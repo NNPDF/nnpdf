@@ -1,64 +1,34 @@
 """
-    This module containg a list of useful operations translated in the keras language
-
-    All operations accept as input an iterable of keras layers or tensors
-    and (when necessary) keyword arguments.
-    The return operation is always a keras layer (or tensor)
+    This module contains the list of operations that can be used within the
+    ``call`` method of the ``n3fit`` layers as well as operations that can
+    act on layers.
 
     This includes an implementation of the NNPDF operations on fktable in the keras
-    language (hence the mapping `c_to_py_fun`)
+    language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
+
+    The rest of the operations in this module are divided into three categories:
+    numpy to tensor:
+        Operations that take a numpy array and return a tensorflow tensor
+    tensor to tensor:
+        Operations that take a tensor and return a tensor
+    layer generation:
+        Instanciate a layer to be applied by the calling function
+
+    Some of these are just aliases to the backend (tensorflow or Keras) operations
+    Note that tensor operations can also be applied to layers as the output of a layer is a tensor
+    equally operations are automatically converted to layers when used as such.
 """
 
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
+from tensorflow.keras.layers import Concatenate as keras_concatenate
 
-from tensorflow.keras.layers import Input, Layer
+from tensorflow.keras.layers import Input
 from tensorflow.keras import backend as K
 
 from validphys.convolution import OP
-
-
-def numpy_to_tensor(ival):
-    """
-        Make the input into a tensor
-    """
-    return K.constant(ival)
-
-
-def batchit(x):
-    """ Add a batch dimension to tensor x """
-    return tf.expand_dims(x, 0)
-
-
-def numpy_to_input(numpy_array, no_reshape=False):
-    """
-    Takes a numpy array and generates a Input layer.
-    By default it adds a batch dimension (of size 1) so that the shape of the layer
-    is that of the array
-
-    Parameters
-    ----------
-        numpy_array: np.ndarray
-        no_reshape: bool
-            if true, don't add batch dimension, take the first dimension of the array as the batch
-    """
-    if isinstance(numpy_array, np.ndarray):
-        if no_reshape:
-            batched_array = numpy_array
-            batch_size = numpy_array.shape[0]
-            shape = numpy_array.shape[1:]
-        else:
-            batched_array = np.expand_dims(numpy_array, 0)
-            batch_size = 1
-            shape = numpy_array.shape
-        input_layer = Input(batch_size=batch_size, shape=shape)
-        input_layer.tensor_content = batched_array
-        input_layer.original_shape = no_reshape
-        return input_layer
-    else:
-        return numpy_array
 
 
 def evaluate(tensor):
@@ -66,10 +36,11 @@ def evaluate(tensor):
     return K.eval(tensor)
 
 
-def c_to_py_fun(op_name, name = "dataset"):
+# NNPDF operations
+def c_to_py_fun(op_name, name="dataset"):
     """
     Map the NNPDF operations to Keras layers
-    NNPDF operations are defined in :py:func:`validphys.convolution.OP
+    NNPDF operations are defined in :py:func:`validphys.convolution.OP`
 
     Parameters
     ----------
@@ -85,9 +56,137 @@ def c_to_py_fun(op_name, name = "dataset"):
     operation_layer = keras_Lambda(lambda x: operation(*x), name=f"op_{name}_{op_name}")
     return operation_layer
 
-def op_subtract(o_list): #TODO to be removed, not used once other PRs are merged
-    from tensorflow.keras.layers import subtract
-    return subtract(o_list)
+
+# f(x: numpy) -> y: tensor
+def numpy_to_tensor(ival):
+    """
+        Make the input into a tensor
+    """
+    return K.constant(ival)
+
+
+# f(x: tensor) -> y: tensor
+def batchit(x, batch_dimension=0):
+    """ Add a batch dimension to tensor x """
+    return tf.expand_dims(x, batch_dimension)
+
+
+# layer generation
+def concatenate_split(splitting_sizes, axis=1):
+    """ Generate a pair of concatention and splitting layer
+    so that they invert each other
+
+    Parameters
+    ----------
+        splitting_sizes: list(int)
+            size of the output of the split
+        axis: int
+            axis in which to apply the operation
+    """
+    concatenation_layer = keras_concatenate(axis=axis)
+    splitting_layer = keras_Lambda(lambda x: tf.split(x, splitting_sizes, axis=axis))
+    return concatenation_layer, splitting_layer
+
+
+# layer generation
+def numpy_to_input(numpy_array, no_reshape=False, name=None):
+    """
+    Takes a numpy array and generates a Input layer.
+    By default it adds a batch dimension (of size 1) so that the shape of the layer
+    is that of the array
+
+    Parameters
+    ----------
+        numpy_array: np.ndarray
+        no_reshape: bool
+            if true, don't add batch dimension, take the first dimension of the array as the batch
+        name: bool
+            name to give to the layer
+    """
+    if no_reshape:
+        batched_array = numpy_array
+        batch_size = numpy_array.shape[0]
+        shape = numpy_array.shape[1:]
+    else:
+        batched_array = np.expand_dims(numpy_array, 0)
+        batch_size = 1
+        shape = numpy_array.shape
+    input_layer = Input(batch_size=batch_size, shape=shape, name=name)
+    input_layer.tensor_content = batched_array
+    input_layer.original_shape = no_reshape
+    return input_layer
+
+
+#
+# Tensor operations
+# f(x: tensor[s]) -> y: tensor
+#
+
+# Generation operations
+# generate tensors of given shape/content
+def tensor_ones_like(*args, **kwargs):
+    """
+    Generates a tensor of ones of the same shape as the input tensor
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
+    """
+    return K.ones_like(*args, **kwargs)
+
+
+def many_replication(grid, replications, axis=0, **kwargs):
+    """
+    Generates a tensor with one extra dimension:
+        a repetition of "grid" n times along the given axis
+    from keras documentation:
+    If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/repeat_elements>`_
+    """
+    return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
+
+
+# Property operations
+# modify properties of the tensor like the shape or elements it has
+def flatten(x):
+    """ Flatten tensor x """
+    return tf.reshape(x, (-1,))
+
+
+def boolean_mask(*args, **kwargs):
+    """
+    Applies a boolean mask to a tensor
+
+    Relevant parameters: (tensor, mask, axis=None)
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/boolean_mask>`_.
+    """
+    return tf.boolean_mask(*args, **kwargs)
+
+
+def transpose(tensor, **kwargs):
+    """
+    Transpose a layer,
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/transpose>`_
+    """
+    return K.transpose(tensor, **kwargs)
+
+
+def concatenate(tensor_list, axis=-1, target_shape=None):
+    """
+    Concatenates a list of numbers or tenosr into a bigger tensor
+    If the target shape is given, the output is reshaped to said shape
+    """
+    concatenated_tensor = K.concatenate(tensor_list, axis=axis)
+    if target_shape:
+        return K.reshape(concatenated_tensor, target_shape)
+    else:
+        return concatenated_tensor
+
+
+# Mathematical operations
+def tensor_product(*args, **kwargs):
+    """
+    Computes the tensordot product between tensor_x and tensor_y
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
+    """
+    return tf.tensordot(*args, **kwargs)
 
 
 def op_multiply(o_list, **kwargs):
@@ -118,3 +217,11 @@ def op_log(o_tensor, **kwargs):
     Computes the logarithm of the input
     """
     return K.log(o_tensor)
+
+
+def sum(*args, **kwargs):
+    """
+    Computes the sum of the elements of the tensor
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/sum>`_
+    """
+    return K.sum(*args, **kwargs)

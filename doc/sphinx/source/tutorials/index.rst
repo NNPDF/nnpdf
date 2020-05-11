@@ -6,6 +6,7 @@ Tutorials
 
    ./runafit.md
    ./compare-fits.md
+   ./list-fits.md
    ./report.md
    ./buildmaster.md
    ./APPLgrids.md

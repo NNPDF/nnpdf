@@ -1,6 +1,6 @@
 import numpy as np
 from n3fit.backends import MetaLayer
-from n3fit.backends import operations
+from n3fit.backends import operations as op
 
 
 class Mask(MetaLayer):
@@ -33,8 +33,8 @@ class Mask(MetaLayer):
         super(Mask, self).build(input_shape)
 
     def call(self, prediction_in):
-        ret = self.boolean_mask(self.kernel * prediction_in, self.mask)
+        ret = op.boolean_mask(self.kernel * prediction_in, self.mask)
         if self.batch_it:
-            return operations.batchit(ret)
+            return op.batchit(ret)
         else:
             return ret

@@ -4,7 +4,7 @@ import numpy as np
 from validphys.loader import Loader
 from validphys.results import ThPredictionsResult
 from validphys.fkparser import load_fktable
-from validphys.convolution import predictions
+from validphys.convolution import predictions, central_predictions, linear_predictions
 
 
 def test_basic_loading():
@@ -56,3 +56,20 @@ def test_preditions():
         preds = predictions(ds, pdf)
         cppres = ThPredictionsResult.from_convolution(pdf, ds)
         assert np.allclose(preds.values, cppres._rawdata)
+
+def test_extended_predictions():
+    l = Loader()
+    pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
+    had = l.check_dataset('ATLASTTBARTOT', theoryid=162, cfac=('QCD',))
+    dis = l.check_dataset('H1HERAF2B', theoryid=162)
+    dis_all = predictions(dis, pdf).T
+    dis_central = central_predictions(dis, pdf).T
+    assert np.allclose(dis_all.mean().values, dis_central.values)
+    dis_linear = linear_predictions(dis, pdf).T
+    assert np.all(dis_all == dis_linear)
+    had_all = predictions(had, pdf).T
+    had_central = central_predictions(had, pdf).T
+    had_linear = linear_predictions(had, pdf).T
+    assert np.allclose(had_linear.mean().values, had_central)
+    assert not np.allclose(had_all.mean().values, had_central)
+    assert np.all((had_linear - had_all).std() < had_all.std())

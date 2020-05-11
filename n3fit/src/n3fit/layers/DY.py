@@ -1,5 +1,6 @@
 import numpy as np
 from n3fit.layers.Observable import Observable
+from n3fit.backends import operations as op
 
 
 class DY(Observable):
@@ -35,34 +36,35 @@ class DY(Observable):
             # Returns:
                 - `result`: rank 1 tensor (ndata)
         """
+        pdf_in = self.digest_pdf(pdf_in)
         # This is a convoluted way of applying a mask, but it is faster
         # mask-version below
         lumi_fun = []
-        pdfT = self.transpose(pdf_in)
+        pdfT = op.transpose(pdf_in)
 
         for i, j in self.basis:
-            lumi_fun.append(self.tensor_product(pdfT[i], pdfT[j], axes=0))
+            lumi_fun.append(op.tensor_product(pdfT[i], pdfT[j], axes=0))
 
-        pdf_X_pdf = self.concatenate(lumi_fun, axis=0, target_shape=(self.basis_size, self.xgrid_size, self.xgrid_size))
+        pdf_X_pdf = op.concatenate(lumi_fun, axis=0, target_shape=(self.basis_size, self.xgrid_size, self.xgrid_size))
 
-        result = self.tensor_product(self.fktable, pdf_X_pdf, axes=3)
+        result = op.tensor_product(self.fktable, pdf_X_pdf, axes=3)
         return result
 
 
 # Another example on how to performt the DY convolution
 # this code is equivalent to the previos one, with a slightly greater cost
-class DY_mask(Observable):
-    def gen_basis(self, basis):
-        if basis is not None:
-            self.basis = np.zeros((self.nfl, self.nfl), dtype=bool)
-            for i, j in basis.reshape(-1, 2):
-                self.basis[i, j] = True
-        else:
-            self.basis = np.ones((self.nfl, self.nfl), dtype=bool)
-
-    def call(self, pdf_in):
-        lfun = self.tensor_product(pdf_in, pdf_in, axes=0)
-        lfunT = self.permute_dimensions(lfun, (3, 1, 2, 0))
-        x = self.boolean_mask(lfunT, self.basis, axis=0)
-        result = self.tensor_product(self.fktable, x, axes=3)
-        return result
+# class DY_mask(Observable):
+#     def gen_basis(self, basis):
+#         if basis is not None:
+#             self.basis = np.zeros((self.nfl, self.nfl), dtype=bool)
+#             for i, j in basis.reshape(-1, 2):
+#                 self.basis[i, j] = True
+#         else:
+#             self.basis = np.ones((self.nfl, self.nfl), dtype=bool)
+# 
+#     def call(self, pdf_in):
+#         lfun = op.tensor_product(pdf_in, pdf_in, axes=0)
+#         lfunT = tensorflow.keras.backend.permute_dimensions(lfun, (3, 1, 2, 0))
+#         x = op.boolean_mask(lfunT, self.basis, axis=0)
+#         result = op.tensor_product(self.fktable, x, axes=3)
+#         return result

@@ -3,11 +3,6 @@ set -u
 set -v
 set -e
 
-#Download some resources.
-#This is here to help isolate the errors and avoid timeouts
-vp-get theoryID 162
-vp-get pdf NNPDF31_nnlo_as_0118
-
 #Python tests for the installed validphys package
 pytest --pyargs --mpl validphys
 pytest --pyargs n3fit

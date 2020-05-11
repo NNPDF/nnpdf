@@ -17,7 +17,7 @@
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
-from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
+from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate, Input
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
 from tensorflow.keras.regularizers import l1_l2

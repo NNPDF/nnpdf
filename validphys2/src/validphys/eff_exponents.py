@@ -397,7 +397,9 @@ effective_exponents_table = collect(
     'effective_exponents_table_internal', ('fitpdfandbasis',))
 fmt = lambda a: float(significant_digits(a, 4))
 
-def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
+next_fit_eff_exps_table = collect("next_effective_exponents_table", ("fitpdfandbasis",))
+
+def next_effective_exponents_yaml(fit: FitSpec, next_fit_eff_exps_table):
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report
     using `effective_exponents_table` this provider outputs the yaml runcard to run
@@ -412,8 +414,8 @@ def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
 
     """
 
-    df_effexps = effective_exponents_table[0]
-    #Reading from the filter
+    df_effexps = next_fit_eff_exps_table[0]
+    # Use round trip loader rather than safe_load in fit.as_input()
     with open(fit.path/'filter.yml', 'r') as f:
         filtermap = yaml.load(f, yaml.RoundTripLoader)
     previous_exponents = filtermap['fitting']['basis']
@@ -425,8 +427,8 @@ def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
     runcard_flavours = basis.to_known_elements(
         [ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
     for fl in flavours:
-        alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
-        betas = df_effexps.loc[(f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
+        alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$')].values
+        betas = df_effexps.loc[(f'${fl}$', r'$\beta$')].values
         previous_exponents[runcard_flavours.index(fl)]['smallx'] = [fmt(alpha) for alpha in alphas]
         previous_exponents[runcard_flavours.index(fl)]['largex'] = [fmt(beta) for beta in betas]
     #iterate t0

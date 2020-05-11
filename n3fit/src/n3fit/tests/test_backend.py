@@ -3,6 +3,7 @@
     and ensures they do the same thing as their numpy counterparts
 """
 import operator
+import functools
 import numpy as np
 from n3fit.backends import operations as op
 from n3fit.backends import losses
@@ -40,6 +41,8 @@ def numpy_check(backend_op, python_op, mode="same"):
      - `same` (default): two arrays of the same dimensionality
      - `diff`: first array has one extra dimension that second array
      - `single`: only one array enters the operation
+     - (tensor, array): if passed a tuple (backend tensor, numpy array), uses these
+        values as tensor and array inputs for the operations
     """
     if mode == "same":
         tensors = [T1, T2]
@@ -53,6 +56,10 @@ def numpy_check(backend_op, python_op, mode="same"):
     elif mode == "single":
         tensors = [T1]
         arrays = [ARR1]
+    elif isinstance(mode, tuple):
+        tensors = mode[0]
+        arrays = mode[1]
+
     result = backend_op(tensors)
     reference = python_op(*arrays)
     are_equal(result, reference)
@@ -89,7 +96,27 @@ def test_op_multiply_dim():
 
 
 def test_op_log():
-    numpy_check(op.op_log, np.log, mode="single")
+    numpy_check(op.op_log, np.log, mode='single')
+
+
+def test_flatten():
+    numpy_check(op.flatten, np.ndarray.flatten, mode=(T3, [ARR3]))
+
+
+def test_boolean_mask():
+    bools = np.random.randint(0, 2, DIM, dtype=bool)
+    np_result = ARR1[bools]
+    tf_bools = op.numpy_to_tensor(bools)
+    tf_result = op.boolean_mask(T1, tf_bools, axis=0)
+    are_equal(np_result, tf_result)
+
+def test_tensor_product():
+    np_result = np.tensordot(ARR3, ARR1, axes=1)
+    tf_result = op.tensor_product(T3, T1, axes=1)
+    are_equal(np_result, tf_result)
+
+def test_sum():
+    numpy_check(op.sum, np.sum, mode='single')
 
 
 # Tests loss functions

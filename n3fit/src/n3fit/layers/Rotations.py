@@ -2,7 +2,9 @@
     This module includes rotation layers
 """
 from n3fit.backends import MetaLayer
+from n3fit.backends import operations as op
 from validphys.pdfbases import rotation
+
 
 class FlavourToEvolution(MetaLayer):
     """ 
@@ -24,16 +26,21 @@ class FlavourToEvolution(MetaLayer):
 
 class Rotation(MetaLayer):
     """
-        Applies a transformation from the dimension-8 fit basis
-        to the dimension-14 evolution basis
-    """
+    Applies a transformation from the dimension-8 evolution basis
+    to the dimension-14 evolution basis used by the fktables.
 
+    The input to this layer is a `pdf_raw` variable which is expected to have
+    a shape (1,  None, 8), and it is then rotated to an output (1, None, 14)
+    """
+    # TODO: Generate a rotation matrix in the input and just do tf.tensordot in call
+    # the matrix should be: (8, 14) so that we can just do tf.tensordot(pdf, rotmat, axes=1)
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
-        super(MetaLayer, self).__init__(**kwargs, name="evolution")
+        super().__init__(**kwargs, name="evolution")
 
-    def call(self, x_raw):
-        x = self.transpose(x_raw)
+    def call(self, pdf_raw):
+        # Transpose the PDF so that the flavour index is the first one
+        x = op.transpose(pdf_raw)
         pdf_raw_list = [
             0 * x[0],  # photon
             x[0],  # sigma
@@ -50,4 +57,6 @@ class Rotation(MetaLayer):
             x[0],  # t24
             x[0],  # t35
         ]
-        return self.concatenate(pdf_raw_list)
+        ret = op.concatenate(pdf_raw_list)
+        # Concatenating destroys the batch index so we have to regenerate it
+        return op.batchit(ret)
