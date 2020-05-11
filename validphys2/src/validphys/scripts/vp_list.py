@@ -119,7 +119,7 @@ def main():
     if not args.remote:
         local_res = getattr(l, LOCAL_TOKEN + args.resource, None)
         if args.resource in available and local_res:
-            log.info("The following %s are available locally", args.resource)
+            log.info("The following %s are available locally:", args.resource)
             print("- " + "\n- ".join(sane_order(local_res)))
         else:
             log.info("No %s are available locally.", args.resource)
