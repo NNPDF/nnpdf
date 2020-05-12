@@ -125,7 +125,7 @@ def theory_block_diag_covmat(theory_covmat_datasets, groups_index):
     return df
 
 @table
-def theory_diagonal_covmat(theory_covmat_singleprocess_no_table,groups_index):
+def theory_diagonal_covmat(theory_covmat_singleprocess_no_table, groups_index):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat_singleprocess_no_table.values
     # Initialise array of zeros and set precision to same as FK tables
@@ -587,7 +587,7 @@ def chi2_diag_only(theory_diagcovmat, groups_covmat, data_theory_diff):
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
 
-each_dataset_results = collect(results, ('group_dataset_inputs_by_metadata','data'))
+each_dataset_results = collect(results, ('group_dataset_inputs_by_metadata', 'data'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """Returns an array of tuples (member_chi², central_chi², numpoints)
