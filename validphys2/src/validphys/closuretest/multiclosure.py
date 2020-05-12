@@ -657,9 +657,13 @@ def total_ratio_error_finite_effects(
     bias_total, var_total = exps_bias_var_resample[0]
     for exp_bias_var_resample in exps_bias_var_resample[1:]:
         bias, var = exp_bias_var_resample
+        print(bias)
+        print(var)
         bias_total += bias
         var_total += var
     # don't reinvent the wheel
+    print(bias_total)
+    print(var_total)
     return dataset_ratio_error_finite_effects(
         (bias_total, var_total), n_fit_samples, n_replica_samples
     )
