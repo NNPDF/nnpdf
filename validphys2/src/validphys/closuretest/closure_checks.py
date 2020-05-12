@@ -77,10 +77,13 @@ def check_at_least_10_fits(fits):
 
 
 @make_argcheck
-def check_multifit_replicas(fits_pdf):
+def check_multifit_replicas(fits_pdf, _internal_n_reps):
     """Checks that all the fit pdfs have the same number of replicas N_rep and
     that N_rep is at least 10"""
     # we take off 1 here because we don't want to include replica 0
+    if _internal_n_reps is not None:
+        return {"_internal_n_reps": _internal_n_reps}
+
     n_reps = set([len(pdf) - 1 for pdf in fits_pdf])
     if len(n_reps) != 1:
         raise CheckError(
