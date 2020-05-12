@@ -1009,7 +1009,9 @@ class CoreConfig(configparser.Config):
             raise ConfigError("must specify dataset_inputs in runcard")
 
     def parse_metadata_group(self, group: str):
-        """Parse an explicit way of grouping data from runcard."""
+        """User specified key to group data by. The key must exist in the
+        PLOTTING file for example `experiment`
+        """
         return group
 
     @record_from_defaults
@@ -1027,7 +1029,7 @@ class CoreConfig(configparser.Config):
         # slightly superfluous, only one default at present but perhaps
         # somebody will want to add to this at some point e.g for th. uncertainties
         allowed = {
-            "standard_report": "experiment"
+            "standard_report": "experiment",
         }
         return allowed[spec]
 
@@ -1050,24 +1052,34 @@ class CoreConfig(configparser.Config):
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
 
+    def produce_processed_metadata_group(
+        self, processed_data_grouping, metadata_group=None
+    ):
+        """Expose the final data grouping result. Either metadata_group is
+        specified by user, in which case uses `processed_data_grouping` which
+        is experiment by default.
+        """
+        if metadata_group is None:
+            return processed_data_grouping
+        return metadata_group
 
     def produce_group_dataset_inputs_by_metadata(
-        self, data_input, processed_data_grouping, metadata_group=None,
+        self, data_input, processed_metadata_group,
     ):
-        # use default if no group is specified in namespace
-        if metadata_group is None:
-            metadata_group = processed_data_grouping
-
+        """Take the data and the processed_metadata_group key and attempt
+        to group the data, returns a list where each element specifies the data_input
+        for a single group and the group_name
+        """
         res = defaultdict(list)
         for dsinput in data_input:
             cd = self.produce_commondata(dataset_input=dsinput)
             try:
-                res[getattr(get_info(cd), metadata_group)].append(dsinput)
+                res[getattr(get_info(cd), processed_metadata_group)].append(dsinput)
             except AttributeError:
                 raise ConfigError(
-                    f"Unable to find key: {metadata_group} in {cd.name} "
+                    f"Unable to find key: {processed_metadata_group} in {cd.name} "
                     "PLOTTING file.",
-                    bad_item=metadata_group,
+                    bad_item=processed_metadata_group,
                     alternatives=get_info(cd).__dict__,
                 )
         return [
