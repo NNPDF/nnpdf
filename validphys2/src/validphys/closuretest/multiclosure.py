@@ -657,13 +657,9 @@ def total_ratio_error_finite_effects(
     bias_total, var_total = exps_bias_var_resample[0]
     for exp_bias_var_resample in exps_bias_var_resample[1:]:
         bias, var = exp_bias_var_resample
-        print(bias)
-        print(var)
         bias_total += bias
         var_total += var
     # don't reinvent the wheel
-    print(bias_total)
-    print(var_total)
     return dataset_ratio_error_finite_effects(
         (bias_total, var_total), n_fit_samples, n_replica_samples
     )
@@ -689,6 +685,8 @@ def total_ratio_means_finite_effects(
         var_total += var
     ind = pd.Index(list(n_replica_samples), name="n_rep samples")
     col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    print(bias_total.mean(axis=2))
+    print(var_total.mean(axis=2))
     return pd.DataFrame((bias_total / var_total).mean(axis=2), index=ind, columns=col)
 
 def xi_resampling_dataset(
