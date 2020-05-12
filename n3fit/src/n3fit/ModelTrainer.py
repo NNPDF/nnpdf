@@ -11,6 +11,7 @@
 import logging
 import numpy as np
 import n3fit.model_gen as model_gen
+from n3fit.hyper_optimization import penalties
 from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
@@ -155,6 +156,12 @@ class ModelTrainer:
         else:
             self.kpartitions = kfold_parameters["partitions"]
             self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
+            # if there are penalties enabled, set them up
+            self.hyper_penalties = []
+            if kfold_parameters.get('penalties'):
+                if kfold_parameters['penalties'].get('saturation'):
+                    self.hyper_penalties.append(penalties.saturation)
+
 
         # Initialize the pdf model
         self.pdf_model = None
@@ -732,6 +739,9 @@ class ModelTrainer:
 
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
+                # Check whether we have to add any penalty
+                for penalty in self.hyper_penalties:
+                    hyper_loss += penalty(pdf_model)
                 l_hyper.append(hyper_loss)
                 log.info("fold: %d", k+1)
                 log.info("Hyper loss: %f", hyper_loss)
