@@ -14,7 +14,7 @@ Specifying a dataset
 In a validphys runcard the settings for a single dataset are specified
 using a ``dataset_input``. This is a dictionary which minimally
 specifies the name of the dataset, but can also control behaviour such
-as contributions to the covariance matrix for the dataset and NNLO
+as contributions to the covariance matrix for the dataset and
 C-factors.
 
 Here is an example dataset input:
@@ -54,7 +54,7 @@ Here we are obtaining the result from the production rule
 .. note::
     It seems odd to require a `theoryid`
     and parameters in the `dataset_input` which refer to theory settings
-    in order to load data. however, this is a relic of the underlying c++ code
+    in order to load data. However, this is a relic of the underlying c++ code
     which performs the loading of data, which intrinsically groups together the
     commondata (CSVs containing data central values and uncertainties) and :ref:`fktables`.
 
@@ -144,7 +144,9 @@ types. The grouping of datasets is done internally according to the
 metadata of datasets and is controlled by ``metadata_group`` key. This
 can be any key which is present in the ``PLOTTING`` file of each dataset
 - for example ``experiment`` or ``nnpdf31_process``.
-The default value for ``metadata_group`` is ``experiment``.
+The default value for ``metadata_group`` is ``experiment``. Other groupings
+might be relevant for example when contructing a theory covariance matrix, where
+you want to group datasets according to process type rather than experiment.
 The grouping is performed by the production rule
 :py:mod:`validphys.config.CoreConfig.produce_group_dataset_inputs_by_metadata`
 which returns a list with length equal to number of distinct groups. Each element
@@ -157,7 +159,7 @@ specific group e.g:
     ...    dataset_inputs=[
     ...        {"dataset":"NMC"},
     ...        {"dataset": "ATLASTTBARTOT", "cfac": ["QCD"]},
-    ...        {"dataset": "CMSZDIFF12", "cfac": ["QCD","NRM"], "sys": 10 }]
+    ...        {"dataset": "CMSZDIFF12", "cfac": ["QCD","NRM"], "sys": 10 }],
     ...    metadata_group="experiment"
     ... )
     [
@@ -178,7 +180,7 @@ pipeline
     dataset_inputs or experiments -> data_input -> data
 
 For example the following runcard produces a single column table with a
-row containing the chi2 of the specificed datasets, grouped by
+row containing the 𝞆² of the specificed datasets, grouped by
 ``experiment``
 
 .. code:: yaml
@@ -222,6 +224,19 @@ If we specify a grouping in the runcard:
 then we instead get a single column table, but with the datasets grouped
 by process type, according the `theory uncertainties
 paper <https://arxiv.org/abs/1906.10698>`__.
+
+To expose the result of checking if ``metadata_group`` was specified in the
+runcard and applying a default value, use the namespace key
+``processed_metadata_group``. We can use this key in reports and actions alike
+for example to give sensible titles/section headings e.g:
+
+`` code:: yaml
+    template_text: |
+     # chi2 grouped by {processed_metadata_group}
+     {@dataspecs_groups_chi2_table@}
+
+    actions_:
+     - report(main=True)
 
 Backwards compatibility
 -----------------------

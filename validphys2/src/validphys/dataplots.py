@@ -80,7 +80,7 @@ def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
 
 
 @figure
-def plot_phi(groups_data, groups_data_phi):
+def plot_phi(groups_data, groups_data_phi, processed_metadata_group):
     """plots phi for each group of data as a bar for a single
     PDF input
 
@@ -89,15 +89,15 @@ def plot_phi(groups_data, groups_data_phi):
     phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
     xticks = [group.name for group in groups_data]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
-    ax.set_title(r"$\phi$ for each group of data")
+    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
     return fig
 
 @figure
-def plot_fits_groups_data_phi(fits_groups_phi_table):
+def plot_fits_groups_data_phi(fits_groups_phi_table, processed_metadata_group):
     """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
     group of datasets, which is defined according to the keys in the PLOTTING info file"""
     fig, ax = _plot_chis_df(fits_groups_phi_table)
-    ax.set_title(r"$\phi$ for each group of data")
+    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
     return fig
 
 @figure
@@ -125,12 +125,12 @@ def _check_same_group_data_name(dataspecs_groups):
         if len(x) != len(lst[0]):
             raise CheckError("All dataspecs should have the same number "
                              "of groups of data")
-        for i, g in enumerate(x):
-            if g.name != lst[0][i].name:
+        for i, group in enumerate(x):
+            if group.name != lst[0][i].name:
                 raise CheckError("\n".join(["All groups of data must have the "
                                             "same name",
                                             fr"dataspec {j+1}, "
-                                            fr"group {i+1}: {g.name}",
+                                            fr"group {i+1}: {group.name}",
                                             fr"dataspec 1, group {i+1}: "
                                             fr"{lst[0][i].name}"]))
 
@@ -495,7 +495,7 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 
 @figure
-def plot_groups_data_chi2(groups_data, groups_chi2):
+def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
     """Plot the chi² of all groups of datasets with bars."""
     exchi2 = []
     xticks = []
@@ -503,7 +503,7 @@ def plot_groups_data_chi2(groups_data, groups_chi2):
         exchi2.append(groupres.central_result/groupres.ndata)
         xticks.append(group.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
-    ax.set_title(r"$\chi^2$ distribution for groups of datasets")
+    ax.set_title(r"$\chi^2$ distribution by {}".format(processed_metadata_group))
     return fig
 
 @figure
@@ -555,17 +555,17 @@ def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
     return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
 
 @figure
-def plot_fits_groups_data_chi2(fits_groups_chi2_table):
+def plot_fits_groups_data_chi2(fits_groups_chi2_table, processed_metadata_group):
     """Generate a plot equivalent to ``plot_groups_data_chi2`` using all the
     fitted group of data as input."""
     fig, ax = _plot_chis_df(fits_groups_chi2_table)
-    ax.set_title(r"$\chi^2$ for groups of data")
+    ax.set_title(r"$\chi^2$ by {}".format(processed_metadata_group))
     return fig
 
 @figure
-def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table):
+def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table, processed_metadata_group):
     """Same as plot_fits_groups_data_chi2 but for arbitrary dataspecs"""
-    return plot_fits_groups_data_chi2(dataspecs_groups_chi2_table)
+    return plot_fits_groups_data_chi2(dataspecs_groups_chi2_table, processed_metadata_group)
 
 @figure
 def plot_training_length(replica_data, fit):

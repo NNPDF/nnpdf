@@ -42,7 +42,7 @@ Training validation
 -------------------
 {@fits plot_training_validation@}
 
-$\chi^2$ by group
+$\chi^2$ by {processed_metadata_group}
 ----------------------
 {@plot_fits_groups_data_chi2@}
 
@@ -53,11 +53,11 @@ $\chi^2$ by dataset comparisons
 ### Table
 {@fits_chi2_table(show_total=true)@}
 
-$\phi$ by group
+$\phi$ by {processed_metadata_group}
 --------------------
 {@plot_fits_groups_data_phi@}
 
-Group plots
+Dataset plots
 ---------------
 {@with matched_datasets_from_dataspecs@}
 [Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})

@@ -1133,7 +1133,8 @@ def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
 
 def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
     """Return the total chi²/ndata for all data, specified by dataset_inputs.
-    Includes full all known contributions across datasets.
+    Covariance matrix is fully correlated across datasets, with all known
+    correlations.
     """
     return (
         dataset_inputs_abs_chi2_data.central_result / dataset_inputs_abs_chi2_data.ndata
