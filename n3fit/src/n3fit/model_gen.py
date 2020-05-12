@@ -12,7 +12,7 @@ import numpy as np
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, Rotation
-from n3fit.layers import Preprocessing
+from n3fit.layers import Feature_Scaling
 
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
@@ -107,7 +107,7 @@ def observable_generator(
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
     concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
-   
+
     # creating the experiment as a model turns out to bad for performance
     def experiment_layer(pdf, datasets_out = None):
         output_layers = []
