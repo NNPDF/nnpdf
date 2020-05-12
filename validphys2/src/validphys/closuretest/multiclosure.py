@@ -575,13 +575,13 @@ def bias_variance_resampling_dataset(
             bias_boot = []
             variance_boot = []
             for _ in range(bootstrap_samples):
-                fit_boot_index = rng.randint(0, n_fit_samples[-1], size=n_fit_sample)
+                fit_boot_index = rng.choice(n_fit_samples[-1], size=n_fit_sample, replace=False)
                 fit_boot_th = [closure_th[i] for i in fit_boot_index]
                 boot_ths = []
                 # construct proxy fits theory predictions
                 for fit_th in fit_boot_th:
-                    rep_boot_index = rng.randint(
-                        0, n_replica_samples[-1], size=n_rep_sample
+                    rep_boot_index = rng.choice(
+                        n_replica_samples[-1], size=n_rep_sample, replace=False
                     )
                     boot_ths.append(
                         BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
