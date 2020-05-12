@@ -103,6 +103,34 @@ def expected_bias_dataset(internal_multiclosure_dataset_loader):
     biases = calc_chi2(sqrtcov, diffs)
     return np.mean(biases), len(law_th)
 
+@figure
+def plot_fits_bias_variance(internal_multiclosure_dataset_loader):
+    """For a set of closure fits, calculate the bias and variance across fits
+    and then plot scatter points so we can see the distribution of each quantity
+    with fits.
+    """
+    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    centrals = np.asarray([th.central_value for th in closures_th])
+    # place bins on first axis
+    diffs = law_th.central_value[:, np.newaxis] - centrals.T
+    biases = calc_chi2(sqrtcov, diffs)
+
+    reps = np.asarray([th._rawdata for th in closures_th])
+    variances = []
+    # this seems slow but breaks for datasets with single data point otherwise
+    for i in range(reps.shape[0]):
+        diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+        variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+
+    fig, ax = plt.subplots()
+    ax.plot(biases, "*", label="bias")
+    ax.axhline(np.mean(biases), label="bias mean", linestyle="-", color="k")
+    ax.plot(variances, ".", label="variance")
+    ax.axhline(np.mean(variances), label="variances mean", linestyle=":", color="k")
+    ax.set_title("Bias and variance for each fit (unnormalised)")
+    ax.set_xlabel("fit index")
+    ax.legend()
+    return fig
 
 def expected_variance_dataset(internal_multiclosure_dataset_loader):
     """Given multiple closure fits, calculate the mean variance across fits
@@ -530,22 +558,26 @@ def bias_variance_resampling_dataset(
 
     bias_sample = []
     variance_sample = []
-    for n_rep_sample in n_replica_samples:
+
+    override_reps = 20
+    override_fits = 20
+
+    for n_rep_sample in range(10, override_reps+5, 5):
         # results varying n_fit_sample
         fixed_n_rep_bias = []
         fixed_n_rep_variance = []
-        for n_fit_sample in n_fit_samples:
+        for n_fit_sample in range(10, override_fits+5, 5):
             # for each n_fit and n_replica sample store result of each boot resample
             bias_boot = []
             variance_boot = []
             for _ in range(bootstrap_samples):
-                fit_boot_index = rng.randint(0, len(fits_pdf), size=n_fit_sample)
+                fit_boot_index = rng.randint(0, override_fits, size=n_fit_sample)
                 fit_boot_th = [closure_th[i] for i in fit_boot_index]
                 boot_ths = []
                 # construct proxy fits theory predictions
                 for fit_th in fit_boot_th:
                     rep_boot_index = rng.randint(
-                        0, fit_th._rawdata.shape[1], size=n_rep_sample
+                        0, override_reps, size=n_rep_sample
                     )
                     boot_ths.append(
                         BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
