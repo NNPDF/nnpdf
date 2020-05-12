@@ -35,38 +35,12 @@ datacuts:
 theory:
   theoryid: 53        # database id
 
-###########################################################
-hyperscan:
-    stopping:
-        min_epochs: 5e2
-        max_epochs: 40e2
-        min_patience: 0.10
-        max_patience: 0.40
-    positivity:
-        min_multiplier: 1.00000001
-        max_multiplier: 1.00000002
-        min_initial:
-        max_initial:
-    optimizer:
-        names: 'ALL' # Use all implemented optimizers
-        min_lr: 0.0005
-        max_lr: 0.5
-    architecture:
-        initializers: 'ALL'
-        max_drop: 0.15
-        n_layers: [2,3,4]
-        min_units: 5
-        max_units: 50
-        activations: ['sigmoid', 'tanh']
-
-
 ############################################################
 fitting:
-  genrep   : True    # on = generate MC replicas, False = use real data
+  genrep: True    # on = generate MC replicas, False = use real data
   trvlseed: 1
   nnseed: 2
   mcseed: 3  
-  epochs: 900
   # CHANGE THE FOLLOWING OPTIONS
   save: False
   savefile: 'weights.hd5'
@@ -75,14 +49,18 @@ fitting:
   plot: False
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+    # The number of activation functions and nodes per layer should be the same, the last layer
+    # should always match the expected number of flavours at the end of the PDF
     nodes_per_layer: [15, 10, 8]
     activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.01
     optimizer: 'RMSprop'
+    learning_rate: 0.01
     epochs: 900
+    # if the positivity multipler or initial value is not set
+    # it will be calculated from the poslambda in the positivity dictionary
     pos_multiplier: 1.05
-    pos_initial:  # believe the pos_lambda below 
+    pos_initial:
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
@@ -90,14 +68,15 @@ fitting:
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
-  fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
+  # (QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
+  fitbasis: NN31IC # EVOL (7), EVOLQED (8), FLAVOUR etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
       # pos: True for NN squared
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
+      # trainable: whether the preprocessing exponent should be trained or kept fixed within a replica fit (always within the given ranges)
       - { fl: sng, pos: False, mutsize: [15], mutprob: [0.05], smallx: [1.05,1.19], largex: [1.47,2.70], trainable: False }
       - { fl: g,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.94,1.25], largex: [0.11,5.87], trainable: False }
       - { fl: v,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.54,0.75], largex: [1.15,2.76], trainable: False }

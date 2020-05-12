@@ -61,8 +61,14 @@ hyperscan:
         activations: ['sigmoid', 'tanh']
     kfold: # if given a number k, k partitions will be generated automatically
         threshold_loss: 2.0
+        penalties:
+            saturation: True
         partitions:
             - datasets:
+                - NMC
+                - CMSZDIFF12
+            - overfit: True
+              datasets:
                 - NMC
 
 ############################################################

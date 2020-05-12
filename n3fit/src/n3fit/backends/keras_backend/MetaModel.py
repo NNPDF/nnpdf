@@ -270,22 +270,23 @@ class MetaModel(Model):
             mask_w = self.get_layer(mask_name).weights[0]
             mask_w.assign(mask_val)
 
-    def multiply_weights(self, layer_names, multiplier):
+    def multiply_weights(self, layer_names, multipliers):
         """ Multiply all weights for the given layers by some scalar
 
         Parameters
         ----------
             layer_names: list
                 list of names of the layers to update weights
-            multiplier: float
-                scalar number to multiply the weights by
+            multiplier: list
+                list of multiplier to apply to each layer of layer_names 
         """
-        for layer_name in layer_names:
+        for layer_name, multiplier in zip(layer_names, multipliers):
             layer = self.get_layer(layer_name)
             w_val = layer.get_weights()
             w_ref = layer.weights
             for val, tensor in zip(w_val, w_ref):
-                tensor.assign(val * multiplier)
+                new_val = val*multiplier
+                tensor.assign(new_val)
 
     def apply_as_layer(self, x):
         """ Apply the model as a layer """

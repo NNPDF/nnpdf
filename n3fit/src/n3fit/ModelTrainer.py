@@ -17,6 +17,8 @@ from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 5.0
+PUSH_POSITIVITY_EACH = 100 # epochs
+PRINT_STATS_EACH = 100
 
 
 def _assign_data_to_model(model, data_dict, fold_k = 0, skip_fold = False):
@@ -175,7 +177,8 @@ class ModelTrainer:
             "losses": [],
             "ndata": 0,
             "model": None,
-            "posdatasets": [],
+            "pos_datasets": [],
+            "pos_multipliers": [],
             "folds": [],
         }
         self.validation = {
@@ -271,7 +274,8 @@ class ModelTrainer:
 
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
-            self.training["posdatasets"].append(pos_dict["name"])
+            self.training["pos_datasets"].append(pos_dict["name"])
+
 
     def _model_generation(self, pdf_model, partition):
         """
@@ -379,7 +383,7 @@ class ModelTrainer:
         """
         self.input_list = []
         self.input_sizes = []
-        for key in ["output", "losses"]:
+        for key in ["output", "losses", "pos_multipliers"]:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
@@ -394,7 +398,7 @@ class ModelTrainer:
     # i.e., the most important function is hyperparametizable, which is a      #
     # wrapper around all of these                                              #
     ############################################################################
-    def _generate_observables(self, pos_multiplier, pos_initial):
+    def _generate_observables(self, positivity_multiplier, positivity_initial, epochs):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
         with the output layers and the loss functions
@@ -433,21 +437,30 @@ class ModelTrainer:
         for pos_dict in self.pos_info:
             if not self.mode_hyperopt:
                 log.info("Generating positivity penalty for %s", pos_dict["name"])
+
+            # If an initial positivity and multiplier is given in the runcard, use that
+            if positivity_initial is None and positivity_multiplier is None:
+                positivity_initial = 10.0
+            # if only one of the two is given, use one and the steps to generate the other
+            positivity_steps = int(epochs/PUSH_POSITIVITY_EACH)
+            max_lambda = pos_dict["lambda"]
+            if positivity_multiplier is None:
+                positivity_multiplier = pow(max_lambda/positivity_initial, 1/positivity_steps)
+            elif positivity_initial is None:
+                positivity_initial = max_lambda / pow(positivity_multiplier, positivity_steps)
+
             pos_layer = model_gen.observable_generator(
                 pos_dict,
-                positivity_initial=pos_initial,
-                positivity_multiplier=pos_multiplier,
+                positivity_initial=positivity_initial,
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
             self.input_sizes.append(pos_layer["experiment_xsize"])
 
             # The positivity all falls to the training
+            self.training["pos_multipliers"].append(positivity_multiplier)
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
-        # Save the positivity multiplier into the training dictionary
-        # as it will be used during training
-        self.training["pos_multiplier"] = pos_multiplier
 
     def _generate_pdf(
         self,
@@ -564,7 +577,7 @@ class ModelTrainer:
         return reporting_list
 
 
-    def _train_and_fit(self, training_model, stopping_object, epochs = 100, pos_multiplier = 1.0):
+    def _train_and_fit(self, training_model, stopping_object, epochs = 100):
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -576,11 +589,11 @@ class ModelTrainer:
             out = training_model.perform_fit(verbose=False)
             print_stats = False
 
-            if (epoch + 1) % 100 == 0:
+            if (epoch + 1) % PRINT_STATS_EACH == 0:
                 print_stats = True
-                training_model.multiply_weights(
-                    self.training["posdatasets"], pos_multiplier
-                )
+
+            if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
+                training_model.multiply_weights(self.training["pos_datasets"], self.training["pos_multipliers"])
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
@@ -668,8 +681,9 @@ class ModelTrainer:
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
-        positivity_multiplier = params["pos_multiplier"]
-        self._generate_observables(positivity_multiplier, params["pos_initial"])
+        positivity_multiplier = params.get("pos_multiplier")
+        positivity_initial = params.get("pos_initial")
+        self._generate_observables(positivity_multiplier, positivity_initial, epochs)
 
         # Initialize the chi2 dictionaries
         l_train = []
@@ -721,7 +735,6 @@ class ModelTrainer:
                     models['training'],
                     stopping_object,
                     epochs = epochs,
-                    pos_multiplier = positivity_multiplier
                     )
 
             # Compute validation and training loss

@@ -23,7 +23,7 @@ import tensorflow as tf
 
 
 def observable_generator(
-    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300,
+    spec_dict, positivity_initial=1.0,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -140,14 +140,9 @@ def observable_generator(
     full_nx = sum(dataset_xsizes)
 
     if spec_dict["positivity"]:
-        max_lambda = spec_dict["lambda"]
-        if not positivity_initial:
-            initial_lambda = max_lambda / pow(positivity_multiplier, positivity_steps)
-        else:
-            initial_lambda = positivity_initial
         out_mask = Mask(
             bool_mask=spec_dict["trmask"],
-            c=initial_lambda,
+            c=positivity_initial,
             axis=1,
             name=spec_name,
             unbatch=True,
