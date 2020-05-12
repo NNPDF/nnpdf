@@ -57,7 +57,7 @@ def matrix_plot_labels(df):
         points = [x[1] for x in df.index]
         labels = dslabels
     unique_ds = []
-    unique_ds.append([labels[0],0])
+    unique_ds.append([labels[0], 0])
     for x in range(len(labels)-1):
         if labels[x+1] != labels[x]:
             unique_ds.append([labels[x+1],x+1])
