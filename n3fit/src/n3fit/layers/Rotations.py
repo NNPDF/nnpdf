@@ -37,9 +37,9 @@ class FlavourToEvolution(Rotation):
     """
 
     def __init__(
-        self, flav_info, **kwargs,
+        self, flav_info, fitbasis, **kwargs,
     ):
-        rotation_matrix = pdfbases.rotation(flav_info)
+        rotation_matrix = pdfbases.rotation(flav_info, fitbasis)
         super().__init__(rotation_matrix, axes=1, **kwargs)
 
 
