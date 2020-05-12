@@ -196,26 +196,26 @@ class CoreConfig(configparser.Config):
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""
-
-
         _, theory      = self.parse_from_('fit', 'theory', write=False)
         thid = theory['theoryid']
 
         # new fits have dataset_inputs, old fits have experiments
         data_key = 'dataset_inputs'
         try:
-            _, data_input = self.parse_from_('fit', data_key, write=False)
+            _, data_val = self.parse_from_('fit', data_key, write=False)
         except ConfigError as e:
             data_key = "experiments"
             log.warning("old fit found, falling back to old behaviour")
             # We need to make theoryid available if using experiments
             try:
                 with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-                    _, data_input = self.parse_from_('fit', data_key, write=False)
+                    _, data_val = self.parse_from_('fit', data_key, write=False)
             except ConfigError:
                 raise e
-
-        return {'theoryid':thid, data_key: data_input}
+        # now fill in a unique key "data_input" regardless of new or old fit
+        # for uniformity
+        data_input = self.produce_data_input(**{data_key: data_val})
+        return {'theoryid':thid, "data_input": data_input}
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""
