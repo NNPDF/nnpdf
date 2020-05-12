@@ -3,28 +3,47 @@
 """
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
-from validphys.pdfbases import rotation
+from validphys import pdfbases
 
-
-class FlavourToEvolution(MetaLayer):
-    """ 
-        Rotates from the flavour basis to
-        the evolution basis. 
-    """
-    def __init__(
-        self,
-        flav_info,
-        **kwargs,
-    ):
-        rotation_matrix = rotation(flav_info)
-        self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)   
-        super().__init__(**kwargs)
-    
-    def call(self, x_raw):     
-        return op.tensor_product(x_raw, self.rotation_matrix, 1)      
-        
 
 class Rotation(MetaLayer):
+    """
+    Rotates the input through some user defined rotation matrix.
+    Given an input matrix M_{m,n} with an input x_{m}, returns
+    y_{n} = x_{m}M_{m,n}
+
+    Parameters
+    ----------
+        rotation_matrix: np.array
+            rotation matrix
+        axes: int or list
+            if given a number, contracts as many indices as given
+            if given a list (of tuples) contracts indices according to op.tensor_product
+    """
+
+    def __init__(self, rotation_matrix, axes=1, **kwargs):
+        self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)
+        self.axes = axes
+        super().__init__(**kwargs)
+
+    def call(self, x_raw):
+        return op.tensor_product(x_raw, self.rotation_matrix, self.axes)
+
+
+class FlavourToEvolution(Rotation):
+    """
+        Rotates from the flavour basis to
+        the evolution basis.
+    """
+
+    def __init__(
+        self, flav_info, **kwargs,
+    ):
+        rotation_matrix = pdfbases.rotation(flav_info)
+        super().__init__(rotation_matrix, axes=1, **kwargs)
+
+
+class FkRotation(MetaLayer):
     """
     Applies a transformation from the dimension-8 evolution basis
     to the dimension-14 evolution basis used by the fktables.
@@ -32,8 +51,10 @@ class Rotation(MetaLayer):
     The input to this layer is a `pdf_raw` variable which is expected to have
     a shape (1,  None, 8), and it is then rotated to an output (1, None, 14)
     """
+
     # TODO: Generate a rotation matrix in the input and just do tf.tensordot in call
     # the matrix should be: (8, 14) so that we can just do tf.tensordot(pdf, rotmat, axes=1)
+    # i.e., create the matrix and inherit from the Rotation layer above
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
         super().__init__(**kwargs, name="evolution")
