@@ -13,7 +13,7 @@ from n3fit.layers import DIS
 from n3fit.layers import DY
 from n3fit.layers import Mask
 from n3fit.layers import ObsRotation
-from n3fit.layers import Preprocessing, Rotation, FlavourToEvolution
+from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 
 from n3fit.backends import operations
 from n3fit.backends import losses
@@ -461,7 +461,7 @@ def pdfNN_layer_generator(
     )
 
     # Evolution layer
-    layer_evln = Rotation(input_shape=(last_layer_nodes,), output_dim=out)
+    layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info)
