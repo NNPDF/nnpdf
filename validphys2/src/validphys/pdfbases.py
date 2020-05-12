@@ -427,6 +427,19 @@ NN31IC = Basis.from_mapping(
         'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
     default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
+FLAVOUR = Basis.from_mapping(
+    {
+        'u': {'u': 1},
+        'ubar': {'ubar': 1},
+        'd': {'d': 1},
+        'dbar': {'dbar': 1},
+        's': {'s': 1},
+        'sbar': {'sbar': 1},
+        'c': {'c': 1},
+        'g': {'g': 1},
+    },
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))    
+
 pdg = Basis.from_mapping({
 'g/10': {'g':0.1},
 'u_{v}': {'u':1, 'ubar':-1},

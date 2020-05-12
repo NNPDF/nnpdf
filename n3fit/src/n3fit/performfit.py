@@ -4,6 +4,7 @@
 
 # Backend-independent imports
 from collections import namedtuple
+from validphys.pdfbases import check_basis
 import sys
 import logging
 import os.path
@@ -84,27 +85,13 @@ def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
 @make_argcheck
 def check_consistent_basis(fitting):
     fitbasis = fitting["fitbasis"]
-    if fitbasis == 'flavour':
-        allowed_labels = [
-        'u','ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g'
-    ]
-    else:
-        allowed_labels = [
-        'sng', 'g', 'v', 'v3', 'v8', 't3', 't8', 'cp'
-    ]
-
     # Check that there are no duplicate flavours
     flavs = [d['fl'] for d in fitting['basis']]
     if len(set(flavs)) != len(flavs):
         raise CheckError(f"Repeated flavour names: check basis dictionary")
-
-    # Check that the flavours given in the runcard correspond to the
-    # allowed distribution of the declared fitbasis
-    for flav_dict in fitting['basis']:
-        flav_name = flav_dict['fl']
-        if flav_name not in allowed_labels:
-            raise CheckError(f"{flav_name} is not a valid flavour name of {fitbasis} basis")    
-
+    # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
+    res = check_basis(fitbasis,flavs)
+    
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 @check_consistent_hyperscan_options
