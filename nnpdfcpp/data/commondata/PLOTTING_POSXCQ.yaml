@@ -1,4 +1,4 @@
-dataset_label: "positivity dataset: $xc$ PDF"
+dataset_label: "positivity dataset: $xc$ PDF $Q^2=5$ GeV$^2$"
 x: k1
 kinematics_override: dis_sqrt_scale
 
