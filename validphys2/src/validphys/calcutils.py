@@ -9,6 +9,10 @@ import numpy as np
 import scipy.linalg as la
 import pandas as pd
 
+PRECISION_THRESHOLD = 1e-14
+
+class PrecisionError(Exception): pass
+
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
     lower triangular part and a vector of differences.
@@ -175,10 +179,17 @@ def regularize_covmat(covmat: np.array, norm_threshold=4):
     sqr_threshold = norm_threshold**2
     d = np.sqrt(np.diag(covmat))[:, np.newaxis]
     corr = covmat / d / d.T
+    # eigh gives eigenvals in ascending order
     e_val, e_vec = la.eigh(corr)
     # if eigenvalues are close to zero, can be negative which messes this up
-    # take abs here to be safe
-    if abs(1 / e_val[0]) <= sqr_threshold: # eigh gives eigenvals in ascending order
+    # check matrix is positive semi definite within precision
+    if e_val[0] < -PRECISION_THRESHOLD:
+        raise PrecisionError(
+            "Supplied matrix is not positive semi-definite within precision tolerance."
+            f"Minimum eigenvalue: {e_val[0]}, tolerance: {PRECISION_THRESHOLD}."
+        )
+    # add epsilon to handle eigenvalue close to zero
+    if 1 / (e_val[0] + PRECISION_THRESHOLD) <= sqr_threshold:
         return covmat
     new_e_val = np.clip(e_val, a_min=1/sqr_threshold, a_max=None)
     return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
