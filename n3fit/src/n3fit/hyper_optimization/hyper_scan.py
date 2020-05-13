@@ -71,6 +71,22 @@ def hp_choice(key, choices):
         return None
     return hyperopt.hp.choice(key, choices)
 
+def optimizer_arg_wrapper(hp_key, option_dict):
+    # Let's accept the learning rate as a fixed float
+    if isinstance(option_dict, float):
+        choice = option_dict
+    else:
+        # Get the min-max of the learing rate
+        max_lr = option_dict['max']
+        min_lr = option_dict['min']
+        # Get the sampling type, if not given use uniform
+        sampling = option_dict.get('sampling', 'uniform')
+        if sampling == "uniform":
+            choice = hp_uniform(hp_key, min_lr, max_lr)
+        elif sampling == "log":
+            choice = hp_loguniform(hp_key, min_lr, max_lr)
+    return choice
+
 
 # Wrapper for the hyperscanning
 def hyper_scan_wrapper(
@@ -261,6 +277,7 @@ class HyperScanner:
 
         The accepted options are:
             - learning_rate
+            - clipnorm
 
         Since the learning rate is a parameter that depends on the optimizer, the final result is a
         recursive dictionary such that even though the ModelTrainer will receive a parameter optimizer with
@@ -281,6 +298,7 @@ class HyperScanner:
 
         opt_key = "optimizer"
         lr_key = "learning_rate"
+        clip_key = "clipnorm"
         for optimizer in optimizers:
             name = optimizer['name']
 
@@ -293,24 +311,15 @@ class HyperScanner:
             if lr_dict is not None:
                 # Check whether this optimizer is implemented with a learning rate
                 args = all_optimizers[name][1]
-                if "lr" not in args.keys():
+                if lr_key not in args.keys():
                     raise ValueError(f"Optimizer {name} does not accept {lr_key}")
                 hp_key = f"{name}_{lr_key}"
-                # Let's accept the learning rate as a fixed float
-                if isinstance(lr_dict, float):
-                    lr_choice = lr_dict
-                else:
-                    # Get the min-max of the learing rate 
-                    max_lr = lr_dict['max']
-                    min_lr = lr_dict['min']
-                    # Get the sampling type, if not given use uniform
-                    sampling = lr_dict.get('sampling', 'uniform')
-                    if sampling == "uniform":
-                        lr_choice = hp_uniform(hp_key, min_lr, max_lr)
-                    elif sampling == "log":
-                        lr_choice = hp_loguniform(hp_key, min_lr, max_lr)
-                    # Add the sampler to the dictionary for this optimizer
-                optimizer_dictionary[lr_key] = lr_choice
+                optimizer_dictionary[lr_key] = optimizer_arg_wrapper(hp_key, lr_dict)
+
+            clip_dict = optimizer.get(clip_key)
+            if clip_dict is not None:
+                hp_key = f"{name}_{clip_key}"
+                optimizer_dictionary[clip_key] = optimizer_arg_wrapper(hp_key, clip_dict)
 
             choices.append(optimizer_dictionary)
 

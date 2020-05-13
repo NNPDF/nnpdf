@@ -57,6 +57,7 @@ fitting:
     optimizer:
         optimizer_name: 'RMSprop'
         learning_rate: 0.01
+        clipnorm: 1.0
     epochs: 900
     # if the positivity multipler or initial value is not set
     # it will be calculated from the poslambda in the positivity dictionary
