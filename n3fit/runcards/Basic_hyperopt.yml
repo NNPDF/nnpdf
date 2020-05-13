@@ -70,9 +70,15 @@ hyperscan:
         min_multiplier: 1.01
         max_multiplier: 1.10
     optimizer:
-        names: ['Adadelta', 'Adam', 'RMSprop']
-        min_lr: 0.008
-        max_lr: 0.07
+        - name: Adadelta
+          learning_rate:
+              min: 0.5
+              max: 1.5
+        - name: RMSprop
+          learning_rate:
+              sampling: log
+              min: 0.001
+              max: 0.2
     architecture:
         initializers: ['glorot_normal', 'glorot_uniform']
         max_drop: 0.15
@@ -120,8 +126,8 @@ fitting:
     nodes_per_layer: [35, 25, 8]
     activation_per_layer: ['tanh', 'tanh', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.01
-    optimizer: 'Adadelta'
+    optimizer:
+        optimizer_name: 'Adadelta'
     epochs: 40000
     pos_multiplier: 1.09
     pos_initial: 10.0

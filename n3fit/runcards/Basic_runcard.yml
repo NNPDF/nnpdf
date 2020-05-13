@@ -54,8 +54,9 @@ fitting:
     nodes_per_layer: [15, 10, 8]
     activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
     initializer: 'glorot_normal'
-    optimizer: 'RMSprop'
-    learning_rate: 0.01
+    optimizer:
+        optimizer_name: 'RMSprop'
+        learning_rate: 0.01
     epochs: 900
     # if the positivity multipler or initial value is not set
     # it will be calculated from the poslambda in the positivity dictionary

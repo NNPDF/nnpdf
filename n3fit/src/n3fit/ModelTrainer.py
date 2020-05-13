@@ -52,7 +52,7 @@ def _assign_data_to_model(model, data_dict, fold_k = 0, skip_fold = False):
     return ret
 
 
-def _model_compilation(models, learning_rate, optimizer):
+def _model_compilation(models, param_dict):
     """
     Wrapper around `_compile_one_model` to pass the right parameters
     and index of the k-folding.
@@ -69,7 +69,6 @@ def _model_compilation(models, learning_rate, optimizer):
         kidx: int
             k-index of the fold
     """
-    param_dict = {"learning_rate": learning_rate, "optimizer_name": optimizer}
     for _, model_dict in models.items():
         model = model_dict['model']
         target = model_dict['target_data']
@@ -729,7 +728,7 @@ class ModelTrainer:
             )
 
             # Compile each of the models witht he right parameters
-            _model_compilation(model_dicts, params["learning_rate"], params["optimizer"])
+            _model_compilation(model_dicts, params["optimizer"])
 
             passed = self._train_and_fit(
                     models['training'],

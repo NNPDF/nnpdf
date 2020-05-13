@@ -168,7 +168,7 @@ class HyperScanner:
         self.hyper_keys = set([])
 
         stopping_dict = sampling_dict.get("stopping")
-        optimizer_dict = sampling_dict.get("optimizer")
+        optimizer_list = sampling_dict.get("optimizers")
         positivity_dict = sampling_dict.get("positivity")
         nn_dict = sampling_dict.get("architecture")
 
@@ -179,11 +179,9 @@ class HyperScanner:
                 min_patience=stopping_dict.get("min_patience"),
                 max_patience=stopping_dict.get("max_patience"),
             )
-        if optimizer_dict:
+        if optimizer_list:
             self.optimizer(
-                names=optimizer_dict.get("names"),
-                min_lr=optimizer_dict.get("min_lr"),
-                max_lr=optimizer_dict.get("max_lr"),
+                optimizers=optimizer_list
             )
         if positivity_dict:
             self.positivity(
@@ -253,56 +251,74 @@ class HyperScanner:
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
 
-    def optimizer(self, names=None, min_lr=0.0005, max_lr=0.5):
+    def optimizer(self, optimizers):
         """
-        This function look at the optimizers implemented in MetaModel and adds the learning rate to (only)
-        those who use it. The special keyword "ALL" will make it use all optimizers implemented
-            - `optimizer`
-            - `learning rate`
+        This function look at the optimizers implemented in MetaModel
+
+        Since each optimizer can take different parameters, the input to this function, `optimizer`
+        is a list of dictionaries, each defining the name of the optimizer (which needs to be
+        implemented in `n3fit`) and the options to modify.
+
+        The accepted options are:
+            - learning_rate
 
         Since the learning rate is a parameter that depends on the optimizer, the final result is a
-        recursive dictionary such that even though the ModelTrainer will receive
-            {optimizer: sampler(optimizer), learning rate: sampler(lr)}
-        for hyperopt it will look as
-            {optimizer: [ (optimizer1, sampler(lr)), (optimzier2, sampler(lr)), (optimizer3, )]
+        recursive dictionary such that even though the ModelTrainer will receive a parameter optimizer with
+            optimizer: {optimizer_name: optimizer, learning rate: float}
+        but for hyperopt it will look as a list of dictionaries
+            [ { optimizer_name: optimizer_name, learning_rate: sampler },
+              { optimizer_name: optimizer_name, learning_rate: sampler }, ...
+            ]
+        and will sample one from this list.
+
+        Note that the keys within the dictionary (`optimizer_name` and `learning_rate`) should be named
+        as the keys used by the compiler of the model as they are used as they come.
         """
-        if names is None:  # Nothing to do here
-            return
+        # Get all accepted optimizer too check against
+        all_optimizers = MetaModel.accepted_optimizers
+
+        choices = []
 
         opt_key = "optimizer"
         lr_key = "learning_rate"
+        for optimizer in optimizers:
+            name = optimizer['name']
 
-        # Check which optimizers are we using
-        optimizer_dict = MetaModel.accepted_optimizers
-        if names == "ALL":
-            names = optimizer_dict.keys()
+            optimizer_dictionary = {"optimizer_name": name}
 
-        # Set a logarithmic sampling for the learning rate
-        lr_choice = hp_uniform(lr_key, min_lr, max_lr)
+            if name not in all_optimizers.keys():
+                raise NotImplementedError(f"HyperScanner: Optimizer {name} not implemented in MetaModel.py")
 
-        choices = []
-        for opt_name in names:
-            if opt_name not in optimizer_dict.keys():
-                raise NotImplementedError(
-                    "HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(
-                        opt_name
-                    )
-                )
+            lr_dict = optimizer.get(lr_key)
+            if lr_dict is not None:
+                # Check whether this optimizer is implemented with a learning rate
+                args = all_optimizers[name][1]
+                if "lr" not in args.keys():
+                    raise ValueError(f"Optimizer {name} does not accept {lr_key}")
+                hp_key = f"{name}_{lr_key}"
+                # Let's accept the learning rate as a fixed float
+                if isinstance(lr_dict, float):
+                    lr_choice = lr_dict
+                else:
+                    # Get the min-max of the learing rate 
+                    max_lr = lr_dict['max']
+                    min_lr = lr_dict['min']
+                    # Get the sampling type, if not given use uniform
+                    sampling = lr_dict.get('sampling', 'uniform')
+                    if sampling == "uniform":
+                        lr_choice = hp_uniform(hp_key, min_lr, max_lr)
+                    elif sampling == "log":
+                        lr_choice = hp_loguniform(hp_key, min_lr, max_lr)
+                    # Add the sampler to the dictionary for this optimizer
+                optimizer_dictionary[lr_key] = lr_choice
 
-            # Check whether this optimizer takes the learning rate
-            # if it does the choice should be a dictionary with both the optimizer and the learning rate
-            # otherwise just the optimizer name (dictionary not needed)
-            args = optimizer_dict[opt_name][1]
-            if "lr" in args.keys():
-                choices.append({opt_key: opt_name, lr_key: lr_choice})
-            else:
-                choices.append(opt_name)
+            choices.append(optimizer_dictionary)
 
         # Make the list of options into a list sampler
         opt_val = hp_choice(opt_key, choices)
-
         # Tell the HyperScanner this key might contain a dictionary so we save the extra keys
         self._update_param(opt_key, opt_val)
+
 
     def positivity(
         self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100
