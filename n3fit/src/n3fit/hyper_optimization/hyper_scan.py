@@ -184,7 +184,7 @@ class HyperScanner:
         self.hyper_keys = set([])
 
         stopping_dict = sampling_dict.get("stopping")
-        optimizer_list = sampling_dict.get("optimizers")
+        optimizer_list = sampling_dict.get("optimizer")
         positivity_dict = sampling_dict.get("positivity")
         nn_dict = sampling_dict.get("architecture")
 
