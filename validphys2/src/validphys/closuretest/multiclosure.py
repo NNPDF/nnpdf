@@ -488,7 +488,7 @@ SAMPLING_INTERVAL = 5
 
 
 @check_at_least_10_fits
-def n_fit_samples(fits, _internal_n_fits=None):
+def n_fit_samples(fits):
     """Return a range object where each item is a number of fits to use for
     resampling a multiclosure quantity
 
@@ -496,9 +496,7 @@ def n_fit_samples(fits, _internal_n_fits=None):
     user in steps of 5. User must provide at least 10 fits.
 
     """
-    if _internal_n_fits is not None:
-        return range(10, _internal_n_fits + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
-    return range(10, len(fits) + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
+    return list(range(10, len(fits) + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
 
 
 @check_multifit_replicas
@@ -509,8 +507,11 @@ def n_replica_samples(fits_pdf, _internal_n_reps=None):
     determined by varying n_reps between 10 and number of replicas that each
     provided closure fit has. All provided fits must have the same number of
     replicas and that number must be at least 10.
+
+    can override the number of replicas used from each fit by supplying
+    _internal_n_reps
     """
-    return range(10, _internal_n_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
+    return list(range(10, _internal_n_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
 
 
 class BootstrappedTheoryResult:
@@ -523,15 +524,16 @@ class BootstrappedTheoryResult:
         self.central_value = data.mean(axis=1)
 
 
-INTERNAL_SEED = 235356421
+DEFAULT_SEED = 9689372
 
 
 def bias_variance_resampling_dataset(
     internal_multiclosure_dataset_loader,
-    fits_pdf,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+    use_repeats=True,
 ):
     """For a single dataset, create bootstrap distributions of bias and variance
     varying the number of fits and replicas drawn for each resample. Return two
@@ -559,13 +561,11 @@ def bias_variance_resampling_dataset(
 
     """
     # seed same rng so we can aggregate results
-    rng = np.random.RandomState(seed=INTERNAL_SEED)
+    rng = np.random.RandomState(seed=boot_seed)
     closure_th, *input_tuple = internal_multiclosure_dataset_loader
 
     bias_sample = []
     variance_sample = []
-    n_fit_samples = list(n_fit_samples)
-    n_replica_samples = list(n_replica_samples)
     for n_rep_sample in n_replica_samples:
         # results varying n_fit_sample
         fixed_n_rep_bias = []
@@ -575,13 +575,13 @@ def bias_variance_resampling_dataset(
             bias_boot = []
             variance_boot = []
             for _ in range(bootstrap_samples):
-                fit_boot_index = rng.choice(n_fit_samples[-1], size=n_fit_sample, replace=False)
+                fit_boot_index = rng.choice(n_fit_samples[-1], size=n_fit_sample, replace=use_repeats)
                 fit_boot_th = [closure_th[i] for i in fit_boot_index]
                 boot_ths = []
                 # construct proxy fits theory predictions
                 for fit_th in fit_boot_th:
                     rep_boot_index = rng.choice(
-                        n_replica_samples[-1], size=n_rep_sample, replace=False
+                        n_replica_samples[-1], size=n_rep_sample, replace=use_repeats
                     )
                     boot_ths.append(
                         BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
@@ -599,10 +599,11 @@ def bias_variance_resampling_dataset(
 
 def bias_variance_resampling_experiment(
     internal_multiclosure_experiment_loader,
-    fits_pdf,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+    use_repeats=True,
 ):
     """like ratio_n_dependence_dataset except for an experiment
 
@@ -615,10 +616,11 @@ def bias_variance_resampling_experiment(
     """
     return bias_variance_resampling_dataset(
         internal_multiclosure_experiment_loader,
-        fits_pdf,
         n_fit_samples,
         n_replica_samples,
         bootstrap_samples,
+        boot_seed=boot_seed,
+        use_repeats=use_repeats
     )
 
 
@@ -637,8 +639,8 @@ def dataset_ratio_error_finite_effects(
     """
     bias_samples, var_samples = bias_variance_resampling_dataset
     ratio = bias_samples / var_samples
-    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
-    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(ratio.std(axis=2), index=ind, columns=col)
 
 
@@ -683,18 +685,17 @@ def total_ratio_means_finite_effects(
         bias, var = exp_bias_var_resample
         bias_total += bias
         var_total += var
-    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
-    col = pd.Index(list(n_fit_samples), name="n_fit samples")
-    print(bias_total.mean(axis=2))
-    print(var_total.mean(axis=2))
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame((bias_total / var_total).mean(axis=2), index=ind, columns=col)
 
 def xi_resampling_dataset(
     internal_multiclosure_dataset_loader,
-    fits_pdf,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+    use_repeats=True,
 ):
     """For a single dataset, create bootstrap distributions of xi_1sigma
     varying the number of fits and replicas drawn for each resample. Return a
@@ -721,7 +722,7 @@ def xi_resampling_dataset(
 
     """
     # seed same rng so we can aggregate results
-    rng = np.random.RandomState(seed=INTERNAL_SEED)
+    rng = np.random.RandomState(seed=boot_seed)
     closure_th, *input_tuple = internal_multiclosure_dataset_loader
 
     xi_1sigma = []
@@ -732,13 +733,14 @@ def xi_resampling_dataset(
             # for each n_fit and n_replica sample store result of each boot resample
             xi_1sigma_boot = []
             for _ in range(bootstrap_samples):
-                fit_boot_index = rng.randint(0, len(fits_pdf), size=n_fit_sample)
+                fit_boot_index = rng.choice(
+                    n_fit_samples[-1], size=n_fit_sample, replace=use_repeats)
                 fit_boot_th = [closure_th[i] for i in fit_boot_index]
                 boot_ths = []
                 # construct proxy fits theory predictions
                 for fit_th in fit_boot_th:
-                    rep_boot_index = rng.randint(
-                        0, fit_th._rawdata.shape[1], size=n_rep_sample
+                    rep_boot_index = rng.choice(
+                        n_replica_samples[-1], size=n_rep_sample, replace=use_repeats
                     )
                     boot_ths.append(
                         BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
@@ -751,10 +753,11 @@ def xi_resampling_dataset(
 
 def xi_resampling_experiment(
     internal_multiclosure_experiment_loader,
-    fits_pdf,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+    use_repeats=True
 ):
     """like xi_resampling_dataset except for an experiment
 
@@ -767,10 +770,11 @@ def xi_resampling_experiment(
     """
     return xi_resampling_dataset(
         internal_multiclosure_experiment_loader,
-        fits_pdf,
         n_fit_samples,
         n_replica_samples,
         bootstrap_samples,
+        boot_seed=boot_seed,
+        use_repeats=use_repeats
     )
 
 @table
@@ -784,8 +788,8 @@ def dataset_xi_error_finite_effects(
 
     """
     mean_xi_table = xi_resampling_dataset.mean(axis=-1)
-    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
-    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(mean_xi_table.std(axis=2), index=ind, columns=col)
 
 @table
@@ -799,8 +803,8 @@ def dataset_xi_mean_finite_effects(
 
     """
     mean_xi_table = xi_resampling_dataset.mean(axis=-1)
-    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
-    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(mean_xi_table.mean(axis=2), index=ind, columns=col)
 
 @table
@@ -815,8 +819,8 @@ def dataset_std_xi_error_finite_effects(
 
     """
     mean_xi_table = xi_resampling_dataset.std(axis=-1)
-    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
-    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(mean_xi_table.std(axis=2), index=ind, columns=col)
 
 @table
@@ -831,8 +835,8 @@ def dataset_std_xi_mean_finite_effects(
 
     """
     mean_xi_table = xi_resampling_dataset.std(axis=-1)
-    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
-    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(mean_xi_table.mean(axis=2), index=ind, columns=col)
 
 exps_xi_resample = collect("xi_resampling_experiment", ("experiments",))
