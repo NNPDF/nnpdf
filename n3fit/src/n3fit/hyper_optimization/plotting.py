@@ -177,8 +177,8 @@ def parse_stopping(trial):
     epochs = trial["misc"]["space_vals"][KEYWORDS["epochs"]]
     patience = trial["misc"]["space_vals"][KEYWORDS["stp"]]
     stop_ep = patience * epochs
-    positivity_initial = trial["misc"]["space_vals"][KEYWORDS["p_ini"]]
-    positivity_multiplier = trial["misc"]["space_vals"][KEYWORDS["p_mul"]]
+    positivity_initial = trial["misc"]["space_vals"].get(KEYWORDS["p_ini"])
+    positivity_multiplier = trial["misc"]["space_vals"].get(KEYWORDS["p_mul"])
 
     dict_out[KEYWORDS["epochs"]] = epochs
     dict_out[KEYWORDS["stp"]] = patience
@@ -254,6 +254,8 @@ def parse_statistics(trial):
     std = results["kfold_meta"]["hyper_std"]
     dict_out["avg"] = average
     dict_out["std"] = std
+    dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
+    dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
     return dict_out
 
 
@@ -283,6 +285,8 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
     val_loss = trial_dict[KEYWORDS["vl"]]
     test_loss = trial_dict[KEYWORDS["tl"]]
     loss = val_loss * validation_multiplier + test_loss * test_f
+
+#     loss = max(trial_dict['hlosses'])
 
     if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold:
         trial_dict["good"] = False
