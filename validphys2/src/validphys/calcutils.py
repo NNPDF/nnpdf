@@ -176,7 +176,9 @@ def regularize_covmat(covmat: np.array, norm_threshold=4):
     d = np.sqrt(np.diag(covmat))[:, np.newaxis]
     corr = covmat / d / d.T
     e_val, e_vec = la.eigh(corr)
-    if 1 / e_val[0] <= sqr_threshold: # eigh gives eigenvals in ascending order
+    # if eigenvalues are close to zero, can be negative which messes this up
+    # take abs here to be safe
+    if abs(1 / e_val[0]) <= sqr_threshold: # eigh gives eigenvals in ascending order
         return covmat
     new_e_val = np.clip(e_val, a_min=1/sqr_threshold, a_max=None)
     return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
