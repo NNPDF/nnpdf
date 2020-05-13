@@ -12,6 +12,7 @@
 """
 
 import os
+
 # this is needed for Travis to pass the test in mac
 os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 import pytest
@@ -30,7 +31,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
-EXPECTED_MAX_FITTIME = 200 # seen mac ~ 180  and linux ~ 90
+EXPECTED_MAX_FITTIME = 200  # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
@@ -97,9 +98,9 @@ def test_performfit():
     # check that the times didnt grow in a weird manner
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     # Better to catch up errors even when they happen to grow larger by chance
-    f = open(time_path, 'r')
+    f = open(time_path, "r")
     times = yaml.load(f)
-    fitting_time = times['walltime']['replica_set_to_replica_fitted']
+    fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
     f.close()
     assert fitting_time < EXPECTED_MAX_FITTIME
 

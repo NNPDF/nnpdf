@@ -39,7 +39,8 @@ def evaluate(tensor):
     """ Evaluate input tensor using the backend """
     return K.eval(tensor)
 
-def as_layer(operation, op_args = None, op_kwargs = None, **kwargs):
+
+def as_layer(operation, op_args=None, op_kwargs=None, **kwargs):
     """ Wrap any operation as a keras layer
 
     Note that a layer call argument takes only one argument, therefore
@@ -226,12 +227,12 @@ def transpose(tensor, **kwargs):
     return K.transpose(tensor, **kwargs)
 
 
-def concatenate(tensor_list, axis=-1, target_shape=None, name = None):
+def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     """
     Concatenates a list of numbers or tensor into a bigger tensor
     If the target shape is given, the output is reshaped to said shape
     """
-    concatenated_tensor = tf.concat(tensor_list, axis, name = name)
+    concatenated_tensor = tf.concat(tensor_list, axis, name=name)
     if target_shape:
         return K.reshape(concatenated_tensor, target_shape)
     else:
@@ -289,6 +290,7 @@ def sum(*args, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/sum>`_
     """
     return K.sum(*args, **kwargs)
+
 
 def split(*args, **kwargs):
     """

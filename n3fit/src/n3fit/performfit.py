@@ -14,7 +14,9 @@ from reportengine.checks import make_argcheck, CheckError
 log = logging.getLogger(__name__)
 
 
-def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
+def initialize_seeds(
+    replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool
+):
     """Action to initialize seeds for random number generation.
     We initialize three different seeds. The first is the seed
     used for training/validation splits, the second is used for
@@ -73,14 +75,22 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
     Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
     return Seeds(trvalseeds, nnseeds, mcseeds)
 
+
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and hyperscan is None:
-        raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
+        raise CheckError(
+            "A hyperscan dictionary needs to be defined when performing hyperopt"
+        )
     if hyperopt is not None and "kfold" not in hyperscan:
-        raise CheckError("hyperscan::kfold key needs to be defined when performing hyperopt")
+        raise CheckError(
+            "hyperscan::kfold key needs to be defined when performing hyperopt"
+        )
     if hyperopt is not None and fitting["genrep"]:
-        raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
+        raise CheckError(
+            "During hyperoptimization we cannot generate replicas (genrep=false)"
+        )
+
 
 @make_argcheck
 def check_consistent_basis(fitting):
@@ -181,9 +191,9 @@ def performfit(
     else:
         t0pdfset = None
 
-
-    trvlseed, nnseed, mcseed, genrep = [fitting.get(i)
-                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
+    trvlseed, nnseed, mcseed, genrep = [
+        fitting.get(i) for i in ["trvlseed", "nnseed", "mcseed", "genrep"]
+    ]
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
     trvalseeds, nnseeds, mcseeds = seeds.trvlseeds, seeds.nnseeds, seeds.mcseeds
@@ -198,7 +208,7 @@ def performfit(
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
-    if fitting.get('diagonal_basis'):
+    if fitting.get("diagonal_basis"):
         log.info("working in diagonal basis")
 
     if hyperscan and hyperopt:
@@ -217,7 +227,7 @@ def performfit(
             replica_seeds=mcseeds,
             trval_seeds=trvalseeds,
             kpartitions=kpartitions,
-            rotate_diagonal=fitting.get('diagonal_basis'),
+            rotate_diagonal=fitting.get("diagonal_basis"),
         )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
@@ -246,7 +256,7 @@ def performfit(
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
-            max_cores = maxcores
+            max_cores=maxcores,
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)

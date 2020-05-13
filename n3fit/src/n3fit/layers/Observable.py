@@ -3,6 +3,7 @@ import numpy as np
 from abc import abstractmethod, ABC
 from n3fit.backends import operations as op
 
+
 def _is_unique(list_of_arrays):
     """ Check whether the list of arrays more than one different arrays """
     the_first = list_of_arrays[0]
@@ -10,6 +11,7 @@ def _is_unique(list_of_arrays):
         if not np.array_equal(the_first, i):
             return False
     return True
+
 
 class Observable(MetaLayer, ABC):
     """
@@ -44,9 +46,9 @@ class Observable(MetaLayer, ABC):
         xgrids = []
         self.fktables = []
         for fktable in fktable_dicts:
-            xgrids.append(fktable['xgrid'])
-            basis.append(fktable['basis'])
-            self.fktables.append(op.numpy_to_tensor(fktable['fktable']))
+            xgrids.append(fktable["xgrid"])
+            basis.append(fktable["basis"])
+            self.fktables.append(op.numpy_to_tensor(fktable["fktable"]))
 
         # check how many xgrids this dataset needs
         if _is_unique(xgrids):
@@ -64,7 +66,6 @@ class Observable(MetaLayer, ABC):
 
         self.operation = op.c_to_py_fun(operation_name)
         self.output_dim = self.fktables[0].shape[0]
-
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)

@@ -249,9 +249,7 @@ class MetaModel(Model):
             self.target_tensors = None  # TODO TF 2.2 target_output
             # Tensorize
             target = [numpy_to_tensor(i) for i in target_output]
-        super(MetaModel, self).compile(
-            optimizer=opt, target_tensors=target, loss=loss
-        )
+        super(MetaModel, self).compile(optimizer=opt, target_tensors=target, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """ Set all mask value to the selected value

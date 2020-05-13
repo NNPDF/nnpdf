@@ -340,8 +340,10 @@ class ModelTrainer:
         # The input layer is a concatenation of all experiments
         # we need now to split the output on a different array per experiment
         sp_ar = [self.input_sizes]
-        sp_kw = {'axis': 1}
-        splitting_layer = operations.as_layer(operations.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
+        sp_kw = {"axis": 1}
+        splitting_layer = operations.as_layer(
+            operations.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
+        )
         splitted_pdf = splitting_layer(full_pdf)
 
         for model_dict in self.list_of_models_dicts:

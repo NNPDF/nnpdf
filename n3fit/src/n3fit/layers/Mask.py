@@ -25,7 +25,7 @@ class Mask(MetaLayer):
             axis in which to apply the mask
     """
 
-    def __init__(self, bool_mask, c=None, unbatch = False, axis = None, **kwargs):
+    def __init__(self, bool_mask, c=None, unbatch=False, axis=None, **kwargs):
         self.output_dim = np.count_nonzero(bool_mask)
         self.mask = op.numpy_to_tensor(bool_mask)
         self.c = c
@@ -36,11 +36,13 @@ class Mask(MetaLayer):
     def build(self, input_shape):
         if self.c:
             initializer = MetaLayer.init_constant(value=self.c)
-            self.kernel = self.builder_helper("mask", (1,), initializer, trainable=False)
+            self.kernel = self.builder_helper(
+                "mask", (1,), initializer, trainable=False
+            )
         super(Mask, self).build(input_shape)
 
     def meta_call(self, prediction_in):
-        ret = op.boolean_mask(prediction_in, self.mask, axis = self.axis)
+        ret = op.boolean_mask(prediction_in, self.mask, axis=self.axis)
         if self.c:
             ret = ret * self.kernel
         if self.unbatch:

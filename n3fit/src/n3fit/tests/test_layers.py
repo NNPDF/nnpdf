@@ -80,30 +80,24 @@ def generate_input_DIS(flavs=3, xsize=2, ndata=5, n_combinations=-1):
     fktable = np.random.rand(ndata, lc, xsize)
     return fktable, np.array(combinations)
 
-def generate_DIS(nfk = 1):
+
+def generate_DIS(nfk=1):
     fkdicts = []
     for i in range(nfk):
         fk, comb = generate_input_DIS(
             flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
         )
-        fkdicts.append({
-            'fktable' : fk,
-            'basis' : comb,
-            'xgrid' : np.ones((1, XSIZE))
-            })
+        fkdicts.append({"fktable": fk, "basis": comb, "xgrid": np.ones((1, XSIZE))})
     return fkdicts
 
-def generate_had(nfk = 1):
+
+def generate_had(nfk=1):
     fkdicts = []
     for i in range(nfk):
         fk, comb = generate_input_had(
             flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS
         )
-        fkdicts.append({
-            'fktable' : fk,
-            'basis' : comb,
-            'xgrid' : np.ones((1, XSIZE))
-            })
+        fkdicts.append({"fktable": fk, "basis": comb, "xgrid": np.ones((1, XSIZE))})
     return fkdicts
 
 
@@ -114,7 +108,7 @@ def test_DIS_basis():
     # Get the masks from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fkdicts):
-        comb = fk['basis']
+        comb = fk["basis"]
         # Compute the basis with numpy
         reference = np.zeros(FLAVS, dtype=bool)
         for i in comb:
@@ -128,14 +122,15 @@ def test_DY_basis():
     # Get the mask from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fkdicts):
-        comb = fk['basis']
+        comb = fk["basis"]
         reference = np.zeros((FLAVS, FLAVS))
-        for i,j in comb:
-            reference[i,j] = True
+        for i, j in comb:
+            reference[i, j] = True
         assert np.alltrue(result == reference)
 
+
 def test_DIS():
-    tests = [(2, 'ADD'), (1, 'NULL')]
+    tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
         fkdicts = generate_DIS(nfk)
@@ -151,13 +146,14 @@ def test_DIS():
             all_masks *= nfk
         reference = 0
         for fkdict, mask in zip(fkdicts, all_masks):
-            fk = fkdict['fktable']
+            fk = fkdict["fktable"]
             pdf_masked = pdf.T[mask.numpy()].T
             reference += np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
         assert np.allclose(result, reference, THRESHOLD)
 
+
 def test_DY():
-    tests = [(2, 'ADD'), (1, 'NULL')]
+    tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
         fkdicts = generate_had(nfk)
@@ -173,7 +169,7 @@ def test_DY():
             all_masks *= nfk
         reference = 0
         for fkdict, mask in zip(fkdicts, all_masks):
-            fk = fkdict['fktable']
+            fk = fkdict["fktable"]
             lumi = np.tensordot(pdf, pdf, axes=0)
             lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
             lumi_masked = lumi_perm[mask.numpy()]
