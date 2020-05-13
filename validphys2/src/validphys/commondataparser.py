@@ -19,6 +19,14 @@ from validphys.coredata import CommonData
 class BadCommonDataError(Exception):
     """Exception raised when a commondata file cannot be parsed correctly"""
 
+@dataclasses.dataclass(frozen=True)
+class CommonDataInfo:
+    """Class containing the basic properties of a commondata file."""
+    setname: str
+    ndata: int
+    proc: str
+    nsys: int
+
 def load_dataset(datafile):
     """Reads commondata file for dataset_name and returns a panda DataFrame with:
         entry   process kin1    kin2    kin3    data    stat    \
