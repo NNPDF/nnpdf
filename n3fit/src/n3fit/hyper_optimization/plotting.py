@@ -47,6 +47,8 @@ regex_not_op = re.compile(r"[\w\.]+")
 KEYWORDS = {
     "id": "iteration",
     "optimizer": "optimizer",
+    "optimizer_name": "optimizer_name",
+    "clipnorm" : "clipnorm",
     "lr": "learning_rate",
     "initializer": "initializer",
     "dropout": "dropout",
@@ -154,13 +156,16 @@ def parse_optimizer(trial):
     if isinstance(opt, dict):
         # If this is a dictionary then the optimizer contains extra
         # information (normaly the learning rate)
-        name = opt[KEYWORDS["optimizer"]]
+        name = opt[KEYWORDS["optimizer_name"]]
         lr = opt[KEYWORDS["lr"]]
+        clipnorm = opt.get(KEYWORDS['clipnorm'])
     else:
         name = opt
         lr = None
+        clipnorm = None
     dict_out[KEYWORDS["optimizer"]] = name
     dict_out[KEYWORDS["lr"]] = lr
+    dict_out[KEYWORDS["clipnorm"]] = clipnorm
     return dict_out
 
 
