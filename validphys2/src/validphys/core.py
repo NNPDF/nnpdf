@@ -15,7 +15,6 @@ import inspect
 import logging
 
 import numpy as np
-import pandas as pd
 
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
