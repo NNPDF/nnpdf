@@ -4,6 +4,7 @@
 
 # Backend-independent imports
 from collections import namedtuple
+from validphys.pdfbases import check_basis
 import sys
 import logging
 import os.path
@@ -81,9 +82,20 @@ def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and fitting["genrep"]:
         raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
 
+@make_argcheck
+def check_consistent_basis(fitting):
+    fitbasis = fitting["fitbasis"]
+    # Check that there are no duplicate flavours
+    flavs = [d['fl'] for d in fitting['basis']]
+    if len(set(flavs)) != len(flavs):
+        raise CheckError(f"Repeated flavour names: check basis dictionary")
+    # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
+    res = check_basis(fitbasis,flavs)
+    
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 @check_consistent_hyperscan_options
+@check_consistent_basis
 def performfit(
     fitting,
     experiments,
