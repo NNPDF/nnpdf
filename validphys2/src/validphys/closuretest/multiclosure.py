@@ -89,7 +89,10 @@ def internal_multiclosure_experiment_loader(
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
-    internal_multiclosure_dataset_loader, _internal_n_reps=None):
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=None
+):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data) where bias and variance are
     1-D arrays of length len(fits).
@@ -101,11 +104,11 @@ def fits_dataset_bias_variance(
     different filterseeds, so that the level 1 shift is different.
 
     Can control the number of replicas taken from each fit with
-    _internal_n_reps
+    _internal_max_reps
 
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    reps = np.asarray([th._rawdata[:, :_internal_n_reps] for th in closures_th])
+    reps = np.asarray([th._rawdata[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis
@@ -129,11 +132,13 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
 @check_multifit_replicas
 def fits_experiment_bias_variance(
-    internal_multiclosure_experiment_loader, _internal_n_reps=None
+    internal_multiclosure_experiment_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=None
 ):
     """Like `fits_dataset_bias_variance` but for an experiment"""
     return fits_dataset_bias_variance(
-        internal_multiclosure_experiment_loader, _internal_n_reps)
+        internal_multiclosure_experiment_loader, _internal_max_reps, _internal_min_reps)
 
 def expected_experiment_bias_variance(fits_experiment_bias_variance):
     """Like `expected_dataset_bias_variance` except for an experiment"""
@@ -513,7 +518,7 @@ def n_fit_samples(fits):
 
 
 @check_multifit_replicas
-def n_replica_samples(fits_pdf, _internal_n_reps=None):
+def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=None):
     """Return a range object where each item is a number of replicas to use for
     resampling a multiclosure quantity
 
@@ -522,9 +527,9 @@ def n_replica_samples(fits_pdf, _internal_n_reps=None):
     replicas and that number must be at least 10.
 
     can override the number of replicas used from each fit by supplying
-    _internal_n_reps
+    _internal_max_reps
     """
-    return list(range(10, _internal_n_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
+    return list(range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
 
 
 class BootstrappedTheoryResult:
