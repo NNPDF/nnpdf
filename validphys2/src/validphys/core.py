@@ -20,8 +20,6 @@ from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
-from commondataparser import load_dataset
-
 from NNPDF import (LHAPDFSet,
     CommonData,
     FKTable,
@@ -309,9 +307,9 @@ class CommonDataSpec(TupleComp):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
     @functools.lru_cache()
-    def load(self):
+    def load(self)->CommonData:
         #TODO: Use better path handling in python 3.6
-        return load_dataset(self.datafile)
+        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
 
     @property
     def plot_kinlabels(self):
