@@ -86,8 +86,14 @@ def check_multifit_replicas(fits_pdf, _internal_n_reps):
         raise CheckError(
             "all fits for multiclosure actions should have same number of replicas"
         )
+    n_reps = n_reps.pop()
     if _internal_n_reps is None:
-        _internal_n_reps = n_reps.pop()
+        _internal_n_reps = n_reps
+    elif _internal_n_reps > n_reps:
+        raise CheckError(
+            f"Specified _internal_n_reps to be {_internal_n_reps} "
+            f"however each fit only has {n_reps} replicas"
+        )
     if _internal_n_reps < 10:
         raise CheckError(
             "Multiclosure actions testing finite sampling effects require fits "

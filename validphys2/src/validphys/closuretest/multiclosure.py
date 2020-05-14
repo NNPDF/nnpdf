@@ -17,7 +17,7 @@ from reportengine.figure import figure
 
 from validphys.results import ThPredictionsResult
 from validphys.calcutils import calc_chi2
-from validphys.core import DataSetSpec, Experiment
+from validphys.core import DataSetSpec
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
     check_multifit_replicas,
@@ -87,90 +87,98 @@ def internal_multiclosure_experiment_loader(
     )
 
 
-def expected_bias_dataset(internal_multiclosure_dataset_loader):
-    """For a set of closure fits, calculate the mean bias across fits for
-    a dataset, bias is the chi2 between central prediction and underlying law.
-    For more information on bias, see closuretest.bias_dataset.
+@check_multifit_replicas
+def fits_dataset_bias_variance(
+    internal_multiclosure_dataset_loader, _internal_n_reps=None):
+    """For a single dataset, calculate the bias and variance for each fit
+    and return tuple (bias, variance, n_data) where bias and variance are
+    1-D arrays of length len(fits).
+
+    for more information on bias see closuretest.bias_dataset and for more information
+    on variance see closuretest.variance_dataset.
 
     The fits should each have the same underlying law and t0pdf, but have
     different filterseeds, so that the level 1 shift is different.
 
+    Can control the number of replicas taken from each fit with
+    _internal_n_reps
+
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    centrals = np.asarray([th.central_value for th in closures_th])
+    reps = np.asarray([th._rawdata[:, :_internal_n_reps] for th in closures_th])
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
     # place bins on first axis
     diffs = law_th.central_value[:, np.newaxis] - centrals.T
     biases = calc_chi2(sqrtcov, diffs)
-    return np.mean(biases), len(law_th)
-
-@figure
-def plot_dataset_fits_bias_variance(internal_multiclosure_dataset_loader):
-    """For a set of closure fits, calculate the bias and variance across fits
-    and then plot scatter points so we can see the distribution of each quantity
-    with fits.
-    """
-    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    centrals = np.asarray([th.central_value for th in closures_th])
-    # place bins on first axis
-    diffs = law_th.central_value[:, np.newaxis] - centrals.T
-    biases = calc_chi2(sqrtcov, diffs)
-
-    reps = np.asarray([th._rawdata for th in closures_th])
     variances = []
     # this seems slow but breaks for datasets with single data point otherwise
     for i in range(reps.shape[0]):
         diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
         variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+    return biases, np.asarray(variances), len(law_th)
 
+
+def expected_dataset_bias_variance(fits_dataset_bias_variance):
+    """For a given dataset calculate the expected bias and variance across fits
+    then return tuple (expected bias, expected variance, n_data)
+
+    """
+    biases, variances, n_data = fits_dataset_bias_variance
+    return np.mean(biases), np.mean(variances), n_data
+
+@check_multifit_replicas
+def fits_experiment_bias_variance(
+    internal_multiclosure_experiment_loader, _internal_n_reps=None
+):
+    """Like `fits_dataset_bias_variance` but for an experiment"""
+    return fits_dataset_bias_variance(
+        internal_multiclosure_experiment_loader, _internal_n_reps)
+
+def expected_experiment_bias_variance(fits_experiment_bias_variance):
+    """Like `expected_dataset_bias_variance` except for an experiment"""
+    return expected_dataset_bias_variance(fits_experiment_bias_variance)
+
+
+@figure
+def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
+    """For a set of closure fits, calculate the bias and variance across fits
+    and then plot scatter points so we can see the distribution of each quantity
+    with fits.
+    """
+    biases, variances, _ = fits_dataset_bias_variance
     fig, ax = plt.subplots()
     ax.plot(biases, "*", label="bias")
     ax.axhline(np.mean(biases), label="bias mean", linestyle="-", color="k")
     ax.plot(variances, ".", label="variance")
     ax.axhline(np.mean(variances), label="variances mean", linestyle=":", color="k")
-    ax.set_title("Bias and variance for each fit (unnormalised)")
+    ax.set_title(f"Bias and variance for {dataset} for each fit (unnormalised)")
     ax.set_xlabel("fit index")
     ax.legend()
     return fig
 
 @figure
-def plot_experiment_fits_bias_variance(internal_multiclosure_experiment_loader):
-    return plot_dataset_fits_bias_variance(internal_multiclosure_experiment_loader)
+def plot_experiment_fits_bias_variance(fits_experiment_bias_variance, experiment):
+    return plot_dataset_fits_bias_variance(fits_experiment_bias_variance, experiment)
 
-def expected_variance_dataset(internal_multiclosure_dataset_loader):
-    """Given multiple closure fits, calculate the mean variance across fits
-    for a given dataset, variance is the spread of replicas in units of the
-    covariance, for more information see closuretest.variance_dataset
+fits_experiments_bias_variance = collect("fits_experiment_bias_variance", ("experiments",))
 
-    As with expected_bias_dataset, the fits should each have the same underlying
-    law and t0pdf, but have different filterseeds.
+# TODO: get rid of this with data keyword merge
+def fits_total_bias_variance(fits_experiments_bias_variance):
+    """Like `fits_dataset_bias_variance` except for all data"""
+    bias_total, variance_total, n_total = fits_experiments_bias_variance[0]
+    for b, v, n, in fits_experiments_bias_variance[1:]:
+        bias_total += b
+        variance_total += v
+        n_total += n
+    return bias_total, variance_total, n_total
 
-    """
-    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    # object is fits, bins, replicas
-    reps = np.asarray([th._rawdata for th in closures_th])
-    variances = []
-    # this seems slow but breaks for datasets with single data point otherwise
-    for i in range(reps.shape[0]):
-        diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-        variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
-    # assume all data same length
-    return np.mean(variances), len(law_th)
+@figure
+def plot_total_fits_bias_variance(fits_total_bias_variance):
+    return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
-
-def expected_bias_experiment(internal_multiclosure_experiment_loader):
-    """Like expected_bias_dataset but for whole experiment"""
-    return expected_bias_dataset(internal_multiclosure_experiment_loader)
-
-
-def expected_variance_experiment(internal_multiclosure_experiment_loader):
-    """Like expected_variance_dataset but for whole experiment"""
-    return expected_variance_dataset(internal_multiclosure_experiment_loader)
-
-
-datasets_expected_bias = collect("expected_bias_dataset", ("experiments", "experiment"))
-datasets_expected_variance = collect(
-    "expected_variance_dataset", ("experiments", "experiment")
-)
+datasets_expected_bias_variance = collect(
+    "expected_dataset_bias_variance", ("experiments", "experiment"))
 
 # TODO: check that this hasn't been implemented somewhere else at point of merge
 experiments_datasets = collect("dataset", ("experiments", "experiment"))
@@ -178,7 +186,7 @@ experiments_datasets = collect("dataset", ("experiments", "experiment"))
 
 @table
 def datasets_bias_variance_ratio(
-    datasets_expected_bias, datasets_expected_variance, experiments_datasets
+    datasets_expected_bias_variance, experiments_datasets
 ):
     """For each dataset calculate the expected bias and expected variance
     across fits
@@ -192,8 +200,8 @@ def datasets_bias_variance_ratio(
 
     """
     records = []
-    for ds, (bias, ndata), (var, _) in zip(
-        experiments_datasets, datasets_expected_bias, datasets_expected_variance
+    for ds, (bias, var, ndata) in zip(
+        experiments_datasets, datasets_expected_bias_variance
     ):
         records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var))
     df = pd.DataFrame.from_records(
@@ -207,11 +215,16 @@ experiments_expected_bias = collect("expected_bias_experiment", ("experiments",)
 experiments_expected_variance = collect(
     "expected_variance_experiment", ("experiments",)
 )
+experiments_expected_bias_variance = collect(
+    "expected_experiment_bias_variance", ("experiments",))
 
+def expected_total_bias_variance(fits_total_bias_variance):
+    """Like `expected_dataset_bias_variance` except for all data"""
+    return expected_dataset_bias_variance(fits_total_bias_variance)
 
 @table
 def experiments_bias_variance_ratio(
-    experiments_expected_bias, experiments_expected_variance, experiments
+    experiments_expected_bias_variance, experiments, expected_total_bias_variance
 ):
     """Like datasets_bias_variance_ratio except for each experiment. Also
     calculate and tabulate
@@ -221,12 +234,10 @@ def experiments_bias_variance_ratio(
     """
     # don't reinvent wheel
     df_in = datasets_bias_variance_ratio(
-        experiments_expected_bias, experiments_expected_variance, experiments
+        experiments_expected_bias_variance, experiments
     )
 
-    bias_tot = np.sum([bias for (bias, _) in experiments_expected_bias])
-    var_tot = np.sum([var for (var, _) in experiments_expected_variance])
-    ntotal = np.sum(df_in["ndata"].values)
+    bias_tot, var_tot, ntotal = expected_total_bias_variance
 
     tot_df = pd.DataFrame(
         [[ntotal, bias_tot / var_tot]], index=["Total"], columns=df_in.columns
@@ -586,9 +597,14 @@ def bias_variance_resampling_dataset(
                     boot_ths.append(
                         BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
                     )
-                bias, _ = expected_bias_dataset((boot_ths, *input_tuple))
+                # explicitly pass n_rep to fits_dataset_bias_variance so it uses
+                # full subsample
+                bias, variance, _ = expected_dataset_bias_variance(
+                    fits_dataset_bias_variance(
+                        (boot_ths, *input_tuple), n_rep_sample
+                    )
+                )
                 bias_boot.append(bias)
-                variance, _ = expected_variance_dataset((boot_ths, *input_tuple))
                 variance_boot.append(variance)
             fixed_n_rep_bias.append(bias_boot)
             fixed_n_rep_variance.append(variance_boot)
