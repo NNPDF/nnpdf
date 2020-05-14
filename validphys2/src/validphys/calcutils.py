@@ -4,14 +4,14 @@ calcutils.py
 Low level utilities to calculate χ² and such. These are used to implement the
 higher level functions in results.py
 """
+import logging
 from typing import Callable
+
 import numpy as np
 import scipy.linalg as la
 import pandas as pd
 
-PRECISION_THRESHOLD = 1e-14
-
-class PrecisionError(Exception): pass
+log = logging.getLogger(__name__)
 
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
@@ -181,15 +181,15 @@ def regularize_covmat(covmat: np.array, norm_threshold=4):
     corr = covmat / d / d.T
     # eigh gives eigenvals in ascending order
     e_val, e_vec = la.eigh(corr)
-    # if eigenvalues are close to zero, can be negative which messes this up
-    # check matrix is positive semi definite within precision
-    if e_val[0] < -PRECISION_THRESHOLD:
-        raise PrecisionError(
-            "Supplied matrix is not positive semi-definite within precision tolerance."
-            f"Minimum eigenvalue: {e_val[0]}, tolerance: {PRECISION_THRESHOLD}."
+    # if eigenvalues are close to zero, can be negative
+    if e_val[0] < 0:
+        log.warning(
+            "Negative eigenvalue encountered in correlation matrix: %s. "
+            "Assuming eigenvalue should be zero and is negative due to numerical "
+            "precision.",
+            e_val[0]
         )
-    # add epsilon to handle eigenvalue close to zero
-    if 1 / (e_val[0] + PRECISION_THRESHOLD) <= sqr_threshold:
+    if e_val[0] > 1/sqr_threshold:
         return covmat
     new_e_val = np.clip(e_val, a_min=1/sqr_threshold, a_max=None)
     return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
