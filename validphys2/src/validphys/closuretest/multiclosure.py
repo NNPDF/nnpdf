@@ -891,6 +891,25 @@ def total_xi_mean_finite_effects(
     return dataset_xi_mean_finite_effects(xi_total, n_fit_samples, n_replica_samples)
 
 @table
+def total_expected_xi_mean_finite_effects(
+    total_ratio_means_finite_effects
+):
+    """Given the resampled ratio of bias/variance, returns table of resampled
+    expected xi
+
+    see `expected_xi_from_bias_variance` for more details on how to calculate
+    expected xi.
+
+    """
+    df_in = total_ratio_means_finite_effects
+    sqrt_bias_var = np.sqrt(df_in.values)
+    n_sigma_in_variance = 1 / sqrt_bias_var
+    # pylint can't find erf here, disable error in this function
+    # pylint: disable=no-member
+    estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
+    return pd.DataFrame(estimated_integral, index=df_in.index, columns=df_in.columns)
+
+@table
 def total_std_xi_error_finite_effects(
     exps_xi_resample, n_fit_samples, n_replica_samples
 ):
