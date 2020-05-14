@@ -148,10 +148,12 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     """
     biases, variances, _ = fits_dataset_bias_variance
     fig, ax = plt.subplots()
-    ax.plot(biases, "*", label="bias")
-    ax.axhline(np.mean(biases), label="bias mean", linestyle="-", color="k")
-    ax.plot(variances, ".", label="variance")
-    ax.axhline(np.mean(variances), label="variances mean", linestyle=":", color="k")
+    ax.plot(biases, "*", label=f"bias, std dev. = {np.std(biases)}")
+    ax.axhline(
+        np.mean(biases), label=f"bias mean = {np.mean(biases)}", linestyle="-", color="k")
+    ax.plot(variances, ".", label=f"variance, std dev. = {np.std(variances)}")
+    ax.axhline(
+        np.mean(variances), label=f"variances mean = {np.mean(variances)}", linestyle=":", color="k")
     ax.set_title(f"Bias and variance for {dataset} for each fit (unnormalised)")
     ax.set_xlabel("fit index")
     ax.legend()
