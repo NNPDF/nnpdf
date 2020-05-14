@@ -151,6 +151,8 @@ class ModelTrainer:
         self.model_file = None
         self.impose_sumrule = True
         self.hyperkeys = None
+        self.fit_stats = True
+        self.kfold_stats = False
         if kfold_parameters is None:
             self.kpartitions = [None]
             self.hyper_threshold = None
@@ -162,6 +164,10 @@ class ModelTrainer:
             if kfold_parameters.get('penalties'):
                 if kfold_parameters['penalties'].get('saturation'):
                     self.hyper_penalties.append(penalties.saturation)
+            # Define verbosity levels
+            if kfold_parameters.get('verbosity'):
+                self.fit_stats = kfold_parameters['verbosity'].get('training', True)
+                self.kfold_stats = kfold_parameters['verbosity'].get('kfold')
 
 
         # Initialize the pdf model
@@ -576,7 +582,7 @@ class ModelTrainer:
         return reporting_list
 
 
-    def _train_and_fit(self, training_model, stopping_object, epochs = 100):
+    def _train_and_fit(self, training_model, stopping_object, epochs = 100, callback = None):
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -588,13 +594,16 @@ class ModelTrainer:
             out = training_model.perform_fit(verbose=False)
             print_stats = False
 
-            if (epoch + 1) % PRINT_STATS_EACH == 0:
+            if (epoch + 1) % PRINT_STATS_EACH == 0 and self.fit_stats:
                 print_stats = True
 
             if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
                 training_model.multiply_weights(self.training["pos_datasets"], self.training["pos_multipliers"])
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
+
+            if callback is not None:
+                callback(epoch)
 
             if stopping_object.stop_here():
                 break
@@ -672,11 +681,13 @@ class ModelTrainer:
 
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
+        hyper_stats = None
         if self.mode_hyperopt:
             log.info("Performing hyperparameter scan")
             for key in self.hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
             self._hyperopt_override(params)
+
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -730,10 +741,21 @@ class ModelTrainer:
             # Compile each of the models witht he right parameters
             _model_compilation(model_dicts, params["optimizer"])
 
+            # Generate a callback method to print stats
+            # of the kfolding every 100 epochs
+            if self.mode_hyperopt and self.kfold_stats:
+                def hyper_stats(epoch):
+                    if (epoch + 1) % PRINT_STATS_EACH == 0:
+                        lraw = models["experimental"].compute_losses(verbose=False)["loss"]
+                        chi2 = lraw / model_dicts['experimental']["ndata"]
+                        log.info("kfold loss for fold %d: %f", k, chi2)
+                        
+
             passed = self._train_and_fit(
                     models['training'],
                     stopping_object,
                     epochs = epochs,
+                    callback=hyper_stats
                     )
 
             # Compute validation and training loss
