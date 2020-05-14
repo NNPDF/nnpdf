@@ -135,7 +135,10 @@ The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hype
 .. code-block:: yaml
 
     kfold:
-        threshold_loss: 5.0
+        verbosity:
+            training: True
+            kfold: True
+        threshold: 5.0
         penalties:
             saturation: True
         partitions:
@@ -156,6 +159,10 @@ fit, without worrying about things like overlearning which might be a second ord
 The ``threshold_loss`` flag will make the fit stop if any of the partitions produces a loss greater
 than the given threshold. This is useful for quickly discarding hyperparameter subspaces without
 needing to do all ``k`` fits.
+
+The ``verbosity`` dictionary allows fine control on what to report each 100 epochs. When both ``training``
+and ``kfold`` are set to ``False``, nothing is printed until the end of the fit of the fold.
+When set to ``True``, the losses for the training (training and validation) and for the partition are printed.
 
 During hyperoptimization we might want to search for specific features, such as quickly fitting
 (giving an incentive to quicker runs) or avoiding saturation (increasing the loss for models that
