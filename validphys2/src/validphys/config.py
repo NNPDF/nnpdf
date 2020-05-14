@@ -941,6 +941,13 @@ class CoreConfig(configparser.Config):
         log.warning("Overwriting filter rules")
         return filter_rules
 
+    def parse_default_filter_rules_recorded_spec_(self, spec):
+        """This function is a hacky fix for parsing the recorded spec
+        of filter rules. The reason we need this function is that without
+        it reportengine detects a conflict in the `dataset` key.
+        """
+        return spec
+
     def produce_rules(
             self,
             theoryid,
