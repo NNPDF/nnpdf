@@ -235,8 +235,6 @@ class PDF(TupleComp):
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
 _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
 
-
-
 def get_plot_kinlabels(commondata):
     """Return the LaTex kinematic labels for a given Commondata"""
     key = commondata.process_type
