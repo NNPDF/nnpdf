@@ -40,7 +40,7 @@ def natural_keys(text):
 sane_order = partial(sorted, key=natural_keys)
 
 
-def main():
+def main(command_line=None):
     parser = argparse.ArgumentParser(description=__doc__)
 
     attrs = dir(L)
@@ -81,7 +81,7 @@ def main():
         default=False,
         help="Only list local resources",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(command_line)
 
     l = L()
     if not args.remote:
