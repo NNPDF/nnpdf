@@ -10,6 +10,7 @@ import io
 import functools
 import tarfile
 import dataclasses
+import re
 
 import numpy as np
 import pandas as pd
@@ -35,11 +36,15 @@ def load_commondata(spec):
     entry   process kin1    kin2    kin3    data    stat    \
             sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
     """
-    tabledata = parse_commondata(spec.datafile)
+    commondatafile = spec.datafile
+
+    # Getting set name from commondata file name
+    setname = re.search('DATA_(.*).dat', str(commondatafile)).group(1)
+    tabledata = parse_commondata(commondatafile, setname)
 
     return tabledata
 
-def parse_commondata(f):
+def parse_commondata(f, setname):
     
     """Parse a commondata file into a CommonData. Raise a BadCommondATAError
     if problems are encountered.
@@ -60,20 +65,17 @@ def parse_commondata(f):
 
     # build header
     header = ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
-    for i in range((table.shape[1]-len(header))//2):
+    nsys  = (table.shape[1]-len(header))//2
+    for i in range(nsys):
         header += [f'sys.add.{i+1}', f'sys.mult.{i+1}']
     table.columns = header
     table.set_index('entry', inplace=True)
 
     # Populate CommonData object
     return CommonData(
-                    setname= "Stevland Judkins",
-                    ndata= 1,
-                    data= np.zeros(1),
-                    commondataproc= "DIS",
-                    nkin= 1 ,
-                    kinematics= ["x"],
-                    nsys= 1,
-                    sysid= "PRAWN",
-                    stat= np.zeros(1),
-                    sys= np.zeros((1,2)))
+                    setname = setname,
+                    ndata = len(table),
+                    commondataproc = table["process"][1],
+                    nkin = 3 ,
+                    nsys = nsys,
+                    data = table)

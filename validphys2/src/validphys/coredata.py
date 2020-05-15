@@ -145,7 +145,5 @@ class CommonData:
     ndata: int 
     commondataproc: str
     nkin: int 
-    kinematics: list
     nsys: int
-    sysid: list
     data: pd.DataFrame
