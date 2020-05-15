@@ -245,7 +245,7 @@ class HyperScanner:
         self.parameters[key] = sampler
 
     def stopping(
-        self, min_epochs=5e3, max_epochs=30e3, min_patience=0.10, max_patience=0.3
+        self, min_epochs=None, max_epochs=None, min_patience=None, max_patience=None
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
@@ -258,14 +258,15 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         # Generate the samplers
-        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps=self.steps)
-        stopping_patience = hp_quniform(
-            stopping_key, min_patience, max_patience, steps=self.steps
-        )
+        if min_epochs is not None and max_epochs is not None:
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps=self.steps)
+            self._update_param(epochs_key, epochs)
 
-        # Update the parameters ditionary
-        self._update_param(epochs_key, epochs)
-        self._update_param(stopping_key, stopping_patience)
+        if min_patience is not None and max_patience is not None:
+            stopping_patience = hp_quniform(
+                stopping_key, min_patience, max_patience, steps=self.steps
+            )
+            self._update_param(stopping_key, stopping_patience)
 
     def optimizer(self, optimizers):
         """

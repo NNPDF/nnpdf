@@ -164,6 +164,8 @@ class ModelTrainer:
             if kfold_parameters.get('penalties'):
                 if kfold_parameters['penalties'].get('saturation'):
                     self.hyper_penalties.append(penalties.saturation)
+                if kfold_parameters['penalties'].get('patience'):
+                    self.hyper_penalties.append(penalties.patience)
             # Define verbosity levels
             if kfold_parameters.get('verbosity'):
                 self.fit_stats = kfold_parameters['verbosity'].get('training', True)
@@ -775,14 +777,15 @@ class ModelTrainer:
                 hyper_loss = experimental_loss
                 # Check whether we have to add any penalty
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_model)
+                    hyper_loss += penalty(pdf_model, stopping_object)
                 l_hyper.append(hyper_loss)
                 log.info("fold: %d", k+1)
                 log.info("Hyper loss: %f", hyper_loss)
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss over threshold, breaking")
                     # Give an extra penalty for the ones that failed the threshold
-                    l_hyper = [i*self.hyper_threshold for i in l_hyper]
+                    extra_penalty = 1 + np.exp(hyper_loss - self.hyper_threshold)
+                    l_hyper = [i*extra_penalty for i in l_hyper]
                     break
 
         dict_out = {
