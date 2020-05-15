@@ -11,7 +11,7 @@ import inspect
 import numbers
 import copy
 import os
-from importlib.resources import read_text
+from importlib.resources import read_text, contents
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -39,9 +39,6 @@ from validphys.plotoptions import get_info
 import validphys.scalevariations
 
 log = logging.getLogger(__name__)
-
-class SpecificationError(FileNotFoundError):
-    pass
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
@@ -930,10 +927,21 @@ class CoreConfig(configparser.Config):
 
     def load_default_default_filter_rules(self, spec):
         import validphys.cuts.lockfiles
+        lock_token = "_filters.lock.yaml"
         try:
-            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}_filters.lock.yaml'))
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}{lock_token}'))
         except FileNotFoundError as e:
-            raise SpecificationError(f"Possible bad specification: {spec}") from e
+            alternatives=[
+                el.strip(lock_token)
+                for el in contents(validphys.cuts.lockfiles)
+                if el.endswith(lock_token)
+            ]
+            raise ConfigError(
+                f"Default filter rules not found: {spec}",
+                bad_item=spec,
+                alternatives=alternatives,
+                display_alternatives="all"
+            )
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
@@ -993,10 +1001,21 @@ class CoreConfig(configparser.Config):
 
     def load_default_default_filter_settings(self, spec):
         import validphys.cuts.lockfiles
+        lock_token = "_defaults.lock.yaml"
         try:
-            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}_defaults.lock.yaml'))
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}{lock_token}'))
         except FileNotFoundError as e:
-            raise SpecificationError(f"Possible bad specification: {spec}") from e
+            alternatives = alternatives=[
+                el.strip(lock_token)
+                for el in contents(validphys.cuts.lockfiles)
+                if el.endswith(lock_token)
+            ]
+            raise ConfigError(
+                f"Default filter settings not found: {spec}",
+                bad_item=spec,
+                alternatives=alternatives,
+                display_alternatives="all"
+            )
 
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
