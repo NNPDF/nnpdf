@@ -8,7 +8,7 @@ While the methodology used up to the 3.1 release of NNPDF considerably reduced t
 functional form of the PDFs, there existed a bias regarding the choice of hyperparameters that define
 the NNPDF neural network and optimization strategy.
 
-Of the main advantages introduced by the ``n3fit`` framework with respect to ``nnfit`` is the
+One of the main advantages introduced by the ``n3fit`` framework with respect to ``nnfit`` is the
 possibility of running fits in a fraction of the time. This allow us to reduce the dependence of the
 hyperparameters by running a grid scan on the relevant parameters. Together with an appropriate
 figure of merit this grid search or *hyperparameter scan* will minimize the bias of the network
@@ -27,7 +27,7 @@ produce overlearning even when optimizing on the validation loss, as can be seen
 `here <https://vp.nnpdf.science/yG3XvinBQriLdqqTAHg3Sw==/>`_.
 
 Despite producing a very good :math:`\chi^2`, the previous fit will fail when challenged with new
-non-seen data. This needs to be accounted for by the figure of merit.
+unseen data. This needs to be accounted for by the figure of merit.
 
 The desired features of this figure of merit can be summarized as:
 
@@ -39,20 +39,20 @@ The desired features of this figure of merit can be summarized as:
 
 K-folding cross-validation
 --------------------------
-A good compromise between all previous points is the usage of the cross validation technique
+A good compromise between all previous points is the usage of the cross-validation technique
 usually known as `k-folds <https://web.stanford.edu/~hastie/Papers/ESLII.pdf#page=260>`_.
 
 When k-folding  we take all datapoints in our fit (in this case one datapoint refers to one dataset)
-and break it down into *k* partitions. Now, for every combination of hyperparameter we do *k* fits,
+and break it down into *k* partitions. Now, for every combination of hyperparameters we do *k* fits,
 leaving out a different partition each time.
 At the end of the fit we test the goodness of the fit with the data that was left out.
-In this way all datasets are used exactly once for testing of the hyperparameters
+In this way all datasets are used exactly once for the testing of the hyperparameters
 (and *k-1* times for fitting).
 
-For the fit we perform the usual training validation split within each dataset and use it for
+For the fit we perform the usual training-validation split within each dataset and use it for
 stopping.
 
-The choice of this method for selecting the hyperparameter of the NNPDF fitting methodology
+The choice of this method for selecting the hyperparameters of the NNPDF fitting methodology
 are discussed `in the mailing list <https://lists.cam.ac.uk/mailman/private/ucam-nnpdf/2020-March/msg00066.html>`_.
 Some public discussion about the different hyperoptimization techniques that has been used and
 tested during the development of ``n3fit`` can be found in `public slides <http://n3pdf.mi.infn.it/wp-content/uploads/2019/10/JCruz-Martinez_Mexico_102019.pdf>`_
@@ -98,13 +98,13 @@ combinations which are deemed to be unstable.
     the same time. Once a multireplica ``n3fit`` is implemented we can hyperoptimize without having to
     rely in the one-replica proxy without a loss of performance.
 
-From the fitting point of view, the implementation of the `k-folding` is done by setting to 0 all
-experimental data points and masking to 0 the respective predictions from the Neural Network.
-In the code this means that during the data reading phase ``n3fit`` also creates one mask per kfold
+From the fitting point of view, the implementation of the `k-folding` is done by setting all experimental
+ data points to 0 and by masking the respective predictions from the Neural Network to 0.
+In the code this means that during the data-reading phase ``n3fit`` also creates one mask per kfold
 per experiment to apply to the experimental data before compiling the Neural Network.
-Note that this is not a boolean mask dropping the points but rather just sets the data to 0.
+Note that this is not a boolean mask that drops the points but rather it just sets the data to 0.
 The reason for doing it in this way is to minimize the number of things that change when doing a
-hyperparameter scan with respect to a scan.
+hyperparameter scan with respect to a fit.
 
 
 Interpretation
@@ -153,8 +153,8 @@ The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hype
                 - data_5
 
 The ``overfit`` flag, when applied to one of the partitions, introduces this partition in the
-training data. This is useful for very broad scans where we to find an architecture which is able to
-fit, without worrying about things like overlearning which might be a second order problem.
+training data. This is useful for very broad scans where we want to find an architecture which is able to
+fit, without worrying about things like overlearning which might be a second-order problem.
 
 The ``threshold_loss`` flag will make the fit stop if any of the partitions produces a loss greater
 than the given threshold. This is useful for quickly discarding hyperparameter subspaces without

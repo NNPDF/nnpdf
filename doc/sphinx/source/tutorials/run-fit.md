@@ -175,7 +175,7 @@ Consider using the `vp-comparefits` tool.
 
 Performance of the fit
 ----------------------
-The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such to
+The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
 first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
 In our tests the bests results are obtained using the MKL-compiled version of Tensorflow as found by
