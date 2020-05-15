@@ -117,7 +117,7 @@ class CFactorData:
     description: str
     central_value: np.array
     uncertainty: np.array
-    
+
 @dataclasses.dataclass(eq=False)
 class CommonData:
     """
@@ -152,8 +152,8 @@ class CommonData:
     data: np.array 
     commondataproc: str
     nkin: int 
-    kinematics: list(str)
+    kinematics: list
     nsys: int
-    sysid: list(str)
+    sysid: list
     stat: np.array
     sys: np.array 

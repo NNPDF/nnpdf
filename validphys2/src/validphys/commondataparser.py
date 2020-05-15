@@ -27,9 +27,10 @@ class CommonDataInfo:
     proc: str
     nsys: int
 
-def load_dataset(datafile):
-    """Reads commondata file for dataset_name and returns a panda DataFrame with:
-        entry   process kin1    kin2    kin3    data    stat    \
+def load_commondata(datafile):
+    """
+    Reads commondata file for dataset_name and returns a pandas DataFrame with:
+    entry   process kin1    kin2    kin3    data    stat    \
             sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
     """
     # read raw commondata file
@@ -45,4 +46,17 @@ def load_dataset(datafile):
         header += [f'sys.add.{i+1}', f'sys.mult.{i+1}']
     table.columns = header
     table.set_index('entry', inplace=True)
-    return table
+
+    # Populate CommonData object
+    return CommonData(
+                    setname: "Stevland Judkins"
+                    ndata: 1
+                    data: np.zeros(1)
+                    commondataproc: "DIS"
+                    nkin: 1 
+                    kinematics: ["x"]
+                    nsys: 1
+                    sysid: "PRAWN"
+                    stat: np.zeros(1)
+                    sys: np.zeros((1,2)) 
+    table = out
