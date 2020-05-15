@@ -27,14 +27,32 @@ class CommonDataInfo:
     proc: str
     nsys: int
 
-def load_commondata(datafile):
+def load_commondata(spec):
     """
+    Load the data corresponding to a CommonDataSpec object.
+
     Reads commondata file for dataset_name and returns a pandas DataFrame with:
     entry   process kin1    kin2    kin3    data    stat    \
             sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
     """
-    # read raw commondata file
-    table = pd.read_csv(datafile, sep=r'\s+', skiprows=1, header=None)
+    tabledata = parse_commondata(spec.datafile)
+
+    return tabledata
+
+def parse_commondata(f):
+    
+    """Parse a commondata file into a CommonData. Raise a BadCommondATAError
+    if problems are encountered.
+    Parameters
+    ----------
+    f : file
+        Open file-like object. 
+    Returns
+    -------
+    commondata : CommonData
+        An object containing the data and information from the commondata file.
+    """
+    table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
 
     # remove NaNs
     # TODO: replace commondata files with bad formatting
@@ -49,14 +67,13 @@ def load_commondata(datafile):
 
     # Populate CommonData object
     return CommonData(
-                    setname: "Stevland Judkins"
-                    ndata: 1
-                    data: np.zeros(1)
-                    commondataproc: "DIS"
-                    nkin: 1 
-                    kinematics: ["x"]
-                    nsys: 1
-                    sysid: "PRAWN"
-                    stat: np.zeros(1)
-                    sys: np.zeros((1,2)) 
-    table = out
+                    setname= "Stevland Judkins",
+                    ndata= 1,
+                    data= np.zeros(1),
+                    commondataproc= "DIS",
+                    nkin= 1 ,
+                    kinematics= ["x"],
+                    nsys= 1,
+                    sysid= "PRAWN",
+                    stat= np.zeros(1),
+                    sys= np.zeros((1,2)))
