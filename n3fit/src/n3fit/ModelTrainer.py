@@ -781,6 +781,8 @@ class ModelTrainer:
                 log.info("Hyper loss: %f", hyper_loss)
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss over threshold, breaking")
+                    # Give an extra penalty for the ones that failed the threshold
+                    l_hyper = [i*self.hyper_threshold for i in l_hyper]
                     break
 
         dict_out = {
