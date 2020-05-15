@@ -128,8 +128,6 @@ class CommonData:
         Name of the dataset
     ndata: int
         Number of data points
-    data: array of floats with length ndata
-        Data values
     commondataproc: str
         Process type, one of 21 options. 
     nkin: int
@@ -140,20 +138,14 @@ class CommonData:
         Number of systematics
     sysid: list of str with length nsys
         ID for systematic
-    stat: array of floats with length ndata
-        Statistical uncertainties on each data point
-        (separate ADD and MULT here?)
-    sys: array of floats with dimensions ndat x nsys
-        Systematic uncertainties on each data point
-        (separate ADD and MULT here?)   
+    data: 
+        Pandas dataframe containing the commondata.
     """
     setname: str
-    ndata: int
-    data: np.array 
+    ndata: int 
     commondataproc: str
     nkin: int 
     kinematics: list
     nsys: int
     sysid: list
-    stat: np.array
-    sys: np.array 
+    data: pd.DataFrame
