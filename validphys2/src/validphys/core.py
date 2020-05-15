@@ -231,9 +231,13 @@ class PDF(TupleComp):
             return range(0, len(self))
         else:
             raise RuntimeError("Unknown error type")
+            
+            
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
 _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
+
+
 
 def get_plot_kinlabels(commondata):
     """Return the LaTex kinematic labels for a given Commondata"""
