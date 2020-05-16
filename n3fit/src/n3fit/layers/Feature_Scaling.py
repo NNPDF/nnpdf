@@ -59,7 +59,8 @@ class Feature_Scaling(MetaLayer):
             return fk_xgrids
 
         if self.scaler == 'MinMaxScaler':
-            scaled_xgrids = load_fk_tables(fk_dis_datasets)
+            fk_xgrids = load_fk_tables(fk_dis_datasets)
+            scaled_xgrids = fk_xgrids + fk_xgrids**0.4 + fk_xgrids**0.3 + 0.5*fk_xgrids**0.2
             self.max_ = scaled_xgrids.max()
 
         
