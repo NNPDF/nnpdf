@@ -64,15 +64,6 @@ private:
   void ReadData();
 };
 
-class LHCB_WENU_8TEVFilter: public CommonData
-{
-public: LHCB_WENU_8TEVFilter():
-  CommonData("LHCB_WENU_8TEV") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
 class LHCB_WENU_8TEV_RFilter: public CommonData
 {
 public: LHCB_WENU_8TEV_RFilter():
