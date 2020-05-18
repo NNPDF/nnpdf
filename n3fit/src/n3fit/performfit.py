@@ -102,9 +102,16 @@ def check_consistent_basis(fitting):
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
     res = check_basis(fitbasis,flavs)
     
+def check_consistent_layers(fitting):
+    npl = len(fitting['parameters']['nodes_per_layer'])
+    apl = len(fitting['parameters']['activation_per_layer'])
+    if npl != apl:
+        raise CheckError(f"Number of layers ({npl}) does not match activation functions: {apl}")
+
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 @check_consistent_hyperscan_options
+@check_consistent_layers
 @check_consistent_basis
 def performfit(
     fitting,
