@@ -12,9 +12,9 @@ from validphys.api import API
 
 def test_withidentity():
     identity_mat = np.eye(3)
-    assert np.allclose(identity_mat, regularize_l2(identity_mat, 1))
-    assert np.allclose(identity_mat, regularize_covmat(identity_mat, 1))
-    assert np.allclose(2*identity_mat, regularize_l2(identity_mat, 0.5))
+    np.testing.assert_allclose(identity_mat, regularize_l2(identity_mat, 1))
+    np.testing.assert_allclose(identity_mat, regularize_covmat(identity_mat, 1))
+    np.testing.assert_allclose(2*identity_mat, regularize_l2(identity_mat, 0.5))
 
 @make_table_comp(parse_exp_mat)
 def test_regularize_expcov(data_config):
@@ -26,18 +26,30 @@ def test_regularize_expcov(data_config):
     assert ~np.allclose(df1.values, df2.values)
     # check that square of sqrt matches
     sqrt_df1 = API.experiments_sqrtcovmat(**inp)
-    assert np.allclose(df1.values, sqrt_df1.values@sqrt_df1.values.T)
+    np.testing.assert_allclose(df1.values, sqrt_df1.values@sqrt_df1.values.T)
     # check that same result obtained
     return df1
 
-def test_regularization_matches():
+def test_regularization_matches_sane():
     """Check that regularizing the sqrt cov produces same result as regularizing
-    on the covariance matrix
+    on the covariance matrix with a fairly sane matrix
     """
+    # choose some sensible matrix to be regularized
+    a = np.ones((3, 3)) + 0.5*np.diag(np.ones(3))
+    cov = a@a.T
+    a_reg = regularize_l2(a, 3)
+    np.testing.assert_allclose(regularize_covmat(cov, 3), a_reg@a_reg.T)
+
+def test_regularization_matches_zero_eig():
+    """Check that regularizing the sqrt cov produces the same result as regularizing
+    on the covmat with a matrix with almost zero eigenvalue
+    """
+    # choose matrix with ~zero eigenvalue
     a = np.arange(9).reshape(3, 3)
     cov = a@a.T
     a_reg = regularize_l2(a, 3)
-    assert np.allclose(regularize_covmat(cov, 3), a_reg@a_reg.T)
+    np.testing.assert_allclose(regularize_covmat(cov, 3), a_reg@a_reg.T)
+
 
 @make_table_comp(parse_exp_mat)
 def test_no_regularization(data_config):
@@ -46,6 +58,6 @@ def test_no_regularization(data_config):
     df1 = API.experiments_covmat(**inp)
     df2 = API.experiments_covmat(**data_config)
     # check here that regularization occured
-    assert np.allclose(df1.values, df2.values)
+    np.testing.assert_allclose(df1.values, df2.values)
     # check that same result obtained
     return df1
