@@ -694,13 +694,13 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     background of the plot. The maximum absolute values are used for
     the comparison."""
 
-    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins':1},
-                  "ATLAS jets 8 TeV, R=0.6":   {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$",'Nybins':6},
-                  "CMS jets 7 TeV 2011":       {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$",'Nybins':5},
-                  "CMS jets 8 TeV":            {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$",'Nybins':6},
-                  "ATLAS dijets 7 TeV, R=0.6": {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": r"$|y^*|$",'Nybins':6},
-                  "CMS dijets 7 TeV":          {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": r"$|y_{max}|$",'Nybins':5},
-                  "CMS 3D dijets 8 TeV":       {"ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend": r"$(y_b, y^{*})$",'Nybins':6}}
+    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {'title': "ATLAS Inclusive jets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins': 1},
+                  "ATLAS jets 8 TeV, R=0.6":   {'title': "ATLAS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins': 6},
+                  "CMS jets 7 TeV 2011":       {'title': "CMS Inclusive jets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins': 5},
+                  "CMS jets 8 TeV":            {'title': "CMS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins': 6},
+                  "ATLAS dijets 7 TeV, R=0.6": {'title': "ATLAS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": r"$|y^*|$", 'Nybins': 6},
+                  "CMS dijets 7 TeV":          {'title': "CMS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": r"$|y_{max}|$", 'Nybins': 5},
+                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend": r"$(y_b, y^{*})$", 'Nybins': 6}}
 
     info = get_info(dataset)
 
@@ -724,10 +724,10 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
     #TODO: vmin vmax should be global or by figure?
     vmin,vmax = min(plotting_var), max(plotting_var)
-    if info.x_scale == 'log':
-        norm = mcolors.LogNorm(vmin, vmax)
-    else:
-        norm = mcolors.Normalize(vmin, vmax)
+    #if info.x_scale == 'log':
+    #    norm = mcolors.LogNorm(vmin, vmax)
+    #else:
+    norm = mcolors.Normalize(vmin, vmax)
     #http://stackoverflow.com/a/11558629/1007990
     sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
     sm._A = []
@@ -744,7 +744,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         #TODO: PY36ScalarMappable
         #TODO Improve title?
         ##title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
-        title = "%s" % (info.dataset_label)
+        title = "%s" % (DijetsInfo[info.dataset_label]['title'])
+        #title = "%s" % (info.dataset_label)
 
         #Start plotting
         w,h = plt.rcParams["figure.figsize"]
@@ -834,8 +835,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         ax.legend(title=DijetsInfo[info.dataset_label]["legend"], frameon=False, borderaxespad=0.5)
         #fig.subplots_adjust(hspace=0)
 
-        fig.colorbar(sm, ax=ax, label=info.xlabel,
-                     aspect=100)
+        fig.colorbar(sm, ax=ax, label=info.xlabel) #,aspect=100)
         #TODO: Fix title for this
         #fig.tight_layout()
         yield fig
