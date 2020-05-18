@@ -700,7 +700,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
                   "CMS jets 8 TeV":            {'title': "CMS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins': 6},
                   "ATLAS dijets 7 TeV, R=0.6": {'title': "ATLAS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": r"$|y^*|$", 'Nybins': 6},
                   "CMS dijets 7 TeV":          {'title': "CMS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": r"$|y_{max}|$", 'Nybins': 5},
-                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend": r"$(y_b, y^{*})$", 'Nybins': 6}}
+                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend1": r"$y_b$", "legend2": r"$y^{*}$", 'Nybins': 6}}
 
     info = get_info(dataset)
 
@@ -793,6 +793,13 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
                         ilinestyle =0
                     else:
                         ilinestyle =1
+
+                    if info.dataset_label == "CMS 3D dijets 8 TeV":
+                        lab1="$"+str(label[0]-0.5)+"\,<\,$"+DijetsInfo[info.dataset_label]["legend1"]+"$\,<\,"+str(label[0]+0.5)+"$"
+                        lab2="$"+str(label[1]-0.5)+"\,<\,$"+DijetsInfo[info.dataset_label]["legend2"]+"$\,<\,"+str(label[1]+0.5)+"$"
+                        label = lab1+"; "+lab2
+                    else:
+                        label = "$"+str(label-0.25)+"\,<\,$"+DijetsInfo[info.dataset_label]["legend"]+"$\,<\,"+str(label+0.25)+"$"
                     ax.plot(x, grid[i, 0, :].T, color="black", linestyle=linestyle2[ilinestyle], label = label)
                     ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle2[ilinestyle])
 
@@ -832,7 +839,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         ax.set_ylim(-1,1)
         ax.set_xlim(1e-3, 0.9)
         ax.set_xlabel('$x$')
-        ax.legend(title=DijetsInfo[info.dataset_label]["legend"], frameon=False, borderaxespad=0.5)
+        ax.legend(frameon=False, borderaxespad=0.5)
         #fig.subplots_adjust(hspace=0)
 
         fig.colorbar(sm, ax=ax, label=info.xlabel) #,aspect=100)
