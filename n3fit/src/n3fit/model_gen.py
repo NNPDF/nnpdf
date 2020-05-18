@@ -506,6 +506,9 @@ def pdfNN_layer_generator(
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
+        if basis_rotation.is_identity():
+            # if we don't need to rotate basis we don't want spurious layers
+            return ret
         return basis_rotation(ret)
 
     # Rotation layer, changes from the 8-basis to the 14-basis
