@@ -36,7 +36,7 @@ def test_listtheories():
 def test_listdatasets():
     """Checks listing datasets returns output"""
     f = io.StringIO()
-    cmd = ["pdfs"]
+    cmd = ["datasets"]
     with redirect_stdout(f):
         main(cmd)
     assert f.getvalue()
