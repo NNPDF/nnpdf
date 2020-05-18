@@ -1,5 +1,9 @@
 # How to list the available resources
 
+```eval_rst
+.. _vp-list:
+```
+
 ## Using `vp-list`
 
 In order to check what resources are available locally and for download, use
