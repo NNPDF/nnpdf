@@ -40,6 +40,7 @@ log = logging.getLogger(__name__)
 TERRIBLE_CHI2 = 1e10
 INITIAL_CHI2 = 1e9
 
+
 # Pass/veto keys
 POS_OK = "POS_PASS"
 POS_BAD = "POS_VETO"
@@ -327,6 +328,7 @@ class Stopping:
         validation_model,
         all_data_dicts,
         threshold_positivity=1e-6,
+        threshold_chi2=10.0,
         total_epochs=0,
         stopping_patience=7000,
         dont_stop=False,
@@ -352,6 +354,7 @@ class Stopping:
         self.stopping_degree = 0
         self.count = 0
         self.total_epochs = total_epochs
+        self.threshold_chi2 = threshold_chi2
 
     @property
     def vl_loss(self):
@@ -439,7 +442,7 @@ class Stopping:
 
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        if self.positivity(fitstate):
+        if self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
             if vl_chi2 < self.history.best_vl():
                 # Set the new best
                 self.history.best_epoch = epoch

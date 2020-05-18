@@ -16,7 +16,14 @@ from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
+# If any partition is beyond this loss it will be discarded
+# can be controlled in the runcard with hyperscan::kfold::threshold
 HYPER_THRESHOLD = 5.0
+# The stopping does not start counting until this threshold is passed for the validation chi2
+# can be controlled in the runcard with fitting::threshold_chi2
+THRESHOLD_CHI2 = 5.0
+# How many epochs we perform activities such as pushing positivity up
+# or printing stats on the chi2 per experiment
 PUSH_POSITIVITY_EACH = 100 # epochs
 PRINT_STATS_EACH = 100
 
@@ -737,7 +744,9 @@ class ModelTrainer:
                 reporting,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
+                threshold_chi2=params.get("threshold_chi2", THRESHOLD_CHI2),
                 save_weights_each=self.save_weights_each,
+                
             )
 
             # Compile each of the models witht he right parameters
