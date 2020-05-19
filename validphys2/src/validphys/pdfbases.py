@@ -439,7 +439,20 @@ FLAVOUR = Basis.from_mapping(
         'c': {'c': 1},
         'g': {'g': 1},
     },
-    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))    
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
+
+FLAFLA = Basis.from_mapping(
+    {
+        'up': {'u': 1, 'ubar': 1},
+        'um': {'ubar': 1, 'ubar': -1},
+        'dp': {'d': 1, 'dbar': 1},
+        'dm': {'dbar': 1, 'dbar': -1},
+        'sp': {'s': 1, 'sbar': 1},
+        'sm': {'s': 1, 'sbar': -1},
+        'cp': {'c': 1, 'cbar': 1},
+        'g': {'g': 1},
+    },
+    default_elements=('up', 'um', 'dp', 'dm', 'sp', 'sm', 'cp', 'g', ))        
 
 pdg = Basis.from_mapping({
 'g/10': {'g':0.1},
@@ -454,7 +467,7 @@ r'\bar{d}': {'dbar':1},
 
 def rotation(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
-    of the possible fitting basis (EVOL, NN31IC, FLAVOUR) to the evolution basis,
+    of the possible fitting basis (EVOL, NN31IC, FLAVOUR, FLAFLA) to the evolution basis,
     (sigma, g, v, v3, v8, t3, t8, cp), corresponding to NN31IC.
     Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index. 
     The evolution basis (NN31IC) is defined as 
@@ -494,6 +507,17 @@ def rotation(flav_info, fitbasis):
         cp = {'sng': -0.5, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.5, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
         
+    elif fitbasis == 'FLAFLA':
+        sng = {'up': 1, 'um': 0, 'dp': 1, 'dm': 0, 'sp': 1, 'sm': 0, 'cp': 1, 'g': 0 }
+        v =   {'up': 0, 'um': 1, 'dp': 0, 'dm': 1, 'sp': 0, 'sm': 1, 'cp': 0, 'g': 0 }
+        v3 =  {'up': 0, 'um': 1, 'dp': 0, 'dm': -1, 'sp': 0, 'sm': 0, 'cp': 0, 'g': 0 }
+        v8 =  {'up': 0, 'um': 1, 'dp': 0, 'dm': 1, 'sp': 0, 'sm': -2, 'cp': 0, 'g': 0 }
+        t3 =  {'up': 1, 'um': 0, 'dp': -1, 'dm': 0, 'sp': 0, 'sm': 0, 'cp': 0, 'g': 0 }
+        t8 =  {'up': 1, 'um': 0, 'dp': 1, 'dm': 0, 'sp': -2, 'sm': 0, 'cp': 0, 'g': 0 }
+        cp =  {'up': 0, 'um': 0, 'dp': 0, 'dm': 0, 'sp': 0, 'sm': 0, 'cp': 1, 'g': 0 }
+        g =   {'up': 0, 'um': 0, 'dp': 0, 'dm': 0, 'sp': 0, 'sm': 0, 'cp': 0, 'g': 1 }
+
+
     flist = [sng, g, v, v3, v8, t3, t8, cp]
   
     mat = []
