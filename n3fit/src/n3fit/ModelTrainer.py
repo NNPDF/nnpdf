@@ -787,7 +787,9 @@ class ModelTrainer:
                 # Check whether we have to add any penalty
                 for penalty in self.hyper_penalties:
                     hyper_loss += penalty(pdf_model, stopping_object)
-                l_hyper.append(hyper_loss)
+                # Apply the weight (if any)
+                partition_weight = partition.get('weight', 1.0)
+                l_hyper.append(hyper_loss*partition_weight)
                 log.info("fold: %d", k+1)
                 log.info("Hyper loss: %f", hyper_loss)
                 if hyper_loss > self.hyper_threshold:
