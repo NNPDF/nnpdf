@@ -243,8 +243,8 @@ class CoreConfig(configparser.Config):
         fit files"""
         known_keys = {'dataset', 'sys', 'cfac', 'frac', 'weight'}
         try:
-            dataset = dataset['dataset']
-            if not isinstance(dataset, str):
+            name = dataset['dataset']
+            if not isinstance(name, str):
                 raise ConfigError(f"'dataset' must be a string, not {type(name)}")
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with "
