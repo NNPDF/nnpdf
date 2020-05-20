@@ -499,8 +499,8 @@ def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
     """Plot the chi² of all groups of datasets with bars."""
     exchi2 = []
     xticks = []
-    for group, groupres in zip(groups_data, groups_chi2):
-        exchi2.append(groupres.central_result/groupres.ndata)
+    for group, group_res in zip(groups_data, groups_chi2):
+        exchi2.append(group_res.central_result/group_res.ndata)
         xticks.append(group.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
     ax.set_title(r"$\chi^2$ distribution by {}".format(processed_metadata_group))
@@ -512,7 +512,7 @@ def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
-    for group, groupres in zip(groups_data, groups_chi2):
+    for group, group_res in zip(groups_data, groups_chi2):
         for dataset, dsres in zip(group, ds):
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
@@ -825,7 +825,7 @@ def _check_marker_by(marker_by):
 def _check_highlights(groups_data, highlight_datasets):
     if highlight_datasets:
         values = frozenset(highlight_datasets)
-        names_set = {ds.name for group in groups_data for ds in group }
+        names_set = {ds.name for group in groups_data for ds in group}
         diff = values - names_set
         if diff:
             raise CheckError(f"The following highlight elements are "

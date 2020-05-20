@@ -215,7 +215,7 @@ class CoreConfig(configparser.Config):
         # now fill in a unique key "data_input" regardless of new or old fit
         # for uniformity
         data_input = self.produce_data_input(**{data_key: data_val})
-        return {'theoryid':thid, "data_input": data_input}
+        return {"theoryid": thid, "data_input": data_input}
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""
@@ -702,8 +702,8 @@ class CoreConfig(configparser.Config):
         for experiment in experiments:
             for dsinput, dataset in zip(experiment, experiment.datasets):
                 single_exp = DataGroupSpec(experiment.name,
-                                            datasets=[dataset],
-                                            dsinputs=[dsinput])
+                                           datasets=[dataset],
+                                           dsinputs=[dsinput])
                 ret.append({'reweighting_experiments': [single_exp],
                             'dataset_input':dsinput})
         return ret
@@ -1018,7 +1018,7 @@ class CoreConfig(configparser.Config):
     def parse_data_grouping(self, key):
         """a key which indicates which default grouping to use. Mainly for
         internal use. It allows the default grouping of experiment to be applied
-        to runcards which don't specify `metadata_group` without their being
+        to runcards which don't specify `metadata_group` without there being
         a namespace conflict in the lockfile
 
         """
@@ -1037,7 +1037,7 @@ class CoreConfig(configparser.Config):
     def produce_processed_data_grouping(
         self, data_grouping=None, data_grouping_recorded_spec_=None):
         """Process the data_grouping key from the runcard, or lockfile. If
-        `data_grouping_recorded_spec_` is present then it's value is taken, and
+        `data_grouping_recorded_spec_` is present then its value is taken, and
         the runcard is assumed to be a lockfile.
 
         If data_grouping is None, then fall back to old behaviour of grouping
