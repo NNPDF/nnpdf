@@ -1,0 +1,9 @@
+dataset_label: "V integrability"
+x: k2
+y_label: '$\sum_i(x_i V(x_i))^2$'
+
+x_scale: linear
+y_scale: linear
+
+experiment: "INTEGV"
+
