@@ -32,7 +32,7 @@ def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
 
-    Reads commondata file for dataset_name and returns a pandas DataFrame with:
+    Returns a CommonData instance with data arranged like
     entry   process kin1    kin2    kin3    data    stat    \
             sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
     """
@@ -46,7 +46,7 @@ def load_commondata(spec):
 
 def parse_commondata(f, setname):
     
-    """Parse a commondata file into a CommonData. Raise a BadCommondATAError
+    """Parse a commondata file into a CommonData. Raise a BadCommondDataError
     if problems are encountered.
     Parameters
     ----------

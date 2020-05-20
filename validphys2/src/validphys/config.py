@@ -241,14 +241,14 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset:Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {'name', 'sys', 'cfac', 'frac', 'weight'}
+        known_keys = {'dataset', 'sys', 'cfac', 'frac', 'weight'}
         try:
-            name = dataset['name']
-            if not isinstance(name, str):
-                raise ConfigError(f"'name' must be a string, not {type(name)}")
+            dataset = dataset['dataset']
+            if not isinstance(dataset, str):
+                raise ConfigError(f"'dataset' must be a string, not {type(name)}")
         except KeyError:
-            raise ConfigError("'name' must be a mapping with "
-                              "'name' and 'sysnum'")
+            raise ConfigError("'dataset' must be a mapping with "
+                              "'dataset' and 'sysnum'")
 
 
         sysnum = dataset.get('sys')
