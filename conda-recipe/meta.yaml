@@ -22,7 +22,8 @@ requirements:
         - python
         - numpy
     run:
-        - tensorflow-eigen
+        - tensorflow <2.2 # there are some problems with tf 2.2
+        - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
         - lhapdf
