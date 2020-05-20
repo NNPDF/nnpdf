@@ -11,13 +11,14 @@ import inspect
 import numbers
 import copy
 import os
-from importlib.resources import read_text
+from importlib.resources import read_text, contents
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
+from reportengine.compat import yaml
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
@@ -920,13 +921,51 @@ class CoreConfig(configparser.Config):
         """
         return {"norm_threshold": None}
 
+    @configparser.record_from_defaults
+    def parse_default_filter_rules(self, spec: (str, type(None))):
+        return spec
+
+    def load_default_default_filter_rules(self, spec):
+        import validphys.cuts.lockfiles
+        lock_token = "_filters.lock.yaml"
+        try:
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}{lock_token}'))
+        except FileNotFoundError as e:
+            alternatives=[
+                el.strip(lock_token)
+                for el in contents(validphys.cuts.lockfiles)
+                if el.endswith(lock_token)
+            ]
+            raise ConfigError(
+                f"Default filter rules not found: {spec}",
+                bad_item=spec,
+                alternatives=alternatives,
+                display_alternatives="all"
+            )
+
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
         log.warning("Overwriting filter rules")
         return filter_rules
 
-    def produce_rules(self, theoryid, use_cuts, defaults, filter_rules=None):
+    def parse_default_filter_rules_recorded_spec_(self, spec):
+        """This function is a hacky fix for parsing the recorded spec
+        of filter rules. The reason we need this function is that without
+        it reportengine detects a conflict in the `dataset` key.
+        """
+        return spec
+
+    def produce_rules(
+            self,
+            theoryid,
+            use_cuts,
+            defaults,
+            default_filter_rules=None,
+            filter_rules=None,
+            default_filter_rules_recorded_spec_=None,
+            ):
+
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
@@ -936,22 +975,47 @@ class CoreConfig(configparser.Config):
             #Don't bother loading the rules if we are not using them.
             if use_cuts is not CutsPolicy.INTERNAL:
                 return None
-            filter_rules = default_filter_rules_input()
+            if default_filter_rules_recorded_spec_ is not None:
+                filter_rules = default_filter_rules_recorded_spec_[default_filter_rules]
+            else:
+                filter_rules = default_filter_rules_input()
 
         try:
             rule_list = [
-                Rule(
-                    initial_data=i,
-                    defaults=defaults,
-                    theory_parameters=theory_parameters,
-                    loader=self.loader
-                )
-                for i in filter_rules
-            ]
+                    Rule(
+                        initial_data=i,
+                        defaults=defaults,
+                        theory_parameters=theory_parameters,
+                        loader=self.loader
+                        )
+                    for i in filter_rules
+                    ]
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
 
         return rule_list
+
+    @configparser.record_from_defaults
+    def parse_default_filter_settings(self, spec: (str, type(None))):
+        return spec
+
+    def load_default_default_filter_settings(self, spec):
+        import validphys.cuts.lockfiles
+        lock_token = "_defaults.lock.yaml"
+        try:
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}{lock_token}'))
+        except FileNotFoundError as e:
+            alternatives = alternatives=[
+                el.strip(lock_token)
+                for el in contents(validphys.cuts.lockfiles)
+                if el.endswith(lock_token)
+            ]
+            raise ConfigError(
+                f"Default filter settings not found: {spec}",
+                bad_item=spec,
+                alternatives=alternatives,
+                display_alternatives="all"
+            )
 
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
@@ -961,19 +1025,31 @@ class CoreConfig(configparser.Config):
         log.warning("Overwriting filter defaults")
         return filter_defaults
 
-    def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):
+    def produce_defaults(
+            self,
+            q2min=None,
+            w2min=None,
+            default_filter_settings=None,
+            filter_defaults={},
+            default_filter_settings_recorded_spec_=None
+    ):
         """Produce default values for filters taking into account both the
         values of ``q2min`` and ` `w2min`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
-        from validphys.filters import default_filter_settings
+        from validphys.filters import default_filter_settings_input
         if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
 
-        if not filter_defaults:
-            filter_defaults = default_filter_settings()
+        if default_filter_settings_recorded_spec_ is not None:
+            filter_defaults = default_filter_settings_recorded_spec_[default_filter_settings]
+            # If we find recorded specs return immediately and don't read q2min and w2min
+            # from runcard
+            return filter_defaults
+        elif not filter_defaults:
+            filter_defaults = default_filter_settings_input()
             defaults_loaded = True
         else:
             defaults_loaded = False
