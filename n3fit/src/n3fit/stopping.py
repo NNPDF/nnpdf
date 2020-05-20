@@ -30,9 +30,6 @@
 
 """
 
-# TODO for TF 2.0
-#   - Save a proper reference to the part of the NN we want to store instead of the whole model
-
 import logging
 import numpy as np
 

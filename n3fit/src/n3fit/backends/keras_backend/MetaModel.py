@@ -7,6 +7,7 @@
 
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+from n3fit.backends.keras_backend.operations import numpy_to_tensor
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -114,7 +115,7 @@ class MetaModel(Model):
             if hasattr(layer, "reinitialize"):
                 layer.reinitialize()
 
-    def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
+    def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.
 
@@ -122,21 +123,20 @@ class MetaModel(Model):
         of the model (the loss functions) to the partial losses.
 
         If the model was compiled with input and output data, they will not be passed through.
-        In this case by default the number of `steps_per_epoch` will be set to 1
+        In this case by default the number of `epochs` will be set to 1
 
         ex:
             {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
 
         Returns
         -------
-            `loss_dict`: dict
+            loss_dict: dict
                 a dictionary with all partial losses of the model
         """
-        if x is None:
-            x = self.x_in
+        x = self._parse_input(self.x_in)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x, y=y, **kwargs,)
+        history = super().fit(x=x, y=y, epochs=epochs, **kwargs,)
         loss_dict = history.history
         return loss_dict
 
@@ -187,8 +187,7 @@ class MetaModel(Model):
         In this case the number of steps must be always specified and the input of x and y must
         be set to `None`.
         """
-        if x is None:
-            x = self.x_in
+        x = self._parse_input(self.x_in)
         if y is None:
             y = self.target_tensors
             # TODO Ensure that no x or y were passed
@@ -247,8 +246,10 @@ class MetaModel(Model):
         if target_output is not None:
             if not isinstance(target_output, list):
                 target_output = [target_output]
-            self.target_tensors = None # TODO TF 2.2 target_output
-        super(MetaModel, self).compile(optimizer=opt, target_tensors=target_output, loss=loss)
+            self.target_tensors = None  # TODO TF 2.2 target_output
+            # Tensorize
+            target = [numpy_to_tensor(i) for i in target_output]
+        super(MetaModel, self).compile(optimizer=opt, target_tensors=target, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """ Set all mask value to the selected value

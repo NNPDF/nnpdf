@@ -1,6 +1,7 @@
 """
     This module includes rotation layers
 """
+import numpy as np
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 from validphys import pdfbases
@@ -25,6 +26,14 @@ class Rotation(MetaLayer):
         self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)
         self.axes = axes
         super().__init__(**kwargs)
+
+    def is_identity(self):
+        """ Returns true if the rotation is an identity """
+        # check whether it is a mxm matrix
+        if self.rotation_matrix.shape[0] == self.rotation_matrix.shape[1]:
+            # check whether it is the identity
+            iden = np.identity(self.rotation_matrix.shape[0])
+            return np.allclose(self.rotation_matrix, iden)
 
     def call(self, x_raw):
         return op.tensor_product(x_raw, self.rotation_matrix, self.axes)
