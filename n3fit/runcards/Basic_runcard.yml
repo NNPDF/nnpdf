@@ -36,31 +36,6 @@ theory:
   theoryid: 53        # database id
 
 ###########################################################
-hyperscan:
-    stopping:
-        min_epochs: 5e2
-        max_epochs: 40e2
-        min_patience: 0.10
-        max_patience: 0.40
-    positivity:
-        min_multiplier: 1.00000001
-        max_multiplier: 1.00000002
-        min_initial:
-        max_initial:
-    optimizer:
-        names: 'ALL' # Use all implemented optimizers
-        min_lr: 0.0005
-        max_lr: 0.5
-    architecture:
-        initializers: 'ALL'
-        max_drop: 0.15
-        n_layers: [2,3,4]
-        min_units: 5
-        max_units: 50
-        activations: ['sigmoid', 'tanh']
-
-
-############################################################
 fitting:
   genrep   : True    # on = generate MC replicas, False = use real data
   trvlseed: 1
@@ -81,6 +56,7 @@ fitting:
     optimizer:
       optimizer_name: 'RMSprop'
       learning_rate: 0.01
+      clipnorm: 1.0
     epochs: 900
     pos_multiplier: 1.05
     pos_initial:  # believe the pos_lambda below 

@@ -79,6 +79,9 @@ hyperscan:
           sampling: log
           min: 0.01
           max: 1.5
+        clipnorm:
+          max: 2.0
+          min: 1.0
     architecture:
         initializers: ['glorot_normal', 'glorot_uniform']
         max_drop: 0.15

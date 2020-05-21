@@ -39,32 +39,6 @@ datacuts:
 theory:
   theoryid: 162        # database id
 
-hyperscan:
-    stopping:
-        min_epochs: 2e1
-        max_epochs: 5e1
-        min_patience: 0.10
-        max_patience: 0.40
-    positivity:
-        min_multiplier: 1.01
-        max_multiplier: 1.10
-    optimizer:
-        names: ['Adadelta', 'Adam', 'RMSprop']
-        min_lr: 0.008
-        max_lr: 0.07
-    architecture:
-        initializers: ['glorot_normal', 'glorot_uniform']
-        max_drop: 0.15
-        n_layers: [2,3,4,5]
-        min_units: 10
-        max_units: 50
-        activations: ['sigmoid', 'tanh']
-    kfold: # if given a number k, k partitions will be generated automatically
-        threshold_loss: 2.0
-        partitions:
-            - datasets:
-                - NMC
-
 ############################################################
 fitting:
   genrep: True    # on = generate MC replicas, False = use real data
@@ -80,6 +54,7 @@ fitting:
     optimizer:
       optimizer_name: 'RMSprop'
       learning_rate: 0.00001
+      clipnorm: 1.0
     epochs: 1000
     pos_multiplier: 1.05
     pos_initial: 1.5

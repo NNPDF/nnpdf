@@ -269,16 +269,22 @@ class HyperScanner:
 
     def optimizer(self, optimizers):
         """
-        This function look at the optimizers implemented in MetaModel and adds the learning rate to (only)
-        those who use it. The special keyword "ALL" will make it use all optimizers implemented
-            - `optimizer`
-            - `learning rate`
+        This function look at the optimizers implemented in MetaModel
+        Since each optimizer can take different parameters, the input to this function, `optimizer`
+        is a list of dictionaries, each defining the name of the optimizer (which needs to be
+        implemented in `n3fit`) and the options to modify.
 
-        Since the learning rate is a parameter that depends on the optimizer, the final result is a
-        recursive dictionary such that even though the ModelTrainer will receive
-            {optimizer: sampler(optimizer), learning rate: sampler(lr)}
-        for hyperopt it will look as
-            {optimizer: [ (optimizer1, sampler(lr)), (optimzier2, sampler(lr)), (optimizer3, )]
+        The accepted options are:
+            - learning_rate
+            - clipnorm
+        but for hyperopt it will look as a list of dictionaries
+            [ { optimizer_name: optimizer_name, learning_rate: sampler },
+              { optimizer_name: optimizer_name, learning_rate: sampler }, ...
+            ]
+        and will sample one from this list.
+
+        Note that the keys within the dictionary (`optimizer_name` and `learning_rate`) should be named
+        as the keys used by the compiler of the model as they are used as they come.
         """
         # Get all accepted optimizer to check against
         all_optimizers = MetaModel.accepted_optimizers
@@ -288,6 +294,8 @@ class HyperScanner:
         opt_key = "optimizer"
         optname_key = "optimizer_name"
         lr_key = "learning_rate"
+        clip_key = "clipnorm"
+
 
         for optimizer in optimizers:
             name = optimizer[optname_key]
@@ -306,6 +314,11 @@ class HyperScanner:
                     raise ValueError(f"Optimizer {name} does not accept {lr_key}")
                 hp_key = f"{name}_{lr_key}"
                 optimizer_dictionary[lr_key] = optimizer_arg_wrapper(hp_key, lr_dict)
+
+            clip_dict = optimizer.get(clip_key)
+            if clip_dict is not None:
+                hp_key = f"{name}_{clip_key}"
+                optimizer_dictionary[clip_key] = optimizer_arg_wrapper(hp_key, clip_dict)
 
             choices.append(optimizer_dictionary)
 

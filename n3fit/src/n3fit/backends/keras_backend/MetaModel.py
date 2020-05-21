@@ -21,6 +21,10 @@ optimizers = {
     "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
 }
 
+# Some keys need to work for everyone
+for k, v in optimizers.items():
+    v[1]["clipnorm"] = 1.0
+
 
 def _fill_placeholders(original_input, new_input=None):
     """
@@ -200,6 +204,7 @@ class MetaModel(Model):
         learning_rate=None,
         loss=None,
         target_output=None,
+        clipnorm=None,
         **kwargs,
     ):
         """
@@ -237,14 +242,13 @@ class MetaModel(Model):
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
-        user_selected_args = {"learning_rate": learning_rate}
+        user_selected_args = {"learning_rate": learning_rate, "clipnorm": clipnorm}
 
         # Override defaults with user provided values
         for key, value in user_selected_args.items():
             if key in opt_args.keys() and value is not None:
                 opt_args[key] = value
 
-        opt_args["clipnorm"] = 1.0
 
         # Instantiate the optimizer
         opt = opt_function(**opt_args)
