@@ -7,6 +7,8 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`preprocessing-label`
 - :ref:`trval-label`
 - :ref:`networkarch-label`
+- :ref:`_otheroptions-label`
+
 
 .. _preprocessing-label:
 
@@ -30,7 +32,7 @@ This parameter accepts a list of the size of the chosen basis with a number of p
 
 Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old behaviour of ``nnfit``.
 
-.. code-block:: yml
+.. code-block:: yaml
 
     fitting:
         basis:
@@ -51,7 +53,7 @@ Training / Validation split
 ---------------------------
 The fraction of events that are considered for the training and validation sets is defined by the ``frac`` key in the ``experiment:dataset`` parameter of the nnpdf runcard. A fraction of ``X`` means that ``X`` of the event will go into the training set while ``1-X`` will enter the validation set for that dataset.
 
-.. code-block:: yml
+.. code-block:: yaml
 
     experiments:
     - experiment: ALL
@@ -71,7 +73,7 @@ There are different network architectures implemented in ``n3fit``.
 Which can be selected by changing the ``fitting:parameters::layer_type`` parameter in the runcard.
 All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and ``initializer`` parameters.
 
-.. code-block:: yml
+.. code-block:: yaml
 
     fitting:
         parameters:
@@ -84,9 +86,9 @@ All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and 
 
   Extra accepted parameters:
     - `dropout`: float
-        see `here <https://keras.io/layers/core/#dropout>`_
+        see `keras dropout <https://keras.io/layers/core/#dropout>`_
     - `regularizer`: str
-        see `here <https://keras.io/regularizers/>`_
+        see `keras regularizers <https://keras.io/regularizers/>`_
     - `regularizer_args`: dict
         choice arguments for the `regularizer`
 
@@ -99,4 +101,18 @@ In this case the ``nodes_per_layer`` parameter represents the nodes each one of 
 This mode is designed to behave as the methodology for NNPDF before 3.1 where each flavour has a separated identical network. 
 
 In this case the ``nodes_per_layer`` parameter represents the nodes each layer of each flavour has. For instance ``[5, 3, 8]`` means that the first step is a list of 8 layers of shape ``(2x5)``, while the second layer is again a list that matches the previous one (i.e., 8 layers) with layers of shape ``(5x3)`` while the last layer has two task. The output of each layer should be one single element (i.e., 8 ``(3x1)`` layers) and then concatenate them all so that the final output of the neural network will be a 8-elements tensor. A report comparing the ``dense`` and ``dense_per_flavour`` architectures can be found  `here <https://vp.nnpdf.science/q6Rm1Q_rTguJwKsLOZFoig==/>`_
+
+.. _otheroptions-label:
+
+Other options
+-------------
+
+
+.. code-block:: yaml
+
+    fitting:
+        parameters:
+            threshold_chi2: 4.0
+
+- ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
