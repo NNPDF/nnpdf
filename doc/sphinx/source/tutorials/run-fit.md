@@ -81,9 +81,14 @@ hyperscan:
         min_initial: 1.0 # minimum initial penalty
         max_initial: 5.0 # maximum initial penalty
     optimizer: # setup for the optimizer scan
-        names: 'ALL' # Use all implemented optimizers from keras
-        min_lr: 0.0005 # minimum learning rate
-        max_lr: 0.5 # maximum learning rate
+        - optimizer_name: 'Adadelta'
+          learning_rate:
+            min: 0.5
+            max: 1.5
+        - optimizer_name: 'Adam'
+          learning_rate:
+            min: 0.5
+            max: 1.5
     architecture: # setup for the architecture scan
         initializers: 'ALL' # Use all implemented initializers from keras
         max_drop: 0.15 # maximum dropout probability

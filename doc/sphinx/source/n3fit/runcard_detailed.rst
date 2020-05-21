@@ -7,7 +7,8 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`preprocessing-label`
 - :ref:`trval-label`
 - :ref:`networkarch-label`
-- :ref:`_otheroptions-label`
+- :ref:`optimizer-label`
+- :ref:`otheroptions-label`
 
 
 .. _preprocessing-label:
@@ -101,6 +102,29 @@ In this case the ``nodes_per_layer`` parameter represents the nodes each one of 
 This mode is designed to behave as the methodology for NNPDF before 3.1 where each flavour has a separated identical network. 
 
 In this case the ``nodes_per_layer`` parameter represents the nodes each layer of each flavour has. For instance ``[5, 3, 8]`` means that the first step is a list of 8 layers of shape ``(2x5)``, while the second layer is again a list that matches the previous one (i.e., 8 layers) with layers of shape ``(5x3)`` while the last layer has two task. The output of each layer should be one single element (i.e., 8 ``(3x1)`` layers) and then concatenate them all so that the final output of the neural network will be a 8-elements tensor. A report comparing the ``dense`` and ``dense_per_flavour`` architectures can be found  `here <https://vp.nnpdf.science/q6Rm1Q_rTguJwKsLOZFoig==/>`_
+
+
+.. _optimizer-label:
+
+Optimizer
+---------
+
+One of the most important parameters defining the training of the Neural Network is the choice
+of optimizer (and its corresponding options).
+
+.. code-block:: yaml
+
+    fitting:
+        parameters:
+            optimizer:
+              optimizer_name: 'Adadelta'
+              learning_rate: 1.0
+              clipnorm: 1.0
+
+
+The full list of optimizers accepted by the ``n3fit`` and their arguments
+can be checked in the `MetaModel <https://github.com/NNPDF/nnpdf/blob/master/n3fit/src/n3fit/backends/keras_backend/MetaModel.py>`_ file.
+
 
 .. _otheroptions-label:
 
