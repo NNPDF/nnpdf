@@ -48,6 +48,7 @@ KEYWORDS = {
     "id": "iteration",
     "optimizer": "optimizer",
     "lr": "learning_rate",
+    "optimizer_name": "optimizer_name",
     "initializer": "initializer",
     "dropout": "dropout",
     "nodes": "nodes_per_layer",
@@ -154,7 +155,7 @@ def parse_optimizer(trial):
     if isinstance(opt, dict):
         # If this is a dictionary then the optimizer contains extra
         # information (normaly the learning rate)
-        name = opt[KEYWORDS["optimizer"]]
+        name = opt[KEYWORDS["optimizer_name"]]
         lr = opt[KEYWORDS["lr"]]
     else:
         name = opt

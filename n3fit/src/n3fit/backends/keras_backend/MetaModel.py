@@ -12,13 +12,13 @@ from n3fit.backends.keras_backend.operations import numpy_to_tensor
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
 optimizers = {
-    "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
-    "Adam": (Kopt.Adam, {"lr": 0.01}),
+    "RMSprop": (Kopt.RMSprop, {"learning_rate": 0.01}),
+    "Adam": (Kopt.Adam, {"learning_rate": 0.01}),
     "Adagrad": (Kopt.Adagrad, {}),
-    "Adadelta": (Kopt.Adadelta, {"lr": 1.0}),
+    "Adadelta": (Kopt.Adadelta, {"learning_rate": 1.0}),
     "Adamax": (Kopt.Adamax, {}),
     "Nadam": (Kopt.Nadam, {}),
-    "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
+    "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
 }
 
 
@@ -197,7 +197,7 @@ class MetaModel(Model):
     def compile(
         self,
         optimizer_name="RMSprop",
-        learning_rate=0.05,
+        learning_rate=None,
         loss=None,
         target_output=None,
         **kwargs,
@@ -237,12 +237,19 @@ class MetaModel(Model):
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
-        if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate
+        user_selected_args = {"learning_rate": learning_rate}
+
+        # Override defaults with user provided values
+        for key, value in user_selected_args.items():
+            if key in opt_args.keys() and value is not None:
+                opt_args[key] = value
 
         opt_args["clipnorm"] = 1.0
+
+        # Instantiate the optimizer
         opt = opt_function(**opt_args)
 
+        # If given target output, compile it together with the model for better performance
         if target_output is not None:
             if not isinstance(target_output, list):
                 target_output = [target_output]

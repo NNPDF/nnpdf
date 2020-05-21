@@ -72,6 +72,24 @@ def hp_choice(key, choices):
     return hyperopt.hp.choice(key, choices)
 
 
+# Wrapper for options that work the same
+def optimizer_arg_wrapper(hp_key, option_dict):
+    # Let's accept the learning rate as a fixed float
+    if isinstance(option_dict, float):
+        choice = option_dict
+    else:
+        # Get the min-max of the learing rate
+        max_lr = option_dict["max"]
+        min_lr = option_dict["min"]
+        # Get the sampling type, if not given use uniform
+        sampling = option_dict.get("sampling", "uniform")
+        if sampling == "uniform":
+            choice = hp_uniform(hp_key, min_lr, max_lr)
+        elif sampling == "log":
+            choice = hp_loguniform(hp_key, min_lr, max_lr)
+    return choice
+
+
 # Wrapper for the hyperscanning
 def hyper_scan_wrapper(
     replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1
@@ -168,7 +186,7 @@ class HyperScanner:
         self.hyper_keys = set([])
 
         stopping_dict = sampling_dict.get("stopping")
-        optimizer_dict = sampling_dict.get("optimizer")
+        optimizer_list = sampling_dict.get("optimizer")
         positivity_dict = sampling_dict.get("positivity")
         nn_dict = sampling_dict.get("architecture")
 
@@ -179,12 +197,8 @@ class HyperScanner:
                 min_patience=stopping_dict.get("min_patience"),
                 max_patience=stopping_dict.get("max_patience"),
             )
-        if optimizer_dict:
-            self.optimizer(
-                names=optimizer_dict.get("names"),
-                min_lr=optimizer_dict.get("min_lr"),
-                max_lr=optimizer_dict.get("max_lr"),
-            )
+        if optimizer_list:
+            self.optimizer(optimizers=optimizer_list)
         if positivity_dict:
             self.positivity(
                 min_multiplier=positivity_dict.get("min_multiplier"),
@@ -253,7 +267,7 @@ class HyperScanner:
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
 
-    def optimizer(self, names=None, min_lr=0.0005, max_lr=0.5):
+    def optimizer(self, optimizers):
         """
         This function look at the optimizers implemented in MetaModel and adds the learning rate to (only)
         those who use it. The special keyword "ALL" will make it use all optimizers implemented
@@ -266,37 +280,34 @@ class HyperScanner:
         for hyperopt it will look as
             {optimizer: [ (optimizer1, sampler(lr)), (optimzier2, sampler(lr)), (optimizer3, )]
         """
-        if names is None:  # Nothing to do here
-            return
+        # Get all accepted optimizer to check against
+        all_optimizers = MetaModel.accepted_optimizers
+        # We will have a list of dictionaries to choose from
+        choices = []
 
         opt_key = "optimizer"
+        optname_key = "optimizer_name"
         lr_key = "learning_rate"
 
-        # Check which optimizers are we using
-        optimizer_dict = MetaModel.accepted_optimizers
-        if names == "ALL":
-            names = optimizer_dict.keys()
+        for optimizer in optimizers:
+            name = optimizer[optname_key]
+            optimizer_dictionary = {optname_key: name}
 
-        # Set a logarithmic sampling for the learning rate
-        lr_choice = hp_loguniform(lr_key, min_lr, max_lr)
-
-        choices = []
-        for opt_name in names:
-            if opt_name not in optimizer_dict.keys():
+            if name not in all_optimizers.keys():
                 raise NotImplementedError(
-                    "HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(
-                        opt_name
-                    )
+                    f"HyperScanner: Optimizer {name} not implemented in MetaModel.py"
                 )
 
-            # Check whether this optimizer takes the learning rate
-            # if it does the choice should be a dictionary with both the optimizer and the learning rate
-            # otherwise just the optimizer name (dictionary not needed)
-            args = optimizer_dict[opt_name][1]
-            if "lr" in args.keys():
-                choices.append({opt_key: opt_name, lr_key: lr_choice})
-            else:
-                choices.append(opt_name)
+            lr_dict = optimizer.get(lr_key)
+            if lr_dict is not None:
+                # Check whether this optimizer is implemented with a learning rate
+                args = all_optimizers[name][1]
+                if lr_key not in args.keys():
+                    raise ValueError(f"Optimizer {name} does not accept {lr_key}")
+                hp_key = f"{name}_{lr_key}"
+                optimizer_dictionary[lr_key] = optimizer_arg_wrapper(hp_key, lr_dict)
+
+            choices.append(optimizer_dictionary)
 
         # Make the list of options into a list sampler
         opt_val = hp_choice(opt_key, choices)
@@ -311,7 +322,7 @@ class HyperScanner:
         Modifies the following entries of the `parameters` dictionary:
             - pos_multiplier
             - pos_initial
-        Sampling between maximum and minimum is uniform for the multiplier and loguniform for the initial
+        Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
         mul_key = "pos_multiplier"
         ini_key = "pos_initial"
