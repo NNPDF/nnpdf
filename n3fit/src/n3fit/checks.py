@@ -9,6 +9,7 @@ LOGGER = logging.getLogger(__name__)
 
 # Checks on the NN parameters
 def check_consistent_layers(parameters):
+    """ Checks that all layers have an activation function defined """
     npl = len(parameters["nodes_per_layer"])
     apl = len(parameters["activation_per_layer"])
     if npl != apl:
@@ -18,6 +19,10 @@ def check_consistent_layers(parameters):
 
 
 def check_stopping(parameters):
+    """ Checks whether the stopping-related options are sane:
+    stopping patience as a ratio between 0 and 1
+    and positive number of epochs
+    """
     spt = parameters.get("stopping_patience", 1.0)
     if not 0.0 <= spt <= 1.0:
         raise CheckError(f"The stopping_patience must be between 0 and 1, got: {spt}")
@@ -27,6 +32,7 @@ def check_stopping(parameters):
 
 
 def check_basis_and_layers_are_consistent(fitting, parameters):
+    """ Check that the last layer matches the number of flavours defined in the runcard"""
     number_of_flavours = len(fitting["basis"])
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
@@ -36,6 +42,7 @@ def check_basis_and_layers_are_consistent(fitting, parameters):
 
 
 def check_optimizer(optimizer_dict):
+    """ Checks whether the optimizer setup is valid """
     name_key = "optimizer_name"
     name = optimizer_dict[name_key]
     from n3fit.backends import MetaModel
@@ -52,6 +59,7 @@ def check_optimizer(optimizer_dict):
 
 
 def check_initializer(initializer):
+    """ Checks whether the initializer is implemented """
     from n3fit.backends import MetaLayer
 
     accepted_init = MetaLayer.initializers
@@ -60,6 +68,7 @@ def check_initializer(initializer):
 
 
 def check_dropout(parameters):
+    """ Checks the dropout setup (positive and smaller than 1.0) """
     dropout = parameters.get("dropout", 0.0)
     if not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
@@ -67,6 +76,7 @@ def check_dropout(parameters):
 
 @make_argcheck
 def wrapper_check_NN(fitting):
+    """ Wrapper function for all NN-related checks """
     parameters = fitting["parameters"]
     check_consistent_layers(parameters)
     check_basis_and_layers_are_consistent(fitting, parameters)
@@ -76,23 +86,12 @@ def wrapper_check_NN(fitting):
     check_initializer(parameters["initializer"])
 
 
-# Hyperparameter scan
-def check_consistent_hyperscan_options(hyperscan, fitting):
-    if hyperscan is None:
-        raise CheckError(
-            "A hyperscan dictionary needs to be defined when performing hyperopt"
-        )
-    if "kfold" not in hyperscan:
-        raise CheckError(
-            "hyperscan::kfold key needs to be defined when performing hyperopt"
-        )
-    if fitting["genrep"]:
-        raise CheckError(
-            "During hyperoptimization we cannot generate replicas (genrep=false)"
-        )
-
-
 def check_hyperopt_architecture(architecture):
+    """ Checks whether the scanning setup for the NN architecture works
+    - Initializers are valid
+    - Droput setup is valid
+    - No 'min' is greater than its corresponding 'max'
+    """
     if architecture is None:
         return None
     initializers = architecture.get("initializers")
@@ -116,6 +115,7 @@ def check_hyperopt_architecture(architecture):
 
 
 def check_kfold_options(kfold):
+    """ Warns the user about potential bugs on the kfold setup"""
     threshold = kfold.get("threshold", 5.0)
     if threshold < 2.0:
         LOGGER.warning("The kfolding loss threshold might be too low: %f", threshold)
@@ -123,16 +123,30 @@ def check_kfold_options(kfold):
 
 @make_argcheck
 def wrapper_hyperopt(hyperopt, hyperscan, fitting):
-    if hyperopt is None:
+    """ Wrapper function for all hyperopt-related checks
+    No check is performed if hyperopt is not active
+    """
+    if not hyperopt:
         return None
-    check_consistent_hyperscan_options(hyperscan, fitting)
+    if fitting["genrep"]:
+        raise CheckError(
+            "Generation of replicas is not accepted during hyperoptimization"
+        )
+    if hyperscan is None:
+        raise CheckError("Can't perform hyperoptimization without the hyperscan key")
+    if "kfold" not in hyperscan:
+        raise CheckError("The hyperscan::kfold dictionary is not defined")
     check_hyperopt_architecture(hyperscan.get("architecture"))
-    check_kfold_options(hyperscan.get("kfold"))
+    check_kfold_options(hyperscan["kfold"])
 
 
 # Checks on the physics
 @make_argcheck
 def check_consistent_basis(fitting):
+    """ Checks the fitbasis setup for inconsistencies
+    - Correct flavours for the selected basis
+    - Correct ranges (min < max) for the small and large-x exponents
+    """
     fitbasis = fitting["fitbasis"]
     # Check that there are no duplicate flavours and that parameters are sane
     flavs = []
