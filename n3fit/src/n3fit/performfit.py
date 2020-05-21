@@ -101,7 +101,9 @@ def check_consistent_basis(fitting):
         raise CheckError(f"Repeated flavour names: check basis dictionary")
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
     res = check_basis(fitbasis,flavs)
-    
+
+
+@make_argcheck
 def check_consistent_layers(fitting):
     npl = len(fitting['parameters']['nodes_per_layer'])
     apl = len(fitting['parameters']['activation_per_layer'])
