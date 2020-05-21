@@ -22,7 +22,7 @@ from validphys.calcutils import calc_chi2
 # exclude charm
 XI_FLAVOURS = (r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',)
 
-N = 12
+N = 6
 SINGLET_GLUON_XGRID = np.concatenate(
     (np.logspace(-3, -1, int(N/2), endpoint=False), np.linspace(0.1, 0.5, int(N/2))),
     axis=0
