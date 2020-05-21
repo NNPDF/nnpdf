@@ -10,7 +10,6 @@ import scipy.linalg as la
 import scipy.special
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
 
 from reportengine import collect
 from reportengine.table import table
@@ -23,7 +22,7 @@ from validphys.calcutils import calc_chi2
 # exclude charm
 XI_FLAVOURS = (r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',)
 
-N = 24
+N = 12
 SINGLET_GLUON_XGRID = np.concatenate(
     (np.logspace(-3, -1, int(N/2), endpoint=False), np.linspace(0.1, 0.5, int(N/2))),
     axis=0
@@ -384,7 +383,7 @@ def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
     #pylint: disable=no-member
     estimated_integral = scipy.special.erf(n_sigma_in_variance/np.sqrt(2))
     return pd.DataFrame(
-        np.sqrt(estimated_integral),
+        estimated_integral,
         index=df_in.index,
         columns=[r"expected $\xi_{1\sigma}$"]
     )
