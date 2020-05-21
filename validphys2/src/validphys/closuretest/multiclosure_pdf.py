@@ -15,12 +15,9 @@ from matplotlib.ticker import MaxNLocator
 from reportengine import collect
 from reportengine.table import table
 from reportengine.figure import figuregen
-from reportengine.checks import make_argcheck
 
-from validphys.pdfgrids import xplotting_grid, check_basis
-from validphys.pdfbases import Basis
+from validphys.pdfgrids import xplotting_grid
 from validphys.core import PDF
-from validphys.checks import check_scale
 from validphys.calcutils import calc_chi2
 
 # exclude charm
@@ -138,7 +135,8 @@ def fits_covariance_matrix_by_flavour(fits_replica_difference):
 def xi_flavour_x(
     fits_replica_difference,
     fits_central_difference,
-    fits_covariance_matrix_by_flavour
+    fits_covariance_matrix_by_flavour,
+    use_x_basis=False,
 ):
     """for a set of fits calculate the indicator function
 
@@ -158,15 +156,17 @@ def xi_flavour_x(
 
     xis = []
     for i in range(len(XI_FLAVOURS)):
-        _, e_vec = la.eigh(fits_covariance_matrix_by_flavour[i])
-        # uncomment to diagonalise
-        # put x on first axis
-        diag_central_diff = e_vec.T @ central_diff[:, i, :].T
-        # put x on second to last axis
-        diag_rep_diff = e_vec.T @ rep_diff[:, :, i, :].transpose(1, 2, 0)
-        # uncoment for xbasis
-        #diag_central_diff = central_diff[:, i, :].T
-        #diag_rep_diff = rep_diff[:, :, i, :].transpose(1, 2, 0)
+        if use_x_basis:
+            # put x on first axis
+            diag_central_diff = central_diff[:, i, :].T
+            # put x on second to last axis
+            diag_rep_diff = rep_diff[:, :, i, :].transpose(1, 2, 0)
+        else:
+            _, e_vec = la.eigh(fits_covariance_matrix_by_flavour[i])
+            # put x on first axis
+            diag_central_diff = e_vec.T @ central_diff[:, i, :].T
+            # put x on second to last axis
+            diag_rep_diff = e_vec.T @ rep_diff[:, :, i, :].transpose(1, 2, 0)
         var_diff = (diag_rep_diff)**2
         sigma = np.sqrt(var_diff.mean(axis=0)) # mean across reps
         # indicator and mean across fits
@@ -189,7 +189,8 @@ fits_indicator_function_totalpdf = collect(
 def xi_totalpdf(
     fits_replica_difference,
     fits_central_difference,
-    fits_covariance_matrix_totalpdf
+    fits_covariance_matrix_totalpdf,
+    use_x_basis=False,
 ):
     """Like xi_flavour_x except calculate the total xi across flavours and x
     accounting for correlations
@@ -200,14 +201,16 @@ def xi_totalpdf(
     )
     central_diff = np.asarray(fits_central_difference).reshape(
         -1, N*len(XI_FLAVOURS))
-    _, e_vec = la.eigh(fits_covariance_matrix_totalpdf)
-    # put flavourx on first axis
-    diag_central_diff = e_vec.T @ central_diff.T
-    # need reps on second axis
-    diag_rep_diff = e_vec.T @ rep_diff.transpose(1, 2, 0)
-    # uncomment for x basis
-    #diag_central_diff = central_diff.T
-    #diag_rep_diff = rep_diff.transpose(1, 2, 0)
+    if use_x_basis:
+        diag_central_diff = central_diff.T
+        diag_rep_diff = rep_diff.transpose(1, 2, 0)
+    else:
+        _, e_vec = la.eigh(fits_covariance_matrix_totalpdf)
+        # put flavourx on first axis
+        diag_central_diff = e_vec.T @ central_diff.T
+        # need reps on second axis
+        diag_rep_diff = e_vec.T @ rep_diff.transpose(1, 2, 0)
+
     var_diff = (diag_rep_diff)**2
     sigma = np.sqrt(var_diff.mean(axis=0)) # mean across reps
     # indicator and mean across all
@@ -225,19 +228,35 @@ def xi_flavour_table(xi_flavour_x, xi_totalpdf):
     """
     data = np.concatenate(
         (xi_flavour_x.mean(axis=-1), [xi_totalpdf]), axis=0)[:, np.newaxis]
+    index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
     return pd.DataFrame(
         data,
-        columns=[r"$\xi_{1\sigma}$"],
-        index=[f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"]
+        columns=[r"Measured $\xi_{1\sigma}$"],
+        index=index
     )
 
 @figuregen
-def plot_xi_flavour_x(xi_flavour_x, Q):
+def plot_xi_flavour_x(xi_flavour_x, Q, use_x_basis=False):
+    """For each flavour plot xi for each x-point. By default xi is calculated and
+    plotted in the basis which diagonalises the covmat estimated from the union
+    of all the replicas. However, if use_x_basis is True then xi will be
+    calculated and plotted in x basis.
+
+    """
+    # treat singlet and gluon seperately
+    if use_x_basis:
+        x_for_plot = 2*[SINGLET_GLUON_XGRID] + 5*[NONSINGLET_XGRID]
+        x_label = "x"
+    else:
+        x_for_plot = 7*[np.arange(N)]
+        x_label = "estimated covariance eigenvectors (ascending in eigenvalue)"
+
     for i, fl in enumerate(XI_FLAVOURS):
         if i == 0:
             fl = f"${fl}$"
         fig, ax = plt.subplots()
         ax.plot(
+            x_for_plot[i],
             xi_flavour_x[i, :],
             '*',
             label=r"$\xi_{1\sigma}$ = "+f"{xi_flavour_x[i, :].mean():.2f}"
@@ -245,9 +264,9 @@ def plot_xi_flavour_x(xi_flavour_x, Q):
         ax.axhline(0.68, linestyle=":", color="k", label="expected value")
         ax.set_ylim([0, 1])
         ax.set_title(r"$\xi_{1\sigma}$"+f" for Q={Q}, {fl} PDF.")
-        ax.set_xlabel("estimated covariance eigenvectors (ascending in eigenvalue)")
+        ax.set_xlabel(x_label)
         ax.set_ylabel(r"$\xi_{1\sigma}$")
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+        #ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.legend()
         yield fig
 
@@ -370,162 +389,8 @@ def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
         columns=[r"expected $\xi_{1\sigma}$"]
     )
 
-def xi_pdfgrid_proxy(
-    proxy_pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None):
-    return xi_pdfgrid(proxy_pdf, Q, basis, flavours)
-
-def xi_pdfgrid_replicas(
-    replica_pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None):
-    return xi_pdfgrid(replica_pdf, Q, basis, flavours)
-
 @table
-def xi_1sigma_proxy(xi_pdfgrid_replicas, underlying_xi_pdfgrid, xi_pdfgrid_proxy):
-    fit_replica_grids = xi_pdfgrid_replicas.grid_values
-    fit_central_grids = fit_replica_grids.mean(axis=0, keepdims=True)
-
-    law_grid = underlying_xi_pdfgrid[0].grid_values[0][np.newaxis, ...]
-    proxy_grid = xi_pdfgrid_proxy.grid_values
-
-    central_diff = law_grid - proxy_grid
-    sigma_diff = fit_replica_grids - fit_central_grids
-
-    variance = ((sigma_diff)**2).mean(axis=0, keepdims=True)
-    sigma = np.sqrt(variance)
-
-    indicator = np.asarray(abs(central_diff) < sigma, dtype=float) #fit, flav, x
-    flavs = pd.Index([
-        underlying_xi_pdfgrid[0].basis.elementlabel(fl)
-        for fl in underlying_xi_pdfgrid[0].flavours],
-        name="flavour"
-    )
-    xgridindex = pd.Index(underlying_xi_pdfgrid[0].xgrid, name="x")
-    df = pd.DataFrame(
-        indicator.mean(axis=0),
-        index=flavs,
-        columns=xgridindex,
-    )
-    return df
-
-@figuregen
-@check_scale('xscale', allow_none=True)
-def plot_xi_1sigma_proxy(xi_1sigma_proxy, Q, xscale):
-    yield from plot_xi_1sigma(xi_1sigma_proxy, Q, xscale)
-
-@figuregen
-@check_scale('xscale', allow_none=True)
-def plot_xi_1sigma_comparison(xi_1sigma_proxy, xi_1sigma, Q, xscale):
-    x = xi_1sigma.columns.values
-    xi_data = xi_1sigma.values
-    xi_proxy = xi_1sigma_proxy.values
-    for i, fl in enumerate(xi_1sigma.index.values):
-        fig, ax = plt.subplots()
-        ax.plot(x, xi_data[i, :], '*', label=r"multiple fits $\xi_{1\sigma}$ = "+f"{xi_data[i, :].mean():.2f}")
-        ax.plot(x, xi_proxy[i, :], '*', label=r"single rep proxy $\xi_{1\sigma}$ = "+f"{xi_proxy[i, :].mean():.2f}")
-        ax.axhline(0.68, linestyle=":", color="k", label="expected value")
-        ax.set_ylim([0, 1])
-        ax.set_title(r"$\xi_{1\sigma}$"+f" for Q={Q}, ${fl}$ PDF.")
-        ax.set_xlabel("x")
-        ax.set_ylabel(r"$\xi_{1\sigma}$")
-        ax.set_xscale(xscale)
-        ax.legend()
-        yield fig
-
-@make_argcheck(check_basis)
-def pdf_bias_grid(
-    pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None,
-    logspace_lims=(-5, -1),
-    logspace_num=3,
-    linspace_lims=(0.1, 1),
-    linspace_num=3):
-    xgrid_log = np.logspace(*logspace_lims, num=logspace_num, endpoint=False)
-    xgrid_lin = np.linspace(*linspace_lims, num=linspace_num, endpoint=False)
-    xgrid = np.concatenate((xgrid_log, xgrid_lin), axis=0)
-    return xplotting_grid(
-        pdf, Q, xgrid=xgrid, basis=basis, flavours=flavours)
-
-fits_pdf_bias_grid = collect("pdf_bias_grid", ("fits", "fitpdf"))
-underlying_pdf_bias_grid = collect("pdf_bias_grid", ("fitunderlyinglaw",))
-
-def multifits_flavours_covmat(fits_pdf_bias_grid):
-    fits_replica_grids = np.asarray([xpg.grid_values for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=0, keepdims=True)
-    diffs = np.concatenate((fits_central_grids - fits_replica_grids), axis=0) # superreps, flav, x
-    covs = []
-    for fli in range(diffs.shape[1]): # loop over fl index
-        covs.append(np.cov(diffs[:, fli, :], rowvar=False))
-    return covs
-
-
-def multifits_flavours_bias_variance(
-    fits_pdf_bias_grid, underlying_pdf_bias_grid, multifits_flavours_covmat):
-    fits_replica_grids = np.asarray([xpg.grid_values for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=1, keepdims=True)
-    underlying_grid = underlying_pdf_bias_grid[0].grid_values[0][np.newaxis, np.newaxis, ...]
-    flavours_invs = np.asarray([la.inv(cov) for cov in multifits_flavours_covmat])
-
-    bias_diff = (fits_central_grids - underlying_grid)[:, 0, ...] #fit, flav, x
-    var_diff = fits_central_grids - fits_replica_grids # fit, rep, flav, x
-
-    bias_xM = (bias_diff[..., np.newaxis] * flavours_invs[np.newaxis, ...]) #fit, flav, x, x
-    bias = (bias_xM * bias_diff[:, :, np.newaxis, :]).sum(axis=(-2, -1)) #fit, flav
-    expected_bias = np.mean(bias, axis=0)
-
-    var_xM = (var_diff[..., np.newaxis] * flavours_invs[np.newaxis, np.newaxis, ...]) #fit, rep, flav, x, x
-    var = (var_xM * var_diff[:, :, :, np.newaxis, :]).sum(axis=(-2, -1)).mean(axis=1) # fit, flav
-    expected_var = np.mean(var, axis=0)
-
-    return expected_bias/expected_var
-
-def multifits_total_covmat(fits_pdf_bias_grid):
-    fits_replica_grids = np.asarray([xpg.grid_values for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=0, keepdims=True)
-    diffs = np.concatenate((fits_central_grids - fits_replica_grids), axis=0) # superreps, flav, x
-    diffs_total = diffs.reshape(-1, diffs.shape[1]*diffs.shape[2]) # superreps, (flav * x)
-    return np.cov(diffs_total, rowvar=False)
-
-def multifits_total_pdf_bias_variance(
-    multifits_total_covmat, fits_pdf_bias_grid, underlying_pdf_bias_grid):
-    underlying_grid = underlying_pdf_bias_grid[0].grid_values[0][np.newaxis, np.newaxis, ...]
-    flavx = underlying_grid.shape[2] * underlying_grid.shape[3]
-    underlying_grid = underlying_grid.reshape(1, 1, flavx)
-    fits_replica_grids = np.asarray([xpg.grid_values.reshape(-1, flavx) for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=1, keepdims=True)
-
-    bias_diff = (fits_central_grids - underlying_grid)[:, 0, :] #fit, (flav*x)
-    var_diff = fits_central_grids - fits_replica_grids # fit, rep, (flav*x)
-    total_inv = la.inv(multifits_total_covmat) # flav*x, flav*x
-
-    bias_xM = (bias_diff[..., np.newaxis] * total_inv[np.newaxis, ...]) #fit, flav*x, flav*x
-    bias = (bias_xM * bias_diff[:, np.newaxis, :]).sum(axis=(-2, -1))/flavx #fit
-    expected_bias = np.mean(bias, axis=0)
-
-    var_xM = (var_diff[..., np.newaxis] * total_inv[np.newaxis, np.newaxis, ...]) #fit, rep, flav*x
-    var = (var_xM * var_diff[:, :, np.newaxis, :]).sum(axis=(-2, -1)).mean(axis=1)/flavx # fit
-    expected_var = np.mean(var, axis=0)
-
-    return expected_bias/expected_var
-
-@table
-def multifits_pdf_bias_variance_table(
-    multifits_total_pdf_bias_variance,
-    multifits_flavours_bias_variance,
-    underlying_pdf_bias_grid
-):
-    flavids = underlying_pdf_bias_grid[0].flavours
-    basis = underlying_pdf_bias_grid[0].basis
-    records = []
-    for flid, ratio in zip(flavids, multifits_flavours_bias_variance):
-        records.append(dict(
-            flavour=f"${basis.elementlabel(flid)}$",
-            ratio=ratio
-        ))
-    records.append(dict(
-        flavour="total",
-        ratio=multifits_total_pdf_bias_variance
-    ))
-    df = pd.DataFrame.from_records(records, index="flavour", columns=("flavour", "ratio"))
-    df.columns = ("bias/variance",)
-    return df
+def fits_pdf_compare_xi_to_expected(fits_pdf_expected_xi_from_ratio, xi_flavour_table):
+    """Two column table comparing the measured value of xi for each flavour to the
+    one calculated from bias/variance"""
+    return pd.concat((xi_flavour_table, fits_pdf_expected_xi_from_ratio), axis=1)
