@@ -811,13 +811,13 @@ def dataset_xi_error_finite_effects(
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    mean_xi_table = xi_resampling_dataset.mean(axis=-1)
+    means_xi_table = xi_resampling_dataset.mean(axis=-1)
     ind = pd.Index(n_replica_samples, name="n_rep samples")
     col = pd.Index(n_fit_samples, name="n_fit samples")
-    return pd.DataFrame(mean_xi_table.std(axis=2), index=ind, columns=col)
+    return pd.DataFrame(means_xi_table.std(axis=2), index=ind, columns=col)
 
 @table
-def dataset_xi_mean_finite_effects(
+def dataset_xi_means_finite_effects(
     xi_resampling_dataset, n_fit_samples, n_replica_samples
 ):
     """For a single dataset vary number of fits and number of replicas used to perform
@@ -826,10 +826,10 @@ def dataset_xi_mean_finite_effects(
     tabulate the mean of xi_1sigma across bootstrap samples
 
     """
-    mean_xi_table = xi_resampling_dataset.mean(axis=-1)
+    means_xi_table = xi_resampling_dataset.mean(axis=-1)
     ind = pd.Index(n_replica_samples, name="n_rep samples")
     col = pd.Index(n_fit_samples, name="n_fit samples")
-    return pd.DataFrame(mean_xi_table.mean(axis=2), index=ind, columns=col)
+    return pd.DataFrame(means_xi_table.mean(axis=2), index=ind, columns=col)
 
 @table
 def dataset_std_xi_error_finite_effects(
@@ -842,13 +842,13 @@ def dataset_std_xi_error_finite_effects(
     bootstrap samples
 
     """
-    mean_xi_table = xi_resampling_dataset.std(axis=-1)
+    means_xi_table = xi_resampling_dataset.std(axis=-1)
     ind = pd.Index(n_replica_samples, name="n_rep samples")
     col = pd.Index(n_fit_samples, name="n_fit samples")
-    return pd.DataFrame(mean_xi_table.std(axis=2), index=ind, columns=col)
+    return pd.DataFrame(means_xi_table.std(axis=2), index=ind, columns=col)
 
 @table
-def dataset_std_xi_mean_finite_effects(
+def dataset_std_xi_means_finite_effects(
     xi_resampling_dataset, n_fit_samples, n_replica_samples
 ):
     """For a single dataset vary number of fits and number of replicas used to perform
@@ -858,10 +858,10 @@ def dataset_std_xi_mean_finite_effects(
     bootstrap samples
 
     """
-    mean_xi_table = xi_resampling_dataset.std(axis=-1)
+    means_xi_table = xi_resampling_dataset.std(axis=-1)
     ind = pd.Index(n_replica_samples, name="n_rep samples")
     col = pd.Index(n_fit_samples, name="n_fit samples")
-    return pd.DataFrame(mean_xi_table.mean(axis=2), index=ind, columns=col)
+    return pd.DataFrame(means_xi_table.mean(axis=2), index=ind, columns=col)
 
 exps_xi_resample = collect("xi_resampling_experiment", ("experiments",))
 
@@ -882,7 +882,7 @@ def total_xi_error_finite_effects(
     return dataset_xi_error_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
 
 @table
-def total_xi_mean_finite_effects(
+def total_xi_means_finite_effects(
     total_xi_resample, n_fit_samples, n_replica_samples
 ):
     """For all data vary number of fits and number of replicas used to perform
@@ -891,7 +891,7 @@ def total_xi_mean_finite_effects(
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    return dataset_xi_mean_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
+    return dataset_xi_means_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
 
 def total_expected_xi_resample(bias_variance_resampling_total):
     """using the bias and variance resample, return a resample of expected
@@ -906,7 +906,7 @@ def total_expected_xi_resample(bias_variance_resampling_total):
     return special.erf(n_sigma_in_variance / np.sqrt(2))
 
 @table
-def total_expected_xi_mean_finite_effects(
+def total_expected_xi_means_finite_effects(
     total_expected_xi_resample, n_fit_samples, n_replica_samples
 ):
     """Given the resampled ratio of bias/variance, returns table of mean of
@@ -921,7 +921,7 @@ def total_expected_xi_mean_finite_effects(
     return pd.DataFrame(total_expected_xi_resample.mean(axis=2), index=ind, columns=col)
 
 @table
-def total_expected_xi_std_finite_effects(
+def total_expected_xi_error_finite_effects(
     total_expected_xi_resample, n_fit_samples, n_replica_samples
 ):
     """Given the resampled ratio of bias/variance, returns table of mean of
@@ -950,7 +950,7 @@ def total_std_xi_error_finite_effects(
     return dataset_std_xi_error_finite_effects(xi_total, n_fit_samples, n_replica_samples)
 
 @table
-def total_std_xi_mean_finite_effects(
+def total_std_xi_means_finite_effects(
     exps_xi_resample, n_fit_samples, n_replica_samples
 ):
     """For all data vary number of fits and number of replicas used to perform
@@ -961,4 +961,4 @@ def total_std_xi_mean_finite_effects(
 
     """
     xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_std_xi_mean_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+    return dataset_std_xi_means_finite_effects(xi_total, n_fit_samples, n_replica_samples)
