@@ -544,7 +544,7 @@ class ModelTrainer:
         if recompile:
             _compile_one_model(self.experimental, kidx=kidx, negate_fold=not off)
 
-    def _model_compilation(self, learning_rate, optimizer, kidx=None):
+    def _model_compilation(self, optimizer_dict, kidx=None):
         """
         Wrapper around `_compile_one_model` to pass the right parameters
         and index of the k-folding.
@@ -564,8 +564,7 @@ class ModelTrainer:
 
         # Compile all different models
         for model_dict in self.list_of_models_dicts:
-            param_dict = {"learning_rate": learning_rate, "optimizer_name": optimizer}
-            _compile_one_model(model_dict, kidx=kidx, **param_dict)
+            _compile_one_model(model_dict, kidx=kidx, **optimizer_dict)
 
     def _train_and_fit(self, stopping_object, epochs):
         """
@@ -715,10 +714,8 @@ class ModelTrainer:
                 save_weights_each=self.save_weights_each,
             )
 
-            # Compile the training['model'] with the given parameters
-            self._model_compilation(
-                params["learning_rate"], params["optimizer"], kidx=k
-            )
+            # Compile the models with the given parameters
+            self._model_compilation(params["optimizer"], kidx=k)
 
             passed = self._train_and_fit(stopping_object, epochs)
 
