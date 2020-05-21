@@ -646,6 +646,22 @@ def bias_variance_resampling_experiment(
         use_repeats=use_repeats
     )
 
+exps_bias_var_resample = collect(
+    "bias_variance_resampling_experiment", ("experiments",)
+)
+
+def bias_variance_resampling_total(exps_bias_var_resample):
+    """Sum the bias_variance_resampling_experiment for all experiments, giving
+    the total bias and variance resamples, relies on the bootstrap seed being
+    the same for all experiments such that the replicas are the same
+
+    """
+    bias_total, var_total = exps_bias_var_resample[0]
+    for exp_bias_var_resample in exps_bias_var_resample[1:]:
+        bias, var = exp_bias_var_resample
+        bias_total += bias
+        var_total += var
+    return bias_total, var_total
 
 @table
 def dataset_ratio_error_finite_effects(
@@ -667,32 +683,21 @@ def dataset_ratio_error_finite_effects(
     return pd.DataFrame(ratio.std(axis=2), index=ind, columns=col)
 
 
-exps_bias_var_resample = collect(
-    "bias_variance_resampling_experiment", ("experiments",)
-)
-
-
 @table
 def total_ratio_error_finite_effects(
-    exps_bias_var_resample, n_fit_samples, n_replica_samples
+    bias_variance_resampling_total, n_fit_samples, n_replica_samples
 ):
     """Like dataset_ratio_relative_error_finite_effects except for the total
     bias / variance
     """
-    bias_total, var_total = exps_bias_var_resample[0]
-    for exp_bias_var_resample in exps_bias_var_resample[1:]:
-        bias, var = exp_bias_var_resample
-        bias_total += bias
-        var_total += var
-    # don't reinvent the wheel
     return dataset_ratio_error_finite_effects(
-        (bias_total, var_total), n_fit_samples, n_replica_samples
+        bias_variance_resampling_total, n_fit_samples, n_replica_samples
     )
 
 
 @table
 def total_ratio_means_finite_effects(
-    exps_bias_var_resample, n_fit_samples, n_replica_samples
+    bias_variance_resampling_total, n_fit_samples, n_replica_samples
 ):
     """Vary number of fits and number of replicas used to perform
     bootstrap sample of expected bias and variance. For each combination of
@@ -703,13 +708,9 @@ def total_ratio_means_finite_effects(
     Which can give context to `total_ratio_relative_error_finite_effects`
 
     """
-    bias_total, var_total = exps_bias_var_resample[0]
-    for exp_bias_var_resample in exps_bias_var_resample[1:]:
-        bias, var = exp_bias_var_resample
-        bias_total += bias
-        var_total += var
     ind = pd.Index(n_replica_samples, name="n_rep samples")
     col = pd.Index(n_fit_samples, name="n_fit samples")
+    bias_total, var_total = bias_variance_resampling_total
     return pd.DataFrame((bias_total / var_total).mean(axis=2), index=ind, columns=col)
 
 def xi_resampling_dataset(
@@ -864,9 +865,13 @@ def dataset_std_xi_mean_finite_effects(
 
 exps_xi_resample = collect("xi_resampling_experiment", ("experiments",))
 
+def total_xi_resample(exps_xi_resample):
+    """concatenate the xi for each datapoint for all data"""
+    return np.concatenate(exps_xi_resample, axis=-1)
+
 @table
 def total_xi_error_finite_effects(
-    exps_xi_resample, n_fit_samples, n_replica_samples
+    total_xi_resample, n_fit_samples, n_replica_samples
 ):
     """For all data vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the mean of xi across datapoints (note that points
@@ -874,12 +879,11 @@ def total_xi_error_finite_effects(
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_xi_error_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+    return dataset_xi_error_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
 
 @table
 def total_xi_mean_finite_effects(
-    exps_xi_resample, n_fit_samples, n_replica_samples
+    total_xi_resample, n_fit_samples, n_replica_samples
 ):
     """For all data vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the mean of xi across datapoints (note that points
@@ -887,27 +891,49 @@ def total_xi_mean_finite_effects(
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_xi_mean_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+    return dataset_xi_mean_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
+
+def total_expected_xi_resample(bias_variance_resampling_total):
+    """using the bias and variance resample, return a resample of expected
+    xi
+
+    """
+    bias_total, var_total = bias_variance_resampling_total
+    sqrt_bias_var = np.sqrt(bias_total / var_total)
+    n_sigma_in_variance = 1 / sqrt_bias_var
+    # pylint can't find erf here, disable error in this function
+    # pylint: disable=no-member
+    return special.erf(n_sigma_in_variance / np.sqrt(2))
 
 @table
 def total_expected_xi_mean_finite_effects(
-    total_ratio_means_finite_effects
+    total_expected_xi_resample, n_fit_samples, n_replica_samples
 ):
-    """Given the resampled ratio of bias/variance, returns table of resampled
-    expected xi
+    """Given the resampled ratio of bias/variance, returns table of mean of
+    resampled expected xi across bootstrap samples
 
     see `expected_xi_from_bias_variance` for more details on how to calculate
     expected xi.
 
     """
-    df_in = total_ratio_means_finite_effects
-    sqrt_bias_var = np.sqrt(df_in.values)
-    n_sigma_in_variance = 1 / sqrt_bias_var
-    # pylint can't find erf here, disable error in this function
-    # pylint: disable=no-member
-    estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
-    return pd.DataFrame(estimated_integral, index=df_in.index, columns=df_in.columns)
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
+    return pd.DataFrame(total_expected_xi_resample.mean(axis=2), index=ind, columns=col)
+
+@table
+def total_expected_xi_std_finite_effects(
+    total_expected_xi_resample, n_fit_samples, n_replica_samples
+):
+    """Given the resampled ratio of bias/variance, returns table of mean of
+    resampled expected xi across bootstrap samples
+
+    see `expected_xi_from_bias_variance` for more details on how to calculate
+    expected xi.
+
+    """
+    ind = pd.Index(n_replica_samples, name="n_rep samples")
+    col = pd.Index(n_fit_samples, name="n_fit samples")
+    return pd.DataFrame(total_expected_xi_resample.std(axis=2), index=ind, columns=col)
 
 @table
 def total_std_xi_error_finite_effects(
