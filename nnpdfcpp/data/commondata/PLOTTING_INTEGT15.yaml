@@ -1,0 +1,9 @@
+dataset_label: "T15 integrability"
+x: k2
+y_label: '$\sum_i(x_i T_{15}(x_i))^2$'
+
+x_scale: linear
+y_scale: linear
+
+experiment: "INTEGT15"
+
