@@ -10,6 +10,8 @@ import os.path
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
+import tensorflow.keras.backend as K
+
 log = logging.getLogger(__name__)
 
 
@@ -316,7 +318,39 @@ def performfit(
                 stopping_object.stopping_degree,
                 stopping_object.positivity_pass(),
             )
-        )
+        )            
+
+        # Check the directory exist, if it doesn't, generate it
+        activation_path = replica_path_set / 'activationfunction'
+        os.makedirs(activation_path, exist_ok=True)
+
+        # Creates histogram of output values at the notes, to check for saturation
+        # NOTE: In keras: output = activation(dot(input, kernel) + bias), 
+        # from https://keras.io/api/layers/core_layers/dense/
+        # NOTE: calculation of a layer check explicitly and ur understanding of how we interpre
+        # the relation between all paramters is correct. 
+        xgrid_input = np.expand_dims(np.logspace(-9, 0, num=2000).reshape(-1,1), axis=0)
+        xgrid_save = xgrid_input.reshape(-1,1)[0::10]
+        np.savetxt(activation_path / 'activationxgrid.gz', xgrid_save)
+        # activationinputs = np.array(['x_input', 'layer', 'node', 'activationgrid'])
+        activationinputs = np.array([])
+        for layer in range(3,4): # for now we only care abou the first layer
+            get_layer_input = K.function([pdf_model.layers[1].input], [pdf_model.layers[layer].input])             
+            layer_inputs = get_layer_input(xgrid_input)[0][0]
+            kernel = pdf_model.layers[layer].kernel.numpy()
+            bias = pdf_model.layers[layer].bias.numpy()
+            input_to_activation_func = layer_inputs @ kernel + bias
+            for node in range(pdf_model.layers[layer].output.shape[2]):
+                input_single_node = input_to_activation_func[:,node]
+                input_node_save = input_single_node[0::10]
+                storeinfo = np.append([layer-2, node+1], input_node_save)
+                if layer-2 == 1 and node+1 == 1: 
+                    activationinputs = storeinfo 
+                else:
+                    activationinputs = np.vstack((activationinputs, storeinfo))
+        np.savetxt(activation_path / 'activationdata.gz', activationinputs, 
+            header= "The first is the layer number, the scond clolumn is the node, \
+                    followed by input values.")
 
         # Creates a PDF model for export grid
         def pdf_function(export_xgrid):
@@ -326,6 +360,7 @@ def performfit(
             # First add an extra dimensions because the model works on batches
             xgrid = np.expand_dims(export_xgrid, 0)
             result = pdf_model.predict([xgrid])
+
             # Now remove the spurious dimension
             return np.squeeze(result, 0)
 
