@@ -81,10 +81,19 @@ An example of a DIS fit using this loss function can be found here: [`best worst
   \end{array} 
   \right.
   
-An example of a DIS fit using this loss function can be found here: [`best std] <https://vp.nnpdf.science/vcPtqM8KSXCVB2GheENd8Q==>`_].
+An example of a DIS fit using this loss function with the threshold :math:`\chi^2` set to 2.0 
+can be found here: [`best std <https://vp.nnpdf.science/vcPtqM8KSXCVB2GheENd8Q==>`_].
 
 As observed, for DIS fits we obtain fits of similar quality using these losses.
 This is not unexpected but it is a good test of the robustness of the method.
+
+While this method is much more robust that the previously used "test set" (which is
+similar to doing the limit :math:`k\rightarrow 1`) we can still find overfitting configurations.
+For instance, if one of the metrics give a much more complicated network structure,
+overfitting is expected. Here's an example where, after 10000 hyperparameter trials
+the network structure had an order of magnitude more free parameters for the average method:
+[`best avg overlearned <https://vp.nnpdf.science/AQpgs2SyRbGlNqSnWWvMJw==>`_].
+
 
 Creating partitions
 -------------------
