@@ -236,7 +236,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                   "CMS jets 8 TeV":            {'title': "CMS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 6, 'dy':0.25},
                   "ATLAS dijets 7 TeV, R=0.6": {'title': "ATLAS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": "|y^*|", 'Nybins': 6, 'dy':0.25},
                   "CMS dijets 7 TeV":          {'title': "CMS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": "|y_{max}|", 'Nybins': 5, 'dy':0.25},
-                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend1": "y_b", "legend2": r"$y^{*}$", 'Nybins': 6, 'dy':0.5}}
+                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend1": "y_b", "legend2": "y^{*}", 'Nybins': 6, 'dy':0.5}}
 
 
 
@@ -301,30 +301,30 @@ def _plot_fancy_impl(results, commondata, cutlist,
         if info.dataset_label in DijetsInfo.keys():
             split_info = info.group_label(samefig_vals, info.figure_by).split()
             if info.dataset_label == "CMS 3D dijets 8 TeV":
-                kin1 = split_info[0]
+                kin1 = DijetsInfo[info.dataset_label]["legend1"] #split_info[0]
                 avg_kin1 = float(split_info[2])
                 max_kin1 = avg_kin1+DijetsInfo[info.dataset_label]['dy']
                 min_kin1 = avg_kin1-DijetsInfo[info.dataset_label]['dy']
 
-                kin2 = split_info[3]
+                kin2 = DijetsInfo[info.dataset_label]["legend2"] #split_info[3]
                 avg_kin2 = float(split_info[5])
                 max_kin2 = avg_kin2+DijetsInfo[info.dataset_label]['dy']
                 min_kin2 = avg_kin2-DijetsInfo[info.dataset_label]['dy']
 
-                yrange1 = "$"+str(min_kin1)+'\,<\,$'+kin1 + \
-                    '$\,<\,'+str(max_kin1)+"$"
+                yrange1 = "$"+str(min_kin1)+'\,<\,'+kin1 + \
+                    '\,<\,'+str(max_kin1)+"$"
 
-                yrange2 = "$"+str(min_kin2)+'\,<\,$'+kin2 + \
-                    '$\,<\,'+str(max_kin2)+"$"
+                yrange2 = "$"+str(min_kin2)+'\,<\,'+kin2 + \
+                    '\,<\,'+str(max_kin2)+"$"
             
                 #fig.suptitle(title)
             else:
-                kin = split_info[0]
+                kin = DijetsInfo[info.dataset_label]["legend"]
                 avg_kin = float(split_info[2])
                 max_kin = float(split_info[2])+DijetsInfo[info.dataset_label]['dy']
                 min_kin = float(split_info[2])-DijetsInfo[info.dataset_label]['dy']
-                yrange = "$"+str(min_kin)+'\,<\,$'+kin + \
-                    '$\,<\,'+str(max_kin)+"$"
+                yrange = "$"+str(min_kin)+'\,<\,'+kin + \
+                    '\,<\,'+str(max_kin)+"$"
         
         if info.dataset_label == "CMS 3D dijets 8 TeV":
             ax.set_title("%s, %s; %s" % (DijetsInfo[info.dataset_label]['title'], yrange1, yrange2))
