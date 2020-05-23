@@ -332,9 +332,12 @@ def performfit(
         xgrid_input = np.expand_dims(np.logspace(-9, 0, num=2000).reshape(-1,1), axis=0)
         xgrid_save = xgrid_input.reshape(-1,1)[0::10]
         np.savetxt(activation_path / 'activationxgrid.gz', xgrid_save)
-        # activationinputs = np.array(['x_input', 'layer', 'node', 'activationgrid'])
-        activationinputs = np.array([])
-        for layer in range(3,4): # for now we only care abou the first layer
+        activationinputs = []
+        first_layer = pdf_model.get_layer('dense')
+        for i in range(len(pdf_model.layers)):
+            if first_layer == pdf_model.layers[i]:
+                first_layer = i
+        for layer in range(first_layer,first_layer+1): # for now we only care abou the first layer
             get_layer_input = K.function([pdf_model.layers[1].input], [pdf_model.layers[layer].input])             
             layer_inputs = get_layer_input(xgrid_input)[0][0]
             kernel = pdf_model.layers[layer].kernel.numpy()
@@ -343,11 +346,9 @@ def performfit(
             for node in range(pdf_model.layers[layer].output.shape[2]):
                 input_single_node = input_to_activation_func[:,node]
                 input_node_save = input_single_node[0::10]
-                storeinfo = np.append([layer-2, node+1], input_node_save)
-                if layer-2 == 1 and node+1 == 1: 
-                    activationinputs = storeinfo 
-                else:
-                    activationinputs = np.vstack((activationinputs, storeinfo))
+                storeinfo = np.append([int(layer-first_layer+1), int(node+1)], input_node_save)
+                activationinputs.append(storeinfo)
+        activationinputs = np.array(activationinputs)
         np.savetxt(activation_path / 'activationdata.gz', activationinputs, 
             header= "The first is the layer number, the scond clolumn is the node, \
                     followed by input values.")
