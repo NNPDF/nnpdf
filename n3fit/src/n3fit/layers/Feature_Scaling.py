@@ -82,7 +82,8 @@ class Feature_Scaling(MetaLayer):
             return numerator/denominator
 
         if self.scaler == "MinMaxScaler":
-            scaled_xgrids = scaled_xgrids + scaled_xgrids**0.4 + scaled_xgrids**0.3 + 0.5*scaled_xgrids**0.2
+            scaled_xgrids = (scaled_xgrids + scaled_xgrids**0.4 + 1.2 * scaled_xgrids**0.3 
+                        +  0.7 * scaled_xgrids**0.2 + 0.5 * scaled_xgrids ** 0.1)
             scaled_xgrids /= self.max_
             scaled_xgrids *= 2
             scaled_xgrids -= 1
