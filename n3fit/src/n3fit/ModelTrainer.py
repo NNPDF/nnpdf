@@ -173,7 +173,7 @@ class ModelTrainer:
         self.print_summary = True
         self.mode_hyperopt = False
         self.model_file = None
-        self.impose_sumrule = True
+        self.impose_sumrule = False
         self.hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]
@@ -502,7 +502,11 @@ class ModelTrainer:
             self.integrator_input = integrator_input
             model_input = [integrator_input, placeholder_input]
         else:
-            model_input = [placeholder_input]
+            nx = int(2e3)
+            xgrid, dum = msr_constraints.gen_integration_input(nx)
+            integrator_input = operations.numpy_to_input(xgrid)
+            self.integrator_input = integrator_input
+            model_input = [integrator_input, placeholder_input]
 
         # Generate teh PDF model, which takes as input [integration_input, placeholder]
         # Since the integration is fixed and the placeholder is free, when calling the model
