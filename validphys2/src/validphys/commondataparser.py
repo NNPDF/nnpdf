@@ -25,7 +25,7 @@ class BadSystypeError(Exception):
     """Exception raised when a systype file cannot be parsed correctly"""
 
 CommondataInfo = namedtuple(
-    "CommondataTables", ("commondata", "systypes")
+    "CommondataInfo", ("commondata", "systypes")
 )
 def load_commondata(spec):
     """
