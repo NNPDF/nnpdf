@@ -70,8 +70,8 @@ def parse_commondata(f, setname):
     try:
         table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
     except Exception as e:
-        raise BadCommonDataError(f"Could not read file {f}. Please
-    check there is a valid COMMONDATA file at this location.") from e
+        raise BadCommonDataError(f"Could not read file {f}. Please"
+     + "check there is a valid COMMONDATA file at this location.") from e
     # remove NaNs
     # TODO: replace commondata files with bad formatting
     table.dropna(axis='columns', inplace=True)
@@ -110,8 +110,8 @@ def parse_systype(f, setname):
     try: 
         table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
     except Exception as e:
-        raise BadSystypeError(f"Could not read file {f}. Please check
-    there is a valid SYSTYPES file at this location.") from e
+        raise BadSystypeError(f"Could not read file {f}. Please check"
+    + "there is a valid SYSTYPES file at this location.") from e
     # build header
     header = ["sys_index", "treatment", "description"]
     table.columns = header
