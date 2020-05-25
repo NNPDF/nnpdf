@@ -15,10 +15,14 @@ import re
 import numpy as np
 import pandas as pd
 
-from validphys.coredata import CommonData 
+from collections import namedtuple
+
+from validphys.coredata import CommonData, SystypeData
 
 class BadCommonDataError(Exception):
     """Exception raised when a commondata file cannot be parsed correctly"""
+class BadSystypeError(Exception):
+    """Exception raised when a systype file cannot be parsed correctly"""
 
 @dataclasses.dataclass(frozen=True)
 class CommonDataInfo:
@@ -34,26 +38,40 @@ class SystypeInfo:
     setname: str
     nsys: int
 
+CommondataTables = namedtuple(
+    "CommondataTables", ("commondata_table", "systype_table")
+)
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
-
-    Returns a CommonData instance with data arranged like
+    
+    Returns an instance of the namedtuple CommondataTables,
+    with:
+    
+    commondata_table being a CommonData instance with data arranged like
     entry   process kin1    kin2    kin3    data    stat    \
-            sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
+            sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N ;
+
+    systype_table being a SystypeData instance with data arranged like
+    sys_index   treatment   description.
     """
     commondatafile = spec.datafile
 
     # Getting set name from commondata file name
     setname = re.search('DATA_(.*).dat', str(commondatafile)).group(1)
-    tabledata = parse_commondata(commondatafile, setname)
+    commondata = parse_commondata(commondatafile, setname)
 
-    return tabledata
+    systypefile = spec.sysfile
+    systypedata = parse_systype(systypefile, setname)
+     
+    return CommondataTables(
+        commondata_table=commondata, systype_table=systypedata
+    )
 
 def parse_commondata(f, setname):
     
     """Parse a commondata file into a CommonData. Raise a BadCommondDataError
-    if problems are encountered.
+    if problems are encountered. 
     Parameters
     ----------
     f : file
@@ -85,3 +103,29 @@ def parse_commondata(f, setname):
                     nkin = 3 ,
                     nsys = nsys,
                     data = table)
+
+
+def parse_systype(f, setname):
+    
+    """Parse a systype file into a SystypeData. Raise a BadSystypeDataError
+    if problems are encountered. 
+    Parameters
+    ----------
+    f : file
+        Open file-like object. 
+    Returns
+    -------
+    systypes : SystypeData
+        An object containing the data and information from the systype file.
+    """
+    table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
+
+    # build header
+    header = ["sys_index", "treatment", "description"]
+    table.columns = header
+
+    # Populate SystypeData object
+    return SystypeData(
+                    setname = setname,
+                    nsys = len(table),
+                    systypes = table)
