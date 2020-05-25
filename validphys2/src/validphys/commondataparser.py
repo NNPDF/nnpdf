@@ -28,6 +28,12 @@ class CommonDataInfo:
     proc: str
     nsys: int
 
+@dataclasses.dataclass(frozen=True)
+class SystypeInfo:
+    """Class containing the basic properties of a systype file."""
+    setname: str
+    nsys: int
+
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
