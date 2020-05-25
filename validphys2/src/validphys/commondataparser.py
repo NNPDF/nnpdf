@@ -24,14 +24,14 @@ class BadCommonDataError(Exception):
 class BadSystypeError(Exception):
     """Exception raised when a systype file cannot be parsed correctly"""
 
-CommondataTables = namedtuple(
-    "CommondataTables", ("commondata_table", "systype_table")
+CommondataInfo = namedtuple(
+    "CommondataTables", ("commondata", "systypes")
 )
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
     
-    Returns an instance of the namedtuple CommondataTables,
+    Returns an instance of the namedtuple CommondataInfo,
     with:
     
     commondata_table being a CommonData instance with data arranged like
@@ -50,8 +50,8 @@ def load_commondata(spec):
     systypefile = spec.sysfile
     systypedata = parse_systype(systypefile, setname)
      
-    return CommondataTables(
-        commondata_table=commondata, systype_table=systypedata
+    return CommondataInfo(
+        commondata=commondata, systypes=systypedata
     )
 
 def parse_commondata(f, setname):
