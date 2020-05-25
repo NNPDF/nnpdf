@@ -138,7 +138,7 @@ class CommonData:
         Number of systematics
     sysid: list of str with length nsys
         ID for systematic
-    data: 
+    commondata_table: 
         Pandas dataframe containing the commondata.
     """
     #TODO: Apply cuts
@@ -147,7 +147,7 @@ class CommonData:
     commondataproc: str
     nkin: int 
     nsys: int
-    data: pd.DataFrame
+    commondata_table: pd.DataFrame
 
 @dataclasses.dataclass(eq=False)
 class SystypeData:
@@ -159,7 +159,7 @@ class SystypeData:
         Name of the dataset
     nsys: int
         Number of systematics
-    systypes: pd.DataFrame
+    systype_table: pd.DataFrame
         Pandas dataframe containing the systype index
         for each systematic alongside the uncertainty
         treatment (ADD/MULT/RAND) and description
@@ -167,4 +167,4 @@ class SystypeData:
     """
     setname: str
     nsys: int
-    systypes: pd.DataFrame
+    systype_table: pd.DataFrame

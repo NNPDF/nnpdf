@@ -91,7 +91,7 @@ def parse_commondata(f, setname):
                     commondataproc = table["process"][1],
                     nkin = 3 ,
                     nsys = nsys,
-                    data = table)
+                    commondata_table = table)
 
 
 def parse_systype(f, setname):
@@ -112,12 +112,14 @@ def parse_systype(f, setname):
     except Exception as e:
         raise BadSystypeError(f"Could not read file {f}. Please check"
     + "there is a valid SYSTYPES file at this location.") from e
+    table.dropna(axis='columns', inplace=True)
     # build header
     header = ["sys_index", "treatment", "description"]
     table.columns = header
+    table.set_index("sys_index", inplace=True)
 
     # Populate SystypeData object
     return SystypeData(
                     setname = setname,
                     nsys = len(table),
-                    systypes = table)
+                    systype_table = table)
