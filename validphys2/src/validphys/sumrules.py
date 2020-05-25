@@ -34,6 +34,40 @@ def _svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
 def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
 
+def _t3_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    t3 = (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-2)
+    - lpdf.xfxQ(x, Q=Q, n=irep, fl=1) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
+    return t3
+
+def _t8_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    t8 = (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-2)
+    + lpdf.xfxQ(x, Q=Q, n=irep, fl=1) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-1)
+    -2*lpdf.xfxQ(x, Q=Q, n=irep, fl=3) -2*lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
+    return t8
+
+def _t15_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    t15 = (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-2)
+    + lpdf.xfxQ(x, Q=Q, n=irep, fl=1) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-1)
+    + lpdf.xfxQ(x, Q=Q, n=irep, fl=3) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-3)
+    -3*lpdf.xfxQ(x, Q=Q, n=irep, fl=4) - 3*lpdf.xfxQ(x, Q=Q, n=irep, fl=-4))/x
+    return t15
+
+def _xup_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))
+
+def _xdp_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=1) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))
+
+def _xsp_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) + lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))
+
+def _xg_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return lpdf.xfxQ(x, Q=Q, n=irep, fl=0)   
+
+def _gottfried(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=-2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
+
+
 
 #NOTE: For the moment we rely on this order being the same as in the .sumrules
 #file produced by nnfit.
@@ -42,6 +76,14 @@ SUM_RULES = {
     'uvalence': _uvalence_sum_rule_integrand,
     'dvalence': _dvalence_sum_rule_integrand,
     'svalence': _svalence_sum_rule_integrand,
+    'xup' : _xup_integrand,
+    'xdp' : _xdp_integrand,
+    'xsp' : _xsp_integrand,
+    'xg'  : _xg_integrand,
+    't3': _t3_integrand,
+    't8': _t8_integrand,
+    't15': _t15_integrand,
+    'gottfried' : _gottfried,
 }
 
 SUM_RULES_EXPECTED = {
@@ -68,8 +110,8 @@ def _sum_rules(lpdf, Q):
 
     for irep in range(nmembers):
         for r, f in enumerate(integrands):
-            res[r,irep] =  (integral(f, 0, 1e-5, irep)  +
-               integral(f, 1e-5, 1e-3, irep) + integral(f, 1e-3, 1, irep))
+            res[r,irep] =  (integral(f, 1e-9, 1e-5, irep)  +
+               integral(f, 1e-5, 1e-3, irep) + integral(f, 1e-3, 1, irep))  
     return SumRulesGrid(*res)
 
 
