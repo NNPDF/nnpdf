@@ -24,20 +24,6 @@ class BadCommonDataError(Exception):
 class BadSystypeError(Exception):
     """Exception raised when a systype file cannot be parsed correctly"""
 
-@dataclasses.dataclass(frozen=True)
-class CommonDataInfo:
-    """Class containing the basic properties of a commondata file."""
-    setname: str
-    ndata: int
-    proc: str
-    nsys: int
-
-@dataclasses.dataclass(frozen=True)
-class SystypeInfo:
-    """Class containing the basic properties of a systype file."""
-    setname: str
-    nsys: int
-
 CommondataTables = namedtuple(
     "CommondataTables", ("commondata_table", "systype_table")
 )
