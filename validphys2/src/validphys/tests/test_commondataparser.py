@@ -9,6 +9,7 @@ def test_basic_commondata_loading():
     res = load_commondata(cd)
     # Test commondata loading
     assert res.commondata.ndata == 12
-    assert isinstance(res.commondata.data, pd.DataFrame)
+    assert isinstance(res.commondata.commondata_table, pd.DataFrame)
     # Test systype loading
     assert res.systypes.nsys == 25
+    assert isinstance(res.systypes.systype_table, pd.DataFrame)
