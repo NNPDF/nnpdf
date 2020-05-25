@@ -141,9 +141,30 @@ class CommonData:
     data: 
         Pandas dataframe containing the commondata.
     """
+    #TODO: Apply cuts
     setname: str
     ndata: int 
     commondataproc: str
     nkin: int 
     nsys: int
     data: pd.DataFrame
+
+@dataclasses.dataclass(eq=False)
+class SystypeData:
+    """
+    Data contained in Systype file.
+    Parameters:
+    -----------
+    setname: str
+        Name of the dataset
+    nsys: int
+        Number of systematics
+    systypes: pd.DataFrame
+        Pandas dataframe containing the systype index
+        for each systematic alongside the uncertainty
+        treatment (ADD/MULT/RAND) and description
+        (CORR/UNCORR/THEORYCORR/SKIP)
+    """
+    setname: str
+    nsys: int
+    systypes: pd.DataFrame
