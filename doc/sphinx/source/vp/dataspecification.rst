@@ -308,8 +308,11 @@ The user should be aware, however, that any grouping introduced in this way
 is purely superficial and will be ignored in favour of the experiments defined
 by the metadata of the datasets.
 
-Note that some theory uncertainties runcards will need to be updated to explicitly
-set the ``metadata_group`` to ``experiment``.
+*IMPORTANT*: Note that all theory uncertainties runcards will need to be updated to explicitly
+set the ``metadata_group`` to ``nnpdf31_process``, or else the prescriptions for 
+scale variations will not vary scales the same for data with the same process type,
+but with the same experiment. However, it should be obvious if this has happened because the outputs will 
+be plots grouped by experiment rather than by process type.
 
 Runcards which request actions that have been renamed won't work anymore,
 generally actions which were previously named ``experiments_*`` have been
