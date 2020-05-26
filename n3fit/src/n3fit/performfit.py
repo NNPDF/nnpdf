@@ -74,6 +74,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
     Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
     return Seeds(trvalseeds, nnseeds, mcseeds)
 
+
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and hyperscan is None:
@@ -82,6 +83,7 @@ def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
         raise CheckError("hyperscan::kfold key needs to be defined when performing hyperopt")
     if hyperopt is not None and fitting["genrep"]:
         raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
+
 
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
@@ -171,9 +173,9 @@ def performfit(
     else:
         t0pdfset = None
 
-
-    trvlseed, nnseed, mcseed, genrep = [fitting.get(i)
-                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
+    trvlseed, nnseed, mcseed, genrep = [
+        fitting.get(i) for i in ["trvlseed", "nnseed", "mcseed", "genrep"]
+    ]
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
     trvalseeds, nnseeds, mcseeds = seeds.trvlseeds, seeds.nnseeds, seeds.mcseeds
@@ -188,7 +190,7 @@ def performfit(
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
-    if fitting.get('diagonal_basis'):
+    if fitting.get("diagonal_basis"):
         log.info("working in diagonal basis")
 
     if hyperscan and hyperopt:
@@ -207,7 +209,7 @@ def performfit(
             replica_seeds=mcseeds,
             trval_seeds=trvalseeds,
             kpartitions=kpartitions,
-            rotate_diagonal=fitting.get('diagonal_basis'),
+            rotate_diagonal=fitting.get("diagonal_basis"),
         )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
@@ -236,7 +238,7 @@ def performfit(
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
-            max_cores = maxcores
+            max_cores=maxcores,
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
@@ -244,9 +246,7 @@ def performfit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(
-                " > Loading the weights from previous training from %s", model_file
-            )
+            log.info(" > Loading the weights from previous training from %s", model_file)
             if not os.path.isfile(model_file):
                 log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
@@ -271,11 +271,7 @@ def performfit(
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
             true_best = hyper_scan_wrapper(
-                replica_path_set,
-                the_model_trainer,
-                parameters,
-                hyperscan,
-                max_evals=hyperopt,
+                replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt,
             )
             print("##################")
             print("Best model found: ")
@@ -318,40 +314,49 @@ def performfit(
                 stopping_object.stopping_degree,
                 stopping_object.positivity_pass(),
             )
-        )            
+        )
 
         # Check the directory exist, if it doesn't, generate it
-        activation_path = replica_path_set / 'activationfunction'
+        activation_path = replica_path_set / "activationfunction"
         os.makedirs(activation_path, exist_ok=True)
 
         # Creates histogram of output values at the notes, to check for saturation
-        # NOTE: In keras: output = activation(dot(input, kernel) + bias), 
+        # NOTE: In keras: output = activation(dot(input, kernel) + bias),
         # from https://keras.io/api/layers/core_layers/dense/
         # NOTE: calculation of a layer check explicitly and ur understanding of how we interpre
-        # the relation between all paramters is correct. 
-        xgrid_input = np.expand_dims(np.logspace(-9, 0, num=2000).reshape(-1,1), axis=0)
-        xgrid_save = xgrid_input.reshape(-1,1)[0::10]
-        np.savetxt(activation_path / 'activationxgrid.gz', xgrid_save)
+        # the relation between all paramters is correct.
+        xgrid_input = np.expand_dims(np.logspace(-9, 0, num=2000).reshape(-1, 1), axis=0)
+        xgrid_save = xgrid_input.reshape(-1, 1)[0::10]
+        np.savetxt(activation_path / "activationxgrid.gz", xgrid_save)
         activationinputs = []
-        first_layer = pdf_model.get_layer('dense')
-        for i in range(len(pdf_model.layers)):
-            if first_layer == pdf_model.layers[i]:
-                first_layer = i
-        for layer in range(first_layer,first_layer+1): # for now we only care abou the first layer
-            get_layer_input = K.function([pdf_model.layers[1].input], [pdf_model.layers[layer].input])             
+        dense_layers = []
+        for num, layer in enumerate(pdf_model.layers):
+            if layer.name.startswith('dense'):
+                dense_layers.append(num)
+        for layer in dense_layers:
+            get_layer_input = K.function(
+                [pdf_model.layers[1].input], [pdf_model.layers[layer].input]
+            )
             layer_inputs = get_layer_input(xgrid_input)[0][0]
             kernel = pdf_model.layers[layer].kernel.numpy()
             bias = pdf_model.layers[layer].bias.numpy()
             input_to_activation_func = layer_inputs @ kernel + bias
             for node in range(pdf_model.layers[layer].output.shape[2]):
-                input_single_node = input_to_activation_func[:,node]
+                input_single_node = input_to_activation_func[:, node]
                 input_node_save = input_single_node[0::10]
-                storeinfo = np.append([int(layer-first_layer+1), int(node+1)], input_node_save)
+                storeinfo = np.append(
+                    [int(layer - min(dense_layers) + 1), int(node + 1)], input_node_save
+                )
                 activationinputs.append(storeinfo)
         activationinputs = np.array(activationinputs)
-        np.savetxt(activation_path / 'activationdata.gz', activationinputs, 
-            header= "The first is the layer number, the scond clolumn is the node, \
-                    followed by input values.")
+        np.savetxt(
+            activation_path / "activationdata.gz",
+            activationinputs,
+            header="The first is the layer number, the second clolumn is the node, "
+            + "followed by input values.",
+        )
+
+        # Intercept the gluon PDF and refit it after including extraplation data at the PDF level
 
         # Creates a PDF model for export grid
         def pdf_function(export_xgrid):
@@ -386,12 +391,8 @@ def performfit(
             stopping_object.history.rewind(step)
             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
-            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(
-                stopping_object
-            )
-            writer_wrapper.write_data(
-                new_path, output_path.name, training_chi2, val_chi2, exp_chi2
-            )
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+            writer_wrapper.write_data(new_path, output_path.name, training_chi2, val_chi2, exp_chi2)
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
