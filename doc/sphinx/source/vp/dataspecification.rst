@@ -309,7 +309,7 @@ is purely superficial and will be ignored in favour of the experiments defined
 by the metadata of the datasets.
 
 Note that some theory uncertainties runcards will need to be updated to explicitly
-set the dataset grouping to ``experiment``.
+set the ``metadata_group`` to ``experiment``.
 
 Runcards which request actions that have been renamed won't work anymore,
 generally actions which were previously named ``experiments_*`` have been
