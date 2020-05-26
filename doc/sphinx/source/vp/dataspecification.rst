@@ -238,6 +238,39 @@ for example to give sensible titles/section headings e.g:
     actions_:
      - report(main=True)
 
+Action naming conventions
+-------------------------
+
+There are some general rules which should be observed when adding
+new actions to ``validphys``. Firstly try to indicate the required runcard input
+for an action in the name of the function. Take for example the provider
+``dataset_inputs_results``. The returned object is a ``results`` object: a tuple
+of data and theory which is used by a wide range of other actions, notably
+when calculating 𝞆². The first part of the name ``dataset_inputs`` refers
+to the runcard input required to process that action. This is especially
+useful with actions for a group of datasets or ``data``, because the dependency
+tree for these actions is not neccessarily obvious to somebody who is unfamiliar
+with the code. As explained above,
+``dataset_inputs -> data_input -> data`` and so the action name serves to
+guide the user to creating a working runcard as easily as possible.
+
+The second general rule is if your action has makes use of ``collect`` somewhere
+in the dependency graph, then consider prepending what is collected over to
+the action name. For example: ``dataspecs_groups_chi2_table``, which depends on
+
+.. code:: python
+    dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
+
+and in turn
+
+.. code:: python
+    groups_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",))
+
+Without having to find these specific lines in the code we were able to guess
+that 𝞆² was collected first over groups of data (``groups_chi2``), and then
+over ``dataspecs``. Naming functions according to these rules helps make the
+general workings of the underlying code more transparent to an end user.
+
 Backwards compatibility
 -----------------------
 

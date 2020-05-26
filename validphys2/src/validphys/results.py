@@ -236,7 +236,9 @@ def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF)
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
-groups_covmat_collection = collect('group_covariance_matrix', ('group_dataset_inputs_by_metadata',))
+groups_covmat_collection = collect(
+    'dataset_inputs_covariance_matrix', ('group_dataset_inputs_by_metadata',)
+)
 
 def groups_covmat_no_table(
        groups_data, groups_index, groups_covmat_collection):
@@ -577,9 +579,9 @@ def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
     # do checks get performed here?
     return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat)
 
-def dataset_inputs_sqrt_covmat(group_covariance_matrix):
+def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
     """Like `sqrt_covmat` but for an group of datasets"""
-    return sqrt_covmat(group_covariance_matrix)
+    return sqrt_covmat(dataset_inputs_covariance_matrix)
 
 def results(
         dataset:(DataSetSpec),
@@ -602,13 +604,13 @@ def results(
 def dataset_inputs_results(
         data,
         pdf:PDF,
-        group_covariance_matrix,
+        dataset_inputs_covariance_matrix,
         dataset_inputs_sqrt_covmat):
     """Like `results` but for a group of datasets"""
     return results(
         data,
         pdf,
-        group_covariance_matrix,
+        dataset_inputs_covariance_matrix,
         dataset_inputs_sqrt_covmat
         )
 

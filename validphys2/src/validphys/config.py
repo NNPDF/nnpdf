@@ -484,7 +484,7 @@ class CoreConfig(configparser.Config):
             return results.covmat
 
     @configparser.explicit_node
-    def produce_group_covariance_matrix(self, use_pdferr: bool = False):
+    def produce_dataset_inputs_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as experiment_covariance_matrix
         depending on the flag `use_pdferr`
         """
