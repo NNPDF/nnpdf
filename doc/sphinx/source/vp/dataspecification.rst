@@ -274,8 +274,49 @@ general workings of the underlying code more transparent to an end user.
 Backwards compatibility
 -----------------------
 
-Most old validphys runcards which used the ``experiments`` key to
-specify a multi-levelled list of datasets should still work within the
-new framework. This is because ``data_input`` will check if
-``experiments`` has been specified and flatten it if ``dataset_inputs`` is not
-present in the runcard.
+Where possible, backwards compatibility with runcards which use the ``experiments``
+key has been preserved. For example with the ``dataspecs_groups_chi2_table``
+example above we could also use the following input
+
+.. code:: yaml
+
+    metadata_group: nnpdf31_process
+
+    dataset_inputs:
+    experiments:
+     - experiment: NMC
+       datasets:
+        - { dataset: NMC }
+     - experiment: ATLAS
+       datasets:
+        - { dataset: ATLASTTBARTOT, cfac: [QCD] }
+     - experiment: CMS
+       datasets:
+        - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+
+    theoryid: 53
+
+    dataspecs:
+     - pdf: NNPDF31_nnlo_as_0118
+
+    use_cuts: internal
+
+    actions_:
+     - dataspecs_groups_chi2_table
+
+The user should be aware, however, that any grouping introduced in this way
+is purely superficial and will be ignored in favour of the experiments defined
+by the metadata of the datasets.
+
+Note that some theory uncertainties runcards will need to be updated to explicitly
+set the dataset grouping to ``experiment``.
+
+Runcards which request actions that have been renamed won't work anymore,
+generally actions which were previously named ``experiments_*`` have been
+renamed to highlight that they work with more general groupings.
+
+Currently ``n3fit``, and the ``pseudodata``, ``closuretest`` and ``chi2grids``
+modules have not been updated to use ``dataset_inputs`` yet and so require
+``experiments`` to be specified in the runcard. The c++ fitting code ``nnfit``
+is not scheduled to be updated to use ``dataset_inputs`` and so will always
+require ``experiments`` to be specified in the runcard.
