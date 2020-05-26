@@ -244,5 +244,5 @@ def storefit(
         json.dump(timings, fs, indent=2)
 
     # create .version file
-    with open(f"{replica_path}/{fitname}.version", "w") as fs:
+    with open(f"{replica_path}/version.info", "w") as fs:
         fs.write(n3fit.__version__)
