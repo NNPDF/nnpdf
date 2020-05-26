@@ -24,6 +24,7 @@ import subprocess as sp
 from collections import namedtuple
 from numpy.testing import assert_almost_equal
 from reportengine.compat import yaml
+import n3fit
 from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
@@ -103,6 +104,11 @@ def test_performfit():
     fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
     f.close()
     assert fitting_time < EXPECTED_MAX_FITTIME
+    version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.version"
+    f = open(version_path, "r")
+    version = f.read()
+    f.close()
+    assert version == n3fit.__version__
 
 
 def test_hyperopt():
