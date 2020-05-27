@@ -6,7 +6,6 @@ interfaces with common Python libraries.  The integration of these objects into
 the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 """
-import re
 from collections import namedtuple
 
 import numpy as np
@@ -33,7 +32,7 @@ def load_commondata(spec):
     commondatafile = spec.datafile
 
     # Getting set name from commondata file name
-    setname = re.search("DATA_(.*).dat", str(commondatafile)).group(1)
+    setname = commondatafile.name[:-4] # removing the .dat suffix
     commondata = parse_commondata(commondatafile, setname)
 
     systypefile = spec.sysfile
