@@ -43,8 +43,7 @@ def load_commondata(spec):
 
 
 def parse_commondata(f, setname):
-    """Parse a commondata file into a CommonData. Raise a BadCommondDataError
-    if problems are encountered. 
+    """Parse a commondata file into a CommonData.
 
     Parameters
     ----------
@@ -81,8 +80,7 @@ def parse_commondata(f, setname):
 
 
 def parse_systype(f, setname):
-    """Parse a systype file into a SystypeData. Raise a BadSystypeDataError
-    if problems are encountered.
+    """Parse a systype file into a SystypeData.
 
     Parameters
     ----------
