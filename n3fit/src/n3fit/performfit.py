@@ -373,7 +373,7 @@ def performfit(
         xgrid_exp = np.insert(xgrid_exp, 0, 1e-6).reshape(-1, 1)  # set x-value extrapolation data point
         xgrid_exp = np.expand_dims(xgrid_exp, axis=0)
         pdfs_exp = pdf_model.predict([xgrid_exp])
-        pdfs_exp[0][0, 2] = 0.5 # set y-value extrapolation data point
+        pdfs_exp[0][0, 2] = 2. # set y-value extrapolation data point
         pdf_model.compile(
             optimizer="Adadelta",
             loss="mean_squared_error",
@@ -382,8 +382,8 @@ def performfit(
             learning_rate=1e-2,
         )
         xdict = {"input_1": xgrid_exp, "input_2": pdf_model.x_in["input_2"]}
-        pdf_model.fit(x=xdict, y=None, epochs=5000, verbose=0)
-        new_xgrid = np.logspace(-6, 0, num=100).reshape(-1, 1)
+        pdf_model.fit(x=xdict, y=None, epochs=10000, verbose=0)
+        new_xgrid = np.logspace(-6, 0, num=1000).reshape(-1, 1)
         new_xgrid = np.expand_dims(new_xgrid, axis=0)
         new_gluonpdf = pdf_model.predict([new_xgrid])[0][:, 2]
         import matplotlib.pyplot as plt
@@ -395,6 +395,7 @@ def performfit(
         plt.title('gluon PDF')
         plt.legend(loc='best')
         plt.savefig(f'{replica_path_set}/gluon_pdf.png')
+        plt.close()
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
