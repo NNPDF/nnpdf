@@ -28,7 +28,7 @@ class FKTableData:
     xgrid : array, shape (nx)
         The points in x at which the PDFs should be evaluated.
 
-    sigma : DataFrame
+    sigma : pd.DataFrame
         For hadronic data, the columns are the indexes in the ``NfxNf`` list of
         possible flavour combinations of two PDFs.  The MultiIndex contains
         three keys, the data index, an index into ``xgrid`` for the first PDF
@@ -122,23 +122,32 @@ class CFactorData:
 class CommonData:
     """
     Data contained in Commondata files, relevant cuts applied.
+
     Parameters
     ----------
-    setname: str
+
+    setname : str
         Name of the dataset
-    ndata: int
+
+    ndata : int
         Number of data points
-    commondataproc: str
-        Process type, one of 21 options. 
-    nkin: int
+
+    commondataproc : str
+        Process type, one of 21 options
+
+    nkin : int
         Number of kinematics specified
-    kinematics: list of str with length nkin
+
+    kinematics : list of str with length nkin
         Kinematic variables kin1, kin2, kin3 ...
-    nsys: int
+
+    nsys : int
         Number of systematics
-    sysid: list of str with length nsys
+
+    sysid : list of str with length nsys
         ID for systematic
-    commondata_table: 
+
+    commondata_table : pd.DataFrame
         Pandas dataframe containing the commondata.
     """
     #TODO: Apply cuts
@@ -153,13 +162,16 @@ class CommonData:
 class SystypeData:
     """
     Data contained in Systype file.
-    Parameters:
-    -----------
-    setname: str
+
+    Parameters
+    ----------
+    setname : str
         Name of the dataset
-    nsys: int
+
+    nsys : int
         Number of systematics
-    systype_table: pd.DataFrame
+
+    systype_table : pd.DataFrame
         Pandas dataframe containing the systype index
         for each systematic alongside the uncertainty
         treatment (ADD/MULT/RAND) and description

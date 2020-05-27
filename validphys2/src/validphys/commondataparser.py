@@ -45,21 +45,23 @@ def load_commondata(spec):
 def parse_commondata(f, setname):
     """Parse a commondata file into a CommonData. Raise a BadCommondDataError
     if problems are encountered. 
+
     Parameters
     ----------
     f : file
-        Open file-like object. 
+        Open file-like object.
+
     Returns
     -------
     commondata : CommonData
         An object containing the data and information from the commondata file.
     """
     table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
-    # remove NaNs
+    # Remove NaNs
     # TODO: replace commondata files with bad formatting
     table.dropna(axis="columns", inplace=True)
 
-    # build header
+    # Build header
     header = ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
     nsys  = (table.shape[1] - len(header)) // 2
     for i in range(nsys):
@@ -80,11 +82,13 @@ def parse_commondata(f, setname):
 
 def parse_systype(f, setname):
     """Parse a systype file into a SystypeData. Raise a BadSystypeDataError
-    if problems are encountered. 
+    if problems are encountered.
+
     Parameters
     ----------
     f : file
-        Open file-like object. 
+        Open file-like object.
+
     Returns
     -------
     systypes : SystypeData
@@ -92,7 +96,7 @@ def parse_systype(f, setname):
     """
     table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
     table.dropna(axis='columns', inplace=True)
-    # build header
+    # Build header
     header = ["sys_index", "treatment", "description"]
     table.columns = header
     table.set_index("sys_index", inplace=True)
