@@ -242,11 +242,11 @@ Action naming conventions
 -------------------------
 
 There are some general rules which should be observed when adding
-new actions to ``validphys``. Firstly try to indicate the required runcard input
+new actions to ``validphys``. Firstly, try to indicate the required runcard input
 for an action in the name of the function. Take for example the provider
 ``dataset_inputs_results``. The returned object is a ``results`` object: a tuple
 of data and theory which is used by a wide range of other actions, notably
-when calculating 𝞆². The first part of the name ``dataset_inputs`` refers
+when calculating a 𝞆². The first part of the name ``dataset_inputs`` refers
 to the runcard input required to process that action. This is especially
 useful with actions for a group of datasets or ``data``, because the dependency
 tree for these actions is not neccessarily obvious to somebody who is unfamiliar
@@ -254,19 +254,21 @@ with the code. As explained above,
 ``dataset_inputs -> data_input -> data`` and so the action name serves to
 guide the user to creating a working runcard as easily as possible.
 
-The second general rule is if your action has makes use of ``collect`` somewhere
+The second general rule is that if your action makes use of ``collect`` somewhere
 in the dependency graph, then consider prepending what is collected over to
 the action name. For example: ``dataspecs_groups_chi2_table``, which depends on
 
 .. code:: python
+
     dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
 
 and in turn
 
 .. code:: python
+
     groups_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",))
 
-Without having to find these specific lines in the code we were able to guess
+Without having to find these specific lines in the code we would be able to guess
 that 𝞆² was collected first over groups of data (``groups_chi2``), and then
 over ``dataspecs``. Naming functions according to these rules helps make the
 general workings of the underlying code more transparent to an end user.
@@ -275,7 +277,7 @@ Backwards compatibility
 -----------------------
 
 Where possible, backwards compatibility with runcards which use the ``experiments``
-key has been preserved. For example with the ``dataspecs_groups_chi2_table``
+key has been preserved. For example, with the ``dataspecs_groups_chi2_table``
 example above we could also use the following input
 
 .. code:: yaml
@@ -310,15 +312,15 @@ by the metadata of the datasets.
 
 *IMPORTANT*: Note that all theory uncertainties runcards will need to be updated to explicitly
 set the ``metadata_group`` to ``nnpdf31_process``, or else the prescriptions for 
-scale variations will not vary scales the same for data with the same process type,
-but with the same experiment. However, it should be obvious if this has happened because the outputs will 
+scale variations will not vary scales the same for data within the same process type,
+but within the same experiment. However, it should be obvious if this has happened because the outputs will
 be plots grouped by experiment rather than by process type.
 
-Runcards which request actions that have been renamed won't work anymore,
-generally actions which were previously named ``experiments_*`` have been
+Runcards which request actions that have been renamed will not work anymore.
+Generally actions which were previously named ``experiments_*`` have been
 renamed to highlight that they work with more general groupings.
 
-Currently ``n3fit``, and the ``pseudodata``, ``closuretest`` and ``chi2grids``
+Currently ``n3fit``, as well as the ``pseudodata``, ``closuretest`` and ``chi2grids``
 modules have not been updated to use ``dataset_inputs`` yet and so require
 ``experiments`` to be specified in the runcard. The c++ fitting code ``nnfit``
 is not scheduled to be updated to use ``dataset_inputs`` and so will always
