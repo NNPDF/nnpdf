@@ -152,9 +152,9 @@ class CommonData:
     """
     #TODO: Apply cuts
     setname: str
-    ndata: int 
+    ndata: int
     commondataproc: str
-    nkin: int 
+    nkin: int
     nsys: int
     commondata_table: pd.DataFrame
 
