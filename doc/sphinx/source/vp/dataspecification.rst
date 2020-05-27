@@ -284,7 +284,6 @@ example above we could also use the following input
 
     metadata_group: nnpdf31_process
 
-    dataset_inputs:
     experiments:
      - experiment: NMC
        datasets:
