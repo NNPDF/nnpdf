@@ -158,6 +158,21 @@ class CommonData:
     nsys: int
     commondata_table: pd.DataFrame
 
+    @property
+    def central_values(self):
+        return self.commondata_table["data"]
+
+    @property
+    def stat_err(self):
+        return self.commondata_table["stat"]
+
+    @property
+    def sys_err(self):
+        return self.commondata_table.drop(
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+        )
+
+
 @dataclasses.dataclass(eq=False)
 class SystypeData:
     """
