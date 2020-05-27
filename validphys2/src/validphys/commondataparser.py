@@ -71,7 +71,7 @@ def parse_commondata(f, setname):
     return CommonData(
         setname=setname,
         ndata=len(table),
-        commondataproc=table["process"][1],
+        commondataproc=table["process"][0],
         nkin=3,
         nsys=nsys,
         commondata_table=table
