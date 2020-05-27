@@ -6,10 +6,6 @@ interfaces with common Python libraries.  The integration of these objects into
 the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 """
-import io
-import functools
-import tarfile
-import dataclasses
 import re
 
 import numpy as np
