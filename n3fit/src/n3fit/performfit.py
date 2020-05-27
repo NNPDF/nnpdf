@@ -4,6 +4,7 @@
 
 # Backend-independent imports
 from collections import namedtuple
+from validphys.pdfbases import check_basis
 import sys
 import logging
 import os.path
@@ -13,7 +14,9 @@ from reportengine.checks import make_argcheck, CheckError
 log = logging.getLogger(__name__)
 
 
-def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
+def initialize_seeds(
+    replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool
+):
     """Action to initialize seeds for random number generation.
     We initialize three different seeds. The first is the seed
     used for training/validation splits, the second is used for
@@ -72,18 +75,37 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
     Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
     return Seeds(trvalseeds, nnseeds, mcseeds)
 
+
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and hyperscan is None:
-        raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
+        raise CheckError(
+            "A hyperscan dictionary needs to be defined when performing hyperopt"
+        )
     if hyperopt is not None and "kfold" not in hyperscan:
-        raise CheckError("hyperscan::kfold key needs to be defined when performing hyperopt")
+        raise CheckError(
+            "hyperscan::kfold key needs to be defined when performing hyperopt"
+        )
     if hyperopt is not None and fitting["genrep"]:
-        raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
+        raise CheckError(
+            "During hyperoptimization we cannot generate replicas (genrep=false)"
+        )
 
+
+@make_argcheck
+def check_consistent_basis(fitting):
+    fitbasis = fitting["fitbasis"]
+    # Check that there are no duplicate flavours
+    flavs = [d['fl'] for d in fitting['basis']]
+    if len(set(flavs)) != len(flavs):
+        raise CheckError(f"Repeated flavour names: check basis dictionary")
+    # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
+    res = check_basis(fitbasis,flavs)
+    
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 @check_consistent_hyperscan_options
+@check_consistent_basis
 def performfit(
     fitting,
     experiments,
@@ -96,6 +118,7 @@ def performfit(
     hyperscan=None,
     hyperopt=None,
     debug=False,
+    maxcores=None,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
@@ -116,18 +139,32 @@ def performfit(
             4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
         5. Once the fit is finished, output the PDF grid and accompanying files
 
-        # Arguments:
-            - `fitting`: dictionary with the hyperparameters of the fit
-            - `experiments`: vp list of experiments to be included in the fit
-            - `t0set`: t0set name
-            - `replica`: a list of replica numbers to run over (typically just one)
-            - `replica_path`: path to the output of this run
-            - `output_path`: name of the fit
-            - `theorid`: theory id number
-            - `posdatasets` : list of positivity datasets
-            - `hyperscan`: dictionary containing the details of the hyperscan
-            - `hyperopt`: if given, number of hyperopt iterations to run
-            - `debug`: activate some debug options
+        Parameters
+        ----------
+            fitting: dict
+                dictionary with the hyperparameters of the fit
+            experiments: dict
+                vp list of experiments to be included in the fit
+            t0set: str
+                t0set name
+            replica: list
+                a list of replica numbers to run over (typically just one)
+            replica_path: pathlib.Path
+                path to the output of this run
+            output_path: str
+                name of the fit
+            theorid: int
+                theory id number
+            posdatasets: list
+                list of positivity datasets
+            hyperscan: dict
+                dictionary containing the details of the hyperscan
+            hyperopt: int
+                if given, number of hyperopt iterations to run
+            debug: bool
+                activate some debug options
+            maxcores: int
+                maximum number of (logical) cores that the backend should be aware of
     """
 
     if debug:
@@ -154,9 +191,9 @@ def performfit(
     else:
         t0pdfset = None
 
-
-    trvlseed, nnseed, mcseed, genrep = [fitting.get(i)
-                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
+    trvlseed, nnseed, mcseed, genrep = [
+        fitting.get(i) for i in ["trvlseed", "nnseed", "mcseed", "genrep"]
+    ]
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
     trvalseeds, nnseeds, mcseeds = seeds.trvlseeds, seeds.nnseeds, seeds.mcseeds
@@ -171,7 +208,7 @@ def performfit(
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
-    if fitting.get('diagonal_basis'):
+    if fitting.get("diagonal_basis"):
         log.info("working in diagonal basis")
 
     if hyperscan and hyperopt:
@@ -190,7 +227,7 @@ def performfit(
             replica_seeds=mcseeds,
             trval_seeds=trvalseeds,
             kpartitions=kpartitions,
-            rotate_diagonal=fitting.get('diagonal_basis'),
+            rotate_diagonal=fitting.get("diagonal_basis"),
         )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
@@ -219,6 +256,7 @@ def performfit(
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
+            max_cores=maxcores,
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
