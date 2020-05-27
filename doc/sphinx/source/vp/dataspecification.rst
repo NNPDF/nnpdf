@@ -273,6 +273,8 @@ that 𝞆² was collected first over groups of data (``groups_chi2``), and then
 over ``dataspecs``. Naming functions according to these rules helps make the
 general workings of the underlying code more transparent to an end user.
 
+.. _backwards-compatibility:
+
 Backwards compatibility
 -----------------------
 
@@ -309,11 +311,16 @@ The user should be aware, however, that any grouping introduced in this way
 is purely superficial and will be ignored in favour of the experiments defined
 by the metadata of the datasets.
 
-*IMPORTANT*: Note that all theory uncertainties runcards will need to be updated to explicitly
-set the ``metadata_group`` to ``nnpdf31_process``, or else the prescriptions for 
-scale variations will not vary scales the same for data within the same process type,
-but within the same experiment. However, it should be obvious if this has happened because the outputs will
-be plots grouped by experiment rather than by process type.
+*IMPORTANT*: Note that all theory uncertainties runcards will need to be updated
+to explicitly set the ``metadata_group`` to ``nnpdf31_process``, or else the
+prescriptions for scale variations will not vary scales the same for data within
+the same process type, but within the same experiment. When running the examples
+in :ref:`theory-covmat-examples`, it should be obvious if this has been set
+because the outputs will be plots grouped by experiment rather than by process
+type. However, care must be taken when using the theory covariance matrix but
+not plotting anything, since the aforementioned check is not relevant. For
+example, if you only want to produce a 𝞆² you must be careful to set the
+``metadata_group`` key as above.
 
 Runcards which request actions that have been renamed will not work anymore.
 Generally actions which were previously named ``experiments_*`` have been

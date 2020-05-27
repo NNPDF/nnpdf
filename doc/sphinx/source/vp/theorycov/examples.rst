@@ -1,3 +1,4 @@
+.. _theory-covmat-examples:
 
 Examples
 ========
@@ -21,8 +22,11 @@ Here the cuts and PDF are taken from the central NLO scale-varied fit.
 You must also list all the experiments you wish to include, along with any 
 relevant c-factors. 
 
-*IMPORTANT*: In order to ensure backwards compatibility now that the structure of
-data in runcards has been updated and ``experiments`` is deprecated, you must also include ``metadata_group: nnpdf31_process`` in the runcards, so that the scale variation prescriptions are done by process rather than by experiment.
+*IMPORTANT*: In order to ensure backwards compatibility now that the structure
+of data in runcards has been updated and ``experiments`` is deprecated, you must
+also include ``metadata_group: nnpdf31_process`` in the runcards, so that the
+scale variation prescriptions are done by process rather than by experiment. See
+:ref:`backwards-compatibility` for more details.
 
 .. code-block::  yaml
    :linenos:
