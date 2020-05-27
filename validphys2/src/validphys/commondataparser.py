@@ -33,15 +33,14 @@ def load_commondata(spec):
     commondatafile = spec.datafile
 
     # Getting set name from commondata file name
-    setname = re.search('DATA_(.*).dat', str(commondatafile)).group(1)
+    setname = re.search("DATA_(.*).dat", str(commondatafile)).group(1)
     commondata = parse_commondata(commondatafile, setname)
 
     systypefile = spec.sysfile
     systypedata = parse_systype(systypefile, setname)
-     
-    return CommondataInfo(
-        commondata=commondata, systypes=systypedata
-    )
+
+    return CommondataInfo(commondata=commondata, systypes=systypedata)
+
 
 def parse_commondata(f, setname):
     """Parse a commondata file into a CommonData. Raise a BadCommondDataError
@@ -58,15 +57,15 @@ def parse_commondata(f, setname):
     table = pd.read_csv(f, sep=r'\s+', skiprows=1, header=None)
     # remove NaNs
     # TODO: replace commondata files with bad formatting
-    table.dropna(axis='columns', inplace=True)
+    table.dropna(axis="columns", inplace=True)
 
     # build header
     header = ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
     nsys  = (table.shape[1] - len(header)) // 2
     for i in range(nsys):
-        header += [f'sys.add.{i+1}', f'sys.mult.{i+1}']
+        header += [f"sys.add.{i+1}", f"sys.mult.{i+1}"]
     table.columns = header
-    table.set_index('entry', inplace=True)
+    table.set_index("entry", inplace=True)
 
     # Populate CommonData object
     return CommonData(
