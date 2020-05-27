@@ -11,6 +11,9 @@ import multiprocessing as mp
 import numpy as np
 import pandas as pd
 
+import n3fit.io.reader as reader
+from n3fit.performfit import initialize_seeds
+
 log = logging.getLogger(__name__)
 
 
@@ -66,9 +69,6 @@ def fitted_pseudodata(fit, experiments, num_fitted_replicas, t0pdfset=None, NPRO
             >>> from validphys.api import API
             >>> API.get_pseudodata(**runcard)
     """
-    import n3fit.io.reader as reader
-    from n3fit.performfit import initialize_seeds
-
     if t0pdfset is not None:
         t0pdfset = t0pdfset.load_t0()
     else:
