@@ -11,6 +11,8 @@ import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
 import tensorflow.keras.backend as K
+import matplotlib.pyplot as plt
+
 
 log = logging.getLogger(__name__)
 
@@ -370,13 +372,22 @@ def performfit(
 
         # Intercept the gluon PDF and refit it after including extraplation data at the PDF level
         xgrid_exp = np.logspace(np.log10(4.05e-5), 0, num=100)
-        xgrid_exp = np.insert(xgrid_exp, 0, 1e-6).reshape(-1, 1)  # set x-value extrapolation data point
+        xgrid_exp = np.insert(xgrid_exp, 0, 1e-6).reshape(-1, 1)  # x-value extrapolation data point
         xgrid_exp = np.expand_dims(xgrid_exp, axis=0)
         pdfs_exp = pdf_model.predict([xgrid_exp])
-        flavors = [('sigma', 1), ('g', 2), ('v', 3), ('v3', 4), ('v8', 5), ('t3', 9), ('t8', 10), ('t15', 11)]
-        for flavor in flavors: # linearly indep. evol. basis pdfs 
+        flavors = [
+            ("sigma", 1),
+            ("g", 2),
+            ("v", 3),
+            ("v3", 4),
+            ("v8", 5),
+            ("t3", 9),
+            ("t8", 10),
+            ("t15", 11),
+        ]
+        for flavor in flavors:  # linearly indep. evol. basis pdfs
             flavor_index = flavor[1]
-            pdfs_exp[0][0, flavor_index] = 2. # set y-value extrapolation data point
+            pdfs_exp[0][0, flavor_index] = 2.0  # set y-value extrapolation data point
         pdf_model.compile(
             optimizer="Adadelta",
             loss="mean_squared_error",
@@ -389,19 +400,18 @@ def performfit(
         new_xgrid = np.logspace(-6, 0, num=1000).reshape(-1, 1)
         new_xgrid = np.expand_dims(new_xgrid, axis=0)
         new_pdfs = pdf_model.predict([new_xgrid])[0]
-        import matplotlib.pyplot as plt
         for flavor in flavors:
             flavor_name = flavor[0]
             flavor_index = flavor[1]
             plt.figure()
             plt.plot(new_xgrid.flatten(), new_pdfs[:, flavor_index], color="b", label="fit")
-            plt.plot(xgrid_exp.flatten(), pdfs_exp[0][:,2], "r.", markersize=6, label="Data")
+            plt.plot(xgrid_exp.flatten(), pdfs_exp[0][:, 2], "r.", markersize=6, label="Data")
             plt.xscale("log")
-            plt.xlabel('$x$')
-            plt.ylabel(f'$x{flavor_name}(x)$')
-            plt.title(f'{flavor_name} PDF')
-            plt.legend(loc='best')
-            plt.savefig(f'{replica_path_set}/{flavor_name}_pdf.png')
+            plt.xlabel("$x$")
+            plt.ylabel(f"$x{flavor_name}(x)$")
+            plt.title(f"{flavor_name} PDF")
+            plt.legend(loc="best")
+            plt.savefig(f"{replica_path_set}/{flavor_name}_pdf.png")
             plt.close()
 
         # Generate the writer wrapper
