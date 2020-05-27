@@ -21,6 +21,9 @@ Here the cuts and PDF are taken from the central NLO scale-varied fit.
 You must also list all the experiments you wish to include, along with any 
 relevant c-factors. 
 
+*IMPORTANT*: In order to ensure backwards compatibility now that the structure of
+data in runcards has been updated and ``experiments`` is deprecated, you must also include ``metadata_group: nnpdf31_process`` in the runcards, so that the scale variation prescriptions are done by process rather than by experiment.
+
 .. code-block::  yaml
    :linenos:
    
@@ -28,7 +31,9 @@ relevant c-factors.
       author: Rosalyn Pearson
       keywords: [theory uncertainties, 3-point]
       title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
-
+    
+   metadata_group: nnpdf31_process
+    
    default_theory:
       - theoryid: 163
 
@@ -241,6 +246,8 @@ For each dataspec we can give the ``_experiments_list_nlo``.
        author: Rosalyn Pearson
        keywords: [test, theory uncertainties, eigenvalues, 5 point]
 
+   metadata_group: nnpdf31_process
+   
    fivetheories: nobar
 
    orthonormalisation: qr

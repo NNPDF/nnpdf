@@ -18,17 +18,12 @@ from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
-<<<<<<< HEAD
 from reportengine.configparser import (
     ConfigError,
     element_of,
     _parse_func,
     record_from_defaults,
 )
-=======
-from reportengine.compat import yaml
-from reportengine.configparser import ConfigError, element_of, _parse_func
->>>>>>> refs/rewritten/onto
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from reportengine import report
