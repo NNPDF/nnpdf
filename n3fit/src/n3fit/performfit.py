@@ -331,7 +331,7 @@ def performfit(
         activationinputs = []
         dense_layers = []
         for num, layer in enumerate(pdf_model.layers):
-            if layer.name.startswith('dense'):
+            if layer.name.startswith("dense"):
                 dense_layers.append(num)
         for layer in dense_layers:
             get_layer_input = K.function(
@@ -356,8 +356,6 @@ def performfit(
             + "followed by input values.",
         )
 
-        # Intercept the gluon PDF and refit it after including extraplation data at the PDF level
-
         # Creates a PDF model for export grid
         def pdf_function(export_xgrid):
             """
@@ -369,6 +367,29 @@ def performfit(
 
             # Now remove the spurious dimension
             return np.squeeze(result, 0)
+
+        # Intercept the gluon PDF and refit it after including extraplation data at the PDF level
+        xgrid_exp = np.logspace(np.log10(4.05e-5), 0, num=100)
+        xgrid_exp = np.insert(xgrid_exp, 0, 1e-6).reshape(-1, 1)  # set x-value extrapolation data point
+        xgrid_exp = np.expand_dims(xgrid_exp, axis=0)
+        pdfs_exp = pdf_model.predict([xgrid_exp])
+        pdfs_exp[0][0, 2] = 0.6  # set y-value extrapolation data point
+        pdf_model.compile(
+            optimizer="Adadelta",
+            loss="mean_squared_error",
+            metrics=["accuracy"],
+            target_output=pdfs_exp,
+            learning_rate=1e-2,
+        )
+        xdict = {"input_1": xgrid_exp, "input_2": pdf_model.x_in["input_2"]}
+        pdf_model.fit(x=xdict, y=None, epochs=1000, verbose=0)
+        new_xgrid = np.logspace(-6, 0, num=2000).reshape(-1, 1)
+        new_xgrid = np.expand_dims(new_xgrid, axis=0)
+        new_gluonpdf = pdf_model.predict([new_xgrid])[0][:, 2]
+        import matplotlib.pyplot as plt
+        plt.plot(new_xgrid.flatten(), new_gluonpdf)
+        plt.xscale("log")
+        plt.savefig(replica_path_set + "/gluon_pdf.png")
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
