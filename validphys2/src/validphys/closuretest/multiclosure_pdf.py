@@ -454,7 +454,8 @@ def bootstrap_fits_pdf_sqrt_ratio(
     n_boot=100,
     boot_seed=None,
 ):
-    """Perform a bootstrap sampling across fits and replicas of xi, by flavour
+    """Perform a bootstrap sampling across fits and replicas of the sqrt
+    ratio, by flavour
     and total and then tabulate the mean and error
 
     """
