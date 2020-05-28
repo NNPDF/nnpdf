@@ -399,15 +399,12 @@ def fits_pdf_compare_xi_to_expected(fits_pdf_expected_xi_from_ratio, xi_flavour_
 fits_xi_grid_values = collect("xi_grid_values", ("fits", "fitpdf"))
 
 @table
-@check_multifit_replicas
 def bootstrap_fits_pdf_xi(
     fits_xi_grid_values,
     underlying_xi_grid_values,
     multiclosure_underlyinglaw,
-    fits_pdf,
     n_boot=100,
     boot_seed=None,
-    _internal_max_reps=None,
     use_x_basis=False
 ):
     """Perform a bootstrap sampling across fits and replicas of xi, by flavour
@@ -422,8 +419,9 @@ def bootstrap_fits_pdf_xi(
         boot_central_diff = []
         boot_rep_diff = []
         for i_fit in fit_boot_index:
-            rep_boot_index = rng.choice(_internal_max_reps, size=_internal_max_reps)
-            xi_gv = fits_xi_grid_values[i_fit][rep_boot_index, ...]
+            fit_xi_grid = fits_xi_grid_values[i_fit]
+            rep_boot_index = rng.choice(fit_xi_grid.shape[0], size=fit_xi_grid.shape[0])
+            xi_gv = fit_xi_grid[rep_boot_index, ...]
             boot_central_diff.append(
                 pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
             )
@@ -449,15 +447,12 @@ def bootstrap_fits_pdf_xi(
     )
 
 @table
-@check_multifit_replicas
 def bootstrap_fits_pdf_sqrt_ratio(
     fits_xi_grid_values,
     underlying_xi_grid_values,
     multiclosure_underlyinglaw,
-    fits_pdf,
     n_boot=100,
     boot_seed=None,
-    _internal_max_reps=None,
 ):
     """Perform a bootstrap sampling across fits and replicas of xi, by flavour
     and total and then tabulate the mean and error
@@ -471,8 +466,9 @@ def bootstrap_fits_pdf_sqrt_ratio(
         boot_central_diff = []
         boot_rep_diff = []
         for i_fit in fit_boot_index:
-            rep_boot_index = rng.choice(_internal_max_reps, size=_internal_max_reps)
-            xi_gv = fits_xi_grid_values[i_fit][rep_boot_index, ...]
+            fit_xi_grid = fits_xi_grid_values[i_fit]
+            rep_boot_index = rng.choice(fit_xi_grid.shape[0], size=fit_xi_grid.shape[0])
+            xi_gv = fit_xi_grid[rep_boot_index, ...]
             boot_central_diff.append(
                 pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
             )
