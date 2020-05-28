@@ -126,6 +126,17 @@ class SystematicError:
     sys_type: str #e.g ADD
     name: str #e.g UNCORR
 
+    def __repr__(self):
+        return (f"{self.__class__.__name__}(add={self.add}, mult={self.mult},"
+                "sys_type={self.sys_type}, name={self.name})")
+
+    def __str__(self):
+        pretty_print = (f"add: {'%.2g' % self.add} "
+                        f"mult: {'%.2g' % self.mult} "
+                        f"type: {self.sys_type} "
+                        f"name: {self.name}")
+        return pretty_print
+
 
 @dataclasses.dataclass(eq=False)
 class CommonData:
