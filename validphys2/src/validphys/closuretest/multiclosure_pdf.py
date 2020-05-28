@@ -407,7 +407,7 @@ def bootstrap_fits_pdf_xi(
     fits_pdf,
     n_boot=100,
     boot_seed=None,
-    _internal_n_reps=None,
+    _internal_max_reps=None,
     use_x_basis=False
 ):
     """Perform a bootstrap sampling across fits and replicas of xi, by flavour
@@ -422,7 +422,7 @@ def bootstrap_fits_pdf_xi(
         boot_central_diff = []
         boot_rep_diff = []
         for i_fit in fit_boot_index:
-            rep_boot_index = rng.choice(_internal_n_reps, size=_internal_n_reps)
+            rep_boot_index = rng.choice(_internal_max_reps, size=_internal_max_reps)
             xi_gv = fits_xi_grid_values[i_fit][rep_boot_index, ...]
             boot_central_diff.append(
                 pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
@@ -457,7 +457,7 @@ def bootstrap_fits_pdf_sqrt_ratio(
     fits_pdf,
     n_boot=100,
     boot_seed=None,
-    _internal_n_reps=None,
+    _internal_max_reps=None,
 ):
     """Perform a bootstrap sampling across fits and replicas of xi, by flavour
     and total and then tabulate the mean and error
@@ -471,7 +471,7 @@ def bootstrap_fits_pdf_sqrt_ratio(
         boot_central_diff = []
         boot_rep_diff = []
         for i_fit in fit_boot_index:
-            rep_boot_index = rng.choice(_internal_n_reps, size=_internal_n_reps)
+            rep_boot_index = rng.choice(_internal_max_reps, size=_internal_max_reps)
             xi_gv = fits_xi_grid_values[i_fit][rep_boot_index, ...]
             boot_central_diff.append(
                 pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
