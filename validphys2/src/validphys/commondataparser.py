@@ -45,7 +45,7 @@ def parse_commondata(commondatafile, systypefile, setname):
     Returns
     -------
     commondata : CommonData
-        An object containing the data and information from the commondata 
+        An object containing the data and information from the commondata
         and systype files.
     """
     # First parse commondata file
@@ -58,8 +58,8 @@ def parse_commondata(commondatafile, systypefile, setname):
     nsys  = (commondatatable.shape[1] - len(commondataheader)) // 2
     for i in range(nsys):
         commondataheader += [f"sys.add.{i+1}", f"sys.mult.{i+1}"]
-    commondataable.columns = commondataheader
-    commmondatatable.set_index("entry", inplace=True)
+    commondatatable.columns = commondataheader
+    commondatatable.set_index("entry", inplace=True)
 
     # Now parse systyle file
     systypetable = pd.read_csv(systypefile, sep=r'\s+', skiprows=1, header=None)
@@ -72,11 +72,11 @@ def parse_commondata(commondatafile, systypefile, setname):
     # Populate CommonData object
     return CommonData(
         setname=setname,
-        ndata=len(table),
-        commondataproc=table["process"][1],
+        ndata=len(commondatatable),
+        commondataproc=commondatatable["process"][1],
         nkin=3,
         nsys=nsys,
-        commondata_table=commondatatable
+        commondata_table=commondatatable,
         systype_table=systypetable
     )
 
