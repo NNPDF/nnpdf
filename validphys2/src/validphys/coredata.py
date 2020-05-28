@@ -148,7 +148,13 @@ class CommonData:
         ID for systematic
 
     commondata_table : pd.DataFrame
-        Pandas dataframe containing the commondata.
+        Pandas dataframe containing the commondata
+
+    systype_table : pd.DataFrame
+        Pandas dataframe containing the systype index
+        for each systematic alongside the uncertainty
+        type (ADD/MULT/RAND) and name
+        (CORR/UNCORR/THEORYCORR/SKIP)
     """
     #TODO: Apply cuts
     setname: str
@@ -157,6 +163,7 @@ class CommonData:
     nkin: int
     nsys: int
     commondata_table: pd.DataFrame
+    systype_table: pd.DataFrame
 
     @property
     def central_values(self):
@@ -172,26 +179,3 @@ class CommonData:
             columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
         )
 
-
-@dataclasses.dataclass(eq=False)
-class SystypeData:
-    """
-    Data contained in Systype file.
-
-    Parameters
-    ----------
-    setname : str
-        Name of the dataset
-
-    nsys : int
-        Number of systematics
-
-    systype_table : pd.DataFrame
-        Pandas dataframe containing the systype index
-        for each systematic alongside the uncertainty
-        treatment (ADD/MULT/RAND) and description
-        (CORR/UNCORR/THEORYCORR/SKIP)
-    """
-    setname: str
-    nsys: int
-    systype_table: pd.DataFrame
