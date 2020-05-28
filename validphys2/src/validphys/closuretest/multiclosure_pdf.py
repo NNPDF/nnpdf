@@ -19,6 +19,8 @@ from validphys.pdfgrids import xplotting_grid
 from validphys.core import PDF
 from validphys.calcutils import calc_chi2
 
+from validphys.closuretest.closure_checks import check_multifit_replicas
+
 # exclude charm
 XI_FLAVOURS = (r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',)
 
@@ -393,3 +395,108 @@ def fits_pdf_compare_xi_to_expected(fits_pdf_expected_xi_from_ratio, xi_flavour_
     """Two column table comparing the measured value of xi for each flavour to the
     one calculated from bias/variance"""
     return pd.concat((xi_flavour_table, fits_pdf_expected_xi_from_ratio), axis=1)
+
+fits_xi_grid_values = collect("xi_grid_values", ("fits", "fitpdf"))
+
+@table
+@check_multifit_replicas
+def bootstrap_fits_pdf_xi(
+    fits_xi_grid_values,
+    underlying_xi_grid_values,
+    multiclosure_underlyinglaw,
+    fits_pdf,
+    n_boot=100,
+    boot_seed=None,
+    _internal_n_reps=None,
+    use_x_basis=False
+):
+    """Perform a bootstrap sampling across fits and replicas of xi, by flavour
+    and total and then tabulate the mean and error
+
+    """
+    rng = np.random.RandomState(seed=boot_seed)
+    xi_boot = []
+    for _ in range(n_boot):
+        fit_boot_index = rng.choice(
+            len(fits_xi_grid_values), size=len(fits_xi_grid_values))
+        boot_central_diff = []
+        boot_rep_diff = []
+        for i_fit in fit_boot_index:
+            rep_boot_index = rng.choice(_internal_n_reps, size=_internal_n_reps)
+            xi_gv = fits_xi_grid_values[i_fit][rep_boot_index, ...]
+            boot_central_diff.append(
+                pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
+            )
+            boot_rep_diff.append(
+                pdf_replica_difference(xi_gv)
+            )
+        flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
+        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff)
+        xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
+        xi_total = xi_totalpdf(boot_rep_diff, boot_central_diff, total_cov, use_x_basis)
+        xi_data = np.concatenate(
+            (xi_flav.mean(axis=-1), [xi_total]), axis=0)
+        xi_boot.append(xi_data)
+    index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
+    res = np.concatenate(
+        (np.mean(xi_boot, axis=0)[:, np.newaxis], np.std(xi_boot, axis=0)[:, np.newaxis]),
+        axis=1
+    )
+    return pd.DataFrame(
+        res,
+        columns=[r"bootstrap mean $\xi_{1\sigma}$", r"bootstrap std. $\xi_{1\sigma}$"],
+        index=index
+    )
+
+@table
+@check_multifit_replicas
+def bootstrap_fits_pdf_sqrt_ratio(
+    fits_xi_grid_values,
+    underlying_xi_grid_values,
+    multiclosure_underlyinglaw,
+    fits_pdf,
+    n_boot=100,
+    boot_seed=None,
+    _internal_n_reps=None,
+):
+    """Perform a bootstrap sampling across fits and replicas of xi, by flavour
+    and total and then tabulate the mean and error
+
+    """
+    rng = np.random.RandomState(seed=boot_seed)
+    sqrt_ratio_boot = []
+    for _ in range(n_boot):
+        fit_boot_index = rng.choice(
+            len(fits_xi_grid_values), size=len(fits_xi_grid_values))
+        boot_central_diff = []
+        boot_rep_diff = []
+        for i_fit in fit_boot_index:
+            rep_boot_index = rng.choice(_internal_n_reps, size=_internal_n_reps)
+            xi_gv = fits_xi_grid_values[i_fit][rep_boot_index, ...]
+            boot_central_diff.append(
+                pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
+            )
+            boot_rep_diff.append(
+                pdf_replica_difference(xi_gv)
+            )
+        flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
+        flav_sqrt_cov = fits_sqrt_covmat_by_flavour(flav_cov)
+        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff)
+        ratio_flav = fits_pdf_flavour_ratio(flav_sqrt_cov, boot_central_diff, boot_rep_diff)
+        ratio_tot = fits_pdf_total_ratio(boot_central_diff, boot_rep_diff, total_cov)
+        ratio_data = np.concatenate(
+            (ratio_flav, [ratio_tot]), axis=0)
+        sqrt_ratio_boot.append(np.sqrt(ratio_data)) # take sqrt here
+    index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
+    res = np.concatenate(
+        (
+            np.mean(sqrt_ratio_boot, axis=0)[:, np.newaxis],
+            np.std(sqrt_ratio_boot, axis=0)[:, np.newaxis]
+        ),
+        axis=1
+    )
+    return pd.DataFrame(
+        res,
+        columns=[r"bootstrap mean sqrt ratio", r"bootstrap std. sqrt ratio"],
+        index=index
+    )
