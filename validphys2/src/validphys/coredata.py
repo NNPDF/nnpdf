@@ -118,6 +118,15 @@ class CFactorData:
     central_value: np.array
     uncertainty: np.array
 
+
+@dataclasses.dataclass(eq=False)
+class SystematicError:
+    add: float
+    mult: float
+    sys_type: str #e.g ADD
+    name: str #e.g UNCORR
+
+
 @dataclasses.dataclass(eq=False)
 class CommonData:
     """
@@ -170,12 +179,28 @@ class CommonData:
         return self.commondata_table["data"]
 
     @property
-    def stat_err(self):
+    def stat_errors(self):
         return self.commondata_table["stat"]
 
     @property
-    def sys_err(self):
-        return self.commondata_table.drop(
+    def sys_errors(self):
+        sys_table = self.commondata_table.drop(
             columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
         )
-
+        table = [
+            [
+                SystematicError(
+                    add=sys_table[f"sys.add.{j+1}"][i + 1],
+                    mult=sys_table[f"sys.mult.{j+1}"][i + 1],
+                    sys_type=self.systype_table["type"][j + 1],
+                    name=self.systype_table["name"][j + 1],
+                )
+                for j in range(self.nsys)
+            ]
+            for i in range(self.ndata)
+        ]
+        return pd.DataFrame(
+            table,
+            columns=[f"sys.{i+1}" for i in range(self.nsys)],
+            index=range(1, self.ndata + 1),
+        )
