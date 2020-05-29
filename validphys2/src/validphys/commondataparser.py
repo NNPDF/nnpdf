@@ -54,15 +54,17 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondatatable.set_index("entry", inplace=True)
 
     # Now parse systype file
+    systypeheader = ["sys_index", "type", "name"]
     try:
-        systypetable = pd.read_csv(systypefile, sep=r'\s+', skiprows=1, header=None)
+        systypetable = pd.read_csv(
+            systypefile, sep=r"\s+", names=systypeheader, skiprows=1, header=None
+        )
         systypetable.dropna(axis='columns', inplace=True)
-        # Build header
-        systypeheader = ["sys_index", "type", "name"]
-        systypetable.columns = systypeheader
-        systypetable.set_index("sys_index", inplace=True)
-    except pd.io.common.EmptyDataError:
-        systypetable = pd.DataFrame()
+    # Some datasets e.g. CMSWCHARMRAT have no systematics
+    except pd.errors.EmptyDataError:
+        systypetable = pd.DataFrame(columns=systypeheader)
+
+    systypetable.set_index("sys_index", inplace=True)
 
     # Populate CommonData object
     return CommonData(
