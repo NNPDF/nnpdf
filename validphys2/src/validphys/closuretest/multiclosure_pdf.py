@@ -10,29 +10,54 @@ import scipy.linalg as la
 import scipy.special
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 from reportengine import collect
 from reportengine.table import table
-from reportengine.figure import figuregen
+from reportengine.figure import figuregen, figure
 
 from validphys.pdfgrids import xplotting_grid
 from validphys.core import PDF
 from validphys.calcutils import calc_chi2
 
-from validphys.closuretest.closure_checks import check_multifit_replicas
-
 # exclude charm
 XI_FLAVOURS = (r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',)
 
-N = 6
-SINGLET_GLUON_XGRID = np.concatenate(
-    (np.logspace(-3, -1, int(N/2), endpoint=False), np.linspace(0.1, 0.5, int(N/2))),
-    axis=0
-)
-NONSINGLET_XGRID = np.linspace(0.1, 0.5, N)
+def _internal_Nx(multiclosure_nx=6):
+    """set a default value for number of points Nx to be used in multiclosure
+    PDF actions, allows for studying dependence on this number but by default
+    sets Nx = 6
 
+    """
+    return multiclosure_nx
 
-def xi_pdfgrids(pdf:PDF, Q:(float,int)):
+def _internal_singlet_gluon_xgrid(_internal_Nx):
+    """Given the number of x points, set up the singlet and gluon xgrids,
+    which are defined as half the points being logarithmically spaced
+    between 10^-3 and 0.1 and the other half of the points being linearly
+    spaced between 0.1 and 0.5
+    """
+    return np.concatenate(
+        (
+            np.logspace(-3, -1, int(_internal_Nx/2), endpoint=False),
+            np.linspace(0.1, 0.5, int(_internal_Nx/2))
+        ),
+        axis=0
+    )
+
+def _internal_nonsinglet_xgrid(_internal_Nx):
+    """Given the number of x points, set up the x grid for flavours which
+    are not singlet or gluon, defined as being linearly spaced points between
+    0.1 and 0.5
+    """
+    return np.linspace(0.1, 0.5, _internal_Nx)
+
+def xi_pdfgrids(
+    pdf:PDF,
+    Q:(float,int),
+    _internal_singlet_gluon_xgrid,
+    _internal_nonsinglet_xgrid
+):
     """Generate PDF grids which are required for calculating xi in PDF space
     in the NN31IC basis, exclusing the charm we want to specify different xgrids
     for different flavours to avoid sampling PDFs in deep extrapolation, the
@@ -52,7 +77,7 @@ def xi_pdfgrids(pdf:PDF, Q:(float,int)):
     singlet_gluon_grid = xplotting_grid(
         pdf,
         Q,
-        xgrid=SINGLET_GLUON_XGRID,
+        xgrid=_internal_singlet_gluon_xgrid,
         basis="NN31IC",
         flavours=XI_FLAVOURS[:2]
     )
@@ -60,7 +85,7 @@ def xi_pdfgrids(pdf:PDF, Q:(float,int)):
     nonsinglet_grid = xplotting_grid(
         pdf,
         Q,
-        xgrid=NONSINGLET_XGRID,
+        xgrid=_internal_nonsinglet_xgrid,
         basis="NN31IC",
         flavours=XI_FLAVOURS[2:]
     )
@@ -76,11 +101,21 @@ def xi_grid_values(xi_pdfgrids):
         axis=1
     )
 
-def underlying_xi_grid_values(multiclosure_underlyinglaw: PDF, Q:(float,int)):
+def underlying_xi_grid_values(
+    multiclosure_underlyinglaw: PDF,
+    Q:(float,int),
+    _internal_singlet_gluon_xgrid,
+    _internal_nonsinglet_xgrid
+):
     """Like xi_pdfgrids but setting the PDF as the underlying law, extracted
     from a set of fits.
     """
-    underlying_grid = xi_pdfgrids(multiclosure_underlyinglaw, Q)
+    underlying_grid = xi_pdfgrids(
+        multiclosure_underlyinglaw,
+        Q,
+        _internal_singlet_gluon_xgrid,
+        _internal_nonsinglet_xgrid
+    )
     return xi_grid_values(underlying_grid)
 
 def pdf_central_difference(
@@ -175,13 +210,13 @@ def xi_flavour_x(
         xis.append(xi)
     return np.asarray(xis)
 
-def fits_covariance_matrix_totalpdf(fits_replica_difference):
+def fits_covariance_matrix_totalpdf(fits_replica_difference, _internal_Nx):
     """Given a set of pdf grids from multiple closure tests, obtain an estimate
     of the covariance matrix allowing for correlations across flavours
     """
     # diffs want to be calculated on the per fit level
     super_diffs = np.concatenate(fits_replica_difference, axis=0).reshape(
-        -1, N*len(XI_FLAVOURS)) # reshape to correlate flavours
+        -1, _internal_Nx*len(XI_FLAVOURS)) # reshape to correlate flavours
     return np.cov(super_diffs, rowvar=False)
 
 fits_indicator_function_totalpdf = collect(
@@ -191,6 +226,7 @@ def xi_totalpdf(
     fits_replica_difference,
     fits_central_difference,
     fits_covariance_matrix_totalpdf,
+    _internal_Nx,
     use_x_basis=False,
 ):
     """Like xi_flavour_x except calculate the total xi across flavours and x
@@ -198,10 +234,10 @@ def xi_totalpdf(
     """
     # keep fits and reps then reshape flavour x to one dim
     rep_diff = np.asarray(fits_replica_difference).reshape(
-        len(fits_replica_difference), -1, N*len(XI_FLAVOURS)
+        len(fits_replica_difference), -1, _internal_Nx*len(XI_FLAVOURS)
     )
     central_diff = np.asarray(fits_central_difference).reshape(
-        -1, N*len(XI_FLAVOURS))
+        -1, _internal_Nx*len(XI_FLAVOURS))
     if use_x_basis:
         diag_central_diff = central_diff.T
         diag_rep_diff = rep_diff.transpose(1, 2, 0)
@@ -237,7 +273,14 @@ def xi_flavour_table(xi_flavour_x, xi_totalpdf):
     )
 
 @figuregen
-def plot_xi_flavour_x(xi_flavour_x, Q, use_x_basis=False):
+def plot_xi_flavour_x(
+    xi_flavour_x,
+    Q,
+    _internal_singlet_gluon_xgrid,
+    _internal_nonsinglet_xgrid,
+    _internal_Nx,
+    use_x_basis=False
+):
     """For each flavour plot xi for each x-point. By default xi is calculated and
     plotted in the basis which diagonalises the covmat estimated from the union
     of all the replicas. However, if use_x_basis is True then xi will be
@@ -246,10 +289,10 @@ def plot_xi_flavour_x(xi_flavour_x, Q, use_x_basis=False):
     """
     # treat singlet and gluon seperately
     if use_x_basis:
-        x_for_plot = 2*[SINGLET_GLUON_XGRID] + 5*[NONSINGLET_XGRID]
+        x_for_plot = 2*[_internal_singlet_gluon_xgrid] + 5*[_internal_nonsinglet_xgrid]
         x_label = "x"
     else:
-        x_for_plot = 7*[np.arange(N)]
+        x_for_plot = 7*[np.arange(_internal_Nx)]
         x_label = "estimated covariance eigenvectors (ascending in eigenvalue)"
 
     for i, fl in enumerate(XI_FLAVOURS):
@@ -309,7 +352,8 @@ def fits_pdf_flavour_ratio(
 def fits_pdf_total_ratio(
     fits_central_difference,
     fits_replica_difference,
-    fits_covariance_matrix_totalpdf
+    fits_covariance_matrix_totalpdf,
+    _internal_Nx,
 ):
     """Calculate the total bias and variance for all flavours and x allowing for
     correlations across flavour,
@@ -320,9 +364,9 @@ def fits_pdf_total_ratio(
         required data for calculating mean(bias) over mean(variance) across fits
         in form of tuple (bias, variance)
     """
-    central_diff = np.asarray(fits_central_difference).reshape(-1, N*len(XI_FLAVOURS))
+    central_diff = np.asarray(fits_central_difference).reshape(-1, _internal_Nx*len(XI_FLAVOURS))
     rep_diff = np.asarray(fits_replica_difference).reshape(
-        len(fits_replica_difference), -1, N*len(XI_FLAVOURS))
+        len(fits_replica_difference), -1, _internal_Nx*len(XI_FLAVOURS))
 
     sqrtcov = la.cholesky(fits_covariance_matrix_totalpdf, lower=True)
 
@@ -403,6 +447,7 @@ def bootstrap_fits_pdf_xi(
     fits_xi_grid_values,
     underlying_xi_grid_values,
     multiclosure_underlyinglaw,
+    _internal_Nx,
     n_boot=100,
     boot_seed=None,
     use_x_basis=False
@@ -429,7 +474,7 @@ def bootstrap_fits_pdf_xi(
                 pdf_replica_difference(xi_gv)
             )
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
-        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff)
+        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, _internal_Nx)
         xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
         xi_total = xi_totalpdf(boot_rep_diff, boot_central_diff, total_cov, use_x_basis)
         xi_data = np.concatenate(
@@ -451,6 +496,7 @@ def bootstrap_fits_pdf_sqrt_ratio(
     fits_xi_grid_values,
     underlying_xi_grid_values,
     multiclosure_underlyinglaw,
+    _internal_Nx,
     n_boot=100,
     boot_seed=None,
 ):
@@ -478,9 +524,10 @@ def bootstrap_fits_pdf_sqrt_ratio(
             )
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         flav_sqrt_cov = fits_sqrt_covmat_by_flavour(flav_cov)
-        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff)
+        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, _internal_Nx)
         ratio_flav = fits_pdf_flavour_ratio(flav_sqrt_cov, boot_central_diff, boot_rep_diff)
-        ratio_tot = fits_pdf_total_ratio(boot_central_diff, boot_rep_diff, total_cov)
+        ratio_tot = fits_pdf_total_ratio(
+            boot_central_diff, boot_rep_diff, total_cov, _internal_Nx)
         ratio_data = np.concatenate(
             (ratio_flav, [ratio_tot]), axis=0)
         sqrt_ratio_boot.append(np.sqrt(ratio_data)) # take sqrt here
@@ -497,3 +544,83 @@ def bootstrap_fits_pdf_sqrt_ratio(
         columns=[r"bootstrap mean sqrt ratio", r"bootstrap std. sqrt ratio"],
         index=index
     )
+
+def plot_pdf_matrix(matrix, n_x, **kwargs):
+    """Utility function which, given a covmat/corrmat for all flavours and
+    x, plots it with appropriate labels. Input matrix is expected to be
+    size (n_flavours*n_x) * (n_flavours*n_x)
+
+    Parameters
+    ----------
+    matrix: np.array
+        square matrix which must be (n_flavours*n_x) * (n_flavours*n_x) with
+        elements ordered like:
+        (flavour0_x0, flavour0_x1, ..., flavourN_x0, ..., flavourN_xN)
+        i.e the points along x for flavour 0, then points along x for flavour 1
+        etc.
+    **kwargs:
+        keyword arguments for the matplotlib.axes.Axes.imshow function
+
+    Notes
+    -----
+    See matplotlib.axes.Axes.imshow for more details on plotting function
+
+    """
+    labels = [f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:]]
+    ticks = n_x/2 + n_x * np.arange(len(XI_FLAVOURS))
+    fig, ax = plt.subplots()
+    im = ax.imshow(matrix, **kwargs)
+    ax.set_xticks(ticks, labels)
+    fig.colorbar(im, ax)
+    return fig, ax
+
+@figure
+def plot_multiclosure_covariance_matrix(
+    fits_covariance_matrix_totalpdf, _internal_Nx):
+    """Plot the covariance matrix for all flavours, covariance matrix
+    has shape n_flavours * n_x each block is the covariance of the replica
+    PDFs on the x-grid defined in xi_pdfgrids
+    """
+    fig, ax = plot_pdf_matrix(fits_covariance_matrix_totalpdf, _internal_Nx)
+    ax.set_title("Covariance matrix estimated from multiclosure replicas")
+    return fig
+
+def fits_correlation_matrix_totalpdf(fits_covariance_matrix_totalpdf):
+    """Given the fits_covariance_matrix_totalpdf, returns the corresponding
+    correlation matrix
+    """
+    d = np.sqrt(np.diag(fits_covariance_matrix_totalpdf))
+    return (fits_covariance_matrix_totalpdf/d)/d[:, np.newaxis]
+
+
+@figure
+def plot_multiclosure_correlation_matrix(fits_correlation_matrix_totalpdf, _internal_Nx):
+    """Like plot_multiclosure_covariance_matrix but plots the total
+    correlation matrix
+    """
+    fig, ax = plot_pdf_matrix(fits_correlation_matrix_totalpdf, _internal_Nx, vmin=0, vmax=1)
+    ax.set_title("Correlation matrix estimated from multiclosure replicas")
+    return fig
+
+@figure
+def plot_multiclosure_correlation_eigenvalues(fits_correlation_matrix_totalpdf):
+    """Plot scatter points for each of the eigenvalues from the estimated
+    correlation matrix from the multiclosure PDFs in flavour and x.
+
+    In the legend add the ratio of the largest eigenvalue over the smallest
+    eigenvalue, aka the l2 condition number of the correlation matrix
+
+    """
+    # e_val is in ascending order
+    e_val, _ = la.eigh(fits_correlation_matrix_totalpdf)
+    l2_condition = e_val[-1] / e_val[0]
+    fig, ax = plt.subplots()
+    ax.plot(
+        e_val,
+        "*",
+        label=f"Eigenvalues of correlation matrix, l2-condition: {l2_condition:.2f}"
+    )
+    ax.set_ylabel(r"$\lambda_{\rm corr}$")
+    ax.set_xlabel("eigenvalue index (ascending)")
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    return fig
