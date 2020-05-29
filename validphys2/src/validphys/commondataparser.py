@@ -53,13 +53,16 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondatatable.columns = commondataheader
     commondatatable.set_index("entry", inplace=True)
 
-    # Now parse systyle file
-    systypetable = pd.read_csv(systypefile, sep=r'\s+', skiprows=1, header=None)
-    systypetable.dropna(axis='columns', inplace=True)
-    # Build header
-    systypeheader = ["sys_index", "type", "name"]
-    systypetable.columns = systypeheader
-    systypetable.set_index("sys_index", inplace=True)
+    # Now parse systype file
+    try:
+        systypetable = pd.read_csv(systypefile, sep=r'\s+', skiprows=1, header=None)
+        systypetable.dropna(axis='columns', inplace=True)
+        # Build header
+        systypeheader = ["sys_index", "type", "name"]
+        systypetable.columns = systypeheader
+        systypetable.set_index("sys_index", inplace=True)
+    except pd.io.common.EmptyDataError:
+        systypetable = pd.DataFrame()
 
     # Populate CommonData object
     return CommonData(
