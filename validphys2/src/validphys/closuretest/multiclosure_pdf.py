@@ -571,7 +571,7 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
     fig, ax = plt.subplots()
     im = ax.imshow(matrix, **kwargs)
     ax.set_xticks(ticks, labels)
-    fig.colorbar(im, ax)
+    fig.colorbar(im, ax=ax)
     return fig, ax
 
 @figure
