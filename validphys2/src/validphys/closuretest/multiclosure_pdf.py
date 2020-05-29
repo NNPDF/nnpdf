@@ -476,7 +476,7 @@ def bootstrap_fits_pdf_xi(
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, internal_Nx)
         xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
-        xi_total = xi_totalpdf(boot_rep_diff, boot_central_diff, total_cov, use_x_basis)
+        xi_total = xi_totalpdf(boot_rep_diff, boot_central_diff, total_cov, internal_Nx, use_x_basis)
         xi_data = np.concatenate(
             (xi_flav.mean(axis=-1), [xi_total]), axis=0)
         xi_boot.append(xi_data)
