@@ -623,4 +623,5 @@ def plot_multiclosure_correlation_eigenvalues(fits_correlation_matrix_totalpdf):
     ax.set_ylabel(r"$\lambda_{\rm corr}$")
     ax.set_xlabel("eigenvalue index (ascending)")
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax.legend()
     return fig
