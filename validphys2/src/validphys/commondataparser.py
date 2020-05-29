@@ -14,13 +14,7 @@ from validphys.coredata import CommonData
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
-    Returns an instance of CommonData,
-    with:
-    commondata_table being a pandas dataframe with data arranged like
-    entry   process kin1    kin2    kin3    data    stat    \
-            sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N ;
-    systype_table being a pandas dataframe with data arranged like
-    sys_index   treatment   description.
+    Returns an instance of CommonData
     """
     commondatafile = spec.datafile
     # Getting set name from commondata file name
@@ -37,10 +31,8 @@ def parse_commondata(commondatafile, systypefile, setname):
 
     Parameters
     ----------
-    commondatafile : file
-        Open file-like object.
-    systypefile : file
-        Open file-like object.
+    commondatafile : file or path to file
+    systypefile : file or path to file
 
     Returns
     -------
