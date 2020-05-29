@@ -567,11 +567,21 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
 
     """
     labels = [f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:]]
-    ticks = n_x/2 + n_x * np.arange(len(XI_FLAVOURS))
+    # we want to centre the labels on each of the x grids
+    # ticks appear shifted right by 0.5, so we account for this here
+    ticks = (n_x)/2 + n_x * np.arange(len(XI_FLAVOURS)) - 0.5
     fig, ax = plt.subplots()
     im = ax.imshow(matrix, **kwargs)
-    ax.set_xticks(ticks, labels)
     fig.colorbar(im, ax=ax)
+    ax.set_xticks(ticks,)
+    ax.set_xticklabels(labels,)
+    ax.set_yticks(ticks,)
+    ax.set_yticklabels(labels,)
+    # for some reason the axis can be resized, so fix that here
+    ax.set_ylim([n_x*len(XI_FLAVOURS)-0.5, -0.5])
+    ax.set_xlim([-0.5, n_x*len(XI_FLAVOURS)-0.5])
+    # looks more natural with xticks at top
+    ax.xaxis.tick_top()
     return fig, ax
 
 @figure
