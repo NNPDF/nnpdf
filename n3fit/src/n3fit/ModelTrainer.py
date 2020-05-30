@@ -792,10 +792,10 @@ class ModelTrainer:
                 l_hyper.append(hyper_loss*partition_weight)
                 log.info("fold: %d", k+1)
                 log.info("Hyper loss: %f", hyper_loss)
-                if hyper_loss > self.hyper_threshold:
+                if hyper_loss > self.hyper_threshold and passed:
                     log.info("Loss over threshold, breaking")
                     # Give an extra penalty for the ones that failed the threshold
-                    extra_penalty = 1 + np.exp(hyper_loss - self.hyper_threshold)
+                    extra_penalty = 1 + np.exp(-1.0*self.hyper_threshold/hyper_loss)
                     l_hyper = [i*extra_penalty for i in l_hyper]
                     break
 
