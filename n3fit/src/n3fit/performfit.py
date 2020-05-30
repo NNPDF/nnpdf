@@ -110,11 +110,26 @@ def check_consistent_layers(fitting):
     if npl != apl:
         raise CheckError(f"Number of layers ({npl}) does not match activation functions: {apl}")
 
+@make_argcheck                                   
+def check_correct_partitions(hyperopt, hyperscan, experiments):                     
+    if hyperopt is None:
+        return None                              
+    # Get all datasets                           
+    datasets = []                                
+    for exp in experiments:                      
+        datasets += [i.name for i in exp.datasets]                                                 
+    for partition in hyperscan['kfold']['partitions']:                                             
+        fold_sets = partition['datasets']        
+        for dset in fold_sets:                   
+            if dset not in datasets:             
+                raise CheckError(f"The fold dataset {dset} is not part of the fit")   
+
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 @check_consistent_hyperscan_options
 @check_consistent_layers
 @check_consistent_basis
+@check_correct_partitions
 def performfit(
     fitting,
     experiments,
