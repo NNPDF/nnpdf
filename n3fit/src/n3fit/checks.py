@@ -120,9 +120,22 @@ def check_kfold_options(kfold):
     if threshold < 2.0:
         LOGGER.warning("The kfolding loss threshold might be too low: %f", threshold)
 
+def check_correct_partitions(kfold, experiments):
+    """ Ensures that all experimennts in all partitions
+    are included in  the fit definition """
+    # Get all datasets
+    datasets = []
+    for exp in experiments:
+        datasets += [i.name for i in exp.datasets]
+    for partition in kfold['partitions']:
+        fold_sets = partition['datasets']
+        for dset in fold_sets:
+            if dset not in datasets:
+                raise CheckError(f"The k-fold defined dataset {dset} is not part of the fit")
+
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan, fitting):
+def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
     """ Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
@@ -138,6 +151,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting):
         raise CheckError("The hyperscan::kfold dictionary is not defined")
     check_hyperopt_architecture(hyperscan.get("architecture"))
     check_kfold_options(hyperscan["kfold"])
+    check_correct_partitions(hyperscan["kfold"], experiments)
 
 
 # Checks on the physics
