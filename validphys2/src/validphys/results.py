@@ -383,6 +383,58 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 
+def covmat_from_systematics(dataset):
+    systype = dataset.cd.systype_table["name"]
+    skip_systematics = systype.where(systype=="SKIP").dropna().index
+    sys_errors = dataset.sys_errors.drop(columns=[f"sys.{i}" for i in skip_systematics])
+
+    def to_additive(sys_errors):
+        result = []
+        for idx, sys_error in enumerate(sys_errors):
+            if sys_error.sys_type == "ADD":
+                result.append(sys_error.add)
+            elif sys_error.sys_type == "MULT":
+                result.append(dataset.central_values.iloc[idx] * sys_error.mult / 100)
+        return result
+
+    additive_mat = sys_errors.apply(to_additive)
+
+    # Matrix where all non-zero values are due to correlated systematics
+    correlated_mat = additive_mat.copy()
+    for i, j in enumerate(systype):
+        if j not in ("UNCORR", "THEORYUNCORR"):
+            continue
+        correlated_mat.iloc[:, i] = 0
+
+    correlated_mat = correlated_mat.to_numpy()
+
+    # Systematic uncertainties converted to additive uncertainties
+    additive_mat = additive_mat.to_numpy()
+
+    # Diagonal matrix containing the statistical uncertainty for each
+    # data point
+    stat_mat = np.diag(dataset.stat_errors.to_numpy())
+
+    if not correlated_mat.size > 0:
+        # Some datasets e.g CMSWCHARMRAT have zero systematic
+        # uncertainties. We treat this special edge case
+        # by creating a matrix of zeros so it can be broadcast
+        # with the statistical error matrix at the end
+        correlated_mat = additive_mat = np.zeros_like(stat_mat)
+
+    # Avoid double counting in case the i = j element is a correlated
+    # systematic we take care of this case in the einsum below
+    off_diagonals = correlated_mat @ additive_mat.T
+    np.fill_diagonal(off_diagonals, 0)
+
+    cov_mat = (
+        stat_mat ** 2
+        + off_diagonals
+        + np.diag(np.einsum("ij, ij -> i", additive_mat, additive_mat))
+    )
+    return cov_mat
+
+
 @check_dataset_cuts_match_theorycovmat
 def covmat(
     dataset:DataSetSpec,
