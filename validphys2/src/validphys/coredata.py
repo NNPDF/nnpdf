@@ -178,6 +178,29 @@ class CommonData:
     commondata_table: pd.DataFrame
     systype_table: pd.DataFrame
 
+    def with_cuts(self, cuts):
+        """A method to return a CommonData object where
+        an integer mask has been applied, keeping only data
+        points which pass cuts.
+
+        Note if the first data point passes cuts, the first entry
+        of ``cuts`` should be ``1`` not ``0``.
+
+        Paramters
+        ---------
+        cuts: list or validphys.core.Cuts or None
+        """
+
+        if hasattr(cuts, 'load'):
+            cuts = cuts.load()
+        if cuts is None:
+            return self
+        newndata = len(cuts)
+        new_commondata_table = self.commondata_table.loc[cuts]
+        return dataclasses.replace(
+            self, ndata=newndata, commondata_table=new_commondata_table
+        )
+
     @property
     def central_values(self):
         return self.commondata_table["data"]
@@ -194,17 +217,17 @@ class CommonData:
         table = [
             [
                 SystematicError(
-                    add=sys_table[f"sys.add.{j+1}"][i + 1],
-                    mult=sys_table[f"sys.mult.{j+1}"][i + 1],
-                    sys_type=self.systype_table["type"][j + 1],
-                    name=self.systype_table["name"][j + 1],
+                    add=sys_table[f"sys.add.{j}"][i],
+                    mult=sys_table[f"sys.mult.{j}"][i],
+                    sys_type=self.systype_table["type"][j],
+                    name=self.systype_table["name"][j],
                 )
-                for j in range(self.nsys)
+                for j in self.systype_table.index
             ]
-            for i in range(self.ndata)
+            for i in self.commondata_table.index
         ]
         return pd.DataFrame(
             table,
-            columns=[f"sys.{i+1}" for i in range(self.nsys)],
-            index=range(1, self.ndata + 1),
+            columns=[f"sys.{i}" for i in self.systype_table.index],
+            index=self.commondata_table.index,
         )

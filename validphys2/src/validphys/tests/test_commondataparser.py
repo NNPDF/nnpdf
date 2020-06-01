@@ -1,5 +1,6 @@
 import pandas as pd
 
+from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.loader import Loader
 
@@ -18,4 +19,4 @@ def test_basic_commondata_loading():
     emptysyscd = l.check_commondata(setname="CMSWCHARMRAT")
     emptysysres = load_commondata(emptysyscd)
     assert emptysysres.nsys == 0
-    assert emptysysres.systype_table.empty is True 
+    assert emptysysres.systype_table.empty is True

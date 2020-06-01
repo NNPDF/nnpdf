@@ -6,7 +6,6 @@ interfaces with common Python libraries.  The integration of these objects into
 the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 """
-import numpy as np
 import pandas as pd
 
 from validphys.core import peek_commondata_metadata
@@ -62,7 +61,7 @@ def parse_commondata(commondatafile, systypefile, setname):
             "Commondata table information does not match metadata"
 
     # Now parse the systype file
-    systypetable = parse_systypes(systypefile, setname)
+    systypetable = parse_systypes(systypefile)
 
     # Populate CommonData object
     return CommonData(
@@ -75,7 +74,7 @@ def parse_commondata(commondatafile, systypefile, setname):
         systype_table=systypetable
     )
 
-def parse_systypes(systypefile, setname):
+def parse_systypes(systypefile):
     """Parses a systype file and returns a pandas dataframe.
     """
     systypeheader = ["sys_index", "type", "name"]
