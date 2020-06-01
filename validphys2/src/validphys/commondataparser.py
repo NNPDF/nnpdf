@@ -51,19 +51,9 @@ def parse_commondata(commondatafile, systypefile, setname):
         commondataheader += [f"sys.add.{i+1}", f"sys.mult.{i+1}"]
     commondatatable.columns = commondataheader
     commondatatable.set_index("entry", inplace=True)
-
-    # Now parse systype file
-    systypeheader = ["sys_index", "type", "name"]
-    try:
-        systypetable = pd.read_csv(
-            systypefile, sep=r"\s+", names=systypeheader, skiprows=1, header=None
-        )
-        systypetable.dropna(axis='columns', inplace=True)
-    # Some datasets e.g. CMSWCHARMRAT have no systematics
-    except pd.errors.EmptyDataError:
-        systypetable = pd.DataFrame(columns=systypeheader)
-
-    systypetable.set_index("sys_index", inplace=True)
+    
+    # Now parse the systype file
+    systypetable = parse_systypes(systypefile, setname)
 
     # Populate CommonData object
     return CommonData(
@@ -76,3 +66,19 @@ def parse_commondata(commondatafile, systypefile, setname):
         systype_table=systypetable
     )
 
+def parse_systypes(systypefile, setname):
+    """Parses a systype file and returns a pandas dataframe.
+    """
+    systypeheader = ["sys_index", "type", "name"]
+    try:
+        systypetable = pd.read_csv(
+            systypefile, sep=r"\s+", names=systypeheader, skiprows=1, header=None
+        )
+        systypetable.dropna(axis='columns', inplace=True)
+    # Some datasets e.g. CMSWCHARMRAT have no systematics
+    except pd.errors.EmptyDataError:
+        systypetable = pd.DataFrame(columns=systypeheader)
+
+    systypetable.set_index("sys_index", inplace=True)
+
+    return systypetable
