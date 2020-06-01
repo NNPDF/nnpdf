@@ -26,12 +26,12 @@ Here is an example dataset input:
         cfac: [QCD,NRM]
         sys: 10
 
-This particular example is for ``CMSZDIFF12`` dataset, the user has
-specified to use some C-factors ``cfac`` and ``sys: 10`` which corresponds
+This particular example is for the ``CMSZDIFF12`` dataset, the user has
+specified to use some C-factors given by ``cfac`` as well as ``sys: 10``, which corresponds
 to an additonal contribution to the covariance matrix accounting for
 statistical fluctuations in the C-factors. These settings correspond to
 NNLO predictions and so presumably elsewhere in the runcard the user
-would have specified a NNLO theory - such as theory 53.
+would have specified an NNLO theory - such as theory 53.
 
 We can use the API to return an instance of ``DataSetSpec`` in a
 development environment using the settings above
@@ -52,14 +52,13 @@ Here we are obtaining the result from the production rule
 ``dataset_input``, ``cuts`` and ``theoryid``.
 
 .. note::
-    It seems odd to require a `theoryid`
-    and parameters in the `dataset_input` which refer to theory settings
-    in order to load data. However, this is a relic of the underlying c++ code
-    which performs the loading of data, which intrinsically groups together the
+    It seems odd to require theory settings such as a `theoryid` in the `dataset_input`
+    in order to load data. However, this is a relic of the underlying C++ code
+    that performs the loading of data, which intrinsically groups together the
     commondata (CSVs containing data central values and uncertainties) and :ref:`fktables`.
 
     Clearly there is a big margin for error when manually entering `dataset_input`
-    and so there is a [project](https://github.com/NNPDF/nnpdf/issues/226) which
+    and so there is a [project](https://github.com/NNPDF/nnpdf/issues/226) that
     aims to have a stable way of filling many of these settings with correct
     default values.
 
@@ -74,23 +73,24 @@ it, e.g
     'CMSZDIFF12'
 
 but also importantly has a ``load`` method, which returns an instance of
-the ``DataSet``, which was generated from the c++ code using SWIG. This
+the ``DataSet`` that is generated from the C++ code using SWIG. This
 new object contains numpy arrays of data central values and experimental
 covariance matrices, e.g:
 
 .. code:: python
 
+    >>> ds_libnnpdf = ds_spec.load()
     >>> ds_libnnpdf.get_cv() # get central values of dataset
     array([2917.  , 1074.  ,  460.5 ,  222.6 ,  109.8 ,   61.84,   30.19,
            2863.  , 1047.  ,  446.1 ,  214.5 ,  110.  ,   58.13,   29.85,
            2588.  ,  935.5 ,  416.3 ,  199.  ,  103.1 ,   54.06,   28.45,
            1933.  ,  719.5 ,  320.7 ,  161.1 ,   84.62,   47.57,   24.13])
 
-In practice actions which require experimental data and/or covariance
+In practice, actions that require experimental data and/or covariance
 matrices will make use of the :py:mod:`validphys.results.results`
-provider which is a tuple of :py:mod:`validphys.results.DataResult`
-and :py:mod:`validphys.results.ThPredictionsResult`. Since we are additionally
-generating theory predictions we additionally are required to specify a
+provider, which is a tuple of :py:mod:`validphys.results.DataResult`
+and :py:mod:`validphys.results.ThPredictionsResult`. Since in this case we are additionally
+generating theory predictions, we are additionally required to specify a
 PDF
 
 .. code:: python
@@ -109,26 +109,26 @@ PDF
     (<validphys.results.DataResult object at 0x1518528350>, <validphys.results.ThPredictionsResult object at 0x1a19a4da50>)
 
 The covariance matrix associated with the ``DataResult`` in this tuple
-was constructed by :py:mod:`validphys.results.covmat` which allows the
+was constructed by :py:mod:`validphys.results.covmat`, which allows the
 user to change the behaviour of the covariance matrix - such as adding
-theory uncertainties from scale variation or using a t0 pdf to calculate
+theory uncertainties computed from scale variations or using a t0 PDF to calculate
 the multiplicative contributions to the covariance matrix - for more
-detail see :py:mod:`validphys.results.covmat`.
+detail see :py:mod:`validphys.results.covmat` itself.
 
 ``DataGroupSpec`` - core object for multiple datasets
 -----------------------------------------------------
 
-The core object for multiple datasets is :py:mod:`validphys.core.DataGroupSpec`
-which is similar in many regards to the DataSetSpec, but handles the loading
+The core object for multiple datasets is :py:mod:`validphys.core.DataGroupSpec`,
+which is similar in many regards to the `DataSetSpec`, but additionally handles the loading
 of multiple datasets. In particular, when constructing the covariance matrix,
-it takes into account any uncertainties which are correlated across different
+it takes into account any uncertainties which are correlated across the different
 datasets.
 
 Specifying multiple datasets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Multiple datasets are specified using ``dataset_inputs`` key: a list
-where each element of the list is a valid ``dataset_input``. For
+Multiple datasets are specified using the ``dataset_inputs`` key, which is a list
+in which each element of the list is a valid ``dataset_input``. For
 example:
 
 .. code:: yaml
@@ -138,18 +138,18 @@ example:
         - { dataset: ATLASTTBARTOT, cfac: [QCD] }
         - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
 
-We see that multiple datasets are inputted as a flat list and there is
-no hierarchy to the datasets, splitting them into experiments or process
+We see that multiple datasets are inputted as a flat list, i.e. that there is
+no hierarchy to the datasets which splits them into experiments or process
 types. The grouping of datasets is done internally according to the
-metadata of datasets and is controlled by ``metadata_group`` key. This
+metadata of datasets and is controlled by the ``metadata_group`` key. This
 can be any key which is present in the ``PLOTTING`` file of each dataset
 - for example ``experiment`` or ``nnpdf31_process``.
 The default value for ``metadata_group`` is ``experiment``. Other groupings
-might be relevant for example when contructing a theory covariance matrix, where
+might be relevant, for example when contructing a theory covariance matrix, in which case
 you want to group datasets according to process type rather than experiment.
 The grouping is performed by the production rule
-:py:mod:`validphys.config.CoreConfig.produce_group_dataset_inputs_by_metadata`
-which returns a list with length equal to number of distinct groups. Each element
+:py:mod:`validphys.config.CoreConfig.produce_group_dataset_inputs_by_metadata`,
+which returns a list with length equal to the number of distinct groups. Each element
 is a namespace with the ``group_name`` and list of ``dataset_input`` s for that
 specific group e.g:
 
@@ -168,10 +168,10 @@ specific group e.g:
         {'data_input': [DataSetInput(name='CMSZDIFF12', sys=10, cfac=['QCD', 'NRM'], frac=1, weight=1)], 'group_name': 'CMS'}
     ]
 
-Here we see that the namespace key is ``data_input`` rather than ``dataset_inputs``
+Here we see that the namespace key is ``data_input`` rather than ``dataset_inputs``,
 which is because ``data_input`` bridges the gap between the current way of specifying
 data (with ``dataset_inputs``) and a deprecated specification using the ``experiments``
-key. The production rule which returns a ``DataGroupSpec`` is
+key. The production rule that returns a ``DataGroupSpec`` is
 :py:mod:`validphys.config.CoreConfig.produce_data` through the following
 pipeline
 
@@ -179,9 +179,9 @@ pipeline
 
     dataset_inputs or experiments -> data_input -> data
 
-For example the following runcard produces a single column table with a
+For example, the following runcard produces a single-column table with a
 row containing the 𝞆² of the specificed datasets, grouped by
-``experiment``
+``experiment``:
 
 .. code:: yaml
 
@@ -200,7 +200,7 @@ row containing the 𝞆² of the specificed datasets, grouped by
     actions_:
      - dataspecs_groups_chi2_table
 
-If we specify a grouping in the runcard:
+If we specify a grouping in the runcard, like so
 
 .. code:: yaml
 
@@ -221,13 +221,12 @@ If we specify a grouping in the runcard:
     actions_:
      - dataspecs_groups_chi2_table
 
-then we instead get a single column table, but with the datasets grouped
+then we instead get a single-column table, but with the datasets grouped
 by process type, according the `theory uncertainties
 paper <https://arxiv.org/abs/1906.10698>`__.
 
-To expose the result of checking if ``metadata_group`` was specified in the
-runcard and applying a default value, use the namespace key
-``processed_metadata_group``. We can use this key in reports and actions alike
+To check whether ``metadata_group`` was specified in a given runcard, use the namespace key
+``processed_metadata_group``. We can use this key in reports and actions alike,
 for example to give sensible titles/section headings e.g:
 
 .. code:: yaml
@@ -242,14 +241,14 @@ for example to give sensible titles/section headings e.g:
 Action naming conventions
 -------------------------
 
-There are some general rules which should be observed when adding
+There are some general rules that should be observed when adding
 new actions to ``validphys``. Firstly, try to indicate the required runcard input
 for an action in the name of the function. Take for example the provider
 ``dataset_inputs_results``. The returned object is a ``results`` object: a tuple
-of data and theory which is used by a wide range of other actions, notably
+of data and theory predictions, which is used by a wide range of other actions, notably
 when calculating a 𝞆². The first part of the name ``dataset_inputs`` refers
-to the runcard input required to process that action. This is especially
-useful with actions for a group of datasets or ``data``, because the dependency
+to the runcard input required to process the action. This is especially
+useful for actions which use a group of datasets or ``data``, because the dependency
 tree for these actions is not neccessarily obvious to somebody who is unfamiliar
 with the code. As explained above,
 ``dataset_inputs -> data_input -> data`` and so the action name serves to
@@ -313,9 +312,9 @@ is purely superficial and will be ignored in favour of the experiments defined
 by the metadata of the datasets.
 
 *IMPORTANT*: Note that all theory uncertainties runcards will need to be updated
-to explicitly set the ``metadata_group`` to ``nnpdf31_process``, or else the
-prescriptions for scale variations will not vary scales the same for data within
-the same process type, but within the same experiment. When running the examples
+to explicitly set ``metadata_group: nnpdf31_process``, or else the
+prescriptions for scale variations will not vary scales coherently for data within
+the same process type, as usually desired, but rather for data within the same experiment. When running the examples
 in :ref:`theory-covmat-examples`, it should be obvious if this has been set
 because the outputs will be plots grouped by experiment rather than by process
 type. However, care must be taken when using the theory covariance matrix but
@@ -323,12 +322,12 @@ not plotting anything, since the aforementioned check is not relevant. For
 example, if you only want to produce a 𝞆² you must be careful to set the
 ``metadata_group`` key as above.
 
-Runcards which request actions that have been renamed will not work anymore.
-Generally actions which were previously named ``experiments_*`` have been
-renamed to highlight that they work with more general groupings.
+Runcards that request actions that have been renamed will not work anymore.
+Generally, actions that were previously named ``experiments_*`` have been
+renamed to highlight the fact that they work with more general groupings.
 
 Currently ``n3fit``, as well as the ``pseudodata``, ``closuretest`` and ``chi2grids``
-modules have not been updated to use ``dataset_inputs`` yet and so require
-``experiments`` to be specified in the runcard. The c++ fitting code ``nnfit``
+modules have not been updated to use ``dataset_inputs`` and so require
+``experiments`` to be specified in the runcard. The C++ fitting code ``nnfit``
 is not scheduled to be updated to use ``dataset_inputs`` and so will always
 require ``experiments`` to be specified in the runcard.
