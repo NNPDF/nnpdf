@@ -230,7 +230,8 @@ runcard and applying a default value, use the namespace key
 ``processed_metadata_group``. We can use this key in reports and actions alike
 for example to give sensible titles/section headings e.g:
 
-`` code:: yaml
+.. code:: yaml
+
     template_text: |
      # chi2 grouped by {processed_metadata_group}
      {@dataspecs_groups_chi2_table@}
