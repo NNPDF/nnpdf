@@ -32,14 +32,16 @@ def test_distribution_veto(arr, threshold):
 @pytest.mark.filterwarnings('ignore')
 @given(lists(fitinfos, min_size=1))
 def test_determine_vetoes(fitinfos):
-    vetoes = determine_vetoes(fitinfos)
+    chi2_threshold = 4.0
+    arclength_threshold = 4.0
+    vetoes = determine_vetoes(fitinfos, chi2_threshold, arclength_threshold)
     assert np.all(vetoes['Positivity'] == np.array([info.is_positive for info in fitinfos]))
     tot = vetoes['Total']
     assert all(np.all(tot & val == tot) for val in vetoes.values())
-    single_replica_veto = determine_vetoes([fitinfos[0]])
+    single_replica_veto = determine_vetoes([fitinfos[0]], chi2_threshold, arclength_threshold)
     assert single_replica_veto['Total'][0] == single_replica_veto['Positivity'][0]
     # distribution_vetoes applied a second time should veto nothing
     if sum(tot) > 0:
         passing_fitinfos = list(itertools.compress(fitinfos, tot))
-        second_vetoes = determine_vetoes(passing_fitinfos)
+        second_vetoes = determine_vetoes(passing_fitinfos, chi2_threshold, arclength_threshold)
         assert sum(vetoes["Total"]) == sum(second_vetoes["Total"])
