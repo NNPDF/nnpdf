@@ -14,3 +14,8 @@ def test_basic_commondata_loading():
     # Test systype loading
     assert res.nsys == 25
     assert isinstance(res.systype_table, pd.DataFrame)
+    # Test a dataset with no systematics
+    emptysyscd = l.check_commondata(setname="CMSWCHARMRAT")
+    emptysysres = load_commondata(emptysyscd)
+    assert emptysysres.nsys == 0
+    assert emptysysres.systype_table.empty is True 
