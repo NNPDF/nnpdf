@@ -9,6 +9,7 @@ serves as a proof of concept.
 import numpy as np
 import pandas as pd
 
+from validphys.core import peek_commondata_metadata
 from validphys.coredata import CommonData
 
 def load_commondata(spec):
@@ -18,7 +19,7 @@ def load_commondata(spec):
     """
     commondatafile = spec.datafile
     # Getting set name from commondata file name
-    setname = commondatafile.name[:-4] # removing the .dat suffix
+    setname = commondatafile.name[5:-4] # DATA prefix and .dat suffix
     systypefile = spec.sysfile
 
     commondata = parse_commondata(commondatafile, systypefile, setname)
@@ -51,15 +52,23 @@ def parse_commondata(commondatafile, systypefile, setname):
         commondataheader += [f"sys.add.{i+1}", f"sys.mult.{i+1}"]
     commondatatable.columns = commondataheader
     commondatatable.set_index("entry", inplace=True)
-    
+    ndata = len(commondatatable)
+    commondataproc = commondatatable["process"][1]
+     # Check for consistency with commondata metadata
+    cdmetadata =  peek_commondata_metadata(commondatafile)
+    assert setname == cdmetadata.name and \
+        nsys == cdmetadata.nsys and ndata == cdmetadata.ndata \
+        and commondataproc == cdmetadata.process_type, \
+            "Commondata table information does not match metadata"
+
     # Now parse the systype file
     systypetable = parse_systypes(systypefile, setname)
 
     # Populate CommonData object
     return CommonData(
         setname=setname,
-        ndata=len(commondatatable),
-        commondataproc=commondatatable["process"][1],
+        ndata=ndata,
+        commondataproc=commondataproc,
         nkin=3,
         nsys=nsys,
         commondata_table=commondatatable,
