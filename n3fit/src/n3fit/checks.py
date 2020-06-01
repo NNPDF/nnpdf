@@ -2,12 +2,21 @@
 This module contains checks to be perform by n3fit on the input
 """
 import logging
-from reportengine.checks import make_argcheck, CheckError
+from reportengine.checks import make_argcheck, CheckError, check_not_empty
 from validphys.pdfbases import check_basis
 
-LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
+
+NN_PARAMETERS = ["nodes_per_layer", "optimizer", "activation_per_layer", "epochs"]
 
 # Checks on the NN parameters
+#@check_not_empty("nodes_per_layer")
+def check_existing_parameters(parameters):
+    """ Check that non-optional parameters are defined """
+    for param_name in NN_PARAMETERS:
+        if param_name not in parameters:
+            raise CheckError(f"Missing {param_name} parameter in the runcard")
+
 def check_consistent_layers(parameters):
     """ Checks that all layers have an activation function defined """
     npl = len(parameters["nodes_per_layer"])
@@ -76,6 +85,7 @@ def check_dropout(parameters):
 def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
     parameters = fitting["parameters"]
+    check_existing_parameters(parameters)
     check_consistent_layers(parameters)
     check_basis_with_layers(fitting, parameters)
     check_stopping(parameters)
@@ -91,7 +101,7 @@ def check_hyperopt_architecture(architecture):
     - No 'min' is greater than its corresponding 'max'
     """
     if architecture is None:
-        return None
+        return
     initializers = architecture.get("initializers")
     if initializers is not None:
         for init in initializers:
@@ -116,7 +126,7 @@ def check_kfold_options(kfold):
     """ Warns the user about potential bugs on the kfold setup"""
     threshold = kfold.get("threshold", 5.0)
     if threshold < 2.0:
-        LOGGER.warning("The kfolding loss threshold might be too low: %f", threshold)
+        log.warning("The kfolding loss threshold might be too low: %f", threshold)
 
 def check_correct_partitions(kfold, experiments):
     """ Ensures that all experimennts in all partitions
@@ -174,4 +184,4 @@ def check_consistent_basis(fitting):
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
         flavs.append(name)
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
-    res = check_basis(fitbasis, flavs)
+    check_basis(fitbasis, flavs)
