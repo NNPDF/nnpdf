@@ -36,8 +36,8 @@ def check_stopping(parameters):
     stopping patience as a ratio between 0 and 1
     and positive number of epochs
     """
-    spt = parameters.get("stopping_patience", 1.0)
-    if not 0.0 <= spt <= 1.0:
+    spt = parameters.get("stopping_patience")
+    if spt is not None and not 0.0 <= spt <= 1.0:
         raise CheckError(f"The stopping_patience must be between 0 and 1, got: {spt}")
     epochs = parameters["epochs"]
     if epochs < 1:
@@ -83,8 +83,8 @@ def check_initializer(initializer):
 
 def check_dropout(parameters):
     """ Checks the dropout setup (positive and smaller than 1.0) """
-    dropout = parameters.get("dropout", 0.0)
-    if not 0.0 <= dropout <= 1.0:
+    dropout = parameters.get("dropout")
+    if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
 
@@ -96,6 +96,7 @@ def wrapper_check_NN(fitting):
     check_consistent_layers(parameters)
     check_basis_with_layers(fitting, parameters)
     check_stopping(parameters)
+    check_dropout(parameters)
     # Checks that need to import the backend (and thus take longer) should be done last
     #     check_optimizer(parameters["optimizer"]) # this check is waiting for PR 783
     check_initializer(parameters["initializer"])
@@ -114,25 +115,25 @@ def check_hyperopt_architecture(architecture):
         for init in initializers:
             check_initializer(init)
     # Check that max-min are correct
-    dropout = architecture.get("max_drop", 0.0)
-    if not 0.0 <= dropout <= 1.0:
+    dropout = architecture.get("max_drop")
+    if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"max_drop must be between 0 and 1, got: {dropout}")
     min_u = architecture.get("min_units", 1)
-    if min_u < 0:
+    # Set a minimum number of units in case none is defined to check later if the maximum is sane
+    if min_u <= 0:
         raise CheckError(
             f"All layers must have at least 1 unit, got min_units: {min_u}"
         )
-    max_u = architecture.get("max_units", 1)
-    if max_u < min_u:
-        raise CheckError(
-            f"The maximum number of units must be bigger than the minimum, got: ({min_u}, {max_u})"
-        )
+    max_u = architecture.get("max_units")
+    if max_u is not None and max_u < min_u:
+        raise CheckError("The maximum number of units must be bigger than the minimum"
+                f" but got min: {min_u}, max: {max_u}")
 
 
 def check_kfold_options(kfold):
     """ Warns the user about potential bugs on the kfold setup"""
-    threshold = kfold.get("threshold", 5.0)
-    if threshold < 2.0:
+    threshold = kfold.get("threshold")
+    if threshold is not None and threshold < 2.0:
         log.warning("The kfolding loss threshold might be too low: %f", threshold)
 
 
