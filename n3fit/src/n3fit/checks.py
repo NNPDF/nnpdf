@@ -2,20 +2,24 @@
 This module contains checks to be perform by n3fit on the input
 """
 import logging
-from reportengine.checks import make_argcheck, CheckError, check_not_empty
+from reportengine.checks import make_argcheck, CheckError
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
 
-NN_PARAMETERS = ["nodes_per_layer", "optimizer", "activation_per_layer", "epochs"]
+NN_PARAMETERS = ["nodes_per_layer", "optimizer", "activation_per_layer"]
 
 # Checks on the NN parameters
-#@check_not_empty("nodes_per_layer")
 def check_existing_parameters(parameters):
-    """ Check that non-optional parameters are defined """
+    """ Check that non-optional parameters are defined and are not empty """
     for param_name in NN_PARAMETERS:
-        if param_name not in parameters:
+        if param_name in parameters:
+            val = parameters[param_name]
+            if len(val) == 0:
+                raise CheckError(f"The parameter {param_name} cannot be empty")
+        else:
             raise CheckError(f"Missing {param_name} parameter in the runcard")
+
 
 def check_consistent_layers(parameters):
     """ Checks that all layers have an activation function defined """
@@ -45,8 +49,11 @@ def check_basis_with_layers(fitting, parameters):
     number_of_flavours = len(fitting["basis"])
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
-        raise CheckError(f"The number of nodes in the last layer ({last_layer}) does not"
-                " match the number of flavours: ({number_of_flavours})")
+        raise CheckError(
+            f"The number of nodes in the last layer ({last_layer}) does not"
+            " match the number of flavours: ({number_of_flavours})"
+        )
+
 
 def check_optimizer(optimizer_dict):
     """ Checks whether the optimizer setup is valid """
@@ -128,6 +135,7 @@ def check_kfold_options(kfold):
     if threshold < 2.0:
         log.warning("The kfolding loss threshold might be too low: %f", threshold)
 
+
 def check_correct_partitions(kfold, experiments):
     """ Ensures that all experimennts in all partitions
     are included in  the fit definition """
@@ -135,11 +143,13 @@ def check_correct_partitions(kfold, experiments):
     datasets = []
     for exp in experiments:
         datasets += [i.name for i in exp.datasets]
-    for partition in kfold['partitions']:
-        fold_sets = partition['datasets']
+    for partition in kfold["partitions"]:
+        fold_sets = partition["datasets"]
         for dset in fold_sets:
             if dset not in datasets:
-                raise CheckError(f"The k-fold defined dataset {dset} is not part of the fit")
+                raise CheckError(
+                    f"The k-fold defined dataset {dset} is not part of the fit"
+                )
 
 
 @make_argcheck
