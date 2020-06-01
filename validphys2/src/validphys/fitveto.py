@@ -5,8 +5,8 @@ Module for the determination of passing fit replicas.
 
 Current active vetoes:
    Positivity - Replicas with FitInfo.is_positive == False
-   ChiSquared - Replicas with ChiSquared > NSIGMA_DISCARD*StandardDev + Average
-   ArclengthX - Replicas with ArcLengthX > NSIGMA_DISCARD*StandardDev + Average
+   ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
+   ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
 """
 
 import json
@@ -14,11 +14,6 @@ import logging
 import numpy as np
 
 log = logging.getLogger(__name__)
-
-# Threshold for distribution vetos
-NSIGMA_DISCARD_ARCLENGTH = 4
-NSIGMA_DISCARD_CHI2 = 4
-
 
 
 def distribution_veto(dist, prior_mask, nsigma_threshold):
@@ -41,7 +36,7 @@ def distribution_veto(dist, prior_mask, nsigma_threshold):
     return (dist - average_pass) <= nsigma_threshold * stderr_pass
 
 
-def determine_vetoes(fitinfos: list):
+def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float):
     """ Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
@@ -50,11 +45,11 @@ def determine_vetoes(fitinfos: list):
     # Setup distributions to veto upon: Make a dictionary {name: (values, threshold)}, where
     # values and threshold are to be filtered recusively as per ``distribution_veto``.
     # TODO ensure that all replicas have the same amount of arclengths
-    distributions = {"ChiSquared": ([i.chi2 for i in fitinfos], NSIGMA_DISCARD_CHI2)}
+    distributions = {"ChiSquared": ([i.chi2 for i in fitinfos], nsigma_discard_chi2)}
     for i in range(0, len(fitinfos[0].arclengths)):
         distributions["ArcLength_" + str(i)] = (
             [j.arclengths[i] for j in fitinfos],
-            NSIGMA_DISCARD_ARCLENGTH,
+            nsigma_discard_arclength,
         )
 
     # Positivity veto

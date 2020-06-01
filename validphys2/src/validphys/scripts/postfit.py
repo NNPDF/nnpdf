@@ -34,6 +34,10 @@ log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(colors.ColorHandler())
 
+# Default thresholds for distribution vetos in units of standard deivations
+CHI2_THRESHOLD_DEFAULT = 4.0
+ARCLENGTH_THRESHOLD_DEFAULT = 4.0
+
 
 def splash():
     print("                                                        ")
@@ -61,6 +65,15 @@ def set_lhapdf_info(info_path, nrep):
         f.truncate()
 
 
+def convertable_to_float(x):
+    """Checks whether the argument can be converted to a float."""
+    try:
+        x = float(x)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{x} cannot be converted to a float.")
+    return x
+
+
 class PostfitError(Exception):
     """Exception raised when postfit cannot suceed and knows why"""
     pass
@@ -69,7 +82,7 @@ class FatalPostfitError(Exception):
     """Excption raised when some corrupted input is detected"""
     pass
 
-def filter_replicas(postfit_path, nnfit_path, fitname):
+def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold):
     """ Find the paths of all replicas passing the standard NNPDF fit vetoes
     as defined in fitveto.py. Returns a list of the replica directories that pass."""
     # This glob defines what is considered a valid replica
@@ -91,7 +104,7 @@ def filter_replicas(postfit_path, nnfit_path, fitname):
             raise FatalPostfitError(
                 f"Corrupted replica replica at {path}. "
                 f"Error when loading replica information:\n {e}") from e
-    fit_vetoes = fitveto.determine_vetoes(fitinfo)
+    fit_vetoes = fitveto.determine_vetoes(fitinfo, chi2_threshold, arclength_threshold)
     fitveto.save_vetoes(fit_vetoes, postfit_path / 'veto_count.json')
 
     for key in fit_vetoes:
@@ -100,7 +113,7 @@ def filter_replicas(postfit_path, nnfit_path, fitname):
     return passing_paths
 
 
-def postfit(results: str, nrep: int):
+def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
 
@@ -132,7 +145,7 @@ def postfit(results: str, nrep: int):
     log.addHandler(postfitlog)
 
     # Perform postfit selection
-    passing_paths = filter_replicas(postfit_path, nnfit_path, fitname)
+    passing_paths = filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold)
     if len(passing_paths) < nrep:
         raise PostfitError("Number of requested replicas is too large")
     # Select the first nrep passing replicas
@@ -187,6 +200,22 @@ def main():
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
     parser.add_argument('result_path', help="Folder containig the "
                                             "results of the fit")
+    parser.add_argument(
+        '--chi2_threshold',
+        nargs='?',
+        default=CHI2_THRESHOLD_DEFAULT,
+        help="The number of standard deviations in the chi2, calculated over PDF replicas, "
+             " above which the replicas are cut. The default is four.",
+        type=convertable_to_float,
+    )
+    parser.add_argument(
+        '--arclength_threshold',
+        nargs='?',
+        default=ARCLENGTH_THRESHOLD_DEFAULT,
+        help="The number of standard deviations in the arclength, calculated over PDF replicas, "
+             " above which the replicas are cut. The default is four.",
+        type=convertable_to_float,
+    )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
     if args.debug:
@@ -194,7 +223,7 @@ def main():
     else:
         log.setLevel(logging.INFO)
     try:
-        postfit(args.result_path, args.nrep)
+        postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold)
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
         sys.exit(1)
