@@ -31,15 +31,13 @@ def check_stopping(parameters):
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
 
 
-def check_basis_and_layers_are_consistent(fitting, parameters):
+def check_basis_with_layers(fitting, parameters):
     """ Check that the last layer matches the number of flavours defined in the runcard"""
     number_of_flavours = len(fitting["basis"])
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
-        raise CheckError(
-            f"The number of nodes of the last layer ({last_layer}) does not much the number of flavours ({number_of_flavours})"
-        )
-
+        raise CheckError(f"The number of nodes in the last layer ({last_layer}) does not"
+                " match the number of flavours: ({number_of_flavours})")
 
 def check_optimizer(optimizer_dict):
     """ Checks whether the optimizer setup is valid """
@@ -50,7 +48,7 @@ def check_optimizer(optimizer_dict):
     accepted_optimizers = MetaModel.accepted_optimizers
     optimizer_data = accepted_optimizers.get(name)
     if optimizer_data is None:
-        raise CheckError(f"Optimizer {name} not accepted by {MetaModel}")
+        raise CheckError(f"Optimizer {name} not accepted by MetaModel")
     # Get the dictionary of accepted parameters
     data = optimizer_data[1]
     for key in optimizer_dict.keys():
@@ -79,7 +77,7 @@ def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
     parameters = fitting["parameters"]
     check_consistent_layers(parameters)
-    check_basis_and_layers_are_consistent(fitting, parameters)
+    check_basis_with_layers(fitting, parameters)
     check_stopping(parameters)
     # Checks that need to import the backend (and thus take longer) should be done last
     #     check_optimizer(parameters["optimizer"]) # this check is waiting for PR 783
