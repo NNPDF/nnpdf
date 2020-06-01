@@ -44,7 +44,6 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondatatable = pd.read_csv(commondatafile, sep=r'\s+', skiprows=1, header=None)
     # Remove NaNs
     # TODO: replace commondata files with bad formatting
-    commondatatable.dropna(axis="columns", inplace=True)
     # Build header
     commondataheader = ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
     nsys  = (commondatatable.shape[1] - len(commondataheader)) // 2
