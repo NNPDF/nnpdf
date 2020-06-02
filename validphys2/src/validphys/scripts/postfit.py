@@ -29,14 +29,11 @@ from validphys import lhio
 from validphys import fitdata
 from validphys import fitveto
 from validphys.core import PDF
+from validphys.fitveto import NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2
 
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(colors.ColorHandler())
-
-# Default thresholds for distribution vetos in units of standard deivations
-CHI2_THRESHOLD_DEFAULT = 4.0
-ARCLENGTH_THRESHOLD_DEFAULT = 4.0
 
 
 def splash():
@@ -203,7 +200,7 @@ def main():
     parser.add_argument(
         '--chi2_threshold',
         nargs='?',
-        default=CHI2_THRESHOLD_DEFAULT,
+        default=NSIGMA_DISCARD_CHI2,
         help="The number of standard deviations in the chi2, calculated over PDF replicas, "
              " above which the replicas are cut. The default is four.",
         type=convertable_to_float,
@@ -211,7 +208,7 @@ def main():
     parser.add_argument(
         '--arclength_threshold',
         nargs='?',
-        default=ARCLENGTH_THRESHOLD_DEFAULT,
+        default=NSIGMA_DISCARD_ARCLENGTH,
         help="The number of standard deviations in the arclength, calculated over PDF replicas, "
              " above which the replicas are cut. The default is four.",
         type=convertable_to_float,
