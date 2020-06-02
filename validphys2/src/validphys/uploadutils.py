@@ -12,10 +12,12 @@ import sys
 import contextlib
 import pathlib
 import tempfile
+import paramiko
 from urllib.parse import urljoin
 
 from reportengine.compat import yaml
 from reportengine.colors import t
+from reportengine.configparser import ConfigError
 
 from NNPDF import get_profile_path
 
@@ -87,18 +89,31 @@ class Uploader():
             "Please make sure it is installed.")
 
 
-    def upload_output(self, output_path):
+    def upload_output(self, new_output_path, old_output_path, force):
         """Rsync ``output_path`` to the server and print the resulting URL. If
         specific_file is given"""
         #Set the date to now
-        pathlib.Path(output_path).touch()
-        randname = self.get_relative_path(output_path)
+        pathlib.Path(new_output_path).touch()
+        randname = self.get_relative_path(new_output_path)
         newdir = self.target_dir + randname
 
-        rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
-                         f"{output_path}/", f'{self.upload_host}:{newdir}')
+        # Get list of fits on the server
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        username, hostname = self.upload_host.split("@")
+        ssh.connect(hostname=hostname, username=username)
+        sftp = ssh.open_sftp()
+        fits = sftp.listdir(newdir)
 
-        log.info(f"Uploading output ({output_path}) to {self.upload_host}")
+        if f"{old_output_path}.tar.gz" in fits and force == False:
+            raise ConfigError("A fit with the same name already exists on the "
+                              "server. To overwrite this fit use the --force "
+                              "flag, as in `vp-uploadfit <fitname> --force`.")
+
+        rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
+                         f"{new_output_path}/", f'{self.upload_host}:{newdir}')
+
+        log.info(f"Uploading output ({new_output_path}) to {self.upload_host}")
         try:
             subprocess.run(rsync_command, check=True)
         except subprocess.CalledProcessError as e:
@@ -119,20 +134,20 @@ class Uploader():
         self.check_auth()
 
     @contextlib.contextmanager
-    def upload_context(self, output):
+    def upload_context(self, output, force):
         """Before entering the context, check that uploading is feasible.
         On exiting the context, upload output.
         """
         self.check_upload()
         yield
-        res = self.upload_output(output)
+        res = self.upload_output(output, force)
         self._print_output(res)
 
     @contextlib.contextmanager
-    def upload_or_exit_context(self, output):
+    def upload_or_exit_context(self, output, force):
         """Like upload context, but log and sys.exit on error"""
         try:
-            with self.upload_context(output):
+            with self.upload_context(output, force):
                 yield
         except BadSSH as e:
             log.error(e)
@@ -191,17 +206,18 @@ class FitUploader(FileUploader):
         return tempdir, archive_path_without_extension
 
 
-    def upload_output(self, output_path):
+    def upload_output(self, output_path, force):
+        old_out = output_path
         output_path = pathlib.Path(output_path)
         new_out, name = self.compress(output_path)
-        super().upload_output(new_out)
+        super().upload_output(new_out, old_out, force)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
 
     @contextlib.contextmanager
-    def upload_context(self, output_path):
+    def upload_context(self, output_path, force):
         self.check_upload()
         yield
-        res = self.upload_output(output_path)
+        res = self.upload_output(output_path, force)
         self._print_output(self.root_url, res)
