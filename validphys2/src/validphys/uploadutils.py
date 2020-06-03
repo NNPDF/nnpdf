@@ -101,7 +101,7 @@ class Uploader():
         l = RemoteLoader()
         fits = l.downloadable_fits
 
-        if old_output_path in fits and force == False:
+        if old_output_path in fits and not force:
             raise ConfigError("A fit with the same name already exists on the "
                               "server. To overwrite this fit use the --force "
                               "flag, as in `vp-uploadfit <fitname> --force`.")
