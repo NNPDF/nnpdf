@@ -12,6 +12,7 @@ import sys
 import contextlib
 import pathlib
 import tempfile
+import os
 from urllib.parse import urljoin
 
 from reportengine.compat import yaml
@@ -88,7 +89,7 @@ class Uploader():
             "Please make sure it is installed.")
 
 
-    def upload_output(self, new_output_path, old_output_path, force):
+    def upload_output(self, new_output_path, output_name, force):
         """Rsync ``output_path`` to the server and print the resulting URL. If
         specific_file is given"""
         #Set the date to now
@@ -100,7 +101,7 @@ class Uploader():
         l = RemoteLoader()
         fits = l.downloadable_fits
 
-        if old_output_path in fits and not force:
+        if output_name in fits and not force:
             raise FileExistsError("A fit with the same name already exists on "
                                   "the server. To overwrite this fit use the "
                                   "--force flag, as in `vp-uploadfit <fitname> "
@@ -203,10 +204,12 @@ class FitUploader(FileUploader):
 
 
     def upload_output(self, output_path, force):
-        old_out = output_path
+        # Get name of folder, i.e. fit, to upload
+        # Use normpath to remove trailing slash if present
+        fit_name = os.path.basename(os.path.normpath(output_path))
         output_path = pathlib.Path(output_path)
         new_out, name = self.compress(output_path)
-        super().upload_output(new_out, old_out, force)
+        super().upload_output(new_out, fit_name, force)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
