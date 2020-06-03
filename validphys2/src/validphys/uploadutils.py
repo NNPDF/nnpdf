@@ -12,12 +12,12 @@ import sys
 import contextlib
 import pathlib
 import tempfile
-import paramiko
 from urllib.parse import urljoin
 
 from reportengine.compat import yaml
 from reportengine.colors import t
 from reportengine.configparser import ConfigError
+from validphys.loader import RemoteLoader
 
 from NNPDF import get_profile_path
 
@@ -97,15 +97,11 @@ class Uploader():
         randname = self.get_relative_path(new_output_path)
         newdir = self.target_dir + randname
 
-        # Get list of fits on the server
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        username, hostname = self.upload_host.split("@")
-        ssh.connect(hostname=hostname, username=username)
-        sftp = ssh.open_sftp()
-        fits = sftp.listdir(newdir)
+        # Get list of the available fits on the server
+        l = RemoteLoader()
+        fits = l.downloadable_fits
 
-        if f"{old_output_path}.tar.gz" in fits and force == False:
+        if old_output_path in fits and force == False:
             raise ConfigError("A fit with the same name already exists on the "
                               "server. To overwrite this fit use the --force "
                               "flag, as in `vp-uploadfit <fitname> --force`.")
