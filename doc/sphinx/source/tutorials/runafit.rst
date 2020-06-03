@@ -30,7 +30,7 @@ to n. (You can change the o)
 <number_of_replicas> <runcard_folder>` to finalize the PDF set by applying post
 selection criteria. This will produce a set of :code:`<number_of_replicas>+1`
 replicas. Note that the standard behaviour of :code:`postfit` may be modified by
-using the :code:`--chi2_threshold` and :code:`--arclength_threshold` flags. As
+using the :code:`--chi2-threshold` and :code:`--arclength-threshold` flags. As
 their names suggest, these set the thresholds for the :math:`\chi^2` and the
 arclength, respectively. They are in units of the respective standard deviations
 over replicas, above which the replicas are vetoed by :code:`postfit`. They are

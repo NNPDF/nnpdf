@@ -189,7 +189,7 @@ def main():
     parser.add_argument('result_path', help="Folder containig the "
                                             "results of the fit")
     parser.add_argument(
-        '--chi2_threshold',
+        '--chi2-threshold',
         nargs='?',
         default=NSIGMA_DISCARD_CHI2,
         help="The number of standard deviations in the chi2, calculated over PDF replicas, "
@@ -197,7 +197,7 @@ def main():
         type=float,
     )
     parser.add_argument(
-        '--arclength_threshold',
+        '--arclength-threshold',
         nargs='?',
         default=NSIGMA_DISCARD_ARCLENGTH,
         help="The number of standard deviations in the arclength, calculated over PDF replicas, "
