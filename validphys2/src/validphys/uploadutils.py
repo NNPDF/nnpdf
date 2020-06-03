@@ -97,15 +97,16 @@ class Uploader():
         randname = self.get_relative_path(new_output_path)
         newdir = self.target_dir + randname
 
-        # Get list of the available fits on the server
-        l = RemoteLoader()
-        fits = l.downloadable_fits
+        if not force:
+            # Get list of the available fits on the server
+            l = RemoteLoader()
+            fits = l.downloadable_fits
 
-        if output_name in fits and not force:
-            raise FileExistsError("A fit with the same name already exists on "
-                                  "the server. To overwrite this fit use the "
-                                  "--force flag, as in `vp-uploadfit <fitname> "
-                                  "--force`.")
+            if output_name in fits:
+                raise FileExistsError("A fit with the same name already exists on "
+                                      "the server. To overwrite this fit use the "
+                                      "--force flag, as in `vp-uploadfit <fitname> "
+                                      "--force`.")
 
         rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
                          f"{new_output_path}/", f'{self.upload_host}:{newdir}')
