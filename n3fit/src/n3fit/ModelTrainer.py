@@ -15,7 +15,12 @@ from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
-HYPER_THRESHOLD = 3.0
+
+# Threshold defaults
+# Any partition with a chi2 over the threshold will discard its hyperparameters
+HYPER_THRESHOLD = 5.0
+# The stopping will not consider any run where the validation is not under this threshold
+THRESHOLD_CHI2 = 10.0
 
 
 def _fold_data(all_data, folds, k_idx, negate_fold=False):
@@ -712,6 +717,7 @@ class ModelTrainer:
                 self.all_info,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
+                threshold_chi2=params.get("threshold_chi2", THRESHOLD_CHI2),
                 save_weights_each=self.save_weights_each,
             )
 

@@ -15,6 +15,9 @@ import os
 
 # this is needed for Travis to pass the test in mac
 os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
+# make sure the GPU is not used
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 import pytest
 import shutil
 import pathlib
