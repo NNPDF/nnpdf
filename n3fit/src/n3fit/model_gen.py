@@ -335,6 +335,7 @@ def pdfNN_layer_generator(
     initializer_name="glorot_normal",
     layer_type="dense",
     flav_info=None,
+    fitbasis='EVOL',
     out=14,
     seed=None,
     dropout=0.0,
@@ -501,7 +502,7 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info)
+    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
     
     # Apply preprocessing and basis
     def layer_fitbasis(x):

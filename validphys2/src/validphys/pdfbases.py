@@ -475,7 +475,7 @@ def rotation(flav_info, fitbasis):
         return mat.transpose()
 
     elif fitbasis == 'FLAVOUR':
-        sigma = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
+        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
         v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
         v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
         v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
@@ -494,7 +494,7 @@ def rotation(flav_info, fitbasis):
         cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 } 
         
-    flist = [sigma, g, v, v3, v8, t3, t8, cp]
+    flist = [sng, g, v, v3, v8, t3, t8, cp]
     
     evol_basis = False
     mat = []
