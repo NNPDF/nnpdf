@@ -470,9 +470,7 @@ def rotation(flav_info, fitbasis):
     If the input is already in the evolution basis it returns the identity.
     """
     if fitbasis == 'NN31IC':
-        mat = np.identity(8)
-        mat = np.asarray(mat).reshape(8,8)
-        return mat.transpose()
+        return np.identity(8)
 
     elif fitbasis == 'FLAVOUR':
         sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }

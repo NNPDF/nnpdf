@@ -335,7 +335,7 @@ def pdfNN_layer_generator(
     initializer_name="glorot_normal",
     layer_type="dense",
     flav_info=None,
-    fitbasis='EVOL',
+    fitbasis='NN31IC',
     out=14,
     seed=None,
     dropout=0.0,
