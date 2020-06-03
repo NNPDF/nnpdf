@@ -28,6 +28,7 @@ def observable_generator(
     positivity_multiplier=1.05,
     positivity_steps=300,
     kfolding=False,
+    integrability=False,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -170,10 +171,15 @@ def observable_generator(
             exp_result = experiment_layer(pdf_layer)
             return out_mask(exp_result)
 
+        if integrability:
+            loss = losses.l_integrability()
+        else:
+            loss = losses.l_positivity()    
+
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_positivity,
-            "loss_tr": losses.l_positivity(),
+            "loss_tr": loss,
             "experiment_xsize": full_nx,
         }
         return layer_info

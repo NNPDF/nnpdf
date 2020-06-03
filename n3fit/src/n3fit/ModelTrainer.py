@@ -423,6 +423,9 @@ class ModelTrainer:
 
         # Finally generate the positivity penalty
         for pos_dict in self.pos_info:
+            integ=False
+            if 'INTEG' in pos_dict["name"]:
+                integ=True
             if not self.mode_hyperopt:
                 log.info("Generating positivity penalty for %s", pos_dict["name"])
             pos_layer = model_gen.observable_generator(
@@ -430,6 +433,7 @@ class ModelTrainer:
                 positivity_initial=pos_initial,
                 positivity_multiplier=pos_multiplier,
                 kfolding=self.mode_hyperopt,
+                integrability=integ,
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
