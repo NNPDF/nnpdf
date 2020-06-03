@@ -62,15 +62,6 @@ def set_lhapdf_info(info_path, nrep):
         f.truncate()
 
 
-def convertable_to_float(x):
-    """Checks whether the argument can be converted to a float."""
-    try:
-        x = float(x)
-    except ValueError:
-        raise argparse.ArgumentTypeError(f"{x} cannot be converted to a float.")
-    return x
-
-
 class PostfitError(Exception):
     """Exception raised when postfit cannot suceed and knows why"""
     pass
@@ -203,7 +194,7 @@ def main():
         default=NSIGMA_DISCARD_CHI2,
         help="The number of standard deviations in the chi2, calculated over PDF replicas, "
              " above which the replicas are cut. The default is four.",
-        type=convertable_to_float,
+        type=float,
     )
     parser.add_argument(
         '--arclength_threshold',
@@ -211,7 +202,7 @@ def main():
         default=NSIGMA_DISCARD_ARCLENGTH,
         help="The number of standard deviations in the arclength, calculated over PDF replicas, "
              " above which the replicas are cut. The default is four.",
-        type=convertable_to_float,
+        type=float,
     )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
