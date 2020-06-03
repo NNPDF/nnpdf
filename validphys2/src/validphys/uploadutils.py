@@ -16,7 +16,6 @@ from urllib.parse import urljoin
 
 from reportengine.compat import yaml
 from reportengine.colors import t
-from reportengine.configparser import ConfigError
 from validphys.loader import RemoteLoader
 
 from NNPDF import get_profile_path
@@ -102,9 +101,10 @@ class Uploader():
         fits = l.downloadable_fits
 
         if old_output_path in fits and not force:
-            raise ConfigError("A fit with the same name already exists on the "
-                              "server. To overwrite this fit use the --force "
-                              "flag, as in `vp-uploadfit <fitname> --force`.")
+            raise FileExistsError("A fit with the same name already exists on "
+                                  "the server. To overwrite this fit use the "
+                                  "--force flag, as in `vp-uploadfit <fitname> "
+                                  "--force`.")
 
         rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
                          f"{new_output_path}/", f'{self.upload_host}:{newdir}')
