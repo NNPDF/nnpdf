@@ -88,29 +88,18 @@ class Uploader():
             "Please make sure it is installed.")
 
 
-    def upload_output(self, new_output_path, output_name, force):
+    def upload_output(self, output_path):
         """Rsync ``output_path`` to the server and print the resulting URL. If
         specific_file is given"""
         #Set the date to now
-        pathlib.Path(new_output_path).touch()
-        randname = self.get_relative_path(new_output_path)
+        pathlib.Path(output_path).touch()
+        randname = self.get_relative_path(output_path)
         newdir = self.target_dir + randname
 
-        if not force:
-            # Get list of the available fits on the server
-            l = RemoteLoader()
-            fits = l.downloadable_fits
-
-            if output_name in fits:
-                raise FileExistsError("A fit with the same name already exists on "
-                                      "the server. To overwrite this fit use the "
-                                      "--force flag, as in `vp-uploadfit <fitname> "
-                                      "--force`.")
-
         rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
-                         f"{new_output_path}/", f'{self.upload_host}:{newdir}')
+                         f"{output_path}/", f'{self.upload_host}:{newdir}')
 
-        log.info(f"Uploading output ({new_output_path}) to {self.upload_host}")
+        log.info(f"Uploading output ({output_path}) to {self.upload_host}")
         try:
             subprocess.run(rsync_command, check=True)
         except subprocess.CalledProcessError as e:
@@ -131,20 +120,20 @@ class Uploader():
         self.check_auth()
 
     @contextlib.contextmanager
-    def upload_context(self, output, force):
+    def upload_context(self, output):
         """Before entering the context, check that uploading is feasible.
         On exiting the context, upload output.
         """
         self.check_upload()
         yield
-        res = self.upload_output(output, force)
+        res = self.upload_output(output)
         self._print_output(res)
 
     @contextlib.contextmanager
-    def upload_or_exit_context(self, output, force):
+    def upload_or_exit_context(self, output):
         """Like upload context, but log and sys.exit on error"""
         try:
-            with self.upload_context(output, force):
+            with self.upload_context(output):
                 yield
         except BadSSH as e:
             log.error(e)
@@ -185,6 +174,18 @@ class FitUploader(FileUploader):
     def get_relative_path(self, output_path=None):
         return ''
 
+    def check_fit_exists(self, fit_name):
+        """Check whether the fit already exists on the server."""
+        # Get list of the available fits on the server
+        l = RemoteLoader()
+        fits = l.downloadable_fits
+
+        if fit_name in fits:
+            raise FileExistsError("A fit with the same name already exists on "
+                                  "the server. To overwrite this fit use the "
+                                  "--force flag, as in `vp-uploadfit <fitname> "
+                                  "--force`.")
+
     def compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
         #make_archive fails if we give it relative paths for some reason
@@ -207,7 +208,11 @@ class FitUploader(FileUploader):
         output_path = pathlib.Path(output_path)
         fit_name = output_path.name
         new_out, name = self.compress(output_path)
-        super().upload_output(new_out, fit_name, force)
+
+        if not force:
+            self.check_fit_exists(fit_name)
+
+        super().upload_output(new_out)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
@@ -218,3 +223,12 @@ class FitUploader(FileUploader):
         yield
         res = self.upload_output(output_path, force)
         self._print_output(self.root_url, res)
+
+    @contextlib.contextmanager
+    def upload_or_exit_context(self, output, force):
+        try:
+            with self.upload_context(output, force):
+                yield
+        except BadSSH as e:
+            log.error(e)
+            sys.exit()
