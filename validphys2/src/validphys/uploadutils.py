@@ -12,7 +12,6 @@ import sys
 import contextlib
 import pathlib
 import tempfile
-import os
 from urllib.parse import urljoin
 
 from reportengine.compat import yaml
@@ -205,10 +204,8 @@ class FitUploader(FileUploader):
 
 
     def upload_output(self, output_path, force):
-        # Get name of folder, i.e. fit, to upload
-        # Use normpath to remove trailing slash if present
-        fit_name = os.path.basename(os.path.normpath(output_path))
         output_path = pathlib.Path(output_path)
+        fit_name = output_path.name
         new_out, name = self.compress(output_path)
         super().upload_output(new_out, fit_name, force)
 
