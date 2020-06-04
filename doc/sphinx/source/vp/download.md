@@ -81,6 +81,10 @@ Theories
     example for using an existing file instead of computing it.
 ```
 
+```eval_rst
+.. _vp-get:
+```
+
 The `vp-get` tool
 -----------------
 
