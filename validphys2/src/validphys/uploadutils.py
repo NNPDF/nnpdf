@@ -207,11 +207,11 @@ class FitUploader(FileUploader):
     def upload_output(self, output_path, force):
         output_path = pathlib.Path(output_path)
         fit_name = output_path.name
-        new_out, name = self.compress(output_path)
 
         if not force:
             self.check_fit_exists(fit_name)
 
+        new_out, name = self.compress(output_path)
         super().upload_output(new_out)
 
         shutil.rmtree(new_out)
