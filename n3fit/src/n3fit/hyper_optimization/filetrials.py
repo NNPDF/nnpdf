@@ -24,7 +24,7 @@ def space_eval_trial(space, trial):
 
     # Arguments:
         - `space`: the dictionary containing the hyperopt space samplers we pass
-                   to the hyperparametizable function
+                   to the hyperparametrizable function
         - `trial`: trial dictionary. This is a dictionary containing (among other things)
                    the list of parameters that were tried for this iteration of hyperopt
 

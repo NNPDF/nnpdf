@@ -27,7 +27,6 @@ def observable_generator(
     positivity_initial=None,
     positivity_multiplier=1.05,
     positivity_steps=300,
-    kfolding=False,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -93,7 +92,7 @@ def observable_generator(
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
         obs_layer = Obs_Layer(
-            dataset_dict["fktables"], operation_name, name=f"ol_{dataset_name}"
+            dataset_dict["fktables"], operation_name, name=f"dat_{dataset_name}"
         )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
@@ -107,23 +106,13 @@ def observable_generator(
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
-        # Create a mask of ones for kfolding
-        if kfolding:
-            mask_one = Mask(
-                bool_mask=np.ones(ndata, dtype=np.bool),
-                name=f"{dataset_name}_mask",
-                c=1.0,
-                axis=1,  # the ndata dimension
-            )
-        else:
-            mask_one = None
-        model_obs.append((obs_layer, mask_one))
+        model_obs.append(obs_layer)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
     concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
 
     # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(pdf):
+    def experiment_layer(pdf, datasets_out=None):
         output_layers = []
         # First split the pdf layer into the different datasets if needed
         if len(dataset_xsizes) > 1:
@@ -137,10 +126,11 @@ def observable_generator(
         else:
             split_pdf = [pdf]
         # every obs gets its share of the split
-        for partial_pdf, (obs, mask) in zip(split_pdf, model_obs):
+        for partial_pdf, obs in zip(split_pdf, model_obs):
             obs_output = obs(partial_pdf)
-            if mask:
-                obs_output = mask(obs_output)
+            if datasets_out and obs.name[4:] in datasets_out:
+                mask_out = Mask(c=0.0, name=f"zero_{obs.name}")
+                obs_output = mask_out(obs_output)
             output_layers.append(obs_output)
         # Concatenate all datasets as experiments are one single entity if needed
         if len(output_layers) > 1:
@@ -166,7 +156,7 @@ def observable_generator(
             unbatch=True,
         )
 
-        def out_positivity(pdf_layer):
+        def out_positivity(pdf_layer, datasets_out=None):
             exp_result = experiment_layer(pdf_layer)
             return out_mask(exp_result)
 
@@ -202,14 +192,14 @@ def observable_generator(
         loss_vl = losses.l_invcovmat(invcovmat_vl)
     loss = losses.l_invcovmat(invcovmat)
 
-    def out_tr(pdf_layer):
-        exp_result = experiment_layer(pdf_layer)
+    def out_tr(pdf_layer, datasets_out=None):
+        exp_result = experiment_layer(pdf_layer, datasets_out=datasets_out)
         if obsrot is not None:
             exp_result = obsrot(exp_result)
         return out_tr_mask(exp_result)
 
-    def out_vl(pdf_layer):
-        exp_result = experiment_layer(pdf_layer)
+    def out_vl(pdf_layer, datasets_out=None):
+        exp_result = experiment_layer(pdf_layer, datasets_out=datasets_out)
         if obsrot is not None:
             exp_result = obsrot(exp_result)
         return out_vl_mask(exp_result)
@@ -502,7 +492,7 @@ def pdfNN_layer_generator(
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info)
-    
+
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
@@ -534,6 +524,6 @@ def pdfNN_layer_generator(
         integrator_input = None
         model_input = [placeholder_input]
 
-    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input))
+    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
 
     return pdf_model, integrator_input
