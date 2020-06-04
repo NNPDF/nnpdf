@@ -113,12 +113,6 @@ class MetaModel(Model):
         else:
             return _fill_placeholders(self.tensors_in, extra_input)
 
-    def reinitialize(self):
-        """ Run through all layers and reinitialize the ones that can be reinitialied """
-        for layer in self.layers:
-            if hasattr(layer, "reinitialize"):
-                layer.reinitialize()
-
     def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.

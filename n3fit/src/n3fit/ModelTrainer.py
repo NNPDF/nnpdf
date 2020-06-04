@@ -455,6 +455,7 @@ class ModelTrainer:
         dropout,
         regularizer,
         regularizer_args,
+        seed,
     ):
         """
         Defines the internal variable layer_pdf
@@ -479,6 +480,8 @@ class ModelTrainer:
                 choice of regularizer to add to the dense layers of the NN
             regularizer_args: dict
                 dictionary of arguments for the regularizer
+            seed: int
+                seed for the NN
         see model_gen.pdfNN_layer_generator for more information
 
         Returns
@@ -495,7 +498,7 @@ class ModelTrainer:
             activations=activation_per_layer,
             layer_type=layer_type,
             flav_info=self.flavinfo,
-            seed=self.NNseed,
+            seed=seed,
             initializer_name=initializer,
             dropout=dropout,
             regularizer=regularizer,
@@ -613,7 +616,7 @@ class ModelTrainer:
         train_chi2 = stopping_object.evaluate_training(training["model"])
         val_chi2, _ = stopping_object.validation.loss()
         exp_chi2 = (
-            experimental["model"].compute_losses()["loss"] / experimental["ndata"]
+            experimental["model"].compute_losses(verbose=False)["loss"] / experimental["ndata"]
         )
         return train_chi2, val_chi2, exp_chi2
 
@@ -656,17 +659,6 @@ class ModelTrainer:
         positivity_multiplier = params.get("pos_multiplier", 1.0)
         self._generate_observables(positivity_multiplier, params["pos_initial"])
 
-        # Generate the pdf model
-        self._generate_pdf(
-            params["nodes_per_layer"],
-            params["activation_per_layer"],
-            params["initializer"],
-            params["layer_type"],
-            params["dropout"],
-            params.get("regularizer", None),  # regularizer optional
-            params.get("regularizer_args", None),
-        )
-
         # Generate the stopping_object
         # this object holds statistical information about the fit
         # it can be used to perform stopping
@@ -688,6 +680,9 @@ class ModelTrainer:
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
+            seed = self.NNseed
+            if k > 0:
+                seed = np.random.randint(0, pow(2,31))
 
             # Generate the pdf model
             pdf_model = self._generate_pdf(
@@ -698,6 +693,7 @@ class ModelTrainer:
                 params["dropout"],
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
+                seed 
             )
 
             # Model generation joins all the different observable layers
@@ -745,7 +741,7 @@ class ModelTrainer:
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
                 l_hyper.append(hyper_loss)
-                log.info("fold: %d", k)
+                log.info("fold: %d", k+1)
                 log.info("Hyper loss: %f", hyper_loss)
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss over threshold, breaking")
