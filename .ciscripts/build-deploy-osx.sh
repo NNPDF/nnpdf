@@ -5,7 +5,14 @@ set -v
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
-conda build -q conda-recipe
+# If upload non master, add an extra string to the build
+APPEND_BUILD=''
+if [ "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == true ];
+then
+    APPEND_BUILD=--append-file conda-recipe/non_master.yml
+fi
+
+conda build -q conda-recipe ${APPEND_BUILD}
 if [ $? != 0 ]; then
 	echo failed to build
 	exit 1

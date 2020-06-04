@@ -1,0 +1,4 @@
+build:    
+    string: "PR"
+    track_features:
+      - non-master
