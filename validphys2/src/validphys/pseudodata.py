@@ -161,7 +161,7 @@ def _datasets_mask(experiment_list):
     }
 
 
-def pseudodata_table(get_pseudodata):
+def training_validation_pseudodata(get_pseudodata):
     """Generator to yield a dictionary of training and validation DataFrame
     per replica indexed appropriately using a MultiIndex
     """
