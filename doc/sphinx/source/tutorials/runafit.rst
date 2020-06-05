@@ -1,45 +1,55 @@
 How to run a fit
 ----------------
 
-By running a fit one generates a PDF as an output of a neural network calculated
-at some initial scale :math:`Q_0` from an interpolation grid in :math:`x`. The
-result is then convoluted with an :ref:`FK table<fktables>` containing the
-partonic interaction and the PDF evolution from the initial scale :math:`Q_0` to
-the scale of the interaction. Finally, the result is compared to data and the
-optimization is performed. To do this, one has to first install the nnpdf code
-and then prepare a runcard and run the fit itself.
+In running a fit one generates a PDF as an output of a neural network calculated
+at some initial scale :math:`Q_0` on an interpolation grid in :math:`x`. The
+result is then convoluted with an :ref:`FK table<fktables>` that contains both
+the partonic interaction and the PDF evolution, which runs from the initial
+scale :math:`Q_0` to the scale of the interaction. Finally, the theoretical
+predictions are compared to data and the optimization is performed. To follow
+this procedure yourself, you can follow the following steps:
 
-0. Install the code (see :ref:`conda`)
+0. Install the code, either using :ref:`conda<conda>` or by installing it from
+:ref:`source<source>`. The former installation method should be considered the
+default, with the latter being employed for situations in which you want to edit
+the code yourself.
 
-1. Create a runcard by, for example, using one of the files in
-:code:`<profile_prefix>/config` as a template. The :code:`<profile_prefix>` path
-is by default :code:`<install prefix>/share/NNPDF` for code installed from
-source, while it is :code:`<conda root>/share/NNPDF` for code installed using
-conda.
+1. Create a runcard by, for example, using one of the configuration files
+available `here <https://github.com/NNPDF/nnpdf/tree/master/nnpdfcpp/config/>`_.
 
 2. Prepare the fit: use the command :code:`vp-setupfit <runcard>.yaml` to
-generate a :code:`<runcard>` folder in the current directory, which will contain
-a copy of the original YAML runcard. The required resources (such as the theory
-ID and the :math:`t_0` PDF) will be downloaded automatically. Alternatively,
-such resources can be obtained with the :code:`vp-get` tool (see :ref:`vp-get`).
+generate a :code:`<runcard_folder>` in the current directory. This will have the
+same name as the runcard and it will also contain a copy of the runcard itself.
+The resources that are required to launch the fit, such as the theory ID and the
+:math:`t_0` PDF set, will be downloaded automatically. Alternatively, such
+resources can be obtained with the :ref:`vp-get<vp-get>` tool.
 
-3. The :code:`nnfit` program takes a :code:`<runcard_folder>` as input, e.g.
-:code:`nnfit <replica_number> <runcard_folder>`, where :code:`replica_number` is
-the number of PDF replicas that you wish to produce in the fit.
+3. To run the fit, use the :code:`nnfit` program. This takes a
+:code:`<runcard_folder>` as input, as well a number that indexes the PDF replica
+that will be produced. It is used as follows: :code:`nnfit <replica_number>
+<runcard_folder>`. Therefore, to produce a fit with :math:`N` replicas, you will
+need to run this command :math:`N` times with :code:`<replica_number>` running
+from 1 to :math:`N`. Having to run this command :math:`N` times is ideal for
+running a fit on a cluster.
 
-4. Once the results of :code:`nnfit` are computed, then use :code:`postfit
-<number_of_replicas> <runcard_folder>` to finalize the PDF set by applying the
-post selection criteria. This will produce a set of :code:`<number_of_replicas>
-+ 1` replicas, since the mean of the fitted replicas, usually dubbed
-:code:`replica_0`, will also be computed. Note that the standard behaviour of
-:code:`postfit` may be modified by using the :code:`--chi2-threshold` and
-:code:`--arclength-threshold` flags. As their names suggest, these set the
-thresholds for the :math:`\chi^2` and the arclength, respectively. They are in
-units of the respective standard deviations over replicas, above which the
-replicas are vetoed by :code:`postfit`. They are both set to 4 as default.
+4. Once each of the :code:`nnfit` commands has finished running, use
+:code:`postfit <number_of_replicas> <runcard_folder>` to finalize the PDF set by
+applying the post selection criteria. This will produce a set of
+:code:`<number_of_replicas> + 1` replicas, since the mean of the fitted
+replicas, usually dubbed :code:`replica_0`, will also be computed. Note that the
+standard behaviour of :code:`postfit` may be modified by using the
+:code:`--chi2-threshold` and :code:`--arclength-threshold` flags. As their names
+suggest, these set the thresholds for the :math:`\chi^2` and the arclength,
+respectively. They are in units of the respective standard deviations over
+replicas, above which the replicas are vetoed by :code:`postfit`. They are both
+set to 4 as default.
 
-5. Upload the results using :code:`vp-uploadfit <runcard_folder>`. Then, to
-analyze results with :code:`validphys`, see the `validphys guide
-<https://data.nnpdf.science/validphys-docs/guide.html#development-installs>`_.
-You may consider running the :code:`vp-comparefits -i` command (see
-:ref:`compare-fits`).
+5. You can then upload the fit to the
+`server <https://data.nnpdf.science/fits/>`_ by using
+:code:`vp-uploadfit<runcard_folder>`. This will enable someone else to download
+the fit using :ref:`vp-get<vp-get>`.
+
+6. Finally, the fit can be analyzed with :code:`validphys`. You can create your
+own custom analysis by referring to the :ref:`validphys guide<vp-index>`. To
+produce a quick summary of the fit, you can compare it to a baseline fit by
+using the :ref:`vp-comparefits <compare-fits>` command.
