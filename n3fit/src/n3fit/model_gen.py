@@ -3,7 +3,7 @@
 
     Contains:
         # observable_generator:
-            Generates the output layers
+            Generates the output layers as functions
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
@@ -30,17 +30,25 @@ def observable_generator(
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
-    These are models which takes as input a PDF tensor (14 x size_of_xgrid) and output
+    These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
     the result of the observable for each contained dataset (n_points,)
 
     An experiment contains an fktable, which is loaded by the convolution layer
     (be it hadronic or DIS) and a inv covmat which loaded by the loss.
 
-    This function also outputs three "output object" (which are layers applied to the model)
+    This function also outputs three "output objects" (which are functions that generate layers)
     that use the training and validation mask to create a training_output, validation_output
     and experimental_output
 
     If the dataset is a positivity dataset acts in consequence.
+
+    The output is a dictionary (`layer_info`), each one of the three output functions
+    have a signature:
+
+        `def out_tr(pdf_layer, dataset_out=None)`
+
+    The `pdf_layer` must be a layer of shape (1, size_of_xgrid, flavours)
+    `datasets_out` is the list of dataset to be masked to 0 when generating the layer
 
     Parameters
     ----------
@@ -412,9 +420,6 @@ def pdfNN_layer_generator(
     -------
         model_pdf: n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
-        integrator_input: tensor
-            (if impose_sumrule is True) a tensor with the input of the integrator used to compute
-            the sumrule
     """
     if nodes is None:
         nodes = [15, 8]
@@ -505,12 +510,6 @@ def pdfNN_layer_generator(
     def layer_pdf(x):
         return layer_evln(layer_fitbasis(x))
 
-    dict_layers = {
-        "denses": dense_me,  # The set of the N dense layers
-        "preprocessing": layer_preproc,  # The layer that applies preprocessing
-        "fitbasis": layer_fitbasis,  # Applied preprocessing to the output of the denses
-    }
-
     # Prepare the input for the PDF model
     placeholder_input = Input(shape=(None, 1), batch_size=1)
 
@@ -526,4 +525,4 @@ def pdfNN_layer_generator(
 
     pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
 
-    return pdf_model, integrator_input
+    return pdf_model

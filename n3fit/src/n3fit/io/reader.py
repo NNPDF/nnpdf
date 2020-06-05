@@ -254,6 +254,8 @@ def common_data_reader(
         )
 
     # Collect the masks (if any) due to kfolding for this experiment
+    # These will be applied to the experimental data before starting
+    # the training of each fold
     list_folds = []
     for partition in kpartitions:
         data_fold = partition.get("datasets", [])

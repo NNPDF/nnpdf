@@ -24,6 +24,20 @@ THRESHOLD_CHI2 = 10.0
 
 
 def _assign_data_to_model(model, data_dict, fold_k=0):
+    """
+        Reads the data dictionary and assigns the target data to the model
+
+        Parameters
+        ----------
+            model: backend.MetaModel
+            data_dict: dict
+            fold_k: int
+
+        Returns
+        -------
+            ret: dict
+                dictionary containing the model and its associated ndata and loss
+    """
     # Array with all data
     all_data = data_dict["expdata"]
     # Each element of this list correspond to the set of folds for one experiment
@@ -493,7 +507,7 @@ class ModelTrainer:
 
         # Set the parameters of the NN
         # Generate the NN layers
-        pdf_model, _ = model_gen.pdfNN_layer_generator(
+        pdf_model = model_gen.pdfNN_layer_generator(
             nodes=nodes_per_layer,
             activations=activation_per_layer,
             layer_type=layer_type,

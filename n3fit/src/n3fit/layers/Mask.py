@@ -6,10 +6,13 @@ from n3fit.backends import operations as op
 class Mask(MetaLayer):
     """
     This layers applies a boolean mask to a rank-1 input tensor.
-    By default returns a rank-2 tensor where the first dimension
-    is a batch dimension of size 1
-    Its most common use is the training/validation split.
-    The mask admit a multiplier for all outputs
+    The mask admit a multiplier for all outputs which will be internally
+    saved as a weight so it can be updated during trainig.
+
+    Typical usage is to apply training/validation split masks
+    or applying a multiplier to a given layer
+
+
     Parameters
     ----------
         bool_mask: np.array
@@ -17,14 +20,12 @@ class Mask(MetaLayer):
         c: float
             constant multiplier for every output
         unbatch: bool
-            whether to remove the first dimension (size=1) at the beginning
-            if given sets batch_it to False
+            whether to remove the first dimension (of size=1) at the beginning
         axis: int
             axis in which to apply the mask
     """
 
     def __init__(self, bool_mask=None, c=None, unbatch=False, axis=None, **kwargs):
-        self.output_dim = np.count_nonzero(bool_mask)
         if bool_mask is None:
             self.mask = None
         else:
