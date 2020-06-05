@@ -169,7 +169,6 @@ class CommonData:
         type (ADD/MULT/RAND) and name
         (CORR/UNCORR/THEORYCORR/SKIP)
     """
-    #TODO: Apply cuts
     setname: str
     ndata: int
     commondataproc: str
@@ -190,11 +189,17 @@ class CommonData:
         ---------
         cuts: list or validphys.core.Cuts or None
         """
+        # Ensure that the cuts we're applying applies to this dataset
+        # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
+        if hasattr(cuts, 'name') and self.setname != cuts.name:
+            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
+                    f"to this commondata file: {self.setname}")
 
         if hasattr(cuts, 'load'):
             cuts = cuts.load()
         if cuts is None:
             return self
+
         newndata = len(cuts)
         new_commondata_table = self.commondata_table.loc[cuts]
         return dataclasses.replace(
