@@ -155,7 +155,10 @@ def _datasets_mask(experiment_list):
         slices.append(start + ndata)
         start += ndata
 
-    return {"trmask": np.split(tr_mask, slices[:-1]), "vlmask": np.split(vl_mask, slices[:-1])}
+    return {
+        "trmask": np.split(tr_mask, slices[:-1]),
+        "vlmask": np.split(vl_mask, slices[:-1]),
+    }
 
 
 def pseudodata_table(get_pseudodata):
@@ -163,7 +166,7 @@ def pseudodata_table(get_pseudodata):
     per replica indexed appropriately using a MultiIndex
     """
     exp_infos = get_pseudodata
-    columns=["experiment", "dataset", "id"]
+    columns = ["experiment", "dataset", "id"]
     # Loop over all initial replicas
     for replica in exp_infos:
         tr_records, tr_central_values = [], []
@@ -184,15 +187,23 @@ def pseudodata_table(get_pseudodata):
                 for tr_idat in tr_indices:
                     tr_records.append(
                         dict(
-                            [('experiment', experiment["name"]),
-                             ('dataset', dataset["name"]),
-                             ('id', tr_idat),]))
+                            [
+                                ("experiment", experiment["name"]),
+                                ("dataset", dataset["name"]),
+                                ("id", tr_idat),
+                            ]
+                        )
+                    )
                 for vl_idat in vl_indices:
                     vl_records.append(
                         dict(
-                            [('experiment', experiment["name"]),
-                             ('dataset', dataset["name"]),
-                             ('id', vl_idat),]))
+                            [
+                                ("experiment", experiment["name"]),
+                                ("dataset", dataset["name"]),
+                                ("id", vl_idat),
+                            ]
+                        )
+                    )
 
         tr_df = pd.DataFrame(tr_records, columns=columns)
         vl_df = pd.DataFrame(vl_records, columns=columns)
@@ -203,7 +214,7 @@ def pseudodata_table(get_pseudodata):
         tr_index = tr_df.index
         vl_index = vl_df.index
         tr_vl_dict = {
-                "trdata": pd.DataFrame(tr_central_values, index=tr_index, columns=["data"]),
-                "vldata": pd.DataFrame(vl_central_values, index=vl_index, columns=["data"])
-                }
+            "trdata": pd.DataFrame(tr_central_values, index=tr_index, columns=["data"]),
+            "vldata": pd.DataFrame(vl_central_values, index=vl_index, columns=["data"]),
+        }
         yield tr_vl_dict
