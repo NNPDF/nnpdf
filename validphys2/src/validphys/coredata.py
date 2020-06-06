@@ -8,6 +8,8 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
+from NNPDF import FKSet
+
 
 @dataclasses.dataclass(eq=False)
 class FKTableData:
@@ -241,6 +243,8 @@ class CommonData:
             index=self.commondata_table.index,
         )
 
+
+@dataclasses.dataclass(eq=False)
 class DataSet:
     """
     Add a docstring
@@ -248,16 +252,17 @@ class DataSet:
     # XXX: Note the C++ class has 2 constructors which accepts
     # a boolean mask and thus handles cuts appropriately
 
-    def __init__(self, cd, fkset, weight):
-        self.cd = cd
-        self.fkset = fkset
-        self.weight = weight
+    cd: CommonData
+    fkset: FKSet
+    # Check this
+    weight: np.array
 
-        self.ndata = cd.ndata
-        self.nsys = cd.nsys
-        self.central_values = cd.central_values
-        self.stat_errors = cd.stat_errors
-        self.sys_errors = cd.sys_errors
+    def __post_init__(self):
+        self.ndata = self.cd.ndata
+        self.nsys = self.cd.nsys
+        self.central_values = self.cd.central_values
+        self.stat_errors = self.cd.stat_errors
+        self.sys_errors = self.cd.sys_errors
 
 
     def __getitem__(self, mask):
