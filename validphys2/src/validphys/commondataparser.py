@@ -6,6 +6,8 @@ interfaces with common Python libraries.  The integration of these objects into
 the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 """
+from operator import attrgetter
+
 import pandas as pd
 
 from validphys.core import peek_commondata_metadata
@@ -55,10 +57,8 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondataproc = commondatatable["process"][1]
      # Check for consistency with commondata metadata
     cdmetadata =  peek_commondata_metadata(commondatafile)
-    assert setname == cdmetadata.name and \
-        nsys == cdmetadata.nsys and ndata == cdmetadata.ndata \
-        and commondataproc == cdmetadata.process_type, \
-            "Commondata table information does not match metadata"
+    if (setname, nsys, ndata) != attrgetter('name', 'nsys', 'ndata')(cdmetadata):
+        raise ValueError("Commondata table information does not match metadata")
 
     # Now parse the systype file
     systypetable = parse_systypes(systypefile)
