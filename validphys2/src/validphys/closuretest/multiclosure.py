@@ -1222,8 +1222,8 @@ def experiments_bootstrap_expected_xi_table(
     )
     # change the column headers
     df.columns = [
-        r"Bootstrap mean expected $\xi_{1\sigma} from ratio$",
-        r"Bootstrap std. dev. expected $\xi_{1\sigma} from ratio$",
+        r"Bootstrap mean expected $\xi_{1\sigma}$ from ratio",
+        r"Bootstrap std. dev. expected $\xi_{1\sigma}$ from ratio",
     ]
     return df
 
