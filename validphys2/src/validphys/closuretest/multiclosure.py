@@ -38,8 +38,8 @@ def internal_multiclosure_dataset_loader(
     with multiclosure statistical estimators. Avoiding memory issues from caching
     experiment load
 
-    Returns
-    -------
+    Returns:
+
     multiclosure_results: tuple
         a tuple of length 4 containing all necessary dependencies of multiclosure
         statistical estimators in order:
@@ -91,7 +91,7 @@ def internal_multiclosure_experiment_loader(
 def fits_dataset_bias_variance(
     internal_multiclosure_dataset_loader,
     _internal_max_reps=None,
-    _internal_min_reps=None
+    _internal_min_reps=None,
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data) where bias and variance are
@@ -130,15 +130,18 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
     biases, variances, n_data = fits_dataset_bias_variance
     return np.mean(biases), np.mean(variances), n_data
 
+
 @check_multifit_replicas
 def fits_experiment_bias_variance(
     internal_multiclosure_experiment_loader,
     _internal_max_reps=None,
-    _internal_min_reps=None
+    _internal_min_reps=None,
 ):
     """Like `fits_dataset_bias_variance` but for an experiment"""
     return fits_dataset_bias_variance(
-        internal_multiclosure_experiment_loader, _internal_max_reps, _internal_min_reps)
+        internal_multiclosure_experiment_loader, _internal_max_reps, _internal_min_reps
+    )
+
 
 def expected_experiment_bias_variance(fits_experiment_bias_variance):
     """Like `expected_dataset_bias_variance` except for an experiment"""
@@ -149,54 +152,74 @@ def expected_experiment_bias_variance(fits_experiment_bias_variance):
 def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     """For a set of closure fits, calculate the bias and variance across fits
     and then plot scatter points so we can see the distribution of each quantity
-    with fits.
+    with fits. The spread of the variance across fits is assumed to be small
+    compared to the spread of the biases, deviation from this assumption could
+    suggest that there are finite size effects due to too few replicas.
+
     """
     biases, variances, _ = fits_dataset_bias_variance
     fig, ax = plt.subplots()
     ax.plot(biases, "*", label=f"bias, std dev. = {np.std(biases)}")
     ax.axhline(
-        np.mean(biases), label=f"bias mean = {np.mean(biases)}", linestyle="-", color="k")
+        np.mean(biases),
+        label=f"bias mean = {np.mean(biases)}",
+        linestyle="-",
+        color="k",
+    )
     ax.plot(variances, ".", label=f"variance, std dev. = {np.std(variances)}")
     ax.axhline(
-        np.mean(variances), label=f"variances mean = {np.mean(variances)}", linestyle=":", color="k")
+        np.mean(variances),
+        label=f"variances mean = {np.mean(variances)}",
+        linestyle=":",
+        color="k",
+    )
     ax.set_title(f"Bias and variance for {dataset} for each fit (unnormalised)")
     ax.set_xlabel("fit index")
     ax.legend()
     return fig
 
+
 @figure
 def plot_experiment_fits_bias_variance(fits_experiment_bias_variance, experiment):
+    """Like `plot_dataset_fits_bias_variance` but for an experiment"""
     return plot_dataset_fits_bias_variance(fits_experiment_bias_variance, experiment)
 
-fits_experiments_bias_variance = collect("fits_experiment_bias_variance", ("experiments",))
+
+fits_experiments_bias_variance = collect(
+    "fits_experiment_bias_variance", ("experiments",)
+)
 
 # TODO: get rid of this with data keyword merge
 def fits_total_bias_variance(fits_experiments_bias_variance):
     """Like `fits_dataset_bias_variance` except for all data"""
     bias_total, variance_total, n_total = fits_experiments_bias_variance[0]
-    for b, v, n, in fits_experiments_bias_variance[1:]:
+    for b, v, n in fits_experiments_bias_variance[1:]:
         bias_total += b
         variance_total += v
         n_total += n
     return bias_total, variance_total, n_total
 
+
 @figure
 def plot_total_fits_bias_variance(fits_total_bias_variance):
+    """Like `plot_dataset_fits_bias_variance` but for the total bias/variance
+    for all data.
+    """
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
+
 datasets_expected_bias_variance = collect(
-    "expected_dataset_bias_variance", ("experiments", "experiment"))
+    "expected_dataset_bias_variance", ("experiments", "experiment")
+)
 
 # TODO: check that this hasn't been implemented somewhere else at point of merge
 experiments_datasets = collect("dataset", ("experiments", "experiment"))
 
 
 @table
-def datasets_bias_variance_ratio(
-    datasets_expected_bias_variance, experiments_datasets
-):
+def datasets_bias_variance_ratio(datasets_expected_bias_variance, experiments_datasets):
     """For each dataset calculate the expected bias and expected variance
-    across fits
+    across fits, then calculate the ratio
 
         ratio = expected bias / expected variance
 
@@ -204,6 +227,15 @@ def datasets_bias_variance_ratio(
 
     This gives an idea of how faithful uncertainties are for a set of
     datasets.
+
+    Notes:
+
+    If uncertainties are faithfully estimated then we would expect to see
+    ratio = 1. We should note that the ratio is a squared quantity and
+    sqrt(ratio) is more appropriate for seeing how much uncertainties are
+    over or underestimated. An over-estimate of uncertainty leads to
+    sqrt(ratio) < 1, similarly an under-estimate of uncertainty leads to
+    sqrt(ratio) > 1.
 
     """
     records = []
@@ -223,11 +255,14 @@ experiments_expected_variance = collect(
     "expected_variance_experiment", ("experiments",)
 )
 experiments_expected_bias_variance = collect(
-    "expected_experiment_bias_variance", ("experiments",))
+    "expected_experiment_bias_variance", ("experiments",)
+)
+
 
 def expected_total_bias_variance(fits_total_bias_variance):
     """Like `expected_dataset_bias_variance` except for all data"""
     return expected_dataset_bias_variance(fits_total_bias_variance)
+
 
 @table
 def experiments_bias_variance_ratio(
@@ -236,7 +271,9 @@ def experiments_bias_variance_ratio(
     """Like datasets_bias_variance_ratio except for each experiment. Also
     calculate and tabulate
 
-        total expected bias / total expected variance.
+        (total expected bias) / (total expected variance)
+
+    where the total refers to summing over all experiments.
 
     """
     # don't reinvent wheel
@@ -257,9 +294,12 @@ def experiments_bias_variance_ratio(
 
 @table
 def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
-    """For each of the tabulated bias/variance from
-    `datasets_bias_variance_ratio` take the sqrt, which gives an idea of how
-    faithful the uncertainties are in units of the standard deviation.
+    """Given `datasets_bias_variance_ratio` take the sqrt and tabulate the
+    results. This gives an idea of how
+    faithful the uncertainties are in sensible units. As noted in
+    `datasets_bias_variance_ratio`, bias/variance is a squared quantity and
+    so when considering how much uncertainty has been over or underestimated
+    it is more natural to consider sqrt(bias/variance)
 
     """
     df_in = datasets_bias_variance_ratio
@@ -282,7 +322,8 @@ def total_bias_variance_ratio(
     experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments
 ):
     """Combine datasets_bias_variance_ratio and experiments_bias_variance_ratio
-    into single table with multiindex of experiment and dataset
+    into single table with MultiIndex of experiment and dataset
+
     """
     exps_df_in = experiments_bias_variance_ratio.iloc[:-1]  # Handle total seperate
     lvs = exps_df_in.index
@@ -362,12 +403,19 @@ def dataset_xi(internal_multiclosure_dataset_loader):
     The differences are calculated in the basis which would diagonalise the
     dataset's covariance matrix.
 
-    Then the Indictor function is evaluated for elementwise for sigma and delta
+    Then the indictor function is evaluated for elementwise for sigma and delta
 
         I_{[-\sigma_j, \sigma_j]}(\delta_j)
 
     which is 1 when |\delta_j| < \sigma_j and 0 otherwise. Finally, take the
-    mean across fits
+    mean across fits.
+
+    Returns:
+
+        xi_1sigma_i: np.array
+            a 1-D array where each element is the value of xi_1sigma for that
+            particular direction. We note that the directions are ordered by
+            ascending eigenvalues
 
     """
     closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
@@ -403,7 +451,7 @@ experiments_xi_measured = collect("experiment_xi", ("experiments",))
 def fits_measured_xi(experiments_xi_measured, experiments):
     r"""Tabulate the measure value of \xi_{1\sigma} for each experiment, as
     calculated by experiment_xi, note that the mean is taken across directions
-    of the covariance matrix
+    of the covariance matrix.
 
     """
     records = []
@@ -411,14 +459,15 @@ def fits_measured_xi(experiments_xi_measured, experiments):
     tot_n = 0
     for exp, xi in zip(experiments, experiments_xi_measured):
         records.append(dict(experiment=str(exp), ndata=len(xi), xi=np.mean(xi)))
-        tot_xi += len(xi)*np.mean(xi)
+        tot_xi += len(xi) * np.mean(xi)
         tot_n += len(xi)
-    records.append(dict(experiment="Total", ndata=tot_n, xi=tot_xi/tot_n))
+    records.append(dict(experiment="Total", ndata=tot_n, xi=tot_xi / tot_n))
     df = pd.DataFrame.from_records(
         records, index="experiment", columns=("experiment", "ndata", "xi")
     )
     df.columns = ["ndata", r"measured $\xi_{1\sigma}$"]
     return df
+
 
 @table
 def compare_measured_expected_xi(fits_measured_xi, expected_xi_from_bias_variance):
@@ -430,10 +479,10 @@ def compare_measured_expected_xi(fits_measured_xi, expected_xi_from_bias_varianc
     """
     # don't want ndata twice
     df = pd.concat(
-        (fits_measured_xi, expected_xi_from_bias_variance.iloc[:, 1]),
-        axis=1
+        (fits_measured_xi, expected_xi_from_bias_variance.iloc[:, 1]), axis=1
     )
     return df
+
 
 @figure
 def plot_dataset_xi(dataset_xi, dataset):
@@ -517,20 +566,29 @@ def n_fit_samples(fits):
     return list(range(10, len(fits) + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
 
 
+# NOTE: check_multifit_replicas can fill in _internal_max_reps and
+# _internal_min_reps if they are None which means by default the values are
+# filled but this value can be overridden in specific studies. Both keys
+# must be present in signature for the check to work
 @check_multifit_replicas
 def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=None):
     """Return a range object where each item is a number of replicas to use for
     resampling a multiclosure quantity
 
-    determined by varying n_reps between 10 and number of replicas that each
+    determined by varying n_reps between 20 and number of replicas that each
     provided closure fit has. All provided fits must have the same number of
-    replicas and that number must be at least 10.
+    replicas and that number must be at least 20.
 
     can override the number of replicas used from each fit by supplying
     _internal_max_reps
     """
-    return list(range(
-        _internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
+    return list(
+        range(
+            _internal_min_reps,
+            _internal_max_reps + SAMPLING_INTERVAL,
+            SAMPLING_INTERVAL,
+        )
+    )
 
 
 class BootstrappedTheoryResult:
@@ -553,14 +611,29 @@ def boostrap_multiclosure_fits(
     n_fit,
     n_rep_max,
     n_rep,
-    use_repeats
-    ):
-    """Perform a single bootstrap resample of the multiclosure fits.
+    use_repeats,
+):
+    """Perform a single bootstrap resample of the multiclosure fits and return
+    a proxy of the base internal object used by relevant estimator actions
+    with the fits and replicas resampled.
 
-    Returns
+    If use_repeats is False then each fit and replica can only be chosen once
+    and there are no repeated samples of either fit or replicas within each fit.
+
+    The various n_fit* and n_rep* choices are for finite size effect studies.
+    If you want to perform a simple bootstrap then simply set n_fit and n_fit_max
+    to the number of closure fits (len(fits)) and n_rep and n_rep_max to the
+    number of replicas in each of the closure tests.
+
+    Returns:
+
         resampled_multiclosure:
             like internal_multiclosure_dataset_loader but with the fits
-            and replicas resampled randomly
+            and replicas resampled randomly using np.random.choice.
+
+    See also:
+
+    np.random.choice
 
     """
     closure_th, *input_tuple = internal_multiclosure_dataset_loader
@@ -569,12 +642,8 @@ def boostrap_multiclosure_fits(
     boot_ths = []
     # construct proxy fits theory predictions
     for fit_th in fit_boot_th:
-        rep_boot_index = rng.choice(
-            n_rep_max, size=n_rep, replace=use_repeats
-        )
-        boot_ths.append(
-            BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
-        )
+        rep_boot_index = rng.choice(n_rep_max, size=n_rep, replace=use_repeats)
+        boot_ths.append(BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index]))
     return (boot_ths, *input_tuple)
 
 
@@ -607,11 +676,12 @@ def bias_variance_resampling_dataset(
 
     Notes
     -----
-    The bootstrap samples are seeded in this function. If this action is colleted
+    The bootstrap samples are seeded in this function. If this action is collected
     over multiple datasets then the set of resamples all used corresponding replicas
+    and fits
 
     """
-    # seed same rng so we can aggregate results
+    # seed same rng so we can aggregate results across datasets
     rng = np.random.RandomState(seed=boot_seed)
     bias_sample = []
     variance_sample = []
@@ -631,7 +701,7 @@ def bias_variance_resampling_dataset(
                     n_fit_sample,
                     n_replica_samples[-1],
                     n_rep_sample,
-                    use_repeats
+                    use_repeats,
                 )
                 # explicitly pass n_rep to fits_dataset_bias_variance so it uses
                 # full subsample
@@ -659,9 +729,9 @@ def bias_variance_resampling_experiment(
 
     Notes
     -----
-    The bootstrap samples are seeded in this function. If this action is colleted
-    over multiple experiments then the set of resamples all used corresponding replicas
-    and can be added together.
+    The bootstrap samples are seeded in this function. If this action is collected
+    over multiple experiments then the set of resamples all used corresponding
+    fits/replicas and can be added together.
 
     """
     return bias_variance_resampling_dataset(
@@ -670,17 +740,19 @@ def bias_variance_resampling_experiment(
         n_replica_samples,
         bootstrap_samples,
         boot_seed=boot_seed,
-        use_repeats=use_repeats
+        use_repeats=use_repeats,
     )
+
 
 exps_bias_var_resample = collect(
     "bias_variance_resampling_experiment", ("experiments",)
 )
 
+
 def bias_variance_resampling_total(exps_bias_var_resample):
     """Sum the bias_variance_resampling_experiment for all experiments, giving
     the total bias and variance resamples, relies on the bootstrap seed being
-    the same for all experiments such that the replicas are the same
+    the same for all experiments such that the fits/replicas are the same
 
     """
     bias_total, var_total = exps_bias_var_resample[0]
@@ -689,6 +761,7 @@ def bias_variance_resampling_total(exps_bias_var_resample):
         bias_total += bias
         var_total += var
     return bias_total, var_total
+
 
 @table
 def dataset_ratio_error_finite_effects(
@@ -715,7 +788,8 @@ def total_ratio_error_finite_effects(
     bias_variance_resampling_total, n_fit_samples, n_replica_samples
 ):
     """Like dataset_ratio_relative_error_finite_effects except for the total
-    bias / variance
+    bias / variance (across all data)
+
     """
     return dataset_ratio_error_finite_effects(
         bias_variance_resampling_total, n_fit_samples, n_replica_samples
@@ -739,6 +813,7 @@ def total_ratio_means_finite_effects(
     col = pd.Index(n_fit_samples, name="n_fit samples")
     bias_total, var_total = bias_variance_resampling_total
     return pd.DataFrame((bias_total / var_total).mean(axis=2), index=ind, columns=col)
+
 
 def xi_resampling_dataset(
     internal_multiclosure_dataset_loader,
@@ -790,7 +865,7 @@ def xi_resampling_dataset(
                     n_fit_sample,
                     n_replica_samples[-1],
                     n_rep_sample,
-                    use_repeats
+                    use_repeats,
                 )
                 # append the 1d array for individual directions
                 xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
@@ -798,13 +873,14 @@ def xi_resampling_dataset(
         xi_1sigma.append(fixed_n_rep_xi_1sigma)
     return np.array(xi_1sigma)
 
+
 def xi_resampling_experiment(
     internal_multiclosure_experiment_loader,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
-    use_repeats=True
+    use_repeats=True,
 ):
     """like xi_resampling_dataset except for an experiment
 
@@ -821,8 +897,9 @@ def xi_resampling_experiment(
         n_replica_samples,
         bootstrap_samples,
         boot_seed=boot_seed,
-        use_repeats=use_repeats
+        use_repeats=use_repeats,
     )
+
 
 @table
 def dataset_xi_error_finite_effects(
@@ -839,6 +916,7 @@ def dataset_xi_error_finite_effects(
     col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(means_xi_table.std(axis=2), index=ind, columns=col)
 
+
 @table
 def dataset_xi_means_finite_effects(
     xi_resampling_dataset, n_fit_samples, n_replica_samples
@@ -854,6 +932,9 @@ def dataset_xi_means_finite_effects(
     col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(means_xi_table.mean(axis=2), index=ind, columns=col)
 
+
+# NOTE: This action was written when trying to understand the finite size effects
+# and is largely redundant.
 @table
 def dataset_std_xi_error_finite_effects(
     xi_resampling_dataset, n_fit_samples, n_replica_samples
@@ -869,6 +950,7 @@ def dataset_std_xi_error_finite_effects(
     ind = pd.Index(n_replica_samples, name="n_rep samples")
     col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(means_xi_table.std(axis=2), index=ind, columns=col)
+
 
 @table
 def dataset_std_xi_means_finite_effects(
@@ -886,39 +968,49 @@ def dataset_std_xi_means_finite_effects(
     col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(means_xi_table.mean(axis=2), index=ind, columns=col)
 
+
 exps_xi_resample = collect("xi_resampling_experiment", ("experiments",))
+
 
 def total_xi_resample(exps_xi_resample):
     """concatenate the xi for each datapoint for all data"""
     return np.concatenate(exps_xi_resample, axis=-1)
 
+
 @table
-def total_xi_error_finite_effects(
-    total_xi_resample, n_fit_samples, n_replica_samples
-):
+def total_xi_error_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples):
     """For all data vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the mean of xi across datapoints (note that points
     here refers to points in the basis which diagonalises the covmat) and then
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    return dataset_xi_error_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
+    return dataset_xi_error_finite_effects(
+        total_xi_resample, n_fit_samples, n_replica_samples
+    )
+
 
 @table
-def total_xi_means_finite_effects(
-    total_xi_resample, n_fit_samples, n_replica_samples
-):
+def total_xi_means_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples):
     """For all data vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the mean of xi across datapoints (note that points
     here refers to points in the basis which diagonalises the covmat) and then
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    return dataset_xi_means_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
+    return dataset_xi_means_finite_effects(
+        total_xi_resample, n_fit_samples, n_replica_samples
+    )
+
 
 def total_expected_xi_resample(bias_variance_resampling_total):
     """using the bias and variance resample, return a resample of expected
-    xi
+    xi using the method outlined in `expected_xi_from_bias_variance`.
+
+    The general concept is based on assuming all of the distributions are
+    gaussians and using the ratio of bias/variance to predict the corresponding
+    integral. To see a more in depth explanation, see
+    `expected_xi_from_bias_variance`
 
     """
     bias_total, var_total = bias_variance_resampling_total
@@ -927,6 +1019,7 @@ def total_expected_xi_resample(bias_variance_resampling_total):
     # pylint can't find erf here, disable error in this function
     # pylint: disable=no-member
     return special.erf(n_sigma_in_variance / np.sqrt(2))
+
 
 @table
 def total_expected_xi_means_finite_effects(
@@ -943,6 +1036,7 @@ def total_expected_xi_means_finite_effects(
     col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(total_expected_xi_resample.mean(axis=2), index=ind, columns=col)
 
+
 @table
 def total_expected_xi_error_finite_effects(
     total_expected_xi_resample, n_fit_samples, n_replica_samples
@@ -958,6 +1052,7 @@ def total_expected_xi_error_finite_effects(
     col = pd.Index(n_fit_samples, name="n_fit samples")
     return pd.DataFrame(total_expected_xi_resample.std(axis=2), index=ind, columns=col)
 
+
 @table
 def total_std_xi_error_finite_effects(
     exps_xi_resample, n_fit_samples, n_replica_samples
@@ -970,7 +1065,10 @@ def total_std_xi_error_finite_effects(
 
     """
     xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_std_xi_error_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+    return dataset_std_xi_error_finite_effects(
+        xi_total, n_fit_samples, n_replica_samples
+    )
+
 
 @table
 def total_std_xi_means_finite_effects(
@@ -984,7 +1082,10 @@ def total_std_xi_means_finite_effects(
 
     """
     xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_std_xi_means_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+    return dataset_std_xi_means_finite_effects(
+        xi_total, n_fit_samples, n_replica_samples
+    )
+
 
 @check_multifit_replicas
 def fits_bootstrap_experiment_bias_variance(
@@ -996,7 +1097,10 @@ def fits_bootstrap_experiment_bias_variance(
     boot_seed=DEFAULT_SEED,
 ):
     """Perform bootstrap resample of `fits_experiment_bias_variance`, returns
-    tuple of bias_samples, variance_samples
+    tuple of bias_samples, variance_samples where each element is a list
+    of length bootstrap_samples. The elements of the lists are bootstrap samples
+    of bias and variance respectively
+
     """
     # seed same rng so we can aggregate results
     rng = np.random.RandomState(seed=boot_seed)
@@ -1011,21 +1115,24 @@ def fits_bootstrap_experiment_bias_variance(
             len(fits),
             _internal_max_reps,
             _internal_max_reps,
-            True
+            True,
         )
         # explicitly pass n_rep to fits_dataset_bias_variance so it uses
         # full subsample
         bias, variance, _ = expected_dataset_bias_variance(
             fits_dataset_bias_variance(
-                boot_internal_loader, _internal_max_reps, _internal_min_reps)
+                boot_internal_loader, _internal_max_reps, _internal_min_reps
+            )
         )
         bias_boot.append(bias)
         variance_boot.append(variance)
     return bias_boot, variance_boot
 
+
 experiments_bootstrap_bias_variance = collect(
-    "fits_bootstrap_experiment_bias_variance",
-    ("experiments",))
+    "fits_bootstrap_experiment_bias_variance", ("experiments",)
+)
+
 
 def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
     """returns a bootstrap resampling of the ratio of bias/variance for
@@ -1045,35 +1152,48 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
     for bias, var in experiments_bootstrap_bias_variance[1:]:
         bias_tot += bias
         var_tot += var
-        ratios.append(bias/var)
-    ratios.append(bias_tot/var_tot)
+        # take mean across fits then take ratio
+        ratios.append(np.mean(bias) / np.mean(var))
+    # likewise take mean across fits for total
+    ratios.append(np.mean(bias_tot) / np.mean(var_tot))
     return ratios
+
 
 def experiments_bootstrap_sqrt_ratio(experiments_bootstrap_ratio):
     """Square root of experiments_bootstrap_ratio"""
     return np.sqrt(experiments_bootstrap_ratio)
 
+
 @table
 def experiments_bootstrap_sqrt_ratio_table(
-    experiments_bootstrap_sqrt_ratio, experiments):
+    experiments_bootstrap_sqrt_ratio, experiments
+):
+    """Given experiments_bootstrap_sqrt_ratio, which a bootstrap
+    resampling of the sqrt(bias/variance) for each experiment and the total
+    across all data, tabulate the mean and standard deviation across bootstrap
+    samples.
+
+    """
     indices = [str(exp) for exp in experiments] + ["Total"]
     records = []
     for i, exp in enumerate(indices):
         ratio_boot = experiments_bootstrap_sqrt_ratio[i]
-        records.append(dict(
-            experiment=exp,
-            mean_ratio=np.mean(ratio_boot, axis=0),
-            std_ratio=np.std(ratio_boot, axis=0)))
+        records.append(
+            dict(
+                experiment=exp,
+                mean_ratio=np.mean(ratio_boot, axis=0),
+                std_ratio=np.std(ratio_boot, axis=0),
+            )
+        )
     df = pd.DataFrame.from_records(
-        records,
-        index="experiment",
-        columns=("experiment", "mean_ratio", "std_ratio")
+        records, index="experiment", columns=("experiment", "mean_ratio", "std_ratio")
     )
     df.columns = [
         "Bootstrap mean sqrt(bias/variance)",
-        "Bootstrap std. dev. sqrt(bias/variance)"
+        "Bootstrap std. dev. sqrt(bias/variance)",
     ]
     return df
+
 
 def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     """Calculate a bootstrap resampling of the expected xi from
@@ -1087,26 +1207,27 @@ def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
     return estimated_integral
 
+
 @table
 def experiments_bootstrap_expected_xi_table(
-    experiments_bootstrap_expected_xi, experiments):
+    experiments_bootstrap_expected_xi, experiments
+):
     """Tabule the mean and standard deviation across bootstrap samples of the
-    expected xi calculated from the ratio of bias/variance.
-
-    Returns
-
-    table: pd.DataFrame
-        table with two columns, for the boostrap mean and standard deviation
-        and a row for each experiment plus the total across all experiments
+    expected xi calculated from the ratio of bias/variance. Returns a table with
+    two columns, for the boostrap mean and standard deviation
+    and a row for each experiment plus the total across all experiments
 
     """
     df = experiments_bootstrap_sqrt_ratio_table(
-        experiments_bootstrap_expected_xi, experiments)
+        experiments_bootstrap_expected_xi, experiments
+    )
+    # change the column headers
     df.columns = [
         r"Bootstrap mean expected $\xi_{1\sigma} from ratio$",
         r"Bootstrap std. dev. expected $\xi_{1\sigma} from ratio$",
     ]
     return df
+
 
 @check_multifit_replicas
 def fits_bootstrap_experiment_xi(
@@ -1117,8 +1238,12 @@ def fits_bootstrap_experiment_xi(
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
 ):
-    """Perform bootstrap resample of `fits_experiment_bias_variance`, returns
-    tuple of bias_samples, variance_samples
+    """Perform bootstrap resample of `experiment_xi`, returns a list
+    where each element is an independent resampling of experiment_xi.
+
+    For more information on bootstrapping see boostrap_multiclosure_fits.
+    For more information on xi see dataset_xi.
+
     """
     # seed same rng so we can aggregate results
     rng = np.random.RandomState(seed=boot_seed)
@@ -1133,17 +1258,17 @@ def fits_bootstrap_experiment_xi(
             len(fits),
             _internal_max_reps,
             _internal_max_reps,
-            True
+            True,
         )
         xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
     return xi_1sigma_boot
 
-experiments_bootstrap_xi = collect(
-    "fits_bootstrap_experiment_xi", ("experiments",))
+
+experiments_bootstrap_xi = collect("fits_bootstrap_experiment_xi", ("experiments",))
+
 
 @table
-def experiments_bootstrap_xi_table(
-    experiments_bootstrap_xi, experiments):
+def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments):
     """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
     samples. Note that the mean has already be taken across data points
     (or eigenvector directions in the basis which diagonalises the covariance
@@ -1155,9 +1280,10 @@ def experiments_bootstrap_xi_table(
     df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments)
     df.columns = [
         r"Bootstrap mean $\xi_{1\sigma}$",
-        r"Bootstrap std. dev. $\xi_{1\sigma}$"
+        r"Bootstrap std. dev. $\xi_{1\sigma}$",
     ]
     return df
+
 
 @table
 def experiments_bootstrap_xi_comparison(
@@ -1170,4 +1296,5 @@ def experiments_bootstrap_xi_comparison(
     """
     return pd.concat(
         (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
-        axis=1)
+        axis=1,
+    )

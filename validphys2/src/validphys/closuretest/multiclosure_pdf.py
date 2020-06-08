@@ -27,7 +27,9 @@ XI_FLAVOURS = (r"\Sigma", "gluon", "V", "V3", "V8", "T3", "T8")
 def internal_Nx(multiclosure_nx=4):
     """set a default value for number of points Nx to be used in multiclosure
     PDF actions, allows for studying dependence on this number but by default
-    sets Nx = 4 which was found to be a reasonable value for 30 fits each with
+    sets Nx = 4.
+
+    This was found to be a reasonable value for 30 fits each with
     40 replicas. Increasing the number of points beyond this leads to large
     correlations across points, which would require significantly higher
     number of fits/replicas to properly estimate.
@@ -70,14 +72,13 @@ def xi_pdfgrids(
         gluon and singlet: 10^-3 < x < 0.5
         other non-singlets: 0.1 < x < 0.5
 
-    TODO: check above limits.
+    Returns:
 
-    Returns
-    -------
     tuple of xplotting_grids, one for gluon and singlet and one for other
     non-singlets
+
     """
-    # TODO: do we want to hardcode Q here as well?
+    # NOTE: Could we hardcode Q to the initial scale/infer from fits?
     singlet_gluon_grid = xplotting_grid(
         pdf,
         Q,
@@ -132,8 +133,8 @@ def pdf_central_difference(
 
     where mean is across replicas
 
-    Returns
-    -------
+    Returns:
+
     diffs: np.array
         array of diffs with shape (flavour, x)
 
@@ -152,8 +153,8 @@ def pdf_replica_difference(xi_grid_values):
 
     where the mean is across replicas
 
-    Returns
-    -------
+    Returns:
+
     diffs: np.array
         array of diffs with shape (replicas, flavour, x)
     """
@@ -372,8 +373,8 @@ def fits_pdf_total_ratio(
     """Calculate the total bias and variance for all flavours and x allowing for
     correlations across flavour,
 
-    Returns
-    -------
+    Returns:
+
     ratio_data: tuple
         required data for calculating mean(bias) over mean(variance) across fits
         in form of tuple (bias, variance)
@@ -417,6 +418,7 @@ def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
 def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
     """Like fits_pdf_bias_variance_ratio except taking the sqrt, we see how
     faithful our uncertainty is in units of the standard deviation
+
     """
     df_in = fits_pdf_bias_variance_ratio
     data = np.sqrt(df_in.values)
@@ -428,6 +430,7 @@ def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
     """Like expected_xi_from_bias_variance but in PDF space. Estimate the
     integral across central difference distribution, with domain defined by the
     replica distribution for more details see expected_xi_from_bias_variance
+
     """
     df_in = fits_pdf_sqrt_ratio
     n_sigma_in_variance = 1 / df_in.values
@@ -442,7 +445,9 @@ def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
 @table
 def fits_pdf_compare_xi_to_expected(fits_pdf_expected_xi_from_ratio, xi_flavour_table):
     """Two column table comparing the measured value of xi for each flavour to the
-    one calculated from bias/variance"""
+    one calculated from bias/variance
+
+    """
     return pd.concat((xi_flavour_table, fits_pdf_expected_xi_from_ratio), axis=1)
 
 
@@ -461,6 +466,7 @@ def bootstrap_pdf_differences(
     being resampled.
 
     Returns
+
         pdf_difference: tuple
             a tuple of 2 lists: the central differences and the replica
             differences. Each list is n_fits long and each element is a resampled
@@ -601,7 +607,9 @@ def fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_sqrt_ratio):
 
 def fits_bootstrap_pdf_expected_xi(fits_bootstrap_pdf_sqrt_ratio):
     """Using fits_bootstrap_pdf_sqrt_ratio calculate a bootstrap of the expected
-    xi using the same procedure as in expected_xi_from_bias_variance"""
+    xi using the same procedure as in expected_xi_from_bias_variance
+
+    """
     n_sigma_in_variance = 1 / fits_bootstrap_pdf_sqrt_ratio
     # pylint can't find erf here, disable error in this function
     # pylint: disable=no-member
@@ -614,6 +622,7 @@ def fits_bootstrap_pdf_expected_xi_table(fits_bootstrap_pdf_expected_xi):
     """Tabulate the mean and standard deviation across bootstrap samples
     of fits_bootstrap_pdf_expected_xi with a row for each flavour and the
     total expected xi.
+
     """
     df = fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_expected_xi)
     return pd.DataFrame(
@@ -633,6 +642,7 @@ def fits_bootstrap_pdf_compare_xi_to_expected(
     of the measured value of xi to the one calculated from bias/variance
     in PDF space, for each flavour and total across all flavours accounting
     for correlations.
+
     """
     return fits_pdf_compare_xi_to_expected(
         fits_bootstrap_pdf_expected_xi_table, fits_bootstrap_pdf_xi_table
@@ -644,8 +654,8 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
     x, plots it with appropriate labels. Input matrix is expected to be
     size (n_flavours*n_x) * (n_flavours*n_x)
 
-    Parameters
-    ----------
+    Parameters:
+
     matrix: np.array
         square matrix which must be (n_flavours*n_x) * (n_flavours*n_x) with
         elements ordered like:
@@ -655,8 +665,8 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
     **kwargs:
         keyword arguments for the matplotlib.axes.Axes.imshow function
 
-    Notes
-    -----
+    Notes:
+
     See matplotlib.axes.Axes.imshow for more details on plotting function
 
     """
@@ -684,6 +694,7 @@ def plot_multiclosure_covariance_matrix(fits_covariance_matrix_totalpdf, interna
     """Plot the covariance matrix for all flavours, covariance matrix
     has shape n_flavours * n_x each block is the covariance of the replica
     PDFs on the x-grid defined in xi_pdfgrids
+
     """
     fig, ax = plot_pdf_matrix(fits_covariance_matrix_totalpdf, internal_Nx)
     ax.set_title("Covariance matrix estimated from multiclosure replicas")
@@ -693,6 +704,7 @@ def plot_multiclosure_covariance_matrix(fits_covariance_matrix_totalpdf, interna
 def fits_correlation_matrix_totalpdf(fits_covariance_matrix_totalpdf):
     """Given the fits_covariance_matrix_totalpdf, returns the corresponding
     correlation matrix
+
     """
     d = np.sqrt(np.diag(fits_covariance_matrix_totalpdf))
     return (fits_covariance_matrix_totalpdf / d) / d[:, np.newaxis]
@@ -702,6 +714,7 @@ def fits_correlation_matrix_totalpdf(fits_covariance_matrix_totalpdf):
 def plot_multiclosure_correlation_matrix(fits_correlation_matrix_totalpdf, internal_Nx):
     """Like plot_multiclosure_covariance_matrix but plots the total
     correlation matrix
+
     """
     fig, ax = plot_pdf_matrix(
         fits_correlation_matrix_totalpdf, internal_Nx, vmin=0, vmax=1

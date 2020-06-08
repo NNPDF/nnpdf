@@ -79,7 +79,15 @@ def check_at_least_10_fits(fits):
 @make_argcheck
 def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
     """Checks that all the fit pdfs have the same number of replicas N_rep and
-    that N_rep is at least 10"""
+    that N_rep is at least 20 (by default).
+
+    This check also has the secondary
+    effect of filling in the namespace keys _internal_max_reps and _internal_min_reps
+    which can be used to override the number of replicas used at the level of
+    the runcard, but by default get filled in as the number of replicas in each
+    fit and 20 respectively
+
+    """
     # we take off 1 here because we don't want to include replica 0
     n_reps = {len(pdf) - 1 for pdf in fits_pdf}
     if len(n_reps) != 1:
@@ -104,12 +112,20 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
             f", {_internal_min_reps}. If you have set _internal_max_reps and"
             "_internal_min_reps then ensure that they take sensible values."
         )
-    return {"_internal_max_reps": _internal_max_reps, "_internal_min_reps": _internal_min_reps}
+    return {
+        "_internal_max_reps": _internal_max_reps,
+        "_internal_min_reps": _internal_min_reps,
+    }
 
 
 @make_argcheck
 def check_fits_different_filterseed(fits):
-    """Input fits should have the same filter seed if they are being compared"""
+    """Input fits should have the different filter seed if they are being
+    used for multiple closure test studies, because in high-level hands-waving
+    terms the different level 1 shifts represents different
+    'runs of the universe'!
+
+    """
     seed_list = [fit.as_input()["closuretest"]["filterseed"] for fit in fits]
     if len(seed_list) > len(set(seed_list)):
         raise CheckError(
