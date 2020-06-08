@@ -1273,7 +1273,7 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
     array
 
     """
-    return np.concatenate(experiments_bootstrap_xi)
+    return np.concatenate(experiments_bootstrap_xi, axis=1)
 
 @table
 def experiments_bootstrap_xi_table(
