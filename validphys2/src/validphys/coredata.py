@@ -249,9 +249,6 @@ class DataSet:
     """
     Add a docstring
     """
-    # XXX: Note the C++ class has 2 constructors which accepts
-    # a boolean mask and thus handles cuts appropriately
-
     cd: CommonData
     fkset: FKSet
     # Check this
@@ -265,13 +262,33 @@ class DataSet:
         self.sys_errors = self.cd.sys_errors
 
 
-    def __getitem__(self, mask):
-        """ Use the __getitem__ dunder method to apply
-        a cuts mask to the dataset object.
+    def with_cuts(self, cuts):
+        """A method to return a DataSet object where
+        an integer mask has been applied, keeping only data
+        points which pass cuts.
 
-        Example
-        -------
+        Note if the first data point passes cuts, the first entry
+        of ``cuts`` should be ``1`` not ``0``.
+
+        Paramters
+        ---------
+        cuts: list or validphys.core.Cuts
         """
-        # TODO: add a check such that the mask is same length as
-        # commondata
-        pass
+        # Ensure that the cuts we're applying applies to this dataset
+        # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
+        if hasattr(cuts, 'name') and self.cd.setname != cuts.name:
+            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
+                    f"to this commondata file: {self.cd.setname}")
+
+        if hasattr(cuts, 'load'):
+            cuts = cuts.load()
+        if cuts is None:
+            return self
+
+        # For now, we use swig for NNPDF.FKSet which doesn't like numpy.int
+        cuts = list(map(int, cuts))
+        new_cd = self.cd.with_cuts(cuts)
+        # BUG: check this
+        new_fkset = FKSet(self.fkset, cuts)
+
+        return dataclasses.replace(self, cd=new_cd, fkset=new_fkset)
