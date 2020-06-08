@@ -1097,8 +1097,8 @@ def fits_bootstrap_experiment_bias_variance(
     boot_seed=DEFAULT_SEED,
 ):
     """Perform bootstrap resample of `fits_experiment_bias_variance`, returns
-    tuple of bias_samples, variance_samples where each element is a list
-    of length bootstrap_samples. The elements of the lists are bootstrap samples
+    tuple of bias_samples, variance_samples where each element is a 1-D np.array
+    of length bootstrap_samples. The elements of the arrays are bootstrap samples
     of bias and variance respectively
 
     """
@@ -1126,7 +1126,7 @@ def fits_bootstrap_experiment_bias_variance(
         )
         bias_boot.append(bias)
         variance_boot.append(variance)
-    return bias_boot, variance_boot
+    return np.array(bias_boot), np.array(variance_boot)
 
 
 experiments_bootstrap_bias_variance = collect(
