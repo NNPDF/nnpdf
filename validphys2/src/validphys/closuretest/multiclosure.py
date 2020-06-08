@@ -529,7 +529,8 @@ def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=None
     can override the number of replicas used from each fit by supplying
     _internal_max_reps
     """
-    return list(range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
+    return list(range(
+        _internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
 
 
 class BootstrappedTheoryResult:
@@ -543,6 +544,38 @@ class BootstrappedTheoryResult:
 
 
 DEFAULT_SEED = 9689372
+
+
+def boostrap_multiclosure_fits(
+    internal_multiclosure_dataset_loader,
+    rng,
+    n_fit_max,
+    n_fit,
+    n_rep_max,
+    n_rep,
+    use_repeats
+    ):
+    """Perform a single bootstrap resample of the multiclosure fits.
+
+    Returns
+        resampled_multiclosure:
+            like internal_multiclosure_dataset_loader but with the fits
+            and replicas resampled randomly
+
+    """
+    closure_th, *input_tuple = internal_multiclosure_dataset_loader
+    fit_boot_index = rng.choice(n_fit_max, size=n_fit, replace=use_repeats)
+    fit_boot_th = [closure_th[i] for i in fit_boot_index]
+    boot_ths = []
+    # construct proxy fits theory predictions
+    for fit_th in fit_boot_th:
+        rep_boot_index = rng.choice(
+            n_rep_max, size=n_rep, replace=use_repeats
+        )
+        boot_ths.append(
+            BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
+        )
+    return (boot_ths, *input_tuple)
 
 
 def bias_variance_resampling_dataset(
@@ -580,8 +613,6 @@ def bias_variance_resampling_dataset(
     """
     # seed same rng so we can aggregate results
     rng = np.random.RandomState(seed=boot_seed)
-    closure_th, *input_tuple = internal_multiclosure_dataset_loader
-
     bias_sample = []
     variance_sample = []
     for n_rep_sample in n_replica_samples:
@@ -593,23 +624,19 @@ def bias_variance_resampling_dataset(
             bias_boot = []
             variance_boot = []
             for _ in range(bootstrap_samples):
-                fit_boot_index = rng.choice(n_fit_samples[-1], size=n_fit_sample, replace=use_repeats)
-                fit_boot_th = [closure_th[i] for i in fit_boot_index]
-                boot_ths = []
-                # construct proxy fits theory predictions
-                for fit_th in fit_boot_th:
-                    rep_boot_index = rng.choice(
-                        n_replica_samples[-1], size=n_rep_sample, replace=use_repeats
-                    )
-                    boot_ths.append(
-                        BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
-                    )
+                boot_internal_loader = boostrap_multiclosure_fits(
+                    internal_multiclosure_dataset_loader,
+                    rng,
+                    n_fit_samples[-1],
+                    n_fit_sample,
+                    n_replica_samples[-1],
+                    n_rep_sample,
+                    use_repeats
+                )
                 # explicitly pass n_rep to fits_dataset_bias_variance so it uses
                 # full subsample
                 bias, variance, _ = expected_dataset_bias_variance(
-                    fits_dataset_bias_variance(
-                        (boot_ths, *input_tuple), n_rep_sample
-                    )
+                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample)
                 )
                 bias_boot.append(bias)
                 variance_boot.append(variance)
@@ -747,7 +774,6 @@ def xi_resampling_dataset(
     """
     # seed same rng so we can aggregate results
     rng = np.random.RandomState(seed=boot_seed)
-    closure_th, *input_tuple = internal_multiclosure_dataset_loader
 
     xi_1sigma = []
     for n_rep_sample in n_replica_samples:
@@ -757,20 +783,17 @@ def xi_resampling_dataset(
             # for each n_fit and n_replica sample store result of each boot resample
             xi_1sigma_boot = []
             for _ in range(bootstrap_samples):
-                fit_boot_index = rng.choice(
-                    n_fit_samples[-1], size=n_fit_sample, replace=use_repeats)
-                fit_boot_th = [closure_th[i] for i in fit_boot_index]
-                boot_ths = []
-                # construct proxy fits theory predictions
-                for fit_th in fit_boot_th:
-                    rep_boot_index = rng.choice(
-                        n_replica_samples[-1], size=n_rep_sample, replace=use_repeats
-                    )
-                    boot_ths.append(
-                        BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
-                    )
+                boot_internal_loader = boostrap_multiclosure_fits(
+                    internal_multiclosure_dataset_loader,
+                    rng,
+                    n_fit_samples[-1],
+                    n_fit_sample,
+                    n_replica_samples[-1],
+                    n_rep_sample,
+                    use_repeats
+                )
                 # append the 1d array for individual directions
-                xi_1sigma_boot.append(dataset_xi((boot_ths, *input_tuple)))
+                xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
             fixed_n_rep_xi_1sigma.append(xi_1sigma_boot)
         xi_1sigma.append(fixed_n_rep_xi_1sigma)
     return np.array(xi_1sigma)
@@ -962,3 +985,189 @@ def total_std_xi_means_finite_effects(
     """
     xi_total = np.concatenate(exps_xi_resample, axis=-1)
     return dataset_std_xi_means_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+
+@check_multifit_replicas
+def fits_bootstrap_experiment_bias_variance(
+    internal_multiclosure_experiment_loader,
+    fits,
+    _internal_max_reps=None,
+    _internal_min_reps=None,
+    bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+):
+    """Perform bootstrap resample of `fits_experiment_bias_variance`, returns
+    tuple of bias_samples, variance_samples
+    """
+    # seed same rng so we can aggregate results
+    rng = np.random.RandomState(seed=boot_seed)
+    bias_boot = []
+    variance_boot = []
+    for _ in range(bootstrap_samples):
+        # use all fits. Use all replicas by default. Allow repeats in resample.
+        boot_internal_loader = boostrap_multiclosure_fits(
+            internal_multiclosure_experiment_loader,
+            rng,
+            len(fits),
+            len(fits),
+            _internal_max_reps,
+            _internal_max_reps,
+            True
+        )
+        # explicitly pass n_rep to fits_dataset_bias_variance so it uses
+        # full subsample
+        bias, variance, _ = expected_dataset_bias_variance(
+            fits_dataset_bias_variance(
+                boot_internal_loader, _internal_max_reps, _internal_min_reps)
+        )
+        bias_boot.append(bias)
+        variance_boot.append(variance)
+    return bias_boot, variance_boot
+
+experiments_bootstrap_bias_variance = collect(
+    "fits_bootstrap_experiment_bias_variance",
+    ("experiments",))
+
+def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
+    """returns a bootstrap resampling of the ratio of bias/variance for
+    each experiment and total. Total is calculated as sum(bias)/sum(variance)
+    where each sum refers to the sum across experiments.
+
+    Returns
+
+    ratios_resampled: list
+        list of boostrap samples of ratio of bias/var, length of list is
+        len(experiments) + 1 because the final element is the total ratio
+        resampled.
+
+    """
+    ratios = []
+    bias_tot, var_tot = experiments_bootstrap_bias_variance[0]
+    for bias, var in experiments_bootstrap_bias_variance[1:]:
+        bias_tot += bias
+        var_tot += var
+        ratios.append(bias/var)
+    ratios.append(bias_tot/var_tot)
+    return ratios
+
+def experiments_bootstrap_sqrt_ratio(experiments_bootstrap_ratio):
+    """Square root of experiments_bootstrap_ratio"""
+    return np.sqrt(experiments_bootstrap_ratio)
+
+@table
+def experiments_bootstrap_sqrt_ratio_table(
+    experiments_bootstrap_sqrt_ratio, experiments):
+    indices = [str(exp) for exp in experiments] + ["Total"]
+    records = []
+    for i, exp in enumerate(indices):
+        ratio_boot = experiments_bootstrap_sqrt_ratio[i]
+        records.append(dict(
+            experiment=exp,
+            mean_ratio=np.mean(ratio_boot, axis=0),
+            std_ratio=np.std(ratio_boot, axis=0)))
+    df = pd.DataFrame.from_records(
+        records,
+        index="experiment",
+        columns=("experiment", "mean_ratio", "std_ratio")
+    )
+    df.columns = [
+        "Bootstrap mean sqrt(bias/variance)",
+        "Bootstrap std. dev. sqrt(bias/variance)"
+    ]
+    return df
+
+def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
+    """Calculate a bootstrap resampling of the expected xi from
+    `experiments_bootstrap_sqrt_ratio`, using the same formula as
+    `expected_xi_from_bias_variance`
+
+    """
+    n_sigma_in_variance = 1 / experiments_bootstrap_sqrt_ratio
+    # pylint can't find erf here, disable error in this function
+    # pylint: disable=no-member
+    estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
+    return estimated_integral
+
+@table
+def experiments_bootstrap_expected_xi_table(
+    experiments_bootstrap_expected_xi, experiments):
+    """Tabule the mean and standard deviation across bootstrap samples of the
+    expected xi calculated from the ratio of bias/variance.
+
+    Returns
+
+    table: pd.DataFrame
+        table with two columns, for the boostrap mean and standard deviation
+        and a row for each experiment plus the total across all experiments
+
+    """
+    df = experiments_bootstrap_sqrt_ratio_table(
+        experiments_bootstrap_expected_xi, experiments)
+    df.columns = [
+        r"Bootstrap mean expected $\xi_{1\sigma} from ratio$",
+        r"Bootstrap std. dev. expected $\xi_{1\sigma} from ratio$",
+    ]
+    return df
+
+@check_multifit_replicas
+def fits_bootstrap_experiment_xi(
+    internal_multiclosure_experiment_loader,
+    fits,
+    _internal_max_reps=None,
+    _internal_min_reps=None,
+    bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+):
+    """Perform bootstrap resample of `fits_experiment_bias_variance`, returns
+    tuple of bias_samples, variance_samples
+    """
+    # seed same rng so we can aggregate results
+    rng = np.random.RandomState(seed=boot_seed)
+
+    xi_1sigma_boot = []
+    for _ in range(bootstrap_samples):
+        # use all fits. Use all replicas by default. Allow repeats in resample.
+        boot_internal_loader = boostrap_multiclosure_fits(
+            internal_multiclosure_experiment_loader,
+            rng,
+            len(fits),
+            len(fits),
+            _internal_max_reps,
+            _internal_max_reps,
+            True
+        )
+        xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
+    return xi_1sigma_boot
+
+experiments_bootstrap_xi = collect(
+    "fits_bootstrap_experiment_xi", ("experiments",))
+
+@table
+def experiments_bootstrap_xi_table(
+    experiments_bootstrap_xi, experiments):
+    """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
+    samples. Note that the mean has already be taken across data points
+    (or eigenvector directions in the basis which diagonalises the covariance
+    matrix) for each individual bootstrap sample.
+
+    """
+    # first take mean across data
+    xi_1sigma = np.mean(experiments_bootstrap_xi, axis=-1)
+    df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments)
+    df.columns = [
+        r"Bootstrap mean $\xi_{1\sigma}$",
+        r"Bootstrap std. dev. $\xi_{1\sigma}$"
+    ]
+    return df
+
+@table
+def experiments_bootstrap_xi_comparison(
+    experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table
+):
+    """Table comparing the mean and standard deviation across bootstrap samples of
+    the measured xi_1sigma and the expected xi_1sigma calculated from
+    bias/variance
+
+    """
+    return pd.concat(
+        (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
+        axis=1)
