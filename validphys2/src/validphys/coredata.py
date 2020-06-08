@@ -183,7 +183,7 @@ class CommonData:
         points which pass cuts.
 
         Note if the first data point passes cuts, the first entry
-        of ``cuts`` should be ``1`` not ``0``.
+        of ``cuts`` should be ``0``.
 
         Paramters
         ---------
@@ -199,6 +199,10 @@ class CommonData:
             cuts = cuts.load()
         if cuts is None:
             return self
+
+        # We must shift the cuts up by 1 since a cut of 0 implies the first data point
+        # while commondata indexing starts at 1.
+        cuts = list(map(lambda x: x + 1, cuts))
 
         newndata = len(cuts)
         new_commondata_table = self.commondata_table.loc[cuts]

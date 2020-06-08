@@ -36,20 +36,22 @@ def test_commondata_with_cuts():
     )
 
     loaded_cd_fit_cuts = loaded_cd.with_cuts(fit_cuts)
-    assert all(loaded_cd_fit_cuts.commondata_table.index == fit_cuts.load())
-    assert all(loaded_cd_fit_cuts.sys_errors.index == fit_cuts.load())
+    # We must do these - 1 subtractions due to the fact that cuts indexing
+    # starts at 0 while commondata indexing starts at 1
+    assert all(loaded_cd_fit_cuts.commondata_table.index - 1 == fit_cuts.load())
+    assert all(loaded_cd_fit_cuts.sys_errors.index - 1 == fit_cuts.load())
 
     loaded_cd_internal_cuts = loaded_cd.with_cuts(internal_cuts)
-    assert all(loaded_cd_internal_cuts.commondata_table.index == internal_cuts.load())
+    assert all(loaded_cd_internal_cuts.commondata_table.index - 1 == internal_cuts.load())
 
     loaded_cd_nocuts = loaded_cd.with_cuts(None)
     assert all(loaded_cd_nocuts.commondata_table.index == range(1, cd.ndata + 1))
 
     preloaded_fit_cuts = fit_cuts.load()
     loaded_cd_preloaded_cuts = loaded_cd.with_cuts(fit_cuts)
-    assert all(loaded_cd_preloaded_cuts.commondata_table.index == preloaded_fit_cuts)
+    assert all(loaded_cd_preloaded_cuts.commondata_table.index - 1 == preloaded_fit_cuts)
 
-    assert all(loaded_cd.with_cuts([1, 2, 3]).commondata_table.index == [1, 2, 3])
+    assert all(loaded_cd.with_cuts([1, 2, 3]).commondata_table.index - 1 == [1, 2, 3])
 
     # Check that giving cuts for another dataset raises the correct ValueError exception
     bad_cuts = l.check_fit_cuts(fit="191015-mw-001", setname="NMCPD")
