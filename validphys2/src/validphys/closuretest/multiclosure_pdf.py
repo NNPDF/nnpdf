@@ -634,7 +634,7 @@ def fits_bootstrap_pdf_expected_xi_table(fits_bootstrap_pdf_expected_xi):
         ],
     )
 
-
+@table
 def fits_bootstrap_pdf_compare_xi_to_expected(
     fits_bootstrap_pdf_expected_xi_table, fits_bootstrap_pdf_xi_table
 ):
