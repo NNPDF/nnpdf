@@ -13,6 +13,178 @@ import pandas as pd
 
 log = logging.getLogger(__name__)
 
+
+def covmat_from_systematics(dataset):
+    """ Function that takes in a :py:class:`validphys.coredata.DataSet` object
+    and generates the associated covariance matrix using the systematics. The logic
+    is best described by the now deprecated C++ code:
+
+    .. code-block:: c++
+
+            auto CovMat = NNPDF::matrix<double>(ndat, ndat);
+
+            for (int i = 0; i < ndat; i++)
+            {
+              for (int j = 0; j < ndat; j++)
+              {
+                double sig    = 0.0;
+                double signor = 0.0;
+
+                // Statistical error
+                if (i == j)
+                  sig += pow(stat_error[i],2);
+
+                for (int l = 0; l < nsys; l++)
+                {
+                  sysError const& isys = systematic_errors[i][l];
+                  sysError const& jsys = systematic_errors[j][l];
+                  if (isys.name != jsys.name)
+                      throw RuntimeException("ComputeCovMat", "Inconsistent naming of systematics");
+                  if (isys.name == "SKIP")
+                      continue; // Continue if systype is skipped
+                  if ((isys.name == "THEORYCORR" || isys.name == "THEORYUNCORR") && !use_theory_errors)
+                      continue; // Continue if systype is theoretical and use_theory_errors == false
+                  const bool is_correlated = ( isys.name != "UNCORR" && isys.name !="THEORYUNCORR");
+                  if (i == j || is_correlated)
+                    switch (isys.type)
+                    {
+                      case ADD:   sig    += isys.add *jsys.add;  break;
+                      case MULT: if (mult_errors) { signor += isys.mult*jsys.mult; break; }
+                                 else { continue; }
+                      case UNSET: throw RuntimeException("ComputeCovMat", "UNSET systype encountered");
+                    }
+                }
+
+                // Covariance matrix entry
+                CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
+            // Covariance matrix weight
+            CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
+          }
+        }
+
+        return CovMat;
+      }
+
+    We see that for the diagonal elements of the covariance matrix, we must add the squared
+    statistical error. This is done by creating a diagonal matrix from the vector of statistical
+    errors, called ``stat_mat``, and squaring the matrix before the return line.
+
+    We now pick datapoint i and loop over all other datapoints j. For each such pair of points,
+    loop over all the systematics, if the l'th systematic of data point i has name ``SKIP`` we ignore
+    it. This is handled by scanning over all sytematic errors in the ``sys_errors`` dataframe and dropping
+    any columns which correspond to a systematic error name of ``SKIP``, thus the ``sys_errors`` dataframe
+    define below contains only the systematics without the ``SKIP`` name.
+
+    Note that in the switch statement an ADDitive or MULTiplicative systype of systematic i is handled
+    by either multiplying the additive or multiplicative uncertainties respectively. We instead opt to
+    create a purely additive systematic table where all elements are to be understood as additive
+    systematics and systematics of type MULT have been correctly transformed to their additive
+    values. This dataframe we call ``additive_mat``.
+
+    Next we notice that a systematic is correlated if its name is neither ``UNCORR`` nor ``THEORYUNCORR``. We
+    create a dataframe called ``correlated_mat`` where any column correpsonding to an ``UNCORR`` or
+    ``THEORYUNCORR`` systematic is set to 0.
+
+    From here it's a matter of staring at a piece of paper for a while to realise the contribution to the
+    covariance matrix arising due to correlated systematics is ``correlated_mat @ additive_mat.T``. Note
+    that in the case where ``i == j`` is met, we double count this contribution using this method, so we set
+    the diagonal elements of this particular contribution to 0 by using ``np.fill_diagonal``.
+
+    Finally, the ``i == j`` case is handled by summing the square row elements of ``additive_mat``, this is
+    done by using the ``np.einsum`` function.
+
+    For more information on the generation of the covariance matrix see the `paper <https://arxiv.org/pdf/hep-ph/0501067.pdf>`_
+    outlining the procedure, specifically equation 2 and surrounding text.
+
+    Paramaters
+    ----------
+    dataset : validphys.coredata.DataSet
+        Dataset object containing CommonData which in turn stores information
+        about systematic errors, their treatment and description.
+
+    Returns
+    -------
+    cov_mat : np.array
+        Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
+        containing correlation information.
+
+    Example
+    -------
+    >>> from validphys.commondataparser import load_commondata
+    >>> from validphys.coredata import DataSet
+    >>> from validphys.loader import Loader
+    >>> from validphys.results import covmat_from_systematics
+    >>> from NNPDF import FKSet
+    >>> l = Loader()
+    >>> cd = l.check_commondata("NMC")
+    >>> cd = load_commondata(cd)
+    >>> ds = l.check_dataset("NMC", theoryid=53, cuts=None)
+    >>> fktables = []
+    >>> for p in ds.fkspecs:
+    ...     fktable = p.load()
+    ...     fktable.thisown = 0
+    ...     fktables.append(fktable)
+    ...
+    >>> fkset = FKSet(FKSet.parseOperator(ds.op), fktables)
+    >>> data = DataSet(cd, fkset, ds.weight)
+    >>> covmat_from_systematics(data)
+    array([[8.64031971e-05, 8.19971921e-05, 6.27396915e-05, ...,
+            2.40747732e-05, 2.79614418e-05, 3.46727332e-05],
+           [8.19971921e-05, 1.41907442e-04, 6.52360141e-05, ...,
+            2.36624379e-05, 2.72605623e-05, 3.45492831e-05],
+           [6.27396915e-05, 6.52360141e-05, 9.41928691e-05, ...,
+            1.79244824e-05, 2.08603130e-05, 2.56283708e-05],
+           ...,
+           [2.40747732e-05, 2.36624379e-05, 1.79244824e-05, ...,
+            5.67822050e-05, 4.09077450e-05, 4.14126235e-05],
+           [2.79614418e-05, 2.72605623e-05, 2.08603130e-05, ...,
+            4.09077450e-05, 5.55150870e-05, 4.15843357e-05],
+           [3.46727332e-05, 3.45492831e-05, 2.56283708e-05, ...,
+            4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
+    """
+    systype = dataset.cd.systype_table["name"]
+    # Dropping systematics that have type SKIP
+    sys_errors = dataset.sys_errors.loc[:, systype != "SKIP"]
+
+    # Diagonal matrix containing the statistical uncertainty for each
+    # data point
+    stat_mat = np.diag(dataset.stat_errors.to_numpy())
+
+    # Systematic uncertainties converted to additive uncertainties
+    additive_mat = sys_errors.apply(
+        lambda x: [
+            i.add if i.sys_type == "ADD" else (i.mult * j / 100)
+            for i, j in zip(x, dataset.central_values)
+        ]
+    )
+
+    # Matrix where all non-zero values are due to correlated systematics
+    correlated_mat = additive_mat.copy()
+    # If all systypes were SKIP then we'd have an empty df
+    if not correlated_mat.empty:
+        correlated_mat.loc[:, (systype == "UNCORR") | (systype == "THEORYUNCORR")] = 0
+        correlated_mat = correlated_mat.to_numpy()
+        additive_mat = additive_mat.to_numpy()
+    else:
+        # Some datasets have zero systematic uncertainties.
+        # We treat this special edge case by creating
+        # a matrix of zeros so it can be broadcast
+        # with the statistical error matrix at the end
+        correlated_mat = additive_mat = np.zeros_like(stat_mat)
+
+    # Avoid double counting in case the i = j element is a correlated
+    # systematic we take care of this case in the einsum below
+    off_diagonals = correlated_mat @ additive_mat.T
+    np.fill_diagonal(off_diagonals, 0)
+
+    cov_mat = (
+        stat_mat ** 2
+        + off_diagonals
+        + np.diag(np.einsum("ij, ij -> i", additive_mat, additive_mat))
+    )
+    return cov_mat
+
+
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
     lower triangular part and a vector of differences.
