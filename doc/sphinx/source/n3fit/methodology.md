@@ -70,7 +70,7 @@ The main advantage of using a modern deep learning backend such as Keras/Tensorf
 
 The current `n3fit` code supports feed-forward multilayer perceptron neural networks (also known as sequential dense networks in ML code frameworks) with custom number of layers, nodes, activation functions and initializers from [Keras](https://keras.io/).
 
-A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1.
+A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1. Note however that `n3fit` also allows for the use for one network per flavour by modifying the `layer_type` parameter.
 
 ``` image:: figures/nn.png
 ```
@@ -81,7 +81,7 @@ The momentum sum rules are implemented as a **neural network layer** which compu
 
 The network initialization relies on modern deep learning techniques such as glorot uniform and normal (see [Keras initializers](https://keras.io/initializers/)), which have demonstrated to provide a faster convergence to the solution.
 
-``` important:: Parameters like the number of layers, nodes, activation functions are hyper-paramters that require tuning.
+``` important:: Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 ```
 
 Preprocessing

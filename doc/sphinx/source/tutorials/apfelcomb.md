@@ -1,10 +1,12 @@
-## How to generate/implement FK tables
+# How to generate and implement FK tables
 
 APFELcomb is the project that allows the user to generate `FK` tables.
 These are lookup tables that contain the relevant information to compute 
 theoretical predicitons in the NNPDF framework. Broadly speaking, this is 
 achieved by taking DGLAP evolution kernels from ``APFEL`` and combining them 
-with interpolated parton-level observable kernels of various forms.
+with interpolated parton-level observable kernels in the APPLgrid or
+FastNLO format 
+(see [How to generate APPLgrid and fastNLO tables](../tutorials/APPLgrids.md)).
 The various data formats used in APFELcomb are described in 
 ```
 nnpdf/nnpdfcpp/data/doc/data_layout.pdf
@@ -13,7 +15,7 @@ The user is strongly encouraged to go through that note with care, in order to
 familiarise himself with the features and the structure of the APFELcomb
 project.
 
-# Generate a FK table
+## Generate a FK table
 Each `FK` table is generated piecewise in one or more `subgrids`. The `subgrids`
 implemented in APFELcomb can be displayed by running the script
 ```
@@ -43,6 +45,10 @@ will be written out to
 ```
 $RESULTS_PATH/theory_<theory id>/subgrids/FK_<setname>_<subgrid id>.dat.
 ```
+
+APPLgrids and FastNLO tables should be properly stored in the `applgrids` folder by means of
+[Git LFS](https://git-lfs.github.com/) (see [here](storage) for details).
+
 Once all the relevant subgrids for the desired dataset(s) are generated, 
 one should run
 ```
@@ -54,7 +60,7 @@ complete `FK` table. The resulting final `FK` table should be stored at
 $RESULTS_PATH/theory_<theory id>/fastkernel/FK_<setname>.dat.
 ```
 
-# Implement a new FK table
+## Implement a new FK table
 Whenever a new dataset is implemented, it should be accompanied by the 
 corresponding `FK` table. To implement a new `FK` table, one must first add
 a corresponding entry into the apfelcomb database (by editing the 
@@ -79,9 +85,9 @@ elements and disables target-mass corrections.
 Once this entry is complete, one must move on to adding entries in the 
 corresponding subgrid table.
 
-### Implementing a new APPLgrid subgrid 
+### Implementing a new APPLgrid/FastNLO subgrid 
 
-To add a new APPLgrid-based subgrid, one must add a corresponding entry into 
+To add a new APPLgrid- or FastNLO--based subgrid, one must add a corresponding entry into 
 the `app\_subgrids` table of the apfelcomb database. One entry should be added 
 for each APPLgrid making up the final target `FK` table.
 The entries have the following fields:
@@ -100,6 +106,11 @@ where we want to exclude the penultimate bin, the mask would be:
 ```
 1 1 1 0 1
 ```
+Note that there is no way to know a priori whether `pdfwgt` should be set to 0 or to 1, that is
+whether the grid is unweighted or weighted. However, this can easily be checked a posteriori, since
+setting `pdfwgt` to the wrong value should lead to `./apfel_comb` failing due to a large relative
+error between the value in the APPLgrid and that in the FK table.
+
 The applgrid filename assumes that the grid can be found at
 ```
 $APPL_PATH/<setname>/<applgrid>
@@ -261,7 +272,7 @@ done by running `db/generate_database.sh`.
 
 Several helper scripts are provided to make using APFELcomb easier 
 (particularly when generating a full set of FK tables for a particular theory).
-- `scripts/disp_grids.py` displays a full list of APPLgrid, DIS or DYP subgrids 
+- `scripts/disp_grids.py` displays a full list of APPLgrid/FastNLO, DIS or DYP subgrids 
 implemented in APFELcomb.
 - `run_allgrids.py [theoryID] [job script]` scans the results directory and 
 submits jobs for all missing subgrids for the specified theory.

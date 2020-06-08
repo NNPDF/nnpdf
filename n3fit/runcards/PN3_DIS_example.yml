@@ -1,9 +1,9 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 
 ############################################################
-description: NNPDF3.1 NNLO fitted charm global dataset
+description: NNPDF3.1 NNLO fitted charm dis dataset
 
 ############################################################
 # frac: training fraction
@@ -100,7 +100,7 @@ fitting:
     nodes_per_layer: [35, 25, 8]
     activation_per_layer: ['tanh', 'tanh', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.01
+    learning_rate: 1.0
     optimizer: 'Adadelta'
     epochs: 40000
     pos_multiplier: 1.09

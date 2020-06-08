@@ -5,13 +5,14 @@ This holds the concrete labels data relative to the PDF bases,
 as declaratively as possible.
 """
 import inspect
+import functools
 
 import numpy as np
 
 from reportengine.checks import CheckError
 
 from validphys.core import PDF
-from validphys.gridvalues import grid_values
+from validphys.gridvalues import grid_values, central_grid_values
 
 
 #This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
@@ -270,9 +271,8 @@ class Basis():
         possibly obtained with `_to_indexes`)."""
         return np.count_nonzero(self.from_flavour_mat[inds, :], axis=0) > 0
 
-    def grid_values(self, pdf:PDF, vmat, xmat, qmat):
-        """Like `validphys.gridvalues.grid_values`, but taking  and returning
-        `vmat` in terms of the vectors in this base."""
+
+    def _grid_values(self, func, vmat, xmat, qmat):
 
         #Indexes in the transformation from the "free form" inpt
         inds = self._to_indexes(vmat)
@@ -287,10 +287,52 @@ class Basis():
         #The PDG codes for LHAPDF
         flmat = self._flaray_from_flindexes(flinds)
 
-        gv = grid_values(pdf, flmat, xmat, qmat)
+        gv = func(flmat, xmat, qmat)
         #Matrix product along the flavour axis
         rotated_gv = np.einsum('bc,acde->abde', transformation, gv)
         return rotated_gv
+
+    def grid_values(self, pdf, vmat, xmat, qmat):
+        """Like :py:func:`validphys.gridvalues.grid_values`, but taking  and
+        returning `vmat` in terms of the vectors in this base.
+
+        ----------
+        pdf : PDF
+            Any PDF set
+        vmat : iterable
+            A list of flavour aliases valid for the basis.
+        xmat : iterable
+            A list of x values
+        qmat : iterable
+            A list of values in Q, expressed in GeV.
+
+        Returns
+        -------
+        A 4-dimension array with the PDF values at the input parameters
+        for each replica. The return value is indexed as follows::
+
+            grid_values[replica][flavour][x][Q]
+
+        Examples
+        --------
+        Compute the median ratio over replicas between singlet and gluon for a
+        fixed point in x and a range of values in Q::
+
+            >>> import numpy as np
+            >>> from validphys.loader import Loader
+            >>> from validphys.pdfbases import evolution
+            >>> gv = evolution.grid_values(Loader().check_pdf("NNPDF31_nnlo_as_0118"), ["singlet", "gluon"], [0.01], [2,20,200])
+            >>> np.median(gv[:,0,...]/gv[:,1,...], axis=0)
+            array([[0.56694959, 0.53782002, 0.60348812]])
+        """
+        func = functools.partial(grid_values, pdf)
+        return self._grid_values(func, vmat, xmat, qmat)
+
+    def central_grid_values(self, pdf, vmat, xmat, qmat):
+        """Same as :py:meth:`Basis.grid_values` but returning information on
+        the central member of the PDF set."""
+        func = functools.partial(central_grid_values, pdf)
+        return self._grid_values(func, vmat, xmat, qmat)
 
 
     @classmethod
@@ -339,6 +381,26 @@ evolution = Basis.from_mapping({
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
+EVOL = Basis.from_mapping({
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        'g': {'g': 1},
+
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+    },
+    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
+    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',  ))
+
 NN31IC = Basis.from_mapping(
     {
         r'\Sigma': {
@@ -365,6 +427,19 @@ NN31IC = Basis.from_mapping(
         'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
     default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
+FLAVOUR = Basis.from_mapping(
+    {
+        'u': {'u': 1},
+        'ubar': {'ubar': 1},
+        'd': {'d': 1},
+        'dbar': {'dbar': 1},
+        's': {'s': 1},
+        'sbar': {'sbar': 1},
+        'c': {'c': 1},
+        'g': {'g': 1},
+    },
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))    
+
 pdg = Basis.from_mapping({
 'g/10': {'g':0.1},
 'u_{v}': {'u':1, 'ubar':-1},
@@ -374,3 +449,50 @@ r'\bar{u}': {'ubar':1},
 r'\bar{d}': {'dbar':1},
 'c': {'c':1},
 })
+
+
+def rotation(flav_info):
+    """Return a rotation matrix R_{ij} which takes from the flavour to the evolution basis,
+    from (u, ubar, d, dbar, s, sbar, c, g) to (sigma, g, v, v3, v8, t3, t8, cp), where
+    i is the flavour index and j is the evolution index. 
+    The evolution basis is defined as 
+    cp = c + cbar = 2c
+    and
+    sigma = u + ubar + d + dbar + s + sbar + cp  
+    v = u - ubar + d - dbar + s - sbar + c - cbar 
+    v3 = u - ubar - d + dbar
+    v8 = u - ubar + d - dbar - 2*s + 2*sbar
+    t3 = u + ubar - d - dbar
+    t8 = u + ubar + d + dbar - 2*s - 2*sbar
+
+    If the input is already in the evolution basis it returns the identity.
+    """
+    sigma = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
+    v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
+    v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+    v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
+    t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+    t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
+    cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
+    g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
+    flist = [sigma, g, v, v3, v8, t3, t8, cp]
+    
+    evol_basis = False
+    mat = []
+    for f in flist:
+        for flav_dict in flav_info:
+            try:
+                flav_name = flav_dict["fl"]
+                mat.append(f[flav_name])
+            # if one of the keys in the dictionary is not a key in flist
+            # it means we are already in the evolution basis    
+            except KeyError:
+                evol_basis = True
+                break
+        if evol_basis:
+            mat = np.identity(8)
+            break    
+
+    mat = np.asarray(mat).reshape(8,8)
+    # Return the transpose of the matrix, to have the first index referring to flavour
+    return mat.transpose()    

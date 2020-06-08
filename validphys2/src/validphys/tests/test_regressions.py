@@ -74,6 +74,9 @@ def test_expsqrtcovmat(data_config):
 def test_t0sqrtcovmat(data_witht0_config):
     return API.experiments_sqrtcovmat(**data_witht0_config)
 
+@make_table_comp(parse_exp_mat)
+def test_pdf_plus_exp_covmat(data_config):
+    return API.experiments_covmat_no_table(use_pdferr=True, **data_config)
 
 @make_table_comp(sane_load)
 def test_predictions(data_config):

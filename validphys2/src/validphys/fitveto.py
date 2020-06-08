@@ -5,8 +5,8 @@ Module for the determination of passing fit replicas.
 
 Current active vetoes:
    Positivity - Replicas with FitInfo.is_positive == False
-   ChiSquared - Replicas with ChiSquared > NSIGMA_DISCARD*StandardDev + Average
-   ArclengthX - Replicas with ArcLengthX > NSIGMA_DISCARD*StandardDev + Average
+   ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
+   ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
 """
 
 import json
@@ -15,35 +15,47 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
-# Threshold for distribution vetos
-NSIGMA_DISCARD = 4
+# Default thresholds for distribution vetos in units of standard deivations
+NSIGMA_DISCARD_ARCLENGTH = 4.0
+NSIGMA_DISCARD_CHI2 = 4.0
 
 
-def distribution_veto(dist, prior_mask):
+
+def distribution_veto(dist, prior_mask, nsigma_threshold):
     """ For a given distribution (a list of floats), returns a boolean mask
-    specifying the passing elements. Only points passing the prior_mask are
+    specifying the passing elements. The result is a new mask of the elements that
+    satisfy:
+
+    value <=  mean + nsigma_threshold*standard_deviation
+
+    Only points passing the prior_mask are
     considered in the average or standard deviation."""
-    if sum(prior_mask) <= 1: return prior_mask
+    if sum(prior_mask) <= 1:
+        return prior_mask
     dist = np.asarray(dist)
     passing = dist[prior_mask]
     average_pass = np.mean(passing)
-    stderr_pass  = np.std(passing)
+    stderr_pass = np.std(passing)
     # NOTE that this has always not been abs
     # i.e replicas that are lower than the average by more than 4std pass
-    return (dist - average_pass) <= NSIGMA_DISCARD*stderr_pass
+    return (dist - average_pass) <= nsigma_threshold * stderr_pass
 
 
-def determine_vetoes(fitinfos: list):
+def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float):
     """ Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
     """
 
-    # Setup distributions to veto upon
+    # Setup distributions to veto upon: Make a dictionary {name: (values, threshold)}, where
+    # values and threshold are to be filtered recusively as per ``distribution_veto``.
     # TODO ensure that all replicas have the same amount of arclengths
-    distributions = {"ChiSquared": [i.chi2 for i in fitinfos]}
+    distributions = {"ChiSquared": ([i.chi2 for i in fitinfos], nsigma_discard_chi2)}
     for i in range(0, len(fitinfos[0].arclengths)):
-        distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfos]
+        distributions["ArcLength_" + str(i)] = (
+            [j.arclengths[i] for j in fitinfos],
+            nsigma_discard_arclength,
+        )
 
     # Positivity veto
     posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
@@ -53,12 +65,16 @@ def determine_vetoes(fitinfos: list):
     # Distribution vetoes
     while True:
         for key in distributions:
-            vetoes[key] = distribution_veto(distributions[key], total_mask)
+            values, threshold = distributions[key]
+            vetoes[key] = distribution_veto(
+                values, total_mask, nsigma_threshold=threshold
+            )
         new_total_mask = np.all(list(vetoes.values()), axis=0)
-        if sum(new_total_mask) == sum(total_mask): break
+        if sum(new_total_mask) == sum(total_mask):
+            break
         total_mask = new_total_mask
 
-    pass_chi2 = np.asarray(distributions["ChiSquared"])[total_mask]
+    pass_chi2 = np.asarray(distributions["ChiSquared"][0])[total_mask]
     log.info(f"Passing average chi2: {np.mean(pass_chi2)}")
 
     vetoes["Total"] = total_mask

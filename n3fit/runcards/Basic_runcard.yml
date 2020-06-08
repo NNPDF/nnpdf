@@ -1,9 +1,9 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 
 ############################################################
-description: NNPDF3.1 NLO fitted charm global dataset
+description: Basic runcard
 
 ############################################################
 # frac: training fraction
@@ -35,30 +35,6 @@ datacuts:
 theory:
   theoryid: 53        # database id
 
-###########################################################
-hyperscan:
-    stopping:
-        min_epochs: 5e2
-        max_epochs: 40e2
-        min_patience: 0.10
-        max_patience: 0.40
-    positivity:
-        min_multiplier: 1.00000001
-        max_multiplier: 1.00000002
-        min_initial:
-        max_initial:
-    optimizer:
-        names: 'ALL' # Use all implemented optimizers
-        min_lr: 0.0005
-        max_lr: 0.5
-    architecture:
-        initializers: 'ALL'
-        max_drop: 0.15
-        n_layers: [2,3,4]
-        min_units: 5
-        max_units: 50
-        activations: ['sigmoid', 'tanh']
-
 
 ############################################################
 fitting:
@@ -86,6 +62,7 @@ fitting:
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
+    threshold_chi2: 5.0
 
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
@@ -149,3 +126,4 @@ lhagrid:
 
 ############################################################
 debug: true
+maxcores: 8

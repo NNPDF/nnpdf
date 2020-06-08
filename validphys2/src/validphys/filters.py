@@ -35,7 +35,7 @@ class FatalRuleError(Exception):
     """Exception raised when a rule application failed at runtime."""
 
 
-def default_filter_settings():
+def default_filter_settings_input():
     """Return a dictionary with the default hardcoded filter settings.
     These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
     """

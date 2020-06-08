@@ -20,12 +20,14 @@ import os.path as osp
 import urllib.parse as urls
 import mimetypes
 
+from typing import List
+
 import requests
 from reportengine.compat import yaml
 from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts,
+                            PositivitySetSpec, DataSetSpec, PDF, Cuts, ExperimentSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
@@ -363,14 +365,14 @@ class Loader(LoaderBase):
 
         return tuple(cf)
 
-    def check_posset(self, theiryID, setname, postlambda):
+    def check_posset(self, theoryID, setname, postlambda):
         cd = self.check_commondata(setname, 'DEFAULT')
-        fk = self.check_fktable(theiryID, setname, [])
-        th =  self.check_theoryID(theiryID)
+        fk = self.check_fktable(theoryID, setname, [])
+        th =  self.check_theoryID(theoryID)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 
-    def get_posset(self, theiryID, setname, postlambda):
-        return self.check_posset(theiryID, setname, postlambda).load()
+    def get_posset(self, theoryID, setname, postlambda):
+        return self.check_posset(theoryID, setname, postlambda).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
@@ -388,14 +390,14 @@ class Loader(LoaderBase):
     def check_default_filter_rules(self, theoryid, defaults=None):
         # avoid circular import
         from validphys.filters import (
-            default_filter_settings,
+            default_filter_settings_input,
             default_filter_rules_input,
             Rule,
         )
 
         th_params = theoryid.get_description()
         if defaults is None:
-            defaults = default_filter_settings()
+            defaults = default_filter_settings_input()
         return [
             Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
@@ -446,6 +448,34 @@ class Loader(LoaderBase):
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
                            frac=frac, op=op, weight=weight)
+
+    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> ExperimentSpec:
+        """Loader method for instantiating ExperimentSpec objects. The NNPDF::Experiment
+        object can then be instantiated using the load method.
+
+        Parameters
+        ----------
+        name: str
+            A string denoting the name of the resulting ExperimentSpec object.
+        dataset: List[DataSetSpec]
+            A list of DataSetSpec objects pre-created by the user. Note, these too
+            will be loaded by Loader.
+
+        Returns
+        -------
+        ExperimentSpec
+
+        Example
+        -------
+        >>> from validphys.loader import Loader
+        >>> l = Loader()
+        >>> ds = l.check_dataset("NMC", theoryid=53, cuts="internal")
+        >>> exp = l.check_experiment("My ExperimentSpec Name", [ds])
+        """
+        if not isinstance(datasets, list):
+            raise TypeError("Must specify a list of DataSetSpec objects to use")
+
+        return ExperimentSpec(name, datasets)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):

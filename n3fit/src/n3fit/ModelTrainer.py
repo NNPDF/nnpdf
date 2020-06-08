@@ -9,18 +9,109 @@
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 import logging
+import numpy as np
 import n3fit.model_gen as model_gen
-import n3fit.msr as msr_constraints
-from n3fit.backends import MetaModel, clear_backend_state
+from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
 
-# If an experiment matches this name, it will not be included int he training
-TESTNAME = "TEST"
-# Weights for the hyperopt cost function
-TEST_MULTIPLIER = 0.5
-VALIDATION_MULTIPLIER = 0.5
+# Threshold defaults
+# Any partition with a chi2 over the threshold will discard its hyperparameters
+HYPER_THRESHOLD = 5.0
+# The stopping will not consider any run where the validation is not under this threshold
+THRESHOLD_CHI2 = 10.0
+
+
+def _fold_data(all_data, folds, k_idx, negate_fold=False):
+    """
+    Utility method to fold the data.
+    If the folds are emtpy returns the data unchganed.
+    If the number of folds and data are different, it is assumed that anything beyond
+    the fold passes through.
+    If negate_fold is active the fold is negated before applying it.
+
+    Parameters
+    ----------
+        all_data: list of np.array
+            original data
+        folds: list of (list of) np.array
+            boolean array to select the data that goes through
+        k_idx: int
+            index of the fold
+        negate_fold: bool
+            Flag to decide whether the fold such be negated
+
+    Returns
+    -------
+        folded_data: list of np.array
+            subset of the original data
+    """
+    if any(folds):
+        # Check how many datasets we can fold
+        folded_data = []
+        nfolds = len(folds)
+        for original_data, fold in zip(all_data, folds):
+            if negate_fold:
+                kfold = ~fold[k_idx]
+            else:
+                kfold = fold[k_idx]
+            folded_data.append(original_data * kfold)
+        # If there are dataset from the original set, add them all
+        folded_data += all_data[nfolds:]
+        return folded_data
+    else:
+        return all_data
+
+
+def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
+    """
+    Compiles one model dictionary. The model dictionary must include a backend-dependent
+    model (`model`), a list of losses (`losses`), data to be compared with (`data`) and,
+    if applies, a "fold".
+
+    Parameters
+    ----------
+        model_dict: dict
+            A ditionary defining the model
+        kidx: int
+            k-index of the fold
+        negate_fold: bool
+            Flag to pass to `fold_data` to negate the fold
+        **params: **dict
+            Parameters to be passes to the compile method of the model
+    """
+    model = model_dict["model"]
+    losses = model_dict["losses"]
+    data = model_dict["expdata"]
+    fold = model_dict["folds"]
+    folded_data = _fold_data(data, fold, kidx, negate_fold=negate_fold)
+    model.compile(loss=losses, target_output=folded_data, **params)
+
+
+def _count_data_fold(folds, k_idx):
+    """
+    Count the number of active datapoints in this fold
+
+    Parameters
+    ----------
+        folds: list
+            list of folds
+        k_idx: int
+            index of the fold to count
+    """
+    n = 0
+    for fold in folds:
+        n += np.count_nonzero(~fold[k_idx])
+    return n
+
+
+def _pdf_injection(pdf_layers, observables):
+    """
+    Takes as input a list of output layers and returns a corresponding list
+    where all output layers call the pdf layer at self.pdf_layer
+    """
+    return [f(x) for f, x in zip(observables, pdf_layers)]
 
 
 class ModelTrainer:
@@ -50,6 +141,8 @@ class ModelTrainer:
         failed_status="fail",
         debug=False,
         save_weights_each=False,
+        kfold_parameters=None,
+        max_cores=None,
     ):
         """
         # Arguments:
@@ -76,43 +169,62 @@ class ModelTrainer:
         self.failed_status = failed_status
         self.debug = debug
         self.save_weights_each = save_weights_each
+        self.all_datasets = []
 
         # Initialise internal variables which define behaviour
+        if debug:
+            self.max_cores = 1
+        else:
+            self.max_cores = max_cores
         self.print_summary = True
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
+        self.hyperkeys = None
+        if kfold_parameters is None:
+            self.kpartitions = [None]
+            self.hyper_threshold = None
+        else:
+            self.kpartitions = kfold_parameters["partitions"]
+            self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
 
-        # Initialize the pdf layer
-        self.layer_pdf = None
+        # Initialize the pdf model
+        self.pdf_model = None
+        self.integrator_input = None
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
+        self.input_sizes = []
         self.training = {
             "output": [],
             "expdata": [],
             "losses": [],
+            "original_ndata": 0,
             "ndata": 0,
             "model": None,
             "posdatasets": [],
+            "folds": [],
         }
         self.validation = {
             "output": [],
             "expdata": [],
             "losses": [],
+            "original_ndata": 0,
             "ndata": 0,
             "model": None,
+            "folds": [],
         }
         self.experimental = {
             "output": [],
             "expdata": [],
             "losses": [],
+            "original_ndata": 0,
             "ndata": 0,
             "model": None,
+            "folds": [],
         }
         self.list_of_models_dicts = [self.training, self.experimental]
 
-        self.test_dict = None
         self._fill_the_dictionaries()
 
         if self.validation["ndata"] == 0:
@@ -124,6 +236,10 @@ class ModelTrainer:
             self.no_validation = False
             self.list_of_models_dicts.append(self.validation)
 
+        # Save the original number of datapoints in case we need to overwrite it later
+        for model_dict in self.list_of_models_dicts:
+            model_dict["original_ndata"] = model_dict["ndata"]
+
     @property
     def model_file(self):
         """ If a model_file is set the training model will try to get the weights form here """
@@ -133,8 +249,9 @@ class ModelTrainer:
     def model_file(self, model_file):
         self._model_file = model_file
 
-    def set_hyperopt(self, hyperopt_on, keys=None):
+    def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
+        self.pass_status = status_ok
         if keys is None:
             keys = []
         self.hyperkeys = keys
@@ -167,19 +284,13 @@ class ModelTrainer:
             - `ndata`: number of experimental points
         """
         for exp_dict in self.exp_info:
-            if exp_dict["name"] == TESTNAME:
-                self.test_dict = {
-                    "output": [],
-                    "expdata": exp_dict["expdata_true"],
-                    "losses": [],
-                    "ndata": exp_dict["ndata"] + exp_dict["ndata_vl"],
-                    "model": None,
-                }
-                self.list_of_models_dicts.append(self.test_dict)
-                continue
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
+
+            self.training["folds"].append(exp_dict["folds"]["training"])
+            self.validation["folds"].append(exp_dict["folds"]["validation"])
+            self.experimental["folds"].append(exp_dict["folds"]["experimental"])
 
             nd_tr = exp_dict["ndata"]
             nd_vl = exp_dict["ndata_vl"]
@@ -187,6 +298,10 @@ class ModelTrainer:
             self.training["ndata"] += nd_tr
             self.validation["ndata"] += nd_vl
             self.experimental["ndata"] += nd_tr + nd_vl
+
+            for dataset in exp_dict["datasets"]:
+                self.all_datasets.append(dataset["name"])
+        self.all_datasets = set(self.all_datasets)
 
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
@@ -197,26 +312,48 @@ class ModelTrainer:
         Fills the three dictionaries (`training`, `validation`, `experimental`)
         with the `model` entry
 
-        *Note*: before entering this function the dictionaries contain a list of inputs
-            and a list of outputs, but they are not connected.
-            This function connects inputs with outputs by injecting the PDF
 
         Compiles the validation and experimental models with fakes optimizers and learning rate
         as they are never trained, but this is needed by some backends
         in order to run evaluate on them
+
+        Before entering this function the dictionaries contain a list of inputs
+        and a list of outputs, but they are not connected.
+        This function connects inputs with outputs by injecting the PDF.
+        At this point we have a PDF model that takes an input (1, None, 1)
+        and outputs in return (1, none, 14)
+
+        The injection of the PDF is done by concatenating all inputs and calling
+        pdf_model on it.
+        This in turn generates an output_layer that needs to be splitted for every experiment
+        as we have a set of observable "functions" that each take (1, exp_xgrid_size, 14)
+        and output (1, masked_ndata) where masked_ndata can be the training/validation
+        or the experimental mask (in which cased masked_ndata == ndata)
         """
         log.info("Generating the Model")
 
-        input_list = self.input_list
-
-        # Loop over all the dictionary models and create the trainig,
-        #                 validation, true (data w/o replica) models:
-        # note: if test_dict exists, it will also create a model for it
+        # Compute the input array that will be given to the pdf
+        input_arr = np.concatenate(self.input_list, axis=1)
+        input_layer = operations.numpy_to_input(input_arr.T)
+        if self.impose_sumrule:
+            full_model_input = [self.integrator_input, input_layer]
+        else:
+            full_model_input = [input_layer]
+        # The output of the pdf on input_layer will be thus a concatenation
+        # of the PDF values for all experiments
+        full_pdf = self.pdf_model.apply_as_layer([input_layer])
+        # The input layer is a concatenation of all experiments
+        # we need now to split the output on a different array per experiment
+        sp_ar = [self.input_sizes]
+        sp_kw = {"axis": 1}
+        splitting_layer = operations.as_layer(
+            operations.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
+        )
+        splitted_pdf = splitting_layer(full_pdf)
 
         for model_dict in self.list_of_models_dicts:
-            model_dict["model"] = MetaModel(
-                input_list, self._pdf_injection(model_dict["output"])
-            )
+            output = _pdf_injection(splitted_pdf, model_dict["output"])
+            model_dict["model"] = MetaModel(full_model_input, output)
 
         if self.model_file:
             # If a model file is given, load the weights from there
@@ -236,19 +373,11 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
+        self.input_sizes = []
         for key in ["output", "losses"]:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
-            if self.test_dict:
-                self.test_dict[key] = []
-
-    def _pdf_injection(self, olist):
-        """
-        Takes as input a list of output layers and returns a corresponding list
-        where all output layers call the pdf layer at self.pdf_layer
-        """
-        return [o(self.layer_pdf) for o in olist]
 
     ############################################################################
     # # Parametizable functions                                                #
@@ -280,16 +409,13 @@ class ModelTrainer:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            exp_layer = model_gen.observable_generator(
+                exp_dict, kfolding=self.mode_hyperopt
+            )
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
-
-            if exp_dict["name"] == TESTNAME and self.test_dict:
-                # If this is the test set, fill the dictionary and stop here
-                self.test_dict["output"].append(exp_layer["output"])
-                self.test_dict["losses"].append(exp_layer["loss"])
-                continue
+            self.input_sizes.append(exp_layer["experiment_xsize"])
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -308,9 +434,11 @@ class ModelTrainer:
                 pos_dict,
                 positivity_initial=pos_initial,
                 positivity_multiplier=pos_multiplier,
+                kfolding=self.mode_hyperopt,
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
+            self.input_sizes.append(pos_layer["experiment_xsize"])
 
             # The positivity all falls to the training
             self.training["output"].append(pos_layer["output_tr"])
@@ -320,7 +448,14 @@ class ModelTrainer:
         self.training["pos_multiplier"] = pos_multiplier
 
     def _generate_pdf(
-        self, nodes_per_layer, activation_per_layer, initializer, layer_type, dropout
+        self,
+        nodes_per_layer,
+        activation_per_layer,
+        initializer,
+        layer_type,
+        dropout,
+        regularizer,
+        regularizer_args,
     ):
         """
         Defines the internal variable layer_pdf
@@ -329,25 +464,39 @@ class ModelTrainer:
         if the sumrule is being imposed, it also updates input_list with the
         integrator_input tensor used to calculate the sumrule
 
-        # Returns: (layers, integrator_input)
-            `layers`: a list of layers
-            `integrator_input`: input used to compute the  sumrule
-        both are being used at the moment for reporting purposes at the end of the fit
-
-        Parameters accepted:
-            - `nodes_per_layer`
-            - `activation_per_layer`
-            - `initializer`
-            - `layer_type`
-            - `dropout`
+        Parameters:
+        -----------
+            nodes_per_layer: list
+                list of nodes each layer has
+            activation_per_layer: list
+                list of the activation function for each layer
+            initializer: str
+                initializer for the weights of the NN
+            layer_type: str
+                type of layer to be used
+            dropout: float
+                dropout to add at the end of the NN
+            regularizer: str
+                choice of regularizer to add to the dense layers of the NN
+            regularizer_args: dict
+                dictionary of arguments for the regularizer
         see model_gen.pdfNN_layer_generator for more information
+
+        Returns
+        -------
+            layers: list
+                list of layers
+            integrator_input: tensor
+                xgrid used for integration within the network
+
+        note: both are being used at the moment for reporting purposes at the end of the fit
         """
         log.info("Generating PDF layer")
 
         # Set the parameters of the NN
 
         # Generate the NN layers
-        layer_pdf, layers = model_gen.pdfNN_layer_generator(
+        pdf_model, integrator_input = model_gen.pdfNN_layer_generator(
             nodes=nodes_per_layer,
             activations=activation_per_layer,
             layer_type=layer_type,
@@ -355,42 +504,73 @@ class ModelTrainer:
             seed=self.NNseed,
             initializer_name=initializer,
             dropout=dropout,
+            regularizer=regularizer,
+            regularizer_args=regularizer_args,
+            impose_sumrule=self.impose_sumrule,
         )
+        self.integrator_input = integrator_input
+        self.pdf_model = pdf_model
 
-        integrator_input = None
-        if self.impose_sumrule:
-            # Impose the sumrule
-            # Inyect here momentum sum rule, effecively modifying layer_pdf
-            layer_pdf, integrator_input = msr_constraints.msr_impose(
-                layers["fitbasis"], layer_pdf
-            )
-            self.input_list.append(integrator_input)
+    def _toggle_fold(self, datasets, kidx=0, off=False, recompile=False):
+        """ Toggle the input dataset on (off) and turn all other datasets off (on)
 
-        self.layer_pdf = layer_pdf
+        Parameters
+        ----------
+            datasets: list
+                list of datasets defining the fold
+            kidx: int
+                index of the fold
+            off: bool
+                Choose whether to the input datasets should be on or off
+            recompile: bool
+                Choose whether the model should be recompiled
+        """  # TODO datasets and kidx is redundant but...
+        # TODO fold the number of datapoints in the dictionaries
+        all_other_datasets = self.all_datasets - set(datasets)
 
-        return layers, integrator_input
+        if off:
+            val = 0.0
+        else:
+            val = 1.0
 
-    def _model_compilation(self, learning_rate, optimizer):
+        # Use the "experimental" model to access all layers
+        self.experimental["model"].set_masks_to(datasets, val=val)
+        self.experimental["model"].set_masks_to(all_other_datasets, val=1.0 - val)
+
+        # Now run through all dicts and count the actual total numer of points
+        for model_dict in self.list_of_models_dicts:
+            fold_ndata = _count_data_fold(model_dict["folds"], kidx)
+            if off:
+                new_ndata = model_dict["original_ndata"] - fold_ndata
+            else:
+                new_ndata = fold_ndata
+            model_dict["ndata"] = new_ndata
+
+        if recompile:
+            _compile_one_model(self.experimental, kidx=kidx, negate_fold=not off)
+
+    def _model_compilation(self, learning_rate, optimizer, kidx=None):
         """
-        Compiles the model with the data given in params
+        Wrapper around `_compile_one_model` to pass the right parameters
+        and index of the k-folding.
 
-        Parameters accepted:
-            - `learning_rate`
-            - `optimizer`
-        Optimizers accepted are backend-dependent
+        Currently the accepted for compilation are `learning_rate` and `optimizer`
+
+        Parameters
+        ----------
+            learning_rate: float
+                value of the learning rate
+            optimizer: str
+                name of the optimizer to be used
+                optimizers accepted are backend-dependent
+            kidx: int
+                k-index of the fold
         """
 
         # Compile all different models
         for model_dict in self.list_of_models_dicts:
-            model = model_dict["model"]
-            losses = model_dict["losses"]
-            data = model_dict["expdata"]
-            model.compile(
-                optimizer_name=optimizer,
-                learning_rate=learning_rate,
-                loss=losses,
-                target_output=data,
-            )
+            param_dict = {"learning_rate": learning_rate, "optimizer_name": optimizer}
+            _compile_one_model(model_dict, kidx=kidx, **param_dict)
 
     def _train_and_fit(self, stopping_object, epochs):
         """
@@ -409,7 +589,9 @@ class ModelTrainer:
 
             if (epoch + 1) % 100 == 0:
                 print_stats = True
-                training_model.multiply_weights('pos', self.training["posdatasets"], pos_multiplier)
+                training_model.multiply_weights(
+                    self.training["posdatasets"], pos_multiplier
+                )
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
@@ -451,7 +633,10 @@ class ModelTrainer:
         # training and the validation which are actually `chi2` and not part of the penalty
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2, _ = stopping_object.validation.loss()
-        exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
+        exp_chi2 = (
+            self.experimental["model"].compute_losses()["loss"]
+            / self.experimental["ndata"]
+        )
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametizable(self, params):
@@ -472,8 +657,8 @@ class ModelTrainer:
 
         # Reset the internal state of the backend
         print("")
-        if not self.debug:
-            clear_backend_state()
+        if not self.debug or self.mode_hyperopt:
+            clear_backend_state(max_cores=self.max_cores)
 
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
@@ -482,17 +667,20 @@ class ModelTrainer:
             for key in self.hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
             self._hyperopt_override(params)
+            hyper_losses = []
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         self._generate_observables(params["pos_multiplier"], params["pos_initial"])
 
-        # Generate the pdf layer
-        layers, integrator_input = self._generate_pdf(
+        # Generate the pdf model
+        self._generate_pdf(
             params["nodes_per_layer"],
             params["activation_per_layer"],
             params["initializer"],
             params["layer_type"],
             params["dropout"],
+            params.get("regularizer", None),  # regularizer optional
+            params.get("regularizer_args", None),
         )
 
         # Model generation
@@ -510,67 +698,101 @@ class ModelTrainer:
         else:
             validation_model = self.validation["model"]
 
-        stopping_object = Stopping(
-            validation_model,
-            self.all_info,
-            total_epochs=epochs,
-            stopping_patience=stopping_epochs,
-            save_weights_each=self.save_weights_each,
-        )
-
-        # Compile the training['model'] with the given parameters
-        self._model_compilation(params["learning_rate"], params["optimizer"])
+        # Initialize the chi2 dictionaries
+        l_train = []
+        l_valid = []
+        l_exper = []
 
         ### Training loop
-        passed = self._train_and_fit(stopping_object, epochs)
+        for k, partition in enumerate(self.kpartitions):
 
-        # Compute validation loss
-        validation_loss = stopping_object.vl_loss
+            if self.mode_hyperopt:
+                # Disable the partition for training
+                datasets = partition["datasets"]
+                self._toggle_fold(datasets, kidx=k, off=True)
 
-        # Compute experimental loss
-        experimental_loss = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
+            # Generate the stopping object
+            stopping_object = Stopping(
+                validation_model,
+                self.all_info,
+                total_epochs=epochs,
+                stopping_patience=stopping_epochs,
+                threshold_chi2=params.get("threshold_chi2", THRESHOLD_CHI2),
+                save_weights_each=self.save_weights_each,
+            )
 
-        # Compute the testing loss if it was given
-        if self.test_dict:
-            # Generate the 'true' chi2 with the experimental model
-            # but only for models that were stopped
-            target_model = self.test_dict["model"]
-            testing_loss = target_model.compute_losses(verbose=False)["loss"] / self.test_dict["ndata"]
-        else:
-            testing_loss = 0.0
+            # Compile the training['model'] with the given parameters
+            self._model_compilation(
+                params["learning_rate"], params["optimizer"], kidx=k
+            )
 
-        if self.mode_hyperopt:
-            final_loss = VALIDATION_MULTIPLIER * validation_loss
-            final_loss += TEST_MULTIPLIER * testing_loss
-            final_loss /= TEST_MULTIPLIER + VALIDATION_MULTIPLIER
-            arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
-        else:
-            final_loss = experimental_loss
-            arc_lengths = None
+            passed = self._train_and_fit(stopping_object, epochs)
+
+            # Compute validation and training loss
+            training_loss = stopping_object.tr_loss
+            validation_loss = stopping_object.vl_loss
+
+            # Compute experimental loss
+            exp_loss_raw = self.experimental["model"].compute_losses()["loss"]
+            experimental_loss = exp_loss_raw / self.experimental["ndata"]
+
+            l_train.append(training_loss)
+            l_valid.append(validation_loss)
+            l_exper.append(experimental_loss)
+
+            if self.mode_hyperopt:
+                # Toggle the fold
+                self._toggle_fold(datasets, kidx=k, off=False, recompile=True)
+                # Compute the hyperopt loss
+                hyper_loss = (
+                    self.experimental["model"].compute_losses()["loss"]
+                    / self.experimental["ndata"]
+                )
+                hyper_losses.append(hyper_loss)
+                # Check whether this run is any good, if not, get out
+                log.info(f"fold: {k}")
+                log.info(f"Experimental loss: {experimental_loss}")
+                log.info(f"Hyper loss: {hyper_loss}")
+                # Check whether the losses are above the set thresholds
+                all_losses = [training_loss, validation_loss, experimental_loss]
+                if any([il > self.hyper_threshold for il in all_losses]):
+                    # Add a penalty for leaving early
+                    hyper_losses = [ih + self.hyper_threshold for ih in hyper_losses]
+                    log.info("Bad threshold: break")
+                    break
+                self.training["model"].reinitialize()
 
         dict_out = {
-            "loss": final_loss,
             "status": passed,
-            "arc_lengths": arc_lengths,
-            "training_loss": stopping_object.tr_loss,
-            "validation_loss": validation_loss,
-            "experimental_loss": experimental_loss,
-            "testing_loss": testing_loss,
+            "training_loss": np.average(l_train),
+            "validation_loss": np.average(l_valid),
+            "experimental_loss": np.average(l_exper),
         }
 
         if self.mode_hyperopt:
+            ave = np.average(hyper_losses)
+            std = np.var(hyper_losses)
+            dict_out["loss"] = ave
+            dict_out["kfold_meta"] = {
+                "training_losses": l_train,
+                "validation_losses": l_valid,
+                "experimental_losses": l_exper,
+                "hyper_losses": hyper_losses,
+                "hyper_avg": ave,
+                "hyper_std": std,
+            }
             # If we are using hyperopt we don't need to output any other information
             return dict_out
 
-        # Add to the output dictionary things that are needed by fit.py
+        dict_out["loss"] = experimental_loss
+
+        # Add to the output dictionary things that are needed by performfit.py
         # to generate the output pdf, check the arc-length, gather stats, etc
         # some of them are already attributes of the class so they are redundant here
         # but I think it's good to present them explicitly
-        dict_out["layer_pdf"] = self.layer_pdf
-        dict_out["layers"] = layers
-        dict_out["integrator_input"] = integrator_input
         dict_out["stopping_object"] = stopping_object
         dict_out["experimental"] = self.experimental
         dict_out["training"] = self.training
+        dict_out["pdf_model"] = self.pdf_model
 
         return dict_out

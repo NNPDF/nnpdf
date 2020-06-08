@@ -62,6 +62,7 @@ RUNCARD_COPY_FILENAME = "filter.yml"
 FILTER_OUTPUT_FOLDER = "filter"
 TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
+INPUT_FOLDER = "input"
 
 
 class SetupFitError(Exception):
@@ -104,6 +105,9 @@ class SetupFitEnvironment(Environment):
         self.filter_path.mkdir(exist_ok=True)
         self.table_folder = self.output_path / TABLE_OUTPUT_FOLDER
         self.table_folder.mkdir(exist_ok=True)
+        # put lockfile input inside of filter output
+        self.input_folder = self.filter_path / INPUT_FOLDER
+        self.input_folder.mkdir(exist_ok=True)
 
     def save_md5(self):
         """Generate md5 key from file"""
