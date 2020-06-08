@@ -1267,17 +1267,27 @@ def fits_bootstrap_experiment_xi(
 
 experiments_bootstrap_xi = collect("fits_bootstrap_experiment_xi", ("experiments",))
 
+def total_bootstrap_xi(experiments_bootstrap_xi):
+    """Given the bootstrap samples of xi_1sigma for all experiments,
+    concatenate the result to get xi_1sigma for all data points in a single
+    array
+
+    """
+    return np.concatenate(experiments_bootstrap_xi)
 
 @table
-def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments):
+def experiments_bootstrap_xi_table(
+    experiments_bootstrap_xi, experiments, total_bootstrap_xi):
     """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
     samples. Note that the mean has already be taken across data points
     (or eigenvector directions in the basis which diagonalises the covariance
     matrix) for each individual bootstrap sample.
 
+    Tabulate the results for each experiment and for the total xi across all data
     """
     # first take mean across data
-    xi_1sigma = np.mean(experiments_bootstrap_xi, axis=-1)
+    exps_xi_plus_total = [*experiments_bootstrap_xi, total_bootstrap_xi]
+    xi_1sigma = np.mean(exps_xi_plus_total, axis=-1)
     df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments)
     df.columns = [
         r"Bootstrap mean $\xi_{1\sigma}$",
