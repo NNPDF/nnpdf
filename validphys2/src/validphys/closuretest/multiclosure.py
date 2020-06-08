@@ -1148,15 +1148,13 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
 
     """
     bias_tot, var_tot = experiments_bootstrap_bias_variance[0]
-    # add first ratio to list, take mean across fits
-    ratios = [np.mean(bias_tot, axis=1) / np.mean(var_tot, axis=1)]
+    # add first ratio to list
+    ratios = [bias_tot / var_tot]
     for bias, var in experiments_bootstrap_bias_variance[1:]:
         bias_tot += bias
         var_tot += var
-        # take mean across fits then take ratio
-        ratios.append(np.mean(bias, axis=1) / np.mean(var, axis=1))
-    # likewise take mean across fits for total
-    ratios.append(np.mean(bias_tot, axis=1) / np.mean(var_tot, axis=1))
+        ratios.append(bias / var)
+    ratios.append(bias_tot / var_tot)
     return ratios
 
 
