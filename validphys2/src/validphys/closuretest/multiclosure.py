@@ -1283,9 +1283,10 @@ def experiments_bootstrap_xi_table(
 
     Tabulate the results for each experiment and for the total xi across all data
     """
-    # first take mean across data
-    exps_xi_plus_total = [*experiments_bootstrap_xi, total_bootstrap_xi]
-    xi_1sigma = np.mean(exps_xi_plus_total, axis=-1)
+    # take mean across data points for each experiment
+    xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
+    # take mean across all data
+    xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
     df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments)
     df.columns = [
         r"Bootstrap mean $\xi_{1\sigma}$",
