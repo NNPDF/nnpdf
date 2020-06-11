@@ -15,7 +15,7 @@ from reportengine import collect
 from reportengine.table import table
 from reportengine.figure import figure
 
-from validphys.results import ThPredictionsResult
+from validphys.results import ThPredictionsResult, each_dataset
 from validphys.calcutils import calc_chi2
 from validphys.core import DataSetSpec
 from validphys.closuretest.closure_checks import (
@@ -213,12 +213,9 @@ datasets_expected_bias_variance = collect(
     "expected_dataset_bias_variance", ("experiments", "experiment")
 )
 
-# TODO: check that this hasn't been implemented somewhere else at point of merge
-experiments_datasets = collect("dataset", ("experiments", "experiment"))
-
 
 @table
-def datasets_bias_variance_ratio(datasets_expected_bias_variance, experiments_datasets):
+def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     """For each dataset calculate the expected bias and expected variance
     across fits, then calculate the ratio
 
@@ -241,7 +238,7 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, experiments_da
     """
     records = []
     for ds, (bias, var, ndata) in zip(
-        experiments_datasets, datasets_expected_bias_variance
+        each_dataset, datasets_expected_bias_variance
     ):
         records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var))
     df = pd.DataFrame.from_records(
