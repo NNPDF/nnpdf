@@ -46,7 +46,7 @@ class Mask(MetaLayer):
     def meta_call(self, ret):
         if self.mask is not None:
             ret = op.boolean_mask(ret, self.mask, axis=self.axis)
-        if self.c:
+        if self.c is not None:
             ret = ret * self.kernel
         if self.unbatch:
             ret = op.unbatch(ret)

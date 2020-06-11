@@ -200,3 +200,25 @@ def test_rotation():
     rotmat = layers.FlavourToEvolution(flav_info)
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)
+
+def test_Mask():
+    """ Test the mask layer """
+    SIZE = 100
+    fi = np.random.rand(SIZE)
+    # Check that the multiplier works
+    vals = [0.0, 2.0, np.random.rand()]
+    for val in vals:
+        masker = layers.Mask(c = val)
+        ret = masker(fi)
+        np.allclose(ret, val*fi)
+    # Check that the boolean works
+    np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
+    masker = layers.Mask(bool_mask = np_mask)
+    ret = masker(fi)
+    masked_fi = fi[np_mask]
+    np.allclose(ret, masked_fi)
+    # Check that the combination works!
+    rn_val = vals[-1]
+    masker = layers.Mask(bool_mask = np_mask, c = rn_val)
+    ret = masker(fi)
+    np.allclose(ret, masked_fi)
