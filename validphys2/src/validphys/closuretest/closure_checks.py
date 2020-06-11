@@ -1,7 +1,8 @@
 """
 closuretest/checks.py
 
-Module containing checks specfic to the closure tests
+Module containing checks specific to the closure tests.
+
 """
 from collections import defaultdict
 

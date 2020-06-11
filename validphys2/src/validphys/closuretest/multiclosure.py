@@ -1,10 +1,10 @@
 """
 closuretest/multiclosure.py
 
-containing all of the statistical estimators which are
-averaged across multiple fits or a single replica proxy fit
-"""
+Module containing all of the statistical estimators which are
+averaged across multiple fits or a single replica proxy fit.
 
+"""
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
