@@ -14,7 +14,7 @@ If you intend to work on the NNPDF code, then building from source is the recomm
       <summary>Important note for Mac users</summary>
 
       If you are a macOS user, you will need to download the
-      [mac Software Development Kit](https://github.com/phracker/MacOSX-SDKs) or
+      [Mac Software Development Kit](https://github.com/phracker/MacOSX-SDKs) or
       SDK for short. This is necessary to get the correct C compiler. Assuming
       that you already have access to the [server](NNPDF-server), you can
       download the version of the SDK used by the [Continuous Integration](CI)
