@@ -35,7 +35,6 @@ datacuts:
 theory:
   theoryid: 53        # database id
 
-
 ############################################################
 fitting:
   genrep   : True    # on = generate MC replicas, False = use real data
@@ -54,8 +53,10 @@ fitting:
     nodes_per_layer: [15, 10, 8]
     activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.01
-    optimizer: 'RMSprop'
+    optimizer:
+      optimizer_name: 'RMSprop'
+      learning_rate: 0.01
+      clipnorm: 1.0
     epochs: 900
     pos_multiplier: 1.05
     pos_initial:  # believe the pos_lambda below 
