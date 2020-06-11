@@ -135,10 +135,11 @@ def check_fits_different_filterseed(fits):
         seed = fit.as_input()["closuretest"]["filterseed"]
         seed_fits_dict[seed].append(pdf_name)
 
-    for seed, fits in seed_fits_dict.items():
-        if len(fits) > 1:
-            raise CheckError(
-            "Multiclosure actions require that fits have different level 1 "
-            "noise and therefore different filter seeds. The following fits "
-            f"have the same seed: {', '.join(fits)}."
-            )
+    bad_fits = [fits for _, fits in seed_fits_dict.items() if len(fits) > 1]
+
+    if bad_fits:
+        raise CheckError(
+        "Multiclosure actions require that fits have different level 1 "
+        "noise and therefore different filter seeds. The following groups "
+        f"of fits have the same seed: {bad_fits}."
+        )
