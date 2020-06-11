@@ -3,6 +3,8 @@ closuretest/checks.py
 
 Module containing checks specfic to the closure tests
 """
+from collections import defaultdict
+
 from reportengine.checks import make_argcheck, CheckError
 
 
@@ -120,14 +122,23 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
 
 @make_argcheck
 def check_fits_different_filterseed(fits):
-    """Input fits should have the different filter seed if they are being
+    """Input fits should have different filter seeds if they are being
     used for multiple closure test studies, because in high-level hand-waving
     terms the different level 1 shifts represents different
     'runs of the universe'!
 
     """
-    seed_list = [fit.as_input()["closuretest"]["filterseed"] for fit in fits]
-    if len(seed_list) > len(set(seed_list)):
-        raise CheckError(
-            f"Multiclosure actions require that fits had different level 1 noise"
-        )
+    seed_fits_dict = defaultdict(list)
+
+    for fit in fits:
+        pdf_name = fit.as_input()["pdf"]["id"]
+        seed = fit.as_input()["closuretest"]["filterseed"]
+        seed_fits_dict[seed].append(pdf_name)
+
+    for seed, fits in seed_fits_dict.items():
+        if len(fits) > 1:
+            raise CheckError(
+            "Multiclosure actions require that fits have different level 1 "
+            "noise and therefore different filter seeds. The following fits "
+            f"have the same seed: {', '.join(fits)}."
+            )
