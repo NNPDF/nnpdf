@@ -85,7 +85,7 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
     effect of filling in the namespace keys _internal_max_reps and _internal_min_reps
     which can be used to override the number of replicas used at the level of
     the runcard, but by default get filled in as the number of replicas in each
-    fit and 20 respectively
+    fit and 20 respectively.
 
     """
     # we take off 1 here because we don't want to include replica 0
@@ -121,7 +121,7 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
 @make_argcheck
 def check_fits_different_filterseed(fits):
     """Input fits should have the different filter seed if they are being
-    used for multiple closure test studies, because in high-level hands-waving
+    used for multiple closure test studies, because in high-level hand-waving
     terms the different level 1 shifts represents different
     'runs of the universe'!
 

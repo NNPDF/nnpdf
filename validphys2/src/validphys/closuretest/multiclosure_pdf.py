@@ -25,7 +25,7 @@ XI_FLAVOURS = (r"\Sigma", "gluon", "V", "V3", "V8", "T3", "T8")
 
 
 def internal_Nx(multiclosure_nx=4):
-    """set a default value for number of points Nx to be used in multiclosure
+    """Set a default value for number of points Nx to be used in multiclosure
     PDF actions, allows for studying dependence on this number but by default
     sets Nx = 4.
 
@@ -54,7 +54,7 @@ def internal_singlet_gluon_xgrid(internal_Nx):
 
 
 def internal_nonsinglet_xgrid(internal_Nx):
-    """Given the number of x points, set up the x grid for flavours which
+    """Given the number of x points, set up the xgrid for flavours which
     are not singlet or gluon, defined as being linearly spaced points between
     0.1 and 0.5
     """
@@ -65,7 +65,7 @@ def xi_pdfgrids(
     pdf: PDF, Q: (float, int), internal_singlet_gluon_xgrid, internal_nonsinglet_xgrid
 ):
     """Generate PDF grids which are required for calculating xi in PDF space
-    in the NN31IC basis, exclusing the charm we want to specify different xgrids
+    in the NN31IC basis, excluding the charm we want to specify different xgrids
     for different flavours to avoid sampling PDFs in deep extrapolation, the
     limits are:
 
@@ -98,7 +98,7 @@ def xi_pdfgrids(
 
 
 def xi_grid_values(xi_pdfgrids):
-    """grid values from the xi_pdfgrids concatenated as single numpy array"""
+    """Grid values from the xi_pdfgrids concatenated as single numpy array"""
     glu_sin_grid, nonsin_grid = xi_pdfgrids
     # grid values have shape: replica, flavour, x
     # concatenate along flavour
@@ -112,7 +112,7 @@ def underlying_xi_grid_values(
     internal_nonsinglet_xgrid,
 ):
     """Like xi_pdfgrids but setting the PDF as the underlying law, extracted
-    from a set of fits.
+    from a set of fits
     """
     underlying_grid = xi_pdfgrids(
         multiclosure_underlyinglaw,
@@ -126,7 +126,7 @@ def underlying_xi_grid_values(
 def pdf_central_difference(
     xi_grid_values, underlying_xi_grid_values, multiclosure_underlyinglaw
 ):
-    """Calculate the difference between underlying law and central pdf for,
+    """Calculate the difference between underlying law and central PDF for,
     specifically:
 
         underlying_grid - mean(grid_vals)
@@ -146,17 +146,18 @@ def pdf_central_difference(
 
 
 def pdf_replica_difference(xi_grid_values):
-    """Calculate the difference between the central pdf and the replica pdfs,
+    """Calculate the difference between the central PDF and the replica PDFs,
     specifically:
 
         mean(grid_vals) - grid_vals
 
-    where the mean is across replicas
+    where the mean is across replicas.
 
     Returns:
 
     diffs: np.array
         array of diffs with shape (replicas, flavour, x)
+
     """
     return xi_grid_values.mean(axis=0, keepdims=True) - xi_grid_values
 
@@ -166,11 +167,11 @@ fits_central_difference = collect("pdf_central_difference", ("fits", "fitpdf"))
 
 
 def fits_covariance_matrix_by_flavour(fits_replica_difference):
-    """Given a set of pdf grids from multiple closure tests, obtain an estimate
-    of the covariance matrix for each flavour seperately, return as a list of
+    """Given a set of PDF grids from multiple closure tests, obtain an estimate
+    of the covariance matrix for each flavour separately, return as a list of
     covmats
     """
-    # diffs want to be calculated on the per fit level
+    # diffs should be calculated on the per fit level
     super_diffs = np.concatenate(fits_replica_difference, axis=0)
     covmats = []
     for i in range(len(XI_FLAVOURS)):
@@ -184,17 +185,17 @@ def xi_flavour_x(
     fits_covariance_matrix_by_flavour,
     use_x_basis=False,
 ):
-    """for a set of fits calculate the indicator function
+    """For a set of fits calculate the indicator function
 
         I_{[-sigma, sigma]}(delta)
 
     where sigma is the RMS difference between central and replicas PDF
     and delta is the difference between central PDF and underlying law.
 
-    differences are all rotated to basis which diagonalises the covariance
+    The differences are all rotated to basis which diagonalises the covariance
     matrix that was estimated from the super set of all fit replicas.
 
-    finally take the mean across fits to get xi in flavour and x
+    Finally take the mean across fits to get xi in flavour and x.
 
     """
     rep_diff = np.asarray(fits_replica_difference)
@@ -222,10 +223,10 @@ def xi_flavour_x(
 
 
 def fits_covariance_matrix_totalpdf(fits_replica_difference, internal_Nx):
-    """Given a set of pdf grids from multiple closure tests, obtain an estimate
+    """Given a set of PDF grids from multiple closure tests, obtain an estimate
     of the covariance matrix allowing for correlations across flavours
     """
-    # diffs want to be calculated on the per fit level
+    # diffs should be calculated on the per fit level
     super_diffs = np.concatenate(fits_replica_difference, axis=0).reshape(
         -1, internal_Nx * len(XI_FLAVOURS)
     )  # reshape to correlate flavours
@@ -272,7 +273,7 @@ def xi_totalpdf(
 
 @table
 def xi_flavour_table(xi_flavour_x, xi_totalpdf):
-    """for each flavour take the mean of xi_flavour_x across x to get single
+    """For each flavour take the mean of xi_flavour_x across x to get single
     number of proportion points on the central PDF which are within 1 sigma,
     calculated from the replicas, of the underlying PDF.
 
@@ -302,7 +303,7 @@ def plot_xi_flavour_x(
     calculated and plotted in x basis.
 
     """
-    # treat singlet and gluon seperately
+    # treat singlet and gluon separately
     if use_x_basis:
         x_for_plot = 2 * [internal_singlet_gluon_xgrid] + 5 * [
             internal_nonsinglet_xgrid
@@ -342,8 +343,8 @@ def fits_sqrt_covmat_by_flavour(fits_covariance_matrix_by_flavour):
 def fits_pdf_flavour_ratio(
     fits_sqrt_covmat_by_flavour, fits_central_difference, fits_replica_difference
 ):
-    """calculate the bias (chi2 between central PDF and underlying PDF)
-    for each flavour and the variance (mean chi2 between replica and central PDF)
+    """Calculate the bias (chi2 between central PDF and underlying PDF)
+    for each flavour and the variance (mean chi2 between replica and central PDF),
     then return a numpy array with shape (flavours, 2) with second axis being
     bias, variance
 
@@ -371,7 +372,7 @@ def fits_pdf_total_ratio(
     internal_Nx,
 ):
     """Calculate the total bias and variance for all flavours and x allowing for
-    correlations across flavour,
+    correlations across flavour.
 
     Returns:
 
@@ -398,7 +399,7 @@ def fits_pdf_total_ratio(
 def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
     """Returns a table with the values of mean bias / mean variance with mean
     referring to mean across fits, by flavour. Includes total across all
-    flavours allowing for correlations
+    flavours allowing for correlations.
 
     """
     records = []
@@ -416,8 +417,8 @@ def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
 
 @table
 def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
-    """Like fits_pdf_bias_variance_ratio except taking the sqrt, we see how
-    faithful our uncertainty is in units of the standard deviation
+    """Like fits_pdf_bias_variance_ratio except taking the sqrt. To see how
+    faithful our uncertainty is in units of the standard deviation.
 
     """
     df_in = fits_pdf_bias_variance_ratio
@@ -429,7 +430,7 @@ def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
 def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
     """Like expected_xi_from_bias_variance but in PDF space. Estimate the
     integral across central difference distribution, with domain defined by the
-    replica distribution for more details see expected_xi_from_bias_variance
+    replica distribution. For more details see expected_xi_from_bias_variance.
 
     """
     df_in = fits_pdf_sqrt_ratio
@@ -546,9 +547,8 @@ def fits_bootstrap_pdf_ratio(
     n_boot=100,
     boot_seed=None,
 ):
-    """Perform a bootstrap sampling across fits and replicas of the sqrt
-    ratio, by flavour
-    and total and then tabulate the mean and error
+    """Perform a bootstrap sampling across fits and replicas of the sqrt ratio,
+    by flavour and total and then tabulate the mean and error
 
     """
     rng = np.random.RandomState(seed=boot_seed)
@@ -621,7 +621,7 @@ def fits_bootstrap_pdf_expected_xi(fits_bootstrap_pdf_sqrt_ratio):
 def fits_bootstrap_pdf_expected_xi_table(fits_bootstrap_pdf_expected_xi):
     """Tabulate the mean and standard deviation across bootstrap samples
     of fits_bootstrap_pdf_expected_xi with a row for each flavour and the
-    total expected xi.
+    total expected xi
 
     """
     df = fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_expected_xi)
@@ -641,7 +641,7 @@ def fits_bootstrap_pdf_compare_xi_to_expected(
     """Table comparing the mean and standard deviation across bootstrap samples
     of the measured value of xi to the one calculated from bias/variance
     in PDF space, for each flavour and total across all flavours accounting
-    for correlations.
+    for correlations
 
     """
     return fits_pdf_compare_xi_to_expected(
@@ -671,7 +671,7 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
 
     """
     labels = [f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:]]
-    # we want to centre the labels on each of the x grids
+    # we want to centre the labels on each of the xgrids
     # ticks appear shifted right by 0.5, so we account for this here
     ticks = (n_x) / 2 + n_x * np.arange(len(XI_FLAVOURS)) - 0.5
     fig, ax = plt.subplots()
@@ -729,7 +729,7 @@ def plot_multiclosure_correlation_eigenvalues(fits_correlation_matrix_totalpdf):
     correlation matrix from the multiclosure PDFs in flavour and x.
 
     In the legend add the ratio of the largest eigenvalue over the smallest
-    eigenvalue, aka the l2 condition number of the correlation matrix
+    eigenvalue, aka the l2 condition number of the correlation matrix.
 
     """
     # e_val is in ascending order
