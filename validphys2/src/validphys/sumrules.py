@@ -64,7 +64,7 @@ def _xsp_integrand(x, lpdf:LHAPDFSet, irep, Q):
 def _xg_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return lpdf.xfxQ(x, Q=Q, n=irep, fl=0)   
 
-def _gottfried(x, lpdf:LHAPDFSet, irep, Q):
+def _flavor_asymmetry(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=-2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
 
 
@@ -83,7 +83,7 @@ SUM_RULES = {
     't3': _t3_integrand,
     't8': _t8_integrand,
     't15': _t15_integrand,
-    'gottfried' : _gottfried,
+    'f_asymmetry' : _flavor_asymmetry,
 }
 
 SUM_RULES_EXPECTED = {
