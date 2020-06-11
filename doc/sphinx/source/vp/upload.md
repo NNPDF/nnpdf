@@ -147,8 +147,15 @@ To upload fits use:
 vp-uploadfit <completed_fit_path>
 ```
 
-Note there are [plans](https://github.com/NNPDF/nnpdf/issues/162) to change this
-command. Fits are indexed separately, and can be retrieved with the [`vp-get`
+Note that if there is already a fit on the server with the same name as the fit
+you wish to upload, then this command will *not* overwrite the fit that already
+exists. To overwite such a fit on the server, use the `--force` option:
+
+```
+vp-uploadfit <completed_fit_path> --force
+```
+
+Note that fits are indexed separately, and can be retrieved with the [`vp-get`
 command](download).
 
 

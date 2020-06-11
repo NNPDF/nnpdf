@@ -4,7 +4,7 @@ Tutorials
 .. toctree::
    :maxdepth: 1
 
-   ./runafit.md
+   ./runafit.rst
    ./compare-fits.md
    ./list-resources.md
    ./report.md

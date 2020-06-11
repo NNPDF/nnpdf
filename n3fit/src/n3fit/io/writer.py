@@ -10,6 +10,7 @@ import time
 import json
 import numpy as np
 from reportengine.compat import yaml
+import n3fit
 from n3fit.msr import compute_arclength
 
 
@@ -241,3 +242,7 @@ def storefit(
     # create .time file
     with open(f"{replica_path}/{fitname}.time", "w") as fs:
         json.dump(timings, fs, indent=2)
+
+    # create .version file
+    with open(f"{replica_path}/version.info", "w") as fs:
+        fs.write(n3fit.__version__)
