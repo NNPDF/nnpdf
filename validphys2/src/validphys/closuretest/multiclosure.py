@@ -38,7 +38,8 @@ def internal_multiclosure_dataset_loader(
     which is for use with multiclosure statistical estimators. Avoiding memory
     issues from caching experiment load.
 
-    Returns:
+    Returns
+    -------
 
     multiclosure_results: tuple
         a tuple of length 4 containing all necessary dependencies of multiclosure
@@ -95,16 +96,16 @@ def fits_dataset_bias_variance(
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
-    1-D arrays of length len(fits).
+    1-D arrays of length ``len(fits)``.
 
     For more information on bias see closuretest.bias_dataset and for more information
-    on variance see closuretest.variance_dataset.
+    on variance see :py:func:`validphys.closuretest.closure_results.variance_dataset`.
 
     The fits should each have the same underlying law and t0 PDF, but have
     different filterseeds, so that the level 1 shift is different.
 
     Can control the number of replicas taken from each fit with
-    _internal_max_reps.
+    ``_internal_max_reps``.
 
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
@@ -358,8 +359,8 @@ def total_bias_variance_ratio(
 
 @table
 def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
-    """Given the `sqrt_experiments_bias_variance_ratio` calculate a predicted
-    value of xi_{1 sigma} for each experiment. The predicted value is based of
+    """Given the ``sqrt_experiments_bias_variance_ratio`` calculate a predicted
+    value of :math:`\\xi_{1 \sigma}` for each experiment. The predicted value is based of
     the assumption that the difference between replica and central prediction
     and the difference between central prediction and underlying prediction are
     both gaussians centered on zero.
@@ -396,7 +397,7 @@ def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
 
 
 def dataset_xi(internal_multiclosure_dataset_loader):
-    r"""For a given dataset calculate sigma, the RMS difference between
+    """For a given dataset calculate sigma, the RMS difference between
     replica predictions and central predictions, and delta, the difference
     between the central prediction and the underlying prediction.
 
@@ -405,12 +406,13 @@ def dataset_xi(internal_multiclosure_dataset_loader):
 
     Then the indicator function is evaluated elementwise for sigma and delta
 
-        I_{[-\sigma_j, \sigma_j]}(\delta_j)
+        :math:`I_{[-\sigma_j, \sigma_j]}(\delta_j)`
 
-    which is 1 when |\delta_j| < \sigma_j and 0 otherwise. Finally, take the
+    which is 1 when :math:`|\delta_j| < \sigma_j` and 0 otherwise. Finally, take the
     mean across fits.
 
-    Returns:
+    Returns
+    -------
 
         xi_1sigma_i: np.array
             a 1-D array where each element is the value of xi_1sigma for that
@@ -625,7 +627,8 @@ def boostrap_multiclosure_fits(
     to the number of closure fits (len(fits)) and n_rep and n_rep_max to the
     number of replicas in each of the closure tests.
 
-    Returns:
+    Returns
+    -------
 
         resampled_multiclosure:
             like internal_multiclosure_dataset_loader but with the fits
@@ -1044,7 +1047,7 @@ def total_expected_xi_error_finite_effects(
     """Given the resampled ratio of bias/variance, returns table of mean of
     resampled expected xi across bootstrap samples.
 
-    See `expected_xi_from_bias_variance` for more details on how to calculate
+    See :py:func:`expected_xi_from_bias_variance` for more details on how to calculate
     expected xi.
 
     """
@@ -1140,6 +1143,7 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
     where each sum refers to the sum across experiments.
 
     Returns
+    -------
 
     ratios_resampled: list
         list of boostrap samples of ratio of bias/var, length of list is

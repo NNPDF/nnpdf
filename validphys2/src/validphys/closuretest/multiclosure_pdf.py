@@ -72,7 +72,8 @@ def xi_pdfgrids(
         gluon and singlet: 10^-3 < x < 0.5
         other non-singlets: 0.1 < x < 0.5
 
-    Returns:
+    Returns
+    -------
 
     tuple of xplotting_grids, one for gluon and singlet and one for other
     non-singlets
@@ -245,7 +246,7 @@ def xi_totalpdf(
     internal_Nx,
     use_x_basis=False,
 ):
-    """Like xi_flavour_x except calculate the total xi across flavours and x
+    """Like :py:func:`xi_flavour_x` except calculate the total xi across flavours and x
     accounting for correlations
     """
     # keep fits and reps then reshape flavour x to one dim
@@ -299,7 +300,7 @@ def plot_xi_flavour_x(
 ):
     """For each flavour plot xi for each x-point. By default xi is calculated and
     plotted in the basis which diagonalises the covmat estimated from the union
-    of all the replicas. However, if use_x_basis is True then xi will be
+    of all the replicas. However, if ``use_x_basis`` is ``True`` then xi will be
     calculated and plotted in x basis.
 
     """
@@ -417,7 +418,7 @@ def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
 
 @table
 def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
-    """Like fits_pdf_bias_variance_ratio except taking the sqrt. To see how
+    """Like :py:func:`fits_pdf_bias_variance_ratio` except taking the sqrt. To see how
     faithful our uncertainty is in units of the standard deviation.
 
     """
@@ -458,15 +459,16 @@ fits_xi_grid_values = collect("xi_grid_values", ("fits", "fitpdf"))
 def bootstrap_pdf_differences(
     fits_xi_grid_values, underlying_xi_grid_values, multiclosure_underlyinglaw, rng
 ):
-    """Generate a single bootstrap sample of `pdf_central_difference` and
-    `pdf_replica_difference` given the multiclosure fits grid values
-    (fits_xi_grid_values); the underlying law grid values and the underlying
+    """Generate a single bootstrap sample of ``pdf_central_difference`` and
+    ``pdf_replica_difference`` given the multiclosure fits grid values
+    (``fits_xi_grid_values``); the underlying law grid values and the underlying
     law; and a numpy random state which is used to generate random indices
     for bootstrap sample. The bootstrap does include repeats and has the same
-    number of fits and replicas as the original fits_xi_grid_values which is
+    number of fits and replicas as the original ``fits_xi_grid_values`` which is
     being resampled.
 
     Returns
+    -------
 
         pdf_difference: tuple
             a tuple of 2 lists: the central differences and the replica
@@ -586,7 +588,7 @@ def fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_sqrt_ratio):
     """Tabulate the mean and standard deviation across bootstrap samples of the
     sqrt ratio of bias/variance in PDF space, with a row for each flavour and
     the total. For more information on the bootstrap sampling see
-    fits_bootstrap_pdf_ratio.
+    :py:func:`fits_bootstrap_pdf_ratio`.
 
     """
     index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
@@ -620,7 +622,7 @@ def fits_bootstrap_pdf_expected_xi(fits_bootstrap_pdf_sqrt_ratio):
 @table
 def fits_bootstrap_pdf_expected_xi_table(fits_bootstrap_pdf_expected_xi):
     """Tabulate the mean and standard deviation across bootstrap samples
-    of fits_bootstrap_pdf_expected_xi with a row for each flavour and the
+    of :py:func:`fits_bootstrap_pdf_expected_xi` with a row for each flavour and the
     total expected xi
 
     """
