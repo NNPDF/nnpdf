@@ -431,7 +431,7 @@ def dataset_xi(internal_multiclosure_dataset_loader):
     var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
     central_diff = e_vec.T @ central_diff.T
 
-    var_diff = (var_diff_sqrt) ** 2
+    var_diff = var_diff_sqrt ** 2
     sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
     in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
     # mean across fits
