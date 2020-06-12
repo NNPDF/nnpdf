@@ -1,13 +1,9 @@
-How to run a fit
-----------------
+How to run a legacy PDF fit
+---------------------------
 
-In running a fit one generates a PDF as an output of a neural network calculated
-at some initial scale :math:`Q_0` on an interpolation grid in :math:`x`. The
-result is then convoluted with an :ref:`FK table<fktables>` that contains both
-the partonic interaction and the PDF evolution, which runs from the initial
-scale :math:`Q_0` to the scale of the interaction. Finally, the theoretical
-predictions are compared to data and the optimization is performed. To follow
-this procedure yourself, you can follow the following steps:
+This tutorial explains how to run a PDF fit using the legacy code,
+:code:`nnfit`. To find out how to run a PDF fit with the code that is currently
+being developed, :code:`n3fit`, see the :ref:`n3fit-usage`.
 
 0. Install the code, either using :ref:`conda<conda>` or by installing it from
 :ref:`source<source>`. The former installation method should be considered the

@@ -1,3 +1,7 @@
+```eval_rst
+.. _n3fit-usage:
+```
+
 `n3fit` usage guide
 ===================
 
