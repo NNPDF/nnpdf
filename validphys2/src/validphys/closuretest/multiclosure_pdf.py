@@ -65,9 +65,9 @@ def xi_pdfgrids(
     pdf: PDF, Q: (float, int), internal_singlet_gluon_xgrid, internal_nonsinglet_xgrid
 ):
     """Generate PDF grids which are required for calculating xi in PDF space
-    in the NN31IC basis, excluding the charm we want to specify different xgrids
-    for different flavours to avoid sampling PDFs in deep extrapolation, the
-    limits are:
+    in the NN31IC basis, excluding the charm. We want to specify different xgrids
+    for different flavours to avoid sampling PDFs in deep extrapolation regions.
+    The limits are chosen to achieve this and specifically they are chosen to be:
 
         gluon and singlet: 10^-3 < x < 0.5
         other non-singlets: 0.1 < x < 0.5
