@@ -20,7 +20,10 @@ from validphys.pdfgrids import xplotting_grid
 from validphys.core import PDF
 from validphys.calcutils import calc_chi2
 
-# exclude charm
+# Define the NN31IC basis with the charm PDF excluded. It is excluded because
+# the exercises carried out with this module are intended to be done in the
+# data region and at the fitting scale, where the charm is noisy. Results
+# obtained with it are therefore likely to be dominated by fluctuations
 XI_FLAVOURS = (r"\Sigma", "gluon", "V", "V3", "V8", "T3", "T8")
 
 
