@@ -496,6 +496,7 @@ def plot_dataset_xi(dataset_xi, dataset):
         dataset_xi,
         "*",
         label=r"$\xi_{1\sigma}$ = " + f"{dataset_xi.mean():.2f}, from multifits",
+        clip_on=False,
     )
     ax.axhline(
         0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ " + "expected value"

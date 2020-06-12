@@ -326,6 +326,7 @@ def plot_xi_flavour_x(
             xi_flavour_x[i, :],
             "*",
             label=r"$\xi_{1\sigma}$ = " + f"{xi_flavour_x[i, :].mean():.2f}",
+            clip_on=False,
         )
         ax.axhline(0.68, linestyle=":", color="k", label="expected value")
         ax.set_ylim([0, 1])
