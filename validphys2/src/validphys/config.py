@@ -1097,12 +1097,6 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
 
-    def parse_proxy_pdf(self, proxy_name):
-        return self.parse_pdf(proxy_name)
-
-    def parse_replica_pdf(self, name):
-        return self.parse_pdf(name)
-
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
            prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
