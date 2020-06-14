@@ -57,12 +57,6 @@ def check_fits_areclosures(fits):
 
 
 @make_argcheck
-def check_t0_used(use_t0):
-    if not use_t0:
-        raise CheckError("use_t0 must be true")
-
-
-@make_argcheck
 def check_t0pdfset_matches_law(t0pdfset, fit):
     t0_from_fit = fit.as_input()["closuretest"]["fakepdf"]
     if not str(t0pdfset) == t0_from_fit:
@@ -107,7 +101,7 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
         )
 
     if _internal_min_reps is None:
-        _internal_min_reps = 10
+        _internal_min_reps = 20
 
     if _internal_max_reps < _internal_min_reps:
         raise CheckError(
