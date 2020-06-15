@@ -418,7 +418,8 @@ def fits_bootstrap_pdf_sqrt_ratio(fits_bootstrap_pdf_ratio):
 
 def fits_bootstrap_pdf_expected_xi(fits_bootstrap_pdf_sqrt_ratio):
     """Using fits_bootstrap_pdf_sqrt_ratio calculate a bootstrap of the expected
-    xi using the same procedure as in expected_xi_from_bias_variance
+    xi using the same procedure as in
+    :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`.
 
     """
     n_sigma_in_variance = 1 / fits_bootstrap_pdf_sqrt_ratio

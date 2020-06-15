@@ -563,13 +563,14 @@ def total_xi_resample(exps_xi_resample):
 
 
 def total_expected_xi_resample(bias_variance_resampling_total):
-    """Using the bias and variance resample, return a resample of expected
-    xi using the method outlined in `expected_xi_from_bias_variance`.
+    """Using the bias and variance resample, return a resample of expected xi
+    using the method outlined in
+    :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`.
 
     The general concept is based on assuming all of the distributions are
     gaussians and using the ratio of bias/variance to predict the corresponding
     integral. To see a more in depth explanation, see
-    `expected_xi_from_bias_variance`.
+    :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`.
 
     """
     bias_total, var_total = bias_variance_resampling_total
@@ -661,7 +662,7 @@ def experiments_bootstrap_sqrt_ratio(experiments_bootstrap_ratio):
 def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     """Calculate a bootstrap resampling of the expected xi from
     `experiments_bootstrap_sqrt_ratio`, using the same formula as
-    `expected_xi_from_bias_variance`
+    :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`.
 
     """
     n_sigma_in_variance = 1 / experiments_bootstrap_sqrt_ratio

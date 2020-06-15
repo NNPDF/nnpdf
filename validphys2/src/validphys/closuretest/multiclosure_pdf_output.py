@@ -124,10 +124,12 @@ def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
 
 @table
 def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
-    """Like :py:func:`expected_xi_from_bias_variance` but in PDF space. An
-    estimate is made of the integral across the central difference distribution,
-    with domain defined by the replica distribution. For more details see
-    :py:func:`expected_xi_from_bias_variance`.
+    """Like
+    :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`
+    but in PDF space. An estimate is made of the integral across the central
+    difference distribution, with domain defined by the replica distribution.
+    For more details see
+    :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`.
 
     """
     df_in = fits_pdf_sqrt_ratio
