@@ -28,11 +28,11 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     """
     biases, variances, _ = fits_dataset_bias_variance
     fig, ax = plt.subplots()
-    ax.plot(biases, "*", label=f"bias, std dev. = {np.std(biases):.2f}")
+    ax.plot(biases, "*", label=f"bias, std. dev. = {np.std(biases):.2f}")
     ax.axhline(
         np.mean(biases), label=f"bias, mean = {np.mean(biases):.2f}", linestyle="-"
     )
-    ax.plot(variances, ".", label=f"variance, std dev. = {np.std(variances):.2f}")
+    ax.plot(variances, ".", label=f"variance, std. dev. = {np.std(variances):.2f}")
     ax.axhline(
         np.mean(variances),
         label=f"variance, mean = {np.mean(variances):.2f}",
@@ -46,14 +46,17 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
 
 @figure
 def plot_experiment_fits_bias_variance(fits_experiment_bias_variance, experiment):
-    """Like `plot_dataset_fits_bias_variance` but for an experiment"""
+    """Like `plot_dataset_fits_bias_variance` but for an experiment.
+
+    """
     return plot_dataset_fits_bias_variance(fits_experiment_bias_variance, experiment)
 
 
 @figure
 def plot_total_fits_bias_variance(fits_total_bias_variance):
     """Like `plot_dataset_fits_bias_variance` but for the total bias/variance
-    for all data
+    for all data.
+
     """
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
@@ -70,7 +73,8 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     This gives an idea of how faithful uncertainties are for a set of
     datasets.
 
-    Notes:
+    Notes
+    -----
 
     If uncertainties are faithfully estimated then we would expect to see
     ratio = 1. We should note that the ratio is a squared quantity and
@@ -125,7 +129,7 @@ def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
     faithful the uncertainties are in sensible units. As noted in
     `datasets_bias_variance_ratio`, bias/variance is a squared quantity and
     so when considering how much uncertainty has been over or underestimated
-    it is more natural to consider sqrt(bias/variance)
+    it is more natural to consider sqrt(bias/variance).
 
     """
     df_in = datasets_bias_variance_ratio
@@ -138,7 +142,8 @@ def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
 
 @table
 def sqrt_experiments_bias_variance_ratio(experiments_bias_variance_ratio):
-    """Like sqrt_datasets_bias_variance_ratio except for each experiment
+    """Like sqrt_datasets_bias_variance_ratio except for each experiment.
+
     """
     return sqrt_datasets_bias_variance_ratio(experiments_bias_variance_ratio)
 
@@ -148,7 +153,7 @@ def total_bias_variance_ratio(
     experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments
 ):
     """Combine datasets_bias_variance_ratio and experiments_bias_variance_ratio
-    into single table with MultiIndex of experiment and dataset
+    into single table with MultiIndex of experiment and dataset.
 
     """
     exps_df_in = experiments_bias_variance_ratio.iloc[:-1]  # Handle total separately
@@ -316,13 +321,17 @@ def plot_dataset_xi_histogram(dataset_xi, dataset):
 
 @figure
 def plot_experiment_xi(experiment_xi, experiment):
-    """Like plot_dataset_xi except for an experiment"""
+    """Like plot_dataset_xi except for an experiment.
+
+    """
     return plot_dataset_xi(experiment_xi, experiment)
 
 
 @figure
 def plot_experiment_xi_histogram(experiment_xi, experiment):
-    """Like plot_dataset_xi_histogram but for an experiment"""
+    """Like plot_dataset_xi_histogram but for an experiment.
+
+    """
     return plot_dataset_xi_histogram(experiment_xi, experiment)
 
 
@@ -338,6 +347,7 @@ def dataset_ratio_error_finite_effects(
 
     The resulting table gives and approximation of how error varies with
     number of fits and number of replicas for each dataset.
+
     """
     bias_samples, var_samples = bias_variance_resampling_dataset
     ratio = bias_samples / var_samples
@@ -351,7 +361,7 @@ def total_ratio_error_finite_effects(
     bias_variance_resampling_total, n_fit_samples, n_replica_samples
 ):
     """Like dataset_ratio_relative_error_finite_effects except for the total
-    bias / variance (across all data)
+    bias / variance (across all data).
 
     """
     return dataset_ratio_error_finite_effects(
@@ -545,7 +555,7 @@ def experiments_bootstrap_sqrt_ratio_table(
     """Given experiments_bootstrap_sqrt_ratio, which a bootstrap
     resampling of the sqrt(bias/variance) for each experiment and the total
     across all data, tabulate the mean and standard deviation across bootstrap
-    samples
+    samples.
 
     """
     indices = list(map(str, experiments)) + ["Total"]
@@ -600,6 +610,7 @@ def experiments_bootstrap_xi_table(
     matrix) for each individual bootstrap sample.
 
     Tabulate the results for each experiment and for the total xi across all data.
+
     """
     # take mean across data points for each experiment
     xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
@@ -619,7 +630,7 @@ def experiments_bootstrap_xi_comparison(
 ):
     """Table comparing the mean and standard deviation across bootstrap samples of
     the measured xi_1sigma and the expected xi_1sigma calculated from
-    bias/variance
+    bias/variance.
 
     """
     return pd.concat(
