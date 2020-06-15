@@ -9,7 +9,7 @@ The `n3fit` is designed to maintain close compatibility with the former `nnfit`
 code.
 
 From a practical point of view the user should perform the steps documented
-above in order to obtain a complete PDF fit:
+below in order to obtain a complete PDF fit:
 
 - [Preparing a fit runcard](#preparing-a-fit-runcard)
 - [Running the fitting code](#running-the-fitting-code)
