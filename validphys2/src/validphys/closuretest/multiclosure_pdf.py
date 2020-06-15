@@ -13,6 +13,7 @@ import scipy.special
 
 from reportengine import collect
 
+from validphys.closuretest.multiclosure import DEFAULT_SEED
 from validphys.pdfgrids import xplotting_grid
 from validphys.core import PDF
 from validphys.calcutils import calc_chi2
@@ -379,7 +380,7 @@ def fits_bootstrap_pdf_ratio(
     multiclosure_underlyinglaw,
     internal_Nx,
     n_boot=100,
-    boot_seed=None,
+    boot_seed=DEFAULT_SEED,
 ):
     """Perform a bootstrap sampling across fits and replicas of the sqrt ratio,
     by flavour and total and then tabulate the mean and error

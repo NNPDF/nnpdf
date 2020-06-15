@@ -15,6 +15,7 @@ import scipy.special
 from reportengine.table import table
 from reportengine.figure import figuregen, figure
 
+from validphys.closuretest.multiclosure import DEFAULT_SEED
 from validphys.closuretest.multiclosure_pdf import (
     XI_FLAVOURS,
     bootstrap_pdf_differences,
@@ -155,7 +156,7 @@ def fits_bootstrap_pdf_xi_table(
     multiclosure_underlyinglaw,
     internal_Nx,
     n_boot=100,
-    boot_seed=None,
+    boot_seed=DEFAULT_SEED,
     use_x_basis=False,
 ):
     """Perform a bootstrap sampling across fits and replicas of xi, by flavour
