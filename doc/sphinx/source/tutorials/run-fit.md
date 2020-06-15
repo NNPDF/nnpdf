@@ -2,8 +2,8 @@
 .. _n3fit-usage:
 ```
 
-`n3fit` usage guide
-===================
+How to run a PDF fit
+====================
 
 The `n3fit` is designed to maintain close compatibility with the former `nnfit` code.
 

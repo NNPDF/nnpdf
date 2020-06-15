@@ -4,6 +4,7 @@ Tutorials
 .. toctree::
    :maxdepth: 1
 
+   ./run-fit.md
    ./run-legacy-fit.rst
    ./compare-fits.md
    ./list-resources.md
