@@ -39,7 +39,7 @@ def xi_flavour_table(xi_flavour_x, xi_totalpdf):
         :, np.newaxis
     ]
     index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
-    return pd.DataFrame(data, columns=[r"Measured $\xi_{1\sigma}$"], index=index)
+    return pd.DataFrame(data, columns=[r"measured $\xi_{1\sigma}$"], index=index)
 
 
 @figuregen
@@ -80,7 +80,7 @@ def plot_xi_flavour_x(
         )
         ax.axhline(0.68, linestyle=":", color="k", label="expected value")
         ax.set_ylim([0, 1])
-        ax.set_title(r"$\xi_{1\sigma}$" + f" for Q={Q}, {fl} PDF.")
+        ax.set_title(r"$\xi_{1\sigma}$" + f" for Q={Q}, {fl} PDF")
         ax.set_xlabel(x_label)
         ax.set_ylabel(r"$\xi_{1\sigma}$")
         ax.legend()
@@ -188,7 +188,7 @@ def fits_bootstrap_pdf_xi_table(
     )
     return pd.DataFrame(
         res,
-        columns=[r"bootstrap mean $\xi_{1\sigma}$", r"bootstrap std. $\xi_{1\sigma}$"],
+        columns=[r"bootstrap mean $\xi_{1\sigma}$", r"bootstrap std. dev. $\xi_{1\sigma}$"],
         index=index,
     )
 
@@ -212,7 +212,7 @@ def fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_sqrt_ratio):
     )
     return pd.DataFrame(
         res,
-        columns=[r"bootstrap mean sqrt ratio", r"bootstrap std. sqrt ratio"],
+        columns=[r"bootstrap mean sqrt ratio", r"bootstrap std. dev. sqrt ratio"],
         index=index,
     )
 
@@ -328,7 +328,7 @@ def plot_multiclosure_correlation_eigenvalues(fits_correlation_matrix_totalpdf):
     e_val, _ = la.eigh(fits_correlation_matrix_totalpdf)
     l2_condition = e_val[-1] / e_val[0]
     fig, ax = plt.subplots()
-    ax.plot(e_val, "*", label=f"l2-condition: {l2_condition:.2f}")
+    ax.plot(e_val, "*", label=f"l2-condition: {l2_condition:,.0f}")
     ax.set_ylabel(r"$\lambda_{\rm corr}$")
     ax.set_xlabel("eigenvalue index (ascending)")
     ax.set_title("Eigenvalues of PDF correlation matrix, $N_{x}=$" + f"{len(e_val)}")

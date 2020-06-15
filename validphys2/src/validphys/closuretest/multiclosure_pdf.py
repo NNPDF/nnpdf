@@ -132,7 +132,7 @@ def pdf_central_difference(
 
         underlying_grid - mean(grid_vals)
 
-    where mean is across replicas
+    where mean is across replicas.
 
     Returns:
 
