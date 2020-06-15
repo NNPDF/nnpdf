@@ -27,13 +27,16 @@ from validphys.closuretest.multiclosure_pdf import (
 
 @table
 def xi_flavour_table(xi_flavour_x, xi_totalpdf):
-    """For each flavour take the mean of xi_flavour_x across x to get single
-    number of proportion points on the central PDF which are within 1 sigma,
-    calculated from the replicas, of the underlying PDF.
+    """For each flavour take the mean of xi_flavour_x across x to get a single
+    number, which is the proportion of points on the central PDF which are
+    within 1 sigma. This is calculated from the replicas of the underlying PDF.
 
     Returns
+    -------
+
     xi_flavour: pd.DataFrame
         table of xi by flavour
+
     """
     data = np.concatenate((xi_flavour_x.mean(axis=-1), [xi_totalpdf]), axis=0)[
         :, np.newaxis
@@ -51,10 +54,10 @@ def plot_xi_flavour_x(
     internal_Nx,
     use_x_basis=False,
 ):
-    """For each flavour plot xi for each x-point. By default xi is calculated and
-    plotted in the basis which diagonalises the covmat estimated from the union
-    of all the replicas. However, if ``use_x_basis`` is ``True`` then xi will be
-    calculated and plotted in x basis.
+    """For each flavour plot xi for each x-point. By default xi is calculated
+    and plotted in the basis which diagonalises the covmat, which is estimated
+    from the union of all the replicas. However, if ``use_x_basis`` is ``True``
+    then xi will be calculated and plotted in the x-basis.
 
     """
     # treat singlet and gluon separately
@@ -80,7 +83,7 @@ def plot_xi_flavour_x(
         )
         ax.axhline(0.68, linestyle=":", color="k", label="expected value")
         ax.set_ylim([0, 1])
-        ax.set_title(r"$\xi_{1\sigma}$" + f" for Q={Q}, {fl} PDF")
+        ax.set_title(r"$\xi_{1\sigma}$" + f" for Q={Q} GeV, {fl} PDF")
         ax.set_xlabel(x_label)
         ax.set_ylabel(r"$\xi_{1\sigma}$")
         ax.legend()
@@ -109,8 +112,8 @@ def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
 
 @table
 def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
-    """Like :py:func:`fits_pdf_bias_variance_ratio` except taking the sqrt. To see how
-    faithful our uncertainty is in units of the standard deviation.
+    """Like :py:func:`fits_pdf_bias_variance_ratio` except taking the sqrt. This
+    is to see how faithful our uncertainty is in units of the standard deviation.
 
     """
     df_in = fits_pdf_bias_variance_ratio
@@ -120,9 +123,10 @@ def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
 
 @table
 def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
-    """Like expected_xi_from_bias_variance but in PDF space. Estimate the
-    integral across central difference distribution, with domain defined by the
-    replica distribution. For more details see expected_xi_from_bias_variance.
+    """Like :py:func:`expected_xi_from_bias_variance` but in PDF space. An
+    estimate is made of the integral across the central difference distribution,
+    with domain defined by the replica distribution. For more details see
+    :py:func:`expected_xi_from_bias_variance`.
 
     """
     df_in = fits_pdf_sqrt_ratio
@@ -137,8 +141,8 @@ def fits_pdf_expected_xi_from_ratio(fits_pdf_sqrt_ratio):
 
 @table
 def fits_pdf_compare_xi_to_expected(fits_pdf_expected_xi_from_ratio, xi_flavour_table):
-    """Two column table comparing the measured value of xi for each flavour to the
-    one calculated from bias/variance
+    """Two-column table comparing the measured value of xi for each flavour to the
+    value calculated from the bias/variance.
 
     """
     return pd.concat((xi_flavour_table, fits_pdf_expected_xi_from_ratio), axis=1)
@@ -155,7 +159,7 @@ def fits_bootstrap_pdf_xi_table(
     use_x_basis=False,
 ):
     """Perform a bootstrap sampling across fits and replicas of xi, by flavour
-    and total and then tabulate the mean and error
+    and total and then tabulate the mean and error.
 
     """
     rng = np.random.RandomState(seed=boot_seed)
@@ -219,9 +223,9 @@ def fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_sqrt_ratio):
 
 @table
 def fits_bootstrap_pdf_expected_xi_table(fits_bootstrap_pdf_expected_xi):
-    """Tabulate the mean and standard deviation across bootstrap samples
-    of :py:func:`fits_bootstrap_pdf_expected_xi` with a row for each flavour and the
-    total expected xi
+    """Tabulate the mean and standard deviation across bootstrap samples of
+    :py:func:`fits_bootstrap_pdf_expected_xi` with a row for each flavour and
+    the total expected xi.
 
     """
     df = fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_expected_xi)
@@ -240,9 +244,9 @@ def fits_bootstrap_pdf_compare_xi_to_expected(
     fits_bootstrap_pdf_expected_xi_table, fits_bootstrap_pdf_xi_table
 ):
     """Table comparing the mean and standard deviation across bootstrap samples
-    of the measured value of xi to the one calculated from bias/variance
-    in PDF space, for each flavour and total across all flavours accounting
-    for correlations
+    of the measured value of xi to the value calculated from bias/variance
+    in PDF space. This is done for each flavour and for the total across all
+    flavours accounting for correlations.
 
     """
     return fits_pdf_compare_xi_to_expected(
@@ -253,22 +257,24 @@ def fits_bootstrap_pdf_compare_xi_to_expected(
 def plot_pdf_matrix(matrix, n_x, **kwargs):
     """Utility function which, given a covmat/corrmat for all flavours and
     x, plots it with appropriate labels. Input matrix is expected to be
-    size (n_flavours*n_x) * (n_flavours*n_x)
+    size (n_flavours*n_x) * (n_flavours*n_x).
 
-    Parameters:
+    Parameters
+    ----------
 
     matrix: np.array
         square matrix which must be (n_flavours*n_x) * (n_flavours*n_x) with
         elements ordered like:
         (flavour0_x0, flavour0_x1, ..., flavourN_x0, ..., flavourN_xN)
-        i.e the points along x for flavour 0, then points along x for flavour 1
+        i.e. the points along x for flavour 0, then points along x for flavour 1
         etc.
     **kwargs:
         keyword arguments for the matplotlib.axes.Axes.imshow function
 
-    Notes:
+    Notes
+    -----
 
-    See matplotlib.axes.Axes.imshow for more details on plotting function
+    See matplotlib.axes.Axes.imshow for more details on the plotting function.
 
     """
     labels = [f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:]]
@@ -292,9 +298,9 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
 
 @figure
 def plot_multiclosure_covariance_matrix(fits_covariance_matrix_totalpdf, internal_Nx):
-    """Plot the covariance matrix for all flavours, covariance matrix
-    has shape n_flavours * n_x each block is the covariance of the replica
-    PDFs on the x-grid defined in xi_pdfgrids
+    """Plot the covariance matrix for all flavours. The covariance matrix has
+    shape n_flavours * n_x, where each block is the covariance of the replica
+    PDFs on the x-grid defined in :py:func:`xi_pdfgrids`.
 
     """
     fig, ax = plot_pdf_matrix(fits_covariance_matrix_totalpdf, internal_Nx)
@@ -304,8 +310,8 @@ def plot_multiclosure_covariance_matrix(fits_covariance_matrix_totalpdf, interna
 
 @figure
 def plot_multiclosure_correlation_matrix(fits_correlation_matrix_totalpdf, internal_Nx):
-    """Like plot_multiclosure_covariance_matrix but plots the total
-    correlation matrix
+    """Like plot_multiclosure_covariance_matrix but plots the total correlation
+    matrix.
 
     """
     fig, ax = plot_pdf_matrix(
