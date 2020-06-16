@@ -40,7 +40,8 @@ def l_integrability():
     """
     def true_loss(y_true,y_pred):
         loss = K.square(y_pred)
-        return K.sum(loss)    
+        return K.sum(loss)
+    return true_loss        
 
 def l_diaginvcovmat(diaginvcovmat_np):
     """
