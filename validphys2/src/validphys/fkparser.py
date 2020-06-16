@@ -361,6 +361,7 @@ def parse_cfactor(f):
         data = np.loadtxt(f)
     except Exception as e:
         raise BadCFactorError(e) from e
+    data = data.reshape(-1, 2)
     central_value = data[:, 0]
     uncertainty = data[:, 1]
     return CFactorData(
