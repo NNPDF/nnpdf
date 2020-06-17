@@ -25,6 +25,10 @@
 *   uncertainty) and Table 12 and Table 13 (breakdown of systematic 
 *   uncertainties), respectively for W+ +cbar and W- + c.
 *
+*   Systematici uncertainties are supplemented by a theoretical uncertainty
+*   that takes into account missing NNLO corrections in the matrix element.
+*   This uncertainty was estimated by means as the asymmetric envelope of the 
+*   3pt renormalisation scale variation (Eq. 4.16 in 1906.10698).
 */
 
 #include "ATLAS_WCHARM_WP_DIFF_7TEV.h"
@@ -66,12 +70,18 @@ void ATLAS_WCHARM_WP_DIFF_7TEVFilter::ReadData()
     for(int k=0; k<fNSys; k++)
     {
       lstream >> fSys[i][k].mult;
+      if(k==fNSys-2||k==fNSys-1)
+	fSys[i][k].mult /= sqrt(2.);
       fSys[i][k].type = MULT;
       fSys[i][k].add = fSys[i][k].mult*fData[i]/100;
       if(k == 0)
         fSys[i][k].name = "UNCORR";
-      else if(k == fNSys - 1)
+      else if(k == fNSys - 3)
         fSys[i][k].name = "ATLASLUMI11";
+      else if(k == fNSys - 2)
+        fSys[i][k].name = "SCALEVAR";
+      else if(k == fNSys - 1)
+        fSys[i][k].name = "SCALEVAR"; 
       else
         fSys[i][k].name = "CORR";
     }
@@ -118,12 +128,18 @@ void ATLAS_WCHARM_WM_DIFF_7TEVFilter::ReadData()
     for(int k=0; k<fNSys; k++)
     {
       lstream >> fSys[i][k].mult;
+      if(k==fNSys-2||k==fNSys-1)
+	fSys[i][k].mult /= sqrt(2.);
       fSys[i][k].type = MULT;
       fSys[i][k].add = fSys[i][k].mult*fData[i]/100;
       if(k == 0)
         fSys[i][k].name = "UNCORR";
-      else if(k == fNSys - 1)
+      else if(k == fNSys - 3)
         fSys[i][k].name = "ATLASLUMI11";
+      else if(k == fNSys - 2)
+        fSys[i][k].name = "SCALEVAR";
+      else if(k == fNSys - 1)
+        fSys[i][k].name = "SCALEVAR"; 
       else
         fSys[i][k].name = "CORR";
     }
