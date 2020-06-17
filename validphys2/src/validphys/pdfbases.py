@@ -473,7 +473,6 @@ def rotation(flav_info, fitbasis):
     ----------
         flav_info: dict
             dictionary containing the information about each PDF (basis dictionary in the runcard)
-            value of the learning rate
         fitbasis: str
             name of the fitting basis
 
@@ -481,7 +480,7 @@ def rotation(flav_info, fitbasis):
     -------
         mat.transpose(): numpy matrix
             matrix performing the change of basis from fitbasis to NN31IC
-                   
+
     """
     if fitbasis == 'NN31IC':
         return np.identity(8)
