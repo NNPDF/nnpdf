@@ -1,3 +1,5 @@
+.. _nnfit-usage:
+
 How to run a legacy PDF fit
 ---------------------------
 

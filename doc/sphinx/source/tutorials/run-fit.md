@@ -5,15 +5,18 @@
 How to run a PDF fit
 ====================
 
-The `n3fit` is designed to maintain close compatibility with the former `nnfit`
-code.
 
-From a practical point of view the user should perform the steps documented
-below in order to obtain a complete PDF fit:
+The user should perform the steps documented below in order to obtain a complete
+PDF fit:
 
 - [Preparing a fit runcard](#preparing-a-fit-runcard)
 - [Running the fitting code](#running-the-fitting-code)
 - [Upload and analyse the fit](#upload-and-analyse-the-fit)
+
+
+These steps are similar to those required to run the
+[`nnfit` code](nnfit-usage) as `n3fit` is designed to maintain close
+compatibility with it.
 
 Preparing a fit runcard
 -----------------------
@@ -144,17 +147,17 @@ created in ```runcard/nnfit/replica_$replica```. This folder contains several
 files which follow the same structure as `nnfit`:
 
 - `runcard.exportgrid`: a file containing the PDF grid.
-- `chi2exps.log`: a log file with the chi2 of the training every 100 epochs.
+- `chi2exps.log`: a log file with the χ² of the training every 100 epochs.
 - `runcard.preproc`: Empty file.
 - `runcard.fitinfo`: Includes information about the fit. The first line
-contains, in this order, the number of epochs, the validation chi2, training
-chi2, experimental chi2 and the state of the positivity. The second line the
+contains, in this order, the number of epochs, the validation χ², training
+χ², experimental χ² and the state of the positivity. The second line the
 arclength for each flavour.
 - `runcard.time`: Includes the total time the fit took in CPU time and walltime.
 The times are separated by the time of the actual fit and the time of the data
 load.
 
-``` note:: The reported chi2 refers always to the actual chi2, i.e., without positivity loss or other penalty terms.
+``` note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 ```
 
 Upload and analyse the fit
