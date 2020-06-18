@@ -82,9 +82,18 @@ class MetaModel(Model):
         input_list = input_tensors
         output_list = output_tensors
 
-        if not isinstance(input_list, list):
+        if isinstance(input_list, dict):
+            # if this is a dictionary, convert it to a list for now
+            input_list = input_tensors.values()
+        elif not isinstance(input_list, list):
+            # if it is not a dict but also not a list, make it into a 1-element list and pray
             input_list = [input_list]
-        if not isinstance(output_list, list):
+
+        if isinstance(output_list, dict):
+            # if this is a dictionary, convert it to a list for now
+            output_list = output_tensors.values()
+        elif not isinstance(output_list, list):
+            # if it is not a dict but also not a list, make it into a 1-element list and pray
             output_list = [output_list]
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)

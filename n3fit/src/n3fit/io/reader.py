@@ -3,6 +3,7 @@
 """
 import hashlib
 import copy
+from collections import defaultdict
 import numpy as np
 
 from NNPDF import RandomGenerator
@@ -308,7 +309,7 @@ def common_data_reader(
         # Now save a dictionary of training/validation/experimental folds
         # for training and validation we need to apply the tr/vl masks
         # for experimental we need to negate the mask
-        folds = {"training":[], "validation":[], "experimental":[]}
+        folds = defaultdict(list)
         for fold in list_folds:
             folds["training"].append(fold[tr_mask])
             folds["validation"].append(fold[vl_mask])

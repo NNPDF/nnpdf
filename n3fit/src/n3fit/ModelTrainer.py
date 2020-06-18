@@ -25,7 +25,7 @@ THRESHOLD_CHI2 = 10.0
 
 def _assign_data_to_model(model, data_dict, fold_k=0):
     """
-        Reads the data dictionary (`data_dict`) and assings the target data to the model
+        Reads the data dictionary (``data_dict``) and assings the target data to the model
         It returns a dictionary containing:
         {
             'model': the backend.MetaModel to be trained
@@ -34,7 +34,7 @@ def _assign_data_to_model(model, data_dict, fold_k=0):
             'losses': the list of loss functions of the model
         }
 
-        If kfolding is active applies the (`fold_k`) fold to the target data.
+        If kfolding is active applies the (``fold_k``) fold to the target data.
         in this case ndata is a count of the non_zero entries of the fold
 
         Note: this function is transitional. Eventually a validphys action should
@@ -85,7 +85,6 @@ def _assign_data_to_model(model, data_dict, fold_k=0):
     # affected by the folding.
     # They don't count for the chi2 (which is only for reporting)
     active_data += all_data[n_exps:]
-
     ret = {
         "model": model,
         "target_data": active_data,
@@ -152,18 +151,19 @@ class ModelTrainer:
         max_cores=None,
     ):
         """
-        # Arguments:
-            - `exp_info`: list of dictionaries containing experiments
-            - `pos_info`: list of dictionaries containing positivity sets
-            - `flavinfo`: the object returned by fitting['basis']
-            - `nnseed`: the seed used to initialise the Neural Network, will be passed to model_gen
-            - `pass_status`: flag to signal a good run
-            - `failed_status`: flag to signal a bad run
-            - `pass_status`: flag to signal a good run
-            - `failed_status`: flag to signal a bad run
-            - `debug`: flag to activate some debug options
-            - `save_weights_each`: if set, save the state of the fit
-                                    every `save_weights_each` epochs
+        Parameters
+        ----------
+            exp_info: list of dictionaries containing experiments
+            pos_info: list of dictionaries containing positivity sets
+            flavinfo: the object returned by fitting['basis']
+            nnseed: the seed used to initialise the Neural Network, will be passed to model_gen
+            pass_status: flag to signal a good run
+            failed_status: flag to signal a bad run
+            pass_status: flag to signal a good run
+            failed_status: flag to signal a bad run
+            debug: flag to activate some debug options
+            save_weights_each: if set, save the state of the fit
+                                    every ``save_weights_each`` epochs
         """
 
         # Save all input information
@@ -267,9 +267,9 @@ class ModelTrainer:
     def _fill_the_dictionaries(self):
         """
         This function fills the following dictionaries
-            -`training`: data for the fit
-            -`validation`: data which for the stopping
-            -`experimental`: 'true' data, only used for reporting purposes
+            -``training``: data for the fit
+            -``validation``: data which for the stopping
+            -``experimental``: 'true' data, only used for reporting purposes
         with fixed information.
 
         Fixed information: information which will not change between different runs of the code.
@@ -277,9 +277,9 @@ class ModelTrainer:
         and so it will remain unchanged between different runs of the hyperoptimizer.
 
         The aforementioned information corresponds to:
-            - `expdata`: experimental data
-            - `name`: names of the experiment
-            - `ndata`: number of experimental points
+            - ``expdata``: experimental data
+            - ``name``: names of the experiment
+            - ``ndata``: number of experimental points
         """
         for exp_dict in self.exp_info:
             self.training["expdata"].append(exp_dict["expdata"])
@@ -307,8 +307,8 @@ class ModelTrainer:
 
     def _model_generation(self, pdf_model, partition):
         """
-        Fills the three dictionaries (`training`, `validation`, `experimental`)
-        with the `model` entry
+        Fills the three dictionaries (``training``, ``validation``, ``experimental``)
+        with the ``model`` entry
 
 
         Compiles the validation and experimental models with fakes optimizers and learning rate
@@ -347,7 +347,6 @@ class ModelTrainer:
         # The input to the full model is expected to be the input to the PDF
         # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted fro
         full_model_input_dict = pdf_model._parse_input([input_layer], pass_numpy=False)
-        full_model_input = [v for _, v in full_model_input_dict.items()]
 
         # The output of the pdf on input_layer will be thus a concatenation
         # of the PDF values for all experiments
@@ -376,19 +375,19 @@ class ModelTrainer:
         output_tr = _pdf_injection(
             splitted_pdf, self.training["output"], kfold_datasets
         )
-        training = MetaModel(full_model_input, output_tr)
+        training = MetaModel(full_model_input_dict, output_tr)
         if self.no_validation:
             validation = training
         else:
             output_vl = _pdf_injection(
                 splitted_pdf, self.validation["output"], kfold_datasets
             )
-            validation = MetaModel(full_model_input, output_vl)
+            validation = MetaModel(full_model_input_dict, output_vl)
         output_ex = _pdf_injection(
             splitted_pdf, self.experimental["output"], negate_k_datasets
         )
 
-        experimental = MetaModel(full_model_input, output_ex)
+        experimental = MetaModel(full_model_input_dict, output_ex)
 
         if self.model_file:
             # If a model file is given, load the weights from there
@@ -410,7 +409,7 @@ class ModelTrainer:
     def _reset_observables(self):
         """
         Resets the 'output' and 'losses' entries of all 3 dictionaries:
-                            (`training`, `validation`, `experimental`)
+                            (``training``, ``validation``, ``experimental``)
         as well as the input_list
         this is necessary as these can either depend on the parametrization of the NN
         or be obliterated when/if the backend state is reset
@@ -439,8 +438,8 @@ class ModelTrainer:
         It also fill the list of input tensors (input_list)
 
         Parameters accepted:
-            - `pos_multiplier`: the multiplier to be applied to the positivity each 100 epochs
-            - `pos_initial`: the initial value for the positivity
+            - ``pos_multiplier``: the multiplier to be applied to the positivity each 100 epochs
+            - ``pos_initial``: the initial value for the positivity
         """
 
         # First reset the dictionaries
@@ -572,7 +571,7 @@ class ModelTrainer:
         return ret
 
     def _prepare_reporting(self, partition):
-        """ Parses the information received by the ModelTrainer
+        """ Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
@@ -599,7 +598,7 @@ class ModelTrainer:
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
 
-        Every 100 epochs the positivitiy will be updated with `pos_multiplier`
+        Every 100 epochs the positivitiy will be updated with ``pos_multiplier``
         """
         # Train the model for the number of epochs given
         for epoch in range(epochs):
@@ -638,15 +637,15 @@ class ModelTrainer:
 
         Parameters
         ----------
-            `stopping_object`
+            stopping_object
                 A Stopping intance which will have associated a validation model and the
                 list of output layers that should contribute to the training chi2
 
         Returns
         -------
-            `train_chi2`: chi2 of the trainining set
-            `val_chi2` : chi2 of the validation set
-            `exp_chi2`: chi2 of the experimental data (without replica or tr/vl split)
+            train_chi2: chi2 of the trainining set
+            val_chi2 : chi2 of the validation set
+            exp_chi2: chi2 of the experimental data (without replica or tr/vl split)
         """
         if self.model_dicts is None:
             raise RuntimeError("Modeltrainer.evaluate was called before any training")
@@ -666,14 +665,14 @@ class ModelTrainer:
         Wrapper around all the functions defining the fit.
 
         After the ModelTrainer class has been instantiated,
-        a call to this function (with a `params` dictionary) is necessary
+        a call to this function (with a ``params`` dictionary) is necessary
         in order to generate the whole PDF model and perform a fit.
 
         This is a necessary step for hyperopt to work
 
         Parameters used only here:
-            - `epochs`: maximum number of iterations for the fit to run
-            - `stopping_patience`: patience of the stopper after finding a new minimum
+            - ``epochs``: maximum number of iterations for the fit to run
+            - ``stopping_patience``: patience of the stopper after finding a new minimum
         All other parameters are passed to the corresponding functions
         """
 
@@ -759,7 +758,7 @@ class ModelTrainer:
                 save_weights_each=self.save_weights_each,
             )
 
-            # Compile each of the models witht he right parameters
+            # Compile each of the models with the right parameters
             _model_compilation(model_dicts, params["optimizer"])
 
             passed = self._train_and_fit(

@@ -210,15 +210,15 @@ def test_Mask():
     for val in vals:
         masker = layers.Mask(c = val)
         ret = masker(fi)
-        np.allclose(ret, val*fi)
+        np.testing.assert_allclose(ret, val*fi, rtol=1e-5)
     # Check that the boolean works
     np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
     masker = layers.Mask(bool_mask = np_mask)
     ret = masker(fi)
     masked_fi = fi[np_mask]
-    np.allclose(ret, masked_fi)
+    np.testing.assert_allclose(ret, masked_fi, rtol=1e-5)
     # Check that the combination works!
     rn_val = vals[-1]
     masker = layers.Mask(bool_mask = np_mask, c = rn_val)
     ret = masker(fi)
-    np.allclose(ret, masked_fi)
+    np.testing.assert_allclose(ret, masked_fi*rn_val, rtol=1e-5)
