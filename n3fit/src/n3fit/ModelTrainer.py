@@ -760,7 +760,7 @@ class ModelTrainer:
             )
 
             # Compile each of the models witht he right parameters
-            _model_compilation(model_dicts, kidx=k, params["optimizer"])
+            _model_compilation(model_dicts, params["optimizer"])
 
             passed = self._train_and_fit(
                 models["training"],
