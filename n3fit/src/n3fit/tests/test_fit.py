@@ -52,8 +52,7 @@ def compare_two(val1, val2, precision=6):
         num_2 = float(val2)
         assert_almost_equal(num_1, num_2, decimal=precision)
     except ValueError:
-        pass
-#         assert val1 == val2
+        assert val1 == val2
 
 
 def compare_lines(set1, set2, precision=6):

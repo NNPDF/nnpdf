@@ -25,13 +25,40 @@ THRESHOLD_CHI2 = 10.0
 
 def _assign_data_to_model(model, data_dict, fold_k=0):
     """
-        Reads the data dictionary and assigns the target data to the model
+        Reads the data dictionary (`data_dict`) and assings the target data to the model
+        It returns a dictionary containing:
+        {
+            'model': the backend.MetaModel to be trained
+            'target_ndata': an array of target output
+            'ndata': the number of datapoints
+            'losses': the list of loss functions of the model
+        }
+
+        If kfolding is active applies the (`fold_k`) fold to the target data.
+        in this case ndata is a count of the non_zero entries of the fold
+
+        Note: this function is transitional. Eventually a validphys action should
+        provide an experiment object with a .target_data(fold_indx) method which
+        should return the necessary information:
+            - number of datapoints
+            - target data with the right entries set to 0*
+        *or masked away if it is able to also return a list of loss functions that will mask away
+        the corresponding entries of the prediction
+
 
         Parameters
         ----------
             model: backend.MetaModel
+                model to be added to the dictionary
             data_dict: dict
+                dictionary containing: {
+                    'expdata' : list of experimental data which the model will target,
+                    'folds' : a list (size=expdata) of lists (size=kfolds) with the folding masks)
+                    'losses': a list of loss functions for the model
+                    }
             fold_k: int
+                when kfolding, index of the fold, so that for every experiment we apply the
+                folds[index_experiment][mask]
 
         Returns
         -------

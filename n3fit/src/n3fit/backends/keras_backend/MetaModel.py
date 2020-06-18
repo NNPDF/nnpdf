@@ -298,6 +298,6 @@ class MetaModel(Model):
         try:
             return super().__call__(x)
         except ValueError:
-            # The usage of dictionaries as input for the layer is not 100% tf 2.0 friendly
+            # TF 2.0 seems to fail with ValueError when passing a dictionary as an input
             y = x.values()
             return super().__call__(y)
