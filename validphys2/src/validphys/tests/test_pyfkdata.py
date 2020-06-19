@@ -20,6 +20,11 @@ def test_basic_loading():
     assert res.ndata == 12
     assert isinstance(res.sigma, pd.DataFrame)
 
+    # Check if cfactors for datasets having one entry are correctly parsed
+    fk = l.check_fktable(setname='CMSTTBARTOT7TEV', theoryID=162, cfac=('QCD',))
+    res = load_fktable(fk)
+    assert res.ndata == 1
+
 
 def test_cuts():
     l = Loader()
@@ -39,7 +44,7 @@ def test_cuts():
     assert len(newtable.sigma.index.get_level_values(0).unique()) == len(ds.cuts.load())
 
 
-def test_preditions():
+def test_predictions():
     l = Loader()
     pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
     dss = [
