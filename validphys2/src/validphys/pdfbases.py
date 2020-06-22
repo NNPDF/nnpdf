@@ -468,6 +468,19 @@ def rotation(flav_info, fitbasis):
     t8 = u + ubar + d + dbar - 2*s - 2*sbar
 
     If the input is already in the evolution basis it returns the identity.
+
+    Parameters
+    ----------
+        flav_info: dict
+            dictionary containing the information about each PDF (basis dictionary in the runcard)
+        fitbasis: str
+            name of the fitting basis
+
+    Returns
+    -------
+        mat.transpose(): numpy matrix
+            matrix performing the change of basis from fitbasis to NN31IC
+
     """
     if fitbasis == 'NN31IC':
         return np.identity(8)
