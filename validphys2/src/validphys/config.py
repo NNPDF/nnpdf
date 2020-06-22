@@ -796,7 +796,7 @@ class CoreConfig(configparser.Config):
         if use_thcovmat_if_present and thcovmat_present:
             # Expected path of covmat hardcoded
             covmat_path = (
-                fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+                fit.path/'tables'/'datacuts_theory_theory_covmat.csv')
             if not os.path.exists(covmat_path):
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
