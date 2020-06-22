@@ -498,6 +498,7 @@ class ModelTrainer:
             activations=activation_per_layer,
             layer_type=layer_type,
             flav_info=self.flavinfo,
+            fitbasis=self.fitbasis,
             seed=self.NNseed,
             initializer_name=initializer,
             dropout=dropout,
