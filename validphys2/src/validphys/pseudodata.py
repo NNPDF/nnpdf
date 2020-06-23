@@ -11,13 +11,18 @@ import multiprocessing as mp
 import numpy as np
 import pandas as pd
 
+from reportengine import collect
+
 import n3fit.io.reader as reader
 from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
 
 
-def fitted_pseudodata(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
+fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
+
+
+def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit. Note:
             - this function returns the pseudodata for the replicas
@@ -133,6 +138,12 @@ def fitted_pseudodata(fit, experiments, num_fitted_replicas, t0pdfset=None, NPRO
 
 
 def get_pseudodata(fitted_pseudodata, fitted_replica_indexes):
+    """Pseudodata used during fitting but correctly accounting for
+    the postfit reordering.
+    """
+    # By collecting over `fitcontext` we create a list of length
+    # one.
+    fitted_pseudodata = fitted_pseudodata[0]
     return [fitted_pseudodata[i] for i in fitted_replica_indexes]
 
 
