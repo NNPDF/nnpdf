@@ -145,12 +145,12 @@ void CMSWCHARMTOTFilter::ReadData()
       fSys[i][5].mult /= sqrt(2.);
       fSys[i][5].add = fSys[i][5].mult*fData[i]/100;
       fSys[i][5].type = MULT;
-      fSys[i][5].name = "SCALEVAR";
+      fSys[i][5].name = "SKIP";
       
       fSys[i][6].mult /= sqrt(2.);
       fSys[i][6].add = fSys[i][6].mult*fData[i]/100;
       fSys[i][6].type = MULT;
-      fSys[i][6].name = "SCALEVAR";
+      fSys[i][6].name = "SKIP";
     }
   
   f1.close();
@@ -358,12 +358,12 @@ void CMSWCHARMRATFilter::ReadData()
     fSys[i][0].mult /= sqrt(2.);
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "SCALEVAR";
+    fSys[i][0].name = "SKIP";
     
     fSys[i][1].mult /= sqrt(2.);
     fSys[i][1].add = fSys[i][1].mult*fData[i]/100;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "SCALEVAR";
+    fSys[i][1].name = "SKIP";
 
   }
 

@@ -79,9 +79,9 @@ void ATLAS_WCHARM_WP_DIFF_7TEVFilter::ReadData()
       else if(k == fNSys - 3)
         fSys[i][k].name = "ATLASLUMI11";
       else if(k == fNSys - 2)
-        fSys[i][k].name = "SCALEVAR";
+        fSys[i][k].name = "SKIP";
       else if(k == fNSys - 1)
-        fSys[i][k].name = "SCALEVAR"; 
+        fSys[i][k].name = "SKIP"; 
       else
         fSys[i][k].name = "CORR";
     }
@@ -137,9 +137,9 @@ void ATLAS_WCHARM_WM_DIFF_7TEVFilter::ReadData()
       else if(k == fNSys - 3)
         fSys[i][k].name = "ATLASLUMI11";
       else if(k == fNSys - 2)
-        fSys[i][k].name = "SCALEVAR";
+        fSys[i][k].name = "SKIP";
       else if(k == fNSys - 1)
-        fSys[i][k].name = "SCALEVAR"; 
+        fSys[i][k].name = "SKIP"; 
       else
         fSys[i][k].name = "CORR";
     }
