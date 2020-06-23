@@ -17,7 +17,9 @@ import pathlib
 import logging
 import tempfile
 import subprocess as sp
+from collections import namedtuple
 from numpy.testing import assert_almost_equal
+from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
@@ -45,12 +47,30 @@ def compare_two(val1, val2, precision=6):
         assert val1 == val2
 
 
-def compare_lines(set1, set2):
+def compare_lines(set1, set2, precision=6):
     """ Returns true if the lines within set1 and set2 are the same
     The numbers are compared up to `precision`
     """
     for val1, val2 in zip(set1, set2):
-        compare_two(val1, val2)
+        compare_two(val1, val2, precision=precision)
+
+
+def test_initialize_seeds():
+    # Regression tests for seed generation
+    replicas = [1, 4]
+    Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
+    regression = Seeds(
+        trvlseeds=[2005877882, 741720773],
+        nnseeds=[327741615, 87982037],
+        mcseeds=[1791095845, 2029572362],
+    )
+    result = initialize_seeds(replicas, 4, 7, 1, True)
+    assert result == regression
+    result_nomc = initialize_seeds(replicas, 10, 100, 1000, False)
+    regression_nomc = Seeds(
+        trvlseeds=[1165313289, 2124247567], nnseeds=[186422792, 1315999533], mcseeds=[]
+    )
+    assert result_nomc == regression_nomc
 
 
 def test_performfit():
@@ -62,9 +82,9 @@ def test_performfit():
     # cp runcard to tmp folder
     shutil.copy(QUICKPATH, tmp_path)
     # run the fit
-    sp.run(f"{EXE} {QUICKCARD} {REPLICA}".split(), cwd = tmp_path, check = True)
+    sp.run(f"{EXE} {QUICKCARD} {REPLICA}".split(), cwd=tmp_path, check=True)
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
-    compare_lines(new_fitinfo, old_fitinfo)
+    compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)

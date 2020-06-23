@@ -237,3 +237,8 @@ def check_speclabels_different(dataspecs_speclabel):
 def check_two_dataspecs(dataspecs):
     l = len(dataspecs)
     check(l == 2, f"Expecting exactly 2 dataspecs, not {l}")
+
+@make_argcheck
+def check_norm_threshold(norm_threshold):
+    """Check norm_threshold is not None"""
+    check(norm_threshold is not None)

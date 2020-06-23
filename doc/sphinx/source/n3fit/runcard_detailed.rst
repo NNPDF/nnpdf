@@ -5,9 +5,11 @@
 In this section we fine-grain the explanation of the different parameters that enter the runcard.
 
 - :ref:`preprocessing-label`
+- :ref:`trval-label`
+- :ref:`networkarch-label`
 
 .. _preprocessing-label:
- 
+
 Preprocessing
 -------------
 The behaviour of the preprocessing in the ``n3fit`` code is controlled, as in the old ``nnfit`` code, through the ``fitting:basis`` parameter of the nnpdf runcard.
@@ -42,6 +44,9 @@ Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old 
             - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
             - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
 
+
+.. _trval-label:
+
 Training / Validation split
 ---------------------------
 The fraction of events that are considered for the training and validation sets is defined by the ``frac`` key in the ``experiment:dataset`` parameter of the nnpdf runcard. A fraction of ``X`` means that ``X`` of the event will go into the training set while ``1-X`` will enter the validation set for that dataset.
@@ -56,3 +61,42 @@ The fraction of events that are considered for the training and validation sets 
         - { dataset: CMSJETS11,     frac: 0.8, sys: 10 }
 
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
+
+
+.. _networkarch-label:
+
+Network Architecture
+--------------------
+There are different network architectures implemented in ``n3fit``.
+Which can be selected by changing the ``fitting:parameters::layer_type`` parameter in the runcard.
+All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and ``initializer`` parameters.
+
+.. code-block:: yml
+
+    fitting:
+        parameters:
+            nodes_per_layer: [5, 3, 8]
+            activation_per_layer: ['tanh', 'tanh', 'linear']
+            layer_type: 'dense_per_flavour'
+            initializer: 'glorot_normal'
+
+- **One single network** (``layer_type: dense``):
+
+  Extra accepted parameters:
+    - `dropout`: float
+        see `here <https://keras.io/layers/core/#dropout>`_
+    - `regularizer`: str
+        see `here <https://keras.io/regularizers/>`_
+    - `regularizer_args`: dict
+        choice arguments for the `regularizer`
+
+In this mode all nodes are connected with all nodes of the next layer. In this case there is one single network which take as input the value of ``x`` (and ``log(x)``) and outputs all different flavours.
+
+In this case the ``nodes_per_layer`` parameter represents the nodes each one of these layers has. For instance ``[40, 20, 8]`` corresponds to a network where the first layer is a matrix ``(2x40)`` (the input is ``x, log(x)``), the second layer is a matrix ``(40x20)`` and the third and final one ``(20x8)``.
+
+- **One network per flavour** (``layer_type: dense_per_flavour``):
+
+This mode is designed to behave as the methodology for NNPDF before 3.1 where each flavour has a separated identical network. 
+
+In this case the ``nodes_per_layer`` parameter represents the nodes each layer of each flavour has. For instance ``[5, 3, 8]`` means that the first step is a list of 8 layers of shape ``(2x5)``, while the second layer is again a list that matches the previous one (i.e., 8 layers) with layers of shape ``(5x3)`` while the last layer has two task. The output of each layer should be one single element (i.e., 8 ``(3x1)`` layers) and then concatenate them all so that the final output of the neural network will be a 8-elements tensor. A report comparing the ``dense`` and ``dense_per_flavour`` architectures can be found  `here <https://vp.nnpdf.science/q6Rm1Q_rTguJwKsLOZFoig==/>`_
+

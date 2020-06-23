@@ -1,5 +1,5 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 
 ############################################################
@@ -186,7 +186,7 @@ fitting:
     nodes_per_layer: [50, 35, 25, 8]
     activation_per_layer: ['tanh', 'sigmoid', 'sigmoid', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.002
+    learning_rate: 1.0
     optimizer: 'Adadelta'
     epochs: 50000
     pos_multiplier: 1.09

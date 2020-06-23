@@ -41,9 +41,11 @@ providers = [
              'validphys.theorycovariance.output',
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
-             'validphys.MCgen_checks',
-             'validphys.closure',
+             'validphys.closuretest',
+             'validphys.mc_gen_checks',
              'validphys.theoryinfo',
+             'validphys.pseudodata',
+             'validphys.renametools',
              'reportengine.report'
             ]
 

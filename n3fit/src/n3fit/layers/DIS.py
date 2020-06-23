@@ -1,5 +1,6 @@
 import numpy as np
 from n3fit.layers.Observable import Observable
+from n3fit.backends import operations as op
 
 
 class DIS(Observable):
@@ -35,8 +36,9 @@ class DIS(Observable):
             # Returns:
                 - `result`: rank 1 tensor (ndata)
         """
-        pdf_masked = self.boolean_mask(pdf_in, self.basis, axis=1)
+        pdf_in = self.digest_pdf(pdf_in)
+        pdf_masked = op.boolean_mask(pdf_in, self.basis, axis=1)
 
-        pdfT = self.transpose(pdf_masked)
-        result = self.tensor_product(self.fktable, pdfT, axes=2)
+        pdfT = op.transpose(pdf_masked)
+        result = op.tensor_product(self.fktable, pdfT, axes=2)
         return result

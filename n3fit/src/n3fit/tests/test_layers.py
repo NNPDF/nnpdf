@@ -112,7 +112,7 @@ def test_DIS():
         flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
     )
     pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(pdf)
+    kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
     # generate the n3fit results
     obs_layer = layers.DIS(NDATA, fk, basis=comb, nfl=FLAVS)
     result_tensor = obs_layer(kp)
@@ -130,7 +130,7 @@ def test_DY():
         flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
     )
     pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(pdf)
+    kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
     # generate the n3fit results
     obs_layer = layers.DY(NDATA, fk, basis=comb, nfl=FLAVS)
     result_tensor = obs_layer(kp)

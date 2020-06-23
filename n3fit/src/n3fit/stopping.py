@@ -109,18 +109,18 @@ def parse_losses(history_object, data, suffix="loss"):
     """
     try:
         hobj = history_object.history
-    except AttributeError:  # So it works whether we pass the out our the out.history
+    except AttributeError:  # So it works whether we pass the out or the out.history
         hobj = history_object
 
     # In the general case epochs = 1.
-    # In case that we are doing more than 1 epoch, take the average to smooth out
-    # fluctuations.
+    # In case that we are doing more than 1 epoch, take the last result as it is the result
+    # the model is in at the moment
     # This value is only used for printing output purposes so should not have any significance
     dict_chi2 = {}
     total_points = 0
     total_loss = 0
     for exp_name, npoints in data.items():
-        loss = np.mean(hobj[exp_name + f"_{suffix}"])
+        loss = np.take(hobj[exp_name + f"_{suffix}"], -1)
         dict_chi2[exp_name] = loss / npoints
         total_points += npoints
         total_loss += loss
@@ -390,7 +390,7 @@ class Stopping:
             `tr_chi2`
                 chi2 of the given `training_model`
         """
-        training_info = training_model.evaluate()
+        training_info = training_model.compute_losses()
         tr_chi2, _ = parse_losses(training_info, self._tr_ndata)
         return tr_chi2
 
@@ -576,7 +576,7 @@ class Validation:
             `vl_dict`
                 dictionary containing a map of experiment names and loss
         """
-        loss_dict = self.model.evaluate(verbose=self.verbose)
+        loss_dict = self.model.compute_losses(verbose=self.verbose)
         return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
 
     @property
@@ -619,8 +619,10 @@ class Positivity:
     def check_positivity(self, history_object):
         """
             This function receives a history object and look for entries
-            with the keyname: pos_key_something
+            with the keyname: pos_key_{posdataset_name}
 
+            If the sum of all the positivity loss don't surpass a certain
+            threshold it returns True, otherwise returns False
 
             Parameters
             ----------
@@ -632,7 +634,8 @@ class Positivity:
         positivity_loss = 0.0
         for key in self.positivity_sets:
             key_loss = f"{key}_loss"
-            positivity_loss = history_object[key_loss][-1]
+            # If we are taking the avg when checking the output, we should do so here as well
+            positivity_loss += np.take(history_object[key_loss], -1)
         if positivity_loss > self.threshold:
             return False
         else:

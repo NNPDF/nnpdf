@@ -2,6 +2,7 @@
 """
 Utilities for loading data from fit folders
 """
+import json
 import logging
 from collections import namedtuple, OrderedDict
 from io import StringIO
@@ -28,6 +29,16 @@ REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
+
+def num_fitted_replicas(fit):
+    """Function to obtain the number of nnfit replicas. That is
+    the number of replicas before postfit was run.
+    """
+    with open(fit.path / "postfit" / "veto_count.json", 'r') as stream:
+        veto = json.load(stream)
+    # In principle we could use any of the other keys
+    return len(veto["Positivity"])
+
 
 #TODO setup make_check on these
 def check_nnfit_results_path(path):
@@ -319,7 +330,6 @@ fits_theory_covmat_summary = collect('fit_theory_covmat_summary', ('fits',))
 def summarise_theory_covmat_fits(fits_theory_covmat_summary):
     """Collects the theory covmat summary for all fits and concatenates them into a single table"""
     return pd.concat(fits_theory_covmat_summary, axis=1)
-
 
 def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replcia i"""

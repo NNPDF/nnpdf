@@ -5,7 +5,7 @@
 import random as rn
 import numpy as np
 import tensorflow as tf
-from keras import backend as K
+from tensorflow.keras import backend as K
 
 
 def set_initial_state(seed=13):
@@ -25,7 +25,6 @@ def set_initial_state(seed=13):
 
     # Clear the state of keras in case anyone used it before
     K.clear_session()
-    K.set_floatx('float64')
     tf.config.threading.set_inter_op_parallelism_threads(1)
     tf.config.threading.set_intra_op_parallelism_threads(1)
     tf.random.set_seed(use_seed)

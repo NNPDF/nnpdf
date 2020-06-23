@@ -15,10 +15,10 @@ help:
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
+%: Makefile MakeTheoryCSV
 	@if test $@ != "clean"; then \
-		sphinx-apidoc -o ./$(SOURCEDIR)/modules/validphys ../../validphys2/src/validphys/ ; \
-		sphinx-apidoc -o ./$(SOURCEDIR)/modules/n3fit-code ../../n3fit/src/n3fit/ ; \
+		sphinx-apidoc -f -o ./$(SOURCEDIR)/modules/validphys ../../validphys2/src/validphys/ ; \
+		sphinx-apidoc -f -o ./$(SOURCEDIR)/modules/n3fit-code ../../n3fit/src/n3fit/ ; \
 	fi
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
@@ -28,3 +28,6 @@ rsync: html
 
 view: html
 	$(BROWSER) $(BUILDDIR)/html/index.html
+
+MakeTheoryCSV:
+	sqlite3 -header -csv ../../nnpdfcpp/data/theory.db "select * from TheoryIndex;" > source/theories.csv

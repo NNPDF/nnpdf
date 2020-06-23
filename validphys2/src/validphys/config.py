@@ -11,6 +11,7 @@ import inspect
 import numbers
 import copy
 import os
+from importlib.resources import read_text
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -19,7 +20,9 @@ from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
+from reportengine.namespaces import NSList
 from reportengine import report
+from reportengine.compat import yaml
 
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
@@ -31,6 +34,8 @@ from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
 from validphys.plotoptions import get_info
+
+import validphys.scalevariations
 
 log = logging.getLogger(__name__)
 
@@ -464,6 +469,28 @@ class CoreConfig(configparser.Config):
         return {'experiment':self.parse_experiment(experiment_input.as_dict(),
                 theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
 
+    @configparser.explicit_node
+    def produce_covariance_matrix(self, use_pdferr: bool = False):
+        """Modifies which action is used as covariance_matrix depending on
+        the flag `use_pdferr`
+        """
+        from validphys import results
+        if use_pdferr:
+            return results.pdferr_plus_data_covmat
+        else:
+            return results.data_covmat
+
+    @configparser.explicit_node
+    def produce_experiment_covariance_matrix(self, use_pdferr: bool = False):
+        """Modifies which action is used as experiment_covariance_matrix
+        depending on the flag `use_pdferr`
+        """
+        from validphys import results
+        if use_pdferr:
+            return results.pdferr_plus_experiment_covmat
+        else:
+            return results.experiment_covmat
+
     #TODO: Do this better and elsewhere
     @staticmethod
     def _check_dataspecs_type(dataspecs):
@@ -829,7 +856,6 @@ class CoreConfig(configparser.Config):
         key in the plotting info file.
         """
         #TODO: consider this an implimentation detail
-        from reportengine.namespaces import NSList
 
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
             _, experiments = self.parse_from_('fit', 'experiments', write=False)
@@ -879,15 +905,33 @@ class CoreConfig(configparser.Config):
                 "correctly?")
         return grouping
 
-    def parse_perform_covmat_reg(self, do_reg: bool):
-        """Parse the `regularize_covmat` key from runcard"""
-        if do_reg:
-            log.info("Regularizing covariance matrices")
-        return do_reg
+    def parse_norm_threshold(self, val: (numbers.Number, type(None))):
+        """The threshold to use for covariance matrix normalisation, sets
+        the maximum l2 norm of the inverse covariance matrix, by clipping
+        smallest eigenvalues
+
+        If norm_threshold is set to None, then no covmat regularization is
+        performed
+
+        """
+        if val is not None:
+            if val <= 0:
+                raise ConfigError("norm_threshold must be greater than zero.")
+            log.info(
+                f"Regularizing covariance matrices with norm threshold: {val}")
+        return val
+
+    def produce_no_covmat_reg(self):
+        """explicitly set norm_threshold to None so that no covariance matrix
+        regularization is performed
+
+        """
+        return {"norm_threshold": None}
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
+        log.warning("Overwriting filter rules")
         return filter_rules
 
     def produce_rules(self, theoryid, use_cuts, defaults, filter_rules=None):
@@ -913,7 +957,7 @@ class CoreConfig(configparser.Config):
                 for i in filter_rules
             ]
         except RuleProcessingError as e:
-            raise ConfigError(e) from e
+            raise ConfigError(f"Error Processing filter rules: {e}") from e
 
         return rule_list
 
@@ -922,6 +966,7 @@ class CoreConfig(configparser.Config):
         filtering data (when using internal cuts).
         Currently these limits are ``q2min`` and ``w2min``.
         """
+        log.warning("Overwriting filter defaults")
         return filter_defaults
 
     def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):
@@ -950,6 +995,76 @@ class CoreConfig(configparser.Config):
             filter_defaults["w2min"] = w2min
 
         return filter_defaults
+
+    def produce_scale_variation_theories(self, theoryid, point_prescription):
+        """Produces a list of theoryids given a theoryid at central scales and a point
+           prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
+           and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
+           theories needed for each prescription to avoid user error."""
+        pp = point_prescription
+        th = theoryid.id
+
+        lsv = yaml.safe_load(
+            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
+        )
+
+        scalevarsfor_list = lsv["scale_variations_for"]
+        # Allowed central theoryids
+        cent_thids = [
+            str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list
+        ]
+
+        if th not in cent_thids:
+            valid_thids = ", ".join(cent_thids)
+            raise ConfigError(
+                "Scale variations are not currently defined for this central theoryid. It is "
+                + f"currently only possible to use one of the following as the central theory: {valid_thids}. "
+                + "Please use one of these instead if you wish to include theory uncertainties here."
+            )
+
+        # Find scales that correspond to this point prescription
+        pp_scales_dict = yaml.safe_load(
+            read_text(validphys.scalevariations, "pointprescriptions.yaml")
+        )
+
+        try:
+            scales = pp_scales_dict[pp]
+        except KeyError:
+            valid_pps = ", ".join(pp_scales_dict.keys())
+            raise ConfigError(
+                "Scale variations are not currently defined for this point prescription. This "
+                + "configuration only works when 'point_prescription' is equal to one of the "
+                + f"following: {valid_pps}. Please use one of these instead if you wish to "
+                + "include theory uncertainties here."
+            )
+
+        # Get dictionary containing theoryid and variations for central theory from runcard
+        for scalevarsfor_dict in scalevarsfor_list:
+            if scalevarsfor_dict["theoryid"] == int(th):
+                theoryid_variations = scalevarsfor_dict
+
+        # Find theoryids for given point prescription for given central theoryid
+        try:
+            thids = [theoryid_variations["variations"][scale] for scale in scales]
+        except KeyError:
+            available_scales = list(theoryid_variations["variations"])
+            missing_scales = []
+            for scale in scales:
+                if scale not in available_scales:
+                    missing_scales.append(scale)
+            missing_scales_string = ", ".join(missing_scales)
+            raise ConfigError(
+                "For this central theoryid, the requested point prescription is not currently "
+                + "available. To use this point prescription for this central theoryid, theoryids "
+                + "that correspond to the following scale choices must be created and added to "
+                + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
+                + f"(k_F, k_R) = {missing_scales_string}."
+            )
+
+        # Check each theory is loaded
+        theoryids = [self.loader.check_theoryID(thid) for thid in thids]
+        # NSList needs to be used for theoryids to be recognised as a namespace
+        return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
