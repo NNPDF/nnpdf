@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-pseudodata.py
-
 Tools to obtain and analyse the pseudodata that was seen by the neural
-networks during the fitting of a fit
+networks during the fitting.
 """
 import logging
 import multiprocessing as mp
@@ -24,29 +22,28 @@ fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
 def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
-        into an N3FIT fit. Note:
-            - this function returns the pseudodata for the replicas
-              pre-postfit. Postfit discards some replicas and rearranges
-              the order. The correpsondence is done by the get_pseudodata
-              function.
-            - this code runs in parallel to increase efficiency.
+        into an N3FIT fit.
 
         Parameters
         ----------
-        fit: validphys.core.FitSpec
+        fit: :py:class:`validphys.core.FitSpec`
         experiments:
-            List of validphys.core.ExeperimentSpec
-        num_nnfit_replicas: int
-            Provided for by validphys.fitdata. Equal to the number of
+            List of :py:class:`validphys.core.ExeperimentSpec`
+        num_nnfit_replicas: ``int``
+            Provided for by :py:mod:`validphys.fitdata`. Equal to the number of
             pre-postfit replicas.
-        t0pdfset: validphys.core.PDF
-        NPROC: int
+        t0pdfset: :py:class:`validphys.core.PDF`
+        NPROC: ``int``
             Integer specifying how many cores to run on. Default is
-            mp.cpu_count()
+            ``mp.cpu_count()``
 
         Example
         -------
-        Create a .yaml file say runcard_for_pseudodata.yaml
+        Create a ``YAML`` file say ``runcard_for_pseudodata.yaml``
+
+        .. code-block:: YAML
+            :caption: runcard_for_pseudodata.yaml
+
             pdf: PN3_DIS_130519
             fit: PN3_DIS_130519
 
@@ -68,11 +65,25 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
             use_cuts: fromfit
 
         Then run
+
             >>> with open("./runcard_for_pseudodata.yaml", 'r') as stream:
             ...     from reportengine.compat import yaml
             ...     runcard = yaml.safe_load(stream)
             >>> from validphys.api import API
-            >>> API.get_pseudodata(**runcard)
+            >>> API.get_pseudodata_internal(**runcard)
+
+        Notes
+        -----
+            - This is a wrapper for the ``fitted_pseudodata`` action
+              which knows that ``experiments``, *must* come from fit
+              and similarly ``PDF`` and ``theoryid`` *must* be the same as
+              that of ``fit`` and so on.
+            - This function returns the pseudodata for the replicas
+              pre-postfit. Postfit discards some replicas and rearranges
+              the order. The correpsondence is done by the
+              :py:func:`get_pseudodata`
+              function.
+            - This code runs in parallel to increase efficiency.
     """
     if t0pdfset is not None:
         t0pdfset = t0pdfset.load_t0()

@@ -41,19 +41,26 @@ theoryid:
 use_cuts: fromfit
 """
 
-exp_infos_bytes = read_binary(validphys.tests.regressions, "test_exp_infos.pickle")
-ns = yaml.safe_load(EXAMPLE_RUNCARD)
-# This is what all the fitted replicas saw
-exp_infos = pickle.loads(exp_infos_bytes)
+@pytest.fixture(scope="session", autouse=True)
+def setup_dicts():
+    exp_infos_bytes = read_binary(validphys.tests.regressions, "test_exp_infos.pickle")
+    ns = yaml.safe_load(EXAMPLE_RUNCARD)
+    # This is what all the fitted replicas saw
+    exp_infos = pickle.loads(exp_infos_bytes)
 
-# We now need to convert these to postfit replicas
-fitted_indices = API.fitted_replica_indexes(**ns)
-fit_postfit_mapping = dict(enumerate(exp_infos, 1))
-exp_infos = [fit_postfit_mapping[i] for i in fitted_indices]
+    # We now need to convert these to postfit replicas
+    fitted_indices = API.fitted_replica_indexes(**ns)
+    fit_postfit_mapping = dict(enumerate(exp_infos, 1))
+    exp_infos = [fit_postfit_mapping[i] for i in fitted_indices]
 
 
-pseudodata_info = API.get_pseudodata(**ns)
-def test_pseudodata():
+    pseudodata_info = API.get_pseudodata(**ns)
+
+    return exp_infos, pseudodata_info
+
+
+def test_pseudodata(setup_dicts):
+    exp_infos, pseudodata_info = setup_dicts
     # Loop over replicas
     for i, j in zip(exp_infos, pseudodata_info):
         # For each replica, loop over experiments
@@ -61,7 +68,9 @@ def test_pseudodata():
             assert np.allclose(exp1["expdata"], exp2["expdata"])
             assert np.allclose(exp1["expdata_vl"], exp2["expdata_vl"])
 
-def test_pseudodata_generator():
+
+def test_pseudodata_generator(setup_dicts):
+    exp_infos, pseudodata_info = setup_dicts
     gen = training_validation_pseudodata(pseudodata_info)
     for i, j in enumerate(gen):
         continue
