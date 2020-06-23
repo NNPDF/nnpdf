@@ -25,21 +25,7 @@ from validphys.calcutils import calc_chi2
 XI_FLAVOURS = (r"\Sigma", "gluon", "V", "V3", "V8", "T3", "T8")
 
 
-def internal_Nx(multiclosure_nx=4):
-    """Set a default value for number of points Nx to be used in multiclosure
-    PDF actions, allows for studying dependence on this number but by default
-    sets Nx = 4.
-
-    This was found to be a reasonable value for 30 fits each with
-    40 replicas. Increasing the number of points beyond this leads to large
-    correlations across points, which would require significantly higher
-    number of fits/replicas to properly estimate.
-
-    """
-    return multiclosure_nx
-
-
-def internal_singlet_gluon_xgrid(internal_Nx):
+def internal_singlet_gluon_xgrid(multiclosure_nx=4):
     """Given the number of x points, set up the singlet and gluon xgrids,
     which are defined as half the points being logarithmically spaced
     between 10^-3 and 0.1 and the other half of the points being linearly
@@ -47,19 +33,19 @@ def internal_singlet_gluon_xgrid(internal_Nx):
     """
     return np.concatenate(
         (
-            np.logspace(-3, -1, int(internal_Nx / 2), endpoint=False),
-            np.linspace(0.1, 0.5, int(internal_Nx / 2)),
+            np.logspace(-3, -1, int(multiclosure_nx / 2), endpoint=False),
+            np.linspace(0.1, 0.5, int(multiclosure_nx / 2)),
         ),
         axis=0,
     )
 
 
-def internal_nonsinglet_xgrid(internal_Nx):
+def internal_nonsinglet_xgrid(multiclosure_nx=4):
     """Given the number of x points, set up the xgrid for flavours which
     are not singlet or gluon, defined as being linearly spaced points between
     0.1 and 0.5
     """
-    return np.linspace(0.1, 0.5, internal_Nx)
+    return np.linspace(0.1, 0.5, multiclosure_nx)
 
 
 def xi_pdfgrids(
@@ -224,13 +210,13 @@ def xi_flavour_x(
     return np.asarray(xis)
 
 
-def fits_covariance_matrix_totalpdf(fits_replica_difference, internal_Nx):
+def fits_covariance_matrix_totalpdf(fits_replica_difference, multiclosure_nx=4):
     """Given a set of PDF grids from multiple closure tests, obtain an estimate
     of the covariance matrix allowing for correlations across flavours
     """
     # diffs should be calculated on the per fit level
     super_diffs = np.concatenate(fits_replica_difference, axis=0).reshape(
-        -1, internal_Nx * len(XI_FLAVOURS)
+        -1, multiclosure_nx * len(XI_FLAVOURS)
     )  # reshape to correlate flavours
     return np.cov(super_diffs, rowvar=False)
 
@@ -244,7 +230,7 @@ def xi_totalpdf(
     fits_replica_difference,
     fits_central_difference,
     fits_covariance_matrix_totalpdf,
-    internal_Nx,
+    multiclosure_nx=4,
     use_x_basis=False,
 ):
     """Like :py:func:`xi_flavour_x` except calculate the total xi across flavours and x
@@ -252,10 +238,10 @@ def xi_totalpdf(
     """
     # keep fits and reps then reshape flavour x to one dim
     rep_diff = np.asarray(fits_replica_difference).reshape(
-        len(fits_replica_difference), -1, internal_Nx * len(XI_FLAVOURS)
+        len(fits_replica_difference), -1, multiclosure_nx * len(XI_FLAVOURS)
     )
     central_diff = np.asarray(fits_central_difference).reshape(
-        -1, internal_Nx * len(XI_FLAVOURS)
+        -1, multiclosure_nx * len(XI_FLAVOURS)
     )
     if use_x_basis:
         diag_central_diff = central_diff.T
@@ -309,7 +295,7 @@ def fits_pdf_total_ratio(
     fits_central_difference,
     fits_replica_difference,
     fits_covariance_matrix_totalpdf,
-    internal_Nx,
+    multiclosure_nx=4,
 ):
     """Calculate the total bias and variance for all flavours and x allowing for
     correlations across flavour.
@@ -321,10 +307,10 @@ def fits_pdf_total_ratio(
         in form of tuple (bias, variance)
     """
     central_diff = np.asarray(fits_central_difference).reshape(
-        -1, internal_Nx * len(XI_FLAVOURS)
+        -1, multiclosure_nx * len(XI_FLAVOURS)
     )
     rep_diff = np.asarray(fits_replica_difference).reshape(
-        len(fits_replica_difference), -1, internal_Nx * len(XI_FLAVOURS)
+        len(fits_replica_difference), -1, multiclosure_nx * len(XI_FLAVOURS)
     )
 
     sqrtcov = la.cholesky(fits_covariance_matrix_totalpdf, lower=True)
@@ -378,7 +364,7 @@ def fits_bootstrap_pdf_ratio(
     fits_xi_grid_values,
     underlying_xi_grid_values,
     multiclosure_underlyinglaw,
-    internal_Nx,
+    multiclosure_nx=4,
     n_boot=100,
     boot_seed=DEFAULT_SEED,
 ):
@@ -399,12 +385,12 @@ def fits_bootstrap_pdf_ratio(
         # need various dependencies for ratio actions
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         flav_sqrt_cov = fits_sqrt_covmat_by_flavour(flav_cov)
-        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, internal_Nx)
+        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, multiclosure_nx)
         ratio_flav = fits_pdf_flavour_ratio(
             flav_sqrt_cov, boot_central_diff, boot_rep_diff
         )
         ratio_tot = fits_pdf_total_ratio(
-            boot_central_diff, boot_rep_diff, total_cov, internal_Nx
+            boot_central_diff, boot_rep_diff, total_cov, multiclosure_nx
         )
         ratio_data = np.concatenate((ratio_flav, [ratio_tot]), axis=0)
         ratio_boot.append(ratio_data)

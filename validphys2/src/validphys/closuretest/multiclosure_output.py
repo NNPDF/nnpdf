@@ -585,7 +585,7 @@ def experiments_bootstrap_expected_xi_table(
 ):
     """Tabulate the mean and standard deviation across bootstrap samples of the
     expected xi calculated from the ratio of bias/variance. Returns a table with
-    two columns, for the boostrap mean and standard deviation
+    two columns, for the bootstrap mean and standard deviation
     and a row for each experiment plus the total across all experiments.
 
     """

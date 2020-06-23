@@ -75,14 +75,15 @@ def check_at_least_10_fits(fits):
 
 @make_argcheck
 def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
-    """Checks that all the fit pdfs have the same number of replicas N_rep and
-    that N_rep is at least 20 (by default).
+    """Checks that all the fit pdfs have the same number of replicas N_rep. Then
+    check that N_rep is greater than the smallest number of replicas used in
+    actions which subsample the replicas of each fit.
 
     This check also has the secondary
-    effect of filling in the namespace keys _internal_max_reps and _internal_min_reps
+    effect of filling in the namespace key _internal_max_reps
     which can be used to override the number of replicas used at the level of
     the runcard, but by default get filled in as the number of replicas in each
-    fit and 20 respectively.
+    fit.
 
     """
     # we take off 1 here because we don't want to include replica 0
@@ -99,9 +100,6 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
             f"Specified _internal_max_reps to be {_internal_max_reps} "
             f"however each fit only has {n_reps} replicas"
         )
-
-    if _internal_min_reps is None:
-        _internal_min_reps = 20
 
     if _internal_max_reps < _internal_min_reps:
         raise CheckError(

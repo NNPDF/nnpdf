@@ -26,7 +26,7 @@ from validphys.closuretest.closure_checks import (
 
 # bootstrap seed default
 DEFAULT_SEED = 9689372
-# stepsize in fits/replicas to use for finite size boostraps
+# stepsize in fits/replicas to use for finite size bootstraps
 SAMPLING_INTERVAL = 5
 
 # TODO: deprecate this at some point
@@ -118,7 +118,7 @@ def internal_multiclosure_experiment_loader(
 def fits_dataset_bias_variance(
     internal_multiclosure_dataset_loader,
     _internal_max_reps=None,
-    _internal_min_reps=None,
+    _internal_min_reps=20,
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -163,7 +163,7 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 def fits_experiment_bias_variance(
     internal_multiclosure_experiment_loader,
     _internal_max_reps=None,
-    _internal_min_reps=None,
+    _internal_min_reps=20,
 ):
     """Like `fits_dataset_bias_variance` but for an experiment"""
     return fits_dataset_bias_variance(
@@ -280,7 +280,7 @@ def n_fit_samples(fits):
 # filled but this value can be overridden in specific studies. Both keys
 # must be present in signature for the check to work
 @check_multifit_replicas
-def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=None):
+def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=20):
     """Return a range object where each item is a number of replicas to use for
     resampling a multiclosure quantity.
 
@@ -310,7 +310,7 @@ class BootstrappedTheoryResult:
         self.central_value = data.mean(axis=1)
 
 
-def boostrap_multiclosure_fits(
+def _bootstrap_multiclosure_fits(
     internal_multiclosure_dataset_loader,
     rng,
     n_fit_max,
@@ -401,7 +401,7 @@ def bias_variance_resampling_dataset(
             bias_boot = []
             variance_boot = []
             for _ in range(bootstrap_samples):
-                boot_internal_loader = boostrap_multiclosure_fits(
+                boot_internal_loader = _bootstrap_multiclosure_fits(
                     internal_multiclosure_dataset_loader,
                     rng,
                     n_fit_samples[-1],
@@ -509,7 +509,7 @@ def xi_resampling_dataset(
             # for each n_fit and n_replica sample store result of each boot resample
             xi_1sigma_boot = []
             for _ in range(bootstrap_samples):
-                boot_internal_loader = boostrap_multiclosure_fits(
+                boot_internal_loader = _bootstrap_multiclosure_fits(
                     internal_multiclosure_dataset_loader,
                     rng,
                     n_fit_samples[-1],
@@ -586,7 +586,7 @@ def fits_bootstrap_experiment_bias_variance(
     internal_multiclosure_experiment_loader,
     fits,
     _internal_max_reps=None,
-    _internal_min_reps=None,
+    _internal_min_reps=20,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
 ):
@@ -602,7 +602,7 @@ def fits_bootstrap_experiment_bias_variance(
     variance_boot = []
     for _ in range(bootstrap_samples):
         # use all fits. Use all replicas by default. Allow repeats in resample.
-        boot_internal_loader = boostrap_multiclosure_fits(
+        boot_internal_loader = _bootstrap_multiclosure_fits(
             internal_multiclosure_experiment_loader,
             rng,
             len(fits),
@@ -637,7 +637,7 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
     -------
 
     ratios_resampled: list
-        list of boostrap samples of ratio of bias/var, length of list is
+        list of bootstrap samples of ratio of bias/var, length of list is
         len(experiments) + 1 because the final element is the total ratio
         resampled.
 
@@ -679,14 +679,14 @@ def fits_bootstrap_experiment_xi(
     internal_multiclosure_experiment_loader,
     fits,
     _internal_max_reps=None,
-    _internal_min_reps=None,
+    _internal_min_reps=20,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
 ):
     """Perform bootstrap resample of `experiment_xi`, returns a list
     where each element is an independent resampling of experiment_xi.
 
-    For more information on bootstrapping see boostrap_multiclosure_fits.
+    For more information on bootstrapping see _bootstrap_multiclosure_fits.
     For more information on xi see dataset_xi.
 
     """
@@ -696,7 +696,7 @@ def fits_bootstrap_experiment_xi(
     xi_1sigma_boot = []
     for _ in range(bootstrap_samples):
         # use all fits. Use all replicas by default. Allow repeats in resample.
-        boot_internal_loader = boostrap_multiclosure_fits(
+        boot_internal_loader = _bootstrap_multiclosure_fits(
             internal_multiclosure_experiment_loader,
             rng,
             len(fits),

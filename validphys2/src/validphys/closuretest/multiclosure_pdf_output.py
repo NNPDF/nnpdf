@@ -52,7 +52,7 @@ def plot_xi_flavour_x(
     Q,
     internal_singlet_gluon_xgrid,
     internal_nonsinglet_xgrid,
-    internal_Nx,
+    multiclosure_nx=4,
     use_x_basis=False,
 ):
     """For each flavour plot xi for each x-point. By default xi is calculated
@@ -68,7 +68,7 @@ def plot_xi_flavour_x(
         ]
         x_label = "x"
     else:
-        x_for_plot = 7 * [np.arange(internal_Nx)]
+        x_for_plot = 7 * [np.arange(multiclosure_nx)]
         x_label = "estimated covariance eigenvectors (ascending in eigenvalue)"
 
     for i, fl in enumerate(XI_FLAVOURS):
@@ -156,7 +156,7 @@ def fits_bootstrap_pdf_xi_table(
     fits_xi_grid_values,
     underlying_xi_grid_values,
     multiclosure_underlyinglaw,
-    internal_Nx,
+    multiclosure_nx=4,
     n_boot=100,
     boot_seed=DEFAULT_SEED,
     use_x_basis=False,
@@ -177,10 +177,10 @@ def fits_bootstrap_pdf_xi_table(
         )
 
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
-        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, internal_Nx)
+        total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, multiclosure_nx)
         xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
         xi_total = xi_totalpdf(
-            boot_rep_diff, boot_central_diff, total_cov, internal_Nx, use_x_basis
+            boot_rep_diff, boot_central_diff, total_cov, multiclosure_nx, use_x_basis
         )
         xi_data = np.concatenate((xi_flav.mean(axis=-1), [xi_total]), axis=0)
         xi_boot.append(xi_data)
@@ -300,25 +300,25 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
 
 
 @figure
-def plot_multiclosure_covariance_matrix(fits_covariance_matrix_totalpdf, internal_Nx):
+def plot_multiclosure_covariance_matrix(fits_covariance_matrix_totalpdf, multiclosure_nx=4):
     """Plot the covariance matrix for all flavours. The covariance matrix has
     shape n_flavours * n_x, where each block is the covariance of the replica
     PDFs on the x-grid defined in :py:func:`xi_pdfgrids`.
 
     """
-    fig, ax = plot_pdf_matrix(fits_covariance_matrix_totalpdf, internal_Nx)
+    fig, ax = plot_pdf_matrix(fits_covariance_matrix_totalpdf, multiclosure_nx)
     ax.set_title("Covariance matrix estimated from multiclosure replicas")
     return fig
 
 
 @figure
-def plot_multiclosure_correlation_matrix(fits_correlation_matrix_totalpdf, internal_Nx):
+def plot_multiclosure_correlation_matrix(fits_correlation_matrix_totalpdf, multiclosure_nx=4):
     """Like plot_multiclosure_covariance_matrix but plots the total correlation
     matrix.
 
     """
     fig, ax = plot_pdf_matrix(
-        fits_correlation_matrix_totalpdf, internal_Nx, vmin=0, vmax=1
+        fits_correlation_matrix_totalpdf, multiclosure_nx, vmin=0, vmax=1
     )
     ax.set_title("Correlation matrix estimated from multiclosure replicas")
     return fig
