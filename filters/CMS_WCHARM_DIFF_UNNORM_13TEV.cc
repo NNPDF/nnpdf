@@ -87,12 +87,12 @@ void CMS_WCHARM_DIFF_UNNORM_13TEVFilter::ReadData()
       fSys[i][fNSys-2].mult = fSystematics[fNSys-2]/sqrt(2.);
       fSys[i][fNSys-2].add  = fSys[i][fNSys-2].mult*fData[i]*1e-2;
       fSys[i][fNSys-2].type = MULT;
-      fSys[i][fNSys-2].name = "SCALEVAR";
+      fSys[i][fNSys-2].name = "SKIP";
 
       fSys[i][fNSys-1].mult = fSystematics[fNSys-1]/sqrt(2.);
       fSys[i][fNSys-1].add  = fSys[i][fNSys-1].mult*fData[i]*1e-2;
       fSys[i][fNSys-1].type = MULT;
-      fSys[i][fNSys-1].name = "SCALEVAR";
+      fSys[i][fNSys-1].name = "SKIP";
       
     }  
 
