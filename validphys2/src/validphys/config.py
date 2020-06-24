@@ -35,8 +35,6 @@ from validphys.paramfits.config import ParamfitsConfig
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
 from validphys.plotoptions import get_info
 
-import validphys.scalevariations
-
 log = logging.getLogger(__name__)
 
 class Environment(Environment):
@@ -1002,77 +1000,6 @@ class CoreConfig(configparser.Config):
             filter_defaults["w2min"] = w2min
 
         return filter_defaults
-
-    def produce_scale_variation_theories(self, theoryid, point_prescription):
-        """Produces a list of theoryids given a theoryid at central scales and a point
-           prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
-           and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
-           theories needed for each prescription to avoid user error."""
-        pp = point_prescription
-        th = theoryid.id
-
-        lsv = yaml.safe_load(
-            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
-        )
-
-        scalevarsfor_list = lsv["scale_variations_for"]
-        # Allowed central theoryids
-        cent_thids = [
-            str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list
-        ]
-
-        if th not in cent_thids:
-            valid_thids = ", ".join(cent_thids)
-            raise ConfigError(
-                "Scale variations are not currently defined for this central theoryid. It is "
-                + f"currently only possible to use one of the following as the central theory: {valid_thids}. "
-                + "Please use one of these instead if you wish to include theory uncertainties here."
-            )
-
-        # Find scales that correspond to this point prescription
-        pp_scales_dict = yaml.safe_load(
-            read_text(validphys.scalevariations, "pointprescriptions.yaml")
-        )
-
-        try:
-            scales = pp_scales_dict[pp]
-        except KeyError:
-            valid_pps = ", ".join(pp_scales_dict.keys())
-            raise ConfigError(
-                "Scale variations are not currently defined for this point prescription. This "
-                + "configuration only works when 'point_prescription' is equal to one of the "
-                + f"following: {valid_pps}. Please use one of these instead if you wish to "
-                + "include theory uncertainties here."
-            )
-
-        # Get dictionary containing theoryid and variations for central theory from runcard
-        for scalevarsfor_dict in scalevarsfor_list:
-            if scalevarsfor_dict["theoryid"] == int(th):
-                theoryid_variations = scalevarsfor_dict
-
-        # Find theoryids for given point prescription for given central theoryid
-        try:
-            thids = [theoryid_variations["variations"][scale] for scale in scales]
-        except KeyError:
-            available_scales = list(theoryid_variations["variations"])
-            missing_scales = []
-            for scale in scales:
-                if scale not in available_scales:
-                    missing_scales.append(scale)
-            missing_scales_string = ", ".join(missing_scales)
-            raise ConfigError(
-                "For this central theoryid, the requested point prescription is not currently "
-                + "available. To use this point prescription for this central theoryid, theoryids "
-                + "that correspond to the following scale choices must be created and added to "
-                + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
-                + f"(k_F, k_R) = {missing_scales_string}."
-            )
-
-        # Check each theory is loaded
-        theoryids = [self.loader.check_theoryID(thid) for thid in thids]
-        # NSList needs to be used for theoryids to be recognised as a namespace
-        return {"theoryids": NSList(theoryids, nskey="theoryid")}
-
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
