@@ -740,6 +740,7 @@ class CoreConfig(configparser.Config):
         use_thcovmat_in_sampling: bool,
         use_thcovmat_in_fitting: bool,
         use_higher_twist_uncertainties: bool = False,
+        use_top_uncertainties: bool = False,
         thcovmat_type: str = "full",
     ):
         """
@@ -784,6 +785,12 @@ class CoreConfig(configparser.Config):
         if use_higher_twist_uncertainties is True:
             from validphys.theorycovariance.construction import higher_twist_covmat
             f = higher_twist_covmat
+        elif use_top_uncertainties is True:
+            from validphys.theorycovariance.construction import top_covmat
+            f = top_covmat
+        else:
+            raise ConfigError(
+        "On this branch you must provide either a higher twist or top covmat")
 
 
         @functools.wraps(f)

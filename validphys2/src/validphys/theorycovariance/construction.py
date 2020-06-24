@@ -394,30 +394,29 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     return df
 
 @table
-def higher_twist_covmat(experiments, experiments_index):
-    """Reads the higher twist covariance matrix from file and applies cuts
+def fromfile_covmat(covmatpath, experiments, experiments_index):
+    """Reads the custom covariance matrix from file and applies cuts
     to match experiment covaraince matrix"""
-    htcovmat = pd.read_csv(
-            f"/exports/csce/eddie/ph/groups/nnpdf/Users/rosalyn/Documents/fits/htcovmat_total.csv",
+    filecovmat = pd.read_csv(covmatpath,
             index_col=[0,1,2], header=[0,1,2])
-    htcovmat = pd.DataFrame(htcovmat.values,
-                            index=htcovmat.index,
-                            columns=htcovmat.index)
-    # Reordering HT covmat to match exp order in runcard
+    filecovmat = pd.DataFrame(filecovmat.values,
+                            index=filecovmat.index,
+                            columns=filecovmat.index)
+    # Reordering covmat to match exp order in runcard
     dslist = []
     for exp in experiments:
         for ds in exp.datasets:
             dslist.append(ds.name)
-    htcovmat = htcovmat.reindex(dslist, level="dataset")
-    htcovmat = ((htcovmat.T).reindex(dslist, level="dataset")).T
+    filecovmat = filecovmat.reindex(dslist, level="dataset")
+    filecovmat = ((filecovmat.T).reindex(dslist, level="dataset")).T
     ndata = 0
     cuts_list = []
     indextuples = []
     for exp in experiments:
         for ds in exp.datasets:
-            if ds.name in htcovmat.index.get_level_values(1):
+            if ds.name in filecovmat.index.get_level_values(1):
                 print(ds.name)
-                uncutlength = len(htcovmat.xs(ds.name, level=1))
+                uncutlength = len(filecovmat.xs(ds.name, level=1))
                 cuts = ds.cuts
                 if cuts is None:
                     cuts_list.append(np.arange(ndata, ndata+uncutlength))
@@ -430,7 +429,7 @@ def higher_twist_covmat(experiments, experiments_index):
                     indextuples.append((exp.name, ds.name, float(i)))
     newindex = pd.MultiIndex.from_tuples(indextuples, names=["experiment", "dataset", "index"], sortorder=0)
     total_cuts = np.concatenate(cuts_list, axis=0)
-    cut_covmat = htcovmat.values[:, total_cuts][total_cuts, :]
+    cut_covmat = filecovmat.values[:, total_cuts][total_cuts, :]
     cut_df = pd.DataFrame(cut_covmat, index=newindex,
                           columns=newindex)
     # Make dimensions match those of exp covmat. First make empty df of
@@ -457,6 +456,16 @@ def higher_twist_covmat(experiments, experiments_index):
     full_df = full_df.reindex(experiments_index)
     full_df = ((full_df.T).reindex(experiments_index)).T
     return full_df
+
+@table
+def higher_twist_covmat(experiments, experiments_index):
+    return fromfile_covmat("/exports/csce/eddie/ph/groups/nnpdf/Users/rosalyn/Documents/fits/htcovmat_total.csv",
+              experiments, experiments_index)
+
+@table
+def top_covmat(experiments, experiments_index):
+    return fromfile_covmat("/exports/csce/eddie/ph/groups/nnpdf/Users/rosalyn/Documents/fits/topthcovmat.csv",
+              experiments, experiments_index)
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_experiments(experiments_results_theory,
