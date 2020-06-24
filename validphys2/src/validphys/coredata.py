@@ -28,7 +28,7 @@ class FKTableData:
     xgrid : array, shape (nx)
         The points in x at which the PDFs should be evaluated.
 
-    sigma : DataFrame
+    sigma : pd.DataFrame
         For hadronic data, the columns are the indexes in the ``NfxNf`` list of
         possible flavour combinations of two PDFs.  The MultiIndex contains
         three keys, the data index, an index into ``xgrid`` for the first PDF
@@ -117,3 +117,126 @@ class CFactorData:
     description: str
     central_value: np.array
     uncertainty: np.array
+
+
+@dataclasses.dataclass(eq=False)
+class SystematicError:
+    add: float
+    mult: float
+    sys_type: str #e.g ADD
+    name: str #e.g UNCORR
+
+    def __repr__(self):
+        return (f"{self.__class__.__name__}(add={self.add}, mult={self.mult},"
+                "sys_type={self.sys_type}, name={self.name})")
+
+
+@dataclasses.dataclass(eq=False)
+class CommonData:
+    """
+    Data contained in Commondata files, relevant cuts applied.
+
+    Parameters
+    ----------
+
+    setname : str
+        Name of the dataset
+
+    ndata : int
+        Number of data points
+
+    commondataproc : str
+        Process type, one of 21 options
+
+    nkin : int
+        Number of kinematics specified
+
+    kinematics : list of str with length nkin
+        Kinematic variables kin1, kin2, kin3 ...
+
+    nsys : int
+        Number of systematics
+
+    sysid : list of str with length nsys
+        ID for systematic
+
+    commondata_table : pd.DataFrame
+        Pandas dataframe containing the commondata
+
+    systype_table : pd.DataFrame
+        Pandas dataframe containing the systype index
+        for each systematic alongside the uncertainty
+        type (ADD/MULT/RAND) and name
+        (CORR/UNCORR/THEORYCORR/SKIP)
+    """
+    setname: str
+    ndata: int
+    commondataproc: str
+    nkin: int
+    nsys: int
+    commondata_table: pd.DataFrame
+    systype_table: pd.DataFrame
+
+    def with_cuts(self, cuts):
+        """A method to return a CommonData object where
+        an integer mask has been applied, keeping only data
+        points which pass cuts.
+
+        Note if the first data point passes cuts, the first entry
+        of ``cuts`` should be ``0``.
+
+        Paramters
+        ---------
+        cuts: list or validphys.core.Cuts or None
+        """
+        # Ensure that the cuts we're applying applies to this dataset
+        # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
+        if hasattr(cuts, 'name') and self.setname != cuts.name:
+            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
+                    f"to this commondata file: {self.setname}")
+
+        if hasattr(cuts, 'load'):
+            cuts = cuts.load()
+        if cuts is None:
+            return self
+
+        # We must shift the cuts up by 1 since a cut of 0 implies the first data point
+        # while commondata indexing starts at 1.
+        cuts = list(map(lambda x: x + 1, cuts))
+
+        newndata = len(cuts)
+        new_commondata_table = self.commondata_table.loc[cuts]
+        return dataclasses.replace(
+            self, ndata=newndata, commondata_table=new_commondata_table
+        )
+
+    @property
+    def central_values(self):
+        return self.commondata_table["data"]
+
+    @property
+    def stat_errors(self):
+        return self.commondata_table["stat"]
+
+    @property
+    def sys_errors(self):
+        sys_table = self.commondata_table.drop(
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+        )
+        table = [
+            [
+                SystematicError(
+                    add=sys_table[f"sys.add.{j}"][i],
+                    mult=sys_table[f"sys.mult.{j}"][i],
+                    sys_type=self.systype_table["type"][j],
+                    name=self.systype_table["name"][j],
+                )
+                for j in self.systype_table.index
+            ]
+            for i in self.commondata_table.index
+        ]
+        return pd.DataFrame(
+            table,
+            columns=[f"sys.{i}" for i in self.systype_table.index],
+            index=self.commondata_table.index,
+        )
