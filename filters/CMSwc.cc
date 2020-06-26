@@ -11,7 +11,12 @@
  * to compare with the experimental data)
  * - Cross section ratio data, WplusC/Wminuc
  * (Need to take the ratio of the corresponding FK tables)
- */
+ *
+ * Systematici uncertainties are supplemented by a theoretical uncertainty
+ * that takes into account missing NNLO corrections in the matrix element.
+ * This uncertainty was estimated by means as the asymmetric envelope of the 
+ * 3pt renormalisation scale variation (Eq. 4.16 in 1906.10698).
+*/
 
 #include "CMSwc.h"
 
@@ -21,6 +26,7 @@ void CMSWCHARMTOTFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  fstream f2;
 
   // Read raw data
   stringstream datafile("");
@@ -30,6 +36,16 @@ void CMSWCHARMTOTFilter::ReadData()
   // Check file properly open
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream theoryfile("");
+  theoryfile << dataPath() << "rawdata/"
+	     << fSetName << "/theory.txt";
+  f2.open(theoryfile.str().c_str(), ios::in);
+  // Check file properly open
+  if (f2.fail()) {
+    cerr << "Error opening data file " << theoryfile.str() << endl;
     exit(-1);
   }
 
@@ -112,7 +128,7 @@ void CMSWCHARMTOTFilter::ReadData()
    }
 
   for (int i = 0; i < fNData; i++)
-    for (int l = 0; l < fNSys; l++)
+    for (int l = 0; l < fNSys-2; l++)
     {
       fSys[i][l].add = syscor[i][l];
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -120,8 +136,26 @@ void CMSWCHARMTOTFilter::ReadData()
       fSys[i][l].name = "CORR";
     }
 
+  for(int i = 0 ; i<fNData; i++)
+    {
+      getline(f2,line);
+      istringstream kstream(line);
+      
+      kstream >> fSys[i][5].mult >> fSys[i][6].mult;
+      fSys[i][5].mult /= sqrt(2.);
+      fSys[i][5].add = fSys[i][5].mult*fData[i]/100;
+      fSys[i][5].type = MULT;
+      fSys[i][5].name = "SKIP";
+      
+      fSys[i][6].mult /= sqrt(2.);
+      fSys[i][6].add = fSys[i][6].mult*fData[i]/100;
+      fSys[i][6].type = MULT;
+      fSys[i][6].name = "SKIP";
+    }
+  
   f1.close();
-
+  f2.close();
+  
 }
 
 ///////////////////////////
@@ -266,18 +300,30 @@ void CMSWCHARMRATFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  fstream f2;
 
   // Read raw data
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/Wcharm_ratio_Table7.txt";
+	   << fSetName << "/Wcharm_ratio_Table7.txt";
   f1.open(datafile.str().c_str(), ios::in);
   // Check file properly open
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
     exit(-1);
   }
-    // Now read the data
+
+  stringstream theoryfile("");
+  theoryfile << dataPath() << "rawdata/"
+	     << fSetName << "/theory.txt";
+  f2.open(theoryfile.str().c_str(), ios::in);
+  // Check file properly open
+  if (f2.fail()) {
+    cerr << "Error opening data file " << theoryfile.str() << endl;
+    exit(-1);
+  }
+  
+  // Now read the data
   string line;
   double etamin, etamax;
   double MW2 = pow(MW,2.0);
@@ -305,8 +351,23 @@ void CMSWCHARMRATFilter::ReadData()
     // so add in quadrature statistical and systematic uncertainties
     fStat[i] = sqrt ( fStat[i] * fStat[i] + sys * sys );
 
+    getline(f2,line);
+    istringstream kstream(line);
+
+    kstream >> fSys[i][0].mult >> fSys[i][1].mult;
+    fSys[i][0].mult /= sqrt(2.);
+    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "SKIP";
+    
+    fSys[i][1].mult /= sqrt(2.);
+    fSys[i][1].add = fSys[i][1].mult*fData[i]/100;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "SKIP";
+
   }
 
   f1.close();
+  f2.close();
 
 }
