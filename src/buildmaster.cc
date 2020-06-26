@@ -101,6 +101,9 @@
 #include "CMS_TTBAR_2D_DIFF.h"
 #include "ATLAS_TTB_DIFF_8TEV_LJ.h"
 #include "ATLAS_Z_3D_8TEV.h"
+#include "ATLAS_WZ_13TEV.h"
+#include "ATLAS_WW_13TEV.h"
+#include "CMS_WZ_13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -424,6 +427,21 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_hxsec_RunII_diff_pTH_ggHFilter());
   target.push_back(new CMS_hxsec_RunII_diff_yHFilter());
 
+  // *********************** DIBOSON *********************************
+  target.push_back(new ATLAS_WZ_13TEV_pTZFilter());
+  target.push_back(new ATLAS_WZ_13TEV_pTWFilter());
+  target.push_back(new ATLAS_WZ_13TEV_mTWZFilter());
+  target.push_back(new ATLAS_WZ_13TEV_phiWZFilter());
+  target.push_back(new ATLAS_WZ_13TEV_totWZFilter());
+  target.push_back(new ATLAS_WW_13TEV_memuFilter());
+  target.push_back(new ATLAS_WW_13TEV_pTemuFilter());
+  target.push_back(new ATLAS_WW_13TEV_pTleadFilter());
+  target.push_back(new ATLAS_WW_13TEV_yemuFilter());
+  target.push_back(new ATLAS_WW_13TEV_totWWFilter());
+  target.push_back(new CMS_WZ_13TEV_pTZFilter());
+  target.push_back(new CMS_WZ_13TEV_mTZFilter());
+  target.push_back(new CMS_WZ_13TEV_pTleadFilter());
+  
   // *********************** ATLAS Z (8 TeV) 3D **********************************
   target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
   target.push_back(new ATLAS_Z_3D_ELE_HRAP_8TEVFilter());
