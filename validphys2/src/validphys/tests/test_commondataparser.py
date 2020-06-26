@@ -17,6 +17,12 @@ def test_basic_commondata_loading():
     assert res.nsys == 25
     assert isinstance(res.systype_table, pd.DataFrame)
 
+    # Test a dataset with no systematics
+    emptysyscd = l.check_posset(theoryID=162, setname='POSDYCBD', postlambda=1e-10)
+    emptysysres = load_commondata(emptysyscd.commondataspec)
+    assert emptysysres.nsys == 0
+    assert emptysysres.systype_table.empty is True
+
 
 def test_commondata_with_cuts():
     l = Loader()
