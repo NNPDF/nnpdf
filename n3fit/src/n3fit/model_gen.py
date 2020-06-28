@@ -484,7 +484,7 @@ def pdfNN_layer_generator(
 
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
-            curr_fun0 = cense_layer(curr_fun0)
+            curr_fun0 = dense_layer(curr_fun0)
         res = operation.op_subtract([curr_fun,curr_fun0])
         return res
 
