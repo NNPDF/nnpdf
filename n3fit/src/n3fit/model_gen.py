@@ -485,7 +485,7 @@ def pdfNN_layer_generator(
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
             curr_fun0 = dense_layer(curr_fun0)
-        res = operation.op_subtract([curr_fun,curr_fun0])
+        res = tf.keras.layers.subtract([curr_fun,curr_fun0])
         return res
 
     # Preprocessing layer (will be multiplied to the last of the denses)
