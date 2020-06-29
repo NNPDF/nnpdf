@@ -538,8 +538,7 @@ def _download_and_show(response, stream):
             stream.write(data)
             if sys.stdout.isatty():
                 done = int(50 * dl / total_length)
-                sys.stdout.write("\r[%s%s] (%d%%)" % ('=' * done, ' ' * (50-done),
-                                 done*2))
+                sys.stdout.write(f"\r[{'=' * done}{' '*(50 - done)}] ({done * 2}%)")
             sys.stdout.flush()
         sys.stdout.write('\n')
 
