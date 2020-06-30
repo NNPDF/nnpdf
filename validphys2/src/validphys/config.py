@@ -1068,7 +1068,11 @@ class CoreConfig(configparser.Config):
             if use_cuts is not CutsPolicy.INTERNAL:
                 return None
             if default_filter_rules_recorded_spec_ is not None:
+                # For when using a lockfile as a runcard
                 filter_rules = default_filter_rules_recorded_spec_[default_filter_rules]
+            elif default_filter_rules is not None:
+                # For when a rules spec is specified
+                filter_rules = self.load_default_default_filter_rules(default_filter_rules)
             else:
                 filter_rules = default_filter_rules_input()
 
@@ -1148,12 +1152,17 @@ class CoreConfig(configparser.Config):
             raise ConfigError("w2min defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
+            # If running on a lockfile
             filter_defaults = default_filter_settings_recorded_spec_[
                 default_filter_settings
             ]
             # If we find recorded specs return immediately and don't read q2min and w2min
             # from runcard
             return filter_defaults
+        elif default_filter_settings is not None:
+            # If the user requests to read from a pre existing settings lockfile
+            filter_defaults = self.load_default_default_filter_settings(default_filter_settings)
+            defaults_loaded = True
         elif not filter_defaults:
             filter_defaults = default_filter_settings_input()
             defaults_loaded = True
