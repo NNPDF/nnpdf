@@ -474,6 +474,8 @@ def pdfNN_layer_generator(
         from the `list_of_pdf_layers` in order """
 
         x0 = tf.keras.backend.ones_like(x)
+        x0 = layer_scaling(x0)
+
         x = layer_scaling(x)
 
         if inp == 1:
