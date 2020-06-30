@@ -7,7 +7,7 @@ import tensorflow as tf
 from validphys.fkparser import load_fktable
 from validphys.loader import FallbackLoader as Loader
 
-fk_dis_datasets=[    
+fk_dis_datasets=[
     'NMCPD_D',
     # 'NMCPD_P',
     'NMC',
@@ -49,21 +49,29 @@ class Feature_Scaling(MetaLayer):
                 raise ValueError(f"Feature Scaling does not support '{self.scaler}'.")
 
         def load_fk_tables(datasets):
-            l = Loader() 
+            l = Loader()
             fk_xgrids = np.array([])
             for fk_dataset in datasets:
                 print(f'loading {fk_dataset}')
                 fk = l.check_fktable(setname=fk_dataset, theoryID=52, cfac=[])
                 res = load_fktable(fk)
-                fk_xgrids = np.concatenate([fk_xgrids, res.xgrid]) 
+                fk_xgrids = np.concatenate([fk_xgrids, res.xgrid])
             return fk_xgrids
 
         if self.scaler == 'MinMaxScaler':
             fk_xgrids = load_fk_tables(fk_dis_datasets)
-            scaled_xgrids = fk_xgrids + fk_xgrids**0.4 + fk_xgrids**0.3 + 0.5*fk_xgrids**0.2
+            scaled_xgrids = fk_xgrids
+            scaled_xgrids = (
+            2 * scaled_xgrids
+            + scaled_xgrids ** 0.4
+            + 1.2 * scaled_xgrids ** 0.3
+            + 0.7 * scaled_xgrids ** 0.2
+            + 0.5 * scaled_xgrids ** 0.1
+            )
             self.max_ = scaled_xgrids.max()
+            self.min_ = scaled_xgrids.min()
 
-        
+
         elif self.scaler == 'GaussianScaler':
             scaled_xgrids = load_fk_tables(fk_dis_datasets)
             min_ = scaled_xgrids.min()
@@ -82,19 +90,27 @@ class Feature_Scaling(MetaLayer):
             return numerator/denominator
 
         if self.scaler == "MinMaxScaler":
-            scaled_xgrids = (scaled_xgrids + scaled_xgrids**0.4 + 1.2 * scaled_xgrids**0.3 
-                        +  0.7 * scaled_xgrids**0.2 + 0.5 * scaled_xgrids ** 0.1)
+            scaled_xgrids = (
+            2 * scaled_xgrids
+            + scaled_xgrids ** 0.4
+            + 1.2 * scaled_xgrids ** 0.3
+            + 0.7 * scaled_xgrids ** 0.2
+            + 0.5 * scaled_xgrids ** 0.1
+            )
+            feature_range_min = -1
+            feature_range_max = 1
+            scaled_xgrids_new = (scaled_xgrids - self.min_) / (
+                self.max_ - self.min_
+            ) * (feature_range_max - feature_range_min) + feature_range_min
+            scaled_xgrids = scaled_xgrids_new
+
+        elif self.scaler == "GaussianScaler":
+            scaled_xgrids = scaled_xgrids + scaled_xgrids**0.4 + scaled_xgrids**0.3 + 0.5*scaled_xgrids**0.2
+
             scaled_xgrids /= self.max_
             scaled_xgrids *= 2
             scaled_xgrids -= 1
 
-        elif self.scaler == "GaussianScaler":
-            scaled_xgrids = scaled_xgrids + scaled_xgrids**0.4 + scaled_xgrids**0.3 + 0.5*scaled_xgrids**0.2
-            
-            scaled_xgrids /= self.max_
-            scaled_xgrids *= 2
-            scaled_xgrids -= 1
-            
             scaled_xgrids = K.exp((scaled_xgrids-self.mean_)**2 ) * scaled_xgrids
-                
+
         return scaled_xgrids
