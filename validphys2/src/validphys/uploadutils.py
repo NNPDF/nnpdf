@@ -19,6 +19,7 @@ from urllib.parse import urljoin
 from reportengine.compat import yaml
 from reportengine.colors import t
 from validphys.loader import RemoteLoader
+from validphys.renametools import Spinner
 
 from NNPDF import get_profile_path
 
@@ -197,9 +198,10 @@ class FitUploader(FileUploader):
         log.info(f"Compressing fit to {tempdir}")
         archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
         try:
-            shutil.make_archive(base_name=archive_path_without_extension,
-                                format='gztar',
-                            root_dir=output_path.parent, base_dir=output_path.name)
+            with Spinner():
+                shutil.make_archive(base_name=archive_path_without_extension,
+                                    format='gztar',
+                                root_dir=output_path.parent, base_dir=output_path.name)
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
@@ -262,9 +264,10 @@ class PdfUploader(FitUploader):
         log.info(f"Compressing pdf to {tempdir}")
         archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
         try:
-            shutil.make_archive(base_name=archive_path_without_extension,
-                                format='gztar',
-                            root_dir=output_path.parent, base_dir=output_path.name)
+            with Spinner():
+                shutil.make_archive(base_name=archive_path_without_extension,
+                                    format='gztar',
+                                root_dir=output_path.parent, base_dir=output_path.name)
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e

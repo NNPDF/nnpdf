@@ -38,6 +38,8 @@ class Spinner:
 
     def __exit__(self, exception, value, tb):
         self.event.set()
+        sys.stdout.write('\r')
+        sys.stdout.flush()
 
     @staticmethod
     def spinning_cursor():
