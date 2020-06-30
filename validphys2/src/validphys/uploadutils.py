@@ -5,7 +5,9 @@ Tools to upload resources to remote servers.
 """
 import subprocess
 import logging
+import os
 import shutil
+import re
 import uuid
 import base64
 import sys
@@ -232,3 +234,66 @@ class FitUploader(FileUploader):
         except BadSSH as e:
             log.error(e)
             sys.exit()
+
+class PdfUploader(FitUploader):
+    """An uploader for pdfs. Pdfs will be automatically compressed
+    before uploading."""
+    target_dir = _profile_key('pdfs_target_dir')
+    root_url = _profile_key('pdfs_root_url')
+
+    def check_pdf_exists(self, pdf_name):
+        """Check whether the fit already exists on the server."""
+        # Get list of the available fits on the server
+        l = RemoteLoader()
+        pdfs = l.downloadable_pdfs
+
+        if pdf_name in pdfs:
+            raise FileExistsError("A pdf with the same name already exists on "
+                                  "the server. To overwrite this fit use the "
+                                  "--force flag, as in `vp-uploadfit <fitname> "
+                                  "--force`.")
+
+    def compress(self, output_path):
+        """Compress the folder and put in in a directory inside its parent."""
+        #make_archive fails if we give it relative paths for some reason
+        output_path = output_path.resolve()
+        tempdir = tempfile.mkdtemp(prefix='pdf_upload_deleteme_',
+                                   dir=output_path.parent)
+        log.info(f"Compressing pdf to {tempdir}")
+        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
+        try:
+            shutil.make_archive(base_name=archive_path_without_extension,
+                                format='gztar',
+                            root_dir=output_path.parent, base_dir=output_path.name)
+        except Exception as e:
+            log.error(f"Couldn't compress archive: {e}")
+            raise UploadError(e) from e
+        return tempdir, archive_path_without_extension
+
+
+    def upload_output(self, output_path, force):
+        output_path = pathlib.Path(output_path)
+        pdf_name = output_path.name
+
+        if not force:
+            self.check_pdf_exists(pdf_name)
+
+        new_out, name = self.compress(output_path)
+        super(FileUploader, self).upload_output(new_out)
+
+        shutil.rmtree(new_out)
+        return name.with_suffix('.tar.gz').name
+
+
+def check_input(path):
+    files = os.listdir(path)
+    r = re.compile('.+\.info')
+
+    if 'index.html' in files:
+        return 'report'
+    elif 'filter.yml' in files:
+        return 'fit'
+    elif list(filter(r.match, files)):
+        return 'pdf'
+    else:
+        raise ValueError("Unrecognized type of input, please save to the server using rsync.")
