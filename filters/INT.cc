@@ -75,9 +75,9 @@ void IntFilter_small::ReadData()
 {
   const double q2int = 2.7225; //GeV2
 
-  fKin1[0] = 1e-9;
-  fKin1[1] = 1e-8;
-  fKin1[2] = 1e-7;
+  fKin1[0] = 1e-11;
+  fKin1[1] = 1e-10;
+  fKin1[2] = 1e-9;
 
   for (int i=0; i< fNData; i++)
   {
@@ -93,9 +93,9 @@ void IntFilterT15_small::ReadData()
 {
   const double q2int = 10.; //GeV2
 
-  fKin1[0] = 1e-9;
-  fKin1[1] = 1e-8;
-  fKin1[2] = 1e-7;
+  fKin1[0] = 1e-11;
+  fKin1[1] = 1e-10;
+  fKin1[2] = 1e-9;
 
   for (int i=0; i< fNData; i++)
   {
