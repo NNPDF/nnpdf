@@ -4,5 +4,5 @@
 3    MULT    CORR
 4    MULT    CORR
 5    MULT    CORR
-6    MULT    SKIP
-7    MULT    SKIP
+6    MULT    SCALEVAR
+7    MULT    SCALEVAR

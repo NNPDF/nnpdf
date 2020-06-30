@@ -4,12 +4,10 @@
 
 # Backend-independent imports
 from collections import namedtuple
-from validphys.pdfbases import check_basis
-import sys
 import logging
 import os.path
 import numpy as np
-from reportengine.checks import make_argcheck, CheckError
+import n3fit.checks
 
 log = logging.getLogger(__name__)
 
@@ -55,15 +53,15 @@ def initialize_seeds(
     mcseeds = []
     for replica_number in replica:
         np.random.seed(trvlseed)
-        for i in range(replica_number):
+        for _ in range(replica_number):
             trvalseed = np.random.randint(0, pow(2, 31))
 
         np.random.seed(nnseed)
-        for i in range(replica_number):
+        for _ in range(replica_number):
             nnseed = np.random.randint(0, pow(2, 31))
 
         np.random.seed(mcseed)
-        for i in range(replica_number):
+        for _ in range(replica_number):
             mcseed = np.random.randint(0, pow(2, 31))
         trvalseeds.append(trvalseed)
         nnseeds.append(nnseed)
@@ -76,36 +74,11 @@ def initialize_seeds(
     return Seeds(trvalseeds, nnseeds, mcseeds)
 
 
-@make_argcheck
-def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
-    if hyperopt is not None and hyperscan is None:
-        raise CheckError(
-            "A hyperscan dictionary needs to be defined when performing hyperopt"
-        )
-    if hyperopt is not None and "kfold" not in hyperscan:
-        raise CheckError(
-            "hyperscan::kfold key needs to be defined when performing hyperopt"
-        )
-    if hyperopt is not None and fitting["genrep"]:
-        raise CheckError(
-            "During hyperoptimization we cannot generate replicas (genrep=false)"
-        )
-
-
-@make_argcheck
-def check_consistent_basis(fitting):
-    fitbasis = fitting["fitbasis"]
-    # Check that there are no duplicate flavours
-    flavs = [d['fl'] for d in fitting['basis']]
-    if len(set(flavs)) != len(flavs):
-        raise CheckError(f"Repeated flavour names: check basis dictionary")
-    # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
-    res = check_basis(fitbasis,flavs)
-    
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
-@check_consistent_hyperscan_options
-@check_consistent_basis
+@n3fit.checks.check_consistent_basis
+@n3fit.checks.wrapper_check_NN
+@n3fit.checks.wrapper_hyperopt
 def performfit(
     fitting,
     experiments,

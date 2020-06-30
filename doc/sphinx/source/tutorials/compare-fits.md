@@ -1,3 +1,7 @@
+```eval_rst
+.. _compare-fits:
+```
+
 # How to compare two fits
 
 After running a fit, one will usually want to check that the fit gives expected

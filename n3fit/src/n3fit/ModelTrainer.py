@@ -15,7 +15,12 @@ from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
-HYPER_THRESHOLD = 3.0
+
+# Threshold defaults
+# Any partition with a chi2 over the threshold will discard its hyperparameters
+HYPER_THRESHOLD = 5.0
+# The stopping will not consider any run where the validation is not under this threshold
+THRESHOLD_CHI2 = 10.0
 
 
 def _fold_data(all_data, folds, k_idx, negate_fold=False):
@@ -547,7 +552,7 @@ class ModelTrainer:
         if recompile:
             _compile_one_model(self.experimental, kidx=kidx, negate_fold=not off)
 
-    def _model_compilation(self, learning_rate, optimizer, kidx=None):
+    def _model_compilation(self, optimizer_dict, kidx=None):
         """
         Wrapper around `_compile_one_model` to pass the right parameters
         and index of the k-folding.
@@ -567,8 +572,7 @@ class ModelTrainer:
 
         # Compile all different models
         for model_dict in self.list_of_models_dicts:
-            param_dict = {"learning_rate": learning_rate, "optimizer_name": optimizer}
-            _compile_one_model(model_dict, kidx=kidx, **param_dict)
+            _compile_one_model(model_dict, kidx=kidx, **optimizer_dict)
 
     def _train_and_fit(self, stopping_object, epochs):
         """
@@ -715,13 +719,12 @@ class ModelTrainer:
                 self.all_info,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
+                threshold_chi2=params.get("threshold_chi2", THRESHOLD_CHI2),
                 save_weights_each=self.save_weights_each,
             )
 
-            # Compile the training['model'] with the given parameters
-            self._model_compilation(
-                params["learning_rate"], params["optimizer"], kidx=k
-            )
+            # Compile the models with the given parameters
+            self._model_compilation(params["optimizer"], kidx=k)
 
             passed = self._train_and_fit(stopping_object, epochs)
 

@@ -62,17 +62,26 @@ theory:
 
 hyperscan:
     stopping:
-        min_epochs: 2e4
-        max_epochs: 5e4
+        min_epochs: 2e3
+        max_epochs: 5e3
         min_patience: 0.10
         max_patience: 0.40
     positivity:
         min_multiplier: 1.01
         max_multiplier: 1.10
     optimizer:
-        names: ['Adadelta', 'Adam', 'RMSprop']
-        min_lr: 0.008
-        max_lr: 0.07
+      - optimizer_name: 'Adadelta'
+        learning_rate:
+          min: 0.008
+          max: 0.07
+      - optimizer_name: 'RMSprop'
+        learning_rate:
+          sampling: log
+          min: 0.01
+          max: 1.5
+        clipnorm:
+          max: 2.0
+          min: 1.0
     architecture:
         initializers: ['glorot_normal', 'glorot_uniform']
         max_drop: 0.15
@@ -81,7 +90,7 @@ hyperscan:
         max_units: 50
         activations: ['sigmoid', 'tanh']
     kfold: 
-        threshold_loss: 2.0
+        threshold: 2.0
         partitions:
             - datasets:
                 - HERACOMBCCEM
@@ -120,8 +129,9 @@ fitting:
     nodes_per_layer: [35, 25, 8]
     activation_per_layer: ['tanh', 'tanh', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.01
-    optimizer: 'Adadelta'
+    optimizer:
+      learning_rate: 0.01
+      optimizer_name: 'Adadelta'
     epochs: 40000
     pos_multiplier: 1.09
     pos_initial: 10.0

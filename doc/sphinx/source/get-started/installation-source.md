@@ -1,14 +1,45 @@
+```eval_rst
+.. _source:
+```
 ## Installation from source
 
 If you intend to work on the NNPDF code, then building from source is the recommended installation procedure. However, you can still use conda to get all the dependecies and setup the validphys and C++ development environment. Further information is available in the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs). Note that the `binary-bootstrap.sh` should be downloaded and run as explained above, if the user has not already done so.
 
 1. Create an NNPDF developer environment `nnpdf-dev` and install all relevant dependencies using
-		
-		conda create -n nnpdf-dev 
+
+		conda create -n nnpdf-dev
 		conda activate nnpdf-dev
 		conda install --only-deps nnpdf
 
 	Note that the user should be in the conda environment `nnpdf-dev` whenever they wish to work on NNPDF code. The conda environment can be exited using `conda deactivate`.
+
+	<details>
+      <summary>Important note for Mac users</summary>
+
+      If you are a macOS user, you will need to download the
+      [Mac Software Development Kit](https://github.com/phracker/MacOSX-SDKs) or
+      SDK for short. This is necessary to get the correct C compiler. Assuming
+      that you already have access to the [server](NNPDF-server), you can
+      download the version of the SDK used by the [Continuous Integration](CI)
+      system by doing
+
+		curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
+
+	  You can then unpack it into your root conda directory by running
+
+		tar xfz MacOSX10.9.sdk.tar.xz -C <path_to_root_conda_directory>
+
+	  where you can find `<path_to_root_conda_directory>` by typing
+	  `echo $CONDA_PREFIX` when your base conda environment is activated. You
+	  should then export the following path
+
+		export CONDA_BUILD_SYSROOT=<path_to_root_conda_directory>/MacOSX10.9.sdk
+
+	  which you may wish to write to one of your `~/.bashrc` or
+	  `~/.bash_profile` scripts so that the SDK is easily accessible from the
+	  shell.
+
+    </details>
 
 2. Install the appropriate C++ compilers using
 		

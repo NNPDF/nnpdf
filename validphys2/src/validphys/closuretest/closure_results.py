@@ -8,6 +8,9 @@ from collections import namedtuple
 import numpy as np
 import pandas as pd
 
+from reportengine import collect
+from reportengine.table import table
+
 from validphys.calcutils import calc_chi2, bootstrap_values
 from validphys.checks import check_pdf_is_montecarlo
 from validphys.closuretest.closure_checks import (
@@ -17,19 +20,16 @@ from validphys.closuretest.closure_checks import (
     check_fits_same_filterseed,
     check_fits_underlying_law_match,
 )
-from reportengine import collect
-from reportengine.table import table
 
 
 BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
 underlying_results = collect("results", ("fitunderlyinglaw",))
 
+
 @check_fit_isclosure
 @check_use_fitcommondata
-def bias_dataset(
-    results, underlying_results, fit, use_fitcommondata, sqrt_covariance_matrix
-):
+def bias_dataset(results, underlying_results, fit, use_fitcommondata):
     """Calculate the bias for a given dataset and fit. The bias is defined as
     chi2 between the prediction from the underlying PDF (which was used to
     generate the closure pseudodata), also known as level zero closure data, and
@@ -39,11 +39,11 @@ def bias_dataset(
     is used to generate the multiplicative contributions to the covariance
     matrix
     """
-    _, th_ct = results
+    dt_ct, th_ct = results
     # does collect need to collect a list even with one element?
     (_, th_ul), = underlying_results
     central_diff = th_ct.central_value - th_ul.central_value
-    bias_out = calc_chi2(sqrt_covariance_matrix, central_diff)  # unnormalised
+    bias_out = calc_chi2(dt_ct.sqrtcovmat, central_diff)  # unnormalised
     return BiasData(bias_out, len(th_ct))
 
 
@@ -53,20 +53,12 @@ underlying_experiment_results = collect("experiment_results", ("fitunderlyinglaw
 @check_fit_isclosure
 @check_use_fitcommondata
 def bias_experiment(
-    experiment_results,
-    underlying_experiment_results,
-    fit,
-    use_fitcommondata,
-    experiment_sqrt_covariance_matrix,
+    experiment_results, underlying_experiment_results, fit, use_fitcommondata
 ):
     """Like `bias_dataset` but for a whole experiment.
     """
     return bias_dataset(
-        experiment_results,
-        underlying_experiment_results,
-        fit,
-        use_fitcommondata,
-        experiment_sqrt_covariance_matrix,
+        experiment_results, underlying_experiment_results, fit, use_fitcommondata
     )
 
 
@@ -177,7 +169,7 @@ VarianceData = namedtuple("VarianceData", ("variance", "ndata"))
 
 @check_fit_isclosure
 @check_use_fitcommondata
-def variance_dataset(results, fit, use_fitcommondata, sqrt_covariance_matrix):
+def variance_dataset(results, fit, use_fitcommondata):
     """calculate the variance for a given dataset, which is the spread of
     replicas measured in the space of the covariance matrix. Given by:
 
@@ -188,25 +180,18 @@ def variance_dataset(results, fit, use_fitcommondata, sqrt_covariance_matrix):
     be made fully independent of the closure data. This is useful when checking
     the variance of data which was not included in the fit.
 
-    # TODO: here we require that use_fitcommondata is true, for the generic use
-    # case. we require another action which uses explicitly a t0pdf of the
-    # underlying law.
     """
-    _, th = results
+    dt, th = results
     diff = th.central_value[:, np.newaxis] - th._rawdata
-    var_unnorm = calc_chi2(sqrt_covariance_matrix, diff).mean()
+    var_unnorm = calc_chi2(dt.sqrtcovmat, diff).mean()
     return VarianceData(var_unnorm, len(th))
 
 
 @check_fit_isclosure
 @check_use_fitcommondata
-def variance_experiment(
-    experiment_results, fit, use_fitcommondata, experiment_sqrt_covariance_matrix
-):
+def variance_experiment(experiment_results, fit, use_fitcommondata):
     """Like variance_dataset but for a whole experiment"""
-    return variance_dataset(
-        experiment_results, fit, use_fitcommondata, experiment_sqrt_covariance_matrix
-    )
+    return variance_dataset(experiment_results, fit, use_fitcommondata)
 
 
 def bootstrap_variance_experiment(experiment_results, bootstrap_samples=500):
