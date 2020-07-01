@@ -39,7 +39,7 @@ def test_dataspecschi2():
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
 def test_plot_xq2():
-    theoryid = 53
+    theoryid = 162
     use_cuts = "nocuts"
     display_cuts = False
     marker_by = "process type"
