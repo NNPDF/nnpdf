@@ -201,7 +201,7 @@ class FitUploader(FileUploader):
             with Spinner():
                 shutil.make_archive(base_name=archive_path_without_extension,
                                     format='gztar',
-                                root_dir=output_path.parent, base_dir=output_path.name)
+                                    root_dir=output_path.parent, base_dir=output_path.name)
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
@@ -237,8 +237,8 @@ class FitUploader(FileUploader):
             log.error(e)
             sys.exit()
 
-class PdfUploader(FitUploader):
-    """An uploader for pdfs. Pdfs will be automatically compressed
+class PDFUploader(FitUploader):
+    """An uploader for pdfs. PDFs will be automatically compressed
     before uploading."""
     target_dir = _profile_key('pdfs_target_dir')
     root_url = _profile_key('pdfs_root_url')
@@ -256,8 +256,8 @@ class PdfUploader(FitUploader):
                                   "--force`.")
 
     def compress(self, output_path):
-        """Compress the folder and put in in a directory inside its parent."""
-        #make_archive fails if we give it relative paths for some reason
+        """Compress the folder and put it in a directory inside its parent."""
+        # make_archive fails if we give it relative paths for some reason
         output_path = output_path.resolve()
         tempdir = tempfile.mkdtemp(prefix='pdf_upload_deleteme_',
                                    dir=output_path.parent)
@@ -267,7 +267,7 @@ class PdfUploader(FitUploader):
             with Spinner():
                 shutil.make_archive(base_name=archive_path_without_extension,
                                     format='gztar',
-                                root_dir=output_path.parent, base_dir=output_path.name)
+                                    root_dir=output_path.parent, base_dir=output_path.name)
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e

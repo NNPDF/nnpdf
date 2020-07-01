@@ -41,7 +41,7 @@ def main():
     uploader_dict = {
             'report': uploadutils.ReportUploader,
             'fit': uploadutils.FitUploader,
-            'pdf': uploadutils.PdfUploader
+            'pdf': uploadutils.PDFUploader
     }
     uploader = uploader_dict[input_type]()
 
