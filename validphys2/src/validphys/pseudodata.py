@@ -87,8 +87,6 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
     """
     if t0pdfset is not None:
         t0pdfset = t0pdfset.load_t0()
-    else:
-        t0pdfset = None
 
     # The + 1 coming from the fact that we wish to
     # include the last replica
