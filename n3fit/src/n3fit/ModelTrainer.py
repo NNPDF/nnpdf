@@ -607,7 +607,7 @@ class ModelTrainer:
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
 
-        Every ``PUSH_POSITIVITY_EACH`` epochs the positivitiy will be multiplied by their
+        Every ``PUSH_POSITIVITY_EACH`` epochs the positivity will be multiplied by their
         respective positivity multipliers
         """
         # Train the model for the number of epochs given
@@ -618,7 +618,9 @@ class ModelTrainer:
             if (epoch + 1) % 100 == 0:
                 print_stats = True
             if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
-                training_model.multiply_weights(self.training["pos_datasets"], self.training["pos_multipliers"])
+                training_model.multiply_weights(
+                    self.training["pos_datasets"], self.training["pos_multipliers"]
+                )
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
@@ -769,11 +771,7 @@ class ModelTrainer:
             # Compile each of the models with the right parameters
             _model_compilation(model_dicts, params["optimizer"])
 
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
 
             # Compute validation and training loss
             training_loss = stopping_object.tr_loss
