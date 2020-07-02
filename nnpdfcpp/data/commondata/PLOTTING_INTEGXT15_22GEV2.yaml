@@ -1,0 +1,7 @@
+dataset_label: "integrability dataset: $xT_{15}$ PDF, $Q=\\sqrt{22}$ GeV"
+x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "INTEGXT15_22GEV2"
+
+nnpdf31_process: DIS CC
