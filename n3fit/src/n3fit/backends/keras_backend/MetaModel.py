@@ -82,9 +82,18 @@ class MetaModel(Model):
         input_list = input_tensors
         output_list = output_tensors
 
-        if not isinstance(input_list, list):
+        if isinstance(input_list, dict):
+            # if this is a dictionary, convert it to a list for now
+            input_list = input_tensors.values()
+        elif not isinstance(input_list, list):
+            # if it is not a dict but also not a list, make it into a 1-element list and pray
             input_list = [input_list]
-        if not isinstance(output_list, list):
+
+        if isinstance(output_list, dict):
+            # if this is a dictionary, convert it to a list for now
+            output_list = output_tensors.values()
+        elif not isinstance(output_list, list):
+            # if it is not a dict but also not a list, make it into a 1-element list and pray
             output_list = [output_list]
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
@@ -112,12 +121,6 @@ class MetaModel(Model):
             return _fill_placeholders(self.x_in, extra_input)
         else:
             return _fill_placeholders(self.tensors_in, extra_input)
-
-    def reinitialize(self):
-        """ Run through all layers and reinitialize the ones that can be reinitialied """
-        for layer in self.layers:
-            if hasattr(layer, "reinitialize"):
-                layer.reinitialize()
 
     def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
@@ -301,4 +304,9 @@ class MetaModel(Model):
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
         x = self._parse_input(x, pass_numpy=False)
-        return super().__call__(x)
+        try:
+            return super().__call__(x)
+        except ValueError:
+            # TF 2.0 seems to fail with ValueError when passing a dictionary as an input
+            y = x.values()
+            return super().__call__(y)

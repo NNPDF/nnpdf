@@ -130,3 +130,6 @@ def test_hyperopt():
             cwd=tmp_path,
             timeout=60,
         )
+
+if __name__ == "__main__":
+    test_performfit()
