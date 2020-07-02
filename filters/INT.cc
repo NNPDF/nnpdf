@@ -16,7 +16,7 @@ void register_integrability(vector<CommonData*>& list)
     "INTEGXV3",
     "INTEGXV8"};
   const std::array<std::string, 1>  INT_T15 = {
-    "INTEGXT15_10GEV2"};
+    "INTEGXT15_22GEV2"};
   const std::array<std::string, 5>  INTsets_small = { 
     "INTEGXT3_SMALLX",
     "INTEGXT8_SMALLX",
@@ -24,7 +24,7 @@ void register_integrability(vector<CommonData*>& list)
     "INTEGXV3_SMALLX",
     "INTEGXV8_SMALLX"};
   const std::array<std::string, 1>  INT_T15_small = {
-    "INTEGXT15_10GEV2_SMALLX"};
+    "INTEGXT15_22GEV2_SMALLX"};
   for (auto set : INTsets)
     list.push_back(new IntFilter(set));
   for (auto set : INT_T15)
@@ -55,7 +55,7 @@ void IntFilter::ReadData()
 
 void IntFilterT15::ReadData()
 {
-  const double q2int = 10.; //GeV2
+  const double q2int = 22.; //GeV2
 
   fKin1[0] = 1e-7;
   fKin1[1] = 1e-6;
@@ -91,7 +91,7 @@ void IntFilter_small::ReadData()
 
 void IntFilterT15_small::ReadData()
 {
-  const double q2int = 10.; //GeV2
+  const double q2int = 22.; //GeV2
 
   fKin1[0] = 1e-11;
   fKin1[1] = 1e-10;
