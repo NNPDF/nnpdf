@@ -22,12 +22,7 @@ from n3fit.backends import base_layer_selector, regularizer_selector
 import tensorflow as tf
 
 
-def observable_generator(
-    spec_dict,
-    positivity_initial=None,
-    positivity_multiplier=1.05,
-    positivity_steps=300,
-):  # pylint: disable=too-many-locals
+def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
     These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
@@ -99,9 +94,7 @@ def observable_generator(
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer = Obs_Layer(
-            dataset_dict["fktables"], operation_name, name=f"dat_{dataset_name}"
-        )
+        obs_layer = Obs_Layer(dataset_dict["fktables"], operation_name, name=f"dat_{dataset_name}")
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         # but for now it is ok
@@ -151,14 +144,9 @@ def observable_generator(
     full_nx = sum(dataset_xsizes)
 
     if spec_dict["positivity"]:
-        max_lambda = spec_dict["lambda"]
-        if not positivity_initial:
-            initial_lambda = max_lambda / pow(positivity_multiplier, positivity_steps)
-        else:
-            initial_lambda = positivity_initial
         out_mask = Mask(
             bool_mask=spec_dict["trmask"],
-            c=initial_lambda,
+            c=positivity_initial,
             axis=1,
             name=spec_name,
             unbatch=True,
@@ -178,12 +166,8 @@ def observable_generator(
 
     # Now prepare the actual outputs that can be used by n3fit
     # Generate the masks layers to be applied during training and validation
-    out_tr_mask = Mask(
-        bool_mask=spec_dict["trmask"], name=spec_name, axis=1, unbatch=True
-    )
-    out_vl_mask = Mask(
-        bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1, unbatch=True
-    )
+    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1, unbatch=True)
+    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1, unbatch=True)
 
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
@@ -288,9 +272,7 @@ def generate_dense_per_flavour_network(
         initializers = []
         for _ in range(basis_size):
             # select the initializer and move the seed
-            initializers.append(
-                MetaLayer.select_initializer(initializer_name, seed=current_seed)
-            )
+            initializers.append(MetaLayer.select_initializer(initializer_name, seed=current_seed))
             current_seed += 1
 
         # set the arguments that will define the layer
@@ -459,20 +441,13 @@ def pdfNN_layer_generator(
         # TODO: this information should come from the basis information
         #       once the basis information is passed to this class
         list_of_pdf_layers = generate_dense_per_flavour_network(
-            inp,
-            nodes,
-            activations,
-            initializer_name,
-            seed=seed,
-            basis_size=last_layer_nodes,
+            inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
         )
 
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
-        add_log = Lambda(
-            lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1)
-        )
+        add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
 
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
@@ -515,9 +490,7 @@ def pdfNN_layer_generator(
 
     # Impose sumrule if necessary
     if impose_sumrule:
-        layer_pdf, integrator_input = msr_constraints.msr_impose(
-            layer_fitbasis, layer_pdf
-        )
+        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf)
         model_input = [integrator_input, placeholder_input]
     else:
         integrator_input = None
