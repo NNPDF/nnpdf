@@ -128,7 +128,7 @@ def check_hyperopt_architecture(architecture):
     max_u = architecture.get("max_units")
     if max_u is not None and max_u < min_u:
         raise CheckError(
-            "The maximum number of units must be bigger than the minimum"
+            "The maximum number of units must be bigger than the minimum "
             f" but got min: {min_u}, max: {max_u}"
         )
 
