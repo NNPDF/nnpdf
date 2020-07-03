@@ -437,9 +437,9 @@ class ModelTrainer:
 
         Parameters
         ----------
-            all_pos_multiplier: float / None
+            all_pos_multiplier: float, None
                 multiplier to be applied to the positivity each ``PUSH_POSITIVITY_EACH`` epochs
-            all_pos_initial: float / None
+            all_pos_initial: float, None
                 initial value for the positivity lambda
             epochs: int
                 total number of epochs for the run
