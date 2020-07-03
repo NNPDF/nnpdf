@@ -40,8 +40,8 @@ usually known as `k-folds <https://web.stanford.edu/~hastie/Papers/ESLII.pdf#pag
 
 In its most general form, we take all datapoints that enter the fit and break it down into *k*
 partitions. Then, for every combination of hyperparameters, we do *k* fits leaving out a different
-partition each time. We then use this partition to evaluate the goodness of the fit each one of the *k* fit and construct,
-with these result, a reward function for the combination of hyperparameter.
+partition each time. We then use this partition to evaluate the goodness of the fit for each of the *k* fits and construct,
+with these results, a reward function for the combination of hyperparameters.
 
 In the NNPDF implementation of k-folding, each of the datapoints can be identified with a dataset.
 Note that during the fit we perform the usual training-validation split within each dataset and use it for
@@ -89,8 +89,8 @@ This is not unexpected but it is a good test of the robustness of the method.
 
 While this method is much more robust that the previously used "test set" (which is
 similar to doing the limit :math:`k\rightarrow 1`) we can still find overfitting configurations.
-For instance, if one of the metrics give a much more complicated network structure,
-overfitting is expected. Here's an example where, after 10000 hyperparameter trials
+For instance, if one of the metrics gives a much more complicated network structure,
+overfitting is expected. Here's an example where, after 10000 hyperparameter trials,
 the network structure had an order of magnitude more free parameters for the average method:
 [`best avg overlearned <https://vp.nnpdf.science/AQpgs2SyRbGlNqSnWWvMJw==>`_].
 
@@ -125,7 +125,7 @@ the one that reaches the lowest value of x.
 Interpretation of results
 -------------------------
 
-While performing the hyperparameter scan we found that optimizing only looking at the validation
+While performing the hyperparameter scan we found that optimizing by only looking at the validation
 loss produced results which would usually be considered overfitted: very low training and validation
 :math:`\chi^2` and complex replica patterns. Thanks to the high performance of the ``n3fit`` procedure the
 usual cross-validation algorithm used in the NNPDF framework was not enough to prevent overlearning
@@ -138,8 +138,8 @@ correlations within points in a same dataset when using hyperopt with ``n3fit``.
 For hyperopt we have implemented k-folding cross-validation.
 This method works by refitting with the same set of parameters several times (k times) each time leaving out
 a partition of the datasets.
-By using this method we reduce the bias associated with a particular choice of the datasets to leave out
-while at the same time, refitting with the same set of parameters, allow us to assess the stability of the
+By using this method we reduce the bias associated with a particular choice of the datasets to leave out,
+while at the same time, refitting with the same set of parameters allows us to assess the stability of the
 particular combination of hyperparameters.
 
 Implementation in ``n3fit``
