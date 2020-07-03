@@ -707,7 +707,8 @@ class ModelTrainer:
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
-        self._generate_observables(params.get("pos_multiplier"), params.get("pos_initial"), epochs)
+        positivity_dict = params.get("positivity", {})
+        self._generate_observables(positivity_dict.get("multiplier"), positivity_dict.get("initial"), epochs)
 
         # Generate the stopping_object
         # this object holds statistical information about the fit

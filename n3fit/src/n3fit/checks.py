@@ -19,6 +19,11 @@ def check_existing_parameters(parameters):
                 raise CheckError(f"The parameter {param_name} cannot be empty")
         else:
             raise CheckError(f"Missing {param_name} parameter in the runcard")
+    # Check that positivity is not defined wrong
+    if "pos_initial" in parameters or "pos_multiplier" in parameters:
+        raise CheckError("The definition of the positivity parameters is deprecated, please"
+                "use instead: fitting:parameters:positivity: {multiplier: x, initial: y}"
+                "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml")
 
 
 def check_consistent_layers(parameters):

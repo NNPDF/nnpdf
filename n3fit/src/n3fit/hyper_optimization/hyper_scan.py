@@ -337,19 +337,22 @@ class HyperScanner:
             - pos_initial
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
-        mul_key = "pos_multiplier"
-        ini_key = "pos_initial"
+        mul_key = "multiplier"
+        ini_key = "initial"
+        params = {}
 
         if max_multiplier is not None:
             if min_multiplier is None:
                 min_multiplier = 1.0  # I guess this is a sensible minimum
 
             mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
-            self._update_param(mul_key, mul_val)
+            params[mul_key] = mul_val
 
         if min_initial is not None and max_initial is not None:
             ini_val = hp_loguniform(ini_key, min_initial, max_initial)
-            self._update_param(ini_key, ini_val)
+            params[ini_key] = ini_val
+
+        self._update_param("positivity", params)
 
     def architecture(
         self,
