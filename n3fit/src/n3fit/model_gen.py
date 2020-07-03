@@ -50,12 +50,7 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
         spec_dict: dict
             a dictionary-like object containing the information of the experiment
         positivity_initial: float
-            if given, set this number as the positivity multiplier for epoch 1
-        positivity_multiplier: float
-            how much the positivity increases every 100 steps
-        positivity_steps: float
-            if positivity_initial is not given, computes the initial by assuming we want,
-            after 100**positivity_steps epochs, to have the lambda of the runcard
+            set the positivity lagrange multiplier for epoch 1
 
     Returns
     ------

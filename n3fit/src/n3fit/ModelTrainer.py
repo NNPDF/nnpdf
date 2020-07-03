@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 5.0
 # The stopping will not consider any run where the validation is not under this threshold
 THRESHOLD_CHI2 = 10.0
-# Each how many epochs do we want to push positivitiy up
+# Each how many epochs do we increase the positivitiy Lagrange Multiplier 
 PUSH_POSITIVITY_EACH = 100
 
 
@@ -209,8 +209,8 @@ class ModelTrainer:
             "losses": [],
             "ndata": 0,
             "model": None,
-            "pos_datasets": [],
-            "pos_multipliers": [],
+            "posdatasets": [],
+            "posmultipliers": [],
             "folds": [],
         }
         self.validation = {
@@ -306,7 +306,7 @@ class ModelTrainer:
 
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
-            self.training["pos_datasets"].append(pos_dict["name"])
+            self.training["posdatasets"].append(pos_dict["name"])
 
     def _model_generation(self, pdf_model, partition):
         """
@@ -411,7 +411,7 @@ class ModelTrainer:
         """
         self.input_list = []
         self.input_sizes = []
-        for key in ["output", "losses", "pos_multipliers"]:
+        for key in ["output", "losses", "posmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
@@ -499,7 +499,7 @@ class ModelTrainer:
             # The positivity all falls to the training
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
-            self.training["pos_multipliers"].append(pos_multiplier)
+            self.training["posmultipliers"].append(pos_multiplier)
 
     def _generate_pdf(
         self,
@@ -619,7 +619,7 @@ class ModelTrainer:
                 print_stats = True
             if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
                 training_model.multiply_weights(
-                    self.training["pos_datasets"], self.training["pos_multipliers"]
+                    self.training["posdatasets"], self.training["posmultipliers"]
                 )
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)

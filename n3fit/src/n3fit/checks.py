@@ -142,7 +142,7 @@ def check_hyperopt_positivity(positivity_dict):
     max_mul = positivity_dict.get("max_multiplier")
     if max_mul is not None or min_mul is not None:
         if max_mul is None:
-            raise CheckError("Need to set a maximum positivity multiplier is the minimum is set")
+            raise CheckError("Need to set a maximum positivity multiplier if the minimum is set")
         if min_mul is not None and max_mul <= min_mul:
             raise CheckError("The minimum multiplier cannot be greater than the maximum")
     min_ini = positivity_dict.get("min_initial")
