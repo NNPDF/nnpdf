@@ -16,6 +16,10 @@
 
 #include "POS.h"
 
+// ************** Integrability ********
+
+#include "INT.h"
+
 // ************* DATA **************
 #include "NMC.h"
 #include "SLAC.h"
@@ -137,6 +141,10 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* POS ******************************
 
   register_positivity(target);
+
+  // ************************* INTEG ****************************
+
+  register_integrability(target);
 
   // ************************* ATLAS ******************************
 
