@@ -504,13 +504,8 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Basis rotation
-<<<<<<< HEAD
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
     
-=======
-    basis_rotation = FlavourToEvolution(flav_info=flav_info)
-
->>>>>>> integrability
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
