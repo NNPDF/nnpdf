@@ -15,6 +15,7 @@ import numpy as np
 import pytest
 
 from validphys.api import API
+from validphys.pseudodata import training_validation_pseudodata
 import validphys.tests.regressions
 
 from reportengine.compat import yaml
@@ -40,8 +41,8 @@ theoryid:
 use_cuts: fromfit
 """
 
-
-def test_pseudodata():
+@pytest.fixture(scope="session", autouse=True)
+def setup_dicts():
     exp_infos_bytes = read_binary(validphys.tests.regressions, "test_exp_infos.pickle")
     ns = yaml.safe_load(EXAMPLE_RUNCARD)
     # This is what all the fitted replicas saw
@@ -52,11 +53,28 @@ def test_pseudodata():
     fit_postfit_mapping = dict(enumerate(exp_infos, 1))
     exp_infos = [fit_postfit_mapping[i] for i in fitted_indices]
 
+
     pseudodata_info = API.get_pseudodata(**ns)
 
+    return exp_infos, pseudodata_info
+
+
+def test_pseudodata(setup_dicts):
+    exp_infos, pseudodata_info = setup_dicts
     # Loop over replicas
     for i, j in zip(exp_infos, pseudodata_info):
         # For each replica, loop over experiments
         for exp1, exp2 in zip(i, j):
             assert np.allclose(exp1["expdata"], exp2["expdata"])
             assert np.allclose(exp1["expdata_vl"], exp2["expdata_vl"])
+
+
+def test_pseudodata_generator(setup_dicts):
+    exp_infos, pseudodata_info = setup_dicts
+    gen = training_validation_pseudodata(pseudodata_info)
+    for i, j in enumerate(gen):
+        continue
+    # There is only one postfit replica in this fit
+    assert i == 0
+    # The training and validation split should be disjoint
+    assert set(j["trdata"].index).isdisjoint(j["vldata"].index)

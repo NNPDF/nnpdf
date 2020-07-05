@@ -230,6 +230,39 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts['fakepdf'])
         return {'pdf': underlyinglaw}
 
+    def produce_multiclosure_underlyinglaw(self, fits):
+        """Produce the underlying law for a set of fits. This allows a single t0
+        like covariance matrix to be loaded for all fits, for use with
+        statistical estimators on multiple closure fits. If the fits don't all
+        have the same underlying law then an error is raised, offending fit is
+        identified.
+        """
+        # could use comprehension here but more useful to find offending fit
+        laws = set()
+        for fit in fits:
+            try:
+                closuretest_spec = fit.as_input()["closuretest"]
+            except KeyError as e:
+                raise ConfigError(
+                    f"fit: {fit} does not have a `closuretest` namespace in "
+                    "runcard"
+                ) from e
+            try:
+                laws.add(closuretest_spec["fakepdf"])
+            except KeyError as e:
+                raise ConfigError(
+                    f"fit: {fit} does not have `fakepdf` specified in the "
+                    "closuretest namespace in runcard."
+                ) from e
+
+        if len(laws) != 1:
+            raise ConfigError(
+                "Did not find unique underlying law from fits, "
+                f"instead found: {laws}"
+            )
+        return self.parse_pdf(laws.pop())
+
+
     def produce_fitpdfandbasis(self, fit):
         """ Set the PDF and basis from the fit config. """
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):

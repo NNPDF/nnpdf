@@ -24,6 +24,7 @@ def plot_biases(biases_table):
     ax.legend()
     return fig
 
+
 @figure
 def plot_delta_chi2(delta_chi2_bootstrap, fits):
     """Plots distributions of delta chi2 for each fit in `fits`.
@@ -41,6 +42,7 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits):
     ax.set_title(r"Total $\Delta_{\chi^{2}}$ for each fit")
     return fig
 
+
 def errorbar_figure_from_table(df):
     """Given a table with even columns as central values as odd columns as errors
     plot an errorbar plot"""
@@ -49,8 +51,10 @@ def errorbar_figure_from_table(df):
         df.values[:, 1::2].T,
         df.index.values,
         df.columns.unique(0),
-        xlim=0)
+        xlim=0,
+    )
     return fig, ax
+
 
 @figure
 def plot_fits_bootstrap_variance(fits_bootstrap_variance_table):
@@ -61,10 +65,9 @@ def plot_fits_bootstrap_variance(fits_bootstrap_variance_table):
     ax.set_title("Variance by experiment for closure fits")
     return fig
 
+
 @figure
-def plot_fits_bootstrap_bias(
-    fits_bootstrap_bias_table
-):
+def plot_fits_bootstrap_bias(fits_bootstrap_bias_table):
     """Plot the bias for each experiment for all `fits` as a point with an error bar,
     where the error bar is given by bootstrapping the bias across replicas
 

@@ -12,14 +12,18 @@ from n3fit.backends.keras_backend.operations import numpy_to_tensor
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
 optimizers = {
-    "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
-    "Adam": (Kopt.Adam, {"lr": 0.01}),
+    "RMSprop": (Kopt.RMSprop, {"learning_rate": 0.01}),
+    "Adam": (Kopt.Adam, {"learning_rate": 0.01}),
     "Adagrad": (Kopt.Adagrad, {}),
-    "Adadelta": (Kopt.Adadelta, {"lr": 1.0}),
+    "Adadelta": (Kopt.Adadelta, {"learning_rate": 1.0}),
     "Adamax": (Kopt.Adamax, {}),
     "Nadam": (Kopt.Nadam, {}),
-    "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
+    "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
 }
+
+# Some keys need to work for everyone
+for k, v in optimizers.items():
+    v[1]["clipnorm"] = 1.0
 
 
 def _fill_placeholders(original_input, new_input=None):
@@ -78,9 +82,18 @@ class MetaModel(Model):
         input_list = input_tensors
         output_list = output_tensors
 
-        if not isinstance(input_list, list):
+        if isinstance(input_list, dict):
+            # if this is a dictionary, convert it to a list for now
+            input_list = input_tensors.values()
+        elif not isinstance(input_list, list):
+            # if it is not a dict but also not a list, make it into a 1-element list and pray
             input_list = [input_list]
-        if not isinstance(output_list, list):
+
+        if isinstance(output_list, dict):
+            # if this is a dictionary, convert it to a list for now
+            output_list = output_tensors.values()
+        elif not isinstance(output_list, list):
+            # if it is not a dict but also not a list, make it into a 1-element list and pray
             output_list = [output_list]
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
@@ -108,12 +121,6 @@ class MetaModel(Model):
             return _fill_placeholders(self.x_in, extra_input)
         else:
             return _fill_placeholders(self.tensors_in, extra_input)
-
-    def reinitialize(self):
-        """ Run through all layers and reinitialize the ones that can be reinitialied """
-        for layer in self.layers:
-            if hasattr(layer, "reinitialize"):
-                layer.reinitialize()
 
     def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
@@ -197,9 +204,10 @@ class MetaModel(Model):
     def compile(
         self,
         optimizer_name="RMSprop",
-        learning_rate=0.05,
+        learning_rate=None,
         loss=None,
         target_output=None,
+        clipnorm=None,
         **kwargs,
     ):
         """
@@ -237,12 +245,18 @@ class MetaModel(Model):
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
-        if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate
+        user_selected_args = {"learning_rate": learning_rate, "clipnorm": clipnorm}
 
-        opt_args["clipnorm"] = 1.0
+        # Override defaults with user provided values
+        for key, value in user_selected_args.items():
+            if key in opt_args.keys() and value is not None:
+                opt_args[key] = value
+
+
+        # Instantiate the optimizer
         opt = opt_function(**opt_args)
 
+        # If given target output, compile it together with the model for better performance
         if target_output is not None:
             if not isinstance(target_output, list):
                 target_output = [target_output]
@@ -290,4 +304,9 @@ class MetaModel(Model):
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
         x = self._parse_input(x, pass_numpy=False)
-        return super().__call__(x)
+        try:
+            return super().__call__(x)
+        except ValueError:
+            # TF 2.0 seems to fail with ValueError when passing a dictionary as an input
+            y = x.values()
+            return super().__call__(y)
