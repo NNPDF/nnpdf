@@ -545,12 +545,9 @@ class ModelTrainer:
             activations=activation_per_layer,
             layer_type=layer_type,
             flav_info=self.flavinfo,
-<<<<<<< HEAD
             fitbasis=self.fitbasis,
             seed=self.NNseed,
-=======
             seed=seed,
->>>>>>> integrability
             initializer_name=initializer,
             dropout=dropout,
             regularizer=regularizer,
