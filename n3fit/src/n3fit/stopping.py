@@ -30,9 +30,6 @@
 
 """
 
-# TODO for TF 2.0
-#   - Save a proper reference to the part of the NN we want to store instead of the whole model
-
 import logging
 import numpy as np
 
@@ -332,6 +329,7 @@ class Stopping:
         threshold_positivity=1e-6,
         total_epochs=0,
         stopping_patience=7000,
+        threshold_chi2=10.0,
         dont_stop=False,
         save_weights_each=None,
     ):
@@ -349,6 +347,7 @@ class Stopping:
         self.history = FitHistory(self.validation, save_weights_each=save_weights_each)
 
         # Initialize internal variables for the stopping
+        self.threshold_chi2 = threshold_chi2
         self.dont_stop = dont_stop
         self.stop_now = False
         self.stopping_patience = stopping_patience
@@ -442,7 +441,7 @@ class Stopping:
 
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        if self.positivity(fitstate):
+        if self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
             if vl_chi2 < self.history.best_vl():
                 # Set the new best
                 self.history.best_epoch = epoch

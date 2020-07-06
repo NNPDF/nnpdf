@@ -4,9 +4,10 @@ Tutorials
 .. toctree::
    :maxdepth: 1
 
-   ./runafit.md
+   ./run-fit.md
+   ./run-legacy-fit.rst
    ./compare-fits.md
-   ./list-fits.md
+   ./list-resources.md
    ./report.md
    ./buildmaster.md
    ./APPLgrids.md

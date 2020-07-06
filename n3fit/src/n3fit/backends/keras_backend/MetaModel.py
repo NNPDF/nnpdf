@@ -7,10 +7,15 @@
 
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+<<<<<<< HEAD
+=======
+from n3fit.backends.keras_backend.operations import numpy_to_tensor
+>>>>>>> master
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
 optimizers = {
+<<<<<<< HEAD
     "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
     "Adam": (Kopt.Adam, {"lr": 0.01}),
     "Adagrad": (Kopt.Adagrad, {}),
@@ -20,6 +25,21 @@ optimizers = {
     "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
 }
 
+=======
+    "RMSprop": (Kopt.RMSprop, {"learning_rate": 0.01}),
+    "Adam": (Kopt.Adam, {"learning_rate": 0.01}),
+    "Adagrad": (Kopt.Adagrad, {}),
+    "Adadelta": (Kopt.Adadelta, {"learning_rate": 1.0}),
+    "Adamax": (Kopt.Adamax, {}),
+    "Nadam": (Kopt.Nadam, {}),
+    "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
+}
+
+# Some keys need to work for everyone
+for k, v in optimizers.items():
+    v[1]["clipnorm"] = 1.0
+
+>>>>>>> master
 
 def _fill_placeholders(original_input, new_input=None):
     """
@@ -107,6 +127,7 @@ class MetaModel(Model):
             return _fill_placeholders(self.x_in, extra_input)
         else:
             return _fill_placeholders(self.tensors_in, extra_input)
+<<<<<<< HEAD
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
@@ -115,6 +136,16 @@ class MetaModel(Model):
                 layer.reinitialize()
 
     def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
+=======
+
+    def reinitialize(self):
+        """ Run through all layers and reinitialize the ones that can be reinitialied """
+        for layer in self.layers:
+            if hasattr(layer, "reinitialize"):
+                layer.reinitialize()
+
+    def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
+>>>>>>> master
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.
 
@@ -122,13 +153,18 @@ class MetaModel(Model):
         of the model (the loss functions) to the partial losses.
 
         If the model was compiled with input and output data, they will not be passed through.
+<<<<<<< HEAD
         In this case by default the number of `steps_per_epoch` will be set to 1
+=======
+        In this case by default the number of `epochs` will be set to 1
+>>>>>>> master
 
         ex:
             {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
 
         Returns
         -------
+<<<<<<< HEAD
             `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
@@ -137,6 +173,15 @@ class MetaModel(Model):
         if y is None:
             y = self.target_tensors
         history = super().fit(x=x, y=y, **kwargs,)
+=======
+            loss_dict: dict
+                a dictionary with all partial losses of the model
+        """
+        x = self._parse_input(self.x_in)
+        if y is None:
+            y = self.target_tensors
+        history = super().fit(x=x, y=y, epochs=epochs, **kwargs,)
+>>>>>>> master
         loss_dict = history.history
         return loss_dict
 
@@ -187,8 +232,12 @@ class MetaModel(Model):
         In this case the number of steps must be always specified and the input of x and y must
         be set to `None`.
         """
+<<<<<<< HEAD
         if x is None:
             x = self.x_in
+=======
+        x = self._parse_input(self.x_in)
+>>>>>>> master
         if y is None:
             y = self.target_tensors
             # TODO Ensure that no x or y were passed
@@ -198,9 +247,16 @@ class MetaModel(Model):
     def compile(
         self,
         optimizer_name="RMSprop",
+<<<<<<< HEAD
         learning_rate=0.05,
         loss=None,
         target_output=None,
+=======
+        learning_rate=None,
+        loss=None,
+        target_output=None,
+        clipnorm=None,
+>>>>>>> master
         **kwargs,
     ):
         """
@@ -238,15 +294,22 @@ class MetaModel(Model):
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
-        if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate
+        user_selected_args = {"learning_rate": learning_rate, "clipnorm": clipnorm}
 
-        opt_args["clipnorm"] = 1.0
+        # Override defaults with user provided values
+        for key, value in user_selected_args.items():
+            if key in opt_args.keys() and value is not None:
+                opt_args[key] = value
+
+
+        # Instantiate the optimizer
         opt = opt_function(**opt_args)
 
+        # If given target output, compile it together with the model for better performance
         if target_output is not None:
             if not isinstance(target_output, list):
                 target_output = [target_output]
+<<<<<<< HEAD
             self.target_tensors = None # TODO TF 2.2 target_output
         super(MetaModel, self).compile(optimizer=opt, target_tensors=target_output, loss=loss)
 
@@ -256,6 +319,19 @@ class MetaModel(Model):
 
         Mask are layers with one single weight (shape=(1,)) that multiplies the input
 
+=======
+            self.target_tensors = None  # TODO TF 2.2 target_output
+            # Tensorize
+            target = [numpy_to_tensor(i) for i in target_output]
+        super(MetaModel, self).compile(optimizer=opt, target_tensors=target, loss=loss)
+
+    def set_masks_to(self, names, val=0.0):
+        """ Set all mask value to the selected value
+        Masks in MetaModel should be named {name}_mask
+
+        Mask are layers with one single weight (shape=(1,)) that multiplies the input
+
+>>>>>>> master
         Parameters
         ----------
             names: list

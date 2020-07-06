@@ -16,6 +16,7 @@ from urllib.parse import urljoin
 
 from reportengine.compat import yaml
 from reportengine.colors import t
+from validphys.loader import RemoteLoader
 
 from NNPDF import get_profile_path
 
@@ -173,6 +174,18 @@ class FitUploader(FileUploader):
     def get_relative_path(self, output_path=None):
         return ''
 
+    def check_fit_exists(self, fit_name):
+        """Check whether the fit already exists on the server."""
+        # Get list of the available fits on the server
+        l = RemoteLoader()
+        fits = l.downloadable_fits
+
+        if fit_name in fits:
+            raise FileExistsError("A fit with the same name already exists on "
+                                  "the server. To overwrite this fit use the "
+                                  "--force flag, as in `vp-uploadfit <fitname> "
+                                  "--force`.")
+
     def compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
         #make_archive fails if we give it relative paths for some reason
@@ -191,8 +204,13 @@ class FitUploader(FileUploader):
         return tempdir, archive_path_without_extension
 
 
-    def upload_output(self, output_path):
+    def upload_output(self, output_path, force):
         output_path = pathlib.Path(output_path)
+        fit_name = output_path.name
+
+        if not force:
+            self.check_fit_exists(fit_name)
+
         new_out, name = self.compress(output_path)
         super().upload_output(new_out)
 
@@ -200,8 +218,17 @@ class FitUploader(FileUploader):
         return name.with_suffix('.tar.gz').name
 
     @contextlib.contextmanager
-    def upload_context(self, output_path):
+    def upload_context(self, output_path, force):
         self.check_upload()
         yield
-        res = self.upload_output(output_path)
+        res = self.upload_output(output_path, force)
         self._print_output(self.root_url, res)
+
+    @contextlib.contextmanager
+    def upload_or_exit_context(self, output, force):
+        try:
+            with self.upload_context(output, force):
+                yield
+        except BadSSH as e:
+            log.error(e)
+            sys.exit()
