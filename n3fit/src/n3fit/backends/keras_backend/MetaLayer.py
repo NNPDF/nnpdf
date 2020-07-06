@@ -48,10 +48,7 @@ class MetaLayer(Layer):
 
     initializers = initializers
     weight_inits = []
-<<<<<<< HEAD
-=======
     compilable = True
->>>>>>> master
 
     # Building function
     def builder_helper(
@@ -116,8 +113,6 @@ class MetaLayer(Layer):
             if key in ini_args.keys():
                 ini_args[key] = value
         return ini_class(**ini_args)
-<<<<<<< HEAD
-=======
 
     def call(self, *args, training=None, **kwargs):
         if self.compilable:
@@ -125,4 +120,3 @@ class MetaLayer(Layer):
         else:
             compiled_function = self.meta_call
         return compiled_function(*args, **kwargs)
->>>>>>> master

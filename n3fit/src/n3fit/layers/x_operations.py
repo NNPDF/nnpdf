@@ -35,11 +35,7 @@ class xDivide(MetaLayer):
         self.div_list = div_list
         super(MetaLayer, self).__init__(**kwargs)
 
-<<<<<<< HEAD
-    def call(self, x):
-=======
     def meta_call(self, x):
->>>>>>> master
         out_array = []
         one = op.tensor_ones_like(x)
         for i in range(self.output_dim):
@@ -48,11 +44,7 @@ class xDivide(MetaLayer):
             else:
                 res = one
             out_array.append(res)
-<<<<<<< HEAD
-        out_tensor = op.concatenate(out_array, axis=-1)
-=======
         out_tensor = op.concatenate(out_array)
->>>>>>> master
         return out_tensor
 
 
@@ -76,10 +68,6 @@ class xIntegrator(MetaLayer):
         self.grid_weights = op.many_replication(grid_weights_tensor, 8, axis=1)
         super(MetaLayer, self).__init__(**kwargs)
 
-<<<<<<< HEAD
-    def call(self, x):
-=======
     def meta_call(self, x):
->>>>>>> master
         xx = x * self.grid_weights
         return op.sum(xx, axis=-2)

@@ -26,11 +26,8 @@ import tempfile
 import subprocess as sp
 from collections import namedtuple
 from numpy.testing import assert_almost_equal
-<<<<<<< HEAD
-=======
 from reportengine.compat import yaml
 import n3fit
->>>>>>> master
 from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
@@ -96,18 +93,12 @@ def test_performfit():
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
     # run the fit
-<<<<<<< HEAD
-    sp.run(f"{EXE} {QUICKCARD} {REPLICA}".split(), cwd=tmp_path, check=True)
-=======
     sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, check=True)
->>>>>>> master
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
     compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)
-<<<<<<< HEAD
-=======
     # check that the times didnt grow in a weird manner
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     # Better to catch up errors even when they happen to grow larger by chance
@@ -139,4 +130,3 @@ def test_hyperopt():
             cwd=tmp_path,
             timeout=60,
         )
->>>>>>> master

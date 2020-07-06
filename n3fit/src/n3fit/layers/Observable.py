@@ -1,9 +1,4 @@
 from n3fit.backends import MetaLayer
-<<<<<<< HEAD
-import tensorflow as tf
-from abc import abstractmethod, ABC
-from n3fit.backends import operations as op
-=======
 import numpy as np
 from abc import abstractmethod, ABC
 from n3fit.backends import operations as op
@@ -16,7 +11,6 @@ def _is_unique(list_of_arrays):
         if not np.array_equal(the_first, i):
             return False
     return True
->>>>>>> master
 
 
 class Observable(MetaLayer, ABC):
@@ -48,11 +42,6 @@ class Observable(MetaLayer, ABC):
 
         self.nfl = nfl
 
-<<<<<<< HEAD
-        self.output_dim = output_dim
-        self.fktable = op.numpy_to_tensor(fktable)
-        self.xgrid_size = self.fktable.shape[-1]
-=======
         basis = []
         xgrids = []
         self.fktables = []
@@ -60,7 +49,6 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fktable["xgrid"])
             basis.append(fktable["basis"])
             self.fktables.append(op.numpy_to_tensor(fktable["fktable"]))
->>>>>>> master
 
         # check how many xgrids this dataset needs
         if _is_unique(xgrids):

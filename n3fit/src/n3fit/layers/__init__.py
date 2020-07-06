@@ -1,9 +1,5 @@
 from n3fit.layers.Preprocessing import Preprocessing
-<<<<<<< HEAD
-from n3fit.layers.Rotation import Rotation
-=======
 from n3fit.layers.Rotations import FkRotation, FlavourToEvolution
->>>>>>> master
 from n3fit.layers.x_operations import xIntegrator, xDivide
 from n3fit.layers.MSR_Normalization import MSR_Normalization
 from n3fit.layers.DIS import DIS

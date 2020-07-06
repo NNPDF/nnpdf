@@ -130,45 +130,6 @@ def test_DY_basis():
 
 
 def test_DIS():
-<<<<<<< HEAD
-    # Input values
-    fk, comb = generate_input_DIS(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
-    pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
-    # generate the n3fit results
-    obs_layer = layers.DIS(NDATA, fk, basis=comb, nfl=FLAVS)
-    result_tensor = obs_layer(kp)
-    result = op.evaluate(result_tensor)
-    # Compute the numpy version of this layer
-    basis = obs_layer.basis
-    pdf_masked = pdf.T[basis].T
-    reference = np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
-    assert np.allclose(result, reference, THRESHOLD)
-
-
-def test_DY():
-    # Input values
-    fk, comb = generate_input_had(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
-    pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
-    # generate the n3fit results
-    obs_layer = layers.DY(NDATA, fk, basis=comb, nfl=FLAVS)
-    result_tensor = obs_layer(kp)
-    result = op.evaluate(result_tensor)
-    # Compute the numpy version of this layer
-    mask = np.zeros((FLAVS, FLAVS), dtype=bool)
-    for i, j in obs_layer.basis:
-        mask[i, j] = True
-    lumi = np.tensordot(pdf, pdf, axes=0)
-    lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
-    lumi_masked = lumi_perm[mask]
-    reference = np.tensordot(fk, lumi_masked, axes=3)
-    assert np.allclose(result, reference, THRESHOLD)
-=======
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
@@ -239,4 +200,3 @@ def test_rotation():
     rotmat = layers.FlavourToEvolution(flav_info)
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)
->>>>>>> master

@@ -100,14 +100,9 @@ fitting:
     nodes_per_layer: [35, 25, 8]
     activation_per_layer: ['tanh', 'tanh', 'linear']
     initializer: 'glorot_normal'
-<<<<<<< HEAD
-    learning_rate: 1.0
-    optimizer: 'Adadelta'
-=======
     optimizer:
       learning_rate: 1.0
       optimizer_name: 'Adadelta'
->>>>>>> master
     epochs: 40000
     pos_multiplier: 1.09
     pos_initial: 10.0 # believe the pos_lambda above

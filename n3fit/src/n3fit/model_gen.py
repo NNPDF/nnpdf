@@ -8,15 +8,6 @@
             Generates the PDF NN layer to be fitted
 """
 import numpy as np
-<<<<<<< HEAD
-
-from n3fit.layers import DIS
-from n3fit.layers import DY
-from n3fit.layers import Mask
-from n3fit.layers import ObsRotation
-from n3fit.layers import Preprocessing, Rotation
-=======
->>>>>>> master
 
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
@@ -25,19 +16,6 @@ from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
 from n3fit.backends import losses
-<<<<<<< HEAD
-from n3fit.backends import MetaLayer
-from n3fit.backends import (
-    base_layer_selector,
-    regularizer_selector,
-    concatenate,
-    Lambda,
-)
-
-
-def observable_generator(
-    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300
-=======
 from n3fit.backends import MetaLayer, Concatenate, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
@@ -50,7 +28,6 @@ def observable_generator(
     positivity_multiplier=1.05,
     positivity_steps=300,
     kfolding=False,
->>>>>>> master
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -68,15 +45,6 @@ def observable_generator(
 
     Parameters
     ----------
-<<<<<<< HEAD
-        `spec_dict`
-            a dictionary-like object containing the information of the observable
-        `positivity_initial`
-            if given, set this number as the positivity multiplier for epoch 1
-        `positivity_multiplier`
-            how much the positivity increases every 100 steps
-        `positivity_steps`
-=======
         spec_dict: dict
             a dictionary-like object containing the information of the experiment
         positivity_initial: float
@@ -84,18 +52,13 @@ def observable_generator(
         positivity_multiplier: float
             how much the positivity increases every 100 steps
         positivity_steps: float
->>>>>>> master
             if positivity_initial is not given, computes the initial by assuming we want,
             after 100**positivity_steps epochs, to have the lambda of the runcard
 
     Returns
     ------
-<<<<<<< HEAD
-        'layer_info` a dictionary with:
-=======
         layer_info: dict
             a dictionary with:
->>>>>>> master
             - `inputs`: input layer
             - `output`: output layer (unmasked)
             - `loss` : loss function (unmasked)
@@ -107,80 +70,19 @@ def observable_generator(
     spec_name = spec_dict["name"]
     dataset_xsizes = []
     model_obs = []
-<<<<<<< HEAD
-    dataset_xsizes = []
-
-    # The first step is to generate an observable layer for each given datasets
-=======
     model_inputs = []
     # The first step is to compute the observable for each of the datasets
->>>>>>> master
     for dataset_dict in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset_dict["name"]
         ndata = dataset_dict["ndata"]
 
-<<<<<<< HEAD
-        # Choose which kind of observable are we dealing with, since this defines the convolution
-=======
         # Look at what kind of layer do we need for this dataset
->>>>>>> master
         if dataset_dict["hadronic"]:
             Obs_Layer = DY
         else:
             Obs_Layer = DIS
 
-<<<<<<< HEAD
-        # Define the operation (if any)
-        op = operations.c_to_py_fun(dataset_dict["operation"], name=dataname)
-        # Retrieve the list of fktables
-        fktable_list = dataset_dict["fktables"]
-
-        obs_list = []
-        input_list = []
-        # Now generate an input and output layer for each sub_ops of the dataset
-        for i, fktable_dict in enumerate(fktable_list):
-            # Input layer
-            input_layer = operations.numpy_to_input(fktable_dict["xgrid"].T)
-            input_list.append(input_layer)
-            ndata = fktable_dict["ndata"]
-            # Output layer
-            obs_layer = Obs_Layer(
-                output_dim=ndata,
-                fktable=fktable_dict["fktable"],
-                basis=fktable_dict["basis"],
-                name="{0}_{1}".format(dataname, i),
-                input_shape=(14,),
-            )
-            obs_list.append((input_layer, obs_layer))
-            dataset_xsizes.append(input_layer.shape[1])
-
-        # This mask does usually nothing but it is useful in order to turn off datasets during kfolding
-        mask_one = Mask(bool_mask=np.ones(ndata, dtype=np.bool), batch_it = False, name=f"{dataname}_mask")
-        # Add the inputs to the lists of inputs of the model
-        model_inputs += input_list
-        # Append a combination of the operation to be applied (op) to the list
-        # and the list of observable to which we want to applied the op
-        # as well as the mask to turn on and off k-folds
-        model_obs.append((op, obs_list, mask_one))
-
-    from tensorflow import split # TODO
-
-    def final_obs(pdf_layer): # TODO
-        """ pdf_layer is already a tensor """
-        all_ops = []
-        all_pdfs = split(pdf_layer, dataset_xsizes, axis=1)
-        i = 0
-        for operation, observables, mask in model_obs:
-            all_obs = []
-            for i_layer, o_layer in observables:
-                all_obs.append(o_layer(all_pdfs[i]))
-                i += 1
-            result = operation(all_obs)
-            all_ops.append(mask(result))
-        if len(all_ops) == 1:
-            return all_ops[0]
-=======
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset_dict["operation"]
 
@@ -232,7 +134,6 @@ def observable_generator(
                 name=f"{spec_name}_split",
             )
             split_pdf = splitting_layer(pdf)
->>>>>>> master
         else:
             split_pdf = [pdf]
         # every obs gets its share of the split
@@ -257,20 +158,6 @@ def observable_generator(
             initial_lambda = max_lambda / pow(positivity_multiplier, positivity_steps)
         else:
             initial_lambda = positivity_initial
-<<<<<<< HEAD
-        out_tr_mask = Mask(
-            bool_mask=spec_dict["trmask"], c=initial_lambda, name=spec_name
-        )
-
-        def out_tr_positivity(pdf_layer):
-            return out_tr_mask(final_obs(pdf_layer))
-
-        layer_info = {
-            "inputs": model_inputs,
-            "output_tr": out_tr_positivity,
-            "loss_tr": losses.l_positivity(),
-            "experiment_xsize" : sum(dataset_xsizes) # TODO
-=======
         out_mask = Mask(
             bool_mask=spec_dict["trmask"],
             c=initial_lambda,
@@ -288,7 +175,6 @@ def observable_generator(
             "output_tr": out_positivity,
             "loss_tr": losses.l_positivity(),
             "experiment_xsize": full_nx,
->>>>>>> master
         }
         return layer_info
 
@@ -301,40 +187,8 @@ def observable_generator(
         bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1, unbatch=True
     )
 
-<<<<<<< HEAD
-    if spec_dict.get("data_transformation") is not None:
-        obsrot = ObsRotation(spec_dict.get("data_transformation"))
-
-        def out_tr(pdf_layer):
-            return out_tr_mask(obsrot(final_obs(pdf_layer)))
-
-        def out_vl(pdf_layer):
-            return out_vl_mask(obsrot(final_obs(pdf_layer)))
-
-        invcovmat_tr = spec_dict["invcovmat"]
-        loss_tr = losses.l_diaginvcovmat(invcovmat_tr)
-
-        invcovmat_vl = spec_dict["invcovmat_vl"]
-        loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
-    else:
-
-        def out_tr(pdf_layer):
-            return out_tr_mask(final_obs(pdf_layer))
-
-        def out_vl(pdf_layer):
-            return out_vl_mask(final_obs(pdf_layer))
-
-        invcovmat_tr = spec_dict["invcovmat"]
-        loss_tr = losses.l_invcovmat(invcovmat_tr)
-
-        invcovmat_vl = spec_dict["invcovmat_vl"]
-        loss_vl = losses.l_invcovmat(invcovmat_vl)
-
-    # Generate the loss function as usual
-=======
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
->>>>>>> master
     invcovmat = spec_dict["invcovmat_true"]
 
     # Generate the loss function and rotations of the final data (if any)
@@ -348,8 +202,6 @@ def observable_generator(
         loss_vl = losses.l_invcovmat(invcovmat_vl)
     loss = losses.l_invcovmat(invcovmat)
 
-<<<<<<< HEAD
-=======
     def out_tr(pdf_layer):
         exp_result = experiment_layer(pdf_layer)
         if obsrot is not None:
@@ -362,7 +214,6 @@ def observable_generator(
             exp_result = obsrot(exp_result)
         return out_vl_mask(exp_result)
 
->>>>>>> master
     layer_info = {
         "inputs": model_inputs,
         "output": experiment_layer,
@@ -371,11 +222,7 @@ def observable_generator(
         "loss_tr": loss_tr,
         "output_vl": out_vl,
         "loss_vl": loss_vl,
-<<<<<<< HEAD
-        "experiment_xsize" : sum(dataset_xsizes) # TODO
-=======
         "experiment_xsize": full_nx,
->>>>>>> master
     }
 
     return layer_info
@@ -493,10 +340,7 @@ def pdfNN_layer_generator(
     dropout=0.0,
     regularizer=None,
     regularizer_args=None,
-<<<<<<< HEAD
-=======
     impose_sumrule=False,
->>>>>>> master
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -550,38 +394,6 @@ def pdfNN_layer_generator(
 
     Parameters
     ----------
-<<<<<<< HEAD
-        `inp`
-            dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
-        `nodes'
-            list of the number of nodes per layer of the PDF NN. Default: [15,8]
-        `activation`
-            list of activation functions to apply to each layer. Default: ["tanh", "linear"]
-            if the number of activation function does not match the number of layers, it will add
-            copies of the first activation function found
-        `initializer_name`
-            selects the initializer of the weights of the NN. Default: glorot_normal
-        `layer_type`
-            selects the type of architecture of the NN. Default: dense
-        `flav_info`
-            dictionary containing the information about each PDF (basis dictionary in the runcard)
-            to be used by Preprocessing
-        `out`
-            number of output flavours of the model
-        `seed`
-            seed to initialize the NN
-        `dropout`
-            rate of dropout layer by layer
-
-    Returns
-    -------
-        `layer_pdf`
-            a function which, upon calling it with a tensor,
-            will connect all PDF layers and output a tensor of size (batch_size, `out`)
-        `dict_layers`
-            a dictionary containing some of the intermediate layers
-            (necessary for debugging and to compute intermediate quantities)
-=======
         inp: int
             dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
         nodes: list(int)
@@ -613,7 +425,6 @@ def pdfNN_layer_generator(
         integrator_input: tensor
             (if impose_sumrule is True) a tensor with the input of the integrator used to compute
             the sumrule
->>>>>>> master
     """
     if nodes is None:
         nodes = [15, 8]
@@ -664,13 +475,9 @@ def pdfNN_layer_generator(
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
-<<<<<<< HEAD
-        add_log = Lambda(lambda x: concatenate([x, operations.op_log(x)], axis=-1))
-=======
         add_log = Lambda(
             lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1)
         )
->>>>>>> master
 
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
@@ -689,12 +496,9 @@ def pdfNN_layer_generator(
     layer_preproc = Preprocessing(
         input_shape=(1,), name="pdf_prepro", flav_info=flav_info, seed=preproseed
     )
-<<<<<<< HEAD
-=======
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
->>>>>>> master
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info)

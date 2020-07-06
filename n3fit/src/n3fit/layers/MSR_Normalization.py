@@ -13,11 +13,7 @@ class MSR_Normalization(MetaLayer):
         self.three = op.numpy_to_tensor([[3.0]])
         super(MSR_Normalization, self).__init__(**kwargs, name="normalizer")
 
-<<<<<<< HEAD
-    def call(self, xgrid):
-=======
     def meta_call(self, xgrid):
->>>>>>> master
         """
             Receives as input a tensor with the value of the MSR for each PDF
             and returns a rank-1 tensor with the normalization factor A_i of each flavour

@@ -11,11 +11,7 @@ import inspect
 import numbers
 import copy
 import os
-<<<<<<< HEAD
-from importlib.resources import read_text
-=======
 from importlib.resources import read_text, contents
->>>>>>> master
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -972,8 +968,6 @@ class CoreConfig(configparser.Config):
 
         """
         return {"norm_threshold": None}
-<<<<<<< HEAD
-=======
 
     @configparser.record_from_defaults
     def parse_default_filter_rules(self, spec: (str, type(None))):
@@ -996,7 +990,6 @@ class CoreConfig(configparser.Config):
                 alternatives=alternatives,
                 display_alternatives="all"
             )
->>>>>>> master
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
@@ -1119,8 +1112,6 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
 
-<<<<<<< HEAD
-=======
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
            prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
@@ -1192,7 +1183,6 @@ class CoreConfig(configparser.Config):
         return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
 
->>>>>>> master
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
     pass

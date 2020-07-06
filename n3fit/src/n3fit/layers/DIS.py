@@ -56,14 +56,6 @@ class DIS(Observable):
                 result: backend tensor
                     rank 1 tensor (batchsize, ndata)
         """
-<<<<<<< HEAD
-        pdf_in = self.digest_pdf(pdf_in)
-        pdf_masked = op.boolean_mask(pdf_in, self.basis, axis=1)
-
-        pdfT = op.transpose(pdf_masked)
-        result = op.tensor_product(self.fktable, pdfT, axes=2)
-        return result
-=======
         # DIS never needs splitting
         if self.splitting is not None:
             raise ValueError(
@@ -88,4 +80,3 @@ class DIS(Observable):
 
         ret = self.operation(results)
         return op.batchit(ret)
->>>>>>> master

@@ -48,11 +48,8 @@ KEYWORDS = {
     "id": "iteration",
     "optimizer": "optimizer",
     "lr": "learning_rate",
-<<<<<<< HEAD
-=======
     "optimizer_name": "optimizer_name",
     "clipnorm" : "clipnorm",
->>>>>>> master
     "initializer": "initializer",
     "dropout": "dropout",
     "nodes": "nodes_per_layer",
@@ -159,15 +156,6 @@ def parse_optimizer(trial):
     if isinstance(opt, dict):
         # If this is a dictionary then the optimizer contains extra
         # information (normaly the learning rate)
-<<<<<<< HEAD
-        name = opt[KEYWORDS["optimizer"]]
-        lr = opt[KEYWORDS["lr"]]
-    else:
-        name = opt
-        lr = None
-    dict_out[KEYWORDS["optimizer"]] = name
-    dict_out[KEYWORDS["lr"]] = lr
-=======
         name = opt[KEYWORDS["optimizer_name"]]
         lr = opt[KEYWORDS["lr"]]
         clipnorm = opt.get(KEYWORDS["clipnorm"])
@@ -178,7 +166,6 @@ def parse_optimizer(trial):
     dict_out[KEYWORDS["optimizer"]] = name
     dict_out[KEYWORDS["lr"]] = lr
     dict_out[KEYWORDS["clipnorm"] = clipnorm
->>>>>>> master
     return dict_out
 
 
