@@ -198,7 +198,7 @@ def check_normalize_to(ns, **kwargs):
 #TODO: This interface is horrible. We need to think how to adapt libnnpdf
 #to make this use case easier
 def _plot_fancy_impl(results, commondata, cutlist,
-               normalize_to:(int,type(None)) = None, labellist=None):
+               normalize_to:(int,type(None)) = None, labellist=None, withshifts=False):
 
     """Implementation of the data-theory comparison plots. Providers are
     supposed to call (yield from) this.
@@ -220,6 +220,9 @@ def _plot_fancy_impl(results, commondata, cutlist,
     labellist : list or None
         The labesl that will appear in the plot. They sill be deduced
         (from the PDF names) if None is given.
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
 
     Returns
     -------
@@ -262,6 +265,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 
         cv, err = transform_result(cv, err,
                                    table.iloc[:,:nkinlabels], info)
+
         #By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
         if normalize_to is None:
@@ -271,6 +275,49 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[cvcol] = cv/norm_cv
             table[('err', i)] = err/norm_cv
         cvcols.append(cvcol)
+
+    ### Computing correlated shifts according to the paper: arXiv:1709.04922
+    if withshifts:
+        for i, (result, cuts) in enumerate(zip(results, cutlist)):
+            if i==0: continue
+
+            cd = commondata.load()
+            mask = cut_mask(cuts)
+
+            ## fill uncertainties
+            Ndat = len(table[('cv', i)])
+            Nsys = cd.GetNSys()
+
+            uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
+            corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
+            lambda_sys = np.zeros(Nsys) # nuisance parameters
+
+            for idat in range(Ndat):
+                convi = table[('cv', 0)][idat]/cd.GetData(idat) # conversion constant
+                uncorrE[idat] = cd.GetUncE(idat)*convi
+                for isys in range(Nsys):
+                    if cd.GetSys(idat, isys).name != "UNCORR":
+                        corrE[idat, isys] = cd.GetSys(idat, isys).add*convi
+
+            ## applying cuts
+            uncorrE=uncorrE[mask]
+            corrE=corrE[mask]
+            data = table[('cv', 0)][mask]
+            theory = table[('cv', i)][mask]
+
+            ## computing lambda the nuisance parameter
+            ## isys is equivalent to alpha index and lsys to delta in eq.85
+            f1 = (data - theory)/uncorrE # first part of eq.85
+            A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
+                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
+            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
+            lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
+            temp_shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
+
+            shifts = np.full(Ndat, np.nan)
+            shifts[mask] = temp_shifts
+
+            table[('cv', i)] += shifts
 
     figby = sane_groupby_iter(table, info.figure_by)
 
@@ -385,7 +432,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 @check_normalize_to
 @figuregen
 def plot_fancy(one_or_more_results, commondata, cuts,
-               normalize_to:(int,str,type(None)) = None):
+               normalize_to: (int, str, type(None)) = None, withshifts=False):
     """
     Read the PLOTTING configuration for the dataset and generate the
     corrspondig data theory plot.
@@ -399,13 +446,18 @@ def plot_fancy(one_or_more_results, commondata, cuts,
     result (0 for the data, and i for the ith pdf). None means plotting
     absolute values.
 
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
+
     See docs/plotting_format.md for details on the format of the PLOTTING
     files.
     """
     yield from _plot_fancy_impl(results=one_or_more_results,
                                 commondata=commondata,
                                 cutlist=[cuts]*len(one_or_more_results),
-                                normalize_to=normalize_to)
+                                normalize_to=normalize_to,
+                                withshifts=withshifts)
 
 @make_argcheck
 def _check_same_dataset_name(dataspecs_commondata):
@@ -436,7 +488,8 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
 @figuregen
 def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
                          dataspecs_cuts, dataspecs_speclabel,
-                         normalize_to:(str, int, type(None))=None):
+                         normalize_to:(str, int, type(None))=None,
+                         withshifts=False):
     """
     General interface for data-theory comparison plots.
 
@@ -462,6 +515,10 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
 
         - or None (default) to plot absolute values.
 
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
+
     A limitation at the moment is that the data cuts and errors will be taken
     from the first specifiaction.
     """
@@ -476,7 +533,8 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
     labellist = [None, *dataspecs_speclabel]
     yield from _plot_fancy_impl(results = results, commondata=commondata,
                                 cutlist=cutlist, labellist=labellist,
-                                normalize_to=normalize_to)
+                                normalize_to=normalize_to,
+                                withshifts=withshifts)
 
 
 
