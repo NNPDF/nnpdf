@@ -305,19 +305,21 @@ def _plot_fancy_impl(results, commondata, cutlist,
             data = table[('cv', 0)][mask]
             theory = table[('cv', i)][mask]
 
-            ## computing lambda the nuisance parameter
             ## isys is equivalent to alpha index and lsys to delta in eq.85
-            f1 = (data - theory)/uncorrE # first part of eq.85
-            A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
-                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
-            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
-            lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
-            temp_shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
+            if np.any(uncorrE == 0):
+                temp_shifts = np.zeros(Ndat)
+            else:
+                f1 = (data - theory)/uncorrE # first part of eq.85
+                A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
+                    np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
+                f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
+                lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
+                temp_shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
 
-            shifts = np.full(Ndat, np.nan)
-            shifts[mask] = temp_shifts
+                shifts = np.full(Ndat, np.nan)
+                shifts[mask] = temp_shifts
 
-            table[('cv', i)] += shifts
+                table[('cv', i)] += shifts
 
     figby = sane_groupby_iter(table, info.figure_by)
 
