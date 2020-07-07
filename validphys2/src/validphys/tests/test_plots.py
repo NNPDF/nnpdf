@@ -5,12 +5,12 @@ matplotlib.use('agg')
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import THEORYID
+from validphys.tests.conftest import PDF, THEORYID
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
 def test_plotpdfs():
-    pdfs = ['NNPDF31_nnlo_as_0118']
+    pdfs = [PDF]
     Q = 10
     flavours = ['g']
     #plot_pdfs returns a generator with (figure, name_hint)
@@ -31,8 +31,8 @@ def test_dataspecschi2():
             'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
         ]
     dataspecs = [
-        {'pdf': 'NNPDF31_nnlo_as_0118', 'theoryid': THEORYID, 'speclabel': 'no t0'},
-        {'pdf': 'NNPDF31_nnlo_as_0118', 'theoryid': THEORYID, 'use_t0': False, 'speclabel': 'with t0'}
+        {'pdf': PDF, 'theoryid': THEORYID, 'speclabel': 'no t0'},
+        {'pdf': PDF, 'theoryid': THEORYID, 'use_t0': False, 'speclabel': 'with t0'}
     ]
     return API.plot_dataspecs_datasets_chi2(
         experiments=experiments, dataspecs=dataspecs, use_cuts='nocuts')

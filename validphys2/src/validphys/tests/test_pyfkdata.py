@@ -5,7 +5,7 @@ from validphys.loader import Loader
 from validphys.results import ThPredictionsResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions
-from validphys.tests.conftest import THEORYID
+from validphys.tests.conftest import PDF, THEORYID
 
 
 def test_basic_loading():
@@ -47,7 +47,7 @@ def test_cuts():
 
 def test_predictions():
     l = Loader()
-    pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
+    pdf = l.check_pdf(PDF)
     dss = [
         l.check_dataset(
             'ATLASTTBARTOT', theoryid=THEORYID, cfac=('QCD',), cuts=None
@@ -67,7 +67,7 @@ def test_predictions():
 
 def test_extended_predictions():
     l = Loader()
-    pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
+    pdf = l.check_pdf(PDF)
     had = l.check_dataset('ATLASTTBARTOT', theoryid=THEORYID, cfac=('QCD',))
     dis = l.check_dataset('H1HERAF2B', theoryid=THEORYID)
     dis_all = predictions(dis, pdf).T
