@@ -91,9 +91,7 @@ def optimizer_arg_wrapper(hp_key, option_dict):
 
 
 # Wrapper for the hyperscanning
-def hyper_scan_wrapper(
-    replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1
-):
+def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1):
     """
     This function receives a `ModelTrainer` object as well as a dictionary of parameters (`parameters`) and a dictionary defining the
     space to search (`hyperscan_dict`) and performs `max_evals` evaluations of the function trying to find the best model.
@@ -111,9 +109,7 @@ def hyper_scan_wrapper(
     # Create a HyperScanner object
     the_scanner = HyperScanner(parameters, hyperscan_dict)
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(
-        True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK
-    )
+    model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
     # Generate the trials object
     trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
 
@@ -244,9 +240,7 @@ class HyperScanner:
 
         self.parameters[key] = sampler
 
-    def stopping(
-        self, min_epochs=None, max_epochs=None, min_patience=None, max_patience=None
-    ):
+    def stopping(self, min_epochs=None, max_epochs=None, min_patience=None, max_patience=None):
         """
         Modifies the following entries of the `parameters` dictionary:
             - `epochs`
@@ -302,7 +296,6 @@ class HyperScanner:
         lr_key = "learning_rate"
         clip_key = "clipnorm"
 
-
         for optimizer in optimizers:
             name = optimizer[optname_key]
             optimizer_dictionary = {optname_key: name}
@@ -335,7 +328,7 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None,
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
@@ -411,9 +404,7 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(
-                    units_label, min_units, max_units, steps=self.steps
-                )
+                units_sampler = hp_quniform(units_label, min_units, max_units, steps=self.steps)
                 units.append(units_sampler)
             # The last layer will always have 8 nodes
             units.append(8)
@@ -429,9 +420,7 @@ class HyperScanner:
         for ini_name in initializers:
             if ini_name not in imp_init_names:
                 raise NotImplementedError(
-                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(
-                        ini_name
-                    )
+                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name)
                 )
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
