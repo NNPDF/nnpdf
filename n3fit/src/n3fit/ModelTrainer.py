@@ -13,15 +13,16 @@ import numpy as np
 import n3fit.model_gen as model_gen
 from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
+import n3fit.hyper_optimization.penalties
 
 log = logging.getLogger(__name__)
 
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
-HYPER_THRESHOLD = 5.0
+HYPER_THRESHOLD = 50.0
 # The stopping will not consider any run where the validation is not under this threshold
 THRESHOLD_CHI2 = 10.0
-# Each how many epochs do we increase the positivitiy Lagrange Multiplier 
+# Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
 
@@ -196,6 +197,13 @@ class ModelTrainer:
         else:
             self.kpartitions = kfold_parameters["partitions"]
             self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
+            # if there are penalties enabled, set them up
+            penalties = kfold_parameters.get('penalties', [])
+            self.hyper_penalties = []
+            for penalty in penalties:
+                pen_fun = getattr(n3fit.hyper_optimization.penalties, penalty)
+                self.hyper_penalties.append(pen_fun)
+                log.info("Adding penalty: %s", penalty)
 
         # Initialize the pdf model
         self.pdf_model = None
@@ -786,6 +794,8 @@ class ModelTrainer:
 
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
+                for penalty in self.hyper_penalties:
+                    hyper_loss += penalty(pdf_model, stopping_object)
                 l_hyper.append(hyper_loss)
                 log.info("fold: %d", k + 1)
                 log.info("Hyper loss: %f", hyper_loss)
