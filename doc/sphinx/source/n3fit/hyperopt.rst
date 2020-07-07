@@ -191,7 +191,8 @@ The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hype
             kfold: True
         threshold: 5.0
         penalties:
-            saturation: True
+            - saturation
+            - patience
         partitions:
             - overfit: True
               datasets:
