@@ -4,7 +4,7 @@ import pandas as pd
 from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.loader import FallbackLoader as Loader
-from validphys.tests.conftest import THEORYID
+from validphys.tests.conftest import THEORYID, FIT
 
 
 def test_basic_commondata_loading():
@@ -32,7 +32,7 @@ def test_commondata_with_cuts():
     cd = l.check_commondata(setname=setname)
     loaded_cd = load_commondata(cd)
 
-    fit_cuts = l.check_fit_cuts(fit="191015-mw-001", setname=setname)
+    fit_cuts = l.check_fit_cuts(fit=FIT, setname=setname)
     internal_cuts = l.check_internal_cuts(
         cd, API.rules(theoryid=THEORYID, use_cuts="internal")
     )
@@ -56,6 +56,6 @@ def test_commondata_with_cuts():
     assert all(loaded_cd.with_cuts([1, 2, 3]).commondata_table.index - 1 == [1, 2, 3])
 
     # Check that giving cuts for another dataset raises the correct ValueError exception
-    bad_cuts = l.check_fit_cuts(fit="191015-mw-001", setname="NMCPD")
+    bad_cuts = l.check_fit_cuts(fit=FIT, setname="NMCPD")
     with pytest.raises(ValueError):
         loaded_cd.with_cuts(bad_cuts)
