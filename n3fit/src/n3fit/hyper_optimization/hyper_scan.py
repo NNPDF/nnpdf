@@ -329,7 +329,7 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
@@ -337,16 +337,22 @@ class HyperScanner:
             - pos_initial
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
-        mul_key = "pos_multiplier"
-        ini_key = "pos_initial"
+        mul_key = "multiplier"
+        ini_key = "initial"
+        params = {}
 
-        # Create the samplers
-        mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
-        ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+        if max_multiplier is not None:
+            if min_multiplier is None:
+                min_multiplier = 1.0  # I guess this is a sensible minimum
 
-        # Update the dictionaries
-        self._update_param(mul_key, mul_val)
-        self._update_param(ini_key, ini_val)
+            mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
+            params[mul_key] = mul_val
+
+        if min_initial is not None and max_initial is not None:
+            ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+            params[ini_key] = ini_val
+
+        self._update_param("positivity", params)
 
     def architecture(
         self,

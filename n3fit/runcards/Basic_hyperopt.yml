@@ -133,8 +133,9 @@ fitting:
       learning_rate: 0.01
       optimizer_name: 'Adadelta'
     epochs: 40000
-    pos_multiplier: 1.09
-    pos_initial: 10.0
+    positivity:
+      multiplier: 1.09
+      initial: 10.0
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
