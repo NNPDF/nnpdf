@@ -286,7 +286,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
             mask = cut_mask(cuts)
 
             ## fill uncertainties
-            Ndat = len(table[('cv', i)])
+            Ndat = cd.GetNData()
             Nsys = cd.GetNSys()
 
             uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
