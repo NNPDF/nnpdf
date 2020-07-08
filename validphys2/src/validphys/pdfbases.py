@@ -454,12 +454,12 @@ r'\bar{d}': {'dbar':1},
 def rotation(flav_info):
     """Return a rotation matrix R_{ij} which takes from the flavour to the evolution basis,
     from (u, ubar, d, dbar, s, sbar, c, g) to (sigma, g, v, v3, v8, t3, t8, cp), where
-    i is the flavour index and j is the evolution index. 
-    The evolution basis is defined as 
+    i is the flavour index and j is the evolution index.
+    The evolution basis is defined as
     cp = c + cbar = 2c
     and
-    sigma = u + ubar + d + dbar + s + sbar + cp  
-    v = u - ubar + d - dbar + s - sbar + c - cbar 
+    sigma = u + ubar + d + dbar + s + sbar + cp
+    v = u - ubar + d - dbar + s - sbar + c - cbar
     v3 = u - ubar - d + dbar
     v8 = u - ubar + d - dbar - 2*s + 2*sbar
     t3 = u + ubar - d - dbar
@@ -476,7 +476,7 @@ def rotation(flav_info):
     cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
     g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
     flist = [sigma, g, v, v3, v8, t3, t8, cp]
-    
+
     evol_basis = False
     mat = []
     for f in flist:
@@ -485,14 +485,14 @@ def rotation(flav_info):
                 flav_name = flav_dict["fl"]
                 mat.append(f[flav_name])
             # if one of the keys in the dictionary is not a key in flist
-            # it means we are already in the evolution basis    
+            # it means we are already in the evolution basis
             except KeyError:
                 evol_basis = True
                 break
         if evol_basis:
             mat = np.identity(8)
-            break    
+            break
 
     mat = np.asarray(mat).reshape(8,8)
     # Return the transpose of the matrix, to have the first index referring to flavour
-    return mat.transpose()    
+    return mat.transpose()
