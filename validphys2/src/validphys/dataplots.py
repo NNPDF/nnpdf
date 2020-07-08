@@ -506,6 +506,8 @@ def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
     ax.set_title(r"$\chi^2$ distribution by {}".format(processed_metadata_group))
     return fig
 
+plot_experiments_chi2 = plot_groups_data_chi2
+
 @figure
 def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     """Plot the chi² of all datasets with bars."""

@@ -217,6 +217,8 @@ def group_result_table(group_result_table_no_table):
     """Duplicate of group_result_table_no_table but with a table decorator."""
     return group_result_table_no_table
 
+experiment_result_table = group_result_table
+
 @table
 def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF):
     """Generate a table containing the data central value, the central prediction,
@@ -780,6 +782,8 @@ def groups_chi2_table(groups_data, pdf, groups_chi2,
             records.append(stats)
     return pd.DataFrame(records)
 
+experiments_chi2_table = groups_chi2_table
+
 @check_cuts_considered
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
@@ -884,7 +888,7 @@ def dataset_chi2_table(chi2_stats, dataset):
     """Show the chi² estimators for a given dataset"""
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
-groups_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",))
+groups_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",)
 
 fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
 fits_groups = collect(
@@ -1142,6 +1146,7 @@ def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
         dataset_inputs_abs_chi2_data.central_result / dataset_inputs_abs_chi2_data.ndata
     )
 
+total_experiments_chi2 = dataset_inputs_chi2_per_point_data
 
 @table
 @check_not_empty("groups_data")
