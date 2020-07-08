@@ -301,8 +301,8 @@ def _plot_fancy_impl(results, commondata, cutlist,
                         corrE[idat, isys] = cd.GetSys(idat, isys).add*convi
 
             ## applying cuts
-            uncorrE=uncorrE[mask]
-            corrE=corrE[mask]
+            uncorrE = uncorrE[mask]
+            corrE = corrE[mask]
             data = table[('cv', 0)][mask]
             theory = table[('cv', i)][mask]
 
