@@ -184,10 +184,12 @@ class FitUploader(FileUploader):
         fits = l.downloadable_fits
 
         if fit_name in fits:
-            raise FileExistsError("A fit with the same name already exists on "
-                                  "the server. To overwrite this fit use the "
-                                  "--force flag, as in `vp-uploadfit <fitname> "
-                                  "--force`.")
+            log.error("A fit with the same name already exists on "
+                      "the server. To overwrite this fit use the "
+                      "--force flag, as in `vp-uploadfit <fitname> "
+                      "--force`.")
+            raise UploadError
+
 
     def compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
@@ -250,10 +252,11 @@ class PDFUploader(FitUploader):
         pdfs = l.downloadable_pdfs
 
         if pdf_name in pdfs:
-            raise FileExistsError("A pdf with the same name already exists on "
-                                  "the server. To overwrite this fit use the "
-                                  "--force flag, as in `vp-uploadfit <fitname> "
-                                  "--force`.")
+            log.error("A PDF with the same name already exists on "
+                      "the server. To overwrite this PDF use the "
+                      "--force flag, as in `vp-uploadfit <fitname> "
+                      "--force`.")
+            raise UploadError
 
     def compress(self, output_path):
         """Compress the folder and put it in a directory inside its parent."""
