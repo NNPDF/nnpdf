@@ -103,10 +103,9 @@ def auxiliary_performfit(timing=True):
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     if timing:
         # Better to catch up errors even when they happen to grow larger by chance
-        f = open(time_path, "r")
-        times = yaml.load(f)
-        fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
-        f.close()
+        with open(time_path, 'r') as stream:
+            times = yaml.safe_load(stream)
+        fitting_time = times['walltime']['replica_set_to_replica_fitted']
         assert fitting_time < EXPECTED_MAX_FITTIME
     version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/version.info"
     f = open(version_path, "r")
