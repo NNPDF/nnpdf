@@ -35,7 +35,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
-EXPECTED_MAX_FITTIME = 200  # seen mac ~ 180  and linux ~ 90
+EXPECTED_MAX_FITTIME = 130 # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
@@ -81,7 +81,7 @@ def test_initialize_seeds():
     assert result_nomc == regression_nomc
 
 
-def test_performfit():
+def auxiliary_performfit(timing=True):
     quickcard = f"{QUICKNAME}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
@@ -101,17 +101,28 @@ def test_performfit():
     compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)
     # check that the times didnt grow in a weird manner
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
-    # Better to catch up errors even when they happen to grow larger by chance
-    f = open(time_path, "r")
-    times = yaml.load(f)
-    fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
-    f.close()
-    assert fitting_time < EXPECTED_MAX_FITTIME
+    if timing:
+        # Better to catch up errors even when they happen to grow larger by chance
+        f = open(time_path, "r")
+        times = yaml.load(f)
+        fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
+        f.close()
+        assert fitting_time < EXPECTED_MAX_FITTIME
     version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/version.info"
     f = open(version_path, "r")
     version = f.read()
     f.close()
     assert version == n3fit.__version__
+
+
+@pytest.mark.darwin
+def test_performfit():
+    auxiliary_performfit(timing=False)
+
+
+@pytest.mark.linux
+def test_performfit_and_timing():
+    auxiliary_performfit(timing=True)
 
 
 def test_hyperopt():
@@ -126,10 +137,5 @@ def test_hyperopt():
     # 60 seconds should be enough
     with pytest.raises(sp.TimeoutExpired):
         sp.run(
-            f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(),
-            cwd=tmp_path,
-            timeout=60,
+            f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(), cwd=tmp_path, timeout=60,
         )
-
-if __name__ == "__main__":
-    test_performfit()
