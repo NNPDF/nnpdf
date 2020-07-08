@@ -279,7 +279,8 @@ def _plot_fancy_impl(results, commondata, cutlist,
     ### Computing correlated shifts according to the paper: arXiv:1709.04922
     if withshifts:
         for i, (result, cuts) in enumerate(zip(results, cutlist)):
-            if i==0: continue
+            if i==0:
+                continue
 
             cd = commondata.load()
             mask = cut_mask(cuts)
