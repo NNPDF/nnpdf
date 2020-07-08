@@ -22,9 +22,11 @@ def check_existing_parameters(parameters):
             raise CheckError(f"Missing {param_name} parameter in the runcard")
     # Check that positivity is not defined wrong
     if "pos_initial" in parameters or "pos_multiplier" in parameters:
-        raise CheckError("The definition of the positivity parameters is deprecated, please "
-                "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
-                "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml")
+        raise CheckError(
+            "The definition of the positivity parameters is deprecated, please "
+            "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
+            "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml"
+        )
 
 
 def check_consistent_layers(parameters):
@@ -165,7 +167,9 @@ def check_kfold_options(kfold):
     penalty_selection = kfold.get("penalties", [])
     for penalty in penalty_selection:
         if not hasattr(penalties_module, penalty):
-            raise CheckError(f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py")
+            raise CheckError(
+                f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
+            )
 
 
 def check_correct_partitions(kfold, experiments):
