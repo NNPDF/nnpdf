@@ -1171,6 +1171,7 @@ class CoreConfig(configparser.Config):
             return processed_data_grouping
         return metadata_group
 
+
     def produce_group_dataset_inputs_by_metadata(
         self, data_input, processed_metadata_group,
     ):
@@ -1192,6 +1193,25 @@ class CoreConfig(configparser.Config):
                 )
         return [
             {"data_input": group, "group_name": name}
+            for name, group in res.items()
+        ]
+
+    def produce_group_dataset_inputs_by_experiment(
+        self, data_input):
+        res = defaultdict(list)
+        for dsinput in data_input:
+            cd = self.produce_commondata(dataset_input=dsinput)
+            try:
+                res[getattr(get_info(cd), "experiment")].append(dsinput)
+            except AttributeError:
+                raise ConfigError(
+                    f"Unable to find key: experiment in {cd.name} "
+                    "PLOTTING file."
+                )
+        from IPython import embed
+        embed()
+        return [
+            {"data_input": group, "experiment_name": name}
             for name, group in res.items()
         ]
 

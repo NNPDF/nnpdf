@@ -217,7 +217,7 @@ def group_result_table(group_result_table_no_table):
     """Duplicate of group_result_table_no_table but with a table decorator."""
     return group_result_table_no_table
 
-experiment_result_table = group_result_table
+experiment_result_table = collect('group_result_table', ("group_dataset_inputs_by_experiment",))
 
 @table
 def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF):
@@ -782,7 +782,7 @@ def groups_chi2_table(groups_data, pdf, groups_chi2,
             records.append(stats)
     return pd.DataFrame(records)
 
-experiments_chi2_table = groups_chi2_table
+experiments_chi2_table = collect('groups_chi2_table', ("group_dataset_inputs_by_experiment",))
 
 @check_cuts_considered
 @table
@@ -1146,7 +1146,10 @@ def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
         dataset_inputs_abs_chi2_data.central_result / dataset_inputs_abs_chi2_data.ndata
     )
 
-total_experiments_chi2 = dataset_inputs_chi2_per_point_data
+def total_experiments_chi2(dataset_inputs_chi2_per_point_data):
+    return dataset_inputs_chi2_per_point_data
+
+
 
 @table
 @check_not_empty("groups_data")
