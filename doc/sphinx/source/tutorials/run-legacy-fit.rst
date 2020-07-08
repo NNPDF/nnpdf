@@ -44,7 +44,7 @@ set to 4 as default.
 
 5. You can then upload the fit to the
 `server <https://data.nnpdf.science/fits/>`_ by using
-:code:`vp-uploadfit<runcard_folder>`. This will enable someone else to download
+:code:`vp-upload<runcard_folder>`. This will enable someone else to download
 the fit using :ref:`vp-get<vp-get>`.
 
 6. Finally, the fit can be analyzed with :code:`validphys`. You can create your

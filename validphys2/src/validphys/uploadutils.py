@@ -292,6 +292,27 @@ class PDFUploader(FitUploader):
 
 
 def check_input(path):
+    """A function that checks the type of the input for vp-upload. The type
+    determines where on the vp server the file will end up
+
+    A ``fit`` is defined as any folder structure containing a ``filter.yml``
+    file at its root.
+
+    A ``pdf`` is defined as any folder structure that contains a ``.info``
+    file at its root.
+
+    A ``report`` is defined as any folder structure that contains an ``index.html``
+    at its root.
+
+    If the input file does not fall under any such category ``ValueError`` exception
+    is raised and the user is prompted to use either ``rsync`` or
+    :py:mod:`validphys.scripts.wiki_upload`.
+
+    Parameters
+    ----------
+    path: pathlib.Path
+        Path of the input file
+    """
     files = os.listdir(path)
     r = re.compile('.+\.info')
 
@@ -302,4 +323,4 @@ def check_input(path):
     elif list(filter(r.match, files)):
         return 'pdf'
     else:
-        raise ValueError("Unrecognized type of input, please save to the server using rsync.")
+        raise ValueError("Unrecognized type of input, please save to the server using rsync or wiki-upload.")
