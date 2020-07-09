@@ -12,7 +12,6 @@ def test_print_systype_overlap():
     assert isinstance(match, tuple)
     match2 = print_systype_overlap([e])
     assert isinstance(match2, str)
-    # ds2 = l.check_dataset(name='ATLAS1JET11', theoryid=162, cuts=None)
     ds2 = l.check_dataset(name='ATLAS1JET11', theoryid=THEORYID, cuts=None)
     ediffbis = DataGroupSpec('e3bis', [ds2])
     match3 = print_systype_overlap([e, ediffbis])
