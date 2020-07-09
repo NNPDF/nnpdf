@@ -29,7 +29,7 @@ from validphys.checks import (
     check_experiment_cuts_match_theorycovmat,
     check_norm_threshold,
 )
-from validphys.core import DataSetSpec, PDF, ExperimentSpec
+from validphys.core import DataSetSpec, PDF, ExperimentSpec, cut_mask
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
     get_df_block, regularize_covmat)
@@ -593,6 +593,52 @@ def results(
     data = dataset.load()
     return (DataResult(data, covariance_matrix, sqrt_covariance_matrix),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
+
+def get_shifted_results(results, commondata, cutlist):
+    """Returns a tuple of data and theory results where the theory results' central values are 
+    shifted according to the paper: arXiv:1709.04922. These shifts correspond encapsulates the 
+    impact of correlated experimental uncertainties."""
+
+    for i, (result, cuts) in enumerate(zip(results, cutlist)):
+        if i==0:
+            continue
+
+        cd = commondata.load()
+
+        ## fill uncertainties
+        Ndat = cd.GetNData()
+        Nsys = cd.GetNSys()
+
+        uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
+        corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
+        lambda_sys = np.zeros(Nsys) # nuisance parameters
+
+        for idat in range(Ndat):
+            uncorrE[idat] = cd.GetUncE(idat)
+            for isys in range(Nsys):
+                if cd.GetSys(idat, isys).name != "UNCORR":
+                    corrE[idat, isys] = cd.GetSys(idat, isys).add
+        
+        mask = cut_mask(cuts)
+        uncorrE = uncorrE[mask]
+        corrE = corrE[mask]
+        data = results[0].central_value
+        theory = results[i].central_value
+
+        ## isys is equivalent to alpha index and lsys to delta in eq.85
+        if np.any(uncorrE == 0):
+            temp_shifts = np.zeros(Ndat)
+        else:
+            f1 = (data - theory)/uncorrE # first part of eq.85
+            A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
+                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
+            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
+            lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
+            shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
+
+            results[i]._central_value += shifts
+    
+    return results
 
 def experiment_results(
         experiment,

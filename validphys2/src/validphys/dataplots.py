@@ -21,7 +21,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck, check
 from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask, CutsPolicy
-from validphys.results import chi2_stat_labels
+from validphys.results import chi2_stat_labels, get_shifted_results
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
@@ -194,50 +194,6 @@ def check_normalize_to(ns, **kwargs):
         return
 
     raise RuntimeError("Should not be here")
-
-def get_shifted_results(results, commondata, cutlist):
-
-    ### Computing correlated shifts according to the paper: arXiv:1709.04922
-    for i, (result, cuts) in enumerate(zip(results, cutlist)):
-        if i==0:
-            continue
-
-        cd = commondata.load()
-
-        ## fill uncertainties
-        Ndat = cd.GetNData()
-        Nsys = cd.GetNSys()
-
-        uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
-        corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
-        lambda_sys = np.zeros(Nsys) # nuisance parameters
-
-        for idat in range(Ndat):
-            uncorrE[idat] = cd.GetUncE(idat)
-            for isys in range(Nsys):
-                if cd.GetSys(idat, isys).name != "UNCORR":
-                    corrE[idat, isys] = cd.GetSys(idat, isys).add
-        
-        mask = cut_mask(cuts)
-        uncorrE = uncorrE[mask]
-        corrE = corrE[mask]
-        data = results[0].central_value
-        theory = results[i].central_value
-
-        ## isys is equivalent to alpha index and lsys to delta in eq.85
-        if np.any(uncorrE == 0):
-            temp_shifts = np.zeros(Ndat)
-        else:
-            f1 = (data - theory)/uncorrE # first part of eq.85
-            A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
-                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
-            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
-            lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
-            shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
-
-            results[i]._central_value += shifts
-    
-    return results
 
 #TODO: This interface is horrible. We need to think how to adapt libnnpdf
 #to make this use case easier
