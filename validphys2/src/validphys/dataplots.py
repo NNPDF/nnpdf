@@ -412,9 +412,13 @@ def plot_fancy(one_or_more_results, commondata, cuts,
     files.
     """
     if withshifts:
-        one_or_more_results = get_shifted_results(results=one_or_more_results,
-                                                  commondata=commondata,
-                                                  cutlist=cutlist)
+        one_or_more_results, shifted = get_shifted_results(results=one_or_more_results,
+                                               commondata=commondata,
+                                               cutlist=cutlist)
+        for ilabel in range(len(labellist)): 
+            if ilabel==0: continue
+            if shifted[ilabel-1]: labellist[ilabel]+=" (shifted)"
+
 
     yield from _plot_fancy_impl(results=one_or_more_results,
                                 commondata=commondata,
@@ -495,9 +499,12 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
     labellist = [None, *dataspecs_speclabel]
 
     if withshifts:
-        results = get_shifted_results(results=results,
-                                      commondata=commondata,
-                                      cutlist=cutlist)
+        results, shifted = get_shifted_results(results=results,
+                                               commondata=commondata,
+                                               cutlist=cutlist)
+        for ilabel in range(len(labellist)): 
+            if ilabel==0: continue
+            if shifted[ilabel-1]: labellist[ilabel]+=" (shifted)"
 
     yield from _plot_fancy_impl(results = results, commondata=commondata,
                                 cutlist=cutlist, labellist=labellist,

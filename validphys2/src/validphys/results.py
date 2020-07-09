@@ -595,10 +595,14 @@ def results(
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
 def get_shifted_results(results, commondata, cutlist):
-    """Returns a tuple of data and theory results where the theory results' central values are 
+    """Returns: 
+    - 'results': a tuple of data and theory results where the theory results' central values are 
     shifted according to the paper: arXiv:1709.04922. These shifts correspond encapsulates the 
-    impact of correlated experimental uncertainties."""
+    impact of correlated experimental uncertainties.
+    - 'shifted' a list of booleans indicating which datasets have been shifted. Note: the datasets with 
+    uncorrelated uncertainties doesn't include the correlated shifts."""
 
+    shifted=[]
     for i, (result, cuts) in enumerate(zip(results, cutlist)):
         if i==0:
             continue
@@ -628,6 +632,7 @@ def get_shifted_results(results, commondata, cutlist):
         ## isys is equivalent to alpha index and lsys to delta in eq.85
         if np.any(uncorrE == 0):
             temp_shifts = np.zeros(Ndat)
+            shifted.append(False)
         else:
             f1 = (data - theory)/uncorrE # first part of eq.85
             A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
@@ -637,8 +642,9 @@ def get_shifted_results(results, commondata, cutlist):
             shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
 
             results[i]._central_value += shifts
+            shifted.append(True)
     
-    return results
+    return results, shifted
 
 def experiment_results(
         experiment,
