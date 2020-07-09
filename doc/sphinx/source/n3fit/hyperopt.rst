@@ -5,14 +5,14 @@ Hyperoptimization algorithm
 Motivation
 ----------
 While the methodology used up to the 3.1 release of NNPDF considerably reduced the dependency on the
-functional form of the PDFs, there existed a bias regarding the choice of hyperparameters that define
+functional form of the PDFs compared to other collaborations, there existed a bias regarding the choice of hyperparameters that define
 the NNPDF neural network and optimization strategy.
 
 One of the main advantages introduced by the ``n3fit`` framework with respect to ``nnfit`` is the
 possibility of running the fits in a fraction of the time. This allow us to reduce the dependence of the
 hyperparameters by running a grid scan on the relevant parameters. Together with an appropriate
 figure of merit this grid search or *hyperparameter scan* will minimize the bias of the network
-finding the best one for each possible situation.
+by finding the best one for each possible situation.
 
 The final goal is for the methodology to be robust enough that a change in the physics
 (fitted experiments, choice of basis, choice of constraints, ...) depends only on a new run of the
@@ -24,7 +24,7 @@ produce overlearning even when optimizing on the validation loss, as can be seen
 `here <https://vp.nnpdf.science/yG3XvinBQriLdqqTAHg3Sw==/>`_.
 
 Despite producing a very good :math:`\chi^2`, the previous fit will fail when challenged with new
-unseen data. This needs to be accounted for by the figure of merit of the hyperoptimization.
+unseen data. This needs to be accounted for in the figure of merit of the hyperoptimization.
 
 The desired features of this figure of merit can be summarized as:
 
@@ -38,18 +38,18 @@ K-folding cross-validation
 A good compromise between all previous points is the usage of the cross-validation technique
 usually known as `k-folds <https://web.stanford.edu/~hastie/Papers/ESLII.pdf#page=260>`_.
 
-In its most general form, we take all datapoints that enter the fit and break it down into *k*
+In its most general form, we take all data points that enter the fit and break them down into *k*
 partitions. Then, for every combination of hyperparameters, we do *k* fits leaving out a different
 partition each time. We then use this partition to evaluate the goodness of the fit for each of the *k* fits and construct,
 with these results, a reward function for the combination of hyperparameters.
 
-In the NNPDF implementation of k-folding, each of the datapoints can be identified with a dataset.
+In the NNPDF implementation of k-folding, each of the data points can be identified with a dataset.
 Note that during the fit we perform the usual training-validation split within each dataset and use it for
 stopping.
 
 The choice of this method for selecting the hyperparameters of the NNPDF fitting methodology
 has been discussed `in the mailing list <https://lists.cam.ac.uk/mailman/private/ucam-nnpdf/2020-March/msg00066.html>`_.
-Some public discussion about the different hyperoptimization techniques that has been used and
+Some public discussion about the different hyperoptimization techniques that have been used and
 tested during the development of ``n3fit`` can be found in `public slides <http://n3pdf.mi.infn.it/wp-content/uploads/2019/10/JCruz-Martinez_Mexico_102019.pdf>`_
 as well as in `internal presentations <https://www.wiki.ed.ac.uk/display/nnpdfwiki/Amsterdam+Feb+2020+NNPDF+Collaboration+Meeting+agenda?preview=/432523942/436448892/juanCM.pdf>`_.
 
@@ -91,7 +91,8 @@ While this method is much more robust that the previously used "test set" (which
 similar to doing the limit :math:`k\rightarrow 1`) we can still find overfitting configurations.
 For instance, if one of the metrics gives a much more complicated network structure,
 overfitting is expected. Here's an example where, after 10000 hyperparameter trials,
-the network structure had an order of magnitude more free parameters for the average method:
+the network structure had an order of magnitude more free parameters than normal,
+in the case of the best average loss function:
 [`best avg overlearned <https://vp.nnpdf.science/AQpgs2SyRbGlNqSnWWvMJw==>`_].
 
 
@@ -99,7 +100,7 @@ Creating partitions
 -------------------
 The K-folding method is based on the creation of several partitions such that we can evaluate
 how the fit would behave on completely unseen data.
-The choice of this partitions is completely arbitrary, but defines completely the method.
+The choice of this partitions is completely arbitrary, but defines the method completely.
 Here we list some important considerations
 to be taken into account when constructing these partitions.
 
@@ -112,7 +113,7 @@ When they are not equivalent the ``weight`` flag should be used (see :ref:`hyper
 - Not all datasets should enter a partition: beware of extrapolation.
 
 Beyond the last dataset that has entered the fit we find ourselves in what is usually known as
-extrapolation region. The behaviour of the fit in this region is not controlled by any data but
+the extrapolation region. The behaviour of the fit in this region is not controlled by any data but
 rather by the choice of preprocessing exponents (:math:`\alpha` at small x, :math:`\beta` at large x).
 For this reason, if an "extrapolation dataset" is included in a partition, its loss function will be
 determined by these exponents (which are randomly chosen) rather than by the hypeparameter combination.
@@ -131,9 +132,9 @@ loss produced results which would usually be considered overfitted: very low tra
 usual cross-validation algorithm used in the NNPDF framework was not enough to prevent overlearning
 for all architectures.
 
-The cross-validation implemented in NNPDF is successful on avoiding the learning of the noise within
+The cross-validation implemented in NNPDF is successful in avoiding the learning of the noise within
 a dataset. However, we observe that this choice is not enough to prevent overfitting due to
-correlations within points in a same dataset when using hyperopt with ``n3fit``.
+correlations between points in the same dataset when using hyperopt with ``n3fit``.
 
 For hyperopt we have implemented k-folding cross-validation.
 This method works by refitting with the same set of parameters several times (k times) each time leaving out
@@ -149,27 +150,27 @@ The hyperparameter scan capabilities are implemented using the `hyperopt <https:
 systematically scans over a selection of parameter using Bayesian optimization and measures model
 performance to select the best architecture.
 A `Jupyter Notebook is provided <https://github.com/NNPDF/tutorials/blob/master/hyperparameter%20scan/Hyperparameter%20scan.ipynb>`_
-with a practical example of usage of the hyperopt framework. This example is a simplified version
+with a practical example of the usage of the hyperopt framework. This example is a simplified version
 of the hyperparameter scan used in ``n3fit``.
 The hyperopt library implements the tree-structured of
-Parzen estimator which is a robust sequential model based optimization approach `[SMBO] <https://en.wikipedia.org/wiki/Hyperparameter_optimization>`_.
+Parzen estimator which is a robust sequential-model-based optimization approach `[SMBO] <https://en.wikipedia.org/wiki/Hyperparameter_optimization>`_.
 
-We optimize on a combination of the best validation loss and stability of the fits. In other words,
-we select the architecture which produces the lowest validation loss after we trim those
+We optimize on a combination of the best validation loss and the stability of the fits. In other words,
+we select the architecture that produces the lowest validation loss after we trim those
 combinations which are deemed to be unstable.
 
 .. note::
     The fits done for hyperoptimization are one-replica fits. We take advantage of the
     stability of the Gradient Descent and of the fact that the difference between set of hyperparameters
-    is small. This is a trade-off as we sustain a loss of "accuracy" (as some very ill-behave replicas
+    is small. This is a trade-off as we sustain a loss of "accuracy" (as some very ill-behaved replicas
     might destroy good sets of parameters) in exchange for being able to test many more parameters in
     the same time. Once a multireplica ``n3fit`` is implemented we can hyperoptimize without having to
-    rely in the one-replica proxy without a loss of performance.
+    rely on the one-replica proxy and without a loss of performance.
 
 
 From the fitting point of view, the implementation of the k-folding is done by setting all experimental
 data points to 0 and by masking the respective predictions from the Neural Network to 0.
-In the code this means that during the data-reading phase ``n3fit`` also creates one mask per kfold
+In the code this means that during the data-reading phase ``n3fit`` also creates one mask per k-fold
 per experiment to apply to the experimental data before compiling the Neural Network.
 Note that this is not a boolean mask that drops the points but rather it just sets the data to 0.
 The reason for doing it in this way is to minimize the number of things that change when doing a
@@ -209,14 +210,14 @@ The ``overfit`` flag, when applied to one of the partitions, introduces this par
 training data. This is useful for very broad scans where we want to find an architecture which is able to
 fit, without worrying about things like overlearning which might be a second-order problem.
 
-The ``weight`` (default 1.0) is multiplied to the loss function of the partition for which it is set.
+The ``weight`` (default 1.0) is multiplied with the loss function of the partition for which it is set.
 Note that the weight is applied before the threshold check.
 
 The ``threshold_loss`` flag will make the fit stop if any of the partitions produces a loss greater
 than the given threshold. This is useful for quickly discarding hyperparameter subspaces without
 needing to do all ``k`` fits.
 
-The ``verbosity`` dictionary allows fine control on what to report each 100 epochs. When both ``training``
+The ``verbosity`` dictionary allows fine control over what to report each 100 epochs. When both ``training``
 and ``kfold`` are set to ``False``, nothing is printed until the end of the fit of the fold.
 When set to ``True``, the losses for the training (training and validation) and for the partition are printed.
 
