@@ -642,6 +642,7 @@ def get_shifted_results(results, commondata, cutlist):
             shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
 
             results[i]._central_value += shifts
+            results[i]._std_error = uncorrE
             shifted.append(True)
     
     return results, shifted
