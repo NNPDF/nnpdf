@@ -270,7 +270,7 @@ void ATLAS_1JET_8TEV_R06_DECFilter::ReadData()
 	      fSys[i][660].mult = fSys[i][660].add*100/fData[i];
 
 	      fSys[i][661].type = MULT;   
-	      fSys[i][661].name = "CORR";   
+	      fSys[i][661].name = "UNCORR";   
 	      fSys[i][661].add  = uncertainties[2];
 	      fSys[i][661].mult = fSys[i][661].add*100/fData[i];
 	    }
@@ -293,7 +293,7 @@ void ATLAS_1JET_8TEV_R06_DECFilter::ReadData()
 	      fSys[i][663].mult = fSys[i][663].add*100/fData[i];
 
 	      fSys[i][664].type = MULT;   
-	      fSys[i][664].name = "CORR";   
+	      fSys[i][664].name = "UNCORR";   
 	      fSys[i][664].add  = uncertainties[2];
 	      fSys[i][664].mult = fSys[i][664].add*100/fData[i];
 	      
@@ -317,7 +317,7 @@ void ATLAS_1JET_8TEV_R06_DECFilter::ReadData()
 	      fSys[i][666].mult = fSys[i][666].add*100/fData[i];
 
 	      fSys[i][667].type = MULT;   
-	      fSys[i][667].name = "CORR";   
+	      fSys[i][667].name = "UNCORR";   
 	      fSys[i][667].add  = uncertainties[2];
 	      fSys[i][667].mult = fSys[i][667].add*100/fData[i];	      
 	    }
@@ -340,7 +340,7 @@ void ATLAS_1JET_8TEV_R06_DECFilter::ReadData()
 	      fSys[i][669].mult = fSys[i][669].add*100/fData[i];
 
 	      fSys[i][670].type = MULT;   
-	      fSys[i][670].name = "CORR";   
+	      fSys[i][670].name = "UNCORR";   
 	      fSys[i][670].add  = uncertainties[2];
 	      fSys[i][670].mult = fSys[i][670].add*100/fData[i];
 	    }
@@ -363,7 +363,7 @@ void ATLAS_1JET_8TEV_R06_DECFilter::ReadData()
 	      fSys[i][672].mult = fSys[i][672].add*100/fData[i];
 
 	      fSys[i][673].type = MULT;   
-	      fSys[i][673].name = "CORR";   
+	      fSys[i][673].name = "UNCORR";   
 	      fSys[i][673].add  = uncertainties[2];
 	      fSys[i][673].mult = fSys[i][673].add*100/fData[i];
 	    }
@@ -386,7 +386,7 @@ void ATLAS_1JET_8TEV_R06_DECFilter::ReadData()
 	      fSys[i][675].mult = fSys[i][675].add*100/fData[i];
 
 	      fSys[i][676].type = MULT;   
-	      fSys[i][676].name = "CORR";   
+	      fSys[i][676].name = "UNCORR";   
 	      fSys[i][676].add  = uncertainties[2];
 	      fSys[i][676].mult = fSys[i][676].add*100/fData[i];
 	    } 
