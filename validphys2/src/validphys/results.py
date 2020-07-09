@@ -610,6 +610,9 @@ def get_shifted_results(results, commondata, cutlist):
     Ndat = cd.GetNData()
     Nsys = cd.GetNSys()
 
+    uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
+    corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
+
     for idat in range(Ndat):
         uncorrE[idat] = cd.GetUncE(idat)
         for isys in range(Nsys):
@@ -620,8 +623,6 @@ def get_shifted_results(results, commondata, cutlist):
         if i==0:
             continue
 
-        uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
-        corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
         lambda_sys = np.zeros(Nsys) # nuisance parameters
         
         mask = cut_mask(cuts)
@@ -643,8 +644,10 @@ def get_shifted_results(results, commondata, cutlist):
             shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
 
             results[i]._central_value += shifts
-            results[0]._std_error = uncorrE
             shifted.append(True)
+
+    if any(prediction_shifted == True for prediction_shifted in shifted):
+        results[0]._std_error = uncorrE
     
     return results, shifted
 
