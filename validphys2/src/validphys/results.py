@@ -648,7 +648,7 @@ def get_shifted_results(results, commondata, cutlist):
 
     #now that theory is shifted, take only the uncorr component of the uncertainty in the data
     if any(prediction_shifted == True for prediction_shifted in shifted):
-        results[0]._std_error = uncorrE
+        results[0].covmat[np.diag_indices_from(results[0].covmat)] = uncorrE**2
     
     return results, shifted
 
