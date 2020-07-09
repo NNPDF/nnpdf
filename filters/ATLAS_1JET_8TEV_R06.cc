@@ -171,8 +171,23 @@ void ATLAS_1JET_8TEV_R06Filter::ReadData()
       fSys[i][658].name = "ATLASLUMI12";   
       fSys[i][658].add = sys1;
       fSys[i][658].mult  = fSys[i][658].add*100/fData[i];
+
+      //Decorrelate uncertainties
+      fSys[i][528].name = "UNCORR";
+      fSys[i][529].name = "UNCORR";
+      fSys[i][580].name = "UNCORR";
+      fSys[i][581].name = "UNCORR";
+      fSys[i][610].name = "UNCORR";
+      fSys[i][611].name = "UNCORR";
+      
+      /*
+      cout << fSys[i][528].add*sqrt(2.) << "   " << fSys[i][529].add*sqrt(2.) << "   "
+	   << fSys[i][580].add*sqrt(2.) << "   " << fSys[i][581].add*sqrt(2.) << "   "
+	   << fSys[i][610].add*sqrt(2.) << "   " << fSys[i][611].add*sqrt(2.) << endl;
+      */
+      
     }
-          
+    
     rS.close();
     n += ndata[bin];
 
