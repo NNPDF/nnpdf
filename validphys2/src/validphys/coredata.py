@@ -8,8 +8,6 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
-from NNPDF import FKSet
-
 
 @dataclasses.dataclass(eq=False)
 class FKTableData:
@@ -242,53 +240,3 @@ class CommonData:
             columns = self.systype_table.index,
             index=self.commondata_table.index,
         )
-
-
-@dataclasses.dataclass(eq=False)
-class DataSet:
-    """
-    Add a docstring
-    """
-    cd: CommonData
-    fkset: FKSet
-    # Check this
-    weight: np.array
-
-    def __post_init__(self):
-        self.ndata = self.cd.ndata
-        self.nsys = self.cd.nsys
-        self.central_values = self.cd.central_values
-        self.stat_errors = self.cd.stat_errors
-        self.sys_errors = self.cd.sys_errors
-
-
-    def with_cuts(self, cuts):
-        """A method to return a DataSet object where
-        an integer mask has been applied, keeping only data
-        points which pass cuts.
-
-        Note if the first data point passes cuts, the first entry
-        of ``cuts`` should be ``1`` not ``0``.
-
-        Paramters
-        ---------
-        cuts: list or validphys.core.Cuts
-        """
-        # Ensure that the cuts we're applying applies to this dataset
-        # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
-        if hasattr(cuts, 'name') and self.cd.setname != cuts.name:
-            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
-                    f"to this commondata file: {self.cd.setname}")
-
-        if hasattr(cuts, 'load'):
-            cuts = cuts.load()
-        if cuts is None:
-            return self
-
-        # For now, we use swig for NNPDF.FKSet which doesn't like numpy.int
-        cuts = list(map(int, cuts))
-        new_cd = self.cd.with_cuts(cuts)
-        # BUG: check this
-        new_fkset = FKSet(self.fkset, cuts)
-
-        return dataclasses.replace(self, cd=new_cd, fkset=new_fkset)

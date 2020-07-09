@@ -14,8 +14,8 @@ import pandas as pd
 log = logging.getLogger(__name__)
 
 
-def covmat_from_systematics(dataset):
-    """ Function that takes in a :py:class:`validphys.coredata.DataSet` object
+def covmat_from_systematics(commondata):
+    """ Function that takes in a :py:class:`validphys.coredata.CommonData` object
     and generates the associated covariance matrix using the systematics. The logic
     is best described by the now deprecated C++ code:
 
@@ -98,9 +98,9 @@ def covmat_from_systematics(dataset):
 
     Paramaters
     ----------
-    dataset : validphys.coredata.DataSet
-        Dataset object containing CommonData which in turn stores information
-        about systematic errors, their treatment and description.
+    commondata : validphys.coredata.CommonData
+        CommonData which stores information about systematic errors,
+        their treatment and description.
 
     Returns
     -------
@@ -111,23 +111,12 @@ def covmat_from_systematics(dataset):
     Example
     -------
     >>> from validphys.commondataparser import load_commondata
-    >>> from validphys.coredata import DataSet
     >>> from validphys.loader import Loader
-    >>> from validphys.results import covmat_from_systematics
-    >>> from NNPDF import FKSet
+    >>> from validphys.calcutils import covmat_from_systematics
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> cd = load_commondata(cd)
-    >>> ds = l.check_dataset("NMC", theoryid=53, cuts=None)
-    >>> fktables = []
-    >>> for p in ds.fkspecs:
-    ...     fktable = p.load()
-    ...     fktable.thisown = 0
-    ...     fktables.append(fktable)
-    ...
-    >>> fkset = FKSet(FKSet.parseOperator(ds.op), fktables)
-    >>> data = DataSet(cd, fkset, ds.weight)
-    >>> covmat_from_systematics(data)
+    >>> covmat_from_systematics(cd)
     array([[8.64031971e-05, 8.19971921e-05, 6.27396915e-05, ...,
             2.40747732e-05, 2.79614418e-05, 3.46727332e-05],
            [8.19971921e-05, 1.41907442e-04, 6.52360141e-05, ...,
@@ -142,19 +131,19 @@ def covmat_from_systematics(dataset):
            [3.46727332e-05, 3.45492831e-05, 2.56283708e-05, ...,
             4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
     """
-    systype = dataset.cd.systype_table["name"]
+    systype = commondata.systype_table["name"]
     # Dropping systematics that have type SKIP
-    sys_errors = dataset.sys_errors.loc[:, systype != "SKIP"]
+    sys_errors = commondata.sys_errors.loc[:, systype != "SKIP"]
 
     # Diagonal matrix containing the statistical uncertainty for each
     # data point
-    stat_mat = np.diag(dataset.stat_errors.to_numpy())
+    stat_mat = np.diag(commondata.stat_errors.to_numpy())
 
     # Systematic uncertainties converted to additive uncertainties
     additive_mat = sys_errors.apply(
         lambda x: [
             i.add if i.sys_type == "ADD" else (i.mult * j / 100)
-            for i, j in zip(x, dataset.central_values)
+            for i, j in zip(x, commondata.central_values)
         ]
     )
 
