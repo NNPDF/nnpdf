@@ -618,17 +618,16 @@ def get_shifted_results(results, commondata, cutlist):
         for isys in range(Nsys):
             if cd.GetSys(idat, isys).name != "UNCORR":
                 corrE[idat, isys] = cd.GetSys(idat, isys).add
+    mask = cut_mask(cutlist[0])
+    uncorrE = uncorrE[mask]
+    corrE = corrE[mask]
+    data = results[0].central_value
 
-    for i, (result, cuts) in enumerate(zip(results, cutlist)):
+    for i, result in enumerate(results):
         if i==0:
             continue
 
         lambda_sys = np.zeros(Nsys) # nuisance parameters
-        
-        mask = cut_mask(cuts)
-        uncorrE = uncorrE[mask]
-        corrE = corrE[mask]
-        data = results[0].central_value
         theory = results[i].central_value
 
         ## isys is equivalent to alpha index and lsys to delta in eq.85
