@@ -618,6 +618,7 @@ def get_shifted_results(results, commondata, cutlist):
         for isys in range(Nsys):
             if cd.GetSys(idat, isys).name != "UNCORR":
                 corrE[idat, isys] = cd.GetSys(idat, isys).add
+
     mask = cut_mask(cutlist[0])
     uncorrE = uncorrE[mask]
     corrE = corrE[mask]
@@ -645,6 +646,7 @@ def get_shifted_results(results, commondata, cutlist):
             results[i]._central_value += shifts
             shifted.append(True)
 
+    #now that theory is shifted, take only the uncorr component of the uncertainty in the data
     if any(prediction_shifted == True for prediction_shifted in shifted):
         results[0]._std_error = uncorrE
     
