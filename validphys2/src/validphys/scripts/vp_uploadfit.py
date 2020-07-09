@@ -11,8 +11,14 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', help="Fit folder to upload.")
+    parser.add_argument(
+        '-f',
+        '--force',
+        help="If the fit to upload already exists on the server, overwrite it.",
+        action='store_true')
     args = parser.parse_args()
     output = args.output
+    force = args.force
 
     import os.path as osp
     import logging
@@ -29,7 +35,7 @@ def main():
     from validphys import uploadutils
     uploader = uploadutils.FitUploader()
     try:
-        with uploader.upload_or_exit_context(output):
+        with uploader.upload_or_exit_context(output, force):
             pass
     except KeyboardInterrupt:
         print(colors.t.bold_red("\nInterrupted by user. Exiting."), file=sys.stderr)

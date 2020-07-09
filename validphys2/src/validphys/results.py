@@ -809,11 +809,11 @@ def closure_shifts(experiments_index, fit, use_cuts, experiments):
 
 
 
-def positivity_predictions(pdf, posdataset):
+def positivity_predictions_data_result(pdf, posdataset):
     """Return an object containing the values of the positivuty observable."""
     return PositivityResult.from_convolution(pdf, posdataset)
 
-positivity_predictions_for_pdfs = collect(positivity_predictions, ('pdfs',))
+positivity_predictions_for_pdfs = collect(positivity_predictions_data_result, ('pdfs',))
 
 def count_negative_points(possets_predictions):
     """Return the number of replicas with negative predictions for each bin

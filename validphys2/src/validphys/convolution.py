@@ -5,6 +5,7 @@ The high level :py:func:`predictions` function can be used to extact theory
 predictions for experimentally measured quantities, in a way that is directly
 comparable with the C++ code::
 
+    import numpy as np
     from validphys.api import API
     from validphys.convolution import predictions
 
@@ -32,17 +33,25 @@ comparable with the C++ code::
 
 
 
+
+Some variants such as :py:func:`central_predictions` and
+:py:func:`linear_predictions` are useful for more specialized tasks.
+
+These functions work with :py:class:`validphys.core.DatasetSpec` objects,
+allowing to account for information on COMPOUND predictions and cuts. A lower
+level interface which operates with :py:class:`validphys.coredata.FKTableData`
+objects is also available.
+
 Note that currently no effort has been made to optimize these operations.
 """
 import operator
+import functools
 
 import pandas as pd
 import numpy as np
 
 from validphys.pdfbases import evolution
 from validphys.fkparser import load_fktable
-
-__all__ = ('fk_predictions', 'predictions', 'dis_predictions', 'hadron_predictions')
 
 
 FK_FLAVOURS = evolution.to_known_elements(
@@ -86,6 +95,20 @@ OP = {
     "SMN": _smn,
     "NULL": _id,
 }
+
+
+def _predictions(dataset, pdf, fkfunc):
+    """Combine data on all the FKTables in the datase according to the
+    reduction operation defined therein. Dispatch the kind of predictions (for
+    all replicas, central, etc) according to the provided ``fkfunc``, which
+    should have the same interface as e.g. ``fk_predictions``.
+    """
+    opfunc = OP[dataset.op]
+    cuts = dataset.cuts.load() if dataset.cuts is not None else None
+    all_predictions = [
+        fkfunc(load_fktable(fk).with_cuts(cuts), pdf) for fk in dataset.fkspecs
+    ]
+    return opfunc(*all_predictions)
 
 
 def predictions(dataset, pdf):
@@ -138,12 +161,29 @@ def predictions(dataset, pdf):
 
 
     """
-    opfunc = OP[dataset.op]
-    cuts = dataset.cuts.load() if dataset.cuts is not None else None
-    all_predictions = [
-        fk_predictions(load_fktable(fk).with_cuts(cuts), pdf) for fk in dataset.fkspecs
-    ]
-    return opfunc(*all_predictions)
+    return _predictions(dataset, pdf, fk_predictions)
+
+
+def central_predictions(dataset, pdf):
+    """Same as :py:func:`predictions` but computing the predictions for the
+    central member of the PDF set only. For Monte Carlo PDFs, this is a faster
+    alternative to computing the central predictions as the average of the
+    replica predictions (although a small approximation is involved in the case
+    of hadronic predictions).
+    """
+    return _predictions(dataset, pdf, central_fk_predictions)
+
+
+def linear_predictions(dataset, pdf):
+    """Same as :py:func:`predictions` but computing *linearized* predictions.
+    These are the same as ``predictions`` for DIS, but truncates to the terms
+    that are linear in the difference between each member and the central
+    value for hadronic predictions.
+
+    This approximation is generally a very good approximation in that yields
+    differences that are much smaller that the PDF uncertainty.
+    """
+    return _predictions(dataset, pdf, linear_fk_predictions)
 
 
 def fk_predictions(loaded_fk, pdf):
@@ -198,20 +238,49 @@ def fk_predictions(loaded_fk, pdf):
         return dis_predictions(loaded_fk, pdf)
 
 
-def hadron_predictions(loaded_fk, pdf):
-    """Implementation of :py:func:`fk_predictions` for hadronic observables."""
+def central_fk_predictions(loaded_fk, pdf):
+    """Same as :py:func:`fk_predictions`, but computing predictions for the
+    central PDF member only."""
+    if loaded_fk.hadronic:
+        return central_hadron_predictions(loaded_fk, pdf)
+    else:
+        return central_dis_predictions(loaded_fk, pdf)
+
+
+def linear_fk_predictions(loaded_fk, pdf):
+    """Same as :py:func:`predictions` for DIS, but compute linearized
+    predictions for hadronic data, using :py:func:`linear_hadron_predictions`.
+    """
+    if loaded_fk.hadronic:
+        return linear_hadron_predictions(loaded_fk, pdf)
+    else:
+        return dis_predictions(loaded_fk, pdf)
+
+
+def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
+    """Compute hadronic convolutions between the loaded FKTable
+    and the PDF evaluation functions `gv1func` and `gv2func`.
+    These must have the same interface as
+    :py:meth:`validphys.pdfbases.evolution.grid_values`, but without the PDF
+    argument.
+
+    If gv2func is not given, then gv1func will be used for the second PDF,
+    with the grid being evaluated only once.
+    """
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
-    index = pdf.grid_values_index
 
     # Generate gid values for all flavours in the evolution basis, in the
     # expected order.
     #
     # Squeeze to remove the dimension over Q.
-    gv = evolution.grid_values(pdf=pdf, qmat=[Q], vmat=FK_FLAVOURS, xmat=xgrid).squeeze(
-        -1
-    )
+    gv1 = gv1func(qmat=[Q], vmat=FK_FLAVOURS, xmat=xgrid).squeeze(-1)
+    if gv2func is not None:
+        gv2 = gv2func(qmat=[Q], vmat=FK_FLAVOURS, xmat=xgrid).squeeze(-1)
+    else:
+        gv2 = gv1
+
     # The hadronic FK table columns are indexes into the NFK*NFK table of
     # possible flavour combinations of the two PDFs, with the convention of
     # looping first of the first index and the over the second: If the flavour
@@ -229,8 +298,8 @@ def hadron_predictions(loaded_fk, pdf):
     # convolution below: We are left with two tensor of shape
     # ``nmembers * len(sigma.columns) * nx`` such that the pairs of flavours of the two
     # combinations correspond to the combination encoded in the FKTable.
-    expanded_gv1 = gv[:, fl1, :]
-    expanded_gv2 = gv[:, fl2, :]
+    expanded_gv1 = gv1[:, fl1, :]
+    expanded_gv2 = gv2[:, fl2, :]
 
     def appl(df):
         # x1 and x2 are encoded as the first and second index levels.
@@ -238,27 +307,99 @@ def hadron_predictions(loaded_fk, pdf):
         xx2 = df.index.get_level_values(2)
         gv1 = expanded_gv1[:, :, xx1]
         gv2 = expanded_gv2[:, :, xx2]
-        return pd.Series(np.einsum("ijk,ijk,kj->i", gv1, gv2, df.values), index=index)
+        return pd.Series(np.einsum("ijk,ijk,kj->i", gv1, gv2, df.values))
 
     return sigma.groupby(level=0).apply(appl)
 
 
-def dis_predictions(loaded_fk, pdf):
-    """Implementation of :py:func:`fk_predictions` for DIS observables."""
+def _gv_dis_predictions(loaded_fk, gvfunc):
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
-    index = pdf.grid_values_index
     # The column indexes are indices into the FK_FLAVOURS list above.
     fm = sigma.columns
     # Squeeze to remove the dimension over Q.
-    gv = evolution.grid_values(
-        pdf=pdf, qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid
-    ).squeeze(-1)
+    gv = gvfunc(qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid).squeeze(-1)
 
     def appl(df):
         # x is encoded as the first index level.
         xind = df.index.get_level_values(1)
-        return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values), index=index)
+        return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values))
 
     return sigma.groupby(level=0).apply(appl)
+
+
+def hadron_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`fk_predictions` for hadronic observables."""
+    gv = functools.partial(evolution.grid_values, pdf=pdf)
+    res = _gv_hadron_predictions(loaded_fk, gv)
+    res.columns = pdf.grid_values_index
+    return res
+
+
+def central_hadron_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`central_fk_predictions` for hadronic
+    observables."""
+    gv = functools.partial(evolution.central_grid_values, pdf=pdf)
+    return _gv_hadron_predictions(loaded_fk, gv)
+
+
+def linear_hadron_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`linear_fk_predictions` for hadronic
+    observables. Specifically this computes:
+
+        central_value ⊗ FK ⊗ (2 * replica_values - central_value)
+
+    which is the linear expansion of the hadronic observable in the difference
+    between each replica and the central value, ``replica_values -
+    central_value``
+    """
+    gv1 = functools.partial(evolution.central_grid_values, pdf=pdf)
+
+    def gv2(*args, **kwargs):
+        replica_values = evolution.grid_values(pdf, *args, **kwargs)
+        central_value = evolution.central_grid_values(pdf, *args, **kwargs)
+        return 2 * replica_values - central_value
+
+    res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
+    res.columns = pdf.grid_values_index
+    return res
+
+
+def dis_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`fk_predictions` for DIS observables."""
+    gv = functools.partial(evolution.grid_values, pdf=pdf)
+    res = _gv_dis_predictions(loaded_fk, gv)
+    res.columns = pdf.grid_values_index
+    return res
+
+
+def central_dis_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`central_fk_predictions` for DIS
+    observables."""
+    gv = functools.partial(evolution.central_grid_values, pdf=pdf)
+    return _gv_dis_predictions(loaded_fk, gv)
+
+
+def _positivity_predictions(posdataset, pdf, fkfunc):
+    """Implentation of :py:func:`_predictions` but for positivity
+    datasets."""
+    return fkfunc(load_fktable(posdataset.fkspec), pdf)
+
+
+def positivity_predictions(posdataset, pdf):
+    """Implementation of :py:func:`predictions` but for positivity
+    datasets."""
+    return _positivity_predictions(posdataset, pdf, fk_predictions)
+
+
+def linear_positivity_predictions(posdataset, pdf):
+    """Implmentation of :py:func:`linear_predictions` but for positivity
+    datasets."""
+    return _positivity_predictions(posdataset, pdf, linear_fk_predictions)
+
+
+def central_positivity_predictions(posdataset, pdf):
+    """Implementation as :py:func:`central_predictions`, but for postivity datasets
+    """
+    return _positivity_predictions(posdataset, pdf, central_fk_predictions)

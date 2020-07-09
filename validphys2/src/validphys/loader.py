@@ -390,14 +390,14 @@ class Loader(LoaderBase):
     def check_default_filter_rules(self, theoryid, defaults=None):
         # avoid circular import
         from validphys.filters import (
-            default_filter_settings,
+            default_filter_settings_input,
             default_filter_rules_input,
             Rule,
         )
 
         th_params = theoryid.get_description()
         if defaults is None:
-            defaults = default_filter_settings()
+            defaults = default_filter_settings_input()
         return [
             Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
@@ -536,9 +536,9 @@ def _download_and_show(response, stream):
         for data in response.iter_content(chunk_size=4096):
             dl += len(data)
             stream.write(data)
-            done = int(50 * dl / total_length)
-            sys.stdout.write("\r[%s%s] (%d%%)" % ('=' * done, ' ' * (50-done),
-                             done*2))
+            if sys.stdout.isatty():
+                done = int(50 * dl / total_length)
+                sys.stdout.write(f"\r[{'=' * done}{' '*(50 - done)}] ({done * 2}%)")
             sys.stdout.flush()
         sys.stdout.write('\n')
 

@@ -10,12 +10,13 @@ import time
 import json
 import numpy as np
 from reportengine.compat import yaml
+import n3fit
 from n3fit.msr import compute_arclength
 
 
 class WriterWrapper:
     def __init__(
-        self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2, timings
+        self, replica_number, pdf_function, stopping_object, q2, timings
     ):
         """
         Initializes the writer for one given replica. This is decoupled from the writing
@@ -30,8 +31,6 @@ class WriterWrapper:
                 function to evaluate with a grid in x to generate a pdf
             `stopping_object`
                 a stopping.Validation object
-            `fitbasis_layer`
-                the layer corresponding to the fitbasis, necessary to compute the arclength
             `q2`
                 q^2 of the fit
             `timings`
@@ -40,7 +39,6 @@ class WriterWrapper:
         self.replica_number = replica_number
         self.pdf_function = pdf_function
         self.stopping_object = stopping_object
-        self.fitbasis = fitbasis_layer
         self.q2 = q2
         self.timings = timings
 
@@ -62,7 +60,7 @@ class WriterWrapper:
                 chi2 of the replica to the central experimental data
         """
         # Compute the arclengths
-        arc_lengths = compute_arclength(self.fitbasis)
+        arc_lengths = compute_arclength(self.pdf_function)
         # Construct the chi2exp file
         allchi2_lines = self.stopping_object.chi2exps_str()
         # Construct the preproc file
@@ -244,3 +242,7 @@ def storefit(
     # create .time file
     with open(f"{replica_path}/{fitname}.time", "w") as fs:
         json.dump(timings, fs, indent=2)
+
+    # create .version file
+    with open(f"{replica_path}/version.info", "w") as fs:
+        fs.write(n3fit.__version__)

@@ -12,6 +12,13 @@
 """
 
 import os
+
+# this is needed for Travis to pass the test in mac
+os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
+# make sure the GPU is not used
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
+import pytest
 import shutil
 import pathlib
 import logging
@@ -19,15 +26,16 @@ import tempfile
 import subprocess as sp
 from collections import namedtuple
 from numpy.testing import assert_almost_equal
+from reportengine.compat import yaml
+import n3fit
 from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
-QUICKCARD = f"{QUICKNAME}.yml"
-QUICKPATH = REGRESSION_FOLDER / QUICKCARD
 EXE = "n3fit"
 REPLICA = "1"
+EXPECTED_MAX_FITTIME = 130 # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
@@ -73,19 +81,60 @@ def test_initialize_seeds():
     assert result_nomc == regression_nomc
 
 
-def test_performfit():
-    return
+def auxiliary_performfit(timing=True):
+    quickcard = f"{QUICKNAME}.yml"
+    # Prepare the runcard
+    quickpath = REGRESSION_FOLDER / quickcard
     # read up the old info file
     old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
     # create a /tmp folder
     tmp_name = tempfile.mkdtemp(prefix="nnpdf-")
     tmp_path = pathlib.Path(tmp_name)
     # cp runcard to tmp folder
-    shutil.copy(QUICKPATH, tmp_path)
+    shutil.copy(quickpath, tmp_path)
     # run the fit
-    sp.run(f"{EXE} {QUICKCARD} {REPLICA}".split(), cwd=tmp_path, check=True)
+    sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, check=True)
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
     compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)
+    # check that the times didnt grow in a weird manner
+    time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
+    if timing:
+        # Better to catch up errors even when they happen to grow larger by chance
+        with open(time_path, 'r') as stream:
+            times = yaml.safe_load(stream)
+        fitting_time = times['walltime']['replica_set_to_replica_fitted']
+        assert fitting_time < EXPECTED_MAX_FITTIME
+    version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/version.info"
+    f = open(version_path, "r")
+    version = f.read()
+    f.close()
+    assert version == n3fit.__version__
+
+
+@pytest.mark.darwin
+def test_performfit():
+    auxiliary_performfit(timing=False)
+
+
+@pytest.mark.linux
+def test_performfit_and_timing():
+    auxiliary_performfit(timing=True)
+
+
+def test_hyperopt():
+    # Prepare the run
+    quickcard = f"hyper-{QUICKNAME}.yml"
+    quickpath = REGRESSION_FOLDER / quickcard
+    tmp_name = tempfile.mkdtemp(prefix="hypernnpdf-")
+    tmp_path = pathlib.Path(tmp_name)
+    # cp runcard to tmp folder
+    shutil.copy(quickpath, tmp_path)
+    # We just want to ensure that the hyperopt can run, but we need to kill it ourselves
+    # 60 seconds should be enough
+    with pytest.raises(sp.TimeoutExpired):
+        sp.run(
+            f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(), cwd=tmp_path, timeout=60,
+        )

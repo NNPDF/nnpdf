@@ -4,7 +4,7 @@
 import logging
 import numpy as np
 
-from n3fit.layers import xDivide, MSR_Normalization, xIntegrator, xMultiply
+from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
 
@@ -124,51 +124,24 @@ def check_integration(ultimate_pdf, integration_input):
     )
 
 
-def layer_to_integrand(layer, xgrid, eps):
-    """
-    Given a layer (f) and a grid in x
-    return a Model corresponding to x*(f(x)-f(x-eps))
-
-    # Arguments:
-        - `layer`: layer to make into an integrand
-        - `xgrid`: grid in x (numpy array)
-        - `eps`: shift on x
-
-    # Returns:
-        - `modelito`: model corresponding to x*(f(x)-f(x-eps))
-    """
-    xgrid = xgrid.reshape(-1,1)
-    # Generate the input layers
-    xgrid_input = operations.numpy_to_input(xgrid, no_reshape = True)
-    xgrid_input_prime = operations.numpy_to_input(xgrid - eps, no_reshape = True)
-    f1 = layer(xgrid_input)
-    f2 = layer(xgrid_input_prime)
-    layer_diff = operations.op_subtract([f2, f1])
-    # Generate a multiplier layer
-    multiplier = xMultiply()
-    # Generate the output layer
-    output = operations.op_multiply([multiplier(xgrid_input), layer_diff])
-    modelito = MetaModel([xgrid_input, xgrid_input_prime], output)
-    return modelito
-
-
-def compute_arclength(fitbasis_layer, nx=int(1e3)):
+def compute_arclength(pdf_function, nx=int(2e3)):  # TODO: to be removed
     """
     Given the layer with the fit basis computes the arc length
 
     # Arguments:
-        - `fitbasis_layer`: reference to the fit basis layer
+        - `pdf_function`: reference to the pdf model
         - `nx`: number of point for the integration grid
     """
     # Generate the input layers for the xgrid and the weight
     xgrid, weights_array = gen_integration_input(nx)
     eps = xgrid[0] / 2.0
-    # Generate the model to integrate
-    modelito = layer_to_integrand(fitbasis_layer, xgrid, eps)
-    # Compute the derivatie
-    derivatives = modelito.predict(x=None, steps=1) / eps
-    # Integrates the result
-    derivatives_sq = pow(derivatives, 2)
+    # Compute the "integration values"
+    y = pdf_function(xgrid)
+    yprime = pdf_function(xgrid - eps)
+    result_raw = (yprime - y) / eps
+    # Now select the 8-basis
+    aa = [1, 2, 3, 4, 5, 9, 10, 11]
+    derivatives_sq = pow(result_raw[:, aa] * xgrid, 2)
     f_of_x = np.sqrt(1.0 + derivatives_sq)
     arc_lengths = np.sum(f_of_x * weights_array, axis=0)
 

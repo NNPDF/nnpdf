@@ -6,6 +6,8 @@
 import numpy as np
 from n3fit.backends import operations as op
 import n3fit.layers as layers
+from validphys.pdfbases import rotation
+
 
 FLAVS = 3
 XSIZE = 4
@@ -79,68 +81,144 @@ def generate_input_DIS(flavs=3, xsize=2, ndata=5, n_combinations=-1):
     return fktable, np.array(combinations)
 
 
+def generate_DIS(nfk=1):
+    fkdicts = []
+    for i in range(nfk):
+        fk, comb = generate_input_DIS(
+            flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
+        )
+        fkdicts.append({"fktable": fk, "basis": comb, "xgrid": np.ones((1, XSIZE))})
+    return fkdicts
+
+
+def generate_had(nfk=1):
+    fkdicts = []
+    for i in range(nfk):
+        fk, comb = generate_input_had(
+            flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS
+        )
+        fkdicts.append({"fktable": fk, "basis": comb, "xgrid": np.ones((1, XSIZE))})
+    return fkdicts
+
+
 # Tests
 def test_DIS_basis():
-    fk, comb = generate_input_DIS(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
-    obs_layer = layers.DIS(NDATA, fk, basis=comb, nfl=FLAVS)
-    # Get the basis from the layer
-    result = obs_layer.basis
-    # Compute the basis with numpy
-    reference = np.zeros(FLAVS, dtype=bool)
-    for i in comb:
-        reference[i] = True
-    assert np.alltrue(result == reference)
+    fkdicts = generate_DIS(2)
+    obs_layer = layers.DIS(fkdicts, "NULL", nfl=FLAVS)
+    # Get the masks from the layer
+    all_masks = obs_layer.all_masks
+    for result, fk in zip(all_masks, fkdicts):
+        comb = fk["basis"]
+        # Compute the basis with numpy
+        reference = np.zeros(FLAVS, dtype=bool)
+        for i in comb:
+            reference[i] = True
+        assert np.alltrue(result == reference)
 
 
 def test_DY_basis():
-    fk, comb = generate_input_had(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS
-    )
-    obs_layer = layers.DY(NDATA, fk, basis=comb, nfl=FLAVS)
-    # Get the basis from the layer
-    result = obs_layer.basis
-    # Compute the basis with numpy
-    reference = comb.reshape(-1, 2)
-    assert np.alltrue(result == reference)
+    fkdicts = generate_had(2)
+    obs_layer = layers.DY(fkdicts, "NULL", nfl=FLAVS)
+    # Get the mask from the layer
+    all_masks = obs_layer.all_masks
+    for result, fk in zip(all_masks, fkdicts):
+        comb = fk["basis"]
+        reference = np.zeros((FLAVS, FLAVS))
+        for i, j in comb:
+            reference[i, j] = True
+        assert np.alltrue(result == reference)
 
 
 def test_DIS():
-    # Input values
-    fk, comb = generate_input_DIS(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
-    pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(pdf)
-    # generate the n3fit results
-    obs_layer = layers.DIS(NDATA, fk, basis=comb, nfl=FLAVS)
-    result_tensor = obs_layer(kp)
-    result = op.evaluate(result_tensor)
-    # Compute the numpy version of this layer
-    basis = obs_layer.basis
-    pdf_masked = pdf.T[basis].T
-    reference = np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
-    assert np.allclose(result, reference, THRESHOLD)
+    tests = [(2, "ADD"), (1, "NULL")]
+    for nfk, ope in tests:
+        # Input values
+        fkdicts = generate_DIS(nfk)
+        obs_layer = layers.DIS(fkdicts, ope, nfl=FLAVS)
+        pdf = np.random.rand(XSIZE, FLAVS)
+        kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
+        # generate the n3fit results
+        result_tensor = obs_layer(kp)
+        result = op.evaluate(result_tensor)
+        # Compute the numpy version of this layer
+        all_masks = obs_layer.all_masks
+        if len(all_masks) < nfk:
+            all_masks *= nfk
+        reference = 0
+        for fkdict, mask in zip(fkdicts, all_masks):
+            fk = fkdict["fktable"]
+            pdf_masked = pdf.T[mask.numpy()].T
+            reference += np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
+        assert np.allclose(result, reference, THRESHOLD)
 
 
 def test_DY():
-    # Input values
-    fk, comb = generate_input_had(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
-    pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(pdf)
-    # generate the n3fit results
-    obs_layer = layers.DY(NDATA, fk, basis=comb, nfl=FLAVS)
-    result_tensor = obs_layer(kp)
-    result = op.evaluate(result_tensor)
-    # Compute the numpy version of this layer
-    mask = np.zeros((FLAVS, FLAVS), dtype=bool)
-    for i, j in obs_layer.basis:
-        mask[i, j] = True
-    lumi = np.tensordot(pdf, pdf, axes=0)
-    lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
-    lumi_masked = lumi_perm[mask]
-    reference = np.tensordot(fk, lumi_masked, axes=3)
-    assert np.allclose(result, reference, THRESHOLD)
+    tests = [(2, "ADD"), (1, "NULL")]
+    for nfk, ope in tests:
+        # Input values
+        fkdicts = generate_had(nfk)
+        obs_layer = layers.DY(fkdicts, ope, nfl=FLAVS)
+        pdf = np.random.rand(XSIZE, FLAVS)
+        kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
+        # generate the n3fit results
+        result_tensor = obs_layer(kp)
+        result = op.evaluate(result_tensor)
+        # Compute the numpy version of this layer
+        all_masks = obs_layer.all_masks
+        if len(all_masks) < nfk:
+            all_masks *= nfk
+        reference = 0
+        for fkdict, mask in zip(fkdicts, all_masks):
+            fk = fkdict["fktable"]
+            lumi = np.tensordot(pdf, pdf, axes=0)
+            lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
+            lumi_masked = lumi_perm[mask.numpy()]
+            reference += np.tensordot(fk, lumi_masked, axes=3)
+        assert np.allclose(result, reference, THRESHOLD)
+
+
+def test_rotation():
+    # Input dictionary to build the rotation matrix using vp2 functions
+    flav_info = [
+        {"fl": "u"},
+        {"fl": "ubar"},
+        {"fl": "d"},
+        {"fl": "dbar"},
+        {"fl": "s"},
+        {"fl": "sbar"},
+        {"fl": "c"},
+        {"fl": "g"},
+    ]
+    # Apply the rotation using numpy tensordot
+    x = np.ones(8)  # Vector in the flavour basis v_i
+    x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
+    mat = rotation(flav_info)  # Rotation matrix R_ij, i=flavour, j=evolution
+    res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
+
+    # Apply the rotation through the rotation layer
+    x = op.numpy_to_tensor(x)
+    rotmat = layers.FlavourToEvolution(flav_info)
+    res_layer = rotmat(x)
+    assert np.alltrue(res_np == res_layer)
+
+def test_Mask():
+    """ Test the mask layer """
+    SIZE = 100
+    fi = np.random.rand(SIZE)
+    # Check that the multiplier works
+    vals = [0.0, 2.0, np.random.rand()]
+    for val in vals:
+        masker = layers.Mask(c = val)
+        ret = masker(fi)
+        np.testing.assert_allclose(ret, val*fi, rtol=1e-5)
+    # Check that the boolean works
+    np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
+    masker = layers.Mask(bool_mask = np_mask)
+    ret = masker(fi)
+    masked_fi = fi[np_mask]
+    np.testing.assert_allclose(ret, masked_fi, rtol=1e-5)
+    # Check that the combination works!
+    rn_val = vals[-1]
+    masker = layers.Mask(bool_mask = np_mask, c = rn_val)
+    ret = masker(fi)
+    np.testing.assert_allclose(ret, masked_fi*rn_val, rtol=1e-5)

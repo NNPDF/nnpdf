@@ -31,22 +31,74 @@ LUMI_CHANNELS = {
     'dubar': r'd\bar{u}',
 }
 
+def _grid_values(lpdf, flmat, xmat, qmat):
+    """Compute lpdf.grid_values with more forgiving argument types"""
+    flmat = np.atleast_1d(np.asanyarray(flmat, dtype=FLTYPE))
+    xmat = np.atleast_1d(np.asarray(xmat, dtype=REALTYPE))
+    qmat = np.atleast_1d(np.asarray(qmat, dtype=REALTYPE))
+    return lpdf.grid_values(flmat, xmat, qmat)
 
 def grid_values(pdf:PDF, flmat, xmat, qmat):
-     """Returns a 4-dimension array with the PDF values at the input parameters
-     for each replica. The return value is indexed as follows:
+    """
+    Evaluate ``x*f(x)`` on a grid of points in flavour, x and Q.
 
-     grid_values[replica][flavour][x][Q]
+    Parameters
+    ----------
+    pdf : PDF
+        Any PDF set
+    flmat : iterable
+        A list of PDG IDs corresponding the the LHAPDF flavours in the grid.
+    xmat : iterable
+        A list of x values
+    qmat : iterable
+        A list of values in Q, expressed in GeV.
 
-     This uses libnnpdf, and therefore follows the convention to throw away
-     replica 0 for Monte Carlo ensembles (so index 0 corresponds to replica 1).
-     Use ``pdf.grid_values_index`` to index the result properly.
-     """
-     flmat = np.atleast_1d(np.asanyarray(flmat, dtype=FLTYPE))
-     xmat, qmat =  (np.atleast_1d(np.asarray(x, dtype=REALTYPE))
-                           for x in (xmat,qmat))
-     lpdf = pdf.load()
-     return lpdf.grid_values(flmat, xmat, qmat)
+    Returns
+    -------
+    A 4-dimension array with the PDF values at the input parameters
+    for each replica. The return value is indexed as follows::
+
+        grid_values[replica][flavour][x][Q]
+
+    Notes
+    ----
+    This uses libnnpdf, and therefore follows the convention to throw away
+    replica 0 for Monte Carlo ensembles (so index 0 corresponds to replica 1).
+    Use ``pdf.grid_values_index`` to index the result properly.
+
+    See Also
+    --------
+    :py:meth:`validphys.pdfbases.Basis.grid_values` offers a higher level
+    interface, allowing to obtain the grid in different bases, and allowing for
+    aliases to refer to the flavours.
+
+    Examples
+    --------
+    Compute the maximum difference across replicas between the u and ubar PDFs
+    (times x) for x=0.05 and both Q=10 and Q=100::
+
+        >>> from validphys.loader import Loader
+        >>> from validphys.gridvalues import grid_values
+        >>> import numpy as np
+        >>> gv = grid_values(Loader().check_pdf('NNPDF31_nnlo_as_0118'), [-1, 1], [0.5], [10, 100])
+        >>> #Take the difference across the flavour dimension, the max
+        >>> #across the replica dimension, and leave the Q dimension untouched.
+        >>> np.diff(gv, axis=1).max(axis=0).ravel()
+        array([0.07904731, 0.04989902], dtype=float32)
+    """
+    return _grid_values(pdf.load(), flmat, xmat, qmat)
+
+def central_grid_values(pdf:PDF, flmat, xmat, qmat):
+    """Same as :py:func:`grid_values` but it returns only the central values. The
+    return value is indexed as::
+
+        grid_values[replica][flavour][x][Q]
+
+    where the first dimension (coresponding to the central member of the PDF set) is
+    always one.
+    """
+    return _grid_values(pdf.load_t0(), flmat, xmat, qmat)
+
 
 #TODO: Investigate writting these in cython/cffi/numba/...
 

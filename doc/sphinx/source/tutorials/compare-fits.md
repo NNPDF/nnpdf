@@ -1,3 +1,7 @@
+```eval_rst
+.. _compare-fits:
+```
+
 # How to compare two fits
 
 After running a fit, one will usually want to check that the fit gives expected
@@ -12,14 +16,15 @@ command `vp-comparefits -i`, where the `-i` flag runs the script in interactive
 mode.
 
 Once launched, the user is then prompted to enter the name of the current fit
-(that is, the fit that they have just run), the reference fit (the baseline fit
-that they wish to make a comparison with respect to), the title of the report
-(though a sensible default is suggested), the name of the author, any keywords
-for the report, and a choice of whether or not to use a theory covariance matrix
-for the statistical estimators that will be used in the report (the default is
-to include the contribution due to the theory covariance matrix). The `keywords`
-field is for `validphys` indexing and as such similar reports should make use of
-the same keywords, which are relevant to the project in question.
+(that is, the fit that they have just run), a label for the current fit, the
+reference fit (the baseline fit that they wish to make a comparison with respect
+to), a label for the reference fit, the title of the report (though a sensible
+default is suggested), the name of the author, any keywords for the report, and
+a choice of whether or not to use a theory covariance matrix for the statistical
+estimators that will be used in the report (the default is to include the
+contribution due to the theory covariance matrix). The `keywords` field is for
+`validphys` indexing and as such similar reports should make use of the same
+keywords, which are relevant to the project in question.
 
 The resulting report produces a summary of the two fits and can be uploaded to
 the server by using `vp-upload <output folder>`, where the folder is called

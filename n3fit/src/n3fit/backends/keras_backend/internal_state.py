@@ -1,7 +1,13 @@
 """
     Library of functions that modify the internal state of Keras/Tensorflow
 """
+import os
+import psutil
 
+# Needs to be set before importing tensorflow for the first time
+os.environ.setdefault("KMP_BLOCKTIME", "0")
+os.environ.setdefault("KMP_SETTINGS", "0")
+os.environ.setdefault("KMP_AFFINITY", "granularity=fine,noverbose,compact,1,0")
 import random as rn
 import numpy as np
 import tensorflow as tf
@@ -32,7 +38,7 @@ def set_initial_state(seed=13):
     return 0
 
 
-def clear_backend_state():
+def clear_backend_state(max_cores=None):
     """
         Clears the state of the backend and opens a new session.
 
@@ -41,6 +47,24 @@ def clear_backend_state():
     """
     print("Clearing session")
 
+    # Find how many cores we have and how many threads per core
+    cores = psutil.cpu_count(logical=False)
+    logical = psutil.cpu_count(logical=True)
+    tpc = int(logical / cores)
+
+    # We might not have access to all cpu, but assume we get all associated threads for a cpu
+    try:
+        affinity = psutil.Process().cpu_affinity()
+        if len(affinity) != logical:
+            cores = int(len(affinity) * tpc)
+    except AttributeError:
+        # travis Mac OS does not have "cpu_affinity", not sure whether is common to all Macs
+        pass
+
+    # And, in any case, we never want to get above the number provided by the user
+    if max_cores is not None:
+        cores = min(cores, max_cores)
+
     K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(8)
-    tf.config.threading.set_intra_op_parallelism_threads(8)
+    tf.config.threading.set_inter_op_parallelism_threads(tpc)
+    tf.config.threading.set_intra_op_parallelism_threads(cores)

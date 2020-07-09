@@ -72,6 +72,24 @@ def hp_choice(key, choices):
     return hyperopt.hp.choice(key, choices)
 
 
+# Wrapper for options that work the same
+def optimizer_arg_wrapper(hp_key, option_dict):
+    # Let's accept the learning rate as a fixed float
+    if isinstance(option_dict, float):
+        choice = option_dict
+    else:
+        # Get the min-max of the learing rate
+        max_lr = option_dict["max"]
+        min_lr = option_dict["min"]
+        # Get the sampling type, if not given use uniform
+        sampling = option_dict.get("sampling", "uniform")
+        if sampling == "uniform":
+            choice = hp_uniform(hp_key, min_lr, max_lr)
+        elif sampling == "log":
+            choice = hp_loguniform(hp_key, min_lr, max_lr)
+    return choice
+
+
 # Wrapper for the hyperscanning
 def hyper_scan_wrapper(
     replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1
@@ -86,7 +104,7 @@ def hyper_scan_wrapper(
     # Arguments:
         - `replica_path_set`: folder where to create json file with info about all trials
         - `model_trainer`: a ModelTrainer object
-        - `parameters`: a dictionary of parameters to pass to hyperparametizable
+        - `parameters`: a dictionary of parameters to pass to hyperparametrizable
         - `hyperscan_dict`: dictionary definining the sampling
         - `max_evals`: how many runs of hyperopt to run
     """
@@ -101,7 +119,7 @@ def hyper_scan_wrapper(
 
     # Perform the scan
     best = hyperopt.fmin(
-        fn=model_trainer.hyperparametizable,
+        fn=model_trainer.hyperparametrizable,
         space=the_scanner.dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
@@ -168,7 +186,7 @@ class HyperScanner:
         self.hyper_keys = set([])
 
         stopping_dict = sampling_dict.get("stopping")
-        optimizer_dict = sampling_dict.get("optimizer")
+        optimizer_list = sampling_dict.get("optimizer")
         positivity_dict = sampling_dict.get("positivity")
         nn_dict = sampling_dict.get("architecture")
 
@@ -179,12 +197,8 @@ class HyperScanner:
                 min_patience=stopping_dict.get("min_patience"),
                 max_patience=stopping_dict.get("max_patience"),
             )
-        if optimizer_dict:
-            self.optimizer(
-                names=optimizer_dict.get("names"),
-                min_lr=optimizer_dict.get("min_lr"),
-                max_lr=optimizer_dict.get("max_lr"),
-            )
+        if optimizer_list:
+            self.optimizer(optimizers=optimizer_list)
         if positivity_dict:
             self.positivity(
                 min_multiplier=positivity_dict.get("min_multiplier"),
@@ -253,50 +267,60 @@ class HyperScanner:
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
 
-    def optimizer(self, names=None, min_lr=0.0005, max_lr=0.5):
+    def optimizer(self, optimizers):
         """
-        This function look at the optimizers implemented in MetaModel and adds the learning rate to (only)
-        those who use it. The special keyword "ALL" will make it use all optimizers implemented
-            - `optimizer`
-            - `learning rate`
+        This function look at the optimizers implemented in MetaModel
+        Since each optimizer can take different parameters, the input to this function, `optimizer`
+        is a list of dictionaries, each defining the name of the optimizer (which needs to be
+        implemented in `n3fit`) and the options to modify.
 
-        Since the learning rate is a parameter that depends on the optimizer, the final result is a
-        recursive dictionary such that even though the ModelTrainer will receive
-            {optimizer: sampler(optimizer), learning rate: sampler(lr)}
-        for hyperopt it will look as
-            {optimizer: [ (optimizer1, sampler(lr)), (optimzier2, sampler(lr)), (optimizer3, )]
+        The accepted options are:
+            - learning_rate
+            - clipnorm
+        but for hyperopt it will look as a list of dictionaries
+            [ { optimizer_name: optimizer_name, learning_rate: sampler },
+              { optimizer_name: optimizer_name, learning_rate: sampler }, ...
+            ]
+        and will sample one from this list.
+
+        Note that the keys within the dictionary (`optimizer_name` and `learning_rate`) should be named
+        as the keys used by the compiler of the model as they are used as they come.
         """
-        if names is None:  # Nothing to do here
-            return
+        # Get all accepted optimizer to check against
+        all_optimizers = MetaModel.accepted_optimizers
+        # We will have a list of dictionaries to choose from
+        choices = []
 
         opt_key = "optimizer"
+        optname_key = "optimizer_name"
         lr_key = "learning_rate"
+        clip_key = "clipnorm"
 
-        # Check which optimizers are we using
-        optimizer_dict = MetaModel.optimizers
-        if names == "ALL":
-            names = optimizer_dict.keys()
 
-        # Set a logarithmic sampling for the learning rate
-        lr_choice = hp_loguniform(lr_key, min_lr, max_lr)
+        for optimizer in optimizers:
+            name = optimizer[optname_key]
+            optimizer_dictionary = {optname_key: name}
 
-        choices = []
-        for opt_name in names:
-            if opt_name not in optimizer_dict.keys():
+            if name not in all_optimizers.keys():
                 raise NotImplementedError(
-                    "HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(
-                        opt_name
-                    )
+                    f"HyperScanner: Optimizer {name} not implemented in MetaModel.py"
                 )
 
-            # Check whether this optimizer takes the learning rate
-            # if it does the choice should be a dictionary with both the optimizer and the learning rate
-            # otherwise just the optimizer name (dictionary not needed)
-            args = optimizer_dict[opt_name][1]
-            if "lr" in args.keys():
-                choices.append({opt_key: opt_name, lr_key: lr_choice})
-            else:
-                choices.append(opt_name)
+            lr_dict = optimizer.get(lr_key)
+            if lr_dict is not None:
+                # Check whether this optimizer is implemented with a learning rate
+                args = all_optimizers[name][1]
+                if lr_key not in args.keys():
+                    raise ValueError(f"Optimizer {name} does not accept {lr_key}")
+                hp_key = f"{name}_{lr_key}"
+                optimizer_dictionary[lr_key] = optimizer_arg_wrapper(hp_key, lr_dict)
+
+            clip_dict = optimizer.get(clip_key)
+            if clip_dict is not None:
+                hp_key = f"{name}_{clip_key}"
+                optimizer_dictionary[clip_key] = optimizer_arg_wrapper(hp_key, clip_dict)
+
+            choices.append(optimizer_dictionary)
 
         # Make the list of options into a list sampler
         opt_val = hp_choice(opt_key, choices)
@@ -305,30 +329,36 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
             - pos_multiplier
             - pos_initial
-        Sampling between maximum and minimum is uniform for the multiplier and loguniform for the initial
+        Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
-        mul_key = "pos_multiplier"
-        ini_key = "pos_initial"
+        mul_key = "multiplier"
+        ini_key = "initial"
+        params = {}
 
-        # Create the samplers
-        mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
-        ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+        if max_multiplier is not None:
+            if min_multiplier is None:
+                min_multiplier = 1.0  # I guess this is a sensible minimum
 
-        # Update the dictionaries
-        self._update_param(mul_key, mul_val)
-        self._update_param(ini_key, ini_val)
+            mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
+            params[mul_key] = mul_val
+
+        if min_initial is not None and max_initial is not None:
+            ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+            params[ini_key] = ini_val
+
+        self._update_param("positivity", params)
 
     def architecture(
         self,
         initializers=None,
         activations=None,
-        max_drop=0.0,
+        max_drop=None,
         n_layers=None,
         min_units=15,
         max_units=25,
@@ -401,13 +431,11 @@ class HyperScanner:
             ini_choices.append(ini_name)
 
         # Finally select the dropout rate, starting point always at 0
-        drop_key = "dropout"
 
         # Create the samplers
         act_functions = hp_choice(activation_key, activation_choices)
         nodes = hp_choice(nodes_key, nodes_choices)
         ini_choice = hp_choice(ini_key, ini_choices)
-        drop_val = hp_quniform(drop_key, 0.0, max_drop, steps=self.steps)
 
         # Finally select the layer types (not very well tested for now)
         layer_key = "layer_type"
@@ -418,4 +446,9 @@ class HyperScanner:
         self._update_param(activation_key, act_functions)
         self._update_param(nodes_key, nodes)
         self._update_param(ini_key, ini_choice)
-        self._update_param(drop_key, drop_val)
+
+        if max_drop is not None:
+            # Finally select the dropout rate, starting point always at 0
+            drop_key = "dropout"
+            drop_val = hp_quniform(drop_key, 0.0, max_drop, steps=self.steps)
+            self._update_param(drop_key, drop_val)
