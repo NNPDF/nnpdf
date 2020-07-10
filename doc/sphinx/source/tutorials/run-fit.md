@@ -197,15 +197,15 @@ KMP_AFFINITY=granularity=fine,verbose,compact,1,0
 ```
 
 When these variables are not set, `n3fit` will default to the values shown above.
-For more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
-the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html)
+For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
+the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html).
 
 By default, `n3fit` will try to use as many cores as possible, but this behaviour can be overriden
 from the runcard with the `maxcores` parameter. In our tests the point of diminishing returns is found
 at `maxcores=4`.
 
 Note that everything stated above is machine dependent so the best parameters for you might be
-very different. When testing it is useful to set the environmental variable `KMP_SETTINGS` to 1
+very different. When testing, it is useful to set the environmental variable `KMP_SETTINGS` to 1
 to obtain detailed information about the current variables being used by OpenMP.
 
 Below we list some benchmarks that have been run for the Global NNPDF 3.1 case, as found in the

@@ -145,7 +145,8 @@ In ``nnfit`` the loss due to the positivity observable was multiplied by a ``pos
 
 This behavior was found to be very inefficient for gradient descent based strategies and was exchanged for a dynamical Lagrange multiplier.
 The dynamical multiplier is defined in terms of a initial value and a multiplier to be applied each 100 epochs.
-Both the initial value and the 100 epochs multiplier are defined as an optional ``positivity`` dictionary alongside the hyperparameters of the NN as: 
+Both the initial value and the 100 epochs multiplier are defined as an optional ``positivity`` dictionary alongside the hyperparameters of
+the Neural Network as:
 
 .. code-block:: yaml
 
