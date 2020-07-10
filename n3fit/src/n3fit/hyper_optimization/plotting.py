@@ -291,8 +291,6 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
     test_loss = trial_dict[KEYWORDS["tl"]]
     loss = val_loss * validation_multiplier + test_loss * test_f
 
-    #     loss = max(trial_dict['hlosses'])
-
     if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold:
         trial_dict["good"] = False
         # Set the loss an order of magnitude above the result so it shows obviously on the plots
