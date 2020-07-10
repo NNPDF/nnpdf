@@ -575,7 +575,7 @@ class Validation:
             `vl_dict`
                 dictionary containing a map of experiment names and loss
         """
-        loss_dict = self.model.compute_losses(verbose=self.verbose)
+        loss_dict = self.model.compute_losses(turbo = True, verbose=self.verbose)
         return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
 
     @property

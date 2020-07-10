@@ -610,26 +610,28 @@ class ModelTrainer:
         Every ``PUSH_POSITIVITY_EACH`` epochs the positivity will be multiplied by their
         respective positivity multipliers
         """
-        # Train the model for the number of epochs given
-        for epoch in range(epochs):
-            out = training_model.perform_fit(verbose=False)
+        # Define the callbacks
+        def callback_stopping(epoch, logs):
             print_stats = False
-
             if (epoch + 1) % 100 == 0:
                 print_stats = True
+            stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
+            if stopping_object.stop_here():
+                training_model.stop_training = True
+
+        def callback_positivity(epoch, logs):
             if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
                 training_model.multiply_weights(
                     self.training["posdatasets"], self.training["posmultipliers"]
                 )
 
-            passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
+        from tensorflow.keras.callbacks import LambdaCallback
+        callback_1 = LambdaCallback(on_epoch_end=callback_stopping)
+        callback_2 = LambdaCallback(on_epoch_end=callback_positivity)
+            
+        training_model.perform_fit(epochs = epochs, verbose=False, callbacks=[callback_1, callback_2])
 
-            if stopping_object.stop_here():
-                break
-
-        # Report a "good" training only if there was no NaNs
-        # and if there was at least a point which passed positivity
-        if passes and stopping_object.positivity:
+        if stopping_object.positivity:
             return self.pass_status
         else:
             return self.failed_status

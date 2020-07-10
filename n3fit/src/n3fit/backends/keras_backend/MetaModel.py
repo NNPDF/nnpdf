@@ -113,6 +113,9 @@ class MetaModel(Model):
         self.all_inputs = input_list
         self.all_outputs = output_list
         self.target_tensors = None
+        self.eval_fun = None
+        self.metricas = None
+
 
     def _parse_input(self, extra_input, pass_numpy=True):
         """ Introduces the extra_input in the places asigned to the
@@ -153,7 +156,7 @@ class MetaModel(Model):
         result = super().predict(x=x, **kwargs)
         return result
 
-    def compute_losses(self, *args, **kwargs):
+    def compute_losses(self, *args, turbo = False, **kwargs):
         """
         Performs keras.evaluate and returns a dictionary containing the loss function for
         each of the outputs.
@@ -173,12 +176,22 @@ class MetaModel(Model):
             `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
-        result = self.evaluate(*args, **kwargs)
+        if turbo:
+            result = self.eval_fun()
+            result = [i.numpy()[0,0] for i in result]
+        else:
+            result = self.evaluate(*args, **kwargs)
+            if isinstance(result, float):
+                result = [result]
         # get the name of all losses
-        metricas = self.metrics_names
-        if isinstance(result, float):
+        if self.metricas is None: # Need to call evaluate at least one
+            self.evaluate(*args, **kwargs)
+            self.metricas = self.metrics_names
+
+        metricas = self.metricas
+        if len(result) == 1:
             # if there is only one we have to game it
-            result = [result, result]
+            result = [result[0], result[0]]
             # get the name of the last layer before the loss
             last_name = self.layers[-1].name
             metricas.append(f"{last_name}_loss")
@@ -260,10 +273,21 @@ class MetaModel(Model):
         if target_output is not None:
             if not isinstance(target_output, list):
                 target_output = [target_output]
-            self.target_tensors = None  # TODO TF 2.2 target_output
+            self.target_tensors = target_output
             # Tensorize
-            target = [numpy_to_tensor(i) for i in target_output]
-        super(MetaModel, self).compile(optimizer=opt, target_tensors=target, loss=loss)
+#             target = [numpy_to_tensor(i) for i in target_output]
+        import tensorflow as tf
+
+        lens = [i.size for i in target_output]
+
+        @tf.function
+        def eval_fun():
+            ypred = self(self._parse_input(None))
+            predspl = tf.split(tf.concat(ypred, axis=0), lens, axis=-1)
+            return [a(None, i) for a, i in zip(loss, predspl)]
+
+        self.eval_fun = eval_fun
+        super(MetaModel, self).compile(optimizer=opt, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """ Set all mask value to the selected value

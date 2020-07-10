@@ -6,16 +6,23 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 
 
-def l_invcovmat(invcovmat_np):
+def l_invcovmat(invcovmat_np, set_true = None):
     """
     Returns a loss function such that:
     L = \sum_{ij} (yt - yp)_{i} invcovmat_{ij} (yt - yp)_{j}
     """
     invcovmat = K.constant(invcovmat_np)
 
+    if set_true is not None:
+        set_true = K.constant(set_true)
+
+    @tf.function
     def true_loss(y_true, y_pred):
         # (yt - yp) * covmat * (yt - yp)
-        tmp = y_true - y_pred
+        if set_true is not None:
+            tmp = set_true - y_pred
+        else:
+            tmp = y_true - y_pred
         right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
         return tf.tensordot(tmp, right_dot, axes=1)
 
