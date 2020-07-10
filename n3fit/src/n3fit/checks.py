@@ -211,7 +211,8 @@ def check_hyperopt_stopping(stopping_dict):
     max_pat = stopping_dict.get("max_patience")
     if min_pat is not None or max_pat is not None:
         if min_pat is not None and min_pat < 0.0:
-            raise CheckError(f"min_patience cannot be less than 0.0: {min_pat}")
+            raise CheckError(f"min_patience cannot be less than 0.0: "
+                              "selected min_pat = {min_pat}")
         if max_pat is not None:
             if max_pat > 1.0:
                 raise CheckError(f"max_patience cannot be greater than 1.0: {max_pat}")
