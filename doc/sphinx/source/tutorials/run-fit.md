@@ -208,5 +208,19 @@ Note that everything stated above is machine dependent so the best parameters fo
 very different. When testing, it is useful to set the environmental variable `KMP_SETTINGS` to 1
 to obtain detailed information about the current variables being used by OpenMP.
 
-Below we list some benchmarks that have been run for the Global NNPDF 3.1 case, as found in the
+Below we present a benchmark that have been run for the Global NNPDF 3.1 case, as found in the
 example runcards [folder](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
+
+Settings of the benchmark:
+  - TF version: 2.1 MKL
+  - NNPDF commit: [406b39d991ebb602aedcb8c8cc275d5111f3bfcb](https://github.com/NNPDF/nnpdf/commit/406b39d991ebb602aedcb8c8cc275d5111f3bfcb)
+  - Number of epochs: 5000
+  
+Hardware:
+  - Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz
+  - 16 GB RAM 1600 MHz DDR3
+  
+Timing for a fit (from epoch 1 to epoch 5000):
+  - Walltime: 871s
+  - CPUtime: 2979s
+

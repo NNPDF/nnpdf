@@ -30,7 +30,7 @@ The desired features of this figure of merit can be summarized as:
 
 1. Produce a low :math:`\chi^2` for both fitted experiments and non-fitted experiments.
 2. Be stable upon random fluctuations.
-3. Be reliable even when the number of points is not extremely large.
+3. Be reliable even when the number of points is not very large.
 
 
 K-folding cross-validation
@@ -54,10 +54,9 @@ tested during the development of ``n3fit`` can be found in `public slides <http:
 as well as in `internal presentations <https://www.wiki.ed.ac.uk/display/nnpdfwiki/Amsterdam+Feb+2020+NNPDF+Collaboration+Meeting+agenda?preview=/432523942/436448892/juanCM.pdf>`_.
 
 
-**Under construction:**
-the choice of figure of merit is still under development, but we have several possibilities
+For the choice of figure of merit is still under development, but we have several possibilities
 
-1. We can take the combination that produces the best average for the partitions' :math:`\chi^2`.
+1. By default we take the combination that produces the best average for the partitions' :math:`\chi^2`.
 
 .. math::
     L_{hyperopt} = \frac{1}{N_{k}} \sum \chi^2
@@ -96,6 +95,8 @@ in the case of the best average loss function:
 [`best avg overlearned <https://vp.nnpdf.science/AQpgs2SyRbGlNqSnWWvMJw==>`_].
 
 
+.. _hyperextrapolation-label:
+
 Creating partitions
 -------------------
 The K-folding method is based on the creation of several partitions such that we can evaluate
@@ -110,17 +111,22 @@ All loss functions implemented in ``n3fit`` for the optimization of hyperparamet
 of all partitions as if they were equivalent.
 When they are not equivalent the ``weight`` flag should be used (see :ref:`hyperoptrc-label`)
 
+
+
 - Not all datasets should enter a partition: beware of extrapolation.
 
 Beyond the last dataset that has entered the fit we find ourselves in what is usually known as
 the extrapolation region. The behaviour of the fit in this region is not controlled by any data but
 rather by the choice of preprocessing exponents (:math:`\alpha` at small x, :math:`\beta` at large x).
-For this reason, if an "extrapolation dataset" is included in a partition, its loss function will be
-determined by these exponents (which are randomly chosen) rather than by the hypeparameter combination.
+For this reason, if a dataset is included in a partition which however falls in the extrapolation region of the fit,
+its loss function will be determined by these exponents (which are randomly chosen)
+rather than by the hypeparameter combination.
 
-The general rule for this last point is that we want the lowest-x dataset that determines each of the
-PDF functions. As a proxy-rule we can classify the datasets by process type and not take into account
-the one that reaches the lowest value of x.
+The general rule that we follow is to always include in the fit the lowest-x dataset that determines
+each of the PDF functions.
+This means that no partition has datasets which falls in the extrapolation regions.
+As a practical proxy-rule we can classify the datasets by process type and exclude from the partitioning
+the ones that reach the lowest value of x.
 
 
 Interpretation of results
@@ -128,8 +134,8 @@ Interpretation of results
 
 While performing the hyperparameter scan we found that optimizing by only looking at the validation
 loss produced results which would usually be considered overfitted: very low training and validation
-:math:`\chi^2` and complex replica patterns. Thanks to the high performance of the ``n3fit`` procedure the
-usual cross-validation algorithm used in the NNPDF framework was not enough to prevent overlearning
+:math:`\chi^2` but very complex replica patterns. Thanks to the high performance of the ``n3fit`` procedure the
+usual within-dataset cross-validation algorithm used in the NNPDF framework was not enough to prevent overlearning
 for all architectures.
 
 The cross-validation implemented in NNPDF is successful in avoiding the learning of the noise within
@@ -152,8 +158,8 @@ performance to select the best architecture.
 A `Jupyter Notebook is provided <https://github.com/NNPDF/tutorials/blob/master/hyperparameter%20scan/Hyperparameter%20scan.ipynb>`_
 with a practical example of the usage of the hyperopt framework. This example is a simplified version
 of the hyperparameter scan used in ``n3fit``.
-The hyperopt library implements the tree-structured of
-Parzen estimator which is a robust sequential-model-based optimization approach `[SMBO] <https://en.wikipedia.org/wiki/Hyperparameter_optimization>`_.
+The hyperopt library implements the tree-structured Parzen estimator algorithm
+which is a robust sequential-model-based optimization approach `[SMBO] <https://en.wikipedia.org/wiki/Hyperparameter_optimization>`_.
 
 We optimize on a combination of the best validation loss and the stability of the fits. In other words,
 we select the architecture that produces the lowest validation loss after we trim those
@@ -169,7 +175,7 @@ combinations which are deemed to be unstable.
 
 
 From the fitting point of view, the implementation of the k-folding is done by setting all experimental
-data points to 0 and by masking the respective predictions from the Neural Network to 0.
+data points from the fold to 0 and by masking the respective predictions from the Neural Network to 0.
 In the code this means that during the data-reading phase ``n3fit`` also creates one mask per k-fold
 per experiment to apply to the experimental data before compiling the Neural Network.
 Note that this is not a boolean mask that drops the points but rather it just sets the data to 0.
@@ -230,7 +236,7 @@ An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
 The loss function is currently computed as the average of the loss function over the partition sets.
 
 .. math::
-    L_{hyperopt} = \frac{1}{N_{k}} \sum (L_{k})
+    L_{hyperopt} = \frac{1}{N_{k}} \sum L_{k}
 
 
 
@@ -242,7 +248,7 @@ The loss function was then computed as
 .. math::
     L_{hyperopt} = \frac{1}{2} (L_{validation} + L_{testing})
 
-The group of datasets that were left out were:
+The group of datasets that were left out followed the algorithm :ref:`mentioned above<hyperextrapolation-label>` with only one fold:
 
 
 * NMC
