@@ -203,7 +203,7 @@ def check_hyperopt_stopping(stopping_dict):
         if min_ep < 1:
             raise CheckError(f"Can't run for less than 1 epoch: "
                               "selected min_ep = {min_ep}")
-        if max_ep < min_ep:
+        if max_ep <= min_ep:
             raise CheckError(
                 f"min_epochs cannot be greater than max_epochs: ({min_ep} > {max_ep})"
             )
