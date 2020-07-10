@@ -133,7 +133,25 @@ namespace NNPDF
     if (n <= 0)
       throw LengthError("CholeskyDecomposition","attempting a decomposition of an empty matrix!");
 
-    gsl_matrix_const_view inmatrix_view = gsl_matrix_const_view_array(inmatrix.data(), n, n);
+    // Originally the decomposition of the covariance matrix was found directly.
+    // However, when the covariance matrix is near singular it is preferable to
+    // find the decomposition of the corresponding correlation matrix and then
+    // to rescale this, so this is what is done here.
+    // See https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition
+    // for a more detailed discussion of this
+    std::vector<double> sqrt_diags;
+    matrix<double> inmatrix_corr(n,n);
+
+    // Find sqrts of diagonal entries of input covariance matrix
+    for (int i = 0; i < (int) n; i++)
+      sqrt_diags.push_back(sqrt(inmatrix(i, i)));
+
+    // Find correlation matrix from covariance matrix
+    for (int i = 0; i < (int) n; i++)
+      for (int j = 0; j < (int) n; j++)
+        inmatrix_corr(i, j) = inmatrix(i, j) / (sqrt_diags[i] * sqrt_diags[j]);
+
+    gsl_matrix_const_view inmatrix_view = gsl_matrix_const_view_array(inmatrix_corr.data(), n, n);
     const gsl_matrix *inmatrix_gsl = &(inmatrix_view.matrix);
     matrix<double> sqrtmat(n,n);
     gsl_matrix_view sqrtmat_view = gsl_matrix_view_array(sqrtmat.data(), n, n);
@@ -150,7 +168,15 @@ namespace NNPDF
       for (int j = i + 1; j < (int) n; j++)
         sqrtmat(i, j) = 0;
 
-    return sqrtmat;
+    // Rescale the decomposition of correlation matrix by multiplying by sqrts
+    // of diagonals of the covariance matrix. This then gives the decomposition
+    // of the covariance matrix
+    matrix<double> sqrtmat_rescaled(n,n);
+    for (int i = 0; i < (int) n; i++)
+      for (int j = 0; j < (int) n; j++)
+        sqrtmat_rescaled(i, j) = sqrtmat(i, j) * sqrt_diags[i];
+
+    return sqrtmat_rescaled;
   }
 
 
