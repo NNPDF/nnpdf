@@ -637,7 +637,7 @@ def get_shifted_results(results, commondata, cutlist):
             shifted.append(False)
         else:
             f1 = (data - theory)/uncorrE # first part of eq.85
-            A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
+            A = np.eye(Nsys) + \
                 np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
             f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
             lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
