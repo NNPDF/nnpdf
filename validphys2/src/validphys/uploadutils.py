@@ -314,13 +314,16 @@ def check_input(path):
         Path of the input file
     """
     files = os.listdir(path)
-    r = re.compile('.+\.info')
+    # Require that a .info file and replica 0  exist before admitting
+    # the input is a valid LHAPDF set
+    info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
 
     if 'index.html' in files:
         return 'report'
     elif 'filter.yml' in files:
         return 'fit'
-    elif list(filter(r.match, files)):
+    elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'
     else:
-        raise ValueError("Unrecognized type of input, please save to the server using rsync or wiki-upload.")
+        raise ValueError("Unrecognized type of input, "
+                         "please save to the server using rsync or wiki-upload.")
