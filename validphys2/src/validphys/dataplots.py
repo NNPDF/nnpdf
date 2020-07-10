@@ -503,8 +503,10 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
                                                commondata=commondata,
                                                cutlist=cutlist)
         for ilabel in range(len(labellist)): 
-            if ilabel==0: continue
-            if shifted[ilabel-1]: labellist[ilabel]+=" (shifted)"
+            if ilabel==0:
+                continue
+            if shifted[ilabel-1]:
+                labellist[ilabel]+=" (shifted)"
 
     yield from _plot_fancy_impl(results = results, commondata=commondata,
                                 cutlist=cutlist, labellist=labellist,
