@@ -171,12 +171,11 @@ namespace NNPDF
     // Rescale the decomposition of correlation matrix by multiplying by sqrts
     // of diagonals of the covariance matrix. This then gives the decomposition
     // of the covariance matrix
-    matrix<double> sqrtmat_rescaled(n,n);
     for (int i = 0; i < (int) n; i++)
       for (int j = 0; j < (int) n; j++)
-        sqrtmat_rescaled(i, j) = sqrtmat(i, j) * sqrt_diags[i];
+        sqrtmat(i, j) = sqrtmat(i, j) * sqrt_diags[i];
 
-    return sqrtmat_rescaled;
+    return sqrtmat;
   }
 
 
