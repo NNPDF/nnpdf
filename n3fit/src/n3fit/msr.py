@@ -7,7 +7,6 @@ import numpy as np
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
-from n3fit.vpinterface import N3PDF
 from validphys.arclength import arc_lengths
 
 
@@ -127,7 +126,7 @@ def check_integration(ultimate_pdf, integration_input):
 
 
 # TODO: once the writer is absorbed into vp this function can dissapear as well
-def compute_arclength(pdf_function):
+def compute_arclength(n3pdf):
     """
     Given the layer with the fit basis computes the arc length
 
@@ -147,6 +146,5 @@ def compute_arclength(pdf_function):
     >>> n3pdf = N3PDF(pdf_model)
     >>> res = compute_arclength(n3pdf)
     """
-    n3pdf = N3PDF(pdf_function)
     ret = arc_lengths(n3pdf, [1.6], "evolution", ["sigma", "gluon", "V", "V3", "V8"])
     return ret.stats.central_value()

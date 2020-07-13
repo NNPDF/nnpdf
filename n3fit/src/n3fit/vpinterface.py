@@ -21,12 +21,15 @@
 import numpy as np
 import numpy.linalg as la
 from validphys.core import PDF, MCStats
-from validphys.pdfbases import ALL_FLAVOURS, evolution
+from validphys.pdfbases import ALL_FLAVOURS, check_basis
+
+EVOL_LIST = ['photon', 'sigma', 'gluon', 'V', 'V3', 'V8', 'V15', 'V24', 'V35', 'T3', 'T8', 'T15', 'T24', 'T35']
 
 
 class N3PDF(PDF):
     def __init__(self, pdf, name="n3fit"):
         self.model = pdf
+        self.basis = check_basis("evolution", EVOL_LIST)["basis"]
         # Set the number of members to two for legacy compatibility
         # in this case replica 0 and replica 1 are the same
         self.NumMembers = 2
@@ -57,6 +60,12 @@ class N3PDF(PDF):
             # add a batch dimension for n3fit-compatibility
             return np.expand_dims(ret, 0)
 
+    def __call__(self, export_xgrid):
+        """ on call behave as export grid would expect """
+        mod_xgrid = export_xgrid.reshape(1, -1, 1)
+        result = self.predict(mod_xgrid)
+        return result.squeeze(0)
+
     def grid_values(self, flavs, xarr, qmat=None):
         """
         Parameters
@@ -74,13 +83,15 @@ class N3PDF(PDF):
             array of shape (1, flavs, xgrid_size, qmat) with the values of the ``pdf_model``
             evaluated in ``xarr``
         """
-        evol_result = self.predict(xarr.reshape(1, -1, 1))
+        n3fit_result = self.predict(xarr.reshape(1, -1, 1))
+        ii = self.basis._to_indexes(EVOL_LIST)
+        n3fit_result = n3fit_result[:,:,ii]
         # The results of n3fit are always in the 14-evolution basis used in fktables
         # we need to rotate them to the LHAPDF-flavour basis,
         # we don't care that much for precision here
-        evol2flav = la.inv(evolution.from_flavour_mat)
-        evol2flav[np.abs(evol2flav) < 1e-12] = 0.0
-        flav_result = np.tensordot(evol_result, evol2flav, axes=[-1, 1])
+        to_flav = la.inv(self.basis.from_flavour_mat)
+        to_flav[np.abs(to_flav) < 1e-12] = 0.0
+        flav_result = np.tensordot(n3fit_result, to_flav, axes=[-1, 1])
         # Now drop the indices that are not requested
         requested_flavours = [ALL_FLAVOURS.index(i) for i in flavs]
         flav_result = flav_result[:, :, requested_flavours]
