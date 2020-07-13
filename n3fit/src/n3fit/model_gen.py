@@ -178,7 +178,7 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
         loss_tr = losses.l_invcovmat(invcovmat_tr)
         # TODO At this point we need to intercept the data and compile the loss with it
         # then the validation must have a list of None as an output
-        loss_vl = losses.l_invcovmat(invcovmat_vl, set_true = spec_dict["expdata_vl"])
+        loss_vl = losses.l_invcovmat(invcovmat_vl)
     loss = losses.l_invcovmat(invcovmat)
 
     def out_tr(pdf_layer, datasets_out=None):

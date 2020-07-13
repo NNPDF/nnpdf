@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 5.0
 # The stopping will not consider any run where the validation is not under this threshold
 THRESHOLD_CHI2 = 10.0
-# Each how many epochs do we increase the positivitiy Lagrange Multiplier 
+# Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
 
@@ -626,10 +626,11 @@ class ModelTrainer:
                 )
 
         from tensorflow.keras.callbacks import LambdaCallback
+
         callback_1 = LambdaCallback(on_epoch_end=callback_stopping)
         callback_2 = LambdaCallback(on_epoch_end=callback_positivity)
-            
-        training_model.perform_fit(epochs = epochs, verbose=False, callbacks=[callback_1, callback_2])
+
+        training_model.perform_fit(epochs=epochs, verbose=False, callbacks=[callback_1, callback_2])
 
         if stopping_object.positivity:
             return self.pass_status
@@ -668,9 +669,7 @@ class ModelTrainer:
         experimental = self.model_dicts["experimental"]
         train_chi2 = stopping_object.evaluate_training(training["model"])
         val_chi2, _ = stopping_object.validation.loss()
-        exp_chi2 = (
-            experimental["model"].compute_losses(verbose=False)["loss"] / experimental["ndata"]
-        )
+        exp_chi2 = experimental["model"].compute_losses()["loss"] / experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametrizable(self, params):
@@ -710,7 +709,9 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
-        self._generate_observables(positivity_dict.get("multiplier"), positivity_dict.get("initial"), epochs)
+        self._generate_observables(
+            positivity_dict.get("multiplier"), positivity_dict.get("initial"), epochs
+        )
 
         # Generate the stopping_object
         # this object holds statistical information about the fit
