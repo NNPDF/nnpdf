@@ -16,6 +16,9 @@ import pathlib
 import tempfile
 from urllib.parse import urljoin
 
+import prompt_toolkit
+from prompt_toolkit.completion import WordCompleter
+
 from reportengine.compat import yaml
 from reportengine.colors import t
 from validphys.loader import RemoteLoader
@@ -291,6 +294,51 @@ class PDFUploader(FitUploader):
         return name.with_suffix('.tar.gz').name
 
 
+def check_for_meta(path):
+    """ Function that checks if a report input has a ``meta.yaml`` file.
+    If not it prompts the user to either create one or follow an interactive
+    prompt which assists the user in constructing one.
+
+    Parameters
+    ----------
+    path: pathlib.Path
+        Input path
+
+    Returns
+    -------
+    None
+    """
+    # Import here to avoid circular imports
+    from validphys.scripts.vp_comparefits import KeywordsWithCache
+
+    if 'meta.yaml' not in os.listdir(path):
+        log.warning(
+                'No meta.yaml file detected, please add one or follow '
+                'the interactive prompt below.'
+                )
+
+        title = prompt_toolkit.prompt("Enter report title: ")
+
+        default = ""
+        try:
+            import pwd
+        except ImportError:
+            pass
+        else:
+            default = pwd.getpwuid(os.getuid())[0]
+        author = prompt_toolkit.prompt("Enter author name: ", default=default)
+
+        kwinp = prompt_toolkit.prompt(
+            "Enter keywords: ",
+            completer=WordCompleter(words=KeywordsWithCache()),
+            complete_in_thread=True)
+        keywords = [k.strip() for k in kwinp.split(',') if k]
+
+        meta_dict = {'title': title, 'author': author, 'keywords': keywords}
+        with open(path / 'meta.yaml', 'w') as stream:
+            yaml.safe_dump(meta_dict, stream)
+
+
 def check_input(path):
     """A function that checks the type of the input for vp-upload. The type
     determines where on the vp server the file will end up
@@ -319,6 +367,7 @@ def check_input(path):
     info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
 
     if 'index.html' in files:
+        check_for_meta(path)
         return 'report'
     elif 'filter.yml' in files:
         return 'fit'
