@@ -23,12 +23,28 @@ import numpy.linalg as la
 from validphys.core import PDF, MCStats
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
 
-EVOL_LIST = ['photon', 'sigma', 'gluon', 'V', 'V3', 'V8', 'V15', 'V24', 'V35', 'T3', 'T8', 'T15', 'T24', 'T35']
+# Order of the evolution basis output from n3fit
+EVOL_LIST = [
+    "photon",
+    "sigma",
+    "gluon",
+    "V",
+    "V3",
+    "V8",
+    "V15",
+    "V24",
+    "V35",
+    "T3",
+    "T8",
+    "T15",
+    "T24",
+    "T35",
+]
 
 
 class N3PDF(PDF):
-    def __init__(self, pdf, name="n3fit"):
-        self.model = pdf
+    def __init__(self, pdf_model, name="n3fit"):
+        self.model = pdf_model
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
         # Set the number of members to two for legacy compatibility
         # in this case replica 0 and replica 1 are the same
@@ -46,24 +62,25 @@ class N3PDF(PDF):
         """
         return self
 
-    def predict(self, xarr):
+    def __call__(self, xarr):
         """ Uses the internal model to produce pdf values
+
         Parameters
         ----------
             xarr: numpy.array
-                x-points with shape (1, xgrid_size, 1)
-        """
-        if hasattr(self.model, 'predict'):
-            return self.model.predict([xarr])
-        else:
-            ret = self.model(xarr.squeeze(0))
-            # add a batch dimension for n3fit-compatibility
-            return np.expand_dims(ret, 0)
+                x-points with shape (xgrid_size,) (size-1 dimensions are removed)
 
-    def __call__(self, export_xgrid):
-        """ on call behave as export grid would expect """
-        mod_xgrid = export_xgrid.reshape(1, -1, 1)
-        result = self.predict(mod_xgrid)
+        Returns
+        -------
+            numpy.array
+                (xgrid_size, flavours) pdf result
+        """
+        # Ensures that the input has the shape the model expect, no matter the input
+        mod_xgrid = xarr.reshape(1, -1, 1)
+        result = self.model.predict([mod_xgrid])
+        # Ensure that the result has its flavour in the basis-defined order
+        ii = self.basis._to_indexes(EVOL_LIST)
+        result = result[:, :, ii]
         return result.squeeze(0)
 
     def grid_values(self, flavs, xarr, qmat=None):
@@ -83,22 +100,23 @@ class N3PDF(PDF):
             array of shape (1, flavs, xgrid_size, qmat) with the values of the ``pdf_model``
             evaluated in ``xarr``
         """
-        n3fit_result = self.predict(xarr.reshape(1, -1, 1))
-        ii = self.basis._to_indexes(EVOL_LIST)
-        n3fit_result = n3fit_result[:,:,ii]
+        n3fit_result = self(xarr.reshape(1, -1, 1))
+
         # The results of n3fit are always in the 14-evolution basis used in fktables
-        # we need to rotate them to the LHAPDF-flavour basis,
+        # the calls to grid_values always assume the result will be LHAPDF flavours
+        # we need then to rotate them to the LHAPDF-flavour basis,
         # we don't care that much for precision here
         to_flav = la.inv(self.basis.from_flavour_mat)
         to_flav[np.abs(to_flav) < 1e-12] = 0.0
         flav_result = np.tensordot(n3fit_result, to_flav, axes=[-1, 1])
         # Now drop the indices that are not requested
         requested_flavours = [ALL_FLAVOURS.index(i) for i in flavs]
-        flav_result = flav_result[:, :, requested_flavours]
+        flav_result = flav_result[:, requested_flavours]
+
         # Swap the flavour and xgrid axis for vp-compatibility
-        ret = flav_result.swapaxes(1, 2)
+        ret = flav_result.swapaxes(0, 1)
         # If given, insert as many copies of the grid as q values
-        ret = np.expand_dims(ret, -1)
+        ret = np.expand_dims(ret, (0,-1))
         if qmat is not None:
             lq = len(qmat)
             ret = ret.repeat(lq, -1)
