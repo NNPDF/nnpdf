@@ -146,5 +146,5 @@ def compute_arclength(n3pdf):
     >>> n3pdf = N3PDF(pdf_model)
     >>> res = compute_arclength(n3pdf)
     """
-    ret = arc_lengths(n3pdf, [1.6], "evolution", ["sigma", "gluon", "V", "V3", "V8"])
+    ret = arc_lengths(n3pdf, [1.65], "evolution", ["sigma", "gluon", "V", "V3", "V8"])
     return ret.stats.central_value()

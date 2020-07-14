@@ -62,25 +62,31 @@ class N3PDF(PDF):
         """
         return self
 
-    def __call__(self, xarr):
-        """ Uses the internal model to produce pdf values
+    def __call__(self, xarr, flavs=None):
+        """ Uses the internal model to produce pdf values.
+        The output is on the evolution basis.
 
         Parameters
         ----------
             xarr: numpy.array
                 x-points with shape (xgrid_size,) (size-1 dimensions are removed)
+            flavs: list
+                list of flavour to output
 
         Returns
         -------
             numpy.array
                 (xgrid_size, flavours) pdf result
         """
+        if flavs is None:
+            flavs = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
         mod_xgrid = xarr.reshape(1, -1, 1)
         result = self.model.predict([mod_xgrid])
-        # Ensure that the result has its flavour in the basis-defined order
-        ii = self.basis._to_indexes(EVOL_LIST)
-        result = result[:, :, ii]
+        if flavs != "n3fit":
+            # Ensure that the result has its flavour in the basis-defined order
+            ii = self.basis._to_indexes(flavs)
+            result[:, :, ii] = result
         return result.squeeze(0)
 
     def grid_values(self, flavs, xarr, qmat=None):
@@ -116,7 +122,7 @@ class N3PDF(PDF):
         # Swap the flavour and xgrid axis for vp-compatibility
         ret = flav_result.swapaxes(0, 1)
         # If given, insert as many copies of the grid as q values
-        ret = np.expand_dims(ret, (0,-1))
+        ret = np.expand_dims(ret, (0, -1))
         if qmat is not None:
             lq = len(qmat)
             ret = ret.repeat(lq, -1)
