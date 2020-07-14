@@ -58,8 +58,9 @@ fitting:
       learning_rate: 0.01
       clipnorm: 1.0
     epochs: 900
-    pos_multiplier: 1.05
-    pos_initial:  # believe the pos_lambda below 
+    positivity:
+      multiplier: 1.05 # When any of the multiplier and/or the initial is not set
+      initial: # the poslambda will be used instead to compute these values per dataset
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
@@ -103,6 +104,7 @@ stopping:
 positivity:
   posdatasets:
     - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSFLL,   poslambda: 1e4 }
 
 ############################################################
 closuretest:

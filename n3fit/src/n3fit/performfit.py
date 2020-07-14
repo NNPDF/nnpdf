@@ -248,7 +248,7 @@ def performfit(
                 the_model_trainer.model_file = model_file
 
         # This is just to give a descriptive name to the fit function
-        pdf_gen_and_train_function = the_model_trainer.hyperparametizable
+        pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
 
         # Read up the parameters of the NN from the runcard
         parameters = fitting.get("parameters")
