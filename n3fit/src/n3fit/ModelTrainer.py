@@ -188,7 +188,7 @@ class ModelTrainer:
         self.print_summary = True
         self.mode_hyperopt = False
         self.model_file = None
-        self.impose_sumrule = True
+        self.impose_sumrule = False
         self.hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]
