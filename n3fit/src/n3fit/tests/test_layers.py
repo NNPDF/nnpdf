@@ -6,7 +6,7 @@
 import numpy as np
 from n3fit.backends import operations as op
 import n3fit.layers as layers
-from validphys.pdfbases import rotation
+from validphys.pdfbases import fitbasis_to_NN31IC
 
 
 FLAVS = 3
@@ -192,7 +192,7 @@ def test_rotation_flavour():
     # Apply the rotation using numpy tensordot
     x = np.ones(8)  # Vector in the flavour basis v_i
     x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
-    mat = rotation(flav_info, 'FLAVOUR')  # Rotation matrix R_ij, i=flavour, j=evolution
+    mat = fitbasis_to_NN31IC(flav_info, 'FLAVOUR')  # Rotation matrix R_ij, i=flavour, j=evolution
     res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer
@@ -217,7 +217,7 @@ def test_rotation_evol():
     # Apply the rotation using numpy tensordot
     x = np.ones(8)  # Vector in the flavour basis v_i
     x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
-    mat = rotation(flav_info, 'EVOL')  # Rotation matrix R_ij, i=flavour, j=evolution
+    mat = fitbasis_to_NN31IC(flav_info, 'EVOL')  # Rotation matrix R_ij, i=flavour, j=evolution
     res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer

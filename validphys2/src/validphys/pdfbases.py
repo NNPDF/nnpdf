@@ -434,10 +434,10 @@ r'\bar{d}': {'dbar':1},
 })
 
 
-def rotation(flav_info, fitbasis):
+def fitbasis_to_NN31IC(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
-    of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the evolution basis,
-    (sigma, g, v, v3, v8, t3, t8, cp), corresponding to NN31IC.
+    of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
+    (sigma, g, v, v3, v8, t3, t8, cp), corresponding to the one used in NNPDF31.
     Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index. 
     The evolution basis (NN31IC) is defined as  
     cp = c + cbar = 2c
