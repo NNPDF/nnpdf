@@ -26,7 +26,7 @@ def observable_generator(
     spec_dict,
     positivity_initial=None,
     positivity_multiplier=1.05,
-    positivity_steps=500,
+    positivity_steps=300,
     kfolding=False,
     integrability=False,
 ):  # pylint: disable=too-many-locals
