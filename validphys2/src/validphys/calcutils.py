@@ -176,8 +176,9 @@ def covmat_from_systematics(commondata):
 
 def sqrtcovmat_from_systematics(covmat_from_systematics):
     sqrt_diags = np.sqrt(np.diag(covmat_from_systematics))
-    outer_sqrt_diags = np.outer(sqrt_diags, sqrt_diags)
-    corrmat = covmat_from_systematics / outer_sqrt_diags
+    corrmat = (
+        covmat_from_systematics / sqrt_diags[:, np.newaxis] / sqrt_diags[:, np.newaxis].T
+    )
     decomp = la.cholesky(corrmat, lower=True)
     sqrtmat = (decomp.T * sqrt_diags).T
     return sqrtmat
