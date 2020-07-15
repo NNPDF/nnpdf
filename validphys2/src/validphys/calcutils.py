@@ -224,6 +224,9 @@ def sqrtcovmat_from_systematics(covmat_from_systematics):
            [3.73012316e-03, 2.05432491e-04, 4.40226875e-05, ...,
             9.61421910e-04, 5.31447414e-04, 9.98677667e-03]])
     """
+    if covmat_from_systematics.size == 0:
+        raise ValueError("Attempting the decomposition of an empty matrix.")
+
     sqrt_diags = np.sqrt(np.diag(covmat_from_systematics))
     corrmat = (
         covmat_from_systematics / sqrt_diags[:, np.newaxis] / sqrt_diags[:, np.newaxis].T
