@@ -145,6 +145,7 @@ class ModelTrainer:
         exp_info,
         pos_info,
         flavinfo,
+        fitbasis,
         nnseed,
         pass_status="ok",
         failed_status="fail",
@@ -174,6 +175,7 @@ class ModelTrainer:
         self.pos_info = pos_info
         self.all_info = exp_info + pos_info
         self.flavinfo = flavinfo
+        self.fitbasis = fitbasis
         self.NNseed = nnseed
         self.pass_status = pass_status
         self.failed_status = failed_status
@@ -561,6 +563,7 @@ class ModelTrainer:
             activations=activation_per_layer,
             layer_type=layer_type,
             flav_info=self.flavinfo,
+            fitbasis=self.fitbasis,
             seed=seed,
             initializer_name=initializer,
             dropout=dropout,
