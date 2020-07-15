@@ -175,6 +175,55 @@ def covmat_from_systematics(commondata):
 
 
 def sqrtcovmat_from_systematics(covmat_from_systematics):
+    """Function that computes the square root of the covariance matrix which is
+    formed from systematics, such that the following is ``True``:
+    ``np.allclose(sqrtcovmat_from_systematics @ sqrtcovmat_from_systematics.T, covmat_from_systematics)``.
+    The square root is found by using the Cholesky decomposition. However, rather
+    than finding the decomposition of the covariance matrix directly, the
+    decomposition is found of the corresponding correlation matrix and then the
+    output of this is rescaled as ``sqrtmat = (decomp.T * sqrt_diags).T``, where
+    ``decomp`` is the Cholesky decomposition of the correlation matrix and
+    ``sqrt_diags`` is the square root of the diagonal entries of the covariance
+    matrix. This method is useful in situations in which the covariance matrix is
+    near-singular. See https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition
+    for more discussion on this.
+
+    Paramaters
+    ----------
+    covmat_from_systematics : np.array
+        Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
+        containing uncertainty and correlation information.
+
+    Returns
+    -------
+    sqrtmat : np.array
+        Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts).
+        This is the square root of the covariance matrix that is given as input.
+
+    Example
+    -------
+    >>> from validphys.commondataparser import load_commondata
+    >>> from validphys.loader import Loader
+    >>> from validphys.calcutils import covmat_from_systematics, sqrtcovmat_from_systematics
+    >>> l = Loader()
+    >>> cd = l.check_commondata("NMC")
+    >>> cd = load_commondata(cd)
+    >>> cov = covmat_from_systematics(cd)
+    >>> sqrtcov = sqrtcovmat_from_systematics(cov)
+    array([[9.29533200e-03, 0.00000000e+00, 0.00000000e+00, ...,
+            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+           [8.82133011e-03, 8.00572153e-03, 0.00000000e+00, ...,
+            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+           [6.74959124e-03, 7.11446377e-04, 6.93755946e-03, ...,
+            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+           ...,
+           [2.58998530e-03, 1.01842488e-04, 5.34315873e-05, ...,
+            4.36182637e-03, 0.00000000e+00, 0.00000000e+00],
+           [3.00811652e-03, 9.05569142e-05, 7.09658356e-05, ...,
+            1.18572366e-03, 4.31943367e-03, 0.00000000e+00],
+           [3.73012316e-03, 2.05432491e-04, 4.40226875e-05, ...,
+            9.61421910e-04, 5.31447414e-04, 9.98677667e-03]])
+    """
     sqrt_diags = np.sqrt(np.diag(covmat_from_systematics))
     corrmat = (
         covmat_from_systematics / sqrt_diags[:, np.newaxis] / sqrt_diags[:, np.newaxis].T
