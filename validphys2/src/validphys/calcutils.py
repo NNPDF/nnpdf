@@ -174,6 +174,15 @@ def covmat_from_systematics(commondata):
     return cov_mat
 
 
+def sqrtcovmat_from_systematics(covmat_from_systematics):
+    sqrt_diags = np.sqrt(np.diag(covmat_from_systematics))
+    outer_sqrt_diags = np.outer(sqrt_diags, sqrt_diags)
+    corrmat = covmat_from_systematics / outer_sqrt_diags
+    decomp = la.cholesky(corrmat, lower=True)
+    sqrtmat = (decomp.T * sqrt_diags).T
+    return sqrtmat
+
+
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
     lower triangular part and a vector of differences.
