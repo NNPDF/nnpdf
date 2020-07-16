@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 
 def covmat_from_systematics(commondata):
-    """ Function that takes in a :py:class:`validphys.coredata.CommonData` object
+    """Function that takes in a :py:class:`validphys.coredata.CommonData` object
     and generates the associated covariance matrix using the systematics. The logic
     is best described by the now deprecated C++ code:
 
@@ -73,7 +73,7 @@ def covmat_from_systematics(commondata):
     loop over all the systematics, if the l'th systematic of data point i has name ``SKIP`` we ignore
     it. This is handled by scanning over all sytematic errors in the ``sys_errors`` dataframe and dropping
     any columns which correspond to a systematic error name of ``SKIP``, thus the ``sys_errors`` dataframe
-    define below contains only the systematics without the ``SKIP`` name.
+    defined below contains only the systematics without the ``SKIP`` name.
 
     Note that in the switch statement an ADDitive or MULTiplicative systype of systematic i is handled
     by either multiplying the additive or multiplicative uncertainties respectively. We instead opt to
@@ -82,7 +82,7 @@ def covmat_from_systematics(commondata):
     values. This dataframe we call ``additive_mat``.
 
     Next we notice that a systematic is correlated if its name is neither ``UNCORR`` nor ``THEORYUNCORR``. We
-    create a dataframe called ``correlated_mat`` where any column correpsonding to an ``UNCORR`` or
+    create a dataframe called ``correlated_mat`` where any column corresponding to an ``UNCORR`` or
     ``THEORYUNCORR`` systematic is set to 0.
 
     From here it's a matter of staring at a piece of paper for a while to realise the contribution to the
@@ -106,7 +106,7 @@ def covmat_from_systematics(commondata):
     -------
     cov_mat : np.array
         Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
-        containing correlation information.
+        containing uncertainty and correlation information.
 
     Example
     -------
@@ -161,8 +161,8 @@ def covmat_from_systematics(commondata):
         # with the statistical error matrix at the end
         correlated_mat = additive_mat = np.zeros_like(stat_mat)
 
-    # Avoid double counting in case the i = j element is a correlated
-    # systematic we take care of this case in the einsum below
+    # Avoid double counting in case that the i = j element is a correlated
+    # systematic. We take care of this case in the einsum below
     off_diagonals = correlated_mat @ additive_mat.T
     np.fill_diagonal(off_diagonals, 0)
 
