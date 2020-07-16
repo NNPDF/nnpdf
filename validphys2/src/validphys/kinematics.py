@@ -159,3 +159,16 @@ def xq2map_with_cuts(commondata, cuts):
     return XQ2Map(info.experiment, commondata, fitted_kintable, empty)
 
 experiments_xq2map = collect(xq2map_with_cuts, ('dataset_inputs',))
+
+@table
+def kinematics_table(commondata, kinlimits):
+    """
+    Table containing the kinematics of a commondata object,
+    indexed by their datapoint id.
+    """
+    ld_cd = commondata.load()
+    labels = [kinlimits[kin] for kin in ('k1', 'k2', 'k3')]
+    res = pd.DataFrame(ld_cd.get_kintable(), columns=labels)
+
+    return res
+

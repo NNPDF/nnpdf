@@ -377,29 +377,12 @@ evolution = Basis.from_mapping({
     'g'        : {'g':1},
     'photon'   : {'photon':1},
     },
-    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sigma':r'\Sigma'},
+    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15'},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
-EVOL = Basis.from_mapping({
-        r'\Sigma': {
-            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
-            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
-        'g': {'g': 1},
-
-        'V': {
-            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
-            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
-
-        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
-        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
-
-        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
-        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
-    },
-    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
-    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',  ))
+EVOL = evolution
 
 NN31IC = Basis.from_mapping(
     {
@@ -451,11 +434,12 @@ r'\bar{d}': {'dbar':1},
 })
 
 
-def rotation(flav_info):
-    """Return a rotation matrix R_{ij} which takes from the flavour to the evolution basis,
-    from (u, ubar, d, dbar, s, sbar, c, g) to (sigma, g, v, v3, v8, t3, t8, cp), where
-    i is the flavour index and j is the evolution index. 
-    The evolution basis is defined as 
+def fitbasis_to_NN31IC(flav_info, fitbasis):
+    """Return a rotation matrix R_{ij} which takes from one
+    of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
+    (sigma, g, v, v3, v8, t3, t8, cp), corresponding to the one used in NNPDF31.
+    Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index. 
+    The evolution basis (NN31IC) is defined as  
     cp = c + cbar = 2c
     and
     sigma = u + ubar + d + dbar + s + sbar + cp  
@@ -466,33 +450,52 @@ def rotation(flav_info):
     t8 = u + ubar + d + dbar - 2*s - 2*sbar
 
     If the input is already in the evolution basis it returns the identity.
+
+    Parameters
+    ----------
+        flav_info: dict
+            dictionary containing the information about each PDF (basis dictionary in the runcard)
+        fitbasis: str
+            name of the fitting basis
+
+    Returns
+    -------
+        mat.transpose(): numpy matrix
+            matrix performing the change of basis from fitbasis to NN31IC
+
     """
-    sigma = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
-    v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
-    v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-    v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
-    t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
-    t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
-    cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
-    g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
-    flist = [sigma, g, v, v3, v8, t3, t8, cp]
+    if fitbasis == 'NN31IC':
+        return np.identity(8)
+
+    elif fitbasis == 'FLAVOUR':
+        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
+        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
+        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
+        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
+        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
+        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
+
+    elif fitbasis == 'EVOL' or fitbasis == 'evolution':
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
+        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 } 
+        
+    flist = [sng, g, v, v3, v8, t3, t8, cp]
     
     evol_basis = False
     mat = []
     for f in flist:
         for flav_dict in flav_info:
-            try:
-                flav_name = flav_dict["fl"]
-                mat.append(f[flav_name])
-            # if one of the keys in the dictionary is not a key in flist
-            # it means we are already in the evolution basis    
-            except KeyError:
-                evol_basis = True
-                break
-        if evol_basis:
-            mat = np.identity(8)
-            break    
-
+            flav_name = flav_dict["fl"]
+            mat.append(f[flav_name])
+               
     mat = np.asarray(mat).reshape(8,8)
     # Return the transpose of the matrix, to have the first index referring to flavour
     return mat.transpose()    
