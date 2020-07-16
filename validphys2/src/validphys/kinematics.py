@@ -93,12 +93,12 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
         d[key + ' max'] = kmax
     return d
 
-all_kinlimits = collect(kinlimits, ('experiments', 'experiment'))
+all_kinlimits = collect(kinlimits, ('dataset_inputs',))
 
 @table
 def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
-    """Return a table with the kinematic limits for the datasets in all
-    the experiments. If the PLOTTING overrides are not used, the information on
+    """Return a table with the kinematic limits for the datasets given as input
+    in dataset_inputs. If the PLOTTING overrides are not used, the information on
     sqrt(k2) will be displayed."""
 
     table = pd.DataFrame(all_kinlimits,
@@ -120,26 +120,26 @@ def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
     return table
 
 @table
-def all_commondata_grouping(all_commondata, groupby):
+def all_commondata_grouping(all_commondata, metadata_group):
     """Return a table with the grouping specified
-    by `groupby` key for each dataset for all available commondata.
+    by `metadata_group` key for each dataset for all available commondata.
     """
     records = []
     for cd in all_commondata:
-        records.append({'dataset': str(cd), groupby: getattr(plotoptions.get_info(cd), groupby)})
+        records.append({'dataset': str(cd), metadata_group: getattr(plotoptions.get_info(cd), metadata_group)})
     df = pd.DataFrame.from_records(records, index='dataset')
     # sort first by grouping alphabetically and then dataset name
-    return df.sort_values([groupby, 'dataset'])
+    return df.sort_values([metadata_group, 'dataset'])
 
 def total_fitted_points(all_kinlimits_table)->int:
-    """Print the total number of fitted points in a given set of experiments"""
+    """Print the total number of fitted points in a given set of data"""
     tb = all_kinlimits_table
     return int(tb[nfittedlabel].sum())
 
 
-XQ2Map = namedtuple('XQ2Map', ('experiment', 'commondata', 'fitted', 'masked'))
+XQ2Map = namedtuple('XQ2Map', ('data', 'commondata', 'fitted', 'masked'))
 
-def xq2map_with_cuts(experiment, commondata, cuts):
+def xq2map_with_cuts(commondata, cuts):
     """Return two (x,Q²) tuples: one for the fitted data and one for the
     cut data. If `display_cuts` is false or all data passes the cuts, the second
     tuple will be empty."""
@@ -153,13 +153,12 @@ def xq2map_with_cuts(experiment, commondata, cuts):
         masked_kitable = kintable.loc[~boolmask]
         xq2fitted =  plotoptions.get_xq2map(fitted_kintable, info)
         xq2masked = plotoptions.get_xq2map(masked_kitable, info)
-        return XQ2Map(experiment, commondata, xq2fitted, xq2masked)
+        return XQ2Map(info.experiment, commondata, xq2fitted, xq2masked)
     fitted_kintable = plotoptions.get_xq2map(kintable, info)
     empty = (np.array([]), np.array([]))
-    return XQ2Map(experiment, commondata, fitted_kintable, empty)
+    return XQ2Map(info.experiment, commondata, fitted_kintable, empty)
 
-experiments_xq2map = collect(xq2map_with_cuts, ('experiments', 'experiment'))
-
+experiments_xq2map = collect(xq2map_with_cuts, ('dataset_inputs',))
 
 @table
 def kinematics_table(commondata, kinlimits):
@@ -172,3 +171,4 @@ def kinematics_table(commondata, kinlimits):
     res = pd.DataFrame(ld_cd.get_kintable(), columns=labels)
 
     return res
+

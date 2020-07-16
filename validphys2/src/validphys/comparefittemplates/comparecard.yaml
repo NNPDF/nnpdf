@@ -82,8 +82,8 @@ description:
     from_: fit
 
 dataspecs:
-  - experiments:
-      from_: fit
+  - data_input:
+      from_: fitinputcontext
     theoryid:
       from_: current
     pdf:
@@ -94,8 +94,8 @@ dataspecs:
       from_: current
 
 
-  - experiments:
-      from_: fit
+  - data_input:
+      from_: fitinputcontext
     theoryid:
       from_: reference
     pdf:
