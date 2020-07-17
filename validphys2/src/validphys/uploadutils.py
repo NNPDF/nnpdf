@@ -295,7 +295,7 @@ class PDFUploader(FitUploader):
 
 
 def check_for_meta(path):
-    """ Function that checks if a report input has a ``meta.yaml`` file.
+    """Function that checks if a report input has a ``meta.yaml`` file.
     If not it prompts the user to either create one or follow an interactive
     prompt which assists the user in constructing one.
 
@@ -311,10 +311,10 @@ def check_for_meta(path):
     # Import here to avoid circular imports
     from validphys.scripts.vp_comparefits import KeywordsWithCache
 
-    if 'meta.yaml' not in os.listdir(path):
+    if "meta.yaml" not in os.listdir(path):
         log.warning(
-                'No meta.yaml file detected, please add one or follow '
-                'the interactive prompt below.'
+                "No meta.yaml file detected in folder to be uploaded, please add one or follow "
+                "the interactive prompt below."
                 )
 
         title = prompt_toolkit.prompt("Enter report title: ")
@@ -332,10 +332,10 @@ def check_for_meta(path):
             "Enter keywords: ",
             completer=WordCompleter(words=KeywordsWithCache()),
             complete_in_thread=True)
-        keywords = [k.strip() for k in kwinp.split(',') if k]
+        keywords = [k.strip() for k in kwinp.split(",") if k]
 
-        meta_dict = {'title': title, 'author': author, 'keywords': keywords}
-        with open(path / 'meta.yaml', 'w') as stream:
+        meta_dict = {"title": title, "author": author, "keywords": keywords}
+        with open(path / "meta.yaml", "w") as stream:
             yaml.safe_dump(meta_dict, stream)
 
 
