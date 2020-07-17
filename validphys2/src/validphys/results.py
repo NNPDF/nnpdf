@@ -567,8 +567,14 @@ def sqrt_covariance_matrix(covariance_matrix):
            [3.73012316e-03, 2.05432491e-04, 4.40226875e-05, ...,
             9.61421910e-04, 5.31447414e-04, 9.98677667e-03]])
     """
+    dimensions = covariance_matrix.shape
+
     if covariance_matrix.size == 0:
         raise ValueError("Attempting the decomposition of an empty matrix.")
+    elif dimensions[0] != dimensions[1]:
+        raise ValueError("The input covariance matrix should be square but "
+                         f"instead it has dimensions {dimensions[0]} x "
+                         f"{dimensions[1]}")
 
     sqrt_diags = np.sqrt(np.diag(covariance_matrix))
     correlation_matrix = covariance_matrix / sqrt_diags[:, np.newaxis] / sqrt_diags
