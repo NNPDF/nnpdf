@@ -537,7 +537,7 @@ def sqrt_covariance_matrix(covariance_matrix):
     where ``decomp`` is the Cholesky decomposition of the correlation matrix and
     ``sqrt_diags`` is the square root of the diagonal entries of the covariance
     matrix. This method is useful in situations in which the covariance matrix is
-    near-singular. See https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition
+    near-singular. See `here <https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition>`_
     for more discussion on this.
 
     The lower triangular is useful for efficient calculation of the :math:`\chi^2`
@@ -571,11 +571,9 @@ def sqrt_covariance_matrix(covariance_matrix):
         raise ValueError("Attempting the decomposition of an empty matrix.")
 
     sqrt_diags = np.sqrt(np.diag(covariance_matrix))
-    correlation_matrix = (
-        covariance_matrix / sqrt_diags[:, np.newaxis] / sqrt_diags[:, np.newaxis].T
-    )
-    decomp = la.cholesky(correlation_matrix, lower=True)
-    sqrt_matrix = (decomp.T * sqrt_diags).T
+    correlation_matrix = covariance_matrix / sqrt_diags[:, np.newaxis] / sqrt_diags
+    decomp = la.cholesky(correlation_matrix)
+    sqrt_matrix = (decomp * sqrt_diags).T
     return sqrt_matrix
 
 @check_experiment_cuts_match_theorycovmat
