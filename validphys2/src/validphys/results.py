@@ -540,7 +540,7 @@ def sqrt_covariance_matrix(covariance_matrix):
     near-singular. See https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition
     for more discussion on this.
 
-    The lower triangular is useful for efficient calculation of the chi^2
+    The lower triangular is useful for efficient calculation of the :math:`\chi^2`
 
     Example
     -------
