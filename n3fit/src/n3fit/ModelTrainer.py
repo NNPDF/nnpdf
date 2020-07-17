@@ -481,6 +481,9 @@ class ModelTrainer:
 
         # Finally generate the positivity penalty
         for pos_dict in self.pos_info:
+            integ = False
+            if 'INTEG' in pos_dict['name']:
+                integ = True
             if not self.mode_hyperopt:
                 log.info("Generating positivity penalty for %s", pos_dict["name"])
 
@@ -501,7 +504,7 @@ class ModelTrainer:
                 # Select the necessary initial value to get to max_lambda after all steps
                 pos_initial = max_lambda / pow(pos_multiplier, positivity_steps)
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial, integrability=integ)
             # The input list is still common
             self.input_list += pos_layer["inputs"]
             self.input_sizes.append(pos_layer["experiment_xsize"])
