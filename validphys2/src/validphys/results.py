@@ -523,21 +523,21 @@ def sqrt_covariance_matrix(covariance_matrix):
     -------
     sqrt_mat : np.array
         The square root of the input covariance matrix, which is N_dat x N_dat
-        (where N_dat is the number of data points after cuts).
+        (where N_dat is the number of data points after cuts), and which is the
+        the lower triangular decomposition. The following should be ``True``:
+        ``np.allclose(sqrt_covariance_matrix @ sqrt_covariance_matrix.T, covariance_matrix)``.
 
     Notes
     -----
-    The following should be ``True``:
-    ``np.allclose(sqrt_covariance_matrix @ sqrt_covariance_matrix.T, covariance_matrix)``.
-
     The square root is found by using the Cholesky decomposition. However, rather
-    than finding the decomposition of the covariance matrix directly, the
-    decomposition is found of the corresponding correlation matrix and then the
-    output of this is rescaled as ``sqrt_matrix = (decomp.T * sqrt_diags).T``,
-    where ``decomp`` is the Cholesky decomposition of the correlation matrix and
-    ``sqrt_diags`` is the square root of the diagonal entries of the covariance
-    matrix. This method is useful in situations in which the covariance matrix is
-    near-singular. See `here <https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition>`_
+    than finding the decomposition of the covariance matrix directly, the (upper
+    triangular) decomposition is found of the corresponding correlation matrix
+    and then the output of this is rescaled and then transposed as
+    ``sqrt_matrix = (decomp * sqrt_diags).T``, where ``decomp`` is the Cholesky
+    decomposition of the correlation matrix and ``sqrt_diags`` is the square root
+    of the diagonal entries of the covariance matrix. This method is useful in
+    situations in which the covariance matrix is near-singular. See
+    `here <https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition>`_
     for more discussion on this.
 
     The lower triangular is useful for efficient calculation of the :math:`\chi^2`
