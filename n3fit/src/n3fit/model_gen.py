@@ -467,7 +467,7 @@ def pdfNN_layer_generator(
             lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1)
         )
 
-    layer_scaling = Feature_Scaling(scaler='MinMaxScaler', name="feature_scaling")
+    layer_scaling = Feature_Scaling(name="feature_scaling")
 
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
@@ -487,7 +487,7 @@ def pdfNN_layer_generator(
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
             curr_fun0 = dense_layer(curr_fun0)
-        res = tf.keras.layers.subtract([curr_fun,curr_fun0])
+        res = tf.keras.layers.subtract([curr_fun, curr_fun0])
         return res
 
     # Preprocessing layer (will be multiplied to the last of the denses)
