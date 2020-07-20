@@ -158,7 +158,23 @@ void Experiment::MakeReplica()
   if (fSamplingMatrix.size(0) == 0)
   {
     matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false, false, "", {});
-    fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
+
+    // If covariance matrix is zero, set sampling matrix equal to it, otherwise find its sqrt via decomposition
+    // This avoids problems caused by decomposing a matrix of zeros, which can be caused by cases in which there are no
+    // additive errors for a particular dataset
+    bool isZero = true;
+    for (int i = 0; i < fNData; i++)
+      for (int j = 0; j < fNData; j++)
+        if (SM(i,j) != 0)
+        {
+          isZero = false;
+          goto stop;
+        }
+
+    stop: if (isZero)
+      fSamplingMatrix = SM;
+    else
+      fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
   }
 
   // generate procType array for ease of checking
