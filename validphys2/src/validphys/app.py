@@ -46,6 +46,7 @@ providers = [
              'validphys.theoryinfo',
              'validphys.pseudodata',
              'validphys.renametools',
+             'validphys.covmats',
              'reportengine.report'
             ]
 
