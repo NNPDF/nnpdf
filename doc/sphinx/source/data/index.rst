@@ -6,3 +6,4 @@ Data
 
    ./intro
    ./exp-data-files
+   ./data-config
