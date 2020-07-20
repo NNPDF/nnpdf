@@ -518,34 +518,83 @@ def pdferr_plus_covmat(dataset, pdf, covmat):
 
 datasets_covmat = collect('covariance_matrix', ('data',))
 
-def sqrt_covmat(covariance_matrix):
-    """Returns the lower-triangular Cholesky factor of `covmat`
+datasets_covariance_matrix = collect(
+    'covariance_matrix',
+    ('experiments', 'experiment',)
+)
+
+def sqrt_covariance_matrix(covariance_matrix):
+    """Function that computes the square root of the covariance matrix.
 
     Parameters
     ----------
-    covmat: array
-        a positive definite covariance matrix
+    covariance_matrix : np.array
+        A positive definite covariance matrix, which is N_dat x N_dat (where
+        N_dat is the number of data points after cuts) containing uncertainty
+        and correlation information.
 
     Returns
     -------
-    sqrt_covmat : array
-        lower triangular Cholesky factor of covmat
+    sqrt_mat : np.array
+        The square root of the input covariance matrix, which is N_dat x N_dat
+        (where N_dat is the number of data points after cuts), and which is the
+        the lower triangular decomposition. The following should be ``True``:
+        ``np.allclose(sqrt_covariance_matrix @ sqrt_covariance_matrix.T, covariance_matrix)``.
 
     Notes
     -----
-    The lower triangular is useful for efficient calculation of the chi^2
+    The square root is found by using the Cholesky decomposition. However, rather
+    than finding the decomposition of the covariance matrix directly, the (upper
+    triangular) decomposition is found of the corresponding correlation matrix
+    and then the output of this is rescaled and then transposed as
+    ``sqrt_matrix = (decomp * sqrt_diags).T``, where ``decomp`` is the Cholesky
+    decomposition of the correlation matrix and ``sqrt_diags`` is the square root
+    of the diagonal entries of the covariance matrix. This method is useful in
+    situations in which the covariance matrix is near-singular. See
+    `here <https://www.gnu.org/software/gsl/doc/html/linalg.html#cholesky-decomposition>`_
+    for more discussion on this.
 
-    Examples
-    --------
+    The lower triangular is useful for efficient calculation of the :math:`\chi^2`
 
-    >>> import numpy as np
-    >>> from validphys.results import sqrt_covmat
-    >>> a = np.array([[1, 0.5], [0.5, 1]])
-    >>> sqrt_covmat(a)
-    array([[1.  , 0.    ],
-        [0.5    , 0.8660254]])
+    Example
+    -------
+    >>> from validphys.commondataparser import load_commondata
+    >>> from validphys.loader import Loader
+    >>> from validphys.calcutils import covmat_from_systematics
+    >>> from validphys.results import sqrt_covariance_matrix
+    >>> l = Loader()
+    >>> cd = l.check_commondata("NMC")
+    >>> cd = load_commondata(cd)
+    >>> cov = covmat_from_systematics(cd)
+    >>> sqrtcov = sqrt_covariance_matrix(cov)
+    array([[9.29533200e-03, 0.00000000e+00, 0.00000000e+00, ...,
+            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+           [8.82133011e-03, 8.00572153e-03, 0.00000000e+00, ...,
+            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+           [6.74959124e-03, 7.11446377e-04, 6.93755946e-03, ...,
+            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+           ...,
+           [2.58998530e-03, 1.01842488e-04, 5.34315873e-05, ...,
+            4.36182637e-03, 0.00000000e+00, 0.00000000e+00],
+           [3.00811652e-03, 9.05569142e-05, 7.09658356e-05, ...,
+            1.18572366e-03, 4.31943367e-03, 0.00000000e+00],
+           [3.73012316e-03, 2.05432491e-04, 4.40226875e-05, ...,
+            9.61421910e-04, 5.31447414e-04, 9.98677667e-03]])
     """
-    return la.cholesky(covariance_matrix, lower=True)
+    dimensions = covariance_matrix.shape
+
+    if covariance_matrix.size == 0:
+        raise ValueError("Attempting the decomposition of an empty matrix.")
+    elif dimensions[0] != dimensions[1]:
+        raise ValueError("The input covariance matrix should be square but "
+                         f"instead it has dimensions {dimensions[0]} x "
+                         f"{dimensions[1]}")
+
+    sqrt_diags = np.sqrt(np.diag(covariance_matrix))
+    correlation_matrix = covariance_matrix / sqrt_diags[:, np.newaxis] / sqrt_diags
+    decomp = la.cholesky(correlation_matrix)
+    sqrt_matrix = (decomp * sqrt_diags).T
+    return sqrt_matrix
 
 @check_data_cuts_match_theorycovmat
 def dataset_inputs_covmat(
