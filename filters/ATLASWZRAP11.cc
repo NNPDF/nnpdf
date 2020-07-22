@@ -37,7 +37,7 @@ void ATLASWZRAP11CCFilter::ReadData()
  
   const int nBins = 5;
   const int ndataWZ[nBins] = {11,22,28,40,46};  // Data thresholds for W+, W- and (Z_low, Z_peak, Z_high) respectively
-  const double MWZ2[nBins]= {pow(MW,2.0), pow(MW,2.0), pow(39.0,2.0), pow(98.0,2.0), pow(808.0,2.0)};   //Mass squared of W (+ and -) and (Z_low, Z_peak, Z_high)
+  const double MWZ2[nBins]= {pow(MW,2.0), pow(MW,2.0), pow(56.0,2.0), pow(91.0,2.0), pow(133.0,2.0)};   //Mass squared of W (+ and -) and (Z_low, Z_peak, Z_high)
 
   int low_bin = 0;
   for (int b = 0; b < nBins; b++)
@@ -112,7 +112,7 @@ void ATLASWZRAP11CFFilter::ReadData()
  
   const int nBins = 2;
   const int ndataWZ[nBins] = {9,15};  // Data thresholds for Z_peak, Z_high
-  const double MWZ2[nBins]= {pow(98.0,2.0), pow(808.0,2.0)};   //Mass squared of Z_peak, Z_high
+  const double MWZ2[nBins]= {pow(91.0,2.0), pow(133.0,2.0)};   //Mass squared of Z_peak, Z_high
 
   int low_bin = 0;
   for (int b = 0; b < nBins; b++)
