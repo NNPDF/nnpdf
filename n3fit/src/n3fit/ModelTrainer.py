@@ -11,7 +11,7 @@
 import logging
 import numpy as np
 import n3fit.model_gen as model_gen
-from n3fit.backends import MetaModel, clear_backend_state, operations
+from n3fit.backends import MetaModel, clear_backend_state, operations, callbacks
 from n3fit.stopping import Stopping
 import n3fit.hyper_optimization.penalties
 
@@ -359,7 +359,7 @@ class ModelTrainer:
 
         # The input to the full model is expected to be the input to the PDF
         # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted fro
-        full_model_input_dict = pdf_model._parse_input([input_layer], pass_numpy=False)
+        full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
 
         # The output of the pdf on input_layer will be thus a concatenation
         # of the PDF values for all experiments
@@ -621,26 +621,19 @@ class ModelTrainer:
         Every ``PUSH_POSITIVITY_EACH`` epochs the positivity will be multiplied by their
         respective positivity multipliers
         """
-        # Train the model for the number of epochs given
-        for epoch in range(epochs):
-            out = training_model.perform_fit(verbose=False)
-            print_stats = False
+        callback_st = callbacks.gen_stopping_callback(training_model, stopping_object)
+        callback_pos = callbacks.gen_stopping_positivity(
+            training_model,
+            self.training["posdatasets"],
+            self.training["posmultipliers"],
+            update_freq=PUSH_POSITIVITY_EACH,
+        )
 
-            if (epoch + 1) % 100 == 0:
-                print_stats = True
-            if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
-                training_model.multiply_weights(
-                    self.training["posdatasets"], self.training["posmultipliers"]
-                )
+        training_model.perform_fit(
+            epochs=epochs, verbose=False, callbacks=[callback_st, callback_pos]
+        )
 
-            passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
-
-            if stopping_object.stop_here():
-                break
-
-        # Report a "good" training only if there was no NaNs
-        # and if there was at least a point which passed positivity
-        if passes and stopping_object.positivity:
+        if stopping_object.positivity:
             return self.pass_status
         else:
             return self.failed_status
@@ -677,9 +670,7 @@ class ModelTrainer:
         experimental = self.model_dicts["experimental"]
         train_chi2 = stopping_object.evaluate_training(training["model"])
         val_chi2, _ = stopping_object.validation.loss()
-        exp_chi2 = (
-            experimental["model"].compute_losses(verbose=False)["loss"] / experimental["ndata"]
-        )
+        exp_chi2 = experimental["model"].compute_losses()["loss"] / experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametrizable(self, params):
@@ -719,7 +710,9 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
-        self._generate_observables(positivity_dict.get("multiplier"), positivity_dict.get("initial"), epochs)
+        self._generate_observables(
+            positivity_dict.get("multiplier"), positivity_dict.get("initial"), epochs
+        )
 
         # Generate the stopping_object
         # this object holds statistical information about the fit

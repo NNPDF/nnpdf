@@ -17,7 +17,8 @@ def l_invcovmat(invcovmat_np):
         # (yt - yp) * covmat * (yt - yp)
         tmp = y_true - y_pred
         right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
-        return tf.tensordot(tmp, right_dot, axes=1)
+        res = tf.tensordot(tmp, right_dot, axes=1)
+        return tf.reshape(res, (-1,))
 
     return true_loss
 
@@ -30,9 +31,11 @@ def l_positivity(alpha=1e-7):
     def true_loss(y_true, y_pred):
         y = -y_pred
         loss = K.elu(y, alpha=alpha)
-        return K.sum(loss)
+        res = K.sum(loss)
+        return tf.reshape(res, (-1,))
 
     return true_loss
+
 
 def l_diaginvcovmat(diaginvcovmat_np):
     """
@@ -44,5 +47,7 @@ def l_diaginvcovmat(diaginvcovmat_np):
 
     def true_loss(y_true, y_pred):
         tmp = y_true - y_pred
-        return tf.tensordot(invcovmat, K.transpose(tmp*tmp), axes=1)
+        res = tf.tensordot(invcovmat, K.transpose(tmp * tmp), axes=1)
+        return tf.reshape(res, (-1,))
+
     return true_loss

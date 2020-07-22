@@ -176,6 +176,8 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
     else:
         obsrot = None
         loss_tr = losses.l_invcovmat(invcovmat_tr)
+        # TODO At this point we need to intercept the data and compile the loss with it
+        # then the validation must have a list of None as an output
         loss_vl = losses.l_invcovmat(invcovmat_vl)
     loss = losses.l_invcovmat(invcovmat)
 
