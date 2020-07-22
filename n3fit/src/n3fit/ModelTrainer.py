@@ -349,7 +349,7 @@ class ModelTrainer:
 
         # The input to the full model is expected to be the input to the PDF
         # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted fro
-        full_model_input_dict = pdf_model._parse_input([input_layer], pass_numpy=False)
+        full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
 
         # The output of the pdf on input_layer will be thus a concatenation
         # of the PDF values for all experiments

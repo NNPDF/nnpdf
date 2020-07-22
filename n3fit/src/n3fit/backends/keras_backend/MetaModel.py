@@ -112,7 +112,7 @@ class MetaModel(Model):
             # otherwise, put a placeholder None as it will come from the outside
             name = input_tensor.op.name
             try:
-                self.x_in[name] = input_tensor.tensor_content
+                self.x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
                 self.tensors_in[name] = input_tensor
             except AttributeError:
                 self.x_in[name] = None
@@ -123,10 +123,14 @@ class MetaModel(Model):
         self.target_tensors = None
         self.eval_fun = None
 
-    def _parse_input(self, extra_input, pass_numpy=True):
-        """ Introduces the extra_input in the places asigned to the
-        placeholders """
-        if pass_numpy:
+    def _parse_input(self, extra_input=None, pass_content=True):
+        """ Returns the input tensors the model was compiled with.
+        Introduces the extra_input in the places asigned to the
+        placeholders.
+
+        If ``pass_content`` is set to ``False``, pass the tensor object.
+        """
+        if pass_content:
             return _fill_placeholders(self.x_in, extra_input)
         else:
             return _fill_placeholders(self.tensors_in, extra_input)
@@ -350,7 +354,7 @@ class MetaModel(Model):
 
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
-        x = self._parse_input(x, pass_numpy=False)
+        x = self._parse_input(x, pass_content=False)
         try:
             return super().__call__(x)
         except ValueError:
