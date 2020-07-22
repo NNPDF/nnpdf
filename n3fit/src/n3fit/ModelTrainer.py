@@ -494,8 +494,13 @@ class ModelTrainer:
             pos_initial = all_pos_initial
             pos_multiplier = all_pos_multiplier
 
+            # If the selected observable is for integrability, use always known values
+            # (alternatively we can introduce an option in the runcard)
+            if integ:
+                pos_initial = 1.0
+                pos_multiplier = pow(max_lambda / pos_initial, 1 / positivity_steps)
             # If the multiplier is None, compute it from known values
-            if pos_multiplier is None:
+            elif pos_multiplier is None:
                 # If the initial value is also None, set it to one
                 if pos_initial is None:
                     pos_initial = 1.0
@@ -503,6 +508,8 @@ class ModelTrainer:
             elif pos_initial is None:
                 # Select the necessary initial value to get to max_lambda after all steps
                 pos_initial = max_lambda / pow(pos_multiplier, positivity_steps)
+
+
 
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial, integrability=integ)
             # The input list is still common
