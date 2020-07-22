@@ -1,3 +1,5 @@
+.. _example_cfactor_file:
+
 ================================
 Example: ``CFACTOR`` file format
 ================================

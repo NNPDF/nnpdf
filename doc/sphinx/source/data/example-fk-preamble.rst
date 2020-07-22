@@ -1,3 +1,5 @@
+.. _example_fk_preamble:
+
 ========================
 Example: ``FK`` preamble
 ========================

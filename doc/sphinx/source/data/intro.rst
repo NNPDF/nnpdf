@@ -24,10 +24,10 @@ here.
 
 This document will begin by detailing the specifications for the file formats
 used by the code, first with the experimental data file formats and layouts in
-Section~... and secondly with the file formats used for
-theoretical predictions in Section~.... Finally the organisation of
+:ref:`exp_data_files` and secondly with the file formats used for
+theoretical predictions in :ref:`th_data_files`. Finally the organisation of
 these files within the ``nnpdf++`` structure will be described in
-Section~....
+:ref:`org_data_files`.
 
 Important definitions
 =====================

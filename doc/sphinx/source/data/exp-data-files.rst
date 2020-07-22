@@ -1,3 +1,5 @@
+.. _exp_data_files:
+
 =======================
 Experimental data files
 =======================
@@ -90,14 +92,14 @@ The first line begins with the *Dataset* name, the number of systematic
 errors, and the number of datapoints in the set, whitespace separated. For
 example for the ATLAS 2010 jet measurement the first line of the file reads:
 
-ATLASR04JETS36PB        91      90
+	ATLASR04JETS36PB        91      90
 
 Which demonstrates that the set *name* is "ATLASR04JETS36PB", that there
 are 91 sources of systematic uncertainty, 90 datapoints, one associated ``FK``
 table, and that the ``FK`` table corresponds to a proton initial state. As
 another example, consider the NMCPD *Dataset*:
 
-NMCPD   5       211
+	NMCPD   5       211
 
 Here there are 5 sources of systematic uncertainty and 211 datapoints.
 Following this, each line specifies the details of a single datapoint. The first
@@ -108,11 +110,11 @@ experimental datapoint itself, and the value of the statistical uncertainty
 associated with it (absolute value). Finally the systematic uncertainties are
 specified. The layout per datapoint is therefore
 
-:math:`i_{\mathrm{dat}}`   *ProcessType* :math:`\text{kin}_1 \text{kin}_2 \text{kin}_3` data\_value stat\_error  :math:`[..` systematics :math:`..]`
+	:math:`i_{\mathrm{dat}}`   *ProcessType* :math:`\text{kin}_1 \text{kin}_2 \text{kin}_3` data\_value stat\_error  :math:`[..` systematics :math:`..]`
 
 For example, in the case of a DIS datapoint from the BCDMSD *Dataset*:
 
-1    DIS\_F2D 7.0e-02   8.75e+00   5.666e-01   3.6575e-01   6.43e-03 :math:`[..` systematics :math:`..]`
+	1    DIS\_F2D 7.0e-02   8.75e+00   5.666e-01   3.6575e-01   6.43e-03 :math:`[..` systematics :math:`..]`
 
 In these lines the systematic uncertainties are laid out as so. For each
 uncertainty, additive and multiplicative versions are given. The additive
@@ -121,7 +123,7 @@ of the data value (that is, relative error multiplied by 100). The systematics
 string is formed by the sequence of :math:`N_{\text{sys}}` pairs of systematic
 uncertainties:
 
-:math:`[..` systematics :math:`..] =  \sigma^{\mathrm{add}}_0 \quad  \sigma^{\mathrm{mul}}_0\quad \sigma^{\mathrm{add}}_1 \quad \sigma^{\mathrm{mul}}_1 \quad....\quad \sigma^{\mathrm{add}}_n  \quad\sigma^{\mathrm{mul}}_n`
+	:math:`[..` systematics :math:`..] =  \sigma^{\mathrm{add}}_0 \quad  \sigma^{\mathrm{mul}}_0\quad \sigma^{\mathrm{add}}_1 \quad \sigma^{\mathrm{mul}}_1 \quad....\quad \sigma^{\mathrm{add}}_n  \quad\sigma^{\mathrm{mul}}_n`
 
 where :math:`\sigma^{\mathrm{add}}_i` and :math:`\sigma^{\mathrm{mul}}_i` are the additive
 and multiplicative versions respectively of the systematic uncertainty arising
@@ -160,7 +162,7 @@ systematics. Naturally this must match with the :math:`N_{\text{sys}}` variable
 specified in the associated ``CommonData`` file. This is presented as a single
 integer. For example, in the case of the BCDMSD ``SYSTYPE`` files, the first line is
 
-8
+	8
 
 As there are :math:`N_{\text{sys}}=8` sources of systematic uncertainty for this
 *Dataset*. Following this line are :math:`N_{\text{sys}}` lines, describing each
@@ -168,9 +170,9 @@ source of systematic uncertainty. For each source two parameters are provided,
 the *uncertainty treatment* and the *uncertainty description*. These
 are laid out for each systematic as:
 
-:math:`i_{\text{sys}}`	[*uncertainty treatment*]	[*uncertainty description*]
+	:math:`i_{\text{sys}}`	[*uncertainty treatment*]	[*uncertainty description*]
 
-Where :math:`1< i_{\text{sys}} \leq N_{\mathrm{sys}}` enumerates each systematic. The
+where :math:`1< i_{\text{sys}} \leq N_{\mathrm{sys}}` enumerates each systematic. The
 *uncertainty treatment* determines whether the uncertainty should be
 treated as additive, multiplicative, or in cases where the choice is unclear, as
 randomised on a replica by replica basis. These choices are selected by using
@@ -198,15 +200,15 @@ purposes.
 As an example, let us consider an NNPDF2.3 standard ``SYSTYPE`` for the BCDMSD
 *Dataset*.
 
-| 8
-| 1    ADD    BCDMSFB
-| 2    ADD    BCDMSFS
-| 3    ADD    BCDMSFR
-| 4    MULT    BCDMSNORM
-| 5    MULT    BCDMSRELNORMTARGET
-| 6    MULT    CORR
-| 7    MULT    CORR
-| 8    MULT    CORR
+	| 8
+	| 1    ADD    BCDMSFB
+	| 2    ADD    BCDMSFS
+	| 3    ADD    BCDMSFR
+	| 4    MULT    BCDMSNORM
+	| 5    MULT    BCDMSRELNORMTARGET
+	| 6    MULT    CORR
+	| 7    MULT    CORR
+	| 8    MULT    CORR
 
 Here the first five systematics have custom *uncertainty descriptions*,
 thereby allowing them to be cross-correlated with other *Datasets* in a
@@ -216,18 +218,18 @@ the first three systematics are specified as additive, and the remainder are
 multiplicative. If we compare now to the equivalent ``SYSTYPE`` file for the
 BCDMSP *Dataset*:
 
-| 11
-| 1    ADD    BCDMSFB
-| 2    ADD    BCDMSFS
-| 3    ADD    BCDMSFR
-| 4    MULT    BCDMSNORM
-| 5    MULT    BCDMSRELNORMTARGET
-| 6    MULT    CORR
-| 7    MULT    CORR
-| 8    MULT    CORR
-| 9    MULT    CORR
-| 10    MULT    CORR
-| 11    MULT    CORR
+	| 11
+	| 1    ADD    BCDMSFB
+	| 2    ADD    BCDMSFS
+	| 3    ADD    BCDMSFR
+	| 4    MULT    BCDMSNORM
+	| 5    MULT    BCDMSRELNORMTARGET
+	| 6    MULT    CORR
+	| 7    MULT    CORR
+	| 8    MULT    CORR
+	| 9    MULT    CORR
+	| 10    MULT    CORR
+	| 11    MULT    CORR
 
 It is clear that the first five systematics are the same as in the BCDMSD
 *Dataset*, and therefore should the two sets be combined into a common

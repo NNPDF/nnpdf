@@ -1,3 +1,5 @@
+.. _th_data_files:
+
 =================
 Theory data files
 =================
@@ -6,6 +8,8 @@ In the ``nnpdf++`` project, ``FK`` tables (or grids) are used to provide the
 information required to compute pQCD cross sections in a compact fashion.  With
 the ``FK`` method a typical hadronic observable datapoint :math:`\mathcal{O}`, is
 computed as,
+
+.. _observable:
 
   :math:`\mathcal{O}_d= \sum_{\alpha,\beta}^{N_x}\sum_{i,j}^{N_{\mathrm{pdf}}} \sigma^{(d)}_{\alpha\beta i j}N_i^0(x_\alpha)N_j^0(x_\beta)`.
 
@@ -16,6 +20,8 @@ initial scale PDF in the evolution basis at x-grid point :math:`x=x_\alpha`. Eac
 ``FK`` table has an internally specified :math:`x`-grid upon which the PDFs are
 interpolated.  The full 14-PDF evolution basis used in the ``FK`` tables is
 given by:
+
+.. _flavours:
 
   :math:`\left\{ \gamma, \Sigma,g,V,V3,V8,V15,V24,V35,T3,T8,T15,T24,T35\right\}`.
 
@@ -85,17 +91,17 @@ These are, specified by their segment name:
 
 * **GridInfo** [K-V]
   
-  This list specified various architectural points of the FK table. The required keys are specified in Table~\ref{tab:gridparams}.
+  This list specified various architectural points of the FK table. The required keys are specified in :ref:`fk_config_variables`.
 
 * **TheoryInfo** [K-V]
   
-  A list of all the theory parameters used in the generation of the table. The required keys are specified in Table~\ref{tab:theoryparams}.
+  A list of all the theory parameters used in the generation of the table. The required keys are specified in :ref:`th_parameter_definitions`.
 
 * **FlavourMap** [BLOB]
 
   The segment describes the flavour structure of the grid by means of a flavour
   map. This map details which flavour channels are active in the grid, using the
-  basis specified in Eqn.~\ref{eq:evolbasis}. For DIS processes, an example
+  basis specified :ref:`here<flavours>`. For DIS processes, an example
   section would be
 
     | {FlavourMap_____________________________________________
@@ -144,7 +150,7 @@ These are, specified by their segment name:
     | 1.00000000000000000
 
 For examples of complete DIS and hadronic ``FK`` table headers, see
-Appendix~\ref{app:FKheaders}.
+:ref:`example_fk_preamble`.
 
 ``FK`` grid layout
 ------------------
@@ -161,7 +167,7 @@ The grid itself is now written out. For hadronic data, the format is line by lin
 where :math:`d` is the index of the data point for that line, :math:`\alpha` is the x-index
 of the first PDF, :math:`\beta` is the x-index of the second PDF, the
 :math:`\sigma^d_{\alpha\beta i j}` are the values of the FastKernel grid for data
-point :math:`d` as in Eqn~\ref{eq:FKprod}, and :math:`n=14` is the total number of parton
+point :math:`d` as in the equation :ref:`here<observable>`, and :math:`n=14` is the total number of parton
 flavours in the grid. Therefore the full :math:`14\times 14` flavour space for one
 combination of the indices :math:`\{d,\alpha,\beta\}` is written out on each line.
 These lines should be written out first in :math:`\beta`, then :math:`\alpha` and finally
@@ -237,7 +243,7 @@ the ``FK`` prediction for the :math:`(i-1)^{\text{th}}` datapoint.  The first co
 denotes the value of the :math:`C-`factor and the second column denotes the
 uncertainty upon it (in absolute terms, not as a percentage or otherwise
 relative to the :math:`C-`factor). For a complete example of a ``CFACTOR`` file,
-please see Appendix~\ref{app:CFACexa}.
+please see :ref:`example_cfactor_file`.
 
 ``COMPOUND`` file format
 ========================
@@ -246,7 +252,7 @@ Some *Datasets* cover observables that depend non-linearly upon the input
 PDFs. For example, the NMCPD *Dataset* is a measurement of the ratio of
 deuteron to proton structure functions. In the ``nnpdf++`` code such sets are
 denoted *Compound Datasets*. In these cases, a prescription for how the
-results from FK convolutions as in Eqn~\ref{eq:FKprod} should be combined must
+results from FK convolutions as in this :ref:`equation<observable>` should be combined must
 be given.
 
 The ``COMPOUND`` files are a simple method of providing this information. For
