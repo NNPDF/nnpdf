@@ -8,3 +8,5 @@ Data
    ./exp-data-files
    ./th-data-files
    ./data-config
+   ./example-cfactor-file
+   ./example-fk-preamble
