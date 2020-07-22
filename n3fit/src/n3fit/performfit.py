@@ -224,6 +224,7 @@ def performfit(
             exp_info,
             pos_info,
             fitting["basis"],
+            fitting["fitbasis"],
             nnseed,
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),

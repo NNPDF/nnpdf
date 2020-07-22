@@ -1,0 +1,10 @@
+********************************************************************************
+SetName: ATLAS_TTBARTOT_13TEV_FULLLUMI
+Author: Emanuele R. Nocera enocera@nikhef.nl
+Date: June 2020
+CodesUsed: top++ v2.0
+TheoryInput: NNPDF3.1 with alphas(MZ)=0.118
+PDFset: NNPDF31_nnlo_as_0118
+Warnings: NNLO theory (no NNLL effects)
+********************************************************************************
+1.0703   0.0000

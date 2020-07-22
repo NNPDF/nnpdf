@@ -13,7 +13,7 @@ experiments:
   - experiment: ALL
     datasets:
       - { dataset: SLACP, frac: 0.5}
-      - { dataset: NMCPD, frac: 0.5 }      
+      - { dataset: NMCPD, frac: 0.5 }
       - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
 
 ############################################################
@@ -37,17 +37,19 @@ theory:
 
 ############################################################
 fitting:
-  genrep   : True    # on = generate MC replicas, False = use real data
   trvlseed: 1
   nnseed: 2
-  mcseed: 3  
+  mcseed: 3
   epochs: 900
-  # CHANGE THE FOLLOWING OPTIONS
   save: False
   savefile: 'weights.hd5'
   load: False
   loadfile: 'weights.hd5'
   plot: False
+
+  seed     : 9453862133528      # set the seed for the random generator
+  genrep   : True     # on = generate MC replicas, off = use real data
+  rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [15, 10, 8]
@@ -92,13 +94,13 @@ stopping:
   lbdelta   : 0         # Delta for look-back stopping
   mingen    : 0         # Minimum number of generations
   window    : 500       # Window for moving average
-  minchi2   : 3.5       # Minimum chi2 
+  minchi2   : 3.5       # Minimum chi2
   minchi2exp: 6.0       # Minimum chi2 for experiments
   nsmear    : 200       # Smear for stopping
   deltasm   : 200       # Delta smear for stopping
   rv        : 2         # Ratio for validation stopping
   rt        : 0.5       # Ratio for training stopping
-  epsilon   : 1e-6      # Gradient epsilon  
+  epsilon   : 1e-6      # Gradient epsilon
 
 ############################################################
 positivity:

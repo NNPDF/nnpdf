@@ -22,18 +22,6 @@
    linearly dependent on the others
   rule: "MQQ<1350"
 
-- dataset: CMSTOPDIFF8TEVTRAPNORM
-  reason: |
-   We remove the last bin of the normalised distribution because it is
-   linearly dependent on the others
-  rule: "yQ<2.01"
-
-- dataset: CMSTOPDIFF8TEVTTRAPNORM
-  reason: |
-   We remove the last bin of the normalised distribution because it is
-   linearly dependent on the others
-  rule: "yQQ<1.82"
-
 - dataset: ATLAS1JET11
   reason: |
     We keep only the first rapidity bin since the chi2 to the whole set of

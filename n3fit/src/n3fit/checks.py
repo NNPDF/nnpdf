@@ -4,6 +4,7 @@ This module contains checks to be perform by n3fit on the input
 import logging
 from reportengine.checks import make_argcheck, CheckError
 from validphys.pdfbases import check_basis
+from n3fit.hyper_optimization import penalties as penalties_module
 
 log = logging.getLogger(__name__)
 
@@ -21,9 +22,11 @@ def check_existing_parameters(parameters):
             raise CheckError(f"Missing {param_name} parameter in the runcard")
     # Check that positivity is not defined wrong
     if "pos_initial" in parameters or "pos_multiplier" in parameters:
-        raise CheckError("The definition of the positivity parameters is deprecated, please "
-                "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
-                "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml")
+        raise CheckError(
+            "The definition of the positivity parameters is deprecated, please "
+            "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
+            "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml"
+        )
 
 
 def check_consistent_layers(parameters):
@@ -161,6 +164,12 @@ def check_kfold_options(kfold):
     threshold = kfold.get("threshold")
     if threshold is not None and threshold < 2.0:
         log.warning("The kfolding loss threshold might be too low: %f", threshold)
+    penalty_selection = kfold.get("penalties", [])
+    for penalty in penalty_selection:
+        if not hasattr(penalties_module, penalty):
+            raise CheckError(
+                f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
+            )
 
 
 def check_correct_partitions(kfold, experiments):

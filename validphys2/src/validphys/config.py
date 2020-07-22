@@ -13,19 +13,23 @@ import copy
 import os
 from importlib.resources import read_text, contents
 
-from collections import ChainMap
+from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
-from reportengine.compat import yaml
-from reportengine.configparser import ConfigError, element_of, _parse_func
+from reportengine.configparser import (
+    ConfigError,
+    element_of,
+    _parse_func,
+    record_from_defaults,
+)
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from reportengine import report
 from reportengine.compat import yaml
 
-from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
+from validphys.core import (DataGroupSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader, InconsistentMetaDataError)
@@ -185,35 +189,33 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
-    def produce_fitcontext(self, fit):
-        """Set PDF, theory ID and experiments from the fit config"""
+    def produce_fitcontext(self, fitinputcontext, fitpdf):
+        """Set PDF, theory ID and data input from the fit config"""
 
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
-        _, theory      = self.parse_from_('fit', 'theory', write=False)
-
-        #TODO: parse we need multilevel from to do theoruid nicely
-        thid = theory['theoryid']
-
-        #We need to make theoryid available to parse the experiments
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
-
-
-
-        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+        return dict(**fitinputcontext, **fitpdf)
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""
-
-
         _, theory      = self.parse_from_('fit', 'theory', write=False)
         thid = theory['theoryid']
 
-        #We need to make theoryid available to parse the experiments
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
-
-        return {'theoryid':thid, 'experiments': experiments}
+        # new fits have dataset_inputs, old fits have experiments
+        data_key = 'dataset_inputs'
+        try:
+            _, data_val = self.parse_from_('fit', data_key, write=False)
+        except ConfigError as e:
+            data_key = "experiments"
+            log.warning("old fit found, falling back to old behaviour")
+            # We need to make theoryid available if using experiments
+            try:
+                with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+                    _, data_val = self.parse_from_('fit', data_key, write=False)
+            except ConfigError:
+                raise e
+        # now fill in a unique key "data_input" regardless of new or old fit
+        # for uniformity
+        data_input = self.produce_data_input(**{data_key: data_val})
+        return {"theoryid": thid, "data_input": data_input}
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""
@@ -475,7 +477,7 @@ class CoreConfig(configparser.Config):
             for (dsinp, cuts) in zip(dsinputs, cutinps)
         ]
 
-        return ExperimentSpec(name=name, datasets=datasets, dsinputs=dsinputs)
+        return DataGroupSpec(name=name, datasets=datasets, dsinputs=dsinputs)
 
 
     @configparser.element_of('experiment_inputs')
@@ -510,20 +512,20 @@ class CoreConfig(configparser.Config):
         """
         from validphys import results
         if use_pdferr:
-            return results.pdferr_plus_data_covmat
+            return results.pdferr_plus_covmat
         else:
-            return results.data_covmat
+            return results.covmat
 
     @configparser.explicit_node
-    def produce_experiment_covariance_matrix(self, use_pdferr: bool = False):
+    def produce_dataset_inputs_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as experiment_covariance_matrix
         depending on the flag `use_pdferr`
         """
         from validphys import results
         if use_pdferr:
-            return results.pdferr_plus_experiment_covmat
+            return results.pdferr_plus_dataset_inputs_covmat
         else:
-            return results.experiment_covmat
+            return results.dataset_inputs_covmat
 
     #TODO: Do this better and elsewhere
     @staticmethod
@@ -548,7 +550,7 @@ class CoreConfig(configparser.Config):
 
         Compute the intersection of the dataset names, and for each element in
         the intersection construct a mapping with the follwing keys:
-            
+
             - process : A string with the common process name.
             - experiment_name : A string with the common experiment name.
             - dataset_name : A string with the common dataset name.
@@ -563,29 +565,27 @@ class CoreConfig(configparser.Config):
         self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
+
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, experiments = self.parse_from_(
-                    None, 'experiments', write=False)
-                names = {(e.name, ds.name, process_lookup(ds.name)): (ds, dsin)
-                         for e in experiments
-                         for ds, dsin in zip(e.datasets, e)}
+                _, data_input = self.parse_from_(None, "data_input", write=False)
+                names = {(process_lookup(dsin.name), dsin.name): dsin
+                         for dsin in data_input}
+
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
-            inres = {'experiment_name': k[0], 'dataset_name': k[1], 'process': k[2]}
+            inres = {'process': k[0], 'dataset_name': k[1]}
             #TODO: Should this have the same name?
             inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
                 #Passing spec by referene
                 d = ChainMap({
-                    'dataset': all_names[ispec][k][0],
-                    'dataset_input': all_names[ispec][k][1],
+                    'dataset_input': all_names[ispec][k],
                 }, spec)
                 inner_spec_list.append(d)
             res.append(inres)
-        res.sort(key=lambda x: (x['process'], x['experiment_name'], x['dataset_name']))
+        res.sort(key=lambda x: (x['process'], x['dataset_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
@@ -734,9 +734,9 @@ class CoreConfig(configparser.Config):
         ret = []
         for experiment in experiments:
             for dsinput, dataset in zip(experiment, experiment.datasets):
-                single_exp = ExperimentSpec(experiment.name,
-                                            datasets=[dataset],
-                                            dsinputs=[dsinput])
+                single_exp = DataGroupSpec(experiment.name,
+                                           datasets=[dataset],
+                                           dsinputs=[dsinput])
                 ret.append({'reweighting_experiments': [single_exp],
                             'dataset_input':dsinput})
         return ret
@@ -876,44 +876,6 @@ class CoreConfig(configparser.Config):
         """
         return label
 
-    def produce_fit_data_groupby_experiment(self, fit):
-        """Used to produce data from the fit grouped into experiments,
-        where each experiment is a group of datasets according to the experiment
-        key in the plotting info file.
-        """
-        #TODO: consider this an implimentation detail
-
-        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
-
-        flat = (ds for exp in experiments for ds in exp.datasets)
-        metaexps = [get_info(ds).experiment for ds in flat]
-        res = {}
-        for exp in experiments:
-            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
-                metaexp = get_info(ds).experiment
-                if metaexp in res:
-                    res[metaexp].append(ds)
-                else:
-                    res[metaexp] = [ds]
-        exps = []
-        for exp in res:
-            exps.append(ExperimentSpec(exp, res[exp]))
-
-        experiments = NSList(exps, nskey='experiment')
-        return {'experiments': experiments}
-
-    def produce_fit_context_groupby_experiment(self, fit):
-        """produces experiments similarly to `fit_data_groupby_experiment`
-        but also sets fitcontext (pdf and theoryid)
-        """
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
-        _, theory      = self.parse_from_('fit', 'theory', write=False)
-        thid = theory['theoryid']
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            experiments = self.produce_fit_data_groupby_experiment(
-                fit)['experiments']
-        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
     def produce_all_commondata(self):
         """produces all commondata using the loader function """
@@ -1096,6 +1058,163 @@ class CoreConfig(configparser.Config):
             filter_defaults["w2min"] = w2min
 
         return filter_defaults
+
+    def produce_data(
+            self,
+            data_input,
+            *,
+            theoryid,
+            use_cuts,
+            rules,
+            fit=None,
+            check_plotting: bool = False,
+            use_fitcommondata=False,
+            group_name="data",
+        ):
+        """A set of datasets where correlated systematics are taken
+        into account
+        """
+        #TODO: extract the commondata and cuts and seperate from dataset
+        cds = [self.produce_commondata(
+                dataset_input=dsinp,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit) for dsinp in data_input]
+        cutinps = [
+            self.produce_cuts(
+                rules=rules,
+                commondata=cd,
+                use_cuts=use_cuts,
+                fit=fit,
+                theoryid=theoryid,
+                ) for cd in cds
+        ]
+
+        #autogenerated func, from element_of
+        datasets = [
+            self.produce_dataset(
+                rules=rules,
+                dataset_input=dsinp,
+                theoryid=theoryid,
+                cuts=cuts,
+                fit=fit,
+                check_plotting=check_plotting,
+                use_fitcommondata=use_fitcommondata)
+            for (dsinp, cuts) in zip(data_input, cutinps)
+        ]
+        #TODO: get rid of libnnpdf Experiment
+        return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
+
+    def produce_data_input(self, dataset_inputs: (list, type(None))=None, experiments=None):
+        if dataset_inputs:
+            return dataset_inputs
+        if experiments is not None:
+            log.warning(
+                "`experiments` has been deprecated, specify data using `dataset_inputs`. "
+                "Any grouping defined by `experiments` is being ignored."
+            )
+            return [dsinput for experiment in experiments for dsinput in experiment.dsinputs]
+        else:
+            raise ConfigError("must specify dataset_inputs in runcard")
+
+    def parse_metadata_group(self, group: str):
+        """User specified key to group data by. The key must exist in the
+        PLOTTING file for example `experiment`
+        """
+        return group
+
+    @record_from_defaults
+    def parse_data_grouping(self, key):
+        """a key which indicates which default grouping to use. Mainly for
+        internal use. It allows the default grouping of experiment to be applied
+        to runcards which don't specify `metadata_group` without there being
+        a namespace conflict in the lockfile
+
+        """
+        return key
+
+    def load_default_data_grouping(self, spec):
+        """Load the default grouping of data"""
+        # slightly superfluous, only one default at present but perhaps
+        # somebody will want to add to this at some point e.g for th. uncertainties
+        allowed = {
+            "standard_report": "experiment",
+        }
+        return allowed[spec]
+
+
+    def produce_processed_data_grouping(
+        self, data_grouping=None, data_grouping_recorded_spec_=None):
+        """Process the data_grouping key from the runcard, or lockfile. If
+        `data_grouping_recorded_spec_` is present then its value is taken, and
+        the runcard is assumed to be a lockfile.
+
+        If data_grouping is None, then fall back to old behaviour of grouping
+        by experiment.
+
+        Else, the user can specfiy their own grouping, for example metadata_process.
+        """
+        if data_grouping is None:
+            # fallback to old default behaviour, but still record to lockfile
+            data_grouping = self.parse_data_grouping("standard_report")
+        if data_grouping_recorded_spec_ is not None:
+            return data_grouping_recorded_spec_[data_grouping]
+        return self.load_default_data_grouping(data_grouping)
+
+    def produce_processed_metadata_group(
+        self, processed_data_grouping, metadata_group=None
+    ):
+        """Expose the final data grouping result. Either metadata_group is
+        specified by user, in which case uses `processed_data_grouping` which
+        is experiment by default.
+        """
+        if metadata_group is None:
+            return processed_data_grouping
+        return metadata_group
+
+
+    def produce_group_dataset_inputs_by_metadata(
+        self, data_input, processed_metadata_group,
+    ):
+        """Take the data and the processed_metadata_group key and attempt
+        to group the data, returns a list where each element specifies the data_input
+        for a single group and the group_name
+        """
+        res = defaultdict(list)
+        for dsinput in data_input:
+            cd = self.produce_commondata(dataset_input=dsinput)
+            try:
+                res[getattr(get_info(cd), processed_metadata_group)].append(dsinput)
+            except AttributeError:
+                raise ConfigError(
+                    f"Unable to find key: {processed_metadata_group} in {cd.name} "
+                    "PLOTTING file.",
+                    bad_item=processed_metadata_group,
+                    alternatives=get_info(cd).__dict__,
+                )
+        return [
+            {"data_input": group, "group_name": name}
+            for name, group in res.items()
+        ]
+
+    def produce_group_dataset_inputs_by_experiment(
+        self, data_input):
+        res = defaultdict(list)
+        for dsinput in data_input:
+            cd = self.produce_commondata(dataset_input=dsinput)
+            try:
+                res[getattr(get_info(cd), "experiment")].append(dsinput)
+            except AttributeError:
+                raise ConfigError(
+                    f"Unable to find key: experiment in {cd.name} "
+                    "PLOTTING file."
+                )
+        from IPython import embed
+        embed()
+        return [
+            {"data_input": group, "experiment_name": name}
+            for name, group in res.items()
+        ]
+
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point

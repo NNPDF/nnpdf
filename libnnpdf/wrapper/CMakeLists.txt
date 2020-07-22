@@ -48,6 +48,7 @@ set_source_files_properties(./src/nnpdf.i PROPERTIES CPLUSPLUS ON)
 include_directories(../src)
 
 # Add swig module
+SET(CMAKE_SWIG_FLAGS "-threads")
 if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
     swig_add_module(nnpdf python ./src/nnpdf.i)
 else()
