@@ -7,8 +7,8 @@ Experimental data files
 Data made available by experimental collaborations comes in a variety of
 formats. For use in a fitting code, this data must be converted into a common
 format that contains all the required information for use in PDF fitting.
-Existing formats commonly used by the community, such as in HepData, are
-generally unsuitable.  Principally as they often do not fully describe the
+Existing formats commonly used by the community, such as in `HepData <https://www.hepdata.net/>`_,
+are generally unsuitable. Principally as they often do not fully describe the
 breakdown of systematic uncertainties. Therefore over several years an NNPDF
 standard data format has been iteratively developed, now denoted
 ``CommonData``. In addition to the ``CommonData`` files themselves, in the
@@ -28,9 +28,9 @@ Process types and kinematics
 Before going into the file formats, we shall summarise the identifying features
 used for data in the ``nnpdf++`` code.
 
-Each datapoint has an associated *process type* string. This can be
+Each data point has an associated *process type* string. This can be
 specified by the user, but **must** begin with the appropriate identifying
-base process type. Additionally for each datapoint three kinematic values are
+base process type. Additionally for each data point three kinematic values are
 given, the *process type* being primarily to identify the nature of these
 values. Typically the first kinematic variable is the principal differential
 quantity used in the measurement. The second kinematic variable defines the
@@ -68,7 +68,7 @@ only use this freedom when absolutely necessary (such as when used in
 combination with APFEL).
 
 One special case is that of :math:`W` boson lepton asymmetry measurements, which being
-cross-section asymmetries may occasionally have negative datapoints. Therefore
+cross-section asymmetries may occasionally have negative data points. Therefore
 asymmetry measurements must have the final tag **ASY** to ensure that
 artificial data generation permits negative data values. An example
 *process type* string would be **EWK\_RAP\_ASY**.
@@ -86,33 +86,33 @@ Each experimental *Dataset* has its own ``CommonData`` file.
 ``CommonData`` files contain the bulk of the experimental information used in the
 ``nnpdf++`` project, with the only other experimental data files controlling
 the treatment and correlation of systematic errors. Each ``CommonData`` file
-is a plaintext file with the following layout.
+is a plaintext file whose layout is described in the following.
 
 The first line begins with the *Dataset* name, the number of systematic
-errors, and the number of datapoints in the set, whitespace separated. For
-example for the ATLAS 2010 jet measurement the first line of the file reads:
+errors, and the number of data points in the set, whitespace separated. For
+example, for the ATLAS 2010 jet measurement the first line of the file reads:
 
 	ATLASR04JETS36PB        91      90
 
-Which demonstrates that the set *name* is "ATLASR04JETS36PB", that there
-are 91 sources of systematic uncertainty, 90 datapoints, one associated ``FK``
+Which demonstrates that the set *name* is 'ATLASR04JETS36PB', that there
+are 91 sources of systematic uncertainty, 90 data points, one associated ``FK``
 table, and that the ``FK`` table corresponds to a proton initial state. As
 another example, consider the NMCPD *Dataset*:
 
 	NMCPD   5       211
 
-Here there are 5 sources of systematic uncertainty and 211 datapoints.
-Following this, each line specifies the details of a single datapoint. The first
-value being the datapoint index :math:`1< i_{\text{dat}} \leq N_{\mathrm{dat}}`,
+Here there are 5 sources of systematic uncertainty and 211 data points.
+Following this, each line specifies the details of a single data point. The first
+value being the data point index :math:`1< i_{\text{dat}} \leq N_{\mathrm{dat}}`,
 followed by the *process type* string as outlined above, and the three
 kinematic variables in order. These are followed by the value of the
-experimental datapoint itself, and the value of the statistical uncertainty
+experimental data point itself, and the value of the statistical uncertainty
 associated with it (absolute value). Finally the systematic uncertainties are
-specified. The layout per datapoint is therefore
+specified. The layout per data point is therefore
 
 	:math:`i_{\mathrm{dat}}`   *ProcessType* :math:`\text{kin}_1 \text{kin}_2 \text{kin}_3` data\_value stat\_error  :math:`[..` systematics :math:`..]`
 
-For example, in the case of a DIS datapoint from the BCDMSD *Dataset*:
+For example, in the case of a DIS data point from the BCDMSD *Dataset*:
 
 	1    DIS\_F2D 7.0e-02   8.75e+00   5.666e-01   3.6575e-01   6.43e-03 :math:`[..` systematics :math:`..]`
 
@@ -127,9 +127,9 @@ uncertainties:
 
 where :math:`\sigma^{\mathrm{add}}_i` and :math:`\sigma^{\mathrm{mul}}_i` are the additive
 and multiplicative versions respectively of the systematic uncertainty arising
-from the :math:`i`th source. While it may seem at first that the multiplicative error
+from the :math:`i\text{th}` source. While it may seem at first that the multiplicative error
 is spurious given the presence of the additive error and data central value,
-this may not be the case. For example in a closure test scenario, the data
+this may not be the case. For example, in a closure test scenario, the data
 central values may have been replaced in the ``CommonData`` file by
 theoretical predictions. Therefore if you wish to use a covariance matrix
 generated with the original multiplicative uncertainties via the :math:`t_0` method,
@@ -137,11 +137,11 @@ you must also store the original multiplicative (percentage) error. For
 flexibility and ease of I/O this is therefore done in the ``CommonData`` file
 itself.
 
-For a *Dataset* with :math:`N_{\text{dat}}` datapoints and :math:`N_{\text{sys}}`
+For a *Dataset* with :math:`N_{\text{dat}}` data points and :math:`N_{\text{sys}}`
 sources of systematic uncertainty, the total ``CommonData`` file should
 therefore be :math:`N_{\text{dat}}+1` lines long. Its first line contains the set
 parameters, and every subsequent line should consist of the description of a
-single datapoint. Each datapoint line should therefore contain :math:`7 +
+single data point. Each data point line should therefore contain :math:`7 +
 2N_{\text{sys}}` columns.
 
 ``SYSTYPE`` file format
@@ -157,6 +157,7 @@ file. As there is not always an unambiguous method for the treatment of these
 uncertainties, these information is kept outside the (unambiguous)
 ``CommonData`` file. Several options for this treatment are often provided in the
 form of multiple ``SYSTYPE`` files which may be selected between in the fit.
+
 Each ``SYSTYPE`` file begins with a line specifying the total number of
 systematics. Naturally this must match with the :math:`N_{\text{sys}}` variable
 specified in the associated ``CommonData`` file. This is presented as a single
@@ -164,8 +165,8 @@ integer. For example, in the case of the BCDMSD ``SYSTYPE`` files, the first lin
 
 	8
 
-As there are :math:`N_{\text{sys}}=8` sources of systematic uncertainty for this
-*Dataset*. Following this line are :math:`N_{\text{sys}}` lines, describing each
+as there are :math:`N_{\text{sys}}=8` sources of systematic uncertainty for this
+*Dataset*. Following this line there are :math:`N_{\text{sys}}` lines describing each
 source of systematic uncertainty. For each source two parameters are provided,
 the *uncertainty treatment* and the *uncertainty description*. These
 are laid out for each systematic as:
@@ -178,7 +179,7 @@ treated as additive, multiplicative, or in cases where the choice is unclear, as
 randomised on a replica by replica basis. These choices are selected by using
 the strings **ADD**, **MULT**, or **RAND**. The *uncertainty
 description* specifies how the systematic is to be correlated with other
-datapoints. There are three special cases for the *uncertainty
+data points. There are three special cases for the *uncertainty
 description*, specified by the strings **CORR**, **UNCORR**,
 **THEORYCORR**, **THEORYUNCORR** and **SKIP**. The first two
 specify whether the systematic is fully correlated **only** within the
@@ -194,11 +195,11 @@ When building a covariance matrix for an *Experiment*, the ``nnpdf++``
 code checks for matches between the *uncertainty descriptions* of
 systematics of its constituent *Datasets*. If a match is found, the code
 will correlate those systematics over the relevant datasets. The **SKIP**
-descriptor removes the systematic from the covariance matrices for debug
+descriptor removes the systematic from the covariance matrices for debugging
 purposes.
 
 As an example, let us consider an NNPDF2.3 standard ``SYSTYPE`` for the BCDMSD
-*Dataset*.
+*Dataset*:
 
 	| 8
 	| 1    ADD    BCDMSFB
@@ -231,7 +232,7 @@ BCDMSP *Dataset*:
 	| 10    MULT    CORR
 	| 11    MULT    CORR
 
-It is clear that the first five systematics are the same as in the BCDMSD
+it is clear that the first five systematics are the same as in the BCDMSD
 *Dataset*, and therefore should the two sets be combined into a common
 *Experiment*, the code will cross-correlate them appropriately. The
 combination of ``SYSTYPE`` and ``CommonData`` is quite flexible. As stated

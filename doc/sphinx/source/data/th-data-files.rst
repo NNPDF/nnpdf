@@ -5,8 +5,8 @@ Theory data files
 =================
 
 In the ``nnpdf++`` project, ``FK`` tables (or grids) are used to provide the
-information required to compute pQCD cross sections in a compact fashion.  With
-the ``FK`` method a typical hadronic observable datapoint :math:`\mathcal{O}`, is
+information required to compute perturbative QCD cross sections in a compact fashion.  With
+the ``FK`` method a typical hadronic observable data point :math:`\mathcal{O}`, is
 computed as,
 
 .. _observable:
@@ -15,8 +15,8 @@ computed as,
 
 where :math:`\sigma_{\alpha\beta i j}^{(d)}`, the ``FK`` table, is a five index
 object with two indices in flavour (:math:`i`, :math:`j`), two indices in :math:`x` (:math:`\alpha`,
-:math:`\beta`) and a datapoint index :math:`d`. :math:`N^0_i({x_\alpha})` is the :math:`i^{\mathrm{th}}`
-initial scale PDF in the evolution basis at x-grid point :math:`x=x_\alpha`. Each
+:math:`\beta`) and a data point index :math:`d`. :math:`N^0_i({x_\alpha})` is the :math:`i^{\mathrm{th}}`
+initial scale PDF in the evolution basis at :math:`x`-grid point :math:`x=x_\alpha`. Each
 ``FK`` table has an internally specified :math:`x`-grid upon which the PDFs are
 interpolated.  The full 14-PDF evolution basis used in the ``FK`` tables is
 given by:
@@ -26,7 +26,7 @@ given by:
   :math:`\left\{ \gamma, \Sigma,g,V,V3,V8,V15,V24,V35,T3,T8,T15,T24,T35\right\}`.
 
 Additional information may be introduced via correction factors known internally
-as :math:`C`-factors. These consist of datapoint by datapoint multiplicative
+as :math:`C`-factors. These consist of data point by data point multiplicative
 corrections to the final result of the ``FK`` convolution :math:`\mathcal{O}`. These
 are provided by ``CFACTOR`` files, typical applications being the application
 of NNLO and electroweak corrections.  For processes which depend non-linearly
@@ -52,13 +52,12 @@ NNPDF code are compressed individually with gzip.
 
 The FK preamble is constructed by a set of data segments, of which there are two
 configurations. The first configuration consists of a list of key-value pairs,
-and the second is a simple data `blob' with no requirements as to it's
-formatting. Each segment is begun by a delineating line, for key-value pairs the
-segment opening line is
+and the second is a simple data 'blob' with no requirements as to its
+formatting. Each segment begins with a delineating line which for key-value pairs is
 
     _SegmentName_____________________________________________
 
-and for data blobs the opening line is
+and for data blobs is
 
     {SegmentName_____________________________________________
 
@@ -69,7 +68,7 @@ underscore (``_``). The line is then typically padded out with underscores up
 to 60 characters. Following this delineating line, for a key-value segment, the
 following lines must all be of the format
 
-    ``*KEY: VALUE``
+    *KEY: VALUE
 
 with the first character required to be an asterisk (``*``), then specifying the
 key, and value for that segment. For blob-type segments, no constraints are
@@ -107,7 +106,7 @@ These are, specified by their segment name:
     | {FlavourMap_____________________________________________
     | 0 1 1 0 0 0 0 0 0 0 1 0 0 0
 
-  Which specifies that only the Singlet, gluon and :math:`T_8` channels are populated in
+  which specifies that only the Singlet, gluon and :math:`T_8` channels are populated in
   the grid. In the case of hadronic FK tables, the full :math:`14\times 14` flavour
   combination matrix is specified in the same manner. Consider the flavourmap for
   the CDFR2KT *Dataset*:
@@ -136,7 +135,7 @@ These are, specified by their segment name:
 
 * **xGrid** [BLOB]
   
-  This segment defines the :math:`x` grid upon which the ``FK`` grid is defined,
+  This segment defines the :math:`x`-grid upon which the ``FK`` grid is defined,
   given as an :math:`N_x` long list of the :math:`x`-grid points. This grid should be
   optimised to minimise ``FK`` grid zeros in :math:`x`-space. The blob is a simple
   list of the grid points, here is an example of an :math:`x`-grid with :math:`N_x=5`
@@ -164,14 +163,14 @@ The grid itself is now written out. For hadronic data, the format is line by lin
 
   :math:`d \:\: \alpha \:\: \beta \:\: \sigma^d_{\alpha\beta 1 1} \:\: \sigma^d_{\alpha\beta 1 2}\:\: ....\:\: \sigma^d_{\alpha\beta n n}`
 
-where :math:`d` is the index of the data point for that line, :math:`\alpha` is the x-index
-of the first PDF, :math:`\beta` is the x-index of the second PDF, the
+where :math:`d` is the index of the data point for that line, :math:`\alpha` is the :math:`x`-index
+of the first PDF, :math:`\beta` is the :math:`x`-index of the second PDF, the
 :math:`\sigma^d_{\alpha\beta i j}` are the values of the FastKernel grid for data
 point :math:`d` as in the equation :ref:`here<observable>`, and :math:`n=14` is the total number of parton
 flavours in the grid. Therefore the full :math:`14\times 14` flavour space for one
 combination of the indices :math:`\{d,\alpha,\beta\}` is written out on each line.
 These lines should be written out first in :math:`\beta`, then :math:`\alpha` and finally
-:math:`d` so that the ``FK`` grids are written in blocks of datapoints. All ``FK``
+:math:`d` so that the ``FK`` grids are written in blocks of data points. All ``FK``
 grid values should be written out in double precision. For DIS data the ``FK``
 grids must be written out as
 
@@ -198,9 +197,9 @@ lines at the end of file.
 Additional multiplicative factors to be applied to the output of the ``FK``
 convolution may be introduced by the use of ``CFACTOR`` files. These files
 have a very simple format. They begin with a header providing a description of
-the :math:`C-`factor information stored in the file. This segment is initialised and
+the :math:`C`-factor information stored in the file. This segment is initialised and
 terminated by a line beginning with a star (``*``) character and consists of
-six mandatory fields
+six mandatory fields:
 
 * **SetName** - The *Dataset* name.
 * **Author** - The author of the ``CFACTOR`` file.
@@ -228,7 +227,7 @@ header region. Consider the following as a complete example of the header,
   | *******************************************
 
 The remainder of the file consists of the :math:`C`-factors themselves, and the error
-upon the :math:`C`-factors. Each line is now the :math:`C-`factor for each datapoint, with
+upon the :math:`C`-factors. Each line is now the :math:`C`-factor for each data point, with
 the whitespace separated uncertainty. For example, for *Dataset* with five
 points, the data section of a ``CFACTOR`` file may be:
 
@@ -238,11 +237,11 @@ points, the data section of a ``CFACTOR`` file may be:
   | 1.4	0.14
   | 1.5	0.15
 
-where the :math:`i^{\text{th}}` line corresponds to the :math:`C-`factor to be applied to
-the ``FK`` prediction for the :math:`(i-1)^{\text{th}}` datapoint.  The first column
-denotes the value of the :math:`C-`factor and the second column denotes the
+where the :math:`i^{\text{th}}` line corresponds to the :math:`C`-factor to be applied to
+the ``FK`` prediction for the :math:`(i-1)^{\text{th}}` data point.  The first column
+denotes the value of the :math:`C`-factor and the second column denotes the
 uncertainty upon it (in absolute terms, not as a percentage or otherwise
-relative to the :math:`C-`factor). For a complete example of a ``CFACTOR`` file,
+relative to the :math:`C`-factor). For a complete example of a ``CFACTOR`` file,
 please see :ref:`example_cfactor_file`.
 
 ``COMPOUND`` file format
@@ -251,14 +250,13 @@ please see :ref:`example_cfactor_file`.
 Some *Datasets* cover observables that depend non-linearly upon the input
 PDFs. For example, the NMCPD *Dataset* is a measurement of the ratio of
 deuteron to proton structure functions. In the ``nnpdf++`` code such sets are
-denoted *Compound Datasets*. In these cases, a prescription for how the
-results from FK convolutions as in this :ref:`equation<observable>` should be combined must
-be given.
+denoted *Compound Datasets*. In these cases, a prescription must be given for how the
+results from FK convolutions, as in this :ref:`equation<observable>`, should be combined.
 
 The ``COMPOUND`` files are a simple method of providing this information. For
 each *Compound Dataset* a ``COMPOUND`` file is provided that contains the
 information on how to build the observable from constituent ``FK`` tables. The
-following operations are currently implemented.
+following operations are currently implemented:
 
 =================================  =========  =================
 Operation :math:`(N_{\text{FK}})`  Code       Output Observable
@@ -270,7 +268,7 @@ Asymmetry (2)                      **ASY**    :math:`\mathcal{O}_d = (\mathcal{O
 Ratio (2)                          **RATIO**  :math:`\mathcal{O}_d = \mathcal{O}^{(1)}_d / \mathcal{O}^{(2)}_d`
 =================================  =========  =================
 
-Here :math:`N_{\text{``FK``}}` refers to the number of tables required for each
+Here :math:`N_{\text{FK}}` refers to the number of tables required for each
 compound operation. :math:`\mathcal{O}_d` is final observable prediction for the
 :math:`d^{\text{th}}` point in the *Dataset*. :math:`\mathcal{O}_d^{(i)}` refers to the
 observable prediction for the :math:`d^{\text{th}}` point arising from the
@@ -280,14 +278,14 @@ is important.
 The ``COMPOUND`` file layout is as so. The first line is once again a general
 comment line and is not used by the code, and therefore has no particular
 requirements other than its presence. Following this line should come a list of
-the {\tt} FK tables required for the calculation. This must be given as the
-table's filename *without* its path, preceded by the string "**FK:**". For example,
+the ``FK`` tables required for the calculation. This must be given as the
+table's filename *without* its path, preceded by the string '**FK:**'. For example,
 
   | FK: FK_SETNAME_1.dat
   | FK: FK_SETNAME_2.dat
 
 The ordering of the list is once again important, and must match the above
-table. For example the observables :math:`\mathcal{O}^{(i)}` arise from the
+table. For example, the observables :math:`\mathcal{O}^{(i)}` arise from the
 computation with the :math:`i^{\text{th}}` element of this list. The final line
 specified the operation to be performed upon the list of tables, and must take
 the form

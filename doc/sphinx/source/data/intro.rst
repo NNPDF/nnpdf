@@ -8,21 +8,21 @@ pertaining to the treatment of systematic errors are held in ``CommonData``
 and ``SYSTYPE`` files. ``FK`` tables, ``COMPOUND`` and ``CFACTOR`` files
 store the precomputed information for use when calculating theoretical
 predictions corresponding to information held in the equivalent ``CommonData``
-file. In this document the file formats and naming conventions for these files
+file. In this section the file formats and naming conventions for these files
 will be detailed, along with the directory structure employed by the
 ``nnpdf++`` code.
 
 For NNPDF3.1 and later fits, a considerably larger number of theory options will
 be explored than in previous determinations. In NNPDF3.0 the main theory
 variations used were perturbative order, value of the strong coupling and the
-number of active flavours in the VFNS. For NNPDF3.1 and later, variations in
-additional parameters must be accommodated, such as treatments of the heavy
-quark mass (pole vs MS-bar), scale variations,  intrinsic charm, resummation
+number of active flavours in the VFNS. For NNPDF3.1 and later, it has been necessary to
+accommodate variations in additional parameters, such as treatments of the heavy
+quark mass (pole vs MS-bar), scale variations, intrinsic charm, resummation
 effects etc. The book-keeping used to enable efficient variations of the
 theoretical treatment used in fits post-3.0 will therefore also be outlined
 here.
 
-This document will begin by detailing the specifications for the file formats
+This section will begin by detailing the specifications for the file formats
 used by the code, first with the experimental data file formats and layouts in
 :ref:`exp_data_files` and secondly with the file formats used for
 theoretical predictions in :ref:`th_data_files`. Finally the organisation of
@@ -49,6 +49,9 @@ examples of *Datasets* as used in the NNPDF3.0 analysis. Both of these
 datasets are grouped into the ATLAS *Experiment* as they have systematic
 uncertainties that are cross-correlated with each other. In this document, when
 using these terms in this sense, they will be italicised for clarity.
+
+Note however that the concept of an *Experiment* is being phased out in the NNPDF
+code. For more information on this see :ref:`data_specification`.
 
 *Dataset* and *Experiment* names
 --------------------------------

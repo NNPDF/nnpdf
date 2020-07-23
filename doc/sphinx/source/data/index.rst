@@ -1,5 +1,5 @@
-Data
-====
+Storage of data and theory predictions
+======================================
 
 .. toctree::
    :maxdepth: 1

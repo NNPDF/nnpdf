@@ -21,13 +21,13 @@ located in the ``nnpdfcpp`` git repository at
 
 	``/nnpdfcpp/data/commondata/``
 
-Where a separate ``CommonData`` file is stored for each *Dataset* with the
+where a separate ``CommonData`` file is stored for each *Dataset* with the
 filename format
 
-	``DATA\_<SETNAME>.dat``
+	``DATA_<SETNAME>.dat``
 
 Information on the treatment of systematic uncertainties, provided in
-``SYSTYPE`` files, are located in the subdirectory
+``SYSTYPE`` files, is located in the subdirectory
 
 	``/nnpdfcpp/data/commondata/systypes``
 
@@ -35,12 +35,12 @@ Here several ``SYSTYPE`` files may be supplied for each *Dataset*. The
 various options are enumerated by suffix to the filename. The filename format
 for ``SYSTYPE`` files is therefore
 
-	``SYSTYPE\_<SETNAME>\_<SYSID>.dat``
+	``SYSTYPE_<SETNAME>_<SYSID>.dat``
 
 Where the default systematic ID is **DEFAULT**. As an example, consider
 the first ``SYSTYPE`` file for the D0ZRAP *Dataset*:
 
-	``SYSTYPE\_D0ZRAP\_DEFAULT.dat``
+	``SYSTYPE_D0ZRAP_DEFAULT.dat``
 
 Theory lookup table
 ===================
@@ -52,11 +52,11 @@ in the ``nnpdfcpp`` repository data directory at:
 	``/nnpdfcpp/data/theory.db``
 
 This file should only be edited in order to add new theory options. It may be
-edited with any appropriate sqlite3-supported software. A script is provided to
+edited with any appropriate ``sqlite3``-supported software. A script is provided to
 give a brief overview of the various theory options available. It can be found
 at
 
-	``/nnpdfcpp/data/disp\_theory.py``
+	``/nnpdfcpp/data/disp_theory.py``
 
 and should be run without any arguments.
 
@@ -67,37 +67,37 @@ The current available parameters are summarised in :ref:`th_parameter_definition
 Theory storage
 ==============
 
-Each theory configuration is stored as a GZIP compressed Tar archive with
+Each theory configuration is stored as a gzip compressed tar archive with
 filename format
 
-	``theory\_<THEORYID>.tgz``
+	``theory_<THEORYID>.tgz``
 
-and are stored at the location specified in the default nnprofile.yaml. For easy
+and is stored at the location specified in the default ``nnprofile.yaml``. For easy
 access, they can be downloaded through the ``vp-get`` utility.  Each archive
 contains the following directory structure
 
-	| ``theory\_X/``
+	| ``theory_X/``
 	|	``-cfactor/``
 	|	``-compound/``
 	|	``-fastkernel/``
 
-Inside the directory ``theory\_X/cfactor/`` are stored ``CFACTOR`` files
+Inside the directory ``theory_X/cfactor/`` are stored ``CFACTOR`` files
 with the filename format
 
-	``CF\_<TYP>\_<SETNAME>.dat``
+	``CF_<TYP>_<SETNAME>.dat``
 
 where ``<TYP>`` is a three-letter designation for the source of the C-factor
-(i.e EWK or QCD) and ``<SETNAME>`` is the typical *Dataset* designation.
-The directory ``theory\_X/compound/`` contains the ``COMPOUND`` files
+(e.g. EWK or QCD) and ``<SETNAME>`` is the typical *Dataset* designation.
+The directory ``theory_X/compound/`` contains the ``COMPOUND`` files
 described earlier, this time with the filename format
 
-	``FK\_<SETNAME>-COMPOUND.dat``
+	``FK_<SETNAME>-COMPOUND.dat``
 
-Finally the ``FK`` tables themselves are stored in ``theory\_X/fastkernel/``
+Finally the ``FK`` tables themselves are stored in ``theory_X/fastkernel/``
 with the filename format
 
-	``FK\_<SETNAME>.dat``
+	``FK_<SETNAME>.dat``
 
 Naturally, all of the FastKernel and C-factor files within the directory
-``theory\_X/`` have been determined with the theoretical parameters specified in
+``theory_X/`` have been determined with the theoretical parameters specified in
 the theory lookup table under ID ``X``.
