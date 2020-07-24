@@ -220,8 +220,8 @@ def group_result_table(group_result_table_no_table):
 experiment_result_table = collect('group_result_table', ("group_dataset_inputs_by_experiment",))
 
 @table
-def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF):
-    """Generate a table containing the data central value, the central prediction,
+def group_result_table_68cl(groups_results, group_result_table_no_table: pd.DataFrame, pdf: PDF):
+    """Generate a table containing the data central value, the data 68% confidence levels, the central prediction,
     and 68% confidence level bounds of the prediction.
     """
     df = group_result_table_no_table
@@ -231,10 +231,12 @@ def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF)
     stats = [level.reshape(-1, 1) for level in pdf.stats_class(replica_data).errorbar68()]
     # concatenate for dataframe construction
     stats_array = np.concatenate(stats, axis=1)
+    unc_array = np.concatenate([i[0].std_error for i in groups_results])
+    uncertainty_array = np.c_[unc_array, stats_array]
     df_cl = pd.DataFrame(
-        stats_array,
+        uncertainty_array,
         index=df.index,
-        columns=['theory_lower', 'theory_upper'])
+        columns=['data uncertainty', 'theory_lower', 'theory_upper'])
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
