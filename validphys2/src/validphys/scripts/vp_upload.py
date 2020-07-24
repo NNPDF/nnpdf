@@ -14,12 +14,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', help="Folder to upload.")
     parser.add_argument(
+        '-i',
+        '--interactive',
+        help="Interactively create a meta file.",
+        action='store_true')
+    parser.add_argument(
         '-f',
         '--force',
         help="If the fit to upload already exists on the server, overwrite it.",
         action='store_true')
     args = parser.parse_args()
-    output = args.output
+    import pathlib
+    output = pathlib.Path(args.output)
+    interactive = args.interactive
     force = args.force
 
     import os.path as osp
@@ -35,6 +42,9 @@ def main():
 
 
     from validphys import uploadutils
+    if interactive:
+        uploadutils.interactive_meta(output)
+
     input_type = uploadutils.check_input(output)
     log.info(f"Detected {input_type} input")
 
