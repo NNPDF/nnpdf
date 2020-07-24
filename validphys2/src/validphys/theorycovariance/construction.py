@@ -32,6 +32,20 @@ theoryids_groups_central_values_no_table = collect(groups_central_values_no_tabl
 collected_theoryids = collect('theoryids',
                               ['theoryconfig',])
 
+
+def dataset_index_byprocess(groups_index):
+    """Return a multiindex with index
+       per dataset per point, ordered by process"""
+    dsnames = []
+    ids = groups_index.get_level_values("id")
+    for dsname in groups_index.get_level_values("dataset"):
+        dsnames.append(dsname)
+    processnames = [process_lookup(dsname) for dsname in dsnames]
+    groups_index.droplevel(level="group")
+    newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+                                         names = ("process", "dataset", "id"))
+    return newindex
+
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
     variations to produce a covariance matrix."""
