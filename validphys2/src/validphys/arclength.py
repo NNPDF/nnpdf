@@ -36,7 +36,7 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     npoints = 199 # 200 intervals
     seg_min = [1e-6, 1e-4, 1e-2]
     seg_max = [1e-4, 1e-2, 1.0 ]
-    # we use the (lhapdf) convention of discarding replica 0, hence the -1
+    # we use the (libnnpdf) convention of discarding replica 0, hence the -1
     members = len(pdf) - 1
     res = np.zeros((members,len(flavours)))
     # Integrate the separate segments
