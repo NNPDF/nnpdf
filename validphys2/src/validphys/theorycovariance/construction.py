@@ -36,10 +36,8 @@ collected_theoryids = collect('theoryids',
 def dataset_index_byprocess(groups_index):
     """Return a multiindex with index
        per dataset per point, ordered by process"""
-    dsnames = []
     ids = groups_index.get_level_values("id")
-    for dsname in groups_index.get_level_values("dataset"):
-        dsnames.append(dsname)
+    dsnames = list(groups_index.get_level_values("dataset"))
     processnames = [process_lookup(dsname) for dsname in dsnames]
     groups_index.droplevel(level="group")
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
