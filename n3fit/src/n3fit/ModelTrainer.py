@@ -25,6 +25,9 @@ THRESHOLD_CHI2 = 10.0
 # Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
+# Each how many epochs do we increase the integrability Lagrange Multiplier
+PUSH_INTEGRABILITY_EACH = 100
+
 
 def _assign_data_to_model(model, data_dict, fold_k=0):
     """
@@ -144,6 +147,7 @@ class ModelTrainer:
         self,
         exp_info,
         pos_info,
+        integ_info,
         flavinfo,
         fitbasis,
         nnseed,
@@ -159,6 +163,7 @@ class ModelTrainer:
         ----------
             exp_info: list of dictionaries containing experiments
             pos_info: list of dictionaries containing positivity sets
+            integ_info: list of dictionaries containing integrability sets
             flavinfo: the object returned by fitting['basis']
             nnseed: the seed used to initialise the Neural Network, will be passed to model_gen
             pass_status: flag to signal a good run
@@ -173,7 +178,8 @@ class ModelTrainer:
         # Save all input information
         self.exp_info = exp_info
         self.pos_info = pos_info
-        self.all_info = exp_info + pos_info
+        self.integ_info = integ_info
+        self.all_info = exp_info + pos_info + integ_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self.NNseed = nnseed
@@ -221,6 +227,8 @@ class ModelTrainer:
             "model": None,
             "posdatasets": [],
             "posmultipliers": [],
+            "integdatasets": [],
+            "integmultipliers": [],
             "folds": [],
         }
         self.validation = {
@@ -317,6 +325,10 @@ class ModelTrainer:
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
             self.training["posdatasets"].append(pos_dict["name"])
+        for integ_dict in self.integ_info:
+            self.training["expdata"].append(integ_dict["expdata"])
+            self.training["integdatasets"].append(integ_dict["name"])
+
 
     def _model_generation(self, pdf_model, partition):
         """
@@ -421,7 +433,7 @@ class ModelTrainer:
         """
         self.input_list = []
         self.input_sizes = []
-        for key in ["output", "losses", "posmultipliers"]:
+        for key in ["output", "losses", "posmultipliers", "integmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
@@ -459,7 +471,7 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
-        # Now we need to loop over all dictionaries (First exp_info, then pos_info)
+        # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
         for exp_dict in self.exp_info:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
@@ -479,11 +491,8 @@ class ModelTrainer:
             self.validation["losses"].append(exp_layer["loss_vl"])
             self.experimental["losses"].append(exp_layer["loss"])
 
-        # Finally generate the positivity penalty
+        # Generate the positivity penalty
         for pos_dict in self.pos_info:
-            integ = False
-            if 'INTEG' in pos_dict['name']:
-                integ = True
             if not self.mode_hyperopt:
                 log.info("Generating positivity penalty for %s", pos_dict["name"])
 
@@ -493,14 +502,8 @@ class ModelTrainer:
             # If either is given as an argument, use it for all sets
             pos_initial = all_pos_initial
             pos_multiplier = all_pos_multiplier
-
-            # If the selected observable is for integrability, use always known values
-            # (alternatively we can introduce an option in the runcard)
-            if integ:
-                pos_initial = 1.0
-                pos_multiplier = pow(max_lambda / pos_initial, 1 / positivity_steps)
             # If the multiplier is None, compute it from known values
-            elif pos_multiplier is None:
+            if pos_multiplier is None:
                 # If the initial value is also None, set it to one
                 if pos_initial is None:
                     pos_initial = 1.0
@@ -509,9 +512,7 @@ class ModelTrainer:
                 # Select the necessary initial value to get to max_lambda after all steps
                 pos_initial = max_lambda / pow(pos_multiplier, positivity_steps)
 
-
-
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial, integrability=integ)
+            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
             self.input_list += pos_layer["inputs"]
             self.input_sizes.append(pos_layer["experiment_xsize"])
@@ -520,6 +521,27 @@ class ModelTrainer:
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
             self.training["posmultipliers"].append(pos_multiplier)
+
+        # Finally generate the integrability penalty
+        for integ_dict in self.integ_info:
+            if not self.mode_hyperopt:
+                log.info("Generating integrability penalty for %s", integ_dict["name"])
+
+            integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
+            max_lambda = integ_dict["lambda"]
+
+            integ_initial = 1.0
+            integ_multiplier = pow(max_lambda / integ_initial, 1 / integrability_steps)
+
+            integ_layer = model_gen.observable_generator(integ_dict, positivity_initial=integ_initial, integrability=True)
+            # The input list is still common
+            self.input_list += integ_layer["inputs"]
+            self.input_sizes.append(integ_layer["experiment_xsize"])
+
+            # The integrability all falls to the training
+            self.training["output"].append(integ_layer["output_tr"])
+            self.training["losses"].append(integ_layer["loss_tr"])
+            self.training["integmultipliers"].append(integ_multiplier)    
 
     def _generate_pdf(
         self,
@@ -629,7 +651,9 @@ class ModelTrainer:
         stopping_object as the stopping criteria
 
         Every ``PUSH_POSITIVITY_EACH`` epochs the positivity will be multiplied by their
-        respective positivity multipliers
+        respective positivity multipliers. 
+        In the same way, every ``PUSH_INTEGRABILITY_EACH`` epochs the integrability will be multiplied by their
+        respective integrability multipliers
         """
         # Train the model for the number of epochs given
         for epoch in range(epochs):
@@ -641,6 +665,10 @@ class ModelTrainer:
             if (epoch + 1) % PUSH_POSITIVITY_EACH == 0:
                 training_model.multiply_weights(
                     self.training["posdatasets"], self.training["posmultipliers"]
+                )
+            if (epoch + 1) % PUSH_INTEGRABILITY_EACH == 0:
+                training_model.multiply_weights(
+                    self.training["integdatasets"], self.training["integmultipliers"]
                 )
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
