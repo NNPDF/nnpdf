@@ -43,6 +43,7 @@ SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
+        'theory check_integrability',
         'datacuts::closuretest::theory::fitting filter',
     ])
 
