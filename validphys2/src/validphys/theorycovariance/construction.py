@@ -43,7 +43,7 @@ def dataset_index_byprocess(groups_index):
     processnames = [process_lookup(dsname) for dsname in dsnames]
     groups_index.droplevel(level="group")
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
-                                         names = ("process", "dataset", "id"))
+                                         names=("process", "dataset", "id"))
     return newindex
 
 def make_scale_var_covmat(predictions):
