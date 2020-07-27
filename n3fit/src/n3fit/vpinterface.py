@@ -62,7 +62,7 @@ class N3PDF(PDF):
         """
         return self
 
-    def __call__(self, xarr, flavs=None):
+    def __call__(self, xarr, flavours=None):
         """ Uses the internal model to produce pdf values.
         The output is on the evolution basis.
 
@@ -70,30 +70,30 @@ class N3PDF(PDF):
         ----------
             xarr: numpy.array
                 x-points with shape (xgrid_size,) (size-1 dimensions are removed)
-            flavs: list
-                list of flavour to output
+            flavours: list
+                list of flavours to output
 
         Returns
         -------
             numpy.array
                 (xgrid_size, flavours) pdf result
         """
-        if flavs is None:
-            flavs = EVOL_LIST
+        if flavours is None:
+            flavours = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
         mod_xgrid = xarr.reshape(1, -1, 1)
         result = self.model.predict([mod_xgrid])
-        if flavs != "n3fit":
+        if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
-            ii = self.basis._to_indexes(flavs)
+            ii = self.basis._to_indexes(flavours)
             result[:, :, ii] = result
         return result.squeeze(0)
 
-    def grid_values(self, flavs, xarr, qmat=None):
+    def grid_values(self, flavours, xarr, qmat=None):
         """
         Parameters
         ----------
-            flavs: numpy.array
+            flavours: numpy.array
                 flavours to compute
             xarr: numpy.array
                 x-points to compute, dim: (xgrid_size,)
@@ -103,7 +103,7 @@ class N3PDF(PDF):
         Returns
         ------
             numpy.array
-            array of shape (1, flavs, xgrid_size, qmat) with the values of the ``pdf_model``
+            array of shape (1, flavours, xgrid_size, qmat) with the values of the ``pdf_model``
             evaluated in ``xarr``
         """
         n3fit_result = self(xarr.reshape(1, -1, 1))
@@ -116,7 +116,7 @@ class N3PDF(PDF):
         to_flav[np.abs(to_flav) < 1e-12] = 0.0
         flav_result = np.tensordot(n3fit_result, to_flav, axes=[-1, 1])
         # Now drop the indices that are not requested
-        requested_flavours = [ALL_FLAVOURS.index(i) for i in flavs]
+        requested_flavours = [ALL_FLAVOURS.index(i) for i in flavours]
         flav_result = flav_result[:, requested_flavours]
 
         # Swap the flavour and xgrid axis for vp-compatibility
