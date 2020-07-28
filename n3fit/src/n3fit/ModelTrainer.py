@@ -179,7 +179,10 @@ class ModelTrainer:
         self.exp_info = exp_info
         self.pos_info = pos_info
         self.integ_info = integ_info
-        self.all_info = exp_info + pos_info + integ_info
+        if self.integ_info is not None:
+            self.all_info = exp_info + pos_info + integ_info
+        else:
+            self.all_info = exp_info + pos_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self.NNseed = nnseed
@@ -325,9 +328,10 @@ class ModelTrainer:
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
             self.training["posdatasets"].append(pos_dict["name"])
-        for integ_dict in self.integ_info:
-            self.training["expdata"].append(integ_dict["expdata"])
-            self.training["integdatasets"].append(integ_dict["name"])
+        if self.integ_info is not None:    
+            for integ_dict in self.integ_info:
+                self.training["expdata"].append(integ_dict["expdata"])
+                self.training["integdatasets"].append(integ_dict["name"])
 
 
     def _model_generation(self, pdf_model, partition):
@@ -523,25 +527,26 @@ class ModelTrainer:
             self.training["posmultipliers"].append(pos_multiplier)
 
         # Finally generate the integrability penalty
-        for integ_dict in self.integ_info:
-            if not self.mode_hyperopt:
-                log.info("Generating integrability penalty for %s", integ_dict["name"])
+        if self.integ_info is not None:
+            for integ_dict in self.integ_info:
+                if not self.mode_hyperopt:
+                    log.info("Generating integrability penalty for %s", integ_dict["name"])
 
-            integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
-            max_lambda = integ_dict["lambda"]
+                integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
+                max_lambda = integ_dict["lambda"]
 
-            integ_initial = 1.0
-            integ_multiplier = pow(max_lambda / integ_initial, 1 / integrability_steps)
+                integ_initial = 1.0
+                integ_multiplier = pow(max_lambda / integ_initial, 1 / integrability_steps)
 
-            integ_layer = model_gen.observable_generator(integ_dict, positivity_initial=integ_initial, integrability=True)
-            # The input list is still common
-            self.input_list += integ_layer["inputs"]
-            self.input_sizes.append(integ_layer["experiment_xsize"])
+                integ_layer = model_gen.observable_generator(integ_dict, positivity_initial=integ_initial, integrability=True)
+                # The input list is still common
+                self.input_list += integ_layer["inputs"]
+                self.input_sizes.append(integ_layer["experiment_xsize"])
 
-            # The integrability all falls to the training
-            self.training["output"].append(integ_layer["output_tr"])
-            self.training["losses"].append(integ_layer["loss_tr"])
-            self.training["integmultipliers"].append(integ_multiplier)    
+                # The integrability all falls to the training
+                self.training["output"].append(integ_layer["output_tr"])
+                self.training["losses"].append(integ_layer["loss_tr"])
+                self.training["integmultipliers"].append(integ_multiplier)    
 
     def _generate_pdf(
         self,
