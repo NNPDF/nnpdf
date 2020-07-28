@@ -1208,8 +1208,6 @@ class CoreConfig(configparser.Config):
                     f"Unable to find key: experiment in {cd.name} "
                     "PLOTTING file."
                 )
-        from IPython import embed
-        embed()
         return [
             {"data_input": group, "experiment_name": name}
             for name, group in res.items()
