@@ -489,12 +489,12 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
     of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
     (sigma, g, v, v3, v8, t3, t8, cp), corresponding to the one used in NNPDF31.
-    Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index. 
-    The evolution basis (NN31IC) is defined as  
+    Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index.
+    The evolution basis (NN31IC) is defined as
     cp = c + cbar = 2c
     and
-    sigma = u + ubar + d + dbar + s + sbar + cp  
-    v = u - ubar + d - dbar + s - sbar + c - cbar 
+    sigma = u + ubar + d + dbar + s + sbar + cp
+    v = u - ubar + d - dbar + s - sbar + c - cbar
     v3 = u - ubar - d + dbar
     v8 = u - ubar + d - dbar - 2*s + 2*sbar
     t3 = u + ubar - d - dbar
@@ -536,20 +536,20 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
         cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 } 
-        
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+
     flist = [sng, g, v, v3, v8, t3, t8, cp]
-    
+
     evol_basis = False
     mat = []
     for f in flist:
         for flav_dict in flav_info:
             flav_name = flav_dict["fl"]
             mat.append(f[flav_name])
-               
+
     mat = np.asarray(mat).reshape(8,8)
     # Return the transpose of the matrix, to have the first index referring to flavour
-    return mat.transpose()    
+    return mat.transpose()
 
 @scalar_function_transformation(label="u/d")
 def ud_ratio(func, xmat, qmat):
