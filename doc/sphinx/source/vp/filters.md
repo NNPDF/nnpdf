@@ -5,7 +5,7 @@
 Filtering data
 ==============
 
-# Introduction
+## Introduction
 
 In PDF fits, not all the data provided by the experimental collaborations
 are useful. For example, we may wish to discard certain datapoints for
@@ -20,7 +20,7 @@ In `validphys 2`, the cuts are handled by the `validphys.filters` alongside filt
 definitions and defaults found within `validphys.cuts`.
 .
 
-# Cuts as declarative filters
+## Cuts as declarative filters
 
 Due to the nature of data cuts, it is important to be transparent about which cuts
 are being applied to which dataset and/or process. Moreover, it is useful for the
