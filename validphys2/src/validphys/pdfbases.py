@@ -134,21 +134,38 @@ class UnknownElement(KeyError):
 
 
 class Basis(abc.ABC):
+    """A Basis maps a set of PDF partons (typically as given by
+    :ref:`LHAPDF <lhapdf>`) to functions thereof. This abstract class provides
+    functionalities to manage labels (used for plotting) and defaults, while
+    the concrete implementation of the transofromations if handled by the
+    subclasses (by implementing the
+    :py:meth:`validphys.pdfbases.Basis.apply_grid_values` method). The high
+    level :py:meth:`validphys.pdfbases.Basis.grid_values` and
+    :py:meth:`validphys.pdfbases.Basis.central_grid_values` methods then provide
+    convenient functionality to work with transformations.
+
+    Attributes
+    ----------
+    labels: list
+        A list of strings representing the labels of each possible
+        transformation, in order.
+    aliases: dict, optional
+        A mapping from strings to labels appearing in ``labels`` specifying
+        equivalent ways to enter elements in the user interface.
+    default_elements: list, optional
+        A list of the labels to be computed by default when no subset of
+        elements is specifyed. If not given it is assumed to be the same as
+        ``labels``.
+    element_representations: dict, optional
+        A mapping from strings to labels indicating the preferred string
+        representation of the provided elements (to be used in plotting). If
+        this parameter is not given or the element is not in the mapping, the
+        label itself is used. It may be convenient to set this when heavy use
+        of LaTeX is desired.
+    """
+
     def __init__(self, labels, *, aliases=None,
             default_elements=None, element_representations=None):
-        """A "basis" is constructed from a list of `labels` that represent the
-        canonical names of the basis elements, a matrix of dimension
-        (Nelements, Npdfs) such that ``from_flavour_mat@flavours``, where
-        `flavours` is in the LHAPDF flavour bases (with the elements sorted
-        as in ``ALL_FLAVOURS``) gives the values in this basis.
-
-        An ``alias`` mapping can be defined, from arbitrary
-        strings to labels. This is used for alternative ways to refer to the
-        elements of the basis.
-
-        `default_elements` is an iterable of elements to be computed by default.
-
-         """
 
         self.labels = labels
 
@@ -196,28 +213,54 @@ class Basis(abc.ABC):
 
     @abc.abstractmethod
     def apply_grid_values(self, func, vmat, xmat, qmat):
+        """Abstract method to implement basis transfomarions. It outsosrces the
+        filling of the grid in the flavour basis to ``func`` and implements the
+        transformation from the flavour basis to the basis. Methods like
+        :py:meth:`validphys.pdfbases.Basis.grid_values` and
+        :py:meth:`validphys.pdfbases.Basis.central_grid_values` are derived
+        from this method by selecting the appropriate ``func``.
+
+        It should return an array indexes as
+
+            grid_values[N][flavour][x][Q]
+
+        Parameters
+        ----------
+        func: callable
+            A function that fills the grid defined by the rest of the input
+            with elements in the flavour basis.
+        vmat: iterable
+            A list of flavour aliases valid for the basis.
+        xmat: iterable
+            A list of x values
+        qmat: iterable
+            A list of values in Q, expressed in GeV.
+
+        """
         ...
 
     def grid_values(self, pdf, vmat, xmat, qmat):
         """Like :py:func:`validphys.gridvalues.grid_values`, but taking  and
         returning `vmat` in terms of the vectors in this base.
 
+        Parameters
         ----------
-        pdf : PDF
+        pdf: PDF
             Any PDF set
-        vmat : iterable
+        vmat: iterable
             A list of flavour aliases valid for the basis.
-        xmat : iterable
+        xmat: iterable
             A list of x values
-        qmat : iterable
+        qmat: iterable
             A list of values in Q, expressed in GeV.
 
         Returns
         -------
-        A 4-dimension array with the PDF values at the input parameters
-        for each replica. The return value is indexed as follows::
+        grid: np.ndarray
+            A 4-dimension array with the PDF values at the input parameters
+            for each replica. The return value is indexed as follows::
 
-            grid_values[replica][flavour][x][Q]
+                grid_values[replica][flavour][x][Q]
 
         Examples
         --------
@@ -241,6 +284,13 @@ class Basis(abc.ABC):
         return self.apply_grid_values(func, vmat, xmat, qmat)
 
 class LinearBasis(Basis):
+    """A basis that implements a linear transformation of flavours.
+
+    Attributes
+    ----------
+    from_flavour_mat: np.ndarray
+        A matrix that rotates the flabour basis into this basis.
+    """
 
     def __init__(self, labels, from_flavour_mat, *args, **kwargs):
         """
@@ -366,6 +416,20 @@ class LinearBasis(Basis):
 
 
 class ScalarFunctionTransformation(Basis):
+    """A basis that transforms the flavour basis into a single element given by.
+    ``transform_func``.
+
+    Optional keyword arguments are passed to the constructor of
+    :py:class:`validphys.pdfbases.Basis`.
+
+    Attributes
+    ----------
+    transform_func: callable
+        A callable of with the signature ``transform_func(func, xmat, qmat)``
+        that should fill the grid in :math:`x` and :math:`Q`  using ``func``
+        and return a grid with a single basis element.
+
+    """
     def __init__(self, transform_func, *args, **kwargs):
         self.transform_func = transform_func
         super().__init__(*args, **kwargs)
@@ -375,6 +439,25 @@ class ScalarFunctionTransformation(Basis):
 
 
 def scalar_function_transformation(label, *args, **kwargs):
+    """Convenience decorator factory to produce a
+    :py:class:`validphys.pdfbases.ScalarFunctionTransformation` basis from a
+    function.
+
+    Parameters
+    ----------
+    label: str
+        The single label of the element produced by the function transformation.
+
+    Notes
+    -----
+    Optional keyword arguments are passed to the constructor of
+    :py:class:`validphys.pdfbases.ScalarFunctionTransformation`.
+
+    Returns
+    -------
+    decorator: callable
+       A decorator that can be applied to a suitable transformation function.
+    """
     def f_(transform_func):
         return ScalarFunctionTransformation(transform_func, [label], *args, **kwargs)
 

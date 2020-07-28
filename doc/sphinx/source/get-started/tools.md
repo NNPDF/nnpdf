@@ -16,6 +16,9 @@ validphys and reportengine are two internal NNPDF codes that form the basis of m
 NNPDF does. To read about what validphys and reportengine are and what they do, please refer to the
 introductory section of the [vp-guide](./../vp/introduction.md).
 
+```eval_rst
+.. _lhapdf:
+```
 ## PDF set storage and interpolation
 
 [LHAPDF](https://lhapdf.hepforge.org/) is a C++ library that evaluates PDFs by interpolating the
