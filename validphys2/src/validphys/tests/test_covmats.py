@@ -1,7 +1,7 @@
 """
-test_sqrtcovmat.py
+test_covmats.py
 
-Tests that the sqrt of the covariance matrix is computed correctly
+Tests related to the computation of the covariance matrix and its derivatives
 """
 import numpy as np
 import random
