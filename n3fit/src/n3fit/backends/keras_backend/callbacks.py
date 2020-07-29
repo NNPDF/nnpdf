@@ -38,30 +38,28 @@ def gen_stopping_callback(training_model, stopping_object, log_freq=100):
     return LambdaCallback(on_epoch_end=callback_stopping)
 
 
-def gen_stopping_positivity(
-    training_model, positivity_datasets, positivity_multipliers, update_freq=100
-):
+def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100):
     """
-    Updates the given positivity datasets
+    Updates the given datasets 
     with its respective multipliers each ``update_freq`` epochs
 
     Parameters
     ----------
         training_model: backend Model
             Model being trained
-        positivity_datasets: list(str)
+        datasets: list(str)
             List of the names of the datasets to be trained
-        positivity_multipliers: list(float)
+        multipliers: list(float)
             List of multipliers to be applied
         update_freq: int
             each how many epochs the positivity lambda is updated
     """
 
-    if len(positivity_multipliers) != len(positivity_datasets):
-        raise ValueError("The number of positivity datasets and multipliers do not match")
+    if len(multipliers) != len(datasets):
+        raise ValueError("The number ofvdatasets and multipliers do not match")
 
-    def callback_positivity(epoch, logs):
+    def callback_lagrange(epoch, logs):
         if (epoch + 1) % update_freq == 0:
-            training_model.multiply_weights(positivity_datasets, positivity_multipliers)
+            training_model.multiply_weights(datasets, multipliers)
 
-    return LambdaCallback(on_epoch_end=callback_positivity)
+    return LambdaCallback(on_epoch_end=callback_lagrange)
