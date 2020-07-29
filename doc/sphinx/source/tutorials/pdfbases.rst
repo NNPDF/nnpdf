@@ -55,11 +55,10 @@ return ``grid_values``, a list of :math:`x` values ``xmat``, and a list of
       sbar, s, ubar, dbar = (gv[:, [i], ...] for i in range(4))
       return (sbar + s) / (ubar + dbar)
 
-However, ``validphys`` requires the notion of a :py:class:`validphys.pdfbases.Basis`
-in order to perform plotting. For this we can decorate the above function using
+We then use this transformation to produce a ``Basis`` with the  required functionality to integrate with the rest of the framework (such as labels for plotting). To do so, we decorate the function with
 :py:func:`validphys.pdfbases.scalar_function_transformation` which will instantiate
-a new ``Basis`` inheriting :py:class:`validphys.pdfbases.ScalarFunctionTransformation`
-object with ``strange_fraction`` as the ``apply_grid_values`` method.
+a new  :py:class:`validphys.pdfbases.ScalarFunctionTransformation`
+object with the ``apply_grid_values`` method constructed based on the  ``strange_fraction`` function we above.
 
 The ``scalar_function_transformation`` function takes as an argument ``label``, which it will
 use to label the plot title and axes. For our particular example, it will be sensible
@@ -98,3 +97,4 @@ defined basis. One such example would be:
   actions_:
       - report(main=True)
 
+Note that the name of the basis exposed to `validphys` is the name of the function.
