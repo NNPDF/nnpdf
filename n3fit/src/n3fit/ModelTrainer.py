@@ -452,7 +452,7 @@ class ModelTrainer:
     # i.e., the most important function is hyperparametrizable, which is a      #
     # wrapper around all of these                                              #
     ############################################################################
-    def _generate_observables(self, all_pos_multiplier, all_pos_initial, epochs):
+    def _generate_observables(self, all_pos_multiplier, all_pos_initial, all_integ_multiplier, all_integ_initial, epochs):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
         with the output layers and the loss functions
@@ -495,6 +495,21 @@ class ModelTrainer:
             self.validation["losses"].append(exp_layer["loss_vl"])
             self.experimental["losses"].append(exp_layer["loss"])
 
+
+        def LM_initial_and_multiplier(all_initial, all_multiplier, max_lambda, steps):
+            initial = all_initial
+            multiplier = all_multiplier
+            # If the multiplier is None, compute it from known values
+            if multiplier is None:
+                # If the initial value is also None, set it to one
+                if initial is None:
+                    initial = 1.0
+                multiplier = pow(max_lambda / initial, 1 / steps)
+            elif initial is None:
+                # Select the necessary initial value to get to max_lambda after all steps
+                initial = max_lambda / pow(multiplier, steps)
+            return initial, multiplier
+            
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
             if not self.mode_hyperopt:
@@ -503,18 +518,8 @@ class ModelTrainer:
             positivity_steps = int(epochs / PUSH_POSITIVITY_EACH)
             max_lambda = pos_dict["lambda"]
 
-            # If either is given as an argument, use it for all sets
-            pos_initial = all_pos_initial
-            pos_multiplier = all_pos_multiplier
-            # If the multiplier is None, compute it from known values
-            if pos_multiplier is None:
-                # If the initial value is also None, set it to one
-                if pos_initial is None:
-                    pos_initial = 1.0
-                pos_multiplier = pow(max_lambda / pos_initial, 1 / positivity_steps)
-            elif pos_initial is None:
-                # Select the necessary initial value to get to max_lambda after all steps
-                pos_initial = max_lambda / pow(pos_multiplier, positivity_steps)
+            pos_initial, pos_multiplier = LM_initial_and_multiplier(all_pos_initial, all_pos_multiplier,
+            max_lambda, positivity_steps)
 
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
@@ -535,9 +540,9 @@ class ModelTrainer:
                 integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
                 max_lambda = integ_dict["lambda"]
 
-                integ_initial = 1.0
-                integ_multiplier = pow(max_lambda / integ_initial, 1 / integrability_steps)
-
+                integ_initial, integ_multiplier = LM_initial_and_multiplier(all_integ_initial, all_integ_multiplier,
+                max_lambda, integrability_steps)
+            
                 integ_layer = model_gen.observable_generator(integ_dict, positivity_initial=integ_initial, integrability=True)
                 # The input list is still common
                 self.input_list += integ_layer["inputs"]
@@ -762,7 +767,9 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
         positivity_dict = params.get("positivity", {})
-        self._generate_observables(positivity_dict.get("multiplier"), positivity_dict.get("initial"), epochs)
+        integrability_dict = params.get("integrability", {})
+        self._generate_observables(positivity_dict.get("multiplier"), positivity_dict.get("initial"),
+         integrability_dict.get("multiplier"), integrability_dict.get("initial"), epochs)
 
         # Generate the stopping_object
         # this object holds statistical information about the fit
