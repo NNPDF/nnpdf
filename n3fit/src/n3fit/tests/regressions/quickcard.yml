@@ -105,13 +105,6 @@ positivity:
     - { dataset: POSDYC    , poslambda: 1e5 }
 
 ############################################################
-integrability:
-  integdatasets:
-    - { dataset: INTEGXT8,   poslambda: 1e2 }
-    - { dataset: INTEGXT3,   poslambda: 1e2 }
-
-############################################################
-
 lhagrid:
   nx  : 150
   xmin: 1e-9
