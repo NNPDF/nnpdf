@@ -338,9 +338,7 @@ class Stopping:
 
         # Create the Validation, Positivity and History objects
         if vl_ndata is None:
-            self.validation = Validation(
-                validation_model, self._tr_ndata, no_validation=True
-            )
+            self.validation = Validation(validation_model, self._tr_ndata, no_validation=True)
         else:
             self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
@@ -463,9 +461,7 @@ class Stopping:
         epoch_index = epoch + 1
         tr_loss = fitstate.tr_chi2
         vl_loss = fitstate.vl_chi2
-        total_str = (
-            f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_loss}\n"
-        )
+        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_loss}\n"
 
         partials = []
         for experiment in self._tr_ndata:
@@ -631,7 +627,7 @@ class Positivity:
                     `key that searchs for the positivity`
         """
         positivity_loss = 0.0
-        for key in self.positivity_sets:            
+        for key in self.positivity_sets:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well
             positivity_loss += np.take(history_object[key_loss], -1)
