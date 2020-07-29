@@ -11,6 +11,7 @@ NNPDF documentation
 
    get-started/index
    theory/index
+   data/index
    vp/index
    n3fit/index
    code/index

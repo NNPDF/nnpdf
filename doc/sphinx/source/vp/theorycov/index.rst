@@ -1,5 +1,5 @@
  .. _vptheorycov-index:
-The `theorycovariance` module
+The ``theorycovariance`` module
 =============================
 
 .. toctree::
