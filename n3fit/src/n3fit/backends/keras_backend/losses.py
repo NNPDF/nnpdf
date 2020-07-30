@@ -37,15 +37,16 @@ def l_positivity(alpha=1e-7):
     return true_loss
 
 
-
 def l_integrability():
     """
     Returns (y_pred)*(y_pred)
     """
-    def true_loss(y_true,y_pred):
+
+    def true_loss(y_true, y_pred):
         loss = K.square(y_pred)
-        return K.sum(loss)      
-    
+        res = K.sum(loss, keepdims=True)
+        return tf.reshape(res, (-1,))
+
     return true_loss
 
 
