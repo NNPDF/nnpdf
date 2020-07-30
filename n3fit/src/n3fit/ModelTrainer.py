@@ -670,9 +670,9 @@ class ModelTrainer:
         stopping_object as the stopping criteria
 
         Every ``PUSH_POSITIVITY_EACH`` epochs the positivity will be multiplied by their
-        respective positivity multipliers. 
-        In the same way, every ``PUSH_INTEGRABILITY_EACH`` epochs the integrability will be multiplied by their
-        respective integrability multipliers
+        respective positivity multipliers.
+        In the same way, every ``PUSH_INTEGRABILITY_EACH`` epochs the integrability
+        will be multiplied by their respective integrability multipliers
         """
         callback_st = callbacks.gen_stopping_callback(training_model, stopping_object)
         callback_pos = callbacks.gen_lagrange_callback(
