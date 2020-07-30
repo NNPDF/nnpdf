@@ -40,7 +40,7 @@ def gen_stopping_callback(training_model, stopping_object, log_freq=100):
 
 def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100):
     """
-    Updates the given datasets 
+    Updates the given datasets
     with its respective multipliers each ``update_freq`` epochs
 
     Parameters
