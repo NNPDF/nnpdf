@@ -125,6 +125,25 @@ def _pdf_injection(pdf_layers, observables, datasets_out=None):
     """
     return [f(x, datasets_out=datasets_out) for f, x in zip(observables, pdf_layers)]
 
+def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
+    """
+    If any of input_initial or input_multiplier is None this function computes 
+    the missing values taking as input the maximum lambda multiplier and the number of steps needed 
+    to reach the maximum number of epochs
+    """
+    initial = input_initial
+    multiplier = input_multiplier
+    # If the multiplier is None, compute it from known values
+    if multiplier is None:
+        # If the initial value is also None, set it to one
+        if initial is None:
+            initial = 1.0
+        multiplier = pow(max_lambda / initial, 1 / steps)
+    elif initial is None:
+        # Select the necessary initial value to get to max_lambda after all steps
+        initial = max_lambda / pow(multiplier, steps)
+    return initial, multiplier
+
 
 class ModelTrainer:
     """
@@ -496,20 +515,6 @@ class ModelTrainer:
             self.validation["losses"].append(exp_layer["loss_vl"])
             self.experimental["losses"].append(exp_layer["loss"])
 
-        def LM_initial_and_multiplier(all_initial, all_multiplier, max_lambda, steps):
-            initial = all_initial
-            multiplier = all_multiplier
-            # If the multiplier is None, compute it from known values
-            if multiplier is None:
-                # If the initial value is also None, set it to one
-                if initial is None:
-                    initial = 1.0
-                multiplier = pow(max_lambda / initial, 1 / steps)
-            elif initial is None:
-                # Select the necessary initial value to get to max_lambda after all steps
-                initial = max_lambda / pow(multiplier, steps)
-            return initial, multiplier
-
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
             if not self.mode_hyperopt:
@@ -518,7 +523,7 @@ class ModelTrainer:
             positivity_steps = int(epochs / PUSH_POSITIVITY_EACH)
             max_lambda = pos_dict["lambda"]
 
-            pos_initial, pos_multiplier = LM_initial_and_multiplier(
+            pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
 
@@ -541,7 +546,7 @@ class ModelTrainer:
                 integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
                 max_lambda = integ_dict["lambda"]
 
-                integ_initial, integ_multiplier = LM_initial_and_multiplier(
+                integ_initial, integ_multiplier = _LM_initial_and_multiplier(
                     all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
                 )
 
