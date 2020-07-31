@@ -7,9 +7,11 @@
 
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
 from n3fit.backends.keras_backend.operations import numpy_to_tensor
+import evolutionary_keras.optimizers as Evolutionary_optimizers
+from evolutionary_keras.models import EvolModel
+
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split('.')
@@ -28,6 +30,8 @@ optimizers = {
     "Adamax": (Kopt.Adamax, {}),
     "Nadam": (Kopt.Nadam, {}),
     "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
+    "NGA": (Evolutionary_optimizers.NGA, {}),
+    "CMA": (Evolutionary_optimizers.CMA, {})
 }
 
 # Some keys need to work for everyone
@@ -62,7 +66,7 @@ def _fill_placeholders(original_input, new_input=None):
     return x
 
 
-class MetaModel(Model):
+class MetaModel(EvolModel):
     """
     The `MetaModel` behaves as the tensorflow.keras.model.Model class,
     with the addition of `tensor_content`:

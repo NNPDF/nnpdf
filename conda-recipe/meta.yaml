@@ -45,6 +45,7 @@ requirements:
         - sphinx # documentation
         - recommonmark
         - sphinx_rtd_theme
+        - evolutionary_keras
 
 test:
     requires:
