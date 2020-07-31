@@ -34,7 +34,7 @@ Index       Parton
 :math:`21`  :math:`g`
 ==========  ===============
 
-we see that for our quantity of interest, :math:`R_s`, we are interested
+We see that for our quantity of interest, :math:`R_s`, we are interested
 in indices :math:`-3`, :math:`3`, :math:`-2`, and :math:`-1`.
 To achieve the desired plot, we must tell ``validphys`` what manipulation
 it must make on the interpolation grids. The logic for grid manipulation
@@ -58,14 +58,14 @@ return ``grid_values``, a list of :math:`x` values ``xmat``, and a list of
 We then use this transformation to produce a ``Basis`` with the  required functionality to integrate with the rest of the framework (such as labels for plotting). To do so, we decorate the function with
 :py:func:`validphys.pdfbases.scalar_function_transformation` which will instantiate
 a new  :py:class:`validphys.pdfbases.ScalarFunctionTransformation`
-object with the ``apply_grid_values`` method constructed based on the  ``strange_fraction`` function we above.
+object, with the ``apply_grid_values`` method constructed based on the  ``strange_fraction`` function we above.
 
 The ``scalar_function_transformation`` function takes as an argument ``label``, which it will
 use to label the plot title and axes. For our particular example, it will be sensible
 to use ``Rs`` as the value for this argument.
 
 In addition, it will be good practice to define this particular combination of PDFs as an element
-of a particular basis. As such, we must give this particular element a label, which we will do so
+of a particular basis. As such, we must give this particular element a label, which we will do
 by adding ``element_representations={"Rs": "R_{s}"}`` to the decorator arguments.
 
 The final function is thus:

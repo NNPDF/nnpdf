@@ -134,7 +134,7 @@ class UnknownElement(KeyError):
 
 
 class Basis(abc.ABC):
-    """A Basis maps a set of PDF partons (typically as given by
+    """A Basis maps a set of PDF flavours (typically as given by
     :ref:`LHAPDF <lhapdf>`) to functions thereof. This abstract class provides
     functionalities to manage labels (used for plotting) and defaults, while
     the concrete implementation of the transofromations if handled by the
@@ -416,7 +416,7 @@ class LinearBasis(Basis):
 
 
 class ScalarFunctionTransformation(Basis):
-    """A basis that transforms the flavour basis into a single element given by.
+    """A basis that transforms the flavour basis into a single element given by
     ``transform_func``.
 
     Optional keyword arguments are passed to the constructor of
@@ -425,9 +425,9 @@ class ScalarFunctionTransformation(Basis):
     Attributes
     ----------
     transform_func: callable
-        A callable of with the signature ``transform_func(func, xmat, qmat)``
-        that should fill the grid in :math:`x` and :math:`Q`  using ``func``
-        and return a grid with a single basis element.
+        A callable with the signature ``transform_func(func, xmat, qmat)``
+        that fills the grid in :math:`x` and :math:`Q`  using ``func``
+        and returns a grid with a single basis element.
 
     """
     def __init__(self, transform_func, *args, **kwargs):
