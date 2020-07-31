@@ -97,6 +97,7 @@
 #include "CMS_1JET_8TEV.h"
 #include "ATLAS_1JET_8TEV_R04.h"
 #include "ATLAS_1JET_8TEV_R06.h"
+#include "ATLAS_1JET_8TEV_R06_DEC.h"
 #include "CMS_2JET_7TEV.h"
 #include "ATLAS_2JET_7TEV_R04.h"
 #include "ATLAS_2JET_7TEV_R06.h"
@@ -174,6 +175,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASPHT12Filter());
   target.push_back(new ATLAS_1JET_8TEV_R04Filter());
   target.push_back(new ATLAS_1JET_8TEV_R06Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R06_DECFilter());
   target.push_back(new ATLAS_2JET_7TEV_R04Filter());
   target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
   target.push_back(new ATLAS_WP_JET_8TEV_PTFilter()); 
