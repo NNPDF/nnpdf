@@ -39,12 +39,13 @@ class DIS(Observable):
                 basis_mask[i] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def meta_call(self, pdf_raw):
+    def meta_call(self, pdf):
         """
-            Thiss function perform the fktable \otimes pdf convolution.
+            This function perform the fktable \otimes pdf convolution.
 
-            Firs pass the input PDF through a mask to remove the unactive flavour, then transpose the PDF
-            to have everything in the correct order and finally perform a tensorproduct contracting both pdf indices.
+            First pass the input PDF through a mask to remove the unactive flavors,
+            then a tensor_product between the PDF and each fktable is performed
+            finally the defined operation is applied to all the results
 
             Parameters
             ----------
@@ -58,25 +59,19 @@ class DIS(Observable):
         """
         # DIS never needs splitting
         if self.splitting is not None:
-            raise ValueError(
-                "DIS layer call with a dataset that needs more than one xgrids?"
-            )
-
-        pdf = op.unbatch(pdf_raw)
+            raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
 
         results = []
-
         # Separate the two possible paths this layer can take
         if self.many_masks:
             for mask, fktable in zip(self.all_masks, self.fktables):
-                pdf_masked = op.boolean_mask(pdf, mask, axis=1)
-                res = op.tensor_product(pdf_masked, fktable, axes=[(0, 1), (2, 1)])
+                pdf_masked = op.boolean_mask(pdf, mask, axis=2)
+                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                 results.append(res)
         else:
-            pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=1)
+            pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
             for fktable in self.fktables:
-                res = op.tensor_product(pdf_masked, fktable, axes=[(0, 1), (2, 1)])
+                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                 results.append(res)
 
-        ret = self.operation(results)
-        return op.batchit(ret)
+        return self.operation(results)

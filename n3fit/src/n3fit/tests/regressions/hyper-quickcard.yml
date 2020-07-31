@@ -68,7 +68,9 @@ hyperscan:
         min_units: 10
         max_units: 50
         activations: ['sigmoid', 'tanh']
-    kfold: # if given a number k, k partitions will be generated automatically
+    kfold:
+        penalties:
+          - saturation
         threshold: 2.0
         partitions:
             - datasets:

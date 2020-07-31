@@ -131,7 +131,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(fit_name_with_covmat_label, replica_data, total_experiments_chi2data):
+def fit_summary(fit_name_with_covmat_label, replica_data, dataset_inputs_abs_chi2_data, dataset_inputs_phi_data):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -149,15 +149,15 @@ def fit_summary(fit_name_with_covmat_label, replica_data, total_experiments_chi2
 
     """
     nrep = len(replica_data)
-    ndata = total_experiments_chi2data.ndata
-    central_chi2 = total_experiments_chi2data.central_result / ndata
-    member_chi2 = total_experiments_chi2data.replica_result.error_members() / ndata
+    ndata = dataset_inputs_abs_chi2_data.ndata
+    central_chi2 = dataset_inputs_abs_chi2_data.central_result / ndata
+    member_chi2 = dataset_inputs_abs_chi2_data.replica_result.error_members() / ndata
 
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
 
-    phi, _ = phi_data(total_experiments_chi2data)
+    phi, _ = dataset_inputs_phi_data
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
     VET = ValueErrorTuple
@@ -198,7 +198,7 @@ def fit_sum_rules_table(fit_sum_rules):
 fits_replica_data = collect('replica_data', ('fits',))
 
 #Do collect in two parts so we get a list for each fit instead of a single list
-all_datasets = collect('dataset', ('experiments', 'experiment'))
+all_datasets = collect('dataset', ('data',))
 fits_datasets = collect('all_datasets', ('fits', 'fitinputcontext',))
 
 @make_argcheck
@@ -369,6 +369,7 @@ def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
         dfs.append(pd.DataFrame(dt, columns=FitInfo._fields, index=inds))
     return pd.concat(dfs, axis=1, keys=[fit.name for fit in fits])
 
+#TODO: collect data_input with fitcontext, don't open file here..
 @table
 def datasets_properties_table(fit):
     """Returns table of dataset properties for each dataset used in a fit."""
@@ -396,34 +397,35 @@ def datasets_properties_table(fit):
     df.index.name = 'Dataset'
     return df
 
-def print_systype_overlap(experiments):
-    """Returns a set of systypes that overlap between experiments.
+def print_systype_overlap(groups_data):
+    """Returns a set of systypes that overlap between groups.
     Discards the set of systypes which overlap but do not imply
     correlations
+
     """
-    exps = experiments
-    experiment_names = []
-    systype_exps = []
+    groups = groups_data
+    group_names = []
+    systype_groups = []
     whitelist = {'CORR', 'UNCORR', 'SKIP', 'THEORYUNCORR', 'THEORYCORR'}
-    for exp in exps:
-        systype_exp = set()
-        for ds in exp.datasets:
+    for group in groups:
+        systype_group = set()
+        for ds in group.datasets:
             cd = ds.commondata.load()
             Nsys = cd.GetNSys()
             for i in range(Nsys):
-                systype_exp.add(cd.GetSys(0, i).name)
-                systype_exp.difference_update(whitelist)
-        systype_exps.append(systype_exp)
-        experiment_names.append(exp.name)
+                systype_group.add(cd.GetSys(0, i).name)
+                systype_group.difference_update(whitelist)
+        systype_groups.append(systype_group)
+        group_names.append(group.name)
     systype_overlap = set()
-    exps_overlap = set()
-    for i in range(len(systype_exps)):
-        for j in range(i+1, len(systype_exps)):
-            comp = systype_exps[i].intersection(systype_exps[j])
+    groups_overlap = set()
+    for i, sys_i in enumerate(systype_groups):
+        for j, sys_j in enumerate(systype_groups[i+1:], start=i+1):
+            comp = sys_i.intersection(sys_j)
             if comp:
-                exps_overlap.update({experiment_names[i], experiment_names[j]})
+                groups_overlap.update({group_names[i], group_names[j]})
             systype_overlap.update(comp)
     if systype_overlap:
-        return(exps_overlap, systype_overlap)
+        return groups_overlap, systype_overlap
     else:
-        return("No overlap of systypes")
+        return "No overlap of systypes"

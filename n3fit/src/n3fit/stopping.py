@@ -338,9 +338,7 @@ class Stopping:
 
         # Create the Validation, Positivity and History objects
         if vl_ndata is None:
-            self.validation = Validation(
-                validation_model, self._tr_ndata, no_validation=True
-            )
+            self.validation = Validation(validation_model, self._tr_ndata, no_validation=True)
         else:
             self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
@@ -463,9 +461,7 @@ class Stopping:
         epoch_index = epoch + 1
         tr_loss = fitstate.tr_chi2
         vl_loss = fitstate.vl_chi2
-        total_str = (
-            f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_loss}\n"
-        )
+        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_loss}\n"
 
         partials = []
         for experiment in self._tr_ndata:
@@ -575,7 +571,7 @@ class Validation:
             `vl_dict`
                 dictionary containing a map of experiment names and loss
         """
-        loss_dict = self.model.compute_losses(verbose=self.verbose)
+        loss_dict = self.model.compute_losses()
         return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
 
     @property

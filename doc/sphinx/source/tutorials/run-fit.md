@@ -81,9 +81,14 @@ hyperscan:
         min_initial: 1.0 # minimum initial penalty
         max_initial: 5.0 # maximum initial penalty
     optimizer: # setup for the optimizer scan
-        names: 'ALL' # Use all implemented optimizers from keras
-        min_lr: 0.0005 # minimum learning rate
-        max_lr: 0.5 # maximum learning rate
+        - optimizer_name: 'Adadelta'
+          learning_rate:
+            min: 0.5
+            max: 1.5
+        - optimizer_name: 'Adam'
+          learning_rate:
+            min: 0.5
+            max: 1.5
     architecture: # setup for the architecture scan
         initializers: 'ALL' # Use all implemented initializers from keras
         max_drop: 0.15 # maximum dropout probability
@@ -160,9 +165,9 @@ load.
 ``` note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 ```
 
+
 Upload and analyse the fit
 --------------------------
-
 After obtaining the fit you can proceed with the fit upload and analisis by:
 
 1. Uploading the results using `vp-uploadfit runcard_folder` then install the
@@ -170,3 +175,52 @@ fitted set with `vp-get fit fit_name`.
 
 2. Analysing the results with `validphys`, see the [vp-guide](../vp/index).
 Consider using the `vp-comparefits` tool.
+
+
+
+Performance of the fit
+----------------------
+The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
+first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
+
+In our tests the bests results are obtained using the MKL-compiled version of Tensorflow as found by
+default in Conda.
+
+When using the MKL version the following environmental variables are relevant to control the
+performance of Tensorflow.
+
+```bash
+
+KMP_BLOCKTIME=0
+KMP_AFFINITY=granularity=fine,verbose,compact,1,0
+
+```
+
+When these variables are not set, `n3fit` will default to the values shown above.
+For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
+the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html).
+
+By default, `n3fit` will try to use as many cores as possible, but this behaviour can be overriden
+from the runcard with the `maxcores` parameter. In our tests the point of diminishing returns is found
+at `maxcores=4`.
+
+Note that everything stated above is machine dependent so the best parameters for you might be
+very different. When testing, it is useful to set the environmental variable `KMP_SETTINGS` to 1
+to obtain detailed information about the current variables being used by OpenMP.
+
+Below we present a benchmark that have been run for the Global NNPDF 3.1 case, as found in the
+example runcards [folder](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
+
+Settings of the benchmark:
+  - TF version: 2.1 MKL
+  - NNPDF commit: [406b39d991ebb602aedcb8c8cc275d5111f3bfcb](https://github.com/NNPDF/nnpdf/commit/406b39d991ebb602aedcb8c8cc275d5111f3bfcb)
+  - Number of epochs: 5000
+  
+Hardware:
+  - Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz
+  - 16 GB RAM 1600 MHz DDR3
+  
+Timing for a fit (from epoch 1 to epoch 5000):
+  - Walltime: 871s
+  - CPUtime: 2979s
+

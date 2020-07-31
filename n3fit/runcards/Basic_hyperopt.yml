@@ -62,7 +62,7 @@ theory:
 
 hyperscan:
     stopping:
-        min_epochs: 2e3
+        min_epochs: 5e3
         max_epochs: 5e3
         min_patience: 0.10
         max_patience: 0.40
@@ -90,6 +90,9 @@ hyperscan:
         max_units: 50
         activations: ['sigmoid', 'tanh']
     kfold: 
+        penalties:
+          - saturation
+          - patience
         threshold: 2.0
         partitions:
             - datasets:

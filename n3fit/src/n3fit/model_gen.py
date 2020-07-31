@@ -144,7 +144,6 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
             c=positivity_initial,
             axis=1,
             name=spec_name,
-            unbatch=True,
         )
 
         def out_positivity(pdf_layer, datasets_out=None):
@@ -161,8 +160,8 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
 
     # Now prepare the actual outputs that can be used by n3fit
     # Generate the masks layers to be applied during training and validation
-    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1, unbatch=True)
-    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1, unbatch=True)
+    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1)
+    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1)
 
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
@@ -176,6 +175,8 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
     else:
         obsrot = None
         loss_tr = losses.l_invcovmat(invcovmat_tr)
+        # TODO At this point we need to intercept the data and compile the loss with it
+        # then the validation must have a list of None as an output
         loss_vl = losses.l_invcovmat(invcovmat_vl)
     loss = losses.l_invcovmat(invcovmat)
 
@@ -310,6 +311,7 @@ def pdfNN_layer_generator(
     initializer_name="glorot_normal",
     layer_type="dense",
     flav_info=None,
+    fitbasis='NN31IC',
     out=14,
     seed=None,
     dropout=0.0,
@@ -466,8 +468,8 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info)
-
+    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
+    
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
