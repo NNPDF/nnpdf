@@ -729,7 +729,34 @@ class CoreConfig(configparser.Config):
             raise ConfigError("Failed to get 'posdatasets' from positivity. "
                               "Expected that key to be present.")
         return positivity['posdatasets']
+    
+    @element_of('integdatasets')
+    def parse_integdataset(self, integset:dict, * ,theoryid):
+        """An observable corresponding to a PDF in the evolution basis,
+        used as integrability constrain in the fit. It is a mapping containing 'dataset' and 'poslambda'."""
+        bad_msg = ("integset must be a mapping with a name ('dataset') and "
+                   "a float multiplier(poslambda)")
 
+        theoryno, theopath = theoryid
+        try:
+            name = integset['dataset']
+            poslambda = float(integset['poslambda'])
+        except KeyError as e:
+            raise ConfigError(bad_msg, e.args[0], integset.keys()) from e
+        except ValueError as e:
+            raise ConfigError(bad_msg) from e
+        # use the same underlying c++ code as the positivity observables
+        try:
+            return self.loader.check_posset(theoryno, name, poslambda)
+        except FileNotFoundError as e:
+            raise ConfigError(e) from e
+    
+    def produce_integdatasets(self, integrability):
+        if not isinstance(integrability, dict) or 'integdatasets' not in integrability:
+            raise ConfigError("Failed to get 'integdatasets' from integrability. "
+                              "Expected that key to be present.")
+        return integrability['integdatasets']    
+    
     def produce_reweight_all_datasets(self, experiments):
         ret = []
         for experiment in experiments:

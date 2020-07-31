@@ -22,7 +22,7 @@ from n3fit.backends import base_layer_selector, regularizer_selector
 import tensorflow as tf
 
 
-def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=too-many-locals
+def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
     These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
@@ -150,10 +150,15 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
             exp_result = experiment_layer(pdf_layer)
             return out_mask(exp_result)
 
+        if integrability:
+            loss = losses.l_integrability()
+        else:
+            loss = losses.l_positivity()
+
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_positivity,
-            "loss_tr": losses.l_positivity(),
+            "loss_tr": loss,
             "experiment_xsize": full_nx,
         }
         return layer_info

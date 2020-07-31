@@ -88,6 +88,7 @@ def performfit(
     output_path,
     theoryid,
     posdatasets,
+    integdatasets=None,
     hyperscan=None,
     hyperopt=None,
     debug=False,
@@ -130,6 +131,8 @@ def performfit(
                 theory id number
             posdatasets: list
                 list of positivity datasets
+            integdatasets: list
+                list of integrability datasets
             hyperscan: dict
                 dictionary containing the details of the hyperscan
             hyperopt: int
@@ -212,6 +215,16 @@ def performfit(
         pos_dict = reader.positivity_reader(pos_set)
         pos_info.append(pos_dict)
 
+    if integdatasets is not None:
+        integ_info = []
+        for integ_set in integdatasets:
+            log.info("Loading integrability dataset %s", integ_set)
+            # Use the same reader as positivity observables
+            integ_dict = reader.positivity_reader(integ_set)
+            integ_info.append(integ_dict) 
+    else:
+        integ_info = None           
+
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
     stopwatch.register_times("data_loaded")
@@ -224,6 +237,7 @@ def performfit(
         the_model_trainer = ModelTrainer(
             exp_info,
             pos_info,
+            integ_info,
             fitting["basis"],
             fitting["fitbasis"],
             nnseed,
