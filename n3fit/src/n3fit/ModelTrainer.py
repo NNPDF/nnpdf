@@ -385,11 +385,10 @@ class ModelTrainer:
         # experiment leaves out the negation
         output_tr = _pdf_injection(splitted_pdf, self.training["output"], kfold_datasets)
         training = MetaModel(full_model_input_dict, output_tr)
-        if self.no_validation:
-            validation = training
-        else:
-            output_vl = _pdf_injection(splitted_pdf, self.validation["output"], kfold_datasets)
-            validation = MetaModel(full_model_input_dict, output_vl)
+
+        output_vl = _pdf_injection(splitted_pdf, self.validation["output"], kfold_datasets)
+        validation = MetaModel(full_model_input_dict, output_vl)
+
         output_ex = _pdf_injection(splitted_pdf, self.experimental["output"], negate_k_datasets)
 
         experimental = MetaModel(full_model_input_dict, output_ex)
@@ -721,11 +720,6 @@ class ModelTrainer:
         stopping_patience = params["stopping_patience"]
         stopping_epochs = epochs * stopping_patience
 
-        if self.no_validation:
-            validation_model = self.training["model"]
-        else:
-            validation_model = self.validation["model"]
-
         # Initialize the chi2 dictionaries
         l_train = []
         l_valid = []
@@ -763,10 +757,17 @@ class ModelTrainer:
             # Generate the list containing reporting info necessary for chi2
             reporting = self._prepare_reporting(partition)
 
+            if self.no_validation:
+                # Substitute the validation model with the training model
+                model_dicts["validation"] = model_dicts["training"]
+                validation_model = models["training"]
+            else:
+                validation_model = models["validation"]
+
             # Generate the stopping_object this object holds statistical information about the fit
             # it is used to perform stopping
             stopping_object = Stopping(
-                models["validation"],
+                validation_model,
                 reporting,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
