@@ -237,6 +237,6 @@ class CommonData:
         ]
         return pd.DataFrame(
             table,
-            columns=[f"sys.{i}" for i in self.systype_table.index],
+            columns = self.systype_table.index,
             index=self.commondata_table.index,
         )
