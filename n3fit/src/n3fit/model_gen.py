@@ -144,7 +144,6 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
             c=positivity_initial,
             axis=1,
             name=spec_name,
-            unbatch=True,
         )
 
         def out_positivity(pdf_layer, datasets_out=None):
@@ -166,8 +165,8 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     # Now prepare the actual outputs that can be used by n3fit
     # Generate the masks layers to be applied during training and validation
-    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1, unbatch=True)
-    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1, unbatch=True)
+    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1)
+    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1)
 
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]

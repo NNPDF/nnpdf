@@ -1,4 +1,3 @@
-import numpy as np
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
@@ -19,20 +18,17 @@ class Mask(MetaLayer):
             numpy array with the boolean mask to be applied
         c: float
             constant multiplier for every output
-        unbatch: bool
-            whether to remove the first dimension (of size=1) at the beginning
         axis: int
             axis in which to apply the mask
     """
 
-    def __init__(self, bool_mask=None, c=None, unbatch=False, axis=None, **kwargs):
+    def __init__(self, bool_mask=None, c=None, axis=None, **kwargs):
         if bool_mask is None:
             self.mask = None
         else:
             self.mask = op.numpy_to_tensor(bool_mask, dtype=bool)
         self.c = c
         self.axis = axis
-        self.unbatch = unbatch
         super().__init__(**kwargs)
 
     def build(self, input_shape):
@@ -48,6 +44,4 @@ class Mask(MetaLayer):
             ret = op.boolean_mask(ret, self.mask, axis=self.axis)
         if self.c is not None:
             ret = ret * self.kernel
-        if self.unbatch:
-            ret = op.unbatch(ret)
         return ret
