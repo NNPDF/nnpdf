@@ -64,7 +64,7 @@ The ``scalar_function_transformation`` function takes as an argument ``label``, 
 use to label the plot title and axes. For our particular example, it will be sensible
 to use ``Rs`` as the value for this argument.
 
-In addition, it will be good practice to define this particular combination of PDFs as an element
+In addition, it is good practice to define this particular combination of PDFs as an element
 of a particular basis. As such, we must give this particular element a label, which we will do
 by adding ``element_representations={"Rs": "R_{s}"}`` to the decorator arguments.
 
@@ -97,4 +97,4 @@ defined basis. One such example would be:
   actions_:
       - report(main=True)
 
-Note that the name of the basis exposed to `validphys` is the name of the function.
+Note that the name of the basis exposed to ``validphys`` is the name of the function.

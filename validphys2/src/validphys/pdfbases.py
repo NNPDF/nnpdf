@@ -137,7 +137,7 @@ class Basis(abc.ABC):
     """A Basis maps a set of PDF flavours (typically as given by
     :ref:`LHAPDF <lhapdf>`) to functions thereof. This abstract class provides
     functionalities to manage labels (used for plotting) and defaults, while
-    the concrete implementation of the transofromations if handled by the
+    the concrete implementation of the transformations is handled by the
     subclasses (by implementing the
     :py:meth:`validphys.pdfbases.Basis.apply_grid_values` method). The high
     level :py:meth:`validphys.pdfbases.Basis.grid_values` and
@@ -150,11 +150,11 @@ class Basis(abc.ABC):
         A list of strings representing the labels of each possible
         transformation, in order.
     aliases: dict, optional
-        A mapping from strings to labels appearing in ``labels`` specifying
+        A mapping from strings to labels appearing in ``labels``, specifying
         equivalent ways to enter elements in the user interface.
     default_elements: list, optional
         A list of the labels to be computed by default when no subset of
-        elements is specifyed. If not given it is assumed to be the same as
+        elements is specified. If not given it is assumed to be the same as
         ``labels``.
     element_representations: dict, optional
         A mapping from strings to labels indicating the preferred string
@@ -213,14 +213,14 @@ class Basis(abc.ABC):
 
     @abc.abstractmethod
     def apply_grid_values(self, func, vmat, xmat, qmat):
-        """Abstract method to implement basis transfomarions. It outsosrces the
+        """Abstract method to implement basis transformations. It outsources the
         filling of the grid in the flavour basis to ``func`` and implements the
         transformation from the flavour basis to the basis. Methods like
         :py:meth:`validphys.pdfbases.Basis.grid_values` and
         :py:meth:`validphys.pdfbases.Basis.central_grid_values` are derived
         from this method by selecting the appropriate ``func``.
 
-        It should return an array indexes as
+        It should return an array indexed as
 
             grid_values[N][flavour][x][Q]
 
@@ -258,7 +258,7 @@ class Basis(abc.ABC):
         -------
         grid: np.ndarray
             A 4-dimension array with the PDF values at the input parameters
-            for each replica. The return value is indexed as follows::
+            for each replica. The return value is indexed as follows:
 
                 grid_values[replica][flavour][x][Q]
 
@@ -289,7 +289,7 @@ class LinearBasis(Basis):
     Attributes
     ----------
     from_flavour_mat: np.ndarray
-        A matrix that rotates the flabour basis into this basis.
+        A matrix that rotates the flavour basis into this basis.
     """
 
     def __init__(self, labels, from_flavour_mat, *args, **kwargs):
