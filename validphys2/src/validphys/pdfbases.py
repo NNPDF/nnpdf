@@ -6,6 +6,7 @@ as declaratively as possible.
 """
 import inspect
 import functools
+import abc
 
 import numpy as np
 
@@ -29,7 +30,7 @@ PDG_PARTONS = dict((
         (3 , r"s"),
         (4 , r"c"),
         (5 , r"b"),
-        (6, 't'),
+        (6 , r"t"),
         (22 , r"\gamma"),
         (21 , r"g"),
     ))
@@ -131,28 +132,43 @@ def parse_flarr(flarr):
 class UnknownElement(KeyError):
     pass
 
-class Basis():
-    def __init__(self, labels, from_flavour_mat,*, aliases=None,
+
+class Basis(abc.ABC):
+    """A Basis maps a set of PDF flavours (typically as given by
+    :ref:`LHAPDF <lhapdf>`) to functions thereof. This abstract class provides
+    functionalities to manage labels (used for plotting) and defaults, while
+    the concrete implementation of the transformations is handled by the
+    subclasses (by implementing the
+    :py:meth:`validphys.pdfbases.Basis.apply_grid_values` method). The high
+    level :py:meth:`validphys.pdfbases.Basis.grid_values` and
+    :py:meth:`validphys.pdfbases.Basis.central_grid_values` methods then provide
+    convenient functionality to work with transformations.
+
+    Attributes
+    ----------
+    labels: list
+        A list of strings representing the labels of each possible
+        transformation, in order.
+    aliases: dict, optional
+        A mapping from strings to labels appearing in ``labels``, specifying
+        equivalent ways to enter elements in the user interface.
+    default_elements: list, optional
+        A list of the labels to be computed by default when no subset of
+        elements is specified. If not given it is assumed to be the same as
+        ``labels``.
+    element_representations: dict, optional
+        A mapping from strings to labels indicating the preferred string
+        representation of the provided elements (to be used in plotting). If
+        this parameter is not given or the element is not in the mapping, the
+        label itself is used. It may be convenient to set this when heavy use
+        of LaTeX is desired.
+    """
+
+    def __init__(self, labels, *, aliases=None,
             default_elements=None, element_representations=None):
-        """A "basis" is constructed from a list of `labels` that represent the
-        canonical names of the basis elements, a matrix of dimension
-        (Nelements, Npdfs) such that ``from_flavour_mat@flavours``, where
-        `flavours` is in the LHAPDF flavour bases (with the elements sorted
-        as in ``ALL_FLAVOURS``) gives the values in this basis.
-
-        An ``alias`` mapping can be defined, from arbitrary
-        strings to labels. This is used for alternative ways to refer to the
-        elements of the basis.
-
-        `default_elements` is an iterable of elements to be computed by default.
-
-        `flavour_representantion` is a mapping with the printable strings of
-        the elements (in case it doesn't match `labels`).
-         """
 
         self.labels = labels
 
-        self.from_flavour_mat = from_flavour_mat
         #self._known_flavours = ALL_FLAVOURS[]
         if default_elements is None:
             default_elements = labels
@@ -181,6 +197,109 @@ class Basis():
         elif element in self.labels:
             return element
         raise UnknownElement(element)
+
+    def _to_indexes(self, basis_arr):
+        """Convert a list of elements of the basis to indexes of the
+        (rows of the) transformation matrix."""
+        return [self.indexes[k] for k in basis_arr]
+
+    def to_known_elements(self, vmat):
+        """Transform the list of aliases into an array of known labels. Raise
+        `UnknownElement` on failure."""
+        try:
+            return np.asanyarray(self.labels)[self._to_indexes(vmat)]
+        except KeyError as e:
+            raise UnknownElement(*e.args) from e
+
+    @abc.abstractmethod
+    def apply_grid_values(self, func, vmat, xmat, qmat):
+        """Abstract method to implement basis transformations. It outsources the
+        filling of the grid in the flavour basis to ``func`` and implements the
+        transformation from the flavour basis to the basis. Methods like
+        :py:meth:`validphys.pdfbases.Basis.grid_values` and
+        :py:meth:`validphys.pdfbases.Basis.central_grid_values` are derived
+        from this method by selecting the appropriate ``func``.
+
+        It should return an array indexed as
+
+            grid_values[N][flavour][x][Q]
+
+        Parameters
+        ----------
+        func: callable
+            A function that fills the grid defined by the rest of the input
+            with elements in the flavour basis.
+        vmat: iterable
+            A list of flavour aliases valid for the basis.
+        xmat: iterable
+            A list of x values
+        qmat: iterable
+            A list of values in Q, expressed in GeV.
+
+        """
+        ...
+
+    def grid_values(self, pdf, vmat, xmat, qmat):
+        """Like :py:func:`validphys.gridvalues.grid_values`, but taking  and
+        returning `vmat` in terms of the vectors in this base.
+
+        Parameters
+        ----------
+        pdf: PDF
+            Any PDF set
+        vmat: iterable
+            A list of flavour aliases valid for the basis.
+        xmat: iterable
+            A list of x values
+        qmat: iterable
+            A list of values in Q, expressed in GeV.
+
+        Returns
+        -------
+        grid: np.ndarray
+            A 4-dimension array with the PDF values at the input parameters
+            for each replica. The return value is indexed as follows:
+
+                grid_values[replica][flavour][x][Q]
+
+        Examples
+        --------
+        Compute the median ratio over replicas between singlet and gluon for a
+        fixed point in x and a range of values in Q::
+
+            >>> import numpy as np
+            >>> from validphys.loader import Loader
+            >>> from validphys.pdfbases import evolution
+            >>> gv = evolution.grid_values(Loader().check_pdf("NNPDF31_nnlo_as_0118"), ["singlet", "gluon"], [0.01], [2,20,200])
+            >>> np.median(gv[:,0,...]/gv[:,1,...], axis=0)
+            array([[0.56694959, 0.53782002, 0.60348812]])
+        """
+        func = functools.partial(grid_values, pdf)
+        return self.apply_grid_values(func, vmat, xmat, qmat)
+
+    def central_grid_values(self, pdf, vmat, xmat, qmat):
+        """Same as :py:meth:`Basis.grid_values` but returning information on
+        the central member of the PDF set."""
+        func = functools.partial(central_grid_values, pdf)
+        return self.apply_grid_values(func, vmat, xmat, qmat)
+
+class LinearBasis(Basis):
+    """A basis that implements a linear transformation of flavours.
+
+    Attributes
+    ----------
+    from_flavour_mat: np.ndarray
+        A matrix that rotates the flavour basis into this basis.
+    """
+
+    def __init__(self, labels, from_flavour_mat, *args, **kwargs):
+        """
+        `flavour_representantion` is a mapping with the printable strings of
+        the elements (in case it doesn't match `labels`).
+        """
+        self.from_flavour_mat = from_flavour_mat
+        super().__init__(labels, *args, **kwargs)
+
 
     """
     NOTE: At the moment, we don't need the inverse functionality, namely
@@ -246,19 +365,8 @@ class Basis():
 
     """
 
-    def to_known_elements(self, vmat):
-        """Transform the list of aliases into an array of known labels. Raise
-        `UnknownElement` on failure."""
-        try:
-            return np.asanyarray(self.labels)[self._to_indexes(vmat)]
-        except KeyError as e:
-            raise UnknownElement(*e.args) from e
 
 
-    def _to_indexes(self, basis_arr):
-        """Convert a list of elements of the basis to indexes of the
-        (rows of the) transformation matrix."""
-        return [self.indexes[k] for k in basis_arr]
 
     def _flaray_from_flindexes(self, flinds):
         """Convert a list of flavor basis indexes to PDG codes to pass to
@@ -272,7 +380,7 @@ class Basis():
         return np.count_nonzero(self.from_flavour_mat[inds, :], axis=0) > 0
 
 
-    def _grid_values(self, func, vmat, xmat, qmat):
+    def apply_grid_values(self, func, vmat, xmat, qmat):
 
         #Indexes in the transformation from the "free form" inpt
         inds = self._to_indexes(vmat)
@@ -292,47 +400,6 @@ class Basis():
         rotated_gv = np.einsum('bc,acde->abde', transformation, gv)
         return rotated_gv
 
-    def grid_values(self, pdf, vmat, xmat, qmat):
-        """Like :py:func:`validphys.gridvalues.grid_values`, but taking  and
-        returning `vmat` in terms of the vectors in this base.
-
-        ----------
-        pdf : PDF
-            Any PDF set
-        vmat : iterable
-            A list of flavour aliases valid for the basis.
-        xmat : iterable
-            A list of x values
-        qmat : iterable
-            A list of values in Q, expressed in GeV.
-
-        Returns
-        -------
-        A 4-dimension array with the PDF values at the input parameters
-        for each replica. The return value is indexed as follows::
-
-            grid_values[replica][flavour][x][Q]
-
-        Examples
-        --------
-        Compute the median ratio over replicas between singlet and gluon for a
-        fixed point in x and a range of values in Q::
-
-            >>> import numpy as np
-            >>> from validphys.loader import Loader
-            >>> from validphys.pdfbases import evolution
-            >>> gv = evolution.grid_values(Loader().check_pdf("NNPDF31_nnlo_as_0118"), ["singlet", "gluon"], [0.01], [2,20,200])
-            >>> np.median(gv[:,0,...]/gv[:,1,...], axis=0)
-            array([[0.56694959, 0.53782002, 0.60348812]])
-        """
-        func = functools.partial(grid_values, pdf)
-        return self._grid_values(func, vmat, xmat, qmat)
-
-    def central_grid_values(self, pdf, vmat, xmat, qmat):
-        """Same as :py:meth:`Basis.grid_values` but returning information on
-        the central member of the PDF set."""
-        func = functools.partial(central_grid_values, pdf)
-        return self._grid_values(func, vmat, xmat, qmat)
 
 
     @classmethod
@@ -348,13 +415,62 @@ class Basis():
         return cls(labels, arr, aliases=aliases, default_elements=default_elements)
 
 
-flavour = Basis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
+class ScalarFunctionTransformation(Basis):
+    """A basis that transforms the flavour basis into a single element given by
+    ``transform_func``.
+
+    Optional keyword arguments are passed to the constructor of
+    :py:class:`validphys.pdfbases.Basis`.
+
+    Attributes
+    ----------
+    transform_func: callable
+        A callable with the signature ``transform_func(func, xmat, qmat)``
+        that fills the grid in :math:`x` and :math:`Q`  using ``func``
+        and returns a grid with a single basis element.
+
+    """
+    def __init__(self, transform_func, *args, **kwargs):
+        self.transform_func = transform_func
+        super().__init__(*args, **kwargs)
+
+    def apply_grid_values(self, func, vmat, xmat, qmat):
+        return self.transform_func(func, xmat, qmat)
+
+
+def scalar_function_transformation(label, *args, **kwargs):
+    """Convenience decorator factory to produce a
+    :py:class:`validphys.pdfbases.ScalarFunctionTransformation` basis from a
+    function.
+
+    Parameters
+    ----------
+    label: str
+        The single label of the element produced by the function transformation.
+
+    Notes
+    -----
+    Optional keyword arguments are passed to the constructor of
+    :py:class:`validphys.pdfbases.ScalarFunctionTransformation`.
+
+    Returns
+    -------
+    decorator: callable
+       A decorator that can be applied to a suitable transformation function.
+    """
+    def f_(transform_func):
+        return ScalarFunctionTransformation(transform_func, [label], *args, **kwargs)
+
+    return f_
+
+
+flavour = LinearBasis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
     default_elements = DEFAULT_FLARR, element_representations=PDG_PARTONS
 )
 
 #dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
 #though
-evolution = Basis.from_mapping({
+evolution = LinearBasis.from_mapping({
     r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
     'V'        : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1 ,'b':1, 'bbar':-1, 't': 1, 'tbar':-1},
 
@@ -382,9 +498,27 @@ evolution = Basis.from_mapping({
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
-EVOL = evolution
+EVOL = LinearBasis.from_mapping({
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        'g': {'g': 1},
 
-NN31IC = Basis.from_mapping(
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+    },
+    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
+    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',  ))
+
+NN31IC = LinearBasis.from_mapping(
     {
         r'\Sigma': {
             'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
@@ -410,7 +544,7 @@ NN31IC = Basis.from_mapping(
         'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
     default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
-FLAVOUR = Basis.from_mapping(
+FLAVOUR = LinearBasis.from_mapping(
     {
         'u': {'u': 1},
         'ubar': {'ubar': 1},
@@ -421,9 +555,9 @@ FLAVOUR = Basis.from_mapping(
         'c': {'c': 1},
         'g': {'g': 1},
     },
-    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))    
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
 
-pdg = Basis.from_mapping({
+pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
 'u_{v}': {'u':1, 'ubar':-1},
 'd_{v}': {'d':1, 'dbar': -1},
@@ -438,12 +572,12 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
     of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
     (sigma, g, v, v3, v8, t3, t8, cp), corresponding to the one used in NNPDF31.
-    Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index. 
-    The evolution basis (NN31IC) is defined as  
+    Denoting the rotation matrix as R_{ij} i is the flavour index and j is the evolution index.
+    The evolution basis (NN31IC) is defined as
     cp = c + cbar = 2c
     and
-    sigma = u + ubar + d + dbar + s + sbar + cp  
-    v = u - ubar + d - dbar + s - sbar + c - cbar 
+    sigma = u + ubar + d + dbar + s + sbar + cp
+    v = u - ubar + d - dbar + s - sbar + c - cbar
     v3 = u - ubar - d + dbar
     v8 = u - ubar + d - dbar - 2*s + 2*sbar
     t3 = u + ubar - d - dbar
@@ -485,17 +619,30 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
         cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
-        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 } 
-        
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+
     flist = [sng, g, v, v3, v8, t3, t8, cp]
-    
+
     evol_basis = False
     mat = []
     for f in flist:
         for flav_dict in flav_info:
             flav_name = flav_dict["fl"]
             mat.append(f[flav_name])
-               
+
     mat = np.asarray(mat).reshape(8,8)
     # Return the transpose of the matrix, to have the first index referring to flavour
-    return mat.transpose()    
+    return mat.transpose()
+
+@scalar_function_transformation(label="u/d")
+def ud_ratio(func, xmat, qmat):
+    gv = func([2, 1], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
+@scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
+def strange_fraction(func, xmat, qmat):
+    gv = func([-3, 3, -2, -1], xmat, qmat)
+    sbar, s, ubar, dbar = (gv[:, [i], ...] for i in range(4))
+    return (sbar + s) / (ubar + dbar)
