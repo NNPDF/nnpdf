@@ -380,7 +380,7 @@ def check_input(path):
     # the input is a valid LHAPDF set
     info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
 
-    if 'index.html' in files:
+    if 'meta.yaml' in files:
         check_for_meta(path)
         return 'report'
     elif 'filter.yml' in files:
@@ -388,5 +388,9 @@ def check_input(path):
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'
     else:
+        log.error(f"Specified input directory: {path} did not fall under the known "
+                   "categories of validphys (report, fit, or pdf).")
         raise ValueError("Unrecognized type of input, "
-                         "please save to the server using rsync or wiki-upload.")
+                         "please save to the server using rsync or wiki-upload. "
+                         "The --interactive flag will generate a meta file which "
+                         "will cause the input to be registered as a report.")
