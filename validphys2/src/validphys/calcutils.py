@@ -13,6 +13,7 @@ import pandas as pd
 
 log = logging.getLogger(__name__)
 
+
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
     lower triangular part and a vector of differences.

@@ -1,3 +1,5 @@
+.. _th_parameter_definitions:
+
 Theory parameter definitions
 ============================
 

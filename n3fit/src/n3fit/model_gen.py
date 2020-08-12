@@ -22,7 +22,7 @@ from n3fit.backends import base_layer_selector, regularizer_selector
 import tensorflow as tf
 
 
-def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=too-many-locals
+def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
     These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
@@ -144,25 +144,29 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
             c=positivity_initial,
             axis=1,
             name=spec_name,
-            unbatch=True,
         )
 
         def out_positivity(pdf_layer, datasets_out=None):
             exp_result = experiment_layer(pdf_layer)
             return out_mask(exp_result)
 
+        if integrability:
+            loss = losses.l_integrability()
+        else:
+            loss = losses.l_positivity()
+
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_positivity,
-            "loss_tr": losses.l_positivity(),
+            "loss_tr": loss,
             "experiment_xsize": full_nx,
         }
         return layer_info
 
     # Now prepare the actual outputs that can be used by n3fit
     # Generate the masks layers to be applied during training and validation
-    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1, unbatch=True)
-    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1, unbatch=True)
+    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1)
+    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1)
 
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
@@ -176,6 +180,8 @@ def observable_generator(spec_dict, positivity_initial=1.0):  # pylint: disable=
     else:
         obsrot = None
         loss_tr = losses.l_invcovmat(invcovmat_tr)
+        # TODO At this point we need to intercept the data and compile the loss with it
+        # then the validation must have a list of None as an output
         loss_vl = losses.l_invcovmat(invcovmat_vl)
     loss = losses.l_invcovmat(invcovmat)
 

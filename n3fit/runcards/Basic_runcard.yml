@@ -109,6 +109,11 @@ positivity:
     - { dataset: POSFLL,   poslambda: 1e4 }
 
 ############################################################
+integrability:
+  integdatasets:
+    - {dataset: INTEGXT3,   poslambda: 1e2}
+    
+############################################################
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
   fakedata    : False # on = to use FAKEPDF to generate pseudo-data
