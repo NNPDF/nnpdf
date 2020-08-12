@@ -568,6 +568,21 @@ r'\bar{d}': {'dbar':1},
 })
 
 
+@scalar_function_transformation(label="u/d")
+def ud_ratio(func, xmat, qmat):
+    gv = func([2, 1], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
+  
+@scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
+def strange_fraction(func, xmat, qmat):
+    gv = func([-3, 3, -2, -1], xmat, qmat)
+    sbar, s, ubar, dbar = (gv[:, [i], ...] for i in range(4))
+    return (sbar + s) / (ubar + dbar)
+
+  
 def fitbasis_to_NN31IC(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
     of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
@@ -633,16 +648,3 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
     mat = np.asarray(mat).reshape(8,8)
     # Return the transpose of the matrix, to have the first index referring to flavour
     return mat.transpose()
-
-@scalar_function_transformation(label="u/d")
-def ud_ratio(func, xmat, qmat):
-    gv = func([2, 1], xmat, qmat)
-    num = gv[:, [0], ...]
-    den = gv[:, [1], ...]
-    return num / den
-
-@scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
-def strange_fraction(func, xmat, qmat):
-    gv = func([-3, 3, -2, -1], xmat, qmat)
-    sbar, s, ubar, dbar = (gv[:, [i], ...] for i in range(4))
-    return (sbar + s) / (ubar + dbar)
