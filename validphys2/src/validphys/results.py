@@ -595,20 +595,36 @@ def results(
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
 def get_shifted_results(results, commondata, cutlist):
-    """Returns: 
-    - 'results': a tuple of data and theory results where the theory results' central values are 
-    shifted according to the paper: arXiv:1709.04922. These shifts correspond encapsulates the 
-    impact of correlated experimental uncertainties.
-    - 'shifted' a list of booleans indicating which datasets have been shifted. Note: the datasets with 
-    uncorrelated uncertainties doesn't include the correlated shifts."""
+    """Returns the theory results shifted according to correlated experimental uncertainties.
 
-    shifted=[]
+    Parameters
+    ----------
+    results: tuple 
+        A tuple of data and theory results where the theory results' central values are 
+        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
+        impact of correlated experimental uncertainties.
+    commondata : ``CommonDataSpec``
+        The specification corresponfing to the commondata to be plotted.
+    cutlist : list
+        The list of ``CutSpecs`` or ``None`` corresponding to the cuts for each
+        result.
+
+    Returns
+    -------
+    results: tuple 
+        A tuple of data and theory results where the theory results' central values are 
+        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
+        impact of correlated experimental uncertainties.
+    shifted: list 
+        A list of booleans indicating which datasets have been shifted. Note: the datasets with 
+        uncorrelated uncertainties doesn't include the correlated shifts."""
+
+    shifted = []
 
     cd = commondata.load()
 
     ## fill uncertainties
-    Ndat = cd.GetNData()
-    Nsys = cd.GetNSys()
+    Ndat, Nsys = cd.GetNData(), cd.GetNSys()
 
     uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
     corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties

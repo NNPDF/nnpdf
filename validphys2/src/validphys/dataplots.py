@@ -220,14 +220,20 @@ def _plot_fancy_impl(results, commondata, cutlist,
     labellist : list or None
         The labesl that will appear in the plot. They sill be deduced
         (from the PDF names) if None is given.
-    withshifts: bool
-        Add the correlated shifts to the theory predctions based on 
-        eq.84 of arXiv:1709.04922
 
     Returns
     -------
     A generator over figures.
     """
+
+    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {'title': "ATLAS Inclusive jets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 1, 'dy':0.25},
+                  "ATLAS jets 8 TeV, R=0.6":   {'title': "ATLAS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 6, 'dy':0.25},
+                  "CMS jets 7 TeV 2011":       {'title': "CMS Inclusive jets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 5, 'dy':0.25},
+                  "CMS jets 8 TeV":            {'title': "CMS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 6, 'dy':0.25},
+                  "ATLAS dijets 7 TeV, R=0.6": {'title': "ATLAS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": "|y^*|", 'Nybins': 6, 'dy':0.25},
+                  "CMS dijets 7 TeV":          {'title': "CMS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": "|y_{max}|", 'Nybins': 5, 'dy':0.25},
+                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend1": "y_b", "legend2": "y^{*}", 'Nybins': 6, 'dy':0.5}}
+
 
 
     info = get_info(commondata, normalize=(normalize_to is not None))
@@ -265,7 +271,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
 
         cv, err = transform_result(cv, err,
                                    table.iloc[:,:nkinlabels], info)
-
         #By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
         if normalize_to is None:
@@ -275,7 +280,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[cvcol] = cv/norm_cv
             table[('err', i)] = err/norm_cv
         cvcols.append(cvcol)
-
 
     figby = sane_groupby_iter(table, info.figure_by)
 
@@ -288,8 +292,44 @@ def _plot_fancy_impl(results, commondata, cutlist,
         min_vals = []
         max_vals = []
         fig, ax = plt.subplots()
-        ax.set_title("%s %s"%(info.dataset_label,
-                     info.group_label(samefig_vals, info.figure_by)))
+
+        yrange=" "
+        if info.dataset_label in DijetsInfo.keys():
+            split_info = info.group_label(samefig_vals, info.figure_by).split()
+            if info.dataset_label == "CMS 3D dijets 8 TeV":
+                kin1 = DijetsInfo[info.dataset_label]["legend1"] #split_info[0]
+                avg_kin1 = float(split_info[2])
+                max_kin1 = avg_kin1+DijetsInfo[info.dataset_label]['dy']
+                min_kin1 = avg_kin1-DijetsInfo[info.dataset_label]['dy']
+
+                kin2 = DijetsInfo[info.dataset_label]["legend2"] #split_info[3]
+                avg_kin2 = float(split_info[5])
+                max_kin2 = avg_kin2+DijetsInfo[info.dataset_label]['dy']
+                min_kin2 = avg_kin2-DijetsInfo[info.dataset_label]['dy']
+
+                yrange1 = "$"+str(min_kin1)+'\,<\,'+kin1 + \
+                    '\,<\,'+str(max_kin1)+"$"
+
+                yrange2 = "$"+str(min_kin2)+'\,<\,'+kin2 + \
+                    '\,<\,'+str(max_kin2)+"$"
+            
+                #fig.suptitle(title)
+            else:
+                kin = DijetsInfo[info.dataset_label]["legend"]
+                avg_kin = float(split_info[2])
+                max_kin = float(split_info[2])+DijetsInfo[info.dataset_label]['dy']
+                min_kin = float(split_info[2])-DijetsInfo[info.dataset_label]['dy']
+                yrange = "$"+str(min_kin)+'\,<\,'+kin + \
+                    '\,<\,'+str(max_kin)+"$"
+        
+        if info.dataset_label == "CMS 3D dijets 8 TeV":
+            ax.set_title("%s, %s; %s" % (DijetsInfo[info.dataset_label]['title'], yrange1, yrange2))
+        else:
+            ax.set_title("%s, %s" % (DijetsInfo[info.dataset_label]['title'], yrange))
+
+        #else:
+        #    ax.set_title("%s %s"%(info.dataset_label,
+        #                info.group_label(samefig_vals, info.figure_by)))
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
@@ -416,8 +456,10 @@ def plot_fancy(one_or_more_results, commondata, cuts,
                                                commondata=commondata,
                                                cutlist=cutlist)
         for ilabel in range(len(labellist)): 
-            if ilabel==0: continue
-            if shifted[ilabel-1]: labellist[ilabel]+=" (shifted)"
+            if ilabel == 0:
+                continue
+            if shifted[ilabel-1]:
+                labellist[ilabel] += " (shifted)"
 
 
     yield from _plot_fancy_impl(results=one_or_more_results,
