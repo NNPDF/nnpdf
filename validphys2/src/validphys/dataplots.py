@@ -198,12 +198,10 @@ def check_normalize_to(ns, **kwargs):
 #TODO: This interface is horrible. We need to think how to adapt libnnpdf
 #to make this use case easier
 def _plot_fancy_impl(results, commondata, cutlist,
-               normalize_to:(int,type(None)) = None, labellist=None):
+               normalize_to:(int,type(None)) = None, labellist=None, withshifts=False):
 
     """Implementation of the data-theory comparison plots. Providers are
     supposed to call (yield from) this.
-
-
     Parameters
     -----------
     results : list
@@ -220,21 +218,13 @@ def _plot_fancy_impl(results, commondata, cutlist,
     labellist : list or None
         The labesl that will appear in the plot. They sill be deduced
         (from the PDF names) if None is given.
-
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
     Returns
     -------
     A generator over figures.
     """
-
-    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {'title': "ATLAS Inclusive jets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 1, 'dy':0.25},
-                  "ATLAS jets 8 TeV, R=0.6":   {'title': "ATLAS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 6, 'dy':0.25},
-                  "CMS jets 7 TeV 2011":       {'title': "CMS Inclusive jets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 5, 'dy':0.25},
-                  "CMS jets 8 TeV":            {'title': "CMS Inclusive jets - 8 TeV", "ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": "|y|", 'Nybins': 6, 'dy':0.25},
-                  "ATLAS dijets 7 TeV, R=0.6": {'title': "ATLAS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": "|y^*|", 'Nybins': 6, 'dy':0.25},
-                  "CMS dijets 7 TeV":          {'title': "CMS Dijets - 7 TeV", "ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": "|y_{max}|", 'Nybins': 5, 'dy':0.25},
-                  "CMS 3D dijets 8 TeV":       {'title': "CMS Dijets - 8 TeV", "ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend1": "y_b", "legend2": "y^{*}", 'Nybins': 6, 'dy':0.5}}
-
-
 
     info = get_info(commondata, normalize=(normalize_to is not None))
 
@@ -271,6 +261,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 
         cv, err = transform_result(cv, err,
                                    table.iloc[:,:nkinlabels], info)
+
         #By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
         if normalize_to is None:
@@ -280,6 +271,51 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[cvcol] = cv/norm_cv
             table[('err', i)] = err/norm_cv
         cvcols.append(cvcol)
+
+    ### Computing correlated shifts according to the paper: arXiv:1709.04922
+    if withshifts:
+        for i, (result, cuts) in enumerate(zip(results, cutlist)):
+            if i==0: continue
+
+            cd = commondata.load()
+            mask = cut_mask(cuts)
+
+            ## fill uncertainties
+            Ndat = len(table[('cv', i)])
+            Nsys = cd.GetNSys()
+
+            uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
+            corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
+            lambda_sys = np.zeros(Nsys) # nuisance parameters
+
+            for idat in range(Ndat):
+                convi = table[('cv', 0)][idat]/cd.GetData(idat) # conversion constant
+                uncorrE[idat] = cd.GetUncE(idat)*convi
+                for isys in range(Nsys):
+                    if cd.GetSys(idat, isys).name != "UNCORR":
+                        corrE[idat, isys] = cd.GetSys(idat, isys).add*convi
+
+            ## applying cuts
+            uncorrE=uncorrE[mask]
+            corrE=corrE[mask]
+            data = table[('cv', 0)][mask]
+            theory = table[('cv', i)][mask]
+
+            ## isys is equivalent to alpha index and lsys to delta in eq.85
+            if np.any(uncorrE == 0):
+                temp_shifts = np.zeros(Ndat)
+            else:
+                f1 = (data - theory)/uncorrE # first part of eq.85
+                A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
+                    np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
+                f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
+                lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
+                temp_shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
+
+                shifts = np.full(Ndat, np.nan)
+                shifts[mask] = temp_shifts
+
+                table[('cv', i)] += shifts
 
     figby = sane_groupby_iter(table, info.figure_by)
 
@@ -292,44 +328,8 @@ def _plot_fancy_impl(results, commondata, cutlist,
         min_vals = []
         max_vals = []
         fig, ax = plt.subplots()
-
-        yrange=" "
-        if info.dataset_label in DijetsInfo.keys():
-            split_info = info.group_label(samefig_vals, info.figure_by).split()
-            if info.dataset_label == "CMS 3D dijets 8 TeV":
-                kin1 = DijetsInfo[info.dataset_label]["legend1"] #split_info[0]
-                avg_kin1 = float(split_info[2])
-                max_kin1 = avg_kin1+DijetsInfo[info.dataset_label]['dy']
-                min_kin1 = avg_kin1-DijetsInfo[info.dataset_label]['dy']
-
-                kin2 = DijetsInfo[info.dataset_label]["legend2"] #split_info[3]
-                avg_kin2 = float(split_info[5])
-                max_kin2 = avg_kin2+DijetsInfo[info.dataset_label]['dy']
-                min_kin2 = avg_kin2-DijetsInfo[info.dataset_label]['dy']
-
-                yrange1 = "$"+str(min_kin1)+'\,<\,'+kin1 + \
-                    '\,<\,'+str(max_kin1)+"$"
-
-                yrange2 = "$"+str(min_kin2)+'\,<\,'+kin2 + \
-                    '\,<\,'+str(max_kin2)+"$"
-            
-                #fig.suptitle(title)
-            else:
-                kin = DijetsInfo[info.dataset_label]["legend"]
-                avg_kin = float(split_info[2])
-                max_kin = float(split_info[2])+DijetsInfo[info.dataset_label]['dy']
-                min_kin = float(split_info[2])-DijetsInfo[info.dataset_label]['dy']
-                yrange = "$"+str(min_kin)+'\,<\,'+kin + \
-                    '\,<\,'+str(max_kin)+"$"
-        
-        if info.dataset_label == "CMS 3D dijets 8 TeV":
-            ax.set_title("%s, %s; %s" % (DijetsInfo[info.dataset_label]['title'], yrange1, yrange2))
-        else:
-            ax.set_title("%s, %s" % (DijetsInfo[info.dataset_label]['title'], yrange))
-
-        #else:
-        #    ax.set_title("%s %s"%(info.dataset_label,
-        #                info.group_label(samefig_vals, info.figure_by)))
+        ax.set_title("%s %s"%(info.dataset_label,
+                     info.group_label(samefig_vals, info.figure_by)))
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
@@ -544,11 +544,11 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
         results, shifted = get_shifted_results(results=results,
                                                commondata=commondata,
                                                cutlist=cutlist)
-        for ilabel in range(len(labellist)): 
-            if ilabel==0:
+        for ilabel in range(len(labellist)):
+            if ilabel == 0:
                 continue
             if shifted[ilabel-1]:
-                labellist[ilabel]+=" (shifted)"
+                labellist[ilabel] += " (shifted)"
 
     yield from _plot_fancy_impl(results = results, commondata=commondata,
                                 cutlist=cutlist, labellist=labellist,
