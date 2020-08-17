@@ -16,3 +16,5 @@ vp-guide
    ./dataspecification.rst
    ./theorycov/index
    ./pydataobjs.rst
+   ./examples.rst
+
