@@ -1209,7 +1209,7 @@ class CoreConfig(configparser.Config):
                     "PLOTTING file."
                 )
         return [
-            {"data_input": group, "experiment_name": name}
+            {"data_input": group, "group_name": name}
             for name, group in res.items()
         ]
 

@@ -151,6 +151,8 @@ class PositivityResult(StatsResult):
 #TODO: finish deprecating all dependencies on this index largely in theorycovmat module
 groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
+experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
+
 def groups_index(groups_data):
     """Return a pandas.MultiIndex with levels for group, dataset and point
     respectively, the group is determined by a key in the dataset metadata, and
@@ -180,6 +182,9 @@ def groups_index(groups_data):
     df = pd.DataFrame(records, columns=columns)
     df.set_index(columns, inplace=True)
     return df.index
+
+def experiments_index(experiments_data):
+    return groups_index(experiments_data)
 
 def groups_data_values(group_result_table):
     """Returns list of data values for the input groups."""
@@ -240,12 +245,26 @@ def group_result_table_68cl(groups_results, group_result_table_no_table: pd.Data
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
-groups_covmat_collection = collect(
-    'dataset_inputs_covariance_matrix', ('group_dataset_inputs_by_metadata',)
-)
+experiments_covmat_collection = collect(
+    'dataset_inputs_covariance_matrix', ("group_dataset_inputs_by_experiment",)
+    )
+
+def experiments_covmat_no_table(
+    experiments_data, experiments_index, experiments_covmat_collection):
+    """Makes the total experiments covariance matrix, which can then
+    be reindexed appropriately by the chosen grouping. The covariance
+    matrix must first be grouped by experiments to ensure correlations
+    within experiments are preserved."""
+    data = np.zeros((len(experiments_index), len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment, experiment_covmat in zip(
+            experiments_data, experiments_covmat_collection):
+        name = experiment.name
+        df.loc[[name],[name]] = experiment_covmat
+    return df
 
 def groups_covmat_no_table(
-       groups_data, groups_index, groups_covmat_collection):
+       experiments_covmat_no_table, groups_index):
     """Export the covariance matrix for the groups. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -255,12 +274,13 @@ def groups_covmat_no_table(
 
         - index of the point within the dataset.
     """
-    data = np.zeros((len(groups_index),len(groups_index)))
-    df = pd.DataFrame(data, index=groups_index, columns=groups_index)
-    for group, group_covmat in zip(
-            groups_data, groups_covmat_collection):
-        name = group.name
-        df.loc[[name],[name]] = group_covmat
+    covmat = experiments_covmat_no_table
+    # Sorting along dataset axis so we can apply the groups index directly
+    covmat = covmat.sort_index(axis=0, level=1)
+    covmat = covmat.sort_index(axis=1, level=1)
+    sorted_groups_index = groups_index.sortlevel(1)[0]
+    df = pd.DataFrame(covmat.values, index=sorted_groups_index, 
+                                    columns=sorted_groups_index)
     return df
 
 @table
