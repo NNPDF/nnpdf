@@ -261,7 +261,7 @@ def experiments_covmat_no_table(
     return df
 
 def groups_covmat_no_table(
-       experiments_covmat_no_table, groups_index):
+       experiments_covmat_no_table, experiments_data, groups_index):
     """Export the covariance matrix for the groups. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -278,6 +278,9 @@ def groups_covmat_no_table(
     sorted_groups_index = groups_index.sortlevel(1)[0]
     df = pd.DataFrame(covmat.values, index=sorted_groups_index, 
                                     columns=sorted_groups_index)
+    # Reindexing to fit with groups_index
+    df.reindex(groups_index, axis=0)
+    df.reindex(groups_index, axis=1)
     return df
 
 @table
