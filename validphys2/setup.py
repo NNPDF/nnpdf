@@ -31,6 +31,7 @@ setup(name= "validphys",
                         'vp-rebuild-data = validphys.scripts.vp_rebuild_data:main',
                         'vp-pdfrename = validphys.scripts.vp_pdfrename:main',
                         'vp-list = validphys.scripts.vp_list:main',
+                        'vp-nextfitruncard = validphys.scripts.vp_nextfitruncard:main'
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),
