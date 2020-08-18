@@ -70,15 +70,7 @@ def matrix_plot_labels(df):
     return ticklocs, ticklabels, startlocs
 
 def plot_covmat_heatmap(covmat, title, groups_index):
-    """Matrix plot of a covariance matrix.
-    WARNING: Plotting is ordered by process and dataset in the custom
-    order given in _procorder and _dsorder. In order for this to work
-    the covmat provided MUST be indexed and ordered the same as
-    groups_covmat, that is by (exp, dataset, point) in the order
-    of experiments and datasets listed in the runcard. Otherwise the
-    labels will not correspond to the correct points."""
-    from IPython import embed
-   # embed()
+    """Matrix plot of a covariance matrix."""
     df = covmat
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
