@@ -9,6 +9,7 @@ import warnings
 import numbers
 import numpy as np
 import pandas as pd
+import random
 
 from reportengine import collect
 from reportengine.figure import figuregen
@@ -433,4 +434,6 @@ def next_effective_exponents_yaml(fit: FitSpec, next_fit_eff_exps_table):
         previous_exponents[runcard_flavours.index(fl)]['largex'] = [fmt(beta) for beta in betas]
     #iterate t0
     filtermap['datacuts']['t0pdfset'] = fit.name
+    # Update random seed
+    filtermap['fitting']['seed'] = random.randrange(0, 1e10)
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
