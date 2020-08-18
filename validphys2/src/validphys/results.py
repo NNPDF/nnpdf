@@ -279,8 +279,8 @@ def groups_covmat_no_table(
     df = pd.DataFrame(covmat.values, index=sorted_groups_index, 
                                     columns=sorted_groups_index)
     # Reindexing to fit with groups_index
-    df.reindex(groups_index, axis=0)
-    df.reindex(groups_index, axis=1)
+    df = df.reindex(groups_index, axis=0)
+    df = df.reindex(groups_index, axis=1)
     return df
 
 @table
@@ -330,6 +330,9 @@ def groups_invcovmat(
 def groups_normcovmat(groups_covmat, groups_data_values):
     """Calculates the grouped experimental covariance matrix normalised to data."""
     df = groups_covmat
+    index = df.index
+    # Reindexing data so that it is aligned with the covmat
+    groups_data_values = groups_data_values.reindex(index)
     groups_data_array = np.array(groups_data_values)
     mat = df/np.outer(groups_data_array, groups_data_array)
     return mat
