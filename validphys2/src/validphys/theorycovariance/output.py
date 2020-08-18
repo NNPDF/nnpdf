@@ -77,8 +77,9 @@ def plot_covmat_heatmap(covmat, title, groups_index):
     groups_covmat, that is by (exp, dataset, point) in the order
     of experiments and datasets listed in the runcard. Otherwise the
     labels will not correspond to the correct points."""
-    df = pd.DataFrame(covmat.values, index=groups_index,
-                      columns=groups_index)
+    from IPython import embed
+   # embed()
+    df = covmat
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
