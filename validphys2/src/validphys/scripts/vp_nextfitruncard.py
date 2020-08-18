@@ -21,6 +21,11 @@ import NNPDF as nnpath
 
 from reportengine.compat import yaml
 from reportengine import colors
+from reportengine.floatformatting import significant_digits
+
+from validphys.eff_exponents import next_effective_exponents_table
+from validphys.loader import Loader, PDFNotFound
+from validphys.pdfbases import check_basis
 
 
 # Take command line arguments
@@ -62,7 +67,7 @@ def main():
         log.error(
             "Could not find the specified fit. The following path is not a directory: "
             f"{fit_path.absolute()}. If the requested fit does exist, you can download it with "
-            "`vp-get fit <fit_name>`"
+            "`vp-get fit <fit_name>`."
         )
         sys.exit(1)
 
@@ -74,11 +79,51 @@ def main():
         log.info(f"Input runcard successfully read from {runcard_path_in.absolute()}.")
 
     # Update runcard with settings needed for iteration
+
     # Iterate t0
     runcard_data["datacuts"]["t0pdfset"] = input_fit
+
     # Update seed with pseudorandom number between 0 and 1e10
     runcard_data["fitting"]["seed"] = random.randrange(0, 1e10)
 
+    # Update preprocessing exponents
+    # Firstly, find new exponents from PDF set that corresponds to fit
+    basis = runcard_data["fitting"]["fitbasis"]
+    checked = check_basis(basis, None)
+    basis = checked["basis"]
+    flavours = checked["flavours"]
+    l = Loader()
+    try:
+        pdf = l.check_pdf(input_fit)
+    except PDFNotFound:
+        log.error(
+            f"Could not find the PDF set {input_fit}. If the requested PDF set does exist, you can "
+            "download it with `vp-get pdf <pdf_name>`."
+        )
+        sys.exit(1)
+    new_exponents = next_effective_exponents_table(
+        pdf=pdf, basis=basis, flavours=flavours
+    )
+
+    # Define function that we will use to round exponents to 4 significant figures
+    rounder = lambda a: float(significant_digits(a, 4))
+
+    # Update previous_exponents with new values
+    previous_exponents = runcard_data["fitting"]["basis"]
+    runcard_flavours = basis.to_known_elements(
+        [ref_fl["fl"] for ref_fl in previous_exponents]
+    ).tolist()
+    for fl in flavours:
+        alphas = new_exponents.loc[(f"${fl}$", r"$\alpha$")].values
+        betas = new_exponents.loc[(f"${fl}$", r"$\beta$")].values
+        previous_exponents[runcard_flavours.index(fl)]["smallx"] = [
+            rounder(alpha) for alpha in alphas
+        ]
+        previous_exponents[runcard_flavours.index(fl)]["largex"] = [
+            rounder(beta) for beta in betas
+        ]
+
+    # Start process of writing new runcard to file
     config_path = pathlib.Path(nnpath.get_config_path())
     output_fit = input_fit + "_iterated.yaml"
     runcard_path_out = config_path / output_fit
