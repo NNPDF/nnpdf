@@ -1,14 +1,17 @@
 """
 vp-nextfitruncard
 
-Command line tool to produce the runcard for an iterated fit given the non-iterated fit.
+Command line tool to produce the runcard for an iterated fit given the input fit.
 
 The script:
-- Takes the non-iterated fit as a required argument and loads its runcard
-- Uses the non-iterated fit as the t0 set
-- Modifies the random seed to a value between 0 and 1e10
-- Writes the runcard for the iterated fit to the user's NNPDF config path as long as it does not
-  already exist, unless the --force flag is given
+- Takes the input fit as a required argument and loads its runcard
+- Updated the description of the fit interactively
+- Uses the input fit as the t0 set
+- Modifies the random seeds to values between 0 and 1e10
+- Writes the runcard for the iterated fit to the current working directory, unless a different path
+  is given as an argument
+- Note that the runcard is written as long as it does not already exist in the path. This can be
+  overridden by using the --force flag
 """
 
 import argparse
