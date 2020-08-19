@@ -498,25 +498,7 @@ evolution = LinearBasis.from_mapping({
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
-EVOL = LinearBasis.from_mapping({
-        r'\Sigma': {
-            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
-            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
-        'g': {'g': 1},
-
-        'V': {
-            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
-            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
-
-        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
-        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
-
-        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
-        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
-    },
-    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
-    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8',  ))
+EVOL = evolution
 
 NN31IC = LinearBasis.from_mapping(
     {
