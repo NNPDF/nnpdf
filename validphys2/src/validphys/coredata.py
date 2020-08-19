@@ -128,7 +128,7 @@ class SystematicError:
 
     def __repr__(self):
         return (f"{self.__class__.__name__}(add={self.add}, mult={self.mult},"
-                "sys_type={self.sys_type}, name={self.name})")
+                f"sys_type={self.sys_type}, name={self.name})")
 
 
 @dataclasses.dataclass(eq=False)
