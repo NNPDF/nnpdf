@@ -104,7 +104,7 @@ def wrapper_check_NN(fitting):
     check_stopping(parameters)
     check_dropout(parameters)
     # Checks that need to import the backend (and thus take longer) should be done last
-    #     check_optimizer(parameters["optimizer"]) # this check is waiting for PR 783
+    check_optimizer(parameters["optimizer"])
     check_initializer(parameters["initializer"])
 
 

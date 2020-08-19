@@ -3,6 +3,7 @@
 """
 import pytest
 from reportengine.checks import CheckError
+from n3fit.backends import MetaModel
 from n3fit import checks
 
 
@@ -36,6 +37,24 @@ def test_check_stopping():
         checks.check_stopping(params)
     params["epochs"] = 4
     checks.check_stopping(params)
+
+def test_check_basis_with_layer():
+    """ Test that it fails with layers that do not match flavours """
+    flavs = ["g", "ubar"]
+    layers = [4,5,9]
+    with pytest.raises(CheckError):
+        checks.check_basis_with_layers({"basis" : flavs}, {"nodes_per_layer" : layers})
+        
+def test_check_optimizer():
+    """ Test that the optimizer check is correct """
+    params = {"optimizer_name" : "fake_non_existing"}
+    with pytest.raises(CheckError):
+        checks.check_optimizer(params)
+    valid_optimizers = MetaModel.accepted_optimizers
+    params["optimizer_name"] = "RMSprop"
+    params["wrong_parameters"] = 7
+    with pytest.raises(CheckError):
+        checks.check_optimizer(params)
 
 
 def test_check_initializer():
