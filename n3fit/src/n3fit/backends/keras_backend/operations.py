@@ -111,11 +111,6 @@ def batchit(x, batch_dimension=0, **kwarg):
     return tf.expand_dims(x, batch_dimension, **kwarg)
 
 
-def unbatch(x, batch_dimension=0, **kwargs):
-    """ Remove batch dimension to tensor x """
-    return tf.squeeze(x, axis=batch_dimension)
-
-
 # layer generation
 def numpy_to_input(numpy_array, no_reshape=False, name=None):
     """

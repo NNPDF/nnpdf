@@ -153,7 +153,7 @@ def check_hyperopt_positivity(positivity_dict):
     if max_ini is not None or min_ini is not None:
         if max_ini is None or min_ini is None:
             raise CheckError(
-                "Need to set both the maximum and minimum positivitiy initial value if any of the two is set"
+                "Need to set both the max_initial and the min_initial positivity values"
             )
         if min_ini is not None and max_ini <= min_mul:
             raise CheckError("The minimum initial value cannot be greater than the maximum")
@@ -186,6 +186,37 @@ def check_correct_partitions(kfold, experiments):
                 raise CheckError(f"The k-fold defined dataset {dset} is not part of the fit")
 
 
+def check_hyperopt_stopping(stopping_dict):
+    """ Checks that the options selected for the stopping are consistent """
+    if stopping_dict is None:
+        return
+    min_ep = stopping_dict.get("min_epochs")
+    max_ep = stopping_dict.get("max_epochs")
+    if max_ep is not None or min_ep is not None:
+        if min_ep is None or max_ep is None:
+            raise CheckError("Need to set both the max_epochs and the min_epochs")
+        if min_ep < 1:
+            raise CheckError(f"Can't run for less than 1 epoch: " "selected min_ep = {min_ep}")
+        if max_ep <= min_ep:
+            raise CheckError(f"min_epochs cannot be greater than max_epochs: ({min_ep} > {max_ep})")
+    min_pat = stopping_dict.get("min_patience")
+    max_pat = stopping_dict.get("max_patience")
+    if min_pat is not None or max_pat is not None:
+        if min_pat is not None and min_pat < 0.0:
+            raise CheckError(
+                f"min_patience cannot be less than 0.0: " "selected min_pat = {min_pat}"
+            )
+        if max_pat is not None:
+            if max_pat > 1.0:
+                raise CheckError(
+                    f"max_patience cannot be greater than 1.0: " "selected max_pat = {max_pat}"
+                )
+            if min_pat is not None and max_pat < min_pat:
+                raise CheckError(
+                    f"min_patience cannot be greater than max_patience: ({min_pat} > {max_pat})"
+                )
+
+
 @make_argcheck
 def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
     """ Wrapper function for all hyperopt-related checks
@@ -199,6 +230,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
         raise CheckError("Can't perform hyperoptimization without the hyperscan key")
     if "kfold" not in hyperscan:
         raise CheckError("The hyperscan::kfold dictionary is not defined")
+    check_hyperopt_stopping(hyperscan.get("stopping"))
     check_hyperopt_architecture(hyperscan.get("architecture"))
     check_hyperopt_positivity(hyperscan.get("positivity"))
     check_kfold_options(hyperscan["kfold"])

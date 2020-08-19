@@ -35,7 +35,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
-EXPECTED_MAX_FITTIME = 130 # seen mac ~ 180  and linux ~ 90
+EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
@@ -103,9 +103,9 @@ def auxiliary_performfit(timing=True):
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     if timing:
         # Better to catch up errors even when they happen to grow larger by chance
-        with open(time_path, 'r') as stream:
+        with open(time_path, "r") as stream:
             times = yaml.safe_load(stream)
-        fitting_time = times['walltime']['replica_set_to_replica_fitted']
+        fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
         assert fitting_time < EXPECTED_MAX_FITTIME
     version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/version.info"
     f = open(version_path, "r")
@@ -138,3 +138,14 @@ def test_hyperopt():
         sp.run(
             f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(), cwd=tmp_path, timeout=60,
         )
+
+
+def test_novalidation(timing=30):
+    """ Runs a runcard without validation, success is assumed if it doesn't crash in 30 seconds """
+    quickcard = f"noval-{QUICKNAME}.yml"
+    quickpath = REGRESSION_FOLDER / quickcard
+    tmp_name = tempfile.mkdtemp(prefix="hypernnpdf-")
+    tmp_path = pathlib.Path(tmp_name)
+    shutil.copy(quickpath, tmp_path)
+    with pytest.raises(sp.TimeoutExpired):
+        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)

@@ -8,13 +8,12 @@ import logging
 import os.path
 import numpy as np
 import n3fit.checks
+from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
 
 
-def initialize_seeds(
-    replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool
-):
+def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
     """Action to initialize seeds for random number generation.
     We initialize three different seeds. The first is the seed
     used for training/validation splits, the second is used for
@@ -88,6 +87,7 @@ def performfit(
     output_path,
     theoryid,
     posdatasets,
+    integdatasets=None,
     hyperscan=None,
     hyperopt=None,
     debug=False,
@@ -130,6 +130,8 @@ def performfit(
                 theory id number
             posdatasets: list
                 list of positivity datasets
+            integdatasets: list
+                list of integrability datasets
             hyperscan: dict
                 dictionary containing the details of the hyperscan
             hyperopt: int
@@ -212,6 +214,16 @@ def performfit(
         pos_dict = reader.positivity_reader(pos_set)
         pos_info.append(pos_dict)
 
+    if integdatasets is not None:
+        integ_info = []
+        for integ_set in integdatasets:
+            log.info("Loading integrability dataset %s", integ_set)
+            # Use the same reader as positivity observables
+            integ_dict = reader.positivity_reader(integ_set)
+            integ_info.append(integ_dict) 
+    else:
+        integ_info = None           
+
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
     stopwatch.register_times("data_loaded")
@@ -224,6 +236,7 @@ def performfit(
         the_model_trainer = ModelTrainer(
             exp_info,
             pos_info,
+            integ_info,
             fitting["basis"],
             fitting["fitbasis"],
             nnseed,
@@ -238,9 +251,7 @@ def performfit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(
-                " > Loading the weights from previous training from %s", model_file
-            )
+            log.info(" > Loading the weights from previous training from %s", model_file)
             if not os.path.isfile(model_file):
                 log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
@@ -265,11 +276,7 @@ def performfit(
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
             true_best = hyper_scan_wrapper(
-                replica_path_set,
-                the_model_trainer,
-                parameters,
-                hyperscan,
-                max_evals=hyperopt,
+                replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt,
             )
             print("##################")
             print("Best model found: ")
@@ -314,21 +321,13 @@ def performfit(
             )
         )
 
-        # Creates a PDF model for export grid
-        def pdf_function(export_xgrid):
-            """
-            Receives an array, returns the result of the PDF for said array
-            """
-            # First add an extra dimensions because the model works on batches
-            xgrid = np.expand_dims(export_xgrid, 0)
-            result = pdf_model.predict([xgrid])
-            # Now remove the spurious dimension
-            return np.squeeze(result, 0)
+        # Create a pdf instance
+        pdf_instance = N3PDF(pdf_model)
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
             replica_number,
-            pdf_function,
+            pdf_instance,
             stopping_object,
             theoryid.get_description().get("Q0") ** 2,
             stopwatch.stop(),
@@ -346,12 +345,8 @@ def performfit(
             stopping_object.history.rewind(step)
             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
-            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(
-                stopping_object
-            )
-            writer_wrapper.write_data(
-                new_path, output_path.name, training_chi2, val_chi2, exp_chi2
-            )
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+            writer_wrapper.write_data(new_path, output_path.name, training_chi2, val_chi2, exp_chi2)
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder

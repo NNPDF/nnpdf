@@ -47,9 +47,9 @@ regex_not_op = re.compile(r"[\w\.]+")
 KEYWORDS = {
     "id": "iteration",
     "optimizer": "optimizer",
-    "lr": "learning_rate",
     "optimizer_name": "optimizer_name",
-    "clipnorm" : "clipnorm",
+    "clipnorm": "clipnorm",
+    "lr": "learning_rate",
     "initializer": "initializer",
     "dropout": "dropout",
     "nodes": "nodes_per_layer",
@@ -64,7 +64,7 @@ KEYWORDS = {
     "p_mul": "pos_multiplier",
     "good": "good",
     "vl": "validation_loss",
-    "tl": "loss", # The testing loss has dissapeared, the loss corresponds to the k-folding loss
+    "tl": "loss",  # The testing loss has dissapeared, the loss corresponds to the k-folding loss
     "loss": "loss",
 }
 
@@ -157,7 +157,7 @@ def parse_optimizer(trial):
         # If this is a dictionary then the optimizer contains extra
         # information (normaly the learning rate)
         name = opt[KEYWORDS["optimizer_name"]]
-        lr = opt[KEYWORDS["lr"]]
+        lr = opt.get(KEYWORDS["lr"])
         clipnorm = opt.get(KEYWORDS["clipnorm"])
     else:
         name = opt
@@ -182,8 +182,8 @@ def parse_stopping(trial):
     epochs = trial["misc"]["space_vals"][KEYWORDS["epochs"]]
     patience = trial["misc"]["space_vals"][KEYWORDS["stp"]]
     stop_ep = patience * epochs
-    positivity_initial = trial["misc"]["space_vals"][KEYWORDS["p_ini"]]
-    positivity_multiplier = trial["misc"]["space_vals"][KEYWORDS["p_mul"]]
+    positivity_initial = trial["misc"]["space_vals"].get(KEYWORDS["p_ini"])
+    positivity_multiplier = trial["misc"]["space_vals"].get(KEYWORDS["p_mul"])
 
     dict_out[KEYWORDS["epochs"]] = epochs
     dict_out[KEYWORDS["stp"]] = patience
@@ -259,6 +259,8 @@ def parse_statistics(trial):
     std = results["kfold_meta"]["hyper_std"]
     dict_out["avg"] = average
     dict_out["std"] = std
+    dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
+    dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
     return dict_out
 
 
