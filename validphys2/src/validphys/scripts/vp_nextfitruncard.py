@@ -12,6 +12,7 @@ The script:
 """
 
 import argparse
+import os
 import pathlib
 import sys
 import random
@@ -35,6 +36,12 @@ def process_args():
     )
     parser.add_argument("input_fit", help="Name of input fit.")
     parser.add_argument(
+        "output_dir",
+        nargs="?",
+        default=os.getcwd(),
+        help="Directory to which the new runcard will be written. The default is the current working directory.",
+    )
+    parser.add_argument(
         "-f",
         "--force",
         help="If the runcard for the iterated fit already exists in the path, overwrite it.",
@@ -53,6 +60,7 @@ def main():
     args = process_args()
 
     input_fit = args.input_fit
+    output_dir = args.output_dir
     force = args.force
     if force:
         log.warning(
@@ -124,9 +132,9 @@ def main():
         ]
 
     # Start process of writing new runcard to file
-    config_path = pathlib.Path(nnpath.get_config_path())
+    output_path = pathlib.Path(output_dir)
     output_fit = input_fit + "_iterated.yaml"
-    runcard_path_out = config_path / output_fit
+    runcard_path_out = output_path / output_fit
 
     if runcard_path_out.exists() and not force:
         log.error(
@@ -139,6 +147,7 @@ def main():
         log.info("Dumping runcard for iterated fit.")
         yaml.dump(runcard_data, outfile, Dumper=yaml.RoundTripDumper)
         log.info(f"Runcard for iterated fit written to {runcard_path_out.absolute()}.")
+
 
 if __name__ == "__main__":
     main()
