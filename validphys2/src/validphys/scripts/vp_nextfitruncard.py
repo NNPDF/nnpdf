@@ -80,8 +80,8 @@ def main():
     force = args.force
     if force:
         log.warning(
-            "--force set to True. If the runcard for the iterated fit already exists in config "
-            "path, it will be overwritten."
+            "--force set to True. If the runcard for the iterated fit already exists in path to be "
+            "written to, it will be overwritten."
         )
 
     results_path = pathlib.Path(nnpath.get_results_path())
@@ -98,7 +98,6 @@ def main():
     runcard_path_in = fit_path / "filter.yml"
 
     with open(runcard_path_in, "r") as infile:
-        log.info(f"Input fit is {input_fit}.")
         runcard_data = yaml.load(infile, Loader=yaml.RoundTripLoader)
         log.info(f"Input runcard successfully read from {runcard_path_in.absolute()}.")
 
@@ -177,12 +176,11 @@ def main():
         sys.exit(1)
 
     with open(runcard_path_out, "w") as outfile:
-        log.info("Dumping runcard for iterated fit.")
         yaml.dump(runcard_data, outfile, Dumper=yaml.RoundTripDumper)
         log.info(f"Runcard for iterated fit written to {runcard_path_out.absolute()}.")
 
-    # Open new runcard with default editor, or if one is not set, with vim
-    EDITOR = os.environ.get("EDITOR") if os.environ.get("EDITOR") else "vim"
+    # Open new runcard with default editor, or if one is not set, with vi
+    EDITOR = os.environ.get("EDITOR") if os.environ.get("EDITOR") else "vi"
     os.system(f"{EDITOR} {runcard_path_out}")
 
 
