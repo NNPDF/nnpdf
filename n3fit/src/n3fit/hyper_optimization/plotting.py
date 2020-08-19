@@ -60,8 +60,8 @@ KEYWORDS = {
     "epochs": "epochs",
     "stp": "stopping_patience",
     "ste": "stopping_epochs",
-    "p_ini": "pos_initial",
-    "p_mul": "pos_multiplier",
+    "p_ini": "initial",
+    "p_mul": "multiplier",
     "good": "good",
     "vl": "validation_loss",
     "tl": "loss",  # The testing loss has dissapeared, the loss corresponds to the k-folding loss
@@ -182,8 +182,8 @@ def parse_stopping(trial):
     epochs = trial["misc"]["space_vals"][KEYWORDS["epochs"]]
     patience = trial["misc"]["space_vals"][KEYWORDS["stp"]]
     stop_ep = patience * epochs
-    positivity_initial = trial["misc"]["space_vals"].get(KEYWORDS["p_ini"])
-    positivity_multiplier = trial["misc"]["space_vals"].get(KEYWORDS["p_mul"])
+    positivity_initial = trial["misc"]["space_vals"]["positivity"].get(KEYWORDS["p_ini"])
+    positivity_multiplier = trial["misc"]["space_vals"]["positivity"].get(KEYWORDS["p_mul"])
 
     dict_out[KEYWORDS["epochs"]] = epochs
     dict_out[KEYWORDS["stp"]] = patience
