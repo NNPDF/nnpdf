@@ -11,6 +11,8 @@ from reportengine import collect
 from reportengine.table import table
 
 from validphys.calcutils import regularize_covmat, get_df_block
+from validphys.core import PDF, DataGroupSpec, DataSetSpec
+from validphys.commondataparser import load_commondata
 from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
@@ -21,9 +23,63 @@ from validphys.checks import (
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.results import ThPredictionsResult
 
+import NNPDF
+
 log = logging.getLogger(__name__)
 
 INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
+
+def make_replica(commondata, seed=1):
+    # dataset_input: {dataset: NMC, frac: 0.5}
+
+    # use_cuts: nocuts
+
+    # theoryid: 53
+
+    # template_text: |
+      # {@make_replica@}
+
+    # actions_:
+      # - report(main=True)
+
+    # TODO: eventually remove the inhouse random number generator
+    # in favour of e.g numpy
+    NNPDF.RandomGenerator.InitRNG(0, seed)
+    rng = NNPDF.RandomGenerator.GetRNG()
+
+    ld_cd = load_commondata(commondata)
+    covmat_for_sampling = covmat_from_systematics(ld_cd, use_mult_errors=False)
+    sampling_matrix = sqrt_covmat(covmat_for_sampling)
+
+    rand = [rng.GetRandomGausDev(1.0) for _ in range(ld_cd.nsys)]
+    deviates = [rng.GetRandomGausDev(1.0) for _ in range(ld_cd.ndata)]
+    deviates, rand = map(np.array, (deviates, rand))
+
+    correlated_deviates = sampling_matrix @ deviates
+
+    artdata = np.array(ld_cd.central_values) + correlated_deviates
+
+    sys_table = ld_cd.sys_errors
+    for i in range(ld_cd.ndata):
+        xnor = 1
+        for j in range(ld_cd.nsys):
+            sys = sys_table.iloc[i, j]
+            if sys.name in ('THEORYCORR', 'THEORYUNCORR', 'SKIP'):
+                continue
+
+            if sys.name == 'UNCORR':
+                if sys.sys_type == 'ADD':
+                    continue
+                xnor *= (1.0 + rng.GetRandomGausDev(1.0)*sys.mult/100)
+            else:
+                if sys.sys_type == 'ADD':
+                    continue
+                xnor *= (1.0 + rand[j] * sys.mult/100)
+        artdata[i] = xnor * artdata[i]
+
+    # TODO: check the pseudodata is positive
+    # requires implementing the above code in a while loop
+    return artdata
 
 
 def covmat_from_systematics(commondata, central_values=None):
@@ -73,6 +129,12 @@ def covmat_from_systematics(commondata, central_values=None):
         default this is None, and the experimental central values are used. However, this
         can be used to calculate, for example, the t0 covariance matrix by
         using the predictions from the central member of the t0 pdf.
+
+    use_mult_errors: bool
+        Boolean which controls whether we use multiplicative errors
+        when computing the covmat. By default it should be set to ``True``
+        unles one wishes to uses a sampling matrix for pseudodata generation,
+        in which case it should be set to ``False``.
 
     Returns
     -------
