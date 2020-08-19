@@ -118,9 +118,9 @@ def check_dataset_cuts_match_theorycovmat(dataset, fitthcovmat):
 
 
 @make_argcheck
-def check_experiment_cuts_match_theorycovmat(
-        experiment, fitthcovmat):
-    for dataset in experiment.datasets:
+def check_data_cuts_match_theorycovmat(
+        data, fitthcovmat):
+    for dataset in data.datasets:
         if fitthcovmat:
             ds_index = fitthcovmat.load().index.get_level_values(1)
             ncovmat = (ds_index == dataset.name).sum()

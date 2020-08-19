@@ -19,6 +19,7 @@ import pandas as pd
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck, check
 from reportengine.floatformatting import format_number
+from reportengine import collect
 
 from validphys.core import MCStats, cut_mask, CutsPolicy
 from validphys.results import chi2_stat_labels, get_shifted_results
@@ -80,76 +81,75 @@ def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
 
 
 @figure
-def plot_phi(experiments, experiments_phi):
-    """plots phi for each experiment as a bar for a single
+def plot_phi(groups_data, groups_data_phi, processed_metadata_group):
+    """plots phi for each group of data as a bar for a single
     PDF input
 
     See `phi_data` for information on how phi is calculated
     """
-    phi = [exp_phi for (exp_phi, npoints) in experiments_phi]
-    xticks = [experiment.name for experiment in experiments]
+    phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
+    xticks = [group.name for group in groups_data]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
-    ax.set_title(r"$\phi$ for each experiment")
+    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
     return fig
 
 @figure
-def plot_fits_experiments_phi(fits_experiments_phi_table):
+def plot_fits_groups_data_phi(fits_groups_phi_table, processed_metadata_group):
     """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
-    experiment, where the experiment is a group of datasets according to the `experiment` key in
-    the PLOTTING info file"""
-    fig, ax = _plot_chis_df(fits_experiments_phi_table)
-    ax.set_title(r"$\phi$ for each experiment")
+    group of datasets, which is defined according to the keys in the PLOTTING info file"""
+    fig, ax = _plot_chis_df(fits_groups_phi_table)
+    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
     return fig
 
 @figure
-def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
+def plot_dataset_inputs_phi_dist(data, dataset_inputs_bootstrap_phi_data):
     """Generates a bootstrap distribution of phi and then plots a histogram
-    of the individual bootstrap samples for a single experiment. By default
+    of the individual bootstrap samples for `dataset_inputs`. By default
     the number of bootstrap samples is set to a sensible number (500) however
     this number can be changed by specifying `bootstrap_samples` in the runcard
     """
-    phi = bootstrap_phi_data_experiment
+    phi = dataset_inputs_bootstrap_phi_data
     label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
                        fr'$\phi$ std dev = {format_number(phi.std())}'])
     fig, ax = plt.subplots()
     ax.hist(phi, label=label)
-    ax.set_title(r"$\phi$ distribution for " + experiment.name)
+    ax.set_title(r"$\phi$ distribution for " + data.name)
     ax.legend()
     return fig
 
 @make_argcheck
-def _check_same_experiment_name(dataspecs_experiments):
-    lst = dataspecs_experiments
+def _check_same_group_data_name(dataspecs_groups):
+    lst = dataspecs_groups
     if not lst:
         return
     for j, x in enumerate(lst[1:]):
         if len(x) != len(lst[0]):
             raise CheckError("All dataspecs should have the same number "
-                             "of experiments")
-        for i, exp in enumerate(x):
-            if exp.name != lst[0][i].name:
-                raise CheckError("\n".join(["All experiments must have the "
+                             "of groups of data")
+        for i, group in enumerate(x):
+            if group.name != lst[0][i].name:
+                raise CheckError("\n".join(["All groups of data must have the "
                                             "same name",
                                             fr"dataspec {j+1}, "
-                                            fr"experiment {i+1}: {exp.name}",
-                                            fr"dataspec 1, experiment {i+1}: "
+                                            fr"group {i+1}: {group.name}",
+                                            fr"dataspec 1, group {i+1}: "
                                             fr"{lst[0][i].name}"]))
 
-@_check_same_experiment_name
+@_check_same_group_data_name
 @figure
-def plot_phi_scatter_dataspecs(dataspecs_experiments,
-        dataspecs_speclabel, dataspecs_experiments_bootstrap_phi):
+def plot_phi_scatter_dataspecs(dataspecs_groups,
+        dataspecs_speclabel, dataspecs_groups_bootstrap_phi):
     """For each of the dataspecs, a bootstrap distribution of phi is generated
-    for all specified experiments. The distribution is then represented as a
+    for all specified groups of datasets. The distribution is then represented as a
     scatter point which is the median of the bootstrap distribution and an
     errorbar which spans the 68% confidence interval. By default the number
     of bootstrap samples is set to a sensible value, however it can be
     controlled by specifying `bootstrap_samples` in the runcard.
     """
     labels = dataspecs_speclabel
-    phis = dataspecs_experiments_bootstrap_phi
-    exps = dataspecs_experiments
-    xticks = [experiment.name for experiment in exps[0]]
+    phis = dataspecs_groups_bootstrap_phi
+    exps = dataspecs_groups
+    xticks = [group.name for group in exps[0]]
     x = range(1, len(xticks)+1)
     fig, ax = plt.subplots()
     phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
@@ -572,25 +572,27 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 
 @figure
-def plot_experiments_chi2(experiments, experiments_chi2):
-    """Plot the chi² of all experiments with bars."""
+def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
+    """Plot the chi² of all groups of datasets with bars."""
     exchi2 = []
     xticks = []
-    for experiment, expres in zip(experiments, experiments_chi2):
-        exchi2.append(expres.central_result/expres.ndata)
-        xticks.append(experiment.name)
+    for group, group_res in zip(groups_data, groups_chi2):
+        exchi2.append(group_res.central_result/group_res.ndata)
+        xticks.append(group.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
-    ax.set_title(r"$\chi^2$ distribution for experiments")
+    ax.set_title(r"$\chi^2$ distribution by {}".format(processed_metadata_group))
     return fig
 
+plot_experiments_chi2 = collect("plot_groups_data_chi2",  ("group_dataset_inputs_by_experiment",))
+
 @figure
-def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
+def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     """Plot the chi² of all datasets with bars."""
     ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
-    for experiment, expres in zip(experiments, experiments_chi2):
-        for dataset, dsres in zip(experiment, ds):
+    for group, group_res in zip(groups_data, groups_chi2):
+        for dataset, dsres in zip(group, ds):
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
     fig,ax = plotutils.barplot(dschi2, collabels=xticks,
@@ -632,17 +634,17 @@ def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
     return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
 
 @figure
-def plot_fits_experiments_chi2(fits_experiments_chi2_table):
-    """Generate a plot equivalent to ``plot_experiments_chi2`` using all the
-    fitted experiments as input."""
-    fig, ax = _plot_chis_df(fits_experiments_chi2_table)
-    ax.set_title(r"$\chi^2$ for experiments")
+def plot_fits_groups_data_chi2(fits_groups_chi2_table, processed_metadata_group):
+    """Generate a plot equivalent to ``plot_groups_data_chi2`` using all the
+    fitted group of data as input."""
+    fig, ax = _plot_chis_df(fits_groups_chi2_table)
+    ax.set_title(r"$\chi^2$ by {}".format(processed_metadata_group))
     return fig
 
 @figure
-def plot_dataspecs_experiments_chi2(dataspecs_experiments_chi2_table):
-    """Same as plot_fits_experiments_chi2 but for arbitrary dataspecs"""
-    return plot_fits_experiments_chi2(dataspecs_experiments_chi2_table)
+def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table, processed_metadata_group):
+    """Same as plot_fits_groups_data_chi2 but for arbitrary dataspecs"""
+    return plot_fits_groups_data_chi2(dataspecs_groups_chi2_table, processed_metadata_group)
 
 @figure
 def plot_training_length(replica_data, fit):
@@ -704,22 +706,22 @@ def plot_trainvaliddist(fit, replica_data):
     return fig
 
 @figure
-def plot_covmat_eigs(experiment):
-    """Plot the eigenvalues of the covariance matrix for a given experiment."""
-    eigs = la.eigvalsh(experiment.load().get_covmat())
+def plot_covmat_eigs(data):
+    """Plot the eigenvalues of the covariance matrix for a given group of datasets."""
+    eigs = la.eigvalsh(data.load().get_covmat())
     fig,ax = plt.subplots()
     x = np.arange(1,len(eigs) + 1)
     ax.plot(x, eigs, 'o', markersize=10)
     ax.set_yscale('log')
     ax.yaxis.grid(False)
-    plt.title("Covmat eigenvalues for %s" % experiment.name)
+    plt.title("Covmat eigenvalues for %s" % data.name)
     plt.xlabel("# Eigenvector")
     return fig
 
 @figure
-def plot_corrmat_eigs(experiment):
-    """Plot the eigenvalues of the correlation matrix for a given experiment."""
-    covmat = experiment.load().get_covmat()
+def plot_corrmat_eigs(data):
+    """Plot the eigenvalues of the correlation matrix for a given group of datasets."""
+    covmat = data.load().get_covmat()
     stds = np.sqrt(np.diag(covmat))
     corrmat = covmat/np.outer(stds,stds)
     eigs = la.eigvalsh(corrmat)
@@ -899,10 +901,10 @@ def _check_marker_by(marker_by):
 
 #TODO: Right now this is hackish Could we turn it into a permanent interface?
 @make_argcheck
-def _check_highlights(experiments, highlight_datasets):
+def _check_highlights(groups_data, highlight_datasets):
     if highlight_datasets:
         values = frozenset(highlight_datasets)
-        names_set = {ds.name for experiment in experiments for ds in experiment }
+        names_set = {ds.name for group in groups_data for ds in group}
         diff = values - names_set
         if diff:
             raise CheckError(f"The following highlight elements are "
@@ -921,7 +923,7 @@ def _check_aspect(aspect):
 @_check_marker_by
 @_check_highlights
 @_check_aspect
-def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
+def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
                  marker_by:str='process type', highlight_label:str='highlight',
                  highlight_datasets:(Sequence,type(None))=None,
                  aspect:str='landscape'):

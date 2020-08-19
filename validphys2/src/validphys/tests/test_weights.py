@@ -14,5 +14,5 @@ def test_weights_have_same_commondata(weighted_data_witht0_config):
 
 
 def test_chi2_arithmetic(weighted_data_witht0_config):
-    normal, weighted = API.experiments_chi2(**weighted_data_witht0_config)
+    ((normal, weighted,),) = API.groups_datasets_chi2_data(**weighted_data_witht0_config)
     assert np.allclose(weighted[0].data/normal[0].data, 100)

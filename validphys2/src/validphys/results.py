@@ -25,7 +25,8 @@ from validphys.checks import (
     check_speclabels_different,
     check_two_dataspecs,
 )
-from validphys.core import DataSetSpec, PDF, DataGroupSpec, ExperimentSpec, cut_mask
+
+from validphys.core import DataSetSpec, PDF, DataGroupSpec, cut_mask
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 )
@@ -316,7 +317,6 @@ def results(
     data = dataset.load()
     return (DataResult(data, covariance_matrix, sqrt_covmat),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
-
 
 def get_shifted_results(results, commondata, cutlist):
     """Returns the theory results shifted according to correlated experimental uncertainties.
@@ -1011,7 +1011,6 @@ def dataspecs_dataset_chi2_difference_table(
         df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     return pd.concat(dfs, axis=1)
-
 
 each_dataset_chi2 = collect(abs_chi2_data, ('data',))
 

@@ -22,7 +22,7 @@ requirements:
         - python
         - numpy
     run:
-        - tensorflow <2.2 # there are some problems with tf 2.2
+        - tensorflow 
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn

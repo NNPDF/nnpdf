@@ -91,9 +91,7 @@ def optimizer_arg_wrapper(hp_key, option_dict):
 
 
 # Wrapper for the hyperscanning
-def hyper_scan_wrapper(
-    replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1
-):
+def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1):
     """
     This function receives a `ModelTrainer` object as well as a dictionary of parameters (`parameters`) and a dictionary defining the
     space to search (`hyperscan_dict`) and performs `max_evals` evaluations of the function trying to find the best model.
@@ -111,9 +109,7 @@ def hyper_scan_wrapper(
     # Create a HyperScanner object
     the_scanner = HyperScanner(parameters, hyperscan_dict)
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(
-        True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK
-    )
+    model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
     # Generate the trials object
     trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
 
@@ -244,9 +240,7 @@ class HyperScanner:
 
         self.parameters[key] = sampler
 
-    def stopping(
-        self, min_epochs=5e3, max_epochs=30e3, min_patience=0.10, max_patience=0.3
-    ):
+    def stopping(self, min_epochs=None, max_epochs=None, min_patience=None, max_patience=None):
         """
         Modifies the following entries of the `parameters` dictionary:
             - `epochs`
@@ -257,15 +251,21 @@ class HyperScanner:
         epochs_key = "epochs"
         stopping_key = "stopping_patience"
 
-        # Generate the samplers
-        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps=self.steps)
-        stopping_patience = hp_quniform(
-            stopping_key, min_patience, max_patience, steps=self.steps
-        )
+        if min_epochs is not None and max_epochs is not None:
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps=self.steps)
+            self._update_param(epochs_key, epochs)
 
-        # Update the parameters ditionary
-        self._update_param(epochs_key, epochs)
-        self._update_param(stopping_key, stopping_patience)
+        if min_patience is not None or max_patience is not None:
+            if min_patience is None:
+                min_patience = 0.0
+            if max_patience is None:
+                max_patience = 1.0
+
+            stopping_patience = hp_quniform(
+                stopping_key, min_patience, max_patience, steps=self.steps
+            )
+
+            self._update_param(stopping_key, stopping_patience)
 
     def optimizer(self, optimizers):
         """
@@ -295,7 +295,6 @@ class HyperScanner:
         optname_key = "optimizer_name"
         lr_key = "learning_rate"
         clip_key = "clipnorm"
-
 
         for optimizer in optimizers:
             name = optimizer[optname_key]
@@ -329,7 +328,7 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None,
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
@@ -337,16 +336,22 @@ class HyperScanner:
             - pos_initial
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
-        mul_key = "pos_multiplier"
-        ini_key = "pos_initial"
+        mul_key = "multiplier"
+        ini_key = "initial"
+        params = {}
 
-        # Create the samplers
-        mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
-        ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+        if max_multiplier is not None:
+            if min_multiplier is None:
+                min_multiplier = 1.0  # I guess this is a sensible minimum
 
-        # Update the dictionaries
-        self._update_param(mul_key, mul_val)
-        self._update_param(ini_key, ini_val)
+            mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
+            params[mul_key] = mul_val
+
+        if min_initial is not None and max_initial is not None:
+            ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+            params[ini_key] = ini_val
+
+        self._update_param("positivity", params)
 
     def architecture(
         self,
@@ -399,9 +404,7 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(
-                    units_label, min_units, max_units, steps=self.steps
-                )
+                units_sampler = hp_quniform(units_label, min_units, max_units, steps=self.steps)
                 units.append(units_sampler)
             # The last layer will always have 8 nodes
             units.append(8)
@@ -417,9 +420,7 @@ class HyperScanner:
         for ini_name in initializers:
             if ini_name not in imp_init_names:
                 raise NotImplementedError(
-                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(
-                        ini_name
-                    )
+                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name)
                 )
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
