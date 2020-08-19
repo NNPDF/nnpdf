@@ -139,3 +139,6 @@ def main():
         log.info("Dumping runcard for iterated fit.")
         yaml.dump(runcard_data, outfile, Dumper=yaml.RoundTripDumper)
         log.info(f"Runcard for iterated fit written to {runcard_path_out.absolute()}.")
+
+if __name__ == "__main__":
+    main()
