@@ -160,6 +160,9 @@ def main():
         yaml.dump(runcard_data, outfile, Dumper=yaml.RoundTripDumper)
         log.info(f"Runcard for iterated fit written to {runcard_path_out.absolute()}.")
 
+    # Open new runcard with default editor, or if one is not set, with vim
+    EDITOR = os.environ.get("EDITOR") if os.environ.get("EDITOR") else "vim"
+    os.system(f"{EDITOR} {runcard_path_out}")
 
 if __name__ == "__main__":
     main()
