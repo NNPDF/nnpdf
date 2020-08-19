@@ -91,8 +91,20 @@ def main():
     # Iterate t0
     runcard_data["datacuts"]["t0pdfset"] = input_fit
 
-    # Update seed with pseudorandom number between 0 and 1e10
-    runcard_data["fitting"]["seed"] = random.randrange(0, 1e10)
+    # Update seeds with pseudorandom numbers between 0 and 1e10
+    # Check if seeds exist especially since extra seeds needed in n3fit vs nnfit
+    # Start with seeds in "fitting" section of runcard
+    fitting_data = runcard_data["fitting"]
+    fitting_seeds = ["seed", "trvlseed", "nnseed", "mcseed"]
+
+    for seed in fitting_seeds:
+        if seed in fitting_data:
+            fitting_data[seed] = random.randrange(0, 1e10)
+
+    # Next "closuretest" section of runcard
+    closuretest_data = runcard_data["closuretest"]
+    if "filterseed" in closuretest_data:
+        closuretest_data["filterseed"] = random.randrange(0, 1e10)
 
     # Update preprocessing exponents
     # Firstly, find new exponents from PDF set that corresponds to fit
