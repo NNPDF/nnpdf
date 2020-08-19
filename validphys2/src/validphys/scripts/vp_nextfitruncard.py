@@ -17,6 +17,7 @@ import pathlib
 import sys
 import random
 import logging
+import prompt_toolkit
 
 import NNPDF as nnpath
 
@@ -49,6 +50,18 @@ def process_args():
     )
     args = parser.parse_args()
     return args
+
+
+def interactive_description(original_description):
+    """Set description of fit interactively. The description of the input fit is used as default."""
+    default = original_description
+    new_description = prompt_toolkit.prompt(
+        "Enter a description for the new fit, taking into account that it should state that this fit is an iteration: \n",
+        default=default,
+    )
+    if not new_description:
+        return default
+    return new_description
 
 
 def main():
@@ -87,6 +100,11 @@ def main():
         log.info(f"Input runcard successfully read from {runcard_path_in.absolute()}.")
 
     # Update runcard with settings needed for iteration
+
+    # Update description of fit interactively
+    description = runcard_data["description"]
+    updated_description = interactive_description(description)
+    runcard_data["description"] = updated_description
 
     # Iterate t0
     runcard_data["datacuts"]["t0pdfset"] = input_fit
@@ -163,6 +181,7 @@ def main():
     # Open new runcard with default editor, or if one is not set, with vim
     EDITOR = os.environ.get("EDITOR") if os.environ.get("EDITOR") else "vim"
     os.system(f"{EDITOR} {runcard_path_out}")
+
 
 if __name__ == "__main__":
     main()
