@@ -186,7 +186,11 @@ first approximation, anything that makes Tensorflow faster will also make ``n3fi
 The recommended way of using Tensorflow is by installing the [pip package](https://www.tensorflow.org/install/pip#2.-install-the-python-development-environment-on-your-system).
 You will notice, however, that the NNPDF conda package installs instead [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen).
 This is due to a memory explosion found in some of the conda mkl builds.
-When running n3fit all versions of the package show similar performance.
+If you want to disable MKL without installing `tensorflow-eigen` you can always set the environment variable `TF_DISABLE_MKL=1` before running ``n3fit``.
+When running ``n3fit`` all versions of the package show similar performance.
+
+``` note:: The TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
+```
 
 When using the MKL version of tensorflow you gain more control of the way Tensorflow will use
 the multithreading capabilities of the machine by using the following environment variables:
@@ -198,7 +202,8 @@ KMP_AFFINITY=granularity=fine,verbose,compact,1,0
 
 ```
 
-This is mostly relevant when running Tensorflow in a machine with a large number of cores,
+
+The usage of MKL is mostly relevant when running Tensorflow in a machine with a large number of cores,
 as the default behaviour of Tensorflow is suboptimal for ``n3fit``, specially when running more than one instance of the code at once.
 
 
