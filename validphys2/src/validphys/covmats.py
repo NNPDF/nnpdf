@@ -50,34 +50,40 @@ def make_replica(commondata, seed=1):
     covmat_for_sampling = covmat_from_systematics(ld_cd, use_mult_errors=False)
     sampling_matrix = sqrt_covmat(covmat_for_sampling)
 
-    rand = [rng.GetRandomGausDev(1.0) for _ in range(ld_cd.nsys)]
-    deviates = [rng.GetRandomGausDev(1.0) for _ in range(ld_cd.ndata)]
-    deviates, rand = map(np.array, (deviates, rand))
+    # We need to loop until the pseudodata is positive
+    while True:
+        rand = [rng.GetRandomGausDev(1.0) for _ in range(ld_cd.nsys)]
+        deviates = [rng.GetRandomGausDev(1.0) for _ in range(ld_cd.ndata)]
+        deviates, rand = map(np.array, (deviates, rand))
 
-    correlated_deviates = sampling_matrix @ deviates
+        correlated_deviates = sampling_matrix @ deviates
 
-    artdata = np.array(ld_cd.central_values) + correlated_deviates
+        artdata = np.array(ld_cd.central_values) + correlated_deviates
 
-    sys_table = ld_cd.sys_errors
-    for i in range(ld_cd.ndata):
-        xnor = 1
-        for j in range(ld_cd.nsys):
-            sys = sys_table.iloc[i, j]
-            if sys.name in ('THEORYCORR', 'THEORYUNCORR', 'SKIP'):
-                continue
-
-            if sys.name == 'UNCORR':
-                if sys.sys_type == 'ADD':
+        sys_table = ld_cd.sys_errors
+        for i in range(ld_cd.ndata):
+            xnor = 1
+            for j in range(ld_cd.nsys):
+                sys = sys_table.iloc[i, j]
+                if sys.name in ('THEORYCORR', 'THEORYUNCORR', 'SKIP'):
                     continue
-                xnor *= (1.0 + rng.GetRandomGausDev(1.0)*sys.mult/100)
-            else:
-                if sys.sys_type == 'ADD':
-                    continue
-                xnor *= (1.0 + rand[j] * sys.mult/100)
-        artdata[i] = xnor * artdata[i]
 
-    # TODO: check the pseudodata is positive
-    # requires implementing the above code in a while loop
+                if sys.name == 'UNCORR':
+                    if sys.sys_type == 'ADD':
+                        continue
+                    xnor *= (1.0 + rng.GetRandomGausDev(1.0)*sys.mult/100)
+                else:
+                    if sys.sys_type == 'ADD':
+                        continue
+                    xnor *= (1.0 + rand[j] * sys.mult/100)
+            artdata[i] = xnor * artdata[i]
+
+        artdata = np.array(artdata)
+
+        # Check positivity of the pseudodata
+        if all(artdata > 0):
+            break
+
     return artdata
 
 
