@@ -6,7 +6,7 @@
     They must take as input an epoch number and a log of the partial losses
 """
 
-from tensorflow.keras.callbacks import LambdaCallback
+from tensorflow.keras.callbacks import LambdaCallback, TensorBoard
 
 
 def gen_stopping_callback(training_model, stopping_object, log_freq=100):
@@ -63,3 +63,34 @@ def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100
             training_model.multiply_weights(datasets, multipliers)
 
     return LambdaCallback(on_epoch_end=callback_lagrange)
+
+
+def gen_tensorboard_callback(log_dir, profiling=False):
+    """
+    Generate tensorboard logging details at ``log_dir``.
+    Metrics of the system are saved each epoch.
+    If the profiling flag is set to True, it will also attempt
+    to save profiling data.
+
+    Note the usage of this callback can hurt performance.
+
+    Parameters
+    ----------
+        log_dir: str
+            Directory in which to save tensorboard details
+        profiling: bool
+            Whether or not save profiling information (default False)
+    """
+    if profiling:
+        profile_batch = 1
+    else:
+        profile_batch = 0
+    clb = TensorBoard(
+        log_dir=log_dir,
+        histogram_freq=0,
+        write_graph=True,
+        write_images=False,
+        update_freq="epoch",
+        profile_batch=profile_batch,
+    )
+    return clb

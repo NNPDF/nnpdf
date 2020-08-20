@@ -220,9 +220,9 @@ def performfit(
             log.info("Loading integrability dataset %s", integ_set)
             # Use the same reader as positivity observables
             integ_dict = reader.positivity_reader(integ_set)
-            integ_info.append(integ_dict) 
+            integ_info.append(integ_dict)
     else:
-        integ_info = None           
+        integ_info = None
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
@@ -290,6 +290,13 @@ def performfit(
 
         # Ensure hyperopt is off
         the_model_trainer.set_hyperopt(False)
+
+        # Enable the tensorboard callback
+        tboard = fitting.get("tensorboard")
+        if tboard is not None:
+            logdir = tboard["directory"]
+            profiling = tboard.get("profiling", False)
+            the_model_trainer.enable_tensorboard(logdir, profiling)
 
         #############################################################################
         # ### Fit                                                                   #

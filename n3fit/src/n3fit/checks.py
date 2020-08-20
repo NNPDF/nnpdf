@@ -93,10 +93,15 @@ def check_dropout(parameters):
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
+def check_tensorboard(tensorboard):
+    if tensorboard is not None:
+        if "directory" not in tensorboard:
+            raise CheckError("When using the TensorBoard callbacks a directory must be given")
 
 @make_argcheck
 def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
+    check_tensorboard(fitting.get("tensorboard"))
     parameters = fitting["parameters"]
     check_existing_parameters(parameters)
     check_consistent_layers(parameters)

@@ -10,6 +10,7 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`optimizer-label`
 - :ref:`positivity-label`
 - :ref:`otheroptions-label`
+- :ref:`tensorboard-label`
 
 
 .. _preprocessing-label:
@@ -180,3 +181,30 @@ Other options
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
+.. _tensorboard-label:
+
+Inspecting and profiling the code
+---------------------------------
+
+It is possible to inspect the ``n3fit`` code using `TensorBoard <https://www.tensorflow.org/tensorboard/>`_.
+In order to enable the TensorBoard callback in ``n3fit`` it is enough with adding the following options in the runcard:
+
+
+.. code-block:: yaml
+
+    fitting:
+        tensorboard:
+            directory: 'log_path'
+            profiling: True
+
+
+After the ``n3fit`` run has finished, details of the run can be found in the chosen directory.
+Logging details can be visualized in the browser with the following command:
+
+
+.. code-block:: bash
+
+    tensorboard --logdir log_path
+
+Logging details will include the value of the loss for each experiment over time
+as well as a detailed analysis of the amount of time that TensorFlow spent on each operation.

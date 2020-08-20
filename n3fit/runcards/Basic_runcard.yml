@@ -47,6 +47,10 @@ fitting:
   loadfile: 'weights.hd5'
   plot: False
 
+  tensorboard:
+    directory: 'logdir'
+    profiling: False
+
   seed     : 9453862133528      # set the seed for the random generator
   genrep   : True     # on = generate MC replicas, off = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
@@ -135,5 +139,5 @@ lhagrid:
   qmax: 1e5
 
 ############################################################
-debug: true
+debug: True
 maxcores: 8
