@@ -172,6 +172,13 @@ def check_positivity(posdatasets):
         pos.load()
         log.info(f'{pos.name} checked.')
 
+def check_integrability(integdatasets):
+    """Verify positive datasets are ready for the fit."""
+    log.info('Verifying integrability tables:')
+    for integ in integdatasets:
+        integ.load()
+        log.info(f'{integ.name} checked.')        
+
 class PerturbativeOrder:
     """Class that conveniently handles
     perturbative order declarations for use

@@ -12,7 +12,6 @@ import itertools
 import logging
 
 import numpy as np
-import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData, Experiment
@@ -25,14 +24,11 @@ from validphys.checks import (
     check_pdf_is_montecarlo,
     check_speclabels_different,
     check_two_dataspecs,
-    check_dataset_cuts_match_theorycovmat,
-    check_data_cuts_match_theorycovmat,
-    check_norm_threshold,
 )
 from validphys.core import DataSetSpec, PDF, DataGroupSpec
 from validphys.calcutils import (
-    all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
-    get_df_block, regularize_covmat)
+    all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
+)
 
 log = logging.getLogger(__name__)
 
@@ -379,7 +375,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     """
 
     #TODO: Do this somewhere else
-    from  NNPDF import RandomGenerator
+    from NNPDF import RandomGenerator
     RandomGenerator.InitRNG(0,0)
     data = np.zeros((len(experiments_index), nclosure*(1+nnoisy)))
 
@@ -427,208 +423,6 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
     return df
 
-
-@check_dataset_cuts_match_theorycovmat
-def covmat(
-    dataset:DataSetSpec,
-    fitthcovmat,
-    t0set:(PDF, type(None)) = None,
-    norm_threshold=None):
-    """Returns the covariance matrix for a given `dataset`. By default the
-    data central values will be used to calculate the multiplicative contributions
-    to the covariance matrix.
-
-    The matrix can instead be constructed with
-    the t0 proceedure if the user sets `use_t0` to True and gives a
-    `t0pdfset`. In this case the central predictions from the `t0pdfset` will be
-    used to calculate the multiplicative contributions to the covariance matrix.
-    More information on the t0 procedure can be found here:
-    https://arxiv.org/abs/0912.2276
-
-    The user can specify `use_fit_thcovmat_if_present` to be True
-    and provide a corresponding `fit`. If the theory covmat was used in the
-    corresponding `fit` and the specfied `dataset` was used in the fit then
-    the theory covariance matrix for this `dataset` will be added in quadrature
-    to the experimental covariance matrix.
-
-    Covariance matrix can be regularized according to
-    `calcutils.regularize_covmat` if the user specifies `norm_threshold. This
-    algorithm sets a minimum threshold for eigenvalues that the corresponding
-    correlation matrix can have to be:
-
-    1/(norm_threshold)^2
-
-    which has the effect of limiting the L2 norm of the inverse of the correlation
-    matrix. By default norm_threshold is None, to which means no regularization
-    is performed.
-
-    Parameters
-    ----------
-    dataset : DataSetSpec
-        object parsed from the `dataset_input` runcard key
-    fitthcovmat: None or ThCovMatSpec
-        None if either `use_thcovmat_if_present` is False or if no theory
-        covariance matrix was used in the corresponding fit
-    t0set: None or PDF
-        None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
-    perform_covmat_reg: bool
-        whether or not to regularize the covariance matrix
-    norm_threshold: number
-        threshold used to regularize covariance matrix
-
-    Returns
-    -------
-    covmat : array
-        a covariance matrix as a numpy array
-
-    Examples
-    --------
-
-    >>> from validphys.api import API
-    >>> inp = {
-            'dataset_input': {'ATLASTTBARTOT'},
-            'theoryid': 52,
-            'use_cuts': 'no_cuts'
-        }
-    >>> cov = API.covmat(**inp)
-    TODO: complete example
-    """
-    loaded_data = dataset.load()
-
-    if t0set:
-        #Copy data to avoid chaos
-        loaded_data = type(loaded_data)(loaded_data)
-        log.debug("Setting T0 predictions for %s" % dataset)
-        loaded_data.SetT0(t0set.load_t0())
-
-    covmat = loaded_data.get_covmat()
-    if fitthcovmat:
-        loaded_thcov = fitthcovmat.load()
-        covmat += get_df_block(loaded_thcov, dataset.name, level=1)
-    if norm_threshold is not None:
-        covmat = regularize_covmat(
-            covmat,
-            norm_threshold=norm_threshold
-        )
-    return covmat
-
-
-@check_pdf_is_montecarlo
-def pdferr_plus_covmat(dataset, pdf, covmat):
-    """For a given `dataset`, returns the sum of the covariance matrix given by
-    `covmat` and the PDF error: a covariance matrix estimated from the
-    replica theory predictions from a given monte carlo `pdf`
-
-    Parameters
-    ----------
-    dataset: DataSetSpec
-        object parsed from the `dataset_input` runcard key
-    pdf: PDF
-        monte carlo pdf used to estimate PDF error
-    covmat: np.array
-        experimental covariance matrix
-
-    Returns
-    -------
-    covariance_matrix: np.array
-        sum of the experimental and pdf error as a numpy array
-
-    Examples
-    --------
-
-    `use_pdferr` makes this action be used for `covariance_matrix`
-
-    >>> from validphys.api import API
-    >>> from import numpy as np
-    >>> inp = {
-            'dataset_input': {'dataset' : 'ATLASTTBARTOT'},
-            'theoryid': 53,
-            'pdf': 'NNPDF31_nlo_as_0118',
-            'use_cuts': 'nocuts'
-        }
-    >>> a = API.covariance_matrix(**inp, use_pdferr=True)
-    >>> b = API.pdferr_plus_covmat(**inp)
-    >>> np.allclose(a == b)
-    True
-
-    See Also
-    --------
-    covmat: Standard experimental covariance matrix
-    """
-    loaded_data = dataset.load()
-    th = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=loaded_data)
-    pdf_cov = np.cov(th._rawdata, rowvar=True)
-    return pdf_cov + covmat
-
-
-datasets_covmat = collect('covariance_matrix', ('data',))
-
-def sqrt_covmat(covariance_matrix):
-    """Returns the lower-triangular Cholesky factor of `covmat`
-
-    Parameters
-    ----------
-    covmat: array
-        a positive definite covariance matrix
-
-    Returns
-    -------
-    sqrt_covmat : array
-        lower triangular Cholesky factor of covmat
-
-    Notes
-    -----
-    The lower triangular is useful for efficient calculation of the chi^2
-
-    Examples
-    --------
-
-    >>> import numpy as np
-    >>> from validphys.results import sqrt_covmat
-    >>> a = np.array([[1, 0.5], [0.5, 1]])
-    >>> sqrt_covmat(a)
-    array([[1.  , 0.    ],
-        [0.5    , 0.8660254]])
-    """
-    return la.cholesky(covariance_matrix, lower=True)
-
-@check_data_cuts_match_theorycovmat
-def dataset_inputs_covmat(
-        data: DataGroupSpec,
-        fitthcovmat,
-        t0set:(PDF, type(None)) = None,
-        norm_threshold=None):
-    """Like `covmat` except for a group of datasets"""
-    loaded_data = data.load()
-
-    if t0set:
-        #Copy data to avoid chaos
-        loaded_data = type(loaded_data)(loaded_data)
-        log.debug("Setting T0 predictions for %s" % data)
-        loaded_data.SetT0(t0set.load_t0())
-
-    covmat = loaded_data.get_covmat()
-
-    if fitthcovmat:
-        loaded_thcov = fitthcovmat.load()
-        ds_names = loaded_thcov.index.get_level_values(1)
-        indices = np.in1d(ds_names, [ds.name for ds in data.datasets]).nonzero()[0]
-        covmat += loaded_thcov.iloc[indices, indices].values
-    if norm_threshold is not None:
-        covmat = regularize_covmat(
-            covmat,
-            norm_threshold=norm_threshold
-        )
-    return covmat
-
-def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
-    """Like `pdferr_plus_covmat` except for an experiment"""
-    # do checks get performed here?
-    return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat)
-
-def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
-    """Like `sqrt_covmat` but for an group of datasets"""
-    return sqrt_covmat(dataset_inputs_covariance_matrix)
 
 def results(
         dataset:(DataSetSpec),
@@ -856,8 +650,6 @@ def closure_shifts(experiments_index, fit, use_cuts, experiments):
     return pd.DataFrame(result, index=experiments_index)
 
 
-
-
 def positivity_predictions_data_result(pdf, posdataset):
     """Return an object containing the values of the positivuty observable."""
     return PositivityResult.from_convolution(pdf, posdataset)
@@ -939,20 +731,6 @@ fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
 fits_groups = collect(
     "groups_data", ("fits", "fitcontext",)
 )
-
-
-def fit_name_with_covmat_label(fit, fitthcovmat):
-    """If theory covariance matrix is being used to calculate statistical estimators for the `fit`
-    then appends (exp + th) onto the fit name for use in legends and column headers to help the user
-    see what covariance matrix was used to produce the plot or table they are looking at.
-    """
-    if fitthcovmat:
-        label = str(fit) + " (exp + th)"
-    else:
-        label = str(fit)
-    return label
-
-fits_name_with_covmat_label = collect('fit_name_with_covmat_label', ('fits',))
 
 
 #TODO: Possibly get rid of the per_point_data parameter and have separate
@@ -1191,9 +969,9 @@ def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
         dataset_inputs_abs_chi2_data.central_result / dataset_inputs_abs_chi2_data.ndata
     )
 
+
 def total_experiments_chi2(dataset_inputs_chi2_per_point_data):
     return dataset_inputs_chi2_per_point_data
-
 
 
 @table
@@ -1282,60 +1060,6 @@ def dataspecs_dataset_chi2_difference_table(
         dfs.append(df)
     return pd.concat(dfs, axis=1)
 
-datasets_covmat_no_reg = collect(
-    "covariance_matrix", ("data", "no_covmat_reg"))
-datasets_covmat_reg = collect(
-    "covariance_matrix", ("data",))
-
-@table
-@check_norm_threshold
-def datasets_covmat_differences_table(
-    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg, norm_threshold):
-    """For each dataset calculate and tabulate two max differences upon
-    regularization given a value for `norm_threshold`:
-
-    - max relative difference to the diagonal of the covariance matrix (%)
-    - max absolute difference to the correlation matrix of each covmat
-
-    """
-    records = []
-    for ds, reg, noreg in zip(
-        each_dataset, datasets_covmat_reg, datasets_covmat_no_reg):
-        cov_diag_rel_diff = np.diag(reg)/np.diag(noreg)
-        d_reg = np.sqrt(np.diag(reg))
-        d_noreg = np.sqrt(np.diag(noreg))
-        corr_reg = reg/d_reg[:, np.newaxis]/d_reg[np.newaxis, :]
-        corr_noreg = noreg/d_noreg[:, np.newaxis]/d_noreg[np.newaxis, :]
-        corr_abs_diff = abs(corr_reg - corr_noreg)
-        records.append(dict(
-                dataset=str(ds),
-                covdiff= np.max(abs(cov_diag_rel_diff- 1))*100, #make percentage
-                corrdiff=np.max(corr_abs_diff)
-            ))
-    df = pd.DataFrame.from_records(records,
-        columns=("dataset", "covdiff", "corrdiff"),
-        index = ("dataset",)
-        )
-    df.columns = ["Variance rel. diff. (%)", "Correlation max abs. diff."]
-    return df
-
-dataspecs_covmat_diff_tables = collect(
-    "datasets_covmat_differences_table", ("dataspecs",))
-
-@check_speclabels_different
-@table
-def dataspecs_datasets_covmat_differences_table(
-    dataspecs_speclabel, dataspecs_covmat_diff_tables
-):
-    """For each dataspec calculate and tabulate the two covmat differences
-    described in `datasets_covmat_differences_table`
-    (max relative difference in variance and max absolute correlation difference)
-
-    """
-    df = pd.concat( dataspecs_covmat_diff_tables, axis=1)
-    cols = df.columns.get_level_values(0).unique()
-    df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
-    return df
 
 each_dataset_chi2 = collect(abs_chi2_data, ('data',))
 

@@ -18,6 +18,7 @@ Tutorials
    ./closuretest.md
    ./conda.md
    ./pseudodata.md
+   ./pdfbases.rst
 
 =======
 

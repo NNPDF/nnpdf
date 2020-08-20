@@ -8,9 +8,13 @@ import psutil
 os.environ.setdefault("KMP_BLOCKTIME", "0")
 os.environ.setdefault("KMP_SETTINGS", "0")
 os.environ.setdefault("KMP_AFFINITY", "granularity=fine,noverbose,compact,1,0")
+# Reduce tensorflow verbosity
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 import random as rn
 import numpy as np
 import tensorflow as tf
+# for (very slow but fine grained) debugging turn eager mode on
+# tf.config.run_functions_eagerly(True)
 from tensorflow.keras import backend as K
 
 
