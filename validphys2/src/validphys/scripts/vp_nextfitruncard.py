@@ -5,9 +5,10 @@ Command line tool to produce the runcard for an iterated fit given the input fit
 
 The script:
 - Takes the input fit as a required argument and loads its runcard
-- Updated the description of the fit interactively
+- Updates the description of the fit interactively
 - Uses the input fit as the t0 set
 - Modifies the random seeds to values between 0 and 1e10
+- Updates the preprocessing exponents
 - Writes the runcard for the iterated fit to the current working directory, unless a different path
   is given as an argument
 - Note that the runcard is written as long as it does not already exist in the path. This can be

@@ -224,3 +224,9 @@ Timing for a fit (from epoch 1 to epoch 5000):
   - Walltime: 871s
   - CPUtime: 2979s
 
+Iterate the fit
+---------------
+
+It may be desirable to iterate a fit to achieve a higher degree of convergence/stability in the fit.
+To read more about this, see [How to run an iterated fit](run-iterated-fit).
+
