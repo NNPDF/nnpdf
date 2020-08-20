@@ -183,7 +183,7 @@ Performance of the fit
 The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
 first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
-``` note:: Tensorflow only supports the installation via pi. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
+``` note:: Tensorflow only supports the installation via pip. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
 ```
 
 When you install the nnpdf conda package, you get the [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen) package, which is not the default.
