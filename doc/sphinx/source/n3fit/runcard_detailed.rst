@@ -194,17 +194,22 @@ In order to enable the TensorBoard callback in ``n3fit`` it is enough with addin
 
     fitting:
         tensorboard:
-            directory: 'log_path'
+            weight_freq: 100
             profiling: True
 
 
-After the ``n3fit`` run has finished, details of the run can be found in the chosen directory.
+The ``weight_freq`` flag controls each how many epochs the weights of the NN are stored.
+Note that smaller values will lead to slower performance and increased memory usage.
+
+
+After the ``n3fit`` run has finished, details of the run can be found in the replica directory, under the ``tboard`` subfolder.
 Logging details can be visualized in the browser with the following command:
 
 
 .. code-block:: bash
 
-    tensorboard --logdir log_path
+    tensorboard --logdir runcard_name/nnfit/replica_1/tboard
 
-Logging details will include the value of the loss for each experiment over time
+Logging details will include the value of the loss for each experiment over time,
+the values of the weights of the NN,
 as well as a detailed analysis of the amount of time that TensorFlow spent on each operation.
