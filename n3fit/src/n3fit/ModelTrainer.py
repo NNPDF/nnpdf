@@ -710,9 +710,19 @@ class ModelTrainer:
                 for key, value in item.items():
                     params[key] = value
 
-    def enable_tensorboard(self, logdir, profiling=False):
-        """ Enables tensorboard callback for further runs of the fitting procedure """
-        callback_tb = callbacks.gen_tensorboard_callback(logdir, profiling=profiling)
+    def enable_tensorboard(self, logdir, weight_freq = 0, profiling=False):
+        """ Enables tensorboard callback for further runs of the fitting procedure 
+
+        Parameters
+        ----------
+            logdir: Path
+                path where to save the tensorboard logs
+            weight_freq: int
+                frequency (in epochs) at which to save weight histograms
+            profiling: bool
+                flag to enable the tensorboard profiler
+        """
+        callback_tb = callbacks.gen_tensorboard_callback(logdir, profiling=profiling, histogram_freq=weight_freq)
         self.callbacks.append(callback_tb)
 
     def evaluate(self, stopping_object):

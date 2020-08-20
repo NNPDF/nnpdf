@@ -294,9 +294,10 @@ def performfit(
         # Enable the tensorboard callback
         tboard = fitting.get("tensorboard")
         if tboard is not None:
-            logdir = tboard["directory"]
             profiling = tboard.get("profiling", False)
-            the_model_trainer.enable_tensorboard(logdir, profiling)
+            weight_freq = tboard.get("weight_freq", 0)
+            log_path = replica_path_set / "tboard"
+            the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
 
         #############################################################################
         # ### Fit                                                                   #
@@ -357,6 +358,9 @@ def performfit(
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
+
+    if tboard is not None:
+        log.info("Tensorboard logging information is stored at %s", log_path)
 
     # Save the weights to some file
     if fitting.get("save"):

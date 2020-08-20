@@ -95,8 +95,9 @@ def check_dropout(parameters):
 
 def check_tensorboard(tensorboard):
     if tensorboard is not None:
-        if "directory" not in tensorboard:
-            raise CheckError("When using the TensorBoard callbacks a directory must be given")
+        weight_freq = tensorboard.get("weight_freq", 0)
+        if weight_freq < 0:
+            raise CheckError(f"The frequency at which weights are saved must be greater than 0, receive {weight_freq}")
 
 @make_argcheck
 def wrapper_check_NN(fitting):

@@ -65,7 +65,7 @@ def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100
     return LambdaCallback(on_epoch_end=callback_lagrange)
 
 
-def gen_tensorboard_callback(log_dir, profiling=False):
+def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq = 0):
     """
     Generate tensorboard logging details at ``log_dir``.
     Metrics of the system are saved each epoch.
@@ -87,7 +87,7 @@ def gen_tensorboard_callback(log_dir, profiling=False):
         profile_batch = 0
     clb = TensorBoard(
         log_dir=log_dir,
-        histogram_freq=0,
+        histogram_freq=histogram_freq,
         write_graph=True,
         write_images=False,
         update_freq="epoch",

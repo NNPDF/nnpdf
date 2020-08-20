@@ -45,10 +45,9 @@ fitting:
   savefile: 'weights.hd5'
   load: False
   loadfile: 'weights.hd5'
-  plot: False
 
   tensorboard:
-    directory: 'logdir'
+    weight_freq: 100
     profiling: False
 
   seed     : 9453862133528      # set the seed for the random generator
