@@ -183,11 +183,18 @@ Performance of the fit
 The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
 first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
-In our tests the bests results are obtained using the MKL-compiled version of Tensorflow as found by
-default in Conda.
+``` note:: Tensorflow only supports the installation via pip. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
+```
 
-When using the MKL version the following environmental variables are relevant to control the
-performance of Tensorflow.
+When you install the nnpdf conda package, you get the [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen) package, which is not the default.
+This is due to a memory explosion found in some of the conda mkl builds.
+
+If you want to disable MKL without installing `tensorflow-eigen` you can always set the environment variable `TF_DISABLE_MKL=1` before running ``n3fit``.
+When running ``n3fit`` all versions of the package show similar performance.
+
+
+When using the MKL version of tensorflow you gain more control of the way Tensorflow will use
+the multithreading capabilities of the machine by using the following environment variables:
 
 ```bash
 
@@ -195,6 +202,11 @@ KMP_BLOCKTIME=0
 KMP_AFFINITY=granularity=fine,verbose,compact,1,0
 
 ```
+
+
+The usage of MKL is mostly relevant when running Tensorflow in a machine with a large number of cores,
+as the default behaviour of Tensorflow is suboptimal for ``n3fit``, specially when running more than one instance of the code at once.
+
 
 When these variables are not set, `n3fit` will default to the values shown above.
 For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of

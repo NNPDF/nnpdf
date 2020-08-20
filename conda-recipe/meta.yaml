@@ -22,7 +22,7 @@ requirements:
         - python
         - numpy
     run:
-        - tensorflow 
+        - tensorflow-eigen
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
