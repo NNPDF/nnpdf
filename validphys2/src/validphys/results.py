@@ -263,8 +263,24 @@ def experiments_covmat_no_table(
         df.loc[[name],[name]] = experiment_covmat
     return df
 
-def groups_covmat_no_table(
-       experiments_covmat_no_table, experiments_data, groups_index):
+def relabel_experiments_to_groups(covmat, groups_index):
+    """Takes a covmat grouped by experiments and relabels
+    it by groups. This allows grouping over experiments to
+    preserve experimental correlations outwith the chosen 
+    grouping."""
+    # Sorting along dataset axis so we can apply the groups index directly
+    covmat = covmat.sort_index(axis=0, level=1)
+    covmat = covmat.sort_index(axis=1, level=1)
+    sorted_groups_index = groups_index.sortlevel(1)[0]
+    df = pd.DataFrame(covmat.values, index=sorted_groups_index, 
+                                    columns=sorted_groups_index)
+    # Reindexing to fit with groups_index
+    df = df.reindex(groups_index, axis=0)
+    df = df.reindex(groups_index, axis=1)  
+    return df
+
+def groups_covmat_no_table(experiments_covmat_no_table, 
+                            relabel_experiments_to_groups):
     """Export the covariance matrix for the groups. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -274,60 +290,61 @@ def groups_covmat_no_table(
 
         - index of the point within the dataset.
     """
-    covmat = experiments_covmat_no_table
-    # Sorting along dataset axis so we can apply the groups index directly
-    covmat = covmat.sort_index(axis=0, level=1)
-    covmat = covmat.sort_index(axis=1, level=1)
-    sorted_groups_index = groups_index.sortlevel(1)[0]
-    df = pd.DataFrame(covmat.values, index=sorted_groups_index, 
-                                    columns=sorted_groups_index)
-    # Reindexing to fit with groups_index
-    df = df.reindex(groups_index, axis=0)
-    df = df.reindex(groups_index, axis=1)
-    return df
+    return relabel_experiments_to_groups(experiments_covmat_no_table)
 
 @table
 def groups_covmat(groups_covmat_no_table):
     """Duplicate of groups_covmat_no_table but with a table decorator."""
     return groups_covmat_no_table
 
-groups_sqrt_covmat = collect(
+experiments_sqrt_covmat = collect(
     'dataset_inputs_sqrt_covmat',
-    ('group_dataset_inputs_by_metadata',)
+    ('group_dataset_inputs_by_experiment',)
 )
 
 @table
-def groups_sqrtcovmat(
-        groups_data, groups_index, groups_sqrt_covmat):
-    """Like groups_covmat, but dump the lower triangular part of the
+def experiments_sqrtcovmat(
+        experiments_data, experiments_index, experiments_sqrt_covmat):
+    """Like experiments_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
     """
-    data = np.zeros((len(groups_index),len(groups_index)))
-    df = pd.DataFrame(data, index=groups_index, columns=groups_index)
-    for group, group_sqrt_covmat in zip(
-            groups_data, groups_sqrt_covmat):
-        name = group.name
-        group_sqrt_covmat[np.triu_indices_from(group_sqrt_covmat, k=1)] = 0
-        df.loc[[name],[name]] = group_sqrt_covmat
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, 
+                index=experiments_index, columns=experiments_index)
+    for experiment, experiments_sqrt_covmat in zip(
+            experiments_data, experiments_sqrt_covmat):
+        name = experiment.name
+        experiments_sqrt_covmat[
+            np.triu_indices_from(experiments_sqrt_covmat, k=1)] = 0
+        df.loc[[name],[name]] = experiments_sqrt_covmat
     return df
 
 @table
-def groups_invcovmat(
-        groups_data, groups_index, groups_covmat_collection):
+def groups_sqrtcovmat(experiments_sqrtcovmat, relabel_experiments_to_groups):
+    """Like experiments_sqrtcovmat but relabelled to the chosen grouping."""
+    return relabel_experiments_to_groups(experiments_sqrtcovmat)
+
+@table
+def experiments_invcovmat(
+        experiments_data, experiments_index, experiments_covmat_collection):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
-    data = np.zeros((len(groups_index),len(groups_index)))
-    df = pd.DataFrame(data, index=groups_index, columns=groups_index)
-    for group, group_covmat in zip(
-            groups_data, groups_covmat_collection):
-        name = group.name
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment, experiment_covmat in zip(
+            experiments_data, experiments_covmat_collection):
+        name = experiment.name
         #Improve this inversion if this method tuns out to be important
-        invcov = la.inv(group_covmat)
+        invcov = la.inv(experiment_covmat)
         df.loc[[name],[name]] = invcov
     return df
 
+@table
+def groups_invcovmat(experiments_invcovmat, relabel_experiments_to_groups):
+    """Like experiments_invcovmat but relabelled to the chosen grouping."""
+    return relabel_experiments_to_groups(experiments_invcovmat)
 
 @table
 def groups_normcovmat(groups_covmat, groups_data_values):
