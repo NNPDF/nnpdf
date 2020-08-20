@@ -183,14 +183,15 @@ Performance of the fit
 The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
 first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
-The recommended way of using Tensorflow is by installing the [pip package](https://www.tensorflow.org/install/pip#2.-install-the-python-development-environment-on-your-system).
-You will notice, however, that the NNPDF conda package installs instead [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen).
+``` note:: Tensorflow only supports the installation via pi. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
+```
+
+When you install the nnpdf conda package, you get the [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen) package, which is not the default.
 This is due to a memory explosion found in some of the conda mkl builds.
+
 If you want to disable MKL without installing `tensorflow-eigen` you can always set the environment variable `TF_DISABLE_MKL=1` before running ``n3fit``.
 When running ``n3fit`` all versions of the package show similar performance.
 
-``` note:: The TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
-```
 
 When using the MKL version of tensorflow you gain more control of the way Tensorflow will use
 the multithreading capabilities of the machine by using the following environment variables:
