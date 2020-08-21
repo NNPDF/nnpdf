@@ -380,6 +380,9 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
                       columns=groups_index)
     return df
 
+def merge_theory_covmats(covmat1, covmat2):
+    return pd.merge(covmat1, covmat2).fillna(0)
+
 @table
 def fromfile_covmat(covmatpath, experiments, experiments_index):
     """Reads the custom covariance matrix from file and applies cuts
@@ -446,13 +449,32 @@ def fromfile_covmat(covmatpath, experiments, experiments_index):
 
 @table
 def higher_twist_covmat(experiments, experiments_index):
-    return fromfile_covmat("/exports/csce/eddie/ph/groups/nnpdf/Users/rosalyn/Documents/fits/htcovmat_total.csv",
+    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/htcovmat_total.csv",
               experiments, experiments_index)
 
 @table
 def top_covmat(experiments, experiments_index):
-    return fromfile_covmat("/exports/csce/eddie/ph/groups/nnpdf/Users/rosalyn/Documents/fits/topthcovmat.csv",
+    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
               experiments, experiments_index)
+
+@table
+def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
+        use_higher_twist_uncertainties: bool = False,
+        use_top_uncertainties: bool = False):
+    
+    f = theory_covmat_custom
+
+    if use_higher_twist_uncertainties is True:
+            from validphys.theorycovariance.construction import higher_twist_covmat
+            f_ht = higher_twist_covmat
+            f = merge_theory_covmats(f, f_ht)
+    if use_top_uncertainties is True:
+        from validphys.theorycovariance.construction import top_covmat
+        f_top = top_covmat
+        f = merge_theory_covmats(f, f_top)
+    return f
+
+    
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_groups(groups_results_theory,
