@@ -57,7 +57,7 @@ class N3FitEnvironment(Environment):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
                 self.output_path.mkdir(exist_ok=True)
-                (self.output_path /"nnfit").mkdir()
+                (self.output_path /"nnfit").mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
 

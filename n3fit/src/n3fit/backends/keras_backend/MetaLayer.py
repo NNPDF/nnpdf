@@ -26,17 +26,6 @@ initializers = {
 }
 
 
-def reinitialize_weight(weight, initializer, seed_skip=10):
-    new_config = initializer.get_config()
-    if "seed" in new_config:
-        new_seed = initializer.seed + 10
-        new_config["seed"] += new_seed
-        initializer.seed = new_seed
-    new_init = initializer.from_config(new_config)
-    new_weights = new_init(weight.shape)
-    weight.assign(new_weights)
-
-
 class MetaLayer(Layer):
     """
     This metalayer function must contain all backend-dependent functions
@@ -72,20 +61,6 @@ class MetaLayer(Layer):
         if trainable:
             self.weight_inits.append((kernel, initializer))
         return kernel
-
-    def reinitialize(self):
-        """ Reinitialize all weights and kernels with an initializer """
-        # First check the default keras-tf ones
-        if hasattr(self, "kernel_initializer"):
-            kern = self.kernel
-            kern_init = self.kernel_initializer
-            bias = self.bias
-            bias_init = self.bias_initializer
-            reinitialize_weight(kern, kern_init)
-            reinitialize_weight(bias, bias_init)
-        # Now check the ones generated with the builder helper
-        for w, init in self.weight_inits:
-            reinitialize_weight(w, init)
 
     # Implemented initializers
     @staticmethod

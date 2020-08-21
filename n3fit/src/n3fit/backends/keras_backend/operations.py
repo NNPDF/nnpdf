@@ -279,7 +279,8 @@ def tensor_product(*args, **kwargs):
     return tf.tensordot(*args, **kwargs)
 
 
-@tf.function
+
+@tf.function(experimental_relax_shapes=True)
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input

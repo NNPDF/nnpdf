@@ -104,7 +104,7 @@ def hyper_scan_wrapper(
     # Arguments:
         - `replica_path_set`: folder where to create json file with info about all trials
         - `model_trainer`: a ModelTrainer object
-        - `parameters`: a dictionary of parameters to pass to hyperparametizable
+        - `parameters`: a dictionary of parameters to pass to hyperparametrizable
         - `hyperscan_dict`: dictionary definining the sampling
         - `max_evals`: how many runs of hyperopt to run
     """
@@ -119,7 +119,7 @@ def hyper_scan_wrapper(
 
     # Perform the scan
     best = hyperopt.fmin(
-        fn=model_trainer.hyperparametizable,
+        fn=model_trainer.hyperparametrizable,
         space=the_scanner.dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
@@ -329,7 +329,7 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
@@ -337,22 +337,28 @@ class HyperScanner:
             - pos_initial
         Sampling between max and min is uniform for the multiplier and loguniform for the initial
         """
-        mul_key = "pos_multiplier"
-        ini_key = "pos_initial"
+        mul_key = "multiplier"
+        ini_key = "initial"
+        params = {}
 
-        # Create the samplers
-        mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
-        ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+        if max_multiplier is not None:
+            if min_multiplier is None:
+                min_multiplier = 1.0  # I guess this is a sensible minimum
 
-        # Update the dictionaries
-        self._update_param(mul_key, mul_val)
-        self._update_param(ini_key, ini_val)
+            mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
+            params[mul_key] = mul_val
+
+        if min_initial is not None and max_initial is not None:
+            ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+            params[ini_key] = ini_val
+
+        self._update_param("positivity", params)
 
     def architecture(
         self,
         initializers=None,
         activations=None,
-        max_drop=0.0,
+        max_drop=None,
         n_layers=None,
         min_units=15,
         max_units=25,
@@ -425,13 +431,11 @@ class HyperScanner:
             ini_choices.append(ini_name)
 
         # Finally select the dropout rate, starting point always at 0
-        drop_key = "dropout"
 
         # Create the samplers
         act_functions = hp_choice(activation_key, activation_choices)
         nodes = hp_choice(nodes_key, nodes_choices)
         ini_choice = hp_choice(ini_key, ini_choices)
-        drop_val = hp_quniform(drop_key, 0.0, max_drop, steps=self.steps)
 
         # Finally select the layer types (not very well tested for now)
         layer_key = "layer_type"
@@ -442,4 +446,9 @@ class HyperScanner:
         self._update_param(activation_key, act_functions)
         self._update_param(nodes_key, nodes)
         self._update_param(ini_key, ini_choice)
-        self._update_param(drop_key, drop_val)
+
+        if max_drop is not None:
+            # Finally select the dropout rate, starting point always at 0
+            drop_key = "dropout"
+            drop_val = hp_quniform(drop_key, 0.0, max_drop, steps=self.steps)
+            self._update_param(drop_key, drop_val)

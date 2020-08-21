@@ -56,8 +56,9 @@ fitting:
       learning_rate: 0.00001
       clipnorm: 1.0
     epochs: 1000
-    pos_multiplier: 1.05
-    pos_initial: 1.5
+    positivity:
+      multiplier: 1.05
+      initial: 1.5
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0

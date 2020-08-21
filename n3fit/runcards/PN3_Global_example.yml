@@ -137,30 +137,7 @@ datacuts:
 theory:
   theoryid: 53        # database id
 
-hyperscan:
-    stopping:
-        min_epochs: 25e3
-        max_epochs: 40e3
-        min_patience: 0.10
-        max_patience: 0.40
-    positivity:
-        min_multiplier: 1.04
-        max_multiplier: 1.1
-        min_initial: 1.0
-        max_initial: 50.0
-    optimizer:
-        names: ['RMSprop', 'Adadelta'] 
-        min_lr: 0.0005
-        max_lr: 0.13
-    architecture:
-        initializers: ['glorot_normal', 'glorot_uniform']
-        max_drop: 0.05
-        n_layers: [1,2]
-        min_units: 5
-        max_units: 50
-        activations: ['sigmoid', 'tanh']
-  
-############################################################
+###########################################################
 fitting:
 
   trvlseed: 1
@@ -190,8 +167,9 @@ fitting:
       learning_rate: 1.0
       optimizer_name: 'Adadelta'
     epochs: 50000
-    pos_multiplier: 1.09
-    pos_initial: 1.1
+    positivity:
+      multiplier: 1.09
+      initial: 10.0
     stopping_patience: 0.3 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.006

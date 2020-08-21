@@ -4,6 +4,7 @@ This module contains checks to be perform by n3fit on the input
 import logging
 from reportengine.checks import make_argcheck, CheckError
 from validphys.pdfbases import check_basis
+from n3fit.hyper_optimization import penalties as penalties_module
 
 log = logging.getLogger(__name__)
 
@@ -19,6 +20,13 @@ def check_existing_parameters(parameters):
                 raise CheckError(f"The parameter {param_name} cannot be empty")
         else:
             raise CheckError(f"Missing {param_name} parameter in the runcard")
+    # Check that positivity is not defined wrong
+    if "pos_initial" in parameters or "pos_multiplier" in parameters:
+        raise CheckError(
+            "The definition of the positivity parameters is deprecated, please "
+            "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
+            "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml"
+        )
 
 
 def check_consistent_layers(parameters):
@@ -26,9 +34,7 @@ def check_consistent_layers(parameters):
     npl = len(parameters["nodes_per_layer"])
     apl = len(parameters["activation_per_layer"])
     if npl != apl:
-        raise CheckError(
-            f"Number of layers ({npl}) does not match activation functions: {apl}"
-        )
+        raise CheckError(f"Number of layers ({npl}) does not match activation functions: {apl}")
 
 
 def check_stopping(parameters):
@@ -121,13 +127,36 @@ def check_hyperopt_architecture(architecture):
     min_u = architecture.get("min_units", 1)
     # Set a minimum number of units in case none is defined to check later if the maximum is sane
     if min_u <= 0:
-        raise CheckError(
-            f"All layers must have at least 1 unit, got min_units: {min_u}"
-        )
+        raise CheckError(f"All layers must have at least 1 unit, got min_units: {min_u}")
     max_u = architecture.get("max_units")
     if max_u is not None and max_u < min_u:
-        raise CheckError("The maximum number of units must be bigger than the minimum"
-                f" but got min: {min_u}, max: {max_u}")
+        raise CheckError(
+            "The maximum number of units must be bigger than the minimum "
+            f" but got min: {min_u}, max: {max_u}"
+        )
+
+
+def check_hyperopt_positivity(positivity_dict):
+    """ Checks that the positivity multiplier and initial values are sensible and valid
+    """
+    if positivity_dict is None:
+        return
+    min_mul = positivity_dict.get("min_multiplier")
+    max_mul = positivity_dict.get("max_multiplier")
+    if max_mul is not None or min_mul is not None:
+        if max_mul is None:
+            raise CheckError("Need to set a maximum positivity multiplier if the minimum is set")
+        if min_mul is not None and max_mul <= min_mul:
+            raise CheckError("The minimum multiplier cannot be greater than the maximum")
+    min_ini = positivity_dict.get("min_initial")
+    max_ini = positivity_dict.get("max_initial")
+    if max_ini is not None or min_ini is not None:
+        if max_ini is None or min_ini is None:
+            raise CheckError(
+                "Need to set both the maximum and minimum positivitiy initial value if any of the two is set"
+            )
+        if min_ini is not None and max_ini <= min_mul:
+            raise CheckError("The minimum initial value cannot be greater than the maximum")
 
 
 def check_kfold_options(kfold):
@@ -135,6 +164,12 @@ def check_kfold_options(kfold):
     threshold = kfold.get("threshold")
     if threshold is not None and threshold < 2.0:
         log.warning("The kfolding loss threshold might be too low: %f", threshold)
+    penalty_selection = kfold.get("penalties", [])
+    for penalty in penalty_selection:
+        if not hasattr(penalties_module, penalty):
+            raise CheckError(
+                f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
+            )
 
 
 def check_correct_partitions(kfold, experiments):
@@ -148,9 +183,7 @@ def check_correct_partitions(kfold, experiments):
         fold_sets = partition["datasets"]
         for dset in fold_sets:
             if dset not in datasets:
-                raise CheckError(
-                    f"The k-fold defined dataset {dset} is not part of the fit"
-                )
+                raise CheckError(f"The k-fold defined dataset {dset} is not part of the fit")
 
 
 @make_argcheck
@@ -161,14 +194,13 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
     if not hyperopt:
         return None
     if fitting["genrep"]:
-        raise CheckError(
-            "Generation of replicas is not accepted during hyperoptimization"
-        )
+        raise CheckError("Generation of replicas is not accepted during hyperoptimization")
     if hyperscan is None:
         raise CheckError("Can't perform hyperoptimization without the hyperscan key")
     if "kfold" not in hyperscan:
         raise CheckError("The hyperscan::kfold dictionary is not defined")
     check_hyperopt_architecture(hyperscan.get("architecture"))
+    check_hyperopt_positivity(hyperscan.get("positivity"))
     check_kfold_options(hyperscan["kfold"])
     check_correct_partitions(hyperscan["kfold"], experiments)
 

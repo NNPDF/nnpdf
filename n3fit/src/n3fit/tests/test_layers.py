@@ -6,7 +6,7 @@
 import numpy as np
 from n3fit.backends import operations as op
 import n3fit.layers as layers
-from validphys.pdfbases import rotation
+from validphys.pdfbases import fitbasis_to_NN31IC
 
 
 FLAVS = 3
@@ -177,7 +177,7 @@ def test_DY():
         assert np.allclose(result, reference, THRESHOLD)
 
 
-def test_rotation():
+def test_rotation_flavour():
     # Input dictionary to build the rotation matrix using vp2 functions
     flav_info = [
         {"fl": "u"},
@@ -192,11 +192,58 @@ def test_rotation():
     # Apply the rotation using numpy tensordot
     x = np.ones(8)  # Vector in the flavour basis v_i
     x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
-    mat = rotation(flav_info)  # Rotation matrix R_ij, i=flavour, j=evolution
+    mat = fitbasis_to_NN31IC(flav_info, 'FLAVOUR')  # Rotation matrix R_ij, i=flavour, j=evolution
     res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)
-    rotmat = layers.FlavourToEvolution(flav_info)
+    rotmat = layers.FlavourToEvolution(flav_info, 'FLAVOUR')
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)
+
+
+def test_rotation_evol():
+    # Input dictionary to build the rotation matrix using vp2 functions
+    flav_info = [
+        {"fl": "sng"},
+        {"fl": "v"},
+        {"fl": "v3"},
+        {"fl": "v8"},
+        {"fl": "t3"},
+        {"fl": "t8"},
+        {"fl": "t15"},
+        {"fl": "g"},
+    ]
+    # Apply the rotation using numpy tensordot
+    x = np.ones(8)  # Vector in the flavour basis v_i
+    x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
+    mat = fitbasis_to_NN31IC(flav_info, 'EVOL')  # Rotation matrix R_ij, i=flavour, j=evolution
+    res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
+
+    # Apply the rotation through the rotation layer
+    x = op.numpy_to_tensor(x)
+    rotmat = layers.FlavourToEvolution(flav_info, 'EVOL')
+    res_layer = rotmat(x)
+    assert np.alltrue(res_np == res_layer)    
+    
+def test_Mask():
+    """ Test the mask layer """
+    SIZE = 100
+    fi = np.random.rand(SIZE)
+    # Check that the multiplier works
+    vals = [0.0, 2.0, np.random.rand()]
+    for val in vals:
+        masker = layers.Mask(c = val)
+        ret = masker(fi)
+        np.testing.assert_allclose(ret, val*fi, rtol=1e-5)
+    # Check that the boolean works
+    np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
+    masker = layers.Mask(bool_mask = np_mask)
+    ret = masker(fi)
+    masked_fi = fi[np_mask]
+    np.testing.assert_allclose(ret, masked_fi, rtol=1e-5)
+    # Check that the combination works!
+    rn_val = vals[-1]
+    masker = layers.Mask(bool_mask = np_mask, c = rn_val)
+    ret = masker(fi)
+    np.testing.assert_allclose(ret, masked_fi*rn_val, rtol=1e-5)

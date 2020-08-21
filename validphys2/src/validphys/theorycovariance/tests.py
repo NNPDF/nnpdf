@@ -47,23 +47,23 @@ log = logging.getLogger(__name__)
 matched_dataspecs_results = collect("results", ["dataspecs"])
 
 LabeledShifts = namedtuple(
-    "LabeledShifts", ("experiment_name", "dataset_name", "shifts")
+    "LabeledShifts", ("process", "dataset_name", "shifts")
 )
 
 
 @check_two_dataspecs
 def dataspecs_dataset_prediction_shift(
-    matched_dataspecs_results, experiment_name, dataset_name
+    matched_dataspecs_results, process, dataset_name
 ):
     """Compute the difference in theory predictions between two dataspecs.
     This can be used in combination with `matched_datasets_from_dataspecs`
     It returns a ``LabeledShifts`` containing ``dataset_name``,
-    ``experiment_name`` and ``shifts``.
+    ``process`` and ``shifts``.
     """
     r1, r2 = matched_dataspecs_results
     res = r1[1].central_value - r2[1].central_value
     return LabeledShifts(
-        dataset_name=dataset_name, experiment_name=experiment_name, shifts=res
+        dataset_name=dataset_name, process=process, shifts=res
     )
 
 
@@ -101,13 +101,13 @@ def shift_vector(
     return pd.DataFrame(norm_shifts, index=index)
 
 
-def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset_name):
-    """Returns a tuple of shifts grouped by data set and experiment
+def dataspecs_dataset_theory(matched_dataspecs_results, process, dataset_name):
+    """Returns a tuple of shifts processed by data set and experiment
     for matched dataspecs."""
     central = matched_dataspecs_results[0]
     res = central[1].central_value
     return LabeledShifts(
-        dataset_name=dataset_name, experiment_name=experiment_name, shifts=res
+        dataset_name=dataset_name, process=process, shifts=res
     )
 
 
@@ -136,15 +136,15 @@ def theory_vector(matched_dataspecs_dataset_theory):
 
 
 def dataspecs_dataset_alltheory(
-    matched_dataspecs_results, experiment_name, dataset_name
+    matched_dataspecs_results, process, dataset_name
 ):
     """Returns a LabeledShifts tuple corresponding to the theory
     vectors for all the scale varied theories (not the central one),
-    grouped by data set and experiment for matched dataspecs."""
+    processed by data set and experiment for matched dataspecs."""
     others = matched_dataspecs_results[1:]
     res = [other[1].central_value for other in others]
     return LabeledShifts(
-        dataset_name=dataset_name, experiment_name=experiment_name, shifts=res
+        dataset_name=dataset_name, process=process, shifts=res
     )
 
 
@@ -218,7 +218,7 @@ def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
     return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
 
 
-matched_dataspecs_experiment_name = collect("experiment_name", ["dataspecs"])
+matched_dataspecs_process = collect("process", ["dataspecs"])
 matched_dataspecs_dataset_name = collect("dataset_name", ["dataspecs"])
 matched_cuts_datasets = collect("dataset", ["dataspecs"])
 all_matched_datasets = collect("matched_cuts_datasets", ["dataspecs"])

@@ -68,7 +68,9 @@ hyperscan:
         min_units: 10
         max_units: 50
         activations: ['sigmoid', 'tanh']
-    kfold: # if given a number k, k partitions will be generated automatically
+    kfold:
+        penalties:
+          - saturation
         threshold: 2.0
         partitions:
             - datasets:
@@ -93,8 +95,9 @@ fitting:
       optimizer_name: 'RMSprop'
       learning_rate: 0.00001
     epochs: 10
-    pos_multiplier: 1.05
-    pos_initial: 1.5
+    positivity:
+      multiplier: 1.05
+      initial: 1.5
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
