@@ -384,7 +384,7 @@ def merge_theory_covmats(covmat1, covmat2):
     return pd.merge(covmat1, covmat2).fillna(0)
 
 @table
-def fromfile_covmat(covmatpath, groups, groups_index):
+def fromfile_covmat(covmatpath, groups_data, groups_index):
     """Reads the custom covariance matrix from file and applies cuts
     to match experiment covaraince matrix"""
     filecovmat = pd.read_csv(covmatpath,
@@ -394,7 +394,7 @@ def fromfile_covmat(covmatpath, groups, groups_index):
                             columns=filecovmat.index)
     # Reordering covmat to match exp order in runcard
     dslist = []
-    for group in groups:
+    for group in groups_data:
         for ds in group.datasets:
             dslist.append(ds.name)
     filecovmat = filecovmat.reindex(dslist, level="dataset")
@@ -402,8 +402,8 @@ def fromfile_covmat(covmatpath, groups, groups_index):
     ndata = 0
     cuts_list = []
     indextuples = []
-    for exp in experiments:
-        for ds in exp.datasets:
+    for group in groups_data:
+        for ds in group.datasets:
             if ds.name in filecovmat.index.get_level_values(1):
                 print(ds.name)
                 uncutlength = len(filecovmat.xs(ds.name, level=1))
@@ -416,7 +416,7 @@ def fromfile_covmat(covmatpath, groups, groups_index):
                 print(len(cuts.load()))
                 # Creating new index
                 for i in range(len(cuts.load())):
-                    indextuples.append((exp.name, ds.name, float(i)))
+                    indextuples.append((group.name, ds.name, float(i)))
     newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0)
     total_cuts = np.concatenate(cuts_list, axis=0)
     cut_covmat = filecovmat.values[:, total_cuts][total_cuts, :]
@@ -448,14 +448,14 @@ def fromfile_covmat(covmatpath, groups, groups_index):
     return full_df
 
 @table
-def higher_twist_covmat(groups, groups_index):
+def higher_twist_covmat(groups_data, groups_index):
     return fromfile_covmat("/home/s1303034/general_th_covmat_tests/htcovmat_total.csv",
-              groups, groups_index)
+              groups_data, groups_index)
 
 @table
-def top_covmat(groups, groups_index):
+def top_covmat(groups_data, groups_index):
     return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
-              groups, groups_index)
+              groups_data, groups_index)
 
 @table
 def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
