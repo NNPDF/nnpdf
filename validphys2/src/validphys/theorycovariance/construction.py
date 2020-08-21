@@ -384,7 +384,7 @@ def merge_theory_covmats(covmat1, covmat2):
     return pd.merge(covmat1, covmat2).fillna(0)
 
 @table
-def fromfile_covmat(covmatpath, experiments, experiments_index):
+def fromfile_covmat(covmatpath, groups, groups_index):
     """Reads the custom covariance matrix from file and applies cuts
     to match experiment covaraince matrix"""
     filecovmat = pd.read_csv(covmatpath,
@@ -394,8 +394,8 @@ def fromfile_covmat(covmatpath, experiments, experiments_index):
                             columns=filecovmat.index)
     # Reordering covmat to match exp order in runcard
     dslist = []
-    for exp in experiments:
-        for ds in exp.datasets:
+    for group in groups:
+        for ds in group.datasets:
             dslist.append(ds.name)
     filecovmat = filecovmat.reindex(dslist, level="dataset")
     filecovmat = ((filecovmat.T).reindex(dslist, level="dataset")).T
@@ -417,14 +417,14 @@ def fromfile_covmat(covmatpath, experiments, experiments_index):
                 # Creating new index
                 for i in range(len(cuts.load())):
                     indextuples.append((exp.name, ds.name, float(i)))
-    newindex = pd.MultiIndex.from_tuples(indextuples, names=["experiment", "dataset", "index"], sortorder=0)
+    newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0)
     total_cuts = np.concatenate(cuts_list, axis=0)
     cut_covmat = filecovmat.values[:, total_cuts][total_cuts, :]
     cut_df = pd.DataFrame(cut_covmat, index=newindex,
                           columns=newindex)
     # Make dimensions match those of exp covmat. First make empty df of
     # exp covmat dimensions
-    empty_df = pd.DataFrame(0, index=experiments_index, columns=experiments_index)
+    empty_df = pd.DataFrame(0, index=groups_index, columns=groups_index)
     covmats = []
     for ds1 in dslist:
         for ds2 in dslist:
@@ -443,19 +443,19 @@ def fromfile_covmat(covmatpath, experiments, experiments_index):
         strips.append(strip.T)
     strips.reverse()
     full_df = pd.concat(strips, axis=1)
-    full_df = full_df.reindex(experiments_index)
-    full_df = ((full_df.T).reindex(experiments_index)).T
+    full_df = full_df.reindex(groups_index)
+    full_df = ((full_df.T).reindex(groups_index)).T
     return full_df
 
 @table
-def higher_twist_covmat(experiments, experiments_index):
+def higher_twist_covmat(groups, groups_index):
     return fromfile_covmat("/home/s1303034/general_th_covmat_tests/htcovmat_total.csv",
-              experiments, experiments_index)
+              groups, groups_index)
 
 @table
-def top_covmat(experiments, experiments_index):
+def top_covmat(groups, groups_index):
     return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
-              experiments, experiments_index)
+              groups, groups_index)
 
 @table
 def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
