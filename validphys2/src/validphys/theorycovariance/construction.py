@@ -379,10 +379,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
     df = pd.DataFrame(cov_by_exp, index=groups_index,
                       columns=groups_index)
     return df
-
-def merge_theory_covmats(covmat1, covmat2):
-    return pd.merge(covmat1, covmat2).fillna(0)
-
+    
 @table
 def fromfile_covmat(covmatpath, groups_data, groups_index):
     """Reads the custom covariance matrix from file and applies cuts
@@ -405,7 +402,6 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     for group in groups_data:
         for ds in group.datasets:
             if ds.name in filecovmat.index.get_level_values(1):
-                print(ds.name)
                 uncutlength = len(filecovmat.xs(ds.name, level=1))
                 cuts = ds.cuts
                 if cuts is None:
@@ -413,7 +409,6 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
                 else:
                     cuts_list.append(ndata+cuts.load())
                 ndata += uncutlength
-                print(len(cuts.load()))
                 # Creating new index
                 for i in range(len(cuts.load())):
                     indextuples.append((group.name, ds.name, float(i)))
@@ -467,11 +462,11 @@ def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
     if use_higher_twist_uncertainties is True:
             from validphys.theorycovariance.construction import higher_twist_covmat
             f_ht = higher_twist_covmat
-            f = merge_theory_covmats(f, f_ht)
+            f = pd.merge(f, f_ht).fillna(0)
     if use_top_uncertainties is True:
         from validphys.theorycovariance.construction import top_covmat
         f_top = top_covmat
-        f = merge_theory_covmats(f, f_top)
+        f = pd.merge(f, f_top).fillna(0)
     return f
 
     
