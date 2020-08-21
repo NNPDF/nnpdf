@@ -108,10 +108,9 @@ def auxiliary_performfit(timing=True):
         fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
         assert fitting_time < EXPECTED_MAX_FITTIME
     version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/version.info"
-    f = open(version_path, "r")
-    version = f.read()
-    f.close()
-    assert version == n3fit.__version__
+    with open(version_path, "r") as stream:
+        versions = yaml.safe_load(stream)
+        assert versions["nnpdf"] == n3fit.__version__
 
 
 @pytest.mark.darwin

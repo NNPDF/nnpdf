@@ -243,6 +243,16 @@ def storefit(
     with open(f"{replica_path}/{fitname}.time", "w") as fs:
         json.dump(timings, fs, indent=2)
 
-    # create .version file
+    # create .version file, with the version of programs used
     with open(f"{replica_path}/version.info", "w") as fs:
-        fs.write(n3fit.__version__)
+        versions = {}
+        try:
+            import tensorflow as tf
+            mkl = tf.python.framework.test_util.IsMklEnabled()
+            versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
+            versions["keras"] = tf.keras.__version__
+        except:
+            pass
+        versions["numpy"] = np.__version__
+        versions["nnpdf"] = n3fit.__version__
+        json.dump(versions, fs, indent=2)
