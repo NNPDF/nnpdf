@@ -12,6 +12,7 @@ from reportengine.table import table
 
 from validphys.calcutils import regularize_covmat, get_df_block
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
+from validphys.coredata import CommonData
 from validphys.commondataparser import load_commondata
 from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
@@ -28,24 +29,58 @@ log = logging.getLogger(__name__)
 
 
 def make_replica(commondata, seed=1):
-    # dataset_input: {dataset: NMC, frac: 0.5}
+    """Function that takes in a :py:class:`validphys.coredata.CommonData` or
+    :py:class:`validphys.core.CommonDataSpec` and returns pseudodata replicas
+    of the data central value.
 
-    # use_cuts: nocuts
+    The square root (obtained by the Cholesky decomposition) of the covariance
+    matrix is used as the sampling matrix. The covariance matrix is obtained using
+    :py:func:`validphys.covmats.covmat_from_systematics` and must not use
+    multiplicative systematic uncertainties when obtaining the sampling matrix.
 
-    # theoryid: 53
+    Parameters
+    ---------
+    commondata: :py:class:`validphys.coredata.CommonData`, :py:class:`validphys.core.CommonDataSpec`
+        CommonData which stores information about systematic errors,
+        their treatment and description.
 
-    # template_text: |
-      # {@make_replica@}
+    seed: int
+        Seed used to initialise the random number generator.
 
-    # actions_:
-      # - report(main=True)
+    Returns
+    -------
+    pseudodata: np.array
+        Numpy array which is N_dat (where N_dat is the number of data points after cuts)
+        containing monte carlo samples of data centered around the data central value.
 
+
+    Example
+    -------
+    >>> from validphys.loader import Loader
+    >>> l = Loader()
+    >>> from validphys.covmats import make_replica
+    >>> cd = l.check_commondata("NMC")
+    >>> make_replica(cd)
+    - Random Generator allocated: ranlux
+    array([0.24013561, 0.24060029, 0.26382826, 0.27698772, 0.28603631,
+       0.28491346, 0.30983694, 0.31394779, 0.2987047 , 0.31680287,
+       0.33169788, 0.29497604, 0.30490075, 0.32969979, 0.34781687,
+       0.34964414, 0.30162117, 0.32235222, 0.32743923, 0.33293424,
+       0.35932347, 0.37967132, 0.37942145, 0.2931131 , 0.3504976 ,
+
+    .. todo:: Replace the inhouse random number generation with a numpy equivalent.
+    .. todo:: Allow for correlations between datasets within an experiment.
+    """
     # TODO: eventually remove the inhouse random number generator
     # in favour of e.g numpy
     NNPDF.RandomGenerator.InitRNG(0, seed)
     rng = NNPDF.RandomGenerator.GetRNG()
 
-    ld_cd = load_commondata(commondata)
+    if not isinstance(commondata, CommonData):
+        ld_cd = load_commondata(commondata)
+    else:
+        ld_cd = commondata
+
     covmat_for_sampling = covmat_from_systematics(ld_cd, use_mult_errors=False)
     sampling_matrix = sqrt_covmat(covmat_for_sampling)
 
@@ -68,8 +103,7 @@ def make_replica(commondata, seed=1):
     ]
     mult_uncorr_sys = mult_uncorr_sys.applymap(lambda x: x.mult / 100)
 
-    # We want to know which of the remaining systematics were
-    # uncorrelated. The other we mark as NaN
+    # We want to know the names of the remaining systematics.
     mult_uncorr_names = sys_names.loc[mult_uncorr_sys.columns]
 
     # We need to loop until the pseudodata is positive
@@ -191,9 +225,9 @@ def covmat_from_systematics(commondata, use_mult_errors=True):
     For more information on the generation of the covariance matrix see the `paper <https://arxiv.org/pdf/hep-ph/0501067.pdf>`_
     outlining the procedure, specifically equation 2 and surrounding text.
 
-    Paramaters
+    Parameters
     ----------
-    commondata : validphys.coredata.CommonData
+    commondata: validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
 
@@ -205,7 +239,7 @@ def covmat_from_systematics(commondata, use_mult_errors=True):
 
     Returns
     -------
-    cov_mat : np.array
+    cov_mat: np.array
         Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
         containing uncertainty and correlation information.
 
