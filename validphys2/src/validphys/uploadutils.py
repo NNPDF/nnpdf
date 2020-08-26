@@ -314,6 +314,7 @@ def check_for_meta(path):
                 "the meta tags to the runcard or use the --interactive flag "
                 "with vp-upload to interactively create one"
                 )
+    return True
 
 
 def interactive_meta(path):
@@ -381,7 +382,12 @@ def check_input(path):
     info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
 
     if 'meta.yaml' in files:
-        check_for_meta(path)
+        return 'report'
+    elif 'index.html' in files and check_for_meta(path):
+        # It could be that the user has created a report but hasn't
+        # created a meta.yaml file. In which case we raise an exception
+        # and instruct the user to either create one or use the
+        # --interactive flag to create one
         return 'report'
     elif 'filter.yml' in files:
         return 'fit'
