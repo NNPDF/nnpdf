@@ -25,7 +25,8 @@ from validphys.checks import (
     check_speclabels_different,
     check_two_dataspecs,
 )
-from validphys.core import DataSetSpec, PDF, DataGroupSpec
+
+from validphys.core import DataSetSpec, PDF, DataGroupSpec, cut_mask
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 )
@@ -316,6 +317,82 @@ def results(
     data = dataset.load()
     return (DataResult(data, covariance_matrix, sqrt_covmat),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
+
+def get_shifted_results(results, commondata, cutlist):
+    """Returns the theory results shifted according to correlated experimental uncertainties.
+
+    Parameters
+    ----------
+    results: tuple 
+        A tuple of data and theory results where the theory results' central values are 
+        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
+        impact of correlated experimental uncertainties.
+    commondata : ``CommonDataSpec``
+        The specification corresponfing to the commondata to be plotted.
+    cutlist : list
+        The list of ``CutSpecs`` or ``None`` corresponding to the cuts for each
+        result.
+
+    Returns
+    -------
+    results: tuple 
+        A tuple of data and theory results where the theory results' central values are 
+        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
+        impact of correlated experimental uncertainties.
+    shifted: list 
+        A list of booleans indicating which datasets have been shifted. Note: the datasets with 
+        uncorrelated uncertainties doesn't include the correlated shifts."""
+
+    shifted = []
+
+    cd = commondata.load()
+
+    ## fill uncertainties
+    Ndat, Nsys = cd.GetNData(), cd.GetNSys()
+
+    # square root of sum of uncorrelated uncertainties
+    uncorrE = np.zeros(Ndat)
+    corrE = np.zeros((Ndat, Nsys))  # table of all the correlated uncertainties
+
+    for idat in range(Ndat):
+        uncorrE[idat] = cd.GetUncE(idat)
+        for isys in range(Nsys):
+            if cd.GetSys(idat, isys).name != "UNCORR":
+                corrE[idat, isys] = cd.GetSys(idat, isys).add
+
+    mask = cut_mask(cutlist[0])
+    uncorrE = uncorrE[mask]
+    corrE = corrE[mask]
+    data = results[0].central_value
+
+    for i, result in enumerate(results):
+        if i == 0:
+            continue
+
+        lambda_sys = np.zeros(Nsys)  # nuisance parameters
+        theory = results[i].central_value
+
+        ## isys is equivalent to alpha index and lsys to delta in eq.85
+        if np.any(uncorrE == 0):
+            temp_shifts = np.zeros(Ndat)
+            shifted.append(False)
+        else:
+            f1 = (data - theory)/uncorrE  # first part of eq.85
+            A = np.eye(Nsys) + \
+                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2)  # eq.86
+            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A),
+                           corrE, 1./uncorrE)  # second part of eq.85
+            lambda_sys = np.einsum('i,ik->k', f1, f2)  # nuisance parameter
+            shifts = np.einsum('ik,k->i', corrE, lambda_sys)  # the shift
+
+            results[i]._central_value += shifts
+            shifted.append(True)
+
+    #now that theory is shifted, take only the uncorr component of the uncertainty in the data
+    if any(shifted):
+        results[0].covmat[np.diag_indices_from(results[0].covmat)] = uncorrE**2
+
+    return results, shifted
 
 def dataset_inputs_results(
         data,
@@ -934,7 +1011,6 @@ def dataspecs_dataset_chi2_difference_table(
         df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     return pd.concat(dfs, axis=1)
-
 
 each_dataset_chi2 = collect(abs_chi2_data, ('data',))
 
