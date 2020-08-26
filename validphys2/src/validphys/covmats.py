@@ -32,7 +32,7 @@ INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 
 def make_replica(commondata, seed=1):
     """Function that takes in a :py:class:`validphys.coredata.CommonData` or
-    :py:class:`validphys.core.CommonDataSpec` and returns pseudodata replicas
+    :py:class:`validphys.core.CommonDataSpec` object and returns pseudodata replicas
     of the data central value.
 
     The square root (obtained by the Cholesky decomposition) of the covariance
@@ -196,7 +196,7 @@ def covmat_from_systematics(commondata, central_values=None):
     use_mult_errors: bool
         Boolean which controls whether we use multiplicative errors
         when computing the covmat. By default it should be set to ``True``
-        unles one wishes to uses a sampling matrix for pseudodata generation,
+        unless one wishes to uses a sampling matrix for pseudodata generation,
         in which case it should be set to ``False``.
 
     Returns
