@@ -1,0 +1,22 @@
+#: table_doi: 10.17182/hepdata.66887.v1/t10
+#: name: Table 10
+#: description: DiJet Cross Section for |rapidity| 2.0 TO 2.5 as a function of the dijet invariant mass. 
+#:           The (sys) error is the total systematic error  including the luminosity uncertainty of 2.2%.
+#: data_file: Table10.yaml
+#: keyword reactions: P P --> JET JET X
+#: keyword observables: D2SIG/DM/DYRAP
+#: keyword phrases: Inclusive | Double Differential Cross Section | Rapidity Dependence | Proton-Proton Scattering | Dijet Production | Jet Production
+#: keyword cmenergies: 7000.0
+#: RE   P P --> JET JET X
+#: ABS(YRAP)   2.0-2.5
+#: SQRT(S) [GeV]   7000.0
+M(2JET) [GEV] M(2JET) [GEV] LOW M(2JET) [GEV] HIGH D2(SIG)/DM/DYRAP [PB/GEV] stat + stat - sys + sys -
+1123.0 1000.0 1246.0 4.98 0.292 -0.292 0.749 -0.623
+1388.0 1246.0 1530.0 1.18 0.129 -0.129 0.185 -0.154
+1693.0 1530.0 1856.0 0.304 0.0366 -0.0366 0.0481 -0.0407
+2043.5 1856.0 2231.0 0.0627 0.0112 -0.0112 0.0111 -0.00915
+2445.0 2231.0 2659.0 0.0077 0.00337 -0.00337 0.00142 -0.00123
+2903.0 2659.0 3147.0 0.00247 0.000955 -0.000955 0.000585 -0.000478
+3425.5 3147.0 3704.0 0.000628 0.000137 -0.000137 0.000189 -0.000154
+4381.0 3704.0 5058.0 1.21e-05 1.25e-05 -1.25e-05 8.72e-06 -4.97e-06
+

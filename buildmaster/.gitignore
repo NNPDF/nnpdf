@@ -1,0 +1,5 @@
+buildmaster
+inc/svn.h
+*.o
+*.swp
+.DS_Store
