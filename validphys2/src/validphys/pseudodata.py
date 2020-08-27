@@ -3,18 +3,72 @@
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
 """
+from concurrent.futures import ThreadPoolExecutor
 import logging
 import multiprocessing as mp
 
 import numpy as np
 import pandas as pd
 
-from reportengine import collect
+from validphys.fitdata import num_fitted_replicas
 
 import n3fit.io.reader as reader
 from n3fit.performfit import initialize_seeds
 
+from reportengine import collect
+
+import NNPDF
+
 log = logging.getLogger(__name__)
+
+
+def _experiment_replicas(experiment_list):
+    """This function is to be used in conjuction with
+    :py:func:`nnfit_fitted_pseudodata` it is defined at
+    top level to be pickleable and for use with multithreading
+    """
+    df = pd.Series()
+    for exp in experiment_list:
+        exp.MakeReplica()
+        cv = pd.Series(exp.get_cv())
+        df = df.append(cv)
+
+    return df
+
+
+def nnfit_fitted_pseudodata(fit, experiments, groups_index):
+    """Function that returns the pseudodata that was seen by the replicas
+    during an nnfit PDF fit. Note, this function does not account for training
+    and validation splitting nor does it consider replicas that fail to survive
+    postfit.
+
+    .. note:: This function works in parallel and uses multithreading.
+    """
+
+    runcard = fit.as_input()
+    seed = runcard["fitting"]["seed"]
+    NNPDF.RandomGenerator.InitRNG(0, seed)
+
+    num_replicas = num_fitted_replicas(fit)
+
+    loaded_exps = [experiment.load() for experiment in experiments]
+    copied_exps = (
+        (type(exp)(exp) for exp in loaded_exps)
+        for _ in range(num_replicas)
+    )
+
+    with ThreadPoolExecutor() as executor:
+        reps = executor.map(_experiment_replicas, copied_exps)
+
+    # Need to make a copy since when we iterate and assign an index,
+    # we want to be able to yield from the object.
+    reps = list(reps)
+    for rep in reps:
+        rep.index = groups_index
+
+    pseudodata = dict(zip(range(1, num_replicas + 1), reps))
+
+    return pseudodata
 
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
