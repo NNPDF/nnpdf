@@ -453,20 +453,16 @@ def top_covmat(groups_data, groups_index):
               groups_data, groups_index)
 
 @table
-def total_theory_covmat(groups_data, groups_index,
+def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
         use_higher_twist_uncertainties: bool = False,
         use_top_uncertainties: bool = False):
-    
-    f = theory_covmat_custom(covs_pt_prescrip, covmap, groups_index)
+  
+    f = theory_covmat_custom
 
     if use_higher_twist_uncertainties is True:
-            from validphys.theorycovariance.construction import higher_twist_covmat
-            f_ht = higher_twist_covmat(groups_data, groups_index)
-            f = pd.merge(f, f_ht).fillna(0)
+        f = f + higher_twist_covmat
     if use_top_uncertainties is True:
-        from validphys.theorycovariance.construction import top_covmat
-        f_top = top_covmat(groups_data, groups_index)
-        f = pd.merge(f, f_top).fillna(0)
+        f = f + top_covmat
     return f
 
     
