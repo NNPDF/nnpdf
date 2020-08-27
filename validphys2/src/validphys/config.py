@@ -510,22 +510,22 @@ class CoreConfig(configparser.Config):
         """Modifies which action is used as covariance_matrix depending on
         the flag `use_pdferr`
         """
-        from validphys import results
+        from validphys import covmats
         if use_pdferr:
-            return results.pdferr_plus_covmat
+            return covmats.pdferr_plus_covmat
         else:
-            return results.covmat
+            return covmats.covmat
 
     @configparser.explicit_node
     def produce_dataset_inputs_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as experiment_covariance_matrix
         depending on the flag `use_pdferr`
         """
-        from validphys import results
+        from validphys import covmats
         if use_pdferr:
-            return results.pdferr_plus_dataset_inputs_covmat
+            return covmats.pdferr_plus_dataset_inputs_covmat
         else:
-            return results.dataset_inputs_covmat
+            return covmats.dataset_inputs_covmat
 
     #TODO: Do this better and elsewhere
     @staticmethod
@@ -729,7 +729,34 @@ class CoreConfig(configparser.Config):
             raise ConfigError("Failed to get 'posdatasets' from positivity. "
                               "Expected that key to be present.")
         return positivity['posdatasets']
+    
+    @element_of('integdatasets')
+    def parse_integdataset(self, integset:dict, * ,theoryid):
+        """An observable corresponding to a PDF in the evolution basis,
+        used as integrability constrain in the fit. It is a mapping containing 'dataset' and 'poslambda'."""
+        bad_msg = ("integset must be a mapping with a name ('dataset') and "
+                   "a float multiplier(poslambda)")
 
+        theoryno, theopath = theoryid
+        try:
+            name = integset['dataset']
+            poslambda = float(integset['poslambda'])
+        except KeyError as e:
+            raise ConfigError(bad_msg, e.args[0], integset.keys()) from e
+        except ValueError as e:
+            raise ConfigError(bad_msg) from e
+        # use the same underlying c++ code as the positivity observables
+        try:
+            return self.loader.check_posset(theoryno, name, poslambda)
+        except FileNotFoundError as e:
+            raise ConfigError(e) from e
+    
+    def produce_integdatasets(self, integrability):
+        if not isinstance(integrability, dict) or 'integdatasets' not in integrability:
+            raise ConfigError("Failed to get 'integdatasets' from integrability. "
+                              "Expected that key to be present.")
+        return integrability['integdatasets']    
+    
     def produce_reweight_all_datasets(self, experiments):
         ret = []
         for experiment in experiments:
@@ -1199,7 +1226,7 @@ class CoreConfig(configparser.Config):
                     "PLOTTING file."
                 )
         return [
-            {"data_input": group, "experiment_name": name}
+            {"data_input": group, "group_name": name}
             for name, group in res.items()
         ]
 
