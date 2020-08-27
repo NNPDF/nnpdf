@@ -5,6 +5,7 @@ networks during the fitting.
 """
 import logging
 import multiprocessing as mp
+import random
 
 import numpy as np
 import pandas as pd
@@ -24,6 +25,33 @@ log = logging.getLogger(__name__)
 
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
+
+
+def training_validation_mask(experiment):
+    tr_val_dict = {}
+    for dataset in experiment.datasets:
+        ld_ds = dataset.load()
+        ndata = ld_ds.GetNData()
+
+        frac = dataset.frac
+        # The number of datapoint that go into the training split the
+        # complement (= ndata - trmax) is thefore the validation split
+        trmax = int(frac * ndata)
+        mask = list(range(ndata))
+
+        # TODO: figure out how to do this with
+        # NNPDF.RandomGenerator.GetRNG(), for now
+        # I can't find the ShuffleVector method
+        # The following operations are done in place
+        random.shuffle(mask)
+        # Split the mask into training and validation sets
+        training, validation = mask[:trmax], mask[trmax:]
+        # Sort in ascending order
+        training.sort(), validation.sort()
+
+        tr_val_dict[dataset.name] = {"training": training, "validation": validation}
+
+    return tr_val_dict
 
 
 def make_replica(commondata, seed=1):
