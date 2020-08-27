@@ -297,17 +297,17 @@ def experiments_covmat_no_table(
     return df
 
 
-def relabel_experiments_to_groups(covmat, groups_index):
+def relabel_experiments_to_groups(input_covmat, groups_index):
     """Takes a covmat grouped by experiments and relabels
     it by groups. This allows grouping over experiments to
     preserve experimental correlations outwith the chosen 
     grouping."""
     # Sorting along dataset axis so we can apply the groups index directly
-    covmat = covmat.sort_index(axis=0, level=1)
-    covmat = covmat.sort_index(axis=1, level=1)
+    input_covmat = input_covmat.sort_index(axis=0, level=1)
+    input_covmat = input_covmat.sort_index(axis=1, level=1)
     sorted_groups_index = groups_index.sortlevel(1)[0]
     df = pd.DataFrame(
-        covmat.values, index=sorted_groups_index, columns=sorted_groups_index
+        input_covmat.values, index=sorted_groups_index, columns=sorted_groups_index
     )
     # Reindexing to fit with groups_index
     df = df.reindex(groups_index, axis=0)
