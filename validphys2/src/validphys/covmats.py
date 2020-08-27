@@ -12,8 +12,6 @@ from reportengine.table import table
 
 from validphys.calcutils import regularize_covmat, get_df_block
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
-from validphys.coredata import CommonData
-from validphys.commondataparser import load_commondata
 from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
@@ -23,8 +21,6 @@ from validphys.checks import (
 )
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.results import ThPredictionsResult
-
-import NNPDF
 
 log = logging.getLogger(__name__)
 
