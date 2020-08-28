@@ -454,9 +454,29 @@ def top_covmat(groups_data, groups_index):
               groups_data, groups_index)
 
 @table
-def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
+def deuteron_covmat(groups_data, groups_index):
+    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
+              groups_data, groups_index)
+        
+@table
+def nuclear_covmat(groups_data, groups_index):
+    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
+              groups_data, groups_index)
+
+@table
+def user_covmat(groups_data, groups_index):
+    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/usercovmat.csv",
+              groups_data, groups_index)
+
+@table
+def total_theory_covmat(
+        theory_covmat_custom, higher_twist_covmat, top_covmat,
+        deuteron_covmat, nuclear_covmat, user_covmat,
         use_higher_twist_uncertainties: bool = False,
-        use_top_uncertainties: bool = False):
+        use_top_uncertainties: bool = False,
+        use_deuteron_uncertainties: bool = False,
+        use_nuclear_uncertainties: bool = False,
+        use_user_uncertainties: bool = False):
   
     f = theory_covmat_custom
 
@@ -464,6 +484,12 @@ def total_theory_covmat(theory_covmat_custom, higher_twist_covmat, top_covmat,
         f = f + higher_twist_covmat
     if use_top_uncertainties is True:
         f = f + top_covmat
+    if use_deuteron_uncertainties is True:
+        f = f + deuteron_covmat
+    if use_nuclear_uncertainties is True:
+        f = f + nuclear_covmat
+    if use_user_uncertainties is True:
+        f = f + user_covmat
     return f
 
     
