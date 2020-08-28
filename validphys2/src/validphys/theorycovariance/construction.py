@@ -19,6 +19,7 @@ from validphys.results import groups_central_values, groups_central_values_no_ta
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
+from validphys.covmats import sqrt_covmat 
 
 log = logging.getLogger(__name__)
 
