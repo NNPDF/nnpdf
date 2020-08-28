@@ -3,7 +3,6 @@
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
 """
-from concurrent.futures import ThreadPoolExecutor
 import logging
 import multiprocessing as mp
 
@@ -22,20 +21,6 @@ import NNPDF
 log = logging.getLogger(__name__)
 
 
-def _experiment_replicas(experiment_list):
-    """This function is to be used in conjuction with
-    :py:func:`nnfit_fitted_pseudodata` it is defined at
-    top level to be pickleable and for use with multithreading
-    """
-    df = pd.Series()
-    for exp in experiment_list:
-        exp.MakeReplica()
-        cv = pd.Series(exp.get_cv())
-        df = df.append(cv)
-
-    return df
-
-
 def nnfit_fitted_pseudodata(fit, experiments, groups_index):
     """Function that returns the pseudodata that was seen by the replicas
     during an nnfit PDF fit. Note, this function does not account for training
@@ -52,21 +37,19 @@ def nnfit_fitted_pseudodata(fit, experiments, groups_index):
     num_replicas = num_fitted_replicas(fit)
 
     loaded_exps = [experiment.load() for experiment in experiments]
-    copied_exps = (
-        (type(exp)(exp) for exp in loaded_exps)
-        for _ in range(num_replicas)
-    )
 
-    with ThreadPoolExecutor() as executor:
-        reps = executor.map(_experiment_replicas, copied_exps)
+    pseudodata = {}
+    for i in range(1, num_replicas + 1):
+        df = pd.Series()
+        for exp in loaded_exps:
+            exp_copy = type(exp)(exp)
+            exp_copy.MakeReplica()
 
-    # Need to make a copy since when we iterate and assign an index,
-    # we want to be able to yield from the object.
-    reps = list(reps)
-    for rep in reps:
-        rep.index = groups_index
+            cv = pd.Series(exp_copy.get_cv())
+            df = df.append(cv)
 
-    pseudodata = dict(zip(range(1, num_replicas + 1), reps))
+        df.index = groups_index
+        pseudodata[i] = df
 
     return pseudodata
 
