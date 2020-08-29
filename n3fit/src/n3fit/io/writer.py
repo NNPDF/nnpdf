@@ -10,6 +10,7 @@ import time
 import json
 import numpy as np
 from reportengine.compat import yaml
+import validphys
 import n3fit
 from n3fit.msr import compute_arclength
 
@@ -247,12 +248,24 @@ def storefit(
     with open(f"{replica_path}/version.info", "w") as fs:
         versions = {}
         try:
+            # Wrap tf in try-except block as it could possible to run n3fit without tf
             import tensorflow as tf
+            versions["keras"] = tf.keras.__version__
             mkl = tf.python.framework.test_util.IsMklEnabled()
             versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
-            versions["keras"] = tf.keras.__version__
+        except ImportError:
+            versions["tensorflow"] = "Not available"
+            versions["keras"] = "Not available"
+        except AttributeError:
+            # Check for MKL was only recently introduced and is not part of the official API
+            versions["tensorflow"] = f"{tf.__version__}, mkl=??"
         except:
+            # We don't want _any_ uncaught exception to crash the whole program at this point
             pass
         versions["numpy"] = np.__version__
         versions["nnpdf"] = n3fit.__version__
+        try:
+            versions["validphys"] = validphys.__version__
+        except AttributeError:
+            versions["validphys"] = "unknown"
         json.dump(versions, fs, indent=2)
