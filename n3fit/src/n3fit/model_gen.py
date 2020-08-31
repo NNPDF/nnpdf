@@ -487,7 +487,9 @@ def pdfNN_layer_generator(
 
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
-    if inp == 2:
+    if inp == 1:
+        scale_input = Lambda(lambda  x: 2*x-1)
+    else:
         add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
 
     def dense_me(x):
@@ -495,9 +497,7 @@ def pdfNN_layer_generator(
         from the `list_of_pdf_layers` in order """
 
         if inp == 1:
-            import ipdb; ipdb.set_trace()
-            # x = 2*x-1
-            # x = 1*x
+            x = scale_input(x)
             x0 = tf.keras.backend.ones_like(x)
             curr_fun = list_of_pdf_layers[0](x)
             curr_fun0 = list_of_pdf_layers[0](x0)
@@ -508,7 +508,7 @@ def pdfNN_layer_generator(
             for dense_layer in list_of_pdf_layers[1:]:
                 curr_fun = dense_layer(curr_fun)
                 curr_fun0 = dense_layer(curr_fun0)
-            # curr_fun = tf.keras.layers.subtract([curr_fun, curr_fun0])
+            curr_fun = tf.keras.layers.subtract([curr_fun, curr_fun0])
         else:
             for dense_layer in list_of_pdf_layers[1:]:
                 curr_fun = dense_layer(curr_fun)
