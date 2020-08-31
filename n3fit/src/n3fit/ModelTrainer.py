@@ -15,6 +15,7 @@ from n3fit.backends import MetaModel, clear_backend_state, operations, callbacks
 from n3fit.stopping import Stopping
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from scipy.interpolate import PchipInterpolator
 
 log = logging.getLogger(__name__)
 
@@ -394,8 +395,12 @@ class ModelTrainer:
         """
         log.info("Generating the Model")
 
-        # Compute the input array that will be given to the pdf
+        # Construct the input array that will be given to the pdf
         input_arr = np.concatenate(self.input_list, axis=1)
+        mapping = self.mapping
+        interpolation = PchipInterpolator(mapping[0], mapping[1])
+        input_arr = interpolation(input_arr.squeeze())
+        input_arr = np.expand_dims(input_arr, axis=0)
         input_layer = operations.numpy_to_input(input_arr.T)
 
         # The input to the full model is expected to be the input to the PDF
@@ -567,6 +572,31 @@ class ModelTrainer:
                 self.training["integmultipliers"].append(integ_multiplier)
                 self.training["integinitials"].append(integ_initial)
 
+        # Store the input data for the interpolator as self.mapping
+        input_arr = np.concatenate(self.input_list, axis=1)
+        input_arr = np.sort(input_arr)
+
+        onein = int(input_arr.size/20)
+        input_list = [i for j,i in enumerate(input_arr.flatten()) if j%onein==0]
+        input_list.insert(0,input_arr.min())
+        input_list.append(input_arr.max())
+        input_arr = np.expand_dims(np.array(input_list),axis=0)
+
+        input_arr_size = input_arr.size
+        start_val = np.array(1/input_arr_size, dtype=input_arr.dtype)
+        new_xgrid = np.linspace(start=start_val, stop=1., endpoint=False, num=input_arr_size)
+
+        unique, counts = np.unique(input_arr, return_counts=True)
+
+        map_from = np.append(unique, 1.)
+        map_from = np.insert(map_from, 0 ,0)
+        map_to = [0]
+        for cumsum_ in np.cumsum(counts):
+            map_to.append(new_xgrid[cumsum_-1])
+        map_to.append(1.)
+        map_to = np.array(map_to)
+        self.mapping = [map_from, map_to]
+
     def _generate_pdf(
         self,
         nodes_per_layer,
@@ -626,6 +656,7 @@ class ModelTrainer:
             regularizer=regularizer,
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
+            mapping=self.mapping
         )
         return pdf_model
 

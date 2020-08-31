@@ -7,16 +7,19 @@ import numpy as np
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
-
+from validphys.arclength import arc_lengths
+from scipy.interpolate import PchipInterpolator
+import tensorflow as tf
 
 log = logging.getLogger(__name__)
 
 
-def gen_integration_input(nx):
+def gen_integration_input(nx, mapping):
     """
     Generates a np.array (shaped (nx,1)) of nx elements where the
     nx/2 first elements are a logspace between 0 and 0.1
-    and the rest a linspace from 0.1 to 0
+    and the rest a linspace from 0.1 to 0, which is than scaled
+    using the interpolator.
     """
     lognx = int(nx / 2)
     linnx = int(nx - lognx)
@@ -34,10 +37,14 @@ def gen_integration_input(nx):
         weights.append((spacing[i] + spacing[i + 1]) / 2.0)
     weights_array = np.array(weights).reshape(nx, 1)
 
-    return xgrid, weights_array
+    interpolation = PchipInterpolator(mapping[0], mapping[1])
+    xgrid_scaled = interpolation(xgrid.squeeze())
+    xgrid_scaled = np.expand_dims(xgrid_scaled, axis=1)
+
+    return xgrid, xgrid_scaled, weights_array
 
 
-def msr_impose(fit_layer, final_pdf_layer, mode='All', verbose=False):
+def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
     """
         This function receives:
             - fit_layer: the 8-basis layer of PDF which we fit
@@ -47,14 +54,14 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', verbose=False):
     """
     # 1. Generate the fake input which will be used to integrate
     nx = int(2e3)
-    xgrid, weights_array = gen_integration_input(nx)
+    xgrid, xgrid_scaled, weights_array = gen_integration_input(nx, mapping)
 
     # 2. Prepare the pdf for integration
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide()
 
-    def pdf_integrand(x):
-        res = operations.op_multiply([division_by_x(x), fit_layer(x)])
+    def pdf_integrand(xgrid, xgrid_scaled):
+        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled)])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
@@ -64,8 +71,10 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', verbose=False):
     normalizer = MSR_Normalization(input_shape=(8,), mode=mode)
 
     # 5. Make the xgrid numpy array into a backend input layer so it can be given
-    xgrid_input = operations.numpy_to_input(xgrid)
-    normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
+    xgrid_input_scaled = operations.numpy_to_input(xgrid_scaled)
+    xgrid_input = np.expand_dims(xgrid, 0)
+    xgrid_input = tf.convert_to_tensor(xgrid_input, dtype=xgrid_input_scaled.dtype)
+    normalization = normalizer(integrator(pdf_integrand(xgrid_input, xgrid_input_scaled)))
 
     def ultimate_pdf(x):
         return operations.op_multiply_dim([final_pdf_layer(x), normalization])
@@ -76,15 +85,15 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', verbose=False):
         #         result = modelito.predict(x = None, steps = 1)
 
         print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input)
+        check_integration(ultimate_pdf, xgrid_input, mapping)
 
     # Save a reference to xgrid in ultimate_pdf, very useful for debugging
     ultimate_pdf.ref_xgrid = xgrid_input
 
-    return ultimate_pdf, xgrid_input
+    return ultimate_pdf, xgrid_input_scaled
 
 
-def check_integration(ultimate_pdf, integration_input):
+def check_integration(ultimate_pdf, integration_input, mapping):
     """
     Naive integrator for quick checks.
     Receives the final PDF layer, computes the 4 MSR and prints out the result
@@ -92,7 +101,7 @@ def check_integration(ultimate_pdf, integration_input):
     Called only (for debugging purposes) by msr_impose above
     """
     nx = int(1e4)
-    xgrid, weights_array = gen_integration_input(nx)
+    xgrid, _, weights_array = gen_integration_input(nx, mapping)
     xgrid_input = operations.numpy_to_input(xgrid)
 
     multiplier = xDivide(output_dim=14, div_list=range(3, 9))
