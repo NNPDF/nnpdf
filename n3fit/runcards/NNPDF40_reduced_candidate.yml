@@ -29,8 +29,8 @@ experiments:
       - { dataset: CHORUSNBPb, frac: 0.5} #Changed name for consistency with full runcard
   - experiment: NTVDMN
     datasets:
-      - { dataset: NTVNUDMNFe, frac: 0.5} #Changed name for consistency with full runcard
-      - { dataset: NTVNBDMNFe, frac: 0.5} #Changed name for consistency with full runcard
+      - { dataset: NTVNUDMNFe, frac: 0.5, cfac: [MAS]} 
+      - { dataset: NTVNBDMNFe, frac: 0.5, cfac: [MAS]} 
 # HERA data
   - experiment: HERACOMB
     datasets:
@@ -45,16 +45,11 @@ experiments:
 # - experiment: HERAF2CHARM
 #   datasets:
 #       - { dataset: HERAF2CHARM, frac: 0.5}
-#     - {dataset: HERACOMB_SIGMARED_C, frac: 0.5} # N You can remove this data set, if it's a source of noise
+#     - {dataset: HERACOMB_SIGMARED_C, frac: 0.5} # N 
   - experiment: HERAF2BOTTOM
     datasets:
       - {dataset: HERACOMB_SIGMARED_B, frac: 0.5} # N 
-# F2bottom data
-#   - experiment: F2BOTTOM
-#     datasets: 
-#       - { dataset: H1HERAF2B, frac: 1.0}
-#       - { dataset: ZEUSHERAF2B, frac: 1.0}
-      # Fixed target Drell-Yan
+# Fixed target Drell-Yan
   - experiment: DYE886
     datasets:
       - { dataset: DYE886R, frac: 1.0 }
@@ -66,20 +61,18 @@ experiments:
   - experiment: CDF
     datasets:
       - { dataset: CDFZRAP, frac: 1.0, cfac: [QCD] }
-#       - { dataset: CDFR2KT, frac: 0.5, sys: 10 }
   - experiment: D0
     datasets:
       - { dataset: D0ZRAP, frac: 1.0, cfac: [QCD] }
       - { dataset: D0WEASY, frac: 1.0, cfac: [QCD] }
       - { dataset: D0WMASY, frac: 1.0, cfac: [QCD] }
-      # ATLAS
+# ATLAS
   - experiment: ATLAS
     datasets:
 # ATLAS eWK
       - { dataset: ATLASWZRAP36PB,   frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD] }
-      - { dataset: ATLASWZRAP11, frac: 0.5, cfac: [QCD] }
       - { dataset: ATLASWZRAP11CC, frac: 0.5, cfac: [QCD]} # N
       - { dataset: ATLASWZRAP11CF, frac: 0.5, cfac: [QCD]} # N
       - { dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.5, cfac: [QCD]} # N
@@ -92,22 +85,21 @@ experiments:
 #       - { dataset: ATLASR04JETS2P76TEV, frac: 0.5, sys: 10 }
 #       - { dataset: ATLAS1JET11, frac: 0.5, sys: 10 }
 # ATLAS top
-      - { dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD] }
-#       - { dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0, cfac: [QCD] }     
-      - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: [QCD]} 
-      - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM, frac: 1.0, cfac: [QCD]}  
+      - {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD] }    
+      - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: [QCD]}  # N
+      - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM, frac: 1.0, cfac: [QCD]}    # N
 #DIJETS
       - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.5, cfac: [QCD]} # N
 #DIRECT PHOTON
       - {dataset: ATLASPHT12, frac: 0.5, cfac: [NRM,QCD,EWK]} # N
       - {dataset: ATLASPHT15, frac: 0.5, cfac: [QCD,EWK]} # N
 #SINGLE TOP
-      - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: [QCD]}
-      - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}
-      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}
-      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}
-      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.5, cfac: [QCD]}
-      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.5, cfac: [QCD]}
+      - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: [QCD]}  # N
+      - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}  # N
+      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}  # N
+      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}  # N
+      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.5, cfac: [QCD]}  # N
+      - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.5, cfac: [QCD]}  # N
 # CMS
   - experiment: CMS
     datasets:
@@ -115,7 +107,7 @@ experiments:
       - { dataset: CMSWEASY840PB, frac: 1.0, cfac: [QCD] }
       - { dataset: CMSWMASY47FB,  frac: 1.0, cfac: [QCD] }
       - { dataset: CMSDY2D11,     frac: 0.5, cfac: [QCD] }
-      - { dataset: CMSWMU8TEV,     frac: 1.0, cfac: [QCD] }
+      - { dataset: CMSWMU8TEV,    frac: 1.0, cfac: [QCD] }
 # CMS Z pt
       - { dataset: CMSZDIFF12,   frac: 1.0, cfac: [QCD,NRM], sys: 10 }
 # CMS jets
@@ -125,27 +117,25 @@ experiments:
       - {dataset: CMS_2JET_7TEV, frac: 0.5, cfac: [QCD]} # N 
       - {dataset: CMS_2JET_3D_8TEV, frac: 0.5, cfac: [QCD]} # N
 # CMS ttbar      
-      - { dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD] } 
-      - { dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD] }
+      - {dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD] } 
+      - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD] }
       - {dataset: CMSTTBARTOT5TEV, frac: 1.0, cfac: [QCD]} # N
       - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 1.0, cfac: [QCD]} # N
       - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 1.0, cfac: [QCD]} # N
       - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 1.0, cfac: [QCD]} # N
 #SINGLE TOP
       - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 1.0, cfac: [QCD]} # N
-      - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0, cfac: [QCD]} # N
-      - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]} # N
+      - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0, cfac: [QCD]}   # N
+      - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}  # N
 # LHCb 
   - experiment: LHCb
     datasets:
-      - { dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD] }
-      - { dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD] }
-      - { dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM,QCD] }
-      - { dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM,QCD] }
+      - {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD] }
+      - {dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD] }
+      - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM,QCD] }
+      - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM,QCD] }
       - {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0, cfac: [QCD]} # N
       - {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 1.0, cfac: [QCD]} # N
-
-
 
 ############################################################
 datacuts:
