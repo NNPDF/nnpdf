@@ -156,6 +156,94 @@ datacuts:
 theory:
   theoryid: 53        # database id
 
+hyperscan:
+    architecture:
+        initializers: ['glorot_normal', 'glorot_uniform']
+        n_layers: [3,4,5]
+        min_units: 20
+        max_units: 50
+        activations: ['sigmoid', 'tanh']
+    kfold: 
+        threshold: 5.0
+        partitions:
+          - datasets:
+            # DIS
+              - HERACOMBCCEM
+              - HERACOMBNCEP460
+              - HERACOMB_SIGMARED_B
+              - NMC
+              - NTVNBDMNFe
+            # EWK
+              - LHCBZEE2FB
+              - CMSWEASY840PB
+              - D0WEASY
+              - ATLASZPT8TEVMDIST
+              - DYE886P
+            # JETS+TOP
+              - ATLASPHT15
+              - ATLAS_2JET_7TEV_R06
+              - ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM
+              - CMSTTBARTOT
+              - CMS_SINGLETOP_TCH_TOT_7TEV
+          - datasets:
+            # DIS
+              - HERACOMBCCEP
+              - HERACOMBNCEP575
+              - NMCPD
+              - NTVNUDMNFe
+            # EWK
+              - LHCBWZMU7TEV
+              - LHCB_Z_13TEV_DIELECTRON
+              - ATLASWZRAP11CC
+              - ATLAS_WP_JET_8TEV_PT
+              - ATLASZHIGHMASS49FB
+              - CMSWMASY47FB
+              - D0WMASY
+              - DYE886R
+              - CDFZRAP
+            # JET+TOP
+              - ATLASTTBARTOT
+              - ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM
+              - CMSTTBARTOT5TEV
+              - CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM
+          - datasets:
+            # DIS
+              - CHORUSNBPb
+              - HERACOMBNCEP820
+              - BCDMSD
+            # EWK
+              - LHCBWZMU8TEV
+              - LHCB_Z_13TEV_DIMUON
+              - ATLASWZRAP11CF
+              - ATLAS_WM_JET_8TEV_PT
+              - ATLASLOMASSDY11EXT
+              - ATLASZPT8TEVYDIST
+              - CMSWMU8TEV
+              - D0ZRAP
+            # JET+TOP
+              - CMS_2JET_7TEV
+              - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM
+              - ATLAS_SINGLETOP_TCH_R_13TEV
+              - CMS_SINGLETOP_TCH_R_13TEV
+          - datasets:
+            # DIS
+              - CHORUSNUPb
+              - HERACOMBNCEP920
+              - BCDMSP
+            # EWK
+              - LHCBZ940PB
+              - ATLASWZRAP36PB
+              - CMSZDIFF12
+              - DYE605
+              - CMSDY2D11
+            # JET+TOP
+              - ATLASPHT12
+              - CMS_2JET_3D_8TEV
+              - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM
+              - ATLAS_SINGLETOP_TCH_R_7TEV
+              - CMSTOPDIFF8TEVTTRAPNORM
+              - CMS_SINGLETOP_TCH_R_8TEV
+
 ############################################################
 fitting:
 
@@ -169,7 +257,7 @@ fitting:
   loadfile: 'weights.hd5'
 
   seed     : 9453862133528      # set the seed for the random generator
-  genrep   : True      # on = generate MC replicas, off = use real data
+  genrep   : False      # on = generate MC replicas, off = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants : 80     # Number of mutants for replica
