@@ -347,7 +347,7 @@ def generate_dense_per_flavour_network(
 
 
 def pdfNN_layer_generator(
-    inp=2,
+    inp=1,
     nodes=None,
     activations=None,
     initializer_name="glorot_normal",
@@ -360,6 +360,7 @@ def pdfNN_layer_generator(
     regularizer=None,
     regularizer_args=None,
     impose_sumrule=False,
+    mapping=None
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -493,12 +494,21 @@ def pdfNN_layer_generator(
         """Takes an input tensor `x` and applies all layers
         from the `list_of_pdf_layers` in order"""
         if inp == 1:
+            x = 2*x-1
+            x0 = tf.keras.backend.ones_like(x)
             curr_fun = list_of_pdf_layers[0](x)
+            curr_fun0 = list_of_pdf_layers[0](x0)
         else:
             curr_fun = list_of_pdf_layers[0](add_log(x))
 
-        for dense_layer in list_of_pdf_layers[1:]:
-            curr_fun = dense_layer(curr_fun)
+        if inp == 1:
+            for dense_layer in list_of_pdf_layers[1:]:
+                curr_fun = dense_layer(curr_fun)
+                curr_fun0 = dense_layer(curr_fun0)
+                curr_fun = tf.keras.layers.subtract([curr_fun, curr_fun0])
+        else:
+            for dense_layer in list_of_pdf_layers[1:]:
+                curr_fun = dense_layer(curr_fun)
         return curr_fun
 
     # Preprocessing layer (will be multiplied to the last of the denses)
@@ -534,7 +544,7 @@ def pdfNN_layer_generator(
 
     # Impose sumrule if necessary
     if impose_sumrule:
-        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mode=impose_sumrule)
+        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mapping, mode=impose_sumrule)
         model_input = [integrator_input, placeholder_input]
     else:
         integrator_input = None
