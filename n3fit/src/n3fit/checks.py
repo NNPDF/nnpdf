@@ -104,14 +104,14 @@ def wrapper_check_NN(fitting):
     check_stopping(parameters)
     check_dropout(parameters)
     # Checks that need to import the backend (and thus take longer) should be done last
-    #     check_optimizer(parameters["optimizer"]) # this check is waiting for PR 783
+    check_optimizer(parameters["optimizer"])
     check_initializer(parameters["initializer"])
 
 
 def check_hyperopt_architecture(architecture):
     """ Checks whether the scanning setup for the NN architecture works
     - Initializers are valid
-    - Droput setup is valid
+    - Dropout setup is valid
     - No 'min' is greater than its corresponding 'max'
     """
     if architecture is None:
@@ -155,7 +155,7 @@ def check_hyperopt_positivity(positivity_dict):
             raise CheckError(
                 "Need to set both the max_initial and the min_initial positivity values"
             )
-        if min_ini is not None and max_ini <= min_mul:
+        if max_ini <= min_ini:
             raise CheckError("The minimum initial value cannot be greater than the maximum")
 
 
