@@ -1,0 +1,20 @@
+Path: /HepData/8846/d17-x1-y1
+Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(top) of the top quark or antiquark
+Location: Additional table (breakdown of systematics)
+RE : P P -> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : Source
+y : Uncertainty in each bin (in [%])
+xdesc	x	xlow	xhigh	y	y	y	y	y	y	y	y	
+LEP				0.1	0.1	0.0	0.1	0.2	0.2	0.3	0.3
+JES				2.4	0.2	0.9	1.5	1.2	1.1	2.7	4.2
+JER				0.1	0.2	0.1	0.2	0.5	0.8	0.3	0.7
+BG				0.5	0.5	0.4	0.3	0.5	0.4	0.5	0.9
+Btag				0.9	0.2	0.3	0.6	1.0	1.2	1.5	1.7
+PU				0.1	0.1	0.0	0.1	0.2	0.3	0.4	0.7
+TopScale				1.5	1.2	1.4	1.8	2.2	4.2	5.1	6.9
+TopMatch				0.7	0.8	1.6	1.4	0.8	1.4	1.6	2.7
+Hadronization				1.8	0.0	1.5	1.8	0.3	2.6	4.1	3.1
+TopMass				0.4	0.4	1.1	0.8	1.3	1.2	1.5	1.2
+PDF				0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.3
+

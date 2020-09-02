@@ -1,0 +1,22 @@
+#: table_doi: 10.17182/hepdata.89307.v1/t81
+#: name: Table 81
+#: description: Measured absolute differential cross section at parton level as a function of $y_{t\bar{t}}$.
+#: data_file: d041-x01-y01.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword observables: SIG
+#: keyword phrases: Top | Differential Cross Section | Proton-Proton Scattering | Top Production
+#: keyword cmenergies: 13000.0
+#: RE,,,P P --> TOP TOPBAR X
+#: SQRT(S) [GEV],,,13000.0
+$y_{t\bar{t}}$ ,$y_{t\bar{t}}$  LOW,$y_{t\bar{t}}$  HIGH,\frac{d\sigma}{dX} [PB],stat +,stat -,sys +,sys -
+-2.1,-2.6,-1.6,44.4339,1.09182,-1.09182,6.4671,-6.4671
+-1.4,-1.6,-1.2,142.403,1.58453,-1.58453,10.3266,-10.3266
+-1.0,-1.2,-0.8,210.846,2.16315,-2.16315,15.6529,-15.6529
+-0.6000000000000001,-0.8,-0.4,260.154,2.39218,-2.39218,18.8878,-18.8878
+-0.2,-0.4,0,304.028,2.55314,-2.55314,19.0973,-19.0973
+0.2,0,0.4,291.014,2.51559,-2.51559,20.9167,-20.9167
+0.6000000000000001,0.4,0.8,264.15,2.31679,-2.31679,18.9172,-18.9172
+1.0,0.8,1.2,214.894,2.00888,-2.00888,14.7915,-14.7915
+1.4,1.2,1.6,139.604,1.56041,-1.56041,11.1686,-11.1686
+2.1,1.6,2.6,48.4785,1.0813,-1.0813,5.14243,-5.14243
+

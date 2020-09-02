@@ -1,0 +1,14 @@
+ # ATLAS W and Z total cross section measurements. The data is manually
+ # copied from http://arxiv.org/pdf/1603.09222v2.pdf (Note that there
+ # is a v1 and the values are different). Values in
+ # data.txt are taken from Table 3, first header row "Measured cross
+ # section x BR (W->lv, Z->ll) [nb], "Fiducial".
+ # The units for the cross section are nanobarn, and are converted to
+ # fb for storage in the CommonData format.
+ # The central scales (k2) are the dilepton mass for the Z, which we
+ # choose to set to the Z mass, and Mw for W (in GeV).
+ # The center of mass energy (k3) is 13 TeV.
+	value	stat	syst	lumi	k1	k2	k3
+Wm	3.50	0.01	0.07	0.07	0	80.385	13
+Wp	4.53	0.01	0.09	0.10	0	80.385	13
+Z	0.779	0.003	0.006	0.016	0	91.1876	13

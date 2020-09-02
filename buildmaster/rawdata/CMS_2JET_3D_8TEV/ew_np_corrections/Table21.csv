@@ -1,0 +1,27 @@
+#: table_doi: 10.17182/hepdata.79410.v1/t21
+#: name: Table 21
+#: description: Nonperturbative correction factor to triple-differential dijet cross section with uncertainty
+#: data_file: table_21.yaml
+#: keyword observables: Nonperturbative correction factor
+#: keyword phrases: Triple Differential Inclusive Dijet Production
+#: keyword cmenergies: 8000
+#: keyword reactions: P P --> JET JET X
+#: YSTAR,,,2.0 <= YSTAR < 3.0
+#: SQRT(S) [TeV],,,8
+#: YBOOST,,,0.0 <= YBOOST < 1.0
+PTAVG [GeV],PTAVG [GeV] LOW,PTAVG [GeV] HIGH,NPCORR,nperr +,nperr -
+143.0,133.0,153.0,1.0836,1.943%,-1.943%
+163.5,153.0,174.0,1.074,1.639%,-1.639%
+185.0,174.0,196.0,1.0664,1.384%,-1.384%
+208.0,196.0,220.0,1.061,1.165%,-1.165%
+232.5,220.0,245.0,1.0557,0.978%,-0.978%
+258.5,245.0,272.0,1.0525,0.8178%,-0.8178%
+286.0,272.0,300.0,1.0494,0.6805%,-0.6805%
+315.0,300.0,330.0,1.0476,0.5624%,-0.5624%
+346.0,330.0,362.0,1.0428,0.6378%,-0.6378%
+378.5,362.0,395.0,1.0392,0.7376%,-0.7376%
+412.5,395.0,430.0,1.0367,0.8363%,-0.8363%
+449.0,430.0,468.0,1.0336,0.9359%,-0.9359%
+487.5,468.0,507.0,1.031,1.033%,-1.033%
+527.5,507.0,548.0,1.0281,1.128%,-1.128%
+
