@@ -184,6 +184,8 @@ def make_replica(commondata, seed=1):
         (~sys_names.isin(["THEORYCORR", "THEORYUNCORR", "SKIP"]))
         & (sys_types == "MULT"),
     ]
+    # The multiplicative uncertainties are quoted as percentages, so
+    # we change them to fractional values
     mult_uncorr_sys = mult_uncorr_sys.applymap(lambda x: x.mult / 100)
 
     # We want to know the names of the remaining systematics.
