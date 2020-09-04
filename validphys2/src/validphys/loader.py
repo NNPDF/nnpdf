@@ -532,14 +532,17 @@ def _download_and_show(response, stream):
         stream.write(response.content)
     else:
         dl = 0
+        prev_done = -1
         total_length = int(total_length)
         for data in response.iter_content(chunk_size=4096):
             dl += len(data)
             stream.write(data)
             if sys.stdout.isatty():
                 done = int(50 * dl / total_length)
-                sys.stdout.write(f"\r[{'=' * done}{' '*(50 - done)}] ({done * 2}%)")
-            sys.stdout.flush()
+                if prev_done != done:
+                    sys.stdout.write(f"\r[{'=' * done}{' '*(50 - done)}] ({done * 2}%)")
+                    prev_done = done
+                    sys.stdout.flush()
         sys.stdout.write('\n')
 
 def download_file(url, stream_or_path, make_parents=False):
