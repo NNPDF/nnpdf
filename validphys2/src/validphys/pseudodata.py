@@ -164,8 +164,8 @@ def make_replica(commondata, seed=1):
     else:
         ld_cd = commondata
 
-    covmat_for_sampling = covmat_from_systematics(ld_cd, use_mult_errors=False)
-    sampling_matrix = sqrt_covmat(covmat_for_sampling)
+    additive_covmat = covmat_from_systematics(ld_cd, use_mult_errors=False)
+    sampling_matrix = sqrt_covmat(additive_covmat)
 
     central_values = ld_cd.central_values
     nsys, ndata = ld_cd.nsys, ld_cd.ndata
