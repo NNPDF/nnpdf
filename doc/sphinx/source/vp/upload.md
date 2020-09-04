@@ -138,7 +138,7 @@ arbitrary files, use the [`wiki-upload` command](#the-wiki-upload-script).
 The script automatically detects (:py:func:`validphys.uploadutils.check_input`) the type of the input.
 A `fit` is defined to be any folder structure that contains a `filter.yml` file at its root, a `PDF` is any
 folder containing a `.info` file at the root, and a report is any such structure containing an
-`index.html` file at the root. The input folder is then place in the correct location in the
+`index.html` file at the root. The input folder is then placed in the correct location in the
 server accordingly.
 ```
 
@@ -186,5 +186,4 @@ serverscripts/WEB/validphys-reports/index.html
 inside the `validphys2` directory in the main repository. This page can be
 edited to reflect the current interests (the Makefile directly uploads to the
 server). See the documentation on  [web scripts](web-scripts) for more details.
-
 

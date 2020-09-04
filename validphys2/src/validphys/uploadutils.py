@@ -189,7 +189,7 @@ class FitUploader(FileUploader):
         if fit_name in fits:
             log.error("A fit with the same name already exists on "
                       "the server. To overwrite this fit use the "
-                      "--force flag, as in `vp-uploadfit <fitname> "
+                      "--force flag, as in `vp-upload <fitname> "
                       "--force`.")
             raise UploadError
 
@@ -243,13 +243,13 @@ class FitUploader(FileUploader):
             sys.exit()
 
 class PDFUploader(FitUploader):
-    """An uploader for pdfs. PDFs will be automatically compressed
+    """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
     target_dir = _profile_key('pdfs_target_dir')
     root_url = _profile_key('pdfs_root_url')
 
     def check_pdf_exists(self, pdf_name):
-        """Check whether the fit already exists on the server."""
+        """Check whether the pdf already exists on the server."""
         # Get list of the available fits on the server
         l = RemoteLoader()
         pdfs = l.downloadable_pdfs
@@ -257,7 +257,7 @@ class PDFUploader(FitUploader):
         if pdf_name in pdfs:
             log.error("A PDF with the same name already exists on "
                       "the server. To overwrite this PDF use the "
-                      "--force flag, as in `vp-uploadfit <fitname> "
+                      "--force flag, as in `vp-upload <pdfname> "
                       "--force`.")
             raise UploadError
 
@@ -377,7 +377,7 @@ def check_input(path):
         Path of the input file
     """
     files = os.listdir(path)
-    # Require that a .info file and replica 0  exist before admitting
+    # Require that a .info file and replica 0 exist before admitting
     # the input is a valid LHAPDF set
     info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
 
