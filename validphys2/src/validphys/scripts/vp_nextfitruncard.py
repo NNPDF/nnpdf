@@ -44,7 +44,7 @@ def process_args():
         "output_dir",
         nargs="?",
         default=os.getcwd(),
-        help="Directory to which the new runcard will be written. The default is the current working directory.",
+        help="Directory to which the new runcard will be written. This must be a valid path. The default is the current working directory.",
     )
     parser.add_argument(
         "-f",
@@ -77,7 +77,14 @@ def main():
     args = process_args()
 
     input_fit = args.input_fit
+
     output_dir = args.output_dir
+    # Convert given output directory to path and check it exists
+    output_path = pathlib.Path(output_dir)
+    if not output_path.is_dir():
+        log.error("The specified output directory is not a valid path.")
+        sys.exit(1)
+
     force = args.force
     if force:
         log.warning(
@@ -165,7 +172,6 @@ def main():
         ]
 
     # Start process of writing new runcard to file
-    output_path = pathlib.Path(output_dir)
     output_fit = input_fit + "_iterated.yaml"
     runcard_path_out = output_path / output_fit
 
