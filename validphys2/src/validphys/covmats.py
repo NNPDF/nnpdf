@@ -192,7 +192,7 @@ def covmat_from_systematics(commondata, central_values=None):
     use_mult_errors: bool
         Boolean which controls whether we use multiplicative errors
         when computing the covmat. By default it should be set to ``True``
-        unless one wishes to uses a sampling matrix for pseudodata generation,
+        unless one wishes to sample pseudodata from a multigaussian distribution,
         in which case it should be set to ``False``.
 
     Returns
