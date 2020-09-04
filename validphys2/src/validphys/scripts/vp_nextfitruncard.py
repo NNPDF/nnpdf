@@ -92,6 +92,16 @@ def main():
             "written to, it will be overwritten."
         )
 
+    output_fit = input_fit + "_iterated.yaml"
+    runcard_path_out = output_path / output_fit
+    # Check whether runcard with same name already exists in the path
+    if runcard_path_out.exists() and not force:
+        log.error(
+            f"Destination path {runcard_path_out.absolute()} already exists. If you wish to "
+            "overwrite it, use the --force option."
+        )
+        sys.exit(1)
+
     results_path = pathlib.Path(nnpath.get_results_path())
     fit_path = results_path / input_fit
 
@@ -171,17 +181,7 @@ def main():
             rounder(beta) for beta in betas
         ]
 
-    # Start process of writing new runcard to file
-    output_fit = input_fit + "_iterated.yaml"
-    runcard_path_out = output_path / output_fit
-
-    if runcard_path_out.exists() and not force:
-        log.error(
-            f"Destination path {runcard_path_out.absolute()} already exists. If you wish to "
-            "overwrite it, use the --force option."
-        )
-        sys.exit(1)
-
+    # Write new runcard to file
     with open(runcard_path_out, "w") as outfile:
         yaml.dump(runcard_data, outfile, Dumper=yaml.RoundTripDumper)
         log.info(f"Runcard for iterated fit written to {runcard_path_out.absolute()}.")
