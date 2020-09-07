@@ -457,7 +457,7 @@ wget https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz
 make && make install 
 ```
 If the above is successful, one can install the FastNLO packages, specifically
-- [fastnlo-toolkit](https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1pre-2411.tar.gz) (2585)
+- [fastnlo-toolkit](https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1pre-2411.tar.gz) (2.3.1, pre2411)
 - [fastnlo_interface](https://fastnlo.hepforge.org/code/v23/fastnlo_interface_nlojet-2.3.1pre-2411.tar.gz) (2.3.1, pre2411)
 
 The first package is a kit that allows one to manipulate look-up tables in the
