@@ -457,7 +457,7 @@ wget https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz
 make && make install 
 ```
 If the above is successful, one can install the FastNLO packages, specifically
-- [fastnlo-toolkit](https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz) (2585)
+- [fastnlo-toolkit](https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1pre-2411.tar.gz) (2585)
 - [fastnlo_interface](https://fastnlo.hepforge.org/code/v23/fastnlo_interface_nlojet-2.3.1pre-2411.tar.gz) (2.3.1, pre2411)
 
 The first package is a kit that allows one to manipulate look-up tables in the
@@ -466,14 +466,14 @@ a fastNLO table.
 
 To install fastnlo-toolkit, do the following
 ``` 
-wget https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz 
-tar -zxvf fastnlo_toolkit-2.3.1-2585.tar.gz 
+wget https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1pre-2411.tar.gz 
+tar -zxvf fastnlo_toolkit-2.3.1pre-2411.tar.gz 
 ./configure --prefix=$CONDA_PREFIX 
 make -j  && make install 
 ```
 To install the fastnlo interface do the following
 ```
- ./configure --prefix=$CONDA_PREFIX --with-hoppet  
+ ./configure --prefix=$CONDA_PREFIX 
  make -j && make install  
 ```
 The code should now be set up to compute FastNLO tables. In order to do so, 
