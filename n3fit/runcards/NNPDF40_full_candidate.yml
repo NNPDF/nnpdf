@@ -74,7 +74,7 @@ experiments:
       - { dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASWZRAP11CC, frac: 0.5, cfac: [QCD] } # N
       - { dataset: ATLASWZRAP11CF, frac: 0.5, cfac: [QCD] } # N
-      - { dataset: ATLAS_DY2D_8TEV, frac: 0.5, cfac: [QCD] } # N
+      - { dataset: ATLASDY2D8TEV, frac: 0.5, cfac: [QCDEWK] } # N
       - { dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM,QCD] } # N
       - { dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.5, cfac: [QCD] } # N
       - { dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.5, cfac: [QCD] } # N
@@ -89,7 +89,7 @@ experiments:
       - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0, cfac: [QCD]} # N
       - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0, cfac: [QCD]} # N
 #SINGLE JETS
-      - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.5, cfac: [QCD]} # N
+#      - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.5, cfac: [QCD]} # N
 #DIJETS
       - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.5, cfac: [QCD]} # N
 #DIRECT PHOTON
