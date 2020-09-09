@@ -57,7 +57,7 @@ integrated with your editor of choice.
 
 Usually the most efficient way to debug a piece of Python code, such as a
 `validphys` action is to insert `print` statements to check the state at various
-places in the code. A  few alternatives exists when that is not enough:
+places in the code. A few alternatives exists when that is not enough:
 
   - [IPython embed](https://ipython.readthedocs.io/en/stable/api/generated/IPython.terminal.embed.html):
     The [IPython](https://ipython.org/) shell can be easily dropped at any
@@ -70,8 +70,8 @@ places in the code. A  few alternatives exists when that is not enough:
     query (and manipulate) the state of the code using a rich shell.
 
   - PDB: The standard [Python debugger](https://docs.python.org/3/library/pdb.html)
-    can be used as an alternative. Compared to IPython it has the advantage that
-    it allows to atomically step in the execution of the code, but the disadvantage
+    can be used as an alternative. Compared to `IPython` it has the advantage that
+    it allows to automatically step in the execution of the code, but the disadvantage
     that the interface is somewhat more complex and often surprising (hint: always
     [prefix interpreter commands with `!`](https://docs.python.org/3/library/pdb.html#pdbcommand-!)).
 
@@ -88,14 +88,13 @@ surprising. It is a good idea to measure where the problems actually are.
 ## Documentation
 
   - We use the [Sphinx tool](https://www.sphinx-doc.org/) to document code
-    projects. It an render and organize special purpose documentation files as
+    projects. It can render and organize special purpose documentation files as
     well as read Python source files to automatically document interfaces.  It
     supports extensive customization and plugins. In particular because the
-    default formatting for docstrings is somewhat unwieldy, it is recommendable
+    default formatting for docstrings is somewhat unwieldy, it is recommended
     to enable the `napoleaon` extension which allows for a more lenient
     [`numydoc`](https://numpydoc.readthedocs.io/en/latest/format.html) style.
     Similarly the default RST markup language can be overwhelming for simple
     documents. We enable the
     [recommonmark](https://recommonmark.readthedocs.io/en/latest/) extension to
     be able to compose files also in markdown format.
-
