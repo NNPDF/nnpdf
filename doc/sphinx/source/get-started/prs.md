@@ -47,17 +47,15 @@ requests:
   - Ideally changes should come with automatic tests supporting their
 	correctness.
 
-  - Use automated tools which could catch a few extra
+  - Use [automated tools](pytoolsqa) which could catch a few extra
 	problems. In particular
 	  * Do look at the automated tests that run with the PR.
 	    New code should not break them.
-	  * The [`pylint`](https://www.pylint.org/) tool allows for the catching of
-		common problems in Python code. The top level
-		[`.pylintrc` file](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc)
-		comes with a useful and not overly noisy configuration.
-	  * New Python code should come formatted with the
-	    [`black` tool](https://github.com/psf/black), which results in a
-		standardized and reasonably good looking code.
+      * Use [`pylint`](https://www.pylint.org/) with [our default
+        configuration](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc) to
+        catch common problems with Python code.
+	  * New Python code should come formatted with
+	    [`black` tool](https://github.com/psf/black).
 	  * Changes in compiled code should be tested in debug mode, with
 		the address sanitizer enabled. This is done with the
 		`-DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON` options in `cmake`.
@@ -75,4 +73,3 @@ requests:
     Did it break compatibility with something that we rely on? Should an email
     be sent around announcing the change? Does the change solve or unblock some
     outstanding issues?
-
