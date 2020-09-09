@@ -728,8 +728,6 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
   else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
-  else if (setbasis == BASIS_PDF4LHC20)
-    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = pdf4lhc20f[t]; }
   else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
   else if (setbasis == BASIS_NN30 || setbasis == BASIS_NN30QED)
