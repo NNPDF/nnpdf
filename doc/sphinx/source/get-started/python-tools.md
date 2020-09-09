@@ -4,14 +4,14 @@
 
 # Tools for developing with the Python programming language
 
-This page summarizes auxiliary Python tools that we use commonly to develop the
+This page summarizes auxiliary Python tools that we commonly use to develop the
 project. Note that this page is meant to be a quick index. Consult the
 documentation on each specific tool for details.
 
 
 ## Python editors
 
-  - The [Sypder editor](https://www.spyder-ide.org/) is good for getting started
+  - The [Spyder editor](https://www.spyder-ide.org/) is good for getting started
     with scientific Python coding, because of various inspection and interactive
     features.
   - [`vscode`](https://code.visualstudio.com/) is a more full featured editor.

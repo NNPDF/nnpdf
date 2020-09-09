@@ -52,7 +52,7 @@ requests:
 	  * Do look at the automated tests that run with the PR.
 	    New code should not break them.
       * Use [`pylint`](https://www.pylint.org/) with [our default
-        configuration](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc)to
+        configuration](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc) to
         catch common problems with Python code.
 	  * New Python code should come formatted with
 	    [`black` tool](https://github.com/psf/black).
@@ -73,4 +73,3 @@ requests:
     Did it break compatibility with something that we rely on? Should an email
     be sent around announcing the change? Does the change solve or unblock some
     outstanding issues?
-
