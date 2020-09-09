@@ -37,6 +37,20 @@ Python code can be evaluated interactively, which can speed up the development.
 
 ## Testing
 
+  - [`pytest`](https://docs.pytest.org/en/latest/): It is a framework for
+    writing and running tests. It finds tests in the codebase (basically
+    modules and functions that start with `test`), enhances the `assert`
+    statement to provide rich error reporting and allows to structure
+    dependencies between the tests (in a way similar to `reportengine`).
+    Tests are stored in the codebase and executed by pytest either manually or
+    as a part of the continuous integration process.
+  - [`coverage.py`](https://coverage.readthedocs.io/en/coverage-5.2.1/) is a
+    program that traces which lines of code have been executed when a given
+    Python program (notably pytest) is running. The main use case is to verify
+    that tests probe our code paths.
+
+
+
 ```eval_rst
 .. _pytoolsqa:
 ```
@@ -80,10 +94,11 @@ places in the code. A few alternatives exists when that is not enough:
 Sometimes a piece of code runs slower than expected. The reasons can often be
 surprising. It is a good idea to measure where the problems actually are.
 
-  - [`py-spy`](https://github.com/benfred/py-spy): Is a modern tool that
-    provides good information and little overhead. Prefer it to the standard
-    `cProfile`. The output is typically presented in the form of "Flamegraphs"
-    that show the relative time spent on each piece of code.
+  - [`py-spy`](https://github.com/benfred/py-spy): A performance measuring
+    program (*profiler*) that provides good information and little overhead.
+    Prefer it to the standard `cProfile`. The output is typically presented in
+    the form of "Flamegraphs" that show the relative time spent on each piece of
+    code.
 
 ## Documentation
 
