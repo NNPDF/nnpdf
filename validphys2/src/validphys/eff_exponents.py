@@ -9,6 +9,7 @@ import warnings
 import numbers
 import numpy as np
 import pandas as pd
+import random
 
 from reportengine import collect
 from reportengine.figure import figuregen
@@ -433,4 +434,20 @@ def next_effective_exponents_yaml(fit: FitSpec, next_fit_eff_exps_table):
         previous_exponents[runcard_flavours.index(fl)]['largex'] = [fmt(beta) for beta in betas]
     #iterate t0
     filtermap['datacuts']['t0pdfset'] = fit.name
+
+    # Update seeds with pseudorandom numbers between 0 and 1e10
+    # Check if seeds exist especially since extra seeds needed in n3fit vs nnfit
+    # Start with seeds in "fitting" section of runcard
+    fitting_data = filtermap["fitting"]
+    fitting_seeds = ["seed", "trvlseed", "nnseed", "mcseed"]
+
+    for seed in fitting_seeds:
+        if seed in fitting_data:
+            fitting_data[seed] = random.randrange(0, 1e10)
+
+    # Next "closuretest" section of runcard
+    closuretest_data = filtermap["closuretest"]
+    if "filterseed" in closuretest_data:
+        closuretest_data["filterseed"] = random.randrange(0, 1e10)
+
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
