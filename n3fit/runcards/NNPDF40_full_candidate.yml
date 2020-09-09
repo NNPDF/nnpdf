@@ -89,7 +89,7 @@ experiments:
       - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0, cfac: [QCD]} # N
       - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0, cfac: [QCD]} # N
 #SINGLE JETS
-#      - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.5, cfac: [QCD]} # N
+      - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.5, cfac: [QCD]} # N
 #DIJETS
       - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.5, cfac: [QCD]} # N
 #DIRECT PHOTON
