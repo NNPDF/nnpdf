@@ -69,6 +69,7 @@ hyperscan:
         max_units: 50
         activations: ['sigmoid', 'tanh']
     kfold:
+        target: average
         penalties:
           - saturation
         threshold: 2.0

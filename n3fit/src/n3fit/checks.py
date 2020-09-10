@@ -5,6 +5,7 @@ import logging
 from reportengine.checks import make_argcheck, CheckError
 from validphys.pdfbases import check_basis
 from n3fit.hyper_optimization import penalties as penalties_module
+from n3fit.hyper_optimization import rewards as rewards_module
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ def check_consistent_layers(parameters):
 
 
 def check_stopping(parameters):
-    """ Checks whether the stopping-related options are sane:
+    """Checks whether the stopping-related options are sane:
     stopping patience as a ratio between 0 and 1
     and positive number of epochs
     """
@@ -115,7 +116,7 @@ def wrapper_check_NN(fitting):
 
 
 def check_hyperopt_architecture(architecture):
-    """ Checks whether the scanning setup for the NN architecture works
+    """Checks whether the scanning setup for the NN architecture works
     - Initializers are valid
     - Dropout setup is valid
     - No 'min' is greater than its corresponding 'max'
@@ -143,8 +144,7 @@ def check_hyperopt_architecture(architecture):
 
 
 def check_hyperopt_positivity(positivity_dict):
-    """ Checks that the positivity multiplier and initial values are sensible and valid
-    """
+    """Checks that the positivity multiplier and initial values are sensible and valid"""
     if positivity_dict is None:
         return
     min_mul = positivity_dict.get("min_multiplier")
@@ -176,11 +176,18 @@ def check_kfold_options(kfold):
             raise CheckError(
                 f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
             )
+    loss_target = kfold.get("target")
+    if loss_target is not None:
+        if not hasattr(rewards_module, loss_target):
+            raise CheckError(
+                f"The hyperoptimization target '{loss_target}' loss is not recognized, "
+                "ensure it is implemented in hyper_optimization/rewards.py"
+            )
 
 
 def check_correct_partitions(kfold, experiments):
-    """ Ensures that all experimennts in all partitions
-    are included in  the fit definition """
+    """Ensures that all experimennts in all partitions
+    are included in  the fit definition"""
     # Get all datasets
     datasets = []
     for exp in experiments:
@@ -225,7 +232,7 @@ def check_hyperopt_stopping(stopping_dict):
 
 @make_argcheck
 def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
-    """ Wrapper function for all hyperopt-related checks
+    """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
@@ -246,7 +253,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
 # Checks on the physics
 @make_argcheck
 def check_consistent_basis(fitting):
-    """ Checks the fitbasis setup for inconsistencies
+    """Checks the fitbasis setup for inconsistencies
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
     """
