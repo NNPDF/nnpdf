@@ -139,7 +139,7 @@ def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, step
         # If the initial value is also None, set it to one
         if initial is None:
             initial = 1.0
-        multiplier = pow(max_lambda / initial, 1 / steps)
+        multiplier = pow(max_lambda / initial, 1 / max(steps, 1))
     elif initial is None:
         # Select the necessary initial value to get to max_lambda after all steps
         initial = max_lambda / pow(multiplier, steps)
@@ -881,6 +881,9 @@ class ModelTrainer:
                 log.info("fold: %d", k + 1)
                 log.info("Hyper loss: %f", hyper_loss)
                 if hyper_loss > self.hyper_threshold:
+                    # Apply a penalty proportional to the number of folds that have not been computed
+                    pen_mul = len(self.kpartitions) - k
+                    l_hyper = [i*pen_mul for i in l_hyper]
                     log.info("Loss over threshold, breaking")
                     break
 
