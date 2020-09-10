@@ -476,7 +476,13 @@ class ModelTrainer:
     # wrapper around all of these                                              #
     ############################################################################
     def _generate_observables(
-        self, all_pos_multiplier, all_pos_initial, all_integ_multiplier, all_integ_initial, epochs
+        self,
+        all_pos_multiplier,
+        all_pos_initial,
+        all_integ_multiplier,
+        all_integ_initial,
+        epochs,
+        interpolation_points=20,
     ):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
@@ -576,24 +582,23 @@ class ModelTrainer:
         input_arr = np.concatenate(self.input_list, axis=1)
         input_arr = np.sort(input_arr)
 
-        onein = int(input_arr.size/20)
-        input_list = [i for j,i in enumerate(input_arr.flatten()) if j%onein==0]
-        input_list.insert(0,input_arr.min())
+        onein = int(input_arr.size / (interpolation_points - 2))
+        input_list = [i for j, i in enumerate(input_arr.flatten()) if j % onein == 0]
         input_list.append(input_arr.max())
-        input_arr = np.expand_dims(np.array(input_list),axis=0)
+        input_arr = np.expand_dims(np.array(input_list), axis=0)
 
         input_arr_size = input_arr.size
-        start_val = np.array(1/input_arr_size, dtype=input_arr.dtype)
-        new_xgrid = np.linspace(start=start_val, stop=1., endpoint=False, num=input_arr_size)
+        start_val = np.array(1 / input_arr_size, dtype=input_arr.dtype)
+        new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
 
         unique, counts = np.unique(input_arr, return_counts=True)
 
-        map_from = np.append(unique, 1.)
-        map_from = np.insert(map_from, 0 ,0)
+        map_from = np.append(unique, 1.0)
+        map_from = np.insert(map_from, 0, 0)
         map_to = [0]
         for cumsum_ in np.cumsum(counts):
-            map_to.append(new_xgrid[cumsum_-1])
-        map_to.append(1.)
+            map_to.append(new_xgrid[cumsum_ - 1])
+        map_to.append(1.0)
         map_to = np.array(map_to)
         self.mapping = [map_from, map_to]
 
@@ -656,7 +661,7 @@ class ModelTrainer:
             regularizer=regularizer,
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
-            mapping=self.mapping
+            mapping=self.mapping,
         )
         return pdf_model
 
@@ -807,6 +812,7 @@ class ModelTrainer:
         epochs = int(params["epochs"])
         stopping_patience = params["stopping_patience"]
         stopping_epochs = int(epochs * stopping_patience)
+        interpolation_points = int(params["interpolation_points"])
 
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
@@ -826,6 +832,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
+            interpolation_points,
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
