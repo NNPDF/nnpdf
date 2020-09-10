@@ -582,9 +582,11 @@ class ModelTrainer:
         input_arr = np.concatenate(self.input_list, axis=1)
         input_arr = np.sort(input_arr)
 
-        onein = int(input_arr.size / (interpolation_points - 2))
-        input_list = [i for j, i in enumerate(input_arr.flatten()) if j % onein == 0]
-        input_list.append(input_arr.max())
+        onein = input_arr.size / (interpolation_points - 1)
+        input_list = [input_arr.min()]
+        input_list += [
+            input_arr.flatten()[round(i * onein - 1)] for i in range(1, interpolation_points)
+        ]
         input_arr = np.expand_dims(np.array(input_list), axis=0)
 
         input_arr_size = input_arr.size
