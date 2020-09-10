@@ -13,7 +13,7 @@ from evolutionary_keras.models import EvolModel
 
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
-tf_version = tf.__version__.split('.')
+tf_version = tf.__version__.split(".")
 if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
     LEGACY = True
 else:
@@ -29,8 +29,14 @@ optimizers = {
     "Adamax": (Kopt.Adamax, {}),
     "Nadam": (Kopt.Nadam, {}),
     "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
-    "NGA": (Evolutionary_optimizers.NGA, {}),
-    "CMA": (Evolutionary_optimizers.CMA, {})
+    "NGA": (
+        Evolutionary_optimizers.NGA,
+        {"sigma_init": 15, "population_size": 80, "mutation_rate": 0.05},
+    ),
+    "CMA": (
+        Evolutionary_optimizers.CMA,
+        {"sigma_init": 0.3, "population_size": None, "max_evaluations": None},
+    ),
 }
 
 # Some keys need to work for everyone
@@ -196,7 +202,7 @@ class MetaModel(EvolModel):
         if LEGACY:
             # For tF < 2.2 we need to force the output to be a float
             ret = self.eval_fun()
-            ret['loss'] = ret['loss'].numpy()
+            ret["loss"] = ret["loss"].numpy()
             return ret
         else:
             return self.eval_fun()
@@ -215,10 +221,12 @@ class MetaModel(EvolModel):
     def compile(
         self,
         optimizer_name="RMSprop",
-        learning_rate=None,
+        sigma_init=None,
+        population_size=None,
+        mutation_rate=None,
+        max_evaluations=None,
         loss=None,
         target_output=None,
-        clipnorm=None,
         **kwargs,
     ):
         """
@@ -256,7 +264,12 @@ class MetaModel(EvolModel):
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
-        user_selected_args = {"learning_rate": learning_rate, "clipnorm": clipnorm}
+        user_selected_args = {
+            "sigma_init": sigma_init,
+            "population_size": population_size,
+            "mutation_rate": mutation_rate,
+            "max_evaluations": max_evaluations,
+        }
 
         # Override defaults with user provided values
         for key, value in user_selected_args.items():
