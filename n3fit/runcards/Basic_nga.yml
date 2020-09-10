@@ -58,9 +58,10 @@ fitting:
     activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
     initializer: 'glorot_normal'
     optimizer:
-      optimizer_name: 'RMSprop'
-      learning_rate: 0.01
-      clipnorm: 1.0
+      optimizer_name: 'NGA'
+      sigma_init: 15
+      population_size: 80
+      mutation_rate: 0.05
     epochs: 900
     positivity:
       multiplier: 1.05 # When any of the multiplier and/or the initial is not set
