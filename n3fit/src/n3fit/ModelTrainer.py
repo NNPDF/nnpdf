@@ -258,8 +258,10 @@ class ModelTrainer:
             "model": None,
             "posdatasets": [],
             "posmultipliers": [],
+            "posinitials": [],
             "integdatasets": [],
             "integmultipliers": [],
+            "integinitials": [],
             "folds": [],
         }
         self.validation = {
@@ -546,6 +548,7 @@ class ModelTrainer:
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
             self.training["posmultipliers"].append(pos_multiplier)
+            self.training["posinitials"].append(pos_initial)
 
         # Finally generate the integrability penalty
         if self.integ_info is not None:
@@ -571,6 +574,7 @@ class ModelTrainer:
                 self.training["output"].append(integ_layer["output_tr"])
                 self.training["losses"].append(integ_layer["loss_tr"])
                 self.training["integmultipliers"].append(integ_multiplier)
+                self.training["integinitials"].append(integ_initial)
 
     def _generate_pdf(
         self,
@@ -823,6 +827,7 @@ class ModelTrainer:
             # Each partition of the kfolding needs to have its own separate model
             seed = self.NNseed
             if k > 0:
+                # Update the seed
                 seed = np.random.randint(0, pow(2, 31))
 
             # Generate the pdf model
@@ -840,6 +845,12 @@ class ModelTrainer:
             # Model generation joins all the different observable layers
             # together with pdf model generated above
             models = self._model_generation(pdf_model, partition)
+
+            if k > 0:
+                # Reset the positivity and integrability multipliers
+                pos_and_int = self.training["posdatasets"] + self.training["integdatasets"]
+                initial_values = self.training["posinitials"] + self.training["posinitials"]
+                models["training"].reset_layer_weights_to(pos_and_int, initial_values)
 
             # Assign data to each model
             # model dicts is similar to model but includes information about
