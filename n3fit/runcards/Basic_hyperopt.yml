@@ -90,6 +90,7 @@ hyperscan:
         max_units: 50
         activations: ['sigmoid', 'tanh']
     kfold: 
+        target: average
         penalties:
           - saturation
           - patience
