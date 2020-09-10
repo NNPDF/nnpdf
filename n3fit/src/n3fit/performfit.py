@@ -141,7 +141,6 @@ def performfit(
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
     """
-
     if debug:
         # If debug is active, fix the initial state this should make the run reproducible
         # (important to avoid non-deterministic multithread or hidden states)
@@ -158,6 +157,8 @@ def performfit(
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
     from n3fit.backends import MetaModel, operations
+    if fitting.get("backend") == "evolutionary_keras":
+        MetaModel.enable_ga()
     import n3fit.io.reader as reader
 
     # Loading t0set from LHAPDF

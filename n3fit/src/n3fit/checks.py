@@ -100,6 +100,19 @@ def check_tensorboard(tensorboard):
         if weight_freq < 0:
             raise CheckError(f"The frequency at which weights are saved must be greater than 0, received {weight_freq}")
 
+def check_backend(backend):
+    """ Checks whether the selected backend is available """
+    if backend in [None, "tensorflow", "tf", "keras"]:
+        try:
+            import tensorflow
+        except ModuleNotFoundError:
+            raise CheckError(f"Tensorflow not available")
+    elif backend == "evolutionary_keras":
+        try:
+            import evolutionary_keras
+        except ModuleNotFoundError:
+            raise CheckError(f"evolutionary_keras not available")
+
 @make_argcheck
 def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
@@ -111,7 +124,8 @@ def wrapper_check_NN(fitting):
     check_stopping(parameters)
     check_dropout(parameters)
     # Checks that need to import the backend (and thus take longer) should be done last
-    check_optimizer(parameters["optimizer"])
+    check_backend(fitting.get("backend"))    
+	check_optimizer(parameters["optimizer"])
     check_initializer(parameters["initializer"])
 
 
