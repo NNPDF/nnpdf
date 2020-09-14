@@ -13,8 +13,21 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', help="Folder to upload.")
+    parser.add_argument(
+        '-i',
+        '--interactive',
+        help="Interactively create a meta file.",
+        action='store_true')
+    parser.add_argument(
+        '-f',
+        '--force',
+        help="If the fit to upload already exists on the server, overwrite it.",
+        action='store_true')
     args = parser.parse_args()
-    output = args.output
+    import pathlib
+    output = pathlib.Path(args.output)
+    interactive = args.interactive
+    force = args.force
 
     import os.path as osp
     import logging
@@ -29,9 +42,26 @@ def main():
 
 
     from validphys import uploadutils
-    uploader = uploadutils.ReportUploader()
+    if interactive:
+        uploadutils.interactive_meta(output)
+
+    input_type = uploadutils.check_input(output)
+    log.info(f"Detected {input_type} input")
+
+    uploader_dict = {
+            'report': uploadutils.ReportUploader,
+            'fit': uploadutils.FitUploader,
+            'pdf': uploadutils.PDFUploader
+    }
+    uploader = uploader_dict[input_type]()
+
+    if isinstance(uploader, uploadutils.ReportUploader):
+        upload_args = (output,)
+    else:
+        upload_args = (output, force)
+
     try:
-        with uploader.upload_or_exit_context(output):
+        with uploader.upload_or_exit_context(*upload_args):
             pass
     except KeyboardInterrupt:
         print(colors.t.bold_red("\nInterrupted by user. Exiting."), file=sys.stderr)

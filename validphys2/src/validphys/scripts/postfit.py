@@ -175,7 +175,7 @@ def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold:
     log.info("\n\n*****************************************************************\n")
     log.info("Postfit complete")
     log.info("Please upload your results with:")
-    log.info(f"\tvp-uploadfit {result_path}\n")
+    log.info(f"\tvp-upload {result_path}\n")
     log.info("and install with:")
     log.info(f"\tvp-get fit {fitname}\n")
     log.info("*****************************************************************\n\n")

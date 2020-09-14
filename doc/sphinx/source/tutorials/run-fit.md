@@ -170,7 +170,7 @@ Upload and analyse the fit
 --------------------------
 After obtaining the fit you can proceed with the fit upload and analisis by:
 
-1. Uploading the results using `vp-uploadfit runcard_folder` then install the
+1. Uploading the results using `vp-upload runcard_folder` then install the
 fitted set with `vp-get fit fit_name`.
 
 2. Analysing the results with `validphys`, see the [vp-guide](../vp/index).
