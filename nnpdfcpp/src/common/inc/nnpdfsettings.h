@@ -137,6 +137,7 @@ public:
   FlMutProperty  const& GetFlMutProp(int i) const { return fFlMutProperty[i]; }
   vector<int> const& GetArch() const { return fArch; }
   map<string,string> const& GetTheoryMap() const { return fTheory; }
+  bool SavePseudodata() const;
   bool IsQED() const;
   bool IsIC()  const;
   bool IsThUncertainties() const { return fThUncertainties; }
