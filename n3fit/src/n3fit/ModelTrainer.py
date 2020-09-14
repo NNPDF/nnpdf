@@ -21,8 +21,6 @@ log = logging.getLogger(__name__)
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
-# The stopping will not consider any run where the validation is not under this threshold
-THRESHOLD_CHI2 = 10.0
 # Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
@@ -708,7 +706,7 @@ class ModelTrainer:
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
 
-        if stopping_object.positivity:
+        if stopping_object.positivity_pass():
             return self.pass_status
         else:
             return self.failed_status
@@ -809,13 +807,6 @@ class ModelTrainer:
             epochs,
         )
 
-        # Generate the stopping_object
-        # this object holds statistical information about the fit
-        # it can be used to perform stopping
-        epochs = int(params["epochs"])
-        stopping_patience = params["stopping_patience"]
-        stopping_epochs = epochs * stopping_patience
-
         # Initialize the chi2 dictionaries
         l_train = []
         l_valid = []
@@ -894,8 +885,6 @@ class ModelTrainer:
             exp_loss_raw = models["experimental"].compute_losses()["loss"]
             experimental_loss = exp_loss_raw / model_dicts["experimental"]["ndata"]
 
-            # Save all losses
-
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
                 for penalty in self.hyper_penalties:
@@ -903,13 +892,14 @@ class ModelTrainer:
                 l_hyper.append(hyper_loss)
                 log.info("fold: %d", k + 1)
                 log.info("Hyper loss: %f", hyper_loss)
-                if hyper_loss > self.hyper_threshold:
+                if hyper_loss > self.hyper_threshold or passed != self.pass_status: 
                     # Apply a penalty proportional to the number of folds that have not been computed
                     pen_mul = len(self.kpartitions) - k
                     l_hyper = [i * pen_mul for i in l_hyper]
-                    log.info("Loss over threshold, breaking")
+                    log.info("Wrong hyperparameter combination, breaking")
                     break
 
+            # Save all losses
             l_train.append(training_loss)
             l_valid.append(validation_loss)
             l_exper.append(experimental_loss)

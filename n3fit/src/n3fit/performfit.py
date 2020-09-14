@@ -325,7 +325,7 @@ def performfit(
                 stopping_object.vl_loss,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
-                stopping_object.positivity_pass(),
+                stopping_object.positivity_status(),
             )
         )
 

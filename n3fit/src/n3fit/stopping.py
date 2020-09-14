@@ -487,6 +487,15 @@ class Stopping:
         """
         best_state = self.history.best_state()
         if best_state is not None and self.positivity(best_state):
+            return True
+        else:
+            return False
+
+    def positivity_status(self):
+        """ Checks whether the positivity loss is below the requested threshold
+        If there is no best state, the positivity (obv) cannot pass
+        """
+        if self.positivity_pass():
             return POS_OK
         else:
             return POS_BAD
