@@ -318,7 +318,7 @@ def check_for_meta(path):
 
 
 def interactive_meta(path):
-    """Function to interactively creating a meta.yaml file
+    """Function to interactively create a meta.yaml file
 
     Parameters
     ----------
