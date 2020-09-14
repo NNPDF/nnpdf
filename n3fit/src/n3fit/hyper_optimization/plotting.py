@@ -255,10 +255,6 @@ def parse_statistics(trial):
     dict_out[KEYWORDS["tl"]] = testing_loss
 
     # Kfolding information
-    average = results["kfold_meta"]["hyper_avg"]
-    std = results["kfold_meta"]["hyper_std"]
-    dict_out["avg"] = average
-    dict_out["std"] = std
     dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
     dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
     return dict_out
