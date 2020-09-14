@@ -362,7 +362,7 @@ def check_input(path):
     file at its root.
 
     A ``pdf`` is defined as any folder structure that contains a ``.info``
-    file at its root.
+    file and a replica 0 at its root.
 
     A ``report`` is defined as any folder structure that contains an ``index.html``
     at its root.

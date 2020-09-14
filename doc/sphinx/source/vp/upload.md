@@ -137,7 +137,7 @@ arbitrary files, use the [`wiki-upload` command](#the-wiki-upload-script).
 ```eval_rst
 The script automatically detects (:py:func:`validphys.uploadutils.check_input`) the type of the input.
 A `fit` is defined to be any folder structure that contains a `filter.yml` file at its root, a `PDF` is any
-folder containing a `.info` file at the root, and a report is any such structure containing an
+folder containing a `.info` file at the root and a replica 0, and a report is any such structure containing an
 `index.html` file at the root. The input folder is then placed in the correct location in the
 server accordingly.
 ```
