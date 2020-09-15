@@ -1,8 +1,13 @@
-fit: NNPDF31_nlo_as_0118
+fits: 
+  - NNPDF31_nlo_as_0118
 
 pdfs: 
   - NNPDF31_nlo_as_0118
   - NNPDF31_nlo_as_0118_hessian_100 
+
+use_cuts: fromfit
+
+theoryid: 53
 
 Q: 1.7
 

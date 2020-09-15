@@ -1,5 +1,11 @@
-%NNPDF Report for fit deltachi2 
+%NNPDF Report for $\Delta \chi^2$ of {@ fits @}
 
-Eigenvector decomposition
+
+$\Delta \chi^2$ distribution 
 ------------
-{@ plot_pdfs @}
+
+Eigenvector decomposition 
+------------
+
+Kullback-Leibler measure
+------------
