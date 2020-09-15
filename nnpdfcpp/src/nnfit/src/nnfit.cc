@@ -599,6 +599,7 @@ void TrainValidSplit(NNPDFSettings const& settings,
         training_file << tr->GetExpName() << "\t" << ds.GetSetName() << "\t" << tr_mask[j] << "\t" << ds.GetData(j) << "\n";
         }
     }
+  if (expValSize != 0)
     for(int i=0; i < val->GetNSet(); ++i)
     {
       auto ds = val->GetSet(i);
