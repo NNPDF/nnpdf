@@ -514,7 +514,7 @@ void TrainValidSplit(NNPDFSettings const& settings,
 
   vector<int> trCovMatMask(0);
   vector<int> valCovMatMask(0);
-  // Vector containg vectors of masks
+  // Vector containing vectors of masks
   vector<vector<int>> trMasks, valMasks;
   int AccumulatedData = 0;
 
