@@ -187,8 +187,6 @@ class ModelTrainer:
             nnseed: the seed used to initialise the Neural Network, will be passed to model_gen
             pass_status: flag to signal a good run
             failed_status: flag to signal a bad run
-            pass_status: flag to signal a good run
-            failed_status: flag to signal a bad run
             debug: flag to activate some debug options
             save_weights_each: if set, save the state of the fit
                                     every ``save_weights_each`` epochs
@@ -890,13 +888,16 @@ class ModelTrainer:
                 for penalty in self.hyper_penalties:
                     hyper_loss += penalty(pdf_model, stopping_object)
                 l_hyper.append(hyper_loss)
-                log.info("fold: %d", k + 1)
-                log.info("Hyper loss: %f", hyper_loss)
-                if hyper_loss > self.hyper_threshold or passed != self.pass_status: 
+                log.info("Fold %d finished, loss=%.1f, pass=%s", k+1, hyper_loss, passed)
+                if passed != self.pass_status:
+                    log.info("Hyperparameter combination fail to find a good fit, breaking")
+                    # If the fit failed to fit, no need to add a penalty to the loss
+                    break
+                if hyper_loss > self.hyper_threshold:
+                    log.info("Loss above threshold (%.1f > %.1f), breaking", hyper_loss, self.hyper_threshold)
                     # Apply a penalty proportional to the number of folds that have not been computed
                     pen_mul = len(self.kpartitions) - k
                     l_hyper = [i * pen_mul for i in l_hyper]
-                    log.info("Wrong hyperparameter combination, breaking")
                     break
 
             # Save all losses
