@@ -97,7 +97,7 @@ def check_tensorboard(tensorboard):
     if tensorboard is not None:
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
-            raise CheckError(f"The frequency at which weights are saved must be greater than 0, receive {weight_freq}")
+            raise CheckError(f"The frequency at which weights are saved must be greater than 0, received {weight_freq}")
 
 @make_argcheck
 def wrapper_check_NN(fitting):

@@ -79,12 +79,9 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq = 0):
         log_dir: str
             Directory in which to save tensorboard details
         profiling: bool
-            Whether or not save profiling information (default False)
+            Whether or not to save profiling information (default False)
     """
-    if profiling:
-        profile_batch = 1
-    else:
-        profile_batch = 0
+    profile_batch = 1 if profiling else 0
     clb = TensorBoard(
         log_dir=log_dir,
         histogram_freq=histogram_freq,
