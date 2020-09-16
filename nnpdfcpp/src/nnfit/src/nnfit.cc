@@ -583,28 +583,28 @@ void TrainValidSplit(NNPDFSettings const& settings,
       val = new Experiment(*exp, validationSets);
 
 
-  if(settings.SavePseudodata())
+  if (settings.SavePseudodata())
   {
     // Save the pseudodata if requested in the runcard
     std::ofstream training_file, validation_file;
     training_file.open(settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/training.dat", std::ios_base::app);
     validation_file.open(settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/validation.dat", std::ios_base::app);
 
-    for(int i=0; i < tr->GetNSet(); ++i)
+    for (int i = 0; i < tr->GetNSet(); ++i)
     {
       auto ds = tr->GetSet(i);
       // The training mask for set i
       vector<int> tr_mask = trMasks[i];
-      for(int j=0; j < ds.GetNData(); ++j){
+      for (int j = 0; j < ds.GetNData(); ++j) {
         training_file << tr->GetExpName() << "\t" << ds.GetSetName() << "\t" << tr_mask[j] << "\t" << ds.GetData(j) << "\n";
         }
     }
   if (expValSize != 0)
-    for(int i=0; i < val->GetNSet(); ++i)
+    for (int i = 0; i < val->GetNSet(); ++i)
     {
       auto ds = val->GetSet(i);
       vector<int> val_mask = valMasks[i];
-      for(int j=0; j < ds.GetNData(); ++j){
+      for (int j = 0; j < ds.GetNData(); ++j) {
         validation_file << val->GetExpName() << "\t" << ds.GetSetName() << "\t" << val_mask[j] << "\t" << ds.GetData(j) << "\n";
         }
     }
