@@ -93,10 +93,16 @@ def check_dropout(parameters):
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
+def check_tensorboard(tensorboard):
+    if tensorboard is not None:
+        weight_freq = tensorboard.get("weight_freq", 0)
+        if weight_freq < 0:
+            raise CheckError(f"The frequency at which weights are saved must be greater than 0, received {weight_freq}")
 
 @make_argcheck
 def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
+    check_tensorboard(fitting.get("tensorboard"))
     parameters = fitting["parameters"]
     check_existing_parameters(parameters)
     check_consistent_layers(parameters)

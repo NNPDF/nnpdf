@@ -125,6 +125,7 @@ def _pdf_injection(pdf_layers, observables, datasets_out=None):
     """
     return [f(x, datasets_out=datasets_out) for f, x in zip(observables, pdf_layers)]
 
+
 def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
     """
     If any of input_initial or input_multiplier is None this function computes 
@@ -280,6 +281,8 @@ class ModelTrainer:
         else:
             # Consider the validation only if there is validation (of course)
             self.no_validation = False
+
+        self.callbacks = []
 
     @property
     def model_file(self):
@@ -688,7 +691,9 @@ class ModelTrainer:
         )
 
         training_model.perform_fit(
-            epochs=epochs, verbose=False, callbacks=[callback_st, callback_pos, callback_integ]
+            epochs=epochs,
+            verbose=False,
+            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
 
         if stopping_object.positivity:
@@ -704,6 +709,21 @@ class ModelTrainer:
             if isinstance(item, dict):
                 for key, value in item.items():
                     params[key] = value
+
+    def enable_tensorboard(self, logdir, weight_freq = 0, profiling=False):
+        """ Enables tensorboard callback for further runs of the fitting procedure 
+
+        Parameters
+        ----------
+            logdir: Path
+                path where to save the tensorboard logs
+            weight_freq: int
+                frequency (in epochs) at which to save weight histograms
+            profiling: bool
+                flag to enable the tensorboard profiler
+        """
+        callback_tb = callbacks.gen_tensorboard_callback(logdir, profiling=profiling, histogram_freq=weight_freq)
+        self.callbacks.append(callback_tb)
 
     def evaluate(self, stopping_object):
         """ Returns the training, validation and experimental chi2

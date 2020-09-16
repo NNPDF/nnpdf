@@ -220,9 +220,9 @@ def performfit(
             log.info("Loading integrability dataset %s", integ_set)
             # Use the same reader as positivity observables
             integ_dict = reader.positivity_reader(integ_set)
-            integ_info.append(integ_dict) 
+            integ_info.append(integ_dict)
     else:
-        integ_info = None           
+        integ_info = None
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
@@ -291,6 +291,14 @@ def performfit(
         # Ensure hyperopt is off
         the_model_trainer.set_hyperopt(False)
 
+        # Enable the tensorboard callback
+        tboard = fitting.get("tensorboard")
+        if tboard is not None:
+            profiling = tboard.get("profiling", False)
+            weight_freq = tboard.get("weight_freq", 0)
+            log_path = replica_path_set / "tboard"
+            the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
+
         #############################################################################
         # ### Fit                                                                   #
         # This function performs the actual fit, it reads all the parameters in the #
@@ -350,6 +358,9 @@ def performfit(
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
+
+    if tboard is not None:
+        log.info("Tensorboard logging information is stored at %s", log_path)
 
     # Save the weights to some file
     if fitting.get("save"):

@@ -148,7 +148,6 @@ fitting:
   savefile: 'weights.hd5'
   load: False
   loadfile: 'weights.hd5'
-  plot: False
 
   seed     : 9453862133528      # set the seed for the random generator
   genrep   : True      # on = generate MC replicas, off = use real data
