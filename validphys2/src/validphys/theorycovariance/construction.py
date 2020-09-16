@@ -470,16 +470,17 @@ def user_covmat(groups_data, groups_index):
 
 @table
 def total_theory_covmat(
-        theory_covmat_custom, higher_twist_covmat, top_covmat,
-        deuteron_covmat, nuclear_covmat, user_covmat,
+        use_scalevar_uncertaintes: bool = False,
         use_higher_twist_uncertainties: bool = False,
         use_top_uncertainties: bool = False,
         use_deuteron_uncertainties: bool = False,
         use_nuclear_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
   
-    f = theory_covmat_custom
+    f = None 
 
+    if use_scalevar_uncertaintes is True:
+        f = f + theory_covmat_custom
     if use_higher_twist_uncertainties is True:
         f = f + higher_twist_covmat
     if use_top_uncertainties is True:
