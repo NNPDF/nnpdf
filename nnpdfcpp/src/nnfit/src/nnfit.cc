@@ -586,6 +586,9 @@ void TrainValidSplit(NNPDFSettings const& settings,
   if (settings.SavePseudodata())
   {
     // Save the pseudodata if requested in the runcard
+    // Note that the datapoint index starts with a 0 and
+    // goes up to the number of datapoints after cuts
+    // have been applied.
     std::ofstream training_file, validation_file;
     training_file.open(settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/training.dat", std::ios_base::app);
     validation_file.open(settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/validation.dat", std::ios_base::app);
