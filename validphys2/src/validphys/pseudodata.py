@@ -120,6 +120,11 @@ def make_replica(commondata, seed=1):
     :py:func:`validphys.covmats.covmat_from_systematics` and must not use
     multiplicative systematic uncertainties when obtaining the sampling matrix.
 
+    Gaussian sampling is performed using the additive part of the covariance matrix.
+    An additional gaussian sampling for the renormalization of the data having multiplicative
+    uncertainties happens later. All the contributions to the covariance matrix coming from
+    theory errors should be accounted for in the additive part
+
     Parameters
     ---------
     commondata: :py:class:`validphys.coredata.CommonData`, :py:class:`validphys.core.CommonDataSpec`
