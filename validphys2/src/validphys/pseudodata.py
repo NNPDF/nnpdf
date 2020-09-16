@@ -179,17 +179,17 @@ def make_replica(commondata, seed=1):
     # Drop any systematics that are related to theory uncertainties
     # or have explicitly been labelled as a systematic to be skipped.
     # We are only interested in multiplicative uncertainties
-    mult_uncorr_sys = systematics.loc[
+    mult_sys = systematics.loc[
         :,
         (~sys_names.isin(["THEORYCORR", "THEORYUNCORR", "SKIP"]))
         & (sys_types == "MULT"),
     ]
     # The multiplicative uncertainties are quoted as percentages, so
     # we change them to fractional values
-    mult_uncorr_sys = mult_uncorr_sys.applymap(lambda x: x.mult / 100)
+    mult_sys = mult_sys.applymap(lambda x: x.mult / 100)
 
     # We want to know the names of the remaining systematics.
-    mult_uncorr_names = sys_names.loc[mult_uncorr_sys.columns]
+    mult_names = sys_names.loc[mult_sys.columns]
 
     # We make this generator infinite in the sense that it shall never
     # raise a StopIteration exception. Thus we can continuely request
@@ -213,7 +213,7 @@ def make_replica(commondata, seed=1):
                 [
                     [
                         rng.GetRandomGausDev(1.0) if sys_type == "UNCORR" else rand[i]
-                        for i, sys_type in mult_uncorr_names.iteritems()
+                        for i, sys_type in mult_names.iteritems()
                     ]
                     for _ in range(ndata)
                 ]
@@ -223,7 +223,7 @@ def make_replica(commondata, seed=1):
             # of the multiplicative uncertainties with the above random matrix. We then
             # add unity to all elements and take the product across columns. This vector
             # must then be elementwise multiplied by central values + correlated deviates.
-            pseudodata = np.prod(1 + random_matrix * mult_uncorr_sys.to_numpy(), axis=1) * pseudodata
+            pseudodata = np.prod(1 + random_matrix * mult_sys.to_numpy(), axis=1) * pseudodata
 
             # Check positivity of the pseudodata
             if all(pseudodata > 0):
