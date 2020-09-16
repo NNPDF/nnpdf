@@ -225,8 +225,9 @@ def make_replica(commondata, seed=1):
             # must then be elementwise multiplied by central values + correlated deviates.
             pseudodata = np.prod(1 + random_matrix * mult_sys.to_numpy(), axis=1) * pseudodata
 
-            # Check positivity of the pseudodata
-            if all(pseudodata > 0):
+            # Check positivity of the pseudodata. Note that if the dataset is an asymmetry
+            # then it is allowed to be negative.
+            if all(pseudodata > 0) or ("ASY" in commondata.process_type):
                 break
 
         yield pseudodata
