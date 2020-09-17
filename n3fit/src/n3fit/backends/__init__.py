@@ -7,13 +7,16 @@
 
 # If no backend has been set the default is the tensorflow backend
 from sys import modules as _modules
+
 _backends_module = _modules[__name__]
 
 from n3fit.backends.keras_backend.internal_state import set_backend as set_tf
+
 set_tf(_backends_module)
 
+
 def select_backend(backend_name):
-    """ Select the appropiate backend by overriding this module 
+    """Select the appropiate backend by overriding this module
     Default is understood as TensorFlow
     """
     if backend_name is None:

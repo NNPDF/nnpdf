@@ -147,4 +147,4 @@ def test_novalidation(timing=30):
     tmp_path = pathlib.Path(tmp_name)
     shutil.copy(quickpath, tmp_path)
     with pytest.raises(sp.TimeoutExpired):
-        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)
+        finish = sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)

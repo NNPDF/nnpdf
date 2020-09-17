@@ -7,8 +7,6 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
-import numpy as np
-
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -19,7 +17,9 @@ from n3fit.backends import losses
 from n3fit.backends import backend_layers
 
 
-def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
+def observable_generator(
+    spec_dict, positivity_initial=1.0, integrability=False
+):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
     These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
@@ -69,7 +69,6 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     for dataset_dict in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset_dict["name"]
-        ndata = dataset_dict["ndata"]
 
         # Look at what kind of layer do we need for this dataset
         if dataset_dict["hadronic"]:
@@ -234,7 +233,9 @@ def generate_dense_network(
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
         # if we have dropout set up, add it to the list
         if dropout_rate > 0 and i == dropout_layer:
-            list_of_pdf_layers.append(backend_layers.base_layer_selector("dropout", rate=dropout_rate))
+            list_of_pdf_layers.append(
+                backend_layers.base_layer_selector("dropout", rate=dropout_rate)
+            )
 
         # select the initializer and move the seed
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
@@ -313,7 +314,7 @@ def pdfNN_layer_generator(
     initializer_name="glorot_normal",
     layer_type="dense",
     flav_info=None,
-    fitbasis='NN31IC',
+    fitbasis="NN31IC",
     out=14,
     seed=None,
     dropout=0.0,
@@ -440,17 +441,24 @@ def pdfNN_layer_generator(
         # TODO: this information should come from the basis information
         #       once the basis information is passed to this class
         list_of_pdf_layers = generate_dense_per_flavour_network(
-            inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
+            inp,
+            nodes,
+            activations,
+            initializer_name,
+            seed=seed,
+            basis_size=last_layer_nodes,
         )
 
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
-        add_log = backend_layers.Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+        add_log = backend_layers.Lambda(
+            lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1)
+        )
 
     def dense_me(x):
-        """ Takes an input tensor `x` and applies all layers
-        from the `list_of_pdf_layers` in order """
+        """Takes an input tensor `x` and applies all layers
+        from the `list_of_pdf_layers` in order"""
         if inp == 1:
             curr_fun = list_of_pdf_layers[0](x)
         else:
@@ -471,7 +479,7 @@ def pdfNN_layer_generator(
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
-    
+
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
