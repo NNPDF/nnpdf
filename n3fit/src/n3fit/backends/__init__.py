@@ -2,43 +2,32 @@
 # These includes:
 #   set_initial_state, clear_backend_state
 #   meta classes: MetaLayer, MetaModel
-#   base_layers: Input, Lambda, base_layer_selector, regularizer_selector, Concatenate
-#   modules: losses, operations, constraints, callbacks
+#   modules: backend_layers, losses, operations, constraints, callbacks
 #
 
+# If no backend has been set the default is the tensorflow backend
+from sys import modules as _modules
+_backends_module = _modules[__name__]
 
-from n3fit.backends.keras_backend.internal_state import (
-    set_initial_state,
-    clear_backend_state,
-)
-from n3fit.backends.keras_backend.MetaLayer import MetaLayer
-from n3fit.backends.keras_backend.MetaModel import MetaModel
-
-from n3fit.backends.keras_backend.base_layers import (
-    Input,
-    Lambda,
-    base_layer_selector,
-    regularizer_selector,
-    Concatenate,
-)
-from n3fit.backends.keras_backend import losses
-from n3fit.backends.keras_backend import operations
-from n3fit.backends.keras_backend import constraints
-from n3fit.backends.keras_backend import callbacks
-
+from n3fit.backends.keras_backend.internal_state import set_backend as set_tf
+set_tf(_backends_module)
 
 def select_backend(backend_name):
-    """ nuke the module from orbit """
-    import sys
-
-    backends_module = sys.modules[__name__]
+    """ Select the appropiate backend by overriding this module 
+    Default is understood as TensorFlow
+    """
+    if backend_name is None:
+        backend_name = "tf"
+    try:
+        backend_name = backend_name.lower()
+    except AttributeError:
+        raise ValueError(f"select_backend accepts only strings, received: {backend_name}")
     # Now depenidng on the backend, we need to load the backend importer function
     if backend_name == "evolutionary_keras":
         from n3fit.backends.ga_backend.internal_state import set_backend
 
-        set_backend(backends_module)
+        set_backend(_backends_module)
     elif backend_name in ["tf", "tensorflow", "keras"]:
-        pass
-        # from n3fit.backends.keras_backend.internal_state import set_backend
+        set_tf(_backends_module)
     else:
         raise ValueError(f"Backend {backend_name} not recognized")

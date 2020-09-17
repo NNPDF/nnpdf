@@ -13,13 +13,10 @@ import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 
-from n3fit.backends import MetaModel, Input
+from n3fit.backends import MetaModel, MetaLayer
 from n3fit.backends import operations
 from n3fit.backends import losses
-from n3fit.backends import MetaLayer, Concatenate, Lambda
-from n3fit.backends import base_layer_selector, regularizer_selector
-
-import tensorflow as tf
+from n3fit.backends import backend_layers
 
 
 def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
@@ -105,7 +102,7 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         model_obs.append(obs_layer)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
-    concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
+    concatenator = backend_layers.Concatenate(axis=1, name=f"{spec_name}_full")
 
     # creating the experiment as a model turns out to bad for performance
     def experiment_layer(pdf, datasets_out=None):
@@ -237,7 +234,7 @@ def generate_dense_network(
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
         # if we have dropout set up, add it to the list
         if dropout_rate > 0 and i == dropout_layer:
-            list_of_pdf_layers.append(base_layer_selector("dropout", rate=dropout_rate))
+            list_of_pdf_layers.append(backend_layers.base_layer_selector("dropout", rate=dropout_rate))
 
         # select the initializer and move the seed
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
@@ -251,7 +248,7 @@ def generate_dense_network(
             "kernel_regularizer": regularizer,
         }
 
-        layer = base_layer_selector("dense", **arguments)
+        layer = backend_layers.base_layer_selector("dense", **arguments)
 
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
@@ -291,11 +288,11 @@ def generate_dense_per_flavour_network(
             "basis_size": basis_size,
         }
 
-        layer = base_layer_selector("dense_per_flavour", **arguments)
+        layer = backend_layers.base_layer_selector("dense_per_flavour", **arguments)
 
         if i == number_of_layers - 1:
             # For the last layer, apply concatenate
-            concatenator = base_layer_selector("concatenate")
+            concatenator = backend_layers.base_layer_selector("concatenate")
 
             def output_layer(ilayer):
                 result = layer(ilayer)
@@ -428,7 +425,7 @@ def pdfNN_layer_generator(
     last_layer_nodes = nodes[-1]
 
     if layer_type == "dense":
-        reg = regularizer_selector(regularizer, **regularizer_args)
+        reg = backend_layers.regularizer_selector(regularizer, **regularizer_args)
         list_of_pdf_layers = generate_dense_network(
             inp,
             nodes,
@@ -449,7 +446,7 @@ def pdfNN_layer_generator(
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
-        add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+        add_log = backend_layers.Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
 
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
@@ -488,7 +485,7 @@ def pdfNN_layer_generator(
         return layer_evln(layer_fitbasis(x))
 
     # Prepare the input for the PDF model
-    placeholder_input = Input(shape=(None, 1), batch_size=1)
+    placeholder_input = backend_layers.Input(shape=(None, 1), batch_size=1)
 
     # Impose sumrule if necessary
     if impose_sumrule:
