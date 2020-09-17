@@ -46,7 +46,7 @@ before_install:
      fi
     - >
      if [[ "$TRAVIS_OS_NAME" == "linux" ]];
-     then docker run -itd --name build zaharid/conda-centos --build-arg CONDA_BUILD_VERSION=${CONDA_BUILD_VERSION};
+     then docker run -itd --name build zaharid/conda-centos;
      fi
     - >
      if [[ "$TRAVIS_OS_NAME" == "linux" ]];

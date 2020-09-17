@@ -30,13 +30,12 @@ RUN wget "$CONDA_URL"      && \
     ./"$CONDA_FILE" -b     && \
     rm "$CONDA_FILE"
 
-ARG CONDA_BUILD_VERSION
 ENV PATH /root/miniconda3/bin:$PATH
 
 RUN conda config --append channels conda-forge                                    && \
     conda config --prepend channels https://packages.nnpdf.science/conda/         && \
     conda config --set show_channel_urls true                                     && \
-    conda install conda-build=$CONDA_BUILD_VERSION --yes
+    conda install conda-build --yes
 
 ENV CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=1
 
