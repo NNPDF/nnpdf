@@ -13,6 +13,7 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 import random as rn
 import numpy as np
 import tensorflow as tf
+
 # for (very slow but fine grained) debugging turn eager mode on
 # tf.config.run_functions_eagerly(True)
 from tensorflow.keras import backend as K
@@ -44,10 +45,10 @@ def set_initial_state(seed=13):
 
 def clear_backend_state(max_cores=None):
     """
-        Clears the state of the backend and opens a new session.
+    Clears the state of the backend and opens a new session.
 
-        Note that this function needs to set the TF session, including threads and processes
-        i.e., this function must NEVER be called after setting the initial state.
+    Note that this function needs to set the TF session, including threads and processes
+    i.e., this function must NEVER be called after setting the initial state.
     """
     print("Clearing session")
 

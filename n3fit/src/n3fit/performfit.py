@@ -156,9 +156,10 @@ def performfit(
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
-    from n3fit.backends import MetaModel, operations
-    if fitting.get("backend") == "evolutionary_keras":
-        MetaModel.enable_ga()
+    from n3fit.backends import select_backend, operations
+    select_backend(fitting.get("backend", "tf"))
+#     if fitting.get("backend") == "evolutionary_keras":
+#         MetaModel.enable_ga()
     import n3fit.io.reader as reader
 
     # Loading t0set from LHAPDF

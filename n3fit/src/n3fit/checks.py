@@ -94,24 +94,27 @@ def check_dropout(parameters):
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
+
 def check_tensorboard(tensorboard):
     if tensorboard is not None:
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
-            raise CheckError(f"The frequency at which weights are saved must be greater than 0, received {weight_freq}")
+            raise CheckError(
+                f"The frequency at which weights are saved must be greater than 0, received {weight_freq}"
+            )
+
 
 def check_backend(backend):
     """ Checks whether the selected backend is available """
-    if backend in [None, "tensorflow", "tf", "keras"]:
-        try:
-            import tensorflow
-        except ModuleNotFoundError:
-            raise CheckError(f"Tensorflow not available")
-    elif backend == "evolutionary_keras":
-        try:
-            import evolutionary_keras
-        except ModuleNotFoundError:
-            raise CheckError(f"evolutionary_keras not available")
+    from n3fit.backends import select_backend
+
+    try:
+        select_backend(backend)
+    except ModuleNotFoundError:
+        raise CheckError(f"Backend {backend} is not installed")
+    except ValueError:
+        raise CheckError(f"Backend {backend} not recognized")
+
 
 @make_argcheck
 def wrapper_check_NN(fitting):
@@ -124,8 +127,9 @@ def wrapper_check_NN(fitting):
     check_stopping(parameters)
     check_dropout(parameters)
     # Checks that need to import the backend (and thus take longer) should be done last
-    check_backend(fitting.get("backend"))    
-	check_optimizer(parameters["optimizer"])
+    # and check_backend _must_ always be called first
+    check_backend(fitting.get("backend"))
+    check_optimizer(parameters["optimizer"])
     check_initializer(parameters["initializer"])
 
 
