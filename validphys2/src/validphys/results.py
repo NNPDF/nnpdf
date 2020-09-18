@@ -315,7 +315,7 @@ def relabel_experiments_to_groups(input_covmat, groups_index):
     return df
 
 
-def groups_covmat_no_table(experiments_covmat_no_table):
+def groups_covmat_no_table(experiments_covmat_no_table, groups_index):
     """Export the covariance matrix for the groups. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -325,7 +325,7 @@ def groups_covmat_no_table(experiments_covmat_no_table):
 
         - index of the point within the dataset.
     """
-    return relabel_experiments_to_groups(experiments_covmat_no_table)
+    return relabel_experiments_to_groups(experiments_covmat_no_table, groups_index)
 
 
 @table
@@ -359,9 +359,9 @@ def experiments_sqrtcovmat(
 
 
 @table
-def groups_sqrtcovmat(experiments_sqrtcovmat):
+def groups_sqrtcovmat(experiments_sqrtcovmat, groups_index):
     """Like experiments_sqrtcovmat but relabelled to the chosen grouping."""
-    return relabel_experiments_to_groups(experiments_sqrtcovmat)
+    return relabel_experiments_to_groups(experiments_sqrtcovmat, groups_index)
 
 
 @table
@@ -384,9 +384,9 @@ def experiments_invcovmat(
 
 
 @table
-def groups_invcovmat(experiments_invcovmat):
+def groups_invcovmat(experiments_invcovmat, groups_index):
     """Like experiments_invcovmat but relabelled to the chosen grouping."""
-    return relabel_experiments_to_groups(experiments_invcovmat)
+    return relabel_experiments_to_groups(experiments_invcovmat, groups_index)
 
 
 @table
