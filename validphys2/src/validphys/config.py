@@ -1399,6 +1399,30 @@ class CoreConfig(configparser.Config):
         return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
 
+    @configparser.explicit_node
+    def produce_filter_data(self, fakedata: bool, theorycovmatconfig=None):
+        """Set the action used to filter the data to filter either real or
+        closure data. If the closure data filter is being used and if the
+        theory covariance matrix is not being closure tested then filter
+        data by experiment for efficiency"""
+        import validphys.filters
+        if not fakedata:
+            return validphys.filters.filter_real_data
+        else:
+            if (
+                theorycovmatconfig is not None and
+                theorycovmatconfig.get("use_thcovmat_in_sampling")
+            ):
+                # NOTE: By the time we run theory covmat closure tests,
+                # hopefully the generation of pseudodata will be done in python.
+                raise ConfigError(
+                    "Generating closure test data which samples from the theory "
+                    "covariance matrix has not been implemented yet."
+                )
+            return validphys.filters.filter_closure_data_by_experiment
+
+
+
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
 

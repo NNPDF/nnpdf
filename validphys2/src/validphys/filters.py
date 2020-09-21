@@ -14,6 +14,7 @@ import numpy as np
 from NNPDF import CommonData, RandomGenerator
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
+from reportengine import collect
 import validphys.cuts
 
 log = logging.getLogger(__name__)
@@ -84,27 +85,45 @@ def export_mask(path, mask):
     """Dump mask to file"""
     np.savetxt(path, mask, fmt='%d')
 
-
-@check_combocuts
 @check_rngalgo
-@check_positive('errorsize')
 @check_nonnegative('filterseed')
 @check_nonnegative('seed')
-def filter(data, theoryid, filter_path,
-           fakedata: bool,
-           filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
-           errorsize:numbers.Real, combocuts, t0pdfset,
-           rules, defaults):
-    """Apply filters to all datasets"""
-    if not fakedata:
-        log.info('Filtering real data.')
-        total_data, total_cut_data = _filter_real_data(filter_path, data)
-    else:
-        log.info('Filtering closure-test data.')
-        RandomGenerator.InitRNG(rngalgo, seed)
-        RandomGenerator.GetRNG().SetSeed(filterseed)
-        total_data, total_cut_data = _filter_closure_data(filter_path, data,
-                                                          t0pdfset, fakenoise, errorsize)
+def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
+    """Initialise the internal NNPDF RNG, specified by ``rngalgo`` which must
+    be an integer between 0 and 16, seeded with ``filterseed``.
+    The RNG can then be subsequently used to i.e generate pseudodata.
+    """
+    log.info("Initialising RNG")
+    RandomGenerator.InitRNG(rngalgo, seed)
+    RandomGenerator.GetRNG().SetSeed(filterseed)
+
+@check_positive('errorsize')
+def filter_closure_data(filter_path, data, t0pdfset, fakenoise, errorsize, prepare_nnpdf_rng):
+    """Filter closure data. In addition to cutting data points, the data is
+    generated from an underlying ``t0pdfset``, applying a shift to the data
+    if ``fakenoise`` is ``True``, which emulates the experimental central values
+    being shifted away from the underlying law.
+
+    """
+    log.info('Filtering closure-test data.')
+    return _filter_closure_data(
+        filter_path, data, t0pdfset, fakenoise, errorsize)
+
+filter_closure_data_by_experiment = collect(
+    "filter_closure_data", ("group_dataset_inputs_by_experiment",)
+)
+
+def filter_real_data(filter_path, data):
+    """Filter real data, cutting any points which do not pass the filter rules.
+    """
+    log.info('Filtering real data.')
+    return _filter_real_data(filter_path, data)
+
+
+@check_combocuts
+def filter(filter_data, combocuts):
+    """Summarise filters applied to all datasets"""
+    total_data, total_cut_data = np.atleast_2d(filter_data).sum(axis=0)
     log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
 
 
