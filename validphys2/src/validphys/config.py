@@ -1413,7 +1413,12 @@ class CoreConfig(configparser.Config):
                 theorycovmatconfig is not None and
                 theorycovmatconfig.get("use_thcovmat_in_sampling")
             ):
-                return validphys.filters.filter_closure_data
+                # NOTE: By the time we run theory covmat closure tests,
+                # hopefully the generation of pseudodata will be done in python.
+                raise ConfigError(
+                    "Generating closure test data which samples from the theory "
+                    "covariance matrix has not been implemented yet."
+                )
             else:
                 return validphys.filters.filter_closure_data_by_experiment
 
