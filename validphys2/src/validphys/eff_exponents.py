@@ -408,12 +408,13 @@ def next_effective_exponents_yaml(
     Using `effective_exponents_table` this provider outputs the yaml runcard
     used to specify settings of ``fit`` but having iterated the following
     sections:
-    - Modifies the random seeds
+    - Modifies the random seeds (to random unsigned long ints)
     - Updates the preprocessing exponents
     - Updates the description if ``_updated_description`` is provided
 
-    this should facilitate running a new fit with identical input settings
-    as the specified ``fit`` with the t0, seeds and preprocessing iterated.
+    This should facilitate running a new fit with identical input settings
+    as the specified ``fit`` with the t0, seeds and preprocessing iterated. For
+    more information see: :ref:`run-iterated-fit`
 
     This action can be used in a report but should be wrapped in a code block
     to be formatted correctly, for example:
@@ -459,7 +460,7 @@ def next_effective_exponents_yaml(
     # iterate t0
     filtermap["datacuts"]["t0pdfset"] = fit.name
 
-    # Update seeds with pseudorandom numbers between 0 and 1e10
+    # Update seeds with valid pseudorandom unsigned long int
     # Check if seeds exist especially since extra seeds needed in n3fit vs nnfit
     # Start with seeds in "fitting" section of runcard
     fitting_data = filtermap["fitting"]
@@ -467,12 +468,12 @@ def next_effective_exponents_yaml(
 
     for seed in fitting_seeds:
         if seed in fitting_data:
-            fitting_data[seed] = random.randrange(0, 1e10)
+            fitting_data[seed] = random.randrange(0, 2**32)
 
     # Next "closuretest" section of runcard
     closuretest_data = filtermap["closuretest"]
     if "filterseed" in closuretest_data:
-        closuretest_data["filterseed"] = random.randrange(0, 1e10)
+        closuretest_data["filterseed"] = random.randrange(0, 2**32)
 
     # update description if necessary
     if _updated_description is not None:

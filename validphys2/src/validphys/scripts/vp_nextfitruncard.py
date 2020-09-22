@@ -7,7 +7,7 @@ The script:
 - Takes the input fit as a required argument and loads its runcard
 - Updates the description of the fit interactively
 - Uses the input fit as the t0 set
-- Modifies the random seeds to values between 0 and 1e10
+- Modifies the random seeds to values between 0 and 2**32 - 1 (max size of unsigned long int)
 - Updates the preprocessing exponents
 - Writes the runcard for the iterated fit to the current working directory, unless a different path
   is given as an argument
