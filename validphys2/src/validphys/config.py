@@ -1421,6 +1421,28 @@ class CoreConfig(configparser.Config):
                 )
             return validphys.filters.filter_closure_data_by_experiment
 
+    @configparser.explicit_node
+    def produce_total_chi2_data(self, fitthcovmat):
+        """If there is no theory covmat for the fit, then calculate the
+        total chi2 by summing the chi2 from each experiment.
+        """
+        import validphys.results
+
+        if fitthcovmat is None:
+            return validphys.results.total_chi2_data_from_experiments
+        return validphys.results.dataset_inputs_abs_chi2_data
+
+    @configparser.explicit_node
+    def produce_total_phi_data(self, fitthcovmat):
+        """If there is no theory covmat for the fit, then calculate the total
+        phi using contributions from each experiment.
+        """
+        import validphys.results
+
+        if fitthcovmat is None:
+            return validphys.results.total_phi_data_from_experiments
+        return validphys.results.dataset_inputs_phi_data
+
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

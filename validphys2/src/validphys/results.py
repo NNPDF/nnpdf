@@ -13,6 +13,7 @@ import logging
 
 import numpy as np
 import pandas as pd
+import scipy.linalg as la
 
 from NNPDF import ThPredictions, CommonData, Experiment
 from reportengine.checks import require_one, remove_outer, check_not_empty
@@ -652,6 +653,33 @@ def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
     return phi_data(dataset_inputs_abs_chi2_data)
 
 
+experiments_phi_data = collect("dataset_inputs_phi_data", ("group_dataset_inputs_by_experiment",))
+
+
+def total_phi_data_from_experiments(experiments_phi_data):
+    """Like :py:func:`dataset_inputs_phi_data` except calculate phi for
+    each experiment and then sum the contributions. Note that since
+    the definition of phi is
+
+        phi = sqrt( (<chi2[T_k]> - chi2[<T_k>]) / n_data ),
+
+    where k is the replica index, the total phi is
+
+        sqrt( sum(n_data*phi**2) / sum(n_data) )
+
+    where the sums run over experiment
+
+    This is only a valid method of calculating total phi provided that there are
+    no inter-experimental correlations.
+
+    """
+
+    unnorm_phi_squared, ndata = np.sum(
+        [(ndata*phi**2, ndata) for phi, ndata in experiments_phi_data],
+        axis=0
+    )
+    return np.sqrt(unnorm_phi_squared / ndata), ndata
+
 @check_pdf_is_montecarlo
 def dataset_inputs_bootstrap_phi_data(dataset_inputs_results, bootstrap_samples=500):
     """Takes the data result and theory prediction given `dataset_inputs` and
@@ -815,7 +843,7 @@ chi2_stat_labels = {
 }
 
 
-def experiments_chi2_stats(total_experiments_chi2data):
+def experiments_chi2_stats(total_chi2_data):
     """Compute several estimators from the chi² for an
     aggregate of experiments:
 
@@ -829,7 +857,7 @@ def experiments_chi2_stats(total_experiments_chi2data):
 
      - chi2_per_data
     """
-    rep_data, central_result, npoints = total_experiments_chi2data
+    rep_data, central_result, npoints = total_chi2_data
     m = central_result.mean()
     rep_mean = rep_data.central_value().mean()
     return OrderedDict(
@@ -1040,8 +1068,8 @@ def dataspecs_datasets_chi2_table(
     )
 
 
-fits_total_chi2_data = collect("dataset_inputs_abs_chi2_data", ("fits", "fitcontext"))
-dataspecs_total_chi2_data = collect("dataset_inputs_abs_chi2_data", ("dataspecs",))
+fits_total_chi2_data = collect("total_chi2_data", ("fits", "fitcontext"))
+dataspecs_total_chi2_data = collect("total_chi2_data", ("dataspecs",))
 
 # TODO: Decide what to do with the horrible totals code.
 @table
@@ -1115,6 +1143,36 @@ def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
     df["difference"] = diff
     return df
 
+experiments_chi2_data = collect(
+    "dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_experiment",)
+)
+
+def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
+    """Like :py:func:`dataset_inputs_abs_chi2_data`, except sums the contribution
+    from each experiment which is more efficient in the case that the total
+    covariance matrix is block diagonal in experiments.
+
+    This is valid as long as there are no cross experiment correlations from
+    i.e theory covariance matrix
+
+    """
+
+    central_result = np.sum(
+        [exp_chi2_data.central_result for exp_chi2_data in experiments_chi2_data],
+    )
+
+    error_members = np.sum(
+        [exp_chi2_data.replica_result.error_members() for exp_chi2_data in experiments_chi2_data],
+        axis=0
+    )
+
+    ndata = np.sum(
+        [exp_chi2_data.ndata for exp_chi2_data in experiments_chi2_data],
+    )
+    return Chi2Data(
+        pdf.stats_class(error_members), central_result, ndata
+    )
+
 
 def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
     """Return the total chi²/ndata for all data, specified by dataset_inputs.
@@ -1126,13 +1184,13 @@ def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
     )
 
 
-def total_experiments_chi2(dataset_inputs_chi2_per_point_data):
-    return dataset_inputs_chi2_per_point_data
+def total_chi2_per_point_data(total_chi2_data):
+    return dataset_inputs_chi2_per_point_data(total_chi2_data)
 
 
 @table
 @check_not_empty("groups_data")
-def perreplica_chi2_table(groups_data, groups_chi2, dataset_inputs_abs_chi2_data):
+def perreplica_chi2_table(groups_data, groups_chi2, total_chi2_data):
     """Chi² per point for each replica for each group.
     Also outputs the total chi² per replica.
     The columns come in two levels: The first is the name of the group,
@@ -1147,7 +1205,7 @@ def perreplica_chi2_table(groups_data, groups_chi2, dataset_inputs_abs_chi2_data
         th, central, l = ch
         total_chis[i] = [central, *th.error_members()]
         ls.append(l)
-    total_rep, total_central, total_n = dataset_inputs_abs_chi2_data
+    total_rep, total_central, total_n = total_chi2_data
     total_chis[0] = [total_central, *total_rep.error_members()]
     total_chis[0] /= total_n
     total_chis[1:, :] /= np.array(ls)[:, np.newaxis]
@@ -1225,15 +1283,15 @@ def dataspecs_dataset_chi2_difference_table(
 
 each_dataset_chi2 = collect(abs_chi2_data, ("data",))
 
-pdfs_total_chi2 = collect(dataset_inputs_chi2_per_point_data, ("pdfs",))
+pdfs_total_chi2 = collect(total_chi2_per_point_data, ("pdfs",))
 
 # These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ("fits", "fitcontext", "dataset_inputs"))
 
-fits_total_chi2 = collect("dataset_inputs_chi2_per_point_data", ("fits", "fitcontext"))
+fits_total_chi2 = collect("total_chi2_per_point_data", ("fits", "fitcontext"))
 
 fits_total_chi2_for_groups = collect(
-    "dataset_inputs_chi2_per_point_data", ("fits", "fittheoryandpdf")
+    "total_chi2_per_point_data", ("fits", "fittheoryandpdf")
 )
 
 fits_pdf = collect("pdf", ("fits", "fitpdf"))
@@ -1251,7 +1309,7 @@ dataspecs_groups = collect("groups_data", ("dataspecs",))
 dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
 dataspecs_groups_bootstrap_phi = collect("groups_bootstrap_phi", ("dataspecs",))
 dataspecs_results = collect("results", ("dataspecs",))
-dataspecs_total_chi2 = collect("dataset_inputs_chi2_per_point_data", ("dataspecs",))
+dataspecs_total_chi2 = collect("total_chi2_per_point_data", ("dataspecs",))
 
 dataspecs_speclabel = collect("speclabel", ("dataspecs",), element_default=None)
 dataspecs_cuts = collect("cuts", ("dataspecs",))

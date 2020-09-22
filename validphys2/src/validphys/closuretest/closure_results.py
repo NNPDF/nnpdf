@@ -273,7 +273,7 @@ fits_exps_bootstrap_chi2_central = collect(
     "experiments_bootstrap_chi2_central", ("fits", "fitcontext")
 )
 fits_level_1_noise = collect(
-    "total_experiments_chi2data", ("fits", "fitinputcontext", "fitunderlyinglaw")
+    "total_chi2_data", ("fits", "fitinputcontext", "fitunderlyinglaw")
 )
 
 
