@@ -540,8 +540,13 @@ void TrainValidSplit(NNPDFSettings const& settings,
       std::sort(valMaskset.begin(), valMaskset.end());
 
 
-      trMasks.push_back(trMaskset);
-      valMasks.push_back(valMaskset);
+      // If either of the training or validation mask sets
+      // are empty then don't insert them into the vector
+      // of masks
+      if (trMaskset.size() != 0)
+        trMasks.push_back(trMaskset);
+      if (valMaskset.size() != 0)
+        valMasks.push_back(valMaskset);
 
       if (settings.IsThUncertainties())
       {
