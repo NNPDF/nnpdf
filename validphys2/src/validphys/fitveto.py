@@ -93,14 +93,8 @@ def save_vetoes(veto_dict: dict, filepath):
 def save_postfit_parameters(chi2_threshold, arclength_threshold, filepath):
     """ Saves the chi2 and arclength thresholds used by postfit to file """
     if filepath.exists():
-        log.warning(
-            f"Postfit parameters file {filepath} already exists. Overwriting file"
-        )
+        log.warning(f"Postfit parameters file {filepath} already exists. Overwriting file")
     with open(str(filepath), "w") as f:
         json.dump(
-            {
-                "chi2_threshold": chi2_threshold,
-                "arclength_threshold": arclength_threshold
-            },
-            f
+            {"chi2_threshold": chi2_threshold, "arclength_threshold": arclength_threshold}, f,
         )
