@@ -32,7 +32,7 @@ def parse_test_output(filename):
 
 @make_table_comp(parse_test_output)
 def test_filter_rebuild_closure_data():
-    runcard_name = FIT_NAME + ".yml"
+    runcard_name = FIT_NAME + ".yaml"
     runcard = REGRESSION_FOLDER / runcard_name
 
     # create a /tmp folder
