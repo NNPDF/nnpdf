@@ -600,6 +600,14 @@ void NNPDFSettings::SetPlotFile(string const& plotfile)
   }
 }
 
+bool NNPDFSettings::SavePseudodata() const
+{
+  if (NNPDFSettings::Exists("fitting", "savepseudodata"))
+    return Get("fitting", "savepseudodata").as<bool>();
+  return false;
+}
+
+
 bool NNPDFSettings::IsQED() const
 {
   const basisType isqed = NNPDFSettings::getFitBasisType(Get("fitting","fitbasis").as<string>());
