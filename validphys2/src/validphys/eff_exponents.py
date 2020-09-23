@@ -400,42 +400,67 @@ fmt = lambda a: float(significant_digits(a, 4))
 
 next_fit_eff_exps_table = collect("next_effective_exponents_table", ("fitpdfandbasis",))
 
-def next_effective_exponents_yaml(fit: FitSpec, next_fit_eff_exps_table):
-    """-Returns a table in yaml format called NextEffExps.yaml
-       -Prints the yaml table in the report
-    using `effective_exponents_table` this provider outputs the yaml runcard to run
-    a fit with identical input as the specified `fit` with the t0 and preprocessing iterated.
 
-    This action must be used in a report and should be wrapped in a code block to be formatted
-    correctly, for example:
+def iterated_runcard_yaml(
+    fit: FitSpec, next_fit_eff_exps_table, _updated_description=None
+):
+    """
+    Using `effective_exponents_table` this provider outputs the yaml runcard
+    used to specify settings of ``fit`` but having iterated the following
+    sections:
+    - Modifies the random seeds (to random unsigned long ints)
+    - Updates the preprocessing exponents
+    - Updates the description if ``_updated_description`` is provided
+
+    This should facilitate running a new fit with identical input settings
+    as the specified ``fit`` with the t0, seeds and preprocessing iterated. For
+    more information see: :ref:`run-iterated-fit`
+
+    This action can be used in a report but should be wrapped in a code block
+    to be formatted correctly, for example:
 
     ```yaml
     {@next_effective_exponents_runcard@}
     ```
 
-    """
+    alternatively, using the API, the yaml dump returned by this function can
+    be written to a file e.g
 
+    >>> from validphys.api import API
+    >>> yaml_output = API.iterated_runcard_yaml(
+    ...     fit=<fit name>,
+    ...     _updated_description="My iterated fit"
+    ... )
+    >>> with open("output.yml", "w+") as f:
+    ...     f.write(yaml_output)
+
+    """
     df_effexps = next_fit_eff_exps_table[0]
     # Use round trip loader rather than safe_load in fit.as_input()
-    with open(fit.path/'filter.yml', 'r') as f:
+    with open(fit.path / "filter.yml", "r") as f:
         filtermap = yaml.load(f, yaml.RoundTripLoader)
-    previous_exponents = filtermap['fitting']['basis']
-    basis = filtermap['fitting']['fitbasis']
+    previous_exponents = filtermap["fitting"]["basis"]
+    basis = filtermap["fitting"]["fitbasis"]
     checked = check_basis(basis, None)
-    basis = checked['basis']
-    flavours = checked['flavours']
+    basis = checked["basis"]
+    flavours = checked["flavours"]
 
     runcard_flavours = basis.to_known_elements(
-        [ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
+        [ref_fl["fl"] for ref_fl in previous_exponents]
+    ).tolist()
     for fl in flavours:
-        alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$')].values
-        betas = df_effexps.loc[(f'${fl}$', r'$\beta$')].values
-        previous_exponents[runcard_flavours.index(fl)]['smallx'] = [fmt(alpha) for alpha in alphas]
-        previous_exponents[runcard_flavours.index(fl)]['largex'] = [fmt(beta) for beta in betas]
-    #iterate t0
-    filtermap['datacuts']['t0pdfset'] = fit.name
+        alphas = df_effexps.loc[(f"${fl}$", r"$\alpha$")].values
+        betas = df_effexps.loc[(f"${fl}$", r"$\beta$")].values
+        previous_exponents[runcard_flavours.index(fl)]["smallx"] = [
+            fmt(alpha) for alpha in alphas
+        ]
+        previous_exponents[runcard_flavours.index(fl)]["largex"] = [
+            fmt(beta) for beta in betas
+        ]
+    # iterate t0
+    filtermap["datacuts"]["t0pdfset"] = fit.name
 
-    # Update seeds with pseudorandom numbers between 0 and 1e10
+    # Update seeds with valid pseudorandom unsigned long int
     # Check if seeds exist especially since extra seeds needed in n3fit vs nnfit
     # Start with seeds in "fitting" section of runcard
     fitting_data = filtermap["fitting"]
@@ -443,11 +468,15 @@ def next_effective_exponents_yaml(fit: FitSpec, next_fit_eff_exps_table):
 
     for seed in fitting_seeds:
         if seed in fitting_data:
-            fitting_data[seed] = random.randrange(0, 1e10)
+            fitting_data[seed] = random.randrange(0, 2**32)
 
     # Next "closuretest" section of runcard
     closuretest_data = filtermap["closuretest"]
     if "filterseed" in closuretest_data:
-        closuretest_data["filterseed"] = random.randrange(0, 1e10)
+        closuretest_data["filterseed"] = random.randrange(0, 2**32)
+
+    # update description if necessary
+    if _updated_description is not None:
+        filtermap["description"] = _updated_description
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)

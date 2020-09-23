@@ -25,7 +25,7 @@ def test_next_runcard():
     ite2_runcard.pop("pdf")  # Removing the PDF key, it's an artefact of as_input
 
     predicted_ite2_runcard = yaml.safe_load(
-        API.next_effective_exponents_yaml(fit=FIT)
+        API.iterated_runcard_yaml(fit=FIT)
     )
 
     # Remove all seed keys from the runcards since these are randomly generated
