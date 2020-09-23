@@ -30,17 +30,17 @@ from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
 log = logging.getLogger(__name__)
 
 @figure
-def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+def plot_chi2dist_experiments(total_chi2_data, experiments_chi2_stats, pdf):
     """Plot the distribution of chi²s of the members of the pdfset."""
-    fig, ax = _chi2_distribution_plots(total_experiments_chi2data, experiments_chi2_stats, pdf, "hist")
+    fig, ax = _chi2_distribution_plots(total_chi2_data, experiments_chi2_stats, pdf, "hist")
     ax.set_title(r"Experiments $\chi^2$ distribution")
     return fig
 
 
 @figure
-def kde_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+def kde_chi2dist_experiments(total_chi2_data, experiments_chi2_stats, pdf):
     """KDE plot for experiments chi2."""
-    fig, ax = _chi2_distribution_plots(total_experiments_chi2data, experiments_chi2_stats, pdf, "kde")
+    fig, ax = _chi2_distribution_plots(total_chi2_data, experiments_chi2_stats, pdf, "kde")
     ax.set_ylabel(r"Density")
     ax.set_title(r"Experiments $\chi^2 KDE plot$")
     return fig

@@ -131,7 +131,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(fit_name_with_covmat_label, replica_data, dataset_inputs_abs_chi2_data, dataset_inputs_phi_data):
+def fit_summary(fit_name_with_covmat_label, replica_data, total_chi2_data, total_phi_data):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -149,15 +149,15 @@ def fit_summary(fit_name_with_covmat_label, replica_data, dataset_inputs_abs_chi
 
     """
     nrep = len(replica_data)
-    ndata = dataset_inputs_abs_chi2_data.ndata
-    central_chi2 = dataset_inputs_abs_chi2_data.central_result / ndata
-    member_chi2 = dataset_inputs_abs_chi2_data.replica_result.error_members() / ndata
+    ndata = total_chi2_data.ndata
+    central_chi2 = total_chi2_data.central_result / ndata
+    member_chi2 = total_chi2_data.replica_result.error_members() / ndata
 
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
 
-    phi, _ = dataset_inputs_phi_data
+    phi, _ = total_phi_data
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
     VET = ValueErrorTuple
