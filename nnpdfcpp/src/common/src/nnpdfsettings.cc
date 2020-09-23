@@ -602,7 +602,7 @@ void NNPDFSettings::SetPlotFile(string const& plotfile)
 
 bool NNPDFSettings::SavePseudodata() const
 {
-  if(NNPDFSettings::Exists("fitting", "savepseudodata"))
+  if (NNPDFSettings::Exists("fitting", "savepseudodata"))
     return Get("fitting", "savepseudodata").as<bool>();
   return false;
 }
