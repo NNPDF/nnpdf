@@ -51,7 +51,7 @@ fitting:
       optimizer_name: 'Adadelta'
       learning_rate: 0.00001
       clipnorm: 1.0
-    epochs: 2000
+    epochs: 20000
     stopping_patience: 1.00 # percentage of the number of epochs
     layer_type: 'dense_per_flavour'
     dropout: 0.0

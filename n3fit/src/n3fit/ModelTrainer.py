@@ -14,14 +14,13 @@ import n3fit.model_gen as model_gen
 from n3fit.backends import MetaModel, clear_backend_state, operations, callbacks
 from n3fit.stopping import Stopping
 import n3fit.hyper_optimization.penalties
+import n3fit.hyper_optimization.rewards
 
 log = logging.getLogger(__name__)
 
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
-# The stopping will not consider any run where the validation is not under this threshold
-THRESHOLD_CHI2 = 10.0
 # Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
@@ -31,45 +30,45 @@ PUSH_INTEGRABILITY_EACH = 100
 
 def _assign_data_to_model(model, data_dict, fold_k=0):
     """
-        Reads the data dictionary (``data_dict``) and assings the target data to the model
-        It returns a dictionary containing:
-        {
-            'model': the backend.MetaModel to be trained
-            'target_ndata': an array of target output
-            'ndata': the number of datapoints
-            'losses': the list of loss functions of the model
-        }
+    Reads the data dictionary (``data_dict``) and assings the target data to the model
+    It returns a dictionary containing:
+    {
+        'model': the backend.MetaModel to be trained
+        'target_ndata': an array of target output
+        'ndata': the number of datapoints
+        'losses': the list of loss functions of the model
+    }
 
-        If kfolding is active applies the (``fold_k``) fold to the target data.
-        in this case ndata is a count of the non_zero entries of the fold
+    If kfolding is active applies the (``fold_k``) fold to the target data.
+    in this case ndata is a count of the non_zero entries of the fold
 
-        Note: this function is transitional. Eventually a validphys action should
-        provide an experiment object with a .target_data(fold_indx) method which
-        should return the necessary information:
-            - number of datapoints
-            - target data with the right entries set to 0*
-        *or masked away if it is able to also return a list of loss functions that will mask away
-        the corresponding entries of the prediction
+    Note: this function is transitional. Eventually a validphys action should
+    provide an experiment object with a .target_data(fold_indx) method which
+    should return the necessary information:
+        - number of datapoints
+        - target data with the right entries set to 0*
+    *or masked away if it is able to also return a list of loss functions that will mask away
+    the corresponding entries of the prediction
 
 
-        Parameters
-        ----------
-            model: backend.MetaModel
-                model to be added to the dictionary
-            data_dict: dict
-                dictionary containing: {
-                    'expdata' : list of experimental data which the model will target,
-                    'folds' : a list (size=expdata) of lists (size=kfolds) with the folding masks)
-                    'losses': a list of loss functions for the model
-                    }
-            fold_k: int
-                when kfolding, index of the fold, so that for every experiment we apply the
-                folds[index_experiment][mask]
+    Parameters
+    ----------
+        model: backend.MetaModel
+            model to be added to the dictionary
+        data_dict: dict
+            dictionary containing: {
+                'expdata' : list of experimental data which the model will target,
+                'folds' : a list (size=expdata) of lists (size=kfolds) with the folding masks)
+                'losses': a list of loss functions for the model
+                }
+        fold_k: int
+            when kfolding, index of the fold, so that for every experiment we apply the
+            folds[index_experiment][mask]
 
-        Returns
-        -------
-            ret: dict
-                dictionary containing the model and its associated ndata and loss
+    Returns
+    -------
+        ret: dict
+            dictionary containing the model and its associated ndata and loss
     """
     # Array with all data
     all_data = data_dict["expdata"]
@@ -102,7 +101,7 @@ def _assign_data_to_model(model, data_dict, fold_k=0):
 
 def _model_compilation(models, optimizer_params):
     """
-	Compiles all models
+        Compiles all models
 
     Parameters
     ----------
@@ -128,8 +127,8 @@ def _pdf_injection(pdf_layers, observables, datasets_out=None):
 
 def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
     """
-    If any of input_initial or input_multiplier is None this function computes 
-    the missing values taking as input the maximum lambda multiplier and the number of steps needed 
+    If any of input_initial or input_multiplier is None this function computes
+    the missing values taking as input the maximum lambda multiplier and the number of steps needed
     to reach the maximum number of epochs
     """
     initial = input_initial
@@ -139,7 +138,7 @@ def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, step
         # If the initial value is also None, set it to one
         if initial is None:
             initial = 1.0
-        multiplier = pow(max_lambda / initial, 1 / steps)
+        multiplier = pow(max_lambda / initial, 1 / max(steps, 1))
     elif initial is None:
         # Select the necessary initial value to get to max_lambda after all steps
         initial = max_lambda / pow(multiplier, steps)
@@ -148,19 +147,19 @@ def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, step
 
 class ModelTrainer:
     """
-        ModelTrainer Class:
+    ModelTrainer Class:
 
-        Wrapper around the fitting code and the generation of the Neural Network
+    Wrapper around the fitting code and the generation of the Neural Network
 
-        When the "hyperparametrizable"* function is called with a dictionary of parameters,
-        it generates a NN and subsequentially performs a fit.
+    When the "hyperparametrizable"* function is called with a dictionary of parameters,
+    it generates a NN and subsequentially performs a fit.
 
-        The motivation behind this class is minimising the amount
-        of redundant calls of each hyperopt run, in particular this allows to completely reset
-        the NN at the beginning of each iteration reusing some of the previous work.
+    The motivation behind this class is minimising the amount
+    of redundant calls of each hyperopt run, in particular this allows to completely reset
+    the NN at the beginning of each iteration reusing some of the previous work.
 
-        *called in this way because it accept a dictionary of hyper-parameters
-        which defines the Neural Network
+    *called in this way because it accept a dictionary of hyper-parameters
+    which defines the Neural Network
     """
 
     def __init__(
@@ -186,8 +185,6 @@ class ModelTrainer:
             integ_info: list of dictionaries containing integrability sets
             flavinfo: the object returned by fitting['basis']
             nnseed: the seed used to initialise the Neural Network, will be passed to model_gen
-            pass_status: flag to signal a good run
-            failed_status: flag to signal a bad run
             pass_status: flag to signal a good run
             failed_status: flag to signal a bad run
             debug: flag to activate some debug options
@@ -235,6 +232,13 @@ class ModelTrainer:
                 pen_fun = getattr(n3fit.hyper_optimization.penalties, penalty)
                 self.hyper_penalties.append(pen_fun)
                 log.info("Adding penalty: %s", penalty)
+            # Check what is the hyperoptimization target function
+            hyper_loss = kfold_parameters.get("target", None)
+            if hyper_loss is None:
+                hyper_loss = "average"
+                log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
+            log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
+            self.hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
 
         # Initialize the pdf model
         self.pdf_model = None
@@ -250,8 +254,10 @@ class ModelTrainer:
             "model": None,
             "posdatasets": [],
             "posmultipliers": [],
+            "posinitials": [],
             "integdatasets": [],
             "integmultipliers": [],
+            "integinitials": [],
             "folds": [],
         }
         self.validation = {
@@ -538,6 +544,7 @@ class ModelTrainer:
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
             self.training["posmultipliers"].append(pos_multiplier)
+            self.training["posinitials"].append(pos_initial)
 
         # Finally generate the integrability penalty
         if self.integ_info is not None:
@@ -563,6 +570,7 @@ class ModelTrainer:
                 self.training["output"].append(integ_layer["output_tr"])
                 self.training["losses"].append(integ_layer["loss_tr"])
                 self.training["integmultipliers"].append(integ_multiplier)
+                self.training["integinitials"].append(integ_initial)
 
     def _generate_pdf(
         self,
@@ -627,7 +635,7 @@ class ModelTrainer:
         return pdf_model
 
     def _assign_data(self, models, fold_k=0):
-        """ Assign to each model the data to compare with as well as the
+        """Assign to each model the data to compare with as well as the
         number of data points in the model.
         In the most general case training and validation get assigned the replic'd data
         while experimental gets the actual data.
@@ -646,7 +654,7 @@ class ModelTrainer:
         return ret
 
     def _prepare_reporting(self, partition):
-        """ Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
+        """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
@@ -696,7 +704,7 @@ class ModelTrainer:
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
 
-        if stopping_object.positivity:
+        if stopping_object.positivity_pass():
             return self.pass_status
         else:
             return self.failed_status
@@ -726,7 +734,7 @@ class ModelTrainer:
         self.callbacks.append(callback_tb)
 
     def evaluate(self, stopping_object):
-        """ Returns the training, validation and experimental chi2
+        """Returns the training, validation and experimental chi2
 
         Parameters
         ----------
@@ -797,13 +805,6 @@ class ModelTrainer:
             epochs,
         )
 
-        # Generate the stopping_object
-        # this object holds statistical information about the fit
-        # it can be used to perform stopping
-        epochs = int(params["epochs"])
-        stopping_patience = params["stopping_patience"]
-        stopping_epochs = epochs * stopping_patience
-
         # Initialize the chi2 dictionaries
         l_train = []
         l_valid = []
@@ -815,6 +816,7 @@ class ModelTrainer:
             # Each partition of the kfolding needs to have its own separate model
             seed = self.NNseed
             if k > 0:
+                # Update the seed
                 seed = np.random.randint(0, pow(2, 31))
 
             # Generate the pdf model
@@ -832,6 +834,12 @@ class ModelTrainer:
             # Model generation joins all the different observable layers
             # together with pdf model generated above
             models = self._model_generation(pdf_model, partition)
+
+            if k > 0:
+                # Reset the positivity and integrability multipliers
+                pos_and_int = self.training["posdatasets"] + self.training["integdatasets"]
+                initial_values = self.training["posinitials"] + self.training["posinitials"]
+                models["training"].reset_layer_weights_to(pos_and_int, initial_values)
 
             # Assign data to each model
             # model dicts is similar to model but includes information about
@@ -861,7 +869,11 @@ class ModelTrainer:
             # Compile each of the models with the right parameters
             _model_compilation(model_dicts, params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             # Compute validation and training loss
             training_loss = stopping_object.tr_loss
@@ -871,19 +883,24 @@ class ModelTrainer:
             exp_loss_raw = models["experimental"].compute_losses()["loss"]
             experimental_loss = exp_loss_raw / model_dicts["experimental"]["ndata"]
 
-            # Save all losses
-
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
                 for penalty in self.hyper_penalties:
                     hyper_loss += penalty(pdf_model, stopping_object)
                 l_hyper.append(hyper_loss)
-                log.info("fold: %d", k + 1)
-                log.info("Hyper loss: %f", hyper_loss)
+                log.info("Fold %d finished, loss=%.1f, pass=%s", k+1, hyper_loss, passed)
+                if passed != self.pass_status:
+                    log.info("Hyperparameter combination fail to find a good fit, breaking")
+                    # If the fit failed to fit, no need to add a penalty to the loss
+                    break
                 if hyper_loss > self.hyper_threshold:
-                    log.info("Loss over threshold, breaking")
+                    log.info("Loss above threshold (%.1f > %.1f), breaking", hyper_loss, self.hyper_threshold)
+                    # Apply a penalty proportional to the number of folds that have not been computed
+                    pen_mul = len(self.kpartitions) - k
+                    l_hyper = [i * pen_mul for i in l_hyper]
                     break
 
+            # Save all losses
             l_train.append(training_loss)
             l_valid.append(validation_loss)
             l_exper.append(experimental_loss)
@@ -896,16 +913,12 @@ class ModelTrainer:
         }
 
         if self.mode_hyperopt:
-            ave = np.average(l_hyper)
-            std = np.var(l_hyper)
-            dict_out["loss"] = ave
+            dict_out["loss"] = self.hyper_loss(l_hyper)
             dict_out["kfold_meta"] = {
                 "training_losses": l_train,
                 "validation_losses": l_valid,
                 "experimental_losses": l_exper,
                 "hyper_losses": l_hyper,
-                "hyper_avg": ave,
-                "hyper_std": std,
             }
             # If we are using hyperopt we don't need to output any other information
             return dict_out

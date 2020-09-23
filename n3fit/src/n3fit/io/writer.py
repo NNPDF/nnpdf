@@ -84,7 +84,7 @@ class WriterWrapper:
             arc_lengths,
             allchi2_lines,
             preproc_lines,
-            self.stopping_object.positivity_pass(),
+            self.stopping_object.positivity_status(),
             self.timings,
         )
 
