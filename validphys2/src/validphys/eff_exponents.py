@@ -401,7 +401,7 @@ fmt = lambda a: float(significant_digits(a, 4))
 next_fit_eff_exps_table = collect("next_effective_exponents_table", ("fitpdfandbasis",))
 
 
-def next_effective_exponents_yaml(
+def iterated_runcard_yaml(
     fit: FitSpec, next_fit_eff_exps_table, _updated_description=None
 ):
     """
@@ -427,7 +427,7 @@ def next_effective_exponents_yaml(
     be written to a file e.g
 
     >>> from validphys.api import API
-    >>> yaml_output = API.next_effective_exponents_yaml(
+    >>> yaml_output = API.iterated_runcard_yaml(
     ...     fit=<fit name>,
     ...     _updated_description="My iterated fit"
     ... )

@@ -101,7 +101,7 @@ def main():
 
     updated_description = interactive_description(description)
 
-    iterated_runcard_yaml = API.next_effective_exponents_yaml(
+    iterated_runcard_yaml = API.iterated_runcard_yaml(
         fit=input_fit, _updated_description=updated_description
     )
 
