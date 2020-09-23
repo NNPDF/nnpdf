@@ -81,20 +81,16 @@ def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_
     return vetoes
 
 
-def save_vetoes(veto_dict: dict, filepath):
-    """ Saves a fit veto dictionary to file """
+def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, filepath):
+    """ Saves to file the chi2 and arclength thresholds used by postfit as well as veto
+    dictionaries which contain information on which replicas pass each veto."""
     if filepath.exists():
         log.warning(f"Veto file {filepath} already exists. Overwriting file")
-    with open(filepath, 'w') as f:
-        veto_dict_tolist = {key: val.tolist() for key, val in veto_dict.items()}
-        json.dump(veto_dict_tolist, f)
-
-
-def save_postfit_parameters(chi2_threshold, arclength_threshold, filepath):
-    """ Saves the chi2 and arclength thresholds used by postfit to file """
-    if filepath.exists():
-        log.warning(f"Postfit parameters file {filepath} already exists. Overwriting file")
     with open(filepath, "w") as f:
-        json.dump(
-            {"chi2_threshold": chi2_threshold, "arclength_threshold": arclength_threshold}, f,
-        )
+        thresholds_dict = {
+            "chi2_threshold": chi2_threshold,
+            "arclength_threshold": arclength_threshold
+        }
+        veto_dict_tolist = {key: val.tolist() for key, val in veto_dict.items()}
+        combined_dict = {**thresholds_dict, **veto_dict_tolist}
+        json.dump(combined_dict, f)

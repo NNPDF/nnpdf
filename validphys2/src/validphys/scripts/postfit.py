@@ -93,10 +93,9 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
                 f"Corrupted replica replica at {path}. "
                 f"Error when loading replica information:\n {e}") from e
     fit_vetoes = fitveto.determine_vetoes(fitinfo, chi2_threshold, arclength_threshold)
-    fitveto.save_postfit_parameters(
-        chi2_threshold, arclength_threshold, postfit_path / "postfit_parameters.json"
+    fitveto.save_vetoes_info(
+        fit_vetoes, chi2_threshold, arclength_threshold, postfit_path / "veto_count.json"
     )
-    fitveto.save_vetoes(fit_vetoes, postfit_path / 'veto_count.json')
 
     for key in fit_vetoes:
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
