@@ -98,7 +98,7 @@ class Preprocessing(MetaLayer):
 
         super(Preprocessing, self).build(input_shape)
 
-    def meta_call(self, inputs, **kwargs):
+    def call(self, inputs, **kwargs):
         x = inputs
         pdf_raw = op.concatenate(
             [
