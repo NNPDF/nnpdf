@@ -144,14 +144,16 @@ def check_model_file(fitting):
     if save_file:
         if not isinstance(save_file, str):
             raise CheckError(f"Model file to save to: {save_file} not understood")
-        # Check whether we can werite to the file
+        # Check whether we can write to the file
         try:
-            with open(save_file, 'w'):
+            with open(save_file, 'a'):
                 pass
-        except PermissionError:
-            raise CheckError(f"Model file {save_file} cannot be written to (permission denied)")
-        except FileNotFoundError:
-            raise CheckError(f"Model file {save_file} cannot be written to (folder not found)")
+        except PermissionError as e:
+            raise CheckError(f"Model file {save_file} cannot be written to: {e}") from e
+        except FileNotFoundError as e:
+            raise CheckError(f"Model file {save_file} cannot be written to: {e}") from e
+        except OSError as e:
+            raise CheckError(e) from e
 
     if load_file:
         if not isinstance(load_file, str):
@@ -160,6 +162,8 @@ def check_model_file(fitting):
             raise CheckError(f"Model file to load from: {load_file} can not be opened")
         if not os.access(load_file, os.R_OK):
             raise CheckError(f"Model file to load from: {load_file} cannot be read")
+        if os.stat(load_file).st_size == 0:
+            raise CheckError(f"Model file {load_file} is empty")
 
 @make_argcheck
 def wrapper_check_NN(fitting):
