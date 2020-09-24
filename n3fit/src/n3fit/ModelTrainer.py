@@ -821,7 +821,7 @@ class ModelTrainer:
             models = self._model_generation(pdf_model, partition)
 
             # Only after model generation, apply possible weight file
-            if self.model_file is not None:
+            if self.model_file:
                 log.info("Applying model file %s", self.model_file)
                 pdf_model.load_weights(self.model_file)
 

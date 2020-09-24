@@ -244,7 +244,7 @@ def performfit(
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
-            model_file=fitting.get("load") # TODO add a check!
+            model_file=fitting.get("load")
         )
 
         # This is just to give a descriptive name to the fit function
@@ -353,6 +353,6 @@ def performfit(
 
     # Save the weights to some file
     model_file = fitting.get("save")
-    if model_file is not None:
+    if model_file:
         log.info(" > Saving the weights for future in %s", model_file)
         pdf_model.save_weights(model_file)
