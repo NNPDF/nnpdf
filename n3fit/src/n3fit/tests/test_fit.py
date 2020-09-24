@@ -24,7 +24,6 @@ import pytest
 import shutil
 import pathlib
 import logging
-import tempfile
 import subprocess as sp
 from collections import namedtuple
 from numpy.testing import assert_almost_equal
@@ -58,7 +57,7 @@ def compare_two(val1, val2, precision=6):
 
 
 def compare_lines(set1, set2, precision=6):
-    """ Returns true if the lines within set1 and set2 are the same
+    """Returns true if the lines within set1 and set2 are the same
     The numbers are compared up to `precision`
     """
     for val1, val2 in zip(set1, set2):
@@ -83,16 +82,13 @@ def test_initialize_seeds():
     assert result_nomc == regression_nomc
 
 
-def auxiliary_performfit(timing=True):
+def auxiliary_performfit(tmp_path, timing=True):
     quickcard = f"{QUICKNAME}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
     weightpath = REGRESSION_FOLDER / "weights.h5"
     # read up the old info file
     old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
-    # create a /tmp folder
-    tmp_name = tempfile.mkdtemp(prefix="nnpdf-")
-    tmp_path = pathlib.Path(tmp_name)
     # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
     shutil.copy(weightpath, tmp_path)
@@ -103,6 +99,7 @@ def auxiliary_performfit(timing=True):
     new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
     compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)
+    assert 0
     # check that the times didnt grow in a weird manner
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     if timing:
@@ -118,37 +115,35 @@ def auxiliary_performfit(timing=True):
 
 
 @pytest.mark.darwin
-def test_performfit():
-    auxiliary_performfit(timing=False)
+def test_performfit(tmp):
+    auxiliary_performfit(tmp, timing=False)
 
 
 @pytest.mark.linux
-def test_performfit_and_timing():
-    auxiliary_performfit(timing=True)
+def test_performfit_and_timing(tmp):
+    auxiliary_performfit(tmp, timing=True)
 
 
-def test_hyperopt():
+def test_hyperopt(tmp):
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
-    tmp_name = tempfile.mkdtemp(prefix="hypernnpdf-")
-    tmp_path = pathlib.Path(tmp_name)
     # cp runcard to tmp folder
-    shutil.copy(quickpath, tmp_path)
+    shutil.copy(quickpath, tmp)
     # We just want to ensure that the hyperopt can run, but we need to kill it ourselves
     # 60 seconds should be enough
     with pytest.raises(sp.TimeoutExpired):
         sp.run(
-            f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(), cwd=tmp_path, timeout=60,
+            f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(),
+            cwd=tmp,
+            timeout=60,
         )
 
 
-def test_novalidation(timing=30):
+def test_novalidation(tmp, timing=30):
     """ Runs a runcard without validation, success is assumed if it doesn't crash in 30 seconds """
     quickcard = f"noval-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
-    tmp_name = tempfile.mkdtemp(prefix="hypernnpdf-")
-    tmp_path = pathlib.Path(tmp_name)
-    shutil.copy(quickpath, tmp_path)
+    shutil.copy(quickpath, tmp)
     with pytest.raises(sp.TimeoutExpired):
-        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)
+        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp, timeout=timing)
