@@ -83,9 +83,7 @@ fitting:
   mcseed: 3  
   epochs: 20000
   save: False
-  savefile: 'weights.hd5'
   load: False
-  loadfile: 'weights.hd5'
 
   seed     : 9453862133528      # set the seed for the random generator
   genrep   : True     # on = generate MC replicas, off = use real data
