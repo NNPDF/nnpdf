@@ -243,8 +243,8 @@ class CoreConfig(configparser.Config):
             try:
                 with self.set_context(ns=self._curr_ns.new_child({"theoryid": thid})):
                     _, data_val = self.parse_from_("fit", data_key, write=False)
-            except ConfigError:
-                raise e
+            except ConfigError as inner_error:
+                raise e from inner_error
         # now fill in a unique key "data_input" regardless of new or old fit
         # for uniformity
         data_input = self.produce_data_input(**{data_key: data_val})
