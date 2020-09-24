@@ -17,6 +17,8 @@ import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 # make sure the GPU is not used
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
+os.environ["PYTHONHASHSEED"] = "0"
 
 import pytest
 import shutil
@@ -85,13 +87,15 @@ def auxiliary_performfit(timing=True):
     quickcard = f"{QUICKNAME}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
+    weightpath = REGRESSION_FOLDER / "weights.h5"
     # read up the old info file
     old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
     # create a /tmp folder
     tmp_name = tempfile.mkdtemp(prefix="nnpdf-")
     tmp_path = pathlib.Path(tmp_name)
-    # cp runcard to tmp folder
+    # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
+    shutil.copy(weightpath, tmp_path)
     # run the fit
     sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, check=True)
     # read up the .fitinfo files

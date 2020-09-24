@@ -244,19 +244,8 @@ def performfit(
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
+            model_file=fitting.get("load") # TODO add a check!
         )
-
-        # Check whether we want to load weights from a file (maybe from a previous run)
-        # check whether the file exists, otherwise set it to none
-        # reading the data up will be done by the model_trainer
-        if fitting.get("load"):
-            model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from %s", model_file)
-            if not os.path.isfile(model_file):
-                log.warning(" > Model file %s could not be found", model_file)
-                model_file = None
-            else:
-                the_model_trainer.model_file = model_file
 
         # This is just to give a descriptive name to the fit function
         pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
@@ -363,7 +352,7 @@ def performfit(
         log.info("Tensorboard logging information is stored at %s", log_path)
 
     # Save the weights to some file
-    if fitting.get("save"):
-        model_file = fitting.get("savefile")
+    model_file = fitting.get("save")
+    if model_file is not None:
         log.info(" > Saving the weights for future in %s", model_file)
-        training["model"].save_weights(model_file)
+        pdf_model.save_weights(model_file)
