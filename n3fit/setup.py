@@ -10,6 +10,11 @@ setup(
             '':['*.fitinfo', '*.yml'],
             'tests/regressions': ['*'],
         },
+        extras_require={
+          'ga' : [
+            'evolutionary-keras',
+            ],
+          },
 
         entry_points = {'console_scripts':
             ['n3fit = n3fit.scripts.n3fit_exec:main',

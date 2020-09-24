@@ -13,9 +13,42 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 import random as rn
 import numpy as np
 import tensorflow as tf
+
 # for (very slow but fine grained) debugging turn eager mode on
 # tf.config.run_functions_eagerly(True)
 from tensorflow.keras import backend as K
+
+
+def set_backend(module):
+    """Overwrites the necessary modules and imports from the
+    backends module.
+    Receives a reference to the module to overwrite.
+    """
+    from n3fit.backends.keras_backend.internal_state import (
+        set_initial_state,
+        clear_backend_state,
+    )
+
+    setattr(module, "set_initial_state", set_initial_state)
+    setattr(module, "clear_backend_state", clear_backend_state)
+
+    from n3fit.backends.keras_backend.MetaLayer import MetaLayer
+    from n3fit.backends.keras_backend.MetaModel import MetaModel
+
+    setattr(module, "MetaLayer", MetaLayer)
+    setattr(module, "MetaModel", MetaModel)
+
+    import n3fit.backends.keras_backend.base_layers as backend_layers
+    from n3fit.backends.keras_backend import losses
+    from n3fit.backends.keras_backend import operations
+    from n3fit.backends.keras_backend import constraints
+    from n3fit.backends.keras_backend import callbacks
+
+    setattr(module, "backend_layers", backend_layers)
+    setattr(module, "losses", losses)
+    setattr(module, "operations", operations)
+    setattr(module, "constraints", constraints)
+    setattr(module, "callbacks", callbacks)
 
 
 def set_initial_state(seed=13):
@@ -44,10 +77,10 @@ def set_initial_state(seed=13):
 
 def clear_backend_state(max_cores=None):
     """
-        Clears the state of the backend and opens a new session.
+    Clears the state of the backend and opens a new session.
 
-        Note that this function needs to set the TF session, including threads and processes
-        i.e., this function must NEVER be called after setting the initial state.
+    Note that this function needs to set the TF session, including threads and processes
+    i.e., this function must NEVER be called after setting the initial state.
     """
     print("Clearing session")
 

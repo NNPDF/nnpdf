@@ -11,6 +11,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
 from n3fit.backends.keras_backend.operations import numpy_to_tensor
 
+
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split('.')
 if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
