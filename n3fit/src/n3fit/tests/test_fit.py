@@ -99,7 +99,6 @@ def auxiliary_performfit(tmp_path, timing=True):
     new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
     compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)
-    assert 0
     # check that the times didnt grow in a weird manner
     time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     if timing:
