@@ -80,3 +80,18 @@ $ vp-pdfrename --author "Shayan Iranipour" --author "Zahari Kassabov" --descript
 
 The user can additionally modify the `DataVersion`, `SetIndex`, `Reference` entries using the `--data-version`, `--index`, and `--reference`
 flags respectively.
+
+If the PDF uses MC replicas then the number of replicas can be subsampled using
+the `--replicas` flag. Since the replica zero will have to be regenerated,
+subsampling replicas also requires `-l` or `--lhapdf_path`:
+
+```
+$ vp-pdfrename <path-to-PDF> <desired-name-of-PDF> --replicas 5 -l
+```
+
+Some obvious restrictions apply, e.g the number of subsampled replicas cannot
+be greater than the number of replicas of the original `PDF`. There is also
+the special case when the number of subsampled replicas is set to 1: LHAPDF
+files are required to have at least 2 replicas, and so the script will choose
+a single replica and then duplicate it so the resulting `PDF` will have two
+identical replicas.
