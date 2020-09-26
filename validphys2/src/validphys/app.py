@@ -47,6 +47,8 @@ providers = [
              'validphys.pseudodata',
              'validphys.renametools',
              'validphys.covmats',
+             'validphys.deltachitemplates.delta_chi2_hessian',
+             'validphys.deltachitemplates.plot_epsilon',
              'reportengine.report'
             ]
 

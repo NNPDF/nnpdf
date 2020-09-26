@@ -197,7 +197,8 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
 
 def new_pdf_from_indexes(
         pdf, indexes, set_name=None, folder=None,
-        extra_fields=None, installgrid=False, use_rep0grid=False):
+        extra_fields=None, installgrid=False, use_rep0grid=False,
+        hessian=False):
     """Create a new PDF set from by selecting replicas from another one.
 
     Parameters
@@ -220,6 +221,9 @@ def new_pdf_from_indexes(
         instead of relying that all grids are the same and averaging the
         files directly. It is slower and will call LHAPDF to fill the grids,
         but works for sets where the replicas have different grids.
+    hessian: bool, optional, default=``False``
+        Set True if the prior set is an Hessian set so the pdf 0 will we copied
+        instead of calculated from the average.
     """
 
     if extra_fields is not None:
@@ -269,15 +273,29 @@ def new_pdf_from_indexes(
     oldpaths = lhapdf.paths()
     try:
         lhapdf.setPaths([str(folder)])
-        generatedPDF = PDF(set_name)
-        generate_replica0(generatedPDF, rep0grid)
+        """Added this simple if-else with copy member 0
+        """
+        if not hessian:
+            generatedPDF = PDF(set_name)
+            generate_replica0(generatedPDF, rep0grid)
+        else:
+            # Copy member 0
+            original_path = _index_to_path(original_folder, pdf, 0)
+            new_path = _index_to_path(set_root, set_name, 0)
+            shutil.copy(original_path, new_path)
     finally:
         lhapdf.setPaths(oldpaths)
 
     if installgrid:
         newpath = pathlib.Path(lhaindex.get_lha_datapath()) /  set_name
         log.info(f"Installing new PDF set at {newpath}")
-        shutil.copytree(set_root, newpath)
+        """Use move otherwise a copy of the pdf set will remain in the current
+        directory. Note that python raises the error
+        AttributeError: 'PosixPath' object has no attribute 'rstrip' 
+        when the output directory already exists
+        """
+        shutil.move(set_root, newpath)
+
 
 
 def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
