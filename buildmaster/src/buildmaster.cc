@@ -462,5 +462,13 @@ void InitCommonData(vector<CommonData*>& target)
   // *********************** EIC pseudodata ***********************************
   target.push_back(new EIC_CC_140_OPTFilter());
   target.push_back(new EIC_CC_140_PESFilter());
+  target.push_back(new EIC_NC_140_OPTFilter());
+  target.push_back(new EIC_NC_63_OPTFilter());
+  target.push_back(new EIC_NC_44_OPTFilter());
+  target.push_back(new EIC_NC_28_OPTFilter());
+  target.push_back(new EIC_NC_140_PESFilter());
+  target.push_back(new EIC_NC_63_PESFilter());
+  target.push_back(new EIC_NC_44_PESFilter());
+  target.push_back(new EIC_NC_28_PESFilter());
   
 }
