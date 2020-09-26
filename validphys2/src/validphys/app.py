@@ -47,6 +47,8 @@ providers = [
              'validphys.pseudodata',
              'validphys.renametools',
              'validphys.covmats',
+             'validphys.hyperplottemplates.hyperoptplot',
+             'validphys.hyperplottemplates.hyperoptdata',
              'reportengine.report'
             ]
 
