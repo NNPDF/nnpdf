@@ -193,11 +193,11 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
     #NOTE: I'm not sure what to do here regarding choice of target loss
     hyperopt_losses = np.array(trial_dict["hlosses"])
     if loss_target == "average":
-        loss = hyperopt_losses.mean()
+        test_loss = hyperopt_losses.mean()
     elif loss_target == "best_worst":
-        loss = hyperopt_losses.max()
+        test_loss = hyperopt_losses.max()
     elif loss_target == "std":
-        loss = hyperopt_losses.std()
+        test_loss = hyperopt_losses.std()
     loss = val_loss * validation_multiplier + test_loss * test_f
 
     if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold or np.isnan(loss):
@@ -243,7 +243,7 @@ def generate_dictionary(
         evaluate_trial(trial_dict, val_multiplier, fail_threshold, loss_target)
         trial_dict[KEYWORDS["id"]] = index
         all_trials.append(trial_dict)
-    import ipdb; ipdb.set_trace()
+
     return all_trials
 
 
