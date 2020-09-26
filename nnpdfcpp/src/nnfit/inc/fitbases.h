@@ -114,22 +114,6 @@ protected:
   bool fQED;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  *  \class PDF4LHC20FitBasis
  *  \brief PDF4LHC20 basis for fitting
