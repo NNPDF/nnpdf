@@ -182,16 +182,25 @@ def parse_trial(trial):
     return data_dict
 
 
-def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
+def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_target):
     """
     Read a trial dictionary and compute the true loss and decide whether the run passes or not
     """
     test_f = 1.0 - validation_multiplier
     val_loss = trial_dict[KEYWORDS["vl"]]
     test_loss = trial_dict[KEYWORDS["tl"]]
+
+    #NOTE: I'm not sure what to do here regarding choice of target loss
+    hyperopt_losses = np.array(trial_dict["hlosses"])
+    if loss_target == "average":
+        loss = hyperopt_losses.mean()
+    elif loss_target == "best_worst":
+        loss = hyperopt_losses.max()
+    elif loss_target == "std":
+        loss = hyperopt_losses.std()
     loss = val_loss * validation_multiplier + test_loss * test_f
 
-    if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold:
+    if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold or np.isnan(loss):
         trial_dict["good"] = False
         # Set the loss an order of magnitude above the result so it shows obviously on the plots
         loss *= 10
@@ -201,6 +210,7 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
 
 def generate_dictionary(
     replica_path,
+    loss_target,
     json_name="tries.json",
     starting_index=0,
     val_multiplier=0.5,
@@ -230,9 +240,10 @@ def generate_dictionary(
         trial_dict = parse_trial(trial)
         if trial_dict is None:
             continue
-        evaluate_trial(trial_dict, val_multiplier, fail_threshold)
+        evaluate_trial(trial_dict, val_multiplier, fail_threshold, loss_target)
         trial_dict[KEYWORDS["id"]] = index
         all_trials.append(trial_dict)
+    import ipdb; ipdb.set_trace()
     return all_trials
 
 
@@ -312,6 +323,7 @@ def hyperopt_dataframe(commandline_args):
         replica_path = os.path.dirname(json_path)
         dictionaries = generate_dictionary(
             replica_path,
+            args.loss_target,
             starting_index=starting_index,
             val_multiplier=args.val_multiplier,
             fail_threshold=args.threshold,
