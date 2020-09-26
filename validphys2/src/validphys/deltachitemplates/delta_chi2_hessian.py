@@ -12,11 +12,12 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
                           % (pdf, etype))
 
 @check_pdf_is_symmhessian
-def delta_chi2_hessian(pdf, experiments, experiments_chi2):
+def delta_chi2_hessian(pdf, experiments, groups_chi2):
     """
     Return delta_chi2 (computed as in plot_delta_chi2_hessian) relative to
     each eigenvector of the Hessian set.
     """
+    experiments_chi2 = groups_chi2
     # store for each exp the chi2 from central value and chi2 from each error memebeer
     total_chis_exps = np.zeros((len(experiments), 1 + len(experiments_chi2[0].replica_result.error_members())))
 
