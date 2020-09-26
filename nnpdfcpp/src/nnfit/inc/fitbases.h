@@ -123,7 +123,7 @@ class PDF4LHC20FitBasis: public FitBasis
 public:
   PDF4LHC20FitBasis(NNPDFSettings const&);
 
-  // Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35, γ
+  // Σ, g, V, V3, T3, T8, γ
 
   enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_T3, FIT_T8, FIT_GAM };
 
