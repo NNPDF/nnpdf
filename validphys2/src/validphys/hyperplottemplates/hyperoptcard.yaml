@@ -1,0 +1,6 @@
+template: report.md
+
+author: Roy Stegeman
+
+actions_:
+  - report(main=True)

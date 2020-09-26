@@ -30,7 +30,8 @@ setup(name= "validphys",
                         'vp-rebuild-data = validphys.scripts.vp_rebuild_data:main',
                         'vp-pdfrename = validphys.scripts.vp_pdfrename:main',
                         'vp-list = validphys.scripts.vp_list:main',
-                        'vp-nextfitruncard = validphys.scripts.vp_nextfitruncard:main'
+                        'vp-nextfitruncard = validphys.scripts.vp_nextfitruncard:main',
+                        'vp-hyperoptplot = validphys.hyperplottemplates.vp_hyperoptplot:main'
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),
@@ -42,6 +43,7 @@ setup(name= "validphys",
             'tests/baseline': ['*'],
             'cuts': ['*'],
             'scalevariations': ['*'],
+            'hyperopt': ['*']
        },
       zip_safe = False,
       classifiers=[
