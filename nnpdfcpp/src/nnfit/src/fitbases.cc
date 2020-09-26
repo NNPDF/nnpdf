@@ -34,6 +34,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: EVOL" << Colour::FG_DEFAULT << endl;
       break;
     }
+    
     case BASIS_DISEVOL:
     {
       fitbasis = new DISEvolFitBasis(settings);
@@ -100,6 +101,13 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       break;
     }
 
+    case BASIS_PDF4LHC20:
+    {
+      fitbasis = new PDF4LHC20FitBasis(settings);
+      cout << Colour::FG_BLUE << "Selecting FitBasis: EVOL" << Colour::FG_DEFAULT << endl;
+      break;
+    }
+    
     default:
       cerr << Colour::FG_RED << "[getFitBasis] error: Invalid Fitting Basis" << Colour::FG_DEFAULT << endl;
       exit(-1);
@@ -594,6 +602,193 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
        break;
      default:
        cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+       exit(-1);
+       break;
+  }
+}
+
+// ****************** PDF4LHC20 BASIS *************************
+
+
+/**
+ *  Evolution Fit Basis
+ **/
+PDF4LHC20FitBasis::PDF4LHC20FitBasis(NNPDFSettings const& nnset):
+FitBasis(nnset, "PDF4LHC20FitBasis", 6+nnset.IsQED()),
+fQED(nnset.IsQED())
+{
+  // PDF Names for plotting
+  fPDFNames[FIT_SNG] = "Singlet";
+  fPDFNames[FIT_GLU] = "Gluon";
+  fPDFNames[FIT_VAL] = "V";
+  fPDFNames[FIT_V3] = "V3";
+  fPDFNames[FIT_T3] = "T3";
+  fPDFNames[FIT_T8] = "T8";
+  if (fQED)
+    fPDFNames[FIT_GAM] = "Photon";
+
+  // Damping factor for arclengths
+  fArcDampFactor[FIT_SNG] = 1;
+  fArcDampFactor[FIT_GLU] = 1;
+  fArcDampFactor[FIT_VAL] = 0;
+  fArcDampFactor[FIT_V3] = 0;
+  fArcDampFactor[FIT_T3] = 1;
+  fArcDampFactor[FIT_T8] = 1;
+  if (fQED)
+    fArcDampFactor[FIT_GAM] = 1;
+
+}
+
+void PDF4LHC20FitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
+{
+  // status
+  status = false;
+
+  // Clear old normalisations
+  for (int i=0; i<fNPDF; i++)
+  {
+    param.fPDFNorm[i] = 1.0;
+    param.fPDFAux[i] = 0.0;
+  }
+
+  // Normalisations pointer
+  real* norm = param.fPDFNorm;
+
+  // Quantum number sum rules
+  norm[FIT_VAL] = 3.0f/pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork); // Total valence
+  norm[FIT_V3] = 1.0f/pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork); // V3
+
+  // ************ QED dependent normalisations **************
+  if (fQED)
+  {
+    norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork) - pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork))
+    / pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+  }
+  else
+  {
+    norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork))/
+    pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+  }
+
+  return;
+
+}
+
+/**
+ * @brief EvolFitBasis::BASIS2EVLN
+ * @param FIT
+ * @param EVLN
+ */
+void PDF4LHC20FitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
+{
+  if ( fQED )
+    EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  else
+    EVLN[EVLN_GAM] = 0;
+
+  EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
+  EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
+  EVLN[EVLN_VAL]  = FIT[FIT_VAL]; //Valence
+  EVLN[EVLN_V3]   = FIT[FIT_V3];  //V3
+  EVLN[EVLN_V8]   = FIT[FIT_VAL]; //V8
+  EVLN[EVLN_V15]  = FIT[FIT_VAL]; //V15 = V
+  EVLN[EVLN_V24]  = FIT[FIT_VAL]; //V24 = V
+  EVLN[EVLN_V35]  = FIT[FIT_VAL]; //V35 = V
+  EVLN[EVLN_T3]   = FIT[FIT_T3];  //T3
+  EVLN[EVLN_T8]   = FIT[FIT_T8];  //T8
+  EVLN[EVLN_T15]  = FIT[FIT_SNG]; //T15 = S
+  EVLN[EVLN_T24]  = FIT[FIT_SNG]; //T24 = S
+  EVLN[EVLN_T35]  = FIT[FIT_SNG]; //T35 = S
+
+  return;
+}
+
+void PDF4LHC20FitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
+{
+  // Order in fitting basis
+  // S g V V3 V8 T3 T8 gam
+
+  // Order in Evln bassi
+  // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
+
+  FIT[FIT_SNG]  = EVLN[EVLN_SNG]; //Singlet
+  FIT[FIT_GLU]  = EVLN[EVLN_GLU]; //gluon
+  FIT[FIT_VAL]  = EVLN[EVLN_VAL]; //valence
+  FIT[FIT_V3]   = EVLN[EVLN_V3]; // V3
+  FIT[FIT_T3]   = EVLN[EVLN_T3]; // T3
+  FIT[FIT_T8]   = EVLN[EVLN_T8]; // T8
+
+  if (fQED)
+    FIT[FIT_GAM] =  EVLN[0];  // photon
+
+  return;
+}
+
+real PDF4LHC20FitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status) const
+{
+  // status
+  status = false;
+
+  // sum rule calculations
+  switch (rule) {
+     case SUM_MSR:
+       {
+         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+         real msr = xsng+xglu;
+         if (fQED)
+           {
+             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+             msr += xgam;
+           }
+         return msr;
+       }
+       break;
+     case SUM_UVL:
+       {
+         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+         return ( val + v3 )/2.0;
+       }
+       break;
+     case SUM_DVL:
+       {
+         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+         return ( val - v3 )/2.0;
+       }
+       break;
+     case SUM_SVL:
+       {
+         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+         return ( val - val )/3.0;
+       }
+        break;
+     case SUM_USM:
+       {
+         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+         return ( 2.0*sng + 3.0*t3 + t8 )/6.0;
+       }
+       break;
+     case SUM_DSM:
+       {
+         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+         return ( 2.0*sng - 3.0*t3 + t8 )/6.0;
+       }
+       break;
+     case SUM_SSM:
+       {
+         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+         return ( sng - t8 )/3.0;
+       }
+       break;
+     default:
+       cerr << "PDF4LHC20FitBasis::ComputeSumRules error: unknown sum rule"<<endl;
        exit(-1);
        break;
   }

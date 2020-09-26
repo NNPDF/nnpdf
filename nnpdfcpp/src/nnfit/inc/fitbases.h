@@ -115,6 +115,31 @@ protected:
 };
 
 /**
+ *  \class PDF4LHC20FitBasis
+ *  \brief PDF4LHC20 basis for fitting
+ */
+class PDF4LHC20FitBasis: public FitBasis
+{
+public:
+  PDF4LHC20FitBasis(NNPDFSettings const&);
+
+  // Σ, g, V, V3, T3, T8, γ
+
+  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_T3, FIT_T8, FIT_GAM };
+
+  void BASIS2EVLN(real const* basis, real* evln) const;
+  void EVLN2BASIS(real const* evln, real* basis) const;
+
+  real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const;
+
+  // Preprocessing
+  void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
+
+protected:
+  bool fQED;
+};
+
+/**
  *  \class DISEvolFitBasis
  *  \brief DIS Evol basis for fitting
  */
