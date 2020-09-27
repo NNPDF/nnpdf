@@ -1,5 +1,10 @@
 /*
-   EIC pseudodata
+   EIC pseudodata for the Yellow Report.
+   The pseudodata correspond to the CC and NC cross sections, evaluated from the
+   200609-ern-001 fit. The kinematic bins and the associated statistical and
+   systematic uncertainties have been provided by the IR EIC WG and correspond,
+   for both CC and NC data, to a pessimistic and an optimistic scenario. See
+   https://github.com/JeffersonLab/txgrids
 */
 
 #include "EIC.h"
