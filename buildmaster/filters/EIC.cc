@@ -27,10 +27,10 @@ void EIC_CC_140_OPTFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -70,10 +70,10 @@ void EIC_CC_140_PESFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -113,10 +113,10 @@ void EIC_NC_140_OPTFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -155,10 +155,10 @@ void EIC_NC_63_OPTFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -197,10 +197,10 @@ void EIC_NC_44_OPTFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -239,10 +239,10 @@ void EIC_NC_28_OPTFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -282,10 +282,10 @@ void EIC_NC_140_PESFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -324,11 +324,11 @@ void EIC_NC_63_PESFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
-
+      
       fStat[i] = fStat[i]/100. * fData[i]; 
       
       fKin3[i] = fKin2[i] / fKin1[i] / sqrts / sqrts; //y
@@ -366,10 +366,10 @@ void EIC_NC_44_PESFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
@@ -408,10 +408,10 @@ void EIC_NC_28_PESFilter::ReadData()
       double sqrts;
       int idum;
       lstream >> idum >> sqrts >> fKin1[i] >> fKin2[i] // x, Q2
+	      >> fData[i]
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-      fData[i] = 1.;
 
       fStat[i] = fStat[i]/100. * fData[i]; 
       
