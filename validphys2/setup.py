@@ -32,6 +32,10 @@ setup(name= "validphys",
                         'vp-pdffromreplicas = validphys.scripts.vp_pdffromreplicas:main',
                         'vp-list = validphys.scripts.vp_list:main',
                         'vp-nextfitruncard = validphys.scripts.vp_nextfitruncard:main',
+<<<<<<< HEAD
+=======
+                        'vp-deltachi2 = validphys.deltachitemplates.vp_deltachi2'
+>>>>>>> first version of vp-deltachi2
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),

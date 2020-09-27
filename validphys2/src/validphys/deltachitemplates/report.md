@@ -1,11 +1,12 @@
-%NNPDF Report for $\Delta \chi^2$ of {@ fits @}
+%NNPDF Report for $\Delta \chi^2$ of {@ pdfs @}
 
+## $\Delta \chi^2$ per eigenvector
 
-$\Delta \chi^2$ distribution 
-------------
+## Hessian set vs MC set
+{@ MC_Hessian_compare plot_pdfs @}
 
-Eigenvector decomposition 
-------------
+## Measure of Gaussianity 
+{@ gaussianity plot_epsilon @}
 
-Kullback-Leibler measure
-------------
+## Eigenvalue decomposition 
+{@ decomposition plot_pdfs @}

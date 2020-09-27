@@ -13,19 +13,16 @@ from reportengine.figure import figuregen
 
 from validphys import plotutils
 from validphys.checks import check_scale
-from validphys.pdfplots  import FlavourState
+from validphys.pdfplots import FlavourState
 
 log = logging.getLogger(__name__)
+
 
 @figuregen
 @check_scale("xscale", allow_none=True)
 def plot_epsilon(
-    pdfs, xplotting_grids,
-    xscale: (str, type(None)) = None,
-    ymin = None,
-    ymax = None,
-    eps = None
-    ):
+    pdfs, xplotting_grids, xscale: (str, type(None)) = None, ymin=None, ymax=None, eps=None
+):
     """Plot the discrepancy (epsilon) of the 1-sigma and 68% bands at each grid value
     for all pdfs for a given Q.
 
@@ -47,16 +44,15 @@ def plot_epsilon(
 
     # pick XPlottingGrid of the first pdf set just to extract useful information
     firstgrid = xplotting_grids[0]
-    basis = firstgrid.basis # this is an object pdfbases.Basis defined in validphys.pdfbases
+    basis = firstgrid.basis  # this is an object pdfbases.Basis defined in validphys.pdfbases
     for flindex, fl in enumerate(firstgrid.flavours):
         fig, ax = plt.subplots()
         # return the label of the flavour number key passed
         parton_name = basis.elementlabel(fl)
         # create object with useful attributes
-        flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
-                                parton_name=parton_name)
+        flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax, parton_name=parton_name)
         _setup_flavour_label(flstate)
-        ax.set_title('$%s$ at %.1f GeV' % (parton_name, firstgrid.Q))
+        ax.set_title("$%s$ at %.1f GeV" % (parton_name, firstgrid.Q))
 
         all_vals = []
         for pdf, grid in zip(pdfs, xplotting_grids):
@@ -66,11 +62,14 @@ def plot_epsilon(
 
         if xscale is None:
             ax.set_xscale(firstgrid.scale)
-        else: ax.set_xscale(xscale)
+        else:
+            ax.set_xscale(xscale)
 
         if eps is not None:
             xmin = np.min(xplotting_grids[0].xgrid)
-            line2d = ax.axhline(eps, xmin, 1, alpha=.5, lw=.6, color='#666666', label='$\epsilon$=%.2f' % eps)
+            line2d = ax.axhline(
+                eps, xmin, 1, alpha=0.5, lw=0.6, color="#666666", label="$\epsilon$=%.2f" % eps
+            )
             flstate.labels.append(line2d.get_label())
 
         plotutils.frame_center(ax, firstgrid.xgrid, np.concatenate(all_vals))
@@ -79,25 +78,23 @@ def plot_epsilon(
         if ymax is not None:
             ax.set_ylim(top=ymax)
 
-        ax.set_xlabel('$x$')
+        ax.set_xlabel("$x$")
         ax.set_xlim(firstgrid.xgrid[0])
 
-
-        ax.set_ylabel('$\epsilon(x)$')
+        ax.set_ylabel("$\epsilon(x)$")
 
         ax.set_axisbelow(True)
 
-        ax.legend(flstate.labels,
-                            handler_map={plotutils.HandlerSpec:
-                                        plotutils.ComposedHandler()}
-                        )
+        ax.legend(flstate.labels, handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()})
 
-        plt.grid(linestyle='-', lw=.5, alpha=.4)
+        plt.grid(linestyle="-", lw=0.5, alpha=0.4)
 
-        yield fig, parton_name # figure and string used by figuregen to save figures
+        yield fig, parton_name  # figure and string used by figuregen to save figures
+
 
 def _setup_flavour_label(flstate):
-    flstate.labels=[]
+    flstate.labels = []
+
 
 def _draw(pdf, grid, flstate):
 
@@ -110,23 +107,23 @@ def _draw(pdf, grid, flstate):
     # Basically stats is an object which says what is the type class of the replicas:
     # MCStats, HessianStats, SymmHessianStats. In this way validphys use the right methods
     # to compute statistical values.
-    stats = pdf.stats_class(grid.grid_values[:,flindex,:])
+    stats = pdf.stats_class(grid.grid_values[:, flindex, :])
 
-    #Ignore spurious normalization warnings
+    # Ignore spurious normalization warnings
     with warnings.catch_warnings():
-        warnings.simplefilter('ignore', RuntimeWarning)
-        error68down, error68up = stats.errorbar68() # 68% error bands
+        warnings.simplefilter("ignore", RuntimeWarning)
+        error68down, error68up = stats.errorbar68()  # 68% error bands
 
     errorstd = stats.std_error()
     # color cycle iterable
     pcycler = ax._get_lines.prop_cycler
     next_prop = next(pcycler)
-    color = next_prop['color']
+    color = next_prop["color"]
     xgrid = grid.xgrid
     # the division by 2 is equivalent to considering the complete 1-sigma band (2 * error_std)
-    error68 = (error68up - error68down) / 2.
+    error68 = (error68up - error68down) / 2.0
     epsilon = abs(1 - errorstd / error68)
-    ax.plot(xgrid, epsilon, linestyle='-', color=color)
+    ax.plot(xgrid, epsilon, linestyle="-", color=color)
     labels.append(rf"{pdf.label}")
 
     return [5 * epsilon]

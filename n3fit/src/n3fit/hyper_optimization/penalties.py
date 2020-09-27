@@ -82,6 +82,8 @@ def patience(pdf_model, stopping_object, alpha=1e-4):
 
     """
     epoch_best = stopping_object.e_best_chi2
+    if epoch_best == None:
+        epoch_best = 0
     patience = stopping_object.stopping_patience
     max_epochs = stopping_object.total_epochs
     diff = abs(max_epochs - patience - epoch_best)
