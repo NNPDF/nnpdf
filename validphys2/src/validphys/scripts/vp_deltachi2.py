@@ -1,5 +1,5 @@
 from validphys.app import App
-from validphys import deltachitemplates
+from validphys import deltachi2templates
 from reportengine.compat import yaml
 import pwd
 import os
@@ -8,6 +8,8 @@ from validphys.api import API
 import numpy as np
 from validphys.lhio import new_pdf_from_indexes
 import logging
+from validphys import lhaindex
+import pathlib
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +29,13 @@ class HyperoptPlotApp(App):
             help="Energy Scale in GeV",
             type=float,
             default=1.7,
+        )
+        parser.add_argument(
+            "-t0",
+            "--t0pdfset",
+            help="PDF set used to generate the t0 covmat",
+            type=str,
+            default="NNPDF31_nnlo_as_0118",
         )
         # Report meta data
         parser.add_argument(
@@ -83,7 +92,7 @@ class HyperoptPlotApp(App):
 
             pdf = PDF(name=pdf_name)
             fit = fit_name
-            t0pdfset = "NNPDF31_nnlo_as_0118"
+            t0pdfset = self.args["t0pdfset"]
             template = {
                 "theory": {"from_": "fit"},
                 "theoryid": {"from_": "theory"},
@@ -99,18 +108,19 @@ class HyperoptPlotApp(App):
             ind_neg = np.asarray([i for i in range(len(delta_chi2)) if i not in ind_pos])
 
             ind_pos, ind_neg = ind_pos + 1, ind_neg + 1
+            lhapdfpath = pathlib.Path(lhaindex.get_lha_datapath())
             new_pdf_from_indexes(
-                pdf=pdf, indexes=ind_pos, set_name=pdf_name + "_pos", installgrid=True, hessian=True
+                pdf=pdf, indexes=ind_pos, folder=lhapdfpath, set_name=pdf_name + "_pos", hessian=True
             )
             new_pdf_from_indexes(
-                pdf=pdf, indexes=ind_neg, set_name=pdf_name + "_neg", installgrid=True, hessian=True
+                pdf=pdf, indexes=ind_neg, folder=lhapdfpath, set_name=pdf_name + "_neg", hessian=True
             )
 
-            log.info("Finished ecomposing Hessian pdfs")
+            log.info("Completed decomposing Hessian pdfs")
 
         decompose(self.args["hessian_pdfs"], self.args["original_pdfs"])
 
-        runcard = deltachitemplates.template_path
+        runcard = deltachi2templates.template_path
         # No error handling here because this is our internal file
         with open(runcard) as f:
             # TODO: Ideally this would load round trip but needs

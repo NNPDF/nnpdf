@@ -289,13 +289,7 @@ def new_pdf_from_indexes(
     if installgrid:
         newpath = pathlib.Path(lhaindex.get_lha_datapath()) /  set_name
         log.info(f"Installing new PDF set at {newpath}")
-        """Use move otherwise a copy of the pdf set will remain in the current
-        directory. Note that python raises the error
-        AttributeError: 'PosixPath' object has no attribute 'rstrip' 
-        when the output directory already exists
-        """
-        shutil.move(set_root, newpath)
-
+        shutil.copytree(set_root, newpath)
 
 
 def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
