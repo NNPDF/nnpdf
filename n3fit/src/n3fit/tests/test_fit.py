@@ -114,35 +114,35 @@ def auxiliary_performfit(tmp_path, timing=True):
 
 
 @pytest.mark.darwin
-def test_performfit(tmp):
-    auxiliary_performfit(tmp, timing=False)
+def test_performfit(tmp_path):
+    auxiliary_performfit(tmp_path, timing=False)
 
 
 @pytest.mark.linux
-def test_performfit_and_timing(tmp):
-    auxiliary_performfit(tmp, timing=True)
+def test_performfit_and_timing(tmp_path):
+    auxiliary_performfit(tmp_path, timing=True)
 
 
-def test_hyperopt(tmp):
+def test_hyperopt(tmp_path):
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
     # cp runcard to tmp folder
-    shutil.copy(quickpath, tmp)
+    shutil.copy(quickpath, tmp_path)
     # We just want to ensure that the hyperopt can run, but we need to kill it ourselves
     # 60 seconds should be enough
     with pytest.raises(sp.TimeoutExpired):
         sp.run(
             f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(),
-            cwd=tmp,
+            cwd=tmp_path,
             timeout=60,
         )
 
 
-def test_novalidation(tmp, timing=30):
+def test_novalidation(tmp_path, timing=30):
     """ Runs a runcard without validation, success is assumed if it doesn't crash in 30 seconds """
     quickcard = f"noval-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
-    shutil.copy(quickpath, tmp)
+    shutil.copy(quickpath, tmp_path)
     with pytest.raises(sp.TimeoutExpired):
-        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp, timeout=timing)
+        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)
