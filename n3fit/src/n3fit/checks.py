@@ -94,11 +94,15 @@ def check_dropout(parameters):
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
+
 def check_tensorboard(tensorboard):
     if tensorboard is not None:
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
-            raise CheckError(f"The frequency at which weights are saved must be greater than 0, received {weight_freq}")
+            raise CheckError(
+                f"The frequency at which weights are saved must be greater than 0, received {weight_freq}"
+            )
+
 
 @make_argcheck
 def wrapper_check_NN(fitting):
@@ -163,6 +167,14 @@ def check_hyperopt_positivity(positivity_dict):
             )
         if max_ini <= min_ini:
             raise CheckError("The minimum initial value cannot be greater than the maximum")
+    threshold = positivity_dict.get("threshold")
+    if threshold is not None:
+        try:
+            4.0 < threshold
+        except TypeError as e:
+            raise CheckError(
+                f"The positivity::threshold must be a number, received: {threhsold}"
+            ) from e
 
 
 def check_kfold_options(kfold):
