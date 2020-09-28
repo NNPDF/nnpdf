@@ -154,6 +154,7 @@ the Neural Network as:
     fitting:
         parameters:
             positivity:
+              threshold: 1e-6
               multiplier: 1.05
               initial: 14.5
               
@@ -164,7 +165,11 @@ In this case ``n3fit`` will set the initial Lagrange multiplier as ``initial`` (
 while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier 
 equals the ``poslambda`` defined for the dataset.
 
-Note that the effect of the positivity constraints on the fit are still being studied and so this cannot be considered final.
+Finally we have the positivity threshold, which is set to ``1e-6`` by default.
+During the fit, the positivity loss will be compared to this value, if it is above
+the positivity won't be considered good (and thus the fit won't stop).
+If the replica reaches the maximum number of epochs with the positivity loss above
+this value, it will be tagged as ``POS_VETO`` and the replica removed from postfit.
      
               
 .. _otheroptions-label:
