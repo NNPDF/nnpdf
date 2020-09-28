@@ -444,32 +444,58 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     return full_df
 
 @table
-def higher_twist_covmat(groups_data, groups_index):
-    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/htcovmat_total.csv",
-              groups_data, groups_index)
+def higher_twist_covmat(groups_data, groups_index, 
+                        use_higher_twist_uncertainties: bool = False):
+    if use_higher_twist_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/htcovmat_total.csv",
+                groups_data, groups_index)
 
 @table
-def top_covmat(groups_data, groups_index):
-    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
-              groups_data, groups_index)
+def top_covmat(groups_data, groups_index,
+                use_top_uncertainties: bool = False):
+    if use_top_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
+                groups_data, groups_index)
 
 @table
-def deuteron_covmat(groups_data, groups_index):
-    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
+def deuteron_covmat(groups_data, groups_index,
+                    use_deuteron_uncertainties: bool = False):
+    if use_deuteron_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
               groups_data, groups_index)
         
 @table
-def nuclear_covmat(groups_data, groups_index):
-    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
+def nuclear_covmat(groups_data, groups_index,
+                    use_nuclear_uncertainties: bool = False):
+    if use_nuclear_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
               groups_data, groups_index)
 
 @table
-def user_covmat(groups_data, groups_index):
-    return fromfile_covmat("/home/s1303034/general_th_covmat_tests/usercovmat.csv",
+def user_covmat(groups_data, groups_index,
+                use_user_uncertainties: bool = False):
+    if use_user_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/usercovmat.csv",
               groups_data, groups_index)
 
 @table
 def total_theory_covmat(
+        groups_index,
+        theory_covmat_custom,
+        higher_twist_covmat,
+        top_covmat,
+        deuteron_covmat,
+        user_covmat,
         use_scalevar_uncertaintes: bool = False,
         use_higher_twist_uncertainties: bool = False,
         use_top_uncertainties: bool = False,
@@ -477,7 +503,7 @@ def total_theory_covmat(
         use_nuclear_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
   
-    f = None 
+    f = pd.DataFrame(0, index=groups_index, columns=groups_index)
 
     if use_scalevar_uncertaintes is True:
         f = f + theory_covmat_custom
