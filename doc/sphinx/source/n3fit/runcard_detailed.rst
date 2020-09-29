@@ -166,7 +166,7 @@ while the ``multiplier`` will be such that after the last epoch the final Lagran
 equals the ``poslambda`` defined for the dataset.
 
 Finally we have the positivity threshold, which is set to ``1e-6`` by default.
-During the fit, the positivity loss will be compared to this value, if it is above
+During the fit, the positivity loss will be compared to this value. If it is above it,
 the positivity won't be considered good (and thus the fit won't stop).
 If the replica reaches the maximum number of epochs with the positivity loss above
 this value, it will be tagged as ``POS_VETO`` and the replica removed from postfit.
