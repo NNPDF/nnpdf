@@ -173,7 +173,7 @@ def check_hyperopt_positivity(positivity_dict):
             4.0 < threshold
         except TypeError as e:
             raise CheckError(
-                f"The positivity::threshold must be a number, received: {threhsold}"
+                f"The positivity::threshold must be a number, received: {threshold}"
             ) from e
 
 
