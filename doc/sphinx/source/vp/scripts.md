@@ -81,12 +81,13 @@ $ vp-pdfrename --author "Shayan Iranipour" --author "Zahari Kassabov" --descript
 The user can additionally modify the `DataVersion`, `SetIndex`, `Reference` entries using the `--data-version`, `--index`, and `--reference`
 flags respectively.
 
-If the PDF uses MC replicas then the number of replicas can be subsampled using
-the `--replicas` flag. Since the replica zero will have to be regenerated,
-subsampling replicas also requires `-l` or `--lhapdf_path`:
+## PDF sampling
+
+A new `PDF` can be created by subsampling the replicas of a pre-existing `PDF`,
+provided the source `PDF` uses MC replicas, by using `vp-pdffromreplicas`
 
 ```
-$ vp-pdfrename <path-to-PDF> <desired-name-of-PDF> --replicas 5 -l
+$ vp-pdffromreplicas <input PDF name> <desired number of replicas>
 ```
 
 Some obvious restrictions apply, e.g the number of subsampled replicas cannot
@@ -95,3 +96,14 @@ the special case when the number of subsampled replicas is set to 1: LHAPDF
 files are required to have at least 2 replicas, and so the script will choose
 a single replica and then duplicate it so the resulting `PDF` will have two
 identical replicas.
+
+By default the output `PDF` will be called
+`<input PDF name>_<desired number of replicas>` however the user can choose
+their own name, using the `-o` or `--output-name` option. The script will not
+overwrite existing files, and so the output `PDF` name must not already
+be installed locally. You can check which PDFs you already own using
+[`vp-list`](../tutorials/list-resources.html#using-vp-list)
+
+Finally you can save a CSV which records which replica indices from the source
+`PDF` correspond to which replicas in the output `PDF` using the `-s` or
+`--save-indices` option.
