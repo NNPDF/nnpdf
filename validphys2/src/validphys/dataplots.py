@@ -649,10 +649,17 @@ def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table, processed_metadata_g
 @figure
 def plot_training_length(replica_data, fit):
     """Generate an histogram for the distribution
-    of training lengths in a given fit."""
+    of training lengths in a given fit. Each bin is normalised by the total
+    number of replicas.
+
+    """
     fig, ax = plt.subplots()
     x = [x.nite for x in replica_data]
-    ax.hist(x, density=True, label=str(fit))
+    hist, bin_edges = np.histogram(x)
+    # don't plot pdf, instead proportion of replicas in each bin.
+    hist = hist / np.sum(hist)
+    width = np.diff(bin_edges)
+    ax.bar(bin_edges[:-1], hist, width=width, align="edge", label=str(fit))
     ax.set_title("Distribution of training lengths")
     ax.legend()
     return fig
@@ -661,22 +668,43 @@ def plot_training_length(replica_data, fit):
 @figure
 def plot_training_validation(fit, replica_data, replica_filters=None):
     """Scatter plot with the training and validation chi² for each replica
-    in the fit. The mean is also displayed"""
+    in the fit. The mean is also displayed as well as a line y=x to easily
+    identify whether training or validation chi² is larger.
+
+    """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plt.subplots()
-    ax.plot(training, valid, marker='o', linestyle='none', markersize=5, zorder=100)
+    fig, ax = plt.subplots(
+        figsize=(
+            max(plt.rcParams.get("figure.figsize")),
+            max(plt.rcParams.get("figure.figsize")),
+        )
+    )
+    ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
     if replica_filters:
-        _scatter_marked(ax, training,valid, replica_filters, zorder=90)
+        _scatter_marked(ax, training, valid, replica_filters, zorder=90)
         ax.legend().set_zorder(10000)
 
     ax.set_title(fit.label)
 
-    ax.set_xlabel(r'$\chi^2/N_{dat}$ train')
-    ax.set_ylabel(r'$\chi^2/N_{dat}$ valid')
+    ax.set_xlabel(r"$\chi^2/N_{dat}$ train")
+    ax.set_ylabel(r"$\chi^2/N_{dat}$ valid")
 
-    ax.plot(np.mean(training), np.mean(valid),
-         marker='s', color='red', markersize=7, zorder=1000)
+    min_max_lims = [
+        min([*ax.get_xlim(), *ax.get_ylim()]),
+        max([*ax.get_xlim(), *ax.get_ylim()]),
+    ]
+    ax.plot(min_max_lims, min_max_lims, ":k")
 
+    ax.plot(
+        np.mean(training),
+        np.mean(valid),
+        marker="s",
+        color="red",
+        markersize=7,
+        zorder=1000,
+    )
+
+    ax.set_aspect("equal")
     return fig
 
 
