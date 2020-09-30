@@ -111,7 +111,7 @@ def check_dropout(parameters):
 
 
 def check_tensorboard(tensorboard):
-    """ Check that the tensorbard callback can enabled correctly """
+    """ Check that the tensorbard callback can be enabled correctly """
     if tensorboard is not None:
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
@@ -122,7 +122,7 @@ def check_tensorboard(tensorboard):
 
 def check_lagrange_multipliers(parameters, key):
     """Checks the parameters in a lagrange multiplier dictionary
-    are correct (positivity, integrability)"""
+    are correct, e.g. for positivity and integrability"""
     lagrange_dict = parameters.get(key)
     if lagrange_dict is None:
         return
