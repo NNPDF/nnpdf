@@ -13,7 +13,7 @@ exist with the same name as the output ``PDF``.
 
 Note that whilst in principle it is possible to create a single replica ``PDF``
 whose replica 0 is simply the same as replica 1, LHAPDF has a restriction which
-requires ``PDF``s to have at least 2 replicas (plus replica 0). To handle this
+requires ``PDF`` s to have at least 2 replicas (plus replica 0). To handle this
 special case if ``replicas == 1``, then replica 2 will be a duplicate of replica
 1, satisfying the minimum number of replicas whilst retaining the property
 that replica 1 and replica 0 are identical.
@@ -48,7 +48,8 @@ def check_none_or_gt_one(value):
 
     Returns
     -------
-    int(value)
+    int
+        supplied value cast to integer.
     """
 
     try:
