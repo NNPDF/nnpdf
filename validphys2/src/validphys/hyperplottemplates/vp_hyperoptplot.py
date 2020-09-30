@@ -51,7 +51,7 @@ class HyperoptPlotApp(App):
             "-c",
             "--combine",
             help="If more than one replica folder is found, combine all trials",
-            action="store_false",
+            action="store_true",
         )
         # Autofiltering
         parser.add_argument(
@@ -84,10 +84,18 @@ class HyperoptPlotApp(App):
 
     def complete_mapping(self):
         args = self.args
+        hyperop_folder = args["hyperopt_folder"]
+        hyperopt_filter = f"{hyperop_folder}/filter.yml"
 
-        while args["hyperopt_folder"][-1] == "/":
-            args["hyperopt_folder"] = args["hyperopt_folder"][:-1]
-        folder_path = args["hyperopt_folder"]
+
+        while hyperop_folder[-1] == "/":
+            hyperop_folder = hyperop_folder[:-1]
+        with open(hyperopt_filter) as f:
+            # TODO: Ideally this would load round trip but needs
+            # to be fixed in reportengine.
+            filtercard = yaml.safe_load(f)
+
+        folder_path = hyperop_folder
         index_slash = folder_path.rfind("/") + 1
         name_folder = folder_path[index_slash:]
         args["title"] = f"NNPDF hyperoptimization report for {name_folder}"
@@ -99,7 +107,7 @@ class HyperoptPlotApp(App):
             "keywords": args["keywords"],
         }
         autosettings["commandline_args"] = {
-            "hyperopt_folder": args["hyperopt_folder"],
+            "hyperopt_folder": hyperop_folder,
             "val_multiplier": args["val_multiplier"],
             "include_failures": args["include_failures"],
             "threshold": args["threshold"],
@@ -109,6 +117,7 @@ class HyperoptPlotApp(App):
             "debug": args["debug"],
             "loss_target": args["loss_target"]
         }
+        autosettings["hyperscan"] = filtercard["hyperscan"]
 
         return autosettings
 

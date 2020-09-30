@@ -18,6 +18,7 @@ plotting_styles = {
     "number_of_layers": 1,
     "activation_per_layer": 1,
     "dropout": 0,
+    "clipnorm": 0
 }
 
 
@@ -48,9 +49,30 @@ def plot_optimizers(hyperopt_dataframe):
 
 
 @figure
-def plot_learning_rate(hyperopt_dataframe):
+def plot_clipnorm(hyperopt_dataframe, optimizer_name):
     dataframe, best_trial = hyperopt_dataframe
-    fig = plot_scans(dataframe, best_trial, "learning_rate")
+    filtered_dataframe = dataframe[dataframe.optimizer==optimizer_name]
+    best_filtered_idx = filtered_dataframe.loss.idxmin()
+    best_idx = best_trial.iteration.iloc[0]
+    if best_filtered_idx == best_idx:
+        include_best = True
+    else: 
+        include_best = False
+    fig = plot_scans(filtered_dataframe, best_trial, "clipnorm", include_best=include_best)
+    return fig
+
+
+@figure
+def plot_learning_rate(hyperopt_dataframe, optimizer_name):
+    dataframe, best_trial = hyperopt_dataframe
+    filtered_dataframe = dataframe[dataframe.optimizer==optimizer_name]
+    best_filtered_idx = filtered_dataframe.loss.idxmin()
+    best_idx = best_trial.iteration.iloc[0]
+    if best_filtered_idx == best_idx:
+        include_best = True
+    else: 
+        include_best = False
+    fig = plot_scans(filtered_dataframe, best_trial, "learning_rate", include_best=include_best)
     return fig
 
 
@@ -94,7 +116,7 @@ def order_axis(df, bestdf, key):
     return ordering_true, best_x
 
 
-def plot_scans(df, best_df, plotting_parameter):
+def plot_scans(df, best_df, plotting_parameter, include_best=True):
     """
     This function plots all trials
     """
@@ -133,9 +155,10 @@ def plot_scans(df, best_df, plotting_parameter):
         )
 
     # Finally plot the "best" one, which will be first
-    ax = sns.scatterplot(
-        x=best_x, y=best_df.get(loss_k), ax=ax, color="orange", marker="s"
-    )
+    if include_best:
+        ax = sns.scatterplot(
+            x=best_x, y=best_df.get(loss_k), ax=ax, color="orange", marker="s"
+        )
     ax.set_ylabel("Loss")
     ax.set_xlabel(key)
 
