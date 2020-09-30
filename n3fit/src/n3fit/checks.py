@@ -129,6 +129,8 @@ def check_lagrange_multipliers(parameters, key):
     multiplier = lagrange_dict.get("multiplier")
     if multiplier is not None and multiplier < 0:
         log.warning("The %s multiplier is below 0, it will produce a negative loss", key)
+    elif multiplier is not None and multiplier == 0:
+        log.warning("The %s multiplier is 0 so it won't contribute to the loss", key)
     threshold = lagrange_dict.get("threshold")
     if threshold is not None and not _is_floatable(threshold):
         raise CheckError(f"The {key}::threshold must be a number, received: {threshold}")
