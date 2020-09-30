@@ -188,7 +188,12 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
     """
     test_f = 1.0 - validation_multiplier
     val_loss = trial_dict[KEYWORDS["vl"]]
-    test_loss = trial_dict[KEYWORDS["tl"]]
+    if loss_target == "average":
+        test_loss = np.array(trial_dict["hlosses"]).mean()
+    elif loss_target == "best_worst":
+        test_loss = np.array(trial_dict["hlosses"]).max()
+    elif loss_target == "std":
+        test_loss = np.array(trial_dict["hlosses"]).std()
     loss = val_loss * validation_multiplier + test_loss * test_f
 
     if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold or np.isnan(loss):
