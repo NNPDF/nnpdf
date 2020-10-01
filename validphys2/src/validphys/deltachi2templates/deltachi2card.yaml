@@ -1,19 +1,18 @@
 template_text: |
-  %NNPDF hyperopt report for $\Delta \chi^2$ of {@ fit @}
-
   ## $\Delta \chi^2$ per eigenvector
   {@ hessianinfo plot_delta_chi2_hessian_eigenv @}
   {@ hessianinfo plot_delta_chi2_hessian_distribution @}
-
 
   ## Hessian set vs MC set
   {@ MC_Hessian_compare plot_pdfs @}
 
   ## Measure of Gaussianity 
+  $\epsilon$ = |$1\sigma$ - 68%c.i.| / (68%c.i.)
   {@ plot_epsilon @}
 
   ## Eigenvalue decomposition 
-  {@ decomposition plot_pdfs @}
+  {@ hessianinfo plot_pos_neg_pdfs @}
+
 
 actions_:
   - report(main=True)

@@ -1,17 +1,12 @@
 import logging
 import os
-import pathlib
 import pwd
-
-import numpy as np
 
 from reportengine.compat import yaml
 
-from validphys import deltachi2templates, lhaindex
-from validphys.api import API
+from validphys import deltachi2templates
 from validphys.app import App
-from validphys.core import PDF
-from validphys.lhio import new_pdf_from_indexes
+
 
 log = logging.getLogger(__name__)
 
@@ -45,7 +40,7 @@ class HyperoptPlotApp(App):
             "--author",
             help="Add custom author name to the report's meta data",
             type=str,
-            default=pwd.getpwuid(os.getuid())[4].replace(',',''),
+            default=pwd.getpwuid(os.getuid())[4].replace(",", ""),
         )
         parser.add_argument(
             "--title",
@@ -86,12 +81,10 @@ class HyperoptPlotApp(App):
             "experiments": {"from_": "fit"},
             "use_t0": True,
             "t0pdfset": args["t0pdfset"],
+            "normalize_to": fit,
         }
 
-        autosettings["decomposition"] = {
-            "pdfs": [hessian_pdfs, f"{hessian_pdfs}_pos", f"{hessian_pdfs}_neg"],
-            "normalize_to": hessian_pdfs,
-        }
+        autosettings["decomposition"] = {"normalize_to": hessian_pdfs, "pdf": hessian_pdfs}
         autosettings["MC_Hessian_compare"] = {
             "pdfs": [hessian_pdfs, fit],
             "normalize_to": fit,
@@ -100,40 +93,7 @@ class HyperoptPlotApp(App):
         return autosettings
 
     def get_config(self):
-        def decompose(inputs):
-
-            log.info("Decomposing Hessian pdfs...")
-
-            pdf_name = inputs["pdf"]
-            pdf = PDF(name=pdf_name)
-
-            delta_chi2 = API.delta_chi2_hessian(**inputs)
-            ind_pos = np.asarray([i for i in range(len(delta_chi2)) if delta_chi2[i] >= 0])
-            ind_neg = np.asarray([i for i in range(len(delta_chi2)) if i not in ind_pos])
-
-            ind_pos, ind_neg = ind_pos + 1, ind_neg + 1
-            lhapdfpath = pathlib.Path(lhaindex.get_lha_datapath())
-            new_pdf_from_indexes(
-                pdf=pdf,
-                indexes=ind_pos,
-                folder=lhapdfpath,
-                set_name=pdf_name + "_pos",
-                hessian=True,
-            )
-            new_pdf_from_indexes(
-                pdf=pdf,
-                indexes=ind_neg,
-                folder=lhapdfpath,
-                set_name=pdf_name + "_neg",
-                hessian=True,
-            )
-
-            log.info("Completed decomposing Hessian pdfs")
-
         complete_mapping = self.complete_mapping()
-
-        decompose(complete_mapping["hessianinfo"])
-
         runcard = deltachi2templates.template_path
         # No error handling here because this is our internal file
         with open(runcard) as f:

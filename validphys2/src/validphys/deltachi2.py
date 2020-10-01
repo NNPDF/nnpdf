@@ -5,7 +5,7 @@ Plots and data processing that can be used in a delta chi2 analysis
 """
 import logging
 import warnings
-from types import SimpleNamespace
+from collections import namedtuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,21 +14,17 @@ from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
 
 from validphys import plotutils
-from validphys.checks import check_scale
+from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
+from validphys.core import PDF
+from validphys.pdfplots import BandPDFPlotter, FlavourState
 
 
 log = logging.getLogger(__name__)
 
 
-class FlavourState(SimpleNamespace):
-    """This is the namespace for the pats specific for each flavour"""
-    pass
-
-
 @make_argcheck
 def check_pdf_is_replicas(pdfs, **kwargs):
-    """Checks that the action is applied only to a pdf consisiting of MC replicas.
-    """
+    """Checks that the action is applied only to a pdf consisiting of MC replicas."""
     for pdf in pdfs:
         etype = pdf.ErrorType
         if etype != "replicas":
@@ -112,8 +108,7 @@ def _setup_flavour_label(flstate):
 
 
 def _draw(pdf, grid, flstate):
-    """ Obtains the gridvalues of epsilon (measure of Gaussianity)
-    """
+    """Obtains the gridvalues of epsilon (measure of Gaussianity)"""
     ax = flstate.ax
     flindex = flstate.flindex
     labels = flstate.labels
@@ -161,6 +156,7 @@ def delta_chi2_hessian(pdf, experiments, groups_chi2):
     Return delta_chi2 (computed as in plot_delta_chi2_hessian) relative to
     each eigenvector of the Hessian set.
     """
+
     experiments_chi2 = groups_chi2
     # store for each exp the chi2 from central value and chi2 from each error member
     total_chis_exps = np.zeros(
@@ -176,7 +172,7 @@ def delta_chi2_hessian(pdf, experiments, groups_chi2):
 
     delta_chi2 = total_chis[1:] - total_chis[0]
 
-    return delta_chi2
+    return delta_chi2, pdf
 
 
 @figure
@@ -208,10 +204,10 @@ def plot_delta_chi2_hessian_eigenv(pdf, experiments, groups_chi2):
 
     fig, ax = plt.subplots()
 
-    ax.bar(x, delta_chi2, label='%s' % pdf.label)
-    ax.set_xlabel('# Hessian PDF')
-    ax.set_ylabel('$\Delta\chi^2$')
-    ax.set_title('$\Delta\chi^2$ each eigenvector')
+    ax.bar(x, delta_chi2, label="%s" % pdf.label)
+    ax.set_xlabel("# Hessian PDF")
+    ax.set_ylabel("$\Delta\chi^2$")
+    ax.set_title("$\Delta\chi^2$ each eigenvector")
     ax.grid(False)
 
     handles, labels = ax.get_legend_handles_labels()
@@ -246,7 +242,7 @@ def plot_delta_chi2_hessian_distribution(pdf, experiments, groups_chi2):
 
     delta_chi2 = total_chis[1:] - total_chis[0]
 
-    x = np.arange(1, len(delta_chi2) + 1)
+    np.arange(1, len(delta_chi2) + 1)
 
     fig, ax = plt.subplots()
 
@@ -263,3 +259,65 @@ def plot_delta_chi2_hessian_distribution(pdf, experiments, groups_chi2):
     plt.subplots_adjust(top=0.85)
 
     return fig
+
+
+XPlottingGrid = namedtuple(
+    "XPlottingGrid", ("Q", "basis", "flavours", "xgrid", "grid_values", "scale")
+)
+
+
+def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
+    """
+    Generates xplotting_grids correspodning to positive and negative delta chi2s.
+    """
+
+    delta_chi2, pdf = delta_chi2_hessian
+    ind_pos = np.asarray([i for i in range(len(delta_chi2)) if delta_chi2[i] >= 0])
+    ind_neg = np.asarray([i for i in range(len(delta_chi2)) if i not in ind_pos])
+
+    ind_pos, ind_neg = ind_pos + 1, ind_neg + 1
+    ind_pos = np.append(0, ind_pos)
+    ind_neg = np.append(0, ind_neg)
+
+    pos_grid = xplotting_grid.grid_values[ind_pos, :, :]
+    neg_grid = xplotting_grid.grid_values[ind_neg, :, :]
+
+    pos_xplotting_grid = xplotting_grid._replace(grid_values=pos_grid)
+    neg_xplotting_grid = xplotting_grid._replace(grid_values=neg_grid)
+
+    return [xplotting_grid, pos_xplotting_grid, neg_xplotting_grid]
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_pos_neg_pdfs(
+    pdf,
+    pos_neg_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+):
+    """
+    Plot the the uncertainty of the original hessian pdfs, as well as that of the positive and
+    negative subset.
+    """
+
+    original_pdf = pdf.name
+    pos_pdf = PDF(f"{original_pdf}_pos")
+    neg_pdf = PDF(f"{original_pdf}_neg")
+
+    pdfs = [pdf, pos_pdf, neg_pdf]
+
+    yield from BandPDFPlotter(
+        pdfs,
+        pos_neg_xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        pdfs_noband=pdfs_noband,
+    )
