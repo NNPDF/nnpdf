@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 
 from reportengine.figure import figure, figuregen
-from reportengine.checks import make_argcheck
+from reportengine.checks import make_argcheck, CheckError
 
 from validphys import plotutils
 from validphys.core import MCStats
@@ -774,16 +774,24 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts: numbers.Real):
     return fig
 
 
+@make_argcheck
+def check_pdf_is_replicas(pdfs, **kwargs):
+    """Checks that the action is applied only to a pdf consisiting of MC replicas.  
+    """
+    for pdf in pdfs:
+        etype = pdf.ErrorType
+        if etype != "replicas":
+            raise CheckError("Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype))
+
+
 @figuregen
+@check_pdf_is_replicas
 @check_scale("xscale", allow_none=True)
 def plot_epsilon(
     pdfs, xplotting_grids, xscale: (str, type(None)) = None, ymin=None, ymax=None, eps=None
 ):
     """Plot the discrepancy (epsilon) of the 1-sigma and 68% bands at each grid value
     for all pdfs for a given Q. See https://arxiv.org/abs/1505.06736 eq. (11)
-
-    Of course this function is meaningful only if the pdfs are sets of MC replicas.
-    (Still there is no check in the implementation)
 
     xscale is read from pdf plotting_grid scale, which is 'log' by default.
 
@@ -837,7 +845,7 @@ def plot_epsilon(
         ax.set_xlabel("$x$")
         ax.set_xlim(firstgrid.xgrid[0])
 
-        ax.set_ylabel("$\epsilon(x)$")
+        ax.set_ylabel("$\epsilon$")
 
         ax.set_axisbelow(True)
 
@@ -853,7 +861,8 @@ def _setup_flavour_label(flstate):
 
 
 def _draw(pdf, grid, flstate):
-
+    """ Obtains the gridvalues of epsilon (measure of Gaussianity)
+    """
     ax = flstate.ax
     flindex = flstate.flindex
     labels = flstate.labels
