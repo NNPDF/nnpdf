@@ -127,18 +127,3 @@ class N3PDF(PDF):
             lq = len(qmat)
             ret = ret.repeat(lq, -1)
         return ret
-
-    def GetMembers(self):
-        """Proxy of libnnpdf function which returns number of members.
-        Note that the convention is that replica 0 doesn't get counted for
-        PDFs with ``replicas`` errortype, which is why we take 1 off the
-        ``__len__``. This is in contrast to hessian
-        PDFs where all members are counted.
-
-        Returns
-        -------
-            int:
-            len(self) - 1
-
-        """
-        return len(self) - 1

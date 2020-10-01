@@ -30,14 +30,15 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
                 basis:(str, Basis)='flavour',
                 flavours:(list, tuple, type(None))=None):
     """Compute arc lengths at scale Q"""
-    lpdf = pdf.load()
     checked = check_basis(basis, flavours)
     basis, flavours = checked['basis'], checked['flavours']
     # x-grid points and limits in three segments
     npoints = 199 # 200 intervals
     seg_min = [1e-6, 1e-4, 1e-2]
     seg_max = [1e-4, 1e-2, 1.0 ]
-    res = np.zeros((lpdf.GetMembers(),len(flavours)))
+    # Note that we discard replica 0 for MC PDFs, see core.PDF.grid_values_index
+    # for more details
+    res = np.zeros((pdf.get_members(),len(flavours)))
     # Integrate the separate segments
     for a, b in zip(seg_min, seg_max):
         # Finite diff. step-size, x-grid
