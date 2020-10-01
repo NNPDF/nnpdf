@@ -43,7 +43,7 @@ void EIC_CC_140_OPTFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "CORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -86,7 +86,7 @@ void EIC_CC_140_PESFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "CORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";
     }
@@ -129,7 +129,7 @@ void EIC_NC_140_OPTFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -171,7 +171,7 @@ void EIC_NC_63_OPTFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -213,7 +213,7 @@ void EIC_NC_44_OPTFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -255,7 +255,7 @@ void EIC_NC_28_OPTFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -298,7 +298,7 @@ void EIC_NC_140_PESFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -340,7 +340,7 @@ void EIC_NC_63_PESFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -382,7 +382,7 @@ void EIC_NC_44_PESFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
@@ -424,7 +424,7 @@ void EIC_NC_28_PESFilter::ReadData()
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
-      fSys[i][1].add  = fSys[i][0].mult / 100. * fData[i];
+      fSys[i][1].add  = fSys[i][1].mult / 100. * fData[i];
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CORR";      
     }
