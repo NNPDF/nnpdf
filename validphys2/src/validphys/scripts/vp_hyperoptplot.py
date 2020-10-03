@@ -4,6 +4,10 @@ from reportengine.compat import yaml
 import pwd
 import os
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 class HyperoptPlotApp(App):
     def add_positional_arguments(self, parser):
@@ -66,7 +70,7 @@ class HyperoptPlotApp(App):
             "--author",
             help="Add custom author name to the report's meta data",
             type=str,
-            default=pwd.getpwuid(os.getuid())[4],
+            default=pwd.getpwuid(os.getuid())[4].replace(",", ""),
         )
         parser.add_argument(
             "--title",
@@ -87,18 +91,17 @@ class HyperoptPlotApp(App):
         hyperop_folder = args["hyperopt_folder"]
         hyperopt_filter = f"{hyperop_folder}/filter.yml"
 
-
         while hyperop_folder[-1] == "/":
             hyperop_folder = hyperop_folder[:-1]
+
         with open(hyperopt_filter) as f:
-            # TODO: Ideally this would load round trip but needs
-            # to be fixed in reportengine.
             filtercard = yaml.safe_load(f)
 
         folder_path = hyperop_folder
         index_slash = folder_path.rfind("/") + 1
         name_folder = folder_path[index_slash:]
-        args["title"] = f"NNPDF hyperoptimization report for {name_folder}"
+        if args['title'] == None:
+            args["title"] = f"NNPDF hyperoptimization report for {name_folder}"
 
         autosettings = {}
         autosettings["meta"] = {

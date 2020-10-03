@@ -1,6 +1,8 @@
-template: report.md
+results_table:
+    meta: Null
+    template: results_table.md
 
-author: Roy Stegeman
+template: report.md
 
 actions_:
   - report(main=True)

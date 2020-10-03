@@ -1,4 +1,4 @@
-%NNPDF hyperoptimization report
+% NNPDF hyperplot report
 
 ## Best Setup
 {@ best_setup @}
@@ -28,4 +28,4 @@
 {@ plot_activation_per_layer @}
 
 ## Results Table
-{@ hyperopt_table @}
+[Detailed hyperopt results]({@ results_table report @})
