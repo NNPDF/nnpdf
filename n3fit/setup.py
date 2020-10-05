@@ -13,7 +13,6 @@ setup(
 
         entry_points = {'console_scripts':
             ['n3fit = n3fit.scripts.n3fit_exec:main',
-             'n3Hyperplot = n3fit.hyper_optimization.plotting:main',
              ]
             },
 )
