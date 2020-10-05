@@ -199,7 +199,7 @@ Save and load weights of the model
         load: "weights.h5"
 
 - ``save``: saves the weights of the PDF model in the selected file.
-- ``load``: loads the weights of the PDF mode from the selected file.
+- ``load``: loads the weights of the PDF model from the selected file.
 
 Since the weights depend only on the architecture of the Neural Network,
 it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments

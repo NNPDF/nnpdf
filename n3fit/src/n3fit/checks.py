@@ -148,22 +148,20 @@ def check_model_file(fitting):
         try:
             with open(save_file, 'a'):
                 pass
-        except PermissionError as e:
-            raise CheckError(f"Model file {save_file} cannot be written to: {e}") from e
-        except FileNotFoundError as e:
+        except (FileNotFoundError, PermissionError) as e:
             raise CheckError(f"Model file {save_file} cannot be written to: {e}") from e
         except OSError as e:
             raise CheckError(e) from e
 
     if load_file:
         if not isinstance(load_file, str):
-            raise CheckError(f"Model file to load from: {load_file} not understood")
+            raise CheckError(f"Model file to load: {load_file} not understood, str expected")
         if not os.path.isfile(load_file):
-            raise CheckError(f"Model file to load from: {load_file} can not be opened")
+            raise CheckError(f"Model file to load: {load_file} can not be opened, does it exist?")
         if not os.access(load_file, os.R_OK):
-            raise CheckError(f"Model file to load from: {load_file} cannot be read")
+            raise CheckError(f"Model file to load: {load_file} cannot be read, permission denied")
         if os.stat(load_file).st_size == 0:
-            raise CheckError(f"Model file {load_file} is empty")
+            raise CheckError(f"Model file {load_file} seems to be empty")
 
 @make_argcheck
 def wrapper_check_NN(fitting):
