@@ -84,6 +84,7 @@ class HyperoptPlotApp(App):
             default=[]
         )
         args = parser.parse_args()
+        args['config_yml'] = hyperplottemplates.template_path
         return args
 
     def complete_mapping(self):
@@ -124,10 +125,14 @@ class HyperoptPlotApp(App):
 
         return autosettings
 
+    def get_commandline_arguments(self, cmdline=None):
+        args = super().get_commandline_arguments(cmdline)
+        args['config_yml'] = hyperplottemplates.template_path
+        return args
+
     def get_config(self):
-        runcard = hyperplottemplates.template_path
         # No error handling here because this is our internal file
-        with open(runcard) as f:
+        with open(self.args['config_yml']) as f:
             # TODO: Ideally this would load round trip but needs
             # to be fixed in reportengine.
             c = yaml.safe_load(f)
