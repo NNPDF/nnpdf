@@ -686,8 +686,8 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
 
     ax.set_title(fit.label)
 
-    ax.set_xlabel(r"$\chi^2/N_{dat}$ train")
-    ax.set_ylabel(r"$\chi^2/N_{dat}$ valid")
+    ax.set_xlabel(r"$\chi^2/N_{dat}$ training")
+    ax.set_ylabel(r"$\chi^2/N_{dat}$ validation")
 
     min_max_lims = [
         min([*ax.get_xlim(), *ax.get_ylim()]),
