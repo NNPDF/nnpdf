@@ -150,6 +150,10 @@ def main():
         with open(base_name + ".info", "w") as f:
             yaml.dump(info_file, f)
 
+        # here we update old indices in case the user creates
+        # the original_index_mapping.csv
+        indices = 2*indices
+
     if args.save_indices:
         index_file = (
             pathlib.Path(lhaindex.get_lha_datapath())
