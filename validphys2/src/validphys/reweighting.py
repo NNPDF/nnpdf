@@ -88,7 +88,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
      - The maximum value of P(alpha) in some sensible range.
     """
     er = effective_number_of_replicas(nnpdf_weights)
-    initial_replicas = len(pdf) - 1
+    initial_replicas = pdf.get_members()
     median = np.median(nnpdf_weights)
     max_alpha = p_alpha_study.idxmax()
 
