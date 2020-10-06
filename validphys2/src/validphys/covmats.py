@@ -198,7 +198,7 @@ def covmat_from_systematics(commondata):
     -------
     >>> from validphys.commondataparser import load_commondata
     >>> from validphys.loader import Loader
-    >>> from validphys.calcutils import covmat_from_systematics
+    >>> from validphys.covmats import covmat_from_systematics
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> cd = load_commondata(cd)
