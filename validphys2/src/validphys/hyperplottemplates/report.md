@@ -3,9 +3,6 @@
 ## Best Setup
 {@ best_setup @}
 
-## Iterations
-{@ plot_iterations @}
-
 ## Optimizers
 {@ plot_optimizers @}
 
