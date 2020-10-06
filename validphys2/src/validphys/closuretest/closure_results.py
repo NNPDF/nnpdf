@@ -41,29 +41,35 @@ def bias_dataset(results, underlying_results, fit, use_fitcommondata):
     """
     dt_ct, th_ct = results
     # does collect need to collect a list even with one element?
-    (_, th_ul), = underlying_results
+    ((_, th_ul),) = underlying_results
     central_diff = th_ct.central_value - th_ul.central_value
     bias_out = calc_chi2(dt_ct.sqrtcovmat, central_diff)  # unnormalised
     return BiasData(bias_out, len(th_ct))
 
 
-underlying_experiment_results = collect("experiment_results", ("fitunderlyinglaw",))
+underlying_dataset_inputs_results = collect(
+    "dataset_inputs_results", ("fitunderlyinglaw",)
+)
 
 
 @check_fit_isclosure
 @check_use_fitcommondata
 def bias_experiment(
-    experiment_results, underlying_experiment_results, fit, use_fitcommondata
+    dataset_inputs_results, underlying_dataset_inputs_results, fit, use_fitcommondata
 ):
     """Like `bias_dataset` but for a whole experiment.
     """
     return bias_dataset(
-        experiment_results, underlying_experiment_results, fit, use_fitcommondata
+        dataset_inputs_results,
+        underlying_dataset_inputs_results,
+        fit,
+        use_fitcommondata,
     )
 
 
-experiments_bias = collect("bias_experiment", ("experiments",))
+experiments_bias = collect("bias_experiment", ("group_dataset_inputs_by_experiment",))
 fits_experiments_bias = collect("experiments_bias", ("fits", "fitcontext"))
+fits_experiments = collect("experiments_data", ("fits", "fitcontext"))
 
 
 @table
@@ -105,7 +111,7 @@ def biases_table(
 
 @check_pdf_is_montecarlo
 def bootstrap_bias_experiment(
-    experiment_results, underlying_experiment_results, bootstrap_samples=500
+    dataset_inputs_results, underlying_dataset_inputs_results, bootstrap_samples=500
 ):
     """Calculates bias as per `bias_experiment` but performs bootstrap sample
     across replicas. note that bias_experiment returns a named tuple like
@@ -113,15 +119,17 @@ def bootstrap_bias_experiment(
     `boostrap_bias` with length bootstrap_samples. Each element of
     returned array is bias/n_data (bias normalised by number of datapoints)
     """
-    dt_ct, th_ct = experiment_results
-    (_, th_ul), = underlying_experiment_results
+    dt_ct, th_ct = dataset_inputs_results
+    ((_, th_ul),) = underlying_dataset_inputs_results
     th_ct_boot_cv = bootstrap_values(th_ct._rawdata, bootstrap_samples)
     boot_diffs = th_ct_boot_cv - th_ul.central_value[:, np.newaxis]
     boot_bias = calc_chi2(dt_ct.sqrtcovmat, boot_diffs) / len(dt_ct)
     return boot_bias
 
 
-experiments_bootstrap_bias = collect("bootstrap_bias_experiment", ("experiments",))
+experiments_bootstrap_bias = collect(
+    "bootstrap_bias_experiment", ("group_dataset_inputs_by_experiment",)
+)
 fits_experiments_bootstrap_bias = collect(
     "experiments_bootstrap_bias", ("fits", "fitcontext")
 )
@@ -189,17 +197,17 @@ def variance_dataset(results, fit, use_fitcommondata):
 
 @check_fit_isclosure
 @check_use_fitcommondata
-def variance_experiment(experiment_results, fit, use_fitcommondata):
+def variance_experiment(dataset_inputs_results, fit, use_fitcommondata):
     """Like variance_dataset but for a whole experiment"""
-    return variance_dataset(experiment_results, fit, use_fitcommondata)
+    return variance_dataset(dataset_inputs_results, fit, use_fitcommondata)
 
 
-def bootstrap_variance_experiment(experiment_results, bootstrap_samples=500):
+def bootstrap_variance_experiment(dataset_inputs_results, bootstrap_samples=500):
     """Calculate the variance as in `variance_experiment` but performs bootstrap
     sample of the estimator. Returns an array of variance for each resample,
     normalised to the number of data in the experiment.
     """
-    dt_ct, th_ct = experiment_results
+    dt_ct, th_ct = dataset_inputs_results
     diff = th_ct.central_value[:, np.newaxis] - th_ct._rawdata
     var_unnorm_boot = bootstrap_values(
         diff,
@@ -213,7 +221,7 @@ def bootstrap_variance_experiment(experiment_results, bootstrap_samples=500):
 
 
 experiments_boostrap_variance = collect(
-    "bootstrap_variance_experiment", ("experiments",)
+    "bootstrap_variance_experiment", ("group_dataset_inputs_by_experiment",)
 )
 
 fits_exps_bootstrap_var = collect(
@@ -269,6 +277,10 @@ def fits_bootstrap_variance_table(
     return pd.concat(dfs, axis=1, sort=True)
 
 
+experiments_bootstrap_chi2_central = collect(
+    "dataset_inputs_bootstrap_chi2_central", ("group_dataset_inputs_by_experiment",)
+)
+
 fits_exps_bootstrap_chi2_central = collect(
     "experiments_bootstrap_chi2_central", ("fits", "fitcontext")
 )
@@ -306,10 +318,9 @@ def delta_chi2_bootstrap(
 # Note that these collect over the experiments as specified in fit in case of
 # TEST set
 fits_exps_level_1_noise = collect(
-    "experiments_chi2", ("fits", "fitinputcontext", "fitunderlyinglaw")
+    "experiments_chi2_data", ("fits", "fitinputcontext", "fitunderlyinglaw")
 )
-fits_exps_chi2 = collect("experiments_chi2", ("fits", "fitcontext"))
-fit_specified_experiments = collect("experiments", ("fits", "fitcontext"))
+fits_exps_chi2 = collect("experiments_chi2_data", ("fits", "fitcontext"))
 
 
 @table
@@ -321,7 +332,7 @@ def delta_chi2_table(
     fits_exps_chi2,
     fits_exps_level_1_noise,
     fits_name_with_covmat_label,
-    fit_specified_experiments,
+    fits_experiments,
     fits,
     use_fitcommondata,
 ):
@@ -334,7 +345,7 @@ def delta_chi2_table(
     cols = ("ndata", r"$\Delta_{chi^2}$ (normalised by ndata)")
     for label, experiments, exps_chi2, exps_level_1_noise in zip(
         fits_name_with_covmat_label,
-        fit_specified_experiments,
+        fits_experiments,
         fits_exps_chi2,
         fits_exps_level_1_noise,
     ):
