@@ -7,11 +7,14 @@ the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 """
 from operator import attrgetter
+import toolz
 
+import numpy as np
 import pandas as pd
+import scipy.linalg as la
 
 from validphys.core import peek_commondata_metadata
-from validphys.coredata import CommonData
+from validphys.coredata import CommonData, SystematicError
 
 def load_commondata(spec):
     """
@@ -90,3 +93,82 @@ def parse_systypes(systypefile):
     systypetable.set_index("sys_index", inplace=True)
 
     return systypetable
+
+
+def combine_commondata(commondata_list):
+    # TODO: raise exception if nkin don't match
+    # Combine the systematics from each of the CommonDatas
+    systematics, systype_table = combine_commondata_systematics(commondata_list)
+
+    # The number of data points is the sum of data points per CommonData while
+    # the systematics have correlations accounted for
+    ndata, nsys = systematics.shape
+
+    header = ['process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
+    kinematics = pd.concat([i.commondata_table.loc[:, header] for i in commondata_list], ignore_index=True)
+    kinematics.index += 1
+
+    additive = systematics.applymap(lambda x: x.add)
+    multiplicative = systematics.applymap(lambda x: x.mult)
+    additive.columns = (f"sys.add.{i + 1}" for i in range(nsys))
+    multiplicative.columns = (f"sys.mult.{i + 1}" for i in range(nsys))
+
+    # Table containing alternating additive and multiplicative systematic uncertainties
+    systematics_table = pd.concat([additive, multiplicative], axis=1)[list(toolz.interleave([additive, multiplicative]))]
+
+    commondata_table = pd.concat([kinematics, systematics_table], axis=1)
+
+    # The effective CommonData object to return. The set has no unique name or
+    # process type and so there is no file associated with this object.
+    cd = CommonData("N/A", ndata, "MIXED", 3, nsys, commondata_table, systype_table)
+
+    return cd
+
+
+def combine_commondata_systematics(commondata_list):
+    special_types = frozenset({"UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR", "SKIP"})
+
+    # Create an effective systematic error table which is block diagonal
+    # where the off-diagonal blocks are filled with zeros as sentinel values.
+    eff_sys_errors = pd.DataFrame(la.block_diag(*[i.sys_errors for i in commondata_list]))
+    # Replace 0s with np.nan so we can use df.fillna later on
+    eff_sys_errors.replace(0, np.nan, inplace=True)
+    # Make index and columns start from 1
+    eff_sys_errors.index += 1
+    eff_sys_errors.columns += 1
+
+    systypes = pd.concat([cd.systype_table for cd in commondata_list], ignore_index=True)
+    systypes.index += 1
+
+    # If the systypes are duplicated and not one of the special
+    # types above, then those set of systematics are correlated
+    # and we keep the first occurence and replace each subsequent
+    # occurence with a sentinel value of None
+    duplicates = systypes.groupby("name").groups
+    # Remove the duplicates that are special types
+    [duplicates.pop(key, None) for key in special_types]
+
+    for cols in duplicates.values():
+        # The columns that were correlated
+        to_combine = eff_sys_errors.loc[:, cols]
+        # We backwards propagate the uncertainties
+        to_combine.fillna(method="bfill", axis=1, inplace=True)
+        # Replace the eff_sys_errors column with
+        # the systematics that were correlated
+        prepared_column = to_combine.iloc[:, 0]
+        eff_sys_errors.loc[:, cols[0]] = prepared_column
+
+    # The zeros are replaced with validphys.coredata.SystematicError types, we label the
+    # name as "SKIP" so any future logic knows that these systematic errors should be ignored
+    dummy_error = SystematicError(0, 0, None, "SKIP")
+    eff_sys_errors.fillna(dummy_error, inplace=True)
+
+    keep_columns = (systypes["name"].isin(special_types)) | ~(
+        systypes.duplicated(subset="name", keep="first")
+    )
+    keep_columns.index = eff_sys_errors.columns
+    eff_sys_errors = eff_sys_errors.loc[:, keep_columns]
+
+    systype_table = systypes[keep_columns]
+
+    return eff_sys_errors, systype_table
