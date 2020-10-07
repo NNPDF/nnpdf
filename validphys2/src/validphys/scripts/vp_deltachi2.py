@@ -15,18 +15,13 @@ class HyperoptPlotApp(App):
     def add_positional_arguments(self, parser):
         """ Wrapper around argumentparser """
         parser.add_argument(
-            "fit",
-            help="Name of the fit",
+            "fit", help="Name of the fit",
         )
         parser.add_argument(
-            "hessian_pdfs",
-            help="Name of the set of Hessian pdfs",
+            "hessian_pdfs", help="Name of the set of Hessian pdfs",
         )
         parser.add_argument(
-            "--Q",
-            help="Energy Scale in GeV",
-            type=float,
-            default=1.7,
+            "--Q", help="Energy Scale in GeV", type=float, default=1.7,
         )
         parser.add_argument(
             "-t0",
@@ -43,9 +38,7 @@ class HyperoptPlotApp(App):
             default=pwd.getpwuid(os.getuid())[4].replace(",", ""),
         )
         parser.add_argument(
-            "--title",
-            help="Add custom title to the report's meta data",
-            type=str,
+            "--title", help="Add custom title to the report's meta data", type=str,
         )
         parser.add_argument(
             "--keywords",
@@ -53,8 +46,6 @@ class HyperoptPlotApp(App):
             type=list,
             default=[],
         )
-        args = parser.parse_args()
-        return args
 
     def complete_mapping(self):
         args = self.args
@@ -84,7 +75,10 @@ class HyperoptPlotApp(App):
             "normalize_to": fit,
         }
 
-        autosettings["decomposition"] = {"normalize_to": hessian_pdfs, "pdf": hessian_pdfs}
+        autosettings["decomposition"] = {
+            "normalize_to": hessian_pdfs,
+            "pdf": hessian_pdfs,
+        }
         autosettings["MC_Hessian_compare"] = {
             "pdfs": [hessian_pdfs, fit],
             "normalize_to": fit,
