@@ -17,7 +17,7 @@ Theory Covariance Summary
 
 Dataset properties
 ------------------
-{@current datasets_properties_table@}
+{@current fit_datasets_properties_table@}
 
 Distances
 ------------------

@@ -42,7 +42,7 @@ Errorbars from performing bootstrap sample upon replicas
 
 Dataset properties
 ------------------
-{@closure datasets_properties_table@}
+{@closure fit_datasets_properties_table@}
 
 Distances
 ------------------
