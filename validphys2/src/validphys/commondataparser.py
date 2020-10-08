@@ -7,7 +7,6 @@ the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 """
 from operator import attrgetter
-import toolz
 
 import numpy as np
 import pandas as pd
@@ -114,7 +113,9 @@ def combine_commondata(commondata_list):
     multiplicative.columns = (f"sys.mult.{i + 1}" for i in range(nsys))
 
     # Table containing alternating additive and multiplicative systematic uncertainties
-    systematics_table = pd.concat([additive, multiplicative], axis=1)[list(toolz.interleave([additive, multiplicative]))]
+    systematics_header = np.empty((additive.columns.size + multiplicative.columns.size,), dtype=object)
+    systematics_header[0::2], systematics_header[1::2] = additive.columns, multiplicative.columns
+    systematics_table = additive.join(multiplicative)[systematics_header]
 
     commondata_table = pd.concat([kinematics, systematics_table], axis=1)
 
