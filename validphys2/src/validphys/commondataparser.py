@@ -169,7 +169,11 @@ def combine_commondata_systematics(commondata_list):
     )
     keep_columns.index = eff_sys_errors.columns
     eff_sys_errors = eff_sys_errors.loc[:, keep_columns]
+    # After slicing with keep_columns, the index
+    # of the systematic errors need to be reset
+    eff_sys_errors.columns = range(1, len(eff_sys_errors.columns) + 1)
 
     systype_table = systypes[keep_columns]
+    systype_table.index = range(1, len(eff_sys_errors.columns) + 1)
 
     return eff_sys_errors, systype_table
