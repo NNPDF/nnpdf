@@ -374,21 +374,20 @@ def datasets_properties_table(data_input):
     """Return dataset properties for each dataset in ``data_input``"""
     dataset_property_dict = defaultdict(list)
     for dataset in data_input:
-        for key, val in zip(dataset.argnames(), dataset.comp_tuple):
-            if val:
-                dataset_property_dict[key].append(val)
-            else:
-                dataset_property_dict[key].append("-")
-    # fixup some names
-    dataset_property_dict["Training fraction"] = dataset_property_dict.pop("frac")
-    dataset_property_dict["C-factors"] = dataset_property_dict.pop("cfac")
-    dataset_property_dict["Other fields"] = [
-        {"sys": el} if el != "-" else el for el in dataset_property_dict.pop("sys")]
-    df = pd.DataFrame(dataset_property_dict)
-    df.set_index("name", inplace=True)
+        # only add elements if they don't evaluate to false
+        ds_input_dict = {
+            k: v for (k, v) in zip(dataset.argnames(), dataset.comp_tuple)
+            if v
+        }
+        dataset_property_dict["Dataset"].append(ds_input_dict.pop("name"))
+        dataset_property_dict["Training fraction"].append(ds_input_dict.pop("frac", "-"))
+        dataset_property_dict["Weight"].append(ds_input_dict.pop("weight", "-"))
+        dataset_property_dict["C-factors"].append(ds_input_dict.pop("cfac", "-"))
+        dataset_property_dict["Other fields"].append(ds_input_dict if ds_input_dict else "-")
 
-    df = df[['Training fraction', 'C-factors', 'Other fields']]
-    df.index.name = 'Dataset'
+    df = pd.DataFrame(dataset_property_dict)
+    df.set_index("Dataset", inplace=True)
+    df = df[["Training fraction", "Weight", "C-factors", "Other fields"]]
     return df
 
 
