@@ -392,7 +392,7 @@ def datasets_properties_table(data_input):
 
 
 @table
-def fit_datasets_properties_table(fitcontext):
+def fit_datasets_properties_table(fitinputcontext):
     """Returns table of dataset properties for each dataset used in a fit."""
     return datasets_properties_table(fitcontext["data_input"])
 
