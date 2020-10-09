@@ -3,15 +3,81 @@ test_covmats.py
 
 Tests related to the computation of the covariance matrix and its derivatives
 """
+import pathlib
+
 import pytest
 
 import numpy as np
 import random
 
-from validphys.loader import Loader
-from validphys.tests.conftest import THEORYID
+
 from validphys.api import API
-from validphys.covmats import sqrt_covmat
+from validphys.commondataparser import combine_commondata, load_commondata
+from validphys.covmats import covmat_from_systematics, sqrt_covmat
+from validphys.loader import Loader
+from validphys.tableloader import parse_exp_mat
+from validphys.tests.conftest import THEORYID
+
+REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
+
+
+def test_covmat_from_systematics_correlated():
+    """Test the covariance matrix generation from a set of correlated datasets
+    given their systematic errors
+    """
+    l = Loader()
+    correlated_datasets = [
+        "ATLASWZRAP36PB",
+        "ATLASZHIGHMASS49FB",
+        "ATLASLOMASSDY11EXT",
+        "ATLASWZRAP11",
+    ]
+
+    cds = list(map(l.check_commondata, correlated_datasets))
+    ld_cds = list(map(load_commondata, cds))
+
+    combo_cd = combine_commondata(ld_cds)
+    covmat = covmat_from_systematics(combo_cd)
+
+    dss = [
+        l.check_dataset(i, theoryid=THEORYID, cuts=None) for i in correlated_datasets
+    ]
+    exp = l.check_experiment("null", dss)
+    ld_exp = exp.load()
+
+    assert np.allclose(ld_exp.get_covmat(), covmat)
+
+
+def test_covmat_from_systematics(data_config):
+    """Test which checks the python computation of the covmat relating to a
+    collection of datasets matches that of the C++ computation. Note that the
+    datasets are cut using the internal rules, but the datasets are not correlated.
+    """
+    l = Loader()
+    exps = API.experiments(**data_config)
+
+    cds = [l.check_commondata(i.name) for exp in exps for i in exp.datasets]
+    ld_cds = list(map(load_commondata, cds))
+
+    internal_cuts = [
+        l.check_internal_cuts(cd, API.rules(theoryid=THEORYID, use_cuts="internal"))
+        for cd in cds
+    ]
+    cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
+    combo_cd = combine_commondata(cut_ld_cds)
+
+    covmat = covmat_from_systematics(combo_cd)
+
+    dss = [
+        l.check_dataset(i.name, theoryid=THEORYID, cuts="internal")
+        for exp in exps
+        for i in exp.datasets
+    ]
+    exp = l.check_experiment("null", dss)
+    ld = exp.load()
+    cpp_covmat = ld.get_covmat()
+
+    assert np.allclose(cpp_covmat, covmat)
 
 
 def test_cpp_sqrtcovmat():
