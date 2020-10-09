@@ -95,6 +95,54 @@ def parse_systypes(systypefile):
 
 
 def combine_commondata(commondata_list):
+    """Function that takes in a sequence of :py:class:`validphys.coredata.CommonData`
+    objects and returns an effective :py:class:`validphys.coredata.CommonData` object
+    which has taken into account the (possible) correlations between the datasets. This
+    effective ``CommonData`` can then be used to obtain a correlated covariance matrix,
+    for example.
+
+    .. note::
+        The return of this function does not have a file on disk associated with it.
+        As such the ``CommonData`` instance has a ``setname`` of ``"N/A"`` and a
+        ``processtype`` of ``"MIXED"``.
+
+    Parameters
+    ----------
+    commondata_list: sequence
+        Sequence of :py:class:`validphys.coredata.CommonData` objects
+
+    Returns
+    -------
+    comb_cd: validphys.coredata.CommonData
+        The combined ``CommonData``
+
+    Raises
+    ------
+    ValueError: if one or more of the input ``CommonData`` objects have a different
+        number of kinematic variables
+
+    Example
+    -------
+    >>> from validphys.commondataparser import combine_commondata, load_commondata
+    >>> from validphys.loader import Loader
+    >>> l = Loader()
+    >>> cd1 = l.check_commondata("ATLASLOMASSDY11EXT")
+    >>> cd2 = l.check_commondata("ATLASZHIGHMASS49FB")
+    >>> ld1, ld2 = map(load_commondata, (cd1, cd2))
+    >>> comb_cd = combine_commondata((ld1, ld2))
+    # Note that the two datasets have one pair of correlated systematics
+    # so the total number of systematics is one fewer than the sum
+    >>> comb_cd.nsys
+    18
+    >>> ld1.nsys + ld2.nsys
+    19
+    >>> from validphys.covmats import covmat_from_systematics
+    >>> covmat = covmat_from_systematics(comb_cd)
+    >>> covmat.shape
+    (19, 19)
+    >>> ld1.ndata + ld2.ndata
+    19
+    """
     # Raise an exception if any of the CommonDatas has
     # a different number of kinematic variables to the others
     # TODO: handle this case instead of raising an error
@@ -127,12 +175,28 @@ def combine_commondata(commondata_list):
 
     # The effective CommonData object to return. The set has no unique name or
     # process type and so there is no file associated with this object.
-    cd = CommonData("N/A", ndata, "MIXED", 3, nsys, commondata_table, systype_table)
+    comb_cd = CommonData("N/A", ndata, "MIXED", 3, nsys, commondata_table, systype_table)
 
-    return cd
+    return comb_cd
 
 
 def combine_commondata_systematics(commondata_list):
+    """Function that takes in a sequence of :py:class:`validphys.coredata.CommonData`
+    and returns a tuple of ``pd.DataFrame``. The first ``DataFrame`` contains
+    :py:class:`validphys.coredata.SystematicError` which has accounted for the correlations
+    between systematics while the second contains information about the systematic errors
+    themselves such as their type and name.
+
+    Parameters
+    ----------
+    commondata_list: sequence
+        Sequence of :py:class:`validphys.coredata.CommonData` objects
+
+    Returns
+    -------
+    eff_sys_errors, systype_table: (pd.DataFrame, pd.DataFrame)
+        Tuple of DataFrames containing systematic errors and information about their name and type
+    """
     special_types = frozenset({"UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR", "SKIP"})
 
     # Create an effective systematic error table which is block diagonal
