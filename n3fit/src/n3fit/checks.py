@@ -144,14 +144,7 @@ def check_model_file(fitting):
     if save_file:
         if not isinstance(save_file, str):
             raise CheckError(f"Model file to save to: {save_file} not understood")
-        # Check whether we can write to the file
-        try:
-            with open(save_file, 'a'):
-                pass
-        except (FileNotFoundError, PermissionError) as e:
-            raise CheckError(f"Model file {save_file} cannot be written to: {e}") from e
-        except OSError as e:
-            raise CheckError(e) from e
+        # Since the file to save to will be found inside the replica folder, it should writable as all the others
 
     if load_file:
         if not isinstance(load_file, str):

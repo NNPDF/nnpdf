@@ -336,6 +336,13 @@ def performfit(
             replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
         )
 
+        # Save the weights to some file for the given replica
+        model_file = fitting.get("save")
+        if model_file:
+            model_file_path = replica_path_set / model_file
+            log.info(" > Saving the weights for future in %s", model_file_path)
+            pdf_model.save_weights(model_file_path)
+
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
         for step in range(len(stopping_object.history.reloadable_history)):
@@ -351,8 +358,3 @@ def performfit(
     if tboard is not None:
         log.info("Tensorboard logging information is stored at %s", log_path)
 
-    # Save the weights to some file
-    model_file = fitting.get("save")
-    if model_file:
-        log.info(" > Saving the weights for future in %s", model_file)
-        pdf_model.save_weights(model_file)

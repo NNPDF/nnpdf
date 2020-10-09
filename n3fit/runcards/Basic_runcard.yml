@@ -42,7 +42,7 @@ fitting:
   mcseed: 3
   epochs: 900
   save: 'weights.h5'
-  load: False
+  load: /media/storageSSD/Academic_Workspace/NNPDF/source/nnpdf/n3fit/Basic_runcard/nnfit/replica_1/weights.h5
 
   tensorboard:
     weight_freq: 100
