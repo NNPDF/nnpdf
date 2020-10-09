@@ -158,7 +158,7 @@ def xq2map_with_cuts(commondata, cuts):
     empty = (np.array([]), np.array([]))
     return XQ2Map(info.experiment, commondata, fitted_kintable, empty)
 
-experiments_xq2map = collect(xq2map_with_cuts, ('dataset_inputs',))
+data_xq2map = collect(xq2map_with_cuts, ('data',))
 
 @table
 def kinematics_table(commondata, kinlimits):
@@ -172,3 +172,23 @@ def kinematics_table(commondata, kinlimits):
 
     return res
 
+
+@table
+def groups_xq2_table(data_xq2map, groups_index):
+    """Generate a table containing (x, Q2) information
+    for data."""
+    result_records = []
+    for dat in data_xq2map:
+        xs, q2s = dat.fitted
+        for index, (x, q2) in enumerate(zip(xs, q2s)): 
+            result_records.append(dict([
+                                 ('x', x),
+                                 ('q2', q2)
+                                 ]))
+    if not result_records:
+        log.warning("Empty records for experiment xq2 map")
+        return pd.DataFrame()
+    df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
+                       index=groups_index)
+
+    return df
