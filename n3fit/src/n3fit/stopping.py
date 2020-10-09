@@ -74,7 +74,7 @@ def parse_ndata(all_data):
                 tr_ndata_dict[exp_name] = tr_ndata
             if vl_ndata:
                 vl_ndata_dict[exp_name] = vl_ndata
-        if dictionary.get("positivity"):
+        if dictionary.get("positivity") and not dictionary.get("integrability"):
             pos_set.append(exp_name)
     if not vl_ndata_dict:
         vl_ndata_dict = None
