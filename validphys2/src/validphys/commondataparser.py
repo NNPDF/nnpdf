@@ -95,7 +95,13 @@ def parse_systypes(systypefile):
 
 
 def combine_commondata(commondata_list):
-    # TODO: raise exception if nkin don't match
+    # Raise an exception if any of the CommonDatas has
+    # a different number of kinematic variables to the others
+    # TODO: handle this case instead of raising an error
+    nkins = [cd.nkin for cd in commondata_list]
+    if not all(x == nkins[0] for x in nkins):
+        raise ValueError("One or more of the datasets have a different number of kinematics.")
+
     # Combine the systematics from each of the CommonDatas
     systematics, systype_table = combine_commondata_systematics(commondata_list)
 
