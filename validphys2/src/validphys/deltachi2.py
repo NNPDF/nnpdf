@@ -12,7 +12,9 @@ import numpy as np
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
+from reportengine import collect
 
+from validphys import plotutils
 from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
 from validphys.core import PDF
 from validphys.pdfplots import PDFPlotter, BandPDFPlotter
@@ -33,8 +35,13 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
         )
 
 
+experiments_chi2_data = collect(
+    "dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_experiment",)
+)
+Chi2Data = namedtuple("Chi2Data", ("replica_result", "central_result", "ndata"))
+
 @check_pdf_is_symmhessian
-def delta_chi2_hessian(pdf, total_chi2_data):
+def delta_chi2_hessian(pdf, total_chi2_data, experiments, groups_chi2, experiments_chi2_data):
     """
     Return delta_chi2 (computed as in plot_delta_chi2_hessian) relative to
     each eigenvector of the Hessian set.
@@ -59,13 +66,13 @@ def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
 
     fig, ax = plt.subplots()
 
-    ax.bar(x, delta_chi2, label="%s" % pdf.label)
+    ax.bar(x, delta_chi2, label=pdf.label)
     ax.set_xlabel("# Hessian PDF")
     ax.set_ylabel("$\Delta\chi^2$")
     ax.set_title("$\Delta\chi^2$ each eigenvector")
     ax.grid(False)
 
-    ax.legend(loc="upper center")
+    # ax.legend(loc="upper center")
     return fig
 
 
@@ -88,13 +95,11 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     ax.hist(
         delta_chi2,
         bins=bins,
-        label="%s - $\chi^2_{0}$=%d" % (pdf.label, total_chi2_data.central_result),
+        label=f"{pdf.label} - $\chi^2_{0}$={total_chi2_data.central_result:.0f}",
     )
     ax.set_xlabel("$\Delta\chi^2$")
     ax.set_title("$\Delta\chi^2$ distribution")
-    ax.grid(False)
 
-    ax.legend(loc="upper center")
     return fig
 
 
@@ -196,9 +201,12 @@ class PDFEpsilonPlotter(PDFPlotter):
         error68 = (error68up - error68down) / 2.0
         epsilon = abs(1 - errorstd / error68)
         ax.plot(xgrid, epsilon, linestyle="-", color=color)
+        ax.set_xlabel("$x$")
+        ax.set_ylabel("$\epsilon$")
         labels.append(rf"{pdf.label}")
 
         return [5 * epsilon]
+
 
 
 @make_argcheck

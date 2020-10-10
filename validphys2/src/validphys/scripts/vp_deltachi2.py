@@ -23,13 +23,6 @@ class HyperoptPlotApp(App):
         parser.add_argument(
             "--Q", help="Energy Scale in GeV", type=float, default=1.7,
         )
-        parser.add_argument(
-            "-t0",
-            "--t0pdfset",
-            help="PDF set used to generate the t0 covmat",
-            type=str,
-            default="NNPDF31_nnlo_as_0118",
-        )
         # Report meta data
         parser.add_argument(
             "--author",
@@ -52,7 +45,8 @@ class HyperoptPlotApp(App):
 
         fit = args["fit"]
         hessian_pdfs = args["hessian_pdfs"]
-        args["title"] = f"$\Delta \chi^2$ report for {fit}"
+        if args["title"] == None:
+            args["title"] = f"$\Delta \chi^2$ report for {fit}"
 
         autosettings = {}
         autosettings["meta"] = {
@@ -70,8 +64,8 @@ class HyperoptPlotApp(App):
             "theoryid": {"from_": "theory"},
             "use_cuts": "fromfit",
             "experiments": {"from_": "fit"},
-            "use_t0": True,
-            "t0pdfset": args["t0pdfset"],
+            # "use_t0": {"from_": "fit"},
+            # "t0pdfset": args["t0pdfset"],
             "normalize_to": fit,
         }
 
