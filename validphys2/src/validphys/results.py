@@ -1161,8 +1161,10 @@ def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
         [exp_chi2_data.central_result for exp_chi2_data in experiments_chi2_data],
     )
 
-    error_members = np.sum(
-        [exp_chi2_data.replica_result.error_members() for exp_chi2_data in experiments_chi2_data],
+    # we sum data, not error_members here because we feed it back into the stats
+    # class, some stats class error_members cuts off the CV
+    data_sum = np.sum(
+        [exp_chi2_data.replica_result.data for exp_chi2_data in experiments_chi2_data],
         axis=0
     )
 
@@ -1170,7 +1172,7 @@ def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
         [exp_chi2_data.ndata for exp_chi2_data in experiments_chi2_data],
     )
     return Chi2Data(
-        pdf.stats_class(error_members), central_result, ndata
+        pdf.stats_class(data_sum), central_result, ndata
     )
 
 
