@@ -36,7 +36,7 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
 
 
 @check_pdf_is_symmhessian
-def delta_chi2_hessian(pdf, total_chi2_data, experiments, groups_chi2, experiments_chi2_data):
+def delta_chi2_hessian(pdf, total_chi2_data):
     """
     Return delta_chi2 (computed as in plot_delta_chi2_hessian) relative to
     each eigenvector of the Hessian set.
@@ -65,7 +65,6 @@ def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
     ax.set_xlabel("# Hessian PDF")
     ax.set_ylabel("$\Delta\chi^2$")
     ax.set_title("$\Delta\chi^2$ each eigenvector")
-    # ax.grid(False)
 
     ax.legend()
 
