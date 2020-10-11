@@ -15,7 +15,7 @@ void EIC_CC_140_OPTFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/CC-optimistic.dat";
+  datafile << dataPath() << "rawdata/EIC/CCemP-optimistic.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -58,7 +58,7 @@ void EIC_CC_140_PESFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/CC-pessimistic.dat";
+  datafile << dataPath() << "rawdata/EIC/CCemP-pessimistic.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -79,7 +79,7 @@ void EIC_CC_140_PESFilter::ReadData()
 	      >> fStat[i]
 	      >> fSys[i][0].mult
 	      >> fSys[i][1].mult;
-
+      
       fStat[i] = fStat[i]/100. * fData[i]; 
       
       fKin3[i] = fKin2[i] / fKin1[i] / sqrts / sqrts; //y
@@ -101,7 +101,7 @@ void EIC_NC_140_OPTFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-optimistic_140.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-optimistic_140.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -143,7 +143,7 @@ void EIC_NC_63_OPTFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-optimistic_63.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-optimistic_63.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -185,7 +185,7 @@ void EIC_NC_44_OPTFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-optimistic_44.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-optimistic_44.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -227,7 +227,7 @@ void EIC_NC_28_OPTFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-optimistic_28.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-optimistic_28.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -270,7 +270,7 @@ void EIC_NC_140_PESFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-pessimistic_140.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-pessimistic_140.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -312,7 +312,7 @@ void EIC_NC_63_PESFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-pessimistic_63.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-pessimistic_63.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -354,7 +354,7 @@ void EIC_NC_44_PESFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-pessimistic_44.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-pessimistic_44.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -396,7 +396,7 @@ void EIC_NC_28_PESFilter::ReadData()
   //Opening file
   fstream f1;
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/EIC/NC-pessimistic_28.dat";
+  datafile << dataPath() << "rawdata/EIC/NCemP-pessimistic_28.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
