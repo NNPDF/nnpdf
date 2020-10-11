@@ -673,19 +673,36 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
 
     """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plt.subplots()
-    ax.plot(training, valid, marker='o', linestyle='none', markersize=5, zorder=100)
+    fig, ax = plt.subplots(
+        figsize=(
+            max(plt.rcParams.get("figure.figsize")),
+            max(plt.rcParams.get("figure.figsize")),
+        )
+    )
+    ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
     if replica_filters:
-        _scatter_marked(ax, training,valid, replica_filters, zorder=90)
+        _scatter_marked(ax, training, valid, replica_filters, zorder=90)
         ax.legend().set_zorder(10000)
 
     ax.set_title(fit.label)
 
-    ax.set_xlabel(r'$\chi^2/N_{dat}$ train')
-    ax.set_ylabel(r'$\chi^2/N_{dat}$ valid')
+    ax.set_xlabel(r"$\chi^2/N_{dat}$ training")
+    ax.set_ylabel(r"$\chi^2/N_{dat}$ validation")
 
-    ax.plot(np.mean(training), np.mean(valid),
-         marker='s', color='red', markersize=7, zorder=1000)
+    min_max_lims = [
+        min([*ax.get_xlim(), *ax.get_ylim()]),
+        max([*ax.get_xlim(), *ax.get_ylim()]),
+    ]
+    ax.plot(min_max_lims, min_max_lims, ":k")
+
+    ax.plot(
+        np.mean(training),
+        np.mean(valid),
+        marker="s",
+        color="red",
+        markersize=7,
+        zorder=1000,
+    )
 
     ax.set_aspect("equal")
     return fig
