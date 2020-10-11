@@ -17,7 +17,7 @@ from reportengine import collect
 from validphys import plotutils
 from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
 from validphys.core import PDF
-from validphys.pdfplots import PDFPlotter, BandPDFPlotter
+from validphys.pdfplots import PDFPlotter, BandPDFPlotter, FlavourState
 
 
 log = logging.getLogger(__name__)
@@ -34,11 +34,6 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
             "Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype)
         )
 
-
-experiments_chi2_data = collect(
-    "dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_experiment",)
-)
-Chi2Data = namedtuple("Chi2Data", ("replica_result", "central_result", "ndata"))
 
 @check_pdf_is_symmhessian
 def delta_chi2_hessian(pdf, total_chi2_data, experiments, groups_chi2, experiments_chi2_data):
@@ -70,9 +65,10 @@ def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
     ax.set_xlabel("# Hessian PDF")
     ax.set_ylabel("$\Delta\chi^2$")
     ax.set_title("$\Delta\chi^2$ each eigenvector")
-    ax.grid(False)
+    # ax.grid(False)
 
-    # ax.legend(loc="upper center")
+    ax.legend()
+
     return fig
 
 
@@ -85,13 +81,10 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     """
     delta_chi2 = delta_chi2_hessian
 
-    np.arange(1, len(delta_chi2) + 1)
-
     fig, ax = plt.subplots()
 
-    range_min = np.int32(np.floor(np.min(delta_chi2)))
-    range_max = np.int32(np.ceil(np.max(delta_chi2)))
-    bins = np.asarray([i for i in range(range_min - 1, range_max + 1)])
+    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2))+1)
+
     ax.hist(
         delta_chi2,
         bins=bins,
@@ -172,12 +165,17 @@ class PDFEpsilonPlotter(PDFPlotter):
 
     def setup_flavour(self, flstate):
         flstate.labels = []
+        flstate.handles = []
+    
+    def get_ylabel(self, parton_name):
+        return '$\epsilon(x)$'
 
     def draw(self, pdf, grid, flstate):
         """Obtains the gridvalues of epsilon (measure of Gaussianity)"""
         ax = flstate.ax
         flindex = flstate.flindex
         labels = flstate.labels
+        handles = flstate.handles
 
         # pick all replicas grid_values for the flavour flindex. stats_class is a method
         # of the PDF class, which returns the stats calculator (object) for the pdf error type.
@@ -200,13 +198,20 @@ class PDFEpsilonPlotter(PDFPlotter):
         # the division by 2 is equivalent to considering the complete 1-sigma band (2 * error_std)
         error68 = (error68up - error68down) / 2.0
         epsilon = abs(1 - errorstd / error68)
-        ax.plot(xgrid, epsilon, linestyle="-", color=color)
-        ax.set_xlabel("$x$")
-        ax.set_ylabel("$\epsilon$")
-        labels.append(rf"{pdf.label}")
+
+        handle, = ax.plot(xgrid, epsilon, linestyle="-", color=color)
+
+        handles.append(handle)
+        labels.append(pdf.label)
 
         return [5 * epsilon]
 
+    def legend(self, flstate):
+        return flstate.ax.legend(flstate.handles, flstate.labels,
+                                 handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()
+                                             }
+                                 )
 
 
 @make_argcheck
