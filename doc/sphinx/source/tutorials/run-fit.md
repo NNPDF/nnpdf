@@ -112,11 +112,24 @@ Running the fitting code
 After successfully installing the `n3fit` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
-1. Prepare the fit: `vp-setupfit runcard.yml` this command will generate a
-`runcard_folder` folder in the current directory with a copy of the original
-YAML runcard.  The required resources (such as the theory and t0 PDF) will be
-downloaded automatically. Alternatively they can be obtained with the `vp-get`
-tool.
+1. Prepare the fit: `vp-setupfit runcard.yml`. This command will generate a
+    folder with the same name as the runcard (minus the file extension) in the
+    current directory, which will contain a copy of the original YAML runcard.
+    The required resources (such as the theory and t0 PDF set) will be
+    downloaded automatically. Alternatively they can be obtained with the
+    `vp-get` tool.
+
+    <details>
+      <summary>Note</summary>
+
+      This step is not strictly necessary when producing a standard fit with
+      n3fit - notice that in the next step the first command-line argument is
+      the runcard itself and not a folder, unlike with [nnfit](run-legacy-fit) - but
+      it *is* required when running a fit for a [closure test](running-a-closure-test).
+      Either way, it is recommended that this step is followed when producing any
+      fit with n3fit.
+
+    </details>
 
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the

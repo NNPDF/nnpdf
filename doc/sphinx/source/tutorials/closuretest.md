@@ -159,6 +159,10 @@ closuretest:
   ...
 ```
 
+```eval_rst
+.. _running-a-closure-test:
+```
+
 ## Running a closure test
 
 ### With `nnfit`
