@@ -382,9 +382,10 @@ def datasets_properties_table(data_input):
         dataset_property_dict["Dataset"].append(ds_input_dict.pop("name"))
         dataset_property_dict["Training fraction"].append(ds_input_dict.pop("frac", "-"))
         dataset_property_dict["Weight"].append(ds_input_dict.pop("weight", "-"))
-        dataset_property_dict["C-factors"].append(ds_input_dict.pop("cfac", "-"))
-        dataset_property_dict["Other fields"].append(ds_input_dict if ds_input_dict else "-")
-
+        dataset_property_dict["C-factors"].append(", ".join(ds_input_dict.pop("cfac", "-")))
+        dataset_property_dict["Other fields"].append(
+            ", ".join([f"{k}: {v}" for k, v in ds_input_dict.items()])
+            if ds_input_dict else "-")
     df = pd.DataFrame(dataset_property_dict)
     df.set_index("Dataset", inplace=True)
     df = df[["Training fraction", "Weight", "C-factors", "Other fields"]]
@@ -394,7 +395,7 @@ def datasets_properties_table(data_input):
 @table
 def fit_datasets_properties_table(fitinputcontext):
     """Returns table of dataset properties for each dataset used in a fit."""
-    return datasets_properties_table(fitcontext["data_input"])
+    return datasets_properties_table(fitinputcontext["data_input"])
 
 def print_systype_overlap(groups_data):
     """Returns a set of systypes that overlap between groups.
