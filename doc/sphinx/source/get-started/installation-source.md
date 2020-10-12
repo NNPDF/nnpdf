@@ -3,7 +3,7 @@
 ```
 ## Installation from source
 
-If you intend to work on the NNPDF code, then building from source is the recommended installation procedure. However, you can still use conda to get all the dependecies and setup the validphys and C++ development environment. Further information is available in the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs). Note that the `binary-bootstrap.sh` should be downloaded and run as explained above, if the user has not already done so.
+If you intend to work on the NNPDF code, then building from source is the recommended installation procedure. However, you can still use conda to get all the dependencies and setup the validphys and C++ development environment. Further information is available in the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs). Note that the `binary-bootstrap.sh` should be downloaded and run as explained above, if the user has not already done so.
 
 1. Create an NNPDF developer environment `nnpdf-dev` and install all relevant dependencies using
 

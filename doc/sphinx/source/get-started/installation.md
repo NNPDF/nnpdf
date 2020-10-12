@@ -69,7 +69,7 @@ After the helper script has run, navigate to the miniconda3 installation directo
 
 This will provide functioning C++ and Python executables.
 
-**Note:** The installer will set up it’s own version of the LHAPDF code, with its own path for storing PDFs, which can be seen running lhapdf --help. If you have an existing folder with LHAPDF grids, you may want to either move, symlink or copy them to the new path (depending on whether you want to keep around the older installation). The command for symlinking would be something like:
+**Note:** The installer will set up its own version of the LHAPDF code, with its own path for storing PDFs, which can be seen running lhapdf --help. If you have an existing folder with LHAPDF grids, you may want to either move, symlink or copy them to the new path (depending on whether you want to keep around the older installation). The command for symlinking would be something like:
 
 	ln -s <old path>/share/LHAPDF/* <new path>/miniconda3/share/LHAPDF
 
