@@ -175,7 +175,7 @@ def kinematics_table(commondata, kinlimits):
 
 @table
 def groups_xq2_table(data_xq2map, groups_index):
-    """Generate a table containing (x, Q2) information
+    """Generate a table containing (x, Q^2) information
     for data."""
     result_records = [
         {"$x$": x, "$Q^2$": q2} for dat in data_xq2map for x, q2 in zip(*dat.fitted)
