@@ -177,14 +177,9 @@ def kinematics_table(commondata, kinlimits):
 def groups_xq2_table(data_xq2map, groups_index):
     """Generate a table containing (x, Q2) information
     for data."""
-    result_records = []
-    for dat in data_xq2map:
-        xs, q2s = dat.fitted
-        for index, (x, q2) in enumerate(zip(xs, q2s)): 
-            result_records.append(dict([
-                                 ('x', x),
-                                 ('q2', q2)
-                                 ]))
+    result_records = [
+        {"$x$": x, "$Q^2$": q2} for dat in data_xq2map for x, q2 in zip(*dat.fitted)
+    ]
     if not result_records:
         log.warning("Empty records for experiment xq2 map")
         return pd.DataFrame()
