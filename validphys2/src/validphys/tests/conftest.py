@@ -127,3 +127,10 @@ def hessian_pdf_config(flavour_basis_initial_scale_config):
 
     """
     return {"pdf": HESSIAN_PDF, **flavour_basis_initial_scale_config}
+
+@pytest.fixture(scope='module')
+def hessian_data_config(data_config):
+    """Same as data config but with hessian PDF"""
+    new_config = dict(data_config)
+    new_config["pdf"] = HESSIAN_PDF
+    return new_config
