@@ -458,6 +458,10 @@ def top_covmat(groups_data, groups_index,
     if use_top_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
+        import validphys.loader as Loader
+        l = Loader()
+        fileloc = l.check_vp_output_file(
+            "https://vp.nnpdf.science/IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv")
         return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
                 groups_data, groups_index)
 
