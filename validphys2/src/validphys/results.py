@@ -1153,7 +1153,7 @@ def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
     covariance matrix is block diagonal in experiments.
 
     This is valid as long as there are no cross experiment correlations from
-    i.e theory covariance matrix
+    e.g. theory covariance matrices.
 
     """
 
