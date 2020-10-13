@@ -190,10 +190,11 @@ def covmat_from_systematics(commondata, central_values=None):
         using the predictions from the central member of the t0 pdf.
 
     use_mult_errors: bool
-        Boolean which controls whether we use multiplicative errors
+        Boolean which controls whether multiplicative errors are used
         when computing the covmat. By default it should be set to ``True``
-        unless one wishes to sample pseudodata from a multigaussian distribution,
-        in which case it should be set to ``False``.
+        since setting this parameter to ``False`` will completely ignore multiplicative
+        uncertainties. This flag is present for use with pseudodata generation where the
+        multiplicative uncertainties should be ignored.
 
     Returns
     -------
