@@ -69,7 +69,7 @@ requests:
 	functionality should come with some prose explaining what they are for.
 
   - Consider the effects on the larger system: Did this change make some example
-    or piece of documentation obselete and therefore mean needs to be updated?
+    or piece of documentation obsolete and therefore mean needs to be updated?
     Did it break compatibility with something that we rely on? Should an email
     be sent around announcing the change? Does the change solve or unblock some
     outstanding issues?
