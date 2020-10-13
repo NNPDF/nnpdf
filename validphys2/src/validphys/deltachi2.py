@@ -25,9 +25,7 @@ log = logging.getLogger(__name__)
 
 @make_argcheck
 def check_pdf_is_symmhessian(pdf, **kwargs):
-    """Check plot_delta_chi2_hessian is applied only to Hessian
-    set (symmhessian) converted from MC set.
-    """
+    """Check ``pdf`` has error type of ``symmhessian``"""
     etype = pdf.ErrorType
     if etype != "symmhessian":
         raise CheckError(
