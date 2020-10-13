@@ -7,6 +7,7 @@ import logging
 import multiprocessing as mp
 import os
 import pathlib
+import random
 
 import numpy as np
 import pandas as pd
@@ -109,7 +110,7 @@ def read_fit_pseudodata(fitcontext, context_index):
         yield pseudodata.drop("type", axis=1), tr.index, val.index
 
 
-def make_replica(commondata, seed=1):
+def make_replica(commondata, seed=None):
     """Generator that takes in a :py:class:`validphys.coredata.CommonData` or
     :py:class:`validphys.core.CommonDataSpec` object and yields pseudodata replicas
     of the data central value. This generator is infinite in the sense that it will
@@ -131,8 +132,10 @@ def make_replica(commondata, seed=1):
         CommonData which stores information about systematic errors,
         their treatment and description.
 
-    seed: int
-        Seed used to initialise the random number generator.
+    seed: int, None
+        Seed used to initialise the random number generator. If ``None`` then a random seed is allocated
+        using ``random.randint(1, 1000)``. This default behaviour is selected to avoid introducing
+        inadvertent correlations.
 
     Returns
     -------
@@ -159,6 +162,11 @@ def make_replica(commondata, seed=1):
     .. todo:: Replace the inhouse random number generation with a numpy equivalent.
     .. todo:: Allow for correlations between datasets within an experiment.
     """
+    # If seed is None (i.e not explicitly provided in the function call)
+    # then set it randomly
+    if seed is None:
+        seed = random.randint(1, 1000)
+
     # TODO: eventually remove the inhouse random number generator
     # in favour of e.g numpy
     NNPDF.RandomGenerator.InitRNG(0, seed)
