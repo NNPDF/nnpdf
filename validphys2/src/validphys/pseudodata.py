@@ -116,14 +116,14 @@ def make_replica(commondata, seed=1):
     never raise a StopIteration exception
 
     The square root (obtained by the Cholesky decomposition) of the covariance
-    matrix is used as the sampling matrix. The covariance matrix is obtained using
-    :py:func:`validphys.covmats.covmat_from_systematics` and must not use
-    multiplicative systematic uncertainties when obtaining the sampling matrix.
-
-    Gaussian sampling is performed using the additive part of the covariance matrix.
-    An additional gaussian sampling for the renormalization of the data having multiplicative
-    uncertainties happens later. All the contributions to the covariance matrix coming from
-    theory errors should be accounted for in the additive part
+    matrix is used as the sampling matrix with the covariance matrix being obtained using
+    :py:func:`validphys.covmats.covmat_from_systematics`. In the internal code, the call
+    to this function has the boolean parameter ``use_mult_errors`` set to ``False`` to
+    ignore multiplicative uncertainties. Gaussian sampling is performed using the
+    additive part of the covariance matrix. An additional gaussian sampling for the
+    renormalization of the data having multiplicative uncertainties happens later.
+    All the contributions to the covariance matrix coming from theory errors should be
+    accounted for in the additive part.
 
     Parameters
     ---------
