@@ -612,8 +612,10 @@ class Positivity:
 
         Parameters
         ----------
-            `threshold_positivity`
+            threshold_positivity: float
                 maximum value allowed for the sum of all positivity losses
+            positivity_sets: list
+                list of positivity datasets
     """
 
     def __init__(self, threshold, positivity_sets):
@@ -622,28 +624,25 @@ class Positivity:
 
     def check_positivity(self, history_object):
         """
-            This function receives a history object and look for entries
-            with the keyname: pos_key_{posdataset_name}
+        This function receives a history objects and loops over the
+        positivity_sets to check the value of the positivity loss.
 
-            If the sum of all the positivity loss don't surpass a certain
-            threshold it returns True, otherwise returns False
+        If the positivity loss is above the threshold, the positivity fails
+        otherwise, it passes.
 
-            Parameters
-            ----------
-                `history_object`
-                    dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
-                `pos_key`
-                    `key that searchs for the positivity`
+        Parameters
+        ----------
+            history_object: dict
+                dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
         """
-        positivity_loss = 0.0
         for key in self.positivity_sets:
             key_loss = f"{key}_loss"
-            # If we are taking the avg when checking the output, we should do so here as well
-            positivity_loss += np.take(history_object[key_loss], -1)
-        if positivity_loss > self.threshold:
-            return False
-        else:
-            return True
+            # If we are taking the avg when checking the output, we should do so here as well?
+            positivity_loss = np.take(history_object[key_loss], -1)
+            if positivity_loss > self.threshold:
+                return False
+        # If none of the positivities failed, it passes
+        return True
 
     def __call__(self, fitstate):
         """
