@@ -1,4 +1,4 @@
-c"""
+"""
 hyperoptplot.py
 
 Module for the parsing and plotting of hyperopt results.
