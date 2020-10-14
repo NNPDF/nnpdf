@@ -139,7 +139,8 @@ In NNPDF3.1 there were a number of datasets added in order to constraint positiv
 
 The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated.
 In few words, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
-In `n3fit` however the fit will not stop until the replica passes all positivity constraints.
+In `n3fit` however the fit will not stop until the replica passes all positivity constraints, i.e., no
+negative values are allowed.
 
 Note as well that the positivity penalty in `n3fit` grows dynamically with the fit to facilitate quick training at early stages of the fit.
 
