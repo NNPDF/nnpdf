@@ -143,7 +143,6 @@ fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3
-  epochs: 50000
   save: False
   load: False
 

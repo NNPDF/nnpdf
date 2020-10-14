@@ -879,9 +879,15 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 @figure
 def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
-    """Plot the value of a positivity observable on a symlog scale as a
+    """Plot an errorbar spanning the central 68% CI of a positivity
+    observable as well as a point indicating the central value (according
+    to the ``pdf.stats_class.central_value()``).
+
+    Errorbars and points are plotted on a symlog scale as a
     function of the data point index (if pos_use_kin==False) or the first
-    kinematic variable (if pos_use_kin==True)."""
+    kinematic variable (if pos_use_kin==True).
+
+    """
     fig, ax = plt.subplots()
     ax.axhline(0, color='red')
 
@@ -898,18 +904,25 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
     minscale = np.inf
-    for i, (pdf, pred) in enumerate(zip(pdfs, positivity_predictions_for_pdfs)):
+    for pdf, pred in zip(pdfs, positivity_predictions_for_pdfs):
         cv = pred.central_value
-        ax.errorbar(xvals, cv, yerr=pred.std_error,
-                    linestyle='--',
-                    marker='s',
-                    label=pdf.label, lw=0.5, transform=next(offsets))
+        lower, upper = pred.stats.errorbar68()
+        ax.errorbar(
+            xvals,
+            cv,
+            yerr=[cv - lower, upper - cv],
+            linestyle='--',
+            marker='s',
+            label=pdf.label,
+            lw=0.5,
+            transform=next(offsets)
+        )
         minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))
 
     ax.set_ylabel('Observable Value')
-    ax.set_yscale('symlog', linthreshy=minscale)
+    ax.set_yscale('symlog', linthresh=minscale)
     ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 
     return fig

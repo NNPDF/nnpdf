@@ -107,7 +107,7 @@ surprising. It is a good idea to measure where the problems actually are.
     well as read Python source files to automatically document interfaces.  It
     supports extensive customization and plugins. In particular because the
     default formatting for docstrings is somewhat unwieldy, it is recommended
-    to enable the `napoleaon` extension which allows for a more lenient
+    to enable the `napoleon` extension which allows for a more lenient
     [`numydoc`](https://numpydoc.readthedocs.io/en/latest/format.html) style.
     Similarly the default RST markup language can be overwhelming for simple
     documents. We enable the

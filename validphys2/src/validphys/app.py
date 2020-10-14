@@ -47,6 +47,7 @@ providers = [
              'validphys.pseudodata',
              'validphys.renametools',
              'validphys.covmats',
+             'validphys.deltachi2',
              'reportengine.report'
             ]
 

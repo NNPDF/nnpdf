@@ -642,7 +642,7 @@ class ModelTrainer:
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
-        reported_keys = ["name", "count_chi2", "positivity", "ndata", "ndata_vl"]
+        reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
         reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}

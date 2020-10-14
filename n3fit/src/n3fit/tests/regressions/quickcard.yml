@@ -45,7 +45,6 @@ fitting:
   trvlseed: 3
   nnseed: 2
   mcseed: 1  
-  epochs: 900
 
 #   save: "weights.h5"
   load: "weights.h5"
