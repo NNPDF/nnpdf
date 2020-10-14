@@ -141,7 +141,7 @@ same steps by adding the `--hyperopt number_of_trials` argument to `n3fit`,
 where `number_of_trials` is the maximum allowed value of trials required by the
 fit. Usually when running hyperparameter scan we switch-off the MC replica
 generation so different replicas will correspond to different initial points for
-the scan, this approach provides faster results. We provide the `n3Hyperplot`
+the scan, this approach provides faster results. We provide the `vp-hyperoptplot`
 script to analyse the output of the hyperparameter scan.
 
 
