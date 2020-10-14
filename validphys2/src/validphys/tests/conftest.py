@@ -52,6 +52,7 @@ WEIGHTED_DATA = [
     ]
 
 PDF = "NNPDF31_nnlo_as_0118"
+HESSIAN_PDF = "NNPDF31_nnlo_as_0118_hessian"
 THEORYID = 162
 FIT = "191015-mw-001"
 FIT_ITERATED = "191015-mw-001_ite2_for_testing"
@@ -99,3 +100,37 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "linux: mark test to run only on linux"
     )
+
+@pytest.fixture(scope='module')
+def flavour_basis_initial_scale_config():
+    """Set the basis to ``flavour`` and fix ``Q`` to be 1.651, which is
+    about the initial scale at the point of creating this fixture.
+
+    In practice these values don't matter, but we will fix them here for the
+    sake of having stable tests.
+
+    """
+    return {"basis": "flavour", "Q": 1.651}
+
+@pytest.fixture(scope='module')
+def mc_pdf_config(flavour_basis_initial_scale_config):
+    """``flavour_basis_initial_scale_config`` with pdf set to be
+    a MC pdf
+
+    """
+    return {"pdf": PDF, **flavour_basis_initial_scale_config}
+
+@pytest.fixture(scope='module')
+def hessian_pdf_config(flavour_basis_initial_scale_config):
+    """``flavour_basis_initial_scale_config`` with pdf set to be
+    a hessian pdf
+
+    """
+    return {"pdf": HESSIAN_PDF, **flavour_basis_initial_scale_config}
+
+@pytest.fixture(scope='module')
+def hessian_data_config(data_config):
+    """Same as data config but with hessian PDF"""
+    new_config = dict(data_config)
+    new_config["pdf"] = HESSIAN_PDF
+    return new_config

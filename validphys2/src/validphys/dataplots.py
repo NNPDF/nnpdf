@@ -649,10 +649,17 @@ def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table, processed_metadata_g
 @figure
 def plot_training_length(replica_data, fit):
     """Generate an histogram for the distribution
-    of training lengths in a given fit."""
+    of training lengths in a given fit. Each bin is normalised by the total
+    number of replicas.
+
+    """
     fig, ax = plt.subplots()
     x = [x.nite for x in replica_data]
-    ax.hist(x, density=True, label=str(fit))
+    hist, bin_edges = np.histogram(x)
+    # don't plot pdf, instead proportion of replicas in each bin.
+    hist = hist / np.sum(hist)
+    width = np.diff(bin_edges)
+    ax.bar(bin_edges[:-1], hist, width=width, align="edge", label=str(fit))
     ax.set_title("Distribution of training lengths")
     ax.legend()
     return fig
@@ -661,22 +668,43 @@ def plot_training_length(replica_data, fit):
 @figure
 def plot_training_validation(fit, replica_data, replica_filters=None):
     """Scatter plot with the training and validation chi² for each replica
-    in the fit. The mean is also displayed"""
+    in the fit. The mean is also displayed as well as a line y=x to easily
+    identify whether training or validation chi² is larger.
+
+    """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plt.subplots()
-    ax.plot(training, valid, marker='o', linestyle='none', markersize=5, zorder=100)
+    fig, ax = plt.subplots(
+        figsize=(
+            max(plt.rcParams.get("figure.figsize")),
+            max(plt.rcParams.get("figure.figsize")),
+        )
+    )
+    ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
     if replica_filters:
-        _scatter_marked(ax, training,valid, replica_filters, zorder=90)
+        _scatter_marked(ax, training, valid, replica_filters, zorder=90)
         ax.legend().set_zorder(10000)
 
     ax.set_title(fit.label)
 
-    ax.set_xlabel(r'$\chi^2/N_{dat}$ train')
-    ax.set_ylabel(r'$\chi^2/N_{dat}$ valid')
+    ax.set_xlabel(r"$\chi^2/N_{dat}$ training")
+    ax.set_ylabel(r"$\chi^2/N_{dat}$ validation")
 
-    ax.plot(np.mean(training), np.mean(valid),
-         marker='s', color='red', markersize=7, zorder=1000)
+    min_max_lims = [
+        min([*ax.get_xlim(), *ax.get_ylim()]),
+        max([*ax.get_xlim(), *ax.get_ylim()]),
+    ]
+    ax.plot(min_max_lims, min_max_lims, ":k")
 
+    ax.plot(
+        np.mean(training),
+        np.mean(valid),
+        marker="s",
+        color="red",
+        markersize=7,
+        zorder=1000,
+    )
+
+    ax.set_aspect("equal")
     return fig
 
 
@@ -851,9 +879,15 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 @figure
 def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
-    """Plot the value of a positivity observable on a symlog scale as a
+    """Plot an errorbar spanning the central 68% CI of a positivity
+    observable as well as a point indicating the central value (according
+    to the ``pdf.stats_class.central_value()``).
+
+    Errorbars and points are plotted on a symlog scale as a
     function of the data point index (if pos_use_kin==False) or the first
-    kinematic variable (if pos_use_kin==True)."""
+    kinematic variable (if pos_use_kin==True).
+
+    """
     fig, ax = plt.subplots()
     ax.axhline(0, color='red')
 
@@ -870,18 +904,25 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
     minscale = np.inf
-    for i, (pdf, pred) in enumerate(zip(pdfs, positivity_predictions_for_pdfs)):
+    for pdf, pred in zip(pdfs, positivity_predictions_for_pdfs):
         cv = pred.central_value
-        ax.errorbar(xvals, cv, yerr=pred.std_error,
-                    linestyle='--',
-                    marker='s',
-                    label=pdf.label, lw=0.5, transform=next(offsets))
+        lower, upper = pred.stats.errorbar68()
+        ax.errorbar(
+            xvals,
+            cv,
+            yerr=[cv - lower, upper - cv],
+            linestyle='--',
+            marker='s',
+            label=pdf.label,
+            lw=0.5,
+            transform=next(offsets)
+        )
         minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))
 
     ax.set_ylabel('Observable Value')
-    ax.set_yscale('symlog', linthreshy=minscale)
+    ax.set_yscale('symlog', linthresh=minscale)
     ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 
     return fig

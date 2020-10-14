@@ -658,7 +658,7 @@ class ModelTrainer:
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
-        reported_keys = ["name", "count_chi2", "positivity", "ndata", "ndata_vl"]
+        reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
         reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
@@ -804,6 +804,7 @@ class ModelTrainer:
             integrability_dict.get("initial"),
             epochs,
         )
+        threshold_pos = positivity_dict.get("threshold", 1e-6)
 
         # Initialize the chi2 dictionaries
         l_train = []
@@ -864,6 +865,7 @@ class ModelTrainer:
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 save_weights_each=self.save_weights_each,
+                threshold_positivity=threshold_pos
             )
 
             # Compile each of the models with the right parameters

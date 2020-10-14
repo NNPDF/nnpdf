@@ -34,7 +34,7 @@ from reportengine import api, colors
 
 from validphys.app import providers
 from validphys.config import Environment
-from n3fit.n3fit import N3FitConfig
+from n3fit.scripts.n3fit_exec import N3FitConfig
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)

@@ -86,8 +86,7 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
     fit.
 
     """
-    # we take off 1 here because we don't want to include replica 0
-    n_reps = {len(pdf) - 1 for pdf in fits_pdf}
+    n_reps = {pdf.get_members() for pdf in fits_pdf}
     if len(n_reps) != 1:
         raise CheckError(
             "all fits for multiclosure actions should have same number of replicas"

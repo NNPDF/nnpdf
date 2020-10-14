@@ -45,33 +45,8 @@ pdf_report:
     meta: Null
     template: pdf.md
 
-experiments:
-    from_: fit
-
 description:
     from_: fit
-
-dataspecs:
-  - fit:
-      from_: current
-    pdf:
-      from_: current
-    theory:
-      from_: current
-    theoryid:
-      from_: current
-    speclabel:
-      from_: current
-  - fit:
-      from_: reference
-    pdf:
-      from_: reference
-    theory:
-      from_: reference
-    theoryid:
-      from_: reference
-    speclabel:
-      from_: reference
 
 pdfnormalize:
     - normtitle: Absolute

@@ -14,7 +14,6 @@ import numpy as np
 from NNPDF import CommonData, RandomGenerator
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
-from reportengine import collect
 import validphys.cuts
 
 log = logging.getLogger(__name__)
@@ -109,9 +108,25 @@ def filter_closure_data(filter_path, data, t0pdfset, fakenoise, errorsize, prepa
     return _filter_closure_data(
         filter_path, data, t0pdfset, fakenoise, errorsize)
 
-filter_closure_data_by_experiment = collect(
-    "filter_closure_data", ("group_dataset_inputs_by_experiment",)
-)
+
+@check_positive("errorsize")
+def filter_closure_data_by_experiment(
+    filter_path, experiments_data, t0pdfset, fakenoise, errorsize, prepare_nnpdf_rng,
+):
+    """
+    Like :py:func:`filter_closure_data` except filters data by experiment.
+
+    This function just peforms a ``for`` loop over ``experiments``, the reason
+    we don't use ``reportengine.collect`` is that it can permute the order
+    in which closure data is generate, which means that the pseudodata is
+    not reproducible.
+
+    """
+    return [
+        _filter_closure_data(filter_path, exp, t0pdfset, fakenoise, errorsize)
+        for exp in experiments_data
+    ]
+
 
 def filter_real_data(filter_path, data):
     """Filter real data, cutting any points which do not pass the filter rules.
@@ -174,7 +189,7 @@ def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
         loaded_ds = loaded_data.GetSet(j)
         if errorsize != 1.0:
             loaded_ds.RescaleErrors(errorsize)
-            loaded_ds.Export(str(path))
+        loaded_ds.Export(str(path))
     return total_data_points, total_cut_data_points
 
 

@@ -80,3 +80,43 @@ $ vp-pdfrename --author "Shayan Iranipour" --author "Zahari Kassabov" --descript
 
 The user can additionally modify the `DataVersion`, `SetIndex`, `Reference` entries using the `--data-version`, `--index`, and `--reference`
 flags respectively.
+
+## PDF sampling
+
+A new `PDF` can be created by subsampling the replicas of a pre-existing `PDF`,
+provided the source `PDF` uses MC replicas, by using `vp-pdffromreplicas`
+
+```
+$ vp-pdffromreplicas <input PDF name> <desired number of replicas>
+```
+
+Some obvious restrictions apply, e.g the number of subsampled replicas cannot
+be greater than the number of replicas of the original `PDF`. There is also
+the special case when the number of subsampled replicas is set to 1: LHAPDF
+files are required to have at least 2 replicas, and so the script will choose
+a single replica and then duplicate it so the resulting `PDF` will have two
+identical replicas.
+
+By default the output `PDF` will be called
+`<input PDF name>_<desired number of replicas>` however the user can choose
+their own name, using the `-o` or `--output-name` option. The script will not
+overwrite existing files, and so the output `PDF` name must not already
+be installed locally. You can check which PDFs you already own using
+[`vp-list`](../tutorials/list-resources.html#using-vp-list)
+
+Finally you can save a CSV which records which replica indices from the source
+`PDF` correspond to which replicas in the output `PDF` using the `-s` or
+`--save-indices` option.
+
+## The vp-deltachi2 application
+
+The script `vp-deltachi2` can be used to generate a report providing information about possible inefficiencies in a fitting methodology. 
+
+The function is called as:
+```
+$ vp-deltachi2 <input fit name> <corresponding Hessian PDF set>
+```
+
+Optionally, users can provide custom metadata (`title`, `author`, and `keywords`), as well as the energy scale `Q` using commandline arguments. By default the energy scale is set to 1.7 GeV. 
+
+To run this analysis one first has to prepare the corresponding Hessian PDF set by performing a Monte Carlo to Hessian conversion using [mc2hessian](https://github.com/scarrazza/mc2hessian).

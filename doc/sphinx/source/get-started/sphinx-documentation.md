@@ -84,7 +84,7 @@ while inline maths is generated using
 ```
 :math:`\frac{1}{2}`
 ```
-with attention being brought to the backticks. Note: the markdown intepreter
+with attention being brought to the backticks. Note: the markdown interpreter
 being used here does not support inline maths, so if formula dense documentation
 is being implemented, it is advised to use restructured text instead.
 
@@ -118,7 +118,7 @@ at the top of this file.
 In addition, one can link to other pages within the documentation by
 `[text](<relative-path-to-md-or-rst-file>.<extension>)`.
 
-One can define "lables" for RestructuredText, which can be referred to from
+One can define "labels" for RestructuredText, which can be referred to from
 anywhere, like this:
 ```
     .. _my-reference-label:
@@ -142,12 +142,12 @@ code markers in markdown:
 Labels can be linked to from anywhere using  the syntax
 
 ```
-[lint text](my-refence-label)
+[link text](my-reference-label)
 ```
 for Markdown and
 
 ```
-:ref:`my-reference-label`.
+:ref:`my-reference-label`
 ```
 for RestructuredText, as described in its
 [documentation](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html?highlight=cross%20reference#role-ref).
