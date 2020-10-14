@@ -158,7 +158,22 @@ def xq2map_with_cuts(commondata, cuts):
     empty = (np.array([]), np.array([]))
     return XQ2Map(info.experiment, commondata, fitted_kintable, empty)
 
-data_xq2map = collect(xq2map_with_cuts, ('data',))
+experiments_xq2map = collect(xq2map_with_cuts, ('data',))
+
+
+def kinematics_table_notable(commondata, kinlimits):
+    """
+    No table object of able containing the kinematics of a commondata object,
+    indexed by their datapoint id.
+    """
+    ld_cd = commondata.load()
+    name = ld_cd.GetSetName()
+    labels = [kinlimits[kin] for kin in ('k1', 'k2', 'k3')]
+    table = ld_cd.get_kintable()
+    index = [name]*len(table)
+    res = pd.DataFrame(ld_cd.get_kintable(), index=index, columns=labels)
+
+    return res
 
 @table
 def kinematics_table(commondata, kinlimits):
@@ -166,24 +181,14 @@ def kinematics_table(commondata, kinlimits):
     Table containing the kinematics of a commondata object,
     indexed by their datapoint id.
     """
-    ld_cd = commondata.load()
-    labels = [kinlimits[kin] for kin in ('k1', 'k2', 'k3')]
-    res = pd.DataFrame(ld_cd.get_kintable(), columns=labels)
+    return kinematics_table_notable(commondata, kinlimits)
 
-    return res
-
+data_kinematics_tables = collect(kinematics_table_notable, ("data",))
 
 @table
-def groups_xq2_table(data_xq2map, groups_index):
-    """Generate a table containing (x, Q^2) information
-    for data."""
-    result_records = [
-        {"$x$": x, "$Q^2$": q2} for dat in data_xq2map for x, q2 in zip(*dat.fitted)
-    ]
-    if not result_records:
-        log.warning("Empty records for experiment xq2 map")
-        return pd.DataFrame()
-    df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
-                       index=groups_index)
+def full_kinematics_table(data_kinematics_tables):
+    """
+    Kinemtics information for a commondata object
+    """
+    return pd.concat(data_kinematics_tables)
 
-    return df
