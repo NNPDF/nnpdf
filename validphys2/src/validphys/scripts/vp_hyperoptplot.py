@@ -84,8 +84,6 @@ class HyperoptPlotApp(App):
             default=[]
         )
         args = parser.parse_args()
-        args['config_yml'] = hyperplottemplates.template_path
-        return args
 
     def complete_mapping(self):
         args = self.args
