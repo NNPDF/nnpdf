@@ -119,17 +119,16 @@ following the points presented above you can proceed with a fit.
     downloaded automatically. Alternatively they can be obtained with the
     `vp-get` tool.
 
-    <details>
-      <summary>Note</summary>
-
-      This step is not strictly necessary when producing a standard fit with
-      n3fit - notice that in the next step the first command-line argument is
-      the runcard itself and not a folder, unlike with [nnfit](run-legacy-fit) - but
-      it *is* required when running a fit for a [closure test](running-a-closure-test).
-      Either way, it is recommended that this step is followed when producing any
-      fit with n3fit.
-
-    </details>
+    ```eval_rst
+    .. note::
+       This step is not strictly necessary when producing a standard fit with
+       n3fit - notice that in the next step the first command-line argument is
+       the runcard itself and not a folder, unlike with the legacy code
+       :ref:`nnfit <nnfit-usage>` - but it is required by :ref:`validphys <vp-index>`
+       and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
+       will fail unless this step has been followed. If necessary, this step can
+       be done after the fit has been run.
+    ```
 
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
@@ -178,6 +177,11 @@ load.
 ``` note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 ```
 
+
+
+```eval_rst
+.. _upload-fit:
+```
 
 Upload and analyse the fit
 --------------------------
