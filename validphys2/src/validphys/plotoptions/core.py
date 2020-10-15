@@ -14,7 +14,7 @@ from reportengine.floatformatting import format_number
 from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 
-from validphys.core import CommonDataSpec, DataSetSpec, Cuts
+from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 
@@ -48,7 +48,7 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     if cuts is None:
         if isinstance(data, DataSetSpec):
             cuts = data.cuts.load() if data.cuts else None
-    elif isinstance(cuts, Cuts):
+    elif isinstance(cuts, (Cuts, InternalCutsWrapper)):
         cuts = cuts.load()
     elif not cuts:
         cuts = None
