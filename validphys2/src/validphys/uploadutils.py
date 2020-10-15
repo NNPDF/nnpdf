@@ -15,6 +15,7 @@ import contextlib
 import pathlib
 import tempfile
 from urllib.parse import urljoin
+import hashlib
 
 import prompt_toolkit
 from prompt_toolkit.completion import WordCompleter
@@ -354,7 +355,7 @@ def interactive_meta(path):
         yaml.safe_dump(meta_dict, stream)
 
 
-def check_input(path, force_no_setupfit):
+def check_input(path):
     """A function that checks the type of the input for vp-upload. The type
     determines where on the vp server the file will end up
 
@@ -390,14 +391,7 @@ def check_input(path, force_no_setupfit):
         # --interactive flag to create one
         return 'report'
     elif 'filter.yml' in files:
-        if 'filter' in files or force_no_setupfit:
-            return 'fit'
-        else:
-            log.error("The fit being uploaded does not contain a filter folder, "
-                      "which implies that vp-setupfit has not been run on it. "
-                      "Either run vp-setupfit on it and attempt to upload it "
-                      "again or specify the force_no_setupfit flag.")
-            raise UploadError
+        return 'fit'
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'
     else:
@@ -407,3 +401,37 @@ def check_input(path, force_no_setupfit):
                          "please save to the server using rsync or wiki-upload. "
                          "The --interactive flag will generate a meta file which "
                          "will cause the input to be registered as a report.")
+
+
+def check_fit_md5(output_path):
+    """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
+    the config. We check that the ``md5`` matches the ``filter.yml`` which
+    is checking that ``vp-setupfit`` was ran and that the ``filter.yml``
+    inside the fit folder wasn't modified.
+
+    """
+    md5_path = output_path/"md5"
+    try:
+        with open(md5_path, "r") as f:
+            saved_md5 = f.read()
+    except FileNotFoundError as e:
+        log.error(
+            "It doesn't appear that `vp-setupfit` was ran because no `md5` "
+            "was found, `vp-setupfit` should be ran before uploading a fit "
+            "to overwrite this behaviour, use --force_no_setupfit flag "
+            "when running vp-upload."
+        )
+        raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
+
+    with open(output_path/"filter.yml", "rb") as f:
+        hashed_config = hashlib.md5(f.read()).hexdigest()
+
+    if hashed_config != saved_md5:
+        log.error(
+            "Saved md5 doesn't match saved fit configuration runcard, which "
+            "suggests that the configuration file was modified after it was "
+            "saved, which could cause issues. Either rerun vp-setupfit on "
+            "the latest version of the runcard, or use --force_no_setupfit "
+            "to ignore this when uploading fit."
+        )
+        raise UploadError

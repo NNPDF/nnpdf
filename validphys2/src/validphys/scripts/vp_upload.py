@@ -60,8 +60,11 @@ def main():
     if interactive:
         uploadutils.interactive_meta(output)
 
-    input_type = uploadutils.check_input(output, force_no_setupfit)
+    input_type = uploadutils.check_input(output)
     log.info(f"Detected {input_type} input")
+
+    if input_type == "fit" and not force_no_setupfit:
+        uploadutils.check_fit_md5(output)
 
     uploader_dict = {
             'report': uploadutils.ReportUploader,
