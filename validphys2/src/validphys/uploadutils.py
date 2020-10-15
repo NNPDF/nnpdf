@@ -194,6 +194,35 @@ class FitUploader(FileUploader):
                       "--force`.")
             raise UploadError
 
+    def check_fit_md5(self, output_path):
+        """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
+        the config. We check that the ``md5`` matches the ``filter.yml`` which
+        is checking that ``vp-setupfit`` was ran and that the ``filter.yml``
+        inside the fit folder wasn't modified.
+
+        """
+        md5_path = output_path/"md5"
+        try:
+            with open(md5_path, "r") as f:
+                saved_md5 = f.read()
+        except FileNotFoundError as e:
+            log.error(
+                "It doesn't appear that `vp-setupfit` was ran because no `md5` "
+                "was found, `vp-setupfit` should be ran before uploading a fit."
+            )
+            raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
+
+        with open(output_path/"filter.yml", "rb") as f:
+            hashed_config = hashlib.md5(f.read()).hexdigest()
+
+        if hashed_config != saved_md5:
+            log.error(
+                "Saved md5 doesn't match saved fit configuration runcard, which "
+                "suggests that the configuration file was modified after it was "
+                "saved. <fit folder>/filter.yml shouldn't be modified directly "
+                "instead modify the fit runcard and re-run ``vp-setupfit``."
+            )
+            raise UploadError
 
     def compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
@@ -220,6 +249,8 @@ class FitUploader(FileUploader):
 
         if not force:
             self.check_fit_exists(fit_name)
+
+        self.check_fit_md5(output_path)
 
         new_out, name = self.compress(output_path)
         super().upload_output(new_out)
@@ -401,37 +432,3 @@ def check_input(path):
                          "please save to the server using rsync or wiki-upload. "
                          "The --interactive flag will generate a meta file which "
                          "will cause the input to be registered as a report.")
-
-
-def check_fit_md5(output_path):
-    """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
-    the config. We check that the ``md5`` matches the ``filter.yml`` which
-    is checking that ``vp-setupfit`` was ran and that the ``filter.yml``
-    inside the fit folder wasn't modified.
-
-    """
-    md5_path = output_path/"md5"
-    try:
-        with open(md5_path, "r") as f:
-            saved_md5 = f.read()
-    except FileNotFoundError as e:
-        log.error(
-            "It doesn't appear that `vp-setupfit` was ran because no `md5` "
-            "was found, `vp-setupfit` should be ran before uploading a fit "
-            "to overwrite this behaviour, use --force_no_setupfit flag "
-            "when running vp-upload."
-        )
-        raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
-
-    with open(output_path/"filter.yml", "rb") as f:
-        hashed_config = hashlib.md5(f.read()).hexdigest()
-
-    if hashed_config != saved_md5:
-        log.error(
-            "Saved md5 doesn't match saved fit configuration runcard, which "
-            "suggests that the configuration file was modified after it was "
-            "saved, which could cause issues. Either rerun vp-setupfit on "
-            "the latest version of the runcard, or use --force_no_setupfit "
-            "to ignore this when uploading fit."
-        )
-        raise UploadError
