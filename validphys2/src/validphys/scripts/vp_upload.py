@@ -32,11 +32,17 @@ def main():
         '--force',
         help="If the fit to upload already exists on the server, overwrite it.",
         action='store_true')
+    parser.add_argument(
+        '-fns',
+        '--force_no_setupfit',
+        help="Upload the fit even if vp-setupfit has not been run on it.",
+        action='store_true')
     args = parser.parse_args()
     import pathlib
     output = pathlib.Path(args.output)
     interactive = args.interactive
     force = args.force
+    force_no_setupfit = args.force_no_setupfit
 
     import os.path as osp
     import logging
@@ -54,7 +60,7 @@ def main():
     if interactive:
         uploadutils.interactive_meta(output)
 
-    input_type = uploadutils.check_input(output)
+    input_type = uploadutils.check_input(output, force_no_setupfit)
     log.info(f"Detected {input_type} input")
 
     uploader_dict = {

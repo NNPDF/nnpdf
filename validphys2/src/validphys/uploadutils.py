@@ -354,7 +354,7 @@ def interactive_meta(path):
         yaml.safe_dump(meta_dict, stream)
 
 
-def check_input(path):
+def check_input(path, force_no_setupfit):
     """A function that checks the type of the input for vp-upload. The type
     determines where on the vp server the file will end up
 
@@ -390,7 +390,14 @@ def check_input(path):
         # --interactive flag to create one
         return 'report'
     elif 'filter.yml' in files:
-        return 'fit'
+        if 'filter' in files or force_no_setupfit:
+            return 'fit'
+        else:
+            log.error("The fit being uploaded does not contain a filter folder, "
+                      "which implies that vp-setupfit has not been run on it. "
+                      "Either run vp-setupfit on it and attempt to upload it "
+                      "again or specify the force_no_setupfit flag.")
+            raise UploadError
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'
     else:
