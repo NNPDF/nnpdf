@@ -183,4 +183,7 @@ def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     return res
 
 
-kinematics_table = table(kinematics_table_notable)
+@table
+def kinematics_table(kinematics_table_notable):
+    """Same as kinematics_table_notable but writing the table to file"""
+    return kinematics_table_notable
