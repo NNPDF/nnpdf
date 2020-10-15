@@ -160,10 +160,10 @@ def xq2map_with_cuts(commondata, cuts):
 
 experiments_xq2map = collect(xq2map_with_cuts, ('data',))
 
-
-def kinematics_table_notable(commondata, kinlimits):
+@table
+def kinematics_table(commondata, kinlimits):
     """
-    No table object of able containing the kinematics of a commondata object,
+    Table containing the kinematics of a commondata object,
     indexed by their datapoint id.
     """
     ld_cd = commondata.load()
@@ -175,14 +175,6 @@ def kinematics_table_notable(commondata, kinlimits):
 
     return res
 
-@table
-def kinematics_table(commondata, kinlimits):
-    """
-    Table containing the kinematics of a commondata object,
-    indexed by their datapoint id.
-    """
-    return kinematics_table_notable(commondata, kinlimits)
-
 data_kinematics_tables = collect(kinematics_table_notable, ("data",))
 
 @table
@@ -190,5 +182,7 @@ def full_kinematics_table(data_kinematics_tables):
     """
     Kinemtics information for a commondata object
     """
+    from IPython import embed
+    embed()
     return pd.concat(data_kinematics_tables)
 
