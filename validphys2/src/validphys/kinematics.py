@@ -171,13 +171,9 @@ def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     PLOTTING files will be displayed. Otherwise only the original three
     kinematics will be shown.
     """
-    # Handling the cuts this way because
-    # commondata + kitable + cuts doesn't really work
-    info = plotoptions.get_info(commondata, cuts=None)
-    res = plotoptions.kitable(commondata, info)
-    if cuts:
-        res = res.loc[cuts.load()]
-    res.columns = [*info.kinlabels[:3], *res.columns[3:]]
+    info = plotoptions.get_info(commondata, cuts=cuts)
+    res = plotoptions.kitable(commondata, info, cuts=cuts)
+    res.columns = [*info.kinlabels, *res.columns[3:]]
     if not show_extra_labels:
         res = res.iloc[:, :3]
     return res

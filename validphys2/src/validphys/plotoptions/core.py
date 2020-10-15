@@ -14,6 +14,7 @@ from reportengine.floatformatting import format_number
 from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 
+from NNPDF import CommonData, DataSet
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
@@ -281,14 +282,37 @@ class PlotConfigParser(Config):
 
 
 
-def kitable(commondata, info):
-    if isinstance(commondata, (DataSetSpec, CommonDataSpec)):
-        commondata = commondata.load()
-    table = pd.DataFrame(commondata.get_kintable(), columns=default_labels[1:])
+def kitable(data, info, *, cuts=None):
+    """Obtain a DataFrame with the kinematics for each data point
+
+    Parameters
+    ----------
+    data: (DataSetSpec, CommonDataSpec, Dataset, CommonData)
+        A data object to extract the kinematics from.
+    info: PlotInfo
+        The desctiption of the transformations to apply to the kinematics.
+        See :py:func:`get_info`
+    cuts: Cuts or None, default=None
+        An object to load the cuts from. It is an error to set this if ``data``
+        is a dataset. If `data` is a CommonData, these **must** be the same as
+        those passed to :py:func:`get_info`.
+
+    Returns
+    -------
+    table: pd.DataFrame
+       A dataframe containing the kinematics for all points after cuts.
+    """
+    if isinstance(data, (DataSet, DataSetSpec)) and cuts is not None:
+        raise TypeError("Cuts must be None when a dataset is given")
+    if isinstance(data, (DataSetSpec, CommonDataSpec)):
+        data = data.load()
+    table = pd.DataFrame(data.get_kintable(), columns=default_labels[1:])
+    if isinstance(data, CommonData) and cuts is not None:
+        table = table.loc[cuts.load()]
     table.index.name = default_labels[0]
     if info.kinematics_override:
         transform = apply_to_all_columns(table, info.kinematics_override)
-        table = pd.DataFrame(np.array(transform).T, columns=table.columns)
+        table = pd.DataFrame(np.array(transform).T, columns=table.columns, index=table.index)
 
     #TODO: This is a little bit ugly. We want to call the functions
     #with all the
