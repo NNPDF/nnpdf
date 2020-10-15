@@ -1,46 +1,30 @@
-#!/usr/bin/env python3
-
 """
-    This module contains the necessary functions for generating
-    the hyperopt plots.
+hyperoptplot.py
 
-    In the most basic form it simply generates a plot with all the trials
-    with the lowest loss configuration drawn in a different color.
-
-    Receives as input a fit folder containing at least one replica.
-    If there are more than one replicas in the folder it will run iteratively
-    through all the json unless the option --combine is given
-
-    It also includes several options to massage the results:
-
-    # Options:
-    -f, --filter: expresions of the form key [operator] value
-              the allowed operators are: =, <, >, !=
-    -v: change the value of the validation multiplier (by default 0.5)
-        the test multiplier is just (1.0 - v)
-    -t: if the loss is above this value, the configuration is considered as failure
-    -if: if given, the flags include failing runs
-    -c: if given, combine all the replicas as if it were one big json file
+Module for the parsing and plotting of hyperopt results.
 """
+
 from argparse import ArgumentParser
 import os
 import re
-import sys
 import glob
 import json
 import logging
 import numpy as np
 import pandas as pd
-import seaborn as sns
+from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
+from types import SimpleNamespace
+from reportengine.figure import figure
+import numpy as np
 import matplotlib.pyplot as plt
-from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe, parse_keys
+from reportengine.table import table
+import seaborn as sns
 
-logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
-
 
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
+
 
 # A mapping between the names the fields have in the json file
 # and more user-friendly names
@@ -68,78 +52,22 @@ KEYWORDS = {
     "loss": "loss",
 }
 
-NODES = (KEYWORDS["nodes"], 4)
+
 # 0 = normal scatter plot, 1 = violin, 2 = log
-DEFAULT_PLOTTING_KEYS = [
-    (KEYWORDS["id"], 0),
-    (KEYWORDS["optimizer"], 1),
-    (KEYWORDS["lr"], 2, [2e-4, 4e-1]),
-    (KEYWORDS["initializer"], 1),
-    (KEYWORDS["epochs"], 0),
-    (KEYWORDS["ste"], 0),
-    (KEYWORDS["stp"], 0),
-    (KEYWORDS["p_mul"], 0),
-    (KEYWORDS["nl"], 1),
-    (KEYWORDS["activation"], 1),
-    (KEYWORDS["dropout"], 0),
-    (KEYWORDS["tl"], 0),
-    NODES,
-]
-
-
-def parse_args():
-    """ Wrapper around argumentparser """
-    parser = ArgumentParser()
-    parser.add_argument("folder", help="Fit folder")
-    parser.add_argument(
-        "-v",
-        "--val_multiplier",
-        help="Fraction to weight the validation loss with (test_multiplier = 1-val_multiplier)",
-        type=float,
-        default=0.0,
-    )
-    parser.add_argument(
-        "-if",
-        "--include_failures",
-        help="Flag to include failed runs in  the plots",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-t",
-        "--threshold",
-        help="Value of the loss function from which to consider a run to have failed",
-        type=float,
-        default=1e3,
-    )
-    parser.add_argument(
-        "-f",
-        "--filter",
-        help="Add the filter key=value to the dataframe",
-        nargs="+",
-        default=(),
-    )
-    parser.add_argument(
-        "-c",
-        "--combine",
-        help="If more than one replica folder is found, combine all trials",
-        action="store_true",
-    )
-    # Autofiltering
-    parser.add_argument(
-        "--autofilter",
-        help="Given a number of keys, perform an autofilter (removing combinations of elements with worse rewards",
-        nargs="+",
-    )
-    # Plotting options
-    parser.add_argument(
-        "-p",
-        "--keys_to_plot",
-        help="Choose which keys to plot (they must be part of the DEFAULT_PLOTTING_KEYS dicttionary, use the special key -p HELP)",
-        nargs="+",
-    )
-    parser.add_argument("--debug", help="Print debug information", action="store_true")
-    args = parser.parse_args()
-    return args
+plotting_styles = {
+    "iteration": 0,
+    "optimizer": 1,
+    "learning_rate": 2,
+    "initializer": 1,
+    "epochs": 0,
+    "stopping_epochs": 0,
+    "stopping_patience": 0,
+    "multiplier": 0,
+    "number_of_layers": 1,
+    "activation_per_layer": 1,
+    "dropout": 0,
+    "clipnorm": 0,
+}
 
 
 # Parse the different sections of the hyperoptimization
@@ -255,6 +183,10 @@ def parse_statistics(trial):
     dict_out[KEYWORDS["tl"]] = testing_loss
 
     # Kfolding information
+    # average = results["kfold_meta"]["hyper_avg"]
+    # std = results["kfold_meta"]["hyper_std"]
+    # dict_out["avg"] = average
+    # dict_out["std"] = std
     dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
     dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
     return dict_out
@@ -278,16 +210,26 @@ def parse_trial(trial):
     return data_dict
 
 
-def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
+def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_target):
     """
     Read a trial dictionary and compute the true loss and decide whether the run passes or not
     """
     test_f = 1.0 - validation_multiplier
     val_loss = trial_dict[KEYWORDS["vl"]]
-    test_loss = trial_dict[KEYWORDS["tl"]]
+    if loss_target == "average":
+        test_loss = np.array(trial_dict["hlosses"]).mean()
+    elif loss_target == "best_worst":
+        test_loss = np.array(trial_dict["hlosses"]).max()
+    elif loss_target == "std":
+        test_loss = np.array(trial_dict["hlosses"]).std()
     loss = val_loss * validation_multiplier + test_loss * test_f
 
-    if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold:
+    if (
+        loss > fail_threshold
+        or val_loss > fail_threshold
+        or test_loss > fail_threshold
+        or np.isnan(loss)
+    ):
         trial_dict["good"] = False
         # Set the loss an order of magnitude above the result so it shows obviously on the plots
         loss *= 10
@@ -297,20 +239,21 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
 
 def generate_dictionary(
     replica_path,
+    loss_target,
     json_name="tries.json",
     starting_index=0,
     val_multiplier=0.5,
     fail_threshold=10.0,
 ):
     """
-        Reads a json file and returns a list of dictionaries
+    Reads a json file and returns a list of dictionaries
 
-        # Arguments:
-            - `replica_path`: folder in which the tries.json file can be found
-            - `starting_index`: if the trials are to be added to an already existing
-                                set, make sure the id has the correct index!
-            - `val_multiplier`: validation multipler
-            - `fail_threhsold`: threshold for the loss to consider a configuration as a failure
+    # Arguments:
+        - `replica_path`: folder in which the tries.json file can be found
+        - `starting_index`: if the trials are to be added to an already existing
+                            set, make sure the id has the correct index!
+        - `val_multiplier`: validation multipler
+        - `fail_threhsold`: threshold for the loss to consider a configuration as a failure
     """
     filename = "{0}/{1}".format(replica_path, json_name)
 
@@ -326,9 +269,10 @@ def generate_dictionary(
         trial_dict = parse_trial(trial)
         if trial_dict is None:
             continue
-        evaluate_trial(trial_dict, val_multiplier, fail_threshold)
+        evaluate_trial(trial_dict, val_multiplier, fail_threshold, loss_target)
         trial_dict[KEYWORDS["id"]] = index
         all_trials.append(trial_dict)
+
     return all_trials
 
 
@@ -372,9 +316,7 @@ def filter_by_string(filter_string):
         operators = ["!=", "==", ">", "<"]
         if operator not in operators:
             raise NotImplementedError(
-                "Filter string not valid, operator not recognized {0}".format(
-                    filter_string
-                )
+                "Filter string not valid, operator not recognized {0}".format(filter_string)
             )
 
         # This I know it is not ok:
@@ -390,102 +332,22 @@ def filter_by_string(filter_string):
     return filter_function
 
 
-def order_axis(df, bestdf, key):
+def hyperopt_dataframe(commandline_args):
     """
-    Helper function for ordering the axis and make sure the best is always first
+    Loads the data generated by running hyperopt and stored in json files into a dataframe, and 
+    then filters the data according to the selection criteria provided by the command line 
+    arguments. It then returns both the entire dataframe as well as a dataframe object with the 
+    hyperopt parametesr of the best setup. 
     """
-    best_x_lst = bestdf.get(key).tolist()
-    ordering = set(df.get(key).tolist())
-    ordering.remove(best_x_lst[0])
-    ordering_true = best_x_lst + list(ordering)
-    best_x = np.array([str(best_x_lst[0])])
-    return ordering_true, best_x
+    args = SimpleNamespace(**commandline_args)
 
-
-def plot_scans(df, best_df, outfile, plotting_keys):
-    """
-    This function plots all trials in a nice multiplot
-    """
-    # Some printouts
-    print("All trials:")
-    print(df)
-
-    print("Best setup:")
-    with pd.option_context("display.max_rows", None, "display.max_columns", None):
-        print(best_df)
-
-    # Create a grid of plots
-    nplots = len(plotting_keys)
-    _, axs = plt.subplots(
-        int(np.ceil(nplots / 4)), min(4, nplots), sharey=True, figsize=(30, 30)
-    )
-
-    # Set the quantity we will be plotting in the y axis
-    loss_k = KEYWORDS["loss"]
-
-    for ax, key_tuple in zip(axs.reshape(-1), plotting_keys):
-        key = key_tuple[0]
-        mode = key_tuple[1]
-
-        if mode == 0 or mode == 2:  # normal scatter plot
-            ax = sns.scatterplot(x=key, y=loss_k, data=df, ax=ax)
-            best_x = best_df.get(key)
-            if mode == 2:
-                ax.set_xscale("log")
-                ax.set_xlim(key_tuple[2])
-        elif mode == 1:
-            ordering_true, best_x = order_axis(df, best_df, key=key)
-            ax = sns.violinplot(
-                x=key,
-                y=loss_k,
-                data=df,
-                ax=ax,
-                palette="Set2",
-                cut=0.0,
-                order=ordering_true,
-            )
-            ax = sns.stripplot(
-                x=key,
-                y=loss_k,
-                data=df,
-                ax=ax,
-                color="gray",
-                order=ordering_true,
-                alpha=0.4,
-            )
-        elif mode == 4:
-            # The nodes per layer is a special case because we want to know to
-            # which total number of layers they correspond
-            ordering_true, _ = order_axis(df, best_df, key=KEYWORDS["nl"])
-            best_x = best_df.get(key)
-            for l in ordering_true:
-                plot_data = df[df[KEYWORDS["nl"]] == l]
-                label = "layers = {0}".format(l)
-                ax = sns.scatterplot(
-                    x=key, y=loss_k, data=plot_data, ax=ax, label=label
-                )
-            ax.legend()
-
-        # Finally plot the "best" one, which will be first
-        ax = sns.scatterplot(
-            x=best_x, y=best_df.get(loss_k), ax=ax, color="orange", marker="s"
-        )
-        ax.set_ylabel("Loss")
-        ax.set_xlabel(key)
-
-    plt.savefig(f"{outfile}", bbox_inches="tight")
-
-
-def main():
-    args = parse_args()
     if args.debug:
         root_log = logging.getLogger()
         root_log.setLevel(logging.DEBUG)
 
-    # Prepare the filter(s)
     filter_functions = [filter_by_string(filter_me) for filter_me in args.filter]
 
-    search_str = "{0}/nnfit/replica_*/tries.json".format(args.folder)
+    search_str = f"{args.hyperopt_folder}/nnfit/replica_*/tries.json"
     all_json = glob.glob(search_str)
     starting_index = 0
     all_replicas = []
@@ -494,6 +356,7 @@ def main():
         replica_path = os.path.dirname(json_path)
         dictionaries = generate_dictionary(
             replica_path,
+            args.loss_target,
             starting_index=starting_index,
             val_multiplier=args.val_multiplier,
             fail_threshold=args.threshold,
@@ -544,46 +407,206 @@ def main():
         else:
             dataframe = dataframe_raw[dataframe_raw["good"]]
 
-        # Now select the best one
-        best_idx = dataframe.loss.idxmin()
-        best_trial_series = dataframe.loc[best_idx]
-        # Make into a dataframe and transpose or the plotting code will complain
-        best_trial = best_trial_series.to_frame().T
+    # Now select the best one
+    best_idx = dataframe.loss.idxmin()
+    best_trial_series = dataframe.loc[best_idx]
+    # Make into a dataframe and transpose or the plotting code will complain
+    best_trial = best_trial_series.to_frame().T
 
-        if not args.keys_to_plot:
-            plotting_keys = DEFAULT_PLOTTING_KEYS
-            # Append extra keys for the number of possible layers
-            for i in range(KEYWORDS["max_layers"]):
-                plotting_keys.append(("layer_{0}".format(i + 1), 4))
-        elif args.keys_to_plot == ["HELP"]:
-            print("The available plotting keys are: ")
-            for i in DEFAULT_PLOTTING_KEYS:
-                print(i[0])
-            sys.exit()
-        else:
-            # Run through the default plotting keys and see which ones do we keep
-            keys_parsed = [KEYWORDS.get(i, i) for i in args.keys_to_plot]
-            plotting_keys = []
-            for i in DEFAULT_PLOTTING_KEYS:
-                if i[0] in keys_parsed:
-                    plotting_keys.append(i)
+    log.info("Best setup:")
+    with pd.option_context("display.max_rows", None, "display.max_columns", None):
+        log.info(best_trial)
 
-        # If NODES is within the plotting keys, substitute it by the number of nodes
-        # per layer
-        if NODES in plotting_keys:
-            plotting_keys.remove(NODES)
-            # Get the possible numbers of layers from the dataframe
-            layers_info = parse_keys(dataframe, [KEYWORDS["nl"]])
-            possible_layers = layers_info[KEYWORDS["nl"]]
-            for i in possible_layers:
-                plotting_keys.append(("layer_{0}".format(i), 4))
-
-        # A script gotta plot what a script gotta plot
-        fileout = "{0}/scan.pdf".format(replica_path)
-        plot_scans(dataframe, best_trial, fileout, plotting_keys)
-        curdir = os.getcwd()
-        print(f"Plot saved at {curdir}/{fileout}")
+    return dataframe, best_trial
 
 
-if __name__ == "__main__":
-    main()
+@table
+def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
+    """
+    Generates a clean table with information on the hyperparameter settings of the best setup. 
+    """
+    _, best_trial = hyperopt_dataframe
+    best_idx = best_trial.index[0]
+    best_trial = best_trial.rename(index={best_idx: "parameter settings"})
+    best_trial = best_trial[
+        [
+            "optimizer",
+            "learning_rate",
+            "clipnorm",
+            "epochs",
+            "stopping_patience",
+            "initial",
+            "multiplier",
+            "nodes_per_layer",
+            "activation_per_layer",
+            "initializer",
+            "dropout",
+            "loss",
+        ]
+    ]
+    best_trial.insert(11, "loss type", commandline_args["loss_target"])
+    best_trial = best_trial.T
+    return best_trial
+
+
+@table
+def hyperopt_table(hyperopt_dataframe):
+    """
+    Generates a table containing complete information on all the tested setups that passed the 
+    filters set in the commandline arguments.
+    """
+    dataframe, _ = hyperopt_dataframe
+    return dataframe
+
+
+@figure
+def plot_iterations(hyperopt_dataframe):
+    """
+    Generates a scatter plot of the loss as a function of the iteration index. 
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    fig = plot_scans(dataframe, best_trial, "iteration")
+    return fig
+
+
+@figure
+def plot_optimizers(hyperopt_dataframe):
+    """
+    Generates a violin plot of the loss per optimizer.
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    fig = plot_scans(dataframe, best_trial, "optimizer")
+    return fig
+
+
+@figure
+def plot_clipnorm(hyperopt_dataframe, optimizer_name):
+    """
+    Generates a scatter plot of the loss as a function of the clipnorm for a given optimizer. 
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    filtered_dataframe = dataframe[dataframe.optimizer == optimizer_name]
+    best_filtered_idx = filtered_dataframe.loss.idxmin()
+    best_idx = best_trial.iteration.iloc[0]
+    if best_filtered_idx == best_idx:
+        include_best = True
+    else:
+        include_best = False
+    fig = plot_scans(filtered_dataframe, best_trial, "clipnorm", include_best=include_best)
+    return fig
+
+
+@figure
+def plot_learning_rate(hyperopt_dataframe, optimizer_name):
+    """
+    Generates a scatter plot of the loss as a function of the learning rate for a given optimizer.
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    filtered_dataframe = dataframe[dataframe.optimizer == optimizer_name]
+    best_filtered_idx = filtered_dataframe.loss.idxmin()
+    best_idx = best_trial.iteration.iloc[0]
+    if best_filtered_idx == best_idx:
+        include_best = True
+    else:
+        include_best = False
+    fig = plot_scans(filtered_dataframe, best_trial, "learning_rate", include_best=include_best)
+    return fig
+
+
+@figure
+def plot_initializer(hyperopt_dataframe):
+    """
+    Generates a violin plot of the loss per initializer.
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    fig = plot_scans(dataframe, best_trial, "initializer")
+    return fig
+
+
+@figure
+def plot_epochs(hyperopt_dataframe):
+    """
+    Generates a scatter plot of the loss as a function the number of epochs.
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    fig = plot_scans(dataframe, best_trial, "epochs")
+    return fig
+
+
+@figure
+def plot_number_of_layers(hyperopt_dataframe):
+    """
+    Generates a violin plot of the loss as a function of the number of layers of the model.
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    fig = plot_scans(dataframe, best_trial, "number_of_layers")
+    return fig
+
+
+@figure
+def plot_activation_per_layer(hyperopt_dataframe):
+    """
+    Generates a violin plot of the loss per activation function.
+    """
+    dataframe, best_trial = hyperopt_dataframe
+    fig = plot_scans(dataframe, best_trial, "activation_per_layer")
+    return fig
+
+
+def order_axis(df, bestdf, key):
+    """
+    Helper function for ordering the axis and make sure the best is always first
+    """
+    best_x_lst = bestdf.get(key).tolist()
+    ordering = set(df.get(key).tolist())
+    ordering.remove(best_x_lst[0])
+    ordering_true = best_x_lst + list(ordering)
+    best_x = np.array([str(best_x_lst[0])])
+    return ordering_true, best_x
+
+
+def plot_scans(df, best_df, plotting_parameter, include_best=True):
+    """
+    This function performs the plotting and is called by the `plot_` functions in this file.
+    """
+    figs, ax = plt.subplots()
+
+    # Set the quantity we will be plotting in the y axis
+    loss_k = "loss"
+
+    key = plotting_parameter
+    mode = plotting_styles[plotting_parameter]
+
+    if mode == 0 or mode == 2:  # normal scatter plot
+        ax = sns.scatterplot(x=key, y=loss_k, data=df, ax=ax)
+        best_x = best_df.get(key)
+        if mode == 2:
+            ax.set_xscale("log")
+    elif mode == 1:
+        ordering_true, best_x = order_axis(df, best_df, key=key)
+        ax = sns.violinplot(
+            x=key,
+            y=loss_k,
+            data=df,
+            ax=ax,
+            palette="Set2",
+            cut=0.0,
+            order=ordering_true,
+        )
+        ax = sns.stripplot(
+            x=key,
+            y=loss_k,
+            data=df,
+            ax=ax,
+            color="gray",
+            order=ordering_true,
+            alpha=0.4,
+        )
+
+    # Finally plot the "best" one, which will be first
+    if include_best:
+        ax = sns.scatterplot(x=best_x, y=best_df.get(loss_k), ax=ax, color="orange", marker="s")
+    ax.set_ylabel("Loss")
+    ax.set_xlabel(key)
+
+    return figs
