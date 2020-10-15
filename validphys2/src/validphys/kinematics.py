@@ -176,13 +176,3 @@ def kinematics_table(commondata, kinlimits):
     return res
 
 data_kinematics_tables = collect(kinematics_table_notable, ("data",))
-
-@table
-def full_kinematics_table(data_kinematics_tables):
-    """
-    Kinemtics information for a commondata object
-    """
-    from IPython import embed
-    embed()
-    return pd.concat(data_kinematics_tables)
-
