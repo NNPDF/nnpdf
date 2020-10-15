@@ -175,4 +175,4 @@ def kinematics_table(commondata, kinlimits):
 
     return res
 
-data_kinematics_tables = collect(kinematics_table_notable, ("data",))
+data_kinematics_tables = collect(kinematics_table, ("data",))
