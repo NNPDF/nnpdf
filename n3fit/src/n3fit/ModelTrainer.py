@@ -176,6 +176,7 @@ class ModelTrainer:
         save_weights_each=False,
         kfold_parameters=None,
         max_cores=None,
+        model_file=None, 
     ):
         """
         Parameters
@@ -190,6 +191,7 @@ class ModelTrainer:
             debug: flag to activate some debug options
             save_weights_each: if set, save the state of the fit
                                     every ``save_weights_each`` epochs
+            model_file: str whether to save the models
         """
 
         # Save all input information
@@ -214,9 +216,9 @@ class ModelTrainer:
             self.max_cores = 1
         else:
             self.max_cores = max_cores
+        self.model_file = model_file
         self.print_summary = True
         self.mode_hyperopt = False
-        self.model_file = None
         self.impose_sumrule = True
         self.hyperkeys = None
         if kfold_parameters is None:
@@ -239,9 +241,6 @@ class ModelTrainer:
                 log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
             self.hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
-
-        # Initialize the pdf model
-        self.pdf_model = None
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -289,15 +288,6 @@ class ModelTrainer:
             self.no_validation = False
 
         self.callbacks = []
-
-    @property
-    def model_file(self):
-        """ If a model_file is set the training model will try to get the weights form here """
-        return self._model_file
-
-    @model_file.setter
-    def model_file(self, model_file):
-        self._model_file = model_file
 
     def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
@@ -435,12 +425,6 @@ class ModelTrainer:
         output_ex = _pdf_injection(splitted_pdf, self.experimental["output"], negate_k_datasets)
 
         experimental = MetaModel(full_model_input_dict, output_ex)
-
-        if self.model_file:
-            # If a model file is given, load the weights from there
-            # note: even though the load corresponds to the training model only,
-            #       the layer_pdf is shared  and so it should affect all models
-            training.load_weights(self.model_file)
 
         if self.print_summary:
             training.summary()
@@ -835,6 +819,11 @@ class ModelTrainer:
             # Model generation joins all the different observable layers
             # together with pdf model generated above
             models = self._model_generation(pdf_model, partition)
+
+            # Only after model generation, apply possible weight file
+            if self.model_file:
+                log.info("Applying model file %s", self.model_file)
+                pdf_model.load_weights(self.model_file)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers

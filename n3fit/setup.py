@@ -7,7 +7,7 @@ setup(
         packages=find_packages('src'),
         zip_safe=False,
         package_data = {
-            '':['*.fitinfo', '*.yml'],
+            '':['*.fitinfo', '*.yml', '*.h5'],
             'tests/regressions': ['*'],
         },
 
