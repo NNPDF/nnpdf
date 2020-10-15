@@ -201,7 +201,7 @@ class FitUploader(FileUploader):
         inside the fit folder wasn't modified.
 
         """
-        md5_path = output_path/"md5"
+        md5_path = output_path / "md5"
         try:
             with open(md5_path, "r") as f:
                 saved_md5 = f.read()
@@ -212,15 +212,15 @@ class FitUploader(FileUploader):
             )
             raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
 
-        with open(output_path/"filter.yml", "rb") as f:
+        with open(output_path / "filter.yml", "rb") as f:
             hashed_config = hashlib.md5(f.read()).hexdigest()
 
         if hashed_config != saved_md5:
             log.error(
                 "Saved md5 doesn't match saved fit configuration runcard, which "
                 "suggests that the configuration file was modified after it was "
-                "saved. <fit folder>/filter.yml shouldn't be modified directly "
-                "instead modify the fit runcard and re-run ``vp-setupfit``."
+                "saved. <fit folder>/filter.yml shouldn't be modified directly. "
+                "Instead modify the fit runcard and re-run ``vp-setupfit``."
             )
             raise UploadError
 
