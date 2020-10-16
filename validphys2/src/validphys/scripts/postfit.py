@@ -183,7 +183,7 @@ def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold:
     log.info("*****************************************************************\n\n")
 
 
-def main():
+def main(command_line=None):
     splash()
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -207,7 +207,7 @@ def main():
         type=float,
     )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
-    args = parser.parse_args()
+    args = parser.parse_args(command_line)
     if args.debug:
         log.setLevel(logging.DEBUG)
     else:
