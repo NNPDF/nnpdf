@@ -20,6 +20,7 @@ from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
 from validphys.covmats import sqrt_covmat 
+from validphys.loader import Loader
 
 log = logging.getLogger(__name__)
 
@@ -458,11 +459,10 @@ def top_covmat(groups_data, groups_index,
     if use_top_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        import validphys.loader as Loader
         l = Loader()
         fileloc = l.check_vp_output_file(
-            "https://vp.nnpdf.science/IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv")
-        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/topthcovmat.csv",
+            "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv")
+        return fromfile_covmat(fileloc,
                 groups_data, groups_index)
 
 @table
