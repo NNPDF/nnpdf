@@ -112,11 +112,23 @@ Running the fitting code
 After successfully installing the `n3fit` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
-1. Prepare the fit: `vp-setupfit runcard.yml` this command will generate a
-`runcard_folder` folder in the current directory with a copy of the original
-YAML runcard.  The required resources (such as the theory and t0 PDF) will be
-downloaded automatically. Alternatively they can be obtained with the `vp-get`
-tool.
+1. Prepare the fit: `vp-setupfit runcard.yml`. This command will generate a
+    folder with the same name as the runcard (minus the file extension) in the
+    current directory, which will contain a copy of the original YAML runcard.
+    The required resources (such as the theory and t0 PDF set) will be
+    downloaded automatically. Alternatively they can be obtained with the
+    `vp-get` tool.
+
+    ```eval_rst
+    .. note::
+       This step is not strictly necessary when producing a standard fit with
+       n3fit - notice that in the next step the first command-line argument is
+       the runcard itself and not a folder, unlike with the legacy code
+       :ref:`nnfit <nnfit-usage>` - but it is required by :ref:`validphys <vp-index>`
+       and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
+       will fail unless this step has been followed. If necessary, this step can
+       be done after the fit has been run.
+    ```
 
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
@@ -165,6 +177,11 @@ load.
 ``` note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 ```
 
+
+
+```eval_rst
+.. _upload-fit:
+```
 
 Upload and analyse the fit
 --------------------------
