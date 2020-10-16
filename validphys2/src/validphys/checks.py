@@ -246,12 +246,13 @@ def check_norm_threshold(norm_threshold):
 @make_argcheck
 def check_dataspecs_posdataset_match(dataspecs_posdataset):
     """Check that the ``posdataset`` key matches for ``dataspecs``"""
-    pos_zero = dataspecs_posdataset[0]
+    pos_zero_cd = dataspecs_posdataset[0].commondataspec
     for i, pos_set in enumerate(dataspecs_posdataset[1:], start=1):
         check(
-            pos_zero == pos_set,
+            pos_zero_cd == pos_set.commondataspec,
             (
-                f"`posdataset` from dataspec 0: {pos_zero}, doesn't match "
-                f"`posdataset` from dataspec {i}: {pos_set}"
+                f"`posdataset` from dataspec 0: {pos_zero_cd}, doesn't match "
+                f"`posdataset` from dataspec {i}: {pos_set.commondataspec} so "
+                "they cannot be plotted together."
             )
         )
