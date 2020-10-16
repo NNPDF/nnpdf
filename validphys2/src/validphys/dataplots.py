@@ -941,13 +941,13 @@ def plot_dataspecs_positivity(
     element of dataspecs, allowing positivity predictions to be generated with
     different ``theory_id`` s as well as ``pdf`` s
     """
-    # only supply the first posdataset, since it is just used to plot kinematics
-    # assuming that the kinematics are the same if the names match
+    # we checked the positivity set matches between dataspecs so this is fine
+    posset = dataspecs_posdataset[0]
     return plot_positivity(
         dataspecs_pdf,
         dataspecs_positivity_predictions,
-        dataspecs_posdataset[0],
-        pos_use_kin
+        posset,
+        pos_use_kin,
     )
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):

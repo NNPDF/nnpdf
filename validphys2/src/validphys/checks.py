@@ -246,7 +246,12 @@ def check_norm_threshold(norm_threshold):
 @make_argcheck
 def check_dataspecs_posdataset_match(dataspecs_posdataset):
     """Check that the ``posdataset`` key matches for ``dataspecs``"""
-    names = []
-    for pos_set in dataspecs_posdataset:
-        names.append(pos_set.name)
-    check(len(set(names)) == 1, "dataspecs posdataset do not match")
+    pos_zero = dataspecs_posdataset[0]
+    for i, pos_set in enumerate(dataspecs_posdataset[1:], start=1):
+        check(
+            pos_zero == pos_set,
+            (
+                f"`posdataset` from dataspec 0: {pos_zero}, doesn't match "
+                f"`posdataset` from dataspec {i}: {pos_set}"
+            )
+        )
