@@ -471,9 +471,10 @@ def iterated_runcard_yaml(
             fitting_data[seed] = random.randrange(0, 2**32)
 
     # Next "closuretest" section of runcard
-    closuretest_data = filtermap["closuretest"]
-    if "filterseed" in closuretest_data:
-        closuretest_data["filterseed"] = random.randrange(0, 2**32)
+    if "closuretest" in filtermap:
+        closuretest_data = filtermap["closuretest"]
+        if "filterseed" in closuretest_data:
+            closuretest_data["filterseed"] = random.randrange(0, 2**32)
 
     # update description if necessary
     if _updated_description is not None:
