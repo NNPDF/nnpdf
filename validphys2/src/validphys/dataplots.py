@@ -26,6 +26,7 @@ from validphys.results import chi2_stat_labels, get_shifted_results
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
+from validphys.checks import check_dataspecs_posdataset_match
 
 log = logging.getLogger(__name__)
 
@@ -927,6 +928,27 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 
     return fig
 
+
+@figure
+@check_dataspecs_posdataset_match
+def plot_dataspecs_positivity(
+    dataspecs_pdf,
+    dataspecs_positivity_predictions,
+    dataspecs_posdataset,
+    pos_use_kin=False
+):
+    """Like :py:meth:`plot_positivity` except plots positivity for each
+    element of dataspecs, allowing positivity predictions to be generated with
+    different ``theory_id`` s as well as ``pdf`` s
+    """
+    # only supply the first posdataset, since it is just used to plot kinematics
+    # assuming that the kinematics are the same if the names match
+    return plot_positivity(
+        dataspecs_pdf,
+        dataspecs_positivity_predictions,
+        dataspecs_posdataset[0],
+        pos_use_kin
+    )
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
     check(
