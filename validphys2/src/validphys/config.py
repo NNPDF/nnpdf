@@ -1400,7 +1400,7 @@ class CoreConfig(configparser.Config):
 
 
     @configparser.explicit_node
-    def produce_filter_data(self, fakedata: bool, theorycovmatconfig=None):
+    def produce_filter_data(self, fakedata: bool = False, theorycovmatconfig=None):
         """Set the action used to filter the data to filter either real or
         closure data. If the closure data filter is being used and if the
         theory covariance matrix is not being closure tested then filter
