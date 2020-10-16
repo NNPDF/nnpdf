@@ -22,7 +22,7 @@ from reportengine.compat import yaml
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
     use_t0 = True,
-    actions_ = ['datacuts::theory::closuretest performfit']
+    actions_ = []
 )
 
 N3FIT_PROVIDERS = ["n3fit.performfit"]
@@ -109,6 +109,14 @@ class N3FitConfig(Config):
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
+
+        if file_content.get('closuretest') is not None:
+            N3FIT_FIXED_CONFIG['actions_'].append(
+                'datacuts::theory::closuretest performfit')
+        else:
+            N3FIT_FIXED_CONFIG['actions_'].append(
+                'datacuts::theory performfit')
+
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
