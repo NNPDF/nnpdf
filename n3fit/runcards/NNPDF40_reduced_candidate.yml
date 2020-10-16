@@ -250,7 +250,6 @@ fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3  
-  epochs: 20000
   save: False
   savefile: 'weights.hd5'
   load: False
