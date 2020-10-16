@@ -26,7 +26,6 @@ from validphys.results import chi2_stat_labels, get_shifted_results
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
-from validphys.checks import check_dataspecs_posdataset_match
 
 log = logging.getLogger(__name__)
 
@@ -914,7 +913,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
             yerr=[cv - lower, upper - cv],
             linestyle='--',
             marker='s',
-            label=pdf.label,
+            label=str(pdf),
             lw=0.5,
             transform=next(offsets)
         )
@@ -929,13 +928,18 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     return fig
 
 
+@make_argcheck
+def _check_same_posdataset_name(dataspecs_posdataset):
+    """Check that the ``posdataset`` key matches for ``dataspecs``"""
+    _check_same_dataset_name([ds.commondataspec for ds in dataspecs_posdataset])
+
 @figure
-@check_dataspecs_posdataset_match
+@_check_same_posdataset_name
 def plot_dataspecs_positivity(
-    dataspecs_pdf,
+    dataspecs_speclabel,
     dataspecs_positivity_predictions,
     dataspecs_posdataset,
-    pos_use_kin=False
+    pos_use_kin=False,
 ):
     """Like :py:meth:`plot_positivity` except plots positivity for each
     element of dataspecs, allowing positivity predictions to be generated with
@@ -944,11 +948,13 @@ def plot_dataspecs_positivity(
     # we checked the positivity set matches between dataspecs so this is fine
     posset = dataspecs_posdataset[0]
     return plot_positivity(
-        dataspecs_pdf,
+        dataspecs_speclabel,
         dataspecs_positivity_predictions,
         posset,
         pos_use_kin,
     )
+
+
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
     check(
