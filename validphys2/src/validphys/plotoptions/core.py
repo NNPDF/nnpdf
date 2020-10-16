@@ -290,7 +290,7 @@ def kitable(data, info, *, cuts=None):
     data: (DataSetSpec, CommonDataSpec, Dataset, CommonData)
         A data object to extract the kinematics from.
     info: PlotInfo
-        The desctiption of the transformations to apply to the kinematics.
+        The description of the transformations to apply to the kinematics.
         See :py:func:`get_info`
     cuts: Cuts or None, default=None
         An object to load the cuts from. It is an error to set this if ``data``
@@ -300,7 +300,7 @@ def kitable(data, info, *, cuts=None):
     Returns
     -------
     table: pd.DataFrame
-       A dataframe containing the kinematics for all points after cuts.
+       A DataFrame containing the kinematics for all points after cuts.
     """
     if isinstance(data, (DataSet, DataSetSpec)) and cuts is not None:
         raise TypeError("Cuts must be None when a dataset is given")
