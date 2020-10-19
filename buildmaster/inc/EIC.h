@@ -10,185 +10,236 @@
 
 #include "buildmaster_utils.h"
 
-class EIC_CC_140_OPTFilter: public CommonData
+class EIC_CC_EMP_140_OPTFilter: public CommonData
 {
-public: EIC_CC_140_OPTFilter():
-  CommonData("EIC_CC_140_OPT") { ReadData(); }
+public: EIC_CC_EMP_140_OPTFilter():
+  CommonData("EIC_CC_EMP_140_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_CC_140_PESFilter: public CommonData
+class EIC_CC_EMP_140_PESFilter: public CommonData
 {
-public: EIC_CC_140_PESFilter():
-  CommonData("EIC_CC_140_PES") { ReadData(); }
+public: EIC_CC_EMP_140_PESFilter():
+  CommonData("EIC_CC_EMP_140_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_140_OPTFilter: public CommonData
+class EIC_CC_EPP_140_OPTFilter: public CommonData
 {
-public: EIC_NC_140_OPTFilter():
-  CommonData("EIC_NC_140_OPT") { ReadData(); }
+public: EIC_CC_EPP_140_OPTFilter():
+  CommonData("EIC_CC_EPP_140_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_63_OPTFilter: public CommonData
+class EIC_CC_EPP_140_PESFilter: public CommonData
 {
-public: EIC_NC_63_OPTFilter():
-  CommonData("EIC_NC_63_OPT") { ReadData(); }
+public: EIC_CC_EPP_140_PESFilter():
+  CommonData("EIC_CC_EPP_140_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_44_OPTFilter: public CommonData
+class EIC_NC_EMP_140_OPTFilter: public CommonData
 {
-public: EIC_NC_44_OPTFilter():
-  CommonData("EIC_NC_44_OPT") { ReadData(); }
+public: EIC_NC_EMP_140_OPTFilter():
+  CommonData("EIC_NC_EMP_140_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_28_OPTFilter: public CommonData
+class EIC_NC_EMP_63_OPTFilter: public CommonData
 {
-public: EIC_NC_28_OPTFilter():
-  CommonData("EIC_NC_28_OPT") { ReadData(); }
+public: EIC_NC_EMP_63_OPTFilter():
+  CommonData("EIC_NC_EMP_63_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_140_PESFilter: public CommonData
+class EIC_NC_EMP_44_OPTFilter: public CommonData
 {
-public: EIC_NC_140_PESFilter():
-  CommonData("EIC_NC_140_PES") { ReadData(); }
+public: EIC_NC_EMP_44_OPTFilter():
+  CommonData("EIC_NC_EMP_44_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_63_PESFilter: public CommonData
+class EIC_NC_EMP_28_OPTFilter: public CommonData
 {
-public: EIC_NC_63_PESFilter():
-  CommonData("EIC_NC_63_PES") { ReadData(); }
+public: EIC_NC_EMP_28_OPTFilter():
+  CommonData("EIC_NC_EMP_28_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_44_PESFilter: public CommonData
+class EIC_NC_EMP_140_PESFilter: public CommonData
 {
-public: EIC_NC_44_PESFilter():
-  CommonData("EIC_NC_44_PES") { ReadData(); }
+public: EIC_NC_EMP_140_PESFilter():
+  CommonData("EIC_NC_EMP_140_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_28_PESFilter: public CommonData
+class EIC_NC_EMP_63_PESFilter: public CommonData
 {
-public: EIC_NC_28_PESFilter():
-  CommonData("EIC_NC_28_PES") { ReadData(); }
+public: EIC_NC_EMP_63_PESFilter():
+  CommonData("EIC_NC_EMP_63_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_CC_140_OPT_NUCLFilter: public CommonData
+class EIC_NC_EMP_44_PESFilter: public CommonData
 {
-public: EIC_CC_140_OPT_NUCLFilter():
-  CommonData("EIC_CC_140_OPT_NUCL") { ReadData(); }
+public: EIC_NC_EMP_44_PESFilter():
+  CommonData("EIC_NC_EMP_44_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_CC_140_PES_NUCLFilter: public CommonData
+class EIC_NC_EMP_28_PESFilter: public CommonData
 {
-public: EIC_CC_140_PES_NUCLFilter():
-  CommonData("EIC_CC_140_PES_NUCL") { ReadData(); }
+public: EIC_NC_EMP_28_PESFilter():
+  CommonData("EIC_NC_EMP_28_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_140_OPT_NUCLFilter: public CommonData
+class EIC_NC_EPP_140_OPTFilter: public CommonData
 {
-public: EIC_NC_140_OPT_NUCLFilter():
-  CommonData("EIC_NC_140_OPT_NUCL") { ReadData(); }
+public: EIC_NC_EPP_140_OPTFilter():
+  CommonData("EIC_NC_EPP_140_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_63_OPT_NUCLFilter: public CommonData
+class EIC_NC_EPP_63_OPTFilter: public CommonData
 {
-public: EIC_NC_63_OPT_NUCLFilter():
-  CommonData("EIC_NC_63_OPT_NUCL") { ReadData(); }
+public: EIC_NC_EPP_63_OPTFilter():
+  CommonData("EIC_NC_EPP_63_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_44_OPT_NUCLFilter: public CommonData
+class EIC_NC_EPP_44_OPTFilter: public CommonData
 {
-public: EIC_NC_44_OPT_NUCLFilter():
-  CommonData("EIC_NC_44_OPT_NUCL") { ReadData(); }
+public: EIC_NC_EPP_44_OPTFilter():
+  CommonData("EIC_NC_EPP_44_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_28_OPT_NUCLFilter: public CommonData
+class EIC_NC_EPP_28_OPTFilter: public CommonData
 {
-public: EIC_NC_28_OPT_NUCLFilter():
-  CommonData("EIC_NC_28_OPT_NUCL") { ReadData(); }
+public: EIC_NC_EPP_28_OPTFilter():
+  CommonData("EIC_NC_EPP_28_OPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_140_PES_NUCLFilter: public CommonData
+class EIC_NC_EPP_140_PESFilter: public CommonData
 {
-public: EIC_NC_140_PES_NUCLFilter():
-  CommonData("EIC_NC_140_PES_NUCL") { ReadData(); }
+public: EIC_NC_EPP_140_PESFilter():
+  CommonData("EIC_NC_EPP_140_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_63_PES_NUCLFilter: public CommonData
+class EIC_NC_EPP_63_PESFilter: public CommonData
 {
-public: EIC_NC_63_PES_NUCLFilter():
-  CommonData("EIC_NC_63_PES_NUCL") { ReadData(); }
+public: EIC_NC_EPP_63_PESFilter():
+  CommonData("EIC_NC_EPP_63_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_44_PES_NUCLFilter: public CommonData
+class EIC_NC_EPP_44_PESFilter: public CommonData
 {
-public: EIC_NC_44_PES_NUCLFilter():
-  CommonData("EIC_NC_44_PES_NUCL") { ReadData(); }
+public: EIC_NC_EPP_44_PESFilter():
+  CommonData("EIC_NC_EPP_44_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class EIC_NC_28_PES_NUCLFilter: public CommonData
+class EIC_NC_EPP_28_PESFilter: public CommonData
 {
-public: EIC_NC_28_PES_NUCLFilter():
-  CommonData("EIC_NC_28_PES_NUCL") { ReadData(); }
+public: EIC_NC_EPP_28_PESFilter():
+  CommonData("EIC_NC_EPP_28_PES") { ReadData(); }
 
 private:
   void ReadData();
 };
 
+class EIC_NC_EMD_88_OPTFilter: public CommonData
+{
+public: EIC_NC_EMD_88_OPTFilter():
+  CommonData("EIC_NC_EMD_88_OPT") { ReadData(); }
 
+private:
+  void ReadData();
+};
 
+class EIC_NC_EMD_66_OPTFilter: public CommonData
+{
+public: EIC_NC_EMD_66_OPTFilter():
+  CommonData("EIC_NC_EMD_66_OPT") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EMD_28_OPTFilter: public CommonData
+{
+public: EIC_NC_EMD_28_OPTFilter():
+  CommonData("EIC_NC_EMD_28_OPT") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EMD_88_PESFilter: public CommonData
+{
+public: EIC_NC_EMD_88_PESFilter():
+  CommonData("EIC_NC_EMD_88_PES") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EMD_66_PESFilter: public CommonData
+{
+public: EIC_NC_EMD_66_PESFilter():
+  CommonData("EIC_NC_EMD_66_PES") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EMD_28_PESFilter: public CommonData
+{
+public: EIC_NC_EMD_28_PESFilter():
+  CommonData("EIC_NC_EMD_28_PES") { ReadData(); }
+
+private:
+  void ReadData();
+};

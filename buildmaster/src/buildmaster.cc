@@ -460,25 +460,31 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_Z_3D_ELE_HRAP_8TEVFilter());
 
   // *********************** EIC pseudodata ***********************************
-  target.push_back(new EIC_CC_140_OPTFilter());
-  target.push_back(new EIC_CC_140_PESFilter());
-  target.push_back(new EIC_NC_140_OPTFilter());
-  target.push_back(new EIC_NC_63_OPTFilter());
-  target.push_back(new EIC_NC_44_OPTFilter());
-  target.push_back(new EIC_NC_28_OPTFilter());
-  target.push_back(new EIC_NC_140_PESFilter());
-  target.push_back(new EIC_NC_63_PESFilter());
-  target.push_back(new EIC_NC_44_PESFilter());
-  target.push_back(new EIC_NC_28_PESFilter());
-  target.push_back(new EIC_CC_140_OPT_NUCLFilter());
-  target.push_back(new EIC_CC_140_PES_NUCLFilter());
-  target.push_back(new EIC_NC_140_OPT_NUCLFilter());
-  target.push_back(new EIC_NC_63_OPT_NUCLFilter());
-  target.push_back(new EIC_NC_44_OPT_NUCLFilter());
-  target.push_back(new EIC_NC_28_OPT_NUCLFilter());
-  target.push_back(new EIC_NC_140_PES_NUCLFilter());
-  target.push_back(new EIC_NC_63_PES_NUCLFilter());
-  target.push_back(new EIC_NC_44_PES_NUCLFilter());
-  target.push_back(new EIC_NC_28_PES_NUCLFilter());
+  target.push_back(new EIC_CC_EMP_140_OPTFilter());
+  target.push_back(new EIC_CC_EMP_140_PESFilter());
+  target.push_back(new EIC_CC_EPP_140_OPTFilter());
+  target.push_back(new EIC_CC_EPP_140_PESFilter());
+  target.push_back(new EIC_NC_EMP_140_OPTFilter());
+  target.push_back(new EIC_NC_EMP_63_OPTFilter());
+  target.push_back(new EIC_NC_EMP_44_OPTFilter());
+  target.push_back(new EIC_NC_EMP_28_OPTFilter());
+  target.push_back(new EIC_NC_EMP_140_PESFilter());
+  target.push_back(new EIC_NC_EMP_63_PESFilter());
+  target.push_back(new EIC_NC_EMP_44_PESFilter());
+  target.push_back(new EIC_NC_EMP_28_PESFilter());
+  target.push_back(new EIC_NC_EPP_140_OPTFilter());
+  target.push_back(new EIC_NC_EPP_63_OPTFilter());
+  target.push_back(new EIC_NC_EPP_44_OPTFilter());
+  target.push_back(new EIC_NC_EPP_28_OPTFilter());
+  target.push_back(new EIC_NC_EPP_140_PESFilter());
+  target.push_back(new EIC_NC_EPP_63_PESFilter());
+  target.push_back(new EIC_NC_EPP_44_PESFilter());
+  target.push_back(new EIC_NC_EPP_28_PESFilter());
+  target.push_back(new EIC_NC_EMD_88_OPTFilter());
+  target.push_back(new EIC_NC_EMD_66_OPTFilter());
+  target.push_back(new EIC_NC_EMD_28_OPTFilter());
+  target.push_back(new EIC_NC_EMD_88_PESFilter());
+  target.push_back(new EIC_NC_EMD_66_PESFilter());
+  target.push_back(new EIC_NC_EMD_28_PESFilter());
   
 }
