@@ -20,7 +20,7 @@ from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
 from validphys.covmats import sqrt_covmat 
-from validphys.loader import Loader
+from validphys.loader import FallbackLoader
 
 log = logging.getLogger(__name__)
 
@@ -450,8 +450,10 @@ def higher_twist_covmat(groups_data, groups_index,
     if use_higher_twist_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/htcovmat_total.csv",
-                groups_data, groups_index)
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/htcovmat_total.csv")
+        return fromfile_covmat(fileloc, groups_data, groups_index)
+
 
 @table
 def top_covmat(groups_data, groups_index,
@@ -459,11 +461,9 @@ def top_covmat(groups_data, groups_index,
     if use_top_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        l = Loader()
-        fileloc = l.check_vp_output_file(
-            "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv")
-        return fromfile_covmat(fileloc,
-                groups_data, groups_index)
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv")
+        return fromfile_covmat(fileloc, groups_data, groups_index)
 
 @table
 def deuteron_covmat(groups_data, groups_index,
@@ -471,8 +471,9 @@ def deuteron_covmat(groups_data, groups_index,
     if use_deuteron_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
-              groups_data, groups_index)
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/deuteron.csv")
+        return fromfile_covmat(fileloc, groups_data, groups_index)
         
 @table
 def nuclear_covmat(groups_data, groups_index,
@@ -480,8 +481,9 @@ def nuclear_covmat(groups_data, groups_index,
     if use_nuclear_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/deuteron.csv",
-              groups_data, groups_index)
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/nuclear.csv")
+        return fromfile_covmat(fileloc, groups_data, groups_index)
 
 @table
 def user_covmat(groups_data, groups_index,
@@ -489,8 +491,9 @@ def user_covmat(groups_data, groups_index,
     if use_user_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        return fromfile_covmat("/home/s1303034/general_th_covmat_tests/usercovmat.csv",
-              groups_data, groups_index)
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/usercovmat.csv")
+        return fromfile_covmat(fileloc, groups_data, groups_index)
 
 @table
 def total_theory_covmat(
