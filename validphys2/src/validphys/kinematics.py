@@ -163,7 +163,7 @@ experiments_xq2map = collect(xq2map_with_cuts, ('dataset_inputs',))
 def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     """
     Table containing the kinematics of a commondata object,
-    indexed by their datapoint id. The kinematics will be transormed as per the
+    indexed by their datapoint id. The kinematics will be tranfsormed as per the
     PLOTTING file of the dataset or process type, and the column headers will
     be the labels of the variables defined in the metadata.
 
