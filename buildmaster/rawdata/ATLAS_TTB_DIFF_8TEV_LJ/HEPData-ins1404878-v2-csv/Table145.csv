@@ -1,0 +1,71 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t145
+#: name: Table 145
+#: description: Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+
+#: data_file: Table_145.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Single Differential Cross Section | Proton-Proton Scattering
+#: keyword cmenergies: 8000.0
+#: SQRT(S)(Q = 8 TEV),8000.0
+column,row,BOOT_CHI_TTBAR_4J2B_PT_TTBAR_4J2B (rows vs columns)
+1,1,0.241156
+2,1,0.346733
+3,1,0.302493
+4,1,0.220059
+5,1,0.150423
+6,1,0.0922464
+1,2,0.294066
+2,2,0.431204
+3,2,0.382318
+4,2,0.276686
+5,2,0.186724
+6,2,0.115642
+1,3,0.281568
+2,3,0.418601
+3,3,0.379638
+4,3,0.281144
+5,3,0.188822
+6,3,0.114357
+1,4,0.23528
+2,4,0.356971
+3,4,0.331091
+4,4,0.250693
+5,4,0.175402
+6,4,0.10695
+1,5,0.193915
+2,5,0.297158
+3,5,0.28075
+4,5,0.218196
+5,5,0.15561
+6,5,0.0913913
+1,6,0.153395
+2,6,0.237253
+3,6,0.225461
+4,6,0.177797
+5,6,0.133338
+6,6,0.0794993
+1,7,0.119402
+2,7,0.187431
+3,7,0.180398
+4,7,0.142763
+5,7,0.107111
+6,7,0.0666752
+1,8,0.0887573
+2,8,0.143563
+3,8,0.142765
+4,8,0.114734
+5,8,0.0857297
+6,8,0.0533159
+1,9,0.0666279
+2,9,0.114356
+3,9,0.116711
+4,9,0.0898167
+5,9,0.0652919
+6,9,0.0459229
+1,10,0.0421703
+2,10,0.0720049
+3,10,0.0739652
+4,10,0.0575854
+5,10,0.0442202
+6,10,0.0290356
+

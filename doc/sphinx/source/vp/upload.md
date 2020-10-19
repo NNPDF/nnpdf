@@ -135,24 +135,22 @@ form of a `meta.yaml` file). If it doesn't exist or you want to upload and index
 arbitrary files, use the [`wiki-upload` command](#the-wiki-upload-script).
 
 ```eval_rst
+The script automatically detects (:py:func:`validphys.uploadutils.check_input`) the type of the input.
+A `fit` is defined to be any folder structure that contains a `filter.yml` file at its root, a `PDF` is any
+folder containing a `.info` file at the root and a replica 0, and a report is any such structure containing an
+`index.html` file at the root. The input folder is then placed in the correct location in the
+server accordingly.
+```
+
+```eval_rst
+.. note::
+  If there is already a fit or PDF on the server with the same name as the fit or PDF
+  you wish to upload, then this command will *not* overwrite the resource that already
+  exists. To overwite such a resource on the server, use the :code:`--force` option.
+```
+
+```eval_rst
 The code is documented at :py:mod:`validphys.scripts.vp_upload`.
-```
-
-### Uploading fits
-
-
-To upload fits use:
-
-```
-vp-uploadfit <completed_fit_path>
-```
-
-Note that if there is already a fit on the server with the same name as the fit
-you wish to upload, then this command will *not* overwrite the fit that already
-exists. To overwite such a fit on the server, use the `--force` option:
-
-```
-vp-uploadfit <completed_fit_path> --force
 ```
 
 Note that fits are indexed separately, and can be retrieved with the [`vp-get`
@@ -188,5 +186,4 @@ serverscripts/WEB/validphys-reports/index.html
 inside the `validphys2` directory in the main repository. This page can be
 edited to reflect the current interests (the Makefile directly uploads to the
 server). See the documentation on  [web scripts](web-scripts) for more details.
-
 

@@ -7,13 +7,12 @@ setup(
         packages=find_packages('src'),
         zip_safe=False,
         package_data = {
-            '':['*.fitinfo', '*.yml'],
+            '':['*.fitinfo', '*.yml', '*.h5'],
             'tests/regressions': ['*'],
         },
 
         entry_points = {'console_scripts':
             ['n3fit = n3fit.scripts.n3fit_exec:main',
-             'n3Hyperplot = n3fit.hyper_optimization.plotting:main',
              ]
             },
 )

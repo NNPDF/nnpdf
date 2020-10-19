@@ -6,6 +6,7 @@ Tutorials
 
    ./run-fit.md
    ./run-legacy-fit.rst
+   ./run-iterated-fit.rst
    ./compare-fits.md
    ./list-resources.md
    ./report.md

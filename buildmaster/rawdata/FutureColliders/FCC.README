@@ -1,0 +1,47 @@
+Overview on simulations for FCC   M.Klein  17.3.2017
+
+-----------------------------------------------------------
+
+Calculations are done of the uncertainties of the NC and CC
+inclusive cross sections as can be expected for the FCC-ep.
+
+The following sets are provided:
+
+
+NC/CC Name             Ee[GeV]  Ep[TeV]  P(e)   Charge  Lum[ab-1]
+
+nominal, high luminosity data, negative polarisation  
+NC    datfcc5060ncem   60       50       -0.8    -1     1
+CC    datfcc5060ccem   60       50       -0.8    -1     1
+
+nominal, high luminosity data, opposite polarisation
+NC    datfcc5060ncep   60       50        0.8    -1    0.3
+CC    datfcc5060ccep   60       50        0.8    -1    0.3
+
+positron data, unpolarised
+NC    datfcc5060ncepp  60       50         0    +1     0.1
+CC    datfcc5060ccepp  60       50         0    +1     0.1
+
+low energy data, unpolarised 
+NC    datfcc720ncem    20        7         0    -1     0.1
+CC    datfcc720ccem    20        7         0    -1     0.1
+
+each  file has a header which should make the meaning of the numbers clear.
+ 
+In the LHeC Note 2013-002 PHY these simulations are described (for
+the LHeC case)
+http://cds.cern.ch/record/1564929/files/maxvoiSMnote.pdf
+
+For the FCC the following cuts were applied:
+
+eta_max=5, .95 < y < 0.001
+
+Error assumptions
+
+energy scales: e: 0.1%,  h=0.5%  
+      this is the D/MC scale difference
+
+Radcor 0.3%  Photoproduction at high y: 1%
+uncorrelated extra efficiency 0.5%
+
+The luminosity error is kept aside, one may assume 0.5-1%.

@@ -5,6 +5,9 @@ set -v
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
+# print out basic conda info
+conda info -a
+
 conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build

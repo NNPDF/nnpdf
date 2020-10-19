@@ -5,6 +5,7 @@
     backend-dependent calls.
 """
 
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
@@ -351,6 +352,29 @@ class MetaModel(Model):
             w_ref = layer.weights
             for val, tensor in zip(w_val, w_ref):
                 tensor.assign(val * multiplier)
+
+    def reset_layer_weights_to(self, layer_names, reference_vals):
+        """ Set weights for the given layer to the given reference values
+
+        The ``reference_vals`` values list must be a list of the same size
+        of ``layer_names`` and it must consist of numpy arrays that perfectly
+        align to the reference layer weights.
+        In the special case of 1-weight layers it admits a scalar as input.
+
+        Parameters
+        ----------
+            layer_names: list
+                list of names of the layers to update weights
+            reference_vals: list(float) or list(arrays)
+                list of scalar or arrays to assign to each layer
+        """
+        for layer_name, values in zip(layer_names, reference_vals):
+            if np.isscalar(values):
+                values = np.array([[values]])
+            layer = self.get_layer(layer_name)
+            all_w = layer.weights
+            for w, v in zip(all_w, values):
+                w.assign(v)
 
     def apply_as_layer(self, x):
         """ Apply the model as a layer """

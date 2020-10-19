@@ -113,7 +113,7 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
 
     # TODO: Write this in something fast
     lpdf = pdf.load()
-    nmembers = lpdf.GetMembers()
+    nmembers = pdf.get_members()
 
     weights = np.full(shape=(nmembers, nbins_m, nbins_y), fill_value=np.NaN)
 
@@ -156,7 +156,7 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
 
     # TODO: Write this in something fast
     lpdf = pdf.load()
-    nmembers = lpdf.GetMembers()
+    nmembers = pdf.get_members()
 
     weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
 

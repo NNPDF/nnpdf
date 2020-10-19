@@ -1,17 +1,15 @@
 # How to implement a new experiment in buildmaster
 
-Buildmaster is the project that allows the user to generate the ``DATA`` and
+Buildmaster is the code that allows the user to generate the ``DATA`` and
 ``SYSTYPE`` files that contain, respectively, the experimental data and the 
 information pertaining to the treatment of systematic errors.
 Data made available by experimental collaborations comes in a variety of 
 formats: for use in a fitting code, this data must be converted into a
 common format, that contains all the required information for use in PDF 
-fitting. Such a conversion is realised by the buildmaster project according to 
-the layout described in
-```
-nnpdf/doc/data/data_layout.pdf
-``` 
-The user is strongly encouraged to go through that note with care,
+fitting. Such a conversion is realised by the buildmaster code according to
+the layout described in [Experimental data files](exp_data_files).
+
+The user is strongly encouraged to go through that section with care,
 in order to familiarise himself with the features of the experimental data,
 in general, and the nomenclature of the ``NNPDF`` code, in particular.
  
@@ -59,10 +57,7 @@ nsys:     <number of systematic errors>
 setname:  <setname in double quotes, i.e. "<name_exp>_<name_obs>_[<extra_info>]">
 proctype: <process type> in double quotes)
 ```
-A list of the available process types can be found in Sect.3.1 of
-```
-nnpdf/doc/data/data_layout.pdf
-``` 
+A list of the available process types can be found at [Process type and kinematics](process_type).
 If the process type corresponding to the experiment under consideration is not
 contained in that list, a new process type should be defined and implemented.
 
@@ -88,7 +83,7 @@ Such a function should read from the rawdata file
   ``fKin1``, ``fKin2``, ``fKin3``;
 - the data: ``fData``
 - the statistical uncertainty: ``fStat``
-- the systeamtic uncertaintis: ``fSys``
+- the systematic uncertainties: ``fSys``
 
 Important remarks.
 

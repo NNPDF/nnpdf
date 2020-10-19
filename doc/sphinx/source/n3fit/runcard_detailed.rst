@@ -10,6 +10,7 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`optimizer-label`
 - :ref:`positivity-label`
 - :ref:`otheroptions-label`
+- :ref:`tensorboard-label`
 
 
 .. _preprocessing-label:
@@ -153,6 +154,7 @@ the Neural Network as:
     fitting:
         parameters:
             positivity:
+              threshold: 1e-6
               multiplier: 1.05
               initial: 14.5
               
@@ -163,7 +165,11 @@ In this case ``n3fit`` will set the initial Lagrange multiplier as ``initial`` (
 while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier 
 equals the ``poslambda`` defined for the dataset.
 
-Note that the effect of the positivity constraints on the fit are still being studied and so this cannot be considered final.
+Finally we have the positivity threshold, which is set to ``1e-6`` by default.
+During the fit, the positivity loss will be compared to this value. If it is above it,
+the positivity won't be considered good (and thus the fit won't stop).
+If the replica reaches the maximum number of epochs with the positivity loss above
+this value, it will be tagged as ``POS_VETO`` and the replica removed from postfit.
      
               
 .. _otheroptions-label:
@@ -171,6 +177,8 @@ Note that the effect of the positivity constraints on the fit are still being st
 Other options
 -------------
 
+Threshold :math:`\chi2`
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: yaml
 
@@ -180,3 +188,56 @@ Other options
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
+
+Save and load weights of the model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    fitting:
+        save: "weights.h5"
+        load: "weights.h5"
+
+- ``save``: saves the weights of the PDF model in the selected file in the replica folder.
+- ``load``: loads the weights of the PDF model from the selected file.
+
+Since the weights depend only on the architecture of the Neural Network,
+it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
+and load it in a different runcard and continue the training from there.
+
+While the load file is read as an absolute path, the file to save to will be found
+inside the replica folder.
+
+
+.. _tensorboard-label:
+
+Inspecting and profiling the code
+---------------------------------
+
+It is possible to inspect the ``n3fit`` code using `TensorBoard <https://www.tensorflow.org/tensorboard/>`_.
+In order to enable the TensorBoard callback in ``n3fit`` it is enough with adding the following options in the runcard:
+
+
+.. code-block:: yaml
+
+    fitting:
+        tensorboard:
+            weight_freq: 100
+            profiling: True
+
+
+The ``weight_freq`` flag controls each how many epochs the weights of the NN are stored.
+Note that smaller values will lead to slower performance and increased memory usage.
+
+
+After the ``n3fit`` run has finished, details of the run can be found in the replica directory, under the ``tboard`` subfolder.
+Logging details can be visualized in the browser with the following command:
+
+
+.. code-block:: bash
+
+    tensorboard --logdir runcard_name/nnfit/replica_1/tboard
+
+Logging details will include the value of the loss for each experiment over time,
+the values of the weights of the NN,
+as well as a detailed analysis of the amount of time that TensorFlow spent on each operation.

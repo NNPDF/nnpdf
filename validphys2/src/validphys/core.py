@@ -224,13 +224,19 @@ class PDF(TupleComp):
         The range object can be used efficiently as a Pandas index.
         """
         err = self.nnpdf_error
-
         if err is LHAPDFSet.erType_ER_MC:
             return range(1, len(self))
-        elif err in (LHAPDFSet.ER_SYMEIG, LHAPDFSet.ER_EIG, LHAPDFSet.ER_EIG90):
+        elif err in (LHAPDFSet.erType_ER_SYMEIG, LHAPDFSet.erType_ER_EIG, LHAPDFSet.erType_ER_EIG90):
             return range(0, len(self))
         else:
             raise RuntimeError("Unknown error type")
+
+    def get_members(self):
+        """Return the number of members selected in ``pdf.load().grid_values``
+        operation. See :py:meth:`PDF.grid_values_index` for details on differences
+        between types of PDF sets.
+        """
+        return len(self.grid_values_index)
 
 
 

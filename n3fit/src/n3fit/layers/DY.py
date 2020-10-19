@@ -17,7 +17,7 @@ class DY(Observable):
                 basis_mask[i, j] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def meta_call(self, pdf_raw):
+    def call(self, pdf_raw):
         """
         This function perform the fktable \otimes pdf \otimes pdf convolution.
 

@@ -62,8 +62,8 @@ theory:
 
 hyperscan:
     stopping:
-        min_epochs: 5e3
-        max_epochs: 5e3
+        min_epochs: 1e3
+        max_epochs: 2e3
         min_patience: 0.10
         max_patience: 0.40
     positivity:
@@ -90,10 +90,11 @@ hyperscan:
         max_units: 50
         activations: ['sigmoid', 'tanh']
     kfold: 
+        target: average
         penalties:
           - saturation
           - patience
-        threshold: 2.0
+        threshold: 20.0
         partitions:
             - datasets:
                 - HERACOMBCCEM
