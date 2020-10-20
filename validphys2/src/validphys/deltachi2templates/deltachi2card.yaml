@@ -3,6 +3,9 @@ template_text: |
   {@ hessianinfo plot_delta_chi2_hessian_eigenv @}
   {@ hessianinfo plot_delta_chi2_hessian_distribution @}
 
+  ## Relative entropy
+  {@ hessianinfo plot_Kullback_Leibler @}
+
   ## Hessian set vs MC set
   {@ MC_Hessian_compare plot_pdfs @}
 

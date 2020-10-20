@@ -9,6 +9,7 @@ from collections import namedtuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import chi2, entropy
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
@@ -28,9 +29,7 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
     """Check ``pdf`` has error type of ``symmhessian``"""
     etype = pdf.ErrorType
     if etype != "symmhessian":
-        raise CheckError(
-            "Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype)
-        )
+        raise CheckError("Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype))
 
 
 @check_pdf_is_symmhessian
@@ -40,10 +39,48 @@ def delta_chi2_hessian(pdf, total_chi2_data):
     each eigenvector of the Hessian set.
     """
     delta_chi2 = (
-        np.ravel(total_chi2_data.replica_result.error_members())
-        - total_chi2_data.central_result
+        np.ravel(total_chi2_data.replica_result.error_members()) - total_chi2_data.central_result
     )
     return delta_chi2
+
+
+@figure
+def plot_Kullback_Leibler(delta_chi2_hessian):
+    """
+    Determines the KL measure by compareing the expectation value of Delta chi2 to the cumulative
+    distribution function of chi2 with one degree of freedom.
+    """
+    delta_chi2 = delta_chi2_hessian
+
+    bins_NNPDF = np.arange(0, 7.5, 0.1)
+    bin_central_NNPDF = np.zeros(len(bins_NNPDF) - 1)
+    for i in range(len(bins_NNPDF) - 1):
+        bin_central_NNPDF[i] = (bins_NNPDF[i] + bins_NNPDF[i + 1]) / 2
+    x = np.linspace(0, 7.4, 200)
+
+    fig, ax = plt.subplots()
+
+    vals_NNPDF, _, _ = ax.hist(
+        delta_chi2,
+        bins=bins_NNPDF,
+        density=True,
+        cumulative=True,
+        label="cumulative $\Delta\chi^2$",
+    )
+    # compute Kullback-Leibler (null values set to 1e-8)
+    for j, v in enumerate(vals_NNPDF):
+        if v == 0:
+            vals_NNPDF[j] = 1e-8
+    KL_NNPDF = entropy(chi2.cdf(bin_central_NNPDF, 1), qk=vals_NNPDF)
+
+    ax.plot(x, chi2.cdf(x, 1), label="$\chi^2$ CDF")
+
+    ax.set_title(f"Kullback-Leibler divergence = {KL_NNPDF:.4f}")
+    ax.set_xlabel("$<\Delta\chi^2>$")
+
+    ax.legend()
+
+    return fig
 
 
 @figure
@@ -80,7 +117,7 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
 
     fig, ax = plt.subplots()
 
-    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2))+1)
+    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2)) + 1)
 
     ax.hist(
         delta_chi2,
@@ -163,9 +200,9 @@ class PDFEpsilonPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
         flstate.labels = []
         flstate.handles = []
-    
+
     def get_ylabel(self, parton_name):
-        return '$\epsilon(x)$'
+        return "$\epsilon(x)$"
 
     def draw(self, pdf, grid, flstate):
         """Obtains the gridvalues of epsilon (measure of Gaussianity)"""
@@ -196,7 +233,7 @@ class PDFEpsilonPlotter(PDFPlotter):
         error68 = (error68up - error68down) / 2.0
         epsilon = abs(1 - errorstd / error68)
 
-        handle, = ax.plot(xgrid, epsilon, linestyle="-", color=color)
+        (handle,) = ax.plot(xgrid, epsilon, linestyle="-", color=color)
 
         handles.append(handle)
         labels.append(pdf.label)
@@ -204,11 +241,11 @@ class PDFEpsilonPlotter(PDFPlotter):
         return [5 * epsilon]
 
     def legend(self, flstate):
-        return flstate.ax.legend(flstate.handles, flstate.labels,
-                                 handler_map={plotutils.HandlerSpec:
-                                             plotutils.ComposedHandler()
-                                             }
-                                 )
+        return flstate.ax.legend(
+            flstate.handles,
+            flstate.labels,
+            handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
+        )
 
 
 @make_argcheck
@@ -217,9 +254,7 @@ def check_pdfs_are_montecarlo(pdfs, **kwargs):
     for pdf in pdfs:
         etype = pdf.ErrorType
         if etype != "replicas":
-            raise CheckError(
-                "Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype)
-            )
+            raise CheckError("Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype))
 
 
 @figuregen
