@@ -224,16 +224,16 @@ void CMSWMASY47FBFilter::ReadData()
 }
 
 
-/*******   CMS DY 2D Z > ll 7 TeV 4.5 fb^{-1} data ***
- *******   ABSOLUTE VALUE dMll/dY distribution     ***
+/*******   CMS DY 2D Z > \mu \mu 7 TeV 4.5 fb^{-1} data ***
+ *******   ABSOLUTE VALUE dM_{\mu \mu}/dY distribution  ***
  * Check data and writes it in a common format
  *
  * data/CMSDY2D45FB/DATA_CMSDY2DABS45FB.dat
  * data/CMSDY2D45FB/COVMAT_CMSDYABS45FB.dat
  *
- * Double differential Drell-Yan cross section in the combined di-electron and
- * di-muon channels, from Z decay with 4.5 fb^-1 from the 2011 dataset
- * ArXiv:1301.7291
+ * Double differential Drell-Yan cross section in the dimuon channel,
+ * from Z decay with 4.5 fb^{-1} from the 2011 dataset
+ * ArXiv:1310.7291
  * Raw data from JR's root files obtained from CMS experimentalists
  */
 
