@@ -450,9 +450,12 @@ class Stopping:
 
         # If your patience has ended, prepare for stop
         if self.stopping_degree > self.stopping_patience:
-            self.stop_now = True
-            self.history.reload()
+            self.make_stop()
         return True
+
+    def make_stop(self):
+        self.stop_now = True
+        self.history.reload()
 
     def print_current_stats(self, epoch, fitstate):
         """
