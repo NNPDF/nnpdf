@@ -90,7 +90,7 @@ void EIC_CC_EPP_140_OPTFilter::ReadData()
 	      >> fSys[i][0].mult >> comma
 	      >> fSys[i][1].mult;
 
-      fStat[i] = fStat[i]/100. * fData[i]; 
+      fStat[i] = fStat[i]/100. * fData[i];      
       
       fKin3[i] = fKin2[i] / fKin1[i] / sqrts / sqrts; //y
       fSys[i][0].add  = fSys[i][0].mult / 100. * fData[i];
