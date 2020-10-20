@@ -770,6 +770,18 @@ def _chs_per_replica(chs):
 
 
 @table
+def predictions_by_kinematics_table(results, kinematics_table_notable):
+    """Return a table combining the output of
+    :py:func:`validphys.kinematics.kinematics_table`` with the data and theory
+    central values.  """
+    tb = kinematics_table_notable.copy()
+    data, theory = results
+    tb['data'] = data.central_value
+    tb['prediction'] = theory.central_value
+    return tb
+
+
+@table
 def groups_chi2_table(groups_data, pdf, groups_chi2, each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
     the groups."""
