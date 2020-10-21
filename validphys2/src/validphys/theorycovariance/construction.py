@@ -445,27 +445,6 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     return full_df
 
 @table
-def higher_twist_covmat(groups_data, groups_index, 
-                        use_higher_twist_uncertainties: bool = False):
-    if use_higher_twist_uncertainties is False:
-        return pd.DataFrame(0, index=groups_index, columns=groups_index)
-    else:
-        l = FallbackLoader()
-        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/htcovmat_total.csv")
-        return fromfile_covmat(fileloc, groups_data, groups_index)
-
-
-@table
-def top_covmat(groups_data, groups_index,
-                use_top_uncertainties: bool = False):
-    if use_top_uncertainties is False:
-        return pd.DataFrame(0, index=groups_index, columns=groups_index)
-    else:
-        l = FallbackLoader()
-        fileloc = l.check_vp_output_file("IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv")
-        return fromfile_covmat(fileloc, groups_data, groups_index)
-
-@table
 def deuteron_covmat(groups_data, groups_index,
                     use_deuteron_uncertainties: bool = False):
     if use_deuteron_uncertainties is False:
@@ -499,13 +478,9 @@ def user_covmat(groups_data, groups_index,
 def total_theory_covmat(
         groups_index,
         theory_covmat_custom,
-        higher_twist_covmat,
-        top_covmat,
         deuteron_covmat,
         user_covmat,
         use_scalevar_uncertaintes: bool = False,
-        use_higher_twist_uncertainties: bool = False,
-        use_top_uncertainties: bool = False,
         use_deuteron_uncertainties: bool = False,
         use_nuclear_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
@@ -514,10 +489,6 @@ def total_theory_covmat(
 
     if use_scalevar_uncertaintes is True:
         f = f + theory_covmat_custom
-    if use_higher_twist_uncertainties is True:
-        f = f + higher_twist_covmat
-    if use_top_uncertainties is True:
-        f = f + top_covmat
     if use_deuteron_uncertainties is True:
         f = f + deuteron_covmat
     if use_nuclear_uncertainties is True:
@@ -525,8 +496,7 @@ def total_theory_covmat(
     if use_user_uncertainties is True:
         f = f + user_covmat
     return f
-
-    
+  
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_groups(groups_results_theory,

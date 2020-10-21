@@ -800,8 +800,6 @@ class CoreConfig(configparser.Config):
         self,
         use_thcovmat_in_sampling: bool,
         use_thcovmat_in_fitting: bool,
-        use_higher_twist_uncertainties: bool = False,
-        use_top_uncertainties: bool = False,
         thcovmat_type: str = "full",
     ):
         """
@@ -838,8 +836,7 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_fitthcovmat(
-            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None,
-            include_hterrors: bool = False):
+            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None):
         """If a `fit` is specified and `use_thcovmat_if_present` is `True` then returns the
         corresponding covariance matrix for the given fit if it exists. If the fit doesn't have a
         theory covariance matrix then returns `False`.
