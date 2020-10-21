@@ -838,7 +838,8 @@ def positivity_predictions_data_result(pdf, posdataset):
 
 
 positivity_predictions_for_pdfs = collect(positivity_predictions_data_result, ("pdfs",))
-
+dataspecs_positivity_predictions = collect(positivity_predictions_data_result, ("dataspecs",))
+dataspecs_posdataset = collect("posdataset", ("dataspecs",))
 
 def count_negative_points(possets_predictions):
     """Return the number of replicas with negative predictions for each bin
