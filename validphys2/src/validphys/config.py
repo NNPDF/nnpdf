@@ -232,7 +232,7 @@ class CoreConfig(configparser.Config):
         _, theory = self.parse_from_("fit", "theory", write=False)
         thid = theory["theoryid"]
 
-        data_input = self.parse_data_input_from_(
+        data_input = self._parse_data_input_from_(
             "fit", {"theoryid": thid}
         )
         return {"theoryid": thid, "data_input": data_input}
@@ -1206,7 +1206,7 @@ class CoreConfig(configparser.Config):
         # TODO: get rid of libnnpdf Experiment
         return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
 
-    def parse_data_input_from_(
+    def _parse_data_input_from_(
         self,
         parse_from_value: (str, type(None)),
         additional_context: (dict, type(None)) = None,
@@ -1266,7 +1266,7 @@ class CoreConfig(configparser.Config):
 
         """
         # parse from current namespace with no additional context.
-        return self.parse_data_input_from_(None)
+        return self._parse_data_input_from_(None)
 
     def parse_metadata_group(self, group: str):
         """User specified key to group data by. The key must exist in the
