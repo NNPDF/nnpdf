@@ -1208,8 +1208,8 @@ class CoreConfig(configparser.Config):
 
     def parse_data_input_from_(
         self,
-        parse_from_value: (type(None), str),
-        additional_context: dict
+        parse_from_value: (str, type(None)),
+        additional_context: (dict, type(None)) = None,
     ):
         """Function which parses the ``data_input`` from a namespace. Usage
         is similar to :py:meth:`self.parse_from_` except this function bridges
@@ -1224,11 +1224,11 @@ class CoreConfig(configparser.Config):
 
         Parameters
         ----------
-        parse_from_value: None, str
+        parse_from_value: str, None
             value which will be passed to :py:meth:`self.parse_from_`. If None
             then parses from the current namespace but can also be another
             input resource which can be resolved as a ``dict``.
-        additional_context: dict
+        additional_context: dict, None
             additional context to update the namespace specified by
             ``parse_from_value``.
             In the case of this function, if ``experiments`` needs to be parsed
@@ -1266,7 +1266,7 @@ class CoreConfig(configparser.Config):
 
         """
         # parse from current namespace with no additional context.
-        return self.parse_data_input_from_(None, dict())
+        return self.parse_data_input_from_(None)
 
     def parse_metadata_group(self, group: str):
         """User specified key to group data by. The key must exist in the
