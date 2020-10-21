@@ -266,6 +266,7 @@ class ModelTrainer:
             "ndata": 0,
             "model": None,
             "folds": [],
+            "posdatasets": [],
         }
         self.experimental = {
             "output": [],
@@ -346,6 +347,8 @@ class ModelTrainer:
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
             self.training["posdatasets"].append(pos_dict["name"])
+            self.validation["expdata"].append(pos_dict["expdata"])
+            self.validation["posdatasets"].append(pos_dict["name"])
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
                 self.training["expdata"].append(integ_dict["expdata"])
@@ -524,9 +527,12 @@ class ModelTrainer:
             self.input_list += pos_layer["inputs"]
             self.input_sizes.append(pos_layer["experiment_xsize"])
 
-            # The positivity all falls to the training
+            # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
+            self.validation["output"].append(pos_layer["output_tr"])
+            self.validation["losses"].append(pos_layer["loss_tr"])
+
             self.training["posmultipliers"].append(pos_multiplier)
             self.training["posinitials"].append(pos_initial)
 

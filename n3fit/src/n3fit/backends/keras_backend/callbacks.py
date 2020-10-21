@@ -35,8 +35,7 @@ class StoppingCallback(Callback):
     def on_epoch_end(self, epoch, logs=None):
         """ Function to be called at the end of every epoch """
         print_stats = ((epoch + 1) % self.log_freq) == 0
-        # The input log correspond to the fit before the weights are updated
-        logs = self.model.compute_losses()
+        # Note taht the input logs correspond to the fit before the weights are updated
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
             self.model.stop_training = True

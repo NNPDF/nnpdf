@@ -91,17 +91,19 @@ def parse_losses(history_object, data, suffix="loss"):
 
     Parameters
     ----------
-        `training_info`
-            history object
-        `data`
-            dictionary with the name of the experiment to take into account
-            and the number of datapoints of the experiment
+        history_object: dict
+            A history object dictionary
+        data: dict
+            dictionary with the name of the experiments to be taken into account
+            and the number of datapoints of the experiments
+        suffix: str (default: ``loss``)
+            suffix of the loss layer, Keras default is _loss
 
     Returns
     -------
-        `total`
-            total value for the training loss
-        `dict_chi2`
+        total_loss: float
+            Total value for the loss
+        dict_chi2: dict
             dictionary of {'expname' : loss }
     """
     try:
@@ -141,19 +143,18 @@ class FitState:
 
         Parameters
         ----------
-            `all_tr_chi2`
-                all chi2 from training sets
-            `all_vl_chi2`
-                all chi2 from validation sets
-            `training_info`
-                return state from NN training
-                can include positivity sets, penalties, etc
+            all_tr_chi2: dict
+                Chi2 for all training datasets computed before the update of the weights
+            all_vl_chi2: dict
+                Chi2 for all validation datasets computed after the update of the weights
+            info: dict
+                Full return state of the Validation model
     """
 
-    def __init__(self, all_tr_chi2, all_vl_chi2, training_info):
+    def __init__(self, all_tr_chi2, all_vl_chi2, info):
         self.all_tr_chi2 = all_tr_chi2
         self.all_vl_chi2 = all_vl_chi2
-        self.training_info = training_info
+        self.info = info
         # These two variables are only filled for specific points
         # in order to save precious memory, and only when we are
         # saving the fit history each X number of epoch
@@ -432,7 +433,7 @@ class Stopping:
         vl_chi2, all_vl = self.validation.loss()
 
         # Step 3. Store information about the run and print stats if asked
-        fitstate = FitState(all_tr, all_vl, training_info)
+        fitstate = FitState(all_tr, all_vl, self.validation.state)
         self.history.register(fitstate, epoch)
         if print_stats:
             self.print_current_stats(epoch, fitstate)
@@ -565,6 +566,7 @@ class Validation:
 
     def __init__(self, model, ndata_dict, verbose=False, no_validation=False):
         self.model = model
+        self.state = None
         self.verbose = verbose
         self.ndata_dict = ndata_dict
         self.n_val_exp = len(ndata_dict)
@@ -587,6 +589,7 @@ class Validation:
                 dictionary containing a map of experiment names and loss
         """
         loss_dict = self.model.compute_losses()
+        self.state = loss_dict
         return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
 
     @property
@@ -655,4 +658,4 @@ class Positivity:
             Checks whether a given FitState object
             passes the positivity requirement
         """
-        return self.check_positivity(fitstate.training_info)
+        return self.check_positivity(fitstate.info)
