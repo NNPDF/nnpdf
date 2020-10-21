@@ -22,7 +22,7 @@ from reportengine.floatformatting import format_number
 from reportengine import collect
 
 from validphys.core import MCStats, cut_mask, CutsPolicy
-from validphys.results import chi2_stat_labels
+from validphys.results import chi2_stat_labels, get_shifted_results
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
@@ -30,17 +30,17 @@ from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
 log = logging.getLogger(__name__)
 
 @figure
-def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+def plot_chi2dist_experiments(total_chi2_data, experiments_chi2_stats, pdf):
     """Plot the distribution of chi²s of the members of the pdfset."""
-    fig, ax = _chi2_distribution_plots(total_experiments_chi2data, experiments_chi2_stats, pdf, "hist")
+    fig, ax = _chi2_distribution_plots(total_chi2_data, experiments_chi2_stats, pdf, "hist")
     ax.set_title(r"Experiments $\chi^2$ distribution")
     return fig
 
 
 @figure
-def kde_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+def kde_chi2dist_experiments(total_chi2_data, experiments_chi2_stats, pdf):
     """KDE plot for experiments chi2."""
-    fig, ax = _chi2_distribution_plots(total_experiments_chi2data, experiments_chi2_stats, pdf, "kde")
+    fig, ax = _chi2_distribution_plots(total_chi2_data, experiments_chi2_stats, pdf, "kde")
     ax.set_ylabel(r"Density")
     ax.set_title(r"Experiments $\chi^2 KDE plot$")
     return fig
@@ -198,12 +198,10 @@ def check_normalize_to(ns, **kwargs):
 #TODO: This interface is horrible. We need to think how to adapt libnnpdf
 #to make this use case easier
 def _plot_fancy_impl(results, commondata, cutlist,
-               normalize_to:(int,type(None)) = None, labellist=None):
+               normalize_to:(int,type(None)) = None, labellist=None, withshifts=False):
 
     """Implementation of the data-theory comparison plots. Providers are
     supposed to call (yield from) this.
-
-
     Parameters
     -----------
     results : list
@@ -220,12 +218,13 @@ def _plot_fancy_impl(results, commondata, cutlist,
     labellist : list or None
         The labesl that will appear in the plot. They sill be deduced
         (from the PDF names) if None is given.
-
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
     Returns
     -------
     A generator over figures.
     """
-
 
     info = get_info(commondata, normalize=(normalize_to is not None))
 
@@ -262,6 +261,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 
         cv, err = transform_result(cv, err,
                                    table.iloc[:,:nkinlabels], info)
+
         #By doing tuple keys we avoid all possible name collisions
         cvcol = ('cv', i)
         if normalize_to is None:
@@ -271,6 +271,51 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[cvcol] = cv/norm_cv
             table[('err', i)] = err/norm_cv
         cvcols.append(cvcol)
+
+    ### Computing correlated shifts according to the paper: arXiv:1709.04922
+    if withshifts:
+        for i, (result, cuts) in enumerate(zip(results, cutlist)):
+            if i==0: continue
+
+            cd = commondata.load()
+            mask = cut_mask(cuts)
+
+            ## fill uncertainties
+            Ndat = len(table[('cv', i)])
+            Nsys = cd.GetNSys()
+
+            uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
+            corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
+            lambda_sys = np.zeros(Nsys) # nuisance parameters
+
+            for idat in range(Ndat):
+                convi = table[('cv', 0)][idat]/cd.GetData(idat) # conversion constant
+                uncorrE[idat] = cd.GetUncE(idat)*convi
+                for isys in range(Nsys):
+                    if cd.GetSys(idat, isys).name != "UNCORR":
+                        corrE[idat, isys] = cd.GetSys(idat, isys).add*convi
+
+            ## applying cuts
+            uncorrE=uncorrE[mask]
+            corrE=corrE[mask]
+            data = table[('cv', 0)][mask]
+            theory = table[('cv', i)][mask]
+
+            ## isys is equivalent to alpha index and lsys to delta in eq.85
+            if np.any(uncorrE == 0):
+                temp_shifts = np.zeros(Ndat)
+            else:
+                f1 = (data - theory)/uncorrE # first part of eq.85
+                A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
+                    np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
+                f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
+                lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
+                temp_shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
+
+                shifts = np.full(Ndat, np.nan)
+                shifts[mask] = temp_shifts
+
+                table[('cv', i)] += shifts
 
     figby = sane_groupby_iter(table, info.figure_by)
 
@@ -385,7 +430,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 @check_normalize_to
 @figuregen
 def plot_fancy(one_or_more_results, commondata, cuts,
-               normalize_to:(int,str,type(None)) = None):
+               normalize_to: (int, str, type(None)) = None, withshifts=False):
     """
     Read the PLOTTING configuration for the dataset and generate the
     corrspondig data theory plot.
@@ -399,9 +444,24 @@ def plot_fancy(one_or_more_results, commondata, cuts,
     result (0 for the data, and i for the ith pdf). None means plotting
     absolute values.
 
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
+
     See docs/plotting_format.md for details on the format of the PLOTTING
     files.
     """
+    if withshifts:
+        one_or_more_results, shifted = get_shifted_results(results=one_or_more_results,
+                                               commondata=commondata,
+                                               cutlist=cutlist)
+        for ilabel in range(len(labellist)): 
+            if ilabel == 0:
+                continue
+            if shifted[ilabel-1]:
+                labellist[ilabel] += " (shifted)"
+
+
     yield from _plot_fancy_impl(results=one_or_more_results,
                                 commondata=commondata,
                                 cutlist=[cuts]*len(one_or_more_results),
@@ -436,7 +496,8 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
 @figuregen
 def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
                          dataspecs_cuts, dataspecs_speclabel,
-                         normalize_to:(str, int, type(None))=None):
+                         normalize_to:(str, int, type(None))=None,
+                         withshifts=False):
     """
     General interface for data-theory comparison plots.
 
@@ -462,6 +523,10 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
 
         - or None (default) to plot absolute values.
 
+    withshifts: bool
+        Add the correlated shifts to the theory predctions based on 
+        eq.84 of arXiv:1709.04922
+
     A limitation at the moment is that the data cuts and errors will be taken
     from the first specifiaction.
     """
@@ -474,6 +539,17 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
     cutlist = [dataspecs_cuts[0], *dataspecs_cuts]
     commondata = dataspecs_commondata[0]
     labellist = [None, *dataspecs_speclabel]
+
+    if withshifts:
+        results, shifted = get_shifted_results(results=results,
+                                               commondata=commondata,
+                                               cutlist=cutlist)
+        for ilabel in range(len(labellist)):
+            if ilabel == 0:
+                continue
+            if shifted[ilabel-1]:
+                labellist[ilabel] += " (shifted)"
+
     yield from _plot_fancy_impl(results = results, commondata=commondata,
                                 cutlist=cutlist, labellist=labellist,
                                 normalize_to=normalize_to)
@@ -573,10 +649,17 @@ def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table, processed_metadata_g
 @figure
 def plot_training_length(replica_data, fit):
     """Generate an histogram for the distribution
-    of training lengths in a given fit."""
+    of training lengths in a given fit. Each bin is normalised by the total
+    number of replicas.
+
+    """
     fig, ax = plt.subplots()
     x = [x.nite for x in replica_data]
-    ax.hist(x, density=True, label=str(fit))
+    hist, bin_edges = np.histogram(x)
+    # don't plot pdf, instead proportion of replicas in each bin.
+    hist = hist / np.sum(hist)
+    width = np.diff(bin_edges)
+    ax.bar(bin_edges[:-1], hist, width=width, align="edge", label=str(fit))
     ax.set_title("Distribution of training lengths")
     ax.legend()
     return fig
@@ -585,22 +668,43 @@ def plot_training_length(replica_data, fit):
 @figure
 def plot_training_validation(fit, replica_data, replica_filters=None):
     """Scatter plot with the training and validation chi² for each replica
-    in the fit. The mean is also displayed"""
+    in the fit. The mean is also displayed as well as a line y=x to easily
+    identify whether training or validation chi² is larger.
+
+    """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plt.subplots()
-    ax.plot(training, valid, marker='o', linestyle='none', markersize=5, zorder=100)
+    fig, ax = plt.subplots(
+        figsize=(
+            max(plt.rcParams.get("figure.figsize")),
+            max(plt.rcParams.get("figure.figsize")),
+        )
+    )
+    ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
     if replica_filters:
-        _scatter_marked(ax, training,valid, replica_filters, zorder=90)
+        _scatter_marked(ax, training, valid, replica_filters, zorder=90)
         ax.legend().set_zorder(10000)
 
     ax.set_title(fit.label)
 
-    ax.set_xlabel(r'$\chi^2/N_{dat}$ train')
-    ax.set_ylabel(r'$\chi^2/N_{dat}$ valid')
+    ax.set_xlabel(r"$\chi^2/N_{dat}$ training")
+    ax.set_ylabel(r"$\chi^2/N_{dat}$ validation")
 
-    ax.plot(np.mean(training), np.mean(valid),
-         marker='s', color='red', markersize=7, zorder=1000)
+    min_max_lims = [
+        min([*ax.get_xlim(), *ax.get_ylim()]),
+        max([*ax.get_xlim(), *ax.get_ylim()]),
+    ]
+    ax.plot(min_max_lims, min_max_lims, ":k")
 
+    ax.plot(
+        np.mean(training),
+        np.mean(valid),
+        marker="s",
+        color="red",
+        markersize=7,
+        zorder=1000,
+    )
+
+    ax.set_aspect("equal")
     return fig
 
 
@@ -775,9 +879,15 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 @figure
 def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
-    """Plot the value of a positivity observable on a symlog scale as a
+    """Plot an errorbar spanning the central 68% CI of a positivity
+    observable as well as a point indicating the central value (according
+    to the ``pdf.stats_class.central_value()``).
+
+    Errorbars and points are plotted on a symlog scale as a
     function of the data point index (if pos_use_kin==False) or the first
-    kinematic variable (if pos_use_kin==True)."""
+    kinematic variable (if pos_use_kin==True).
+
+    """
     fig, ax = plt.subplots()
     ax.axhline(0, color='red')
 
@@ -794,18 +904,25 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
     minscale = np.inf
-    for i, (pdf, pred) in enumerate(zip(pdfs, positivity_predictions_for_pdfs)):
+    for pdf, pred in zip(pdfs, positivity_predictions_for_pdfs):
         cv = pred.central_value
-        ax.errorbar(xvals, cv, yerr=pred.std_error,
-                    linestyle='--',
-                    marker='s',
-                    label=pdf.label, lw=0.5, transform=next(offsets))
+        lower, upper = pred.stats.errorbar68()
+        ax.errorbar(
+            xvals,
+            cv,
+            yerr=[cv - lower, upper - cv],
+            linestyle='--',
+            marker='s',
+            label=pdf.label,
+            lw=0.5,
+            transform=next(offsets)
+        )
         minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))
 
     ax.set_ylabel('Observable Value')
-    ax.set_yscale('symlog', linthreshy=minscale)
+    ax.set_yscale('symlog', linthresh=minscale)
     ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 
     return fig

@@ -1,14 +1,31 @@
 """
 This module contains checks to be perform by n3fit on the input
 """
+import os
 import logging
+import numbers
+import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 from validphys.pdfbases import check_basis
 from n3fit.hyper_optimization import penalties as penalties_module
+from n3fit.hyper_optimization import rewards as rewards_module
 
 log = logging.getLogger(__name__)
 
 NN_PARAMETERS = ["nodes_per_layer", "optimizer", "activation_per_layer"]
+
+
+def _is_floatable(num):
+    """Check that num is a number or, worst case scenario, a number that can
+    be casted to a float (such as a tf scalar)"""
+    if isinstance(num, numbers.Number):
+        return True
+    try:
+        np.float(num)
+        return True
+    except (ValueError, TypeError):
+        return False
+
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
@@ -38,7 +55,7 @@ def check_consistent_layers(parameters):
 
 
 def check_stopping(parameters):
-    """ Checks whether the stopping-related options are sane:
+    """Checks whether the stopping-related options are sane:
     stopping patience as a ratio between 0 and 1
     and positive number of epochs
     """
@@ -94,24 +111,73 @@ def check_dropout(parameters):
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
 
+def check_tensorboard(tensorboard):
+    """ Check that the tensorbard callback can be enabled correctly """
+    if tensorboard is not None:
+        weight_freq = tensorboard.get("weight_freq", 0)
+        if weight_freq < 0:
+            raise CheckError(
+                f"The frequency at which weights are saved must be greater than 0, received {weight_freq}"
+            )
+
+
+def check_lagrange_multipliers(parameters, key):
+    """Checks the parameters in a lagrange multiplier dictionary
+    are correct, e.g. for positivity and integrability"""
+    lagrange_dict = parameters.get(key)
+    if lagrange_dict is None:
+        return
+    multiplier = lagrange_dict.get("multiplier")
+    if multiplier is not None and multiplier < 0:
+        log.warning("The %s multiplier is below 0, it will produce a negative loss", key)
+    elif multiplier is not None and multiplier == 0:
+        log.warning("The %s multiplier is 0 so it won't contribute to the loss", key)
+    threshold = lagrange_dict.get("threshold")
+    if threshold is not None and not _is_floatable(threshold):
+        raise CheckError(f"The {key}::threshold must be a number, received: {threshold}")
+
+
+def check_model_file(fitting):
+    """ Checks whether the model_files given in the runcard are acceptable """
+    save_file = fitting.get("save")
+    load_file = fitting.get("load")
+    if save_file:
+        if not isinstance(save_file, str):
+            raise CheckError(f"Model file to save to: {save_file} not understood")
+        # Since the file to save to will be found inside the replica folder, it should writable as all the others
+
+    if load_file:
+        if not isinstance(load_file, str):
+            raise CheckError(f"Model file to load: {load_file} not understood, str expected")
+        if not os.path.isfile(load_file):
+            raise CheckError(f"Model file to load: {load_file} can not be opened, does it exist?")
+        if not os.access(load_file, os.R_OK):
+            raise CheckError(f"Model file to load: {load_file} cannot be read, permission denied")
+        if os.stat(load_file).st_size == 0:
+            raise CheckError(f"Model file {load_file} seems to be empty")
+
 @make_argcheck
 def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
+    check_tensorboard(fitting.get("tensorboard"))
     parameters = fitting["parameters"]
+    check_model_file(fitting)
     check_existing_parameters(parameters)
     check_consistent_layers(parameters)
     check_basis_with_layers(fitting, parameters)
     check_stopping(parameters)
     check_dropout(parameters)
+    check_lagrange_multipliers(parameters, "integrability")
+    check_lagrange_multipliers(parameters, "positivity")
     # Checks that need to import the backend (and thus take longer) should be done last
-    #     check_optimizer(parameters["optimizer"]) # this check is waiting for PR 783
+    check_optimizer(parameters["optimizer"])
     check_initializer(parameters["initializer"])
 
 
 def check_hyperopt_architecture(architecture):
-    """ Checks whether the scanning setup for the NN architecture works
+    """Checks whether the scanning setup for the NN architecture works
     - Initializers are valid
-    - Droput setup is valid
+    - Dropout setup is valid
     - No 'min' is greater than its corresponding 'max'
     """
     if architecture is None:
@@ -137,8 +203,7 @@ def check_hyperopt_architecture(architecture):
 
 
 def check_hyperopt_positivity(positivity_dict):
-    """ Checks that the positivity multiplier and initial values are sensible and valid
-    """
+    """Checks that the positivity multiplier and initial values are sensible and valid"""
     if positivity_dict is None:
         return
     min_mul = positivity_dict.get("min_multiplier")
@@ -155,7 +220,7 @@ def check_hyperopt_positivity(positivity_dict):
             raise CheckError(
                 "Need to set both the max_initial and the min_initial positivity values"
             )
-        if min_ini is not None and max_ini <= min_mul:
+        if max_ini <= min_ini:
             raise CheckError("The minimum initial value cannot be greater than the maximum")
 
 
@@ -170,11 +235,18 @@ def check_kfold_options(kfold):
             raise CheckError(
                 f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
             )
+    loss_target = kfold.get("target")
+    if loss_target is not None:
+        if not hasattr(rewards_module, loss_target):
+            raise CheckError(
+                f"The hyperoptimization target '{loss_target}' loss is not recognized, "
+                "ensure it is implemented in hyper_optimization/rewards.py"
+            )
 
 
 def check_correct_partitions(kfold, experiments):
-    """ Ensures that all experimennts in all partitions
-    are included in  the fit definition """
+    """Ensures that all experimennts in all partitions
+    are included in  the fit definition"""
     # Get all datasets
     datasets = []
     for exp in experiments:
@@ -219,7 +291,7 @@ def check_hyperopt_stopping(stopping_dict):
 
 @make_argcheck
 def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
-    """ Wrapper function for all hyperopt-related checks
+    """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
@@ -240,7 +312,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
 # Checks on the physics
 @make_argcheck
 def check_consistent_basis(fitting):
-    """ Checks the fitbasis setup for inconsistencies
+    """Checks the fitbasis setup for inconsistencies
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
     """

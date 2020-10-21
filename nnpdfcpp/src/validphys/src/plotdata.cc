@@ -710,6 +710,9 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
   string evol[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","Photon"};
 
+  real (*pdf4lhc20f[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fT3,&fT8,&fphoton};
+  string pdf4lhc20[] = {"Singlet","Gluon","Valence","V3","T3","T8","Photon"};
+
   real (*evolsf[])(real*) = {&fsinglet,&fgluon,&fV,&fV8,&fT3,&fT8,&fDelta,&fphoton};
   string evols[] = {"Singlet","Gluon","Valence","V8","T3","T8","#Delta_{s}","Photon"};
 
@@ -2511,6 +2514,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
 
   real (*nn23f[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fphoton};
   real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
+  real (*pdf4lhc20f[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fT3,&fT8,&fphoton};
   real (*evolsf[])(real*) = {&fsinglet,&fgluon,&fV,&fV8,&fT3,&fT8,&fDelta,&fphoton};
   real (*flvrf[])(real*) = {&fgluon,&fup,&fubar,&fdown,&fdbar,&fstrange,&fsbar};
   real (*nn30icf[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fcplus,&fcminus,&fphoton};
@@ -2524,6 +2528,8 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
     for (int t = 0; t < nfl; t++) functions[t] = nn23f[t];
   else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
     for (int t = 0; t < nfl; t++) functions[t] = evolf[t];
+  else if (setbasis == BASIS_PDF4LHC20)
+    for (int t = 0; t < nfl; t++) functions[t] = pdf4lhc20f[t];
   else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
     for (int t = 0; t < nfl; t++) functions[t] = evolsf[t];
   else if (setbasis == BASIS_FLVR || setbasis == BASIS_FLVRQED)

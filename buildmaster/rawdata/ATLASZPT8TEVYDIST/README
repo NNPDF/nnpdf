@@ -1,0 +1,44 @@
+Introduction
+------------
+
+README file, explaining the naming conventions used for the input and output files of the combination program F2AV
+The original README for F2AV is included with the name 'F2AV_README' for advanced details.
+
+
+Directory structure 
+-------------------
+
+Differential cross sections are provided both normalized (PhiStar and ZpT) and unnormalized (i.e. absolute; for ZpT only).
+The fiducial cross sections in invariant mass bins are also provided unnormalized. The correponding input and output files are found in the 'input' and 'output' directories under both the 'normalized' and 'unnormalized' directions.
+
+Input files
+-----------
+
+The file names are in the following format
+
+CHANNEL OBSERVABLE_TRUTHLEVEL_MASSRANGE_RAPIDITYRANGE
+
+CHANNEL can be Zee or Zmm (electron or muon channel).
+OBSERVABLE is either pT (ZpT) or PhiStar or M (mass).
+TRUTHLEVEL is either born (the only channel used for combination), bare (not provided for electron channel) or dressed.
+MASSRANGE is the di-lepton mass range given in GeV. I.e. m66116 is: 66 GeV < M_ll < 116 GeV.
+RAPIDITY RANGE is the absolute di-lepton rapidity range. I.e. y0004 is 0.0 < |y_ll| < 0.4
+
+The full description of the table layout in each input file is given in F2AV_README, but summarised here.
+
+The title row for the table is the line beginning with '*' (not a column header)
+The first column contains only the total number of bins, e.g. 36 for PhiStar). The next column has the bin centre, then the cross-section, statistical uncertainty in percent and then various systematic uncertainties, also provided in percentage form.
+
+The row labelled SYSTYPE at the top indicates whether a systematic uncertainty is correlated or uncorrelated. Each systematic uncertainty (in the same order as in the table) is assigned a number. A number 'zero' indicated uncorrelated bin-to-bin and also between the electron and muon channels. A non-zero number indicated the systematic is considered fully-correlated bin-to-bin. If the same number is used in both the electron and muon channel files then those systematics are also considered correlated between the channels.
+
+Output files
+------------
+
+The output of each combination is contained within a directory with the same naming structure as for the input files above. Within these directories are four files, "*.out , chi2map.dat, tab.dat and xsec1". Again more detailed information is given in F2AV_README.
+
+The most important file is tab.dat which contains a series of rows, one corresponding to each bin (after three header rows). The first column is the bin centre. The next two columns can be ignored. The following columns are then: the cross section value, the statistical uncertainty (absolute), the systematic uncertainty uncorrelated between bins (absolute) and the total uncertainty (absolute) (quadratic sum of statistical + uncorrelated systematics + correlated systematics) . The following columns detail the orthogonal sources of correlated systematic uncertainties (also absolute)
+
+Note
+------------
+
+Note for all input and output files the cross-sections are divided by the bin-width (i.e. d sigma / dX is given). However in the paper the integrated mass-binned cross-section measurements (Table 4) are re-multiplied by the bin width (i.e sigma is given).

@@ -41,7 +41,6 @@ fitting:
   trvlseed: 3
   nnseed: 2
   mcseed: 1  
-  epochs: 900
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [15, 10, 8]
@@ -51,7 +50,7 @@ fitting:
       optimizer_name: 'Adadelta'
       learning_rate: 0.00001
       clipnorm: 1.0
-    epochs: 2000
+    epochs: 20000
     stopping_patience: 1.00 # percentage of the number of epochs
     layer_type: 'dense_per_flavour'
     dropout: 0.0

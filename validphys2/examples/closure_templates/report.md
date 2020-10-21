@@ -42,7 +42,7 @@ Errorbars from performing bootstrap sample upon replicas
 
 Dataset properties
 ------------------
-{@closure datasets_properties_table@}
+{@closure fit_datasets_properties_table@}
 
 Distances
 ------------------
@@ -71,9 +71,9 @@ Training validation
 -------------------
 {@fits plot_training_validation@}
 
-$\chi^2$ by experiment
+$\chi^2$ by {@processed_metadata_group@}
 ----------------------
-{@plot_fits_experiments_chi2@}
+{@plot_fits_groups_data_chi2@}
 
 $\chi^2$ by dataset comparisons
 -------------------------------

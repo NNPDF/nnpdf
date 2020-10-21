@@ -1,0 +1,16 @@
+Path: /HepData/9211/d24-x1-y1
+Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are pb$^2$
+Location: Table 12 in Auxiliary Material
+ABSY_TTBAR : 0.0 - 0.4 : 0.4 - 0.8 : 0.8 - 1.2 : 1.2 - 2.0 : 2.0 - 2.8
+RE : P P --> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : ABSY_TTBAR
+y : $cov\left(\frac{d\sigma}{d|y_{t\bar{t}}|}\right) \left[\rm pb^2 \, \right]$
+xdesc	x	xlow	xhigh	y	y	y	y	y	
+	0.2	0.0	0.4	129.6483	41.45256	21.39968	17.29226	2.639956
+	0.6000000000000001	0.4	0.8	41.45256	136.6583	41.52112	14.39154	2.799251
+	1.0	0.8	1.2	21.39968	41.52112	56.14663	14.02003	0.9746892
+	1.6	1.2	2.0	17.29226	14.39154	14.02003	14.53974	1.490887
+	2.4	2.0	2.8	2.639956	2.799251	0.9746892	1.490887	0.7495413
+
+

@@ -48,7 +48,8 @@ SETUPFIT_FIXED_CONFIG = dict(
 
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
-                      'validphys.results',]
+                      'validphys.results',
+                      'validphys.covmats']
 
 SETUPFIT_DEFAULTS = dict(
     use_cuts= 'internal',

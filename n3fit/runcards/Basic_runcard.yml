@@ -41,11 +41,13 @@ fitting:
   nnseed: 2
   mcseed: 3
   epochs: 900
-  save: False
-  savefile: 'weights.hd5'
-  load: False
-  loadfile: 'weights.hd5'
-  plot: False
+  save: 'weights.h5'
+  load: '/path/to/weights.h5/file
+
+
+  tensorboard:
+    weight_freq: 100
+    profiling: False
 
   seed     : 9453862133528      # set the seed for the random generator
   genrep   : True     # on = generate MC replicas, off = use real data
@@ -63,6 +65,7 @@ fitting:
     positivity:
       multiplier: 1.05 # When any of the multiplier and/or the initial is not set
       initial: # the poslambda will be used instead to compute these values per dataset
+      threshold: 1e-5
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
@@ -135,5 +138,5 @@ lhagrid:
   qmax: 1e5
 
 ############################################################
-debug: true
+debug: True
 maxcores: 8

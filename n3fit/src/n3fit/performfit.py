@@ -220,9 +220,9 @@ def performfit(
             log.info("Loading integrability dataset %s", integ_set)
             # Use the same reader as positivity observables
             integ_dict = reader.positivity_reader(integ_set)
-            integ_info.append(integ_dict) 
+            integ_info.append(integ_dict)
     else:
-        integ_info = None           
+        integ_info = None
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
@@ -244,19 +244,8 @@ def performfit(
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
+            model_file=fitting.get("load")
         )
-
-        # Check whether we want to load weights from a file (maybe from a previous run)
-        # check whether the file exists, otherwise set it to none
-        # reading the data up will be done by the model_trainer
-        if fitting.get("load"):
-            model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from %s", model_file)
-            if not os.path.isfile(model_file):
-                log.warning(" > Model file %s could not be found", model_file)
-                model_file = None
-            else:
-                the_model_trainer.model_file = model_file
 
         # This is just to give a descriptive name to the fit function
         pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
@@ -291,6 +280,14 @@ def performfit(
         # Ensure hyperopt is off
         the_model_trainer.set_hyperopt(False)
 
+        # Enable the tensorboard callback
+        tboard = fitting.get("tensorboard")
+        if tboard is not None:
+            profiling = tboard.get("profiling", False)
+            weight_freq = tboard.get("weight_freq", 0)
+            log_path = replica_path_set / "tboard"
+            the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
+
         #############################################################################
         # ### Fit                                                                   #
         # This function performs the actual fit, it reads all the parameters in the #
@@ -317,7 +314,7 @@ def performfit(
                 stopping_object.vl_loss,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
-                stopping_object.positivity_pass(),
+                stopping_object.positivity_status(),
             )
         )
 
@@ -339,6 +336,13 @@ def performfit(
             replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
         )
 
+        # Save the weights to some file for the given replica
+        model_file = fitting.get("save")
+        if model_file:
+            model_file_path = replica_path_set / model_file
+            log.info(" > Saving the weights for future in %s", model_file_path)
+            pdf_model.save_weights(model_file_path)
+
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
         for step in range(len(stopping_object.history.reloadable_history)):
@@ -351,8 +355,6 @@ def performfit(
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
 
-    # Save the weights to some file
-    if fitting.get("save"):
-        model_file = fitting.get("savefile")
-        log.info(" > Saving the weights for future in %s", model_file)
-        training["model"].save_weights(model_file)
+    if tboard is not None:
+        log.info("Tensorboard logging information is stored at %s", log_path)
+

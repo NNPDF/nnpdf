@@ -54,21 +54,21 @@ tested during the development of ``n3fit`` can be found in `public slides <http:
 as well as in `internal presentations <https://www.wiki.ed.ac.uk/display/nnpdfwiki/Amsterdam+Feb+2020+NNPDF+Collaboration+Meeting+agenda?preview=/432523942/436448892/juanCM.pdf>`_.
 
 
-For the choice of figure of merit is still under development, but we have several possibilities
+The choice of figure of merit is still under development, but we have several possibilities.
 
 1. By default we take the combination that produces the best average for the partitions' :math:`\chi^2`.
 
 .. math::
     L_{hyperopt} = \frac{1}{N_{k}} \sum \chi^2
 
-An example of a DIS fit using this loss function can be found here: [`best average <https://vp.nnpdf.science/iAaUMPgsTKyngsK5haLYMw==>`_].
+An example of a DIS fit using this loss function can be found here: [`best average <https://vp.nnpdf.science/iAaUMPgsTKyngsK5haLYMw==>`_]. It can be selected in the runcard using the target ``average``.
 
 2. We can take the combination that produces the *best* *worst* loss.
 
 .. math::
     L_{hyperopt} = max(\chi^2)
 
-An example of a DIS fit using this loss function can be found here: [`best worst <https://vp.nnpdf.science/0sWyhJZGQbuezEc7nMGATQ==>`_].
+An example of a DIS fit using this loss function can be found here: [`best worst <https://vp.nnpdf.science/0sWyhJZGQbuezEc7nMGATQ==>`_]. It can be selected in the runcard using the target ``best_worst``.
 
 3. We can take the most stable combination which gets the loss under a certain threshold.
 
@@ -82,6 +82,7 @@ An example of a DIS fit using this loss function can be found here: [`best worst
   
 An example of a DIS fit using this loss function with the threshold :math:`\chi^2` set to 2.0 
 can be found here: [`best std <https://vp.nnpdf.science/vcPtqM8KSXCVB2GheENd8Q==>`_].
+It can be selected in the runcard using the target ``std``.
 
 As observed, for DIS fits we obtain fits of similar quality using these losses.
 This is not unexpected but it is a good test of the robustness of the method.
@@ -188,11 +189,15 @@ hyperparameter scan with respect to a fit.
 Practical Usage
 ---------------
 
+.. note::
+  An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
+
 The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hyperscan`` dictionary.
 
 .. code-block:: yaml
 
     kfold:
+        target: average
         verbosity:
             training: True
             kfold: True
@@ -231,14 +236,15 @@ During hyperoptimization we might want to search for specific features, such as 
 (giving an incentive to quicker runs) or avoiding saturation (increasing the loss for models that
 have produce saturation after a fit). New penalties can easily be added in the ``src/n3fit/hyper_optimization/penalties.py`` file.
 
-An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
 
-The loss function is currently computed as the average of the loss function over the partition sets.
+The target function for minimization can be selected with the ``target`` key.
+By default, and if no ``target`` is chosen, ``n3fit`` defaults to
+the average of the loss function over the partition sets (``average``).
 
 .. math::
     L_{hyperopt} = \frac{1}{N_{k}} \sum L_{k}
 
-
+New target functions can be easily added in the ``src/n3fit/hyper_optimization/rewards.py`` file.
 
 The hyperoptimization procedure performed in `hep-ph/1907.05075 <https://arxiv.org/abs/1907.05075>`_
 used a slightly different approach in order to avoid overfitting,

@@ -6,8 +6,8 @@ meta:
     author: Lazy Person
 
 closure:
-    fit: {id: 071018-edi-001}
-    pdf: {id: 071018-edi-001, label: "test closures"}
+    fit: {id: 191015-mw-001}
+    pdf: {id: 191015-mw-001, label: "test closures"}
     theory:
       from_: fit
     theoryid:
@@ -66,9 +66,6 @@ pdf_uncertainty_report:
 
 template: report.md
 
-experiments:
-    from_: fit
-
 dataspecs:
   - theoryid:
       from_: closure
@@ -78,12 +75,16 @@ dataspecs:
       from_: closure
     speclabel:
       from_: closure
+    data_input:
+      from_: fitinputcontext
    
 normalize:
   normalize_to: 1
 
 datanorm:
     normalize_to: data
+
+metadata_group: experiment
 
 actions_:
   - report(main=true)

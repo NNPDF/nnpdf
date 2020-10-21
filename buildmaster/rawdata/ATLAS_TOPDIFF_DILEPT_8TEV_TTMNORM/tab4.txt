@@ -1,0 +1,16 @@
+Path: /HepData/9211/d4-x1-y1
+Parton-level normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature
+Location: Table 5
+RE : P P --> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : M_TTBAR IN GEV
+y : 1/SIG*DSIG/DM_TTBAR [10$^{-3}$/GEV]
+xdesc	x	xlow	xhigh	y	dy+	dy-	dy+	dy-	
+	350.0	250.0	450.0	2.41	+0.026510000000000002	-0.026510000000000002	+0.1446	-0.1446
+	510.0	450.0	570.0	2.56	+0.028160000000000004	-0.028160000000000004	+0.04864	-0.04864
+	635.0	570.0	700.0	0.97	+0.01552	-0.01552	+0.08148000000000001	-0.08148000000000001
+	775.0	700.0	850.0	0.35	+0.008749999999999999	-0.008749999999999999	+0.0455	-0.0455
+	925.0	850.0	1000.0	0.129	+0.0046440000000000006	-0.0046440000000000006	+0.02193	-0.02193
+	1850.0	1000.0	2700.0	0.0086	+5.676E-4	-5.676E-4	+0.001978	-0.001978
+
+

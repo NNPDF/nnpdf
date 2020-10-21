@@ -49,6 +49,7 @@ class N3PDF(PDF):
         # Set the number of members to two for legacy compatibility
         # in this case replica 0 and replica 1 are the same
         self.NumMembers = 2
+        self.ErrorType = "replicas"
         super().__init__(name)
 
     @property

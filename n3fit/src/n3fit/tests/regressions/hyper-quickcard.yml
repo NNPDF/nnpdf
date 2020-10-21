@@ -69,6 +69,7 @@ hyperscan:
         max_units: 50
         activations: ['sigmoid', 'tanh']
     kfold:
+        target: average
         penalties:
           - saturation
         threshold: 2.0
@@ -85,7 +86,6 @@ fitting:
   trvlseed: 3
   nnseed: 2
   mcseed: 1  
-  epochs: 900
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [15, 10, 8]

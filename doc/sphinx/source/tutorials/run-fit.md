@@ -112,11 +112,23 @@ Running the fitting code
 After successfully installing the `n3fit` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
-1. Prepare the fit: `vp-setupfit runcard.yml` this command will generate a
-`runcard_folder` folder in the current directory with a copy of the original
-YAML runcard.  The required resources (such as the theory and t0 PDF) will be
-downloaded automatically. Alternatively they can be obtained with the `vp-get`
-tool.
+1. Prepare the fit: `vp-setupfit runcard.yml`. This command will generate a
+    folder with the same name as the runcard (minus the file extension) in the
+    current directory, which will contain a copy of the original YAML runcard.
+    The required resources (such as the theory and t0 PDF set) will be
+    downloaded automatically. Alternatively they can be obtained with the
+    `vp-get` tool.
+
+    ```eval_rst
+    .. note::
+       This step is not strictly necessary when producing a standard fit with
+       n3fit - notice that in the next step the first command-line argument is
+       the runcard itself and not a folder, unlike with the legacy code
+       :ref:`nnfit <nnfit-usage>` - but it is required by :ref:`validphys <vp-index>`
+       and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
+       will fail unless this step has been followed. If necessary, this step can
+       be done after the fit has been run.
+    ```
 
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
@@ -141,7 +153,7 @@ same steps by adding the `--hyperopt number_of_trials` argument to `n3fit`,
 where `number_of_trials` is the maximum allowed value of trials required by the
 fit. Usually when running hyperparameter scan we switch-off the MC replica
 generation so different replicas will correspond to different initial points for
-the scan, this approach provides faster results. We provide the `n3Hyperplot`
+the scan, this approach provides faster results. We provide the `vp-hyperoptplot`
 script to analyse the output of the hyperparameter scan.
 
 
@@ -166,11 +178,16 @@ load.
 ```
 
 
+
+```eval_rst
+.. _upload-fit:
+```
+
 Upload and analyse the fit
 --------------------------
 After obtaining the fit you can proceed with the fit upload and analisis by:
 
-1. Uploading the results using `vp-uploadfit runcard_folder` then install the
+1. Uploading the results using `vp-upload runcard_folder` then install the
 fitted set with `vp-get fit fit_name`.
 
 2. Analysing the results with `validphys`, see the [vp-guide](../vp/index).
@@ -183,11 +200,18 @@ Performance of the fit
 The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
 first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
-In our tests the bests results are obtained using the MKL-compiled version of Tensorflow as found by
-default in Conda.
+``` note:: Tensorflow only supports the installation via pip. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
+```
 
-When using the MKL version the following environmental variables are relevant to control the
-performance of Tensorflow.
+When you install the nnpdf conda package, you get the [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen) package, which is not the default.
+This is due to a memory explosion found in some of the conda mkl builds.
+
+If you want to disable MKL without installing `tensorflow-eigen` you can always set the environment variable `TF_DISABLE_MKL=1` before running ``n3fit``.
+When running ``n3fit`` all versions of the package show similar performance.
+
+
+When using the MKL version of tensorflow you gain more control of the way Tensorflow will use
+the multithreading capabilities of the machine by using the following environment variables:
 
 ```bash
 
@@ -195,6 +219,11 @@ KMP_BLOCKTIME=0
 KMP_AFFINITY=granularity=fine,verbose,compact,1,0
 
 ```
+
+
+The usage of MKL is mostly relevant when running Tensorflow in a machine with a large number of cores,
+as the default behaviour of Tensorflow is suboptimal for ``n3fit``, specially when running more than one instance of the code at once.
+
 
 When these variables are not set, `n3fit` will default to the values shown above.
 For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
@@ -223,4 +252,10 @@ Hardware:
 Timing for a fit (from epoch 1 to epoch 5000):
   - Walltime: 871s
   - CPUtime: 2979s
+
+Iterate the fit
+---------------
+
+It may be desirable to iterate a fit to achieve a higher degree of convergence/stability in the fit.
+To read more about this, see [How to run an iterated fit](run-iterated-fit).
 

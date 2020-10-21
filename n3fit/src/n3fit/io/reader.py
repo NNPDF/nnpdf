@@ -369,6 +369,7 @@ def positivity_reader(pos_spec):
         "positivity": True,
         "lambda": positivity_factor,
         "count_chi2": False,
+        "integrability": "INTEG" in pos_spec.name,
     }
 
     return dict_out

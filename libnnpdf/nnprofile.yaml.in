@@ -17,7 +17,7 @@ theory_urls:
 theory_index: 'theorydata.json'
 
 lhapdf_urls:
-    - 'https://lhapdf.hepforge.org/downloads/pdfsets/6.1/'
+    - 'http://lhapdfsets.web.cern.ch/lhapdfsets/current/'
 nnpdf_pdfs_urls:
     - 'https://data.nnpdf.science/pdfs/'
 nnpdf_pdfs_index: 'pdfdata.json'
@@ -28,3 +28,5 @@ reports_target_dir: "WEB/validphys-reports/"
 reports_root_url: 'https://vp.nnpdf.science/'
 fits_target_dir: "WEB/fits/"
 fits_root_url: 'https://data.nnpdf.science/fits/'
+pdfs_target_dir: "WEB/pdfs/"
+pdfs_root_url: 'https://data.nnpdf.science/pdfs/'

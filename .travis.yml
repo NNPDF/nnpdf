@@ -19,6 +19,9 @@ env:
     - OUTPUT_CHANNEL=conda-private
     - UPLOAD_NON_MASTER="false"
     - CONDA_BUILD_SYSROOT="${CONDAPATH}/MacOSX10.9.sdk"
+    # pin conda build on OSX because of issue with channel name
+    # https://github.com/NNPDF/nnpdf/issues/915
+    - CONDA_BUILD_VERSION=3.18.11
 
   matrix:
     - CONDA_PY=37
@@ -78,8 +81,6 @@ before_install:
      then docker exec build bash -c "echo TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH >> /root/.bashrc";
      fi
 
-# Need to pin conda build to 3.8 because of:
-# https://github.com/conda/conda-build/issues/2841
 
 install:
     - >
@@ -98,7 +99,7 @@ install:
      conda config --add channels https://packages.nnpdf.science/conda;
      conda config --add channels https://packages.nnpdf.science/conda-private;
      conda config --set show_channel_urls true;
-     conda install --yes conda-build;
+     conda install --yes conda-build=$CONDA_BUILD_VERSION;
      fi
 
 script:

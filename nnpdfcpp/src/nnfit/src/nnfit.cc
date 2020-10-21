@@ -117,7 +117,7 @@ int main(int argc, char **argv)
       vector<Experiment*> training;
       vector<Experiment*> validation;
       vector<PositivitySet> pos;
-      LoadAllDataAndSplit(settings, training, validation, pos);
+      LoadAllDataAndSplit(settings, training, validation, pos, replica);
 
       // Fit Basis
       std::unique_ptr<FitBasis> fitbasis(getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica));
@@ -385,7 +385,8 @@ int main(int argc, char **argv)
 void LoadAllDataAndSplit(NNPDFSettings const& settings,
                          vector<Experiment*> & training,
                          vector<Experiment*> & validation,
-                         vector<PositivitySet> & pos)
+                         vector<PositivitySet> & pos,
+                         int const& replica)
 {
   auto T0Set = std::make_unique<LHAPDFSet>(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
   for (int i = 0; i < settings.GetNExp(); i++)
@@ -418,7 +419,7 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
       training.push_back(NULL);
       validation.push_back(NULL);
 
-      TrainValidSplit(settings, exp.get(), training.back(), validation.back());
+      TrainValidSplit(settings, exp.get(), training.back(), validation.back(), replica);
     }
 
   // Read Positivity Sets
@@ -505,13 +506,16 @@ void LogChi2(const FitPDFSet* pdf,
 }
 
 void TrainValidSplit(NNPDFSettings const& settings,
-                     Experiment* const& exp, Experiment* &tr, Experiment* &val)
+                     Experiment* const& exp, Experiment* &tr, Experiment* &val,
+                     int const& replica)
 {
   vector<DataSet> trainingSets;
   vector<DataSet> validationSets;
 
   vector<int> trCovMatMask(0);
   vector<int> valCovMatMask(0);
+  // Vector containing vectors of masks
+  vector<vector<int>> trMasks, valMasks;
   int AccumulatedData = 0;
 
   int expValSize = 0; // size of validation experiment
@@ -534,6 +538,15 @@ void TrainValidSplit(NNPDFSettings const& settings,
 
       std::sort(trMaskset.begin(), trMaskset.end());
       std::sort(valMaskset.begin(), valMaskset.end());
+
+
+      // If either of the training or validation mask sets
+      // are empty then don't insert them into the vector
+      // of masks
+      if (trMaskset.size() != 0)
+        trMasks.push_back(trMaskset);
+      if (valMaskset.size() != 0)
+        valMasks.push_back(valMaskset);
 
       if (settings.IsThUncertainties())
       {
@@ -573,6 +586,38 @@ void TrainValidSplit(NNPDFSettings const& settings,
   cout << Colour::FG_BLUE << "- Building Validation" << Colour::FG_DEFAULT << endl;
   if (expValSize != 0)
       val = new Experiment(*exp, validationSets);
+
+
+  if (settings.SavePseudodata())
+  {
+    // Save the pseudodata if requested in the runcard
+    // Note that the datapoint index starts with a 0 and
+    // goes up to the number of datapoints after cuts
+    // have been applied minus one (because we start
+    // counting from 0).
+    std::ofstream training_file, validation_file;
+    training_file.open(settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/training.dat", std::ios_base::app);
+    validation_file.open(settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/validation.dat", std::ios_base::app);
+
+    for (int i = 0; i < tr->GetNSet(); ++i)
+    {
+      auto ds = tr->GetSet(i);
+      // The training mask for set i
+      vector<int> tr_mask = trMasks[i];
+      for (int j = 0; j < ds.GetNData(); ++j) {
+        training_file << tr->GetExpName() << "\t" << ds.GetSetName() << "\t" << tr_mask[j] << "\t" << ds.GetData(j) << "\n";
+        }
+    }
+  if (expValSize != 0)
+    for (int i = 0; i < val->GetNSet(); ++i)
+    {
+      auto ds = val->GetSet(i);
+      vector<int> val_mask = valMasks[i];
+      for (int j = 0; j < ds.GetNData(); ++j) {
+        validation_file << val->GetExpName() << "\t" << ds.GetSetName() << "\t" << val_mask[j] << "\t" << ds.GetData(j) << "\n";
+        }
+    }
+  }
 
   // read covmat from file if specified in the runcard
   if (settings.IsThUncertainties())

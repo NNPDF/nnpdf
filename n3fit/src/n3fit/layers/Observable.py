@@ -77,7 +77,3 @@ class Observable(MetaLayer, ABC):
     @abstractmethod
     def gen_mask(self, basis):
         pass
-
-    @abstractmethod
-    def meta_call(self, pdf_in):
-        pass

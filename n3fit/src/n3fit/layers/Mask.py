@@ -39,7 +39,7 @@ class Mask(MetaLayer):
             )
         super(Mask, self).build(input_shape)
 
-    def meta_call(self, ret):
+    def call(self, ret):
         if self.mask is not None:
             ret = op.boolean_mask(ret, self.mask, axis=self.axis)
         if self.c is not None:

@@ -37,7 +37,6 @@ class MetaLayer(Layer):
 
     initializers = initializers
     weight_inits = []
-    compilable = True
 
     # Building function
     def builder_helper(
@@ -88,10 +87,3 @@ class MetaLayer(Layer):
             if key in ini_args.keys():
                 ini_args[key] = value
         return ini_class(**ini_args)
-
-    def call(self, *args, training=None, **kwargs):
-        if self.compilable:
-            compiled_function = tf.function(self.meta_call)
-        else:
-            compiled_function = self.meta_call
-        return compiled_function(*args, **kwargs)

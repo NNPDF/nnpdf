@@ -1,5 +1,5 @@
 % Next runcard:
 
 ```yaml
-{@next_effective_exponents_yaml@}
+{@iterated_runcard_yaml@}
 ```
