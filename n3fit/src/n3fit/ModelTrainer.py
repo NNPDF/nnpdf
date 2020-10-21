@@ -669,14 +669,12 @@ class ModelTrainer:
         will be multiplied by their respective integrability multipliers
         """
         callback_st = callbacks.StoppingCallback(stopping_object)
-        callback_pos = callbacks.gen_lagrange_callback(
-            training_model,
+        callback_pos = callbacks.LagrangeCallback(
             self.training["posdatasets"],
             self.training["posmultipliers"],
             update_freq=PUSH_POSITIVITY_EACH,
         )
-        callback_integ = callbacks.gen_lagrange_callback(
-            training_model,
+        callback_integ = callbacks.LagrangeCallback(
             self.training["integdatasets"],
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,

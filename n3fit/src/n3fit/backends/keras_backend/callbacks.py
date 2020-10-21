@@ -8,7 +8,8 @@
     they must take as input an epoch number and a log of the partial losses.
 """
 
-from tensorflow.keras.callbacks import LambdaCallback, TensorBoard, Callback
+from tensorflow.keras.callbacks import TensorBoard, Callback
+import tensorflow as tf
 
 
 class StoppingCallback(Callback):
@@ -34,7 +35,7 @@ class StoppingCallback(Callback):
     def on_epoch_end(self, epoch, logs=None):
         """ Function to be called at the end of every epoch """
         print_stats = ((epoch + 1) % self.log_freq) == 0
-        # The logs corresponds to the fit before the weights are updated
+        # The input log correspond to the fit before the weights are updated
         logs = self.model.compute_losses()
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
@@ -48,15 +49,13 @@ class StoppingCallback(Callback):
         self.stopping_object.make_stop()
 
 
-def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100):
+class LagrangeCallback(Callback):
     """
     Updates the given datasets
     with its respective multipliers each ``update_freq`` epochs
 
     Parameters
     ----------
-        training_model: backend Model
-            Model being trained
         datasets: list(str)
             List of the names of the datasets to be trained
         multipliers: list(float)
@@ -65,14 +64,35 @@ def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100
             each how many epochs the positivity lambda is updated
     """
 
-    if len(multipliers) != len(datasets):
-        raise ValueError("The number ofvdatasets and multipliers do not match")
+    def __init__(self, datasets, multipliers, update_freq=100):
+        super().__init__()
+        if len(multipliers) != len(datasets):
+            raise ValueError("The number ofvdatasets and multipliers do not match")
+        self.update_freq = update_freq
+        self.datasets = datasets
+        self.multipliers = multipliers
+        self.updateable_weights = []
 
-    def callback_lagrange(epoch, logs):
-        if (epoch + 1) % update_freq == 0:
-            training_model.multiply_weights(datasets, multipliers)
+    def on_train_begin(self, logs=None):
+        """ Save an instance of all relevant layers """
+        for layer_name in self.datasets:
+            layer = self.model.get_layer(layer_name)
+            self.updateable_weights.append(layer.weights)
 
-    return LambdaCallback(on_epoch_end=callback_lagrange)
+    @tf.function
+    def _update_weights(self):
+        """Update all the weight with the corresponding multipliers
+        Wrapped with tf.function to compensate the for loops as both weights variables
+        and multipliers are known upon first call
+        """
+        for ws, multiplier in zip(self.updateable_weights, self.multipliers):
+            for w in ws:
+                w.assign(w * multiplier)
+
+    def on_epoch_end(self, epoch, logs=None):
+        """ Function to be called at the end of every epoch """
+        if (epoch + 1) % self.update_freq == 0:
+            self._update_weights()
 
 
 def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
