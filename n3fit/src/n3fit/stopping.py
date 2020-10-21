@@ -454,6 +454,9 @@ class Stopping:
         return True
 
     def make_stop(self):
+        """ Convenience method to set the stop_now flag
+        and reload the history to the point of the best model if any
+        """
         self.stop_now = True
         self.history.reload()
 
