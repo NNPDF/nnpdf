@@ -15,7 +15,7 @@ from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.covmats import (
     sqrt_covmat,
-    commondatas_covmat_from_systematics
+    datasets_covmat_from_systematics
 )
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -38,7 +38,7 @@ def test_covmat_from_systematics_correlated():
     cds = list(map(l.check_commondata, correlated_datasets))
     ld_cds = list(map(load_commondata, cds))
 
-    covmat = commondatas_covmat_from_systematics(ld_cds)
+    covmat = datasets_covmat_from_systematics(ld_cds)
 
     dss = [
         l.check_dataset(i, theoryid=THEORYID, cuts=None) for i in correlated_datasets
@@ -66,7 +66,7 @@ def test_covmat_from_systematics(data_config):
     ]
     cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
 
-    covmat = commondatas_covmat_from_systematics(cut_ld_cds)
+    covmat = datasets_covmat_from_systematics(cut_ld_cds)
 
     dss = [
         l.check_dataset(i.name, theoryid=THEORYID, cuts="internal")

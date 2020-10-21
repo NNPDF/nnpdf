@@ -23,20 +23,29 @@ from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
 
+INTRA_DATASET_SYS_NAME = ("THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR")
 
-def split_systematics(commondata):
-    """Take the systematics table from a commondata and remove any systematics
-    which have name "SKIP". Next transform the systematics into the correct units.
-    Additive (ADD) systematics are left unchanged, whereas multiplicative (MULT)
-    systematics need to be converted from a percentage into an uncertainty
-    by multiplying by the central value and dividing by 100.
 
-    Finally the systematics are split into the different components which
-    are treated differently when constructing the covariance matrix.
+def split_uncertainties(commondata):
+    """Take the statistical uncertainty and systematics table from ``commondata``
+    and split into the different different uncertainty archetypes each of
+    which may be handled differently by future operations, such as constructing
+    the covariance matrix.
 
-    Returns a tuple of the statistical uncertainty and 5 possible groups
-    of systematics uncertainties: UNCORR, CORR, THEORYUNCORR, THEORYCORR and
-    inter-dataset systematics
+    First we remove any systematics which have name "SKIP" because, as the name
+    implies, these systematics will be skipped.
+
+    Next the systematics are transformed into the correct units:
+
+        - Additive (ADD) systematics are left unchanged
+        - multiplicative (MULT) systematics need to be converted from a
+        percentage into an uncertainty by multiplying by the central value
+        and dividing by 100.
+
+    Finally, the systematics are split into the five possible archetypes
+    of systematics uncertainties: uncorrelated (UNCORR), correlated (CORR),
+    theory_uncorrelated (THEORYUNCORR), theory_correlated (THEORYCORR) and
+    special_correlated systematics
 
     Returns
     -------
@@ -52,58 +61,64 @@ def split_systematics(commondata):
             correlated: np.2darray
                 Similar to uncorrelated except they can be correlated across
                 data points.
-            theory_uncorr: np.2darray
+            theory_uncorrelated: np.2darray
                 numpy array of uncorrelated "theory" uncertainties which
                 are not to be confused with theory covariance uncertainties.
                 Instead they are, for example, uncertainties in the c-factors
-            theory_corr: np.2darray
-                same as theory_uncorr except they can be correlated across
+            theory_correlated: np.2darray
+                same as theory_uncorrelated except they can be correlated across
                 data points.
-            special_corr: pd.DataFrame
-                a dataframe of the systematics which can be correlated across
+            special_correlated: pd.DataFrame
+                Dataframe of the systematics which can be correlated across
                 datasets, the columns of the dataframe are the systematic names.
-                Each systematic of this type has a unique name, which is used
-                to correlated these systematics across datasets.
+                Each systematic of this type has a unique name, by returning
+                these systematics as a dataframe with the unique names as column
+                headers, we can easily join up the special_correlated systematics
+                from multiple datasets, retaining correlations, using
+                ``pandas.concat``.
 
     """
-    systype = commondata.systype_table["name"].values
+    sys_name = commondata.systype_table["name"].to_numpy()
     # Dropping systematics that have type SKIP
-    sys_errors = commondata.sys_errors.loc[:, systype != "SKIP"]
-    systype = systype[systype != "SKIP"]
+    sys_errors_df = commondata.sys_errors.loc[:, sys_name != "SKIP"]
+    sys_name = sys_name[sys_name != "SKIP"]
 
     # Diagonal matrix containing the statistical uncertainty for each
     # data point
-    stat = commondata.stat_errors.values
+    stat = commondata.stat_errors.to_numpy()
 
-    # Systematic uncertainties converted to proper units (additives are left
-    # unchanged, multiplicative uncertainties are in percentage format so get
-    # multiplied by central value and divided by 100)
-    sys_mat = sys_errors.apply(
+    # Systematic uncertainties converted to absolute uncertainties (additives
+    # are left unchanged, multiplicative uncertainties are in percentage format
+    # so get multiplied by central value and divided by 100).
+    abs_sys_errors_df = sys_errors_df.apply(
         lambda x: [
             i.add if i.sys_type == "ADD" else (i.mult * j / 100)
             for i, j in zip(x, commondata.central_values)
         ]
     )
-    # set columns for special_corr errors
-    sys_mat.columns = systype
+    abs_sys_errors = abs_sys_errors_df.to_numpy()
 
-    special = ["THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR"]
+    # set columns for special_correlated errors
+    abs_sys_errors_df.columns = sys_name
+    special_corr = abs_sys_errors_df.loc[:, ~np.isin(sys_name, INTRA_DATASET_SYS_NAME)]
 
-    special_corr = sys_mat.loc[:, ~np.isin(systype, special)]
-    thunc = sys_mat.loc[:, systype == "THEORYUNCORR"].values
-    unc = sys_mat.loc[:, systype == "UNCORR"].values
-    thcorr = sys_mat.loc[:, systype == "THEORYCORR"].values
-    corr = sys_mat.loc[:, systype == "CORR"].values
+    thunc = abs_sys_errors[:, sys_name == "THEORYUNCORR"]
+    unc = abs_sys_errors[:, sys_name == "UNCORR"]
+    thcorr = abs_sys_errors[:, sys_name == "THEORYCORR"]
+    corr = abs_sys_errors[:, sys_name == "CORR"]
     return stat, unc, corr, thunc, thcorr, special_corr
 
 
 def covmat_from_systematics(commondata, use_theory_errors=True):
-    """Taking the tuple of statistical uncertainty and systematics returned by
-    :py:meth:`split_systematics` and construct the covariance matrix. uncorrelated
-    contributions from ``stat``, ``uncorrelated`` and ``theory_uncorr`` are
-    added in quadrature
-    to the diagonal of the covmat. The correlated systematics ``correlated``,
-    ``theory_corr`` and ``special_corr`` are multiplied by their transpose
+    """Given a single ``commondata``, obtain the tuple of statistical
+    uncertainty and systematics from :py:meth:`split_uncertainties` and
+    construct the covariance matrix.
+    Uncorrelated contributions from: ``stat``, ``uncorrelated`` and
+    ``theory_uncorrelated`` are added in quadrature
+    to the diagonal of the covmat.
+
+    The correlated systematics: ``correlated``,
+    ``theory_correlated`` and ``special_correlated`` are multiplied by their transpose
     to give contributions to both the diagonal and off diagonal components of
     the covmat.
 
@@ -148,27 +163,27 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
            [3.46727332e-05, 3.45492831e-05, 2.56283708e-05, ...,
             4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
     """
-    stat, unc, corr, thunc, thcorr, special_corr = split_systematics(commondata)
+    stat, unc, corr, thunc, thcorr, special_corr = split_uncertainties(commondata)
 
     special_vals = special_corr.values
-    cov_mat = (
-        np.diag(
-            stat ** 2 + (unc**2).sum(axis=1) + (thunc**2).sum(axis=1)* use_theory_errors
-        )
-        + (
-            corr @ corr.T +
-            thcorr @ thcorr.T * use_theory_errors +
-            special_vals @ special_vals.T
-        )
+    cov_mat = np.diag(
+        stat ** 2
+        + (unc ** 2).sum(axis=1)
+        + (thunc ** 2).sum(axis=1) * use_theory_errors
+    ) + (
+        corr @ corr.T
+        + thcorr @ thcorr.T * use_theory_errors
+        + special_vals @ special_vals.T
     )
     return cov_mat
 
-def commondatas_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
+
+def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
     """Given a list of commondata, construct the full covariance matrix.
 
     This is similar to :py:meth:`covmat_from_systematics`
-    except that ``special_corr`` systematics are concatenated across all datasets
-    before it is multiplied by its transpose to give off block-diagonal
+    except that ``special_corr`` is concatenated across all datasets
+    before being multiplied by its transpose to give off block-diagonal
     contributions. The other systematics contribute to the block diagonal in the
     same way as :py:meth:`covmat_from_systematics`.
 
@@ -189,22 +204,20 @@ def commondatas_covmat_from_systematics(list_of_commondata, use_theory_errors=Tr
     special_corrs = []
     block_diags = []
     for cd in list_of_commondata:
-        stat, unc, corr, thunc, thcorr, special_corr = split_systematics(cd)
+        stat, unc, corr, thunc, thcorr, special_corr = split_uncertainties(cd)
         special_corrs.append(special_corr)
-        diag_covmat = (
-            np.diag(
-                stat ** 2 + (unc**2).sum(axis=1) + (thunc**2).sum(axis=1)* use_theory_errors
-            )
-            + (
-                corr @ corr.T +
-                thcorr @ thcorr.T * use_theory_errors
-            )
-        )
+        diag_covmat = np.diag(
+            stat ** 2
+            + (unc ** 2).sum(axis=1)
+            + (thunc ** 2).sum(axis=1) * use_theory_errors
+        ) + (corr @ corr.T + thcorr @ thcorr.T * use_theory_errors)
         block_diags.append(diag_covmat)
     special_sys = pd.concat(special_corrs, axis=0, sort=False)
+    # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
     special_sys.fillna(0, inplace=True)
     diag = la.block_diag(*block_diags)
     return diag + special_sys.values @ special_sys.values.T
+
 
 def sqrt_covmat(covariance_matrix):
     """Function that computes the square root of the covariance matrix.
