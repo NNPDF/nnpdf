@@ -3,8 +3,6 @@ test_postfit.py
 
 Module for testing postfit.
 """
-from contextlib import redirect_stdout
-import io
 import json
 
 from validphys.scripts.postfit import main as postfit
@@ -43,9 +41,7 @@ def test_postfit():
     ]
 
     # Rerun postfit
-    f = io.StringIO()
-    with redirect_stdout(f):
-        postfit(args)
+    postfit(args)
 
     # Check that postfit directory is created
     assert postfitpath.is_dir()
