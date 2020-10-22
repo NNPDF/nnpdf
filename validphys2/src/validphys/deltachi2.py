@@ -9,7 +9,6 @@ from collections import namedtuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import chi2, entropy
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
@@ -29,7 +28,9 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
     """Check ``pdf`` has error type of ``symmhessian``"""
     etype = pdf.ErrorType
     if etype != "symmhessian":
-        raise CheckError("Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype))
+        raise CheckError(
+            "Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype)
+        )
 
 
 @check_pdf_is_symmhessian
@@ -39,7 +40,8 @@ def delta_chi2_hessian(pdf, total_chi2_data):
     each eigenvector of the Hessian set.
     """
     delta_chi2 = (
-        np.ravel(total_chi2_data.replica_result.error_members()) - total_chi2_data.central_result
+        np.ravel(total_chi2_data.replica_result.error_members())
+        - total_chi2_data.central_result
     )
     return delta_chi2
 
@@ -117,7 +119,7 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
 
     fig, ax = plt.subplots()
 
-    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2)) + 1)
+    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2))+1)
 
     ax.hist(
         delta_chi2,
@@ -200,9 +202,9 @@ class PDFEpsilonPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
         flstate.labels = []
         flstate.handles = []
-
+    
     def get_ylabel(self, parton_name):
-        return "$\epsilon(x)$"
+        return '$\epsilon(x)$'
 
     def draw(self, pdf, grid, flstate):
         """Obtains the gridvalues of epsilon (measure of Gaussianity)"""
@@ -233,7 +235,7 @@ class PDFEpsilonPlotter(PDFPlotter):
         error68 = (error68up - error68down) / 2.0
         epsilon = abs(1 - errorstd / error68)
 
-        (handle,) = ax.plot(xgrid, epsilon, linestyle="-", color=color)
+        handle, = ax.plot(xgrid, epsilon, linestyle="-", color=color)
 
         handles.append(handle)
         labels.append(pdf.label)
@@ -241,11 +243,11 @@ class PDFEpsilonPlotter(PDFPlotter):
         return [5 * epsilon]
 
     def legend(self, flstate):
-        return flstate.ax.legend(
-            flstate.handles,
-            flstate.labels,
-            handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
-        )
+        return flstate.ax.legend(flstate.handles, flstate.labels,
+                                 handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()
+                                             }
+                                 )
 
 
 @make_argcheck
@@ -254,7 +256,9 @@ def check_pdfs_are_montecarlo(pdfs, **kwargs):
     for pdf in pdfs:
         etype = pdf.ErrorType
         if etype != "replicas":
-            raise CheckError("Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype))
+            raise CheckError(
+                "Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype)
+            )
 
 
 @figuregen
