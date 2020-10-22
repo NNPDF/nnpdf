@@ -45,7 +45,9 @@ def test_postfit():
 
     # Check that postfit directory is created
     postfitpath = fitpath / "postfit"
-    assert postfitpath.is_dir()
+    assert (
+        postfitpath.is_dir()
+    ), f"The postfit directory has not been created as expected at {postfitpath}."
 
     # Check that there are the expected files in the PDF set folder
     pdfsetpath = postfitpath / f"{FIT}"
@@ -56,7 +58,10 @@ def test_postfit():
     expected_pdf_files.add(f"{FIT}.info")
     # Find set of files that postfit actually generates
     generated_pdf_files = set(listdir(pdfsetpath))
-    assert expected_pdf_files == generated_pdf_files
+    assert (
+        expected_pdf_files == generated_pdf_files
+    ), f"""The set of files generated for the PDF set by postfit differs from the set of expected files.
+           The problematic files are {", ".join(expected_pdf_files.symmetric_difference(generated_pdf_files))})."""
 
     # Check that replicas in the PDF set correspond to the fit replicas correctly
     for x in range(1, nrep):
@@ -68,16 +73,27 @@ def test_postfit():
                 data = yaml.safe_load_all(f)
                 metadata = next(data)
                 repnos.add(metadata["FromMCReplica"])
-        assert len(repnos) == 1
+        assert (
+            len(repnos) == 1
+        ), f"""There is a mismatch between the replica number written to the PDF set by postfit and
+               the fit replica it recorded for replica_{x}."""
 
     # Check that number of PDF members is written correctly
-    with open(postfitpath / f"{FIT}/{FIT}.info", "r") as f:
+    infopath = postfitpath / f"{FIT}/{FIT}.info"
+    with open(infopath, "r") as f:
         data = yaml.safe_load(f)
         # Add one to nrep to account for replica 0
-        assert data["NumMembers"] == nrep + 1
+        assert (
+            data["NumMembers"] == nrep + 1
+        ), f"Postfit has not written the number of PDF members correctly to {infopath}."
 
     # Check that chi2 and arclength thresholds are recorded correctly
-    with open(postfitpath / f"veto_count.json", "r") as f:
+    vetopath = postfitpath / "veto_count.json"
+    with open(vetopath, "r") as f:
         veto_count = json.load(f)
-        assert veto_count["chi2_threshold"] == chi2_threshold
-        assert veto_count["arclength_threshold"] == arclength_threshold
+        assert (
+            veto_count["chi2_threshold"] == chi2_threshold
+        ), f"Postfit has not written the chi2 threshold correctly to {vetopath}."
+        assert (
+            veto_count["arclength_threshold"] == arclength_threshold
+        ), f"Postfit has not written the arclength threshold correctly to {vetopath}."
