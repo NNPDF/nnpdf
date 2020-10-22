@@ -27,25 +27,73 @@ INTRA_DATASET_SYS_NAME = ("THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR")
 
 
 def split_uncertainties(commondata):
-    """Take the statistical uncertainty and systematics table from ``commondata``
+    """Take the statistical uncertainty and systematics table from
+    a :py:class:`validphys.coredata.CommonData` object
     and split into the different different uncertainty archetypes each of
     which may be handled differently by future operations, such as constructing
-    the covariance matrix.
+    the covariance matrix. The logic of the different archetypes
+    is best described by the now deprecated C++ code:
 
-    First we remove any systematics which have name "SKIP" because, as the name
-    implies, these systematics will be skipped.
+    .. code-block:: c++
+            auto CovMat = NNPDF::matrix<double>(ndat, ndat);
+            for (int i = 0; i < ndat; i++)
+            {
+              for (int j = 0; j < ndat; j++)
+              {
+                double sig    = 0.0;
+                double signor = 0.0;
+                // Statistical error
+                if (i == j)
+                  sig += pow(stat_error[i],2);
+                for (int l = 0; l < nsys; l++)
+                {
+                  sysError const& isys = systematic_errors[i][l];
+                  sysError const& jsys = systematic_errors[j][l];
+                  if (isys.name != jsys.name)
+                      throw RuntimeException("ComputeCovMat", "Inconsistent naming of systematics");
+                  if (isys.name == "SKIP")
+                      continue; // Continue if systype is skipped
+                  if ((isys.name == "THEORYCORR" || isys.name == "THEORYUNCORR") && !use_theory_errors)
+                      continue; // Continue if systype is theoretical and use_theory_errors == false
+                  const bool is_correlated = ( isys.name != "UNCORR" && isys.name !="THEORYUNCORR");
+                  if (i == j || is_correlated)
+                    switch (isys.type)
+                    {
+                      case ADD:   sig    += isys.add *jsys.add;  break;
+                      case MULT: if (mult_errors) { signor += isys.mult*jsys.mult; break; }
+                                 else { continue; }
+                      case UNSET: throw RuntimeException("ComputeCovMat", "UNSET systype encountered");
+                    }
+                }
+                // Covariance matrix entry
+                CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
+            // Covariance matrix weight
+            CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
+          }
+        }
 
-    Next the systematics are transformed into the correct units:
+        return CovMat;
+      }
 
+    if the systematic of data point i has name ``SKIP`` we ignore
+    it. This is handled by scanning over all sytematic errors in the
+    ``sys_errors`` dataframe and dropping any columns which correspond
+    to a systematic error name of ``SKIP``, thus the ``sys_errors`` dataframe
+    defined below contains only the systematics without the ``SKIP`` name.
+
+    Note that in the switch statement an ADDitive or MULTiplicative systype
+    is handled by either multiplying the additive or multiplicative
+    uncertainties respectively. We convert uncertainties so that they are all
+    absolute:
         - Additive (ADD) systematics are left unchanged
         - multiplicative (MULT) systematics need to be converted from a
-        percentage into an uncertainty by multiplying by the central value
+        percentage by multiplying by the central value
         and dividing by 100.
 
     Finally, the systematics are split into the five possible archetypes
     of systematics uncertainties: uncorrelated (UNCORR), correlated (CORR),
     theory_uncorrelated (THEORYUNCORR), theory_correlated (THEORYCORR) and
-    special_correlated systematics
+    special_correlated systematics.
 
     Returns
     -------
@@ -110,17 +158,22 @@ def split_uncertainties(commondata):
 
 
 def covmat_from_systematics(commondata, use_theory_errors=True):
-    """Given a single ``commondata``, obtain the tuple of statistical
-    uncertainty and systematics from :py:meth:`split_uncertainties` and
+    """Given a single :py:class:`validphys.coredata.CommonData`, obtain the
+    tuple of statistical uncertainty and systematics from
+    :py:meth:`split_uncertainties` and
     construct the covariance matrix.
+
     Uncorrelated contributions from: ``stat``, ``uncorrelated`` and
     ``theory_uncorrelated`` are added in quadrature
     to the diagonal of the covmat.
 
-    The correlated systematics: ``correlated``,
-    ``theory_correlated`` and ``special_correlated`` are multiplied by their transpose
-    to give contributions to both the diagonal and off diagonal components of
-    the covmat.
+    From here it's a matter of staring at a piece of paper for a while to
+    realise the contribution to the covariance matrix arising due to
+    correlated systematics is schematically ``A_correlated @ A_correlated.T``,
+    where A_correlated is a matrix N_dat by N_sys. The total contribution
+    from correlated systematics is found by adding together the result of
+    mutiplying each correlated systematic matrix by its transpose
+    (``correlated``, ``theory_correlated`` and ``special_correlated``).
 
     For more information on the generation of the covariance matrix see the
     `paper <https://arxiv.org/pdf/hep-ph/0501067.pdf>`_
@@ -179,7 +232,8 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
 
 
 def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
-    """Given a list of commondata, construct the full covariance matrix.
+    """Given a list containing :py:class:`validphys.coredata.CommonData` s,
+    construct the full covariance matrix.
 
     This is similar to :py:meth:`covmat_from_systematics`
     except that ``special_corr`` is concatenated across all datasets
