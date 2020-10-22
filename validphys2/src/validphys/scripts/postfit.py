@@ -75,7 +75,8 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
     as defined in fitveto.py. Returns a list of the replica directories that pass."""
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
-    all_replicas   = glob(f"{nnfit_path}/replica_*/")
+    # We sort the paths so that the selection of replicas is deterministic
+    all_replicas   = sorted(glob(f"{nnfit_path}/replica_*/"))
     valid_paths = [path for path in all_replicas if fitdata.check_replica_files(path, fitname)]
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
