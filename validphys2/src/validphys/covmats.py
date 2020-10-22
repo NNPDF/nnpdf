@@ -35,16 +35,20 @@ def split_uncertainties(commondata):
     is best described by the now deprecated C++ code:
 
     .. code-block:: c++
+
             auto CovMat = NNPDF::matrix<double>(ndat, ndat);
+
             for (int i = 0; i < ndat; i++)
             {
               for (int j = 0; j < ndat; j++)
               {
                 double sig    = 0.0;
                 double signor = 0.0;
+
                 // Statistical error
                 if (i == j)
                   sig += pow(stat_error[i],2);
+
                 for (int l = 0; l < nsys; l++)
                 {
                   sysError const& isys = systematic_errors[i][l];
@@ -65,6 +69,7 @@ def split_uncertainties(commondata):
                       case UNSET: throw RuntimeException("ComputeCovMat", "UNSET systype encountered");
                     }
                 }
+
                 // Covariance matrix entry
                 CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
             // Covariance matrix weight
