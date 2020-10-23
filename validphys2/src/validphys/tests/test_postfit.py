@@ -53,7 +53,8 @@ def test_postfit():
     pdfsetpath = postfitpath / f"{FIT}"
     # Create set of expected files, inc. info file
     # Use sets so that the files are automatically sorted
-    # Add one to nrep to account for replica 0
+    # Start counting from zero because of replica 0
+    # Add one to nrep to account for the last replica
     expected_pdf_files = {f"{FIT}_{x:04d}.dat" for x in range(nrep + 1)}
     expected_pdf_files.add(f"{FIT}.info")
     # Find set of files that postfit actually generates
@@ -64,7 +65,7 @@ def test_postfit():
            The problematic files are {", ".join(expected_pdf_files.symmetric_difference(generated_pdf_files))})."""
 
     # Check that replicas in the PDF set correspond to the fit replicas correctly
-    for x in range(1, nrep):
+    for x in range(1, nrep + 1):
         repnos = set()
         # [File in PDF set, file in fit]
         files = [pdfsetpath / f"{FIT}_{x:04d}.dat", postfitpath / f"replica_{x}/{FIT}.dat"]
