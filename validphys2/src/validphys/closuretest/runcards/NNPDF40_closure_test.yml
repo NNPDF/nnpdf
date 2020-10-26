@@ -126,7 +126,7 @@ fitting:
   loadfile: weights.hd5
 
   seed: 577993051               # set the seed for the random generator
-  genrep: true          # on = generate MC replicas, off = use real data
+  genrep: true          # true = generate MC replicas, false = use real data
   rngalgo: 0        # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants: 80      # Number of mutants for replica
@@ -163,21 +163,21 @@ fitting:
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
-  - {fl: sng, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [
+  - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
       1.086, 1.124], largex: [1.466, 3.33]}
-  - {fl: g, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [0.7804,
+  - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7804,
       1.112], largex: [2.499, 6.501]}
-  - {fl: v, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [0.5347,
+  - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5347,
       0.7183], largex: [1.503, 3.976]}
-  - {fl: v3, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [0.2016,
+  - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.2016,
       0.4753], largex: [1.781, 4.003]}
-  - {fl: v8, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [0.5735,
+  - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5735,
       0.7563], largex: [1.531, 4.101]}
-  - {fl: t3, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [-0.3324,
+  - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.3324,
       0.8232], largex: [1.781, 4.254]}
-  - {fl: t8, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [0.7985,
+  - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7985,
       1.018], largex: [1.515, 4.107]}
-  - {fl: t15, pos: off, trainable: off, mutsize: [15], mutprob: [0.05], smallx: [
+  - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
       1.033, 1.161], largex: [1.506, 3.504]}
 
 ############################################################
@@ -220,10 +220,10 @@ integrability:
 
 closuretest:
   filterseed: 9116129314 # Random seed to be used in filtering data partitions
-  fakedata: True     # on = to use FAKEPDF to generate pseudo-data
+  fakedata: True     # true = to use FAKEPDF to generate pseudo-data
   fakepdf: 250920-mw-001_closure_fakepdf  # Theory input for pseudo-data
   errorsize: 1.0    # uncertainties rescaling
-  fakenoise: True    # on = to add random fluctuations to pseudo-data
+  fakenoise: True    # true = to add random fluctuations to pseudo-data
   rancutprob: 1.0   # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
