@@ -23,7 +23,7 @@ rescale_r: 1
 allm_limits: 0
 rescale_non_resonance: 1
 rescale_resonance: 1
-use_mu2_as_upper_limit: true
+use_mu2_as_upper_limit: false
 q2min_inel_override: 0.0
 q2max_inel_override: 1E300
 lhapdf_transition_q2: 9
