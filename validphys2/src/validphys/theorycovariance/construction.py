@@ -479,7 +479,7 @@ def user_covmat(groups_data, groups_index,
 @table
 def total_theory_covmat(
         groups_index,
-        theory_covmat_custom,
+      #  theory_covmat_custom,
         nuclear_covmat,
         deuteron_covmat,
         user_covmat,
@@ -490,8 +490,8 @@ def total_theory_covmat(
   
     f = pd.DataFrame(0, index=groups_index, columns=groups_index)
 
-    if use_scalevar_uncertaintes is True:
-        f = f + theory_covmat_custom
+  #  if use_scalevar_uncertaintes is True:
+  #      f = f + theory_covmat_custom
     if use_deuteron_uncertainties is True:
         f = f + deuteron_covmat
     if use_nuclear_uncertainties is True:
