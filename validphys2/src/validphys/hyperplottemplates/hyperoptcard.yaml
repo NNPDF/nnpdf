@@ -1,0 +1,8 @@
+results_table:
+    meta: Null
+    template: results_table.md
+
+template: report.md
+
+actions_:
+  - report(main=True)

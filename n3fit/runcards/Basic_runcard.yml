@@ -40,10 +40,10 @@ fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3
-  save: False
-  savefile: 'weights.hd5'
-  load: False
-  loadfile: 'weights.hd5'
+  epochs: 900
+  save: 'weights.h5'
+  load: '/path/to/weights.h5/file
+
 
   tensorboard:
     weight_freq: 100

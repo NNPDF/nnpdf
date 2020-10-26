@@ -47,7 +47,9 @@ providers = [
              'validphys.pseudodata',
              'validphys.renametools',
              'validphys.covmats',
-             'reportengine.report'
+             'validphys.hyperoptplot',
+             'validphys.deltachi2',
+             'reportengine.report',
             ]
 
 log = logging.getLogger(__name__)

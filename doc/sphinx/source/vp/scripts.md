@@ -107,3 +107,16 @@ be installed locally. You can check which PDFs you already own using
 Finally you can save a CSV which records which replica indices from the source
 `PDF` correspond to which replicas in the output `PDF` using the `-s` or
 `--save-indices` option.
+
+## The vp-deltachi2 application
+
+The script `vp-deltachi2` can be used to generate a report providing information about possible inefficiencies in a fitting methodology. 
+
+The function is called as:
+```
+$ vp-deltachi2 <input fit name> <corresponding Hessian PDF set>
+```
+
+Optionally, users can provide custom metadata (`title`, `author`, and `keywords`), as well as the energy scale `Q` using commandline arguments. By default the energy scale is set to 1.7 GeV. 
+
+To run this analysis one first has to prepare the corresponding Hessian PDF set by performing a Monte Carlo to Hessian conversion using [mc2hessian](https://github.com/scarrazza/mc2hessian).

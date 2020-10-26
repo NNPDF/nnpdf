@@ -177,6 +177,8 @@ this value, it will be tagged as ``POS_VETO`` and the replica removed from postf
 Other options
 -------------
 
+Threshold :math:`\chi2`
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: yaml
 
@@ -185,6 +187,27 @@ Other options
             threshold_chi2: 4.0
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
+
+
+Save and load weights of the model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    fitting:
+        save: "weights.h5"
+        load: "weights.h5"
+
+- ``save``: saves the weights of the PDF model in the selected file in the replica folder.
+- ``load``: loads the weights of the PDF model from the selected file.
+
+Since the weights depend only on the architecture of the Neural Network,
+it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
+and load it in a different runcard and continue the training from there.
+
+While the load file is read as an absolute path, the file to save to will be found
+inside the replica folder.
+
 
 .. _tensorboard-label:
 

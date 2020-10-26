@@ -913,7 +913,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
             yerr=[cv - lower, upper - cv],
             linestyle='--',
             marker='s',
-            label=pdf.label,
+            label=str(pdf),
             lw=0.5,
             transform=next(offsets)
         )
@@ -926,6 +926,36 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 
     return fig
+
+
+@make_argcheck
+def _check_same_posdataset_name(dataspecs_posdataset):
+    """Check that the ``posdataset`` key matches for ``dataspecs``"""
+    _check_same_dataset_name.__wrapped__(
+        [ds.commondataspec for ds in dataspecs_posdataset]
+    )
+
+@figure
+@_check_same_posdataset_name
+def plot_dataspecs_positivity(
+    dataspecs_speclabel,
+    dataspecs_positivity_predictions,
+    dataspecs_posdataset,
+    pos_use_kin=False,
+):
+    """Like :py:meth:`plot_positivity` except plots positivity for each
+    element of dataspecs, allowing positivity predictions to be generated with
+    different ``theory_id`` s as well as ``pdf`` s
+    """
+    # we checked the positivity set matches between dataspecs so this is fine
+    posset = dataspecs_posdataset[0]
+    return plot_positivity(
+        dataspecs_speclabel,
+        dataspecs_positivity_predictions,
+        posset,
+        pos_use_kin,
+    )
+
 
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):

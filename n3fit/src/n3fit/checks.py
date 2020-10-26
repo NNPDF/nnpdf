@@ -1,6 +1,7 @@
 """
 This module contains checks to be perform by n3fit on the input
 """
+import os
 import logging
 import numbers
 import numpy as np
@@ -136,11 +137,31 @@ def check_lagrange_multipliers(parameters, key):
         raise CheckError(f"The {key}::threshold must be a number, received: {threshold}")
 
 
+def check_model_file(fitting):
+    """ Checks whether the model_files given in the runcard are acceptable """
+    save_file = fitting.get("save")
+    load_file = fitting.get("load")
+    if save_file:
+        if not isinstance(save_file, str):
+            raise CheckError(f"Model file to save to: {save_file} not understood")
+        # Since the file to save to will be found inside the replica folder, it should writable as all the others
+
+    if load_file:
+        if not isinstance(load_file, str):
+            raise CheckError(f"Model file to load: {load_file} not understood, str expected")
+        if not os.path.isfile(load_file):
+            raise CheckError(f"Model file to load: {load_file} can not be opened, does it exist?")
+        if not os.access(load_file, os.R_OK):
+            raise CheckError(f"Model file to load: {load_file} cannot be read, permission denied")
+        if os.stat(load_file).st_size == 0:
+            raise CheckError(f"Model file {load_file} seems to be empty")
+
 @make_argcheck
 def wrapper_check_NN(fitting):
     """ Wrapper function for all NN-related checks """
     check_tensorboard(fitting.get("tensorboard"))
     parameters = fitting["parameters"]
+    check_model_file(fitting)
     check_existing_parameters(parameters)
     check_consistent_layers(parameters)
     check_basis_with_layers(fitting, parameters)

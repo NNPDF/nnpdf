@@ -68,7 +68,7 @@ class FkRotation(MetaLayer):
         self.output_dim = output_dim
         super().__init__(**kwargs, name="evolution")
 
-    def meta_call(self, pdf_raw):
+    def call(self, pdf_raw):
         # Transpose the PDF so that the flavour index is the first one
         x = op.transpose(pdf_raw)
         pdf_raw_list = [
