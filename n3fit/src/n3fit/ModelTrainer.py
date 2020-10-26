@@ -289,6 +289,8 @@ class ModelTrainer:
             self.no_validation = False
 
         self.callbacks = []
+        if debug or True:
+            self.callbacks.append(callbacks.TimerCallback())
 
     def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
