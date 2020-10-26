@@ -405,19 +405,11 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
             if ds.name in filecovmat.index.get_level_values(1):
                 uncutlength = len(filecovmat.xs(ds.name, level=1))
                 cuts = ds.cuts
-                if cuts is None:
-                    cuts_list.append(np.arange(ndata, ndata+uncutlength))
-                else:
-                    cuts_list.append(ndata+cuts.load())
-                ndata += uncutlength
-                # Creating new index
-                for i in range(len(cuts.load())):
-                    indextuples.append((group.name, ds.name, float(i)))
-    newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0)
-    total_cuts = np.concatenate(cuts_list, axis=0)
-    cut_covmat = filecovmat.values[:, total_cuts][total_cuts, :]
-    cut_df = pd.DataFrame(cut_covmat, index=newindex,
-                          columns=newindex)
+                # Creating new index for with cuts
+                for keeploc in cuts.load():
+                    indextuples.append((group.name, ds.name, keeploc))
+    newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0) 
+    cut_df = filecovmat.reindex(newindex).dropna(0).dropna(1)
     # Make dimensions match those of exp covmat. First make empty df of
     # exp covmat dimensions
     empty_df = pd.DataFrame(0, index=groups_index, columns=groups_index)
