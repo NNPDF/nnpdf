@@ -486,5 +486,11 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new EIC_NC_EMD_88_PESFilter());
   target.push_back(new EIC_NC_EMD_66_PESFilter());
   target.push_back(new EIC_NC_EMD_28_PESFilter());
+  target.push_back(new EIC_NC_EPD_88_OPTFilter());
+  target.push_back(new EIC_NC_EPD_66_OPTFilter());
+  target.push_back(new EIC_NC_EPD_28_OPTFilter());
+  target.push_back(new EIC_NC_EPD_88_PESFilter());
+  target.push_back(new EIC_NC_EPD_66_PESFilter());
+  target.push_back(new EIC_NC_EPD_28_PESFilter());
   
 }

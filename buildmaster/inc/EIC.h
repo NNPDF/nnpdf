@@ -243,3 +243,57 @@ public: EIC_NC_EMD_28_PESFilter():
 private:
   void ReadData();
 };
+
+class EIC_NC_EPD_88_OPTFilter: public CommonData
+{
+public: EIC_NC_EPD_88_OPTFilter():
+  CommonData("EIC_NC_EPD_88_OPT") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EPD_66_OPTFilter: public CommonData
+{
+public: EIC_NC_EPD_66_OPTFilter():
+  CommonData("EIC_NC_EPD_66_OPT") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EPD_28_OPTFilter: public CommonData
+{
+public: EIC_NC_EPD_28_OPTFilter():
+  CommonData("EIC_NC_EPD_28_OPT") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EPD_88_PESFilter: public CommonData
+{
+public: EIC_NC_EPD_88_PESFilter():
+  CommonData("EIC_NC_EPD_88_PES") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EPD_66_PESFilter: public CommonData
+{
+public: EIC_NC_EPD_66_PESFilter():
+  CommonData("EIC_NC_EPD_66_PES") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EIC_NC_EPD_28_PESFilter: public CommonData
+{
+public: EIC_NC_EPD_28_PESFilter():
+  CommonData("EIC_NC_EPD_28_PES") { ReadData(); }
+
+private:
+  void ReadData();
+};
