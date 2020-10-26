@@ -63,11 +63,11 @@ def set_lhapdf_info(info_path, nrep):
 
 
 class PostfitError(Exception):
-    """Exception raised when postfit cannot suceed and knows why"""
+    """Exception raised when postfit cannot succeed and knows why"""
     pass
 
 class FatalPostfitError(Exception):
-    """Excption raised when some corrupted input is detected"""
+    """Exception raised when some corrupted input is detected"""
     pass
 
 def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold):
@@ -189,7 +189,7 @@ def main(command_line=None):
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
-    parser.add_argument('result_path', help="Folder containig the "
+    parser.add_argument('result_path', help="Folder containing the "
                                             "results of the fit")
     parser.add_argument(
         '--chi2-threshold',
@@ -225,7 +225,7 @@ def main(command_line=None):
             file=sys.stderr)
         sys.exit(1)
     except Exception as e:
-        log.critical(f"Bug in postfit ocurred. Please report it.")
+        log.critical(f"Bug in postfit occurred. Please report it.")
         print(
             colors.color_exception(e.__class__, e, e.__traceback__),
             file=sys.stderr)
