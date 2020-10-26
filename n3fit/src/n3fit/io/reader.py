@@ -56,7 +56,7 @@ def make_tr_val_mask(datasets, exp_name, seed):
         for fktable_dict in dataset_dict["fktables"]:
             tr_fks.append(fktable_dict["fktable"][mask])
             vl_fks.append(fktable_dict["fktable"][vl_mask])
-            ex_fks.append(fktable_dict.pop("fktable"))
+            ex_fks.append(fktable_dict.get("fktable"))
         dataset_dict["tr_fktables"] = tr_fks
         dataset_dict["vl_fktables"] = vl_fks
         dataset_dict["ex_fktables"] = ex_fks
