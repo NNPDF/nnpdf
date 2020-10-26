@@ -16,7 +16,7 @@ from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
 from n3fit.backends import losses
-from n3fit.backends import MetaLayer, Concatenate, Lambda
+from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
 import tensorflow as tf
@@ -66,7 +66,9 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     """
     spec_name = spec_dict["name"]
     dataset_xsizes = []
-    model_obs = []
+    model_obs_tr = []
+    model_obs_vl = []
+    model_obs_ex = []
     model_inputs = []
     # The first step is to compute the observable for each of the datasets
     for dataset_dict in spec_dict["datasets"]:
@@ -89,11 +91,16 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer = Obs_Layer(dataset_dict["fktables"], operation_name, name=f"dat_{dataset_name}")
+        obs_layer_tr = Obs_Layer(dataset_dict["fktables"], dataset_dict["tr_fktables"], operation_name, name=f"dat_{dataset_name}")
+        if spec_dict["positivity"]:
+            obs_layer_ex = obs_layer_tr
+            obs_layer_vl = obs_layer_tr
+        else:
+            obs_layer_ex = Obs_Layer(dataset_dict["fktables"], dataset_dict["ex_fktables"], operation_name, name=f"dat_{dataset_name}")
+            obs_layer_vl = Obs_Layer(dataset_dict["fktables"], dataset_dict["vl_fktables"], operation_name, name=f"dat_{dataset_name}")
 
-        # To know how many xpoints we compute we are duplicating functionality from obs_layer
-        # but for now it is ok
-        if obs_layer.splitting is None:
+        # To know how many xpoints we compute we are duplicating functionality from obs_layer but for now it is ok
+        if obs_layer_tr.splitting is None:
             xgrid = dataset_dict["fktables"][0]["xgrid"]
             model_inputs.append(xgrid)
             dataset_xsizes.append(xgrid.shape[1])
@@ -102,13 +109,19 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
-        model_obs.append(obs_layer)
+        model_obs_tr.append(obs_layer_tr)
+        model_obs_vl.append(obs_layer_vl)
+        model_obs_ex.append(obs_layer_ex)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
-    concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
+    concatenator = lambda x: operations.concatenate(x, axis=1, name=f"{spec_name}")
+    namer_tr =  Mask(c = 1.0, name = spec_name)
+    namer_ex =  Mask(c = 1.0, name = f"{spec_name}_exp")
+    namer_vl =  Mask(c = 1.0, name = f"{spec_name}_val")
 
     # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(pdf, datasets_out=None):
+    def experiment_layer(pdf, model_obs = model_obs_ex, namer = namer_ex, datasets_out=None):
+        """ By default works with the experiment observable """
         output_layers = []
         # First split the pdf layer into the different datasets if needed
         if len(dataset_xsizes) > 1:
@@ -129,11 +142,8 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 obs_output = mask_out(obs_output)
             output_layers.append(obs_output)
         # Concatenate all datasets as experiments are one single entity if needed
-        if len(output_layers) > 1:
-            output_layer = concatenator(output_layers)
-        else:
-            output_layer = output_layers[0]
-        return output_layer
+        res = concatenator(output_layers)
+        return namer(res)
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
@@ -186,16 +196,17 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     loss = losses.l_invcovmat(invcovmat)
 
     def out_tr(pdf_layer, datasets_out=None):
-        exp_result = experiment_layer(pdf_layer, datasets_out=datasets_out)
+        exp_result = experiment_layer(pdf_layer, model_obs=model_obs_tr, namer=namer_tr, datasets_out=datasets_out)
         if obsrot is not None:
             exp_result = obsrot(exp_result)
-        return out_tr_mask(exp_result)
+        # TODO: rotations might be broken!!!
+        return exp_result
 
     def out_vl(pdf_layer, datasets_out=None):
-        exp_result = experiment_layer(pdf_layer, datasets_out=datasets_out)
+        exp_result = experiment_layer(pdf_layer, model_obs=model_obs_vl, namer=namer_vl, datasets_out=datasets_out)
         if obsrot is not None:
             exp_result = obsrot(exp_result)
-        return out_vl_mask(exp_result)
+        return exp_result
 
     layer_info = {
         "inputs": model_inputs,

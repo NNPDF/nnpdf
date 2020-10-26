@@ -2,7 +2,7 @@
     Library of function for reading  NNPDF objects
 """
 import hashlib
-import copy
+from copy import deepcopy
 from collections import defaultdict
 import numpy as np
 
@@ -13,16 +13,25 @@ from validphys.core import DataSetSpec as vp_Dataset
 
 def make_tr_val_mask(datasets, exp_name, seed):
     """
-    Generates the training and validation masks for a given experiment
+    Masks the fktables for a given experiment
 
-    # Arguments:
-        - `datasets`: list of datasets corresponding to one experiment
-        - `exp_name`: name of the experiment
-        - `seed` : seed for the random tr/vl split
+    Parameters
+    ----------
+        datasets: list
+            list of datasets specs for a given experiment
+        exp_name: str
+            name of the experiment, it is used for the generation of the random number
+        seed: int
+            seed for the random tr/vl split
 
-    # Return
-        - `trmask`: numpy boolean array
-        - `vlmask`: not trmask
+    Return
+    ------
+        trmask: np.array
+            boolean array with the mask corresponding to the training set
+        vlmask: np.array
+            boolean array with the mask corresponding to the validation set
+
+    Note: the returned masks are only used in order to mask the covmat
     """
     # Set the seed for the experiment
     nameseed = int(hashlib.sha256(exp_name.encode()).hexdigest(), 16) % 10 ** 8
@@ -39,8 +48,22 @@ def make_tr_val_mask(datasets, exp_name, seed):
             [np.ones(trmax, dtype=np.bool), np.zeros(ndata - trmax, dtype=np.bool)]
         )
         np.random.shuffle(mask)
+        vl_mask = mask == False
+        # Generate the training and validation fktables
+        tr_fks = []
+        vl_fks = []
+        ex_fks = []
+        for fktable_dict in dataset_dict["fktables"]:
+            tr_fks.append(fktable_dict["fktable"][mask])
+            vl_fks.append(fktable_dict["fktable"][vl_mask])
+            ex_fks.append(fktable_dict.pop("fktable"))
+        dataset_dict["tr_fktables"] = tr_fks
+        dataset_dict["vl_fktables"] = vl_fks
+        dataset_dict["ex_fktables"] = ex_fks
+
         trmask_partial.append(mask)
-        vlmask_partial.append(mask == False)
+        vlmask_partial.append(vl_mask)
+
     trmask = np.concatenate(trmask_partial)
     vlmask = np.concatenate(vlmask_partial)
 
@@ -355,6 +378,7 @@ def positivity_reader(pos_spec):
             "name": pos_spec.name,
             "frac": 1.0,
             "ndata": ndata,
+            "tr_fktables": [i["fktable"] for i in parsed_set]
         }
     ]
 
