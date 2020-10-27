@@ -30,6 +30,8 @@ def set_initial_state(seed=13, max_cores=None):
     At the moment this is only enabled for debugging and by default sets the number of threads to 1
     Note that choosing more than 1 cores could potentially break reproducibility
     """
+    # Set the initial seed for the hyperoptimization
+    os.environ.setdefault("HYPEROPT_FMIN_SEED", str(seed))
 
     np.random.seed(seed)
     use_seed = np.random.randint(0, pow(2, 31))
