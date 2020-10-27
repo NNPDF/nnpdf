@@ -85,7 +85,7 @@ fitting:
   load: False
 
   seed     : 9453862133528      # set the seed for the random generator
-  genrep   : True     # on = generate MC replicas, off = use real data
+  genrep   : True     # true = generate MC replicas, false = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants : 80     # Number of mutants for replica
@@ -158,10 +158,10 @@ positivity:
 ############################################################
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : False # on = to use FAKEPDF to generate pseudo-data
+  fakedata    : False # true = to use FAKEPDF to generate pseudo-data
   fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
   errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : False # on = to add random fluctuations to pseudo-data
+  fakenoise   : False # true = to add random fluctuations to pseudo-data
   rancutprob  : 1.0 # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: False # 0(1) to output training(valiation) chi2 in report

@@ -1,5 +1,5 @@
 # runcard for libluxqed
-qed_running: on  # determines the running of alpha.
+qed_running: true  # determines the running of alpha.
 q2_max     : 1e9  # the maximum allowed Q2.
 eps_base   : 1e-5 # precision on final integration of double integral.
 eps_rel    : 1e-1 # extra precision on any single integration.
@@ -23,10 +23,10 @@ rescale_r: 1
 allm_limits: 0
 rescale_non_resonance: 1
 rescale_resonance: 1
-use_mu2_as_upper_limit: off
+use_mu2_as_upper_limit: false
 q2min_inel_override: 0.0
 q2max_inel_override: 1E300
 lhapdf_transition_q2: 9
 
 # general
-verbose: on
+verbose: true

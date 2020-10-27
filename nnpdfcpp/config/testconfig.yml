@@ -53,7 +53,7 @@ fitting:
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
-      # pos: on for NN squared
+      # pos: true for NN squared
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
