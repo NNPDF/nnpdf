@@ -13,12 +13,13 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 import random as rn
 import numpy as np
 import tensorflow as tf
+
 # for (very slow but fine grained) debugging turn eager mode on
 # tf.config.run_functions_eagerly(True)
 from tensorflow.keras import backend as K
 
 
-def set_initial_state(seed=13):
+def set_initial_state(seed=13, max_cores=None):
     """
     Sets the initial state of the backend
     This is the only way of getting reproducible results for keras-tensorflow
@@ -26,7 +27,8 @@ def set_initial_state(seed=13):
     This function needs to be called before __any__ tensorflow related stuff is called so
     it will clear the keras session to ensure the initial state is set
 
-    At the moment this is only enabled for debugging as forces the use of only one thread
+    At the moment this is only enabled for debugging and by default sets the number of threads to 1
+    Note that choosing more than 1 cores could potentially break reproducibility
     """
 
     np.random.seed(seed)
@@ -34,20 +36,24 @@ def set_initial_state(seed=13):
     rn.seed(use_seed)
 
     # Clear the state of keras in case anyone used it before
-    K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(1)
-    tf.config.threading.set_intra_op_parallelism_threads(1)
+    # and set the number of cores depending on the user choice of max_cores
+    if max_cores is None:
+        K.clear_session()
+        tf.config.threading.set_inter_op_parallelism_threads(1)
+        tf.config.threading.set_intra_op_parallelism_threads(1)
+    else:
+        clear_backend_state(max_cores=max_cores)
     tf.random.set_seed(use_seed)
-
-    return 0
 
 
 def clear_backend_state(max_cores=None):
     """
-        Clears the state of the backend and opens a new session.
+    Clears the state of the backend and opens a new session.
 
-        Note that this function needs to set the TF session, including threads and processes
-        i.e., this function must NEVER be called after setting the initial state.
+    Note that this function needs to set the TF session, including threads and processes
+    i.e., this function must NEVER be called after setting the initial state.
+
+    The number of cores set will be min(max_cores, physical cores of the system)
     """
     print("Clearing session")
 
@@ -56,19 +62,21 @@ def clear_backend_state(max_cores=None):
     logical = psutil.cpu_count(logical=True)
     tpc = int(logical / cores)
 
-    # We might not have access to all cpu, but assume we get all associated threads for a cpu
+    # We might not have access to all cpus, but assume we get all associated threads for a cpu
     try:
         affinity = psutil.Process().cpu_affinity()
         if len(affinity) != logical:
-            cores = int(len(affinity) * tpc)
+            cores = int(len(affinity) / tpc)
     except AttributeError:
         # travis Mac OS does not have "cpu_affinity", not sure whether is common to all Macs
         pass
 
-    # And, in any case, we never want to get above the number provided by the user
+    # In any case, we never want to get above the number provided by the user
     if max_cores is not None:
         cores = min(cores, max_cores)
 
     K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(tpc)
+    # Set the number of thread per cores to 2 * the hyperthreading capabilities
+    tf.config.threading.set_inter_op_parallelism_threads(tpc*2)
+    # Set the maximum number of processes to the number of cores
     tf.config.threading.set_intra_op_parallelism_threads(cores)

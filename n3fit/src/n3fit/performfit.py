@@ -148,7 +148,7 @@ def performfit(
         # (important to avoid non-deterministic multithread or hidden states)
         from n3fit.backends import set_initial_state
 
-        set_initial_state()
+        set_initial_state(max_cores=maxcores)
     ###############
 
     from n3fit.stopwatch import StopWatch
@@ -356,6 +356,6 @@ def performfit(
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
 
-    if tboard is not None:
-        log.info("Tensorboard logging information is stored at %s", log_path)
+        if tboard is not None:
+            log.info("Tensorboard logging information is stored at %s", log_path)
 
