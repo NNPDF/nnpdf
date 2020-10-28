@@ -861,25 +861,11 @@ class CoreConfig(configparser.Config):
             The covariance matrix is computed using
             ``theory_block_diag_covmat``.
         """
-        valid_type = {"full", "blockdiagonal", "diagonal"}
-        if thcovmat_type not in valid_type:
-            raise ConfigError(
-                f"Invalid thcovmat_type setting: '{valid_type}'.",
-                thcovmat_type,
-                valid_type,
-            )
 
-        from validphys.theorycovariance.construction import theory_covmat_custom
-        from validphys.theorycovariance.construction import theory_diagonal_covmat
-        from validphys.theorycovariance.construction import theory_block_diag_covmat
+        from validphys.theorycovariance.construction import total_theory_covmat
 
-        if thcovmat_type == "full":
-            f = theory_covmat_custom
-        if thcovmat_type == "diagonal":
-            f = theory_diagonal_covmat
-        if thcovmat_type == "blockdiagonal":
-            f = theory_block_diag_covmat
-
+        f = total_theory_covmat
+        
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
