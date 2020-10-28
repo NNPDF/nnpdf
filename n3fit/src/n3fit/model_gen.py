@@ -129,14 +129,17 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         model_obs_ex.append(obs_layer_ex)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
-    concatenator = lambda x: operations.concatenate(x, axis=1, name=f"{spec_name}")
-    # Tensorflow operations have ugly name, we want the final observables to be named just {spec_name} (with'val' if needed)
-    namer_tr = Mask(c=1.0, name=spec_name)
-    namer_ex = Mask(c=1.0, name=f"{spec_name}_exp")
-    namer_vl = Mask(c=1.0, name=f"{spec_name}_val")
+    def gen_concat(name):
+        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 1}, name=name)
+
+    # Tensorflow operations have ugly name,
+    # we want the final observables to be named just {spec_name} (with'val/exp' if needed)
+    concat_tr = gen_concat(spec_name)
+    concat_ex = gen_concat(f"{spec_name}_exp")
+    concat_vl = gen_concat(f"{spec_name}_val")
 
     # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(pdf, model_obs=model_obs_ex, namer=namer_ex, datasets_out=None):
+    def experiment_layer(pdf, model_obs=model_obs_ex, concat=concat_ex, datasets_out=None):
         """ By default works with the experiment observable """
         output_layers = []
         # First split the pdf layer into the different datasets if needed
@@ -158,8 +161,7 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 obs_output = mask_out(obs_output)
             output_layers.append(obs_output)
         # Concatenate all datasets as experiments are one single entity if needed
-        res = concatenator(output_layers)
-        return namer(res)
+        return concat(output_layers)
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
@@ -213,7 +215,7 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     def out_tr(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
-            pdf_layer, model_obs=model_obs_tr, namer=namer_tr, datasets_out=datasets_out
+            pdf_layer, model_obs=model_obs_tr, concat=concat_tr, datasets_out=datasets_out
         )
         if obsrot is not None:
             exp_result = obsrot(exp_result)
@@ -222,7 +224,7 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     def out_vl(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
-            pdf_layer, model_obs=model_obs_vl, namer=namer_vl, datasets_out=datasets_out
+            pdf_layer, model_obs=model_obs_vl, concat=concat_vl, datasets_out=datasets_out
         )
         if obsrot is not None:
             exp_result = obsrot(exp_result)
@@ -326,11 +328,11 @@ def generate_dense_per_flavour_network(
 
         if i == number_of_layers - 1:
             # For the last layer, apply concatenate
-            concatenator = base_layer_selector("concatenate")
+            concat = base_layer_selector("concatenate")
 
             def output_layer(ilayer):
                 result = layer(ilayer)
-                return concatenator(result)
+                return concat(result)
 
             list_of_pdf_layers.append(output_layer)
         else:
