@@ -383,8 +383,11 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
 
 @table
 def fromfile_covmat(covmatpath, groups_data, groups_index):
-    """Reads the custom covariance matrix from file and applies cuts
-    to match experiment covaraince matrix"""
+    """Reads the custom covariance matrix from file. Then
+    1: Applies cuts to match experiment covaraince matrix
+    2: Expands dimensions to match experiment covariance matrix
+       by filling additional entries with 0."""
+    # Load covmat as pandas DataFrame
     filecovmat = pd.read_csv(covmatpath,
             index_col=[0,1,2], header=[0,1,2])
     filecovmat = pd.DataFrame(filecovmat.values,
@@ -397,39 +400,56 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
             dslist.append(ds.name)
     filecovmat = filecovmat.reindex(dslist, level="dataset")
     filecovmat = ((filecovmat.T).reindex(dslist, level="dataset")).T
+    # ------------- #
+    # 1: Apply cuts #
+    # ------------- #
+    # Loading cuts to apply to covariance matrix
     indextuples = []
     for group in groups_data:
         for ds in group.datasets:
+            # Load cuts for each dataset in the covmat
             if ds.name in filecovmat.index.get_level_values(1):
                 cuts = ds.cuts
-                # Creating new index for with cuts
+                # Creating new index for post cuts
                 for keeploc in cuts.load():
                     indextuples.append((group.name, ds.name, keeploc))
     newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0) 
+    # Reindex covmat with the new cut index
     cut_df = filecovmat.reindex(newindex).T
     cut_df = cut_df.reindex(newindex).T
+    # Elements where cuts are applied will become NaN - remove these rows and columns
     cut_df = cut_df.dropna(0).dropna(1)
-    # Make dimensions match those of exp covmat. First make empty df of
-    # exp covmat dimensions
+    # -------------------- #
+    # 2: Expand dimensions #
+    # -------------------- #
+    # First make empty df of exp covmat dimensions
     empty_df = pd.DataFrame(0, index=groups_index, columns=groups_index)
     covmats = []
+    # Make a piece of the covmat for each combination of two datasetes
     for ds1 in dslist:
         for ds2 in dslist:
             if (ds1 in newindex.unique(level=1)) and (ds2 in newindex.unique(level=1)):
+                # If both datasets in the fromfile covmat, use the piece of the fromfile covmat
                 covmat = cut_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
             else:
+                # Otherwise use a covmat of 0s
                 covmat = empty_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
             covmats.append(covmat)
     chunks = []
+    # Arrange into chunks, each chunk is a list of pieces of covmat which are associated with 
+    # one dataset in particular
     for x in range(0, len(covmats), len(dslist)):
         chunk = covmats[x:x+len(dslist)]
         chunks.append(chunk)
     strips = []
+    # Concatenate each chunk into a strip of the covariance matrix 
     for chunk in chunks:
         strip = pd.concat(chunk, axis=1)
         strips.append(strip.T)
     strips.reverse()
+    # Concatenate the strips to make the full matrix
     full_df = pd.concat(strips, axis=1)
+    # Reindex to align with experiment covmat index
     full_df = full_df.reindex(groups_index)
     full_df = ((full_df.T).reindex(groups_index)).T
     return full_df
