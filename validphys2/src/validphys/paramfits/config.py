@@ -85,7 +85,7 @@ class ParamfitsConfig(Config):
                 raise ConfigError("dataspecs should be a sequence of mappings, "
                       f" but {spec} is {type(spec).__name__}")
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, df = self.parse_from_(None, 'fits_computed_psedorreplicas_chi2', write=False)
+                _, df = self.parse_from_(None, 'fits_computed_pseudoreplicas_chi2', write=False)
                 _, asval = self.parse_from_(None, 'fits_as', write=False)
                 _, namelist = self.parse_from_(None, 'fits_name', write=False)
                 if not dfs:
@@ -98,7 +98,7 @@ class ParamfitsConfig(Config):
         res = tableloader.combine_pseudoreplica_tables(dfs, finalnames,
                 blacklist_datasets=blacklist_datasets)
 
-        return {'fits_computed_psedorreplicas_chi2': res}
+        return {'fits_computed_pseudoreplicas_chi2': res}
 
 
     #TODO: autogenerate functions like this
@@ -144,26 +144,26 @@ class ParamfitsConfig(Config):
         df.columns = newcols
         return df
 
-    def parse_fits_computed_psedorreplicas_chi2_output(self, fname:str,
+    def parse_fits_computed_pseudoreplicas_chi2_output(self, fname:str,
             config_rel_path):
         """Return a namespace (mapping) with the output of
-        ``fits_computed_psedorreplicas_chi2_table`` as read from the specified
+        ``fits_computed_pseudoreplicas_chi2_table`` as read from the specified
         filename. Use a {@with@} block to pass it to the providers.
         The fit names must be provided explicitly."""
-        return self._get_table(tableloader.load_fits_computed_psedorreplicas_chi2,
+        return self._get_table(tableloader.load_fits_computed_pseudoreplicas_chi2,
                              fname, config_rel_path)
 
 
-    def produce_use_fits_computed_psedorreplicas_chi2_output(
-            self, fits_computed_psedorreplicas_chi2_output, fits_name):
+    def produce_use_fits_computed_pseudoreplicas_chi2_output(
+            self, fits_computed_pseudoreplicas_chi2_output, fits_name):
         """Select the columns of the input file matching the fits."""
-        df = fits_computed_psedorreplicas_chi2_output
+        df = fits_computed_pseudoreplicas_chi2_output
         try:
             df = df[fits_name]
         except Exception as e:
             raise ConfigError(f"Could not select the fit names from the table: {e}") from e
 
-        return {'fits_computed_psedorreplicas_chi2':  df}
+        return {'fits_computed_pseudoreplicas_chi2':  df}
 
 
     @element_of('extra_sums')
@@ -180,7 +180,7 @@ class ParamfitsConfig(Config):
         return s
 
     def produce_fits_matched_pseudoreplicas_chi2_by_experiment_and_dataset(self,
-            fits_computed_psedorreplicas_chi2, prepend_total:bool=True,
+            fits_computed_pseudoreplicas_chi2, prepend_total:bool=True,
             extra_sums=None):
         """Take the table returned by
         ``fits_matched_pseudoreplicas_chi2_output`` and break it down
@@ -198,7 +198,7 @@ class ParamfitsConfig(Config):
                                   f"of points in {df.name}")
             return val[0]
 
-        df = fits_computed_psedorreplicas_chi2
+        df = fits_computed_pseudoreplicas_chi2
 
         if prepend_total:
             s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum(min_count=1)

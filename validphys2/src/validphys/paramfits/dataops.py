@@ -71,12 +71,12 @@ def get_parabola(asvals, chi2vals):
 #TODO: Export the total here. Not having it is causing huge pain elsewhere.
 @table
 @check_fits_different
-def fits_matched_pseudoreplicas_chi2_table(fits, fits_computed_psedorreplicas_chi2):
+def fits_matched_pseudoreplicas_chi2_table(fits, fits_computed_pseudoreplicas_chi2):
     """Collect the chi^2 of the pseudoreplicas in the fits a single table,
     groped by nnfit_id.
     The columns come in two levels, fit name and (total chi², n).
     The indexes also come in two levels: nnfit_id and experiment name."""
-    return pd.concat(fits_computed_psedorreplicas_chi2, axis=1, keys=map(str,fits))
+    return pd.concat(fits_computed_pseudoreplicas_chi2, axis=1, keys=map(str,fits))
 
 @table
 @check_dataspecs_fits_different
@@ -604,7 +604,7 @@ def pseudoreplicas_stats_error(
 
     return dict(d)
 
-datasepecs_pseudoreplica_stats_error = collect(pseudoreplicas_stats_error, ['dataspecs'])
+dataspecs_pseudoreplica_stats_error = collect(pseudoreplicas_stats_error, ['dataspecs'])
 
 #TODO: This is deprecated FAPP
 @make_argcheck
@@ -649,7 +649,7 @@ def compare_determinations_table_impl(
 @table
 @check_speclabels_different
 def dataspecs_stats_error_table(
-        datasepecs_pseudoreplica_stats_error,
+        dataspecs_pseudoreplica_stats_error,
         dataspecs_dataset_suptitle,
         dataspecs_speclabel,
         dataset_items:(type(None), list) = None,
@@ -657,7 +657,7 @@ def dataspecs_stats_error_table(
     """Return a table with the stats errors of the pseudoreplica determination
     of each dataspec"""
     dfs = []
-    for d in datasepecs_pseudoreplica_stats_error:
+    for d in dataspecs_pseudoreplica_stats_error:
         df = pd.DataFrame(d, columns=ps_cols)
         format_error_value_columns(df, ps_mean, ps_error)
         format_error_value_columns(df, stats_halfone, err_halfone)
@@ -707,7 +707,7 @@ def dataspecs_ndata_table(
             dataspecs_speclabel,
             dataset_items:(list, type(None))=None):
     """Return a table with the same index as
-    datasepecs_as_value_error_table_impl with the number of points
+    dataspecs_as_value_error_table_impl with the number of points
     per dataset."""
     d = {}
     for dslabel, datanames, ndatas in zip(dataspecs_speclabel,
@@ -721,7 +721,7 @@ def dataspecs_ndata_table(
 
 @check_speclabels_different
 @check_dataset_items
-def datasepecs_quad_table_impl(
+def dataspecs_quad_table_impl(
         quad_as_datasets_pseudoreplicas_chi2, dataspecs_speclabel,
         dataspecs_dataset_suptitle,
         dataset_items:(list, type(None)) = None,
@@ -763,7 +763,7 @@ def datasepecs_quad_table_impl(
 
 @check_speclabels_different
 @check_dataset_items
-def datasepecs_as_value_error_table_impl(
+def dataspecs_as_value_error_table_impl(
         dataspecs_as_datasets_pseudoreplicas_chi2, dataspecs_speclabel,
         dataspecs_dataset_suptitle,
         dataset_items:(list, type(None)) = None,
@@ -808,11 +808,11 @@ def datasepecs_as_value_error_table_impl(
     return df
 
 @table
-def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
-    """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+def dataspecs_as_value_error_table(dataspecs_as_value_error_table_impl):
+    """Return ``dataspecs_value_error_table_impl`` formatted nicely"""
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
-    return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
+    return dataspecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
 
 @table
 def dataspecs_as_value_error_table_transposed(dataspecs_as_value_error_table):
@@ -821,11 +821,11 @@ def dataspecs_as_value_error_table_transposed(dataspecs_as_value_error_table):
     return dataspecs_as_value_error_table.T
 
 @table
-def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
-    """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+def dataspecs_quad_value_error_table(dataspecs_quad_table_impl):
+    """Return ``dataspecs_value_error_table_impl`` formatted nicely"""
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
-    return datasepecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
+    return dataspecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
 
 dataspecs_fits_as = collect('fits_as', ['dataspecs'])
 

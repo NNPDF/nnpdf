@@ -279,7 +279,7 @@ def plot_as_datasets_compare(as_datasets_pseudoreplicas_chi2,
     return fig
 
 @figure
-def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
+def plot_dataspecs_as_value_error(dataspecs_as_value_error_table_impl,
         dataspecs_fits_as,
         marktotal:bool=True, fix_limits:bool=True):
     """
@@ -294,7 +294,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 
     """
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     datalabels = df.columns.levels[0]
     catlabels = list(df.index)
     cvs = df.loc[:, (slice(None), 'mean')].T.values
@@ -331,7 +331,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 
 @figure
 def plot_dataspecs_as_value_error_comparing_with_central(
-        datasepecs_as_value_error_table_impl,
+        dataspecs_as_value_error_table_impl,
         as_datasets_central_chi2,
         dataspecs_fits_as,
         speclabel,
@@ -341,7 +341,7 @@ def plot_dataspecs_as_value_error_comparing_with_central(
     central (old) and new partial chi².
     """
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     catlabels = list(df.index)
     replica_cvs = df.loc[:, (speclabel, 'mean')].T.values
     replica_errors = df.loc[:, (speclabel, 'error')].T.values
@@ -476,12 +476,12 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     return fig
 
 @figure
-def plot_pull_plots_global_min(datasepecs_as_value_error_table_impl,
+def plot_pull_plots_global_min(dataspecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Plots the pulls of individual experiments as a barplot."""
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     tots_error = df.loc['Total', (slice(None), 'error')].values
     tots_mean = df.loc['Total', (slice(None), 'mean')].values
 
@@ -516,8 +516,8 @@ def _check_two_speclabels(dataspecs_speclabel):
 @figure
 @_check_two_speclabels
 def alphas_shift(
-    datasepecs_as_value_error_table_impl,
-    datasepecs_quad_table_impl,
+    dataspecs_as_value_error_table_impl,
+    dataspecs_quad_table_impl,
     dataspecs_ndata_table,
     dataspecs_dataset_ndata,
     dataspecs_fits_as,
@@ -533,8 +533,8 @@ def alphas_shift(
         or the quadratic coefficient of the parabolic fit (quad_weights)"""
 
     df1 = dataspecs_ndata_table
-    df = datasepecs_as_value_error_table_impl
-    df2 = datasepecs_quad_table_impl
+    df = dataspecs_as_value_error_table_impl
+    df2 = dataspecs_quad_table_impl
 
 
     tots_mean = df.loc['Total', (slice(None), 'mean')].values
@@ -592,13 +592,13 @@ def alphas_shift(
     return fig
 
 @figuregen
-def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
+def plot_pull_gaussian_fit_pseudo(dataspecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     tots_error = df.loc['Total', (slice(None), 'error')].T.values
     tots_mean = df.loc['Total', (slice(None), 'mean')].T.values
 
