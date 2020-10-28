@@ -12,10 +12,12 @@ import random
 
 
 from validphys.api import API
-from validphys.commondataparser import combine_commondata, load_commondata
-from validphys.covmats import covmat_from_systematics, sqrt_covmat
+from validphys.commondataparser import load_commondata
+from validphys.covmats import (
+    sqrt_covmat,
+    datasets_covmat_from_systematics
+)
 from validphys.loader import Loader
-from validphys.tableloader import parse_exp_mat
 from validphys.tests.conftest import THEORYID
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
@@ -36,8 +38,7 @@ def test_covmat_from_systematics_correlated():
     cds = list(map(l.check_commondata, correlated_datasets))
     ld_cds = list(map(load_commondata, cds))
 
-    combo_cd = combine_commondata(ld_cds)
-    covmat = covmat_from_systematics(combo_cd)
+    covmat = datasets_covmat_from_systematics(ld_cds)
 
     dss = [
         l.check_dataset(i, theoryid=THEORYID, cuts=None) for i in correlated_datasets
@@ -45,7 +46,7 @@ def test_covmat_from_systematics_correlated():
     exp = l.check_experiment("null", dss)
     ld_exp = exp.load()
 
-    assert np.allclose(ld_exp.get_covmat(), covmat)
+    np.testing.assert_allclose(ld_exp.get_covmat(), covmat)
 
 
 def test_covmat_from_systematics(data_config):
@@ -64,9 +65,8 @@ def test_covmat_from_systematics(data_config):
         for cd in cds
     ]
     cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
-    combo_cd = combine_commondata(cut_ld_cds)
 
-    covmat = covmat_from_systematics(combo_cd)
+    covmat = datasets_covmat_from_systematics(cut_ld_cds)
 
     dss = [
         l.check_dataset(i.name, theoryid=THEORYID, cuts="internal")
