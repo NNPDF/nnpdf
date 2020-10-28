@@ -35,7 +35,7 @@ class StoppingCallback(Callback):
     def on_epoch_end(self, epoch, logs=None):
         """ Function to be called at the end of every epoch """
         print_stats = ((epoch + 1) % self.log_freq) == 0
-        # Note taht the input logs correspond to the fit before the weights are updated
+        # Note that the input logs correspond to the fit before the weights are updated
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
             self.model.stop_training = True
@@ -66,7 +66,7 @@ class LagrangeCallback(Callback):
     def __init__(self, datasets, multipliers, update_freq=100):
         super().__init__()
         if len(multipliers) != len(datasets):
-            raise ValueError("The number ofvdatasets and multipliers do not match")
+            raise ValueError("The number of datasets and multipliers do not match")
         self.update_freq = update_freq
         self.datasets = datasets
         self.multipliers = multipliers
