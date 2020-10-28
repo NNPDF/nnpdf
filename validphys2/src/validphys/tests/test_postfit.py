@@ -8,9 +8,12 @@ from os import listdir
 
 from validphys.scripts.postfit import main as postfit
 from validphys.loader import FallbackLoader as Loader
-from validphys.tests.conftest import FIT
 from reportengine.compat import yaml
 
+# Use fit that is only used by this test, rather than importing the default from conftest.py
+# We do this to avoid any unwanted interference between the tests, in particular because this
+# test modifies the postfit folder of the fit and therefore the info associated with its LHAPDF set
+FIT = "191015-mw-001_for_postfit_test"
 
 def test_postfit():
     """Checks that the following happens when postfit is run on a pre-existing fit:
