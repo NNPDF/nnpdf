@@ -19,6 +19,7 @@ from validphys.results import groups_central_values, groups_central_values_no_ta
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
+from validphys.loader import FallbackLoader
 
 log = logging.getLogger(__name__)
 
@@ -379,6 +380,117 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
     df = pd.DataFrame(cov_by_exp, index=groups_index,
                       columns=groups_index)
     return df
+
+@table
+def fromfile_covmat(covmatpath, groups_data, groups_index):
+    """Reads the custom covariance matrix from file and applies cuts
+    to match experiment covaraince matrix"""
+    filecovmat = pd.read_csv(covmatpath,
+            index_col=[0,1,2], header=[0,1,2])
+    filecovmat = pd.DataFrame(filecovmat.values,
+                            index=filecovmat.index,
+                            columns=filecovmat.index)
+    # Reordering covmat to match exp order in runcard
+    dslist = []
+    for group in groups_data:
+        for ds in group.datasets:
+            dslist.append(ds.name)
+    filecovmat = filecovmat.reindex(dslist, level="dataset")
+    filecovmat = ((filecovmat.T).reindex(dslist, level="dataset")).T
+    indextuples = []
+    for group in groups_data:
+        for ds in group.datasets:
+            if ds.name in filecovmat.index.get_level_values(1):
+                cuts = ds.cuts
+                # Creating new index for with cuts
+                for keeploc in cuts.load():
+                    indextuples.append((group.name, ds.name, keeploc))
+    newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0) 
+    cut_df = filecovmat.reindex(newindex).T
+    cut_df = cut_df.reindex(newindex).T
+    cut_df = cut_df.dropna(0).dropna(1)
+    # Make dimensions match those of exp covmat. First make empty df of
+    # exp covmat dimensions
+    empty_df = pd.DataFrame(0, index=groups_index, columns=groups_index)
+    covmats = []
+    for ds1 in dslist:
+        for ds2 in dslist:
+            if (ds1 in newindex.unique(level=1)) and (ds2 in newindex.unique(level=1)):
+                covmat = cut_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+            else:
+                covmat = empty_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+            covmats.append(covmat)
+    chunks = []
+    for x in range(0, len(covmats), len(dslist)):
+        chunk = covmats[x:x+len(dslist)]
+        chunks.append(chunk)
+    strips = []
+    for chunk in chunks:
+        strip = pd.concat(chunk, axis=1)
+        strips.append(strip.T)
+    strips.reverse()
+    full_df = pd.concat(strips, axis=1)
+    full_df = full_df.reindex(groups_index)
+    full_df = ((full_df.T).reindex(groups_index)).T
+    return full_df
+
+@table
+def deuteron_covmat(groups_data, groups_index,
+                    deuteron_covmat_path: str = "",
+                    use_deuteron_uncertainties: bool = False):
+    if use_deuteron_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file(deuteron_covmat_path)
+        return fromfile_covmat(fileloc, groups_data, groups_index)
+
+@table
+def nuclear_covmat(groups_data, groups_index,
+                    nuclear_covmat_path: str = "",
+                    use_nuclear_uncertainties: bool = False):
+    if use_nuclear_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file(nuclear_covmat_path)
+        return fromfile_covmat(fileloc, groups_data, groups_index)
+
+@table
+def user_covmat(groups_data, groups_index,
+                user_covmat_path: str = "",
+                use_user_uncertainties: bool = False):
+    if use_user_uncertainties is False:
+        return pd.DataFrame(0, index=groups_index, columns=groups_index)
+    else:
+        l = FallbackLoader()
+        fileloc = l.check_vp_output_file(user_covmat_path)
+        return fromfile_covmat(fileloc, groups_data, groups_index)
+
+@table
+def total_theory_covmat(
+        groups_index,
+      #  theory_covmat_custom,
+        nuclear_covmat,
+        deuteron_covmat,
+        user_covmat,
+        use_scalevar_uncertainties: bool = False,
+        use_deuteron_uncertainties: bool = False,
+        use_nuclear_uncertainties: bool = False,
+        use_user_uncertainties: bool = False):
+
+    f = pd.DataFrame(0, index=groups_index, columns=groups_index)
+
+  #  if use_scalevar_uncertainties is True:
+  #      f = f + theory_covmat_custom
+    if use_deuteron_uncertainties is True:
+        f = f + deuteron_covmat
+    if use_nuclear_uncertainties is True:
+        f = f + nuclear_covmat
+    if use_user_uncertainties is True:
+        f = f + user_covmat
+    return f
+
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_groups(groups_results_theory,
