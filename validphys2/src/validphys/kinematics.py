@@ -160,15 +160,26 @@ def xq2map_with_cuts(commondata, cuts):
 
 experiments_xq2map = collect(xq2map_with_cuts, ('dataset_inputs',))
 
-@table
-def kinematics_table(commondata, kinlimits):
+def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     """
     Table containing the kinematics of a commondata object,
-    indexed by their datapoint id.
-    """
-    ld_cd = commondata.load()
-    labels = [kinlimits[kin] for kin in ('k1', 'k2', 'k3')]
-    res = pd.DataFrame(ld_cd.get_kintable(), columns=labels)
+    indexed by their datapoint id. The kinematics will be tranfsormed as per the
+    PLOTTING file of the dataset or process type, and the column headers will
+    be the labels of the variables defined in the metadata.
 
+    If ``show_extra_labels`` is ``True`` then extra label defined in the
+    PLOTTING files will be displayed. Otherwise only the original three
+    kinematics will be shown.
+    """
+    info = plotoptions.get_info(commondata, cuts=cuts)
+    res = plotoptions.kitable(commondata, info, cuts=cuts)
+    res.columns = [*info.kinlabels, *res.columns[3:]]
+    if not show_extra_labels:
+        res = res.iloc[:, :3]
     return res
 
+
+@table
+def kinematics_table(kinematics_table_notable):
+    """Same as kinematics_table_notable but writing the table to file"""
+    return kinematics_table_notable

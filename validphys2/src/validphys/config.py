@@ -232,22 +232,9 @@ class CoreConfig(configparser.Config):
         _, theory = self.parse_from_("fit", "theory", write=False)
         thid = theory["theoryid"]
 
-        # new fits have dataset_inputs, old fits have experiments
-        data_key = "dataset_inputs"
-        try:
-            _, data_val = self.parse_from_("fit", data_key, write=False)
-        except ConfigError as e:
-            data_key = "experiments"
-            log.warning("old fit found, falling back to old behaviour")
-            # We need to make theoryid available if using experiments
-            try:
-                with self.set_context(ns=self._curr_ns.new_child({"theoryid": thid})):
-                    _, data_val = self.parse_from_("fit", data_key, write=False)
-            except ConfigError:
-                raise e
-        # now fill in a unique key "data_input" regardless of new or old fit
-        # for uniformity
-        data_input = self.produce_data_input(**{data_key: data_val})
+        data_input = self._parse_data_input_from_(
+            "fit", {"theoryid": thid}
+        )
         return {"theoryid": thid, "data_input": data_input}
 
     def produce_fitpdf(self, fit):
@@ -1206,21 +1193,67 @@ class CoreConfig(configparser.Config):
         # TODO: get rid of libnnpdf Experiment
         return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
 
-    def produce_data_input(
-        self, dataset_inputs: (list, type(None)) = None, experiments=None
+    def _parse_data_input_from_(
+        self,
+        parse_from_value: (str, type(None)),
+        additional_context: (dict, type(None)) = None,
     ):
-        if dataset_inputs:
-            return dataset_inputs
-        if experiments is not None:
-            log.warning(
-                "`experiments` has been deprecated, specify data using `dataset_inputs`. "
-                "Any grouping defined by `experiments` is being ignored."
-            )
-            return [
-                dsinput for experiment in experiments for dsinput in experiment.dsinputs
-            ]
-        else:
-            raise ConfigError("must specify dataset_inputs in runcard")
+        """Function which parses the ``data_input`` from a namespace. Usage
+        is similar to :py:meth:`self.parse_from_` except this function bridges
+        the gap between the new and old way of specifying data.
+
+        First it attempts to parse ``dataset_inputs`` from the namespace
+        specified by ``parse_from_value``, for more information see
+        :py:meth:`self.parse_from_`. If that fails then attempt to parse
+        ``experiments``. If both should fail then raise the first exception
+        encountered from the second, so that the cause can be surface in
+        ``debug`` mode.
+
+        Parameters
+        ----------
+        parse_from_value: str, None
+            value which will be passed to :py:meth:`self.parse_from_`. If None
+            then parses from the current namespace but can also be another
+            input resource which can be resolved as a ``dict``.
+        additional_context: dict, None
+            additional context to update the namespace specified by
+            ``parse_from_value``.
+            In the case of this function, if ``experiments`` needs to be parsed
+            then it has the additional requirements of ``theoryid`` and
+            ``use_cuts`` which should either already be present in
+            ``parse_from_value`` or can be passed as a ``dict`` using this
+            parameter i.e ``additional_context={"theoryid": 53}``.
+
+        """
+        with self.set_context(ns=self._curr_ns.new_child(additional_context)):
+                # new fits have dataset_inputs, old fits have experiments
+            data_key = "dataset_inputs"
+            try:
+                _, data_val = self.parse_from_(parse_from_value, data_key, write=False)
+            except ConfigError as e:
+                data_key = "experiments"
+                log.warning(
+                    "`experiments` has been deprecated, specify data using `dataset_inputs`. "
+                    "Any grouping defined by `experiments` is being ignored."
+                )
+                # We need to make theoryid available if using experiments
+                try:
+                    _, experiments = self.parse_from_(parse_from_value, data_key, write=False)
+                    data_val = [
+                        dsinput for experiment in experiments for dsinput in experiment.dsinputs
+                ]
+                except ConfigError as inner_error:
+                    raise e from inner_error
+        return data_val
+
+    def produce_data_input(self):
+        """Produce the ``data_input`` which is a flat list of ``dataset_input`` s.
+        This production rule handles the backwards compatibility with old datasets
+        which specify ``experiments`` in the runcard.
+
+        """
+        # parse from current namespace with no additional context.
+        return self._parse_data_input_from_(None)
 
     def parse_metadata_group(self, group: str):
         """User specified key to group data by. The key must exist in the
