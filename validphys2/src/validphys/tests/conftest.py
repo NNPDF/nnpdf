@@ -34,6 +34,26 @@ EXPERIMENTS = [
         'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
     ]
 
+# Experiments which have non trivial correlations between their datasets
+CORR_EXPERIMENTS = [
+    {
+        'experiment': 'ATLAS',
+        'datasets': [
+            {'dataset': 'ATLASWZRAP36PB', 'cfac': ['QCD']},
+            {'dataset': 'ATLASZHIGHMASS49FB', 'cfac': ['QCD']},
+            {'dataset': 'ATLASLOMASSDY11EXT', 'cfac': ['QCD']},
+            {'dataset': 'ATLASWZRAP11', 'frac': 0.5, 'cfac': ['QCD']},
+        ],
+    },
+    {
+        'experiment': 'CMS',
+        'datasets': [
+            {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+            {'dataset': 'CMSJETS11', 'frac': 0.5, 'sys': 10},
+        ],
+    },
+]
+
 SINGLE_EXP = [
     {
         'experiment': 'pseudo experiment',
@@ -70,6 +90,12 @@ def data_config():
     return base_config
 
 @pytest.fixture(scope='module')
+def data_internal_cuts_config(data_config):
+    config_dict = dict(data_config)
+    config_dict.update(use_cuts='internal')
+    return config_dict
+
+@pytest.fixture(scope='module')
 def data_witht0_config():
     config_dict = dict(
         **base_config,
@@ -81,6 +107,18 @@ def data_witht0_config():
 def data_singleexp_witht0_config(data_witht0_config):
     config_dict = dict(data_witht0_config)
     config_dict.update({'experiments': SINGLE_EXP})
+    return config_dict
+
+@pytest.fixture(scope='module')
+def data_with_correlations_config():
+    corr_dict = dict(base_config)
+    corr_dict.update(experiments=CORR_EXPERIMENTS)
+    return corr_dict
+
+@pytest.fixture(scope='module')
+def data_with_correlations_internal_cuts_config(data_with_correlations_config):
+    config_dict = dict(data_with_correlations_config)
+    config_dict.update(use_cuts='internal')
     return config_dict
 
 @pytest.fixture(scope='module')
