@@ -8,12 +8,10 @@ serves as a proof of concept.
 """
 from operator import attrgetter
 
-import numpy as np
 import pandas as pd
-import scipy.linalg as la
 
 from validphys.core import peek_commondata_metadata
-from validphys.coredata import CommonData, SystematicError
+from validphys.coredata import CommonData
 
 def load_commondata(spec):
     """
