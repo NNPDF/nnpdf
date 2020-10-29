@@ -902,3 +902,16 @@ def as_parabolic_coefficient_table(
         tb_polys.append(frame)
     final_table = pd.concat(tb_polys, axis=1, keys=by_dataset_suptitle)
     return final_table
+
+# Define aliases for functions with spelling mistakes in their names which have now been corrected
+# Do this so that old runcards still work
+fits_matched_pseudorreplicas_chi2_table = fits_matched_pseudoreplicas_chi2_table
+dataspecs_matched_pseudorreplicas_chi2_table = dataspecs_matched_pseudoreplicas_chi2_table
+as_datasets_pseudorreplicas_chi2 = as_datasets_pseudoreplicas_chi2
+quadratic_datasets_pseudorreplicas_chi2 = quadratic_datasets_pseudoreplicas_chi2
+pseudorreplicas_stats_error = pseudoreplicas_stats_error
+datasepecs_pseudorreplica_stats_error = dataspecs_pseudoreplica_stats_error
+dataspecs_as_datasets_pseudorreplicas_chi2 = dataspecs_as_datasets_pseudoreplicas_chi2
+quad_as_datasets_pseudorreplicas_chi2 = quad_as_datasets_pseudoreplicas_chi2
+datasepecs_quad_table_impl = dataspecs_quad_table_impl
+datasepecs_as_value_error_table_impl = dataspecs_as_value_error_table_impl

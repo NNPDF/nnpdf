@@ -890,3 +890,8 @@ def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
 
     ax.legend()
     return fig
+
+# Define aliases for functions with spelling mistakes in their names which have now been corrected
+# Do this so that old runcards still work
+plot_as_datasets_pseudorreplicas_chi2 = plot_as_datasets_pseudoreplicas_chi2
+plot_dataspecs_pseudorreplica_means = plot_dataspecs_pseudoreplica_means
