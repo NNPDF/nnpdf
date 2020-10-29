@@ -244,12 +244,12 @@ def check_kfold_options(kfold):
             )
 
 
-def check_correct_partitions(kfold, experiments):
+def check_correct_partitions(kfold, groups_data):
     """Ensures that all experimennts in all partitions
     are included in  the fit definition"""
     # Get all datasets
     datasets = []
-    for exp in experiments:
+    for exp in groups_data:
         datasets += [i.name for i in exp.datasets]
     for partition in kfold["partitions"]:
         fold_sets = partition["datasets"]
@@ -290,7 +290,7 @@ def check_hyperopt_stopping(stopping_dict):
 
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
+def wrapper_hyperopt(hyperopt, hyperscan, fitting, groups_data):
     """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
@@ -306,7 +306,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments):
     check_hyperopt_architecture(hyperscan.get("architecture"))
     check_hyperopt_positivity(hyperscan.get("positivity"))
     check_kfold_options(hyperscan["kfold"])
-    check_correct_partitions(hyperscan["kfold"], experiments)
+    check_correct_partitions(hyperscan["kfold"], groups_data)
 
 
 # Checks on the physics
