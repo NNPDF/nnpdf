@@ -14,9 +14,11 @@ description: n3fit regression test
 experiments:
   - experiment: NMC
     datasets:
-      - { dataset: NMC, frac: 0.5 }      
+      - { dataset: NMC, frac: 0.5 }
+  - experiment: SLAC
+    datasets:
       - { dataset: SLACP, frac: 0.5}
-  - experiment: CMSZDIFF12
+  - experiment: CMS
     datasets:
     - { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
 
