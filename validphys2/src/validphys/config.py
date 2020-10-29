@@ -1252,10 +1252,11 @@ class CoreConfig(configparser.Config):
                 # We need to make theoryid available if using experiments
                 try:
                     _, experiments = self.parse_from_(parse_from_value, data_key, write=False)
-                    data_val = [
+                    data_val = NSList([
                         dsinput for experiment in experiments for dsinput in experiment.dsinputs
-                ]
+                    ], nskey='dataset_input')
                 except ConfigError as inner_error:
+                    log.error(inner_error)
                     raise e from inner_error
         return data_val
 
