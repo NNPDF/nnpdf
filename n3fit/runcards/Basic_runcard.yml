@@ -42,7 +42,7 @@ fitting:
   mcseed: 3
   epochs: 900
   save: 'weights.h5'
-  load: '/path/to/weights.h5/file
+#   load: '/path/to/weights.h5/file'
 
 
   tensorboard:
