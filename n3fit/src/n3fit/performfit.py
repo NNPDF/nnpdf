@@ -342,7 +342,7 @@ def performfit(
         if model_file:
             model_file_path = replica_path_set / model_file
             log.info(" > Saving the weights for future in %s", model_file_path)
-            pdf_model.save_weights(model_file_path)
+            pdf_model.save_weights(model_file_path, save_format="h5")
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
