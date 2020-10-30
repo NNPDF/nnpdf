@@ -264,8 +264,6 @@ def common_data_reader(
         spec_replica_c.MakeReplica()
         all_expdatas.append(spec_replica_c.get_cv())
 
-    # spec_c = spec_replica_c
-
     if isinstance(spec, vp_Exp):
         datasets = common_data_reader_experiment(spec_c, spec)
     elif isinstance(spec, vp_Dataset):
@@ -306,7 +304,9 @@ def common_data_reader(
     # Now it is time to build the masks for the training validation split
     all_dict_out = []
     for expdata, trval_seed in zip(all_expdatas, trval_seeds):
-        tr_mask, vl_mask = make_tr_val_mask(datasets, exp_name, seed=trval_seed)
+        # Each replica has its own dataset
+        datasets_copy = deepcopy(datasets)
+        tr_mask, vl_mask = make_tr_val_mask(datasets_copy, exp_name, seed=trval_seed)
 
         if rotate_diagonal:
             expdata = np.matmul(dt_trans, expdata)
@@ -339,7 +339,7 @@ def common_data_reader(
             folds["experimental"].append(~fold)
 
         dict_out = {
-            "datasets": datasets,
+            "datasets": datasets_copy,
             "name": exp_name,
             "expdata_true": expdata_true,
             "invcovmat_true": inv_true,
