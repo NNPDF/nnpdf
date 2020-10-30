@@ -7,38 +7,26 @@ description:  Hyperopt example
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
+dataset_inputs:
 # Fixed target DIS
-- experiment: NMC
-  datasets:
-  - {dataset: NMCPD, frac: 0.5}
-  - {dataset: NMC, frac: 0.5}
-- experiment: SLAC
-  datasets:
-  - {dataset: SLACP, frac: 0.5}
-  - {dataset: SLACD, frac: 0.5}
-- experiment: BCDMS
-  datasets:
-  - {dataset: BCDMSP, frac: 0.5}
-  - {dataset: BCDMSD, frac: 0.5}
-- experiment: CHORUS
-  datasets:
-  - {dataset: CHORUSNUPb, frac: 0.5}
-  - {dataset: CHORUSNBPb, frac: 0.5}
-- experiment: NTVDMN
-  datasets:
-  - {dataset: NTVNUDMNFe, frac: 0.5}
-  - {dataset: NTVNBDMNFe, frac: 0.5}
+- {dataset: NMCPD, frac: 0.5}
+- {dataset: NMC, frac: 0.5}
+- {dataset: SLACP, frac: 0.5}
+- {dataset: SLACD, frac: 0.5}
+- {dataset: BCDMSP, frac: 0.5}
+- {dataset: BCDMSD, frac: 0.5}
+- {dataset: CHORUSNUPb, frac: 0.5}
+- {dataset: CHORUSNBPb, frac: 0.5}
+- {dataset: NTVNUDMNFe, frac: 0.5}
+- {dataset: NTVNBDMNFe, frac: 0.5}
 # HERA data
-- experiment: HERACOMB
-  datasets:
-  - {dataset: HERACOMBNCEM, frac: 0.5}
-  - {dataset: HERACOMBNCEP460, frac: 0.5}
-  - {dataset: HERACOMBNCEP575, frac: 0.5}
-  - {dataset: HERACOMBNCEP820, frac: 0.5}
-  - {dataset: HERACOMBNCEP920, frac: 0.5}
-  - {dataset: HERACOMBCCEM, frac: 0.5}
-  - {dataset: HERACOMBCCEP, frac: 0.5}
+- {dataset: HERACOMBNCEM, frac: 0.5}
+- {dataset: HERACOMBNCEP460, frac: 0.5}
+- {dataset: HERACOMBNCEP575, frac: 0.5}
+- {dataset: HERACOMBNCEP820, frac: 0.5}
+- {dataset: HERACOMBNCEP920, frac: 0.5}
+- {dataset: HERACOMBCCEM, frac: 0.5}
+- {dataset: HERACOMBCCEP, frac: 0.5}
 
 
 ############################################################
