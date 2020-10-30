@@ -21,7 +21,7 @@ experiments:
   - experiment: CMS
     datasets:
     - { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
-    - { dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD] }
+    - { dataset: CMSTTBARTOT, frac: 1.0, cfac: ['QCD'] }
 
 ############################################################
 datacuts:
