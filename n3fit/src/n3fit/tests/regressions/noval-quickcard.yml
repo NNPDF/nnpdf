@@ -11,10 +11,8 @@ description: n3fit regression test
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
-  - experiment: NMC
-    datasets:
-      - { dataset: NMC, frac: 1.0 }      
+dataset_inputs:
+- { dataset: NMC, frac: 1.0 }
 
 ############################################################
 datacuts:
