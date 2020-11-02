@@ -17,7 +17,7 @@ def make_tr_val_mask(datasets, exp_name, seed):
 
     Parameters
     ----------
-        datasets: list
+        datasets: list[validphys.core.DataSetSpec]
             list of datasets specs for a given experiment
         exp_name: str
             name of the experiment, it is used for the generation of the random number
