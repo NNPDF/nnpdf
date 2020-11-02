@@ -142,18 +142,15 @@ def performfit(
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
     """
+    from n3fit.backends import set_initial_state
 
-    if debug:
-        # If debug is active, fix the initial state this should make the run reproducible
-        # (important to avoid non-deterministic multithread or hidden states)
-        from n3fit.backends import set_initial_state
-
-        set_initial_state(max_cores=maxcores)
-    ###############
+    # If debug is active, the initial state will be fixed should that the run is reproducible
+    set_initial_state(debug=debug, max_cores=maxcores)
 
     from n3fit.stopwatch import StopWatch
 
     stopwatch = StopWatch()
+
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
@@ -342,7 +339,8 @@ def performfit(
         if model_file:
             model_file_path = replica_path_set / model_file
             log.info(" > Saving the weights for future in %s", model_file_path)
-            pdf_model.save_weights(model_file_path, save_format="h5")
+            # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3 though)
+            pdf_model.save_weights(str(model_file_path), save_format="h5")
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results

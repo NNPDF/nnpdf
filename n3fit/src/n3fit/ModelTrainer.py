@@ -766,10 +766,9 @@ class ModelTrainer:
         All other parameters are passed to the corresponding functions
         """
 
-        # Reset the internal state of the backend
+        # Reset the internal state of the backend every time this function is called
         print("")
-        if not self.debug or self.mode_hyperopt:
-            clear_backend_state(max_cores=self.max_cores)
+        clear_backend_state()
 
         # Preprocess some hyperparameters
         epochs = int(params["epochs"])
