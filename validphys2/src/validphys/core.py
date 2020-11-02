@@ -295,6 +295,10 @@ class CommonDataSpec(TupleComp):
         return self.metadata.name
 
     @property
+    def nsys(self):
+        return self.metadata.nsys
+
+    @property
     def ndata(self):
         return self.metadata.ndata
 
