@@ -408,14 +408,14 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
     correlations
 
     """
-    whitelist = {"CORR", "UNCORR", "SKIP", "THEORYUNCORR", "THEORYCORR"}
+    allow_list = {"CORR", "UNCORR", "SKIP", "THEORYUNCORR", "THEORYCORR"}
     systype_groups = dict()
     for group_cd, group in zip(groups_commondata, group_dataset_inputs_by_metadata):
         systype_groups[group["group_name"]] = {
             cd.load().GetSys(0, i).name
             for cd in group_cd
             for i in range(cd.nsys)
-            if cd.load().GetSys(0, i).name not in whitelist
+            if cd.load().GetSys(0, i).name not in allow_list
         }
 
     systype_overlap = set()
