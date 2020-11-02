@@ -692,7 +692,7 @@ class ModelTrainer:
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
 
-        if stopping_object.positivity_pass():
+        if stopping_object.positivity_pass() and stopping_object.integrability_pass():
             return self.pass_status
         else:
             return self.failed_status
@@ -793,6 +793,7 @@ class ModelTrainer:
             epochs,
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
+        threshold_integ = integrability_dict.get("threshold", 10.)
 
         # Initialize the chi2 dictionaries
         l_train = []
@@ -858,7 +859,8 @@ class ModelTrainer:
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 save_weights_each=self.save_weights_each,
-                threshold_positivity=threshold_pos
+                threshold_positivity=threshold_pos,
+                threshold_integrability=threshold_integ
             )
 
             # Compile each of the models with the right parameters

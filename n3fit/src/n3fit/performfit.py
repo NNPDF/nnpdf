@@ -309,12 +309,15 @@ def performfit(
         > > The stopping point has been at: {0} with a loss of {1}
                 which it got at {2}. Stopping degree {3}
                 Positivity state: {4}
+                Integrability state: {5}
                 """.format(
                 stopping_object.epoch_of_the_stop,
                 stopping_object.vl_loss,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
                 stopping_object.positivity_status(),
+                stopping_object.integrability_status()
+
             )
         )
 

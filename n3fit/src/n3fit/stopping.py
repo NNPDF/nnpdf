@@ -12,6 +12,7 @@
     - Stopping: this class monitors the chi2 of the validation
             and training sets and decides when to stop
     - Positivity: Decides whether a given point fullfills the positivity conditions
+    - Integrability: Decides whether a given point fullfills the integrability conditions
     - Validation: Controls the NNPDF cross-validation algorithm
 
     Note:
@@ -43,6 +44,8 @@ INITIAL_CHI2 = 1e9
 # Pass/veto keys
 POS_OK = "POS_PASS"
 POS_BAD = "POS_VETO"
+INTEG_OK = "INTEG_PASS"
+INTEG_BAD = "INTEG_VETO"
 
 
 def parse_ndata(all_data):
@@ -58,6 +61,7 @@ def parse_ndata(all_data):
         `vl_ndata`
             dictionary of {'exp' : ndata}
         `pos_set`: list of the names of the positivity sets
+        `integ_set` : list of the names of the positivity sets 
 
     Note: if there is no validation (total number of val points == 0)
     then vl_ndata will point to tr_ndata
@@ -65,6 +69,7 @@ def parse_ndata(all_data):
     tr_ndata_dict = {}
     vl_ndata_dict = {}
     pos_set = []
+    integ_set = []
     for dictionary in all_data:
         exp_name = dictionary["name"]
         if dictionary.get("count_chi2"):
@@ -76,9 +81,11 @@ def parse_ndata(all_data):
                 vl_ndata_dict[exp_name] = vl_ndata
         if dictionary.get("positivity") and not dictionary.get("integrability"):
             pos_set.append(exp_name)
+        if dictionary.get("positivity") and dictionary.get("integrability"):
+            integ_set.append(exp_name)
     if not vl_ndata_dict:
         vl_ndata_dict = None
-    return tr_ndata_dict, vl_ndata_dict, pos_set
+    return tr_ndata_dict, vl_ndata_dict, pos_set, integ_set
 
 
 def parse_losses(history_object, data, suffix="loss"):
@@ -328,6 +335,7 @@ class Stopping:
         validation_model,
         all_data_dicts,
         threshold_positivity=1e-6,
+        threshold_integrability=10.,
         total_epochs=0,
         stopping_patience=7000,
         threshold_chi2=10.0,
@@ -335,14 +343,15 @@ class Stopping:
         save_weights_each=None,
     ):
         # Parse the training, validation and positivity sets from all the input dictionaries
-        self._tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
+        self._tr_ndata, vl_ndata, pos_sets, integ_sets = parse_ndata(all_data_dicts)
 
-        # Create the Validation, Positivity and History objects
+        # Create the Validation, Positivity, Integrability and History objects
         if vl_ndata is None:
             self.validation = Validation(validation_model, self._tr_ndata, no_validation=True)
         else:
             self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
+        self.integrability = Integrability(threshold_integrability, integ_sets)
         self.history = FitHistory(self.validation, save_weights_each=save_weights_each)
 
         # Initialize internal variables for the stopping
@@ -434,13 +443,14 @@ class Stopping:
 
         # Step 3. Store information about the run and print stats if asked
         fitstate = FitState(all_tr, all_vl, self.validation.state)
+        print(self.validation.state)
         self.history.register(fitstate, epoch)
         if print_stats:
             self.print_current_stats(epoch, fitstate)
-
+        #print(fitstate.info)
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        if self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
+        if self.integrability(fitstate) and self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
             if vl_chi2 < self.history.best_vl():
                 # Set the new best
                 self.history.best_epoch = epoch
@@ -506,6 +516,25 @@ class Stopping:
             return POS_OK
         else:
             return POS_BAD
+
+    def integrability_pass(self):
+        """ Checks whether the integrability loss is below the requested threshold
+        If there is no best state, the integrability (obv) cannot pass
+        """
+        best_state = self.history.best_state()
+        if best_state is not None and self.integrability(best_state):
+            return True
+        else:
+            return False
+
+    def integrability_status(self):
+        """ Checks whether the integrability loss is below the requested threshold
+        If there is no best state, the integrability (obv) cannot pass
+        """
+        if self.integrability_pass():
+            return INTEG_OK
+        else:
+            return INTEG_BAD        
 
     def chi2exps_str(self, log_each=100):
         """
@@ -648,6 +677,8 @@ class Positivity:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well?
             positivity_loss = np.take(history_object[key_loss], -1)
+            print("pos_loss : " + str(positivity_loss))
+            print(self.threshold)
             if positivity_loss > self.threshold:
                 return False
         # If none of the positivities failed, it passes
@@ -659,3 +690,56 @@ class Positivity:
             passes the positivity requirement
         """
         return self.check_positivity(fitstate.info)
+
+class Integrability:
+    """
+        Controls the integrability requirements.
+
+        In order to check the integrability passes will check the history of the fitting
+        as the fitting included integrability sets.
+        If each integrability loss is above a certain value the model is
+        not accepted and the training continues.
+
+        Parameters
+        ----------
+            threshold_integrability: float
+                maximum value allowed for each one of the integrability losses
+            integrability_sets: list
+                list of integrability datasets
+    """
+
+    def __init__(self, threshold, integrability_sets):
+        self.threshold = threshold
+        self.integrability_sets = integrability_sets
+
+    def check_integrability(self, history_object):
+        """
+        This function receives a history objects and loops over the
+        integrability_sets to check the value of the integrability loss.
+
+        If the integrability loss is above the threshold, the integrability fails
+        otherwise, it passes.
+
+        Parameters
+        ----------
+            history_object: dict
+                dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
+        """
+        for key in self.integrability_sets:
+            key_loss = f"{key}_loss"
+            # If we are taking the avg when checking the output, we should do so here as well?
+            #print(history_object)
+            integrability_loss = np.take(history_object[key_loss], -1)
+            print("int_loss : " + str(integrability_loss))
+            print(self.threshold)
+            if integrability_loss > self.threshold:
+                return False
+        # If none of the positivities failed, it passes
+        return True
+
+    def __call__(self, fitstate):
+        """
+            Checks whether a given FitState object
+            passes the integrability requirement
+        """
+        return self.check_integrability(fitstate.info)        
