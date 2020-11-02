@@ -158,14 +158,14 @@ fitting:
     optimizer:
         optimizer_name: 'Adadelta'
         learning_rate: 1.0
-    epochs: 1000
+    epochs: 2000
     integrability:
       initial:
       multiplier: 1.03
     positivity:
         initial:
         multiplier: 1.10
-    stopping_patience: 1.0 # percentage of the number of epochs
+    stopping_patience: 0.1 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.001
 

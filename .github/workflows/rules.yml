@@ -8,8 +8,8 @@ on:
 
 # some general variables
 env:
-  N3FIT_MAXNREP: 5 # total number of replicas to fit
-  POSTFIT_NREP: 5 # requested replicas for postfit
+  N3FIT_MAXNREP: 20 # total number of replicas to fit
+  POSTFIT_NREP: 16 # requested replicas for postfit
   REFERENCE_SET: 231020-nnpdf40_jcm_iterated # reference set for vp
   CONDA_PY: 37
 
@@ -54,7 +54,7 @@ jobs:
       run: |
         source activate nnpdfenv
         cd n3fit/runcards
-        for ((i=1; i<=$N3FIT_MAXNREP; i++)); do n3fit $RUNCARD.yml $i; done
+        for ((i=1; i<=$N3FIT_MAXNREP; i+=2)); do n3fit $RUNCARD.yml $i -r $((i+1)); done
     # performing DGLAP
     - name: Running dglap
       run: |
