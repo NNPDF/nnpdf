@@ -267,6 +267,7 @@ class ModelTrainer:
             "model": None,
             "folds": [],
             "posdatasets": [],
+            "integdatasets": [],
         }
         self.experimental = {
             "output": [],
@@ -353,6 +354,8 @@ class ModelTrainer:
             for integ_dict in self.integ_info:
                 self.training["expdata"].append(integ_dict["expdata"])
                 self.training["integdatasets"].append(integ_dict["name"])
+                self.validation["expdata"].append(integ_dict["expdata"])
+                self.validation["integdatasets"].append(integ_dict["name"])
 
     def _model_generation(self, pdf_model, partition):
         """
@@ -559,6 +562,9 @@ class ModelTrainer:
                 # The integrability all falls to the training
                 self.training["output"].append(integ_layer["output_tr"])
                 self.training["losses"].append(integ_layer["loss_tr"])
+                self.validation["output"].append(integ_layer["output_tr"])
+                self.validation["losses"].append(integ_layer["loss_tr"])
+
                 self.training["integmultipliers"].append(integ_multiplier)
                 self.training["integinitials"].append(integ_initial)
 
@@ -840,7 +846,7 @@ class ModelTrainer:
             # model dicts is similar to model but includes information about
             # the target data and number of points
             model_dicts = self._assign_data(models, k)
-
+            
             # Generate the list containing reporting info necessary for chi2
             reporting = self._prepare_reporting(partition)
 

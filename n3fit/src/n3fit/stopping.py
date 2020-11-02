@@ -440,14 +440,12 @@ class Stopping:
 
         # Step 2. Check the validation loss at this point
         vl_chi2, all_vl = self.validation.loss()
-
         # Step 3. Store information about the run and print stats if asked
         fitstate = FitState(all_tr, all_vl, self.validation.state)
-        print(self.validation.state)
+    
         self.history.register(fitstate, epoch)
         if print_stats:
             self.print_current_stats(epoch, fitstate)
-        #print(fitstate.info)
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
         if self.integrability(fitstate) and self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
@@ -677,8 +675,6 @@ class Positivity:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well?
             positivity_loss = np.take(history_object[key_loss], -1)
-            print("pos_loss : " + str(positivity_loss))
-            print(self.threshold)
             if positivity_loss > self.threshold:
                 return False
         # If none of the positivities failed, it passes
@@ -728,7 +724,6 @@ class Integrability:
         for key in self.integrability_sets:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well?
-            #print(history_object)
             integrability_loss = np.take(history_object[key_loss], -1)
             print("int_loss : " + str(integrability_loss))
             print(self.threshold)
