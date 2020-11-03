@@ -335,7 +335,7 @@ class Stopping:
         validation_model,
         all_data_dicts,
         threshold_positivity=1e-6,
-        threshold_integrability=10.,
+        threshold_integrability=1e-2.,
         total_epochs=0,
         stopping_patience=7000,
         threshold_chi2=10.0,
@@ -448,7 +448,7 @@ class Stopping:
             self.print_current_stats(epoch, fitstate)
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        if self.integrability(fitstate) and self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
+        if self.positivity(fitstate) and self.integrability(fitstate) and vl_chi2 < self.threshold_chi2:
             if vl_chi2 < self.history.best_vl():
                 # Set the new best
                 self.history.best_epoch = epoch
@@ -725,8 +725,6 @@ class Integrability:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well?
             integrability_loss = np.take(history_object[key_loss], -1)
-            print("int_loss : " + str(integrability_loss))
-            print(self.threshold)
             if integrability_loss > self.threshold:
                 return False
         # If none of the positivities failed, it passes

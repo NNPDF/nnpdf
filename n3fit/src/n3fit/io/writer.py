@@ -85,6 +85,7 @@ class WriterWrapper:
             allchi2_lines,
             preproc_lines,
             self.stopping_object.positivity_status(),
+            self.stopping_object.integrability_status(),
             self.timings,
         )
 
@@ -163,6 +164,7 @@ def storefit(
     all_chi2_lines,
     all_preproc_lines,
     pos_state,
+    integ_state,
     timings,
 ):
     """
@@ -198,6 +200,8 @@ def storefit(
             (None)
         `pos_state`
             positivity passing flag
+        `integ_state`
+            integrability passing flag    
         `timings`
             dictionary to dump to file containing timing information of the fit
     """
@@ -237,7 +241,7 @@ def storefit(
     arc_strings = [str(i) for i in arc_lengths]
     arc_line = " ".join(arc_strings)
     with open(f"{replica_path}/{fitname}.fitinfo", "w") as fs:
-        fs.write(f"{nite} {erf_vl} {erf_tr} {chi2} {pos_state}\n")
+        fs.write(f"{nite} {erf_vl} {erf_tr} {chi2} {pos_state} {integ_state}\n")
         fs.write(arc_line)
 
     # create .time file

@@ -799,7 +799,7 @@ class ModelTrainer:
             epochs,
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
-        threshold_integ = integrability_dict.get("threshold", 10.)
+        threshold_integ = integrability_dict.get("threshold", 1e-2)
 
         # Initialize the chi2 dictionaries
         l_train = []

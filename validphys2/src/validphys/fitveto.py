@@ -5,6 +5,7 @@ Module for the determination of passing fit replicas.
 
 Current active vetoes:
    Positivity - Replicas with FitInfo.is_positive == False
+   Integrability - Replicas with FitInfo.is_integrable == False
    ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
    ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
 """
@@ -61,6 +62,12 @@ def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_
     posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
     vetoes = {"Positivity": posmask}
     total_mask = posmask.copy()
+
+    # Integrability veto
+    integmask = np.array([replica.is_integrable for replica in fitinfos], dtype=bool)
+    vetoes = {"Integrability": integmask}
+    total_mask = integmask.copy()
+
 
     # Distribution vetoes
     while True:
