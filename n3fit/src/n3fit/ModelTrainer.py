@@ -874,9 +874,9 @@ class ModelTrainer:
                 epochs=epochs,
             )
 
-            # Compute validation and training loss
-            training_loss = stopping_object.tr_loss
-            validation_loss = stopping_object.vl_loss
+            # Save validation and training chi2
+            training_loss = stopping_object.tr_chi2
+            validation_loss = stopping_object.vl_chi2
 
             # Compute experimental loss
             exp_loss_raw = models["experimental"].compute_losses()["loss"]

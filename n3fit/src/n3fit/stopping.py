@@ -135,11 +135,15 @@ def parse_losses(history_object, data, suffix="loss"):
 
 class FitState:
     """
-        Holds the state of the chi2 of the fit.
+        Holds the state of the chi2 during the fit.
 
         It holds the necessary information to reload the fit
         to a specific point in time if we are interested on reloading
         (otherwise the relevant variables stay empty to save memory)
+
+        Note: the training chi2 is computed before the update of the weights
+        so it is the chi2 that informed the updated corresponding to this state.
+        The validation chi2 instead is computed after the update of the weights.
 
         Parameters
         ----------
@@ -355,13 +359,13 @@ class Stopping:
         self.total_epochs = total_epochs
 
     @property
-    def vl_loss(self):
-        """ Validation loss """
+    def vl_chi2(self):
+        """ Validation chi2 """
         return self.history.best_vl()
 
     @property
-    def tr_loss(self):
-        """ Training loss """
+    def tr_chi2(self):
+        """ Training chi2 """
         return self.history.best_tr()
 
     @property
@@ -375,18 +379,18 @@ class Stopping:
         return self.history.final_epoch + 1
 
     def evaluate_training(self, training_model):
-        """ Given the training model, returns a tuple
-        with the training chi2
+        """ Given the training model, evaluates the
+        model and parses the chi2 of the training datasets
 
         Parameters
         ----------
-            `training_model`
+            training_model: n3fit.backends.MetaModel
                 an object implementing the evaluate function
 
         Returns
         -------
-            `tr_chi2`
-                chi2 of the given `training_model`
+            tr_chi2: float
+                chi2 of the given ``training_model``
         """
         training_info = training_model.compute_losses()
         tr_chi2, _ = parse_losses(training_info, self._tr_ndata)
@@ -546,6 +550,30 @@ Total: training = {total_tr_loss} validation = {total_vl_loss}
 """
             file_list.append(strout)
         return file_list
+
+    def to_dict(self, model_trainer):
+        """ Generates a dict with all the information about the stopping.
+        It needs a ``model_trainer`` object to compute the chi2 of
+        the training and experimental models after the best weights are updated.
+
+        It generates a dictionary with:
+            - epoch of the stop
+            - epoch of best fit
+            - status of the positivity
+            - tr chi2
+            - vl chi2
+            - exp chi2
+        """
+        tr_chi2, val_chi2, exp_chi2 = model_trainer.evaluate(self)
+        dict_out = {
+                "vl_chi2" : val_chi2,
+                "tr_chi2" : tr_chi2,
+                "exp_chi2" : exp_chi2,
+                "epoch_of_the_stop" : self.epoch_of_the_stop,
+                "epoch_of_best_fit" : self.e_best_chi2,
+                "positivity_status" : self.positivity_status()
+                }
+        return dict_out
 
 
 class Validation:
