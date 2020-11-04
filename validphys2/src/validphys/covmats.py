@@ -100,6 +100,13 @@ def split_uncertainties(commondata):
     theory_uncorrelated (THEORYUNCORR), theory_correlated (THEORYCORR) and
     special_correlated systematics.
 
+
+    Parameters
+    ----------
+    commondata: :py:class:`validphys.coredata.CommonData`
+        A commondata object containing information on the data central values, statistical and
+        systematic uncertainties, and information on their correlations.
+
     Returns
     -------
         uncertainties: tuple
