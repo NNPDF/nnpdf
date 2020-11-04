@@ -1,6 +1,7 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
+from collections import namedtuple
 import logging
 
 import numpy as np
@@ -24,6 +25,10 @@ from validphys.results import ThPredictionsResult
 log = logging.getLogger(__name__)
 
 INTRA_DATASET_SYS_NAME = ("THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR")
+
+Uncertainties = namedtuple(
+    "Uncertainties", ("stat", "unc", "corr", "thunc", "thcorr", "special")
+)
 
 
 def split_uncertainties(commondata):
@@ -109,26 +114,28 @@ def split_uncertainties(commondata):
 
     Returns
     -------
-        uncertainties: tuple
+        uncertainties: :py:class:`validphys.covmats.Uncertainties`
+            A ``namedtuple`` with the following attributes
+
             stat: np.array
                 1-D array containing statistical uncertainties
-            uncorrelated: np.2darray
+            unc: np.2darray
                 numpy array of uncorrelated systematics, can be empty if there
                 are no uncorrelated systematics. These are semantically similar
                 to statistical error, and only contribute the diagonal component
                 of the covariance matrix, because they are uncorrelated across
                 data points.
-            correlated: np.2darray
+            corr: np.2darray
                 Similar to uncorrelated except they can be correlated across
                 data points.
-            theory_uncorrelated: np.2darray
+            thunc: np.2darray
                 numpy array of uncorrelated "theory" uncertainties which
                 are not to be confused with theory covariance uncertainties.
                 Instead they are, for example, uncertainties in the c-factors
-            theory_correlated: np.2darray
+            thcorr: np.2darray
                 same as theory_uncorrelated except they can be correlated across
                 data points.
-            special_correlated: pd.DataFrame
+            special: pd.DataFrame
                 Dataframe of the systematics which can be correlated across
                 datasets, the columns of the dataframe are the systematic names.
                 Each systematic of this type has a unique name, by returning
@@ -136,7 +143,6 @@ def split_uncertainties(commondata):
                 headers, we can easily join up the special_correlated systematics
                 from multiple datasets, retaining correlations, using
                 ``pandas.concat``.
-
     """
     sys_name = commondata.systype_table["name"].to_numpy()
     # Dropping systematics that have type SKIP
@@ -166,7 +172,9 @@ def split_uncertainties(commondata):
     unc = abs_sys_errors[:, sys_name == "UNCORR"]
     thcorr = abs_sys_errors[:, sys_name == "THEORYCORR"]
     corr = abs_sys_errors[:, sys_name == "CORR"]
-    return stat, unc, corr, thunc, thcorr, special_corr
+
+    uncertainties = Uncertainties(stat, unc, corr, thunc, thcorr, special_corr)
+    return uncertainties
 
 
 def covmat_from_systematics(commondata, use_theory_errors=True):
