@@ -335,7 +335,7 @@ class Stopping:
         validation_model,
         all_data_dicts,
         threshold_positivity=1e-6,
-        threshold_integrability=1e-2.,
+        threshold_integrability=1e-2,
         total_epochs=0,
         stopping_patience=7000,
         threshold_chi2=10.0,
