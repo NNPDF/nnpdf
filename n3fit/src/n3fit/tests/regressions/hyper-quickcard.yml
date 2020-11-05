@@ -11,14 +11,10 @@ description: n3fit regression test
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
-  - experiment: NMC
-    datasets:
-      - { dataset: NMC, frac: 0.5 }      
-      - { dataset: SLACP, frac: 0.5}
-  - experiment: CMSZDIFF12
-    datasets:
-    - { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
+dataset_inputs:
+- { dataset: NMC, frac: 0.5 }
+- { dataset: SLACP, frac: 0.5}
+- { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
 
 ############################################################
 datacuts:

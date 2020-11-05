@@ -9,12 +9,10 @@ description: Basic runcard
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
-  - experiment: ALL
-    datasets:
-      - { dataset: SLACP, frac: 0.5}
-      - { dataset: NMCPD, frac: 0.5 }
-      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
+dataset_inputs:
+- { dataset: SLACP, frac: 0.5}
+- { dataset: NMCPD, frac: 0.5 }
+- { dataset: CMSJETS11, frac: 0.5, sys: 10 }
 
 ############################################################
 datacuts:

@@ -80,7 +80,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
 @n3fit.checks.wrapper_hyperopt
 def performfit(
     fitting,
-    experiments,
+    experiments_data,
     t0set,
     replica,
     replica_path,
@@ -116,8 +116,9 @@ def performfit(
         ----------
             fitting: dict
                 dictionary with the hyperparameters of the fit
-            experiments: dict
-                vp list of experiments to be included in the fit
+            experiments_data: dict
+                vp list of datasets grouped into experiments to be included in
+                the fit
             t0set: str
                 t0set name
             replica: list
@@ -194,7 +195,7 @@ def performfit(
         kpartitions = None
 
     # First loop over the experiments
-    for exp in experiments:
+    for exp in experiments_data:
         log.info("Loading experiment: {0}".format(exp))
         all_exp_dicts = reader.common_data_reader(
             exp,
