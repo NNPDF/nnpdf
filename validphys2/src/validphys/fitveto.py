@@ -48,24 +48,9 @@ def distribution_veto(dist, prior_mask, nsigma_threshold, integ):
     # i.e replicas that are lower than the average by more than 4std pass
     return (dist - average_pass) <= nsigma_threshold * stderr_pass
 
-def integrability_veto(dist, prior_mask, integ_threshold):
-    """ For a given distribution (a list of floats), returns a boolean mask
-    specifying the passing elements. The result is a new mask of the elements that
-    satisfy:
-
-    value <=  integ_threshold
-
-    Only points passing the prior_mask are
-    considered in the average or standard deviation."""
-    if sum(prior_mask) <= 1:
-        return prior_mask
-    dist = np.asarray(dist)
-    passing = dist[prior_mask]
-    return dist <= integ_threshold    
-
 
 def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float,
-):
+integ_threshold: float):
     """ Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
