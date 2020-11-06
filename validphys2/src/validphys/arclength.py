@@ -90,3 +90,18 @@ def plot_arc_lengths(pdfs_arc_lengths:Sequence, Q:numbers.Real, normalize_to:(ty
         ax.set_xticklabels(xlabels)
     ax.legend()
     return fig
+
+
+#TODO: this should probably go somewhere else
+def integrability_number(pdf:PDF, Q:numbers.Real,
+    basis:(str, Basis)='evolution',
+    flavours:(list, tuple, type(None))=None):
+    """Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7} 
+    for the distributions V, V3, V8, T3 and T8 
+    """
+    checked = check_basis(basis, flavours)
+    basis, flavours = checked['basis'], checked['flavours']
+    ixgrid = xgrid(1e-9, 1e-6, 'log', 3)
+    xfgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values   
+    res = np.sum(np.abs(xfgrid),axis=2)
+    return res[0]

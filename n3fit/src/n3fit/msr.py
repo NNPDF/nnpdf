@@ -7,7 +7,7 @@ import numpy as np
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
-from validphys.arclength import arc_lengths
+from validphys.arclength import arc_lengths, integrability_number
 
 
 log = logging.getLogger(__name__)
@@ -148,3 +148,14 @@ def compute_arclength(n3pdf):
     """
     ret = arc_lengths(n3pdf, [1.65], "evolution", ["sigma", "gluon", "V", "V3", "V8"])
     return ret.stats.central_value()
+
+def compute_integrability_number(n3pdf):
+    """
+    Given the layer with the fit basis computes the integrability number
+
+    Parameters
+    ----------
+        n3pdf: pdf function has received by the writer or ``pdf_model``
+    """
+    ret = integrability_number(n3pdf, [1.65], flavours=['V', 'T3', 'V3', 'T8', 'V8'])
+    return ret

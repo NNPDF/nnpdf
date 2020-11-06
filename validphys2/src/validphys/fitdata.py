@@ -91,8 +91,9 @@ def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
     with open(p, 'r') as fitinfo_file:
-        fitinfo_line = fitinfo_file.readline().split() # General fit properties
-        fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
+        fitinfo_line  = fitinfo_file.readline().split() # General fit properties
+        fitinfo_arcl  = fitinfo_file.readline()         # Replica arc-lengths
+        fitinfo_integ = fitinfo_file.readline()         # Replica integ-numbers
 
         n_iterations   = int(  fitinfo_line[0])
         erf_validation = float(fitinfo_line[1])
@@ -100,7 +101,8 @@ def load_fitinfo(replica_path, prefix):
         chisquared     = float(fitinfo_line[3])
         is_positive    = fitinfo_line[4] == "POS_PASS"
         arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
-    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
+        integnumbers   = np.fromstring(fitinfo_integ, sep=' ')
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
 
 
 #TODO: Produce a more informative .sumrules file.
