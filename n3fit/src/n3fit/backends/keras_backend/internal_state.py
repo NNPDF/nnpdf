@@ -4,12 +4,9 @@
 import os
 import psutil
 
-# Currently the default TF package for n3fit is tensorflow-eigen from conda
-# the default conda package, however, is compiled with MKL
-# check the options below as they could have a big impact
-os.environ.setdefault("KMP_BLOCKTIME", "0") # has a positive impact on eigen
-# the line below forces the eigen version of TF to run on one single core
-# os.environ.setdefault("KMP_AFFINITY", "granularity=fine,noverbose,compact,1,0")
+# Despite the current default being tf-eigen, the option below seems to have a positive impact
+os.environ.setdefault("KMP_BLOCKTIME", "0")
+
 # Reduce tensorflow verbosity
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 import random as rn

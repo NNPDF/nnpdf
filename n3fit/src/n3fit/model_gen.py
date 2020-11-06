@@ -105,13 +105,13 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
                 operation_name,
-                name=f"dat_{dataset_name}",
+                name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["vl_fktables"],
                 operation_name,
-                name=f"dat_{dataset_name}",
+                name=f"val_{dataset_name}",
             )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer but for now it is ok
