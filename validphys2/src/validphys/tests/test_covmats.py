@@ -14,7 +14,8 @@ from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.covmats import (
     sqrt_covmat,
-    datasets_covmat_from_systematics
+    datasets_covmat_from_systematics,
+    covmat_from_systematics
 )
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -34,6 +35,26 @@ def test_covmat_from_systematics_correlated(data_with_correlations_config):
     cpp_covmat = API.groups_covmat(**data_with_correlations_config)
 
     np.testing.assert_allclose(cpp_covmat, covmat)
+
+
+def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
+    """Test which checks that the single dataset implementation of
+    ``covmat_from_systematics`` matches ``datasets_covmat_from_systematics``
+    when the latter is given a list containing a single dataset.
+
+    """
+    data = API.data(**data_internal_cuts_config)
+    cds = [ds.commondata for ds in data.datasets]
+
+    ld_cds = list(map(load_commondata, cds))
+
+    internal_cuts = [ds.cuts for ds in data.datasets]
+    cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
+
+    for cut_ld_cd in cut_ld_cds:
+        covmat_a = covmat_from_systematics(cut_ld_cd)
+        covmat_b = datasets_covmat_from_systematics([cut_ld_cd])
+        np.testing.assert_allclose(covmat_a, covmat_b)
 
 
 def test_covmat_from_systematics(data_internal_cuts_config):

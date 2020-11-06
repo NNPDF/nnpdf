@@ -240,3 +240,21 @@ class CommonData:
             columns = self.systype_table.index,
             index=self.commondata_table.index,
         )
+
+    @property
+    def multiplicative_errors(self):
+        sys_table = self.commondata_table.drop(
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+        )
+        mult_table = sys_table.iloc[:, 1::2]
+        mult_table.columns = self.systype_table["name"].to_numpy()
+        return mult_table.loc[:, self.systype_table["type"].to_numpy() == "MULT"]
+
+    @property
+    def additive_errors(self):
+        sys_table = self.commondata_table.drop(
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+        )
+        add_table = sys_table.iloc[:, 0::2]
+        add_table.columns = self.systype_table["name"].to_numpy()
+        return add_table.loc[:, self.systype_table["type"].to_numpy() == "ADD"]
