@@ -97,7 +97,7 @@ def integrability_number(pdf:PDF, Q:numbers.Real,
     basis:(str, Basis)='evolution',
     flavours:(list, tuple, type(None))=None):
     """Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7} 
-    for the distributions V, V3, V8, T3 and T8 
+    for selected flavours 
     """
     checked = check_basis(basis, flavours)
     basis, flavours = checked['basis'], checked['flavours']

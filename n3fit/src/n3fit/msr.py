@@ -152,6 +152,7 @@ def compute_arclength(n3pdf):
 def compute_integrability_number(n3pdf):
     """
     Given the layer with the fit basis computes the integrability number
+    for the distributions V, V3, V8, T3, T8
 
     Parameters
     ----------
