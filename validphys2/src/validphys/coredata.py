@@ -219,29 +219,6 @@ class CommonData:
         return self.commondata_table["stat"]
 
     @property
-    def sys_errors(self):
-        sys_table = self.commondata_table.drop(
-            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
-        )
-        table = [
-            [
-                SystematicError(
-                    add=sys_table[f"sys.add.{j}"][i],
-                    mult=sys_table[f"sys.mult.{j}"][i],
-                    sys_type=self.systype_table["type"][j],
-                    name=self.systype_table["name"][j],
-                )
-                for j in self.systype_table.index
-            ]
-            for i in self.commondata_table.index
-        ]
-        return pd.DataFrame(
-            table,
-            columns = self.systype_table.index,
-            index=self.commondata_table.index,
-        )
-
-    @property
     def multiplicative_errors(self):
         sys_table = self.commondata_table.drop(
             columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
