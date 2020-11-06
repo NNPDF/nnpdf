@@ -416,12 +416,12 @@ class ParamfitsConfig(Config):
                 fits_central_chi2_by_experiment_and_dataset, ['Total'])
         return res
 
-# Define aliases for functions with spelling mistakes in their names which have now been corrected
-# Do this so that old runcards still work
-produce_combine_dataspecs_pseudorreplicas_as = produce_combine_dataspecs_pseudoreplicas_as
-produce_fits_matched_pseudorreplicas_chi2_output = produce_fits_matched_pseudoreplicas_chi2_output
-parse_fits_computed_psedorreplicas_chi2_output = parse_fits_computed_pseudoreplicas_chi2_output
-produce_use_fits_computed_psedorreplicas_chi2_output = produce_use_fits_computed_pseudoreplicas_chi2_output
-produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset = produce_fits_matched_pseudoreplicas_chi2_by_experiment_and_dataset
-produce_fits_matched_pseudorreplicas_chi2_by_dataset_item = produce_fits_matched_pseudoreplicas_chi2_by_dataset_item
-produce_matched_pseudorreplcias_for_total = produce_matched_pseudoreplicas_for_total
+    # Define aliases for functions with spelling mistakes in their names which have now been corrected
+    # Do this so that old runcards still work
+    produce_combine_dataspecs_pseudorreplicas_as = produce_combine_dataspecs_pseudoreplicas_as
+    produce_fits_matched_pseudorreplicas_chi2_output = produce_fits_matched_pseudoreplicas_chi2_output
+    parse_fits_computed_psedorreplicas_chi2_output = parse_fits_computed_pseudoreplicas_chi2_output
+    produce_use_fits_computed_psedorreplicas_chi2_output = produce_use_fits_computed_pseudoreplicas_chi2_output
+    produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset = produce_fits_matched_pseudoreplicas_chi2_by_experiment_and_dataset
+    produce_fits_matched_pseudorreplicas_chi2_by_dataset_item = produce_fits_matched_pseudoreplicas_chi2_by_dataset_item
+    produce_matched_pseudorreplcias_for_total = produce_matched_pseudoreplicas_for_total
