@@ -144,7 +144,7 @@ def performfit(
     """
     from n3fit.backends import set_initial_state
 
-    # If debug is active, the initial state will be fixed should that the run is reproducible
+    # If debug is active, the initial state will be fixed so that the run is reproducible
     set_initial_state(debug=debug, max_cores=maxcores)
 
     from n3fit.stopwatch import StopWatch
@@ -356,4 +356,3 @@ def performfit(
 
         if tboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)
-
