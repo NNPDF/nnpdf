@@ -42,11 +42,11 @@ def distribution_veto(dist, prior_mask, nsigma_threshold, integ):
     if integ:
         return dist <= nsigma_threshold
     else:
-    average_pass = np.mean(passing)
-    stderr_pass = np.std(passing)
-    # NOTE that this has always not been abs
-    # i.e replicas that are lower than the average by more than 4std pass
-    return (dist - average_pass) <= nsigma_threshold * stderr_pass
+        average_pass = np.mean(passing)
+        stderr_pass = np.std(passing)
+        # NOTE that this has always not been abs
+        # i.e replicas that are lower than the average by more than 4std pass
+        return (dist - average_pass) <= nsigma_threshold * stderr_pass
 
 
 def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float,
@@ -65,13 +65,13 @@ integ_threshold: float):
             [j.arclengths[i] for j in fitinfos],
             nsigma_discard_arclength,
         )
-
+    
     for i in range(0, len(fitinfos[0].integnumbers)):
         distributions["IntegNumber_" + str(i)] = (
             [j.integnumbers[i] for j in fitinfos],
             integ_threshold,
         )    
-
+    print(distributions)
     # Positivity veto
     posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
     vetoes = {"Positivity": posmask}
@@ -83,7 +83,7 @@ integ_threshold: float):
             integ = 'IntegNumber' in key              
             values, threshold = distributions[key]
             vetoes[key] = distribution_veto(
-                values, total_mask, nsigma_threshold=threshold, integ
+                values, total_mask, nsigma_threshold=threshold, integ=integ
             )
         new_total_mask = np.all(list(vetoes.values()), axis=0)
         if sum(new_total_mask) == sum(total_mask):
