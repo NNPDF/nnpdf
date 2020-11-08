@@ -78,7 +78,7 @@ integ_threshold: float):
     total_mask = posmask.copy()
 
     # Integrability veto
-    for i in range(0,4):
+    for i in range(0, len(fitinfos[0].integnumbers)):
         key = "IntegNumber_" + str(i)
         values, threshold = integrability[key]
         vetoes[key] = distribution_veto(
