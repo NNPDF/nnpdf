@@ -91,7 +91,7 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
         except Exception as e:
             raise FatalPostfitError(
                 f"Corrupted replica replica at {path}. "
-                f"Error when loading replica information:\n {e}") from e
+                f"Error when loading replica information:\n {e}") from e            
     fit_vetoes = fitveto.determine_vetoes(fitinfo, chi2_threshold, arclength_threshold, integrability_threshold)
     fitveto.save_vetoes_info(
         fit_vetoes, chi2_threshold, arclength_threshold, postfit_path / "veto_count.json"

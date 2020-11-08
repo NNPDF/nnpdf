@@ -64,26 +64,34 @@ integ_threshold: float):
         distributions["ArcLength_" + str(i)] = (
             [j.arclengths[i] for j in fitinfos],
             nsigma_discard_arclength,
-        )
-    
+        )  
+    integrability = dict()
     for i in range(0, len(fitinfos[0].integnumbers)):
-        distributions["IntegNumber_" + str(i)] = (
+        integrability["IntegNumber_" + str(i)] = (
             [j.integnumbers[i] for j in fitinfos],
             integ_threshold,
-        )    
-    print(distributions)
+        )
+
     # Positivity veto
     posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
     vetoes = {"Positivity": posmask}
     total_mask = posmask.copy()
 
+    # Integrability veto
+    for i in range(0,4):
+        key = "IntegNumber_" + str(i)
+        values, threshold = integrability[key]
+        vetoes[key] = distribution_veto(
+            values, total_mask, nsigma_threshold=threshold, integ=True
+        )
+        new_total_mask = np.all(list(vetoes.values()), axis=0)
+
     # Distribution and integrability vetoes
     while True:
-        for key in distributions:
-            integ = 'IntegNumber' in key              
+        for key in distributions:              
             values, threshold = distributions[key]
             vetoes[key] = distribution_veto(
-                values, total_mask, nsigma_threshold=threshold, integ=integ
+                values, total_mask, nsigma_threshold=threshold, integ=False
             )
         new_total_mask = np.all(list(vetoes.values()), axis=0)
         if sum(new_total_mask) == sum(total_mask):
