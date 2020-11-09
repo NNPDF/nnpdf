@@ -223,7 +223,7 @@ def main():
     else:
         log.setLevel(logging.INFO)
     try:
-        postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integ_threshold)
+        postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integrability_threshold)
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
         sys.exit(1)
