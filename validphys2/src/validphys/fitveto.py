@@ -7,6 +7,7 @@ Current active vetoes:
    Positivity - Replicas with FitInfo.is_positive == False
    ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
    ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
+   Integrability - Replicas with IntegrabilityNumbers < integ_threshold
 """
 
 import json
@@ -18,7 +19,7 @@ log = logging.getLogger(__name__)
 # Default thresholds for distribution vetos in units of standard deivations
 NSIGMA_DISCARD_ARCLENGTH = 4.0
 NSIGMA_DISCARD_CHI2 = 4.0
-INTEG_THRESHOLD = 1e-3
+INTEG_THRESHOLD = 1e-1
 
 
 
