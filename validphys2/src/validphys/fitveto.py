@@ -70,19 +70,14 @@ integ_threshold: float):
             [j.arclengths[i] for j in fitinfos],
             nsigma_discard_arclength,
         )  
-    integrability = dict()
-    #for i in range(0, len(fitinfos[0].integnumbers)):
-    #    integrability["IntegNumber_" + str(i)] = (
-    #        [j.integnumbers[i] for j in fitinfos],
-    #        integ_threshold,
-    #    )
-
+    
     # Positivity veto
     posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
     vetoes = {"Positivity": posmask}
     total_mask = posmask.copy()
 
     # Integrability veto
+    integrability = dict()
     for i in range(0, len(fitinfos[0].integnumbers)):
         values = [j.integnumbers[i] for j in fitinfos] 
         key = "IntegNumber_" + str(i)
@@ -109,7 +104,7 @@ integ_threshold: float):
     return vetoes
 
 
-def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, filepath):
+def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, integ_threshold, filepath):
     """ Saves to file the chi2 and arclength thresholds used by postfit as well as veto
     dictionaries which contain information on which replicas pass each veto."""
     if filepath.exists():
@@ -117,7 +112,8 @@ def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, filep
     with open(filepath, "w") as f:
         thresholds_dict = {
             "chi2_threshold": chi2_threshold,
-            "arclength_threshold": arclength_threshold
+            "arclength_threshold": arclength_threshold,
+            "integrability_threshold": integ_threshold
         }
         veto_dict_tolist = {key: val.tolist() for key, val in veto_dict.items()}
         combined_dict = {**thresholds_dict, **veto_dict_tolist}
