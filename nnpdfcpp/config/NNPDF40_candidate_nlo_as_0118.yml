@@ -4,162 +4,107 @@
 ############################################################
 description: NNPDF4.0 candidate - NLO - fitted charm
 ############################################################
-# frac: training fraction
-# ewk: apply ewk k-factors
-# sys: systematics treatment (see systypes)
-experiments:
+dataset_inputs:
 # Fixed target DIS
-- experiment: NMC
-  datasets:
-  - {dataset: NMCPD, frac: 0.5}
-  - {dataset: NMC, frac: 0.5}
-- experiment: SLAC
-  datasets:
-  - {dataset: SLACP, frac: 0.5}
-  - {dataset: SLACD, frac: 0.5}
-- experiment: BCDMS
-  datasets:
-  - {dataset: BCDMSP, frac: 0.5}
-  - {dataset: BCDMSD, frac: 0.5}
-- experiment: CHORUS
-  datasets:
+  - {dataset: NMCPD,      frac: 0.5}
+  - {dataset: NMC,        frac: 0.5}
+  - {dataset: SLACP,      frac: 0.5}
+  - {dataset: SLACD,      frac: 0.5}
+  - {dataset: BCDMSP,     frac: 0.5}
+  - {dataset: BCDMSD,     frac: 0.5}
   - {dataset: CHORUSNUPb, frac: 0.5}
   - {dataset: CHORUSNBPb, frac: 0.5}
-- experiment: NTVDMN
-  datasets:
   - {dataset: NTVNUDMNFe, frac: 0.5}
   - {dataset: NTVNBDMNFe, frac: 0.5}
-# HERA data
-- experiment: HERACOMB
-  datasets:
-  - {dataset: HERACOMBNCEM, frac: 0.5}
+# Collider DIS (HERA combined)
+  - {dataset: HERACOMBNCEM,    frac: 0.5}
   - {dataset: HERACOMBNCEP460, frac: 0.5}
   - {dataset: HERACOMBNCEP575, frac: 0.5}
   - {dataset: HERACOMBNCEP820, frac: 0.5}
   - {dataset: HERACOMBNCEP920, frac: 0.5}
-  - {dataset: HERACOMBCCEM, frac: 0.5}
-  - {dataset: HERACOMBCCEP, frac: 0.5}
+  - {dataset: HERACOMBCCEM,    frac: 0.5}
+  - {dataset: HERACOMBCCEP,    frac: 0.5}
 # Combined HERA charm production cross-sections
-- experiment: HERAF2CHARM
-  datasets:
-  - {dataset: HERACOMB_SIGMARED_C, frac: 0.5}
+  - {dataset: HERACOMB_SIGMARED_C, frac: 0.5} # N
 # Combined HERA bottom production cross-sections
-- experiment: HERAF2BOTTOM
-  datasets:
-  - {dataset: HERACOMB_SIGMARED_B, frac: 0.5}
+  - {dataset: HERACOMB_SIGMARED_B, frac: 0.5} # N
 # Fixed target Drell-Yan
-- experiment: DYE886
-  datasets:
   - {dataset: DYE886R, frac: 1.0}
   - {dataset: DYE886P, frac: 0.5}
-- experiment: DYE605
-  datasets:
-  - {dataset: DYE605, frac: 0.5}
-# Tevatron jets and W,Z production
-- experiment: CDF
-  datasets:
+  - {dataset: DYE605,  frac: 0.5}
+# Tevatron W,Z production
   - {dataset: CDFZRAP, frac: 1.0}
-- experiment: D0
-  datasets:
-  - {dataset: D0ZRAP, frac: 1.0}
+  - {dataset: D0ZRAP,  frac: 1.0}
   - {dataset: D0WEASY, frac: 1.0}
   - {dataset: D0WMASY, frac: 1.0}
-# ATLAS
-- experiment: ATLAS
-  datasets:
-  #EWK
-  - {dataset: ATLASWZRAP36PB, frac: 1.0} 
-  - {dataset: ATLASZHIGHMASS49FB, frac: 1.0}
-  - {dataset: ATLASLOMASSDY11EXT, frac: 1.0}
-  - {dataset: ATLASWZRAP11, frac: 0.5}
-  - {dataset: ATLASWZRAP11CC, frac: 0.5}
-  - {dataset: ATLASWZRAP11CF, frac: 0.5}
-  - {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM,EWK]}
-  - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.5}
-  - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.5}
-#  - {dataset: ATLAS_WP_JET_8TEV_PTJ, frac: 0.5}
-#  - {dataset: ATLAS_WM_JET_8TEV_PTJ, frac: 0.5}
-  - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 1.0}
+# ATLAS DY and EW
+  - {dataset: ATLASWZRAP36PB,       frac: 1.0}
+  - {dataset: ATLASZHIGHMASS49FB,   frac: 1.0}
+  - {dataset: ATLASLOMASSDY11EXT,   frac: 1.0}
+  - {dataset: ATLASWZRAP11CC,       frac: 0.5}      # N
+  - {dataset: ATLASWZRAP11CF,       frac: 0.5}      # N
+  - {dataset: ATLASDY2D8TEV,        frac: 0.5}      # N
+  - {dataset: ATLAS_WZ_TOT_13TEV,   frac: 1.0, cfac: [NRM]}  # N
+  - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.5}      # N
+  - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.5}      # N
   - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 1.0}
-  #Z pT
-  - {dataset: ATLASZPT8TEVMDIST, frac: 0.5}
-  - {dataset: ATLASZPT8TEVYDIST, frac: 0.5}
-  #SINGLE JETS
-#  - {dataset: ATLAS1JET11_NEW_SCALE, frac: 0.5, cfac: [EWK]}
-  - {dataset: ATLAS_1JET_8TEV_R06, frac: 0.5, cfac: [EWK]}
-  #DIJETS
-  - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.5, cfac: [EWK]}
-  #DIRECT PHOTON
-  - {dataset: ATLASPHT12, frac: 0.5, cfac: [NRM,EWK]}
-  - {dataset: ATLASPHT15, frac: 0.5, cfac: [EWK]}
-  #TOP PAIR
-  - {dataset: ATLASTTBARTOT, frac: 1.0}
-  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM, frac: 1.0}
-  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0}
-  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0}
-  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM, frac: 1.0}
-  - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0}
-#  - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM, frac: 1.0}
-  #SINGLE TOP
-  - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0}
-  - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0}
-#  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT}
-#  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT}
-#  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP}
-#  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP}
-#  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORM}
-#  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORM}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM}
-# CMS
-- experiment: CMS
-  datasets:
-  #EWK
-  - {dataset: CMSWEASY840PB, frac: 1.0} 
-  - {dataset: CMSWMASY47FB, frac: 1.0}
+  - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 1.0}
+# ATLAS ZpT
+  - {dataset: ATLASZPT8TEVMDIST, frac: 0.5, sys: 10}
+  - {dataset: ATLASZPT8TEVYDIST, frac: 0.5, sys: 10}
+# ATLAS TOP PAIR PRODUCTION
+  - {dataset: ATLASTTBARTOT,                       frac: 1.0}    
+  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM,      frac: 1.0} # N
+  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM,     frac: 1.0} # N
+  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM,      frac: 1.0} # N
+  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM,    frac: 1.0} # N
+  - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0} # N
+# ATLAS SINGLE JETS
+  - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.5} # N
+# ATLAS DIJETS
+  - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.5} # N
+# ATLAS DIRECT PHOTON
+  - {dataset: ATLASPHT15, frac: 0.5, cfac: [EWK]} # N
+# ATLAS SINGLE TOP
+  - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV,                  frac: 1.0}  # N
+  - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV,                 frac: 1.0}  # N
+  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM,    frac: 1.0}  # N
+  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0}  # N
+  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM,    frac: 0.5}  # N
+  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.5}  # N
+# CMS DY and EW
+  - {dataset: CMSWEASY840PB, frac: 1.0}
+  - {dataset: CMSWMASY47FB,  frac: 1.0}
+  - {dataset: CMSDY2D11,     frac: 0.5}
+  - {dataset: CMSWMU8TEV,    frac: 1.0}
+# CMS W + charm
   - {dataset: CMSWCHARMTOT, frac: 1.0}
   - {dataset: CMSWCHARMRAT, frac: 1.0}
   - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV, frac: 1.0}
-  - {dataset: CMSDY2D11, frac: 0.5}
-  - {dataset: CMSWMU8TEV, frac: 1.0}
-  #Z pt
-  - {dataset: CMSZDIFF12, frac: 1.0, cfac: [NRM]}
-  #SINGLE JETS
-#  - {dataset: CMSJETS11_NEW_SCALE, frac: 0.5, cfac: [EWK]}
-#  - {dataset: CMS_1JET_8TEV, frac: 0.5, cfac: [EWK]}
-  #DIJETS
-  - {dataset: CMS_2JET_7TEV, frac: 0.5, cfac: [EWK]}
-  - {dataset: CMS_2JET_3D_8TEV, frac: 0.5, cfac: [EWK]}
-  #TOP PAIR
-  - {dataset: CMSTTBARTOT, frac: 1.0}
-  - {dataset: CMSTTBARTOT5TEV, frac: 1.0}
-  - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0}
-  - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 1.0}
-#  - {dataset: CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORM, frac: 1.0}
-#  - {dataset: CMS_TTBAR_2D_DIFF_PT_TRAP_NORM, frac: 1.0}
-#  - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TPT, frac: 1.0}
-  - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 1.0}
-#  - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TTM, frac: 1.0}
-#  - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TTRAP, frac: 1.0}
-#  - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TPT, frac: 1.0}
-  - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 1.0}
-#  - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TTM, frac: 1.0}
-#  - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP, frac: 1.0}
-  #SINGLE TOP
-  - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 1.0}
-  - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0}
-  - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0}
-# LHCb 
-- experiment: LHCb
-  datasets:
-  - {dataset: LHCBZ940PB, frac: 1.0}
-  - {dataset: LHCBZEE2FB, frac: 1.0}
-  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
-  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
-  - {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0}
-  - {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 1.0}
+# CMS Z pt
+  - { dataset: CMSZDIFF12,   frac: 1.0, cfac: [NRM], sys: 10 }
+# CMS DIJETS
+  - {dataset: CMS_2JET_7TEV,    frac: 0.5} # N 
+  - {dataset: CMS_2JET_3D_8TEV, frac: 0.5} # N
+# CMS TOP PAIR PRODUCTION      
+  - {dataset: CMSTTBARTOT,                     frac: 1.0} 
+  - {dataset: CMSTOPDIFF8TEVTTRAPNORM,         frac: 1.0}
+  - {dataset: CMSTTBARTOT5TEV,                 frac: 1.0} # N
+  - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 1.0} # N
+  - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 1.0} # N
+  - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 1.0} # N
+# CMS SINGLE TOP
+  - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 1.0} # N
+  - {dataset: CMS_SINGLETOP_TCH_R_8TEV,   frac: 1.0} # N
+  - {dataset: CMS_SINGLETOP_TCH_R_13TEV,  frac: 1.0} # N
+# LHCb EW
+  - {dataset: LHCBZ940PB,              frac: 1.0}
+  - {dataset: LHCBZEE2FB,              frac: 1.0}
+  - {dataset: LHCBWZMU7TEV,            frac: 1.0, cfac: [NRM]}
+  - {dataset: LHCBWZMU8TEV,            frac: 1.0, cfac: [NRM]}
+  - {dataset: LHCB_WENU_8TEV_A,        frac: 0.5} # N
+  - {dataset: LHCB_Z_13TEV_DIMUON,     frac: 1.0} # N
+  - {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 1.0} # N
 
 ############################################################
 datacuts:
