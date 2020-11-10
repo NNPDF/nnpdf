@@ -176,6 +176,12 @@ class CommonData:
     nsys: int
     commondata_table: pd.DataFrame
     systype_table: pd.DataFrame
+    systematics_table: pd.DataFrame = dataclasses.field(init=None)
+
+    def __post_init__(self):
+        self.systematics_table = self.commondata_table.drop(
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+        )
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where
@@ -220,18 +226,22 @@ class CommonData:
 
     @property
     def multiplicative_errors(self):
-        sys_table = self.commondata_table.drop(
-            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
-        )
-        mult_table = sys_table.iloc[:, 1::2]
-        mult_table.columns = self.systype_table["name"].to_numpy()
-        return mult_table.loc[:, self.systype_table["type"].to_numpy() == "MULT"]
+        """Returns the systematics which are multiplicative (systype is MULT)
+        in a percentage format
+        """
+        mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
+        mult_table = self.systematics_table.loc[
+            :, [f"sys.mult.{i}" for i in mult_systype.index]]
+        mult_table.columns = mult_systype["name"].to_numpy()
+        return mult_table
 
     @property
     def additive_errors(self):
-        sys_table = self.commondata_table.drop(
-            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
-        )
-        add_table = sys_table.iloc[:, 0::2]
-        add_table.columns = self.systype_table["name"].to_numpy()
-        return add_table.loc[:, self.systype_table["type"].to_numpy() == "ADD"]
+        """Returns the systematics which are additive (systype is ADD) as
+        absolute uncertainties (same units as data).
+        """
+        add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
+        add_table = self.systematics_table.loc[
+            :, [f"sys.add.{i}" for i in add_systype.index]]
+        add_table.columns = add_systype["name"].to_numpy()
+        return add_table
