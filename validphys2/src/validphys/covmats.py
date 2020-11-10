@@ -1,7 +1,6 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
-from collections import namedtuple
 import logging
 
 import numpy as np
@@ -87,7 +86,7 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
     Note that in the switch statement an ADDitive or MULTiplicative systype
     is handled by either multiplying the additive or multiplicative
     uncertainties respectively. We convert uncertainties so that they are all
-    absolute:
+    in the same units as the data:
         - Additive (ADD) systematics are left unchanged
         - multiplicative (MULT) systematics need to be converted from a
         percentage by multiplying by the central value
@@ -151,7 +150,9 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
             4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
     """
     converted_mult_errors = (
-        commondata.multiplicative_errors * commondata.central_values.to_numpy()[:, np.newaxis] / 100
+        commondata.multiplicative_errors
+        * commondata.central_values.to_numpy()[:, np.newaxis]
+        / 100
     )
 
     # start with diagonal of statistical error
@@ -171,6 +172,7 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
                 cov_mat += sys_mat @ sys_mat.T
 
     return cov_mat
+
 
 
 def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
@@ -225,12 +227,14 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
                 elif sys_name == "SPECIALCORR":
                     cd_special_corr.append(sys_error)
         block_diags.append(cov_mat)
-        # is there a better way to handle datasets which have no
-        # special correlated systematics?
+        # special corrs for each dataset needs to be N_data * N_sys, so either
+        # concatenate additive and mutiplicative systematics or set as empty so
+        # N_sys = 0
         if cd_special_corr:
             special_corrs.append(pd.concat(cd_special_corr, axis=1, sort=False))
         else:
             special_corrs.append(pd.DataFrame(index=cd.additive_errors.index))
+    # concat systematics across datasets
     special_sys = pd.concat(special_corrs, axis=0, sort=False)
     # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
     special_sys.fillna(0, inplace=True)
