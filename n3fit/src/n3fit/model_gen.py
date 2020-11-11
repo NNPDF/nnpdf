@@ -135,12 +135,20 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     # Tensorflow operations have ugly name,
     # we want the final observables to be named just {spec_name} (with'val/exp' if needed)
-    concat_tr = gen_concat(spec_name)
-    concat_ex = gen_concat(f"{spec_name}_exp")
-    concat_vl = gen_concat(f"{spec_name}_val")
+    tr_name = spec_name
+    vl_name = f"{spec_name}_val"
+    ex_name = f"{spec_name}_exp"
+    concat_ex = gen_concat(ex_name)
+    # For data transformation all concatenations are the same
+    if spec_dict.get("data_transformation") is None:
+        concat_tr = gen_concat(tr_name)
+        concat_vl = gen_concat(vl_name)
+    else:
+        concat_tr = concat_ex
+        concat_vl = concat_ex
 
     # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(pdf, model_obs=model_obs_ex, concat=concat_ex, datasets_out=None):
+    def experiment_layer(pdf, model_obs=model_obs_ex, concat=concat_ex, rotation=None, datasets_out=None):
         """ By default works with the experiment observable """
         output_layers = []
         # First split the pdf layer into the different datasets if needed
@@ -162,14 +170,16 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 obs_output = mask_out(obs_output)
             output_layers.append(obs_output)
         # Concatenate all datasets as experiments are one single entity if needed
-        return concat(output_layers)
+        ret = concat(output_layers)
+        if rotation is not None:
+            ret = rotation(ret)
+        return ret
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
 
     if spec_dict["positivity"]:
         out_mask = Mask(
-            bool_mask=spec_dict["trmask"],
             c=positivity_initial,
             axis=1,
             name=spec_name,
@@ -198,11 +208,14 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     # Generate the loss function and rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
-        obsrot = ObsRotation(spec_dict.get("data_transformation"))
+        # The rotation is the last layer so it should carry The Name
+        obsrot_tr = ObsRotation(spec_dict.get("data_transformation"), name=tr_name)
+        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"), name=vl_name)
         loss_tr = losses.l_diaginvcovmat(invcovmat_tr)
         loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
     else:
-        obsrot = None
+        obsrot_tr = None
+        obsrot_vl = None
         loss_tr = losses.l_invcovmat(invcovmat_tr)
         # TODO At this point we need to intercept the data and compile the loss with it
         # then the validation must have a list of None as an output
@@ -211,18 +224,14 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     def out_tr(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
-            pdf_layer, model_obs=model_obs_tr, concat=concat_tr, datasets_out=datasets_out
+            pdf_layer, model_obs=model_obs_tr, concat=concat_tr, datasets_out=datasets_out, rotation=obsrot_tr
         )
-        if obsrot is not None:
-            exp_result = obsrot(exp_result)
         return exp_result
 
     def out_vl(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
-            pdf_layer, model_obs=model_obs_vl, concat=concat_vl, datasets_out=datasets_out
+            pdf_layer, model_obs=model_obs_vl, concat=concat_vl, datasets_out=datasets_out, rotation=obsrot_vl
         )
-        if obsrot is not None:
-            exp_result = obsrot(exp_result)
         return exp_result
 
     layer_info = {

@@ -300,6 +300,8 @@ def common_data_reader(
         dt_trans = v.T
     else:
         dt_trans = None
+        dt_trans_tr = None
+        dt_trans_vl = None
 
     # Now it is time to build the masks for the training validation split
     all_dict_out = []
@@ -316,6 +318,10 @@ def common_data_reader(
 
             covmat_vl = eig[vl_mask]
             invcovmat_vl = 1./covmat_vl
+
+            # prepare a masking rotation
+            dt_trans_tr = dt_trans[tr_mask]
+            dt_trans_vl = dt_trans[vl_mask]
         else:
             covmat_tr = covmat[tr_mask].T[tr_mask]
             invcovmat_tr = np.linalg.inv(covmat_tr)
@@ -354,7 +360,8 @@ def common_data_reader(
             "positivity": False,
             "count_chi2": True,
             "folds" : folds,
-            "data_transformation": dt_trans,
+            "data_transformation": dt_trans_tr,
+            "data_transformation_vl": dt_trans_vl,
         }
         all_dict_out.append(dict_out)
 
