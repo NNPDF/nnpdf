@@ -43,7 +43,7 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
 
 
 @figure
-def plot_experiment_fits_bias_variance(fits_data_bias_variance, data):
+def plot_data_fits_bias_variance(fits_data_bias_variance, data):
     """Like `plot_dataset_fits_bias_variance` but for all data. Can use
     alongside ``group_dataset_inputs_by_experiment`` to plot for each experiment.
 
@@ -229,8 +229,8 @@ def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
 @table
 def fits_measured_xi(experiments_xi_measured, experiments_data):
     r"""Tabulate the measure value of \xi_{1\sigma} for each experiment, as
-    calculated by experiment_xi. Note that the mean is taken across directions
-    of the covariance matrix.
+    calculated by data_xi (collected over experiments). Note that the mean is
+    taken across directions of the covariance matrix.
 
     """
     records = []
