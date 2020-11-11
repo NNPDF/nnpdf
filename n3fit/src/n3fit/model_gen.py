@@ -7,8 +7,6 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
-import numpy as np
-
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -18,8 +16,6 @@ from n3fit.backends import operations
 from n3fit.backends import losses
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
-
-import tensorflow as tf
 
 
 def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
@@ -74,7 +70,6 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     for dataset_dict in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset_dict["name"]
-        ndata = dataset_dict["ndata"]
 
         # Look at what kind of layer do we need for this dataset
         if dataset_dict["hadronic"]:
@@ -114,7 +109,13 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 name=f"val_{dataset_name}",
             )
 
-        # To know how many xpoints we compute we are duplicating functionality from obs_layer but for now it is ok
+        # Data transformation might need access to the full array of output data
+        # therefore the validation and training layers should point to the full exp
+        if spec_dict.get("data_transformation") is not None:
+            obs_layer_tr = obs_layer_ex
+            obs_layer_vl = obs_layer_ex
+
+        # To know how many xpoints we compute we are duplicating functionality from obs_layer
         if obs_layer_tr.splitting is None:
             xgrid = dataset_dict["fktables"][0]["xgrid"]
             model_inputs.append(xgrid)
@@ -191,11 +192,6 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         }
         return layer_info
 
-    # Now prepare the actual outputs that can be used by n3fit
-    # Generate the masks layers to be applied during training and validation
-    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1)
-    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1)
-
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
     invcovmat = spec_dict["invcovmat_true"]
@@ -219,7 +215,6 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         )
         if obsrot is not None:
             exp_result = obsrot(exp_result)
-        # TODO: rotations might be broken!!!
         return exp_result
 
     def out_vl(pdf_layer, datasets_out=None):
