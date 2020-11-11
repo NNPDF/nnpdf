@@ -117,7 +117,7 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
                 (sys_name == "THEORYUNCORR") and use_theory_errors
             ):
                 cov_mat += np.diag((sys_error.to_numpy() ** 2).sum(axis=1))
-            if sys_name in ("CORR", "SPECIALCORR") or (
+            elif sys_name in ("CORR", "SPECIALCORR") or (
                 (sys_name == "THEORYCORR") and use_theory_errors
             ):
                 sys_mat = sys_error.to_numpy()
