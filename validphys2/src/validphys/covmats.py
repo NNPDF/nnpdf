@@ -30,63 +30,16 @@ INTRA_DATASET_SYS_NAME = ("THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR", "SKIP"
 
 def covmat_from_systematics(commondata, use_theory_errors=True):
     """Take the statistical uncertainty and systematics table from
-    a :py:class:`validphys.coredata.CommonData` object
-    and construct the covariance matrix. The logic
-    is best described by the now deprecated C++ code:
+    a :py:class:`validphys.coredata.CommonData` object and
+    construct the covariance matrix accounting for correlations between
+    systematics.
 
-    .. code-block:: c++
+    If the systematic has the name ``SKIP`` then it is ignore in the
+    construction of the covariance matrix.
 
-            auto CovMat = NNPDF::matrix<double>(ndat, ndat);
-
-            for (int i = 0; i < ndat; i++)
-            {
-              for (int j = 0; j < ndat; j++)
-              {
-                double sig    = 0.0;
-                double signor = 0.0;
-
-                // Statistical error
-                if (i == j)
-                  sig += pow(stat_error[i],2);
-
-                for (int l = 0; l < nsys; l++)
-                {
-                  sysError const& isys = systematic_errors[i][l];
-                  sysError const& jsys = systematic_errors[j][l];
-                  if (isys.name != jsys.name)
-                      throw RuntimeException("ComputeCovMat", "Inconsistent naming of systematics");
-                  if (isys.name == "SKIP")
-                      continue; // Continue if systype is skipped
-                  if ((isys.name == "THEORYCORR" || isys.name == "THEORYUNCORR") && !use_theory_errors)
-                      continue; // Continue if systype is theoretical and use_theory_errors == false
-                  const bool is_correlated = ( isys.name != "UNCORR" && isys.name !="THEORYUNCORR");
-                  if (i == j || is_correlated)
-                    switch (isys.type)
-                    {
-                      case ADD:   sig    += isys.add *jsys.add;  break;
-                      case MULT: if (mult_errors) { signor += isys.mult*jsys.mult; break; }
-                                 else { continue; }
-                      case UNSET: throw RuntimeException("ComputeCovMat", "UNSET systype encountered");
-                    }
-                }
-
-                // Covariance matrix entry
-                CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
-            // Covariance matrix weight
-            CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
-          }
-        }
-
-        return CovMat;
-      }
-
-    If the systematic of data point i has name ``SKIP`` we ignore
-    it.
-
-    Note that in the switch statement an ADDitive or MULTiplicative systype
-    is handled by either multiplying the additive or multiplicative
-    uncertainties respectively. We convert uncertainties so that they are all
-    in the same units as the data:
+    ADDitive or MULTiplicative systypes are handled by either multiplying
+    the additive or multiplicative uncertainties respectively. We convert
+    uncertainties so that they are all in the same units as the data:
         - Additive (ADD) systematics are left unchanged
         - multiplicative (MULT) systematics need to be converted from a
         percentage by multiplying by the central value
@@ -100,8 +53,7 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
     Uncorrelated contributions from: statistical error, uncorrelated and
     theory uncorrelated are added in quadrature to the diagonal of the covmat.
 
-    From here it's a matter of staring at a piece of paper for a while to
-    realise the contribution to the covariance matrix arising due to
+    The contribution to the covariance matrix arising due to
     correlated systematics is schematically ``A_correlated @ A_correlated.T``,
     where A_correlated is a matrix N_dat by N_sys. The total contribution
     from correlated systematics is found by adding together the result of
