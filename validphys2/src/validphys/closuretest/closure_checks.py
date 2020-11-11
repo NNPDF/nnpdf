@@ -66,8 +66,7 @@ def check_fits_same_filterseed(fits):
 def check_fits_areclosures(fits):
     """Check all fits are closures"""
     for fit in fits:
-        if not fit.as_input()["closuretest"]["fakedata"]:
-            raise CheckError(f"Specified fit: {fit}, is not a closure test")
+        check_fit_isclosure.__wrapped__(fit)
 
 
 @make_argcheck
