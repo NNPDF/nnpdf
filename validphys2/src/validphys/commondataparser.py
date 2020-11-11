@@ -49,8 +49,8 @@ def parse_commondata(commondatafile, systypefile, setname):
     # Build header
     commondataheader = ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
     nsys  = (commondatatable.shape[1] - len(commondataheader)) // 2
-    for i in range(nsys):
-        commondataheader += [f"sys.add.{i+1}", f"sys.mult.{i+1}"]
+
+    commondataheader += ["ADD", "MULT"] * nsys
     commondatatable.columns = commondataheader
     commondatatable.set_index("entry", inplace=True)
     ndata = len(commondatatable)

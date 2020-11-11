@@ -230,8 +230,10 @@ class CommonData:
         in a percentage format
         """
         mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
-        mult_table = self.systematics_table.loc[
-            :, [f"sys.mult.{i}" for i in mult_systype.index]]
+        mult_table = self.systematics_table.loc[:, "MULT"]
+        # Minus 1 because iloc starts from 0, while the systype counting starts
+        # from 1.
+        mult_table = mult_table.iloc[:, mult_systype.index - 1]
         mult_table.columns = mult_systype["name"].to_numpy()
         return mult_table
 
@@ -241,7 +243,9 @@ class CommonData:
         absolute uncertainties (same units as data).
         """
         add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
-        add_table = self.systematics_table.loc[
-            :, [f"sys.add.{i}" for i in add_systype.index]]
+        add_table = self.systematics_table.loc[:, "ADD"]
+        # Minus 1 because iloc starts from 0, while the systype counting starts
+        # from 1.
+        add_table = add_table.iloc[:, add_systype.index - 1]
         add_table.columns = add_systype["name"].to_numpy()
         return add_table
