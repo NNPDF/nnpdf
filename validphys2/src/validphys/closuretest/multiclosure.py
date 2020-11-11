@@ -30,7 +30,6 @@ DEFAULT_SEED = 9689372
 SAMPLING_INTERVAL = 5
 
 # TODO: deprecate this at some point
-# TODO: update the docstring wording here when ``data`` keyword gets merged.
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
@@ -108,7 +107,7 @@ def internal_multiclosure_dataset_loader(
 def internal_multiclosure_data_loader(
     data, fits_pdf, multiclosure_underlyinglaw, fits
 ):
-    """Like `internal_multiclosure_dataset_loader` except for data"""
+    """Like `internal_multiclosure_dataset_loader` except for all data"""
     return internal_multiclosure_dataset_loader(
         data, fits_pdf, multiclosure_underlyinglaw, fits
     )
@@ -165,14 +164,14 @@ def fits_data_bias_variance(
     _internal_max_reps=None,
     _internal_min_reps=20,
 ):
-    """Like `fits_dataset_bias_variance` but for data"""
+    """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
         internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps
     )
 
 
 def expected_data_bias_variance(fits_data_bias_variance):
-    """Like `expected_dataset_bias_variance` except for data"""
+    """Like `expected_dataset_bias_variance` except for all data"""
     return expected_dataset_bias_variance(fits_data_bias_variance)
 
 
