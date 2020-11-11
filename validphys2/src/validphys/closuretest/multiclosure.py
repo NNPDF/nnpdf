@@ -38,16 +38,16 @@ def internal_multiclosure_dataset_loader(
     dataset, fits_pdf, multiclosure_underlyinglaw, fits
 ):
     """Internal function for loading multiple theory predictions for a given
-    experiment and a single covariance matrix using underlying law as t0 PDF,
+    dataset and a single covariance matrix using underlying law as t0 PDF,
     which is for use with multiclosure statistical estimators. Avoiding memory
-    issues from caching experiment load.
+    issues from caching the load function of a group of datasets.
 
     Parameters
     ----------
-    dataset: DatasetSpec-like
+    dataset: (DataSetSpec, DataGroupSpec)
         dataset for which the theory predictions and t0 covariance matrix
         will be loaded. Note that due to the structure of `validphys` this
-        function can be overloaded to accept an ExperimentSpec.
+        function can be overloaded to accept an DataGroupSpec.
     fits_pdf: list
         list of PDF objects produced from performing multiple closure tests
         fits. Each fit should have a different filterseed but the same
@@ -105,12 +105,12 @@ def internal_multiclosure_dataset_loader(
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
-def internal_multiclosure_experiment_loader(
-    experiment, fits_pdf, multiclosure_underlyinglaw, fits
+def internal_multiclosure_data_loader(
+    data, fits_pdf, multiclosure_underlyinglaw, fits
 ):
-    """Like `internal_multiclosure_dataset_loader` except for an experiment"""
+    """Like `internal_multiclosure_dataset_loader` except for data"""
     return internal_multiclosure_dataset_loader(
-        experiment, fits_pdf, multiclosure_underlyinglaw, fits
+        data, fits_pdf, multiclosure_underlyinglaw, fits
     )
 
 
@@ -160,45 +160,44 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
 
 @check_multifit_replicas
-def fits_experiment_bias_variance(
-    internal_multiclosure_experiment_loader,
+def fits_data_bias_variance(
+    internal_multiclosure_data_loader,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ):
-    """Like `fits_dataset_bias_variance` but for an experiment"""
+    """Like `fits_dataset_bias_variance` but for data"""
     return fits_dataset_bias_variance(
-        internal_multiclosure_experiment_loader, _internal_max_reps, _internal_min_reps
+        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps
     )
 
 
-def expected_experiment_bias_variance(fits_experiment_bias_variance):
-    """Like `expected_dataset_bias_variance` except for an experiment"""
-    return expected_dataset_bias_variance(fits_experiment_bias_variance)
+def expected_data_bias_variance(fits_data_bias_variance):
+    """Like `expected_dataset_bias_variance` except for data"""
+    return expected_dataset_bias_variance(fits_data_bias_variance)
 
 
 fits_experiments_bias_variance = collect(
-    "fits_experiment_bias_variance", ("experiments",)
+    "fits_data_bias_variance", ("group_dataset_inputs_by_experiment",)
 )
 
-# TODO: get rid of this with data keyword merge
+
 def fits_total_bias_variance(fits_experiments_bias_variance):
-    """Like `fits_dataset_bias_variance` except for all data"""
+    """Like `fits_dataset_bias_variance` except for all data, assumes there are
+    no inter-experiment correlations. That assumption is broken if a theory
+    covariance matrix is used.
+
+    """
     bias_total, variance_total, n_total = np.sum(fits_experiments_bias_variance, axis=0)
     return bias_total, variance_total, n_total
 
 
 datasets_expected_bias_variance = collect(
-    "expected_dataset_bias_variance", ("experiments", "experiment")
+    "expected_dataset_bias_variance", ("data",)
 )
 
 
-
-experiments_expected_bias = collect("expected_bias_experiment", ("experiments",))
-experiments_expected_variance = collect(
-    "expected_variance_experiment", ("experiments",)
-)
 experiments_expected_bias_variance = collect(
-    "expected_experiment_bias_variance", ("experiments",)
+    "expected_data_bias_variance", ("group_dataset_inputs_by_experiment",)
 )
 
 
@@ -253,14 +252,12 @@ def dataset_xi(internal_multiclosure_dataset_loader):
     return in_1_sigma.mean(axis=1)
 
 
-def experiment_xi(internal_multiclosure_experiment_loader):
-    """Like dataset_xi but for whole experiment"""
-    return dataset_xi(internal_multiclosure_experiment_loader)
+def data_xi(internal_multiclosure_data_loader):
+    """Like dataset_xi but for all data"""
+    return dataset_xi(internal_multiclosure_data_loader)
 
 
-experiments_xi_measured = collect("experiment_xi", ("experiments",))
-
-
+experiments_xi_measured = collect("data_xi", ("group_dataset_inputs_by_experiment",))
 
 
 @check_at_least_10_fits
@@ -424,15 +421,15 @@ def bias_variance_resampling_dataset(
     return np.array(bias_sample), np.array(variance_sample)
 
 
-def bias_variance_resampling_experiment(
-    internal_multiclosure_experiment_loader,
+def bias_variance_resampling_data(
+    internal_multiclosure_data_loader,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
     use_repeats=True,
 ):
-    """Like ratio_n_dependence_dataset except for an experiment.
+    """Like ratio_n_dependence_dataset except for all data.
 
     Notes
     -----
@@ -442,7 +439,7 @@ def bias_variance_resampling_experiment(
 
     """
     return bias_variance_resampling_dataset(
-        internal_multiclosure_experiment_loader,
+        internal_multiclosure_data_loader,
         n_fit_samples,
         n_replica_samples,
         bootstrap_samples,
@@ -452,14 +449,15 @@ def bias_variance_resampling_experiment(
 
 
 exps_bias_var_resample = collect(
-    "bias_variance_resampling_experiment", ("experiments",)
+    "bias_variance_resampling_data", ("group_dataset_inputs_by_experiment",)
 )
 
 
 def bias_variance_resampling_total(exps_bias_var_resample):
-    """Sum the bias_variance_resampling_experiment for all experiments, giving
+    """Sum the bias_variance_resampling_data for all experiments, giving
     the total bias and variance resamples. This relies on the bootstrap seed being
-    the same for all experiments such that the fits/replicas are the same.
+    the same for all experiments such that the fits/replicas are the same and
+    there being no inter-experiment correlations.
 
     """
     bias_total, var_total = np.sum(exps_bias_var_resample, axis=0)
@@ -525,15 +523,15 @@ def xi_resampling_dataset(
     return np.array(xi_1sigma)
 
 
-def xi_resampling_experiment(
-    internal_multiclosure_experiment_loader,
+def xi_resampling_data(
+    internal_multiclosure_data_loader,
     n_fit_samples,
     n_replica_samples,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
     use_repeats=True,
 ):
-    """Like xi_resampling_dataset except for an experiment.
+    """Like xi_resampling_dataset except for all data.
 
     Notes
     -----
@@ -543,7 +541,7 @@ def xi_resampling_experiment(
 
     """
     return xi_resampling_dataset(
-        internal_multiclosure_experiment_loader,
+        internal_multiclosure_data_loader,
         n_fit_samples,
         n_replica_samples,
         bootstrap_samples,
@@ -554,7 +552,7 @@ def xi_resampling_experiment(
 
 
 
-exps_xi_resample = collect("xi_resampling_experiment", ("experiments",))
+exps_xi_resample = collect("xi_resampling_data", ("group_dataset_inputs_by_experiment",))
 
 
 def total_xi_resample(exps_xi_resample):
@@ -582,15 +580,15 @@ def total_expected_xi_resample(bias_variance_resampling_total):
 
 
 @check_multifit_replicas
-def fits_bootstrap_experiment_bias_variance(
-    internal_multiclosure_experiment_loader,
+def fits_bootstrap_data_bias_variance(
+    internal_multiclosure_data_loader,
     fits,
     _internal_max_reps=None,
     _internal_min_reps=20,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
 ):
-    """Perform bootstrap resample of `fits_experiment_bias_variance`, returns
+    """Perform bootstrap resample of `fits_data_bias_variance`, returns
     tuple of bias_samples, variance_samples where each element is a 1-D np.array
     of length bootstrap_samples. The elements of the arrays are bootstrap samples
     of bias and variance respectively.
@@ -603,7 +601,7 @@ def fits_bootstrap_experiment_bias_variance(
     for _ in range(bootstrap_samples):
         # use all fits. Use all replicas by default. Allow repeats in resample.
         boot_internal_loader = _bootstrap_multiclosure_fits(
-            internal_multiclosure_experiment_loader,
+            internal_multiclosure_data_loader,
             rng,
             len(fits),
             len(fits),
@@ -624,7 +622,7 @@ def fits_bootstrap_experiment_bias_variance(
 
 
 experiments_bootstrap_bias_variance = collect(
-    "fits_bootstrap_experiment_bias_variance", ("experiments",)
+    "fits_bootstrap_data_bias_variance", ("group_dataset_inputs_by_experiment",)
 )
 
 
@@ -661,7 +659,7 @@ def experiments_bootstrap_sqrt_ratio(experiments_bootstrap_ratio):
 
 def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     """Calculate a bootstrap resampling of the expected xi from
-    `experiments_bootstrap_sqrt_ratio`, using the same formula as
+    ``experiments_bootstrap_sqrt_ratio``, using the same formula as
     :py:func:`validphys.closuretest.multiclosure_output.expected_xi_from_bias_variance`.
 
     """
@@ -675,16 +673,16 @@ def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
 
 
 @check_multifit_replicas
-def fits_bootstrap_experiment_xi(
-    internal_multiclosure_experiment_loader,
+def fits_bootstrap_data_xi(
+    internal_multiclosure_data_loader,
     fits,
     _internal_max_reps=None,
     _internal_min_reps=20,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
 ):
-    """Perform bootstrap resample of `experiment_xi`, returns a list
-    where each element is an independent resampling of experiment_xi.
+    """Perform bootstrap resample of ``data_xi``, returns a list
+    where each element is an independent resampling of ``data_xi``.
 
     For more information on bootstrapping see _bootstrap_multiclosure_fits.
     For more information on xi see dataset_xi.
@@ -697,7 +695,7 @@ def fits_bootstrap_experiment_xi(
     for _ in range(bootstrap_samples):
         # use all fits. Use all replicas by default. Allow repeats in resample.
         boot_internal_loader = _bootstrap_multiclosure_fits(
-            internal_multiclosure_experiment_loader,
+            internal_multiclosure_data_loader,
             rng,
             len(fits),
             len(fits),
@@ -709,7 +707,8 @@ def fits_bootstrap_experiment_xi(
     return xi_1sigma_boot
 
 
-experiments_bootstrap_xi = collect("fits_bootstrap_experiment_xi", ("experiments",))
+experiments_bootstrap_xi = collect(
+    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_experiment",))
 
 def total_bootstrap_xi(experiments_bootstrap_xi):
     """Given the bootstrap samples of xi_1sigma for all experiments,

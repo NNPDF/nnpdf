@@ -14,8 +14,6 @@ import scipy.special as special
 from reportengine.figure import figure
 from reportengine.table import table
 
-from validphys.results import each_dataset
-
 
 @figure
 def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
@@ -45,17 +43,19 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
 
 
 @figure
-def plot_experiment_fits_bias_variance(fits_experiment_bias_variance, experiment):
-    """Like `plot_dataset_fits_bias_variance` but for an experiment.
+def plot_experiment_fits_bias_variance(fits_data_bias_variance, data):
+    """Like `plot_dataset_fits_bias_variance` but for all data. Can use
+    alongside ``group_dataset_inputs_by_experiment`` to plot for each experiment.
 
     """
-    return plot_dataset_fits_bias_variance(fits_experiment_bias_variance, experiment)
+    return plot_dataset_fits_bias_variance(fits_data_bias_variance, data)
 
 
 @figure
 def plot_total_fits_bias_variance(fits_total_bias_variance):
     """Like `plot_dataset_fits_bias_variance` but for the total bias/variance
-    for all data.
+    for all data, with the total calculated by summing up contributions from each
+    experiment.
 
     """
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
@@ -96,7 +96,7 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
 
 @table
 def experiments_bias_variance_ratio(
-    experiments_expected_bias_variance, experiments, expected_total_bias_variance
+    experiments_expected_bias_variance, experiments_data, expected_total_bias_variance
 ):
     """Like datasets_bias_variance_ratio except for each experiment. Also
     calculate and tabulate
@@ -108,7 +108,7 @@ def experiments_bias_variance_ratio(
     """
     # don't reinvent wheel
     df_in = datasets_bias_variance_ratio(
-        experiments_expected_bias_variance, experiments
+        experiments_expected_bias_variance, experiments_data
     )
 
     bias_tot, var_tot, ntotal = expected_total_bias_variance
@@ -150,7 +150,7 @@ def sqrt_experiments_bias_variance_ratio(experiments_bias_variance_ratio):
 
 @table
 def total_bias_variance_ratio(
-    experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments
+    experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments_data
 ):
     """Combine datasets_bias_variance_ratio and experiments_bias_variance_ratio
     into single table with MultiIndex of experiment and dataset.
@@ -166,7 +166,7 @@ def total_bias_variance_ratio(
         [
             [
                 str(experiment)
-                for experiment in experiments
+                for experiment in experiments_data
                 for ds in experiment.datasets
             ],
             datasets_bias_variance_ratio.index.values,
@@ -227,7 +227,7 @@ def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
 
 
 @table
-def fits_measured_xi(experiments_xi_measured, experiments):
+def fits_measured_xi(experiments_xi_measured, experiments_data):
     r"""Tabulate the measure value of \xi_{1\sigma} for each experiment, as
     calculated by experiment_xi. Note that the mean is taken across directions
     of the covariance matrix.
@@ -236,7 +236,7 @@ def fits_measured_xi(experiments_xi_measured, experiments):
     records = []
     tot_xi = 0
     tot_n = 0
-    for exp, xi in zip(experiments, experiments_xi_measured):
+    for exp, xi in zip(experiments_data, experiments_xi_measured):
         records.append(dict(experiment=str(exp), ndata=len(xi), xi=np.mean(xi)))
         tot_xi += len(xi) * np.mean(xi)
         tot_n += len(xi)
@@ -320,19 +320,21 @@ def plot_dataset_xi_histogram(dataset_xi, dataset):
 
 
 @figure
-def plot_experiment_xi(experiment_xi, experiment):
-    """Like plot_dataset_xi except for an experiment.
+def plot_data_xi(data_xi, data):
+    """Like plot_dataset_xi except for all data. Can be used alongside
+    ``group_dataset_inputs_by_experiment`` to plot for each experiment.
 
     """
-    return plot_dataset_xi(experiment_xi, experiment)
+    return plot_dataset_xi(data_xi, data)
 
 
 @figure
-def plot_experiment_xi_histogram(experiment_xi, experiment):
-    """Like plot_dataset_xi_histogram but for an experiment.
+def plot_data_xi_histogram(data_xi, data):
+    """Like plot_dataset_xi_histogram but for all data. Can be used alongside
+    ``group_dataset_inputs_by_experiment`` to plot for each experiment.
 
     """
-    return plot_dataset_xi_histogram(experiment_xi, experiment)
+    return plot_dataset_xi_histogram(data_xi, data)
 
 
 @table
@@ -550,7 +552,7 @@ def total_std_xi_means_finite_effects(
 
 @table
 def experiments_bootstrap_sqrt_ratio_table(
-    experiments_bootstrap_sqrt_ratio, experiments
+    experiments_bootstrap_sqrt_ratio, experiments_data
 ):
     """Given experiments_bootstrap_sqrt_ratio, which a bootstrap
     resampling of the sqrt(bias/variance) for each experiment and the total
@@ -558,7 +560,7 @@ def experiments_bootstrap_sqrt_ratio_table(
     samples.
 
     """
-    indices = list(map(str, experiments)) + ["Total"]
+    indices = list(map(str, experiments_data)) + ["Total"]
     records = []
     for i, exp in enumerate(indices):
         ratio_boot = experiments_bootstrap_sqrt_ratio[i]
@@ -581,7 +583,7 @@ def experiments_bootstrap_sqrt_ratio_table(
 
 @table
 def experiments_bootstrap_expected_xi_table(
-    experiments_bootstrap_expected_xi, experiments
+    experiments_bootstrap_expected_xi, experiments_data
 ):
     """Tabulate the mean and standard deviation across bootstrap samples of the
     expected xi calculated from the ratio of bias/variance. Returns a table with
@@ -590,7 +592,7 @@ def experiments_bootstrap_expected_xi_table(
 
     """
     df = experiments_bootstrap_sqrt_ratio_table(
-        experiments_bootstrap_expected_xi, experiments
+        experiments_bootstrap_expected_xi, experiments_data
     )
     # change the column headers
     df.columns = [
@@ -602,7 +604,7 @@ def experiments_bootstrap_expected_xi_table(
 
 @table
 def experiments_bootstrap_xi_table(
-    experiments_bootstrap_xi, experiments, total_bootstrap_xi
+    experiments_bootstrap_xi, experiments_data, total_bootstrap_xi
 ):
     """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
     samples. Note that the mean has already be taken across data points
@@ -616,7 +618,7 @@ def experiments_bootstrap_xi_table(
     xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
     # take mean across all data
     xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
-    df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments)
+    df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments_data)
     df.columns = [
         r"Bootstrap mean $\xi_{1\sigma}$",
         r"Bootstrap std. dev. $\xi_{1\sigma}$",
