@@ -8,8 +8,48 @@
     they must take as input an epoch number and a log of the partial losses.
 """
 
-from tensorflow.keras.callbacks import TensorBoard, Callback
+import logging
+from time import time
+import numpy as np
 import tensorflow as tf
+from tensorflow.keras.callbacks import TensorBoard, Callback
+
+log = logging.getLogger(__name__)
+
+
+class TimerCallback(Callback):
+    """Callback to be used during debugging to time the fit"""
+
+    def __init__(self, count_range=100):
+        super().__init__()
+
+        self.all_times = []
+        self.every_x = []
+        self.x_count = count_range
+        self.starting_time = None
+        self.last_time = 0
+
+    def on_epoch_end(self, epoch, logs=None):
+        """ At the end of every epoch it checks the time """
+        new_time = time()
+        if epoch == 0:
+            # The first epoch is only useful for starting
+            self.starting_time = new_time
+        else:
+            cur_dif = new_time - self.last_time
+            self.all_times.append(cur_dif)
+            if (epoch + 1) % self.x_count == 0:
+                ave = np.mean(self.all_times[-100:])
+                log.info(f" > Latest 100 average: {ave:.5} s")
+                self.every_x.append(ave)
+        self.last_time = new_time
+
+    def on_train_end(self, logs=None):
+        """ Print the results """
+        total_time = time() - self.starting_time
+        log.info(f"> Values of the {self.x_count}: {self.every_x}")
+        log.info(f"> > Average time per epoch: {np.mean(self.all_times[3:]):.5} s")
+        log.info(f"> > > Total time: {total_time/60:.5} min")
 
 
 class StoppingCallback(Callback):
