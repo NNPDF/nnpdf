@@ -120,18 +120,6 @@ class CFactorData:
 
 
 @dataclasses.dataclass(eq=False)
-class SystematicError:
-    add: float
-    mult: float
-    sys_type: str #e.g ADD
-    name: str #e.g UNCORR
-
-    def __repr__(self):
-        return (f"{self.__class__.__name__}(add={self.add}, mult={self.mult},"
-                "sys_type={self.sys_type}, name={self.name})")
-
-
-@dataclasses.dataclass(eq=False)
 class CommonData:
     """
     Data contained in Commondata files, relevant cuts applied.
