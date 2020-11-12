@@ -23,12 +23,10 @@ from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
 
-# although SKIP is technically ignored, we define it here so it isn't counted
-# as an inter-dataset systematic.
-INTRA_DATASET_SYS_NAME = ("THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR", "SKIP")
+INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 
 
-def covmat_from_systematics(commondata, use_theory_errors=True):
+def covmat_from_systematics(commondata):
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
     construct the covariance matrix accounting for correlations between
@@ -69,8 +67,6 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
     commondata : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
-    use_theory_errors: bool
-        Whether or not to include errors with name ``THEORY*` in the covmat
 
     Returns
     -------
@@ -101,27 +97,11 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
            [3.46727332e-05, 3.45492831e-05, 2.56283708e-05, ...,
             4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
     """
-    converted_mult_errors = (
-        commondata.multiplicative_errors
-        * commondata.central_values.to_numpy()[:, np.newaxis]
-        / 100
-    )
-    errors = pd.concat((converted_mult_errors, commondata.additive_errors), axis=1)
-
-    # start with diagonal of statistical error
-    cov_mat = np.diag(commondata.stat_errors.to_numpy() ** 2)
-
-    uncorr_part, corr_part, special_corr = group_systematics(errors, use_theory_errors)
-    if special_corr:
-        special_corr = pd.concat(special_corr, axis=1, sort=False)
-    else:
-        special_corr = pd.DataFrame(index=commondata.additive_errors.index)
-
-    cov_mat += corr_part + uncorr_part + special_corr.to_numpy() @ special_corr.to_numpy().T
-    return cov_mat
+    return construct_covmat(
+        commondata.stat_errors.to_numpy(),  commondata.systematic_errors())
 
 
-def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
+def datasets_covmat_from_systematics(list_of_commondata):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
 
@@ -135,8 +115,6 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
     ----------
     list_of_commondata : list[validphys.coredata.CommonData]
         list of CommonData objects.
-    use_theory_errors: bool
-        Whether or not to include errors with name ``THEORY*` in the covmat
 
     Returns
     -------
@@ -162,26 +140,13 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
     block_diags = []
 
     for cd in list_of_commondata:
-        converted_mult_errors = (
-            cd.multiplicative_errors * cd.central_values.to_numpy()[:, np.newaxis] / 100
-        )
-        errors = pd.concat((converted_mult_errors, cd.additive_errors), axis=1)
-
-        # start with diagonal of statistical error squared and add systematic
-        # contributions
-        cd_cov_mat = np.diag(cd.stat_errors.to_numpy() ** 2)
-
-        uncorr_part, corr_part, cd_special_corr = group_systematics(errors, use_theory_errors)
-        cd_cov_mat += corr_part + uncorr_part
-
-        block_diags.append(cd_cov_mat)
-        # special corrs for each dataset needs to be N_data * N_sys, so either
-        # concatenate additive and mutiplicative systematics or set as empty so
-        # N_sys = 0
-        if cd_special_corr:
-            special_corrs.append(pd.concat(cd_special_corr, axis=1, sort=False))
-        else:
-            special_corrs.append(pd.DataFrame(index=cd.additive_errors.index))
+        errors = cd.systematic_errors()
+        # seperate out the special uncertainties which can be correlated across
+        # datasets
+        is_intra_dataset_error = errors.columns.isin(INTRA_DATASET_SYS_NAME)
+        block_diags.append(construct_covmat(
+            cd.stat_errors.to_numpy(), errors.loc[:, is_intra_dataset_error]))
+        special_corrs.append(errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets
     special_sys = pd.concat(special_corrs, axis=0, sort=False)
@@ -192,25 +157,44 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
     return diag + special_sys.to_numpy() @ special_sys.to_numpy().T
 
 
-def group_systematics(sys_errors, use_theory_errors):
-    is_special = lambda x: x if x in INTRA_DATASET_SYS_NAME else "SPECIALCORR"
-    cd_special_corr = []
-    ndat, _ = sys_errors.shape
-    uncorr_part, corr_part = np.zeros(ndat), np.zeros((ndat, ndat))
-    for sys_name, sys_error in sys_errors.groupby(by=is_special, axis=1):
-        if (sys_name == "UNCORR") or (
-            (sys_name == "THEORYUNCORR") and use_theory_errors
-        ):
-            uncorr_part +=(sys_error.to_numpy() ** 2).sum(axis=1)
-        elif (sys_name == "CORR") or (
-            (sys_name == "THEORYCORR") and use_theory_errors
-        ):
-            sys_mat = sys_error.to_numpy()
-            corr_part += sys_mat @ sys_mat.T
-        elif sys_name == "SPECIALCORR":
-            cd_special_corr.append(sys_error)
+def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
+    """basic function to construct a covariance matrix (covmat), given the
+    statistical error and a dataframe of systematics.
 
-    return np.diag(uncorr_part), corr_part, cd_special_corr
+    Errors with name *UNCORR are added in quadrature with
+    the statistical error to the diagonal of the covmat.
+
+    Other systematics are treated as correlated their covmat contribution is
+    found by multiplying them by there transpose.
+
+    Parameters
+    ----------
+    stat_errors: np.array
+        a 1-D array of statistical uncertainties
+    sys_errors: pd.DataFrame
+        a dataframe with shape (N_data * N_sys) and systematic name as the
+        column headers. The uncertainties should be in the same units as the
+        data.
+
+    Notes
+    -----
+    This function doesn't contain any logic to ignore certain contributions to
+    the covmat, if you wanted to not include a particular systematic/set of
+    systematic i.e all uncertainties with MULT errors, then filter those out
+    of ``sys_errors`` before passing that to this function.
+
+    """
+    diagonal = stat_errors ** 2
+    covmat = np.zeros(diagonal.shape * 2)
+    for sys_name, sys_error in sys_errors.groupby(level=0, axis=1):
+        if sys_name in ("UNCORR", "THEORYUNCORR"):
+            diagonal +=(sys_error.to_numpy() ** 2).sum(axis=1)
+        else:
+            sys_mat = sys_error.to_numpy()
+            covmat += sys_mat @ sys_mat.T
+
+    # finally add diagonal only contribution to covmat
+    return covmat + np.diag(diagonal)
 
 
 def sqrt_covmat(covariance_matrix):

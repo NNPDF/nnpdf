@@ -215,7 +215,8 @@ class CommonData:
     @property
     def multiplicative_errors(self):
         """Returns the systematics which are multiplicative (systype is MULT)
-        in a percentage format
+        in a percentage format, with SKIP uncertainties removed.
+
         """
         mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
         mult_table = self.systematics_table.loc[:, "MULT"]
@@ -223,12 +224,14 @@ class CommonData:
         # from 1.
         mult_table = mult_table.iloc[:, mult_systype.index - 1]
         mult_table.columns = mult_systype["name"].to_numpy()
-        return mult_table
+        return mult_table.loc[:, mult_table.columns != "SKIP"]
 
     @property
     def additive_errors(self):
         """Returns the systematics which are additive (systype is ADD) as
-        absolute uncertainties (same units as data).
+        absolute uncertainties (same units as data), with SKIP uncertainties
+        removed.
+
         """
         add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
         add_table = self.systematics_table.loc[:, "ADD"]
@@ -236,4 +239,20 @@ class CommonData:
         # from 1.
         add_table = add_table.iloc[:, add_systype.index - 1]
         add_table.columns = add_systype["name"].to_numpy()
-        return add_table
+        return add_table.loc[:, add_table.columns != "SKIP"]
+
+
+    def systematic_errors(self):
+        """Returns all systematic errors as absolute uncertainties, with a
+        single column for each uncertainty. Converts
+        :py:attr:`multiplicative_errors` to units of data and then appends
+        onto :py:attr:`additive_errors`
+
+        """
+        # TODO: shall we just save this object when loading the data?
+        # NOTE: in the future can take t0 predictions here.
+        central_values = self.central_values.to_numpy()
+        converted_mult_errors = (
+            self.multiplicative_errors * central_values[:, np.newaxis] / 100
+        )
+        return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
