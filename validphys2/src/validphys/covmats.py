@@ -185,16 +185,12 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
 
     """
     diagonal = stat_errors ** 2
-    covmat = np.zeros(diagonal.shape * 2)
-    for sys_name, sys_error in sys_errors.groupby(level=0, axis=1):
-        if sys_name in ("UNCORR", "THEORYUNCORR"):
-            diagonal +=(sys_error.to_numpy() ** 2).sum(axis=1)
-        else:
-            sys_mat = sys_error.to_numpy()
-            covmat += sys_mat @ sys_mat.T
 
-    # finally add diagonal only contribution to covmat
-    return covmat + np.diag(diagonal)
+    is_uncorr = sys_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    diagonal += (sys_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
+
+    corr_sys_mat = sys_errors.loc[:, ~is_uncorr].to_numpy()
+    return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
 
 
 def sqrt_covmat(covariance_matrix):
