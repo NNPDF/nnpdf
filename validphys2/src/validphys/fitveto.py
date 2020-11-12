@@ -8,7 +8,6 @@ Current active vetoes:
    ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
    ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
    Integrability - Replicas with IntegrabilityNumbers < integ_threshold
-   INTEG_THRESHOLD = 1e-2
 """
 
 import json
@@ -20,7 +19,7 @@ log = logging.getLogger(__name__)
 # Default thresholds for distribution vetos in units of standard deivations
 NSIGMA_DISCARD_ARCLENGTH = 4.0
 NSIGMA_DISCARD_CHI2 = 4.0
-
+INTEG_THRESHOLD = 1e-2
 
 
 def distribution_veto(dist, prior_mask, nsigma_threshold):
@@ -53,7 +52,7 @@ def integrability_veto(dist, integ_threshold):
     return dist <= integ_threshold
 
 
-def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float):
+def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float, integ_threshold: float):
     """ Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
