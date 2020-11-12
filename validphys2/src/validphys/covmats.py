@@ -126,7 +126,6 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
     return cov_mat
 
 
-
 def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -150,6 +149,19 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
         Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
         containing uncertainty and correlation information.
 
+    Example
+    -------
+    >>> from validphys.commondataparser import load_commondata
+    >>> from validphys.covmats import datasets_covmat_from_systematics
+    >>> from validphys.loader import Loader
+    >>> l = Loader()
+    >>> cd1 = l.check_commondata("ATLASLOMASSDY11EXT")
+    >>> cd2 = l.check_commondata("ATLASZHIGHMASS49FB")
+    >>> ld1, ld2 = map(load_commondata, (cd1, cd2))
+    >>> datasets_covmat_from_systematics((ld1, ld2))
+    array([[2.91814548e+06, 4.66692123e+06, 2.36823008e+06, 8.62587330e+05,
+            2.78209614e+05, 1.11790645e+05, 1.75129920e+03, 7.97466600e+02,
+            4.00296960e+02, 2.22039720e+02, 1.46202210e+02, 8.36558100e+01,
     """
     special_corrs = []
     block_diags = []
