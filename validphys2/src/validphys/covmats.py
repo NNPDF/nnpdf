@@ -106,23 +106,18 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
         * commondata.central_values.to_numpy()[:, np.newaxis]
         / 100
     )
+    errors = pd.concat((converted_mult_errors, commondata.additive_errors), axis=1)
 
     # start with diagonal of statistical error
     cov_mat = np.diag(commondata.stat_errors.to_numpy() ** 2)
 
-    is_special = lambda x: x if x in INTRA_DATASET_SYS_NAME else "SPECIALCORR"
-    for sys_errors in (converted_mult_errors, commondata.additive_errors):
-        for sys_name, sys_error in sys_errors.groupby(by=is_special, axis=1):
-            if (sys_name == "UNCORR") or (
-                (sys_name == "THEORYUNCORR") and use_theory_errors
-            ):
-                cov_mat += np.diag((sys_error.to_numpy() ** 2).sum(axis=1))
-            elif sys_name in ("CORR", "SPECIALCORR") or (
-                (sys_name == "THEORYCORR") and use_theory_errors
-            ):
-                sys_mat = sys_error.to_numpy()
-                cov_mat += sys_mat @ sys_mat.T
+    uncorr_part, corr_part, special_corr = group_systematics(errors, use_theory_errors)
+    if special_corr:
+        special_corr = pd.concat(special_corr, axis=1, sort=False)
+    else:
+        special_corr = pd.DataFrame(index=commondata.additive_errors.index)
 
+    cov_mat += corr_part + uncorr_part + special_corr.to_numpy() @ special_corr.to_numpy().T
     return cov_mat
 
 
@@ -165,32 +160,21 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
     """
     special_corrs = []
     block_diags = []
-    is_special = lambda x: x if x in INTRA_DATASET_SYS_NAME else "SPECIALCORR"
 
     for cd in list_of_commondata:
-        cd_special_corr = []
         converted_mult_errors = (
             cd.multiplicative_errors * cd.central_values.to_numpy()[:, np.newaxis] / 100
         )
+        errors = pd.concat((converted_mult_errors, cd.additive_errors), axis=1)
 
         # start with diagonal of statistical error squared and add systematic
         # contributions
-        cov_mat = np.diag(cd.stat_errors.to_numpy() ** 2)
+        cd_cov_mat = np.diag(cd.stat_errors.to_numpy() ** 2)
 
-        for sys_errors in (converted_mult_errors, cd.additive_errors):
-            for sys_name, sys_error in sys_errors.groupby(by=is_special, axis=1):
-                if (sys_name == "UNCORR") or (
-                    (sys_name == "THEORYUNCORR") and use_theory_errors
-                ):
-                    cov_mat += np.diag((sys_error.to_numpy() ** 2).sum(axis=1))
-                elif (sys_name == "CORR") or (
-                    (sys_name == "THEORYCORR") and use_theory_errors
-                ):
-                    sys_mat = sys_error.to_numpy()
-                    cov_mat += sys_mat @ sys_mat.T
-                elif sys_name == "SPECIALCORR":
-                    cd_special_corr.append(sys_error)
-        block_diags.append(cov_mat)
+        uncorr_part, corr_part, cd_special_corr = group_systematics(errors, use_theory_errors)
+        cd_cov_mat += corr_part + uncorr_part
+
+        block_diags.append(cd_cov_mat)
         # special corrs for each dataset needs to be N_data * N_sys, so either
         # concatenate additive and mutiplicative systematics or set as empty so
         # N_sys = 0
@@ -198,6 +182,7 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
             special_corrs.append(pd.concat(cd_special_corr, axis=1, sort=False))
         else:
             special_corrs.append(pd.DataFrame(index=cd.additive_errors.index))
+
     # concat systematics across datasets
     special_sys = pd.concat(special_corrs, axis=0, sort=False)
     # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
@@ -205,6 +190,27 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
 
     diag = la.block_diag(*block_diags)
     return diag + special_sys.to_numpy() @ special_sys.to_numpy().T
+
+
+def group_systematics(sys_errors, use_theory_errors):
+    is_special = lambda x: x if x in INTRA_DATASET_SYS_NAME else "SPECIALCORR"
+    cd_special_corr = []
+    ndat, _ = sys_errors.shape
+    uncorr_part, corr_part = np.zeros(ndat), np.zeros((ndat, ndat))
+    for sys_name, sys_error in sys_errors.groupby(by=is_special, axis=1):
+        if (sys_name == "UNCORR") or (
+            (sys_name == "THEORYUNCORR") and use_theory_errors
+        ):
+            uncorr_part +=(sys_error.to_numpy() ** 2).sum(axis=1)
+        elif (sys_name == "CORR") or (
+            (sys_name == "THEORYCORR") and use_theory_errors
+        ):
+            sys_mat = sys_error.to_numpy()
+            corr_part += sys_mat @ sys_mat.T
+        elif sys_name == "SPECIALCORR":
+            cd_special_corr.append(sys_error)
+
+    return np.diag(uncorr_part), corr_part, cd_special_corr
 
 
 def sqrt_covmat(covariance_matrix):
