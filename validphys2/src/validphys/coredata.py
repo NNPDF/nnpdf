@@ -219,7 +219,9 @@ class CommonData:
 
         """
         mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
-        mult_table = self.systematics_table.loc[:, "MULT"]
+        # NOTE: Index with list here so that return is always a DataFrame, even
+        # if N_sys = 1 (else a Series could be returned)
+        mult_table = self.systematics_table.loc[:, ["MULT"]]
         # Minus 1 because iloc starts from 0, while the systype counting starts
         # from 1.
         mult_table = mult_table.iloc[:, mult_systype.index - 1]
@@ -234,7 +236,9 @@ class CommonData:
 
         """
         add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
-        add_table = self.systematics_table.loc[:, "ADD"]
+        # NOTE: Index with list here so that return is always a DataFrame, even
+        # if N_sys = 1 (else a Series could be returned)
+        add_table = self.systematics_table.loc[:, ["ADD"]]
         # Minus 1 because iloc starts from 0, while the systype counting starts
         # from 1.
         add_table = add_table.iloc[:, add_systype.index - 1]

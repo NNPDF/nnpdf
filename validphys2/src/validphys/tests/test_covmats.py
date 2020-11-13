@@ -76,6 +76,22 @@ def test_covmat_from_systematics(data_internal_cuts_config):
 
     np.testing.assert_allclose(cpp_covmat, covmat)
 
+def test_covmat_with_one_systematic():
+    """Test that a dataset with 1 systematic successfully builds covmat, and
+    that it agrees with cpp code. This special case can break the covmat
+    construction in python because of pandas indexing.
+
+    """
+    dsinput = {"dataset": "D0ZRAP", "frac": 1.0, "cfac": ["QCD"]}
+    cd = API.commondata(dataset_input=dsinput)
+    l_cd = load_commondata(cd)
+    covmat = covmat_from_systematics(l_cd)
+
+    ds = API.dataset(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
+    cpp_covmat = ds.load().get_covmat()
+
+    np.testing.assert_allclose(cpp_covmat, covmat)
+
 
 def test_cpp_sqrtcovmat():
     """Test that the sqrt of the covariance matrix is computed correctly for a
