@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 # Default thresholds for distribution vetos in units of standard deivations
 NSIGMA_DISCARD_ARCLENGTH = 4.0
 NSIGMA_DISCARD_CHI2 = 4.0
-INTEG_THRESHOLD = 1e-2
+INTEG_THRESHOLD = 0.5
 
 
 def distribution_veto(dist, prior_mask, nsigma_threshold):
