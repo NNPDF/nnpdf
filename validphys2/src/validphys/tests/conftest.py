@@ -64,8 +64,8 @@ WEIGHTED_DATA = [
 PDF = "NNPDF31_nnlo_as_0118"
 HESSIAN_PDF = "NNPDF31_nnlo_as_0118_hessian"
 THEORYID = 162
-FIT = "191015-mw-001"
-FIT_ITERATED = "191015-mw-001_ite2_for_testing"
+FIT = "191015-mw-001_for_testing"
+FIT_ITERATED = "191015-mw-001_for_testing_iterated"
 
 base_config = dict(
         pdf=PDF,
