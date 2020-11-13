@@ -240,7 +240,6 @@ def storefit(
             fs.write(line)
 
     # create info file
-    arc_strings = [str(i) for i in arc_lengths]
     arc_line = " ".join(arc_strings)
     integrability_line = " ".join(str(i) for i in integrability_numbers)
     with open(f"{replica_path}/{fitname}.fitinfo", "w") as fs:
