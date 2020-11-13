@@ -46,7 +46,7 @@ def internal_multiclosure_dataset_loader(
     dataset: (DataSetSpec, DataGroupSpec)
         dataset for which the theory predictions and t0 covariance matrix
         will be loaded. Note that due to the structure of `validphys` this
-        function can be overloaded to accept an DataGroupSpec.
+        function can be overloaded to accept a DataGroupSpec.
     fits_pdf: list
         list of PDF objects produced from performing multiple closure tests
         fits. Each fit should have a different filterseed but the same
@@ -455,7 +455,7 @@ exps_bias_var_resample = collect(
 def bias_variance_resampling_total(exps_bias_var_resample):
     """Sum the bias_variance_resampling_data for all experiments, giving
     the total bias and variance resamples. This relies on the bootstrap seed being
-    the same for all experiments such that the fits/replicas are the same and
+    the same for all experiments, such that the fits/replicas are the same, and
     there being no inter-experiment correlations.
 
     """
