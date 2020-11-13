@@ -74,14 +74,11 @@ def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_
     total_mask = posmask.copy()
 
     # Integrability veto
-    integrability = dict()
     for i in range(0, len(fitinfos[0].integnumbers)):
         values = [j.integnumbers[i] for j in fitinfos] 
         key = "IntegNumber_" + str(i)
-        #values, threshold = integrability[key]
         vetoes[key] = integrability_veto(
             values, integ_threshold=integ_threshold)
-        new_total_mask = np.all(list(vetoes.values()), axis=0)
 
     # Distribution vetoes
     while True:
