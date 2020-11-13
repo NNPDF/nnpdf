@@ -9,19 +9,13 @@ description: Dummy closure fit runcard
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
+dataset_inputs:
 # Fixed target DIS
-- experiment: NMC
-  datasets:
-  - {dataset: NMC, frac: 0.5}
+- {dataset: NMC, frac: 0.5}
 # ATLAS
-- experiment: ATLAS
-  datasets:
-  - {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD]}
 # CMS
-- experiment: CMS
-  datasets:
-  - {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
+- {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
 
 ############################################################
 datacuts:
