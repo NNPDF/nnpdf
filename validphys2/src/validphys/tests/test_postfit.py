@@ -33,7 +33,7 @@ def test_postfit(tmp):
     # the LHAPDF folder. Otherwise other tests may fail, for example
     shutil.copytree(fitpath, tmp / FIT)
     TMPFIT = "TEST"
-    sp.run(f"vp-fitrename -c {fit.name} {TMPFIT}".split(), cwd=tmp)
+    sp.run(f"vp-fitrename -c {fit.name} {TMPFIT}".split(), cwd=tmp, check=True)
     # Update fitpath so that it is the path of the fit that we will run postfit on
     fitpath = tmp / TMPFIT
 
@@ -47,6 +47,7 @@ def test_postfit(tmp):
     sp.run(
         f"postfit {nrep} {TMPFIT} --chi2-threshold {chi2_threshold} --arclength-threshold {arclength_threshold}".split(),
         cwd=tmp,
+        check=True,
     )
 
     # Check that postfit directory is created
