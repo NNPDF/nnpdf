@@ -49,7 +49,7 @@ def delta_chi2_hessian(pdf, total_chi2_data):
 @figure
 def plot_Kullback_Leibler(delta_chi2_hessian):
     """
-    Determines the KL measure by compareing the expectation value of Delta chi2 to the cumulative
+    Determines the KL measure by comparing the expectation value of Delta chi2 to the cumulative
     distribution function of chi2 with one degree of freedom.
     """
     delta_chi2 = delta_chi2_hessian
