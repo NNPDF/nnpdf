@@ -497,6 +497,7 @@ def pdfNN_layer_generator(
         from the `list_of_pdf_layers` in order """
 
         if inp == 1:
+            import tensorflow as tf
             x = scale_input(x)
             x0 = tf.keras.backend.ones_like(x)
             curr_fun = list_of_pdf_layers[0](x)
