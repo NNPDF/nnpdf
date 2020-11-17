@@ -10,7 +10,7 @@ description: NNPDF4.0 NNLO Closure Test - 70k epochs, 3.1 dataset, n3fit rep law
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 experiments:
-# Fixed-target DIS
+# Fixed target DIS
 - experiment: NMC
   datasets:
   - {dataset: NMCPD, frac: 0.5}
@@ -25,13 +25,13 @@ experiments:
   - {dataset: BCDMSD, frac: 0.5}
 - experiment: CHORUS
   datasets:
-  - {dataset: CHORUSNUPb, frac: 0.5}
-  - {dataset: CHORUSNBPb, frac: 0.5}
+  - {dataset: CHORUSNUPb, frac: 0.5}      #Changed name for consistency with full runcard
+  - {dataset: CHORUSNBPb, frac: 0.5}      #Changed name for consistency with full runcard
 - experiment: NTVDMN
   datasets:
   - {dataset: NTVNUDMNFe, frac: 0.5, cfac: [MAS]}
   - {dataset: NTVNBDMNFe, frac: 0.5, cfac: [MAS]}
-# HERA
+# HERA data
 - experiment: HERACOMB
   datasets:
   - {dataset: HERACOMBNCEM, frac: 0.5}
@@ -44,10 +44,10 @@ experiments:
 # Combined HERA charm production cross-sections
 - experiment: HERAF2CHARM
   datasets:
-  - {dataset: HERACOMB_SIGMARED_C, frac: 0.5} # U
+  - {dataset: HERACOMB_SIGMARED_C, frac: 0.5}     # N 
 - experiment: HERAF2BOTTOM
   datasets:
-  - {dataset: HERACOMB_SIGMARED_B, frac: 0.5} # U
+  - {dataset: HERACOMB_SIGMARED_B, frac: 0.5}     # N 
 # Fixed target Drell-Yan
 - experiment: DYE886
   datasets:
@@ -56,7 +56,7 @@ experiments:
 - experiment: DYE605
   datasets:
   - {dataset: DYE605, frac: 0.5, cfac: [QCD]}
-# Tevatron
+# Tevatron jets and W,Z production
 - experiment: CDF
   datasets:
   - {dataset: CDFZRAP, frac: 1.0, cfac: [QCD]}
@@ -65,34 +65,45 @@ experiments:
   - {dataset: D0ZRAP, frac: 1.0, cfac: [QCD]}
   - {dataset: D0WEASY, frac: 1.0, cfac: [QCD]}
   - {dataset: D0WMASY, frac: 1.0, cfac: [QCD]}
-# LHC
+# ATLAS
 - experiment: ATLAS
   datasets:
+# ATLAS eWK
   - {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: [QCD]}
   - {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD]}
   - {dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD]}
-  - {dataset: ATLASWZRAP11, frac: 0.5, cfac: [QCD]}
-  - {dataset: ATLAS1JET11, frac: 0.5, cfac: [QCD]}
+  - {dataset: ATLASWZRAP11CC, frac: 0.5, cfac: [QCD]}       # N 
+# ATLAS Z pt    
   - {dataset: ATLASZPT8TEVMDIST, frac: 0.5, cfac: [QCD], sys: 10}
   - {dataset: ATLASZPT8TEVYDIST, frac: 0.5, cfac: [QCD], sys: 10}
+# ATLAS top
   - {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD]}
-  - {dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0, cfac: [QCD]}
+  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: [QCD]}      # N
+# ATLAS jets
+  - { dataset: ATLAS1JET11_NEW_SCALE, frac: 0.5, cfac: [QCD], sys: DECORR }              # N
+# CMS
 - experiment: CMS
   datasets:
+# CMS EWK
   - {dataset: CMSWEASY840PB, frac: 1.0, cfac: [QCD]}
   - {dataset: CMSWMASY47FB, frac: 1.0, cfac: [QCD]}
   - {dataset: CMSDY2D11, frac: 0.5, cfac: [QCD]}
   - {dataset: CMSWMU8TEV, frac: 1.0, cfac: [QCD]}
-  - {dataset: CMSJETS11, frac: 0.5, cfac: [QCD]}
+# CMS Z pt
   - {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
+# CMS jets
+  - { dataset: CMSJETS11_NEW_SCALE,     frac: 0.5, cfac: [QCD] }     # N
+# CMS ttbar      
   - {dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD]}
   - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD]}
+# LHCb 
 - experiment: LHCb
   datasets:
   - {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
   - {dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD]}
-  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [QCD, NRM]}
-  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [QCD, NRM]}
+  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
+  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
+
 
 ############################################################
 datacuts:
