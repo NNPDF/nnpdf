@@ -75,13 +75,6 @@ def covmat_from_systematics(commondata, central_values=None):
         can be used to calculate, for example, the t0 covariance matrix by
         using the predictions from the central member of the t0 pdf.
 
-    use_mult_errors: bool
-        Boolean which controls whether multiplicative errors are used
-        when computing the covmat. By default it should be set to ``True``
-        since setting this parameter to ``False`` will completely ignore multiplicative
-        uncertainties. This flag is present for use with pseudodata generation where the
-        multiplicative uncertainties should be ignored.
-
     Returns
     -------
     cov_mat: np.array
@@ -138,6 +131,10 @@ def datasets_covmat_from_systematics(
         combined with the multiplicative errors to calculate their absolute
         contribution. By default this is None and the experimental central
         values are used.
+
+    use_mult_errors: bool
+        Whether or not to include multiplicative systematic errors in the computation of
+        the covariance matrix. This is largely for use in :py:func:`validphys.pseudodata.make_replica`.
 
     Returns
     -------
