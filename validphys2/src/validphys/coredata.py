@@ -253,7 +253,6 @@ class CommonData:
         onto :py:attr:`additive_errors`
 
         """
-        # TODO: shall we just save this object when loading the data?
         # NOTE: in the future can take t0 predictions here.
         central_values = self.central_values.to_numpy()
         converted_mult_errors = (

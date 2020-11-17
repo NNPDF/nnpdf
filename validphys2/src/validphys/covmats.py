@@ -32,7 +32,7 @@ def covmat_from_systematics(commondata):
     construct the covariance matrix accounting for correlations between
     systematics.
 
-    If the systematic has the name ``SKIP`` then it is ignore in the
+    If the systematic has the name ``SKIP`` then it is ignored in the
     construction of the covariance matrix.
 
     ADDitive or MULTiplicative systypes are handled by either multiplying
@@ -44,11 +44,11 @@ def covmat_from_systematics(commondata):
         and dividing by 100.
 
     Finally, the systematics are split into the five possible archetypes
-    of systematics uncertainties: uncorrelated (UNCORR), correlated (CORR),
+    of systematic uncertainties: uncorrelated (UNCORR), correlated (CORR),
     theory uncorrelated (THEORYUNCORR), theory correlated (THEORYCORR) and
     special correlated (SPECIALCORR) systematics.
 
-    Uncorrelated contributions from: statistical error, uncorrelated and
+    Uncorrelated contributions from statistical error, uncorrelated and
     theory uncorrelated are added in quadrature to the diagonal of the covmat.
 
     The contribution to the covariance matrix arising due to
@@ -111,7 +111,7 @@ def datasets_covmat_from_systematics(list_of_commondata):
     contributions. The other systematics contribute to the block diagonal in the
     same way as :py:meth:`covmat_from_systematics`.
 
-    Paramaters
+    Parameters
     ----------
     list_of_commondata : list[validphys.coredata.CommonData]
         list of CommonData objects.
@@ -141,7 +141,7 @@ def datasets_covmat_from_systematics(list_of_commondata):
 
     for cd in list_of_commondata:
         errors = cd.systematic_errors()
-        # seperate out the special uncertainties which can be correlated across
+        # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = errors.columns.isin(INTRA_DATASET_SYS_NAME)
         block_diags.append(construct_covmat(
@@ -158,14 +158,14 @@ def datasets_covmat_from_systematics(list_of_commondata):
 
 
 def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
-    """basic function to construct a covariance matrix (covmat), given the
+    """Basic function to construct a covariance matrix (covmat), given the
     statistical error and a dataframe of systematics.
 
-    Errors with name *UNCORR are added in quadrature with
+    Errors with name UNCORR or THEORYUNCORR are added in quadrature with
     the statistical error to the diagonal of the covmat.
 
-    Other systematics are treated as correlated their covmat contribution is
-    found by multiplying them by there transpose.
+    Other systematics are treated as correlated; their covmat contribution is
+    found by multiplying them by their transpose.
 
     Parameters
     ----------
@@ -180,7 +180,7 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     -----
     This function doesn't contain any logic to ignore certain contributions to
     the covmat, if you wanted to not include a particular systematic/set of
-    systematic i.e all uncertainties with MULT errors, then filter those out
+    systematics i.e all uncertainties with MULT errors, then filter those out
     of ``sys_errors`` before passing that to this function.
 
     """
