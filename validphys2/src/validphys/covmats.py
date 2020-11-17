@@ -68,13 +68,6 @@ def covmat_from_systematics(commondata):
         CommonData which stores information about systematic errors,
         their treatment and description.
 
-    use_mult_errors: bool
-        Boolean which controls whether multiplicative errors are used
-        when computing the covmat. By default it should be set to ``True``
-        since setting this parameter to ``False`` will completely ignore multiplicative
-        uncertainties. This flag is present for use with pseudodata generation where the
-        multiplicative uncertainties should be ignored.
-
     Returns
     -------
     cov_mat: np.array
@@ -108,7 +101,7 @@ def covmat_from_systematics(commondata):
         commondata.stat_errors.to_numpy(),  commondata.systematic_errors())
 
 
-def datasets_covmat_from_systematics(list_of_commondata):
+def datasets_covmat_from_systematics(list_of_commondata, use_mult_errors=True):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
 
@@ -122,6 +115,10 @@ def datasets_covmat_from_systematics(list_of_commondata):
     ----------
     list_of_commondata : list[validphys.coredata.CommonData]
         list of CommonData objects.
+
+    use_mult_errors: bool
+        Whether or not to include multiplicative systematic errors in the computation of
+        the covariance matrix. This is largely for use in :py:func:`validphys.pseudodata.make_replica`.
 
     Returns
     -------
@@ -147,7 +144,10 @@ def datasets_covmat_from_systematics(list_of_commondata):
     block_diags = []
 
     for cd in list_of_commondata:
-        errors = cd.systematic_errors()
+        if use_mult_errors:
+            errors = cd.systematic_errors()
+        else:
+            errors = cd.additive_errors
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = errors.columns.isin(INTRA_DATASET_SYS_NAME)
