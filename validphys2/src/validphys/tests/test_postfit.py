@@ -42,10 +42,11 @@ def test_postfit(tmp):
     nrep = 2
     chi2_threshold = 3
     arclength_threshold = 5.2
+    integrability_threshold = 1.0
 
     # Run postfit
     sp.run(
-        f"postfit {nrep} {TMPFIT} --chi2-threshold {chi2_threshold} --arclength-threshold {arclength_threshold}".split(),
+        f"postfit {nrep} {TMPFIT} --chi2-threshold {chi2_threshold} --arclength-threshold {arclength_threshold} --integrability-threshold {integrability_threshold}".split(),
         cwd=tmp,
         check=True,
     )
@@ -108,3 +109,6 @@ def test_postfit(tmp):
         assert (
             veto_count["arclength_threshold"] == arclength_threshold
         ), f"Postfit has not written the arclength threshold correctly to {vetopath}."
+        assert (
+            veto_count["integrability_threshold"] == integrability_threshold
+        ), f"Postfit has not written the integrability threshold correctly to {vetopath}."
