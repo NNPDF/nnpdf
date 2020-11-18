@@ -41,7 +41,8 @@ def test_commondata_with_cuts():
     # We must do these - 1 subtractions due to the fact that cuts indexing
     # starts at 0 while commondata indexing starts at 1
     assert all(loaded_cd_fit_cuts.commondata_table.index - 1 == fit_cuts.load())
-    assert all(loaded_cd_fit_cuts.sys_errors.index - 1 == fit_cuts.load())
+    assert all(loaded_cd_fit_cuts.additive_errors.index - 1 == fit_cuts.load())
+    assert all(loaded_cd_fit_cuts.multiplicative_errors.index - 1 == fit_cuts.load())
 
     loaded_cd_internal_cuts = loaded_cd.with_cuts(internal_cuts)
     assert all(loaded_cd_internal_cuts.commondata_table.index - 1 == internal_cuts.load())

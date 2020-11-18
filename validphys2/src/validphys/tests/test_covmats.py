@@ -14,7 +14,8 @@ from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.covmats import (
     sqrt_covmat,
-    datasets_covmat_from_systematics
+    datasets_covmat_from_systematics,
+    covmat_from_systematics
 )
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -36,6 +37,26 @@ def test_covmat_from_systematics_correlated(data_with_correlations_config):
     np.testing.assert_allclose(cpp_covmat, covmat)
 
 
+def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
+    """Test which checks that the single dataset implementation of
+    ``covmat_from_systematics`` matches ``datasets_covmat_from_systematics``
+    when the latter is given a list containing a single dataset.
+
+    """
+    data = API.data(**data_internal_cuts_config)
+    cds = [ds.commondata for ds in data.datasets]
+
+    ld_cds = list(map(load_commondata, cds))
+
+    internal_cuts = [ds.cuts for ds in data.datasets]
+    cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
+
+    for cut_ld_cd in cut_ld_cds:
+        covmat_a = covmat_from_systematics(cut_ld_cd)
+        covmat_b = datasets_covmat_from_systematics([cut_ld_cd])
+        np.testing.assert_allclose(covmat_a, covmat_b)
+
+
 def test_covmat_from_systematics(data_internal_cuts_config):
     """Test which checks the python computation of the covmat relating to a
     collection of datasets matches that of the C++ computation. Note that the
@@ -52,6 +73,22 @@ def test_covmat_from_systematics(data_internal_cuts_config):
     covmat = datasets_covmat_from_systematics(cut_ld_cds)
 
     cpp_covmat = API.groups_covmat(**data_internal_cuts_config)
+
+    np.testing.assert_allclose(cpp_covmat, covmat)
+
+def test_covmat_with_one_systematic():
+    """Test that a dataset with 1 systematic successfully builds covmat, and
+    that it agrees with cpp code. This special case can break the covmat
+    construction in python because of pandas indexing.
+
+    """
+    dsinput = {"dataset": "D0ZRAP", "frac": 1.0, "cfac": ["QCD"]}
+    cd = API.commondata(dataset_input=dsinput)
+    l_cd = load_commondata(cd)
+    covmat = covmat_from_systematics(l_cd)
+
+    ds = API.dataset(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
+    cpp_covmat = ds.load().get_covmat()
 
     np.testing.assert_allclose(cpp_covmat, covmat)
 

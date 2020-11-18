@@ -120,18 +120,6 @@ class CFactorData:
 
 
 @dataclasses.dataclass(eq=False)
-class SystematicError:
-    add: float
-    mult: float
-    sys_type: str #e.g ADD
-    name: str #e.g UNCORR
-
-    def __repr__(self):
-        return (f"{self.__class__.__name__}(add={self.add}, mult={self.mult},"
-                "sys_type={self.sys_type}, name={self.name})")
-
-
-@dataclasses.dataclass(eq=False)
 class CommonData:
     """
     Data contained in Commondata files, relevant cuts applied.
@@ -176,6 +164,12 @@ class CommonData:
     nsys: int
     commondata_table: pd.DataFrame
     systype_table: pd.DataFrame
+    systematics_table: pd.DataFrame = dataclasses.field(init=None)
+
+    def __post_init__(self):
+        self.systematics_table = self.commondata_table.drop(
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+        )
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where
@@ -219,24 +213,49 @@ class CommonData:
         return self.commondata_table["stat"]
 
     @property
-    def sys_errors(self):
-        sys_table = self.commondata_table.drop(
-            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+    def multiplicative_errors(self):
+        """Returns the systematics which are multiplicative (systype is MULT)
+        in a percentage format, with SKIP uncertainties removed.
+
+        """
+        mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
+        # NOTE: Index with list here so that return is always a DataFrame, even
+        # if N_sys = 1 (else a Series could be returned)
+        mult_table = self.systematics_table.loc[:, ["MULT"]]
+        # Minus 1 because iloc starts from 0, while the systype counting starts
+        # from 1.
+        mult_table = mult_table.iloc[:, mult_systype.index - 1]
+        mult_table.columns = mult_systype["name"].to_numpy()
+        return mult_table.loc[:, mult_table.columns != "SKIP"]
+
+    @property
+    def additive_errors(self):
+        """Returns the systematics which are additive (systype is ADD) as
+        absolute uncertainties (same units as data), with SKIP uncertainties
+        removed.
+
+        """
+        add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
+        # NOTE: Index with list here so that return is always a DataFrame, even
+        # if N_sys = 1 (else a Series could be returned)
+        add_table = self.systematics_table.loc[:, ["ADD"]]
+        # Minus 1 because iloc starts from 0, while the systype counting starts
+        # from 1.
+        add_table = add_table.iloc[:, add_systype.index - 1]
+        add_table.columns = add_systype["name"].to_numpy()
+        return add_table.loc[:, add_table.columns != "SKIP"]
+
+
+    def systematic_errors(self):
+        """Returns all systematic errors as absolute uncertainties, with a
+        single column for each uncertainty. Converts
+        :py:attr:`multiplicative_errors` to units of data and then appends
+        onto :py:attr:`additive_errors`
+
+        """
+        # NOTE: in the future can take t0 predictions here.
+        central_values = self.central_values.to_numpy()
+        converted_mult_errors = (
+            self.multiplicative_errors * central_values[:, np.newaxis] / 100
         )
-        table = [
-            [
-                SystematicError(
-                    add=sys_table[f"sys.add.{j}"][i],
-                    mult=sys_table[f"sys.mult.{j}"][i],
-                    sys_type=self.systype_table["type"][j],
-                    name=self.systype_table["name"][j],
-                )
-                for j in self.systype_table.index
-            ]
-            for i in self.commondata_table.index
-        ]
-        return pd.DataFrame(
-            table,
-            columns = self.systype_table.index,
-            index=self.commondata_table.index,
-        )
+        return pd.concat((self.additive_errors, converted_mult_errors), axis=1)

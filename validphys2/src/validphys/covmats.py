@@ -1,7 +1,6 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
-from collections import namedtuple
 import logging
 
 import numpy as np
@@ -24,176 +23,40 @@ from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
 
-INTRA_DATASET_SYS_NAME = ("THEORYUNCORR", "UNCORR", "THEORYCORR", "CORR")
-
-Uncertainties = namedtuple(
-    "Uncertainties", ("stat", "unc", "corr", "thunc", "thcorr", "special")
-)
+INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 
 
-def split_uncertainties(commondata):
+def covmat_from_systematics(commondata):
     """Take the statistical uncertainty and systematics table from
-    a :py:class:`validphys.coredata.CommonData` object
-    and split into the different different uncertainty archetypes each of
-    which may be handled differently by future operations, such as constructing
-    the covariance matrix. The logic of the different archetypes
-    is best described by the now deprecated C++ code:
+    a :py:class:`validphys.coredata.CommonData` object and
+    construct the covariance matrix accounting for correlations between
+    systematics.
 
-    .. code-block:: c++
+    If the systematic has the name ``SKIP`` then it is ignored in the
+    construction of the covariance matrix.
 
-            auto CovMat = NNPDF::matrix<double>(ndat, ndat);
-
-            for (int i = 0; i < ndat; i++)
-            {
-              for (int j = 0; j < ndat; j++)
-              {
-                double sig    = 0.0;
-                double signor = 0.0;
-
-                // Statistical error
-                if (i == j)
-                  sig += pow(stat_error[i],2);
-
-                for (int l = 0; l < nsys; l++)
-                {
-                  sysError const& isys = systematic_errors[i][l];
-                  sysError const& jsys = systematic_errors[j][l];
-                  if (isys.name != jsys.name)
-                      throw RuntimeException("ComputeCovMat", "Inconsistent naming of systematics");
-                  if (isys.name == "SKIP")
-                      continue; // Continue if systype is skipped
-                  if ((isys.name == "THEORYCORR" || isys.name == "THEORYUNCORR") && !use_theory_errors)
-                      continue; // Continue if systype is theoretical and use_theory_errors == false
-                  const bool is_correlated = ( isys.name != "UNCORR" && isys.name !="THEORYUNCORR");
-                  if (i == j || is_correlated)
-                    switch (isys.type)
-                    {
-                      case ADD:   sig    += isys.add *jsys.add;  break;
-                      case MULT: if (mult_errors) { signor += isys.mult*jsys.mult; break; }
-                                 else { continue; }
-                      case UNSET: throw RuntimeException("ComputeCovMat", "UNSET systype encountered");
-                    }
-                }
-
-                // Covariance matrix entry
-                CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
-            // Covariance matrix weight
-            CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
-          }
-        }
-
-        return CovMat;
-      }
-
-    if the systematic of data point i has name ``SKIP`` we ignore
-    it. This is handled by scanning over all sytematic errors in the
-    ``sys_errors`` dataframe and dropping any columns which correspond
-    to a systematic error name of ``SKIP``, thus the ``sys_errors`` dataframe
-    defined below contains only the systematics without the ``SKIP`` name.
-
-    Note that in the switch statement an ADDitive or MULTiplicative systype
-    is handled by either multiplying the additive or multiplicative
-    uncertainties respectively. We convert uncertainties so that they are all
-    absolute:
+    ADDitive or MULTiplicative systypes are handled by either multiplying
+    the additive or multiplicative uncertainties respectively. We convert
+    uncertainties so that they are all in the same units as the data:
         - Additive (ADD) systematics are left unchanged
         - multiplicative (MULT) systematics need to be converted from a
         percentage by multiplying by the central value
         and dividing by 100.
 
     Finally, the systematics are split into the five possible archetypes
-    of systematics uncertainties: uncorrelated (UNCORR), correlated (CORR),
-    theory_uncorrelated (THEORYUNCORR), theory_correlated (THEORYCORR) and
-    special_correlated systematics.
+    of systematic uncertainties: uncorrelated (UNCORR), correlated (CORR),
+    theory uncorrelated (THEORYUNCORR), theory correlated (THEORYCORR) and
+    special correlated (SPECIALCORR) systematics.
 
+    Uncorrelated contributions from statistical error, uncorrelated and
+    theory uncorrelated are added in quadrature to the diagonal of the covmat.
 
-    Parameters
-    ----------
-    commondata: :py:class:`validphys.coredata.CommonData`
-        A commondata object containing information on the data central values, statistical and
-        systematic uncertainties, and information on their correlations.
-
-    Returns
-    -------
-        uncertainties: :py:class:`validphys.covmats.Uncertainties`
-            A ``namedtuple`` with the following attributes
-
-            stat: np.array
-                1-D array containing statistical uncertainties
-            unc: np.2darray
-                numpy array of uncorrelated systematics, can be empty if there
-                are no uncorrelated systematics. These are semantically similar
-                to statistical error, and only contribute the diagonal component
-                of the covariance matrix, because they are uncorrelated across
-                data points.
-            corr: np.2darray
-                Similar to uncorrelated except they can be correlated across
-                data points.
-            thunc: np.2darray
-                numpy array of uncorrelated "theory" uncertainties which
-                are not to be confused with theory covariance uncertainties.
-                Instead they are, for example, uncertainties in the c-factors
-            thcorr: np.2darray
-                same as theory_uncorrelated except they can be correlated across
-                data points.
-            special: pd.DataFrame
-                Dataframe of the systematics which can be correlated across
-                datasets, the columns of the dataframe are the systematic names.
-                Each systematic of this type has a unique name, by returning
-                these systematics as a dataframe with the unique names as column
-                headers, we can easily join up the special_correlated systematics
-                from multiple datasets, retaining correlations, using
-                ``pandas.concat``.
-    """
-    sys_name = commondata.systype_table["name"].to_numpy()
-    # Dropping systematics that have type SKIP
-    sys_errors_df = commondata.sys_errors.loc[:, sys_name != "SKIP"]
-    sys_name = sys_name[sys_name != "SKIP"]
-
-    # Diagonal matrix containing the statistical uncertainty for each
-    # data point
-    stat = commondata.stat_errors.to_numpy()
-
-    # Systematic uncertainties converted to absolute uncertainties (additives
-    # are left unchanged, multiplicative uncertainties are in percentage format
-    # so get multiplied by central value and divided by 100).
-    abs_sys_errors_df = sys_errors_df.apply(
-        lambda x: [
-            i.add if i.sys_type == "ADD" else (i.mult * j / 100)
-            for i, j in zip(x, commondata.central_values)
-        ]
-    )
-    abs_sys_errors = abs_sys_errors_df.to_numpy()
-
-    # set columns for special_correlated errors
-    abs_sys_errors_df.columns = sys_name
-    special_corr = abs_sys_errors_df.loc[:, ~np.isin(sys_name, INTRA_DATASET_SYS_NAME)]
-
-    thunc = abs_sys_errors[:, sys_name == "THEORYUNCORR"]
-    unc = abs_sys_errors[:, sys_name == "UNCORR"]
-    thcorr = abs_sys_errors[:, sys_name == "THEORYCORR"]
-    corr = abs_sys_errors[:, sys_name == "CORR"]
-
-    uncertainties = Uncertainties(stat, unc, corr, thunc, thcorr, special_corr)
-    return uncertainties
-
-
-def covmat_from_systematics(commondata, use_theory_errors=True):
-    """Given a single :py:class:`validphys.coredata.CommonData`, obtain the
-    tuple of statistical uncertainty and systematics from
-    :py:meth:`split_uncertainties` and
-    construct the covariance matrix.
-
-    Uncorrelated contributions from: ``stat``, ``uncorrelated`` and
-    ``theory_uncorrelated`` are added in quadrature
-    to the diagonal of the covmat.
-
-    From here it's a matter of staring at a piece of paper for a while to
-    realise the contribution to the covariance matrix arising due to
+    The contribution to the covariance matrix arising due to
     correlated systematics is schematically ``A_correlated @ A_correlated.T``,
     where A_correlated is a matrix N_dat by N_sys. The total contribution
     from correlated systematics is found by adding together the result of
     mutiplying each correlated systematic matrix by its transpose
-    (``correlated``, ``theory_correlated`` and ``special_correlated``).
+    (correlated, theory_correlated and special_correlated).
 
     For more information on the generation of the covariance matrix see the
     `paper <https://arxiv.org/pdf/hep-ph/0501067.pdf>`_
@@ -204,14 +67,12 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
     commondata : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
-    use_theory_errors: bool
-        Whether or not to include errors with name ``THEORY*` in the covmat
 
     Returns
     -------
     cov_mat : np.array
-        Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
-        containing uncertainty and correlation information.
+        Numpy array which is N_dat x N_dat (where N_dat is the number of data
+        points after cuts) containing uncertainty and correlation information.
 
     Example
     -------
@@ -236,37 +97,24 @@ def covmat_from_systematics(commondata, use_theory_errors=True):
            [3.46727332e-05, 3.45492831e-05, 2.56283708e-05, ...,
             4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
     """
-    stat, unc, corr, thunc, thcorr, special_corr = split_uncertainties(commondata)
-
-    special_vals = special_corr.values
-    cov_mat = np.diag(
-        stat ** 2
-        + (unc ** 2).sum(axis=1)
-        + (thunc ** 2).sum(axis=1) * use_theory_errors
-    ) + (
-        corr @ corr.T
-        + thcorr @ thcorr.T * use_theory_errors
-        + special_vals @ special_vals.T
-    )
-    return cov_mat
+    return construct_covmat(
+        commondata.stat_errors.to_numpy(),  commondata.systematic_errors())
 
 
-def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True):
+def datasets_covmat_from_systematics(list_of_commondata):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
 
     This is similar to :py:meth:`covmat_from_systematics`
-    except that ``special_corr`` is concatenated across all datasets
-    before being multiplied by its transpose to give off block-diagonal
+    except that special corr systematics are concatenated across all datasets
+    before being multiplied by their transpose to give off block-diagonal
     contributions. The other systematics contribute to the block diagonal in the
     same way as :py:meth:`covmat_from_systematics`.
 
-    Paramaters
+    Parameters
     ----------
     list_of_commondata : list[validphys.coredata.CommonData]
         list of CommonData objects.
-    use_theory_errors: bool
-        Whether or not to include errors with name ``THEORY*` in the covmat
 
     Returns
     -------
@@ -274,23 +122,75 @@ def datasets_covmat_from_systematics(list_of_commondata, use_theory_errors=True)
         Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
         containing uncertainty and correlation information.
 
+    Example
+    -------
+    >>> from validphys.commondataparser import load_commondata
+    >>> from validphys.covmats import datasets_covmat_from_systematics
+    >>> from validphys.loader import Loader
+    >>> l = Loader()
+    >>> cd1 = l.check_commondata("ATLASLOMASSDY11EXT")
+    >>> cd2 = l.check_commondata("ATLASZHIGHMASS49FB")
+    >>> ld1, ld2 = map(load_commondata, (cd1, cd2))
+    >>> datasets_covmat_from_systematics((ld1, ld2))
+    array([[2.91814548e+06, 4.66692123e+06, 2.36823008e+06, 8.62587330e+05,
+            2.78209614e+05, 1.11790645e+05, 1.75129920e+03, 7.97466600e+02,
+            4.00296960e+02, 2.22039720e+02, 1.46202210e+02, 8.36558100e+01,
     """
     special_corrs = []
     block_diags = []
+
     for cd in list_of_commondata:
-        stat, unc, corr, thunc, thcorr, special_corr = split_uncertainties(cd)
-        special_corrs.append(special_corr)
-        diag_covmat = np.diag(
-            stat ** 2
-            + (unc ** 2).sum(axis=1)
-            + (thunc ** 2).sum(axis=1) * use_theory_errors
-        ) + (corr @ corr.T + thcorr @ thcorr.T * use_theory_errors)
-        block_diags.append(diag_covmat)
+        errors = cd.systematic_errors()
+        # separate out the special uncertainties which can be correlated across
+        # datasets
+        is_intra_dataset_error = errors.columns.isin(INTRA_DATASET_SYS_NAME)
+        block_diags.append(construct_covmat(
+            cd.stat_errors.to_numpy(), errors.loc[:, is_intra_dataset_error]))
+        special_corrs.append(errors.loc[:, ~is_intra_dataset_error])
+
+    # concat systematics across datasets
     special_sys = pd.concat(special_corrs, axis=0, sort=False)
     # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
     special_sys.fillna(0, inplace=True)
+
     diag = la.block_diag(*block_diags)
-    return diag + special_sys.values @ special_sys.values.T
+    return diag + special_sys.to_numpy() @ special_sys.to_numpy().T
+
+
+def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
+    """Basic function to construct a covariance matrix (covmat), given the
+    statistical error and a dataframe of systematics.
+
+    Errors with name UNCORR or THEORYUNCORR are added in quadrature with
+    the statistical error to the diagonal of the covmat.
+
+    Other systematics are treated as correlated; their covmat contribution is
+    found by multiplying them by their transpose.
+
+    Parameters
+    ----------
+    stat_errors: np.array
+        a 1-D array of statistical uncertainties
+    sys_errors: pd.DataFrame
+        a dataframe with shape (N_data * N_sys) and systematic name as the
+        column headers. The uncertainties should be in the same units as the
+        data.
+
+    Notes
+    -----
+    This function doesn't contain any logic to ignore certain contributions to
+    the covmat, if you wanted to not include a particular systematic/set of
+    systematics i.e all uncertainties with MULT errors, then filter those out
+    of ``sys_errors`` before passing that to this function.
+
+    """
+    diagonal = stat_errors ** 2
+
+    is_uncorr = sys_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
+    diagonal += (sys_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
+
+    corr_sys_mat = sys_errors.loc[:, ~is_uncorr].to_numpy()
+    return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
 
 
 def sqrt_covmat(covariance_matrix):
