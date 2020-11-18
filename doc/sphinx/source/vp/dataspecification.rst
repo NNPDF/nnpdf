@@ -284,7 +284,7 @@ If we specify a grouping in the runcard, like so
 
     dataspecs:
      - pdf: NNPDF31_nnlo_as_0118
-     - speclabel: "3.1 NNLO"
+       speclabel: "3.1 NNLO"
 
     use_cuts: internal
 
@@ -373,7 +373,7 @@ input
 
     dataspecs:
      - pdf: NNPDF31_nnlo_as_0118
-     - speclabel: "3.1 NNLO"
+       speclabel: "3.1 NNLO"
 
     use_cuts: internal
 
@@ -400,8 +400,56 @@ Runcards that request actions that have been renamed will not work anymore.
 Generally, actions that were previously named ``experiments_*`` have been
 renamed to highlight the fact that they work with more general groupings.
 
-Currently ``n3fit``, as well as the ``pseudodata``, ``closuretest`` and
-``chi2grids`` modules have not been updated to use ``dataset_inputs`` and so
-require ``experiments`` to be specified in the runcard. The C++ fitting code
+If you are writing a runcard whereby you want to take the data from a ``fit``,
+and either do not know whether the fit uses the new or old data specification or
+require the runcard to be agnostic to the data specification in the fit,
+there are a couple of options.
+
+First and foremost try using the ``fitinputcontext`` production rule to extract
+the data from the fit. This production rule handles both styles of runcard
+out of the box:
+
+.. code:: yaml
+
+    metadata_group: nnpdf31_process
+
+    fit: NNPDF31_nnlo_as_0118_DISonly
+
+    dataspecs:
+     - pdf: NNPDF31_nnlo_as_0118
+       speclabel: "3.1 NNLO"
+
+    use_cuts: internal
+
+    actions_:
+     - fitinputcontext dataspecs_groups_chi2_table
+
+The production rule sets the ``theoryid`` and ``data_input`` based on the
+runcard for the specified ``fit``. Note that you can also use ``fitcontext``
+which does all of the above, and additionally sets the ``pdf`` to be the
+``fitpdf``.
+
+In many cases where an action is prefixed with ``dataspecs``, indicating that
+a table or plot will contain some results collected over the ``dataspecs``,
+there will be a similar action prefixed with ``fits``, where instead the
+results in the table or plot will have been collected over ``fits`` with
+``fitcontext`` taken into account.
+
+.. warning::
+  Whilst it is possible to specify ``data_input: {from_: fitinputcontext}``
+  directly in the runcard, it is highly recommended **not** to do this where
+  possible. Specifying ``data_input`` explicitly at the level of the
+  runcard will overwrite any subsequent grouping which is done on the data
+  and instead each ``metadata_group`` will contain all of the datasets, which
+  will cause the resulting reports/actions to contain incorrect results
+  as well as taking a lot of time and resources to produce. The only exception
+  to this rule is when using the ``matched_datasets_from_dataspecs`` production
+  rule, however the user should take **extreme** care to not pollute any
+  namespace which will be used to compute actions which rely on dataset
+  grouping with ``data_input: {from_: fitinputcontext}``.
+
+Currently ``pseudodata`` and ``chi2grids`` modules have not been updated to
+use ``dataset_inputs`` and so require ``experiments`` to be specified in the
+runcard. The C++ fitting code
 ``nnfit`` is not scheduled to be updated to use ``dataset_inputs`` and so will
 always require ``experiments`` to be specified in the runcard.
