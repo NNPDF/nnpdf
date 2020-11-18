@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
+CHI2_THRESHOLD = 10.0
 # Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
@@ -289,6 +290,8 @@ class ModelTrainer:
             self.no_validation = False
 
         self.callbacks = []
+        if debug:
+            self.callbacks.append(callbacks.TimerCallback())
 
     def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
@@ -763,10 +766,9 @@ class ModelTrainer:
         All other parameters are passed to the corresponding functions
         """
 
-        # Reset the internal state of the backend
+        # Reset the internal state of the backend every time this function is called
         print("")
-        if not self.debug or self.mode_hyperopt:
-            clear_backend_state(max_cores=self.max_cores)
+        clear_backend_state()
 
         # Preprocess some hyperparameters
         epochs = int(params["epochs"])
@@ -793,6 +795,7 @@ class ModelTrainer:
             epochs,
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
+        threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
 
         # Initialize the chi2 dictionaries
         l_train = []
@@ -858,7 +861,8 @@ class ModelTrainer:
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 save_weights_each=self.save_weights_each,
-                threshold_positivity=threshold_pos
+                threshold_positivity=threshold_pos,
+                threshold_chi2=threshold_chi2
             )
 
             # Compile each of the models with the right parameters

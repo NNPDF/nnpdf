@@ -63,11 +63,11 @@ def set_lhapdf_info(info_path, nrep):
 
 
 class PostfitError(Exception):
-    """Exception raised when postfit cannot suceed and knows why"""
+    """Exception raised when postfit cannot succeed and knows why"""
     pass
 
 class FatalPostfitError(Exception):
-    """Excption raised when some corrupted input is detected"""
+    """Exception raised when some corrupted input is detected"""
     pass
 
 def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold):
@@ -75,7 +75,8 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
     as defined in fitveto.py. Returns a list of the replica directories that pass."""
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
-    all_replicas   = glob(f"{nnfit_path}/replica_*/")
+    # We sort the paths so that the selection of replicas is deterministic
+    all_replicas   = sorted(glob(f"{nnfit_path}/replica_*/"))
     valid_paths = [path for path in all_replicas if fitdata.check_replica_files(path, fitname)]
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
@@ -188,7 +189,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
-    parser.add_argument('result_path', help="Folder containig the "
+    parser.add_argument('result_path', help="Folder containing the "
                                             "results of the fit")
     parser.add_argument(
         '--chi2-threshold',
@@ -232,7 +233,7 @@ def main():
             file=sys.stderr)
         sys.exit(1)
     except Exception as e:
-        log.critical(f"Bug in postfit ocurred. Please report it.")
+        log.critical(f"Bug in postfit occurred. Please report it.")
         print(
             colors.color_exception(e.__class__, e, e.__traceback__),
             file=sys.stderr)
