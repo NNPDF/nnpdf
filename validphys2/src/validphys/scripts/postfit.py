@@ -200,7 +200,7 @@ def main():
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
     parser.add_argument(
-        "result_path", type=type_fitname, help="Folder containing the " "results of the fit"
+        "result_path", type=type_fitname, help="Folder containing the results of the fit"
     )
     parser.add_argument(
         '--chi2-threshold',
