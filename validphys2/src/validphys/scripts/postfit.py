@@ -12,6 +12,7 @@
 """
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
+import re
 import sys
 import os.path
 import shutil
@@ -105,13 +106,16 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
 
 def type_fitname(fitname: str):
     """ Ensure the sanity of the fitname """
-    if "." in fitname:
+    fitpath = pathlib.Path(fitname)
+    # Accept only [a-Z, 0-9, -, _]
+    sane_name = re.compile(r'[\w\-]+')
+    if sane_name.fullmatch(fitpath.name) is None:
+        new_name = "-".join(i for i in sane_name.findall(fitname))
         raise argparse.ArgumentTypeError(
-            "The name of the fit should not include dots (.) "
-            "Please, re-run postfit after changing the name of the fit "
-            f"with ~$ vp-fitrename {fitname} {fitname.replace('.','')}"
+            "Only alphanumeric characters, _ and - are allowed in the fit name. "
+            f"Please, re-run postfit after renaming the fit: ~$ vp-fitrename {fitpath} {new_name}"
         )
-    return fitname
+    return fitpath
 
 
 def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float):
