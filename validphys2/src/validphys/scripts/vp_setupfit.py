@@ -87,7 +87,7 @@ class SetupFitEnvironment(Environment):
         if self.output_path.is_dir():
             log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
-            if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
+            if not re.fullmatch(r'[\w\-]+', self.output_path.name):
                 raise SetupFitError("Invalid output folder name. Must be alphanumeric.")
             try:
                 self.output_path.mkdir()
