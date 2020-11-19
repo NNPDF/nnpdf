@@ -106,7 +106,7 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
 
 def type_fitname(fitname: str):
     """ Ensure the sanity of the fitname """
-    fitpath = pathlib.Path(fitname)
+    fitpath = pathlib.Path(fitname).absolute()
     # Accept only [a-Z, 0-9, -, _]
     sane_name = re.compile(r'[\w\-]+')
     if sane_name.fullmatch(fitpath.name) is None:
