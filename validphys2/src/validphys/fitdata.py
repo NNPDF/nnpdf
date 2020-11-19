@@ -79,8 +79,7 @@ def check_replica_files(replica_path, prefix):
             valid = False
     main_path = path/prefix
     for f in REPLICA_FILES:
-        # we want to append a suffix not substitute a possible one
-        test_path = main_path.with_suffix(main_path.suffix + f)
+        test_path = main_path.with_suffix(f)
         if not test_path.is_file():
             log.warning(f"Missing file: {test_path}")
             valid = False
