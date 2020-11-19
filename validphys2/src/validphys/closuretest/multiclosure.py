@@ -226,7 +226,7 @@ def dataset_xi(internal_multiclosure_dataset_loader):
 
         xi_1sigma_i: np.array
             a 1-D array where each element is the value of xi_1sigma for that
-            particular direction. We note that the directions are ordered by
+            particular eigenvector. We note that the eigenvectors are ordered by
             ascending eigenvalues
 
     """
@@ -515,7 +515,7 @@ def xi_resampling_dataset(
                     n_rep_sample,
                     use_repeats,
                 )
-                # append the 1d array for individual directions
+                # append the 1d array for individual eigenvectors
                 xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
             fixed_n_rep_xi_1sigma.append(xi_1sigma_boot)
         xi_1sigma.append(fixed_n_rep_xi_1sigma)

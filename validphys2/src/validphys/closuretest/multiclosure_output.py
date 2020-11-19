@@ -230,7 +230,7 @@ def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
 def fits_measured_xi(experiments_xi_measured, experiments_data):
     r"""Tabulate the measure value of \xi_{1\sigma} for each experiment, as
     calculated by data_xi (collected over experiments). Note that the mean is
-    taken across directions of the covariance matrix.
+    taken across eigenvectors of the covariance matrix.
 
     """
     records = []
@@ -265,10 +265,10 @@ def compare_measured_expected_xi(fits_measured_xi, expected_xi_from_bias_varianc
 
 @figure
 def plot_dataset_xi(dataset_xi, dataset):
-    r"""For a given dataset, plot the value of \xi_{1 \sigma} for each direction
+    r"""For a given dataset, plot the value of \xi_{1 \sigma} for each eigenvector
     of the covariance matrix, along with the expected value of \xi_{1 \sigma}
     if the replicas distribution perfectly matches the central distribution
-    (0.68). In the legend include the mean across directions.
+    (0.68). In the legend include the mean across eigenvectors.
 
     """
     fig, ax = plt.subplots()
@@ -293,7 +293,7 @@ def plot_dataset_xi(dataset_xi, dataset):
 
 @figure
 def plot_dataset_xi_histogram(dataset_xi, dataset):
-    r"""For a given dataset, bin the values of \xi_{1 \sigma} for each direction
+    r"""For a given dataset, bin the values of \xi_{1 \sigma} for each eigenvector
     of the covariance matrix, plot as a histogram with a vertical line for the
     expected value: 0.68. In the legend print the mean and standard deviation
     of the distribution.
@@ -608,7 +608,7 @@ def experiments_bootstrap_xi_table(
 ):
     """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
     samples. Note that the mean has already be taken across data points
-    (or eigenvector directions in the basis which diagonalises the covariance
+    (or eigenvectors in the basis which diagonalises the covariance
     matrix) for each individual bootstrap sample.
 
     Tabulate the results for each experiment and for the total xi across all data.
