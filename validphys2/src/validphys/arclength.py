@@ -129,4 +129,4 @@ def integrability_number(
     ixgrid = xgrid(1e-9, 1e-6, "log", 3)
     xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values
     res = np.sum(np.abs(xfgrid), axis=2)
-    return res[0]
+    return res.squeeze()
