@@ -12,6 +12,7 @@
 """
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
+import re
 import sys
 import os.path
 import shutil
@@ -103,6 +104,19 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
     passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
     return passing_paths
 
+def type_fitname(fitname: str):
+    """ Ensure the sanity of the fitname """
+    fitpath = pathlib.Path(fitname).absolute()
+    # Accept only [a-Z, 0-9, -, _]
+    sane_name = re.compile(r'[\w\-]+')
+    if sane_name.fullmatch(fitpath.name) is None:
+        new_name = "-".join(i for i in sane_name.findall(fitname))
+        raise argparse.ArgumentTypeError(
+            "Only alphanumeric characters, _ and - are allowed in the fit name. "
+            f"Please, re-run postfit after renaming the fit: ~$ vp-fitrename {fitpath} {new_name}"
+        )
+    return fitpath
+
 
 def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float):
     result_path = pathlib.Path(results).resolve()
@@ -189,8 +203,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
-    parser.add_argument('result_path', help="Folder containing the "
-                                            "results of the fit")
+    parser.add_argument(
+        "result_path", type=type_fitname, help="Folder containing the results of the fit"
+    )
     parser.add_argument(
         '--chi2-threshold',
         nargs='?',
