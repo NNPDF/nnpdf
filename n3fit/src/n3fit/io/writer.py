@@ -12,7 +12,7 @@ import numpy as np
 from reportengine.compat import yaml
 import validphys
 import n3fit
-from n3fit.msr import compute_arclength
+from n3fit.msr import compute_arclength, compute_integrability_number
 
 
 class WriterWrapper:
@@ -62,6 +62,8 @@ class WriterWrapper:
         """
         # Compute the arclengths
         arc_lengths = compute_arclength(self.pdf_function)
+        # Compute the integrability numbers
+        integrability_numbers = compute_integrability_number(self.pdf_function)
         # Construct the chi2exp file
         allchi2_lines = self.stopping_object.chi2exps_str()
         # Construct the preproc file
@@ -82,6 +84,7 @@ class WriterWrapper:
             tr_chi2,
             true_chi2,
             arc_lengths,
+            integrability_numbers,
             allchi2_lines,
             preproc_lines,
             self.stopping_object.positivity_status(),
@@ -160,6 +163,7 @@ def storefit(
     erf_tr,
     chi2,
     arc_lengths,
+    integrability_numbers,
     all_chi2_lines,
     all_preproc_lines,
     pos_state,
@@ -192,6 +196,8 @@ def storefit(
             chi2 for the exp (unreplica'd data)
         `arc_lengths`
             list with the arclengths of all replicas
+        `integrability_numbers`
+            list with the integrability numbers
         `all_chi2_lines`
             a big log with the chi2 every 100 epochs
         `all_preproc_lines`
@@ -234,11 +240,13 @@ def storefit(
             fs.write(line)
 
     # create info file
-    arc_strings = [str(i) for i in arc_lengths]
-    arc_line = " ".join(arc_strings)
+    arc_line = " ".join(str(i) for i in arc_lengths)
+    integrability_line = " ".join(str(i) for i in integrability_numbers)
     with open(f"{replica_path}/{fitname}.fitinfo", "w") as fs:
         fs.write(f"{nite} {erf_vl} {erf_tr} {chi2} {pos_state}\n")
         fs.write(arc_line)
+        fs.write(f"\n")
+        fs.write(integrability_line)
 
     # create .time file
     with open(f"{replica_path}/{fitname}.time", "w") as fs:

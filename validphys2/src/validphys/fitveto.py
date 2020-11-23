@@ -7,6 +7,7 @@ Current active vetoes:
    Positivity - Replicas with FitInfo.is_positive == False
    ChiSquared - Replicas with ChiSquared > nsigma_discard_chi2*StandardDev + Average
    ArclengthX - Replicas with ArcLengthX > nsigma_discard_arclength*StandardDev + Average
+   Integrability - Replicas with IntegrabilityNumbers < integ_threshold
 """
 
 import json
@@ -18,7 +19,7 @@ log = logging.getLogger(__name__)
 # Default thresholds for distribution vetos in units of standard deivations
 NSIGMA_DISCARD_ARCLENGTH = 4.0
 NSIGMA_DISCARD_CHI2 = 4.0
-
+INTEG_THRESHOLD = 0.5
 
 
 def distribution_veto(dist, prior_mask, nsigma_threshold):
@@ -41,7 +42,17 @@ def distribution_veto(dist, prior_mask, nsigma_threshold):
     return (dist - average_pass) <= nsigma_threshold * stderr_pass
 
 
-def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float):
+def integrability_veto(dist, integ_threshold):
+    """ For a given distribution (a list of floats), returns a boolean mask
+    specifying the passing elements. The result is a new mask of the elements that
+    satisfy:
+    value <=  integ_threshold
+    """
+    dist = np.asarray(dist)
+    return dist <= integ_threshold
+
+
+def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_arclength: float, integ_threshold: float):
     """ Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
@@ -62,6 +73,16 @@ def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_
     vetoes = {"Positivity": posmask}
     total_mask = posmask.copy()
 
+    # Integrability veto
+    if len(fitinfos[0].integnumbers) == 0:
+        log.warning(f"No integrability numbers in the fitinfo file")
+    else:
+        for i in range(0, len(fitinfos[0].integnumbers)):
+            values = [j.integnumbers[i] for j in fitinfos] 
+            key = "IntegNumber_" + str(i)
+            vetoes[key] = integrability_veto(
+                values, integ_threshold=integ_threshold)
+    
     # Distribution vetoes
     while True:
         for key in distributions:
@@ -81,7 +102,7 @@ def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_
     return vetoes
 
 
-def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, filepath):
+def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, integ_threshold, filepath):
     """ Saves to file the chi2 and arclength thresholds used by postfit as well as veto
     dictionaries which contain information on which replicas pass each veto."""
     if filepath.exists():
@@ -89,7 +110,8 @@ def save_vetoes_info(veto_dict: dict, chi2_threshold, arclength_threshold, filep
     with open(filepath, "w") as f:
         thresholds_dict = {
             "chi2_threshold": chi2_threshold,
-            "arclength_threshold": arclength_threshold
+            "arclength_threshold": arclength_threshold,
+            "integrability_threshold": integ_threshold
         }
         veto_dict_tolist = {key: val.tolist() for key, val in veto_dict.items()}
         combined_dict = {**thresholds_dict, **veto_dict_tolist}
