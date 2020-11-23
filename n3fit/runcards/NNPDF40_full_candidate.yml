@@ -108,7 +108,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  t0pdfset     : NNPDF31_nnlo_as_0118 # PDF set to generate t0 covmat
+  t0pdfset: 101120-nnpdf40-jcm        # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -128,18 +128,11 @@ theory:
 ############################################################
 fitting:
 
-  trvlseed: 1
-  nnseed: 2
-  mcseed: 3  
+  trvlseed: 441557204
+  nnseed: 4140724068
+  mcseed: 1618953082
   save: False
-
-  seed     : 9453862133528      # set the seed for the random generator
   genrep   : True       # on = generate MC replicas, off = use real data
-  rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
-  fitmethod: NGA    # Minimization algorithm
-  nmutants : 80     # Number of mutants for replica
-  paramtype: NN
-  nnodes   : [2,5,3,1]
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [18, 24, 36, 8]
@@ -167,14 +160,14 @@ fitting:
   # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
-    - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.086, 1.124], largex: [1.466, 3.33]}
-    - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7804,1.112], largex: [2.499, 6.501]}
-    - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5347,0.7183], largex: [1.503, 3.976]}
-    - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.2016,0.4753], largex: [1.781, 4.003]}
-    - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5735,0.7563], largex: [1.531, 4.101]}
-    - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.3324,0.8232], largex: [1.781, 4.254]}
-    - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7985,1.018], largex: [1.515, 4.107]}
-    - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.033, 1.161], largex: [1.506, 3.504]}
+  - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.074, 1.124], largex: [1.471, 3.335]}
+  - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.8363, 1.083], largex: [2.5, 6.9]}
+  - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5741, 0.7375], largex: [1.513, 3.912]}
+  - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.08012, 0.5072], largex: [1.733, 4.053]}
+  - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.6088, 0.7906], largex: [1.516, 3.907]}
+  - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.3794, 0.7936], largex: [1.771, 3.825]}
+  - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7167, 1.000], largex: [1.498, 3.772]}
+  - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.9842, 1.149], largex: [1.464, 3.709]}
 
 ############################################################
 stopping:
