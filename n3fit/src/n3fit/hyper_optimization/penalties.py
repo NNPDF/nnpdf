@@ -24,8 +24,8 @@ from n3fit.vpinterface import N3PDF
 from n3fit.msr import compute_integrability_number
 
 
-def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavors = None):
-    """ Checks the pdf model for saturation at small x
+def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavors=None):
+    """Checks the pdf model for saturation at small x
     by checking the slope from ``min_x`` to ``max_x``.
 
     Parameters
@@ -52,7 +52,7 @@ def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavor
     if flavors is None:
         flavors = [1, 2]
     x = np.logspace(np.log10(min_x), np.log10(max_x), n)
-    xin = np.expand_dims(x, axis=[0,-1])
+    xin = np.expand_dims(x, axis=[0, -1])
     y = pdf_model.predict([xin])
     extra_loss = 0.0
     xpdf = y[0, :, flavors]
@@ -63,7 +63,7 @@ def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavor
 
 
 def patience(pdf_model, stopping_object, alpha=1e-4):
-    """ Adds a penalty for fits that have finished too soon, which
+    """Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
     The penalty is proportional to the validation loss and will be 0
     when the best epoch is exactly at max_epoch - patience
@@ -93,7 +93,7 @@ def patience(pdf_model, stopping_object, alpha=1e-4):
 
 
 def integrability(pdf_model, stopping_object):
-    """ Adds a penalty proportional to the value of the integrability integration
+    """Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
     of the threshold defined in validphys::fitveto
 
