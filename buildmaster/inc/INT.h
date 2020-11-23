@@ -26,10 +26,10 @@ private:
   void ReadData();
 };
 
-class IntFilter765: public CommonData
+class IntFilter543: public CommonData
 {
 public: 
-	IntFilter765(std::string setname):
+	IntFilter543(std::string setname):
   	CommonData(setname) { ReadData(); }
 
 private:
