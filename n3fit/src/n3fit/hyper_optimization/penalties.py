@@ -19,6 +19,9 @@ New penalties can be added directly in this module.
 The name in the runcard must match the name used in this module.
 """
 import numpy as np
+from validphys import fitveto
+from n3fit.vpinterface import N3PDF
+from n3fit.msr import compute_integrability_number
 
 
 def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavors = None):
@@ -87,3 +90,29 @@ def patience(pdf_model, stopping_object, alpha=1e-4):
     diff = abs(max_epochs - patience - epoch_best)
     vl_loss = stopping_object.vl_loss
     return vl_loss * np.exp(alpha * diff)
+
+
+def integrability(pdf_model, stopping_object):
+    """ Adds a penalty proportional to the value of the integrability integration
+    It adds a 0-penalty when the value of the integrability is equal or less than the value
+    of the threshold defined in validphys::fitveto
+
+    The penalty increases exponentially with the growth of the integrability number
+
+    Example
+    -------
+    >>> from n3fit.hyper_optimization.penalties import integrability
+    >>> from n3fit.model_gen import pdfNN_layer_generator
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> isinstance(integrability(pdf_model, None), float)
+    True
+
+    """
+    pdf_instance = N3PDF(pdf_model)
+    integ_values = np.array(compute_integrability_number(pdf_instance))
+    integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
+    if integ_overflow > 50.0:
+        # before reaching an overflow, just give a stupidly big number
+        return np.exp(50.0)
+    return np.exp(integ_overflow) - 1.0

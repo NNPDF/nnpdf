@@ -82,6 +82,7 @@ hyperscan:
         penalties:
           - saturation
           - patience
+          - integrability
         threshold: 20.0
         partitions:
             - datasets:
