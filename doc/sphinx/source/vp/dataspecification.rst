@@ -438,15 +438,17 @@ results in the table or plot will have been collected over ``fits`` with
 .. warning::
   Whilst it is possible to specify ``data_input: {from_: fitinputcontext}``
   directly in the runcard, it is highly recommended **not** to do this where
-  possible. Specifying ``data_input`` explicitly at the level of the
-  runcard will overwrite any subsequent grouping which is done on the data
-  and instead each ``metadata_group`` will contain all of the datasets, which
-  will cause the resulting reports/actions to contain incorrect results
-  as well as taking a lot of time and resources to produce. The only exception
-  to this rule is when using the ``matched_datasets_from_dataspecs`` production
-  rule, however the user should take **extreme** care to not pollute any
-  namespace which will be used to compute actions which rely on dataset
-  grouping with ``data_input: {from_: fitinputcontext}``.
+  possible. Taking a key `from_` a production rule causes that key to be
+  overwritten in inner namespaces. The grouping function, essentially returns a
+  namespace list with each item in the list specifying a different namespace
+  where ``data_input`` is defined as the datasets within that group. If
+  the user specifies ``data_input: {from_: fitinputcontext}`` in the runcard,
+  the inner ``data_input`` for each group will be overwritten and instead each
+  group will contain all of the datasets from the fit - which is incorrect.
+  It's rare that a user should need a runcard to be agnostic to whether the
+  fit used the old or new data specification - instead take either
+  ``dataset_inputs`` or ``experiments`` directly ``from_: fit`` depending on
+  whether the fit uses new or old data specification respectively.
 
 Currently ``pseudodata`` and ``chi2grids`` modules have not been updated to
 use ``dataset_inputs`` and so require ``experiments`` to be specified in the

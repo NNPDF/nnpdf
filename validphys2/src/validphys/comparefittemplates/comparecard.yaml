@@ -82,6 +82,8 @@ description:
     from_: fit
 
 dataspecs:
+  # WARNING: do not blindly copy and paste this: it can overwrite the datasets
+  # for any actions which rely on grouping datasets.
   - data_input:
       from_: fitinputcontext
     theoryid:
@@ -93,7 +95,8 @@ dataspecs:
     speclabel:
       from_: current
 
-
+  # WARNING: do not blindly copy and paste this: it can overwrite the datasets
+  # for any actions which rely on grouping datasets.
   - data_input:
       from_: fitinputcontext
     theoryid:
