@@ -30,7 +30,7 @@ class WriterWrapper:
             `pdf_object`
                 function to evaluate with a grid in x to generate a pdf
             `stopping_object`
-                a stopping.Validation object
+                a stopping.Stopping object
             `q2`
                 q^2 of the fit
             `timings`
@@ -89,6 +89,80 @@ class WriterWrapper:
             self.stopping_object.positivity_status(),
             self.timings,
         )
+
+        # TODO: compute the chi2s directly from the stopping object
+        # export all metadata from the fit to a single yaml file
+        output_file = f"{replica_path_set}/{fitname}.json"
+        json_dict = jsonfit(self.stopping_object, self.pdf_object, tr_chi2, vl_chi2, true_chi2, self.timings)
+        with open(output_file, "w") as fs:
+            json.dump(json_dict, fs, indent=2)
+
+
+def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
+    """ Generates a dictionary containing all relevant metadata for the fit
+
+    Parameters
+    ----------
+        stopping_object: n3fit.stopping.Stopping
+            a stopping.Validation object
+        pdf_object: n3fit.vpinterface.N3PDF
+            N3PDF object constructed from the pdf_model
+            that receives as input a point in x and returns an array of 14 flavours
+        tr_chi2: float
+            chi2 for the training
+        vl_chi2: float
+            chi2 for the validation
+        true_chi2: float
+            chi2 for the exp (unreplica'd data)
+        timing: dict
+            dictionary of the timing of the different events that happened
+    """
+    all_info = {}
+    # Generate preprocessing information
+    all_info["preprocessing"] = ""
+    # .fitinfo-like info
+    all_info["epoch_of_the_stop"] = stopping_object.epoch_of_the_stop
+    all_info["best_epoch"] = stopping_object.e_best_chi2
+    all_info["erf_tr"] = tr_chi2
+    all_info["erf_vl"] = vl_chi2
+    all_info["chi2"] = true_chi2
+    all_info["pos_state"] = stopping_object.positivity_status()
+    all_info["arc_lenghts"] = pdf_object.compute_arclength().tolist()
+    all_info["integrability"] = pdf_object.integrability_numbers().tolist()
+    all_info["timing"] = timing
+    # Versioning info
+    all_info["version"] = version()
+    return all_info
+
+
+def version():
+    """ Generates a dictionary with misc version info for this run """
+    versions = {}
+    try:
+        # Wrap tf in try-except block as it could possible to run n3fit without tf
+        import tensorflow as tf
+        versions["keras"] = tf.keras.__version__
+        mkl = tf.python.framework.test_util.IsMklEnabled()
+        versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
+    except ImportError:
+        versions["tensorflow"] = "Not available"
+        versions["keras"] = "Not available"
+    except AttributeError:
+        # Check for MKL was only recently introduced and is not part of the official API
+        versions["tensorflow"] = f"{tf.__version__}, mkl=??"
+    except:
+        # We don't want _any_ uncaught exception to crash the whole program at this point
+        pass
+    versions["numpy"] = np.__version__
+    versions["nnpdf"] = n3fit.__version__
+    try:
+        versions["validphys"] = validphys.__version__
+    except AttributeError:
+        versions["validphys"] = "unknown"
+    return versions
+
+
+
 
 
 def evln2lha(evln):
@@ -175,7 +249,7 @@ def storefit(
     Parameters
     ----------
         `pdf_object`
-            PDF function (usually the .predict method of a model)
+            N3PDF object constructed from the pdf_model
             that receives as input a point in x and returns an array of 14 flavours
         `replica`
             the replica index
@@ -253,26 +327,5 @@ def storefit(
 
     # create .version file, with the version of programs used
     with open(f"{replica_path}/version.info", "w") as fs:
-        versions = {}
-        try:
-            # Wrap tf in try-except block as it could possible to run n3fit without tf
-            import tensorflow as tf
-            versions["keras"] = tf.keras.__version__
-            mkl = tf.python.framework.test_util.IsMklEnabled()
-            versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
-        except ImportError:
-            versions["tensorflow"] = "Not available"
-            versions["keras"] = "Not available"
-        except AttributeError:
-            # Check for MKL was only recently introduced and is not part of the official API
-            versions["tensorflow"] = f"{tf.__version__}, mkl=??"
-        except:
-            # We don't want _any_ uncaught exception to crash the whole program at this point
-            pass
-        versions["numpy"] = np.__version__
-        versions["nnpdf"] = n3fit.__version__
-        try:
-            versions["validphys"] = validphys.__version__
-        except AttributeError:
-            versions["validphys"] = "unknown"
+        versions = version()
         json.dump(versions, fs, indent=2)
