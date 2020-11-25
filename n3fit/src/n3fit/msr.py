@@ -7,7 +7,6 @@ import numpy as np
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
-from validphys.arclength import arc_lengths, integrability_number
 
 
 log = logging.getLogger(__name__)
@@ -123,43 +122,3 @@ def check_integration(ultimate_pdf, integration_input):
             msr, v, v3, v8
         )
     )
-
-
-# TODO: once the writer is absorbed into vp this function can dissapear as well
-def compute_arclength(n3pdf):
-    """
-    Given the layer with the fit basis computes the arc length
-
-    Parameters
-    ----------
-        pdf_function: function
-            pdf function has received by the writer or ``pdf_model``
-
-    Example
-    -------
-
-    >>> from n3fit.vpinterface import N3PDF
-    >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> from n3fit.msr import compute_arclength
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> n3pdf = N3PDF(pdf_model)
-    >>> res = compute_arclength(n3pdf)
-    """
-    ret = arc_lengths(n3pdf, [1.65], "evolution", ["sigma", "gluon", "V", "V3", "V8"])
-    return ret.stats.central_value()
-
-def compute_integrability_number(n3pdf):
-    """
-    Given the layer with the fit basis computes the integrability number
-    for the distributions V, V3, V8, T3, T8 defined in vp2, at the fitting scale Q_0
-    Parameters
-    ----------
-        n3pdf: pdf function has received by the writer or ``pdf_model``
-
-    Returns
-    -------
-        a list of floats
-    """
-    ret = integrability_number(n3pdf, [1.65], flavours=['V', 'T3', 'V3', 'T8', 'V8'])
-    return ret 
