@@ -47,37 +47,39 @@ def delta_chi2_hessian(pdf, total_chi2_data):
 
 
 @figure
-def plot_Kullback_Leibler(delta_chi2_hessian):
+def plot_kullback_leibler(delta_chi2_hessian):
     """
-    Determines the KL measure by comparing the expectation value of Delta chi2 to the cumulative
-    distribution function of chi2 with one degree of freedom.
+    Determines the Kullback–Leibler divergence by comparing the expectation value of Delta chi2 to 
+    the cumulative distribution function of chi-square distribution with one degree of freedom 
+    (see: https://en.wikipedia.org/wiki/Chi-square_distribution).
+    
+    The Kullback-Leibler divergence provides a measure of the difference between two distribution 
+    functions, here we compare the chi-squared distribution and the cumulative distribution of the
+    expectation value of Delta chi2. 
     """
     delta_chi2 = delta_chi2_hessian
 
-    bins_NNPDF = np.arange(0, 7.5, 0.1)
-    bin_central_NNPDF = np.zeros(len(bins_NNPDF) - 1)
-    for i in range(len(bins_NNPDF) - 1):
-        bin_central_NNPDF[i] = (bins_NNPDF[i] + bins_NNPDF[i + 1]) / 2
+    bins_nnpdf = np.arange(0, 7.5, 0.1)
+    # find the midpoint of each bin, has length len(bins_NNPDF) - 1
+    bin_central_NNPDF = (bins_NNPDF[1:] + bins_NNPDF[:-1]) / 2
     x = np.linspace(0, 7.4, 200)
 
     fig, ax = plt.subplots()
 
-    vals_NNPDF, _, _ = ax.hist(
+    vals_nnpdf, _, _ = ax.hist(
         delta_chi2,
-        bins=bins_NNPDF,
+        bins=bins_nnpdf,
         density=True,
         cumulative=True,
         label="cumulative $\Delta\chi^2$",
     )
     # compute Kullback-Leibler (null values set to 1e-8)
-    for j, v in enumerate(vals_NNPDF):
-        if v == 0:
-            vals_NNPDF[j] = 1e-8
-    KL_NNPDF = entropy(chi2.cdf(bin_central_NNPDF, 1), qk=vals_NNPDF)
+    vals_nnpdf[vals_nnpdf==0] = 1e-8
+    kl_nnpdf = entropy(chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
 
     ax.plot(x, chi2.cdf(x, 1), label="$\chi^2$ CDF")
 
-    ax.set_title(f"Kullback-Leibler divergence = {KL_NNPDF:.4f}")
+    ax.set_title(f"KL divergence: {kl_nnpdf:.4f}")
     ax.set_xlabel("$<\Delta\chi^2>$")
 
     ax.legend()
