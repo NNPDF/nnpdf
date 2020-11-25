@@ -60,8 +60,8 @@ def plot_kullback_leibler(delta_chi2_hessian):
     delta_chi2 = delta_chi2_hessian
 
     bins_nnpdf = np.arange(0, 7.5, 0.1)
-    # find the midpoint of each bin, has length len(bins_NNPDF) - 1
-    bin_central_NNPDF = (bins_NNPDF[1:] + bins_NNPDF[:-1]) / 2
+    # find the midpoint of each bin, has length len(bins_nnpdf) - 1
+    bin_central_nnpdf = (bins_nnpdf[1:] + bins_nnpdf[:-1]) / 2
     x = np.linspace(0, 7.4, 200)
 
     fig, ax = plt.subplots()
