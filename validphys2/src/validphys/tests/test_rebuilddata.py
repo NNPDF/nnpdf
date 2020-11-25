@@ -55,5 +55,11 @@ def test_filter_rebuild_closure_data(tmp):
     API = api.API(
         providers, N3FitConfig, Environment, output=str(tmp / FIT_NAME)
     )
-    df = API.groups_data_values(**REBUILD_CONFIG, pdf="NNPDF31_nnlo_as_0118")
+    # to use groups_data_values we need to do some gymnastics with data spec
+    # because taking data_input from fitinputcontext overwrites any subsequent
+    # grouping.
+    input_params = dict(REBUILD_CONFIG)
+    input_params.pop("data_input")
+    input_params["dataset_inputs"] = {"from_": "fit"}
+    df = API.groups_data_values(**input_params, pdf="NNPDF31_nnlo_as_0118")
     return df.to_frame()
