@@ -457,3 +457,5 @@ always require ``experiments`` to be specified in the runcard.
   the user specifies ``data_input: {from_: fitinputcontext}`` in the runcard,
   the inner ``data_input`` for each group will be overwritten and instead each
   group will contain all of the datasets from the fit - which is incorrect.
+  This is regarded as a bug, the relevant issue is:
+  https://github.com/NNPDF/reportengine/issues/38
