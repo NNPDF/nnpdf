@@ -351,8 +351,12 @@ def dataset_inputs_covmat(
         data: DataGroupSpec,
         fitthcovmat,
         t0set:(PDF, type(None)) = None,
+        use_weights_in_covmat: bool = True,
         norm_threshold=None):
     """Like `covmat` except for a group of datasets"""
+    if not use_weights_in_covmat:
+        data = data.to_unweighted()
+
     loaded_data = data.load()
 
     if t0set:
@@ -381,7 +385,9 @@ def covmat(
     dataset:DataSetSpec,
     fitthcovmat,
     t0set:(PDF, type(None)) = None,
-    norm_threshold=None):
+    use_weights_in_covmat: bool = True,
+    norm_threshold=None,
+    ):
     """Returns the covariance matrix for a given `dataset`. By default the
     data central values will be used to calculate the multiplicative contributions
     to the covariance matrix.
@@ -419,8 +425,8 @@ def covmat(
         covariance matrix was used in the corresponding fit
     t0set: None or PDF
         None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
-    perform_covmat_reg: bool
-        whether or not to regularize the covariance matrix
+    use_weights_in_covmat: bool, default True
+        Rescale the covmat by the dataset weights.
     norm_threshold: number
         threshold used to regularize covariance matrix
 
@@ -441,6 +447,8 @@ def covmat(
     >>> cov = API.covmat(**inp)
     TODO: complete example
     """
+    if not use_weights_in_covmat:
+        dataset = dataset.to_unweighted()
     loaded_data = dataset.load()
 
     if t0set:
