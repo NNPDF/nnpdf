@@ -34,5 +34,8 @@ the server by using `vp-upload <output folder>`, where the folder is called
 The `vp-comparefits` application is implemented as a small wrapper on top of a
 specific `validphys` report. The wrapper code is defined in the
 :py:mod:`validphys.scripts.vp_comparefits` module, and the specific templates
-are in :py:mod:`validphys.comparefittemplates`.
+are in :py:mod:`validphys.comparefittemplates`. The template sets some
+reasonable defaults such as the energy scale of the PDF comparisons or the type
+of covariance matrix used for χ² comparisons (experimental and ignoring the
+weights).
 ```
