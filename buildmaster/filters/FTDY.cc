@@ -1,3 +1,11 @@
+/*
+WARNING: File modified by ERN Nov 2020.
+Additional data sets, with suffix _dw and _sh have been added with extra 
+systematic ucnertainties. These systematic ucnertainties account for nuclear 
+uncertainties (estimated according to 1812.09074).
+The two strategies (dw=deweighted and sh=shifted) are implemented.
+*/
+
 /**
  *
  *     Drell-Yan experiment E605
@@ -100,6 +108,233 @@ void DYE605Filter::ReadData()
   }
   
   f1.close();  
+}
+
+void DYE605_dwFilter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/DYE605/dy-e605.data";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/DYE605/nuclear/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/DYE605/proton/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  double convfact = 1e33;
+  double SCM = 38.8*38.8;
+  int nrep=100;
+  int nrealsys=2;
+  
+  string line;
+  double sqrttau;
+
+  getline(f2,line);
+  getline(f3,line);
+  
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> fKin1[i];   // y
+    
+    lstream >> sqrttau;
+    // Instead of sqrttau, save M2 as second kinematical variable using
+    // M2 = taus * S
+    fKin2[i] = sqrttau*sqrttau*SCM;
+    
+    fKin3[i] = 38.8;   //s
+    
+    lstream >> fData[i];
+    fData[i]*= convfact;     // Convert from cm2 to pb
+    
+    lstream >> fStat[i];     // stat
+    fStat[i]*= convfact;     // Convert from cm2 to pb
+    
+    fSys[i][0].mult = 10.0;   // 10% uncorrelated systematic
+    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "UNCORR";
+    
+    fSys[i][1].mult = 15.0;         // 15% normalisation uncertainty
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "CORR";
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+    
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = "NUCLEAR";
+      }
+
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+  
+}
+
+void DYE605_shFilter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/DYE605/dy-e605.data";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/DYE605/nuclear/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/DYE605/proton/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  double convfact = 1e33;
+  double SCM = 38.8*38.8;
+  int nrep=100;
+  int nrealsys=2;
+  
+  string line;
+  double sqrttau;
+
+  getline(f2,line);
+  getline(f3,line);
+  
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> fKin1[i];   // y
+    
+    lstream >> sqrttau;
+    // Instead of sqrttau, save M2 as second kinematical variable using
+    // M2 = taus * S
+    fKin2[i] = sqrttau*sqrttau*SCM;
+    
+    fKin3[i] = 38.8;   //s
+    
+    lstream >> fData[i];
+    fData[i]*= convfact;     // Convert from cm2 to pb
+    
+    lstream >> fStat[i];     // stat
+    fStat[i]*= convfact;     // Convert from cm2 to pb
+    
+    fSys[i][0].mult = 10.0;   // 10% uncorrelated systematic
+    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "UNCORR";
+    
+    fSys[i][1].mult = 15.0;         // 15% normalisation uncertainty
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "CORR";
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = "NUCLEAR";
+      }
+
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;   
+
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+  
 }
 
 /**
@@ -266,4 +501,207 @@ void DYE866RFilter::ReadData()
   }
   
   f1.close();
+}
+
+void DYE866R_dwFilter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/DYE886R/dy-e886-rat-2001-y.data";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/DYE886R/nuclear/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/DYE886R/proton/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+  
+  // Starting filter
+  int nrep=100;
+  int nrealsys=1;
+  
+  string line;
+  getline(f2,line);
+  getline(f3,line);
+  double m, tmp;
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> fKin1[i];   // y
+    lstream >> tmp;        // x2
+    lstream >> m;
+    // Instead of M, save M2 as second kinematical variable using
+    fKin2[i] = m*m;
+    
+    fKin3[i] = 38.8;   //s
+    
+    lstream >> fData[i];
+    
+    lstream >> fStat[i];     // stat
+    fStat[i]*= fData[i]*1e-2;
+
+    lstream >> fSys[i][0].mult;  //sys
+    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "CORR";
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+    
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = "DEUTERON";
+      }
+    
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+}
+
+void DYE866R_shFilter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/DYE886R/dy-e886-rat-2001-y.data";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/DYE886R/nuclear/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/DYE886R/proton/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+  
+  // Starting filter
+  int nrep=100;
+  int nrealsys=1;
+  
+  string line;
+  getline(f2,line);
+  getline(f3,line);
+  double m, tmp;
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> fKin1[i];   // y
+    lstream >> tmp;        // x2
+    lstream >> m;
+    // Instead of M, save M2 as second kinematical variable using
+    fKin2[i] = m*m;
+    
+    fKin3[i] = 38.8;   //s
+    
+    lstream >> fData[i];
+    
+    lstream >> fStat[i];     // stat
+    fStat[i]*= fData[i]*1e-2;
+
+    lstream >> fSys[i][0].mult;  //sys
+    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "CORR";
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = "DEUTERON";
+      }
+    
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
 }
