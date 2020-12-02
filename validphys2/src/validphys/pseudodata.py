@@ -5,6 +5,8 @@ networks during the fitting.
 """
 import logging
 import multiprocessing as mp
+import os
+import pathlib
 
 import numpy as np
 import pandas as pd
@@ -19,6 +21,44 @@ log = logging.getLogger(__name__)
 
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
+
+context_index = collect("groups_index", ("fitcontext",))
+
+def fit_pseudodata(fitcontext, context_index):
+    # List of length 1 due to the collect
+    context_index = context_index[0]
+    # The [0] is because of how pandas handles sorting a MultiIndex
+    sorted_index = context_index.sortlevel(level=range(3))[0]
+
+    pdf = fitcontext["pdf"]
+    log.info(f"Using same pseudodata & training/validation splits as {pdf.name}.")
+    nrep = len(pdf)
+    path = pathlib.Path(pdf.infopath)
+
+    for rep_number in range(1, nrep):
+        # This is a symlink (usually).
+        replica = path.with_name(pdf.name + "_" + str(rep_number).zfill(4) + ".dat")
+        # we resolve the symlink
+        if replica.parent.is_symlink():
+            replica = pathlib.Path(os.path.realpath(replica))
+
+        training_path = replica.with_name("training.dat")
+        validation_path = replica.with_name("validation.dat")
+
+        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+        tr["type"], val["type"] = "training", "validation"
+
+        pseudodata = pd.concat((tr, val))
+        pseudodata.sort_index(level=range(3), inplace=True)
+
+        pseudodata.index = sorted_index
+
+        tr = pseudodata[pseudodata["type"]=="training"]
+        val = pseudodata[pseudodata["type"]=="validation"]
+
+        yield pseudodata.drop("type", axis=1), tr.index, val.index
+
 
 @check_darwin_single_process
 def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
