@@ -535,6 +535,7 @@ def plot_lumi1d(pdfs, pdfs_lumis,
     ax.legend(loc='best')
     ax.set_ylabel(ylabel)
     ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xlim(mx[0], mx[-1])
     ax.set_xscale('log')
     ax.grid(False)
     ax.set_title("$%s$ luminosity\n"
