@@ -133,6 +133,7 @@ class N3PDF(PDF):
     # Utilities
     def integrability_numbers(self, q0=1.65, flavours=None):
         """Compute the integrability numbers for the current PDF
+        using the corresponding validphys action
 
         Parameters
         ----------
@@ -162,13 +163,14 @@ class N3PDF(PDF):
     def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
         """
         Given the layer with the fit basis computes the arc length
+        using the corresponding validphys action
 
         Parameters
         ----------
             pdf_function: function
                 pdf function has received by the writer or ``pdf_model``
             q0: float
-                energy at which the integrability is computed
+                energy at which the arc length is computed
             basis: str
                 basis in which to compute the arc length
             flavours: list
