@@ -442,7 +442,7 @@ results in the table or plot will have been collected over ``fits`` with
   directly ``from_: fit`` depending on whether the fit uses new or old data
   specification respectively. (See below for a detailed explanation).
 
-Currently ``pseudodata`` and ``chi2grids`` modules have not been updated to
+Currently the ``pseudodata`` and ``chi2grids`` modules have not been updated to
 use ``dataset_inputs`` and so require ``experiments`` to be specified in the
 runcard. The C++ fitting code
 ``nnfit`` is not scheduled to be updated to use ``dataset_inputs`` and so will
@@ -451,8 +451,8 @@ always require ``experiments`` to be specified in the runcard.
 .. seealso:: Why not to use ``data_input: {from_: fitinputcontext}``?
 
   Taking a key ``from_`` a production rule causes that key to be
-  overwritten in inner namespaces. The grouping function, essentially returns a
-  namespace list with each item in the list specifying a different namespace
+  overwritten in inner namespaces. The grouping function essentially returns a
+  namespace list with each item in the list specifying a different namespace,
   where ``data_input`` is defined as the datasets within that group. If
   the user specifies ``data_input: {from_: fitinputcontext}`` in the runcard,
   the inner ``data_input`` for each group will be overwritten and instead each
