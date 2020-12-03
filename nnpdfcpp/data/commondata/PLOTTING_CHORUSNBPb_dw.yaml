@@ -16,6 +16,6 @@ normalize:
     figure_by:
         - k1
 
-experiment: "CHORUS"
+experiment: "NUCLEAR"
 
 nnpdf31_process: DIS CC

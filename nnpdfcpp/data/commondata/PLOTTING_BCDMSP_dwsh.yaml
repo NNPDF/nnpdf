@@ -1,9 +1,9 @@
-dataset_label: "CHORUS $\\sigma_{CC}^{\\nu}$"
+dataset_label: "BCDMS $p$"
 x: k2
-y_label: '$10^{i}\sigma_{CC}^{\nu}(x,Q^2)$' 
+y_label: '$10^{i}F_2(x,Q^2)$' 
 result_transform: qbindis
 kinematics_override: dis_sqrt_scale
-data_reference: Onengut:2005kv
+data_reference: bcdms1
 
 #x_scale: log
 y_scale: symlog
@@ -15,7 +15,8 @@ normalize:
     line_by: []
     figure_by:
         - k1
+        - k3
 
-experiment: "NUCLEAR"
+experiment: "DEUTERON"
 
-nnpdf31_process: DIS CC
+nnpdf31_process: DIS NC

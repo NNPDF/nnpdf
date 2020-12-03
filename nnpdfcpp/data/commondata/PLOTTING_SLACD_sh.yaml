@@ -10,6 +10,6 @@ y_scale: symlog
 line_by:
   - k1
 
-experiment: "SLAC"
+experiment: "DEUTERON"
 
 nnpdf31_process: DIS NC
