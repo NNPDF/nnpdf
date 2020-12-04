@@ -641,9 +641,11 @@ def experiments_bootstrap_xi_comparison(
         axis=1,
     )
 
+
 @figuregen
-def plot_sqrt_ratio_bootstrap_distribution(
-    experiments_bootstrap_sqrt_ratio, experiments_data):
+def plot_experiments_sqrt_ratio_bootstrap_distribution(
+    experiments_bootstrap_sqrt_ratio, experiments_data
+):
     """Plots a histogram for each experiment and the total, showing the
     distribution of bootstrap samples. Takes the mean and std deviation of the
     bootstrap sample and plots the corresponding scaled normal distribution
@@ -657,7 +659,7 @@ def plot_sqrt_ratio_bootstrap_distribution(
         mean = np.mean(sqrt_ratio_sample)
         std = np.std(sqrt_ratio_sample)
 
-        xlim = (mean - 3*std, mean + 3*std)
+        xlim = (mean - 3 * std, mean + 3 * std)
         ax.set_xlim(xlim)
 
         x = np.linspace(*xlim, 100)
@@ -665,16 +667,18 @@ def plot_sqrt_ratio_bootstrap_distribution(
             x,
             scipy.stats.norm.pdf(x, mean, std),
             "-r",
-            label=f"Corresponding normal distribution: mean = {mean:.2g}, std = {std:.2g}"
+            label=f"Corresponding normal distribution: mean = {mean:.2g}, std = {std:.2g}",
         )
         ax.legend()
         ax.set_title(f"Bootstrap distribution of sqrt(bias/variance) for {title}")
         ax.set_xlabel("Sqrt(bias/variance)")
         yield fig
 
+
 @figuregen
-def plot_xi_bootstrap_distribution(
-    experiments_bootstrap_xi, total_bootstrap_xi, experiments_data):
+def plot_experiments_xi_bootstrap_distribution(
+    experiments_bootstrap_xi, total_bootstrap_xi, experiments_data
+):
     """Similar to :py:func:`plot_sqrt_ratio_bootstrap_distribution` except plots
     the bootstrap distribution of xi_1sigma, along with a corresponding
     scaled gaussian, for each experiment (and for all data).
@@ -684,7 +688,12 @@ def plot_xi_bootstrap_distribution(
     xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
     # take mean across all data
     xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
-    for fig, exp in zip(plot_sqrt_ratio_bootstrap_distribution(xi_1sigma, experiments_data), experiments_data):
+    # use plotting function from above
+    xi_plots = plot_experiments_sqrt_ratio_bootstrap_distribution(
+        xi_1sigma, experiments_data
+    )
+    # need to fix the title and x label on each plot
+    for fig, exp in zip(xi_plots, experiments_data + ["Total"]):
         ax = fig.gca()
         ax.set_title(r"Bootstrap distribution of $\xi_{1\sigma}$ for " + str(exp))
         ax.set_xlabel(r"$\xi_{1\sigma}$")
