@@ -45,8 +45,14 @@ def fit_pseudodata(fitcontext, context_index):
         training_path = replica.with_name("training.dat")
         validation_path = replica.with_name("validation.dat")
 
-        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=["data"])
-        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+        try:
+            tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+            val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+        except FileNotFoundError as e:
+            raise FileNotFoundError(
+                "Could not find saved training and validation data files. "
+                f"Please ensure {pdf} was generated with the savepseudodata flag set to true"
+            ) from e
         tr["type"], val["type"] = "training", "validation"
 
         pseudodata = pd.concat((tr, val))
