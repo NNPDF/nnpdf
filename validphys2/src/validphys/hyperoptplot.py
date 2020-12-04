@@ -456,6 +456,7 @@ def hyperopt_table(hyperopt_dataframe):
     filters set in the commandline arguments.
     """
     dataframe, _ = hyperopt_dataframe
+    dataframe.sort_values(by=['loss'], inplace=True)
     return dataframe
 
 
