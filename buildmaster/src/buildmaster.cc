@@ -495,9 +495,5 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new EICFilter("EIC_NC_EPD_28_PES"));
 
   // **************** CMS Dijet production pp 5TEV *****************************
-  target.push_back(new CMS_2JET_5TEVFilter("CMS_2JET_5TEV_bin1")); // DIJET
-  target.push_back(new CMS_2JET_5TEVFilter("CMS_2JET_5TEV_bin2")); // DIJET
-  target.push_back(new CMS_2JET_5TEVFilter("CMS_2JET_5TEV_bin3")); // DIJET
-  target.push_back(new CMS_2JET_5TEVFilter("CMS_2JET_5TEV_bin4")); // DIJET
-  target.push_back(new CMS_2JET_5TEVFilter("CMS_2JET_5TEV_bin5")); // DIJET
+  target.push_back(new CMS_2JET_5TEVFilter()); // DIJET
 }
