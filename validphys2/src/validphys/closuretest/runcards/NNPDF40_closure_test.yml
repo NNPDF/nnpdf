@@ -3,7 +3,7 @@
 #
 
 ############################################################
-description: NNPDF4.0 NNLO Closure Test - 70k epochs, 3.1 dataset, n3fit rep law
+description: NNPDF4.0 NNLO global, iterated, closure test
 
 ############################################################
 # frac: training fraction
@@ -77,7 +77,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  t0pdfset: 250920-mw-001_closure_fakepdf    # PDF set to generate t0 covmat
+  t0pdfset: 201204-mw-001_closure_fakepdf            # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
   combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
@@ -97,17 +97,13 @@ theory:
 ############################################################
 fitting:
 
-  trvlseed: 6416578340
-  nnseed: 4106399685
-  mcseed: 6355854418
-  epochs: 20000
+  trvlseed: 1727532335
+  nnseed: 1737785873
+  mcseed: 2123509817
   save: false
-  savefile: weights.hd5
-  load: false
-  loadfile: weights.hd5
 
-  seed: 577993051               # set the seed for the random generator
-  genrep: true          # true = generate MC replicas, false = use real data
+  seed: 1881658207              # set the seed for the random generator
+  genrep: true          # on = generate MC replicas, off = use real data
   rngalgo: 0        # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants: 80      # Number of mutants for replica
@@ -115,23 +111,24 @@ fitting:
   nnodes: [2, 5, 3, 1]
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [30, 30, 42, 18, 8]
-    activation_per_layer: [tanh, sigmoid, sigmoid, sigmoid, linear]
-    initializer: glorot_uniform
+    nodes_per_layer: [18, 24, 36, 8]
+    activation_per_layer: [tanh, sigmoid, sigmoid, linear]
+    initializer: glorot_normal
     optimizer:
-      clipnorm: 46.2
-      learning_rate: 0.73
+      clipnorm: 100.0
+      learning_rate: 1.0
       optimizer_name: Adadelta
-    epochs: 70000
+    epochs: 45000
     positivity:
-      initial: 370
+      initial: 338
       multiplier:
     integrability:
-      initial:
-      multiplier: 1.03
-    stopping_patience: 0.30
+      initial: 10
+      multiplier:
+    stopping_patience: 0.15
     layer_type: dense
-    dropout: 0.005
+    dropout: 0.0
+    threshold_chi2: 3.5
 
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
@@ -139,27 +136,14 @@ fitting:
   # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
-      # remeber to change the name of PDF accordingly with fitbasis
-      # pos: True for NN squared
-      # mutsize: mutation size
-      # mutprob: mutation probability
-      # smallx, largex: preprocessing ranges
-  - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
-      1.086, 1.124], largex: [1.466, 3.33]}
-  - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7804,
-      1.112], largex: [2.499, 6.501]}
-  - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5347,
-      0.7183], largex: [1.503, 3.976]}
-  - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.2016,
-      0.4753], largex: [1.781, 4.003]}
-  - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5735,
-      0.7563], largex: [1.531, 4.101]}
-  - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.3324,
-      0.8232], largex: [1.781, 4.254]}
-  - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7985,
-      1.018], largex: [1.515, 4.107]}
-  - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
-      1.033, 1.161], largex: [1.506, 3.504]}
+  - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.083, 1.12], largex: [1.468, 3.277]}
+  - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.8232, 1.065], largex: [2.263, 7.969]}
+  - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5819, 0.7351], largex: [1.496, 3.975]}
+  - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.01663, 0.5046], largex: [1.748, 3.933]}
+  - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.6181, 0.7835], largex: [1.483, 3.915]}
+  - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.4284, 0.8596], largex: [1.765, 3.921]}
+  - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7236, 1.0], largex: [1.516, 3.649]}
+  - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.014, 1.137], largex: [1.43, 3.752]}
 
 ############################################################
 stopping:
@@ -200,11 +184,11 @@ integrability:
   - {dataset: INTEGXT3, poslambda: 1e2}
 
 closuretest:
-  filterseed: 9116129314 # Random seed to be used in filtering data partitions
-  fakedata: True     # true = to use FAKEPDF to generate pseudo-data
-  fakepdf: 250920-mw-001_closure_fakepdf  # Theory input for pseudo-data
+  filterseed: 3345348918 # Random seed to be used in filtering data partitions
+  fakedata: true     # on = to use FAKEPDF to generate pseudo-data
+  fakepdf: 201204-mw-001_closure_fakepdf      # Theory input for pseudo-data
   errorsize: 1.0    # uncertainties rescaling
-  fakenoise: True    # true = to add random fluctuations to pseudo-data
+  fakenoise: true    # on = to add random fluctuations to pseudo-data
   rancutprob: 1.0   # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
