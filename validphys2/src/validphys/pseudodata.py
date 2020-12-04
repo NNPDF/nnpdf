@@ -30,7 +30,7 @@ def fit_pseudodata(fitcontext, context_index):
 
     The data is read from the PDF to handle the mixing introduced by ``postfit``.
 
-    The data files are concatened to yield all the data that went into a fit. The training and validation
+    The data files are concatenated to yield all the data that went into a fit. The training and validation
     indices are also returned so one can access the splits using pandas indexing.
 
     Raises
