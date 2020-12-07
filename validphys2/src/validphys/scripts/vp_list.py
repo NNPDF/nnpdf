@@ -5,9 +5,10 @@ Script which lists available resources locally and remotely
 
 """
 import argparse
+import fnmatch
 from functools import partial
-import re
 import logging
+import re
 
 from reportengine import colors
 
@@ -40,6 +41,22 @@ def natural_keys(text):
 sane_order = partial(sorted, key=natural_keys)
 
 
+def _get_filter(*, glob_pattern=None, re_pattern=None):
+    """Returns ``func`` which applies some filter to a list based on either
+    a regular expression or glob pattern. It is expected that only
+    ``re_pattern`` or ``glob_pattern`` will be supplied but this assumption
+    is not checked and instead ``glob_pattern`` takes precedence.
+
+    """
+    if glob_pattern is not None:
+        return partial(fnmatch.filter, pat=glob_pattern)
+    if re_pattern is not None:
+        re_filter = re.compile(re_pattern)
+        return partial(filter, re_filter.match)
+    # else just return identity func
+    return lambda x: x
+
+
 def main(command_line=None):
     parser = argparse.ArgumentParser(description=__doc__)
 
@@ -64,8 +81,8 @@ def main(command_line=None):
         ),
         metavar="resource",
     )
-    g = parser.add_mutually_exclusive_group()
-    g.add_argument(
+    location_group = parser.add_mutually_exclusive_group()
+    location_group.add_argument(
         "-r",
         "--remote-only",
         dest="remote",
@@ -73,7 +90,7 @@ def main(command_line=None):
         default=False,
         help="Only list remote resources",
     )
-    g.add_argument(
+    location_group.add_argument(
         "-l",
         "--local-only",
         dest="local",
@@ -81,11 +98,34 @@ def main(command_line=None):
         default=False,
         help="Only list local resources",
     )
-    args = parser.parse_args(command_line)
+    pattern_group = parser.add_mutually_exclusive_group()
+    pattern_group.add_argument(
+        "-re",
+        "--regex",
+        type=str,
+        default=None,
+        help=(
+            "Filter search using regular expression, only list resources which "
+            "match pattern."
+        ),
+    )
+    pattern_group.add_argument(
+        "-g",
+        "--glob",
+        type=str,
+        default=None,
+        help=(
+            "Filter search using Unix shell-style wildcards, only list "
+            "resources which match pattern."
+        ),
+    )
 
+    args = parser.parse_args(command_line)
+    results_filter = _get_filter(glob_pattern=args.glob, re_pattern=args.regex)
     l = L()
     if not args.remote:
         local_res = getattr(l, LOCAL_TOKEN + args.resource, None)
+        local_res = results_filter(local_res)
         if args.resource in available and local_res:
             log.info("The following %s are available locally:", args.resource)
             print("- " + "\n- ".join(sane_order(local_res)))
@@ -93,6 +133,7 @@ def main(command_line=None):
             log.info("No %s are available locally.", args.resource)
     if not args.local:
         remote_res = getattr(l, REMOTE_TOKEN + args.resource, None)
+        remote_res = results_filter(remote_res)
         if args.resource in downloadable and remote_res:
             log.info("The following %s are downloadable:", args.resource)
             print("- " + "\n- ".join(sane_order(remote_res)))
