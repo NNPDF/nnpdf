@@ -29,6 +29,8 @@ LUMI_CHANNELS = {
     'qq': r'qq',
     'udbar': r'u\bar{d}',
     'dubar': r'd\bar{u}',
+    'uubar': r'u\bar{u}',
+    'ddbar': r'd\bar{d}',
 }
 
 def _grid_values(lpdf, flmat, xmat, qmat):
@@ -139,6 +141,12 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     elif channel == 'dubar':
         res = (pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -2)
                + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 1))
+    elif channel == 'uubar':
+        res = (pdf_set.xfxQ(x1, mx, n, 2) * pdf_set.xfxQ(x2, mx, n, -2)
+               + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 2))
+    elif channel == 'ddbar':
+        res = (pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -1)
+               + pdf_set.xfxQ(x1, mx, n, -1) * pdf_set.xfxQ(x2, mx, n, 1))
 
     else:
         raise ValueError("Bad channel")
