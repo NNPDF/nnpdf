@@ -118,7 +118,7 @@ def type_fitname(fitname: str):
     return fitpath
 
 
-def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float, integ_threshold: float, at_least_nrep: bool):
+def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float, integ_threshold: float, at_least_nrep: bool):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
 
@@ -250,7 +250,7 @@ def main():
     else:
         log.setLevel(logging.INFO)
     try:
-        postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integrability_threshold, args.at_least_nrep)
+        _postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integrability_threshold, args.at_least_nrep)
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
         sys.exit(1)
