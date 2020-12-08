@@ -1,5 +1,16 @@
+/*
+Reference: Phys.Rev.Lett. 121 (2018) 6, 062002
+arXiv: [1805.04736]
+HepData: https://www.hepdata.net/record/ins1672941
+Description: The pseudorapidity distributions of dijets as a function of their 
+average transverse momentum are measured in proton-proton (pp) collisions. 
+The data samples were collected by the CMS experiment at the CERN LHC, at a 
+nucleon-nucleon center-of-mass energy of 5.02 TeV. 
+The data are taken from Tabs. 3a, 3b, 3c, 3d and 3e of the HepData entry. No
+information on correlations is provided.
+*/
+
 #include "CMS_2JET_5TEV.h"
-// Distribution differential in Z boson rapidity in di-muon, di-electron combined channel
 
 void CMS_2JET_5TEVFilter::ReadData()
 {
@@ -26,7 +37,7 @@ void CMS_2JET_5TEVFilter::ReadData()
     }
 
     // Starting filter
-    double sqrt_s = 5020;
+    double sqrt_s = 5020; // GeV
     string line;
 
     std::vector<double> totsys(fNData);
@@ -52,11 +63,11 @@ void CMS_2JET_5TEVFilter::ReadData()
       lstream >> sys;
 
       /*
-    The total systematic uncertainties in ηdijet and in the ratios of
-    the pPb and pp spectra are evaluated by summing in quadrature over
-    the contributions from the above sources: the uncertainties due to
-    the JES, jet energy resolution, and jet angular resolution 
-    */
+	The total systematic uncertainties in ηdijet and in the ratios of
+	the pPb and pp spectra are evaluated by summing in quadrature over
+	the contributions from the above sources: the uncertainties due to
+	the JES, jet energy resolution, and jet angular resolution 
+      */
       fSys[n][0].add = sys;
       fSys[n][0].mult = (fSys[n][0].add / fData[n]) * 100;
       fSys[n][0].type = ADD;
