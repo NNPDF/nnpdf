@@ -38,9 +38,6 @@ def natural_keys(text):
     return [atoi(c) for c in re.split(r"(\d+)", text)]
 
 
-sane_order = partial(sorted, key=natural_keys)
-
-
 def _get_filter(*, glob_pattern=None, re_pattern=None):
     """Returns ``func`` which applies some filter to a list based on either
     a regular expression or glob pattern. It is expected that only
@@ -122,6 +119,11 @@ def main(command_line=None):
 
     args = parser.parse_args(command_line)
     results_filter = _get_filter(glob_pattern=args.glob, re_pattern=args.regex)
+    # sane ordering is quite expensive and only really required with theories.
+    if args.resource == "theories":
+        sane_order = partial(sorted, key=natural_keys)
+    else:
+        sane_order = sorted
     l = L()
     if not args.remote:
         local_res = getattr(l, LOCAL_TOKEN + args.resource, None)
