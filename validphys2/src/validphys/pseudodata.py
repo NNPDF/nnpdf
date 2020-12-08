@@ -225,8 +225,8 @@ def make_replica(list_of_commondata, seed=None):
                     check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
 
             # if we sort here (which sorts columns), then permuting datasets doesn't change the result
-            special_add_errors = pd.concat(special_add, axis=0, sort=True).to_numpy()
             # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
+            special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
             special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
 
 
