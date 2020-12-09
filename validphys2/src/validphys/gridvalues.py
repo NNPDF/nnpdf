@@ -36,6 +36,8 @@ LUMI_CHANNELS = {
     'udbar': r'u\bar{d}',
     'scbar': r's\bar{c}',
     'csbar': r'c\bar{s}',
+    'pp': r'\gamma\gamma',
+    'gp': r'g\gamma',
 }
 
 QUARK_COMBINATIONS = {
@@ -141,6 +143,11 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         for i in QUARK_FLAVOURS:
             res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
                     + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
+    elif channel == 'gp':
+        res = (pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 22)
+               + pdf_set.xfxQ(x1, mx, n, 22) * pdf_set.xfxQ(x2, mx, n, 21))
+    elif channel == 'pp':
+        res = pdf_set.xfxQ(x1, mx, n, 22) * pdf_set.xfxQ(x2, mx, n, 22)
     elif channel == 'qqbar':
         for i in QUARK_FLAVOURS:
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
