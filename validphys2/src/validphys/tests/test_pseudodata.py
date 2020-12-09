@@ -39,13 +39,16 @@ theoryid:
   from_: theory
 
 use_cuts: fromfit
-
-NPROC: 1
 """
 
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_dicts():
+@pytest.fixture(
+    scope="session",
+    autouse=True,
+    params=[1, pytest.param(None, marks=pytest.mark.linux)],
+)
+def setup_dicts(request):
+    n_process_config = dict(NPROC=request.param)
     exp_infos_bytes = read_binary(validphys.tests.regressions, "test_exp_infos.pickle")
     ns = yaml.safe_load(EXAMPLE_RUNCARD)
     # This is what all the fitted replicas saw
@@ -56,8 +59,7 @@ def setup_dicts():
     fit_postfit_mapping = dict(enumerate(exp_infos, 1))
     exp_infos = [fit_postfit_mapping[i] for i in fitted_indices]
 
-
-    pseudodata_info = API.get_pseudodata(**ns)
+    pseudodata_info = API.get_pseudodata(**ns, **n_process_config)
 
     return exp_infos, pseudodata_info
 
