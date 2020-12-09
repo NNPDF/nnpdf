@@ -656,6 +656,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
             flav_name = flav_dict["fl"]
             mat.append(f[flav_name])
 
-    mat = np.asarray(mat).reshape(8,8)
+    nflavs = len(flav_info)
+    mat = np.asarray(mat).reshape(8, nflavs)
     # Return the transpose of the matrix, to have the first index referring to flavour
     return mat.transpose()

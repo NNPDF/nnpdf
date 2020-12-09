@@ -74,7 +74,7 @@ def check_basis_with_layers(fitting, parameters):
     if number_of_flavours != last_layer:
         raise CheckError(
             f"The number of nodes in the last layer ({last_layer}) does not"
-            " match the number of flavours: ({number_of_flavours})"
+            f" match the number of flavours: ({number_of_flavours})"
         )
 
 
