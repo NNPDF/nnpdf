@@ -166,6 +166,24 @@ class ParamfitsConfig(Config):
         return {'fits_computed_pseudoreplicas_chi2':  df}
 
 
+    def produce_use_fits_computed_psedorreplicas_chi2_output(
+            self, fits_computed_psedorreplicas_chi2_output, fits_name):
+        """Select the columns of the input file matching the fits.
+
+        Note: this is a copy of ``produce_use_fits_computed_pseudoreplicas_chi2_output``.
+        It is here so that `fits_computed_pseudoreplicas_chi2` gets assigned whether
+        `fits_computed_pseudoreplicas_chi2_output` or `fits_computed_psedorreplicas_chi2_output`
+        is specified in the runcard. This is to ensure that old runcards still work.
+        """
+        df = fits_computed_psedorreplicas_chi2_output
+        try:
+            df = df[fits_name]
+        except Exception as e:
+            raise ConfigError(f"Could not select the fit names from the table: {e}") from e
+
+        return {'fits_computed_pseudoreplicas_chi2':  df}
+
+
     @element_of('extra_sums')
     def parse_extra_sum(self, s:dict):
         keys = {'dataset_item', 'components'}
@@ -421,7 +439,6 @@ class ParamfitsConfig(Config):
     produce_combine_dataspecs_pseudorreplicas_as = produce_combine_dataspecs_pseudoreplicas_as
     produce_fits_matched_pseudorreplicas_chi2_output = produce_fits_matched_pseudoreplicas_chi2_output
     parse_fits_computed_psedorreplicas_chi2_output = parse_fits_computed_pseudoreplicas_chi2_output
-    produce_use_fits_computed_psedorreplicas_chi2_output = produce_use_fits_computed_pseudoreplicas_chi2_output
     produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset = produce_fits_matched_pseudoreplicas_chi2_by_experiment_and_dataset
     produce_fits_matched_pseudorreplicas_chi2_by_dataset_item = produce_fits_matched_pseudoreplicas_chi2_by_dataset_item
     produce_matched_pseudorreplcias_for_total = produce_matched_pseudoreplicas_for_total
