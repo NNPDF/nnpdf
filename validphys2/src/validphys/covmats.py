@@ -132,10 +132,6 @@ def datasets_covmat_from_systematics(
         contribution. By default this is None and the experimental central
         values are used.
 
-    use_mult_errors: bool
-        Whether or not to include multiplicative systematic errors in the computation of
-        the covariance matrix. This is largely for use in :py:func:`validphys.pseudodata.make_replica`.
-
     Returns
     -------
     cov_mat : np.array
