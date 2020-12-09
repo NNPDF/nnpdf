@@ -4,8 +4,9 @@ Created on Thu Jun  2 19:35:40 2016
 
 @author: Zahari Kassabov
 """
-import tempfile
 from collections import Counter
+import platform
+import tempfile
 
 from matplotlib import scale as mscale
 
@@ -242,3 +243,25 @@ def check_two_dataspecs(dataspecs):
 def check_norm_threshold(norm_threshold):
     """Check norm_threshold is not None"""
     check(norm_threshold is not None)
+
+@make_argcheck
+def check_sequential_on_osx(NPROC):
+    """Check that if we are on OSX, NPROC is equal to 1. This is related to
+    the infamous issues with multiprocessing on osx.
+
+    The "solution" is to run the code sequentially if NPROC is 1 and enforce
+    that mac users don't set NPROC as anything else.
+
+    TODO: Once pseudodata is generated in python, try using spawn instead of
+    fork with multiprocessing.
+
+    Notes
+    --------
+    for the specific NNPDF issue: https://github.com/NNPDF/nnpdf/issues/931
+    General discussion: https://wefearchange.org/2018/11/forkmacos.rst.html
+
+    """
+    if platform.system() == "Darwin" and NPROC != 1:
+        raise CheckError(
+            "NPROC must be set to 1 on OSX, because multithreading is not supported."
+        )

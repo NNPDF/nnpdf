@@ -39,7 +39,10 @@ theoryid:
   from_: theory
 
 use_cuts: fromfit
+
+NPROC: 1
 """
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_dicts():
