@@ -97,16 +97,6 @@ def main(command_line=None):
     )
     pattern_group = parser.add_mutually_exclusive_group()
     pattern_group.add_argument(
-        "-re",
-        "--regex",
-        type=str,
-        default=None,
-        help=(
-            "Filter search using regular expression, only list resources which "
-            "match pattern."
-        ),
-    )
-    pattern_group.add_argument(
         "-g",
         "--glob",
         type=str,
@@ -116,6 +106,16 @@ def main(command_line=None):
             "resources which match pattern."
         ),
     )
+    pattern_group.add_argument(
+        "--regex",
+        type=str,
+        default=None,
+        help=(
+            "Filter search using regular expression, only list resources which "
+            "match pattern."
+        ),
+    )
+
 
     args = parser.parse_args(command_line)
     results_filter = _get_filter(glob_pattern=args.glob, re_pattern=args.regex)
