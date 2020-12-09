@@ -110,12 +110,7 @@ fitting:
   mcseed: 3
   load: 'developing_weights.h5'
 
-  genrep   : true      # on = generate MC replicas, off = use real data
-  fitmethod: NGA    # Minimization algorithm
-  ngen     : 30000  # Maximum number of generations
-  nmutants : 80     # Number of mutants for replica
-  paramtype: NN
-  nnodes   : [2,5,3,1]
+  genrep   : true      # true = generate MC replicas, false = use real data
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [50, 35, 25, 8]
