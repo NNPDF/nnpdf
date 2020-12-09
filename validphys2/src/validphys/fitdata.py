@@ -77,8 +77,9 @@ def check_replica_files(replica_path, prefix):
         if not test_path.is_file():
             log.warning(f"Missing file: {test_path}")
             valid = False
+    main_path = path/prefix
     for f in REPLICA_FILES:
-        test_path = (path/prefix).with_suffix(f)
+        test_path = main_path.with_suffix(f)
         if not test_path.is_file():
             log.warning(f"Missing file: {test_path}")
             valid = False
@@ -86,13 +87,14 @@ def check_replica_files(replica_path, prefix):
         log.warning(f"Found invalid replica {path}")
     return valid
 
-FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths'))
+FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers'))
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
     with open(p, 'r') as fitinfo_file:
         fitinfo_line = fitinfo_file.readline().split() # General fit properties
         fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
+        fitinfo_integ = fitinfo_file.readline()         # Replica integ-numbers
 
         n_iterations   = int(  fitinfo_line[0])
         erf_validation = float(fitinfo_line[1])
@@ -100,7 +102,8 @@ def load_fitinfo(replica_path, prefix):
         chisquared     = float(fitinfo_line[3])
         is_positive    = fitinfo_line[4] == "POS_PASS"
         arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
-    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
+        integnumbers   = np.fromstring(fitinfo_integ, sep=' ')
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
 
 
 #TODO: Produce a more informative .sumrules file.
@@ -397,33 +400,35 @@ def fit_datasets_properties_table(fitinputcontext):
     """Returns table of dataset properties for each dataset used in a fit."""
     return datasets_properties_table(fitinputcontext["data_input"])
 
-def print_systype_overlap(groups_data):
+dataset_inputs_commondata = collect("commondata", ("data_input",))
+groups_commondata = collect(
+    "dataset_inputs_commondata", ("group_dataset_inputs_by_metadata",))
+
+
+def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
     """Returns a set of systypes that overlap between groups.
     Discards the set of systypes which overlap but do not imply
     correlations
 
     """
-    groups = groups_data
-    group_names = []
-    systype_groups = []
-    whitelist = {'CORR', 'UNCORR', 'SKIP', 'THEORYUNCORR', 'THEORYCORR'}
-    for group in groups:
-        systype_group = set()
-        for ds in group.datasets:
-            cd = ds.commondata.load()
-            Nsys = cd.GetNSys()
-            for i in range(Nsys):
-                systype_group.add(cd.GetSys(0, i).name)
-                systype_group.difference_update(whitelist)
-        systype_groups.append(systype_group)
-        group_names.append(group.name)
+    allow_list = {"CORR", "UNCORR", "SKIP", "THEORYUNCORR", "THEORYCORR"}
+    systype_groups = dict()
+    for group_cd, group in zip(groups_commondata, group_dataset_inputs_by_metadata):
+        systype_groups[group["group_name"]] = {
+            cd.load().GetSys(0, i).name
+            for cd in group_cd
+            for i in range(cd.nsys)
+            if cd.load().GetSys(0, i).name not in allow_list
+        }
+
     systype_overlap = set()
     groups_overlap = set()
-    for i, sys_i in enumerate(systype_groups):
-        for j, sys_j in enumerate(systype_groups[i+1:], start=i+1):
+    name_sys_list = list(systype_groups.items())
+    for i, (name_i, sys_i) in enumerate(name_sys_list):
+        for name_j, sys_j in name_sys_list[i + 1 :]:
             comp = sys_i.intersection(sys_j)
             if comp:
-                groups_overlap.update({group_names[i], group_names[j]})
+                groups_overlap.update({name_i, name_j})
             systype_overlap.update(comp)
     if systype_overlap:
         return groups_overlap, systype_overlap

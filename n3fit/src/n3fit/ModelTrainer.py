@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 # Threshold defaults
 # Any partition with a chi2 over the threshold will discard its hyperparameters
 HYPER_THRESHOLD = 50.0
+CHI2_THRESHOLD = 10.0
 # Each how many epochs do we increase the positivitiy Lagrange Multiplier
 PUSH_POSITIVITY_EACH = 100
 
@@ -266,6 +267,7 @@ class ModelTrainer:
             "ndata": 0,
             "model": None,
             "folds": [],
+            "posdatasets": [],
         }
         self.experimental = {
             "output": [],
@@ -288,6 +290,8 @@ class ModelTrainer:
             self.no_validation = False
 
         self.callbacks = []
+        if debug:
+            self.callbacks.append(callbacks.TimerCallback())
 
     def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
@@ -346,6 +350,8 @@ class ModelTrainer:
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
             self.training["posdatasets"].append(pos_dict["name"])
+            self.validation["expdata"].append(pos_dict["expdata"])
+            self.validation["posdatasets"].append(pos_dict["name"])
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
                 self.training["expdata"].append(integ_dict["expdata"])
@@ -524,9 +530,12 @@ class ModelTrainer:
             self.input_list += pos_layer["inputs"]
             self.input_sizes.append(pos_layer["experiment_xsize"])
 
-            # The positivity all falls to the training
+            # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
             self.training["losses"].append(pos_layer["loss_tr"])
+            self.validation["output"].append(pos_layer["output_tr"])
+            self.validation["losses"].append(pos_layer["loss_tr"])
+
             self.training["posmultipliers"].append(pos_multiplier)
             self.training["posinitials"].append(pos_initial)
 
@@ -668,15 +677,13 @@ class ModelTrainer:
         In the same way, every ``PUSH_INTEGRABILITY_EACH`` epochs the integrability
         will be multiplied by their respective integrability multipliers
         """
-        callback_st = callbacks.gen_stopping_callback(training_model, stopping_object)
-        callback_pos = callbacks.gen_lagrange_callback(
-            training_model,
+        callback_st = callbacks.StoppingCallback(stopping_object)
+        callback_pos = callbacks.LagrangeCallback(
             self.training["posdatasets"],
             self.training["posmultipliers"],
             update_freq=PUSH_POSITIVITY_EACH,
         )
-        callback_integ = callbacks.gen_lagrange_callback(
-            training_model,
+        callback_integ = callbacks.LagrangeCallback(
             self.training["integdatasets"],
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,
@@ -759,10 +766,9 @@ class ModelTrainer:
         All other parameters are passed to the corresponding functions
         """
 
-        # Reset the internal state of the backend
+        # Reset the internal state of the backend every time this function is called
         print("")
-        if not self.debug or self.mode_hyperopt:
-            clear_backend_state(max_cores=self.max_cores)
+        clear_backend_state()
 
         # Preprocess some hyperparameters
         epochs = int(params["epochs"])
@@ -789,6 +795,7 @@ class ModelTrainer:
             epochs,
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
+        threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
 
         # Initialize the chi2 dictionaries
         l_train = []
@@ -851,10 +858,12 @@ class ModelTrainer:
             stopping_object = Stopping(
                 validation_model,
                 reporting,
+                pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 save_weights_each=self.save_weights_each,
-                threshold_positivity=threshold_pos
+                threshold_positivity=threshold_pos,
+                threshold_chi2=threshold_chi2
             )
 
             # Compile each of the models with the right parameters
@@ -866,9 +875,9 @@ class ModelTrainer:
                 epochs=epochs,
             )
 
-            # Compute validation and training loss
-            training_loss = stopping_object.tr_loss
-            validation_loss = stopping_object.vl_loss
+            # Save validation and training chi2
+            training_loss = stopping_object.tr_chi2
+            validation_loss = stopping_object.vl_chi2
 
             # Compute experimental loss
             exp_loss_raw = models["experimental"].compute_losses()["loss"]
@@ -876,14 +885,14 @@ class ModelTrainer:
 
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
-                for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_model, stopping_object)
-                l_hyper.append(hyper_loss)
-                log.info("Fold %d finished, loss=%.1f, pass=%s", k+1, hyper_loss, passed)
                 if passed != self.pass_status:
                     log.info("Hyperparameter combination fail to find a good fit, breaking")
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
+                for penalty in self.hyper_penalties:
+                    hyper_loss += penalty(pdf_model, stopping_object)
+                l_hyper.append(hyper_loss)
+                log.info("Fold %d finished, loss=%.1f, pass=%s", k+1, hyper_loss, passed)
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss above threshold (%.1f > %.1f), breaking", hyper_loss, self.hyper_threshold)
                     # Apply a penalty proportional to the number of folds that have not been computed

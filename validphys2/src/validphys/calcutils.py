@@ -210,8 +210,8 @@ def regularize_l2(sqrtcov, norm_threshold=4):
 
     .. math::
 
-        \left\Vert A+ \right\Vert_L2
-        \leq \frac{1}{norm_threshold}
+        \left\Vert A^+ \right\Vert_{L2}
+        \leq \frac{1}{\text{norm_threshold}}
 
     A+ is the pseudoinverse of A, `norm_threshold` roughly corresponds to the
     sqrt of the maximimum relative uncertainty in any systematic.

@@ -183,6 +183,22 @@ Note that this is not a boolean mask that drops the points but rather it just se
 The reason for doing it in this way is to minimize the number of things that change when doing a
 hyperparameter scan with respect to a fit.
 
+Positivity and integrability
+----------------------------
+
+Since positivity is a hard constraint of the fit (i.e., a replica fit will not be marked as good
+unless it passes the positivity constraints), it enters the hyperoptimization in a similar way.
+There is no threshold, either the replica passes positivity or it doesn't, and if it doesn't
+hyperopt will receive a failure instead of a fit (so the run will be discarded).
+
+Integrability instead is implemented as a penalty.
+In order to activate it it is necessary to add ``integrability`` to the penalties section
+of the hyperoptimization namespace (see below).
+In this case the integrability is implemented as an exponential penalty, this means that as
+the "integrability number" grows, the test loss will grow as well, favouring replicas with
+an "integrability number" below the chosen threshold.
+For consistency the threshold used during hyperoptimization is read directly from the ``fitveto.py`` variable.
+
 
 .. _hyperoptrc-label:
 
@@ -205,6 +221,7 @@ The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hype
         penalties:
             - saturation
             - patience
+            - integrability
         partitions:
             - overfit: True
               datasets:

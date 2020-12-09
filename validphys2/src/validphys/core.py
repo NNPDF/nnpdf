@@ -295,6 +295,10 @@ class CommonDataSpec(TupleComp):
         return self.metadata.name
 
     @property
+    def nsys(self):
+        return self.metadata.nsys
+
+    @property
     def ndata(self):
         return self.metadata.ndata
 
@@ -455,6 +459,19 @@ class DataSetSpec(TupleComp):
                 data = DataSet(data, intmask)
         return data
 
+    def to_unweighted(self):
+        """Return a copy of the dataset with the weight set to one."""
+        return self.__class__(
+            name=self.name,
+            commondata=self.commondata,
+            fkspecs=self.fkspecs,
+            thspec=self.thspec,
+            cuts=self.cuts,
+            frac=self.frac,
+            op=self.op,
+            weight=1,
+        )
+
     def __str__(self):
         return self.name
 
@@ -534,6 +551,15 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
     @property
     def as_markdown(self):
         return str(self)
+
+    def to_unweighted(self):
+        """Return a copy of the group with the weights for all experiments set
+        to one. Note that the results cannot be used as a namespace."""
+        return self.__class__(
+            name=self.name,
+            datasets=[ds.to_unweighted() for ds in self.datasets],
+            dsinputs=None,
+        )
 
 
 class FitSpec(TupleComp):

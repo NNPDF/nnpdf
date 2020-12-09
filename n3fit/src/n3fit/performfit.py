@@ -80,7 +80,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
 @n3fit.checks.wrapper_hyperopt
 def performfit(
     fitting,
-    experiments,
+    experiments_data,
     t0set,
     replica,
     replica_path,
@@ -116,8 +116,9 @@ def performfit(
         ----------
             fitting: dict
                 dictionary with the hyperparameters of the fit
-            experiments: dict
-                vp list of experiments to be included in the fit
+            experiments_data: dict
+                vp list of datasets grouped into experiments to be included in
+                the fit
             t0set: str
                 t0set name
             replica: list
@@ -141,18 +142,15 @@ def performfit(
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
     """
+    from n3fit.backends import set_initial_state
 
-    if debug:
-        # If debug is active, fix the initial state this should make the run reproducible
-        # (important to avoid non-deterministic multithread or hidden states)
-        from n3fit.backends import set_initial_state
-
-        set_initial_state()
-    ###############
+    # If debug is active, the initial state will be fixed so that the run is reproducible
+    set_initial_state(debug=debug, max_cores=maxcores)
 
     from n3fit.stopwatch import StopWatch
 
     stopwatch = StopWatch()
+
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
@@ -194,7 +192,7 @@ def performfit(
         kpartitions = None
 
     # First loop over the experiments
-    for exp in experiments:
+    for exp in experiments_data:
         log.info("Loading experiment: {0}".format(exp))
         all_exp_dicts = reader.common_data_reader(
             exp,
@@ -311,7 +309,7 @@ def performfit(
                 Positivity state: {4}
                 """.format(
                 stopping_object.epoch_of_the_stop,
-                stopping_object.vl_loss,
+                stopping_object.vl_chi2,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
                 stopping_object.positivity_status(),
@@ -341,7 +339,8 @@ def performfit(
         if model_file:
             model_file_path = replica_path_set / model_file
             log.info(" > Saving the weights for future in %s", model_file_path)
-            pdf_model.save_weights(model_file_path)
+            # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3 though)
+            pdf_model.save_weights(str(model_file_path), save_format="h5")
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
@@ -355,6 +354,5 @@ def performfit(
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
 
-    if tboard is not None:
-        log.info("Tensorboard logging information is stored at %s", log_path)
-
+        if tboard is not None:
+            log.info("Tensorboard logging information is stored at %s", log_path)

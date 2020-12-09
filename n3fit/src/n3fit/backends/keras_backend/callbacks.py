@@ -1,52 +1,100 @@
 """
     Callbacks to be used during training
 
-    The callbacks defined in this module can be passed to the ``on_epoch_end`` argument
+    The callbacks defined in this module can be passed to the ``callbacks`` argument
     of the ``perform_fit`` method as a list.
-    They must take as input an epoch number and a log of the partial losses
+
+    For the most typical usage: ``on_epoch_end``,
+    they must take as input an epoch number and a log of the partial losses.
 """
 
-from tensorflow.keras.callbacks import LambdaCallback, TensorBoard
+import logging
+from time import time
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.callbacks import TensorBoard, Callback
+
+log = logging.getLogger(__name__)
 
 
-def gen_stopping_callback(training_model, stopping_object, log_freq=100):
+class TimerCallback(Callback):
+    """Callback to be used during debugging to time the fit"""
+
+    def __init__(self, count_range=100):
+        super().__init__()
+
+        self.all_times = []
+        self.every_x = []
+        self.x_count = count_range
+        self.starting_time = None
+        self.last_time = 0
+
+    def on_epoch_end(self, epoch, logs=None):
+        """ At the end of every epoch it checks the time """
+        new_time = time()
+        if epoch == 0:
+            # The first epoch is only useful for starting
+            self.starting_time = new_time
+        else:
+            cur_dif = new_time - self.last_time
+            self.all_times.append(cur_dif)
+            if (epoch + 1) % self.x_count == 0:
+                ave = np.mean(self.all_times[-100:])
+                log.info(f" > Latest 100 average: {ave:.5} s")
+                self.every_x.append(ave)
+        self.last_time = new_time
+
+    def on_train_end(self, logs=None):
+        """ Print the results """
+        total_time = time() - self.starting_time
+        log.info(f"> Values of the {self.x_count}: {self.every_x}")
+        log.info(f"> > Average time per epoch: {np.mean(self.all_times[3:]):.5} s")
+        log.info(f"> > > Total time: {total_time/60:.5} min")
+
+
+class StoppingCallback(Callback):
     """
     Given a ``stopping_object``, the callback will monitor the validation chi2
-    and will stop the ``training_model`` when the conditions given by ``stopping_object``
+    and will stop the training model when the conditions given by ``stopping_object``
     are met.
 
     Parameters
     ----------
-        training_model: backend Model
-            Model being trained
         stopping_object: Stopping
             instance of Stopping which controls when the fit should stop
         log_freq: int
             each how manwy epochs the ``print_stats`` argument of ``stopping_object``
             will be set to true
     """
-    # TODO: reduce the importance of the callback function moving its logic to Stopping
 
-    def callback_stopping(epoch, logs):
-        print_stats = False
-        if (epoch + 1) % log_freq == 0:
-            print_stats = True
-        stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
-        if stopping_object.stop_here():
-            training_model.stop_training = True
+    def __init__(self, stopping_object, log_freq=100):
+        super().__init__()
+        self.log_freq = log_freq
+        self.stopping_object = stopping_object
 
-    return LambdaCallback(on_epoch_end=callback_stopping)
+    def on_epoch_end(self, epoch, logs=None):
+        """ Function to be called at the end of every epoch """
+        print_stats = ((epoch + 1) % self.log_freq) == 0
+        # Note that the input logs correspond to the fit before the weights are updated
+        self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
+        if self.stopping_object.stop_here():
+            self.model.stop_training = True
+
+    def on_train_end(self, logs=None):
+        """The training can be finished by the stopping or by
+        Tensorflow when the number of epochs reaches the maximum.
+        In this second case the stopping has to be manually set
+        """
+        self.stopping_object.make_stop()
 
 
-def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100):
+class LagrangeCallback(Callback):
     """
     Updates the given datasets
     with its respective multipliers each ``update_freq`` epochs
 
     Parameters
     ----------
-        training_model: backend Model
-            Model being trained
         datasets: list(str)
             List of the names of the datasets to be trained
         multipliers: list(float)
@@ -55,17 +103,38 @@ def gen_lagrange_callback(training_model, datasets, multipliers, update_freq=100
             each how many epochs the positivity lambda is updated
     """
 
-    if len(multipliers) != len(datasets):
-        raise ValueError("The number ofvdatasets and multipliers do not match")
+    def __init__(self, datasets, multipliers, update_freq=100):
+        super().__init__()
+        if len(multipliers) != len(datasets):
+            raise ValueError("The number of datasets and multipliers do not match")
+        self.update_freq = update_freq
+        self.datasets = datasets
+        self.multipliers = multipliers
+        self.updateable_weights = []
 
-    def callback_lagrange(epoch, logs):
-        if (epoch + 1) % update_freq == 0:
-            training_model.multiply_weights(datasets, multipliers)
+    def on_train_begin(self, logs=None):
+        """ Save an instance of all relevant layers """
+        for layer_name in self.datasets:
+            layer = self.model.get_layer(layer_name)
+            self.updateable_weights.append(layer.weights)
 
-    return LambdaCallback(on_epoch_end=callback_lagrange)
+    @tf.function
+    def _update_weights(self):
+        """Update all the weight with the corresponding multipliers
+        Wrapped with tf.function to compensate the for loops as both weights variables
+        and multipliers are known upon first call
+        """
+        for ws, multiplier in zip(self.updateable_weights, self.multipliers):
+            for w in ws:
+                w.assign(w * multiplier)
+
+    def on_epoch_end(self, epoch, logs=None):
+        """ Function to be called at the end of every epoch """
+        if (epoch + 1) % self.update_freq == 0:
+            self._update_weights()
 
 
-def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq = 0):
+def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
     """
     Generate tensorboard logging details at ``log_dir``.
     Metrics of the system are saved each epoch.

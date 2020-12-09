@@ -47,6 +47,47 @@ def delta_chi2_hessian(pdf, total_chi2_data):
 
 
 @figure
+def plot_kullback_leibler(delta_chi2_hessian):
+    """
+    Determines the Kullback–Leibler divergence by comparing the expectation value of Delta chi2 to 
+    the cumulative distribution function of chi-square distribution with one degree of freedom 
+    (see: https://en.wikipedia.org/wiki/Chi-square_distribution).
+    
+    The Kullback-Leibler divergence provides a measure of the difference between two distribution 
+    functions, here we compare the chi-squared distribution and the cumulative distribution of the
+    expectation value of Delta chi2. 
+    """
+    delta_chi2 = delta_chi2_hessian
+
+    bins_nnpdf = np.arange(0, 7.5, 0.1)
+    # find the midpoint of each bin, has length len(bins_nnpdf) - 1
+    bin_central_nnpdf = (bins_nnpdf[1:] + bins_nnpdf[:-1]) / 2
+    x = np.linspace(0, 7.4, 200)
+
+    fig, ax = plt.subplots()
+
+    vals_nnpdf, _, _ = ax.hist(
+        delta_chi2,
+        bins=bins_nnpdf,
+        density=True,
+        cumulative=True,
+        label="cumulative $\Delta\chi^2$",
+    )
+    # compute Kullback-Leibler (null values set to 1e-8)
+    vals_nnpdf[vals_nnpdf==0] = 1e-8
+    kl_nnpdf = entropy(chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
+
+    ax.plot(x, chi2.cdf(x, 1), label="$\chi^2$ CDF")
+
+    ax.set_title(f"KL divergence: {kl_nnpdf:.4f}")
+    ax.set_xlabel("$<\Delta\chi^2>$")
+
+    ax.legend()
+
+    return fig
+
+
+@figure
 def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
     """
     Plot of the chi2 difference between chi2 of each eigenvector of a symmHessian set

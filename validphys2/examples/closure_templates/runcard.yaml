@@ -75,6 +75,8 @@ dataspecs:
       from_: closure
     speclabel:
       from_: closure
+    # WARNING: do not blindly copy and paste this: it can overwrite the datasets
+    # for any actions which rely on grouping datasets.
     data_input:
       from_: fitinputcontext
    

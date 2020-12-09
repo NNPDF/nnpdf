@@ -22,6 +22,7 @@ import numpy as np
 import numpy.linalg as la
 from validphys.core import PDF, MCStats
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
+from validphys.arclength import integrability_number, arc_lengths
 
 # Order of the evolution basis output from n3fit
 EVOL_LIST = [
@@ -58,13 +59,13 @@ class N3PDF(PDF):
         return MCStats
 
     def load(self):
-        """ Many vp functions ask for a LHAPDF pdf
+        """Many vp functions ask for a LHAPDF pdf
         from nnpdflib, this class fakes it until a time in which vp is free from C++
         """
         return self
 
     def __call__(self, xarr, flavours=None):
-        """ Uses the internal model to produce pdf values.
+        """Uses the internal model to produce pdf values.
         The output is on the evolution basis.
 
         Parameters
@@ -128,3 +129,63 @@ class N3PDF(PDF):
             lq = len(qmat)
             ret = ret.repeat(lq, -1)
         return ret
+
+    # Utilities
+    def integrability_numbers(self, q0=1.65, flavours=None):
+        """Compute the integrability numbers for the current PDF
+        using the corresponding validphys action
+
+        Parameters
+        ----------
+            q0: float
+                energy at which the integrability is computed
+            flavours: list
+                flavours for which the integrability is computed
+
+        Returns
+        -------
+            np.array(float)
+                Value for the integrability for each of the flavours
+
+        Example
+        -------
+        >>> from n3fit.vpinterface import N3PDF
+        >>> from n3fit.model_gen import pdfNN_layer_generator
+        >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+        >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+        >>> n3pdf = N3PDF(pdf_model)
+        >>> res = n3pdf.integrability_numbers()
+        """
+        if flavours is None:
+            flavours = ["V", "T3", "V3", "T8", "V8"]
+        return integrability_number(self, [q0], flavours=flavours)
+
+    def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
+        """
+        Given the layer with the fit basis computes the arc length
+        using the corresponding validphys action
+
+        Parameters
+        ----------
+            pdf_function: function
+                pdf function has received by the writer or ``pdf_model``
+            q0: float
+                energy at which the arc length is computed
+            basis: str
+                basis in which to compute the arc length
+            flavours: list
+                output flavours
+
+        Example
+        -------
+        >>> from n3fit.vpinterface import N3PDF
+        >>> from n3fit.model_gen import pdfNN_layer_generator
+        >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+        >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+        >>> n3pdf = N3PDF(pdf_model)
+        >>> res = n3pdf.compute_arclength()
+        """
+        if flavours is None:
+            flavours = ["sigma", "gluon", "V", "V3", "V8"]
+        ret = arc_lengths(self, [q0], basis, flavours)
+        return ret.stats.central_value()

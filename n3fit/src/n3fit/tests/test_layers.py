@@ -104,7 +104,8 @@ def generate_had(nfk=1):
 # Tests
 def test_DIS_basis():
     fkdicts = generate_DIS(2)
-    obs_layer = layers.DIS(fkdicts, "NULL", nfl=FLAVS)
+    fks = [i['fktable'] for i in fkdicts]
+    obs_layer = layers.DIS(fkdicts, fks, "NULL", nfl=FLAVS)
     # Get the masks from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fkdicts):
@@ -118,7 +119,8 @@ def test_DIS_basis():
 
 def test_DY_basis():
     fkdicts = generate_had(2)
-    obs_layer = layers.DY(fkdicts, "NULL", nfl=FLAVS)
+    fks = [i['fktable'] for i in fkdicts]
+    obs_layer = layers.DY(fkdicts, fks, "NULL", nfl=FLAVS)
     # Get the mask from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fkdicts):
@@ -134,7 +136,8 @@ def test_DIS():
     for nfk, ope in tests:
         # Input values
         fkdicts = generate_DIS(nfk)
-        obs_layer = layers.DIS(fkdicts, ope, nfl=FLAVS)
+        fks = [i['fktable'] for i in fkdicts]
+        obs_layer = layers.DIS(fkdicts, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
         # generate the n3fit results
@@ -157,7 +160,8 @@ def test_DY():
     for nfk, ope in tests:
         # Input values
         fkdicts = generate_had(nfk)
-        obs_layer = layers.DY(fkdicts, ope, nfl=FLAVS)
+        fks = [i['fktable'] for i in fkdicts]
+        obs_layer = layers.DY(fkdicts, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
         # generate the n3fit results

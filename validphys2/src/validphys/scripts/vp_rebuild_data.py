@@ -43,7 +43,7 @@ log.addHandler(colors.ColorHandler())
 # We want to have the Config from n3fit to accept a fit as a directory
 
 REBUILD_CONFIG = dict(
-    experiments={"from_": "fit"},
+    data_input={"from_": "fitinputcontext"},
     theory={"from_": "fit"},
     theoryid={"from_": "theory"},
     use_cuts="fromfit",
@@ -69,7 +69,7 @@ def main():
     # NOTE: this will trigger validphys.loader.rebuild_commondata_without_cuts
     # which creates new files with cut data points padded with zeros,
     # strictly for use with closure fits! Does crazy things!
-    API.experiments(**REBUILD_CONFIG)
+    API.data(**REBUILD_CONFIG)
 
 if __name__ == "__main__":
     main()

@@ -112,11 +112,23 @@ Running the fitting code
 After successfully installing the `n3fit` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
-1. Prepare the fit: `vp-setupfit runcard.yml` this command will generate a
-`runcard_folder` folder in the current directory with a copy of the original
-YAML runcard.  The required resources (such as the theory and t0 PDF) will be
-downloaded automatically. Alternatively they can be obtained with the `vp-get`
-tool.
+1. Prepare the fit: `vp-setupfit runcard.yml`. This command will generate a
+    folder with the same name as the runcard (minus the file extension) in the
+    current directory, which will contain a copy of the original YAML runcard.
+    The required resources (such as the theory and t0 PDF set) will be
+    downloaded automatically. Alternatively they can be obtained with the
+    `vp-get` tool.
+
+    ```eval_rst
+    .. note::
+       This step is not strictly necessary when producing a standard fit with
+       n3fit - notice that in the next step the first command-line argument is
+       the runcard itself and not a folder, unlike with the legacy code
+       :ref:`nnfit <nnfit-usage>` - but it is required by :ref:`validphys <vp-index>`
+       and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
+       will fail unless this step has been followed. If necessary, this step can
+       be done after the fit has been run.
+    ```
 
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
@@ -166,6 +178,11 @@ load.
 ```
 
 
+
+```eval_rst
+.. _upload-fit:
+```
+
 Upload and analyse the fit
 --------------------------
 After obtaining the fit you can proceed with the fit upload and analisis by:
@@ -200,15 +217,10 @@ the multithreading capabilities of the machine by using the following environmen
 
 KMP_BLOCKTIME=0
 KMP_AFFINITY=granularity=fine,verbose,compact,1,0
-
 ```
 
-
-The usage of MKL is mostly relevant when running Tensorflow in a machine with a large number of cores,
-as the default behaviour of Tensorflow is suboptimal for ``n3fit``, specially when running more than one instance of the code at once.
-
-
-When these variables are not set, `n3fit` will default to the values shown above.
+These are the best values found for ``n3fit`` when using the mkl version of Tensorflow from conda
+and were found for TF 2.1 as the default values were suboptimal.
 For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
 the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html).
 
@@ -224,17 +236,19 @@ Below we present a benchmark that have been run for the Global NNPDF 3.1 case, a
 example runcards [folder](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
 
 Settings of the benchmark:
-  - TF version: 2.1 MKL
-  - NNPDF commit: [406b39d991ebb602aedcb8c8cc275d5111f3bfcb](https://github.com/NNPDF/nnpdf/commit/406b39d991ebb602aedcb8c8cc275d5111f3bfcb)
+  - TF version: tensorflow-eigen from conda, TF 2.2
+  - NNPDF commit: [f878fc95a4f32e8c3b4c454fc12d438cbb87ea80](https://github.com/NNPDF/nnpdf/commit/f878fc95a4f32e8c3b4c454fc12d438cbb87ea80)
   - Number of epochs: 5000
+  - maxcores: 4
+  - no early stopping
   
 Hardware:
-  - Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz
-  - 16 GB RAM 1600 MHz DDR3
+  - Intel(R) Core(TM) i7-6700 CPU @ 4.00GHz
+  - 16 GB RAM 3000 MHz DDR4
   
-Timing for a fit (from epoch 1 to epoch 5000):
-  - Walltime: 871s
-  - CPUtime: 2979s
+Timing for a fit:
+  - Walltime: 397s
+  - CPUtime: 1729s
 
 Iterate the fit
 ---------------

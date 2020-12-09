@@ -7,8 +7,6 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
-import numpy as np
-
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -16,10 +14,8 @@ from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
 from n3fit.backends import losses
-from n3fit.backends import MetaLayer, Concatenate, Lambda
+from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
-
-import tensorflow as tf
 
 
 def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
@@ -66,13 +62,14 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     """
     spec_name = spec_dict["name"]
     dataset_xsizes = []
-    model_obs = []
+    model_obs_tr = []
+    model_obs_vl = []
+    model_obs_ex = []
     model_inputs = []
     # The first step is to compute the observable for each of the datasets
     for dataset_dict in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset_dict["name"]
-        ndata = dataset_dict["ndata"]
 
         # Look at what kind of layer do we need for this dataset
         if dataset_dict["hadronic"]:
@@ -89,11 +86,37 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer = Obs_Layer(dataset_dict["fktables"], operation_name, name=f"dat_{dataset_name}")
+        obs_layer_tr = Obs_Layer(
+            dataset_dict["fktables"],
+            dataset_dict["tr_fktables"],
+            operation_name,
+            name=f"dat_{dataset_name}",
+        )
+        if spec_dict["positivity"]:
+            obs_layer_ex = obs_layer_tr
+            obs_layer_vl = obs_layer_tr
+        else:
+            obs_layer_ex = Obs_Layer(
+                dataset_dict["fktables"],
+                dataset_dict["ex_fktables"],
+                operation_name,
+                name=f"exp_{dataset_name}",
+            )
+            obs_layer_vl = Obs_Layer(
+                dataset_dict["fktables"],
+                dataset_dict["vl_fktables"],
+                operation_name,
+                name=f"val_{dataset_name}",
+            )
+
+        # Data transformation might need access to the full array of output data
+        # therefore the validation and training layers should point to the full exp
+        if spec_dict.get("data_transformation") is not None:
+            obs_layer_tr = obs_layer_ex
+            obs_layer_vl = obs_layer_ex
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
-        # but for now it is ok
-        if obs_layer.splitting is None:
+        if obs_layer_tr.splitting is None:
             xgrid = dataset_dict["fktables"][0]["xgrid"]
             model_inputs.append(xgrid)
             dataset_xsizes.append(xgrid.shape[1])
@@ -102,13 +125,31 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
-        model_obs.append(obs_layer)
+        model_obs_tr.append(obs_layer_tr)
+        model_obs_vl.append(obs_layer_vl)
+        model_obs_ex.append(obs_layer_ex)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
-    concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
+    def gen_concat(name):
+        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 1}, name=name)
+
+    # Tensorflow operations have ugly name,
+    # we want the final observables to be named just {spec_name} (with'val/exp' if needed)
+    tr_name = spec_name
+    vl_name = f"{spec_name}_val"
+    ex_name = f"{spec_name}_exp"
+    concat_ex = gen_concat(ex_name)
+    # For data transformation all concatenations are the same
+    if spec_dict.get("data_transformation") is None:
+        concat_tr = gen_concat(tr_name)
+        concat_vl = gen_concat(vl_name)
+    else:
+        concat_tr = concat_ex
+        concat_vl = concat_ex
 
     # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(pdf, datasets_out=None):
+    def experiment_layer(pdf, model_obs=model_obs_ex, concat=concat_ex, rotation=None, datasets_out=None):
+        """ By default works with the experiment observable """
         output_layers = []
         # First split the pdf layer into the different datasets if needed
         if len(dataset_xsizes) > 1:
@@ -129,18 +170,16 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 obs_output = mask_out(obs_output)
             output_layers.append(obs_output)
         # Concatenate all datasets as experiments are one single entity if needed
-        if len(output_layers) > 1:
-            output_layer = concatenator(output_layers)
-        else:
-            output_layer = output_layers[0]
-        return output_layer
+        ret = concat(output_layers)
+        if rotation is not None:
+            ret = rotation(ret)
+        return ret
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
 
     if spec_dict["positivity"]:
         out_mask = Mask(
-            bool_mask=spec_dict["trmask"],
             c=positivity_initial,
             axis=1,
             name=spec_name,
@@ -163,22 +202,20 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         }
         return layer_info
 
-    # Now prepare the actual outputs that can be used by n3fit
-    # Generate the masks layers to be applied during training and validation
-    out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name, axis=1)
-    out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val", axis=1)
-
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
     invcovmat = spec_dict["invcovmat_true"]
 
     # Generate the loss function and rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
-        obsrot = ObsRotation(spec_dict.get("data_transformation"))
+        # The rotation is the last layer so it should carry The Name
+        obsrot_tr = ObsRotation(spec_dict.get("data_transformation"), name=tr_name)
+        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"), name=vl_name)
         loss_tr = losses.l_diaginvcovmat(invcovmat_tr)
         loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
     else:
-        obsrot = None
+        obsrot_tr = None
+        obsrot_vl = None
         loss_tr = losses.l_invcovmat(invcovmat_tr)
         # TODO At this point we need to intercept the data and compile the loss with it
         # then the validation must have a list of None as an output
@@ -186,16 +223,16 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     loss = losses.l_invcovmat(invcovmat)
 
     def out_tr(pdf_layer, datasets_out=None):
-        exp_result = experiment_layer(pdf_layer, datasets_out=datasets_out)
-        if obsrot is not None:
-            exp_result = obsrot(exp_result)
-        return out_tr_mask(exp_result)
+        exp_result = experiment_layer(
+            pdf_layer, model_obs=model_obs_tr, concat=concat_tr, datasets_out=datasets_out, rotation=obsrot_tr
+        )
+        return exp_result
 
     def out_vl(pdf_layer, datasets_out=None):
-        exp_result = experiment_layer(pdf_layer, datasets_out=datasets_out)
-        if obsrot is not None:
-            exp_result = obsrot(exp_result)
-        return out_vl_mask(exp_result)
+        exp_result = experiment_layer(
+            pdf_layer, model_obs=model_obs_vl, concat=concat_vl, datasets_out=datasets_out, rotation=obsrot_vl
+        )
+        return exp_result
 
     layer_info = {
         "inputs": model_inputs,
@@ -295,11 +332,11 @@ def generate_dense_per_flavour_network(
 
         if i == number_of_layers - 1:
             # For the last layer, apply concatenate
-            concatenator = base_layer_selector("concatenate")
+            concat = base_layer_selector("concatenate")
 
             def output_layer(ilayer):
                 result = layer(ilayer)
-                return concatenator(result)
+                return concat(result)
 
             list_of_pdf_layers.append(output_layer)
         else:
@@ -316,7 +353,7 @@ def pdfNN_layer_generator(
     initializer_name="glorot_normal",
     layer_type="dense",
     flav_info=None,
-    fitbasis='NN31IC',
+    fitbasis="NN31IC",
     out=14,
     seed=None,
     dropout=0.0,
@@ -452,8 +489,8 @@ def pdfNN_layer_generator(
         add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
 
     def dense_me(x):
-        """ Takes an input tensor `x` and applies all layers
-        from the `list_of_pdf_layers` in order """
+        """Takes an input tensor `x` and applies all layers
+        from the `list_of_pdf_layers` in order"""
         if inp == 1:
             curr_fun = list_of_pdf_layers[0](x)
         else:
@@ -474,7 +511,7 @@ def pdfNN_layer_generator(
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
-    
+
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])

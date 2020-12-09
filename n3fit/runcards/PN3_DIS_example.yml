@@ -9,51 +9,33 @@ description: NNPDF3.1 NNLO fitted charm dis dataset
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
+dataset_inputs:
 # Fixed target DIS
-  - experiment: NMC
-    datasets:
-      - { dataset: NMCPD, frac: 0.5 }
-      - { dataset: NMC,   frac: 0.5  }
-  - experiment: SLAC
-    datasets:
-      - { dataset: SLACP, frac: 0.5}
-      - { dataset: SLACD, frac: 0.5}
-  - experiment: BCDMS
-    datasets:
-      - { dataset: BCDMSP, frac: 0.5}
-      - { dataset: BCDMSD, frac: 0.5}
-  - experiment: CHORUS
-    datasets:
-      - { dataset: CHORUSNU, frac: 0.5}
-      - { dataset: CHORUSNB, frac: 0.5}
-  - experiment: NTVDMN
-    datasets:
-      - { dataset: NTVNUDMN, frac: 0.5}
-      - { dataset: NTVNBDMN, frac: 0.5}
+- { dataset: NMCPD, frac: 0.5 }
+- { dataset: NMC,   frac: 0.5  }
+- { dataset: SLACP, frac: 0.5}
+- { dataset: SLACD, frac: 0.5}
+- { dataset: BCDMSP, frac: 0.5}
+- { dataset: BCDMSD, frac: 0.5}
+- { dataset: CHORUSNU, frac: 0.5}
+- { dataset: CHORUSNB, frac: 0.5}
+- { dataset: NTVNUDMN, frac: 0.5}
+- { dataset: NTVNBDMN, frac: 0.5}
 # EMC F2C data
-#  - experiment: EMCF2C
-#    datasets:
-#      - { dataset: EMCF2C, frac: 1.0}
+# - { dataset: EMCF2C, frac: 1.0}
 # HERA data
-  - experiment: HERACOMB
-    datasets:
-      - { dataset: HERACOMBNCEM , frac: 0.5}
-      - { dataset: HERACOMBNCEP460, frac: 0.5}
-      - { dataset: HERACOMBNCEP575, frac: 0.5}
-      - { dataset: HERACOMBNCEP820, frac: 0.5}
-      - { dataset: HERACOMBNCEP920, frac: 0.5}
-      - { dataset: HERACOMBCCEM , frac: 0.5}
-      - { dataset: HERACOMBCCEP , frac: 0.5}
+- { dataset: HERACOMBNCEM , frac: 0.5}
+- { dataset: HERACOMBNCEP460, frac: 0.5}
+- { dataset: HERACOMBNCEP575, frac: 0.5}
+- { dataset: HERACOMBNCEP820, frac: 0.5}
+- { dataset: HERACOMBNCEP920, frac: 0.5}
+- { dataset: HERACOMBCCEM , frac: 0.5}
+- { dataset: HERACOMBCCEP , frac: 0.5}
 # Combined HERA charm production cross-sections
-  - experiment: HERAF2CHARM
-    datasets:
-      - { dataset: HERAF2CHARM, frac: 0.5}
+- { dataset: HERAF2CHARM, frac: 0.5}
 # F2bottom data
-  - experiment: F2BOTTOM
-    datasets: 
-      - { dataset: H1HERAF2B, frac: 1.0}
-      - { dataset: ZEUSHERAF2B, frac: 1.0}
+- { dataset: H1HERAF2B, frac: 1.0}
+- { dataset: ZEUSHERAF2B, frac: 1.0}
 
 
 ############################################################
@@ -85,7 +67,7 @@ fitting:
   load: False
 
   seed     : 9453862133528      # set the seed for the random generator
-  genrep   : True     # on = generate MC replicas, off = use real data
+  genrep   : True     # true = generate MC replicas, false = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants : 80     # Number of mutants for replica
@@ -155,10 +137,10 @@ positivity:
 ############################################################
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : False # on = to use FAKEPDF to generate pseudo-data
+  fakedata    : False # true = to use FAKEPDF to generate pseudo-data
   fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
   errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : False # on = to add random fluctuations to pseudo-data
+  fakenoise   : False # true = to add random fluctuations to pseudo-data
   rancutprob  : 1.0 # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: False # 0(1) to output training(valiation) chi2 in report

@@ -16,7 +16,9 @@ private repositories. The [Gitlab CI service hosted at
 CERN](https://gitlab.cern.ch/) was used in the past, but support was
 discontinued due to the burden of requiring everyone to have a CERN account.
 
-## Operation of CI tools
+Furthermore, we implement a self-hosted runner for GitHub Actions for long duration workflows, such as running a full fit pipeline.
+
+## Operation of Travis CI tools
 
 Our CI service works roughly as follows:
 
@@ -91,3 +93,22 @@ Linux builds are executed on top of a [docker image](https://www.docker.com/)
 which is defined by the configuration file under [the `docker`
 folder](https://github.com/NNPDF/nnpdf/tree/master/docker). This is mostly for
 historical reasons.
+
+## Operation of GitHub Actions
+
+Our GitHub Action service implements:
+
+ 1. Every time the label `run-fit-bot` is added to a pull request, a request to process the code in that branch is made automatically.
+ 2. The code for the branch is downloaded to the CI self-hosted runner, and some action is
+    taken based on configuration found both in the git repository itself in `.github/workflow/rules.yml`. These actions include:
+      * Compiling and installing the code.
+	  * Running a complete fit using the `n3fit/runcards/development.yml` runcard.
+      * Produces a report and upload results to the [NNPDF server](server).
+ 3. The CI service reports whether it has *succeeded* or *failed* to the GitHub
+	server, which displays that information next to the relevant pull request or
+	commit. Some logs are generated, which can aid in determining the cause of
+	errors.
+ 4. If the workflow succeeds, a comment to the initial pull request will appear with link references to the generated report and fit.
+
+The progress reports of the various jobs at [GitHub Actions](https://github.com/NNPDF/actions), upon logging in
+with an authorized GitHub account.

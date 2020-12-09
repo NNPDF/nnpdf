@@ -9,12 +9,10 @@ description: Basic runcard
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
-  - experiment: ALL
-    datasets:
-      - { dataset: SLACP, frac: 0.5}
-      - { dataset: NMCPD, frac: 0.5 }
-      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
+dataset_inputs:
+- { dataset: SLACP, frac: 0.5}
+- { dataset: NMCPD, frac: 0.5 }
+- { dataset: CMSJETS11, frac: 0.5, sys: 10 }
 
 ############################################################
 datacuts:
@@ -42,7 +40,7 @@ fitting:
   mcseed: 3
   epochs: 900
   save: 'weights.h5'
-  load: '/path/to/weights.h5/file
+#   load: '/path/to/weights.h5/file'
 
 
   tensorboard:
@@ -50,7 +48,7 @@ fitting:
     profiling: False
 
   seed     : 9453862133528      # set the seed for the random generator
-  genrep   : True     # on = generate MC replicas, off = use real data
+  genrep   : True     # true = generate MC replicas, false = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -119,10 +117,10 @@ integrability:
 ############################################################
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : False # on = to use FAKEPDF to generate pseudo-data
+  fakedata    : False # true = to use FAKEPDF to generate pseudo-data
   fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
   errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : False # on = to add random fluctuations to pseudo-data
+  fakenoise   : False # true = to add random fluctuations to pseudo-data
   rancutprob  : 1.0 # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: False # 0(1) to output training(valiation) chi2 in report
