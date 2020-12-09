@@ -111,20 +111,22 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
         for i, j in zip(all_exp_infos, replicas):
             d[j] = i
 
-    with mp.Manager() as manager:
-        d = manager.dict()
+    if NPROC == 1:
+        pseudodata_dicts = dict()
+        task(pseudodata_dicts, seeds.mcseeds, seeds.trvlseeds, replica)
+    else:
+        with mp.Manager() as manager:
+            d = manager.dict()
 
-        if NPROC is None:
-            NPROC = mp.cpu_count()
-            log.warning(
-                f"Using all {NPROC} cores available, this may be dangerous "
-                "especially for use on a cluster. Consider setting the NPROC "
-                "variable to something sensible."
-            )
-        processes = []
-        if NPROC == 1:
-            task(d, seeds.mcseeds, seeds.trvlseeds, replica)
-        else:
+            if NPROC is None:
+                NPROC = mp.cpu_count()
+                log.warning(
+                    f"Using all {NPROC} cores available, this may be dangerous "
+                    "especially for use on a cluster. Consider setting the NPROC "
+                    "variable to something sensible."
+                )
+            processes = []
+
             # XXX: There must be a better way to do this. Note it changes
             # from type int to numpy int and thus require being converted back
             batched_mcseeds = np.array_split(seeds.mcseeds, NPROC)
@@ -146,7 +148,7 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
                 processes.append(p)
             for p in processes:
                 p.join()
-        pseudodata_dicts = dict(d)
+            pseudodata_dicts = dict(d)
     return pseudodata_dicts
 
 
