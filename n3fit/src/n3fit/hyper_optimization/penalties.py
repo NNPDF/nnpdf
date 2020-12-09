@@ -21,7 +21,6 @@ The name in the runcard must match the name used in this module.
 import numpy as np
 from validphys import fitveto
 from n3fit.vpinterface import N3PDF
-from n3fit.msr import compute_integrability_number
 
 
 def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavors=None):
@@ -110,7 +109,7 @@ def integrability(pdf_model, stopping_object):
 
     """
     pdf_instance = N3PDF(pdf_model)
-    integ_values = np.array(compute_integrability_number(pdf_instance))
+    integ_values = pdf_instance.integrability_numbers()
     integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
     if integ_overflow > 50.0:
         # before reaching an overflow, just give a stupidly big number
