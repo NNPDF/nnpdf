@@ -239,7 +239,7 @@ def main():
         type=float,
     )
     parser.add_argument(
-        '--at_least_nrep',
+        '--at-least-nrep',
         action='store_true',
         help="nrep becomes the minimum number of required replicas. If there are more than nrep "
              "good replicas, all good replicas are written to the postfit folder.")
