@@ -13,14 +13,14 @@ from reportengine import collect
 
 import n3fit.io.reader as reader
 from n3fit.performfit import initialize_seeds
-from validphys.checks import check_sequential_on_osx
+from validphys.checks import check_darwin_single_process
 
 log = logging.getLogger(__name__)
 
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
-@check_sequential_on_osx
+@check_darwin_single_process
 def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit.
