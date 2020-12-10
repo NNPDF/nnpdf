@@ -44,7 +44,6 @@ use_cuts: fromfit
 
 @pytest.fixture(
     scope="session",
-    autouse=True,
     params=[1, pytest.param(None, marks=pytest.mark.linux)],
 )
 def setup_dicts(request):
