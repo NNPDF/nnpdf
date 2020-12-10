@@ -1,20 +1,20 @@
 dataset_label: "CMS dijets 5 TeV"
-x: k2
+x: k1
 
 y_label: '$10^{3*qbin} d^2\sigma/dp_{T,av}d\eta$ [pb/GeV]' 
 y_scale: log
-x_scale: log
+x_scale: linear
 result_transform: qbinjets
-kinematics_override: dijet_sqrt_scale
+kinematics_override: dijet_CMS_5TEV
 
 normalize:
     y_scale: linear
     line_by: []
     figure_by:
-        - k1
+        - k2
 
 line_by:
-    - k1
+    - k2
 
 experiment: "CMS"
 nnpdf31_process: DIJET
