@@ -38,7 +38,7 @@ def gen_integration_input(nx, mapping):
     weights_array = np.array(weights).reshape(nx, 1)
 
     interpolation = PchipInterpolator(mapping[0], mapping[1])
-    xgrid_scaled = interpolation(xgrid.squeeze())
+    xgrid_scaled = interpolation(np.log10(xgrid.squeeze()))
     xgrid_scaled = np.expand_dims(xgrid_scaled, axis=1)
 
     return xgrid, xgrid_scaled, weights_array
