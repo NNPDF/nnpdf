@@ -399,7 +399,7 @@ class ModelTrainer:
         input_arr = np.concatenate(self.input_list, axis=1)
         mapping = self.mapping
         interpolation = PchipInterpolator(mapping[0], mapping[1])
-        input_arr = interpolation(input_arr.squeeze())
+        input_arr = interpolation(np.log10(input_arr.squeeze()))
         input_arr = np.expand_dims(input_arr, axis=0)
         input_layer = operations.numpy_to_input(input_arr.T)
 
@@ -582,26 +582,26 @@ class ModelTrainer:
         input_arr = np.concatenate(self.input_list, axis=1)
         input_arr = np.sort(input_arr)
 
-        onein = input_arr.size / (interpolation_points - 1)
-        input_list = [input_arr.min()]
-        input_list += [
-            input_arr.flatten()[round(i * onein - 1)] for i in range(1, interpolation_points)
-        ]
-        input_arr = np.expand_dims(np.array(input_list), axis=0)
-
         input_arr_size = input_arr.size
         start_val = np.array(1 / input_arr_size, dtype=input_arr.dtype)
         new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
-
         unique, counts = np.unique(input_arr, return_counts=True)
-
-        map_from = np.append(unique, 1.0)
-        map_from = np.insert(map_from, 0, 0)
-        map_to = [0]
+        map_from_complete = np.append(unique, 1.0)
+        smallest_xpoint = 1e-9
+        map_from_complete = np.insert(map_from_complete, 0, smallest_xpoint)
+        map_to_complete = [0]
         for cumsum_ in np.cumsum(counts):
-            map_to.append(new_xgrid[cumsum_ - 1])
-        map_to.append(1.0)
-        map_to = np.array(map_to)
+            map_to_complete.append(new_xgrid[cumsum_ - 1])
+        map_to_complete.append(1.0)
+        map_to_complete = np.array(map_to_complete)
+
+        onein = map_from_complete.size / (interpolation_points - 1)
+        selected_points = [0]
+        selected_points += [round(i * onein - 1) for i in range(1, interpolation_points)]
+        map_from = map_from_complete[selected_points]
+        map_from = np.log10(map_from)
+        map_to = map_to_complete[selected_points]
+
         self.mapping = [map_from, map_to]
 
     def _generate_pdf(
