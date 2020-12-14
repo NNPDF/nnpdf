@@ -127,22 +127,20 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
                 )
             processes = []
 
-            # XXX: There must be a better way to do this. Note it changes
-            # from type int to numpy int and thus require being converted back
-            batched_mcseeds = np.array_split(seeds.mcseeds, NPROC)
-            batched_trvlseeds = np.array_split(seeds.trvlseeds, NPROC)
-            batched_replica_num = np.array_split(replica, NPROC)
+            # convert sub arrays back to lists, use tolist to get builtin python
+            # types.
+            list_split = lambda lst, n: [
+                arr.tolist() for arr in np.array_split(lst, n)
+            ]
+            batched_mcseeds = list_split(seeds.mcseeds, NPROC)
+            batched_trvlseeds = list_split(seeds.trvlseeds, NPROC)
+            batched_replica_num = list_split(replica, NPROC)
             for mc_batch, trvl_batch, replica_batch in zip(
                 batched_mcseeds, batched_trvlseeds, batched_replica_num
             ):
                 p = mp.Process(
                     target=task,
-                    args=(
-                        d,
-                        list([int(i) for i in mc_batch]),
-                        list([int(i) for i in trvl_batch]),
-                        list([int(i) for i in replica_batch]),
-                    ),
+                    args=(d, mc_batch, trvl_batch, replica_batch,),
                 )
                 p.start()
                 processes.append(p)
