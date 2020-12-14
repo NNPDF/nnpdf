@@ -12,11 +12,7 @@ import numpy as np
 from reportengine.compat import yaml
 import validphys
 import n3fit
-<<<<<<< HEAD
-=======
-from n3fit.msr import compute_arclength
 from scipy.interpolate import PchipInterpolator
->>>>>>> cc3f88b9... include feature scaling
 
 
 class WriterWrapper:
@@ -291,7 +287,7 @@ def storefit(
     interpolation = PchipInterpolator(mapping[0], mapping[1])
     xgrid_scaled = interpolation(np.log10(xgrid))
 
-    result = pdf_function(xgrid_scaled, flavours = 'n3fit')
+    result = pdf_object(xgrid_scaled, flavours = 'n3fit')
     lha = evln2lha(result.T).T
 
     data = {
