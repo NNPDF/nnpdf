@@ -13,13 +13,14 @@ from reportengine import collect
 
 import n3fit.io.reader as reader
 from n3fit.performfit import initialize_seeds
+from validphys.checks import check_darwin_single_process
 
 log = logging.getLogger(__name__)
 
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
-
+@check_darwin_single_process
 def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit.
@@ -110,39 +111,42 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
         for i, j in zip(all_exp_infos, replicas):
             d[j] = i
 
-    with mp.Manager() as manager:
-        d = manager.dict()
+    if NPROC == 1:
+        pseudodata_dicts = dict()
+        task(pseudodata_dicts, seeds.mcseeds, seeds.trvlseeds, replica)
+    else:
+        with mp.Manager() as manager:
+            d = manager.dict()
 
-        if NPROC is None:
-            NPROC = mp.cpu_count()
-            log.warning(
-                f"Using all {NPROC} cores available, this may be dangerous "
-                "especially for use on a cluster. Consider setting the NPROC "
-                "variable to something sensible."
-            )
-        processes = []
-        # XXX: There must be a better way to do this. Note it changes
-        # from type int to numpy int and thus require being converted back
-        batched_mcseeds = np.array_split(seeds.mcseeds, NPROC)
-        batched_trvlseeds = np.array_split(seeds.trvlseeds, NPROC)
-        batched_replica_num = np.array_split(replica, NPROC)
-        for mc_batch, trvl_batch, replica_batch in zip(
-            batched_mcseeds, batched_trvlseeds, batched_replica_num
-        ):
-            p = mp.Process(
-                target=task,
-                args=(
-                    d,
-                    list([int(i) for i in mc_batch]),
-                    list([int(i) for i in trvl_batch]),
-                    list([int(i) for i in replica_batch]),
-                ),
-            )
-            p.start()
-            processes.append(p)
-        for p in processes:
-            p.join()
-        pseudodata_dicts = dict(d)
+            if NPROC is None:
+                NPROC = mp.cpu_count()
+                log.warning(
+                    f"Using all {NPROC} cores available, this may be dangerous "
+                    "especially for use on a cluster. Consider setting the NPROC "
+                    "variable to something sensible."
+                )
+            processes = []
+
+            # convert sub arrays back to lists, use tolist to get builtin python
+            # types.
+            list_split = lambda lst, n: [
+                arr.tolist() for arr in np.array_split(lst, n)
+            ]
+            batched_mcseeds = list_split(seeds.mcseeds, NPROC)
+            batched_trvlseeds = list_split(seeds.trvlseeds, NPROC)
+            batched_replica_num = list_split(replica, NPROC)
+            for mc_batch, trvl_batch, replica_batch in zip(
+                batched_mcseeds, batched_trvlseeds, batched_replica_num
+            ):
+                p = mp.Process(
+                    target=task,
+                    args=(d, mc_batch, trvl_batch, replica_batch,),
+                )
+                p.start()
+                processes.append(p)
+            for p in processes:
+                p.join()
+            pseudodata_dicts = dict(d)
     return pseudodata_dicts
 
 
