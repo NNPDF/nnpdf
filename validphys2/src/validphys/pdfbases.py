@@ -198,6 +198,14 @@ class Basis(abc.ABC):
             return element
         raise UnknownElement(element)
 
+    def has_element(self, element):
+        """ Return true if basis has knowledge of the given element """
+        try:
+            self.elementlabel(element)
+            return True
+        except UnknownElement:
+            return False
+
     def _to_indexes(self, basis_arr):
         """Convert a list of elements of the basis to indexes of the
         (rows of the) transformation matrix."""
