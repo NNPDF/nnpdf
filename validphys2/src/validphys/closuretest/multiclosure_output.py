@@ -652,8 +652,11 @@ def plot_experiments_sqrt_ratio_bootstrap_distribution(
     for comparison. The limits are set to be +/- 3 std deviations of the mean.
 
     """
-    titles = list(map(str, experiments_data)) + ["Total"]
-    for sqrt_ratio_sample, title in zip(experiments_bootstrap_sqrt_ratio, titles):
+    # experiments_bootstrap_sqrt_ratio includes total. str(exp) is only used to
+    # generate title, so appending string is fine.
+    for sqrt_ratio_sample, exp in zip(
+        experiments_bootstrap_sqrt_ratio, experiments_data + ["Total"]
+    ):
         fig, ax = plt.subplots()
         ax.hist(sqrt_ratio_sample, bins=20, density=True)
         mean = np.mean(sqrt_ratio_sample)
@@ -670,7 +673,7 @@ def plot_experiments_sqrt_ratio_bootstrap_distribution(
             label=f"Corresponding normal distribution: mean = {mean:.2g}, std = {std:.2g}",
         )
         ax.legend()
-        ax.set_title(f"Bootstrap distribution of sqrt(bias/variance) for {title}")
+        ax.set_title(f"Bootstrap distribution of sqrt(bias/variance) for {exp}")
         ax.set_xlabel("Sqrt(bias/variance)")
         yield fig
 
@@ -692,7 +695,8 @@ def plot_experiments_xi_bootstrap_distribution(
     xi_plots = plot_experiments_sqrt_ratio_bootstrap_distribution(
         xi_1sigma, experiments_data
     )
-    # need to fix the title and x label on each plot
+    # Update the title and x label on each plot to reflect that we're plotting
+    # \xi_1sigma, don't forget Total plot.
     for fig, exp in zip(xi_plots, experiments_data + ["Total"]):
         ax = fig.gca()
         ax.set_title(r"Bootstrap distribution of $\xi_{1\sigma}$ for " + str(exp))
