@@ -565,7 +565,9 @@ void NTVNUDMNFe_dwFilter::ReadData()
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
-	fSys[i][l].name = "NUCLEAR";
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
       }    
   }
   
@@ -718,7 +720,9 @@ void NTVNBDMNFe_dwFilter::ReadData()
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
-	fSys[i][l].name = "NUCLEAR";
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
       } 
     
   }
@@ -869,7 +873,9 @@ void NTVNUDMNFe_shFilter::ReadData()
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
-	fSys[i][l].name = "NUCLEAR";
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
       }
 
     //Compute shifts
@@ -1026,7 +1032,9 @@ void NTVNBDMNFe_shFilter::ReadData()
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
-	fSys[i][l].name = "NUCLEAR";
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
       }
 
     //Compute shifts
