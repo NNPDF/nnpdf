@@ -11,6 +11,6 @@ data_reference: Arneodo:1996qe
 figure_by:
   - k1
 
-experiment: "DEUTERON"
+experiment: "NMC"
 
 nnpdf31_process: DIS NC

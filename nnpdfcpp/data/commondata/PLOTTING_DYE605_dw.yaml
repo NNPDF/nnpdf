@@ -7,6 +7,6 @@ result_transform: qbindyp
 kinematics_override: dyp_sqrt_scale
 line_by:
     - k1
-experiment: "NUCLEAR"
+experiment: "DYE605"
 
 nnpdf31_process: DY

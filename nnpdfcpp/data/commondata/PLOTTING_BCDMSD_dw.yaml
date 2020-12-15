@@ -17,6 +17,6 @@ normalize:
         - k1
         - k3
 
-experiment: "DEUTERON"
+experiment: "BCDMS"
 
 nnpdf31_process: DIS NC
