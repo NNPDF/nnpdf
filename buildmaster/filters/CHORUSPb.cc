@@ -226,6 +226,19 @@ const std::vector<std::string> fakesyslabel =
    "BCDMSRELNORMTARGET",
   };
 
+const std::vector<std::string> fakesystype =
+  {
+   "MULT",
+   "MULT",
+   "MULT",
+   "MULT",
+   "ADD",
+   "ADD",
+   "ADD",
+   "MULT",
+   "MULT",
+  };
+
 const int nfakesys=9;
 
 void CHORUSNUPb_dwFilter::ReadData()
@@ -341,7 +354,10 @@ void CHORUSNUPb_dwFilter::ReadData()
       {
 	fSys[i][l].add = 0.;
 	fSys[i][l].mult= 0.;
-	fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="ADD")
+	  fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="MULT")
+	  fSys[i][l].type = MULT;
 	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
 
@@ -508,7 +524,10 @@ void CHORUSNBPb_dwFilter::ReadData()
       {
 	fSys[i][l].add = 0.;
 	fSys[i][l].mult= 0.;
-	fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="ADD")
+	  fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="MULT")
+	  fSys[i][l].type = MULT;
 	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
   }
@@ -632,7 +651,10 @@ void CHORUSNUPb_shFilter::ReadData()
       {
 	fSys[i][l].add = 0.;
 	fSys[i][l].mult= 0.;
-	fSys[i][l].type = ADD;
+       	if(fakesystype[l-fNSys+nfakesys]=="ADD")
+	  fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="MULT")
+	  fSys[i][l].type = MULT;
 	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
 
@@ -803,7 +825,10 @@ void CHORUSNBPb_shFilter::ReadData()
       {
 	fSys[i][l].add = 0.;
 	fSys[i][l].mult= 0.;
-	fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="ADD")
+	  fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="MULT")
+	  fSys[i][l].type = MULT;
 	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
     

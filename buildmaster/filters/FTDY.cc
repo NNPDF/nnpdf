@@ -137,6 +137,33 @@ const std::vector<std::string> fakesyslabel =
    "BCDMSRELNORMTARGET",
   };
 
+const std::vector<std::string> fakesystype =
+  {
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "ADD",
+   "MULT",
+   "MULT",
+   "ADD",
+   "MULT",
+   "MULT",
+   "ADD",
+   "ADD",
+   "ADD",
+   "MULT",
+   "MULT",
+  };
+
 const int nfakesys=23;
 
 void DYE605_dwFilter::ReadData()
@@ -249,7 +276,10 @@ void DYE605_dwFilter::ReadData()
       {
 	fSys[i][l].add = 0.;
 	fSys[i][l].mult= 0.;
-	fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="ADD")
+	  fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="MULT")
+	  fSys[i][l].type = MULT;
 	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
   }
@@ -370,7 +400,10 @@ void DYE605_shFilter::ReadData()
       {
 	fSys[i][l].add = 0.;
 	fSys[i][l].mult= 0.;
-	fSys[i][l].type = ADD;
+       	if(fakesystype[l-fNSys+nfakesys]=="ADD")
+	  fSys[i][l].type = ADD;
+	if(fakesystype[l-fNSys+nfakesys]=="MULT")
+	  fSys[i][l].type = MULT;
 	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
 
