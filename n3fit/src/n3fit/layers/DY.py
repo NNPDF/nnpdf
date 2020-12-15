@@ -60,5 +60,5 @@ class DY(Observable):
                 results.append(res)
 
         # the masked convolution removes the batch dimension
-        ret = self.operation(results)
+        ret = op.transpose(self.operation(results))
         return op.batchit(ret)

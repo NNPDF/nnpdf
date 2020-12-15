@@ -131,7 +131,7 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
     def gen_concat(name):
-        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 1}, name=name)
+        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 2}, name=name)
 
     # Tensorflow operations have ugly name,
     # we want the final observables to be named just {spec_name} (with'val/exp' if needed)
@@ -360,6 +360,7 @@ def pdfNN_layer_generator(
     regularizer=None,
     regularizer_args=None,
     impose_sumrule=False,
+    parallel_models=1,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -442,6 +443,7 @@ def pdfNN_layer_generator(
         model_pdf: n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
     """
+    # Parse the input configuration
     if nodes is None:
         nodes = [15, 8]
     ln = len(nodes)
@@ -462,84 +464,90 @@ def pdfNN_layer_generator(
         raise ValueError(
             "Number of activation functions does not match number of layers @ model_gen.py"
         )
-    # The number of nodes in the last layer is equal to the number of fitted flavours (== len(flav_info))
     last_layer_nodes = nodes[-1]
 
-    if layer_type == "dense":
-        reg = regularizer_selector(regularizer, **regularizer_args)
-        list_of_pdf_layers = generate_dense_network(
-            inp,
-            nodes,
-            activations,
-            initializer_name,
-            seed=seed,
-            dropout_rate=dropout,
-            regularizer=reg,
-        )
-    elif layer_type == "dense_per_flavour":
-        # Define the basis size attending to the last layer in the network
-        # TODO: this information should come from the basis information
-        #       once the basis information is passed to this class
-        list_of_pdf_layers = generate_dense_per_flavour_network(
-            inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
-        )
+    # Generate the generic layers
+
+    # Prepare the input for the PDF model
+    placeholder_input = Input(shape=(None, 1), batch_size=1)
 
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
         add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
 
-    def dense_me(x):
-        """Takes an input tensor `x` and applies all layers
-        from the `list_of_pdf_layers` in order"""
-        if inp == 1:
-            curr_fun = list_of_pdf_layers[0](x)
-        else:
-            curr_fun = list_of_pdf_layers[0](add_log(x))
-
-        for dense_layer in list_of_pdf_layers[1:]:
-            curr_fun = dense_layer(curr_fun)
-        return curr_fun
-
-    # Preprocessing layer (will be multiplied to the last of the denses)
-    preproseed = seed + number_of_layers
-    layer_preproc = Preprocessing(
-        input_shape=(1,),
-        name="pdf_prepro",
-        flav_info=flav_info,
-        seed=preproseed,
-        output_dim=last_layer_nodes
-    )
-    # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
-
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
+    # Basis rotation
+    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
-    # Apply preprocessing and basis
-    def layer_fitbasis(x):
-        ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
-        if basis_rotation.is_identity():
-            # if we don't need to rotate basis we don't want spurious layers
-            return ret
-        return basis_rotation(ret)
+    integrator_input = None # TODO
+    pdf_models = []
 
-    # Rotation layer, changes from the 8-basis to the 14-basis
-    def layer_pdf(x):
-        return layer_evln(layer_fitbasis(x))
+    # Now we need a trainable network per model to be trained in parallel
+    for i in range(parallel_models):
+        layer_seed = seed + i*number_of_layers
+        if layer_type == "dense":
+            reg = regularizer_selector(regularizer, **regularizer_args)
+            list_of_pdf_layers = generate_dense_network(
+                inp,
+                nodes,
+                activations,
+                initializer_name,
+                seed=seed,
+                dropout_rate=dropout,
+                regularizer=reg,
+            )
+        elif layer_type == "dense_per_flavour":
+            # Define the basis size attending to the last layer in the network
+            # TODO: this information should come from the basis information
+            #       once the basis information is passed to this class
+            list_of_pdf_layers = generate_dense_per_flavour_network(
+                inp, nodes, activations, initializer_name, seed=layer_seed, basis_size=last_layer_nodes,
+            )
 
-    # Prepare the input for the PDF model
-    placeholder_input = Input(shape=(None, 1), batch_size=1)
 
-    # Impose sumrule if necessary
-    if impose_sumrule:
-        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mode=impose_sumrule)
-        model_input = [integrator_input, placeholder_input]
-    else:
-        integrator_input = None
-        model_input = [placeholder_input]
+        def dense_me(x):
+            """Takes an input tensor `x` and applies all layers
+            from the `list_of_pdf_layers` in order"""
+            if inp == 1:
+                curr_fun = list_of_pdf_layers[0](x)
+            else:
+                curr_fun = list_of_pdf_layers[0](add_log(x))
 
-    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
+            for dense_layer in list_of_pdf_layers[1:]:
+                curr_fun = dense_layer(curr_fun)
+            return curr_fun
 
-    return pdf_model
+        # Preprocessing layer (will be multiplied to the last of the denses)
+        preproseed = seed + number_of_layers*(i+1)
+        layer_preproc = Preprocessing(
+            input_shape=(1,), name=f"pdf_prepro_{i}", flav_info=flav_info, seed=preproseed
+        )
+
+        # Apply preprocessing and basis
+        def layer_fitbasis(x):
+            ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
+            if basis_rotation.is_identity():
+                # if we don't need to rotate basis we don't want spurious layers
+                return ret
+            return basis_rotation(ret)
+
+        # Rotation layer, changes from the 8-basis to the 14-basis
+        def layer_pdf(x):
+            return layer_evln(layer_fitbasis(x))
+
+        # Impose sumrule if necessary #TODO still a lot of repetition going on inside the MSR, but not important -for now-
+        if impose_sumrule:
+            layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mode=impose_sumrule)
+            model_input = [integrator_input, placeholder_input]
+        else:
+            integrator_input = None
+            model_input = [placeholder_input]
+
+        pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name=f"PDF_{i}")
+
+        pdf_models.append(pdf_model)
+
+    return pdf_models

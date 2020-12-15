@@ -234,6 +234,13 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
         return concatenated_tensor
 
 
+def stack(tensor_list, axis=0, **kwargs):
+    """ Stack a list of tensors
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
+    """
+    return tf.stack(tensor_list, axis=axis, **kwargs)
+
+
 # Mathematical operations
 def pdf_masked_convolution(raw_pdf, basis_mask):
     """ Computes a masked convolution of two equal pdfs
@@ -254,11 +261,8 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
             rank3 (len(mask_true), xgrid, xgrid)
     """
     pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
-    luminosity = tensor_product(pdf, pdf, axes=0)
-    # (xgrid, flavour, xgrid, flavour)
-    # reshape to put the flavour indices at the beginning to apply mask
-    lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
-    pdf_x_pdf = boolean_mask(lumi_tmp, basis_mask)
+    luminosity = tf.einsum('air,bjr->jibar', pdf, pdf)
+    pdf_x_pdf = boolean_mask(luminosity, basis_mask)
     return pdf_x_pdf
 
 

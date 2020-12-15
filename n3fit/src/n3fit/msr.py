@@ -37,7 +37,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(fit_layer, final_pdf_layer, mode='All', verbose=False):
+def msr_impose(fit_layer, final_pdf_layer, mode='All', xgrid_input=None, verbose=False):
     """
         This function receives:
             - fit_layer: the 8-basis layer of PDF which we fit
@@ -64,7 +64,8 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', verbose=False):
     normalizer = MSR_Normalization(input_shape=(8,), mode=mode)
 
     # 5. Make the xgrid numpy array into a backend input layer so it can be given
-    xgrid_input = operations.numpy_to_input(xgrid)
+    if xgrid_input is None:
+        xgrid_input = operations.numpy_to_input(xgrid)
     normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
 
     def ultimate_pdf(x):

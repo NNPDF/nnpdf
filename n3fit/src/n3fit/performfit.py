@@ -92,6 +92,7 @@ def performfit(
     hyperopt=None,
     debug=False,
     maxcores=None,
+    parallel_models=1,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
@@ -243,7 +244,11 @@ def performfit(
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
             model_file=fitting.get("load"),
+<<<<<<< HEAD
             sum_rules=fitting.get("sum_rules", True)
+=======
+            parallel_models=parallel_models
+>>>>>>> 6e0fc5f2c (fit many models at once)
         )
 
         # This is just to give a descriptive name to the fit function
@@ -297,7 +302,7 @@ def performfit(
 
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
-        pdf_model = result["pdf_model"]
+        pdf_models = result["pdf_models"]
         true_chi2 = result["loss"]
         training = result["training"]
         log.info("Total exp chi2: %s", true_chi2)
@@ -317,31 +322,38 @@ def performfit(
             )
         )
 
-        # Create a pdf instance
-        pdf_instance = N3PDF(pdf_model, fit_basis=fitting.get("basis"))
+        final_time = stopwatch.stop()
 
-        # Generate the writer wrapper
-        writer_wrapper = WriterWrapper(
-            replica_number,
-            pdf_instance,
-            stopping_object,
-            theoryid.get_description().get("Q0") ** 2,
-            stopwatch.stop(),
-        )
+        for i, pdf_model in enumerate(pdf_models):
+            # Each model goes into its own replica folder
+            replica_path_set = replica_path / f"replica_{replica_number + i}"
 
-        # Now write the data down
-        training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-        writer_wrapper.write_data(
-            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
-        )
+            # Create a pdf instance
+            pdf_instance = N3PDF(pdf_model, fit_basis=fitting.get("basis"))
 
-        # Save the weights to some file for the given replica
-        model_file = fitting.get("save")
-        if model_file:
-            model_file_path = replica_path_set / model_file
-            log.info(" > Saving the weights for future in %s", model_file_path)
-            # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3 though)
-            pdf_model.save_weights(str(model_file_path), save_format="h5")
+            # Generate the writer wrapper
+            writer_wrapper = WriterWrapper(
+                replica_number,
+                pdf_instance,
+                stopping_object, # TODO
+                theoryid.get_description().get("Q0") ** 2,
+                final_time,
+            )
+
+            # Now write the data down
+            # TODO: recompute training, valudation and experimental _per_ pdfmodel
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+            writer_wrapper.write_data(
+                replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
+            )
+
+            # Save the weights to some file for the given replica
+            model_file = fitting.get("save")
+            if model_file:
+                model_file_path = replica_path_set / model_file
+                log.info(" > Saving the weights for future in %s", model_file_path)
+                # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3 though)
+                pdf_model.save_weights(str(model_file_path), save_format="h5")
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results

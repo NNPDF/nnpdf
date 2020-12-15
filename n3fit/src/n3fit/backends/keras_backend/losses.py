@@ -16,9 +16,7 @@ def l_invcovmat(invcovmat_np):
     def true_loss(y_true, y_pred):
         # (yt - yp) * covmat * (yt - yp)
         tmp = y_true - y_pred
-        right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
-        res = tf.tensordot(tmp, right_dot, axes=1)
-        return tf.reshape(res, (-1,))
+        return tf.einsum('bri,ij,brj->b', tmp, invcovmat, tmp)
 
     return true_loss
 
