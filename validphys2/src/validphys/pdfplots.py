@@ -521,18 +521,51 @@ def plot_lumi1d(pdfs, pdfs_lumis,
         ylabel = f"Ratio to {pdfs[normalize_to]}"
     else:
         norm = 1
-        ylabel = r"$L(GeV^{-2})$"
+        ylabel = r"$L (GeV^{-2})$"
+
+    # For plotting
+    hatchit = plotutils.hatch_iter()
+    pcycler = ax._get_lines.prop_cycler
+    handles = []
+    labels = []
 
     for pdf, lumigrid1d in zip(pdfs, pdfs_lumis):
         mx = lumigrid1d.m
         gv = lumigrid1d.grid_values
 
         cv = gv.central_value()
-        err = gv.std_error()
 
-        ax.fill_between(mx, (cv -err)/norm, (cv+err)/norm, alpha=0.5)
-        ax.plot(mx, cv/norm, label='%s' % pdf.label)
-    ax.legend(loc='best')
+        err68down, err68up = gv.errorbar68()
+        errstddown, errstdup = gv.errorbarstd()
+
+        next_prop = next(pcycler)
+        color = next_prop["color"]
+        hatch = next(hatchit)
+
+        alpha = 0.5
+        ax.fill_between(mx, err68down / norm, err68up / norm, color=color, alpha=alpha, zorder=1)
+        ax.fill_between(
+            mx, err68down / norm, err68up / norm, facecolor="None", alpha=alpha, edgecolor=color,
+            hatch=hatch, zorder=1,
+        )
+
+        ax.plot(mx, cv / norm, color=color)
+
+        if isinstance(gv, MCStats):
+            ax.plot(mx, errstddown / norm, linestyle="--", color=color)
+            ax.plot(mx, errstdup / norm, linestyle="--", color=color)
+            label_add = "($68%$ c.l.+$1\sigma$)"
+            outer = True
+        else:
+            label_add = "($68\%$ c.l.)"
+            outer = False
+
+        handle = plotutils.HandlerSpec(color=color, alpha=alpha, hatch=hatch, outer=outer)
+        handles.append(handle)
+        labels.append(f"{pdf.label} {label_add}")
+
+    ax.legend(handles, labels, handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()})
+
     ax.set_ylabel(ylabel)
     ax.set_xlabel('$M_{X}$ (GeV)')
     ax.set_xlim(mx[0], mx[-1])
