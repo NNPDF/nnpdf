@@ -213,34 +213,6 @@ void CHORUSNBPbFilter::ReadData()
   f1.close();
 }
 
-const std::vector<std::string> fakesyslabel =
-  {
-   "NUTEVNORM",
-   "NUTEVBRC",
-   "SLACNORM",
-   "SLACRELNORM",
-   "BCDMSFB",
-   "BCDMSFS",
-   "BCDMSFR",
-   "BCDMSNORM",
-   "BCDMSRELNORMTARGET",
-  };
-
-const std::vector<std::string> fakesystype =
-  {
-   "MULT",
-   "MULT",
-   "MULT",
-   "MULT",
-   "ADD",
-   "ADD",
-   "ADD",
-   "MULT",
-   "MULT",
-  };
-
-const int nfakesys=9;
-
 void CHORUSNUPb_dwFilter::ReadData()
 {
   // Opening files
@@ -305,7 +277,7 @@ void CHORUSNUPb_dwFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCOR";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -314,7 +286,7 @@ void CHORUSNUPb_dwFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l;
+      sysname << "CHORUSSYS1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -340,7 +312,7 @@ void CHORUSNUPb_dwFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -348,17 +320,6 @@ void CHORUSNUPb_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
 
   }
@@ -476,7 +437,7 @@ void CHORUSNBPb_dwFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCOR";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -485,7 +446,7 @@ void CHORUSNBPb_dwFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l;
+      sysname << "CHORUSSYS1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -510,7 +471,7 @@ void CHORUSNBPb_dwFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -518,17 +479,6 @@ void CHORUSNBPb_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-    
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
   }
   
@@ -602,7 +552,7 @@ void CHORUSNUPb_shFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCOR";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -611,7 +561,7 @@ void CHORUSNUPb_shFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l;
+      sysname << "CHORUSSYS1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -637,7 +587,7 @@ void CHORUSNUPb_shFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -645,17 +595,6 @@ void CHORUSNUPb_shFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-    
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-       	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
 
     //Compute shifts
@@ -776,7 +715,7 @@ void CHORUSNBPb_shFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCOR";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -785,7 +724,7 @@ void CHORUSNBPb_shFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l;
+      sysname << "CHORUSSYS1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -811,7 +750,7 @@ void CHORUSNBPb_shFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -819,17 +758,6 @@ void CHORUSNBPb_shFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-    
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
     
     //Compute shifts

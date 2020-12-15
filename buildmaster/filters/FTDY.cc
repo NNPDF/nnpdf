@@ -110,62 +110,6 @@ void DYE605Filter::ReadData()
   f1.close();  
 }
 
-const std::vector<std::string> fakesyslabel =
-  {
-   "CHORUSSYS1",
-   "CHORUSSYS2",
-   "CHORUSSYS3",
-   "CHORUSSYS4",
-   "CHORUSSYS5",
-   "CHORUSSYS6",
-   "CHORUSSYS7",
-   "CHORUSSYS8",
-   "CHORUSSYS9",
-   "CHORUSSYS10",
-   "CHORUSSYS11",
-   "CHORUSSYS12",
-   "CHORUSSYS13",
-   "NUTEVNORM",
-   "NUTEVBRC",
-   "CHORUSQEDRADCOR",
-   "SLACNORM",
-   "SLACRELNORM",
-   "BCDMSFB",
-   "BCDMSFS",
-   "BCDMSFR",
-   "BCDMSNORM",
-   "BCDMSRELNORMTARGET",
-  };
-
-const std::vector<std::string> fakesystype =
-  {
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "MULT",
-   "MULT",
-   "MULT",
-   "MULT",
-   "MULT",
-   "ADD",
-   "ADD",
-   "ADD",
-   "MULT",
-   "MULT",
-  };
-
-const int nfakesys=23;
-
 void DYE605_dwFilter::ReadData()
 {
   // Opening files
@@ -262,7 +206,7 @@ void DYE605_dwFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -270,17 +214,6 @@ void DYE605_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-    
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
   }
   
@@ -386,7 +319,7 @@ void DYE605_shFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -394,17 +327,6 @@ void DYE605_shFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-       	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
 
     //Compute shifts

@@ -425,58 +425,6 @@ void NTVNBDMNFeFilter::ReadData()
   f2.close();
 }
 
-const std::vector<std::string> fakesyslabel =
-  {
-   "CHORUSSYS1",
-   "CHORUSSYS2",
-   "CHORUSSYS3",
-   "CHORUSSYS4",
-   "CHORUSSYS5",
-   "CHORUSSYS6",
-   "CHORUSSYS7",
-   "CHORUSSYS8",
-   "CHORUSSYS9",
-   "CHORUSSYS10",
-   "CHORUSSYS11",
-   "CHORUSSYS12",
-   "CHORUSSYS13",
-   "CHORUSQEDRADCOR",
-   "SLACNORM",
-   "SLACRELNORM",
-   "BCDMSFB",
-   "BCDMSFS",
-   "BCDMSFR",
-   "BCDMSNORM",
-   "BCDMSRELNORMTARGET",
-  };
-
-const std::vector<std::string> fakesystype =
-  {
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "ADD",
-   "MULT",
-   "MULT",
-   "MULT",
-   "ADD",
-   "ADD",
-   "ADD",
-   "MULT",
-   "MULT",
-  };
-
-const int nfakesys=21;
-
 void NTVNUDMNFe_dwFilter::ReadData()
 {
   // Opening files
@@ -576,13 +524,13 @@ void NTVNUDMNFe_dwFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM";
+    fSys[i][1].name = "NUTEVNORM1";
 
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC";
+    fSys[i][2].name = "NUTEVBRC1";
     
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -612,7 +560,7 @@ void NTVNUDMNFe_dwFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -620,17 +568,6 @@ void NTVNUDMNFe_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
     
   }
@@ -743,13 +680,13 @@ void NTVNBDMNFe_dwFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM";
+    fSys[i][1].name = "NUTEVNORM1";
     
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC";
+    fSys[i][2].name = "NUTEVBRC1";
 
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -779,7 +716,7 @@ void NTVNBDMNFe_dwFilter::ReadData()
       }
     
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -787,17 +724,6 @@ void NTVNBDMNFe_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
   }
   
@@ -906,13 +832,13 @@ void NTVNUDMNFe_shFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM";
+    fSys[i][1].name = "NUTEVNORM1";
 
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC";
+    fSys[i][2].name = "NUTEVBRC1";
     
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -942,7 +868,7 @@ void NTVNUDMNFe_shFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -950,17 +876,6 @@ void NTVNUDMNFe_shFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
     
     //Compute shifts
@@ -1076,13 +991,13 @@ void NTVNBDMNFe_shFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM";
+    fSys[i][1].name = "NUTEVNORM1";
     
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC";
+    fSys[i][2].name = "NUTEVBRC1";
 
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -1112,7 +1027,7 @@ void NTVNBDMNFe_shFilter::ReadData()
       }
     
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys-nfakesys; l++)
+    for(int l=nrealsys; l<fNSys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -1120,17 +1035,6 @@ void NTVNBDMNFe_shFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }
-
-    for(int l=fNSys-nfakesys; l<fNSys; l++)
-      {
-	fSys[i][l].add = 0.;
-	fSys[i][l].mult= 0.;
-	if(fakesystype[l-fNSys+nfakesys]=="ADD")
-	  fSys[i][l].type = ADD;
-	if(fakesystype[l-fNSys+nfakesys]=="MULT")
-	  fSys[i][l].type = MULT;
-	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
       }
     
     //Compute shifts
