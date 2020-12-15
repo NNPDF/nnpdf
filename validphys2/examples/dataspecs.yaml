@@ -8,8 +8,12 @@
 # lists of `dataspecs` taking the declared ones, so that it produces
 # one set of plots per dataset.
 #
-
-fit: NNPDF31_nlo_as_0118_1000
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+    
+fit: NNPDF31_nlo_as_0118
 
 use_cuts: True
 
@@ -18,20 +22,15 @@ experiments:
 
 dataspecs:
     - theoryid: 52
-      pdf: NNPDF31_nlo_as_0118_hessian
+      pdf: NNPDF31_nlo_as_0118
       speclabel: "NLO"
-      fit: NNPDF31_nlo_as_0118_1000
+      fit: NNPDF31_nlo_as_0118
 
     - theoryid: 53
-      pdf: NNPDF31_nnlo_as_0118_hessian
+      pdf: NNPDF31_nnlo_as_0118_1000
       speclabel: "NNLO"
       fit: NNPDF31_nnlo_as_0118_1000
 
-
-meta:
-    title: NLO vs NNLO results for all NLO datasets in 3.1
-    keywords: [test, nn31final]
-    author: Zahari Kassabov
 
 template_text: |
     {@with matched_datasets_from_dataspecs@}

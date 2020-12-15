@@ -1,10 +1,15 @@
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
 pdfs:
-    - NNPDF30_nlo_as_0118
-    - NNPDF30_nnlo_as_0118
-    - CT14nlo
+    - NNPDF31_nlo_as_0118
+    - NNPDF31_nnlo_as_0118
+    - 191015-mw-001 
 
 norm:
-    normalize_to: NNPDF30_nlo_as_0118
+    normalize_to: NNPDF31_nlo_as_0118
 
 first:
     Q: 1
@@ -12,7 +17,7 @@ first:
 
 second:
     Q: 100
-    xgrid: linear
+    scale: linear
 
 actions_:
     - first::norm plot_pdfreplicas

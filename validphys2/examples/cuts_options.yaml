@@ -3,7 +3,10 @@ meta:
     author: Zahari Kassabov
     keywords: [test, debug]
 
-fit: NNPDF31_nlo_as_0118_1000
+fit: NNPDF31_nlo_as_0118
+
+pdf:
+    from_: fit
 
 theory:
     from_: fit
