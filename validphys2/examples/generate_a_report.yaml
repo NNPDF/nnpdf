@@ -1,0 +1,24 @@
+meta:
+  title: Distribution plots per replica across experiments
+  author: Shayan Iranipour
+  keywords: [chi2, replica, distribution, DISonly]
+
+fit: NNPDF31_nnlo_as_0118_DISonly
+
+pdf:
+  from_: "fit"
+
+experiments:
+  from_: "fit"
+
+theoryid: 53
+
+use_cuts: "fromfit"
+
+template_text: |
+  # Histograms of χ2
+  ## DIS only distributions
+  {@experiments::experiment plot_chi2dist@}
+
+actions_:
+  - report(main=True)

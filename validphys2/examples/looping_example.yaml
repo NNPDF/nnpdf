@@ -1,0 +1,32 @@
+meta:
+    title: Looping in validphys example
+    author: Rosalyn Pearson
+    keywords: [example]
+
+pdfs:
+    - id:  NNPDF31_nlo_as_0118
+      label: NLO
+
+    - id: NNPDF31_nnlo_as_0118
+      label: NNLO
+
+    - id: 191015-mw-001 
+      label: closure
+
+theoryids:
+    - 52
+    - 53
+use_cuts : nocuts
+
+experiments:
+  - experiment: LHCb
+    datasets:
+      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+
+  - experiment: ATLAS
+    datasets:
+      - { dataset: ATLASWZRAP36PB}
+
+actions_:
+ - theoryids::pdfs::experiments::experiment plot_fancy
