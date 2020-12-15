@@ -425,6 +425,33 @@ void NTVNBDMNFeFilter::ReadData()
   f2.close();
 }
 
+const std::vector<std::string> fakesyslabel =
+  {
+   "CHORUSSYS1",
+   "CHORUSSYS2",
+   "CHORUSSYS3",
+   "CHORUSSYS4",
+   "CHORUSSYS5",
+   "CHORUSSYS6",
+   "CHORUSSYS7",
+   "CHORUSSYS8",
+   "CHORUSSYS9",
+   "CHORUSSYS10",
+   "CHORUSSYS11",
+   "CHORUSSYS12",
+   "CHORUSSYS13",
+   "CHORUSQEDRADCOR",
+   "SLACNORM",
+   "SLACRELNORM",
+   "BCDMSFB",
+   "BCDMSFS",
+   "BCDMSFR",
+   "BCDMSNORM",
+   "BCDMSRELNORMTARGET",
+  };
+
+const int nfakesys=21;
+
 void NTVNUDMNFe_dwFilter::ReadData()
 {
   // Opening files
@@ -560,7 +587,7 @@ void NTVNUDMNFe_dwFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys; l++)
+    for(int l=nrealsys; l<fNSys-nfakesys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -568,7 +595,16 @@ void NTVNUDMNFe_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      }    
+      }
+
+    for(int l=fNSys-nfakesys; l<fNSys; l++)
+      {
+	fSys[i][l].add = 0.;
+	fSys[i][l].mult= 0.;
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
+      }
+    
   }
   
   f1.close();
@@ -715,7 +751,7 @@ void NTVNBDMNFe_dwFilter::ReadData()
       }
     
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys; l++)
+    for(int l=nrealsys; l<fNSys-nfakesys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -723,8 +759,15 @@ void NTVNBDMNFe_dwFilter::ReadData()
 	ostringstream sysname;
 	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
-      } 
-    
+      }
+
+    for(int l=fNSys-nfakesys; l<fNSys; l++)
+      {
+	fSys[i][l].add = 0.;
+	fSys[i][l].mult= 0.;
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
+      }
   }
   
   f1.close();
@@ -868,7 +911,7 @@ void NTVNUDMNFe_shFilter::ReadData()
       }
 
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys; l++)
+    for(int l=nrealsys; l<fNSys-nfakesys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -878,6 +921,14 @@ void NTVNUDMNFe_shFilter::ReadData()
 	fSys[i][l].name = sysname.str();
       }
 
+    for(int l=fNSys-nfakesys; l<fNSys; l++)
+      {
+	fSys[i][l].add = 0.;
+	fSys[i][l].mult= 0.;
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
+      }
+    
     //Compute shifts
     cout << nuclear/proton_cv << "   " << 0.0 << endl;
     
@@ -1027,7 +1078,7 @@ void NTVNBDMNFe_shFilter::ReadData()
       }
     
     //Compute additional uncertainties
-    for(int l=nrealsys; l<fNSys; l++)
+    for(int l=nrealsys; l<fNSys-nfakesys; l++)
       {
 	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -1037,6 +1088,14 @@ void NTVNBDMNFe_shFilter::ReadData()
 	fSys[i][l].name = sysname.str();
       }
 
+    for(int l=fNSys-nfakesys; l<fNSys; l++)
+      {
+	fSys[i][l].add = 0.;
+	fSys[i][l].mult= 0.;
+	fSys[i][l].type = ADD;
+	fSys[i][l].name = fakesyslabel[l-fNSys+nfakesys];
+      }
+    
     //Compute shifts
     cout << nuclear/proton_cv << "   " << 0.0 << endl;
     
