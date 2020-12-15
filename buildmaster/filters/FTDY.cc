@@ -154,7 +154,7 @@ const std::vector<std::string> fakesystype =
    "ADD",
    "MULT",
    "MULT",
-   "ADD",
+   "MULT",
    "MULT",
    "MULT",
    "ADD",
