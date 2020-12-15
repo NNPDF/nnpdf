@@ -42,7 +42,11 @@ Errorbars from performing bootstrap sample upon replicas
 
 Dataset properties
 ------------------
+<<<<<<< HEAD
 {@closure fit_datasets_properties_table@}
+=======
+{@closure datasets_properties_table@}
+>>>>>>> parent of 2560716e... removing all examples runcards
 
 Distances
 ------------------
@@ -71,9 +75,15 @@ Training validation
 -------------------
 {@fits plot_training_validation@}
 
+<<<<<<< HEAD
 $\chi^2$ by {@processed_metadata_group@}
 ----------------------
 {@plot_fits_groups_data_chi2@}
+=======
+$\chi^2$ by experiment
+----------------------
+{@plot_fits_experiments_chi2@}
+>>>>>>> parent of 2560716e... removing all examples runcards
 
 $\chi^2$ by dataset comparisons
 -------------------------------

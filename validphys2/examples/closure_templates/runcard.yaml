@@ -6,8 +6,13 @@ meta:
     author: Lazy Person
 
 closure:
+<<<<<<< HEAD
     fit: {id: 191015-mw-001}
     pdf: {id: 191015-mw-001, label: "test closures"}
+=======
+    fit: {id: 071018-edi-001}
+    pdf: {id: 071018-edi-001, label: "test closures"}
+>>>>>>> parent of 2560716e... removing all examples runcards
     theory:
       from_: fit
     theoryid:
@@ -66,6 +71,12 @@ pdf_uncertainty_report:
 
 template: report.md
 
+<<<<<<< HEAD
+=======
+experiments:
+    from_: fit
+
+>>>>>>> parent of 2560716e... removing all examples runcards
 dataspecs:
   - theoryid:
       from_: closure
@@ -75,10 +86,13 @@ dataspecs:
       from_: closure
     speclabel:
       from_: closure
+<<<<<<< HEAD
     # WARNING: do not blindly copy and paste this: it can overwrite the datasets
     # for any actions which rely on grouping datasets.
     data_input:
       from_: fitinputcontext
+=======
+>>>>>>> parent of 2560716e... removing all examples runcards
    
 normalize:
   normalize_to: 1
@@ -86,7 +100,10 @@ normalize:
 datanorm:
     normalize_to: data
 
+<<<<<<< HEAD
 metadata_group: experiment
 
+=======
+>>>>>>> parent of 2560716e... removing all examples runcards
 actions_:
   - report(main=true)

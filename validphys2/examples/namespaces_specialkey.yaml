@@ -1,0 +1,47 @@
+dataspec_input:
+  - fitdeclarations:
+       - NNPDF31_nnlo_as_0117_uncorr
+       - NNPDF31_nnlo_as_0118_uncorr
+    fits_computed_psedorreplicas_chi2_output: new-alldata/fits_matched_pseudorreplicas_chi2_table.csv
+    fits_chi2_paramfits_output: new-alldata/central_global.csv
+    badspecs:
+       - badcurves: discard
+         speclabel: "Global, discard"
+       - badcurves: allminimum
+         speclabel: "Global, allminimum"
+
+  - fitdeclarations:
+       - NNPDF31_nnlo_as_0117_uncorr_collider
+       - NNPDF31_nnlo_as_0118_uncorr_collider
+    fits_computed_psedorreplicas_chi2_output: new-alldata/collider.csv
+    fits_chi2_paramfits_output: new-alldata/collider_central.csv
+    badspecs:
+       - badcurves: discard
+         speclabel: "Collider, discard"
+       - badcurves: allminimum
+         speclabel: "Collider, allminimum"
+
+dataspecs:
+    namespaces_: "dataspec_input::badspecs
+                  ::fits_as_from_fitdeclarations::fits_name_from_fitdeclarations
+                  ::use_fits_computed_psedorreplicas_chi2_output::use_fits_chi2_paramfits_output"
+
+meta:
+   author: Zahari Kassabov
+   title: Summary of the allminimum and discard for global and collider only fits
+   keywords: [as]
+template_text: |
+
+    We compare the results of the determinations with `allminimum`
+    and `discard` on the global and collider only fits.
+
+    # Table
+
+    {@dataspecs_as_value_error_table@}
+
+    # Plot
+
+    {@plot_dataspecs_as_value_error@}
+
+actions_:
+  - report(main=True)

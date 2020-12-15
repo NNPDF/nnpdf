@@ -1,0 +1,20 @@
+pdfs:
+    - NNPDF30_nlo_as_0118
+    - NNPDF30_nnlo_as_0118
+    - CT14nlo
+
+norm:
+    normalize_to: NNPDF30_nlo_as_0118
+
+first:
+    Q: 1
+    flavours: [up, down, gluon]
+
+second:
+    Q: 100
+    xgrid: linear
+
+actions_:
+    - first::norm plot_pdfreplicas
+    - first plot_pdfs
+    - second plot_pdfreplicas

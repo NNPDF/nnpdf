@@ -1,0 +1,13 @@
+pdf: NNPDF30_nlo_as_0118
+
+theoryid: 52
+
+use_cuts: "nocuts"
+
+dataset_input:
+    dataset: ATLASWZRAP36PB
+    cfac: [EWK]
+
+actions_:
+  - plot_fancy
+  - plot_chi2dist

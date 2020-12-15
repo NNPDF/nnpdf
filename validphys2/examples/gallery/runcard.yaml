@@ -1,0 +1,77 @@
+pdfs:
+  -  {id: NNPDF31_nnlo_as_0118, label: "Fitted charm"}
+  -  {id: NNPDF31_nnlo_pch_as_0118, label: "Perturbative charm"}
+
+use_cuts: True
+
+base:
+  fit: NNPDF31_nnlo_as_0118_1000
+
+fits:
+  - from_: base
+  - NNPDF31_nnlo_pch_as_0118_1000 
+
+meta:
+    title: Comparison for fitted and perturbative charm
+    keywords: [gallery]
+    author: NNPDF Collaboration
+
+pdfnormalize:
+    - normtitle: Absolute
+
+    - normalize_to: 1
+      normtitle: Ratio
+
+basespecs:
+    - basis: flavour
+      basistitle: Flavour basis
+    - basis: evolution
+      basistitle: Evolution basis
+
+Q: 2
+sqrts: 13000
+
+dataset_report:
+    meta: Null
+    template_text: |
+        % Data theory comparison for {@dataset@}
+        
+        Absolute
+        ---------
+        
+        {@ plot_fancy @}
+        
+        Normalized
+        ----------
+        
+        {@ datanorm plot_fancy@}
+
+datanorm:
+    normalize_to: data
+
+template_text: |
+    
+    # PDFs 
+    
+    {@with pdfnormalize@}
+    ## {@normtitle@}
+    {@with basespecs@}
+    ### {@basistitle@}
+    {@plot_pdfs@}
+    {@endwith@}
+    {@endwith@}
+    
+    # $\chi^2$
+    {@fits_chi2_table@}
+
+    # Comparison with data
+    {@with base::fitcontext::experiments@}
+    ###{@ experiment @}
+    {@with experiment@}
+    [Detailed plots for dataset ' {@dataset@} ']({@dataset_report report @})
+    {@ endwith @}
+    {@ endwith @}
+
+actions_:
+    - - report:
+           main: True

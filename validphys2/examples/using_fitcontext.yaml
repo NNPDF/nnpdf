@@ -1,0 +1,26 @@
+fits:
+    - 161208-jr-003
+    - 161222-jr-004
+
+
+use_cuts: "nocuts"
+
+
+Q: 10
+
+description:
+    from_: fit
+template: report.md
+
+normalize:
+    normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+pdfs:
+    - from_: fit
+    - NNPDF30_nlo_as_0118
+
+actions_:
+  - fits::fitcontext report

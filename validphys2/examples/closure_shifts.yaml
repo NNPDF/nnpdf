@@ -1,0 +1,18 @@
+use_cuts: True
+fits:
+ - fit: 160611-rce7f669-002-zk
+ - fit: 160609-rce7f669-001-zk
+
+actions_:
+    - fits:
+      - closure_shifts
+
+
+experiments: 
+    from_: fit
+
+theory:
+    from_: fit
+
+
+theoryid:  53

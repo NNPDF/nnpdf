@@ -1,0 +1,26 @@
+pdfs:
+    - NNPDF30_nlo_as_0118
+    - NNPDF30_nnlo_as_0118
+    - CT14nlo
+
+first:
+    Q: 1
+    flavours: [up, down, gluon, 4]
+
+second:
+    Q: 100
+    scale: linear
+    xmin: 0.9
+    xmax: 1
+    npoints: 300
+    basis: evolution
+
+actions_:
+    - first:
+        - plot_pdfreplicas:
+            normalize_to: 1
+            xscale : log
+        - plot_pdfs
+    - second:
+        - plot_pdfreplicas
+        - plot_pdf_uncertainties

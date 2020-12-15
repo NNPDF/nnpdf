@@ -1,0 +1,32 @@
+pdfs:
+ - {id: NNPDF31_nnlo_as_0118, label: NNPDF 3.1 NNLO}
+ - {id: NNPDF30_nnlo_as_0118, label: NNPDF 3.0 NNLO}
+ - {id: NNPDF31_nlo_as_0118, label: NNPDF 3.1 NLO}
+ - {id: NNPDF30_nlo_as_0118, label: NNPDF 3.0 NLO}
+Qs:
+    - Q: 3.5
+    - Q: 10
+    - Q: 100
+
+basis: pdg
+xmin: 0.002
+
+meta:
+    author: Zahari Kassabov
+    keywords: [gallery, nn31final]
+
+template_text: |
+    % PDG Plots
+    {@with Qs@}
+    # Q={@Q@} GeV
+    {@with pdfs@}
+    {@pdf@}
+    -------
+    {@plot_flavours@}
+    {@endwith@}
+    {@endwith@}
+
+actions_:
+    - - report:
+           main: True
+

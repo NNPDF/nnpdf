@@ -1,0 +1,42 @@
+#
+# Configuration file for NNPDF++
+#
+
+use_cuts: False
+actions_:
+ - theory:
+        experiments:
+            experiment:
+              - plot_fancy
+
+pdfs: 
+      -  160826-r241b3bf-jr-004
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+experiments:
+      # DYE886
+  - experiment: DYE886
+    datasets:
+      - { dataset: DYE886P, frac: 1.0, sys: 2, cfac: [QCD] }
+############################################################
+datacuts:
+  t0pdfset     : 160302-r7c33a66-007-jr # PDF set to generate t0 covmat
+  q2min        : 3.49                 # Q2 minimum
+  w2min        : 12.5                # W2 minimum
+  combocuts    : NNPDF30             # NNPDF3.0 final kin. cuts
+  jetptcut_tev : 0                   # jet pt cut for tevatron
+  jetptcut_lhc : 0                   # jet pt cut for lhc
+  wptcut_lhc   : 25.0                # Minimum pT for W pT diff distributions
+  jetycut_tev  : 1e30                # jet rap. cut for tevatron
+  jetycut_lhc  : 1e30                # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut  : 1e30                # jet cfact. cut
+
+############################################################
+theory:
+  theoryid: 65       # database id
+  

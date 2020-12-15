@@ -1,0 +1,36 @@
+fits:
+ - NNPDF31_nlo_as_0118_1000
+ - NNPDF31_nnlo_as_0118_1000
+
+meta:
+    keywords: [gallery, nn31final]
+    author: NNPDF Collaboration
+
+markers:
+    - marker_by: process type
+    - marker_by: experiment
+
+use_cuts: True
+
+display_cuts: False
+
+template_text: |
+    % Kianmatic coverage
+
+    {@with fits@}
+    {@fit@}
+    =======
+
+    {@with markers@}
+    Marker by {@marker_by@}
+    -----------------------
+
+    {@fitcontext plot_xq2@}
+
+    {@endwith@}
+
+    {@endwith@}
+
+actions_:
+    - - report:
+          main: True

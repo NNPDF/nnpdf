@@ -1,0 +1,36 @@
+fit: NNPDF31_nlo_as_0118_1000
+
+
+use_cuts: True
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+
+Q: 10
+
+description:
+    from_: fit
+template: templates/report.md
+
+dataset_report:
+    template: templates/dataset.md
+
+normalize:
+    normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+pdfs:
+    - from_: fit
+    - NNPDF30_nlo_as_0118
+experiments:
+    from_: fit
+
+actions_:
+    - - report:
+          main: True

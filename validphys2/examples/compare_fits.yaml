@@ -1,0 +1,18 @@
+description:
+    from_: fit
+
+fits:
+    - 170321_smallxNLONLL_lr_001
+    - 170321_smallxNLO_lr_001
+
+pdfs:
+    - 170321_smallxNLONLL_lr_001
+    -  170321_smallxNLO_lr_001
+
+Q: 10
+use_cuts: True
+template: templates/compare_fits.md
+
+actions_:
+    - - report:
+          main: True

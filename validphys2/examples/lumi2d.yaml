@@ -1,0 +1,24 @@
+sqrts: 13000
+pdf: NNPDF31_nlo_as_0118
+
+lumi_channels:
+    - gg
+    - udbar
+
+template_text: |
+    ---
+    title: 2D luminosity
+    author: Stefano Carrazza
+    keywords: [nnpdf31]
+    ---
+
+    Ported from https://github.com/scarrazza/lumi2d
+
+    2D luminosity
+    -----------
+    {@lumi_channels plot_lumi2d @}
+    {@lumi_channels plot_lumi2d_uncertainty @}
+
+actions_:
+  -   - report:
+          main: True

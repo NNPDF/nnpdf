@@ -1,0 +1,14 @@
+pdfs:
+  - NNPDF30_nlo_as_0118
+  - CT14nlo
+
+theoryid: 52
+
+use_cuts: "nocuts"
+
+dataset_input:
+    dataset: ATLASWZRAP36PB
+    cfac: [EWK]
+
+actions_:
+  - pdfs plot_fancy

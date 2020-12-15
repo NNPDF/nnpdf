@@ -1,0 +1,31 @@
+
+theoryid: 53
+pos_use_kin: False
+
+pdfs:
+    - NNPDF31_nnlo_as_0118 
+
+posdatasets:
+   - { dataset: POSF2U,   poslambda: 1e6 }
+   - { dataset: POSF2DW,  poslambda: 1e6 }
+   - { dataset: POSF2S,   poslambda: 1e6 }
+   - { dataset: POSFLL,   poslambda: 1e6 }
+   - { dataset: POSDYU,   poslambda: 1e10 }
+   - { dataset: POSDYD,   poslambda: 1e10 }
+   - { dataset: POSDYS,   poslambda: 1e10 }
+   - { dataset: POSDYUBD,   poslambda: 1e5 }
+   - { dataset: POSDYUD,   poslambda: 1e5 }
+   - { dataset: POSDYUDB,   poslambda: 1e5 }
+   - { dataset: POSDYUBDB,   poslambda: 1e5 }
+
+template_text: |                                                                                            
+    ---
+    title: Positivity observables example
+    keywords: positivity
+    ---
+
+    {@posdatasets plot_positivity@}
+    
+
+actions_:
+   - report(main=True)

@@ -1,0 +1,15 @@
+# filter_chi2.yaml
+#
+# Discard outliers with χ² to fitted data which is
+# bigger and more thn 'nsigma_cut' sigmas away from
+# the mean.
+
+fit: 160621-r9d82993-006-zk
+
+
+actions_:
+ - - make_pdf_from_filtered_outliers:
+        installgrid: True
+        set_name: Null
+        nsigma_cut: 2
+
