@@ -286,7 +286,7 @@ void CHORUSNUPb_dwFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS1" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -446,7 +446,7 @@ void CHORUSNBPb_dwFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS1" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -561,7 +561,7 @@ void CHORUSNUPb_shFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS1" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -724,7 +724,7 @@ void CHORUSNBPb_shFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS1" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
