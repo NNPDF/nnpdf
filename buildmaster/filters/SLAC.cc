@@ -297,7 +297,7 @@ void SLACD_dwFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -411,7 +411,7 @@ void SLACD_shFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;

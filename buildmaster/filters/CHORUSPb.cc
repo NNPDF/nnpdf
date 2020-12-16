@@ -248,7 +248,7 @@ void CHORUSNUPb_dwFilter::ReadData()
   // Starting filter
   double Mn = 0.9389;
   double enu,tmp,nortmp;
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=14;
   
   // Filtering data
@@ -314,7 +314,7 @@ void CHORUSNUPb_dwFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -408,7 +408,7 @@ void CHORUSNBPb_dwFilter::ReadData()
   // Starting filter
   double Mn = 0.9389;
   double enu,tmp,nortmp;
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=14;
   
   // Filtering data
@@ -473,7 +473,7 @@ void CHORUSNBPb_dwFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -523,7 +523,7 @@ void CHORUSNUPb_shFilter::ReadData()
   // Starting filter
   double Mn = 0.9389;
   double enu,tmp,nortmp;
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=14;
   
   // Filtering data
@@ -589,7 +589,7 @@ void CHORUSNUPb_shFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -686,7 +686,7 @@ void CHORUSNBPb_shFilter::ReadData()
   // Starting filter
   double Mn = 0.9389;
   double enu,tmp,nortmp;
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=14;
   
   // Filtering data
@@ -752,7 +752,7 @@ void CHORUSNBPb_shFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;

@@ -145,7 +145,7 @@ void DYE605_dwFilter::ReadData()
   // Starting filter
   double convfact = 1e33;
   double SCM = 38.8*38.8;
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=2;
   
   string line;
@@ -208,7 +208,7 @@ void DYE605_dwFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -258,7 +258,7 @@ void DYE605_shFilter::ReadData()
   // Starting filter
   double convfact = 1e33;
   double SCM = 38.8*38.8;
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=2;
   
   string line;
@@ -321,7 +321,7 @@ void DYE605_shFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -593,7 +593,7 @@ void DYE866R_dwFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - proton_cv;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -695,7 +695,7 @@ void DYE866R_shFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = nuclear_cv[l-nrealsys] - nuclear;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
