@@ -186,6 +186,7 @@ def make_replica(list_of_commondata, seed=None):
             for cd in list_of_commondata:
                 pseudodata = cd.central_values.to_numpy()
 
+                # ~~~ ADDITIVE ERRORS  ~~~
                 add_errors = cd.additive_errors
                 add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
 
@@ -197,9 +198,11 @@ def make_replica(list_of_commondata, seed=None):
 
                 # append the partially shifted pseudodata
                 pseudodatas.append(pseudodata)
+                # store the additive errors with correlations between datasets for later use
                 special_add.append(
                     add_errors.loc[:, ~add_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
                 )
+                # ~~~ MULTIPLICATIVE ERRORS ~~~
                 mult_errors = cd.multiplicative_errors
                 mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
                 # convert to from percent to fraction
@@ -214,6 +217,7 @@ def make_replica(list_of_commondata, seed=None):
 
                 mult_shifts.append(mult_shift)
 
+                # store the multiplicative errors with correlations between datasets for later use
                 special_mult.append(
                     mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
                 )
