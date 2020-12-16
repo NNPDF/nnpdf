@@ -186,6 +186,9 @@ def make_replica(list_of_commondata, seed=None):
             for cd in list_of_commondata:
                 pseudodata = cd.central_values.to_numpy()
 
+                # add contribution from statistical uncertainty
+                pseudodata += (cd.stat_errors.to_numpy() * np.random.randn(cd.ndata))
+
                 # ~~~ ADDITIVE ERRORS  ~~~
                 add_errors = cd.additive_errors
                 add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
