@@ -482,7 +482,15 @@ def pdfNN_layer_generator(
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
-    integrator_input = None # TODO
+    # Normalization and sum rules
+    if impose_sumrule:
+        sumrule_imposition, integrator_input = msr_constraints.msr_impose(mode=impose_sumrule)
+        model_input = [integrator_input, placeholder_input]
+    else:
+        sumrule_imposition = lambda x: x
+        integrator_input = None
+        model_input = [placeholder_input]
+
     pdf_models = []
 
     # Now we need a trainable network per model to be trained in parallel
@@ -538,15 +546,10 @@ def pdfNN_layer_generator(
         def layer_pdf(x):
             return layer_evln(layer_fitbasis(x))
 
-        # Impose sumrule if necessary #TODO still a lot of repetition going on inside the MSR, but not important -for now-
-        if impose_sumrule:
-            layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mode=impose_sumrule)
-            model_input = [integrator_input, placeholder_input]
-        else:
-            integrator_input = None
-            model_input = [placeholder_input]
+        # Final PDF
+        final_pdf = sumrule_imposition(layer_fitbasis, layer_pdf)
 
-        pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name=f"PDF_{i}")
+        pdf_model = MetaModel(model_input, final_pdf(placeholder_input), name=f"PDF_{i}")
 
         pdf_models.append(pdf_model)
 

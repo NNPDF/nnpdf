@@ -37,7 +37,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(fit_layer, final_pdf_layer, mode='All', xgrid_input=None, verbose=False):
+def msr_impose(nx=int(2e3), basis_size=8, mode='All'):
     """
         This function receives:
             - fit_layer: the 8-basis layer of PDF which we fit
@@ -46,43 +46,44 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', xgrid_input=None, verbose
         the final_pdf layer with a normalisation by which the sum rule is imposed
     """
     # 1. Generate the fake input which will be used to integrate
-    nx = int(2e3)
     xgrid, weights_array = gen_integration_input(nx)
 
     # 2. Prepare the pdf for integration
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide()
 
-    def pdf_integrand(x):
-        res = operations.op_multiply([division_by_x(x), fit_layer(x)])
-        return res
-
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
     integrator = xIntegrator(weights_array, input_shape=(nx,))
 
     # 4. Now create the normalization by selecting the right integrations
-    normalizer = MSR_Normalization(input_shape=(8,), mode=mode)
+    normalizer = MSR_Normalization(input_shape=(basis_size,), mode=mode)
 
-    # 5. Make the xgrid numpy array into a backend input layer so it can be given
-    if xgrid_input is None:
-        xgrid_input = operations.numpy_to_input(xgrid)
-    normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
+    # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
+    xgrid_input = operations.numpy_to_input(xgrid)
 
-    def ultimate_pdf(x):
-        return operations.op_multiply_dim([final_pdf_layer(x), normalization])
+    # Now parepare a function that takes as input the 8-flavours output of the NN
+    # and the 14-flavours after the fk rotation and returns a 14-flavours normalized output
+    # note + TODO:
+    # the idea was that the normalization should always be applied at the fktable 14-flavours
+    # and always computed at the output of the NN (in case one would like to compute it differently)
+    # don't think it is a good idea anymore and should be changed to act only on the output to the fktable
+    # but will be dealt with in the future.
+                            # fitlayer        #final_pdf
+    def apply_normalization(layer_fitbasis, layer_pdf):
+        """
+            layer_fitbasis: output of the NN
+            layer_pdf: output for the fktable
+        """
 
-    if verbose:
-        #         only_int = integrator(pdf_integrand(xgrid_input))
-        #         modelito = MetaModel(xgrid_input, only_int)
-        #         result = modelito.predict(x = None, steps = 1)
+        pdf_integrand = operations.op_multiply([division_by_x(xgrid_input), layer_fitbasis(xgrid_input)])
+        normalization = normalizer(integrator(pdf_integrand))
 
-        print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input)
+        def ultimate_pdf(x):
+            return operations.op_multiply([layer_pdf(x), normalization])
 
-    # Save a reference to xgrid in ultimate_pdf, very useful for debugging
-    ultimate_pdf.ref_xgrid = xgrid_input
+        return ultimate_pdf
 
-    return ultimate_pdf, xgrid_input
+    return apply_normalization, xgrid_input
 
 
 def check_integration(ultimate_pdf, integration_input):
