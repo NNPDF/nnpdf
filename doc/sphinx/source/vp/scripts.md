@@ -7,6 +7,64 @@ Validphys scripts
 `validphys` comes included with a collection of shell scripts to assist with various logistical
 tasks to do with `fits` and `PDF` formats. 
 
+## Processing a fit
+
+The `postfit` script can be used to process a fit. Its primary role is to filter the PDF replicas
+in the fit according to whether they meet certain criteria. More specifically, it filters the
+replicas and from the successful replicas constructs an LHAPDF set which is written to the
+`<fit_folder>/postfit` folder as well the user's LHAPDF path. In doing this, a replica known as
+`replica_0` is produced, which is the average of the replicas in the set.
+
+
+The standard usage of postfit is something like the following:
+
+```
+$ postfit 100 NNPDF31_nnlo_as_0118
+```
+
+where here the fit being processed is `NNPDF31_nnlo_as_0118` and it is being required that the
+LHAPDF set contains 100 PDF replicas, excluding `replica_0`. If there are not 100 replicas in the
+fit that pass the selection criteria, then the script will fail and the user can either request
+fewer replicas or run more replicas such that there will eventually be enough that satisfy the
+criteria.
+
+If the user wishes to include *all* replicas that satisfy the criteria in the LHAPDF set, and not
+just the amount specified in their command, they can use the `--at-least-nrep` flag, as in:
+
+```
+$ postfit 100 NNPDF31_nnlo_as_0118 --at-least-nrep
+```
+
+Note that the command will still fail if fewer than the requested amount meet the criteria. This
+flag can be useful when, for example, processing many fits simultaneously, where a specific number
+of replicas is not required, but instead at least a certain amount.
+
+### The `postfit` selection criteria
+
+Replicas are filtered based on their \\( \chi^2 \\) to data, their arclength, their integrability
+and their positivity. The first three criteria are based on user-settable thresholds, while the
+positivity is not. They work as follows:
+
+* \\( \chi^2 \\): the \\( \chi^2 \\) to data is calculated for each replica, from which the average
+  \\( \chi^2 \\) and the standard deviation are found. Replicas are cut if \\( \chi^2 > \\) average
+  \\( + \\) threshold \\( * \\) std-dev. The default threshold is 4.
+
+* Arclength: this works in the same way as the \\( \chi^2 \\) threshold. The default threshold is also 4.
+
+* Integrability: ... The default threshold is 0.01.
+
+* Positivity: ...
+
+The three thresholds can be set by the user by specifying any or all of the following flags:
+`--chi2-threshold`, `--arclength-threshold` and `--integrability-threshold`. In each case the
+desired numeric threshold should follow the flag. For example:
+
+```
+$ postfit 100 NNPDF31_nnlo_as_0118 --chi2-threshold 3 --arclength-threshold 5.2 --integrability-threshold 0.02
+```
+
+Importantly, the thresholds used by postfit are recorded in `<fit_folder>/postfit/veto_count.json`.
+
 ## Fit renaming
 
 Fits can be renamed from the command line application `vp-fitrename` that comes installed
