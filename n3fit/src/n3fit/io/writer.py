@@ -141,9 +141,10 @@ def version():
     try:
         # Wrap tf in try-except block as it could possible to run n3fit without tf
         import tensorflow as tf
+        from tensorflow.python.framework import test_util
 
         versions["keras"] = tf.keras.__version__
-        mkl = tf.python.framework.test_util.IsMklEnabled()
+        mkl = test_util.IsMklEnabled()
         versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
     except ImportError:
         versions["tensorflow"] = "Not available"
