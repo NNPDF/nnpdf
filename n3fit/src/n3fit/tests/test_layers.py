@@ -163,7 +163,8 @@ def test_DY():
         fks = [i['fktable'] for i in fkdicts]
         obs_layer = layers.DY(fkdicts, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
-        kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
+        # Add batch dimension (0) and replica dimension (-1)
+        kp = op.numpy_to_tensor(np.expand_dims(pdf, [0,-1]))
         # generate the n3fit results
         result_tensor = obs_layer(kp)
         result = op.evaluate(result_tensor)

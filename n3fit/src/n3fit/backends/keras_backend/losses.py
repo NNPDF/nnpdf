@@ -14,6 +14,10 @@ def l_invcovmat(invcovmat_np):
     invcovmat = K.constant(invcovmat_np)
 
     def true_loss(y_true, y_pred):
+        """
+            y_true: (1, N)
+            y_pred: (1, replicas, N)
+        """
         # (yt - yp) * covmat * (yt - yp)
         tmp = y_true - y_pred
         return tf.einsum('bri,ij,brj->b', tmp, invcovmat, tmp)

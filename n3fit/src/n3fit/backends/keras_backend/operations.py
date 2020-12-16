@@ -250,7 +250,7 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     Parameters
     ----------
         pdf: tf.tensor
-            rank 3 (batchsize, xgrid, flavours)
+            rank 4 (batchsize, xgrid, flavours, replicas)
         basis_mask: tf.tensor
             rank  2 tensor (flavours, flavours)
             mask to apply to the pdf convolution

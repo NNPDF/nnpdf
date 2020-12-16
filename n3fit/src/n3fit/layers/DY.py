@@ -30,12 +30,12 @@ class DY(Observable):
         Parameters
         ----------
             pdf_in: tensor
-                rank 3 tensor (batchsize, xgrid, flavours)
+                rank 4 tensor (batchsize, xgrid, flavours, replicas)
 
         Returns
         -------
             results: tensor
-                rank 2 tensor (batchsize, ndata)
+                rank 3 tensor (batchsize, replicas, ndata)
         """
         # Hadronic observables might need splitting of the input pdf in the x dimension
         # so we have 3 different paths for this layer

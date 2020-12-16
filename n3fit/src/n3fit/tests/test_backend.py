@@ -122,7 +122,8 @@ def test_sum():
 # Tests loss functions
 def test_l_invcovmat():
     loss_f = losses.l_invcovmat(INVCOVMAT)
-    result = loss_f(T1, T2)
+    # Add a replica and batch dimension to T2
+    result = loss_f(T1, np.expand_dims(T2, [0,1]))
     y = ARR1 - ARR2
     tmp = np.dot(INVCOVMAT, y)
     reference = np.dot(y, tmp)

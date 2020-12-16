@@ -843,9 +843,11 @@ class ModelTrainer:
             models = self._model_generation(pdf_models, partition)
 
             # Only after model generation, apply possible weight file
+            # TODO: not sure whether it is a good idea that all of them start at the same point
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
-                pdf_model.load_weights(self.model_file)
+                for pdf_model in pdf_models:
+                    pdf_model.load_weights(self.model_file)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
@@ -873,7 +875,7 @@ class ModelTrainer:
             stopping_object = Stopping(
                 validation_model,
                 reporting,
-                pdf_models[0], # TODO
+                pdf_models[0], # TODO, not stopping for now
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 save_weights_each=self.save_weights_each,
