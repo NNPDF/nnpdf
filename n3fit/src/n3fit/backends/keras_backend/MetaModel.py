@@ -123,6 +123,7 @@ class MetaModel(Model):
         self.all_outputs = output_list
         self.target_tensors = None
         self.eval_fun = None
+        self.compute_losses_function = None
 
     def _parse_input(self, extra_input=None, pass_content=True):
         """ Returns the input tensors the model was compiled with.
@@ -169,34 +170,36 @@ class MetaModel(Model):
 
     def compute_losses(self):
         """
-        This function is the fast-equivalent to the model ``evaluate(x,y)`` method.
+        This function is equivalent to the model ``evaluate(x,y)`` method of most TensorFlow models
+        which return a dictionary of losses per output layer.
+        The losses reported in the ``evaluate`` method for n3fit are, however, summed over replicas.
+        Instead the loss we are interested in is usually the output of the model (i.e., predict)
 
-        On first call it calls ``.evaluate(return_dict=True, verbose=0)`` to force
-        the initialization of the test function.
-        Subsequent calls of this method will (when applicable)
-        directly call the internal evaluation function ``eval_fun``.
-        This bypasses the pre- and post- evaluation steps, resulting in a ~10% speed up
-        with respect to ``.evaluate(...)``
+        This function then generates a dictionary of partial losses of the model separated per replica.
+        i.e., the output for experiment {'LHC_exp'} will be an array of Nrep elements.
 
         Returns
         -------
             dict
                 a dictionary with all partial losses of the model
         """
-        if self.eval_fun is None:
-            # We still need to perform some initialization
-            if LEGACY:
-                # For TF < 2.2 we need to generate the test_function ourselves
-                self.make_test_function()
-            else:
-                return self.evaluate(return_dict=True, verbose=False)
-        if LEGACY:
-            # For tF < 2.2 we need to force the output to be a float
-            ret = self.eval_fun()
-            ret['loss'] = ret['loss'].numpy()
-            return ret
-        else:
-            return self.eval_fun()
+        # TODO might not work for TF < 2.2, we might not care either
+        if self.compute_losses_function is None:
+            out_names = [f"{i}_loss" for i in self.output_names]
+            out_names.insert(0, "loss")
+
+            # Compile a evaluation function
+            @tf.function
+            def losses_fun():
+                predictions = self(self._parse_input(None))
+                total_loss = tf.reduce_sum(predictions, axis=0)
+                ret = [total_loss] + predictions
+                return dict(zip(out_names, ret))
+
+            self.compute_losses_function = losses_fun
+
+        return self.compute_losses_function()
+
 
     def evaluate(self, x=None, y=None, **kwargs):
         """

@@ -897,7 +897,7 @@ class ModelTrainer:
             validation_loss = stopping_object.vl_chi2
 
             # Compute experimental loss
-            exp_loss_raw = models["experimental"].compute_losses()["loss"]
+            exp_loss_raw = np.take(models["experimental"].compute_losses()["loss"], -1)
             experimental_loss = exp_loss_raw / model_dicts["experimental"]["ndata"]
 
             if self.mode_hyperopt:

@@ -12,7 +12,6 @@ from n3fit.backends.keras_backend.base_layers import (
     regularizer_selector,
     Concatenate,
 )
-from n3fit.backends.keras_backend import losses
 from n3fit.backends.keras_backend import operations
 from n3fit.backends.keras_backend import constraints
 from n3fit.backends.keras_backend import callbacks

@@ -233,9 +233,12 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         )
         return loss_vl(exp_result)
 
+    def out_exp(pdf_layer, datasets_out=None):
+        return loss_ex(experiment_layer(pdf_layer))
+
     layer_info = {
         "inputs": model_inputs,
-        "output": experiment_layer,
+        "output": out_exp,
         "loss": loss,
         "output_tr": out_tr,
         "loss_tr": loss,
