@@ -51,9 +51,25 @@ positivity is not. They work as follows:
 
 * Arclength: this works in the same way as the \\( \chi^2 \\) threshold. The default threshold is also 4.
 
-* Integrability: ... The default threshold is 0.01.
+* Integrability: the distributions \\( V \\), \\( V_3 \\), \\( V_8 \\), \\( T_3 \\) and \\( T_8 \\)
+  have to be integrable in \\( x = 0\\).
+  Denoting as \\( q\left(x, Q_0^2\right) \\) a generic PDF at the fitting scale \\( Q_0 \\),
+  we define it to be integrable if, for a given set of points \\( x^{(i)}_{\text{integ}} \\)
+  in the small-x region, the function \\( x q\left(x, Q_0^2\right) \\) evaluated in
+  these points is much smaller than its peak value
+  
+  \\( \sum_i | xq_{x=x^{(i)}_{\text{integ}}} | << xq_{x = x_{\text{peak}}} \\)
+  
+  with \\( x_{\text{peak}} \\) denoting the point where the distribution \\( xq \\) reaches its maximum value.
+  Such condition can be expressed as 
 
-* Positivity: ...
+  \\( \sum_i | xq_{x=x^{(i)}_{\text{integ}}} | < f_q * xq_{x = x_{\text{peak}}} \\)
+  
+  where \\( f_q \\) represent a suitable parameter whose default value is 0.5.
+  Replicas are cut if they don't satisfy the above condition.
+
+* Positivity: during the fit positive and negative replicas are labelled with the flags `POS_PASS`
+  and `POS_VETO` respectively. Only the former are kept.
 
 The three thresholds can be set by the user by specifying any or all of the following flags:
 `--chi2-threshold`, `--arclength-threshold` and `--integrability-threshold`. In each case the
