@@ -266,12 +266,21 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     return pdf_x_pdf
 
 
+
 def tensor_product(*args, **kwargs):
     """
     Computes the tensordot product between tensor_x and tensor_y
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
     """
     return tf.tensordot(*args, **kwargs)
+
+
+def einsum(equation, *args, **kwargs):
+    """
+    Computes the tensor product using einsum
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/einsum>`_
+    """
+    return tf.einsum(equation, *args, **kwargs)
 
 
 
@@ -299,6 +308,7 @@ def split(*args, **kwargs):
     """
     return tf.split(*args, **kwargs)
 
+
 def scatter_to_one(values, indices=[[1]], output_dim=14):
     """
     Like scatter_nd initialized to one instead of zero
@@ -306,3 +316,13 @@ def scatter_to_one(values, indices=[[1]], output_dim=14):
     """
     ones = np.ones(output_dim, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
+
+
+@tf.function
+def backend_function(fun_name, *args, **kwargs):
+    """
+    Calls the (``fun_name``) backend function
+    see full `docs <https://keras.io/api/utils/backend_utils/>`_ for some possibilities
+    """
+    fun = getattr(K, fun_name)
+    return fun(*args, **kwargs)

@@ -305,10 +305,7 @@ class MetaModel(Model):
         @tf.function
         def eval_fun(*args):
             predictions = self(self._parse_input(None))
-            # Concatenate the output to split them again as a list
-            ypred = tf.concat(predictions, axis=-1)
-            predspl = tf.split(ypred, lens, axis=-1)
-            loss_list = [lfun(target, pred) for target, pred, lfun in zip(tt, predspl, self.loss)]
+            loss_list = [lfun(target, pred) for target, pred, lfun in zip(tt, predictions, self.loss)]
             ret = [tf.reduce_sum(loss_list)] + loss_list
             return dict(zip(out_names, ret))
 

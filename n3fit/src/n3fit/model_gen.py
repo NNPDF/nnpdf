@@ -8,12 +8,11 @@
             Generates the PDF NN layer to be fitted
 """
 import n3fit.msr as msr_constraints
-from n3fit.layers import DIS, DY, Mask, ObsRotation
+from n3fit.layers import DIS, DY, Mask, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
-from n3fit.backends import losses
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
@@ -130,19 +129,20 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         model_obs_ex.append(obs_layer_ex)
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
-    def gen_concat(name):
-        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 2}, name=name)
+    def gen_concat():
+        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 2})
 
     # Tensorflow operations have ugly name,
     # we want the final observables to be named just {spec_name} (with'val/exp' if needed)
     tr_name = spec_name
     vl_name = f"{spec_name}_val"
     ex_name = f"{spec_name}_exp"
-    concat_ex = gen_concat(ex_name)
+
+    concat_ex = gen_concat()
     # For data transformation all concatenations are the same
     if spec_dict.get("data_transformation") is None:
-        concat_tr = gen_concat(tr_name)
-        concat_vl = gen_concat(vl_name)
+        concat_tr = gen_concat()
+        concat_vl = gen_concat()
     else:
         concat_tr = concat_ex
         concat_vl = concat_ex
@@ -177,22 +177,22 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
+    loss = lambda x,y: operations.sum(y)
 
     if spec_dict["positivity"]:
         out_mask = Mask(
             c=positivity_initial,
             axis=1,
-            name=spec_name,
         )
+
+        if integrability:
+            loss_pos = losses.L_integrability(name=spec_name)
+        else:
+            loss_pos = losses.L_positivity(name=spec_name)
 
         def out_positivity(pdf_layer, datasets_out=None):
             exp_result = experiment_layer(pdf_layer)
-            return out_mask(exp_result)
-
-        if integrability:
-            loss = losses.l_integrability()
-        else:
-            loss = losses.l_positivity()
+            return loss_pos(out_mask(exp_result))
 
         layer_info = {
             "inputs": model_inputs,
@@ -206,42 +206,41 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     invcovmat_vl = spec_dict["invcovmat_vl"]
     invcovmat = spec_dict["invcovmat_true"]
 
+    # Prepare the loss function
+    loss_tr = losses.L_invcovmat(invcovmat_tr, spec_dict["expdata"], name=tr_name)
+    loss_vl = losses.L_invcovmat(invcovmat_vl, spec_dict["expdata_vl"], name=vl_name)
+    loss_ex = losses.L_invcovmat(invcovmat, spec_dict["expdata_true"], name=ex_name)
+
     # Generate the loss function and rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
+        # TODO: I'm asuming that the diagonal covmat will work ootb, check
         # The rotation is the last layer so it should carry The Name
         obsrot_tr = ObsRotation(spec_dict.get("data_transformation"), name=tr_name)
         obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"), name=vl_name)
-        loss_tr = losses.l_diaginvcovmat(invcovmat_tr)
-        loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
     else:
         obsrot_tr = None
         obsrot_vl = None
-        loss_tr = losses.l_invcovmat(invcovmat_tr)
-        # TODO At this point we need to intercept the data and compile the loss with it
-        # then the validation must have a list of None as an output
-        loss_vl = losses.l_invcovmat(invcovmat_vl)
-    loss = losses.l_invcovmat(invcovmat)
 
     def out_tr(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
             pdf_layer, model_obs=model_obs_tr, concat=concat_tr, datasets_out=datasets_out, rotation=obsrot_tr
         )
-        return exp_result
+        return loss_tr(exp_result)
 
     def out_vl(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
             pdf_layer, model_obs=model_obs_vl, concat=concat_vl, datasets_out=datasets_out, rotation=obsrot_vl
         )
-        return exp_result
+        return loss_vl(exp_result)
 
     layer_info = {
         "inputs": model_inputs,
         "output": experiment_layer,
         "loss": loss,
         "output_tr": out_tr,
-        "loss_tr": loss_tr,
+        "loss_tr": loss,
         "output_vl": out_vl,
-        "loss_vl": loss_vl,
+        "loss_vl": loss,
         "experiment_xsize": full_nx,
     }
 
