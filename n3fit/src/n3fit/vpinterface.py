@@ -44,8 +44,22 @@ EVOL_LIST = [
 
 
 class N3PDF(PDF):
-    def __init__(self, pdf_model, name="n3fit"):
+    """
+        Creates a N3PDF object, extension of the validphys PDF object to perform calculation
+        with a n3fit generated model.
+
+        Parameters
+        ----------
+            pdf_model: n3fit.backend.MetaModel
+                PDF trained with n3fit, x -> f(x)_{i} where i are the flavours in the evol basis
+            fit_basis: list(dict)
+                basis of the training, used for reporting
+            name: str
+                name of the N3PDF object
+    """
+    def __init__(self, pdf_model, fit_basis = None, name="n3fit"):
         self.model = pdf_model
+        self.fit_basis = fit_basis
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
         # Set the number of members to two for legacy compatibility
         # in this case replica 0 and replica 1 are the same
@@ -63,6 +77,33 @@ class N3PDF(PDF):
         from nnpdflib, this class fakes it until a time in which vp is free from C++
         """
         return self
+
+    def get_nn_weights(self):
+        """ Outputs all weights of the NN as numpy arrays """
+        return self.model.get_weights()
+
+    def get_preprocessing_factors(self):
+        """ Loads the preprocessing alpha and beta arrays from the PDF trained model.
+        If a ``fit_basis`` given in the format of `n3fit` runcards is given it will be used
+        to generate a new dictionary with the names, the exponent and whether they are trainable
+        otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
+        """
+        factors = self.model.get_layer("pdf_prepro").get_weights()
+        all_fac = np.concatenate(factors)
+        alphas_and_betas = all_fac.reshape((-1,2))
+        if self.fit_basis is not None and len(alphas_and_betas) == len(self.fit_basis):
+            output_dictionaries = []
+            for ab, d in zip(alphas_and_betas, self.fit_basis):
+                output_dictionaries.append({
+                        "fl": d["fl"],
+                        "smallx": float(ab[0]),
+                        "largex": float(ab[1]),
+                        "trainable": d.get("trainable", True)
+                        })
+            alphas_and_betas = output_dictionaries
+        return alphas_and_betas
+
+
 
     def __call__(self, xarr, flavours=None):
         """Uses the internal model to produce pdf values.
