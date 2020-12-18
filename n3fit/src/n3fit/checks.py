@@ -352,3 +352,15 @@ def check_consistent_basis(fitting, theoryid):
         raise CheckError(f"{theoryid} (intrinsic charm) is incompatible with basis {fitbasis}")
     if not theoryid.get_description()["IC"] and has_c:
         raise CheckError(f"{theoryid} (perturbative charm) is incompatible with basis {fitbasis}")
+
+
+@make_argcheck
+def can_run_in_parallel(fitting, parallel_models=1):
+    """ Checks whether a runcard which is trying to run several replicas at once (parallel_models =/= 1) is valid
+    """
+    if parallel_models == 1:
+        return
+    if fitting.get("genrep"):
+        raise CheckError("Replica generation is not supported yet for parallel models")
+    if fitting["parameters"].get("layer_type") != "dense":
+        raise CheckError("Parallelization has only been tested with layer_type=='dense'")

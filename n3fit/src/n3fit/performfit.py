@@ -75,6 +75,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
 
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
+@n3fit.checks.can_run_in_parallel
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
