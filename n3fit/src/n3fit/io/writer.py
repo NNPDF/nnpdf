@@ -70,11 +70,11 @@ class WriterWrapper:
         os.makedirs(replica_path_set, exist_ok=True)
 
         # Get the replica status for this object
-        replica_status = self.stopping_object.get_next_replica()
+        ii, replica_status = self.stopping_object.get_next_replica()
         stop_epoch = self.stopping_object.epoch_of_the_stop
         # TODO, this is wrong, will be dealt with later
-        tr_chi2 = tr_chi2.tolist()[0]
-        true_chi2 = true_chi2.tolist()
+        tr_chi2 = tr_chi2.tolist()[ii]
+        true_chi2 = true_chi2.tolist()[ii]
         vl_chi2 = vl_chi2.tolist()[0]
 
         # export PDF grid to file

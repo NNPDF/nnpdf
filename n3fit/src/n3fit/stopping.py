@@ -609,7 +609,9 @@ class Stopping:
         """ Return the next ReplicaBest object"""
         if self.replica_iterator is None:
             self.replica_iterator = iter(self.history._replicas)
-        return next(self.replica_iterator)
+            self.ii = -1
+        self.ii += 1
+        return self.ii, next(self.replica_iterator)
 
     def chi2exps_str(self, log_each=100):
         """
