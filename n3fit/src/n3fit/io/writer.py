@@ -69,6 +69,14 @@ class WriterWrapper:
         # Check the directory exist, if it doesn't, generate it
         os.makedirs(replica_path_set, exist_ok=True)
 
+        # Get the replica status for this object
+        replica_status = self.stopping_object.get_next_replica()
+        stop_epoch = self.stopping_object.epoch_of_the_stop
+        # TODO, this is wrong, will be dealt with later
+        tr_chi2 = tr_chi2.tolist()[0]
+        true_chi2 = true_chi2.tolist()
+        vl_chi2 = vl_chi2.tolist()[0]
+
         # export PDF grid to file
         storefit(
             self.pdf_object,
@@ -84,7 +92,7 @@ class WriterWrapper:
             integrability_numbers,
             allchi2_lines,
             preproc_lines,
-            self.stopping_object.positivity_status(),
+            replica_status.positivity_status,
             self.timings,
         )
 
@@ -92,18 +100,18 @@ class WriterWrapper:
         # export all metadata from the fit to a single yaml file
         output_file = f"{replica_path_set}/{fitname}.json"
         json_dict = jsonfit(
-            self.stopping_object, self.pdf_object, tr_chi2, vl_chi2, true_chi2, self.timings
+            replica_status, self.pdf_object, tr_chi2, true_chi2, stop_epoch, self.timings
         )
         with open(output_file, "w") as fs:
             json.dump(json_dict, fs, indent=2)
 
 
-def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
+def jsonfit(replica_status, pdf_object, tr_chi2, true_chi2, epoch_stop, timing):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
     ----------
-        stopping_object: n3fit.stopping.Stopping
+        replica_status: n3fit.stopping.ReplicaBest
             a stopping.Validation object
         pdf_object: n3fit.vpinterface.N3PDF
             N3PDF object constructed from the pdf_model
@@ -121,12 +129,12 @@ def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
     # Generate preprocessing information
     all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
     # .fitinfo-like info
-    all_info["stop_epoch"] = stopping_object.stop_epoch
-    all_info["best_epoch"] = stopping_object.e_best_chi2
+    all_info["stop_epoch"] = epoch_stop
+    all_info["best_epoch"] = replica_status.best_epoch
     all_info["erf_tr"] = tr_chi2
-    all_info["erf_vl"] = vl_chi2
+    all_info["erf_vl"] = replica_status.best_vl
     all_info["chi2"] = true_chi2
-    all_info["pos_state"] = stopping_object.positivity_status()
+    all_info["pos_state"] = replica_status.positivity_status
     all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
     all_info["integrability"] = pdf_object.integrability_numbers().tolist()
     all_info["timing"] = timing
