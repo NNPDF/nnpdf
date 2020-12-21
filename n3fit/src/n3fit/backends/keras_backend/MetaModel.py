@@ -9,6 +9,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+from tensorflow.python.keras.utils import tf_utils
 from n3fit.backends.keras_backend.operations import numpy_to_tensor
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
@@ -198,7 +199,10 @@ class MetaModel(Model):
 
             self.compute_losses_function = losses_fun
 
-        return self.compute_losses_function()
+        ret = self.compute_losses_function()
+        # undocumented TF function that converts all the tensors from the ret dictionary to numpy arrays
+        # if it dissapears, equivalent to {k: i.numpy() for k, i in ret.items()}
+        return tf_utils.to_numpy_or_python_type(ret)
 
 
     def evaluate(self, x=None, y=None, **kwargs):
