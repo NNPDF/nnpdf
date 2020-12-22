@@ -174,7 +174,6 @@ class ModelTrainer:
         pass_status="ok",
         failed_status="fail",
         debug=False,
-        save_weights_each=False,
         kfold_parameters=None,
         max_cores=None,
         model_file=None,
@@ -192,8 +191,6 @@ class ModelTrainer:
             pass_status: flag to signal a good run
             failed_status: flag to signal a bad run
             debug: flag to activate some debug options
-            save_weights_each: if set, save the state of the fit
-                                    every ``save_weights_each`` epochs
             model_file: str whether to save the models
             sum_rules: str whether sum rules should be enabled (All, MSR, VSR, False)
         """
@@ -212,7 +209,6 @@ class ModelTrainer:
         self.pass_status = pass_status
         self.failed_status = failed_status
         self.debug = debug
-        self.save_weights_each = save_weights_each
         self.all_datasets = []
         self.parallel_models = parallel_models
 
@@ -877,7 +873,6 @@ class ModelTrainer:
                 pdf_models,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
-                save_weights_each=self.save_weights_each,
                 threshold_positivity=threshold_pos,
                 threshold_chi2=threshold_chi2
             )

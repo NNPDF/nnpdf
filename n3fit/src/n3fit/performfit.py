@@ -357,17 +357,5 @@ def performfit(
                 # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3 though)
                 pdf_model.save_weights(str(model_file_path), save_format="h5")
 
-        # If the history of weights is active then loop over it
-        # rewind the state back to every step and write down the results
-#         for step in range(len(stopping_object.history.reloadable_history)):
-#             stopping_object.history.rewind(step)
-#             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
-#             # We need to recompute the experimental chi2 for this point
-#             training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-#             writer_wrapper.write_data(new_path, output_path.name, training_chi2, val_chi2, exp_chi2)
-
-        # So every time we want to capture output_path.name and addd a history_step_X
-        # parallel to the nnfit folder
-
         if tboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)

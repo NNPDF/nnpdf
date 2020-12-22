@@ -72,7 +72,7 @@ class WriterWrapper:
         stop_epoch = self.stopping_object.epoch_of_the_stop
 
         # Get the replica status for this object
-        _, replica_status = self.stopping_object.get_next_replica()
+        replica_status = self.stopping_object.get_next_replica()
 
         # export PDF grid to file
         storefit(
