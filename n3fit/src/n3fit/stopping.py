@@ -363,6 +363,10 @@ class FitHistory:
         self._history.append(fitstate)
         return fitstate
 
+    def stop_training_replica(self, i):
+        """ Stop training replica i """
+        replica = self._replicas[i]
+
     def reload(self):
         """Reloads the best fit weights into the model
         if there are models to be reloaded
@@ -426,12 +430,12 @@ class Stopping:
         # Initialize internal variables for the stopping
         self.n_replicas = len(pdf_models)
         self.threshold_chi2 = threshold_chi2
+        self.stopping_degree = np.zeros(self.n_replicas)
+        self.count = np.zeros(self.n_replicas)
 
         self.dont_stop = dont_stop
         self.stop_now = False
         self.stopping_patience = stopping_patience
-        self.stopping_degree = 0
-        self.count = 0
         self.total_epochs = total_epochs
 
     @property
@@ -520,28 +524,28 @@ class Stopping:
 
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        passes_val = True
         # Don't start counting until the chi2 of the validation goes below a certain threshold
-        if self.count == 0:
-            passes_val &= fitstate.vl_chi2 < self.threshold_chi2
-        passes_val &= fitstate.vl_loss < self._history.all_best_vl_loss()
+        # once we start counting, don't bother anymore
+        passes = self.count or ( fitstate.vl_chi2 < self.threshold_chi2 )
+        passes = passes and fitstate.vl_loss < self._history.all_best_vl_loss()
         # And the ones that pass positivity
-        passes_pos = self._positivity(fitstate)
-        passes = passes_val & passes_pos
+        passes = passes and self._positivity(fitstate)
 
         self.stopping_degree += self.count
 
         # Step 5. loop over the valid indices to check whether the vl improved
         for i in np.where(passes)[0]:
             self._history.save_best_replica(i)
-            self.stopping_degree = 0
-            self.count = 1
+            self.stopping_degree[i] = 0
+            self.count[i] = 1
+
+        stop_replicas = self.count and self.stopping_degree > self.stopping_patience
+        for i in np.where(stop_replicas)[0]:
+            self.count[i] = 0
+            self._history.stop_training_replica(i)
 
         # By using the stopping degree we only stop when none of the replicas are improving anymore
-        if self.stopping_degree > self.stopping_patience:
-            stop_here = True
-
-        if stop_here:
+        if min(self.stopping_degree) > self.stopping_patience:
             self.make_stop()
         return True
 
