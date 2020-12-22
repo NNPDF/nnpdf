@@ -193,6 +193,9 @@ class MetaModel(Model):
             @tf.function
             def losses_fun():
                 predictions = self(self._parse_input(None))
+                # If we only have one dataset the output changes
+                if len(out_names) == 2:
+                    predictions = [predictions]
                 total_loss = tf.reduce_sum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
