@@ -274,13 +274,19 @@ class ReplicaState:
             return POS_BAD
 
     def register_best(self, chi2, epoch):
+        """ Register a new best state and some metadata about it """
         self._weights = self._pdf_model.get_weights()
         self._best_epoch = epoch
         self._best_vl_chi2 = chi2
 
     def reload(self):
+        """ Reload the weights of the best state """
         if self._weights:
             self._pdf_model.set_weights(self._weights)
+
+    def stop_training(self):
+        """ Stop training this replica """
+        self._pdf_model.trainable = False
 
 
 class FitHistory:
@@ -319,8 +325,12 @@ class FitHistory:
 
         # Save a list of status for the entire fit
         self._history = []
-        self.best_epoch = None
         self.final_epoch = None
+
+    @property
+    def best_epoch(self):
+        """ Return the best epoch per replica """
+        return [i.best_epoch for i in self._replicas]
 
     def get_state(self, epoch):
         """ Get the FitState of the system for a given epoch """
@@ -338,7 +348,6 @@ class FitHistory:
         """
         if epoch is None:
             epoch = self.final_epoch
-        self.best_epoch = epoch  # TODO: makes sense for only one model in parallel
         loss = self.get_state(epoch).vl_loss[i]
         self._replicas[i].register_best(loss, epoch)
 
@@ -365,7 +374,7 @@ class FitHistory:
 
     def stop_training_replica(self, i):
         """ Stop training replica i """
-        replica = self._replicas[i]
+        self._replicas[i].stop_training()
 
     def reload(self):
         """Reloads the best fit weights into the model
@@ -430,8 +439,8 @@ class Stopping:
         # Initialize internal variables for the stopping
         self.n_replicas = len(pdf_models)
         self.threshold_chi2 = threshold_chi2
-        self.stopping_degree = np.zeros(self.n_replicas)
-        self.count = np.zeros(self.n_replicas)
+        self.stopping_degree = np.zeros(self.n_replicas, dtype=np.int)
+        self.count = np.zeros(self.n_replicas, dtype=np.int)
 
         self.dont_stop = dont_stop
         self.stop_now = False
@@ -526,10 +535,10 @@ class Stopping:
         #         this means improving vl_chi2 and passing positivity
         # Don't start counting until the chi2 of the validation goes below a certain threshold
         # once we start counting, don't bother anymore
-        passes = self.count or ( fitstate.vl_chi2 < self.threshold_chi2 )
-        passes = passes and fitstate.vl_loss < self._history.all_best_vl_loss()
+        passes = self.count | ( fitstate.vl_chi2 < self.threshold_chi2 )
+        passes &= fitstate.vl_loss < self._history.all_best_vl_loss()
         # And the ones that pass positivity
-        passes = passes and self._positivity(fitstate)
+        passes &= self._positivity(fitstate)
 
         self.stopping_degree += self.count
 
@@ -539,7 +548,7 @@ class Stopping:
             self.stopping_degree[i] = 0
             self.count[i] = 1
 
-        stop_replicas = self.count and self.stopping_degree > self.stopping_patience
+        stop_replicas = self.count & (self.stopping_degree > self.stopping_patience)
         for i in np.where(stop_replicas)[0]:
             self.count[i] = 0
             self._history.stop_training_replica(i)
