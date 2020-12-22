@@ -69,13 +69,10 @@ class WriterWrapper:
         # Check the directory exist, if it doesn't, generate it
         os.makedirs(replica_path_set, exist_ok=True)
 
-        # Get the replica status for this object
-        ii, replica_status = self.stopping_object.get_next_replica()
         stop_epoch = self.stopping_object.epoch_of_the_stop
-        # TODO, this is wrong, will be dealt with later
-        tr_chi2 = tr_chi2.tolist()[ii]
-        true_chi2 = true_chi2.tolist()[ii]
-        vl_chi2 = vl_chi2.tolist()[0]
+
+        # Get the replica status for this object
+        _, replica_status = self.stopping_object.get_next_replica()
 
         # export PDF grid to file
         storefit(
@@ -96,14 +93,21 @@ class WriterWrapper:
             self.timings,
         )
 
-        # TODO: compute the chi2s directly from the stopping object
         # export all metadata from the fit to a single yaml file
         output_file = f"{replica_path_set}/{fitname}.json"
         json_dict = jsonfit(
             replica_status, self.pdf_object, tr_chi2, true_chi2, stop_epoch, self.timings
         )
         with open(output_file, "w") as fs:
-            json.dump(json_dict, fs, indent=2)
+            json.dump(json_dict, fs, indent=2, cls = SuperEncoder)
+
+
+class SuperEncoder(json.JSONEncoder):
+    """ Custom json encoder to get around the fact that np.float32 =/= float """
+    def default(self, o):
+        if isinstance(o, np.float32):
+            return float(o)
+        return super().default(o)
 
 
 def jsonfit(replica_status, pdf_object, tr_chi2, true_chi2, epoch_stop, timing):

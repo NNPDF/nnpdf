@@ -324,6 +324,7 @@ def performfit(
         )
 
         final_time = stopwatch.stop()
+        all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
 
         for i, pdf_model in enumerate(pdf_models):
             # Each model goes into its own replica folder
@@ -341,9 +342,12 @@ def performfit(
                 final_time,
             )
 
-            # Now write the data down
-            # TODO: recompute training, valudation and experimental _per_ pdfmodel
-            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+            # Get the right chi2s
+            training_chi2 = np.take(all_training_chi2, i)
+            val_chi2 = np.take(all_val_chi2, i)
+            exp_chi2 = np.take(all_exp_chi2, i)
+
+            # And write the data down
             writer_wrapper.write_data(
                 replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
             )
@@ -358,12 +362,12 @@ def performfit(
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
-        for step in range(len(stopping_object.history.reloadable_history)):
-            stopping_object.history.rewind(step)
-            new_path = output_path / f"history_step_{step}/replica_{replica_number}"
-            # We need to recompute the experimental chi2 for this point
-            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-            writer_wrapper.write_data(new_path, output_path.name, training_chi2, val_chi2, exp_chi2)
+#         for step in range(len(stopping_object.history.reloadable_history)):
+#             stopping_object.history.rewind(step)
+#             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
+#             # We need to recompute the experimental chi2 for this point
+#             training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+#             writer_wrapper.write_data(new_path, output_path.name, training_chi2, val_chi2, exp_chi2)
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder

@@ -759,10 +759,10 @@ class ModelTrainer:
         # Needs to receive a `stopping_object` in order to select the part of the
         # training and the validation which are actually `chi2` and not part of the penalty
         training = self.model_dicts["training"]
-        experimental = self.model_dicts["experimental"]
         train_chi2 = stopping_object.evaluate_training(training["model"])
-        val_chi2, _ = stopping_object.validation.loss()
-        exp_chi2 = np.array(experimental["model"].compute_losses()["loss"]) / experimental["ndata"]
+        val_chi2 = stopping_object.vl_chi2
+        experimental = self.model_dicts["experimental"]
+        exp_chi2 = experimental["model"].compute_losses()["loss"] / experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametrizable(self, params):
@@ -892,8 +892,7 @@ class ModelTrainer:
                 epochs=epochs,
             )
 
-            # Save validation and training chi2
-            training_loss = stopping_object.tr_chi2
+            # Save validation chi2
             validation_loss = stopping_object.vl_chi2
 
             # Compute experimental loss
@@ -918,13 +917,11 @@ class ModelTrainer:
                     break
 
             # Save all losses
-            l_train.append(training_loss)
             l_valid.append(validation_loss)
             l_exper.append(experimental_loss)
 
         dict_out = {
             "status": passed,
-            "training_loss": np.average(l_train),
             "validation_loss": np.average(l_valid),
             "experimental_loss": np.average(l_exper),
         }
@@ -932,7 +929,6 @@ class ModelTrainer:
         if self.mode_hyperopt:
             dict_out["loss"] = self.hyper_loss(l_hyper)
             dict_out["kfold_meta"] = {
-                "training_losses": l_train,
                 "validation_losses": l_valid,
                 "experimental_losses": l_exper,
                 "hyper_losses": l_hyper,
