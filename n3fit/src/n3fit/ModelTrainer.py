@@ -710,10 +710,9 @@ class ModelTrainer:
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
 
-        if stopping_object.positivity_pass():
-            return self.pass_status
-        else:
-            return self.failed_status
+        # TODO: this needs to be changed for hyperopt
+        return self.pass_status
+#         return self.failed_status
 
     def _hyperopt_override(self, params):
         """ Unrolls complicated hyperopt structures into very simple dictionaries"""

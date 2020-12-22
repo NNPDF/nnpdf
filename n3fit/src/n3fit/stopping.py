@@ -307,7 +307,6 @@ class FitHistory:
             vl_ndata = tr_ndata
             vl_suffix = "loss"
         else:
-            vl_ndata = vl_ndata
             vl_suffix = "val_loss"
         # All instances of FitState should use these
         FitState.tr_ndata = tr_ndata
@@ -338,13 +337,14 @@ class FitHistory:
         """
         if epoch is None:
             epoch = self.final_epoch
-        chi2 = self._history[epoch].vl_loss[i]
-        self._replicas[i].register_best(chi2, epoch)
+        self.best_epoch = epoch # TODO: makes sense for only one model in parallel
+        loss = self._history[epoch].vl_loss[i]
+        self._replicas[i].register_best(loss, epoch)
         return False
 
     def all_best_vl_loss(self):
         """ Returns the best validation loss for each replica """
-        return [i.best_vl for i in self._replicas]
+        return np.array([i.best_vl for i in self._replicas])
 
     def register(self, epoch, training_info, validation_info):
         """ Save a new fitstate and updates the current final epoch
@@ -354,9 +354,9 @@ class FitHistory:
         Parameters
         ----------
             fitstate: FitState
-                FitState object 
+                FitState object
                 the fitstate of the object to save
-            `epoch`
+            epoch: int
                 the current epoch of the fit
         """
         # Save all the information in a fitstate object
@@ -365,25 +365,13 @@ class FitHistory:
         self._history.append(fitstate)
         return fitstate
 
-    def reload(self, weights=None):
+    def reload(self):
         """ Reloads the best fit weights into the model
         if there are models to be reloaded
         A set of weights can be enforced as an optional argument
         """
-        # TODO the weights part is tricky
-        if weights is None:
-            for replica in self._replicas:
-                replica.reload()
-
-    def rewind(self, step):
-        """ Rewind the FitHistory object to the step `step` in the fit
-        """
-        fitstate = self.reloadable_history[step]
-        historic_weights = fitstate.weights
-        self.reload(weights=historic_weights)
-        self.best_epoch = fitstate.best_epoch
-        self.final_epoch = (step + 1) * self._save_weights_each - 1
-        # -1 because we are saving the epochs starting at 0
+        for replica in self._replicas:
+            replica.reload()
 
 
 class Stopping:
@@ -527,10 +515,15 @@ class Stopping:
 
         # Step 3. Register the current point in (the) history
         fitstate = self.history.register(epoch, training_info, validation_info)
+        if print_stats:
+            self.print_current_stats(epoch, fitstate)
 
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        passes_val = fitstate.vl_loss < self.threshold_chi2
+        passes_val = True
+        # Don't start counting until the chi2 of the validation goes below a certain threshold
+        if self.count == 0:
+            passes_val &= fitstate.vl_chi2 < self.threshold_chi2
         passes_val &= fitstate.vl_loss < self.history.all_best_vl_loss()
         # And the ones that pass positivity
         passes_pos = self._positivity(fitstate)
@@ -547,9 +540,6 @@ class Stopping:
 
         if self.stopping_degree > self.stopping_patience:
             stop_here = True
-
-        if print_stats:
-            self.print_current_stats(epoch, fitstate)
 
         if stop_here:
             self.make_stop()
@@ -569,7 +559,7 @@ class Stopping:
         epoch_index = epoch + 1
         tr_chi2 = fitstate.total_tr_chi2()
         vl_chi2 = fitstate.total_vl_chi2()
-        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_chi2}\n"
+        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total chi2: {tr_chi2}\n"
 
         # The partial chi2 makes no sense for more than one replica at once:
         if self.n_replicas == 1:
@@ -578,7 +568,7 @@ class Stopping:
             for experiment, chi2 in partial_tr_chi2.items():
                 partials.append(f"{experiment}: {chi2:.3f}")
             total_str += ", ".join(partials) + "\n"
-        total_str += f"Validation loss at this point: {vl_chi2}"
+        total_str += f"Validation chi2 at this point: {vl_chi2}"
         log.info(total_str)
 
     def stop_here(self):
@@ -589,25 +579,6 @@ class Stopping:
             return False
         else:
             return self.stop_now
-
-    def positivity_pass(self):
-        """ Checks whether the positivity loss is below the requested threshold
-        If there is no best state, the positivity (obv) cannot pass
-        """
-        best_state = self.history.best_state()
-        if best_state is not None and self.positivity(best_state):
-            return True
-        else:
-            return False
-
-    def positivity_status(self):
-        """ Checks whether the positivity loss is below the requested threshold
-        If there is no best state, the positivity (obv) cannot pass
-        """
-        if self.positivity_pass():
-            return POS_OK
-        else:
-            return POS_BAD
 
     def get_next_replica(self):
         """ Return the next ReplicaState object"""
@@ -695,8 +666,6 @@ class Positivity:
         for key in self.positivity_sets:
             key_loss = f"{key}_loss"
             positivity_pass &= history_object[key_loss] < self.threshold
-            if not all(positivity_pass):
-                return np.array(positivity_pass)
         return np.array(positivity_pass)
 
     def __call__(self, fitstate):

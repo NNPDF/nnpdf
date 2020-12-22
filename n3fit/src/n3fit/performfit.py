@@ -241,7 +241,6 @@ def performfit(
             fitting["fitbasis"],
             nnseed,
             debug=debug,
-            save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
             model_file=fitting.get("load"),
@@ -313,13 +312,11 @@ def performfit(
             """
         > > The stopping point has been at: {0} with a loss of {1}
                 which it got at {2}. Stopping degree {3}
-                Positivity state: {4}
                 """.format(
                 stopping_object.stop_epoch,
                 stopping_object.vl_chi2,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
-                stopping_object.positivity_status(),
             )
         )
 
