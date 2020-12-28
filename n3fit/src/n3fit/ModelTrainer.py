@@ -507,6 +507,7 @@ class ModelTrainer:
         log.info("Generating layers")
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
+        input_list_exp = []
         for exp_dict in self.exp_info:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
@@ -515,6 +516,7 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
+            input_list_exp += exp_layer["inputs"]
             self.input_sizes.append(exp_layer["experiment_xsize"])
 
             # Now save the observable layer, the losses and the experimental data
@@ -579,9 +581,8 @@ class ModelTrainer:
                 self.training["integinitials"].append(integ_initial)
 
         # Store the input data for the interpolator as self.mapping
-        input_arr = np.concatenate(self.input_list, axis=1)
+        input_arr = np.concatenate(input_list_exp, axis=1)
         input_arr = np.sort(input_arr)
-
         input_arr_size = input_arr.size
         start_val = np.array(1 / input_arr_size, dtype=input_arr.dtype)
         new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
@@ -589,14 +590,14 @@ class ModelTrainer:
         map_from_complete = np.append(unique, 1.0)
         smallest_xpoint = 1e-9
         map_from_complete = np.insert(map_from_complete, 0, smallest_xpoint)
-        map_to_complete = [0]
+        map_to_complete = [-1e5]
         for cumsum_ in np.cumsum(counts):
             map_to_complete.append(new_xgrid[cumsum_ - 1])
         map_to_complete.append(1.0)
         map_to_complete = np.array(map_to_complete)
 
         onein = map_from_complete.size / (interpolation_points - 1)
-        selected_points = [0]
+        selected_points = [0,1]
         selected_points += [round(i * onein - 1) for i in range(1, interpolation_points)]
         map_from = map_from_complete[selected_points]
         map_from = np.log10(map_from)
