@@ -27,7 +27,7 @@ import pathlib
 import logging
 import subprocess as sp
 from collections import namedtuple
-from numpy.testing import assert_equal, assert_array_almost_equal
+from numpy.testing import assert_equal, assert_allclose
 from reportengine.compat import yaml
 import n3fit
 from n3fit.performfit import initialize_seeds
@@ -110,12 +110,14 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True):
     for key, item in new_fitinfo.items():
         assert_equal(item, new_json[key])
     # Now compare to regression results, taking into account precision won't be 100%
-    equal_checks = ["epoch_of_the_stop", "best_epoch", "pos_state"]
-    approx_checks = ["erf_tr", "erf_vl", "chi2", "arc_lengths", "integrability"]
+    equal_checks = ["epoch_of_the_stop", "pos_state"]
+    approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "arc_lengths", "integrability", "best_epoch"]
     for key in equal_checks:
         assert_equal(new_json[key], old_json[key])
     for key in approx_checks:
-        assert_array_almost_equal(new_json[key], old_json[key], decimal=2)
+        if old_json[key] is None and new_json[key] is None:
+            continue
+        assert_allclose(new_json[key], old_json[key], rtol=2e-3)
     # check that the times didnt grow in a weird manner
     if timing:
         # Better to catch up errors even when they happen to grow larger by chance
