@@ -85,7 +85,7 @@ def test_initialize_seeds():
     assert result_nomc == regression_nomc
 
 
-def auxiliary_performfit(tmp_path, replica=1, timing=True):
+def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
     """Fits quickcard and checks the json file to ensure the results have not changed.
     In order to ensure backwards compatibility checks that the information contained
     in the .fitinfo file corresponds to the information in the .json
@@ -117,7 +117,7 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True):
     for key in approx_checks:
         if old_json[key] is None and new_json[key] is None:
             continue
-        assert_allclose(new_json[key], old_json[key], rtol=2e-3)
+        assert_allclose(new_json[key], old_json[key], rtol=rel_error)
     # check that the times didnt grow in a weird manner
     if timing:
         # Better to catch up errors even when they happen to grow larger by chance
@@ -130,7 +130,7 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True):
 
 @pytest.mark.darwin
 def test_performfit(tmp_path):
-    auxiliary_performfit(tmp_path, timing=False)
+    auxiliary_performfit(tmp_path, replica=2, timing=False)
 
 
 @pytest.mark.linux
