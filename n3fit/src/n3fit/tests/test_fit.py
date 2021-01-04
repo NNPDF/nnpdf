@@ -41,7 +41,7 @@ EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
-    """ Loads the information of the fit.
+    """Loads the information of the fit.
     Automatically checks whether it is the fitinfo file or not and
     creates the object correspondingly
     """
@@ -66,6 +66,7 @@ def load_data(info_file):
         else:
             raise ValueError(f"Wrong information file: {info_file}")
 
+
 def test_initialize_seeds():
     # Regression tests for seed generation
     replicas = [1, 4]
@@ -85,7 +86,7 @@ def test_initialize_seeds():
 
 
 def auxiliary_performfit(tmp_path, replica=1, timing=True):
-    """ Fits quickcard and checks the json file to ensure the results have not changed.
+    """Fits quickcard and checks the json file to ensure the results have not changed.
     In order to ensure backwards compatibility checks that the information contained
     in the .fitinfo file corresponds to the information in the .json
     """
