@@ -17,7 +17,9 @@ from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
 
-def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
+def observable_generator(
+    spec_dict, positivity_initial=1.0, integrability=False
+):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
     These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
@@ -148,7 +150,9 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         concat_vl = concat_ex
 
     # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(pdf, model_obs=model_obs_ex, concat=concat_ex, rotation=None, datasets_out=None):
+    def experiment_layer(
+        pdf, model_obs=model_obs_ex, concat=concat_ex, rotation=None, datasets_out=None
+    ):
         """ By default works with the experiment observable """
         output_layers = []
         # First split the pdf layer into the different datasets if needed
@@ -177,22 +181,19 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
-    loss = lambda x,y: operations.sum(y)
+
+    def loss(y_true, y_pred):
+        return operations.sum(y_pred)
 
     if spec_dict["positivity"]:
-        out_mask = Mask(
-            c=positivity_initial,
-            axis=1,
-        )
-
         if integrability:
-            loss_pos = losses.L_integrability(name=spec_name)
+            loss_pos = losses.LossIntegrability(name=spec_name, c=positivity_initial)
         else:
-            loss_pos = losses.L_positivity(name=spec_name)
+            loss_pos = losses.LossPositivity(name=spec_name, c=positivity_initial)
 
         def out_positivity(pdf_layer, datasets_out=None):
             exp_result = experiment_layer(pdf_layer)
-            return loss_pos(out_mask(exp_result))
+            return loss_pos(exp_result)
 
         layer_info = {
             "inputs": model_inputs,
@@ -207,9 +208,9 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
     invcovmat = spec_dict["invcovmat_true"]
 
     # Prepare the loss function
-    loss_tr = losses.L_invcovmat(invcovmat_tr, spec_dict["expdata"], name=tr_name)
-    loss_vl = losses.L_invcovmat(invcovmat_vl, spec_dict["expdata_vl"], name=vl_name)
-    loss_ex = losses.L_invcovmat(invcovmat, spec_dict["expdata_true"], name=ex_name)
+    loss_tr = losses.LossInvcovmat(invcovmat_tr, spec_dict["expdata"], name=tr_name)
+    loss_vl = losses.LossInvcovmat(invcovmat_vl, spec_dict["expdata_vl"], name=vl_name)
+    loss_ex = losses.LossInvcovmat(invcovmat, spec_dict["expdata_true"], name=ex_name)
 
     # Generate the loss function and rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
@@ -223,13 +224,21 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
     def out_tr(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
-            pdf_layer, model_obs=model_obs_tr, concat=concat_tr, datasets_out=datasets_out, rotation=obsrot_tr
+            pdf_layer,
+            model_obs=model_obs_tr,
+            concat=concat_tr,
+            datasets_out=datasets_out,
+            rotation=obsrot_tr,
         )
         return loss_tr(exp_result)
 
     def out_vl(pdf_layer, datasets_out=None):
         exp_result = experiment_layer(
-            pdf_layer, model_obs=model_obs_vl, concat=concat_vl, datasets_out=datasets_out, rotation=obsrot_vl
+            pdf_layer,
+            model_obs=model_obs_vl,
+            concat=concat_vl,
+            datasets_out=datasets_out,
+            rotation=obsrot_vl,
         )
         return loss_vl(exp_result)
 
@@ -497,7 +506,7 @@ def pdfNN_layer_generator(
 
     # Now we need a trainable network per model to be trained in parallel
     for i in range(parallel_models):
-        layer_seed = seed + i*number_of_layers
+        layer_seed = seed + i * number_of_layers
         if layer_type == "dense":
             reg = regularizer_selector(regularizer, **regularizer_args)
             list_of_pdf_layers = generate_dense_network(
@@ -514,9 +523,13 @@ def pdfNN_layer_generator(
             # TODO: this information should come from the basis information
             #       once the basis information is passed to this class
             list_of_pdf_layers = generate_dense_per_flavour_network(
-                inp, nodes, activations, initializer_name, seed=layer_seed, basis_size=last_layer_nodes,
+                inp,
+                nodes,
+                activations,
+                initializer_name,
+                seed=layer_seed,
+                basis_size=last_layer_nodes,
             )
-
 
         def dense_me(x):
             """Takes an input tensor `x` and applies all layers
@@ -531,7 +544,7 @@ def pdfNN_layer_generator(
             return curr_fun
 
         # Preprocessing layer (will be multiplied to the last of the denses)
-        preproseed = seed + number_of_layers*(i+1)
+        preproseed = seed + number_of_layers * (i + 1)
         layer_preproc = Preprocessing(
             input_shape=(1,), name=f"pdf_prepro_{i}", flav_info=flav_info, seed=preproseed
         )

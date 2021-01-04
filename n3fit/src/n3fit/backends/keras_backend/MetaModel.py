@@ -207,18 +207,6 @@ class MetaModel(Model):
         # if it dissapears, equivalent to {k: i.numpy() for k, i in ret.items()}
         return tf_utils.to_numpy_or_python_type(ret)
 
-
-    def evaluate(self, x=None, y=None, **kwargs):
-        """
-        Wrapper around evaluate to take into account the case in which the data is already known
-        when the model is compiled.
-        """
-        x = self._parse_input(self.x_in)
-        if LEGACY and y is None:
-            y = self.target_tensors
-        result = super().evaluate(x=x, y=y, **kwargs)
-        return result
-
     def compile(
         self,
         optimizer_name="RMSprop",
@@ -286,15 +274,27 @@ class MetaModel(Model):
         super(MetaModel, self).compile(optimizer=opt, loss=loss)
 
     def make_test_function(self):
-        """ If the model has been compiled with target data, it creates
-        a specific evaluate function with the target data already evaluated.
-        Otherwise return the normal tensorflow behaviour.
         """
+        If the model has been compiled in the normal NNPDF way,
+        then the output of the prediction is already the loss, so we skip this part
+        by just summing over predictions.
+
+        Otherwise, just return the usual TF make_test_function
+        """
+
         if self.eval_fun is not None:
             return self.eval_fun
 
         if self.target_tensors is None:
             return super().make_test_function()
+
+        @tf.function
+        def eval_fun(*args):
+            predictions = self(self._parse_input(None))
+            return tf.reduce_sum(predictions)
+
+        self.eval_fun = eval_fun
+        return eval_fun
 
         # Recover the target tensors and their lengths, we cannot rely
         # directly on the output from the model as we might have target_tensors

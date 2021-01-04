@@ -13,7 +13,7 @@ INVCOVMAT = np.linalg.inv(C @ C.T)
 
 # Tests loss functions
 def test_l_invcovmat():
-    loss_f = losses.L_invcovmat(INVCOVMAT, ARR1)
+    loss_f = losses.LossInvcovmat(INVCOVMAT, ARR1)
     # Add a replica and batch dimension to T2
     result = loss_f(np.expand_dims(ARR2, [0, 1]))
     y = ARR1 - ARR2
@@ -24,7 +24,7 @@ def test_l_invcovmat():
 
 def test_l_positivity():
     alpha = 1e-7
-    loss_f = losses.L_positivity(alpha=alpha)
+    loss_f = losses.LossPositivity(alpha=alpha)
     result = loss_f(np.expand_dims(ARR2, [0, 1]))
 
     def elu_sum(yarr_in):

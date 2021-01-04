@@ -312,11 +312,13 @@ def performfit(
             """
         > > The stopping point has been at: {0} with a loss of {1}
                 which it got at {2}. Stopping degree {3}
+                Positivity status: {4}
                 """.format(
                 stopping_object.stop_epoch,
                 stopping_object.vl_chi2,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
+                stopping_object.positivity_status
             )
         )
 

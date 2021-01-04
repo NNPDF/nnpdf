@@ -351,6 +351,10 @@ class FitHistory:
         loss = self.get_state(epoch).vl_loss[i]
         self._replicas[i].register_best(loss, epoch)
 
+    def all_positivity_status(self):
+        """ Returns whether the positivity passed or not per replica """
+        return np.array([i.positivity_status for i in self._replicas])
+
     def all_best_vl_loss(self):
         """ Returns the best validation loss for each replica """
         return np.array([i.best_vl for i in self._replicas])
@@ -474,6 +478,12 @@ class Stopping:
         """ Epoch in which the fit is stopped """
         return self._history.final_epoch + 1
 
+    @property
+    def positivity_status(self):
+        """Returns POS_PASS if positivity passes or veto if it doesn't
+        for each replica"""
+        return self._history.all_positivity_status()
+
     def evaluate_training(self, training_model):
         """Given the training model, evaluates the
         model and parses the chi2 of the training datasets
@@ -535,7 +545,7 @@ class Stopping:
         #         this means improving vl_chi2 and passing positivity
         # Don't start counting until the chi2 of the validation goes below a certain threshold
         # once we start counting, don't bother anymore
-        passes = self.count | ( fitstate.vl_chi2 < self.threshold_chi2 )
+        passes = self.count | (fitstate.vl_chi2 < self.threshold_chi2)
         passes &= fitstate.vl_loss < self._history.all_best_vl_loss()
         # And the ones that pass positivity
         passes &= self._positivity(fitstate)
@@ -659,17 +669,17 @@ class Positivity:
 
     def check_positivity(self, history_object):
         """
-        This function receives a history objects and loops over the
-        positivity_sets to check the value of the positivity loss.
+                This function receives a history objects and loops over the
+                positivity_sets to check the value of the positivity loss.
 
-        If the positivity loss is above the threshold, the positivity fails
-        otherwise, it passes.
-        It returns an array booleans which are True if positivity passed
-
-        Parameters
-        ----------
-            history_object: dict
-                dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
+                If the positivity loss is above the threshold, the positivity fails
+                otherwise, it passes.
+                It returns an array booleans which are True if positivity passed
+        story_object[key_loss] < self.threshold
+                Parameters
+                ----------
+                    history_object: dict
+                        dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
         """
         positivity_pass = True
         for key in self.positivity_sets:
