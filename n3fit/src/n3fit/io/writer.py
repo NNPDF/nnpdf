@@ -127,7 +127,7 @@ def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = stopping_object.positivity_status()
-    all_info["arc_lenghts"] = pdf_object.compute_arclength().tolist()
+    all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
     all_info["integrability"] = pdf_object.integrability_numbers().tolist()
     all_info["timing"] = timing
     # Versioning info

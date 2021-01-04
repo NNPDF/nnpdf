@@ -20,13 +20,14 @@ os.environ["CUDA_VISIBLE_DEVICES"] = ""
 # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
 os.environ["PYTHONHASHSEED"] = "0"
 
+import json
 import pytest
 import shutil
 import pathlib
 import logging
 import subprocess as sp
 from collections import namedtuple
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_equal, assert_array_almost_equal
 from reportengine.compat import yaml
 import n3fit
 from n3fit.performfit import initialize_seeds
@@ -40,29 +41,30 @@ EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
-    """ Loads the info file of the fit into a list """
-    with open(info_file, "r") as f:
-        info = f.read()
-        return info.split()
-
-
-def compare_two(val1, val2, precision=6):
-    """ Compares value 1 and value 2 attending to their type """
-    try:
-        num_1 = float(val1)
-        num_2 = float(val2)
-        assert_almost_equal(num_1, num_2, decimal=precision)
-    except ValueError:
-        assert val1 == val2
-
-
-def compare_lines(set1, set2, precision=6):
-    """Returns true if the lines within set1 and set2 are the same
-    The numbers are compared up to `precision`
+    """ Loads the information of the fit.
+    Automatically checks whether it is the fitinfo file or not and
+    creates the object correspondingly
     """
-    for val1, val2 in zip(set1, set2):
-        compare_two(val1, val2, precision=precision)
-
+    with open(info_file, "r") as f:
+        if info_file.suffix == ".fitinfo":
+            ret = {}
+            lines = f.readlines()
+            # Line 2 contains epochs, val, tr, exp, POS
+            sp_lineone = lines[0].split()
+            ret["epoch_of_the_stop"] = int(sp_lineone[0])
+            ret["erf_vl"] = float(sp_lineone[1])
+            ret["erf_tr"] = float(sp_lineone[2])
+            ret["chi2"] = float(sp_lineone[3])
+            ret["pos_state"] = sp_lineone[4]
+            # Line 2 arclengths
+            ret["arc_lengths"] = [float(i) for i in lines[1].split()]
+            # Line 3 integrabilities
+            ret["integrability"] = [float(i) for i in lines[2].split()]
+            return ret
+        elif info_file.suffix == ".json":
+            return json.load(f)
+        else:
+            raise ValueError(f"Wrong information file: {info_file}")
 
 def test_initialize_seeds():
     # Regression tests for seed generation
@@ -82,35 +84,45 @@ def test_initialize_seeds():
     assert result_nomc == regression_nomc
 
 
-def auxiliary_performfit(tmp_path, timing=True):
+def auxiliary_performfit(tmp_path, replica=1, timing=True):
+    """ Fits quickcard and checks the json file to ensure the results have not changed.
+    In order to ensure backwards compatibility checks that the information contained
+    in the .fitinfo file corresponds to the information in the .json
+    """
     quickcard = f"{QUICKNAME}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
-    weightpath = REGRESSION_FOLDER / "weights.h5"
-    # read up the old info file
-    old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
+    weightpath = REGRESSION_FOLDER / f"weights_{replica}.h5"
+    # read up the previous json file for the given replica
+    old_json = load_data(REGRESSION_FOLDER / f"{QUICKNAME}_{replica}.json")
     # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
-    shutil.copy(weightpath, tmp_path)
+    shutil.copy(weightpath, tmp_path / "weights.h5")
     # run the fit
-    sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, check=True)
-    # read up the .fitinfo files
-    full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
-    new_fitinfo = load_data(full_path)
-    # compare to the previous .fitinfo file
-    compare_lines(new_fitinfo[:5], old_fitinfo[:5], precision=1)
+    sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
+    # read up the .fitinfo and json files
+    full_fitinfo = tmp_path / f"{QUICKNAME}/nnfit/replica_{replica}/{QUICKNAME}.fitinfo"
+    full_json = tmp_path / f"{QUICKNAME}/nnfit/replica_{replica}/{QUICKNAME}.json"
+    new_fitinfo = load_data(full_fitinfo)
+    new_json = load_data(full_json)
+    # ensure that the json and fitinfo contain the exact same information
+    for key, item in new_fitinfo.items():
+        assert_equal(item, new_json[key])
+    # Now compare to regression results, taking into account precision won't be 100%
+    equal_checks = ["epoch_of_the_stop", "best_epoch", "pos_state"]
+    approx_checks = ["erf_tr", "erf_vl", "chi2", "arc_lengths", "integrability"]
+    for key in equal_checks:
+        assert_equal(new_json[key], old_json[key])
+    for key in approx_checks:
+        assert_array_almost_equal(new_json[key], old_json[key], decimal=2)
     # check that the times didnt grow in a weird manner
-    time_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.time"
     if timing:
         # Better to catch up errors even when they happen to grow larger by chance
-        with open(time_path, "r") as stream:
-            times = yaml.safe_load(stream)
+        times = new_json["timing"]
         fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
         assert fitting_time < EXPECTED_MAX_FITTIME
-    version_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/version.info"
-    with open(version_path, "r") as stream:
-        versions = yaml.safe_load(stream)
-        assert versions["nnpdf"] == n3fit.__version__
+    # For safety, check also the version
+    assert new_json["version"]["nnpdf"] == n3fit.__version__
 
 
 @pytest.mark.darwin
@@ -120,7 +132,8 @@ def test_performfit(tmp_path):
 
 @pytest.mark.linux
 def test_performfit_and_timing(tmp_path):
-    auxiliary_performfit(tmp_path, timing=True)
+    auxiliary_performfit(tmp_path, replica=1, timing=True)
+    auxiliary_performfit(tmp_path, replica=2, timing=True)
 
 
 def test_hyperopt(tmp_path):
