@@ -7,6 +7,9 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
+from dataclasses import dataclass
+import numpy as np
+
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -15,6 +18,61 @@ from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
+
+
+@dataclass
+class ObservableWrapper:
+    """Wrapper to generate the observable layer once the PDF model is prepared
+    It can take normal datasets or lagrande-multiplier-like datasets
+    (such as positivity or integrability)
+    """
+
+    name: str
+    observables: list
+    dataset_xsizes: list
+    invcovmat: np.array = None
+    multiplier: float = 1.0
+    integrability: bool = False
+    positivity: bool = False
+    data: np.array = None
+    rotation: ObsRotation = None  # only used for diagonal covmat
+
+    def _generate_loss(self, mask=None):
+        """Generates the corresponding loss function depending on the values the wrapper
+        was initialized with"""
+        if self.invcovmat is not None:
+            loss = losses.LossInvcovmat(self.invcovmat, self.data, mask, name=self.name)
+        elif self.positivity:
+            loss = losses.LossPositivity(name=self.name, c=self.multiplier)
+        elif self.integrability:
+            loss = losses.LossIntegrability(name=self.name, c=self.multiplier)
+        return loss
+
+    def _generate_experimental_layer(self, pdf):
+        """ Generates the experimental layer from the PDF """
+        # First split the layer into the different datasets (if needed!)
+        if len(self.dataset_xsizes) > 1:
+            splitting_layer = operations.as_layer(
+                operations.split,
+                op_args=[self.dataset_xsizes],
+                op_kwargs={"axis": 1},
+                name=f"{self.name}_split",
+            )
+            split_pdf = splitting_layer(pdf)
+        else:
+            split_pdf = [pdf]
+        # Every obs gets its share of the split
+        output_layers = [obs(p_pdf) for p_pdf, obs in zip(split_pdf, self.observables)]
+        # Concatenate all datasets (so that experiments are one single entity)
+        ret = operations.concatenate(output_layers, axis=2)
+        if self.rotation is not None:
+            ret = self.rotation(ret)
+        return ret
+
+    def __call__(self, pdf_layer, mask=None):
+        loss_f = self._generate_loss(mask)
+        experiment_prediction = self._generate_experimental_layer(pdf_layer)
+        return loss_f(experiment_prediction)
 
 
 def observable_generator(
@@ -93,10 +151,7 @@ def observable_generator(
             operation_name,
             name=f"dat_{dataset_name}",
         )
-        if spec_dict["positivity"]:
-            obs_layer_ex = obs_layer_tr
-            obs_layer_vl = obs_layer_tr
-        else:
+        if not spec_dict["positivity"]:
             obs_layer_ex = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
@@ -109,6 +164,8 @@ def observable_generator(
                 operation_name,
                 name=f"val_{dataset_name}",
             )
+        else:
+            obs_layer_ex = obs_layer_vl = None
 
         # Data transformation might need access to the full array of output data
         # therefore the validation and training layers should point to the full exp
@@ -130,57 +187,17 @@ def observable_generator(
         model_obs_vl.append(obs_layer_vl)
         model_obs_ex.append(obs_layer_ex)
 
-    # Prepare a concatenation as experiments are one single entity formed by many datasets
-    def gen_concat():
-        return operations.as_layer(operations.concatenate, op_kwargs={"axis": 2})
-
-
-    concat_ex = gen_concat()
-    # For data transformation all concatenations are the same
-    if spec_dict.get("data_transformation") is None:
-        concat_tr = gen_concat()
-        concat_vl = gen_concat()
-    else:
-        concat_tr = concat_ex
-        concat_vl = concat_ex
-
-    # creating the experiment as a model turns out to bad for performance
-    def experiment_layer(
-        pdf, model_obs=model_obs_ex, concat=concat_ex, rotation=None, datasets_out=None
-    ):
-        """ By default works with the experiment observable """
-        output_layers = []
-        # First split the pdf layer into the different datasets if needed
-        if len(dataset_xsizes) > 1:
-            splitting_layer = operations.as_layer(
-                operations.split,
-                op_args=[dataset_xsizes],
-                op_kwargs={"axis": 1},
-                name=f"{spec_name}_split",
-            )
-            split_pdf = splitting_layer(pdf)
-        else:
-            split_pdf = [pdf]
-        # every obs gets its share of the split
-        output_layers = [obs(p_pdf) for p_pdf, obs in zip(split_pdf, model_obs)]
-        # Concatenate all datasets as experiments are one single entity if needed
-        ret = concat(output_layers)
-        if rotation is not None:
-            ret = rotation(ret)
-        return ret
-
-    # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
 
     if spec_dict["positivity"]:
-        if integrability:
-            loss_pos = losses.LossIntegrability(name=spec_name, c=positivity_initial)
-        else:
-            loss_pos = losses.LossPositivity(name=spec_name, c=positivity_initial)
-
-        def out_positivity(pdf_layer, mask=None, datasets_out=None):
-            exp_result = experiment_layer(pdf_layer)
-            return loss_pos(exp_result)
+        out_positivity = ObservableWrapper(
+            spec_name,
+            model_obs_tr,
+            dataset_xsizes,
+            multiplier=positivity_initial,
+            positivity=not integrability,
+            integrability=integrability,
+        )
 
         layer_info = {
             "inputs": model_inputs,
@@ -188,8 +205,6 @@ def observable_generator(
             "experiment_xsize": full_nx,
         }
         return layer_info
-
-    # Prepare the loss function, important! the loss function must carry the name of the experiment!
 
     # Generate the loss function and rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
@@ -201,36 +216,36 @@ def observable_generator(
         obsrot_tr = None
         obsrot_vl = None
 
-
-    # Prepare the inverse covmats for each of the loss functions 
+    # Prepare the inverse covmats for each of the loss functions
     # (that are only instantiated when the output layer is created)
     invcovmat_tr = spec_dict["invcovmat"]
     invcovmat_vl = spec_dict["invcovmat_vl"]
     invcovmat = spec_dict["invcovmat_true"]
 
-    def out_tr(pdf_layer, mask=None, datasets_out=None):
-        loss_tr = losses.LossInvcovmat(invcovmat_tr, spec_dict["expdata"], mask, name=spec_name)
-        exp_result = experiment_layer(
-            pdf_layer,
-            model_obs=model_obs_tr,
-            concat=concat_tr,
-            rotation=obsrot_tr,
-        )
-        return loss_tr(exp_result)
-
-    def out_vl(pdf_layer, mask=None, datasets_out=None):
-        loss_vl = losses.LossInvcovmat(invcovmat_vl, spec_dict["expdata_vl"], mask, name=f"{spec_name}_val")
-        exp_result = experiment_layer(
-            pdf_layer,
-            model_obs=model_obs_vl,
-            concat=concat_vl,
-            rotation=obsrot_vl,
-        )
-        return loss_vl(exp_result)
-
-    def out_exp(pdf_layer, mask=None, datasets_out=None):
-        loss_ex = losses.LossInvcovmat(invcovmat, spec_dict["expdata_true"], mask, name=f"{spec_name}_exp")
-        return loss_ex(experiment_layer(pdf_layer))
+    out_tr = ObservableWrapper(
+        spec_name,
+        model_obs_tr,
+        dataset_xsizes,
+        invcovmat=invcovmat_tr,
+        data=spec_dict["expdata"],
+        rotation=obsrot_tr,
+    )
+    out_vl = ObservableWrapper(
+        f"{spec_name}_val",
+        model_obs_vl,
+        dataset_xsizes,
+        invcovmat=invcovmat_vl,
+        data=spec_dict["expdata_vl"],
+        rotation=obsrot_vl,
+    )
+    out_exp = ObservableWrapper(
+        f"{spec_name}_exp",
+        model_obs_ex,
+        dataset_xsizes,
+        invcovmat=invcovmat,
+        data=spec_dict["expdata_true"],
+        rotation=None,
+    )
 
     layer_info = {
         "inputs": model_inputs,

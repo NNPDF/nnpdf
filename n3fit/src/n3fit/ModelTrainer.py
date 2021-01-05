@@ -812,7 +812,7 @@ class ModelTrainer:
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_model, stopping_object)
+                    hyper_loss += penalty(pdf_models[0], stopping_object)
                 l_hyper.append(hyper_loss)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
                 if hyper_loss > self.hyper_threshold:
