@@ -130,7 +130,7 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
 
 @pytest.mark.darwin
 def test_performfit(tmp_path):
-    auxiliary_performfit(tmp_path, replica=2, timing=False)
+    auxiliary_performfit(tmp_path, replica=2, timing=False, rel_error=1e-1)
 
 
 @pytest.mark.linux
