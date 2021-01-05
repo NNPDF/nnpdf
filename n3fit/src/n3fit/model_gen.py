@@ -17,6 +17,8 @@ from n3fit.backends import losses
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
+import tensorflow as tf
+
 
 def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
     """
@@ -360,7 +362,8 @@ def pdfNN_layer_generator(
     regularizer=None,
     regularizer_args=None,
     impose_sumrule=False,
-    mapping=None
+    mapping=None,
+    data_domain=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -497,7 +500,6 @@ def pdfNN_layer_generator(
         from the `list_of_pdf_layers` in order """
 
         if inp == 1:
-            import tensorflow as tf
             x = scale_input(x)
             x0 = tf.keras.backend.ones_like(x)
             curr_fun = list_of_pdf_layers[0](x)
@@ -532,9 +534,14 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
 
-    # Apply preprocessing and basis
-    def layer_fitbasis(x):
-        ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
+    def extrapolation(x, data_domain):
+        ret = tf.keras.layers.subtract([dense_me(x), layer_preproc(x, data_domain)])
+        return ret
+
+    # Apply extrapolation and basis
+    def layer_fitbasis(x, data_domain):
+        ret = extrapolation(x, data_domain)
+        # ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
         if basis_rotation.is_identity():
             # if we don't need to rotate basis we don't want spurious layers
             return ret
@@ -542,7 +549,7 @@ def pdfNN_layer_generator(
 
     # Rotation layer, changes from the 8-basis to the 14-basis
     def layer_pdf(x):
-        return layer_evln(layer_fitbasis(x))
+        return layer_evln(layer_fitbasis(x, data_domain))
 
     # Prepare the input for the PDF model
     placeholder_input = Input(shape=(None, 1), batch_size=1)
