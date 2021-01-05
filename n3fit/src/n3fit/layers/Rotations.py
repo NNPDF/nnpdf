@@ -66,7 +66,7 @@ class FkRotation(MetaLayer):
     # i.e., create the matrix and inherit from the Rotation layer above
     def __init__(self, output_dim=14, name="evolution", **kwargs):
         self.output_dim = output_dim
-        super().__init__(name, **kwargs)
+        super().__init__(name=name, **kwargs)
 
     def call(self, pdf_raw):
         # Transpose the PDF so that the flavour index is the first one

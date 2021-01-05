@@ -39,11 +39,16 @@ def gen_integration_input(nx):
 
 def msr_impose(nx=int(2e3), basis_size=8, mode='All'):
     """
-        This function receives:
-            - fit_layer: the 8-basis layer of PDF which we fit
-            - final_layer: the 14-basis which is fed to the fktable
-        It uses pdf_fit to compute the sum rule and returns a modified version of
-        the final_pdf layer with a normalisation by which the sum rule is imposed
+        Generates a function that applies a normalization layer to the fit.
+        The normalization is computed from the direct output of the NN (so the 7,8-flavours basis)
+        and it is applied to the input of the fktable (i.e., to the 14-flavours fk-basis).
+
+        Parameters
+        ----------
+            nx: int
+                number of points for the integration grid
+            basis_size: int
+                number of flavours output of the NN
     """
     # 1. Generate the fake input which will be used to integrate
     xgrid, weights_array = gen_integration_input(nx)
@@ -61,7 +66,7 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All'):
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
     xgrid_input = operations.numpy_to_input(xgrid)
 
-    # Now parepare a function that takes as input the 8-flavours output of the NN
+    # Now prepare a function that takes as input the 8-flavours output of the NN
     # and the 14-flavours after the fk rotation and returns a 14-flavours normalized output
     # note + TODO:
     # the idea was that the normalization should always be applied at the fktable 14-flavours

@@ -134,11 +134,6 @@ def observable_generator(
     def gen_concat():
         return operations.as_layer(operations.concatenate, op_kwargs={"axis": 2})
 
-    # Tensorflow operations have ugly name,
-    # we want the final observables to be named just {spec_name} (with'val/exp' if needed)
-    tr_name = spec_name
-    vl_name = f"{spec_name}_val"
-    ex_name = f"{spec_name}_exp"
 
     concat_ex = gen_concat()
     # For data transformation all concatenations are the same
@@ -167,12 +162,7 @@ def observable_generator(
         else:
             split_pdf = [pdf]
         # every obs gets its share of the split
-        for partial_pdf, obs in zip(split_pdf, model_obs):
-            obs_output = obs(partial_pdf)
-            if datasets_out and obs.name[4:] in datasets_out:
-                mask_out = Mask(c=0.0, name=f"zero_{obs.name}")
-                obs_output = mask_out(obs_output)
-            output_layers.append(obs_output)
+        output_layers = [obs(p_pdf) for p_pdf, obs in zip(split_pdf, model_obs)]
         # Concatenate all datasets as experiments are one single entity if needed
         ret = concat(output_layers)
         if rotation is not None:
@@ -182,77 +172,71 @@ def observable_generator(
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
 
-    def loss(y_true, y_pred):
-        return operations.sum(y_pred)
-
     if spec_dict["positivity"]:
         if integrability:
             loss_pos = losses.LossIntegrability(name=spec_name, c=positivity_initial)
         else:
             loss_pos = losses.LossPositivity(name=spec_name, c=positivity_initial)
 
-        def out_positivity(pdf_layer, datasets_out=None):
+        def out_positivity(pdf_layer, mask=None, datasets_out=None):
             exp_result = experiment_layer(pdf_layer)
             return loss_pos(exp_result)
 
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_positivity,
-            "loss_tr": loss,
             "experiment_xsize": full_nx,
         }
         return layer_info
 
-    invcovmat_tr = spec_dict["invcovmat"]
-    invcovmat_vl = spec_dict["invcovmat_vl"]
-    invcovmat = spec_dict["invcovmat_true"]
-
-    # Prepare the loss function
-    loss_tr = losses.LossInvcovmat(invcovmat_tr, spec_dict["expdata"], name=tr_name)
-    loss_vl = losses.LossInvcovmat(invcovmat_vl, spec_dict["expdata_vl"], name=vl_name)
-    loss_ex = losses.LossInvcovmat(invcovmat, spec_dict["expdata_true"], name=ex_name)
+    # Prepare the loss function, important! the loss function must carry the name of the experiment!
 
     # Generate the loss function and rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
         # TODO: I'm asuming that the diagonal covmat will work ootb, check
         # The rotation is the last layer so it should carry The Name
-        obsrot_tr = ObsRotation(spec_dict.get("data_transformation"), name=tr_name)
-        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"), name=vl_name)
+        obsrot_tr = ObsRotation(spec_dict.get("data_transformation"))
+        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
     else:
         obsrot_tr = None
         obsrot_vl = None
 
-    def out_tr(pdf_layer, datasets_out=None):
+
+    # Prepare the inverse covmats for each of the loss functions 
+    # (that are only instantiated when the output layer is created)
+    invcovmat_tr = spec_dict["invcovmat"]
+    invcovmat_vl = spec_dict["invcovmat_vl"]
+    invcovmat = spec_dict["invcovmat_true"]
+
+    def out_tr(pdf_layer, mask=None, datasets_out=None):
+        loss_tr = losses.LossInvcovmat(invcovmat_tr, spec_dict["expdata"], mask, name=spec_name)
         exp_result = experiment_layer(
             pdf_layer,
             model_obs=model_obs_tr,
             concat=concat_tr,
-            datasets_out=datasets_out,
             rotation=obsrot_tr,
         )
         return loss_tr(exp_result)
 
-    def out_vl(pdf_layer, datasets_out=None):
+    def out_vl(pdf_layer, mask=None, datasets_out=None):
+        loss_vl = losses.LossInvcovmat(invcovmat_vl, spec_dict["expdata_vl"], mask, name=f"{spec_name}_val")
         exp_result = experiment_layer(
             pdf_layer,
             model_obs=model_obs_vl,
             concat=concat_vl,
-            datasets_out=datasets_out,
             rotation=obsrot_vl,
         )
         return loss_vl(exp_result)
 
-    def out_exp(pdf_layer, datasets_out=None):
+    def out_exp(pdf_layer, mask=None, datasets_out=None):
+        loss_ex = losses.LossInvcovmat(invcovmat, spec_dict["expdata_true"], mask, name=f"{spec_name}_exp")
         return loss_ex(experiment_layer(pdf_layer))
 
     layer_info = {
         "inputs": model_inputs,
         "output": out_exp,
-        "loss": loss,
         "output_tr": out_tr,
-        "loss_tr": loss,
         "output_vl": out_vl,
-        "loss_vl": loss,
         "experiment_xsize": full_nx,
     }
 

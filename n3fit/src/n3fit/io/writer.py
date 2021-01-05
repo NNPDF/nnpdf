@@ -110,7 +110,7 @@ class SuperEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, epoch_stop, timing):
+def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
@@ -126,6 +126,8 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, epoch_stop,
             chi2 for the validation
         true_chi2: float
             chi2 for the exp (unreplica'd data)
+        epoch_stop: int
+            epoch at which the stopping stopped (not the one for the best fit!)
         timing: dict
             dictionary of the timing of the different events that happened
     """
@@ -133,7 +135,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, epoch_stop,
     # Generate preprocessing information
     all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
     # .fitinfo-like info
-    all_info["stop_epoch"] = epoch_stop
+    all_info["stop_epoch"] = stop_epoch
     all_info["best_epoch"] = replica_status.best_epoch
     all_info["erf_tr"] = tr_chi2
     all_info["erf_vl"] = vl_chi2

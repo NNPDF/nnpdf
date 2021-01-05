@@ -143,6 +143,8 @@ def performfit(
                 activate some debug options
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
+            parallel_models: int
+                number of models to be run in parallel
     """
     from n3fit.backends import set_initial_state
 
@@ -303,9 +305,6 @@ def performfit(
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
         pdf_models = result["pdf_models"]
-        true_chi2 = result["loss"]
-        training = result["training"]
-        log.info("Total exp chi2: %s", true_chi2)
 
         # Where has the stopping point happened (this is only for debugging purposes)
         print(

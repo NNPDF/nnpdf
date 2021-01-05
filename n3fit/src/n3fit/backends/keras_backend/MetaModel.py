@@ -10,14 +10,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
 from tensorflow.python.keras.utils import tf_utils
-from n3fit.backends.keras_backend.operations import numpy_to_tensor
-
-# Check the TF version to check if legacy-mode is needed (TF < 2.2)
-tf_version = tf.__version__.split('.')
-if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
-    LEGACY = True
-else:
-    LEGACY = False
+from n3fit.backends.keras_backend import operations as op
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -34,6 +27,12 @@ optimizers = {
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
+
+
+def _default_loss(y_true, y_pred):
+    """ Default loss to be used when the model is compiled with loss = Null
+    (for instance if the prediction of the model is already the loss """
+    return op.sum(y_pred)
 
 
 def _fill_placeholders(original_input, new_input=None):
@@ -114,7 +113,7 @@ class MetaModel(Model):
             # otherwise, put a placeholder None as it will come from the outside
             name = input_tensor.name.rsplit(":",1)[0]
             try:
-                self.x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
+                self.x_in[name] = op.numpy_to_tensor(input_tensor.tensor_content)
                 self.tensors_in[name] = input_tensor
             except AttributeError:
                 self.x_in[name] = None
@@ -123,7 +122,6 @@ class MetaModel(Model):
         self.all_inputs = input_list
         self.all_outputs = output_list
         self.target_tensors = None
-        self.eval_fun = None
         self.compute_losses_function = None
 
     def _parse_input(self, extra_input=None, pass_content=True):
@@ -159,7 +157,7 @@ class MetaModel(Model):
         x = self._parse_input(self.x_in)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x, y=y, epochs=epochs, **kwargs,)
+        history = self.fit(x=x, y=y, epochs=epochs, **kwargs)
         loss_dict = history.history
         return loss_dict
 
@@ -176,7 +174,7 @@ class MetaModel(Model):
         The losses reported in the ``evaluate`` method for n3fit are, however, summed over replicas.
         Instead the loss we are interested in is usually the output of the model (i.e., predict)
 
-        This function then generates a dictionary of partial losses of the model separated per replica.
+        This function then generates a dict of partial losses of the model separated per replica.
         i.e., the output for experiment {'LHC_exp'} will be an array of Nrep elements.
 
         Returns
@@ -184,8 +182,9 @@ class MetaModel(Model):
             dict
                 a dictionary with all partial losses of the model
         """
-        # TODO might not work for TF < 2.2, we might not care either
+        # TODO might not work for TF < 2.2
         if self.compute_losses_function is None:
+            # If it is the first time we are passing through, compile the function and save it
             out_names = [f"{i}_loss" for i in self.output_names]
             out_names.insert(0, "loss")
 
@@ -203,8 +202,11 @@ class MetaModel(Model):
             self.compute_losses_function = losses_fun
 
         ret = self.compute_losses_function()
-        # undocumented TF function that converts all the tensors from the ret dictionary to numpy arrays
-        # if it dissapears, equivalent to {k: i.numpy() for k, i in ret.items()}
+
+        # The output of this function is to be used by python (and numpy) so we need to convert
+        # the tensorflow variable to python primitives or numpy arrays.
+        # Undocumented TF function that converts all the tensors from the ret dictionary to numpy arrays
+        # if it dissapears, equivalent for us to {k: i.numpy() for k, i in ret.items()}
         return tf_utils.to_numpy_or_python_type(ret)
 
     def compile(
@@ -248,6 +250,9 @@ class MetaModel(Model):
                 f"[MetaModel.select_initializer] optimizer not implemented: {optimizer_name}"
             ) from e
 
+        if loss is None:
+            loss = _default_loss
+
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
@@ -261,68 +266,15 @@ class MetaModel(Model):
         # Instantiate the optimizer
         opt = opt_function(**opt_args)
 
-        # If given target output, compile it together with the model for better performance
-        if target_output is not None:
+        # If given target output is None, target_output is unnecesary, save just a zero per output
+        if target_output is None:
+            self.target_tensors = [np.zeros((1,1)) for i in self.output_shape]
+        else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
-            # Tensorize
             self.target_tensors = target_output
 
-        # Reset the evaluation function (if any)
-        self.eval_fun = None
-
         super(MetaModel, self).compile(optimizer=opt, loss=loss)
-
-    def make_test_function(self):
-        """
-        If the model has been compiled in the normal NNPDF way,
-        then the output of the prediction is already the loss, so we skip this part
-        by just summing over predictions.
-
-        Otherwise, just return the usual TF make_test_function
-        """
-
-        if self.eval_fun is not None:
-            return self.eval_fun
-
-        if self.target_tensors is None:
-            return super().make_test_function()
-
-        @tf.function
-        def eval_fun(*args):
-            predictions = self(self._parse_input(None))
-            return tf.reduce_sum(predictions)
-
-        self.eval_fun = eval_fun
-        return eval_fun
-
-        # Recover the target tensors and their lengths, we cannot rely
-        # directly on the output from the model as we might have target_tensors
-        # with 0 data points (if the tr/vl mask covers the whole set)
-        lens = []
-        tt = []
-        for target in self.target_tensors:
-            lens.append(target.size)
-            tt.append(numpy_to_tensor(target))
-        # Save target_tensors as tensors, as it might be useful for LEGACY
-        self.target_tensors = tt
-
-        # Get the name of the output layer
-        # and add the suffix _loss to match TF behaviour
-        out_names = [f"{i}_loss" for i in self.output_names]
-        out_names.insert(0, "loss")
-
-        @tf.function
-        def eval_fun(*args):
-            predictions = self(self._parse_input(None))
-            loss_list = [lfun(target, pred) for target, pred, lfun in zip(tt, predictions, self.loss)]
-            ret = [tf.reduce_sum(loss_list)] + loss_list
-            return dict(zip(out_names, ret))
-
-        # Save the function so we don't go through this again
-        self.eval_fun = eval_fun
-
-        return eval_fun
 
     def set_masks_to(self, names, val=0.0):
         """ Set all mask value to the selected value
