@@ -96,7 +96,7 @@ class WriterWrapper:
         # export all metadata from the fit to a single yaml file
         output_file = f"{replica_path_set}/{fitname}.json"
         json_dict = jsonfit(
-            replica_status, self.pdf_object, tr_chi2, true_chi2, stop_epoch, self.timings
+            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings
         )
         with open(output_file, "w") as fs:
             json.dump(json_dict, fs, indent=2, cls = SuperEncoder)
@@ -110,7 +110,7 @@ class SuperEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-def jsonfit(replica_status, pdf_object, tr_chi2, true_chi2, epoch_stop, timing):
+def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, epoch_stop, timing):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
@@ -136,7 +136,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, true_chi2, epoch_stop, timing):
     all_info["stop_epoch"] = epoch_stop
     all_info["best_epoch"] = replica_status.best_epoch
     all_info["erf_tr"] = tr_chi2
-    all_info["erf_vl"] = replica_status.best_vl
+    all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = replica_status.positivity_status
     all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
