@@ -61,7 +61,7 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
     division_by_x = xDivide()
 
     def pdf_integrand(xgrid, xgrid_scaled):
-        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled)])
+        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled, data_domain)])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
@@ -123,7 +123,7 @@ def check_integration(ultimate_pdf, integration_input, mapping):
     v8 = result_integrated[5]
     print(
         """
-     > > > Int from 0 to 1 of:
+    > > > Int from 0 to 1 of:
     x*g(x) + x*sigma(x) = {0}
     v                   = {1}
     v3                  = {2}

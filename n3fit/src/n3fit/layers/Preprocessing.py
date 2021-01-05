@@ -98,7 +98,8 @@ class Preprocessing(MetaLayer):
 
         super(Preprocessing, self).build(input_shape)
 
-    def call(self, inputs, **kwargs):
+    def call(self, inputs, data_domain, **kwargs):
+        import tensorflow as tf
         x = inputs
         pdf_list = []
         for i in range(0, self.output_dim*2, 2):
