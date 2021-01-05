@@ -535,7 +535,7 @@ def pdfNN_layer_generator(
 
 
     def extrapolation(x, data_domain):
-        ret = tf.keras.layers.subtract([dense_me(x), layer_preproc(x, data_domain)])
+        ret = tf.keras.layers.multiply([dense_me(x), layer_preproc(x, data_domain)])
         return ret
 
     # Apply extrapolation and basis
