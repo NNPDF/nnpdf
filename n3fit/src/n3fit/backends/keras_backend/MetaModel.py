@@ -207,7 +207,13 @@ class MetaModel(Model):
         # the tensorflow variable to python primitives or numpy arrays.
         # Undocumented TF function that converts all the tensors from the ret dictionary to numpy arrays
         # if it dissapears, equivalent for us to {k: i.numpy() for k, i in ret.items()}
-        return tf_utils.to_numpy_or_python_type(ret)
+        try:
+            dict_result = tf_utils.to_numpy_or_python_type(ret)
+        except AttributeError:
+            # For TF < 2.2
+            dict_result = {k: i.numpy() for k, i in ret.items()}
+        return dict_result
+
 
     def compile(
         self,
