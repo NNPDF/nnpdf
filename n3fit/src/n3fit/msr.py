@@ -61,7 +61,7 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
     division_by_x = xDivide()
 
     def pdf_integrand(xgrid, xgrid_scaled):
-        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled, data_domain)])
+        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled, xgrid, data_domain)])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
@@ -76,8 +76,8 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
     xgrid_input = tf.convert_to_tensor(xgrid_input, dtype=xgrid_input_scaled.dtype)
     normalization = normalizer(integrator(pdf_integrand(xgrid_input, xgrid_input_scaled)))
 
-    def ultimate_pdf(x):
-        return operations.op_multiply_dim([final_pdf_layer(x), normalization])
+    def ultimate_pdf(x, xnotscaled):
+        return operations.op_multiply_dim([final_pdf_layer(x, xnotscaled), normalization])
 
     if verbose:
         #         only_int = integrator(pdf_integrand(xgrid_input))

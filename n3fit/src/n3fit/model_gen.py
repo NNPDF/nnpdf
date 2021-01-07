@@ -534,13 +534,13 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
 
-    def extrapolation(x, data_domain):
-        ret = tf.keras.layers.multiply([dense_me(x), layer_preproc(x, data_domain)])
+    def extrapolation(x, xnotscaled, data_domain):
+        ret = tf.keras.layers.multiply([dense_me(x), layer_preproc(xnotscaled, data_domain)])
         return ret
 
     # Apply extrapolation and basis
-    def layer_fitbasis(x, data_domain):
-        ret = extrapolation(x, data_domain)
+    def layer_fitbasis(x, xnotscaled, data_domain):
+        ret = extrapolation(x, xnotscaled, data_domain)
         # ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
         if basis_rotation.is_identity():
             # if we don't need to rotate basis we don't want spurious layers
@@ -548,11 +548,12 @@ def pdfNN_layer_generator(
         return basis_rotation(ret)
 
     # Rotation layer, changes from the 8-basis to the 14-basis
-    def layer_pdf(x):
-        return layer_evln(layer_fitbasis(x, data_domain))
+    def layer_pdf(x, xnotscaled):
+        return layer_evln(layer_fitbasis(x, xnotscaled, data_domain))
 
     # Prepare the input for the PDF model
     placeholder_input = Input(shape=(None, 1), batch_size=1)
+    placeholder_input_notscaled = Input(shape=(None, 1), batch_size=1)
 
     # Impose sumrule if necessary
     if impose_sumrule:
@@ -562,6 +563,6 @@ def pdfNN_layer_generator(
         integrator_input = None
         model_input = [placeholder_input]
 
-    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
+    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input, placeholder_input_notscaled), name="PDF")
 
     return pdf_model

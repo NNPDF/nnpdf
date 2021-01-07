@@ -403,13 +403,17 @@ class ModelTrainer:
         input_arr = np.expand_dims(input_arr, axis=0)
         input_layer = operations.numpy_to_input(input_arr.T)
 
+        # Construct the non scaled input array that will be given to the pdf
+        input_arr_notscaled = np.concatenate(self.input_list, axis=1)
+        input_layer_notscaled = operations.numpy_to_input(input_arr_notscaled.T)
+
         # The input to the full model is expected to be the input to the PDF
         # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted fro
-        full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
+        full_model_input_dict = pdf_model._parse_input([input_layer, input_layer_notscaled], pass_content=False)
 
         # The output of the pdf on input_layer will be thus a concatenation
         # of the PDF values for all experiments
-        full_pdf = pdf_model.apply_as_layer([input_layer])
+        full_pdf = pdf_model.apply_as_layer([input_layer, input_layer_notscaled])
         # The input layer is a concatenation of all experiments
         # we need now to split the output on a different array per experiment
         sp_ar = [self.input_sizes]
