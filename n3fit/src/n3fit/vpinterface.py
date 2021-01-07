@@ -131,7 +131,7 @@ class N3PDF(PDF):
             flavours = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
         mod_xgrid = xarr.reshape(1, -1, 1)
-        result = self.model.predict([mod_xgrid])
+        result = self.model.predict([mod_xgrid, mod_xgrid])
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
