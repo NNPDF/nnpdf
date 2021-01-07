@@ -101,7 +101,7 @@ def check_scale(scalename, allow_none=False):
 
 @make_argcheck
 def check_cuts_fromfit(use_cuts):
-    check(use_cuts.name == "FROMFIT", "Cuts must be fromfit")
+    check(use_cuts == CutsPolicy.FROMFIT, f"Cuts must be fromfit, not {use_cuts.value}")
 
 
 @make_argcheck

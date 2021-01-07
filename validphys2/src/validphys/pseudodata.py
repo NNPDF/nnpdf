@@ -11,13 +11,12 @@ import pathlib
 import numpy as np
 import pandas as pd
 
-from validphys.checks import check_cuts_fromfit
+from validphys.checks import check_cuts_fromfit, check_darwin_single_process
 
 from reportengine import collect
 
 import n3fit.io.reader as reader
 from n3fit.performfit import initialize_seeds
-from validphys.checks import check_darwin_single_process
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ def fit_pseudodata(fitcontext, context_index):
     ------
     FileNotFoundError
         If the training or validation files for the PDF set cannot be found.
-    ConfigError
+    CheckError
         If the ``use_cuts`` flag is not set to ``fromfit``
 
     Example
