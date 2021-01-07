@@ -11,6 +11,8 @@ import pathlib
 import numpy as np
 import pandas as pd
 
+from validphys.config import ConfigError
+
 from reportengine import collect
 
 import n3fit.io.reader as reader
@@ -24,7 +26,7 @@ fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
 context_index = collect("groups_index", ("fitcontext",))
 
-def fit_pseudodata(fitcontext, context_index):
+def fit_pseudodata(fitcontext, context_index, use_cuts):
     """Generator to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
 
@@ -37,6 +39,8 @@ def fit_pseudodata(fitcontext, context_index):
     ------
     FileNotFoundError
         If the training or validation files for the PDF set cannot be found.
+    ConfigError
+        If the ``use_cuts`` flag is not set to ``fromfit``
 
     Example
     -------
@@ -59,6 +63,11 @@ def fit_pseudodata(fitcontext, context_index):
                 166  0.090437
     [1556 rows x 1 columns]
     """
+    if use_cuts.name != "FROMFIT":
+        raise ConfigError(
+            "The use_cuts flag must be set to ",
+            "fromfit in order to retrieve pseudodata",
+        )
     # List of length 1 due to the collect
     context_index = context_index[0]
     # The [0] is because of how pandas handles sorting a MultiIndex
