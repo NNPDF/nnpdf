@@ -167,8 +167,10 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         col_label = hlines.columns.get_level_values(0).unique()
         xmin, xmax = flstate.ax.get_xlim()
         for i, label in enumerate(col_label):
+            # get the correct index label - don't assume table ordering.
+            table_fl_index = f"${self.firstgrid.basis.elementlabel(flstate.fl)}$"
             handle = flstate.ax.hlines(
-                hlines.values[flstate.flindex, 2*i:(2*i+2)],
+                hlines.loc[table_fl_index, label].values,
                 xmin=xmin,
                 xmax=xmax,
                 linestyle=INTERNAL_LINESTYLE[i]
