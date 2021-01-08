@@ -317,8 +317,11 @@ def performfit(
             )
         )
 
+        # Get mapping 
+        mapping = the_model_trainer.mapping
+
         # Create a pdf instance
-        pdf_instance = N3PDF(pdf_model, fit_basis=fitting.get("basis"))
+        pdf_instance = N3PDF(pdf_model, mapping, fit_basis=fitting.get("basis"))
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
@@ -331,7 +334,6 @@ def performfit(
 
         # Now write the data down
         training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-        mapping = the_model_trainer.mapping
         writer_wrapper.write_data(
             replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2, mapping
         )
