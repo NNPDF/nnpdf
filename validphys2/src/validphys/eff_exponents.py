@@ -5,23 +5,23 @@ Tools for computing and plotting effective exponents.
 from __future__ import generator_stop
 
 import logging
-import warnings
 import numbers
+import random
+import warnings
+
 import numpy as np
 import pandas as pd
-import random
 
 from reportengine import collect
-from reportengine.figure import figuregen
-from reportengine.table import table
-from reportengine.floatformatting import format_number, significant_digits
 from reportengine.compat import yaml
+from reportengine.figure import figuregen
+from reportengine.floatformatting import format_number, significant_digits
+from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
-from validphys.pdfplots import BandPDFPlotter, PDFPlotter
-from validphys.pdfbases import check_basis, Basis
 from validphys.core import PDF, FitSpec
-
+from validphys.pdfbases import check_basis, Basis
+from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
 
