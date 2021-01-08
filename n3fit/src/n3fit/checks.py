@@ -309,13 +309,26 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments_data):
     check_correct_partitions(hyperscan["kfold"], experiments_data)
 
 
+def check_sumrules(sum_rules):
+    """Checks that the chosen option for the sum rules are sensible
+    """
+    if isinstance(sum_rules, bool):
+        return
+    accepted_options = ["ALL", "MSR", "VSR"]
+    if sum_rules.upper() in accepted_options:
+        return
+    raise CheckError(f"The only accepted options for the sum rules are: {accepted_options}")
+
+
 # Checks on the physics
 @make_argcheck
 def check_consistent_basis(fitting):
     """Checks the fitbasis setup for inconsistencies
+    - Checks the sum rules can be imposed
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
     """
+    check_sumrules(fitting.get("sum_rules", True))
     fitbasis = fitting["fitbasis"]
     # Check that there are no duplicate flavours and that parameters are sane
     flavs = []

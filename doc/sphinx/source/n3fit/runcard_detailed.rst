@@ -189,6 +189,9 @@ It is however possible to disable them by setting to false the ``sum_rules`` fla
     fitting:
       sum_rules: False
       
+
+It is also possible to impose just the valence or the gluon sum rules by using the
+``MSR`` or ``VSR`` flags (``True`` is equal to ``All``).
       
 
 Threshold :math:`\chi2`

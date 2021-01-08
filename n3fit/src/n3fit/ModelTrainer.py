@@ -194,7 +194,7 @@ class ModelTrainer:
             save_weights_each: if set, save the state of the fit
                                     every ``save_weights_each`` epochs
             model_file: str whether to save the models
-            sum_rules: bool whether sum rules should be enabled
+            sum_rules: str whether sum rules should be enabled (All, MSR, VSR, False)
         """
 
         # Save all input information
