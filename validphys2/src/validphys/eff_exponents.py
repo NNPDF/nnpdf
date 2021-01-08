@@ -187,7 +187,7 @@ alpha_eff_pdfs = collect('alpha_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff_internal(
+def plot_alpha_eff_internal(
         pdfs, alpha_eff_pdfs, pdfs_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
@@ -208,7 +208,7 @@ def plot_alphaEff_internal(
 alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis',))
 
 @figuregen
-def plot_alphaEff(
+def plot_alpha_eff(
         fits_pdf, alpha_eff_fits, fits_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
@@ -226,30 +226,30 @@ def plot_alphaEff(
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    return plot_alphaEff_internal(
+    return plot_alpha_eff_internal(
         fits_pdf, alpha_eff_fits, fits_alpha_lines, normalize_to, ybottom, ytop)
 
 beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff_internal(
+def plot_beta_eff_internal(
         pdfs, beta_eff_pdfs, pdfs_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
-    """ Same as plot_alphaEff_internal but for beta effective exponent """
+    """ Same as plot_alpha_eff_internal but for beta effective exponent """
     yield from ExponentBandPlotter(
         pdfs_beta_lines, 'beta', pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
 
 beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
 
 @figuregen
-def plot_betaEff(
+def plot_beta_eff(
         fits_pdf, beta_eff_fits, fits_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
-    """ Same as plot_alphaEff but for beta effective exponents """
-    return plot_betaEff_internal(
+    """ Same as plot_alpha_eff but for beta effective exponents """
+    return plot_beta_eff_internal(
         fits_pdf, beta_eff_fits, fits_beta_lines, normalize_to, ybottom, ytop)
 
 
@@ -481,3 +481,11 @@ def iterated_runcard_yaml(
         filtermap["description"] = _updated_description
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+
+
+# deprecated names for backwards compatibility.
+plot_alphaEff = plot_alpha_eff
+plot_alphaEff_internal = plot_alpha_eff_internal
+
+plot_betaEff = plot_beta_eff
+plot_betaEff_internal = plot_beta_eff_internal
