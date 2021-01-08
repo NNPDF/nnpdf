@@ -178,6 +178,7 @@ class ModelTrainer:
         kfold_parameters=None,
         max_cores=None,
         model_file=None, 
+        sum_rules=True,
     ):
         """
         Parameters
@@ -193,6 +194,7 @@ class ModelTrainer:
             save_weights_each: if set, save the state of the fit
                                     every ``save_weights_each`` epochs
             model_file: str whether to save the models
+            sum_rules: bool whether sum rules should be enabled
         """
 
         # Save all input information
@@ -220,7 +222,7 @@ class ModelTrainer:
         self.model_file = model_file
         self.print_summary = True
         self.mode_hyperopt = False
-        self.impose_sumrule = True
+        self.impose_sumrule = sum_rules
         self.hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]

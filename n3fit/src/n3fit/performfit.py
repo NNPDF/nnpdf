@@ -242,7 +242,8 @@ def performfit(
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
-            model_file=fitting.get("load")
+            model_file=fitting.get("load"),
+            sum_rules=fitting.get("sum_rules", True)
         )
 
         # This is just to give a descriptive name to the fit function

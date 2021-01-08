@@ -177,6 +177,20 @@ this value, it will be tagged as ``POS_VETO`` and the replica removed from postf
 Other options
 -------------
 
+Imposing sum rules
+^^^^^^^^^^^^^^^^^^
+
+By default in ``n3fit`` sum rules are imposed following the definitions in Eq. (10) of
+the `NNPDF3.0 paper <https://arxiv.org/pdf/1410.8849.pdf#page=29>`_.
+It is however possible to disable them by setting to false the ``sum_rules`` flag.
+
+.. code-block:: yaml
+
+    fitting:
+      sum_rules: False
+      
+      
+
 Threshold :math:`\chi2`
 ^^^^^^^^^^^^^^^^^^^^^^^
 
