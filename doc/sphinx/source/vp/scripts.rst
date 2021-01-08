@@ -7,6 +7,8 @@ Validphys scripts
 :code:`validphys` comes included with a collection of shell scripts to assist with various
 logistical tasks to do with :code:`fits` and :code:`PDF` formats.
 
+.. _postfit:
+
 Processing a fit
 ----------------
 
