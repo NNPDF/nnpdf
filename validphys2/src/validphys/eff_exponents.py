@@ -9,6 +9,7 @@ import numbers
 import random
 import warnings
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -28,6 +29,8 @@ import validphys.pdfgrids as pdfgrids
 log = logging.getLogger(__name__)
 
 INTERNAL_LINESTYLE = ['-.', ':']
+INTERNAL_COLOR = plt.rcParams['axes.prop_cycle'].by_key()["color"]
+
 
 @check_positive('Q')
 @make_argcheck(check_basis)
@@ -169,11 +172,15 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         for i, label in enumerate(col_label):
             # get the correct index label - don't assume table ordering.
             table_fl_index = f"${self.firstgrid.basis.elementlabel(flstate.fl)}$"
+
+            # wrap color index since number of pdfs could in theory exceed
+            # number of colors
             handle = flstate.ax.hlines(
                 hlines.loc[table_fl_index, label].values,
                 xmin=xmin,
                 xmax=xmax,
-                linestyle=INTERNAL_LINESTYLE[i]
+                linestyle=INTERNAL_LINESTYLE[i],
+                color=INTERNAL_COLOR[pdf_index % len(INTERNAL_COLOR)]
             )
             flstate.handles.append(handle)
             flstate.labels.append(label)
