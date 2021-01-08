@@ -169,10 +169,10 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         hlines = self.hlines[pdf_index]
         col_label = hlines.columns.get_level_values(0).unique()
         xmin, xmax = flstate.ax.get_xlim()
-        for i, label in enumerate(col_label):
-            # get the correct index label - don't assume table ordering.
-            table_fl_index = f"${self.firstgrid.basis.elementlabel(flstate.fl)}$"
+        # get the correct index label - don't assume table ordering.
+        table_fl_index = f"${self.firstgrid.basis.elementlabel(flstate.fl)}$"
 
+        for i, label in enumerate(col_label):
             # wrap color index since number of pdfs could in theory exceed
             # number of colors
             handle = flstate.ax.hlines(
@@ -185,10 +185,11 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
             flstate.handles.append(handle)
             flstate.labels.append(label)
         # need to return xgrid shaped object but with hlines taken into account to get plots nice
+        hline_positions = hlines.loc[table_fl_index, :].values.flatten()
         new_errdown = min(
-            [*errdown, *hlines.values[flstate.flindex, :],])
+            [*errdown, *hline_positions,])
         new_errup = max(
-            [*errup, *hlines.values[flstate.flindex, :],])
+            [*errup, *hline_positions,])
         return new_errdown*np.ones_like(errdown), new_errup*np.ones_like(errup)
 
 
