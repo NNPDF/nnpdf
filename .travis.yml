@@ -19,9 +19,7 @@ env:
     - OUTPUT_CHANNEL=conda-private
     - UPLOAD_NON_MASTER="false"
     - CONDA_BUILD_SYSROOT="${CONDAPATH}/MacOSX10.9.sdk"
-    # pin conda build on OSX because of issue with channel name
-    # https://github.com/NNPDF/nnpdf/issues/915
-    - CONDA_BUILD_VERSION=3.18.11
+    - CONDA_BUILD_VERSION=3
 
   matrix:
     - CONDA_PY=37
