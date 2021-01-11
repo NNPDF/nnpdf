@@ -21,7 +21,7 @@ from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
 from validphys.core import PDF, FitSpec
-from validphys.pdfbases import check_basis, Basis
+from validphys.pdfbases import check_basis, Basis, UnknownElement
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
@@ -163,14 +163,56 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         self.hlines = hlines
 
     def draw(self, pdf, grid, flstate):
-        # Here we assume each pdf has a corresponding fit, which is true by construction.
-        errdown, errup = super().draw(pdf, grid, flstate)
+        """Overload :py:meth:`BandPDFPlotter.draw` to plot bands of the
+        effective exponent calculated from the replicas and horizontal lines
+        for the effective exponents of the previous/next fits, if possible.
+
+        ``flstate`` is an element of the flavours for the first pdf specified in
+        pdfs. If this flavour doesn't exist in the current pdf's basis or
+        the set of flavours for which the preprocessing exponents exist for the
+        current pdf then a warning is surfaced to the user and nothing is added
+        to the plot. Whilst it doesn't make much sense to compare the exponents
+        in this case, raising a check error would be disadvantageous since the
+        action is included in the compare fits report, for which it should
+        be possible to compare two fits which were fitted in different bases, or
+        with different flavours.
+
+        """
         pdf_index = self.pdfs.index(pdf)
         hlines = self.hlines[pdf_index]
+        # get the correct index label - don't assume table ordering. But flavour
+        # might not exist in pdf basis, or the pdfs might have a different
+        # number of flavours. handle these cases seperately, since they are
+        # subtley different.
+        try:
+            table_fl_index = f"${grid.basis.elementlabel(flstate.fl)}$"
+            # test if the flavour exists in the table
+            hlines.loc[table_fl_index]
+        except UnknownElement:
+            log.warning(
+                "%s was not found in the basis specified for %s. Effective "
+                "exponents are probably being compared for pdfs in different "
+                "bases. Skipping flavour/pdf combination.",
+                flstate.fl,
+                pdf,
+            )
+            return None
+        except KeyError:
+            log.warning(
+                "%s was a known element of the basis specificed for %s but "
+                "didn't appear in the preprocessing table, which only had "
+                "entries for %s. Skipping pdf/flavour combination.",
+                flstate.fl,
+                pdf,
+                hlines.index.get_level_values(0).values
+            )
+            return None
+
+        errdown, errup = super().draw(pdf, grid, flstate)
+
         col_label = hlines.columns.get_level_values(0).unique()
+        # need to have plotted bands before getting x limit
         xmin, xmax = flstate.ax.get_xlim()
-        # get the correct index label - don't assume table ordering.
-        table_fl_index = f"${self.firstgrid.basis.elementlabel(flstate.fl)}$"
 
         for i, label in enumerate(col_label):
             # wrap color index since number of pdfs could in theory exceed
