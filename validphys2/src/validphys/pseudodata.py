@@ -26,7 +26,7 @@ fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 context_index = collect("groups_index", ("fitcontext",))
 
 @check_cuts_fromfit
-def fit_pseudodata(fitcontext, context_index):
+def read_fit_pseudodata(fitcontext, context_index):
     """Generator to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
 
@@ -45,7 +45,7 @@ def fit_pseudodata(fitcontext, context_index):
     Example
     -------
     >>> from validphys.api import API
-    >>> data_generator = API.fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
+    >>> data_generator = API.read_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
     >>> data, tr_idx, val_idx = next(data_generator)
     >>> data.loc[tr_idx]
                         data
