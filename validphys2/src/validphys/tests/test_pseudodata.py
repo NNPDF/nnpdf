@@ -18,7 +18,9 @@ from validphys.api import API
 from validphys.pseudodata import training_validation_pseudodata
 import validphys.tests.regressions
 
+from reportengine.checks import CheckError
 from reportengine.compat import yaml
+from reportengine.resourcebuilder import ResourceError
 
 EXAMPLE_RUNCARD = """fit: pseudodata_test_fit
 pdf: pseudodata_test_fit
@@ -61,6 +63,28 @@ def setup_dicts(request):
     pseudodata_info = API.get_pseudodata(**ns, **n_process_config)
 
     return exp_infos, pseudodata_info
+
+
+def test_read_fit_pseudodata():
+    data_generator = API.read_fit_pseudodata(
+      fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata",
+      use_cuts="fromfit"
+    )
+
+    # Only bother checking the first ten replicas
+    for _ in range(10):
+      data, tr_idx, val_idx = next(data_generator)
+      # Check the training and validation index are disjoint
+      assert set(tr_idx).isdisjoint(set(val_idx))
+      # Check the union is equal to the full dataset
+      assert all(tr_idx.union(val_idx) == data.index)
+
+    with pytest.raises(ResourceError) as e_info:
+        API.read_fit_pseudodata(
+          fit="NNPDF31_nnlo_as_0118_DISonly",
+          use_cuts="nocuts"
+        )
+        assert isinstance(e_info.__cause__, CheckError)
 
 
 def test_pseudodata(setup_dicts):
