@@ -79,9 +79,20 @@ def test_read_fit_pseudodata():
       # Check the union is equal to the full dataset
       assert all(tr_idx.union(val_idx) == data.index)
 
+    with pytest.raises(FileNotFoundError):
+        # Check a FileNotFoundError is raised
+        # if the input fit wasn't generated
+        # with the savepseudodata flag set to true
+        bad_gen = API.read_fit_pseudodata(
+            fit="NNPDF31_nnlo_as_0118_DISonly", use_cuts="fromfit"
+        )
+        next(bad_gen)
+
     with pytest.raises(ResourceError) as e_info:
+        # Check the enforcement of use_cuts being set
+        # to fromfit is in place
         API.read_fit_pseudodata(
-          fit="NNPDF31_nnlo_as_0118_DISonly",
+          fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata",
           use_cuts="nocuts"
         )
         assert isinstance(e_info.__cause__, CheckError)
