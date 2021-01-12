@@ -79,18 +79,18 @@ class N3PDF(PDF):
         return self
 
     def get_nn_weights(self):
-        """ Outputs all weights of the NN as numpy arrays """
+        """Outputs all weights of the NN as numpy arrays """
         return self.model.get_weights()
 
     def get_preprocessing_factors(self):
-        """ Loads the preprocessing alpha and beta arrays from the PDF trained model.
-        If a ``fit_basis`` given in the format of `n3fit` runcards is given it will be used
+        """Loads the preprocessing alpha and beta arrays from the PDF trained model.
+        If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
         to generate a new dictionary with the names, the exponent and whether they are trainable
         otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
         """
         factors = self.model.get_layer("pdf_prepro").get_weights()
         all_fac = np.concatenate(factors)
-        alphas_and_betas = all_fac.reshape((-1,2))
+        alphas_and_betas = all_fac.reshape((-1, 2))
         if self.fit_basis is not None and len(alphas_and_betas) == len(self.fit_basis):
             output_dictionaries = []
             for ab, d in zip(alphas_and_betas, self.fit_basis):
