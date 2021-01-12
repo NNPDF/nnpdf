@@ -36,11 +36,11 @@ requirements:
         - apfel
         - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.28 # see https://github.com/NNPDF/reportengine
+        - reportengine >=0.28.60 # see https://github.com/NNPDF/reportengine
         - matplotlib >=3.3.0
-        - blessings
+        - blessings >=1.7
         - scipy >=0.19.1
-        - pandas =1.0
+        - pandas
         - requests
         - prompt_toolkit =2
         - sphinx # documentation
