@@ -72,8 +72,12 @@ positivity is not. They work as follows:
   where :math:`f_q` represents a suitable parameter whose default value is 0.5. Replicas are cut if
   they do not satisfy the above condition.
 
-* Positivity: during the fit positive and negative replicas are labelled with the flags
-  :code:`POS_PASS` and :code:`POS_VETO` respectively. Only the former are kept.
+* Positivity: for each positivity observable appearing in the runcard, a positivity threshold is given.
+  By default this is taken to be :math:`10^{-6}`. During the fit the Positivity class, implemented as part 
+  of the stopping object in n3fit, checks whether the positivity losses (which are the terms proportional to the lagrange multipliers)
+  are below the threshold. This check is performed at the level of each positivity observable.  
+  If none of the positivity checks fails the replica is labelled with the flag
+  :code:`POS_PASS`, otherwise with :code:`POS_VETO`. At the level of postfit only the former are kept.
 
 The three thresholds can be set by the user by specifying any or all of the following flags:
 :code:`--chi2-threshold`, :code:`--arclength-threshold` and :code:`--integrability-threshold`. In
