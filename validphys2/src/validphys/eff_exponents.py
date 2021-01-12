@@ -503,11 +503,3 @@ def iterated_runcard_yaml(
         filtermap["description"] = _updated_description
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
-
-
-# deprecated names for backwards compatibility.
-plot_alphaEff = plot_alpha_eff
-plot_alphaEff_internal = plot_alpha_eff_internal
-
-plot_betaEff = plot_beta_eff
-plot_betaEff_internal = plot_beta_eff_internal
