@@ -13,7 +13,7 @@ requirements:
         - cmake
         - pkg-config
     host:
-        - lhapdf      # with python3.6 wrapper
+        - lhapdf      # with python wrapper
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
         - libarchive
