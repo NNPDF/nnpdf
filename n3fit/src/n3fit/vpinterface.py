@@ -96,11 +96,15 @@ class N3PDF(PDF):
                 flavour = d["fl"]
                 alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
                 beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
+                if alpha is not None:
+                    alpha = float(alpha)
+                if beta is not None:
+                    beta = float(beta)
                 output_dictionaries.append(
                     {
                         "fl": flavour,
-                        "smallx": float(alpha),
-                        "largex": float(beta),
+                        "smallx": alpha,
+                        "largex": beta,
                         "trainable": d.get("trainable", True),
                     }
                 )
