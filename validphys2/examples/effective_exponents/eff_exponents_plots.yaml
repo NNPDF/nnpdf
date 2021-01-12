@@ -12,6 +12,8 @@ beta:
 fits:
   - 170120-008
 
+basis: NN31IC
+
 meta:
     author: Rabah Abdul Khalek
     title: Effective Exponents

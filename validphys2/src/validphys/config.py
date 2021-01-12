@@ -283,13 +283,26 @@ class CoreConfig(configparser.Config):
             )
         return self.parse_pdf(laws.pop())
 
-    def produce_fitpdfandbasis(self, fit):
-        """ Set the PDF and basis from the fit config. """
+
+    def produce_basisfromfit(self, fit):
+        """Set the basis from fit config. In the fit config file the basis
+        is set using the key ``fitbasis``, but it is exposed to validphys
+        as ``basis``.
+
+        The name of this production rule is intentionally
+        set to not conflict with the existing ``fitbasis`` runcard key.
+
+        """
         with self.set_context(ns=self._curr_ns.new_child({"fit": fit})):
-            _, pdf = self.parse_from_("fit", "pdf", write=False)
             _, fitting = self.parse_from_("fit", "fitting", write=False)
         basis = fitting["fitbasis"]
-        return {"pdf": pdf, "basis": basis}
+        return {"basis": basis}
+
+
+    def produce_fitpdfandbasis(self, fitpdf, basisfromfit):
+        """ Set the PDF and basis from the fit config. """
+        return {**fitpdf, **basisfromfit}
+
 
     @element_of("dataset_inputs")
     def parse_dataset_input(self, dataset: Mapping):
