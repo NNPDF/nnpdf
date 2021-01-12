@@ -61,6 +61,26 @@ class MetaLayer(Layer):
             self.weight_inits.append((kernel, initializer))
         return kernel
 
+    def get_weight_by_name(self, weight_name, internal_count=0):
+        """
+        Returns a weight of the layer by name, returns None if the layer does not include
+        the named weight.
+
+        Note that internally weights of a layer are prefaced by the name of the layer, this
+        should not be added to the input of this function. i.e., if the internal name is
+        "layer/weight:0", the argument to this method should be just "weight".
+
+        Parameters
+        ----------
+            weight_name: str
+                Name of the weight
+        """
+        check_name = f"{self.name}/{weight_name}:{internal_count}"
+        for weight in self.weights:
+            if weight.name == check_name:
+                return weight
+        return None
+
     # Implemented initializers
     @staticmethod
     def init_constant(value):
