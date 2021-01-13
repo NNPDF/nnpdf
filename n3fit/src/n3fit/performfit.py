@@ -308,7 +308,7 @@ def performfit(
                 which it got at {2}. Stopping degree {3}
                 Positivity state: {4}
                 """.format(
-                stopping_object.epoch_of_the_stop,
+                stopping_object.stop_epoch,
                 stopping_object.vl_chi2,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,

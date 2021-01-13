@@ -375,7 +375,7 @@ class Stopping:
         return self.history.best_epoch
 
     @property
-    def epoch_of_the_stop(self):
+    def stop_epoch(self):
         """ Epoch in which the fit is stopped """
         return self.history.final_epoch + 1
 
@@ -570,7 +570,7 @@ Total: training = {total_tr_loss} validation = {total_vl_loss}
                 "vl_chi2" : val_chi2,
                 "tr_chi2" : tr_chi2,
                 "exp_chi2" : exp_chi2,
-                "epoch_of_the_stop" : self.epoch_of_the_stop,
+                "stop_epoch" : self.stop_epoch,
                 "epoch_of_best_fit" : self.e_best_chi2,
                 "positivity_status" : self.positivity_status()
                 }
