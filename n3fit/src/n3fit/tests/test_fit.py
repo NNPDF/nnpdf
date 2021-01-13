@@ -155,9 +155,27 @@ def test_hyperopt(tmp_path):
 
 
 def test_novalidation(tmp_path, timing=30):
-    """ Runs a runcard without validation, success is assumed if it doesn't crash in 30 seconds """
+    """ Runs a runcard without validation, success is assumed if it doesn't crash in 30 seconds 
+    Checks that the code is able to run when the trvl frac is set to 1.0
+    """
     quickcard = f"noval-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
     shutil.copy(quickpath, tmp_path)
     with pytest.raises(sp.TimeoutExpired):
         sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing)
+
+
+def test_weirdbasis(tmp_path, timing=30):
+    """ Runs a runcard with perturbative charm basis but an intrinsic charm theory
+    so the run will be stopped by the checks """
+    # Once we have a light theory with perturbative charm for testing, this test can be enabled
+    # to do the commented docstring
+#     """ Runs a runcard with perturbative charm, success is assumed if it doesn't crash in 30 seconds
+#     Checks that the code runs when it needs to rotate the output of the NN to the NN31IC basis
+#     """
+    quickcard = f"pc-{QUICKNAME}.yml"
+    quickpath = REGRESSION_FOLDER / quickcard
+    shutil.copy(quickpath, tmp_path)
+#     with pytest.raises(sp.TimeoutExpired):
+    with pytest.raises(sp.CalledProcessError):
+        sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing, check=True)
