@@ -51,7 +51,7 @@ def load_data(info_file):
             lines = f.readlines()
             # Line 2 contains epochs, val, tr, exp, POS
             sp_lineone = lines[0].split()
-            ret["epoch_of_the_stop"] = int(sp_lineone[0])
+            ret["stop_epoch"] = int(sp_lineone[0])
             ret["erf_vl"] = float(sp_lineone[1])
             ret["erf_tr"] = float(sp_lineone[2])
             ret["chi2"] = float(sp_lineone[3])
@@ -109,7 +109,7 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
     for key, item in new_fitinfo.items():
         assert_equal(item, new_json[key])
     # Now compare to regression results, taking into account precision won't be 100%
-    equal_checks = ["epoch_of_the_stop", "pos_state"]
+    equal_checks = ["stop_epoch", "pos_state"]
     approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "arc_lengths", "integrability", "best_epoch"]
     for key in equal_checks:
         assert_equal(new_json[key], old_json[key])

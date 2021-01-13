@@ -76,7 +76,7 @@ class WriterWrapper:
             replica_path_set,
             fitname,
             self.q2,
-            self.stopping_object.epoch_of_the_stop,
+            self.stopping_object.stop_epoch,
             vl_chi2,
             tr_chi2,
             true_chi2,
@@ -121,7 +121,7 @@ def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
     # Generate preprocessing information
     all_info["preprocessing"] = ""
     # .fitinfo-like info
-    all_info["epoch_of_the_stop"] = stopping_object.epoch_of_the_stop
+    all_info["stop_epoch"] = stopping_object.stop_epoch
     all_info["best_epoch"] = stopping_object.e_best_chi2
     all_info["erf_tr"] = tr_chi2
     all_info["erf_vl"] = vl_chi2
