@@ -23,7 +23,7 @@ The standard usage of postfit is something like the following::
 
     $ postfit 100 NNPDF31_nnlo_as_0118
 
-where here the fit being processed is :code:`NNPDF31_nnlo_as_0118` and it is being required that
+where here the fit being processed is :code:`NNPDF31_nnlo_as_0118` and it requires that
 the LHAPDF set contains 100 PDF replicas, excluding :code:`replica_0`. If there are not 100
 replicas in the fit that pass the selection criteria, then the script will fail and the user can
 either request fewer replicas or run more replicas such that there will eventually be enough that
