@@ -16,6 +16,7 @@ import pytest
 
 from validphys.api import API
 from validphys.pseudodata import training_validation_pseudodata
+from validphys.tests.conftest import FIT
 import validphys.tests.regressions
 
 from reportengine.checks import CheckError
@@ -84,7 +85,7 @@ def test_read_fit_pseudodata():
         # if the input fit wasn't generated
         # with the savepseudodata flag set to true
         bad_gen = API.read_fit_pseudodata(
-            fit="NNPDF31_nnlo_as_0118_DISonly", use_cuts="fromfit"
+            fit=FIT, use_cuts="fromfit"
         )
         next(bad_gen)
 
