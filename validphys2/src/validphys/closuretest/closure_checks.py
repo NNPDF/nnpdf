@@ -23,8 +23,22 @@ def check_use_fitcommondata(use_fitcommondata):
 @make_argcheck
 def check_fit_isclosure(fit):
     """Check the input fit is a closure test"""
-    if not fit.as_input()["closuretest"]["fakedata"]:
-        raise CheckError(f"Specified fit: {fit}, is not a closure test")
+    fitinfo = fit.as_input()
+    if not "closuretest" in fitinfo:
+        raise CheckError(
+            f"There is no `closuretest` namespace in {fit}'s runcard. "
+            f"{fit} is therefore not suitable for closure-test studies."
+        )
+    if not "fakedata" in fitinfo["closuretest"]:
+        raise CheckError(
+            f"The `fakedata` key does not exist in the `closuretest` namespace of {fit}'s runcard. "
+            f"{fit} is therefore not suitable for closure-test studies."
+        )
+    if not fitinfo["closuretest"]["fakedata"]:
+        raise CheckError(
+            f"The `fakedata` key is not set to `true` in the `closuretest` namespace of {fit}'s runcard. "
+            f"{fit} is therefore not suitable for closure-test studies."
+            )
 
 
 @make_argcheck
@@ -52,8 +66,7 @@ def check_fits_same_filterseed(fits):
 def check_fits_areclosures(fits):
     """Check all fits are closures"""
     for fit in fits:
-        if not fit.as_input()["closuretest"]["fakedata"]:
-            raise CheckError(f"Specified fit: {fit}, is not a closure test")
+        check_fit_isclosure.__wrapped__(fit)
 
 
 @make_argcheck

@@ -74,7 +74,7 @@ def check_basis_with_layers(fitting, parameters):
     if number_of_flavours != last_layer:
         raise CheckError(
             f"The number of nodes in the last layer ({last_layer}) does not"
-            " match the number of flavours: ({number_of_flavours})"
+            f" match the number of flavours: ({number_of_flavours})"
         )
 
 
@@ -311,7 +311,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments_data):
 
 # Checks on the physics
 @make_argcheck
-def check_consistent_basis(fitting):
+def check_consistent_basis(fitting, theoryid):
     """Checks the fitbasis setup for inconsistencies
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
@@ -330,5 +330,12 @@ def check_consistent_basis(fitting):
         if name in flavs:
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
         flavs.append(name)
+    # Finally check whether the basis considers or not charm
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
-    check_basis(fitbasis, flavs)
+    basis = check_basis(fitbasis, flavs)["basis"]
+    # Now check that basis and theory id are consistent
+    has_c = basis.has_element("cp") or basis.has_element("T15")
+    if theoryid.get_description()["IC"] and not has_c:
+        raise CheckError(f"{theoryid} (intrinsic charm) is incompatible with basis {fitbasis}")
+    if not theoryid.get_description()["IC"] and has_c:
+        raise CheckError(f"{theoryid} (perturbative charm) is incompatible with basis {fitbasis}")
