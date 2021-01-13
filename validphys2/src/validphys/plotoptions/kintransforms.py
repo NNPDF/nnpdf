@@ -210,6 +210,10 @@ class dijet_CMS_3D(SqrtScaleMixin,DIJET3DXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y^*|$', '$p_{T,avg}$ (GeV)', r'$|y_b|$')
 
+class dijet_CMS_5TEV(SqrtScaleMixin,DIJET3DXQ2MapMixin):
+    def new_labels(self, *old_labels):
+        return ('$\eta_{dijet}$', '$p_{T,avg}$ (GeV)', r'$\sqrt{s} (GeV)$')    
+
 class dis_sqrt_scale(DISXQ2MapMixin):
     def __call__(self, k1, k2, k3):
         ecm = np.sqrt(k2/(k1*k3))
