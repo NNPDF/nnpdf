@@ -63,8 +63,7 @@ def load_data(info_file):
             return ret
         elif info_file.suffix == ".json":
             return json.load(f)
-        else:
-            raise ValueError(f"Wrong information file: {info_file}")
+        raise ValueError(f"Wrong information file: {info_file}")
 
 
 def test_initialize_seeds():
