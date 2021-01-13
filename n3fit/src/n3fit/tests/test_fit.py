@@ -51,7 +51,7 @@ def load_data(info_file):
             lines = f.readlines()
             # Line 2 contains epochs, val, tr, exp, POS
             sp_lineone = lines[0].split()
-            ret["stop_epoch"] = int(sp_lineone[0])
+            ret["best_epoch"] = int(sp_lineone[0])
             ret["erf_vl"] = float(sp_lineone[1])
             ret["erf_tr"] = float(sp_lineone[2])
             ret["chi2"] = float(sp_lineone[3])
