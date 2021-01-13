@@ -72,21 +72,22 @@ positivity is not. They work as follows:
   where :math:`f_q` represents a suitable parameter whose default value is 0.5. Replicas are cut if
   they do not satisfy the above condition.
 
-* Positivity: for each positivity observable appearing in the runcard, a positivity threshold is given.
-  By default this is taken to be :math:`10^{-6}`. During the fit the Positivity class, implemented as part 
-  of the stopping object in n3fit, checks whether the positivity losses (which are the terms proportional to the lagrange multipliers)
-  are below the threshold. This check is performed at the level of each positivity observable.  
-  If none of the positivity checks fails the replica is labelled with the flag
-  :code:`POS_PASS`, otherwise with :code:`POS_VETO`. At the level of postfit only the former are kept.
+* Positivity: for each positivity observable appearing in the runcard, a positivity threshold is
+  given. By default this is taken to be :math:`10^{-6}`. During the fit the Positivity class,
+  implemented as part of the stopping object in n3fit, checks whether the positivity losses (which
+  are the terms proportional to the lagrange multipliers) are below the threshold. This check is
+  performed at the level of each positivity observable. If none of the positivity checks fail the
+  replica is labelled with the flag :code:`POS_PASS`, otherwise with :code:`POS_VETO`. At the level
+  of postfit only the former are kept.
 
-The three thresholds can be set by the user by specifying any or all of the following flags:
+Three of these thresholds can be set by the user by specifying any or all of the following flags:
 :code:`--chi2-threshold`, :code:`--arclength-threshold` and :code:`--integrability-threshold`. In
 each case the desired numeric threshold should follow the flag. For example::
 
 $ postfit 100 NNPDF31_nnlo_as_0118 --chi2-threshold 3 --arclength-threshold 5.2 --integrability-threshold 0.02
 
-Importantly, the thresholds used by postfit are recorded in
-:code:`<fit_folder>/postfit/veto_count.json`.
+Importantly, these three thresholds are recorded in :code:`<fit_folder>/postfit/veto_count.json`
+when postfit is run.
 
 Fit renaming
 ------------
