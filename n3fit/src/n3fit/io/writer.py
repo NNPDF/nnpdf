@@ -119,7 +119,7 @@ def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
     """
     all_info = {}
     # Generate preprocessing information
-    all_info["preprocessing"] = ""
+    all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
     # .fitinfo-like info
     all_info["stop_epoch"] = stopping_object.stop_epoch
     all_info["best_epoch"] = stopping_object.e_best_chi2
