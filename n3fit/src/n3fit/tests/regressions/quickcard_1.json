@@ -1,7 +1,7 @@
 {
   "preprocessing": "",
   "stop_epoch": 1000,
-  "best_epoch": null,
+  "best_epoch": 1000,
   "erf_tr": 33.213114420572914,
   "erf_vl": 28.218009317727912,
   "chi2": 21.431137768190297,
