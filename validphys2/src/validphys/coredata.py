@@ -246,7 +246,7 @@ class CommonData:
         return add_table.loc[:, add_table.columns != "SKIP"]
 
 
-    def systematic_errors(self):
+    def systematic_errors(self, central_values=None):
         """Returns all systematic errors as absolute uncertainties, with a
         single column for each uncertainty. Converts
         :py:attr:`multiplicative_errors` to units of data and then appends
@@ -254,7 +254,8 @@ class CommonData:
 
         """
         # NOTE: in the future can take t0 predictions here.
-        central_values = self.central_values.to_numpy()
+        if central_values is None:
+            central_values = self.central_values.to_numpy()
         converted_mult_errors = (
             self.multiplicative_errors * central_values[:, np.newaxis] / 100
         )

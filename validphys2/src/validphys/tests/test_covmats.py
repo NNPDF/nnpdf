@@ -11,11 +11,8 @@ import numpy as np
 
 
 from validphys.api import API
-from validphys.commondataparser import load_commondata
 from validphys.covmats import (
     sqrt_covmat,
-    datasets_covmat_from_systematics,
-    covmat_from_systematics
 )
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID
@@ -25,15 +22,8 @@ def test_covmat_from_systematics_correlated(data_with_correlations_config):
     """Test the covariance matrix generation from a set of correlated datasets
     given their systematic errors
     """
-    data = API.data(**data_with_correlations_config)
-    cds = [ds.commondata for ds in data.datasets]
-
-    ld_cds = list(map(load_commondata, cds))
-
-    covmat = datasets_covmat_from_systematics(ld_cds)
-
+    covmat = API.dataset_inputs_experimental_covmat(**data_with_correlations_config)
     cpp_covmat = API.groups_covmat(**data_with_correlations_config)
-
     np.testing.assert_allclose(cpp_covmat, covmat)
 
 
@@ -43,17 +33,16 @@ def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
     when the latter is given a list containing a single dataset.
 
     """
-    data = API.data(**data_internal_cuts_config)
-    cds = [ds.commondata for ds in data.datasets]
+    base_config = dict(data_internal_cuts_config)
+    #TODO: update tests to use new input.
+    exps = base_config.pop("experiments")
+    dataset_inputs = [dsinp for exp in exps for dsinp in exp["datasets"]]
 
-    ld_cds = list(map(load_commondata, cds))
-
-    internal_cuts = [ds.cuts for ds in data.datasets]
-    cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
-
-    for cut_ld_cd in cut_ld_cds:
-        covmat_a = covmat_from_systematics(cut_ld_cd)
-        covmat_b = datasets_covmat_from_systematics([cut_ld_cd])
+    for dsinp in dataset_inputs:
+        covmat_a = API.experimental_covmat(
+            **base_config, dataset_input=dsinp)
+        covmat_b = API.dataset_inputs_experimental_covmat(
+            **base_config, dataset_inputs=[dsinp])
         np.testing.assert_allclose(covmat_a, covmat_b)
 
 
@@ -62,16 +51,7 @@ def test_covmat_from_systematics(data_internal_cuts_config):
     collection of datasets matches that of the C++ computation. Note that the
     datasets are cut using the internal rules, but the datasets are not correlated.
     """
-    data = API.data(**data_internal_cuts_config)
-    cds = [ds.commondata for ds in data.datasets]
-
-    ld_cds = list(map(load_commondata, cds))
-
-    internal_cuts = [ds.cuts for ds in data.datasets]
-    cut_ld_cds = list(map(lambda x: x[0].with_cuts(x[1]), zip(ld_cds, internal_cuts)))
-
-    covmat = datasets_covmat_from_systematics(cut_ld_cds)
-
+    covmat = API.dataset_inputs_experimental_covmat(**data_internal_cuts_config)
     cpp_covmat = API.groups_covmat(**data_internal_cuts_config)
 
     np.testing.assert_allclose(cpp_covmat, covmat)
@@ -83,11 +63,10 @@ def test_covmat_with_one_systematic():
 
     """
     dsinput = {"dataset": "D0ZRAP", "frac": 1.0, "cfac": ["QCD"]}
-    cd = API.commondata(dataset_input=dsinput)
-    l_cd = load_commondata(cd)
-    covmat = covmat_from_systematics(l_cd)
+    config = dict(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
 
-    ds = API.dataset(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
+    covmat = API.experimental_covmat(**config)
+    ds = API.dataset(**config)
     cpp_covmat = ds.load().get_covmat()
 
     np.testing.assert_allclose(cpp_covmat, covmat)
@@ -142,3 +121,17 @@ def test_sqrt_covmat(data_config):
         covmat = ld_exp.get_covmat()
         cholesky_cov = sqrt_covmat(covmat)
         np.testing.assert_allclose(cholesky_cov @ cholesky_cov.T, covmat)
+
+def test_t0_covmat(data_witht0_config):
+    #TODO: expand t0 tests
+    base_config = dict(data_witht0_config)
+    # just compare cut data
+    base_config["use_cuts"] = "internal"
+    covmat = API.dataset_inputs_t0_covmat(**base_config)
+    cpp_covmat = API.groups_covmat(**base_config)
+    # use allclose defaults or it fails
+    np.testing.assert_allclose(cpp_covmat, covmat, rtol=1e-05, atol=1e-08)
+    with pytest.raises(AssertionError):
+        np.testing.assert_allclose(
+            covmat, API.dataset_inputs_experimental_covmat(**base_config)
+        )
