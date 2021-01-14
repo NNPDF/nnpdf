@@ -13,7 +13,8 @@ echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 conda config --add channels https://packages.nnpdf.science/conda;
 conda config --add channels https://packages.nnpdf.science/conda-private;
 conda config --set show_channel_urls true;
-conda install nnpdf --yes
+conda create -n nnpdfenv nnpdf --yes
+conda activate nnpdfenv
 cd doc/sphinx
 make html
 
