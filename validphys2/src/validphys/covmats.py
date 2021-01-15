@@ -70,7 +70,7 @@ def covmat_from_systematics(commondata, central_values=None):
     central_values: None, np.array
         1-D array containing alternative central values to combine with the
         multiplicative errors to calculate their absolute contributions. By
-        default this is None, and the experimental central values are used but
+        default this is None, and the experimental central values are used. However, this
         can be used to calculate, for example, the t0 covariance matrix by
         using the predictions from the central member of the t0 pdf.
 
@@ -234,7 +234,7 @@ def t0_covmat(loaded_commondata_with_cuts, dataset_t0_predictions):
     """Like :py:func:`experimental_covmat` except uses the ``t0pdf`` predictions
     to calculate the absolute constributions to the covmat from multiplicative
     uncertainties. The t0 predictions are the predictions generated from the
-    central pdf, note that in the case that the ``t0pdf`` has replicas
+    central pdf. Note that in the case that the ``t0pdf`` has replicas
     errortype this is not the same as the central value of the replica
     predictions in the case of hadronic observables.
 

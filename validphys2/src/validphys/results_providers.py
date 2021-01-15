@@ -2,7 +2,7 @@
 results_providers.py
 
 module which bridges between underlying functions concerned with loading
-theory predictions and data and exposing them as actions which can be accessed
+theory predictions and data and actions which can be accessed
 by other actions/providers.
 
 """
@@ -37,7 +37,7 @@ def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
     errortype MC, and the dataset is a hadronic observable then the predictions
-    of the central member are subtley different to the central value of the
+    of the central member are subtly different to the central value of the
     replica predictions.
 
     Parameters

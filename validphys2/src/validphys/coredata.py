@@ -251,7 +251,7 @@ class CommonData:
         single column for each uncertainty. Converts
         :py:attr:`multiplicative_errors` to units of data and then appends
         onto :py:attr:`additive_errors`. By default uses the experimental
-        central values to perform convertion, but the user can supply a
+        central values to perform conversion, but the user can supply a
         1-D array of central values, with length :py:attr:`self.ndata`, to use
         instead of the experimental central values to calculate the absolute
         contribution of the multiplicative systematics.
@@ -259,7 +259,7 @@ class CommonData:
         Parameters
         ----------
         central_values: None, np.array
-            1-D array containing alternative central values combine with
+            1-D array containing alternative central values to combine with
             multiplicative uncertainties. This array must have length equal
             to :py:attr:`self.ndata`
 
