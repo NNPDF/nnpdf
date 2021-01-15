@@ -166,84 +166,80 @@ def make_replica(list_of_commondata, seed=None):
     # Seed the numpy RNG with the seed.
     np.random.seed(seed=seed)
 
-    # We make this generator infinite in the sense that it shall never
-    # raise a StopIteration exception. Thus we can continually request
-    # pseudodata from it and it will remember the RNG state.
+    # The inner while True loop is for ensuring a positive definite
+    # pseudodata replica
     while True:
-        # The inner while True loop is for ensuring a positive definite
-        # pseudodata replica
-        while True:
-            pseudodatas = []
-            special_add = []
-            special_mult = []
-            mult_shifts = []
-            check_positive_masks = []
-            for cd in list_of_commondata:
-                pseudodata = cd.central_values.to_numpy()
+        pseudodatas = []
+        special_add = []
+        special_mult = []
+        mult_shifts = []
+        check_positive_masks = []
+        for cd in list_of_commondata:
+            pseudodata = cd.central_values.to_numpy()
 
-                # add contribution from statistical uncertainty
-                pseudodata += (cd.stat_errors.to_numpy() * np.random.randn(cd.ndata))
+            # add contribution from statistical uncertainty
+            pseudodata += (cd.stat_errors.to_numpy() * np.random.randn(cd.ndata))
 
-                # ~~~ ADDITIVE ERRORS  ~~~
-                add_errors = cd.additive_errors
-                add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
+            # ~~~ ADDITIVE ERRORS  ~~~
+            add_errors = cd.additive_errors
+            add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
 
-                pseudodata += (add_uncorr_errors * np.random.randn(*add_uncorr_errors.shape)).sum(axis=1)
+            pseudodata += (add_uncorr_errors * np.random.randn(*add_uncorr_errors.shape)).sum(axis=1)
 
-                # correlated within dataset
-                add_corr_errors = add_errors.loc[:, add_errors.columns == "CORR"].to_numpy()
-                pseudodata += add_corr_errors @ np.random.randn(add_corr_errors.shape[1])
+            # correlated within dataset
+            add_corr_errors = add_errors.loc[:, add_errors.columns == "CORR"].to_numpy()
+            pseudodata += add_corr_errors @ np.random.randn(add_corr_errors.shape[1])
 
-                # append the partially shifted pseudodata
-                pseudodatas.append(pseudodata)
-                # store the additive errors with correlations between datasets for later use
-                special_add.append(
-                    add_errors.loc[:, ~add_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-                )
-                # ~~~ MULTIPLICATIVE ERRORS ~~~
-                mult_errors = cd.multiplicative_errors
-                mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
-                # convert to from percent to fraction
-                mult_shift = (
-                    1 + mult_uncorr_errors * np.random.randn(*mult_uncorr_errors.shape) / 100
-                ).prod(axis=1)
+            # append the partially shifted pseudodata
+            pseudodatas.append(pseudodata)
+            # store the additive errors with correlations between datasets for later use
+            special_add.append(
+                add_errors.loc[:, ~add_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
+            )
+            # ~~~ MULTIPLICATIVE ERRORS ~~~
+            mult_errors = cd.multiplicative_errors
+            mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
+            # convert to from percent to fraction
+            mult_shift = (
+                1 + mult_uncorr_errors * np.random.randn(*mult_uncorr_errors.shape) / 100
+            ).prod(axis=1)
 
-                mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
-                mult_shift *= (
-                    1 + mult_corr_errors * np.random.randn(1, mult_corr_errors.shape[1]) / 100
-                ).prod(axis=1)
+            mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
+            mult_shift *= (
+                1 + mult_corr_errors * np.random.randn(1, mult_corr_errors.shape[1]) / 100
+            ).prod(axis=1)
 
-                mult_shifts.append(mult_shift)
+            mult_shifts.append(mult_shift)
 
-                # store the multiplicative errors with correlations between datasets for later use
-                special_mult.append(
-                    mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-                )
-
-                # mask out the data we want to check are all positive
-                if "ASY" in cd.commondataproc:
-                    check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
-                else:
-                    check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-
-            # if we sort here (which sorts columns), then permuting datasets doesn't change the result
-            # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
-            special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
-            special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
-
-
-            all_pseudodata = (
-                np.concatenate(pseudodatas, axis=0)
-                + special_add_errors @ np.random.randn(special_add_errors.shape[1])
-            ) * (
-                np.concatenate(mult_shifts, axis=0)
-                * (1 + special_mult_errors * np.random.randn(1, special_mult_errors.shape[1]) / 100).prod(axis=1)
+            # store the multiplicative errors with correlations between datasets for later use
+            special_mult.append(
+                mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
             )
 
-            if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
-                break
+            # mask out the data we want to check are all positive
+            if "ASY" in cd.commondataproc:
+                check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
+            else:
+                check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
 
-        yield all_pseudodata
+        # if we sort here (which sorts columns), then permuting datasets doesn't change the result
+        # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
+        special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
+        special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
+
+
+        all_pseudodata = (
+            np.concatenate(pseudodatas, axis=0)
+            + special_add_errors @ np.random.randn(special_add_errors.shape[1])
+        ) * (
+            np.concatenate(mult_shifts, axis=0)
+            * (1 + special_mult_errors * np.random.randn(1, special_mult_errors.shape[1]) / 100).prod(axis=1)
+        )
+
+        if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
+            break
+
+    return all_pseudodata
 
 
 @check_darwin_single_process
