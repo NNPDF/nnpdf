@@ -323,14 +323,6 @@ class CommonDataSpec(TupleComp):
         #TODO: Use better path handling in python 3.6
         return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
 
-    @functools.lru_cache()
-    def pyload(self):
-        """load the validphys.coredata.CommonData object."""
-        #TODO: resolve circulate imports and move this.
-        from validphys.commondataparser import load_commondata
-        #TODO: replace load with this function?
-        return load_commondata(self)
-
     @property
     def plot_kinlabels(self):
         return get_plot_kinlabels(self)

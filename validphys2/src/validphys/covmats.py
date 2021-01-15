@@ -18,7 +18,6 @@ from validphys.checks import (
     check_speclabels_different,
     check_data_cuts_match_theorycovmat,
 )
-from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.results import ThPredictionsResult
 
@@ -157,7 +156,7 @@ def datasets_covmat_from_systematics(
 
     if list_of_central_values is None:
         # want to just pass None to systematic_errors method
-        list_of_central_values = [None for _ in list_of_commondata]
+        list_of_central_values = [None] * len(list_of_commondata)
 
     for cd, central_values in zip(list_of_commondata, list_of_central_values):
         errors = cd.systematic_errors(central_values)
@@ -213,7 +212,7 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
 
 
-def experimental_covmat(commondata, cuts):
+def experimental_covmat(loaded_commondata_with_cuts):
     """Returns the experimental covariance matrix. Details of how
     the covmat is constructed can be found in :py:func:`covmat_from_systematics`.
     The experimental covariance matrix uses the experimental central values
@@ -228,13 +227,10 @@ def experimental_covmat(commondata, cuts):
     covmat: np.array
 
     """
-    #TODO: make a cut commondata action to avoid mistakes
-    lcd = commondata.pyload()
-    cut_lcd = lcd.with_cuts(cuts)
-    return covmat_from_systematics(cut_lcd)
+    return covmat_from_systematics(loaded_commondata_with_cuts)
 
 
-def t0_covmat(t0set, dataset, cuts):
+def t0_covmat(loaded_commondata_with_cuts, dataset_t0_predictions):
     """Like :py:func:`experimental_covmat` except uses the ``t0pdf`` predictions
     to calculate the absolute constributions to the covmat from multiplicative
     uncertainties. The t0 predictions are the predictions generated from the
@@ -254,35 +250,19 @@ def t0_covmat(t0set, dataset, cuts):
     covmat: np.array
 
     """
-    # flatten values since t0_pred is 2D with shape n_data * 1
-    t0_pred = central_predictions(dataset, t0set).to_numpy().squeeze()
-    lcd = dataset.commondata.pyload()
-    cut_lcd = lcd.with_cuts(cuts)
-    return covmat_from_systematics(cut_lcd, t0_pred)
+    return covmat_from_systematics(
+        loaded_commondata_with_cuts, dataset_t0_predictions)
 
-dataset_inputs_cuts = collect("cuts", ("data_input",))
 
-def dataset_inputs_experimental_covmat(
-    dataset_inputs_commondata, dataset_inputs_cuts):
+def dataset_inputs_experimental_covmat(datasets_loaded_cd_with_cuts):
     """Like :py:func:`experimental_covmat` except for all data"""
-    #TODO: simply collect cut commondata instead of this
-    cut_ld_cd = [
-        cd.pyload().with_cuts(cuts)
-        for cd, cuts in zip(dataset_inputs_commondata, dataset_inputs_cuts)
-    ]
-    return datasets_covmat_from_systematics(cut_ld_cd)
+    return datasets_covmat_from_systematics(datasets_loaded_cd_with_cuts)
 
-def dataset_inputs_t0_covmat(t0set, data, dataset_inputs_cuts):
+def dataset_inputs_t0_covmat(
+    datasets_loaded_cd_with_cuts, datasets_t0_predictions):
     """Like :py:func:`t0_covmat` except for all data"""
-    t0_preds = [
-        central_predictions(dataset, t0set).to_numpy().squeeze()
-        for dataset in data.datasets
-    ]
-    cut_ld_cd = [
-        ds.commondata.pyload().with_cuts(cuts)
-        for ds, cuts in zip(data.datasets, dataset_inputs_cuts)
-    ]
-    return datasets_covmat_from_systematics(cut_ld_cd, t0_preds)
+    return datasets_covmat_from_systematics(
+        datasets_loaded_cd_with_cuts, datasets_t0_predictions)
 
 
 def sqrt_covmat(covariance_matrix):
