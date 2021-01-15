@@ -6,9 +6,9 @@ import numpy as np
 from validphys.api import API
 
 def test_weights_have_same_commondata(weighted_data_witht0_config):
-    exps = API.experiments(**weighted_data_witht0_config)
-    normal, weighted = exps
-    normalds, weightedds = normal.datasets[0].load(), weighted.datasets[0].load()
+    data = API.data(**weighted_data_witht0_config)
+    normal, weighted = data.datasets
+    normalds, weightedds = normal.load(), weighted.load()
     assert normalds.GetSys(0, 0).mult == weightedds.GetSys(0, 0).mult
     assert normalds.GetSys(0, 0).add == weightedds.GetSys(0, 0).add
 

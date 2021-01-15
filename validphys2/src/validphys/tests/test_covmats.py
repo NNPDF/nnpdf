@@ -135,7 +135,7 @@ def test_sqrt_covmat(data_config):
         # a ValueError
         sqrt_covmat(np.array([]))
 
-    exps = API.experiments(**data_config)
+    exps = API.experiments_data(**data_config)
 
     for exp in exps:
         ld_exp = exp.load()
