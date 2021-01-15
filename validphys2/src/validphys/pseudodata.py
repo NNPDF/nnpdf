@@ -111,57 +111,43 @@ def read_fit_pseudodata(fitcontext, context_index):
 
 
 def make_replica(list_of_commondata, seed=None):
-    # TODO: this is the old docstring: update it
-    """Generator that takes in a :py:class:`validphys.coredata.CommonData` or
-    :py:class:`validphys.core.CommonDataSpec` object and yields pseudodata replicas
-    of the data central value. This generator is infinite in the sense that it will
-    never raise a StopIteration exception
+    """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
+    objects and returns pseudodata replicas of the data central value accounting for
+    possible correlations between systematic uncertainties.
 
-    The square root (obtained by the Cholesky decomposition) of the covariance
-    matrix is used as the sampling matrix with the covariance matrix being obtained using
-    :py:func:`validphys.covmats.covmat_from_systematics`. In the internal code, the call
-    to this function has the boolean parameter ``use_mult_errors`` set to ``False`` to
-    ignore multiplicative uncertainties. Gaussian sampling is performed using the
-    additive part of the covariance matrix. An additional gaussian sampling for the
-    renormalization of the data having multiplicative uncertainties happens later.
-    All the contributions to the covariance matrix coming from theory errors should be
-    accounted for in the additive part.
+    The function loops until positive definite pseudodata is generated for any
+    non-asymmetry datasets. In the case of an asymmetry dataset negative values are
+    permitted so the loop block executes only once.
 
     Parameters
     ---------
-    commondata: :py:class:`validphys.coredata.CommonData`, :py:class:`validphys.core.CommonDataSpec`
-        CommonData which stores information about systematic errors,
-        their treatment and description.
+    list_of_commondata: iterable[:py:class:`validphys.coredata.CommonData`]
+        Iterable of CommonData objects which stores information about systematic errors,
+        their treatment and description, for each dataset.
 
     seed: int, None
-        Seed used to initialise the random number generator. If ``None`` then a random seed is allocated
-        using ``random.randint(1, 1000)``. This default behaviour is selected to avoid introducing
-        inadvertent correlations.
+        Seed used to initialise the numpy random number generator. If ``None`` then a random seed is
+        allocated using the default numpy behaviour.
 
     Returns
     -------
     pseudodata: np.array
-        Numpy array which is N_dat (where N_dat is the number of data points after cuts)
+        Numpy array which is N_dat (where N_dat is the combined number of data points after cuts)
         containing monte carlo samples of data centered around the data central value.
-
 
     Example
     -------
+    >>> from validphys.commondataparser import load_commondata
     >>> from validphys.loader import Loader
-    >>> l = Loader()
     >>> from validphys.pseudodata import make_replica
-    >>> cd = l.check_commondata("NMC")
-    >>> data_generator = make_replica(cd)
-    >>> next(data_generator)
-    - Random Generator allocated: ranlux
-    array([0.24013561, 0.24060029, 0.26382826, 0.27698772, 0.28603631,
-           0.28491346, 0.30983694, 0.31394779, 0.2987047 , 0.31680287,
-           0.33169788, 0.29497604, 0.30490075, 0.32969979, 0.34781687,
-           0.34964414, 0.30162117, 0.32235222, 0.32743923, 0.33293424,
-
-
-    .. todo:: Replace the inhouse random number generation with a numpy equivalent.
-    .. todo:: Allow for correlations between datasets within an experiment.
+    >>> l = Loader()
+    >>> cd1 = l.check_commondata("NMC")
+    >>> cd2 = l.check_commondata("NMCPD")
+    >>> lds = map(load_commondata, (cd1, cd2))
+    >>> make_replica(lds)
+    array([0.25721162, 0.2709698 , 0.27525357, 0.28903442, 0.3114298 ,
+        0.3005844 , 0.3184538 , 0.31094522, 0.30750703, 0.32673155,
+        0.34843355, 0.34730928, 0.3090914 , 0.32825111, 0.3485292 ,
     """
     # Seed the numpy RNG with the seed.
     np.random.seed(seed=seed)
