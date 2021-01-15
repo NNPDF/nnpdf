@@ -129,7 +129,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     for a given channel.
 
     pdf_set: The interested PDF set
-    sqrts: The center of mass energy GeV.
+    s: The square of the center of mass energy GeV^2.
     mx: The invariant mass bin GeV.
     x1 and x2: The partonic x1 and x2.
     channel: The channel tag name from LUMI_CHANNELS.
