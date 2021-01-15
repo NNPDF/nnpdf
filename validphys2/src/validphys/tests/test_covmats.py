@@ -11,20 +11,20 @@ import numpy as np
 
 
 from validphys.api import API
-from validphys.covmats import (
-    sqrt_covmat,
-)
+from validphys.covmats import sqrt_covmat
 from validphys.loader import Loader
-from validphys.tests.conftest import THEORYID
+from validphys.tests.conftest import THEORYID, PDF, HESSIAN_PDF, DATA
 
 
-def test_covmat_from_systematics_correlated(data_with_correlations_config):
-    """Test the covariance matrix generation from a set of correlated datasets
-    given their systematic errors
-    """
-    covmat = API.dataset_inputs_experimental_covmat(**data_with_correlations_config)
-    cpp_covmat = API.groups_covmat(**data_with_correlations_config)
-    np.testing.assert_allclose(cpp_covmat, covmat)
+# Experiments which have non trivial correlations between their datasets
+CORR_DATA = [
+    {'dataset': 'ATLASWZRAP36PB', 'cfac': ['QCD']},
+    {'dataset': 'ATLASZHIGHMASS49FB', 'cfac': ['QCD']},
+    {'dataset': 'ATLASLOMASSDY11EXT', 'cfac': ['QCD']},
+    {'dataset': 'ATLASWZRAP11', 'frac': 0.5, 'cfac': ['QCD']},
+    {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+    {'dataset': 'CMSJETS11', 'frac': 0.5, 'sys': 10},
+]
 
 
 def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
@@ -44,13 +44,21 @@ def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
         np.testing.assert_allclose(covmat_a, covmat_b)
 
 
-def test_covmat_from_systematics(data_internal_cuts_config):
+@pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
+@pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA])
+def test_covmat_from_systematics(data_config, use_cuts, dataset_inputs):
     """Test which checks the python computation of the covmat relating to a
-    collection of datasets matches that of the C++ computation. Note that the
-    datasets are cut using the internal rules, but the datasets are not correlated.
+    collection of datasets matches that of the C++ computation.
+
+    Tests all combinations of internal/no cuts and correlated/uncorrelated data.
+
     """
-    covmat = API.dataset_inputs_experimental_covmat(**data_internal_cuts_config)
-    cpp_covmat = API.groups_covmat(**data_internal_cuts_config)
+    config = dict(data_config)
+    config["use_cuts"] = use_cuts
+    config["dataset_inputs"] = dataset_inputs
+
+    covmat = API.dataset_inputs_experimental_covmat(**config)
+    cpp_covmat = API.groups_covmat(**config)
 
     np.testing.assert_allclose(cpp_covmat, covmat)
 
@@ -120,32 +128,26 @@ def test_sqrt_covmat(data_config):
         cholesky_cov = sqrt_covmat(covmat)
         np.testing.assert_allclose(cholesky_cov @ cholesky_cov.T, covmat)
 
-def test_t0_covmat(data_witht0_config):
-    """Test that t0 covmat matches between cpp and python implementation."""
-    base_config = dict(data_witht0_config)
-    # just compare cut data
-    base_config["use_cuts"] = "internal"
-    covmat = API.dataset_inputs_t0_covmat(**base_config)
-    cpp_covmat = API.groups_covmat(**base_config)
+@pytest.mark.parametrize("t0pdfset", [PDF, HESSIAN_PDF])
+@pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA])
+def test_python_t0_covmat_matches_cpp(
+    data_internal_cuts_config, t0pdfset, dataset_inputs):
+    """Test which checks the python computation of the t0 covmat relating to a
+    collection of datasets matches that of the C++ computation.
+
+    Tests all combinations of hessian/MC t0pdfset and correlated/uncorrelated
+    data.
+
+    """
+    config = dict(data_internal_cuts_config)
+    config["dataset_inputs"] = dataset_inputs
+    config["t0pdfset"] = t0pdfset
+    config["use_t0"] = True
+    covmat = API.dataset_inputs_t0_covmat(**config)
+    cpp_covmat = API.groups_covmat(**config)
     # use allclose defaults or it fails
     np.testing.assert_allclose(cpp_covmat, covmat, rtol=1e-05, atol=1e-08)
     with pytest.raises(AssertionError):
         np.testing.assert_allclose(
-            covmat, API.dataset_inputs_experimental_covmat(**base_config)
-        )
-
-def test_t0_correlated_covmat(data_with_correlations_internal_cuts_config):
-    """Test that the correlated t0 covmat matches between cpp and python"""
-    base_config = dict(data_with_correlations_internal_cuts_config)
-    # use t0
-    base_config["t0pdfset"] = base_config["pdf"]
-    base_config["use_t0"] = True
-
-    covmat = API.dataset_inputs_t0_covmat(**base_config)
-    cpp_covmat = API.groups_covmat(**base_config)
-    # use allclose defaults or it fails
-    np.testing.assert_allclose(cpp_covmat, covmat, rtol=1e-05, atol=1e-08)
-    with pytest.raises(AssertionError):
-        np.testing.assert_allclose(
-            covmat, API.dataset_inputs_experimental_covmat(**base_config)
+            covmat, API.dataset_inputs_experimental_covmat(**config)
         )
