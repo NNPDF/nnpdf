@@ -32,7 +32,10 @@ PDF arc-lengths
 
 Sum rules
 ---------
-{@pdfs sum_rules_table@}
+{@with pdfs@}
+### {@pdf@}
+{@sum_rules_table@}
+{@endwith@}
 
 PDF plots
 ---------
