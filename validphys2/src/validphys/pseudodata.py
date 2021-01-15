@@ -163,11 +163,6 @@ def make_replica(list_of_commondata, seed=None):
     .. todo:: Replace the inhouse random number generation with a numpy equivalent.
     .. todo:: Allow for correlations between datasets within an experiment.
     """
-    # If seed is None (i.e not explicitly provided in the function call)
-    # then set it randomly
-    if seed is None:
-        seed = np.random.randint(1000)
-
     # Seed the numpy RNG with the seed.
     np.random.seed(seed=seed)
 
