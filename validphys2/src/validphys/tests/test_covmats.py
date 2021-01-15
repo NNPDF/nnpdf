@@ -34,9 +34,7 @@ def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
 
     """
     base_config = dict(data_internal_cuts_config)
-    #TODO: update tests to use new input.
-    exps = base_config.pop("experiments")
-    dataset_inputs = [dsinp for exp in exps for dsinp in exp["datasets"]]
+    dataset_inputs = base_config.pop("dataset_inputs")
 
     for dsinp in dataset_inputs:
         covmat_a = API.experimental_covmat(
