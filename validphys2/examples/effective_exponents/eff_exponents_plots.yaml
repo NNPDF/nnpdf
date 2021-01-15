@@ -12,6 +12,8 @@ beta:
 fits:
   - 170120-008
 
+basis: NN31IC
+
 meta:
     author: Rabah Abdul Khalek
     title: Effective Exponents
@@ -24,8 +26,8 @@ template_text: |
   ---
   Effective exponents plots
   -----------
-  {@alpha plot_alphaEff@}
-  {@beta plot_betaEff@}
+  {@alpha plot_alpha_eff@}
+  {@beta plot_beta_eff@}
   -----------
 
 actions_:

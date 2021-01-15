@@ -24,6 +24,6 @@
 
 ## Effective preprocessing exponents
 ### alpha exponent
-{@plot_alphaEff@}
+{@current::basisfromfit plot_alpha_eff@}
 ### beta exponent
-{@plot_betaEff@}
+{@current::basisfromfit plot_beta_eff@}
