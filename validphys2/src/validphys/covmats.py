@@ -220,7 +220,7 @@ def experimental_covmat(loaded_commondata_with_cuts):
 
     Parameters
     ----------
-    commondata: validphys.core.CommonDataSpec
+    loaded_commondata_with_cuts: validphys.coredata.CommonData
 
     Returns
     -------
@@ -231,23 +231,22 @@ def experimental_covmat(loaded_commondata_with_cuts):
 
 
 def t0_covmat(loaded_commondata_with_cuts, dataset_t0_predictions):
-    """Like :py:func:`experimental_covmat` except uses the ``t0pdf`` predictions
+    """Like :py:func:`experimental_covmat` except uses the t0 predictions
     to calculate the absolute constributions to the covmat from multiplicative
-    uncertainties. The t0 predictions are the predictions generated from the
-    central pdf. Note that in the case that the ``t0pdf`` has replicas
-    errortype this is not the same as the central value of the replica
-    predictions in the case of hadronic observables.
+    uncertainties. For more info on the t0 predictions see
+    :py:func:`validphys.results_providers.dataset_t0_predictions`.
 
     Parameters
     ----------
-    t0set: validphys.core.PDF
-        pdf set used to generate t0 predictions
-    commondata: validphys.core.CommonDataSpec
+    loaded_commondata_with_cuts: validphys.coredata.CommonData
         commondata object for which to generate the covmat.
+    dataset_t0_predictions: np.array
+        1-D array with t0 predictions.
 
     Returns
     -------
-    covmat: np.array
+    t0_covmat: np.array
+        t0 covariance matrix
 
     """
     return covmat_from_systematics(
@@ -255,12 +254,36 @@ def t0_covmat(loaded_commondata_with_cuts, dataset_t0_predictions):
 
 
 def dataset_inputs_experimental_covmat(datasets_loaded_cd_with_cuts):
-    """Like :py:func:`experimental_covmat` except for all data"""
+    """Like :py:func:`experimental_covmat` except for all data
+
+    Parameters
+    ----------
+    datasets_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+        The CommonData for all datasets defined in ``dataset_inputs``.
+
+    Returns
+    -------
+    covmat: np.array
+        Covariance matrix for list of datasets.
+    """
     return datasets_covmat_from_systematics(datasets_loaded_cd_with_cuts)
 
 def dataset_inputs_t0_covmat(
     datasets_loaded_cd_with_cuts, datasets_t0_predictions):
-    """Like :py:func:`t0_covmat` except for all data"""
+    """Like :py:func:`t0_covmat` except for all data
+
+    Parameters
+    ----------
+    datasets_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+        The CommonData for all datasets defined in ``dataset_inputs``.
+    datasets_t0_predictions: list[np.array]
+        The t0 predictions for all datasets.
+
+    Returns
+    -------
+    t0_covmat: np.array
+        t0 covariance matrix matrix for list of datasets.
+    """
     return datasets_covmat_from_systematics(
         datasets_loaded_cd_with_cuts, datasets_t0_predictions)
 

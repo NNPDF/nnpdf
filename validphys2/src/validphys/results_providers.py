@@ -36,9 +36,9 @@ datasets_loaded_cd_with_cuts = collect(
 def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
-    errortype MC, and the dataset is a hadronic observable then the predictions
-    of the central member are subtly different to the central value of the
-    replica predictions.
+    errortype ``replicas``, and the dataset is a hadronic observable then the
+    predictions of the central member are subtly different to the central
+    value of the replica predictions.
 
     Parameters
     ----------
