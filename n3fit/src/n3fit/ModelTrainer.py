@@ -858,6 +858,7 @@ class ModelTrainer:
             stopping_object = Stopping(
                 validation_model,
                 reporting,
+                pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 save_weights_each=self.save_weights_each,
@@ -874,9 +875,9 @@ class ModelTrainer:
                 epochs=epochs,
             )
 
-            # Compute validation and training loss
-            training_loss = stopping_object.tr_loss
-            validation_loss = stopping_object.vl_loss
+            # Save validation and training chi2
+            training_loss = stopping_object.tr_chi2
+            validation_loss = stopping_object.vl_chi2
 
             # Compute experimental loss
             exp_loss_raw = models["experimental"].compute_losses()["loss"]
@@ -884,14 +885,14 @@ class ModelTrainer:
 
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
-                for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_model, stopping_object)
-                l_hyper.append(hyper_loss)
-                log.info("Fold %d finished, loss=%.1f, pass=%s", k+1, hyper_loss, passed)
                 if passed != self.pass_status:
                     log.info("Hyperparameter combination fail to find a good fit, breaking")
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
+                for penalty in self.hyper_penalties:
+                    hyper_loss += penalty(pdf_model, stopping_object)
+                l_hyper.append(hyper_loss)
+                log.info("Fold %d finished, loss=%.1f, pass=%s", k+1, hyper_loss, passed)
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss above threshold (%.1f > %.1f), breaking", hyper_loss, self.hyper_threshold)
                     # Apply a penalty proportional to the number of folds that have not been computed

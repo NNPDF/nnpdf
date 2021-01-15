@@ -110,6 +110,7 @@ def biases_table(
 
 
 @check_pdf_is_montecarlo
+@check_fit_isclosure
 def bootstrap_bias_experiment(
     dataset_inputs_results, underlying_dataset_inputs_results, bootstrap_samples=500
 ):
@@ -202,6 +203,7 @@ def variance_experiment(dataset_inputs_results, fit, use_fitcommondata):
     return variance_dataset(dataset_inputs_results, fit, use_fitcommondata)
 
 
+@check_fit_isclosure
 def bootstrap_variance_experiment(dataset_inputs_results, bootstrap_samples=500):
     """Calculate the variance as in `variance_experiment` but performs bootstrap
     sample of the estimator. Returns an array of variance for each resample,
@@ -371,6 +373,7 @@ def delta_chi2_table(
     return res
 
 
+@check_fit_isclosure
 def fit_underlying_pdfs_summary(fit, fitunderlyinglaw):
     """Returns a table with a single column for the `fit` with a row indication
     the PDF used to generate the data and the t0 pdf

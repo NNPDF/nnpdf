@@ -26,8 +26,6 @@
     the `_loss` suffix can be found. This is taken into account by the class `Stopping`
     which will tell `Validation` that no validation set was found and that the training is to
     be used instead.
-
-
 """
 
 import logging
@@ -135,11 +133,15 @@ def parse_losses(history_object, data, suffix="loss"):
 
 class FitState:
     """
-        Holds the state of the chi2 of the fit.
+        Holds the state of the chi2 during the fit.
 
         It holds the necessary information to reload the fit
         to a specific point in time if we are interested on reloading
         (otherwise the relevant variables stay empty to save memory)
+
+        Note: the training chi2 is computed before the update of the weights
+        so it is the chi2 that informed the updated corresponding to this state.
+        The validation chi2 instead is computed after the update of the weights.
 
         Parameters
         ----------
@@ -192,15 +194,15 @@ class FitHistory:
 
         Parameters
         ----------
-            `validation_model`
-                a reference to a Validaton object
-                this is necessary at the moment in order to save the weights
-            `save_weights_each`
+            pdf_model: n3fit.backends.MetaModel
+                PDF model being trained, used to saved the weights and compute
+                more
+            save_weights_each: int
                 if given, it will save a snapshot of the fit every  `save_weights_each` epochs
     """
 
-    def __init__(self, validation_model, save_weights_each=None):
-        self._validation_model = validation_model
+    def __init__(self, pdf_model, save_weights_each=None):
+        self._pdf_model = pdf_model
         self._save_weights_each = save_weights_each
         # Initialize variables for the history
         self._weights = None
@@ -218,7 +220,7 @@ class FitHistory:
     @best_epoch.setter
     def best_epoch(self, epoch):
         """ Saves the current weight """
-        self._weights = self._validation_model.weights
+        self._weights = self._pdf_model.get_weights()
         self._best_epoch = epoch
 
     def get_state(self, epoch):
@@ -283,7 +285,7 @@ class FitHistory:
         if weights is None:
             weights = self._weights
         if weights:
-            self._validation_model.weights = weights
+            self._pdf_model.set_weights(weights)
 
     def rewind(self, step):
         """ Rewind the FitHistory object to the step `step` in the fit
@@ -305,21 +307,23 @@ class Stopping:
 
         Parameters
         ----------
-            `validation_model`
+            validation_model: n3fit.backends.MetaModel
                 the model with the validation mask applied
                 (and compiled with the validation data and covmat)
-            `all_data_dict`
+            all_data_dict: dict
                 list containg all dictionaries containing all information about
                 the experiments/validation/regularizers/etc to be parsed by Stopping
-            `threshold_positivity`
-                maximum value allowed for the sum of all positivity losses
-            `total_epochs`
-                total number of epochs
-            `stopping_patience`
-                how many epochs to wait for the validation loss to improve
-            `dont_stop`
-                dont care about early stopping
-            `save_weights_each`
+            pdf_model: n3fit.backends.MetaModel
+                pdf_model being trained
+            threshold_positivity: float
+               maximum value allowed for the sum of all positivity losses
+            total_epochs: int
+               total number of epochs
+            stopping_patience: int
+               how many epochs to wait for the validation loss to improve
+            dont_stop: bool
+               dont care about early stopping
+            save_weights_each: int
                 every how many epochs to save a snapshot of the fit
     """
 
@@ -327,6 +331,7 @@ class Stopping:
         self,
         validation_model,
         all_data_dicts,
+        pdf_model,
         threshold_positivity=1e-6,
         total_epochs=0,
         stopping_patience=7000,
@@ -343,7 +348,7 @@ class Stopping:
         else:
             self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
-        self.history = FitHistory(self.validation, save_weights_each=save_weights_each)
+        self.history = FitHistory(pdf_model, save_weights_each=save_weights_each)
 
         # Initialize internal variables for the stopping
         self.threshold_chi2 = threshold_chi2
@@ -355,38 +360,43 @@ class Stopping:
         self.total_epochs = total_epochs
 
     @property
-    def vl_loss(self):
-        """ Validation loss """
+    def vl_chi2(self):
+        """ Validation chi2 """
         return self.history.best_vl()
 
     @property
-    def tr_loss(self):
-        """ Training loss """
+    def tr_chi2(self):
+        """ Training chi2 """
         return self.history.best_tr()
 
     @property
     def e_best_chi2(self):
-        """ Epoch of the best chi2 """
-        return self.history.best_epoch
+        """ Epoch of the best chi2, if there is no best epoch
+        return the last epoch"""
+        be = self.history.best_epoch
+        if be is None:
+            return self.stop_epoch
+        return be
+
 
     @property
-    def epoch_of_the_stop(self):
+    def stop_epoch(self):
         """ Epoch in which the fit is stopped """
         return self.history.final_epoch + 1
 
     def evaluate_training(self, training_model):
-        """ Given the training model, returns a tuple
-        with the training chi2
+        """ Given the training model, evaluates the
+        model and parses the chi2 of the training datasets
 
         Parameters
         ----------
-            `training_model`
+            training_model: n3fit.backends.MetaModel
                 an object implementing the evaluate function
 
         Returns
         -------
-            `tr_chi2`
-                chi2 of the given `training_model`
+            tr_chi2: float
+                chi2 of the given ``training_model``
         """
         training_info = training_model.compute_losses()
         tr_chi2, _ = parse_losses(training_info, self._tr_ndata)
@@ -559,7 +569,7 @@ class Validation:
 
         Parameters
         ----------
-            `model`
+            model: n3fit.backends.MetaModel
                 the model with the validation mask applied
                 (and compiled with the validation data and covmat)
     """
@@ -591,16 +601,6 @@ class Validation:
         loss_dict = self.model.compute_losses()
         self.state = loss_dict
         return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
-
-    @property
-    def weights(self):
-        """ Returns the weights of the validation model """
-        return self.model.get_weights()
-
-    @weights.setter
-    def weights(self, weights):
-        """  Sets the weights on the validation model """
-        self.model.set_weights(weights)
 
     def loss(self):
         """

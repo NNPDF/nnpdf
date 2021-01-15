@@ -13,9 +13,9 @@ echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 conda config --add channels https://packages.nnpdf.science/conda;
 conda config --add channels https://packages.nnpdf.science/conda-private;
 conda config --set show_channel_urls true;
-conda install nnpdf --yes
+conda create -n nnpdfenv nnpdf --yes
 cd doc/sphinx
-make html
+conda run --no-capture-output -n nnpdfenv make html
 
 echo "Uploading documentation to the NNPDF server"
 KEY=$( mktemp )

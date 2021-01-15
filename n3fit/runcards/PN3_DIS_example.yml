@@ -66,13 +66,7 @@ fitting:
   save: False
   load: False
 
-  seed     : 9453862133528      # set the seed for the random generator
   genrep   : True     # true = generate MC replicas, false = use real data
-  rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
-  fitmethod: NGA    # Minimization algorithm
-  nmutants : 80     # Number of mutants for replica
-  paramtype: NN
-  nnodes   : [2,5,3,1]
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [35, 25, 8]
@@ -110,20 +104,6 @@ fitting:
       - { fl: cp,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [-0.07,1.13], largex: [1.73,7.37] }
 
 ############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta   : 0         # Delta for look-back stopping
-  mingen    : 0         # Minimum number of generations
-  window    : 500       # Window for moving average
-  minchi2   : 3.5       # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear    : 200       # Smear for stopping
-  deltasm   : 200       # Delta smear for stopping
-  rv        : 2         # Ratio for validation stopping
-  rt        : 0.5       # Ratio for training stopping
-  epsilon   : 1e-6      # Gradient epsilon
-
-############################################################
 positivity:
   posdatasets:
     - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
@@ -133,18 +113,6 @@ positivity:
     - { dataset: POSDYU,   poslambda: 1e10 }
     - { dataset: POSDYD,   poslambda: 1e10 }
     - { dataset: POSDYS,   poslambda: 1e10 }
-
-############################################################
-closuretest:
-  filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : False # true = to use FAKEPDF to generate pseudo-data
-  fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
-  errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : False # true = to add random fluctuations to pseudo-data
-  rancutprob  : 1.0 # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: False # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: False # To print info on PDFs during minimization
 
 ############################################################
 lhagrid:

@@ -16,9 +16,12 @@ import pytest
 
 from validphys.api import API
 from validphys.pseudodata import training_validation_pseudodata
+from validphys.tests.conftest import FIT
 import validphys.tests.regressions
 
+from reportengine.checks import CheckError
 from reportengine.compat import yaml
+from reportengine.resourcebuilder import ResourceError
 
 EXAMPLE_RUNCARD = """fit: pseudodata_test_fit
 pdf: pseudodata_test_fit
@@ -41,8 +44,13 @@ theoryid:
 use_cuts: fromfit
 """
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_dicts():
+
+@pytest.fixture(
+    scope="session",
+    params=[1, pytest.param(None, marks=pytest.mark.linux)],
+)
+def setup_dicts(request):
+    n_process_config = dict(NPROC=request.param)
     exp_infos_bytes = read_binary(validphys.tests.regressions, "test_exp_infos.pickle")
     ns = yaml.safe_load(EXAMPLE_RUNCARD)
     # This is what all the fitted replicas saw
@@ -53,10 +61,42 @@ def setup_dicts():
     fit_postfit_mapping = dict(enumerate(exp_infos, 1))
     exp_infos = [fit_postfit_mapping[i] for i in fitted_indices]
 
-
-    pseudodata_info = API.get_pseudodata(**ns)
+    pseudodata_info = API.get_pseudodata(**ns, **n_process_config)
 
     return exp_infos, pseudodata_info
+
+
+def test_read_fit_pseudodata():
+    data_generator = API.read_fit_pseudodata(
+      fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata",
+      use_cuts="fromfit"
+    )
+
+    # Only bother checking the first ten replicas
+    for _ in range(10):
+      data, tr_idx, val_idx = next(data_generator)
+      # Check the training and validation index are disjoint
+      assert set(tr_idx).isdisjoint(set(val_idx))
+      # Check the union is equal to the full dataset
+      assert all(tr_idx.union(val_idx) == data.index)
+
+    with pytest.raises(FileNotFoundError):
+        # Check a FileNotFoundError is raised
+        # if the input fit wasn't generated
+        # with the savepseudodata flag set to true
+        bad_gen = API.read_fit_pseudodata(
+            fit=FIT, use_cuts="fromfit"
+        )
+        next(bad_gen)
+
+    with pytest.raises(ResourceError) as e_info:
+        # Check the enforcement of use_cuts being set
+        # to fromfit is in place
+        API.read_fit_pseudodata(
+          fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata",
+          use_cuts="nocuts"
+        )
+        assert isinstance(e_info.__cause__, CheckError)
 
 
 def test_pseudodata(setup_dicts):

@@ -140,7 +140,9 @@ number_of_replicas`.
 
 4. Wait until you have results, then use `postfit number_of_replicas
 runcard_folder` to finalize the PDF set by applying post selection criteria.
-This will produce a set of `number_of_replicas + 1` replicas.
+This will produce a set of `number_of_replicas + 1` replicas. Note that the
+standard behaviour of `postfit` can be modified by using various flags.
+More information can be found at [Processing a fit](postfit).
 
 It is possible to run more than one replica in one single run of `n3fit` by
 using the ``--replica_range`` option. Running `n3fit` in this way increases the

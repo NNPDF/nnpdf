@@ -1596,7 +1596,7 @@ configuration setting:
   coincide with the ones loaded with  the `fromfit` setting.
 
 `use_cuts: 'fromintersection'`
-  ~ Compute the internal cuts (as per `use_cuts: 'internal'`) after
+  ~ Compute the internal cuts as per `use_cuts: 'internal'`
   within each namespace in a [namespace list](#multiple-inputs-and-namespaces) called
   `cuts_intersection_spec` and take the intersection of the results as
   the cuts for the given dataset. This is useful for example for

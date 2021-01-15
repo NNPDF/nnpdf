@@ -118,7 +118,7 @@ def type_fitname(fitname: str):
     return fitpath
 
 
-def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float, integ_threshold: float):
+def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float, integ_threshold: float, at_least_nrep: bool):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
 
@@ -137,7 +137,10 @@ def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold:
         raise PostfitError('Postfit cannot find a valid LHAPDF info file')
 
     nrep = int(nrep)
-    log.warning(f"Postfit aiming for {nrep} replicas")
+    if at_least_nrep:
+        log.warning(f"Postfit aiming for at least {nrep} replicas")
+    else:
+        log.warning(f"Postfit aiming for {nrep} replicas")
 
     # Generate postfit and LHAPDF directory
     if final_postfit_path.is_dir():
@@ -154,14 +157,17 @@ def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold:
     if len(passing_paths) < nrep:
         raise PostfitError("Number of requested replicas is too large")
     # Select the first nrep passing replicas
-    selected_paths = passing_paths[:nrep]
+    if at_least_nrep:
+        selected_paths = passing_paths
+    else:
+        selected_paths = passing_paths[:nrep]
 
 
     # Copy info file
     info_source_path = nnfit_path.joinpath(f'{fitname}.info')
     info_target_path = LHAPDF_path.joinpath(f'{fitname}.info')
     shutil.copy2(info_source_path, info_target_path)
-    set_lhapdf_info(info_target_path, nrep)
+    set_lhapdf_info(info_target_path, len(selected_paths))
 
     # Generate symlinks
     for drep, source_path in enumerate(selected_paths, 1):
@@ -174,6 +180,8 @@ def postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold:
         target_file = f'{fitname}_{drep:04d}.dat'
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
+
+    log.info(f"{len(selected_paths)} replicas written to the postfit folder")
 
     # Generate final PDF with replica 0
     log.info("Beginning construction of replica 0")
@@ -230,6 +238,11 @@ def main():
              "The default is 1e-2.",
         type=float,
     )
+    parser.add_argument(
+        '--at-least-nrep',
+        action='store_true',
+        help="nrep becomes the minimum number of required replicas. If there are more than nrep "
+             "good replicas, all good replicas are written to the postfit folder.")
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
     if args.debug:
@@ -237,7 +250,7 @@ def main():
     else:
         log.setLevel(logging.INFO)
     try:
-        postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integrability_threshold)
+        _postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integrability_threshold, args.at_least_nrep)
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
         sys.exit(1)
