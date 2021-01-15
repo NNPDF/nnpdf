@@ -7,7 +7,6 @@ import logging
 import multiprocessing as mp
 import os
 import pathlib
-import random
 
 import numpy as np
 import pandas as pd
@@ -150,7 +149,7 @@ def make_replica(list_of_commondata, seed=None):
         0.34843355, 0.34730928, 0.3090914 , 0.32825111, 0.3485292 ,
     """
     # Seed the numpy RNG with the seed.
-    np.random.seed(seed=seed)
+    rng = np.random.default_rng(seed=seed)
 
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
@@ -164,17 +163,17 @@ def make_replica(list_of_commondata, seed=None):
             pseudodata = cd.central_values.to_numpy()
 
             # add contribution from statistical uncertainty
-            pseudodata += (cd.stat_errors.to_numpy() * np.random.randn(cd.ndata))
+            pseudodata += (cd.stat_errors.to_numpy() * rng.normal(size=cd.ndata))
 
             # ~~~ ADDITIVE ERRORS  ~~~
             add_errors = cd.additive_errors
             add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
 
-            pseudodata += (add_uncorr_errors * np.random.randn(*add_uncorr_errors.shape)).sum(axis=1)
+            pseudodata += (add_uncorr_errors * rng.normal(size=add_uncorr_errors.shape)).sum(axis=1)
 
             # correlated within dataset
             add_corr_errors = add_errors.loc[:, add_errors.columns == "CORR"].to_numpy()
-            pseudodata += add_corr_errors @ np.random.randn(add_corr_errors.shape[1])
+            pseudodata += add_corr_errors @ rng.normal(size=add_corr_errors.shape[1])
 
             # append the partially shifted pseudodata
             pseudodatas.append(pseudodata)
@@ -187,12 +186,12 @@ def make_replica(list_of_commondata, seed=None):
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
             # convert to from percent to fraction
             mult_shift = (
-                1 + mult_uncorr_errors * np.random.randn(*mult_uncorr_errors.shape) / 100
+                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
             ).prod(axis=1)
 
             mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
             mult_shift *= (
-                1 + mult_corr_errors * np.random.randn(1, mult_corr_errors.shape[1]) / 100
+                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
             ).prod(axis=1)
 
             mult_shifts.append(mult_shift)
@@ -216,10 +215,10 @@ def make_replica(list_of_commondata, seed=None):
 
         all_pseudodata = (
             np.concatenate(pseudodatas, axis=0)
-            + special_add_errors @ np.random.randn(special_add_errors.shape[1])
+            + special_add_errors @ rng.normal(size=special_add_errors.shape[1])
         ) * (
             np.concatenate(mult_shifts, axis=0)
-            * (1 + special_mult_errors * np.random.randn(1, special_mult_errors.shape[1]) / 100).prod(axis=1)
+            * (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
         )
 
         if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
