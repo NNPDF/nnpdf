@@ -121,10 +121,26 @@ def test_sqrt_covmat(data_config):
         np.testing.assert_allclose(cholesky_cov @ cholesky_cov.T, covmat)
 
 def test_t0_covmat(data_witht0_config):
-    #TODO: expand t0 tests
+    """Test that t0 covmat matches between cpp and python implementation."""
     base_config = dict(data_witht0_config)
     # just compare cut data
     base_config["use_cuts"] = "internal"
+    covmat = API.dataset_inputs_t0_covmat(**base_config)
+    cpp_covmat = API.groups_covmat(**base_config)
+    # use allclose defaults or it fails
+    np.testing.assert_allclose(cpp_covmat, covmat, rtol=1e-05, atol=1e-08)
+    with pytest.raises(AssertionError):
+        np.testing.assert_allclose(
+            covmat, API.dataset_inputs_experimental_covmat(**base_config)
+        )
+
+def test_t0_correlated_covmat(data_with_correlations_internal_cuts_config):
+    """Test that the correlated t0 covmat matches between cpp and python"""
+    base_config = dict(data_with_correlations_internal_cuts_config)
+    # use t0
+    base_config["t0pdfset"] = base_config["pdf"]
+    base_config["use_t0"] = True
+
     covmat = API.dataset_inputs_t0_covmat(**base_config)
     cpp_covmat = API.groups_covmat(**base_config)
     # use allclose defaults or it fails
