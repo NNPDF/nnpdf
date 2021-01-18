@@ -594,10 +594,7 @@ class ModelTrainer:
         new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
         unique, counts = np.unique(input_arr, return_counts=True)
         map_from_complete = np.append(unique, 1.0)
-        # smallest_xpoint = 1e-11
-        # map_from_complete = np.insert(map_from_complete, 0, smallest_xpoint)
-        # map_to_complete = [0]
-        map_to_complete = []
+        map_to_complete = [0.0]
         for cumsum_ in np.cumsum(counts):
             map_to_complete.append(new_xgrid[cumsum_ - 1])
         map_to_complete.append(1.0)

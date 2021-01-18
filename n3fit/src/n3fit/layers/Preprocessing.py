@@ -9,11 +9,10 @@ class Preprocessing(MetaLayer):
     """
         Applies preprocessing to the PDF.
 
-        This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha
-        are parameters to be fitted.
+        This layer generates a factor x^(1-alpha) where alpha is a trainable parameter.
 
-        Both beta and alpha are initialized uniformly within the ranges allowed in the runcard and
-        then they are only allowed to move between those two values (with a hard wall in each side)
+        Alpha is initialized uniformly within the ranges allowed in the runcard and
+        then it is only allowed to move between those two values (with a hard wall in each side)
 
         Parameters
         ----------
@@ -24,7 +23,6 @@ class Preprocessing(MetaLayer):
                 This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
                 The dicts can contain the following fields:
                     `smallx`: range of alpha
-                    `largex`: range of beta
                     `trainable`: whether these alpha-beta should be trained during the fit
                                 (defaults to true)
             `seed`: int
@@ -92,14 +90,11 @@ class Preprocessing(MetaLayer):
         for flav_dict in self.flav_info:
             flav_name = flav_dict["fl"]
             alpha_name = f"alpha_{flav_name}"
-            beta_name = f"beta_{flav_name}"
             self.generate_weight(alpha_name, "smallx", flav_dict)
-            self.generate_weight(beta_name, "largex", flav_dict)
 
         super(Preprocessing, self).build(input_shape)
 
-    def call(self, inputs, data_domain, **kwargs):
-        import tensorflow as tf
+    def call(self, inputs, **kwargs):        
         x = inputs
         pdf_list = []
         for i in range(0, self.output_dim*2, 2):
