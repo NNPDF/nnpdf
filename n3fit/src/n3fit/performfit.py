@@ -155,7 +155,7 @@ def performfit(
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
-    from n3fit.backends import MetaModel, operations
+    from n3fit.backends import operations
     import n3fit.io.reader as reader
 
     # Loading t0set from LHAPDF
@@ -335,7 +335,7 @@ def performfit(
         # Now write the data down
         training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
         writer_wrapper.write_data(
-            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2, mapping
+            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
         )
 
         # Save the weights to some file for the given replica

@@ -6,5 +6,4 @@ from n3fit.layers.DIS import DIS
 from n3fit.layers.DY import DY
 from n3fit.layers.Mask import Mask
 from n3fit.layers.Obsrotation import ObsRotation
-from n3fit.layers.Extrapolation import Extrapolation
 from n3fit.backends import MetaLayer

@@ -61,7 +61,7 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
     division_by_x = xDivide()
 
     def pdf_integrand(xgrid, xgrid_scaled):
-        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled, xgrid, data_domain)])
+        res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled, xgrid)])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
@@ -85,7 +85,7 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
         #         result = modelito.predict(x = None, steps = 1)
 
         print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input, mapping)
+        check_integration(ultimate_pdf, xgrid_input_scaled, mapping)
 
     # Save a reference to xgrid in ultimate_pdf, very useful for debugging
     ultimate_pdf.ref_xgrid = xgrid_input
@@ -101,16 +101,20 @@ def check_integration(ultimate_pdf, integration_input, mapping):
     Called only (for debugging purposes) by msr_impose above
     """
     nx = int(1e4)
-    xgrid, _, weights_array = gen_integration_input(nx, mapping)
+    xnotscaled, xgrid, weights_array = gen_integration_input(nx, mapping)
     xgrid_input = operations.numpy_to_input(xgrid)
+    xnotscaled_input = operations.numpy_to_input(xnotscaled)
 
     multiplier = xDivide(output_dim=14, div_list=range(3, 9))
 
-    def pdf_integrand(x):
-        res = operations.op_multiply([multiplier(x), ultimate_pdf(x)])
+    def pdf_integrand(x, xnotscaled):
+        res = operations.op_multiply([multiplier(x), ultimate_pdf(x, xnotscaled)])
         return res
 
-    modelito = MetaModel([xgrid_input, integration_input], pdf_integrand(xgrid_input))
+    modelito = MetaModel(
+        [xgrid_input, integration_input, xnotscaled_input],
+        pdf_integrand(xgrid_input, xnotscaled_input),
+    )
     modelito.summary()
     result = modelito.predict(x=None, steps=1)
 
