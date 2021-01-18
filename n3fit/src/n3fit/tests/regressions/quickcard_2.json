@@ -1,0 +1,48 @@
+{
+  "preprocessing": "",
+  "stop_epoch": 1000,
+  "best_epoch": 998,
+  "erf_tr": 2.606570236771195,
+  "erf_vl": 3.0318090969458558,
+  "chi2": 1.5918478894589552,
+  "pos_state": "POS_PASS",
+  "arc_lengths": [
+    1.931689594079703,
+    1.697054671644156,
+    1.1340829034892161,
+    32.891455584502694,
+    1.1119670640240853
+  ],
+  "integrability": [
+    0.02683432819322168,
+    0.026834328193217516,
+    0.0004258475692022756,
+    20.328540325164795,
+    0.028318760450927627
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 16.93633460998535,
+      "start": 0.0,
+      "data_loaded": 0.34407711029052734,
+      "replica_set": 0.3442709445953369,
+      "replica_fitted": 16.935593366622925,
+      "replica_set_to_replica_fitted": 16.591322422027588
+    },
+    "cputime": {
+      "Total": 18.655240567,
+      "start": 0.0,
+      "data_loaded": 1.317259243,
+      "replica_set": 1.3187306250000002,
+      "replica_fitted": 18.65449747,
+      "replica_set_to_replica_fitted": 17.335766845000002
+    }
+  },
+  "version": {
+    "keras": "2.4.0",
+    "tensorflow": "2.3.1, mkl=False",
+    "numpy": "1.18.5",
+    "nnpdf": "3.5.1439+g47c1a11a6-dev",
+    "validphys": "3.5.1439+g47c1a11a6-dev"
+  }
+}

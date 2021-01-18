@@ -198,6 +198,14 @@ class Basis(abc.ABC):
             return element
         raise UnknownElement(element)
 
+    def has_element(self, element):
+        """ Return true if basis has knowledge of the given element """
+        try:
+            self.elementlabel(element)
+            return True
+        except UnknownElement:
+            return False
+
     def _to_indexes(self, basis_arr):
         """Convert a list of elements of the basis to indexes of the
         (rows of the) transformation matrix."""
@@ -545,6 +553,29 @@ NN31IC = LinearBasis.from_mapping(
         'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
     default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
+NN31PC = LinearBasis.from_mapping(
+    {
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        'g': {'g': 1},
+
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+        'photon': {'photon': 1},
+    },
+    aliases={
+        'gluon': 'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+        'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
+    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8'))
+
 FLAVOUR = LinearBasis.from_mapping(
     {
         'u': {'u': 1},
@@ -617,6 +648,16 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
     if fitbasis == 'NN31IC':
         return np.identity(8)
 
+    elif fitbasis == 'NN31PC':
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        v =  {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 1 }
+
     elif fitbasis == 'FLAVOUR':
         sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
         v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
@@ -656,6 +697,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
             flav_name = flav_dict["fl"]
             mat.append(f[flav_name])
 
-    mat = np.asarray(mat).reshape(8,8)
+    nflavs = len(flav_info)
+    mat = np.asarray(mat).reshape(8, nflavs)
     # Return the transpose of the matrix, to have the first index referring to flavour
     return mat.transpose()

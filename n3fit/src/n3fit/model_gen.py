@@ -462,6 +462,7 @@ def pdfNN_layer_generator(
         raise ValueError(
             "Number of activation functions does not match number of layers @ model_gen.py"
         )
+    # The number of nodes in the last layer is equal to the number of fitted flavours (== len(flav_info))
     last_layer_nodes = nodes[-1]
 
     if layer_type == "dense":
@@ -503,14 +504,18 @@ def pdfNN_layer_generator(
     # Preprocessing layer (will be multiplied to the last of the denses)
     preproseed = seed + number_of_layers
     layer_preproc = Preprocessing(
-        input_shape=(1,), name="pdf_prepro", flav_info=flav_info, seed=preproseed
+        input_shape=(1,),
+        name="pdf_prepro",
+        flav_info=flav_info,
+        seed=preproseed,
+        output_dim=last_layer_nodes
     )
+    # Basis rotation
+    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
-    # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
     # Apply preprocessing and basis
     def layer_fitbasis(x):
