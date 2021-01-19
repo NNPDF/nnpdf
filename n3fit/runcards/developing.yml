@@ -89,7 +89,7 @@ fitting:
   mcseed: 3
   load: 'developing_weights.h5'
 
-  genrep   : true      # true = generate MC replicas, false = use real data
+  genrep   : true    # true = generate MC replicas, false = use real data
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [50, 35, 25, 8]
@@ -99,7 +99,7 @@ fitting:
         optimizer_name: 'Adadelta'
         learning_rate: 1.0
     epochs: 2000
-    integrability:
+    ntegrability:
       initial:
       multiplier: 1.03
     positivity:
