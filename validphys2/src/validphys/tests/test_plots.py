@@ -19,23 +19,21 @@ def test_plotpdfs():
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
 def test_dataspecschi2():
-    experiments = [
-        {
-            'experiment': 'NMCexp',
-            'datasets': [{'dataset': 'NMC'}]},
-        {
-            'experiment': 'ATLASxp',
-            'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
-        {
-            'experiment': 'CMSexp',
-            'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
-        ]
+    dsinpts = [
+        {'dataset': 'NMC'},
+        {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+        {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    ]
     dataspecs = [
         {'pdf': PDF, 'theoryid': THEORYID, 'speclabel': 'no t0'},
         {'pdf': PDF, 'theoryid': THEORYID, 'use_t0': False, 'speclabel': 'with t0'}
     ]
     return API.plot_dataspecs_datasets_chi2(
-        experiments=experiments, dataspecs=dataspecs, use_cuts='nocuts', metadata_group='experiment')
+        dataset_inputs=dsinpts,
+        dataspecs=dataspecs,
+        use_cuts='nocuts',
+        metadata_group='experiment'
+    )
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
