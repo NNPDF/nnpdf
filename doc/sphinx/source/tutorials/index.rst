@@ -15,8 +15,8 @@ Tutorials
    ./APPLgrids_comp.md
    ./apfelcomb.md
    ./datthcomp.md
-   ./closureestimators.rst
    ./closuretest.md
+   ./closureestimators.rst
    ./conda.md
    ./pseudodata.md
    ./pdfbases.rst

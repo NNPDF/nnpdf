@@ -27,7 +27,7 @@ These are:
 -  variance
 
    The mean across replicas of the :math:`\chi^2` between predictions
-   from a single replica and the central replica predictions. Can be
+   from a single replica and the central replica. Can be
    thought of as the variance of the replica predictions normalised by
    the covariance.
 
