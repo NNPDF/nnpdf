@@ -22,7 +22,8 @@ requirements:
         - python
         - numpy
     run:
-        - tensorflow-eigen
+        # Only install tensorflow on linux.
+        - tensorflow # [linux]
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -47,6 +48,8 @@ requirements:
         - sphinx_rtd_theme
 
 test:
+    script:
+        - n3fit_test.sh # [linux]
     requires:
         - hypothesis
         - pytest
