@@ -1,5 +1,5 @@
 nreplica: 100
-use_cuts: True
+use_cuts: "fromfit"
 
 meta:
     title: Pseudodata generation

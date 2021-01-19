@@ -7,7 +7,7 @@ meta:
     keywords: [Guilty]
     author: Lazy Person
 
-use_cuts: False
+use_cuts: "nocuts"
 
 pdf: NNPDF31_nlo_as_0118
 

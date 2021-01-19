@@ -4,12 +4,12 @@ meta:
     author: Rosalyn Pearson
 
 pdfs:
-    - id: NNPDF31_nnlo_as_0118
+    - id: NNPDF31_nnlo_as_0118_DISonly
       label: NNPDF31_nnlo_as_0118_DISonly
 
 theoryid: 162
 
-use_cuts: false
+use_cuts: "nocuts"
 
 dataset_inputs:
       - { dataset: BCDMSP}

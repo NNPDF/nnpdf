@@ -15,7 +15,7 @@ meta:
 
 fit: NNPDF31_nlo_as_0118
 
-use_cuts: True
+use_cuts: "fromfit"
 
 experiments:
     from_: fit
@@ -41,6 +41,5 @@ template_text: |
     {@endwith@}
 
 actions_:
- - - report:
-        main: True
+  - report(main=true)
 

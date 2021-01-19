@@ -11,12 +11,12 @@ markers:
     - marker_by: process type
     - marker_by: experiment
 
-use_cuts: True
+use_cuts: "fromfit"
 
 display_cuts: False
 
 template_text: |
-    % Kianmatic coverage
+    % Kinematic coverage
 
     {@with fits@}
     {@fit@}
@@ -33,5 +33,4 @@ template_text: |
     {@endwith@}
 
 actions_:
-    - - report:
-          main: True
+  - report(main=true)
