@@ -115,7 +115,7 @@ fitting:
 ### Summary for each level of closure test
 
 See below for the keys which specify each level of closure test, other keys
-can be chosen by user
+can be chosen by the user.
 
 #### Level 0
 
@@ -145,7 +145,7 @@ closuretest:
   ...
 ```
 
-#### Level 0
+#### Level 2
 
 ```yaml
 fitting:
@@ -171,7 +171,7 @@ vital that the data is not rebuilt until all replicas have finished running.
 
 ### With `n3fit`
 
-Running a closure test with `n3fit` will require valid `n3fit` runcard, with
+Running a closure test with `n3fit` will require a valid `n3fit` runcard, with
 the closure test settings modified as shown
 [above](#preparing-the-closure-test-runcard). The difference
 between running a closure fit in `n3fit` and a standard fit is that the user is
