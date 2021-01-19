@@ -100,17 +100,7 @@ class Preprocessing(MetaLayer):
 
     def call(self, inputs, **kwargs):
         x = inputs
-        pdf_raw = op.concatenate(
-            [
-                x ** (1 - self.kernel[0][0]) * (1 - x) ** self.kernel[1][0],  # sigma
-                x ** (1 - self.kernel[2][0]) * (1 - x) ** self.kernel[3][0],  # g
-                x ** (1 - self.kernel[4][0]) * (1 - x) ** self.kernel[5][0],  # v
-                x ** (1 - self.kernel[6][0]) * (1 - x) ** self.kernel[7][0],  # v3
-                x ** (1 - self.kernel[8][0]) * (1 - x) ** self.kernel[9][0],  # v8
-                x ** (1 - self.kernel[10][0]) * (1 - x) ** self.kernel[11][0],  # t3 = sigma
-                x ** (1 - self.kernel[12][0]) * (1 - x) ** self.kernel[13][0],  # t8 = sigma
-                x ** (1 - self.kernel[14][0]) * (1 - x) ** self.kernel[15][0],  # t15 c-
-            ],
-            axis=-1,
-        )
-        return pdf_raw
+        pdf_list = []
+        for i in range(0, self.output_dim*2, 2):
+            pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i+1][0])
+        return op.concatenate(pdf_list, axis=-1)

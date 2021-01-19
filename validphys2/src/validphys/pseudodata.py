@@ -5,9 +5,13 @@ networks during the fitting.
 """
 import logging
 import multiprocessing as mp
+import os
+import pathlib
 
 import numpy as np
 import pandas as pd
+
+from validphys.checks import check_cuts_fromfit, check_darwin_single_process
 
 from reportengine import collect
 
@@ -19,7 +23,88 @@ log = logging.getLogger(__name__)
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
+context_index = collect("groups_index", ("fitcontext",))
 
+@check_cuts_fromfit
+def read_fit_pseudodata(fitcontext, context_index):
+    """Generator to handle the reading of training and validation splits for a fit that has been
+    produced with the ``savepseudodata`` flag set to ``True``.
+
+    The data is read from the PDF to handle the mixing introduced by ``postfit``.
+
+    The data files are concatenated to yield all the data that went into a fit. The training and validation
+    indices are also returned so one can access the splits using pandas indexing.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the training or validation files for the PDF set cannot be found.
+    CheckError
+        If the ``use_cuts`` flag is not set to ``fromfit``
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> data_generator = API.read_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
+    >>> data, tr_idx, val_idx = next(data_generator)
+    >>> data.loc[tr_idx]
+                        data
+    group dataset id
+    BCDMS BCDMSD  0    0.371510
+                1    0.365659
+                2    0.350234
+                4    0.355560
+                6    0.346234
+    ...                     ...
+    SLAC  SLACP   122  0.245322
+                123  0.256854
+                142  0.165455
+                165  0.089741
+                166  0.090437
+    [1556 rows x 1 columns]
+    """
+    # List of length 1 due to the collect
+    context_index = context_index[0]
+    # The [0] is because of how pandas handles sorting a MultiIndex
+    sorted_index = context_index.sortlevel(level=range(3))[0]
+
+    pdf = fitcontext["pdf"]
+    log.info(f"Using same pseudodata & training/validation splits as {pdf.name}.")
+    nrep = len(pdf)
+    path = pathlib.Path(pdf.infopath)
+
+    for rep_number in range(1, nrep):
+        # This is a symlink (usually).
+        replica = path.with_name(pdf.name + "_" + str(rep_number).zfill(4) + ".dat")
+        # we resolve the symlink
+        if replica.parent.is_symlink():
+            replica = pathlib.Path(os.path.realpath(replica))
+
+        training_path = replica.with_name("training.dat")
+        validation_path = replica.with_name("validation.dat")
+
+        try:
+            tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+            val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=["data"])
+        except FileNotFoundError as e:
+            raise FileNotFoundError(
+                "Could not find saved training and validation data files. "
+                f"Please ensure {pdf} was generated with the savepseudodata flag set to true"
+            ) from e
+        tr["type"], val["type"] = "training", "validation"
+
+        pseudodata = pd.concat((tr, val))
+        pseudodata.sort_index(level=range(3), inplace=True)
+
+        pseudodata.index = sorted_index
+
+        tr = pseudodata[pseudodata["type"]=="training"]
+        val = pseudodata[pseudodata["type"]=="validation"]
+
+        yield pseudodata.drop("type", axis=1), tr.index, val.index
+
+
+@check_darwin_single_process
 def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit.
@@ -110,39 +195,42 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
         for i, j in zip(all_exp_infos, replicas):
             d[j] = i
 
-    with mp.Manager() as manager:
-        d = manager.dict()
+    if NPROC == 1:
+        pseudodata_dicts = dict()
+        task(pseudodata_dicts, seeds.mcseeds, seeds.trvlseeds, replica)
+    else:
+        with mp.Manager() as manager:
+            d = manager.dict()
 
-        if NPROC is None:
-            NPROC = mp.cpu_count()
-            log.warning(
-                f"Using all {NPROC} cores available, this may be dangerous "
-                "especially for use on a cluster. Consider setting the NPROC "
-                "variable to something sensible."
-            )
-        processes = []
-        # XXX: There must be a better way to do this. Note it changes
-        # from type int to numpy int and thus require being converted back
-        batched_mcseeds = np.array_split(seeds.mcseeds, NPROC)
-        batched_trvlseeds = np.array_split(seeds.trvlseeds, NPROC)
-        batched_replica_num = np.array_split(replica, NPROC)
-        for mc_batch, trvl_batch, replica_batch in zip(
-            batched_mcseeds, batched_trvlseeds, batched_replica_num
-        ):
-            p = mp.Process(
-                target=task,
-                args=(
-                    d,
-                    list([int(i) for i in mc_batch]),
-                    list([int(i) for i in trvl_batch]),
-                    list([int(i) for i in replica_batch]),
-                ),
-            )
-            p.start()
-            processes.append(p)
-        for p in processes:
-            p.join()
-        pseudodata_dicts = dict(d)
+            if NPROC is None:
+                NPROC = mp.cpu_count()
+                log.warning(
+                    f"Using all {NPROC} cores available, this may be dangerous "
+                    "especially for use on a cluster. Consider setting the NPROC "
+                    "variable to something sensible."
+                )
+            processes = []
+
+            # convert sub arrays back to lists, use tolist to get builtin python
+            # types.
+            list_split = lambda lst, n: [
+                arr.tolist() for arr in np.array_split(lst, n)
+            ]
+            batched_mcseeds = list_split(seeds.mcseeds, NPROC)
+            batched_trvlseeds = list_split(seeds.trvlseeds, NPROC)
+            batched_replica_num = list_split(replica, NPROC)
+            for mc_batch, trvl_batch, replica_batch in zip(
+                batched_mcseeds, batched_trvlseeds, batched_replica_num
+            ):
+                p = mp.Process(
+                    target=task,
+                    args=(d, mc_batch, trvl_batch, replica_batch,),
+                )
+                p.start()
+                processes.append(p)
+            for p in processes:
+                p.join()
+            pseudodata_dicts = dict(d)
     return pseudodata_dicts
 
 

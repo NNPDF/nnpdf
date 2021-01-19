@@ -5,29 +5,32 @@ Tools for computing and plotting effective exponents.
 from __future__ import generator_stop
 
 import logging
-import warnings
 import numbers
+import random
+import warnings
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import random
 
 from reportengine import collect
-from reportengine.figure import figuregen
-from reportengine.table import table
-from reportengine.floatformatting import format_number, significant_digits
 from reportengine.compat import yaml
+from reportengine.figure import figuregen
+from reportengine.floatformatting import format_number, significant_digits
+from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
-from validphys.pdfplots import BandPDFPlotter, PDFPlotter
-from validphys.pdfbases import check_basis, Basis
 from validphys.core import PDF, FitSpec
-
+from validphys.pdfbases import check_basis, Basis, UnknownElement
+from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
 
 log = logging.getLogger(__name__)
 
 INTERNAL_LINESTYLE = ['-.', ':']
+INTERNAL_COLOR = plt.rcParams['axes.prop_cycle'].by_key()["color"]
+
 
 @check_positive('Q')
 @make_argcheck(check_basis)
@@ -151,8 +154,8 @@ def get_beta_lines(effective_exponents_table_internal):
 pdfs_alpha_lines = collect('get_alpha_lines', ("pdfs",))
 pdfs_beta_lines = collect('get_beta_lines', ("pdfs",))
 
-fits_alpha_lines = collect('get_alpha_lines', ('fits', 'fitpdfandbasis'))
-fits_beta_lines = collect('get_beta_lines', ('fits', 'fitpdfandbasis'))
+fits_alpha_lines = collect('get_alpha_lines', ('fits', 'fitpdf'))
+fits_beta_lines = collect('get_beta_lines', ('fits', 'fitpdf'))
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
     def __init__(self, hlines, exponent, *args,  **kwargs):
@@ -160,26 +163,45 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         self.hlines = hlines
 
     def draw(self, pdf, grid, flstate):
-        # Here we assume each pdf has a corresponding fit, which is true by construction.
-        errdown, errup = super().draw(pdf, grid, flstate)
+        """Overload :py:meth:`BandPDFPlotter.draw` to plot bands of the
+        effective exponent calculated from the replicas and horizontal lines
+        for the effective exponents of the previous/next fits, if possible.
+
+        ``flstate`` is an element of the flavours for the first pdf specified in
+        pdfs. If this flavour doesn't exist in the current pdf's fitbasis or
+        the set of flavours for which the preprocessing exponents exist for the
+        current pdf no horizontal lines are plotted.
+
+        """
         pdf_index = self.pdfs.index(pdf)
         hlines = self.hlines[pdf_index]
+        # get the correct index label - don't assume table ordering. Basis must
+        # be same for all fits so assuming flavour exists in table is valid.
+        table_fl_index = f"${grid.basis.elementlabel(flstate.fl)}$"
+
+        errdown, errup = super().draw(pdf, grid, flstate)
         col_label = hlines.columns.get_level_values(0).unique()
+        # need to have plotted bands before getting x limit
         xmin, xmax = flstate.ax.get_xlim()
+
         for i, label in enumerate(col_label):
+            # wrap color index since number of pdfs could in theory exceed
+            # number of colors
             handle = flstate.ax.hlines(
-                hlines.values[flstate.flindex, 2*i:(2*i+2)],
+                hlines.loc[table_fl_index, label].values,
                 xmin=xmin,
                 xmax=xmax,
-                linestyle=INTERNAL_LINESTYLE[i]
+                linestyle=INTERNAL_LINESTYLE[i],
+                color=INTERNAL_COLOR[pdf_index % len(INTERNAL_COLOR)]
             )
             flstate.handles.append(handle)
             flstate.labels.append(label)
         # need to return xgrid shaped object but with hlines taken into account to get plots nice
+        hline_positions = hlines.loc[table_fl_index, :].values.flatten()
         new_errdown = min(
-            [*errdown, *hlines.values[flstate.flindex, :],])
+            [*errdown, *hline_positions,])
         new_errup = max(
-            [*errup, *hlines.values[flstate.flindex, :],])
+            [*errup, *hline_positions,])
         return new_errdown*np.ones_like(errdown), new_errup*np.ones_like(errup)
 
 
@@ -187,7 +209,7 @@ alpha_eff_pdfs = collect('alpha_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff_internal(
+def plot_alpha_eff_internal(
         pdfs, alpha_eff_pdfs, pdfs_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
@@ -205,10 +227,10 @@ def plot_alphaEff_internal(
     yield from ExponentBandPlotter(
         pdfs_alpha_lines, 'alpha', pdfs, alpha_eff_pdfs, 'log', normalize_to, ybottom, ytop)
 
-alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis',))
+alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdf',))
 
 @figuregen
-def plot_alphaEff(
+def plot_alpha_eff(
         fits_pdf, alpha_eff_fits, fits_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
@@ -226,30 +248,30 @@ def plot_alphaEff(
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    return plot_alphaEff_internal(
+    return plot_alpha_eff_internal(
         fits_pdf, alpha_eff_fits, fits_alpha_lines, normalize_to, ybottom, ytop)
 
 beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff_internal(
+def plot_beta_eff_internal(
         pdfs, beta_eff_pdfs, pdfs_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
-    """ Same as plot_alphaEff_internal but for beta effective exponent """
+    """ Same as plot_alpha_eff_internal but for beta effective exponent """
     yield from ExponentBandPlotter(
         pdfs_beta_lines, 'beta', pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
 
-beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
+beta_eff_fits = collect('beta_eff', ('fits', 'fitpdf',))
 
 @figuregen
-def plot_betaEff(
+def plot_beta_eff(
         fits_pdf, beta_eff_fits, fits_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
-    """ Same as plot_alphaEff but for beta effective exponents """
-    return plot_betaEff_internal(
+    """ Same as plot_alpha_eff but for beta effective exponents """
+    return plot_beta_eff_internal(
         fits_pdf, beta_eff_fits, fits_beta_lines, normalize_to, ybottom, ytop)
 
 
@@ -471,9 +493,10 @@ def iterated_runcard_yaml(
             fitting_data[seed] = random.randrange(0, 2**32)
 
     # Next "closuretest" section of runcard
-    closuretest_data = filtermap["closuretest"]
-    if "filterseed" in closuretest_data:
-        closuretest_data["filterseed"] = random.randrange(0, 2**32)
+    if "closuretest" in filtermap:
+        closuretest_data = filtermap["closuretest"]
+        if "filterseed" in closuretest_data:
+            closuretest_data["filterseed"] = random.randrange(0, 2**32)
 
     # update description if necessary
     if _updated_description is not None:

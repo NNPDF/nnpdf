@@ -111,7 +111,7 @@ class MetaModel(Model):
         for input_tensor in input_list:
             # If the input contains a tensor_content, store it to use at predict/fit/eval times
             # otherwise, put a placeholder None as it will come from the outside
-            name = input_tensor.op.name
+            name = input_tensor.name.rsplit(":",1)[0]
             try:
                 self.x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
                 self.tensors_in[name] = input_tensor

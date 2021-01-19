@@ -27,8 +27,29 @@ LUMI_CHANNELS = {
     'gq': r'gq',
     'qqbar': r'q\bar{q}',
     'qq': r'qq',
-    'udbar': r'u\bar{d}',
+    'ddbar': r'd\bar{d}',
+    'uubar': r'u\bar{u}',
+    'ssbar': r's\bar{s}',
+    'ccbar': r'c\bar{c}',
+    'bbbar': r'b\bar{b}',
     'dubar': r'd\bar{u}',
+    'udbar': r'u\bar{d}',
+    'scbar': r's\bar{c}',
+    'csbar': r'c\bar{s}',
+    'pp': r'\gamma\gamma',
+    'gp': r'g\gamma',
+}
+
+QUARK_COMBINATIONS = {
+    "ddbar": [1, -1],
+    "uubar": [2, -2],
+    "ssbar": [3, -3],
+    "ccbar": [4, -4],
+    "bbbar": [5, -5],
+    "dubar": [1, -2],
+    "udbar": [2, -1],
+    "scbar": [3, -4],
+    "csbar": [4, -3],
 }
 
 def _grid_values(lpdf, flmat, xmat, qmat):
@@ -108,9 +129,9 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     for a given channel.
 
     pdf_set: The interested PDF set
-    s: The center of mass energy GeV.
+    s: The square of the center of mass energy GeV^2.
     mx: The invariant mass bin GeV.
-    x1 and x2: The the partonic x1 and x2.
+    x1 and x2: The partonic x1 and x2.
     channel: The channel tag name from LUMI_CHANNELS.
     """
 
@@ -122,6 +143,11 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         for i in QUARK_FLAVOURS:
             res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
                     + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
+    elif channel == 'gp':
+        res = (pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 22)
+               + pdf_set.xfxQ(x1, mx, n, 22) * pdf_set.xfxQ(x2, mx, n, 21))
+    elif channel == 'pp':
+        res = pdf_set.xfxQ(x1, mx, n, 22) * pdf_set.xfxQ(x2, mx, n, 22)
     elif channel == 'qqbar':
         for i in QUARK_FLAVOURS:
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
@@ -133,12 +159,10 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
             r2.append(pdf_set.xfxQ(x2, mx, n, i))
 
         res = sum(a*b for a,b in itertools.product(r1,r2))
-    elif channel == 'udbar':
-        res = (pdf_set.xfxQ(x1, mx, n, 2) * pdf_set.xfxQ(x2, mx, n, -1)
-               + pdf_set.xfxQ(x1, mx, n, -1) * pdf_set.xfxQ(x2, mx, n, 2))
-    elif channel == 'dubar':
-        res = (pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -2)
-               + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 1))
+    elif channel in QUARK_COMBINATIONS.keys():
+        i, j = QUARK_COMBINATIONS[channel]
+        res = (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
+               + pdf_set.xfxQ(x1, mx, n, j) * pdf_set.xfxQ(x2, mx, n, i))
 
     else:
         raise ValueError("Bad channel")

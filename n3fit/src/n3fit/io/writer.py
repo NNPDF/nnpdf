@@ -76,7 +76,7 @@ class WriterWrapper:
             replica_path_set,
             fitname,
             self.q2,
-            self.stopping_object.epoch_of_the_stop,
+            self.stopping_object.e_best_chi2,
             vl_chi2,
             tr_chi2,
             true_chi2,
@@ -119,15 +119,15 @@ def jsonfit(stopping_object, pdf_object, tr_chi2, vl_chi2, true_chi2, timing):
     """
     all_info = {}
     # Generate preprocessing information
-    all_info["preprocessing"] = ""
+    all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
     # .fitinfo-like info
-    all_info["epoch_of_the_stop"] = stopping_object.epoch_of_the_stop
+    all_info["stop_epoch"] = stopping_object.stop_epoch
     all_info["best_epoch"] = stopping_object.e_best_chi2
     all_info["erf_tr"] = tr_chi2
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = stopping_object.positivity_status()
-    all_info["arc_lenghts"] = pdf_object.compute_arclength().tolist()
+    all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
     all_info["integrability"] = pdf_object.integrability_numbers().tolist()
     all_info["timing"] = timing
     # Versioning info
@@ -141,9 +141,10 @@ def version():
     try:
         # Wrap tf in try-except block as it could possible to run n3fit without tf
         import tensorflow as tf
+        from tensorflow.python.framework import test_util
 
         versions["keras"] = tf.keras.__version__
-        mkl = tf.python.framework.test_util.IsMklEnabled()
+        mkl = test_util.IsMklEnabled()
         versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
     except ImportError:
         versions["tensorflow"] = "Not available"

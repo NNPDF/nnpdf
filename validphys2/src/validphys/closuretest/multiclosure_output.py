@@ -10,8 +10,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.special as special
+import scipy.stats
 
-from reportengine.figure import figure
+from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 
@@ -639,3 +640,65 @@ def experiments_bootstrap_xi_comparison(
         (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
         axis=1,
     )
+
+
+@figuregen
+def plot_experiments_sqrt_ratio_bootstrap_distribution(
+    experiments_bootstrap_sqrt_ratio, experiments_data
+):
+    """Plots a histogram for each experiment and the total, showing the
+    distribution of bootstrap samples. Takes the mean and std deviation of the
+    bootstrap sample and plots the corresponding scaled normal distribution
+    for comparison. The limits are set to be +/- 3 std deviations of the mean.
+
+    """
+    # experiments_bootstrap_sqrt_ratio includes total. str(exp) is only used to
+    # generate title, so appending string is fine.
+    for sqrt_ratio_sample, exp in zip(
+        experiments_bootstrap_sqrt_ratio, experiments_data + ["Total"]
+    ):
+        fig, ax = plt.subplots()
+        ax.hist(sqrt_ratio_sample, bins=20, density=True)
+        mean = np.mean(sqrt_ratio_sample)
+        std = np.std(sqrt_ratio_sample)
+
+        xlim = (mean - 3 * std, mean + 3 * std)
+        ax.set_xlim(xlim)
+
+        x = np.linspace(*xlim, 100)
+        ax.plot(
+            x,
+            scipy.stats.norm.pdf(x, mean, std),
+            "-r",
+            label=f"Corresponding normal distribution: mean = {mean:.2g}, std = {std:.2g}",
+        )
+        ax.legend()
+        ax.set_title(f"Bootstrap distribution of sqrt(bias/variance) for {exp}")
+        ax.set_xlabel("Sqrt(bias/variance)")
+        yield fig
+
+
+@figuregen
+def plot_experiments_xi_bootstrap_distribution(
+    experiments_bootstrap_xi, total_bootstrap_xi, experiments_data
+):
+    """Similar to :py:func:`plot_sqrt_ratio_bootstrap_distribution` except plots
+    the bootstrap distribution of xi_1sigma, along with a corresponding
+    scaled gaussian, for each experiment (and for all data).
+
+    """
+    # take mean across data points for each experiment
+    xi_1sigma = [np.mean(exp_xi, axis=1) for exp_xi in experiments_bootstrap_xi]
+    # take mean across all data
+    xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
+    # use plotting function from above
+    xi_plots = plot_experiments_sqrt_ratio_bootstrap_distribution(
+        xi_1sigma, experiments_data
+    )
+    # Update the title and x label on each plot to reflect that we're plotting
+    # \xi_1sigma, don't forget Total plot.
+    for fig, exp in zip(xi_plots, experiments_data + ["Total"]):
+        ax = fig.gca()
+        ax.set_title(r"Bootstrap distribution of $\xi_{1\sigma}$ for " + str(exp))
+        ax.set_xlabel(r"$\xi_{1\sigma}$")
+        yield fig
