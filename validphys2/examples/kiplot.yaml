@@ -4,8 +4,8 @@ meta:
     author: Lazy Person
 
 fits:
- - NNPDF31_nlo_as_0118_1000
- - NNPDF31_nnlo_as_0118_1000
+ - NNPDF31_nlo_as_0118
+ - NNPDF31_nnlo_as_0118_DISonly
 
 markers:
     - marker_by: process type

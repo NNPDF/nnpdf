@@ -20,12 +20,24 @@ resources, which can be costly in terms of time and memory, to run each example 
 
 The recommended resources are:
 
-==============  ==============================  ==================================================================
-Resource        ID                              Description
-==============  ==============================  ==================================================================
-theoryid        162                             Low precision NNPDF3.1 NNLO theory predictions with central scales
-pdf             NNPDF31_nnlo_as_0118            NNPDF3.1 NNLO PDF set with 100 replicas (+ central replica)
-fit             191015-mw-001                   n3fit closure test fit with 30 replicas before and after postfit
-fit (iterated)  191015-mw-001_ite2_for_testing  Iteration of 191015-mw-001
-==============  ==============================  ==================================================================
-
+==============                       ==============================  ==================================================================
+Resource                             ID                              Description
+==============                       ==============================  ==================================================================
+NLO theoryid                         52                              NNPDF3.1 NLO theory predictions with central scales
+NNLO theoryid                        162                             (Low precision) NNPDF3.1 NNLO theory predictions with central scales
+NLO theoryid for scale variations 1  163                             Central scales, $k_F = 1, k_R = 1$
+NLO theoryid for scale variations 2  173                             Central scales, $k_F = 0.5, k_R = 0.5$
+NLO theoryid for scale variations 3  174                             Central scales, $k_F = 1, k_R = 0.5$
+NLO theoryid for scale variations 4  175                             Central scales, $k_F = 2, k_R = 0.5$
+NLO theoryid for scale variations 5  176                             Central scales, $k_F = 0.5, k_R = 1$
+NLO theoryid for scale variations 6  177                             Central scales, $k_F = 2, k_R = 2$
+NLO theoryid for scale variations 7  178                             Central scales, $k_F = 0.5, k_R = 2$
+NLO theoryid for scale variations 8  179                             Central scales, $k_F = 1, k_R = 0.5$
+NLO theoryid for scale variations 9  180                             Central scales, $k_F = 2, k_R = 0.5$
+NLO pdf                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO PDF set with 100 replicas (+ central replica)
+NNLO pdf                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 NNLO PDF set with 95 replicas (+ central replica)
+NLO fit                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO fit with 100 replicas (+ central replica)
+NNLO fit                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 DIS-only NNLO fit with 95 replicas (+ central replica)
+fit                                  191015-mw-001                   n3fit closure test fit with 30 replicas before and after postfit
+fit (iterated)                       191015-mw-001_ite2_for_testing  Iteration of 191015-mw-001
+==============                       ==============================  ==================================================================

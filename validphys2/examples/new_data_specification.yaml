@@ -10,11 +10,11 @@ dataset_inputs:
     - { dataset: ATLASTTBARTOT, cfac: [QCD] }
     - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
 
-theoryid: 53
+theoryid: 162
 
 dataspecs:
- - pdf: NNPDF31_nnlo_as_0118
-   speclabel: "3.1 NNLO"
+ - pdf: NNPDF31_nnlo_as_0118_DISonly
+   speclabel: "3.1 NNLO DISonly"
 
 use_cuts: internal
 

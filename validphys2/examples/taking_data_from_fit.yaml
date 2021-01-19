@@ -8,7 +8,7 @@ metadata_group: nnpdf31_process
 fit: NNPDF31_nnlo_as_0118_DISonly
 
 dataspecs:
- - pdf: NNPDF31_nnlo_as_0118
+ - pdf: NNPDF31_nnlo_as_0118_DISonly
    speclabel: "3.1 NNLO"
 
 use_cuts: internal

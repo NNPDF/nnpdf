@@ -2,7 +2,7 @@ nreplica: 100
 use_cuts: True
 
 meta:
-    title: Pseudodata generation 
+    title: Pseudodata generation
     author: Rosalyn Pearson
     keywords: [pseudodata, test, artificial replica]
 
@@ -19,6 +19,4 @@ experiments:
   - experiment: BIGEXP
     datasets:
       - { dataset: CHORUSNB, frac: 0.5}
-      
-      
-      
+

@@ -22,7 +22,7 @@ datacuts:
 # Used for intersection cuts
 cuts_intersection_spec:
     - theoryid: 52
-    - theoryid: 53
+    - theoryid: 162
 
 dataset_input: {dataset: ATLAS1JET11}
 

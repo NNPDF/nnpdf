@@ -3,11 +3,11 @@ meta:
     keywords: [example]
     author: Rosalyn Pearson
 
-pdfs: 
+pdfs:
     - id: NNPDF31_nnlo_as_0118
-      label: NNPDF31_nnlo_as_0118
+      label: NNPDF31_nnlo_as_0118_DISonly
 
-theoryid: 53
+theoryid: 162
 
 use_cuts: false
 
