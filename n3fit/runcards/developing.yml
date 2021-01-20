@@ -98,7 +98,7 @@ fitting:
     optimizer:
         optimizer_name: 'Adadelta'
         learning_rate: 1.0
-    epochs: 5000
+    epochs: 4000
     ntegrability:
       initial:
       multiplier: 1.03
