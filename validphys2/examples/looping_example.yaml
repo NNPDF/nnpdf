@@ -18,15 +18,10 @@ theoryids:
     - 162
 use_cuts : nocuts
 
-experiments:
-  - experiment: LHCb
-    datasets:
-      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-
-  - experiment: ATLAS
-    datasets:
-      - { dataset: ATLASWZRAP36PB}
+dataset_inputs:
+  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+  - { dataset: ATLASWZRAP36PB}
 
 actions_:
- - theoryids::pdfs::experiments::experiment plot_fancy
+ - theoryids::pdfs::dataset_inputs plot_fancy
