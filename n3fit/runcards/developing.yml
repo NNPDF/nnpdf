@@ -105,7 +105,7 @@ fitting:
     positivity:
         initial:
         multiplier: 1.10
-    stopping_patience: 0.1 # percentage of the number of epochs
+    stopping_patience: 0.3 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.001
 
