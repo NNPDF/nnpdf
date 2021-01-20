@@ -35,6 +35,7 @@ from validphys.core import (
     ExperimentInput,
     CutsPolicy,
     MatchedCuts,
+    SimilarCuts,
     ThCovMatSpec,
 )
 from validphys.loader import (
@@ -362,7 +363,20 @@ class CoreConfig(configparser.Config):
         except InconsistentMetaDataError as e:
             raise ConfigError(e) from e
 
-    def produce_cuts(self, *, commondata, use_cuts, rules, fit=None, theoryid=None):
+    def parse_cut_similarity_threshold(self, th: numbers.Real):
+        """Maximum relative ratio when using `fromsimilarpredictons` cuts."""
+        return th
+
+    def produce_cuts(
+        self,
+        *,
+        commondata,
+        use_cuts,
+        rules,
+        fit=None,
+        theoryid=None,
+        cut_similarity_threshold=None
+    ):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy."""
         # TODO: Put this bit of logic into loader.check_cuts
@@ -384,7 +398,10 @@ class CoreConfig(configparser.Config):
             if not theoryid:
                 raise ConfigError("theoryid must be specified for internal cuts")
             return self.loader.check_internal_cuts(commondata, rules)
-        elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+        elif (
+            use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE
+            or use_cuts is CutsPolicy.FROM_SIMILAR_PREDICTIONS_NAMESPACE
+        ):
             cut_list = []
             _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
             self._check_dataspecs_type(nss)
@@ -401,7 +418,26 @@ class CoreConfig(configparser.Config):
                     _, nscuts = self.parse_from_(None, "cuts", write=False)
                     cut_list.append(nscuts)
             ndata = commondata.ndata
-            return MatchedCuts(cut_list, ndata=ndata)
+            matched_cuts = MatchedCuts(cut_list, ndata=ndata)
+            if use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+                return matched_cuts
+            else:
+                if cut_similarity_threshold is None:
+                    raise ConfigError("Expecting `cut_similarity_threshold` key.")
+                if len(nss) != 2:
+                    raise ConfigError("Can only work with two namespaces")
+                inps = []
+                for ns in nss:
+                    with self.set_context(
+                        ns=self._curr_ns.new_child({"cuts": matched_cuts, **ns,})
+                    ):
+                        _, ds = self.parse_from_(None, "dataset", write=False)
+                        _, pdf = self.parse_from_(None, "pdf", write=False)
+                        print(ds.cuts)
+                        inps.append((ds, pdf))
+                return SimilarCuts(tuple(inps), cut_similarity_threshold)
+
+
 
         raise TypeError("Wrong use_cuts")
 

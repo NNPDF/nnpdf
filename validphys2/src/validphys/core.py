@@ -359,6 +359,8 @@ class CutsPolicy(enum.Enum):
     NOCUTS = "nocuts"
     FROMFIT = "fromfit"
     FROM_CUT_INTERSECTION_NAMESPACE = "fromintersection"
+    FROM_SIMILAR_PREDICTIONS_NAMESPACE = "fromsimilarpredictions"
+
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
@@ -395,6 +397,27 @@ class MatchedCuts(TupleComp):
             return functools.reduce(np.intersect1d, loaded)
         self._full = True
         return np.arange(self.ndata)
+
+class SimilarCuts(TupleComp):
+    def __init__(self, inputs, threshold):
+        if len(inputs) != 2:
+            raise ValueError("Expecting two input tuples")
+        firstcuts, secondcuts = inputs[0][0].cuts, inputs[1][0].cuts
+        if firstcuts != secondcuts:
+            raise ValueError("Expecting cuts to be the same for all datasets")
+        self.inputs = inputs
+        self.threshold = threshold
+        super().__init__(self.inputs, self.threshold)
+
+    def load(self):
+        from validphys.convolution import central_predictions
+
+        first, second = self.inputs
+        # Compute matched predictions
+        ratio = central_predictions(*first) / central_predictions(*second)
+        ratio = ratio.squeeze()
+        passed = (self.threshold < ratio) & (ratio < 1 / self.threshold)
+        return passed[passed].index
 
 
 def cut_mask(cuts):
