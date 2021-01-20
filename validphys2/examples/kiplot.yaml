@@ -3,22 +3,25 @@ meta:
     keywords: [Guilty]
     author: Lazy Person
 
-fits:
- - NNPDF31_nlo_as_0118
- - NNPDF31_nnlo_as_0118_DISonly
+fit: NNPDF31_nlo_as_0118
 
 markers:
     - marker_by: process type
     - marker_by: experiment
 
 use_cuts: "fromfit"
-
 display_cuts: False
+
+dataset_inputs:
+  - { dataset: NMC }
+  - { dataset: NMCPD }
+  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+  - { dataset: ATLASWZRAP36PB}
 
 template_text: |
     % Kinematic coverage
 
-    {@with fits@}
     {@fit@}
     =======
 
@@ -27,8 +30,6 @@ template_text: |
     -----------------------
 
     {@fitcontext plot_xq2@}
-
-    {@endwith@}
 
     {@endwith@}
 
