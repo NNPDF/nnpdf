@@ -189,6 +189,8 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new BCDMSPFilter());
   target.push_back(new BCDMSDFilter());
+  target.push_back(new BCDMSD_dwFilter());
+  target.push_back(new BCDMSD_shFilter());
 
   // ************************* CDF ******************************
 
@@ -202,6 +204,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CHORUSNBFilter());
   target.push_back(new CHORUSNUPbFilter());
   target.push_back(new CHORUSNBPbFilter());
+  target.push_back(new CHORUSNUPb_dwFilter());
+  target.push_back(new CHORUSNBPb_dwFilter());
+  target.push_back(new CHORUSNUPb_shFilter());
+  target.push_back(new CHORUSNBPb_shFilter());
 
   // ************************* CMS ******************************
 
@@ -244,8 +250,12 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* FTDY ******************************
 
   target.push_back(new DYE605Filter());
+  target.push_back(new DYE605_dwFilter());
+  target.push_back(new DYE605_shFilter());
   target.push_back(new DYE866PFilter());
   target.push_back(new DYE866RFilter());
+  target.push_back(new DYE866R_dwFilter());
+  target.push_back(new DYE866R_shFilter());
 
   // ************************* HERA-I Combined ******************************
 
@@ -288,6 +298,8 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new NMCFilter());
   target.push_back(new NMCpdFilter());
+  target.push_back(new NMCpd_dwFilter());
+  target.push_back(new NMCpd_shFilter());
 
   // ************************* NuTeV ******************************
 
@@ -295,11 +307,17 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new NTVNUDMNFilter());
   target.push_back(new NTVNBDMNFeFilter());
   target.push_back(new NTVNUDMNFeFilter());
+  target.push_back(new NTVNBDMNFe_dwFilter());
+  target.push_back(new NTVNUDMNFe_dwFilter());
+  target.push_back(new NTVNBDMNFe_shFilter());
+  target.push_back(new NTVNUDMNFe_shFilter());
 
   // ************************* SLAC ******************************
 
   target.push_back(new SLACPFilter());
   target.push_back(new SLACDFilter());
+  target.push_back(new SLACD_dwFilter());
+  target.push_back(new SLACD_shFilter());
 
   // ************************* TOP *******************************
 
