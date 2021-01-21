@@ -152,7 +152,9 @@ def plot_next_multiclosure_beta_preprocessing(
         fits_fitbasis_beta_lines, fits_pdf, next_multiclosure_beta_preprocessing_table,
     ):
         # fixup title.
-        fig.gca().get_title().replace("alpha", "beta")
+        ax = fig.gca()
+        new_title = ax.get_title().replace("alpha", "beta")
+        ax.set_title(new_title)
         yield fig
 
 
@@ -210,5 +212,7 @@ def plot_next_multiclosure_beta_preprocessing_range_width(
         fits_fitbasis_beta_lines, fits_pdf, next_multiclosure_beta_preprocessing_table,
     ):
         # fixup title.
-        fig.gca().get_title().replace("alpha", "beta")
+        ax = fig.gca()
+        new_title = ax.get_title().replace("alpha", "beta")
+        ax.set_title(new_title)
         yield fig
