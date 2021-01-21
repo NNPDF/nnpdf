@@ -30,6 +30,66 @@ fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
 context_index = collect("groups_index", ("fitcontext",))
 
+
+def reconstruct_replica(fit, list_of_commondata, replica: int):
+    """A function that reconstructs the pseudodata seen by replica number ``replica``
+
+    #TODO: add list_of_commondata
+    Parameters
+    ----------
+    fit: validphys.core.fit
+        The input fit
+    replica: int
+        The replica number for which the pseudodata is reconstructed
+
+    Returns
+    -------
+    #XXX: maybe this will be a pd.Series
+    pseudodata: np.array
+        The pseudodata in array format
+
+    Raises
+    ------
+    KeyError:
+        If one of ``trvalseed``, ``nnseed``, or ``mcseed`` is not found under the ``fitting``
+        namespace
+
+    Example:
+    >>> from validphys.api import API
+    >>> API.reconstruct_replica(fit="NNPDF40_nnlo_as_0118", replica=0)
+    #TODO: finish this example
+    """
+    log.warning(f"Attempt to reconstruct pseudodata for MC replica {replica} "
+                f"of {fit}. Be advised that this functionality is not available "
+                "for all fits, but only those fitted after N3FIT switched to the "
+                "Python MakeReplica function."
+    )
+
+    runcard = fit.as_input()
+
+    try:
+        fit_ns = runcard["fitting"]
+        trvlseed = fit_ns["trvlseed"]
+        nnseed = fit_ns["nnseed"]
+        mcseed = fit_ns["mcseed"]
+    except KeyError as e:
+        raise KeyError(f"The following keys were not found in the fitting namespace {str(e)}, "
+                        "please ensure the input fit is a valid N3FIT fit."
+        ) from e
+
+    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep=True)
+
+    pseudodata = make_replica(list_of_commondata, seed=mcseed)
+
+    # TODO: change the need for datasets and exp_name
+    trmasks, vlmasks = reader.make_tr_val_mask(datasets=None, exp_name=None, seed=trvlseed)
+
+    training = pseudodata[:, trmasks]
+    validation = pseudodata[:, vlmasks]
+
+    return training, validation
+
+
 @check_cuts_fromfit
 def read_fit_pseudodata(fitcontext, context_index):
     """Generator to handle the reading of training and validation splits for a fit that has been
