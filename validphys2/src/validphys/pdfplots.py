@@ -481,7 +481,7 @@ def plot_pdfs(
     corresponding to the index of the PDF in the list of PDFs, or a mixture
     of both.
 
-    mc_errors (bool): Plot 1σ bands in addition to 68% errors for Monte Carlo
+    show_mc_errors (bool): Plot 1σ bands in addition to 68% errors for Monte Carlo
     PDF.
     """
     yield from BandPDFPlotter(
