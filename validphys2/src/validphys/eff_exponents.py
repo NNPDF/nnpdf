@@ -473,15 +473,35 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
 
 
-def iterated_runcard_yaml(
-    fit, iterate_preprocessing_yaml, _updated_description=None
-):
+def update_runcard_description_yaml(
+    iterate_preprocessing_yaml, _updated_description=None):
+    """Take the runcard with iterated preprocessing and update the description
+    if ``_updated_description`` is provided. As with
+    :py:func:`iterate_preprocessing_yaml` the result can be used in a report
+    but should be wrapped in a code block to be formatted correctly,
+    for example:
+
+    ```yaml
+    {@update_runcard_description_yaml@}
+    ```
+
     """
-    Take the runcard with preprocessing iterated
+    filtermap = yaml.load(iterate_preprocessing_yaml, yaml.RoundTripLoader)
+
+    # update description if necessary
+    if _updated_description is not None:
+        filtermap["description"] = _updated_description
+
+    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+
+
+def iterated_runcard_yaml(
+    fit, update_runcard_description_yaml):
+    """
+    Take the runcard with preprocessing iterated and description updated then
 
     - Updates the t0 pdf set to be ``fit``
     - Modifies the random seeds (to random unsigned long ints)
-    - Updates the description if ``_updated_description`` is provided
 
     This should facilitate running a new fit with identical input settings
     as the specified ``fit`` with the t0, seeds and preprocessing iterated. For
@@ -506,7 +526,7 @@ def iterated_runcard_yaml(
     ...     f.write(yaml_output)
 
     """
-    filtermap = yaml.load(iterate_preprocessing_yaml, yaml.RoundTripLoader)
+    filtermap = yaml.load(update_runcard_description_yaml, yaml.RoundTripLoader)
     # iterate t0
     filtermap["datacuts"]["t0pdfset"] = fit.name
 
@@ -525,9 +545,5 @@ def iterated_runcard_yaml(
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
             closuretest_data["filterseed"] = random.randrange(0, 2**32)
-
-    # update description if necessary
-    if _updated_description is not None:
-        filtermap["description"] = _updated_description
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
