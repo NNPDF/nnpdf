@@ -378,11 +378,12 @@ def plot_pdfvardistances(pdfs, variance_distance_grids, *,
 
 
 class BandPDFPlotter(PDFPlotter):
-    def __init__(self, *args,  pdfs_noband=None ,**kwargs):
+    def __init__(self, *args, pdfs_noband=None, show_mc_errors=True, **kwargs):
         if pdfs_noband is None:
             pdfs_noband = []
         self.pdfs_noband = pdfs_noband
-        super().__init__( *args, **kwargs)
+        self.show_mc_errors = show_mc_errors
+        super().__init__(*args, **kwargs)
 
     def setup_flavour(self, flstate):
         flstate.handles=[]
@@ -423,7 +424,7 @@ class BandPDFPlotter(PDFPlotter):
                         edgecolor=color,
                         hatch=hatch,
                         zorder=1)
-        if isinstance(stats, MCStats):
+        if isinstance(stats, MCStats) and self.show_mc_errors:
             errorstdup, errorstddown = stats.errorbarstd()
             ax.plot(xgrid, errorstdup, linestyle='--', color=color)
             ax.plot(xgrid, errorstddown, linestyle='--', color=color)
@@ -460,6 +461,7 @@ def plot_pdfs(
     ymin=None,
     ymax=None,
     pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
 ):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
@@ -478,6 +480,9 @@ def plot_pdfs(
     strings, corresponding to PDF IDs, integers (starting from one),
     corresponding to the index of the PDF in the list of PDFs, or a mixture
     of both.
+
+    mc_errors (bool): Plot 1σ bands in addition to 68% errors for Monte Carlo
+    PDF.
     """
     yield from BandPDFPlotter(
         pdfs,
@@ -487,6 +492,7 @@ def plot_pdfs(
         ymin,
         ymax,
         pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
     )
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
