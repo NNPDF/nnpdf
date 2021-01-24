@@ -284,7 +284,7 @@ def generate_dense_network(
             "kernel_initializer": init,
             "units": int(nodes_out),
             "activation": activation,
-            "input_shape": {nodes_in},
+            "input_shape": (nodes_in,),
             "kernel_regularizer": regularizer,
         }
 
@@ -523,7 +523,7 @@ def pdfNN_layer_generator(
         flav_info=flav_info,
         seed=preproseed,
         output_dim=last_layer_nodes,
-        feature_scaling=mapping,
+        mapping=mapping,
     )
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)

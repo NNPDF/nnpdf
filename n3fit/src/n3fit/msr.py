@@ -8,7 +8,7 @@ from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
 from scipy.interpolate import PchipInterpolator
-import tensorflow as tf
+
 
 log = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
     if mapping:
         xgrid_input_scaled = operations.numpy_to_input(xgrid_scaled)
         xgrid_input = np.expand_dims(xgrid, 0)
-        xgrid_input = tf.convert_to_tensor(xgrid_input, dtype=xgrid_input_scaled.dtype)
+        xgrid_input = operations.op_convert_to_tensor(xgrid_input, dtype=xgrid_input_scaled.dtype)
         normalization = normalizer(integrator(pdf_integrand(xgrid_input, xgrid_input_scaled)))
     else:
         xgrid_input = operations.numpy_to_input(xgrid)
