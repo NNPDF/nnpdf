@@ -109,6 +109,10 @@ class Preprocessing(MetaLayer):
     def call(self, inputs, **kwargs):
         x = inputs
         pdf_list = []
-        for i in range(0, self.output_dim*2, 2):
-            pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i+1][0])
+        if self.feature_scaling:
+            for i in range(0, self.output_dim, 1):
+                pdf_list.append(x ** (1 - self.kernel[i][0]))
+        else:
+            for i in range(0, self.output_dim*2, 2):
+                pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i+1][0])
         return op.concatenate(pdf_list, axis=-1)
