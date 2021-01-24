@@ -28,6 +28,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import Concatenate as keras_concatenate
+from tensorflow.keras.layers import subtract
 
 from tensorflow.keras.layers import Input
 from tensorflow.keras import backend as K
@@ -302,3 +303,17 @@ def scatter_to_one(values, indices=[[1]], output_dim=14):
     """
     ones = np.ones(output_dim, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
+
+def op_subtract(inputs, **kwargs):
+    """
+    Computes the difference between two tensors. 
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
+    """
+    return subtract(inputs, **kwargs)
+
+def tensor_ones_like_eager(*args, **kwargs):
+    """
+    Generates a tensor of ones of the same shape as the input tensor
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
+    """
+    return K.ones_like(*args, **kwargs)

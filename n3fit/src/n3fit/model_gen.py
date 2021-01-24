@@ -17,8 +17,6 @@ from n3fit.backends import losses
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
-import tensorflow as tf
-
 
 def observable_generator(spec_dict, positivity_initial=1.0, integrability=False):  # pylint: disable=too-many-locals
     """
@@ -447,9 +445,6 @@ def pdfNN_layer_generator(
         model_pdf: n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
     """
-    if mapping:
-        inp = 1
-
     if nodes is None:
         nodes = [15, 8]
     ln = len(nodes)
@@ -509,7 +504,7 @@ def pdfNN_layer_generator(
             curr_fun = list_of_pdf_layers[0](add_log(x))
         elif mapping:
             x = scale_input(x)
-            x0 = tf.keras.backend.ones_like(x)
+            x0 = operations.tensor_ones_like_eager(x)
             curr_fun = list_of_pdf_layers[0](x)
             curr_fun0 = list_of_pdf_layers[0](x0)
         for dense_layer in list_of_pdf_layers[1:]:
@@ -517,7 +512,7 @@ def pdfNN_layer_generator(
             if mapping:
                 curr_fun0 = dense_layer(curr_fun0)
         if mapping:
-            curr_fun = tf.keras.layers.subtract([curr_fun, curr_fun0])
+            curr_fun = operations.op_subtract([curr_fun, curr_fun0])
         return curr_fun
 
     # Preprocessing layer (will be multiplied to the last of the denses)
