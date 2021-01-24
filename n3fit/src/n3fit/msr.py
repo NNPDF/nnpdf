@@ -38,7 +38,7 @@ def gen_integration_input(nx, mapping):
 
     if mapping:
         interpolation = PchipInterpolator(mapping[0], mapping[1])
-        xgrid_scaled = interpolation(np.log10(xgrid.squeeze()))
+        xgrid_scaled = interpolation(np.log(xgrid.squeeze()))
         xgrid_scaled = np.expand_dims(xgrid_scaled, axis=1)
 
     if mapping:
