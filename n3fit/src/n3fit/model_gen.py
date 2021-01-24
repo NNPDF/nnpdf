@@ -533,9 +533,9 @@ def pdfNN_layer_generator(
 
 
     # Apply extrapolation and basis
-    def layer_fitbasis(x, xnotscaled=None):
+    def layer_fitbasis(x, x_scaled=None):
         if mapping:
-            ret = operations.op_multiply([dense_me(x), layer_preproc(xnotscaled)])
+            ret = operations.op_multiply([dense_me(x_scaled), layer_preproc(x)])
         else:
             ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
         if basis_rotation.is_identity():
@@ -544,9 +544,9 @@ def pdfNN_layer_generator(
         return basis_rotation(ret)
 
     # Rotation layer, changes from the 8-basis to the 14-basis
-    def layer_pdf(x, xnotscaled=None):
+    def layer_pdf(x, x_scaled=None):
         if mapping:
-            evol_layer = layer_evln(layer_fitbasis(x, xnotscaled))
+            evol_layer = layer_evln(layer_fitbasis(x, x_scaled))
         else:
             evol_layer = layer_evln(layer_fitbasis(x))
         return evol_layer
@@ -554,13 +554,13 @@ def pdfNN_layer_generator(
     # Prepare the input for the PDF model
     placeholder_input = Input(shape=(None, 1), batch_size=1)
     if mapping:
-        placeholder_input_notscaled = Input(shape=(None, 1), batch_size=1)
+        placeholder_input_scaled = Input(shape=(None, 1), batch_size=1)
 
     # Impose sumrule if necessary
     if impose_sumrule:
         layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mapping)
         if mapping:
-            model_input = [integrator_input, placeholder_input, placeholder_input_notscaled]
+            model_input = [integrator_input, placeholder_input, placeholder_input_scaled]
         else:
             model_input = [integrator_input, placeholder_input]
     else:
@@ -568,7 +568,7 @@ def pdfNN_layer_generator(
         model_input = [placeholder_input]
 
     if mapping:
-        pdf_model = MetaModel(model_input, layer_pdf(placeholder_input, placeholder_input_notscaled), name="PDF")
+        pdf_model = MetaModel(model_input, layer_pdf(placeholder_input, placeholder_input_scaled), name="PDF")
     else:
         pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
 
