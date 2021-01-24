@@ -28,7 +28,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import Concatenate as keras_concatenate
-from tensorflow.keras.layers import subtract
+from tensorflow.keras.layers import subtract as keras_subtract
 
 from tensorflow.keras.layers import Input
 from tensorflow.keras import backend as K
@@ -309,7 +309,7 @@ def op_subtract(inputs, **kwargs):
     Computes the difference between two tensors. 
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
     """
-    return subtract(inputs, **kwargs)
+    return keras_subtract(inputs, **kwargs)
 
 def tensor_ones_like_eager(*args, **kwargs):
     """
@@ -317,3 +317,10 @@ def tensor_ones_like_eager(*args, **kwargs):
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
     """
     return K.ones_like(*args, **kwargs)
+
+def op_convert_to_tensor(value, **kwargs):
+    """
+    Converts 'value' to tensor
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/convert_to_tensor>`_
+    """
+    return tf.convert_to_tensor(value, **kwargs)

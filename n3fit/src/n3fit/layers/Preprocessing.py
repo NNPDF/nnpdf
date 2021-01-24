@@ -42,7 +42,7 @@ class Preprocessing(MetaLayer):
         flav_info=None,
         seed=0,
         initializer="random_uniform",
-        feature_scaling=None,
+        mapping=None,
         **kwargs,
     ):
         self.output_dim = output_dim
@@ -51,7 +51,7 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.initializer = initializer
-        self.feature_scaling = feature_scaling
+        self.mapping = mapping
         self.kernel = []
         # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
@@ -100,7 +100,7 @@ class Preprocessing(MetaLayer):
             flav_name = flav_dict["fl"]
             alpha_name = f"alpha_{flav_name}"
             self.generate_weight(alpha_name, "smallx", flav_dict)
-            if not self.feature_scaling:
+            if not self.mapping:
                 beta_name = f"beta_{flav_name}"
                 self.generate_weight(beta_name, "largex", flav_dict)
 
@@ -109,7 +109,7 @@ class Preprocessing(MetaLayer):
     def call(self, inputs, **kwargs):
         x = inputs
         pdf_list = []
-        if self.feature_scaling:
+        if self.mapping:
             for i in range(0, self.output_dim, 1):
                 pdf_list.append(x ** (1 - self.kernel[i][0]))
         else:
