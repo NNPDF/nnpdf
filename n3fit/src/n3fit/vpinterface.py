@@ -133,15 +133,15 @@ class N3PDF(PDF):
         """
         if self.mapping:
             interpolation = PchipInterpolator(self.mapping[0], self.mapping[1])
-            xarr_notscaled = interpolation(np.log10(xarr))
+            xarr_scaled = interpolation(np.log10(xarr))
         
         if flavours is None:
             flavours = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
         mod_xgrid = xarr.reshape(1, -1, 1)
         if self.mapping:
-            mod_xgrid_scaled = xarr_notscaled.reshape(1, -1, 1)
-            result = self.model.predict([mod_xgrid_scaled, mod_xgrid])
+            mod_xgrid_scaled = xarr_scaled.reshape(1, -1, 1)
+            result = self.model.predict([mod_xgrid, mod_xgrid_scaled])
         else:
             result = self.model.predict([mod_xgrid])
         if flavours != "n3fit":

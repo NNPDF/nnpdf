@@ -3,11 +3,11 @@
 """
 import logging
 import numpy as np
+from scipy.interpolate import PchipInterpolator
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
-from scipy.interpolate import PchipInterpolator
 
 
 log = logging.getLogger(__name__)
@@ -68,7 +68,7 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
 
     def pdf_integrand(xgrid, xgrid_scaled=None):
         if mapping:
-            res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid_scaled, xgrid)])
+            res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid, xgrid_scaled)])
         else:
             res = operations.op_multiply([division_by_x(xgrid), fit_layer(xgrid)])
         return res
@@ -90,9 +90,9 @@ def msr_impose(fit_layer, final_pdf_layer, mapping, mode='All', verbose=False):
         normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
 
 
-    def ultimate_pdf(x, xnotscaled=None):
-        if xnotscaled != None:
-            return operations.op_multiply_dim([final_pdf_layer(x, xnotscaled), normalization])
+    def ultimate_pdf(x, xgrid_scaled=None):
+        if xgrid_scaled != None:
+            return operations.op_multiply_dim([final_pdf_layer(x, xgrid_scaled), normalization])
         else:
             return operations.op_multiply_dim([final_pdf_layer(x), normalization])
 
@@ -125,22 +125,22 @@ def check_integration(ultimate_pdf, integration_input, mapping):
     """
     nx = int(1e4)
     if mapping:
-        xnotscaled, xgrid, weights_array = gen_integration_input(nx, mapping)
-        xnotscaled_input = operations.numpy_to_input(xnotscaled)
+        xgrid, xgrid_scaled, weights_array = gen_integration_input(nx, mapping)
+        xgrid_input_scaled = operations.numpy_to_input(xgrid_scaled)
     else:
         xgrid, weights_array = gen_integration_input(nx)
     xgrid_input = operations.numpy_to_input(xgrid)
 
     multiplier = xDivide(output_dim=14, div_list=range(3, 9))
 
-    def pdf_integrand(x, xnotscaled):
-        res = operations.op_multiply([multiplier(x), ultimate_pdf(x, xnotscaled)])
+    def pdf_integrand(x, x_scaled):
+        res = operations.op_multiply([multiplier(x), ultimate_pdf(x, x_scaled)])
         return res
 
     if mapping:
         modelito = MetaModel(
-            [xgrid_input, integration_input, xnotscaled_input],
-            pdf_integrand(xgrid_input, xnotscaled_input),
+            [xgrid_input, integration_input, xgrid_input_scaled],
+            pdf_integrand(xgrid_input, xgrid_input_scaled),
         )
     else:
         modelito = MetaModel([xgrid_input, integration_input], pdf_integrand(xgrid_input))

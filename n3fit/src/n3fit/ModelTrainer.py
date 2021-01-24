@@ -397,31 +397,27 @@ class ModelTrainer:
 
         # Construct the input array that will be given to the pdf
         input_arr = np.concatenate(self.input_list, axis=1)
-        
+        input_layer = operations.numpy_to_input(input_arr.T)
+
         # Apply feature scaling
         if self.mapping:
             mapping = self.mapping
             interpolation = PchipInterpolator(mapping[0], mapping[1])
-            input_arr = interpolation(np.log10(input_arr.squeeze()))
-            input_arr = np.expand_dims(input_arr, axis=0)
-
-            # Construct the non scaled input array that will be given to the pdf
-            input_arr_notscaled = np.concatenate(self.input_list, axis=1)
-            input_layer_notscaled = operations.numpy_to_input(input_arr_notscaled.T)
-        input_layer = operations.numpy_to_input(input_arr.T)
-
+            input_arr_scaled = interpolation(np.log10(input_arr.squeeze()))
+            input_arr_scaled = np.expand_dims(input_arr, axis=0)
+            input_layer_scaled = operations.numpy_to_input(input_arr_scaled.T)
 
         # The input to the full model is expected to be the input to the PDF
         # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted for
         if self.mapping:
-            full_model_input_dict = pdf_model._parse_input([input_layer, input_layer_notscaled], pass_content=False)
+            full_model_input_dict = pdf_model._parse_input([input_layer, input_layer_scaled], pass_content=False)
         else:
             full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
 
         # The output of the pdf on input_layer will be thus a concatenation
         # of the PDF values for all experiments
         if self.mapping:
-            full_pdf = pdf_model.apply_as_layer([input_layer, input_layer_notscaled])
+            full_pdf = pdf_model.apply_as_layer([input_layer, input_layer_scaled])
         else: 
             full_pdf = pdf_model.apply_as_layer([input_layer])
         # The input layer is a concatenation of all experiments
