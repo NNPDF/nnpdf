@@ -9,10 +9,16 @@ class Preprocessing(MetaLayer):
     """
         Applies preprocessing to the PDF.
 
-        This layer generates a factor x^(1-alpha) where alpha is a trainable parameter.
+        This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha
+        are model paramters that can be trained. If feature scaling is used, the preprocessing
+        factor is x^(1-alpha). 
 
         Alpha is initialized uniformly within the ranges allowed in the runcard and
         then it is only allowed to move between those two values (with a hard wall in each side)
+
+        Alpha and, unless feature scaling is used, beta are initialized uniformly within 
+        the ranges allowed in the runcard and then they are only allowed to move between those two 
+        values (with a hard wall in each side)
 
         Parameters
         ----------
@@ -35,6 +41,7 @@ class Preprocessing(MetaLayer):
         flav_info=None,
         seed=0,
         initializer="random_uniform",
+        feature_scaling=None,
         **kwargs,
     ):
         self.output_dim = output_dim
@@ -43,6 +50,7 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.initializer = initializer
+        self.feature_scaling = feature_scaling
         self.kernel = []
         # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
@@ -91,6 +99,9 @@ class Preprocessing(MetaLayer):
             flav_name = flav_dict["fl"]
             alpha_name = f"alpha_{flav_name}"
             self.generate_weight(alpha_name, "smallx", flav_dict)
+            if not self.feature_scaling:
+                beta_name = f"beta_{flav_name}"
+                self.generate_weight(beta_name, "largex", flav_dict)
 
         super(Preprocessing, self).build(input_shape)
 
