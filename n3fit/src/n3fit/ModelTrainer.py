@@ -403,7 +403,7 @@ class ModelTrainer:
         if self.mapping:
             mapping = self.mapping
             interpolation = PchipInterpolator(mapping[0], mapping[1])
-            input_arr_scaled = interpolation(np.log10(input_arr.squeeze()))
+            input_arr_scaled = interpolation(np.log(input_arr.squeeze()))
             input_arr_scaled = np.expand_dims(input_arr, axis=0)
             input_layer_scaled = operations.numpy_to_input(input_arr_scaled.T)
 
@@ -593,21 +593,33 @@ class ModelTrainer:
             input_arr = np.concatenate(self.input_list, axis=1)
             input_arr = np.sort(input_arr)
             input_arr_size = input_arr.size
-            start_val = np.array(1 / input_arr_size, dtype=input_arr.dtype)
-            new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
+
+            # Define an evenly spaced grid in the domain [0,1]
+            new_xgrid = np.linspace(start=0, stop=1.0, endpoint=True, num=input_arr_size)
+
+            # When mapping the FK xgrids onto our new grid, we need to consider degeneracies among
+            # the x-values in the FK grids 
             unique, counts = np.unique(input_arr, return_counts=True)
-            map_from_complete = np.append(unique, 1.0)
-            map_to_complete = [0.0]
+            map_to_complete = []
             for cumsum_ in np.cumsum(counts):
                 map_to_complete.append(new_xgrid[cumsum_ - 1])
-            map_to_complete.append(1.0)
             map_to_complete = np.array(map_to_complete)
 
+            # Make sure that feature_scaling(x=1)=1
+            map_to_complete = np.append(map_to_complete, 1.0)
+            map_from_complete = np.append(unique, 1.0)
+
+            # Make sure the smallest point included in the scaling is 1e-9, to prevent trouble when 
+            # saving it to the LHAPDF grid
+            if map_from_complete.min() > 1e-9:
+                map_from_complete[0] = 1e-9
+
+            # Select the indices of the points that will be used by the interpolator
             onein = map_from_complete.size / (int(interpolation_points) - 1)
             selected_points = [0]
             selected_points += [round(i * onein - 1) for i in range(1, int(interpolation_points))]
             map_from = map_from_complete[selected_points]
-            map_from = np.log10(map_from)
+            map_from = np.log(map_from)
             map_to = map_to_complete[selected_points]
 
             self.mapping = [map_from, map_to]

@@ -133,7 +133,7 @@ class N3PDF(PDF):
         """
         if self.mapping:
             interpolation = PchipInterpolator(self.mapping[0], self.mapping[1])
-            xarr_scaled = interpolation(np.log10(xarr))
+            xarr_scaled = interpolation(np.log(xarr))
         
         if flavours is None:
             flavours = EVOL_LIST
