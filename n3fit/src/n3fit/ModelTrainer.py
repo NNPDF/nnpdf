@@ -397,23 +397,33 @@ class ModelTrainer:
 
         # Construct the input array that will be given to the pdf
         input_arr = np.concatenate(self.input_list, axis=1)
-        mapping = self.mapping
-        interpolation = PchipInterpolator(mapping[0], mapping[1])
-        input_arr = interpolation(np.log10(input_arr.squeeze()))
-        input_arr = np.expand_dims(input_arr, axis=0)
+        
+        # Apply feature scaling
+        if self.mapping:
+            mapping = self.mapping
+            interpolation = PchipInterpolator(mapping[0], mapping[1])
+            input_arr = interpolation(np.log10(input_arr.squeeze()))
+            input_arr = np.expand_dims(input_arr, axis=0)
+
+            # Construct the non scaled input array that will be given to the pdf
+            input_arr_notscaled = np.concatenate(self.input_list, axis=1)
+            input_layer_notscaled = operations.numpy_to_input(input_arr_notscaled.T)
         input_layer = operations.numpy_to_input(input_arr.T)
 
-        # Construct the non scaled input array that will be given to the pdf
-        input_arr_notscaled = np.concatenate(self.input_list, axis=1)
-        input_layer_notscaled = operations.numpy_to_input(input_arr_notscaled.T)
 
         # The input to the full model is expected to be the input to the PDF
-        # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted fro
-        full_model_input_dict = pdf_model._parse_input([input_layer, input_layer_notscaled], pass_content=False)
+        # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted for
+        if self.mapping:
+            full_model_input_dict = pdf_model._parse_input([input_layer, input_layer_notscaled], pass_content=False)
+        else:
+            full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
 
         # The output of the pdf on input_layer will be thus a concatenation
         # of the PDF values for all experiments
-        full_pdf = pdf_model.apply_as_layer([input_layer, input_layer_notscaled])
+        if self.mapping:
+            full_pdf = pdf_model.apply_as_layer([input_layer, input_layer_notscaled])
+        else: 
+            full_pdf = pdf_model.apply_as_layer([input_layer])
         # The input layer is a concatenation of all experiments
         # we need now to split the output on a different array per experiment
         sp_ar = [self.input_sizes]
@@ -486,7 +496,7 @@ class ModelTrainer:
         all_integ_multiplier,
         all_integ_initial,
         epochs,
-        interpolation_points=20,
+        interpolation_points,
     ):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
@@ -511,7 +521,6 @@ class ModelTrainer:
         log.info("Generating layers")
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        input_list_exp = []
         for exp_dict in self.exp_info:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
@@ -520,7 +529,6 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
-            input_list_exp += exp_layer["inputs"]
             self.input_sizes.append(exp_layer["experiment_xsize"])
 
             # Now save the observable layer, the losses and the experimental data
@@ -531,8 +539,6 @@ class ModelTrainer:
             self.training["losses"].append(exp_layer["loss_tr"])
             self.validation["losses"].append(exp_layer["loss_vl"])
             self.experimental["losses"].append(exp_layer["loss"])
-        input_list_exp = np.concatenate(input_list_exp, axis=1)
-        self.data_domain = [input_list_exp.min(), input_list_exp.max()]
 
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
@@ -587,27 +593,30 @@ class ModelTrainer:
                 self.training["integinitials"].append(integ_initial)
 
         # Store the input data for the interpolator as self.mapping
-        input_arr = np.concatenate(self.input_list, axis=1)
-        input_arr = np.sort(input_arr)
-        input_arr_size = input_arr.size
-        start_val = np.array(1 / input_arr_size, dtype=input_arr.dtype)
-        new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
-        unique, counts = np.unique(input_arr, return_counts=True)
-        map_from_complete = np.append(unique, 1.0)
-        map_to_complete = [0.0]
-        for cumsum_ in np.cumsum(counts):
-            map_to_complete.append(new_xgrid[cumsum_ - 1])
-        map_to_complete.append(1.0)
-        map_to_complete = np.array(map_to_complete)
+        if interpolation_points:
+            input_arr = np.concatenate(self.input_list, axis=1)
+            input_arr = np.sort(input_arr)
+            input_arr_size = input_arr.size
+            start_val = np.array(1 / input_arr_size, dtype=input_arr.dtype)
+            new_xgrid = np.linspace(start=start_val, stop=1.0, endpoint=False, num=input_arr_size)
+            unique, counts = np.unique(input_arr, return_counts=True)
+            map_from_complete = np.append(unique, 1.0)
+            map_to_complete = [0.0]
+            for cumsum_ in np.cumsum(counts):
+                map_to_complete.append(new_xgrid[cumsum_ - 1])
+            map_to_complete.append(1.0)
+            map_to_complete = np.array(map_to_complete)
 
-        onein = map_from_complete.size / (interpolation_points - 1)
-        selected_points = [0]
-        selected_points += [round(i * onein - 1) for i in range(1, interpolation_points)]
-        map_from = map_from_complete[selected_points]
-        map_from = np.log10(map_from)
-        map_to = map_to_complete[selected_points]
+            onein = map_from_complete.size / (int(interpolation_points) - 1)
+            selected_points = [0]
+            selected_points += [round(i * onein - 1) for i in range(1, int(interpolation_points))]
+            map_from = map_from_complete[selected_points]
+            map_from = np.log10(map_from)
+            map_to = map_to_complete[selected_points]
 
-        self.mapping = [map_from, map_to]
+            self.mapping = [map_from, map_to]
+        else: 
+            self.mapping = None
 
     def _generate_pdf(
         self,
@@ -669,7 +678,6 @@ class ModelTrainer:
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             mapping=self.mapping,
-            data_domain=self.data_domain
         )
         return pdf_model
 
@@ -820,7 +828,6 @@ class ModelTrainer:
         epochs = int(params["epochs"])
         stopping_patience = params["stopping_patience"]
         stopping_epochs = int(epochs * stopping_patience)
-        interpolation_points = int(params["interpolation_points"])
 
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
@@ -840,7 +847,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
-            interpolation_points,
+            params.get("interpolation_points"),
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)

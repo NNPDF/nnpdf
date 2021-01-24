@@ -252,6 +252,7 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
 
 # Network generation functions
 def generate_dense_network(
+    nodes_in,
     nodes,
     activations,
     initializer_name="glorot_normal",
@@ -285,18 +286,21 @@ def generate_dense_network(
             "kernel_initializer": init,
             "units": int(nodes_out),
             "activation": activation,
+            "input_shape": {nodes_in},
             "kernel_regularizer": regularizer,
         }
 
         layer = base_layer_selector("dense", **arguments)
 
         list_of_pdf_layers.append(layer)
+        # NOTE: why is this here?
+        nodes_in = int(nodes_out)
 
     return list_of_pdf_layers
 
 
 def generate_dense_per_flavour_network(
-    nodes, activations, initializer_name="glorot_normal", seed=0, basis_size=8
+    nodes_in, nodes, activations, initializer_name="glorot_normal", seed=0, basis_size=8
 ):
     """
     For each flavour generates a dense network of the chosen size
@@ -324,6 +328,7 @@ def generate_dense_per_flavour_network(
             "kernel_initializer": initializers,
             "units": nodes_out,
             "activation": activation,
+            "input_shape": (nodes_in,),
             "basis_size": basis_size,
         }
 
@@ -341,10 +346,12 @@ def generate_dense_per_flavour_network(
         else:
             list_of_pdf_layers.append(layer)
 
+        nodes_in = int(nodes_out)
     return list_of_pdf_layers
 
 
 def pdfNN_layer_generator(
+    inp=2,
     nodes=None,
     activations=None,
     initializer_name="glorot_normal",
@@ -358,7 +365,6 @@ def pdfNN_layer_generator(
     regularizer_args=None,
     impose_sumrule=False,
     mapping=None,
-    data_domain=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -441,6 +447,9 @@ def pdfNN_layer_generator(
         model_pdf: n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
     """
+    if mapping:
+        inp = 1
+
     if nodes is None:
         nodes = [15, 8]
     ln = len(nodes)
@@ -467,6 +476,7 @@ def pdfNN_layer_generator(
     if layer_type == "dense":
         reg = regularizer_selector(regularizer, **regularizer_args)
         list_of_pdf_layers = generate_dense_network(
+            inp,
             nodes,
             activations,
             initializer_name,
@@ -479,23 +489,35 @@ def pdfNN_layer_generator(
         # TODO: this information should come from the basis information
         #       once the basis information is passed to this class
         list_of_pdf_layers = generate_dense_per_flavour_network(
-            nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
+            inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
         )
 
-    # change the input domain [0,1] -> [-1,1]
-    scale_input = Lambda(lambda  x: 2*x-1)
+    if inp == 2 and mapping==None:
+        # If the input is of type (x, logx)
+        # create a x --> (x, logx) layer to preppend to everything
+        add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+    elif mapping:
+        # change the input domain [0,1] -> [-1,1]
+        scale_input = Lambda(lambda  x: 2*x-1)
 
     def dense_me(x):
-        """ Takes an input tensor `x` and applies all layers
-        from the `list_of_pdf_layers` in order """
-        x = scale_input(x)
-        x0 = tf.keras.backend.ones_like(x)
-        curr_fun = list_of_pdf_layers[0](x)
-        curr_fun0 = list_of_pdf_layers[0](x0)
+        """Takes an input tensor `x` and applies all layers
+        from the `list_of_pdf_layers` in order"""
+        if inp == 1 and mapping==None:
+            curr_fun = list_of_pdf_layers[0](x)
+        elif inp==2 and mapping==None:
+            curr_fun = list_of_pdf_layers[0](add_log(x))
+        elif mapping:
+            x = scale_input(x)
+            x0 = tf.keras.backend.ones_like(x)
+            curr_fun = list_of_pdf_layers[0](x)
+            curr_fun0 = list_of_pdf_layers[0](x0)
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
-            curr_fun0 = dense_layer(curr_fun0)
-        curr_fun = tf.keras.layers.subtract([curr_fun, curr_fun0])
+            if mapping:
+                curr_fun0 = dense_layer(curr_fun0)
+        if mapping:
+            curr_fun = tf.keras.layers.subtract([curr_fun, curr_fun0])
         return curr_fun
 
     # Preprocessing layer (will be multiplied to the last of the denses)
@@ -505,7 +527,8 @@ def pdfNN_layer_generator(
         name="pdf_prepro",
         flav_info=flav_info,
         seed=preproseed,
-        output_dim=last_layer_nodes
+        output_dim=last_layer_nodes,
+        feature_scaling=mapping,
     )
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
@@ -515,29 +538,43 @@ def pdfNN_layer_generator(
 
 
     # Apply extrapolation and basis
-    def layer_fitbasis(x, xnotscaled):
-        ret = tf.keras.layers.multiply([dense_me(x), layer_preproc(xnotscaled)])
+    def layer_fitbasis(x, xnotscaled=None):
+        if mapping:
+            ret = operations.op_multiply([dense_me(x), layer_preproc(xnotscaled)])
+        else:
+            ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
         if basis_rotation.is_identity():
             # if we don't need to rotate basis we don't want spurious layers
             return ret
         return basis_rotation(ret)
 
     # Rotation layer, changes from the 8-basis to the 14-basis
-    def layer_pdf(x, xnotscaled):
-        return layer_evln(layer_fitbasis(x, xnotscaled))
+    def layer_pdf(x, xnotscaled=None):
+        if mapping:
+            evol_layer = layer_evln(layer_fitbasis(x, xnotscaled))
+        else:
+            evol_layer = layer_evln(layer_fitbasis(x))
+        return evol_layer
 
     # Prepare the input for the PDF model
     placeholder_input = Input(shape=(None, 1), batch_size=1)
-    placeholder_input_notscaled = Input(shape=(None, 1), batch_size=1)
+    if mapping:
+        placeholder_input_notscaled = Input(shape=(None, 1), batch_size=1)
 
     # Impose sumrule if necessary
     if impose_sumrule:
-        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mapping, mode=impose_sumrule)
-        model_input = [integrator_input, placeholder_input]
+        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mapping)
+        if mapping:
+            model_input = [integrator_input, placeholder_input, placeholder_input_notscaled]
+        else:
+            model_input = [integrator_input, placeholder_input]
     else:
         integrator_input = None
         model_input = [placeholder_input]
 
-    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input, placeholder_input_notscaled), name="PDF")
+    if mapping:
+        pdf_model = MetaModel(model_input, layer_pdf(placeholder_input, placeholder_input_notscaled), name="PDF")
+    else:
+        pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
 
     return pdf_model

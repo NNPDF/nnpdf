@@ -131,15 +131,19 @@ class N3PDF(PDF):
             numpy.ndarray
                 (xgrid_size, flavours) pdf result
         """
-        interpolation = PchipInterpolator(self.mapping[0], self.mapping[1])
-        xarr_notscaled = interpolation(np.log10(xarr))
+        if self.mapping:
+            interpolation = PchipInterpolator(self.mapping[0], self.mapping[1])
+            xarr_notscaled = interpolation(np.log10(xarr))
         
         if flavours is None:
             flavours = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
         mod_xgrid = xarr.reshape(1, -1, 1)
-        mod_xgrid_scaled = xarr_notscaled.reshape(1, -1, 1)
-        result = self.model.predict([mod_xgrid_scaled, mod_xgrid])
+        if self.mapping:
+            mod_xgrid_scaled = xarr_notscaled.reshape(1, -1, 1)
+            result = self.model.predict([mod_xgrid_scaled, mod_xgrid])
+        else:
+            result = self.model.predict([mod_xgrid])
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)

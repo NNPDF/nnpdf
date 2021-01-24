@@ -28,6 +28,7 @@ optimizers = {
     "Adamax": (Kopt.Adamax, {}),
     "Nadam": (Kopt.Nadam, {"learning_rate": 0.001}),
     "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
+    "SGD": (Kopt.SGD, {"learning_rate": 0.01, "momentum": 0.0, "nesterov": False}),
 }
 
 # Some keys need to work for everyone
