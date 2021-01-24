@@ -1,3 +1,14 @@
+/*
+  NOTE ADDED by ERN January 2021
+
+  The implementation of the CDF Z rapidity distributions has been updated to 
+  reflect v4 in the arXiv. The difference w.r.t. the previous implementation
+  consists in th fact that the last two bins have been collapsed together;
+  central values and ucnertainties are also slightly different.
+  PLEASE note that the CDFZRAP data set is DEPRECATED in favour of the
+  CDFRAP_NEW data set
+*/
+
 
 /**
  * ABULENCIA 07 PR D75,092006
@@ -434,6 +445,19 @@ void CDFR2KTFilter::ReadData()
  *
  */
 
+/* Note added by ERN on Janaury 2021
+  
+   The data set has been updated to reflect the results published in
+      Phys. Lett. B692 232 (2010) 
+   The last two rapidity bins have been collapsed together; central values and
+   uncertainties have been updated. The full breakdown of systematic 
+   uncertainties has been produced with the error_propagator_g++.C provided
+   from the following link 
+     https://www-cdf.fnal.gov/physics/ewk/2009/dszdy/dszdy_sys.htm
+   From NNPDF4.0 onwards, the use of the CDFZRAP data set is DEPRECATED in
+   favour of the CDFZRAP_NEW data set.
+*/
+
 void CDFZRAPFilter::ReadData()
 {
   // Opening files
@@ -442,6 +466,53 @@ void CDFZRAPFilter::ReadData()
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
   << fSetName << "/CDF-Zrapdist-2009.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  string line;
+  const double MZ2 = pow(MZ, 2.0);
+  const double s = 1960;
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+
+    lstream >> fKin1[i];   //y
+    fKin2[i] = MZ2;   //Mass Z squared
+    fKin3[i] = s;     //sqrt(s)
+
+    lstream >> fData[i];
+    lstream >> fStat[i];
+
+    fSys[i][0].mult = 6.0;  //luminosity
+    lstream >> fSys[i][0].add;         //absolute value of 6% luminosity
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "CDFLUMI";
+
+    for (int isys = 1; isys < fNSys; isys++)
+    {
+      lstream >> fSys[i][isys].add;      //systematics
+      fSys[i][isys].mult = fSys[i][isys].add*100/fData[i];
+      fSys[i][isys].type = MULT;
+      fSys[i][isys].name = "CORR";
+    }
+  }
+
+  f1.close();
+}
+
+void CDFZRAP_NEWFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/CDFZRAP/CDF-Zrapdist-2009_new.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) {
