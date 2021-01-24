@@ -29,6 +29,7 @@ class Preprocessing(MetaLayer):
                 This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
                 The dicts can contain the following fields:
                     `smallx`: range of alpha
+                    `largex`: range of beta
                     `trainable`: whether these alpha-beta should be trained during the fit
                                 (defaults to true)
             `seed`: int
@@ -105,7 +106,7 @@ class Preprocessing(MetaLayer):
 
         super(Preprocessing, self).build(input_shape)
 
-    def call(self, inputs, **kwargs):        
+    def call(self, inputs, **kwargs):
         x = inputs
         pdf_list = []
         for i in range(0, self.output_dim*2, 2):
