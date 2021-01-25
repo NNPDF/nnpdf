@@ -444,15 +444,23 @@ def fit_code_version(fit,replica_paths):
     Old fits return 'undefined'. 
     """
     version_info = []
-    for path in replica_paths:
-        p = path / ('version.info')
-        with open(p, 'r') as stream:
-            rep_version = json.load(stream)
-        version_info.append(rep_version)
-    versionset = (set(x.items()) for x in version_info)
-    reducedset = reduce(set.intersection, versionset)
-    df = pd.DataFrame(reducedset, columns = ["name", "version"])
-    return df
+    # First check if first replica has 'version.info'
+    p_1 = replica_paths[0]  / ('version.info')
+    if not p_1.is_file():
+        undef_tuple = [("undefined", "undefined")]
+        # Return df with "undefined" in name, version locations
+        vinfo = pd.DataFrame(undef_tuple, columns = ["name", "version"])
+    # Otherwise look at 'version.info' files
+    else:
+        for path in replica_paths:
+            p = path / ('version.info')
+            with open(p, 'r') as stream:
+                rep_version = json.load(stream)
+            version_info.append(rep_version)
+        versionset = (set(x.items()) for x in version_info)
+        reducedset = reduce(set.intersection, versionset)
+        vinfo = pd.DataFrame(reducedset, columns = ["name", "version"])
+    return vinfo
 
 
 
