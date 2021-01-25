@@ -7,6 +7,7 @@ import logging
 from collections import namedtuple, OrderedDict, defaultdict
 from io import StringIO
 import pathlib
+from functools import reduce
 
 import numpy as np
 import pandas as pd
@@ -25,7 +26,7 @@ from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
-REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
+REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules', '.info']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -434,3 +435,19 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return groups_overlap, systype_overlap
     else:
         return "No overlap of systypes"
+
+def fit_code_version(fit,replica_paths):
+    """
+    Returns text with the code version from fit replica 
+    'replica_n/version.info' files.
+    Old fits return 'undefined'. 
+    """
+    version_info = []
+    for path in replica_paths:
+        p = path / ('version.info')
+        with open(p, 'r') as stream:
+            rep_version = json.load(stream)
+        version_info.append(rep_version)
+    versionset = (set(x.items()) for x in version_info)
+    reducedset = reduce(set.intersection, versionset)
+    return reducedset
