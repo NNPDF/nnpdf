@@ -434,7 +434,6 @@ class CoreConfig(configparser.Config):
                     ):
                         _, ds = self.parse_from_(None, "dataset", write=False)
                         _, pdf = self.parse_from_(None, "pdf", write=False)
-                        print(ds.cuts)
                         inps.append((ds, pdf))
                 return SimilarCuts(tuple(inps), cut_similarity_threshold)
 
