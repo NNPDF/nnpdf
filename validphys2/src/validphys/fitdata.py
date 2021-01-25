@@ -458,8 +458,11 @@ def fit_code_version(fit,replica_paths):
                 rep_version = json.load(stream)
             version_info.append(rep_version)
         versionset = (set(x.items()) for x in version_info)
-        reducedset = reduce(set.intersection, versionset)
+        reducedset = reduce(set.union, versionset)
         vinfo = pd.DataFrame(reducedset, columns = ["name", "version"])
+    # Check for conflicting versions
+    version_names = list(vinfo["name"])
+    assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
     return vinfo
 
 
