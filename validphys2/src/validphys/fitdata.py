@@ -436,9 +436,10 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
     else:
         return "No overlap of systypes"
 
+@table
 def fit_code_version(fit,replica_paths):
     """
-    Returns text with the code version from fit replica 
+    Returns table with the code version from
     'replica_n/version.info' files.
     Old fits return 'undefined'. 
     """
@@ -450,4 +451,8 @@ def fit_code_version(fit,replica_paths):
         version_info.append(rep_version)
     versionset = (set(x.items()) for x in version_info)
     reducedset = reduce(set.intersection, versionset)
-    return reducedset
+    df = pd.DataFrame(reducedset, columns = ["name", "version"])
+    return df
+
+
+
