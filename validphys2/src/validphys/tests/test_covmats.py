@@ -73,6 +73,8 @@ def test_covmat_with_one_systematic():
 
     covmat = API.experimental_covmat(**config)
     ds = API.dataset(**config)
+    # double check that the dataset does indeed only have 1 systematic.
+    assert ds.commondata.nsys == 1
     cpp_covmat = ds.load().get_covmat()
 
     np.testing.assert_allclose(cpp_covmat, covmat)

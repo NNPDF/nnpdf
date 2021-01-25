@@ -62,12 +62,12 @@ def covmat_from_systematics(commondata, central_values=None):
     `paper <https://arxiv.org/pdf/hep-ph/0501067.pdf>`_
     outlining the procedure, specifically equation 2 and surrounding text.
 
-    Paramaters
+    Parameters
     ----------
     commondata : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
-    central_values: None, np.array
+    central_values : None, np.array
         1-D array containing alternative central values to combine with the
         multiplicative errors to calculate their absolute contributions. By
         default this is None, and the experimental central values are used. However, this
