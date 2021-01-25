@@ -446,7 +446,7 @@ def fit_code_version(fit,replica_paths):
     version_info = []
     # First check if first replica has 'version.info'
     p_1 = replica_paths[0]  / ('version.info')
-    if not p_1.is_file():
+    if not p_1.exists():
         undef_tuple = [("undefined", "undefined")]
         # Return df with "undefined" in name, version locations
         vinfo = pd.DataFrame(undef_tuple, columns = ["name", "version"])
