@@ -261,7 +261,8 @@ class CommonData:
         central_values: None, np.array
             1-D array containing alternative central values to combine with
             multiplicative uncertainties. This array must have length equal
-            to :py:attr:`self.ndata`
+            to :py:attr:`self.ndata`. By default ``central_values`` is None, and
+            the central values of the commondata are used.
 
         Returns
         -------

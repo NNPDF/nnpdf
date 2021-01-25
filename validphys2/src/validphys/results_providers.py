@@ -29,7 +29,7 @@ def loaded_commondata_with_cuts(commondata, cuts):
     lcd = load_commondata(commondata)
     return lcd.with_cuts(cuts)
 
-datasets_loaded_cd_with_cuts = collect(
+dataset_inputs_loaded_cd_with_cuts = collect(
     "loaded_commondata_with_cuts", ("data_input",))
 
 
@@ -56,4 +56,4 @@ def dataset_t0_predictions(dataset, t0set):
     # Squeeze values since t0_pred is DataFrame with shape n_data * 1
     return central_predictions(dataset, t0set).to_numpy().squeeze()
 
-datasets_t0_predictions = collect("dataset_t0_predictions", ("data",))
+dataset_inputs_t0_predictions = collect("dataset_t0_predictions", ("data",))

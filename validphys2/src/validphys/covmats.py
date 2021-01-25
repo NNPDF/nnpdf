@@ -253,12 +253,12 @@ def t0_covmat(loaded_commondata_with_cuts, dataset_t0_predictions):
         loaded_commondata_with_cuts, dataset_t0_predictions)
 
 
-def dataset_inputs_experimental_covmat(datasets_loaded_cd_with_cuts):
+def dataset_inputs_experimental_covmat(dataset_inputs_loaded_cd_with_cuts):
     """Like :py:func:`experimental_covmat` except for all data
 
     Parameters
     ----------
-    datasets_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+    dataset_inputs_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
         The CommonData for all datasets defined in ``dataset_inputs``.
 
     Returns
@@ -266,17 +266,17 @@ def dataset_inputs_experimental_covmat(datasets_loaded_cd_with_cuts):
     covmat: np.array
         Covariance matrix for list of datasets.
     """
-    return datasets_covmat_from_systematics(datasets_loaded_cd_with_cuts)
+    return datasets_covmat_from_systematics(dataset_inputs_loaded_cd_with_cuts)
 
 def dataset_inputs_t0_covmat(
-    datasets_loaded_cd_with_cuts, datasets_t0_predictions):
+    dataset_inputs_loaded_cd_with_cuts, dataset_inputs_t0_predictions):
     """Like :py:func:`t0_covmat` except for all data
 
     Parameters
     ----------
-    datasets_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+    dataset_inputs_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
         The CommonData for all datasets defined in ``dataset_inputs``.
-    datasets_t0_predictions: list[np.array]
+    dataset_inputs_t0_predictions: list[np.array]
         The t0 predictions for all datasets.
 
     Returns
@@ -285,7 +285,7 @@ def dataset_inputs_t0_covmat(
         t0 covariance matrix matrix for list of datasets.
     """
     return datasets_covmat_from_systematics(
-        datasets_loaded_cd_with_cuts, datasets_t0_predictions)
+        dataset_inputs_loaded_cd_with_cuts, dataset_inputs_t0_predictions)
 
 
 def sqrt_covmat(covariance_matrix):
