@@ -450,6 +450,7 @@ def fit_code_version(fit,replica_paths):
         undef_tuple = [("undefined", "undefined")]
         # Return df with "undefined" in name, version locations
         vinfo = pd.DataFrame(undef_tuple, columns = ["name", "version"])
+        vinfo.index.name = f"{fit.name}"
     # Otherwise look at .json files
     else:
         for path in replica_paths:
@@ -462,10 +463,12 @@ def fit_code_version(fit,replica_paths):
         versionset = (set(x.items()) for x in version_info)
         reducedset = reduce(set.union, versionset)
         vinfo = pd.DataFrame(reducedset, columns = ["name", "version"])
+        vinfo.index.name = f"{fit.name}"
     # Check for conflicting versions
     version_names = list(vinfo["name"])
     assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
     return vinfo
 
+fits_fit_code_version = collect("fit_code_version", ("fits", "fitcontext",))
 
 
