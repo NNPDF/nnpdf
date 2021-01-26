@@ -26,7 +26,7 @@ from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
-REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules', '.info']
+REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules', '.json']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -440,22 +440,24 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
 def fit_code_version(fit,replica_paths):
     """
     Returns table with the code version from
-    'replica_n/version.info' files.
+    'replica_{repno}/{fitname}.json' files.
     Old fits return 'undefined'. 
     """
     version_info = []
-    # First check if first replica has 'version.info'
-    p_1 = replica_paths[0]  / ('version.info')
+    # First check if first replica has .json file
+    p_1 = replica_paths[0]  / (f'{fit.name}.json')
     if not p_1.exists():
         undef_tuple = [("undefined", "undefined")]
         # Return df with "undefined" in name, version locations
         vinfo = pd.DataFrame(undef_tuple, columns = ["name", "version"])
-    # Otherwise look at 'version.info' files
+    # Otherwise look at .json files
     else:
         for path in replica_paths:
-            p = path / ('version.info')
+            p = path / (f'{fit.name}.json')
             with open(p, 'r') as stream:
-                rep_version = json.load(stream)
+                json_info = json.load(stream)
+                # Taking veresion info from .json
+                rep_version = json_info["version"]
             version_info.append(rep_version)
         versionset = (set(x.items()) for x in version_info)
         reducedset = reduce(set.union, versionset)
