@@ -11,11 +11,6 @@ We are comparing:
 
 {@ summarise_fits @}
 
-Fit code versions
------------------
-
-{@fits_fit_code_version@}
-
 Theory Covariance Summary
 -------------------------
 {@summarise_theory_covmat_fits@}
@@ -78,3 +73,8 @@ Dataset differences and cuts
 ----------------------------
 {@print_dataset_differences@}
 {@print_different_cuts@}
+
+Fit code versions
+-----------------
+
+{@fits_fit_code_version@}
