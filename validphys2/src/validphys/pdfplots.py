@@ -540,7 +540,7 @@ def plot_lumi1d(pdfs, pdfs_lumis,
 
     # For plotting
     hatchit = plotutils.hatch_iter()
-    pcycler = ax._get_lines.prop_cycler
+    pcycler = plotutils.color_iter()
     handles = []
     labels = []
 
@@ -553,8 +553,7 @@ def plot_lumi1d(pdfs, pdfs_lumis,
         err68down, err68up = gv.errorbar68()
         errstddown, errstdup = gv.errorbarstd()
 
-        next_prop = next(pcycler)
-        color = next_prop["color"]
+        color = next(pcycler)
         hatch = next(hatchit)
 
         alpha = 0.5
@@ -587,6 +586,51 @@ def plot_lumi1d(pdfs, pdfs_lumis,
     ax.set_xscale('log')
     ax.grid(False)
     ax.set_title("$%s$ luminosity\n"
+                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
+                                           sqrts))
+
+    return fig
+
+@figure
+@check_pdf_normalize_to
+def plot_lumi1d_uncertainties(
+    pdfs, pdfs_lumis, lumi_channel, sqrts: numbers.Real, normalize_to=None
+):
+    """Plot PDF luminosity uncertainties at a given center of mass energy.
+    sqrts is the center of mass energy (GeV).
+
+    If `normalize_to` is set, the values are normalized to the central value of
+    the corresponding PDFs.
+    """
+
+    fig, ax = plt.subplots()
+    if normalize_to is not None:
+        norm = pdfs_lumis[normalize_to].grid_values.central_value()
+        ylabel = f"Ratio to {pdfs[normalize_to]}"
+    else:
+        norm = None
+        ylabel = r"$\sigma\left(L (GeV^{-2})\right)$"
+
+
+    for pdf, lumigrid1d, color in zip(pdfs, pdfs_lumis, plotutils.color_iter()):
+        mx = lumigrid1d.m
+        gv = lumigrid1d.grid_values
+
+        err = gv.std_error()
+
+        if norm is not None:
+            err /= norm
+        ax.plot(mx, err, color=color, label=pdf.label)
+
+
+    ax.legend()
+
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xlim(mx[0], mx[-1])
+    ax.set_xscale('log')
+    ax.grid(False)
+    ax.set_title("$%s$ luminosity uncertainty\n"
                  "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
                                            sqrts))
 
