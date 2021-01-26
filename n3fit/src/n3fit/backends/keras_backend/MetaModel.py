@@ -4,7 +4,7 @@
     Extension of the backend Model class containing some wrappers in order to absorb other
     backend-dependent calls.
 """
-
+import re
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
@@ -334,3 +334,8 @@ class MetaModel(Model):
             # TF 2.0 seems to fail with ValueError when passing a dictionary as an input
             y = x.values()
             return super().__call__(y)
+
+    def get_layer_re(self, regex):
+        """ Get all layers matching the given regular expression """
+        check = lambda x: re.match(regex, x.name)
+        return list(filter(check, self.layers))

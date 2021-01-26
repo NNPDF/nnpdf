@@ -79,12 +79,11 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All'):
             layer_fitbasis: output of the NN
             layer_pdf: output for the fktable
         """
-
         pdf_integrand = operations.op_multiply([division_by_x(xgrid_input), layer_fitbasis(xgrid_input)])
         normalization = normalizer(integrator(pdf_integrand))
 
         def ultimate_pdf(x):
-            return operations.op_multiply([layer_pdf(x), normalization])
+            return layer_pdf(x)*normalization
 
         return ultimate_pdf
 

@@ -460,18 +460,8 @@ class Stopping:
 
     @property
     def e_best_chi2(self):
-<<<<<<< HEAD
-        """ Epoch of the best chi2, if there is no best epoch
-        return the last epoch"""
-        be = self.history.best_epoch
-        if be is None:
-            return self.stop_epoch
-        return be
-
-=======
-        """ Epoch of the best chi2 """
+        """ Epoch of the best chi2, if there is no best epoch, return None"""
         return self._history.best_epoch
->>>>>>> 5fb6df564 (many changes to stopping, remove deprecated options)
 
     @property
     def stop_epoch(self):

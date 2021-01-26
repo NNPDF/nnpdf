@@ -69,7 +69,7 @@ class WriterWrapper:
         # Check the directory exist, if it doesn't, generate it
         os.makedirs(replica_path_set, exist_ok=True)
 
-        stop_epoch = self.stopping_object.epoch_of_the_stop
+        stop_epoch = self.stopping_object.stop_epoch
 
         # Get the replica status for this object
         replica_status = self.stopping_object.get_next_replica()

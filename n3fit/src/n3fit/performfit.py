@@ -246,11 +246,8 @@ def performfit(
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
             model_file=fitting.get("load"),
-<<<<<<< HEAD
-            sum_rules=fitting.get("sum_rules", True)
-=======
+            sum_rules=fitting.get("sum_rules", True),
             parallel_models=parallel_models
->>>>>>> 6e0fc5f2c (fit many models at once)
         )
 
         # This is just to give a descriptive name to the fit function
