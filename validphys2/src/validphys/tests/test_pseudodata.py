@@ -29,17 +29,11 @@ pdf: pseudodata_test_fit
 experiments:
   from_: fit
 
-theory:
-  from_: fit
-
 t0pdfset:
   from_: datacuts
 
 datacuts:
   from_: fit
-
-theoryid:
-  from_: theory
 
 use_cuts: fromfit
 """
