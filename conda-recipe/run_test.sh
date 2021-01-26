@@ -4,7 +4,7 @@ set -v
 set -e
 
 #Python tests for the installed validphys package
-pytest --pyargs --mpl validphys
+pytest --pyargs --mpl validphys -s
 pytest --pyargs n3fit
 
 mkdir bldtest
