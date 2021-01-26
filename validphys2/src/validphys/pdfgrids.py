@@ -138,20 +138,32 @@ lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
 Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
 
 
-@check_positive('sqrts')
-def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
+@check_positive("sqrts")
+@check_positive("nbins_m")
+def lumigrid1d(
+    pdf: PDF,
+    lumi_channel,
+    sqrts: numbers.Real,
+    nbins_m: int = 30,
+    mxmin: numbers.Real = 10,
+    mxmax: (type(None), numbers.Real) = None,
+):
     """
-    Return the integrated luminosity in a grid of nbins_m points,
-    for the values of invariant mass given (proton-proton) collider
-    energy ``sqrts`` (given in GeV).
+    Return the integrated luminosity in a grid of nbins_m points, for the
+    values of invariant mass given (proton-proton) collider energy ``sqrts``
+    (given in GeV).
 
-    The grid is sampled logarithmically in mass.
+    The grid is sampled logarithmically in mass. The limits are given by
+    ``mxmin`` and ``mxmax``, given in GeV. By default ``mxmin`` is 10 GeV and
+    ``mxmax`` is set based on ``sqrts``.
 
     The results are computed for all relevant PDF members and wrapped in a
     stats class, to compute statistics regardless of the ErrorType.
     """
     s = sqrts*sqrts
-    mxs = np.logspace(1, np.log10(sqrts/10), nbins_m)
+    if mxmax is None:
+        mxmax = sqrts/10
+    mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
     taus = (mxs / sqrts) ** 2
 
     # TODO: Write this in something fast
