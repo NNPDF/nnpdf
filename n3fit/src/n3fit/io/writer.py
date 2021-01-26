@@ -81,7 +81,7 @@ class WriterWrapper:
             replica_path_set,
             fitname,
             self.q2,
-            self.stopping_object.e_best_chi2,
+            replica_status.best_epoch,
             vl_chi2,
             tr_chi2,
             true_chi2,

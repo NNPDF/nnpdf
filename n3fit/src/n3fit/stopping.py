@@ -249,6 +249,7 @@ class ReplicaState:
         self._pdf_model = pdf_model
         self._weights = None
         self._best_epoch = None
+        self._stop_epoch = None
         self._best_vl_chi2 = INITIAL_CHI2
 
     def positivity_pass(self):
@@ -260,7 +261,13 @@ class ReplicaState:
 
     @property
     def best_epoch(self):
+        if self._best_epoch is None:
+            return self.stop_epoch
         return self._best_epoch
+
+    @property
+    def stop_epoch(self):
+        return self._stop_epoch
 
     @property
     def best_vl(self):
@@ -284,9 +291,11 @@ class ReplicaState:
         if self._weights:
             self._pdf_model.set_weights(self._weights)
 
-    def stop_training(self):
-        """ Stop training this replica """
-        self._pdf_model.trainable = False
+    def stop_training(self, epoch = None):
+        """ Stop training this replica if not stopped before """
+        if self._pdf_model.trainable:
+            self._pdf_model.trainable = False
+            self._stop_epoch = epoch
 
 
 class FitHistory:
@@ -376,16 +385,16 @@ class FitHistory:
         self._history.append(fitstate)
         return fitstate
 
-    def stop_training_replica(self, i):
-        """ Stop training replica i """
-        self._replicas[i].stop_training()
+    def stop_training_replica(self, i, e):
+        """ Stop training replica i in epoch e"""
+        self._replicas[i].stop_training(e)
 
     def reload(self):
-        """Reloads the best fit weights into the model
-        if there are models to be reloaded
-        A set of weights can be enforced as an optional argument
+        """Reloads the best fit weights into the model if there are models to be reloaded
+        Ensure that all replicas have stopped at this point.
         """
         for replica in self._replicas:
+            replica.stop_training(self.final_epoch)
             replica.reload()
 
     def __next__(self):
@@ -460,7 +469,7 @@ class Stopping:
 
     @property
     def e_best_chi2(self):
-        """ Epoch of the best chi2, if there is no best epoch, return None"""
+        """ Epoch of the best chi2, if there is no best epoch, return last"""
         return self._history.best_epoch
 
     @property
@@ -551,7 +560,7 @@ class Stopping:
         stop_replicas = self.count & (self.stopping_degree > self.stopping_patience)
         for i in np.where(stop_replicas)[0]:
             self.count[i] = 0
-            self._history.stop_training_replica(i)
+            self._history.stop_training_replica(i, epoch)
 
         # By using the stopping degree we only stop when none of the replicas are improving anymore
         if min(self.stopping_degree) > self.stopping_patience:
