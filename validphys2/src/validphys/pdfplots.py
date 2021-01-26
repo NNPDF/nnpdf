@@ -18,6 +18,7 @@ from matplotlib import cm, colors as mcolors
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_argcheck
+from reportengine.floatformatting import format_number
 
 from validphys import plotutils
 from validphys.core import MCStats
@@ -541,7 +542,7 @@ def plot_lumi1d(
         ylabel = f"Ratio to {pdfs[normalize_to]}"
     else:
         norm = 1
-        ylabel = r"$L (GeV^{-2})$"
+        ylabel = r"$\mathcal{L} (GeV^{-2})$"
 
     # For plotting
     hatchit = plotutils.hatch_iter()
@@ -590,9 +591,8 @@ def plot_lumi1d(
     ax.set_xlim(mx[0], mx[-1])
     ax.set_xscale('log')
     ax.grid(False)
-    ax.set_title("$%s$ luminosity\n"
-                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
-                                           sqrts))
+    ax.set_title(f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV")
 
     return fig
 
@@ -614,8 +614,7 @@ def plot_lumi1d_uncertainties(
         ylabel = f"Ratio to {pdfs[normalize_to]}"
     else:
         norm = None
-        ylabel = r"$\sigma\left(L (GeV^{-2})\right)$"
-
+        ylabel = r"$\sigma\left(\mathcal{L} (GeV^{-2})\right)$"
 
     for pdf, lumigrid1d, color in zip(pdfs, pdfs_lumis, plotutils.color_iter()):
         mx = lumigrid1d.m
@@ -627,17 +626,19 @@ def plot_lumi1d_uncertainties(
             err /= norm
         ax.plot(mx, err, color=color, label=pdf.label)
 
-
     ax.legend()
 
     ax.set_ylabel(ylabel)
-    ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xlabel("$M_{X}$ (GeV)")
     ax.set_xlim(mx[0], mx[-1])
-    ax.set_xscale('log')
+    ax.set_xscale("log")
     ax.grid(False)
-    ax.set_title("$%s$ luminosity uncertainty\n"
-                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
-                                           sqrts))
+    ax.set_title(
+        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+    )
+    ymin, _ = ax.get_ylim()
+    ax.set_ylim(max(0, ymin), None)
 
     return fig
 
