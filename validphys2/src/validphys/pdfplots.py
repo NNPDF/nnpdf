@@ -523,9 +523,14 @@ def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
 
 @figure
 @check_pdf_normalize_to
-def plot_lumi1d(pdfs, pdfs_lumis,
-                lumi_channel, sqrts:numbers.Real,
-                normalize_to=None):
+def plot_lumi1d(
+    pdfs,
+    pdfs_lumis,
+    lumi_channel,
+    sqrts: numbers.Real,
+    normalize_to=None,
+    show_mc_errors: bool = True,
+):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
     """
@@ -565,13 +570,13 @@ def plot_lumi1d(pdfs, pdfs_lumis,
 
         ax.plot(mx, cv / norm, color=color)
 
-        if isinstance(gv, MCStats):
+        if isinstance(gv, MCStats) and show_mc_errors:
             ax.plot(mx, errstddown / norm, linestyle="--", color=color)
             ax.plot(mx, errstdup / norm, linestyle="--", color=color)
-            label_add = "($68%$ c.l.+$1\sigma$)"
+            label_add = r"($68%$ c.l.+$1\sigma$)"
             outer = True
         else:
-            label_add = "($68\%$ c.l.)"
+            label_add = r"($68\%$ c.l.)"
             outer = False
 
         handle = plotutils.HandlerSpec(color=color, alpha=alpha, hatch=hatch, outer=outer)
