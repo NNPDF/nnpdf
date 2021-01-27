@@ -68,6 +68,7 @@ jobs:
         cd n3fit/runcards
         postfit $POSTFIT_NREP $RUNCARD
         url=$(vp-upload $RUNCARD 2>&1 | grep https)
+        sleep 10s
         echo "FIT_URL=$url" >> $GITHUB_ENV
     # running validphys report
     - name: Building and upload report
