@@ -160,7 +160,8 @@ def make_replica(list_of_commondata, seed=None):
         mult_shifts = []
         check_positive_masks = []
         for cd in list_of_commondata:
-            pseudodata = cd.central_values.to_numpy()
+            # copy here to avoid mutating the central values.
+            pseudodata = cd.central_values.to_numpy(copy=True)
 
             # add contribution from statistical uncertainty
             pseudodata += (cd.stat_errors.to_numpy() * rng.normal(size=cd.ndata))
