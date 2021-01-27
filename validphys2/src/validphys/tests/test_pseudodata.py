@@ -62,7 +62,7 @@ def setup_dicts(request):
 
 def test_read_fit_pseudodata():
     data_generator = API.read_fit_pseudodata(
-      fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata",
+      fit="dummy_pseudodata_read_test_fit",
       use_cuts="fromfit"
     )
 
@@ -79,7 +79,7 @@ def test_read_fit_pseudodata():
         # if the input fit wasn't generated
         # with the savepseudodata flag set to true
         bad_gen = API.read_fit_pseudodata(
-            fit=FIT, use_cuts="fromfit"
+            fit="dummy_pseudodata_read_failure_test_fit", use_cuts="fromfit"
         )
         next(bad_gen)
 
@@ -87,7 +87,7 @@ def test_read_fit_pseudodata():
         # Check the enforcement of use_cuts being set
         # to fromfit is in place
         API.read_fit_pseudodata(
-          fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata",
+          fit="dummy_pseudodata_read_test_fit",
           use_cuts="nocuts"
         )
         assert isinstance(e_info.__cause__, CheckError)
