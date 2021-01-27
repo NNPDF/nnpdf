@@ -235,6 +235,15 @@ class UncertaintyPDFPlotter(PDFPlotter):
 
         return res
 
+    def __call__(self):
+        # Fixup y limit to not be below zero
+        for fig, parton_name in super().__call__():
+            ax = fig.get_axes()[0]
+            ymin, _ = ax.get_ylim()
+            ax.set_ylim(max(0, ymin), None)
+            yield fig, parton_name
+
+
 @figuregen
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
