@@ -10,7 +10,7 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-d5c2a7a6-2020-11-02 # reference set for vp
+  REFERENCE_SET: NNBOT-a7821446-2021-01-20 # reference set for vp
   CONDA_PY: 37
 
 jobs:
