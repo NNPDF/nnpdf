@@ -450,7 +450,7 @@ def pdfNN_layer_generator(
 
     Returns
     -------
-        model_pdf: n3fit.backends.MetaModel
+        pdf_models: list with a number equal to `parallel_models` of type n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
     """
     # Parse the input configuration
