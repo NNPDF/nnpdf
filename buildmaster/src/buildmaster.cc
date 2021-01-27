@@ -197,6 +197,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CDFR2KTFilter());
   target.push_back(new CDFWASYMFilter());
   target.push_back(new CDFZRAPFilter());
+  target.push_back(new CDFZRAP_NEWFilter());
 
   // ************************* CHORUS ******************************
 
