@@ -23,7 +23,7 @@ from n3fit.backends import base_layer_selector, regularizer_selector
 @dataclass
 class ObservableWrapper:
     """Wrapper to generate the observable layer once the PDF model is prepared
-    It can take normal datasets or lagrande-multiplier-like datasets
+    It can take normal datasets or Lagrange-multiplier-like datasets
     (such as positivity or integrability)
     """
 
