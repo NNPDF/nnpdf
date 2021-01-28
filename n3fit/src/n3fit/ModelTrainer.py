@@ -720,7 +720,6 @@ class ModelTrainer:
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)
 
         # Initialize the chi2 dictionaries
-        l_train = []
         l_valid = []
         l_exper = []
         l_hyper = []

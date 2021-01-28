@@ -157,7 +157,7 @@ class MetaModel(Model):
         x = self._parse_input(self.x_in)
         if y is None:
             y = self.target_tensors
-        history = self.fit(x=x, y=y, epochs=epochs, **kwargs)
+        history = super().fit(x=x, y=y, epochs=epochs, **kwargs)
         loss_dict = history.history
         return loss_dict
 

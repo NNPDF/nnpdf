@@ -5,7 +5,7 @@ import logging
 import numpy as np
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
-from n3fit.backends import operations
+from n3fit.backends import operations as op
 from n3fit.backends import MetaModel
 
 
@@ -64,7 +64,7 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All'):
     normalizer = MSR_Normalization(input_shape=(basis_size,), mode=mode)
 
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
-    xgrid_input = operations.numpy_to_input(xgrid)
+    xgrid_input = op.numpy_to_input(xgrid)
 
     # Now prepare a function that takes as input the 8-flavours output of the NN
     # and the 14-flavours after the fk rotation and returns a 14-flavours normalized output
@@ -79,7 +79,7 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All'):
             layer_fitbasis: output of the NN
             layer_pdf: output for the fktable
         """
-        pdf_integrand = operations.op_multiply([division_by_x(xgrid_input), layer_fitbasis(xgrid_input)])
+        pdf_integrand = op.op_multiply([division_by_x(xgrid_input), layer_fitbasis(xgrid_input)])
         normalization = normalizer(integrator(pdf_integrand))
 
         def ultimate_pdf(x):
@@ -99,12 +99,12 @@ def check_integration(ultimate_pdf, integration_input):
     """
     nx = int(1e4)
     xgrid, weights_array = gen_integration_input(nx)
-    xgrid_input = operations.numpy_to_input(xgrid)
+    xgrid_input = op.numpy_to_input(xgrid)
 
     multiplier = xDivide(output_dim=14, div_list=range(3, 9))
 
     def pdf_integrand(x):
-        res = operations.op_multiply([multiplier(x), ultimate_pdf(x)])
+        res = op.op_multiply([multiplier(x), ultimate_pdf(x)])
         return res
 
     modelito = MetaModel([xgrid_input, integration_input], pdf_integrand(xgrid_input))

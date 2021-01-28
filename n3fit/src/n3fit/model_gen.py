@@ -15,7 +15,7 @@ from n3fit.layers import DIS, DY, Mask, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 
 from n3fit.backends import MetaModel, Input
-from n3fit.backends import operations
+from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
@@ -52,8 +52,8 @@ class ObservableWrapper:
         """ Generates the experimental layer from the PDF """
         # First split the layer into the different datasets (if needed!)
         if len(self.dataset_xsizes) > 1:
-            splitting_layer = operations.as_layer(
-                operations.split,
+            splitting_layer = op.as_layer(
+                op.split,
                 op_args=[self.dataset_xsizes],
                 op_kwargs={"axis": 1},
                 name=f"{self.name}_split",
@@ -64,7 +64,7 @@ class ObservableWrapper:
         # Every obs gets its share of the split
         output_layers = [obs(p_pdf) for p_pdf, obs in zip(split_pdf, self.observables)]
         # Concatenate all datasets (so that experiments are one single entity)
-        ret = operations.concatenate(output_layers, axis=2)
+        ret = op.concatenate(output_layers, axis=2)
         if self.rotation is not None:
             ret = self.rotation(ret)
         return ret
@@ -113,11 +113,9 @@ def observable_generator(
             a dictionary with:
             - `inputs`: input layer
             - `output`: output layer (unmasked)
-            - `loss` : loss function (unmasked)
             - `output_tr`: output layer (training)
-            - `loss_tr` : loss function (training)
             - `output_vl`: output layer (validation)
-            - `loss_vl` : loss function (validation)
+            - `experiment_xsize` : int (size of the output array) 
     """
     spec_name = spec_dict["name"]
     dataset_xsizes = []
@@ -484,7 +482,7 @@ def pdfNN_layer_generator(
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
-        add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+        add_log = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1))
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
@@ -494,10 +492,10 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_imposition, integrator_input = msr_constraints.msr_impose(mode=impose_sumrule)
+        sumrule_layer, integrator_input = msr_constraints.msr_impose(mode=impose_sumrule)
         model_input = [integrator_input, placeholder_input]
     else:
-        sumrule_imposition = lambda x: x
+        sumrule_layer = lambda x: x
         integrator_input = None
         model_input = [placeholder_input]
 
@@ -550,7 +548,7 @@ def pdfNN_layer_generator(
 
         # Apply preprocessing and basis
         def layer_fitbasis(x):
-            ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
+            ret = op.op_multiply([dense_me(x), layer_preproc(x)])
             if basis_rotation.is_identity():
                 # if we don't need to rotate basis we don't want spurious layers
                 return ret
@@ -561,7 +559,7 @@ def pdfNN_layer_generator(
             return layer_evln(layer_fitbasis(x))
 
         # Final PDF
-        final_pdf = sumrule_imposition(layer_fitbasis, layer_pdf)
+        final_pdf = sumrule_layer(layer_fitbasis, layer_pdf)
 
         pdf_model = MetaModel(model_input, final_pdf(placeholder_input), name=f"PDF_{i}")
 

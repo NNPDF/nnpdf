@@ -355,7 +355,7 @@ def check_consistent_basis(fitting, theoryid):
 
 
 @make_argcheck
-def can_run_in_parallel(fitting, replica, hyperopt, parallel_models=1):
+def can_run_multiple_replicas(fitting, replica, hyperopt, parallel_models=1):
     """ Checks whether a runcard which is trying to run several replicas at once (parallel_models =/= 1) is valid
     """
     rp = len(replica)

@@ -180,6 +180,3 @@ def test_weirdbasis(tmp_path, timing=30):
 #     with pytest.raises(sp.TimeoutExpired):
     with pytest.raises(sp.CalledProcessError):
         sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing, check=True)
-
-
-# test_performfit_and_timing(pathlib.Path("/tmp/random_path"))
