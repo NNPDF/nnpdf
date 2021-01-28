@@ -531,6 +531,8 @@ def plot_lumi1d(
     sqrts: numbers.Real,
     normalize_to=None,
     show_mc_errors: bool = True,
+    ymin: (numbers.Real, type(None)) = None,
+    ymax: (numbers.Real, type(None)) = None,
 ):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
@@ -563,10 +565,18 @@ def plot_lumi1d(
         hatch = next(hatchit)
 
         alpha = 0.5
-        ax.fill_between(mx, err68down / norm, err68up / norm, color=color, alpha=alpha, zorder=1)
         ax.fill_between(
-            mx, err68down / norm, err68up / norm, facecolor="None", alpha=alpha, edgecolor=color,
-            hatch=hatch, zorder=1,
+            mx, err68down / norm, err68up / norm, color=color, alpha=alpha, zorder=1
+        )
+        ax.fill_between(
+            mx,
+            err68down / norm,
+            err68up / norm,
+            facecolor="None",
+            alpha=alpha,
+            edgecolor=color,
+            hatch=hatch,
+            zorder=1,
         )
 
         ax.plot(mx, cv / norm, color=color)
@@ -580,26 +590,42 @@ def plot_lumi1d(
             label_add = r"($68\%$ c.l.)"
             outer = False
 
-        handle = plotutils.HandlerSpec(color=color, alpha=alpha, hatch=hatch, outer=outer)
+        handle = plotutils.HandlerSpec(
+            color=color, alpha=alpha, hatch=hatch, outer=outer
+        )
         handles.append(handle)
         labels.append(f"{pdf.label} {label_add}")
 
-    ax.legend(handles, labels, handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()})
+    ax.legend(
+        handles,
+        labels,
+        handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
+    )
 
     ax.set_ylabel(ylabel)
-    ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xlabel("$M_{X}$ (GeV)")
     ax.set_xlim(mx[0], mx[-1])
-    ax.set_xscale('log')
+    ax.set_ylim(ymin, ymax)
+    ax.set_xscale("log")
     ax.grid(False)
-    ax.set_title(f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
-            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV")
+    ax.set_title(
+        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+    )
 
     return fig
+
 
 @figure
 @check_pdf_normalize_to
 def plot_lumi1d_uncertainties(
-    pdfs, pdfs_lumis, lumi_channel, sqrts: numbers.Real, normalize_to=None
+    pdfs,
+    pdfs_lumis,
+    lumi_channel,
+    sqrts: numbers.Real,
+    normalize_to=None,
+    ymin: (numbers.Real, type(None)) = None,
+    ymax: (numbers.Real, type(None)) = None,
 ):
     """Plot PDF luminosity uncertainties at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
@@ -637,8 +663,10 @@ def plot_lumi1d_uncertainties(
         f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
         f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
     )
-    ymin, _ = ax.get_ylim()
-    ax.set_ylim(max(0, ymin), None)
+    ax.set_ylim(ymin, ymax)
+    current_ymin, _ = ax.get_ylim()
+    ax.set_ylim(max(0, current_ymin), None)
+
 
     return fig
 
