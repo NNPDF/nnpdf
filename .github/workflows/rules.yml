@@ -10,7 +10,7 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-d5c2a7a6-2020-11-02 # reference set for vp
+  REFERENCE_SET: NNBOT-40696977-2021-01-28 # reference set for vp
   CONDA_PY: 37
 
 jobs:
@@ -68,6 +68,7 @@ jobs:
         cd n3fit/runcards
         postfit $POSTFIT_NREP $RUNCARD
         url=$(vp-upload $RUNCARD 2>&1 | grep https)
+        sleep 10s
         echo "FIT_URL=$url" >> $GITHUB_ENV
     # running validphys report
     - name: Building and upload report
