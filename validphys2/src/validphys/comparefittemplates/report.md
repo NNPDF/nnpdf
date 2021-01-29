@@ -77,4 +77,4 @@ Dataset differences and cuts
 Fit code versions
 -----------------
 
-{@fits_fit_code_version@}
+{@fits_version_table@}
