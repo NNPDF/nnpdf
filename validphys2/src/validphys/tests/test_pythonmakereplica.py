@@ -4,7 +4,10 @@ test_pythonmakereplica.py
 Module for testing the python implementation of make replica
 
 """
+from copy import deepcopy
+
 import numpy as np
+from pandas.testing import assert_frame_equal, assert_series_equal
 import pytest
 
 from validphys.api import API
@@ -33,17 +36,22 @@ def test_commondata_unchanged(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
-    # keep a copy of all central values and all systematics
-    original_cvs = [np.array(cd.central_values.to_numpy(copy=True)) for cd in ld_cds]
-    original_sys = [np.array(cd.systematics_table.to_numpy(copy=True)) for cd in ld_cds]
+
+    # keep a copy of all dataframes/series pre make replica
+    pre_mkrep_cvs = [deepcopy(cd.central_values) for cd in ld_cds]
+    pre_mkrep_sys_tabs = [deepcopy(cd.systematics_table) for cd in ld_cds]
+    pre_mkrep_cd_tabs = [deepcopy(cd.commondata_table) for cd in ld_cds]
+
     make_replica(ld_cds)
-    for post_mkrep_cd, pre_mkrep_cv, pre_mkrep_sys in zip(ld_cds, original_cvs, original_sys):
-        np.testing.assert_allclose(
-            post_mkrep_cd.central_values.to_numpy(), pre_mkrep_cv
-        )
-        np.testing.assert_allclose(
-            post_mkrep_cd.systematics_table.to_numpy(), pre_mkrep_sys
-        )
+
+    for post_mkrep_cd, pre_mkrep_cv in zip(ld_cds, pre_mkrep_cvs):
+        assert_series_equal(post_mkrep_cd.central_values, pre_mkrep_cv)
+
+    for post_mkrep_cd, pre_mkrep_sys_tab in zip(ld_cds, pre_mkrep_sys_tabs):
+        assert_frame_equal(post_mkrep_cd.systematics_table, pre_mkrep_sys_tab)
+
+    for post_mkrep_cd, pre_mkrep_cd_tab in zip(ld_cds, pre_mkrep_cd_tabs):
+        assert_frame_equal(post_mkrep_cd.commondata_table, pre_mkrep_cd_tab)
 
 
 @pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
