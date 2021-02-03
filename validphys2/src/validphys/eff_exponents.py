@@ -498,7 +498,7 @@ def update_runcard_description_yaml(
 def iterated_runcard_yaml(
     fit, update_runcard_description_yaml):
     """
-    Take the runcard with preprocessing iterated and description updated then
+    Takes the runcard with preprocessing iterated and description updated then
 
     - Updates the t0 pdf set to be ``fit``
     - Modifies the random seeds (to random unsigned long ints)
