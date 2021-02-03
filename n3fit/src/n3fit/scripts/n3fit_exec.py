@@ -17,6 +17,7 @@ from validphys.config import EnvironmentError_, ConfigError
 from validphys.core import FitSpec
 from reportengine import colors
 from reportengine.compat import yaml
+from reportengine.namespaces import NSList
 
 
 N3FIT_FIXED_CONFIG = dict(
@@ -25,7 +26,7 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
-N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results"]
+N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results", "n3fit.io.reader_providers"]
 
 log = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ class N3FitEnvironment(Environment):
 
         # create output folder for the fit
         self.replica_path = self.output_path / "nnfit"
-        for replica in self.replica:
+        for replica in self.replicas:
             path = self.replica_path / "replica_{0}".format(replica)
             log.info("Creating replica output folder in {0}".format(path))
             try:
@@ -83,7 +84,7 @@ class N3FitEnvironment(Environment):
     @classmethod
     def ns_dump_description(cls):
         return {
-            "replica": "The MC replica number",
+            "replicas": "The MC replica number/s",
             "replica_path": "The replica output path",
             "output_path": "The runcard name",
             "hyperopt": "The hyperopt flag",
@@ -112,10 +113,10 @@ class N3FitConfig(Config):
 
         if file_content.get('closuretest') is not None:
             N3FIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::closuretest performfit')
+                'datacuts::theory::closuretest::fitting performfit')
         else:
             N3FIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory performfit')
+                'datacuts::theory::fitting performfit')
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -147,7 +148,15 @@ class N3FitConfig(Config):
         """
         return fakedata
 
+    def produce_kfold_parameters(self, hyperscan=None, hyperopt=None):
+        if hyperscan and hyperopt:
+            return hyperscan["kfold"]
+        return None
 
+    def produce_kpartitions(self, kfold_parameters):
+        if kfold_parameters:
+            return kfold_parameters["partitions"]
+        return None
 
 
 class N3FitApp(App):
@@ -191,7 +200,7 @@ class N3FitApp(App):
                 replicas = list(range(replica, self.args["replica_range"] + 1))
             else:
                 replicas = [replica]
-            self.environment.replica = replicas
+            self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
             super().run()
         except N3FitError as e:

@@ -13,7 +13,7 @@ from n3fit.vpinterface import N3PDF
 log = logging.getLogger(__name__)
 
 
-def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
+def initialize_seeds(replicas: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
     """Action to initialize seeds for random number generation.
     We initialize three different seeds. The first is the seed
     used for training/validation splits, the second is used for
@@ -27,7 +27,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
 
     Parameters
     ----------
-    replica: list
+    replicas: list
         A list of replica numbers to run over typically of size one
     trvlseed: int
         Seed initialization for training/validation split
@@ -50,7 +50,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
     trvalseeds = []
     nnseeds = []
     mcseeds = []
-    for replica_number in replica:
+    for replica_number in replicas:
         np.random.seed(trvlseed)
         for _ in range(replica_number):
             trvalseed = np.random.randint(0, pow(2, 31))
@@ -80,13 +80,15 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
 @n3fit.checks.wrapper_hyperopt
 def performfit(
     fitting,
+    exps_replicas_fitting_data_dict,
     experiments_data,
-    t0set,
-    replica,
+    replicas_nnseed,
+    replicas,
     replica_path,
     output_path,
     theoryid,
     posdatasets,
+    kfold_parameters,
     integdatasets=None,
     hyperscan=None,
     hyperopt=None,
@@ -94,7 +96,8 @@ def performfit(
     maxcores=None,
 ):
     """
-        This action will (upon having read a validcard) process a full PDF fit for a given replica.
+        This action will (upon having read a validcard) process a full PDF fit
+        for a set of replicas.
 
         The input to this function is provided by validphys
         and/or defined in the runcards or commandline arguments.
@@ -121,7 +124,7 @@ def performfit(
                 the fit
             t0set: str
                 t0set name
-            replica: list
+            replicas: list
                 a list of replica numbers to run over (typically just one)
             replica_path: pathlib.Path
                 path to the output of this run
@@ -158,19 +161,6 @@ def performfit(
     from n3fit.backends import MetaModel, operations
     import n3fit.io.reader as reader
 
-    # Loading t0set from LHAPDF
-    if t0set is not None:
-        t0pdfset = t0set.load_t0()
-    else:
-        t0pdfset = None
-
-    trvlseed, nnseed, mcseed, genrep = [
-        fitting.get(i) for i in ["trvlseed", "nnseed", "mcseed", "genrep"]
-    ]
-
-    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
-    trvalseeds, nnseeds, mcseeds = seeds.trvlseeds, seeds.nnseeds, seeds.mcseeds
-
     ##############################################################################
     # ### Read files
     # Loop over all the experiment and positivity datasets
@@ -180,28 +170,10 @@ def performfit(
     # we are just creating dictionaries with all the necessary information
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
-    all_exp_infos = [[] for _ in replica]
-    if fitting.get("diagonal_basis"):
-        log.info("working in diagonal basis")
+    all_exp_infos = [[] for _ in replicas]
 
-    if hyperscan and hyperopt:
-        kfold_parameters = hyperscan["kfold"]
-        kpartitions = kfold_parameters["partitions"]
-    else:
-        kfold_parameters = None
-        kpartitions = None
-
-    # First loop over the experiments
-    for exp in experiments_data:
-        log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(
-            exp,
-            t0pdfset,
-            replica_seeds=mcseeds,
-            trval_seeds=trvalseeds,
-            kpartitions=kpartitions,
-            rotate_diagonal=fitting.get("diagonal_basis"),
-        )
+    # First loop over the experiments, then replica
+    for all_exp_dicts in exps_replicas_fitting_data_dict:
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
 
@@ -225,7 +197,7 @@ def performfit(
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
     stopwatch.register_times("data_loaded")
-    for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
+    for replica_number, exp_info, nnseed in zip(replicas, all_exp_infos, replicas_nnseed):
         replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
 
