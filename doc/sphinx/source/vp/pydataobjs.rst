@@ -15,7 +15,7 @@ computation and storage strategies.
 Loading FKTables
 ----------------
 
-Currently only FKTables can be directly without C++ code. This is implemented
+This is implemented
 in the :py:mod:`validphys.fkparser` module. For example::
 
     from validphys.fkparser import load_fktable
@@ -143,3 +143,111 @@ central replica is the same as the mean of the replica predictions::
     # Compute the size of the differences between approximate and true predictions
     # over the PDF uncertainty. Take the maximum over the three ttbar data points.
     print(((p - lp).std() / p.std()).max())
+
+Loading CommonData
+------------------
+
+The underlying functions for loading CommonData can be found in
+:py:mod:`validphys.results_providers.commondata_parser`. The data is loaded
+as :py:class:`validphys.coredata.CommonData`, which uses the
+`dataclasses <https://docs.python.org/3/library/dataclasses.html>`_ module
+which automatically generates some special methods for the class. The
+underlying data is stored as DataFrames, and so can be used
+with the standard pandas machinery::
+
+    import pandas as pd
+
+    from validphys.api import API
+    from validphys.results_providers.commondata_parser import load_commondata
+    # first get the CommonDataSpec
+    cd = API.commondata(dataset_input={"dataset":"NMC"})
+    lcd = load_commondata(cd)
+    assert isinstance(lcd.central_values, pd.Series)
+    assert isinstance(lcd.systematics_table, pd.DataFrame)
+
+The :py:class:`validphys.coredata.CommonData` class has a method which returns
+a new instance of the class with cuts applied::
+
+    from validphys.api import API
+    from validphys.results_providers.commondata_parser import load_commondata
+    inp = {
+        "dataset_input": {"dataset":"NMC"},
+        "use_cuts": "internal",
+        "theoryid": 162
+    }
+    # first get the CommonDataSpec
+    cd = API.commondata(**inp)
+    lcd = load_commondata(cd)
+    # CommonDataSpec object ndata is always total data points uncut
+    assert lcd.ndata == cd.ndata
+    cuts = API.cuts(**inp)
+    lcd_cut = lcd.with_cuts(cuts)
+    # data has been cut, ndata should have changed.
+    assert lcd_cut.ndata != cd.ndata
+
+An action already exists which returns the loaded and cut commondata, which is
+more convenient than calling the underlying functions::
+
+    api_lcd_cut = API.loaded_commondata_with_cuts(**inp)
+    assert api_lcd_cut.ndata == lcd_cut.ndata
+
+Loading Covariance Matrices
+---------------------------
+
+Functions which take :py:class:`validphys.coredata.CommonData` s and return
+covariance matrices can be found in
+:py:mod:`validphys.results_providers.covmat_construction`. As with the commondata
+the underlying functions can be accessed directly::
+
+    import numpy as np
+    from validphys.api import API
+    from validphys.results_providers.covmat_construction import covmat_from_systematics
+
+    inp = {
+        "dataset_input": {"dataset":"NMC"},
+        "use_cuts": "internal",
+        "theoryid": 162
+    }
+    lcd = API.loaded_commondata_with_cuts(**inp)
+    cov = covmat_from_systematics(lcd)
+    assert isinstance(cov, np.ndarray)
+    assert cov.shape == (lcd.ndata, lcd.ndata)
+
+There exists a similar function which acts upon a list of multiple commondatas
+and takes into account correlations between datasets::
+
+    from validphys.results_providers.covmat_construction import datasets_covmat_from_systematics
+    inp = {
+        "dataset_inputs": [
+            {"dataset":"NMC"},
+            {"dataset":"NMCPD"},
+        ],
+        "use_cuts": "internal",
+        "theoryid": 162
+    }
+    lcds = API.dataset_inputs_loaded_cd_with_cuts(**inp)
+    total_ndata = np.sum([lcd.ndata for lcd in lcds])
+    total_cov = datasets_covmat_from_systematics(lcds)
+    assert total_cov.shape == (total_ndata, total_ndata)
+
+These functions are already leveraged by actions, which can be accessed directly
+from the API::
+
+    from validphys.api import API
+
+    inp = {
+        "dataset_input": {"dataset":"NMC"},
+        "use_cuts": "internal",
+        "theoryid": 162
+    }
+    # single dataset covmat
+    cov = API.experimental_covmat(**inp)
+    inp = {
+        "dataset_inputs": [
+            {"dataset":"NMC"},
+            {"dataset":"NMCPD"},
+        ],
+        "use_cuts": "internal",
+        "theoryid": 162
+    }
+    total_cov = API.dataset_inputs_experimental_covmat(**inp)
