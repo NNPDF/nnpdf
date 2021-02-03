@@ -9,7 +9,7 @@ import numpy as np
 import scipy.integrate as integrate
 
 from reportengine import collect
-from reportengine.checks import make_argcheck, CheckError, check_positive
+from reportengine.checks import make_argcheck, CheckError, check_positive, check
 
 from validphys.core import PDF
 from validphys.gridvalues import (evaluate_luminosity)
@@ -137,7 +137,14 @@ lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
 
 Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
 
+@make_argcheck
+def _check_mx(mxmin, mxmax, sqrts):
+    check(
+        0 <= mxmin < (mxmax if mxmax is not None else sqrts) <= sqrts,
+        "mxmin and mxmax not consitent: Should be 0 <= mxmin < mxmax <= sqrts",
+    )
 
+@_check_mx
 @check_positive("sqrts")
 @check_positive("nbins_m")
 def lumigrid1d(
