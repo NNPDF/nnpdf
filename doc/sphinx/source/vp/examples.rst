@@ -35,7 +35,8 @@ NLO theoryid for scale variations 7  178                             :math:`k_F 
 NLO theoryid for scale variations 8  179                             :math:`k_F = 1, k_R = 2`
 NLO theoryid for scale variations 9  180                             :math:`k_F = 2, k_R = 2`
 NLO pdf                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO PDF set with 100 replicas (+ central replica)
-NNLO pdf                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 NNLO PDF set with 95 replicas (+ central replica)
+NNLO pdf                             NNPDF31_nnlo_as_0118            NNPDF3.1 NNLO PDF set with 100 replicas (+ central replica)
+NNLO pdf hessian                     NNPDF31_nnlo_as_0118_hessian    NNPDF3.1 NNLO hessian PDF set generated from replicas
 NLO fit                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO fit with 100 replicas (+ central replica)
 NNLO fit                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 DIS-only NNLO fit with 95 replicas (+ central replica)
 fit                                  191015-mw-001                   n3fit closure test fit with 30 replicas before and after postfit

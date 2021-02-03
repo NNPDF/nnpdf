@@ -10,8 +10,8 @@ pdfs:
     - id: NNPDF31_nnlo_as_0118_DISonly
       label: NNLO
 
-    - id: 191015-mw-001
-      label: closure
+    - id: NNPDF31_nnlo_as_0118_hessian
+      label: NNLO hessian
 
 theoryids:
     - 52

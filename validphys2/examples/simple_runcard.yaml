@@ -6,7 +6,6 @@ meta:
 pdfs:
     - NNPDF31_nlo_as_0118
     - NNPDF31_nnlo_as_0118_DISonly
-    - 191015-mw-001
 
 norm:
     normalize_to: NNPDF31_nlo_as_0118

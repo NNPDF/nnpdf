@@ -136,7 +136,7 @@ like this:
 pdfs:
     - NNPDF31_nlo_as_0118
     - NNPDF31_nnlo_as_0118
-    - 191015-mw-001 
+    - NNPDF31_nnlo_as_0118_hessian
 
 norm:
     normalize_to: NNPDF31_nlo_as_0118
@@ -223,8 +223,6 @@ pdfs:
     - id: NNPDF31_nnlo_as_0118
       label: NNLO
 
-    - id: 191015-mw-001 
-      label: closure
 
 theoryids:
     - 52
@@ -251,4 +249,3 @@ experiments (so 18 plots in total). This syntax is discussed in more
 detail in the [Usage] section.
 
 It should be trivial to repeat an action for different sets of inputs.
-
