@@ -441,10 +441,7 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
     be written to a file e.g
 
     >>> from validphys.api import API
-    >>> yaml_output = API.iterated_runcard_yaml(
-    ...     fit=<fit name>,
-    ...     _updated_description="My iterated fit"
-    ... )
+    >>> yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
     >>> with open("output.yml", "w+") as f:
     ...     f.write(yaml_output)
 
