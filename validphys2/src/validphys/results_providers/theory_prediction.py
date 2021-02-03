@@ -1,37 +1,13 @@
 """
-results_providers.py
+theory_prediction.py
 
-module which bridges between underlying functions concerned with loading
-theory predictions and data and actions which can be accessed
-by other actions/providers.
+Module containing actions which return theory predictions associated with
+datasets.
 
 """
 from reportengine import collect
 
-from validphys.commondataparser import load_commondata
 from validphys.convolution import central_predictions
-
-def loaded_commondata_with_cuts(commondata, cuts):
-    """Load the commondata and apply cuts.
-
-    Parameters
-    ----------
-    commondata: validphys.core.CommonDataSpec
-        commondata to load and cut.
-    cuts: validphys.core.cuts, None
-        valid cuts, used to cut loaded commondata.
-
-    Returns
-    -------
-    loaded_cut_commondata: validphys.coredata.CommonData
-
-    """
-    lcd = load_commondata(commondata)
-    return lcd.with_cuts(cuts)
-
-dataset_inputs_loaded_cd_with_cuts = collect(
-    "loaded_commondata_with_cuts", ("data_input",))
-
 
 def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions

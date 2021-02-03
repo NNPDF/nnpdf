@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from validphys.api import API
-from validphys.commondataparser import load_commondata
+from validphys.results_providers.commondata_parser import load_commondata
 from validphys.loader import FallbackLoader as Loader
 from validphys.tests.conftest import THEORYID, FIT
 
