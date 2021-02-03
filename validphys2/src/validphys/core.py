@@ -410,13 +410,25 @@ class SimilarCuts(TupleComp):
         super().__init__(self.inputs, self.threshold)
 
     def load(self):
+        # TODO: Update this when a suitable interace becomes available
         from validphys.convolution import central_predictions
+        from validphys.commondataparser import load_commondata
+        from validphys.covmats import covmat_from_systematics
 
         first, second = self.inputs
+        first_ds = first[0]
+        exp_err = np.sqrt(
+            np.diag(
+                covmat_from_systematics(
+                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts)
+                )
+            )
+        )
         # Compute matched predictions
-        ratio = central_predictions(*first) / central_predictions(*second)
-        ratio = ratio.squeeze()
-        passed = (self.threshold < ratio) & (ratio < 1 / self.threshold)
+        delta = (central_predictions(*first) - central_predictions(*second)).squeeze()
+        ratio = delta / exp_err
+        print(ratio)
+        passed = ratio < self.threshold
         return passed[passed].index
 
 
