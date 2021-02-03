@@ -536,6 +536,14 @@ def plot_lumi1d(
 ):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
+
+    This action plots the luminosity (as computed by `lumigrid1d`) as a
+    function of invariant mass for all PDFs for a single lumi channel.
+    ``normalize_to`` works as for `plot_pdfs` and allows to plot a ratio to the
+    central value of some of the PDFs. `ymin` and `ymax` can be used to set
+    exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
+    bands are shown in addition to the 68% confidence intervals for Monte Carlo
+    PDFs.
     """
 
     fig, ax = plt.subplots()
