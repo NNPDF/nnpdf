@@ -18,6 +18,7 @@ from matplotlib import cm, colors as mcolors
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_argcheck
+from reportengine.floatformatting import format_number
 
 from validphys import plotutils
 from validphys.core import MCStats
@@ -523,11 +524,26 @@ def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
 
 @figure
 @check_pdf_normalize_to
-def plot_lumi1d(pdfs, pdfs_lumis,
-                lumi_channel, sqrts:numbers.Real,
-                normalize_to=None):
+def plot_lumi1d(
+    pdfs,
+    pdfs_lumis,
+    lumi_channel,
+    sqrts: numbers.Real,
+    normalize_to=None,
+    show_mc_errors: bool = True,
+    ymin: (numbers.Real, type(None)) = None,
+    ymax: (numbers.Real, type(None)) = None,
+):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
+
+    This action plots the luminosity (as computed by `lumigrid1d`) as a
+    function of invariant mass for all PDFs for a single lumi channel.
+    ``normalize_to`` works as for `plot_pdfs` and allows to plot a ratio to the
+    central value of some of the PDFs. `ymin` and `ymax` can be used to set
+    exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
+    bands are shown in addition to the 68% confidence intervals for Monte Carlo
+    PDFs.
     """
 
     fig, ax = plt.subplots()
@@ -536,11 +552,11 @@ def plot_lumi1d(pdfs, pdfs_lumis,
         ylabel = f"Ratio to {pdfs[normalize_to]}"
     else:
         norm = 1
-        ylabel = r"$L (GeV^{-2})$"
+        ylabel = r"$\mathcal{L} (GeV^{-2})$"
 
     # For plotting
     hatchit = plotutils.hatch_iter()
-    pcycler = ax._get_lines.prop_cycler
+    pcycler = plotutils.color_iter()
     handles = []
     labels = []
 
@@ -553,42 +569,112 @@ def plot_lumi1d(pdfs, pdfs_lumis,
         err68down, err68up = gv.errorbar68()
         errstddown, errstdup = gv.errorbarstd()
 
-        next_prop = next(pcycler)
-        color = next_prop["color"]
+        color = next(pcycler)
         hatch = next(hatchit)
 
         alpha = 0.5
-        ax.fill_between(mx, err68down / norm, err68up / norm, color=color, alpha=alpha, zorder=1)
         ax.fill_between(
-            mx, err68down / norm, err68up / norm, facecolor="None", alpha=alpha, edgecolor=color,
-            hatch=hatch, zorder=1,
+            mx, err68down / norm, err68up / norm, color=color, alpha=alpha, zorder=1
+        )
+        ax.fill_between(
+            mx,
+            err68down / norm,
+            err68up / norm,
+            facecolor="None",
+            alpha=alpha,
+            edgecolor=color,
+            hatch=hatch,
+            zorder=1,
         )
 
         ax.plot(mx, cv / norm, color=color)
 
-        if isinstance(gv, MCStats):
+        if isinstance(gv, MCStats) and show_mc_errors:
             ax.plot(mx, errstddown / norm, linestyle="--", color=color)
             ax.plot(mx, errstdup / norm, linestyle="--", color=color)
-            label_add = "($68%$ c.l.+$1\sigma$)"
+            label_add = r"($68%$ c.l.+$1\sigma$)"
             outer = True
         else:
-            label_add = "($68\%$ c.l.)"
+            label_add = r"($68\%$ c.l.)"
             outer = False
 
-        handle = plotutils.HandlerSpec(color=color, alpha=alpha, hatch=hatch, outer=outer)
+        handle = plotutils.HandlerSpec(
+            color=color, alpha=alpha, hatch=hatch, outer=outer
+        )
         handles.append(handle)
         labels.append(f"{pdf.label} {label_add}")
 
-    ax.legend(handles, labels, handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()})
+    ax.legend(
+        handles,
+        labels,
+        handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
+    )
 
     ax.set_ylabel(ylabel)
-    ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xlabel("$M_{X}$ (GeV)")
     ax.set_xlim(mx[0], mx[-1])
-    ax.set_xscale('log')
+    ax.set_ylim(ymin, ymax)
+    ax.set_xscale("log")
     ax.grid(False)
-    ax.set_title("$%s$ luminosity\n"
-                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
-                                           sqrts))
+    ax.set_title(
+        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+    )
+
+    return fig
+
+
+@figure
+@check_pdf_normalize_to
+def plot_lumi1d_uncertainties(
+    pdfs,
+    pdfs_lumis,
+    lumi_channel,
+    sqrts: numbers.Real,
+    normalize_to=None,
+    ymin: (numbers.Real, type(None)) = None,
+    ymax: (numbers.Real, type(None)) = None,
+):
+    """Plot PDF luminosity uncertainties at a given center of mass energy.
+    sqrts is the center of mass energy (GeV).
+
+    If `normalize_to` is set, the values are normalized to the central value of
+    the corresponding PDFs.
+    """
+
+    fig, ax = plt.subplots()
+    if normalize_to is not None:
+        norm = pdfs_lumis[normalize_to].grid_values.central_value()
+        ylabel = f"Ratio to {pdfs[normalize_to]}"
+    else:
+        norm = None
+        ylabel = r"$\sigma\left(\mathcal{L} (GeV^{-2})\right)$"
+
+    for pdf, lumigrid1d, color in zip(pdfs, pdfs_lumis, plotutils.color_iter()):
+        mx = lumigrid1d.m
+        gv = lumigrid1d.grid_values
+
+        err = gv.std_error()
+
+        if norm is not None:
+            err /= norm
+        ax.plot(mx, err, color=color, label=pdf.label)
+
+    ax.legend()
+
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel("$M_{X}$ (GeV)")
+    ax.set_xlim(mx[0], mx[-1])
+    ax.set_xscale("log")
+    ax.grid(False)
+    ax.set_title(
+        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+    )
+    ax.set_ylim(ymin, ymax)
+    current_ymin, _ = ax.get_ylim()
+    ax.set_ylim(max(0, current_ymin), None)
+
 
     return fig
 
