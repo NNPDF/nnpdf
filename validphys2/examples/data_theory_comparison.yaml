@@ -1,0 +1,21 @@
+meta:
+    title: BCDMSP data/theory comparison
+    keywords: [example]
+    author: Rosalyn Pearson
+
+pdfs:
+    - id: NNPDF31_nnlo_as_0118_DISonly
+      label: NNPDF31_nnlo_as_0118_DISonly
+
+theoryid: 162
+
+use_cuts: "nocuts"
+
+dataset_inputs:
+      - { dataset: BCDMSP}
+
+template: dthcomparison.md
+
+actions_:
+  - report(main=true)
+

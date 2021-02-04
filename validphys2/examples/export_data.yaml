@@ -2,22 +2,22 @@
 # Configuration file for NNPDF++
 #
 
-use_cuts: False
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+use_cuts: "nocuts"
+
+pdf: NNPDF31_nlo_as_0118
+
+dataset_inputs:
+      - { dataset: SLACP }
+      - { dataset: SLACD }
+
+theoryid: 52       # database id
+
 actions_:
-   -  - experiment_result_table
-      - experiments_covmat
-      - experiments_invcovmat
-
-pdf: NNPDF30_nlo_as_0118
-
-experiments:
-  - experiment: NMC
-    datasets:
-      - { dataset: NMCPD, frac: 0.5, sys: 3 }
-      - { dataset: NMC,   frac: 0.5, sys: 3 }
-  - experiment: SLAC
-    datasets:
-      - { dataset: SLACP, frac: 0.5, sys: 3 }
-      - { dataset: SLACD, frac: 0.5, sys: 3 }
-
-theoryid: 53       # database id
+      - group_result_table
+      - groups_covmat
+      - groups_invcovmat

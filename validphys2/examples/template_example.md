@@ -1,6 +1,7 @@
-%NNPDF Report for fit {@ fit @}
+NNPDF Report
+============
 
-{@ patatadescription  @}
+{@ description  @}
 
 
 PDF plots
@@ -24,21 +25,17 @@ $\chi^2$
 
 ### {@ pdf @}
 
-
 {@ experiments_chi2_table @}
 
 {@ endwith@}
 
 Experiment plots
 ---------------
-{@ with experiments @}
-###{@ experiment @}
-{@with experiment@}
-[Detailed plots for dataset ' {@dataset@} ']({@dataset_report report @})
+{@ with pdfs @}
+###Experiment results for {@pdf@}
+{@with datanorm::experiments@}
+
+#### {@experiment@}
+{@experiment plot_fancy @}
 {@ endwith @}
 {@ endwith @}
-
-Theory description
-------------------
-
-{@ theory_description @}
