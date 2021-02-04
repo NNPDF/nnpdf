@@ -26,3 +26,19 @@ class BCDMSDFilter: public CommonData
 private:
   void ReadData();
 };
+
+class BCDMSD_dwFilter: public CommonData
+{ public: BCDMSD_dwFilter():
+  CommonData("BCDMSD_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class BCDMSD_shFilter: public CommonData
+{ public: BCDMSD_shFilter():
+  CommonData("BCDMSD_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};

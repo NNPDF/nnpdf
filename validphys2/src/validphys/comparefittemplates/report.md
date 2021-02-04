@@ -30,6 +30,13 @@ PDF arc-lengths
 ---------------
 {@basespecs plot_arc_lengths@}
 
+Sum rules
+---------
+{@with pdfs@}
+### {@pdf@}
+{@sum_rules_table@}
+{@endwith@}
+
 PDF plots
 ---------
 [Detailed plots]({@pdf_report report@})

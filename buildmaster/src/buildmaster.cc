@@ -98,6 +98,7 @@
 #include "ATLAS_1JET_8TEV_R04.h"
 #include "ATLAS_1JET_8TEV_R06.h"
 #include "ATLAS_1JET_8TEV_R06_DEC.h"
+#include "ATLAS_1JET_8TEV_R06_UNC.h"
 #include "CMS_2JET_7TEV.h"
 #include "ATLAS_2JET_7TEV_R04.h"
 #include "ATLAS_2JET_7TEV_R06.h"
@@ -178,6 +179,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_1JET_8TEV_R04Filter());
   target.push_back(new ATLAS_1JET_8TEV_R06Filter());
   target.push_back(new ATLAS_1JET_8TEV_R06_DECFilter());
+  target.push_back(new ATLAS_1JET_8TEV_R06_UNCFilter());
   target.push_back(new ATLAS_2JET_7TEV_R04Filter());
   target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
   target.push_back(new ATLAS_WP_JET_8TEV_PTFilter()); 
@@ -189,12 +191,15 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new BCDMSPFilter());
   target.push_back(new BCDMSDFilter());
+  target.push_back(new BCDMSD_dwFilter());
+  target.push_back(new BCDMSD_shFilter());
 
   // ************************* CDF ******************************
 
   target.push_back(new CDFR2KTFilter());
   target.push_back(new CDFWASYMFilter());
   target.push_back(new CDFZRAPFilter());
+  target.push_back(new CDFZRAP_NEWFilter());
 
   // ************************* CHORUS ******************************
 
@@ -202,6 +207,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CHORUSNBFilter());
   target.push_back(new CHORUSNUPbFilter());
   target.push_back(new CHORUSNBPbFilter());
+  target.push_back(new CHORUSNUPb_dwFilter());
+  target.push_back(new CHORUSNBPb_dwFilter());
+  target.push_back(new CHORUSNUPb_shFilter());
+  target.push_back(new CHORUSNBPb_shFilter());
 
   // ************************* CMS ******************************
 
@@ -244,8 +253,12 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* FTDY ******************************
 
   target.push_back(new DYE605Filter());
+  target.push_back(new DYE605_dwFilter());
+  target.push_back(new DYE605_shFilter());
   target.push_back(new DYE866PFilter());
   target.push_back(new DYE866RFilter());
+  target.push_back(new DYE866R_dwFilter());
+  target.push_back(new DYE866R_shFilter());
 
   // ************************* HERA-I Combined ******************************
 
@@ -288,6 +301,8 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new NMCFilter());
   target.push_back(new NMCpdFilter());
+  target.push_back(new NMCpd_dwFilter());
+  target.push_back(new NMCpd_shFilter());
 
   // ************************* NuTeV ******************************
 
@@ -295,11 +310,17 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new NTVNUDMNFilter());
   target.push_back(new NTVNBDMNFeFilter());
   target.push_back(new NTVNUDMNFeFilter());
+  target.push_back(new NTVNBDMNFe_dwFilter());
+  target.push_back(new NTVNUDMNFe_dwFilter());
+  target.push_back(new NTVNBDMNFe_shFilter());
+  target.push_back(new NTVNUDMNFe_shFilter());
 
   // ************************* SLAC ******************************
 
   target.push_back(new SLACPFilter());
   target.push_back(new SLACDFilter());
+  target.push_back(new SLACD_dwFilter());
+  target.push_back(new SLACD_shFilter());
 
   // ************************* TOP *******************************
 

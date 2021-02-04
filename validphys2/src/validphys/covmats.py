@@ -11,7 +11,6 @@ from reportengine import collect
 from reportengine.table import table
 
 from validphys.calcutils import regularize_covmat, get_df_block
-from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
@@ -19,6 +18,7 @@ from validphys.checks import (
     check_speclabels_different,
     check_data_cuts_match_theorycovmat,
 )
+from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 
 
-def covmat_from_systematics(commondata):
+def covmat_from_systematics(commondata, central_values=None):
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
     construct the covariance matrix accounting for correlations between
@@ -62,11 +62,17 @@ def covmat_from_systematics(commondata):
     `paper <https://arxiv.org/pdf/hep-ph/0501067.pdf>`_
     outlining the procedure, specifically equation 2 and surrounding text.
 
-    Paramaters
+    Parameters
     ----------
     commondata : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
+    central_values : None, np.array
+        1-D array containing alternative central values to combine with the
+        multiplicative errors to calculate their absolute contributions. By
+        default this is None, and the experimental central values are used. However, this
+        can be used to calculate, for example, the t0 covariance matrix by
+        using the predictions from the central member of the t0 pdf.
 
     Returns
     -------
@@ -98,10 +104,14 @@ def covmat_from_systematics(commondata):
             4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
     """
     return construct_covmat(
-        commondata.stat_errors.to_numpy(),  commondata.systematic_errors())
+        commondata.stat_errors.to_numpy(),
+        commondata.systematic_errors(central_values)
+    )
 
 
-def datasets_covmat_from_systematics(list_of_commondata):
+def datasets_covmat_from_systematics(
+    list_of_commondata, list_of_central_values=None
+):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
 
@@ -115,6 +125,11 @@ def datasets_covmat_from_systematics(list_of_commondata):
     ----------
     list_of_commondata : list[validphys.coredata.CommonData]
         list of CommonData objects.
+    list_of_central_values: None, list[np.array]
+        list of 1-D arrays which contain alternative central values which are
+        combined with the multiplicative errors to calculate their absolute
+        contribution. By default this is None and the experimental central
+        values are used.
 
     Returns
     -------
@@ -139,8 +154,12 @@ def datasets_covmat_from_systematics(list_of_commondata):
     special_corrs = []
     block_diags = []
 
-    for cd in list_of_commondata:
-        errors = cd.systematic_errors()
+    if list_of_central_values is None:
+        # want to just pass None to systematic_errors method
+        list_of_central_values = [None] * len(list_of_commondata)
+
+    for cd, central_values in zip(list_of_commondata, list_of_central_values):
+        errors = cd.systematic_errors(central_values)
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = errors.columns.isin(INTRA_DATASET_SYS_NAME)
@@ -191,6 +210,82 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
 
     corr_sys_mat = sys_errors.loc[:, ~is_uncorr].to_numpy()
     return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
+
+
+def experimental_covmat(loaded_commondata_with_cuts):
+    """Returns the experimental covariance matrix. Details of how
+    the covmat is constructed can be found in :py:func:`covmat_from_systematics`.
+    The experimental covariance matrix uses the experimental central values
+    to calculate the absolute uncertainties from the multiplicative systematics.
+
+    Parameters
+    ----------
+    loaded_commondata_with_cuts: validphys.coredata.CommonData
+
+    Returns
+    -------
+    covmat: np.array
+
+    """
+    return covmat_from_systematics(loaded_commondata_with_cuts)
+
+
+def t0_covmat(loaded_commondata_with_cuts, dataset_t0_predictions):
+    """Like :py:func:`experimental_covmat` except uses the t0 predictions
+    to calculate the absolute constributions to the covmat from multiplicative
+    uncertainties. For more info on the t0 predictions see
+    :py:func:`validphys.results_providers.dataset_t0_predictions`.
+
+    Parameters
+    ----------
+    loaded_commondata_with_cuts: validphys.coredata.CommonData
+        commondata object for which to generate the covmat.
+    dataset_t0_predictions: np.array
+        1-D array with t0 predictions.
+
+    Returns
+    -------
+    t0_covmat: np.array
+        t0 covariance matrix
+
+    """
+    return covmat_from_systematics(
+        loaded_commondata_with_cuts, dataset_t0_predictions)
+
+
+def dataset_inputs_experimental_covmat(dataset_inputs_loaded_cd_with_cuts):
+    """Like :py:func:`experimental_covmat` except for all data
+
+    Parameters
+    ----------
+    dataset_inputs_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+        The CommonData for all datasets defined in ``dataset_inputs``.
+
+    Returns
+    -------
+    covmat: np.array
+        Covariance matrix for list of datasets.
+    """
+    return datasets_covmat_from_systematics(dataset_inputs_loaded_cd_with_cuts)
+
+def dataset_inputs_t0_covmat(
+    dataset_inputs_loaded_cd_with_cuts, dataset_inputs_t0_predictions):
+    """Like :py:func:`t0_covmat` except for all data
+
+    Parameters
+    ----------
+    dataset_inputs_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
+        The CommonData for all datasets defined in ``dataset_inputs``.
+    dataset_inputs_t0_predictions: list[np.array]
+        The t0 predictions for all datasets.
+
+    Returns
+    -------
+    t0_covmat: np.array
+        t0 covariance matrix matrix for list of datasets.
+    """
+    return datasets_covmat_from_systematics(
+        dataset_inputs_loaded_cd_with_cuts, dataset_inputs_t0_predictions)
 
 
 def sqrt_covmat(covariance_matrix):

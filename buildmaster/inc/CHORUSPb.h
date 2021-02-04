@@ -29,3 +29,39 @@ public: CHORUSNBPbFilter():
 private:
   void ReadData();
 };
+
+class CHORUSNUPb_dwFilter: public CommonData
+{
+public: CHORUSNUPb_dwFilter():
+  CommonData("CHORUSNUPb_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_dwFilter: public CommonData
+{
+public: CHORUSNBPb_dwFilter():
+  CommonData("CHORUSNBPb_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNUPb_shFilter: public CommonData
+{
+public: CHORUSNUPb_shFilter():
+  CommonData("CHORUSNUPb_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_shFilter: public CommonData
+{
+public: CHORUSNBPb_shFilter():
+  CommonData("CHORUSNBPb_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};

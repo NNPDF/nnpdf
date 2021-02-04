@@ -55,7 +55,7 @@ def make_table_comp(loader_func):
 def test_expcovmat(data_config):
     mat = API.groups_covmat_no_table(**data_config)
     covmats = []
-    for exp in API.experiments(**data_config):
+    for exp in API.experiments_data(**data_config):
         cd = exp.datasets[0].commondata.load()
         covmats.append(NNPDF.ComputeCovMat(cd, cd.get_cv()))
     othermat = la.block_diag(*covmats)

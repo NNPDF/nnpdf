@@ -25,7 +25,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 
 
 def parse_test_output(filename):
-    """Parse a dump of a matrix like experiments_covmat."""
+    """Parse the output of groups_data_values."""
     df = sane_load(filename, header=0, index_col=[0, 1, 2])
     return df
 

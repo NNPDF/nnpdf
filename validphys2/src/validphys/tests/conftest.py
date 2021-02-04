@@ -22,27 +22,12 @@ def tmp(tmpdir):
 
 # Here define the default config items like the PDF, theory and experiment specs
 
-EXPERIMENTS = [
-    {
-        'experiment': 'NMC',
-        'datasets': [{'dataset': 'NMC'}]},
-    {
-        'experiment': 'ATLASTTBARTOT',
-        'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
-    {
-        'experiment': 'CMSZDIFF12',
-        'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
-    ]
-
-# Experiments which have non trivial correlations between their datasets
-CORR_DATA = [
-    {'dataset': 'ATLASWZRAP36PB', 'cfac': ['QCD']},
-    {'dataset': 'ATLASZHIGHMASS49FB', 'cfac': ['QCD']},
-    {'dataset': 'ATLASLOMASSDY11EXT', 'cfac': ['QCD']},
-    {'dataset': 'ATLASWZRAP11', 'frac': 0.5, 'cfac': ['QCD']},
-    {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
-    {'dataset': 'CMSJETS11', 'frac': 0.5, 'sys': 10},
+DATA = [
+    {'dataset': 'NMC'},
+    {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+    {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
 ]
+
 
 SINGLE_EXP = [
     {
@@ -53,13 +38,9 @@ SINGLE_EXP = [
             {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}]
 
 WEIGHTED_DATA = [
-    {
-        'experiment': 'NMC Experiment',
-        'datasets': [{'dataset': 'NMC'}]},
-    {
-        'experiment': 'Weighted',
-        'datasets': [{'dataset': 'NMC', 'weight': 100}]},
-    ]
+    {'dataset': 'NMC'},
+    {'dataset': 'NMC', 'weight': 100},
+]
 
 PDF = "NNPDF31_nnlo_as_0118"
 HESSIAN_PDF = "NNPDF31_nnlo_as_0118_hessian"
@@ -70,7 +51,7 @@ FIT_ITERATED = "191015-mw-001_for_testing_iterated"
 base_config = dict(
         pdf=PDF,
         use_cuts='nocuts',
-        experiments=EXPERIMENTS,
+        dataset_inputs=DATA,
         theoryid=THEORYID,
         use_fitthcovmat=False
     )
@@ -96,26 +77,14 @@ def data_witht0_config():
 @pytest.fixture(scope='module')
 def data_singleexp_witht0_config(data_witht0_config):
     config_dict = dict(data_witht0_config)
+    config_dict.pop("dataset_inputs")
     config_dict.update({'experiments': SINGLE_EXP})
-    return config_dict
-
-@pytest.fixture(scope='module')
-def data_with_correlations_config():
-    corr_dict = dict(base_config)
-    corr_dict.pop("experiments")
-    corr_dict.update(dataset_inputs=CORR_DATA)
-    return corr_dict
-
-@pytest.fixture(scope='module')
-def data_with_correlations_internal_cuts_config(data_with_correlations_config):
-    config_dict = dict(data_with_correlations_config)
-    config_dict.update(use_cuts='internal')
     return config_dict
 
 @pytest.fixture(scope='module')
 def weighted_data_witht0_config(data_witht0_config):
     config_dict = dict(data_witht0_config)
-    config_dict.update({'experiments': WEIGHTED_DATA})
+    config_dict.update({'dataset_inputs': WEIGHTED_DATA})
     return config_dict
 
 def pytest_runtest_setup(item):
