@@ -141,7 +141,7 @@ Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
 def _check_mx(mxmin, mxmax, sqrts):
     check(
         0 <= mxmin < (mxmax if mxmax is not None else sqrts) <= sqrts,
-        "mxmin and mxmax not consitent: Should be 0 <= mxmin < mxmax <= sqrts",
+        "mxmin and mxmax not consistent: Should be 0 <= mxmin < mxmax <= sqrts",
     )
 
 @_check_mx
