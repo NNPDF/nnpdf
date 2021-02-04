@@ -13,7 +13,7 @@ import numpy as np
 from NNPDF import RandomGenerator
 from reportengine import collect
 
-from n3fit.io.reader import common_data_reader_experiment
+from n3fit.io.reader import common_data_reader_experiment, positivity_reader
 
 log = logging.getLogger()
 
@@ -274,6 +274,31 @@ def fitting_data_dict(
     }
     return dict_out
 
-replicas_fitting_data_dict = collect("fitting_data_dict", ("replicas",))
-exps_replicas_fitting_data_dict = collect(
-    "replicas_fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+
+def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
+    return (replica, exps_fitting_data_dict, replica_nnseed)
+
+replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
+
+
+def fitting_pos_dict(posdataset):
+    """Loads a positivity dataset"""
+    log.info("Loading positivity dataset %s", posdataset)
+    return positivity_reader(posdataset)
+
+posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
+
+
+#can't use collect here because integdatasets might not exist.
+def integdatasets_fitting_integ_dict(integdatasets=None):
+    """Loads a integrability dataset"""
+    if integdatasets is not None:
+        integ_info = []
+        for integ_set in integdatasets:
+            log.info("Loading integrability dataset %s", integ_set)
+            # Use the same reader as positivity observables
+            integ_dict = positivity_reader(integ_set)
+            integ_info.append(integ_dict)
+    else:
+        integ_info = None

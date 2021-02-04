@@ -5,7 +5,6 @@
 # Backend-independent imports
 from collections import namedtuple
 import logging
-import os.path
 import numpy as np
 import n3fit.checks
 from n3fit.vpinterface import N3PDF
@@ -79,21 +78,27 @@ def initialize_seeds(replicas: list, trvlseed: int, nnseed: int, mcseed: int, ge
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
 def performfit(
-    fitting,
-    exps_replicas_fitting_data_dict,
-    experiments_data,
-    replicas_nnseed,
-    replicas,
+    genrep,
+    data,
+    replicas_nnseed_fitting_data_dict,
+    posdatasets_fitting_pos_dict,
+    integdatasets_fitting_integ_dict,
     replica_path,
     output_path,
     theoryid,
-    posdatasets,
     kfold_parameters,
-    integdatasets=None,
+    basis,
+    fitbasis,
+    parameters,
     hyperscan=None,
     hyperopt=None,
     debug=False,
     maxcores=None,
+    save_weights_each=None,
+    load=None,
+    sum_rules=True,
+    tensorboard=None,
+    save=None,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -158,46 +163,11 @@ def performfit(
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
-    from n3fit.backends import MetaModel, operations
-    import n3fit.io.reader as reader
-
-    ##############################################################################
-    # ### Read files
-    # Loop over all the experiment and positivity datasets
-    # and save them into two list of dictionaries: exp_info and pos_info
-    # later on we will loop over these two lists and generate the actual layers
-    # i.e., at this point there is no information about the NN
-    # we are just creating dictionaries with all the necessary information
-    # (experimental data, covariance matrix, replicas, etc, tr/val split)
-    ##############################################################################
-    all_exp_infos = [[] for _ in replicas]
-
-    # First loop over the experiments, then replica
-    for all_exp_dicts in exps_replicas_fitting_data_dict:
-        for i, exp_dict in enumerate(all_exp_dicts):
-            all_exp_infos[i].append(exp_dict)
-
-    # Now read all the positivity datasets
-    pos_info = []
-    for pos_set in posdatasets:
-        log.info("Loading positivity dataset %s", pos_set)
-        pos_dict = reader.positivity_reader(pos_set)
-        pos_info.append(pos_dict)
-
-    if integdatasets is not None:
-        integ_info = []
-        for integ_set in integdatasets:
-            log.info("Loading integrability dataset %s", integ_set)
-            # Use the same reader as positivity observables
-            integ_dict = reader.positivity_reader(integ_set)
-            integ_info.append(integ_dict)
-    else:
-        integ_info = None
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
-    # run once and all_exp_infos is a list of just than one element
+    # run once and replicas_nnseed_fitting_data_dict is a list of just than one element
     stopwatch.register_times("data_loaded")
-    for replica_number, exp_info, nnseed in zip(replicas, all_exp_infos, replicas_nnseed):
+    for replica_number, exp_info, nnseed in replicas_nnseed_fitting_data_dict:
         replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
 
@@ -205,24 +175,23 @@ def performfit(
         # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
             exp_info,
-            pos_info,
-            integ_info,
-            fitting["basis"],
-            fitting["fitbasis"],
+            posdatasets_fitting_pos_dict,
+            integdatasets_fitting_integ_dict,
+            basis,
+            fitbasis,
             nnseed,
             debug=debug,
-            save_weights_each=fitting.get("save_weights_each"),
+            save_weights_each=save_weights_each,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
-            model_file=fitting.get("load"),
-            sum_rules=fitting.get("sum_rules", True)
+            model_file=load,
+            sum_rules=sum_rules
         )
 
         # This is just to give a descriptive name to the fit function
         pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
 
         # Read up the parameters of the NN from the runcard
-        parameters = fitting.get("parameters")
         stopwatch.register_times("replica_set")
 
         ########################################################################
@@ -252,10 +221,9 @@ def performfit(
         the_model_trainer.set_hyperopt(False)
 
         # Enable the tensorboard callback
-        tboard = fitting.get("tensorboard")
-        if tboard is not None:
-            profiling = tboard.get("profiling", False)
-            weight_freq = tboard.get("weight_freq", 0)
+        if tensorboard is not None:
+            profiling = tensorboard.get("profiling", False)
+            weight_freq = tensorboard.get("weight_freq", 0)
             log_path = replica_path_set / "tboard"
             the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
 
@@ -290,7 +258,7 @@ def performfit(
         )
 
         # Create a pdf instance
-        pdf_instance = N3PDF(pdf_model, fit_basis=fitting.get("basis"))
+        pdf_instance = N3PDF(pdf_model, fit_basis=basis)
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
@@ -308,7 +276,7 @@ def performfit(
         )
 
         # Save the weights to some file for the given replica
-        model_file = fitting.get("save")
+        model_file = save
         if model_file:
             model_file_path = replica_path_set / model_file
             log.info(" > Saving the weights for future in %s", model_file_path)
@@ -327,5 +295,5 @@ def performfit(
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
 
-        if tboard is not None:
+        if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)
