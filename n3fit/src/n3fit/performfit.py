@@ -107,40 +107,57 @@ def performfit(
         The input to this function is provided by validphys
         and/or defined in the runcards or commandline arguments.
 
+        This controller is provided with:
+        1. Seeds generated using the replica number and the seeds defined in the runcard.
+        2. Loaded datasets with replicas generated.
+            2.1 Loaded positivity/integrability sets.
+
         The workflow of this controller is as follows:
-        1. Generates seeds using the replica number and the seeds defined in the runcard,
-        2. Read up all datasets from the given experiments and create the necessary replicas
-            2.1 Read up also the positivity sets
-        3. Generate a ModelTrainer object holding information to create the NN and perform a fit
+        1. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
-            3.1 (if hyperopt) generates the hyperopt scanning dictionary
+            1.1 (if hyperopt) generates the hyperopt scanning dictionary
                     taking as a base the fitting dictionary  and the runcard's hyperscan dictionary
-        4. Pass the dictionary of parameters to ModelTrainer
+        2. Pass the dictionary of parameters to ModelTrainer
                                         for the NN to be generated and the fit performed
-            4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
-        5. Once the fit is finished, output the PDF grid and accompanying files
+            2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
+        3. Once the fit is finished, output the PDF grid and accompanying files
 
         Parameters
         ----------
-            fitting: dict
-                dictionary with the hyperparameters of the fit
-            experiments_data: dict
-                vp list of datasets grouped into experiments to be included in
-                the fit
-            t0set: str
-                t0set name
-            replicas: list
-                a list of replica numbers to run over (typically just one)
+            genrep: bool
+                Whether or not to generate MC replicas.
+            data: validphys.core.DataGroupSpec
+                containing the datasets to be included in the fit.
+            replicas_nnseed_fitting_data_dict: list[tuple]
+                list with element for each replica (typically just one) to be
+                fitted. Each element
+                is a tuple containing the replica number, nnseed and
+                ``fitted_data_dict`` containing all of the data, metadata
+                for each group of datasets which is to be fitted.
+            posdatasets_fitting_pos_dict: list[dict]
+                list of dictionaries containing all data and metadata for each
+                positivity dataset
+            integdatasets_fitting_integ_dict: list[dict]
+                list of dictionaries containing all data and metadata for each
+                integrability dataset
             replica_path: pathlib.Path
                 path to the output of this run
             output_path: str
                 name of the fit
-            theorid: int
-                theory id number
-            posdatasets: list
-                list of positivity datasets
-            integdatasets: list
-                list of integrability datasets
+            theoryid: validphys.core.TheoryIDSpec
+                Theory which is used to generate theory predictions from model
+                during fit. Object also contains some metadata on the theory
+                settings.
+            kfold_parameters: None, dict
+                dictionary with kfold settings used in hyperopt.
+            basis: list[dict]
+                preprocessing information for each flavour to be fitted.
+            fitbasis: str
+                Valid basis which the fit is to be ran in. Available bases can
+                be found in :py:mod:`validphys.pdfbases`.
+            parameters: dict
+                Mapping containing parameters which define the network
+                architecture/fitting methodology.
             hyperscan: dict
                 dictionary containing the details of the hyperscan
             hyperopt: int
@@ -149,6 +166,20 @@ def performfit(
                 activate some debug options
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
+            save_weights_each: None, int
+                if set, save the state of the fit every ``save_weights_each``
+                epochs
+            load: None, str
+                model file from which to load weights from.
+            sum_rules: bool
+                Whether to impose sum rules in fit. By default set to True
+            tensorboard: None, dict
+                mapping containing tensorboard settings if it is to be used. By
+                default it is None and tensorboard is not enabled.
+            save: None, str
+                model file where weights will be save, used in conjunction with
+                ``load``.
+
     """
     from n3fit.backends import set_initial_state
 
