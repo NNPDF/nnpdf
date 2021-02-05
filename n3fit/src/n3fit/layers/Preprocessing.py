@@ -7,33 +7,35 @@ BASIS_SIZE = 8
 
 class Preprocessing(MetaLayer):
     """
-        Applies preprocessing to the PDF.
+    Applies preprocessing to the PDF.
 
-        This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha
-        are model paramters that can be trained. If feature scaling is used, the preprocessing
-        factor is x^(1-alpha). 
+    This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha
+    are model paramters that can be trained. If feature scaling is used, the preprocessing
+    factor is x^(1-alpha).
 
-        Alpha is initialized uniformly within the ranges allowed in the runcard and
-        then it is only allowed to move between those two values (with a hard wall in each side)
+    Alpha is initialized uniformly within the ranges allowed in the runcard and
+    then it is only allowed to move between those two values (with a hard wall in each side)
 
-        Alpha and, unless feature scaling is used, beta are initialized uniformly within 
-        the ranges allowed in the runcard and then they are only allowed to move between those two 
-        values (with a hard wall in each side)
+    Alpha and, unless feature scaling is used, beta are initialized uniformly within
+    the ranges allowed in the runcard and then they are only allowed to move between those two
+    values (with a hard wall in each side)
 
-        Parameters
-        ----------
-            `output_dim`: int
-                size of the fitbasis
-            `flav_info`: list
-                list of dicts containing the information about the fitting of the preprocessing
-                This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
-                The dicts can contain the following fields:
-                    `smallx`: range of alpha
-                    `largex`: range of beta
-                    `trainable`: whether these alpha-beta should be trained during the fit
-                                (defaults to true)
-            `seed`: int
-                seed for the initializer of the random alpha and beta values
+    Parameters
+    ----------
+        output_dim: int
+            size of the fitbasis
+        flav_info: list
+            list of dicts containing the information about the fitting of the preprocessing
+            This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
+            The dicts can contain the following fields:
+                `smallx`: range of alpha
+                `largex`: range of beta
+                `trainable`: whether these alpha-beta should be trained during the fit
+                            (defaults to true)
+        large_x: bool
+            Whether large x preprocessing should be active
+        seed: int
+            seed for the initializer of the random alpha and beta values
     """
 
     def __init__(
@@ -42,7 +44,7 @@ class Preprocessing(MetaLayer):
         flav_info=None,
         seed=0,
         initializer="random_uniform",
-        mapping=None,
+        large_x=True,
         **kwargs,
     ):
         self.output_dim = output_dim
@@ -51,39 +53,45 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.initializer = initializer
-        self.mapping = mapping
+        self.large_x = large_x
         self.kernel = []
         # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
 
-    def generate_weight(self, weight_name, kind, dictionary):
+    def generate_weight(self, weight_name, kind, dictionary, set_to_zero=False):
         """
         Generates weights according to the flavour dictionary and adds them
         to the kernel list of the class
 
         Parameters
         ----------
-            `weight_name`: str
+            weight_name: str
                 name to be given to the generated weight
-            `kind`: str
+            kind: str
                 where to find the limits of the weight in the dictionary
-            `dictionary`: dict
+            dictionary: dict
                 dictionary defining the weight, usually one entry from `flav_info`
+            set_to_zero: bool
+                set the weight to constant 0
         """
-        limits = dictionary[kind]
-        ldo = limits[0]
-        lup = limits[1]
-        trainable = dictionary.get("trainable", True)
-        # Set the initializer and move the seed one up
-        initializer = MetaLayer.select_initializer(
-            self.initializer, minval=ldo, maxval=lup, seed=self.seed
-        )
-        self.seed += 1
-        # If we are training, constrain the weights to be within the limits
-        if trainable:
-            weight_constraint = constraints.MinMaxWeight(ldo, lup)
+        weight_constraint = None
+        if set_to_zero:
+            initializer = MetaLayer.init_constant(0.0)
+            trainable = False
         else:
-            weight_constraint = None
+            limits = dictionary[kind]
+            ldo = limits[0]
+            lup = limits[1]
+            trainable = dictionary.get("trainable", True)
+            # Set the initializer and move the seed one up
+            initializer = MetaLayer.select_initializer(
+                self.initializer, minval=ldo, maxval=lup, seed=self.seed
+            )
+            self.seed += 1
+            # If we are training, constrain the weights to be within the limits
+            if trainable:
+                weight_constraint = constraints.MinMaxWeight(ldo, lup)
+
         # Generate the new trainable (or not) parameter
         newpar = self.builder_helper(
             name=weight_name,
@@ -100,19 +108,14 @@ class Preprocessing(MetaLayer):
             flav_name = flav_dict["fl"]
             alpha_name = f"alpha_{flav_name}"
             self.generate_weight(alpha_name, "smallx", flav_dict)
-            if not self.mapping:
-                beta_name = f"beta_{flav_name}"
-                self.generate_weight(beta_name, "largex", flav_dict)
+            beta_name = f"beta_{flav_name}"
+            self.generate_weight(beta_name, "largex", flav_dict, set_to_zero=not self.large_x)
 
         super(Preprocessing, self).build(input_shape)
 
     def call(self, inputs, **kwargs):
         x = inputs
         pdf_list = []
-        if self.mapping:
-            for i in range(0, self.output_dim, 1):
-                pdf_list.append(x ** (1 - self.kernel[i][0]))
-        else:
-            for i in range(0, self.output_dim*2, 2):
-                pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i+1][0])
+        for i in range(0, self.output_dim * 2, 2):
+            pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i + 1][0])
         return op.concatenate(pdf_list, axis=-1)
