@@ -230,9 +230,6 @@ def performfit(
             )
         )
 
-        # Get mapping 
-        mapping = the_model_trainer.mapping
-
         # Create a pdf instance
         pdf_instance = N3PDF(pdf_model, fit_basis=basis)
 

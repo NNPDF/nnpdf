@@ -10,12 +10,12 @@
 """
 import logging
 import numpy as np
+from scipy.interpolate import PchipInterpolator
 import n3fit.model_gen as model_gen
 from n3fit.backends import MetaModel, clear_backend_state, operations, callbacks
 from n3fit.stopping import Stopping
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
-from scipy.interpolate import PchipInterpolator
 
 log = logging.getLogger(__name__)
 
@@ -214,6 +214,7 @@ class ModelTrainer:
         self.debug = debug
         self.save_weights_each = save_weights_each
         self.all_datasets = []
+        self._scaler = None
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -396,31 +397,19 @@ class ModelTrainer:
         log.info("Generating the Model")
 
         # Construct the input array that will be given to the pdf
-        input_arr = np.concatenate(self.input_list, axis=1)
-        input_layer = operations.numpy_to_input(input_arr.T)
+        input_arr = np.concatenate(self.input_list, axis=1).T
+        if self._scaler:
+            # Apply feature scaling if given
+            input_arr = self._scaler(input_arr) # TODO 
+        input_layer = operations.numpy_to_input(input_arr)
 
-        # Apply feature scaling
-        if self.mapping:
-            mapping = self.mapping
-            interpolation = PchipInterpolator(mapping[0], mapping[1])
-            input_arr_scaled = interpolation(np.log(input_arr.squeeze()))
-            input_arr_scaled = np.expand_dims(input_arr, axis=0)
-            input_layer_scaled = operations.numpy_to_input(input_arr_scaled.T)
+        # The input to the full model also works as the input to the PDF model
+        # The PDF model is then applied as a layer (receiving the full_pdf layer)
+        # we also need to receive full_model_input_dict, a dictionary with the full input to the PDF
+        full_model_input_dict, full_pdf = pdf_model.apply_as_layer([input_layer])
 
-        # The input to the full model is expected to be the input to the PDF
-        # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted for
-        if self.mapping:
-            full_model_input_dict = pdf_model._parse_input([input_layer, input_layer_scaled], pass_content=False)
-        else:
-            full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
-
-        # The output of the pdf on input_layer will be thus a concatenation
-        # of the PDF values for all experiments
-        if self.mapping:
-            full_pdf = pdf_model.apply_as_layer([input_layer, input_layer_scaled])
-        else: 
-            full_pdf = pdf_model.apply_as_layer([input_layer])
-        # The input layer is a concatenation of all experiments
+        # The input layer was a concatenation of all experiments
+        # the output of the pdf on input_layer will be thus a concatenation
         # we need now to split the output on a different array per experiment
         sp_ar = [self.input_sizes]
         sp_kw = {"axis": 1}
@@ -588,7 +577,7 @@ class ModelTrainer:
                 self.training["integmultipliers"].append(integ_multiplier)
                 self.training["integinitials"].append(integ_initial)
 
-        # Store the input data for the interpolator as self.mapping
+        # Store a reference to the interpolator as self._scaler
         if interpolation_points:
             input_arr = np.concatenate(self.input_list, axis=1)
             input_arr = np.sort(input_arr)
@@ -622,9 +611,8 @@ class ModelTrainer:
             map_from = np.log(map_from)
             map_to = map_to_complete[selected_points]
 
-            self.mapping = [map_from, map_to]
-        else: 
-            self.mapping = None
+            scaler = PchipInterpolator(map_from, map_to)
+            self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
 
     def _generate_pdf(
         self,
@@ -685,7 +673,7 @@ class ModelTrainer:
             regularizer=regularizer,
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
-            mapping=self.mapping,
+            scaler=self._scaler,
         )
         return pdf_model
 

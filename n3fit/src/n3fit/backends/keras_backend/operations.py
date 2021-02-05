@@ -310,17 +310,3 @@ def op_subtract(inputs, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
     """
     return keras_subtract(inputs, **kwargs)
-
-def tensor_ones_like_eager(*args, **kwargs):
-    """
-    Generates a tensor of ones of the same shape as the input tensor
-    See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
-    """
-    return K.ones_like(*args, **kwargs)
-
-def op_convert_to_tensor(value, **kwargs):
-    """
-    Converts 'value' to tensor
-    See full `docs <https://www.tensorflow.org/api_docs/python/tf/convert_to_tensor>`_
-    """
-    return tf.convert_to_tensor(value, **kwargs)
