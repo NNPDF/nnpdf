@@ -530,8 +530,8 @@ def pdfNN_layer_generator(
         """ The tensor x has a expected shape of (1, None, {1,2})
         where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
         """
-        x_scaled = x[..., 0:1]
-        x_original = x[..., -1:]
+        x_scaled = operations.op_gather_keep_dims(x, 0, axis=-1)
+        x_original = operations.op_gather_keep_dims(x, -1, axis=-1)
 
         nn_output = dense_me(x_scaled)
         if subtract_one:
@@ -546,8 +546,7 @@ def pdfNN_layer_generator(
 
     # Rotation layer, changes from the 8-basis to the 14-basis
     def layer_pdf(x):
-        evol_layer = layer_evln(layer_fitbasis(x))
-        return evol_layer
+        return layer_evln(layer_fitbasis(x))
 
     # Prepare the input for the PDF model,
     # if a scaler is given the model will take as input (scaler(x), x)

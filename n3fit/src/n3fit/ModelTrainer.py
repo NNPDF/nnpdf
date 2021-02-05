@@ -400,7 +400,7 @@ class ModelTrainer:
         input_arr = np.concatenate(self.input_list, axis=1).T
         if self._scaler:
             # Apply feature scaling if given
-            input_arr = self._scaler(input_arr) # TODO 
+            input_arr = self._scaler(input_arr)
         input_layer = operations.numpy_to_input(input_arr)
 
         # The input to the full model also works as the input to the PDF model
