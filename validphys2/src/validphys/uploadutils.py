@@ -181,14 +181,15 @@ class FitUploader(FileUploader):
     def get_relative_path(self, output_path=None):
         return ''
 
-    def check_fit_exists(self, fit_name):
+    def check_fit_exists(self, fit_name, silent=False):
         """Check whether the fit already exists on the server."""
         # Get list of the available fits on the server
         l = RemoteLoader()
         fits = l.downloadable_fits
 
         if fit_name in fits:
-            log.error("A fit with the same name already exists on "
+            if not silent:
+                log.error("A fit with the same name already exists on "
                       "the server. To overwrite this fit use the "
                       "--force flag, as in `vp-upload <fitname> "
                       "--force`.")
@@ -254,6 +255,16 @@ class FitUploader(FileUploader):
 
         new_out, name = self.compress(output_path)
         super().upload_output(new_out)
+
+        # Check whether the fit was really uploaded
+        try:
+            log.info("Checking whether the fit was correctly uploaded...")
+            from time import sleep
+            sleep(20)
+            self.check_fit_exists(fit_name, silent=True)
+            log.error("The fit was uploaded but haven't been indexed yet by the server")
+        except UploadError:
+            log.info("The fit has been indexed by the server")
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
