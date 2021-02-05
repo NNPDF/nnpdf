@@ -68,8 +68,8 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', scaler=None, verbose=Fals
 
     def pdf_integrand(x):
         """ If a scaler is given, the division needs to take only the original input """
-        original_x = x[...,-1:]
-        res = operations.op_multiply([division_by_x(original_x), fit_layer(x)])
+        x_original = operations.op_gather_keep_dims(x, -1, axis=-1)
+        res = operations.op_multiply([division_by_x(x_original), fit_layer(x)])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
