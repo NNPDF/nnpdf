@@ -368,13 +368,7 @@ class CoreConfig(configparser.Config):
         return th
 
     def produce_cuts(
-        self,
-        *,
-        commondata,
-        use_cuts,
-        rules,
-        fit=None,
-        theoryid=None,
+        self, *, commondata, use_cuts, rules, fit=None, theoryid=None,
     ):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy."""
@@ -426,15 +420,33 @@ class CoreConfig(configparser.Config):
                 _, cut_similarity_threshold = self.parse_from_(
                     None, "cut_similarity_threshold", write=False
                 )
-
+                name = commondata.name
                 inps = []
                 for ns in nss:
+                    with self.set_context(ns=self._curr_ns.new_child({**ns,})):
+                        # TODO: find a way to not duplicate this and use a dict
+                        # instead of a linear search
+                        _, dins = self.parse_from_(None, "dataset_inputs", write=False)
+                    try:
+                        di = next(d for d in dins if d.name == name)
+                    except StopIteration as e:
+                        raise ConfigError(
+                            f"cuts_intersection_spec dataset inputs must define {name}"
+                        ) from e
+
                     with self.set_context(
-                        ns=self._curr_ns.new_child({"cuts": matched_cuts, **ns,})
+                        ns=self._curr_ns.new_child(
+                            {
+                                "dataset_input": di,
+                                "use_cuts": CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE,
+                                **ns,
+                            }
+                        )
                     ):
                         _, ds = self.parse_from_(None, "dataset", write=False)
                         _, pdf = self.parse_from_(None, "pdf", write=False)
-                        inps.append((ds, pdf))
+                    print(ds, ds.fkspecs[0].cfactors)
+                    inps.append((ds, pdf))
                 return SimilarCuts(tuple(inps), cut_similarity_threshold)
 
         raise TypeError("Wrong use_cuts")

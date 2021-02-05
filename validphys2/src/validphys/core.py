@@ -425,9 +425,10 @@ class SimilarCuts(TupleComp):
             )
         )
         # Compute matched predictions
-        delta = (central_predictions(*first) - central_predictions(*second)).squeeze()
+        delta = np.abs(
+            (central_predictions(*first) - central_predictions(*second)).squeeze(axis=1)
+        )
         ratio = delta / exp_err
-        print(ratio)
         passed = ratio < self.threshold
         return passed[passed].index
 
