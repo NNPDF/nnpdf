@@ -132,13 +132,13 @@ def make_replica(list_of_commondata, seed=None):
 
     Example
     -------
-    >>> from validphys.commondataparser import load_commondata
-    >>> from validphys.loader import Loader
+    >>> from validphys.api import API
     >>> from validphys.pseudodata import make_replica
-    >>> l = Loader()
-    >>> cd1 = l.check_commondata("NMC")
-    >>> cd2 = l.check_commondata("NMCPD")
-    >>> lds = map(load_commondata, (cd1, cd2))
+    >>> lds = API.dataset_inputs_loaded_cd_with_cuts(
+                                    dataset_inputs=[{"dataset":"NMC"}, {"dataset": "NMCPD"}],
+                                    use_cuts="nocuts",
+                                    theoryid=53
+                                )
     >>> make_replica(lds)
     array([0.25721162, 0.2709698 , 0.27525357, 0.28903442, 0.3114298 ,
         0.3005844 , 0.3184538 , 0.31094522, 0.30750703, 0.32673155,
