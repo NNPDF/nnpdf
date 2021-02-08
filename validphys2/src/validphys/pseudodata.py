@@ -116,8 +116,8 @@ def make_replica(list_of_commondata, seed=None):
 
     Parameters
     ---------
-    list_of_commondata: iterable[:py:class:`validphys.coredata.CommonData`]
-        Iterable of CommonData objects which stores information about systematic errors,
+    list_of_commondata: list[:py:class:`validphys.coredata.CommonData`]
+        List of CommonData objects which stores information about systematic errors,
         their treatment and description, for each dataset.
 
     seed: int, None
