@@ -111,7 +111,7 @@ def read_fit_pseudodata(fitcontext, context_index):
 
 def make_replica(list_of_commondata, seed=None):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
-    objects and returns pseudodata replicas of the data central value accounting for
+    objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
 
     The function loops until positive definite pseudodata is generated for any
@@ -208,7 +208,6 @@ def make_replica(list_of_commondata, seed=None):
             else:
                 check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
 
-        # if we sort here (which sorts columns), then permuting datasets doesn't change the result
         # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
         special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
