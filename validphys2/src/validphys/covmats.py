@@ -19,7 +19,6 @@ from validphys.checks import (
     check_speclabels_different,
     check_data_cuts_match_theorycovmat,
 )
-from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)

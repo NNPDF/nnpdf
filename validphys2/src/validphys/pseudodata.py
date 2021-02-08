@@ -12,16 +12,12 @@ import numpy as np
 import pandas as pd
 
 from validphys.checks import check_cuts_fromfit, check_darwin_single_process
-from validphys.commondataparser import load_commondata
-from validphys.coredata import CommonData
 from validphys.covmats import INTRA_DATASET_SYS_NAME
 
 from reportengine import collect
 
 import n3fit.io.reader as reader
 from n3fit.performfit import initialize_seeds
-
-import NNPDF
 
 log = logging.getLogger(__name__)
 
