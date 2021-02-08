@@ -221,6 +221,13 @@ def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):
     return all_pseudodata
 
 
+def indexed_make_replica(groups_index, make_replica):
+    """Index the make_replica pseudodata appropriately
+    """
+
+    return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
+
+
 @check_darwin_single_process
 def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
