@@ -105,7 +105,7 @@ def read_fit_pseudodata(fitcontext, context_index):
         yield pseudodata.drop("type", axis=1), tr.index, val.index
 
 
-def make_replica(list_of_commondata, seed=None):
+def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -116,7 +116,7 @@ def make_replica(list_of_commondata, seed=None):
 
     Parameters
     ---------
-    list_of_commondata: list[:py:class:`validphys.coredata.CommonData`]
+    dataset_inputs_loaded_cd_with_cuts: list[:py:class:`validphys.coredata.CommonData`]
         List of CommonData objects which stores information about systematic errors,
         their treatment and description, for each dataset.
 
@@ -133,13 +133,11 @@ def make_replica(list_of_commondata, seed=None):
     Example
     -------
     >>> from validphys.api import API
-    >>> from validphys.pseudodata import make_replica
-    >>> lds = API.dataset_inputs_loaded_cd_with_cuts(
+    >>> pseudodata = API.make_replica(
                                     dataset_inputs=[{"dataset":"NMC"}, {"dataset": "NMCPD"}],
                                     use_cuts="nocuts",
                                     theoryid=53
                                 )
-    >>> make_replica(lds)
     array([0.25721162, 0.2709698 , 0.27525357, 0.28903442, 0.3114298 ,
         0.3005844 , 0.3184538 , 0.31094522, 0.30750703, 0.32673155,
         0.34843355, 0.34730928, 0.3090914 , 0.32825111, 0.3485292 ,
@@ -155,7 +153,7 @@ def make_replica(list_of_commondata, seed=None):
         special_mult = []
         mult_shifts = []
         check_positive_masks = []
-        for cd in list_of_commondata:
+        for cd in dataset_inputs_loaded_cd_with_cuts:
             # copy here to avoid mutating the central values.
             pseudodata = cd.central_values.to_numpy(copy=True)
 
