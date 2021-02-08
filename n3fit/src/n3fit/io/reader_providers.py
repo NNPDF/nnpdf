@@ -300,5 +300,5 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
             # Use the same reader as positivity observables
             integ_dict = positivity_reader(integ_set)
             integ_info.append(integ_dict)
-    else:
-        integ_info = None
+        return integ_info
+    return None
