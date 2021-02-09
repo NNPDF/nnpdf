@@ -33,7 +33,6 @@ def art_rep_generation(groups_data, nreplica:int):
 
     for group in groups_data:
         real_group = group.load()
-        print(group.name)
 
         art_replicas = []
         normart_replicas = []
