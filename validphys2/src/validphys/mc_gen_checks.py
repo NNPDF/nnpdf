@@ -68,7 +68,7 @@ def per_point_art_rep_generation(groups_data, nreplica:int):
 
     RandomGenerator.InitRNG(0,0)
 
-    for group in groups data:
+    for group in groups_data:
         real_group = group.load()
 
         art_replicas = []
@@ -154,7 +154,7 @@ def art_data_moments(art_rep_generation, color="green"):
     for momno, ax in zip(range(1,4), axes.flatten()):
         # Calculate moments
         moms = []
-        for i, datapoint in zip(range(len(artrep_array.T)), artrep_array.T:
+        for i, datapoint in zip(range(len(artrep_array.T)), artrep_array.T):
             moment = mom(datapoint, moment=momno)
             moms.append(moment)
         ax.hist(moms, bins=50, histtype='step', stacked=True, fill=False, color=color)
@@ -207,7 +207,7 @@ def one_art_data_residuals(nreplica:int, groups_data):
     Residuals plot for the first datapoint.
     """
     RandomGenerator.InitRNG(0,0)
-    for group in groups_data
+    for group in groups_data:
 
         real_group = group.load()
         real_data = real_group.get_cv()
