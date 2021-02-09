@@ -16,7 +16,6 @@ from scipy.stats import moment as mom
 from NNPDF import Experiment, RandomGenerator
 from reportengine.table import table
 from reportengine.figure import figure
-from reportengine import collect
 log = logging.getLogger(__name__)
 
 
@@ -271,4 +270,3 @@ def art_data_mean_table(art_rep_generation, groups_data):
     df =  pd.DataFrame(data,columns=["DataSet","ArtData","ExpData","abs(residual)"])
 
     return df
-
