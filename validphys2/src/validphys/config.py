@@ -381,8 +381,6 @@ class CoreConfig(configparser.Config):
             except LoadFailedError as e:
                 raise ConfigError(e) from e
         elif use_cuts is CutsPolicy.INTERNAL:
-            if not theoryid:
-                raise ConfigError("theoryid must be specified for internal cuts")
             return self.loader.check_internal_cuts(commondata, rules)
         elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
             cut_list = []
@@ -1046,9 +1044,9 @@ class CoreConfig(configparser.Config):
 
     def produce_rules(
         self,
-        theoryid,
         use_cuts,
         defaults,
+        theoryid=None,
         default_filter_rules=None,
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
@@ -1060,8 +1058,6 @@ class CoreConfig(configparser.Config):
             RuleProcessingError,
             default_filter_rules_input,
         )
-
-        theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
             # Don't bother loading the rules if we are not using them.
@@ -1075,6 +1071,14 @@ class CoreConfig(configparser.Config):
                 filter_rules = self.load_default_default_filter_rules(default_filter_rules)
             else:
                 filter_rules = default_filter_rules_input()
+
+        if theoryid is None:
+            raise ConfigError(
+                "Valid theoryid is required when rules are set to "
+                f"`{CutsPolicy.INTERNAL}`"
+            )
+
+        theory_parameters = theoryid.get_description()
 
         try:
             rule_list = [
