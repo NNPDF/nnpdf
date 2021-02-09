@@ -39,7 +39,7 @@ def art_rep_generation(groups_data, nreplica:int):
         real_data = real_group.get_cv()
 
         # producing replicas
-        for i in range(nreplica):
+        for _ in range(nreplica):
             replica_group = Experiment(real_group)
             replica_group.MakeReplica()
             artrep = replica_group.get_cv()
