@@ -16,64 +16,71 @@ from scipy.stats import moment as mom
 from NNPDF import Experiment, RandomGenerator
 from reportengine.table import table
 from reportengine.figure import figure
+from reportengine import collect
 log = logging.getLogger(__name__)
 
 
-def art_rep_generation(experiments, nreplica:int, experiments_index):
-    """Generates the nreplica pseudodata replicas for a given experiment"""
+
+
+def art_rep_generation(groups_data, nreplica:int):
+    """Generates the nreplica pseudodata replicas"""
 
     RandomGenerator.InitRNG(0,0)
 
-    for exp in experiments:
-        #Since we are going to modify the experiments, we copy them
-        #(and work on the copies) to avoid all
-        #sorts of weirdness with other providers. We don't want this to interact
-        #with ExperimentSpec at all, because it could do funny things with the
-        #cache when calling load(). We need to copy this yet again, for each
-        # of the noisy replicas.
-        real_exp = Experiment(exp.load())
+    real_data_list = []
+    art_replicas_list = []
+    normart_replicas_list = []
+    art_data_list = []
+
+    for group in groups_data:
+        real_group = group.load()
+        print(group.name)
 
         art_replicas = []
         normart_replicas = []
-        real_data = real_exp.get_cv()
+        real_data = real_group.get_cv()
 
         # producing replicas
         for i in range(nreplica):
-            replica_exp = Experiment(real_exp)
-            replica_exp.MakeReplica()
-            artrep = replica_exp.get_cv()
+            replica_group = Experiment(real_group)
+            replica_group.MakeReplica()
+            artrep = replica_group.get_cv()
             normartrep = artrep/real_data
             art_replicas.append(artrep)
             normart_replicas.append(normartrep)
 
         art_data = np.mean(art_replicas, axis=0)
+        art_data_list.append(art_data)
+        real_data_list.append(real_data)
+        art_replicas_list.append(art_replicas)
+        normart_replicas_list.append(normart_replicas)
 
-        return real_data, art_replicas, normart_replicas, art_data
+    art_replicas = np.concatenate(art_replicas_list, axis=1)
+    normart_replicas = np.concatenate(normart_replicas_list, axis=1)
+    art_data = np.concatenate(art_data_list)
+    real_data = np.concatenate(real_data_list)
 
-def per_point_art_rep_generation(experiments, nreplica:int, experiments_index):
-    """Generates the nreplica pseudodata replicas for a given experiment"""
+    return real_data, art_replicas, normart_replicas, art_data
+
+
+def per_point_art_rep_generation(groups_data, nreplica:int):
+    """Generates the nreplica pseudodata replicas for a given group"""
 
     RandomGenerator.InitRNG(0,0)
 
-    for exp in experiments:
-        #Since we are going to modify the experiments, we copy them
-        #(and work on the copies) to avoid all
-        #sorts of weirdness with other providers. We don't want this to interact
-        #with ExperimentSpec at all, because it could do funny things with the
-        #cache when calling load(). We need to copy this yet again, for each
-        # of the noisy replicas.
-        real_exp = Experiment(exp.load())
+    for group in groups data:
+        real_group = group.load()
 
         art_replicas = []
         normart_replicas = []
-        real_data = real_exp.get_cv()
+        real_data = real_group.get_cv()
 
         # producing replicas
         for i in range(nreplica):
-            replica_exp = Experiment(real_exp)
-            for point in range(len(replica_exp.get_cv())):
-                replica_exp.MakePerPointReplica(point)
-            artrep = replica_exp.get_cv()
+            replica_group = Experiment(real_group)
+            for point in range(len(replica_group.get_cv())):
+                replica_group.MakePerPointReplica(point)
+            artrep = replica_group.get_cv()
             normartrep = artrep/real_data
             art_replicas.append(artrep)
             normart_replicas.append(normartrep)
@@ -83,13 +90,13 @@ def per_point_art_rep_generation(experiments, nreplica:int, experiments_index):
         return real_data, art_replicas, normart_replicas, art_data
 
 @figure
-def art_data_residuals(art_rep_generation, nreplica:int, color="green"):
+def art_data_residuals(art_rep_generation, color="green"):
 
     #pass
     """
     Plot the residuals distribution of pseudodata compared to experiment.
     """
-    real_data, art_replicas, normart_replicas, art_data = art_rep_generation
+    real_data, _, _, art_data = art_rep_generation
 
     residuals=real_data-art_data
     normresiduals = residuals/real_data
@@ -104,16 +111,16 @@ def art_data_residuals(art_rep_generation, nreplica:int, color="green"):
     return fig
 
 @figure
-def per_point_art_data_residuals(per_point_art_rep_generation, nreplica:int):
-    return art_data_residuals(per_point_art_rep_generation, nreplica, color="orange")
+def per_point_art_data_residuals(per_point_art_rep_generation):
+    return art_data_residuals(per_point_art_rep_generation, color="orange")
 
 
 @figure
-def art_data_distribution(art_rep_generation, nreplica:int, title='Artificial Data Distribution', color="green"):
+def art_data_distribution(art_rep_generation, title='Artificial Data Distribution', color="green"):
     """
     Plot of the distribution of pseudodata.
     """
-    real_data, art_replicas, normart_replicas, art_data = art_rep_generation
+    real_data, _, _, art_data = art_rep_generation
 
     normart_data = art_data/real_data
     fig, ax = plt.subplots()
@@ -132,11 +139,11 @@ def per_point_art_data_distribution(per_point_art_rep_generation, nreplica:int):
 
 
 @figure
-def art_data_moments(art_rep_generation, nreplica:int, color="green"):
+def art_data_moments(art_rep_generation, color="green"):
     """
     Returns the moments of the distributions per data point, as a histogram.
     """
-    real_data, art_replicas, normart_replicas, art_data = art_rep_generation
+    real_data, _, normart_replicas, art_data = art_rep_generation
 
     artrep_array = np.asarray(normart_replicas)
     normart_data = art_data/real_data
@@ -147,7 +154,7 @@ def art_data_moments(art_rep_generation, nreplica:int, color="green"):
     for momno, ax in zip(range(1,4), axes.flatten()):
         # Calculate moments
         moms = []
-        for i, datapoint, normartdatapoint in zip(range(len(artrep_array.T)), artrep_array.T, normart_data):
+        for i, datapoint in zip(range(len(artrep_array.T)), artrep_array.T:
             moment = mom(datapoint, moment=momno)
             moms.append(moment)
         ax.hist(moms, bins=50, histtype='step', stacked=True, fill=False, color=color)
@@ -167,7 +174,7 @@ def art_data_comparison(art_rep_generation, nreplica:int):
     """
     Plots per datapoint of the distribution of replica values.
     """
-    real_data, art_replicas, normart_replicas, art_data = art_rep_generation
+    real_data, _, normart_replicas, art_data = art_rep_generation
 
     artrep_array = np.asarray(normart_replicas)
     normart_data = art_data/real_data
@@ -193,25 +200,25 @@ def art_data_comparison(art_rep_generation, nreplica:int):
 
 
 @figure
-def one_art_data_residuals(art_rep_generation, nreplica:int, experiments):
+def one_art_data_residuals(nreplica:int, groups_data):
 
     #pass
     """
     Residuals plot for the first datapoint.
     """
     RandomGenerator.InitRNG(0,0)
-    for exp in experiments:
+    for group in groups_data
 
-        real_exp = Experiment(exp.load())
-        real_data = real_exp.get_cv()
+        real_group = group.load()
+        real_data = real_group.get_cv()
         one_art_data = np.zeros(nreplica)
         one_data_index=0
 
         #producing replicas
         for i in range(nreplica):
-            replica_exp = Experiment(real_exp)
-            replica_exp.MakeReplica()
-            one_art_data[i]=replica_exp.get_cv()[one_data_index]
+            replica_group = Experiment(real_group)
+            replica_group.MakeReplica()
+            one_art_data[i]=replica_group.get_cv()[one_data_index]
 
     fig, ax = plt.subplots()
 
@@ -226,7 +233,7 @@ def one_art_data_residuals(art_rep_generation, nreplica:int, experiments):
     return fig
 
 @figure
-def plot_deviation_from_mean(art_rep_generation, per_point_art_rep_generation, nreplica:int, experiments):
+def plot_deviation_from_mean(art_rep_generation, per_point_art_rep_generation):
     real_data, art_replicas, normart_replicas, art_data = art_rep_generation
     ppreal_data, ppart_replicas, ppnormart_replicas, ppart_data = per_point_art_rep_generation
 
@@ -246,15 +253,15 @@ def plot_deviation_from_mean(art_rep_generation, per_point_art_rep_generation, n
     return fig
 
 @table
-def art_data_mean_table(art_rep_generation, nreplica:int, experiments):
+def art_data_mean_table(art_rep_generation, groups_data):
     """Generate table for artdata mean values
     """
     real_data, art_replicas, normart_replicas, art_data = art_rep_generation
 
     #residuals=real_data-art_data
     data=[]
-    for experiment in experiments:
-        for dataset in experiment.datasets:
+    for group in groups_data:
+        for dataset in group.datasets:
             ds = dataset.load()
             Ndata = ds.GetNData()
             for i in range(Ndata):
