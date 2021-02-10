@@ -133,7 +133,7 @@ following the points presented above you can proceed with a fit.
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
 maximum number of desired replicas. Note that if you desire for example a 100 
-replica fit you should launch more than 100 replicas (e.g. 120) because not 
+replica fit you should launch more than 100 replicas (e.g. 130) because not 
 all the replicas will pass the checks in `postfit`.
 
 3. Wait until you have fit results. Then run the `evolven3fit` program once to
@@ -262,4 +262,3 @@ Iterate the fit
 
 It may be desirable to iterate a fit to achieve a higher degree of convergence/stability in the fit.
 To read more about this, see [How to run an iterated fit](run-iterated-fit).
-
