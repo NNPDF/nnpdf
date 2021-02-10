@@ -132,15 +132,20 @@ following the points presented above you can proceed with a fit.
 
 2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
-maximum number of desired replicas.
+maximum number of desired replicas. Note that if you desire for example a 100 
+replica fit you should launch more than 100 replicas (e.g. 120) because not 
+all the replicas will pass the checks in `postfit`.
 
 3. Wait until you have fit results. Then run the `evolven3fit` program once to
 evolve all replicas using DGLAP. The arguments are `evolven3fit runcard_folder
-number_of_replicas`.
+number_of_replicas`. Remember to use the total number of replicas run (120 in the
+above example), rather than the number you desire in the final fit.
 
 4. Wait until you have results, then use `postfit number_of_replicas
 runcard_folder` to finalize the PDF set by applying post selection criteria.
-This will produce a set of `number_of_replicas + 1` replicas. Note that the
+This will produce a set of `number_of_replicas + 1` replicas. This time the 
+number of replicas should be that which you desire in the final fit (100 in the
+above example). Note that the
 standard behaviour of `postfit` can be modified by using various flags.
 More information can be found at [Processing a fit](postfit).
 
