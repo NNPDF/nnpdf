@@ -447,6 +447,9 @@ def pdfNN_layer_generator(
         nodes = [15, 8]
     ln = len(nodes)
 
+    if scaler:
+        inp = 1
+
     if activations is None:
         activations = ["tanh", "linear"]
     elif callable(activations):
@@ -487,12 +490,14 @@ def pdfNN_layer_generator(
 
     subtract_one = False
     process_input = Lambda(lambda x: x)
+    input_corresponding_to_x_equal_one = 1
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
-    if scaler is not None:
+    if scaler:
         # change the input domain [0,1] -> [-1,1]
         process_input = Lambda(lambda  x: 2*x-1)
         subtract_one = True
+        input_corresponding_to_x_equal_one = scaler([1])[0]
     elif inp==2:
         # If the input is of type (x, logx)
         # create a x --> (x, logx) layer to preppend to everything
@@ -535,7 +540,7 @@ def pdfNN_layer_generator(
 
         nn_output = dense_me(x_scaled)
         if subtract_one:
-            nn_at_one = dense_me(operations.numpy_to_tensor([[[1]]]))
+            nn_at_one = dense_me(operations.numpy_to_tensor([[[input_corresponding_to_x_equal_one]]]))
             nn_output = operations.op_subtract([nn_output, nn_at_one])
 
         ret = operations.op_multiply([nn_output, layer_preproc(x_original)])
@@ -550,10 +555,10 @@ def pdfNN_layer_generator(
 
     # Prepare the input for the PDF model,
     # if a scaler is given the model will take as input (scaler(x), x)
-    if scaler is None:
-        placeholder_input = Input(shape=(None, 1), batch_size=1)
-    else:
+    if scaler:
         placeholder_input = Input(shape=(None, 2), batch_size=1)
+    else:
+        placeholder_input = Input(shape=(None, 1), batch_size=1)
 
     # Impose sumrule if necessary
     if impose_sumrule:
