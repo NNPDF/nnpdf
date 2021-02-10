@@ -389,7 +389,8 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
        by filling additional entries with 0."""
     # Load covmat as pandas DataFrame
     filecovmat = pd.read_csv(covmatpath,
-            index_col=[0,1,2], header=[0,1,2])
+            index_col=[0,1,2], header=[0,1,2],
+            sep="\t|,", engine="python")
     filecovmat = pd.DataFrame(filecovmat.values,
                             index=filecovmat.index,
                             columns=filecovmat.index)
