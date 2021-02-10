@@ -38,6 +38,8 @@ Note that the command will still fail if fewer than the requested amount meet th
 flag can be useful when, for example, processing many fits simultaneously, where a specific number
 of replicas is not required, but instead at least a certain amount.
 
+.. _postfit-selection-criteria:
+
 The :code:`postfit` selection criteria
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
