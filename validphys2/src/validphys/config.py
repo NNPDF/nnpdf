@@ -1482,6 +1482,10 @@ class CoreConfig(configparser.Config):
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
 
+    def produce_fk_basis_flavour(self, theoryid):
+        from validphys.convolution import FK_FLAVOURS
+        q0 = theoryid.get_description()["Q0"]
+        return {"basis": "evolution", "flavours": FK_FLAVOURS.tolist(), "Q": q0}
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
