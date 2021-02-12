@@ -186,6 +186,13 @@ def linear_predictions(dataset, pdf):
     return _predictions(dataset, pdf, linear_fk_predictions)
 
 
+def central_differential_predictions(dataset, pdf):
+    """TODO"""
+    if dataset.op != "NULL":
+        raise ValueError("Not sure this makes sense with operations")
+    return _predictions(dataset, pdf, central_fk_differential_predictions)
+
+
 def fk_predictions(loaded_fk, pdf):
     """Low level function to compute predictions from a
     FKTable.
@@ -255,6 +262,21 @@ def linear_fk_predictions(loaded_fk, pdf):
         return linear_hadron_predictions(loaded_fk, pdf)
     else:
         return dis_predictions(loaded_fk, pdf)
+
+
+def central_fk_differential_predictions(loaded_fk, pdf):
+    """Computes a differential central prediction for an observable with
+    index as a MultiIndex in data point index and x and columns indexed by
+    flavour such that summing over x and flavour e.g:
+
+    >>> df = central_fk_differential_predictions(loaded_fk, pdf)
+    >>> df.unstack().sum(axis=1)
+
+    gives the same result as :py:func:`central_fk_predictions`
+    """
+    if loaded_fk.hadronic:
+        raise NotImplementedError("will get round to this shortly")
+    return central_dis_differential_predictions(loaded_fk, pdf)
 
 
 def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
@@ -329,6 +351,27 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     return sigma.groupby(level=0).apply(appl)
 
 
+def _gv_dis_predictions_diff(loaded_fk, gvfunc):
+    xgrid = loaded_fk.xgrid
+    Q = loaded_fk.Q0
+    sigma = loaded_fk.sigma
+    # The column indexes are indices into the FK_FLAVOURS list above.
+    fm = sigma.columns
+    # Squeeze to remove the dimension over Q.
+    gv = gvfunc(qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid).squeeze(-1)
+
+    def appl(df):
+        # x is encoded as the first index level.
+        xind = df.index.get_level_values(1)
+        return pd.DataFrame(
+            np.einsum("ijk,kj->ijk", gv[:, :, xind], df.values)[0,...],
+            index=FK_FLAVOURS[fm],
+            columns=xgrid[xind]
+        )
+
+    return sigma.groupby(level=0).apply(appl)
+
+
 def hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for hadronic observables."""
     gv = functools.partial(evolution.grid_values, pdf=pdf)
@@ -379,6 +422,14 @@ def central_dis_predictions(loaded_fk, pdf):
     observables."""
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)
+
+
+def central_dis_differential_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`central_fk_differential_predictions` for DIS
+    observables.
+    """
+    gv = functools.partial(evolution.central_grid_values, pdf=pdf)
+    return _gv_dis_predictions_diff(loaded_fk, gv)
 
 
 def _positivity_predictions(posdataset, pdf, fkfunc):
