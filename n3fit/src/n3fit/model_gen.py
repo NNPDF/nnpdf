@@ -7,6 +7,7 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
+import numpy as np
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -488,20 +489,27 @@ def pdfNN_layer_generator(
             inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
         )
 
+    placeholder_input = Input(shape=(None, 1), batch_size=1)
     subtract_one = False
     process_input = Lambda(lambda x: x)
-    input_corresponding_to_x_equal_one = 1
+    input_x_eq_1 = [1.0]
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
     if scaler:
         # change the input domain [0,1] -> [-1,1]
         process_input = Lambda(lambda  x: 2*x-1)
         subtract_one = True
-        input_corresponding_to_x_equal_one = scaler([1])[0]
+        input_x_eq_1 = scaler([1.0])[0]
+        placeholder_input = Input(shape=(None, 2), batch_size=1)
     elif inp==2:
         # If the input is of type (x, logx)
         # create a x --> (x, logx) layer to preppend to everything
         process_input = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+
+    model_input = [placeholder_input]
+    if subtract_one:
+        layer_x_eq_1 = operations.numpy_to_input(np.array(input_x_eq_1).reshape(1,1))
+        model_input.append(layer_x_eq_1)
 
     def dense_me(x):
         """Takes an input tensor `x` and applies all layers
@@ -540,11 +548,7 @@ def pdfNN_layer_generator(
 
         nn_output = dense_me(x_scaled)
         if subtract_one:
-            x0 = operations.numpy_to_tensor([[[input_corresponding_to_x_equal_one]]])
-            # x=1. needs to be passed as a layer which depends in the input
-            # otherwise dense(1.0) gets executed only at graph creation
-            x1 = Lambda(lambda x: x0)(x)
-            nn_at_one = dense_me(x1)
+            nn_at_one = dense_me(layer_x_eq_1)
             nn_output = operations.op_subtract([nn_output, nn_at_one])
 
         ret = operations.op_multiply([nn_output, layer_preproc(x_original)])
@@ -557,20 +561,12 @@ def pdfNN_layer_generator(
     def layer_pdf(x):
         return layer_evln(layer_fitbasis(x))
 
-    # Prepare the input for the PDF model,
-    # if a scaler is given the model will take as input (scaler(x), x)
-    if scaler:
-        placeholder_input = Input(shape=(None, 2), batch_size=1)
-    else:
-        placeholder_input = Input(shape=(None, 1), batch_size=1)
-
     # Impose sumrule if necessary
     if impose_sumrule:
         layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, scaler=scaler)
-        model_input = [integrator_input, placeholder_input]
+        model_input.append(integrator_input)
     else:
         integrator_input = None
-        model_input = [placeholder_input]
 
     pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF", scaler=scaler)
 
