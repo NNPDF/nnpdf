@@ -540,9 +540,11 @@ def pdfNN_layer_generator(
 
         nn_output = dense_me(x_scaled)
         if subtract_one:
-            import tensorflow as tf
-            x0 = tf.ones_like(x_scaled)*input_corresponding_to_x_equal_one
-            nn_at_one = dense_me(x0)
+            x0 = operations.numpy_to_tensor([[[input_corresponding_to_x_equal_one]]])
+            # x=1. needs to be passed as a layer which depends in the input
+            # otherwise dense(1.0) gets executed only at graph creation
+            x1 = Lambda(lambda x: x0)(x)
+            nn_at_one = dense_me(x1)
             nn_output = operations.op_subtract([nn_output, nn_at_one])
 
         ret = operations.op_multiply([nn_output, layer_preproc(x_original)])
