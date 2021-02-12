@@ -134,7 +134,7 @@ def art_data_distribution(art_rep_generation, title='Artificial Data Distributio
     return fig
 
 @figure
-def per_point_art_data_distribution(per_point_art_rep_generation, nreplica:int):
+def per_point_art_data_distribution(art_data_distribution,per_point_art_rep_generation, nreplica:int):
     return art_data_distribution(per_point_art_rep_generation, nreplica, title='Uncorrelated Artificial Data Distribution', color="orange")
 
 
