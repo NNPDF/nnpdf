@@ -106,27 +106,36 @@ class MetaModel(Model):
             # if it is not a dict but also not a list, make it into a 1-element list and pray
             output_list = [output_list]
 
-        super(MetaModel, self).__init__(input_list, output_list, **kwargs)
-
-        # There are two possible options when creating a model:
+        # Note: there used to be two possible options when creating a model:
         # - Give placeholder tensors (for which the content will be given at run time)
         # - Give tensors with content* (for which the content is stored with the model
         # *this option was dropped at some point by TF, the code below keeps this behaviour
-        self.x_in = {}
-        self.tensors_in = {}
+        # We will store within the model the following quantities:
+        #   -> x_in: arrays containing the x-input to the model
+        #   -> tensors_in: when the x-input is known at compile time, we store a reference to the tensor
+        # We pass TensorFlow a dictionary {k: tensor} containing placeholders which will be automatically filled
+        # whenever x_in/tensor_in is known at compile time
+
+        x_in = {}
+        tensors_in = {}
+        input_dict = {}
         for input_tensor in input_list:
             # If the input contains a tensor_content, store it to use at predict/fit/eval times
             # otherwise, put a placeholder None as it will come from the outside
             name = input_tensor.name.rsplit(":",1)[0]
+            input_dict[name] = input_tensor
             try:
-                self.x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
-                self.tensors_in[name] = input_tensor
+                x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
+                tensors_in[name] = input_tensor
             except AttributeError:
-                self.x_in[name] = None
-                self.tensors_in[name] = None
+                x_in[name] = None
+                tensors_in[name] = None
 
-        self.all_inputs = input_list
-        self.all_outputs = output_list
+        super().__init__(input_dict, output_list, **kwargs)
+
+        self.x_in = x_in
+        self.tensors_in = tensors_in
+
         self.target_tensors = None
         self.eval_fun = None
         self._scaler = scaler
