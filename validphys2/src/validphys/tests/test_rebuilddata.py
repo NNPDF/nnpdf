@@ -30,7 +30,7 @@ def parse_test_output(filename):
     return df
 
 
-@make_table_comp(parse_test_output)
+@make_table_comp
 def test_filter_rebuild_closure_data(tmp):
     """
     Takes a closure test runcard from the regressions directory

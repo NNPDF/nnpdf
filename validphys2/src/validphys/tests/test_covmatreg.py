@@ -16,7 +16,7 @@ def test_withidentity():
     np.testing.assert_allclose(identity_mat, regularize_covmat(identity_mat, 1))
     np.testing.assert_allclose(2*identity_mat, regularize_l2(identity_mat, 0.5))
 
-@make_table_comp(parse_exp_mat)
+@make_table_comp
 def test_regularize_expcov(data_config):
     """Test if the higher level covmat is regularized by procedure"""
     inp = dict(**data_config, norm_threshol=3)
@@ -51,7 +51,7 @@ def test_regularization_matches_zero_eig():
     np.testing.assert_allclose(regularize_covmat(cov, 3), a_reg@a_reg.T)
 
 
-@make_table_comp(parse_exp_mat)
+@make_table_comp
 def test_no_regularization(data_config):
     """Test if the higher level covmat is regularized by procedure"""
     inp = dict(**data_config, norm_threshol=10)
