@@ -13,7 +13,7 @@ import scipy.linalg as la
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from reportengine.table import savetable
+from reportengine.table import savetable, str_columns
 
 import NNPDF
 from validphys import results
@@ -43,7 +43,7 @@ def make_table_comp(f):
     @functools.wraps(f)
     def f_(*args, **kwargs):
         filename = f'{f.__name__}.parquet'
-        produced_table = f(*args, **kwargs)
+        produced_table = str_columns(f(*args, **kwargs))
         compare_tables(produced_table, REGRESSION_FOLDER/filename)
     return f_
 
