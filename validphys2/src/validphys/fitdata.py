@@ -26,7 +26,7 @@ from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
-REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules', '.json']
+REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
