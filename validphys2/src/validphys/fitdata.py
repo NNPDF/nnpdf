@@ -458,7 +458,7 @@ def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
             p = path / (f'{fit.name}.json')
             with open(p, 'r') as stream:
                 json_info = json.load(stream)
-                # Taking veresion info from .json
+                # Taking version info from .json
                 rep_version = json_info["version"]
             version_info.append(rep_version)
         versionset = (set(x.items()) for x in version_info)
