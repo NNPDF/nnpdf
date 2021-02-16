@@ -24,12 +24,6 @@ FIT_NAME = "dummy_closure_runcard"
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 
 
-def parse_test_output(filename):
-    """Parse the output of groups_data_values."""
-    df = sane_load(filename, header=0, index_col=[0, 1, 2])
-    return df
-
-
 @make_table_comp
 def test_filter_rebuild_closure_data(tmp):
     """

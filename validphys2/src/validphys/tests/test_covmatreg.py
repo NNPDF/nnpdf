@@ -6,7 +6,6 @@ functions to test the covariance matrix regularization
 import numpy as np
 
 from validphys.tests.test_regressions import make_table_comp
-from validphys.tableloader import parse_exp_mat
 from validphys.calcutils import regularize_covmat, regularize_l2
 from validphys.api import API
 
