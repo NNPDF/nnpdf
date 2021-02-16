@@ -437,7 +437,7 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return "No overlap of systypes"
 
 @table
-def fit_code_version(fit_name_with_covmat_label, fit,replica_paths):
+def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
     """
     Returns table with the code version from
     'replica_{repno}/{fitname}.json' files.
