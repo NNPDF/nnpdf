@@ -137,9 +137,11 @@ def total_fitted_points(all_kinlimits_table)->int:
     return int(tb[nfittedlabel].sum())
 
 
-XQ2Map = namedtuple('XQ2Map', ('data', 'commondata', 'fitted', 'masked'))
+XQ2Map = namedtuple(
+    'XQ2Map',
+    ('experiment', 'commondata', 'fitted', 'masked', "group"))
 
-def xq2map_with_cuts(commondata, cuts):
+def xq2map_with_cuts(commondata, cuts, group_name=None):
     """Return two (x,Q²) tuples: one for the fitted data and one for the
     cut data. If `display_cuts` is false or all data passes the cuts, the second
     tuple will be empty."""
@@ -153,12 +155,17 @@ def xq2map_with_cuts(commondata, cuts):
         masked_kitable = kintable.loc[~boolmask]
         xq2fitted =  plotoptions.get_xq2map(fitted_kintable, info)
         xq2masked = plotoptions.get_xq2map(masked_kitable, info)
-        return XQ2Map(info.experiment, commondata, xq2fitted, xq2masked)
+        return XQ2Map(
+            info.experiment, commondata, xq2fitted, xq2masked, group_name)
     fitted_kintable = plotoptions.get_xq2map(kintable, info)
     empty = (np.array([]), np.array([]))
-    return XQ2Map(info.experiment, commondata, fitted_kintable, empty)
+    return XQ2Map(
+        info.experiment, commondata, fitted_kintable, empty, group_name)
 
-experiments_xq2map = collect(xq2map_with_cuts, ('dataset_inputs',))
+dataset_inputs_by_groups_xq2map = collect(
+    xq2map_with_cuts,
+    ('group_dataset_inputs_by_metadata', 'data_input',)
+)
 
 def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     """

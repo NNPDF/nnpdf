@@ -308,7 +308,7 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight"}
+        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -330,13 +330,21 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
         if weight < 0:
             raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
+        custom_group = dataset.get("custom_group")
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             # Abuse ConfigError to get the suggestions.
             log.warning(
                 ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys)
             )
-        return DataSetInput(name=name, sys=sysnum, cfac=cfac, frac=frac, weight=weight)
+        return DataSetInput(
+            name=name,
+            sys=sysnum,
+            cfac=cfac,
+            frac=frac,
+            weight=weight,
+            custom_group=custom_group
+        )
 
     def parse_use_fitcommondata(self, do_use: bool):
         """Use the commondata files in the fit instead of those in the data
@@ -1346,16 +1354,25 @@ class CoreConfig(configparser.Config):
         for a single group and the group_name
         """
         res = defaultdict(list)
+        if processed_metadata_group == "custom_group":
+            get_metadata = lambda dsinp: dsinp
+        else:
+            get_metadata = lambda dsinp: get_info(
+                self.produce_commondata(dataset_input=dsinp))
+
         for dsinput in data_input:
-            cd = self.produce_commondata(dataset_input=dsinput)
             try:
-                res[getattr(get_info(cd), processed_metadata_group)].append(dsinput)
+                res[getattr(get_metadata(dsinput), processed_metadata_group)].append(dsinput)
             except AttributeError as e:
+                # Explaining the custom_group mechanism here, but dataset_input
+                # should always contain the key even if the value is None.
                 raise ConfigError(
-                    f"Unable to find key: {processed_metadata_group} in {cd.name} "
-                    "PLOTTING file.",
+                    f"Unable to find key: {processed_metadata_group} in {dsinput.name} "
+                    "metadata file - which is usually the PLOTTING file, except "
+                    "if `custom_group` was requested, in which case the "
+                    "dataset_input is checked.",
                     bad_item=processed_metadata_group,
-                    alternatives=get_info(cd).__dict__,
+                    alternatives=get_metadata(dsinput).__dict__,
                 ) from e
         return [
             {"data_input": NSList(group, nskey="dataset_input"), "group_name": name}

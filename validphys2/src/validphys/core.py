@@ -331,13 +331,14 @@ class CommonDataSpec(TupleComp):
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specidy a
     dataset."""
-    def __init__(self, *, name, sys, cfac, frac, weight):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
         self.name=name
         self.sys=sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
-        super().__init__(name, sys, cfac, frac, weight)
+        self.custom_group = custom_group
+        super().__init__(name, sys, cfac, frac, weight, custom_group)
 
     def __str__(self):
         return self.name
