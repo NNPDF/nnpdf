@@ -1355,29 +1355,28 @@ class CoreConfig(configparser.Config):
         for a single group and the group_name
         """
         res = defaultdict(list)
-        if processed_metadata_group == "custom_group":
-            get_metadata = lambda dsinp: dsinp
-        else:
-            get_metadata = lambda dsinp: get_info(
-                self.produce_commondata(dataset_input=dsinp))
-
         for dsinput in data_input:
-            try:
-                res[getattr(get_metadata(dsinput), processed_metadata_group)].append(dsinput)
-            except AttributeError as e:
-                # Explaining the custom_group mechanism here, but dataset_input
-                # should always contain the key even if the value is None.
-                raise ConfigError(
-                    f"Unable to find key: {processed_metadata_group} in {dsinput.name} "
-                    "metadata file - which is usually the PLOTTING file, except "
-                    "if `custom_group` was requested, in which case the "
-                    "dataset_input is checked.",
-                    bad_item=processed_metadata_group,
-                    alternatives=get_metadata(dsinput).__dict__,
-                ) from e
-        # cast group_name to string explicitly to avoid weird errors.
+            # special case of custom group, take the grouping from the dataset input
+            if processed_metadata_group == "custom_group":
+                group_name = str(dsinput.custom_group)
+            # otherwise try and take the key from the metadata.
+            else:
+                cd = self.produce_commondata(dataset_input=dsinput)
+                try:
+                    metadata = get_info(cd)
+                    group_name = str(getattr(metadata, processed_metadata_group))
+                except AttributeError as e:
+                    raise ConfigError(
+                        f"Unable to find key: {processed_metadata_group} in "
+                        "metadata for {dsinput.name}. Ensure the PLOTTING file "
+                        "for this dataset contains the key.",
+                        bad_item=processed_metadata_group,
+                        alternatives=metadata.__dict__,
+                    ) from e
+            # in both cases we cast group name to str explicitly.
+            res[group_name].append(dsinput)
         return [
-            {"data_input": NSList(group, nskey="dataset_input"), "group_name": str(name)}
+            {"data_input": NSList(group, nskey="dataset_input"), "group_name": name}
             for name, group in res.items()
         ]
 
