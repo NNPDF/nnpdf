@@ -445,7 +445,7 @@ def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
     """
     version_info = []
     # First check if first replica has .json file
-    p_1 = replica_paths[0]  / (f'{fit.name}.json')
+    p_1 = replica_paths[0] / (f'{fit.name}.json')
     if not p_1.exists():
         undef_tuple = [("unavailable", "unavailable")]
         # Return df with "undefined" in name, version locations
