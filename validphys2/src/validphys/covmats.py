@@ -206,7 +206,7 @@ def t0_covmat_from_systematics(loaded_commondata_with_cuts, dataset_t0_predictio
     """Like :py:func:`covmat_from_systematics` except uses the t0 predictions
     to calculate the absolute constributions to the covmat from multiplicative
     uncertainties. For more info on the t0 predictions see
-    :py:func:`validphys.results_providers.dataset_t0_predictions`.
+    :py:func:`validphys.commondata.dataset_t0_predictions`.
 
     Parameters
     ----------

@@ -148,7 +148,7 @@ Loading CommonData
 ------------------
 
 The underlying functions for loading CommonData can be found in
-:py:mod:`validphys.results_providers.commondata_parser`. The data is loaded
+:py:mod:`validphys.commondataparser`. The data is loaded
 as :py:class:`validphys.coredata.CommonData`, which uses the
 `dataclasses <https://docs.python.org/3/library/dataclasses.html>`_ module
 which automatically generates some special methods for the class. The
@@ -158,7 +158,7 @@ with the standard pandas machinery::
     import pandas as pd
 
     from validphys.api import API
-    from validphys.results_providers.commondata_parser import load_commondata
+    from validphys.commondataparser import load_commondata
     # first get the CommonDataSpec
     cd = API.commondata(dataset_input={"dataset":"NMC"})
     lcd = load_commondata(cd)
@@ -169,7 +169,7 @@ The :py:class:`validphys.coredata.CommonData` class has a method which returns
 a new instance of the class with cuts applied::
 
     from validphys.api import API
-    from validphys.results_providers.commondata_parser import load_commondata
+    from validphys.commondataparser import load_commondata
     inp = {
         "dataset_input": {"dataset":"NMC"},
         "use_cuts": "internal",
@@ -196,12 +196,12 @@ Loading Covariance Matrices
 
 Functions which take :py:class:`validphys.coredata.CommonData` s and return
 covariance matrices can be found in
-:py:mod:`validphys.results_providers.covmat_construction`. As with the commondata
-the underlying functions can be accessed directly::
+:py:mod:`validphys.covmats`. As with the commondata
+the functions can be called in scripts directly::
 
     import numpy as np
     from validphys.api import API
-    from validphys.results_providers.covmat_construction import covmat_from_systematics
+    from validphys.covmats import covmat_from_systematics
 
     inp = {
         "dataset_input": {"dataset":"NMC"},
@@ -216,7 +216,7 @@ the underlying functions can be accessed directly::
 There exists a similar function which acts upon a list of multiple commondatas
 and takes into account correlations between datasets::
 
-    from validphys.results_providers.covmat_construction import datasets_covmat_from_systematics
+    from validphys.covmats import dataset_inputs_covmat_from_systematics
     inp = {
         "dataset_inputs": [
             {"dataset":"NMC"},
@@ -227,10 +227,10 @@ and takes into account correlations between datasets::
     }
     lcds = API.dataset_inputs_loaded_cd_with_cuts(**inp)
     total_ndata = np.sum([lcd.ndata for lcd in lcds])
-    total_cov = datasets_covmat_from_systematics(lcds)
+    total_cov = dataset_inputs_covmat_from_systematics(lcds)
     assert total_cov.shape == (total_ndata, total_ndata)
 
-These functions are already leveraged by actions, which can be accessed directly
+These functions are also actions, which can be accessed directly
 from the API::
 
     from validphys.api import API
@@ -241,7 +241,7 @@ from the API::
         "theoryid": 162
     }
     # single dataset covmat
-    cov = API.experimental_covmat(**inp)
+    cov = API.covmat_from_systematics(**inp)
     inp = {
         "dataset_inputs": [
             {"dataset":"NMC"},
@@ -250,4 +250,4 @@ from the API::
         "use_cuts": "internal",
         "theoryid": 162
     }
-    total_cov = API.dataset_inputs_experimental_covmat(**inp)
+    total_cov = API.dataset_inputs_covmat_from_systematics(**inp)
