@@ -7,7 +7,6 @@ import logging
 from collections import namedtuple, OrderedDict, defaultdict
 from io import StringIO
 import pathlib
-from functools import reduce
 
 import numpy as np
 import pandas as pd
