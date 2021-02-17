@@ -201,7 +201,7 @@ void EMCF2C_dwFilter::ReadData()
     double sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CORR_EMC";
+    fSys[i][0].name = "CORREMC";
     fSys[i][0].mult = 15;
 
     int nrep=1000;
@@ -304,7 +304,7 @@ void EMCF2C_shFilter::ReadData()
     double sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CORR_EMC";
+    fSys[i][0].name = "CORREMC";
     fSys[i][0].mult = 15;
 
     int nrep=1000;
