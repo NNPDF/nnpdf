@@ -26,7 +26,7 @@ from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
-REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules', '.json']
+REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -437,15 +437,17 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return "No overlap of systypes"
 
 @table
-def fit_code_version(fit_name_with_covmat_label, fit,replica_paths):
+def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
     """
     Returns table with the code version from
     'replica_{repno}/{fitname}.json' files.
     Old fits return 'undefined'. 
+    Asserts that version information matches 
+    for all replicas.
     """
     version_info = []
     # First check if first replica has .json file
-    p_1 = replica_paths[0]  / (f'{fit.name}.json')
+    p_1 = replica_paths[0] / (f'{fit.name}.json')
     if not p_1.exists():
         undef_tuple = [("unavailable", "unavailable")]
         # Return df with "undefined" in name, version locations
@@ -456,7 +458,7 @@ def fit_code_version(fit_name_with_covmat_label, fit,replica_paths):
             p = path / (f'{fit.name}.json')
             with open(p, 'r') as stream:
                 json_info = json.load(stream)
-                # Taking veresion info from .json
+                # Taking version info from .json
                 rep_version = json_info["version"]
             version_info.append(rep_version)
         versionset = (set(x.items()) for x in version_info)
@@ -469,7 +471,7 @@ def fit_code_version(fit_name_with_covmat_label, fit,replica_paths):
     assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
     return vinfo
 
-fits_fit_code_version = collect("fit_code_version", ("fits", "fitcontext",))
+fits_fit_code_version = collect("fit_code_version", "fits")
 
 @table
 def fits_version_table(fits_fit_code_version):
