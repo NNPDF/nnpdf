@@ -1359,7 +1359,8 @@ class CoreConfig(configparser.Config):
             get_metadata = lambda dsinp: dsinp
         else:
             get_metadata = lambda dsinp: get_info(
-                self.produce_commondata(dataset_input=dsinp))
+                self.produce_commondata(dataset_input=dsinp)
+            )
 
         for dsinput in data_input:
             try:
