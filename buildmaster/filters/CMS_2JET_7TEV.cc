@@ -133,7 +133,7 @@ void CMS_2JET_7TEVFilter::ReadData()
             for (int ipty = 0; ipty < bins[iy]; ipty++)
                 f3 >> statmat[ipt][ipty];
 
-            fKin2[index] *= fKin2[index]; // dijet m2
+            //fKin2[index] *= fKin2[index]; // dijet m2
             fKin1[index] = etas[iy];      // dijet rapidity
             fKin3[index] = S;             // sqrt{s}
 
