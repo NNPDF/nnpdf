@@ -442,6 +442,8 @@ def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
     Returns table with the code version from
     'replica_{repno}/{fitname}.json' files.
     Old fits return 'undefined'. 
+    Asserts that version information matches 
+    for all replicas.
     """
     version_info = []
     # First check if first replica has .json file
