@@ -330,7 +330,8 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
         if weight < 0:
             raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
-        custom_group = dataset.get("custom_group")
+        # Value needs to be string to not break libnnpdf Experiment
+        custom_group = str(dataset.get("custom_group", "unset"))
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             # Abuse ConfigError to get the suggestions.
@@ -1374,8 +1375,9 @@ class CoreConfig(configparser.Config):
                     bad_item=processed_metadata_group,
                     alternatives=get_metadata(dsinput).__dict__,
                 ) from e
+        # cast group_name to string explicitly to avoid weird errors.
         return [
-            {"data_input": NSList(group, nskey="dataset_input"), "group_name": name}
+            {"data_input": NSList(group, nskey="dataset_input"), "group_name": str(name)}
             for name, group in res.items()
         ]
 
