@@ -462,7 +462,7 @@ def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
                 rep_version = json_info["version"]
             version_info.append(rep_version)
         versionset = (set(x.items()) for x in version_info)
-        reducedset = reduce(set.union, versionset)
+        reducedset = set.union(*versionset)
         vinfo = pd.DataFrame(reducedset).set_index(0)
     vinfo.columns = [f"{fit_name_with_covmat_label}"]
     vinfo.index.name = "module"
@@ -471,7 +471,7 @@ def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
     assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
     return vinfo
 
-fits_fit_code_version = collect("fit_code_version", "fits")
+fits_fit_code_version = collect("fit_code_version", ("fits",))
 
 @table
 def fits_version_table(fits_fit_code_version):
