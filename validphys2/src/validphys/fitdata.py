@@ -450,8 +450,6 @@ def fit_code_version(fit_name_with_covmat_label, fit,replica_paths):
         undef_tuple = [("unavailable", "unavailable")]
         # Return df with "undefined" in name, version locations
         vinfo = pd.DataFrame(undef_tuple).set_index(0)
-        vinfo.columns = [f"{fit_name_with_covmat_label}"]
-        vinfo.index.name = "module"
     # Otherwise look at .json files
     else:
         for path in replica_paths:
@@ -464,8 +462,8 @@ def fit_code_version(fit_name_with_covmat_label, fit,replica_paths):
         versionset = (set(x.items()) for x in version_info)
         reducedset = reduce(set.union, versionset)
         vinfo = pd.DataFrame(reducedset).set_index(0)
-        vinfo.columns = [f"{fit_name_with_covmat_label}"]
-        vinfo.index.name = "module"
+    vinfo.columns = [f"{fit_name_with_covmat_label}"]
+    vinfo.index.name = "module"
     # Check for conflicting versions
     version_names = list(vinfo.index)
     assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
