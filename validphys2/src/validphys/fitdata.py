@@ -473,7 +473,7 @@ def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
     assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
     return vinfo
 
-fits_fit_code_version = collect("fit_code_version", ("fits", "fitcontext",))
+fits_fit_code_version = collect("fit_code_version", "fits")
 
 @table
 def fits_version_table(fits_fit_code_version):
