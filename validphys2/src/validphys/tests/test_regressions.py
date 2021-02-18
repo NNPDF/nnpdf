@@ -30,7 +30,9 @@ def compare_tables(produced_table, storage_path):
     """Test that the ``produced_table`` is equal (as in allclose) to
     the one loaded from the `storage_path` using the `loader_func`"""
     if not storage_path.exists():
-        savetable(produced_table, storage_path)
+        # Needs to be a list for the way reportengine
+        # now handles table saving
+        savetable(produced_table, [storage_path])
         #Fail test
         assert False, "Storage path does not exist"
     stored_table = pd.read_parquet(storage_path)
