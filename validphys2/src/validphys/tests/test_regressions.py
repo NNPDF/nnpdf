@@ -34,7 +34,7 @@ def compare_tables(produced_table, storage_path):
         #Fail test
         assert False, "Storage path does not exist"
     stored_table = pd.read_parquet(storage_path)
-    assert_frame_equal(produced_table, stored_table, check_dtype=False)
+    assert_frame_equal(produced_table, stored_table)
 
 def make_table_comp(f):
     """Compare the dataframe that the decorated function outputs with
