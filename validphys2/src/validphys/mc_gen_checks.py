@@ -16,7 +16,6 @@ from scipy.stats import moment as mom
 from NNPDF import Experiment, RandomGenerator
 from reportengine.table import table
 from reportengine.figure import figure
-from reportengine import collect
 log = logging.getLogger(__name__)
 
 
@@ -34,14 +33,13 @@ def art_rep_generation(groups_data, nreplica:int):
 
     for group in groups_data:
         real_group = group.load()
-        print(group.name)
 
         art_replicas = []
         normart_replicas = []
         real_data = real_group.get_cv()
 
         # producing replicas
-        for i in range(nreplica):
+        for _ in range(nreplica):
             replica_group = Experiment(real_group)
             replica_group.MakeReplica()
             artrep = replica_group.get_cv()
@@ -271,4 +269,3 @@ def art_data_mean_table(art_rep_generation, groups_data):
     df =  pd.DataFrame(data,columns=["DataSet","ArtData","ExpData","abs(residual)"])
 
     return df
-
