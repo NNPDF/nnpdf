@@ -19,6 +19,7 @@ Tutorials
    ./closureestimators.rst
    ./conda.md
    ./pseudodata.md
+   ./plot_pdfs.rst
    ./pdfbases.rst
 
 =======

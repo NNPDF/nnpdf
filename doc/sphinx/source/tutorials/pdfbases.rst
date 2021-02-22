@@ -1,3 +1,4 @@
+.. _pdfbases:
 Plotting non-trivial combinations of PDFs
 =========================================
 
