@@ -3,6 +3,7 @@ uploadutils.py
 
 Tools to upload resources to remote servers.
 """
+import time
 import subprocess
 import logging
 import os
@@ -181,19 +182,16 @@ class FitUploader(FileUploader):
     def get_relative_path(self, output_path=None):
         return ''
 
-    def check_fit_exists(self, fit_name, silent=False):
-        """Check whether the fit already exists on the server."""
+    def check_fit_exists(self, fit_name):
+        """Check whether the fit already exists on the server.
+        Returns true if a fit exists with the same name on the server or false otherwise
+        """
         # Get list of the available fits on the server
         l = RemoteLoader()
         fits = l.downloadable_fits
 
         if fit_name in fits:
-            if not silent:
-                log.error("A fit with the same name already exists on "
-                      "the server. To overwrite this fit use the "
-                      "--force flag, as in `vp-upload <fitname> "
-                      "--force`.")
-            raise UploadError
+            return True
 
     def check_fit_md5(self, output_path):
         """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
@@ -249,7 +247,13 @@ class FitUploader(FileUploader):
         fit_name = output_path.name
 
         if not force:
-            self.check_fit_exists(fit_name)
+            if self.check_fit_exists(fit_name):
+                log.error("A fit with the same name already exists on "
+                      "the server. To overwrite this fit use the "
+                      "--force flag, as in `vp-upload <fitname> "
+                      "--force`.")
+                raise UploadError
+
 
         self.check_fit_md5(output_path)
 
@@ -257,14 +261,14 @@ class FitUploader(FileUploader):
         super().upload_output(new_out)
 
         # Check whether the fit was really uploaded
-        try:
-            log.info("Checking whether the fit was correctly uploaded...")
-            from time import sleep
-            sleep(20)
-            self.check_fit_exists(fit_name, silent=True)
-            log.error("The fit was uploaded but haven't been indexed yet by the server")
-        except UploadError:
-            log.info("The fit has been indexed by the server")
+        log.info("Checking whether the fit was correctly uploaded...")
+        time.sleep(3)
+        if self.check_fit_exists(fit_name):
+            log.info("The fit has been correctly indexed by the server!")
+        else:
+            log.error("The fit was uploaded but haven't been indexed yet by the server "
+                    "you might want to try to upload it again to ensure it is indexed: "
+                    "vp-upload %s", fit_name)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
