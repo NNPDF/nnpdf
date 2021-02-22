@@ -192,6 +192,23 @@ class FitUploader(FileUploader):
 
         if fit_name in fits:
             return True
+        return False
+
+    def _check_existence(self, fit_name):
+        """ Wrapper for the correct existence method """
+        return self.check_fit_exists(fit_name)
+
+    def check_is_indexed(self, fit_name):
+        """ Check whether the fit is correctly indexed in the server
+        """
+        log.info("Checking whether %s was correctly uploaded...", fit_name)
+        time.sleep(3)
+        if self._check_existence(fit_name):
+            log.info("It has been correctly indexed by the server!")
+        else:
+            log.error("The object was uploaded but haven't been indexed yet by the server "
+                    "you might want to try to upload it again to ensure it is indexed: "
+                    "vp-upload %s", fit_name)
 
     def check_fit_md5(self, output_path):
         """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
@@ -261,14 +278,7 @@ class FitUploader(FileUploader):
         super().upload_output(new_out)
 
         # Check whether the fit was really uploaded
-        log.info("Checking whether the fit was correctly uploaded...")
-        time.sleep(3)
-        if self.check_fit_exists(fit_name):
-            log.info("The fit has been correctly indexed by the server!")
-        else:
-            log.error("The fit was uploaded but haven't been indexed yet by the server "
-                    "you might want to try to upload it again to ensure it is indexed: "
-                    "vp-upload %s", fit_name)
+        self.check_is_indexed(fit_name)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
@@ -302,11 +312,12 @@ class PDFUploader(FitUploader):
         pdfs = l.downloadable_pdfs
 
         if pdf_name in pdfs:
-            log.error("A PDF with the same name already exists on "
-                      "the server. To overwrite this PDF use the "
-                      "--force flag, as in `vp-upload <pdfname> "
-                      "--force`.")
-            raise UploadError
+            return True
+        return False
+
+    def _check_existence(self, fit_name):
+        """ Wrapper for the correct existence method """
+        return self.check_pdf_exists(fit_name)
 
     def compress(self, output_path):
         """Compress the folder and put it in a directory inside its parent."""
@@ -332,10 +343,17 @@ class PDFUploader(FitUploader):
         pdf_name = output_path.name
 
         if not force:
-            self.check_pdf_exists(pdf_name)
+            if self.check_pdf_exists(pdf_name):
+                log.error("A PDF with the same name already exists on "
+                            "the server. To overwrite this PDF use the "
+                            "--force flag, as in `vp-upload <pdfname> "
+                            "--force`.")
+                raise UploadError
 
         new_out, name = self.compress(output_path)
         super(FileUploader, self).upload_output(new_out)
+
+        self.check_is_indexed(pdf_name)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
