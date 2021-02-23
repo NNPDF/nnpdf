@@ -205,9 +205,8 @@ class FitUploader(FileUploader):
         if self._check_existence(fit_name):
             log.info("It has been correctly indexed by the server!")
         else:
-            log.error("The object is uploaded but haven't been indexed yet by the server "
-                    "you might want to try to upload it again to ensure it is indexed: "
-                    "vp-upload %s", fit_name)
+            log.error("The object is uploaded but hasn't been indexed yet by the server "
+                    "you should upload it again to ensure it is indexed: vp-upload %s", fit_name)
 
     def check_fit_md5(self, output_path):
         """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
@@ -265,9 +264,9 @@ class FitUploader(FileUploader):
         if not force:
             if self._check_existence(fit_name):
                 log.error("A %s with the same name already exists on "
-                      "the server. To overwrite this fit use the "
-                      "--force flag, as in `vp-upload <%s_name> "
-                      "--force`.", self._resource_type, self._resource_type)
+                      "the server. To overwrite it use the "
+                      "--force flag, as in `vp-upload <%s_name> --force.",
+                      self._resource_type, self._resource_type)
                 raise UploadError
 
         if self._resource_type == "fit":
