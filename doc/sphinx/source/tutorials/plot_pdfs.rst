@@ -59,7 +59,6 @@ Plotting PDFs, uncertainties and replicas
     actions_:
       - report(main=True)
 
-	  
 - The PDFs to be plotted are listed under ``pdfs``, where the PDF ``id`` is specified alongisde a label chosen by the user. If no label is provided, the PDF ``id`` will be displayed on the plots instead.
 
 - To plot one or more PDF sets as a central value only (i.e. without uncertainty band), include them in the list ``pdfs_noband``, where entries in the list are strings corresponding to PDF ``ìds``, integers (starting from 1) of the index of the PDF in ``pdfs``, or a mixture of the two.
