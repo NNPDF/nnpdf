@@ -3,7 +3,7 @@
 How to add a new metadata group
 ===============================
 
-in :ref:`data_specification` it is described how a user can define a custom
+In :ref:`data_specification` it is described how a user can define a custom
 grouping at the level of the runcard, by specifying ``custom_group`` in each
 ``dataset_input`` and then specifying ``metadata_group=custom_group``. This is
 great for testing, but what if you define a grouping that you want to reuse and
@@ -42,9 +42,9 @@ Step 2: Add the grouping and group name to the metadata (PLOTTING) file
    metadata.
 
 Once you have a name for your grouping and a name for each of your groups you
-can add these as key, value pairs to the PLOTTING files of each dataset for
+can add these as key-value pairs to the PLOTTING files of each dataset for
 which you want to be able to apply this grouping. The PLOTTING files are
-found in the git repository in ``nnpdfcpp/data/commondata`` and follow the naming
+found in the Git repository in ``nnpdfcpp/data/commondata`` and follow the naming
 convention ``PLOTTING_<DATASET NAME>.yaml``.
 
 It's a good idea to add
@@ -52,7 +52,7 @@ this to the PLOTTING file of *all* datasets if possible, or else anybody
 who tries to use your grouping in the future is sure to get very frustrated.
 
 Say I called my grouping ``nnpdf40_process`` and the group which a particular
-dataset belongs to is ``DIS NC`` then I would add the following the PLOTTING file
+dataset belongs to is ``DIS NC`` then I would add the following to the PLOTTING file
 
 .. code:: yaml
 
@@ -79,16 +79,16 @@ to add:
     def parse_nnpdf40_process(self, proc: str):
         return proc
 
-the name of the variable (in this case ``proc``) is unimportant, however the
+The name of the variable (in this case ``proc``) is unimportant, however the
 type hint in the signature should be ``str`` to confirm that the key is read
 from the config file as a string.
 
 .. note::
    The reason the group name should be a string is because it is sometimes
-   passed to the c++ code through the swig interface, which is very strict
+   passed to the C++ code through the SWIG interface, which is very strict
    about the typing you use.
 
-in addition to this, you must add the new grouping to
+In addition to this, you must add the new grouping to
 :py:class:`validphys.plotoptions.core.PlotInfo` as a keyword arguments of
 the ``__init__`` function and subsequently as an attribute of the class
 as follows:
@@ -117,7 +117,7 @@ syntax.
     feature these keys in its metadata can be considered broken or not fully
     implemented.
 
-Step 4: recompile, reinstall and profit
+Step 4: Recompile, reinstall and profit
 ---------------------------------------
 
 Now everything is in place, you just need to recompile and reinstall the code
