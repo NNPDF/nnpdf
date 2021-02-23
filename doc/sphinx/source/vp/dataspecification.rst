@@ -320,7 +320,7 @@ Custom grouping
 It is possible to define a custom grouping at the level of the runcard, which
 is useful for temporary groupings or testing out a new group which may
 eventually be added the the metadata. The user can use custom groupings
-by setting ``metadata_group=custom_group`` in the runcard and them adding
+by setting ``metadata_group=custom_group`` in the runcard and then adding
 the ``custom_group`` key to each dataset_input as follows
 
 .. code:: yaml
@@ -334,7 +334,7 @@ the ``custom_group`` key to each dataset_input as follows
     - { dataset: LHCBWZMU8TEV, cfac: [NRM], custom_group: pepa }
     - { dataset: ATLASWZRAP36PB}
 
-Note that we didn't set any group for ``ATLASWZRAP36PB``, that's ok: any
+Note that we didn't set any group for ``ATLASWZRAP36PB``, but that's ok: any
 datasets which are not explicitly given a ``custom_group`` get put into the
 ``unset`` group.
 
