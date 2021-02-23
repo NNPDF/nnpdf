@@ -178,25 +178,23 @@ class FitUploader(FileUploader):
     before uploading."""
     target_dir = _profile_key('fits_target_dir')
     root_url = _profile_key('fits_root_url')
+    _loader_name = "downloadable_fits"
 
     def get_relative_path(self, output_path=None):
         return ''
 
-    def check_fit_exists(self, fit_name):
-        """Check whether the fit already exists on the server.
-        Returns true if a fit exists with the same name on the server or false otherwise
+    def _check_existence(self, resource_name):
+        """ Check whether the given resource exists on the server
+        Returns true if the resource exists with the same name on the server
+        or false otherwise.
+        Note that the type of resource being checked is defined by the ``_loader_name`` attribute
         """
-        # Get list of the available fits on the server
         l = RemoteLoader()
-        fits = l.downloadable_fits
+        resource_list = getattr(l, self._loader_name)
 
-        if fit_name in fits:
+        if resource_name in resource_list:
             return True
         return False
-
-    def _check_existence(self, fit_name):
-        """ Wrapper for the correct existence method """
-        return self.check_fit_exists(fit_name)
 
     def check_is_indexed(self, fit_name):
         """ Check whether the fit is correctly indexed in the server
@@ -264,7 +262,7 @@ class FitUploader(FileUploader):
         fit_name = output_path.name
 
         if not force:
-            if self.check_fit_exists(fit_name):
+            if self._check_existence(fit_name):
                 log.error("A fit with the same name already exists on "
                       "the server. To overwrite this fit use the "
                       "--force flag, as in `vp-upload <fitname> "
@@ -299,25 +297,13 @@ class FitUploader(FileUploader):
             log.error(e)
             sys.exit()
 
+
 class PDFUploader(FitUploader):
     """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
     target_dir = _profile_key('pdfs_target_dir')
     root_url = _profile_key('pdfs_root_url')
-
-    def check_pdf_exists(self, pdf_name):
-        """Check whether the pdf already exists on the server."""
-        # Get list of the available fits on the server
-        l = RemoteLoader()
-        pdfs = l.downloadable_pdfs
-
-        if pdf_name in pdfs:
-            return True
-        return False
-
-    def _check_existence(self, fit_name):
-        """ Wrapper for the correct existence method """
-        return self.check_pdf_exists(fit_name)
+    _loader_name = "downloadable_pdfs"
 
     def compress(self, output_path):
         """Compress the folder and put it in a directory inside its parent."""
@@ -337,13 +323,12 @@ class PDFUploader(FitUploader):
             raise UploadError(e) from e
         return tempdir, archive_path_without_extension
 
-
     def upload_output(self, output_path, force):
         output_path = pathlib.Path(output_path)
         pdf_name = output_path.name
 
         if not force:
-            if self.check_pdf_exists(pdf_name):
+            if self._check_existence(pdf_name):
                 log.error("A PDF with the same name already exists on "
                             "the server. To overwrite this PDF use the "
                             "--force flag, as in `vp-upload <pdfname> "
