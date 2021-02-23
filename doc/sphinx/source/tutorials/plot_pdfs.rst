@@ -70,7 +70,7 @@ Plotting PDFs, uncertainties and replicas
 
 - PDFs can be displayed as absolute values (``normalize_to: None``) or as ratios to one of the PDFs (``normalize_to: x``, where ``x`` is the index of the PDF in ``pdfs`` or is the name of the PDF).
 
-- Here the ``Basespecs`` namespace specifies the basis for plotting, two popular choices being the ``flavour`` and ``evolution`` bases. For information on custom bases see :ref:`_pdfbases`.
+- Here the ``Basespecs`` namespace specifies the basis for plotting, two popular choices being the ``flavour`` and ``evolution`` bases. For information on custom bases see :ref:`here <pdfbases>`.
 
 - Here the ``PDFscalespecs`` namespace specifies the scale on the x-axis, e.g. ``Log`` or ``Linear``.
 
@@ -118,7 +118,7 @@ Plotting PDF distances
 	actions_:
 	  - report(main=true)
  
-- To plot only specific flavours, use the ``flavours`` flag. The chosen flavours should be provided as a list, where the name of flavour or PDG value (listed in :ref:`_pdgflavs`) can be used.	
+- To plot only specific flavours, use the ``flavours`` flag. The chosen flavours should be provided as a list, where the name of flavour or PDG value (listed in :ref:`this section <pdgflavs>`) can be used.	
 - The actions ``plot_pdfdistances`` and ``plot_pdfvardistances`` plot the distances of the PDFs and the variances of these distances with respect to the PDF specalised by ``normalize_to``.
 
 Plotting PDF flavours on the same axis
@@ -149,7 +149,7 @@ Plotting PDF flavours on the same axis
 	  - report(main=True)
 
 - ``plot_flavours`` is the action used to plot PDF flavours on the same axes.
-- Note that the ``basis`` has been set to ``pdg``, which is a configuration that plots well on the same axis as the gluon PDF is divided by 10. More on PDF bases is in :ref:`_pdfbases`.
+- Note that the ``basis`` has been set to ``pdg``, which is a configuration that plots well on the same axis as the gluon PDF is divided by 10. More on PDF bases:ref:`here <pdfbases>`.
 - The plot axes limits can be set using the flags ``xmin``, ``xmax``, ``ymin`` and ``ymax``. 
 
 Luminosity plots
