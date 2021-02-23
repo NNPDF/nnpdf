@@ -340,7 +340,7 @@ datasets which are not explicitly given a ``custom_group`` get put into the
 
 For more information on how to immortalise your custom grouping in the
 metadata and call that grouping as in the previous examples
-(i.e with ``nnpdf31_process``) see :ref:`add_special_label`
+(i.e with ``nnpdf31_process``) see :ref:`add_special_label`.
 
 Action naming conventions
 -------------------------
