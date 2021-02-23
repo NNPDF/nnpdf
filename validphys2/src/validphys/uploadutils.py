@@ -179,6 +179,7 @@ class FitUploader(FileUploader):
     target_dir = _profile_key('fits_target_dir')
     root_url = _profile_key('fits_root_url')
     _loader_name = "downloadable_fits"
+    _resource_type = "fit"
 
     def get_relative_path(self, output_path=None):
         return ''
@@ -204,7 +205,7 @@ class FitUploader(FileUploader):
         if self._check_existence(fit_name):
             log.info("It has been correctly indexed by the server!")
         else:
-            log.error("The object was uploaded but haven't been indexed yet by the server "
+            log.error("The object is uploaded but haven't been indexed yet by the server "
                     "you might want to try to upload it again to ensure it is indexed: "
                     "vp-upload %s", fit_name)
 
@@ -238,13 +239,13 @@ class FitUploader(FileUploader):
             )
             raise UploadError
 
-    def compress(self, output_path):
+    def _compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
         #make_archive fails if we give it relative paths for some reason
         output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix='fit_upload_deleteme_',
+        tempdir = tempfile.mkdtemp(prefix=f'{self._resource_type}_upload_deleteme_',
                                    dir=output_path.parent)
-        log.info(f"Compressing fit to {tempdir}")
+        log.info(f"Compressing {self._resource_type} to {tempdir}")
         archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
         try:
             with Spinner():
@@ -263,16 +264,16 @@ class FitUploader(FileUploader):
 
         if not force:
             if self._check_existence(fit_name):
-                log.error("A fit with the same name already exists on "
+                log.error("A %s with the same name already exists on "
                       "the server. To overwrite this fit use the "
-                      "--force flag, as in `vp-upload <fitname> "
-                      "--force`.")
+                      "--force flag, as in `vp-upload <%s_name> "
+                      "--force`.", self._resource_type, self._resource_type)
                 raise UploadError
 
+        if self._resource_type == "fit":
+            self.check_fit_md5(output_path)
 
-        self.check_fit_md5(output_path)
-
-        new_out, name = self.compress(output_path)
+        new_out, name = self._compress(output_path)
         super().upload_output(new_out)
 
         # Check whether the fit was really uploaded
@@ -304,44 +305,7 @@ class PDFUploader(FitUploader):
     target_dir = _profile_key('pdfs_target_dir')
     root_url = _profile_key('pdfs_root_url')
     _loader_name = "downloadable_pdfs"
-
-    def compress(self, output_path):
-        """Compress the folder and put it in a directory inside its parent."""
-        # make_archive fails if we give it relative paths for some reason
-        output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix='pdf_upload_deleteme_',
-                                   dir=output_path.parent)
-        log.info(f"Compressing pdf to {tempdir}")
-        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
-        try:
-            with Spinner():
-                shutil.make_archive(base_name=archive_path_without_extension,
-                                    format='gztar',
-                                    root_dir=output_path.parent, base_dir=output_path.name)
-        except Exception as e:
-            log.error(f"Couldn't compress archive: {e}")
-            raise UploadError(e) from e
-        return tempdir, archive_path_without_extension
-
-    def upload_output(self, output_path, force):
-        output_path = pathlib.Path(output_path)
-        pdf_name = output_path.name
-
-        if not force:
-            if self._check_existence(pdf_name):
-                log.error("A PDF with the same name already exists on "
-                            "the server. To overwrite this PDF use the "
-                            "--force flag, as in `vp-upload <pdfname> "
-                            "--force`.")
-                raise UploadError
-
-        new_out, name = self.compress(output_path)
-        super(FileUploader, self).upload_output(new_out)
-
-        self.check_is_indexed(pdf_name)
-
-        shutil.rmtree(new_out)
-        return name.with_suffix('.tar.gz').name
+    _resource_type = "pdf"
 
 
 def check_for_meta(path):
