@@ -1,0 +1,49 @@
+meta:
+  title: PDF plot example
+  author: Rosalyn Pearson
+  keywords: [example]
+
+
+pdfs:
+  - {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
+  - {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
+  - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
+
+
+pdfs_noband: ["NNPDF31_nnlo_as_0118_DISonly"] # Equivalently ["3"]
+
+show_mc_errors: True
+
+Q: 10 
+
+PDFnormalize:
+  - normtitle: Absolute  # normalize_to default is None
+  - normalize_to: 1      # Specify index in list of PDFs or name of PDF
+    normtitle: Ratio
+
+Basespecs:
+  - basis: flavour
+    basistitle: Flavour basis
+  - basis: evolution
+    basistitle: Evolution basis
+
+PDFscalespecs:
+  - xscale: log
+    xscaletitle: Log
+  - xscale: linear
+    xscaletitle: Linear
+
+template_text: |
+  {@with PDFscalespecs@}
+  {@with Basespecs@}
+  {@with PDFnormalize@}
+  {@plot_pdfs@}
+  {@plot_pdf_uncertainties@}
+  {@plot_pdfreplicas@}          
+  {@endwith@}
+  {@endwith@}
+  {@endwith@}
+
+actions_:
+  - report(main=True)
+  
