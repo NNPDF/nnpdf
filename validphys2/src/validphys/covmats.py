@@ -84,26 +84,34 @@ def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
 
     Example
     -------
+    In order to use this function, simply call it from the API
+
+    >>> from validphys.api import API
+    >>> inp = dict(
+    ...     dataset_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10},
+    ...     theoryid=162,
+    ...     use_cuts="internal"
+    ... )
+    >>> cov = API.covmat_from_systematics(**inp)
+    >>> cov.shape
+    (28, 28)
+
+    To better understand the inputs for the function we can also explicitly
+    load the commondata and pass it to this function. Here we do that with
+    NMC:
+
     >>> from validphys.commondataparser import load_commondata
     >>> from validphys.loader import Loader
     >>> from validphys.calcutils import covmat_from_systematics
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> cd = load_commondata(cd)
-    >>> covmat_from_systematics(cd)
-    array([[8.64031971e-05, 8.19971921e-05, 6.27396915e-05, ...,
-            2.40747732e-05, 2.79614418e-05, 3.46727332e-05],
-           [8.19971921e-05, 1.41907442e-04, 6.52360141e-05, ...,
-            2.36624379e-05, 2.72605623e-05, 3.45492831e-05],
-           [6.27396915e-05, 6.52360141e-05, 9.41928691e-05, ...,
-            1.79244824e-05, 2.08603130e-05, 2.56283708e-05],
-           ...,
-           [2.40747732e-05, 2.36624379e-05, 1.79244824e-05, ...,
-            5.67822050e-05, 4.09077450e-05, 4.14126235e-05],
-           [2.79614418e-05, 2.72605623e-05, 2.08603130e-05, ...,
-            4.09077450e-05, 5.55150870e-05, 4.15843357e-05],
-           [3.46727332e-05, 3.45492831e-05, 2.56283708e-05, ...,
-            4.14126235e-05, 4.15843357e-05, 1.43824457e-04]])
+    >>> cov = covmat_from_systematics(cd)
+
+    However, it is clearly more effort than using the API. This is only worsened
+    when trying to apply cuts and more complicated dataset settings as in the
+    first example.
+
     """
     return construct_covmat(
         loaded_commondata_with_cuts.stat_errors.to_numpy(),
@@ -141,6 +149,22 @@ def dataset_inputs_covmat_from_systematics(
 
     Example
     -------
+    This function can be called directly from the API:
+
+    >>> dsinps = [
+    ...     {'dataset': 'NMC'},
+    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    ... ]
+    >>> inp = dict(dataset_inputs=dsinps, theoryid=162, use_cuts="internal")
+    >>> cov = API.dataset_inputs_covmat_from_systematics(**inp)
+    >>> cov.shape
+    (235, 235)
+
+    Which properly accounts for all dataset settings and cuts. As with any other
+    action we can demonstrate explictly the inputs to this action by explictly
+    loading them and calling the action directly:
+
     >>> from validphys.commondataparser import load_commondata
     >>> from validphys.covmats import dataset_inputs_covmat_from_systematics
     >>> from validphys.loader import Loader
@@ -152,6 +176,11 @@ def dataset_inputs_covmat_from_systematics(
     array([[2.91814548e+06, 4.66692123e+06, 2.36823008e+06, 8.62587330e+05,
             2.78209614e+05, 1.11790645e+05, 1.75129920e+03, 7.97466600e+02,
             4.00296960e+02, 2.22039720e+02, 1.46202210e+02, 8.36558100e+01,
+
+    However, note that it is much more difficult to apply the correct settings
+    to datasets and apply cuts so it is strongly encouraged to use the API for
+    all scripting purposes.
+
     """
     special_corrs = []
     block_diags = []

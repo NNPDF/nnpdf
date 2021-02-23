@@ -159,8 +159,10 @@ with the standard pandas machinery::
 
     from validphys.api import API
     from validphys.commondataparser import load_commondata
+    # define dataset settings
+    ds_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
     # first get the CommonDataSpec
-    cd = API.commondata(dataset_input={"dataset":"NMC"})
+    cd = API.commondata(dataset_input=ds_input)
     lcd = load_commondata(cd)
     assert isinstance(lcd.central_values, pd.Series)
     assert isinstance(lcd.systematics_table, pd.DataFrame)
@@ -170,8 +172,10 @@ a new instance of the class with cuts applied::
 
     from validphys.api import API
     from validphys.commondataparser import load_commondata
+    # define dataset and additional settings
+    ds_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
     inp = {
-        "dataset_input": {"dataset":"NMC"},
+        "dataset_input": ds_input,
         "use_cuts": "internal",
         "theoryid": 162
     }
