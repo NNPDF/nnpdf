@@ -80,6 +80,7 @@ Plotting PDF distances
 ----------------------
 
 .. code:: yaml
+
 	meta:
 	    title: I didn't change the title
 	    keywords: [Guilty]
@@ -123,6 +124,7 @@ Plotting PDF distances
 Plotting PDF flavours on the same axis
 --------------------------------------
 .. code:: yaml
+
 	meta:
 	  title: PDF plot example
 	  author: Rosalyn Pearson
@@ -153,6 +155,7 @@ Plotting PDF flavours on the same axis
 Luminosity plots
 ----------------
 .. code:: yaml
+
 	meta:
 	  title: PDF plot example
 	  author: Rosalyn Pearson
@@ -172,14 +175,14 @@ Luminosity plots
 	lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
 		           #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
 
-	pdfscalespecs:
+	PDFscalespecs:
 	  - xscale: log
 	    xscaletitle: Log
 	  - xscale: linear
 	    xscaletitle: Linear
 	    
 	template_text: |
-	  {@with pdfscalespecs@}
+	  {@with PDFscalespecs@}
 	  {@plot_lumi1d@}
 	  {@plot_lumi1d_uncertainties@}
 	  {@plot_lumi2d@}

@@ -17,14 +17,14 @@ basis: flavour
 lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
                    #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
 
-pdfscalespecs:
+PDFscalespecs:
   - xscale: log
     xscaletitle: Log
   - xscale: linear
     xscaletitle: Linear
     
 template_text: |
-  {@with pdfscalespecs@}
+  {@with PDFscalespecs@}
   {@plot_lumi1d@}
   {@plot_lumi1d_uncertainties@}
   {@plot_lumi2d@}

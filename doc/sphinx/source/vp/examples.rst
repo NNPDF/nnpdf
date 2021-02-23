@@ -7,6 +7,10 @@ Example validphys runcards can be found
 trying to gain familiarity with how to produce results with validphys or when you want to carry
 out a common task, e.g. plotting some PDFs, and you do not want to write the runcard yourself.
 
+It is strongly encouraged to capitalise namespaces, e.g. ``PDFscalespecs`` rather than ``pdfscalespecs``.
+This is to avoid confusion between namespaces, which are relevant only to that runcard, and any actions
+within ``validphys``, which by convention are lower case.
+
 Here we detail the examples that already exist and list the resources which it is recommended that
 you use when writing a new example runcard.
 
