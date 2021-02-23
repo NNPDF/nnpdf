@@ -22,8 +22,8 @@ future:
     from_: theory
 
 present:
-  pdf: {id: 210219-n3fit-FD04, label: "PreHera"}
-  fit: {id: 210219-n3fit-FD04, label: "PreHera"}
+  pdf: {id: 210219-n3fit-FD04, label: "PreLHC"}
+  fit: {id: 210219-n3fit-FD04, label: "PreLHC"}
 
   speclabel: "PreLHC fit"
   description:
