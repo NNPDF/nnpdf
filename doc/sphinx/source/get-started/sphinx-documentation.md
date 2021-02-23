@@ -17,10 +17,11 @@ New documentation can be added in markdown, naming the source files with the `.m
 restructured text, with the `.rst` suffix formats.
 ```eval_rst
 .. note::
-  Despite both formats being supported it is highly encouraged to use the `rst` format. The
+  The `md` format is now deprecated and only supported for legacy reasons. The
   reStructured Text format natively supports equation displaying as well as directives such
-  as this note. Despite this, it is possible to evaluate inline `rst` in a `md` file using
-  the `eval_rst` command.
+  as this note and is thus the preferred format for `NNPDF` documentation. Despite this, it is
+  possible to evaluate inline `rst` in a `md` file using the `eval_rst` command in legacy files
+  written in markdown.
 ```
 
 To add a new section to the
