@@ -550,7 +550,7 @@ NN31IC = LinearBasis.from_mapping(
     },
     aliases={
         'gluon': 'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma', 'cp': r'c^+',
-        'c': r'c^+', 'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
+        'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
     default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
 NN31PC = LinearBasis.from_mapping(
