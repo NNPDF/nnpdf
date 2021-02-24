@@ -122,10 +122,10 @@ void ATLAS_2JET_7TEV_R06Filter::ReadData()
       lstream >> dum >> m12min >> m12max;
       
       fKin1[i] = y[bin];                       // y, central value of the bin
-      fKin2[i] = (m12min + m12max)*0.5;        // m12, central value of the bin
+      fKin2[i] = (m12min + m12max)*0.5*1000.; // m12, central value of the bin (convert from TeV to GeV)
       fKin3[i] = 7000;                         // sqrt(s)
 
-      lstream >> fData[i];                     // cross section [pb/TeV]
+      lstream >> fData[i];                     // cross section [pb/GeV]
 
 
       //Read uncertainties

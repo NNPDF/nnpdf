@@ -133,8 +133,10 @@ class DIJETATLASXQ2MapMixin:
         plotting both x1 and x2
         """
         ratio = k2/k3
-        x1 = ratio
-        x2 = np.full_like(x1, 1.0)
+        #x1 = ratio
+        #x2 = np.full_like(x1, 1.0)
+        x1 = ratio * np.exp(k1)
+        x2 = ratio * np.exp(-k1)
         q2 = k2*k2
         x = np.concatenate(( x1,x2 ))
         return np.clip(x,a_min=None,a_max=1, out=x), np.concatenate(( q2,q2 ))
@@ -204,7 +206,7 @@ class dijet_sqrt_scale_ATLAS(SqrtScaleMixin,DIJETATLASXQ2MapMixin):
         return k1, k2, k3
 
     def new_labels(self, *old_labels):
-        return ('$|y^*|$', '$m_{12}$ (TeV)', r'$\sqrt{s} (GeV)$')
+        return ('$|y^*|$', '$m_{12}$ (GeV)', r'$\sqrt{s} (GeV)$')
 
 class dijet_CMS_3D(SqrtScaleMixin,DIJET3DXQ2MapMixin):
     def new_labels(self, *old_labels):
