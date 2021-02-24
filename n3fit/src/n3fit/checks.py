@@ -347,7 +347,7 @@ def check_consistent_basis(fitting, theoryid):
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
     basis = check_basis(fitbasis, flavs)["basis"]
     # Now check that basis and theory id are consistent
-    has_c = basis.has_element("cp") or basis.has_element("T15")
+    has_c = basis.has_element("c") or basis.has_element("T15") or basis.has_element("cp")
     if theoryid.get_description()["IC"] and not has_c:
         raise CheckError(f"{theoryid} (intrinsic charm) is incompatible with basis {fitbasis}")
     if not theoryid.get_description()["IC"] and has_c:
