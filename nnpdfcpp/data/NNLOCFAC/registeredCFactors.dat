@@ -11,6 +11,7 @@ NUC  CHORUSNUPb						CHORUSNUPb_sh
 NUC  CHORUSNBPb						CHORUSNBPb_sh
 NUC  NTVNUDMNFe						NTVNUDMNFe_sh
 NUC  NTVNBDMNFe						NTVNBDMNFe_sh
+NUC  EMCF2C                                             EMCF2C_sh
 NUC  DYE605						DYE605_sh
 MMHT CMSDY2D12				                CMSDY2D12
 MAS NTVNUDMNFe						NTVNUDMNFe
