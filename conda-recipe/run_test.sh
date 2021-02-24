@@ -5,7 +5,15 @@ set -e
 
 #Python tests for the installed validphys package
 pytest --pyargs --mpl validphys
-pytest --pyargs n3fit
+
+platformstr=`uname`
+
+# skip n3fit tests on mac
+if [[ "$platformstr" != "Darwin" ]]; then
+    pytest --pyargs n3fit
+else
+    echo "Skipping tests on Mac"
+fi
 
 mkdir bldtest
 cd bldtest

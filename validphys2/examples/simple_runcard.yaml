@@ -1,0 +1,24 @@
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+pdfs:
+    - NNPDF31_nlo_as_0118
+    - NNPDF31_nnlo_as_0118_DISonly
+
+norm:
+    normalize_to: NNPDF31_nlo_as_0118
+
+first:
+    Q: 1
+    flavours: [up, down, gluon]
+
+second:
+    Q: 100
+    scale: linear
+
+actions_:
+    - first::norm plot_pdfreplicas
+    - first plot_pdfs
+    - second plot_pdfreplicas

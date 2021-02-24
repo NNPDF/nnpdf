@@ -80,3 +80,8 @@ Dataset differences and cuts
 ----------------------------
 {@print_dataset_differences@}
 {@print_different_cuts@}
+
+Fit code versions
+-----------------
+
+{@fits_version_table@}

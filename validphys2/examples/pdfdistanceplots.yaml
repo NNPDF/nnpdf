@@ -1,8 +1,13 @@
-pdfs:
-    - NNPDF31_nnlo_as_0118
-    - NNPDF31_nnlo_as_0118_luxqed
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
 
-pdf: NNPDF31_nnlo_as_0118
+pdfs:
+    - NNPDF31_nlo_as_0118
+    - NNPDF31_nnlo_as_0118_DISonly
+
+pdf: NNPDF31_nlo_as_0118
 
 first:
     Q: 2
@@ -16,10 +21,6 @@ second:
 normalize_to: 1
 
 template_text: |
-  ---
-  title: Distances plots
-  keywords: [distances]
-  ---
 
   Log scale, low Q
   -----------
@@ -33,4 +34,3 @@ template_text: |
 
 actions_:
   - report(main=true)
- 

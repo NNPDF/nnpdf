@@ -26,7 +26,7 @@ optimizers = {
     "Adagrad": (Kopt.Adagrad, {}),
     "Adadelta": (Kopt.Adadelta, {"learning_rate": 1.0}),
     "Adamax": (Kopt.Adamax, {}),
-    "Nadam": (Kopt.Nadam, {}),
+    "Nadam": (Kopt.Nadam, {"learning_rate": 0.01}),
     "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
 }
 

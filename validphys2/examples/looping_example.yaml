@@ -1,0 +1,27 @@
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+pdfs:
+    - id:  NNPDF31_nlo_as_0118
+      label: NLO
+
+    - id: NNPDF31_nnlo_as_0118_DISonly
+      label: NNLO
+
+    - id: NNPDF31_nnlo_as_0118_hessian
+      label: NNLO hessian
+
+theoryids:
+    - 52
+    - 162
+use_cuts : nocuts
+
+dataset_inputs:
+  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+  - { dataset: ATLASWZRAP36PB}
+
+actions_:
+ - theoryids::pdfs::dataset_inputs plot_fancy

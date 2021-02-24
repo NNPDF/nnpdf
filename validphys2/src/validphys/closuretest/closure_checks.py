@@ -148,3 +148,14 @@ def check_fits_different_filterseed(fits):
         "noise and therefore different filter seeds. The following groups "
         f"of fits have the same seed: {bad_fits}."
         )
+
+
+@make_argcheck
+def check_fits_have_same_basis(fits_basis):
+    """Check the basis is the same for all fits"""
+    bases_set = set(fits_basis)
+    if len(bases_set) != 1:
+        raise CheckError(
+            "All fits must have the same basis, however the following bases "
+            f"were found: {bases_set}"
+        )

@@ -476,8 +476,8 @@ void  CMS_TTBAR_2D_DIFF_MTT_TRAPFilter::ReadData()
               >> stat[i] >> comma >> ddum >> comma
               >> ddum >> comma >> ddum;
 
-      fKin1[i] = m_tt;         //mtt   
-      fKin2[i] = pow(y_top,2); //yt  
+      fKin1[i] = y_top;        //yt   
+      fKin2[i] = pow(m_tt,2);  //mtt  
       fKin3[i] = 8000;         //sqrt(s) 
       fStat[i] = 0.;
     }
@@ -780,8 +780,8 @@ void  CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter::ReadData()
               >> stat[i] >> comma >> ddum >> comma
               >> ddum >> comma >> ddum;
 
-      fKin1[i] = m_tt;        //m_tt
-      fKin2[i] = pow(y_tt,2); //y_tt     
+      fKin1[i] = y_tt;        //y_tt
+      fKin2[i] = pow(m_tt,2); //m_tt     
       fKin3[i] = 8000;        //sqrt(s) 
       fStat[i] = 0.;
     }
