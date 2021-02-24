@@ -24,7 +24,7 @@ from validphys import mplstyles
 
 providers = [
              'validphys.results',
-             'validphys.results_providers',
+             'validphys.commondata',
              'validphys.pdfgrids',
              'validphys.pdfplots',
              'validphys.dataplots',
