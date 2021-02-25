@@ -275,8 +275,9 @@ def central_fk_differential_predictions(loaded_fk, pdf):
     gives the same result as :py:func:`central_fk_predictions`
     """
     if loaded_fk.hadronic:
-        raise NotImplementedError("will get round to this shortly")
-    return central_dis_differential_predictions(loaded_fk, pdf)
+        return central_hadron_differential_predictions(loaded_fk, pdf)
+    else:
+        return central_dis_differential_predictions(loaded_fk, pdf)
 
 
 def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
@@ -334,6 +335,65 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     return sigma.groupby(level=0).apply(appl)
 
 
+
+def _gv_hadron_predictions_diff(loaded_fk, gv1func, gv2func=None):
+    xgrid = loaded_fk.xgrid
+    Q = loaded_fk.Q0
+    sigma = loaded_fk.sigma
+
+    # Generate gid values for all flavours in the evolution basis, in the
+    # expected order.
+    #
+    # Squeeze to remove the dimension over Q.
+    gv1 = gv1func(qmat=[Q], vmat=FK_FLAVOURS, xmat=xgrid).squeeze(-1)
+    if gv2func is not None:
+        gv2 = gv2func(qmat=[Q], vmat=FK_FLAVOURS, xmat=xgrid).squeeze(-1)
+    else:
+        gv2 = gv1
+
+    # The hadronic FK table columns are indexes into the NFK*NFK table of
+    # possible flavour combinations of the two PDFs, with the convention of
+    # looping first of the first index and the over the second: If the flavour
+    # index of the first PDF is ``i`` and the second is ``j``, then the column
+    # value in the FKTable is ``i*NFK + j``. This can easily be inverted using
+    # the ``np.indices``, which is used here to map the column index to i and
+    # j.
+    fm = sigma.columns
+    all_fl_indices_1, all_fl_indices_2 = np.indices((NFK, NFK))
+    # The flavour indices of the first and second PDF for each combination
+    # (column) are the columns indexing into the flattened indices.
+    fl1 = all_fl_indices_1.ravel()[fm]
+    fl2 = all_fl_indices_2.ravel()[fm]
+    # Once we have the flavours, shape the PDF grids as appropriate for the
+    # convolution below: We are left with two tensor of shape
+    # ``nmembers * len(sigma.columns) * nx`` such that the pairs of flavours of the two
+    # combinations correspond to the combination encoded in the FKTable.
+    expanded_gv1 = gv1[:, fl1, :]
+    expanded_gv2 = gv2[:, fl2, :]
+
+    def appl(df):
+        # x1 and x2 are encoded as the first and second index levels.
+        xx1 = df.index.get_level_values(1)
+        xx2 = df.index.get_level_values(2)
+        gv1 = expanded_gv1[:, :, xx1]
+        gv2 = expanded_gv2[:, :, xx2]
+        # Sum but don't aggregate
+        totally_diff_xs = np.einsum("ijk,ijk,kj->ijk", gv1, gv2, df.values).squeeze(0)
+        # Index by first grid
+        first_grid_indexed = pd.DataFrame(
+            totally_diff_xs, index=FK_FLAVOURS[fl1], columns=xgrid[xx1]
+        )
+        # Integrate over the second grid, i.e. group by the first and sum
+        return (
+            first_grid_indexed.groupby(axis=0, level=0)
+            .sum()
+            .groupby(axis=1, level=0)
+            .sum()
+        )
+
+    return sigma.groupby(level=0).apply(appl)
+
+
 def _gv_dis_predictions(loaded_fk, gvfunc):
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
@@ -385,6 +445,13 @@ def central_hadron_predictions(loaded_fk, pdf):
     observables."""
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_hadron_predictions(loaded_fk, gv)
+
+
+def central_hadron_differential_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`central_fk_differential_predictions` for
+    hadronic observables."""
+    gv = functools.partial(evolution.central_grid_values, pdf=pdf)
+    return _gv_hadron_predictions_diff(loaded_fk, gv)
 
 
 def linear_hadron_predictions(loaded_fk, pdf):

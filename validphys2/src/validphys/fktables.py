@@ -39,8 +39,6 @@ def check_dataset_is_dis(dataset):
             raise CheckError("Only DIS datasets are supported right now.")
 
 
-# TODO: do work so these checks aren't required.
-@make_argcheck(check_dataset_is_dis)
 def normalised_averaged_differential_prediction(dataset, pdf, kinematics_table_notable):
     """Return the xgrid of a ``dataset`` s fktable."""
     info = get_info(dataset)
