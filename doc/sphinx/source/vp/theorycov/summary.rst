@@ -41,7 +41,9 @@ See the `short
    #. ``scalevariationtheoryids.yaml``: correspondence between each scale combination
       and a theoryid for a given central theoryid
 
--  The prescription must be one of 3 point, 5 point, 7 point or 9 point.
+-  The prescription must be one of 3 point, 5 point, 5bar point, 7 point or 9 point. You can specify
+   this using ``point_prescription: "x point"`` in the runcard. The translation of this flag 
+   into the relevant ``theoryids`` is handled by the ``scalevariations`` module in ``validphys``.
 
 -  In the case of 5 theories, you must further specify whether the 5 or
    :math:`\bar{5}` prescription is required. You can do this by
