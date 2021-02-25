@@ -1,3 +1,7 @@
+.. |br| raw:: html
+
+  <br/>
+
 .. _pointprescrips:
 Point prescriptions for theory covariance matrices
 ==================================================
@@ -7,8 +11,11 @@ appear in ``validphys2``.
 
 3 points
 --------
-|``theoryids``: 163, 180, 173
-|``point_prescription: '3 point'``
+.. note:: 
+
+	``theoryids``: 163, 180, 173	|br|
+	``point_prescription: '3 point'``
+	
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
 
 .. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
@@ -16,8 +23,10 @@ appear in ``validphys2``.
 
 5 points
 ---------
-|``theoryids``: 163, 177, 176, 179, 174
-|``point_prescription: '5 point'``
+.. note::
+
+	``theoryids``: 163, 177, 176, 179, 174 |br|
+	``point_prescription: '5 point'``
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2 \bigg\}
 
 .. math::
@@ -29,8 +38,11 @@ appear in ``validphys2``.
 
 :math:`\mathbf{\overline{5}}` points
 ------------------------------------
-|``theoryids:`` 163, 180, 173, 175, 178
-|``point_prescription: '5bar point'``
+.. note::
+
+	``theoryids:`` 163, 180, 173, 175, 178 |br|
+	``point_prescription: '5bar point'``
+	
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 + \Delta_1(+,-)^2 + \Delta_1(-,+)^2 \bigg\}
 
 .. math::
@@ -42,10 +54,15 @@ appear in ``validphys2``.
 
 7 points - original
 -------------------
-| ``theoryids:`` 163, 177, 176, 179, 174, 180, 173
-| Specify in the runcard ``seventheories: original``
-|``point_prescription: '7 point'``
-  .. math::
+
+.. warning::
+
+	**Deprecated prescription!** |br|
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 |br|
+ 	Specify in the runcard ``seventheories: original`` |br|
+	``point_prescription: '7 point'``
+	
+.. math::
 
      \begin{split}
          s_{11} = \frac{1}{3}\bigg\{ &\Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2  \\                                 + &\Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
@@ -61,8 +78,10 @@ appear in ``validphys2``.
 
 7 points - Gavin (default)
 --------------------------
-``theoryids:`` 163, 177, 176, 179, 174, 180, 173
-|``point_prescription: '7 point'``
+.. note::
+
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 |br|
+	``point_prescription: '7 point'``
 
 .. math::
 
@@ -82,8 +101,11 @@ appear in ``validphys2``.
 
 9 points
 --------
-``theoryids:`` 163, 177, 176, 179, 174, 180, 173, 175, 178
-|``point_prescription: '9 point'``
+
+.. note::
+
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173, 175, 178 |br|
+	``point_prescription: '9 point'``
 
 .. math::
 
