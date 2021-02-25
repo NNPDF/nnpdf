@@ -702,3 +702,50 @@ def plot_experiments_xi_bootstrap_distribution(
         ax.set_title(r"Bootstrap distribution of $\xi_{1\sigma}$ for " + str(exp))
         ax.set_xlabel(r"$\xi_{1\sigma}$")
         yield fig
+
+@figuregen
+def plot_bias_variance_distributions(
+    experiments_fits_bias_replicas_variance_samples,
+    group_dataset_inputs_by_experiment
+):
+    """For each experiment, plot the distribution across fits of bias
+    and the distribution across fits and replicas of
+
+    fit_rep_var = (E[g] - g)_i inv(cov)_ij (E[g] - g)_j
+
+    where g is the replica prediction for fit l, replica k and E[g] is the
+    mean across replicas of g for fit l.
+
+    """
+    for (exp_biases, exp_vars, _), group_spec in zip(
+            experiments_fits_bias_replicas_variance_samples,
+            group_dataset_inputs_by_experiment
+        ):
+        fig, ax = plt.subplots()
+        labels = [
+            "fits bias distribution",
+            "replicas variance distribution",
+        ]
+        ax.hist(
+            [exp_biases, exp_vars],
+            density=True,
+            label=labels
+        )
+        ax.legend()
+        ax.set_title(
+            f"Bias and variance distributions for {group_spec['group_name']}."
+        )
+        yield fig
+    total_bias, total_var, _ = np.sum(
+        experiments_fits_bias_replicas_variance_samples,
+        axis=0
+    )
+    fig, ax = plt.subplots()
+    ax.hist(
+        [total_bias, total_var],
+        density=True,
+        label=labels
+    )
+    ax.legend()
+    ax.set_title("Total bias and variance distributions.")
+    yield fig
