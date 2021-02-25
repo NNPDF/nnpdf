@@ -7,6 +7,7 @@ Tutorials
    ./run-fit.md
    ./run-legacy-fit.rst
    ./run-iterated-fit.rst
+   ./thcov_tutorial.rst
    ./compare-fits.md
    ./list-resources.md
    ./report.md
