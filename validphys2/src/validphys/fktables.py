@@ -44,12 +44,13 @@ def normalised_averaged_differential_prediction(dataset, pdf, kinematics_table_n
     info = get_info(dataset)
     cuts = dataset.cuts.load() if dataset.cuts is not None else None
     dfs = []
+    k1list = info.get_xcol(kinematics_table_notable)
     for fkspec in dataset.fkspecs:
         fk_df = central_fk_differential_predictions(
             load_fktable(fkspec).with_cuts(cuts), pdf
         )
         for datapoint, datapoint_df in fk_df.groupby(level=0):
-            k1 = kinematics_table_notable.loc[datapoint, info.xlabel]
+            k1 = k1list[datapoint]
             new_index = pd.MultiIndex.from_product(
                 [[k1], datapoint_df.index.get_level_values(1)])
             out = datapoint_df.set_index(new_index).fillna(0)
