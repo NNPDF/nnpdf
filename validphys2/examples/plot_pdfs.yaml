@@ -10,7 +10,7 @@ pdfs:
   - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
 
 
-pdfs_noband: ["NNPDF31_nnlo_as_0118_DISonly"] # Equivalently ["3"]
+pdfs_noband: ["NNPDF31_nnlo_as_0118_DISonly"] # Equivalently [3]
 
 show_mc_errors: True
 
@@ -46,4 +46,3 @@ template_text: |
 
 actions_:
   - report(main=True)
-
