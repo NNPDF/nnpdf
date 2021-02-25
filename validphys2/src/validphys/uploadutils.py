@@ -173,13 +173,13 @@ class FileUploader(Uploader):
 class ReportFileUploader(FileUploader, ReportUploader):
     pass
 
-class FitUploader(FileUploader):
-    """An uploader for fits. Fits will be automatically compressed
-    before uploading."""
-    target_dir = _profile_key('fits_target_dir')
-    root_url = _profile_key('fits_root_url')
-    _loader_name = "downloadable_fits"
-    _resource_type = "fit"
+
+class ArchiveUploader(FileUploader):
+    """ Uploader for objects comprising many files such as fits or PDFs """
+    target_dir = None
+    root_url = None
+    _loader_name =  None # vp loader for this kind of archive
+    _resource_type = "Archive" # name used during logging
 
     def get_relative_path(self, output_path=None):
         return ''
@@ -197,16 +197,80 @@ class FitUploader(FileUploader):
             return True
         return False
 
-    def check_is_indexed(self, fit_name):
+    def check_is_indexed(self, resource_name):
         """ Check whether the fit is correctly indexed in the server
         """
-        log.info("Checking whether %s was correctly uploaded...", fit_name)
+        log.info("Checking whether %s was correctly uploaded...", resource_name)
         time.sleep(3)
-        if self._check_existence(fit_name):
+        if self._check_existence(resource_name):
             log.info("It has been correctly indexed by the server!")
         else:
             log.error("The object is uploaded but hasn't been indexed yet by the server "
-                    "you should upload it again to ensure it is indexed: vp-upload %s", fit_name)
+                  "you should upload it again to ensure it is indexed: vp-upload %s", resource_name)
+
+    def _compress(self, output_path):
+        """Compress the folder and put in in a directory inside its parent."""
+        #make_archive fails if we give it relative paths for some reason
+        output_path = output_path.resolve()
+        tempdir = tempfile.mkdtemp(prefix=f'{self._resource_type}_upload_deleteme_',
+                                   dir=output_path.parent)
+        log.info(f"Compressing {self._resource_type} to {tempdir}")
+        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
+        try:
+            with Spinner():
+                shutil.make_archive(base_name=archive_path_without_extension,
+                                    format='gztar',
+                                    root_dir=output_path.parent, base_dir=output_path.name)
+        except Exception as e:
+            log.error(f"Couldn't compress archive: {e}")
+            raise UploadError(e) from e
+        return tempdir, archive_path_without_extension
+
+    def upload_output(self, output_path, force):
+        output_path = pathlib.Path(output_path)
+        fit_name = output_path.name
+
+        if not force:
+            if self._check_existence(fit_name):
+                log.error("A %s with the same name already exists on "
+                      "the server. To overwrite it use the "
+                      "--force flag, as in `vp-upload <%s_name> --force.",
+                      self._resource_type, self._resource_type)
+                raise UploadError
+
+        new_out, name = self._compress(output_path)
+        super().upload_output(new_out)
+
+        # Check whether the fit was really uploaded
+        self.check_is_indexed(fit_name)
+
+        shutil.rmtree(new_out)
+        return name.with_suffix('.tar.gz').name
+
+    @contextlib.contextmanager
+    def upload_context(self, output_path, force):
+        self.check_upload()
+        yield
+        res = self.upload_output(output_path, force)
+        self._print_output(self.root_url, res)
+
+    @contextlib.contextmanager
+    def upload_or_exit_context(self, output, force):
+        try:
+            with self.upload_context(output, force):
+                yield
+        except BadSSH as e:
+            log.error(e)
+            sys.exit()
+
+
+class FitUploader(ArchiveUploader):
+    """An uploader for fits. Fits will be automatically compressed
+    before uploading."""
+    target_dir = _profile_key('fits_target_dir')
+    root_url = _profile_key('fits_root_url')
+    _loader_name = "downloadable_fits"
+    _resource_type = "fit"
 
     def check_fit_md5(self, output_path):
         """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
@@ -238,67 +302,13 @@ class FitUploader(FileUploader):
             )
             raise UploadError
 
-    def _compress(self, output_path):
-        """Compress the folder and put in in a directory inside its parent."""
-        #make_archive fails if we give it relative paths for some reason
-        output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix=f'{self._resource_type}_upload_deleteme_',
-                                   dir=output_path.parent)
-        log.info(f"Compressing {self._resource_type} to {tempdir}")
-        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
-        try:
-            with Spinner():
-                shutil.make_archive(base_name=archive_path_without_extension,
-                                    format='gztar',
-                                    root_dir=output_path.parent, base_dir=output_path.name)
-        except Exception as e:
-            log.error(f"Couldn't compress archive: {e}")
-            raise UploadError(e) from e
-        return tempdir, archive_path_without_extension
-
-
     def upload_output(self, output_path, force):
         output_path = pathlib.Path(output_path)
-        fit_name = output_path.name
-
-        if not force:
-            if self._check_existence(fit_name):
-                log.error("A %s with the same name already exists on "
-                      "the server. To overwrite it use the "
-                      "--force flag, as in `vp-upload <%s_name> --force.",
-                      self._resource_type, self._resource_type)
-                raise UploadError
-
-        if self._resource_type == "fit":
-            self.check_fit_md5(output_path)
-
-        new_out, name = self._compress(output_path)
-        super().upload_output(new_out)
-
-        # Check whether the fit was really uploaded
-        self.check_is_indexed(fit_name)
-
-        shutil.rmtree(new_out)
-        return name.with_suffix('.tar.gz').name
-
-    @contextlib.contextmanager
-    def upload_context(self, output_path, force):
-        self.check_upload()
-        yield
-        res = self.upload_output(output_path, force)
-        self._print_output(self.root_url, res)
-
-    @contextlib.contextmanager
-    def upload_or_exit_context(self, output, force):
-        try:
-            with self.upload_context(output, force):
-                yield
-        except BadSSH as e:
-            log.error(e)
-            sys.exit()
+        self.check_fit_md5(output_path)
+        return super().upload_output(output_path, force)
 
 
-class PDFUploader(FitUploader):
+class PDFUploader(ArchiveUploader):
     """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
     target_dir = _profile_key('pdfs_target_dir')
