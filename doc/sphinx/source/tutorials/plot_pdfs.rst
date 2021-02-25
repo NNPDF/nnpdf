@@ -206,11 +206,20 @@ Luminosity plots
 	    
 	template_text: |
 	  {@with PDFscalespecs@}
-	  {@plot_lumi1d@}
-	  {@plot_lumi1d_uncertainties@}
-	  {@plot_lumi2d@}
-	  {@plot_lumi2d_uncertainty@} 
-	  {@endwith@}  
+	  {@xscaletitle@} scale
+	  =====================
+	  {@with Basespecs@}
+	  {@basistitle@}
+	  -------------
+	  {@with PDFnormalize@}
+	  {@normtitle@}
+	  {@plot_pdfs@}
+	  {@plot_pdf_uncertainties@}
+	  {@plot_pdfreplicas@}          
+	  {@endwith@}
+	  {@endwith@}
+	  {@endwith@}
+
 
 	actions_:
 	  - report(main=True)

@@ -35,8 +35,13 @@ PDFscalespecs:
 
 template_text: |
   {@with PDFscalespecs@}
+  {@xscaletitle@} scale
+  =====================
   {@with Basespecs@}
+  {@basistitle@}
+  -------------
   {@with PDFnormalize@}
+  {@normtitle@}
   {@plot_pdfs@}
   {@plot_pdf_uncertainties@}
   {@plot_pdfreplicas@}          
