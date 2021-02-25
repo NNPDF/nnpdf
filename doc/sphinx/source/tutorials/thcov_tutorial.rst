@@ -60,7 +60,10 @@ Next, add necessary flags to the runcard
    where to use the theory covmat in the code. There are two possible places:
    the fitting (i.e. \\(\\chi^2\\) minimiser) and the sampling (i.e. pseudodata
    generation). The default is ``True`` for both.
-   
+.. warning::
+      Changing either of these to ``False`` will affect the fit outcome and should
+      be avoided unless you know what you are doing.
+      
 Example runcard
 ---------------
 The following is an example runcard for an NLO NNPDF3.1 style fit with a 3 point theory covmat.
