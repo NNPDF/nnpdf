@@ -11,6 +11,7 @@ from reportengine import collect
 from reportengine.table import table
 
 from validphys.calcutils import regularize_covmat, get_df_block
+from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
@@ -66,6 +67,7 @@ def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
 
     Parameters
     ----------
+
     loaded_commondata_with_cuts : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
@@ -78,9 +80,9 @@ def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
 
     Returns
     -------
-    cov_mat : np.array
-        Numpy array which is N_dat x N_dat (where N_dat is the number of data
-        points after cuts) containing uncertainty and correlation information.
+    cov_mat: np.array
+        Numpy array which is N_dat x N_dat (where N_dat is the number of data points after cuts)
+        containing uncertainty and correlation information.
 
     Example
     -------
@@ -102,7 +104,7 @@ def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
 
     >>> from validphys.commondataparser import load_commondata
     >>> from validphys.loader import Loader
-    >>> from validphys.calcutils import covmat_from_systematics
+    >>> from validphys.covmats import covmat_from_systematics
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> cd = load_commondata(cd)
