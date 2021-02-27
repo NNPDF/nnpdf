@@ -477,6 +477,7 @@ def fits_version_table(fits_fit_code_version):
     """ Produces a table of version information for multiple fits."""
     vtable = pd.concat(fits_fit_code_version, axis=1)
     # Drops any rows starting with "unavailable"
+    # If no such row is present, the error is suppressed and nothing changes
     vtable.drop("unavailable", inplace=True, errors="ignore")
     # Fill NaNs with "unavailable"
     vtable.fillna("unavailable", inplace=True)
