@@ -610,8 +610,9 @@ class ModelTrainer:
 
             # Select the indices of the points that will be used by the interpolator
             onein = map_from_complete.size / (int(interpolation_points) - 1)
-            selected_points = [0]
-            selected_points += [round(i * onein - 1) for i in range(1, int(interpolation_points))]
+            selected_points = [round(i * onein - 1) for i in range(1, int(interpolation_points))]
+            if selected_points[0] != 0:
+                selected_points = [0] + selected_points
             map_from = map_from_complete[selected_points]
             map_from = np.log(map_from)
             map_to = map_to_complete[selected_points]
