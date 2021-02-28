@@ -617,7 +617,11 @@ class ModelTrainer:
             map_from = np.log(map_from)
             map_to = map_to_complete[selected_points]
 
-            scaler = PchipInterpolator(map_from, map_to)
+            try:
+                scaler = PchipInterpolator(map_from, map_to)
+            except ValueError:
+                raise ValueError("interpolation_points is larger than the number of unique \
+                                    input x-values")
             self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
 
     def _generate_pdf(
