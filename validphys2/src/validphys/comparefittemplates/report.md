@@ -1,7 +1,7 @@
-%NNPDF Report for fit {@ current fit_id @}
+%NNPDF report for {@ current fit_id @}
 
-Fit summary
-------------
+Summary
+-------
 
 We are comparing:
 
@@ -11,7 +11,7 @@ We are comparing:
 
 {@ summarise_fits @}
 
-Theory Covariance Summary
+Theory covariance summary
 -------------------------
 {@summarise_theory_covmat_fits@}
 
@@ -20,7 +20,7 @@ Dataset properties
 {@current fit_datasets_properties_table@}
 
 Distances
-------------------
+---------
 {@with normalize::basespecs::pdfscalespecs::distspecs@}
 {@plot_pdfdistances@}
 {@plot_pdfvardistances@}
@@ -51,29 +51,29 @@ Training lengths
 ----------------
 {@fits plot_training_length@}
 
-Training validation
+Training-validation
 -------------------
 {@fits plot_training_validation@}
 
 $\chi^2$ by {@processed_metadata_group@}
-----------------------
+----------------------------------------
 {@plot_fits_groups_data_chi2@}
 
-$\chi^2$ by dataset comparisons
--------------------------------
+$\chi^2$ by dataset
+-------------------
 ### Plot
 {@plot_fits_datasets_chi2@}
 ### Table
 {@fits_chi2_table(show_total=true)@}
 
 $\phi$ by {@processed_metadata_group@}
---------------------
+--------------------------------------
 {@plot_fits_groups_data_phi@}
 
 Dataset plots
----------------
+-------------
 {@with matched_datasets_from_dataspecs@}
-[Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
+[Plots for {@dataset_name@}]({@dataset_report report@})
 {@endwith@}
 
 Positivity
@@ -87,7 +87,6 @@ Dataset differences and cuts
 {@print_dataset_differences@}
 {@print_different_cuts@}
 
-Fit code versions
------------------
-
+Code versions
+-------------
 {@fits_version_table@}
