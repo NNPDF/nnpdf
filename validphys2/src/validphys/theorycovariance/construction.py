@@ -470,8 +470,6 @@ def user_covmat(groups_data, groups_index,
 def total_theory_covmat(
         groups_index,
         theory_covmat_custom,
-        nuclear_covmat,
-        deuteron_covmat,
         user_covmat,
         use_scalevar_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
