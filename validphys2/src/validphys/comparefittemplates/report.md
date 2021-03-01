@@ -1,4 +1,4 @@
-%NNPDF report for {@ current fit_id @}
+%NNPDF report comparing {@ current fit_id @} and {@ reference fit_id @}
 
 Summary
 -------
