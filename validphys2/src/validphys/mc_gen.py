@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-mc_gen_checks.py
+mc_gen.py
 
 Tools to check the pseudo-data MC generation.
 """
