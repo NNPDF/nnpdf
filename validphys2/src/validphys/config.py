@@ -843,23 +843,10 @@ class CoreConfig(configparser.Config):
     ):
         """
         Return the theory covariance matrix used in the fit.
-        By default it is set to be the full one, the user can
-        set it to be block-diagonal or diagonal, based on the
-        value of ``thcovmat_type``. The possible options are:
-
-        ``thcovmat_type = "full"`` (default):
-            Include all correlations. The covarance matrix is
-            computed using ``theory_covmat_custom``.
-
-        ``thcovmat_type = "diagonal"``:
-            Only diagonal entries are computes included. The
-            covariance matrix is computed using
-            ``theory_diagonal_covmat``.
-
-        ``thcovmat_type = "blockdiagonal"``:
-            Only correlations by process type are included.
-            The covariance matrix is computed using
-            ``theory_block_diag_covmat``.
+        Possible contributions are : scale variation covmat;
+        general user covmat provided via ``use_user_uncertainties``
+        flag in ``theorycovmatconfig`` in the runcard. See 
+        documentation for details.
         """
 
         from validphys.theorycovariance.construction import total_theory_covmat

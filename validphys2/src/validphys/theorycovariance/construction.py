@@ -383,8 +383,8 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
 
 @table
 def fromfile_covmat(covmatpath, groups_data, groups_index):
-    """Reads the custom covariance matrix from file. Then
-    1: Applies cuts to match experiment covaraince matrix
+    """Reads a general theory covariance matrix from file. Then
+    1: Applies cuts to match experiment covariance matrix
     2: Expands dimensions to match experiment covariance matrix
        by filling additional entries with 0."""
     # Load covmat as pandas DataFrame
@@ -459,6 +459,15 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
 def user_covmat(groups_data, groups_index,
                 user_covmat_path: str = "",
                 use_user_uncertainties: bool = False):
+    """
+    General theory covariance matrix provided by the user. 
+    Useful for testing the impact of externally defined 
+    covariance matrices. Matrices must be produced as a 
+    csv of pandas DataFrame, and uploaded to the validphys
+    server. The server path is then provided via 
+    ``user_covmat_path`` in ``theorycovmatconfig`` in the 
+    runcard. For more information see documentation. 
+    """
     if use_user_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
@@ -473,7 +482,11 @@ def total_theory_covmat(
         user_covmat,
         use_scalevar_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
-
+    """
+    Sum of all contributions to the theory covariance matrix.
+    Possible contributions are: scale variation covmat;
+    general user covmat.
+    """
     f = pd.DataFrame(0, index=groups_index, columns=groups_index)
 
     if use_scalevar_uncertainties is True:
