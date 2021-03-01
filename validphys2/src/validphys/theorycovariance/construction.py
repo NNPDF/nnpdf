@@ -461,7 +461,7 @@ def user_covmat(groups_data, groups_index,
                 use_user_uncertainties: bool = False):
     """
     General theory covariance matrix provided by the user. 
-    Useful for testing the impact of externally defined 
+    Useful for testing the impact of externally produced
     covariance matrices. Matrices must be produced as a 
     csv of pandas DataFrame, and uploaded to the validphys
     server. The server path is then provided via 
