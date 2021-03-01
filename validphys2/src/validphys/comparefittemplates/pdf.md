@@ -3,11 +3,11 @@
 # PDF plots
 
 ## PDF comparison
-{@with pdfnormalize@}
+{@with PDFnormalize@}
 ### {@normtitle@}
-{@with basespecs@}
+{@with Basespecs@}
 #### {@basistitle@}
-{@with pdfscalespecs@}
+{@with PDFscalespecs@}
 ##### {@xscaletitle@}
 {@plot_pdfs@}
 {@endwith@}
@@ -15,9 +15,9 @@
 {@endwith@}
 
 ## PDF replicas
-{@with basespecs@}
+{@with Basespecs@}
 #### {@basistitle@}
-{@with pdfscalespecs@}
+{@with PDFscalespecs@}
 ##### {@xscaletitle@}
 {@plot_pdfreplicas@}
 {@endwith@}

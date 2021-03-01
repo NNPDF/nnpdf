@@ -42,25 +42,25 @@ Q: 1.651
 Highscale:
   - Q: 100
 
-pdfnormalize:
+PDFnormalize:
   - normtitle: Absolute
 
   - normalize_to: 1
     normtitle: Ratio
 
-basespecs:
+Basespecs:
   - basis: flavour
     basistitle: Flavour basis
   - basis: evolution
     basistitle: Evolution basis
 
-pdfscalespecs:
+PDFscalespecs:
   - xscale: log
     xscaletitle: Log
   - xscale: linear
     xscaletitle: Linear
 
-distspecs:
+Distspecs:
   - ymin: 0
     ymax: 20
 
@@ -113,10 +113,10 @@ dataspecs:
     speclabel:
       from_: reference
 
-normalize:
+Normalize:
   normalize_to: 1
 
-datanorm:
+Datanorm:
   normalize_to: data
 
 actions_:

@@ -21,14 +21,14 @@ Dataset properties
 
 Distances
 ---------
-{@with normalize::basespecs::pdfscalespecs::distspecs@}
+{@with Normalize::Basespecs::PDFscalespecs::Distspecs@}
 {@plot_pdfdistances@}
 {@plot_pdfvardistances@}
 {@endwith@}
 
 PDF arc-lengths
 ---------------
-{@basespecs plot_arc_lengths@}
+{@Basespecs plot_arc_lengths@}
 
 Sum rules
 ---------
