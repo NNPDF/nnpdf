@@ -39,7 +39,13 @@ Sum rules
 
 PDF plots
 ---------
-[Detailed plots]({@pdf_report report@})
+[Plots at 1.65 GeV]({@pdf_report report@})
+
+[Plots at 100 GeV]({@with Highscale@}{@pdf_report report@}{@endwith@})
+
+Effective exponents
+-------------------
+[Detailed information]({@exponents_report report@})
 
 Training lengths
 ----------------

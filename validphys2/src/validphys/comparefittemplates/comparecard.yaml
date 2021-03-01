@@ -41,6 +41,9 @@ use_weights_in_covmat: False
 
 Q: 1.651
 
+Highscale:
+  - Q: 100
+
 pdfnormalize:
     - normtitle: Absolute
 
@@ -72,6 +75,10 @@ dataset_report:
 pdf_report:
     meta: Null
     template: pdf.md
+
+exponents_report:
+    meta: Null
+    template: exponents.md
 
 template: report.md
 

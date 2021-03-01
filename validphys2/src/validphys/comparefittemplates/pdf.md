@@ -22,15 +22,3 @@
 {@plot_pdfreplicas@}
 {@endwith@}
 {@endwith@}
-
-## Effective preprocessing exponents Plots
-### alpha exponent
-{@current::basisfromfit plot_alpha_eff@}
-### beta exponent
-{@current::basisfromfit plot_beta_eff@}
-
-## Effective preprocessing exponents Table
-{@with fits@}
-### Next effective exponents table for {@fit@}
-{@effective_exponents_table@}
-{@endwith@}
