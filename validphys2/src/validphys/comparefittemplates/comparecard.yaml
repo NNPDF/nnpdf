@@ -3,11 +3,10 @@
 # vp-comparefits script. The settings below are a sample of such settings, kept
 # for reference
 #
-#
 # meta:
-#     title: The title of the Report
-#     keywords: [report_template]
-#     author: NNPDF Collaboration
+#   title: The title of the Report
+#   keywords: [report_template]
+#   author: NNPDF Collaboration
 #
 # current:
 #   fit: {id: id_of_the_base_fit}
@@ -28,13 +27,12 @@
 #   speclabel: "Reference Fit"
 
 pdfs:
-    - from_: current
-    - from_: reference
+  - from_: current
+  - from_: reference
 
 fits:
   - from_: current
   - from_: reference
-
 
 use_cuts: "fromfit"
 use_weights_in_covmat: False
@@ -45,49 +43,48 @@ Highscale:
   - Q: 100
 
 pdfnormalize:
-    - normtitle: Absolute
+  - normtitle: Absolute
 
-    - normalize_to: 1
-      normtitle: Ratio
+  - normalize_to: 1
+    normtitle: Ratio
 
 basespecs:
-    - basis: flavour
-      basistitle: Flavour basis
-    - basis: evolution
-      basistitle: Evolution basis
+  - basis: flavour
+    basistitle: Flavour basis
+  - basis: evolution
+    basistitle: Evolution basis
 
 pdfscalespecs:
-    - xscale: log
-      xscaletitle: Log
-    - xscale: linear
-      xscaletitle: Linear
+  - xscale: log
+    xscaletitle: Log
+  - xscale: linear
+    xscaletitle: Linear
 
 distspecs:
-   - ymin: 0
-     ymax: 20
+  - ymin: 0
+    ymax: 20
 
 pos_use_kin: True
 
 dataset_report:
-    meta: Null
-    template: data.md
+  meta: Null
+  template: data.md
 
 pdf_report:
-    meta: Null
-    template: pdf.md
+  meta: Null
+  template: pdf.md
 
 exponents_report:
-    meta: Null
-    template: exponents.md
+  meta: Null
+  template: exponents.md
 
 template: report.md
 
-
 positivity:
-      from_: fit
+  from_: fit
 
 description:
-    from_: fit
+  from_: fit
 
 dataspecs:
   # WARNING: do not blindly copy and paste this: it can overwrite the datasets
@@ -116,12 +113,11 @@ dataspecs:
     speclabel:
       from_: reference
 
-
 normalize:
   normalize_to: 1
 
 datanorm:
-    normalize_to: data
+  normalize_to: data
 
 actions_:
   - report(main=true)

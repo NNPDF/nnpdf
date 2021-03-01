@@ -1,4 +1,4 @@
-%NNPDF Report for fit {@ current fit @}
+%NNPDF report for {@ current fit @}
 
 # Effective preprocessing information
 
@@ -10,6 +10,6 @@
 
 ## Tables
 {@with fits@}
-### Next effective exponents table for {@fit@}
+### Next effective exponents for {@fit@}
 {@effective_exponents_table@}
 {@endwith@}

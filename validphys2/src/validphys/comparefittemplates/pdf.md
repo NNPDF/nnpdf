@@ -1,4 +1,4 @@
-%NNPDF Report for fit {@ current fit @}
+%NNPDF report for {@ current fit @}
 
 # PDF plots
 
