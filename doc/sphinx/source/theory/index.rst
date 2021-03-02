@@ -9,5 +9,3 @@ Theory
    ./theoryindex
    ./theoryparamsinfo
 
-
-
