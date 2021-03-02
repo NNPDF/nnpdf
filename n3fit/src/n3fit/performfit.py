@@ -196,7 +196,7 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
-    # run once and replicas_nnseed_fitting_data_dict is a list of just than one element
+    # run once as replicas_nnseed_fitting_data_dict is a list of just one element
     stopwatch.register_times("data_loaded")
     for replica_number, exp_info, nnseed in replicas_nnseed_fitting_data_dict:
         replica_path_set = replica_path / f"replica_{replica_number}"
