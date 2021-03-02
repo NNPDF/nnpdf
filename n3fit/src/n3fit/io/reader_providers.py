@@ -1,17 +1,22 @@
 """
-Bridges between NNPDF objects and providers which can return python
-objects required in ``n3fit.performfit``
+reader_providers.py
+
+Providers which prepare the data ready for
+:py:func:`n3fit.performfit.performfit`. Returns python objects but the underlying
+functions make calls to libnnpdf C++ library.
 
 """
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from copy import deepcopy
 import hashlib
 import logging
 
 import numpy as np
+import pandas as pd
 
 from NNPDF import RandomGenerator
 from reportengine import collect
+from reportengine.table import table
 
 from n3fit.io.reader import common_data_reader_experiment, positivity_reader
 
@@ -42,19 +47,14 @@ def replica_mcseed(replica, mcseed, genrep):
         res = np.random.randint(0, pow(2, 31))
     return res
 
-replicas_nnseed =  collect("replica_nnseed", ("replicas",))
 
-TrVlMasks = namedtuple(
-    "TrVlMasks",
-    (
-        "dataset_inputs_tr_mask",
-        "dataset_inputs_vl_mask"
-    )
-)
-
-def tr_vl_masks(data, replica_trvlseed):
+def tr_masks(data, replica_trvlseed):
     """Generate the boolean masks used to split data into training and
-    validation points.
+    validation points. Returns a list of 1-D boolean arrays, one for each
+    dataset. Each array has length equal to N_data, the datapoints which
+    will be included in the training are ``True`` such that
+
+        tr_data = data[tr_mask]
 
     """
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
@@ -62,7 +62,6 @@ def tr_vl_masks(data, replica_trvlseed):
     # TODO: update this to new random infrastructure.
     np.random.seed(nameseed)
     trmask_partial = []
-    vlmask_partial = []
     for dataset in data.datasets:
         # TODO: python commondata will not require this rubbish.
         # all data if cuts are None
@@ -74,15 +73,14 @@ def tr_vl_masks(data, replica_trvlseed):
             [np.ones(trmax, dtype=np.bool), np.zeros(ndata - trmax, dtype=np.bool)]
         )
         np.random.shuffle(mask)
-        vl_mask = ~mask
         trmask_partial.append(mask)
-        vlmask_partial.append(vl_mask)
-    return TrVlMasks(trmask_partial, vlmask_partial)
+    return trmask_partial
 
 def kfold_masks(kpartitions, data):
     """Collect the masks (if any) due to kfolding for this data.
     These will be applied to the experimental data before starting
     the training of each fold.
+
     """
     list_folds = []
     if kpartitions is not None:
@@ -104,7 +102,7 @@ def kfold_masks(kpartitions, data):
     return list_folds
 
 
-def _mask_fk_tables(dataset_dicts, tr_vl_masks):
+def _mask_fk_tables(dataset_dicts, tr_masks):
     """
     Internal function which masks the fktables for a group of datasets.
 
@@ -113,27 +111,24 @@ def _mask_fk_tables(dataset_dicts, tr_vl_masks):
         dataset_dicts: list[dict]
             list of datasets dictionaries returned by
             :py:func:`n3fit.io.reader.common_data_reader_experiment`.
-        tr_vl_masks: tuple[list]
-            a tuple containing the lists of training and validation masks for
-            each dataset.
+        tr_masks: list[np.array]
+            a tuple containing the lists of training masks for each dataset.
 
     Return
     ------
-        trmask: np.array
+        data_trmask: np.array
             boolean array resulting from concatenating the training masks of
-            each dataset
-        vlmask: np.array
-            boolean array resulting from concatenating the validation masks of
-            each dataset
+            each dataset.
 
     Note: the returned masks are only used in order to mask the covmat
     """
-    trmask_partial, vlmask_partial = tr_vl_masks
-    for dataset_dict, tr_mask, vl_mask in zip(dataset_dicts, trmask_partial, vlmask_partial):
+    trmask_partial = tr_masks
+    for dataset_dict, tr_mask in zip(dataset_dicts, trmask_partial):
         # Generate the training and validation fktables
         tr_fks = []
         vl_fks = []
         ex_fks = []
+        vl_mask = ~tr_mask
         for fktable_dict in dataset_dict["fktables"]:
             tr_fks.append(fktable_dict["fktable"][tr_mask])
             vl_fks.append(fktable_dict["fktable"][vl_mask])
@@ -142,13 +137,30 @@ def _mask_fk_tables(dataset_dicts, tr_vl_masks):
         dataset_dict["vl_fktables"] = vl_fks
         dataset_dict["ex_fktables"] = ex_fks
 
-    return np.concatenate(trmask_partial), np.concatenate(vlmask_partial)
+    return np.concatenate(trmask_partial)
+
+
+def generate_data_replica(data, replica_mcseed):
+    """Generate a pseudodata replica for ``data`` given the ``replica_seed``"""
+    spec_c = data.load()
+    base_mcseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
+    # copy C++ object to avoid mutation
+    # t0 not required for replica generation, since libnnpdf uses experimental
+    # covmat to generate replicas.
+    spec_replica_c = type(spec_c)(spec_c)
+
+    # Replica generation
+    if replica_mcseed is not None:
+        mcseed = base_mcseed + replica_mcseed
+        RandomGenerator.InitRNG(0, mcseed)
+        spec_replica_c.MakeReplica()
+    return spec_replica_c.get_cv()
 
 
 def fitting_data_dict(
     data,
-    replica_mcseed,
-    tr_vl_masks,
+    generate_data_replica,
+    tr_masks,
     kfold_masks,
     t0set=None,
     diagonal_basis=None,
@@ -187,16 +199,7 @@ def fitting_data_dict(
         t0pdfset = t0set.load_t0()
         spec_c.SetT0(t0pdfset)
 
-    base_mcseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
-
-    spec_replica_c = type(spec_c)(spec_c) # I might need the t0 set here as well
-
-    # Replica generation
-    if replica_mcseed is not None:
-        mcseed = base_mcseed + replica_mcseed
-        RandomGenerator.InitRNG(0, mcseed)
-        spec_replica_c.MakeReplica()
-    expdata = spec_replica_c.get_cv()
+    expdata = generate_data_replica
 
     datasets = common_data_reader_experiment(spec_c, data)
 
@@ -217,7 +220,8 @@ def fitting_data_dict(
     # Copy dataset dict because we mutate it.
     datasets_copy = deepcopy(datasets)
 
-    tr_mask, vl_mask = _mask_fk_tables(datasets_copy, tr_vl_masks)
+    tr_mask = _mask_fk_tables(datasets_copy, tr_masks)
+    vl_mask = ~tr_mask
 
     if diagonal_basis:
         expdata = np.matmul(dt_trans, expdata)
@@ -281,6 +285,30 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
 
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
 
+exps_pseudodata = collect("generate_data_replica", ("group_dataset_inputs_by_experiment",))
+replicas_exps_pseudodata = collect("exps_pseudodata", ("replicas",))
+
+@table
+def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
+    """Creates a pandas DataFrame containing the generated pseudodata. The
+    index is :py:func:`validphys.results.experiments_index` and the columns
+    are the replica numbers.
+
+    Notes
+    -----
+    The table folder where this table is saved is
+    created inside the final fitted replica
+
+    """
+    rep_dfs = []
+    for rep_exps_pseudodata, rep in zip(replicas_exps_pseudodata, replicas):
+        all_pseudodata = np.concatenate(rep_exps_pseudodata)
+        rep_dfs.append(pd.DataFrame(
+            all_pseudodata[:, np.newaxis],
+            columns=[f"replica {rep}"],
+            index=experiments_index
+        ))
+    return pd.concat(rep_dfs, axis=1)
 
 def fitting_pos_dict(posdataset):
     """Loads a positivity dataset"""

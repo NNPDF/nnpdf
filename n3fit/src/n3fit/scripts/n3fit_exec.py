@@ -32,7 +32,7 @@ log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
-
+TAB_FOLDER = "tables"
 
 class N3FitError(Exception):
     """Exception raised when n3fit cannot succeed and knows why"""
@@ -76,6 +76,11 @@ class N3FitEnvironment(Environment):
                 path.mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
+
+        # place tables in last replica path
+        self.table_folder = path / TAB_FOLDER
+        self.table_folder.mkdir(exist_ok=True)
+
         # make lockfile input inside of replica folder
         # avoid conflict with setupfit
         self.input_folder = self.replica_path / INPUT_FOLDER
@@ -112,11 +117,15 @@ class N3FitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
 
         if file_content.get('closuretest') is not None:
-            N3FIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::closuretest::fitting performfit')
+            fit_action = 'datacuts::theory::closuretest::fitting performfit'
         else:
-            N3FIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::fitting performfit')
+            fit_action = 'datacuts::theory::fitting performfit'
+        N3FIT_FIXED_CONFIG['actions_'].append(fit_action)
+
+        if kwargs["environment"].dump_pseudodata:
+            # take same namespace configuration on the pseudodata_table action.
+            table_action = fit_action.replace('performfit', 'pseudodata_table')
+            N3FIT_FIXED_CONFIG['actions_'].append(table_action)
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -184,6 +193,12 @@ class N3FitApp(App):
         parser.add_argument(
             "-r", "--replica_range", help="End of the range of replicas to compute", type=check_positive
         )
+        parser.add_argument(
+            "-d",
+            "--dump-pseudodata",
+            action="store_true",
+            help="Boolean flag, when enabled saves pseudodata table for replica/s."
+        )
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -202,6 +217,7 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
+            self.environment.dump_pseudodata = self.args["dump_pseudodata"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")
