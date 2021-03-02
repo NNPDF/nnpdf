@@ -20,7 +20,6 @@ NNPDF documentation
    external-code/index
    tutorials/index
    ./sphinx-documentation.md
-   QA/index
 
 Indices and tables
 ==================
