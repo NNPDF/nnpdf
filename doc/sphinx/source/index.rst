@@ -10,13 +10,13 @@ NNPDF documentation
    :maxdepth: 2
 
    get-started/index
+   n3fit/index
+   vp/index
    data/index
    theory/index
-   vp/index
-   n3fit/index
-   code/index
    ci/index
    serverconf/index
+   code/index
    tutorials/index
    ./sphinx-documentation.md
    QA/index
