@@ -28,7 +28,6 @@ theoryids_groups_central_values = collect(groups_central_values,
                                                ('theoryids',))
 
 theoryids_groups_central_values_no_table = collect(groups_central_values_no_table,
-      
                                                ('theoryids',))
 
 collected_theoryids = collect('theoryids',
