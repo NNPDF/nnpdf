@@ -72,33 +72,34 @@ def initialize_seeds(replicas: list, trvlseed: int, nnseed: int, mcseed: int, ge
     return Seeds(trvalseeds, nnseeds, mcseeds)
 
 
-# Action to be called by valid phys
+# Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
 def performfit(
-    genrep,
-    data,
+    *,
+    genrep, # used for checks
+    data, # used for checks
     replicas_nnseed_fitting_data_dict,
     posdatasets_fitting_pos_dict,
     integdatasets_fitting_integ_dict,
-    replica_path,
-    output_path,
     theoryid,
-    kfold_parameters,
     basis,
     fitbasis,
+    sum_rules=True,
     parameters,
+    replica_path,
+    output_path,
+    save_weights_each=None,
+    save=None,
+    load=None,
     hyperscan=None,
     hyperopt=None,
+    kfold_parameters,
+    tensorboard=None,
     debug=False,
     maxcores=None,
-    save_weights_each=None,
-    load=None,
-    sum_rules=True,
-    tensorboard=None,
-    save=None,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -125,9 +126,10 @@ def performfit(
         Parameters
         ----------
             genrep: bool
-                Whether or not to generate MC replicas.
+                Whether or not to generate MC replicas. (Only used for checks)
             data: validphys.core.DataGroupSpec
-                containing the datasets to be included in the fit.
+                containing the datasets to be included in the fit. (Only used
+                for checks)
             replicas_nnseed_fitting_data_dict: list[tuple]
                 list with element for each replica (typically just one) to be
                 fitted. Each element
@@ -140,45 +142,45 @@ def performfit(
             integdatasets_fitting_integ_dict: list[dict]
                 list of dictionaries containing all data and metadata for each
                 integrability dataset
-            replica_path: pathlib.Path
-                path to the output of this run
-            output_path: str
-                name of the fit
             theoryid: validphys.core.TheoryIDSpec
                 Theory which is used to generate theory predictions from model
                 during fit. Object also contains some metadata on the theory
                 settings.
-            kfold_parameters: None, dict
-                dictionary with kfold settings used in hyperopt.
             basis: list[dict]
                 preprocessing information for each flavour to be fitted.
             fitbasis: str
                 Valid basis which the fit is to be ran in. Available bases can
                 be found in :py:mod:`validphys.pdfbases`.
+            sum_rules: bool
+                Whether to impose sum rules in fit. By default set to True
             parameters: dict
                 Mapping containing parameters which define the network
                 architecture/fitting methodology.
+            replica_path: pathlib.Path
+                path to the output of this run
+            output_path: str
+                name of the fit
+            save_weights_each: None, int
+                if set, save the state of the fit every ``save_weights_each``
+                epochs
+            save: None, str
+                model file where weights will be save, used in conjunction with
+                ``load``.
+            load: None, str
+                model file from which to load weights from.
             hyperscan: dict
                 dictionary containing the details of the hyperscan
             hyperopt: int
                 if given, number of hyperopt iterations to run
+            kfold_parameters: None, dict
+                dictionary with kfold settings used in hyperopt.
+            tensorboard: None, dict
+                mapping containing tensorboard settings if it is to be used. By
+                default it is None and tensorboard is not enabled.
             debug: bool
                 activate some debug options
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
-            save_weights_each: None, int
-                if set, save the state of the fit every ``save_weights_each``
-                epochs
-            load: None, str
-                model file from which to load weights from.
-            sum_rules: bool
-                Whether to impose sum rules in fit. By default set to True
-            tensorboard: None, dict
-                mapping containing tensorboard settings if it is to be used. By
-                default it is None and tensorboard is not enabled.
-            save: None, str
-                model file where weights will be save, used in conjunction with
-                ``load``.
 
     """
     from n3fit.backends import set_initial_state
