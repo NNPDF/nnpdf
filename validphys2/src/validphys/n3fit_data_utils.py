@@ -1,5 +1,8 @@
 """
-    Library of function for reading  NNPDF objects
+n3fit_data_utils.py
+
+Library of function for reading libnnpdf objects.
+
 """
 import hashlib
 from copy import deepcopy

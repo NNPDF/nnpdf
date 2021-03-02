@@ -26,7 +26,7 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
-N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results", "n3fit.io.reader_providers"]
+N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results", "validphys.n3fit_data"]
 
 log = logging.getLogger(__name__)
 
@@ -122,7 +122,7 @@ class N3FitConfig(Config):
             fit_action = 'datacuts::theory::fitting performfit'
         N3FIT_FIXED_CONFIG['actions_'].append(fit_action)
 
-        if kwargs["environment"].dump_pseudodata:
+        if file_content["fitting"].get("savepseudodata"):
             # take same namespace configuration on the pseudodata_table action.
             table_action = fit_action.replace('performfit', 'pseudodata_table')
             N3FIT_FIXED_CONFIG['actions_'].append(table_action)
@@ -193,12 +193,6 @@ class N3FitApp(App):
         parser.add_argument(
             "-r", "--replica_range", help="End of the range of replicas to compute", type=check_positive
         )
-        parser.add_argument(
-            "-d",
-            "--dump-pseudodata",
-            action="store_true",
-            help="Boolean flag, when enabled saves pseudodata table for replica/s."
-        )
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -217,7 +211,6 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
-            self.environment.dump_pseudodata = self.args["dump_pseudodata"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

@@ -1,5 +1,5 @@
 """
-reader_providers.py
+n3fit_data.py
 
 Providers which prepare the data ready for
 :py:func:`n3fit.performfit.performfit`. Returns python objects but the underlying
@@ -18,7 +18,10 @@ from NNPDF import RandomGenerator
 from reportengine import collect
 from reportengine.table import table
 
-from n3fit.io.reader import common_data_reader_experiment, positivity_reader
+from validphys.n3fit_data_utils import (
+    common_data_reader_experiment,
+    positivity_reader,
+)
 
 log = logging.getLogger()
 
@@ -110,7 +113,7 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     ----------
         dataset_dicts: list[dict]
             list of datasets dictionaries returned by
-            :py:func:`n3fit.io.reader.common_data_reader_experiment`.
+            :py:func:`validphys.n3fit_data_utils.common_data_reader_experiment`.
         tr_masks: list[np.array]
             a tuple containing the lists of training masks for each dataset.
 
@@ -296,8 +299,20 @@ def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
 
     Notes
     -----
-    The table folder where this table is saved is
-    created inside the final fitted replica
+    Whilst running ``n3fit``, the directory where this table is saved is
+    created inside the final fitted replica. For example running
+
+    .. code::
+        n3fit <fit name>.yml 1
+
+    will create the table folder at ``<fit name>/nnfit/replica_1/tables``.
+    However,
+
+    .. code::
+        n3fit <fit name>.yml 1 --replica_range 5
+
+    will create the table folder at ``<fit name>/nnfit/replica_5/tables``,
+    since that was the final requested replica.
 
     """
     rep_dfs = []

@@ -16,7 +16,7 @@ from validphys.covmats import INTRA_DATASET_SYS_NAME
 
 from reportengine import collect
 
-import n3fit.io.reader as reader
+import validphys.n3fit_data_utils as reader
 from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
