@@ -63,8 +63,8 @@ _datasets_list_nlo: &datasets_list_nlo
   - dataset: CMSTOPDIFF8TEVTTRAPNORM
   - dataset: LHCBZ940PB
   - dataset: LHCBZEE2FB
-  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
-  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
+  - {dataset: LHCBWZMU7TEV, cfac: [NRM]}
+  - {dataset: LHCBWZMU8TEV, cfac: [NRM]}
 
 shiftconfig:     # For calculating NNLO-NLO shift
 

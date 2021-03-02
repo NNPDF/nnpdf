@@ -72,8 +72,8 @@ dataset_inputs:
   - dataset: CMSTOPDIFF8TEVTTRAPNORM
   - dataset: LHCBZ940PB
   - dataset: LHCBZEE2FB
-  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
-  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
+  - {dataset: LHCBWZMU7TEV, cfac: [NRM]}
+  - {dataset: LHCBWZMU8TEV, cfac: [NRM]}
 
 template: template_matrix_plots.md
 
