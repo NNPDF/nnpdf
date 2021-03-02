@@ -18,28 +18,33 @@ Some places to look:
    and see :ref:`theory-covmat-examples` for guidance.
 -  `Here for theory covariance validation plots <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/theorycovariance/tests.py>`_,
    and see :ref:`theory-covmat-examples` for guidance.
+-  Use ``validphys --help``. This will give information on installed modules and also specific actions. For example,
+   ``validphys --help plot_chi2_dist`` gives you information about the action ``plot_chi2_dist`` including input
+   resources, output type and the place where it is defined.
      
 Outline of approach
 -------------------
 **If there is no action for the plot you want, you can add your own!**
 
 .. warning::
-    Please follow the :ref:`rules`!
+    Please follow the :ref:`rules`! In particular, this means you should create a new branch of the code
+    to make your edits on, then create a pull request, with reviewers, for merging into the master branch.
+    This helps to avoid bugged actions being propagated.
     
 1. Locate the right place to put your plot/table. See the "places to look" above to find similar plots.
 2. Identify the inputs you need for your plot/table. For example, if you are plotting some \\(\\chi^2\\)s you 
-   may need the action ``chi2_data`` as an input. Try searching in the relevant modules in ``validphys`` or 
-   using the table of common inputs below.
-   
-.. note::
-    Remember to import the input actions to the module you are working in if necessary.
-
+   may need the action ``chi2_data`` as an input. Try searching in the relevant modules in ``validphys``, using
+   ``validphys --help`` or looking at the table of common inputs below.
 3. See if you can make use of functions in `plotutils <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/plotutils.py>`_
    to help with making a plot.
 4. Write an action which takes the inputs and returns a figure or table.
-5. See :ref:`pytools` for general help on developing the python code. In particular make use of 
-   the ``IPython`` ``embed`` function.
-6. Use the ``@figure`` decorator for figures and ``@table`` decorator for tables.
+5. See :ref:`pytools` for general help on developing the python code. One approach is to make use of 
+   the `IPython embed <https://ipython.readthedocs.io/en/stable/interactive/reference.html#embedding>`_
+   function. This allows you to play around with variables from inside
+   the action you are making. Another is to use an IPython environment such as a `Jupyter notebook <https://jupyter.org/>`_, 
+   and obtain the necessary inputs using the :ref:`API <vpapi>`.
+6. Use the ``@figure`` decorator for figures and ``@table`` decorator for tables. This means that
+   the output will be saved in ``output/figures`` and ``output/tables`` respectively.
 
 Common inputs
 -------------
@@ -59,7 +64,7 @@ Common inputs
    "``groups_covmat``", "Experimental covariance matrix"
    "``theory_covmat_custom``", "Scale variation theory covariance matrix"
    "``total_chi2_data``", "``Chi2Data`` namedtuple with entries ``replica_result``, ``central_result`` and ``ndata`` for total \\(\\chi^2\\), **not including any correlations outwith experiments**"
-   "``groups_chi2``", "``Chi2Data`` namedtuple for all groups."
+   "``groups_chi2``", "``Chi2Data`` namedtuple for all groups"
    "``replica_data``", "PDF replicas"
    "``experiments_xq2map``", "Two ( \\(x\\), \\(Q^2\\) ) tuples, one for fitted data and one for cut data, for each of the ``dataset_inputs``"
 
@@ -98,8 +103,8 @@ start of the action will look like:
 	    from IPython import embed
 	    embed()
 
-Note that an ``IPython embed`` has been included to help explore the various objects. We can set up a test runcard that
-calls our action, like:
+Note that an ``IPython embed`` has been included to help explore the various objects. This is for development purposes and we 
+will remove it when making any commits. We can set up a test runcard that calls our action, like:
 
 .. code:: yaml
 
@@ -127,7 +132,7 @@ calls our action, like:
 
 
 Running this runcard and using ``embed`` we can see that ``groups_data_phi`` is a list of tuples, one for each group. 
-Each tuple is (``phi``,``ǹum_points``). So we can write our action in a similar way to the ``plot_groups_data_chi2``
+Each tuple is (``phi``,``num_points``). So we can write our action in a similar way to the ``plot_groups_data_chi2``
 one:
 
 .. code:: python
@@ -150,7 +155,4 @@ Note that:
 -  We used a list comprehension rather than a ``for`` loop.
 -  We added a docstring explaining what the action does.
 -  The action makes use of ``barplot`` from ``plotutils`` to do a bar chart.
--  The ``@figure`` decorator causes a figure to be generated and saved.
-
-	    
-	   
+-  The ``@figure`` decorator causes a figure to be generated and saved.	   
