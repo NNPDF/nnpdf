@@ -1,4 +1,7 @@
-## APFELcomb
+```eval_rst
+.. _apfelcomb:
+```
+# Using APFELcomb
 
 APFELcomb is the project that allows the user to generate ``FK`` tables. These
 are lookup tables that contain the relevant information to compute theoretical 

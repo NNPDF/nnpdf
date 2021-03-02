@@ -12,11 +12,12 @@ NNPDF documentation
    get-started/index
    n3fit/index
    vp/index
+   ./buildmaster.md
    data/index
    theory/index
    ci/index
    serverconf/index
-   code/index
+   external-code/index
    tutorials/index
    ./sphinx-documentation.md
    QA/index

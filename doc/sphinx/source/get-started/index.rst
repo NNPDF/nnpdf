@@ -11,4 +11,3 @@ Getting Started
    ./rules
    ./prs
    ./python-tools
-   ./tools
