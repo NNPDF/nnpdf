@@ -8,5 +8,4 @@ Getting Started
    ./git
    ./installation
    ./rules
-   ./prs
    ./python-tools
