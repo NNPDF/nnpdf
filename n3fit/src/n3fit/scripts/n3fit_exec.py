@@ -77,9 +77,8 @@ class N3FitEnvironment(Environment):
             except OSError as e:
                 raise EnvironmentError_(e) from e
 
-        # place tables in last replica path
-        self.table_folder = path / TAB_FOLDER
-        self.table_folder.mkdir(exist_ok=True)
+        # place tables in last replica path, folder already exists.
+        self.table_folder = path
 
         # make lockfile input inside of replica folder
         # avoid conflict with setupfit
@@ -123,6 +122,12 @@ class N3FitConfig(Config):
         N3FIT_FIXED_CONFIG['actions_'].append(fit_action)
 
         if file_content["fitting"].get("savepseudodata"):
+            if len(kwargs["environment"].replicas) != 1:
+                raise ConfigError(
+                    "Cannot request that multiple replicas are fitted and that "
+                    "pseudodata is saved. Either set `fitting::savepseudodata` "
+                    "to `false` or fit replicas one at a time."
+                )
             # take same namespace configuration on the pseudodata_table action.
             table_action = fit_action.replace('performfit', 'pseudodata_table')
             N3FIT_FIXED_CONFIG['actions_'].append(table_action)

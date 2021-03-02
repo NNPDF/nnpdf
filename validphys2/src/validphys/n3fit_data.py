@@ -299,20 +299,9 @@ def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
 
     Notes
     -----
-    Whilst running ``n3fit``, the directory where this table is saved is
-    created inside the final fitted replica. For example running
-
-    .. code::
-        n3fit <fit name>.yml 1
-
-    will create the table folder at ``<fit name>/nnfit/replica_1/tables``.
-    However,
-
-    .. code::
-        n3fit <fit name>.yml 1 --replica_range 5
-
-    will create the table folder at ``<fit name>/nnfit/replica_5/tables``,
-    since that was the final requested replica.
+    Whilst running ``n3fit``, this action will only be called if
+    `fitting::savepseudodata` is `true` and replicas are fitted one at a time.
+    The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
 
     """
     rep_dfs = []
