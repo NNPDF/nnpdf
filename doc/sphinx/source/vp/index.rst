@@ -8,7 +8,6 @@ vp-guide
    ./introduction.md
    ./design.md
    ./api.md
-   ./filters.md
    ./download.md
    ./upload.md
    ./nnprofile.md

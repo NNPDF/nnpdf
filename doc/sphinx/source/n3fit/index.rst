@@ -8,3 +8,4 @@ n3fit
    methodology
    hyperopt
    runcard_detailed
+   filters
