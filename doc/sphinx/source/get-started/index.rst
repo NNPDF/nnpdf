@@ -7,7 +7,6 @@ Getting Started
    ./access
    ./git
    ./installation
-   ./installation-source
    ./rules
    ./prs
    ./python-tools
