@@ -18,6 +18,7 @@ Existing examples
 ============================= 	===========================    =========================================================
 Runcard/folder name		Tutorial			What it does
 ============================= 	===========================    =========================================================
+API_example.ipynb		:ref:`vpapi`			Jupyter notebook example with API	
 closure_templates/    		:ref:`tut_closure`  		Running closure tests
 cuts_options.yaml             	N/A          			Shows results for different cuts policites
 dataspecs.yaml			N/A				Shows how to use ``dataspecs``
@@ -32,7 +33,6 @@ pdfdistanceplots.yaml		How to plot PDFs		Distance PDF plots
 simple_runcard.yaml		N/A				Simple runcard example
 taking_data_from_fit.yaml	N/A				Shows how to take ``theoryids`` and ``pdfs`` from a fit	
 theory_covariance/            	:ref:`vptheorycov-index`	Runcards for the ``theorycovariance`` module	
-'W Plot.ipynb'                	:ref:`vpapi`			Jupyter notebook example with API	
 ============================= 	===========================    =========================================================
 
 Recommended resources
