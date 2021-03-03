@@ -422,7 +422,7 @@ class CoreConfig(configparser.Config):
                 )
                 name = commondata.name
                 inps = []
-                for ns in nss:
+                for i, ns in enumerate(nss):
                     with self.set_context(ns=self._curr_ns.new_child({**ns,})):
                         # TODO: find a way to not duplicate this and use a dict
                         # instead of a linear search
@@ -431,7 +431,7 @@ class CoreConfig(configparser.Config):
                         di = next(d for d in dins if d.name == name)
                     except StopIteration as e:
                         raise ConfigError(
-                            f"cuts_intersection_spec dataset inputs must define {name}"
+                            f"cuts_intersection_spec namespace {i}: dataset inputs must define {name}"
                         ) from e
 
                     with self.set_context(
@@ -439,13 +439,13 @@ class CoreConfig(configparser.Config):
                             {
                                 "dataset_input": di,
                                 "use_cuts": CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE,
+                                "cuts": matched_cuts,
                                 **ns,
                             }
                         )
                     ):
                         _, ds = self.parse_from_(None, "dataset", write=False)
                         _, pdf = self.parse_from_(None, "pdf", write=False)
-                    print(ds, ds.fkspecs[0].cfactors)
                     inps.append((ds, pdf))
                 return SimilarCuts(tuple(inps), cut_similarity_threshold)
 
