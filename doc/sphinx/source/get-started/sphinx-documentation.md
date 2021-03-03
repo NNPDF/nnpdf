@@ -7,14 +7,24 @@
 The NNPDF documentation is produced by the
 [sphinx](http://www.sphinx-doc.org/en/master/) resource. To generate the sphinx
 documentation, navigate to the `nnpdf/doc/sphinx/` directory and execute the command `make
-html`, ensuring one is inside the appropriate `nnpdf` conda environment. This produces the 
+html`, ensuring one is inside the appropriate `nnpdf` conda environment. This produces the
 documentation in the `build/index/` directory. The `index.html` can be viewed with any appropriate
 browser.
 
 ### Adding to the Documentation
 
 New documentation can be added in markdown, naming the source files with the `.md` suffix, or
-restructured text, with the `.rst` suffix formats. To add a new section to the
+restructured text, with the `.rst` suffix formats.
+```eval_rst
+.. note::
+  The `md` format is now deprecated and only supported for legacy reasons. The
+  reStructured Text format natively supports equation displaying as well as directives such
+  as this note and is thus the preferred format for `NNPDF` documentation. Despite this, it is
+  possible to evaluate inline `rst` in a `md` file using the `eval_rst` command in legacy files
+  written in markdown.
+```
+
+To add a new section to the
 documentation, create an appropriately named directory in the `sphinx/source/`
 directory.  Inside the new directory, add all relevant documentation in the
 markdown or restructured text formats. In addition to these files, create an

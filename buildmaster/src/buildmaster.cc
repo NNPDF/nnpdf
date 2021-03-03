@@ -242,6 +242,8 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************ EMCF2C *****************************
 
   target.push_back(new EMCF2CFilter());
+  target.push_back(new EMCF2C_dwFilter());
+  target.push_back(new EMCF2C_shFilter());
   target.push_back(new EMCF2c1987Filter());
 
   // ************************ EMC *****************************

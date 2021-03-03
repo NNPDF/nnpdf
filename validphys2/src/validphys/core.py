@@ -331,13 +331,14 @@ class CommonDataSpec(TupleComp):
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specidy a
     dataset."""
-    def __init__(self, *, name, sys, cfac, frac, weight):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
         self.name=name
         self.sys=sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
-        super().__init__(name, sys, cfac, frac, weight)
+        self.custom_group = custom_group
+        super().__init__(name, sys, cfac, frac, weight, custom_group)
 
     def __str__(self):
         return self.name
@@ -359,6 +360,8 @@ class CutsPolicy(enum.Enum):
     NOCUTS = "nocuts"
     FROMFIT = "fromfit"
     FROM_CUT_INTERSECTION_NAMESPACE = "fromintersection"
+    FROM_SIMILAR_PREDICTIONS_NAMESPACE = "fromsimilarpredictions"
+
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
@@ -395,6 +398,40 @@ class MatchedCuts(TupleComp):
             return functools.reduce(np.intersect1d, loaded)
         self._full = True
         return np.arange(self.ndata)
+
+class SimilarCuts(TupleComp):
+    def __init__(self, inputs, threshold):
+        if len(inputs) != 2:
+            raise ValueError("Expecting two input tuples")
+        firstcuts, secondcuts = inputs[0][0].cuts, inputs[1][0].cuts
+        if firstcuts != secondcuts:
+            raise ValueError("Expecting cuts to be the same for all datasets")
+        self.inputs = inputs
+        self.threshold = threshold
+        super().__init__(self.inputs, self.threshold)
+
+    def load(self):
+        # TODO: Update this when a suitable interace becomes available
+        from validphys.convolution import central_predictions
+        from validphys.commondataparser import load_commondata
+        from validphys.covmats import covmat_from_systematics
+
+        first, second = self.inputs
+        first_ds = first[0]
+        exp_err = np.sqrt(
+            np.diag(
+                covmat_from_systematics(
+                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts)
+                )
+            )
+        )
+        # Compute matched predictions
+        delta = np.abs(
+            (central_predictions(*first) - central_predictions(*second)).squeeze(axis=1)
+        )
+        ratio = delta / exp_err
+        passed = ratio < self.threshold
+        return passed[passed].index
 
 
 def cut_mask(cuts):

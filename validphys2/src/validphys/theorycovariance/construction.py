@@ -15,7 +15,9 @@ import pandas as pd
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import groups_central_values, groups_central_values_no_table
+from validphys.results import (groups_central_values, 
+                               groups_central_values_no_table, 
+                               groups_data_values)                              
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
@@ -421,30 +423,27 @@ def theory_corrmat_custom(theory_covmat_custom):
     return mat
 
 @table
-def theory_normcovmat_singleprocess(theory_covmat_singleprocess, groups_data):
+def theory_normcovmat_singleprocess(theory_covmat_singleprocess, groups_data_values):
     """Calculates the theory covariance matrix for scale variations normalised
     to data."""
     df = theory_covmat_singleprocess
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df/np.outer(groups_data_values, groups_data_values)
     return mat
 
 @table
-def theory_normblockcovmat(theory_block_diag_covmat, groups_data):
+def theory_normblockcovmat(theory_block_diag_covmat, groups_data_values):
     """Calculates the theory covariance matrix for scale variations
     normalised to data, block diagonal by dataset."""
     df = theory_block_diag_covmat
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df/np.outer(groups_data_values, groups_data_values)
     return mat
 
 @table
-def theory_normcovmat_custom(theory_covmat_custom, groups_data):
+def theory_normcovmat_custom(theory_covmat_custom, groups_data_values):
     """Calculates the theory covariance matrix for scale variations normalised
     to data, with variations according to the relevant prescription."""
     df = theory_covmat_custom
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df/np.outer(groups_data_values, groups_data_values)
     return mat
 
 @table
@@ -485,25 +484,25 @@ def experimentplustheory_normcovmat_singleprocess(groups_covmat,
 @table
 def experimentplusblocktheory_normcovmat(groups_covmat,
                                           theory_block_diag_covmat,
-                                          groups_data,
+                                          groups_data_values,
                                           experimentplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, block diagonal by data set."""
     mat = experimentplustheory_normcovmat(groups_covmat,
                                            theory_block_diag_covmat,
-                                           groups_data)
+                                           groups_data_values)
     return mat
 
 @table
 def experimentplustheory_normcovmat_custom(groups_covmat,
                                             theory_covmat_custom,
-                                            groups_data,
+                                            groups_data_values,
                                             experimentplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, correlations by process type."""
     mat = experimentplustheory_normcovmat(groups_covmat,
                                            theory_covmat_custom,
-                                           groups_data)
+                                           groups_data_values)
 
     return mat
 @table

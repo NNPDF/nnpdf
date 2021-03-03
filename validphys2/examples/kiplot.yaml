@@ -29,7 +29,7 @@ template_text: |
     Marker by {@marker_by@}
     -----------------------
 
-    {@fitcontext plot_xq2@}
+    {@plot_xq2@}
 
     {@endwith@}
 

@@ -211,7 +211,7 @@ def check_integrability(integdatasets):
     log.info('Verifying integrability tables:')
     for integ in integdatasets:
         integ.load()
-        log.info(f'{integ.name} checked.')        
+        log.info(f'{integ.name} checked.')
 
 class PerturbativeOrder:
     """Class that conveniently handles

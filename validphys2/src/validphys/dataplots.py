@@ -960,22 +960,22 @@ def plot_dataspecs_positivity(
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
     check(
-        not (display_cuts
-             and use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL)),
-        "The display_cuts option requires setting use_cuts to True")
+        not (display_cuts and use_cuts is CutsPolicy.NOCUTS),
+        "The display_cuts option requires setting some cuts",
+    )
 
 @make_argcheck
 def _check_marker_by(marker_by):
-    markers = ('process type', 'experiment', 'dataset')
+    markers = ('process type', 'experiment', 'dataset', 'group')
     if marker_by not in markers:
         raise CheckError("Unknown marker_by value", marker_by, markers)
 
 #TODO: Right now this is hackish Could we turn it into a permanent interface?
 @make_argcheck
-def _check_highlights(groups_data, highlight_datasets):
+def _check_highlights(data_input, highlight_datasets):
     if highlight_datasets:
         values = frozenset(highlight_datasets)
-        names_set = {ds.name for group in groups_data for ds in group}
+        names_set = {ds.name for ds in data_input}
         diff = values - names_set
         if diff:
             raise CheckError(f"The following highlight elements are "
@@ -994,10 +994,16 @@ def _check_aspect(aspect):
 @_check_marker_by
 @_check_highlights
 @_check_aspect
-def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
-                 marker_by:str='process type', highlight_label:str='highlight',
-                 highlight_datasets:(Sequence,type(None))=None,
-                 aspect:str='landscape'):
+def plot_xq2(
+    dataset_inputs_by_groups_xq2map,
+    use_cuts,
+    data_input,
+    display_cuts:bool=True,
+    marker_by:str='process type',
+    highlight_label:str='highlight',
+    highlight_datasets:(Sequence,type(None))=None,
+    aspect:str='landscape',
+):
     """Plot the (x,Q²) coverage based of the data based on some LO
     approximations. These are governed by the relevant kintransform.
 
@@ -1015,7 +1021,8 @@ def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
     will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible
-    values are: "process type", "experiment" or "dataset".
+    values are: "process type", "experiment", "group" or "dataset".
+
     """
 
     w,h = plt.rcParams["figure.figsize"]
@@ -1063,7 +1070,7 @@ def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
     next_opts = next_options()
     key_options = {}
 
-    for experiment, commondata, fitted, masked in experiments_xq2map:
+    for (experiment, commondata, fitted, masked, group) in dataset_inputs_by_groups_xq2map:
         info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description
@@ -1071,6 +1078,9 @@ def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
             key = str(experiment)
         elif marker_by == 'dataset':
             key = info.dataset_label
+        elif marker_by == "group":
+            # if group is None then make sure that shows on legend.
+            key = str(group)
         else:
             raise ValueError('Unknown marker_by value')
 
