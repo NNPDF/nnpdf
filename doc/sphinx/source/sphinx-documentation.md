@@ -1,3 +1,6 @@
+```eval_rst
+.. _add_docs:
+```
 # Adding to the Documentation <a name="top"></a>
 
 The NNPDF documentation is produced by the
