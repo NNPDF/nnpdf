@@ -3,9 +3,14 @@ Including a general theory covariance matrix in a fit
 This tutorial explains how to include an externally constructed theory covariance 
 matrix (theory covmat) in a fit. 
 
+.. warning::
+   Theory covariance matrices are currently only supported in the legacy fitting code,
+   ``nnfit``, which was used to produce NNPDF3.1 fits. See :ref:`nnfit-usage`.
+
 .. note::
    Scale variation (MHOU) covariance matrices are already implemented in ``validphys``
-   in the `theorycovariance <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/theorycovariance/>`_ module. See the tutorial on how to include them.
+   in the `theorycovariance <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/theorycovariance/>`_ module. 
+   See the tutorial on how to include them.
    
 Sometimes we would like to see the impact of a certain theory covariance matrix 
 on the fit. For example
@@ -59,6 +64,9 @@ generation). The default is ``True`` for both.
 .. warning::
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
+      
+4. Make sure that datasets are grouped under one big experiment called "BIGEXP", 
+   just like in :ref:`vptheorycov-index`.
 
 Including both scale variation uncertainties and user uncertainties
 -------------------------------------------------------------------

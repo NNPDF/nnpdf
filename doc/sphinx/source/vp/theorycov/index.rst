@@ -1,6 +1,7 @@
  .. _vptheorycov-index:
+ 
 The ``theorycovariance`` module
-=============================
+===============================
 
 .. toctree::
    :maxdepth: 1
