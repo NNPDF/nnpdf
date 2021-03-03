@@ -185,7 +185,7 @@ class ArchiveUploader(FileUploader):
         return ''
 
     def _check_existence(self, resource_name):
-        """ Check whether the given resource exists on the server
+        """ Check whether the given resource exists on the server.
         Returns true if the resource exists with the same name on the server
         or false otherwise.
         Note that the type of resource being checked is defined by the ``_loader_name`` attribute
@@ -205,8 +205,8 @@ class ArchiveUploader(FileUploader):
         if self._check_existence(resource_name):
             log.info("It has been correctly indexed by the server!")
         else:
-            log.error("The object is uploaded but hasn't been indexed yet by the server "
-                  "you should upload it again to ensure it is indexed: vp-upload %s", resource_name)
+            log.error("The object is uploaded but hasn't been indexed yet by the server. "
+                  "You should upload it again to ensure it is indexed: vp-upload %s", resource_name)
 
     def _compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
@@ -273,9 +273,9 @@ class FitUploader(ArchiveUploader):
     _resource_type = "fit"
 
     def check_fit_md5(self, output_path):
-        """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
+        """When ``vp-setupfit`` is run successfully, it creates an ``md5`` from
         the config. We check that the ``md5`` matches the ``filter.yml`` which
-        is checking that ``vp-setupfit`` was ran and that the ``filter.yml``
+        is checking that ``vp-setupfit`` was run and that the ``filter.yml``
         inside the fit folder wasn't modified.
 
         """
@@ -285,8 +285,8 @@ class FitUploader(ArchiveUploader):
                 saved_md5 = f.read()
         except FileNotFoundError as e:
             log.error(
-                "It doesn't appear that `vp-setupfit` was ran because no `md5` "
-                "was found, `vp-setupfit` should be ran before uploading a fit."
+                "It doesn't appear that `vp-setupfit` was run because no `md5` "
+                "was found, `vp-setupfit` should be run before uploading a fit."
             )
             raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
 
