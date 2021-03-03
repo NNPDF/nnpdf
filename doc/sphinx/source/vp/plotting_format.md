@@ -37,8 +37,8 @@ called:
 PLOTTINTYPE_<type>.yaml
 ```
 
-See [Kinematic labels] below for a list of defined types. When a key
-is present both in the dataset-specific and the process-type level file, the
+See [kinematic labels](#kinematic-labels) below for a list of defined types. When a key
+is present both in the dataset-specific and the process type level file, the
 dataset-specific one always takes precedence.
 
 
