@@ -3,7 +3,7 @@ Plotting Format
 
 A *plotting file* defines a set of options that are used for analysis
 and representation purposes, particularly to determine how datasets
-should be represented in plots and how  should they be grouped
+should be represented in plots and how they should be grouped
 together according to various criteria. The plotting files should be
 considered part of the implementation of the dataset, and should be
 read by various tools that want to sensibly represent the data.
@@ -38,24 +38,24 @@ PLOTTINTYPE_<type>.yaml
 ```
 
 See [Kinematic labels] below for a list of defined types. When a key
-is present both in the dataset-specific and the process type level file, the
+is present both in the dataset-specific and the process-type level file, the
 dataset-specific one always takes precedence.
 
 
 ## Format
 
-The plot file specifies the variable as a function of which the data
-is to be plotted (in the  *x* axis) as well as the variables as
-a function of which the data will be split in different lines in the
+The plot file specifies the variable in which the data
+is to be plotted (in the  *x* axis) as well as the variables
+in which the data will be split in different lines in the
 same figure or in different figures. The possible variables
 ('*kinematic labels*') are described below.
 
-The format also allows to control several plotting properties, such
-that whether to use log scale, or the axes labels.
+The format also allows the control of several plotting properties, such
+as whether to use log scale, or the axes labels.
 
 ### Data label
 
-A key called `dataset_label` can  be used to specify a nice plotting
+A key called `dataset_label` can be used to specify a nice plotting
 and display label for each dataset. LaTeX math is allowed between
 dollar signs.
 
@@ -95,7 +95,7 @@ code (and accessible as `validphys.plotoptions.core.kinlabels_latex`
 in the Python code).
 
 The three kinematic variables are referred to as `k1`, `k2` and `k3`
-in the plot files. For example, for DIS processes, `k1` refers to `x`,
+in the plotting files. For example, for DIS processes, `k1` refers to `x`,
 `k2` to `Q`, and `k3` to `y`.
 
 These kinematic values can be overridden by some transformation of
@@ -104,7 +104,7 @@ a `kinematics_override` key.  The value must be a class defined
 in: `validphys2/src/validphys/plotoptions/kintransforms.py`
 
 The class must have a `__call__` method that takes three parameters:
-`(k1, k2 k3)` as defined in the dataset implementation, and return
+`(k1, k2 k3)` as defined in the dataset implementation, and returns
 three new values `('k1', 'k2', k3')` which are the "transformed"
 kinematical variables, which will be used for plotting purposes every
 time the kinematic variables `k1`, `k2` and `k3` are referred to.
@@ -141,11 +141,11 @@ extra_labels:
 defines one label where the values for each of the datapoints are
 given in the list. Note that the name of the extra_label (in this case
 `idat2bin` is completely arbitrary, and will be used for plotting
-purposes (LaTeX math syntax is allowed as well). However adding labels
+purposes (LaTeX math syntax is allowed as well). However, adding labels
 manually for each point can be tedious. This should only be reserved
 for information that cannot be recovered from the kinematics as
 defined in the CommonData file. Instead, new labels can be generated
-programmatically: every function defined in: `validphys2/src/validphys/plotoptions/labelers.py`
+programmatically: every function defined in `validphys2/src/validphys/plotoptions/labelers.py`
 is a valid label. These functions take as keyword arguments the
 (possibly transformed) kinematical variables, as well as any extra
 label declared in the plotting file. For example, one might declare:
@@ -156,7 +156,7 @@ def high_xq(k1, k2, k3, **kwargs):
 
 ````
 
-Note that it is convenient to always declare the `\*\*kwargs`
+Note that it is convenient to always declare the `**kwargs`
 parameter so that the code doesn't crash when the function is called
 with extra arguments. Similarly to the kinematics transforms, it is
 possible to decorate them with a `@label` describing a nicer latex
@@ -171,7 +171,7 @@ def high_xq(k1, k2, k3, **kwargs):
 
 ### Plotting and grouping
 
-The variable as function of which the data is plotted, is simply
+The variable in which the data is plotted is simply
 declared as
 
 ````
@@ -208,7 +208,7 @@ figure_by:
 
 ### Transforming the result
 
-By default the y axis represents the central value and error. However
+By default the *y* axis represents the central value and error. However,
 it is possible to define a results_transform in the plotting file:
 
 ````
@@ -217,7 +217,7 @@ result_transform: qbinexp
 
 The value must be a function declared in
 `validphys2/src/validphys/plotoptions/results_transform.py`
-taking the error, the central value as well as all the labels, and
+taking the error, the central value, as well as all the labels, and
 returning a new error and central value. For example:
 
 ````
@@ -265,7 +265,7 @@ extra_labels:
 ```
 Here, we would split the data by different figure files for each
 unique value of the key `Boson` (which is defined explicitly as an
-`extra_label`), but only one plots with the three bosons split across
+`extra_label`), but only one plot with the three bosons split across
 different lines will be produced in absolute value plots.
 
 ### Metadata keys
@@ -277,7 +277,7 @@ datasets. These keys include:
   - `process_description` (string): A description of the physical process
   associated to the dataset. This would typically be defined in the
   `PLOTTINGTYPE` files.
-  - `data_reference` (string): a LaTex key corresponding to the
+  - `data_reference` (string): a LaTeX key corresponding to the
   reference of the experimental paper.
   - `theory_reference` (string): a LaTeX key corresponding to the
   codes used to compute the theory predictions.
