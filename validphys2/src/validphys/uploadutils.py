@@ -197,7 +197,7 @@ class ArchiveUploader(FileUploader):
             return True
         return False
 
-    def check_is_indexed(self, resource_name):
+    def _check_is_indexed(self, resource_name):
         """ Check whether the fit is correctly indexed in the server
         """
         log.info("Checking whether %s was correctly uploaded...", resource_name)
@@ -242,7 +242,7 @@ class ArchiveUploader(FileUploader):
         super().upload_output(new_out)
 
         # Check whether the fit was really uploaded
-        self.check_is_indexed(fit_name)
+        self._check_is_indexed(fit_name)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
