@@ -43,14 +43,13 @@ Instructions
 
 .. code:: yaml
 
-	############################################################################
-	theorycovmatconfig:
-	    use_user_uncertainties: True
-	    user_uncertainties_path: "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
-	    use_thcovmat_in_sampling: True
-	    use_thcovmat_in_fitting: True
-		
-	############################################################################
+    ############################################################################
+    theorycovmatconfig:
+      use_user_uncertainties: True
+      user_uncertainties_path: "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
+      use_thcovmat_in_sampling: True
+      use_thcovmat_in_fitting: True		
+    ############################################################################
 	
 The flags ``use_thcovmat_in_fitting`` and ``use_thcovmat_in_sampling`` specify
 where to use the theory covmat in the code. There are two possible places:
