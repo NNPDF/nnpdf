@@ -1,3 +1,5 @@
+.. _vpexamples:
+
 ========
 Examples
 ========
@@ -9,6 +11,29 @@ out a common task, e.g. plotting some PDFs, and you do not want to write the run
 
 Here we detail the examples that already exist and list the resources which it is recommended that
 you use when writing a new example runcard.
+
+Existing examples
+=================
+
+============================= 	===========================    =========================================================
+Runcard/folder name		Tutorial			What it does
+============================= 	===========================    =========================================================
+closure_templates/    		:ref:`tut_closure`  		Running closure tests
+cuts_options.yaml             	N/A          			Shows results for different cuts policites
+dataspecs.yaml			N/A				Shows how to use ``dataspecs``
+data_theory_comparison.yaml	:ref:`tut_datthcomp`		Data theory comparison
+export_data.yaml		N/A				Makes tables of experimental data and covariance matrices
+generate_a_report.yaml		:ref:`tut_report`		Shows how to generate a report
+kiplot.yaml			N/A				Plot kinematic coverage of data
+looping_example.yaml		N/A				Shows how to do actions in a loop over resources
+mc_gen_example.yaml		N/A				Analysis of pseudodata generation
+new_data_specification.yaml	N/A				Shows how to specify data in runcards
+pdfdistanceplots.yaml		How to plot PDFs		Distance PDF plots
+simple_runcard.yaml		N/A				Simple runcard example
+taking_data_from_fit.yaml	N/A				Shows how to take ``theoryids`` and ``pdfs`` from a fit	
+theory_covariance/            	:ref:`vptheorycov-index`	Runcards for the ``theorycovariance`` module	
+'W Plot.ipynb'                	:ref:`vpapi`			Jupyter notebook example with API	
+============================= 	===========================    =========================================================
 
 Recommended resources
 =====================

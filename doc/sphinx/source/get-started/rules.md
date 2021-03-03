@@ -34,9 +34,8 @@ Practically, this means that you should find a green tick next to your PR on the
 page](https://github.com/NNPDF/nnpdf/pulls). If you instead find a red cross next to your PR, the
 reason for the failure must be investigated and dealt with appropriately.
 
-```eval_rst
-.. _reviews:
-```
+* Please use the recommended resources detailed [here](../vp/examples.rst).
+
 ## Reviewing pull requests
 
 All changes to the code [should](rules) be reviewed by at least one person (and ideally

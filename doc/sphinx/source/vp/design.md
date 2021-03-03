@@ -1,3 +1,7 @@
+```eval_rst
+.. _design:
+```
+
 The design of `validphys 2`
 ==========================
 
