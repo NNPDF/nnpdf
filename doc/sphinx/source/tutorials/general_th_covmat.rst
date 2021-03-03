@@ -62,7 +62,7 @@ generation). The default is ``True`` for both.
 
 Including both scale variation uncertainties and user uncertainties
 -------------------------------------------------------------------
-User uncertainties can be included with our without scale variation
-uncertainties as well. By default neither are included. To include both
+User uncertainties and scale variation uncertainties are included independently.
+By default neither are included. To include both
 see the separate tutorial on scale variation uncertainties and use the 
 union of the contributions in ``theorycovmatconfig``.	
