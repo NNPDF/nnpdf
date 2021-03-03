@@ -1062,111 +1062,54 @@ class CoreConfig(configparser.Config):
         """
         return {"norm_threshold": None}
 
-    @configparser.record_from_defaults
-    def parse_default_filter_rules(self, spec: (str, type(None))):
-        return spec
-
-    def load_default_default_filter_rules(self, spec):
-        import validphys.cuts.lockfiles
-
-        lock_token = "_filters.lock.yaml"
-        try:
-            return yaml.safe_load(
-                read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}")
-            )
-        except FileNotFoundError as e:
-            alternatives = [
-                el.strip(lock_token)
-                for el in contents(validphys.cuts.lockfiles)
-                if el.endswith(lock_token)
-            ]
-            raise ConfigError(
-                f"Default filter rules not found: {spec}",
-                bad_item=spec,
-                alternatives=alternatives,
-                display_alternatives="all",
-            )
-
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
         log.warning("Overwriting filter rules")
         return filter_rules
 
-    def parse_default_filter_rules_recorded_spec_(self, spec):
-        """This function is a hacky fix for parsing the recorded spec
-        of filter rules. The reason we need this function is that without
-        it reportengine detects a conflict in the `dataset` key.
+    @record_from_defaults
+    def produce_yaml_rules(self, filter_rules=None) -> list:
+        """Production rule for returning the raw yaml for filter rules.
+
+        If ``filter_rules`` are explicitly declared in the runcard then
+        override the filter rules in ``validphys.cuts.filters``
         """
-        return spec
-
-    def produce_rules(
-        self,
-        theoryid,
-        use_cuts,
-        defaults,
-        default_filter_rules=None,
-        filter_rules=None,
-        default_filter_rules_recorded_spec_=None,
-    ):
-
-        """Produce filter rules based on the user defined input and defaults."""
-        from validphys.filters import (
-            Rule,
-            RuleProcessingError,
-            default_filter_rules_input,
-        )
-
-        theory_parameters = theoryid.get_description()
+        from validphys.filters import default_filter_rules_input
 
         if filter_rules is None:
-            # Don't bother loading the rules if we are not using them.
-            if use_cuts is not CutsPolicy.INTERNAL:
-                return None
-            if default_filter_rules_recorded_spec_ is not None:
-                filter_rules = default_filter_rules_recorded_spec_[default_filter_rules]
-            else:
-                filter_rules = default_filter_rules_input()
+            filter_rules = default_filter_rules_input()
 
-        try:
-            rule_list = [
-                Rule(
-                    initial_data=i,
-                    defaults=defaults,
-                    theory_parameters=theory_parameters,
-                    loader=self.loader,
-                )
-                for i in filter_rules
-            ]
-        except RuleProcessingError as e:
-            raise ConfigError(f"Error Processing filter rules: {e}") from e
+        return filter_rules
 
-        return rule_list
+    @configparser.explicit_node
+    def produce_rules(self, use_cuts):
+        def _no_cuts():
+            return None
 
-    @configparser.record_from_defaults
-    def parse_default_filter_settings(self, spec: (str, type(None))):
-        return spec
+        def _apply_cuts(theoryid, defaults, yaml_rules):
+            from validphys.filters import Rule, RuleProcessingError
 
-    def load_default_default_filter_settings(self, spec):
-        import validphys.cuts.lockfiles
+            theory_parameters = theoryid.get_description()
 
-        lock_token = "_defaults.lock.yaml"
-        try:
-            return yaml.safe_load(
-                read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}")
-            )
-        except FileNotFoundError as e:
-            alternatives = alternatives = [
-                el.strip(lock_token)
-                for el in contents(validphys.cuts.lockfiles)
-                if el.endswith(lock_token)
-            ]
-            raise ConfigError(
-                f"Default filter settings not found: {spec}",
-                bad_item=spec,
-                alternatives=alternatives,
-                display_alternatives="all",
-            )
+            try:
+                rule_list = [
+                    Rule(
+                        initial_data=i,
+                        defaults=defaults,
+                        theory_parameters=theory_parameters,
+                        loader=self.loader,
+                    )
+                    for i in yaml_rules
+                ]
+                return rule_list
+            except RuleProcessingError as e:
+                raise ConfigError(f"Error Processing filter rules: {e}") from e
+
+        if use_cuts is not CutsPolicy.INTERNAL:
+            # Return None if we're not applying rules.
+            return _no_cuts
+        return _apply_cuts
 
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
@@ -1176,19 +1119,18 @@ class CoreConfig(configparser.Config):
         log.warning("Overwriting filter defaults")
         return filter_defaults
 
-    def produce_defaults(
-        self,
-        q2min=None,
-        w2min=None,
-        default_filter_settings=None,
-        filter_defaults={},
-        default_filter_settings_recorded_spec_=None,
-    ):
+    @record_from_defaults
+    # TODO: Change this production rule key here and elsewhere
+    def produce_defaults(self, q2min=None, w2min=None, filter_defaults=None):
         """Produce default values for filters taking into account both the
         values of ``q2min`` and ` `w2min`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
+        if filter_defaults is None:
+            # Sentinal value to avoid having mutable type
+            # in function signature
+            filter_defaults = {}
 
         if (
             q2min is not None
@@ -1203,14 +1145,7 @@ class CoreConfig(configparser.Config):
         ):
             raise ConfigError("w2min defined multiple times with different values")
 
-        if default_filter_settings_recorded_spec_ is not None:
-            filter_defaults = default_filter_settings_recorded_spec_[
-                default_filter_settings
-            ]
-            # If we find recorded specs return immediately and don't read q2min and w2min
-            # from runcard
-            return filter_defaults
-        elif not filter_defaults:
+        if not filter_defaults:
             filter_defaults = default_filter_settings_input()
             defaults_loaded = True
         else:
