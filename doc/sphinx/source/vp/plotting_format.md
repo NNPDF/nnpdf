@@ -10,18 +10,10 @@ read by various tools that want to sensibly represent the data.
 
 ## Naming convention
 
-Given a dataset  labeled `<DATASET>`, a file found in the
-`commondata` folder (`nnpdfcpp/data/commondata`) that matches the
-regular expression
-
-````
-PLOTTING_<DATASET>\.ya?ml
-````
-
-(that is, the string `"PLOTTING_"` followed by the name of the
-dataset,
-and ending in `.yaml` or `.yml`) is to be considering a plotting file
-for that dataset.
+Plotting files are located in the `commondata`
+folder (`nnpdfcpp/data/commondata`).
+For a dataset labeled `<DATASET>`, the corresponding file name is
+`PLOTTING_<DATASET>.yaml` or `PLOTTING_<DATASET>.yml`
 
 For example, given the dataset "HERA1CCEP", the corresponding
 plotting file name is:
