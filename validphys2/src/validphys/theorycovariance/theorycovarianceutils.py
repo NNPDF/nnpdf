@@ -61,6 +61,27 @@ def check_correct_theory_combination_dataspecs(dataspecs_theoryids,
     return check_correct_theory_combination.__wrapped__(
         dataspecs_theoryids, fivetheories)
 
+@make_argcheck
+def check_fit_dataset_order_matches_grouped(group_dataset_inputs_by_metadata, data_input):
+    """
+    Check for use with theory covmat generation. 
+
+    Makes sure that the order of datasets listed in the fit runcard is the same
+    as that specified by the metadata grouping. Otherwise there can be a 
+    misalignment between the experiment covmat and theory covmat.
+    """
+    grouped_names = []
+    for group in group_dataset_inputs_by_metadata:
+        for dsinput in group["data_input"]:
+            grouped_names.append(dsinput.name)
+    
+    data_input_names = [item.name for item in data_input]
+    check(grouped_names == data_input_names, 
+         "Watch out, the order of datasets in the runcard does not match "
+         "the grouping specified by `metadata_group`. You must reorder "
+         f"the runcard datasets to match this: \n {grouped_names}"
+        )
+    
 def process_lookup(name):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
