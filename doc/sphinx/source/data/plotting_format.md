@@ -49,7 +49,7 @@ as whether to use log scale, or the axes labels.
 
 A key called `dataset_label` can be used to specify a nice plotting
 and display label for each dataset. LaTeX math is allowed between
-dollar signs.
+dollar signs. See the [example](#example) plotting file for usage.
 
 ### Kinematic labels
 
