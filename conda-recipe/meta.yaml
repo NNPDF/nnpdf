@@ -23,7 +23,7 @@ requirements:
         - numpy
     run:
         # Only install tensorflow on linux. Eigen build is default (for now).
-        - tensorflow # [linux]
+        - tensorflow >= 2 # [linux]
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
