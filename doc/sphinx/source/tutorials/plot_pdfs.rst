@@ -26,7 +26,7 @@ First we review key aspects of the runcards.
 | ``Q``                                  | Plotting scale.                                                                                       |
 +----------------------------------------+-------------------------------------------------------------------------------------------------------+
 | ``normalize_to``                       | If specified, PDFs are displayed as ratios to one of the PDFs (``normalize_to: x``, where ``x``       |
-|                                        | is the index of the PDF in ``pdfs`` or is the name of the PDF).                                       |
+|                                        | is the index (starting from 1) of the PDF in ``pdfs`` or is the name of the PDF).                     |
 +----------------------------------------+-------------------------------------------------------------------------------------------------------+
 | ``basis``                              | The basis for plotting, two popular choices being the ``flavour`` and ``evolution`` bases.            |
 |                                        | For information on custom bases see :ref:`here <pdfbases>`.                                           |
@@ -43,7 +43,6 @@ First we review key aspects of the runcards.
 Plotting PDFs, uncertainties and replicas
 -----------------------------------------
 
-
 .. code:: yaml
 
     meta:
@@ -51,12 +50,10 @@ Plotting PDFs, uncertainties and replicas
       author: Rosalyn Pearson
       keywords: [example]
 
-
     pdfs:
         - {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
         - {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
         - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
-
 
     pdfs_noband: ["NNPDF31_nnlo_as_0118_DISonly"] # Equivalently ["3"]
     
@@ -96,9 +93,7 @@ Plotting PDFs, uncertainties and replicas
       - report(main=True)
 
 - Here the ``Basespecs`` namespace specifies the two bases to be plotted.
-
 - Here the ``PDFscalespecs`` namespace specifies two x-scales to be plotted.
-
 - The actions are called: ``plot_pdfs``, ``plot_uncertainties`` and ``plot_pdfreplicas``. Their output is fairly self-evident!
 
 Plotting PDF distances
@@ -143,7 +138,7 @@ Plotting PDF distances
 	actions_:
 	  - report(main=true)
  
-- The actions ``plot_pdfdistances`` and ``plot_pdfvardistances`` plot the distances of the PDFs  and the variances of these distances with respect to the PDF specalised by ``normalize_to``.
+- The actions ``plot_pdfdistances`` and ``plot_pdfvardistances`` plot the distances of the PDFs and the variances of these distances with respect to the PDF specalised by ``normalize_to``.
 
 Plotting PDF flavours on the same axis
 --------------------------------------
@@ -173,7 +168,7 @@ Plotting PDF flavours on the same axis
 	  - report(main=True)
 
 - ``plot_flavours`` is the action used to plot PDF flavours on the same axes.
-- Note that the ``basis`` has been set to ``pdg``, which is a configuration that plots well on the same axis as the gluon PDF is divided by 10. More on PDF bases:ref:`here <pdfbases>`.
+- Note that the ``basis`` has been set to ``pdg``, which is a configuration that plots the various flavours well on the same axis as the gluon PDF is divided by 10. More on PDF bases:ref:`here <pdfbases>`.
 
 Luminosity plots
 ----------------
@@ -226,4 +221,4 @@ Luminosity plots
 
 - Luminosity plots can be made using the actions in the above runcard.
 - A choice of ``lumi_channel`` must be provided, which is a string in one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar, ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp].
-- The square root of centre of mass energy, \\(\\sqrt{s}\\), must also be provided via ``sqrts``.
+- The square root of centre of mass energy, \\(\\sqrt{s}\\), must also be provided via ``sqrts``. This is instead of ``Q``.
