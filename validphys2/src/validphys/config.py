@@ -35,6 +35,7 @@ from validphys.core import (
     ExperimentInput,
     CutsPolicy,
     MatchedCuts,
+    SimilarCuts,
     ThCovMatSpec,
 )
 from validphys.loader import (
@@ -371,7 +372,13 @@ class CoreConfig(configparser.Config):
         except InconsistentMetaDataError as e:
             raise ConfigError(e) from e
 
-    def produce_cuts(self, *, commondata, use_cuts, rules, fit=None, theoryid=None):
+    def parse_cut_similarity_threshold(self, th: numbers.Real):
+        """Maximum relative ratio when using `fromsimilarpredictons` cuts."""
+        return th
+
+    def produce_cuts(
+        self, *, commondata, use_cuts, rules, fit=None, theoryid=None,
+    ):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy."""
         # TODO: Put this bit of logic into loader.check_cuts
@@ -393,7 +400,10 @@ class CoreConfig(configparser.Config):
             if not theoryid:
                 raise ConfigError("theoryid must be specified for internal cuts")
             return self.loader.check_internal_cuts(commondata, rules)
-        elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+        elif (
+            use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE
+            or use_cuts is CutsPolicy.FROM_SIMILAR_PREDICTIONS_NAMESPACE
+        ):
             cut_list = []
             _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
             self._check_dataspecs_type(nss)
@@ -410,7 +420,43 @@ class CoreConfig(configparser.Config):
                     _, nscuts = self.parse_from_(None, "cuts", write=False)
                     cut_list.append(nscuts)
             ndata = commondata.ndata
-            return MatchedCuts(cut_list, ndata=ndata)
+            matched_cuts = MatchedCuts(cut_list, ndata=ndata)
+            if use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+                return matched_cuts
+            else:
+                if len(nss) != 2:
+                    raise ConfigError("Can only work with two namespaces")
+                _, cut_similarity_threshold = self.parse_from_(
+                    None, "cut_similarity_threshold", write=False
+                )
+                name = commondata.name
+                inps = []
+                for i, ns in enumerate(nss):
+                    with self.set_context(ns=self._curr_ns.new_child({**ns,})):
+                        # TODO: find a way to not duplicate this and use a dict
+                        # instead of a linear search
+                        _, dins = self.parse_from_(None, "dataset_inputs", write=False)
+                    try:
+                        di = next(d for d in dins if d.name == name)
+                    except StopIteration as e:
+                        raise ConfigError(
+                            f"cuts_intersection_spec namespace {i}: dataset inputs must define {name}"
+                        ) from e
+
+                    with self.set_context(
+                        ns=self._curr_ns.new_child(
+                            {
+                                "dataset_input": di,
+                                "use_cuts": CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE,
+                                "cuts": matched_cuts,
+                                **ns,
+                            }
+                        )
+                    ):
+                        _, ds = self.parse_from_(None, "dataset", write=False)
+                        _, pdf = self.parse_from_(None, "pdf", write=False)
+                    inps.append((ds, pdf))
+                return SimilarCuts(tuple(inps), cut_similarity_threshold)
 
         raise TypeError("Wrong use_cuts")
 
@@ -464,17 +510,7 @@ class CoreConfig(configparser.Config):
         return ds
 
     @configparser.element_of("experiments")
-    def parse_experiment(
-        self,
-        experiment: dict,
-        *,
-        theoryid,
-        use_cuts,
-        rules,
-        fit=None,
-        check_plotting: bool = False,
-        use_fitcommondata=False,
-    ):
+    def parse_experiment(self, experiment: dict):
         """A set of datasets where correlated systematics are taken
            into account. It is a mapping where the keys are the experiment
            name 'experiment' and a list of datasets."""
@@ -484,41 +520,12 @@ class CoreConfig(configparser.Config):
             raise ConfigError(
                 "'experiment' must be a mapping with "
                 "'experiment' and 'datasets', but %s is missing" % e
-            )
+            ) from e
 
         dsinputs = [self.parse_dataset_input(ds) for ds in datasets]
-        cds = [
-            self.produce_commondata(
-                dataset_input=dsinp, use_fitcommondata=use_fitcommondata, fit=fit
-            )
-            for dsinp in dsinputs
-        ]
-        cutinps = [
-            self.produce_cuts(
-                rules=rules,
-                commondata=cd,
-                use_cuts=use_cuts,
-                fit=fit,
-                theoryid=theoryid,
-            )
-            for cd in cds
-        ]
 
-        # autogenerated func, from elemet_of
-        datasets = [
-            self.produce_dataset(
-                rules=rules,
-                dataset_input=dsinp,
-                theoryid=theoryid,
-                cuts=cuts,
-                fit=fit,
-                check_plotting=check_plotting,
-                use_fitcommondata=use_fitcommondata,
-            )
-            for (dsinp, cuts) in zip(dsinputs, cutinps)
-        ]
 
-        return DataGroupSpec(name=name, datasets=datasets, dsinputs=dsinputs)
+        return self.produce_data(group_name=name, data_input=dsinputs)
 
     @configparser.element_of("experiment_inputs")
     def parse_experiment_input(self, ei: dict):
@@ -1183,49 +1190,16 @@ class CoreConfig(configparser.Config):
         self,
         data_input,
         *,
-        theoryid,
-        use_cuts,
-        rules,
-        fit=None,
-        check_plotting: bool = False,
-        use_fitcommondata=False,
         group_name="data",
     ):
         """A set of datasets where correlated systematics are taken
         into account
         """
-        # TODO: extract the commondata and cuts and seperate from dataset
-        cds = [
-            self.produce_commondata(
-                dataset_input=dsinp, use_fitcommondata=use_fitcommondata, fit=fit
-            )
-            for dsinp in data_input
-        ]
-        cutinps = [
-            self.produce_cuts(
-                rules=rules,
-                commondata=cd,
-                use_cuts=use_cuts,
-                fit=fit,
-                theoryid=theoryid,
-            )
-            for cd in cds
-        ]
+        datasets = []
+        for dsinp in data_input:
+            with self.set_context(ns=self._curr_ns.new_child({"dataset_input": dsinp})):
+                datasets.append(self.parse_from_(None, "dataset", write=False)[1])
 
-        # autogenerated func, from element_of
-        datasets = [
-            self.produce_dataset(
-                rules=rules,
-                dataset_input=dsinp,
-                theoryid=theoryid,
-                cuts=cuts,
-                fit=fit,
-                check_plotting=check_plotting,
-                use_fitcommondata=use_fitcommondata,
-            )
-            for (dsinp, cuts) in zip(data_input, cutinps)
-        ]
-        # TODO: get rid of libnnpdf Experiment
         return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
 
     def _parse_data_input_from_(

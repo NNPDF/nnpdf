@@ -960,9 +960,9 @@ def plot_dataspecs_positivity(
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
     check(
-        not (display_cuts
-             and use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL)),
-        "The display_cuts option requires setting use_cuts to True")
+        not (display_cuts and use_cuts is CutsPolicy.NOCUTS),
+        "The display_cuts option requires setting some cuts",
+    )
 
 @make_argcheck
 def _check_marker_by(marker_by):
