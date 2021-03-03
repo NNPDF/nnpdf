@@ -16,5 +16,4 @@ vp-guide
    ./dataspecification.rst
    ./theorycov/index
    ./pydataobjs.rst
-   ./plotting_format.md
    ./examples.rst

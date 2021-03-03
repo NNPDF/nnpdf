@@ -11,3 +11,4 @@ Storage of data and theory predictions
    ./fk-config-variables
    ./example-cfactor-file
    ./example-fk-preamble
+   ./plotting_format
