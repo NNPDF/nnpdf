@@ -36,7 +36,7 @@ dataset-specific one always takes precedence.
 
 ## Format
 
-The plot file specifies the variable in which the data
+The plotting file specifies the variable in which the data
 is to be plotted (in the  *x* axis) as well as the variables
 in which the data will be split in different lines in the
 same figure or in different figures. The possible variables
