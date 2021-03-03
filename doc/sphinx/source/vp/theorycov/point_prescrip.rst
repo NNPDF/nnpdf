@@ -1,3 +1,5 @@
+.. _prescrips:
+
 Point prescriptions for theory covariance matrices
 ==================================================
 
