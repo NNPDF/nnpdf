@@ -23,6 +23,9 @@ to set the ball rolling.
 Another useful command to be aware of is ``vp-comparefits - i``, which launches an interactive
 session to compare two fits. See the tutorial :ref:`compare-fits` for more information.
 
+For more tailored analysis, the API provides a high level interface to the code, allowing you to 
+extract objects and play around with them. See :ref:`vpapi`.
+
 Finally, the ``validphys --help`` command can give you information on modules and specific actions, e.g.
 
 .. code:: 

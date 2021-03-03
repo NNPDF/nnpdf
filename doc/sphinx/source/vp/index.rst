@@ -3,7 +3,7 @@ validphys
 =========
 
 Introduction to ``validphys 2``
------------------------------
+-------------------------------
 
 * ``validphys 2`` is a Python code that implements the data model of NNPDF
   resources. 
@@ -29,6 +29,19 @@ Introduction to ``validphys 2``
 
 * The ideas behind the design of the code are explained in the
   :ref:`Design <design>` section.
+  
+Some things which ``validphys`` does:
+-------------------------------------
+
+* Download resources (``vp-get``) - see :ref:`download`
+* Upload resources (``vp-upload``, ``wiki-upload`` and ``--upload`` flag) - see :ref:`upload`
+* Prepare fits for running with ``n3fit`` (``vp_setupfit``) - see :ref:`scripts`
+* Postprocess a fit (``postfit``) - see :ref:`scripts`
+* Rename a fit or PDF (``vp-fitrename`` and ``vp-pdfrename``) - see :ref:`scripts`
+* Sample a PDF (``vp-pdffromreplicas``) - see :ref:`scripts`
+* Generate a report with information about possible inefficiencies in fitting methodology (``vp-deltachi2``) - see :ref:`scripts`
+* Allow analysis via a high level interface - see :ref:`vpapi`
+* Analyse results - see :ref:`tutorials`
 
 Using validphys
 ---------------
