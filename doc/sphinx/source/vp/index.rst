@@ -1,6 +1,6 @@
 .. _vp-index:
-validphys
-=========
+Code for data: validphys
+========================
 
 Introduction to ``validphys 2``
 -------------------------------

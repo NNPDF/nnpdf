@@ -1,5 +1,4 @@
-## Buildmaster
-
+## Handling experimental data: Buildmaster
 
 Buildmaster is the code that allows the user to generate the ``DATA`` and
 ``SYSTYPE`` files that contain, respectively, the experimental data and the 

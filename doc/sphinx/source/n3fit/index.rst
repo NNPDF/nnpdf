@@ -1,5 +1,5 @@
-n3fit
-=====
+Fitting code: n3fit
+===================
 
 `n3fit` is the next generation fitting code for NNPDF developed by the N3PDF team.
 
