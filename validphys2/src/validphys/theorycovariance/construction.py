@@ -482,6 +482,8 @@ def user_covmat(groups_data, groups_index,
 @check_fit_dataset_order_matches_grouped
 def total_theory_covmat(
         processed_metadata_group,
+        data_input,
+        group_dataset_inputs_by_metadata,
         groups_index,
         theory_covmat_custom,
         user_covmat,
