@@ -1,5 +1,5 @@
-How to plot PDFs
-================
+How to plot PDFs, distances and luminosities
+============================================
 
 Plotting any number of PDFs can be done using ``validphys``.  There are several
 kinds of plots which can be made using the actions in the module ``pdfplots.py``.
@@ -148,7 +148,7 @@ Plotting PDF flavours on the same axis
 .. code:: yaml
 
 	meta:
-	  title: PDF plot example
+	  title: PDF flavours plot example
 	  author: Rosalyn Pearson
 	  keywords: [example]
 
@@ -180,7 +180,7 @@ Luminosity plots
 .. code:: yaml
 
 	meta:
-	  title: PDF plot example
+	  title: Luminosity plot example
 	  author: Rosalyn Pearson
 	  keywords: [example]
 
@@ -191,12 +191,10 @@ Luminosity plots
 
 	pdf: {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
 
-	sqrts: 100
-
-	basis: flavour
+	sqrts: 13000 # GeV
 
 	lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
-		           #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
+	                   #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
 
 	PDFscalespecs:
 	  - xscale: log
@@ -208,25 +206,26 @@ Luminosity plots
 	  {@with PDFscalespecs@}
 	  {@xscaletitle@} scale
 	  =====================
-	  {@with Basespecs@}
-	  {@basistitle@}
-	  -------------
-	  {@with PDFnormalize@}
-	  {@normtitle@}
-	  {@plot_pdfs@}
-	  {@plot_pdf_uncertainties@}
-	  {@plot_pdfreplicas@}
+	  {@plot_lumi1d@}
+	  {@plot_lumi1d_uncertainties@}
+	  {@plot_lumi2d@}
+	  {@plot_lumi2d_uncertainty@}
 	  {@endwith@}
-	  {@endwith@}
-	  {@endwith@}
-
 
 	actions_:
 	  - report(main=True)
 
 - Luminosity plots can be made using the actions in the above runcard.
+- The 1D plots show the luminosity as a function of the invariant mass of the
+  final state *X*, while the 2D plots show it as a function of the invariant
+  mass *X* and the rapidity *y* of the final state.
 - A choice of ``lumi_channel`` must be provided, which is a string in one of
   [gg, gq, qqbar, qq, ddbar, uubar, ssbar, ccbar, bbbar, dubar, udbar, scbar,
-  csbar, pp, gp].
-- The square root of centre of mass energy, \\(\\sqrt{s}\\), must also be
-  provided via ``sqrts``. This is instead of ``Q``.
+  csbar, pp, gp]. Note that p represents the photon and q and qbar represent all
+  six quark flavours, i.e. [u, d, s, c, b, t] or [ubar, dbar, sbar, cbar, bbar,
+  tbar], respectively. The exact definitions of the channels in the code can be
+  found `here <https://github.com/NNPDF/nnpdf/blob/c20f1892767632f4764ada12bc106c04d5b739d4/validphys2/src/validphys/gridvalues.py>`_.
+  Note further that a set of channels can be given by
+  specifying ``lumi_channels`` followed by a list of channels.
+- The square root of centre of mass energy, \\(\\sqrt{s}\\), in GeV must also
+  be provided via ``sqrts``. This is instead of ``Q``.

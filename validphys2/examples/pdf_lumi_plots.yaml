@@ -1,5 +1,5 @@
 meta:
-  title: PDF plot example
+  title: Luminosity plot example
   author: Rosalyn Pearson
   keywords: [example]
 
@@ -7,12 +7,10 @@ pdfs:
   - {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
   - {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
   - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
-  
+
 pdf: {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
 
-sqrts: 100
-
-basis: flavour    
+sqrts: 13000 # GeV
 
 lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
                    #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
@@ -22,14 +20,16 @@ PDFscalespecs:
     xscaletitle: Log
   - xscale: linear
     xscaletitle: Linear
-    
+
 template_text: |
   {@with PDFscalespecs@}
+  {@xscaletitle@} scale
+  =====================
   {@plot_lumi1d@}
   {@plot_lumi1d_uncertainties@}
   {@plot_lumi2d@}
-  {@plot_lumi2d_uncertainty@} 
-  {@endwith@}  
+  {@plot_lumi2d_uncertainty@}
+  {@endwith@}
 
 actions_:
   - report(main=True)

@@ -1,5 +1,5 @@
 meta:
-  title: PDF plot example
+  title: PDF flavours plot example
   author: Rosalyn Pearson
   keywords: [example]
 
@@ -14,7 +14,7 @@ ymin: 0
 ymax: 0.6
 
 xscale: log
-    
+
 template_text: |
   {@plot_flavours@}     
 
