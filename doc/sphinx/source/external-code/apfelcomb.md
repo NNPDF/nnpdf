@@ -20,19 +20,19 @@ nnpdf/nnpdfcpp/data/doc/data_layout.pdf
 ```
 
 APFELcomb depends on the following libraries
-* [APFEL](github.com/scarrazza/apfel.git)
-* [nnpdf](github.com/NNPDF/nnpdf)
-* [APPLgrid](github.com/NNPDF/external/applgrid-1.4.70-nnpd)
+* [APFEL](https://github.com/scarrazza/apfel)
+* [nnpdf](https://github.com/NNPDF/nnpdf)
+* [APPLgrid](https://github.com/NNPDF/external/tree/master/applgrid-1.4.70-nnpdf)
 
 and data files from
 
-* [applgrids](github.com/NNPDF/applgrids)
+* [applgrids](https://github.com/NNPDF/applgrids)
 
 There are various ways of generating the latter, as explained in [How to 
 generate applgrids](../tutorials/APPLgrids.md).
 
 Once the above libraries and data files are set up, the APFELcomb project can be
-compield as follows
+compiled as follows
 ```
 make 
 ```
