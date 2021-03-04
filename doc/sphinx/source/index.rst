@@ -5,7 +5,17 @@
 
 NNPDF documentation
 ===================
+* The `NNPDF collaboration <https://nnpdf.mi.infn.it/>`_ is an organisation performing 
+  research in high-energy physics to determine the structure of the proton by producing
+  **parton distribution functions (PDFs)**.
 
+* This documentation is for the `NNPDF code <https://github.com/NNPDF/nnpdf>`_, which 
+  allows the user to perform PDF fits and analyse the output. 
+
+* If you are a new user head along to :ref:`getstarted`. 
+
+Documentation contents 
+======================
 .. toctree::
    :maxdepth: 2
 
