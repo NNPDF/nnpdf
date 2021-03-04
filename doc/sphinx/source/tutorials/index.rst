@@ -21,6 +21,7 @@ Tutorials
    ./conda.md
    ./pseudodata.md
    ./pdfbases.rst
+   ./newplottingfn.rst
 
 =======
 

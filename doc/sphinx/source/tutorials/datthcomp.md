@@ -1,3 +1,6 @@
+```eval_rst
+.. _datthcomp:
+```
 # How to do a data theory comparison
 
 This tutorial explains how to compare the data and theory for a given data set or list of data sets.
