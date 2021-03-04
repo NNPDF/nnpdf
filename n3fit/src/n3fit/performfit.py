@@ -12,66 +12,6 @@ from n3fit.vpinterface import N3PDF
 log = logging.getLogger(__name__)
 
 
-def initialize_seeds(replicas: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
-    """Action to initialize seeds for random number generation.
-    We initialize three different seeds. The first is the seed
-    used for training/validation splits, the second is used for
-    initialization of the neural network's parameters and the
-    final one is the monte carlo seeds for pseudodata replica
-    generation.
-
-    The generation of these seeds depend on the replica number
-    in question. This dependence comes in by sampling the random
-    number generator <replica number> times in the for loop.
-
-    Parameters
-    ----------
-    replicas: list
-        A list of replica numbers to run over typically of size one
-    trvlseed: int
-        Seed initialization for training/validation split
-    nnseed: int
-        Seed for network initialization
-    mcseed: int
-        Seed for pseudodata replica generation
-    genrep: bool
-
-    Returns
-    -------
-    seeds: NamedTuple[List, List, List]
-        A namedtuple of lists containing the trvalseeds, nnseeds, mcseeds
-    """
-    # First set the seed variables for
-    # - Tr/Vl split
-    # - Neural Network initialization
-    # - Replica generation
-    # These depend both on the seed set in the runcard and the replica number
-    trvalseeds = []
-    nnseeds = []
-    mcseeds = []
-    for replica_number in replicas:
-        np.random.seed(trvlseed)
-        for _ in range(replica_number):
-            trvalseed = np.random.randint(0, pow(2, 31))
-
-        np.random.seed(nnseed)
-        for _ in range(replica_number):
-            nnseed = np.random.randint(0, pow(2, 31))
-
-        np.random.seed(mcseed)
-        for _ in range(replica_number):
-            mcseed = np.random.randint(0, pow(2, 31))
-        trvalseeds.append(trvalseed)
-        nnseeds.append(nnseed)
-        mcseeds.append(mcseed)
-
-    if genrep == 0:
-        mcseeds = []
-
-    Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
-    return Seeds(trvalseeds, nnseeds, mcseeds)
-
-
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.check_consistent_basis

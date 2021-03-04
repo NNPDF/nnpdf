@@ -30,7 +30,7 @@ from collections import namedtuple
 from numpy.testing import assert_equal, assert_allclose
 from reportengine.compat import yaml
 import n3fit
-from n3fit.performfit import initialize_seeds
+from validphys.n3fit_data import replica_trvlseed, replica_nnseed, replica_mcseed
 
 log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
@@ -69,19 +69,22 @@ def load_data(info_file):
 def test_initialize_seeds():
     # Regression tests for seed generation
     replicas = [1, 4]
-    Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
-    regression = Seeds(
-        trvlseeds=[2005877882, 741720773],
-        nnseeds=[327741615, 87982037],
-        mcseeds=[1791095845, 2029572362],
-    )
-    result = initialize_seeds(replicas, 4, 7, 1, True)
-    assert result == regression
-    result_nomc = initialize_seeds(replicas, 10, 100, 1000, False)
-    regression_nomc = Seeds(
-        trvlseeds=[1165313289, 2124247567], nnseeds=[186422792, 1315999533], mcseeds=[]
-    )
-    assert result_nomc == regression_nomc
+
+    trvlseeds = [replica_trvlseed(rep, 4) for rep in replicas]
+    assert trvlseeds == [2005877882, 741720773]
+    nnseeds = [replica_nnseed(rep, 7) for rep in replicas]
+    assert nnseeds == [327741615, 1369975286]
+    mcseeds = [replica_mcseed(rep, 1, True) for rep in replicas]
+    assert mcseeds == [1791095845, 1857819720]
+
+    mcseeds_nomc = [replica_mcseed(rep, 1000, False) for rep in replicas]
+    assert mcseeds_nomc == [None, None]
+
+    # test that we always get same answer
+    same_replicas = [3]*10
+    assert len({replica_trvlseed(rep, 4) for rep in same_replicas}) == 1
+    assert len({replica_nnseed(rep, 7) for rep in same_replicas}) == 1
+    assert len({replica_mcseed(rep, 1, True) for rep in same_replicas}) == 1
 
 
 def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):

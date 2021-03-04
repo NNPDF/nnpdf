@@ -16,8 +16,8 @@ from validphys.covmats import INTRA_DATASET_SYS_NAME
 
 from reportengine import collect
 
+from validphys.n3fit_data import replica_mcseed, replica_trvlseed
 import validphys.n3fit_data_utils as reader
-from n3fit.performfit import initialize_seeds
 
 log = logging.getLogger(__name__)
 
@@ -301,12 +301,20 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
     # include the last replica
     replica = range(1, num_fitted_replicas + 1)
 
-    trvlseed, nnseed, mcseed, genrep = [
+    trvlseed, mcseed, genrep = [
         fit.as_input().get("fitting").get(i)
-        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]
+        for i in ["trvlseed", "mcseed", "genrep"]
     ]
 
-    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
+    # common_data_reader expects None if genrep is False
+    if genrep:
+        replicas_mcseed = [
+            replica_mcseed(rep, mcseed, genrep) for rep in replica
+        ]
+    else:
+        replicas_mcseed = None
+
+    replicas_trvlseeds = [replica_trvlseed(rep, trvlseed) for rep in replica]
 
     def task(d, mcseeds, trvlseeds, replicas):
         all_exp_infos = [[] for _ in range(len(mcseeds))]
@@ -321,7 +329,7 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
 
     if NPROC == 1:
         pseudodata_dicts = dict()
-        task(pseudodata_dicts, seeds.mcseeds, seeds.trvlseeds, replica)
+        task(pseudodata_dicts, replicas_mcseed, replicas_trvlseeds, replica)
     else:
         with mp.Manager() as manager:
             d = manager.dict()
@@ -340,8 +348,8 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
             list_split = lambda lst, n: [
                 arr.tolist() for arr in np.array_split(lst, n)
             ]
-            batched_mcseeds = list_split(seeds.mcseeds, NPROC)
-            batched_trvlseeds = list_split(seeds.trvlseeds, NPROC)
+            batched_mcseeds = list_split(replicas_mcseed, NPROC)
+            batched_trvlseeds = list_split(replicas_trvlseeds, NPROC)
             batched_replica_num = list_split(replica, NPROC)
             for mc_batch, trvl_batch, replica_batch in zip(
                 batched_mcseeds, batched_trvlseeds, batched_replica_num
