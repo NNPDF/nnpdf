@@ -1,8 +1,8 @@
 ```eval_rst
 .. _server:
 ```
-Server configuration
-====================
+Servers
+=======
 
 The NNPDF collaboration employs a storage server that host various data files,
 meant for both public and internal consumption. It hosts the following URLs:
