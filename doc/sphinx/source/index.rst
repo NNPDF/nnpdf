@@ -12,7 +12,7 @@ NNPDF documentation
 * This documentation is for the `NNPDF code <https://github.com/NNPDF/nnpdf>`_, which 
   allows the user to perform PDF fits and analyse the output. 
 
-* If you are a new user head along to :ref:`getstarted`. 
+* If you are a new user head along to :ref:`getstarted` and check out the :ref:`tutorials`.
 
 Documentation contents 
 ======================
