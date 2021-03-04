@@ -1,5 +1,10 @@
 # Installing the code
 
+There are two methods for installing the code, both of which require conda. You can either install
+the code entirely with conda or install the code from source, with the dependencies still being
+installed via conda. The [first method](conda) is preferable if you simply want to run the code,
+while the [second](source) is necessary if you want to develop the code.
+
 ```eval_rst
 .. _conda:
 ```
