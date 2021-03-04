@@ -1,9 +1,9 @@
 How to plot PDFs
 ================
 
-Plotting any number of PDFs can be done using ``validphys``.  There are several 
+Plotting any number of PDFs can be done using ``validphys``.  There are several
 kinds of plots which can be made using the actions in the module ``pdfplots.py``.
-The runcards in this section can be found 
+The runcards in this section can be found
 `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_.
 
 Runcard basics
@@ -56,10 +56,10 @@ Plotting PDFs, uncertainties and replicas
         - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
 
     pdfs_noband: ["NNPDF31_nnlo_as_0118_DISonly"] # Equivalently ["3"]
-    
+
     show_mc_errors: True
 
-    Q: 10 
+    Q: 10
 
     PDFnormalize:
         - normtitle: Absolute  # normalize_to default is None
@@ -77,7 +77,7 @@ Plotting PDFs, uncertainties and replicas
           xscaletitle: Log
         - xscale: linear
           xscaletitle: Linear
-      
+
     template_text: |
       {@with PDFscalespecs@}
       {@with Basespecs@}
@@ -88,13 +88,14 @@ Plotting PDFs, uncertainties and replicas
       {@endwith@}
       {@endwith@}
       {@endwith@}
-  
+
     actions_:
       - report(main=True)
 
 - Here the ``Basespecs`` namespace specifies the two bases to be plotted.
 - Here the ``PDFscalespecs`` namespace specifies two x-scales to be plotted.
-- The actions are called: ``plot_pdfs``, ``plot_uncertainties`` and ``plot_pdfreplicas``. Their output is fairly self-evident!
+- The actions are called: ``plot_pdfs``, ``plot_uncertainties`` and
+  ``plot_pdfreplicas``. Their output is fairly self-evident!
 
 Plotting PDF distances
 ----------------------
@@ -137,8 +138,10 @@ Plotting PDF distances
 
 	actions_:
 	  - report(main=true)
- 
-- The actions ``plot_pdfdistances`` and ``plot_pdfvardistances`` plot the distances of the PDFs and the variances of these distances with respect to the PDF specalised by ``normalize_to``.
+
+- The actions ``plot_pdfdistances`` and ``plot_pdfvardistances`` plot the
+  distances of the PDFs and the variances of these distances with respect to the
+  PDF specalised by ``normalize_to``.
 
 Plotting PDF flavours on the same axis
 --------------------------------------
@@ -151,7 +154,7 @@ Plotting PDF flavours on the same axis
 
 	pdf:  {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
 
-	Q: 10 
+	Q: 10
 
 	basis: pdg      # [g/10, u_v, d_v, s, ubar, dbar, c] plots well on same axis
 	xmin: 0.002
@@ -160,15 +163,17 @@ Plotting PDF flavours on the same axis
 	ymax: 0.6
 
 	xscale: log
-	    
+
 	template_text: |
-	  {@plot_flavours@}     
+	  {@plot_flavours@}
 
 	actions_:
 	  - report(main=True)
 
 - ``plot_flavours`` is the action used to plot PDF flavours on the same axes.
-- Note that the ``basis`` has been set to ``pdg``, which is a configuration that plots the various flavours well on the same axis as the gluon PDF is divided by 10. More on PDF bases:ref:`here <pdfbases>`.
+- Note that the ``basis`` has been set to ``pdg``, which is a configuration that
+  plots the various flavours well on the same axis as the gluon PDF is divided
+  by 10. More on PDF bases :ref:`here <pdfbases>`.
 
 Luminosity plots
 ----------------
@@ -183,12 +188,12 @@ Luminosity plots
 	  - {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
 	  - {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
 	  - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
-	  
+
 	pdf: {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
 
 	sqrts: 100
 
-	basis: flavour    
+	basis: flavour
 
 	lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
 		           #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
@@ -198,7 +203,7 @@ Luminosity plots
 	    xscaletitle: Log
 	  - xscale: linear
 	    xscaletitle: Linear
-	    
+
 	template_text: |
 	  {@with PDFscalespecs@}
 	  {@xscaletitle@} scale
@@ -210,7 +215,7 @@ Luminosity plots
 	  {@normtitle@}
 	  {@plot_pdfs@}
 	  {@plot_pdf_uncertainties@}
-	  {@plot_pdfreplicas@}          
+	  {@plot_pdfreplicas@}
 	  {@endwith@}
 	  {@endwith@}
 	  {@endwith@}
@@ -220,5 +225,8 @@ Luminosity plots
 	  - report(main=True)
 
 - Luminosity plots can be made using the actions in the above runcard.
-- A choice of ``lumi_channel`` must be provided, which is a string in one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar, ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp].
-- The square root of centre of mass energy, \\(\\sqrt{s}\\), must also be provided via ``sqrts``. This is instead of ``Q``.
+- A choice of ``lumi_channel`` must be provided, which is a string in one of
+  [gg, gq, qqbar, qq, ddbar, uubar, ssbar, ccbar, bbbar, dubar, udbar, scbar,
+  csbar, pp, gp].
+- The square root of centre of mass energy, \\(\\sqrt{s}\\), must also be
+  provided via ``sqrts``. This is instead of ``Q``.
