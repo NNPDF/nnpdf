@@ -36,7 +36,6 @@ Adding new data
    ./APPLgrids.md
    ./APPLgrids_comp.md
    ./apfelcomb.md
-   ./datthcomp.md
    
 Closure tests
 -------------
