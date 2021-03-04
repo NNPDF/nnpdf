@@ -1,4 +1,4 @@
-Plotting Format
+Plotting format
 ===============
 
 A *plotting file* defines a set of options that are used for analysis
@@ -26,11 +26,11 @@ Additionally, the configuration is loaded from a per-process-type file
 called:
 
 ```
-PLOTTINTYPE_<type>.yaml
+PLOTTINGTYPE_<type>.yaml
 ```
 
 See [kinematic labels](#kinematic-labels) below for a list of defined types. When a key
-is present both in the dataset-specific and the process type level file, the
+is present both in the dataset-specific and the per-process-type file, the
 dataset-specific one always takes precedence.
 
 
