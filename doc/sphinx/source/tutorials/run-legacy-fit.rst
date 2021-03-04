@@ -30,15 +30,15 @@ resources can be obtained with the :ref:`vp-get<vp-get>` tool.
    
 .. code:: yaml
 
-	experiments:
-	  - experiment: NMC
-	    datasets:
-	      - dataset: NMCPD
-	      - dataset: NMC
-	  - experiment: SLAC
-	    datasets:
-	      - dataset: SLACP
-	      - dataset: SLACD
+    experiments:
+      - experiment: NMC
+        datasets:
+        - dataset: NMCPD
+        - dataset: NMC
+      - experiment: SLAC
+        datasets:
+        - dataset: SLACP
+        - dataset: SLACD
    
 3. To run the fit, use the :code:`nnfit` program. This takes a
 :code:`<runcard_folder>` as input, as well a number that indexes the PDF replica

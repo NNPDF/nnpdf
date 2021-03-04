@@ -55,7 +55,7 @@ Instructions
       use_thcovmat_in_sampling: True
       use_thcovmat_in_fitting: True		
     ############################################################################
-	
+
 The flags ``use_thcovmat_in_fitting`` and ``use_thcovmat_in_sampling`` specify
 where to use the theory covmat in the code. There are two possible places:
 the fitting (i.e. \\(\\chi^2\\) minimiser) and the sampling (i.e. pseudodata
