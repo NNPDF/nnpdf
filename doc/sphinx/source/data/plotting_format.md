@@ -1,3 +1,6 @@
+```eval_rst
+.. _plotting-format:
+```
 Plotting format
 ===============
 

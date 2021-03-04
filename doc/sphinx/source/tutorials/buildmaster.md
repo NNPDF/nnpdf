@@ -129,11 +129,6 @@ target.push_back(new MY_NEW_DATASET_CLASSFilter());
 
 ```
 
-
-
-
-
-
-
-
+Note that a plotting file should also be created for the newly created experiment.
+See [here](plotting-format) for more information.
 
