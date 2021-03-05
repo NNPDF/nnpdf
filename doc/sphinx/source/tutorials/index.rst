@@ -24,6 +24,7 @@ Analysing results
    
    ./compare-fits.md
    ./report.md
+   ./plot_pdfs.rst
    ./pdfbases.rst
    ./datthcomp.md
 
@@ -45,6 +46,7 @@ Closure tests
    ./closuretest.md
    ./closureestimators.rst
 
+
 Miscellaneous
 -------------
 .. toctree ::
@@ -52,5 +54,7 @@ Miscellaneous
    
    ./list-resources.md
    ./pseudodata.md
+   ./newplottingfn.rst
+   ./addspecialgrouping.rst
    ./conda.md
    
