@@ -1,0 +1,22 @@
+meta:
+  title: PDF flavours plot example
+  author: Rosalyn Pearson
+  keywords: [example]
+
+pdf:  {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
+
+Q: 10 
+
+basis: pdg      # [g/10, u_v, d_v, s, ubar, dbar, c] plots well on same axis
+xmin: 0.002
+
+ymin: 0
+ymax: 0.6
+
+xscale: log
+
+template_text: |
+  {@plot_flavours@}     
+
+actions_:
+  - report(main=True)

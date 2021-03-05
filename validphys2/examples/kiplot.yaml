@@ -5,10 +5,7 @@ meta:
 
 fit: NNPDF31_nlo_as_0118
 
-theory: {from_: fit}
-theoryid: {from_: theory}
-
-markers:
+Markers:
     - marker_by: process type
     - marker_by: experiment
 
@@ -28,7 +25,7 @@ template_text: |
     {@fit@}
     =======
 
-    {@with markers@}
+    {@with Markers@}
     Marker by {@marker_by@}
     -----------------------
 

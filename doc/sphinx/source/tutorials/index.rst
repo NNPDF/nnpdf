@@ -20,6 +20,7 @@ Tutorials
    ./addspecialgrouping.rst
    ./conda.md
    ./pseudodata.md
+   ./plot_pdfs.rst
    ./pdfbases.rst
    ./newplottingfn.rst
 
