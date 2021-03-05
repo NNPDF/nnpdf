@@ -22,7 +22,7 @@ Dataset properties
 Distances
 ---------
 {@with Scales@}
-### {@scaletitle@}
+### {@Scaletitle@}
 {@with Normalize::Basespecs::PDFscalespecs::Distspecs@}
 #### {@basistitle@}, {@xscaletitle@}
 {@plot_pdfdistances@}
@@ -44,7 +44,7 @@ Sum rules
 PDF plots
 ---------
 {@with Scales@}
-[Plots at {@scaletitle@}]({@pdf_report report@})
+[Plots at {@Scaletitle@}]({@pdf_report report@})
 {@endwith@}
 
 Effective exponents

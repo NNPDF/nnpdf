@@ -41,9 +41,9 @@ Q: 1.651
 
 Scales:
   - Q: 1.651
-    scaletitle: "Q = 1.65 GeV"
+    Scaletitle: "Q = 1.65 GeV"
   - Q: 100
-    scaletitle: "Q = 100 GeV"
+    Scaletitle: "Q = 100 GeV"
 
 PDFnormalize:
   - normtitle: Absolute
