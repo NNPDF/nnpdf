@@ -39,8 +39,11 @@ use_weights_in_covmat: False
 
 Q: 1.651
 
-Highscale:
+Scales:
+  - Q: 1.651
+    scaletitle: "Q = 1.65 GeV"
   - Q: 100
+    scaletitle: "Q = 100 GeV"
 
 PDFnormalize:
   - normtitle: Absolute
