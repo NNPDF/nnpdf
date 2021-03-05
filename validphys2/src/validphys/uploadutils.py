@@ -193,9 +193,7 @@ class ArchiveUploader(FileUploader):
         l = RemoteLoader()
         resource_list = getattr(l, self._loader_name)
 
-        if resource_name in resource_list:
-            return True
-        return False
+        return  resource_name in resource_list
 
     def _check_is_indexed(self, resource_name):
         """ Check whether the fit is correctly indexed in the server
