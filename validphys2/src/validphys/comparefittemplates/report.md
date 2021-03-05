@@ -24,7 +24,7 @@ Distances
 {@with Scales@}
 ### {@Scaletitle@}
 {@with Normalize::Basespecs::PDFscalespecs::Distspecs@}
-#### {@basistitle@}, {@xscaletitle@}
+#### {@Basistitle@}, {@Xscaletitle@}
 {@plot_pdfdistances@}
 {@plot_pdfvardistances@}
 {@endwith@}

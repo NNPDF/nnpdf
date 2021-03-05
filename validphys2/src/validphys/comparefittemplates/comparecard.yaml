@@ -46,22 +46,22 @@ Scales:
     Scaletitle: "Q = 100 GeV"
 
 PDFnormalize:
-  - normtitle: Absolute
+  - Normtitle: Absolute
 
   - normalize_to: 1
-    normtitle: Ratio
+    Normtitle: Ratio
 
 Basespecs:
   - basis: flavour
-    basistitle: Flavour basis
+    Basistitle: Flavour basis
   - basis: evolution
-    basistitle: Evolution basis
+    Basistitle: Evolution basis
 
 PDFscalespecs:
   - xscale: log
-    xscaletitle: Log
+    Xscaletitle: Log
   - xscale: linear
-    xscaletitle: Linear
+    Xscaletitle: Linear
 
 Distspecs:
   - ymin: 0
