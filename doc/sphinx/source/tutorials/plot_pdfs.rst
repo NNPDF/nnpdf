@@ -198,13 +198,13 @@ Luminosity plots
 
 	PDFscalespecs:
 	  - xscale: log
-	    xscaletitle: Log
+	    Xscaletitle: Log
 	  - xscale: linear
-	    xscaletitle: Linear
+	    Xscaletitle: Linear
 
 	template_text: |
 	  {@with PDFscalespecs@}
-	  {@xscaletitle@} scale
+	  {@Xscaletitle@} scale
 	  =====================
 	  {@plot_lumi1d@}
 	  {@plot_lumi1d_uncertainties@}
@@ -227,5 +227,10 @@ Luminosity plots
   found `here <https://github.com/NNPDF/nnpdf/blob/c20f1892767632f4764ada12bc106c04d5b739d4/validphys2/src/validphys/gridvalues.py>`_.
   Note further that a set of channels can be given by
   specifying ``lumi_channels`` followed by a list of channels.
-- The square root of centre of mass energy, \\(\\sqrt{s}\\), in GeV must also
+- The square root of centre of mass energy, √s, in GeV must also
   be provided via ``sqrts``. This is instead of ``Q``.
+- The options ``ymin`` and ``ymax`` can be supplied to control the vertical
+  range of the plot, while ``mxmin`` and ``mxmax`` (in GeV) control the
+  horizontal axis of invariant masses.
+- Other options for the band plots, such as ``pdfs_noband`` and
+  ``show_mc_errors`` work for ``plot_lumi1d``.
