@@ -7,6 +7,7 @@ Created on Wed Mar  9 15:40:38 2016
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
+import inspect
 import sys
 import pathlib
 import functools
@@ -586,6 +587,27 @@ def download_file(url, stream_or_path, make_parents=False):
         _download_and_show(response, stream_or_path)
 
 
+def keyboard_interrupt_handler(f):
+    sig = inspect.signature(f)
+    # Check if there is a path-like argument for f
+    for i, param in enumerate(sig.parameters):
+        if 'path' in param:
+            index = i
+            break
+    else:
+        raise Exception(f"No path-like argument provided for function {f.__name__}")
+    @functools.wraps(f)
+    def f_(*args, **kwargs):
+        path = args[index]
+        try:
+            return f(*args, **kwargs)
+        except KeyboardInterrupt:
+            shutil.rmtree(path)
+            raise
+    return f_
+
+
+@keyboard_interrupt_handler
 def download_and_extract(url, local_path):
     """Download a compressed archive and then extract it to the given path"""
     local_path = pathlib.Path(local_path)
@@ -605,8 +627,6 @@ def download_and_extract(url, local_path):
         raise
     else:
         os.unlink(archive_dest.name)
-
-
 
 
 def _key_or_loader_error(f):
