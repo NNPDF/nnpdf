@@ -128,82 +128,86 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     # the final location in the end,
     postfit_path = pathlib.Path(tempfile.mkdtemp(prefix='postfit_work_deleteme_',
         dir=result_path))
-    final_postfit_path = result_path / 'postfit'
-    LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
-
-    if not fitdata.check_nnfit_results_path(result_path):
-        raise PostfitError('Postfit cannot find a valid results path')
-    if not fitdata.check_lhapdf_info(result_path, fitname):
-        raise PostfitError('Postfit cannot find a valid LHAPDF info file')
-
-    nrep = int(nrep)
-    if at_least_nrep:
-        log.warning(f"Postfit aiming for at least {nrep} replicas")
-    else:
-        log.warning(f"Postfit aiming for {nrep} replicas")
-
-    # Generate postfit and LHAPDF directory
-    if final_postfit_path.is_dir():
-        log.warning(f"Removing existing postfit directory: {postfit_path}")
-        shutil.rmtree(final_postfit_path)
-    os.mkdir(LHAPDF_path)
-
-    # Setup postfit log
-    postfitlog = logging.FileHandler(postfit_path/'postfit.log', mode='w')
-    log.addHandler(postfitlog)
-
-    # Perform postfit selection
-    passing_paths = filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold)
-    if len(passing_paths) < nrep:
-        raise PostfitError("Number of requested replicas is too large")
-    # Select the first nrep passing replicas
-    if at_least_nrep:
-        selected_paths = passing_paths
-    else:
-        selected_paths = passing_paths[:nrep]
-
-
-    # Copy info file
-    info_source_path = nnfit_path.joinpath(f'{fitname}.info')
-    info_target_path = LHAPDF_path.joinpath(f'{fitname}.info')
-    shutil.copy2(info_source_path, info_target_path)
-    set_lhapdf_info(info_target_path, len(selected_paths))
-
-    # Generate symlinks
-    for drep, source_path in enumerate(selected_paths, 1):
-        # Symlink results to postfit directory
-        source_dir = pathlib.Path(source_path).resolve()
-        target_dir = postfit_path.joinpath('replica_%d' % drep)
-        relative_symlink(source_dir, target_dir)
-        # Symlink results to pdfset directory
-        source_grid = source_dir.joinpath(fitname+'.dat')
-        target_file = f'{fitname}_{drep:04d}.dat'
-        target_grid = LHAPDF_path.joinpath(target_file)
-        relative_symlink(source_grid, target_grid)
-
-    log.info(f"{len(selected_paths)} replicas written to the postfit folder")
-
-    # Generate final PDF with replica 0
-    log.info("Beginning construction of replica 0")
-    # It's important that this is prepended, so that any existing instance of
-    # `fitname` is not read from some other path
-    lhapdf.pathsPrepend(str(postfit_path))
-    generatingPDF = PDF(fitname)
-    lhio.generate_replica0(generatingPDF)
-
-    # Test replica 0
     try:
-        lhapdf.mkPDF(fitname, 0)
-    except RuntimeError as e:
-        raise PostfitError("CRITICAL ERROR: Failure in reading replica zero") from e
-    postfit_path.rename(final_postfit_path)
-    log.info("\n\n*****************************************************************\n")
-    log.info("Postfit complete")
-    log.info("Please upload your results with:")
-    log.info(f"\tvp-upload {result_path}\n")
-    log.info("and install with:")
-    log.info(f"\tvp-get fit {fitname}\n")
-    log.info("*****************************************************************\n\n")
+        final_postfit_path = result_path / 'postfit'
+        LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
+
+        if not fitdata.check_nnfit_results_path(result_path):
+            raise PostfitError('Postfit cannot find a valid results path')
+        if not fitdata.check_lhapdf_info(result_path, fitname):
+            raise PostfitError('Postfit cannot find a valid LHAPDF info file')
+
+        nrep = int(nrep)
+        if at_least_nrep:
+            log.warning(f"Postfit aiming for at least {nrep} replicas")
+        else:
+            log.warning(f"Postfit aiming for {nrep} replicas")
+
+        # Generate postfit and LHAPDF directory
+        if final_postfit_path.is_dir():
+            log.warning(f"Removing existing postfit directory: {postfit_path}")
+            shutil.rmtree(final_postfit_path)
+        os.mkdir(LHAPDF_path)
+
+        # Setup postfit log
+        postfitlog = logging.FileHandler(postfit_path/'postfit.log', mode='w')
+        log.addHandler(postfitlog)
+
+        # Perform postfit selection
+        passing_paths = filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold)
+        if len(passing_paths) < nrep:
+            raise PostfitError("Number of requested replicas is too large")
+        # Select the first nrep passing replicas
+        if at_least_nrep:
+            selected_paths = passing_paths
+        else:
+            selected_paths = passing_paths[:nrep]
+
+
+        # Copy info file
+        info_source_path = nnfit_path.joinpath(f'{fitname}.info')
+        info_target_path = LHAPDF_path.joinpath(f'{fitname}.info')
+        shutil.copy2(info_source_path, info_target_path)
+        set_lhapdf_info(info_target_path, len(selected_paths))
+
+        # Generate symlinks
+        for drep, source_path in enumerate(selected_paths, 1):
+            # Symlink results to postfit directory
+            source_dir = pathlib.Path(source_path).resolve()
+            target_dir = postfit_path.joinpath('replica_%d' % drep)
+            relative_symlink(source_dir, target_dir)
+            # Symlink results to pdfset directory
+            source_grid = source_dir.joinpath(fitname+'.dat')
+            target_file = f'{fitname}_{drep:04d}.dat'
+            target_grid = LHAPDF_path.joinpath(target_file)
+            relative_symlink(source_grid, target_grid)
+
+        log.info(f"{len(selected_paths)} replicas written to the postfit folder")
+
+        # Generate final PDF with replica 0
+        log.info("Beginning construction of replica 0")
+        # It's important that this is prepended, so that any existing instance of
+        # `fitname` is not read from some other path
+        lhapdf.pathsPrepend(str(postfit_path))
+        generatingPDF = PDF(fitname)
+        lhio.generate_replica0(generatingPDF)
+
+        # Test replica 0
+        try:
+            lhapdf.mkPDF(fitname, 0)
+        except RuntimeError as e:
+            raise PostfitError("CRITICAL ERROR: Failure in reading replica zero") from e
+        postfit_path.rename(final_postfit_path)
+        log.info("\n\n*****************************************************************\n")
+        log.info("Postfit complete")
+        log.info("Please upload your results with:")
+        log.info(f"\tvp-upload {result_path}\n")
+        log.info("and install with:")
+        log.info(f"\tvp-get fit {fitname}\n")
+        log.info("*****************************************************************\n\n")
+    except KeyboardInterrupt:
+        shutil.rmtree(postfit_path)
+        raise
 
 
 def main():
