@@ -1,6 +1,6 @@
 .. _getstarted:
 
-Getting Started
+Getting started
 ===============
 This section provides an introduction to the NNPDF code and workflow.
 
@@ -14,7 +14,7 @@ Essential first steps
    ./installation
 
 Necessary for developers
-------------------------   
+------------------------
 .. toctree::
    :maxdepth: 1
 

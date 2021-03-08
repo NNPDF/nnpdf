@@ -36,6 +36,9 @@ reason for the failure must be investigated and dealt with appropriately.
 
 * Please use the recommended resources detailed [here](../vp/examples.rst).
 
+```eval_rst
+.. _reviews:
+```
 ## Reviewing pull requests
 
 All changes to the code [should](rules) be reviewed by at least one person (and ideally

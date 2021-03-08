@@ -14,8 +14,8 @@ NNPDF documentation
 
 * If you are a new user head along to :ref:`getstarted` and check out the :ref:`tutorials`.
 
-Documentation contents 
-======================
+Contents
+========
 .. toctree::
    :maxdepth: 2
 

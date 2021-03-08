@@ -6,12 +6,12 @@ Introduction to ``validphys 2``
 -------------------------------
 
 * ``validphys 2`` is a Python code that implements the data model of NNPDF
-  resources. 
+  resources.
 
 * It provides an executable, called ``validphys`` which is used to
   analyze NNPDF specific data, which takes runcards written in
   `YAML <https://en.wikipedia.org/wiki/YAML>`_ as an input and can produce plots,
-  tables or entire reports as an output. 
+  tables or entire reports as an output.
 
 * The code also provides a Python library
   (also called ``validphys``) which is used to implement executables providing
@@ -29,8 +29,8 @@ Introduction to ``validphys 2``
 
 * The ideas behind the design of the code are explained in the
   :ref:`Design <design>` section.
-  
-Some things which ``validphys`` does:
+
+Some things which ``validphys`` does
 -------------------------------------
 
 * Download resources (``vp-get``) - see :ref:`download`
@@ -47,7 +47,7 @@ Using validphys
 ---------------
 .. toctree::
    :maxdepth: 1
-  
+
    ./getting-started.rst
    ./download.md
    ./upload.md
@@ -55,9 +55,9 @@ Using validphys
    ./scripts.rst
    ./api.md
    ./examples.rst
-   
+
 How validphys handles data
---------------------------   
+--------------------------
 .. toctree::
    :maxdepth: 1
 
@@ -65,13 +65,10 @@ How validphys handles data
    ./filters.md
    ./theorycov/index
    ./dataspecification.rst
-   
+
 Structure and design of validphys
----------------------------------      
+---------------------------------
 .. toctree::
    :maxdepth: 1
 
    ./design.md
-
-   
-
