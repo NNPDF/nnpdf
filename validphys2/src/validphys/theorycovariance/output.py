@@ -18,7 +18,7 @@ from reportengine.figure import figure
 from reportengine.table import table
 
 from validphys import plotutils
-from validphys.results import procs_chi2_table
+from validphys.results import groups_chi2_table
 
 log = logging.getLogger(__name__)
 
@@ -27,8 +27,9 @@ log = logging.getLogger(__name__)
 def procs_chi2_table_theory(
     procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset
 ):
-    """Same as procs_chi2_table but including theory covariance matrix"""
-    return procs_chi2_table(
+    """Same as groups_chi2_table but including theory covariance matrix.
+    Note: we use groups_chi2_table here but provide data grouped by process."""
+    return groups_chi2_table(
         procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset
     )
 
@@ -37,9 +38,9 @@ def procs_chi2_table_theory(
 def procs_chi2_table_diagtheory(
     procs_data, pdf, abs_chi2_data_diagtheory_proc, abs_chi2_data_diagtheory_dataset
 ):
-    """Same as procs_chi2_table but including
-    diagonal theory covariance matrix"""
-    return procs_chi2_table(
+    """Same as groups_chi2_table but including diagonal theory covariance matrix.
+    Note: we use groups_chi2_table here but provide data grouped by process."""
+    return groups_chi2_table(
         procs_data,
         pdf,
         abs_chi2_data_diagtheory_proc,

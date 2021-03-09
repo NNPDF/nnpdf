@@ -585,7 +585,7 @@ def chi2_diag_only(theory_diagcovmat, procs_covmat, data_theory_diff):
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
 
-each_dataset_results = collect(results, ('proc_dataset_inputs_by_metadata', 'data'))
+each_dataset_results = collect(results, ('force_process_grouping', 'data'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """Returns an array of tuples (member_chi², central_chi², numpoints)

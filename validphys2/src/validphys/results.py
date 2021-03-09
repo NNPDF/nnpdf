@@ -1285,12 +1285,12 @@ def groups_central_values(group_result_table):
     central_theory_values = group_result_table["theory_central"]
     return central_theory_values
 
-def procs_central_values_no_table(proc_result_table):
+def procs_central_values_no_table(proc_result_table_no_table):
     central_theory_values = proc_result_table_no_table["theory_central"]
     return central_theory_values
 
 @table
-def procs_central_values(proc_result_table):
+def procs_central_values(procs_central_values_no_table):
     return procs_central_values_no_table
 
 dataspecs_each_dataset_chi2 = collect("each_dataset_chi2", ("dataspecs",))
