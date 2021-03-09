@@ -48,7 +48,7 @@ Scales:
 PDFnormalize:
   - Normtitle: Absolute
 
-  - normalize_to: 1
+  - normalize_to: 2
     Normtitle: Ratio
 
 Basespecs:
@@ -135,7 +135,7 @@ dataspecs:
       from_: reference
 
 Normalize:
-  normalize_to: 1
+  normalize_to: 2
 
 Datanorm:
   normalize_to: data
