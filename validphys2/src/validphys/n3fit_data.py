@@ -23,7 +23,7 @@ from validphys.n3fit_data_utils import (
     positivity_reader,
 )
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 def replica_trvlseed(replica, trvlseed):
     """Generates the ``trvlseed`` for a ``replica``."""
@@ -83,6 +83,46 @@ def kfold_masks(kpartitions, data):
     """Collect the masks (if any) due to kfolding for this data.
     These will be applied to the experimental data before starting
     the training of each fold.
+
+    Parameters
+    ----------
+    kpartitions: list[dict]
+        list of partitions, each partition dictionary with key-value pair
+        `datasets` and a list containing the names of all datasets in that
+        partition. See n3fit/runcards/Basic_hyperopt.yml for an example
+        runcard or the hyperopt documentation for an expanded discussion on
+        k-fold partitions.
+    data: validphys.core.DataGroupSpec
+        full list of data which is to be partitioned.
+
+    Returns
+    kfold_masks: list[np.array]
+        A list containing a boolean array for each partition. Each array is
+        a 1-D boolean array with length equal to the number of cut datapoints
+        in ``data``. If a dataset is included in a particular fold then the
+        mask will be True for the elements corresponding to those datasets
+        such that data.load().get_cv()[kfold_masks[i]] will return the
+        datapoints in the ith partition. See example below.
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> partitions=[
+    ...     {"datasets": ["HERACOMBCCEM", "HERACOMBNCEP460", "NMC", "NTVNBDMNFe"]},
+    ...     {"datasets": ["HERACOMBCCEP", "HERACOMBNCEP575", "NMCPD", "NTVNUDMNFe"]}
+    ... ]
+    >>> ds_inputs = [{"dataset": ds} for part in partitions for ds in part["datasets"]]
+    >>> kfold_masks = API.kfold_masks(dataset_inputs=ds_inputs, kpartitions=partitions, theoryid=53, use_cuts="nocuts")
+    >>> len(kfold_masks) # one element for each partition
+    2
+    >>> kfold_masks[0] # mask which splits data into first partition
+    array([False, False, False, ...,  True,  True,  True])
+    >>> data = API.data(dataset_inputs=ds_inputs, theoryid=53, use_cuts="nocuts")
+    >>> fold_data = data.load().get_cv()[kfold_masks[0]]
+    >>> len(fold_data)
+    604
+    >>> kfold_masks[0].sum()
+    604
 
     """
     list_folds = []
@@ -284,6 +324,16 @@ def fitting_data_dict(
 exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
+    """For a single replica return a tuple of the inputs to this function.
+    Used with `collect` over replicas to avoid having to perform multiple
+    collects.
+
+    See Also
+    --------
+    replicas_nnseed_fitting_data_dict - the result of collecting this function
+    over replicas.
+
+    """
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
@@ -314,8 +364,98 @@ def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
         ))
     return pd.concat(rep_dfs, axis=1)
 
+
+exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_experiment",))
+replicas_exps_tr_masks = collect("exps_tr_masks", ("replicas",))
+
+
+@table
+def training_mask_table(replicas_exps_tr_masks, replicas, experiments_index):
+    """Save the boolean mask used to split data into training and validation
+    for each replica as a pandas DataFrame, indexed by
+    :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
+    the training and validation data used in a fit.
+
+    Parameters
+    ----------
+    replicas_exps_tr_masks: list[list[list[np.array]]]
+        Result of :py:func:`tr_masks` collected over experiments then replicas,
+        which creates the nested structure. The outer list is len(replicas),
+        the next list is len(group_dataset_inputs_by_experiment) and the
+        inner-most list has an array for each dataset in that particular
+        experiment - as defined by the metadata. The arrays should be 1-D
+        boolean arrays which can be used as masks.
+    replicas: NSlist
+        Namespace list of replica numbers to tabulate masks for, each element
+        of the list should be a `replica`. See example below for more
+        information.
+    experiments_index: pd.MultiIndex
+        Index returned by :py:func:`validphys.results.experiments_index`.
+
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> from reportengine.namespaces import NSList
+    >>> # create namespace list for collects over replicas.
+    >>> reps = NSList(list(range(1, 4)), nskey="replica")
+    >>> ds_inp = [
+    ...     {'dataset': 'NMC', 'frac': 0.75},
+    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
+    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
+    ... ]
+    >>> API.training_mask_table(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+                        replica 1  replica 2  replica 3
+    group dataset    id                                 
+    NMC   NMC        0        True      False      False
+                    1        True       True       True
+                    2       False       True       True
+                    3        True       True      False
+                    4        True       True       True
+    ...                        ...        ...        ...
+    CMS   CMSZDIFF12 45       True       True       True
+                    46       True      False       True
+                    47       True       True       True
+                    48      False       True       True
+                    49       True       True       True
+
+    [345 rows x 3 columns]
+
+    """
+    rep_dfs = []
+    for rep_exps_masks, rep in zip(replicas_exps_tr_masks, replicas):
+        # create flat list with all dataset masks in, then concatenate to single
+        # array.
+        all_masks = np.concatenate([
+            ds_mask
+            for exp_masks in rep_exps_masks
+            for ds_mask in exp_masks
+        ])
+        rep_dfs.append(pd.DataFrame(
+            all_masks[:, np.newaxis],
+            columns=[f"replica {rep}"],
+            index=experiments_index
+        ))
+    return pd.concat(rep_dfs, axis=1)
+
 def fitting_pos_dict(posdataset):
-    """Loads a positivity dataset"""
+    """Loads a positivity dataset. For more information see
+    :py:func:`validphys.n3fit_data_utils.positivity_reader`.
+
+    Parameters
+    ----------
+    posdataset: validphys.core.PositivitySetSpec
+        Positivity set which is to be loaded.
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> posdataset = {"dataset": "POSF2U", "poslambda": 1e6}
+    >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=162)
+    >>> len(pos)
+    9
+
+    """
     log.info("Loading positivity dataset %s", posdataset)
     return positivity_reader(posdataset)
 
@@ -324,7 +464,29 @@ posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
 
 #can't use collect here because integdatasets might not exist.
 def integdatasets_fitting_integ_dict(integdatasets=None):
-    """Loads a integrability dataset"""
+    """Loads a integrability dataset. Calls same function as
+    :py:func:`fitting_pos_dict`, except on each element of
+    ``integdatasets`` if ``integdatasets`` is not None.
+
+    Parameters
+    ----------
+    integdatasets: list[validphys.core.PositivitySetSpec]
+        list containing the settings for the integrability sets. Examples of
+        these can be found in the runcards located in n3fit/runcards. They have
+        a format similar to ``dataset_input``.
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> integdatasets = [{"dataset": "INTEGXT3", "poslambda": 1e2}]
+    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
+    >>> len(res), len(res[0])
+    (1, 9)
+    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=None)
+    >>> print(res)
+    None
+
+    """
     if integdatasets is not None:
         integ_info = []
         for integ_set in integdatasets:
@@ -333,4 +495,5 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
             integ_dict = positivity_reader(integ_set)
             integ_info.append(integ_dict)
         return integ_info
+    log.warning("Not using any integrability datasets.")
     return None

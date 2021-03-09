@@ -104,7 +104,7 @@ def performfit(
                 if set, save the state of the fit every ``save_weights_each``
                 epochs
             save: None, str
-                model file where weights will be save, used in conjunction with
+                model file where weights will be saved, used in conjunction with
                 ``load``.
             load: None, str
                 model file from which to load weights from.
