@@ -18,31 +18,31 @@ from reportengine.figure import figure
 from reportengine.table import table
 
 from validphys import plotutils
-from validphys.results import groups_chi2_table
+from validphys.results import procs_chi2_table
 
 log = logging.getLogger(__name__)
 
 
 @table
-def groups_chi2_table_theory(
-    groups_data, pdf, abs_chi2_data_theory_group, abs_chi2_data_theory_dataset
+def procs_chi2_table_theory(
+    procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset
 ):
-    """Same as groups_chi2_table but including theory covariance matrix"""
-    return groups_chi2_table(
-        groups_data, pdf, abs_chi2_data_theory_group, abs_chi2_data_theory_dataset
+    """Same as procs_chi2_table but including theory covariance matrix"""
+    return procs_chi2_table(
+        procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset
     )
 
 
 @table
-def groups_chi2_table_diagtheory(
-    groups_data, pdf, abs_chi2_data_diagtheory_group, abs_chi2_data_diagtheory_dataset
+def procs_chi2_table_diagtheory(
+    procs_data, pdf, abs_chi2_data_diagtheory_proc, abs_chi2_data_diagtheory_dataset
 ):
-    """Same as groups_chi2_table but including
+    """Same as procs_chi2_table but including
     diagonal theory covariance matrix"""
-    return groups_chi2_table(
-        groups_data,
+    return procs_chi2_table(
+        procs_data,
         pdf,
-        abs_chi2_data_diagtheory_group,
+        abs_chi2_data_diagtheory_proc,
         abs_chi2_data_diagtheory_dataset,
     )
 
@@ -210,19 +210,19 @@ def plot_corrmat_heatmap(corrmat, title):
 
 
 @figure
-def plot_normexpcovmat_heatmap(groups_normcovmat):
+def plot_normexpcovmat_heatmap(procs_normcovmat):
     """Matrix plot of the experiment covariance matrix normalised to data."""
     fig = plot_covmat_heatmap(
-        groups_normcovmat, "Experimental Covariance Matrix"
+        procs_normcovmat, "Experimental Covariance Matrix"
     )
     return fig
 
 
 @figure
-def plot_expcorrmat_heatmap(groups_corrmat):
+def plot_expcorrmat_heatmap(procs_corrmat):
     """Matrix plot of the experiment correlation matrix"""
     fig = plot_corrmat_heatmap(
-        groups_corrmat, "Experimental Correlation Matrix"
+        procs_corrmat, "Experimental Correlation Matrix"
     )
     return fig
 
@@ -347,10 +347,10 @@ def plot_expplusthcorrmat_heatmap_custom(
 
 
 @figure
-def plot_blockcovdiff_heatmap(theory_block_diag_covmat, groups_covmat):
+def plot_blockcovdiff_heatmap(theory_block_diag_covmat, procs_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df = (theory_block_diag_covmat.as_matrix() + groups_covmat.values) / np.mean(
-        groups_covmat.values
+    df = (theory_block_diag_covmat.as_matrix() + procs_covmat.values) / np.mean(
+        procs_covmat.values
     )
     fig = plot_covmat_heatmap(
         df,
@@ -363,7 +363,7 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, groups_covmat):
 @figure
 def plot_covdiff_heatmap_custom(
     theory_covmat_custom,
-    groups_covmat,
+    procs_covmat,
     theoryids,
     fivetheories: (str, type(None)) = None,
 ):
@@ -374,7 +374,7 @@ def plot_covdiff_heatmap_custom(
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-    df = (theory_covmat_custom + groups_covmat) / np.mean(groups_covmat.values)
+    df = (theory_covmat_custom + procs_covmat) / np.mean(procs_covmat.values)
     fig = plot_covmat_heatmap(
         df,
         "(Theory + experiment)/mean(experiment)"
@@ -386,8 +386,8 @@ def plot_covdiff_heatmap_custom(
 @figure
 def plot_diag_cov_comparison(
     theory_covmat_custom,
-    groups_covmat,
-    groups_data_values,
+    procs_covmat,
+    procs_data_values,
     theoryids,
     fivetheories: (str, type(None)) = None,
 ):
@@ -398,7 +398,7 @@ def plot_diag_cov_comparison(
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-    data = np.abs(groups_data_values)
+    data = np.abs(procs_data_values)
     plot_index = theory_covmat_custom.index
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=plot_index)
@@ -406,11 +406,11 @@ def plot_diag_cov_comparison(
     oldindex = sqrtdiags_th.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     sqrtdiags_th = sqrtdiags_th.reindex(newindex)
-    sqrtdiags_exp = np.sqrt(np.diag(groups_covmat)) / data
+    sqrtdiags_exp = np.sqrt(np.diag(procs_covmat)) / data
     sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=plot_index)
     sqrtdiags_exp.sort_index(0, inplace=True)
     sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
-    df_total = theory_covmat_custom + groups_covmat
+    df_total = theory_covmat_custom + procs_covmat
     sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
     sqrtdiags_tot.sort_index(0, inplace=True)
@@ -440,8 +440,8 @@ def plot_diag_cov_comparison(
 @figure
 def plot_diag_cov_impact(
     theory_covmat_custom,
-    groups_covmat,
-    groups_data_values,
+    procs_covmat,
+    procs_data_values,
     theoryids,
     fivetheories: (str, type(None)) = None,
 ):
@@ -453,11 +453,11 @@ def plot_diag_cov_impact(
         elif fivetheories == "linear":
             l = "linear 5"
     matrix_theory = theory_covmat_custom.values
-    matrix_experiment = groups_covmat.values
-    inv_exp = (np.diag(la.inv(matrix_experiment))) ** (-0.5) / groups_data_values
+    matrix_experiment = procs_covmat.values
+    inv_exp = (np.diag(la.inv(matrix_experiment))) ** (-0.5) / procs_data_values
     inv_tot = (np.diag(la.inv(matrix_theory + matrix_experiment))) ** (
         -0.5
-    ) / groups_data_values
+    ) / procs_data_values
     plot_index = theory_covmat_custom.index
     df_inv_exp = pd.DataFrame(inv_exp, index=plot_index)
     df_inv_exp.sort_index(0, inplace=True)
@@ -486,7 +486,7 @@ def plot_diag_cov_impact(
 
 @figure
 def plot_datasets_chi2_theory(
-    groups_data, each_dataset_chi2, abs_chi2_data_theory_dataset
+    procs_data, each_dataset_chi2, abs_chi2_data_theory_dataset
 ):
     """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
     ds = iter(each_dataset_chi2)
@@ -494,12 +494,12 @@ def plot_datasets_chi2_theory(
     dschi2 = []
     dschi2theory = []
     xticks = []
-    for group in groups_data:
-        for dataset, dsres in zip(group, ds):
+    for proc in procs_data:
+        for dataset, dsres in zip(proc, ds):
             dschi2.append(dsres.central_result / dsres.ndata)
             xticks.append(dataset.name)
-    for group in groups_data:
-        for dataset, dsres in zip(group, dstheory):
+    for proc in procs_data:
+        for dataset, dsres in zip(proc, dstheory):
             dschi2theory.append(dsres.central_result / dsres.ndata)
     plotvalues = np.stack((dschi2theory, dschi2))
     fig, ax = plotutils.barplot(
