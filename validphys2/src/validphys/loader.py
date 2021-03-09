@@ -7,7 +7,7 @@ Created on Wed Mar  9 15:40:38 2016
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
-import inspect
+import contextlib
 import sys
 import pathlib
 import functools
@@ -524,6 +524,19 @@ class Loader(LoaderBase):
         return path/name
 
 
+@contextlib.contextmanager
+def keyboard_interrupt_manager(path):
+    try:
+        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
+                                                dir=path))
+        yield tempdir
+    except KeyboardInterrupt: # Possibly also postfit error
+        shutil.rmtree(tempdir)
+        raise
+    else:
+        shutil.rmtree(tempdir)
+
+
 #http://stackoverflow.com/a/15645088/1007990
 def _download_and_show(response, stream):
 
@@ -587,27 +600,6 @@ def download_file(url, stream_or_path, make_parents=False):
         _download_and_show(response, stream_or_path)
 
 
-def keyboard_interrupt_handler(f):
-    sig = inspect.signature(f)
-    # Check if there is a path-like argument for f
-    for i, param in enumerate(sig.parameters):
-        if 'path' in param:
-            index = i
-            break
-    else:
-        raise Exception(f"No path-like argument provided for function {f.__name__}")
-    @functools.wraps(f)
-    def f_(*args, **kwargs):
-        path = args[index]
-        try:
-            return f(*args, **kwargs)
-        except KeyboardInterrupt:
-            shutil.rmtree(path)
-            raise
-    return f_
-
-
-@keyboard_interrupt_handler
 def download_and_extract(url, local_path):
     """Download a compressed archive and then extract it to the given path"""
     local_path = pathlib.Path(local_path)
@@ -755,21 +747,19 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
-                                                dir=self.resultspath))
-        download_and_extract(self.remote_fits[fitname], tempdir)
-        #Handle old-style fits compressed with 'results' as root.
-        old_style_res = tempdir/'results'
-        if old_style_res.is_dir():
-            move_target = old_style_res / fitname
-        else:
-            move_target = tempdir/fitname
-        if not move_target.is_dir():
-            raise RemoteLoaderError(f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}")
+        with keyboard_interrupt_manager(self.resultspath) as tempdir:
+            download_and_extract(self.remote_fits[fitname], tempdir)
+            #Handle old-style fits compressed with 'results' as root.
+            old_style_res = tempdir/'results'
+            if old_style_res.is_dir():
+                move_target = old_style_res / fitname
+            else:
+                move_target = tempdir/fitname
+            if not move_target.is_dir():
+                raise RemoteLoaderError(f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}")
 
-        fitpath = self.resultspath / fitname
-        shutil.move(move_target, fitpath)
-        shutil.rmtree(tempdir)
+            fitpath = self.resultspath / fitname
+            shutil.move(move_target, fitpath)
 
 
         if lhaindex.isinstalled(fitname):
