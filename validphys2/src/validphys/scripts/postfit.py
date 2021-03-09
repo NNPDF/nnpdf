@@ -32,7 +32,7 @@ from validphys import fitveto
 from validphys.core import PDF
 from validphys.fitveto import NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2, INTEG_THRESHOLD
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 log.addHandler(colors.ColorHandler())
 
