@@ -31,6 +31,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
+from validphys.scripts.postfit import PostfitError
 from validphys import lhaindex
 import NNPDF as nnpath
 
@@ -530,7 +531,7 @@ def keyboard_interrupt_manager(path):
         tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
                                                 dir=path))
         yield tempdir
-    except KeyboardInterrupt: # Possibly also postfit error
+    except (KeyboardInterrupt, PostfitError):
         shutil.rmtree(tempdir)
         raise
     else:

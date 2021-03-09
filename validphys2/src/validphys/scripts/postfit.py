@@ -126,9 +126,8 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     nnfit_path   = result_path / 'nnfit'    # Path of nnfit replica output
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
-    postfit_path = pathlib.Path(tempfile.mkdtemp(prefix='postfit_work_deleteme_',
-        dir=result_path))
-    try:
+    from validphys.loader import keyboard_interrupt_manager # circular imports
+    with keyboard_interrupt_manager(result_path) as postfit_path:
         final_postfit_path = result_path / 'postfit'
         LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 
@@ -197,17 +196,13 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
             lhapdf.mkPDF(fitname, 0)
         except RuntimeError as e:
             raise PostfitError("CRITICAL ERROR: Failure in reading replica zero") from e
-        postfit_path.rename(final_postfit_path)
-        log.info("\n\n*****************************************************************\n")
-        log.info("Postfit complete")
-        log.info("Please upload your results with:")
-        log.info(f"\tvp-upload {result_path}\n")
-        log.info("and install with:")
-        log.info(f"\tvp-get fit {fitname}\n")
-        log.info("*****************************************************************\n\n")
-    except KeyboardInterrupt:
-        shutil.rmtree(postfit_path)
-        raise
+    log.info("\n\n*****************************************************************\n")
+    log.info("Postfit complete")
+    log.info("Please upload your results with:")
+    log.info(f"\tvp-upload {result_path}\n")
+    log.info("and install with:")
+    log.info(f"\tvp-get fit {fitname}\n")
+    log.info("*****************************************************************\n\n")
 
 
 def main():
