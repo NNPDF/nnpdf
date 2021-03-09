@@ -526,10 +526,9 @@ class Loader(LoaderBase):
 
 
 @contextlib.contextmanager
-def keyboard_interrupt_manager(path):
+def keyboard_interrupt_manager(path, prefix):
     try:
-        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
-                                                dir=path))
+        tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=path))
         yield tempdir
     except (KeyboardInterrupt, PostfitError):
         shutil.rmtree(tempdir)
@@ -748,7 +747,7 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        with keyboard_interrupt_manager(self.resultspath) as tempdir:
+        with keyboard_interrupt_manager(self.resultspath, 'fit_download_deleteme_') as tempdir:
             download_and_extract(self.remote_fits[fitname], tempdir)
             #Handle old-style fits compressed with 'results' as root.
             old_style_res = tempdir/'results'

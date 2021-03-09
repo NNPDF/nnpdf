@@ -127,7 +127,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
     from validphys.loader import keyboard_interrupt_manager # circular imports
-    with keyboard_interrupt_manager(result_path) as postfit_path:
+    with keyboard_interrupt_manager(result_path, 'postfit_work_deleteme_') as postfit_path:
         final_postfit_path = result_path / 'postfit'
         LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 
