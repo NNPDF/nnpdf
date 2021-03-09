@@ -66,7 +66,7 @@ Next, add necessary flags to the runcard
       
 Example runcard
 ---------------
-The following is an example runcard for an NLO NNPDF3.1 style fit with a 3 point theory covmat.
+The following is an example runcard for an NLO NNPDF3.1-style fit with a 3 point theory covmat.
 It can be found `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_.
 
 .. code:: yaml
