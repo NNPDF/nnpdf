@@ -372,7 +372,7 @@ def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
     for rep_exps_pseudodata, rep in zip(replicas_exps_pseudodata, replicas):
         all_pseudodata = np.concatenate(rep_exps_pseudodata)
         rep_dfs.append(pd.DataFrame(
-            all_pseudodata[:, np.newaxis],
+            all_pseudodata,
             columns=[f"replica {rep}"],
             index=experiments_index
         ))
@@ -446,7 +446,7 @@ def training_mask_table(replicas_exps_tr_masks, replicas, experiments_index):
             for ds_mask in exp_masks
         ])
         rep_dfs.append(pd.DataFrame(
-            all_masks[:, np.newaxis],
+            all_masks,
             columns=[f"replica {rep}"],
             index=experiments_index
         ))
