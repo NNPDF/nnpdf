@@ -193,6 +193,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new BCDMSDFilter());
   target.push_back(new BCDMSD_dwFilter());
   target.push_back(new BCDMSD_shFilter());
+  target.push_back(new BCDMSD_dw_iteFilter());
+  target.push_back(new BCDMSD_sh_iteFilter());
 
   // ************************* CDF ******************************
 
@@ -211,6 +213,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CHORUSNBPb_dwFilter());
   target.push_back(new CHORUSNUPb_shFilter());
   target.push_back(new CHORUSNBPb_shFilter());
+  target.push_back(new CHORUSNUPb_dw_iteFilter());
+  target.push_back(new CHORUSNBPb_dw_iteFilter());
+  target.push_back(new CHORUSNUPb_sh_iteFilter());
+  target.push_back(new CHORUSNBPb_sh_iteFilter()); 
 
   // ************************* CMS ******************************
 
@@ -244,6 +250,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new EMCF2CFilter());
   target.push_back(new EMCF2C_dwFilter());
   target.push_back(new EMCF2C_shFilter());
+  target.push_back(new EMCF2C_dw_iteFilter());
+  target.push_back(new EMCF2C_sh_iteFilter());
   target.push_back(new EMCF2c1987Filter());
 
   // ************************ EMC *****************************
@@ -257,10 +265,14 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new DYE605Filter());
   target.push_back(new DYE605_dwFilter());
   target.push_back(new DYE605_shFilter());
+  target.push_back(new DYE605_dw_iteFilter());
+  target.push_back(new DYE605_sh_iteFilter());
   target.push_back(new DYE866PFilter());
   target.push_back(new DYE866RFilter());
   target.push_back(new DYE866R_dwFilter());
   target.push_back(new DYE866R_shFilter());
+  target.push_back(new DYE866R_dw_iteFilter());
+  target.push_back(new DYE866R_sh_iteFilter());
 
   // ************************* HERA-I Combined ******************************
 
@@ -305,6 +317,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new NMCpdFilter());
   target.push_back(new NMCpd_dwFilter());
   target.push_back(new NMCpd_shFilter());
+  target.push_back(new NMCpd_dw_iteFilter());
+  target.push_back(new NMCpd_sh_iteFilter());
 
   // ************************* NuTeV ******************************
 
@@ -316,6 +330,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new NTVNUDMNFe_dwFilter());
   target.push_back(new NTVNBDMNFe_shFilter());
   target.push_back(new NTVNUDMNFe_shFilter());
+  target.push_back(new NTVNBDMNFe_dw_iteFilter());
+  target.push_back(new NTVNUDMNFe_dw_iteFilter());
+  target.push_back(new NTVNBDMNFe_sh_iteFilter());
+  target.push_back(new NTVNUDMNFe_sh_iteFilter());
 
   // ************************* SLAC ******************************
 
@@ -323,6 +341,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new SLACDFilter());
   target.push_back(new SLACD_dwFilter());
   target.push_back(new SLACD_shFilter());
+  target.push_back(new SLACD_dw_iteFilter());
+  target.push_back(new SLACD_sh_iteFilter());
 
   // ************************* TOP *******************************
 

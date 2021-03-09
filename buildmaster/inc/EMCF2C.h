@@ -38,3 +38,21 @@ public: EMCF2C_shFilter():
 private:
   void ReadData();
 };
+
+class EMCF2C_dw_iteFilter: public CommonData
+{
+public: EMCF2C_dw_iteFilter():
+  CommonData("EMCF2C_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class EMCF2C_sh_iteFilter: public CommonData
+{
+public: EMCF2C_sh_iteFilter():
+  CommonData("EMCF2C_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
