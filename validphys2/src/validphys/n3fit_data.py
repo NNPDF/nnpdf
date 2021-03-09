@@ -211,27 +211,40 @@ def fitting_data_dict(
     """
     Provider which takes  the information from validphys ``data``.
 
-    # Returns:
-        - `all_dict_out`: a dictionary containing all the information of the experiment/dataset
-        for training, validation and experimental
-                'datasets' : list of dictionaries for each of the datasets
-                    contained in ``data``
-                'name' : name of the ``data`` - typically experiment/group name
-                'expdata_true' : non-replica data
-                'invcovmat_true' : inverse of the covmat (non-replica)
+    Returns
+    -------
+    all_dict_out: dict
+        Containing all the information of the experiment/dataset
+        for training, validation and experimental With the following keys:
 
-                'trmask' : mask for the training data
-                'invcovmat' : inverse of the covmat for the training data
-                'ndata' : number of datapoints for the training data
-                'expdata' : experimental data (replica'd) for training
-
-                'vlmask' : (same as above for validation)
-                'invcovmat_vl' : (same as above for validation)
-                'ndata_vl' : (same as above for validation)
-                'expdata_vl' :  (same as above for validation)
-
-                'positivity' : bool - is this a positivity set?
-                'count_chi2' : should this be counted towards the chi2
+        'datasets'
+            list of dictionaries for each of the datasets contained in ``data``
+        'name'
+            name of the ``data`` - typically experiment/group name
+        'expdata_true'
+            non-replica data
+        'invcovmat_true'
+            inverse of the covmat (non-replica)
+        'trmask'
+            mask for the training data
+        'invcovmat'
+            inverse of the covmat for the training data
+        'ndata'
+            number of datapoints for the training data
+        'expdata'
+            experimental data (replica'd) for training
+        'vlmask'
+            (same as above for validation)
+        'invcovmat_vl'
+            (same as above for validation)
+        'ndata_vl'
+            (same as above for validation)
+        'expdata_vl'
+            (same as above for validation)
+        'positivity'
+            bool - is this a positivity set?
+        'count_chi2'
+            should this be counted towards the chi2
     """
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
