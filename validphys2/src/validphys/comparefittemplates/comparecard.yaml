@@ -77,9 +77,6 @@ lumi_channels:
   - udbar
   - dubar
 
-Luminormalize:
-  - normalize_to: 2
-
 Distspecs:
   - ymin: 0
     ymax: 20
