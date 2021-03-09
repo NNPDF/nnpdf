@@ -190,6 +190,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
         lhapdf.pathsPrepend(str(postfit_path))
         generatingPDF = PDF(fitname)
         lhio.generate_replica0(generatingPDF)
+        shutil.copytree(postfit_path, final_postfit_path, symlinks=True)
 
         # Test replica 0
         try:
