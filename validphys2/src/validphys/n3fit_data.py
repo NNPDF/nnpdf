@@ -96,6 +96,7 @@ def kfold_masks(kpartitions, data):
         full list of data which is to be partitioned.
 
     Returns
+    -------
     kfold_masks: list[np.array]
         A list containing a boolean array for each partition. Each array is
         a 1-D boolean array with length equal to the number of cut datapoints
