@@ -831,6 +831,9 @@ experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
 )
 
+procs_chi2_table = collect(
+    "groups_chi2_table", ("force_process_grouping",)
+)
 
 @check_cuts_considered
 @table
