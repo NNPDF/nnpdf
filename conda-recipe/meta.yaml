@@ -45,7 +45,7 @@ requirements:
         - prompt_toolkit
         - sphinx # documentation
         - recommonmark
-        - sphinx_rtd_theme > 0.5
+        - sphinx_rtd_theme >0.5
 
 test:
     requires:
