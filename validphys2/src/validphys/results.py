@@ -827,12 +827,12 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, each_dataset_chi2):
     return pd.DataFrame(records)
 
 
+@table
+def procs_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2):
+    return groups_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2)
+    
 experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
-)
-
-procs_chi2_table = collect(
-    "groups_chi2_table", ("force_process_grouping",)
 )
 
 @check_cuts_considered
@@ -951,6 +951,9 @@ def dataset_chi2_table(chi2_stats, dataset):
 
 groups_chi2 = collect(
     "dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",)
+)
+
+procs_chi2 = collect("dataset_inputs_abs_chi2_data", ("force_process_grouping",)
 )
 
 fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
