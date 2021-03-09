@@ -3,7 +3,7 @@ How to include a theory covariance matrix in a fit
 :Author: Contact Rosalyn (r.l.pearson@ed.ac.uk) for further information.
 
 This section details how to include scale variation covariance matrices (covmats)
-in a PDF fit. At the present time this can only be done at NLO, for which the 
+in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the 
 central theory is theory 163.
 
 First, decide which theory covmat you want
