@@ -835,7 +835,7 @@ void CHORUSNUPb_dw_iteFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCORITE";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -844,7 +844,7 @@ void CHORUSNUPb_dw_iteFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS_ITE" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -876,7 +876,7 @@ void CHORUSNUPb_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
@@ -995,7 +995,7 @@ void CHORUSNBPb_dw_iteFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCORITE";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -1004,7 +1004,7 @@ void CHORUSNBPb_dw_iteFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS_ITE" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -1035,7 +1035,7 @@ void CHORUSNBPb_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
   }
@@ -1110,7 +1110,7 @@ void CHORUSNUPb_sh_iteFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCORITE";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -1119,7 +1119,7 @@ void CHORUSNUPb_sh_iteFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS_ITE" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -1151,7 +1151,7 @@ void CHORUSNUPb_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
@@ -1273,7 +1273,7 @@ void CHORUSNBPb_sh_iteFilter::ReadData()
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSQEDRADCORITE";
+    fSys[i][0].name = "CHORUSQEDRADCOR1";
     
     //Systematics
     for (int l = 1; l < nrealsys; l++)
@@ -1282,7 +1282,7 @@ void CHORUSNBPb_sh_iteFilter::ReadData()
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS_ITE" << l;
+      sysname << "CHORUSSYS_1" << l;
       fSys[i][l].name = sysname.str();
     }
 
@@ -1314,7 +1314,7 @@ void CHORUSNBPb_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     

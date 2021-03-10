@@ -1147,13 +1147,13 @@ void NTVNUDMNFe_dw_iteFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM_ITE";
+    fSys[i][1].name = "NUTEVNORM1";
 
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC_ITE";
+    fSys[i][2].name = "NUTEVBRC1";
     
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -1189,7 +1189,7 @@ void NTVNUDMNFe_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
@@ -1303,13 +1303,13 @@ void NTVNBDMNFe_dw_iteFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM_ITE";
+    fSys[i][1].name = "NUTEVNORM1";
     
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC_ITE";
+    fSys[i][2].name = "NUTEVBRC1";
 
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -1345,7 +1345,7 @@ void NTVNBDMNFe_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
   }
@@ -1455,13 +1455,13 @@ void NTVNUDMNFe_sh_iteFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM_ITE";
+    fSys[i][1].name = "NUTEVNORM1";
 
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC_ITE";
+    fSys[i][2].name = "NUTEVBRC1";
     
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -1497,7 +1497,7 @@ void NTVNUDMNFe_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
@@ -1614,13 +1614,13 @@ void NTVNBDMNFe_sh_iteFilter::ReadData()
     fSys[i][1].mult = 2.1;
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "NUTEVNORM_ITE";
+    fSys[i][1].name = "NUTEVNORM1";
     
     // Br uncertainty
     fSys[i][2].mult = BrCunc/BrC * 100;
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "NUTEVBRC_ITE";
+    fSys[i][2].name = "NUTEVBRC1";
 
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -1656,7 +1656,7 @@ void NTVNBDMNFe_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR_ITE" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
