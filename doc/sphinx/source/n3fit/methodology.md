@@ -153,7 +153,7 @@ During the minimization, fit solutions giving negative values of
 \\(\mathcal{O}_k\\) will receive a positive contribution to the total \\( \chi^2\\) and therefore will be penalized.
 A similar methodology was already used in `nnfit`, to impose positivity of DIS and Drell-Yan physical cross sections.
 The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated.
-In few words, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
+In summary, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
 In `n3fit` however the `postfit` selection only accepts replicas which pass all positivity constraints, i.e., no
 negative values are allowed.
 
