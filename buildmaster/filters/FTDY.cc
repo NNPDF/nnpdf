@@ -442,7 +442,7 @@ void DYE605_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR" << l-nrealsys;
+	sysname << "NUCLEAR_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
   }
@@ -555,7 +555,7 @@ void DYE605_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "NUCLEAR" << l-nrealsys;
+	sysname << "NUCLEAR_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
@@ -1034,7 +1034,7 @@ void DYE866R_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "DEUTERON_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
@@ -1136,7 +1136,7 @@ void DYE866R_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "DEUTERON_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     

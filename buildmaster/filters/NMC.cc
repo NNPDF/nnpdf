@@ -374,7 +374,7 @@ void NMCpd_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "DEUTERON_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
@@ -475,7 +475,7 @@ void NMCpd_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "DEUTERON_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 

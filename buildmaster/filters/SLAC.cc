@@ -497,12 +497,12 @@ void SLACD_dw_iteFilter::ReadData()
     fSys[i][1].mult = 1.7;  //absnorm
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "SLACNORM1";
+    fSys[i][1].name = "SLACNORM_ITE";
     
     fSys[i][2].mult = -relnor;     //relnorm
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "SLACRELNORM1";
+    fSys[i][2].name = "SLACRELNORM_ITE";
 
     //Get proton central value
     getline(f3,line);
@@ -532,7 +532,7 @@ void SLACD_dw_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "DEUTERON_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
@@ -611,12 +611,12 @@ void SLACD_sh_iteFilter::ReadData()
     fSys[i][1].mult = 1.7;  //absnorm
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
-    fSys[i][1].name = "SLACNORM1";
+    fSys[i][1].name = "SLACNORM_ITE";
     
     fSys[i][2].mult = -relnor;     //relnorm
     fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
-    fSys[i][2].name = "SLACRELNORM1";
+    fSys[i][2].name = "SLACRELNORM_ITE";
 
     //Get proton central value
     getline(f3,line);
@@ -646,7 +646,7 @@ void SLACD_sh_iteFilter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "DEUTERON_ITE" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
