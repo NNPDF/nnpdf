@@ -139,7 +139,7 @@ In NNPDF3.1 the positivity of a set of chosen DIS and fixed-target Drell-Yan pro
 was required: PDFs were allowed to be negative, as long as these resulting physical cross sections were positive.
 Since \\(\overline{MS}\\) PDFs have been proved to be positive,
 it is now convenient to require positivity of the distributions \\(q_k = \{u,\bar{u},d,\bar{d},s,\bar{s},c,g\} \\) themselves. 
-In `n3fit` this is done on the top of the DIS and Drell-Yan processes already considered in `nnfit`. 
+In `n3fit` this is done on top of the DIS and Drell-Yan processes already considered in `nnfit`. 
 
 The implementation of such positivity constraints is based on a penalty term controlled by a **positivity multiplier**:
 for each positivity observable \\(\mathcal{O}_k\\) (which can now be either a PDF or a physical cross section)
