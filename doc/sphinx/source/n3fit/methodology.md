@@ -165,8 +165,8 @@ In order to satisfy valence and Gottfried sum rules, the distributions \\(  q_k 
 
 \\( \lim_{x\rightarrow 0} x q_k\left(x,Q_0^2\right) = 0 \\).
 
-Similarly to what done for positivity, we can impose this behaviour by adding an additional term to the total \\( \chi^2\\)
-which penalizes fit solutions where the integrable distributions do not decrease to zero at small-\\(x\\)
+Similarly to what is done for positivity, we can impose this behaviour by adding an additional term to the total \\( \chi^2\\)
+which penalizes fit solutions where the integrable distributions do not decrease to zero at small-\\(x\\). This term is
 
 \\( \chi^2_{k,integ} = \Lambda_k \sum_i \left[x_i q_k\left(x_i,Q^2\right)\right]^2 \\).
 
@@ -177,5 +177,4 @@ After the fit, the `postfit` script will retain just those replicas satisfying a
 in the [postfit](#postfit-selection-criteria) section. 
 
 It should be noted that the positivity and integrability multipliers are hyper-parameters of the fit which require specific fine tuning through [hyper-optimization](#pos-int-hyperopt). 
-
 
