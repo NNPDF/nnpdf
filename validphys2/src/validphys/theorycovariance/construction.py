@@ -52,8 +52,8 @@ def make_scale_var_covmat(predictions):
 
 @check_correct_theory_combination
 def theory_covmat_singleprocess_no_table(theoryids_procs_central_values_no_table,
-                           procs_index, theoryids,
-                           fivetheories:(str, type(None)) = None):
+                                         procs_index, theoryids,
+                                         fivetheories:(str, type(None)) = None):
 
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by procs_index."""

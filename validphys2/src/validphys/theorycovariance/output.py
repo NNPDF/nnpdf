@@ -180,7 +180,6 @@ def _get_key(element):
     return newelement
 
 
-@figure
 def plot_corrmat_heatmap(corrmat, title):
     """Matrix plot of a correlation matrix"""
     df = corrmat
