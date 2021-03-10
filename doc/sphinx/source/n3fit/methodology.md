@@ -165,7 +165,7 @@ In order to satisfy valence and Gottfried sum rules, the distributions \\(  q_k 
 
 \\( \lim_{x\rightarrow 0} x q_k\left(x,Q_0^2\right) = 0 \\).
 
-Similarly to what done for positivity, we can impose this behaviour by adding an additional term to the total \\( \chi^2\\)
+Similarly to what is done for positivity, we can impose this behaviour by adding an additional term to the total \\( \chi^2\\)
 which penalizes fit solutions where the integrable distributions do not decrease to zero at small-\\(x\\)
 
 \\( \chi^2_{k,integ} = \Lambda_k \sum_i \left[x_i q_k\left(x_i,Q^2\right)\right]^2 \\).
