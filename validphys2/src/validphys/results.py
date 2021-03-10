@@ -154,7 +154,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
-procs_data = collect("data", ("force_process_grouping",))
+procs_data = collect("data", ("group_dataset_inputs_by_process",))
 
 def groups_index(groups_data):
     """Return a pandas.MultiIndex with levels for group, dataset and point
@@ -212,7 +212,7 @@ groups_results = collect(
 )
 
 procs_results = collect(
-    "dataset_inputs_results", ("force_process_grouping",)
+    "dataset_inputs_results", ("group_dataset_inputs_by_process",)
 )
 
 def group_result_table_no_table(groups_results, groups_index):
@@ -953,7 +953,7 @@ groups_chi2 = collect(
     "dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",)
 )
 
-procs_chi2 = collect("dataset_inputs_abs_chi2_data", ("force_process_grouping",)
+procs_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_process",)
 )
 
 fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))

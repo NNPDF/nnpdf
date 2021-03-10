@@ -70,7 +70,7 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table,
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
-                                        ('force_process_grouping','data'))
+                                        ('group_dataset_inputs_by_process','data'))
 
 @check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory,
@@ -151,7 +151,7 @@ def total_covmat_procs(procs_results_theory,
         proc_result_covmats.append(cov)
     return proc_result_covmats
 
-commondata_procs = collect('commondata', ['force_process_grouping', 'data'])
+commondata_procs = collect('commondata', ['group_dataset_inputs_by_process', 'data'])
 
 def dataset_names(commondata_procs):
     """Returns a list of the names of the datasets, in the same order as
@@ -585,7 +585,7 @@ def chi2_diag_only(theory_diagcovmat, procs_covmat, data_theory_diff):
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
 
-each_dataset_results = collect(results, ('force_process_grouping', 'data'))
+each_dataset_results = collect(results, ('group_dataset_inputs_by_process', 'data'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """Returns an array of tuples (member_chi², central_chi², numpoints)
