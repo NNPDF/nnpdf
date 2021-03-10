@@ -136,7 +136,7 @@ The look-back approach implemented in `nnfit` is not required by `n3fit` due to 
 Positivity
 ----------
 In NNPDF3.1 the positivity of a set of chosen DIS and fixed-target Drell-Yan processes
-was required: PDFs were allowed to be negative, as long as these physical cross sections resulted to be positive.
+was required: PDFs were allowed to be negative, as long as these resulting physical cross sections were positive.
 Since \\(\overline{MS}\\) PDFs have been proved to be positive,
 it is now convenient to require positivity of the distributions \\(q_k = \{u,\bar{u},d,\bar{d},s,\bar{s},c,g\} \\) themselves. 
 In `n3fit` this is done on the top of the DIS and Drell-Yan processes already considered in `nnfit`. 
@@ -175,4 +175,3 @@ in the `postfit` section.
 
 ``` important:: The positivity and integrability multipliers are hyper-parameters of the fit which require specific fine tuning through hyper-optimization. 
 ```
-
