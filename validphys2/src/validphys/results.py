@@ -154,6 +154,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
+procs_data = collect("data", ("group_dataset_inputs_by_process",))
 
 def groups_index(groups_data):
     """Return a pandas.MultiIndex with levels for group, dataset and point
@@ -193,17 +194,26 @@ def groups_index(groups_data):
 def experiments_index(experiments_data):
     return groups_index(experiments_data)
 
+def procs_index(procs_data):
+    return groups_index(procs_data)
 
 def groups_data_values(group_result_table):
     """Returns list of data values for the input groups."""
     data_central_values = group_result_table["data_central"]
     return data_central_values
 
+def procs_data_values(proc_result_table):
+    """Like groups_data_values but grouped by process."""
+    data_central_values = proc_result_table["data_central"]
+    return data_central_values
 
 groups_results = collect(
     "dataset_inputs_results", ("group_dataset_inputs_by_metadata",)
 )
 
+procs_results = collect(
+    "dataset_inputs_results", ("group_dataset_inputs_by_process",)
+)
 
 def group_result_table_no_table(groups_results, groups_index):
     """Generate a table containing the data central value, the central prediction,
@@ -243,10 +253,17 @@ def group_result_table(group_result_table_no_table):
     """Duplicate of group_result_table_no_table but with a table decorator."""
     return group_result_table_no_table
 
+def proc_result_table_no_table(procs_results, procs_index):
+    return group_result_table_no_table(procs_results, procs_index)
+
+@table
+def proc_result_table(proc_result_table_no_table):
+    return proc_result_table_no_table
 
 experiment_result_table = collect(
     "group_result_table", ("group_dataset_inputs_by_experiment",)
 )
+
 
 
 @table
@@ -334,6 +351,12 @@ def groups_covmat(groups_covmat_no_table):
     """Duplicate of groups_covmat_no_table but with a table decorator."""
     return groups_covmat_no_table
 
+def procs_covmat_no_table(experiments_covmat_no_table, procs_index):
+    return relabel_experiments_to_groups(experiments_covmat_no_table, procs_index)
+
+@table
+def procs_covmat(procs_covmat_no_table):
+    return procs_covmat_no_table
 
 experiments_sqrt_covmat = collect(
     "dataset_inputs_sqrt_covmat", ("group_dataset_inputs_by_experiment",)
@@ -401,6 +424,9 @@ def groups_normcovmat(groups_covmat, groups_data_values):
     mat = df / np.outer(groups_data_array, groups_data_array)
     return mat
 
+@table
+def procs_normcovmat(procs_covmat, procs_data_values):
+    return groups_normcovmat(procs_covmat, procs_data_values)
 
 @table
 def groups_corrmat(groups_covmat):
@@ -411,6 +437,9 @@ def groups_corrmat(groups_covmat):
     mat = diag_minus_half[:, np.newaxis] * df * diag_minus_half
     return mat
 
+@table
+def procs_corrmat(procs_covmat):
+    return groups_corrmat(procs_covmat)
 
 @table
 def closure_pseudodata_replicas(
@@ -798,10 +827,13 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, each_dataset_chi2):
     return pd.DataFrame(records)
 
 
+@table
+def procs_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2):
+    return groups_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2)
+    
 experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
 )
-
 
 @check_cuts_considered
 @table
@@ -919,6 +951,9 @@ def dataset_chi2_table(chi2_stats, dataset):
 
 groups_chi2 = collect(
     "dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",)
+)
+
+procs_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_process",)
 )
 
 fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
@@ -1253,6 +1288,13 @@ def groups_central_values(group_result_table):
     central_theory_values = group_result_table["theory_central"]
     return central_theory_values
 
+def procs_central_values_no_table(proc_result_table_no_table):
+    central_theory_values = proc_result_table_no_table["theory_central"]
+    return central_theory_values
+
+@table
+def procs_central_values(procs_central_values_no_table):
+    return procs_central_values_no_table
 
 dataspecs_each_dataset_chi2 = collect("each_dataset_chi2", ("dataspecs",))
 each_dataset = collect("dataset", ("data",))
