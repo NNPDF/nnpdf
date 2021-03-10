@@ -21,9 +21,13 @@ Dataset properties
 
 Distances
 ---------
+{@with Scales@}
+### {@Scaletitle@}
 {@with Normalize::Basespecs::PDFscalespecs::Distspecs@}
+#### {@Basistitle@}, {@Xscaletitle@}
 {@plot_pdfdistances@}
 {@plot_pdfvardistances@}
+{@endwith@}
 {@endwith@}
 
 PDF arc-lengths
@@ -39,9 +43,9 @@ Sum rules
 
 PDF plots
 ---------
-[Plots at 1.65 GeV]({@pdf_report report@})
-
-[Plots at 100 GeV]({@with Highscale@}{@pdf_report report@}{@endwith@})
+{@with Scales@}
+[Plots at {@Scaletitle@}]({@pdf_report report@})
+{@endwith@}
 
 Effective exponents
 -------------------

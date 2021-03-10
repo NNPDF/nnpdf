@@ -14,3 +14,4 @@ namely data files and the corresponding files containing theoretical predictions
    ./fk-config-variables
    ./example-cfactor-file
    ./example-fk-preamble
+   ./plotting_format

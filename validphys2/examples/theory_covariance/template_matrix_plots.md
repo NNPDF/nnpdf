@@ -30,11 +30,11 @@ Total (exp. + th.) $\chi^2$
 
 Experimental $\chi^2$ by dataset
 --------------------------------
-   {@groups_chi2_table@}
+   {@procs_chi2_table@}
 
 Total (exp. + th.) $\chi^2$ by dataset
 --------------------------------------
-   {@groups_chi2_table_theory@}
+   {@procs_chi2_table_theory@}
 
 $\chi^2$ including only diagonal theory elements
 ------------------------------------------------

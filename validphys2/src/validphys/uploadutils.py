@@ -3,6 +3,7 @@ uploadutils.py
 
 Tools to upload resources to remote servers.
 """
+import time
 import subprocess
 import logging
 import os
@@ -172,65 +173,46 @@ class FileUploader(Uploader):
 class ReportFileUploader(FileUploader, ReportUploader):
     pass
 
-class FitUploader(FileUploader):
-    """An uploader for fits. Fits will be automatically compressed
-    before uploading."""
-    target_dir = _profile_key('fits_target_dir')
-    root_url = _profile_key('fits_root_url')
+
+class ArchiveUploader(FileUploader):
+    """ Uploader for objects comprising many files such as fits or PDFs """
+    target_dir = None
+    root_url = None
+    _loader_name =  None # vp loader for this kind of archive
+    _resource_type = "Archive" # name used during logging
 
     def get_relative_path(self, output_path=None):
         return ''
 
-    def check_fit_exists(self, fit_name):
-        """Check whether the fit already exists on the server."""
-        # Get list of the available fits on the server
-        l = RemoteLoader()
-        fits = l.downloadable_fits
-
-        if fit_name in fits:
-            log.error("A fit with the same name already exists on "
-                      "the server. To overwrite this fit use the "
-                      "--force flag, as in `vp-upload <fitname> "
-                      "--force`.")
-            raise UploadError
-
-    def check_fit_md5(self, output_path):
-        """When ``vp-setupfit`` is successfully ran, it creates an ``md5`` from
-        the config. We check that the ``md5`` matches the ``filter.yml`` which
-        is checking that ``vp-setupfit`` was ran and that the ``filter.yml``
-        inside the fit folder wasn't modified.
-
+    def _check_existence(self, resource_name):
+        """ Check whether the given resource exists on the server.
+        Returns true if the resource exists with the same name on the server
+        or false otherwise.
+        Note that the type of resource being checked is defined by the ``_loader_name`` attribute
         """
-        md5_path = output_path / "md5"
-        try:
-            with open(md5_path, "r") as f:
-                saved_md5 = f.read()
-        except FileNotFoundError as e:
-            log.error(
-                "It doesn't appear that `vp-setupfit` was ran because no `md5` "
-                "was found, `vp-setupfit` should be ran before uploading a fit."
-            )
-            raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
+        l = RemoteLoader()
+        resource_list = getattr(l, self._loader_name)
 
-        with open(output_path / "filter.yml", "rb") as f:
-            hashed_config = hashlib.md5(f.read()).hexdigest()
+        return  resource_name in resource_list
 
-        if hashed_config != saved_md5:
-            log.error(
-                "Saved md5 doesn't match saved fit configuration runcard, which "
-                "suggests that the configuration file was modified after it was "
-                "saved. <fit folder>/filter.yml shouldn't be modified directly. "
-                "Instead modify the fit runcard and re-run ``vp-setupfit``."
-            )
-            raise UploadError
+    def _check_is_indexed(self, resource_name):
+        """ Check whether the fit is correctly indexed in the server
+        """
+        log.info("Checking whether %s was correctly uploaded...", resource_name)
+        time.sleep(3)
+        if self._check_existence(resource_name):
+            log.info("It has been correctly indexed by the server!")
+        else:
+            log.error("The object is uploaded but hasn't been indexed yet by the server. "
+                  "You should upload it again to ensure it is indexed: vp-upload %s", resource_name)
 
-    def compress(self, output_path):
+    def _compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
         #make_archive fails if we give it relative paths for some reason
         output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix='fit_upload_deleteme_',
+        tempdir = tempfile.mkdtemp(prefix=f'{self._resource_type}_upload_deleteme_',
                                    dir=output_path.parent)
-        log.info(f"Compressing fit to {tempdir}")
+        log.info(f"Compressing {self._resource_type} to {tempdir}")
         archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
         try:
             with Spinner():
@@ -242,18 +224,23 @@ class FitUploader(FileUploader):
             raise UploadError(e) from e
         return tempdir, archive_path_without_extension
 
-
     def upload_output(self, output_path, force):
         output_path = pathlib.Path(output_path)
         fit_name = output_path.name
 
         if not force:
-            self.check_fit_exists(fit_name)
+            if self._check_existence(fit_name):
+                log.error("A %s with the same name already exists on "
+                      "the server. To overwrite it use the "
+                      "--force flag, as in `vp-upload <%s_name> --force.",
+                      self._resource_type, self._resource_type)
+                raise UploadError
 
-        self.check_fit_md5(output_path)
-
-        new_out, name = self.compress(output_path)
+        new_out, name = self._compress(output_path)
         super().upload_output(new_out)
+
+        # Check whether the fit was really uploaded
+        self._check_is_indexed(fit_name)
 
         shutil.rmtree(new_out)
         return name.with_suffix('.tar.gz').name
@@ -274,56 +261,58 @@ class FitUploader(FileUploader):
             log.error(e)
             sys.exit()
 
-class PDFUploader(FitUploader):
+
+class FitUploader(ArchiveUploader):
+    """An uploader for fits. Fits will be automatically compressed
+    before uploading."""
+    target_dir = _profile_key('fits_target_dir')
+    root_url = _profile_key('fits_root_url')
+    _loader_name = "downloadable_fits"
+    _resource_type = "fit"
+
+    def check_fit_md5(self, output_path):
+        """When ``vp-setupfit`` is run successfully, it creates an ``md5`` from
+        the config. We check that the ``md5`` matches the ``filter.yml`` which
+        is checking that ``vp-setupfit`` was run and that the ``filter.yml``
+        inside the fit folder wasn't modified.
+
+        """
+        md5_path = output_path / "md5"
+        try:
+            with open(md5_path, "r") as f:
+                saved_md5 = f.read()
+        except FileNotFoundError as e:
+            log.error(
+                "It doesn't appear that `vp-setupfit` was run because no `md5` "
+                "was found, `vp-setupfit` should be run before uploading a fit."
+            )
+            raise UploadError(f"Fit MD5 file not found at {md5_path}") from e
+
+        with open(output_path / "filter.yml", "rb") as f:
+            hashed_config = hashlib.md5(f.read()).hexdigest()
+
+        if hashed_config != saved_md5:
+            log.error(
+                "Saved md5 doesn't match saved fit configuration runcard, which "
+                "suggests that the configuration file was modified after it was "
+                "saved. <fit folder>/filter.yml shouldn't be modified directly. "
+                "Instead modify the fit runcard and re-run ``vp-setupfit``."
+            )
+            raise UploadError
+
+    def upload_output(self, output_path, force):
+        output_path = pathlib.Path(output_path)
+        self.check_fit_md5(output_path)
+        return super().upload_output(output_path, force)
+
+
+class PDFUploader(ArchiveUploader):
     """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
     target_dir = _profile_key('pdfs_target_dir')
     root_url = _profile_key('pdfs_root_url')
-
-    def check_pdf_exists(self, pdf_name):
-        """Check whether the pdf already exists on the server."""
-        # Get list of the available fits on the server
-        l = RemoteLoader()
-        pdfs = l.downloadable_pdfs
-
-        if pdf_name in pdfs:
-            log.error("A PDF with the same name already exists on "
-                      "the server. To overwrite this PDF use the "
-                      "--force flag, as in `vp-upload <pdfname> "
-                      "--force`.")
-            raise UploadError
-
-    def compress(self, output_path):
-        """Compress the folder and put it in a directory inside its parent."""
-        # make_archive fails if we give it relative paths for some reason
-        output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix='pdf_upload_deleteme_',
-                                   dir=output_path.parent)
-        log.info(f"Compressing pdf to {tempdir}")
-        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
-        try:
-            with Spinner():
-                shutil.make_archive(base_name=archive_path_without_extension,
-                                    format='gztar',
-                                    root_dir=output_path.parent, base_dir=output_path.name)
-        except Exception as e:
-            log.error(f"Couldn't compress archive: {e}")
-            raise UploadError(e) from e
-        return tempdir, archive_path_without_extension
-
-
-    def upload_output(self, output_path, force):
-        output_path = pathlib.Path(output_path)
-        pdf_name = output_path.name
-
-        if not force:
-            self.check_pdf_exists(pdf_name)
-
-        new_out, name = self.compress(output_path)
-        super(FileUploader, self).upload_output(new_out)
-
-        shutil.rmtree(new_out)
-        return name.with_suffix('.tar.gz').name
+    _loader_name = "downloadable_pdfs"
+    _resource_type = "pdf"
 
 
 def check_for_meta(path):

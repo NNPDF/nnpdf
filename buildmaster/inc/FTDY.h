@@ -37,6 +37,24 @@ private:
   void ReadData();
 };
 
+class DYE866R_dw_iteFilter: public CommonData
+{
+public: DYE866R_dw_iteFilter():
+  CommonData("DYE886R_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE866R_sh_iteFilter: public CommonData
+{
+public: DYE866R_sh_iteFilter():
+  CommonData("DYE886R_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class DYE866PFilter: public CommonData
 { public: DYE866PFilter():
   CommonData("DYE886P") { ReadData(); }
@@ -64,6 +82,22 @@ private:
 class DYE605_shFilter: public CommonData
 { public: DYE605_shFilter():
   CommonData("DYE605_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE605_dw_iteFilter: public CommonData
+{ public: DYE605_dw_iteFilter():
+  CommonData("DYE605_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE605_sh_iteFilter: public CommonData
+{ public: DYE605_sh_iteFilter():
+  CommonData("DYE605_sh_ite") { ReadData(); }
 
 private:
   void ReadData();
