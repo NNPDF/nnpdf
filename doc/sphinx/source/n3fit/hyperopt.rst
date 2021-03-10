@@ -183,6 +183,8 @@ Note that this is not a boolean mask that drops the points but rather it just se
 The reason for doing it in this way is to minimize the number of things that change when doing a
 hyperparameter scan with respect to a fit.
 
+.. _pos-int-hyperopt:
+
 Positivity and integrability
 ----------------------------
 
