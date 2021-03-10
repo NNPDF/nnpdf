@@ -4,6 +4,10 @@ Additional data sets, with suffix _dw and _sh have been added with extra
 systematic ucnertainties. These systematic ucnertainties account for nuclear 
 uncertainties (estimated according to 1812.09074).
 The two strategies (dw=deweighted and sh=shifted) are implemented.
+The necessary shifts can be printed on screen and should be pasted into the
+appropriate cfactor file.
+The necessary shifts can be printed on screen and should be pasted into the
+appropriate cfactor file.
 */
 
 /**
@@ -1200,7 +1204,7 @@ void BCDMSD_sh_iteFilter::ReadData()
       }
 
     //Compute shifts
-    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    //cout << nuclear/proton_cv << "   " << 0.0 << endl;
   }
   
   f1.close();
