@@ -10,7 +10,7 @@ fit: NNPDF31_nlo_as_0118
 
 theoryid: 52
 
-template: mc_gen_checks_report.md
+template: mc_gen_report.md
 
 actions_:
   - report(main=true)

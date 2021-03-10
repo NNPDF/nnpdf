@@ -1,8 +1,7 @@
-# NNPDF code and standards documentation <a name="top"></a>
-
-## Sphinx Documentation
-
-### Generating the Documentation
+```eval_rst
+.. _add_docs:
+```
+# Adding to the Documentation <a name="top"></a>
 
 The NNPDF documentation is produced by the
 [sphinx](http://www.sphinx-doc.org/en/master/) resource. To generate the sphinx
@@ -10,8 +9,6 @@ documentation, navigate to the `nnpdf/doc/sphinx/` directory and execute the com
 html`, ensuring one is inside the appropriate `nnpdf` conda environment. This produces the
 documentation in the `build/index/` directory. The `index.html` can be viewed with any appropriate
 browser.
-
-### Adding to the Documentation
 
 New documentation can be added in markdown, naming the source files with the `.md` suffix, or
 restructured text, with the `.rst` suffix formats.

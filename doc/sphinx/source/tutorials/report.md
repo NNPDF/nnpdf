@@ -1,3 +1,7 @@
+```eval_rst
+.. _tut_report:
+```
+
 # How to generate a report
 
 Suppose that we want to generate a custom report that includes plots and

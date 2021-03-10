@@ -1,4 +1,4 @@
-.. _upload:
+.. _scripts:
 
 =================
 Validphys scripts
