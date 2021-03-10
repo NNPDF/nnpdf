@@ -2,9 +2,9 @@ How to include a theory covariance matrix in a fit
 ==================================================
 :Author: Contact Rosalyn (r.l.pearson@ed.ac.uk) for further information.
 
-This section details how to include scale variation covariance matrices (covmats)
+This section details how to include :ref:`scale variation covariance matrices (covmats) <vptheorycov-index>`
 in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the 
-central theory is theory 163.
+central theory is :ref:`theory 163 <theory-indexes>`.
 
 First, decide which theory covmat you want
 ------------------------------------------
@@ -63,11 +63,30 @@ Next, add necessary flags to the runcard
 .. warning::
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
-      
+  
+If you want to compare data to another fit
+------------------------------------------
+-  Sometimes we want to compare data to another fit for validation, for example
+   we might want to compare predictions for the NLO fit with MHOUs to the known
+   NNLO fit (see :ref:`vptheorycov-tests`). 
+-  To make sure the cuts match between these two fits, edit the ``datacuts`` 
+   section of the runcard to include the following
+
+.. code:: yaml
+
+	  use_cuts: fromintersection
+	  cuts_intersection_spec:
+	  - theoryid: 163
+	  - theoryid: 53 
+	  
+-  This ensures that the cuts on the data are the intersection of the cuts in 
+   theory 53 (default NNLO) and theory 163 (central scale variation NLO). See
+   :ref:`here <theory-indexes>` for theory definitions. 
+   	  
 Example runcard
 ---------------
 The following is an example runcard for an NLO NNPDF3.1-style fit with a 3 point theory covmat.
-It can be found `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_.
+It can be found `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/theory_covariance/fit_with_thcovmat.yaml>`_.
 
 .. code:: yaml
  

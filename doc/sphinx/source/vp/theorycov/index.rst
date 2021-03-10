@@ -1,4 +1,5 @@
  .. _vptheorycov-index:
+ 
 The ``theorycovariance`` module
 =============================
 
