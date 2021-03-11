@@ -1069,7 +1069,7 @@ class CoreConfig(configparser.Config):
         return filter_rules
 
     @record_from_defaults
-    def produce_yaml_rules(self, filter_rules=None) -> list:
+    def produce_default_filter_rules(self) -> list:
         """Production rule for returning the raw yaml for filter rules.
 
         If ``filter_rules`` are explicitly declared in the runcard then
@@ -1077,39 +1077,33 @@ class CoreConfig(configparser.Config):
         """
         from validphys.filters import default_filter_rules_input
 
-        if filter_rules is None:
-            filter_rules = default_filter_rules_input()
+        filter_rules = default_filter_rules_input()
 
         return filter_rules
 
-    @configparser.explicit_node
-    def produce_rules(self, use_cuts):
-        def _no_cuts():
-            return None
+    def produce_rules(self, defaults, theoryid, default_filter_rules, filter_rules=None):
+        from validphys.filters import Rule, RuleProcessingError
 
-        def _apply_cuts(theoryid, defaults, yaml_rules):
-            from validphys.filters import Rule, RuleProcessingError
+        theory_parameters = theoryid.get_description()
 
-            theory_parameters = theoryid.get_description()
+        if filter_rules is None:
+            rule_list = default_filter_rules
+        else:
+            rule_list = filter_rules
 
-            try:
-                rule_list = [
-                    Rule(
-                        initial_data=i,
-                        defaults=defaults,
-                        theory_parameters=theory_parameters,
-                        loader=self.loader,
-                    )
-                    for i in yaml_rules
-                ]
-                return rule_list
-            except RuleProcessingError as e:
-                raise ConfigError(f"Error Processing filter rules: {e}") from e
-
-        if use_cuts is not CutsPolicy.INTERNAL:
-            # Return None if we're not applying rules.
-            return _no_cuts
-        return _apply_cuts
+        try:
+            rule_list = [
+                Rule(
+                    initial_data=i,
+                    defaults=defaults,
+                    theory_parameters=theory_parameters,
+                    loader=self.loader,
+                )
+                for i in rule_list
+            ]
+            return rule_list
+        except RuleProcessingError as e:
+            raise ConfigError(f"Error Processing filter rules: {e}") from e
 
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
