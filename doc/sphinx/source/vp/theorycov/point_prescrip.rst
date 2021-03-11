@@ -1,8 +1,9 @@
 .. |br| raw:: html
 
-  <br/>
-
 .. _pointprescrips:
+
+.. _prescrips:
+
 Point prescriptions for theory covariance matrices
 ==================================================
 

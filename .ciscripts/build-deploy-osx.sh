@@ -8,7 +8,7 @@ echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 # print out basic conda info
 conda info -a
 
-conda build -q conda-recipe
+conda build conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build
 	exit 1

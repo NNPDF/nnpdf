@@ -15,17 +15,19 @@ import pandas as pd
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import groups_central_values, groups_central_values_no_table
+from validphys.results import (procs_central_values, 
+                               procs_central_values_no_table, 
+                               procs_data_values)                              
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
 
 log = logging.getLogger(__name__)
 
-theoryids_groups_central_values = collect(groups_central_values,
+theoryids_procs_central_values = collect(procs_central_values,
                                                ('theoryids',))
 
-theoryids_groups_central_values_no_table = collect(groups_central_values_no_table,
+theoryids_procs_central_values_no_table = collect(procs_central_values_no_table,
                                                ('theoryids',))
 
 collected_theoryids = collect('theoryids',
@@ -49,14 +51,14 @@ def make_scale_var_covmat(predictions):
     return s
 
 @check_correct_theory_combination
-def theory_covmat_singleprocess_no_table(theoryids_groups_central_values_no_table,
-                           groups_index, theoryids,
-                           fivetheories:(str, type(None)) = None):
+def theory_covmat_singleprocess_no_table(theoryids_procs_central_values_no_table,
+                                         procs_index, theoryids,
+                                         fivetheories:(str, type(None)) = None):
 
     """Calculates the theory covariance matrix for scale variations.
-    The matrix is a dataframe indexed by groups_index."""
-    s = make_scale_var_covmat(theoryids_groups_central_values_no_table)
-    df = pd.DataFrame(s, index=groups_index, columns=groups_index)
+    The matrix is a dataframe indexed by procs_index."""
+    s = make_scale_var_covmat(theoryids_procs_central_values_no_table)
+    df = pd.DataFrame(s, index=procs_index, columns=procs_index)
     return df
 
 @table
@@ -68,7 +70,7 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table,
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
-                                        ('group_dataset_inputs_by_metadata','data'))
+                                        ('group_dataset_inputs_by_process','data'))
 
 @check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory,
@@ -115,46 +117,46 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
     return dataset_covmats
 
 @table
-def theory_block_diag_covmat(theory_covmat_datasets, groups_index):
+def theory_block_diag_covmat(theory_covmat_datasets, procs_index):
     """Takes the theory covariance matrices for individual datasets and
     returns a data frame with a block diagonal theory covariance matrix
     by dataset"""
     s  = la.block_diag(*theory_covmat_datasets)
-    df = pd.DataFrame(s, index=groups_index, columns=groups_index)
+    df = pd.DataFrame(s, index=procs_index, columns=procs_index)
     return df
 
 @table
-def theory_diagonal_covmat(theory_covmat_singleprocess_no_table, groups_index):
+def theory_diagonal_covmat(theory_covmat_singleprocess_no_table, procs_index):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat_singleprocess_no_table.values
     # Initialise array of zeros and set precision to same as FK tables
     s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
     np.fill_diagonal(s_diag, np.diag(s))
-    df = pd.DataFrame(s_diag, index=groups_index, columns=groups_index)
+    df = pd.DataFrame(s_diag, index=procs_index, columns=procs_index)
     return df
 
-groups_results_theory = collect('groups_results', ('theoryids',))
+procs_results_theory = collect('procs_results', ('theoryids',))
 
 @check_correct_theory_combination
-def total_covmat_groups(groups_results_theory,
+def total_covmat_procs(procs_results_theory,
                              fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
-    group_result_covmats = []
-    for group_result in zip(*groups_results_theory):
-        theory_centrals = [x[1].central_value for x in group_result]
+    proc_result_covmats = []
+    for proc_result in zip(*procs_results_theory):
+        theory_centrals = [x[1].central_value for x in proc_result]
         s = make_scale_var_covmat(theory_centrals)
-        sigma = group_result[0][0].covmat
+        sigma = proc_result[0][0].covmat
         cov = s + sigma
-        group_result_covmats.append(cov)
-    return group_result_covmats
+        proc_result_covmats.append(cov)
+    return proc_result_covmats
 
-commondata_groups = collect('commondata', ['group_dataset_inputs_by_metadata', 'data'])
+commondata_procs = collect('commondata', ['group_dataset_inputs_by_process', 'data'])
 
-def dataset_names(commondata_groups):
+def dataset_names(commondata_procs):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
-    names = [commondata.name for commondata in commondata_groups]
+    names = [commondata.name for commondata in commondata_procs]
     return names
 
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
@@ -361,7 +363,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
     return covmats
 
 @table
-def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
+def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
@@ -376,17 +378,17 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, groups_index):
     for i in range(matlength):
         for j in range(matlength):
             cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
-    df = pd.DataFrame(cov_by_exp, index=groups_index,
-                      columns=groups_index)
+    df = pd.DataFrame(cov_by_exp, index=procs_index,
+                      columns=procs_index)
     return df
 
 @check_correct_theory_combination
-def total_covmat_diagtheory_groups(groups_results_theory,
+def total_covmat_diagtheory_procs(procs_results_theory,
                                         fivetheories:(str, type(None)) = None):
-    """Same as total_covmat_datasets but per group rather than
-    per dataset. Needed for calculation of chi2 per group."""
+    """Same as total_covmat_datasets but per proc rather than
+    per dataset. Needed for calculation of chi2 per proc."""
     exp_result_covmats = []
-    for exp_result in zip(*groups_results_theory):
+    for exp_result in zip(*procs_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
         s = make_scale_var_covmat(theory_centrals)
         # Initialise array of zeros and set precision to same as FK tables
@@ -421,134 +423,131 @@ def theory_corrmat_custom(theory_covmat_custom):
     return mat
 
 @table
-def theory_normcovmat_singleprocess(theory_covmat_singleprocess, groups_data):
+def theory_normcovmat_singleprocess(theory_covmat_singleprocess, procs_data_values):
     """Calculates the theory covariance matrix for scale variations normalised
     to data."""
     df = theory_covmat_singleprocess
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df/np.outer(procs_data_values, procs_data_values)
     return mat
 
 @table
-def theory_normblockcovmat(theory_block_diag_covmat, groups_data):
+def theory_normblockcovmat(theory_block_diag_covmat, procs_data_values):
     """Calculates the theory covariance matrix for scale variations
     normalised to data, block diagonal by dataset."""
     df = theory_block_diag_covmat
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df/np.outer(procs_data_values, procs_data_values)
     return mat
 
 @table
-def theory_normcovmat_custom(theory_covmat_custom, groups_data):
+def theory_normcovmat_custom(theory_covmat_custom, procs_data_values):
     """Calculates the theory covariance matrix for scale variations normalised
     to data, with variations according to the relevant prescription."""
     df = theory_covmat_custom
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df/np.outer(procs_data_values, procs_data_values)
     return mat
 
 @table
-def experimentplustheory_covmat_singleprocess(groups_covmat_no_table,
+def experimentplustheory_covmat_singleprocess(procs_covmat_no_table,
                                                theory_covmat_singleprocess_no_table):
     """Calculates the experiment + theory covariance matrix for
     scale variations."""
-    df = groups_covmat_no_table + theory_covmat_singleprocess_no_table
+    df = procs_covmat_no_table + theory_covmat_singleprocess_no_table
     return df
 
 @table
-def experimentplusblocktheory_covmat(groups_covmat,
+def experimentplusblocktheory_covmat(procs_covmat,
                                       theory_block_diag_covmat):
     """Calculates the experiment + theory covariance
     matrix for scale variations."""
-    df = groups_covmat + theory_block_diag_covmat
+    df = procs_covmat + theory_block_diag_covmat
     return df
 
 @table
-def experimentplustheory_covmat_custom(groups_covmat,
+def experimentplustheory_covmat_custom(procs_covmat,
                                         theory_covmat_custom):
     """Calculates the experiment + theory covariance matrix for
     scale variations correlated according to the relevant prescription."""
-    df = groups_covmat + theory_covmat_custom
+    df = procs_covmat + theory_covmat_custom
     return df
 
 @table
-def experimentplustheory_normcovmat_singleprocess(groups_covmat,
+def experimentplustheory_normcovmat_singleprocess(procs_covmat,
                                      theory_covmat_singleprocess,
-                                     groups_data):
+                                     procs_data):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data."""
-    df = groups_covmat + theory_covmat_singleprocess
-    groups_data_array = np.array(groups_data)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    df = procs_covmat + theory_covmat_singleprocess
+    procs_data_array = np.array(procs_data)
+    mat = df/np.outer(procs_data_array, procs_data_array)
     return mat
 
 @table
-def experimentplusblocktheory_normcovmat(groups_covmat,
+def experimentplusblocktheory_normcovmat(procs_covmat,
                                           theory_block_diag_covmat,
-                                          groups_data,
+                                          procs_data_values,
                                           experimentplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, block diagonal by data set."""
-    mat = experimentplustheory_normcovmat(groups_covmat,
+    mat = experimentplustheory_normcovmat(procs_covmat,
                                            theory_block_diag_covmat,
-                                           groups_data)
+                                           procs_data_values)
     return mat
 
 @table
-def experimentplustheory_normcovmat_custom(groups_covmat,
+def experimentplustheory_normcovmat_custom(procs_covmat,
                                             theory_covmat_custom,
-                                            groups_data,
+                                            procs_data_values,
                                             experimentplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, correlations by process type."""
-    mat = experimentplustheory_normcovmat(groups_covmat,
+    mat = experimentplustheory_normcovmat(procs_covmat,
                                            theory_covmat_custom,
-                                           groups_data)
+                                           procs_data_values)
 
     return mat
 @table
-def experimentplustheory_corrmat_singleprocess(groups_covmat,
+def experimentplustheory_corrmat_singleprocess(procs_covmat,
                                                 theory_covmat_singleprocess):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices."""
-    total_df = groups_covmat + theory_covmat_singleprocess
-    total_cov = (groups_covmat + theory_covmat_singleprocess).values
+    total_df = procs_covmat + theory_covmat_singleprocess
+    total_cov = (procs_covmat + theory_covmat_singleprocess).values
     diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
 
 @table
-def experimentplusblocktheory_corrmat(groups_covmat,
+def experimentplusblocktheory_corrmat(procs_covmat,
                                        theory_block_diag_covmat):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, block diagonal by dataset."""
-    corrmat = experimentplustheory_corrmat_singleprocess(groups_covmat,
+    corrmat = experimentplustheory_corrmat_singleprocess(procs_covmat,
                                             theory_block_diag_covmat)
     return corrmat
 
 @table
-def experimentplustheory_corrmat_custom(groups_covmat,
+def experimentplustheory_corrmat_custom(procs_covmat,
                                          theory_covmat_custom):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, correlations by prescription."""
-    corrmat = experimentplustheory_corrmat_singleprocess(groups_covmat,
+    corrmat = experimentplustheory_corrmat_singleprocess(procs_covmat,
                                             theory_covmat_custom)
     return corrmat
 
-def chi2_impact(theory_covmat_singleprocess, groups_covmat, groups_results):
+def chi2_impact(theory_covmat_singleprocess, procs_covmat, procs_results):
     """Returns total chi2 including theory cov mat"""
-    dataresults, theoryresults = zip(*groups_results)
+    dataresults, theoryresults = zip(*procs_results)
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
     dat_central = np.concatenate(dat_central_list)
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
-    cov = theory_covmat_singleprocess.values + groups_covmat.values
+    cov = theory_covmat_singleprocess.values + procs_covmat.values
     return calc_chi2(la.cholesky(cov, lower=True), central_diff)/len(central_diff)
 
-def data_theory_diff(groups_results):
+def data_theory_diff(procs_results):
     """Returns (D-T) for central theory, for use in chi2 calculations"""
-    dataresults, theoryresults = zip(*groups_results)
+    dataresults, theoryresults = zip(*procs_results)
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
     dat_central = np.concatenate(dat_central_list)
@@ -556,19 +555,19 @@ def data_theory_diff(groups_results):
     central_diff = dat_central - th_central
     return central_diff
 
-def chi2_block_impact(theory_block_diag_covmat, groups_covmat,
-                      groups_results):
+def chi2_block_impact(theory_block_diag_covmat, procs_covmat,
+                      procs_results):
     """Returns total chi2 including theory cov mat"""
-    chi2 = chi2_impact(theory_block_diag_covmat, groups_covmat,
-                       groups_results)
+    chi2 = chi2_impact(theory_block_diag_covmat, procs_covmat,
+                       procs_results)
     return chi2
 
 
-def chi2_impact_custom(theory_covmat_custom, groups_covmat,
-                       groups_results):
+def chi2_impact_custom(theory_covmat_custom, procs_covmat,
+                       procs_results):
     """Returns total chi2 including theory cov mat"""
-    chi2 = chi2_impact(theory_covmat_custom, groups_covmat,
-                       groups_results)
+    chi2 = chi2_impact(theory_covmat_custom, procs_covmat,
+                       procs_results)
     return chi2
 
 def theory_diagcovmat(theory_covmat_singleprocess):
@@ -579,14 +578,14 @@ def theory_diagcovmat(theory_covmat_singleprocess):
     np.fill_diagonal(s_diag, np.diag(s))
     return s_diag
 
-def chi2_diag_only(theory_diagcovmat, groups_covmat, data_theory_diff):
+def chi2_diag_only(theory_diagcovmat, procs_covmat, data_theory_diff):
     """Returns total chi2 including only diags of theory cov mat"""
-    cov = theory_diagcovmat + groups_covmat.values
+    cov = theory_diagcovmat + procs_covmat.values
     elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
 
-each_dataset_results = collect(results, ('group_dataset_inputs_by_metadata', 'data'))
+each_dataset_results = collect(results, ('group_dataset_inputs_by_process', 'data'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """Returns an array of tuples (member_chi², central_chi², numpoints)
@@ -600,10 +599,10 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
                                    central_result, len(data_result)))
     return chi2data_array
 
-def abs_chi2_data_theory_group(groups_results, total_covmat_groups):
-    """Like abs_chi2_data_theory_dataset but for groups not datasets"""
+def abs_chi2_data_theory_proc(procs_results, total_covmat_procs):
+    """Like abs_chi2_data_theory_dataset but for procs not datasets"""
     chi2data_array = []
-    for expresults, covmat in zip(groups_results, total_covmat_groups):
+    for expresults, covmat in zip(procs_results, total_covmat_procs):
         data_result, th_result = expresults
         chi2s = all_chi2_theory(expresults, covmat)
         central_result = central_chi2_theory(expresults, covmat)
@@ -611,11 +610,11 @@ def abs_chi2_data_theory_group(groups_results, total_covmat_groups):
                               central_result, len(data_result)))
     return chi2data_array
 
-def abs_chi2_data_diagtheory_group(groups_results,
-                                        total_covmat_diagtheory_groups):
+def abs_chi2_data_diagtheory_proc(procs_results,
+                                        total_covmat_diagtheory_procs):
     """For a diagonal theory covmat"""
-    return abs_chi2_data_theory_group(groups_results,
-                                           total_covmat_diagtheory_groups)
+    return abs_chi2_data_theory_proc(procs_results,
+                                           total_covmat_diagtheory_procs)
 
 def abs_chi2_data_diagtheory_dataset(each_dataset_results,
                                      total_covmat_diagtheory_datasets):

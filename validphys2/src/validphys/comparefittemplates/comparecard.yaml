@@ -3,11 +3,10 @@
 # vp-comparefits script. The settings below are a sample of such settings, kept
 # for reference
 #
-#
 # meta:
-#     title: The title of the Report
-#     keywords: [report_template]
-#     author: NNPDF Collaboration
+#   title: The title of the Report
+#   keywords: [report_template]
+#   author: NNPDF Collaboration
 #
 # current:
 #   fit: {id: id_of_the_base_fit}
@@ -28,59 +27,67 @@
 #   speclabel: "Reference Fit"
 
 pdfs:
-    - from_: current
-    - from_: reference
+  - from_: current
+  - from_: reference
 
 fits:
   - from_: current
   - from_: reference
-
 
 use_cuts: "fromfit"
 use_weights_in_covmat: False
 
 Q: 1.651
 
-pdfnormalize:
-    - normtitle: Absolute
+Scales:
+  - Q: 1.651
+    Scaletitle: "Q = 1.65 GeV"
+  - Q: 100
+    Scaletitle: "Q = 100 GeV"
 
-    - normalize_to: 1
-      normtitle: Ratio
+PDFnormalize:
+  - Normtitle: Absolute
 
-basespecs:
-    - basis: flavour
-      basistitle: Flavour basis
-    - basis: evolution
-      basistitle: Evolution basis
+  - normalize_to: 1
+    Normtitle: Ratio
 
-pdfscalespecs:
-    - xscale: log
-      xscaletitle: Log
-    - xscale: linear
-      xscaletitle: Linear
+Basespecs:
+  - basis: flavour
+    Basistitle: Flavour basis
+  - basis: evolution
+    Basistitle: Evolution basis
 
-distspecs:
-   - ymin: 0
-     ymax: 20
+PDFscalespecs:
+  - xscale: log
+    Xscaletitle: Log
+  - xscale: linear
+    Xscaletitle: Linear
+
+Distspecs:
+  - ymin: 0
+    ymax: 20
 
 pos_use_kin: True
 
 dataset_report:
-    meta: Null
-    template: data.md
+  meta: Null
+  template: data.md
 
 pdf_report:
-    meta: Null
-    template: pdf.md
+  meta: Null
+  template: pdf.md
+
+exponents_report:
+  meta: Null
+  template: exponents.md
 
 template: report.md
 
-
 positivity:
-      from_: fit
+  from_: fit
 
 description:
-    from_: fit
+  from_: fit
 
 dataspecs:
   # WARNING: do not blindly copy and paste this: it can overwrite the datasets
@@ -109,12 +116,11 @@ dataspecs:
     speclabel:
       from_: reference
 
-
-normalize:
+Normalize:
   normalize_to: 1
 
-datanorm:
-    normalize_to: data
+Datanorm:
+  normalize_to: data
 
 actions_:
   - report(main=true)

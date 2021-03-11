@@ -1,10 +1,11 @@
 #For some reason the resolver decides to use an old version of numpy
 #without this
 numpy:
-    - 1.14
+    - 1.19
 
 pin_run_as_build:
     lhapdf: x.x.x
     apfel: x.x.x.x
     gsl: x.x.x
     yaml-cpp: x.x
+    libarchive: x.x

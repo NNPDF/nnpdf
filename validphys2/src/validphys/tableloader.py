@@ -32,6 +32,11 @@ def fixup_header(df, head_index, dtype):
                                   *oldcols.levels[head_index+1:]])
     df.columns = newcols
 
+def parse_data_cv(filename):
+    """Useful for reading DataFrames with just one column."""
+    df = sane_load(filename, index_col=[0, 1, 2])
+    return df
+
 def parse_exp_mat(filename):
     """Parse a dump of a matrix like experiments_covmat."""
     df = sane_load(filename, header=[0,1,2], index_col=[0,1,2])

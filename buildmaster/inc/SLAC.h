@@ -42,3 +42,19 @@ class SLACD_shFilter: public CommonData
 private:
   void ReadData();
 };
+
+class SLACD_dw_iteFilter: public CommonData
+{ public: SLACD_dw_iteFilter():
+  CommonData("SLACD_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class SLACD_sh_iteFilter: public CommonData
+{ public: SLACD_sh_iteFilter():
+  CommonData("SLACD_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};

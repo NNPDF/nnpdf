@@ -19,6 +19,7 @@ This document contains a more specific discussion about the choices currently im
 - [Optimizer](#optimizer)
 - [Stopping](#stopping-algorithm)
 - [Positivity](#positivity)
+- [Integrability](#integrability)
 
 Introduction
 ------------
@@ -54,6 +55,8 @@ In the following table we list some of the differences between both codes:
 | Fine tuning        | manual                          | **semi-automatic**                               |
 +--------------------+---------------------------------+--------------------------------------------------+
 | Model selection    | closure test                    | closure test, **hyper optimization**             |
++--------------------+---------------------------------+--------------------------------------------------+
+| Input scaling      | (x,log(x))                      | **feature scaling**                              |
 +--------------------+---------------------------------+--------------------------------------------------+
 ```
 
@@ -134,15 +137,61 @@ The look-back approach implemented in `nnfit` is not required by `n3fit` due to 
 
 Positivity
 ----------
+In NNPDF3.1 the positivity of a set of chosen DIS and fixed-target Drell-Yan processes
+was required: PDFs were allowed to be negative, as long as these physical cross sections resulted to be positive.
+Since \\(\overline{MS}\\) PDFs have been proved to be positive,
+it is now convenient to require positivity of the distributions \\(q_k = \{u,\bar{u},d,\bar{d},s,\bar{s},c,g\} \\) themselves. 
+In `n3fit` this is done on the top of the DIS and Drell-Yan processes already considered in `nnfit`. 
 
-In NNPDF3.1 there were a number of datasets added in order to constraint positivity based on DIS and fixed-target Drell-Yan processes. A similar technology and methodology is implemented in `n3fit` based on a penalty term controlled by a **positivity multiplier**.
+The implementation of such positivity constraints is based on a penalty term controlled by a **positivity multiplier**:
+for each positivity observable \\(\mathcal{O}_k\\) (which can now be either a PDF or a physical cross section)
+we add to the total \\(\chi^2\\) a term of the kind
 
+\\( \chi^2_{k,pos} = \Lambda_k \sum_i \Theta\left(-\mathcal{O}_k\left(x_i,Q^2\right)\right) \\) ,
+
+where \\( \Lambda_k \\) is the Lagrange multiplier associated with the positivity observable \\(\mathcal{O}_k\\)
+and the points \\(x_i\\) are chosen in the whole \\(x\\)-region.
+During the minimization, fit solutions giving negative values of
+\\(\mathcal{O}_k\\) will receive a positive contribution to the total \\( \chi^2\\) and therefore will be penalized.
+A similar methodology was already used in `nnfit`, to impose positivity of DIS and Drell-Yan physical cross sections.
 The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated.
 In few words, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
-In `n3fit` however the fit will not stop until the replica passes all positivity constraints, i.e., no
+In `n3fit` however the `postfit` selection only accepts replicas which pass all positivity constraints, i.e., no
 negative values are allowed.
 
 Note as well that the positivity penalty in `n3fit` grows dynamically with the fit to facilitate quick training at early stages of the fit.
 
-``` important:: The positivity multiplier is a hyper-parameter of the fit which require specific fine tuning.
+Integrability
+-------------
+In order to satisfy valence and Gottfried sum rules, the distributions \\(  q_k = V,V_3,V_8, T_3, T_8 \\) have to be integrable at small-\\(x\\). This implies that
+
+\\( \lim_{x\rightarrow 0} x q_k\left(x,Q_0^2\right) = 0 \\).
+
+Similarly to what done for positivity, we can impose this behaviour by adding an additional term to the total \\( \chi^2\\)
+which penalizes fit solutions where the integrable distributions do not decrease to zero at small-\\(x\\)
+
+\\( \chi^2_{k,integ} = \Lambda_k \sum_i \left[x_i q_k\left(x_i,Q^2\right)\right]^2 \\).
+
+After the fit, the `postfit` script will retain just those replicas satisfying a given integrability condition, as documented
+in the `postfit` section.
+
+``` important:: The positivity and integrability multipliers are hyper-parameters of the fit which require specific fine tuning through hyper-optimization. 
 ```
+
+Feature Scaling
+---------------
+
+Up to NNPDF4.0 the input to the neural network consisted of an input node `(x)`, which in the first layer is transformed to `(x,log(x))` before being connected to the trainable layers of the network. The choice  for the `(x,log(x))` split is motivated by the fact that the pdfs appear to scale linearly in the large-x region, which is roughly `[1e-2,1]`, while the scaling is logarithmical in the small-x region below `x=1e-2`. However, gradient descent based optimizers are incapable of distinguishing features across many orders of magnitude of `x`, this choice of input scaling means that the algorithm is limited to learning features on a logarithmic and linear scale. 
+
+To solve this problem there is the possibility to apply a different feature scaling to the input by adding a `interpolation_points: [number of points]` flag to the `n3fit` runcard. By adding this flag the `(x,log(x))` scaling is replaced by a scaling in such a way that all input `x` values are evenly distributed on the domain `[-1,1]`, and the input node is no longer split in two. 
+
+Of course this scaling is discrete while the pdfs must be continuous. Therefore a monotonically increasing cubic spline is used to interpolate after the scaling has been applied. To this end the [PchipInterpolator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html) function from the scipy library is used. However, this way the neural network will be agnostic to the existence of this interpolation function meaning it can no longer learn the true underlying law. To fix this, the interpolation function has to be probed as well. This is done by only using `[number of points]` set by the `interpolation_points` flag to define the interpolation function after the scaling has been applied. Using this methodology the points used in the interpolation are again evenly distributed. 
+
+
+``` image:: figures/feature_scaling.png
+```
+
+The figure above provides a schematic representation of this feature scaling methodology:  
+1. The input `x` are mapped onto the `[-1,1]` domain such that they are evenly distributed.
+2. `[number of points]` points are kept (dark blue), while other points are discarded (light blue).
+3. A cubic spline function is used to do the interpolation between the points that have not been discarded.

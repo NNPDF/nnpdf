@@ -29,9 +29,12 @@ versions that have been tested):
 * [LHAPDF](https://lhapdf.hepforge.org/) (6.2.1 onwards)
 * [FastJet](http://fastjet.fr/) (3.3.1 onwards, from external/fastjet-3.3.1)
 
-The APPLgird source code is
-* [APPLgrid](https://applgrid.hepforge.org/) (applgridphoton, 
-  from external/applgridphoton)
+The APPLgrid source code is
+* [applgridphoton](https://github.com/scarrazza/applgridphoton), which can also
+  be accessed from [external](https://github.com/NNPDF/external). Note that
+  applgridphoton is a slightly modified version of the
+  [APPLgrid](https://applgrid.hepforge.org/) code, which is recommended
+  for usage with the NNPDF code.
 
 If the user is able to run the nnpdf code, LHAPDF should already be available 
 on their system. Likewise, if they are able to run apfelcomb, ROOT and APPLgrid

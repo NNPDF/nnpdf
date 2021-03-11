@@ -1,3 +1,7 @@
+```eval_rst
+.. _design:
+```
+
 The design of `validphys 2`
 ==========================
 
@@ -9,7 +13,7 @@ underpinning the design of `validphys 2`, and of `reportengine`, the code it is
 based on. It should be useful for anyone aiming to understand the general
 philosophy and design goals of the project or take in in qualitatively different
 directions.  More concrete information on how to use the code can be found in
-the **USAGE** section.
+the sections under Using validphys. 
 
 Some specific issues of scientific code
 ---------------------------------------
