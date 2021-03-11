@@ -8,7 +8,7 @@ central theory is :ref:`theory 163 <theory-indexes>`.
 
 First, decide which theory covmat you want
 ------------------------------------------
-- Choose the desired point-prescription listed :ref:`here <pointprescrips>`.
+- Choose the desired point-prescription listed :ref:`here <prescrips>`.
 - Each prescription comes with a ``point_prescription`` flag to include in
   the runcard, one of ["3 point", "5 point", "5bar point", "7 point", "9 point"]
 
