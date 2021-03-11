@@ -56,6 +56,8 @@ In the following table we list some of the differences between both codes:
 +--------------------+---------------------------------+--------------------------------------------------+
 | Model selection    | closure test                    | closure test, **hyper optimization**             |
 +--------------------+---------------------------------+--------------------------------------------------+
+| Input scaling      | (x,log(x))                      | **feature scaling**                              |
++--------------------+---------------------------------+--------------------------------------------------+
 ```
 
 In `nnfit` there is a single `seed` variable stored in the fit runcard which is used to initialize an instance of the `RandomGenerator` class which provides random numbers sequentially. The `nnfit` user has no independent control over the random number sequences used for the neural network initialization, the training-validation split and the MC replica generation. On the other hand, in `n3fit` we introduce 3 new seed variables in the fit runcard: `trvlseed` for the random numbers used in training-validation, `nnseed` for the neural network initialization and `mcseed` which controls the MC replica generation.
@@ -176,3 +178,20 @@ in the `postfit` section.
 ``` important:: The positivity and integrability multipliers are hyper-parameters of the fit which require specific fine tuning through hyper-optimization. 
 ```
 
+Feature Scaling
+---------------
+
+Up to NNPDF4.0 the input to the neural network consisted of an input node `(x)`, which in the first layer is transformed to `(x,log(x))` before being connected to the trainable layers of the network. The choice  for the `(x,log(x))` split is motivated by the fact that the pdfs appear to scale linearly in the large-x region, which is roughly `[1e-2,1]`, while the scaling is logarithmical in the small-x region below `x=1e-2`. However, gradient descent based optimizers are incapable of distinguishing features across many orders of magnitude of `x`, this choice of input scaling means that the algorithm is limited to learning features on a logarithmic and linear scale. 
+
+To solve this problem there is the possibility to apply a different feature scaling to the input by adding a `interpolation_points: [number of points]` flag to the `n3fit` runcard. By adding this flag the `(x,log(x))` scaling is replaced by a scaling in such a way that all input `x` values are evenly distributed on the domain `[-1,1]`, and the input node is no longer split in two. 
+
+Of course this scaling is discrete while the pdfs must be continuous. Therefore a monotonically increasing cubic spline is used to interpolate after the scaling has been applied. To this end the [PchipInterpolator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html) function from the scipy library is used. However, this way the neural network will be agnostic to the existence of this interpolation function meaning it can no longer learn the true underlying law. To fix this, the interpolation function has to be probed as well. This is done by only using `[number of points]` set by the `interpolation_points` flag to define the interpolation function after the scaling has been applied. Using this methodology the points used in the interpolation are again evenly distributed. 
+
+
+``` image:: figures/feature_scaling.png
+```
+
+The figure above provides a schematic representation of this feature scaling methodology:  
+1. The input `x` are mapped onto the `[-1,1]` domain such that they are evenly distributed.
+2. `[number of points]` points are kept (dark blue), while other points are discarded (light blue).
+3. A cubic spline function is used to do the interpolation between the points that have not been discarded.
