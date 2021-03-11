@@ -1,4 +1,5 @@
-.. |br| raw:: html
+.. The line below allows you to break to a new line by adding |br| at the end of the line
+.. |br| raw:: html 
 
 .. _prescrips:
 
