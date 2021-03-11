@@ -34,11 +34,11 @@ class FatalRuleError(Exception):
     """Exception raised when a rule application failed at runtime."""
 
 
-def default_filter_settings_input():
+def default_filter_global_settings():
     """Return a dictionary with the default hardcoded filter settings.
-    These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
+    These are defined in ``global_settings.yaml`` in the ``validphys.cuts`` module.
     """
-    return yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+    return yaml.safe_load(read_text(validphys.cuts, "global_settings.yaml"))
 
 
 def default_filter_rules_input():
@@ -291,11 +291,11 @@ class Rule:
         variables.
 
         By default these are defined in cuts/filters.yaml
-    defaults: dict
+    global_settings: dict
         A dictionary containing default values to be used globally in
         all rules.
 
-        By default these are defined in cuts/defaults.yaml
+        By default these are defined in cuts/global_settings.yaml
     theory_parameters:
         Dict containing pairs of (theory_parameter, value)
     loader: validphys.loader.Loader, optional
@@ -308,7 +308,7 @@ class Rule:
         self,
         initial_data: dict,
         *,
-        defaults: dict,
+        global_settings: dict,
         theory_parameters: dict,
         loader=None,
     ):
@@ -366,11 +366,11 @@ class Rule:
                 raise RuleProcessingError(e) from e
 
         self.rule_string = self.rule
-        self.defaults = defaults
+        self.global_settings = global_settings
         self.theory_params = theory_parameters
         ns = {
             *self.numpy_functions,
-            *self.defaults,
+            *self.global_settings,
             *self.variables,
             "idat",
             "central_value",
@@ -437,7 +437,7 @@ class Rule:
                 self.numpy_functions,
                 {
                     **{"idat": idat, "central_value": central_value},
-                    **self.defaults,
+                    **self.global_settings,
                     **ns,
                 },
             )
@@ -484,14 +484,14 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     Example
     -------
     >>> from validphys.filters import (get_cuts_for_dataset, Rule,
-    ...     default_filter_settings, default_filter_rules_input)
+    ...     default_filter_global_settings, default_filter_rules_input)
     >>> from validphys.loader import Loader
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> theory = l.check_theoryID(53)
-    >>> filter_defaults = default_filter_settings()
+    >>> global_settings = default_filter_global_settings()
     >>> params = theory.get_description()
-    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params)
+    >>> rule_list = [Rule(initial_data=i, global_settings=global_settings, theory_parameters=params)
     ...     for i in default_filter_rules_input()]
     >>> get_cuts_for_dataset(cd, rules=rule_list)
     """

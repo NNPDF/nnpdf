@@ -390,16 +390,16 @@ class Loader(LoaderBase):
     def check_default_filter_rules(self, theoryid, defaults=None):
         # avoid circular import
         from validphys.filters import (
-            default_filter_settings_input,
+            default_filter_global_settings,
             default_filter_rules_input,
             Rule,
         )
 
         th_params = theoryid.get_description()
         if defaults is None:
-            defaults = default_filter_settings_input()
+            defaults = default_filter_global_settings()
         return [
-            Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
+            Rule(inp, global_settings=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
         ]
 

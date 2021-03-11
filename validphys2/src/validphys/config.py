@@ -1095,7 +1095,7 @@ class CoreConfig(configparser.Config):
             rule_list = [
                 Rule(
                     initial_data=i,
-                    defaults=defaults,
+                    global_settings=defaults,
                     theory_parameters=theory_parameters,
                     loader=self.loader,
                 )
@@ -1120,7 +1120,7 @@ class CoreConfig(configparser.Config):
         values of ``q2min`` and ` `w2min`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
-        from validphys.filters import default_filter_settings_input
+        from validphys.filters import default_filter_global_settings
         if filter_defaults is None:
             # Sentinal value to avoid having mutable type
             # in function signature
@@ -1140,7 +1140,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError("w2min defined multiple times with different values")
 
         if not filter_defaults:
-            filter_defaults = default_filter_settings_input()
+            filter_defaults = default_filter_global_settings()
             defaults_loaded = True
         else:
             defaults_loaded = False
