@@ -1070,25 +1070,27 @@ class CoreConfig(configparser.Config):
 
     @record_from_defaults
     def produce_default_filter_rules(self):
-        """Production rule for returning the raw yaml for filter rules.
+        """Production rule for returning a mapping between a spec key
+        (e.g 31, 40) and a list of parsed yaml containing the filter rules.
 
-        If ``filter_rules`` are explicitly declared in the runcard then
-        override the filter rules in ``validphys.cuts.filters``
+        The filter rule defaults are to be added in validphys.cuts
+
+        The mapping will always contain a `default` key, which maps to the current
+        implementation of the rules, found in `validphys/cuts/filters.yaml`.
         """
         from validphys.filters import default_filter_rules_input
         import validphys.cuts
 
-        lock_token = '_filters.yaml'
-
-        rule_lockfiles = list(
-            filter(lambda x: lock_token in x, contents(validphys.cuts))
-        )
+        # Mapping between a spec key and the name of the
+        # defaults file found in validphys.cuts
+        spec_file_mapping = {
+            '31': '31_filters.yaml',
+        }
 
         rules_dict = {}
-        for lockfile in rule_lockfiles:
-            key = lockfile.strip(lock_token)
-            rules = yaml.safe_load(read_text(validphys.cuts, lockfile))
-            rules_dict[key] = rules
+        for spec, default_file in spec_file_mapping.items():
+            rules = yaml.safe_load(read_text(validphys.cuts, default_file))
+            rules_dict[spec] = rules
 
         default_filter_rules = default_filter_rules_input()
         rules_dict['default'] = default_filter_rules
