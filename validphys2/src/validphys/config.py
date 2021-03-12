@@ -377,7 +377,7 @@ class CoreConfig(configparser.Config):
         return th
 
     def produce_cuts(
-        self, *, commondata, use_cuts, rules, fit=None, theoryid=None,
+        self, *, commondata, use_cuts, rules=None, fit=None,
     ):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy."""
@@ -397,8 +397,13 @@ class CoreConfig(configparser.Config):
             except LoadFailedError as e:
                 raise ConfigError(e) from e
         elif use_cuts is CutsPolicy.INTERNAL:
-            if not theoryid:
-                raise ConfigError("theoryid must be specified for internal cuts")
+            if rules is None:
+                try:
+                    _, rules = self.parse_from_(None, "rules", write=False)
+                except ConfigError as e:
+                    raise ConfigError(
+                        "Couldn't process rules for internal cuts."
+                    ) from e
             return self.loader.check_internal_cuts(commondata, rules)
         elif (
             use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE
@@ -463,7 +468,6 @@ class CoreConfig(configparser.Config):
     def produce_dataset(
         self,
         *,
-        rules,
         dataset_input,
         theoryid,
         cuts,
@@ -483,7 +487,6 @@ class CoreConfig(configparser.Config):
 
         try:
             ds = self.loader.check_dataset(
-                rules=rules,
                 name=name,
                 sysnum=sysnum,
                 theoryid=theoryid,
