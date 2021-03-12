@@ -36,9 +36,9 @@ class FatalRuleError(Exception):
 
 def default_filter_global_settings():
     """Return a dictionary with the default hardcoded filter settings.
-    These are defined in ``global_settings.yaml`` in the ``validphys.cuts`` module.
+    These are defined in ``filter_global_settings.yaml`` in the ``validphys.cuts`` module.
     """
-    return yaml.safe_load(read_text(validphys.cuts, "global_settings.yaml"))
+    return yaml.safe_load(read_text(validphys.cuts, "filter_global_settings.yaml"))
 
 
 def default_filter_rules_input():
@@ -295,7 +295,7 @@ class Rule:
         A dictionary containing default values to be used globally in
         all rules.
 
-        By default these are defined in cuts/global_settings.yaml
+        By default these are defined in cuts/filter_global_settings.yaml
     theory_parameters:
         Dict containing pairs of (theory_parameter, value)
     loader: validphys.loader.Loader, optional
