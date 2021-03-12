@@ -164,11 +164,10 @@ dataset_inputs_normalised_averaged_differential_prediction = collect(
 
 def dataset_inputs_norm_diff_prediction_table(
     dataset_inputs_normalised_averaged_differential_prediction):
-    """Generate a weighted histogram of xgrids of FK tables for all ``data``.
-    The bins edges are the points on the export grid, which is the grid of
-    points the PDF is evaluated at when saved at the end of a fit. The weights
-    are then given by the differential predictions, calculated by
-    :py:func:`normalised_averaged_differential_prediction`
+    """Take all of the differential predictions returned by
+    :py:func:`normalised_averaged_differential_prediction` and put them in
+    a single table, concatenating along the xgrid. Add xgrid as a column to
+    the table, to later use in histogramming.
 
     """
     dfs = []
@@ -186,9 +185,11 @@ def histogram_norm_diff_prediction(
 ):
     """Generate a weighted histogram of xgrids of FK tables for all ``data``.
     The bins edges are the points on the export grid, which is the grid of
-    points the PDF is evaluated at when saved at the end of a fit. The weights
-    are then given by the differential predictions, calculated by
-    :py:func:`normalised_averaged_differential_prediction`.
+    points the PDF is evaluated on when saved at the end of a fit.
+
+    The weights
+    are then given by the (absolute, normalised) differential predictions,
+    calculated by :py:func:`normalised_averaged_differential_prediction`.
 
     """
     total_df = dataset_inputs_norm_diff_prediction_table.fillna(0)
@@ -206,8 +207,9 @@ def histogram_norm_diff_prediction(
 
 class BandPDFWithFKXHistPlotter(BandPDFPlotter):
     """Overload the __call__ method of BandPDFPlotter to add rug plot of
-    fk xgrid to each figure. The y position and height of the rugplot is
-    based on the y-limits set when plotting the PDF bands.
+    :py:func:`histogram_norm_diff_prediction` to each figure. The y position
+    and height of the rugplot is based on the y-limits set when plotting the
+    PDF bands.
 
     """
     def __init__(self, hist_df, *args, **kwargs):
@@ -224,8 +226,8 @@ class BandPDFWithFKXHistPlotter(BandPDFPlotter):
             ax.set_title(title)
             hist = self.hist_df.get(partonname)
             if hist is not None:
-                # rescale the bars to fit on axis.
                 xgrid = hist.index.to_numpy()
+                # rescale the bars to fit on axis (set tallest bar height to 1)
                 counts = hist.to_numpy(copy=True)
                 counts /= np.max(counts)
                 segments = np.c_[
@@ -257,9 +259,9 @@ def plot_pdfs_fktable_bins(
     pdfs_noband: (list, type(None)) = None,
     show_mc_errors: bool = True,
 ):
-    """Like :py:func:`plot_pdfs` with additional rug plot for x grid points
-    in ``data`` FK tables. Restricted to the evolution basis,
-    and plots all flavours used in fk tables.
+    """Like :py:func:`plot_pdfs_fktable_xgrids` except the rugplot is the
+    histogram returned by :py:func`histogram_norm_diff_prediction`.
+    Restricted to the evolution basis, and plots all flavours used in fk tables.
 
     """
     yield from BandPDFWithFKXHistPlotter(
