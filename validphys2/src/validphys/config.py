@@ -1069,25 +1069,58 @@ class CoreConfig(configparser.Config):
         return filter_rules
 
     @record_from_defaults
-    def produce_default_filter_rules(self) -> list:
+    def produce_default_filter_rules(self):
         """Production rule for returning the raw yaml for filter rules.
 
         If ``filter_rules`` are explicitly declared in the runcard then
         override the filter rules in ``validphys.cuts.filters``
         """
         from validphys.filters import default_filter_rules_input
+        import validphys.cuts
 
-        filter_rules = default_filter_rules_input()
+        lock_token = '_filters.yaml'
 
-        return filter_rules
+        rule_lockfiles = list(
+            filter(lambda x: lock_token in x, contents(validphys.cuts))
+        )
 
-    def produce_rules(self, defaults, theoryid, filter_rules=None):
+        rules_dict = {}
+        for lockfile in rule_lockfiles:
+            key = lockfile.strip(lock_token)
+            rules = yaml.safe_load(read_text(validphys.cuts, lockfile))
+            rules_dict[key] = rules
+
+        default_filter_rules = default_filter_rules_input()
+        rules_dict['default'] = default_filter_rules
+
+        return rules_dict
+
+
+    def produce_rules(self, defaults, theoryid, rules_spec=None, filter_rules=None):
         from validphys.filters import Rule, RuleProcessingError
 
         theory_parameters = theoryid.get_description()
 
+        if rules_spec is None:
+            rules_spec = 'default'
+        else:
+            # rules_spec: 31 would break otherwise
+            # and seeing how most rules_spec's will be 40, 31 etc.
+            # this seems helpful
+            rules_spec = str(rules_spec)
+
         if filter_rules is None:
-            rule_list = self.produce_default_filter_rules()
+            spec_rule_mapping = self.produce_default_filter_rules()
+            try:
+                rule_list = spec_rule_mapping[rules_spec]
+            except KeyError:
+                alternatives = spec_rule_mapping.keys()
+                raise ConfigError(
+                    f"Default filter rule not found for spec {rules_spec}",
+                    bad_item=rules_spec,
+                    alternatives=alternatives,
+                    display_alternatives='best'
+                )
         else:
             rule_list = filter_rules
 
