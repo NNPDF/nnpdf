@@ -4,7 +4,7 @@ from validphys.loader import FallbackLoader as Loader
 from validphys.filters import (
     Rule,
     RuleProcessingError,
-    default_filter_global_settings,
+    default_filter_global_settings_input,
     default_filter_rules_input,
     PerturbativeOrder,
     BadPerturbativeOrder,
@@ -41,7 +41,7 @@ def mkrule(inp):
     l = Loader()
     th = l.check_theoryID(THEORYID)
     desc = th.get_description()
-    defaults = default_filter_global_settings()
+    defaults = default_filter_global_settings_input()
     return Rule(initial_data=inp, global_settings=defaults, theory_parameters=desc)
 
 

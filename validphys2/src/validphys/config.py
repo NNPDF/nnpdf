@@ -1098,7 +1098,7 @@ class CoreConfig(configparser.Config):
         return rules_dict
 
 
-    def produce_rules(self, defaults, theoryid, rules_spec=None, filter_rules=None):
+    def produce_rules(self, global_filter_parameters, theoryid, rules_spec=None, filter_rules=None):
         from validphys.filters import Rule, RuleProcessingError
 
         theory_parameters = theoryid.get_description()
@@ -1130,7 +1130,7 @@ class CoreConfig(configparser.Config):
             rule_list = [
                 Rule(
                     initial_data=i,
-                    global_settings=defaults,
+                    global_settings=global_filter_parameters,
                     theory_parameters=theory_parameters,
                     loader=self.loader,
                 )
@@ -1140,55 +1140,98 @@ class CoreConfig(configparser.Config):
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
 
-    def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
+    def parse_filter_global_settings(self, filter_global_settings: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
         filtering data (when using internal cuts).
         Currently these limits are ``q2min`` and ``w2min``.
         """
         log.warning("Overwriting filter defaults")
-        return filter_defaults
+        return filter_global_settings
 
     @record_from_defaults
-    # TODO: Change this production rule key here and elsewhere
-    def produce_defaults(self, q2min=None, w2min=None, filter_defaults=None):
+    def produce_default_filter_global_settings(self):
+        """Production rule for returning a mapping between a spec key
+        (e.g 31, 40) and a list of parsed yaml containing the filter rules.
+
+        The filter global settings defaults are to be added in validphys.cuts
+
+        The mapping will always contain a `default` key, which maps to the current
+        implementation of the rules, found in `validphys/cuts/filter_global_settings.yaml`.
+        """
+        from validphys.filters import default_filter_global_settings_input
+        import validphys.cuts
+
+        # Mapping between a spec key and the name of the
+        # defaults file found in validphys.cuts
+        spec_file_mapping = {
+            '31': '31_filter_global_settings.yaml',
+        }
+
+        global_settings_dict = {}
+        for spec, default_file in spec_file_mapping.items():
+            global_settings = yaml.safe_load(read_text(validphys.cuts, default_file))
+            global_settings_dict[spec] = global_settings
+
+        default_filter_global_settings = default_filter_global_settings_input()
+        global_settings_dict['default'] = default_filter_global_settings
+
+        return global_settings_dict
+
+    # Need to call this something different from produce_filter_global_settings
+    # to avoid having a cyclic production rule
+    def produce_global_filter_parameters(
+        self,
+        filter_global_settings_spec=None,
+        q2min=None,
+        w2min=None,
+        filter_global_settings=None,
+    ):
         """Produce default values for filters taking into account both the
         values of ``q2min`` and ` `w2min`` defined at namespace
-        level and those inside a ``filter_defaults`` mapping.
+        level and those inside a ``filter_global_settings`` mapping.
         """
-        from validphys.filters import default_filter_global_settings
-        if filter_defaults is None:
-            # Sentinal value to avoid having mutable type
-            # in function signature
-            filter_defaults = {}
+        if filter_global_settings_spec is None:
+            spec = 'default'
+        else:
+            spec = str(filter_global_settings_spec)
+
+        if filter_global_settings is None:
+            # Global settings were not overwritten in the runcard
+            spec_settings_mapping = self.produce_default_filter_global_settings()
+            try:
+                filter_global_settings = spec_settings_mapping[spec]
+            except KeyError:
+                alternatives = spec_settings_mapping.keys()
+                raise ConfigError(
+                    f"Default filter rule not found for spec {spec}",
+                    bad_item=spec,
+                    alternatives=alternatives,
+                    display_alternatives='best'
+                )
 
         if (
             q2min is not None
-            and "q2min" in filter_defaults
-            and q2min != filter_defaults["q2min"]
+            and "q2min" in filter_global_settings
+            and q2min != filter_global_settings["q2min"]
         ):
             raise ConfigError("q2min defined multiple times with different values")
         if (
             w2min is not None
-            and "w2min" in filter_defaults
-            and w2min != filter_defaults["w2min"]
+            and "w2min" in filter_global_settings
+            and w2min != filter_global_settings["w2min"]
         ):
             raise ConfigError("w2min defined multiple times with different values")
 
-        if not filter_defaults:
-            filter_defaults = default_filter_global_settings()
-            defaults_loaded = True
-        else:
-            defaults_loaded = False
-
-        if q2min is not None and defaults_loaded:
+        # For backwards compatibility
+        if q2min is not None:
             log.warning("Using q2min from runcard")
-            filter_defaults["q2min"] = q2min
+            filter_global_settings["q2min"] = q2min
 
-        if w2min is not None and defaults_loaded:
+        if w2min is not None:
             log.warning("Using w2min from runcard")
-            filter_defaults["w2min"] = w2min
+            filter_global_settings["w2min"] = w2min
 
-        return filter_defaults
+        return filter_global_settings
 
     def produce_data(
         self,
