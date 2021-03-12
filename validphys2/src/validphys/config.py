@@ -1081,13 +1081,13 @@ class CoreConfig(configparser.Config):
 
         return filter_rules
 
-    def produce_rules(self, defaults, theoryid, default_filter_rules, filter_rules=None):
+    def produce_rules(self, defaults, theoryid, filter_rules=None):
         from validphys.filters import Rule, RuleProcessingError
 
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
-            rule_list = default_filter_rules
+            rule_list = self.produce_default_filter_rules()
         else:
             rule_list = filter_rules
 
