@@ -124,6 +124,50 @@ def experiments_bias_variance_ratio(
 
 
 @table
+def experiments_bias_variance_table(
+    experiments_expected_bias_variance,
+    group_dataset_inputs_by_experiment,
+    expected_total_bias_variance,
+):
+    """Tabulate the values of bias and variance for each experiment as well
+    as the sqrt ratio of the two as in
+    :py:func`sqrt_experiments_bias_variance_ratio`. Used as a performance
+    indicator.
+
+    """
+    records = []
+    for exp, (bias, var, ndata) in zip(
+        group_dataset_inputs_by_experiment,
+        experiments_expected_bias_variance
+    ):
+        records.append(dict(
+            experiment=exp["group_name"],
+            ndata=ndata,
+            bias=bias/ndata,
+            variance=var/ndata,
+            sqrt_ratio=np.sqrt(bias/var)
+        ))
+
+    bias_tot, var_tot, ntotal = expected_total_bias_variance
+
+    records.append(dict(
+        experiment="Total",
+        ndata=ntotal,
+        bias=bias_tot/ntotal,
+        variance=var_tot/ntotal,
+        sqrt_ratio=np.sqrt(bias_tot/var_tot)
+    ))
+    df = pd.DataFrame.from_records(records, index="experiment")
+    df.columns = [
+        "ndata",
+        "bias",
+        "variance",
+        "sqrt(bias/variance)"
+    ]
+    return df
+
+
+@table
 def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
     """Given `datasets_bias_variance_ratio` take the sqrt and tabulate the
     results. This gives an idea of how
