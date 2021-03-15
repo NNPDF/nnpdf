@@ -15,14 +15,6 @@ First, decide which theory covmat you want
 Next, add necessary flags to the runcard
 ----------------------------------------
 - Remember to list the required datasets using ``dataset_inputs`` (see :ref:`data_specification`).
-- Specify ``metadata_group: nnpdf31_process`` in the runcard. This means that
-  the grouping will be done according to process type specified in the ``plotting``
-  files.
-.. warning::
-      If ``metadata_group`` is not set to ``nnpdf31_process`` it will default to
-      ``experiment`` and renormalisation scale variation correlations will be
-      between experiments rather than processes.  See :ref:`backwards-compatibility`
-      for details.
 - Add ``theorycovmatconfig`` to the runcard. An example is in the following code snippet:
 
 .. code:: yaml
@@ -38,12 +30,6 @@ Next, add necessary flags to the runcard
 	  pdf: NNPDF31_nlo_as_0118
 	  use_thcovmat_in_fitting: true
 	  use_thcovmat_in_sampling: true
-
-	sampling_t0:
-	  use_t0: false
-
-	fitting_t0:
-	  use_t0: true
 
 	############################################################
 

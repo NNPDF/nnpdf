@@ -1,6 +1,3 @@
-.. The line below allows you to break to a new line by adding |br| at the end of the line
-.. |br| raw:: html 
-
 .. _prescrips:
 
 Point prescriptions for theory covariance matrices
@@ -13,7 +10,8 @@ appear in ``validphys2``.
 --------
 .. note:: 
 
-	``theoryids``: 163, 180, 173	|br|
+	``theoryids``: 163, 180, 173	
+	
 	``point_prescription: '3 point'``
 	
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
@@ -25,7 +23,8 @@ appear in ``validphys2``.
 ---------
 .. note::
 
-	``theoryids``: 163, 177, 176, 179, 174 |br|
+	``theoryids``: 163, 177, 176, 179, 174 
+	
 	``point_prescription: '5 point'``
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2 \bigg\}
 
@@ -40,7 +39,8 @@ appear in ``validphys2``.
 ------------------------------------
 .. note::
 
-	``theoryids:`` 163, 180, 173, 175, 178 |br|
+	``theoryids:`` 163, 180, 173, 175, 178 
+	
 	``point_prescription: '5bar point'``
 	
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 + \Delta_1(+,-)^2 + \Delta_1(-,+)^2 \bigg\}
@@ -57,9 +57,12 @@ appear in ``validphys2``.
 
 .. warning::
 
-	**Deprecated prescription!** |br|
-	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 |br|
- 	Specify in the runcard ``seventheories: original`` |br|
+	**Deprecated prescription!** 
+	
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 
+	
+ 	Specify in the runcard ``seventheories: original`` 
+ 	
 	``point_prescription: '7 point'``
 	
 .. math::
@@ -80,7 +83,8 @@ appear in ``validphys2``.
 --------------------------
 .. note::
 
-	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 |br|
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 
+	
 	``point_prescription: '7 point'``
 
 .. math::
@@ -104,7 +108,8 @@ appear in ``validphys2``.
 
 .. note::
 
-	``theoryids:`` 163, 177, 176, 179, 174, 180, 173, 175, 178 |br|
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173, 175, 178 
+	
 	``point_prescription: '9 point'``
 
 .. math::
