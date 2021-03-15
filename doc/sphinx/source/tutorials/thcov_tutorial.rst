@@ -3,7 +3,7 @@ How to include a theory covariance matrix in a fit
 :Author: Contact Rosalyn (r.l.pearson@ed.ac.uk) for further information.
 
 This section details how to include :ref:`scale variation covariance matrices (covmats) <vptheorycov-index>`
-in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the 
+in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the
 central theory is :ref:`theory 163 <theory-indexes>`.
 
 First, decide which theory covmat you want
@@ -15,12 +15,12 @@ First, decide which theory covmat you want
 Next, add necessary flags to the runcard
 ----------------------------------------
 - Remember to list the required datasets using ``dataset_inputs`` (see :ref:`data_specification`).
-- Specify ``metadata_group: nnpdf31_process`` in the runcard. This means that 
+- Specify ``metadata_group: nnpdf31_process`` in the runcard. This means that
   the grouping will be done according to process type specified in the ``plotting``
-  files. 
+  files.
 .. warning::
       If ``metadata_group`` is not set to ``nnpdf31_process`` it will default to
-      ``experiment`` and renormalisation scale variation correlations will be 
+      ``experiment`` and renormalisation scale variation correlations will be
       between experiments rather than processes.  See :ref:`backwards-compatibility`
       for details.
 - Add ``theorycovmatconfig`` to the runcard. An example is in the following code snippet:
@@ -46,30 +46,30 @@ Next, add necessary flags to the runcard
 	  use_t0: true
 
 	############################################################
-	
-- ``pdf`` is the PDF used to generate the scale varied predictions which 
-  construct the theory covmat. Choose something close to the PDF you are 
+
+- ``pdf`` is the PDF used to generate the scale varied predictions which
+  construct the theory covmat. Choose something close to the PDF you are
   trying to fit, such as a previous iteration if available.
 -  ``theoryids`` are necessary for the construction of the theory covmat.
    To avoid user error in entering them in the correct configuration and order,
-   this is handled by the ``produce_scale_variation_theories`` action in 
-   `config <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/config.py>`_, 
-   using the information in 
+   this is handled by the ``produce_scale_variation_theories`` action in
+   `config <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/config.py>`_,
+   using the information in
    `the scalevariations module <https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/scalevariations>`_.
 -  The flags ``use_thcovmat_in_fitting`` and ``use_thcovmat_in_sampling`` specify
    where to use the theory covmat in the code. There are two possible places:
-   the fitting (i.e. \\(\\chi^2\\) minimiser) and the sampling (i.e. pseudodata
+   the fitting (i.e. :math:`\chi^2` minimiser) and the sampling (i.e. pseudodata
    generation). The default is ``True`` for both.
 .. warning::
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
-  
+
 If you want to compare data to another fit
 ------------------------------------------
 -  Sometimes we want to compare data to another fit for validation, for example
    we might want to compare predictions for the NLO fit with MHOUs to the known
-   NNLO fit (see :ref:`vptheorycov-tests`). 
--  To make sure the cuts match between these two fits, edit the ``datacuts`` 
+   NNLO fit (see :ref:`vptheorycov-tests`).
+-  To make sure the cuts match between these two fits, edit the ``datacuts``
    section of the runcard to include the following
 
 .. code:: yaml
@@ -77,19 +77,19 @@ If you want to compare data to another fit
 	  use_cuts: fromintersection
 	  cuts_intersection_spec:
 	  - theoryid: 163
-	  - theoryid: 53 
-	  
--  This ensures that the cuts on the data are the intersection of the cuts in 
+	  - theoryid: 53
+
+-  This ensures that the cuts on the data are the intersection of the cuts in
    theory 53 (default NNLO) and theory 163 (central scale variation NLO). See
-   :ref:`here <theory-indexes>` for theory definitions. 
-   	  
+   :ref:`here <theory-indexes>` for theory definitions.
+
 Example runcard
 ---------------
 The following is an example runcard for an NLO NNPDF3.1-style fit with a 3 point theory covmat.
 It can be found `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/theory_covariance/fit_with_thcovmat.yaml>`_.
 
 .. code:: yaml
- 
+
 	#
 	# Configuration file for NNPDF++
 	#
@@ -162,7 +162,7 @@ It can be found `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/exa
 	  use_cuts: fromintersection
 	  cuts_intersection_spec:
 	  - theoryid: 163
-	  - theoryid: 53 
+	  - theoryid: 53
 
 	############################################################
 	theory:
