@@ -376,9 +376,6 @@ class CoreConfig(configparser.Config):
         """Maximum relative ratio when using `fromsimilarpredictons` cuts."""
         return th
 
-    def _produce_no_cuts(self):
-        return None
-
     def _produce_fit_cuts(self, commondata):
         """Produce fit and then attempt to load cuts from that fit."""
         name = commondata.name
@@ -467,10 +464,11 @@ class CoreConfig(configparser.Config):
 
     def produce_cuts(self, *, commondata, use_cuts):
         """Obtain cuts for a given dataset input, based on the
-        appropriate policy."""
-        # TODO: Put this bit of logic into loader.check_cuts
+        appropriate policy.
+
+        """
         if use_cuts is CutsPolicy.NOCUTS:
-            return self._produce_no_cuts()
+            return None
         elif use_cuts is CutsPolicy.FROMFIT:
             return self._produce_fit_cuts(commondata)
         elif use_cuts is CutsPolicy.INTERNAL:
