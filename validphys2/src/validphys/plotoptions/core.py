@@ -204,14 +204,9 @@ class PlotInfo:
                 with open(file) as f:
                     processed_input = yaml.safe_load(f)
                     pf = parse_yaml_inp(processed_input, PlottingFile)
-                    config_params = dataclasses.asdict(pf)
-                #TODO: Do this in a more elegant way
-                config_params = {k: v for k, v in config_params.items() if v is not None}
+                    config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
                 plot_params = plot_params.new_child(config_params)
             if normalize and 'normalize' in plot_params:
-                normalize_ns = config_params['normalize']
-                # Strip the None values as above
-                config_params['normalize'] = {k : v for k, v in normalize_ns if v is not None}
                 plot_params = plot_params.new_child(config_params['normalize'])
             if 'dataset_label' not in plot_params:
                 log.warning(f"'dataset_label' key not found in {file}")
@@ -224,6 +219,15 @@ class PlotInfo:
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
         return cls(kinlabels=kinlabels, **plot_params)
+
+
+def dict_factory(key_value_pairs):
+    """A dictionary factory to be used in conjunction with dataclasses.asdict
+    to remove nested None values.
+
+    https://stackoverflow.com/questions/59481989/dict-from-nested-dataclasses
+    """
+    return dict(pair for pair in key_value_pairs if pair[1] is not None)
 
 
 class KinLabel(enum.Enum):
@@ -285,7 +289,9 @@ class PlottingOptions:
 
     def __post_init__(self):
         if self.kinematics_override is not None:
-            self.kinematics_override = transform_functions[self.kinematics_override.name]()
+            self.kinematics_override = transform_functions[
+                self.kinematics_override.name
+                ]()
         if self.result_transform is not None:
             self.result_transform = result_functions[self.result_transform.name]
 
