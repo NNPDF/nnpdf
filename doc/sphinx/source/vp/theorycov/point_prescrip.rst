@@ -8,12 +8,12 @@ appear in ``validphys2``.
 
 3 points
 --------
-.. note:: 
+.. note::
 
-	``theoryids``: 163, 180, 173	
-	
-	``point_prescription: '3 point'``
-	
+	``theoryids``: 163, 180, 173
+
+  ``point_prescription: '3 point'``
+
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
 
 .. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
@@ -23,8 +23,8 @@ appear in ``validphys2``.
 ---------
 .. note::
 
-	``theoryids``: 163, 177, 176, 179, 174 
-	
+	``theoryids``: 163, 177, 176, 179, 174
+
 	``point_prescription: '5 point'``
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2 \bigg\}
 
@@ -39,10 +39,10 @@ appear in ``validphys2``.
 ------------------------------------
 .. note::
 
-	``theoryids:`` 163, 180, 173, 175, 178 
-	
+	``theoryids:`` 163, 180, 173, 175, 178
+
 	``point_prescription: '5bar point'``
-	
+
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 + \Delta_1(+,-)^2 + \Delta_1(-,+)^2 \bigg\}
 
 .. math::
@@ -57,18 +57,19 @@ appear in ``validphys2``.
 
 .. warning::
 
-	**Deprecated prescription!** 
-	
-	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 
-	
- 	Specify in the runcard ``seventheories: original`` 
- 	
+	**Deprecated prescription!**
+
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173
+
+ 	Specify in the runcard ``seventheories: original``
+
 	``point_prescription: '7 point'``
-	
+
 .. math::
 
      \begin{split}
-         s_{11} = \frac{1}{3}\bigg\{ &\Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2  \\                                 + &\Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
+         s_{11} = \frac{1}{3}\bigg\{ &\Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2  \\
+         + &\Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
      \end{split}
 
 .. math::
@@ -83,14 +84,15 @@ appear in ``validphys2``.
 --------------------------
 .. note::
 
-	``theoryids:`` 163, 177, 176, 179, 174, 180, 173 
-	
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173
+
 	``point_prescription: '7 point'``
 
 .. math::
 
    \begin{split}
-       s_{11} = \frac{1}{3}\bigg\{ &\Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2  \\                                 + &\Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
+       s_{11} = \frac{1}{3}\bigg\{ &\Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2  \\
+       + &\Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
    \end{split}
 
 .. math::
@@ -108,8 +110,8 @@ appear in ``validphys2``.
 
 .. note::
 
-	``theoryids:`` 163, 177, 176, 179, 174, 180, 173, 175, 178 
-	
+	``theoryids:`` 163, 177, 176, 179, 174, 180, 173, 175, 178
+
 	``point_prescription: '9 point'``
 
 .. math::
@@ -117,7 +119,7 @@ appear in ``validphys2``.
    \begin{split}
        s_{11} = \frac{1}{4}\bigg\{ &\Delta_1(+,0)^2 + \Delta_1(-,0)^2
                                + \Delta_1(0,+)^2 + \Delta_1(0,-)^2 \\
-                               + &\Delta_1(+,+)^2 + \Delta_1(+,-)^2 
+                               + &\Delta_1(+,+)^2 + \Delta_1(+,-)^2
                                + \Delta_1(-,+)^2 + \Delta_1(-,-)^2 \bigg\}
    \end{split}
 
