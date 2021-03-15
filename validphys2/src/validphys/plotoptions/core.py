@@ -216,7 +216,9 @@ class PlotInfo:
             if 'result_transform' in plot_params:
                 plot_params['result_transform'] = plot_params['result_transform'].value
             if normalize and 'normalize' in plot_params:
-                #We might need to use reportengine.namespaces.resolve here
+                normalize_ns = config_params['normalize']
+                # Strip the None values as above
+                config_params['normalize'] = {k : v for k, v in normalize_ns if v is not None}
                 plot_params = plot_params.new_child(config_params['normalize'])
             if 'dataset_label' not in plot_params:
                 log.warning(f"'dataset_label' key not found in {file}")
