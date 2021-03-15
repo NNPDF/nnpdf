@@ -391,16 +391,11 @@ class CoreConfig(configparser.Config):
         return self.loader.check_internal_cuts(commondata, rules)
 
     def _produce_matched_cuts(self, commondata):
-        """Parse the ``cuts_intersection_spec``, a namespace list.
-
-        For each namespace produce internal cuts and pass these to matched cuts.
-        The matched cuts are the intersection of each of the inner internal cuts.
-
-        Notes
-        -----
-        The cuts index the points which *survive* the cuts, the naming is
-        slightly confusing in that regard.
-
+        """Compute the internal cuts as per `use_cuts: 'internal'` within each
+        namespace in a namespace list called `cuts_intersection_spec` and take
+        the intersection of the results as the cuts for the given dataset. This
+        is useful for example for requiring the common subset of points that
+        pass the cuts at NLO and NNLO.
         """
         cut_list = []
         _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
@@ -418,22 +413,43 @@ class CoreConfig(configparser.Config):
         return MatchedCuts(cut_list, ndata=ndata)
 
     def _produce_similarity_cuts(self, commondata):
-        """For two namespaces, produce some matched cuts. Then produce the
-        central predictions for each of the namespaces which are used to produce
-        some similarity cuts. These cut points when the difference between the
-        two sets of central predictions divide normalised by the experimental
-        standard deviation exceeds some ``cut_similarity_threshold``.
+        """ Compute the intersection between two namespaces (similar to for
+        `fromintersection`) but additionally require that the predictions
+        computed for each dataset across the namespaces are *similar*,
+        specifically that the ratio between the absolute difference in the
+        predictions and the total experimental uncertainty is smaller than a
+        given value, `cut_similarity_threshold` that must be provided. Note
+        that for this to work with different cfactors across the namespaces,
+        one must provide a different `dataset_inputs` list for each.
 
+        This mechanism can be sidetracked selectively for specific datasets.
+        To do that, add their names to a list called
+        `do_not_require_similarity_for`. The datasets in the list do not need
+        to appear in the `cuts_intersection_spec` name space and will filtered
+        according to the internal cuts unconditionally.
         """
         _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
+
         if len(nss) != 2:
             raise ConfigError("Can only work with two namespaces")
         _, cut_similarity_threshold = self.parse_from_(
             None, "cut_similarity_threshold", write=False
         )
-        # slightly circular here, since matched cuts will re-produce nss
-        matched_cuts = self._produce_matched_cuts(commondata)
+        try:
+
+            _, exclusion_list = self.parse_from_(
+                None, "do_not_require_similarity_for", write=False
+            )
+        except configparser.InputNotFoundError:
+            exclusion_list = []
         name = commondata.name
+        # slightly circular here, since matched cuts will re-produce nss
+        if name in exclusion_list:
+            with self.set_context(
+                ns=self._curr_ns.new_child({"use_cuts": CutsPolicy.INTERNAL})
+            ):
+                return self.parse_from_(None, "cuts", write=False)[1]
+        matched_cuts = self._produce_matched_cuts(commondata)
         inps = []
         for i, ns in enumerate(nss):
             with self.set_context(ns=self._curr_ns.new_child({**ns,})):
