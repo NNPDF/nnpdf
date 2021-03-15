@@ -93,7 +93,7 @@ def experiments_closure_pseudodata_estimators_table(
 ):
     """Tabulate for each experiment the pseudodata relates estimators for
     multiple closure fits. The estimators are shift, noise, delta replica chi2,
-    delta chi2 and delta epsilon. The first two are the shift and noise applied
+    delta_chi2 and delta_epsilon. The first two are the shift and noise applied
     the the underlying law to generate the pseudodata. delta replica chi2 is
     the replica chi2 - (shift + noise) and tells us if the replica predictions
     overfit the pseudodata replicas if delta replica chi2 < 0. Then the last
@@ -180,3 +180,44 @@ def experiments_closure_pseudodata_estimators_table(
         r"$\Delta_{\epsilon}$"
     ]
     return df
+
+@table
+def compare_delta_chi2_bias_variance_table(
+    experiments_bias_variance_table,
+    experiments_closure_pseudodata_estimators_table,
+):
+    """Convenience function, which joins relevant columns from
+    ``experiments_bias_variance_table`` and
+    ``experiments_closure_pseudodata_estimators_table`` to generate a table
+    which has bias, delta_chi2, variance and delta_epsilon.
+
+    Bias and variance
+    contextualise delta_chi2 and delta_epsilon respectively, setting lower
+    bounds based on some assumptions. An alternative form of delta_chi2 is
+
+        delta_chi2 = bias - shift cross term,
+
+    where the shift cross term is the covariance between the shift and the
+    difference between central prediction and underlying law. If the shift
+    and the bias vector are fully correlated then the lower bound on this
+    quantity would be
+
+        delta_chi2 >= bias - 2 * sqrt(bias)
+
+    Which is negative since bias << 1. If delta_chi2 is much closer to zero
+    than this number then there it suggests that the degree of overlearning
+    of the central predictions is not too high. The same argument applies to
+    variance and delta_epsilon.
+
+    """
+    bias_var_tab = experiments_bias_variance_table.drop("ndata", axis=1)
+    total_df = pd.concat(
+        [
+            bias_var_tab,
+            experiments_closure_pseudodata_estimators_table,
+        ],
+        axis=1
+    )
+    return total_df[
+        ["ndata", "bias", r"$\Delta_{\chi^2}$", "variance", r"$\Delta_{\epsilon}$"]
+    ]
