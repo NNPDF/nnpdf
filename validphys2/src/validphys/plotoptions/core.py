@@ -198,23 +198,16 @@ class PlotInfo:
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
 
-        #The only reason to call the parser once per config file is to
-        #give better error messages and stricter checks
         plot_params = ChainMap()
         if commondata.plotfiles:
             for file in commondata.plotfiles:
                 with open(file) as f:
                     processed_input = yaml.safe_load(f)
                     pf = parse_yaml_inp(processed_input, PlottingFile)
-                    config_params = pf.__dict__
-                    # Remove the sentinel None values
-                    config_params = {k : v for k, v in config_params.items() if v is not None}
+                    config_params = dataclasses.asdict(pf)
+                #TODO: Do this in a more elegant way
+                config_params = {k: v for k, v in config_params.items() if v is not None}
                 plot_params = plot_params.new_child(config_params)
-            # Annoying way that enum works. To get
-            # the callable we need the value attribute
-            plot_params['kinematics_override'] = plot_params['kinematics_override'].value
-            if 'result_transform' in plot_params:
-                plot_params['result_transform'] = plot_params['result_transform'].value
             if normalize and 'normalize' in plot_params:
                 normalize_ns = config_params['normalize']
                 # Strip the None values as above
@@ -247,28 +240,23 @@ class TransformFunctions(enum.Enum):
     # https://docs.python.org/3/library/enum.html#timeperiod
     _ignore_ = 'TransformFunctions name func'
     TransformFunctions = vars()
-    for name, func in transform_functions.items():
-        TransformFunctions[name] = func()
+    for name in transform_functions.keys():
+        # Safer to assign enum.auto and fill in the actual
+        # function later, than to assign the value of pair
+        TransformFunctions[name] = enum.auto()
 
 class ResultTransformations(enum.Enum):
     # https://docs.python.org/3/library/enum.html#timeperiod
     _ignore_ = 'ResultTransformations name func'
     ResultTransformations = vars()
-    for name, func in result_functions.items():
-        # https://stackoverflow.com/questions/40338652/how-to-define-enum-values-that-are-functions
-        ResultTransformations[name] = partial(func)
+    for name in result_functions.keys():
+        # Safer to assign enum.auto and fill in the actual
+        # function later, than to assign the value of pair
+        ResultTransformations[name] = enum.auto()
 
 
 @dataclasses.dataclass
-class Normalize:
-    x_scale: typing.Optional[Scale] = None
-    y_scale: typing.Optional[Scale] = None
-
-    line_by: typing.Optional[list] = None
-    figure_by: typing.Optional[list] = None
-
-@dataclasses.dataclass
-class PlottingFile:
+class PlottingOptions:
     dataset_label: typing.Optional[str] = None
     experiment: typing.Optional[str] = None
     nnpdf31_process: typing.Optional[str] = None
@@ -293,8 +281,18 @@ class PlottingFile:
     line_by: typing.Optional[list] = None
     figure_by: typing.Optional[list] = None
 
-    normalize: typing.Optional[Normalize] = None
     extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
+
+    def __post_init__(self):
+        if self.kinematics_override is not None:
+            self.kinematics_override = transform_functions[self.kinematics_override.name]()
+        if self.result_transform is not None:
+            self.result_transform = result_functions[self.result_transform.name]
+
+
+@dataclasses.dataclass
+class PlottingFile(PlottingOptions):
+    normalize: typing.Optional[PlottingOptions] = None
 
 
 def kitable(data, info, *, cuts=None):
