@@ -256,6 +256,15 @@ class ResultTransformations(enum.Enum):
         # https://stackoverflow.com/questions/40338652/how-to-define-enum-values-that-are-functions
         ResultTransformations[name] = partial(func)
 
+
+@dataclasses.dataclass
+class Normalize:
+    x_scale: typing.Optional[Scale] = None
+    y_scale: typing.Optional[Scale] = None
+
+    line_by: typing.Optional[list] = None
+    figure_by: typing.Optional[list] = None
+
 @dataclasses.dataclass
 class PlottingFile:
     dataset_label: typing.Optional[str] = None
@@ -282,7 +291,7 @@ class PlottingFile:
     line_by: typing.Optional[list] = None
     figure_by: typing.Optional[list] = None
 
-    normalize: typing.Optional[typing.Mapping[str, typing.Union[list, str]]] = None
+    normalize: typing.Optional[Normalize] = None
     extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
 
 
