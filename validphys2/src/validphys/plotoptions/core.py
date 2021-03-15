@@ -210,10 +210,9 @@ class PlotInfo:
                     # Remove the sentinel None values
                     config_params = {k : v for k, v in config_params.items() if v is not None}
                 plot_params = plot_params.new_child(config_params)
-            if 'kinematics_override' in plot_params:
-                # Annoying way that enum works. To get
-                # the callable we need the value attribute
-                plot_params['kinematics_override'] = plot_params['kinematics_override'].value
+            # Annoying way that enum works. To get
+            # the callable we need the value attribute
+            plot_params['kinematics_override'] = plot_params['kinematics_override'].value
             if 'result_transform' in plot_params:
                 plot_params['result_transform'] = plot_params['result_transform'].value
             if normalize and 'normalize' in plot_params:
