@@ -14,6 +14,7 @@ Running fits
    ./run-fit.md
    ./run-legacy-fit.rst
    ./run-iterated-fit.rst
+   ./thcov_tutorial.rst
 
 Analysing results
 -----------------

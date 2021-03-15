@@ -1,3 +1,5 @@
+ .. _vptheorycov-tests:
+ 
 Tests
 =====
 
