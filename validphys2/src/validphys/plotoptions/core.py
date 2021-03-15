@@ -223,11 +223,18 @@ class PlotInfo:
 
 def dict_factory(key_value_pairs):
     """A dictionary factory to be used in conjunction with dataclasses.asdict
-    to remove nested None values.
+    to remove nested None values and convert enums to their name.
 
     https://stackoverflow.com/questions/59481989/dict-from-nested-dataclasses
     """
-    return dict(pair for pair in key_value_pairs if pair[1] is not None)
+    new_kv_pairs = []
+    for key, value in key_value_pairs:
+        if isinstance(value, enum.Enum):
+            new_kv_pairs.append((key, value.name))
+        elif value is not None:
+            new_kv_pairs.append((key, value))
+
+    return dict(new_kv_pairs)
 
 
 class KinLabel(enum.Enum):
