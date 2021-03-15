@@ -43,6 +43,7 @@ requirements:
         - pandas
         - requests
         - prompt_toolkit
+        - validobj
         - sphinx # documentation
         - recommonmark
         - sphinx_rtd_theme >0.5
