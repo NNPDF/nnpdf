@@ -47,7 +47,6 @@ class TimerCallback(Callback):
     def on_train_end(self, logs=None):
         """ Print the results """
         total_time = time() - self.starting_time
-        log.info(f"> Values of the {self.x_count}: {self.every_x}")
         log.info(f"> > Average time per epoch: {np.mean(self.all_times[3:]):.5} s")
         log.info(f"> > > Total time: {total_time/60:.5} min")
 

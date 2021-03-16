@@ -33,7 +33,7 @@ class xDivide(MetaLayer):
             div_list = [2, 3, 4]
         self.output_dim = output_dim
         self.div_list = div_list
-        super(MetaLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def call(self, x):
         out_array = []
@@ -66,7 +66,7 @@ class xIntegrator(MetaLayer):
         grid_weights_tensor = op.numpy_to_tensor(grid_weights)
         # Open up the grid weights
         self.grid_weights = op.many_replication(grid_weights_tensor, 8, axis=1)
-        super(MetaLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def call(self, x):
         xx = x * self.grid_weights

@@ -20,6 +20,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.wrapper_hyperopt
 def performfit(
     *,
+    replicas, # used for checks
     genrep, # used for checks
     data, # used for checks
     replicas_nnseed_fitting_data_dict,
@@ -32,7 +33,6 @@ def performfit(
     parameters,
     replica_path,
     output_path,
-    save_weights_each=None,
     save=None,
     load=None,
     hyperscan=None,
@@ -102,9 +102,6 @@ def performfit(
                 path to the output of this run
             output_path: str
                 name of the fit
-            save_weights_each: None, int
-                if set, save the state of the fit every ``save_weights_each``
-                epochs
             save: None, str
                 model file where weights will be saved, used in conjunction with
                 ``load``.
@@ -157,7 +154,6 @@ def performfit(
             fitbasis,
             nnseed,
             debug=debug,
-            save_weights_each=save_weights_each,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
             model_file=load,
@@ -244,6 +240,14 @@ def performfit(
             writer_wrapper.write_data(
                 replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
             )
+            log.info(
+                    "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
+                    replica_number+i,
+                    exp_chi2,
+                    training_chi2,
+                    val_chi2
+                    )
+
 
             # Save the weights to some file for the given replica
             if save:

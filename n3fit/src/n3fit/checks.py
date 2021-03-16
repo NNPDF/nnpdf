@@ -349,11 +349,11 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
 
 
 @make_argcheck
-def can_run_multiple_replicas(fitting, replica, hyperopt, parallel_models=1):
-    """ Checks whether a runcard which is trying to run several replicas at once (parallel_models =/= 1) is valid
+def can_run_multiple_replicas(replicas, genrep, parameters, hyperopt, parallel_models=1):
+    """ Checks whether a runcard which is trying to run several replicas at once
+    (parallel_models =/= 1) is valid
     """
-    rp = len(replica)
-    genrep = fitting.get("genrep")
+    rp = len(replicas)
     if rp > 1 and not genrep:
         raise CheckError("Can't run more than one replica at once if no replicas are to be generated")
     if parallel_models == 1:
@@ -362,7 +362,7 @@ def can_run_multiple_replicas(fitting, replica, hyperopt, parallel_models=1):
         raise CheckError("Running replicas in parallel with hyperopt is still not supported")
     if genrep:
         raise CheckError("Replica generation is not supported yet for parallel models")
-    if fitting["parameters"].get("layer_type") != "dense":
+    if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
     if rp > 1:
         raise CheckError("Parallel mode cannot be used together with multireplica runs")

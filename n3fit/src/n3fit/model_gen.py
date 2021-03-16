@@ -503,11 +503,11 @@ def pdfNN_layer_generator(
     elif inp==2:
         # If the input is of type (x, logx)
         # create a x --> (x, logx) layer to preppend to everything
-        process_input = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1))
 
     model_input = [placeholder_input]
     if subtract_one:
-        layer_x_eq_1 = operations.numpy_to_input(np.array(input_x_eq_1).reshape(1,1))
+        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1,1))
         model_input.append(layer_x_eq_1)
 
     # Evolution layer
@@ -521,8 +521,8 @@ def pdfNN_layer_generator(
         sumrule_layer, integrator_input = msr_constraints.msr_impose(mode=impose_sumrule)
         model_input.append(integrator_input)
     else:
-        sumrule_layer = lambda x: x
-        integrator_input = None
+        sumrule_layer = lambda fitbasis, pdf_layer: pdf_layer
+
 
     # Now we need a trainable network per model to be trained in parallel
     pdf_models = []
@@ -572,15 +572,15 @@ def pdfNN_layer_generator(
             """ The tensor x has a expected shape of (1, None, {1,2})
             where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
             """
-            x_scaled = operations.op_gather_keep_dims(x, 0, axis=-1)
-            x_original = operations.op_gather_keep_dims(x, -1, axis=-1)
+            x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
+            x_original = op.op_gather_keep_dims(x, -1, axis=-1)
 
             nn_output = dense_me(x_scaled)
             if subtract_one:
                 nn_at_one = dense_me(layer_x_eq_1)
-                nn_output = operations.op_subtract([nn_output, nn_at_one])
+                nn_output = op.op_subtract([nn_output, nn_at_one])
 
-            ret = operations.op_multiply([nn_output, layer_preproc(x_original)])
+            ret = op.op_multiply([nn_output, layer_preproc(x_original)])
             if basis_rotation.is_identity():
                 # if we don't need to rotate basis we don't want spurious layers
                 return ret

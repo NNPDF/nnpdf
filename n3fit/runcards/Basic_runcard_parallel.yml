@@ -32,13 +32,14 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
+  theoryid: 162        # database id
 
 ############################################################
 fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3
+  sum_rules: "All"
 
   genrep: False     # true = generate MC replicas, false = use real data
 
@@ -87,9 +88,9 @@ positivity:
     - { dataset: POSFLL,   poslambda: 1e4 }
 
 ############################################################
-integrability:
-  integdatasets:
-    - {dataset: INTEGXT3,   poslambda: 1e2}
+# integrability:
+#   integdatasets:
+#     - {dataset: INTEGXT3,   poslambda: 1e2}
 
 ############################################################
 lhagrid:
@@ -101,6 +102,6 @@ lhagrid:
   qmax: 1e5
 
 ############################################################
-debug: True
+debug: False
 maxcores: 8
-parallel_models: 2
+parallel_models: 4

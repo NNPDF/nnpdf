@@ -10,9 +10,9 @@ description: Basic runcard
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: SLACP, frac: 0.5}
-- { dataset: NMCPD, frac: 0.5 }
-- { dataset: CMSJETS11, frac: 0.5, sys: 10 }
+- { dataset: SLACP_dwsh, frac: 0.5}
+- { dataset: NMCPD_dw, frac: 0.5 }
+- { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
 
 ############################################################
 datacuts:
@@ -31,17 +31,15 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
+  theoryid: 200       # database id
 
 ############################################################
 fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3
-  epochs: 900
   save: 'weights.h5'
 #   load: '/path/to/weights.h5/file'
-
 
   tensorboard:
     weight_freq: 100

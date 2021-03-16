@@ -93,39 +93,13 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
             layer_fitbasis: output of the NN
             layer_pdf: output for the fktable
         """
+        x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
+        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_fitbasis(xgrid_input)])
+        normalization = normalizer(integrator(pdf_integrand))
 
         def ultimate_pdf(x):
-            x_original = op.op_gather_keep_dims(x, -1, axis=-1)
-            pdf_integrand = op.op_multiply([division_by_x(x_original), layer_fitbasis(x)])
-            normalization = normalizer(integrator(pdf_integrand))
             return layer_pdf(x)*normalization
 
         return ultimate_pdf
 
     return apply_normalization, xgrid_input
-
-
-# #########
-# 
-# 
-#     def pdf_integrand(x):
-#         """ If a scaler is given, the division needs to take only the original input """
-#         x_original = op.op_gather_keep_dims(x, -1, axis=-1)
-#         res = op.op_multiply([division_by_x(x_original), fit_layer(x)])
-#         return res
-# 
-# 
-#     # 4. Now create the normalization by selecting the right integrations
-#     normalizer = MSR_Normalization(input_shape=(8,), mode=mode)
-# 
-#     # 5. Make the xgrid numpy array into a backend input layer so it can be given
-#     xgrid_input = op.numpy_to_input(xgrid)
-#     normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
-# 
-#     def ultimate_pdf(x):
-#         return op.op_multiply_dim([final_pdf_layer(x), normalization])
-# 
-#     # Save a reference to xgrid in ultimate_pdf, very useful for debugging
-#     ultimate_pdf.ref_xgrid = xgrid_input
-# 
-#     return ultimate_pdf, xgrid_input

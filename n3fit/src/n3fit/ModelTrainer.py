@@ -330,7 +330,7 @@ class ModelTrainer:
         if self._scaler:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
-        input_layer = operations.numpy_to_input(input_arr)
+        input_layer = op.numpy_to_input(input_arr)
 
         # The trainable part of the n3fit framework is a concatenation of all PDF models
         # each model, in the NNPDF language, corresponds to a different replica
