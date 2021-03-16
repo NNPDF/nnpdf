@@ -240,6 +240,13 @@ def transpose(tensor, **kwargs):
     return K.transpose(tensor, **kwargs)
 
 
+def stack(tensor_list, axis=0, **kwargs):
+    """ Stack a list of tensors
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
+    """
+    return tf.stack(tensor_list, axis=axis, **kwargs)
+
+
 def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     """
     Concatenates a list of numbers or tensor into a bigger tensor
@@ -261,7 +268,7 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     Parameters
     ----------
         pdf: tf.tensor
-            rank 3 (batchsize, xgrid, flavours)
+            rank 4 (batchsize, xgrid, flavours, replicas)
         basis_mask: tf.tensor
             rank  2 tensor (flavours, flavours)
             mask to apply to the pdf convolution
@@ -272,12 +279,18 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
             rank3 (len(mask_true), xgrid, xgrid)
     """
     pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
-    luminosity = tensor_product(pdf, pdf, axes=0)
+    luminosity = tf.einsum('air,bjr->jibar', pdf, pdf)
     # (xgrid, flavour, xgrid, flavour)
-    # reshape to put the flavour indices at the beginning to apply mask
-    lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
-    pdf_x_pdf = boolean_mask(lumi_tmp, basis_mask)
+    pdf_x_pdf = boolean_mask(luminosity, basis_mask)
     return pdf_x_pdf
+
+
+def einsum(equation, *args, **kwargs):
+    """
+    Computes the tensor product using einsum
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/einsum>`_
+    """
+    return tf.einsum(equation, *args, **kwargs)
 
 
 def tensor_product(*args, **kwargs):
@@ -328,3 +341,13 @@ def op_subtract(inputs, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
     """
     return keras_subtract(inputs, **kwargs)
+
+
+@tf.function
+def backend_function(fun_name, *args, **kwargs):
+    """
+    Wrapper to call non-explicitly implemented backend functions by name: (``fun_name``)
+    see full `docs <https://keras.io/api/utils/backend_utils/>`_ for some possibilities
+    """
+    fun = getattr(K, fun_name)
+    return fun(*args, **kwargs)
