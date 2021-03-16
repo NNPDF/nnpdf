@@ -6,7 +6,6 @@ import operator
 import functools
 import numpy as np
 from n3fit.backends import operations as op
-from n3fit.backends import losses
 
 # General parameters
 DIM = 7
@@ -117,34 +116,3 @@ def test_tensor_product():
 
 def test_sum():
     numpy_check(op.sum, np.sum, mode='single')
-
-
-# Tests loss functions
-def test_l_invcovmat():
-    loss_f = losses.l_invcovmat(INVCOVMAT)
-    result = loss_f(T1, T2)
-    y = ARR1 - ARR2
-    tmp = np.dot(INVCOVMAT, y)
-    reference = np.dot(y, tmp)
-    are_equal(result, reference)
-
-
-def test_l_positivity():
-    alpha = 1e-7
-    loss_f = losses.l_positivity(alpha=alpha)
-    result = loss_f(0.0, T1)
-
-    def elu_sum(yarr_in):
-        """ Applies Exponential Linear Unit
-        to an array and sums it up """
-        yarr = -yarr_in
-        res = 0.0
-        for y in yarr:
-            if y > 0:
-                res += y
-            else:
-                res += alpha * (np.exp(y) - 1)
-        return res
-
-    reference = elu_sum(ARR1)
-    are_equal(result, reference)

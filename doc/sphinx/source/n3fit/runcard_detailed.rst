@@ -9,8 +9,9 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`networkarch-label`
 - :ref:`optimizer-label`
 - :ref:`positivity-label`
-- :ref:`otheroptions-label`
 - :ref:`tensorboard-label`
+- :ref:`parallel-label`
+- :ref:`otheroptions-label`
 
 
 .. _preprocessing-label:
@@ -206,24 +207,6 @@ Threshold :math:`\chi2`
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
 
-Save and load weights of the model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: yaml
-
-    fitting:
-        save: "weights.h5"
-        load: "weights.h5"
-
-- ``save``: saves the weights of the PDF model in the selected file in the replica folder.
-- ``load``: loads the weights of the PDF model from the selected file.
-
-Since the weights depend only on the architecture of the Neural Network,
-it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
-and load it in a different runcard and continue the training from there.
-
-While the load file is read as an absolute path, the file to save to will be found
-inside the replica folder.
 
 
 .. _tensorboard-label:
@@ -258,3 +241,54 @@ Logging details can be visualized in the browser with the following command:
 Logging details will include the value of the loss for each experiment over time,
 the values of the weights of the NN,
 as well as a detailed analysis of the amount of time that TensorFlow spent on each operation.
+
+          
+.. _parallel-label:
+
+Running fits in parallel
+------------------------
+
+It is possible to run fits in parallel with ``n3fit`` by using the ``parallel_models``
+flag in the runcard (by default the number of ``parallel_models`` is set to 1).
+Running in parallel can be quite hard on memory and it is only advantageous when
+fitting on a GPU, where one can find a speed up equal to the number of models run
+in parallel (each model being a different replica).
+
+At present it cannot be used together with the ``hyperopt`` module.
+
+
+.. _otheroptions-label:
+
+Other options
+-------------
+
+Threshold :math:`\chi2`
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    fitting:
+        parameters:
+            threshold_chi2: 4.0
+
+- ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
+
+
+Save and load weights of the model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    fitting:
+        save: "weights.h5"
+        load: "weights.h5"
+
+- ``save``: saves the weights of the PDF model in the selected file in the replica folder.
+- ``load``: loads the weights of the PDF model from the selected file.
+
+Since the weights depend only on the architecture of the Neural Network,
+it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
+and load it in a different runcard and continue the training from there.
+
+While the load file is read as an absolute path, the file to save to will be found
+inside the replica folder.

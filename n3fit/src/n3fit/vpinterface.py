@@ -18,12 +18,14 @@
 
 
 """
+import logging
 import numpy as np
 import numpy.linalg as la
 from validphys.core import PDF, MCStats
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
 from validphys.arclength import integrability_number, arc_lengths
 
+log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
 EVOL_LIST = [
     "photon",
@@ -83,13 +85,23 @@ class N3PDF(PDF):
         """Outputs all weights of the NN as numpy.ndarrays """
         return self.model.get_weights()
 
-    def get_preprocessing_factors(self):
+    def get_preprocessing_factors(self, replica=None):
         """Loads the preprocessing alpha and beta arrays from the PDF trained model.
         If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
         to generate a new dictionary with the names, the exponent and whether they are trainable
         otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
         """
-        preprocessing_layer = self.model.get_layer("pdf_prepro")
+        # If the replica is given, get the requested preprocessing layer
+        # otherwise, search for any pdf_prepro_X layer within the model
+        if replica is not None:
+            preprocessing_layer = self.model.get_layer(f"pdf_prepro_{replica}")
+        else:
+            preprocessing_layers = self.model.get_layer_re("pdf_prepro_\d")
+            if len(preprocessing_layers) != 1:
+                # We really don't want to fail at this point, but print a warning at least...
+                log.warning("More than one preprocessing layer found within the model!")
+            preprocessing_layer = preprocessing_layers[0]
+
         if self.fit_basis is not None:
             output_dictionaries = []
             for d in self.fit_basis:

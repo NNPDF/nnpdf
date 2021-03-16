@@ -141,6 +141,7 @@ def test_performfit_and_timing(tmp_path):
     auxiliary_performfit(tmp_path, replica=2, timing=True)
 
 
+@pytest.mark.skip(reason="Still not implemented in parallel mode")
 def test_hyperopt(tmp_path):
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
