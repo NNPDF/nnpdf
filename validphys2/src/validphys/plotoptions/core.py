@@ -6,7 +6,6 @@ Created on Fri Mar 11 19:27:44 2016
 """
 import dataclasses
 import enum
-from functools import partial
 import logging
 import typing
 
