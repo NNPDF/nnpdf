@@ -826,7 +826,7 @@ class ModelTrainer:
 
             if self.no_validation:
                 # Substitute the validation model with the training model
-                model["validation"] = model["training"]
+                models["validation"] = models["training"]
                 validation_model = models["training"]
             else:
                 validation_model = models["validation"]
