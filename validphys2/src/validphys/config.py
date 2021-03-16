@@ -407,8 +407,15 @@ class CoreConfig(configparser.Config):
             )
 
         for ns in nss:
-            with self.set_context(ns=self._curr_ns.new_child(ns)):
-                cut_list.append(self._produce_internal_cuts(commondata))
+            with self.set_context(
+                ns=self._curr_ns.new_child(ns).new_child(
+                    {"use_cuts": CutsPolicy.INTERNAL}
+                )
+            ):
+                # Note: Do not call _produce_internal_cuts directly here:
+                # That doesn't correctly set the namespace in a way that `rules`
+                # can be recovered, as there is no dataset_input object.
+                cut_list.append(self.parse_from_(None, "cuts", write=False)[1])
         ndata = commondata.ndata
         return MatchedCuts(cut_list, ndata=ndata)
 
