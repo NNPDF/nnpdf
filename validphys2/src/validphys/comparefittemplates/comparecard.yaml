@@ -48,7 +48,7 @@ Scales:
 PDFnormalize:
   - Normtitle: Absolute
 
-  - normalize_to: 1
+  - normalize_to: 2
     Normtitle: Ratio
 
 Basespecs:
@@ -62,6 +62,20 @@ PDFscalespecs:
     Xscaletitle: Log
   - xscale: linear
     Xscaletitle: Linear
+
+Energies:
+  - sqrts: 13000
+    Energytitle: "13 TeV"
+
+lumi_channels:
+  - gg
+  - gq
+  - qq
+  - qqbar
+  - uubar
+  - ddbar
+  - udbar
+  - dubar
 
 Distspecs:
   - ymin: 0
@@ -80,6 +94,10 @@ pdf_report:
 exponents_report:
   meta: Null
   template: exponents.md
+
+lumi_report:
+  meta: Null
+  template: lumi.md
 
 template: report.md
 
@@ -117,7 +135,7 @@ dataspecs:
       from_: reference
 
 Normalize:
-  normalize_to: 1
+  normalize_to: 2
 
 Datanorm:
   normalize_to: data

@@ -50,6 +50,7 @@ providers = [
              'validphys.covmats',
              'validphys.hyperoptplot',
              'validphys.deltachi2',
+             'validphys.n3fit_data',
              'reportengine.report',
             ]
 

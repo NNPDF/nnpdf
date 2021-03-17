@@ -390,8 +390,6 @@ input
 
 .. code:: yaml
 
-    metadata_group: nnpdf31_process
-
     experiments:
      - experiment: NMC
        datasets:
@@ -417,18 +415,6 @@ input
 The user should be aware, however, that any grouping introduced in this way is
 purely superficial and will be ignored in favour of the experiments defined by
 the metadata of the datasets.
-
-*IMPORTANT*: Note that all theory uncertainties runcards will need to be
-updated to explicitly set ``metadata_group: nnpdf31_process``, or else the
-prescriptions for scale variations will not vary scales coherently for data
-within the same process type, as usually desired, but rather for data within
-the same experiment. When running the examples in
-:ref:`theory-covmat-examples`, it should be obvious if this has been set
-because the outputs will be plots grouped by experiment rather than by process
-type. However, care must be taken when using the theory covariance matrix but
-not plotting anything, since the aforementioned check is not relevant. For
-example, if you only want to produce a 𝞆² you must be careful to set the
-``metadata_group`` key as above.
 
 Runcards that request actions that have been renamed will not work anymore.
 Generally, actions that were previously named ``experiments_*`` have been

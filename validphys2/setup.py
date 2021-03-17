@@ -10,7 +10,7 @@ with open('README.md') as f:
     long_desc = f.read()
 
 setup(name= "validphys",
-      version = '2.0b2',
+      version = '4.0',
       description = "NNPDF analysis framework",
       author = "Zahari Kassabov",
       author_email = "kassabov@to.infn.it",

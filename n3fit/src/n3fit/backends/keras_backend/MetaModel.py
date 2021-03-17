@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
-from n3fit.backends.keras_backend.operations import numpy_to_tensor
+from n3fit.backends.keras_backend.operations import numpy_to_tensor, numpy_to_input
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split('.')
@@ -26,8 +26,9 @@ optimizers = {
     "Adagrad": (Kopt.Adagrad, {}),
     "Adadelta": (Kopt.Adadelta, {"learning_rate": 1.0}),
     "Adamax": (Kopt.Adamax, {}),
-    "Nadam": (Kopt.Nadam, {"learning_rate": 0.01}),
+    "Nadam": (Kopt.Nadam, {"learning_rate": 0.001}),
     "Amsgrad": (Kopt.Adam, {"learning_rate": 0.01, "amsgrad": True}),
+    "SGD": (Kopt.SGD, {"learning_rate": 0.01, "momentum": 0.0, "nesterov": False}),
 }
 
 # Some keys need to work for everyone
@@ -85,7 +86,7 @@ class MetaModel(Model):
 
     accepted_optimizers = optimizers
 
-    def __init__(self, input_tensors, output_tensors, **kwargs):
+    def __init__(self, input_tensors, output_tensors, scaler=None, **kwargs):
         self.has_dataset = False
 
         input_list = input_tensors
@@ -105,36 +106,52 @@ class MetaModel(Model):
             # if it is not a dict but also not a list, make it into a 1-element list and pray
             output_list = [output_list]
 
-        super(MetaModel, self).__init__(input_list, output_list, **kwargs)
-        self.x_in = {}
-        self.tensors_in = {}
+        # Note: there used to be two possible options when creating a model:
+        # - Give placeholder tensors (for which the content will be given at run time)
+        # - Give tensors with content* (for which the content is stored with the model
+        # *this option was dropped at some point by TF, the code below keeps this behaviour
+        # We will store within the model the following quantities:
+        #   -> x_in: arrays containing the x-input to the model
+        #   -> tensors_in: when the x-input is known at compile time, we store a reference to the tensor
+        # We pass TensorFlow a dictionary {k: tensor} containing placeholders which will be automatically filled
+        # whenever x_in/tensor_in is known at compile time
+
+        x_in = {}
+        tensors_in = {}
+        input_dict = {}
         for input_tensor in input_list:
             # If the input contains a tensor_content, store it to use at predict/fit/eval times
             # otherwise, put a placeholder None as it will come from the outside
             name = input_tensor.name.rsplit(":",1)[0]
+            input_dict[name] = input_tensor
             try:
-                self.x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
-                self.tensors_in[name] = input_tensor
+                x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
+                tensors_in[name] = input_tensor
             except AttributeError:
-                self.x_in[name] = None
-                self.tensors_in[name] = None
+                x_in[name] = None
+                tensors_in[name] = None
 
-        self.all_inputs = input_list
-        self.all_outputs = output_list
+        super().__init__(input_dict, output_list, **kwargs)
+
+        self.x_in = x_in
+        self.tensors_in = tensors_in
+
         self.target_tensors = None
         self.eval_fun = None
+        self._scaler = scaler
 
-    def _parse_input(self, extra_input=None, pass_content=True):
-        """ Returns the input tensors the model was compiled with.
-        Introduces the extra_input in the places asigned to the
-        placeholders.
+    def _parse_input(self, extra_input=None):
+        """ Returns the input data the model was compiled with.
+        Introduces the extra_input in the places asigned to the placeholders.
 
-        If ``pass_content`` is set to ``False``, pass the tensor object.
+        If the model was generated with a scaler, the input will be scaled accordingly
         """
-        if pass_content:
-            return _fill_placeholders(self.x_in, extra_input)
-        else:
-            return _fill_placeholders(self.tensors_in, extra_input)
+        if isinstance(extra_input, dict) and self._scaler is not None:
+            extra_input = {k: self._scaler(i) for k,i in extra_input.items()}
+        elif isinstance(extra_input, (tuple, list)) and self._scaler is not None:
+            extra_input = [self._scaler(i) for i in extra_input]
+        return _fill_placeholders(self.x_in, extra_input)
+
 
     def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
@@ -154,7 +171,7 @@ class MetaModel(Model):
             loss_dict: dict
                 a dictionary with all partial losses of the model
         """
-        x = self._parse_input(self.x_in)
+        x = self._parse_input(x)
         if y is None:
             y = self.target_tensors
         history = super().fit(x=x, y=y, epochs=epochs, **kwargs,)
@@ -203,7 +220,7 @@ class MetaModel(Model):
         Wrapper around evaluate to take into account the case in which the data is already known
         when the model is compiled.
         """
-        x = self._parse_input(self.x_in)
+        x = self._parse_input(x)
         if LEGACY and y is None:
             y = self.target_tensors
         result = super().evaluate(x=x, y=y, **kwargs)
@@ -361,11 +378,11 @@ class MetaModel(Model):
 
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
-        x = self._parse_input(x, pass_content=False)
+        all_input = _fill_placeholders(self.tensors_in, x)
         try:
-            return super().__call__(x)
+            return all_input, super().__call__(all_input)
         except ValueError:
             # TF < 2.1
             # TF 2.0 seems to fail with ValueError when passing a dictionary as an input
-            y = x.values()
-            return super().__call__(y)
+            y = all_input.values()
+            return all_input, super().__call__(y)

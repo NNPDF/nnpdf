@@ -376,94 +376,112 @@ class CoreConfig(configparser.Config):
         """Maximum relative ratio when using `fromsimilarpredictons` cuts."""
         return th
 
-    def produce_cuts(
-        self, *, commondata, use_cuts, rules, fit=None, theoryid=None,
-    ):
+    def _produce_fit_cuts(self, commondata):
+        """Produce fit and then attempt to load cuts from that fit."""
+        name = commondata.name
+        _, fit = self.parse_from_(None, "fit", write=False)
+        try:
+            return self.loader.check_fit_cuts(name, fit)
+        except LoadFailedError as e:
+            raise ConfigError(e) from e
+
+    def _produce_internal_cuts(self, commondata):
+        """Produce internal cut rules and then load cuts from those rules."""
+        _, rules = self.parse_from_(None, "rules", write=False)
+        return self.loader.check_internal_cuts(commondata, rules)
+
+    def _produce_matched_cuts(self, commondata):
+        """Parse the ``cuts_intersection_spec``, a namespace list.
+
+        For each namespace produce internal cuts and pass these to matched cuts.
+        The matched cuts are the intersection of each of the inner internal cuts.
+
+        Notes
+        -----
+        The cuts index the points which *survive* the cuts, the naming is
+        slightly confusing in that regard.
+
+        """
+        cut_list = []
+        _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
+        self._check_dataspecs_type(nss)
+
+        if not nss:
+            raise ConfigError(
+                "'cuts_intersection_spec' must contain at least one namespace."
+            )
+
+        for ns in nss:
+            with self.set_context(ns=self._curr_ns.new_child(ns)):
+                cut_list.append(self._produce_internal_cuts(commondata))
+        ndata = commondata.ndata
+        return MatchedCuts(cut_list, ndata=ndata)
+
+    def _produce_similarity_cuts(self, commondata):
+        """For two namespaces, produce some matched cuts. Then produce the
+        central predictions for each of the namespaces which are used to produce
+        some similarity cuts. These cut points when the difference between the
+        two sets of central predictions divide normalised by the experimental
+        standard deviation exceeds some ``cut_similarity_threshold``.
+
+        """
+        _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
+        if len(nss) != 2:
+            raise ConfigError("Can only work with two namespaces")
+        _, cut_similarity_threshold = self.parse_from_(
+            None, "cut_similarity_threshold", write=False
+        )
+        # slightly circular here, since matched cuts will re-produce nss
+        matched_cuts = self._produce_matched_cuts(commondata)
+        name = commondata.name
+        inps = []
+        for i, ns in enumerate(nss):
+            with self.set_context(ns=self._curr_ns.new_child({**ns,})):
+                # TODO: find a way to not duplicate this and use a dict
+                # instead of a linear search
+                _, dins = self.parse_from_(None, "dataset_inputs", write=False)
+            try:
+                di = next(d for d in dins if d.name == name)
+            except StopIteration as e:
+                raise ConfigError(
+                    f"cuts_intersection_spec namespace {i}: dataset inputs must define {name}"
+                ) from e
+
+            with self.set_context(
+                ns=self._curr_ns.new_child(
+                    {
+                        "dataset_input": di,
+                        "use_cuts": CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE,
+                        "cuts": matched_cuts,
+                        **ns,
+                    }
+                )
+            ):
+                _, ds = self.parse_from_(None, "dataset", write=False)
+                _, pdf = self.parse_from_(None, "pdf", write=False)
+            inps.append((ds, pdf))
+        return SimilarCuts(tuple(inps), cut_similarity_threshold)
+
+    def produce_cuts(self, *, commondata, use_cuts):
         """Obtain cuts for a given dataset input, based on the
-        appropriate policy."""
-        # TODO: Put this bit of logic into loader.check_cuts
+        appropriate policy.
+
+        """
         if use_cuts is CutsPolicy.NOCUTS:
             return None
         elif use_cuts is CutsPolicy.FROMFIT:
-            if not fit:
-                raise ConfigError(
-                    "Setting 'use_cuts' to 'fromfit' requires "
-                    "specifying a fit on which filter "
-                    "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118"
-                )
-            name = commondata.name
-            try:
-                return self.loader.check_fit_cuts(name, fit)
-            except LoadFailedError as e:
-                raise ConfigError(e) from e
+            return self._produce_fit_cuts(commondata)
         elif use_cuts is CutsPolicy.INTERNAL:
-            if not theoryid:
-                raise ConfigError("theoryid must be specified for internal cuts")
-            return self.loader.check_internal_cuts(commondata, rules)
-        elif (
-            use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE
-            or use_cuts is CutsPolicy.FROM_SIMILAR_PREDICTIONS_NAMESPACE
-        ):
-            cut_list = []
-            _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)
-            self._check_dataspecs_type(nss)
-            if not nss:
-                raise ConfigError(
-                    "'cuts_intersection_spec' must contain at least one namespace."
-                )
-
-            ns_cut_inputs = {"commondata": commondata, "use_cuts": CutsPolicy.INTERNAL}
-            for ns in nss:
-                with self.set_context(
-                    ns=self._curr_ns.new_child({**ns, **ns_cut_inputs})
-                ):
-                    _, nscuts = self.parse_from_(None, "cuts", write=False)
-                    cut_list.append(nscuts)
-            ndata = commondata.ndata
-            matched_cuts = MatchedCuts(cut_list, ndata=ndata)
-            if use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
-                return matched_cuts
-            else:
-                if len(nss) != 2:
-                    raise ConfigError("Can only work with two namespaces")
-                _, cut_similarity_threshold = self.parse_from_(
-                    None, "cut_similarity_threshold", write=False
-                )
-                name = commondata.name
-                inps = []
-                for i, ns in enumerate(nss):
-                    with self.set_context(ns=self._curr_ns.new_child({**ns,})):
-                        # TODO: find a way to not duplicate this and use a dict
-                        # instead of a linear search
-                        _, dins = self.parse_from_(None, "dataset_inputs", write=False)
-                    try:
-                        di = next(d for d in dins if d.name == name)
-                    except StopIteration as e:
-                        raise ConfigError(
-                            f"cuts_intersection_spec namespace {i}: dataset inputs must define {name}"
-                        ) from e
-
-                    with self.set_context(
-                        ns=self._curr_ns.new_child(
-                            {
-                                "dataset_input": di,
-                                "use_cuts": CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE,
-                                "cuts": matched_cuts,
-                                **ns,
-                            }
-                        )
-                    ):
-                        _, ds = self.parse_from_(None, "dataset", write=False)
-                        _, pdf = self.parse_from_(None, "pdf", write=False)
-                    inps.append((ds, pdf))
-                return SimilarCuts(tuple(inps), cut_similarity_threshold)
-
+            return self._produce_internal_cuts(commondata)
+        elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+            return self._produce_matched_cuts(commondata)
+        elif use_cuts is CutsPolicy.FROM_SIMILAR_PREDICTIONS_NAMESPACE:
+            return self._produce_similarity_cuts(commondata)
         raise TypeError("Wrong use_cuts")
 
     def produce_dataset(
         self,
         *,
-        rules,
         dataset_input,
         theoryid,
         cuts,
@@ -483,7 +501,6 @@ class CoreConfig(configparser.Config):
 
         try:
             ds = self.loader.check_dataset(
-                rules=rules,
                 name=name,
                 sysnum=sysnum,
                 theoryid=theoryid,
@@ -1357,6 +1374,9 @@ class CoreConfig(configparser.Config):
 
     def produce_group_dataset_inputs_by_experiment(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
+
+    def produce_group_dataset_inputs_by_process(self, data_input):
+        return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point

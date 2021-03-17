@@ -1,8 +1,8 @@
 ```eval_rst
 .. _server:
 ```
-Server configuration
-====================
+Servers
+=======
 
 The NNPDF collaboration employs a storage server that host various data files,
 meant for both public and internal consumption. It hosts the following URLs:
@@ -19,9 +19,9 @@ SSH is used to interact with the server, as described in [Access](#access)
 below.
 
 
-The NNPDF server is a virtual machine (VM) maintained by 
-the Centro Calcolo at the physics department of the 
-University of Milan. The machine has 2 CPUs, 4GB of RAM, 
+The NNPDF server is a virtual machine (VM) maintained by
+the Centro Calcolo at the physics department of the
+University of Milan. The machine has 2 CPUs, 4GB of RAM,
 1 TB of disk and it is running CentOS7.
 
 The full disk is backed up every week by the Centro Calcolo.
@@ -41,7 +41,7 @@ The access to the server is provided by
 `ssh`/[`vp-upload`](upload) with the following restrictions:
 
 - `ssh` access to `root` is forbidden.
-- There is a shared `nnpdf` user with low privileges. In order to login 
+- There is a shared `nnpdf` user with low privileges. In order to login
 the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
 The `nnpdf` is not allowed to login with password.
 
@@ -85,7 +85,7 @@ The relevant passwords can be found
 ```eval_rst
 .. _web-scripts:
 ```
-Web Scripts
+Web scripts
 -----------
 
 Validphys2 interacts with the NNPDF server by [downloading resources](download)
@@ -198,7 +198,7 @@ server {
     listen  80;
     listen [::]:80;
     server_name vp.nnpdf.science;
-    
+
     root /home/nnpdf/WEB/validphys-reports;
     location / {
       try_files $uri $uri/ =404;
@@ -258,7 +258,7 @@ packages.nnpdf.science.	1799	IN	A	159.149.47.24
 SSL encription is provided by [Let's Encrypt](https://letsencrypt.org).
 The certificates are created using the `certbot` program with the `nginx` module.
 
-In order to create new ssl certificates, first prepare the `nginx` server block 
+In order to create new ssl certificates, first prepare the `nginx` server block
 configuration file and then run the interactive command:
 ```
 sudo certbot --nginx -d <domain>
@@ -267,8 +267,3 @@ This will ask you several questions, including if you would like to automaticall
 update the `nginx` server block file. We fully recommend this approach.
 
 The certificate is automatically renewed by a [cron job](#cron-jobs).
-
-
-
-
-

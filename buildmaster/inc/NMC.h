@@ -47,3 +47,19 @@ class NMCpd_shFilter: public CommonData
 private:
   void ReadData();
 };
+
+class NMCpd_dw_iteFilter: public CommonData
+{ public: NMCpd_dw_iteFilter():
+  CommonData("NMCPD_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class NMCpd_sh_iteFilter: public CommonData
+{ public: NMCpd_sh_iteFilter():
+  CommonData("NMCPD_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};

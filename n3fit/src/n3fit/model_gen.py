@@ -7,6 +7,7 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
+import numpy as np
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -360,6 +361,7 @@ def pdfNN_layer_generator(
     regularizer=None,
     regularizer_args=None,
     impose_sumrule=False,
+    scaler=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -446,6 +448,9 @@ def pdfNN_layer_generator(
         nodes = [15, 8]
     ln = len(nodes)
 
+    if scaler:
+        inp = 1
+
     if activations is None:
         activations = ["tanh", "linear"]
     elif callable(activations):
@@ -484,18 +489,33 @@ def pdfNN_layer_generator(
             inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
         )
 
-    # If the input is of type (x, logx)
-    # create a x --> (x, logx) layer to preppend to everything
-    if inp == 2:
-        add_log = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+    placeholder_input = Input(shape=(None, 1), batch_size=1)
+    subtract_one = False
+    process_input = Lambda(lambda x: x)
+    input_x_eq_1 = [1.0]
+    # When scaler is active we also want to do the subtraction of large x
+    # TODO: make it its own option (i.e., one could want to use this without using scaler)
+    if scaler:
+        # change the input domain [0,1] -> [-1,1]
+        process_input = Lambda(lambda  x: 2*x-1)
+        subtract_one = True
+        input_x_eq_1 = scaler([1.0])[0]
+        placeholder_input = Input(shape=(None, 2), batch_size=1)
+    elif inp==2:
+        # If the input is of type (x, logx)
+        # create a x --> (x, logx) layer to preppend to everything
+        process_input = Lambda(lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1))
+
+    model_input = [placeholder_input]
+    if subtract_one:
+        layer_x_eq_1 = operations.numpy_to_input(np.array(input_x_eq_1).reshape(1,1))
+        model_input.append(layer_x_eq_1)
 
     def dense_me(x):
         """Takes an input tensor `x` and applies all layers
         from the `list_of_pdf_layers` in order"""
-        if inp == 1:
-            curr_fun = list_of_pdf_layers[0](x)
-        else:
-            curr_fun = list_of_pdf_layers[0](add_log(x))
+        processed_x = process_input(x)
+        curr_fun = list_of_pdf_layers[0](processed_x)
 
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
@@ -508,7 +528,8 @@ def pdfNN_layer_generator(
         name="pdf_prepro",
         flav_info=flav_info,
         seed=preproseed,
-        output_dim=last_layer_nodes
+        output_dim=last_layer_nodes,
+        large_x = not subtract_one
     )
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
@@ -517,9 +538,20 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
 
-    # Apply preprocessing and basis
+    # Apply extrapolation and basis
     def layer_fitbasis(x):
-        ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
+        """ The tensor x has a expected shape of (1, None, {1,2})
+        where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
+        """
+        x_scaled = operations.op_gather_keep_dims(x, 0, axis=-1)
+        x_original = operations.op_gather_keep_dims(x, -1, axis=-1)
+
+        nn_output = dense_me(x_scaled)
+        if subtract_one:
+            nn_at_one = dense_me(layer_x_eq_1)
+            nn_output = operations.op_subtract([nn_output, nn_at_one])
+
+        ret = operations.op_multiply([nn_output, layer_preproc(x_original)])
         if basis_rotation.is_identity():
             # if we don't need to rotate basis we don't want spurious layers
             return ret
@@ -529,17 +561,13 @@ def pdfNN_layer_generator(
     def layer_pdf(x):
         return layer_evln(layer_fitbasis(x))
 
-    # Prepare the input for the PDF model
-    placeholder_input = Input(shape=(None, 1), batch_size=1)
-
     # Impose sumrule if necessary
     if impose_sumrule:
-        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, mode=impose_sumrule)
-        model_input = [integrator_input, placeholder_input]
+        layer_pdf, integrator_input = msr_constraints.msr_impose(layer_fitbasis, layer_pdf, scaler=scaler)
+        model_input.append(integrator_input)
     else:
         integrator_input = None
-        model_input = [placeholder_input]
 
-    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF")
+    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input), name="PDF", scaler=scaler)
 
     return pdf_model
