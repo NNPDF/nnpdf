@@ -172,7 +172,7 @@ which penalizes fit solutions where the integrable distributions do not decrease
 
 The specific points \\(x_i\\) used in this Lagrange multiplier term depend on the basis in which the fit is performed:
 when working in the evolution basis, integrability is already imposed through the choice of preprocessing exponents, and therefore a single small-\\(x\\) point \\(x=10^{-9}\\) is used; when working in the flavour basis, no small-\\(x\\) preprocessing term is implemented, and therefore more stringent integrability conditions are used to enforce an integrable small-\\(x\\) behaviour.
-In particular the three small-x points \\(x_i = 10^{−5} , 10^{−4} , 10^{−3}\\) are used in the definition of the Lagrange multiplier term above.
+In particular, the three small-x points \\(x_i = 10^{−5} , 10^{−4} , 10^{−3}\\) are used in the definition of the Lagrange multiplier term above.
 After the fit, the `postfit` script will retain just those replicas satisfying a given numerical definition of integrability, as documented
 in the [postfit](#postfit-selection-criteria) section. 
 
