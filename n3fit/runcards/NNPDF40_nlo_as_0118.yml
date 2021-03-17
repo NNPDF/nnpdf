@@ -1,8 +1,7 @@
 #
 # Configuration file for NNPDF++
 #
-############################################################
-description: "NNPDF4.0 NNLO global, deuteron and nuclear uncertainties t0 and preprocessing iterated. Runcard for the baseline NNLO fit. alphas=0.118"
+description: "NNPDF4.0 NLO global, deuteron and nuclear uncertainties t0 and preprocessing iterated. Runcard for the baseline NLO fit, pending iteration. alphas=0.118"
 
 ############################################################
 # frac: training fraction
@@ -42,11 +41,15 @@ NLODatasets: &NLODatasets
 - {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: []}               
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: []}               
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: []}             
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM, ]}       
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM]}       
 - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}         
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}         
-- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [], sys: 10}
-- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [], sys: 10}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}
+- {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 1.0, cfac: []}
+- {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 1.0, cfac: []}
+
+
+- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: []}
+- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: []}
 - {dataset: ATLASTTBARTOT, frac: 1.0, cfac: []}
 - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: []}                 
 - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0, cfac: []}                
@@ -64,7 +67,7 @@ NLODatasets: &NLODatasets
 - {dataset: CMSWMASY47FB, frac: 1.0, cfac: []}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: []}
 - {dataset: CMSWMU8TEV, frac: 1.0, cfac: []}
-- {dataset: CMSZDIFF12, frac: 1.0, cfac: [NRM], sys: 10}
+- {dataset: CMSZDIFF12, frac: 1.0, cfac: [NRM]}
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: []}                                   
 - {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: []}                               
 - {dataset: CMSTTBARTOT, frac: 1.0, cfac: []}
@@ -75,7 +78,9 @@ NLODatasets: &NLODatasets
 - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 1.0, cfac: []}                 
 - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 1.0, cfac: []}                      
 - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0, cfac: []}                        
-- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: []}                       
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: []}
+- {dataset: CMSWCHARMTOT, frac: 1.0}
+- {dataset: CMSWCHARMRAT, frac: 1.0}
 - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV}
 - {dataset: LHCBZ940PB, frac: 1.0, cfac: []}
 - {dataset: LHCBZEE2FB, frac: 1.0, cfac: []}
@@ -120,7 +125,9 @@ NNLODatasets: &NNLODatasets
 - {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}               
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}             
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM, QCD]}       
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM, QCD]}
+# - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 1.0} # No Cfactors at NNLO
+# - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 1.0} # No Cfactors at NNLO
 - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
@@ -153,7 +160,9 @@ NNLODatasets: &NNLODatasets
 - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 1.0, cfac: [QCD]}                 
 - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 1.0, cfac: [QCD]}                      
 - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0, cfac: [QCD]}                        
-- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}                       
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}
+# - {dataset: CMSWCHARMTOT, frac: 1.0} # No Cfactors at NNLO
+# - {dataset: CMSWCHARMRAT, frac: 1.0} # No Cfactors at NNLO
 # - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV} # No Cfactors at NNLO
 - {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
 - {dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD]}
@@ -164,6 +173,10 @@ NNLODatasets: &NNLODatasets
 
 
 do_not_require_similarity_for:
+    - ATLAS_WCHARM_WP_DIFF_7TEV
+    - ATLAS_WCHARM_WM_DIFF_7TEV
+    - CMSWCHARMTOT
+    - CMSWCHARMRAT
     - CMS_WCHARM_DIFF_UNNORM_13TEV
 
 
