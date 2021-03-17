@@ -63,8 +63,8 @@ class WriterWrapper:
         integrability_numbers = self.pdf_object.integrability_numbers()
         # Construct the chi2exp file
         allchi2_lines = self.stopping_object.chi2exps_str()
-        # Construct the preproc file
-        preproc_lines = ""  # TODO decide how to fill up this in a sensible way
+        # Construct the preproc file (the information is only in the json file)
+        preproc_lines = "" 
 
         # Check the directory exist, if it doesn't, generate it
         os.makedirs(replica_path_set, exist_ok=True)

@@ -366,21 +366,28 @@ class ModelTrainer:
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
+
         output_tr = _pdf_injection(splitted_pdf, self.training["output"], training_mask)
         training = MetaModel(full_model_input_dict, output_tr)
 
+        # Validation skips integrability and the "true" chi2 skips also positivity,
+        # so we must only use the corresponding subset of PDF functions
+        val_pdfs = []
+        exp_pdfs = []
+        for partial_pdf, obs in zip(splitted_pdf, self.training["output"]):
+            if not obs.positivity and not obs.integrability:
+                val_pdfs.append(partial_pdf)
+                exp_pdfs.append(partial_pdf)
+            elif not obs.integrability and obs.positivity:
+                val_pdfs.append(partial_pdf)
+
         # We don't want to included the integrablity in the validation
-        n_val = len(self.validation["output"])
-        output_vl = _pdf_injection(splitted_pdf[:n_val], self.validation["output"], validation_mask)
+        output_vl = _pdf_injection(val_pdfs, self.validation["output"], validation_mask)
         validation = MetaModel(full_model_input_dict, output_vl)
 
         # Or the positivity in the total chi2
-        n_exps = len(self.experimental["output"])
-        output_ex = _pdf_injection(splitted_pdf[:n_exps], self.experimental["output"], experimental_mask)
+        output_ex = _pdf_injection(exp_pdfs, self.experimental["output"], experimental_mask)
         experimental = MetaModel(full_model_input_dict, output_ex)
-
-        # TODO: here we rely in the order to remove some PDFs, instead we should loop over the biggest loop
-        # and remove all integrablity or positivity wherever needed
 
         if self.print_summary:
             training.summary()
