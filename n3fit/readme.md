@@ -25,7 +25,7 @@ Specific runcard options are discussed [here](https://docs.nnpdf.science/n3fit/r
 n3fit runcard.yml <replica_number>
 ```
 
-For a full tutorial on how to run a fit using this code please see [here](file:///media/storageSSD/Academic_Workspace/NNPDF/source/nnpdf/doc/sphinx/build/html/tutorials/run-fit.html)
+For a full tutorial on how to run a fit using this code please see [here](https://docs.nnpdf.science/tutorials/run-fit.html)
 Other relevant tutorials are the ones dedicated to [fit analysis](https://docs.nnpdf.science/tutorials/index.html#analysing-results) using [validphys 2](https://docs.nnpdf.science/vp/index.html).
 
 ### Reproducibility
