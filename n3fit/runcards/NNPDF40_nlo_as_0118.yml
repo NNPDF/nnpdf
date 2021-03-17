@@ -2,7 +2,7 @@
 # Configuration file for NNPDF++
 #
 ############################################################
-description: "NNPDF4.0 NNLO global, deuteron and nuclear uncertainties t0 and preprocessing iterated. Runcard for the baseline NNLO fit. alphas=0.118"
+description: "NNPDF4.0 NLO global, deuteron and nuclear uncertainties t0 and preprocessing iterated. Runcard for the baseline NLO fit, pending iteration. alphas=0.118"
 
 ############################################################
 # frac: training fraction
