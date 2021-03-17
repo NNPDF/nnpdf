@@ -72,7 +72,7 @@ jobs:
         do
           sleep 30s
           res=$(vp-upload $RUNCARD 2>&1)
-        enddo
+        done
         url=$( echo "${res}" | grep https )
         echo "FIT_URL=$url" >> $GITHUB_ENV
     # running validphys report
