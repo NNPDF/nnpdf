@@ -215,7 +215,7 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
     Read a trial dictionary and compute the true loss and decide whether the run passes or not
     """
     test_f = 1.0 - validation_multiplier
-    val_loss = trial_dict[KEYWORDS["vl"]]
+    val_loss = float(trial_dict[KEYWORDS["vl"]])
     if loss_target == "average":
         test_loss = np.array(trial_dict["hlosses"]).mean()
     elif loss_target == "best_worst":

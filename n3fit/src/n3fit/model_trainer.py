@@ -422,7 +422,7 @@ class ModelTrainer:
     # defines the fit and the behaviours of the Neural Networks                #
     #                                                                          #
     # These are all called by the function hyperparamizable below              #
-    # i.e., the most important function is hyperparametrizable, which is a      #
+    # i.e., the most important function is hyperparametrizable, which is a     #
     # wrapper around all of these                                              #
     ############################################################################
     def _generate_observables(
@@ -861,9 +861,9 @@ class ModelTrainer:
             )
 
             if self.mode_hyperopt:
-                # TODO: currently only working for one single replica
+                # TODO: currently only working for one single replica!
                 # If doing a hyperparameter scan we need to keep track of the loss function
-                validation_loss = stopping_object.vl_chi2
+                validation_loss = stopping_object.vl_chi2[0]
 
                 # Compute experimental loss
                 exp_loss_raw = np.take(models["experimental"].compute_losses()["loss"], -1)
@@ -879,8 +879,12 @@ class ModelTrainer:
                     break
                 for penalty in self.hyper_penalties:
                     hyper_loss += penalty(pdf_models[0], stopping_object)
-                l_hyper.append(hyper_loss)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
+
+                l_hyper.append(hyper_loss)
+                l_valid.append(validation_loss)
+                l_exper.append(experimental_loss)
+
                 if hyper_loss > self.hyper_threshold:
                     log.info(
                         "Loss above threshold (%.1f > %.1f), breaking",
@@ -892,8 +896,6 @@ class ModelTrainer:
                     l_hyper = [i * pen_mul for i in l_hyper]
                     break
 
-                l_valid.append(validation_loss)
-                l_exper.append(experimental_loss)
             # endfor
 
         if self.mode_hyperopt:
