@@ -148,7 +148,7 @@ we add to the total \\(\chi^2\\) a term of the kind
 \\( \chi^2_{k,pos} = \Lambda_k \sum_i \Theta\left(-\mathcal{O}_k\left(x_i,Q^2\right)\right) \\) ,
 
 where \\( \Lambda_k \\) is the Lagrange multiplier associated with the positivity observable \\(\mathcal{O}_k\\)
-The points \\(x_i\\) are chosen in the whole \\(x\\)-region. More precisely they consist in 10 points logarithmically spaced between \\(5 \times 10^{-7}\\) and \\(10^{-1}\\) and 10 points linearly spaced between 0.1 and 0.9.  
+The points \\(x_i\\) are chosen in the whole \\(x\\)-region. More precisely, they consist of 10 points logarithmically spaced between \\(5 \times 10^{-7}\\) and \\(10^{-1}\\) and 10 points linearly spaced between 0.1 and 0.9.  
 The scale at which positivity is imposed is taken to be \\(Q^2 = 5 GeV^2\\). 
 During the minimization, fit solutions giving negative values of
 \\(\mathcal{O}_k\\) will receive a positive contribution to the total \\( \chi^2\\) and therefore will be penalized.
@@ -177,4 +177,3 @@ After the fit, the `postfit` script will retain just those replicas satisfying a
 in the [postfit](#postfit-selection-criteria) section. 
 
 It should be noted that the positivity and integrability multipliers are hyper-parameters of the fit which require specific fine tuning through [hyper-optimization](#pos-int-hyperopt). 
-
