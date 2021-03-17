@@ -71,7 +71,7 @@ jobs:
         while echo ${res} | grep ERROR >/dev/null
         do
           sleep 30s
-          res=$(vp-upload $RUNCARD 2>&1 | grep https)
+          res=$(vp-upload $RUNCARD 2>&1)
         enddo
         url=$( echo "${res}" | grep https )
         echo "FIT_URL=$url" >> $GITHUB_ENV
