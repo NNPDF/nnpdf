@@ -4,9 +4,9 @@
 """
 
 import numpy as np
+from validphys.pdfbases import fitbasis_to_NN31IC
 from n3fit.backends import operations as op
 import n3fit.layers as layers
-from validphys.pdfbases import fitbasis_to_NN31IC
 
 
 FLAVS = 3
@@ -231,7 +231,7 @@ def test_rotation_evol():
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)    
     
-def test_Mask():
+def test_mask():
     """ Test the mask layer """
     SIZE = 100
     fi = np.random.rand(SIZE)

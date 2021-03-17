@@ -1,5 +1,5 @@
 import numpy as np
-from n3fit.layers.Observable import Observable
+from .observable import Observable
 from n3fit.backends import operations as op
 
 

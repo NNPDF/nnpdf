@@ -134,7 +134,7 @@ def performfit(
 
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
-    from n3fit.ModelTrainer import ModelTrainer
+    from n3fit.model_trainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
