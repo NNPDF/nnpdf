@@ -420,7 +420,7 @@ class CoreConfig(configparser.Config):
         return MatchedCuts(cut_list, ndata=ndata)
 
     def _produce_similarity_cuts(self, commondata):
-        """ Compute the intersection between two namespaces (similar to for
+        """ Compute the intersection between two namespaces (similar to
         `fromintersection`) but additionally require that the predictions
         computed for each dataset across the namespaces are *similar*,
         specifically that the ratio between the absolute difference in the
@@ -432,7 +432,7 @@ class CoreConfig(configparser.Config):
         This mechanism can be sidetracked selectively for specific datasets.
         To do that, add their names to a list called
         `do_not_require_similarity_for`. The datasets in the list do not need
-        to appear in the `cuts_intersection_spec` name space and will filtered
+        to appear in the `cuts_intersection_spec` name space and will be filtered
         according to the internal cuts unconditionally.
         """
         _, nss = self.parse_from_(None, "cuts_intersection_spec", write=False)

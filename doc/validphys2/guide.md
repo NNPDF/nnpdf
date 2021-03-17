@@ -1614,7 +1614,7 @@ configuration setting:
   This mechanism can be sidetracked selectively for specific datasets. To do
   that, add their names to a list called `do_not_require_similarity_for`. The
   datasets in the list do not need to appear in the `cuts_intersection_spec`
-  name space and will filtered according to the internal cuts unconditionally.
+  name space and will be filtered according to the internal cuts unconditionally.
 
 
 The following example demonstrates the first three options:
@@ -3577,4 +3577,3 @@ There is a Makefile which will build the HTML document (`pandoc` and `graphviz`
 are required), and `make rsync` will upload it to the server, if the user has
 sufficient permissions. Of course, changes to the guide should also be commited
 to the repository, and if necessary, discussed in a pull request.
-
