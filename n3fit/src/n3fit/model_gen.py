@@ -25,10 +25,11 @@ class ObservableWrapper:
     (such as positivity or integrability)
     """
 
-    # TODO: temporary? 
-    # In principle this is something that could be automatically provided by validphys
-    # Goal: validphys acts _automagically_ as the observable generator
-    # so the dataset should have a .make_observable() option or whatever
+    # IDEALLY:
+    # In principle this is something that could be automatically provided by validphyts
+    # __but__ it requires backend (i.e., tensorflow) information
+    # but maybe it can be constructed in such a way that the backend is lazyly imported
+    # and make this part of the experiment spec
 
     name: str
     observables: list
@@ -530,7 +531,7 @@ def pdfNN_layer_generator(
         sumrule_layer, integrator_input = msr_constraints.msr_impose(mode=impose_sumrule)
         model_input.append(integrator_input)
     else:
-        sumrule_layer = lambda fitbasis, pdf_layer: pdf_layer
+        sumrule_layer = lambda x: x
 
 
     # Now we need a trainable network per model to be trained in parallel
@@ -600,7 +601,7 @@ def pdfNN_layer_generator(
             return layer_evln(layer_fitbasis(x))
 
         # Final PDF (apply normalization)
-        final_pdf = sumrule_layer(layer_fitbasis, layer_pdf)
+        final_pdf = sumrule_layer(layer_pdf)
 
         # Create the model
         pdf_model = MetaModel(model_input, final_pdf(placeholder_input), name=f"PDF_{i}")

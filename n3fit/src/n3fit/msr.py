@@ -80,21 +80,14 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
     xgrid_input = op.numpy_to_input(xgrid)
 
-    # Now prepare a function that takes as input the 8-flavours output of the NN
-    # and the 14-flavours after the fk rotation and returns a 14-flavours normalized output
-    # note + TODO:
-    # the idea was that the normalization should always be applied at the fktable 14-flavours
-    # and always computed at the output of the NN (in case one would like to compute it differently)
-    # don't think it is a good idea anymore and should be changed to act only on the output to the fktable
-    # but will be dealt with in the future.
-                            # fitlayer        #final_pdf
-    def apply_normalization(layer_fitbasis, layer_pdf):
+    # Finally prepare a function which will take as input the output of the PDF model
+    # and will return it appropiately normalized.
+    def apply_normalization(layer_pdf):
         """
-            layer_fitbasis: output of the NN
-            layer_pdf: output for the fktable
+            layer_pdf: output of the PDF, unnormalized, ready for the fktable
         """
         x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
-        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_fitbasis(xgrid_input)])
+        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
         normalization = normalizer(integrator(pdf_integrand))
 
         def ultimate_pdf(x):
