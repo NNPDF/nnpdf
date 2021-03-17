@@ -15,7 +15,7 @@ from n3fit.backends import operations as op
 class LossInvcovmat(MetaLayer):
     """
     Loss function such that:
-    L = \sum_{ij} (yt - yp)_{i} invcovmat_{ij} (yt - yp)_{j}
+    L = \\sum_{ij} (yt - yp)_{i} invcovmat_{ij} (yt - yp)_{j}
 
     Takes as argument the inverse of the covmat and the target data.
     It also takes an optional argument to mask part of the predictions
@@ -42,7 +42,7 @@ class LossInvcovmat(MetaLayer):
         if mask is None or all(mask):
             self.mask = None
         else:
-            mask = np.array(mask, dtype=np.float32).reshape(1,1,-1)
+            mask = np.array(mask, dtype=np.float32).reshape((1,1,-1))
             self.mask = op.numpy_to_tensor(mask)
         super().__init__(**kwargs)
 
@@ -58,7 +58,7 @@ class LossLagrange(MetaLayer):
     """
     Abstract loss function to apply lagrange multipliers to a model.
 
-        L = \lambda * f(y)
+        L = \\lambda * f(y)
 
     The form of f(y) is given by modifying the ``apply_loss`` method.
     It is possible to modify how the multiplication of the lambda factor is implemented
@@ -89,7 +89,7 @@ class LossLagrange(MetaLayer):
 
 class LossPositivity(LossLagrange):
     """
-    Returns L = \lambda*elu(y_pred)
+    Returns L = \\lambda*elu(y_pred)
 
     The positivity loss is computed by inverting the sign of the
     datapoints and then applying the elu function, this function is
