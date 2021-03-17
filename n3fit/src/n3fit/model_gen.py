@@ -144,15 +144,33 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer_tr = Obs_Layer(
-            dataset_dict["fktables"],
-            dataset_dict["tr_fktables"],
-            operation_name,
-            name=f"dat_{dataset_name}",
-        )
+
         if spec_dict["positivity"]:
+            # Positivity (and integrability, which is a special kind of positivity...)
+            # enters only at the "training" part of the models
+            obs_layer_tr = Obs_Layer(
+                dataset_dict["fktables"],
+                dataset_dict["tr_fktables"],
+                operation_name,
+                name=f"dat_{dataset_name}",
+            )
             obs_layer_ex = obs_layer_vl = None
+        elif spec_dict.get("data_transformation_tr") is not None:
+            # Data transformation needs access to the full array of output data
+            obs_layer_ex = Obs_Layer(
+                dataset_dict["fktables"],
+                dataset_dict["ex_fktables"],
+                operation_name,
+                name=f"exp_{dataset_name}",
+            )
+            obs_layer_tr = obs_layer_vl = obs_layer_ex
         else:
+            obs_layer_tr = Obs_Layer(
+                dataset_dict["fktables"],
+                dataset_dict["tr_fktables"],
+                operation_name,
+                name=f"dat_{dataset_name}",
+            )
             obs_layer_ex = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
@@ -165,12 +183,6 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
                 operation_name,
                 name=f"val_{dataset_name}",
             )
-
-        # Data transformation might need access to the full array of output data
-        # therefore the validation and training layers should point to the full exp
-        if spec_dict.get("data_transformation") is not None:
-            obs_layer_tr = obs_layer_ex
-            obs_layer_vl = obs_layer_ex
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         if obs_layer_tr.splitting is None:
@@ -207,11 +219,8 @@ def observable_generator(spec_dict, positivity_initial=1.0, integrability=False)
         return layer_info
 
     # Generate the loss function and rotations of the final data (if any)
-    if spec_dict.get("data_transformation") is not None:
-        # TODO: I'm asuming that the diagonal covmat will work ootb, check
-        # The rotation is the last layer so it should carry The Name
-        obsrot_tr = ObsRotation(spec_dict.get("data_transformation"))
-        # TODO: change data_transformation to data_transformation_tr and standarize
+    if spec_dict.get("data_transformation_tr") is not None:
+        obsrot_tr = ObsRotation(spec_dict.get("data_transformation_tr"))
         obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
     else:
         obsrot_tr = None

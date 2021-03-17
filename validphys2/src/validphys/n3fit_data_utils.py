@@ -363,7 +363,7 @@ def common_data_reader(
             "positivity": False,
             "count_chi2": True,
             "folds" : folds,
-            "data_transformation": dt_trans_tr,
+            "data_transformation_tr": dt_trans_tr,
             "data_transformation_vl": dt_trans_vl,
         }
         all_dict_out.append(dict_out)
