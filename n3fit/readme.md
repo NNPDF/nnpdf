@@ -47,6 +47,6 @@ feel free to open a [new issue](https://github.com/NNPDF/nnpdf/issues/new/) in t
 The papers describing the implementation, most significant developments and release of the code are:
 
 - _Towards a new generation of parton densities with deep learning models_
-S. Carrazza, J. Cruz-Martinez, [Eur.Phys.J.C 79 (2019) 8, 676](https://doi.org/10.1140/epjc/s10052-019-7197-2) [hep-ph/1907.05075](https://arxiv.org/pdf/1907.05075.pdf)
+**S. Carrazza, J. Cruz-Martinez**, [Eur.Phys.J.C 79 (2019) 8, 676](https://doi.org/10.1140/epjc/s10052-019-7197-2) [hep-ph/1907.05075](https://arxiv.org/pdf/1907.05075.pdf)
 - _NNPDF40 paper_
-NNPDF Collaboration [hep-ph/21XX]()
+**NNPDF Collaboration** (2021) [hep-ph/21XX]()
