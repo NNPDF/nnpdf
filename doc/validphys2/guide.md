@@ -1602,6 +1602,7 @@ configuration setting:
   the cuts for the given dataset. This is useful for example for
   requiring the common subset of points that pass the cuts at NLO and
   NNLO.
+
 `use_cuts: 'fromsimilarpredictions'`
   ~ Compute the intersection between two namespaces (similar to for
   `fromintersection`) but additionally require that the predictions computed for
