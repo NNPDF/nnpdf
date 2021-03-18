@@ -1,3 +1,5 @@
+.. _vpexamples:
+
 ========
 Examples
 ========
@@ -7,8 +9,35 @@ Example validphys runcards can be found
 trying to gain familiarity with how to produce results with validphys or when you want to carry
 out a common task, e.g. plotting some PDFs, and you do not want to write the runcard yourself.
 
+It is strongly encouraged to capitalise namespaces, e.g. ``PDFscalespecs`` rather than ``pdfscalespecs``.
+This is to avoid confusion between namespaces, which are relevant only to that runcard, and any actions
+within ``validphys``, which by convention are lower case.
+
 Here we detail the examples that already exist and list the resources which it is recommended that
 you use when writing a new example runcard.
+
+Existing examples
+=================
+
+============================= 	===========================    =========================================================
+Runcard/folder name		Tutorial			What it does
+============================= 	===========================    =========================================================
+API_example.ipynb		:ref:`vpapi`			Jupyter notebook example with API	
+closure_templates/    		:ref:`tut_closure`  		Running closure tests
+cuts_options.yaml             	N/A          			Shows results for different cuts policites
+dataspecs.yaml			N/A				Shows how to use ``dataspecs``
+data_theory_comparison.yaml	:ref:`tut_datthcomp`		Data theory comparison
+export_data.yaml		N/A				Makes tables of experimental data and covariance matrices
+generate_a_report.yaml		:ref:`tut_report`		Shows how to generate a report
+kiplot.yaml			N/A				Plot kinematic coverage of data
+looping_example.yaml		N/A				Shows how to do actions in a loop over resources
+mc_gen_example.yaml		N/A				Analysis of pseudodata generation
+new_data_specification.yaml	N/A				Shows how to specify data in runcards
+pdfdistanceplots.yaml		How to plot PDFs		Distance PDF plots
+simple_runcard.yaml		N/A				Simple runcard example
+taking_data_from_fit.yaml	N/A				Shows how to take ``theoryids`` and ``pdfs`` from a fit	
+theory_covariance/            	:ref:`vptheorycov-index`	Runcards for the ``theorycovariance`` module	
+============================= 	===========================    =========================================================
 
 Recommended resources
 =====================

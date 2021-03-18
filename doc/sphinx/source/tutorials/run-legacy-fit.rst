@@ -1,7 +1,7 @@
 .. _nnfit-usage:
 
-How to run a legacy PDF fit
----------------------------
+How to run a legacy PDF fit (NNPDF3.1 style)
+============================================
 
 This tutorial explains how to run a PDF fit using the legacy code,
 :code:`nnfit`. To find out how to run a PDF fit with the code that is currently

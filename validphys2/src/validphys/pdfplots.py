@@ -524,6 +524,7 @@ def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
 
 @figure
 @check_pdf_normalize_to
+@check_pdfs_noband
 def plot_lumi1d(
     pdfs,
     pdfs_lumis,
@@ -533,6 +534,7 @@ def plot_lumi1d(
     show_mc_errors: bool = True,
     ymin: (numbers.Real, type(None)) = None,
     ymax: (numbers.Real, type(None)) = None,
+    pdfs_noband=None,
 ):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
@@ -543,7 +545,8 @@ def plot_lumi1d(
     central value of some of the PDFs. `ymin` and `ymax` can be used to set
     exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
     bands are shown in addition to the 68% confidence intervals for Monte Carlo
-    PDFs.
+    PDFs. A list `pdfs_noband` can be passed to supress the error bands for
+    certain PDFs and plot the central values only.
     """
 
     fig, ax = plt.subplots()
@@ -554,7 +557,6 @@ def plot_lumi1d(
         norm = 1
         ylabel = r"$\mathcal{L} (GeV^{-2})$"
 
-    # For plotting
     hatchit = plotutils.hatch_iter()
     pcycler = plotutils.color_iter()
     handles = []
@@ -573,6 +575,14 @@ def plot_lumi1d(
         hatch = next(hatchit)
 
         alpha = 0.5
+
+        (central_line,) = ax.plot(mx, cv / norm, color=color)
+
+        if pdfs_noband and pdf in pdfs_noband:
+            handles.append(central_line)
+            labels.append(pdf.label)
+            continue
+
         ax.fill_between(
             mx, err68down / norm, err68up / norm, color=color, alpha=alpha, zorder=1
         )
@@ -586,8 +596,6 @@ def plot_lumi1d(
             hatch=hatch,
             zorder=1,
         )
-
-        ax.plot(mx, cv / norm, color=color)
 
         if isinstance(gv, MCStats) and show_mc_errors:
             ax.plot(mx, errstddown / norm, linestyle="--", color=color)

@@ -1,3 +1,6 @@
+```eval_rst
+.. _th_parameter_info:
+```
 # Looking up the parameters of a theory
 
 The parameters for all of the theories can be found in the `theory.db` file,

@@ -29,7 +29,7 @@ CORR_DATA = [
 
 def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
     """Test which checks that the single dataset implementation of
-    ``covmat_from_systematics`` matches ``datasets_covmat_from_systematics``
+    ``covmat_from_systematics`` matches ``dataset_inputs_covmat_from_systematics``
     when the latter is given a list containing a single dataset.
 
     """
@@ -37,9 +37,9 @@ def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
     dataset_inputs = base_config.pop("dataset_inputs")
 
     for dsinp in dataset_inputs:
-        covmat_a = API.experimental_covmat(
+        covmat_a = API.covmat_from_systematics(
             **base_config, dataset_input=dsinp)
-        covmat_b = API.dataset_inputs_experimental_covmat(
+        covmat_b = API.dataset_inputs_covmat_from_systematics(
             **base_config, dataset_inputs=[dsinp])
         np.testing.assert_allclose(covmat_a, covmat_b)
 
@@ -57,7 +57,7 @@ def test_covmat_from_systematics(data_config, use_cuts, dataset_inputs):
     config["use_cuts"] = use_cuts
     config["dataset_inputs"] = dataset_inputs
 
-    covmat = API.dataset_inputs_experimental_covmat(**config)
+    covmat = API.dataset_inputs_covmat_from_systematics(**config)
     cpp_covmat = API.groups_covmat(**config)
 
     np.testing.assert_allclose(cpp_covmat, covmat)
@@ -71,7 +71,7 @@ def test_covmat_with_one_systematic():
     dsinput = {"dataset": "D0ZRAP", "frac": 1.0, "cfac": ["QCD"]}
     config = dict(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
 
-    covmat = API.experimental_covmat(**config)
+    covmat = API.covmat_from_systematics(**config)
     ds = API.dataset(**config)
     # double check that the dataset does indeed only have 1 systematic.
     assert ds.commondata.nsys == 1
@@ -145,11 +145,11 @@ def test_python_t0_covmat_matches_cpp(
     config["dataset_inputs"] = dataset_inputs
     config["t0pdfset"] = t0pdfset
     config["use_t0"] = True
-    covmat = API.dataset_inputs_t0_covmat(**config)
+    covmat = API.dataset_inputs_t0_covmat_from_systematics(**config)
     cpp_covmat = API.groups_covmat(**config)
     # use allclose defaults or it fails
     np.testing.assert_allclose(cpp_covmat, covmat, rtol=1e-05, atol=1e-08)
     with pytest.raises(AssertionError):
         np.testing.assert_allclose(
-            covmat, API.dataset_inputs_experimental_covmat(**config)
+            covmat, API.dataset_inputs_covmat_from_systematics(**config)
         )

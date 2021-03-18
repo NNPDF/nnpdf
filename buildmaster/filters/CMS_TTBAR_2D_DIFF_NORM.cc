@@ -462,8 +462,8 @@ void  CMS_TTBAR_2D_DIFF_MTT_TRAP_NORMFilter::ReadData()
               >> stat[i] >> comma >> ddum >> comma
               >> ddum >> comma >> ddum;
       
-      fKin1[i] = var_1;          
-      fKin2[i] = pow(var_2,2);    
+      fKin1[i] = var_2;          
+      fKin2[i] = pow(var_1,2);    
       fKin3[i] = 8000;           //sqrt(s) 
       fStat[i] = 0.;
     }
@@ -769,8 +769,8 @@ void  CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORMFilter::ReadData()
               >> stat[i] >> comma >> ddum >> comma
               >> ddum >> comma >> ddum;
       
-      fKin1[i] = var_1;          
-      fKin2[i] = pow(var_2,2);    
+      fKin1[i] = var_2;          
+      fKin2[i] = pow(var_1,2);    
       fKin3[i] = 8000;           //sqrt(s) 
       fStat[i] = 0.;
     }

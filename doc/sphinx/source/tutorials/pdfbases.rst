@@ -1,3 +1,4 @@
+.. _pdfbases:
 Plotting non-trivial combinations of PDFs
 =========================================
 
@@ -14,6 +15,7 @@ within ``validphys`` can be found in :py:mod:`validphys.pdfbases`).
 We need to begin by assigning each parton a numerical index. This
 convention is laid out by the PDG as follows:
 
+.. _pdgflavs:
 ==========  ===============
 Index       Parton
 ==========  ===============

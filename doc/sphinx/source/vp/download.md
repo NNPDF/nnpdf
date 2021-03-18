@@ -8,9 +8,9 @@ Downloading resources
 `validphys` is designed so that, by default, resources stored in known remote
 locations are downloaded automatically and seamlessly used where necessary.
 Available resources include PDF sets, completed fits, theories, and results of
-past `validphys` runs [uploaded to the server](upload). The `vp-get` tool,
-[described below](#the-vp-get-tool), can be used to download the same items
-manually.
+past `validphys` runs that have been [uploaded to the server](upload). 
+The `vp-get` tool, [described below](#the-vp-get-tool), 
+can be used to download the same items manually.
 
 Automatic operation
 -------------------

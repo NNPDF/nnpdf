@@ -22,7 +22,7 @@ Diagonal elements of covariance matrices
 Experimental $\chi^2$
 ---------------------
 {@with default_theory@}
-   {@total_experiments_chi2@}
+   {@total_chi2_per_point_data@}
 
 Total (exp. + th.) $\chi^2$
 ---------------------------
@@ -30,11 +30,11 @@ Total (exp. + th.) $\chi^2$
 
 Experimental $\chi^2$ by dataset
 --------------------------------
-   {@experiments_chi2_table@}
+   {@procs_chi2_table@}
 
 Total (exp. + th.) $\chi^2$ by dataset
 --------------------------------------
-   {@experiments_chi2_table_theory@}
+   {@procs_chi2_table_theory@}
 
 $\chi^2$ including only diagonal theory elements
 ------------------------------------------------

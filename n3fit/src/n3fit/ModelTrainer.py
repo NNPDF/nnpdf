@@ -10,6 +10,7 @@
 """
 import logging
 import numpy as np
+from scipy.interpolate import PchipInterpolator
 import n3fit.model_gen as model_gen
 from n3fit.backends import MetaModel, clear_backend_state, operations, callbacks
 from n3fit.stopping import Stopping
@@ -213,6 +214,7 @@ class ModelTrainer:
         self.debug = debug
         self.save_weights_each = save_weights_each
         self.all_datasets = []
+        self._scaler = None
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -394,18 +396,20 @@ class ModelTrainer:
         """
         log.info("Generating the Model")
 
-        # Compute the input array that will be given to the pdf
-        input_arr = np.concatenate(self.input_list, axis=1)
-        input_layer = operations.numpy_to_input(input_arr.T)
+        # Construct the input array that will be given to the pdf
+        input_arr = np.concatenate(self.input_list, axis=1).T
+        if self._scaler:
+            # Apply feature scaling if given
+            input_arr = self._scaler(input_arr)
+        input_layer = operations.numpy_to_input(input_arr)
 
-        # The input to the full model is expected to be the input to the PDF
-        # by reutilizing `pdf_model.parse_input` we ensure any auxiliary input is also accunted fro
-        full_model_input_dict = pdf_model._parse_input([input_layer], pass_content=False)
+        # The input to the full model also works as the input to the PDF model
+        # The PDF model is then applied as a layer (receiving the full_pdf layer)
+        # we also need to receive full_model_input_dict, a dictionary with the full input to the PDF
+        full_model_input_dict, full_pdf = pdf_model.apply_as_layer([input_layer])
 
-        # The output of the pdf on input_layer will be thus a concatenation
-        # of the PDF values for all experiments
-        full_pdf = pdf_model.apply_as_layer([input_layer])
-        # The input layer is a concatenation of all experiments
+        # The input layer was a concatenation of all experiments
+        # the output of the pdf on input_layer will be thus a concatenation
         # we need now to split the output on a different array per experiment
         sp_ar = [self.input_sizes]
         sp_kw = {"axis": 1}
@@ -471,7 +475,13 @@ class ModelTrainer:
     # wrapper around all of these                                              #
     ############################################################################
     def _generate_observables(
-        self, all_pos_multiplier, all_pos_initial, all_integ_multiplier, all_integ_initial, epochs
+        self,
+        all_pos_multiplier,
+        all_pos_initial,
+        all_integ_multiplier,
+        all_integ_initial,
+        epochs,
+        interpolation_points,
     ):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
@@ -567,6 +577,53 @@ class ModelTrainer:
                 self.training["integmultipliers"].append(integ_multiplier)
                 self.training["integinitials"].append(integ_initial)
 
+        # Store a reference to the interpolator as self._scaler
+        if interpolation_points:
+            input_arr = np.concatenate(self.input_list, axis=1)
+            input_arr = np.sort(input_arr)
+            input_arr_size = input_arr.size
+
+            # Define an evenly spaced grid in the domain [0,1]
+            # force_set_smallest is used to make sure the smallest point included in the scaling is
+            # 1e-9, to prevent trouble when saving it to the LHAPDF grid
+            force_set_smallest = input_arr.min() > 1e-9
+            if force_set_smallest:
+                new_xgrid = np.linspace(start=1/input_arr_size, stop=1.0, endpoint=False, num=input_arr_size)
+            else:
+                new_xgrid = np.linspace(start=0, stop=1.0, endpoint=False, num=input_arr_size)
+
+            # When mapping the FK xgrids onto our new grid, we need to consider degeneracies among
+            # the x-values in the FK grids 
+            unique, counts = np.unique(input_arr, return_counts=True)
+            map_to_complete = []
+            for cumsum_ in np.cumsum(counts):
+                # Make sure to include the smallest new_xgrid value, such that we have a point at
+                # x<=1e-9
+                map_to_complete.append(new_xgrid[cumsum_ - counts[0]])
+            map_to_complete = np.array(map_to_complete)
+            map_from_complete = unique
+
+            #  If needed, set feature_scaling(x=1e-9)=0
+            if force_set_smallest:
+                map_from_complete = np.insert(map_from_complete, 0, 1e-9)
+                map_to_complete = np.insert(map_to_complete, 0, 0.0)
+
+            # Select the indices of the points that will be used by the interpolator
+            onein = map_from_complete.size / (int(interpolation_points) - 1)
+            selected_points = [round(i * onein - 1) for i in range(1, int(interpolation_points))]
+            if selected_points[0] != 0:
+                selected_points = [0] + selected_points
+            map_from = map_from_complete[selected_points]
+            map_from = np.log(map_from)
+            map_to = map_to_complete[selected_points]
+
+            try:
+                scaler = PchipInterpolator(map_from, map_to)
+            except ValueError:
+                raise ValueError("interpolation_points is larger than the number of unique \
+                                    input x-values")
+            self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
+
     def _generate_pdf(
         self,
         nodes_per_layer,
@@ -626,6 +683,7 @@ class ModelTrainer:
             regularizer=regularizer,
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
+            scaler=self._scaler,
         )
         return pdf_model
 
@@ -795,6 +853,7 @@ class ModelTrainer:
             integrability_dict.get("multiplier"),
             integrability_dict.get("initial"),
             epochs,
+            params.get("interpolation_points"),
         )
         threshold_pos = positivity_dict.get("threshold", 1e-6)
         threshold_chi2 = params.get("threshold_chi2", CHI2_THRESHOLD)

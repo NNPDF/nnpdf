@@ -1,4 +1,4 @@
-.. _upload:
+.. _scripts:
 
 =================
 Validphys scripts
@@ -37,6 +37,8 @@ just the amount specified in their command, they can use the :code:`--at-least-n
 Note that the command will still fail if fewer than the requested amount meet the criteria. This
 flag can be useful when, for example, processing many fits simultaneously, where a specific number
 of replicas is not required, but instead at least a certain amount.
+
+.. _postfit-selection-criteria:
 
 The :code:`postfit` selection criteria
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

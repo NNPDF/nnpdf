@@ -24,7 +24,7 @@ from validphys import mplstyles
 
 providers = [
              'validphys.results',
-             'validphys.results_providers',
+             'validphys.commondata',
              'validphys.pdfgrids',
              'validphys.pdfplots',
              'validphys.dataplots',
@@ -50,6 +50,7 @@ providers = [
              'validphys.covmats',
              'validphys.hyperoptplot',
              'validphys.deltachi2',
+             'validphys.n3fit_data',
              'reportengine.report',
             ]
 

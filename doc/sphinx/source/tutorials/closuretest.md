@@ -1,3 +1,7 @@
+```eval_rst
+.. _tut_closure:
+```
+
 # How to run a closure test
 
 Closure tests are a way to validate methodology by fitting on pseudodata

@@ -24,8 +24,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(VERSION "\"1.2.0b5\"")
-set(nnpdfcpp_VERSION 3.1)
+set(VERSION "\"4.0\"")
+set(nnpdfcpp_VERSION 4.0)
 
 # check for dependencies
 find_package(PkgConfig REQUIRED)

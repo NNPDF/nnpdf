@@ -19,8 +19,9 @@ import NNPDF
 from validphys import results
 from validphys.api import API
 from validphys.tests.test_covmats import CORR_DATA
-from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
+from validphys.tableloader import (parse_data_cv, parse_exp_mat, load_perreplica_chi2_table,
                                    sane_load, load_fits_chi2_table)
+from validphys.tests.test_covmats import CORR_DATA
 
 
 
@@ -51,6 +52,18 @@ def make_table_comp(loader_func):
             compare_tables(produced_table, REGRESSION_FOLDER/filename, loader_func)
         return f_
     return decorator
+
+
+@make_table_comp(parse_data_cv)
+def test_mcreplica(data_config):
+    config = dict(data_config)
+    config["dataset_inputs"] = CORR_DATA
+    seed = 123456
+    # Use no cuts because if filter rules change in the
+    # future then this test will end up failing
+    rep = API.indexed_make_replica(**config, seed=seed)
+    return rep
+
 
 @make_table_comp(parse_exp_mat)
 def test_expcovmat(data_config):

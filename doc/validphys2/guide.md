@@ -1602,8 +1602,16 @@ configuration setting:
   the cuts for the given dataset. This is useful for example for
   requiring the common subset of points that pass the cuts at NLO and
   NNLO.
+`use_cuts: 'fromsimilarpredictions'`
+  ~ Compute the intersection between two namespaces (similar to for
+  `fromintersection`) but additionally require that the predictions computed for
+  each dataset across the namespaces are *similar*, specifically that the ratio
+  between the absolute difference in the predictions and the total experimental
+  uncertainty is smaller than a given value, `cut_similarity_threshold` that
+  must be provided. Note that for this to work with different cfactors across
+  the namespaces, one must provide a different `dataset_inputs` list for each.
 
-The following example demonstrates these options:
+The following example demonstrates the first three options:
 
 ```yaml
 meta:
@@ -1670,6 +1678,70 @@ in a [Data theory comparison] plot and then plot the χ² distribution
 for each one individually.  With these settings the later three
 [dataspecs](#general-data-specification-the-dataspec-api) give the
 same result.
+
+The following example demonstrates the use of `fromsimilarpredictions`:
+
+```yaml
+meta:
+    title: "Test similarity cuts: Threshold 1,2"
+    author: Zahari Kassabov
+    keywords: [test]
+
+show_total: True
+
+NNLODatasts: &NNLODatasts
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: [QCD]}                      # N
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}                     # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}        # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}     # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    # N
+
+NLODatasts: &NLODatasts
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: []}                      # N
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: []}                     # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: []}        # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: []}     # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: []}       # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: []}    # N
+
+
+dataset_inputs: *NLODatasts
+
+cuts_intersection_spec:
+    - theoryid: 52
+      pdf: NNPDF31_nlo_as_0118
+      dataset_inputs: *NLODatasts
+
+    - theoryid: 53
+      pdf: NNPDF31_nlo_as_0118
+      dataset_inputs: *NNLODatasts
+
+
+theoryid: 52
+pdf: NNPDF31_nlo_as_0118
+
+dataspecs:
+
+    - use_cuts: internal
+      speclabel: "No cuts"
+
+
+    - cut_similarity_threshold: 2
+      speclabel: "Threshold 2"
+      use_cuts: fromsimilarpredictions
+
+
+    - cut_similarity_threshold: 1
+      speclabel: "Threshold 1"
+      use_cuts: fromsimilarpredictions
+
+template_text: |
+    {@dataspecs_chi2_table@}
+
+actions_:
+    - report(main=True)
+```
 
 ### Data theory comparison
 
