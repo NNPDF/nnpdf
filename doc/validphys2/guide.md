@@ -1612,6 +1612,12 @@ configuration setting:
   must be provided. Note that for this to work with different cfactors across
   the namespaces, one must provide a different `dataset_inputs` list for each.
 
+  This mechanism can be sidetracked selectively for specific datasets. To do
+  that, add their names to a list called `do_not_require_similarity_for`. The
+  datasets in the list do not need to appear in the `cuts_intersection_spec`
+  name space and will be filtered according to the internal cuts unconditionally.
+
+
 The following example demonstrates the first three options:
 
 ```yaml
@@ -1696,7 +1702,6 @@ NNLODatasts: &NNLODatasts
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}        # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}     # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    # N
 
 NLODatasts: &NLODatasts
 - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: []}                      # N
@@ -1705,6 +1710,8 @@ NLODatasts: &NLODatasts
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: []}     # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: []}       # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: []}    # N
+
+do_not_require_similarity_for: [ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM]
 
 
 dataset_inputs: *NLODatasts
@@ -3571,4 +3578,3 @@ There is a Makefile which will build the HTML document (`pandoc` and `graphviz`
 are required), and `make rsync` will upload it to the server, if the user has
 sufficient permissions. Of course, changes to the guide should also be commited
 to the repository, and if necessary, discussed in a pull request.
-
