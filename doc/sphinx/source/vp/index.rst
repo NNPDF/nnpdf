@@ -2,10 +2,10 @@
 Code for data: validphys
 ========================
 
-Introduction to ``validphys 2``
+Introduction to `validphys 2`
 -------------------------------
 
-* ``validphys 2`` is a Python code that implements the data model of NNPDF
+* `validphys 2` is a Python code that implements the data model of NNPDF
   resources.
 
 * It provides an executable, called ``validphys`` which is used to
@@ -14,23 +14,24 @@ Introduction to ``validphys 2``
   tables or entire reports as an output.
 
 * The code also provides a Python library
-  (also called ``validphys``) which is used to implement executables providing
+  (also called `validphys`) which is used to implement executables providing
   interfaces to more specific analyses such as the ``vp-comparefits``, and to
-  serve as basis to other NNPDF codes such as ``n3fit``.
+  serve as basis to other NNPDF codes such as `n3fit`.
 
-* ``validphys 2`` is implemented on top of the ``reportengine`` framework.
-  ``reportengine`` provides the logic to process the runcards by building  task
+* `validphys 2` is implemented on top of the `reportengine` framework.
+  `reportengine` provides the logic to process the runcards by building  task
   execution graphs based on individual actions (which are Python functions). The
   runcards can execute complex analysis and parameter scans with  the appropriate
-  use of namespaces.
+  use of namespaces. More information on `reportengine` can be found in the
+  :ref:`Design <design>` section.
 
-* Some parts of ``validphys`` use the ``libnnpdf`` library in C++, through SWIG
+* Some parts of `validphys` use the `libnnpdf` library in C++, through SWIG
   wrappers.
 
 * The ideas behind the design of the code are explained in the
   :ref:`Design <design>` section.
 
-Some things which ``validphys`` does
+Some things which `validphys` does
 -------------------------------------
 
 * Download resources (``vp-get``) - see :ref:`download`
@@ -52,8 +53,11 @@ Using validphys
    ./download.md
    ./upload.md
    ./nnprofile.md
+   ./complex_runcards.rst
+   ./reports.rst
    ./scripts.rst
    ./api.md
+   ./developer.rst
    ./examples.rst
 
 How validphys handles data
@@ -72,3 +76,4 @@ Structure and design of validphys
    :maxdepth: 1
 
    ./design.md
+   ./namespaces.md
