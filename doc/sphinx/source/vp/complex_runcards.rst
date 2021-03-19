@@ -124,7 +124,7 @@ We can also have lists of mappings acting as namespaces. The action
 will then be repeated inside each of the namespaces generating one
 result for each. For example:
 
-.. code ::
+.. code :: yaml
 
 	pdf: NNPDF31_nlo_as_0118
 
@@ -187,7 +187,7 @@ will produce plots where the two PDFs appear together. However
 we can also produce individual plots for each PDF, by simply
 specifying that we want to loop over `pdfs`:
 
-.. code ::
+.. code :: yaml
 
 	pdfs:
 	  - NNPDF30_nlo_as_0118

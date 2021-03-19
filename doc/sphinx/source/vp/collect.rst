@@ -9,6 +9,7 @@ providers that collect the results of such computations with the
 The signature is:
 
 .. code:: python
+
 	collect('provider_name', fuzzyspec)
 
 This will expand the :ref:`fuzzyspec <fuzzyspecs>` relative to the current 

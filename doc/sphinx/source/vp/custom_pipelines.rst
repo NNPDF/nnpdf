@@ -10,10 +10,10 @@ The basic code flow is as follows:
     their associated :ref:`fuzzyspec <fuzzyspecs>`
 
  2. Each requirement spans other requirements. These can be:
-        - Providers: Other functions with requirements on their own.
-	- User input processed by the configuration, which is
-	  immediately tested for correctness.
-	- Production rules, also derived from the configuration.
+ 
+    - Providers: Other functions with requirements on their own.
+    - User input processed by the configuration, which is immediately tested for correctness.
+    - Production rules, also derived from the configuration.
 
  3. Once the requirements are satisfied for a given provider, the
     checks of the provider are executed.

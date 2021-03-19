@@ -3,6 +3,11 @@
 Developing `validphys`
 ======================
 
+.. important::
+
+	You can find some general tips on developing with python in
+	:ref:`tools`. 
+
 `validphys2` aims to be as simple to understand and extend as
 possible. The code is based on self contained Python functions with
 a couple of magic decorators that make `reportengine` work as
