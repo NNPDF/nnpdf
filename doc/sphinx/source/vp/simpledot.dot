@@ -1,0 +1,5 @@
+digraph G {
+	graph[dpi=100];
+	results->plot1;
+	results->plot2
+}

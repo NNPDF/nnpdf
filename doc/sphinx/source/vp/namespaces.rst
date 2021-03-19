@@ -11,4 +11,95 @@ A namespace is a stack of python dictionaries which are indexed by a tuple calle
 `namespace specification (nsspec)`. A user gives some inputs in terms of `fuzzyspecs` and
 these are translated into `nnspecs. This is mostly an advanced internal implementation detail,
 but it is important in order to understand how several features work. Also, the abstraction leaks
-into user-facing 
+into user-facing features such as the collect function.
+
+Namespace specifications
+------------------------
+
+An nsspec is a tuple of an arbitrary number of elements.  Each element
+in the tuple corresponds to one extra stack layer in depth (*"stack
+frame"*). The elements of the tuple can be either:
+
+ - Names of mappings.
+ - Names of objects that have an `as_namespace` method
+ - Tuples of the form (name of list of mappings, index).
+
+The scope rules are similar to those of C: The lookup of a value is
+done first looking at the inner frame and then at the outer ones,
+until a match is found.
+
+Consider the example:
+
+.. code:: yaml
+
+	first:
+	   pdf: NNPDF31_nlo_as_0118
+	   normalize_to: None
+	   use_cuts: "nocuts"
+
+	second:
+	   pdf: NNPDF31_nnlo_as_0118
+	   normalize_to: NNPDF31_nnlo_as_0118
+
+	cutspecs:
+	 - {use_cuts: "nocuts"}
+ 	 - {use_cuts: "fromfit"}
+
+
+Given the input above, we could form the following `nsspec`.
+
+.. code:: python
+
+	('second', ('cutspecs', 0))
+
+This would correspond to a namespace where we have the following
+symbols available:
+
+- `use_cuts` (set to `"nocuts"`) from `cutspecs`.
+- `pdf` and `normalize_to` (set to NNLO) from `second`.
+- `first`, `second` and `cutspecs` from the root namespace.
+
+We could also form the specification:
+
+.. code:: python
+
+	(('cutspecs', 1), 'first')
+
+Because the innermost specification is last, the value of `use_cuts`
+is `"nocuts"`.
+
+The function `reportengine.namespaces.resolve(ns, nsspec)` returns
+a mapping (in particular it is a modified version of
+`collections.ChainMap`) that  implements exactly this behaviour. It is
+used extensively thorough `reportengine`.
+
+Fuzzyspecs
+----------
+
+The namespace specifications as described above is not what
+the user typically enters. Instead the typical user input is what in
+the code is labeled *fuzzyspec*. A fuzzyspec is like a nsspec except
+that the lists of mappings are entered by name and not by a tuple
+(name, index). A fuzzyspec resolves to one or more nsspecs. For
+example, given the fuzzyspec:
+
+.. code:: python
+
+	('second', 'cutspecs')
+
+and the input above, it gets expanded into two nsspecs:
+
+.. code:: python
+
+	('second', ('cutspecs', 0))
+	('second', ('cutspecs', 1))
+
+corresponding to each of the two mappings in cutspecs.
+
+The `as_namespace` method
+-------------------------
+
+An object can customize how to be viewed as a reportengine namespace.
+This is done by defining a method called `as_namespace`, that takes no
+arguments and should return either a mapping or a list of mappings.
+This is used to implement automatically parsing lists.

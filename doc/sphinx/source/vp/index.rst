@@ -76,4 +76,6 @@ Structure and design of validphys
    :maxdepth: 1
 
    ./design.md
-   ./namespaces.md
+   ./namespaces.rst
+   ./resolving_dependencies.rst
+   ./custom_pipelines.rst
