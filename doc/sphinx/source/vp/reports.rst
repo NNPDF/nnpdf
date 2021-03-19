@@ -1,3 +1,5 @@
+.. _reports:
+
 Generating reports
 ===================
 
@@ -162,3 +164,13 @@ for each PDF in `pdfs` (note that LaTeX math syntax is allowed).
 Finally we produce, for each pdf and for each experiment, a set of
 data-theory comparison plots (which in turn are repeated for each
 dataset in the experiment).
+
+Customizing how things look in the report
+-----------------------------------------
+
+By default, the `str()` method will be applied to objects that appear
+in the report. If you want a custom behaviour, declare a declare
+a custom `as_markdown` property for your objects. It should return
+a string in Pandoc Markdown describing your object. Raw HTML is
+also allowed (although that decreases the compatibility, e.g. if we
+decide to output LaTeX instead of HTML in the future).

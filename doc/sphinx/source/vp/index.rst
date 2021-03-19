@@ -58,6 +58,7 @@ Using validphys
    ./scripts.rst
    ./api.md
    ./developer.rst
+   ./tables_figs.rst
    ./examples.rst
 
 How validphys handles data
@@ -69,13 +70,15 @@ How validphys handles data
    ./filters.md
    ./theorycov/index
    ./dataspecification.rst
-
-Structure and design of validphys
----------------------------------
+   
+More detailed functionality
+---------------------------
 .. toctree::
    :maxdepth: 1
 
    ./design.md
    ./namespaces.rst
    ./resolving_dependencies.rst
+   ./collect.rst
+   ./checks.rst
    ./custom_pipelines.rst

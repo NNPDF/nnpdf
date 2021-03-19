@@ -73,6 +73,7 @@ a mapping (in particular it is a modified version of
 `collections.ChainMap`) that  implements exactly this behaviour. It is
 used extensively thorough `reportengine`.
 
+.. _fuzzyspecs:
 Fuzzyspecs
 ----------
 
