@@ -733,7 +733,12 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        with exception_manager(self.resultspath, 'fit_download_deleteme_', KeyboardInterrupt) as tempdir:
+        with exception_manager(
+            path=self.resultspath,
+            exit_func=shutil.rmtree,
+            exc=KeyboardInterrupt,
+            prefix='fit_download_deleteme_',
+        ) as tempdir:
             download_and_extract(self.remote_fits[fitname], tempdir)
             #Handle old-style fits compressed with 'results' as root.
             old_style_res = tempdir/'results'

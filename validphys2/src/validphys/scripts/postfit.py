@@ -124,10 +124,17 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
 
     # Paths
     nnfit_path   = result_path / 'nnfit'    # Path of nnfit replica output
+    final_postfit_path = result_path / 'postfit'
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
-    with exception_manager(result_path, 'postfit_work_deleteme_', KeyboardInterrupt) as postfit_path:
-        final_postfit_path = result_path / 'postfit'
+    with exception_manager(
+        path=result_path,
+        exit_func=shutil.move,
+        exc=KeyboardInterrupt,
+        prefix="postfit_work_deleteme_",
+        dst=final_postfit_path,
+    ) as postfit_path:
+
         LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 
         if not fitdata.check_nnfit_results_path(result_path):
@@ -143,7 +150,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
 
         # Generate postfit and LHAPDF directory
         if final_postfit_path.is_dir():
-            log.warning(f"Removing existing postfit directory: {postfit_path}")
+            log.warning(f"Removing existing postfit directory: {final_postfit_path}")
             shutil.rmtree(final_postfit_path)
         os.mkdir(LHAPDF_path)
 
@@ -189,7 +196,6 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
         lhapdf.pathsPrepend(str(postfit_path))
         generatingPDF = PDF(fitname)
         lhio.generate_replica0(generatingPDF)
-        shutil.copytree(postfit_path, final_postfit_path, symlinks=True)
 
         # Test replica 0
         try:

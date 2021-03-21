@@ -13,7 +13,7 @@ import numpy as np
 
 
 @contextlib.contextmanager
-def exception_manager(path, prefix, *exc):
+def exception_manager(path, exit_func, exc, prefix=None, **kwargs):
     try:
         tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=path))
         yield tempdir
@@ -21,7 +21,8 @@ def exception_manager(path, prefix, *exc):
         shutil.rmtree(tempdir)
         raise
     else:
-        shutil.rmtree(tempdir)
+        # e.g shutil.rmtree, shutil.move etc
+        exit_func(tempdir, **kwargs)
 
 def split_by(it, crit):
     """Split ``it`` in two lists, the first is such that ``crit`` evaluates to
