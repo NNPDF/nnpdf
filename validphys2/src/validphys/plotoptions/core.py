@@ -14,7 +14,6 @@ import pandas as pd
 import numbers
 
 from reportengine.floatformatting import format_number
-from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.compat import yaml
 from reportengine.utils import get_functions, ChainMap
 
