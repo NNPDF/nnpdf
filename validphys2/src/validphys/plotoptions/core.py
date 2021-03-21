@@ -31,6 +31,9 @@ labeler_functions = get_functions(labelers)
 transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
 result_functions = get_functions(resulttransforms)
 
+ResultTransformations = enum.Enum('ResultTransformations', list(result_functions.keys()))
+TransformFunctions = enum.Enum('TransformFunctions', list(transform_functions.keys()))
+
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     """Retrieve and process the plotting information for the input data (which could
     be a DatasetSpec or a CommonDataSpec).
@@ -195,28 +198,11 @@ class KinLabel(enum.Enum):
     k2 = enum.auto()
     k3 = enum.auto()
 
+
 class Scale(enum.Enum):
     linear = enum.auto()
     log = enum.auto()
     symlog = enum.auto()
-
-class TransformFunctions(enum.Enum):
-    # https://docs.python.org/3/library/enum.html#timeperiod
-    _ignore_ = 'TransformFunctions name func'
-    TransformFunctions = vars()
-    for name in transform_functions.keys():
-        # Safer to assign enum.auto and fill in the actual
-        # function later, than to assign the value of pair
-        TransformFunctions[name] = enum.auto()
-
-class ResultTransformations(enum.Enum):
-    # https://docs.python.org/3/library/enum.html#timeperiod
-    _ignore_ = 'ResultTransformations name func'
-    ResultTransformations = vars()
-    for name in result_functions.keys():
-        # Safer to assign enum.auto and fill in the actual
-        # function later, than to assign the value of pair
-        ResultTransformations[name] = enum.auto()
 
 
 @dataclasses.dataclass
