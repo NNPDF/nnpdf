@@ -7,12 +7,10 @@ Created on Wed Mar  9 15:40:38 2016
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
-import contextlib
 import sys
 import pathlib
 import functools
 import logging
-import numbers
 import re
 import tempfile
 import shutil
@@ -31,7 +29,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
-from validphys.scripts.postfit import PostfitError
+from validphys.utils import keyboard_interrupt_manager
 from validphys import lhaindex
 import NNPDF as nnpath
 
@@ -523,18 +521,6 @@ class Loader(LoaderBase):
         except filefinder.FinderError as e:
             raise LoaderError(e) from e
         return path/name
-
-
-@contextlib.contextmanager
-def keyboard_interrupt_manager(path, prefix):
-    try:
-        tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=path))
-        yield tempdir
-    except (KeyboardInterrupt, PostfitError):
-        shutil.rmtree(tempdir)
-        raise
-    else:
-        shutil.rmtree(tempdir)
 
 
 #http://stackoverflow.com/a/15645088/1007990

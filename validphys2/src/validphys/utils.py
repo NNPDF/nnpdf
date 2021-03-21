@@ -4,7 +4,27 @@ Created on Sun Mar 13 21:12:41 2016
 
 @author: Zahari Kassabov
 """
+import contextlib
+import shutil
+import pathlib
+import tempfile
+
 import numpy as np
+
+#TODO: this will be gone in the next commit
+from validphys.scripts.postfit import PostfitError
+
+
+@contextlib.contextmanager
+def keyboard_interrupt_manager(path, prefix):
+    try:
+        tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=path))
+        yield tempdir
+    except (KeyboardInterrupt, PostfitError):
+        shutil.rmtree(tempdir)
+        raise
+    else:
+        shutil.rmtree(tempdir)
 
 def split_by(it, crit):
     """Split ``it`` in two lists, the first is such that ``crit`` evaluates to
