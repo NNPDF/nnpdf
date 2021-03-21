@@ -30,7 +30,7 @@ from validphys import fitdata
 from validphys import fitveto
 from validphys.core import PDF
 from validphys.fitveto import NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2, INTEG_THRESHOLD
-from validphys.utils import keyboard_interrupt_manager
+from validphys.utils import exception_manager
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -126,7 +126,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     nnfit_path   = result_path / 'nnfit'    # Path of nnfit replica output
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
-    with keyboard_interrupt_manager(result_path, 'postfit_work_deleteme_') as postfit_path:
+    with exception_manager(result_path, 'postfit_work_deleteme_', KeyboardInterrupt) as postfit_path:
         final_postfit_path = result_path / 'postfit'
         LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 

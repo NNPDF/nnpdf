@@ -11,16 +11,13 @@ import tempfile
 
 import numpy as np
 
-#TODO: this will be gone in the next commit
-from validphys.scripts.postfit import PostfitError
-
 
 @contextlib.contextmanager
-def keyboard_interrupt_manager(path, prefix):
+def exception_manager(path, prefix, *exc):
     try:
         tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=path))
         yield tempdir
-    except (KeyboardInterrupt, PostfitError):
+    except exc:
         shutil.rmtree(tempdir)
         raise
     else:
