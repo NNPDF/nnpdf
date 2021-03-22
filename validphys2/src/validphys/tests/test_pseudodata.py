@@ -61,14 +61,14 @@ def setup_dicts(request):
 
 
 def test_read_fit_pseudodata():
-    data_generator = API.read_fit_pseudodata(
+    data_indices_list = API.read_fit_pseudodata(
       fit="dummy_pseudodata_read_test_fit",
       use_cuts="fromfit"
     )
 
     # Only bother checking the first ten replicas
-    for _ in range(10):
-      data, tr_idx, val_idx = next(data_generator)
+    for data_indices in data_indices_list[:10]:
+      data, tr_idx, val_idx = data_indices
       # Check the training and validation index are disjoint
       assert set(tr_idx).isdisjoint(set(val_idx))
       # Check the union is equal to the full dataset
