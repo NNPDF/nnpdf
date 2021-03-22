@@ -1,4 +1,4 @@
-## The NNPDF Fitting code
+## The NNPDF fitting code
 
 This is the main directory of the new generation fitting code for the NNPDF collaboration.
 For a more technical description of the code, please consult the [NNPDF documentation](https://docs.nnpdf.science/n3fit/methodology.html).
@@ -14,12 +14,12 @@ conda install nnpdf -c https://packages.nnpdf.science/conda
 
 If you are a developer please consult the [guidelines](https://docs.nnpdf.science/get-started/rules.html) before starting.
 
-
 ### How to run a fit
 
 Runcards examples are provided in the `runcards` directory in this folder.
 Specific runcard options are discussed [here](https://docs.nnpdf.science/n3fit/runcard_detailed.html).
 
+The basic command is:
 
 ```bash
 n3fit runcard.yml <replica_number>
@@ -29,13 +29,13 @@ For a full tutorial on how to run a fit using this code please see [here](https:
 Other relevant tutorials are the ones dedicated to [fit analysis](https://docs.nnpdf.science/tutorials/index.html#analysing-results) using [validphys 2](https://docs.nnpdf.science/vp/index.html).
 
 ### Reproducibility
+
 Please note that this repository is in active development and only releases tagged as such are guaranteed to produce correct results.
 
 In order to ensure reproducibility all official NNPDF releases are run with a fixed version of not only the `nnpdf` fitting code but also
 of all external packages that could potentially influence the results.
 A list of conda environments with the exact versions of the `nnpdf` fitting code as well as all external packages used for official releases
 of the code can be found in the `environments` directory.
-
 
 ### Issues and suggestions
 
