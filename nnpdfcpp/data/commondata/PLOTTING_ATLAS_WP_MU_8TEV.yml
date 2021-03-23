@@ -2,7 +2,7 @@ dataset_label: "ATLAS $W^+\\to \\mu^+\\nu$ 8 TeV"
 
 x: k1
 x_label: '$\eta_\nu$'
-y_label: '$d\sigma/d\eta_nu$ [pb/GeV]'
+y_label: '$d\sigma/d\eta_\nu$ [pb/GeV]'
 y_scale: linear
 
 experiment: "ATLAS"
