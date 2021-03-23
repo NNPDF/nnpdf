@@ -141,7 +141,10 @@ def performfit(
     # run once as replicas_nnseed_fitting_data_dict is a list of just one element
     for replica_number, exp_info, nnseed in replicas_nnseed_fitting_data_dict:
         replica_path_set = replica_path / f"replica_{replica_number}"
-        log.info("Starting replica fit %s", replica_number)
+        if parallel_models == 1:
+            log.info("Starting replica fit %s", replica_number)
+        elif parallel_models > 1:
+            log.info("Starting replica fits %s to %s", replica_number, replica_number+parallel_models)
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
