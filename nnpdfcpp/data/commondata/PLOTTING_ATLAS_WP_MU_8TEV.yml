@@ -1,4 +1,4 @@
-dataset_label: "ATLAS $W^+\to \mu^+\nu$ 8 TeV"
+dataset_label: "ATLAS $W^+\\to \\mu^+\\nu$ 8 TeV"
 
 x: k1
 x_label: '$\eta_\nu$'

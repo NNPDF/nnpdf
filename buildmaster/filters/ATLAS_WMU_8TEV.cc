@@ -66,10 +66,11 @@ void ATLAS_WP_MU_8TEVFilter::ReadData()
       lstream >> fKin1[i]        >> comma
 	      >> ddum            >> comma
 	      >> ddum            >> comma
-	      >> fData[i]        >> comma
+	      >> fData[i]        >> comma //in [pb]
 	      >> fStat[i]        >> comma //in percentage
 	      >> ddum;
-      
+
+      fData[i] *= 1000.; //Convert to [fb]
       fKin2[i] = MW*MW;
       fKin3[i] = 8000.; // GeV
       fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
@@ -136,10 +137,11 @@ void ATLAS_WM_MU_8TEVFilter::ReadData()
       lstream >> fKin1[i]        >> comma
 	      >> ddum            >> comma
 	      >> ddum            >> comma
-	      >> fData[i]        >> comma
+	      >> fData[i]        >> comma //[pb]
 	      >> fStat[i]        >> comma //in percentage
 	      >> ddum;
       
+      fData[i] *= 1000.; //Convert to [fb]  
       fKin2[i] = MW*MW;
       fKin3[i] = 8000.; // GeV
       fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
