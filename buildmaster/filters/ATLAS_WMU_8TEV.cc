@@ -82,12 +82,14 @@ void ATLAS_WP_MU_8TEVFilter::ReadData()
 		  >> comma >> ddum;
 	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
 	  fSys[i][j].type = MULT;
-	  ostringstream sysname;
-	  sysname << "ATLASWMU" << j;
-	  fSys[i][j].name = sysname.str();
-	  cout << fSys[i][j].mult << endl;
 	}
       
+      fSys[0][j].name = "ATLASWMU_ETmiss";
+      fSys[1][j].name = "ATLASWMU_MuonReco";
+      fSys[2][j].name = "Background";
+      fSys[3][j].name = "UNCORR";
+      fSys[4][j].name = "Modelling";
+	
       //Luminosity uncertainty
       fSys[i][5].mult = 1.9;
       fSys[i][5].add = fSys[i][5].mult/100. * fData[i];
@@ -153,11 +155,13 @@ void ATLAS_WM_MU_8TEVFilter::ReadData()
 		  >> comma >> ddum;
 	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
 	  fSys[i][j].type = MULT;
-	  ostringstream sysname;
-	  sysname << "ATLASWMU" << j;
-	  fSys[i][j].name = sysname.str();
-	  cout << fSys[i][j].mult << endl;
 	}
+
+      fSys[0][j].name = "ATLASWMU_ETmiss";
+      fSys[1][j].name = "ATLASWMU_MuonReco";
+      fSys[2][j].name = "Background";
+      fSys[3][j].name = "UNCORR";
+      fSys[4][j].name = "Modelling";
       
       //Luminosity uncertainty
       fSys[i][5].mult = 1.9;
