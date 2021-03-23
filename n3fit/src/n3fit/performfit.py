@@ -143,8 +143,12 @@ def performfit(
         replica_path_set = replica_path / f"replica_{replica_number}"
         if parallel_models == 1:
             log.info("Starting replica fit %s", replica_number)
-        elif parallel_models > 1:
-            log.info("Starting replica fits %s to %s", replica_number, replica_number+parallel_models)
+        else:
+            log.info(
+                "Starting replica fits %s to %s",
+                replica_number,
+                replica_number + parallel_models - 1,
+            )
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)

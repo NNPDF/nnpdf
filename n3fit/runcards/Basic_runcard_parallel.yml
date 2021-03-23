@@ -88,20 +88,6 @@ positivity:
     - { dataset: POSFLL,   poslambda: 1e4 }
 
 ############################################################
-# integrability:
-#   integdatasets:
-#     - {dataset: INTEGXT3,   poslambda: 1e2}
-
-############################################################
-lhagrid:
-  nx  : 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq  : 50
-  qmax: 1e5
-
-############################################################
 debug: False
 maxcores: 8
 parallel_models: 4
