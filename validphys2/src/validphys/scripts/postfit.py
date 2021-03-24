@@ -32,7 +32,7 @@ from validphys.core import PDF
 from validphys.fitveto import NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2, INTEG_THRESHOLD
 from validphys.utils import exception_manager
 
-log = logging.getLogger(__name__)
+log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(colors.ColorHandler())
 
