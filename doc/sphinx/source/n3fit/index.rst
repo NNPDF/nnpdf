@@ -14,7 +14,6 @@ n3fit design
    :maxdepth: 1
 
    methodology
-   pos_integ
    hyperopt
    runcard_detailed
 
