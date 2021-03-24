@@ -410,6 +410,7 @@ class SimilarCuts(TupleComp):
         self.threshold = threshold
         super().__init__(self.inputs, self.threshold)
 
+    @functools.lru_cache()
     def load(self):
         # TODO: Update this when a suitable interace becomes available
         from validphys.convolution import central_predictions
