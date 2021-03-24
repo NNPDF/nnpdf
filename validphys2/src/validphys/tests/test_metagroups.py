@@ -1,8 +1,8 @@
 """
-test_metaexps
+test_metagroups
 
-Test that the experiments key defined in the commondata meta data, which is
-subsequently used for grouping makes sense.
+Test the grouping mechanism which uses the commondata meta data to group
+datasets.
 
 """
 from validphys.api import API
@@ -29,3 +29,24 @@ def test_no_systematic_overlaps():
     assert isinstance(
         res, str
     ), f"Overlap found between metadata experiments {res[0]} {res[1]}"
+
+def test_grouping_defaults():
+    """Check that the fallback default for metadata group is working properly.
+    ``metadata_group`` should take precedence, followed by lockfile key
+    ``metadata_group_default_recorded_spec_`` finally the current default
+    produced by ``metadata_group_default``
+
+    """
+    # check current default
+    assert API.processed_metadata_group() == "experiment"
+
+    # check explicit key takes precedence
+    assert API.processed_metadata_group(metadata_group="foo") == "foo"
+
+    # check lockkey
+    assert API.processed_metadata_group(
+        metadata_group_default_recorded_spec_="bar") == "bar"
+
+    # check explicit key still takes precedence
+    assert API.processed_metadata_group(
+        metadata_group_default_recorded_spec_="bar", metadata_group="foo") == "foo"

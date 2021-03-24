@@ -1312,52 +1312,22 @@ class CoreConfig(configparser.Config):
         return group
 
     @record_from_defaults
-    def parse_data_grouping(self, key):
-        """a key which indicates which default grouping to use. Mainly for
-        internal use. It allows the default grouping of experiment to be applied
-        to runcards which don't specify `metadata_group` without there being
-        a namespace conflict in the lockfile
-
+    def produce_metadata_group_default(self):
+        """Default dataset grouping to use if ``metadata_group`` is not
+        specified by the user.
         """
-        return key
-
-    def load_default_data_grouping(self, spec):
-        """Load the default grouping of data"""
-        # slightly superfluous, only one default at present but perhaps
-        # somebody will want to add to this at some point e.g for th. uncertainties
-        allowed = {
-            "standard_report": "experiment",
-        }
-        return allowed[spec]
-
-    def produce_processed_data_grouping(
-        self, data_grouping=None, data_grouping_recorded_spec_=None
-    ):
-        """Process the data_grouping key from the runcard, or lockfile. If
-        `data_grouping_recorded_spec_` is present then its value is taken, and
-        the runcard is assumed to be a lockfile.
-
-        If data_grouping is None, then fall back to old behaviour of grouping
-        by experiment.
-
-        Else, the user can specfiy their own grouping, for example metadata_process.
-        """
-        if data_grouping is None:
-            # fallback to old default behaviour, but still record to lockfile
-            data_grouping = self.parse_data_grouping("standard_report")
-        if data_grouping_recorded_spec_ is not None:
-            return data_grouping_recorded_spec_[data_grouping]
-        return self.load_default_data_grouping(data_grouping)
+        return "experiment"
 
     def produce_processed_metadata_group(
-        self, processed_data_grouping, metadata_group=None
+        self, metadata_group_default, metadata_group=None
     ):
         """Expose the final data grouping result. Either metadata_group is
-        specified by user, in which case uses `processed_data_grouping` which
-        is experiment by default.
+        specified by user or take the default grouping from
+        ``metadata_group_default``
+
         """
         if metadata_group is None:
-            return processed_data_grouping
+            return metadata_group_default
         return metadata_group
 
 
