@@ -40,7 +40,6 @@ def test_python_weights(weighted_data_witht0_config):
 
     """
     weighted_data_witht0_config = dict(weighted_data_witht0_config)
-    # TODO: work out why uncut NMC predictions have wrong shape.
     weighted_data_witht0_config["use_cuts"] = "internal"
     cov = API.dataset_inputs_covariance_matrix(
         **weighted_data_witht0_config

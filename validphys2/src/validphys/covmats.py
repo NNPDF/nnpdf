@@ -191,8 +191,7 @@ def dataset_inputs_covmat_from_systematics(
     ):
         sys_errors = cd.systematic_errors(central_values)
         stat_errors = cd.stat_errors.to_numpy()
-        # better way to do this?
-        weights.append(dsinp.weight * np.ones_like(stat_errors))
+        weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)
@@ -236,8 +235,7 @@ def dataset_t0_predictions(dataset, t0set):
         1-D numpy array with predictions for each of the cut datapoints.
 
     """
-    # Squeeze values since t0_pred is DataFrame with shape n_data * 1
-    cv = central_predictions(dataset, t0set).to_numpy()
+    # squeeze because the underlying data has shape ndata * 1
     return central_predictions(dataset, t0set).to_numpy().squeeze()
 
 
