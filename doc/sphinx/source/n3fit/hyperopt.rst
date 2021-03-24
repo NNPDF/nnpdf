@@ -286,4 +286,4 @@ The group of datasets that were left out followed the algorithm :ref:`mentioned 
 * CMSZDIFF12
 * ATLASTTBARTOT
 
-These were chosen attending to their `process type` as defined in their commondata files. Page 5-7 of the following `document <https://github.com/NNPDF/nnpdf/blob/master/doc/data/data_layout.pdf>`_.
+These were chosen attending to their `process type` as defined in their :ref:`commondata files <exp_data_files>`.
