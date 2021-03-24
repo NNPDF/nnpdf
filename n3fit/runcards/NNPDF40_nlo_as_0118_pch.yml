@@ -187,7 +187,7 @@ cuts_intersection_spec:
 
     - theoryid: 200
       pdf: NNPDF31_nlo_as_0118
-      dataset_inputs: *NLODatasets
+      dataset_inputs: *NNLODatasets
 
 
 
