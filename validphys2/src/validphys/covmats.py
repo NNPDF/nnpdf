@@ -18,6 +18,7 @@ from validphys.checks import (
     check_pdf_is_montecarlo,
     check_speclabels_different,
     check_data_cuts_match_theorycovmat,
+    check_cuts_considered,
 )
 from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
@@ -209,6 +210,7 @@ def dataset_inputs_covmat_from_systematics(
     return diag + special_sys.to_numpy() @ special_sys.to_numpy().T
 
 
+@check_cuts_considered
 def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
