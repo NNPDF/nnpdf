@@ -375,7 +375,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 cv = line_data[('cv', i)].values
                 err = line_data[('err', i)].values
                 ax.errorbar(x, cv, yerr=err,
-                     linestyle='--',
                      lw=0.25,
                      label= label,
                      #elinewidth = 2,
