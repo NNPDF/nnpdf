@@ -158,7 +158,7 @@ class PlotInfo:
         if commondata.plotfiles:
             for file in commondata.plotfiles:
                 with open(file) as f:
-                    processed_input = yaml.safe_load(f)
+                    processed_input = yaml.round_trip_load(f)
                     pf = parse_yaml_inp(processed_input, PlottingFile)
                     config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
                 plot_params = plot_params.new_child(config_params)
