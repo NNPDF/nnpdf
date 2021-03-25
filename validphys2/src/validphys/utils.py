@@ -9,7 +9,7 @@ import numpy as np
 from validobj import parse_input, ValidationError
 
 
-def parse_yaml_inp(inp, spec):
+def parse_yaml_inp(inp, spec, path):
     """Helper function to parse yaml using the `validobj` library and print
     useful error messages in case of a parsing error.
 
@@ -29,7 +29,7 @@ def parse_yaml_inp(inp, spec):
                 # ``(line_number, column)`` for a given item in
                 # the mapping.
                 line = current_inp.lc.item(wrong_field)[0]
-                error_text_lines.append(f"Problem processing key at line {line}:")
+                error_text_lines.append(f"Problem processing key at line {line} in {path}:")
                 current_inp = current_inp[wrong_field]
             elif hasattr(current_exc, 'wrong_index'):
                 wrong_index = current_exc.wrong_index
@@ -37,7 +37,7 @@ def parse_yaml_inp(inp, spec):
                 # a given item.
                 line = current_inp.lc.item(wrong_index)[0]
                 current_inp = current_inp[wrong_index]
-                error_text_lines.append(f"Problem processing list item at line {line}:")
+                error_text_lines.append(f"Problem processing list item at line {line} in {path}:")
             elif hasattr(current_exc, 'unknown'):
                 unknown_lines = []
                 for u in current_exc.unknown:
@@ -45,7 +45,7 @@ def parse_yaml_inp(inp, spec):
                 unknown_lines.sort()
                 for line, key in unknown_lines:
                     error_text_lines.append(
-                        f"Unknown key {key!r} defined at line {line}:"
+                        f"Unknown key {key!r} defined at line {line} in {path}:"
                     )
             error_text_lines.append(str(current_exc))
             current_exc = current_exc.__cause__
