@@ -84,11 +84,11 @@ void ATLAS_WP_MU_8TEVFilter::ReadData()
 	  fSys[i][j].type = MULT;
 	}
       
-      fSys[0][j].name = "ATLASWMU_ETmiss";
-      fSys[1][j].name = "ATLASWMU_MuonReco";
-      fSys[2][j].name = "Background";
-      fSys[3][j].name = "UNCORR";
-      fSys[4][j].name = "Modelling";
+      fSys[i][0].name = "ATLASWMU_ETmiss";
+      fSys[i][1].name = "ATLASWMU_MuonReco";
+      fSys[i][2].name = "Background";
+      fSys[i][3].name = "UNCORR";
+      fSys[i][4].name = "Modelling";
 	
       //Luminosity uncertainty
       fSys[i][5].mult = 1.9;
@@ -157,11 +157,11 @@ void ATLAS_WM_MU_8TEVFilter::ReadData()
 	  fSys[i][j].type = MULT;
 	}
 
-      fSys[0][j].name = "ATLASWMU_ETmiss";
-      fSys[1][j].name = "ATLASWMU_MuonReco";
-      fSys[2][j].name = "Background";
-      fSys[3][j].name = "UNCORR";
-      fSys[4][j].name = "Modelling";
+      fSys[i][0].name = "ATLASWMU_ETmiss";
+      fSys[i][1].name = "ATLASWMU_MuonReco";
+      fSys[i][2].name = "Background";
+      fSys[i][3].name = "UNCORR";
+      fSys[i][4].name = "Modelling";
       
       //Luminosity uncertainty
       fSys[i][5].mult = 1.9;
