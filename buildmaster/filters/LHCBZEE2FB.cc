@@ -122,7 +122,7 @@ void LHCBZEE2FBFilter::ReadData()
     for (int l = 1; l < fNSys-1; l++)
     {
       fSys[i][l].add  = syscor[i][l-1];
-      fSys[i][l].mult = fSys[i][l-1].add/fData[i]*1e2;
+      fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
       fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }

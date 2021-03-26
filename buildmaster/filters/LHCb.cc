@@ -86,7 +86,7 @@ void LHCBW36PBFilter::ReadData()
     totsys[idat+i] *= convfac;
 
     fSys[idat+i][0].mult = 3.5;                     //luminosity uncertainty of 3.5%
-    fSys[idat+i][0].add = fSys[idat+i][0].mult*fData[i]*1e-2;
+    fSys[idat+i][0].add = fSys[idat+i][0].mult*fData[idat+i]*1e-2;
     fSys[idat+i][0].type = MULT;
     fSys[idat+i][0].name = "LHCBLUMI10";
   }
