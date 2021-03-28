@@ -619,7 +619,7 @@ def plot_lumi1d(
     )
 
     ax.set_ylabel(ylabel)
-    ax.set_xlabel("$M_{X}$ (GeV)")
+    ax.set_xlabel("$m_{X}$ (GeV)")
     ax.set_xlim(mx[0], mx[-1])
     ax.set_ylim(ymin, ymax)
     ax.set_xscale("log")
@@ -671,7 +671,7 @@ def plot_lumi1d_uncertainties(
     ax.legend()
 
     ax.set_ylabel(ylabel)
-    ax.set_xlabel("$M_{X}$ (GeV)")
+    ax.set_xlabel("$m_{X}$ (GeV)")
     ax.set_xlim(mx[0], mx[-1])
     ax.set_xscale("log")
     ax.grid(False)
@@ -786,7 +786,7 @@ def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
         )
 
     fig.colorbar(mesh, extend='min', label="Differential luminosity ($GeV^{-1}$)")
-    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_ylabel('$m_{X}$ (GeV)')
     ax.set_xlabel('y')
     ax.set_yscale('log')
     ax.grid(False)
@@ -851,7 +851,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - "
                  "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel],
                          pdf.label, sqrts))
-    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_ylabel('$m_{X}$ (GeV)')
     ax.set_xlabel('y')
     ax.grid(False)
 
