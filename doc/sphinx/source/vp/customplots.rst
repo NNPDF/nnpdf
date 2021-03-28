@@ -31,8 +31,8 @@ Consider adding the functionality to master
 -------------------------------------------
 
 New types of plots, as well as stylistic or functional enhancements to existing
-code can be added to the NNPDF code, following the :ref:`appropriate process
-<rules>`.
+code can be :ref:`added to validphys <addvpplots>`, following the :ref:`appropriate
+process <rules>`.
 
 This option is strongly recommended and should be the default choice in most
 situations. While it requires some initial investment, in coming up with an
