@@ -20,7 +20,7 @@ The default styles we use can be found in the :py:mod:`validphys.mplstyles`
 module. A different style file can be passed using the ``--style`` flag of
 ``validphys`` (and other applications derived from  ``reportengine``). Note
 that the styles don't compose and therefore it is advised to copy the default
-stylsheet and modify it as needed.
+stylesheet and modify it as needed.
 
 Note that several options haven't been chosen at random. For example the first
 few entries in the color cycle are colorblind friendly and such that colors
@@ -47,25 +47,25 @@ Hooking ``validphys`` to external code
 --------------------------------------
 
 In some situations the requirements for a given plot are rather esoteric and
-there is no way to add the functionality to the code in an economically. In
-such cases, external code can be used to. Even so, consider upstreaming as much
+there is no way to add the functionality to the code economically. In
+such cases, external code can be used. Even so, consider upstreaming as much
 of the functionality as possible, to get the benefits discussed above.
 
-There are two ways to take advantage of resource produced using the
-``validphys`` execution model to process the further.
+There are two ways to take advantage of resources produced using the
+``validphys`` execution model to process them further.
 
    * Using the API: It is possible to get some data from ``validphys`` using
      the :ref:`validphys API <vpapi>` and then use it in a script. This affords
      maximum flexibility, as the script can do anything. In exchange runcard
      based input processing or structured output folders aren't readily
-     available. Prefer this option for very small project or when the task
+     available. Prefer this option for a very small project or when the task
      doesn't fit the execution model of ``validphys`` for some reason.
 
    * Using extra modules: Additional Python modules or files can be passed to
      ``validphys`` using the ``--extra-modules`` (or ``-x``) flag. The
      functions in these modules then act ``validphys`` providers and can take
-     resources from ``validpys`` as input. This approach allows using
-     immediately using runcards or the default styles. One limitation is that
+     resources from ``validpys`` as input. This approach allows the 
+     immediate use of runcards or the default styles. One limitation is that
      there is currently no way of adding production rules or parsers in this
      way. Prefer this for actions that are too difficult to upstream to
      ``validphys``, but should work as if they were internal. A minimal example
@@ -101,7 +101,7 @@ There are two ways to take advantage of resource produced using the
 
 
 
-Note that both of these come at the cost of risking future breakage to a
+Note that both of these come at the cost of risking future breakage 
 somewhat  as we don't guarantee any sort of stability on the internal
 interfaces.
 
