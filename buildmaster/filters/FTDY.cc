@@ -1151,3 +1151,63 @@ void DYE866R_sh_iteFilter::ReadData()
   f2.close();
   f3.close();
 }
+
+/**
+ * Drell Yan experiment E906/SeaQuest
+ * 
+ * Name_exp  : E906
+ * Reference : The Asymmetry of Antimatter in the Proton
+ * ArXiv     : 2103.04024
+ * Published : Nature volume 590, pages 561–565(2021)
+ * Hepdata   : n/a 
+ * Dimesionless ratio between DY cross sections with hydrogen and deuterium targets ( sigma^pd / 2*sigma^pp ) is given
+ * as 6 points in different bins with average <xt>, <xb>, <M> and <PT> (Bjorken-x of the target/beam, invarinat mass and 
+ * transverse momentum of the DY pair). The data have been collected with a proton beam at an energy of 120 GeV.
+ * The data are stored in rawdata/DTE906/data_paper.dat, according to the original format as in the paper.
+ * In rawdata/DTE906/prefilter.py they are converted in data for the distribution
+ * differential in hadronic rapidity and invariant mass, using Eqs. (4.6),(4.7) of https://arxiv.org/pdf/1009.5691.pdf.
+ * The converted data are saved in the file rawdata/DTE906/data_E906.dat, which is read in the c++ filter.  
+ * 
+ * Implemented by TG March 2021
+ **/
+
+void DYE906RFilter::ReadData()
+{
+  //Opening files
+  fstream f1;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/"
+  << fSetName << "/data_E906.dat";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+  
+  //Starting filter
+  string line;
+  double M, dum;
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> fKin3[i]; //sqrt(s), 17.37 GeV 
+    lstream >> fKin1[i]; //Y
+    lstream >> dum; //xt
+    lstream >> M;
+    fKin2[i] = M*M; //Invariant mass square
+        
+    lstream >> fData[i];  
+    lstream >> fStat[i]; //stat
+    
+    lstream >> fSys[i][0].add;  //sys
+    fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "CORR";
+  }
+  
+  f1.close();
+}

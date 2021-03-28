@@ -102,3 +102,12 @@ class DYE605_sh_iteFilter: public CommonData
 private:
   void ReadData();
 };
+
+class DYE906RFilter: public CommonData
+{
+public: DYE906RFilter():
+  CommonData("DYE906R") { ReadData(); }
+
+private:
+  void ReadData();
+};

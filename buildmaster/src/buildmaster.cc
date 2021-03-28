@@ -278,6 +278,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new DYE866R_shFilter());
   target.push_back(new DYE866R_dw_iteFilter());
   target.push_back(new DYE866R_sh_iteFilter());
+  target.push_back(new DYE906RFilter());
 
   // ************************* HERA-I Combined ******************************
 
