@@ -18,6 +18,31 @@ appear in ``validphys2``.
 
 .. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
 
+3f points
+---------
+For isolated factorisation scale variation using a 3-point prescription (central, double, half).
+.. note::
+
+	``theoryids``: 163, 176, 177
+
+  ``point_prescription: '3f point'``
+
+.. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+)^2 + \Delta_1(-)^2 \bigg\}
+
+.. math:: s_{12} = \frac{1}{2}\bigg\{\bigg(\Delta_1(+) + \Delta_1(-) \bigg) \bigg(\Delta_2(+) + \Delta_2(-) \bigg) \bigg\}
+
+3r points
+---------
+For isolated renormalisation scale variation using a 3-point prescription (central, double, half).
+.. note::
+
+	``theoryids``: 163, 179, 174
+
+  ``point_prescription: '3r point'``
+
+.. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+)^2 + \Delta_1(-)^2 \bigg\}
+
+.. math:: s_{12} = \frac{1}{2}\bigg\{\bigg(\Delta_1(+) + \Delta_1(-) \bigg) \bigg(\Delta_2(+) + \Delta_2(-) \bigg) \bigg\}
 
 5 points
 ---------
