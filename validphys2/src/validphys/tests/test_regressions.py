@@ -121,7 +121,7 @@ def test_datasetchi2(data_singleexp_witht0_config):
     chi2s = API.groups_datasets_chi2_data(**data_singleexp_witht0_config)
     return results.fits_datasets_chi2_table(['test'], [exps], [chi2s])
 
-@make_table_comp(sane_load)
+@make_table_comp
 def test_art_rep_generation(data_config):
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
