@@ -378,7 +378,7 @@ class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
         self.rules = rules
         self.commondata = commondata
-        super().__init__(commondata)
+        super().__init__(commondata, *[rule.rule_string for rule in rules])
 
     def load(self):
         return np.atleast_1d(
