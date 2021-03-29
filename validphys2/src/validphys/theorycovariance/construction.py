@@ -238,7 +238,7 @@ def covmat_3rpt(name1, name2, deltas1, deltas2):
         s = 0.5*sum(np.outer(deltas1[i], deltas2[i]) for i in range(len(deltas1)))
     else:
         s = 0.25*(np.outer(
-                  (deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
+                  (deltas1[0] + deltas1[1]), (deltas2[0] + deltas2[1])))
     return s
 
 def covmat_3pt(name1, name2, deltas1, deltas2):
