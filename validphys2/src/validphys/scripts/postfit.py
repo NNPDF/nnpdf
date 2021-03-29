@@ -128,7 +128,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
     with exception_manager(
-        path=result_path,
+        root=result_path,
         exit_func=shutil.move,
         exc=KeyboardInterrupt,
         prefix="postfit_work_deleteme_",

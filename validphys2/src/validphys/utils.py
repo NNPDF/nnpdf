@@ -13,9 +13,9 @@ import numpy as np
 
 
 @contextlib.contextmanager
-def exception_manager(path, exit_func, exc, prefix=None, **kwargs):
+def exception_manager(root, exit_func, exc, prefix=None, **kwargs):
     try:
-        tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=path))
+        tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=root))
         yield tempdir
     except exc:
         shutil.rmtree(tempdir)
