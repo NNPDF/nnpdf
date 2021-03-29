@@ -14,6 +14,60 @@ import numpy as np
 
 @contextlib.contextmanager
 def exception_manager(root, exit_func, exc, prefix=None, **kwargs):
+    """A context manager to handle temporary directory creation and
+    clean-up upon raising an expected exception.
+
+    Parameters
+    ----------
+    root: str
+        The root directory to create the temporary directory in.
+    exit_func: Callable
+        The exit function to call upon exiting the context manager.
+        Usually one of ``shutil.move`` or ``shutil.rmtree``. Use the former
+        if the temporary directory will be the final result directory and the
+        latter if the temporary directory will contain the result directory, for
+        example when downloading a resource.
+    exc: Exception
+        The exception to catch within the ``with`` block.
+    prefix: optional[str]
+        A prefix to prepend to the temporary directory.
+    **kwargs: dict
+        Keyword arguments to provide to ``exit_func``.
+
+    Returns
+    -------
+    tempdir: pathlib.Path
+        The path to the temporary directory.
+
+    Example
+    -------
+    The following example creates a temporary directory prepended with
+    ``tutorial_`` in the ``/tmp`` directory. The context manager will listen
+    for a ``KeyboardInterrupt`` and will clean up if this exception is
+    raised. Upon completion of the ``with`` block, it will rename the
+    temporary to ``completed`` as the ``dst``, using ``shutil.move``. The
+    final directory will contain an empty file called ``new_file``, which
+    we created within the ``with`` block.
+
+        .. code-block:: python
+          :linenos:
+
+            import shutil
+
+            from validphys.utils import exception_manager
+
+            with exception_manager(
+                root="/tmp",
+                exit_func=shutil.move,
+                exc=KeyboardInterrupt,
+                prefix="tutorial_",
+                dst="completed",
+            ) as tempdir:
+
+                new_file = tempdir / "new_file"
+                input("Press enter to continue or Ctrl-C to interrupt:\\n")
+                new_file.touch()
+    """
     try:
         tempdir = pathlib.Path(tempfile.mkdtemp(prefix=prefix, dir=root))
         yield tempdir
