@@ -491,8 +491,8 @@ def pdfNN_layer_generator(
         regularizer_args = dict()
 
     number_of_layers = len(nodes)
-    # The number of nodes in the last layer is equal to the number of fitted flavours (== len(flav_info))
-    last_layer_nodes = nodes[-1]
+    # The number of nodes in the last layer is equal to the number of fitted flavours
+    last_layer_nodes = nodes[-1] # (== len(flav_info))
 
     # Generate the generic layers that will not depend on extra considerations
 
@@ -570,9 +570,9 @@ def pdfNN_layer_generator(
 
         preproseed = seed + number_of_layers * (i + 1)
         layer_preproc = Preprocessing(
+            flav_info=flav_info,
             input_shape=(1,),
             name=f"pdf_prepro_{i}",
-            flav_info=flav_info,
             seed=preproseed,
             large_x = not subtract_one
         )
