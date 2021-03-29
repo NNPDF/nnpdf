@@ -13,7 +13,7 @@ xt, xb, M, pT, ratio, stat, sys = np.loadtxt("./data_paper.dat", usecols=(2,3,4,
 # proton mass
 m = 0.938
 # beam energy
-E = 160
+E = 120
 # com energy
 s = 2*m**2 + 2*E*m
 
