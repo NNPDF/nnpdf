@@ -99,7 +99,7 @@ OP = {
 class PredictionsRequireCutsError(Exception): pass
 
 def _predictions(dataset, pdf, fkfunc):
-    """Combine data on all the FKTables in the datase according to the
+    """Combine data on all the FKTables in the database according to the
     reduction operation defined therein. Dispatch the kind of predictions (for
     all replicas, central, etc) according to the provided ``fkfunc``, which
     should have the same interface as e.g. ``fk_predictions``.
