@@ -146,6 +146,7 @@ def _check_mx(mxmin, mxmax, sqrts):
 
 @_check_mx
 @check_positive("sqrts")
+@_check_scale
 @check_positive("nbins_m")
 def lumigrid1d(
     pdf: PDF,
@@ -154,6 +155,7 @@ def lumigrid1d(
     nbins_m: int = 30,
     mxmin: numbers.Real = 10,
     mxmax: (type(None), numbers.Real) = None,
+    scale="log",
 ):
     """
     Return the integrated luminosity in a grid of nbins_m points, for the
@@ -170,7 +172,12 @@ def lumigrid1d(
     s = sqrts*sqrts
     if mxmax is None:
         mxmax = sqrts/10
-    mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
+    if scale=="log":
+        mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
+    elif scale=="linear":
+        mxs = np.linspace(mxmin, mxmax, nbins_m)
+    else:
+        raise ValueError("Unknown scale")
     taus = (mxs / sqrts) ** 2
 
     # TODO: Write this in something fast
