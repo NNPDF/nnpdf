@@ -171,7 +171,7 @@ def scalar_log_formatter():
     def formatter(y, _pos):
         decimalplaces = int(np.maximum(-np.log10(y), 0))  # =0 for numbers >=1
         # Insert that number into a format string
-        formatstring = "{{:.{:1d}f}}".format(decimalplaces)
+        formatstring = f"{{:.{decimalplaces}f}}"
         # Return the formatted tick label
         return formatstring.format(y)
 
