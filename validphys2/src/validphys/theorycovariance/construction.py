@@ -218,6 +218,29 @@ def covmap(combine_by_type, dataset_names):
         start += process_info.sizes[dataset]
     return mapping
 
+
+def covmat_3fpt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 3pt factorisation
+    scale variation *only*, given two dataset names and collections
+    of scale variation shifts"""
+    if name1 == name2:
+        s = 0.5*sum(np.outer(deltas1[i], deltas2[i]) for i in range(len(deltas1)))
+    else:
+        s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
+                              +  np.outer(deltas1[1], deltas2[1]))
+    return s
+
+def covmat_3rpt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 3pt renormalisation
+    scale variation *only*, given two dataset names and collections
+    of scale variation shifts"""
+    if name1 == name2:
+        s = 0.5*sum(np.outer(deltas1[i], deltas2[i]) for i in range(len(deltas1)))
+    else:
+        s = 0.25*(np.outer(
+                  (deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
+    return s
+
 def covmat_3pt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt prescription,
     given two dataset names and collections of scale variation shifts"""
@@ -317,6 +340,7 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
 
 @check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
+                     point_prescription:(str, type(None)) = None,
                      fivetheories:(str, type(None)) = None,
                      seventheories:(str, type(None)) = None):
     """Produces the sub-matrices of the theory covariance matrix according
@@ -337,7 +361,12 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
             central2, *others2 = process_info.theory[name2]
             deltas2 = list((other - central2 for other in others2))
             if l==3:
-                s = covmat_3pt(name1, name2, deltas1, deltas2)
+                if point_prescription == "3f point":
+                    s = covmat_3fpt(name1, name2, deltas1, deltas2)
+                elif point_prescription == "3r point":
+                    s = covmat_3rpt(name1, name2, deltas1, deltas2)
+                else:
+                    s = covmat_3pt(name1, name2, deltas1, deltas2)
             elif l==5:
              # Zahari's proposal for the theoretical covariance matrix --------------
                 if fivetheories=='linear':
