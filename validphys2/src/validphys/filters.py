@@ -404,6 +404,14 @@ class Rule:
                 )
 
 
+    def __eq__(self, other):
+        matches = []
+        matches.append(self.rule_string == other.rule_string)
+        matches.append(self.dataset == other.dataset)
+        matches.append(self.process_type == other.process_type)
+
+        return all(matches)
+
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)
         # We return None if the rule doesn't apply. This
