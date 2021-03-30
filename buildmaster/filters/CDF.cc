@@ -489,9 +489,8 @@ void CDFZRAPFilter::ReadData()
     lstream >> fData[i];
     lstream >> fStat[i];
 
-    //Luminosity uncertainty (6%)
-    lstream >> fSys[i][0].add;
-    fSys[i][0].mult = fSys[i][0].add/fData[i]*100.;
+    fSys[i][0].mult = 6.0;  //luminosity
+    lstream >> fSys[i][0].add;         //absolute value of 6% luminosity
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CDFLUMI";
 
