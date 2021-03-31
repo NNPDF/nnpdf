@@ -1168,50 +1168,120 @@ void DYE866R_sh_iteFilter::ReadData()
  * the covariance matrix for the statistical uncertainties is also given.
  * 
  * The data are stored in rawdata/DTE906/data_paper.dat, according to the original format as in the paper.
- * In rawdata/DTE906/prefilter.py they are converted in data for the distribution
+ * In the filter they are converted in data for the distribution
  * differential in hadronic rapidity and invariant mass, using Eqs. (4.6),(4.7) of https://arxiv.org/pdf/1009.5691.pdf.
- * The converted data are saved in the file rawdata/DTE906/data_E906.dat, which is read in the c++ filter.  
  * 
  * Implemented by TG March 2021
  **/
 
 void DYE906RFilter::ReadData()
-{
-  //Opening files
-  fstream f1;
+{  
+  fstream rf, rCorr;
   
-  stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/data_E906.dat";
-  f1.open(datafile.str().c_str(), ios::in);
+  //opening data file
+  stringstream DataFile("");
+  DataFile << dataPath() << "rawdata/" << fSetName << "/data_paper.dat";
+  rf.open(DataFile.str().c_str(), ios::in);
   
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
+  if (rf.fail()) {
+    cerr << "Error opening data file " << DataFile.str() << endl;
     exit(-1);
   }
+
+  //opening covariance matrix file
+  stringstream DataFileCorr("");
+  DataFileCorr << dataPath() << "rawdata/" << fSetName << "/cov.dat";
+  rCorr.open(DataFileCorr.str().c_str(), ios::in);
+
+  if (rCorr.fail()) {
+    cerr << "Error opening data file " << DataFileCorr.str() << endl;
+    exit(-1);
+  }
+
+  double Eb = 120; //beam energy
+  double mp = 0.938; //proton mass
+  double s = 2*mp*mp + 2*Eb*mp; //com energy square
+  double xt, xb, M, pT, ratio, dum;
+  double xF, tau, pt, Y, j;
   
   //Starting filter
   string line;
-  double M, dum;
+  //Skip first and second line
+  getline(rf,line);
+  getline(rf,line);
+
   for (int i = 0; i < fNData; i++)
   {
-    getline(f1,line);
+    getline(rf,line);
     istringstream lstream(line);
     
-    lstream >> fKin3[i]; //sqrt(s), 15.06 GeV 
-    lstream >> fKin1[i]; //Y
-    lstream >> dum; //xt
-    lstream >> M;
-    fKin2[i] = M*M; //Invariant mass square
+    lstream >> dum >> dum;
+    lstream >> xt >> xb >> M >> pT;
+    xF = xb - xt;
+    tau = M*M/s;
+    pt = pT/M;
+
+    //hadronic rapidity, Eq.(4.6) https://arxiv.org/pdf/1009.5691.pdf
+    Y = 0.5*log( (sqrt(xF*xF + 4*tau*(1+pt*pt)) + xF)/(sqrt(xF*xF + 4*tau*(1+pt*pt)) - xF) );
+    //jacobian, Eq.(4.7 https://arxiv.org/pdf/1009.5691.pdf)
+    j = sqrt(xF*xF +4*tau*(1+pt*pt));
+
+    fKin1[i] = Y;
+    fKin2[i] = M*M;
+    fKin3[i] = sqrt(s);
         
-    lstream >> fData[i];  
-    lstream >> fStat[i]; //stat
-    
-    lstream >> fSys[i][0].add;  //sys
+    lstream >> ratio;
+    fData[i] = j*ratio; //rescale the ratio using the jacobian
+
+    lstream >> dum; //skip statistical uncertainty given in data table
+    fStat[i] = 0; //set statistical uncertainty to 0. Will use the one from the covariance matrix
+
+    //read the only source of systematic
+    lstream >> fSys[i][0].add;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "CORR";
   }
+
+  //defining covariance matrix
+  double** covmat = new double*[fNData];
+  for (int i = 0; i < fNData; i++) 
+    covmat[i] = new double[fNData];
   
-  f1.close();
+  //reading covariance matrix
+  for (int i = 0; i < fNData; i++)
+    for (int j = 0; j < fNData; j++)
+	    rCorr >> covmat[j][i];
+	  
+  //generate artificial systematics accounting for statistical error
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+  
+  if(!genArtSys(fNData,covmat,syscor)){
+    cerr << " in " << fSetName 
+	  << " : cannot generate artificial systematics" << endl;
+    exit(-1);
+  }
+
+  //copy the artificial systematics in the fSys matrix
+  for (int i = 0; i < fNData; i++)
+    for (int l = 1; l < fNSys; l++){
+      fSys[i][l].add  = syscor[i][l];
+	    fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+	    fSys[i][l].type = ADD;  
+	    fSys[i][l].name = "CORR";
+    }
+    
+  for(int i = 0; i < fNData; i++) 
+    delete[] covmat[i];
+  delete[] covmat;
+  
+  for(int i = 0; i < fNData; i++) 
+    delete[] syscor[i];
+  delete[] syscor;
+  
+  rf.close();
+  rCorr.close();
+
 }
