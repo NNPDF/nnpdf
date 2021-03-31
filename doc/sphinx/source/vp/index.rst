@@ -61,6 +61,7 @@ Using validphys
    ./api.md
    ./developer.rst
    ./tables_figs.rst
+   ./customplots.rst
    ./examples.rst
 
 How validphys handles data

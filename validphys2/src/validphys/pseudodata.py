@@ -3,6 +3,7 @@
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
 """
+from collections import namedtuple
 import logging
 import multiprocessing as mp
 import os
@@ -21,6 +22,7 @@ import validphys.n3fit_data_utils as reader
 
 log = logging.getLogger(__name__)
 
+DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
 
 fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
@@ -28,12 +30,12 @@ context_index = collect("groups_index", ("fitcontext",))
 
 @check_cuts_fromfit
 def read_fit_pseudodata(fitcontext, context_index):
-    """Generator to handle the reading of training and validation splits for a fit that has been
+    """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
 
     The data is read from the PDF to handle the mixing introduced by ``postfit``.
 
-    The data files are concatenated to yield all the data that went into a fit. The training and validation
+    The data files are concatenated to return all the data that went into a fit. The training and validation
     indices are also returned so one can access the splits using pandas indexing.
 
     Raises
@@ -43,26 +45,29 @@ def read_fit_pseudodata(fitcontext, context_index):
     CheckError
         If the ``use_cuts`` flag is not set to ``fromfit``
 
+    Returns
+    -------
+    data_indices_list: list[namedtuple]
+        List of ``namedtuple`` where each entry corresponds to a given replica. Each element contains
+        attributes ``pseudodata``, ``tr_idx``, and ``val_idx``. The latter two being used to slice
+        the former to return training and validation data respectively.
+
     Example
     -------
     >>> from validphys.api import API
-    >>> data_generator = API.read_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
-    >>> data, tr_idx, val_idx = next(data_generator)
-    >>> data.loc[tr_idx]
-                        data
+    >>> data_indices_list = API.read_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
+    >>> len(data_indices_list) # Same as nrep
+    100
+    >>> rep_info = data_indices_list[0]
+    >>> rep_info.pseudodata.loc[rep_info.tr_idx].head()
+                          data
     group dataset id
-    BCDMS BCDMSD  0    0.371510
-                1    0.365659
-                2    0.350234
-                4    0.355560
-                6    0.346234
-    ...                     ...
-    SLAC  SLACP   122  0.245322
-                123  0.256854
-                142  0.165455
-                165  0.089741
-                166  0.090437
-    [1556 rows x 1 columns]
+    BCDMS BCDMSD  0   0.371510
+                1   0.365659
+                2   0.350234
+                4   0.355560
+                6   0.346234
+                        data
     """
     # List of length 1 due to the collect
     context_index = context_index[0]
@@ -74,6 +79,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     nrep = len(pdf)
     path = pathlib.Path(pdf.infopath)
 
+    data_indices_list = []
     for rep_number in range(1, nrep):
         # This is a symlink (usually).
         replica = path.with_name(pdf.name + "_" + str(rep_number).zfill(4) + ".dat")
@@ -102,7 +108,11 @@ def read_fit_pseudodata(fitcontext, context_index):
         tr = pseudodata[pseudodata["type"]=="training"]
         val = pseudodata[pseudodata["type"]=="validation"]
 
-        yield pseudodata.drop("type", axis=1), tr.index, val.index
+        data_indices_list.append(
+            DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
+        )
+
+    return data_indices_list
 
 
 def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):

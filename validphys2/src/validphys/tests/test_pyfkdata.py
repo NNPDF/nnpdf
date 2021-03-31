@@ -50,12 +50,12 @@ def test_predictions():
     pdf = l.check_pdf(PDF)
     dss = [
         l.check_dataset(
-            'ATLASTTBARTOT', theoryid=THEORYID, cfac=('QCD',), cuts=None
-        ),  # Had, cfactors, no cuts
+            'ATLASTTBARTOT', theoryid=THEORYID, cfac=('QCD',)
+        ),  # cfactors
         l.check_dataset('H1HERAF2B', theoryid=THEORYID),  # DIS, op: NULL
         l.check_dataset('D0ZRAP', theoryid=THEORYID),  # op: RATIO
         l.check_dataset('D0WEASY', theoryid=THEORYID),  # op: ASY
-        l.check_dataset('CMSWCHARMTOT', theoryid=THEORYID, cuts=None),  # op: ADD
+        l.check_dataset('CMSWCHARMTOT', theoryid=THEORYID),  # op: ADD
         l.check_dataset('ATLASWPT31PB', theoryid=THEORYID),  # op: SMN
     ]
     for ds in dss:

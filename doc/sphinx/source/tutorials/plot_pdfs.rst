@@ -1,4 +1,5 @@
 .. _tut_plot_pdfs:
+.. _pdfplots:
 
 How to plot PDFs, distances and luminosities
 ============================================

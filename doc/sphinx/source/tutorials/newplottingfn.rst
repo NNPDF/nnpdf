@@ -1,4 +1,5 @@
 .. _tut_newaction :
+.. _addvpplots:
 
 How to add a new type of plot or table in ``validphys``
 =======================================================
