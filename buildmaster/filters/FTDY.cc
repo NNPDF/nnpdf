@@ -1170,7 +1170,7 @@ void DYE866R_sh_iteFilter::ReadData()
  * The data are stored in rawdata/DTE906/data_paper.dat, according to the original format as in the paper.
  * In the filter they are converted in data for the distribution
  * differential in hadronic rapidity and invariant mass,
- * using using the definition of hadronic rapidity given in Eqs. (4.6) of https://arxiv.org/pdf/1009.5691.pdf.
+ * using the definition of hadronic rapidity given in Eqs. (4.6) of https://arxiv.org/pdf/1009.5691.pdf.
  * No jacobian is required, since it simplifies between numerator and denominator.
  * 
  * Implemented by TG March 2021
