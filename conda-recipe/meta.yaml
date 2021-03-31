@@ -42,9 +42,10 @@ requirements:
         - matplotlib >=3.3.0
         - blessings >=1.7
         - scipy >=0.19.1
-        - pandas
+        - pandas >= 1.2.0
         - requests
         - prompt_toolkit
+        - pyarrow
         - sphinx # documentation
         - recommonmark
         - sphinx_rtd_theme >0.5
