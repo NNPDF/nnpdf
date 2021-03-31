@@ -29,6 +29,7 @@ DS_NAMES = [
     "LHCBZEE2FB_40",
     "LHCBW36PB_40",
     "CDFZRAP_NEW",
+    "CMSTTBARTOT_40",
 ]
 
 L = Loader()

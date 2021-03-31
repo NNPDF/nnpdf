@@ -91,3 +91,61 @@ void CMSTTBARTOTFilter::ReadData()
   f1.close();
 
 }
+
+// Fix inconsistency with add and mult columns
+void CMSTTBARTOT_40Filter::ReadData()
+{
+  // Opening file
+  fstream f1;
+  stringstream datafile("");
+  datafile << dataPath()
+	   << "rawdata/CMSTTBARTOT_SF/CMSTTBARTOT_SF.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail())
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  for(int i=0; i<fNData;i++)
+    {
+      string line;
+      int idum;
+      double cme;
+      double sys1, sys2;
+      double stmp, dtmp;
+
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> idum >> cme;
+
+      fKin1[i] = 0.;
+      fKin2[i] = Mt*Mt;             //top mass
+      fKin3[i] = cme*1000;       //sqrt(s)
+
+      lstream >> fData[i];       //central value
+      lstream >> fStat[i];       //statistical uncertainty
+      lstream >> sys1 >> sys2;   //Asymmetric systematic uncertainty
+      // sys1 = sys1/fData[i]*100;
+      // sys2 = sys2/fData[i]*100;
+      symmetriseErrors(sys1,sys2,&stmp,&dtmp);
+
+      fSys[i][0].add = stmp;    //Symmetric systematic uncertainty
+      //Shift from asymmetric errors
+      fData[i] += dtmp;
+      fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
+      fSys[i][0].type = MULT;
+      fSys[i][0].name = "UNCORR";
+
+      lstream >> fSys[i][1].add; //Luminosity uncertainty
+      fSys[i][1].mult = fSys[i][1].add/fData[i]*100;
+      fSys[i][1].type = MULT;
+      fSys[i][1].name = "UNCORR";
+
+    }
+
+  f1.close();
+
+}
