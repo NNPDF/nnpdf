@@ -54,6 +54,7 @@ Using validphys
    ./nnprofile.md
    ./scripts.rst
    ./api.md
+   ./customplots.rst
    ./examples.rst
 
 How validphys handles data
