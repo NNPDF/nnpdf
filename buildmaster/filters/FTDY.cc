@@ -1169,7 +1169,9 @@ void DYE866R_sh_iteFilter::ReadData()
  * 
  * The data are stored in rawdata/DTE906/data_paper.dat, according to the original format as in the paper.
  * In the filter they are converted in data for the distribution
- * differential in hadronic rapidity and invariant mass, using Eqs. (4.6),(4.7) of https://arxiv.org/pdf/1009.5691.pdf.
+ * differential in hadronic rapidity and invariant mass,
+ * using using the definition of hadronic rapidity given in Eqs. (4.6) of https://arxiv.org/pdf/1009.5691.pdf.
+ * No jacobian is required, since it simplifies between numerator and denominator.
  * 
  * Implemented by TG March 2021
  **/
@@ -1201,7 +1203,7 @@ void DYE906RFilter::ReadData()
   double Eb = 120; //beam energy
   double mp = 0.938; //proton mass
   double s = 2*mp*mp + 2*Eb*mp; //com energy square
-  double xt, xb, M, pT, ratio, dum;
+  double xt, xb, M, pT, dum;
   double xF, tau, pt, Y;
   
   //Starting filter
