@@ -1202,7 +1202,7 @@ void DYE906RFilter::ReadData()
   double mp = 0.938; //proton mass
   double s = 2*mp*mp + 2*Eb*mp; //com energy square
   double xt, xb, M, pT, ratio, dum;
-  double xF, tau, pt, Y, j;
+  double xF, tau, pt, Y;
   
   //Starting filter
   string line;
@@ -1223,15 +1223,12 @@ void DYE906RFilter::ReadData()
 
     //hadronic rapidity, Eq.(4.6) https://arxiv.org/pdf/1009.5691.pdf
     Y = 0.5*log( (sqrt(xF*xF + 4*tau*(1+pt*pt)) + xF)/(sqrt(xF*xF + 4*tau*(1+pt*pt)) - xF) );
-    //jacobian, Eq.(4.7 https://arxiv.org/pdf/1009.5691.pdf)
-    j = sqrt(xF*xF +4*tau*(1+pt*pt));
-
+    
     fKin1[i] = Y;
     fKin2[i] = M*M;
     fKin3[i] = sqrt(s);
         
-    lstream >> ratio;
-    fData[i] = j*ratio; //rescale the ratio using the jacobian
+    lstream >> fData[i];
 
     lstream >> dum; //skip statistical uncertainty given in data table
     fStat[i] = 0; //set statistical uncertainty to 0. Will use the one from the covariance matrix
