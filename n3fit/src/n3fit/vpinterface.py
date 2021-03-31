@@ -142,6 +142,7 @@ class N3PDF(PDF):
         if flavours is None:
             flavours = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
+        # as the scaling is done by the model itself
         mod_xgrid = xarr.reshape(1, -1, 1)
         result = self.model.predict([mod_xgrid])
         if flavours != "n3fit":

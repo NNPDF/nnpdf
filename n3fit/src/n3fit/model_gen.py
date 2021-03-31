@@ -9,7 +9,7 @@
 """
 from dataclasses import dataclass
 import numpy as np
-import n3fit.msr as msr_constraints
+from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, Mask, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 
@@ -528,7 +528,7 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_constraints.msr_impose(mode=impose_sumrule)
+        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
         model_input.append(integrator_input)
     else:
         sumrule_layer = lambda x: x
@@ -604,6 +604,6 @@ def pdfNN_layer_generator(
         final_pdf = sumrule_layer(layer_pdf)
 
         # Create the model
-        pdf_model = MetaModel(model_input, final_pdf(placeholder_input), name=f"PDF_{i}")
+        pdf_model = MetaModel(model_input, final_pdf(placeholder_input), name=f"PDF_{i}", scaler=scaler)
         pdf_models.append(pdf_model)
     return pdf_models
