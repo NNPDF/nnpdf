@@ -223,10 +223,7 @@ def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
     scale variation *only*, given two dataset names and collections
     of scale variation shifts"""
-    if name1 == name2:
-        s = 0.5*sum(np.outer(deltas1[i], deltas2[i]) for i in range(len(deltas1)))
-    else:
-        s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
+    s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
                               +  np.outer(deltas1[1], deltas2[1]))
     return s
 
@@ -235,10 +232,12 @@ def covmat_3rpt(name1, name2, deltas1, deltas2):
     scale variation *only*, given two dataset names and collections
     of scale variation shifts"""
     if name1 == name2:
-        s = 0.5*sum(np.outer(deltas1[i], deltas2[i]) for i in range(len(deltas1)))
+        s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
+                              +  np.outer(deltas1[1], deltas2[1]))
     else:
         s = 0.25*(np.outer(
-                  (deltas1[0] + deltas1[1]), (deltas2[0] + deltas2[1])))
+                  (deltas1[0] + deltas1[1]), 
+                  (deltas2[0] + deltas2[1])))
     return s
 
 def covmat_3pt(name1, name2, deltas1, deltas2):
