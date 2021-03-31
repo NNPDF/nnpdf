@@ -81,6 +81,57 @@ void D0ZRAPFilter::ReadData()
 
 }
 
+// Fix inconsistency between add and mult columns
+void D0ZRAP_40Filter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/D0ZRAP_SF/D0-Zrapdist.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  string line;
+  const double MZ2 = pow(MZ, 2.0);
+  const double s = 1960;
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+
+    lstream >> fKin1[i];   //Z boson rapidity y
+    fKin2[i] = MZ2;        //Mass Z squared
+    fKin3[i] = s;          //sqrt(s)
+
+    lstream >> fData[i];
+    lstream >> fStat[i];            //stat
+
+    double up = 0;double down = 0;
+    lstream >> up >> down;          // Asymmetric systematic
+
+    double sys = 0;
+    double shift = 0;
+    symmetriseErrors(up,down,&sys,&shift);
+
+    fSys[i][0].add = sys;
+    fData[i]+= shift; // Shift due to asymmetric error (before calculating mult)
+    fSys[i][0].mult = (sys*100.0)/fData[i];
+
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "UNCORR";     //treat sys as uncorrelated
+
+  }
+
+  f1.close();
+
+}
+
 /**
  *
  *     W asymmetry rapidity distribution measurements with muon production

@@ -21,6 +21,15 @@ private:
   void ReadData();
 };
 
+class D0ZRAP_40Filter: public CommonData
+{
+public: D0ZRAP_40Filter():
+  CommonData("D0ZRAP_40") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class D0WMASYFilter: public CommonData
 { public: D0WMASYFilter():
   CommonData("D0WMASY") { ReadData(); }
