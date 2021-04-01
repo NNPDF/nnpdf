@@ -28,6 +28,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import Concatenate as keras_concatenate
+from tensorflow.keras.layers import subtract as keras_subtract
 
 from tensorflow.keras.layers import Input
 from tensorflow.keras import backend as K
@@ -41,7 +42,7 @@ def evaluate(tensor):
 
 
 def as_layer(operation, op_args=None, op_kwargs=None, **kwargs):
-    """ Wrap any operation as a keras layer
+    """Wrap any operation as a keras layer
 
     Note that a layer call argument takes only one argument, therefore
     all extra arguments defining the operation must be given as part
@@ -100,7 +101,7 @@ def c_to_py_fun(op_name, name="dataset"):
 # f(x: numpy) -> y: tensor
 def numpy_to_tensor(ival, **kwargs):
     """
-        Make the input into a tensor
+    Make the input into a tensor
     """
     return K.constant(ival, **kwargs)
 
@@ -165,6 +166,23 @@ def op_multiply_dim(o_list, **kwargs):
 
     layer_op = as_layer(lambda inputs: inputs[0] * inputs[1])
     return layer_op(o_list)
+
+
+def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
+    """A convoluted way of providing ``x[:, indices, :]``
+
+    From TF 2.4 onwards tensorflow is able to understand the syntax above for
+    both eager and non-eager tensors
+    """
+    if indices == -1:
+        indices = tensor.shape[axis]-1
+
+    def tmp(x):
+        y = tf.gather(x, indices, axis=axis, **kwargs)
+        return tf.expand_dims(y, axis=axis)
+
+    layer_op = as_layer(tmp)
+    return layer_op(tensor)
 
 
 #
@@ -236,7 +254,7 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
 
 # Mathematical operations
 def pdf_masked_convolution(raw_pdf, basis_mask):
-    """ Computes a masked convolution of two equal pdfs
+    """Computes a masked convolution of two equal pdfs
     And applies a basis_mask so that only the actually useful values
     of the convolution are returned
 
@@ -270,7 +288,6 @@ def tensor_product(*args, **kwargs):
     return tf.tensordot(*args, **kwargs)
 
 
-
 @tf.function(experimental_relax_shapes=True)
 def op_log(o_tensor, **kwargs):
     """
@@ -294,3 +311,20 @@ def split(*args, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/split>`_
     """
     return tf.split(*args, **kwargs)
+
+
+def scatter_to_one(values, indices=[[1]], output_dim=14):
+    """
+    Like scatter_nd initialized to one instead of zero
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
+    """
+    ones = np.ones(output_dim, dtype=np.float32)
+    return tf.tensor_scatter_nd_update(ones, indices, values)
+
+
+def op_subtract(inputs, **kwargs):
+    """
+    Computes the difference between two tensors.
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
+    """
+    return keras_subtract(inputs, **kwargs)

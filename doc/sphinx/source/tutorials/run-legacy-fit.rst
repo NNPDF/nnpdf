@@ -1,7 +1,7 @@
 .. _nnfit-usage:
 
-How to run a legacy PDF fit
----------------------------
+How to run a legacy PDF fit (NNPDF3.1 style)
+============================================
 
 This tutorial explains how to run a PDF fit using the legacy code,
 :code:`nnfit`. To find out how to run a PDF fit with the code that is currently
@@ -53,12 +53,8 @@ running a fit on a cluster.
 applying the post selection criteria. This will produce a set of
 :code:`<number_of_replicas> + 1` replicas, since the mean of the fitted
 replicas, usually dubbed :code:`replica_0`, will also be computed. Note that the
-standard behaviour of :code:`postfit` may be modified by using the
-:code:`--chi2-threshold` and :code:`--arclength-threshold` flags. As their names
-suggest, these set the thresholds for the :math:`\chi^2` and the arclength,
-respectively. They are in units of the respective standard deviations over
-replicas, above which the replicas are vetoed by :code:`postfit`. They are both
-set to 4 as default.
+standard behaviour of :code:`postfit` can be modified by using various flags.
+More information can be found at :ref:`postfit`.
 
 5. You can then upload the fit to the
 `server <https://data.nnpdf.science/fits/>`_ by using

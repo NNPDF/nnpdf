@@ -44,8 +44,23 @@ EVOL_LIST = [
 
 
 class N3PDF(PDF):
-    def __init__(self, pdf_model, name="n3fit"):
+    """
+    Creates a N3PDF object, extension of the validphys PDF object to perform calculation
+    with a n3fit generated model.
+
+    Parameters
+    ----------
+        pdf_model: :py:class:`n3fit.backends.MetaModel`
+            PDF trained with n3fit, x -> f(x)_{i} where i are the flavours in the evol basis
+        fit_basis: list(dict)
+            basis of the training, used for reporting
+        name: str
+            name of the N3PDF object
+    """
+
+    def __init__(self, pdf_model, fit_basis=None, name="n3fit"):
         self.model = pdf_model
+        self.fit_basis = fit_basis
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
         # Set the number of members to two for legacy compatibility
         # in this case replica 0 and replica 1 are the same
@@ -64,20 +79,52 @@ class N3PDF(PDF):
         """
         return self
 
+    def get_nn_weights(self):
+        """Outputs all weights of the NN as numpy.ndarrays """
+        return self.model.get_weights()
+
+    def get_preprocessing_factors(self):
+        """Loads the preprocessing alpha and beta arrays from the PDF trained model.
+        If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
+        to generate a new dictionary with the names, the exponent and whether they are trainable
+        otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
+        """
+        preprocessing_layer = self.model.get_layer("pdf_prepro")
+        if self.fit_basis is not None:
+            output_dictionaries = []
+            for d in self.fit_basis:
+                flavour = d["fl"]
+                alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
+                beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
+                if alpha is not None:
+                    alpha = float(alpha.numpy())
+                if beta is not None:
+                    beta = float(beta.numpy())
+                output_dictionaries.append(
+                    {
+                        "fl": flavour,
+                        "smallx": alpha,
+                        "largex": beta,
+                        "trainable": d.get("trainable", True),
+                    }
+                )
+            alphas_and_betas = output_dictionaries
+        return alphas_and_betas
+
     def __call__(self, xarr, flavours=None):
         """Uses the internal model to produce pdf values.
         The output is on the evolution basis.
 
         Parameters
         ----------
-            xarr: numpy.array
+            xarr: numpy.ndarray
                 x-points with shape (xgrid_size,) (size-1 dimensions are removed)
             flavours: list
                 list of flavours to output
 
         Returns
         -------
-            numpy.array
+            numpy.ndarray
                 (xgrid_size, flavours) pdf result
         """
         if flavours is None:
@@ -95,16 +142,16 @@ class N3PDF(PDF):
         """
         Parameters
         ----------
-            flavours: numpy.array
+            flavours: numpy.ndarray
                 flavours to compute
-            xarr: numpy.array
+            xarr: numpy.ndarray
                 x-points to compute, dim: (xgrid_size,)
-            qmat: numpy.array
+            qmat: numpy.ndarray
                 q-points to compute (not used by n3fit, used only for shaping purposes)
 
         Returns
         ------
-            numpy.array
+            numpy.ndarray
             array of shape (1, flavours, xgrid_size, qmat) with the values of the ``pdf_model``
             evaluated in ``xarr``
         """

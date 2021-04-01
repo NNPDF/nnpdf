@@ -1,0 +1,26 @@
+meta:
+    title: New data specification example
+    author: Rosalyn Pearson
+    keywords: [example]
+
+metadata_group: nnpdf31_process
+
+dataset_inputs:
+    - { dataset: NMC }
+    - { dataset: ATLASTTBARTOT, cfac: [QCD] }
+    - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+
+theoryid: 162
+
+dataspecs:
+ - pdf: NNPDF31_nnlo_as_0118_DISonly
+   speclabel: "3.1 NNLO DISonly"
+
+use_cuts: internal
+
+template_text: |
+ # chi2 grouped by {processed_metadata_group}
+ {@dataspecs_groups_chi2_table@}
+
+actions_:
+ - report(main=True)

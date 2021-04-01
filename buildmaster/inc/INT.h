@@ -26,30 +26,10 @@ private:
   void ReadData();
 };
 
-class IntFilterT15: public CommonData
+class IntFilter543: public CommonData
 {
 public: 
-	IntFilterT15(std::string setname):
-  	CommonData(setname) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class IntFilter_small: public CommonData
-{
-public: 
-	IntFilter_small(std::string setname):
-  	CommonData(setname) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class IntFilterT15_small: public CommonData
-{
-public: 
-	IntFilterT15_small(std::string setname):
+	IntFilter543(std::string setname):
   	CommonData(setname) { ReadData(); }
 
 private:

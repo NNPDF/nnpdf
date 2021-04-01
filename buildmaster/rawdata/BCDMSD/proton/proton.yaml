@@ -1,0 +1,17 @@
+meta:
+   author: Rosalyn Pearson
+   title: Theoretical predictions
+
+theoryid: 53
+
+use_cuts: nocuts
+
+fit: 201130-jcm-001
+pdf: 201130-jcm-001
+
+dataset_inputs:
+         - dataset: BCDMSD
+
+actions_:
+   - group_result_table
+   

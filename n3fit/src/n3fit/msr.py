@@ -37,31 +37,46 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(fit_layer, final_pdf_layer, verbose=False):
+def msr_impose(fit_layer, final_pdf_layer, mode='All', scaler=None, verbose=False):
     """
-        This function receives:
-            - fit_layer: the 8-basis layer of PDF which we fit
-            - final_layer: the 14-basis which is fed to the fktable
-        It uses pdf_fit to compute the sum rule and returns a modified version of
-        the final_pdf layer with a normalisation by which the sum rule is imposed
+    Applies the normalization due to the sum rules to the final_pdf_layer.
+    The sum rules are computed in the ``fit_layer``
+    while they are applied in the ``final_pdf_layer`` which is in the fk-basis.
+
+    Parameters
+    ----------
+        fit_layer: layer
+            The basis of the fit
+        final_pdf_layer: layer
+            The 14-flavours layers that goes into the fktable
+        mode: str
+            Which sum rules to apply (All/MSR/VSR/None)
+        scaler: scaler
+            Function to apply to the input. If given the input to the model
+            will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
     """
     # 1. Generate the fake input which will be used to integrate
     nx = int(2e3)
     xgrid, weights_array = gen_integration_input(nx)
+    # 1b If a scaler is provided, scale the input xgrid
+    if scaler:
+        xgrid = scaler(xgrid)
 
     # 2. Prepare the pdf for integration
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide()
 
     def pdf_integrand(x):
-        res = operations.op_multiply([division_by_x(x), fit_layer(x)])
+        """ If a scaler is given, the division needs to take only the original input """
+        x_original = operations.op_gather_keep_dims(x, -1, axis=-1)
+        res = operations.op_multiply([division_by_x(x_original), fit_layer(x)])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
     integrator = xIntegrator(weights_array, input_shape=(nx,))
 
     # 4. Now create the normalization by selecting the right integrations
-    normalizer = MSR_Normalization(input_shape=(8,))
+    normalizer = MSR_Normalization(input_shape=(8,), mode=mode)
 
     # 5. Make the xgrid numpy array into a backend input layer so it can be given
     xgrid_input = operations.numpy_to_input(xgrid)

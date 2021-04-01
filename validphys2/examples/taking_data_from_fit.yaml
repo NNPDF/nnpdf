@@ -1,0 +1,17 @@
+meta:
+    title: Taking data from fit example - fitinputcontext
+    author: Rosalyn Pearson
+    keywords: [example]
+
+metadata_group: nnpdf31_process
+
+fit: NNPDF31_nlo_as_0118
+
+dataspecs:
+ - pdf: NNPDF31_nlo_as_0118
+   speclabel: "3.1 NLO"
+
+use_cuts: internal
+
+actions_:
+ - fitinputcontext dataspecs_groups_chi2_table

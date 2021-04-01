@@ -375,7 +375,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 cv = line_data[('cv', i)].values
                 err = line_data[('err', i)].values
                 ax.errorbar(x, cv, yerr=err,
-                     linestyle='--',
                      lw=0.25,
                      label= label,
                      #elinewidth = 2,
@@ -960,22 +959,22 @@ def plot_dataspecs_positivity(
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
     check(
-        not (display_cuts
-             and use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL)),
-        "The display_cuts option requires setting use_cuts to True")
+        not (display_cuts and use_cuts is CutsPolicy.NOCUTS),
+        "The display_cuts option requires setting some cuts",
+    )
 
 @make_argcheck
 def _check_marker_by(marker_by):
-    markers = ('process type', 'experiment', 'dataset')
+    markers = ('process type', 'experiment', 'dataset', 'group')
     if marker_by not in markers:
         raise CheckError("Unknown marker_by value", marker_by, markers)
 
 #TODO: Right now this is hackish Could we turn it into a permanent interface?
 @make_argcheck
-def _check_highlights(groups_data, highlight_datasets):
+def _check_highlights(data_input, highlight_datasets):
     if highlight_datasets:
         values = frozenset(highlight_datasets)
-        names_set = {ds.name for group in groups_data for ds in group}
+        names_set = {ds.name for ds in data_input}
         diff = values - names_set
         if diff:
             raise CheckError(f"The following highlight elements are "
@@ -994,10 +993,16 @@ def _check_aspect(aspect):
 @_check_marker_by
 @_check_highlights
 @_check_aspect
-def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
-                 marker_by:str='process type', highlight_label:str='highlight',
-                 highlight_datasets:(Sequence,type(None))=None,
-                 aspect:str='landscape'):
+def plot_xq2(
+    dataset_inputs_by_groups_xq2map,
+    use_cuts,
+    data_input,
+    display_cuts:bool=True,
+    marker_by:str='process type',
+    highlight_label:str='highlight',
+    highlight_datasets:(Sequence,type(None))=None,
+    aspect:str='landscape',
+):
     """Plot the (x,Q²) coverage based of the data based on some LO
     approximations. These are governed by the relevant kintransform.
 
@@ -1015,7 +1020,97 @@ def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
     will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible
-    values are: "process type", "experiment" or "dataset".
+    values are: "process type", "experiment", "group" or "dataset".
+
+    Some datasets can be made to appear highlighted in the figure: Define a key
+    called ``highlight_datasets`` containing the names of the datasets to be
+    highlighted and a key `highlight_label` with a string containing the label
+    of the highlight, which will appear in the legend.
+
+    Example
+    -------
+
+    Obtain a plot with some reasonable defaults::
+
+        from validphys.api import API
+        inp = {'dataset_inputs': [{'dataset': 'NMCPD_dw'},
+           {'dataset': 'NMC'},
+           {'dataset': 'SLACP_dwsh'},
+           {'dataset': 'SLACD_dw'},
+           {'dataset': 'BCDMSP_dwsh'},
+           {'dataset': 'BCDMSD_dw'},
+           {'dataset': 'CHORUSNUPb_dw'},
+           {'dataset': 'CHORUSNBPb_dw'},
+           {'dataset': 'NTVNUDMNFe_dw', 'cfac': ['MAS']},
+           {'dataset': 'NTVNBDMNFe_dw', 'cfac': ['MAS']},
+           {'dataset': 'HERACOMBNCEM'},
+           {'dataset': 'HERACOMBNCEP460'},
+           {'dataset': 'HERACOMBNCEP575'},
+           {'dataset': 'HERACOMBNCEP820'},
+           {'dataset': 'HERACOMBNCEP920'},
+           {'dataset': 'HERACOMBCCEM'},
+           {'dataset': 'HERACOMBCCEP'},
+           {'dataset': 'HERACOMB_SIGMARED_C'},
+           {'dataset': 'HERACOMB_SIGMARED_B'},
+           {'dataset': 'DYE886R_dw'},
+           {'dataset': 'DYE886P', 'cfac': ['QCD']},
+           {'dataset': 'DYE605_dw', 'cfac': ['QCD']},
+           {'dataset': 'CDFZRAP_NEW', 'cfac': ['QCD']},
+           {'dataset': 'D0ZRAP', 'cfac': ['QCD']},
+           {'dataset': 'D0WMASY', 'cfac': ['QCD']},
+           {'dataset': 'ATLASWZRAP36PB', 'cfac': ['QCD']},
+           {'dataset': 'ATLASZHIGHMASS49FB', 'cfac': ['QCD']},
+           {'dataset': 'ATLASLOMASSDY11EXT', 'cfac': ['QCD']},
+           {'dataset': 'ATLASWZRAP11CC', 'cfac': ['QCD']},
+           {'dataset': 'ATLASWZRAP11CF', 'cfac': ['QCD']},
+           {'dataset': 'ATLASDY2D8TEV', 'cfac': ['QCDEWK']},
+           {'dataset': 'ATLAS_WZ_TOT_13TEV', 'cfac': ['NRM', 'QCD']},
+           {'dataset': 'ATLAS_WP_JET_8TEV_PT', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_WM_JET_8TEV_PT', 'cfac': ['QCD']},
+           {'dataset': 'ATLASZPT8TEVMDIST', 'cfac': ['QCD'], 'sys': 10},
+           {'dataset': 'ATLASZPT8TEVYDIST', 'cfac': ['QCD'], 'sys': 10},
+           {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_1JET_8TEV_R06_DEC', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_2JET_7TEV_R06', 'cfac': ['QCD']},
+           {'dataset': 'ATLASPHT15', 'cfac': ['QCD', 'EWK']},
+           {'dataset': 'ATLAS_SINGLETOP_TCH_R_7TEV', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_SINGLETOP_TCH_R_13TEV', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM', 'cfac': ['QCD']},
+           {'dataset': 'ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM', 'cfac': ['QCD']},
+           {'dataset': 'CMSWEASY840PB', 'cfac': ['QCD']},
+           {'dataset': 'CMSWMASY47FB', 'cfac': ['QCD']},
+           {'dataset': 'CMSDY2D11', 'cfac': ['QCD']},
+           {'dataset': 'CMSWMU8TEV', 'cfac': ['QCD']},
+           {'dataset': 'CMSZDIFF12', 'cfac': ['QCD', 'NRM'], 'sys': 10},
+           {'dataset': 'CMS_2JET_7TEV', 'cfac': ['QCD']},
+           {'dataset': 'CMS_2JET_3D_8TEV', 'cfac': ['QCD']},
+           {'dataset': 'CMSTTBARTOT', 'cfac': ['QCD']},
+           {'dataset': 'CMSTOPDIFF8TEVTTRAPNORM', 'cfac': ['QCD']},
+           {'dataset': 'CMSTTBARTOT5TEV', 'cfac': ['QCD']},
+           {'dataset': 'CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM', 'cfac': ['QCD']},
+           {'dataset': 'CMS_TTB_DIFF_13TEV_2016_2L_TRAP', 'cfac': ['QCD']},
+           {'dataset': 'CMS_TTB_DIFF_13TEV_2016_LJ_TRAP', 'cfac': ['QCD']},
+           {'dataset': 'CMS_SINGLETOP_TCH_TOT_7TEV', 'cfac': ['QCD']},
+           {'dataset': 'CMS_SINGLETOP_TCH_R_8TEV', 'cfac': ['QCD']},
+           {'dataset': 'CMS_SINGLETOP_TCH_R_13TEV', 'cfac': ['QCD']},
+           {'dataset': 'LHCBZ940PB', 'cfac': ['QCD']},
+           {'dataset': 'LHCBZEE2FB', 'cfac': ['QCD']},
+           {'dataset': 'LHCBWZMU7TEV', 'cfac': ['NRM', 'QCD']},
+           {'dataset': 'LHCBWZMU8TEV', 'cfac': ['NRM', 'QCD']},
+           {'dataset': 'LHCB_Z_13TEV_DIMUON', 'cfac': ['QCD']},
+           {'dataset': 'LHCB_Z_13TEV_DIELECTRON', 'cfac': ['QCD']}],
+          'use_cuts': 'internal',
+          'display_cuts': False,
+          'theoryid': 162,
+          'highlight_label': 'Old',
+          'highlight_datasets': ['NMC', 'CHORUSNUPb_dw', 'CHORUSNBPb_dw']}
+        API.plot_xq2(**inp)
+
     """
 
     w,h = plt.rcParams["figure.figsize"]
@@ -1063,7 +1158,7 @@ def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
     next_opts = next_options()
     key_options = {}
 
-    for experiment, commondata, fitted, masked in experiments_xq2map:
+    for (experiment, commondata, fitted, masked, group) in dataset_inputs_by_groups_xq2map:
         info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description
@@ -1071,6 +1166,9 @@ def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
             key = str(experiment)
         elif marker_by == 'dataset':
             key = info.dataset_label
+        elif marker_by == "group":
+            # if group is None then make sure that shows on legend.
+            key = str(group)
         else:
             raise ValueError('Unknown marker_by value')
 

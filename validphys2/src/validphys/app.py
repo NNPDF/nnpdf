@@ -24,6 +24,7 @@ from validphys import mplstyles
 
 providers = [
              'validphys.results',
+             'validphys.commondata',
              'validphys.pdfgrids',
              'validphys.pdfplots',
              'validphys.dataplots',
@@ -42,13 +43,14 @@ providers = [
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
              'validphys.closuretest',
-             'validphys.mc_gen_checks',
+             'validphys.mc_gen',
              'validphys.theoryinfo',
              'validphys.pseudodata',
              'validphys.renametools',
              'validphys.covmats',
              'validphys.hyperoptplot',
              'validphys.deltachi2',
+             'validphys.n3fit_data',
              'reportengine.report',
             ]
 

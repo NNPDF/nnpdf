@@ -5,29 +5,32 @@ Tools for computing and plotting effective exponents.
 from __future__ import generator_stop
 
 import logging
-import warnings
 import numbers
+import random
+import warnings
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import random
 
 from reportengine import collect
-from reportengine.figure import figuregen
-from reportengine.table import table
-from reportengine.floatformatting import format_number, significant_digits
 from reportengine.compat import yaml
+from reportengine.figure import figuregen
+from reportengine.floatformatting import format_number, significant_digits
+from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
-from validphys.pdfplots import BandPDFPlotter, PDFPlotter
-from validphys.pdfbases import check_basis, Basis
 from validphys.core import PDF, FitSpec
-
+from validphys.pdfbases import check_basis, Basis, UnknownElement
+from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
 
 log = logging.getLogger(__name__)
 
 INTERNAL_LINESTYLE = ['-.', ':']
+INTERNAL_COLOR = plt.rcParams['axes.prop_cycle'].by_key()["color"]
+
 
 @check_positive('Q')
 @make_argcheck(check_basis)
@@ -151,8 +154,8 @@ def get_beta_lines(effective_exponents_table_internal):
 pdfs_alpha_lines = collect('get_alpha_lines', ("pdfs",))
 pdfs_beta_lines = collect('get_beta_lines', ("pdfs",))
 
-fits_alpha_lines = collect('get_alpha_lines', ('fits', 'fitpdfandbasis'))
-fits_beta_lines = collect('get_beta_lines', ('fits', 'fitpdfandbasis'))
+fits_alpha_lines = collect('get_alpha_lines', ('fits', 'fitpdf'))
+fits_beta_lines = collect('get_beta_lines', ('fits', 'fitpdf'))
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
     def __init__(self, hlines, exponent, *args,  **kwargs):
@@ -160,26 +163,45 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         self.hlines = hlines
 
     def draw(self, pdf, grid, flstate):
-        # Here we assume each pdf has a corresponding fit, which is true by construction.
-        errdown, errup = super().draw(pdf, grid, flstate)
+        """Overload :py:meth:`BandPDFPlotter.draw` to plot bands of the
+        effective exponent calculated from the replicas and horizontal lines
+        for the effective exponents of the previous/next fits, if possible.
+
+        ``flstate`` is an element of the flavours for the first pdf specified in
+        pdfs. If this flavour doesn't exist in the current pdf's fitbasis or
+        the set of flavours for which the preprocessing exponents exist for the
+        current pdf no horizontal lines are plotted.
+
+        """
         pdf_index = self.pdfs.index(pdf)
         hlines = self.hlines[pdf_index]
+        # get the correct index label - don't assume table ordering. Basis must
+        # be same for all fits so assuming flavour exists in table is valid.
+        table_fl_index = f"${grid.basis.elementlabel(flstate.fl)}$"
+
+        errdown, errup = super().draw(pdf, grid, flstate)
         col_label = hlines.columns.get_level_values(0).unique()
+        # need to have plotted bands before getting x limit
         xmin, xmax = flstate.ax.get_xlim()
+
         for i, label in enumerate(col_label):
+            # wrap color index since number of pdfs could in theory exceed
+            # number of colors
             handle = flstate.ax.hlines(
-                hlines.values[flstate.flindex, 2*i:(2*i+2)],
+                hlines.loc[table_fl_index, label].values,
                 xmin=xmin,
                 xmax=xmax,
-                linestyle=INTERNAL_LINESTYLE[i]
+                linestyle=INTERNAL_LINESTYLE[i],
+                color=INTERNAL_COLOR[pdf_index % len(INTERNAL_COLOR)]
             )
             flstate.handles.append(handle)
             flstate.labels.append(label)
         # need to return xgrid shaped object but with hlines taken into account to get plots nice
+        hline_positions = hlines.loc[table_fl_index, :].values.flatten()
         new_errdown = min(
-            [*errdown, *hlines.values[flstate.flindex, :],])
+            [*errdown, *hline_positions,])
         new_errup = max(
-            [*errup, *hlines.values[flstate.flindex, :],])
+            [*errup, *hline_positions,])
         return new_errdown*np.ones_like(errdown), new_errup*np.ones_like(errup)
 
 
@@ -187,7 +209,7 @@ alpha_eff_pdfs = collect('alpha_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff_internal(
+def plot_alpha_eff_internal(
         pdfs, alpha_eff_pdfs, pdfs_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
@@ -205,10 +227,10 @@ def plot_alphaEff_internal(
     yield from ExponentBandPlotter(
         pdfs_alpha_lines, 'alpha', pdfs, alpha_eff_pdfs, 'log', normalize_to, ybottom, ytop)
 
-alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis',))
+alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdf',))
 
 @figuregen
-def plot_alphaEff(
+def plot_alpha_eff(
         fits_pdf, alpha_eff_fits, fits_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
@@ -226,30 +248,30 @@ def plot_alphaEff(
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    return plot_alphaEff_internal(
+    return plot_alpha_eff_internal(
         fits_pdf, alpha_eff_fits, fits_alpha_lines, normalize_to, ybottom, ytop)
 
 beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff_internal(
+def plot_beta_eff_internal(
         pdfs, beta_eff_pdfs, pdfs_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
-    """ Same as plot_alphaEff_internal but for beta effective exponent """
+    """ Same as plot_alpha_eff_internal but for beta effective exponent """
     yield from ExponentBandPlotter(
         pdfs_beta_lines, 'beta', pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
 
-beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
+beta_eff_fits = collect('beta_eff', ('fits', 'fitpdf',))
 
 @figuregen
-def plot_betaEff(
+def plot_beta_eff(
         fits_pdf, beta_eff_fits, fits_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
-    """ Same as plot_alphaEff but for beta effective exponents """
-    return plot_betaEff_internal(
+    """ Same as plot_alpha_eff but for beta effective exponents """
+    return plot_beta_eff_internal(
         fits_pdf, beta_eff_fits, fits_beta_lines, normalize_to, ybottom, ytop)
 
 
@@ -401,16 +423,82 @@ fmt = lambda a: float(significant_digits(a, 4))
 next_fit_eff_exps_table = collect("next_effective_exponents_table", ("fitpdfandbasis",))
 
 
-def iterated_runcard_yaml(
-    fit: FitSpec, next_fit_eff_exps_table, _updated_description=None
-):
+def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
+    """Using py:func:`next_effective_exponents_table` update the preprocessing
+    exponents of the input ``fit``. This is part of the usual pipeline referred
+    to as "iterating a fit", for more information see: :ref:`run-iterated-fit`.
+    A fully iterated runcard can be obtained from the action
+    :py:func:`iterated_runcard_yaml`.
+
+    This action can be used in a report but should be wrapped in a code block
+    to be formatted correctly, for example:
+
+    ```yaml
+    {@iterate_preprocessing_yaml@}
+    ```
+
+    Alternatively, using the API, the yaml dump returned by this function can
+    be written to a file e.g
+
+    >>> from validphys.api import API
+    >>> yaml_output = API.iterate_preprocessing_yaml(fit=<fit name>)
+    >>> with open("output.yml", "w+") as f:
+    ...     f.write(yaml_output)
+
     """
-    Using `effective_exponents_table` this provider outputs the yaml runcard
-    used to specify settings of ``fit`` but having iterated the following
-    sections:
+    (df_effexps,) = next_fit_eff_exps_table
+    # Use round trip loader rather than safe_load in fit.as_input()
+    with open(fit.path / "filter.yml", "r") as f:
+        filtermap = yaml.load(f, yaml.RoundTripLoader)
+    previous_exponents = filtermap["fitting"]["basis"]
+    basis = filtermap["fitting"]["fitbasis"]
+    checked = check_basis(basis, None)
+    basis = checked["basis"]
+
+    # use order defined in runcard.
+    runcard_flavours = [
+        f"{basis.elementlabel(ref_fl['fl'])}" for ref_fl in previous_exponents]
+    for i, fl in enumerate(runcard_flavours):
+        alphas = df_effexps.loc[(f"${fl}$", r"$\alpha$")].values
+        betas = df_effexps.loc[(f"${fl}$", r"$\beta$")].values
+        previous_exponents[i]["smallx"] = [
+            fmt(alpha) for alpha in alphas
+        ]
+        previous_exponents[i]["largex"] = [
+            fmt(beta) for beta in betas
+        ]
+    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+
+
+def update_runcard_description_yaml(
+    iterate_preprocessing_yaml, _updated_description=None):
+    """Take the runcard with iterated preprocessing and update the description
+    if ``_updated_description`` is provided. As with
+    :py:func:`iterate_preprocessing_yaml` the result can be used in a report
+    but should be wrapped in a code block to be formatted correctly,
+    for example:
+
+    ```yaml
+    {@update_runcard_description_yaml@}
+    ```
+
+    """
+    filtermap = yaml.load(iterate_preprocessing_yaml, yaml.RoundTripLoader)
+
+    # update description if necessary
+    if _updated_description is not None:
+        filtermap["description"] = _updated_description
+
+    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+
+
+def iterated_runcard_yaml(
+    fit, update_runcard_description_yaml):
+    """
+    Takes the runcard with preprocessing iterated and description updated then
+
+    - Updates the t0 pdf set to be ``fit``
     - Modifies the random seeds (to random unsigned long ints)
-    - Updates the preprocessing exponents
-    - Updates the description if ``_updated_description`` is provided
 
     This should facilitate running a new fit with identical input settings
     as the specified ``fit`` with the t0, seeds and preprocessing iterated. For
@@ -420,7 +508,7 @@ def iterated_runcard_yaml(
     to be formatted correctly, for example:
 
     ```yaml
-    {@next_effective_exponents_runcard@}
+    {@iterated_runcard_yaml@}
     ```
 
     alternatively, using the API, the yaml dump returned by this function can
@@ -435,28 +523,7 @@ def iterated_runcard_yaml(
     ...     f.write(yaml_output)
 
     """
-    df_effexps = next_fit_eff_exps_table[0]
-    # Use round trip loader rather than safe_load in fit.as_input()
-    with open(fit.path / "filter.yml", "r") as f:
-        filtermap = yaml.load(f, yaml.RoundTripLoader)
-    previous_exponents = filtermap["fitting"]["basis"]
-    basis = filtermap["fitting"]["fitbasis"]
-    checked = check_basis(basis, None)
-    basis = checked["basis"]
-    flavours = checked["flavours"]
-
-    runcard_flavours = basis.to_known_elements(
-        [ref_fl["fl"] for ref_fl in previous_exponents]
-    ).tolist()
-    for fl in flavours:
-        alphas = df_effexps.loc[(f"${fl}$", r"$\alpha$")].values
-        betas = df_effexps.loc[(f"${fl}$", r"$\beta$")].values
-        previous_exponents[runcard_flavours.index(fl)]["smallx"] = [
-            fmt(alpha) for alpha in alphas
-        ]
-        previous_exponents[runcard_flavours.index(fl)]["largex"] = [
-            fmt(beta) for beta in betas
-        ]
+    filtermap = yaml.load(update_runcard_description_yaml, yaml.RoundTripLoader)
     # iterate t0
     filtermap["datacuts"]["t0pdfset"] = fit.name
 
@@ -475,9 +542,5 @@ def iterated_runcard_yaml(
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
             closuretest_data["filterseed"] = random.randrange(0, 2**32)
-
-    # update description if necessary
-    if _updated_description is not None:
-        filtermap["description"] = _updated_description
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)

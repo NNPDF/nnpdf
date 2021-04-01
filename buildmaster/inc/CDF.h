@@ -29,6 +29,14 @@ private:
   void ReadData();
 };
 
+class CDFZRAP_NEWFilter: public CommonData
+{ public: CDFZRAP_NEWFilter():
+  CommonData("CDFZRAP_NEW") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class CDFR2KTFilter: public CommonData
 { public: CDFR2KTFilter():
   CommonData("CDFR2KT_SF") { ReadData(); }

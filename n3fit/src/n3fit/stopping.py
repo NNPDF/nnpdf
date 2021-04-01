@@ -371,11 +371,16 @@ class Stopping:
 
     @property
     def e_best_chi2(self):
-        """ Epoch of the best chi2 """
-        return self.history.best_epoch
+        """ Epoch of the best chi2, if there is no best epoch
+        return the last epoch"""
+        be = self.history.best_epoch
+        if be is None:
+            return self.stop_epoch
+        return be
+
 
     @property
-    def epoch_of_the_stop(self):
+    def stop_epoch(self):
         """ Epoch in which the fit is stopped """
         return self.history.final_epoch + 1
 
@@ -551,30 +556,6 @@ Total: training = {total_tr_loss} validation = {total_vl_loss}
 """
             file_list.append(strout)
         return file_list
-
-    def to_dict(self, model_trainer):
-        """ Generates a dict with all the information about the stopping.
-        It needs a ``model_trainer`` object to compute the chi2 of
-        the training and experimental models after the best weights are updated.
-
-        It generates a dictionary with:
-            - epoch of the stop
-            - epoch of best fit
-            - status of the positivity
-            - tr chi2
-            - vl chi2
-            - exp chi2
-        """
-        tr_chi2, val_chi2, exp_chi2 = model_trainer.evaluate(self)
-        dict_out = {
-                "vl_chi2" : val_chi2,
-                "tr_chi2" : tr_chi2,
-                "exp_chi2" : exp_chi2,
-                "epoch_of_the_stop" : self.epoch_of_the_stop,
-                "epoch_of_best_fit" : self.e_best_chi2,
-                "positivity_status" : self.positivity_status()
-                }
-        return dict_out
 
 
 class Validation:

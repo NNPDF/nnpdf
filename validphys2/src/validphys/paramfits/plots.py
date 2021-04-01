@@ -66,8 +66,8 @@ def plot_as_central_parabola(
 def plot_as_cummulative_central_chi2(fits_as,
                                      as_datasets_central_parabolas,
                                      central_by_dataset_suptitle):
-    """Plot the cummulative total chi² for each of the datasets"""
-    fig,ax  = plt.subplots()
+    """Plot the cumulative total chi² for each of the datasets"""
+    fig,ax = plt.subplots()
     nx = 100
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
@@ -89,10 +89,10 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
                                      central_by_dataset_suptitle,
                                      parabolic_as_determination_for_total,
                                      ymax:(numbers.Real, type(None))=None):
-    """Plot the cummulative difference between the χ² at the best global
+    """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    fig,ax  = plt.subplots()
+    fig,ax = plt.subplots()
     nx = 100
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
@@ -120,10 +120,10 @@ def plot_as_cummulative_central_chi2_diff_underflow(
                                      central_by_dataset_suptitle,
                                      parabolic_as_determination_for_total,
                                      ymax:(numbers.Real, type(None))=None):
-    """Plot the cummulative difference between the χ² at the best global
+    """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    fig,ax  = plt.subplots()
+    fig,ax = plt.subplots()
     nx = 100
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
@@ -166,13 +166,13 @@ def plot_as_cummulative_central_chi2_diff_negative(
                                      as_datasets_central_parabolas,
                                      central_by_dataset_suptitle,
                                      parabolic_as_determination_for_total):
-    """Plot the cummulative difference between the χ² at the best global
+    """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    """Plot the cummulative difference between the χ² at the best global
+    """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    fig,ax  = plt.subplots()
+    fig,ax = plt.subplots()
     nx = 100
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
@@ -218,16 +218,16 @@ def plot_dataspecs_central_parabolas(
         yield fig
 
 @figure
-def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
-    """Plot the error bars of the αs determination from pseudorreplicas
+def plot_as_datasets_pseudoreplicas_chi2(as_datasets_pseudoreplicas_chi2):
+    """Plot the error bars of the αs determination from pseudoreplicas
     by dataset item. Note that this only has meaning of preferred
     value for "Total", and the rest of the values are the minima of
     the partial χ²."""
-    data, names = zip(*as_datasets_pseudorreplicas_chi2)
+    data, names = zip(*as_datasets_pseudoreplicas_chi2)
     cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
     fig, ax = plot_horizontal_errorbars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
-    ax.set_title(r"$\alpha_S$ from pseudorreplicas")
+    ax.set_title(r"$\alpha_S$ from pseudoreplicas")
     return fig
 
 @figure
@@ -245,28 +245,28 @@ def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
 
 
 @figure
-def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2,
+def plot_as_datasets_compare(as_datasets_pseudoreplicas_chi2,
                              as_datasets_central_chi2,
                              marktotal:bool=True):
-    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
+    """Plot the result of ``plot_as_datasets_pseudoreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
-    datapseudo, namespesudo = zip(*as_datasets_pseudorreplicas_chi2)
+    datapseudo, namespseudo = zip(*as_datasets_pseudoreplicas_chi2)
     cvpseudo, errpseudo = zip(*[(np.mean(dt), np.std(dt)) for dt in datapseudo])
 
 
     datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
 
-    if namespesudo != namescentral:
+    if namespseudo != namescentral:
         raise RuntimeError("Names do not coincide")
 
     fig, ax = plot_horizontal_errorbars(
         [cvcentral, cvpseudo], [errcentral, errpseudo], namescentral,
-        [r'Central $\chi^2$', r'Pseudorreplica $\chi^2$']
+        [r'Central $\chi^2$', r'Pseudoreplica $\chi^2$']
     )
     if marktotal:
         try:
-            pos = namespesudo.index('Total')
+            pos = namespseudo.index('Total')
         except ValueError:
             log.error("Asked to mark total, but it was not provided.")
         else:
@@ -279,14 +279,14 @@ def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2,
     return fig
 
 @figure
-def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
+def plot_dataspecs_as_value_error(dataspecs_as_value_error_table_impl,
         dataspecs_fits_as,
         marktotal:bool=True, fix_limits:bool=True):
     """
-    Plot the result for each dataspec of the pseudorreplica alpha_s
-    determination based on the  partial chi² for each ``dataset_item``.
+    Plot the result for each dataspec of the pseudoreplica alpha_s
+    determination based on the partial chi² for each ``dataset_item``.
 
-    If ``marktotal`` is True, a verical line will appear marking the position
+    If ``marktotal`` is True, a vertical line will appear marking the position
     of the best fit.
 
     If ``fix_limits`` is True, the limits of the plot will span all the fitted
@@ -294,7 +294,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 
     """
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     datalabels = df.columns.levels[0]
     catlabels = list(df.index)
     cvs = df.loc[:, (slice(None), 'mean')].T.values
@@ -331,7 +331,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 
 @figure
 def plot_dataspecs_as_value_error_comparing_with_central(
-        datasepecs_as_value_error_table_impl,
+        dataspecs_as_value_error_table_impl,
         as_datasets_central_chi2,
         dataspecs_fits_as,
         speclabel,
@@ -341,7 +341,7 @@ def plot_dataspecs_as_value_error_comparing_with_central(
     central (old) and new partial chi².
     """
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     catlabels = list(df.index)
     replica_cvs = df.loc[:, (speclabel, 'mean')].T.values
     replica_errors = df.loc[:, (speclabel, 'error')].T.values
@@ -393,7 +393,7 @@ def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
 @_check_first_is_total
 def plot_as_value_error_central(as_datasets_central_chi2,
          marktotal:bool=True):
-    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
+    """Plot the result of ``plot_as_datasets_pseudoreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
 
     datacentral, namescentral = zip(*as_datasets_central_chi2)
@@ -466,7 +466,7 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
 
     #ax.set_title(f"Histogram of pulls for {label} dataset")
     ax.set_xlabel(r"Pull")
-    ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+    ax.plot(x, kde_pulls(x), label="Kernel Density Estimation of pulls")
     ax.hist(pulls,normed=True,bins=4)
     ax.grid(False)
     normdist = stats.norm(mean_pulls, std_dev)
@@ -476,12 +476,12 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     return fig
 
 @figure
-def plot_pull_plots_global_min(datasepecs_as_value_error_table_impl,
+def plot_pull_plots_global_min(dataspecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Plots the pulls of individual experiments as a barplot."""
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     tots_error = df.loc['Total', (slice(None), 'error')].values
     tots_mean = df.loc['Total', (slice(None), 'mean')].values
 
@@ -516,8 +516,8 @@ def _check_two_speclabels(dataspecs_speclabel):
 @figure
 @_check_two_speclabels
 def alphas_shift(
-    datasepecs_as_value_error_table_impl,
-    datasepecs_quad_table_impl,
+    dataspecs_as_value_error_table_impl,
+    dataspecs_quad_table_impl,
     dataspecs_ndata_table,
     dataspecs_dataset_ndata,
     dataspecs_fits_as,
@@ -533,8 +533,8 @@ def alphas_shift(
         or the quadratic coefficient of the parabolic fit (quad_weights)"""
 
     df1 = dataspecs_ndata_table
-    df = datasepecs_as_value_error_table_impl
-    df2 = datasepecs_quad_table_impl
+    df = dataspecs_as_value_error_table_impl
+    df2 = dataspecs_quad_table_impl
 
 
     tots_mean = df.loc['Total', (slice(None), 'mean')].values
@@ -592,13 +592,13 @@ def alphas_shift(
     return fig
 
 @figuregen
-def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
+def plot_pull_gaussian_fit_pseudo(dataspecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
-    df = datasepecs_as_value_error_table_impl
+    df = dataspecs_as_value_error_table_impl
     tots_error = df.loc['Total', (slice(None), 'error')].T.values
     tots_mean = df.loc['Total', (slice(None), 'mean')].T.values
 
@@ -620,7 +620,7 @@ def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
 
         #ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
-        ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+        ax.plot(x, kde_pulls(x), label="Kernel Density Estimation of pulls")
         ax.hist(pulls,normed=True,bins=4)
         ax.grid(False)
         normdist = stats.norm(mean_pulls, std_dev)
@@ -667,12 +667,12 @@ def plot_fitted_replicas_as_profiles_matched(fits_as,
 
 @figuregen
 @check_dataset_items
-def plot_dataspecs_pseudorreplica_means(
+def plot_dataspecs_pseudoreplica_means(
         dataspecs_chi2_by_dataset_dict,
         dataspecs_speclabel,
         dataset_items:(list, type(None))=None,
         ):
-    """ Plot the mean chi² from data to pseudorreplica, over replicas in a fit
+    """ Plot the mean chi² from data to pseudoreplica, over replicas in a fit
     and comparing dataspecs.
     """
     if dataset_items is None:
@@ -710,7 +710,7 @@ def plot_dataspecs_parabola_examples(
         random_seed:int = 0,
         ):
     """Sample ``examples_per_item`` replica_indexes for each of the
-    ``dataset_items``. Yield a plot with the parabolic fit, as resoved for
+    ``dataset_items``. Yield a plot with the parabolic fit, as resolved for
     each of the dataspecs. The random state is local to the function and
     controlled by ``random_seed``."""
     random_state = np.random.RandomState(random_seed)
@@ -777,7 +777,7 @@ def plot_total_as_distribution_dataspecs(
     for dist, label in zip(
             dataspecs_parabolic_as_determination_for_total,
             dataspecs_speclabel):
-        #Remember that *_for_total is a len 1 list, so take the first elelment.
+        #Remember that *_for_total is a len 1 list, so take the first element.
         kde_plot(dist[0].data, ax=ax, label=label)
     ax.set_xlabel(r"$\alpha_S$")
     ax.legend()
@@ -890,3 +890,8 @@ def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
 
     ax.legend()
     return fig
+
+# Define aliases for functions with spelling mistakes in their names which have now been corrected
+# Do this so that old runcards still work
+plot_as_datasets_pseudorreplicas_chi2 = plot_as_datasets_pseudoreplicas_chi2
+plot_dataspecs_pseudorreplica_means = plot_dataspecs_pseudoreplica_means

@@ -1,36 +1,24 @@
-%NNPDF Report for fit {@ current fit @}
+%NNPDF report comparing {@ current fit @} and {@ reference fit @}
 
 # PDF plots
 
 ## PDF comparison
-{@with pdfnormalize@}
-### {@normtitle@}
-{@with basespecs@}
-#### {@basistitle@}
-{@with pdfscalespecs@}
-##### {@xscaletitle@}
+{@with PDFnormalize@}
+### {@Normtitle@}
+{@with Basespecs@}
+#### {@Basistitle@}
+{@with PDFscalespecs@}
+##### {@Xscaletitle@}
 {@plot_pdfs@}
 {@endwith@}
 {@endwith@}
 {@endwith@}
 
 ## PDF replicas
-{@with basespecs@}
-#### {@basistitle@}
-{@with pdfscalespecs@}
-##### {@xscaletitle@}
+{@with Basespecs@}
+#### {@Basistitle@}
+{@with PDFscalespecs@}
+##### {@Xscaletitle@}
 {@plot_pdfreplicas@}
 {@endwith@}
-{@endwith@}
-
-## Effective preprocessing exponents Plots
-### alpha exponent
-{@plot_alphaEff@}
-### beta exponent
-{@plot_betaEff@}
-
-## Effective preprocessing exponents Table
-{@with fits@}
-### Next effective exponents table for {@fit@}
-{@effective_exponents_table@}
 {@endwith@}

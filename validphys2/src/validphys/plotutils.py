@@ -19,6 +19,7 @@ import matplotlib.patches as mpatches
 import matplotlib.collections as mcollections
 from matplotlib  import transforms
 from matplotlib.markers import MarkerStyle
+from matplotlib import ticker
 
 from reportengine.floatformatting import format_number
 
@@ -147,6 +148,34 @@ def color_iter():
     log.warning("Color cycle exhausted. Will repeat colors.")
     yield from itertools.cycle(color_list)
 
+
+def scalar_log_formatter():
+    """Return a matplotlib formatter to display powers of 10 in a log rather
+    than exponential notation.
+
+    Returns
+    -------
+    formatter : ticker.FuncFormatter
+        an object that can be passed to the ``set_major_formatter`` matplotlib
+        functions.
+
+    Examples
+    --------
+    >>> import matplotlib.pyplot as plt
+    >>> fig, ax = plt.subplots()
+    >>> ax.plot([0.01, 0.1, 1, 10, 100])
+    >>> ax.set_yscale("log")
+    >>> ax.yaxis.set_major_formatter(scalar_log_formatter())
+    """
+    # See https://stackoverflow.com/a/33213196
+    def formatter(y, _pos):
+        decimalplaces = int(np.maximum(-np.log10(y), 0))  # =0 for numbers >=1
+        # Insert that number into a format string
+        formatstring = f"{{:.{decimalplaces}f}}"
+        # Return the formatted tick label
+        return formatstring.format(y)
+
+    return ticker.FuncFormatter(formatter)
 
 HandlerSpec = namedtuple('HandelrSpec', ["color", "alpha", "hatch", "outer"])
 

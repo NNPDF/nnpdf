@@ -2,4 +2,4 @@
 # Absolute
 {@plot_fancy_dataspecs@}
 # Normalized
-{@datanorm plot_fancy_dataspecs@}
+{@Datanorm plot_fancy_dataspecs@}

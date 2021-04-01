@@ -29,3 +29,75 @@ public: CHORUSNBPbFilter():
 private:
   void ReadData();
 };
+
+class CHORUSNUPb_dwFilter: public CommonData
+{
+public: CHORUSNUPb_dwFilter():
+  CommonData("CHORUSNUPb_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_dwFilter: public CommonData
+{
+public: CHORUSNBPb_dwFilter():
+  CommonData("CHORUSNBPb_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNUPb_shFilter: public CommonData
+{
+public: CHORUSNUPb_shFilter():
+  CommonData("CHORUSNUPb_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_shFilter: public CommonData
+{
+public: CHORUSNBPb_shFilter():
+  CommonData("CHORUSNBPb_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNUPb_dw_iteFilter: public CommonData
+{
+public: CHORUSNUPb_dw_iteFilter():
+  CommonData("CHORUSNUPb_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_dw_iteFilter: public CommonData
+{
+public: CHORUSNBPb_dw_iteFilter():
+  CommonData("CHORUSNBPb_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNUPb_sh_iteFilter: public CommonData
+{
+public: CHORUSNUPb_sh_iteFilter():
+  CommonData("CHORUSNUPb_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_sh_iteFilter: public CommonData
+{
+public: CHORUSNBPb_sh_iteFilter():
+  CommonData("CHORUSNBPb_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};

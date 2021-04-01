@@ -1,36 +1,37 @@
-fits:
- - NNPDF31_nlo_as_0118_1000
- - NNPDF31_nnlo_as_0118_1000
-
 meta:
-    keywords: [gallery, nn31final]
-    author: NNPDF Collaboration
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
 
-markers:
+fit: NNPDF31_nlo_as_0118
+
+Markers:
     - marker_by: process type
     - marker_by: experiment
 
-use_cuts: True
-
+use_cuts: "fromfit"
 display_cuts: False
 
-template_text: |
-    % Kianmatic coverage
+dataset_inputs:
+  - { dataset: NMC }
+  - { dataset: NMCPD }
+  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+  - { dataset: ATLASWZRAP36PB}
 
-    {@with fits@}
+template_text: |
+    % Kinematic coverage
+
     {@fit@}
     =======
 
-    {@with markers@}
+    {@with Markers@}
     Marker by {@marker_by@}
     -----------------------
 
-    {@fitcontext plot_xq2@}
-
-    {@endwith@}
+    {@plot_xq2@}
 
     {@endwith@}
 
 actions_:
-    - - report:
-          main: True
+  - report(main=true)

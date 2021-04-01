@@ -5,7 +5,6 @@
 # Backend-independent imports
 from collections import namedtuple
 import logging
-import os.path
 import numpy as np
 import n3fit.checks
 from n3fit.vpinterface import N3PDF
@@ -13,134 +12,116 @@ from n3fit.vpinterface import N3PDF
 log = logging.getLogger(__name__)
 
 
-def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
-    """Action to initialize seeds for random number generation.
-    We initialize three different seeds. The first is the seed
-    used for training/validation splits, the second is used for
-    initialization of the neural network's parameters and the
-    final one is the monte carlo seeds for pseudodata replica
-    generation.
-
-    The generation of these seeds depend on the replica number
-    in question. This dependence comes in by sampling the random
-    number generator <replica number> times in the for loop.
-
-    Parameters
-    ----------
-    replica: list
-        A list of replica numbers to run over typically of size one
-    trvlseed: int
-        Seed initialization for training/validation split
-    nnseed: int
-        Seed for network initialization
-    mcseed: int
-        Seed for pseudodata replica generation
-    genrep: bool
-
-    Returns
-    -------
-    seeds: NamedTuple[List, List, List]
-        A namedtuple of lists containing the trvalseeds, nnseeds, mcseeds
-    """
-    # First set the seed variables for
-    # - Tr/Vl split
-    # - Neural Network initialization
-    # - Replica generation
-    # These depend both on the seed set in the runcard and the replica number
-    trvalseeds = []
-    nnseeds = []
-    mcseeds = []
-    for replica_number in replica:
-        np.random.seed(trvlseed)
-        for _ in range(replica_number):
-            trvalseed = np.random.randint(0, pow(2, 31))
-
-        np.random.seed(nnseed)
-        for _ in range(replica_number):
-            nnseed = np.random.randint(0, pow(2, 31))
-
-        np.random.seed(mcseed)
-        for _ in range(replica_number):
-            mcseed = np.random.randint(0, pow(2, 31))
-        trvalseeds.append(trvalseed)
-        nnseeds.append(nnseed)
-        mcseeds.append(mcseed)
-
-    if genrep == 0:
-        mcseeds = []
-
-    Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
-    return Seeds(trvalseeds, nnseeds, mcseeds)
-
-
-# Action to be called by valid phys
+# Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
 def performfit(
-    fitting,
-    experiments_data,
-    t0set,
-    replica,
+    *,
+    genrep, # used for checks
+    data, # used for checks
+    replicas_nnseed_fitting_data_dict,
+    posdatasets_fitting_pos_dict,
+    integdatasets_fitting_integ_dict,
+    theoryid,
+    basis,
+    fitbasis,
+    sum_rules=True,
+    parameters,
     replica_path,
     output_path,
-    theoryid,
-    posdatasets,
-    integdatasets=None,
+    save_weights_each=None,
+    save=None,
+    load=None,
     hyperscan=None,
     hyperopt=None,
+    kfold_parameters,
+    tensorboard=None,
     debug=False,
     maxcores=None,
 ):
     """
-        This action will (upon having read a validcard) process a full PDF fit for a given replica.
+        This action will (upon having read a validcard) process a full PDF fit
+        for a set of replicas.
 
         The input to this function is provided by validphys
         and/or defined in the runcards or commandline arguments.
 
+        This controller is provided with:
+        1. Seeds generated using the replica number and the seeds defined in the runcard.
+        2. Loaded datasets with replicas generated.
+            2.1 Loaded positivity/integrability sets.
+
         The workflow of this controller is as follows:
-        1. Generates seeds using the replica number and the seeds defined in the runcard,
-        2. Read up all datasets from the given experiments and create the necessary replicas
-            2.1 Read up also the positivity sets
-        3. Generate a ModelTrainer object holding information to create the NN and perform a fit
+        1. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
-            3.1 (if hyperopt) generates the hyperopt scanning dictionary
+            1.1 (if hyperopt) generates the hyperopt scanning dictionary
                     taking as a base the fitting dictionary  and the runcard's hyperscan dictionary
-        4. Pass the dictionary of parameters to ModelTrainer
+        2. Pass the dictionary of parameters to ModelTrainer
                                         for the NN to be generated and the fit performed
-            4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
-        5. Once the fit is finished, output the PDF grid and accompanying files
+            2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
+        3. Once the fit is finished, output the PDF grid and accompanying files
 
         Parameters
         ----------
-            fitting: dict
-                dictionary with the hyperparameters of the fit
-            experiments_data: dict
-                vp list of datasets grouped into experiments to be included in
-                the fit
-            t0set: str
-                t0set name
-            replica: list
-                a list of replica numbers to run over (typically just one)
+            genrep: bool
+                Whether or not to generate MC replicas. (Only used for checks)
+            data: validphys.core.DataGroupSpec
+                containing the datasets to be included in the fit. (Only used
+                for checks)
+            replicas_nnseed_fitting_data_dict: list[tuple]
+                list with element for each replica (typically just one) to be
+                fitted. Each element
+                is a tuple containing the replica number, nnseed and
+                ``fitted_data_dict`` containing all of the data, metadata
+                for each group of datasets which is to be fitted.
+            posdatasets_fitting_pos_dict: list[dict]
+                list of dictionaries containing all data and metadata for each
+                positivity dataset
+            integdatasets_fitting_integ_dict: list[dict]
+                list of dictionaries containing all data and metadata for each
+                integrability dataset
+            theoryid: validphys.core.TheoryIDSpec
+                Theory which is used to generate theory predictions from model
+                during fit. Object also contains some metadata on the theory
+                settings.
+            basis: list[dict]
+                preprocessing information for each flavour to be fitted.
+            fitbasis: str
+                Valid basis which the fit is to be ran in. Available bases can
+                be found in :py:mod:`validphys.pdfbases`.
+            sum_rules: bool
+                Whether to impose sum rules in fit. By default set to True
+            parameters: dict
+                Mapping containing parameters which define the network
+                architecture/fitting methodology.
             replica_path: pathlib.Path
                 path to the output of this run
             output_path: str
                 name of the fit
-            theorid: int
-                theory id number
-            posdatasets: list
-                list of positivity datasets
-            integdatasets: list
-                list of integrability datasets
+            save_weights_each: None, int
+                if set, save the state of the fit every ``save_weights_each``
+                epochs
+            save: None, str
+                model file where weights will be saved, used in conjunction with
+                ``load``.
+            load: None, str
+                model file from which to load weights from.
             hyperscan: dict
                 dictionary containing the details of the hyperscan
             hyperopt: int
                 if given, number of hyperopt iterations to run
+            kfold_parameters: None, dict
+                dictionary with kfold settings used in hyperopt.
+            tensorboard: None, dict
+                mapping containing tensorboard settings if it is to be used. By
+                default it is None and tensorboard is not enabled.
             debug: bool
                 activate some debug options
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
+
     """
     from n3fit.backends import set_initial_state
 
@@ -155,77 +136,11 @@ def performfit(
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
-    from n3fit.backends import MetaModel, operations
-    import n3fit.io.reader as reader
-
-    # Loading t0set from LHAPDF
-    if t0set is not None:
-        t0pdfset = t0set.load_t0()
-    else:
-        t0pdfset = None
-
-    trvlseed, nnseed, mcseed, genrep = [
-        fitting.get(i) for i in ["trvlseed", "nnseed", "mcseed", "genrep"]
-    ]
-
-    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
-    trvalseeds, nnseeds, mcseeds = seeds.trvlseeds, seeds.nnseeds, seeds.mcseeds
-
-    ##############################################################################
-    # ### Read files
-    # Loop over all the experiment and positivity datasets
-    # and save them into two list of dictionaries: exp_info and pos_info
-    # later on we will loop over these two lists and generate the actual layers
-    # i.e., at this point there is no information about the NN
-    # we are just creating dictionaries with all the necessary information
-    # (experimental data, covariance matrix, replicas, etc, tr/val split)
-    ##############################################################################
-    all_exp_infos = [[] for _ in replica]
-    if fitting.get("diagonal_basis"):
-        log.info("working in diagonal basis")
-
-    if hyperscan and hyperopt:
-        kfold_parameters = hyperscan["kfold"]
-        kpartitions = kfold_parameters["partitions"]
-    else:
-        kfold_parameters = None
-        kpartitions = None
-
-    # First loop over the experiments
-    for exp in experiments_data:
-        log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(
-            exp,
-            t0pdfset,
-            replica_seeds=mcseeds,
-            trval_seeds=trvalseeds,
-            kpartitions=kpartitions,
-            rotate_diagonal=fitting.get("diagonal_basis"),
-        )
-        for i, exp_dict in enumerate(all_exp_dicts):
-            all_exp_infos[i].append(exp_dict)
-
-    # Now read all the positivity datasets
-    pos_info = []
-    for pos_set in posdatasets:
-        log.info("Loading positivity dataset %s", pos_set)
-        pos_dict = reader.positivity_reader(pos_set)
-        pos_info.append(pos_dict)
-
-    if integdatasets is not None:
-        integ_info = []
-        for integ_set in integdatasets:
-            log.info("Loading integrability dataset %s", integ_set)
-            # Use the same reader as positivity observables
-            integ_dict = reader.positivity_reader(integ_set)
-            integ_info.append(integ_dict)
-    else:
-        integ_info = None
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
-    # run once and all_exp_infos is a list of just than one element
+    # run once as replicas_nnseed_fitting_data_dict is a list of just one element
     stopwatch.register_times("data_loaded")
-    for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
+    for replica_number, exp_info, nnseed in replicas_nnseed_fitting_data_dict:
         replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
 
@@ -233,23 +148,23 @@ def performfit(
         # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
             exp_info,
-            pos_info,
-            integ_info,
-            fitting["basis"],
-            fitting["fitbasis"],
+            posdatasets_fitting_pos_dict,
+            integdatasets_fitting_integ_dict,
+            basis,
+            fitbasis,
             nnseed,
             debug=debug,
-            save_weights_each=fitting.get("save_weights_each"),
+            save_weights_each=save_weights_each,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
-            model_file=fitting.get("load")
+            model_file=load,
+            sum_rules=sum_rules
         )
 
         # This is just to give a descriptive name to the fit function
         pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
 
         # Read up the parameters of the NN from the runcard
-        parameters = fitting.get("parameters")
         stopwatch.register_times("replica_set")
 
         ########################################################################
@@ -279,10 +194,9 @@ def performfit(
         the_model_trainer.set_hyperopt(False)
 
         # Enable the tensorboard callback
-        tboard = fitting.get("tensorboard")
-        if tboard is not None:
-            profiling = tboard.get("profiling", False)
-            weight_freq = tboard.get("weight_freq", 0)
+        if tensorboard is not None:
+            profiling = tensorboard.get("profiling", False)
+            weight_freq = tensorboard.get("weight_freq", 0)
             log_path = replica_path_set / "tboard"
             the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
 
@@ -308,7 +222,7 @@ def performfit(
                 which it got at {2}. Stopping degree {3}
                 Positivity state: {4}
                 """.format(
-                stopping_object.epoch_of_the_stop,
+                stopping_object.stop_epoch,
                 stopping_object.vl_chi2,
                 stopping_object.e_best_chi2,
                 stopping_object.stopping_degree,
@@ -317,7 +231,7 @@ def performfit(
         )
 
         # Create a pdf instance
-        pdf_instance = N3PDF(pdf_model)
+        pdf_instance = N3PDF(pdf_model, fit_basis=basis)
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
@@ -335,7 +249,7 @@ def performfit(
         )
 
         # Save the weights to some file for the given replica
-        model_file = fitting.get("save")
+        model_file = save
         if model_file:
             model_file_path = replica_path_set / model_file
             log.info(" > Saving the weights for future in %s", model_file_path)
@@ -354,5 +268,5 @@ def performfit(
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
 
-        if tboard is not None:
+        if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)

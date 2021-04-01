@@ -32,6 +32,11 @@ def fixup_header(df, head_index, dtype):
                                   *oldcols.levels[head_index+1:]])
     df.columns = newcols
 
+def parse_data_cv(filename):
+    """Useful for reading DataFrames with just one column."""
+    df = sane_load(filename, index_col=[0, 1, 2])
+    return df
+
 def parse_exp_mat(filename):
     """Parse a dump of a matrix like experiments_covmat."""
     df = sane_load(filename, header=[0,1,2], index_col=[0,1,2])
@@ -48,7 +53,7 @@ def load_perreplica_chi2_table(filename):
     return df
 
 
-def load_fits_computed_psedorreplicas_chi2(filename):
+def load_fits_computed_pseudoreplicas_chi2(filename):
     """Load the output of ``fits_computed_psedorreplicas_chi2``"""
     return sane_load(filename, index_col=[0,1,2,3], header=[0,1,])
 
@@ -85,7 +90,7 @@ def set_actual_column_level0(df, new_levels):
 
 
 #TODO: Find a better place for this function
-def combine_pseudorreplica_tables(
+def combine_pseudoreplica_tables(
         dfs, combined_names, * ,blacklist_datasets=None, min_points_required=2):
     """Return a table in the same format as perreplica_chi2_table with th   e
     minimum value of the chi² for each batch of fits."""
@@ -153,3 +158,8 @@ def get_extrasum_slice(df, components):
             (slice(None), c) for c in components]
     locs = [flat for key in keys for flat in df.index.get_locs(key)]
     return df.iloc[locs, :]
+
+# Define aliases for functions with spelling mistakes in their names which have now been corrected
+# Do this so that old runcards still work
+load_fits_computed_psedorreplicas_chi2 = load_fits_computed_pseudoreplicas_chi2
+combine_pseudorreplica_tables = combine_pseudoreplica_tables

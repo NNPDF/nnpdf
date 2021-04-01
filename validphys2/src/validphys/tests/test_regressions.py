@@ -18,8 +18,10 @@ from reportengine.table import savetable
 import NNPDF
 from validphys import results
 from validphys.api import API
-from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
+from validphys.tests.test_covmats import CORR_DATA
+from validphys.tableloader import (parse_data_cv, parse_exp_mat, load_perreplica_chi2_table,
                                    sane_load, load_fits_chi2_table)
+from validphys.tests.test_covmats import CORR_DATA
 
 
 
@@ -51,11 +53,23 @@ def make_table_comp(loader_func):
         return f_
     return decorator
 
+
+@make_table_comp(parse_data_cv)
+def test_mcreplica(data_config):
+    config = dict(data_config)
+    config["dataset_inputs"] = CORR_DATA
+    seed = 123456
+    # Use no cuts because if filter rules change in the
+    # future then this test will end up failing
+    rep = API.indexed_make_replica(**config, seed=seed)
+    return rep
+
+
 @make_table_comp(parse_exp_mat)
 def test_expcovmat(data_config):
     mat = API.groups_covmat_no_table(**data_config)
     covmats = []
-    for exp in API.experiments(**data_config):
+    for exp in API.experiments_data(**data_config):
         cd = exp.datasets[0].commondata.load()
         covmats.append(NNPDF.ComputeCovMat(cd, cd.get_cv()))
     othermat = la.block_diag(*covmats)
@@ -112,3 +126,12 @@ def test_datasetchi2(data_singleexp_witht0_config):
     exps = API.groups_data(**data_singleexp_witht0_config)
     chi2s = API.groups_datasets_chi2_data(**data_singleexp_witht0_config)
     return results.fits_datasets_chi2_table(['test'], [exps], [chi2s])
+
+@make_table_comp(sane_load)
+def test_art_rep_generation(data_config):
+    config = dict(data_config)
+    config["dataset_inputs"] = CORR_DATA
+    config["fitting"] = {"seed": 123456}
+    config["nreplica"] = 1
+    _, art_replicas, _,_ = API.art_rep_generation(**config)
+    return pd.DataFrame(art_replicas.T, columns=['rep0'])

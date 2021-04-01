@@ -26,3 +26,35 @@ class BCDMSDFilter: public CommonData
 private:
   void ReadData();
 };
+
+class BCDMSD_dwFilter: public CommonData
+{ public: BCDMSD_dwFilter():
+  CommonData("BCDMSD_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class BCDMSD_shFilter: public CommonData
+{ public: BCDMSD_shFilter():
+  CommonData("BCDMSD_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class BCDMSD_dw_iteFilter: public CommonData
+{ public: BCDMSD_dw_iteFilter():
+  CommonData("BCDMSD_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class BCDMSD_sh_iteFilter: public CommonData
+{ public: BCDMSD_sh_iteFilter():
+  CommonData("BCDMSD_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};

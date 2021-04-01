@@ -75,7 +75,7 @@ def computed_psedorreplicas_chi2(
                 loaded_data=exp, loaded_pdf=lpdf)
 
 
-            results = DataResult(exp), th
+            results = DataResult(exp, exp.get_covmat(), exp.get_sqrtcovmat()), th
             #The experiment already has T0. No need to set it again.
             #TODO: This is a hack. Get rid of this.
             chi2 = chi2_breakdown_by_dataset(results, exp, t0set=None,

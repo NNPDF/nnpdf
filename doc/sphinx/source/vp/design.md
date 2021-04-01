@@ -1,3 +1,7 @@
+```eval_rst
+.. _design:
+```
+
 The design of `validphys 2`
 ==========================
 
@@ -9,7 +13,7 @@ underpinning the design of `validphys 2`, and of `reportengine`, the code it is
 based on. It should be useful for anyone aiming to understand the general
 philosophy and design goals of the project or take in in qualitatively different
 directions.  More concrete information on how to use the code can be found in
-the **USAGE** section.
+the sections under Using validphys. 
 
 Some specific issues of scientific code
 ---------------------------------------
@@ -134,12 +138,12 @@ like this:
 
 ```yaml
 pdfs:
-    - NNPDF30_nlo_as_0118
-    - NNPDF30_nnlo_as_0118
-    - CT14nlo
+    - NNPDF31_nlo_as_0118
+    - NNPDF31_nnlo_as_0118
+    - NNPDF31_nnlo_as_0118_hessian
 
 norm:
-    normalize_to: NNPDF30_nlo_as_0118
+    normalize_to: NNPDF31_nlo_as_0118
 
 first:
     Q: 1
@@ -147,12 +151,12 @@ first:
 
 second:
     Q: 100
-    xgrid: linear
+    scale: linear
 
 actions_:
     - first::norm plot_pdfreplicas
-	- first plot_pdfs
-	- second plot_pdfreplicas
+    - first plot_pdfs
+    - second plot_pdfreplicas
 ```
 
 This has a number of advantages:
@@ -217,16 +221,13 @@ example the following runcard:
 
 ```yaml
 pdfs:
-    - id:  160502-r82cacd2-jr-001
-      label: Baseline
+    - id:  NNPDF31_nlo_as_0118
+      label: NLO
 
-    - id: 160502-r82cacd2-jr-008
-      label: HERA+LHCb
+    - id: NNPDF31_nnlo_as_0118
+      label: NNLO
 
-    - id: 160603-r654e559-jr-003
-      label: baseline+LHCb and Tev legacy
 
-fit: 160603-r654e559-jr-003
 theoryids:
     - 52
     - 53
@@ -252,4 +253,3 @@ experiments (so 18 plots in total). This syntax is discussed in more
 detail in the [Usage] section.
 
 It should be trivial to repeat an action for different sets of inputs.
-

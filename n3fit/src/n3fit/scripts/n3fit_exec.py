@@ -17,6 +17,7 @@ from validphys.config import EnvironmentError_, ConfigError
 from validphys.core import FitSpec
 from reportengine import colors
 from reportengine.compat import yaml
+from reportengine.namespaces import NSList
 
 
 N3FIT_FIXED_CONFIG = dict(
@@ -25,13 +26,13 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
-N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results"]
+N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results", "validphys.n3fit_data"]
 
 log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
-
+TAB_FOLDER = "tables"
 
 class N3FitError(Exception):
     """Exception raised when n3fit cannot succeed and knows why"""
@@ -68,13 +69,17 @@ class N3FitEnvironment(Environment):
 
         # create output folder for the fit
         self.replica_path = self.output_path / "nnfit"
-        for replica in self.replica:
+        for replica in self.replicas:
             path = self.replica_path / "replica_{0}".format(replica)
             log.info("Creating replica output folder in {0}".format(path))
             try:
                 path.mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
+
+        # place tables in last replica path, folder already exists.
+        self.table_folder = path
+
         # make lockfile input inside of replica folder
         # avoid conflict with setupfit
         self.input_folder = self.replica_path / INPUT_FOLDER
@@ -83,7 +88,7 @@ class N3FitEnvironment(Environment):
     @classmethod
     def ns_dump_description(cls):
         return {
-            "replica": "The MC replica number",
+            "replicas": "The MC replica number/s",
             "replica_path": "The replica output path",
             "output_path": "The runcard name",
             "hyperopt": "The hyperopt flag",
@@ -111,11 +116,21 @@ class N3FitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
 
         if file_content.get('closuretest') is not None:
-            N3FIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::closuretest performfit')
+            fit_action = 'datacuts::theory::closuretest::fitting performfit'
         else:
-            N3FIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory performfit')
+            fit_action = 'datacuts::theory::fitting performfit'
+        N3FIT_FIXED_CONFIG['actions_'].append(fit_action)
+
+        if file_content["fitting"].get("savepseudodata"):
+            if len(kwargs["environment"].replicas) != 1:
+                raise ConfigError(
+                    "Cannot request that multiple replicas are fitted and that "
+                    "pseudodata is saved. Either set `fitting::savepseudodata` "
+                    "to `false` or fit replicas one at a time."
+                )
+            # take same namespace configuration on the pseudodata_table action.
+            table_action = fit_action.replace('performfit', 'pseudodata_table')
+            N3FIT_FIXED_CONFIG['actions_'].append(table_action)
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -147,7 +162,15 @@ class N3FitConfig(Config):
         """
         return fakedata
 
+    def produce_kfold_parameters(self, hyperscan=None, hyperopt=None):
+        if hyperscan and hyperopt:
+            return hyperscan["kfold"]
+        return None
 
+    def produce_kpartitions(self, kfold_parameters):
+        if kfold_parameters:
+            return kfold_parameters["partitions"]
+        return None
 
 
 class N3FitApp(App):
@@ -191,7 +214,7 @@ class N3FitApp(App):
                 replicas = list(range(replica, self.args["replica_range"] + 1))
             else:
                 replicas = [replica]
-            self.environment.replica = replicas
+            self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
             super().run()
         except N3FitError as e:

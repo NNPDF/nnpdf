@@ -79,7 +79,7 @@ dataspecs:
     # for any actions which rely on grouping datasets.
     data_input:
       from_: fitinputcontext
-   
+
 normalize:
   normalize_to: 1
 

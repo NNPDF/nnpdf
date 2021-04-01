@@ -26,3 +26,35 @@ class SLACDFilter: public CommonData
 private:
   void ReadData();
 };
+
+class SLACD_dwFilter: public CommonData
+{ public: SLACD_dwFilter():
+  CommonData("SLACD_dw") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class SLACD_shFilter: public CommonData
+{ public: SLACD_shFilter():
+  CommonData("SLACD_sh") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class SLACD_dw_iteFilter: public CommonData
+{ public: SLACD_dw_iteFilter():
+  CommonData("SLACD_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class SLACD_sh_iteFilter: public CommonData
+{ public: SLACD_sh_iteFilter():
+  CommonData("SLACD_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
