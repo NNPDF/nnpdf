@@ -128,8 +128,6 @@ void CMSTTBARTOT_40Filter::ReadData()
       lstream >> fData[i];       //central value
       lstream >> fStat[i];       //statistical uncertainty
       lstream >> sys1 >> sys2;   //Asymmetric systematic uncertainty
-      // sys1 = sys1/fData[i]*100;
-      // sys2 = sys2/fData[i]*100;
       symmetriseErrors(sys1,sys2,&stmp,&dtmp);
 
       fSys[i][0].add = stmp;    //Symmetric systematic uncertainty
