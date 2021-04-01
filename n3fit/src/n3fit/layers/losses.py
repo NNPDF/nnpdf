@@ -50,7 +50,12 @@ class LossInvcovmat(MetaLayer):
         tmp = self.y_true - y_pred
         if self.mask is not None:
             tmp = op.op_multiply([tmp, self.mask])
-        res = op.einsum("bri, ij, brj -> r", tmp, self.invcovmat, tmp)
+        if tmp.shape[1] == 1:
+            # einsum is not well suited for CPU, so use tensordot if not multimodel
+            right_dot = op.tensor_product(self.invcovmat, tmp[0,0,:], axes=1)
+            res = op.tensor_product(tmp[0,:,:], right_dot, axes=1)
+        else:
+            res = op.einsum("bri, ij, brj -> r", tmp, self.invcovmat, tmp)
         return res
 
 
