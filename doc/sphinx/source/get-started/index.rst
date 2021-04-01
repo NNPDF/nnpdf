@@ -1,15 +1,22 @@
-Getting Started
-===============
+.. _getstarted:
 
+Getting started
+===============
+This section provides an introduction to the NNPDF code and workflow.
+
+Essential first steps
+---------------------
 .. toctree::
    :maxdepth: 1
 
    ./access
-   ./sphinx-documentation.md
-   ./installation
-   ./installation-source
    ./git
+   ./installation
+
+Necessary for developers
+------------------------
+.. toctree::
+   :maxdepth: 1
+
    ./rules
-   ./prs
-   ./tools
    ./python-tools

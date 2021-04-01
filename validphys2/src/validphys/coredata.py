@@ -246,15 +246,32 @@ class CommonData:
         return add_table.loc[:, add_table.columns != "SKIP"]
 
 
-    def systematic_errors(self):
+    def systematic_errors(self, central_values=None):
         """Returns all systematic errors as absolute uncertainties, with a
         single column for each uncertainty. Converts
         :py:attr:`multiplicative_errors` to units of data and then appends
-        onto :py:attr:`additive_errors`
+        onto :py:attr:`additive_errors`. By default uses the experimental
+        central values to perform conversion, but the user can supply a
+        1-D array of central values, with length :py:attr:`self.ndata`, to use
+        instead of the experimental central values to calculate the absolute
+        contribution of the multiplicative systematics.
+
+        Parameters
+        ----------
+        central_values: None, np.array
+            1-D array containing alternative central values to combine with
+            multiplicative uncertainties. This array must have length equal
+            to :py:attr:`self.ndata`. By default ``central_values`` is None, and
+            the central values of the commondata are used.
+
+        Returns
+        -------
+        systematic_errors: pd.DataFrame
+            Dataframe containing systematic errors.
 
         """
-        # NOTE: in the future can take t0 predictions here.
-        central_values = self.central_values.to_numpy()
+        if central_values is None:
+            central_values = self.central_values.to_numpy()
         converted_mult_errors = (
             self.multiplicative_errors * central_values[:, np.newaxis] / 100
         )

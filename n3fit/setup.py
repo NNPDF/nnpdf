@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
         name="n3fit",
-        version="0.9",
+        version="4.0",
         package_dir = {'':'src'},
         packages=find_packages('src'),
         zip_safe=False,
         package_data = {
-            '':['*.fitinfo', '*.yml', '*.h5'],
+            '':['*.json', '*.yml', '*.h5'],
             'tests/regressions': ['*'],
         },
 

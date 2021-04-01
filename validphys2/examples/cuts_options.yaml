@@ -1,0 +1,60 @@
+meta:
+    title: Test the various options for CutsPolicy
+    author: Zahari Kassabov
+    keywords: [test, debug]
+
+fit: NNPDF31_nlo_as_0118
+
+pdf:
+    from_: fit
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+#Load q2min and w2min from the fit
+datacuts:
+    from_: fit
+
+
+# Used for intersection cuts
+cuts_intersection_spec:
+    - theoryid: 52
+    - theoryid: 162
+
+dataset_input: {dataset: ATLAS1JET11}
+
+dataspecs:
+  - speclabel: "No cuts"
+    use_cuts: "nocuts"
+
+  - speclabel: "Fit cuts"
+    use_cuts: "fromfit"
+
+  - speclabel: "Internal cuts"
+    use_cuts: "internal"
+
+  - speclabel: "Intersected cuts"
+    use_cuts: "fromintersection"
+
+template_text: |
+    {@with fitpdf::datacuts@}
+    # Plot
+
+    {@fitpdf::datacuts plot_fancy_dataspecs@}
+
+    # χ² plots
+
+    {@with dataspecs@}
+    ## {@speclabel@}
+
+    {@plot_chi2dist@}
+
+    {@endwith@}
+    {@endwith@}
+
+
+actions_:
+    - report(main=True)

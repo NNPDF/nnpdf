@@ -68,7 +68,7 @@ def _sum_rules(lpdf, Q):
 
     for irep in range(nmembers):
         for r, f in enumerate(integrands):
-            res[r,irep] =  (integral(f, 0, 1e-5, irep)  +
+            res[r,irep] =  (integral(f, 1e-9, 1e-5, irep)  +
                integral(f, 1e-5, 1e-3, irep) + integral(f, 1e-3, 1, irep))
     return SumRulesGrid(*res)
 

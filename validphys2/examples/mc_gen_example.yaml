@@ -1,0 +1,22 @@
+nreplica: 100
+use_cuts: "fromfit"
+
+meta:
+    title: Pseudodata generation
+    author: Rosalyn Pearson
+    keywords: [pseudodata, test, artificial replica]
+
+fit: NNPDF31_nlo_as_0118
+
+theoryid: 52
+
+template: mc_gen_report.md
+
+actions_:
+  - report(main=true)
+
+experiments:
+  - experiment: BIGEXP
+    datasets:
+      - { dataset: CHORUSNB, frac: 0.5}
+

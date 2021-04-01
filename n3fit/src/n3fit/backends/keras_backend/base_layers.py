@@ -21,7 +21,7 @@ from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, c
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
 from tensorflow.keras.regularizers import l1_l2
-
+from tensorflow import nn
 
 from n3fit.backends import MetaLayer
 
@@ -30,8 +30,13 @@ def square_activation(x):
     """ Squares the input """
     return x*x
 
+def leaky_relu(x):
+    """ Computes the Leaky ReLU activation function """
+    return nn.leaky_relu(x, alpha=0.2)
+
 custom_activations = {
-        "square" : square_activation
+        "square" : square_activation,
+        "leaky_relu": leaky_relu,
         }
 
 def LSTM_modified(**kwargs):

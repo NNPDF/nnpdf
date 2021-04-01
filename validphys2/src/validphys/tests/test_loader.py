@@ -13,7 +13,8 @@ from validphys.plotoptions import kitable, get_info
 
 l = Loader()
 #The sorted is to appease hypothesis
-dss = sorted(l.available_datasets - {'PDFEVOLTEST'})
+dss = sorted(l.available_datasets - {"PDFEVOLTEST"})
+
 
 @composite
 def commodata_and_cuts(draw):
@@ -24,39 +25,35 @@ def commodata_and_cuts(draw):
     mask = sorted(draw(sets(sampled_from(range(ndata)))))
     return cd, mask
 
-ipath = 0
 
 @given(arg=commodata_and_cuts())
 @settings(deadline=None)
-def test_rebuild_commondata_without_cuts(tmp, arg):
-    #We have to do this because otherwise files get mixed together. Note that
-    #tmp does fire once for all hypothesis runs.
-    global ipath
-    tmp = tmp/f'{ipath}'
-    tmp.mkdir()
-    ipath += 1
+def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
+    # We need to create a new directory for each call of the test
+    # otherwise we get files mixed together
+    tmp = tmp_path_factory.mktemp("test_loader")
 
     cd, cuts = arg
     lcd = cd.load()
     cutspec = None
     if cuts:
-        cutpath = tmp/'cuts.txt'
-        np.savetxt(cutpath, np.asarray(cuts, dtype=int), fmt='%u')
+        cutpath = tmp / "cuts.txt"
+        np.savetxt(cutpath, np.asarray(cuts, dtype=int), fmt="%u")
         cutspec = Cuts(cd.name, cutpath)
         lcd = type(lcd)(lcd, cuts)
     lcd.Export(str(tmp))
-    #We have to reconstruct the name here...
-    with_cuts = tmp/f'DATA_{cd.name}.dat'
-    newpath = tmp/'commondata.dat'
+    # We have to reconstruct the name here...
+    with_cuts = tmp / f"DATA_{cd.name}.dat"
+    newpath = tmp / "commondata.dat"
     rebuild_commondata_without_cuts(with_cuts, cutspec, cd.datafile, newpath)
     newcd = CommonDataSpec(newpath, cd.sysfile, cd.plotfiles)
-    #Note this one is without cuts
+    # Note this one is without cuts
     t1 = kitable(cd, get_info(cd))
     t2 = kitable(newcd, get_info(newcd))
-    assert (t1==t2).all
+    assert (t1 == t2).all
     lncd = newcd.load()
     if cuts:
-        assert np.allclose(lncd.get_cv()[cuts],  lcd.get_cv())
+        assert np.allclose(lncd.get_cv()[cuts], lcd.get_cv())
         nocuts = np.ones(cd.ndata, dtype=bool)
         nocuts[cuts] = False
         assert (lncd.get_cv()[nocuts] == 0).all()

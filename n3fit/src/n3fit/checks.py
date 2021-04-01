@@ -67,14 +67,14 @@ def check_stopping(parameters):
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
 
 
-def check_basis_with_layers(fitting, parameters):
+def check_basis_with_layers(basis, parameters):
     """ Check that the last layer matches the number of flavours defined in the runcard"""
-    number_of_flavours = len(fitting["basis"])
+    number_of_flavours = len(basis)
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
         raise CheckError(
             f"The number of nodes in the last layer ({last_layer}) does not"
-            " match the number of flavours: ({number_of_flavours})"
+            f" match the number of flavours: ({number_of_flavours})"
         )
 
 
@@ -137,34 +137,31 @@ def check_lagrange_multipliers(parameters, key):
         raise CheckError(f"The {key}::threshold must be a number, received: {threshold}")
 
 
-def check_model_file(fitting):
+def check_model_file(save, load):
     """ Checks whether the model_files given in the runcard are acceptable """
-    save_file = fitting.get("save")
-    load_file = fitting.get("load")
-    if save_file:
-        if not isinstance(save_file, str):
-            raise CheckError(f"Model file to save to: {save_file} not understood")
+    if save:
+        if not isinstance(save, str):
+            raise CheckError(f"Model file to save to: {save} not understood")
         # Since the file to save to will be found inside the replica folder, it should writable as all the others
 
-    if load_file:
-        if not isinstance(load_file, str):
-            raise CheckError(f"Model file to load: {load_file} not understood, str expected")
-        if not os.path.isfile(load_file):
-            raise CheckError(f"Model file to load: {load_file} can not be opened, does it exist?")
-        if not os.access(load_file, os.R_OK):
-            raise CheckError(f"Model file to load: {load_file} cannot be read, permission denied")
-        if os.stat(load_file).st_size == 0:
-            raise CheckError(f"Model file {load_file} seems to be empty")
+    if load:
+        if not isinstance(load, str):
+            raise CheckError(f"Model file to load: {load} not understood, str expected")
+        if not os.path.isfile(load):
+            raise CheckError(f"Model file to load: {load} can not be opened, does it exist?")
+        if not os.access(load, os.R_OK):
+            raise CheckError(f"Model file to load: {load} cannot be read, permission denied")
+        if os.stat(load).st_size == 0:
+            raise CheckError(f"Model file {load} seems to be empty")
 
 @make_argcheck
-def wrapper_check_NN(fitting):
+def wrapper_check_NN(basis, tensorboard, save, load, parameters):
     """ Wrapper function for all NN-related checks """
-    check_tensorboard(fitting.get("tensorboard"))
-    parameters = fitting["parameters"]
-    check_model_file(fitting)
+    check_tensorboard(tensorboard)
+    check_model_file(save, load)
     check_existing_parameters(parameters)
     check_consistent_layers(parameters)
-    check_basis_with_layers(fitting, parameters)
+    check_basis_with_layers(basis, parameters)
     check_stopping(parameters)
     check_dropout(parameters)
     check_lagrange_multipliers(parameters, "integrability")
@@ -244,13 +241,11 @@ def check_kfold_options(kfold):
             )
 
 
-def check_correct_partitions(kfold, experiments_data):
+def check_correct_partitions(kfold, data):
     """Ensures that all experimennts in all partitions
     are included in  the fit definition"""
     # Get all datasets
-    datasets = []
-    for exp in experiments_data:
-        datasets += [i.name for i in exp.datasets]
+    datasets = list(map(str, data))
     for partition in kfold["partitions"]:
         fold_sets = partition["datasets"]
         for dset in fold_sets:
@@ -290,13 +285,13 @@ def check_hyperopt_stopping(stopping_dict):
 
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments_data):
+def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
     """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
         return None
-    if fitting["genrep"]:
+    if genrep:
         raise CheckError("Generation of replicas is not accepted during hyperoptimization")
     if hyperscan is None:
         raise CheckError("Can't perform hyperoptimization without the hyperscan key")
@@ -306,20 +301,32 @@ def wrapper_hyperopt(hyperopt, hyperscan, fitting, experiments_data):
     check_hyperopt_architecture(hyperscan.get("architecture"))
     check_hyperopt_positivity(hyperscan.get("positivity"))
     check_kfold_options(hyperscan["kfold"])
-    check_correct_partitions(hyperscan["kfold"], experiments_data)
+    check_correct_partitions(hyperscan["kfold"], data)
+
+
+def check_sumrules(sum_rules):
+    """Checks that the chosen option for the sum rules are sensible
+    """
+    if isinstance(sum_rules, bool):
+        return
+    accepted_options = ["ALL", "MSR", "VSR"]
+    if sum_rules.upper() in accepted_options:
+        return
+    raise CheckError(f"The only accepted options for the sum rules are: {accepted_options}")
 
 
 # Checks on the physics
 @make_argcheck
-def check_consistent_basis(fitting):
+def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
     """Checks the fitbasis setup for inconsistencies
+    - Checks the sum rules can be imposed
     - Correct flavours for the selected basis
     - Correct ranges (min < max) for the small and large-x exponents
     """
-    fitbasis = fitting["fitbasis"]
+    check_sumrules(sum_rules)
     # Check that there are no duplicate flavours and that parameters are sane
     flavs = []
-    for flavour_dict in fitting["basis"]:
+    for flavour_dict in basis:
         name = flavour_dict["fl"]
         smallx = flavour_dict["smallx"]
         if smallx[0] > smallx[1]:
@@ -330,5 +337,12 @@ def check_consistent_basis(fitting):
         if name in flavs:
             raise CheckError(f"Repeated flavour name: {name}. Check basis dictionary")
         flavs.append(name)
+    # Finally check whether the basis considers or not charm
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
-    check_basis(fitbasis, flavs)
+    basis = check_basis(fitbasis, flavs)["basis"]
+    # Now check that basis and theory id are consistent
+    has_c = basis.has_element("c") or basis.has_element("T15") or basis.has_element("cp")
+    if theoryid.get_description()["IC"] and not has_c:
+        raise CheckError(f"{theoryid} (intrinsic charm) is incompatible with basis {fitbasis}")
+    if not theoryid.get_description()["IC"] and has_c:
+        raise CheckError(f"{theoryid} (perturbative charm) is incompatible with basis {fitbasis}")

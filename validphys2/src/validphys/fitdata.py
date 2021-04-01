@@ -434,3 +434,51 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return groups_overlap, systype_overlap
     else:
         return "No overlap of systypes"
+
+@table
+def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
+    """
+    Returns table with the code version from
+    'replica_{repno}/{fitname}.json' files.
+    Old fits return 'undefined'. 
+    Asserts that version information matches 
+    for all replicas.
+    """
+    version_info = []
+    # First check if first replica has .json file
+    p_1 = replica_paths[0] / (f'{fit.name}.json')
+    if not p_1.exists():
+        undef_tuple = [("unavailable", "unavailable")]
+        # Return df with "undefined" in name, version locations
+        vinfo = pd.DataFrame(undef_tuple).set_index(0)
+    # Otherwise look at .json files
+    else:
+        for path in replica_paths:
+            p = path / (f'{fit.name}.json')
+            with open(p, 'r') as stream:
+                json_info = json.load(stream)
+                # Taking version info from .json
+                rep_version = json_info["version"]
+            version_info.append(rep_version)
+        versionset = (set(x.items()) for x in version_info)
+        reducedset = set.union(*versionset)
+        vinfo = pd.DataFrame(reducedset).set_index(0)
+    vinfo.columns = [f"{fit_name_with_covmat_label}"]
+    vinfo.index.name = "module"
+    # Check for conflicting versions
+    version_names = list(vinfo.index)
+    assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
+    return vinfo
+
+fits_fit_code_version = collect("fit_code_version", ("fits",))
+
+@table
+def fits_version_table(fits_fit_code_version):
+    """ Produces a table of version information for multiple fits."""
+    vtable = pd.concat(fits_fit_code_version, axis=1)
+    # Drops any rows starting with "unavailable"
+    # If no such row is present, the error is suppressed and nothing changes
+    vtable.drop("unavailable", inplace=True, errors="ignore")
+    # Fill NaNs with "unavailable"
+    vtable.fillna("unavailable", inplace=True)
+    return vtable

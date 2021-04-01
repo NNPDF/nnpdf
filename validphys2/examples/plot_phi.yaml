@@ -1,0 +1,21 @@
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+pdf: {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
+
+theoryid: 53
+
+use_cuts : nocuts
+
+dataset_inputs:
+  - { dataset: NMC }
+  - { dataset: ATLASTTBARTOT, cfac: [QCD] }
+  - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }  
+  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+  - { dataset: ATLASWZRAP36PB}
+
+actions_:
+ - plot_phi

@@ -15,7 +15,9 @@ by ``metadata_group``, and the default grouping is by ``experiment``.
 Efforts have been made to ensure a degree of backwards compatibility, however
 there are two main things which may need to be changed in old runcards.
 
-1. For theorycovariance runcards, you must add a line with ``metadata_group: nnpdf31_process``, or else the prescriptions for scale variations will not vary scales coherently for data
+1. For theorycovariance runcards, you must add a line with
+``metadata_group: nnpdf31_process``, or else the prescriptions for scale
+variations will not vary scales coherently for data
 within the same process type, as usually desired, but rather for data within
 the same experiment.
 
@@ -269,7 +271,7 @@ containing the 𝞆² of the specificed datasets, grouped by ``experiment``:
     actions_:
      - dataspecs_groups_chi2_table
 
-If we specify a grouping in the runcard, like so
+If we specify a ``metadata_group`` in the runcard, like so
 
 .. code:: yaml
 
@@ -295,9 +297,13 @@ then we instead get a single-column table, but with the datasets grouped by
 process type, according the
 `theory uncertainties paper <https://arxiv.org/abs/1906.10698>`__.
 
-To check whether ``metadata_group`` was specified in a given runcard, use the
-namespace key ``processed_metadata_group``. We can use this key in reports and
-actions alike, for example to give sensible titles/section headings e.g.:
+
+Note that actions which rely on grouping use a fallback value of
+``metadata_group`` which gets set in the production rule for
+``processed_metadata_group``. It may be useful to use the
+namespace key ``processed_metadata_group`` in reports and
+actions alike to make use of this. Here is an example giving
+sensible titles/section headings e.g.:
 
 .. code:: yaml
 
@@ -307,6 +313,34 @@ actions alike, for example to give sensible titles/section headings e.g.:
 
     actions_:
      - report(main=True)
+
+Custom grouping
+---------------
+
+It is possible to define a custom grouping at the level of the runcard, which
+is useful for temporary groupings or testing out a new group which may
+eventually be added the the metadata. The user can use custom groupings
+by setting ``metadata_group=custom_group`` in the runcard and then adding
+the ``custom_group`` key to each dataset_input as follows
+
+.. code:: yaml
+
+  metadata_group: custom_group
+
+  dataset_inputs:
+    - { dataset: NMC, custom_group: traca }
+    - { dataset: NMCPD, custom_group: traco }
+    - { dataset: LHCBWZMU7TEV, cfac: [NRM], custom_group: pepe }
+    - { dataset: LHCBWZMU8TEV, cfac: [NRM], custom_group: pepa }
+    - { dataset: ATLASWZRAP36PB}
+
+Note that we didn't set any group for ``ATLASWZRAP36PB``, but that's ok: any
+datasets which are not explicitly given a ``custom_group`` get put into the
+``unset`` group.
+
+For more information on how to immortalise your custom grouping in the
+metadata and call that grouping as in the previous examples
+(i.e with ``nnpdf31_process``) see :ref:`add_special_label`.
 
 Action naming conventions
 -------------------------
@@ -356,8 +390,6 @@ input
 
 .. code:: yaml
 
-    metadata_group: nnpdf31_process
-
     experiments:
      - experiment: NMC
        datasets:
@@ -383,18 +415,6 @@ input
 The user should be aware, however, that any grouping introduced in this way is
 purely superficial and will be ignored in favour of the experiments defined by
 the metadata of the datasets.
-
-*IMPORTANT*: Note that all theory uncertainties runcards will need to be
-updated to explicitly set ``metadata_group: nnpdf31_process``, or else the
-prescriptions for scale variations will not vary scales coherently for data
-within the same process type, as usually desired, but rather for data within
-the same experiment. When running the examples in
-:ref:`theory-covmat-examples`, it should be obvious if this has been set
-because the outputs will be plots grouped by experiment rather than by process
-type. However, care must be taken when using the theory covariance matrix but
-not plotting anything, since the aforementioned check is not relevant. For
-example, if you only want to produce a 𝞆² you must be careful to set the
-``metadata_group`` key as above.
 
 Runcards that request actions that have been renamed will not work anymore.
 Generally, actions that were previously named ``experiments_*`` have been
