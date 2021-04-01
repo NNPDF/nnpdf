@@ -422,7 +422,9 @@ class SimilarCuts(TupleComp):
         exp_err = np.sqrt(
             np.diag(
                 covmat_from_systematics(
-                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts)
+                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts),
+                    first_ds, # DataSetSpec has weight attr
+                    use_weights_in_covmat=False, # Don't weight covmat
                 )
             )
         )
