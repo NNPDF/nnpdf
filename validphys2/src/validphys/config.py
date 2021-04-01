@@ -10,7 +10,7 @@ import functools
 import inspect
 import numbers
 import copy
-import os
+import glob
 from importlib.resources import read_text, contents
 
 from collections import ChainMap, defaultdict
@@ -894,18 +894,24 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected path of covmat hardcoded
+            # Expected directory of theory covmat hardcoded
             covmat_path = (
                 fit.path
                 / "tables"
-                / "datacuts_theory_theorycovmatconfig_theory_covmat.csv"
             )
-            if not os.path.exists(covmat_path):
+            # All possible valid files
+            covfiles = sorted(covmat_path.glob("*theory_covmat.csv"))
+            if not covfiles:
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
+                )                
+            if len(covfiles) > 1:
+                raise ConfigError(
+                    "More than one valid theory covmat file found at the "
+                    f"usual location: {covmat_path}. These are {covfiles}."
                 )
-            fit_theory_covmat = ThCovMatSpec(covmat_path)
+            fit_theory_covmat = ThCovMatSpec(covfiles[0])
         else:
             fit_theory_covmat = None
         return fit_theory_covmat
