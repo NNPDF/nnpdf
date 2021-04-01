@@ -56,6 +56,8 @@ Using validphys
    ./upload.md
    ./nnprofile.md
    ./complex_runcards.rst
+   ./cuts.md
+   ./datthcomp.md
    ./reports.rst
    ./scripts.rst
    ./api.md
