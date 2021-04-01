@@ -51,7 +51,8 @@ Then, an input card like the following:
 
 Would result in the following DAG:
 
-.. graphviz:: simplegraph.dot
+.. image:: simplegraph.png
+   :width: 300
 
 The important point to note is that parameter names determine the
 dependencies by default.
@@ -95,7 +96,8 @@ We can request a parameter scan like this:
 
 which would result in the following computation:
 
-.. graphviz:: params.dot
+.. image:: params.png
+   :width: 1000
 
 We have requested the two plots to be computed once in each of the
 three namespaces spanned by `scan_params`. The actions are in general
@@ -125,7 +127,8 @@ once in each of the `scan_params` namespaces. If we instead had this:
 
 The corresponding graph would be:
 
-.. graphviz:: twoparams.dot
+.. image:: twoparams.png
+   :width: 1500
 
 since `results` does depend on the pdf.
 

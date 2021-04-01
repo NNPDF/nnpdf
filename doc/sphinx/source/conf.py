@@ -48,8 +48,6 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    # For dependency trees in the vp guide
-    'sphinx.ext.graphviz',
     # To generate section headings,
     # particularly in markdown. See
     # https://recommonmark.readthedocs.io/en/latest/#linking-to-headings-in-other-files
