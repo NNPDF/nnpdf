@@ -347,7 +347,13 @@ class CoreConfig(configparser.Config):
                      display_alternatives='best'
                 )
 
-            dataset = dataset_defaults[name]
+            try:
+                dataset = dataset_defaults[name]
+            except KeyError as e:
+                raise KeyError(
+                        f"Dataset {name} not found in "
+                        f"the dataset defaults mapping: {dataset_defaults_spec}."
+                ) from e
 
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
