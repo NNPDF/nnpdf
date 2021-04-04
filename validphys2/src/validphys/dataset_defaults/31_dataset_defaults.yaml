@@ -1,0 +1,139 @@
+NMCPD:
+  frac: 0.5
+NMC:
+  frac: 0.5
+SLACP:
+  frac: 0.5
+SLACD:
+  frac: 0.5
+BCDMSP:
+  frac: 0.5
+BCDMSD:
+  frac: 0.5
+CHORUSNU:
+  frac: 0.5
+CHORUSNB:
+  frac: 0.5
+NTVNUDMN:
+  frac: 0.5
+NTVNBDMN:
+  frac: 0.5
+HERACOMBNCEM:
+  frac: 0.5
+HERACOMBNCEP460:
+  frac: 0.5
+HERACOMBNCEP575:
+  frac: 0.5
+HERACOMBNCEP820:
+  frac: 0.5
+HERACOMBNCEP920:
+  frac: 0.5
+HERACOMBCCEM:
+  frac: 0.5
+HERACOMBCCEP:
+  frac: 0.5
+HERAF2CHARM:
+  frac: 0.5
+H1HERAF2B:
+  frac: 1.0
+ZEUSHERAF2B:
+  frac: 1.0
+DYE886R:
+  frac: 1.0
+DYE886P:
+  frac: 0.5
+  cfac: [QCD]
+DYE605:
+  frac: 0.5
+  cfac: [QCD]
+CDFZRAP:
+  frac: 1.0
+  cfac: [QCD]
+CDFR2KT:
+  frac: 0.5
+  sys: 10
+D0ZRAP:
+  frac: 1.0
+  cfac: [QCD]
+D0WEASY:
+  frac: 1.0
+  cfac: [QCD]
+D0WMASY:
+  frac: 1.0
+  cfac: [QCD]
+ATLASWZRAP36PB:
+  frac: 1.0
+  cfac: [QCD]
+ATLASZHIGHMASS49FB:
+  frac: 1.0
+  cfac: [QCD]
+ATLASLOMASSDY11EXT:
+  frac: 1.0
+  cfac: [QCD]
+ATLASWZRAP11:
+  frac: 0.5
+  cfac: [QCD]
+ATLASR04JETS36PB:
+  frac: 0.5
+  sys: 10
+ATLASR04JETS2P76TEV:
+  frac: 0.5
+  sys: 10
+ATLAS1JET11:
+  frac: 0.5
+  sys: 10
+ATLASZPT8TEVMDIST:
+  frac: 0.5
+  cfac: [QCD]
+  sys: 10
+ATLASZPT8TEVYDIST:
+  frac: 0.5
+  cfac: [QCD]
+  sys: 10
+ATLASTTBARTOT:
+  frac: 1.0
+  cfac: [QCD]
+ATLASTOPDIFF8TEVTRAPNORM:
+  frac: 1.0
+  cfac: [QCD]
+CMSWEASY840PB:
+  frac: 1.0
+  cfac: [QCD]
+CMSWMASY47FB:
+  frac: 1.0
+  cfac: [QCD]
+CMSDY2D11:
+  frac: 0.5
+  cfac: [QCD]
+CMSWMU8TEV:
+  frac: 1.0
+  cfac: [QCD]
+CMSJETS11:
+  frac: 0.5
+  sys: 10
+CMS1JET276TEV:
+  frac: 0.5
+  sys: 10
+CMSZDIFF12:
+  frac: 1.0
+  cfac: [QCD,NRM]
+  sys: 10
+CMSTTBARTOT:
+  frac: 1.0
+  cfac: [QCD]
+CMSTOPDIFF8TEVTTRAPNORM:
+  frac: 1.0
+  cfac: [QCD]
+LHCBZ940PB:
+  frac: 1.0
+  cfac: [QCD]
+LHCBZEE2FB:
+  frac: 1.0
+  cfac: [QCD]
+LHCBWZMU7TEV:
+  frac: 1.0
+  cfac: [NRM,QCD]
+LHCBWZMU8TEV:
+  frac: 1.0
+  cfac: [NRM,QCD]
+

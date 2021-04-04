@@ -307,7 +307,10 @@ class CoreConfig(configparser.Config):
 
     @record_from_defaults
     def produce_default_dataset_settings(self):
-        spec_file_mapping = {'40': '40_dataset_defaults.yaml'}
+        spec_file_mapping = {
+                '31': '31_dataset_defaults.yaml',
+                '40': '40_dataset_defaults.yaml',
+                }
         spec_defaults_mapping = {}
         for spec, file in spec_file_mapping.items():
             spec_defaults_mapping[spec] = yaml.safe_load(
