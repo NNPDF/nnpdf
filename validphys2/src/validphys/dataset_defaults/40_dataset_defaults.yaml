@@ -35,9 +35,9 @@ HERACOMBCCEM:
 HERACOMBCCEP:
   frac: 0.75
 HERACOMB_SIGMARED_C:
-  frac: 0.75   # N
+  frac: 0.75
 HERACOMB_SIGMARED_B:
-  frac: 0.75   # N
+  frac: 0.75
 DYE886R:
   frac: 1.0
 DYE886P:
@@ -66,22 +66,22 @@ ATLASLOMASSDY11EXT:
   cfac: [QCD]
 ATLASWZRAP11CC:
   frac: 0.75
-  cfac: [QCD]               # N
+  cfac: [QCD]
 ATLASWZRAP11CF:
   frac: 0.75
-  cfac: [QCD]               # N
+  cfac: [QCD]
 ATLASDY2D8TEV:
   frac: 0.75
-  cfac: [QCDEWK]             # N
+  cfac: [QCDEWK]
 ATLAS_WZ_TOT_13TEV:
   frac: 1.0
-  cfac: [NRM, QCD]      # N
+  cfac: [NRM, QCD]
 ATLAS_WP_JET_8TEV_PT:
   frac: 0.75
-  cfac: [QCD]         # N
+  cfac: [QCD]
 ATLAS_WM_JET_8TEV_PT:
   frac: 0.75
-  cfac: [QCD]         # N
+  cfac: [QCD]
 ATLASZPT8TEVMDIST:
   frac: 0.75
   cfac: [QCD]
@@ -95,40 +95,40 @@ ATLASTTBARTOT:
   cfac: [QCD]
 ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM:
   frac: 1.0
-  cfac: [QCD]       # N
+  cfac: [QCD]
 ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM:
   frac: 1.0
-  cfac: [QCD]      # N
+  cfac: [QCD]
 ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM:
   frac: 1.0
-  cfac: [QCD]   # N
+  cfac: [QCD]
 ATLAS_1JET_8TEV_R06_DEC:
   frac: 0.75
-  cfac: [QCD]   # N
+  cfac: [QCD]
 ATLAS_2JET_7TEV_R06:
   frac: 0.75
-  cfac: [QCD]   # N
+  cfac: [QCD]
 ATLASPHT15:
   frac: 0.75
-  cfac: [QCD, EWK]  # N
+  cfac: [QCD, EWK]
 ATLAS_SINGLETOP_TCH_R_7TEV:
   frac: 1.0
-  cfac: [QCD]                     # N
+  cfac: [QCD]
 ATLAS_SINGLETOP_TCH_R_13TEV:
   frac: 1.0
-  cfac: [QCD]                    # N
+  cfac: [QCD]
 ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM:
   frac: 1.0
-  cfac: [QCD]       # N
+  cfac: [QCD]
 ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM:
   frac: 1.0
-  cfac: [QCD]    # N
+  cfac: [QCD]
 ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM:
   frac: 0.75
-  cfac: [QCD]       # N
+  cfac: [QCD]
 ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM:
   frac: 0.75
-  cfac: [QCD]    # N
+  cfac: [QCD]
 CMSWEASY840PB:
   frac: 1.0
   cfac: [QCD]
@@ -147,10 +147,10 @@ CMSZDIFF12:
   sys: 10
 CMS_2JET_7TEV:
   frac: 0.75
-  cfac: [QCD]      # N 
+  cfac: [QCD]
 CMS_2JET_3D_8TEV:
   frac: 0.75
-  cfac: [QCD]   # N
+  cfac: [QCD]
 CMSTTBARTOT:
   frac: 1.0
   cfac: [QCD]
@@ -159,25 +159,25 @@ CMSTOPDIFF8TEVTTRAPNORM:
   cfac: [QCD]
 CMSTTBARTOT5TEV:
   frac: 1.0
-  cfac: [QCD]                   # N
+  cfac: [QCD]
 CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM:
   frac: 1.0
-  cfac: [QCD]   # N
+  cfac: [QCD]
 CMS_TTB_DIFF_13TEV_2016_2L_TRAP:
   frac: 1.0
-  cfac: [QCD]   # N
+  cfac: [QCD]
 CMS_TTB_DIFF_13TEV_2016_LJ_TRAP:
   frac: 1.0
-  cfac: [QCD]   # N
+  cfac: [QCD]
 CMS_SINGLETOP_TCH_TOT_7TEV:
   frac: 1.0
-  cfac: [QCD]   # N
+  cfac: [QCD]
 CMS_SINGLETOP_TCH_R_8TEV:
   frac: 1.0
-  cfac: [QCD]     # N
+  cfac: [QCD]
 CMS_SINGLETOP_TCH_R_13TEV:
   frac: 1.0
-  cfac: [QCD]    # N
+  cfac: [QCD]
 LHCBZ940PB:
   frac: 1.0
   cfac: [QCD]
@@ -192,7 +192,7 @@ LHCBWZMU8TEV:
   cfac: [NRM, QCD]
 LHCB_Z_13TEV_DIMUON:
   frac: 1.0
-  cfac: [QCD]       # N
+  cfac: [QCD]
 LHCB_Z_13TEV_DIELECTRON:
   frac: 1.0
-  cfac: [QCD]   # N
+  cfac: [QCD]
