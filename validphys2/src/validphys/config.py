@@ -305,8 +305,19 @@ class CoreConfig(configparser.Config):
         return {**fitpdf, **basisfromfit}
 
 
+    @record_from_defaults
+    def produce_default_dataset_settings(self):
+        spec_file_mapping = {'40': '40_dataset_defaults.yaml'}
+        spec_defaults_mapping = {}
+        for spec, file in spec_file_mapping.items():
+            spec_defaults_mapping[spec] = yaml.safe_load(
+                read_text("validphys.dataset_defaults", file)
+            )
+        return spec_defaults_mapping
+
+
     @element_of("dataset_inputs")
-    def parse_dataset_input(self, dataset: Mapping):
+    def parse_dataset_input(self, dataset: Mapping, dataset_defaults_spec=None):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
         known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
@@ -318,6 +329,25 @@ class CoreConfig(configparser.Config):
             raise ConfigError(
                 "'dataset' must be a mapping with " "'dataset' and 'sysnum'"
             )
+
+        if dataset_defaults_spec is not None:
+            # Cast to string because e.g:
+            # dataset_defaults_spec: 40
+            # will be parsed as int by yaml
+            dataset_defaults_spec = str(dataset_defaults_spec)
+            spec_dataset_default_mapping = self.produce_default_dataset_settings()
+            try:
+                dataset_defaults = spec_dataset_default_mapping[dataset_defaults_spec]
+            except KeyError as e:
+                alternatives = spec_dataset_default_mapping.keys()
+                raise ConfigError(
+                     f"Default filter rule not found for spec {dataset_defaults_spec}",
+                     bad_item=dataset_defaults_spec,
+                     alternatives=alternatives,
+                     display_alternatives='best'
+                )
+
+            dataset = dataset_defaults[name]
 
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
