@@ -42,7 +42,7 @@ requirements:
         - matplotlib >=3.3.0
         - blessings >=1.7
         - scipy >=0.19.1
-        - pandas >= 1.2.0
+        - pandas >=1.2.0
         - requests
         - prompt_toolkit
         - pyarrow
