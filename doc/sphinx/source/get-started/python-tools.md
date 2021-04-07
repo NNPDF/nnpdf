@@ -120,7 +120,7 @@ files.
 ## Example pull request
 
 You may find it instructive to go though this pull request that
-implements arc-length computation:
+implements an arc-length computation:
 
 <https://github.com/NNPDF/validphys2/pull/64>
 
