@@ -187,7 +187,7 @@ will produce plots where the two PDFs appear together. However
 we can also produce individual plots for each PDF, by simply
 specifying that we want to loop over `pdfs`:
 
-.. code :: yaml
+.. code:: yaml
 
 	pdfs:
 	  - NNPDF30_nlo_as_0118
