@@ -113,7 +113,7 @@ for Pylint. It is strongly recommended to configure the editor to show the
 problematic pieces of code proactively.
 
 New code should use the [Black](https://black.readthedocs.io/en/stable/>) tool to
-format the code. This tool should not be used too aggressively reformat existing
+format the code. This tool should not be used to aggressively reformat existing
 files.
 
 
