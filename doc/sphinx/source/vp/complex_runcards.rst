@@ -124,7 +124,7 @@ We can also have lists of mappings acting as namespaces. The action
 will then be repeated inside each of the namespaces generating one
 result for each. For example:
 
-.. code :: yaml
+.. code:: yaml
 
 	pdf: NNPDF31_nlo_as_0118
 
