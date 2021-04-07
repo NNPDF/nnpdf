@@ -257,7 +257,7 @@ theories, pdfs and datasets.
 
 The order over which the looping is done is significant: 
 1. The outer specifications must set all the variables required for the inner
-   ones to be fully resolved (so `with_cuts` must go before `dataset_inputs`).
+   ones to be fully resolved (so `With_cuts` must go before `dataset_inputs`).
    
 2. The caching mechanism works by grouping together the namespace
    specifications from the beginning. For example, suppose we were to
