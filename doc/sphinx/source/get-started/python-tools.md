@@ -113,14 +113,14 @@ for Pylint. It is strongly recommended to configure the editor to show the
 problematic pieces of code proactively.
 
 New code should use the [Black](https://black.readthedocs.io/en/stable/>) tool to
-format the code. This tool should not be used too aggressively reformat existing
+format the code. This tool should not be used to aggressively reformat existing
 files.
 
 
 ## Example pull request
 
-You may find instructive to go though this pull request that
-implements arc-length computation:
+You may find it instructive to go though this pull request that
+implements an arc-length computation:
 
 <https://github.com/NNPDF/validphys2/pull/64>
 
@@ -131,7 +131,7 @@ computations and then present those as plots and tables.
 ## Matplotlib Image Comparison Tests
 
 It is possible to create tests which perform an image comparison between a
-generated plot and a preexisting baseline plot. Clearly this allows one to check
+generated plot and a pre-existing baseline plot. Clearly this allows one to check
 consistency in figure generation.
 
 Before beginning you will need to ensure that you have the tests dependencies,
@@ -152,7 +152,7 @@ def test_plotpdfs():
     return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
 ```
 
-we see that the function needs to return a valid matplotlib figure, and should
+We see that the function needs to return a valid matplotlib figure, and should
 be decorated with `@pytest.mark.mpl_image_compare`.
 
 Now the baseline figure needs to be generated, this can be achieved by running
@@ -178,6 +178,6 @@ Also you can check that the test has been added to the full test suite:
 pytest --pyargs --mpl validphys
 ```
 
-just note that if you do not put the `--mpl` flag then the test will just check
+Just note that if you do not put the `--mpl` flag then the test will just check
 that the function runs without error, and won't check that the output matches to
 baseline.

@@ -1,7 +1,7 @@
 Defining custom pipelines
 =========================
 
-Here we discuss what needs to go from user entered strings in the YAML
+Here we discuss what information from user-entered strings needs to go in the YAML
 file to plots and reports.
 
 The basic code flow is as follows:
@@ -11,7 +11,7 @@ The basic code flow is as follows:
 
  2. Each requirement spans other requirements. These can be:
  
-    - Providers: Other functions with requirements on their own.
+    - Providers: Other functions with requirements of their own.
     - User input processed by the configuration, which is immediately tested for correctness.
     - Production rules, also derived from the configuration.
 
@@ -38,7 +38,7 @@ The `config` class takes the user input and the dependencies and:
  - Returns a valid resource if the user input is valid.
  - Raises a `ConfigError` if the user input is invalid.
 
-To parse a given user entered key (e.g. `posdataset`), simply define
+To parse a given user-entered key (e.g. `posdataset`), simply define
 a `parse_posdataset` function. The first argument (i.e. second after
 `self`) will be the raw value in the configuration file. Any other
 arguments correspond to dependencies that are already resolved at the
@@ -80,13 +80,13 @@ the corresponding key (and optionally a set of dependencies), there
 are the `produce_` functions, which take only the dependencies. Other
 than not taking the user input, the `produce_` functions work in
 a very similar way to the `parse_` functions: they are resolved at
-*"compile time"*, before any procider function is executed, and  they
+*"compile time"*, before any provider function is executed, and they
 should raise a `ConfigError` if they fail.
 
-In general production rules should be preferred to parse functions
+In general, production rules should be preferred to parse functions
 that bundle together various dependencies (e.g. data, cuts and
 theory), because by having more granular elements, we can iterate over
-them in different ways: for example we might want to generate
+them in different ways: for example, we might want to generate
 a separate report page for each of the positivity datasets, where they
 are compared for multiple theories. We could break the parse function
 above into:
@@ -103,7 +103,7 @@ above into:
 Now the user has to enter a key called "posdataset_input", from which
 some Python object will be obtained as the return value of
 `parse_posdataset_input`. Then, `produce_posdataset` is used to an
-object representing the positivity set and the corresponding FKTables
+object representing the positivity set and the corresponding FK tables
 in a given theory is obtained from the output of
 `parse_posdataser_input` and a theory ID.
 
@@ -223,7 +223,7 @@ would suggest the correct key.
 Note that all possible error paths must end by raising
 a `ConfigError`.
 
-Computing PDF dependent quantities
+Computing PDF-dependent quantities
 ----------------------------------
 
 Now that we can receive positivity sets as input, let's do something
@@ -248,7 +248,7 @@ results:
 		return self.stats.data
 
 
-`pdf.stats_class` allows to interpret the results of the convolution
+`pdf.stats_class` allows for the interpretation of the results of the convolution
 as a function of the PDF error type (e.g. to use the different
 formulas for the uncertainty of Hessian and Monte Carlo sets). In that
 way it allows to abstract away the different error types. One
@@ -257,7 +257,7 @@ appropriate for a given error type by calling `pdf.stats_class(data)`
 where data is an array where the entries along the first dimension are
 the results from each member computed from `libnnpdf` (and the other
 dimensions are arbitrary). `Stats` has methods that appropriately
-collapse along the first axis. For example `central_value` computes
+collapse along the first axis. For example, `central_value` computes
 the mean along the first axis for Monte Carlo PDFs and yields the
 first member for Hesssian PDFs.
 
@@ -267,5 +267,3 @@ And then define a simple provider function:
 
 	def positivity_predictions(pdf, positivityset):
 	     return PositivityResult.from_convolution(pdf, positivityset)
-
-

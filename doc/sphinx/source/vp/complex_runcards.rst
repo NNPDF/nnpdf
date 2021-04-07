@@ -74,7 +74,7 @@ In this case we can modify the example as follows:
 
 
 
-Here `with_cuts` and `without_cuts` are *arbitrary* strings that
+Here `With_cuts` and `Without_cuts` are *arbitrary* strings that
 specify *namespaces*.
 We are asking for 
 -  `plot_fancy` to be executed taking into account the cuts (note that we also need to 
@@ -83,7 +83,7 @@ specify the fit where they are read from)
 
 Similar to
 a programming language like C, the inner namespace has priority with
-respect to the outer. For example if we add a PDF specification to the
+respect to the outer. For example, if we add a PDF specification to the
 `with_cuts` namespace like this:
 
 
@@ -114,7 +114,7 @@ respect to the outer. For example if we add a PDF specification to the
 The `plot_fancy` action will ignore the outer pdf
 (NNPDF31\_nlo\_as\_0118) and use the one defined in the innermost
 namespace (191015-mw-001). Because we have not specified `plot_chi2dist` to
-be executed within the `with_cuts` namespace, it will continue to use
+be executed within the `With_cuts` namespace, it will continue to use
 (NNPDF31\_nlo\_as\_0118).
 
 
@@ -124,7 +124,7 @@ We can also have lists of mappings acting as namespaces. The action
 will then be repeated inside each of the namespaces generating one
 result for each. For example:
 
-.. code :: yaml
+.. code:: yaml
 
 	pdf: NNPDF31_nlo_as_0118
 
@@ -183,11 +183,11 @@ something like this:
 	  - plot_fancy
 
 
-will produce plots where the two PDFs appear together. However
+will produce plots where the two PDFs appear together. However,
 we can also produce individual plots for each PDF, by simply
 specifying that we want to loop over `pdfs`:
 
-.. code :: yaml
+.. code:: yaml
 
 	pdfs:
 	  - NNPDF30_nlo_as_0118
@@ -240,7 +240,7 @@ Consider the example:
 	    - 52
 	    - 53
 
-	with_cuts:
+	With_cuts:
 	    use_cuts : "nocuts"
 
 	dataset_inputs:
@@ -249,15 +249,15 @@ Consider the example:
 	    - { dataset: ATLASWZRAP36PB}
 
 	actions_:
-	  - with_cuts::theoryids::pdfs::dataset_inputs plot_fancy
+	  - With_cuts::theoryids::pdfs::dataset_inputs plot_fancy
 
-This will first enter the "*with_cuts*" namespace (thus setting
+This will first enter the "*With_cuts*" namespace (thus setting
 ``use_cuts = "nocuts"`` for the action), and then loop over all the
 theories, pdfs and datasets.
 
 The order over which the looping is done is significant: 
 1. The outer specifications must set all the variables required for the inner
-   ones to be fully resolved (so `with_cuts` must go before `dataset_inputs`).
+   ones to be fully resolved (so `With_cuts` must go before `dataset_inputs`).
    
 2. The caching mechanism works by grouping together the namespace
    specifications from the beginning. For example, suppose we were to
@@ -642,5 +642,3 @@ The plotting labels for datasets are read from the `dataset_label` key
 in the plotting files. 
 
 See :ref:`tut_plot_pdfs` for examples.
-
-

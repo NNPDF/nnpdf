@@ -35,12 +35,12 @@ one dataset and one
 theory. Note that the dataset specification is identical to that of
 the `n3fit` configuration files.
 
-We are saying that we do not want to use the cuts of the data
-(so we don't have to specify a fit containing the cut data).
+We are saying that we do not want to use any cuts on the data
+(so we don't have to specify a fit containing the cut data, for example).
 
 The special `actions_` key is used to declare the actions we want to
 have executed. The syntax is the same as for the targets inside the
-report (see :ref:`tut_report`).  We want a data/theory comparison (``plot_fancy``;
+report (see :ref:`tut_report`).  We want a data-theory comparison (``plot_fancy``;
 see :ref:`tut_datthcomp`) and to
 plot the distribution of the chi² for each replica (``plot_chi2dist``).
 
@@ -101,5 +101,4 @@ We can see which keys have a special meaning in the configuration file with
       $ validphys --help config
       
 All other keys are interpreted literally (although they could be further processed by specific actions).	  
-
 

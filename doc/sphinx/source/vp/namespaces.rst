@@ -9,14 +9,14 @@ are a central concept.
 
 A namespace is a stack of python dictionaries which are indexed by a tuple called the 
 `namespace specification (nsspec)`. A user gives some inputs in terms of `fuzzyspecs` and
-these are translated into `nnspecs. This is mostly an advanced internal implementation detail,
+these are translated into `nnspecs`. This is mostly an advanced internal implementation detail,
 but it is important in order to understand how several features work. Also, the abstraction leaks
 into user-facing features such as the collect function.
 
 Namespace specifications
 ------------------------
 
-An nsspec is a tuple of an arbitrary number of elements.  Each element
+An nsspec is a tuple of an arbitrary number of elements. Each element
 in the tuple corresponds to one extra stack layer in depth (*"stack
 frame"*). The elements of the tuple can be either:
 
@@ -70,7 +70,7 @@ is `"nocuts"`.
 
 The function `reportengine.namespaces.resolve(ns, nsspec)` returns
 a mapping (in particular it is a modified version of
-`collections.ChainMap`) that  implements exactly this behaviour. It is
+`collections.ChainMap`) that implements exactly this behaviour. It is
 used extensively thorough `reportengine`.
 
 .. _fuzzyspecs:

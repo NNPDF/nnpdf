@@ -20,7 +20,7 @@ Introduction to `validphys 2`
 
 * `validphys 2` is implemented on top of the 
   `reportengine <https://github.com/NNPDF/reportengine>`_ framework.
-  `reportengine` provides the logic to process the runcards by building  task
+  `reportengine` provides the logic to process the runcards by building task
   execution graphs based on individual actions (which are Python functions). The
   runcards can execute complex analysis and parameter scans with  the appropriate
   use of namespaces. More information on `reportengine` and its interface with 

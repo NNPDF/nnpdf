@@ -49,7 +49,7 @@ it simply takes the arguments we want to test. The function can return
 a dictionary that will be used to update the namespace (but that is
 not required, it can also not return anything).
 
-For example the `check_pdf_is_montecarlo` above could be more easily
+For example, the `check_pdf_is_montecarlo` above could be more easily
 implemented like:
 
 .. code:: python

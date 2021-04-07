@@ -4,7 +4,7 @@ Resolving dependencies
 Dependencies are resolved automatically by `reportengine` when the
 client applications follow a certain convention.
 
-A few things that Validphys needs to do are:
+A few things that `validphys` needs to do are:
 
  - Provide a declarative interface where the user specifies only the
    amount of information needed to specify the requirements.
@@ -131,4 +131,3 @@ The corresponding graph would be:
    :width: 1500
 
 since `results` does depend on the pdf.
-
