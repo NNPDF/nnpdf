@@ -25,7 +25,7 @@ a special case, one can pass directly functions
 
 .. code:: python
 
-	possets_predictionsa = collect(positivity_predictions, ('posdatasets',))
+	possets_predictions = collect(positivity_predictions, ('posdatasets',))
 
 Compared to a simple `for` loop, the collect function has the
 advantages that the computations are appropriately reused and several
@@ -100,7 +100,6 @@ A minimal runcard to use the action above is:
 
 	actions_:
 	  - print_fits_experiments_chi2
-
 
 
 
