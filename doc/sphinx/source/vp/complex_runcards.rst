@@ -74,7 +74,7 @@ In this case we can modify the example as follows:
 
 
 
-Here `with_cuts` and `without_cuts` are *arbitrary* strings that
+Here `With_cuts` and `Without_cuts` are *arbitrary* strings that
 specify *namespaces*.
 We are asking for 
 -  `plot_fancy` to be executed taking into account the cuts (note that we also need to 
@@ -642,5 +642,4 @@ The plotting labels for datasets are read from the `dataset_label` key
 in the plotting files. 
 
 See :ref:`tut_plot_pdfs` for examples.
-
 
