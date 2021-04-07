@@ -152,7 +152,7 @@ def test_plotpdfs():
     return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
 ```
 
-we see that the function needs to return a valid matplotlib figure, and should
+We see that the function needs to return a valid matplotlib figure, and should
 be decorated with `@pytest.mark.mpl_image_compare`.
 
 Now the baseline figure needs to be generated, this can be achieved by running
