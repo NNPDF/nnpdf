@@ -131,7 +131,7 @@ computations and then present those as plots and tables.
 ## Matplotlib Image Comparison Tests
 
 It is possible to create tests which perform an image comparison between a
-generated plot and a preexisting baseline plot. Clearly this allows one to check
+generated plot and a pre-existing baseline plot. Clearly this allows one to check
 consistency in figure generation.
 
 Before beginning you will need to ensure that you have the tests dependencies,
