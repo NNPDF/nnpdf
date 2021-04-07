@@ -74,7 +74,7 @@ Here we only discuss a couple of interesting flags.
 1. The `main` flag
 
 The `main: True` flag can only affect one report per run. It has the
-effect of setting the name `index.html`, which comes handy for
+effect of setting the name `index.html`, which comes in handy for
 visualizing the uploaded result in the server.
 
 The main flag also tries to open the web browser when the report finishes. The
