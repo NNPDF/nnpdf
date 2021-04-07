@@ -183,7 +183,7 @@ something like this:
 	  - plot_fancy
 
 
-will produce plots where the two PDFs appear together. However
+will produce plots where the two PDFs appear together. However,
 we can also produce individual plots for each PDF, by simply
 specifying that we want to loop over `pdfs`:
 
