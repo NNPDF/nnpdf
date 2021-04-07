@@ -83,7 +83,7 @@ specify the fit where they are read from)
 
 Similar to
 a programming language like C, the inner namespace has priority with
-respect to the outer. For example if we add a PDF specification to the
+respect to the outer. For example, if we add a PDF specification to the
 `with_cuts` namespace like this:
 
 
@@ -642,4 +642,3 @@ The plotting labels for datasets are read from the `dataset_label` key
 in the plotting files. 
 
 See :ref:`tut_plot_pdfs` for examples.
-
