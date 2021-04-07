@@ -21,7 +21,7 @@ first argument is found following the standard `reportengine` rules.
 It can be a function defined in a provider module, a configuration
 input or a production rule, as well as another `collect` provider. As
 a special case, one can pass directly functions
-(defined with the `def` keyword).  For example
+(defined with the `def` keyword). For example
 
 .. code:: python
 
@@ -73,7 +73,7 @@ each fit, where each of them is itself list where each item result of
 fit.
 
 Standard iteration techniques can be used to process the results of
-collect. For example here is how we would print the χ² for each
+collect. For example, here is how we would print the χ² for each
 experiment in each fit:
 
 .. code:: python
@@ -100,6 +100,5 @@ A minimal runcard to use the action above is:
 
 	actions_:
 	  - print_fits_experiments_chi2
-
 
 

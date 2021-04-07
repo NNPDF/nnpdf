@@ -1,7 +1,7 @@
 Defining custom pipelines
 =========================
 
-Here we discuss what needs to go from user entered strings in the YAML
+Here we discuss what information from user-entered strings needs to go in the YAML
 file to plots and reports.
 
 The basic code flow is as follows:
@@ -11,7 +11,7 @@ The basic code flow is as follows:
 
  2. Each requirement spans other requirements. These can be:
  
-    - Providers: Other functions with requirements on their own.
+    - Providers: Other functions with requirements of their own.
     - User input processed by the configuration, which is immediately tested for correctness.
     - Production rules, also derived from the configuration.
 
@@ -38,7 +38,7 @@ The `config` class takes the user input and the dependencies and:
  - Returns a valid resource if the user input is valid.
  - Raises a `ConfigError` if the user input is invalid.
 
-To parse a given user entered key (e.g. `posdataset`), simply define
+To parse a given user-entered key (e.g. `posdataset`), simply define
 a `parse_posdataset` function. The first argument (i.e. second after
 `self`) will be the raw value in the configuration file. Any other
 arguments correspond to dependencies that are already resolved at the
@@ -267,4 +267,3 @@ And then define a simple provider function:
 
 	def positivity_predictions(pdf, positivityset):
 	     return PositivityResult.from_convolution(pdf, positivityset)
-
