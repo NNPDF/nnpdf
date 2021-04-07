@@ -114,7 +114,7 @@ respect to the outer. For example, if we add a PDF specification to the
 The `plot_fancy` action will ignore the outer pdf
 (NNPDF31\_nlo\_as\_0118) and use the one defined in the innermost
 namespace (191015-mw-001). Because we have not specified `plot_chi2dist` to
-be executed within the `with_cuts` namespace, it will continue to use
+be executed within the `With_cuts` namespace, it will continue to use
 (NNPDF31\_nlo\_as\_0118).
 
 
