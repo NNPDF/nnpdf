@@ -178,6 +178,6 @@ Also you can check that the test has been added to the full test suite:
 pytest --pyargs --mpl validphys
 ```
 
-just note that if you do not put the `--mpl` flag then the test will just check
+Just note that if you do not put the `--mpl` flag then the test will just check
 that the function runs without error, and won't check that the output matches to
 baseline.
