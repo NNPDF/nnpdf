@@ -251,7 +251,7 @@ Consider the example:
 	actions_:
 	  - With_cuts::theoryids::pdfs::dataset_inputs plot_fancy
 
-This will first enter the "*with_cuts*" namespace (thus setting
+This will first enter the "*With_cuts*" namespace (thus setting
 ``use_cuts = "nocuts"`` for the action), and then loop over all the
 theories, pdfs and datasets.
 
