@@ -249,7 +249,7 @@ Consider the example:
 	    - { dataset: ATLASWZRAP36PB}
 
 	actions_:
-	  - with_cuts::theoryids::pdfs::dataset_inputs plot_fancy
+	  - With_cuts::theoryids::pdfs::dataset_inputs plot_fancy
 
 This will first enter the "*with_cuts*" namespace (thus setting
 ``use_cuts = "nocuts"`` for the action), and then loop over all the
