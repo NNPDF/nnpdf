@@ -1,6 +1,6 @@
 Comparing data and theory
 -------------------------
-For a tutorial on how to do a data theory comparison, see [here](../tutorials/datthcomp.html).
+For a tutorial on how to do a data-theory comparison, see [here](../tutorials/datthcomp.html).
 
 The name of the data-theory comparison tool is `plot_fancy`. You can
 see what parameters in the runcard influence it by typing:

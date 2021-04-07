@@ -42,13 +42,13 @@ configuration setting:
   each dataset across the namespaces are *similar*, specifically that the ratio
   between the absolute difference in the predictions and the total experimental
   uncertainty is smaller than a given value, `cut_similarity_threshold` that
-  must be provided. Note that for this to work with different cfactors across
+  must be provided. Note that for this to work with different C-factors across
   the namespaces, one must provide a different `dataset_inputs` list for each.
 
-  This mechanism can be sidetracked selectively for specific datasets. To do
+  This mechanism can be ignored selectively for specific datasets. To do
   that, add their names to a list called `do_not_require_similarity_for`. The
   datasets in the list do not need to appear in the `cuts_intersection_spec`
-  name space and will be filtered according to the internal cuts unconditionally.
+  namespace and will be filtered according to the internal cuts unconditionally.
 
 
 The following example demonstrates the first three options:
@@ -114,7 +114,7 @@ actions_:
 ```
 
 Here we put together the results with the different filtering policies
-in a [Data theory comparison] plot and then plot the χ² distribution
+in a [Data-theory comparison] plot and then plot the χ² distribution
 for each one individually.  With these settings the later three
 [dataspecs](#general-data-specification-the-dataspec-api) give the
 same result.
@@ -183,6 +183,5 @@ template_text: |
 actions_:
     - report(main=True)
 ```
-
 
 

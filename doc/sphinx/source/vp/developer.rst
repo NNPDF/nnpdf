@@ -9,7 +9,7 @@ Developing `validphys`
 	:ref:`tools`. 
 
 `validphys2` aims to be as simple to understand and extend as
-possible. The code is based on self contained Python functions with
+possible. The code is based on self-contained Python functions with
 a couple of magic decorators that make `reportengine` work as
 expected. Based on that, there is a large and ever growing set of
 tools to interact with NNPDF resources, that are spread across several
@@ -62,10 +62,9 @@ places.
 These are used as a basis for doing everything else. For 
 implementing new functionality see :ref:`tut_newaction`.
 
-Unfortunately the objective of making `validphys` easy means that the
+Unfortunately, the objective of making `validphys` easy means that the
 complexity of getting things to just work is translated into
 `reportengine`, which instead uses many advanced python features, and
 results in a codebase that is not particularly simple.
-
 
 
