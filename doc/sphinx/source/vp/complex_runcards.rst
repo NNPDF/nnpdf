@@ -240,7 +240,7 @@ Consider the example:
 	    - 52
 	    - 53
 
-	with_cuts:
+	With_cuts:
 	    use_cuts : "nocuts"
 
 	dataset_inputs:
