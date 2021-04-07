@@ -78,7 +78,7 @@ effect of setting the name `index.html`, which comes in handy for
 visualizing the uploaded result in the server.
 
 The main flag also tries to open the web browser when the report finishes. The
-browser will be chosen according to internal heuristics, by queering system
+browser will be chosen according to internal heuristics, by querying system
 preferences. These can be overridden by setting the `BROWSER` environment
 variable. For example in text-only environments such as remote clusters, it may
 be preferable to just print the URL. This can be achieved by setting the
