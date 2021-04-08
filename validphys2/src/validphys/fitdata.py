@@ -201,7 +201,7 @@ def fit_sum_rules(fit, replica_paths):
 
 @table
 def fit_sum_rules_table(fit_sum_rules):
-    return sumrules.sum_rules_table(fit_sum_rules)
+    return sumrules.sum_rules_table(fit_sum_rules._asdict())
 
 
 fits_replica_data = collect('replica_data', ('fits',))
