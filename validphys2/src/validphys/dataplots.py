@@ -576,6 +576,8 @@ def plot_fits_chi2_spider(fits_groups_chi2_table):
     N = len(fits_groups_chi2_table)
     names = fits_groups_chi2_table.index.values
     angles = [n / float(N) * 2 * np.pi for n in range(N)]
+    # Add this on so that the plot line connects back to the start
+    angles += angles[:1]
 
     # Only keeping columns with chi2s
     cols = np.array(fits_groups_chi2_table.columns)[1::2]
@@ -590,21 +592,24 @@ def plot_fits_chi2_spider(fits_groups_chi2_table):
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
-    plt.xticks(angles, names, color='grey', size=15)
+    plt.xticks(angles[:-1], names, color='grey', size=15)
 
     # Draw ylabels
     ax.set_rlabel_position(0)
     plt.yticks([0.5,1], ["0.5","1"], color="grey", size=15)
-    plt.ylim(0,maxchi2)
+    plt.ylim(0,maxchi2+0.1)
 
     # Now iterate through chi2 columns, one for each fit
     for fit in cols:
         df = newdf[fit]
         chi2s = df.values
+        # To make the plot connect to the start
+        chi2s += chi2s[:1]
         ax.plot(angles, chi2s, linewidth=2, linestyle="solid", label=fit)
         ax.fill(angles, chi2s, alpha=0.4)
 
     ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=20)
     
     return fig
 
