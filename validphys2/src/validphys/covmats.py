@@ -11,13 +11,13 @@ from reportengine import collect
 from reportengine.table import table
 
 from validphys.calcutils import regularize_covmat, get_df_block
-from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
     check_pdf_is_montecarlo,
     check_speclabels_different,
     check_data_cuts_match_theorycovmat,
+    check_cuts_considered,
 )
 from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
@@ -29,7 +29,12 @@ log = logging.getLogger(__name__)
 INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 
 
-def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
+def covmat_from_systematics(
+    loaded_commondata_with_cuts,
+    dataset_input,
+    use_weights_in_covmat=True,
+    _central_values=None
+):
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
     construct the covariance matrix accounting for correlations between
@@ -71,6 +76,13 @@ def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
     loaded_commondata_with_cuts : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
+    dataset_input: validphys.core.DataSetInput
+        Dataset settings, contains the weight for the current dataset.
+        The returned covmat will be divided by the dataset weight if
+        ``use_weights_in_covmat``. The default weight is 1, which means
+        the returned covmat will be unmodified.
+    use_weights_in_covmat: bool
+        Whether to weight the covmat, True by default.
     _central_values : None, np.array
         1-D array containing alternative central values to combine with the
         multiplicative errors to calculate their absolute contributions. By
@@ -98,31 +110,21 @@ def covmat_from_systematics(loaded_commondata_with_cuts, _central_values=None):
     >>> cov.shape
     (28, 28)
 
-    To better understand the inputs for the function we can also explicitly
-    load the commondata and pass it to this function. Here we do that with
-    NMC:
-
-    >>> from validphys.commondataparser import load_commondata
-    >>> from validphys.loader import Loader
-    >>> from validphys.covmats import covmat_from_systematics
-    >>> l = Loader()
-    >>> cd = l.check_commondata("NMC")
-    >>> cd = load_commondata(cd)
-    >>> cov = covmat_from_systematics(cd)
-
-    However, it is clearly more effort than using the API. This is only worsened
-    when trying to apply cuts and more complicated dataset settings as in the
-    first example.
-
     """
-    return construct_covmat(
+    covmat = construct_covmat(
         loaded_commondata_with_cuts.stat_errors.to_numpy(),
         loaded_commondata_with_cuts.systematic_errors(_central_values)
     )
+    if use_weights_in_covmat:
+        return covmat / dataset_input.weight
+    return covmat
 
 
 def dataset_inputs_covmat_from_systematics(
-    dataset_inputs_loaded_cd_with_cuts, _list_of_central_values=None
+    dataset_inputs_loaded_cd_with_cuts,
+    data_input,
+    use_weights_in_covmat=True,
+    _list_of_central_values=None
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -137,6 +139,14 @@ def dataset_inputs_covmat_from_systematics(
     ----------
     dataset_inputs_loaded_cd_with_cuts : list[validphys.coredata.CommonData]
         list of CommonData objects.
+    data_input: list[validphys.core.DataSetInput]
+        Settings for each dataset, each element contains the weight for the
+        current dataset. The elements of the returned covmat for dataset
+        i and j will be divided by sqrt(weight_i)*sqrt(weight_j), if
+        ``use_weights_in_covmat``. The default weight is 1, which means
+        the returned covmat will be unmodified.
+    use_weights_in_covmat: bool
+        Whether to weight the covmat, True by default.
     _list_of_central_values: None, list[np.array]
         list of 1-D arrays which contain alternative central values which are
         combined with the multiplicative errors to calculate their absolute
@@ -163,42 +173,31 @@ def dataset_inputs_covmat_from_systematics(
     >>> cov.shape
     (235, 235)
 
-    Which properly accounts for all dataset settings and cuts. As with any other
-    action we can demonstrate explictly the inputs to this action by explictly
-    loading them and calling the action directly:
-
-    >>> from validphys.commondataparser import load_commondata
-    >>> from validphys.covmats import dataset_inputs_covmat_from_systematics
-    >>> from validphys.loader import Loader
-    >>> l = Loader()
-    >>> cd1 = l.check_commondata("ATLASLOMASSDY11EXT")
-    >>> cd2 = l.check_commondata("ATLASZHIGHMASS49FB")
-    >>> ld1, ld2 = map(load_commondata, (cd1, cd2))
-    >>> dataset_inputs_covmat_from_systematics((ld1, ld2))
-    array([[2.91814548e+06, 4.66692123e+06, 2.36823008e+06, 8.62587330e+05,
-            2.78209614e+05, 1.11790645e+05, 1.75129920e+03, 7.97466600e+02,
-            4.00296960e+02, 2.22039720e+02, 1.46202210e+02, 8.36558100e+01,
-
-    However, note that it is much more difficult to apply the correct settings
-    to datasets and apply cuts so it is strongly encouraged to use the API for
-    all scripting purposes.
+    Which properly accounts for all dataset settings and cuts.
 
     """
     special_corrs = []
     block_diags = []
+    weights = []
 
     if _list_of_central_values is None:
         # want to just pass None to systematic_errors method
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
 
-    for cd, central_values in zip(dataset_inputs_loaded_cd_with_cuts, _list_of_central_values):
-        errors = cd.systematic_errors(central_values)
+    for cd, dsinp, central_values in zip(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        _list_of_central_values
+    ):
+        sys_errors = cd.systematic_errors(central_values)
+        stat_errors = cd.stat_errors.to_numpy()
+        weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
         # datasets
-        is_intra_dataset_error = errors.columns.isin(INTRA_DATASET_SYS_NAME)
+        is_intra_dataset_error = sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)
         block_diags.append(construct_covmat(
-            cd.stat_errors.to_numpy(), errors.loc[:, is_intra_dataset_error]))
-        special_corrs.append(errors.loc[:, ~is_intra_dataset_error])
+            stat_errors, sys_errors.loc[:, is_intra_dataset_error]))
+        special_corrs.append(sys_errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets
     special_sys = pd.concat(special_corrs, axis=0, sort=False)
@@ -206,9 +205,16 @@ def dataset_inputs_covmat_from_systematics(
     special_sys.fillna(0, inplace=True)
 
     diag = la.block_diag(*block_diags)
-    return diag + special_sys.to_numpy() @ special_sys.to_numpy().T
+    covmat = diag + special_sys.to_numpy() @ special_sys.to_numpy().T
+    if use_weights_in_covmat:
+        # concatenate weights and sqrt
+        sqrt_weights = np.sqrt(np.concatenate(weights))
+        # returns C_ij / (sqrt(w_i) * sqrt(w_j))
+        return (covmat / sqrt_weights).T / sqrt_weights
+    return covmat
 
 
+@check_cuts_considered
 def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
@@ -229,11 +235,17 @@ def dataset_t0_predictions(dataset, t0set):
         1-D numpy array with predictions for each of the cut datapoints.
 
     """
-    # Squeeze values since t0_pred is DataFrame with shape n_data * 1
+    # squeeze because the underlying data has shape ndata * 1
     return central_predictions(dataset, t0set).to_numpy().squeeze()
 
 
-def t0_covmat_from_systematics(loaded_commondata_with_cuts, dataset_t0_predictions):
+def t0_covmat_from_systematics(
+    loaded_commondata_with_cuts,
+    *,
+    dataset_input,
+    use_weights_in_covmat=True,
+    dataset_t0_predictions
+):
     """Like :py:func:`covmat_from_systematics` except uses the t0 predictions
     to calculate the absolute constributions to the covmat from multiplicative
     uncertainties. For more info on the t0 predictions see
@@ -243,6 +255,13 @@ def t0_covmat_from_systematics(loaded_commondata_with_cuts, dataset_t0_predictio
     ----------
     loaded_commondata_with_cuts: validphys.coredata.CommonData
         commondata object for which to generate the covmat.
+    dataset_input: validphys.core.DataSetInput
+        Dataset settings, contains the weight for the current dataset.
+        The returned covmat will be divided by the dataset weight if
+        ``use_weights_in_covmat``. The default weight is 1, which means
+        the returned covmat will be unmodified.
+    use_weights_in_covmat: bool
+        Whether to weight the covmat, True by default.
     dataset_t0_predictions: np.array
         1-D array with t0 predictions.
 
@@ -253,20 +272,37 @@ def t0_covmat_from_systematics(loaded_commondata_with_cuts, dataset_t0_predictio
 
     """
     return covmat_from_systematics(
-        loaded_commondata_with_cuts, dataset_t0_predictions)
+        loaded_commondata_with_cuts,
+        dataset_input,
+        use_weights_in_covmat,
+        _central_values=dataset_t0_predictions
+    )
 
 
 dataset_inputs_t0_predictions = collect("dataset_t0_predictions", ("data",))
 
 
 def dataset_inputs_t0_covmat_from_systematics(
-    dataset_inputs_loaded_cd_with_cuts, dataset_inputs_t0_predictions):
+    dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    dataset_inputs_t0_predictions
+):
     """Like :py:func:`t0_covmat_from_systematics` except for all data
 
     Parameters
     ----------
     dataset_inputs_loaded_cd_with_cuts: list[validphys.coredata.CommonData]
         The CommonData for all datasets defined in ``dataset_inputs``.
+    data_input: list[validphys.core.DataSetInput]
+        Settings for each dataset, each element contains the weight for the
+        current dataset. The elements of the returned covmat for dataset
+        i and j will be divided by sqrt(weight_i)*sqrt(weight_j), if
+        ``use_weights_in_covmat``. The default weight is 1, which means
+        the returned covmat will be unmodified.
+    use_weights_in_covmat: bool
+        Whether to weight the covmat, True by default.
     dataset_inputs_t0_predictions: list[np.array]
         The t0 predictions for all datasets.
 
@@ -276,7 +312,11 @@ def dataset_inputs_t0_covmat_from_systematics(
         t0 covariance matrix matrix for list of datasets.
     """
     return dataset_inputs_covmat_from_systematics(
-        dataset_inputs_loaded_cd_with_cuts, dataset_inputs_t0_predictions)
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        _list_of_central_values=dataset_inputs_t0_predictions
+    )
 
 
 def sqrt_covmat(covariance_matrix):
@@ -314,28 +354,27 @@ def sqrt_covmat(covariance_matrix):
 
     Example
     -------
-    >>> from validphys.commondataparser import load_commondata
-    >>> from validphys.loader import Loader
-    >>> from validphys.calcutils import covmat_from_systematics
-    >>> from validphys.results import sqrt_covmat
-    >>> l = Loader()
-    >>> cd = l.check_commondata("NMC")
-    >>> cd = load_commondata(cd)
-    >>> cov = covmat_from_systematics(cd)
-    >>> sqrtcov = sqrt_covmat(cov)
-    array([[9.29533200e-03, 0.00000000e+00, 0.00000000e+00, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           [8.82133011e-03, 8.00572153e-03, 0.00000000e+00, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           [6.74959124e-03, 7.11446377e-04, 6.93755946e-03, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           ...,
-           [2.58998530e-03, 1.01842488e-04, 5.34315873e-05, ...,
-            4.36182637e-03, 0.00000000e+00, 0.00000000e+00],
-           [3.00811652e-03, 9.05569142e-05, 7.09658356e-05, ...,
-            1.18572366e-03, 4.31943367e-03, 0.00000000e+00],
-           [3.73012316e-03, 2.05432491e-04, 4.40226875e-05, ...,
-            9.61421910e-04, 5.31447414e-04, 9.98677667e-03]])
+    >>> import numpy as np
+    >>> from validphys.api import API
+    >>> API.sqrt_covmat(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
+    array([[0.0326543 , 0.        , 0.        , ..., 0.        , 0.        ,
+            0.        ],
+        [0.00314523, 0.01467259, 0.        , ..., 0.        , 0.        ,
+            0.        ],
+        [0.0037817 , 0.00544256, 0.02874822, ..., 0.        , 0.        ,
+            0.        ],
+        ...,
+        [0.00043404, 0.00031169, 0.00020489, ..., 0.00441073, 0.        ,
+            0.        ],
+        [0.00048717, 0.00033792, 0.00022971, ..., 0.00126704, 0.00435696,
+            0.        ],
+        [0.00067353, 0.00050372, 0.0003203 , ..., 0.00107255, 0.00065041,
+            0.01002952]])
+    >>> sqrt_cov = API.sqrt_covmat(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
+    >>> cov = API.covariance_matrix(dataset_input={"dataset":"NMC"}, theoryid=162, use_cuts="internal")
+    >>> np.allclose(np.linalg.cholesky(cov), sqrt_cov)
+    True
+
     """
     dimensions = covariance_matrix.shape
 

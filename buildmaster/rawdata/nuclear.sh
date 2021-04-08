@@ -23,3 +23,5 @@ do
     cd ../../
 done
 
+sed -i 's/nan/0.00000/g' NMCPD/proton/output/tables/group_result_table.csv
+sed -i 's/nan/0.00000/g' NMCPD/proton_ite/output/tables/group_result_table.csv

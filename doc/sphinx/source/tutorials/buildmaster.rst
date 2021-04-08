@@ -141,12 +141,12 @@ Important remarks.
    adopted, see the implement
 
 3. Consider testing that the additive and multiplicative columns of the
-   commondata are self consistent the multiplicative columns should be related
+   commondata are self-consistent. The multiplicative columns should be related
    to the additive columns (schematically) by
    ``add_columns = mult_columns * central_values * 1e-2``. The easiest
    way to test this is to add the newly implemented dataset to the list
    of datasets tested in :py:mod:`validphys.tests.test_commondata_columns`.
-   If you commit this change to the repo then the CI will always check this is
+   If you commit this change to the repo then the :ref:`CI <CI>` will always check this is
    the case, in case somebody edits the dataset in the future.
 
 .. _hepdata: https://www.hepdata.net/
