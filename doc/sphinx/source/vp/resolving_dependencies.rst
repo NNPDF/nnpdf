@@ -49,7 +49,7 @@ Then, an input card like the following:
 	  - plot1
 	  - plot2
 
-Would result in the following DAG:
+Would result in the following directed acyclic graph (or DAG):
 
 .. image:: simplegraph.png
    :width: 300
