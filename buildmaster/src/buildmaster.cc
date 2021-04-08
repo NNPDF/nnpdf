@@ -242,6 +242,7 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* D0 ******************************
 
   target.push_back(new D0ZRAPFilter());
+  target.push_back(new D0ZRAP_40Filter());
   target.push_back(new D0WMASYFilter());
   target.push_back(new D0WEASYFilter());
 

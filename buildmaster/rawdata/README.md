@@ -13,11 +13,13 @@ data sets are as follows:
 - data sets that utilise heavy nuclei as targets: `CHORUSNUPb`, `CHORUSNBPb`,
 `NTVNUDMNFe`, `NTVNBDMNFe`, `DYE605`.
 
-In order to let buildmaster work, the additional uncertainties have to be generated
-by running the `nuclear.sh` script. The script loops over the relevant vp runcards
-in the rawdata folder corresponding to each of the data sets listed above. Runcards
-should be modified if different nuclear or proton PDFs sets are to be used to
-compute these uncertainties. The runcards currently contain the default options
+The additional uncertainties are stored in the rawdata folders corresponding to each of the
+data sets listed baove as `.csv` files generated with validphys. In general, they SHOULD NOT be
+modified. Nevertheless, a script is provided to generate them, `nuclear.sh`. The script loops
+over the relevant vp runcards in the rawdata folder corresponding to each of the data sets
+listed above. Runcards should be modified if different nuclear or proton PDFs sets are to be used
+to compute these uncertainties. The runcards currently contain the default options
 adopted for NNPDF4.0. Finally note that buildmaster also generates files that
 contain the relevant shifts should the shifted version of the uncertainties be
-used. These shifts must be put into the form of `DEU` K-factors appropriately.
+used. These shifts must be put into the form of `DEU` K-factors appropriately if
+they are changed from the default.

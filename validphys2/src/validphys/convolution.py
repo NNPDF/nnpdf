@@ -96,15 +96,23 @@ OP = {
     "NULL": _id,
 }
 
+class PredictionsRequireCutsError(Exception): pass
 
 def _predictions(dataset, pdf, fkfunc):
-    """Combine data on all the FKTables in the datase according to the
+    """Combine data on all the FKTables in the database according to the
     reduction operation defined therein. Dispatch the kind of predictions (for
     all replicas, central, etc) according to the provided ``fkfunc``, which
     should have the same interface as e.g. ``fk_predictions``.
     """
     opfunc = OP[dataset.op]
-    cuts = dataset.cuts.load() if dataset.cuts is not None else None
+    if dataset.cuts is None:
+        raise PredictionsRequireCutsError(
+            "FKTables do not always generate predictions for some datapoints "
+            "which are usually cut. Loading predictions without cuts can "
+            "therefore produce predictions whose shape doesn't match the uncut "
+            "commondata and is not supported."
+        )
+    cuts = dataset.cuts.load()
     all_predictions = [
         fkfunc(load_fktable(fk).with_cuts(cuts), pdf) for fk in dataset.fkspecs
     ]
