@@ -39,4 +39,3 @@ These work similarly to producing figures, as described
 above. Instead use the `@table` and `@tablegen` decorators.
 
 Tables will be saved in the CSV formats.
-
