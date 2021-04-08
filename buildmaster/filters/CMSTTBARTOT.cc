@@ -1,4 +1,12 @@
 /*
+DEPRECATION WARNING
+-------------------
+
+This dataset (both versions) has been deprecated in favour of
+CMSTTBARTOT5TEV, CMSTTBARTOT7TEV, CMSTTBARTOT8TEV and CMSTTBARTOT13TEV. Which
+correspond to the exact same points included here, but separated into their own
+sets.
+
 Inclusive total cross section for ttbar production @LHC CMS
 There are four points
 
