@@ -23,6 +23,8 @@ def _cd_column_comparison(cd):
     np.testing.assert_allclose(
         cv.to_numpy()[:, np.newaxis] * mult.to_numpy() * 1e-2,
         add.to_numpy(),
+        rtol=1e-05, # use the allclose values (less stringent tolerances)
+        atol=1e-08,
     )
 
 DS_NAMES = [
@@ -30,6 +32,7 @@ DS_NAMES = [
     "LHCBW36PB_40",
     "CDFZRAP_NEW",
     "D0ZRAP_40",
+    "ATLASPHT15",
 ]
 
 L = Loader()

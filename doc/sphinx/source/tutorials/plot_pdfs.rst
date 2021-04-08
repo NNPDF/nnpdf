@@ -1,3 +1,5 @@
+.. _pdfplots:
+
 How to plot PDFs, distances and luminosities
 ============================================
 
