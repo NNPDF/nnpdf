@@ -32,7 +32,7 @@ dataset_inputs:
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: CDFZRAP_NEW, frac: 1.0, cfac: [QCD]}
-- {dataset: D0ZRAP, frac: 1.0, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 1.0, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 1.0, cfac: [QCD]}
 - {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: [QCD]}
 - {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD]}
@@ -75,7 +75,7 @@ dataset_inputs:
 - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0, cfac: [QCD]}                        
 - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}                       
 - {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 1.0, cfac: [QCD]}
 - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
 - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
 - {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0, cfac: [QCD]}                             

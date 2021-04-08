@@ -33,7 +33,7 @@ NLODatasets: &NLODatasets
 - {dataset: DYE886P, frac: 0.75, cfac: []}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: []}
 - {dataset: CDFZRAP_NEW, frac: 1.0, cfac: []}
-- {dataset: D0ZRAP, frac: 1.0, cfac: []}
+- {dataset: D0ZRAP_40, frac: 1.0, cfac: []}
 - {dataset: D0WMASY, frac: 1.0, cfac: []}
 - {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: []}
 - {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: []}
@@ -81,7 +81,7 @@ NLODatasets: &NLODatasets
 - {dataset: CMSWCHARMRAT, frac: 1.0}
 - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV}
 - {dataset: LHCBZ940PB, frac: 1.0, cfac: []}
-- {dataset: LHCBZEE2FB, frac: 1.0, cfac: []}
+- {dataset: LHCBZEE2FB_40, frac: 1.0, cfac: []}
 - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
 - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
 - {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0, cfac: []}                             
@@ -115,7 +115,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: CDFZRAP_NEW, frac: 1.0, cfac: [QCD]}
-- {dataset: D0ZRAP, frac: 1.0, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 1.0, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 1.0, cfac: [QCD]}
 - {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: [QCD]}
 - {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD]}
@@ -163,7 +163,7 @@ NNLODatasets: &NNLODatasets
 # - {dataset: CMSWCHARMRAT, frac: 1.0} # No Cfactors at NNLO
 # - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV} # No Cfactors at NNLO
 - {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 1.0, cfac: [QCD]}
 - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
 - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
 - {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0, cfac: [QCD]}                             
