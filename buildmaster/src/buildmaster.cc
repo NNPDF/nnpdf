@@ -301,9 +301,11 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* LHCb ******************************
 
   target.push_back(new LHCBW36PBFilter());
+  target.push_back(new LHCBW36PB_40Filter());
   target.push_back(new LHCBZ940PBFilter());
   target.push_back(new LHCBLOWMASS37PBFilter());
   target.push_back(new LHCBZEE2FBFilter());
+  target.push_back(new LHCBZEE2FB_40Filter());
   target.push_back(new LHCBWZMU7TEVFilter());
   target.push_back(new LHCBWZMU8TEVFilter());
   target.push_back(new LHCB_WENU_8TEV_RFilter());

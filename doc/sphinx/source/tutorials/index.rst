@@ -32,7 +32,7 @@ Adding new data
 .. toctree ::
    :maxdepth: 1
 
-   ./buildmaster.md
+   ./buildmaster.rst
    ./APPLgrids.md
    ./APPLgrids_comp.md
    ./apfelcomb.md
