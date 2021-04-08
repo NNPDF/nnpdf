@@ -113,6 +113,7 @@
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
+#include "CMS_HMDY_13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -232,6 +233,9 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_1JET_8TEVFilter());
   target.push_back(new CMS_2JET_7TEVFilter());
   target.push_back(new CMS_2JET_3D_8TEVFilter());
+  target.push_back(new CMS_HMDY_13TEVFilter());
+  target.push_back(new CMS_HMDY_DE_13TEVFilter());
+  target.push_back(new CMS_HMDY_DM_13TEVFilter());
 
  // ************************* CMSwc ******************************
 
