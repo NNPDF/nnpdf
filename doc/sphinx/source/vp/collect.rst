@@ -100,5 +100,3 @@ A minimal runcard to use the action above is:
 
 	actions_:
 	  - print_fits_experiments_chi2
-
-

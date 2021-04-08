@@ -183,5 +183,3 @@ template_text: |
 actions_:
     - report(main=True)
 ```
-
-

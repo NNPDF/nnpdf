@@ -66,5 +66,3 @@ Unfortunately, the objective of making `validphys` easy means that the
 complexity of getting things to just work is translated into
 `reportengine`, which instead uses many advanced python features, and
 results in a codebase that is not particularly simple.
-
-

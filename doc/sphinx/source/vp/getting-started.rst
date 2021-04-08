@@ -101,4 +101,3 @@ We can see which keys have a special meaning in the configuration file with
       $ validphys --help config
       
 All other keys are interpreted literally (although they could be further processed by specific actions).	  
-
