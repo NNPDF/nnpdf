@@ -568,6 +568,46 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 #I need to use the informations contained in experiments_chi2_table
 
+@figure
+def plot_fits_chi2_spider(fits_groups_chi2_table):
+    """Plots the chi²s of all groups of datasets for each fit 
+    on a spider/radar diagram."""
+
+    N = len(fits_groups_chi2_table)
+    names = fits_groups_chi2_table.index.values
+    angles = [n / float(N) * 2 * np.pi for n in range(N)]
+
+    # Only keeping columns with chi2s
+    cols = np.array(fits_groups_chi2_table.columns)[1::2]
+    newdf = fits_groups_chi2_table[cols]
+    # Dropping redundant chi2 multiindex label
+    newdf.columns = newdf.columns.droplevel(1)
+    cols = newdf.columns
+    maxchi2 = np.max(newdf.values)
+    
+    fig = plt.figure(figsize=(8,8))
+    ax = fig.add_subplot(projection='polar')
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    plt.xticks(angles, names, color='grey', size=15)
+
+    # Draw ylabels
+    ax.set_rlabel_position(0)
+    plt.yticks([0.5,1], ["0.5","1"], color="grey", size=15)
+    plt.ylim(0,maxchi2)
+
+    # Now iterate through chi2 columns, one for each fit
+    for fit in cols:
+        df = newdf[fit]
+        chi2s = df.values
+        ax.plot(angles, chi2s, linewidth=2, linestyle="solid", label=fit)
+        ax.fill(angles, chi2s, alpha=0.4)
+
+    ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
+    
+    return fig
+
 
 
 @figure
