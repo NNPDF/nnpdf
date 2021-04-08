@@ -602,7 +602,7 @@ def plot_fits_chi2_spider(fits_groups_chi2_table):
     # Now iterate through chi2 columns, one for each fit
     for fit in cols:
         df = newdf[fit]
-        chi2s = df.values
+        chi2s = list(df.values)
         # To make the plot connect to the start
         chi2s += chi2s[:1]
         ax.plot(angles, chi2s, linewidth=2, linestyle="solid", label=fit)
