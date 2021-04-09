@@ -566,8 +566,6 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
         kwargs['s'] += 10
 
 
-#I need to use the informations contained in experiments_chi2_table
-
 @figure
 def plot_fits_chi2_spider(fits_groups_chi2_table):
     """Plots the chi²s of all groups of datasets for each fit 
@@ -609,7 +607,8 @@ def plot_fits_chi2_spider(fits_groups_chi2_table):
         ax.fill(angles, chi2s, alpha=0.4)
 
     ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
-    ax.tick_params(axis='both', which='major', labelsize=20)
+    #ax.tick_params(axis='both', which='major', labelsize=20)
+    ax.grid(linewidth=3)
     
     return fig
 
