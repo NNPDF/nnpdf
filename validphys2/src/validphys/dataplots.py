@@ -640,7 +640,7 @@ def plot_fits_phi_spider(fits_groups_phi_table):
 
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([0.5,1], ["0.5","1"], color="grey", size=15)
+    #plt.yticks(color="grey", size=15)
     plt.ylim(0,maxphi+0.1)
 
     # Now iterate through chi2 columns, one for each fit
