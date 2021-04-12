@@ -567,23 +567,34 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 
 @figure
-def plot_fits_chi2_spider(fits_groups_chi2_table):
+def plot_fits_chi2_spider(fits_datasets_chi2_table, datasets_plot_list = None):
     """Plots the chi²s of all groups of datasets for each fit 
     on a spider/radar diagram."""
+    
+    df = fits_datasets_chi2_table
 
-    N = len(fits_groups_chi2_table)
-    names = fits_groups_chi2_table.index.values
+    df.index = df.index.droplevel(0) # Remove experiment names
+
+    # If dataset sublist given, drop datasets not in this list from df
+    if datasets_plot_list:
+        for dataset in df.index:
+            if dataset not in datasets_plot_list:
+                df = df.drop(index=dataset)
+
+    names = df.index.values
+    N = len(df)
     angles = [n / float(N) * 2 * np.pi for n in range(N)]
     # Add this on so that the plot line connects back to the start
     angles += angles[:1]
 
     # Only keeping columns with chi2s
-    cols = np.array(fits_groups_chi2_table.columns)[1::2]
-    newdf = fits_groups_chi2_table[cols]
+    cols = np.array(df.columns)[1::2]
+    newdf = df[cols]
     # Dropping redundant chi2 multiindex label
     newdf.columns = newdf.columns.droplevel(1)
     cols = newdf.columns
-    maxchi2 = np.max(newdf.values)
+    maxchi2 = np.max(newdf.max(skipna=True)) # newdf.max() gives max 
+                                             # for each column, ignoring NaNs
     
     fig = plt.figure(figsize=(8,8))
     ax = fig.add_subplot(projection='polar')
@@ -610,12 +621,6 @@ def plot_fits_chi2_spider(fits_groups_chi2_table):
     ax.grid(linewidth=3)
     
     return fig
-
-@figure
-def plot_fits_phi_spider(fits_groups_phi_table):
-    """Plots the phis of all groups of datasets for each fit 
-    on a spider/radar diagram."""
-    return plot_fits_chi2_spider(fits_groups_phi_table)
 
 @figure
 def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
