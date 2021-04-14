@@ -376,15 +376,24 @@ class Loader(LoaderBase):
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
+        if fitname != osp.basename(fitname):
+            raise FitNotFound(
+                f"Could not find fit '{fitname}' in '{resultspath} "
+                "because the name doesn't correspond to a valid filename"
+            )
         p = resultspath / fitname
         if p.is_dir():
             return FitSpec(fitname, p)
-        if not p.exists():
-            msg = ("Could not find fit '{fitname}' in '{resultspath}'. "
-                   "Folder '{p}' not found").format(**locals())
+        if not p.is_dir():
+            msg = (
+                f"Could not find fit '{fitname}' in '{resultspath}'. "
+                f"Folder '{p}' not found"
+            )
             raise FitNotFound(msg)
-        msg = ("Could not load fit '{fitname}' from '{resultspath}. "
-                   "'{p}' must be a folder").format(**locals())
+        msg = (
+            f"Could not load fit '{fitname}' from '{resultspath}. "
+            f"'{p}' must be a folder"
+        )
         raise FitNotFound(msg)
 
     def check_default_filter_rules(self, theoryid, defaults=None):
