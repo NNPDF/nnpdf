@@ -24,7 +24,6 @@ from validphys.theorycovariance.theorycovarianceutils import (
                                                 process_lookup, 
                                                 check_correct_theory_combination,
                                                 check_fit_dataset_order_matches_grouped)
-from validphys.loader import FallbackLoader
 
 log = logging.getLogger(__name__)
 
@@ -462,7 +461,7 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
 
 @table
 def user_covmat(groups_data, groups_index,
-                user_covmat_path: str = "",
+                loaded_user_covmat_path,
                 use_user_uncertainties: bool = False):
     """
     General theory covariance matrix provided by the user. 
@@ -476,9 +475,7 @@ def user_covmat(groups_data, groups_index,
     if use_user_uncertainties is False:
         return pd.DataFrame(0, index=groups_index, columns=groups_index)
     else:
-        l = FallbackLoader()
-        fileloc = l.check_vp_output_file(user_covmat_path)
-        return fromfile_covmat(fileloc, groups_data, groups_index)
+        return fromfile_covmat(loaded_user_covmat_path, groups_data, groups_index)
 
 @table
 @check_fit_dataset_order_matches_grouped

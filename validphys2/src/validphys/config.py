@@ -903,6 +903,21 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {"lumi_channels": self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    def produce_loaded_user_covmat_path(self, user_covmat_path: str = "",
+                                        use_user_uncertainties: bool = False):
+        """
+        Path to the user covmat provided by user_covmat_path in the runcard.
+        If no path is provided, returns None.
+        For use in theorycovariance.construction.user_covmat.
+        """
+        if use_user_uncertainties is False:
+            return None
+        else:
+            l = FallbackLoader() 
+            fileloc = l.check_vp_output_file(user_covmat_path)
+            return fileloc
+
+
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self,
