@@ -48,7 +48,9 @@ NLODatasets: &NLODatasets
 - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 1.0, cfac: []}
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: []}
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: []}
-- {dataset: ATLASTTBARTOT, frac: 1.0, cfac: []}
+- {dataset: ATLASTTBARTOT7TEV, frac: 1.0, cfac: []}
+- {dataset: ATLASTTBARTOT8TEV, frac: 1.0, cfac: []}
+- {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 1.0, cfac: []}
 - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: []}                 
 - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0, cfac: []}                
 - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0, cfac: []}             
@@ -68,7 +70,9 @@ NLODatasets: &NLODatasets
 - {dataset: CMSZDIFF12, frac: 1.0, cfac: [NRM]}
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: []}                                   
 - {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: []}                               
-- {dataset: CMSTTBARTOT, frac: 1.0, cfac: []}
+- {dataset: CMSTTBARTOT7TEV, frac: 1.0, cfac: []}
+- {dataset: CMSTTBARTOT8TEV, frac: 1.0, cfac: []}
+- {dataset: CMSTTBARTOT13TEV, frac: 1.0, cfac: []}
 - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: []}
 - {dataset: CMSTTBARTOT5TEV, frac: 1.0, cfac: []}                                 
 - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 1.0, cfac: []}                 
@@ -130,7 +134,9 @@ NNLODatasets: &NNLODatasets
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
-- {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT7TEV, frac: 1.0, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT8TEV, frac: 1.0, cfac: [QCD]}
+- {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 1.0, cfac: [QCD]}
 - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: [QCD]}                 
 - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0, cfac: [QCD]}                
 - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0, cfac: [QCD]}             
@@ -150,7 +156,9 @@ NNLODatasets: &NNLODatasets
 - {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}                                   
 - {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: [QCD]}                               
-- {dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD]}
+- {dataset: CMSTTBARTOT7TEV, frac: 1.0, cfac: [QCD]}
+- {dataset: CMSTTBARTOT8TEV, frac: 1.0, cfac: [QCD]}
+- {dataset: CMSTTBARTOT13TEV, frac: 1.0, cfac: [QCD]}
 - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD]}
 - {dataset: CMSTTBARTOT5TEV, frac: 1.0, cfac: [QCD]}                                 
 - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 1.0, cfac: [QCD]}                 
@@ -167,7 +175,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
 - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
 - {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0, cfac: [QCD]}                             
-- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 1.0, cfac: [QCD]}                         
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 1.0, cfac: [QCD]}                            
 
 
 do_not_require_similarity_for:
