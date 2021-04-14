@@ -24,6 +24,16 @@ def test_next_runcard():
     ite2_runcard = l.check_fit(FIT_ITERATED).as_input()
     ite2_runcard.pop("pdf")  # Removing the PDF key, it's an artefact of as_input
 
+    # We do this check incase FIT_ITERATED is changed to a new style fit in the
+    # future. By checking both namespaces are present, we ensure
+    # "dataset_inputs" was added to the fit namespace by the as_input method as
+    # opposed to actually being present in the fit runcard.
+    if "experiments" in ite2_runcard and 'dataset_inputs' in ite2_runcard:
+        # dataset_inputs was added to the as_input for backwards compatibility
+        # of the old style fits and wasn't actually present in the fit runcard
+        # just like "pdf" above.
+        ite2_runcard.pop('dataset_inputs')
+
     predicted_ite2_runcard = yaml.safe_load(
         API.iterated_runcard_yaml(fit=FIT)
     )
