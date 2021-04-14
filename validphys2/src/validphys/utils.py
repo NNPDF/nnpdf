@@ -78,6 +78,30 @@ def tempfile_cleaner(root, exit_func, exc, prefix=None, **kwargs):
         # e.g shutil.rmtree, shutil.move etc
         exit_func(tempdir, **kwargs)
 
+
+def experiments_to_dataset_inputs(experiments_list):
+    """Flatten a list of old style experiment inputs
+    to the new, flat, ``dataset_inputs`` style.
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> from validphys.utils import experiments_to_dataset_inputs
+    >>> fit = API.fit(fit='NNPDF31_nnlo_as_0118_1000')
+    >>> experiments = fit.as_input()['experiments']
+    >>> dataset_inputs = experiments_to_dataset_inputs(experiments)
+    >>> dataset_inputs[:3]
+    [{'dataset': 'NMCPD', 'frac': 0.5},
+     {'dataset': 'NMC', 'frac': 0.5},
+     {'dataset': 'SLACP', 'frac': 0.5}]
+    """
+    dataset_inputs = []
+    for experiment in experiments_list:
+        dataset_inputs.extend(experiment['datasets'])
+
+    return dataset_inputs
+
+
 def split_by(it, crit):
     """Split ``it`` in two lists, the first is such that ``crit`` evaluates to
     True and the second such it doesn't. Crit can be either a function or an
