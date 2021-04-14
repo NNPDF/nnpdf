@@ -30,7 +30,7 @@ from validphys import fitdata
 from validphys import fitveto
 from validphys.core import PDF
 from validphys.fitveto import NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2, INTEG_THRESHOLD
-from validphys.utils import exception_manager
+from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
@@ -127,7 +127,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     final_postfit_path = result_path / 'postfit'
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
-    with exception_manager(
+    with tempfile_cleaner(
         root=result_path,
         exit_func=shutil.move,
         exc=KeyboardInterrupt,

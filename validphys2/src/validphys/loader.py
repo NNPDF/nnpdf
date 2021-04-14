@@ -29,7 +29,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
-from validphys.utils import exception_manager
+from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
 import NNPDF as nnpath
 
@@ -733,7 +733,7 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        with exception_manager(
+        with tempfile_cleaner(
             root=self.resultspath,
             exit_func=shutil.rmtree,
             exc=KeyboardInterrupt,

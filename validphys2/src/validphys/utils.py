@@ -13,7 +13,7 @@ import numpy as np
 
 
 @contextlib.contextmanager
-def exception_manager(root, exit_func, exc, prefix=None, **kwargs):
+def tempfile_cleaner(root, exit_func, exc, prefix=None, **kwargs):
     """A context manager to handle temporary directory creation and
     clean-up upon raising an expected exception.
 
@@ -54,9 +54,9 @@ def exception_manager(root, exit_func, exc, prefix=None, **kwargs):
 
             import shutil
 
-            from validphys.utils import exception_manager
+            from validphys.utils import tempfile_cleaner
 
-            with exception_manager(
+            with tempfile_cleaner(
                 root="/tmp",
                 exit_func=shutil.move,
                 exc=KeyboardInterrupt,
