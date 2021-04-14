@@ -379,7 +379,7 @@ class Loader(LoaderBase):
         if fitname != osp.basename(fitname):
             raise FitNotFound(
                 f"Could not find fit '{fitname}' in '{resultspath} "
-                "because the name doesn't correspond to a valid filename."
+                "because the name doesn't correspond to a valid filename"
             )
         p = resultspath / fitname
         if p.is_dir():
