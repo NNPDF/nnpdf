@@ -572,7 +572,9 @@ def plot_fits_chi2_spider(fits_datasets_chi2_table, datasets_plot_list = None):
     on a spider/radar diagram."""
     
     df = fits_datasets_chi2_table
-
+    from IPython import embed
+    embed()
+    
     df.index = df.index.droplevel(0) # Remove experiment names
 
     # If dataset sublist given, drop datasets not in this list from df
@@ -621,6 +623,12 @@ def plot_fits_chi2_spider(fits_datasets_chi2_table, datasets_plot_list = None):
     ax.grid(linewidth=3)
     
     return fig
+
+@figure
+def plot_fits_phi_spider(plot_fits_chi2_spider, 
+                        fits_datasets_phi_table, 
+                        datasets_plot_list=None):
+    return plot_fits_chi2_spider(fits_datasets_phi_table, datasets_plot_list=None)
 
 @figure
 def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
