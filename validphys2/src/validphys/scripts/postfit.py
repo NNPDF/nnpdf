@@ -130,7 +130,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
     with tempfile_cleaner(
         root=result_path,
         exit_func=shutil.move,
-        exc=KeyboardInterrupt,
+        exc=(KeyboardInterrupt, PostfitError),
         prefix="postfit_work_deleteme_",
         dst=final_postfit_path,
     ) as postfit_path:
