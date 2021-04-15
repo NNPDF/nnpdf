@@ -9,7 +9,7 @@ description: Example runcard for NLO NNPDF3.1 style fit with user-defined covari
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 experiments:
- - experiment: BIGEXP
+ - experiment: BIGEXP     # Note that BIGEXP structure is needed for theory covmats
    datasets:
 	- {dataset: NMCPD, frac: 0.5}
 	- {dataset: NMC, frac: 0.5}
