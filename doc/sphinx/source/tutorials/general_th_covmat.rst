@@ -67,6 +67,8 @@ generation). The default is ``True`` for both.
       
 4. Make sure that datasets are grouped under one big experiment called "BIGEXP", 
    just like in :ref:`vptheorycov-index`.
+   
+5. For an example runcard, see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_user_covmat.yaml.>`_
 
 Including both scale variation uncertainties and user uncertainties
 -------------------------------------------------------------------
