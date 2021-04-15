@@ -1160,18 +1160,18 @@ void DYE866R_sh_iteFilter::ReadData()
  * ArXiv     : 2103.04024
  * Published : Nature volume 590, pages 561–565(2021)
  * Hepdata   : n/a 
- * Data for the dimesionless ratio between fixed-target DY cross sections with hydrogen and deuterium targets
- * ( sigma^pd / 2*sigma^pp ) have been collected with a proton beam at an energy of 120 GeV and are
- * given as 6 points in different bins with average <xt>, <xb>, <M> and <PT> 
- * (Bjorken-x of the target/beam, invarinat mass and transverse momentum of the DY pair). 
+ * Data for the dimesionless ratio between fixed-target DY cross sections with hydrogen and 
+ * deuterium targets ( sigma^pd / 2*sigma^pp ) have been collected with a proton beam at an 
+ * energy of 120 GeV and are given as 6 points in different bins with average <xt>, <xb>, <M> 
+ * and <PT> (Bjorken-x of the target/beam, invariant mass and transverse momentum of the DY pair). 
  * Systematic uncertainties are given as a single source of fully correlated systematic, and 
  * the covariance matrix for the statistical uncertainties is also given.
  * 
- * The data are stored in rawdata/DTE906/data_paper.dat, according to the original format as in the paper.
- * In the filter they are converted in data for the distribution
- * differential in hadronic rapidity and invariant mass,
- * using the definition of hadronic rapidity given in Eqs. (4.6) of https://arxiv.org/pdf/1009.5691.pdf.
- * No jacobian is required, since it simplifies between numerator and denominator.
+ * The data are stored in rawdata/DTE906/data_paper.dat, according to the original format as in 
+ * the paper. They are converted in data for the distribution differential in hadronic rapidity 
+ * and invariant mass, using the definition of hadronic rapidity given in Eqs. (4.6) of 
+ * https://arxiv.org/pdf/1009.5691.pdf. No Jacobian is required, since it cancels out between the
+ * numerator and the denominator.
  * 
  * Implemented by TG March 2021
  **/
