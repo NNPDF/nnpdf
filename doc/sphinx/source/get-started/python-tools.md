@@ -130,17 +130,6 @@ format the code. This tool should not be used to aggressively reformat existing
 files.
 
 
-## Example pull request
-
-You may find it instructive to go though this pull request that
-implements an arc-length computation:
-
-<https://github.com/NNPDF/validphys2/pull/64>
-
-It demonstrates how to leverage existing functionality to perform new
-computations and then present those as plots and tables.
-
-
 ## Matplotlib Image Comparison Tests
 
 It is possible to create tests which perform an image comparison between a
