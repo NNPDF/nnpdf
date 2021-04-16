@@ -80,7 +80,7 @@ def check_fit_dataset_order_matches_grouped(
                 grouped_ds == input_ds,
                 "Dataset ordering is changed by grouping, this will cause "
                 "errors when running fits with theory covmat. Datasets should "
-                f"be ordered by {processed_metadata_group} in the runcard"
+                f"be ordered by {processed_metadata_group} in the runcard." 
             )
     
 def process_lookup(name):

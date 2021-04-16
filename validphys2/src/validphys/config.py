@@ -913,7 +913,7 @@ class CoreConfig(configparser.Config):
         if use_user_uncertainties is False:
             return None
         else:
-            l = FallbackLoader() 
+            l = self.loader
             fileloc = l.check_vp_output_file(user_covmat_path)
             return fileloc
 

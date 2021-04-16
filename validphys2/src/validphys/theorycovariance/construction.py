@@ -395,16 +395,21 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     filecovmat = pd.read_csv(covmatpath,
             index_col=[0,1,2], header=[0,1,2],
             sep="\t|,", engine="python")
-    filecovmat = pd.DataFrame(filecovmat.values,
-                            index=filecovmat.index,
-                            columns=filecovmat.index)
+    # Remove string in column id
+    filecovmat.columns = filecovmat.index 
     # Reordering covmat to match exp order in runcard
+    # Datasets in exp covmat
     dslist = []
     for group in groups_data:
         for ds in group.datasets:
             dslist.append(ds.name)
-    filecovmat = filecovmat.reindex(dslist, level="dataset")
-    filecovmat = ((filecovmat.T).reindex(dslist, level="dataset")).T
+    # Datasets in filecovmat in exp covmat order
+    shortlist = []
+    for ds in dslist:
+        if ds in filecovmat.index.get_level_values(level="dataset"):
+            shortlist.append(ds)
+    filecovmat = filecovmat.reindex(shortlist, level="dataset")
+    filecovmat = ((filecovmat.T).reindex(shortlist, level="dataset")).T
     # ------------- #
     # 1: Apply cuts #
     # ------------- #
@@ -451,7 +456,7 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     for chunk in chunks:
         strip = pd.concat(chunk, axis=1)
         strips.append(strip.T)
-    strips.reverse()
+   # strips.reverse()
     # Concatenate the strips to make the full matrix
     full_df = pd.concat(strips, axis=1)
     # Reindex to align with experiment covmat index
@@ -484,7 +489,7 @@ def total_theory_covmat(
         data_input,
         group_dataset_inputs_by_metadata,
         groups_index,
-        theory_covmat_custom,
+     #   theory_covmat_custom,
         user_covmat,
         use_scalevar_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
@@ -495,8 +500,8 @@ def total_theory_covmat(
     """
     f = pd.DataFrame(0, index=groups_index, columns=groups_index)
 
-    if use_scalevar_uncertainties is True:
-        f = f + theory_covmat_custom
+#    if use_scalevar_uncertainties is True:
+ #       f = f + theory_covmat_custom
     if use_user_uncertainties is True:
         f = f + user_covmat
     return f
