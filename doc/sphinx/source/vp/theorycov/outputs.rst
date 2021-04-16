@@ -1,9 +1,10 @@
+.. _thcov_outputs:
+
 Outputs
 =======
 
-Below is the template corresponding to the runcard in the previous
-section. This will produce a report with the important features of the
-theory covariance module. These fall into three broad categories:
+The important features of the
+theory covariance module fall into three broad categories:
 
 #. **Matrices and plots of matrices**. Heatmap plots, diagonal element
    plots comparing experimental and theoretical errors.
@@ -16,3 +17,4 @@ theory covariance module. These fall into three broad categories:
    theoretical predictions for each data point for the different scale
    choices.
 
+For an example set of reports and explanation see :ref:`here <theory-covmat-examples>`.
