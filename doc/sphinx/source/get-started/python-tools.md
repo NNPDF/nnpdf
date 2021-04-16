@@ -99,7 +99,20 @@ surprising. It is a good idea to measure where the problems actually are.
     Prefer it to the standard `cProfile`. The output is typically presented in
     the form of "Flamegraphs" that show the relative time spent on each piece of
     code.
+## Documentation
 
+  - We use the [Sphinx tool](https://www.sphinx-doc.org/) to document code
+    projects. It can render and organize special purpose documentation files as
+    well as read Python source files to automatically document interfaces.  It
+    supports extensive customization and plugins. In particular because the
+    default formatting for docstrings is somewhat unwieldy, it is recommended
+    to enable the `napoleon` extension which allows for a more lenient
+    [`numpydoc`](https://numpydoc.readthedocs.io/en/latest/format.html) style.
+    Similarly the default RST markup language can be overwhelming for simple
+    documents. We enable the
+    [recommonmark](https://recommonmark.readthedocs.io/en/latest/) extension to
+    be able to compose files also in markdown format.
+    
 ## Python static checks and code style
 
 We use [Pylint](https://www.pylint.org/) to provide static checking e.g.
