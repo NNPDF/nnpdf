@@ -32,7 +32,7 @@ For isolated factorisation scale variation using a 3-point prescription (central
 
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+)^2 + \Delta_1(-)^2 \bigg\}
 
-.. math:: s_{12} = \frac{1}{2}\bigg\{\bigg(\Delta_1(+) + \Delta_1(-) \bigg) \bigg(\Delta_2(+) + \Delta_2(-) \bigg) \bigg\}
+.. math:: s_{12} = \frac{1}{2}\bigg\{ \Delta_1(+)\Delta_2(+) + \Delta_1(-)\Delta_2(-) \bigg\}
 
 
 3r points
@@ -48,7 +48,8 @@ For isolated renormalisation scale variation using a 3-point prescription (centr
 
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+)^2 + \Delta_1(-)^2 \bigg\}
 
-.. math:: s_{12} = \frac{1}{2}\bigg\{\bigg(\Delta_1(+) + \Delta_1(-) \bigg) \bigg(\Delta_2(+) + \Delta_2(-) \bigg) \bigg\}
+.. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+) + \Delta_1(-) \bigg) \bigg(\Delta_2(+) + \Delta_2(-) \bigg) \bigg\}
+   
 
 5 points
 ---------
@@ -65,6 +66,10 @@ For isolated renormalisation scale variation using a 3-point prescription (centr
        s_{12} = \frac{1}{2}\bigg\{ &\Delta_1(+,0)\Delta_2(+,0) + \Delta_1(-,0)\Delta_2(-,0) \bigg\} \\
                + \frac{1}{4}\bigg\{ &\bigg(\Delta_1(0,+) + \Delta_1(0,-) \bigg)\bigg(\Delta_2(0,+) + \Delta_2(0,-)\bigg)\bigg\}
    \end{split}
+
+.. important::
+
+    This is the sum of 3f points and 3r points.
 
 :math:`\mathbf{\overline{5}}` points
 ------------------------------------
