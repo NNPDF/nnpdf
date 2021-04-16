@@ -496,3 +496,32 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     ax.add_collection(rugs)
     ax.set_ylim(ymin=0)
     return ax
+
+def spiderplot(xticks, vals):
+    """
+    Makes a spider/radar plot.
+    """
+    N = len(xticks)
+    angles = [n / float(N) * 2 * np.pi for n in range(N)]
+    # Add this on so that the plot line connects back to the start
+    angles += angles[:1]
+    vals += vals[:1]
+
+    maxval = np.max(vals)
+    
+    fig = plt.figure(figsize=(8,8))
+    ax = fig.add_subplot(projection='polar')
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    plt.xticks(angles[:-1], xticks, color='grey', size=15)
+
+    # Draw ylabels
+    ax.set_rlabel_position(0)
+    plt.ylim(0, maxval+0.1)
+    
+    ax.plot(angles, vals, linewidth=2, linestyle="solid")
+    ax.fill(angles, vals, alpha=0.4)
+    ax.grid(linewidth=3)
+
+    return fig

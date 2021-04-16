@@ -565,9 +565,8 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
                    facecolors='none', linewidth=0.5, edgecolor='red')
         kwargs['s'] += 10
 
-
 @figure
-def plot_fits_chi2_spider(groups_data, groups_chi2):
+def plot_groups_chi2_spider(groups_data, groups_chi2):
     """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
     exchi2 = []
@@ -576,28 +575,7 @@ def plot_fits_chi2_spider(groups_data, groups_chi2):
         exchi2.append(group_res.central_result/group_res.ndata)
         xticks.append(group.name)
     
-    N = len(xticks)
-    angles = [n / float(N) * 2 * np.pi for n in range(N)]
-    # Add this on so that the plot line connects back to the start
-    angles += angles[:1]
-    exchi2 += exchi2[:1]
-
-    maxchi2 = np.max(exchi2)
-    
-    fig = plt.figure(figsize=(8,8))
-    ax = fig.add_subplot(projection='polar')
-    ax.set_theta_offset(np.pi / 2)
-    ax.set_theta_direction(-1)
-
-    plt.xticks(angles[:-1], xticks, color='grey', size=15)
-
-    # Draw ylabels
-    ax.set_rlabel_position(0)
-    plt.ylim(0,maxchi2+0.1)
-    
-    ax.plot(angles, exchi2, linewidth=2, linestyle="solid")
-    ax.fill(angles, exchi2, alpha=0.4)
-    ax.grid(linewidth=3)
+    fig = plotutils.spiderplot(xticks, exchi2)
 
     return fig
 
