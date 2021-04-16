@@ -566,7 +566,7 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
         kwargs['s'] += 10
 
 @figure
-def plot_groups_chi2_spider(groups_data, groups_chi2):
+def plot_groups_chi2_spider(groups_data, groups_chi2, processed_metadata_group):
     """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
     exchi2 = []
@@ -575,9 +575,24 @@ def plot_groups_chi2_spider(groups_data, groups_chi2):
         exchi2.append(group_res.central_result/group_res.ndata)
         xticks.append(group.name)
     
-    fig = plotutils.spiderplot(xticks, exchi2)
+    fig, ax = plotutils.spiderplot(xticks, exchi2)
+
+    ax.set_title(r"$\chi^2$ by {}".format(processed_metadata_group))
 
     return fig
+
+@figure
+def plot_groups_phi_spider(groups_data, groups_data_phi, processed_metadata_group):
+   """Like plot_groups_chi2_spider but for phi."""
+   phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
+   xticks = [group.name for group in groups_data]
+
+   fig, ax = plotutils.spiderplot(xticks, phi)
+
+   ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
+
+   return fig
+
 
 @figure
 def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):

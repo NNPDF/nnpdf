@@ -524,4 +524,4 @@ def spiderplot(xticks, vals):
     ax.fill(angles, vals, alpha=0.4)
     ax.grid(linewidth=3)
 
-    return fig
+    return fig, ax
