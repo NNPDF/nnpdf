@@ -23,7 +23,7 @@ appear in ``validphys2``.
 For isolated factorisation scale variation using a 3-point prescription (central, double, half).
 .. note::
 
-	``theoryids``: 163, 176, 177
+	``theoryids``: 163, 177, 176
 
   ``point_prescription: '3f point'``
 
@@ -155,4 +155,3 @@ For isolated renormalisation scale variation using a 3-point prescription (centr
                + &\bigg(\Delta_1(-,0) + \Delta_1(-,+) + \Delta_1(-,-)\bigg)\bigg(\Delta_2(-,0) + \Delta_2(-,+) + \Delta_2(-,-) \bigg) \bigg\}\\
                + \frac{1}{8}&\bigg(\Delta_1(0,+)+ \Delta_1(0,-)\bigg)\bigg(\Delta_2(0,+) + \Delta_2(0,-) \bigg)
    \end{split}
-
