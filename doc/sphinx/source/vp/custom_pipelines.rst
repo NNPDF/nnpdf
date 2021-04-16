@@ -140,7 +140,7 @@ a given resource is correct. If so they should return a "Resource
 specification" (something typically containing metadata information
 such as paths, and a `load()` method to get the C++ object from
 `libnnpdf`). We also define a `get` method that returns the C++ object
-directly (although I am not sure it's very useful anymore).
+directly.
 
 In the case of the positivity set, this is entirely given in terms of
 existing check functions:

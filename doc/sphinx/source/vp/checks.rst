@@ -6,7 +6,7 @@ are met. Checks are executed at the time at which the call node is
 just created and all its required dependencies are either in the
 namespace or scheduled to be produced. Checking functions take the
 current state of the namespace, as well as an unspecified set of other
-parameters (because I haven't decided on the interface yet!).
+parameters (the interface is as yet undecided!).
 Therefore check functions should accept `**kwargs` arguments. Checks
 are decorated with the `reportengine.checks.make_argcheck` function.
 If checks don't pass, they must raise

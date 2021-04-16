@@ -11,7 +11,7 @@ A namespace is a stack of python dictionaries which are indexed by a tuple calle
 `namespace specification (nsspec)`. A user gives some inputs in terms of `fuzzyspecs` and
 these are translated into `nnspecs`. This is mostly an advanced internal implementation detail,
 but it is important in order to understand how several features work. Also, the abstraction leaks
-into user-facing features such as the collect function.
+into user-facing features such as the [collect function](collect.html).
 
 Namespace specifications
 ------------------------
@@ -32,12 +32,12 @@ Consider the example:
 
 .. code:: yaml
 
-	first:
+	First:
 	   pdf: NNPDF31_nlo_as_0118
 	   normalize_to: None
 	   use_cuts: "nocuts"
 
-	second:
+	Second:
 	   pdf: NNPDF31_nnlo_as_0118
 	   normalize_to: NNPDF31_nnlo_as_0118
 
@@ -50,20 +50,20 @@ Given the input above, we could form the following `nsspec`.
 
 .. code:: python
 
-	('second', ('cutspecs', 0))
+	('Second', ('cutspecs', 0))
 
 This would correspond to a namespace where we have the following
 symbols available:
 
 - `use_cuts` (set to `"nocuts"`) from `cutspecs`.
 - `pdf` and `normalize_to` (set to NNLO) from `second`.
-- `first`, `second` and `cutspecs` from the root namespace.
+- `First`, `Second` and `cutspecs` from the root namespace.
 
 We could also form the specification:
 
 .. code:: python
 
-	(('cutspecs', 1), 'first')
+	(('cutspecs', 1), 'First')
 
 Because the innermost specification is last, the value of `use_cuts`
 is `"nocuts"`.
@@ -86,14 +86,14 @@ example, given the fuzzyspec:
 
 .. code:: python
 
-	('second', 'cutspecs')
+	('Second', 'cutspecs')
 
 and the input above, it gets expanded into two nsspecs:
 
 .. code:: python
 
-	('second', ('cutspecs', 0))
-	('second', ('cutspecs', 1))
+	('Second', ('cutspecs', 0))
+	('Second', ('cutspecs', 1))
 
 corresponding to each of the two mappings in cutspecs.
 

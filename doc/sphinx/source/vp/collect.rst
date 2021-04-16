@@ -13,7 +13,7 @@ The signature is:
 	collect('provider_name', fuzzyspec)
 
 This will expand the :ref:`fuzzyspec <fuzzyspecs>` relative to the current 
-namespace and
+[namespace](namespaces.html) and
 compute the function once for each frame.  Then it will put all the
 results in a list (to be iterated in the same order as the fuzzyspec)
 and set that list as the result of the provider. The provider in the

@@ -140,7 +140,7 @@ Before beginning you will need to ensure that you have the tests dependencies,
 which can be checked in `nnpdf/conda-recipe/meta.yml`.
 
 The next step is to write the test function. It is highly recommended to use the
-validphys API for this, both to simplify the code and to make it agnostic to the
+[validphys API](../vp/api.md) for this, both to simplify the code and to make it agnostic to the
 structure of backend providers - provided that they produce the same results. See
 for example a function which tests the `plot_pdfs` provider:
 
@@ -166,7 +166,7 @@ pytest -k <name of file containing test function> --mpl-generate-path=baseline
 which will generate a PNG of the figure in the `src/validphys/tests/baseline`
 directory. It is recommended to put all baseline plots in this directory so that
 they are automatically installed, and so will be in the correct location when
-the CI runs the test suite.
+the [CI](../ci/index.md)  runs the test suite.
 
 Now that the baseline figure exists you can check that your test works:
 
