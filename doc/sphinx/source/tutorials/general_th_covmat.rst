@@ -51,7 +51,7 @@ Instructions
     ############################################################################
     theorycovmatconfig:
       use_user_uncertainties: True
-      user_uncertainties_path: "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
+      user_covmat_path: "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
       use_thcovmat_in_sampling: True
       use_thcovmat_in_fitting: True		
     ############################################################################
