@@ -567,68 +567,39 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 
 @figure
-def plot_fits_chi2_spider(fits_datasets_chi2_table, datasets_plot_list = None):
-    """Plots the chi²s of all groups of datasets for each fit 
+def plot_fits_chi2_spider(groups_data, groups_chi2):
+    """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
+    exchi2 = []
+    xticks = []
+    for group, group_res in zip(groups_data, groups_chi2):
+        exchi2.append(group_res.central_result/group_res.ndata)
+        xticks.append(group.name)
     
-    df = fits_datasets_chi2_table
-    from IPython import embed
-    embed()
-    
-    df.index = df.index.droplevel(0) # Remove experiment names
-
-    # If dataset sublist given, drop datasets not in this list from df
-    if datasets_plot_list:
-        for dataset in df.index:
-            if dataset not in datasets_plot_list:
-                df = df.drop(index=dataset)
-
-    names = df.index.values
-    N = len(df)
+    N = len(xticks)
     angles = [n / float(N) * 2 * np.pi for n in range(N)]
     # Add this on so that the plot line connects back to the start
     angles += angles[:1]
+    exchi2 += exchi2[:1]
 
-    # Only keeping columns with chi2s
-    cols = np.array(df.columns)[1::2]
-    newdf = df[cols]
-    # Dropping redundant chi2 multiindex label
-    newdf.columns = newdf.columns.droplevel(1)
-    cols = newdf.columns
-    maxchi2 = np.max(newdf.max(skipna=True)) # newdf.max() gives max 
-                                             # for each column, ignoring NaNs
+    maxchi2 = np.max(exchi2)
     
     fig = plt.figure(figsize=(8,8))
     ax = fig.add_subplot(projection='polar')
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
-    plt.xticks(angles[:-1], names, color='grey', size=15)
+    plt.xticks(angles[:-1], xticks, color='grey', size=15)
 
     # Draw ylabels
     ax.set_rlabel_position(0)
     plt.ylim(0,maxchi2+0.1)
-
-    # Now iterate through chi2 columns, one for each fit
-    for fit in cols:
-        df = newdf[fit]
-        chi2s = list(df.values)
-        # To make the plot connect to the start
-        chi2s += chi2s[:1]
-        ax.plot(angles, chi2s, linewidth=2, linestyle="solid", label=fit)
-        ax.fill(angles, chi2s, alpha=0.4)
-
-    ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
-    #ax.tick_params(axis='both', which='major', labelsize=20)
-    ax.grid(linewidth=3)
     
-    return fig
+    ax.plot(angles, exchi2, linewidth=2, linestyle="solid")
+    ax.fill(angles, exchi2, alpha=0.4)
+    ax.grid(linewidth=3)
 
-@figure
-def plot_fits_phi_spider(plot_fits_chi2_spider, 
-                        fits_datasets_phi_table, 
-                        datasets_plot_list=None):
-    return plot_fits_chi2_spider(fits_datasets_phi_table, datasets_plot_list=None)
+    return fig
 
 @figure
 def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
