@@ -10,6 +10,16 @@
 
 #include "buildmaster_utils.h"
 
+class ATLAS_WMU_8TEVFilter : public CommonData
+{
+public:
+  ATLAS_WMU_8TEVFilter() : CommonData("ATLAS_WMU_8TEV") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+/*
 class ATLAS_WP_MU_8TEVFilter : public CommonData
 {
 public:
@@ -27,4 +37,4 @@ public:
 private:
   void ReadData();
 };
-
+*/
