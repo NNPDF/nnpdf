@@ -408,7 +408,7 @@ class Rule:
         """Attributes of the Rule class that are defining. Two
         Rules with identical ``_properties`` are considered equal.
         """
-        return (self.rule_string, self.dataset, self.process_type)
+        return (self.rule_string, self.dataset, self.process_type, self.theory_params['ID'])
 
     def __eq__(self, other):
         return self._properties == other._properties
