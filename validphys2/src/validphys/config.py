@@ -306,7 +306,7 @@ class CoreConfig(configparser.Config):
 
 
     @record_from_defaults
-    def produce_default_dataset_settings(self):
+    def produce_all_dataset_defaults(self):
         spec_file_mapping = {
                 '31': '31_dataset_defaults.yaml',
                 '40': '40_dataset_defaults.yaml',
@@ -317,6 +317,33 @@ class CoreConfig(configparser.Config):
                 read_text("validphys.dataset_defaults", file)
             )
         return spec_defaults_mapping
+
+
+    def produce_dataset_input_with_defaults(self, setname: str, dataset_defaults_spec, all_dataset_defaults, theoryid):
+        pto = theoryid.get_description()['PTO']
+        pto_string = 'N' * pto + 'LO'
+
+        dataset_defaults_spec = str(dataset_defaults_spec)
+        pto_defaults_mapping = all_dataset_defaults[dataset_defaults_spec]
+        try:
+            dataset_defaults_mapping = pto_defaults_mapping[pto_string]
+        except KeyError:
+            alternatives = pto_defaults_mapping.keys()
+            raise ConfigError(
+                    f"Default perturbative order not found for {pto_string} theory: {theoryid}",
+                    bad_item=pto_string,
+                    alternatives=alternatives,
+                    display_alternatives='best'
+            )
+        try:
+            defaults = dataset_defaults_mapping[setname]
+        except KeyError as e:
+            raise KeyError(
+                    f"Dataset {setname} not found in "
+                    f"the dataset defaults mapping: {dataset_defaults_spec}."
+            ) from e
+
+        return defaults
 
 
     @element_of("dataset_inputs")
@@ -334,29 +361,9 @@ class CoreConfig(configparser.Config):
             )
 
         if dataset_defaults_spec is not None:
-            # Cast to string because e.g:
-            # dataset_defaults_spec: 40
-            # will be parsed as int by yaml
-            dataset_defaults_spec = str(dataset_defaults_spec)
-            spec_dataset_default_mapping = self.produce_default_dataset_settings()
-            try:
-                dataset_defaults = spec_dataset_default_mapping[dataset_defaults_spec]
-            except KeyError as e:
-                alternatives = spec_dataset_default_mapping.keys()
-                raise ConfigError(
-                     f"Default filter rule not found for spec {dataset_defaults_spec}",
-                     bad_item=dataset_defaults_spec,
-                     alternatives=alternatives,
-                     display_alternatives='best'
-                )
-
-            try:
-                dataset = dataset_defaults[name]
-            except KeyError as e:
-                raise KeyError(
-                        f"Dataset {name} not found in "
-                        f"the dataset defaults mapping: {dataset_defaults_spec}."
-                ) from e
+            setname = dataset['dataset']
+            with self.set_context(ns=self._curr_ns.new_child({'setname': setname})):
+                _, dataset = self.parse_from_(None, 'dataset_input_with_defaults', write=False)
 
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
