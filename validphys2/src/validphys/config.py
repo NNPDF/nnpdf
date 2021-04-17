@@ -327,7 +327,17 @@ class CoreConfig(configparser.Config):
         pto_string = 'N' * pto + 'LO'
 
         dataset_defaults_spec = str(dataset_defaults_spec)
-        pto_defaults_mapping = all_dataset_defaults[dataset_defaults_spec]
+        try:
+            pto_defaults_mapping = all_dataset_defaults[dataset_defaults_spec]
+        except KeyError:
+            alternatives = all_dataset_defaults.keys()
+            raise ConfigError(
+                    f"Dataset defaults not found for spec {dataset_defaults_spec}",
+                    bad_item=dataset_defaults_spec,
+                    alternatives=alternatives,
+                    display_alternatives='best'
+            )
+
         try:
             dataset_defaults_mapping = pto_defaults_mapping[pto_string]
         except KeyError:
@@ -338,6 +348,7 @@ class CoreConfig(configparser.Config):
                     alternatives=alternatives,
                     display_alternatives='best'
             )
+
         try:
             defaults = dataset_defaults_mapping[setname]
         except KeyError as e:
