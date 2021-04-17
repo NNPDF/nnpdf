@@ -363,6 +363,8 @@ class CoreConfig(configparser.Config):
         if dataset_defaults_spec is not None:
             setname = dataset['dataset']
             with self.set_context(ns=self._curr_ns.new_child({'setname': setname})):
+                # Override the mapping in the runcard from the presaved defaults
+                log.debug("Overriding runcard mapping with defaults")
                 _, dataset = self.parse_from_(None, 'dataset_input_with_defaults', write=False)
 
         sysnum = dataset.get("sys")
