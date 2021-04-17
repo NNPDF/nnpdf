@@ -319,7 +319,10 @@ class CoreConfig(configparser.Config):
         return spec_defaults_mapping
 
 
-    def produce_dataset_input_with_defaults(self, setname: str, dataset_defaults_spec, all_dataset_defaults, theoryid):
+    def produce_dataset_input_with_defaults(
+        self, setname: str, dataset_defaults_spec, all_dataset_defaults, theoryid
+    ):
+
         pto = theoryid.get_description()['PTO']
         pto_string = 'N' * pto + 'LO'
 
