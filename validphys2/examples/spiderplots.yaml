@@ -1,0 +1,50 @@
+meta:
+    title: chi2 and phi spider plots
+    keywords: [example]
+    author: Rosalyn Pearson
+
+theoryid: 52
+
+fits:
+    - {id: "NNPDF31_nlo_as_0118", label: NLO}
+    - {id: "NNPDF31_nnlo_as_0118_1000", label: NNLO}
+    
+      
+dataset_inputs:   # Whichever ones you want to plot
+     - {dataset: NMCPD}
+     - {dataset: NMC}
+     - {dataset: SLACP}
+     - {dataset: SLACD}
+     - {dataset: BCDMSP}
+     - {dataset: BCDMSD}   
+     - {dataset: HERACOMBNCEM, frac: 0.5}
+     - {dataset: HERACOMBNCEP460, frac: 0.5}
+     - {dataset: HERACOMBNCEP575, frac: 0.5}
+     - {dataset: HERACOMBNCEP820, frac: 0.5}
+     - {dataset: HERACOMBNCEP920, frac: 0.5}
+     - {dataset: HERAF2CHARM, frac: 0.5}     
+     - {dataset: CHORUSNU, frac: 0.5}
+     - {dataset: CHORUSNB, frac: 0.5}
+     - {dataset: NTVNUDMN, frac: 0.5}
+     - {dataset: NTVNBDMN, frac: 0.5}
+     - {dataset: HERACOMBCCEM, frac: 0.5}
+     - {dataset: HERACOMBCCEP, frac: 0.5}
+
+use_cuts: "internal"
+
+template_text: |
+    
+    # Spider plot for χ2
+    
+    {@plot_groups_chi2_spider@}
+    
+    # Spider plot for ϕ
+    
+    {@plot_groups_phi_spider@}
+
+
+actions_:
+  - report(main=true)
+
+
+
