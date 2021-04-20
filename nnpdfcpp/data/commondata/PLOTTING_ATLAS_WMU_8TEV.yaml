@@ -1,4 +1,4 @@
-dataset_label: "ATLAS $W$ 8 TeV 2011"
+dataset_label: "ATLAS $W$ 8 TeV"
 
 x: k1
 x_label: '$\eta_\nu$'
