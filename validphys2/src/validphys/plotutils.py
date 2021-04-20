@@ -54,7 +54,7 @@ def ax_or_newfig(f):
 
 def frame_center(ax, x, values):
     """Set the `ylims` of the axis ``ax`` to appropriately display
-    ``values``, which cna be 1 or 2D and are assumed to be sampled uniformly
+    ``values``, which can be 1 or 2D and are assumed to be sampled uniformly
     in the coordinates of the plot (in the second dimension, for 2D arrays)."""
     values = np.atleast_2d(values)
     scale = mscale.scale_factory(ax.xaxis.get_scale(), ax.xaxis)
@@ -497,10 +497,12 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     ax.set_ylim(ymin=0)
     return ax
 
-def spiderplot(xticks, vals):
+@ax_or_gca
+def spiderplot(xticks, vals, label, ax=None):
     """
     Makes a spider/radar plot.
     """
+    print(f"label={label}")
     N = len(xticks)
     angles = [n / float(N) * 2 * np.pi for n in range(N)]
     # Add this on so that the plot line connects back to the start
@@ -509,8 +511,6 @@ def spiderplot(xticks, vals):
 
     maxval = np.max(vals)
     
-    fig = plt.figure(figsize=(8,8))
-    ax = fig.add_subplot(projection='polar')
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
@@ -520,8 +520,9 @@ def spiderplot(xticks, vals):
     ax.set_rlabel_position(0)
     plt.ylim(0, maxval+0.1)
     
-    ax.plot(angles, vals, linewidth=2, linestyle="solid")
+    ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid")
     ax.fill(angles, vals, alpha=0.4)
     ax.grid(linewidth=3)
+    ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
 
-    return fig, ax
+    return ax

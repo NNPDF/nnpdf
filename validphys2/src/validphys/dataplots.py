@@ -566,23 +566,32 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
         kwargs['s'] += 10
 
 @figure
-def plot_groups_chi2_spider(groups_data, groups_chi2, processed_metadata_group):
+def plot_groups_chi2_spider(fits, fits_groups_chi2, 
+                            fits_groups_data, processed_metadata_group):
     """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
-    exchi2 = []
-    xticks = []
-    for group, group_res in zip(groups_data, groups_chi2):
-        exchi2.append(group_res.central_result/group_res.ndata)
-        xticks.append(group.name)
-    
-    fig, ax = plotutils.spiderplot(xticks, exchi2)
+
+    fig = plt.figure(figsize=(8,8))
+    ax = fig.add_subplot(projection='polar')
+
+    for fit, fitchi2, fitgroup in zip(fits, fits_groups_chi2, fits_groups_data):
+        exchi2 = []
+        xticks = []
+        for group, group_res in zip(fitgroup, fitchi2):
+            exchi2.append(group_res.central_result/group_res.ndata)
+            xticks.append(group.name)
+        print(f"fit = {fit}")
+        ax = plotutils.spiderplot(xticks, exchi2, fit)
+
 
     ax.set_title(r"$\chi^2$ by {}".format(processed_metadata_group))
+    ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
 
     return fig
 
 @figure
-def plot_groups_phi_spider(groups_data, groups_data_phi, processed_metadata_group):
+def plot_groups_phi_spider(fits, fits_groups_data, 
+                            fits_groups_data_phi, processed_metadata_group):
    """Like plot_groups_chi2_spider but for phi."""
    phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
    xticks = [group.name for group in groups_data]
@@ -593,6 +602,7 @@ def plot_groups_phi_spider(groups_data, groups_data_phi, processed_metadata_grou
 
    return fig
 
+pdfs_groups_chi2_spider = collect("plot_groups_chi2_spider",  ("pdfs",))
 
 @figure
 def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
