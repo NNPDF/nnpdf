@@ -502,7 +502,6 @@ def spiderplot(xticks, vals, label, ax=None):
     """
     Makes a spider/radar plot.
     """
-    print(f"label={label}")
     N = len(xticks)
     angles = [n / float(N) * 2 * np.pi for n in range(N)]
     # Add this on so that the plot line connects back to the start
