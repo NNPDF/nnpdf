@@ -69,6 +69,8 @@ void ATLAS_WMU_8TEVFilter::ReadData()
   double ddum;
   char comma;
 
+  double systot = 0.;
+  
   for(int i=0; i<fNData/2; i++)
     {
       getline(f1,line);
@@ -76,7 +78,7 @@ void ATLAS_WMU_8TEVFilter::ReadData()
       lstream >> fKin1[i]        >> comma
 	      >> ddum            >> comma
 	      >> ddum            >> comma
-	      >> fData[i]        >> comma; //in [pb]
+	      >> fData[i];       //in [pb]
 	
       fData[i] *= 1000.; //Convert to [fb]
       fKin2[i] = MW*MW;
@@ -87,20 +89,31 @@ void ATLAS_WMU_8TEVFilter::ReadData()
 	{
 	  lstream >> comma >> fSys[i][j].mult
 		  >> comma >> ddum;
+	  
 	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
+
+	  systot = systot + pow(fSys[i][j].mult,2);
 	}
 
+      cout << i << "   " << systot << endl;
+      
       //Statistical uncertainty
       lstream >> comma >> fStat[i];
       fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
 
       //Luminosity uncertainty
-      fSys[i][36].mult = 1.9;
-      fSys[i][36].add = fSys[i][36].mult/100. * fData[i];
-      fSys[i][36].type = MULT;
-      fSys[i][36].name = "ATLASLUMI12";
+      fSys[i][47].mult = 1.9;
+      fSys[i][47].add = fSys[i][47].mult/100. * fData[i];
+      fSys[i][47].type = MULT;
+      fSys[i][47].name = "ATLASLUMI12";
+
+      //Uncorrelated uncertainties
+      fSys[i][6].name  = "UNCORR";
+      fSys[i][43].name = "UNCORR";
+      fSys[i][44].name = "UNCORR";
+      fSys[i][46].name = "UNCORR";
     }
   
   for(int i=fNData/2; i<fNData; i++)
@@ -110,7 +123,7 @@ void ATLAS_WMU_8TEVFilter::ReadData()
       lstream >> fKin1[i]        >> comma
 	      >> ddum            >> comma
 	      >> ddum            >> comma
-	      >> fData[i]        >> comma; //in [pb]
+	      >> fData[i];       //in [pb]
       
       fData[i] *= 1000.; //Convert to [fb]
       fKin2[i] = MW*MW;
@@ -131,202 +144,19 @@ void ATLAS_WMU_8TEVFilter::ReadData()
       fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
       
       //Luminosity uncertainty
-      fSys[i][36].mult = 1.9;
-      fSys[i][36].add = fSys[i][36].mult/100. * fData[i];
-      fSys[i][36].type = MULT;
-      fSys[i][36].name = "ATLASLUMI12";
+      fSys[i][47].mult = 1.9;
+      fSys[i][47].add = fSys[i][47].mult/100. * fData[i];
+      fSys[i][47].type = MULT;
+      fSys[i][47].name = "ATLASLUMI12";
+
+      //Uncorrelated uncertainties
+      fSys[i][6].name  = "UNCORR";
+      fSys[i][43].name = "UNCORR";
+      fSys[i][44].name = "UNCORR";
+      fSys[i][46].name = "UNCORR";
     }
   
   f1.close();
   f2.close();
   
 }
-
-/*
-//1)W+ distribution
-
-void ATLAS_WP_MU_8TEVFilter::ReadData()
-{
-  fstream f1;
-
-  //Central values and uncertainties
-  stringstream datafile_sys("");
-  datafile_sys << dataPath()
-	   << "rawdata/ATLAS_WMU_8TEV/HEPData-ins1729240-v1-Table_3.csv";
-  f1.open(datafile_sys.str().c_str(), ios::in);
-
-  if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile_sys.str() << endl;
-      exit(-1);
-    }
-
-
-  //Read central value
-  string line;
-  for(int i=0; i<12; i++)
-    {
-      getline(f1,line);
-    }
-
-  double ddum;
-  char comma;
-
-  cout << fNData << endl;
-  
-  for(int i=0; i<fNData; i++)
-    {
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> fKin1[i]        >> comma
-	      >> ddum            >> comma
-	      >> ddum            >> comma
-	      >> fData[i]        >> comma //in [pb]
-	      >> fStat[i]        >> comma //in percentage
-	      >> ddum;
-
-      fData[i] *= 1000.; //Convert to [fb]
-      fKin2[i] = MW*MW;
-      fKin3[i] = 8000.; // GeV
-      fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
-      
-      //Systematic uncertainties
-      for(int j=0; j<fNSys-1; j++)
-	{
-	  lstream >> comma >> fSys[i][j].mult
-		  >> comma >> ddum;
-	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
-	  fSys[i][j].type = MULT;
-	}
-      
-      fSys[i][0].name = "ATLASWMU_ETmiss";
-      fSys[i][1].name = "ATLASWMU_MuonReco";
-      fSys[i][2].name = "Background";
-      fSys[i][3].name = "UNCORR";
-      fSys[i][4].name = "Modelling";
-	
-      //Luminosity uncertainty
-      fSys[i][5].mult = 1.9;
-      fSys[i][5].add = fSys[i][5].mult/100. * fData[i];
-      fSys[i][5].type = MULT;
-      fSys[i][5].name = "ATLASLUMI12";
-      
-    }
-  
-  f1.close();
-  
-} 
-
-//2)W- distribution
-
-void ATLAS_WM_MU_8TEVFilter::ReadData()
-{
-  fstream f1;
-
-  //Central values and uncertainties
-  stringstream datafile_sys("");
-  datafile_sys << dataPath()
-	   << "rawdata/ATLAS_WMU_8TEV/HEPData-ins1729240-v1-Table_3.csv";
-  f1.open(datafile_sys.str().c_str(), ios::in);
-
-  if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile_sys.str() << endl;
-      exit(-1);
-    }
-
-  //Read central value
-  string line;
-  for(int i=0; i<28; i++)
-    {
-      getline(f1,line);
-    }
-
-  double ddum;
-  char comma;
-
-  cout << fNData << endl;
-  
-  for(int i=0; i<fNData; i++)
-    {
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> fKin1[i]        >> comma
-	      >> ddum            >> comma
-	      >> ddum            >> comma
-	      >> fData[i]        >> comma //[pb]
-	      >> fStat[i]        >> comma //in percentage
-	      >> ddum;
-      
-      fData[i] *= 1000.; //Convert to [fb]  
-      fKin2[i] = MW*MW;
-      fKin3[i] = 8000.; // GeV
-      fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
-      
-      //Systematic uncertainties
-      for(int j=0; j<fNSys-1; j++)
-	{
-	  lstream >> comma >> fSys[i][j].mult
-		  >> comma >> ddum;
-	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
-	  fSys[i][j].type = MULT;
-	}
-
-      fSys[i][0].name = "ATLASWMU_ETmiss";
-      fSys[i][1].name = "ATLASWMU_MuonReco";
-      fSys[i][2].name = "Background";
-      fSys[i][3].name = "UNCORR";
-      fSys[i][4].name = "Modelling";
-      
-      //Luminosity uncertainty
-      fSys[i][5].mult = 1.9;
-      fSys[i][5].add = fSys[i][5].mult/100. * fData[i];
-      fSys[i][5].type = MULT;
-      fSys[i][5].name = "ATLASLUMI12";
-      
-    }
-  
-  f1.close();
-  
-} 
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

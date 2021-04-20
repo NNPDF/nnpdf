@@ -18,23 +18,3 @@ public:
 private:
   void ReadData();
 };
-
-/*
-class ATLAS_WP_MU_8TEVFilter : public CommonData
-{
-public:
-  ATLAS_WP_MU_8TEVFilter() : CommonData("ATLAS_WP_MU_8TEV") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class ATLAS_WM_MU_8TEVFilter : public CommonData
-{
-public:
-  ATLAS_WM_MU_8TEVFilter() : CommonData("ATLAS_WM_MU_8TEV") { ReadData(); }
-
-private:
-  void ReadData();
-};
-*/
