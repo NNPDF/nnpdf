@@ -32,6 +32,122 @@ ATLAS luminosity at 8 TeV is implemented.
 
 void ATLAS_WMU_8TEVFilter::ReadData()
 {
+  fstream f1;
+
+  //Central values and uncertainties: W+
+  stringstream datafile("");
+  datafile << dataPath()
+	   << "rawdata/ATLAS_WMU_8TEV/HEPData-ins1729240-v1-Table_3.csv";
+  f1.open(datafile.str().c_str(), ios::in); 
+
+  if (f1.fail())
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+  //Read central value
+  string line;
+  for(int i=0; i<12; i++)
+    {
+      getline(f1,line);
+    }
+  
+  double ddum;
+  char comma;
+
+  for(int i=0; i<fNData/2; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> fKin1[i]        >> comma
+	      >> ddum            >> comma
+	      >> ddum            >> comma
+	      >> fData[i];       //in [pb]
+	
+      fData[i] *= 1000.; //Convert to [fb]
+      fKin2[i] = MW*MW;
+      fKin3[i] = 8000.;  //GeV
+
+      //Statistical uncertainty
+      lstream >> comma >> fStat[i]
+	      >> comma >> ddum;
+      fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
+      
+      //Systematic uncertainties
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  lstream >> comma >> fSys[i][j].mult
+		  >> comma >> ddum;
+	  
+	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+
+      //Luminosity uncertainty
+      fSys[i][5].mult = 1.9;
+      fSys[i][5].add = fSys[i][5].mult/100. * fData[i];
+      fSys[i][5].type = MULT;
+      fSys[i][5].name = "ATLASLUMI12";
+
+      //Uncorrelated uncertainties
+      fSys[i][1].name = "UNCORR";
+      fSys[i][3].name = "UNCORR";
+    }
+
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=fNData/2; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> fKin1[i]        >> comma
+	      >> ddum            >> comma
+	      >> ddum            >> comma
+	      >> fData[i];       //in [pb]
+	
+      fData[i] *= 1000.; //Convert to [fb]
+      fKin2[i] = MW*MW;
+      fKin3[i] = 8000.;  //GeV
+
+      //Statistical uncertainty
+      lstream >> comma >> fStat[i]
+	      >> comma >> ddum;
+      fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
+      
+      //Systematic uncertainties
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  lstream >> comma >> fSys[i][j].mult
+		  >> comma >> ddum;
+	  
+	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+
+      //Luminosity uncertainty
+      fSys[i][5].mult = 1.9;
+      fSys[i][5].add = fSys[i][5].mult/100. * fData[i];
+      fSys[i][5].type = MULT;
+      fSys[i][5].name = "ATLASLUMI12";
+
+      //Uncorrelated uncertainties
+      fSys[i][1].name = "UNCORR";
+      fSys[i][3].name = "UNCORR";
+    }
+  
+  f1.close();
+}
+
+
+/*
+void ATLAS_WMU_8TEVFilter::ReadData()
+{
   fstream f1, f2;
 
   //Central values and uncertainties: W+
@@ -155,3 +271,4 @@ void ATLAS_WMU_8TEVFilter::ReadData()
   
 }
 
+*/
