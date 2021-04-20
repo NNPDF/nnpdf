@@ -69,8 +69,6 @@ void ATLAS_WMU_8TEVFilter::ReadData()
   double ddum;
   char comma;
 
-  double systot = 0.;
-  
   for(int i=0; i<fNData/2; i++)
     {
       getline(f1,line);
@@ -93,12 +91,8 @@ void ATLAS_WMU_8TEVFilter::ReadData()
 	  fSys[i][j].add = fSys[i][j].mult/100. * fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
-
-	  systot = systot + pow(fSys[i][j].mult,2);
 	}
 
-      cout << i << "   " << systot << endl;
-      
       //Statistical uncertainty
       lstream >> comma >> fStat[i];
       fStat[i] = fStat[i]/100. * fData[i]; //convert to absolute value
@@ -160,3 +154,4 @@ void ATLAS_WMU_8TEVFilter::ReadData()
   f2.close();
   
 }
+
