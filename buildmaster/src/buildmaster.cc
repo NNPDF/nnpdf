@@ -113,6 +113,7 @@
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
+#include "ATLAS_DY_2D_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -173,6 +174,7 @@ void InitCommonData(vector<CommonData*>& target)
   //  target.push_back(new ATLASZPT8TEVYDISTNORMFilter());
   target.push_back(new ATLASZPT8TEVMDISTFilter());
   target.push_back(new ATLASDY2D8TEVFilter());
+  target.push_back(new ATLAS_DY_2D_8TEVFilter());
 
   target.push_back(new ATLASPHT15Filter());
   target.push_back(new ATLASPHT12Filter());
