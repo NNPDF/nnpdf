@@ -1,4 +1,19 @@
-//Some description is in order here
+/*
+Name_exp   : ATLAS_DY_2D_8TEV
+Reference  : Measurement of the Drell–Yan triple-differentialcross section 
+             in pp collisions at √s=8 TeV
+ArXiv      : 1710.05167
+Published  : JHEP 12 (2017) 059
+Hepdata    : https://www.hepdata.net/record/ins1630886
+Description: 
+Measurement of the triple-differential cross section for Drell-Yan electron/muon
+production. The measurement is performed for invariant masses of the lepton 
+pairs, between 46 and 200 GeV using a sample of 20.2  fb−1 of pp collisions  
+at a centre-of-mass energy of √s=8 TeV. The data are presented in bins of 
+invariant mass, absolute dilepton rapidity and the angular variable cosθ∗
+between the outgoing lepton and the incoming quark in the Collins–Soper frame.
+Measurements considered here are integrated over the angular variable.
+*/
 
 
 #include "ATLAS_DY_2D_8TEV.h"
