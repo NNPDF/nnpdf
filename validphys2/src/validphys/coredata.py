@@ -4,6 +4,7 @@ dataframes).  This module is intended to substitute large parts of the C++
 wrappers.
 
 """
+from collections import namedtuple
 import dataclasses
 import numpy as np
 import pandas as pd
@@ -117,6 +118,15 @@ class CFactorData:
     description: str
     central_value: np.array
     uncertainty: np.array
+
+
+DynamicCFactorBase = namedtuple('DynamicCFactorBase', ('path', 'magnitude'))
+@dataclasses.dataclass(eq=False)
+class DynamicCFactorInfo:
+    """TODO add docs
+    """
+    description: str #e.g SMEFT
+    pathmagnitudes: list #list[DynamicCFactorBase]
 
 
 @dataclasses.dataclass(eq=False)

@@ -305,11 +305,42 @@ class CoreConfig(configparser.Config):
         return {**fitpdf, **basisfromfit}
 
 
+    def _parse_dynamic_cfac(self, dynamic_cfac):
+        dcf_mapping = {}
+        for dcf in dynamic_cfac:
+            try:
+                _, dynamic_cfac_namespace = self.parse_from_(None, dcf, write=False)
+            except ConfigError:
+                # XXX: This prints the `did you mean` the wrong way round.
+                raise ConfigError(
+                    f"A dynamic cfactor of {dcf} was entered, "
+                    "but a corresponding namespace could not be found.",
+                    bad_item=dcf,
+                    alternatives=self._curr_input.keys(),
+                    display_alternatives='best'
+                )
+            if not isinstance(dynamic_cfac_namespace, Mapping):
+                raise ConfigError(f"Ensure the {dcf} namespace is a Mapping "
+                                  f"not {type(dynamic_cfac_namespace)}."
+                )
+            for key, value in dynamic_cfac_namespace.items():
+                if not isinstance(value, numbers.Real):
+                    raise ConfigError(
+                        f"The value of key {key} in the {dcf} namespace "
+                        f"must be a real number not {type(value)}"
+                    )
+
+
+            dcf_mapping[dcf] = dynamic_cfac_namespace
+
+        return dcf_mapping
+
+
     @element_of("dataset_inputs")
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
+        known_keys = {"dataset", "sys", "cfac", "dynamic_cfac", "frac", "weight", "custom_group"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -321,6 +352,10 @@ class CoreConfig(configparser.Config):
 
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
+
+        dynamic_cfac = dataset.get("dynamic_cfac", tuple())
+        dcf_mapping = self._parse_dynamic_cfac(dynamic_cfac)
+
         frac = dataset.get("frac", 1)
         if not isinstance(frac, numbers.Real):
             raise ConfigError(f"'frac' must be a number, not '{frac}'")
@@ -343,6 +378,7 @@ class CoreConfig(configparser.Config):
             name=name,
             sys=sysnum,
             cfac=cfac,
+            dynamic_cfac=dcf_mapping,
             frac=frac,
             weight=weight,
             custom_group=custom_group
@@ -519,6 +555,7 @@ class CoreConfig(configparser.Config):
         name = dataset_input.name
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
+        dynamic_cfac = dataset_input.dynamic_cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
 
@@ -528,6 +565,7 @@ class CoreConfig(configparser.Config):
                 sysnum=sysnum,
                 theoryid=theoryid,
                 cfac=cfac,
+                dynamic_cfac=dynamic_cfac,
                 cuts=cuts,
                 frac=frac,
                 use_fitcommondata=use_fitcommondata,

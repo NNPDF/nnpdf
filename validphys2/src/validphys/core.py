@@ -331,10 +331,11 @@ class CommonDataSpec(TupleComp):
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specidy a
     dataset."""
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
+    def __init__(self, *, name, sys, cfac, dynamic_cfac, frac, weight, custom_group):
         self.name=name
         self.sys=sys
         self.cfac = cfac
+        self.dynamic_cfac = dynamic_cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
@@ -516,10 +517,11 @@ class DataSetSpec(TupleComp):
         return self.name
 
 class FKTableSpec(TupleComp):
-    def __init__(self, fkpath, cfactors):
+    def __init__(self, fkpath, cfactors, dynamic_cfactors):
         self.fkpath = fkpath
         self.cfactors = cfactors
-        super().__init__(fkpath, cfactors)
+        self.dynamic_cfactors = dynamic_cfactors
+        super().__init__(fkpath, cfactors, dynamic_cfactors)
 
     #NOTE: We cannot do this because Fkset owns the fktable, and trying
     #to reuse the loaded one fails after it gets deleted.

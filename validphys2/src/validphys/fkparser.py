@@ -30,6 +30,7 @@ import pandas as pd
 
 from validphys.coredata import FKTableData, CFactorData
 
+from reportengine.compat import yaml
 
 
 
@@ -67,6 +68,13 @@ def load_fktable(spec):
                 "Length of cfactor data does not match the length of the fktable."
             )
         cfprod *= cfdata.central_value
+    for dcf in spec.dynamic_cfactors:
+        combined_cf = parse_dynamic_cfactor(dcf)
+        if len(combined_cf.central_value) != ndata:
+            raise BadCFactorError(
+                "Length of cfactor data does not match the length of the fktable."
+            )
+        cfprod *= combined_cf.central_value
     # TODO: Find a way to do this in place
     tabledata.sigma = tabledata.sigma.multiply(pd.Series(cfprod), axis=0, level=0)
     return tabledata
@@ -334,6 +342,77 @@ def parse_fktable(f):
         res[header_name] = out
 
 
+def _parse_cfactor_head(f):
+    stars = f.readline()
+    if not stars.startswith(b'*'):
+        raise BadCFactorError("First line should start with '*'.")
+    descbytes = io.BytesIO()
+    for line in f:
+        if line.startswith(b'*'):
+            break
+        descbytes.write(line)
+    description_string = descbytes.getvalue().decode()
+
+    return description_string
+
+
+def _parse_dynamic_cfactor_base(f, magnitude):
+    """ TODO: add docs like below:
+    """
+    description_string = _parse_cfactor_head(f)
+    description = yaml.safe_load(description_string)
+
+    # TODO: CHANGE THESE TO MORE GENERAL KEYS
+    try:
+        default = description['Coefficient']
+    except KeyError:
+        raise BadCFactorError(f"The key ``Coefficient`` is missing from {f.name}")
+
+    try:
+        data = np.loadtxt(f)
+    except Exception as e:
+        raise BadCFactorError(e) from e
+
+    data = data.reshape(-1, 2)
+    central_value = 1 + (magnitude * (data[:, 0] - 1) / default)
+    uncertainty = data[:, 1]
+
+    return CFactorData(description_string, central_value, uncertainty)
+
+
+def _merge_dynamic_cfactors(cfactor_data_list):
+    description = "Combined cfactor for {cfactor_desc} cfactors"
+
+    cvs = np.array([cfactor.central_value for cfactor in cfactor_data_list])
+    uncs = np.array([cfactor.uncertainty for cfactor in cfactor_data_list])
+
+    absolute_corrections = cvs - 1
+    summed_corrections = 1 + np.sum(absolute_corrections, axis=1)
+
+    # Add the errors in quadrature
+    square_uncs = np.square(uncs)
+    quad_errors = np.sum(square_uncs, axis=1)
+
+    return CFactorData(description, summed_corrections, quad_errors)
+
+
+def parse_dynamic_cfactor(dcf):
+    path_magnitude_list = dcf.pathmagnitudes
+    description = dcf.description
+    cfactor_data_list = []
+    for path, magnitude in path_magnitude_list:
+        with open(path, 'rb') as f:
+            cfactor_data = _parse_dynamic_cfactor_base(f, magnitude)
+        cfactor_data_list.append(cfactor_data)
+
+    combined_cfactor = _merge_dynamic_cfactors(cfactor_data_list)
+    combined_cfactor.description = combined_cfactor.description.format(
+        cfactor_desc=description
+    )
+
+    return combined_cfactor
+
+
 def parse_cfactor(f):
     """Parse an open byte stream into a :py:class`CFactorData`. Raise a
     BadCFactorError if problems are encountered.
@@ -348,15 +427,7 @@ def parse_cfactor(f):
     cfac : CFactorData
         An object containing the data on the cfactor for each point.
     """
-    stars = f.readline()
-    if not stars.startswith(b'*'):
-        raise BadCFactorError("First line should start with '*'.")
-    descbytes = io.BytesIO()
-    for line in f:
-        if line.startswith(b'*'):
-            break
-        descbytes.write(line)
-    description = descbytes.getvalue().decode()
+    description = _parse_cfactor_head(f)
     try:
         data = np.loadtxt(f)
     except Exception as e:

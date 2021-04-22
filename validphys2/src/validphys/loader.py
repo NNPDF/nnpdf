@@ -307,7 +307,7 @@ class Loader(LoaderBase):
         return cd.load()
 
     #   @functools.lru_cache()
-    def check_fktable(self, theoryID, setname, cfac):
+    def check_fktable(self, theoryID, setname, cfac, dynamic_cfac):
         _, theopath = self.check_theoryID(theoryID)
         fkpath = theopath/ 'fastkernel' / ('FK_%s.dat' % setname)
         if not fkpath.exists():
@@ -315,9 +315,10 @@ class Loader(LoaderBase):
           "File '%s' not found") % (setname, fkpath) )
 
         cfactors = self.check_cfactor(theoryID, setname, cfac)
-        return FKTableSpec(fkpath, cfactors)
+        dynamic_cfactors = self.check_dynamic_cfactor(theoryID, setname, dynamic_cfac)
+        return FKTableSpec(fkpath, cfactors, dynamic_cfactors)
 
-    def check_compound(self, theoryID, setname, cfac):
+    def check_compound(self, theoryID, setname, cfac, dynamic_cfac):
         thid, theopath = self.check_theoryID(theoryID)
         compound_spec_path = theopath / 'compound' / ('FK_%s-COMPOUND.dat' % setname)
         try:
@@ -335,7 +336,7 @@ class Loader(LoaderBase):
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
         try:
-            tables = [self.check_fktable(theoryID, name[3:-4], cfac)
+            tables = [self.check_fktable(theoryID, name[3:-4], cfac, dynamic_cfac)
                   for name in data['FK']]
         except FKTableNotFound as e:
             raise LoadFailedError(
@@ -349,6 +350,31 @@ class Loader(LoaderBase):
 
         fkspec= self.check_fktable(theoryID, setname, cfac)
         return fkspec.load()
+
+    def check_dynamic_cfactor(self, theoryID, setname, dynamic_cfactors):
+        from validphys.coredata import DynamicCFactorInfo, DynamicCFactorBase
+
+        if dynamic_cfactors is None:
+            return []
+
+        _, theopath = self.check_theoryID(theoryID)
+
+        infos = []
+        for dcf, base_magnitude_mapping in dynamic_cfactors.items():
+            base_magnitude_list = []
+            for base, magnitude in base_magnitude_mapping.items():
+                path = theopath / 'cfactor' / f'CF_{base}_{setname}.dat'
+
+                if not path.exists():
+                    msg = (f"Could not find cfactor base '{base}' for FKTable {setname} "
+                           f"in theory {theoryID}. File {path} does not exist."
+                    )
+                    raise CfactorNotFound(msg)
+                base_magnitude_list.append(DynamicCFactorBase(path, magnitude))
+
+            infos.append(DynamicCFactorInfo(dcf, base_magnitude_list))
+
+        return infos
 
     def check_cfactor(self, theoryID, setname, cfactors):
         _, theopath = self.check_theoryID(theoryID)
@@ -419,6 +445,7 @@ class Loader(LoaderBase):
                       sysnum=None,
                       theoryid,
                       cfac=(),
+                      dynamic_cfac=None,
                       frac=1,
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
@@ -433,9 +460,9 @@ class Loader(LoaderBase):
         commondata = self.check_commondata(
             name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit)
         try:
-            fkspec, op = self.check_compound(theoryno, name, cfac)
+            fkspec, op = self.check_compound(theoryno, name, cfac, dynamic_cfac)
         except CompoundNotFound:
-            fkspec = self.check_fktable(theoryno, name, cfac)
+            fkspec = self.check_fktable(theoryno, name, cfac, dynamic_cfac)
             op = None
 
         #Note this is simply for convenience when scripting. The config will
