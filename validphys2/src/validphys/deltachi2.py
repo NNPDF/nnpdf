@@ -9,7 +9,7 @@ from collections import namedtuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import chi2, entropy
+import scipy as sp
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
@@ -76,7 +76,7 @@ def plot_kullback_leibler(delta_chi2_hessian):
     )
     # compute Kullback-Leibler (null values set to 1e-8)
     vals_nnpdf[vals_nnpdf==0] = 1e-8
-    kl_nnpdf = entropy(chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
+    kl_nnpdf = sp.stats.entropy(sp.stats.chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
 
     ax.plot(x, chi2.cdf(x, 1), label="$\chi^2$ CDF")
 
