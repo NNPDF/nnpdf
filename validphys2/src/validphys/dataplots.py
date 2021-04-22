@@ -571,7 +571,7 @@ def plot_groups_chi2_spider(fits, fits_groups_chi2,
     """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
 
-    fig = plt.figure(figsize=(8,8))
+    fig = plt.figure(figsize=(4,4))
     ax = fig.add_subplot(projection='polar')
 
     for fit, fitchi2, fitgroup in zip(fits, fits_groups_chi2, fits_groups_data):
@@ -592,7 +592,7 @@ def plot_groups_phi_spider(fits, fits_groups_data,
                             fits_groups_data_phi, processed_metadata_group):
    """Like plot_groups_chi2_spider but for phi."""
 
-   fig = plt.figure(figsize=(8,8))
+   fig = plt.figure(figsize=(4,4))
    ax = fig.add_subplot(projection='polar')
    
    for fit, fitphi, fitgroup in zip(fits, fits_groups_data_phi, fits_groups_data):
