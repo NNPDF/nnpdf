@@ -9,6 +9,7 @@ from collections import namedtuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import chi2, entropy
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
