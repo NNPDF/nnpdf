@@ -78,7 +78,7 @@ def plot_kullback_leibler(delta_chi2_hessian):
     vals_nnpdf[vals_nnpdf==0] = 1e-8
     kl_nnpdf = sp.stats.entropy(sp.stats.chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
 
-    ax.plot(x, chi2.cdf(x, 1), label="$\chi^2$ CDF")
+    ax.plot(x, sp.stats.chi2.cdf(x, 1), label="$\chi^2$ CDF")
 
     ax.set_title(f"KL divergence: {kl_nnpdf:.4f}")
     ax.set_xlabel("$<\Delta\chi^2>$")
