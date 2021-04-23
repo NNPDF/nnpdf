@@ -27,8 +27,8 @@ LODatasets: &LODatasets
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+#- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
+#- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75}
 - {dataset: DYE886P, frac: 0.75, cfac: []}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: []}
@@ -42,8 +42,8 @@ LODatasets: &LODatasets
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: []}               
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: []}             
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM]}       
-- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}         
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}
+#- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}         
+#- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75, cfac: []}
 #- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: []}  # zero contribution at LO
@@ -113,8 +113,8 @@ NNLODatasets: &NNLODatasets
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+#- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
+#- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
@@ -130,8 +130,8 @@ NNLODatasets: &NNLODatasets
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
 # - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
 # - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
-- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
+# - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
+# - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 # - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10} # zreo contribution at LO
 # - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10} # zero contribution at LO
 - {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
@@ -267,11 +267,11 @@ positivity:
   - {dataset: POSF2U, poslambda: 1e6}        # Positivity Lagrange Multiplier
   - {dataset: POSF2DW, poslambda: 1e6}
   - {dataset: POSF2S, poslambda: 1e6}
-#  - {dataset: POSFLL, poslambda: 1e6}       # szro at LO
+#  - {dataset: POSFLL, poslambda: 1e6}       
   - {dataset: POSDYU, poslambda: 1e10}
   - {dataset: POSDYD, poslambda: 1e10}
   - {dataset: POSDYS, poslambda: 1e10}
-  - {dataset: POSF2C, poslambda: 1e6}
+#  - {dataset: POSF2C, poslambda: 1e6}
   - {dataset: POSXUQ, poslambda: 1e6}        # Positivity of MSbar PDFs
   - {dataset: POSXUB, poslambda: 1e6}
   - {dataset: POSXDQ, poslambda: 1e6}
