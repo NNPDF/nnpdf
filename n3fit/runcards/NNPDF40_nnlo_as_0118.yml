@@ -28,62 +28,62 @@ dataset_inputs:
 - {dataset: HERACOMBCCEP, frac: 0.75}
 - {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
 - {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
-- {dataset: DYE886R_dw_ite, frac: 1.0}
+- {dataset: DYE886R_dw_ite, frac: 0.75}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-- {dataset: CDFZRAP_NEW, frac: 1.0, cfac: [QCD]}
-- {dataset: D0ZRAP_40, frac: 1.0, cfac: [QCD]}
-- {dataset: D0WMASY, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD]}
+- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
+- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}               
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}             
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM, QCD]}       
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}       
 - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
-- {dataset: ATLASTTBARTOT7TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASTTBARTOT8TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: [QCD]}                 
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 1.0, cfac: [QCD]}                
-- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 1.0, cfac: [QCD]}             
+- {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}                 
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}                
+- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}             
 - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        
 - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}                            
 - {dataset: ATLASPHT15, frac: 0.75, cfac: [QCD, EWK]}                                
-- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: [QCD]}                      
-- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}                     
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}        
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}     
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}                      
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                     
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}        
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}     
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    
-- {dataset: CMSWEASY840PB, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSWMASY47FB, frac: 1.0, cfac: [QCD]}
+- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSWMU8TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
+- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}                                   
 - {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: [QCD]}                               
-- {dataset: CMSTTBARTOT7TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSTTBARTOT8TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSTTBARTOT13TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSTTBARTOT5TEV, frac: 1.0, cfac: [QCD]}                                 
-- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 1.0, cfac: [QCD]}                 
-- {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 1.0, cfac: [QCD]}                 
-- {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 1.0, cfac: [QCD]}                 
-- {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 1.0, cfac: [QCD]}                      
-- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 1.0, cfac: [QCD]}                        
-- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}                       
-- {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBZEE2FB_40, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
-- {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
-- {dataset: LHCB_Z_13TEV_DIMUON, frac: 1.0, cfac: [QCD]}                             
-- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 1.0, cfac: [QCD]}                         
+- {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}                                 
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 
+- {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: [QCD]}                 
+- {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: [QCD]}                 
+- {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}                      
+- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}                        
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       
+- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCBWZMU8TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}                             
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}                         
 
 
 ############################################################
