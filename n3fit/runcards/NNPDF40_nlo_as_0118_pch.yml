@@ -83,7 +83,7 @@ NLODatasets: &NLODatasets
 - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: []}
 - {dataset: CMSWCHARMTOT, frac: 0.75}
 - {dataset: CMSWCHARMRAT, frac: 0.75}
-- {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV}
+- {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV, frac: 0.75}
 - {dataset: LHCBZ940PB, frac: 0.75, cfac: []}
 - {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: []}
 - {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM]}
@@ -169,7 +169,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
 # - {dataset: CMSWCHARMTOT, frac: 0.75} # No Cfactors at NNLO
 # - {dataset: CMSWCHARMRAT, frac: 0.75} # No Cfactors at NNLO
-# - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV} # No Cfactors at NNLO
+# - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV, frac: 0.75} # No Cfactors at NNLO
 - {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
