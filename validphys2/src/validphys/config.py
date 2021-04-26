@@ -307,7 +307,8 @@ class CoreConfig(configparser.Config):
 
     def _parse_dynamic_cfac(self, dynamic_cfac):
         dcf_mapping = {}
-        _, dcf_config = self.parse_from_(None, "dynamic_cfactor_config", write=False)
+        if dynamic_cfac:
+            _, dcf_config = self.parse_from_(None, "dynamic_cfactor_config", write=False)
         for dcf in dynamic_cfac:
             try:
                 dynamic_cfac_namespace = dcf_config[dcf]
