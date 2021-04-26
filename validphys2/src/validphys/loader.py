@@ -355,7 +355,7 @@ class Loader(LoaderBase):
         from validphys.coredata import DynamicCFactorInfo, DynamicCFactorBase
 
         if dynamic_cfactors is None:
-            return []
+            return tuple()
 
         _, theopath = self.check_theoryID(theoryID)
 
@@ -374,7 +374,7 @@ class Loader(LoaderBase):
 
             infos.append(DynamicCFactorInfo(dcf, base_magnitude_list))
 
-        return infos
+        return tuple(infos)
 
     def check_cfactor(self, theoryID, setname, cfactors):
         _, theopath = self.check_theoryID(theoryID)
@@ -393,7 +393,7 @@ class Loader(LoaderBase):
 
     def check_posset(self, theoryID, setname, postlambda):
         cd = self.check_commondata(setname, 'DEFAULT')
-        fk = self.check_fktable(theoryID, setname, [])
+        fk = self.check_fktable(theoryID, setname, [], None)
         th =  self.check_theoryID(theoryID)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 

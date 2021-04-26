@@ -12,17 +12,17 @@ def test_basic_loading():
     l = Loader()
     # Test both with and without cfactors, and load both DIS and hadronic
     for cfac in ((), ('QCD',)):
-        fk = l.check_fktable(setname='ATLASTTBARTOT', theoryID=THEORYID, cfac=cfac)
+        fk = l.check_fktable(setname='ATLASTTBARTOT', theoryID=THEORYID, cfac=cfac, dynamic_cfac=None)
         res = load_fktable(fk)
         assert res.ndata == 3
         assert isinstance(res.sigma, pd.DataFrame)
-    fk = l.check_fktable(setname='H1HERAF2B', theoryID=THEORYID, cfac=())
+    fk = l.check_fktable(setname='H1HERAF2B', theoryID=THEORYID, cfac=(), dynamic_cfac=None)
     res = load_fktable(fk)
     assert res.ndata == 12
     assert isinstance(res.sigma, pd.DataFrame)
 
     # Check if cfactors for datasets having one entry are correctly parsed
-    fk = l.check_fktable(setname='CMSTTBARTOT7TEV', theoryID=THEORYID, cfac=('QCD',))
+    fk = l.check_fktable(setname='CMSTTBARTOT7TEV', theoryID=THEORYID, cfac=('QCD',), dynamic_cfac=None)
     res = load_fktable(fk)
     assert res.ndata == 1
 
