@@ -307,16 +307,19 @@ class CoreConfig(configparser.Config):
 
     def _parse_dynamic_cfac(self, dynamic_cfac):
         dcf_mapping = {}
+        _, dcf_config = self.parse_from_(None, "dynamic_cfactor_config", write=False)
         for dcf in dynamic_cfac:
             try:
-                _, dynamic_cfac_namespace = self.parse_from_(None, dcf, write=False)
-            except ConfigError:
+                dynamic_cfac_namespace = dcf_config[dcf]
+            except KeyError:
                 # XXX: This prints the `did you mean` the wrong way round.
                 raise ConfigError(
                     f"A dynamic cfactor of {dcf} was entered, "
-                    "but a corresponding namespace could not be found.",
+                    "but a corresponding namespace could not be found. "
+                    "Ensure one exists under the dynamic_cfactor_config "
+                    "top level namespace.",
+                    alternatives=dcf_config.keys(),
                     bad_item=dcf,
-                    alternatives=self._curr_input.keys(),
                     display_alternatives='best'
                 )
             if not isinstance(dynamic_cfac_namespace, Mapping):
@@ -329,7 +332,6 @@ class CoreConfig(configparser.Config):
                         f"The value of key {key} in the {dcf} namespace "
                         f"must be a real number not {type(value)}"
                     )
-
 
             dcf_mapping[dcf] = dynamic_cfac_namespace
 
