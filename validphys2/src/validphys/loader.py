@@ -346,9 +346,9 @@ class Loader(LoaderBase):
         return tuple(tables), op
 
 
-    def get_fktable(self, theoryID, setname, cfac):
+    def get_fktable(self, theoryID, setname, cfac, dynamic_cfac):
 
-        fkspec= self.check_fktable(theoryID, setname, cfac)
+        fkspec= self.check_fktable(theoryID, setname, cfac, dynamic_cfac)
         return fkspec.load()
 
     def check_dynamic_cfactor(self, theoryID, setname, dynamic_cfactors):
