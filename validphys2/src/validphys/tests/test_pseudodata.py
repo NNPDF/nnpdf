@@ -16,7 +16,7 @@ import pytest
 
 from validphys.api import API
 from validphys.pseudodata import training_validation_pseudodata
-from validphys.tests.conftest import FIT
+from validphys.tests.conftest import THEORYID
 import validphys.tests.regressions
 
 from reportengine.checks import CheckError
@@ -58,6 +58,20 @@ def setup_dicts(request):
     pseudodata_info = API.get_pseudodata(**ns, **n_process_config)
 
     return exp_infos, pseudodata_info
+
+
+def test_read_fit_pseudodata():
+  inp = dict(fit="dummy_pseudodata_read_test_fit",
+        use_cuts="fromfit",
+        dataset_inputs=[{"dataset": "NMC"}, {"dataset": "NMCPD"}],
+        theoryid=THEORYID,)
+
+  data_indices_list = API.read_fit_pseudodata(**inp)
+  groups_index = API.groups_index(**inp)
+
+  for data, tr, val in data_indices_list:
+    assert all(tr.union(val) == groups_index)
+    assert set(tr).isdisjoint(set(val))
 
 
 def test_read_all_fit_pseudodata():
