@@ -60,8 +60,8 @@ def setup_dicts(request):
     return exp_infos, pseudodata_info
 
 
-def test_read_fit_pseudodata():
-    data_indices_list = API.read_fit_pseudodata(
+def test_read_all_fit_pseudodata():
+    data_indices_list = API.read_all_fit_pseudodata(
       fit="dummy_pseudodata_read_test_fit",
       use_cuts="fromfit"
     )
@@ -78,7 +78,7 @@ def test_read_fit_pseudodata():
         # Check a FileNotFoundError is raised
         # if the input fit wasn't generated
         # with the savepseudodata flag set to true
-        bad_gen = API.read_fit_pseudodata(
+        bad_gen = API.read_all_fit_pseudodata(
             fit="dummy_pseudodata_read_failure_test_fit", use_cuts="fromfit"
         )
         next(bad_gen)
@@ -86,7 +86,7 @@ def test_read_fit_pseudodata():
     with pytest.raises(ResourceError) as e_info:
         # Check the enforcement of use_cuts being set
         # to fromfit is in place
-        API.read_fit_pseudodata(
+        API.read_all_fit_pseudodata(
           fit="dummy_pseudodata_read_test_fit",
           use_cuts="nocuts"
         )
