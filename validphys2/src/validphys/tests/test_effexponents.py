@@ -21,18 +21,11 @@ def test_next_runcard():
     l = Loader()
     ite1_fit = l.check_fit(FIT)
     # The runcard of a 2nd iteration fit I ran manually
-    ite2_runcard = l.check_fit(FIT_ITERATED).as_input()
-    ite2_runcard.pop("pdf")  # Removing the PDF key, it's an artefact of as_input
-
-    # We do this check incase FIT_ITERATED is changed to a new style fit in the
-    # future. By checking both namespaces are present, we ensure
-    # "dataset_inputs" was added to the fit namespace by the as_input method as
-    # opposed to actually being present in the fit runcard.
-    if "experiments" in ite2_runcard and 'dataset_inputs' in ite2_runcard:
-        # dataset_inputs was added to the as_input for backwards compatibility
-        # of the old style fits and wasn't actually present in the fit runcard
-        # just like "pdf" above.
-        ite2_runcard.pop('dataset_inputs')
+    # We load it using the context manager because at_input has been modified
+    # to load various keys that are not present in the actual runcard for
+    # backwards compatibility
+    with open(l.check_fit(FIT_ITERATED).path / "filter.yml", "r") as f:
+        ite2_runcard = yaml.safe_load(f)
 
     predicted_ite2_runcard = yaml.safe_load(
         API.iterated_runcard_yaml(fit=FIT)
