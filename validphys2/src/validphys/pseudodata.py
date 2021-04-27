@@ -29,6 +29,25 @@ fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 context_index = collect("groups_index", ("fitcontext",))
 
 def read_fit_pseudodata(read_all_fit_pseudodata, groups_index):
+    """Function that returns a subset of the pseudodata (split into training
+    and validation) that was used by a fit.
+
+    The difference from
+    :py:func:`validphys.pseudodata.read_all_fit_pseudodata` is that this
+    function will slice the entire pseudodata to using `groups_index` while
+    the other will return simply the entire dataset.
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> inp = {
+            "fit": "NNPDF31_nnlo_as_0118_DISonly_pseudodata",
+            "dataset_inputs": [{"dataset": "NMC"}],
+            "use_cuts": "fromfit",
+            "theoryid": 53,
+        }
+    >>> API.read_fit_pseudodata(**inp)
+    """
     all_data_indices_list = read_all_fit_pseudodata
 
     res = []
