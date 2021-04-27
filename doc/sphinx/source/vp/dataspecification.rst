@@ -458,9 +458,12 @@ results in the table or plot will have been collected over ``fits`` with
 .. warning::
   Whilst it is possible to specify ``data_input: {from_: fitinputcontext}``
   directly in the runcard, it is highly recommended **not** to do this where
-  possible. Instead take either ``dataset_inputs`` or ``experiments``
-  directly ``from_: fit`` depending on whether the fit uses new or old data
-  specification respectively. (See below for a detailed explanation).
+  possible. Instead take ``dataset_inputs`` directly ``from_: fit``
+  irrespective of whether the fit uses new or old data specification; since
+  the conversion from the old style data specification is handled internally
+  using :py:func:`validphys.utils.experiments_to_dataset_inputs` in
+  conjunction with :py:meth:`validphys.core.FitSpec.as_input`.  (See below for
+  a detailed explanation).
 
 Currently the ``pseudodata`` and ``chi2grids`` modules have not been updated to
 use ``dataset_inputs`` and so require ``experiments`` to be specified in the

@@ -33,6 +33,7 @@ from NNPDF import (LHAPDFSet,
 from validphys import lhaindex, filters
 from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
+from validphys.utils import experiments_to_dataset_inputs
 
 log = logging.getLogger(__name__)
 
@@ -623,6 +624,12 @@ class FitSpec(TupleComp):
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
         d['pdf'] = {'id': self.name, 'label': self.label}
+
+        if 'experiments' in d:
+            # Flatten old style experiments to dataset_inputs
+            dataset_inputs = experiments_to_dataset_inputs(d['experiments'])
+            d['dataset_inputs'] = dataset_inputs
+
         return d
 
     def __str__(self):
