@@ -28,8 +28,20 @@ fitted_pseudodata = collect('fitted_pseudodata_internal', ('fitcontext',))
 
 context_index = collect("groups_index", ("fitcontext",))
 
+def read_fit_pseudodata(read_all_fit_pseudodata, groups_index):
+    all_data_indices_list = read_all_fit_pseudodata
+
+    res = []
+    for all_data, all_tr, all_val in all_data_indices_list:
+        data = all_data.loc[groups_index]
+        tr = all_tr.intersection(groups_index)
+        val = all_val.intersection(groups_index)
+        res.append(DataTrValSpec(data, tr, val))
+
+    return res
+
 @check_cuts_fromfit
-def read_fit_pseudodata(fitcontext, context_index):
+def read_all_fit_pseudodata(fitcontext, context_index):
     """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
 
@@ -55,7 +67,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     Example
     -------
     >>> from validphys.api import API
-    >>> data_indices_list = API.read_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
+    >>> data_indices_list = API.read_all_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
     >>> len(data_indices_list) # Same as nrep
     100
     >>> rep_info = data_indices_list[0]
