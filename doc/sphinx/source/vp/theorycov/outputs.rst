@@ -17,4 +17,5 @@ theory covariance module fall into three broad categories:
    theoretical predictions for each data point for the different scale
    choices.
 
-For an example set of reports and explanation see :ref:`here <theory-covmat-examples>`.
+For an example set of reports and explanations of their contents see
+:ref:`here <theory-covmat-examples>`.

@@ -49,7 +49,7 @@ Summary
    process type. These process types are categorised as {DIS CC, DIS NC,
    Drell-Yan, Jets, Top}. 
 
--  :ref:`Outputs <thcov_outputs>` include tables and heat plots of theoretical and combined
+-  :ref:`Outputs <thcov_outputs>` includes tables and heat plots of theoretical and combined
    (theoretical + experimental) covariance matrices, comparisons of
    theoretical and experimental errors, and plots and tables of
    :math:`\chi^2` values.
