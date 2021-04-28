@@ -21,7 +21,7 @@ The differential cross-sections and charge asymmetry are measured in the same
 fiducial phase space as for the integrated measurement. 
 These are measured in 11 bins of absolute muon pseudorapidity between 0 and 
 2.4 with bin edges at 0, 0.21, 0.42, 0.63, 0.84, 1.05, 1.37, 1.52, 1.74, 1.95, 
-2.18, and 2.4. The carge asymmetry is not implemented. Systematic uncertainties
+2.18, and 2.4. The charge asymmetry is not implemented. Systematic uncertainties
 are correlated between W+ and W-. An extra systematic uncertainty due to the
 ATLAS luminosity at 8 TeV is implemented.
 */
