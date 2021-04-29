@@ -39,7 +39,7 @@ def _make_momentum_fraction_integrand(fldict):
     and fixed loaded PDF, replica number and Q that computes the momentum
     fraction based on ``fldict``.
 
-    The keys of ``fldict`` are free form values corresponfing to PDG parton ids
+    The keys of ``fldict`` are free form values corresponding to PDG parton ids
     (that end up being passed :py:func:`validphys.pdfbases.parse_flarr` and
     then to LHAPDF) and the values are multipliers for each parton. The
     integrand is the sum of ``x*flavour(x)*multiplier`` for all the given
@@ -124,7 +124,7 @@ def _sum_rules(rules_dict, lpdf, Q):
 def sum_rules(pdf:PDF, Q:numbers.Real):
     """Compute the momentum, uvalence and dvalence and svalence sum rules for
     each member (as defined by libnnpdf), at the energy scale ``Q``. Return a
-    SumRulesGrid object with the list of valued " "for each sum rule.  The
+    SumRulesGrid object with the list of values for each sum rule.  The
     integration is performed with absolute and relative tolerance of 1e-4."""
     lpdf = pdf.load()
     return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
