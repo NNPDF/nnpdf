@@ -40,7 +40,7 @@ def _make_momentum_fraction_integrand(fldict):
     fraction based on ``fldict``.
 
     The keys of ``fldict`` are free form values corresponding to PDG parton ids
-    (that end up being passed :py:func:`validphys.pdfbases.parse_flarr` and
+    (that end up being passed by :py:func:`validphys.pdfbases.parse_flarr` and
     then to LHAPDF) and the values are multipliers for each parton. The
     integrand is the sum of ``x*flavour(x)*multiplier`` for all the given
     entries.
@@ -199,7 +199,6 @@ def bad_replica_sumrules(pdf, sum_rules, threshold: numbers.Real = 0.01):
     farther from the correct value than ``threshold`` (in absolute value).
     """
     ncomputed = len(sum_rules[0])
-    # TODO: Get rid of this nonsense
     if pdf.ErrorType == "replicas":
         x = np.arange(1, ncomputed + 1)
     else:
