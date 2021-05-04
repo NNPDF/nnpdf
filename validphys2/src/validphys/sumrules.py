@@ -55,7 +55,7 @@ def _make_momentum_fraction_integrand(fldict):
     f : Callable
         An integrand function.
     """
-    # Do this outsde to aid integration time
+    # Do this outside to aid integration time
     fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
 
     def f(x, lpdf, irep, Q):
@@ -122,7 +122,7 @@ def _sum_rules(rules_dict, lpdf, Q):
 
 @check_positive('Q')
 def sum_rules(pdf:PDF, Q:numbers.Real):
-    """Compute the momentum, uvalence and dvalence and svalence sum rules for
+    """Compute the momentum, uvalence, dvalence and svalence sum rules for
     each member (as defined by libnnpdf), at the energy scale ``Q``. Return a
     SumRulesGrid object with the list of values for each sum rule.  The
     integration is performed with absolute and relative tolerance of 1e-4."""
