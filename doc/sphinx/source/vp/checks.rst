@@ -2,19 +2,19 @@ Checking providers
 ==================
 
 Providers can have checks that verify that all the required preconditions
-are met. Checks are executed at the time at which the call node is
-just created and all its required dependencies are either in the
+are met. Checks are executed at the time at which the call node has
+just been created and all of its required dependencies are either in the
 namespace or scheduled to be produced. Checking functions take the
 current state of the namespace, as well as an unspecified set of other
 parameters (the interface is as yet undecided!).
 Therefore check functions should accept `**kwargs` arguments. Checks
 are decorated with the `reportengine.checks.make_argcheck` function.
-If checks don't pass, they must raise
+If checks do not pass, they must raise
 a `reportengine.checks.CheckError` exception.
 
 For example, given a reweighting function, we may want to check that
 the current PDF (the value that will be passed to the function) has
-a Monte Carlo error type, we might define a check like:
+a Monte Carlo error type. We might define a check like:
 
 .. code:: python
 
@@ -62,8 +62,8 @@ implemented like:
 		                  % (pdf, etype))
 
 `make_argcheck` should be preferred, since it is more explicit, and
-could be extended with more functionality later on. However it is
-newer and not very used currently in the code.
+could be extended with more functionality later on. However, it is
+newer and not currently used very much in the code.
 
 Checks have no effect outside of reportengine (unless you call them
 explicitly).

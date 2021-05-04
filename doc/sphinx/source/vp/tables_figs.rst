@@ -28,7 +28,7 @@ This will take care of the following:
 
 There is also the `figuregen` decorator for providers that are
 implemented as generators that yield several figures (see e.g. the
-implementation of `plot_fancy`). Apart from just the figure, yield
+implementation of `plot_fancy`). Apart from just the figure, they yield
 a tuple (prefix, figure) where the prefix will be used in the
 filename.
 

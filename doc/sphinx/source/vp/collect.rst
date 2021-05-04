@@ -12,15 +12,15 @@ The signature is:
 
 	collect('provider_name', fuzzyspec)
 
-This will expand the :ref:`fuzzyspec <fuzzyspecs>` relative to the current 
-[namespace](namespaces.html) and
+This will expand the :ref:`fuzzyspec <fuzzyspecs>` relative to the current
+:ref:`namespace <namespaces>` and
 compute the function once for each frame.  Then it will put all the
 results in a list (to be iterated in the same order as the fuzzyspec)
 and set that list as the result of the provider. The provider in the
 first argument is found following the standard `reportengine` rules.
 It can be a function defined in a provider module, a configuration
 input or a production rule, as well as another `collect` provider. As
-a special case, one can pass directly functions
+a special case, one can pass functions directly
 (defined with the `def` keyword). For example
 
 .. code:: python
@@ -41,7 +41,7 @@ example:
 		    possets_predictions], axis=0)
 
 `collect` can be used to appropriately group nested inputs. For
-example here is how to obtain a list of the experiments for each fit.
+example, here is how to obtain a list of the experiments for each fit.
 
 .. code:: python
 
@@ -68,8 +68,8 @@ chaining several `collect` providers. For instance, the code
 	fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
 
 will result in `fits_experiment_chi2_data` producing one result for
-each fit, where each of them is itself list where each item result of
-`abs_chi2_data_experiment` evaluated for each experiment in a given
+each fit, where each of them is itself a list where each item result of
+`abs_chi2_data_experiment` is evaluated for each experiment in a given
 fit.
 
 Standard iteration techniques can be used to process the results of
