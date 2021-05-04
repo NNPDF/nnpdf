@@ -1,3 +1,5 @@
+.. _collect:
+
 The collect function
 ====================
 

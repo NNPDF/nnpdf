@@ -10,7 +10,7 @@ The basic code flow is as follows:
     their associated :ref:`fuzzyspec <fuzzyspecs>`
 
  2. Each requirement spans other requirements. These can be:
- 
+
     - Providers: Other functions with requirements of their own.
     - User input processed by the configuration, which is immediately tested for correctness.
     - Production rules, also derived from the configuration.
@@ -25,7 +25,7 @@ Configuration
 -------------
 
 A configuration class derived from `reportengine.ConfigParser` is used to parse the
-user input. In validphys, it is defined in 
+user input. In validphys, it is defined in
 `validphys.config <https://github.com/NNPDF/nnpdf/blob/master/validphys2/src/validphys/config.py>`_.
 
 The parsing in reportengine is *context dependent*. Because we want to
@@ -53,7 +53,7 @@ For example, we might have:
 	    ...
 
 
-The type specification (`:dict` above) makes sure that the user input
+The type specification (`dict` above) makes sure that the user input
 is of that type before it is seen by the function (which avoids
 a bunch of repetitive error checking). A positivity dataset requires
 a theory ID in order to be meaningfully processed (i.e. to find the
@@ -102,7 +102,7 @@ above into:
 
 Now the user has to enter a key called "posdataset_input", from which
 some Python object will be obtained as the return value of
-`parse_posdataset_input`. Then, `produce_posdataset` is used to an
+`parse_posdataset_input`. Then `produce_posdataset` is used for an
 object representing the positivity set and the corresponding FK tables
 in a given theory is obtained from the output of
 `parse_posdataser_input` and a theory ID.
@@ -121,7 +121,7 @@ decorator to the parsing function defined in the Config class:
 
 
 Now `posdatasets` is parsed as a list of positivity datasets, which
-can be passed together to a provider, or iterated over, (for example
+can be passed together to a provider, or iterated over (for example
 with a `with` tag in the report, see :ref:`reports`).
 
 Note that you can also put together results from evaluating providers
@@ -136,7 +136,7 @@ folders. It is good to have a common interface, since it is used to
 list the available resources of a given type or even download
 a missing resource. The functions of type `check_<resource>` should
 take the information processed by the Config class and verify that
-a given resource is correct. If so they should return a "Resource
+a given resource is correct. If so, they should return a "Resource
 specification" (something typically containing metadata information
 such as paths, and a `load()` method to get the C++ object from
 `libnnpdf`). We also define a `get` method that returns the C++ object
@@ -253,7 +253,7 @@ as a function of the PDF error type (e.g. to use the different
 formulas for the uncertainty of Hessian and Monte Carlo sets). In that
 way it allows to abstract away the different error types. One
 constructs an object inheriting from `validphys.core.Stats` that is
-appropriate for a given error type by calling `pdf.stats_class(data)`
+appropriate for a given error type by calling `pdf.stats_class(data)`,
 where data is an array where the entries along the first dimension are
 the results from each member computed from `libnnpdf` (and the other
 dimensions are arbitrary). `Stats` has methods that appropriately

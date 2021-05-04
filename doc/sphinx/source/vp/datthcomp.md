@@ -1,3 +1,7 @@
+```eval_rst
+.. _data-theory-comp:
+```
+
 Comparing data and theory
 -------------------------
 For a tutorial on how to do a data-theory comparison, see [here](../tutorials/datthcomp.html).

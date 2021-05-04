@@ -4,16 +4,16 @@ Writing `validphys` runcards
 ============================
 
 In this section we go into some more detail on how to write `validphys`
-runcards, in particular for more complex cases. 
+runcards, in particular for more complex cases.
 
 .. note::
 
-	:ref:`vpexamples` details the example runcards that can be found in 
-	`this folder <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_. 
-	The :ref:`tutorials` section also takes you through how to make runcards for 
+	:ref:`vpexamples` details the example runcards that can be found in
+	`this folder <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples>`_.
+	The :ref:`tutorials` section also takes you through how to make runcards for
 	various tasks.
 
-We start with the simple runcard example 
+We start with the following simple example:
 
 .. code:: yaml
 
@@ -36,13 +36,13 @@ Multiple inputs and namespaces
 
 Resources can be declared:
 
-- At top level, like in the simple runcard above; 
+- At top level, like in the simple runcard above;
 - Inside a mapping (with an arbitrary key);
 - Inside an element of a list of mappings.
 
 These mappings are called `namespaces`. For detailed information see :ref:`namespaces`.
 
-.. important:: 
+.. important::
 	When choosing your arbitrary key, good practice is to use a capital letter at the start.
 	This helps to differentiate user-defined namespaces from internal objects.
 
@@ -76,10 +76,11 @@ In this case we can modify the example as follows:
 
 Here `With_cuts` and `Without_cuts` are *arbitrary* strings that
 specify *namespaces*.
-We are asking for 
--  `plot_fancy` to be executed taking into account the cuts (note that we also need to 
-specify the fit where they are read from) 
-- `plot_chi2dist` to be executed without the cuts.  
+We are asking for
+
+- `plot_fancy` to be executed taking into account the cuts (note that we also need to
+  specify the fit where they are read from)
+- `plot_chi2dist` to be executed without the cuts.
 
 Similar to
 a programming language like C, the inner namespace has priority with
@@ -115,7 +116,7 @@ The `plot_fancy` action will ignore the outer pdf
 (NNPDF31\_nlo\_as\_0118) and use the one defined in the innermost
 namespace (191015-mw-001). Because we have not specified `plot_chi2dist` to
 be executed within the `With_cuts` namespace, it will continue to use
-(NNPDF31\_nlo\_as\_0118).
+NNPDF31\_nlo\_as\_0118.
 
 
 2. Lists of namespaces
@@ -146,8 +147,8 @@ result for each. For example:
 	  - Specifications plot_fancy
 
 Now a different `plot_fancy` action will be executed for each of the
-two mappings of the list "*Specifications*": One will use the NNLO PDF
-and use the cuts from 191015-mw-001, and the other will plot all points 
+two mappings of the list "*Specifications*": one will use the NNLO PDF
+and use the cuts from 191015-mw-001, and the other will plot all points
 in the dataset.
 
 Some keys are appropriately interpreted either as lists of objects or
@@ -192,7 +193,7 @@ specifying that we want to loop over `pdfs`:
 	pdfs:
 	  - NNPDF30_nlo_as_0118
 	  - NNPDF31_nnlo_as_0118
-	  
+
 	theoryid: 52
 
 	use_cuts: "nocuts"
@@ -205,16 +206,16 @@ specifying that we want to loop over `pdfs`:
 	  - pdfs plot_fancy
 
 
-	In this case the value of the `pdfs` key is seen as equivalent to:
+In this case the value of the `pdfs` key is seen as equivalent to:
 
-	.. code:: yaml
+.. code:: yaml
 
 	pdfs:
 	  - {pdf: NNPDF31_nlo_as_0118}
 	  - {pdf: NNPDF31_nnlo_as_0118}
 
 
-However the special treatment allows us to simplify both the input
+However, the special treatment allows us to simplify both the input
 file and the programmatic interface of the functions.
 
 Nesting namespaces
@@ -246,7 +247,7 @@ Consider the example:
 	dataset_inputs:
 	    - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
 	    - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-	    - { dataset: ATLASWZRAP36PB}
+	    - { dataset: ATLASWZRAP36PB }
 
 	actions_:
 	  - With_cuts::theoryids::pdfs::dataset_inputs plot_fancy
@@ -255,14 +256,15 @@ This will first enter the "*With_cuts*" namespace (thus setting
 ``use_cuts = "nocuts"`` for the action), and then loop over all the
 theories, pdfs and datasets.
 
-The order over which the looping is done is significant: 
+The order over which the looping is done is significant:
+
 1. The outer specifications must set all the variables required for the inner
    ones to be fully resolved (so `With_cuts` must go before `dataset_inputs`).
-   
+
 2. The caching mechanism works by grouping together the namespace
    specifications from the beginning. For example, suppose we were to
    add another action to the example above:
-   
+
 .. code:: yaml
 
     - with_cuts:
@@ -273,7 +275,7 @@ The order over which the looping is done is significant:
 
 both of these require the same convolutions to be computed. `Validphys` will
 realize this as long as both actions are iterated in the same way.
-However permuting `pdfs` and `theoryids` would result in the
+However, permuting `pdfs` and `theoryids` would result in the
 convolutions computed twice, since the code cannot prove that they
 would be identical.
 
@@ -285,7 +287,7 @@ Action arguments
 ----------------
 
 Action arguments are syntactic sugar for specifying arguments visible
-to a single action. They are subject to being verified by the action-defined 
+to a single action. They are subject to being verified by the action-defined
 checks. For example, in the PDF plotting example above:
 
 .. code:: yaml
@@ -336,7 +338,6 @@ that). For example:
 	theoryid:
 	    from_: theory
 
-
 	Q: 10
 
 	template: report.md
@@ -350,7 +351,7 @@ that). For example:
 	pdfs:
 	    - from_: fit
 	    - NNPDF31_nnlo_as_0118
-	    
+
 	data_inputs:
 	    from_: fit
 
@@ -385,12 +386,11 @@ this will do what you expect:
 	theoryid:
 	    from_: theory
 
-
 	Q: 10
 
 	description:
 	    from_: fit
-	    
+
 	template: report.md
 
 	normalize:
@@ -402,7 +402,7 @@ this will do what you expect:
 	pdfs:
 	    - from_: fit
 	    - NNPDF31_nlo_as_0118_hessian
-	    
+
 	dataset_inputs:
 	    from_: fit
 
@@ -429,7 +429,7 @@ the `fitcontext` rule. The above example can be simplified like this:
 
 	description:
 	    from_: fit
-	    
+
 	template: report.md
 
 	normalize:
@@ -445,7 +445,6 @@ the `fitcontext` rule. The above example can be simplified like this:
 	actions_:
 	  - fits::fitcontext report
 
-
 Note that one still needs to set manually other keys like `description` and `pdfs`.
 
 from_: Null
@@ -459,7 +458,6 @@ other items. Consider for example:
 
 	Base:
 	    fit: NNPDF31_nnlo_as_0118_1000
-
 
 	Pairs:
 	    fits:
@@ -488,7 +486,7 @@ other items. Consider for example:
 
 	description:
 	    from_: fit
-	    
+
 	meta:
 	    author: Zahari Kassabov
 	    keywords: [nn31final, gallery]
@@ -515,15 +513,14 @@ other items. Consider for example:
 	actions_:
 	  - report(main=True, mathjax=True)
 
-
 - At the beginning, we are printing the name of the fit contained in
-  `Base`.  
+  `Base`.
 - Then we are iterating over each of the `fits` (that we
   defined explicitly in the config), and using `fitcontext` to set some
-  variables inside the `with` block. 
-- In the inner block `{@with Pairs@}`, we are making use of the definition 
-  of `Pairs` to set the`fits` variable to contain two fits: the one defined in `Base` and the
-  one that changes with each iteration. 
+  variables inside the `with` block.
+- In the inner block `{@with Pairs@}`, we are making use of the definition
+  of `Pairs` to set the `fits` variable to contain two fits: the one defined in `Base` and the
+  one that changes with each iteration.
 - Because the actions `print_dataset_differences` and `print_different_cuts` are inside that
   `with` block, the value of the variable `fits` they see is precisely
   this pair, which supersedes our original definition, inside that
@@ -533,7 +530,7 @@ The `namespaces_` special key
 -----------------------------
 
 The `namespaces_` key can be used to form a list of namespaces in
-a similar way as with the `{@with@}` block in the report. A key difference 
+a similar way as with the `{@with@}` block in the report. A key difference
 is that the `namespaces_`
 block allows the list to be names, and in this way it can interact
 with providers expecting a complex input structure. The namespace
@@ -574,7 +571,7 @@ report.  Consider the following example:
 	   author: Zahari Kassabov
 	   title: Summary of the allminimum and discard for global and collider only fits
 	   keywords: [as]
-	   
+
 	template_text: |
 
 	    We compare the results of the determinations with `allminimum`
@@ -598,14 +595,14 @@ the actions `dataspecs_as_value_error_table` and
 `plot_dataspecs_as_value_error` expect as an input, starting from the
 product of each of the two elements in the `dataspec_input` list and
 its corresponding `badspecs` inner namespace, so that we have four
-namespaces in total, labeled "Global, discard", "Global, allminimum",
+namespaces in total, labelled "Global, discard", "Global, allminimum",
 "Collider, discard" and "Collider, allminimum". We are further
 applying production rules  to extract the
 information we need from the fit names and input files, producing the
 corresponding values inside the correct `dataspecs` entry.
 
 The whole list namespace is then passed as input to the actions (which
-are implemented using [the collect function]).
+are implemented using :ref:`the collect function <collect>`).
 
 This advanced functionality allows us to generate almost arbitrary
 inputs in a declarative way and using very few primitives, at the cost
@@ -639,6 +636,6 @@ In all plots the label will be used everywhere the PDF name needs to
 be displayed (like in legends and axes).
 
 The plotting labels for datasets are read from the `dataset_label` key
-in the plotting files. 
+in the plotting files.
 
 See :ref:`tut_plot_pdfs` for examples.
