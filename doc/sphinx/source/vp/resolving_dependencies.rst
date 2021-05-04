@@ -49,7 +49,7 @@ Then, an input card like the following:
 	  - plot1
 	  - plot2
 
-Would result in the following directed acyclic graph (or DAG):
+would result in the following directed acyclic graph (or DAG):
 
 .. image:: simplegraph.png
    :width: 300
@@ -58,8 +58,8 @@ The important point to note is that parameter names determine the
 dependencies by default.
 
 To address the inflexibility that results from the way we choose to
-automatically assign dependency, each action is assigned a unique
-namespace specification. This allows to
+automatically assign dependencies, each action is assigned a unique
+namespace specification. This allows one to
 specify actions with several different parameters. Let's make the
 example above more complicated:
 
@@ -105,7 +105,7 @@ three namespaces spanned by `scan_params`. The actions are in general
 *outermost one that satisfies all the dependencies* (there is also
 a unique private stack frame per action not shown in the figures
 above). That's why, in the graph above, `results` appears only once:
-Since it doesn't depend on the value of `parameter` (it doesn't appear
+since it doesn't depend on the value of `parameter` (it doesn't appear
 in its signature), it is computed in the root namespace, rather than
 once in each of the `scan_params` namespaces. If we instead had this:
 

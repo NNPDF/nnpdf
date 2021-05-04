@@ -4,15 +4,15 @@ Generating reports
 ===================
 
 This section explains how to generate `reports`. These are collections of
-plots, tables or other `validphys` outputs which can be uploaded to the 
+plots, tables or other `validphys` outputs which can be uploaded to the
 :ref:`vp server <upload>`.
 
-- Reports are implemented as an action of `reportengine`. 
+- Reports are implemented as an action of `reportengine`.
 - The `report` action takes a `template`
-  argument, corresponding to the filename of a template in the 
+  argument, corresponding to the filename of a template in the
   `Pandoc Markdown format <http://pandoc.org/MANUAL.html#pandocs-markdown>`_, with
-  the actions defined with a special syntax discussed below. 
-- The actions will be resolve as if they where directly specified in the
+  the actions defined with a special syntax discussed below.
+- The actions will be resolved as if they were directly specified in the
   configuration file and when all of them are completed, their value
   will be substituted in the template (the `jinja2` library is used for
   the intermediate rendering).
@@ -21,7 +21,7 @@ plots, tables or other `validphys` outputs which can be uploaded to the
 templates. There are currently **target** and **with**/**endwith**
 tags:
 
-1. Target tags 
+1. Target tags
 specify an action to be executed. The possible syntax is:
 
 .. code::
@@ -30,7 +30,7 @@ specify an action to be executed. The possible syntax is:
 
 where `[]` stands for optional syntax. A few conforming examples are:
 
-.. code:: 
+.. code::
 
 	{@ plot_fancy @}
 
@@ -39,18 +39,18 @@ where `[]` stands for optional syntax. A few conforming examples are:
 	{@plot_fancy(normalize_to=data)@}
 
 The different parts of the specification,
-naming mapping, lists of mappings (or special tags implementing that
+namely mappings, lists of mappings (or special tags implementing that
 behaviour) are separated with the `::` operator (resembling the C++
 scope resolution operator). Actions will be repeated if the
 specification results in multiple namespaces (e.g. one plot per pdf in
-the second example above). 
+the second example above).
 
-2. With/endwith tags 
+2. With/endwith tags
 repeat the content between the tags for each namespace in the
-specifications. Targets inside the block are repeated and searched
+specifications. Targets inside the block are repeated and searched for
 within each namespace. The syntax of the `with` tag is:
 
-.. code:: 
+.. code::
 
 	{@with spec@}
 
@@ -58,7 +58,7 @@ and it must be closed by an `endwith` tag
 
 .. code::
 
-{@endwith@}
+  {@endwith@}
 
 Like in the **target** tag, the spec is separated by `::`.
 
@@ -92,12 +92,12 @@ environment variable to `echo` (for example in the `.bashrc` file):
 2. Displaying math (the `mathjax` flag)
 
 Displaying math on browsers is painful and not without trouble. Pandoc
-tries to render the LaTeX math using utf8-characters. This doesn't
-require external dependencies and allows to work with the text
+tries to render the LaTeX math using utf8-characters. This does not
+require external dependencies and allows one to work with the text
 normally, but is extremely limited (little more than subindexes and
 greek letters).
 
-It is possible to set `mathjax:True` to use the
+It is possible to set `mathjax: True` to use the
 `Mathjax <https://www.mathjax.org/>`_ library. This supports many more
 symbols, but is rather slow and requires an external connection in
 order to render the math.
@@ -107,7 +107,7 @@ Example report template
 
 A template that could correspond to the example above is:
 
-.. code:: 
+.. code::
 
 	NNPDF Report
 	============
@@ -158,8 +158,8 @@ right below (it is obtained from the fit config file, as seen in the
 template). Then we are computing absolute and normalized PDF plots
 (`normalize` is an arbitrary string that is defined in the config file
 to normalize to the first PDF). We then plot the training and
-validation $\chi^2$ of each replica in the fit. Next we compute the
-$\chi^2$ for each experiment, and produce a separate table and heading
+validation :math:`\chi^2` of each replica in the fit. Next we compute the
+:math:`\chi^2` for each experiment, and produce a separate table and heading
 for each PDF in `pdfs` (note that LaTeX math syntax is allowed).
 Finally we produce, for each pdf and for each experiment, a set of
 data-theory comparison plots (which in turn are repeated for each
@@ -169,7 +169,7 @@ Customizing how things look in the report
 -----------------------------------------
 
 By default, the `str()` method will be applied to objects that appear
-in the report. If you want a custom behaviour, declare a declare
+in the report. If you want a custom behaviour, declare
 a custom `as_markdown` property for your objects. It should return
 a string in Pandoc Markdown describing your object. Raw HTML is
 also allowed (although that decreases the compatibility, e.g. if we

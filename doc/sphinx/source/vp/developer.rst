@@ -1,4 +1,4 @@
-.. _developer: 
+.. _developer:
 
 Developing `validphys`
 ======================
@@ -6,14 +6,14 @@ Developing `validphys`
 .. important::
 
 	You can find some general tips on developing with python in
-	:ref:`tools`. 
+	:ref:`pytools`.
 
 `validphys2` aims to be as simple to understand and extend as
 possible. The code is based on self-contained Python functions with
 a couple of magic decorators that make `reportengine` work as
 expected. Based on that, there is a large and ever growing set of
-tools to interact with NNPDF resources, that are spread across several
-modules in the codebase. 
+tools to interact with NNPDF resources, which are spread across several
+modules in the codebase.
 
 Key modules
 ------------
@@ -56,10 +56,9 @@ tools to manipulate and display them.
 
 - `validphys.checks`
 Contains `reportengine`-style checks that are used in several
-places. 
+places.
 
-
-These are used as a basis for doing everything else. For 
+These are used as a basis for doing everything else. For
 implementing new functionality see :ref:`tut_newaction`.
 
 Unfortunately, the objective of making `validphys` easy means that the
