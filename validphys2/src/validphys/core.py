@@ -529,13 +529,13 @@ class FKTableSpec(TupleComp):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
 class PositivitySetSpec(TupleComp):
-    def __init__(self, name ,commondataspec, fkspec, poslambda, thspec):
+    def __init__(self, name ,commondataspec, fkspec, maxlambda, thspec):
         self.name = name
         self.commondataspec = commondataspec
         self.fkspec = fkspec
-        self.poslambda = poslambda
+        self.maxlambda = maxlambda
         self.thspec = thspec
-        super().__init__(name, commondataspec, fkspec, poslambda, thspec)
+        super().__init__(name, commondataspec, fkspec, maxlambda, thspec)
 
 
 
@@ -546,9 +546,9 @@ class PositivitySetSpec(TupleComp):
     def load(self):
         cd = self.commondataspec.load()
         fk = self.fkspec.load()
-        return PositivitySet(cd, fk, self.poslambda)
+        return PositivitySet(cd, fk, self.maxlambda)
 
-    #__slots__ = ('__weakref__', 'commondataspec', 'fkspec', 'poslambda')
+    #__slots__ = ('__weakref__', 'commondataspec', 'fkspec', 'maxlambda')
 
 
 #We allow to expand the experiment as a list of datasets

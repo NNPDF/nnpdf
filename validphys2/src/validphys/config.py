@@ -802,23 +802,23 @@ class CoreConfig(configparser.Config):
     @element_of("posdatasets")
     def parse_posdataset(self, posset: dict, *, theoryid):
         """An observable used as positivity constrain in the fit.
-        It is a mapping containing 'dataset' and 'poslambda'."""
+        It is a mapping containing 'dataset' and 'maxlambda'."""
         bad_msg = (
             "posset must be a mapping with a name ('dataset') and "
-            "a float multiplier(poslambda)"
+            "a float multiplier(maxlambda)"
         )
 
         theoryno, theopath = theoryid
         try:
             name = posset["dataset"]
-            poslambda = float(posset["poslambda"])
+            maxlambda = float(posset["maxlambda"])
         except KeyError as e:
             raise ConfigError(bad_msg, e.args[0], posset.keys()) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
 
         try:
-            return self.loader.check_posset(theoryno, name, poslambda)
+            return self.loader.check_posset(theoryno, name, maxlambda)
         except FileNotFoundError as e:
             raise ConfigError(e) from e
 
@@ -833,23 +833,23 @@ class CoreConfig(configparser.Config):
     @element_of("integdatasets")
     def parse_integdataset(self, integset: dict, *, theoryid):
         """An observable corresponding to a PDF in the evolution basis,
-        used as integrability constrain in the fit. It is a mapping containing 'dataset' and 'poslambda'."""
+        used as integrability constrain in the fit. It is a mapping containing 'dataset' and 'maxlambda'."""
         bad_msg = (
             "integset must be a mapping with a name ('dataset') and "
-            "a float multiplier(poslambda)"
+            "a float multiplier(maxlambda)"
         )
 
         theoryno, theopath = theoryid
         try:
             name = integset["dataset"]
-            poslambda = float(integset["poslambda"])
+            maxlambda = float(integset["maxlambda"])
         except KeyError as e:
             raise ConfigError(bad_msg, e.args[0], integset.keys()) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
         # use the same underlying c++ code as the positivity observables
         try:
-            return self.loader.check_posset(theoryno, name, poslambda)
+            return self.loader.check_posset(theoryno, name, maxlambda)
         except FileNotFoundError as e:
             raise ConfigError(e) from e
 

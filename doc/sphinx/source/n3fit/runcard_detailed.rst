@@ -136,13 +136,13 @@ Positivity
 ----------
 
 In ``n3fit`` the behavior of the positivity observables has changed with respect to ``nnfit``.
-In ``nnfit`` the loss due to the positivity observable was multiplied by a ``poslambda`` for each observable, defined in the runcard as:
+In ``nnfit`` the loss due to the positivity observable was multiplied by a ``maxlambda`` for each observable, defined in the runcard as:
 
 .. code-block:: yaml
 
     positivity:
       posdatasets:
-        - {dataset: POSF2U, poslambda: 1e6}
+        - {dataset: POSF2U, maxlambda: 1e6}
 
 
 This behavior was found to be very inefficient for gradient descent based strategies and was exchanged for a dynamical Lagrange multiplier.
@@ -164,7 +164,7 @@ Note that by defining the positivity in this way all datasets will share the sam
 It is also possible to not define the positivity hyperparameters (or define them only partially).
 In this case ``n3fit`` will set the initial Lagrange multiplier as ``initial`` (default: 1.0)
 while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier 
-equals the ``poslambda`` defined for the dataset.
+equals the ``maxlambda`` defined for the dataset.
 
 Finally we have the positivity threshold, which is set to ``1e-6`` by default.
 During the fit, the positivity loss will be compared to this value. If it is above it,

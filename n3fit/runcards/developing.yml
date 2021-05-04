@@ -122,20 +122,21 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSF2DW,  poslambda: 1e6 }
-    - { dataset: POSDYU,   poslambda: 1e10 }
-    - { dataset: POSDYD,   poslambda: 1e10 }
-    - { dataset: POSDYS,   poslambda: 1e10 }
-    - { dataset: POSXDB, poslambda: 1e6}
-    - { dataset: POSXSQ, poslambda: 1e6}
-    - { dataset: POSXSB, poslambda: 1e6}
-    - { dataset: POSXGL, poslambda: 1e6}
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSF2DW,  maxlambda: 1e6 }
+    - { dataset: POSDYU,   maxlambda: 1e10 }
+    - { dataset: POSDYD,   maxlambda: 1e10 }
+    - { dataset: POSDYS,   maxlambda: 1e10 }
+    - {dataset: POSXDB, maxlambda: 1e6}
+    - {dataset: POSXSQ, maxlambda: 1e6}
+    - {dataset: POSXSB, maxlambda: 1e6}
+    - {dataset: POSXGL, maxlambda: 1e6}
+
 
 integrability:
  integdatasets:
-    - { dataset: INTEGXT8,   poslambda: 1e2 }
-    - { dataset: INTEGXT3,   poslambda: 1e2 }
+    - { dataset: INTEGXT8,   maxlambda: 1e2 }
+    - { dataset: INTEGXT3,   maxlambda: 1e2 }
 
 ############################################################
 debug: True

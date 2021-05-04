@@ -60,7 +60,7 @@ fitting:
     epochs: 900
     positivity:
       multiplier: 1.05 # When any of the multiplier and/or the initial is not set
-      initial: # the poslambda will be used instead to compute these values per dataset
+      initial: # the maxlambda will be used instead to compute these values per dataset
       threshold: 1e-5
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
@@ -91,13 +91,13 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSFLL,   poslambda: 1e4 }
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSFLL,   maxlambda: 1e4 }
 
 ############################################################
 integrability:
   integdatasets:
-    - {dataset: INTEGXT3,   poslambda: 1e2}
+    - {dataset: INTEGXT3,   maxlambda: 1e2}
 
 ############################################################
 debug: True

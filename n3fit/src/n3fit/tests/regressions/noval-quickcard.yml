@@ -91,7 +91,7 @@ stopping:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
 
 ############################################################
 lhagrid:

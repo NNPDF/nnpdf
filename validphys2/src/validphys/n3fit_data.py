@@ -464,7 +464,7 @@ def fitting_pos_dict(posdataset):
     Examples
     --------
     >>> from validphys.api import API
-    >>> posdataset = {"dataset": "POSF2U", "poslambda": 1e6}
+    >>> posdataset = {"dataset": "POSF2U", "maxlambda": 1e6}
     >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=162)
     >>> len(pos)
     9
@@ -492,7 +492,7 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "poslambda": 1e2}]
+    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
     >>> len(res), len(res[0])
     (1, 9)
