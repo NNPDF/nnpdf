@@ -74,17 +74,16 @@ It is possible to run a fit with no validation set by setting the fraction to ``
 Network Architecture
 --------------------
 There are different network architectures implemented in ``n3fit``.
-Which can be selected by changing the ``fitting:parameters::layer_type`` parameter in the runcard.
+Which can be selected by changing the ``parameters::layer_type`` parameter in the runcard.
 All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and ``initializer`` parameters.
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            nodes_per_layer: [5, 3, 8]
-            activation_per_layer: ['tanh', 'tanh', 'linear']
-            layer_type: 'dense_per_flavour'
-            initializer: 'glorot_normal'
+    parameters:
+        nodes_per_layer: [5, 3, 8]
+        activation_per_layer: ['tanh', 'tanh', 'linear']
+        layer_type: 'dense_per_flavour'
+        initializer: 'glorot_normal'
 
 - **One single network** (``layer_type: dense``):
 
@@ -117,12 +116,11 @@ of optimizer (and its corresponding options).
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            optimizer:
-              optimizer_name: 'Adadelta'
-              learning_rate: 1.0
-              clipnorm: 1.0
+    parameters:
+        optimizer:
+          optimizer_name: 'Adadelta'
+          learning_rate: 1.0
+          clipnorm: 1.0
 
 
 The full list of optimizers accepted by the ``n3fit`` and their arguments
@@ -152,12 +150,11 @@ the Neural Network as:
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            positivity:
-              threshold: 1e-6
-              multiplier: 1.05
-              initial: 14.5
+    parameters:
+        positivity:
+          threshold: 1e-6
+          multiplier: 1.05
+          initial: 14.5
               
 Note that by defining the positivity in this way all datasets will share the same Lagrange multiplier.
 
@@ -200,9 +197,8 @@ Threshold :math:`\chi2`
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            threshold_chi2: 4.0
+    parameters:
+        threshold_chi2: 4.0
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
@@ -266,9 +262,8 @@ Threshold :math:`\chi2`
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            threshold_chi2: 4.0
+    parameters:
+        threshold_chi2: 4.0
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
