@@ -1,0 +1,24 @@
+dataset_label: "ATLAS $W$ 8 TeV"
+
+x: k1
+x_label: '$\eta_\nu$'
+y_label: '$d\sigma/d\eta_\nu$ [pb/GeV]'
+y_scale: linear
+
+line_by:
+  - Boson
+
+normalize:
+    line_by: []
+    figure_by:
+        - Boson
+
+extra_labels:
+   Boson:  ['$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$',
+       '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^-$', '$W^-$',
+       '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$',
+       '$W^-$', '$W^-$']
+
+experiment: "ATLAS"
+
+nnpdf31_process: DY
