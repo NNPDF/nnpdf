@@ -41,7 +41,7 @@ We are saying that we do not want to use any cuts on the data
 The special `actions_` key is used to declare the actions we want to
 have executed. The syntax is the same as for the targets inside the
 report (see :ref:`tut_report`).  We want a data-theory comparison (``plot_fancy``;
-see :ref:`tut_datthcomp`) and to
+see :ref:`datthcomp`) and to
 plot the distribution of the chi² for each replica (``plot_chi2dist``).
 
 Once you have created a runcard (e.g. ``runcard.yaml``), simply run
