@@ -113,6 +113,7 @@
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
+#include "ATLAS_WMU_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -186,6 +187,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_WM_JET_8TEV_PTFilter());
   target.push_back(new ATLAS_WP_JET_8TEV_PTJFilter()); 
   target.push_back(new ATLAS_WM_JET_8TEV_PTJFilter());
+  target.push_back(new ATLAS_WMU_8TEVFilter());
   
   // ************************* BCDMS ******************************
 
