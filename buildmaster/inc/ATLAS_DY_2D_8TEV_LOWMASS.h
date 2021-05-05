@@ -10,10 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-class ATLAS_DY_2D_8TEVFilter: public CommonData
+class ATLAS_DY_2D_8TEV_LOWMASSFilter: public CommonData
 {
-public: ATLAS_DY_2D_8TEVFilter():
-  CommonData("ATLAS_DY_2D_8TEV") { ReadData(); }
+public: ATLAS_DY_2D_8TEV_LOWMASSFilter():
+  CommonData("ATLAS_DY_2D_8TEV_LOWMASS") { ReadData(); }
 
 private:
   void ReadData();

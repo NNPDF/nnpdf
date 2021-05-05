@@ -16,16 +16,16 @@ Measurements considered here are integrated over the angular variable.
 */
 
 
-#include "ATLAS_DY_2D_8TEV.h"
+#include "ATLAS_DY_2D_8TEV_LOWMASS.h"
 
-void ATLAS_DY_2D_8TEVFilter::ReadData()
+void ATLAS_DY_2D_8TEV_LOWMASSFilter::ReadData()
 {
   fstream f1;
 
   //Full breakdown of systematic ucnertainties
   stringstream datafile("");
   datafile << dataPath()
-	  << "rawdata/ATLAS_DY_2D_8TEV/HEPData-ins1630886-v3-Table_5.csv";
+	  << "rawdata/ATLAS_DY_2D_8TEV_LOWMASS/HEPData-ins1630886-v3-Table_5.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
