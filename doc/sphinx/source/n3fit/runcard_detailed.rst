@@ -220,10 +220,9 @@ In order to enable the TensorBoard callback in ``n3fit`` it is enough with addin
 
 .. code-block:: yaml
 
-    fitting:
-        tensorboard:
-            weight_freq: 100
-            profiling: True
+    tensorboard:
+        weight_freq: 100
+        profiling: True
 
 
 The ``weight_freq`` flag controls each how many epochs the weights of the NN are stored.

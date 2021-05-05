@@ -41,9 +41,6 @@ fitting:
   save: 'weights.h5'
 #   load: '/path/to/weights.h5/file'
 
-  tensorboard:
-    weight_freq: 100
-    profiling: False
 
   genrep   : True     # true = generate MC replicas, false = use real data
 
@@ -99,3 +96,7 @@ integrability:
 ############################################################
 debug: True
 maxcores: 8
+
+tensorboard:
+  weight_freq: 100
+  profiling: False
