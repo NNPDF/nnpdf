@@ -638,4 +638,4 @@ be displayed (like in legends and axes).
 The plotting labels for datasets are read from the `dataset_label` key
 in the plotting files.
 
-See :ref:`tut_plot_pdfs` for examples.
+See :ref:`pdfplots` for examples.

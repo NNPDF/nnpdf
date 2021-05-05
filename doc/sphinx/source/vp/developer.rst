@@ -59,7 +59,7 @@ Contains `reportengine`-style checks that are used in several
 places.
 
 These are used as a basis for doing everything else. For
-implementing new functionality see :ref:`tut_newaction`.
+implementing new functionality see :ref:`addvpplots`.
 
 Unfortunately, the objective of making `validphys` easy means that the
 complexity of getting things to just work is translated into
