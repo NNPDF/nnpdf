@@ -44,11 +44,7 @@ fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3
-  save: False
-  savefile: 'weights.hd5'
-  load: False
-  loadfile: 'weights.hd5'
-  plot: False
+  genrep: true
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [15, 10, 8]

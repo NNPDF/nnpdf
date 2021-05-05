@@ -278,9 +278,8 @@ Save and load weights of the model
 
 .. code-block:: yaml
 
-    fitting:
-        save: "weights.h5"
-        load: "weights.h5"
+    save: "weights.h5"
+    load: "weights.h5"
 
 - ``save``: saves the weights of the PDF model in the selected file in the replica folder.
 - ``load``: loads the weights of the PDF model from the selected file.
