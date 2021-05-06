@@ -95,40 +95,41 @@ theory:
   theoryid: 53        # database id
 
 ############################################################
-fitting:
+trvlseed: 1727532335
+nnseed: 1737785873
+mcseed: 2123509817
+genrep: true          # true = generate MC replicas, false = use real data
 
-  trvlseed: 1727532335
-  nnseed: 1737785873
-  mcseed: 2123509817
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [18, 24, 36, 8]
+  activation_per_layer: [tanh, sigmoid, sigmoid, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 100.0
+    learning_rate: 1.0
+    optimizer_name: Adadelta
+  epochs: 45000
+  positivity:
+    initial: 338
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.15
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+
+fitting:
   save: false
 
   seed: 1881658207              # set the seed for the random generator
-  genrep: true          # true = generate MC replicas, false = use real data
   rngalgo: 0        # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants: 80      # Number of mutants for replica
   paramtype: NN
   nnodes: [2, 5, 3, 1]
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [18, 24, 36, 8]
-    activation_per_layer: [tanh, sigmoid, sigmoid, linear]
-    initializer: glorot_normal
-    optimizer:
-      clipnorm: 100.0
-      learning_rate: 1.0
-      optimizer_name: Adadelta
-    epochs: 45000
-    positivity:
-      initial: 338
-      multiplier:
-    integrability:
-      initial: 10
-      multiplier:
-    stopping_patience: 0.15
-    layer_type: dense
-    dropout: 0.0
-    threshold_chi2: 3.5
 
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)

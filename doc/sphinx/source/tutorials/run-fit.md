@@ -39,11 +39,10 @@ See, as an example, the following self explanatory runcard fragment:
 ```yaml
 # runcard example
 ...
-fitting:
-  trvlseed: 1
-  nnseed: 2
-  mcseed: 3
-  genrep: true
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+genrep: true
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]

@@ -37,32 +37,31 @@ theory:
   theoryid: 162        # database id
 
 ############################################################
+genrep: True    # on = generate MC replicas, False = use real data
+trvlseed: 3
+nnseed: 2
+mcseed: 1  
+
+load: "weights.h5"
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.00001
+    clipnorm: 1.0
+  epochs: 1000
+  positivity:
+    multiplier: 1.05
+    initial: 1.5
+  stopping_patience: 0.30 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.0
+  threshold_chi2: 10.0
+
 fitting:
-  genrep: True    # on = generate MC replicas, False = use real data
-  trvlseed: 3
-  nnseed: 2
-  mcseed: 1  
-
-#   save: "weights.h5"
-  load: "weights.h5"
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [15, 10, 8]
-    activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
-    initializer: 'glorot_normal'
-    optimizer:
-      optimizer_name: 'RMSprop'
-      learning_rate: 0.00001
-      clipnorm: 1.0
-    epochs: 1000
-    positivity:
-      multiplier: 1.05
-      initial: 1.5
-    stopping_patience: 0.30 # percentage of the number of epochs
-    layer_type: 'dense'
-    dropout: 0.0
-    threshold_chi2: 10.0
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
@@ -84,33 +83,10 @@ fitting:
       - { fl: cp,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.12,1.19], largex: [1.83,6.70] }
 
 ############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta   : 0         # Delta for look-back stopping
-  mingen    : 0         # Minimum number of generations
-  window    : 500       # Window for moving average
-  minchi2   : 3.5       # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear    : 200       # Smear for stopping
-  deltasm   : 200       # Delta smear for stopping
-  rv        : 2         # Ratio for validation stopping
-  rt        : 0.5       # Ratio for training stopping
-  epsilon   : 1e-6      # Gradient epsilon  
-
-############################################################
 positivity:
   posdatasets:
     - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
     - { dataset: POSDYC    , maxlambda: 1e5 }
-
-############################################################
-lhagrid:
-  nx  : 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq  : 50
-  qmax: 1e5
 
 ############################################################
 closuretest:

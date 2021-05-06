@@ -312,7 +312,7 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
     replica = range(1, num_fitted_replicas + 1)
 
     trvlseed, mcseed, genrep = [
-        fit.as_input().get("fitting").get(i)
+        fit.as_input().get(i)
         for i in ["trvlseed", "mcseed", "genrep"]
     ]
 

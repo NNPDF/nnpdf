@@ -52,13 +52,12 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 5.0
 
 ############################################################
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+genrep: True     # true = generate MC replicas, false = use real data
+
 fitting:
-  trvlseed: 1
-  nnseed: 2
-  mcseed: 3
-
-  genrep   : True     # true = generate MC replicas, false = use real data
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)

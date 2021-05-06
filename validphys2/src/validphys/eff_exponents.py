@@ -530,17 +530,21 @@ def iterated_runcard_yaml(
     # Update seeds with valid pseudorandom unsigned long int
     # Check if seeds exist especially since extra seeds needed in n3fit vs nnfit
     # Start with seeds in "fitting" section of runcard
-    fitting_data = filtermap["fitting"]
     fitting_seeds = ["seed", "trvlseed", "nnseed", "mcseed"]
-
+    fitting_data = filtermap.get("fitting")
+    maxint = np.iinfo('int32').max
     for seed in fitting_seeds:
-        if seed in fitting_data:
-            fitting_data[seed] = random.randrange(0, 2**32)
+        if seed in filtermap:
+            filtermap[seed] = random.randrange(0, maxint)
+        elif fitting_data is not None and seed in fitting_data:
+            #BCH
+            # For older runcards the seeds are inside the `fitting` namespace
+            fitting_data[seed] = random.randrange(0, maxint)
 
     # Next "closuretest" section of runcard
     if "closuretest" in filtermap:
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
-            closuretest_data["filterseed"] = random.randrange(0, 2**32)
+            closuretest_data["filterseed"] = random.randrange(0, maxint)
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)

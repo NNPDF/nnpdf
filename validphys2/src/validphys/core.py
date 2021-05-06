@@ -630,6 +630,15 @@ class FitSpec(TupleComp):
             dataset_inputs = experiments_to_dataset_inputs(d['experiments'])
             d['dataset_inputs'] = dataset_inputs
 
+        #BCH
+        # backwards compatibility hack for runcards with the 'fitting' namespace
+        # if a variable already exists outside 'fitting' it takes precedence
+        fitting = d.get("fitting")
+        if fitting is not None:
+            to_take_out = ["genrep", "trvlseed", "mcseed", "nnseed", "parameters"]
+            for vari in to_take_out:
+                if vari in fitting and vari not in d:
+                    d[vari] = fitting[vari]
         return d
 
     def __str__(self):
