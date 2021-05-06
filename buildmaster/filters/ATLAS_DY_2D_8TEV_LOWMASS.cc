@@ -12,7 +12,8 @@ pairs, between 46 and 200 GeV using a sample of 20.2  fb−1 of pp collisions
 at a centre-of-mass energy of √s=8 TeV. The data are presented in bins of 
 invariant mass, absolute dilepton rapidity and the angular variable cosθ∗
 between the outgoing lepton and the incoming quark in the Collins–Soper frame.
-Measurements considered here are integrated over the angular variable.
+Measurements considered here are integrated over the angular variable and are
+taken from Table 5 of the Hepdata entry.
 */
 
 
@@ -68,7 +69,7 @@ void ATLAS_DY_2D_8TEV_LOWMASSFilter::ReadData()
       fData[i] *= 1000.;
       fStat[i] *= 1000.;
 
-      //Systematic ucnertainties
+      //Systematic uncertainties
       for(int j=0; j<fNSys-1; j++)
 	{
 	  lstream >> comma >> fSys[i][j].add
