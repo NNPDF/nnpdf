@@ -136,6 +136,13 @@
   reason: Avoid the region where EWK corrections are important.
   rule: "p_T > 30"
 
+- dataset: ATLAS_DY_2D_8TEV_LOWMASS
+  reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
+  local_variables:
+    M: sqrt(M2)
+    max_M: 116.0
+  rule: M <= max_M
+  
 - dataset: CMSDY2D11
   reason: |
     Removes data points for which the NNLO K-factors are very large and
