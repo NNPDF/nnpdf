@@ -26,7 +26,7 @@ API_example.ipynb		:ref:`vpapi`			Jupyter notebook example with API
 closure_templates/    		:ref:`tut_closure`  		Running closure tests
 cuts_options.yaml             	N/A          			Shows results for different cuts policites
 dataspecs.yaml			N/A				Shows how to use ``dataspecs``
-data_theory_comparison.yaml	:ref:`tut_datthcomp`		Data theory comparison
+data_theory_comparison.yaml	:ref:`datthcomp`		Data theory comparison
 export_data.yaml		N/A				Makes tables of experimental data and covariance matrices
 generate_a_report.yaml		:ref:`tut_report`		Shows how to generate a report
 kiplot.yaml			N/A				Plot kinematic coverage of data

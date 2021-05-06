@@ -21,8 +21,11 @@ def test_next_runcard():
     l = Loader()
     ite1_fit = l.check_fit(FIT)
     # The runcard of a 2nd iteration fit I ran manually
-    ite2_runcard = l.check_fit(FIT_ITERATED).as_input()
-    ite2_runcard.pop("pdf")  # Removing the PDF key, it's an artefact of as_input
+    # We load it using the context manager because at_input has been modified
+    # to load various keys that are not present in the actual runcard for
+    # backwards compatibility
+    with open(l.check_fit(FIT_ITERATED).path / "filter.yml", "r") as f:
+        ite2_runcard = yaml.safe_load(f)
 
     predicted_ite2_runcard = yaml.safe_load(
         API.iterated_runcard_yaml(fit=FIT)

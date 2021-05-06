@@ -9,8 +9,9 @@ from reportengine.checks import make_argcheck, check
 log = logging.getLogger(__name__)
 
 
-def check_correct_theory_combination_internal(theoryids,
-                                               fivetheories:(str, type(None)) = None):
+def check_correct_theory_combination_internal(theoryids, 
+                                              point_prescription:(str, type(None)) = None,
+                                              fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
@@ -20,8 +21,15 @@ def check_correct_theory_combination_internal(theoryids,
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l == 3:
-        correct_xifs = [1.0, 2.0, 0.5]
-        correct_xirs = [1.0, 2.0, 0.5]
+        if point_prescription == "3f point":
+            correct_xifs = [1.0, 2.0, 0.5]
+            correct_xirs = [1.0, 1.0, 1.0]
+        elif point_prescription == "3r point":
+            correct_xifs = [1.0, 1.0, 1.0]
+            correct_xirs = [1.0, 2.0, 0.5]
+        else:
+            correct_xifs = [1.0, 2.0, 0.5]
+            correct_xirs = [1.0, 2.0, 0.5]
     elif l == 5:
         check(
             fivetheories is not None,
