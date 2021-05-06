@@ -22,15 +22,6 @@ from validphys.core import PDF
 from validphys.pdfbases import ALL_FLAVOURS, parse_flarr
 
 
-def _uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))/x
-
-def _dvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=1) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
-
-def _svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
-
 def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
 
@@ -66,12 +57,47 @@ def _make_momentum_fraction_integrand(fldict):
 
     return f
 
+def _make_pdf_integrand(fldict):
+    """Make a suitable integrand function, which takes x to be integrated over
+    and fixed loaded PDF, replica number and Q that computes the integrand of
+    the PDFs based on ``fldict``.
+
+    The keys of ``fldict`` are free form values corresponfing to PDG parton ids
+    (that end up being passed :py:func:`validphys.pdfbases.parse_flarr` and
+    then to LHAPDF) and the values are multipliers for each parton. The
+    integrand is the sum of ``x*flavour(x)*multiplier`` for all the given
+    entries.
+
+    Parameters
+    ----------
+    fldict : Mapping[int, int]
+        A map from PDG parton id to multipliers
+
+    Returns
+    -------
+    f : Callable
+        An integrand function.
+    """
+    # Do this outsde to aid integration time
+    fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
+
+    def f(x, lpdf, irep, Q):
+        return (
+            sum(
+                multiplier * lpdf.xfxQ(x, Q=Q, n=irep, fl=flavour)
+                for flavour, multiplier in fldict.items()
+            )
+            / x
+        )
+
+    return f
+
 
 KNOWN_SUM_RULES = {
     "momentum": _momentum_sum_rule_integrand,
-    "uvalence": _uvalence_sum_rule_integrand,
-    "dvalence": _dvalence_sum_rule_integrand,
-    "svalence": _svalence_sum_rule_integrand,
+    "uvalence": _make_pdf_integrand({"u": 1, "ubar": -1}),
+    "dvalence": _make_pdf_integrand({"d": 1, "dbar": -1}),
+    "svalence": _make_pdf_integrand({"s": 1, "sbar": -1}),
 }
 
 UNKNOWN_SUM_RULES = {
@@ -83,12 +109,9 @@ UNKNOWN_SUM_RULES = {
     "sbar momentum fraction": _make_momentum_fraction_integrand({"sbar": 1}),
     "cp momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": 1}),
     "g momentum fraction": _make_momentum_fraction_integrand({"g": 1}),
-    "xT3": _make_momentum_fraction_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
-    "xT8": _make_momentum_fraction_integrand(
+    "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
+    "T8": _make_pdf_integrand(
         {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}
-    ),
-    "svalence momentum fraction": _make_momentum_fraction_integrand(
-        {"s": 1, "sbar": -1}
     ),
 }
 
