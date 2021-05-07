@@ -805,7 +805,7 @@ class CoreConfig(configparser.Config):
         It is a mapping containing 'dataset' and 'maxlambda'."""
         bad_msg = (
             "posset must be a mapping with a name ('dataset') and "
-            "a float multiplier(maxlambda)"
+            "a float multiplier (maxlambda)"
         )
 
         theoryno, theopath = theoryid
@@ -813,7 +813,7 @@ class CoreConfig(configparser.Config):
             name = posset["dataset"]
             maxlambda = float(posset["maxlambda"])
         except KeyError as e:
-            raise ConfigError(bad_msg, e.args[0], posset.keys()) from e
+            raise ConfigError(bad_msg, posset.keys(), e.args[0]) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
 
@@ -844,7 +844,7 @@ class CoreConfig(configparser.Config):
             name = integset["dataset"]
             maxlambda = float(integset["maxlambda"])
         except KeyError as e:
-            raise ConfigError(bad_msg, e.args[0], integset.keys()) from e
+            raise ConfigError(bad_msg, integset.keys(), e.args[0]) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
         # use the same underlying c++ code as the positivity observables
