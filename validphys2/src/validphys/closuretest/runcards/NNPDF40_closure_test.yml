@@ -122,15 +122,6 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
 
 
 fitting:
-  save: false
-
-  seed: 1881658207              # set the seed for the random generator
-  rngalgo: 0        # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
-  fitmethod: NGA    # Minimization algorithm
-  nmutants: 80      # Number of mutants for replica
-  paramtype: NN
-  nnodes: [2, 5, 3, 1]
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
@@ -145,20 +136,6 @@ fitting:
   - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.4284, 0.8596], largex: [1.765, 3.921]}
   - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7236, 1.0], largex: [1.516, 3.649]}
   - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.014, 1.137], largex: [1.43, 3.752]}
-
-############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta: 0            # Delta for look-back stopping
-  mingen: 0             # Minimum number of generations
-  window: 500           # Window for moving average
-  minchi2: 3.5          # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear: 200           # Smear for stopping
-  deltasm: 200          # Delta smear for stopping
-  rv: 2                 # Ratio for validation stopping
-  rt: 0.5               # Ratio for training stopping
-  epsilon: 1e-6         # Gradient epsilon
 
 ############################################################
 positivity:
@@ -194,15 +171,6 @@ closuretest:
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
   printpdf4gen: false # To print info on PDFs during minimization
-
-############################################################
-lhagrid:
-  nx: 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq: 50
-  qmax: 1e5
 
 ############################################################
 debug: false

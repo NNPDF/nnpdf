@@ -37,7 +37,6 @@ dataset_inputs:
 - { dataset: H1HERAF2B, frac: 1.0}
 - { dataset: ZEUSHERAF2B, frac: 1.0}
 
-
 ############################################################
 datacuts:
   t0pdfset     : NNPDF31_nnlo_as_0118 # PDF set to generate t0 covmat
@@ -55,37 +54,36 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
+  theoryid: 162        # database id
 
 ############################################################
+trvlseed: 1
+nnseed: 2
+mcseed: 3  
+save: False
+load: False
+
+genrep   : True     # true = generate MC replicas, false = use real data
+diagonal_basis: True
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [35, 25, 8]
+  activation_per_layer: ['tanh', 'tanh', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    learning_rate: 1.0
+    optimizer_name: 'Adadelta'
+  epochs: 4000
+  positivity:
+    multiplier: 1.09
+    initial: 10.0
+  stopping_patience: 0.30 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.0
+  regularizer: l1_l2
+  regularizer_args: {l1: 0.0, l2: 1.0}
+
 fitting:
-
-  trvlseed: 1
-  nnseed: 2
-  mcseed: 3  
-  save: False
-  load: False
-
-  genrep   : True     # true = generate MC replicas, false = use real data
-  diagonal_basis: True
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [35, 25, 8]
-    activation_per_layer: ['tanh', 'tanh', 'linear']
-    initializer: 'glorot_normal'
-    optimizer:
-      learning_rate: 1.0
-      optimizer_name: 'Adadelta'
-    epochs: 4000
-    positivity:
-      multiplier: 1.09
-      initial: 10.0
-    stopping_patience: 0.30 # percentage of the number of epochs
-    layer_type: 'dense'
-    dropout: 0.0
-    regularizer: l1_l2
-    regularizer_args: {l1: 0.0, l2: 1.0}
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)

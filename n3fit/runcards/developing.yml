@@ -63,34 +63,31 @@ theory:
   theoryid: 200        # database id
 
 ############################################################
-fitting:
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+load: 'developing_weights.h5'
+genrep: true    # true = generate MC replicas, false = use real data
 
-  trvlseed: 1
-  nnseed: 2
-  mcseed: 3
-  load: 'developing_weights.h5'
-
-  genrep   : true    # true = generate MC replicas, false = use real data
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [50, 35, 25, 8]
-    activation_per_layer: ['tanh', 'sigmoid', 'sigmoid', 'linear']
-    initializer: 'glorot_normal'
-    optimizer:
-        optimizer_name: 'Adadelta'
-        learning_rate: 1.0
-        clipnorm: 0.1
-    epochs: 2000
-    ntegrability:
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [50, 35, 25, 8]
+  activation_per_layer: ['tanh', 'sigmoid', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+      optimizer_name: 'Adadelta'
+      learning_rate: 1.0
+  epochs: 4000
+  ntegrability:
+    initial:
+    multiplier: 1.03
+  positivity:
       initial:
-      multiplier: 1.03
-    positivity:
-        initial:
-        multiplier: 1.10
-    stopping_patience: 0.1 # percentage of the number of epochs
-    layer_type: 'dense'
-    dropout: 0.001
+      multiplier: 1.10
+  stopping_patience: 0.1 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.001
 
+fitting:
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
@@ -131,7 +128,6 @@ positivity:
     - {dataset: POSXSQ, maxlambda: 1e6}
     - {dataset: POSXSB, maxlambda: 1e6}
     - {dataset: POSXGL, maxlambda: 1e6}
-
 
 integrability:
  integdatasets:
