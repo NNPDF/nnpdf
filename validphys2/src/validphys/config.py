@@ -799,28 +799,33 @@ class CoreConfig(configparser.Config):
         else:
             return None
 
+    def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
+        """ Lagrange multiplier constraints are mappings
+        containing a `dataset` and a `maxlambda` argument which
+        defines the maximum value allowed for the multiplier """
+        bad_msg = (
+            f"{kind} must be a mapping with a name ('dataset') and a float multiplier (maxlambda)"
+        )
+        theoryno, _ = theoryid
+        lambda_key = "maxlambda"
+        #BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
+        if "poslambda" in setdict and "maxlambda" not in setdict:
+            log.warning("The `poslambda` argument has been deprecated in favour of `maxlambda`")
+            lambda_key = "poslambda"
+        try:
+            name = setdict["dataset"]
+            maxlambda = float(setdict[lambda_key])
+        except KeyError as e:
+            raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e
+        except ValueError as e:
+            raise ConfigError(bad_msg) from e
+        return self.loader.check_posset(theoryno, name, maxlambda)
+
     @element_of("posdatasets")
     def parse_posdataset(self, posset: dict, *, theoryid):
         """An observable used as positivity constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        bad_msg = (
-            "posset must be a mapping with a name ('dataset') and "
-            "a float multiplier (maxlambda)"
-        )
-
-        theoryno, theopath = theoryid
-        try:
-            name = posset["dataset"]
-            maxlambda = float(posset["maxlambda"])
-        except KeyError as e:
-            raise ConfigError(bad_msg, posset.keys(), e.args[0]) from e
-        except ValueError as e:
-            raise ConfigError(bad_msg) from e
-
-        try:
-            return self.loader.check_posset(theoryno, name, maxlambda)
-        except FileNotFoundError as e:
-            raise ConfigError(e) from e
+        return self._parse_lagrange_multiplier("posset", theoryid, posset)
 
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
@@ -833,25 +838,9 @@ class CoreConfig(configparser.Config):
     @element_of("integdatasets")
     def parse_integdataset(self, integset: dict, *, theoryid):
         """An observable corresponding to a PDF in the evolution basis,
-        used as integrability constrain in the fit. It is a mapping containing 'dataset' and 'maxlambda'."""
-        bad_msg = (
-            "integset must be a mapping with a name ('dataset') and "
-            "a float multiplier(maxlambda)"
-        )
-
-        theoryno, theopath = theoryid
-        try:
-            name = integset["dataset"]
-            maxlambda = float(integset["maxlambda"])
-        except KeyError as e:
-            raise ConfigError(bad_msg, integset.keys(), e.args[0]) from e
-        except ValueError as e:
-            raise ConfigError(bad_msg) from e
-        # use the same underlying c++ code as the positivity observables
-        try:
-            return self.loader.check_posset(theoryno, name, maxlambda)
-        except FileNotFoundError as e:
-            raise ConfigError(e) from e
+        used as integrability constrain in the fit.
+        It is a mapping containing 'dataset' and 'maxlambda'."""
+        return self._parse_lagrange_multiplier("posset", theoryid, integset)
 
     def produce_integdatasets(self, integrability):
         if not isinstance(integrability, dict) or "integdatasets" not in integrability:
