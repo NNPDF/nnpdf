@@ -566,7 +566,7 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
         kwargs['s'] += 10
 
 @figure
-def plot_groups_chi2_spider(fits, fits_groups_chi2, 
+def plot_fits_chi2_spider(fits, fits_groups_chi2, 
                             fits_groups_data, processed_metadata_group):
     """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
@@ -588,7 +588,7 @@ def plot_groups_chi2_spider(fits, fits_groups_chi2,
     return fig
 
 @figure
-def plot_groups_phi_spider(fits, fits_groups_data, 
+def plot_fits_phi_spider(fits, fits_groups_data, 
                             fits_groups_data_phi, processed_metadata_group):
    """Like plot_groups_chi2_spider but for phi."""
 

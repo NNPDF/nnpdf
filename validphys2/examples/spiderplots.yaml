@@ -8,27 +8,6 @@ theoryid: 52
 fits:
     - {id: "NNPDF31_nlo_as_0118", label: NLO}
     - {id: "NNPDF31_nnlo_as_0118_1000", label: NNLO}
-    
-      
-dataset_inputs:   # Whichever ones you want to plot
-     - {dataset: NMCPD}
-     - {dataset: NMC}
-     - {dataset: SLACP}
-     - {dataset: SLACD}
-     - {dataset: BCDMSP}
-     - {dataset: BCDMSD}   
-     - {dataset: HERACOMBNCEM}
-     - {dataset: HERACOMBNCEP460}
-     - {dataset: HERACOMBNCEP575}
-     - {dataset: HERACOMBNCEP820}
-     - {dataset: HERACOMBNCEP920}
-     - {dataset: HERAF2CHARM}     
-     - {dataset: CHORUSNU}
-     - {dataset: CHORUSNB}
-     - {dataset: NTVNUDMN}
-     - {dataset: NTVNBDMN}
-     - {dataset: HERACOMBCCEM}
-     - {dataset: HERACOMBCCEP}
 
 use_cuts: "internal"
 
@@ -36,11 +15,11 @@ template_text: |
     
     # Spider plot for χ2
     
-    {@plot_groups_chi2_spider@}
+    {@plot_fits_chi2_spider@}
     
     # Spider plot for ϕ
     
-    {@plot_groups_phi_spider@}
+    {@plot_fits_phi_spider@}
 
 actions_:
   - report(main=true)
