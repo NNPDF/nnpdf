@@ -17,18 +17,18 @@ dataset_inputs:   # Whichever ones you want to plot
      - {dataset: SLACD}
      - {dataset: BCDMSP}
      - {dataset: BCDMSD}   
-     - {dataset: HERACOMBNCEM, frac: 0.5}
-     - {dataset: HERACOMBNCEP460, frac: 0.5}
-     - {dataset: HERACOMBNCEP575, frac: 0.5}
-     - {dataset: HERACOMBNCEP820, frac: 0.5}
-     - {dataset: HERACOMBNCEP920, frac: 0.5}
-     - {dataset: HERAF2CHARM, frac: 0.5}     
-     - {dataset: CHORUSNU, frac: 0.5}
-     - {dataset: CHORUSNB, frac: 0.5}
-     - {dataset: NTVNUDMN, frac: 0.5}
-     - {dataset: NTVNBDMN, frac: 0.5}
-     - {dataset: HERACOMBCCEM, frac: 0.5}
-     - {dataset: HERACOMBCCEP, frac: 0.5}
+     - {dataset: HERACOMBNCEM}
+     - {dataset: HERACOMBNCEP460}
+     - {dataset: HERACOMBNCEP575}
+     - {dataset: HERACOMBNCEP820}
+     - {dataset: HERACOMBNCEP920}
+     - {dataset: HERAF2CHARM}     
+     - {dataset: CHORUSNU}
+     - {dataset: CHORUSNB}
+     - {dataset: NTVNUDMN}
+     - {dataset: NTVNBDMN}
+     - {dataset: HERACOMBCCEM}
+     - {dataset: HERACOMBCCEP}
 
 use_cuts: "internal"
 
@@ -42,9 +42,5 @@ template_text: |
     
     {@plot_groups_phi_spider@}
 
-
 actions_:
   - report(main=true)
-
-
-
