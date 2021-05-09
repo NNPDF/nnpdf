@@ -10,7 +10,6 @@ This project contains the following components:
 - nnpdfcpp: programs used in the NNPDF fitting framework. 
 - validphys2: the fit result analysis framework.
 
-
 **Table of Contents**
   * [Installation](#installation)
     * [Binary packages](#binary-packages)
