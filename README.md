@@ -2,10 +2,14 @@
 
 The main repository of the NNPDF framework. 
 
+For comprehensive documentation, including installation instructions and 
+tutorials see [here](https://docs.nnpdf.science/).
+
 This project contains the following components:
 - libnnpdf: core NNPDF utility library.
 - nnpdfcpp: programs used in the NNPDF fitting framework. 
 - validphys2: the fit result analysis framework.
+
 
 **Table of Contents**
   * [Installation](#installation)
@@ -59,7 +63,7 @@ If you intend to work on the code, then building from source is the
 recommended installation procedure. However, you can still use conda
 to get all the dependecies and setup the validphys and C++ development
 environment. Further information is available in the
-[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
+[vp-guide](https://docs.nnpdf.science/vp/index.html).
 
 For precise version requirements, see
 [the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
@@ -120,7 +124,7 @@ applying post selection criteria. This will produce a set of
 install the fitted set with `vp-get fit <fit_name>`.
 
 6. Analyze results with `validphys`, see the
-[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
+[vp-guide](https://docs.nnpdf.science/vp/index.html).
 Consider using the `vp-comparefits` tool.
 
 ## NNPDF paths and URLS
