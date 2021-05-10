@@ -29,7 +29,7 @@ def _is_floatable(num):
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
-    """ Check that non-optional parameters are defined and are not empty """
+    """Check that non-optional parameters are defined and are not empty"""
     for param_name in NN_PARAMETERS:
         if param_name in parameters:
             val = parameters[param_name]
@@ -41,8 +41,9 @@ def check_existing_parameters(parameters):
     if "pos_initial" in parameters or "pos_multiplier" in parameters:
         raise CheckError(
             "The definition of the positivity parameters is deprecated, please "
-            "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
-            "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml"
+            "use instead:\nparameters:\n  positivity\n"
+            "    multiplier: x\n    initial: y\n"
+            "as can be seen in the example runcard: n3fit/runcards/Basic_runcard.yml"
         )
 
 
@@ -366,3 +367,20 @@ def can_run_multiple_replicas(replicas, genrep, parameters, hyperopt, parallel_m
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
     if rp > 1:
         raise CheckError("Parallel mode cannot be used together with multireplica runs")
+
+
+@make_argcheck
+def check_deprecated_options(fitting):
+    """Checks whether the runcard is using deprecated options"""
+    options_outside = ["trvlseed", "nnseed", "mcseed", "save", "load", "genrep", "parameters"]
+    for option in options_outside:
+        if option in fitting:
+            raise CheckError(
+                f"The key '{option}' is a top-level key and not part of the 'fitting' namespace"
+            )
+    if "epochs" in fitting:
+        raise CheckError("The key 'epoch' should only appear as part of the 'parameters' namespace")
+    nnfit_options = ["seed", "rnalgo", "fitmethod", "nmutants", "paramtype", "nnodes"]
+    for option in nnfit_options:
+        if option in fitting:
+            log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
