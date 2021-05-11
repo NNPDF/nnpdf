@@ -11,3 +11,7 @@ scale_variations_for:
       (2, 0.5): 175
       (2, 1): 177
       (2, 2): 180
+      # alpha_s 3pt variations
+      0.116: 77
+      0.118: 53
+      0.120: 80
