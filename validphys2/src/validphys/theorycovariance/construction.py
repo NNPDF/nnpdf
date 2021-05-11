@@ -246,6 +246,12 @@ def covmap(combine_by_type, dataset_names):
         start += process_info.sizes[dataset]
     return mapping
 
+def covmat_alphas(name1, name2, deltas1, deltas2):
+    """Returns the covariance sub-matrix for 3-pt alpha_s
+    variation given two dataset names and collections of the
+    alpha_s shifts"""
+    s = 0.5*sum(np.outer(d, d) for d in deltas1)
+    return s
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
@@ -403,6 +409,8 @@ def covs_pt_prescrip(
             central2, *others2 = process_info.theory[name2]
             deltas2 = list((other - central2 for other in others2))
             if l == 3:
+                if point_prescription == "alpha_s":
+                    s = covmat_alphas(name1, name2, deltas1, deltas2)
                 if point_prescription == "3f point":
                     s = covmat_3fpt(name1, name2, deltas1, deltas2)
                 elif point_prescription == "3r point":
