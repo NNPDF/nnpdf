@@ -52,6 +52,9 @@ def numpy_check(backend_op, python_op, mode="same"):
     elif mode == "four":
         tensors = [T1, T2, T1, T1]
         arrays = [ARR1, ARR2, ARR1, ARR1]
+    elif mode == "twenty":
+        tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1, T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
+        arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
     elif mode == "single":
         tensors = [T1]
         arrays = [ARR1]
@@ -82,7 +85,11 @@ def test_c_to_py_fun():
     # SMN
     op_smn = op.c_to_py_fun("SMN")
     reference = lambda x, y, z, d: (x + y) / (z + d)
-    numpy_check(op_smn, reference, "four")
+    numpy_c
+    # COM
+    op_com = op.c_to_py_fun("COM")
+    reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t : (x + y + z + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
+    numpy_check(op_com, reference, "twenty")heck(op_com, reference, "twenty")
 
 
 # Tests operations

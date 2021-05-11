@@ -77,6 +77,17 @@ namespace NNPDF
     return;
   }
 
+  // Comnination operation
+  static void OpCom(int const& Nvals, std::vector<real*> const& obs, real*out)
+  {
+    if (obs.size()!=20)
+     throw LengthError("OpCom","number of FK grids is incorrect");
+
+    for (int i=0; i<Nvals; i++)
+      out[i] = (obs[0][i]+obs[1][i]+obs[2][i]+obs[3][i]+obs[4][i]+obs[5][i]+obs[6][i]+obs[7][i]+obs[8][i]+obs[9][i])/(obs[10][i]+obs[11][i]+obs[12][i]+obs[13][i]+obs[14][i]+obs[15][i]+obs[16][i]+obs[17][i]+obs[18][i]+obs[19][i]);
+
+    return;
+  }
 
   // FKSet
   FKSet::FKSet(SigmaOp op, std::vector<FKTable*> const& fktabs):
@@ -196,6 +207,9 @@ namespace NNPDF
 
     if (op.compare("SMN") == 0)
       return OpSmn;
+
+    if (op.compare("COM") == 0)
+      return OpCom;
 
     if (op.compare("NULL") == 0)
       return OpNull;

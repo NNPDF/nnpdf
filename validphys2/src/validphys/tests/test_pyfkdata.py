@@ -57,6 +57,7 @@ def test_predictions():
         l.check_dataset('D0WEASY', theoryid=THEORYID),  # op: ASY
         l.check_dataset('CMSWCHARMTOT', theoryid=THEORYID),  # op: ADD
         l.check_dataset('ATLASWPT31PB', theoryid=THEORYID),  # op: SMN
+        l.check_dataset('DYE906R', theoryid=THEORYID),
     ]
     for ds in dss:
         preds = predictions(ds, pdf)

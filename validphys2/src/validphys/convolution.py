@@ -83,6 +83,8 @@ def _asy(a, b):
 def _smn(a, b, c, d):
     return (a + b) / (c + d)
 
+def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
+    return (a + b + c + d + e + f + g + h + i + j) / ( k + l + m + n + o + p + q + r + s + t)
 
 def _id(a):
     return a
@@ -93,6 +95,7 @@ OP = {
     "ASY": _asy,
     "ADD": operator.add,
     "SMN": _smn,
+    "COM": _com,
     "NULL": _id,
 }
 
