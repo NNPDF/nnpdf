@@ -1448,7 +1448,7 @@ class CoreConfig(configparser.Config):
         for scalevarsfor_dict in scalevarsfor_list:
             if scalevarsfor_dict["theoryid"] == int(th):
                 theoryid_variations = scalevarsfor_dict
-
+                
         # Find theoryids for given point prescription for given central theoryid
         try:
             thids = [theoryid_variations["variations"][scale] for scale in scales]
