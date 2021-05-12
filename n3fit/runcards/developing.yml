@@ -79,6 +79,7 @@ fitting:
     optimizer:
         optimizer_name: 'Adadelta'
         learning_rate: 1.0
+        clipnorm: 0.1
     epochs: 4000
     ntegrability:
       initial:
