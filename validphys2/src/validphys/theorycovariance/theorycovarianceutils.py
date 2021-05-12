@@ -21,7 +21,7 @@ def check_correct_theory_combination_internal(theoryids,
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l == 3:
-        if point_prescription = "alpha_s":
+        if point_prescription == "alpha_s":
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0]
         if point_prescription == "3f point":
