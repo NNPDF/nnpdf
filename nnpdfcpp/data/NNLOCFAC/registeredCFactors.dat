@@ -236,6 +236,8 @@ QCD D0ZRAP 				                D0ZRAP
 QCD D0ZRAP_TOT 						D0ZRAP 				            MZ
 QCD DYE605 				                DYE605
 QCD DYE886P 				                DYE886P
+QCD DYE886R_P						DYE886R
+QCD DYE886R_D						DYE886R
 QCD LHCBW36PB 				                LHCBW36PB
 QCD LHCBWMU1FB 				                LHCBWMU1FB
 QCD LHCBWZMU7TEV 			                LHCBWZMU7TEV
