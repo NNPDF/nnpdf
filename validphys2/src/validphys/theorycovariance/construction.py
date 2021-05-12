@@ -180,7 +180,11 @@ commondata_procs = collect("commondata", ["group_dataset_inputs_by_process", "da
 def dataset_names(commondata_procs):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
-    names = [commondata.name for commondata in commondata_procs]
+    names = []
+    for commondata in commondata_procs:
+        name = commondata.name
+        if name not in names:
+            names.append(name)
     return names
 
 
