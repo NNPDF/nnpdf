@@ -24,7 +24,7 @@ def check_correct_theory_combination_internal(theoryids,
         if point_prescription == "alpha_s":
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0]
-        if point_prescription == "3f point":
+        elif point_prescription == "3f point":
             correct_xifs = [1.0, 2.0, 0.5]
             correct_xirs = [1.0, 1.0, 1.0]
         elif point_prescription == "3r point":

@@ -14,6 +14,6 @@ scale_variations_for:
   - theoryid: 53
     variations:
       # alpha_s 3pt variations
-      (0.116): 77
+      (0.116): 85
       (0.118): 53
-      (0.120): 80
+      (0.120): 88
