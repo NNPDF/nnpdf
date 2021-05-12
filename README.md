@@ -95,7 +95,7 @@ selected, while the content of `nnpdfcpp/data` folder will be copied to the
 ### nnfit runcard
 
 The runcard is written in YAML. The runcard is the unique identifier of a fit, it is also the
-only required configuration input required for many programs of this repository.
+only required configuration input required for many programs of this repository. 
 
 ### Workflow
 
