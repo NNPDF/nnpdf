@@ -171,9 +171,8 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
        - sbar momentum fraction
        - cp momentum fraction
        - g momentum fraction
-       - xT3
-       - xT8
-       - svalence momentum fraction
+       - T3
+       - T8
     """
     lpdf = pdf.load()
     return _sum_rules(UNKNOWN_SUM_RULES, lpdf, Q)
