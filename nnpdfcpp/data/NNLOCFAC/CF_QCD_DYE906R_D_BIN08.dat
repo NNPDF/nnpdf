@@ -1,0 +1,14 @@
+ *******************************************************************************
+ SetName: DYE906R
+ Author: Emanuele R. Nocera <enocera@ed.ac.uk>
+ CodesUsed: Vrap v0.9 (modified to handleisoscalar target
+ TheoryInput: muR and muF equal to M_ll,as(MZ) = 0.118
+ PDFset: NNPDF3.1 NNLO
+ Warnings: 
+ *******************************************************************************
+1.31452  0.00000
+1.31507  0.00000
+1.31515  0.00000
+1.35838  0.00000
+1.41214  0.00000
+1.49008  0.00000
