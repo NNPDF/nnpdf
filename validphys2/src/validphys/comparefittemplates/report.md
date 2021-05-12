@@ -38,7 +38,15 @@ Sum rules
 ---------
 {@with pdfs@}
 ### {@pdf@}
+
+#### Known sum rules
+
 {@sum_rules_table@}
+
+#### Unknown sum rules
+
+{@unknown_sum_rules_table@}
+
 {@endwith@}
 
 PDF plots
