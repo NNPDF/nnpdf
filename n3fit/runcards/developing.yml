@@ -10,61 +10,42 @@ description: NNPDF3.1 NNLO fitted charm global dataset
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-# Fixed target DIS
-- {dataset: NMCPD, frac: 0.75 }
-- {dataset: NMC,   frac: 0.75  }
-- {dataset: SLACP, frac: 0.75}
-- {dataset: SLACD, frac: 0.75}
-- {dataset: BCDMSP, frac: 0.75}
-- {dataset: BCDMSD, frac: 0.75}
-- {dataset: CHORUSNUPb, frac: 0.75}
-- {dataset: CHORUSNBPb, frac: 0.75}
-- {dataset: NTVNUDMNFe, frac: 0.75, cfac: [MAS]}
-- {dataset: NTVNBDMNFe, frac: 0.75, cfac: [MAS]}
+- {dataset: NMCPD_dw_ite, frac: 0.75}
+- {dataset: NMC, frac: 0.75}
+- {dataset: SLACP_dwsh, frac: 0.75}
+- {dataset: SLACD_dw_ite, frac: 0.75}
+- {dataset: BCDMSD_dw_ite, frac: 0.75}
+- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
+- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
 - {dataset: HERACOMBNCEM, frac: 0.75}
-- {dataset: HERACOMBNCEP460, frac: 0.75}
 - {dataset: HERACOMBNCEP575, frac: 0.75}
-- {dataset: HERACOMBNCEP820, frac: 0.75}
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}
-- {dataset: DYE886R, frac: 1.0}
-- {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
-- {dataset: DYE605, frac: 0.75, cfac: [QCD]}
-- {dataset: CDFZRAP, frac: 1.0, cfac: [QCD]}
-- {dataset: D0ZRAP_40, frac: 1.0, cfac: [QCD]}
-- {dataset: D0WMASY, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD]}
-
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM, QCD]}
-
-- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
+- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
-- {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASPHT15, frac: 0.75, cfac: [QCD, EWK]}
-- {dataset: CMSWEASY840PB, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSWMASY47FB, frac: 1.0, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        
+- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSWMU8TEV, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
-- {dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBZEE2FB_40, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
-- {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
-
-
-
-
+- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       
+- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}   
 
 ############################################################
 datacuts:
-  t0pdfset     : NNPDF31_nnlo_as_0118 # PDF set to generate t0 covmat
+  t0pdfset: 210219-02-rs-nnpdf40-1000 # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -79,7 +60,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
+  theoryid: 200        # database id
 
 ############################################################
 fitting:
@@ -113,21 +94,29 @@ fitting:
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
   # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
-  fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
+  fitbasis: EVOL # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
       # pos: True for NN squared
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
-      - { fl: sng, pos: False, mutsize: [15], mutprob: [0.05], smallx: [1.04,1.20], largex: [1.45,2.64] }
-      - { fl: g,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.82,1.31], largex: [0.20,6.17] }
-      - { fl: v,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.51,0.71], largex: [1.24,2.80] }
-      - { fl: v3,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.23,0.63], largex: [1.02,3.14] }
-      - { fl: v8,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.53,0.75], largex: [0.70,3.31] }
-      - { fl: t3,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [-0.45,1.41], largex: [1.78,3.21] }
-      - { fl: t8,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.49,1.32], largex: [1.42,3.13] }
-      - { fl: cp,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [-0.07,1.13], largex: [1.73,7.37] }
+  - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      1.093, 1.121], largex: [1.486, 3.287]}
+  - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      0.8329, 1.071], largex: [3.084, 6.767]}
+  - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      0.5202, 0.7431], largex: [1.556, 3.639]}
+  - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      0.1205, 0.4839], largex: [1.736, 3.622]}
+  - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      0.5864, 0.7987], largex: [1.559, 3.569]}
+  - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      -0.5019, 1.126], largex: [1.754, 3.479]}
+  - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      0.6305, 0.8806], largex: [1.544, 3.481]}
+  - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
+      1.087, 1.139], largex: [1.48, 3.365]}
 
 ############################################################
 positivity:
@@ -137,11 +126,10 @@ positivity:
     - { dataset: POSDYU,   poslambda: 1e10 }
     - { dataset: POSDYD,   poslambda: 1e10 }
     - { dataset: POSDYS,   poslambda: 1e10 }
-    - {dataset: POSXDB, poslambda: 1e6}
-    - {dataset: POSXSQ, poslambda: 1e6}
-    - {dataset: POSXSB, poslambda: 1e6}
-    - {dataset: POSXGL, poslambda: 1e6}
-
+    - { dataset: POSXDB, poslambda: 1e6}
+    - { dataset: POSXSQ, poslambda: 1e6}
+    - { dataset: POSXSB, poslambda: 1e6}
+    - { dataset: POSXGL, poslambda: 1e6}
 
 integrability:
  integdatasets:
