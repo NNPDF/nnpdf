@@ -76,7 +76,8 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   optimizer:
       optimizer_name: 'Adadelta'
       learning_rate: 1.0
-  epochs: 4000
+      clipnorm: 0.1
+  epochs: 2000
   ntegrability:
     initial:
     multiplier: 1.03
