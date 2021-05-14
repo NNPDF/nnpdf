@@ -42,6 +42,7 @@ NLODatasets: &NLODatasets
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WMU_8TEV, frac: 0.75, cfac: []}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: []}             
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: []} 
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM]}       
 - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}         
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}
@@ -129,6 +130,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_WMU_8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}             
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
 # - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
 # - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO

@@ -41,6 +41,7 @@ dataset_inputs:
 - {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
 - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
