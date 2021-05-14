@@ -825,7 +825,7 @@ class CoreConfig(configparser.Config):
     def parse_posdataset(self, posset: dict, *, theoryid):
         """An observable used as positivity constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("posset", theoryid, posset)
+        return self._parse_lagrange_multiplier("posdataset", theoryid, posset)
 
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
@@ -840,7 +840,7 @@ class CoreConfig(configparser.Config):
         """An observable corresponding to a PDF in the evolution basis,
         used as integrability constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("posset", theoryid, integset)
+        return self._parse_lagrange_multiplier("integdataset", theoryid, integset)
 
     def produce_integdatasets(self, integrability):
         if not isinstance(integrability, dict) or "integdatasets" not in integrability:
