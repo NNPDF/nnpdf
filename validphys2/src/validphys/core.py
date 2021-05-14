@@ -548,7 +548,6 @@ class PositivitySetSpec(TupleComp):
         fk = self.fkspec.load()
         return PositivitySet(cd, fk, self.maxlambda)
 
-    #__slots__ = ('__weakref__', 'commondataspec', 'fkspec', 'maxlambda')
 
 
 #We allow to expand the experiment as a list of datasets
