@@ -214,77 +214,76 @@ theory:
   theoryid: 213     # database id
 
 ############################################################
+
+trvlseed: 1520585894
+nnseed: 2647869818
+mcseed: 1101490705
+save: false
+genrep: true   # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [25, 20, 8]
+  activation_per_layer: [tanh, tanh, square]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 17000
+  positivity:
+    initial: 184.8
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  #    threshold_chi2: 3.5
+
 fitting:
   sum_rules: MSR
-
-  trvlseed: 1520585894
-  nnseed: 2647869818
-  mcseed: 1101490705
-  save: false
-  genrep: true   # true = generate MC replicas, false = use real data
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [25, 20, 8]
-    activation_per_layer: [tanh, tanh, square]
-    initializer: glorot_normal
-    optimizer:
-      clipnorm: 6.073e-6
-      learning_rate: 2.621e-3
-      optimizer_name: Nadam
-    epochs: 17000
-    positivity:
-      initial: 184.8
-      multiplier:
-    integrability:
-      initial: 10
-      multiplier:
-    stopping_patience: 0.1
-    layer_type: dense
-    dropout: 0.0
-    #    threshold_chi2: 3.5
-
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
   # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: FLAVOUR  # EVOL (7), EVOLQED (8), etc.
   basis:
-  - {fl: u, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [1.655, 4.386]}
-  - {fl: ubar, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [2.766, 11.61]}
-  - {fl: d, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [3.48, 6.71]}
-  - {fl: dbar, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [4.274, 13.33]}
-  - {fl: s, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [4.861, 9.974]}
-  - {fl: sbar, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [4.648, 12.43]}
-  - {fl: c, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [2.878, 7.57]}
-  - {fl: g, pos: false, mutsize: [15], trainable: false, mutprob: [0.05], smallx: [1,1], largex: [3.453, 13.24]}
+  - {fl: u, trainable: false, smallx: [1,1], largex: [1.655, 4.386]}
+  - {fl: ubar, trainable: false, smallx: [1,1], largex: [2.766, 11.61]}
+  - {fl: d, trainable: false, smallx: [1,1], largex: [3.48, 6.71]}
+  - {fl: dbar, trainable: false, smallx: [1,1], largex: [4.274, 13.33]}
+  - {fl: s, trainable: false, smallx: [1,1], largex: [4.861, 9.974]}
+  - {fl: sbar, trainable: false, smallx: [1,1], largex: [4.648, 12.43]}
+  - {fl: c, trainable: false, smallx: [1,1], largex: [2.878, 7.57]}
+  - {fl: g, trainable: false, smallx: [1,1], largex: [3.453, 13.24]}
 
 ############################################################
 positivity:
   posdatasets:
-  - {dataset: POSF2U, poslambda: 1e6}        # Positivity Lagrange Multiplier
-  - {dataset: POSF2DW, poslambda: 1e6}
-  - {dataset: POSF2S, poslambda: 1e6}
-#  - {dataset: POSFLL, poslambda: 1e6}
-  - {dataset: POSDYU, poslambda: 1e10}
-  - {dataset: POSDYD, poslambda: 1e10}
-  - {dataset: POSDYS, poslambda: 1e10}
-#  - {dataset: POSF2C, poslambda: 1e6}
-  - {dataset: POSXUQ, poslambda: 1e6}        # Positivity of MSbar PDFs
-  - {dataset: POSXUB, poslambda: 1e6}
-  - {dataset: POSXDQ, poslambda: 1e6}
-  - {dataset: POSXDB, poslambda: 1e6}
-  - {dataset: POSXSQ, poslambda: 1e6}
-  - {dataset: POSXSB, poslambda: 1e6}
-  - {dataset: POSXGL, poslambda: 1e6}
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSF2DW, maxlambda: 1e6}
+  - {dataset: POSF2S, maxlambda: 1e6}
+#  - {dataset: POSFLL, maxlambda: 1e6}
+  - {dataset: POSDYU, maxlambda: 1e10}
+  - {dataset: POSDYD, maxlambda: 1e10}
+  - {dataset: POSDYS, maxlambda: 1e10}
+#  - {dataset: POSF2C, maxlambda: 1e6}
+  - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: POSXUB, maxlambda: 1e6}
+  - {dataset: POSXDQ, maxlambda: 1e6}
+  - {dataset: POSXDB, maxlambda: 1e6}
+  - {dataset: POSXSQ, maxlambda: 1e6}
+  - {dataset: POSXSB, maxlambda: 1e6}
+  - {dataset: POSXGL, maxlambda: 1e6}
 ############################################################
 integrability:
   integdatasets:
-  - {dataset: INTEGXT8, poslambda: 1e2}
-  - {dataset: INTEGXT3_543, poslambda: 1e2}
-  - {dataset: INTEGXV_543, poslambda: 1e2}
-  - {dataset: INTEGXV3_543, poslambda: 1e2}
-  - {dataset: INTEGXV8_543, poslambda: 1e2}
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3_543, maxlambda: 1e2}
+  - {dataset: INTEGXV_543, maxlambda: 1e2}
+  - {dataset: INTEGXV3_543, maxlambda: 1e2}
+  - {dataset: INTEGXV8_543, maxlambda: 1e2}
 
 ############################################################
 debug: false
