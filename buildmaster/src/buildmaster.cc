@@ -113,8 +113,8 @@
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
-#include "ATLAS_WMU_8TEV.h"
 #include "ATLAS_DY_2D_8TEV_LOWMASS.h"
+#include "ATLAS_WMU_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
