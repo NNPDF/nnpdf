@@ -378,7 +378,7 @@ def check_deprecated_options(fitting):
     for option in options_outside:
         if option in fitting:
             raise CheckError(
-                f"The key '{option}' is a top-level key and not part of the 'fitting' namespace"
+                f"The key '{option}' should be top-level key and not part of the 'fitting' namespace"
             )
     if "epochs" in fitting:
         raise CheckError("The key 'epoch' should only appear as part of the 'parameters' namespace")
