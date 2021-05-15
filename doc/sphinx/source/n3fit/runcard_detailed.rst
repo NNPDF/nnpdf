@@ -1,3 +1,5 @@
+.. _runcard-detailed:
+
 ================================
 ``n3fit`` runcard detailed guide
 ================================

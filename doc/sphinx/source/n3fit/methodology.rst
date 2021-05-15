@@ -1,3 +1,5 @@
+.. _methodology:
+
 Methodology overview
 ====================
 

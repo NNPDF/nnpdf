@@ -98,7 +98,7 @@ the git repository in
 [n3fit/runcards](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
 
 For a more detailed explanation on the parameters that are specific for the
-`n3fit` runcard see the [detailed guide](runcard_detailed).
+`n3fit` runcard see the [detailed guide](runcard-detailed).
 
 Running the fitting code
 ------------------------
