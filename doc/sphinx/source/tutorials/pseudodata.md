@@ -1,6 +1,6 @@
-# Obtaining the pseudodata used by an N3FIT fit
+# Obtaining the pseudodata used by an n3fit fit
 
-Suppose one has obtained a fit using the N3FIT framework and wants to do some analysis that requires
+Suppose one has obtained a fit using the n3fit framework and wants to do some analysis that requires
 knowing exactly the data that the neural networks saw during the fitting procedure. Thankfully, this
 information is reproducible due to the various seeds in the fit runcard.
 
