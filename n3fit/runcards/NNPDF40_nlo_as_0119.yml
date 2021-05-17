@@ -1,5 +1,5 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 description: "NNPDF4.0 NLO global, deuteron and nuclear uncertainties. Runcard for the alpha_s variation NLO fit, pending iteration. alphas=0.119"
 
