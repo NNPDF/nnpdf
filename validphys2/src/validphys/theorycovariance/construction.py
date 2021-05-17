@@ -177,11 +177,10 @@ def total_covmat_procs(procs_results_theory, fivetheories: (str, type(None)) = N
 commondata_procs = collect("commondata", ["group_dataset_inputs_by_process", "data"])
 
 
-def dataset_names(commondata_procs):
+def dataset_names(data_input):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
-    names = [commondata.name for commondata in commondata_procs]
-    return names
+    return [el.name for el in data_input]
 
 
 ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes"))
