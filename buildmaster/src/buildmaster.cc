@@ -279,6 +279,16 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new DYE866R_dw_iteFilter());
   target.push_back(new DYE866R_sh_iteFilter());
   target.push_back(new DYE906RFilter());
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN01"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN02"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN03"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN04"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN05"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN06"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN07"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN08"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN09"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN10"));
   
   // ************************* HERA-I Combined ******************************
 

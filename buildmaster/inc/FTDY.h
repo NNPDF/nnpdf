@@ -111,3 +111,12 @@ public: DYE906RFilter():
 private:
   void ReadData();
 };
+
+class DYE906R_BINFilter: public CommonData
+{
+public: DYE906R_BINFilter(std::string setname):
+  CommonData(setname) { ReadData(); }
+
+private:
+  void ReadData();
+};

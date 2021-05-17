@@ -1223,12 +1223,14 @@ void DYE906RFilter::ReadData()
     
     lstream >> dum >> dum;
     lstream >> xt >> xb >> M >> pT;
-    xF = xb - xt;
-    tau = M*M/s;
-    pt = pT/M;
+    //xF = xb - xt;
+    //tau = M*M/s;
+    //pt = pT/M;
 
     //hadronic rapidity, Eq.(4.6) https://arxiv.org/pdf/1009.5691.pdf
-    Y = 0.5*log( (sqrt(xF*xF + 4*tau*(1+pt*pt)) + xF)/(sqrt(xF*xF + 4*tau*(1+pt*pt)) - xF) );
+    //Y = 0.5*log( (sqrt(xF*xF + 4*tau*(1+pt*pt)) + xF)/(sqrt(xF*xF + 4*tau*(1+pt*pt)) - xF) );
+    Y = 0.5*log(xb/xt);
+
     
     fKin1[i] = Y;
     fKin2[i] = M*M;
@@ -1287,4 +1289,37 @@ void DYE906RFilter::ReadData()
   rf.close();
   rCorr.close();
 
+}
+
+//Auxiliary files for each sub-bin
+void DYE906R_BINFilter::ReadData()
+{
+
+  //Opening file
+  fstream f1;
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/DYE906R/" + fSetName + ".txt";
+  f1.open(datafile.str().c_str(), ios::in);
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+  
+  string line;
+
+  for(int i=0; i<fNData; i++)
+    {
+      double xb, xt;
+      const double sqrts=15.06; // GeV
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> xb >> xt;
+
+      fKin1[i] = 0.5*log(xb/xt);    // Y
+      
+      fKin2[i] = xb*xt*sqrts*sqrts; // M2
+      fKin3[i] = sqrts;             // sqrt(s)
+      fData[i] = 0.;
+      fStat[i] = 0.;
+    }
 }
