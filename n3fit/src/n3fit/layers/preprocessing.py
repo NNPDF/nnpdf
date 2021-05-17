@@ -2,8 +2,6 @@ from n3fit.backends import MetaLayer
 from n3fit.backends import constraints
 from n3fit.backends import operations as op
 
-BASIS_SIZE = 8
-
 
 class Preprocessing(MetaLayer):
     """
@@ -22,8 +20,6 @@ class Preprocessing(MetaLayer):
 
     Parameters
     ----------
-        output_dim: int
-            size of the fitbasis
         flav_info: list
             list of dicts containing the information about the fitting of the preprocessing
             This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
@@ -40,22 +36,20 @@ class Preprocessing(MetaLayer):
 
     def __init__(
         self,
-        output_dim=BASIS_SIZE,
         flav_info=None,
         seed=0,
         initializer="random_uniform",
         large_x=True,
         **kwargs,
     ):
-        self.output_dim = output_dim
         if flav_info is None:
-            flav_info = []
+            raise ValueError("Trying to instantiate a preprocessing with no basis information")
         self.flav_info = flav_info
         self.seed = seed
+        self.output_dim = len(flav_info)
         self.initializer = initializer
         self.large_x = large_x
         self.kernel = []
-        # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
 
     def generate_weight(self, weight_name, kind, dictionary, set_to_zero=False):

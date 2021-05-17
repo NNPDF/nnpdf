@@ -10,9 +10,10 @@ description: Basic runcard
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: SLACP_dwsh, frac: 0.5}
-- { dataset: NMCPD_dw, frac: 0.5 }
-- { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
+- { dataset: SLACP, frac: 0.5}
+- { dataset: NMC,   frac: 0.5  }
+- { dataset: NMCPD, frac: 0.5 }
+- { dataset: CMSJETS11, frac: 0.5, sys: 10 }
 
 ############################################################
 datacuts:
@@ -31,21 +32,16 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 200       # database id
+  theoryid: 162        # database id
 
 ############################################################
 fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3
-  save: 'weights.h5'
-#   load: '/path/to/weights.h5/file'
+  sum_rules: "All"
 
-  tensorboard:
-    weight_freq: 100
-    profiling: False
-
-  genrep   : True     # true = generate MC replicas, false = use real data
+  genrep: False     # true = generate MC replicas, false = use real data
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [15, 10, 8]
@@ -92,10 +88,6 @@ positivity:
     - { dataset: POSFLL,   poslambda: 1e4 }
 
 ############################################################
-integrability:
-  integdatasets:
-    - {dataset: INTEGXT3,   poslambda: 1e2}
-
-############################################################
-debug: True
+debug: False
 maxcores: 8
+parallel_models: 4

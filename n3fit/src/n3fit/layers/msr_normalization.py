@@ -36,7 +36,7 @@ class MSR_Normalization(MetaLayer):
             op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
         )
 
-        super(MSR_Normalization, self).__init__(**kwargs, name="normalizer")
+        super().__init__(**kwargs, name="normalizer")
 
     def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:
@@ -44,18 +44,20 @@ class MSR_Normalization(MetaLayer):
         A_v  = A_v15 = A_v24 = A_v35 = 3/V
         A_v3 = 1/V_3
         A_v8 = 3/V_8
+
+        Note that both the input and the output are in the 14-flavours fk-basis
         """
         y = op.flatten(pdf_integrated)
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[0]) / y[1]] * len(GLUON_IDX)
+            n_ag = [(1.0 - y[GLUON_IDX[0][0]-1]) / y[GLUON_IDX[0][0]]] * len(GLUON_IDX)
             norm_constants += n_ag
 
         if self._vsr_enabled:
-            n_av = [3.0 / y[2]] * len(V_IDX)
-            n_av3 = [1.0 / y[3]] * len(V3_IDX)
-            n_av8 = [3.0 / y[4]] * len(V8_IDX)
+            n_av = [3.0 / y[V_IDX[0][0]]] * len(V_IDX)
+            n_av3 = [1.0 / y[V3_IDX[0][0]]] * len(V3_IDX)
+            n_av8 = [3.0 / y[V8_IDX[0][0]]] * len(V8_IDX)
             norm_constants += n_av + n_av3 + n_av8
 
         return self._out_scatter(norm_constants)
