@@ -106,17 +106,17 @@ Running the fitting code
 After successfully installing the ``n3fit`` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
-1. Prepare the fit: `vp-setupfit runcard.yml`. This command will generate a
+1. Prepare the fit: ``vp-setupfit runcard.yml``. This command will generate a
     folder with the same name as the runcard (minus the file extension) in the
     current directory, which will contain a copy of the original YAML runcard.
     The required resources (such as the theory and t0 PDF set) will be
     downloaded automatically. Alternatively they can be obtained with the
-    `vp-get` tool.
+    ``vp-get`` tool.
 
     ```eval_rst
     .. note::
        This step is not strictly necessary when producing a standard fit with
-       n3fit - notice that in the next step the first command-line argument is
+       ``n3fit`` - notice that in the next step the first command-line argument is
        the runcard itself and not a folder, unlike with the legacy code
        :ref:`nnfit <nnfit-usage>` - but it is required by :ref:`validphys <vp-index>`
        and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
@@ -125,54 +125,54 @@ following the points presented above you can proceed with a fit.
     ```
 
 2. The ``n3fit`` program takes a ``runcard.yml`` as input and a replica number, e.g.
-```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
+```n3fit runcard.yml replica``` where ``replica`` goes from 1-n where n is the
 maximum number of desired replicas. Note that if you desire, for example, a 100
 replica fit you should launch more than 100 replicas (e.g. 130) because not
-all of the replicas will pass the checks in `postfit`
+all of the replicas will pass the checks in ``postfit``
 ([see here](postfit-selection-criteria) for more info).
 
-3. Wait until you have fit results. Then run the `evolven3fit` program once to
-evolve all replicas using DGLAP. The arguments are `evolven3fit runcard_folder
-number_of_replicas`. Remember to use the total number of replicas run (130 in the
+3. Wait until you have fit results. Then run the ``evolven3fit`` program once to
+evolve all replicas using DGLAP. The arguments are ``evolven3fit runcard_folder
+number_of_replicas``. Remember to use the total number of replicas run (130 in the
 above example), rather than the number you desire in the final fit.
 
-4. Wait until you have results, then use `postfit number_of_replicas
-runcard_folder` to finalize the PDF set by applying post selection criteria.
-This will produce a set of `number_of_replicas + 1` replicas. This time the
+4. Wait until you have results, then use ``postfit number_of_replicas
+runcard_folder`` to finalize the PDF set by applying post selection criteria.
+This will produce a set of ``number_of_replicas + 1`` replicas. This time the
 number of replicas should be that which you desire in the final fit (100 in the
 above example). Note that the
-standard behaviour of `postfit` can be modified by using various flags.
+standard behaviour of ``postfit`` can be modified by using various flags.
 More information can be found at [Processing a fit](postfit).
 
-It is possible to run more than one replica in one single run of `n3fit` by
-using the ``--replica_range`` option. Running `n3fit` in this way increases the
+It is possible to run more than one replica in one single run of ``n3fit`` by
+using the ``--replica_range`` option. Running ``n3fit`` in this way increases the
 memory usage as all replicas need to be stored in memory but decreases disk load
 as the reading of the datasets and fktables is only done once for all replicas.
 
 
 If you are planning to perform a hyperparameter scan just perform exactly the
-same steps by adding the `--hyperopt number_of_trials` argument to `n3fit`,
-where `number_of_trials` is the maximum allowed value of trials required by the
+same steps by adding the ``--hyperopt number_of_trials`` argument to ``n3fit``,
+where ``number_of_trials`` is the maximum allowed value of trials required by the
 fit. Usually when running hyperparameter scan we switch-off the MC replica
 generation so different replicas will correspond to different initial points for
-the scan, this approach provides faster results. We provide the `vp-hyperoptplot`
+the scan, this approach provides faster results. We provide the ``vp-hyperoptplot``
 script to analyse the output of the hyperparameter scan.
 
 
 Output of the fit
 -----------------
-In the same fashion as `nnfit`, every time a replica is finalized a folder is
+In the same fashion as ``nnfit``, every time a replica is finalized a folder is
 created in ```runcard/nnfit/replica_$replica```. This folder contains several
-files which follow the same structure as `nnfit`:
+files which follow the same structure as ``nnfit``:
 
-- `runcard.exportgrid`: a file containing the PDF grid.
-- `chi2exps.log`: a log file with the χ² of the training every 100 epochs.
-- `runcard.preproc`: Empty file.
-- `runcard.fitinfo`: Includes information about the fit. The first line
+- ``runcard.exportgrid``: a file containing the PDF grid.
+- ``chi2exps.log``: a log file with the χ² of the training every 100 epochs.
+- ``runcard.preproc``: Empty file.
+- ``runcard.fitinfo``: Includes information about the fit. The first line
 contains, in this order, the number of epochs, the validation χ², training
 χ², experimental χ² and the state of the positivity. The second line the
 arclength for each flavour.
-- `runcard.time`: Includes the total time the fit took in CPU time and walltime.
+- ``runcard.time``: Includes the total time the fit took in CPU time and walltime.
 The times are separated by the time of the actual fit and the time of the data
 load.
 
@@ -189,17 +189,17 @@ Upload and analyse the fit
 --------------------------
 After obtaining the fit you can proceed with the fit upload and analisis by:
 
-1. Uploading the results using `vp-upload runcard_folder` then install the
-fitted set with `vp-get fit fit_name`.
+1. Uploading the results using ``vp-upload runcard_folder`` then install the
+fitted set with ``vp-get fit fit_name``.
 
-2. Analysing the results with `validphys`, see the [vp-guide](../vp/index).
-Consider using the `vp-comparefits` tool.
+2. Analysing the results with ``validphys``, see the [vp-guide](../vp/index).
+Consider using the ``vp-comparefits`` tool.
 
 
 
 Performance of the fit
 ----------------------
-The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
+The ``n3fit`` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such, to
 first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
 ``` note:: Tensorflow only supports the installation via pip. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.
@@ -208,7 +208,7 @@ first approximation, anything that makes Tensorflow faster will also make ``n3fi
 When you install the nnpdf conda package, you get the [tensorflow-eigen](https://anaconda.org/anaconda/tensorflow-eigen) package, which is not the default.
 This is due to a memory explosion found in some of the conda mkl builds.
 
-If you want to disable MKL without installing `tensorflow-eigen` you can always set the environment variable `TF_DISABLE_MKL=1` before running ``n3fit``.
+If you want to disable MKL without installing ``tensorflow-eigen`` you can always set the environment variable ``TF_DISABLE_MKL=1`` before running ``n3fit``.
 When running ``n3fit`` all versions of the package show similar performance.
 
 
@@ -223,15 +223,15 @@ KMP_AFFINITY=granularity=fine,verbose,compact,1,0
 
 These are the best values found for ``n3fit`` when using the mkl version of Tensorflow from conda
 and were found for TF 2.1 as the default values were suboptimal.
-For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
+For a more detailed explanation on the effects of ``KMP_AFFINITY`` on the performance of
 the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html).
 
 By default, ``n3fit`` will try to use as many cores as possible, but this behaviour can be overriden
-from the runcard with the `maxcores` parameter. In our tests the point of diminishing returns is found
-at `maxcores=4`.
+from the runcard with the ``maxcores`` parameter. In our tests the point of diminishing returns is found
+at ``maxcores=4``.
 
 Note that everything stated above is machine dependent so the best parameters for you might be
-very different. When testing, it is useful to set the environmental variable `KMP_SETTINGS` to 1
+very different. When testing, it is useful to set the environmental variable ``KMP_SETTINGS`` to 1
 to obtain detailed information about the current variables being used by OpenMP.
 
 Below we present a benchmark that have been run for the Global NNPDF 3.1 case, as found in the
