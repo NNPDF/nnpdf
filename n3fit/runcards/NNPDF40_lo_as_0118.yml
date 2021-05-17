@@ -1,4 +1,4 @@
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 description: NNPDF4.0 LO global, deuteron and nuclear uncertainties. Runcard for the
   baseline LO fit. alphas=0.118
