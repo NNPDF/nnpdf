@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
+@n3fit.checks.check_deprecated_options
 def performfit(
     *,
     replicas, # used for checks

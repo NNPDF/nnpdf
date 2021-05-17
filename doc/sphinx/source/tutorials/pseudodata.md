@@ -2,7 +2,7 @@
 
 Suppose one has obtained a fit using the N3FIT framework and wants to do some analysis that requires
 knowing exactly the data that the neural networks saw during the fitting procedure. Thankfully, this
-information is reproducible due to the various seeds in the `fitting` namespace in the fit runcard.
+information is reproducible due to the various seeds in the fit runcard.
 
 The 3 seeds of interest are `trvlseed` which determines the training/validation splitting, `nnseed`
 which concerns the initialization of the neural netowrks themselves, and finally `mcseed` which is the

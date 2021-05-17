@@ -28,11 +28,10 @@ experimental data, the theory setup and the fitting setup.
 The `n3fit` code accepts the same YAML keys used by `nnfit` and extra keys
 required by the new techniques introduced in [Methodology](methodology).
 
-In particular we introduce new keys in the `fitting` section such as:
+In particular we introduce new keys in the fit runcard such as:
 - different seeds for the training and validation split (`trvlseed`), neural
 network intialization (`nnseed`) and the MC data replica generation (`mcseed`).
-- some debug flags to store or load the model in/from hd5 files (`save`,
-`savefile`, `load`, `loadfile`, `plot`)
+- some debug flags to store or load the model in/from hd5 files (`save`, `load`)
 - a new `parameters` dictionnary with the model specifications based on the
 arguments described in [Methodology](methodology).
 
@@ -40,28 +39,23 @@ See, as an example, the following self explanatory runcard fragment:
 ```yaml
 # runcard example
 ...
-fitting:
-  trvlseed: 1
-  nnseed: 2
-  mcseed: 3
-  save: False
-  savefile: 'weights.hd5'
-  load: False
-  loadfile: 'weights.hd5'
-  plot: False
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+genrep: true
 
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [15, 10, 8]
-    activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
-    initializer: 'glorot_normal'
-    learning_rate: 0.01
-    optimizer: 'RMSprop'
-    epochs: 900
-    pos_multiplier: 1.05
-    pos_initial:  # believe the pos_lambda below
-    stopping_patience: 0.30 # percentage of the number of epochs
-    layer_type: 'dense'
-    dropout: 0.0
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  learning_rate: 0.01
+  optimizer: 'RMSprop'
+  epochs: 900
+  pos_multiplier: 1.05
+  pos_initial:  # believe the pos_lambda below
+  stopping_patience: 0.30 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.0
 ...
 ```
 

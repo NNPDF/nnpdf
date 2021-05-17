@@ -2848,7 +2848,7 @@ resource we are providing does. The docstring will be seen in
 ```python
 def parse_posdataset(self, posset:dict, * ,theoryid):
     """An observable used as positivity constrain in the fit.
-    It is a mapping containing 'dataset' and 'poslambda'."""
+    It is a mapping containing 'dataset' and 'maxlambda'."""
     ...
 ```
 
@@ -2938,10 +2938,10 @@ errors (see the other examples in the class).
 The `PositivytySetSpec` could be defined roughly like:
 ```python
  class PositivitySetSpec():
-     def __init__(self, commondataspec, fkspec, poslambda, thspec):
+     def __init__(self, commondataspec, fkspec, maxlambda, thspec):
          self.commondataspec = commondataspec
          self.fkspec = fkspec
-         self.poslambda = poslambda
+         self.maxlambda = maxlambda
          self.thspec = thspec
 
      @property
@@ -2955,7 +2955,7 @@ The `PositivytySetSpec` could be defined roughly like:
      def load(self):
          cd = self.commondataspec.load()
          fk = self.fkspec.load()
-         return PositivitySet(cd, fk, self.poslambda)
+         return PositivitySet(cd, fk, self.maxlambda)
 ```
 Here `PositivitySet` is the `libnnpdf` object. It is generally better
 to pass around the spec objects because they are lighter and have more
@@ -2966,21 +2966,21 @@ With this, our parser method could look like this:
 
 def parse_posdataset(self, posset:dict, * ,theoryid):
     """An observable used as positivity constrain in the fit.
-    It is a mapping containing 'dataset' and 'poslambda'."""
+    It is a mapping containing 'dataset' and 'maxlambda'."""
     bad_msg = ("posset must be a mapping with a name ('dataset') and "
-               "a float multiplier(poslambda)")
+               "a float multiplier(maxlambda)")
 
     theoryno, theopath = theoryid
     try:
         name = posset['dataset']
-        poslambda = float(posset['poslambda'])
+        maxlambda = float(posset['maxlambda'])
     except KeyError as e:
         raise ConfigError(bad_msg, e.args[0], posset.keys()) from e
     except ValueError as e:
         raise ConfigError(bad_msg) from e
 
     try:
-        return self.loader.check_posset(theoryno, name, poslambda)
+        return self.loader.check_posset(theoryno, name, maxlambda)
     except FileNotFoundError as e:
         raise ConfigError(e) from e
 ```

@@ -74,17 +74,16 @@ It is possible to run a fit with no validation set by setting the fraction to ``
 Network Architecture
 --------------------
 There are different network architectures implemented in ``n3fit``.
-Which can be selected by changing the ``fitting:parameters::layer_type`` parameter in the runcard.
+Which can be selected by changing the ``parameters::layer_type`` parameter in the runcard.
 All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and ``initializer`` parameters.
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            nodes_per_layer: [5, 3, 8]
-            activation_per_layer: ['tanh', 'tanh', 'linear']
-            layer_type: 'dense_per_flavour'
-            initializer: 'glorot_normal'
+    parameters:
+        nodes_per_layer: [5, 3, 8]
+        activation_per_layer: ['tanh', 'tanh', 'linear']
+        layer_type: 'dense_per_flavour'
+        initializer: 'glorot_normal'
 
 - **One single network** (``layer_type: dense``):
 
@@ -117,12 +116,11 @@ of optimizer (and its corresponding options).
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            optimizer:
-              optimizer_name: 'Adadelta'
-              learning_rate: 1.0
-              clipnorm: 1.0
+    parameters:
+        optimizer:
+          optimizer_name: 'Adadelta'
+          learning_rate: 1.0
+          clipnorm: 1.0
 
 
 The full list of optimizers accepted by the ``n3fit`` and their arguments
@@ -136,13 +134,13 @@ Positivity
 ----------
 
 In ``n3fit`` the behavior of the positivity observables has changed with respect to ``nnfit``.
-In ``nnfit`` the loss due to the positivity observable was multiplied by a ``poslambda`` for each observable, defined in the runcard as:
+In ``nnfit`` the loss due to the positivity observable was multiplied by a ``maxlambda`` for each observable, defined in the runcard as:
 
 .. code-block:: yaml
 
     positivity:
       posdatasets:
-        - {dataset: POSF2U, poslambda: 1e6}
+        - {dataset: POSF2U, maxlambda: 1e6}
 
 
 This behavior was found to be very inefficient for gradient descent based strategies and was exchanged for a dynamical Lagrange multiplier.
@@ -152,19 +150,18 @@ the Neural Network as:
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            positivity:
-              threshold: 1e-6
-              multiplier: 1.05
-              initial: 14.5
+    parameters:
+        positivity:
+          threshold: 1e-6
+          multiplier: 1.05
+          initial: 14.5
               
 Note that by defining the positivity in this way all datasets will share the same Lagrange multiplier.
 
 It is also possible to not define the positivity hyperparameters (or define them only partially).
 In this case ``n3fit`` will set the initial Lagrange multiplier as ``initial`` (default: 1.0)
 while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier 
-equals the ``poslambda`` defined for the dataset.
+equals the ``maxlambda`` defined for the dataset.
 
 Finally we have the positivity threshold, which is set to ``1e-6`` by default.
 During the fit, the positivity loss will be compared to this value. If it is above it,
@@ -200,9 +197,8 @@ Threshold :math:`\chi2`
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            threshold_chi2: 4.0
+    parameters:
+        threshold_chi2: 4.0
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
@@ -220,10 +216,9 @@ In order to enable the TensorBoard callback in ``n3fit`` it is enough with addin
 
 .. code-block:: yaml
 
-    fitting:
-        tensorboard:
-            weight_freq: 100
-            profiling: True
+    tensorboard:
+        weight_freq: 100
+        profiling: True
 
 
 The ``weight_freq`` flag controls each how many epochs the weights of the NN are stored.
@@ -267,9 +262,8 @@ Threshold :math:`\chi2`
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            threshold_chi2: 4.0
+    parameters:
+        threshold_chi2: 4.0
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
@@ -279,9 +273,8 @@ Save and load weights of the model
 
 .. code-block:: yaml
 
-    fitting:
-        save: "weights.h5"
-        load: "weights.h5"
+    save: "weights.h5"
+    load: "weights.h5"
 
 - ``save``: saves the weights of the PDF model in the selected file in the replica folder.
 - ``load``: loads the weights of the PDF model from the selected file.

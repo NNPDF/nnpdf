@@ -392,7 +392,7 @@ def positivity_reader(pos_spec):
         }
     ]
 
-    positivity_factor = pos_spec.poslambda
+    positivity_factor = pos_spec.maxlambda
 
     dict_out = {
         "datasets": pos_sets,

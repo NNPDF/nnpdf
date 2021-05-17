@@ -29,7 +29,7 @@ def _is_floatable(num):
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
-    """ Check that non-optional parameters are defined and are not empty """
+    """Check that non-optional parameters are defined and are not empty"""
     for param_name in NN_PARAMETERS:
         if param_name in parameters:
             val = parameters[param_name]
@@ -41,13 +41,14 @@ def check_existing_parameters(parameters):
     if "pos_initial" in parameters or "pos_multiplier" in parameters:
         raise CheckError(
             "The definition of the positivity parameters is deprecated, please "
-            "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
-            "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml"
+            "use instead:\nparameters:\n  positivity\n"
+            "    multiplier: x\n    initial: y\n"
+            "as can be seen in the example runcard: n3fit/runcards/Basic_runcard.yml"
         )
 
 
 def check_consistent_layers(parameters):
-    """ Checks that all layers have an activation function defined """
+    """Checks that all layers have an activation function defined"""
     npl = len(parameters["nodes_per_layer"])
     apl = len(parameters["activation_per_layer"])
     if npl != apl:
@@ -68,7 +69,7 @@ def check_stopping(parameters):
 
 
 def check_basis_with_layers(basis, parameters):
-    """ Check that the last layer matches the number of flavours defined in the runcard"""
+    """Check that the last layer matches the number of flavours defined in the runcard"""
     number_of_flavours = len(basis)
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
@@ -79,7 +80,7 @@ def check_basis_with_layers(basis, parameters):
 
 
 def check_optimizer(optimizer_dict):
-    """ Checks whether the optimizer setup is valid """
+    """Checks whether the optimizer setup is valid"""
     name_key = "optimizer_name"
     name = optimizer_dict[name_key]
     from n3fit.backends import MetaModel
@@ -96,7 +97,7 @@ def check_optimizer(optimizer_dict):
 
 
 def check_initializer(initializer):
-    """ Checks whether the initializer is implemented """
+    """Checks whether the initializer is implemented"""
     from n3fit.backends import MetaLayer
 
     accepted_init = MetaLayer.initializers
@@ -105,14 +106,14 @@ def check_initializer(initializer):
 
 
 def check_dropout(parameters):
-    """ Checks the dropout setup (positive and smaller than 1.0) """
+    """Checks the dropout setup (positive and smaller than 1.0)"""
     dropout = parameters.get("dropout")
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
 
 def check_tensorboard(tensorboard):
-    """ Check that the tensorbard callback can be enabled correctly """
+    """Check that the tensorbard callback can be enabled correctly"""
     if tensorboard is not None:
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
@@ -138,7 +139,7 @@ def check_lagrange_multipliers(parameters, key):
 
 
 def check_model_file(save, load):
-    """ Checks whether the model_files given in the runcard are acceptable """
+    """Checks whether the model_files given in the runcard are acceptable"""
     if save:
         if not isinstance(save, str):
             raise CheckError(f"Model file to save to: {save} not understood")
@@ -154,9 +155,10 @@ def check_model_file(save, load):
         if os.stat(load).st_size == 0:
             raise CheckError(f"Model file {load} seems to be empty")
 
+
 @make_argcheck
 def wrapper_check_NN(basis, tensorboard, save, load, parameters):
-    """ Wrapper function for all NN-related checks """
+    """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
     check_existing_parameters(parameters)
@@ -222,7 +224,7 @@ def check_hyperopt_positivity(positivity_dict):
 
 
 def check_kfold_options(kfold):
-    """ Warns the user about potential bugs on the kfold setup"""
+    """Warns the user about potential bugs on the kfold setup"""
     threshold = kfold.get("threshold")
     if threshold is not None and threshold < 2.0:
         log.warning("The kfolding loss threshold might be too low: %f", threshold)
@@ -254,7 +256,7 @@ def check_correct_partitions(kfold, data):
 
 
 def check_hyperopt_stopping(stopping_dict):
-    """ Checks that the options selected for the stopping are consistent """
+    """Checks that the options selected for the stopping are consistent"""
     if stopping_dict is None:
         return
     min_ep = stopping_dict.get("min_epochs")
@@ -305,8 +307,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
 
 
 def check_sumrules(sum_rules):
-    """Checks that the chosen option for the sum rules are sensible
-    """
+    """Checks that the chosen option for the sum rules are sensible"""
     if isinstance(sum_rules, bool):
         return
     accepted_options = ["ALL", "MSR", "VSR"]
@@ -350,12 +351,14 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
 
 @make_argcheck
 def can_run_multiple_replicas(replicas, genrep, parameters, hyperopt, parallel_models):
-    """ Checks whether a runcard which is trying to run several replicas at once
+    """Checks whether a runcard which is trying to run several replicas at once
     (parallel_models =/= 1) is valid
     """
     rp = len(replicas)
     if rp > 1 and not genrep:
-        raise CheckError("Can't run more than one replica at once if no replicas are to be generated")
+        raise CheckError(
+            "Can't run more than one replica at once if no replicas are to be generated"
+        )
     if parallel_models == 1:
         return
     if hyperopt:
@@ -366,3 +369,20 @@ def can_run_multiple_replicas(replicas, genrep, parameters, hyperopt, parallel_m
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
     if rp > 1:
         raise CheckError("Parallel mode cannot be used together with multireplica runs")
+
+
+@make_argcheck
+def check_deprecated_options(fitting):
+    """Checks whether the runcard is using deprecated options"""
+    options_outside = ["trvlseed", "nnseed", "mcseed", "save", "load", "genrep", "parameters"]
+    for option in options_outside:
+        if option in fitting:
+            raise CheckError(
+                f"The key '{option}' should be top-level key and not part of the 'fitting' namespace"
+            )
+    if "epochs" in fitting:
+        raise CheckError("The key 'epoch' should only appear as part of the 'parameters' namespace")
+    nnfit_options = ["seed", "rnalgo", "fitmethod", "nmutants", "paramtype", "nnodes"]
+    for option in nnfit_options:
+        if option in fitting:
+            log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
