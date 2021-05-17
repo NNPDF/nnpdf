@@ -52,6 +52,24 @@ Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old 
             - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
             - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
 
+It  is important to determine the correct values for the ``largex`` and ``smallx`` preprocessing 
+ranges. For example setting a poor range for those parameters can result in a conflict with the 
+:ref:`positivity <positivity>` or :ref:`integrability <integrability>` constraints, making it such 
+that no replicas can satisfy those constraints. In most cases when changes are made to a runcard, 
+they will have a relatively small effect on the required preprocessing ranges. This includes common 
+variations to runcards such as changing the datasets, or settings related to the training of the 
+neural network. In these cases :ref:`running an iterated fit <run-iterated-fit>` is likely the 
+easiest way to obtain a satisfactory range of the preprocessing. However, in some cases, such as for
+example a change of PDF basis where the preprocessing ranges obtain a different meaning entirely, 
+we don't know what a good starting point for the ranges would be. One way to identify good ranges 
+is by opening up the ``smallx`` and ``large`` parameters for large ranges and setting 
+``trainable: True``. Generally, it is advised to set ``trainable: False``, because trainable 
+preprocessing can lead to an underestimation of the PDF uncertainties in the extrapolation domain, 
+but trainable preprocessing exponents can be very useful to obtain reasonable preprocessing ranges.
+If the preprocessing ranges are obtained this way, it is recommended to perform at least one and 
+possible more iterated fits with ``trainable: False``. Possibly more because even after determining 
+the preprocessing ranges using fitted preprocessing, it can take more than one iteration before the 
+iterated fits have converged to stable values for the preprocessing ranges. 
 
 .. _trval-label:
 
