@@ -15,7 +15,7 @@ PDF fit:
 
 
 These steps are similar to those required to run the
-[`nnfit` code](nnfit-usage) as `n3fit` is designed to maintain close
+[``nnfit`` code](nnfit-usage) as ``n3fit`` is designed to maintain close
 compatibility with it.
 
 Preparing a fit runcard
@@ -25,14 +25,14 @@ The runcard is written in YAML. The runcard is the unique identifier of a fit
 and contains all required information to perform a fit, which includes the
 experimental data, the theory setup and the fitting setup.
 
-The `n3fit` code accepts the same YAML keys used by `nnfit` and extra keys
+The ``n3fit`` code accepts the same YAML keys used by ``nnfit`` and extra keys
 required by the new techniques introduced in [Methodology](methodology).
 
 In particular we introduce new keys in the fit runcard such as:
-- different seeds for the training and validation split (`trvlseed`), neural
-network intialization (`nnseed`) and the MC data replica generation (`mcseed`).
-- some debug flags to store or load the model in/from hd5 files (`save`, `load`)
-- a new `parameters` dictionnary with the model specifications based on the
+- different seeds for the training and validation split (``trvlseed``), neural
+network intialization (``nnseed``) and the MC data replica generation (``mcseed``).
+- some debug flags to store or load the model in/from hd5 files (``save``, ``load``)
+- a new ``parameters`` dictionnary with the model specifications based on the
 arguments described in [Methodology](methodology).
 
 See, as an example, the following self explanatory runcard fragment:
@@ -59,7 +59,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
 ...
 ```
 
-On the other hand, we have also introduced a new `hyperscan` key which specifies
+On the other hand, we have also introduced a new ``hyperscan`` key which specifies
 the trial ranges for the hyperparameter scan procedure. See the following self
 explanatory example:
 ```yaml
@@ -98,12 +98,12 @@ the git repository in
 [n3fit/runcards](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
 
 For a more detailed explanation on the parameters that are specific for the
-`n3fit` runcard see the [detailed guide](runcard-detailed).
+``n3fit`` runcard see the [detailed guide](runcard-detailed).
 
 Running the fitting code
 ------------------------
 
-After successfully installing the `n3fit` package and preparing a runcard
+After successfully installing the ``n3fit`` package and preparing a runcard
 following the points presented above you can proceed with a fit.
 
 1. Prepare the fit: `vp-setupfit runcard.yml`. This command will generate a
@@ -124,7 +124,7 @@ following the points presented above you can proceed with a fit.
        be done after the fit has been run.
     ```
 
-2. The `n3fit` program takes a `runcard.yml` as input and a replica number, e.g.
+2. The ``n3fit`` program takes a ``runcard.yml`` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where `replica` goes from 1-n where n is the
 maximum number of desired replicas. Note that if you desire, for example, a 100
 replica fit you should launch more than 100 replicas (e.g. 130) because not
@@ -226,7 +226,7 @@ and were found for TF 2.1 as the default values were suboptimal.
 For a more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
 the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html).
 
-By default, `n3fit` will try to use as many cores as possible, but this behaviour can be overriden
+By default, ``n3fit`` will try to use as many cores as possible, but this behaviour can be overriden
 from the runcard with the `maxcores` parameter. In our tests the point of diminishing returns is found
 at `maxcores=4`.
 

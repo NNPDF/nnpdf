@@ -13,7 +13,7 @@ which aim to validate different components of the fitting toolchain.
 For more detailed information on the conception of closure tests, see the
 [NNPDF3.0 paper](https://arxiv.org/abs/1410.8849).
 
-Each closure test defines a `fakepdf` in the runcard, which will be referred to
+Each closure test defines a ``fakepdf`` in the runcard, which will be referred to
 here as the underlying law. For the purpose of the closure test it can be thought
 of as being a proxy for the true PDF.
 
@@ -47,8 +47,8 @@ proxy for the underlying law.
 ## Preparing the closure test runcard
 
 To run a closure test we require a standard fit runcard. The main section
-which controls closure test specific behaviour can be found under `closuretest`.
-Before you've made any changes, a typical `closuretest` section will be as follows:
+which controls closure test specific behaviour can be found under ``closuretest``.
+Before you've made any changes, a typical ``closuretest`` section will be as follows:
 
 ```yaml
 closuretest:
@@ -63,17 +63,17 @@ closuretest:
   printpdf4gen: False # To print info on PDFs during minimization
 ```
 
-Setting `fakedata` to `True` will cause closure test pseudodata to be generated
+Setting ``fakedata`` to ``True`` will cause closure test pseudodata to be generated
 and subsequently fitted. The PDf which the pseudodata will be generated from
-is specified by the `fakepdf` key. It is strongly advised to set the `fakepdf`
-and `t0pdfset`, found under `datacuts` to be the same PDF, unless specifically
+is specified by the ``fakepdf`` key. It is strongly advised to set the ``fakepdf``
+and ``t0pdfset``, found under ``datacuts`` to be the same PDF, unless specifically
 testing the impact of the t0 procedure.
 
-The `fakenoise` key specifies whether or not the level 1 shift η will be
+The ``fakenoise`` key specifies whether or not the level 1 shift η will be
 add to the pseudodata during the filtering step, this is require for
 **both** level 1 and level 2 closure tests.
 
-An example of a typical level 1 or level 2 `closuretest` specification is given
+An example of a typical level 1 or level 2 ``closuretest`` specification is given
 
 ```yaml
 closuretest:
@@ -88,13 +88,13 @@ closuretest:
   printpdf4gen: False # To print info on PDFs during minimization
 ```
 Note that it is *critical* that two closure tests which are to be compared have
-the same `filterseed`. They should also both have been run during a time where
+the same ``filterseed``. They should also both have been run during a time where
 no major changes were made to data generation. This is because fits with
 different level 1 noise produce different closure test estimators. See for
 example a [report](https://vp.nnpdf.science/mbcTUd6-TQmQFvaGd37bkg==/)
 comparing two level 2 closure tests with identical settings apart from
-`filterseed`. Note that setting `filterseed` to 0 will use the default seed for
-the selected `fitting::rngalgo`.
+``filterseed``. Note that setting ``filterseed`` to 0 will use the default seed for
+the selected ``fitting::rngalgo``.
 
 There are still some relevant settings to the closure test. For the above example
 we would choose that the t0 set was the same as the underlying law:
@@ -107,7 +107,7 @@ datacuts:
 
 Finally we need to specify whether or not MC replicas will be generated in the
 fit, differentiating between a level 1 and level 2 closure test. This can be achieved
-by setting `genrep` under `fitting` to be `True`
+by setting ``genrep`` under ``fitting`` to be ``True``
 
 ```yaml
 fitting:
@@ -168,18 +168,18 @@ closuretest:
 ### With `nnfit`
 
 The process of running the closure test is the same as [running a
-standard fit](./runafit.md), simply filter the runcard and run `nnfit` on the
+standard fit](./runafit.md), simply filter the runcard and run ``nnfit`` on the
 filter results. Before uploading the fit, it is helpful if you rebuild the
-filtered closure data by running `vp-rebuild-data <fit output directory>`. It is
+filtered closure data by running ``vp-rebuild-data <fit output directory>``. It is
 vital that the data is not rebuilt until all replicas have finished running.
 
-### With `n3fit`
+### With ``n3fit``
 
-Running a closure test with `n3fit` will require a valid `n3fit` runcard, with
+Running a closure test with ``n3fit`` will require a valid ``n3fit`` runcard, with
 the closure test settings modified as shown
 [above](#preparing-the-closure-test-runcard). The difference
-between running a closure fit in `n3fit` and a standard fit is that the user is
-required to run `vp-setupfit` on the runcard before running `n3fit`. This is
+between running a closure fit in ``n3fit`` and a standard fit is that the user is
+required to run ``vp-setupfit`` on the runcard before running ``n3fit``. This is
 because the filtering of the data is required to generate the pseudodata central
 values. The filtered data should then be rebuilt before the fit, so there is no
 risk of the fit crashing due to multiple replicas rebuilding the data
@@ -191,5 +191,5 @@ $ vp-rebuild-data fitname
 $ n3fit fitname.yml <replica_number>
 ```
 
-You will still need to evolve the fit and run `postfit` as with a standard
-[`n3fit`](../n3fit/usage.md).
+You will still need to evolve the fit and run ``postfit`` as with a standard
+[``n3fit``](../n3fit/usage.md).

@@ -68,6 +68,6 @@ NNLO pdf                             NNPDF31_nnlo_as_0118            NNPDF3.1 NN
 NNLO pdf hessian                     NNPDF31_nnlo_as_0118_hessian    NNPDF3.1 NNLO hessian PDF set generated from replicas
 NLO fit                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO fit with 100 replicas (+ central replica)
 NNLO fit                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 DIS-only NNLO fit with 95 replicas (+ central replica)
-fit                                  191015-mw-001                   n3fit closure test fit with 30 replicas before and after postfit
+fit                                  191015-mw-001                   ``n3fit`` closure test fit with 30 replicas before and after postfit
 fit (iterated)                       191015-mw-001_ite2_for_testing  Iteration of 191015-mw-001
 ===================================  ==============================  ==================================================================
