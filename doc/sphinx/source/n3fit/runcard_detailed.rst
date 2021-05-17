@@ -84,7 +84,7 @@ The fraction of events that are considered for the training and validation sets 
         datasets:
         - { dataset: SLACP, frac: 0.8}
         - { dataset: NMCPD, frac: 0.8 }      
-        - { dataset: CMSJETS11,     frac: 0.8, sys: 10 }
+        - { dataset: CMSJETS11, frac: 0.8, sys: 10 }
 
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
 
