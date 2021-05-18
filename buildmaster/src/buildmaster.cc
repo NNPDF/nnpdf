@@ -279,6 +279,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new DYE866R_dw_iteFilter());
   target.push_back(new DYE866R_sh_iteFilter());
   target.push_back(new DYE906RFilter());
+  target.push_back(new DYE906R_dw_iteFilter());
+  target.push_back(new DYE906R_sh_iteFilter());
   target.push_back(new DYE906R_BINFilter("DYE906R_BIN01"));
   target.push_back(new DYE906R_BINFilter("DYE906R_BIN02"));
   target.push_back(new DYE906R_BINFilter("DYE906R_BIN03"));

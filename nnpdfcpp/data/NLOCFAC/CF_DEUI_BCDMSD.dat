@@ -3,8 +3,8 @@ SetName: BCDMSD_sh_ite
 Author: Emanuele R. Nocera <enocera@ed.ac.uk>
 Date: 2020
 CodesUsed: Validphys 
-TheoryInput: NNPDF4.0 + nNNPDF2.0
-PDFset: nNNPDF2.0
+TheoryInput: NNPDF4.0
+PDFset: 
 Warnings:
 ********************************************************************************
 0.977081   0.00000

@@ -1177,7 +1177,7 @@ void DYE866R_sh_iteFilter::ReadData()
   No Jacobian is required, since it cancels out between the numerator and the 
   denominator.
   
-  Implemented by TG March 2021
+  Implemented by TG March 2021. Compelted and revised by ERN May 2021.
 */
 
 void DYE906RFilter::ReadData()
@@ -1207,8 +1207,7 @@ void DYE906RFilter::ReadData()
   double Eb = 120; //beam energy
   double mp = 0.938; //proton mass
   double s = 2*mp*mp + 2*Eb*mp; //com energy square
-  double xt, xb, M, pT, dum;
-  double xF, tau, pt, Y;
+  double xt, xb, M, Y, dum;
   
   //Starting filter
   string line;
@@ -1222,13 +1221,7 @@ void DYE906RFilter::ReadData()
     istringstream lstream(line);
     
     lstream >> dum >> dum;
-    lstream >> xt >> xb >> M >> pT;
-    //xF = xb - xt;
-    //tau = M*M/s;
-    //pt = pT/M;
-
-    //hadronic rapidity, Eq.(4.6) https://arxiv.org/pdf/1009.5691.pdf
-    //Y = 0.5*log( (sqrt(xF*xF + 4*tau*(1+pt*pt)) + xF)/(sqrt(xF*xF + 4*tau*(1+pt*pt)) - xF) );
+    lstream >> xt >> xb >> M >> dum;
     Y = 0.5*log(xb/xt);
 
     
@@ -1291,6 +1284,330 @@ void DYE906RFilter::ReadData()
 
 }
 
+void DYE906R_dw_iteFilter::ReadData()
+{  
+  fstream rf, rCorr;
+  fstream f2, f3;
+  
+  //opening data file
+  stringstream DataFile("");
+  DataFile << dataPath() << "rawdata/DYE906R/data_paper.dat";
+  rf.open(DataFile.str().c_str(), ios::in);
+  
+  if (rf.fail()) {
+    cerr << "Error opening data file " << DataFile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/DYE906R/nuclear_ite/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/DYE906R/proton_ite/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  //opening covariance matrix file
+  stringstream DataFileCorr("");
+  DataFileCorr << dataPath() << "rawdata/DYE906R/cov.dat";
+  rCorr.open(DataFileCorr.str().c_str(), ios::in);
+
+  if (rCorr.fail()) {
+    cerr << "Error opening data file " << DataFileCorr.str() << endl;
+    exit(-1);
+  }
+
+  double Eb = 120; //beam energy
+  double mp = 0.938; //proton mass
+  double s = 2*mp*mp + 2*Eb*mp; //com energy square
+  double xt, xb, M, Y, dum;
+  
+  //Starting filter
+  int nrep=100;
+  int nrealsys=7;
+  
+  string line;
+  //Skip first and second line
+  getline(rf,line);
+  getline(rf,line);
+  getline(f2,line);
+  getline(f3,line);
+
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(rf,line);
+    istringstream lstream(line);
+    
+    lstream >> dum >> dum;
+    lstream >> xt >> xb >> M >> dum;
+    Y = 0.5*log(xb/xt);
+
+    fKin1[i] = Y;
+    fKin2[i] = M*M;
+    fKin3[i] = sqrt(s);
+        
+    lstream >> fData[i];
+
+    lstream >> dum; //skip statistical uncertainty given in data table
+    fStat[i] = 0; //set statistical uncertainty to 0. Will use the one from the covariance matrix
+
+    //read the only source of systematic
+    lstream >> fSys[i][0].add;
+    fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "CORR";
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+    
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "DEUTERON" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+  }
+
+  //defining covariance matrix
+  double** covmat = new double*[fNData];
+  for (int i = 0; i < fNData; i++) 
+    covmat[i] = new double[fNData];
+  
+  //reading covariance matrix
+  for (int i = 0; i < fNData; i++)
+    for (int j = 0; j < fNData; j++)
+	    rCorr >> covmat[j][i];
+	  
+  //generate artificial systematics accounting for statistical error
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+  
+  if(!genArtSys(fNData,covmat,syscor)){
+    cerr << " in " << fSetName 
+	  << " : cannot generate artificial systematics" << endl;
+    exit(-1);
+  }
+
+  //copy the artificial systematics in the fSys matrix
+  for (int i = 0; i < fNData; i++)
+    for (int l = 1; l < nrealsys; l++){
+      fSys[i][l].add  = syscor[i][l];
+	    fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+	    fSys[i][l].type = ADD;  
+	    fSys[i][l].name = "CORR";
+    }
+    
+  for(int i = 0; i < fNData; i++) 
+    delete[] covmat[i];
+  delete[] covmat;
+  
+  for(int i = 0; i < fNData; i++) 
+    delete[] syscor[i];
+  delete[] syscor;
+  
+  rf.close();
+  rCorr.close();
+  f2.close();
+  f3.close();
+}
+
+void DYE906R_sh_iteFilter::ReadData()
+{  
+  fstream rf, rCorr;
+  fstream f2, f3;
+  
+  //opening data file
+  stringstream DataFile("");
+  DataFile << dataPath() << "rawdata/DYE906R/data_paper.dat";
+  rf.open(DataFile.str().c_str(), ios::in);
+  
+  if (rf.fail()) {
+    cerr << "Error opening data file " << DataFile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/DYE906R/nuclear_ite/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/DYE906R/proton_ite/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  //opening covariance matrix file
+  stringstream DataFileCorr("");
+  DataFileCorr << dataPath() << "rawdata/DYE906R/cov.dat";
+  rCorr.open(DataFileCorr.str().c_str(), ios::in);
+
+  if (rCorr.fail()) {
+    cerr << "Error opening data file " << DataFileCorr.str() << endl;
+    exit(-1);
+  }
+
+  double Eb = 120; //beam energy
+  double mp = 0.938; //proton mass
+  double s = 2*mp*mp + 2*Eb*mp; //com energy square
+  double xt, xb, M, Y, dum;
+ 
+  //Starting filter
+  int nrep=100;
+  int nrealsys=7;
+  
+  string line;
+  //Skip first and second line
+  getline(rf,line);
+  getline(rf,line);
+  getline(f2,line);
+  getline(f3,line);
+
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(rf,line);
+    istringstream lstream(line);
+    
+    lstream >> dum >> dum;
+    lstream >> xt >> xb >> M >> dum;
+    Y = 0.5*log(xb/xt);
+
+    fKin1[i] = Y;
+    fKin2[i] = M*M;
+    fKin3[i] = sqrt(s);
+        
+    lstream >> fData[i];
+
+    lstream >> dum; //skip statistical uncertainty given in data table
+    fStat[i] = 0; //set statistical uncertainty to 0. Will use the one from the covariance matrix
+
+    //read the only source of systematic
+    lstream >> fSys[i][0].add;
+    fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "CORR";
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "DEUTERON" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    
+  }
+
+  //defining covariance matrix
+  double** covmat = new double*[fNData];
+  for (int i = 0; i < fNData; i++) 
+    covmat[i] = new double[fNData];
+  
+  //reading covariance matrix
+  for (int i = 0; i < fNData; i++)
+    for (int j = 0; j < fNData; j++)
+	    rCorr >> covmat[j][i];
+	  
+  //generate artificial systematics accounting for statistical error
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+  
+  if(!genArtSys(fNData,covmat,syscor)){
+    cerr << " in " << fSetName 
+	  << " : cannot generate artificial systematics" << endl;
+    exit(-1);
+  }
+
+  //copy the artificial systematics in the fSys matrix
+  for (int i = 0; i < fNData; i++)
+    for (int l = 1; l < nrealsys; l++){
+      fSys[i][l].add  = syscor[i][l];
+	    fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+	    fSys[i][l].type = ADD;  
+	    fSys[i][l].name = "CORR";
+    }
+    
+  for(int i = 0; i < fNData; i++) 
+    delete[] covmat[i];
+  delete[] covmat;
+  
+  for(int i = 0; i < fNData; i++) 
+    delete[] syscor[i];
+  delete[] syscor;
+  
+  rf.close();
+  rCorr.close();
+  f2.close();
+  f3.close();
+}
+
 //Auxiliary files for each sub-bin
 void DYE906R_BINFilter::ReadData()
 {
@@ -1316,7 +1633,6 @@ void DYE906R_BINFilter::ReadData()
       lstream >> xb >> xt;
 
       fKin1[i] = 0.5*log(xb/xt);    // Y
-      
       fKin2[i] = xb*xt*sqrts*sqrts; // M2
       fKin3[i] = sqrts;             // sqrt(s)
       fData[i] = 0.;
