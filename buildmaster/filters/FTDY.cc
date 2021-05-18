@@ -1333,7 +1333,7 @@ void DYE906R_dw_iteFilter::ReadData()
   double xt, xb, M, Y, dum;
   
   //Starting filter
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=7;
   
   string line;
@@ -1391,7 +1391,7 @@ void DYE906R_dw_iteFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/100.;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -1493,7 +1493,7 @@ void DYE906R_sh_iteFilter::ReadData()
   double xt, xb, M, Y, dum;
  
   //Starting filter
-  int nrep=100;
+  int nrep=1000;
   int nrealsys=7;
   
   string line;
@@ -1551,7 +1551,7 @@ void DYE906R_sh_iteFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/100.;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
