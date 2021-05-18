@@ -88,7 +88,7 @@ def test_c_to_py_fun():
     # SMN
     op_smn = op.c_to_py_fun("SMN")
     reference = lambda x, y, z, d: (x + y) / (z + d)
-    numpy_check(op_com, reference, "four")
+    numpy_check(op_smn, reference, "four")
     # COM
     op_com = op.c_to_py_fun("COM")
     reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t : (x + y + z + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
@@ -96,7 +96,7 @@ def test_c_to_py_fun():
     # SMT
     op_smt = op.c_to_py_fun("SMT")
     reference = lambda x, y, z, d, e, f, g, h, i, j : (x + y + z + d + e + f + g + h + i + j)
-    numpy_check(op_com, reference, "ten")
+    numpy_check(op_smt, reference, "ten")
 
 # Tests operations
 def test_op_multiply():
