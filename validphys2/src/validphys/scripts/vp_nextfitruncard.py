@@ -26,7 +26,7 @@ from reportengine import colors
 
 from validphys.api import API
 
-# arguments for np.clip to enforce positivity.
+# arguments for np.clip to enforce integrability.
 # key should be identical to runcard key, first inner dictionary can contain
 # either smallx or largex, the innermost dictionaries must be valid arguments
 # for np.clip, this means BOTH a_min and a_max must be specified (even if one
