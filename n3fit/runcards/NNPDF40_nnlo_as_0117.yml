@@ -31,6 +31,7 @@ dataset_inputs:
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC,QCD]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
