@@ -73,7 +73,9 @@ iterated fits have converged to stable values for the preprocessing ranges.
 
 Note that the script ``vp-nextfitruncard`` automatically enforces some constraints
 on preprocessing ranges, which are required for integrability of certain
-flavours. More details on those limits, and how to disable them can be found
+flavours. Specifically clipping the maximum value of the small-x exponent
+as :math:`\alpha \leq 1` for the triplets T3 and T8.
+More details on those limits, and how to disable them can be found
 by running
 
 .. code::
