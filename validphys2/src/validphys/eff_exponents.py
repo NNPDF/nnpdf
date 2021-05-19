@@ -479,9 +479,10 @@ def iterate_preprocessing_yaml(
     for i, fl in enumerate(runcard_flavours):
         alphas = df_effexps.loc[(f"${fl}$", r"$\alpha$")].values
         betas = df_effexps.loc[(f"${fl}$", r"$\beta$")].values
-        if _flmap_np_clip_arg is not None and _flmap_np_clip_arg.get(fl) is not None:
-            smallx_args = _flmap_np_clip_arg[fl].get("smallx")
-            largex_args = _flmap_np_clip_arg[fl].get("largex")
+        flmap_key = previous_exponents[i]["fl"]
+        if _flmap_np_clip_arg is not None and _flmap_np_clip_arg.get(flmap_key) is not None:
+            smallx_args = _flmap_np_clip_arg[flmap_key].get("smallx")
+            largex_args = _flmap_np_clip_arg[flmap_key].get("largex")
             if smallx_args is not None:
                 alphas = np.clip(alphas, **smallx_args)
             if largex_args is not None:

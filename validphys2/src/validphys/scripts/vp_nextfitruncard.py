@@ -27,6 +27,10 @@ from reportengine import colors
 from validphys.api import API
 
 # arguments for np.clip to enforce positivity.
+# key should be identical to runcard key, first inner dictionary can contain
+# either smallx or largex, the innermost dictionaries must be valid arguments
+# for np.clip, this means BOTH a_min and a_max must be specified (even if one
+# is left as None, indicating it is unconstrained.)
 PREPROCESSING_CONSTRAINTS = {
     "t3": {"smallx": {"a_min": None, "a_max": 1.0}},
     "t8": {"smallx": {"a_min": None, "a_max": 1.0}},
