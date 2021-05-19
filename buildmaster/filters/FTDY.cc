@@ -1265,10 +1265,12 @@ void DYE906RFilter::ReadData()
   //copy the artificial systematics in the fSys matrix
   for (int i = 0; i < fNData; i++)
     for (int l = 1; l < fNSys; l++){
+      if(abs(syscor[i][l])<1e-10)
+	syscor[i][l]=0.;
       fSys[i][l].add  = syscor[i][l];
-	    fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
-	    fSys[i][l].type = ADD;  
-	    fSys[i][l].name = "CORR";
+      fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+      fSys[i][l].type = ADD;  
+      fSys[i][l].name = "CORR";
     }
     
   for(int i = 0; i < fNData; i++) 
@@ -1333,7 +1335,7 @@ void DYE906R_dw_iteFilter::ReadData()
   double xt, xb, M, Y, dum;
   
   //Starting filter
-  int nrep=1000;
+  int nrep=100;
   int nrealsys=7;
   
   string line;
@@ -1391,7 +1393,7 @@ void DYE906R_dw_iteFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/100.;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/nrep;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -1424,10 +1426,12 @@ void DYE906R_dw_iteFilter::ReadData()
   //copy the artificial systematics in the fSys matrix
   for (int i = 0; i < fNData; i++)
     for (int l = 1; l < nrealsys; l++){
+      if(abs(syscor[i][l])<1e-10)
+	syscor[i][l]=0.;
       fSys[i][l].add  = syscor[i][l];
-	    fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
-	    fSys[i][l].type = ADD;  
-	    fSys[i][l].name = "CORR";
+      fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+      fSys[i][l].type = ADD;  
+      fSys[i][l].name = "CORR";
     }
     
   for(int i = 0; i < fNData; i++) 
@@ -1493,7 +1497,7 @@ void DYE906R_sh_iteFilter::ReadData()
   double xt, xb, M, Y, dum;
  
   //Starting filter
-  int nrep=1000;
+  int nrep=100;
   int nrealsys=7;
   
   string line;
@@ -1551,7 +1555,7 @@ void DYE906R_sh_iteFilter::ReadData()
     //Compute additional uncertainties
     for(int l=nrealsys; l<fNSys; l++)
       {
-	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/100.;
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/nrep;
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
@@ -1588,6 +1592,8 @@ void DYE906R_sh_iteFilter::ReadData()
   //copy the artificial systematics in the fSys matrix
   for (int i = 0; i < fNData; i++)
     for (int l = 1; l < nrealsys; l++){
+      if(abs(syscor[i][l])<1e-10)
+	syscor[i][l]=0.;
       fSys[i][l].add  = syscor[i][l];
 	    fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
 	    fSys[i][l].type = ADD;  
