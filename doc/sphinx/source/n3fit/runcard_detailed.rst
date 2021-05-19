@@ -71,6 +71,18 @@ possible more iterated fits with ``trainable: False``. Possibly more because eve
 the preprocessing ranges using fitted preprocessing, it can take more than one iteration before the 
 iterated fits have converged to stable values for the preprocessing ranges. 
 
+Note that the script ``vp-nextfitruncard`` automatically enforces some constraints
+on preprocessing ranges, which are required for integrability of certain
+flavours. More details on those limits, and how to disable them can be found
+by running
+
+.. code::
+
+    $ vp-nextfitruncard --help
+
+More information on ``vp-nextfitruncard`` can be found in
+:ref:`run-iterated-fit`.
+
 .. _trval-label:
 
 Training / Validation split

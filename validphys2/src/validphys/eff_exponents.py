@@ -423,7 +423,8 @@ fmt = lambda a: float(significant_digits(a, 4))
 next_fit_eff_exps_table = collect("next_effective_exponents_table", ("fitpdfandbasis",))
 
 
-def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
+def iterate_preprocessing_yaml(
+    fit, next_fit_eff_exps_table, _flmap_np_clip_arg=None):
     """Using py:func:`next_effective_exponents_table` update the preprocessing
     exponents of the input ``fit``. This is part of the usual pipeline referred
     to as "iterating a fit", for more information see: :ref:`run-iterated-fit`.
@@ -445,6 +446,23 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
     >>> with open("output.yml", "w+") as f:
     ...     f.write(yaml_output)
 
+    Parameters
+    ----------
+    fit: validphys.core.FitSpec
+        Whose preprocessing range will be iterated, the output runcard will be
+        the same as the one used to run this fit, except with new preprocessing
+        range.
+    next_fit_eff_exps_table: pd.DataFrame
+        Table outputted by :py:func:`next_fit_eff_exps_table` containing
+        the next preprocessing ranges.
+    _flmap_np_clip_arg: dict
+        Internal argument used by ``vp-nextfitruncard``. Dictionary containing
+        a mapping like
+        ``{<flavour>: {<largex/smallx>: {a_min: <min value>, a_max: <max value>}}}``.
+        If a flavour is present in ``_flmap_np_clip_arg`` then the preprocessing
+        ranges will be passed through ``np.clip`` with the arguments supplied
+        in the mapping.
+
     """
     (df_effexps,) = next_fit_eff_exps_table
     # Use round trip loader rather than safe_load in fit.as_input()
@@ -461,6 +479,13 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
     for i, fl in enumerate(runcard_flavours):
         alphas = df_effexps.loc[(f"${fl}$", r"$\alpha$")].values
         betas = df_effexps.loc[(f"${fl}$", r"$\beta$")].values
+        if _flmap_np_clip_arg is not None and _flmap_np_clip_arg.get(fl) is not None:
+            smallx_args = _flmap_np_clip_arg[fl].get("smallx")
+            largex_args = _flmap_np_clip_arg[fl].get("largex")
+            if smallx_args is not None:
+                alphas = np.clip(alphas, **smallx_args)
+            if largex_args is not None:
+                betas = np.clip(betas, **largex_args)
         previous_exponents[i]["smallx"] = [
             fmt(alpha) for alpha in alphas
         ]
