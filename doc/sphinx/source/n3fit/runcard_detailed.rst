@@ -63,13 +63,16 @@ easiest way to obtain a satisfactory range of the preprocessing. However, in som
 example a change of PDF basis where the preprocessing ranges obtain a different meaning entirely, 
 we don't know what a good starting point for the ranges would be. One way to identify good ranges 
 is by opening up the ``smallx`` and ``large`` parameters for large ranges and setting 
-``trainable: True``. Generally, it is advised to set ``trainable: False``, because trainable 
-preprocessing can lead to an underestimation of the PDF uncertainties in the extrapolation domain, 
-but trainable preprocessing exponents can be very useful to obtain reasonable preprocessing ranges.
-If the preprocessing ranges are obtained this way, it is recommended to perform at least one and 
-possible more iterated fits with ``trainable: False``. Possibly more because even after determining 
-the preprocessing ranges using fitted preprocessing, it can take more than one iteration before the 
-iterated fits have converged to stable values for the preprocessing ranges. 
+``trainable: True``. This way the preprocessing exponents will be considered part of the free 
+parameters of the model, and as such they will be fitted by the optimization algorithm.
+
+NNPDF4.0 fits are run with ``trainable: False``, because trainable preprocessing exponents can lead 
+to an underestimation of the PDF uncertainties in the extrapolation domain. So after determining a
+reasonable range for the preprocessing exponents, a new runcard should be generated using 
+``vp-nextfitruncard`` as explained in :ref:_run-iterated-fit. In this runcard one should then 
+manually set ``trainable: False`` for all preprocessing exponents before running the iterated fit. 
+It can take more than one iteration before the iterated fits have converged to stable values for the 
+preprocessing ranges.
 
 .. _trval-label:
 
