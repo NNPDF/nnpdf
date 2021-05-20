@@ -23,6 +23,7 @@ import logging
 import prompt_toolkit
 
 from reportengine import colors
+from reportengine.compat import yaml
 
 from validphys.api import API
 
@@ -31,7 +32,10 @@ from validphys.api import API
 # either smallx or largex, the innermost dictionaries must be valid arguments
 # for np.clip, this means BOTH a_min and a_max must be specified (even if one
 # is left as None, indicating it is unconstrained.)
-PREPROCESSING_CONSTRAINTS = {
+PREPROCESSING_LIMS = {
+    "v": {"smallx": {"a_min": None, "a_max": 1.0}},
+    "v3": {"smallx": {"a_min": None, "a_max": 1.0}},
+    "v8": {"smallx": {"a_min": None, "a_max": 1.0}},
     "t3": {"smallx": {"a_min": None, "a_max": 1.0}},
     "t8": {"smallx": {"a_min": None, "a_max": 1.0}},
 }
@@ -60,7 +64,7 @@ def process_args():
         help=(
             "Do not enforce any preprocessing constraints, which are chosen to "
             "ensure integrability. By default the following constraints are "
-            f"used: {PREPROCESSING_CONSTRAINTS}"
+            f"used: {PREPROCESSING_LIMS}"
         )
     )
     args = parser.parse_args()
@@ -118,11 +122,10 @@ def main():
     description = API.fit(fit=input_fit).as_input()["description"]
 
     if not args.no_preproc_lims:
-        preproc_lims = PREPROCESSING_CONSTRAINTS
-        log.warning(
-            "The following constraints will be used for preprocessing ranges, "
-            "using np.clip:\n%s",
-            preproc_lims,
+        preproc_lims = PREPROCESSING_LIMS
+        log.info(
+            "The following constraints will be used for preprocessing ranges, \n%s",
+            yaml.dump(preproc_lims),
         )
     else:
         # don't enforce any limits.
