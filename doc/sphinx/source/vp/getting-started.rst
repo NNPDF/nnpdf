@@ -33,12 +33,12 @@ A simple example is:
 We are specifying one PDF (by the `LHAPDF <https://lhapdf.hepforge.org/>`_ id),
 one dataset and one
 theory. Note that the dataset specification is identical to that of
-the `n3fit` configuration files.
+the ``n3fit`` configuration files.
 
 We are saying that we do not want to use any cuts on the data
 (so we do not have to specify a fit containing the cut data, for example).
 
-The special `actions_` key is used to declare the actions we want to
+The special ``actions_`` key is used to declare the actions we want to
 have executed. The syntax is the same as for the targets inside the
 report (see :ref:`tut_report`).  We want a data-theory comparison (``plot_fancy``;
 see :ref:`datthcomp`) and to
@@ -83,9 +83,9 @@ Asking for the help of one of the actions will list all the inputs required for 
 
 	Show the chi² of each and number of points of each dataset and
 	experiment of each fit, where experiment is a group of datasets
-	according to the `experiment` key in the PLOTTING info file, computed
+	according to the ``experiment`` key in the PLOTTING info file, computed
 	with the theory corresponding to the fit. Dataset that are not
-	included in some fit appear as `NaN`
+	included in some fit appear as ``NaN``
 
 
 

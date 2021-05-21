@@ -1,3 +1,5 @@
+.. _methodology:
+
 Methodology overview
 ====================
 
@@ -7,14 +9,14 @@ methodology.
 
 .. warning::
    The default implementation of the concepts presented here are implemented with Keras and
-   Tensorflow. The n3fit code inherits its features, so in this document we avoid the discussion of
+   Tensorflow. The ``n3fit`` code inherits its features, so in this document we avoid the discussion of
    specific details which can be found in the `Keras documentation <https://keras.io/>`_.
 
 .. note::
-	The final setup used in n3fit fits can be extracted from the runcards stored in nnpdf/n3fit/runcards.
+	The final setup used in ``n3fit`` fits can be extracted from the runcards stored in nnpdf/n3fit/runcards.
 
 This document contains a more specific discussion about the choices currently implemented in the
-`n3fit` package and discussed for the first time in `hep-ph/1907.05075 <https://arxiv.org/abs/1907.05075>`_.
+``n3fit`` package and discussed for the first time in `hep-ph/1907.05075 <https://arxiv.org/abs/1907.05075>`_.
 
 **Table of contents:**
 
@@ -45,7 +47,7 @@ considering the possibility of adding new fitting algorithms.
 In the following table we list some of the differences between both codes:
 
 +--------------------+---------------------------------+--------------------------------------------------+
-| Component          | nnfit                           | n3fit                                            |
+| Component          | ``nnfit``                       | ``n3fit``                                        |
 +====================+=================================+==================================================+
 | Random numbers     | main seed, closure filter seed  | multi seed                                       |
 +--------------------+---------------------------------+--------------------------------------------------+
@@ -81,7 +83,7 @@ random numbers used in training-validation, ``nnseed`` for the neural network in
 ``mcseed`` which controls the MC replica generation.
 
 .. note::
-	In the next sections we focus on the n3fit specifics marked in **bold**.
+	In the next sections we focus on the ``n3fit`` specifics marked in **bold**.
 
 .. _neural-network-architecture:
 
@@ -159,7 +161,7 @@ Following the gradient descent approach the training is performed in iteration s
   descent update scheme (which controls the convergence step size and speed).
 
 The gradient descent schemes are usually controlled by the **learning rate**, and the total
-**number of iterations**. Examples of fits using the `n3fit` methodology are available here:
+**number of iterations**. Examples of fits using the ``n3fit`` methodology are available here:
 
 - DIS-only fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/KTzrle5FQGuuBdcigkDKnQ==/>`_
 - Global fit based on NNPDF3.1 NNLO setup: `view <https://vp.nnpdf.science/qtXzt-BbQZGkV6P4pf9-UA==/>`_

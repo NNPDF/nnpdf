@@ -1,3 +1,5 @@
+.. _runcard-detailed:
+
 ================================
 ``n3fit`` runcard detailed guide
 ================================
@@ -50,6 +52,41 @@ Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old 
             - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
             - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
 
+It  is important to determine the correct values for the ``largex`` and ``smallx`` preprocessing 
+ranges. For example setting a poor range for those parameters can result in a conflict with the 
+:ref:`positivity <positivity>` or :ref:`integrability <integrability>` constraints, making it such 
+that no replicas can satisfy those constraints. In most cases when changes are made to a runcard, 
+they will have a relatively small effect on the required preprocessing ranges. This includes common 
+variations to runcards such as changing the datasets, or settings related to the training of the 
+neural network. In these cases :ref:`running an iterated fit <run-iterated-fit>` is likely the 
+easiest way to obtain a satisfactory range of the preprocessing. However, in some cases, such as for
+example a change of PDF basis where the preprocessing ranges obtain a different meaning entirely, 
+we don't know what a good starting point for the ranges would be. One way to identify good ranges 
+is by opening up the ``smallx`` and ``large`` parameters for large ranges and setting 
+``trainable: True``. This way the preprocessing exponents will be considered part of the free 
+parameters of the model, and as such they will be fitted by the optimization algorithm.
+
+NNPDF4.0 fits are run with ``trainable: False``, because trainable preprocessing exponents can lead 
+to an underestimation of the PDF uncertainties in the extrapolation domain. So after determining a
+reasonable range for the preprocessing exponents, a new runcard should be generated using 
+``vp-nextfitruncard`` as explained in :ref:_run-iterated-fit. In this runcard one should then 
+manually set ``trainable: False`` for all preprocessing exponents before running the iterated fit. 
+It can take more than one iteration before the iterated fits have converged to stable values for the 
+preprocessing ranges.
+
+Note that the script ``vp-nextfitruncard`` automatically enforces some constraints
+on preprocessing ranges, which are required for integrability of certain
+flavours. Specifically clipping the maximum value of the small-x exponent
+as :math:`\alpha \leq 1` for the valence PDFs and triplets T3 and T8.
+More details on those limits, and how to disable them can be found
+by running
+
+.. code::
+
+    $ vp-nextfitruncard --help
+
+More information on ``vp-nextfitruncard`` can be found in
+:ref:`run-iterated-fit`.
 
 .. _trval-label:
 
@@ -64,7 +101,7 @@ The fraction of events that are considered for the training and validation sets 
         datasets:
         - { dataset: SLACP, frac: 0.8}
         - { dataset: NMCPD, frac: 0.8 }      
-        - { dataset: CMSJETS11,     frac: 0.8, sys: 10 }
+        - { dataset: CMSJETS11, frac: 0.8, sys: 10 }
 
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
 
