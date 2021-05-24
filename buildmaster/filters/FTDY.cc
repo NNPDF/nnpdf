@@ -1177,7 +1177,7 @@ void DYE866R_sh_iteFilter::ReadData()
   No Jacobian is required, since it cancels out between the numerator and the 
   denominator.
   
-  Implemented by TG March 2021. Compelted and revised by ERN May 2021.
+  Implemented by TG March 2021. Completed and revised by ERN May 2021.
 */
 
 void DYE906RFilter::ReadData()
