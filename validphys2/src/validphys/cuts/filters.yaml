@@ -98,6 +98,14 @@
   PTO: NNLO
   rule: "fabs(central_value) >= 0.03"
 
+- dataset: ATLAS_WP_JET_8TEV_PT
+  reason: Avoid the region where small-pT resummation effects become important.
+  rule: "p_T >= 30"
+
+- dataset: ATLAS_WM_JET_8TEV_PT
+  reason: Avoid the region where small-pT resummation effects become important.
+  rule: "p_T >= 30"
+
 - dataset: ATLASZPT7TEV
   reason: Avoid the region where resummation effects become important.
   rule: "p_T2 >= 30**2"
