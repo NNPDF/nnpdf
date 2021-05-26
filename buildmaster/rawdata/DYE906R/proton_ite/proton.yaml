@@ -1,10 +1,10 @@
 meta:
-   author: Rosalyn Pearson
+   author: Emanuele R. Nocera
    title: Theoretical predictions
 
 theoryid: 200
 
-use_cuts: nocuts
+use_cuts: internal
 
 pdf: 210314-001-rs-nnpdf40-1000
 

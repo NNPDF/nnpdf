@@ -1,12 +1,12 @@
 meta:
-   author: Rosalyn Pearson
+   author: Emanuele R. Nocera
    title: Theoretical predictions
 
 theoryid: 200
 
-use_cuts: nocuts
+use_cuts: internal
 
-pdf: 210519-ern-001
+pdf: 210525-ern-002
 
 dataset_inputs:
          - { dataset: DYE906_D, cfac: [ACC,QCD,DEU1] }
