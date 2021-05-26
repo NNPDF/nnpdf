@@ -546,7 +546,7 @@ def pdfNN_layer_generator(
                 nodes,
                 activations,
                 initializer_name,
-                seed=seed,
+                seed=layer_seed,
                 dropout_rate=dropout,
                 regularizer=reg,
             )
@@ -555,7 +555,7 @@ def pdfNN_layer_generator(
             # TODO: this information should come from the basis information
             #       once the basis information is passed to this class
             list_of_pdf_layers = generate_dense_per_flavour_network(
-                inp, nodes, activations, initializer_name, seed=seed, basis_size=last_layer_nodes,
+                inp, nodes, activations, initializer_name, seed=layer_seed, basis_size=last_layer_nodes,
             )
 
         def dense_me(x):
@@ -568,7 +568,7 @@ def pdfNN_layer_generator(
                 curr_fun = dense_layer(curr_fun)
             return curr_fun
 
-        preproseed = seed + number_of_layers * (i + 1)
+        preproseed = layer_seed + number_of_layers * (i + 1)
         layer_preproc = Preprocessing(
             flav_info=flav_info,
             input_shape=(1,),
