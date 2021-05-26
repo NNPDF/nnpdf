@@ -2,6 +2,7 @@ import os
 
 import click
 
+# https://github.com/pallets/click/blob/main/examples/complex/complex/cli.py
 class ComplexCLI(click.MultiCommand):
     def list_commands(self, ctx):
         rv = []
