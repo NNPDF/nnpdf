@@ -1,0 +1,11 @@
+dataset_label: "DYE 906 $\\sigma^d_{\\rm DY}/\\sigma^p_{\\rm DY}$ BIN03"
+x: $x_2$
+
+y_label: '$\sigma_{pd}/\sigma_{pp}$' 
+
+extra_labels:
+   $x_2$:  [0.147,0.179,0.216,0.263,0.315,0.385]
+
+experiment: "AUXILIARY"
+
+nnpdf31_process: DY

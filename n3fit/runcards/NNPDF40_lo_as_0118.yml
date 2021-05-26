@@ -32,6 +32,7 @@ LODatasets: &LODatasets
 - {dataset: DYE886R_dw_ite, frac: 0.75}
 - {dataset: DYE886P, frac: 0.75, cfac: []}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: []}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: []}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: []}
 - {dataset: D0WMASY, frac: 0.75, cfac: []}
@@ -120,6 +121,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC,QCD]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
