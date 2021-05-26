@@ -38,6 +38,9 @@ from validphys.app import App
 from reportengine.compat import yaml
 from reportengine import colors
 
+from n3fit.scripts.n3fit_exec import N3FitConfig
+from reportengine.namespaces import NSList
+
 
 SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
@@ -48,12 +51,21 @@ SETUPFIT_FIXED_CONFIG = dict(
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
                       'validphys.results',
-                      'validphys.covmats']
+                      'validphys.covmats',
+                      'n3fit.performfit']
 
 SETUPFIT_DEFAULTS = dict(
-    use_cuts= 'internal',
+    use_cuts = 'internal',
 )
 
+N3FIT_ARTIFICIAL_INPUTS = dict(
+    replicas = [1],
+    replicas_nnseed_fitting_data_dict = None,
+    posdatasets_fitting_pos_dict = None,
+    integdatasets_fitting_integ_dict = None,
+    replica_path = None,
+    setupfit_check = True,
+)
 
 
 log = logging.getLogger(__name__)
@@ -124,11 +136,12 @@ class SetupFitEnvironment(Environment):
                 **super().ns_dump_description()}
 
 
-class SetupFitConfig(Config):
+class SetupFitConfig(N3FitConfig):
     """Specialization for yaml parsing"""
 
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
+
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore',
@@ -148,14 +161,22 @@ class SetupFitConfig(Config):
         if file_content.get('closuretest') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::closuretest::theory::fitting filter')
+            SETUPFIT_FIXED_CONFIG['actions_'].append(
+                'datacuts::theory::closuretest::fitting performfit')
         else:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::fitting filter')
+            SETUPFIT_FIXED_CONFIG['actions_'].append(
+                'datacuts::theory::fitting performfit')
 
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
         for k,v in SETUPFIT_DEFAULTS.items():
+            file_content.setdefault(k, v)
+        for k,v in SETUPFIT_DEFAULTS.items():
+            file_content.setdefault(k, v)
+        for k,v in N3FIT_ARTIFICIAL_INPUTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -188,7 +209,6 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
-
             # proceed with default run
             super().run()
 

@@ -3,7 +3,7 @@
 """
 
 # Backend-independent imports
-from collections import namedtuple
+# from collections import namedtuple
 import logging
 import numpy as np
 import n3fit.checks
@@ -42,7 +42,8 @@ def performfit(
     tensorboard=None,
     debug=False,
     maxcores=None,
-    parallel_models=1
+    parallel_models=1,
+    setupfit_check=False
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -123,7 +124,15 @@ def performfit(
                 maximum number of (logical) cores that the backend should be aware of
             parallel_models: int
                 number of models to be run in parallel
+            setupfit_check: bool
+                Whether or not performfit is being called by vp-setupfit to perform the checks
+                on the runcard
     """
+
+    # If we are running this as part of vp-setupfit, the function should be stopped here.
+    if setupfit_check:
+        return
+
     from n3fit.backends import set_initial_state
 
     # If debug is active, the initial state will be fixed so that the run is reproducible
