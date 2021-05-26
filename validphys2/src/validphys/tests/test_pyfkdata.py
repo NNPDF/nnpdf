@@ -64,7 +64,7 @@ def test_predictions():
     for ds in dss:
         preds = predictions(ds, pdf)
         cppres = ThPredictionsResult.from_convolution(pdf, ds)
-        # Change the atol and rtol from 1e-8 0 and 1e-7 since DYE906R
+        # Change the atol and rtol from 1e-8 and 1e-7 since DYE906R
         # fails with the default setting
         assert_allclose(preds.values, cppres._rawdata, atol=1e-8, rtol=1e-3)
 

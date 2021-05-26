@@ -1,8 +1,9 @@
 /*
 WARNING: File modified by ERN Nov 2020.
 Additional data sets, with suffix _dw and _sh have been added with extra 
-systematic ucnertainties. These systematic ucnertainties account for nuclear 
-uncertainties (estimated according to 1812.09074).
+systematic ucnertainties. These systematic uncertainties account for nuclear 
+uncertainties (estimated according to 1812.09074). The additional suffix _ite
+denotes that the procedure described there has been iterated once.
 The two strategies (dw=deweighted and sh=shifted) are implemented.
 The necessary shifts can be printed on screen and should be pasted into the
 appropriate cfactor file.
@@ -586,7 +587,7 @@ void DYE605_sh_iteFilter::ReadData()
  *     Published in Phys.Rev.D64:052002,2001.
  *     e-Print: hep-ex/0103030
  *
- *     The dimesionless ratio ( sigma^pd / 2*sigma^pp ) is given
+ *     The dimensionless ratio ( sigma^pd / 2*sigma^pp ) is given
  *     as 15 points in different bins with average <xF> and <M>
  *     In this case the number of kinematical variables is three,
  *     <xF>, <M>, <x2>
@@ -1170,13 +1171,53 @@ void DYE866R_sh_iteFilter::ReadData()
   also given.
   
   The data are stored in rawdata/DTE906/data_paper.dat, according to the 
-  original format as in the paper. They are converted in data for the 
-  distribution differential in hadronic rapidity and invariant mass, using the 
-  definition of hadronic rapidity given in Eqs. (4.6) of 
+  format presented in the paper. Specifically the data are for the distribution
+  differential in xt and xb, the momentum fractions carried by the target and 
+  beam partons involved in the parton-level scattering. The data are converted 
+  to distributions differential in hadronic rapidity and invariant mass, using 
+  the definition of hadronic rapidity given in Eqs. (4.6) of 
   https://arxiv.org/pdf/1009.5691.pdf. 
   No Jacobian is required, since it cancels out between the numerator and the 
   denominator.
-  
+
+  Various filters are implemented, that relate to variations of the same data
+  set in case deuteron uncertainties are considered or not.
+  - DYE906R corresponds to the baseline implementation, and does not 
+    contain any deuteron uncertainty.
+  - DYE906R_dw_ite and DYE906R_sh_ite are the same as DYE906R, but include 
+    extra uncertainties due to the deuteron corrections estimated according to
+    the deweighted (dw) or shifted (sh) procedure described in 1812.09074.
+
+  There is also a DYE906R_BIN filter. This filter is required to allow for the
+  proper computation of the theoretical prediction. It is used to generate
+  DATA files corresponding to the sub-bin kinematics described in Extended 
+  data Table 3 of 2103.04024. These DATA files are used to pass the kinematic
+  details of each sub-bin to APFEL/apfelcomb for the computation of the FK
+  tables. The theoretical prediciton is indeed constructed according to Eq.(10)
+  in 2103.04024. Each measured bin is divided in 10 sub-bins; each of these 
+  bins is computed with different kinematics and receives an acceptance 
+  correction (see Extended data Table 3). The computation of the theoretical
+  prediction requires the computation of 20 FK tables, 10 for the numerator of 
+  the observable and 10 for the denominator. Each of these 10 FK tables 
+  corresponds to one of the ten columns (with six rows) of Extended data Table 
+  3. The observable then becomes a COMPOUND observable. Two COMPOUND operators
+  are defined:
+  a) COM: this takes the 20 FK tables and computes Eq.(10). Note that this 
+  allows one to implement the acceptance factors by means of ACC K-factors 
+  (rather than to hard-code them in apfel), where each number multiplies a bin 
+  in each of the 20 FK tables. The definition of the operator can be found in 
+  the documentation.
+  b) SMT: this takes only 10 of the FK tables (either for the numerator or for 
+  the denominator) and computes their sum. This operator is required to 
+  estimate the nuclear uncertainty due to the deuteron in the numerator, 
+  as it allows one to compute the numerator with a proton-proton or with a 
+  proton-deuteron PDF.
+  The necesssity to rely on the DATA files (and ancillary SYSTYPE and PLOTTING
+  files) comes from the fact that the kinematics of the sub-bins is different
+  from the kinematics of the actual measurement; this information cannot be
+  encoded in applgrids because the computation of FK tables for fixed-target DY
+  relies on a computation made with APFEL.
+
   Implemented by TG March 2021. Completed and revised by ERN May 2021.
 */
 
