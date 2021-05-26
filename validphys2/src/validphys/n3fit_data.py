@@ -184,15 +184,16 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     return np.concatenate(trmask_partial)
 
 
-def generate_data_replica(data, replica_mcseed):
+def generate_data_replica(data, replica_mcseed, setupfit_check=False,):
     """Generate a pseudodata replica for ``data`` given the ``replica_seed``"""
+    if setupfit_check:
+        replica_mcseed = None
     spec_c = data.load()
     base_mcseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
     # copy C++ object to avoid mutation
     # t0 not required for replica generation, since libnnpdf uses experimental
     # covmat to generate replicas.
     spec_replica_c = type(spec_c)(spec_c)
-
     # Replica generation
     if replica_mcseed is not None:
         mcseed = base_mcseed + replica_mcseed

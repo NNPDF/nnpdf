@@ -38,7 +38,7 @@ from validphys.app import App
 from reportengine.compat import yaml
 from reportengine import colors
 
-from n3fit.scripts.n3fit_exec import N3FitConfig
+from n3fit.scripts.n3fit_exec import N3FitConfig, N3FitEnvironment
 from reportengine.namespaces import NSList
 
 
@@ -52,18 +52,19 @@ SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
                       'validphys.results',
                       'validphys.covmats',
-                      'n3fit.performfit']
+                      'n3fit.performfit',
+                      'validphys.n3fit_data']
 
 SETUPFIT_DEFAULTS = dict(
     use_cuts = 'internal',
 )
 
 N3FIT_ARTIFICIAL_INPUTS = dict(
-    replicas = [1],
-    replicas_nnseed_fitting_data_dict = None,
-    posdatasets_fitting_pos_dict = None,
-    integdatasets_fitting_integ_dict = None,
-    replica_path = None,
+    # replicas = [1],
+    # replicas_nnseed_fitting_data_dict = None,
+    # posdatasets_fitting_pos_dict = None,
+    # integdatasets_fitting_integ_dict = None,
+    # replica_path = None,
     setupfit_check = True,
 )
 
@@ -82,7 +83,7 @@ class SetupFitError(Exception):
     pass
 
 
-class SetupFitEnvironment(Environment):
+class SetupFitEnvironment(N3FitEnvironment):
     """Container for information to be filled at run time"""
     def init_output(self):
         # check file exists, is a file, has extension.
@@ -120,6 +121,7 @@ class SetupFitEnvironment(Environment):
         # put lockfile input inside of filter output
         self.input_folder = self.filter_path / INPUT_FOLDER
         self.input_folder.mkdir(exist_ok=True)
+        super().init_output()
 
     def save_md5(self):
         """Generate md5 key from file"""
@@ -174,8 +176,6 @@ class SetupFitConfig(N3FitConfig):
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
         for k,v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
-        for k,v in SETUPFIT_DEFAULTS.items():
-            file_content.setdefault(k, v)
         for k,v in N3FIT_ARTIFICIAL_INPUTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
@@ -209,6 +209,8 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
+            self.environment.replicas = NSList([1], nskey="replica")
+            self.environment.hyperopt = None
             # proceed with default run
             super().run()
 
