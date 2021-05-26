@@ -92,6 +92,7 @@ class N3FitEnvironment(Environment):
             "replica_path": "The replica output path",
             "output_path": "The runcard name",
             "hyperopt": "The hyperopt flag",
+            "dry_run": "The dry run flag",
             **super().ns_dump_description(),
         }
 
@@ -193,6 +194,9 @@ class N3FitApp(App):
                 raise argparse.ArgumentTypeError("%s is an invalid positive int value." % value)
             return ivalue
 
+        parser.add_argument(
+            "--dry-run", help="Dry run to check the runcard", default=False, type=bool
+        )
         parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
@@ -216,6 +220,7 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
+            self.environment.dry_run = self.args["dry_run"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

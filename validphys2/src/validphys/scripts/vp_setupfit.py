@@ -38,7 +38,7 @@ from validphys.app import App
 from reportengine.compat import yaml
 from reportengine import colors
 
-from n3fit.scripts.n3fit_exec import N3FitConfig, N3FitEnvironment
+from n3fit.scripts.n3fit_exec import N3FitConfig, N3FitEnvironment, N3FIT_PROVIDERS
 from reportengine.namespaces import NSList
 
 
@@ -51,21 +51,16 @@ SETUPFIT_FIXED_CONFIG = dict(
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
                       'validphys.results',
-                      'validphys.covmats',
-                      'n3fit.performfit',
-                      'validphys.n3fit_data']
+                      'validphys.covmats',]
 
 SETUPFIT_DEFAULTS = dict(
     use_cuts = 'internal',
 )
 
 N3FIT_ARTIFICIAL_INPUTS = dict(
-    # replicas = [1],
-    # replicas_nnseed_fitting_data_dict = None,
-    # posdatasets_fitting_pos_dict = None,
-    # integdatasets_fitting_integ_dict = None,
-    # replica_path = None,
-    setupfit_check = True,
+    replicas = [1],
+    hyperopt = None,
+    dry_run = True,
 )
 
 
@@ -176,8 +171,6 @@ class SetupFitConfig(N3FitConfig):
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
         for k,v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
-        for k,v in N3FIT_ARTIFICIAL_INPUTS.items():
-            file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
@@ -189,7 +182,7 @@ class SetupFitApp(App):
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=SETUPFIT_PROVIDERS)
+                                          providers=SETUPFIT_PROVIDERS+N3FIT_PROVIDERS)
 
     @property
     def argparser(self):
@@ -209,8 +202,9 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
-            self.environment.replicas = NSList([1], nskey="replica")
-            self.environment.hyperopt = None
+            self.environment.replicas = NSList(N3FIT_ARTIFICIAL_INPUTS["replicas"], nskey="replica")
+            self.environment.hyperopt = N3FIT_ARTIFICIAL_INPUTS["hyperopt"]
+            self.environment.dry_run = N3FIT_ARTIFICIAL_INPUTS["dry_run"]
             # proceed with default run
             super().run()
 

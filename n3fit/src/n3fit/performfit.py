@@ -43,7 +43,7 @@ def performfit(
     debug=False,
     maxcores=None,
     parallel_models=1,
-    setupfit_check=False
+    dry_run
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -130,7 +130,7 @@ def performfit(
     """
 
     # If we are running this as part of vp-setupfit, the function should be stopped here.
-    if setupfit_check:
+    if dry_run:
         return
 
     from n3fit.backends import set_initial_state
