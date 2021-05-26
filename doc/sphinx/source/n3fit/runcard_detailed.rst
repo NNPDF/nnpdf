@@ -105,6 +105,16 @@ The fraction of events that are considered for the training and validation sets 
 
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
 
+The random seed for the training/validation split is defined by the variable ``trvlseed``.
+By default the seed is further modified by the replica index, but it is possible
+to fix it such that it is the same for all replicas with ``same_trvl_per_replica``
+(``false`` by default).
+
+.. code-block:: yaml
+
+    trvlseed: 7
+    same_trvl_per_replica: true
+
 
 .. _networkarch-label:
 
