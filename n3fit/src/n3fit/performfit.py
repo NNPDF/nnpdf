@@ -124,12 +124,12 @@ def performfit(
                 maximum number of (logical) cores that the backend should be aware of
             parallel_models: int
                 number of models to be run in parallel
-            setupfit_check: bool
-                Whether or not performfit is being called by vp-setupfit to perform the checks
-                on the runcard
+            dry_run: bool
+                Whether or not performfit is being called only to perform the checks on the runcard
     """
 
-    # If we are running this as part of vp-setupfit, the function should be stopped here.
+    # A dry run is run with the aim of performing the checks, so there is no need to run the rest
+    # of his function
     if dry_run:
         return
 
