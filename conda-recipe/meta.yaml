@@ -45,6 +45,7 @@ requirements:
         - pandas
         - requests
         - prompt_toolkit
+        - click
         - sphinx # documentation
         - recommonmark
         - sphinx_rtd_theme >0.5
