@@ -3,7 +3,6 @@
 """
 
 # Backend-independent imports
-# from collections import namedtuple
 import logging
 import numpy as np
 import n3fit.checks

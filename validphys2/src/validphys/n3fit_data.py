@@ -184,7 +184,7 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     return np.concatenate(trmask_partial)
 
 
-def generate_data_replica(data, replica_mcseed, dry_run,):
+def generate_data_replica(data, replica_mcseed, dry_run):
     """Generate a pseudodata replica for ``data`` given the ``replica_seed``"""
     if dry_run:
         replica_mcseed = None

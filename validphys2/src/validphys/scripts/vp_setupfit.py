@@ -80,6 +80,8 @@ class SetupFitError(Exception):
 class SetupFitEnvironment(N3FitEnvironment):
     """Container for information to be filled at run time"""
     def init_output(self):
+
+        # initialize paths needed for the n3fit dry run
         super().init_output()
 
         # check file exists, is a file, has extension.
@@ -202,6 +204,7 @@ class SetupFitApp(App):
             self.environment.replicas = NSList(N3FIT_ARTIFICIAL_INPUTS["replicas"], nskey="replica")
             self.environment.hyperopt = N3FIT_ARTIFICIAL_INPUTS["hyperopt"]
             self.environment.dry_run = N3FIT_ARTIFICIAL_INPUTS["dry_run"]
+
             # proceed with default run
             super().run()
 
