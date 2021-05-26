@@ -156,15 +156,12 @@ class SetupFitConfig(N3FitConfig):
                               f"not '{type(file_content)}'.")
 
         if file_content.get('closuretest') is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::closuretest::theory::fitting filter')
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::closuretest::fitting performfit')
+            filter_action = 'datacuts::closuretest::theory::fitting filter'
+            check_fit_action = 'datacuts::theory::closuretest::fitting performfit'
         else:
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::fitting filter')
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::fitting performfit')
+            filter_action = 'datacuts::theory::fitting filter'
+            check_fit_action = 'datacuts::theory::fitting performfit'
+        SETUPFIT_FIXED_CONFIG['actions_'] += [check_fit_action, filter_action]
 
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
