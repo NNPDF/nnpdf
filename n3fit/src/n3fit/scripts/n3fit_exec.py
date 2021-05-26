@@ -194,9 +194,7 @@ class N3FitApp(App):
                 raise argparse.ArgumentTypeError("%s is an invalid positive int value." % value)
             return ivalue
 
-        parser.add_argument(
-            "--dry-run", help="Dry run to check the runcard", default=False, type=bool
-        )
+        parser.add_argument("--dry-run", help="Dry run to check the runcard", action='store_true')
         parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
