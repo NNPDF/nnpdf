@@ -194,6 +194,7 @@ def generate_data_replica(data, replica_mcseed, dry_run,):
     # t0 not required for replica generation, since libnnpdf uses experimental
     # covmat to generate replicas.
     spec_replica_c = type(spec_c)(spec_c)
+
     # Replica generation
     if replica_mcseed is not None:
         mcseed = base_mcseed + replica_mcseed

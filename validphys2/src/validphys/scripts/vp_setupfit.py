@@ -33,13 +33,12 @@ import logging
 import hashlib
 import warnings
 
-from validphys.config import Environment, Config, EnvironmentError_, ConfigError
+from validphys.config import EnvironmentError_, ConfigError
 from validphys.app import App
 from reportengine.compat import yaml
-from reportengine import colors
-
-from n3fit.scripts.n3fit_exec import N3FitConfig, N3FitEnvironment, N3FIT_PROVIDERS
 from reportengine.namespaces import NSList
+from reportengine import colors
+from n3fit.scripts.n3fit_exec import N3FitConfig, N3FitEnvironment, N3FIT_PROVIDERS
 
 
 SETUPFIT_FIXED_CONFIG = dict(
@@ -51,7 +50,7 @@ SETUPFIT_FIXED_CONFIG = dict(
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
                       'validphys.results',
-                      'validphys.covmats',]
+                      'validphys.covmats']
 
 SETUPFIT_DEFAULTS = dict(
     use_cuts = 'internal',
@@ -81,6 +80,8 @@ class SetupFitError(Exception):
 class SetupFitEnvironment(N3FitEnvironment):
     """Container for information to be filled at run time"""
     def init_output(self):
+        super().init_output()
+
         # check file exists, is a file, has extension.
         if not self.config_yml.exists():
             raise SetupFitError("Invalid runcard. File not found.")
@@ -116,7 +117,6 @@ class SetupFitEnvironment(N3FitEnvironment):
         # put lockfile input inside of filter output
         self.input_folder = self.filter_path / INPUT_FOLDER
         self.input_folder.mkdir(exist_ok=True)
-        super().init_output()
 
     def save_md5(self):
         """Generate md5 key from file"""
