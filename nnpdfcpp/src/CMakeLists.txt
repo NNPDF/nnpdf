@@ -58,7 +58,7 @@ endif(COMPILE_chi2check)
 #    )
 #  # validphys
 #  option(COMPILE_validphys "Compile validphys program." OFF)
-#  if (COMPILE_validphys)  
+#  if (COMPILE_validphys)
 #    add_executable(validphys validphys/src/validphys.cc
 #      validphys/src/plotdata.cc
 #      validphys/src/plotutils.cc)
@@ -72,16 +72,7 @@ endif(COMPILE_chi2check)
 #  message(WARNING "ROOT not found: validphys compilation is disabled, install ROOT and rerun cmake to enable the validphys compilation")
 #endif(ROOT_CONFIG)
 
-# revolve
-option(COMPILE_revolve "Compile revolve program." OFF)
-if (COMPILE_revolve)
-  add_executable(revolve revolve/src/revolve.cc)
-  target_link_libraries(revolve common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
-  install(TARGETS revolve DESTINATION bin
-          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
-endif(COMPILE_revolve)
-
-# revolvenet
+# evolvefit
 option(COMPILE_evolvefit "Compile evolvefit program." OFF)
 if (COMPILE_evolvefit)
   add_executable(evolvefit
@@ -90,7 +81,7 @@ if (COMPILE_evolvefit)
   include_directories(evolvefit/inc nnfit/inc)
   target_link_libraries(evolvefit common nnpdf ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS evolvefit DESTINATION bin
-          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_evolvefit)
 
 # libfiatlux
@@ -114,5 +105,5 @@ if (FIATLUX_CONFIG)
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
   endif(COMPILE_fiatlux)
 else(FIATLUX_CONFIG)
-  message(WARNING "libfiatlux not found: fiatlux compilation is disabled, install libfiatlux and rerun cmake to enable the fiatlux compilation")  
+  message(WARNING "libfiatlux not found: fiatlux compilation is disabled, install libfiatlux and rerun cmake to enable the fiatlux compilation")
 endif(FIATLUX_CONFIG)
