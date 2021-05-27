@@ -664,12 +664,45 @@ def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
 
     return fig
 
+@figure
+def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
+    """Plot the chi² of all datasets with bars."""
+    ds = iter(each_dataset_chi2)
+    dschi2 = []
+    xticks = []
+    for group, group_res in zip(groups_data, groups_chi2):
+        for dataset, dsres in zip(group, ds):
+            dschi2.append(dsres.central_result/dsres.ndata)
+            xticks.append(dataset.name)
+
+    fig = plt.figure(figsize=(4,4))
+    ax = fig.add_subplot(projection='polar')
+    ax = plotutils.spiderplot(xticks, dschi2, label==[r'$\chi^2$'])
+
+    ax.set_title(r"$\chi^2$ distribution for datasets")
+
+    return fig
+
+
 def _plot_chis_df(df):
     chilabel = df.columns.get_level_values(1)[1]
     data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.barplot(data, expnames, fitnames)
+    ax.grid(False)
+    ax.legend()
+    return fig, ax
+
+def _plot_chis_spider_df(df):
+    chilabel = df.columns.get_level_values(1)[1]
+    data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
+    fitnames = df.columns.get_level_values(0).unique()
+    expnames = list(df.index.get_level_values(0))
+    fig = plt.figure(figsize=(4,4))
+    ax = fig.add_subplot(projection='polar')
+    for dat in data:
+        ax = plotutils.spiderplot(expnames, dat, fitnames)
     ax.grid(False)
     ax.legend()
     return fig, ax
@@ -691,9 +724,29 @@ def plot_fits_datasets_chi2(fits_datasets_chi2_table):
     return fig
 
 @figure
+def plot_fits_datasets_chi2_spider(fits_datasets_chi2_table):
+    """Generate a splot equivalent to ``plot_datasets_chi2_spider`` using all the
+    fitted datasets as input."""
+    ind = fits_datasets_chi2_table.index.droplevel(0)
+    df = fits_datasets_chi2_table.set_index(ind)
+    cols = fits_datasets_chi2_table.columns.get_level_values(0).unique()
+    dfs = []
+    for col in cols:
+        dfs.append(df[col].dropna())
+    df_out = pd.concat(dfs, axis=1, keys=cols, sort=False)
+    fig, ax = _plot_chis_spider_df(df_out)
+    ax.set_title(r"$\chi^2$ for datasets")
+    return fig
+
+@figure
 def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
     """Same as plot_fits_datasets_chi2 but for arbitrary dataspecs"""
     return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
+
+@figure
+def plot_dataspecs_datasets_chi2_spider(dataspecs_datasets_chi2_table):
+    """Same as plot_fits_datasets_chi2_spider but for arbitrary dataspecs"""
+    return plot_fits_datasets_chi2_spider(dataspecs_datasets_chi2_table)
 
 @figure
 def plot_fits_groups_data_chi2(fits_groups_chi2_table, processed_metadata_group):

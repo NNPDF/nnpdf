@@ -503,9 +503,11 @@ def spiderplot(xticks, vals, label, ax=None):
     Makes a spider/radar plot.
     """
     N = len(xticks)
+
     angles = [n / float(N) * 2 * np.pi for n in range(N)]
     # Add this on so that the plot line connects back to the start
     angles += angles[:1]
+    vals = list(vals)
     vals += vals[:1]
 
     maxval = np.max(vals)
