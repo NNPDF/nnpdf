@@ -33,12 +33,12 @@ import logging
 import hashlib
 import warnings
 
-from validphys.config import EnvironmentError_, ConfigError
+from validphys.config import EnvironmentError_, ConfigError, Config
 from validphys.app import App
 from reportengine.compat import yaml
 from reportengine.namespaces import NSList
 from reportengine import colors
-from n3fit.scripts.n3fit_exec import N3FitConfig, N3FitEnvironment, N3FIT_PROVIDERS
+from n3fit.scripts.n3fit_exec import N3FitEnvironment, N3FIT_PROVIDERS
 
 
 SETUPFIT_FIXED_CONFIG = dict(
@@ -135,7 +135,7 @@ class SetupFitEnvironment(N3FitEnvironment):
                 **super().ns_dump_description()}
 
 
-class SetupFitConfig(N3FitConfig):
+class SetupFitConfig(Config):
     """Specialization for yaml parsing"""
 
     @classmethod
@@ -160,6 +160,7 @@ class SetupFitConfig(N3FitConfig):
         if file_content.get('closuretest') is not None:
             filter_action = 'datacuts::closuretest::theory::fitting filter'
             check_fit_action = 'datacuts::theory::closuretest::fitting performfit'
+            
         else:
             filter_action = 'datacuts::theory::fitting filter'
             check_fit_action = 'datacuts::theory::fitting performfit'
@@ -172,6 +173,7 @@ class SetupFitConfig(N3FitConfig):
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
+
 
 
 class SetupFitApp(App):
