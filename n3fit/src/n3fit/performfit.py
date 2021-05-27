@@ -5,7 +5,6 @@
 # Backend-independent imports
 import logging
 import numpy as np
-import n3fit.checks
 from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
@@ -14,15 +13,10 @@ log = logging.getLogger(__name__)
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.can_run_multiple_replicas
-@n3fit.checks.check_consistent_basis
-@n3fit.checks.wrapper_check_NN
-@n3fit.checks.wrapper_hyperopt
-@n3fit.checks.check_deprecated_options
 def performfit(
     *,
+    n3fit_checks_action, # used for checks
     replicas, # used for checks
-    genrep, # used for checks
-    data, # used for checks
     replicas_nnseed_fitting_data_dict,
     posdatasets_fitting_pos_dict,
     integdatasets_fitting_integ_dict,

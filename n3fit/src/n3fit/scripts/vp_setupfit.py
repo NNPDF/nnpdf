@@ -33,12 +33,10 @@ import logging
 import hashlib
 import warnings
 
-from validphys.config import EnvironmentError_, ConfigError, Config
+from validphys.config import EnvironmentError_, ConfigError, Config, Environment
 from validphys.app import App
 from reportengine.compat import yaml
-from reportengine.namespaces import NSList
 from reportengine import colors
-from n3fit.scripts.n3fit_exec import N3FitEnvironment, N3FIT_PROVIDERS
 
 
 SETUPFIT_FIXED_CONFIG = dict(
@@ -50,18 +48,13 @@ SETUPFIT_FIXED_CONFIG = dict(
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
                       'validphys.results',
-                      'validphys.covmats']
+                      'validphys.covmats',
+                      'n3fit.n3fit_checks_provider'
+                      ]
 
 SETUPFIT_DEFAULTS = dict(
-    use_cuts = 'internal',
+    use_cuts = 'internal'
 )
-
-N3FIT_ARTIFICIAL_INPUTS = dict(
-    replicas = [1],
-    hyperopt = None,
-    dry_run = True,
-)
-
 
 log = logging.getLogger(__name__)
 
@@ -77,12 +70,9 @@ class SetupFitError(Exception):
     pass
 
 
-class SetupFitEnvironment(N3FitEnvironment):
+class SetupFitEnvironment(Environment):
     """Container for information to be filled at run time"""
     def init_output(self):
-
-        # initialize paths needed for the n3fit dry run
-        super().init_output()
 
         # check file exists, is a file, has extension.
         if not self.config_yml.exists():
@@ -159,11 +149,10 @@ class SetupFitConfig(Config):
 
         if file_content.get('closuretest') is not None:
             filter_action = 'datacuts::closuretest::theory::fitting filter'
-            check_fit_action = 'datacuts::theory::closuretest::fitting performfit'
-            
+            check_fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
             filter_action = 'datacuts::theory::fitting filter'
-            check_fit_action = 'datacuts::theory::fitting performfit'
+            check_fit_action = 'datacuts::theory::fitting n3fit_checks_action'
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_fit_action, filter_action]
 
         if file_content.get('theorycovmatconfig') is not None:
@@ -183,7 +172,7 @@ class SetupFitApp(App):
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=SETUPFIT_PROVIDERS+N3FIT_PROVIDERS)
+                                          providers=SETUPFIT_PROVIDERS)
 
     @property
     def argparser(self):
@@ -203,9 +192,6 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
-            self.environment.replicas = NSList(N3FIT_ARTIFICIAL_INPUTS["replicas"], nskey="replica")
-            self.environment.hyperopt = N3FIT_ARTIFICIAL_INPUTS["hyperopt"]
-            self.environment.dry_run = N3FIT_ARTIFICIAL_INPUTS["dry_run"]
 
             # proceed with default run
             super().run()
