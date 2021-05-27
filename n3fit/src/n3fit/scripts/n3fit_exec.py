@@ -96,7 +96,6 @@ class N3FitEnvironment(Environment):
             "replica_path": "The replica output path",
             "output_path": "The runcard name",
             "hyperopt": "The hyperopt flag",
-            "dry_run": "The dry run flag",
             **super().ns_dump_description(),
         }
 
@@ -222,7 +221,6 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
-            self.environment.dry_run = self.args["dry_run"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

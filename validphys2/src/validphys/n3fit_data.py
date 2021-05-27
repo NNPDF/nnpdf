@@ -184,10 +184,8 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     return np.concatenate(trmask_partial)
 
 
-def generate_data_replica(data, replica_mcseed, dry_run):
+def generate_data_replica(data, replica_mcseed):
     """Generate a pseudodata replica for ``data`` given the ``replica_seed``"""
-    if dry_run:
-        replica_mcseed = None
     spec_c = data.load()
     base_mcseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
     # copy C++ object to avoid mutation

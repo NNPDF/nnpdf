@@ -36,8 +36,7 @@ def performfit(
     tensorboard=None,
     debug=False,
     maxcores=None,
-    parallel_models=1,
-    dry_run
+    parallel_models=1
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -118,15 +117,7 @@ def performfit(
                 maximum number of (logical) cores that the backend should be aware of
             parallel_models: int
                 number of models to be run in parallel
-            dry_run: bool
-                Whether or not performfit is being called only to perform the checks on the runcard
     """
-
-    # A dry run is run with the aim of performing the checks, so there is no need to run the rest
-    # of his function
-    if dry_run:
-        return
-
     from n3fit.backends import set_initial_state
 
     # If debug is active, the initial state will be fixed so that the run is reproducible
