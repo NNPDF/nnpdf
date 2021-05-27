@@ -31,6 +31,13 @@ Contents
    tutorials/index
    ./sphinx-documentation.md
 
+Bibliography
+============
+
+.. bibliography::
+   :cited:
+
+
 Indices and tables
 ==================
 
