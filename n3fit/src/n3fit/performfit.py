@@ -6,6 +6,7 @@
 import logging
 import numpy as np
 from n3fit.vpinterface import N3PDF
+import n3fit.checks
 
 log = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ log = logging.getLogger(__name__)
 def performfit(
     *,
     n3fit_checks_action, # used for checks
-    replicas, # used for checks
+    replicas, # used for checks specific to performfit
     replicas_nnseed_fitting_data_dict,
     posdatasets_fitting_pos_dict,
     integdatasets_fitting_integ_dict,
