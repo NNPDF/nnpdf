@@ -53,8 +53,10 @@ SETUPFIT_PROVIDERS = ['validphys.filters',
                       ]
 
 SETUPFIT_DEFAULTS = dict(
-    use_cuts = 'internal'
+    use_cuts = 'internal',
 )
+
+
 
 log = logging.getLogger(__name__)
 
@@ -73,7 +75,6 @@ class SetupFitError(Exception):
 class SetupFitEnvironment(Environment):
     """Container for information to be filled at run time"""
     def init_output(self):
-
         # check file exists, is a file, has extension.
         if not self.config_yml.exists():
             raise SetupFitError("Invalid runcard. File not found.")
@@ -130,7 +131,6 @@ class SetupFitConfig(Config):
 
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
-
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore',

@@ -5,8 +5,8 @@
 # Backend-independent imports
 import logging
 import numpy as np
-from n3fit.vpinterface import N3PDF
 import n3fit.checks
+from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
 

@@ -27,9 +27,4 @@ def n3fit_checks_action(
     tensorboard=None,
     parallel_models=1,
 ):
-    # can_run_parallel_replicas(genrep, parameters, hyperopt, parallel_models)
-    # check_consistent_basis(sum_rules, fitbasis, basis, theoryid)
-    # wrapper_check_NN(basis, tensorboard, save, load, parameters)
-    # wrapper_hyperopt(hyperopt, hyperscan, genrep, data)
-    # check_deprecated_options(fitting)
-    pass
+    return

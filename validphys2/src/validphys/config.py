@@ -1505,16 +1505,6 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
-    
-    def produce_kfold_parameters(self, hyperscan=None, hyperopt=None):
-        if hyperscan and hyperopt:
-            return hyperscan["kfold"]
-        return None
-
-    def produce_kpartitions(self, kfold_parameters):
-        if kfold_parameters:
-            return kfold_parameters["partitions"]
-        return None
 
 
 
