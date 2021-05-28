@@ -6,7 +6,6 @@ and produces expected results
 
 """
 import pathlib
-import pytest
 import shutil
 import subprocess as sp
 
@@ -14,7 +13,7 @@ from reportengine import api
 
 from validphys.app import providers
 from validphys.config import Environment
-from validphys.scripts.vp_rebuild_data import REBUILD_CONFIG
+from n3fit.scripts.vp_rebuild_data import REBUILD_CONFIG
 from validphys.tableloader import sane_load
 from validphys.tests.test_regressions import make_table_comp
 
@@ -31,9 +30,8 @@ def parse_test_output(filename):
     return df
 
 
-@pytest.mark.linux
 @make_table_comp(parse_test_output)
-def test_filter_rebuild_closure_data(tmp):
+def test_filter_rebuild_closure_data(tmp_path):
     """
     Takes a closure test runcard from the regressions directory
     and then runs ``vp-setupfit`` in a temp directory and then
@@ -48,14 +46,14 @@ def test_filter_rebuild_closure_data(tmp):
     runcard = REGRESSION_FOLDER / runcard_name
 
     # cp runcard to tmp folder
-    shutil.copy(runcard, tmp)
+    shutil.copy(runcard, tmp_path)
     # filter the runcard
-    sp.run(f"vp-setupfit {runcard_name}".split(), cwd=tmp, check=True)
+    sp.run(f"vp-setupfit {runcard_name}".split(), cwd=tmp_path, check=True)
 
-    sp.run(f"vp-rebuild-data {FIT_NAME}".split(), cwd=tmp, check=True)
+    sp.run(f"vp-rebuild-data {FIT_NAME}".split(), cwd=tmp_path, check=True)
 
     API = api.API(
-        providers, N3FitConfig, Environment, output=str(tmp / FIT_NAME)
+        providers, N3FitConfig, Environment, output=str(tmp_path / FIT_NAME)
     )
     # to use groups_data_values we need to do some gymnastics with data spec
     # because taking data_input from fitinputcontext overwrites any subsequent
