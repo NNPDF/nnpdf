@@ -14,7 +14,7 @@ from reportengine import api
 
 from validphys.app import providers
 from validphys.config import Environment
-from validphys.scripts.vp_rebuild_data import REBUILD_CONFIG
+from n3fit.scripts.vp_rebuild_data import REBUILD_CONFIG
 from validphys.tableloader import sane_load
 from validphys.tests.test_regressions import make_table_comp
 
