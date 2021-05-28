@@ -82,20 +82,6 @@ fitting:
   - {fl: t15, trainable: false, smallx: [1.033, 1.161], largex: [1.506, 3.504]}
 
 ############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta: 0            # Delta for look-back stopping
-  mingen: 0             # Minimum number of generations
-  window: 500           # Window for moving average
-  minchi2: 3.5          # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear: 200           # Smear for stopping
-  deltasm: 200          # Delta smear for stopping
-  rv: 2                 # Ratio for validation stopping
-  rt: 0.5               # Ratio for training stopping
-  epsilon: 1e-6         # Gradient epsilon
-
-############################################################
 positivity:
   posdatasets:
   - {dataset: POSDYC, maxlambda: 1e6}        # Positivity Lagrange Multiplier

@@ -149,11 +149,15 @@ class SetupFitConfig(Config):
 
         if file_content.get('closuretest') is not None:
             filter_action = 'datacuts::closuretest::theory::fitting filter'
-            check_fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
+            check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
             filter_action = 'datacuts::theory::fitting filter'
-            check_fit_action = 'datacuts::theory::fitting n3fit_checks_action'
-        SETUPFIT_FIXED_CONFIG['actions_'] += [check_fit_action, filter_action]
+            check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
+
+        if kwargs["environment"].legacy:
+            SETUPFIT_FIXED_CONFIG['actions_'] += [filter_action]
+        else:
+            SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
 
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
@@ -179,6 +183,9 @@ class SetupFitApp(App):
         parser.add_argument('-o','--output',
                         help="Output folder and name of the fit",
                         default=None)
+        parser.add_argument("--legacy",
+                            help="Filter an old nnfit runcard by skipping n3fit specific checks",
+                            action='store_true')
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -191,6 +198,7 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
+            self.environment.legacy = self.args["legacy"]
 
             # proceed with default run
             super().run()
