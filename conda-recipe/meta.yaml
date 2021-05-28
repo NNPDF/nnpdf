@@ -77,6 +77,8 @@ outputs:
     - name: n3fit # [linux]
       script: n3-build.sh # [linux]
       requirements: # [linux]
+        build: # [linux]
+            - python # [linux]
         run: # [linux]
         # Select eigen build
             - nnpdf # [linux]
