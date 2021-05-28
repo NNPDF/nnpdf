@@ -65,8 +65,6 @@ build:
     # import CONDA_BUILD_SYSROOT from env variable for osx
     script_env:
       - CONDA_BUILD_SYSROOT # [osx]
-    script:
-        vp-build.sh
 
 about:
     home: https://nnpdf.mi.infn.it/
@@ -75,15 +73,17 @@ about:
 
 outputs:
     - name: nnpdf
-    - name: n3fit
-      skip: True # [osx]
-      script: python -m pip install --no-deps --ignore-installed n3fit
-      requirements:
-        run:
+      script: vp-build.sh
+    - name: n3fit # [linux]
+      script: n3-build.sh # [linux]
+      requirements: # [linux]
+        run: # [linux]
         # Select eigen build
-            - tensorflow >=2 *eigen*
-            - gast ==0.3.3 # Conda tensorflow uses the wrong version
-            - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version
-            - psutil # to ensure n3fit affinity is with the right processors
-            - hyperopt
-      test: pytest --pyargs n3fit
+            - nnpdf # [linux]
+            - tensorflow >=2 *eigen* # [linux]
+            - gast ==0.3.3 # Conda tensorflow uses the wrong version # [linux]
+            - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version # [linux]
+            - psutil # to ensure n3fit affinity is with the right processors # [linux]
+            - hyperopt # [linux]
+      test: # [linux]
+        script: run_fit_test.sh # [linux]
