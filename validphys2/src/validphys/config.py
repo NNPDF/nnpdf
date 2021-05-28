@@ -1508,7 +1508,6 @@ class CoreConfig(configparser.Config):
 
 
 
-
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
 

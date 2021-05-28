@@ -33,7 +33,7 @@ import logging
 import hashlib
 import warnings
 
-from validphys.config import EnvironmentError_, ConfigError, Config, Environment
+from validphys.config import Environment, Config, EnvironmentError_, ConfigError
 from validphys.app import App
 from reportengine.compat import yaml
 from reportengine import colors
@@ -50,7 +50,7 @@ SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.results',
                       'validphys.covmats',
                       'n3fit.n3fit_checks_provider'
-                      ]
+]
 
 SETUPFIT_DEFAULTS = dict(
     use_cuts = 'internal',
@@ -162,7 +162,6 @@ class SetupFitConfig(Config):
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
-
 
 
 class SetupFitApp(App):
