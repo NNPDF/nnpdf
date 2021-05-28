@@ -11,7 +11,6 @@ import sys
 import pathlib
 import functools
 import logging
-import numbers
 import re
 import tempfile
 import shutil
@@ -30,6 +29,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
+from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
 import NNPDF as nnpath
 
@@ -376,15 +376,24 @@ class Loader(LoaderBase):
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
+        if fitname != osp.basename(fitname):
+            raise FitNotFound(
+                f"Could not find fit '{fitname}' in '{resultspath} "
+                "because the name doesn't correspond to a valid filename"
+            )
         p = resultspath / fitname
         if p.is_dir():
             return FitSpec(fitname, p)
-        if not p.exists():
-            msg = ("Could not find fit '{fitname}' in '{resultspath}'. "
-                   "Folder '{p}' not found").format(**locals())
+        if not p.is_dir():
+            msg = (
+                f"Could not find fit '{fitname}' in '{resultspath}'. "
+                f"Folder '{p}' not found"
+            )
             raise FitNotFound(msg)
-        msg = ("Could not load fit '{fitname}' from '{resultspath}. "
-                   "'{p}' must be a folder").format(**locals())
+        msg = (
+            f"Could not load fit '{fitname}' from '{resultspath}. "
+            f"'{p}' must be a folder"
+        )
         raise FitNotFound(msg)
 
     def check_default_filter_rules(self, theoryid, defaults=None):
@@ -607,8 +616,6 @@ def download_and_extract(url, local_path):
         os.unlink(archive_dest.name)
 
 
-
-
 def _key_or_loader_error(f):
     @functools.wraps(f)
     def f_(*args, **kwargs):
@@ -735,21 +742,24 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
-                                                dir=self.resultspath))
-        download_and_extract(self.remote_fits[fitname], tempdir)
-        #Handle old-style fits compressed with 'results' as root.
-        old_style_res = tempdir/'results'
-        if old_style_res.is_dir():
-            move_target = old_style_res / fitname
-        else:
-            move_target = tempdir/fitname
-        if not move_target.is_dir():
-            raise RemoteLoaderError(f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}")
+        with tempfile_cleaner(
+            root=self.resultspath,
+            exit_func=shutil.rmtree,
+            exc=KeyboardInterrupt,
+            prefix='fit_download_deleteme_',
+        ) as tempdir:
+            download_and_extract(self.remote_fits[fitname], tempdir)
+            #Handle old-style fits compressed with 'results' as root.
+            old_style_res = tempdir/'results'
+            if old_style_res.is_dir():
+                move_target = old_style_res / fitname
+            else:
+                move_target = tempdir/fitname
+            if not move_target.is_dir():
+                raise RemoteLoaderError(f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}")
 
-        fitpath = self.resultspath / fitname
-        shutil.move(move_target, fitpath)
-        shutil.rmtree(tempdir)
+            fitpath = self.resultspath / fitname
+            shutil.move(move_target, fitpath)
 
 
         if lhaindex.isinstalled(fitname):

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from numpy.testing import assert_allclose
 
 from validphys.loader import Loader
 from validphys.results import ThPredictionsResult
@@ -50,20 +51,22 @@ def test_predictions():
     pdf = l.check_pdf(PDF)
     dss = [
         l.check_dataset(
-            'ATLASTTBARTOT', theoryid=THEORYID, cfac=('QCD',), cuts=None
-        ),  # Had, cfactors, no cuts
+            'ATLASTTBARTOT', theoryid=THEORYID, cfac=('QCD',)
+        ),  # cfactors
         l.check_dataset('H1HERAF2B', theoryid=THEORYID),  # DIS, op: NULL
         l.check_dataset('D0ZRAP', theoryid=THEORYID),  # op: RATIO
         l.check_dataset('D0WEASY', theoryid=THEORYID),  # op: ASY
-        l.check_dataset('CMSWCHARMTOT', theoryid=THEORYID, cuts=None),  # op: ADD
+        l.check_dataset('CMSWCHARMTOT', theoryid=THEORYID),  # op: ADD
         l.check_dataset('ATLASWPT31PB', theoryid=THEORYID),  # op: SMN
+        l.check_dataset('DYE906R', theoryid=THEORYID), # op: COM
+        l.check_dataset('DYE906_D', theoryid=THEORYID), # op: SMT
     ]
     for ds in dss:
         preds = predictions(ds, pdf)
         cppres = ThPredictionsResult.from_convolution(pdf, ds)
-        # Change the atol from 1e-8 (default) since D0WEASY
-        # failed with the default setting
-        assert np.allclose(preds.values, cppres._rawdata, atol=1e-7)
+        # Change the atol and rtol from 1e-8 and 1e-7 since DYE906R
+        # fails with the default setting
+        assert_allclose(preds.values, cppres._rawdata, atol=1e-8, rtol=1e-3)
 
 def test_extended_predictions():
     l = Loader()

@@ -1,5 +1,5 @@
 import numpy as np
-from n3fit.layers.Observable import Observable
+from .observable import Observable
 from n3fit.backends import operations as op
 
 
@@ -30,12 +30,12 @@ class DY(Observable):
         Parameters
         ----------
             pdf_in: tensor
-                rank 3 tensor (batchsize, xgrid, flavours)
+                rank 4 tensor (batchsize, xgrid, flavours, replicas)
 
         Returns
         -------
             results: tensor
-                rank 2 tensor (batchsize, ndata)
+                rank 3 tensor (batchsize, replicas, ndata)
         """
         # Hadronic observables might need splitting of the input pdf in the x dimension
         # so we have 3 different paths for this layer
@@ -60,5 +60,5 @@ class DY(Observable):
                 results.append(res)
 
         # the masked convolution removes the batch dimension
-        ret = self.operation(results)
+        ret = op.transpose(self.operation(results))
         return op.batchit(ret)

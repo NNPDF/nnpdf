@@ -1602,6 +1602,7 @@ configuration setting:
   the cuts for the given dataset. This is useful for example for
   requiring the common subset of points that pass the cuts at NLO and
   NNLO.
+
 `use_cuts: 'fromsimilarpredictions'`
   ~ Compute the intersection between two namespaces (similar to for
   `fromintersection`) but additionally require that the predictions computed for
@@ -1610,6 +1611,12 @@ configuration setting:
   uncertainty is smaller than a given value, `cut_similarity_threshold` that
   must be provided. Note that for this to work with different cfactors across
   the namespaces, one must provide a different `dataset_inputs` list for each.
+
+  This mechanism can be sidetracked selectively for specific datasets. To do
+  that, add their names to a list called `do_not_require_similarity_for`. The
+  datasets in the list do not need to appear in the `cuts_intersection_spec`
+  name space and will be filtered according to the internal cuts unconditionally.
+
 
 The following example demonstrates the first three options:
 
@@ -1695,7 +1702,6 @@ NNLODatasts: &NNLODatasts
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}        # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}     # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    # N
 
 NLODatasts: &NLODatasts
 - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: []}                      # N
@@ -1704,6 +1710,8 @@ NLODatasts: &NLODatasts
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: []}     # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: []}       # N
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: []}    # N
+
+do_not_require_similarity_for: [ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM]
 
 
 dataset_inputs: *NLODatasts
@@ -2840,7 +2848,7 @@ resource we are providing does. The docstring will be seen in
 ```python
 def parse_posdataset(self, posset:dict, * ,theoryid):
     """An observable used as positivity constrain in the fit.
-    It is a mapping containing 'dataset' and 'poslambda'."""
+    It is a mapping containing 'dataset' and 'maxlambda'."""
     ...
 ```
 
@@ -2930,10 +2938,10 @@ errors (see the other examples in the class).
 The `PositivytySetSpec` could be defined roughly like:
 ```python
  class PositivitySetSpec():
-     def __init__(self, commondataspec, fkspec, poslambda, thspec):
+     def __init__(self, commondataspec, fkspec, maxlambda, thspec):
          self.commondataspec = commondataspec
          self.fkspec = fkspec
-         self.poslambda = poslambda
+         self.maxlambda = maxlambda
          self.thspec = thspec
 
      @property
@@ -2947,7 +2955,7 @@ The `PositivytySetSpec` could be defined roughly like:
      def load(self):
          cd = self.commondataspec.load()
          fk = self.fkspec.load()
-         return PositivitySet(cd, fk, self.poslambda)
+         return PositivitySet(cd, fk, self.maxlambda)
 ```
 Here `PositivitySet` is the `libnnpdf` object. It is generally better
 to pass around the spec objects because they are lighter and have more
@@ -2958,21 +2966,21 @@ With this, our parser method could look like this:
 
 def parse_posdataset(self, posset:dict, * ,theoryid):
     """An observable used as positivity constrain in the fit.
-    It is a mapping containing 'dataset' and 'poslambda'."""
+    It is a mapping containing 'dataset' and 'maxlambda'."""
     bad_msg = ("posset must be a mapping with a name ('dataset') and "
-               "a float multiplier(poslambda)")
+               "a float multiplier(maxlambda)")
 
     theoryno, theopath = theoryid
     try:
         name = posset['dataset']
-        poslambda = float(posset['poslambda'])
+        maxlambda = float(posset['maxlambda'])
     except KeyError as e:
         raise ConfigError(bad_msg, e.args[0], posset.keys()) from e
     except ValueError as e:
         raise ConfigError(bad_msg) from e
 
     try:
-        return self.loader.check_posset(theoryno, name, poslambda)
+        return self.loader.check_posset(theoryno, name, maxlambda)
     except FileNotFoundError as e:
         raise ConfigError(e) from e
 ```
@@ -3570,4 +3578,3 @@ There is a Makefile which will build the HTML document (`pandoc` and `graphviz`
 are required), and `make rsync` will upload it to the server, if the user has
 sufficient permissions. Of course, changes to the guide should also be commited
 to the repository, and if necessary, discussed in a pull request.
-

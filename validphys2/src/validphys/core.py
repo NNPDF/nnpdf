@@ -33,6 +33,7 @@ from NNPDF import (LHAPDFSet,
 from validphys import lhaindex, filters
 from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
+from validphys.utils import experiments_to_dataset_inputs
 
 log = logging.getLogger(__name__)
 
@@ -378,7 +379,7 @@ class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
         self.rules = rules
         self.commondata = commondata
-        super().__init__(commondata)
+        super().__init__(commondata, tuple(rules))
 
     def load(self):
         return np.atleast_1d(
@@ -410,6 +411,7 @@ class SimilarCuts(TupleComp):
         self.threshold = threshold
         super().__init__(self.inputs, self.threshold)
 
+    @functools.lru_cache()
     def load(self):
         # TODO: Update this when a suitable interace becomes available
         from validphys.convolution import central_predictions
@@ -421,7 +423,9 @@ class SimilarCuts(TupleComp):
         exp_err = np.sqrt(
             np.diag(
                 covmat_from_systematics(
-                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts)
+                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts),
+                    first_ds, # DataSetSpec has weight attr
+                    use_weights_in_covmat=False, # Don't weight covmat
                 )
             )
         )
@@ -525,13 +529,13 @@ class FKTableSpec(TupleComp):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
 class PositivitySetSpec(TupleComp):
-    def __init__(self, name ,commondataspec, fkspec, poslambda, thspec):
+    def __init__(self, name ,commondataspec, fkspec, maxlambda, thspec):
         self.name = name
         self.commondataspec = commondataspec
         self.fkspec = fkspec
-        self.poslambda = poslambda
+        self.maxlambda = maxlambda
         self.thspec = thspec
-        super().__init__(name, commondataspec, fkspec, poslambda, thspec)
+        super().__init__(name, commondataspec, fkspec, maxlambda, thspec)
 
 
 
@@ -542,9 +546,8 @@ class PositivitySetSpec(TupleComp):
     def load(self):
         cd = self.commondataspec.load()
         fk = self.fkspec.load()
-        return PositivitySet(cd, fk, self.poslambda)
+        return PositivitySet(cd, fk, self.maxlambda)
 
-    #__slots__ = ('__weakref__', 'commondataspec', 'fkspec', 'poslambda')
 
 
 #We allow to expand the experiment as a list of datasets
@@ -620,6 +623,21 @@ class FitSpec(TupleComp):
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
         d['pdf'] = {'id': self.name, 'label': self.label}
+
+        if 'experiments' in d:
+            # Flatten old style experiments to dataset_inputs
+            dataset_inputs = experiments_to_dataset_inputs(d['experiments'])
+            d['dataset_inputs'] = dataset_inputs
+
+        #BCH
+        # backwards compatibility hack for runcards with the 'fitting' namespace
+        # if a variable already exists outside 'fitting' it takes precedence
+        fitting = d.get("fitting")
+        if fitting is not None:
+            to_take_out = ["genrep", "trvlseed", "mcseed", "nnseed", "parameters"]
+            for vari in to_take_out:
+                if vari in fitting and vari not in d:
+                    d[vari] = fitting[vari]
         return d
 
     def __str__(self):

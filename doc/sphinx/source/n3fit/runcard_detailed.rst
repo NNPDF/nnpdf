@@ -1,3 +1,5 @@
+.. _runcard-detailed:
+
 ================================
 ``n3fit`` runcard detailed guide
 ================================
@@ -9,8 +11,9 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`networkarch-label`
 - :ref:`optimizer-label`
 - :ref:`positivity-label`
-- :ref:`otheroptions-label`
 - :ref:`tensorboard-label`
+- :ref:`parallel-label`
+- :ref:`otheroptions-label`
 
 
 .. _preprocessing-label:
@@ -49,6 +52,41 @@ Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old 
             - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
             - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
 
+It  is important to determine the correct values for the ``largex`` and ``smallx`` preprocessing 
+ranges. For example setting a poor range for those parameters can result in a conflict with the 
+:ref:`positivity <positivity>` or :ref:`integrability <integrability>` constraints, making it such 
+that no replicas can satisfy those constraints. In most cases when changes are made to a runcard, 
+they will have a relatively small effect on the required preprocessing ranges. This includes common 
+variations to runcards such as changing the datasets, or settings related to the training of the 
+neural network. In these cases :ref:`running an iterated fit <run-iterated-fit>` is likely the 
+easiest way to obtain a satisfactory range of the preprocessing. However, in some cases, such as for
+example a change of PDF basis where the preprocessing ranges obtain a different meaning entirely, 
+we don't know what a good starting point for the ranges would be. One way to identify good ranges 
+is by opening up the ``smallx`` and ``large`` parameters for large ranges and setting 
+``trainable: True``. This way the preprocessing exponents will be considered part of the free 
+parameters of the model, and as such they will be fitted by the optimization algorithm.
+
+NNPDF4.0 fits are run with ``trainable: False``, because trainable preprocessing exponents can lead 
+to an underestimation of the PDF uncertainties in the extrapolation domain. So after determining a
+reasonable range for the preprocessing exponents, a new runcard should be generated using 
+``vp-nextfitruncard`` as explained in :ref:_run-iterated-fit. In this runcard one should then 
+manually set ``trainable: False`` for all preprocessing exponents before running the iterated fit. 
+It can take more than one iteration before the iterated fits have converged to stable values for the 
+preprocessing ranges.
+
+Note that the script ``vp-nextfitruncard`` automatically enforces some constraints
+on preprocessing ranges, which are required for integrability of certain
+flavours. Specifically clipping the maximum value of the small-x exponent
+as :math:`\alpha \leq 1` for the valence PDFs and triplets T3 and T8.
+More details on those limits, and how to disable them can be found
+by running
+
+.. code::
+
+    $ vp-nextfitruncard --help
+
+More information on ``vp-nextfitruncard`` can be found in
+:ref:`run-iterated-fit`.
 
 .. _trval-label:
 
@@ -63,9 +101,19 @@ The fraction of events that are considered for the training and validation sets 
         datasets:
         - { dataset: SLACP, frac: 0.8}
         - { dataset: NMCPD, frac: 0.8 }      
-        - { dataset: CMSJETS11,     frac: 0.8, sys: 10 }
+        - { dataset: CMSJETS11, frac: 0.8, sys: 10 }
 
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
+
+The random seed for the training/validation split is defined by the variable ``trvlseed``.
+By default the seed is further modified by the replica index, but it is possible
+to fix it such that it is the same for all replicas with ``same_trvl_per_replica``
+(``false`` by default).
+
+.. code-block:: yaml
+
+    trvlseed: 7
+    same_trvl_per_replica: true
 
 
 .. _networkarch-label:
@@ -73,17 +121,16 @@ It is possible to run a fit with no validation set by setting the fraction to ``
 Network Architecture
 --------------------
 There are different network architectures implemented in ``n3fit``.
-Which can be selected by changing the ``fitting:parameters::layer_type`` parameter in the runcard.
+Which can be selected by changing the ``parameters::layer_type`` parameter in the runcard.
 All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and ``initializer`` parameters.
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            nodes_per_layer: [5, 3, 8]
-            activation_per_layer: ['tanh', 'tanh', 'linear']
-            layer_type: 'dense_per_flavour'
-            initializer: 'glorot_normal'
+    parameters:
+        nodes_per_layer: [5, 3, 8]
+        activation_per_layer: ['tanh', 'tanh', 'linear']
+        layer_type: 'dense_per_flavour'
+        initializer: 'glorot_normal'
 
 - **One single network** (``layer_type: dense``):
 
@@ -116,12 +163,11 @@ of optimizer (and its corresponding options).
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            optimizer:
-              optimizer_name: 'Adadelta'
-              learning_rate: 1.0
-              clipnorm: 1.0
+    parameters:
+        optimizer:
+          optimizer_name: 'Adadelta'
+          learning_rate: 1.0
+          clipnorm: 1.0
 
 
 The full list of optimizers accepted by the ``n3fit`` and their arguments
@@ -135,13 +181,13 @@ Positivity
 ----------
 
 In ``n3fit`` the behavior of the positivity observables has changed with respect to ``nnfit``.
-In ``nnfit`` the loss due to the positivity observable was multiplied by a ``poslambda`` for each observable, defined in the runcard as:
+In ``nnfit`` the loss due to the positivity observable was multiplied by a ``maxlambda`` for each observable, defined in the runcard as:
 
 .. code-block:: yaml
 
     positivity:
       posdatasets:
-        - {dataset: POSF2U, poslambda: 1e6}
+        - {dataset: POSF2U, maxlambda: 1e6}
 
 
 This behavior was found to be very inefficient for gradient descent based strategies and was exchanged for a dynamical Lagrange multiplier.
@@ -151,19 +197,18 @@ the Neural Network as:
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            positivity:
-              threshold: 1e-6
-              multiplier: 1.05
-              initial: 14.5
+    parameters:
+        positivity:
+          threshold: 1e-6
+          multiplier: 1.05
+          initial: 14.5
               
 Note that by defining the positivity in this way all datasets will share the same Lagrange multiplier.
 
 It is also possible to not define the positivity hyperparameters (or define them only partially).
 In this case ``n3fit`` will set the initial Lagrange multiplier as ``initial`` (default: 1.0)
 while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier 
-equals the ``poslambda`` defined for the dataset.
+equals the ``maxlambda`` defined for the dataset.
 
 Finally we have the positivity threshold, which is set to ``1e-6`` by default.
 During the fit, the positivity loss will be compared to this value. If it is above it,
@@ -199,31 +244,12 @@ Threshold :math:`\chi2`
 
 .. code-block:: yaml
 
-    fitting:
-        parameters:
-            threshold_chi2: 4.0
+    parameters:
+        threshold_chi2: 4.0
 
 - ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
 
 
-Save and load weights of the model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: yaml
-
-    fitting:
-        save: "weights.h5"
-        load: "weights.h5"
-
-- ``save``: saves the weights of the PDF model in the selected file in the replica folder.
-- ``load``: loads the weights of the PDF model from the selected file.
-
-Since the weights depend only on the architecture of the Neural Network,
-it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
-and load it in a different runcard and continue the training from there.
-
-While the load file is read as an absolute path, the file to save to will be found
-inside the replica folder.
 
 
 .. _tensorboard-label:
@@ -237,10 +263,9 @@ In order to enable the TensorBoard callback in ``n3fit`` it is enough with addin
 
 .. code-block:: yaml
 
-    fitting:
-        tensorboard:
-            weight_freq: 100
-            profiling: True
+    tensorboard:
+        weight_freq: 100
+        profiling: True
 
 
 The ``weight_freq`` flag controls each how many epochs the weights of the NN are stored.
@@ -258,3 +283,52 @@ Logging details can be visualized in the browser with the following command:
 Logging details will include the value of the loss for each experiment over time,
 the values of the weights of the NN,
 as well as a detailed analysis of the amount of time that TensorFlow spent on each operation.
+
+          
+.. _parallel-label:
+
+Running fits in parallel
+------------------------
+
+It is possible to run fits in parallel with ``n3fit`` by using the ``parallel_models``
+flag in the runcard (by default the number of ``parallel_models`` is set to 1).
+Running in parallel can be quite hard on memory and it is only advantageous when
+fitting on a GPU, where one can find a speed up equal to the number of models run
+in parallel (each model being a different replica).
+
+At present it cannot be used together with the ``hyperopt`` module.
+
+
+.. _otheroptions-label:
+
+Other options
+-------------
+
+Threshold :math:`\chi2`
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    parameters:
+        threshold_chi2: 4.0
+
+- ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
+
+
+Save and load weights of the model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    save: "weights.h5"
+    load: "weights.h5"
+
+- ``save``: saves the weights of the PDF model in the selected file in the replica folder.
+- ``load``: loads the weights of the PDF model from the selected file.
+
+Since the weights depend only on the architecture of the Neural Network,
+it is possible to save the weights of a Neural Network trained with one set of hyperparameters and experiments
+and load it in a different runcard and continue the training from there.
+
+While the load file is read as an absolute path, the file to save to will be found
+inside the replica folder.

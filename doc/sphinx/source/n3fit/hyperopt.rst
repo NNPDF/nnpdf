@@ -183,6 +183,8 @@ Note that this is not a boolean mask that drops the points but rather it just se
 The reason for doing it in this way is to minimize the number of things that change when doing a
 hyperparameter scan with respect to a fit.
 
+.. _pos-int-hyperopt:
+
 Positivity and integrability
 ----------------------------
 
@@ -286,4 +288,4 @@ The group of datasets that were left out followed the algorithm :ref:`mentioned 
 * CMSZDIFF12
 * ATLASTTBARTOT
 
-These were chosen attending to their `process type` as defined in their commondata files. Page 5-7 of the following `document <https://github.com/NNPDF/nnpdf/blob/master/doc/data/data_layout.pdf>`_.
+These were chosen attending to their `process type` as defined in their :ref:`commondata files <exp_data_files>`.

@@ -390,8 +390,6 @@ input
 
 .. code:: yaml
 
-    metadata_group: nnpdf31_process
-
     experiments:
      - experiment: NMC
        datasets:
@@ -417,18 +415,6 @@ input
 The user should be aware, however, that any grouping introduced in this way is
 purely superficial and will be ignored in favour of the experiments defined by
 the metadata of the datasets.
-
-*IMPORTANT*: Note that all theory uncertainties runcards will need to be
-updated to explicitly set ``metadata_group: nnpdf31_process``, or else the
-prescriptions for scale variations will not vary scales coherently for data
-within the same process type, as usually desired, but rather for data within
-the same experiment. When running the examples in
-:ref:`theory-covmat-examples`, it should be obvious if this has been set
-because the outputs will be plots grouped by experiment rather than by process
-type. However, care must be taken when using the theory covariance matrix but
-not plotting anything, since the aforementioned check is not relevant. For
-example, if you only want to produce a 𝞆² you must be careful to set the
-``metadata_group`` key as above.
 
 Runcards that request actions that have been renamed will not work anymore.
 Generally, actions that were previously named ``experiments_*`` have been
@@ -472,9 +458,12 @@ results in the table or plot will have been collected over ``fits`` with
 .. warning::
   Whilst it is possible to specify ``data_input: {from_: fitinputcontext}``
   directly in the runcard, it is highly recommended **not** to do this where
-  possible. Instead take either ``dataset_inputs`` or ``experiments``
-  directly ``from_: fit`` depending on whether the fit uses new or old data
-  specification respectively. (See below for a detailed explanation).
+  possible. Instead take ``dataset_inputs`` directly ``from_: fit``
+  irrespective of whether the fit uses new or old data specification; since
+  the conversion from the old style data specification is handled internally
+  using :py:func:`validphys.utils.experiments_to_dataset_inputs` in
+  conjunction with :py:meth:`validphys.core.FitSpec.as_input`.  (See below for
+  a detailed explanation).
 
 Currently the ``pseudodata`` and ``chi2grids`` modules have not been updated to
 use ``dataset_inputs`` and so require ``experiments`` to be specified in the

@@ -6,11 +6,10 @@ theoryid: 200
 
 use_cuts: nocuts
 
-fit: 210219-01-rs-nnpdf40-baseline
 pdf: 210219-01-rs-nnpdf40-baseline
 
 dataset_inputs:
-         - dataset: DYE886R
+         - { dataset: DYE886R, cfac: [QCD] }
 
 actions_:
    - group_result_table

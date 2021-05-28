@@ -14,6 +14,10 @@ You need to provide the central theory under the ``default_theory`` flag,
 corresponding to :math:`(\mu_F, \mu_R) = (0,0)`,
 which for NLO is theory 163.
 
+You need to provide the required point prescription using the flag in 
+:ref:`this section <pointprescrips>`, e.g. ``point_prescription: "3 point"``
+in the case below.
+
 ``dataspecs`` associates a chosen label (``speclabel``) with each of the theory
 choices. This details what scale variation the theory corresponds to.
 
@@ -22,11 +26,12 @@ Here the cuts and PDF are taken from the central NLO scale-varied fit.
 You must also list all the experiments you wish to include, along with any 
 relevant c-factors. 
 
-*IMPORTANT*: In order to ensure backwards compatibility now that the structure
-of data in runcards has been updated and ``experiments`` is deprecated, you must
-also include ``metadata_group: nnpdf31_process`` in the runcards, so that the
-scale variation prescriptions are done by process rather than by experiment. See
-:ref:`backwards-compatibility` for more details.
+.. warning::
+	In order to ensure backwards compatibility now that the structure
+	of data in runcards has been updated and ``experiments`` is deprecated, you must
+	also include ``metadata_group: nnpdf31_process`` in the runcards, so that the
+	scale variation prescriptions are done by process rather than by experiment. See
+	:ref:`backwards-compatibility` for more details.
 
 .. code-block::  yaml
    :linenos:

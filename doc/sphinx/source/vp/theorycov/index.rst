@@ -3,7 +3,6 @@
 The theorycovariance module
 ===============================
 
-
 :Author: Rosalyn Pearson (r.l.pearson@ed.ac.uk)
   
 The ``theorycovariance`` module deals with constructing, testing and 
@@ -32,7 +31,9 @@ Summary
 -  Theoretical covariance matrices are built according to the various prescriptions
    in :ref:`prescrips`. 
  
--  The prescription must be one of 3 point, 5 point, 5bar point, 7 point or 9 point.
+-  The prescription must be one of 3 point, 5 point, 5bar point, 7 point or 9 point. You can specify
+   this using ``point_prescription: "x point"`` in the runcard. The translation of this flag 
+   into the relevant ``theoryids`` is handled by the ``scalevariations`` module in ``validphys``.
 
 -  As input you need theories for the relevant scale combinations which
    correspond to the prescription. This information is taken from the
@@ -48,12 +49,12 @@ Summary
    process type. These process types are categorised as {DIS CC, DIS NC,
    Drell-Yan, Jets, Top}. 
 
--  **Outputs** include tables and heat plots of theoretical and combined
+-  :ref:`Outputs <thcov_outputs>` includes tables and heat plots of theoretical and combined
    (theoretical + experimental) covariance matrices, comparisons of
    theoretical and experimental errors, and plots and tables of
    :math:`\chi^2` values.
 
--  Various **validation** outputs also exist, including tables of eigenvalues, 
+-  Various :ref:`testing <vptheorycov-tests>` outputs also exist, including tables of eigenvalues, 
    plots of eigenvectors and shift vs theory comparisons.
    
 

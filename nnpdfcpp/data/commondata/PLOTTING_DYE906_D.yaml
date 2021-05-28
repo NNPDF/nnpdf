@@ -1,0 +1,11 @@
+dataset_label: "DYE 906 $\\sigma^d_{\\rm DY}$"
+x: $x_2$
+
+y_label: '$\sigma_{pd}$' 
+
+extra_labels:
+   $x_2$:  [0.147,0.179,0.216,0.263,0.315,0.385]
+
+experiment: "DEUTERON"
+
+nnpdf31_process: DY

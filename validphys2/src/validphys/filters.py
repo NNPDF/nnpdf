@@ -49,14 +49,6 @@ def default_filter_rules_input():
 
 
 @make_argcheck
-def check_combocuts(combocuts: str):
-    """Check combocuts content"""
-    check(
-        combocuts == "NNPDF31",
-        "Invalid combocut. Must be NNPDF31 (or implement it yourself).",
-    )
-
-@make_argcheck
 def check_rngalgo(rngalgo: int):
     """Check rngalgo content"""
     check(0 <= rngalgo < 17,
@@ -135,8 +127,7 @@ def filter_real_data(filter_path, data):
     return _filter_real_data(filter_path, data)
 
 
-@check_combocuts
-def filter(filter_data, combocuts):
+def filter(filter_data):
     """Summarise filters applied to all datasets"""
     total_data, total_cut_data = np.atleast_2d(filter_data).sum(axis=0)
     log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
@@ -412,6 +403,18 @@ class Rule:
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
 
+    @property
+    def _properties(self):
+        """Attributes of the Rule class that are defining. Two
+        Rules with identical ``_properties`` are considered equal.
+        """
+        return (self.rule_string, self.dataset, self.process_type, self.theory_params['ID'])
+
+    def __eq__(self, other):
+        return self._properties == other._properties
+
+    def __hash__(self):
+        return hash(self._properties)
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)

@@ -36,6 +36,16 @@ reason for the failure must be investigated and dealt with appropriately.
 
 * Please use the recommended resources detailed [here](../vp/examples.rst).
 
+## Example pull request
+
+You may find it instructive to go though this pull request that
+implements an arc-length computation:
+
+<https://github.com/NNPDF/validphys2/pull/64>
+
+It demonstrates how to leverage existing functionality to perform new
+computations and then present those as plots and tables.
+
 ```eval_rst
 .. _reviews:
 ```

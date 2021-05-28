@@ -20,8 +20,8 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = 'NNPDF'
-copyright = '2019, SI & MU'
-author = 'SI & MU'
+copyright = '2021, NNPDF collaboration'
+author = 'NNPDF collaboration'
 
 # The short X.Y version
 version = ''
@@ -159,7 +159,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'NNPDFDocumentation.tex', 'NNPDF Documentation Documentation',
-     'SI \\& MU', 'manual'),
+     'NNPDF collaboration', 'manual'),
 ]
 
 
