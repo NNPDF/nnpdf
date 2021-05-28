@@ -22,12 +22,6 @@ requirements:
         - python
         - numpy
     run:
-        # Only install tensorflow on linux. Select eigen build
-        - tensorflow >=2 *eigen* # [linux]
-        - gast ==0.3.3 # Conda tensorflow uses the wrong version
-        - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version
-        - psutil # to ensure n3fit affinity is with the right processors
-        - hyperopt
         - seaborn
         - lhapdf
         - sqlite
@@ -71,8 +65,25 @@ build:
     # import CONDA_BUILD_SYSROOT from env variable for osx
     script_env:
       - CONDA_BUILD_SYSROOT # [osx]
+    script:
+        vp-build.sh
 
 about:
     home: https://nnpdf.mi.infn.it/
     license: SECRET
     summary: "NNPDF analysis framework"
+
+outputs:
+    - name: nnpdf
+    - name: n3fit
+      skip: True # [osx]
+      script: python -m pip install --no-deps --ignore-installed n3fit
+      requirements:
+        run:
+        # Select eigen build
+            - tensorflow >=2 *eigen*
+            - gast ==0.3.3 # Conda tensorflow uses the wrong version
+            - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version
+            - psutil # to ensure n3fit affinity is with the right processors
+            - hyperopt
+      test: pytest --pyargs n3fit
