@@ -48,7 +48,7 @@ providers = [
              'validphys.pseudodata',
              'validphys.renametools',
              'validphys.covmats',
-             'validphys.hyperoptplot',
+             'validphys.hyperopt_output',
              'validphys.deltachi2',
              'validphys.n3fit_data',
              'reportengine.report',

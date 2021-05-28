@@ -1,24 +1,24 @@
 """
-hyperoptplot.py
+hyperopt_output.py
 
-Module for the parsing and plotting of hyperopt results.
+Module for the tabulating and plotting of hyperopt results.
 """
-
-from argparse import ArgumentParser
-import os
-import re
 import glob
 import json
 import logging
+import os
+import re
+from types import SimpleNamespace
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
-from types import SimpleNamespace
-from reportengine.figure import figure
-import numpy as np
-import matplotlib.pyplot as plt
-from reportengine.table import table
 import seaborn as sns
+
+from reportengine.figure import figure
+from reportengine.table import table
+
+from validphys.hyperopt_algo import autofilter_dataframe
 
 log = logging.getLogger(__name__)
 
