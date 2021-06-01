@@ -467,7 +467,7 @@ def pdfNN_layer_generator(
             to be used by Preprocessing
         out: int
             number of output flavours of the model (default 14)
-        seed: int
+        seed: list(int)
             seed to initialize the NN
         dropout: float
             rate of dropout layer by layer

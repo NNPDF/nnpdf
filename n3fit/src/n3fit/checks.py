@@ -265,20 +265,18 @@ def check_hyperopt_stopping(stopping_dict):
         if min_ep is None or max_ep is None:
             raise CheckError("Need to set both the max_epochs and the min_epochs")
         if min_ep < 1:
-            raise CheckError(f"Can't run for less than 1 epoch: " "selected min_ep = {min_ep}")
+            raise CheckError(f"Can't run for less than 1 epoch: selected min_ep = {min_ep}")
         if max_ep <= min_ep:
             raise CheckError(f"min_epochs cannot be greater than max_epochs: ({min_ep} > {max_ep})")
     min_pat = stopping_dict.get("min_patience")
     max_pat = stopping_dict.get("max_patience")
     if min_pat is not None or max_pat is not None:
         if min_pat is not None and min_pat < 0.0:
-            raise CheckError(
-                f"min_patience cannot be less than 0.0: " "selected min_pat = {min_pat}"
-            )
+            raise CheckError(f"min_patience cannot be less than 0.0: selected min_pat = {min_pat}")
         if max_pat is not None:
             if max_pat > 1.0:
                 raise CheckError(
-                    f"max_patience cannot be greater than 1.0: " "selected max_pat = {max_pat}"
+                    f"max_patience cannot be greater than 1.0: selected max_pat = {max_pat}"
                 )
             if min_pat is not None and max_pat < min_pat:
                 raise CheckError(
@@ -292,7 +290,7 @@ def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
-        return None
+        return
     if genrep:
         raise CheckError("Generation of replicas is not accepted during hyperoptimization")
     if hyperscan is None:
@@ -350,19 +348,26 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
 
 
 @make_argcheck
-def can_run_multiple_replicas(replicas, genrep, parallel_models):
+def can_run_multiple_replicas(
+    replicas, parameters, hyperopt, parallel_models, same_trvl_per_replica
+):
     """Checks whether a runcard which is trying to run several replicas at once
     (parallel_models =/= 1) is valid
     """
     if not parallel_models:
         return
-    rp = len(replicas)
-    if hyperopt and rp > 1:
+    if len(replicas) == 1:
+        log.warning("parallel_models is set to true for only one replica")
+        return
+    if not same_trvl_per_replica:
+        raise CheckError(
+            "Replicas cannot be run in parallel with different training/validation "
+            " masks, please set `same_trvl_per_replica` to True in the runcard"
+        )
+    if hyperopt:
         raise CheckError("Running replicas in parallel with hyperopt is still not supported")
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
-    if rp == 1:
-        log.warning("parallel_models is set to true for only one replica")
 
 
 @make_argcheck

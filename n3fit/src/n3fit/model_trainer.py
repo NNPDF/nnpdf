@@ -86,7 +86,7 @@ class ModelTrainer:
         integ_info,
         flavinfo,
         fitbasis,
-        nnseed,
+        nnseeds,
         pass_status="ok",
         failed_status="fail",
         debug=False,
@@ -109,9 +109,8 @@ class ModelTrainer:
                 the object returned by fitting['basis']
             fitbasis: str
                 the name of the basis being fitted
-            nnseed: int
-                the seed used to initialise the Neural Network, will be passed to model_gen
-                can be a list of lists of parallel_models > 1
+            nnseeds: list(int)
+                the seed used to initialise the NN for each model to be passed to model_gen
             pass_status: str
                 flag to signal a good run
             failed_status: str
@@ -139,7 +138,7 @@ class ModelTrainer:
             self.all_info = exp_info + pos_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
-        self.NNseed = nnseed
+        self._nn_seeds = nnseeds
         self.pass_status = pass_status
         self.failed_status = failed_status
         self.debug = debug
@@ -795,10 +794,10 @@ class ModelTrainer:
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
-            seed = self.NNseed
+            # and the seed needs to be updated accordingly
+            seeds = self._nn_seeds
             if k > 0:
-                # Update the seed
-                seed = np.random.randint(0, pow(2, 31))
+                seeds = [np.random.randint(0, pow(2, 31))]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
@@ -809,7 +808,7 @@ class ModelTrainer:
                 params["dropout"],
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
-                seed,
+                seeds,
             )
 
             # Model generation joins all the different observable layers
