@@ -1,8 +1,9 @@
 """
     Add markers for pytest
 """
-import sys
+import pathlib
 import pytest
+import sys
 
 
 def pytest_runtest_setup(item):
@@ -15,3 +16,9 @@ def pytest_runtest_setup(item):
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "linux: mark test to run only on linux")
+
+
+@pytest.fixture
+def tmp(tmpdir):
+    """A tempdir that is manipulated like pathlib Paths"""
+    return pathlib.Path(tmpdir)
