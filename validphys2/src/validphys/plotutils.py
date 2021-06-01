@@ -518,11 +518,10 @@ def spiderplot(xticks, vals, label, ax=None):
     plt.xticks(angles[:-1], xticks, size=8)
 
     # Draw ylabels
- #   plt.ylim(0, maxval+0.1)
     
     ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid")
     ax.fill(angles, vals, alpha=0.4)
-    ax.grid(linewidth=3)
-    ax.legend(bbox_to_anchor=(0.9,-0.1), fontsize=20)
+    ax.grid(linewidth=1)
+    ax.legend(bbox_to_anchor=(0.3,-0.1), fontsize=12)
 
     return ax
