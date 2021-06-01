@@ -694,7 +694,7 @@ def _plot_chis_df(df):
     ax.legend()
     return fig, ax
 
-def _plot_chi2s_spider_df(df, size=4):
+def _plot_chi2s_spider_df(df, size=6):
     chilabel = df.columns.get_level_values(1)[1]
     data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()

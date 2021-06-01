@@ -518,7 +518,7 @@ def spiderplot(xticks, vals, label, ax=None):
     plt.xticks(angles[:-1], xticks, size=8)
 
     # Draw ylabels
-    plt.ylim(0, maxval+0.1)
+ #   plt.ylim(0, maxval+0.1)
     
     ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid")
     ax.fill(angles, vals, alpha=0.4)
