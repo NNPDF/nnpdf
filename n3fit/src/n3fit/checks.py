@@ -354,27 +354,15 @@ def can_run_multiple_replicas(replicas, genrep, parallel_models):
     """Checks whether a runcard which is trying to run several replicas at once
     (parallel_models =/= 1) is valid
     """
-    rp = len(replicas)
-    if rp > 1 and not genrep:
-        raise CheckError(
-            "Can't run more than one replica at once if no replicas are to be generated"
-        )
-    if rp > 1 and parallel_models != 1:
-        raise CheckError("Parallel mode cannot be used together with multireplica runs")
-
-@make_argcheck
-def can_run_parallel_replicas(genrep, parameters, hyperopt, parallel_models):
-    """Checks whether a runcard which is trying to run several replicas at once
-    (parallel_models =/= 1) is valid
-    """
-    if parallel_models == 1:
+    if not parallel_models:
         return
-    if hyperopt:
+    rp = len(replicas)
+    if hyperopt and rp > 1:
         raise CheckError("Running replicas in parallel with hyperopt is still not supported")
-    if genrep:
-        raise CheckError("Replica generation is not supported yet for parallel models")
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
+    if rp == 1:
+        log.warning("parallel_models is set to true for only one replica")
 
 
 @make_argcheck

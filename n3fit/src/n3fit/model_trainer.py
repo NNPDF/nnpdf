@@ -111,6 +111,7 @@ class ModelTrainer:
                 the name of the basis being fitted
             nnseed: int
                 the seed used to initialise the Neural Network, will be passed to model_gen
+                can be a list of lists of parallel_models > 1
             pass_status: str
                 flag to signal a good run
             failed_status: str
@@ -128,7 +129,6 @@ class ModelTrainer:
             parallel_models: int
                 number of models to fit in parallel
         """
-
         # Save all input information
         self.exp_info = exp_info
         self.pos_info = pos_info

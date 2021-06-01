@@ -3,6 +3,8 @@
 """
 
 # Backend-independent imports
+from collections import namedtuple
+import copy
 import logging
 import numpy as np
 import n3fit.checks
@@ -36,7 +38,7 @@ def performfit(
     tensorboard=None,
     debug=False,
     maxcores=None,
-    parallel_models=1
+    parallel_models=False
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -115,8 +117,8 @@ def performfit(
                 activate some debug options
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
-            parallel_models: int
-                number of models to be run in parallel
+            parallel_models: bool
+                whether to run models in parallel
     """
     from n3fit.backends import set_initial_state
 
@@ -132,18 +134,45 @@ def performfit(
     from n3fit.model_trainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
 
+    # If models are to be run in parallel, we just need to enter the replica loop once
+    # but we need all data
+    n_models = len(replicas_nnseed_fitting_data_dict)
+    if parallel_models or n_models == 1:
+        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
+        # Parse the experiments so that the output data contain information for all replicas
+        # as the only different from replica to replica is the experimental training/validation data
+        all_experiments = copy.deepcopy(replica_experiments[0])
+        for i_exp in range(len(all_experiments)):
+            training_data = []
+            validation_data = []
+            for i_rep in range(n_models):
+                training_data.append(replica_experiments[i_rep][i_exp]['expdata'])
+                validation_data.append(replica_experiments[i_rep][i_exp]['expdata_vl'])
+            all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
+            all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
+        log.info(
+            "Starting replica fits %d to %d",
+            replicas[0],
+            replicas[0] + n_models - 1,
+        )
+        replicas_info = [(replicas, all_experiments, nnseeds)]
+    else:
+        replicas_info = replicas_nnseed_fitting_data_dict
+
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once as replicas_nnseed_fitting_data_dict is a list of just one element
-    for replica_number, exp_info, nnseed in replicas_nnseed_fitting_data_dict:
-        replica_path_set = replica_path / f"replica_{replica_number}"
-        if parallel_models == 1:
+
+    # Note: there are three possible scenarios for this loop:
+    #   1.- Only one replica is being run, in this case the loop is only evaluated once
+    #   2.- Many replicas being run, in this case each will have a replica_number, seed, etc
+    #       and they will be fitted sequentially
+    #   3.- Many replicas being run in parallel. In this case the loop will be evaluated just once
+    #       but a model per replica will be generated
+    for replica_numbers, exp_info, nnseed in replicas_info:
+        # TODO: replica_number is too restrictive as a name!
+        if not parallel_models:
+            replica_number = replica_numbers
             log.info("Starting replica fit %s", replica_number)
-        else:
-            log.info(
-                "Starting replica fits %s to %s",
-                replica_number,
-                replica_number + parallel_models - 1,
-            )
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
@@ -159,7 +188,7 @@ def performfit(
             max_cores=maxcores,
             model_file=load,
             sum_rules=sum_rules,
-            parallel_models=parallel_models
+            parallel_models=n_models
         )
 
         # This is just to give a descriptive name to the fit function
@@ -178,6 +207,7 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
+            replica_path_set = replica_path / f"replica_{replica_number}"
             true_best = hyper_scan_wrapper(
                 replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt,
             )
@@ -198,6 +228,10 @@ def performfit(
         if tensorboard is not None:
             profiling = tensorboard.get("profiling", False)
             weight_freq = tensorboard.get("weight_freq", 0)
+            if parallel_models:
+                replica_path_set = replica_path
+            else:
+                replica_path_set = replica_path / f"replica_{replica_number}"
             log_path = replica_path_set / "tboard"
             the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
 
@@ -216,7 +250,7 @@ def performfit(
         all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
 
         pdf_models = result["pdf_models"]
-        for i, pdf_model in enumerate(pdf_models):
+        for i, (replica_number, pdf_model) in enumerate(zip(replica_numbers, pdf_models)):
             # Each model goes into its own replica folder
             replica_path_set = replica_path / f"replica_{replica_number + i}"
 
