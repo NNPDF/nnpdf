@@ -8,8 +8,8 @@ metadata_group: nnpdf31_process
 theoryid: 52
 
 fits:
-    - {id: "NNPDF31_nlo_as_0118", label: NLO}
     - {id: "NNPDF31_nnlo_as_0118_1000", label: NNLO}
+    - {id: "NNPDF31_nlo_as_0118", label: NLO}
 
 use_cuts: "internal"
 
