@@ -1,7 +1,9 @@
 meta:
-    title: chi2 and phi spider plots
-    keywords: [example]
+    title: χ2 spider plots by group
+    keywords: [example, spider]
     author: Rosalyn Pearson
+
+metadata_group: nnpdf31_process
 
 theoryid: 52
 
@@ -15,11 +17,7 @@ template_text: |
     
     # Spider plot for χ2
     
-    {@plot_fits_chi2_spider@}
+    {@plot_fits_datasets_chi2_spider_bygroup@}
     
-    # Spider plot for ϕ
-    
-    {@plot_fits_phi_spider@}
-
 actions_:
   - report(main=true)
