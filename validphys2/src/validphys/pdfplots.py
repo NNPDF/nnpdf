@@ -205,7 +205,7 @@ class ReplicaPDFPlotter(PDFPlotter):
 @_warn_any_pdf_not_montecarlo
 def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None, ymin = None, ymax = None):
-    """Plot the replicas of the specifid PDFs. Otherise it works the same as
+    """Plot the replicas of the specified PDFs. Otherise it works the same as
     plot_pdfs.
 
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
