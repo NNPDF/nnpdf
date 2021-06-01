@@ -6,6 +6,7 @@ and produces expected results
 
 """
 import pathlib
+import pytest
 import shutil
 import subprocess as sp
 
@@ -13,7 +14,7 @@ from reportengine import api
 
 from validphys.app import providers
 from validphys.config import Environment
-from n3fit.scripts.vp_rebuild_data import REBUILD_CONFIG
+from validphys.scripts.vp_rebuild_data import REBUILD_CONFIG
 from validphys.tableloader import sane_load
 from validphys.tests.test_regressions import make_table_comp
 
@@ -30,6 +31,7 @@ def parse_test_output(filename):
     return df
 
 
+@pytest.mark.linux
 @make_table_comp(parse_test_output)
 def test_filter_rebuild_closure_data(tmp):
     """
