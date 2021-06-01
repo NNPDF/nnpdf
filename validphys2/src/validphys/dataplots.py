@@ -737,7 +737,7 @@ def plot_fits_datasets_chi2_spider(fits_datasets_chi2_table):
     ax.set_title(r"$\chi^2$ for datasets")
     return fig
 
-@figure
+@figuregen
 def plot_fits_datasets_chi2_spider_bygroup(fits_datasets_chi2_table):
     """Same as plot_fits_datasets_chi2_spider but one plot for each group."""
     tab = fits_datasets_chi2_table
