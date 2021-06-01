@@ -522,6 +522,6 @@ def spiderplot(xticks, vals, label, ax=None):
     ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid")
     ax.fill(angles, vals, alpha=0.4)
     ax.grid(linewidth=1)
-    ax.legend(bbox_to_anchor=(0.3,-0.1), fontsize=12)
+    ax.legend(fontsize=12)
 
     return ax
