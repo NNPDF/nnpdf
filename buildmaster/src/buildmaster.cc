@@ -109,7 +109,6 @@
 #include "ATLAS_TTB_DIFF_8TEV_LJ.h"
 #include "ATLAS_Z_3D_8TEV.h"
 #include "ATLAS_WZ_13TEV.h"
-#include "ATLAS_WW_13TEV.h"
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
@@ -163,7 +162,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASZHIGHMASS49FBFilter());
   target.push_back(new ATLASWPT31PBFilter());
   target.push_back(new ATLAS1JET11Filter());
-  target.push_back(new ATLASLOMASSDY11Filter());
+  //target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
   target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
@@ -509,11 +508,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_WZ_13TEV_mTWZFilter());
   target.push_back(new ATLAS_WZ_13TEV_phiWZFilter());
   target.push_back(new ATLAS_WZ_13TEV_totWZFilter());
-  target.push_back(new ATLAS_WW_13TEV_memuFilter());
-  target.push_back(new ATLAS_WW_13TEV_pTemuFilter());
-  target.push_back(new ATLAS_WW_13TEV_pTleadFilter());
-  target.push_back(new ATLAS_WW_13TEV_yemuFilter());
-  target.push_back(new ATLAS_WW_13TEV_totWWFilter());
   target.push_back(new CMS_WZ_13TEV_pTZFilter());
   target.push_back(new CMS_WZ_13TEV_mTZFilter());
   target.push_back(new CMS_WZ_13TEV_pTleadFilter());
