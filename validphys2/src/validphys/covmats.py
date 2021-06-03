@@ -653,6 +653,67 @@ def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
     return sqrt_covmat(dataset_inputs_covariance_matrix)
 
 
+def covmat_stability_characteristic(covmat_from_systematics):
+    """
+    Return a number characterizing the stability of an experimental covariance
+    matrix against uncertainties in the correlation. It is defined as the L2
+    norm (largest singular value) of the square root of the inverse correlation
+    matrix. This is equivalent to the square root of the inverse of the
+    smallest singular value of the correlation matrix:
+
+    Z = (1/λ⁰)^½
+
+    Where λ⁰ is the smallest eigenvalue of the correlation matrix.
+
+    This is the number used as
+    threshold in :py:func:`calcutils.regularize_covmat`. The interpretation
+    is roughly what precision does the worst correlation need to
+    have in order to not affect meaningfully the χ² computed using the
+    covariance matrix, so for example a stability characteristic of 4 means
+    that correlations need to be known with uncetainties less than 0.25.
+
+    Examples
+    --------
+
+    >>> from validphys.api import API
+    >>> API.covmat_stability_characteristic(dataset_input={"dataset": "NMC"},
+    ... theoryid=162, use_cuts="internal")
+    2.742658604186114
+
+    Notes
+    -----
+
+    If the  option ``norm_threshold`` of ``covmat_from_systematics`` was usded
+    used as otherwise the matrix would be regularized first and this value
+    would be clipped from below.
+
+    See Also
+    --------
+
+    :py:func`covmat_from_systematics` Compute the covmat and possibly
+    regularize it.
+    """
+    d = np.sqrt(np.diag(covmat_from_systematics))[:, np.newaxis]
+    corr = covmat_from_systematics / d / d.T
+    e_val = la.eigvalsh(corr)
+    stability = np.sqrt(1 / e_val[0])
+    return stability
+
+
+dataset_inputs_stability = collect('covmat_stability_characteristic', ('dataset_inputs',))
+
+
+@table
+def dataset_inputs_stability_table(dataset_inputs_stability, dataset_inputs):
+    """Return a table with py:func:`covmat_stability_characteristic` for all
+    dataset inputs"""
+    res = {}
+    for ds, stab in zip(dataset_inputs, dataset_inputs_stability):
+        res[ds.name] = stab
+
+    return pd.Series(res).sort_values()
+
+
 def fit_name_with_covmat_label(fit, fitthcovmat):
     """If theory covariance matrix is being used to calculate statistical estimators for the `fit`
     then appends (exp + th) onto the fit name for use in legends and column headers to help the user
