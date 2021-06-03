@@ -125,12 +125,20 @@ already done so.
 
       If you are a macOS user, you will need to download the
       [Mac Software Development Kit](https://github.com/phracker/MacOSX-SDKs) or
-      SDK for short. This is necessary to get the correct C compiler. Assuming
-      that you already have access to the [server](NNPDF-server), you can
-      download the version of the SDK used by the [Continuous Integration](CI)
-      system by doing
+      SDK for short. This is necessary to get the correct C compiler. The
+	  [anconda documentation](https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html#macos-sdk) explains in more detail why you need this file, and why
+	  they cannot include it with the compilers by default.
 
-		curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
+	  You can check which version of SDK is currently being used by the
+	  [Continuous Integration](CI) system by checking the
+	  ``MACOS_SDK_URL`` and ``MACOS_SDK_FILE`` variables inside ``.travis.yml``.
+	  At the time of writing this documentation, the version used is 10.9 but
+	  the user is advised to check in case the documentation has become out of
+	  sync with the CI configuration.
+	  Once you know the URL of the SDK file, you can download it from the
+	  commandline using ``curl``, e.g.:
+
+		curl -L -O https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX10.9.sdk.tar.xz
 
 	  You can then unpack it into your root conda directory by running
 
