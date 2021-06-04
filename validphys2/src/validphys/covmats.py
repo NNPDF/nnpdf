@@ -678,7 +678,7 @@ def systematics_matrix_from_commondata(
         return sqrt_covmat / np.sqrt(dataset_input.weight)
     return sqrt_covmat
 
-def covmat_stability_characteristic(covmat_from_systematics):
+def covmat_stability_characteristic(systematics_matrix_from_commondata):
     """
     Return a number characterizing the stability of an experimental covariance
     matrix against uncertainties in the correlation. It is defined as the L2
@@ -705,24 +705,13 @@ def covmat_stability_characteristic(covmat_from_systematics):
     ... theoryid=162, use_cuts="internal")
     2.742658604186114
 
-    Notes
-    -----
-
-    If the  option ``norm_threshold`` of ``covmat_from_systematics`` was usded
-    used as otherwise the matrix would be regularized first and this value
-    would be clipped from below.
-
-    See Also
-    --------
-
-    :py:func`covmat_from_systematics` Compute the covmat and possibly
-    regularize it.
     """
-    d = np.sqrt(np.diag(covmat_from_systematics))[:, np.newaxis]
-    corr = covmat_from_systematics / d / d.T
-    e_val = la.eigvalsh(corr)
-    stability = np.sqrt(1 / e_val[0])
-    return stability
+    sqrtcov = systematics_matrix_from_commondata
+    # copied from calcutils.regularize_l2 but just return stability condition.
+    d = np.sqrt(np.sum(sqrtcov ** 2, axis=1))[:, np.newaxis]
+    sqrtcorr = sqrtcov / d
+    _, s, _ = la.svd(sqrtcorr, full_matrices=False)
+    return 1 / s[-1]
 
 
 dataset_inputs_stability = collect('covmat_stability_characteristic', ('dataset_inputs',))
