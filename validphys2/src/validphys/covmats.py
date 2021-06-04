@@ -725,7 +725,7 @@ def dataset_inputs_stability_table(dataset_inputs_stability, dataset_inputs):
     for ds, stab in zip(dataset_inputs, dataset_inputs_stability):
         res[ds.name] = stab
 
-    return pd.Series(res).sort_values()
+    return pd.Series(res, name="stability").sort_values()
 
 
 def fit_name_with_covmat_label(fit, fitthcovmat):
