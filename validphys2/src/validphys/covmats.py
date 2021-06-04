@@ -21,7 +21,7 @@ from validphys.checks import (
 )
 from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
-from validphys.covmats_utils import construct_covmat
+from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
@@ -652,6 +652,31 @@ def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
     """Like `sqrt_covmat` but for an group of datasets"""
     return sqrt_covmat(dataset_inputs_covariance_matrix)
 
+
+def systematics_matrix_from_commondata(
+    loaded_commondata_with_cuts,
+    dataset_input,
+    use_weights_in_covmat=True,
+    _central_values=None
+):
+    """Returns a systematics matrix, :math:`A`, for the corresponding dataset.
+    The systematics matrix is a square root of the covmat:
+
+    .. math::
+
+        C = A A^T
+
+    and is obtained by concatenating a block diagonal of the uncorrelated uncertainties
+    with the correlated systematics.
+
+    """
+    sqrt_covmat = systematics_matrix(
+        loaded_commondata_with_cuts.stat_errors.to_numpy(),
+        loaded_commondata_with_cuts.systematic_errors(_central_values)
+    )
+    if use_weights_in_covmat:
+        return sqrt_covmat / np.sqrt(dataset_input.weight)
+    return sqrt_covmat
 
 def covmat_stability_characteristic(covmat_from_systematics):
     """
