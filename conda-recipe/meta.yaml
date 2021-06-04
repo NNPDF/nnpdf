@@ -46,7 +46,7 @@ requirements:
         - requests
         - prompt_toolkit
         - validobj
-        - sphinx # documentation
+        - sphinx >=4.0.2 # documentation. Needs pinning becasue https://github.com/sphinx-doc/sphinx/issues/9216
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
