@@ -76,13 +76,11 @@ class Environment(Environment):
         if this_folder:
             self.this_folder = pathlib.Path(this_folder)
 
-        if dry and not net:
+        if not net:
             loader_class = Loader
         elif dry and net:
             log.warning("The --dry flag overrides the --net flag. No resources will be downloaded "
                         "while executing a dry run")
-            loader_class = Loader
-        elif not dry and not net:
             loader_class = Loader
         else:
             loader_class = FallbackLoader
