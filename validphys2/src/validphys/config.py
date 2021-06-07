@@ -80,7 +80,9 @@ class Environment(Environment):
             loader_class = Loader
         elif dry and net:
             log.warning("The --dry flag overrides the --net flag. No resources will be downloaded "
-                        "while exeduting a dry run")
+                        "while executing a dry run")
+            loader_class = Loader
+        elif not dry and not net:
             loader_class = Loader
         else:
             loader_class = FallbackLoader
