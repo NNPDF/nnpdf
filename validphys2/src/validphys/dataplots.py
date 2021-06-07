@@ -746,6 +746,7 @@ def plot_fits_datasets_chi2_spider_bygroup(fits_datasets_chi2_table):
     for group in groups:
         df = tab.T[group].T
         fig, ax = _plot_chi2s_spider_df(df)
+        ax.set_title(rf"$\chi^2$ for {group}")
         yield fig
  
     
