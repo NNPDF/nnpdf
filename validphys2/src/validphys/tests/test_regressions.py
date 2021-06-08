@@ -61,7 +61,7 @@ def test_mcreplica(data_config):
     seed = 123456
     # Use no cuts because if filter rules change in the
     # future then this test will end up failing
-    rep = API.indexed_make_replica(**config, seed=seed)
+    rep = API.indexed_make_replica(**config, replica_mcseed=seed)
     return rep
 
 
