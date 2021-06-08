@@ -82,11 +82,11 @@ void ATLAS_DY_2D_8TEV_LOWMASSFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
 
-      //Luminosity uncertainty
+      //Uncorrelated uncertainty
       fSys[i][276].mult = 1.9; //%
       fSys[i][276].add = fSys[i][276].mult/100. * fData[i];
       fSys[i][276].type = MULT;
-      fSys[i][276].name = "ATLASLUMI12";
+      fSys[i][276].name = "UNCORR";
 
       //Uncorrelated uncertainties
       fSys[i][275].name = "UNCORR";      
