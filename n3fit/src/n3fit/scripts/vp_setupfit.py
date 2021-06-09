@@ -48,10 +48,12 @@ SETUPFIT_FIXED_CONFIG = dict(
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance.construction',
                       'validphys.results',
-                      'validphys.covmats']
+                      'validphys.covmats',
+                      'n3fit.n3fit_checks_provider'
+]
 
 SETUPFIT_DEFAULTS = dict(
-    use_cuts= 'internal',
+    use_cuts = 'internal',
 )
 
 
@@ -146,11 +148,16 @@ class SetupFitConfig(Config):
                               f"not '{type(file_content)}'.")
 
         if file_content.get('closuretest') is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::closuretest::theory::fitting filter')
+            filter_action = 'datacuts::closuretest::theory::fitting filter'
+            check_n3fit_action = 'datacuts::theory::closuretest::fitting n3fit_checks_action'
         else:
-            SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::fitting filter')
+            filter_action = 'datacuts::theory::fitting filter'
+            check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
+
+        if kwargs["environment"].legacy:
+            SETUPFIT_FIXED_CONFIG['actions_'] += [filter_action]
+        else:
+            SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
 
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
@@ -176,6 +183,9 @@ class SetupFitApp(App):
         parser.add_argument('-o','--output',
                         help="Output folder and name of the fit",
                         default=None)
+        parser.add_argument("--legacy",
+                            help="Filter an old nnfit runcard by skipping n3fit specific checks",
+                            action='store_true')
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -188,6 +198,7 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
+            self.environment.legacy = self.args["legacy"]
 
             # proceed with default run
             super().run()

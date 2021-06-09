@@ -15,7 +15,7 @@ the code yourself.
 1. Create a runcard by, for example, using one of the configuration files
 available `here <https://github.com/NNPDF/nnpdf/tree/master/nnpdfcpp/config/>`_.
 
-2. Prepare the fit: use the command :code:`vp-setupfit <runcard>.yaml` to
+2. Prepare the fit: use the command :code:`vp-setupfit --legacy <runcard>.yaml` to
 generate a :code:`<runcard_folder>` in the current directory. This will have the
 same name as the runcard and it will also contain a copy of the runcard itself.
 The resources that are required to launch the fit, such as the theory ID and the
