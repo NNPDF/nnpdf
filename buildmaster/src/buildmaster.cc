@@ -109,7 +109,6 @@
 #include "ATLAS_TTB_DIFF_8TEV_LJ.h"
 #include "ATLAS_Z_3D_8TEV.h"
 #include "ATLAS_WZ_13TEV.h"
-#include "ATLAS_WW_13TEV.h"
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
@@ -163,7 +162,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASZHIGHMASS49FBFilter());
   target.push_back(new ATLASWPT31PBFilter());
   target.push_back(new ATLAS1JET11Filter());
-  target.push_back(new ATLASLOMASSDY11Filter());
+  //target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
   target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
@@ -278,7 +277,20 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new DYE866R_shFilter());
   target.push_back(new DYE866R_dw_iteFilter());
   target.push_back(new DYE866R_sh_iteFilter());
-
+  target.push_back(new DYE906RFilter());
+  target.push_back(new DYE906R_dw_iteFilter());
+  target.push_back(new DYE906R_sh_iteFilter());
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN01"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN02"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN03"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN04"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN05"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN06"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN07"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN08"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN09"));
+  target.push_back(new DYE906R_BINFilter("DYE906R_BIN10"));
+  
   // ************************* HERA-I Combined ******************************
 
   target.push_back(new HERA1NCEMFilter());
@@ -496,11 +508,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_WZ_13TEV_mTWZFilter());
   target.push_back(new ATLAS_WZ_13TEV_phiWZFilter());
   target.push_back(new ATLAS_WZ_13TEV_totWZFilter());
-  target.push_back(new ATLAS_WW_13TEV_memuFilter());
-  target.push_back(new ATLAS_WW_13TEV_pTemuFilter());
-  target.push_back(new ATLAS_WW_13TEV_pTleadFilter());
-  target.push_back(new ATLAS_WW_13TEV_yemuFilter());
-  target.push_back(new ATLAS_WW_13TEV_totWWFilter());
   target.push_back(new CMS_WZ_13TEV_pTZFilter());
   target.push_back(new CMS_WZ_13TEV_mTZFilter());
   target.push_back(new CMS_WZ_13TEV_pTleadFilter());

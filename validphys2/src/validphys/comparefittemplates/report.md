@@ -73,20 +73,26 @@ Training-validation
 -------------------
 {@fits plot_training_validation@}
 
+{@with DataGroups@}
 $\chi^2$ by {@processed_metadata_group@}
 ----------------------------------------
 {@plot_fits_groups_data_chi2@}
+{@endwith@}
+
 
 $\chi^2$ by dataset
 -------------------
 ### Plot
 {@plot_fits_datasets_chi2@}
 ### Table
-{@fits_chi2_table(show_total=true)@}
+{@ProcessGroup fits_chi2_table(show_total=true)@}
 
+
+{@with DataGroups@}
 $\phi$ by {@processed_metadata_group@}
 --------------------------------------
 {@plot_fits_groups_data_phi@}
+{@endwith@}
 
 Dataset plots
 -------------

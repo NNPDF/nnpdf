@@ -25,11 +25,13 @@ from validphys.n3fit_data_utils import (
 
 log = logging.getLogger(__name__)
 
-def replica_trvlseed(replica, trvlseed):
+def replica_trvlseed(replica, trvlseed, same_trvl_per_replica=False):
     """Generates the ``trvlseed`` for a ``replica``."""
     # TODO: move to the new infrastructure
     # https://numpy.org/doc/stable/reference/random/index.html#introduction
     np.random.seed(seed=trvlseed)
+    if same_trvl_per_replica:
+        return np.random.randint(0, pow(2, 31))
     for _ in range(replica):
         res = np.random.randint(0, pow(2, 31))
     return res
