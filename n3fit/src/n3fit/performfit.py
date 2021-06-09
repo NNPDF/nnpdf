@@ -262,7 +262,7 @@ def performfit(
         pdf_models = result["pdf_models"]
         for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
             # Each model goes into its own replica folder
-            replica_path_set = replica_path / f"replica_{replica_number + i}"
+            replica_path_set = replica_path / f"replica_{replica_number}"
 
             # Create a pdf instance
             pdf_instance = N3PDF(pdf_model, fit_basis=basis)
@@ -287,7 +287,7 @@ def performfit(
             )
             log.info(
                     "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
-                    replica_number+i,
+                    replica_number,
                     exp_chi2,
                     training_chi2,
                     val_chi2
