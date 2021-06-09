@@ -11,7 +11,7 @@ Essential first steps
 
    ./access
    ./git
-   ./installation
+   ./installation.rst
 
 Necessary for developers
 ------------------------
