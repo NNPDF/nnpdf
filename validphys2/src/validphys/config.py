@@ -70,15 +70,20 @@ class Environment(Environment):
         this_folder=None,
         net=True,
         upload=False,
+        dry=False,
         **kwargs,
     ):
         if this_folder:
             self.this_folder = pathlib.Path(this_folder)
 
-        if net:
-            loader_class = FallbackLoader
-        else:
+        if not net:
             loader_class = Loader
+        elif dry and net:
+            log.warning("The --dry flag overrides the --net flag. No resources will be downloaded "
+                        "while executing a dry run")
+            loader_class = Loader
+        else:
+            loader_class = FallbackLoader
 
         try:
             self.loader = loader_class(datapath, resultspath)
