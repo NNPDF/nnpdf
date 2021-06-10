@@ -13,6 +13,8 @@ import numpy as np
 import pandas as pd
 import numbers
 
+from validobj import ValidationError
+
 from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
 from reportengine.utils import get_functions, ChainMap
@@ -207,6 +209,7 @@ class Scale(enum.Enum):
 
 @dataclasses.dataclass
 class PlottingOptions:
+    func_labels: dict = dataclasses.field(default_factory=dict)
     dataset_label: typing.Optional[str] = None
     experiment: typing.Optional[str] = None
     nnpdf31_process: typing.Optional[str] = None
@@ -233,6 +236,31 @@ class PlottingOptions:
 
     extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
 
+    def parse_figure_by(self):
+        if self.figure_by is not None:
+            for el in self.figure_by:
+                if el in labeler_functions:
+                    self.func_labels[el] = labeler_functions[el]
+
+    def parse_line_by(self):
+        if self.line_by is not None:
+            for el in self.line_by:
+                if el in labeler_functions:
+                    self.func_labels[el] = labeler_functions[el]
+
+    def parse_x(self):
+        if self.x is not None and self.x not in self.all_labels:
+            raise ValidationError(
+                f"The label {self.x} is not in the set of known labels {self.all_labels}"
+            )
+
+
+    @property
+    def all_labels(self):
+        if self.extra_labels is None:
+            return set(default_labels)
+        return set(self.extra_labels.keys()).union(set(default_labels))
+
     def __post_init__(self):
         if self.kinematics_override is not None:
             self.kinematics_override = transform_functions[
@@ -240,6 +268,10 @@ class PlottingOptions:
                 ]()
         if self.result_transform is not None:
             self.result_transform = result_functions[self.result_transform.name]
+
+        self.parse_figure_by()
+        self.parse_line_by()
+        self.parse_x()
 
 
 @dataclasses.dataclass
