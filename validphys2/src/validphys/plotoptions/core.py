@@ -154,7 +154,7 @@ class PlotInfo:
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
 
-        plot_params = ChainMap({'func_labels':{}})
+        plot_params = ChainMap()
         if commondata.plotfiles:
             for file in commondata.plotfiles:
                 with open(file) as f:
@@ -170,11 +170,6 @@ class PlotInfo:
 
         else:
             plot_params = {'dataset_label':commondata.name}
-
-        if 'figure_by' in config_params:
-            for el in config_params['figure_by']:
-                if el in labeler_functions:
-                    plot_params['func_labels'][el] = labeler_functions[el]
 
         kinlabels = commondata.plot_kinlabels
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
@@ -212,6 +207,7 @@ class Scale(enum.Enum):
 
 @dataclasses.dataclass
 class PlottingOptions:
+    func_labels: dict = dataclasses.field(default_factory=dict)
     dataset_label: typing.Optional[str] = None
     experiment: typing.Optional[str] = None
     nnpdf31_process: typing.Optional[str] = None
@@ -245,6 +241,11 @@ class PlottingOptions:
                 ]()
         if self.result_transform is not None:
             self.result_transform = result_functions[self.result_transform.name]
+
+        if self.figure_by is not None:
+            for el in self.figure_by:
+                if el in labeler_functions:
+                    self.func_labels[el] = labeler_functions[el]
 
 
 @dataclasses.dataclass
