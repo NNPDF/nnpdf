@@ -804,16 +804,6 @@ class CoreConfig(configparser.Config):
         else:
             return None
 
-    @configparser.explicit_node
-    def produce_fitting_covariance_matrix(self, t0set):
-        from validphys.covmats import (
-                dataset_inputs_covmat_from_systematics,
-                dataset_inputs_t0_covmat_from_systematics,
-        )
-        if t0set is not None:
-            return dataset_inputs_t0_covmat_from_systematics
-        return dataset_inputs_covmat_from_systematics
-
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
         """ Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which

@@ -206,7 +206,7 @@ def generate_data_replica(data, replica_mcseed):
 def fitting_data_dict(
     data,
     make_replica,
-    fitting_covariance_matrix,
+    dataset_inputs_t0_covmat_from_systematics,
     tr_masks,
     kfold_masks,
     diagonal_basis=None,
@@ -260,7 +260,7 @@ def fitting_data_dict(
     datasets = common_data_reader_experiment(spec_c, data)
 
     # t0 covmat
-    covmat = fitting_covariance_matrix
+    covmat = dataset_inputs_t0_covmat_from_systematics
     inv_true = np.linalg.inv(covmat)
 
     if diagonal_basis:
