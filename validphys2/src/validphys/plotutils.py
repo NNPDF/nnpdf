@@ -515,12 +515,12 @@ def spiderplot(xticks, vals, label, ax=None):
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
-    plt.xticks(angles[:-1], xticks, size=8)
+    plt.xticks(angles[:-1], xticks, size=8, zorder=6)
 
     # Draw ylabels
     
-    ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid")
-    ax.fill(angles, vals, alpha=0.4)
+    ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1)
+    ax.fill(angles, vals, alpha=0.4, zorder=1)
     ax.grid(linewidth=1)
     ax.legend(fontsize=12)
 
