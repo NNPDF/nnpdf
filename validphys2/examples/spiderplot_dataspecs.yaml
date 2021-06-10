@@ -3,8 +3,8 @@ meta:
     author: Rosalyn Pearson
     keywords: [example, spider]
 
-
 fit: NNPDF31_nnlo_as_0118_1000
+
 theory:
     from_: fit
 
@@ -29,14 +29,11 @@ use_cuts: True
 
 normalize_to: 1
 
-
 template_text: |
 
     # χ2 spider plot
-    
+
     {@plot_dataspecs_datasets_chi2_spider@}
-
-
 
 actions_:
     - report(main=true)
