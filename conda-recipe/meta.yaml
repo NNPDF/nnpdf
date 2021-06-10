@@ -18,7 +18,7 @@ requirements:
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
         - libarchive ==3.4.2 # See https://github.com/NNPDF/nnpdf/pull/1130
-        - yaml-cpp
+        - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
@@ -35,7 +35,7 @@ requirements:
         - gsl
         - numpy
         - libarchive
-        - yaml-cpp
+        - yaml-cpp >=0.6.3
         - apfel
         - pkg-config
         - python # requirements for validphys
