@@ -12,6 +12,7 @@ requirements:
         - swig
         - cmake
         - pkg-config
+        - sysroot_linux-64==2.17
     host:
         - lhapdf      # with python wrapper
         - sqlite
