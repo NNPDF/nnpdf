@@ -91,7 +91,9 @@ install:
      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}";
      bash $MINICONDA_FILE -b;
      conda update --yes conda;
-     curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz;
+     MACOS_SDK_URL="https://github.com/phracker/MacOSX-SDKs/releases/download/11.3";
+     MACOS_SDK_FILE="MacOSX10.9.sdk.tar.xz";
+     curl -L -O "${MACOS_SDK_URL}/${MACOS_SDK_FILE}";
      tar xfz MacOSX10.9.sdk.tar.xz -C "${CONDAPATH}";
      source /Users/travis/miniconda3/bin/activate root;
      conda config --append channels conda-forge;

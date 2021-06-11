@@ -7,7 +7,7 @@
 """
 
 import numpy as np
-from n3fit.layers.Observable import Observable
+from .observable import Observable
 from n3fit.backends import operations as op
 
 
@@ -18,8 +18,8 @@ class DIS(Observable):
         the incoming pdf.
 
         The fktable is expected to be rank 3 (ndata, xgrid, flavours)
-        while the input pdf is also rank 3 where the first dimension is the batch dimension
-        (1, xgrid, flavours)
+        while the input pdf is rank 4 where the first dimension is the batch dimension
+        and the last dimension the number of replicas being fitted (1, xgrid, flavours, replicas)
     """
 
     def gen_mask(self, basis):
@@ -50,12 +50,12 @@ class DIS(Observable):
             Parameters
             ----------
                 pdf:  backend tensor
-                    rank 3 tensor (batch_size, xgrid, flavours)
+                    rank 4 tensor (batch_size, xgrid, flavours, replicas)
 
             Returns
             -------
                 result: backend tensor
-                    rank 1 tensor (batchsize, ndata)
+                    rank 3 tensor (batchsize, replicas, ndata)
         """
         # DIS never needs splitting
         if self.splitting is not None:

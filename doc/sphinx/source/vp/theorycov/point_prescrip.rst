@@ -10,7 +10,7 @@ appear in ``validphys2``.
 --------
 .. note::
 
-	``theoryids``: 163, 180, 173
+  ``theoryids``: 163, 180, 173
 
   ``point_prescription: '3 point'``
 
@@ -18,6 +18,38 @@ appear in ``validphys2``.
 
 .. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
 
+
+3f points
+---------
+
+For isolated factorisation scale variation using a 3-point prescription (central, double, half).
+
+.. note::
+
+  ``theoryids``: 163, 177, 176
+
+  ``point_prescription: '3f point'``
+
+.. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+)^2 + \Delta_1(-)^2 \bigg\}
+
+.. math:: s_{12} = \frac{1}{2}\bigg\{ \Delta_1(+)\Delta_2(+) + \Delta_1(-)\Delta_2(-) \bigg\}
+
+
+3r points
+---------
+
+For isolated renormalisation scale variation using a 3-point prescription (central, double, half).
+
+.. note::
+
+  ``theoryids``: 163, 179, 174
+
+  ``point_prescription: '3r point'``
+
+.. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+)^2 + \Delta_1(-)^2 \bigg\}
+
+.. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+) + \Delta_1(-) \bigg) \bigg(\Delta_2(+) + \Delta_2(-) \bigg) \bigg\}
+   
 
 5 points
 ---------
@@ -34,6 +66,10 @@ appear in ``validphys2``.
        s_{12} = \frac{1}{2}\bigg\{ &\Delta_1(+,0)\Delta_2(+,0) + \Delta_1(-,0)\Delta_2(-,0) \bigg\} \\
                + \frac{1}{4}\bigg\{ &\bigg(\Delta_1(0,+) + \Delta_1(0,-) \bigg)\bigg(\Delta_2(0,+) + \Delta_2(0,-)\bigg)\bigg\}
    \end{split}
+
+.. important::
+
+    This is the sum of 3f points and 3r points.
 
 :math:`\mathbf{\overline{5}}` points
 ------------------------------------
@@ -130,4 +166,3 @@ appear in ``validphys2``.
                + &\bigg(\Delta_1(-,0) + \Delta_1(-,+) + \Delta_1(-,-)\bigg)\bigg(\Delta_2(-,0) + \Delta_2(-,+) + \Delta_2(-,-) \bigg) \bigg\}\\
                + \frac{1}{8}&\bigg(\Delta_1(0,+)+ \Delta_1(0,-)\bigg)\bigg(\Delta_2(0,+) + \Delta_2(0,-) \bigg)
    \end{split}
-

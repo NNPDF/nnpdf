@@ -83,11 +83,11 @@ def patience(pdf_model, stopping_object, alpha=1e-4):
     3.434143467595683
 
     """
-    epoch_best = stopping_object.e_best_chi2
+    epoch_best = np.take(stopping_object.e_best_chi2, 0)
     patience = stopping_object.stopping_patience
     max_epochs = stopping_object.total_epochs
     diff = abs(max_epochs - patience - epoch_best)
-    vl_loss = stopping_object.vl_chi2
+    vl_loss = np.take(stopping_object.vl_chi2, 0)
     return vl_loss * np.exp(alpha * diff)
 
 

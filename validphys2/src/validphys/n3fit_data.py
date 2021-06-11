@@ -25,11 +25,13 @@ from validphys.n3fit_data_utils import (
 
 log = logging.getLogger(__name__)
 
-def replica_trvlseed(replica, trvlseed):
+def replica_trvlseed(replica, trvlseed, same_trvl_per_replica=False):
     """Generates the ``trvlseed`` for a ``replica``."""
     # TODO: move to the new infrastructure
     # https://numpy.org/doc/stable/reference/random/index.html#introduction
     np.random.seed(seed=trvlseed)
+    if same_trvl_per_replica:
+        return np.random.randint(0, pow(2, 31))
     for _ in range(replica):
         res = np.random.randint(0, pow(2, 31))
     return res
@@ -330,7 +332,7 @@ def fitting_data_dict(
         "positivity": False,
         "count_chi2": True,
         "folds" : folds,
-        "data_transformation": dt_trans_tr,
+        "data_transformation_tr": dt_trans_tr,
         "data_transformation_vl": dt_trans_vl,
     }
     return dict_out
@@ -464,7 +466,7 @@ def fitting_pos_dict(posdataset):
     Examples
     --------
     >>> from validphys.api import API
-    >>> posdataset = {"dataset": "POSF2U", "poslambda": 1e6}
+    >>> posdataset = {"dataset": "POSF2U", "maxlambda": 1e6}
     >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=162)
     >>> len(pos)
     9
@@ -492,7 +494,7 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     Examples
     --------
     >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "poslambda": 1e2}]
+    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
     >>> len(res), len(res[0])
     (1, 9)

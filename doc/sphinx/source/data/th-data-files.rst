@@ -263,8 +263,10 @@ Operation :math:`(N_{\text{FK}})`  Code       Output Observable
 =================================  =========  =================
 Null Operation(1)                  **NULL**   :math:`\mathcal{O}_d = \mathcal{O}_d^{(1)}`
 Sum (2)                            **ADD**    :math:`\mathcal{O}_d = \mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d`
+Sum (10)                           **SMT**    :math:`\mathcal{O}_d = \sum_{i=1}^{10}\mathcal{O}^{(i)}_d`
 Normalised Sum (4)                 **SMN**    :math:`\mathcal{O}_d = (\mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d)/(\mathcal{O}^{(3)}_d + \mathcal{O}^{(4)}_d)`
 Asymmetry (2)                      **ASY**    :math:`\mathcal{O}_d = (\mathcal{O}^{(1)}_d - \mathcal{O}^{(2)}_d)/(\mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d)`
+Combination (20)                   **COM**    :math:`\mathcal{O}_d = \sum_{i=1}^{10}\mathcal{O}^{(i)}_d/\sum_{i=11}^{20}\mathcal{O}^{(i)}_d`
 Ratio (2)                          **RATIO**  :math:`\mathcal{O}_d = \mathcal{O}^{(1)}_d / \mathcal{O}^{(2)}_d`
 =================================  =========  =================
 

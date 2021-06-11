@@ -153,3 +153,23 @@ def test_python_t0_covmat_matches_cpp(
         np.testing.assert_allclose(
             covmat, API.dataset_inputs_covmat_from_systematics(**config)
         )
+
+
+@pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
+@pytest.mark.parametrize("dataset_input", DATA)
+def test_systematic_matrix(
+    data_config, use_cuts, dataset_input):
+    """Test which checks the python computation of the t0 covmat relating to a
+    collection of datasets matches that of the C++ computation.
+
+    Tests all combinations of hessian/MC t0pdfset and correlated/uncorrelated
+    data.
+
+    """
+    config = dict(data_config)
+    config["dataset_input"] = dataset_input
+    config["use_cuts"] = use_cuts
+    covmat = API.covmat_from_systematics(**config)
+    sys_mat = API.systematics_matrix_from_commondata(**config)
+    covmat_from_sys_mat = sys_mat @ sys_mat.T
+    np.testing.assert_allclose(covmat_from_sys_mat, covmat)
