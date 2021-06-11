@@ -90,7 +90,7 @@ def plot_phi(groups_data, groups_data_phi, processed_metadata_group):
     phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
     xticks = [group.name for group in groups_data]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
-    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\phi$ by {processed_metadata_group}")
     return fig
 
 @figure
@@ -98,7 +98,7 @@ def plot_fits_groups_data_phi(fits_groups_phi_table, processed_metadata_group):
     """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
     group of datasets, which is defined according to the keys in the PLOTTING info file"""
     fig, ax = _plot_chis_df(fits_groups_phi_table)
-    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\phi$ by {processed_metadata_group}")
     return fig
 
 @figure
@@ -575,15 +575,12 @@ def plot_fits_chi2_spider(fits, fits_groups_chi2,
     ax = fig.add_subplot(projection='polar')
 
     for fit, fitchi2, fitgroup in zip(fits, fits_groups_chi2, fits_groups_data):
-        exchi2 = []
-        xticks = []
-        for group, group_res in zip(fitgroup, fitchi2):
-            exchi2.append(group_res.central_result/group_res.ndata)
-            xticks.append(group.name)
+        exchi2 = [group_res.central_result/group_res.ndata for group_res in fitchi2]
+        xticks = [group.name for group in fitgroup]
 
         ax = plotutils.spiderplot(xticks, exchi2, fit)
 
-    ax.set_title(r"$\chi^2$ by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
 
     return fig
 
@@ -601,23 +598,21 @@ def plot_fits_phi_spider(fits, fits_groups_data,
 
        ax = plotutils.spiderplot(xticks, phi, fit)
 
-   ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
+   ax.set_title(rf"$\phi$ by {processed_metadata_group}")
 
    return fig
 
 @figure
 def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_group, pdf):
     """Plot the chi² of all groups of datasets as a spider plot."""
-    exchi2 = []
-    xticks = []
-    for group, group_res in zip(groups_data, groups_chi2):
-        exchi2.append(group_res.central_result/group_res.ndata)
-        xticks.append(group.name)
+
+    exchi2 = [group_res.central_result/group_res.ndata for group_res in groups_chi2]
+    xticks = [group.name for group in groups_data]
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='polar')
     ax = plotutils.spiderplot(xticks, exchi2, pdf)   
-    ax.set_title(r"$\chi^2$ distribution by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
     return fig
 
 @figure
@@ -629,20 +624,18 @@ def plot_groups_data_phi_spider(groups_data, groups_data_phi, processed_metadata
     fig = plt.figure()
     ax = fig.add_subplot(projection='polar')
     ax = plotutils.spiderplot(xticks, phi, pdf)
-    ax.set_title(r"$\phi$ by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\phi$ by {processed_metadata_group}")
     return fig
 
 
 @figure
 def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
     """Plot the chi² of all groups of datasets with bars."""
-    exchi2 = []
-    xticks = []
-    for group, group_res in zip(groups_data, groups_chi2):
-        exchi2.append(group_res.central_result/group_res.ndata)
-        xticks.append(group.name)
+    exchi2 = [group_res.central_result/group_res.ndata for group_res in groups_chi2]
+    xticks = [group.name for group in groups_data]
+
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
-    ax.set_title(r"$\chi^2$ distribution by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
     return fig
 
 plot_experiments_chi2 = collect("plot_groups_data_chi2",  ("group_dataset_inputs_by_experiment",))
@@ -654,9 +647,8 @@ def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     dschi2 = []
     xticks = []
     for group, group_res in zip(groups_data, groups_chi2):
-        for dataset, dsres in zip(group, ds):
-            dschi2.append(dsres.central_result/dsres.ndata)
-            xticks.append(dataset.name)
+        xticks = [dataset.name for dataset in group]
+        dschi2 = [dsres.central_result/dsres.ndata for dsres in group_res]
     fig,ax = plotutils.barplot(dschi2, collabels=xticks,
                                datalabels=[r'$\chi^2$'])
 
@@ -671,9 +663,8 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
     dschi2 = []
     xticks = []
     for group, group_res in zip(groups_data, groups_chi2):
-        for dataset, dsres in zip(group, ds):
-            dschi2.append(dsres.central_result/dsres.ndata)
-            xticks.append(dataset.name)
+        xticks = [dataset.name for dataset in group]
+        dschi2 = [dsres.central_result/dsres.ndata for dsres in group_res]
 
     fig = plt.figure(figsize=(4,4))
     ax = fig.add_subplot(projection='polar')
@@ -685,6 +676,8 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
 
 
 def _plot_chis_df(df):
+    """Takes a dataframe that is a reduced version of ``fits_dataset_chi2s_table``
+    and returns a bar plot. See ``plot_fits_datasets_chi2`` for use"""
     chilabel = df.columns.get_level_values(1)[1]
     data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()
@@ -695,6 +688,7 @@ def _plot_chis_df(df):
     return fig, ax
 
 def _plot_chi2s_spider_df(df, size=6):
+    """Like _plot_chis_df but for spider plot."""
     chilabel = df.columns.get_level_values(1)[1]
     data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()
@@ -764,7 +758,7 @@ def plot_fits_groups_data_chi2(fits_groups_chi2_table, processed_metadata_group)
     """Generate a plot equivalent to ``plot_groups_data_chi2`` using all the
     fitted group of data as input."""
     fig, ax = _plot_chis_df(fits_groups_chi2_table)
-    ax.set_title(r"$\chi^2$ by {}".format(processed_metadata_group))
+    ax.set_title(rf"$\chi^2$ by {processed_metadata_group")
     return fig
 
 @figure
