@@ -25,7 +25,7 @@ pdfs:
     - NNPDF31_nnlo_as_0118
     - NNPDF31_nlo_as_0118
 
-use_cuts: True
+use_cuts: internal
 
 normalize_to: 1
 
