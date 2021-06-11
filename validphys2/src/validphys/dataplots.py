@@ -724,7 +724,7 @@ def plot_fits_datasets_chi2(fits_datasets_chi2_table):
 
 @figure
 def plot_fits_datasets_chi2_spider(fits_datasets_chi2_table):
-    """Generate a splot equivalent to ``plot_datasets_chi2_spider`` using all the
+    """Generate a plot equivalent to ``plot_datasets_chi2_spider`` using all the
     fitted datasets as input."""
     ind = fits_datasets_chi2_table.index.droplevel(0)
     df = fits_datasets_chi2_table.set_index(ind)
