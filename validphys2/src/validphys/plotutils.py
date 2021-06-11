@@ -501,7 +501,7 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
 def spiderplot(xticks, vals, label, ax=None):
     """
     Makes a spider/radar plot.
-    
+
     xticks: list of names of x tick labels, e.g. datasets
     vals: list of values to plot corresponding to each xtick
     label: label for values, e.g. fit name
@@ -515,14 +515,14 @@ def spiderplot(xticks, vals, label, ax=None):
     vals += vals[:1]
 
     maxval = np.max(vals)
-    
+
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
     plt.xticks(angles[:-1], xticks, size=8, zorder=6)
 
     # Draw ylabels
-    
+
     ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1)
     ax.fill(angles, vals, alpha=0.4, zorder=1)
     ax.grid(linewidth=1)
