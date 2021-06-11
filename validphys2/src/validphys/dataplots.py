@@ -758,7 +758,7 @@ def plot_fits_groups_data_chi2(fits_groups_chi2_table, processed_metadata_group)
     """Generate a plot equivalent to ``plot_groups_data_chi2`` using all the
     fitted group of data as input."""
     fig, ax = _plot_chis_df(fits_groups_chi2_table)
-    ax.set_title(rf"$\chi^2$ by {processed_metadata_group")
+    ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
     return fig
 
 @figure
