@@ -1342,7 +1342,7 @@ each_dataset_chi2 = collect(abs_chi2_data, ("data",))
 
 pdfs_total_chi2 = collect(total_chi2_per_point_data, ("pdfs",))
 
-# These are convenient ways to iterate and extract varios data from fits
+# These are convenient ways to iterate and extract various data from fits
 fits_chi2_data = collect(abs_chi2_data, ("fits", "fitcontext", "dataset_inputs"))
 
 fits_total_chi2 = collect("total_chi2_per_point_data", ("fits", "fitcontext"))
@@ -1357,11 +1357,15 @@ fits_pdf = collect("pdf", ("fits", "fitpdf"))
 groups_data_phi = collect(
     dataset_inputs_phi_data, ("group_dataset_inputs_by_metadata",)
 )
+fits_groups_data_phi = collect("groups_data_phi", ("fits", "fitcontext"))
 groups_bootstrap_phi = collect(
     dataset_inputs_bootstrap_phi_data, ("group_dataset_inputs_by_metadata",)
 )
 
-# Dataspec is so
+fits_groups_chi2 = collect("groups_chi2", ("fits", "fitcontext"))
+fits_groups_data = collect("groups_data", ("fits", "fitcontext"))
+
+# Collections over dataspecs
 dataspecs_groups = collect("groups_data", ("dataspecs",))
 dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
 dataspecs_groups_bootstrap_phi = collect("groups_bootstrap_phi", ("dataspecs",))
