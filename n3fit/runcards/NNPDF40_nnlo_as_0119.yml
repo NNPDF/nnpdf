@@ -1,5 +1,5 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 ############################################################
 description: "NNPDF4.0 NNLO global, deuteron and nuclear uncertainties, alphas=0.1190"
@@ -25,12 +25,12 @@ dataset_inputs:
 - {dataset: HERACOMBNCEP820, frac: 0.75}
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
-- {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
+- {dataset: HERACOMBCCEP, frac: 0.75}  
 - {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC,QCD]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
@@ -39,7 +39,6 @@ dataset_inputs:
 - {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_WMU_8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
 - {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}       
@@ -55,7 +54,7 @@ dataset_inputs:
 - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}             
 - {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        
 - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}                            
-- {dataset: ATLASPHT15, frac: 0.75, cfac: [QCD, EWK]}                                
+- {dataset: ATLASPHT15_SF, frac: 0.75, cfac: [QCD, EWK]}                                
 - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}                      
 - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                     
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}        

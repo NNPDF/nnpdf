@@ -23,9 +23,22 @@ import logging
 import prompt_toolkit
 
 from reportengine import colors
+from reportengine.compat import yaml
 
 from validphys.api import API
 
+# arguments for np.clip to enforce integrability.
+# key should be identical to runcard key, first inner dictionary can contain
+# either smallx or largex, the innermost dictionaries must be valid arguments
+# for np.clip, this means BOTH a_min and a_max must be specified (even if one
+# is left as None, indicating it is unconstrained.)
+PREPROCESSING_LIMS = {
+    "v": {"smallx": {"a_min": None, "a_max": 1.0}},
+    "v3": {"smallx": {"a_min": None, "a_max": 1.0}},
+    "v8": {"smallx": {"a_min": None, "a_max": 1.0}},
+    "t3": {"smallx": {"a_min": None, "a_max": 1.0}},
+    "t8": {"smallx": {"a_min": None, "a_max": 1.0}},
+}
 
 # Take command line arguments
 def process_args():
@@ -44,6 +57,15 @@ def process_args():
         "--force",
         help="If the runcard for the iterated fit already exists in the path, overwrite it.",
         action="store_true",
+    )
+    parser.add_argument(
+        "--no-preproc-lims",
+        action="store_true",
+        help=(
+            "Do not enforce any preprocessing constraints, which are chosen to "
+            "ensure integrability. By default the following constraints are "
+            f"used: {PREPROCESSING_LIMS}"
+        )
     )
     args = parser.parse_args()
     return args
@@ -99,10 +121,22 @@ def main():
     # Update description of fit interactively
     description = API.fit(fit=input_fit).as_input()["description"]
 
+    if not args.no_preproc_lims:
+        preproc_lims = PREPROCESSING_LIMS
+        log.info(
+            "The following constraints will be used for preprocessing ranges, \n%s",
+            yaml.dump(preproc_lims),
+        )
+    else:
+        # don't enforce any limits.
+        preproc_lims = None
+
     updated_description = interactive_description(description)
 
     iterated_runcard_yaml = API.iterated_runcard_yaml(
-        fit=input_fit, _updated_description=updated_description
+        fit=input_fit,
+        _updated_description=updated_description,
+        _flmap_np_clip_arg=preproc_lims,
     )
 
     # Write new runcard to file

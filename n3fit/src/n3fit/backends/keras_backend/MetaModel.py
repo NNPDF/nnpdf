@@ -10,13 +10,24 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
-from tensorflow.python.keras.utils import tf_utils # pylint: disable=no-name-in-module
+from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 import n3fit.backends.keras_backend.operations as op
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split(".")
 if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
     raise NotImplementedError("n3fit needs TF > 2.2 in order to work")
+
+
+# We need a function to transform tensors to numpy/python primitives
+# which is not part of the official TF interface and can change with the version
+if hasattr(tf_utils, "to_numpy_or_python_type"):
+    _to_numpy_or_python_type = tf_utils.to_numpy_or_python_type
+elif hasattr(tf_utils, "sync_to_numpy_or_python_type"):  # from TF 2.5
+    _to_numpy_or_python_type = tf_utils.sync_to_numpy_or_python_type
+else:  # in case of disaster
+    _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
+
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -223,11 +234,9 @@ class MetaModel(Model):
 
         ret = self.compute_losses_function()
 
-        # The output of this function is to be used by python (and numpy) so we need to convert
-        # the tensorflow variable to python primitives or numpy arrays.
-        # Undocumented TF function to convert all tensors from the ret dictionary to numpy arrays
-        # if it dissapears, equivalent for us to {k: i.numpy() for k, i in ret.items()}
-        return tf_utils.to_numpy_or_python_type(ret)
+        # The output of this function is to be used by python (and numpy)
+        # so we need to convert the tensors
+        return _to_numpy_or_python_type(ret)
 
     def compile(
         self,

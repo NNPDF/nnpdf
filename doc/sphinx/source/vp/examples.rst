@@ -34,7 +34,8 @@ looping_example.yaml		N/A				Shows how to do actions in a loop over resources
 mc_gen_example.yaml		N/A				Analysis of pseudodata generation
 new_data_specification.yaml	N/A				Shows how to specify data in runcards
 pdfdistanceplots.yaml		How to plot PDFs		Distance PDF plots
-simple_runcard.yaml		N/A				Simple runcard example
+simple_runcard.yaml 		N/A				Simple runcard example
+spiderplots.yaml      		N/A				Plot spider/radar diagram for χ2 and ϕ
 taking_data_from_fit.yaml	N/A				Shows how to take ``theoryids`` and ``pdfs`` from a fit	
 theory_covariance/            	:ref:`vptheorycov-index`	Runcards for the ``theorycovariance`` module	
 ============================= 	===========================    =========================================================
@@ -68,6 +69,6 @@ NNLO pdf                             NNPDF31_nnlo_as_0118            NNPDF3.1 NN
 NNLO pdf hessian                     NNPDF31_nnlo_as_0118_hessian    NNPDF3.1 NNLO hessian PDF set generated from replicas
 NLO fit                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO fit with 100 replicas (+ central replica)
 NNLO fit                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 DIS-only NNLO fit with 95 replicas (+ central replica)
-fit                                  191015-mw-001                   n3fit closure test fit with 30 replicas before and after postfit
+fit                                  191015-mw-001                   ``n3fit`` closure test fit with 30 replicas before and after postfit
 fit (iterated)                       191015-mw-001_ite2_for_testing  Iteration of 191015-mw-001
 ===================================  ==============================  ==================================================================

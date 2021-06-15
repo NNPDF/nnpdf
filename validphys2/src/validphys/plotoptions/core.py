@@ -4,20 +4,26 @@ Created on Fri Mar 11 19:27:44 2016
 
 @author: Zahari Kassabov
 """
+import dataclasses
+import enum
 import logging
+import typing
 
 import numpy as np
 import pandas as pd
 import numbers
 
+from validobj import ValidationError
+
 from reportengine.floatformatting import format_number
-from reportengine.configparser import Config, ConfigError, named_element_of
+from reportengine.compat import yaml
 from reportengine.utils import get_functions, ChainMap
 
 from NNPDF import CommonData, DataSet
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
+from validphys.utils import parse_yaml_inp
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +33,8 @@ labeler_functions = get_functions(labelers)
 transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
 result_functions = get_functions(resulttransforms)
 
+ResultTransformations = enum.Enum('ResultTransformations', list(result_functions.keys()))
+TransformFunctions = enum.Enum('TransformFunctions', list(transform_functions.keys()))
 
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     """Retrieve and process the plotting information for the input data (which could
@@ -61,8 +69,6 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
 
     info = PlotInfo.from_commondata(data, cuts=cuts, normalize=normalize)
     return info
-
-
 
 class PlotInfo:
     def __init__(
@@ -150,24 +156,17 @@ class PlotInfo:
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
 
-        #The only reason to call the parser once per config file is to
-        #give better error messages and stricter checks
         plot_params = ChainMap()
         if commondata.plotfiles:
             for file in commondata.plotfiles:
                 with open(file) as f:
-                    config = PlotConfigParser.from_yaml(f, commondata, cuts=cuts)
-                try:
-                    config_params = config.process_all_params()
-                except ConfigError:
-                    log.error(f"Error in plotting file: {file}")
-                    raise
-
+                    processed_input = yaml.round_trip_load(f)
+                    pf = parse_yaml_inp(processed_input, PlottingFile, file)
+                    config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
                 plot_params = plot_params.new_child(config_params)
             if normalize and 'normalize' in plot_params:
-                #We might need to use reportengine.namespaces.resolve here
                 plot_params = plot_params.new_child(config_params['normalize'])
-            if not 'dataset_label' in plot_params:
+            if 'dataset_label' not in plot_params:
                 log.warning(f"'dataset_label' key not found in {file}")
                 plot_params['dataset_label'] = commondata.name
 
@@ -175,111 +174,109 @@ class PlotInfo:
             plot_params = {'dataset_label':commondata.name}
 
         kinlabels = commondata.plot_kinlabels
-        if 'kinematics_override' in plot_params:
-            kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
+        kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
         return cls(kinlabels=kinlabels, **plot_params)
 
 
-class PlotConfigParser(Config):
+def dict_factory(key_value_pairs):
+    """A dictionary factory to be used in conjunction with dataclasses.asdict
+    to remove nested None values and convert enums to their name.
 
-    allowed_keys = {'normalize':dict}
+    https://stackoverflow.com/questions/59481989/dict-from-nested-dataclasses
+    """
+    new_kv_pairs = []
+    for key, value in key_value_pairs:
+        if isinstance(value, enum.Enum):
+            new_kv_pairs.append((key, value.name))
+        elif value is not None:
+            new_kv_pairs.append((key, value))
+
+    return dict(new_kv_pairs)
 
 
-    #TODO: Remove any reference to cuts from here entirely
-    def __init__(self, input_params ,commondata, cuts=None, **kwargs):
-        self.commondata = commondata
-        self.cuts = cuts
-        super().__init__(input_params, **kwargs)
-
-    def process_all_params(self, input_params=None):
-        self._output_params = ChainMap({'func_labels':{}})
-        return super().process_all_params(input_params=input_params,
-                                              ns=self._output_params)
+class KinLabel(enum.Enum):
+    k1 = enum.auto()
+    k2 = enum.auto()
+    k3 = enum.auto()
 
 
-    @named_element_of('extra_labels')
-    def parse_label(self, elems:list):
-        ndata = self.commondata.ndata
-        if len(elems) != ndata:
-            raise ConfigError("The number of elements in %s (%d) must be the same as "
-                              "the number of points in the CommonData (%d)" %
-                              (elems, len(elems), (ndata)))
-        if self.cuts is not None:
-            elems = [elems[c] for c in self.cuts]
-        return elems
+class Scale(enum.Enum):
+    linear = enum.auto()
+    log = enum.auto()
+    symlog = enum.auto()
 
-    def resolve_name(self, val, extra_labels):
-        if extra_labels is None:
-            all_labels = list(default_labels)
-        else:
-            all_labels = list(extra_labels.keys()) + list(default_labels)
-        if val in all_labels:
-            return val
-        if val in labeler_functions:
-            self._output_params['func_labels'][val] = labeler_functions[val]
-            return val
 
-        raise ConfigError("Unknown label %s" % val, val, all_labels +
-                          list(labeler_functions),
-                              display_alternatives='all')
+@dataclasses.dataclass
+class PlottingOptions:
+    func_labels: dict = dataclasses.field(default_factory=dict)
+    dataset_label: typing.Optional[str] = None
+    experiment: typing.Optional[str] = None
+    nnpdf31_process: typing.Optional[str] = None
+    data_reference: typing.Optional[str] = None
+    theory_reference: typing.Optional[str] = None
+    process_description: typing.Optional[str] = None
+    y_label: typing.Optional[str] = None
+    x_label: typing.Optional[str] = None
 
-    def parse_process_description(self, desc:str):
-        return desc
+    kinematics_override: typing.Optional[TransformFunctions] = None
 
-    def parse_dataset_label(self, lb:str):
-        return lb
+    result_transform: typing.Optional[ResultTransformations] = None
 
-    def parse_x(self, x:str, extra_labels=None):
-        return self.resolve_name(x, extra_labels)
+    # TODO: change this to x: typing.Optional[KinLabel] = None
+    # but this currently fails CI because some datasets have
+    # a kinlabel of $x_1$ or " "!!
+    x: typing.Optional[str] = None
 
-    def parse_figure_by(self, gb:list, extra_labels=None):
-        return [self.resolve_name(val, extra_labels) for val in gb]
+    x_scale: typing.Optional[Scale] = None
+    y_scale: typing.Optional[Scale] = None
 
-    def parse_line_by(self, lb:list, extra_labels=None):
-        return self.parse_figure_by(lb, extra_labels)
+    line_by: typing.Optional[list] = None
+    figure_by: typing.Optional[list] = None
 
-    def parse_kinematics_override(self, tr:str):
-        if not tr in transform_functions:
-            raise ConfigError("Unknown transform function '%s'" % tr, tr,
-                              transform_functions)
-        return transform_functions[tr]()
+    extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
 
-    def parse_result_transform(self, tr:str):
-        if not tr in result_functions:
-            raise ConfigError("Unknown transform function '%s'" % tr, tr,
-                              result_functions)
-        return result_functions[tr]
+    def parse_figure_by(self):
+        if self.figure_by is not None:
+            for el in self.figure_by:
+                if el in labeler_functions:
+                    self.func_labels[el] = labeler_functions[el]
 
-    def parse_y_label(self, label:str):
-        return label
+    def parse_line_by(self):
+        if self.line_by is not None:
+            for el in self.line_by:
+                if el in labeler_functions:
+                    self.func_labels[el] = labeler_functions[el]
 
-    def parse_x_label(self, label:str):
-        return label
+    def parse_x(self):
+        if self.x is not None and self.x not in self.all_labels:
+            raise ValidationError(
+                f"The label {self.x} is not in the set of known labels {self.all_labels}"
+            )
 
-    def _parse_scale(self, scale:str):
-        if not (scale == 'linear' or scale=='log' or scale == 'symlog'):
-            raise ConfigError("Scale must be 'linear', 'log' or 'symlog'")
-        return scale
 
-    def parse_x_scale(self, scale:str):
-        return self._parse_scale(scale)
+    @property
+    def all_labels(self):
+        if self.extra_labels is None:
+            return set(default_labels)
+        return set(self.extra_labels.keys()).union(set(default_labels))
 
-    def parse_y_scale(self, scale:str):
-        return self._parse_scale(scale)
+    def __post_init__(self):
+        if self.kinematics_override is not None:
+            self.kinematics_override = transform_functions[
+                self.kinematics_override.name
+                ]()
+        if self.result_transform is not None:
+            self.result_transform = result_functions[self.result_transform.name]
 
-    def parse_theory_reference(self, ref:str):
-        return ref
+        self.parse_figure_by()
+        self.parse_line_by()
+        self.parse_x()
 
-    def parse_data_reference(self, ref:str):
-        return ref
 
-    def parse_experiment(self, exp:str):
-        return exp
-
-    def parse_nnpdf31_process(self, proc:str):
-        return proc
-
+@dataclasses.dataclass
+class PlottingFile(PlottingOptions):
+    normalize: typing.Optional[PlottingOptions] = None
 
 
 def kitable(data, info, *, cuts=None):

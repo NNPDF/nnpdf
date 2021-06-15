@@ -11,7 +11,7 @@
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> fake_x = np.linspace(1e-3,0.8,3)
     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> n3pdf = N3PDF(pdf_model)
+    >>> n3pdf = N3PDF(pdf_model[0])
     >>> res = xplotting_grid(n3pdf, 1.6, fake_x)
     >>> res.grid_values.shape
     (1, 8, 3)
