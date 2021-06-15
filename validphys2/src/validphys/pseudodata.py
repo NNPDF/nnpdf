@@ -75,7 +75,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     sorted_index = context_index.sortlevel(level=range(3))[0]
 
     pdf = fitcontext["pdf"]
-    log.info(f"Using same pseudodata & training/validation splits as {pdf.name}.")
+    log.debug(f"Using same pseudodata & training/validation splits as {pdf.name}.")
     nrep = len(pdf)
     path = pathlib.Path(pdf.infopath)
 
@@ -312,7 +312,7 @@ def fitted_pseudodata_internal(fit, experiments, num_fitted_replicas, t0pdfset=N
     replica = range(1, num_fitted_replicas + 1)
 
     trvlseed, mcseed, genrep = [
-        fit.as_input().get("fitting").get(i)
+        fit.as_input().get(i)
         for i in ["trvlseed", "mcseed", "genrep"]
     ]
 

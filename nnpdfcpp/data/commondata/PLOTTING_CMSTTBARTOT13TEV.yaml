@@ -1,0 +1,5 @@
+dataset_label: "CMS $\\sigma_{tt}^{\\rm tot}$ 13 TeV"
+
+experiment: "CMS"
+
+nnpdf31_process: TOP

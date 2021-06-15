@@ -41,6 +41,7 @@ INITIAL_CHI2 = 1e9
 # Pass/veto keys
 POS_OK = "POS_PASS"
 POS_BAD = "POS_VETO"
+THRESHOLD_POS = 1e-6
 
 
 def parse_ndata(all_data):
@@ -117,7 +118,7 @@ def parse_losses(history_object, data, suffix="loss"):
     total_points = 0
     total_loss = 0
     for exp_name, npoints in data.items():
-        loss = np.take(hobj[exp_name + f"_{suffix}"], -1)
+        loss = np.array(hobj[exp_name + f"_{suffix}"])
         dict_chi2[exp_name] = loss / npoints
         total_points += npoints
         total_loss += loss
@@ -133,259 +134,357 @@ def parse_losses(history_object, data, suffix="loss"):
 
 class FitState:
     """
-        Holds the state of the chi2 during the fit.
+    Holds the state of the chi2 during the fit for all replicas
 
-        It holds the necessary information to reload the fit
-        to a specific point in time if we are interested on reloading
-        (otherwise the relevant variables stay empty to save memory)
+    It holds the necessary information to reload the fit
+    to a specific point in time if we are interested on reloading
+    (otherwise the relevant variables stay empty to save memory)
 
-        Note: the training chi2 is computed before the update of the weights
-        so it is the chi2 that informed the updated corresponding to this state.
-        The validation chi2 instead is computed after the update of the weights.
+    Note: the training chi2 is computed before the update of the weights
+    so it is the chi2 that informed the updated corresponding to this state.
+    The validation chi2 instead is computed after the update of the weights.
 
-        Parameters
-        ----------
-            all_tr_chi2: dict
-                Chi2 for all training datasets computed before the update of the weights
-            all_vl_chi2: dict
-                Chi2 for all validation datasets computed after the update of the weights
-            info: dict
-                Full return state of the Validation model
+    Parameters
+    ----------
+        training_info: dict
+            all losses for the training model
+        validation_info: dict
+            all losses for the validation model
     """
 
-    def __init__(self, all_tr_chi2, all_vl_chi2, info):
-        self.all_tr_chi2 = all_tr_chi2
-        self.all_vl_chi2 = all_vl_chi2
-        self.info = info
-        # These two variables are only filled for specific points
-        # in order to save precious memory, and only when we are
-        # saving the fit history each X number of epoch
-        self.weights = None
-        self.best_epoch = 0
+    vl_ndata = None
+    tr_ndata = None
+    vl_suffix = None
 
-    def register_weigths(self, weights, best_epoch):
-        """ Save the current best weights and best_epoch of the fit """
-        self.weights = weights
-        self.best_epoch = best_epoch
+    def __init__(self, training_info, validation_info):
+        if self.vl_ndata is None or self.tr_ndata is None or self.vl_suffix is None:
+            raise ValueError(
+                "FitState cannot be instantiated until vl_ndata, tr_ndata and vl_suffix are filled"
+            )
+        self.training = training_info
+        self.validation = validation_info
+        self._parsed = False
+        self._vl_chi2 = None
+        self._tr_chi2 = None
+        self._vl_dict = None
+        self._tr_dict = None
 
     @property
-    def vl_chi2(self):
-        """ Returns the total validation chi2 """
-        return self.all_vl_chi2["total"]
+    def vl_loss(self):
+        """Return the total validation loss as it comes from the info dictionaries"""
+        return self.validation.get("loss")
+
+    @property
+    def tr_loss(self):
+        """Return the total validation loss as it comes from the info dictionaries"""
+        return self.training.get("loss")
+
+    def _parse_chi2(self):
+        """
+        Parses the chi2 from the losses according to the `tr_ndata` and
+        `vl_ndata` dictionaries of {dataset: n_points}
+        """
+        if self._parsed:
+            return
+        if self.training is not None:
+            self._tr_chi2, self._tr_dict = parse_losses(self.training, self.tr_ndata)
+        if self.validation is not None:
+            self._vl_chi2, self._vl_dict = parse_losses(
+                self.validation, self.vl_ndata, suffix=self.vl_suffix
+            )
 
     @property
     def tr_chi2(self):
-        """ Returns the total training chi2 """
-        return self.all_tr_chi2["total"]
+        self._parse_chi2()
+        return self._tr_chi2
+
+    @property
+    def vl_chi2(self):
+        self._parse_chi2()
+        return self._vl_chi2
+
+    @property
+    def all_tr_chi2(self):
+        self._parse_chi2()
+        return self._tr_dict
+
+    @property
+    def all_vl_chi2(self):
+        self._parse_chi2()
+        return self._vl_dict
+
+    def all_tr_chi2_for_replica(self, r):
+        """" Return the tr chi2 per dataset for a given replica """
+        return {k: np.take(i, r) for k, i in self.all_tr_chi2.items()}
+
+    def all_vl_chi2_for_replica(self, r):
+        """" Return the vl chi2 per dataset for a given replica """
+        return {k: np.take(i, r) for k, i in self.all_vl_chi2.items()}
+
+    def total_partial_tr_chi2(self):
+        """ Return the tr chi2 summed over replicas per experiment"""
+        return {k: np.sum(i) for k, i in self.all_tr_chi2.items()}
+
+    def total_partial_vl_chi2(self):
+        """ Return the vl chi2 summed over replicas per experiment"""
+        return {k: np.sum(i) for k, i in self.all_tr_chi2.items()}
+
+    def total_tr_chi2(self):
+        """ Return the total tr chi2 summed over replicas """
+        return np.sum(self.tr_chi2)
+
+    def total_vl_chi2(self):
+        """ Return the total vl chi2 summed over replicas """
+        return np.sum(self.vl_chi2)
 
     def __str__(self):
         return f"chi2: tr={self.tr_chi2} vl={self.vl_chi2}"
 
 
-class FitHistory:
-    """
-        Keeps a list of FitState items holding the full history of the fit.
+class ReplicaState:
+    """Extra complication which eventually will be merged with someone else
+    but it is here only for development."""
 
-        It also keeps track of the best epoch and the associated weights.
-
-        Can be iterated when there are snapshots of the fit being saved.
-        When iterated it will rewind the fit to each of the point in history
-        that have been saved.
-
-        Parameters
-        ----------
-            pdf_model: n3fit.backends.MetaModel
-                PDF model being trained, used to saved the weights and compute
-                more
-            save_weights_each: int
-                if given, it will save a snapshot of the fit every  `save_weights_each` epochs
-    """
-
-    def __init__(self, pdf_model, save_weights_each=None):
+    def __init__(self, pdf_model):
         self._pdf_model = pdf_model
-        self._save_weights_each = save_weights_each
-        # Initialize variables for the history
         self._weights = None
         self._best_epoch = None
-        self._history = []
-        self.final_epoch = None
-        # Initialize variables for the snapshots
-        self.reloadable_history = []
+        self._stop_epoch = None
+        self._best_vl_chi2 = INITIAL_CHI2
+
+    def positivity_pass(self):
+        """ By definition, if we have a ``best_epoch`` then positivity passed """
+        if self._best_epoch is None:
+            return False
+        else:
+            return True
 
     @property
     def best_epoch(self):
-        """ Epoch of the best fit """
+        if self._best_epoch is None:
+            return self.stop_epoch
         return self._best_epoch
 
-    @best_epoch.setter
-    def best_epoch(self, epoch):
-        """ Saves the current weight """
+    @property
+    def stop_epoch(self):
+        return self._stop_epoch
+
+    @property
+    def best_vl(self):
+        return float(self._best_vl_chi2)
+
+    @property
+    def positivity_status(self):
+        if self.positivity_pass():
+            return POS_OK
+        else:
+            return POS_BAD
+
+    def register_best(self, chi2, epoch):
+        """ Register a new best state and some metadata about it """
         self._weights = self._pdf_model.get_weights()
         self._best_epoch = epoch
+        self._best_vl_chi2 = chi2
+
+    def reload(self):
+        """ Reload the weights of the best state """
+        if self._weights:
+            self._pdf_model.set_weights(self._weights)
+
+    def stop_training(self, epoch = None):
+        """ Stop training this replica if not stopped before """
+        if self._pdf_model.trainable:
+            self._pdf_model.trainable = False
+            self._stop_epoch = epoch
+
+
+class FitHistory:
+    """
+    Keeps a list of FitState items holding the full history of the fit.
+
+    It also keeps track of the best epoch and the associated weights.
+
+    Can be iterated when there are snapshots of the fit being saved.
+    When iterated it will rewind the fit to each of the point in history
+    that have been saved.
+
+    Parameters
+    ----------
+        pdf_models: n3fit.backends.MetaModel
+            list of PDF models being trained, used to saved the weights
+    """
+
+    def __init__(self, pdf_models, tr_ndata, vl_ndata):
+        # Create a ReplicaState object for all models
+        # which will hold the best chi2 and weights per replica
+        self._replicas = []
+        for pdf_model in pdf_models:
+            self._replicas.append(ReplicaState(pdf_model))
+        self._iter_replicas = iter(self._replicas)
+
+        if vl_ndata is None:
+            vl_ndata = tr_ndata
+            vl_suffix = "loss"
+        else:
+            vl_suffix = "val_loss"
+        # All instances of FitState should use these
+        FitState.tr_ndata = tr_ndata
+        FitState.vl_ndata = vl_ndata
+        FitState.vl_suffix = vl_suffix
+
+        # Save a list of status for the entire fit
+        self._history = []
+        self.final_epoch = None
+
+    @property
+    def best_epoch(self):
+        """ Return the best epoch per replica """
+        return [i.best_epoch for i in self._replicas]
 
     def get_state(self, epoch):
         """ Get the FitState of the system for a given epoch """
-        return self._history[epoch]
+        try:
+            return self._history[epoch]
+        except IndexError as e:
+            raise ValueError(
+                f"Tried to get obtain the state for epoch {epoch} when only {len(self._history)} epochs have been saved"
+            ) from e
 
-    def best_state(self):
-        """ Return the FitState object corresponding to the best fit """
-        if self.best_epoch is None:
-            return None
-        else:
-            index = self.best_epoch
-            best_state = self._history[index]
-            return best_state
+    def save_best_replica(self, i, epoch=None):
+        """Save the state of replica ``i`` as a best fit so far.
+        If an epoch is given, save the best as the given epoch, otherwise
+        use the last one
+        """
+        if epoch is None:
+            epoch = self.final_epoch
+        loss = self.get_state(epoch).vl_loss[i]
+        self._replicas[i].register_best(loss, epoch)
 
-    def best_vl(self):
-        """ Returns the chi2 of the best fit
-        if there was no best fit returns `INITIAL_CHI2`
-        if there was a problem, returns `TERRIBLE_CHI2` """
-        if not self._weights:
-            return TERRIBLE_CHI2
-        best_state = self.best_state()
-        if best_state:
-            return best_state.vl_chi2
-        else:
-            return INITIAL_CHI2
+    def all_positivity_status(self):
+        """ Returns whether the positivity passed or not per replica """
+        return np.array([i.positivity_status for i in self._replicas])
 
-    def best_tr(self):
-        """ Returns the training chi2 of the best fit
-        if there are no best fit, returns the last one """
-        best_state = self.best_state()
-        if best_state:
-            return best_state.tr_chi2
-        else:
-            return self._history[self.final_epoch].tr_chi2
+    def all_best_vl_loss(self):
+        """ Returns the best validation loss for each replica """
+        return np.array([i.best_vl for i in self._replicas])
 
-    def register(self, fitstate, epoch):
-        """ Save a new fitstate and updates the current final epoch
-        Every `save_weights_each` (if set) saves a snapshot of the current best fit into
-        the fitstate
+    def register(self, epoch, training_info, validation_info):
+        """Save a new fitstate and updates the current final epoch
 
         Parameters
         ----------
-            `fitstate`
-                a fitstate object to save
-            `epoch`
+            fitstate: FitState
+                FitState object
+                the fitstate of the object to save
+            epoch: int
                 the current epoch of the fit
         """
+        # Save all the information in a fitstate object
+        fitstate = FitState(training_info, validation_info)
         self.final_epoch = epoch
         self._history.append(fitstate)
-        if self._save_weights_each:
-            save_here = (epoch + 1) % self._save_weights_each
-            if save_here == 0:
-                fitstate.register_weigths(self._weights, self.best_epoch)
-                self.reloadable_history.append(fitstate)
+        return fitstate
 
-    def reload(self, weights=None):
-        """ Reloads the best fit weights into the model
-        if there are models to be reloaded
-        A set of weights can be enforced as an optional argument
-        """
-        if weights is None:
-            weights = self._weights
-        if weights:
-            self._pdf_model.set_weights(weights)
+    def stop_training_replica(self, i, e):
+        """ Stop training replica i in epoch e"""
+        self._replicas[i].stop_training(e)
 
-    def rewind(self, step):
-        """ Rewind the FitHistory object to the step `step` in the fit
+    def reload(self):
+        """Reloads the best fit weights into the model if there are models to be reloaded
+        Ensure that all replicas have stopped at this point.
         """
-        fitstate = self.reloadable_history[step]
-        historic_weights = fitstate.weights
-        self.reload(weights=historic_weights)
-        self.best_epoch = fitstate.best_epoch
-        self.final_epoch = (step + 1) * self._save_weights_each - 1
-        # -1 because we are saving the epochs starting at 0
+        for replica in self._replicas:
+            replica.stop_training(self.final_epoch)
+            replica.reload()
+
+    def __next__(self):
+        return next(self._iter_replicas)
 
 
 class Stopping:
     """
-        Driver of the stopping algorithm
+    Driver of the stopping algorithm
 
-        Note, if the total number of points in the validation dictionary is None, it is assumed
-        the validation_model actually corresponds to the training model.
+    Note, if the total number of points in the validation dictionary is None, it is assumed
+    the validation_model actually corresponds to the training model.
 
-        Parameters
-        ----------
-            validation_model: n3fit.backends.MetaModel
-                the model with the validation mask applied
-                (and compiled with the validation data and covmat)
-            all_data_dict: dict
-                list containg all dictionaries containing all information about
-                the experiments/validation/regularizers/etc to be parsed by Stopping
-            pdf_model: n3fit.backends.MetaModel
-                pdf_model being trained
-            threshold_positivity: float
-               maximum value allowed for the sum of all positivity losses
-            total_epochs: int
-               total number of epochs
-            stopping_patience: int
-               how many epochs to wait for the validation loss to improve
-            dont_stop: bool
-               dont care about early stopping
-            save_weights_each: int
-                every how many epochs to save a snapshot of the fit
+    Parameters
+    ----------
+        validation_model: n3fit.backends.MetaModel
+           the model with the validation mask applied
+           (and compiled with the validation data and covmat)
+        all_data_dict: dict
+           list containg all dictionaries containing all information about
+           the experiments/validation/regularizers/etc to be parsed by Stopping
+        pdf_models: list(n3fit.backends.MetaModel)
+           list of pdf_models being trained
+        threshold_positivity: float
+           maximum value allowed for the sum of all positivity losses
+        total_epochs: int
+           total number of epochs
+        stopping_patience: int
+           how many epochs to wait for the validation loss to improve
+        dont_stop: bool
+           dont care about early stopping
     """
 
     def __init__(
         self,
         validation_model,
         all_data_dicts,
-        pdf_model,
-        threshold_positivity=1e-6,
+        pdf_models,
+        threshold_positivity=THRESHOLD_POS,
         total_epochs=0,
         stopping_patience=7000,
         threshold_chi2=10.0,
         dont_stop=False,
-        save_weights_each=None,
     ):
-        # Parse the training, validation and positivity sets from all the input dictionaries
-        self._tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
+        # Save the validation object
+        self._validation = validation_model
 
-        # Create the Validation, Positivity and History objects
-        if vl_ndata is None:
-            self.validation = Validation(validation_model, self._tr_ndata, no_validation=True)
-        else:
-            self.validation = Validation(validation_model, vl_ndata)
-        self.positivity = Positivity(threshold_positivity, pos_sets)
-        self.history = FitHistory(pdf_model, save_weights_each=save_weights_each)
+        # Create the History object
+        tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
+        self._history = FitHistory(pdf_models, tr_ndata, vl_ndata)
+
+        # And the positivity checker
+        self._positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal variables for the stopping
+        self.n_replicas = len(pdf_models)
         self.threshold_chi2 = threshold_chi2
+        self.stopping_degree = np.zeros(self.n_replicas, dtype=np.int)
+        self.count = np.zeros(self.n_replicas, dtype=np.int)
+
         self.dont_stop = dont_stop
         self.stop_now = False
         self.stopping_patience = stopping_patience
-        self.stopping_degree = 0
-        self.count = 0
         self.total_epochs = total_epochs
 
     @property
     def vl_chi2(self):
-        """ Validation chi2 """
-        return self.history.best_vl()
-
-    @property
-    def tr_chi2(self):
-        """ Training chi2 """
-        return self.history.best_tr()
+        """ Current validation chi2 """
+        validation_info = self._validation.compute_losses()
+        fitstate = FitState(None, validation_info)
+        return fitstate.vl_chi2
 
     @property
     def e_best_chi2(self):
-        """ Epoch of the best chi2, if there is no best epoch
-        return the last epoch"""
-        be = self.history.best_epoch
-        if be is None:
-            return self.stop_epoch
-        return be
-
+        """ Epoch of the best chi2, if there is no best epoch, return last"""
+        return self._history.best_epoch
 
     @property
     def stop_epoch(self):
         """ Epoch in which the fit is stopped """
-        return self.history.final_epoch + 1
+        return self._history.final_epoch + 1
+
+    @property
+    def positivity_status(self):
+        """Returns POS_PASS if positivity passes or veto if it doesn't
+        for each replica"""
+        return self._history.all_positivity_status()
 
     def evaluate_training(self, training_model):
-        """ Given the training model, evaluates the
+        """Given the training model, evaluates the
         model and parses the chi2 of the training datasets
 
         Parameters
@@ -399,8 +498,8 @@ class Stopping:
                 chi2 of the given ``training_model``
         """
         training_info = training_model.compute_losses()
-        tr_chi2, _ = parse_losses(training_info, self._tr_ndata)
-        return tr_chi2
+        fitstate = FitState(training_info, None)
+        return fitstate.tr_chi2
 
     def monitor_chi2(self, training_info, epoch, print_stats=False):
         """
@@ -416,81 +515,86 @@ class Stopping:
 
         Parameters
         ----------
-            `training_info`
-                the output of a .fit() run
-            `epoch`
-                the index of the epoch
+            training_info: dict
+                output of a .fit() call, dictionary of the total loss (summed over replicas) for
+                each experiment
+            epoch: int
+                index of the epoch
 
         Returns
         -------
-            `pass_ok`
+            pass_ok: bool
                 true/false according to the status of the run
         """
-        # Step 1. Preprocess the event, count it towards the stopping degree
-        #         parse the training information and check whether it is a good point
-        tr_chi2, all_tr = parse_losses(training_info, self._tr_ndata)
-
-        if np.isnan(tr_chi2):
+        # Step 1. Check whether the fit has NaN'd and stop it if so
+        if np.isnan(training_info["loss"]):
             log.warning(" > NaN found, stopping activated")
-            self.stop_now = True
-            # If we had a good model at any point, reload
-            self.history.reload()
+            self.make_stop()
             return False
 
-        self.stopping_degree += self.count
+        # Step 2. Compute the validation metrics
+        validation_info = self._validation.compute_losses()
 
-        # Step 2. Check the validation loss at this point
-        vl_chi2, all_vl = self.validation.loss()
-
-        # Step 3. Store information about the run and print stats if asked
-        fitstate = FitState(all_tr, all_vl, self.validation.state)
-        self.history.register(fitstate, epoch)
+        # Step 3. Register the current point in (the) history
+        fitstate = self._history.register(epoch, training_info, validation_info)
         if print_stats:
             self.print_current_stats(epoch, fitstate)
 
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
-        if self.positivity(fitstate) and vl_chi2 < self.threshold_chi2:
-            if vl_chi2 < self.history.best_vl():
-                # Set the new best
-                self.history.best_epoch = epoch
-                # Save stopping info
-                self.stopping_degree = 0
-                # Initialize the counter
-                self.count = 1
+        # Don't start counting until the chi2 of the validation goes below a certain threshold
+        # once we start counting, don't bother anymore
+        passes = self.count | (fitstate.vl_chi2 < self.threshold_chi2)
+        passes &= fitstate.vl_loss < self._history.all_best_vl_loss()
+        # And the ones that pass positivity
+        passes &= self._positivity(fitstate)
 
-        # If your patience has ended, prepare for stop
-        if self.stopping_degree > self.stopping_patience:
+        self.stopping_degree += self.count
+
+        # Step 5. loop over the valid indices to check whether the vl improved
+        for i in np.where(passes)[0]:
+            self._history.save_best_replica(i)
+            self.stopping_degree[i] = 0
+            self.count[i] = 1
+
+        stop_replicas = self.count & (self.stopping_degree > self.stopping_patience)
+        for i in np.where(stop_replicas)[0]:
+            self.count[i] = 0
+            self._history.stop_training_replica(i, epoch)
+
+        # By using the stopping degree we only stop when none of the replicas are improving anymore
+        if min(self.stopping_degree) > self.stopping_patience:
             self.make_stop()
         return True
 
     def make_stop(self):
-        """ Convenience method to set the stop_now flag
+        """Convenience method to set the stop_now flag
         and reload the history to the point of the best model if any
         """
         self.stop_now = True
-        self.history.reload()
+        self._history.reload()
 
     def print_current_stats(self, epoch, fitstate):
         """
-            Prints the last validation and training loss saved
+        Prints ``fitstate`` training and validation chi2s
         """
         epoch_index = epoch + 1
-        tr_loss = fitstate.tr_chi2
-        vl_loss = fitstate.vl_chi2
-        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_loss}\n"
+        tr_chi2 = fitstate.total_tr_chi2()
+        vl_chi2 = fitstate.total_vl_chi2()
+        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total chi2: {tr_chi2}\n"
 
-        partials = []
-        for experiment in self._tr_ndata:
-            chi2 = fitstate.all_tr_chi2[experiment]
-            partials.append(f"{experiment}: {chi2:.3f}")
-        total_str += ", ".join(partials)
-
-        total_str += f"\nValidation loss at this point: {vl_loss}"
+        # The partial chi2 makes no sense for more than one replica at once:
+        if self.n_replicas == 1:
+            partial_tr_chi2 = fitstate.total_partial_tr_chi2()
+            partials = []
+            for experiment, chi2 in partial_tr_chi2.items():
+                partials.append(f"{experiment}: {chi2:.3f}")
+            total_str += ", ".join(partials) + "\n"
+        total_str += f"Validation chi2 at this point: {vl_chi2}"
         log.info(total_str)
 
     def stop_here(self):
-        """ Returns the stopping status
+        """Returns the stopping status
         If `dont_stop` is set returns always False (i.e., never stop)
         """
         if self.dont_stop:
@@ -498,133 +602,64 @@ class Stopping:
         else:
             return self.stop_now
 
-    def positivity_pass(self):
-        """ Checks whether the positivity loss is below the requested threshold
-        If there is no best state, the positivity (obv) cannot pass
-        """
-        best_state = self.history.best_state()
-        if best_state is not None and self.positivity(best_state):
-            return True
-        else:
-            return False
+    def get_next_replica(self):
+        """ Return the next ReplicaState object"""
+        return next(self._history)
 
-    def positivity_status(self):
-        """ Checks whether the positivity loss is below the requested threshold
-        If there is no best state, the positivity (obv) cannot pass
-        """
-        if self.positivity_pass():
-            return POS_OK
-        else:
-            return POS_BAD
-
-    def chi2exps_str(self, log_each=100):
+    def chi2exps_str(self, replica=0, log_each=100):
         """
         Returns a list of log-string with the status of the fit
         every `log_each` epochs
 
         Parameters
         ----------
-            `log_each`
+            replica: int
+                which replica are we writing the log for
+            log_each: int
                 every how many epochs to print the log
 
         Returns
         -------
-            `file_list`
-                a list of string to be printed as `chi2exps.log`
+            file_list: list(str)
+                a list of strings to be printed as `chi2exps.log`
         """
-        final_epoch = self.history.final_epoch
+        final_epoch = self._history.final_epoch
         file_list = []
         for i in range(log_each - 1, final_epoch + 1, log_each):
-            fitstate = self.history.get_state(i)
-            all_tr = fitstate.all_tr_chi2
-            all_vl = fitstate.all_vl_chi2
+            fitstate = self._history.get_state(i)
+            all_tr = fitstate.all_tr_chi2_for_replica(replica)
+            all_vl = fitstate.all_vl_chi2_for_replica(replica)
             # Here it is assumed the validation exp set is always a subset of the training exp set
             data_list = []
-            for exp in self._tr_ndata:
-                tr_loss = all_tr[exp]
+            for exp, tr_loss in all_tr.items():
                 vl_loss = all_vl.get(exp, 0.0)
                 data_str = f"{exp}: {tr_loss} {vl_loss}"
                 data_list.append(data_str)
             data = "\n".join(data_list)
             epoch_index = i + 1
-            total_tr_loss = fitstate.tr_chi2
-            total_vl_loss = fitstate.vl_chi2
             strout = f"""
 Epoch: {epoch_index}
 {data}
-Total: training = {total_tr_loss} validation = {total_vl_loss}
 """
             file_list.append(strout)
         return file_list
 
 
-class Validation:
-    """
-        Controls the NNPDF cross-validation algorithm
-
-        The cross-validation refers to the validation loss of the points of the dataset
-        not used in the fitting.
-        In general for any points considered here there will accompanying points from the
-        same dataset being included in the fitting.
-
-        Parameters
-        ----------
-            model: n3fit.backends.MetaModel
-                the model with the validation mask applied
-                (and compiled with the validation data and covmat)
-    """
-
-    def __init__(self, model, ndata_dict, verbose=False, no_validation=False):
-        self.model = model
-        self.state = None
-        self.verbose = verbose
-        self.ndata_dict = ndata_dict
-        self.n_val_exp = len(ndata_dict)
-        if no_validation:
-            self.suffix = "loss"
-        else:
-            self.suffix = "val_loss"
-
-    def _compute_validation_loss(self):
-        """
-        Evaluates the validation model and returns a tuple (`total_loss`, `vl_dict`)
-        with the information for the validation loss by experimenet normalized to the
-        number of points of each experiment
-
-        Returns
-        -------
-            `total_loss`
-                total vale for the validation loss
-            `vl_dict`
-                dictionary containing a map of experiment names and loss
-        """
-        loss_dict = self.model.compute_losses()
-        self.state = loss_dict
-        return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
-
-    def loss(self):
-        """
-        Returns a tuple with the validation loss and a
-        dictionary for the validation loss per experiment
-        """
-        return self._compute_validation_loss()
-
-
 class Positivity:
     """
-        Controls the positivity requirements.
+    Controls the positivity requirements.
 
-        In order to check the positivity passes will check the history of the fitting
-        as the fitting included positivity sets.
-        If the sum of all positivity sets losses is above a certain value the model is
-        not accepted and the training continues.
+    In order to check the positivity passes will check the history of the fitting
+    as the fitting included positivity sets.
+    If the sum of all positivity sets losses is above a certain value the model is
+    not accepted and the training continues.
 
-        Parameters
-        ----------
-            threshold_positivity: float
-                maximum value allowed for the sum of all positivity losses
-            positivity_sets: list
-                list of positivity datasets
+    Parameters
+    ----------
+        threshold_positivity: float
+            maximum value allowed for the sum of all positivity losses
+        positivity_sets: list
+            list of positivity datasets
     """
 
     def __init__(self, threshold, positivity_sets):
@@ -633,29 +668,27 @@ class Positivity:
 
     def check_positivity(self, history_object):
         """
-        This function receives a history objects and loops over the
-        positivity_sets to check the value of the positivity loss.
+                This function receives a history objects and loops over the
+                positivity_sets to check the value of the positivity loss.
 
-        If the positivity loss is above the threshold, the positivity fails
-        otherwise, it passes.
-
-        Parameters
-        ----------
-            history_object: dict
-                dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
+                If the positivity loss is above the threshold, the positivity fails
+                otherwise, it passes.
+                It returns an array booleans which are True if positivity passed
+        story_object[key_loss] < self.threshold
+                Parameters
+                ----------
+                    history_object: dict
+                        dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
         """
+        positivity_pass = True
         for key in self.positivity_sets:
             key_loss = f"{key}_loss"
-            # If we are taking the avg when checking the output, we should do so here as well?
-            positivity_loss = np.take(history_object[key_loss], -1)
-            if positivity_loss > self.threshold:
-                return False
-        # If none of the positivities failed, it passes
-        return True
+            positivity_pass &= history_object[key_loss] < self.threshold
+        return np.array(positivity_pass)
 
     def __call__(self, fitstate):
         """
-            Checks whether a given FitState object
-            passes the positivity requirement
+        Checks whether a given FitState object
+        passes the positivity requirement
         """
-        return self.check_positivity(fitstate.info)
+        return self.check_positivity(fitstate.validation)

@@ -403,6 +403,18 @@ class Rule:
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
 
+    @property
+    def _properties(self):
+        """Attributes of the Rule class that are defining. Two
+        Rules with identical ``_properties`` are considered equal.
+        """
+        return (self.rule_string, self.dataset, self.process_type, self.theory_params['ID'])
+
+    def __eq__(self, other):
+        return self._properties == other._properties
+
+    def __hash__(self):
+        return hash(self._properties)
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)

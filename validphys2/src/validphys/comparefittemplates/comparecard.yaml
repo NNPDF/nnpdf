@@ -107,12 +107,11 @@ positivity:
 description:
   from_: fit
 
+dataset_inputs:
+  from_: fit
+
 dataspecs:
-  # WARNING: do not blindly copy and paste this: it can overwrite the datasets
-  # for any actions which rely on grouping datasets.
-  - data_input:
-      from_: fitinputcontext
-    theoryid:
+  - theoryid:
       from_: current
     pdf:
       from_: current
@@ -121,11 +120,7 @@ dataspecs:
     speclabel:
       from_: current
 
-  # WARNING: do not blindly copy and paste this: it can overwrite the datasets
-  # for any actions which rely on grouping datasets.
-  - data_input:
-      from_: fitinputcontext
-    theoryid:
+  - theoryid:
       from_: reference
     pdf:
       from_: reference
@@ -139,6 +134,13 @@ Normalize:
 
 Datanorm:
   normalize_to: data
+
+DataGroups:
+  - metadata_group: nnpdf31_process
+  - metadata_group: experiment
+
+ProcessGroup:
+    metadata_group: nnpdf31_process
 
 actions_:
   - report(main=true)

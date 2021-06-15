@@ -26,7 +26,7 @@ API_example.ipynb		:ref:`vpapi`			Jupyter notebook example with API
 closure_templates/    		:ref:`tut_closure`  		Running closure tests
 cuts_options.yaml             	N/A          			Shows results for different cuts policites
 dataspecs.yaml			N/A				Shows how to use ``dataspecs``
-data_theory_comparison.yaml	:ref:`tut_datthcomp`		Data theory comparison
+data_theory_comparison.yaml	:ref:`datthcomp`		Data theory comparison
 export_data.yaml		N/A				Makes tables of experimental data and covariance matrices
 generate_a_report.yaml		:ref:`tut_report`		Shows how to generate a report
 kiplot.yaml			N/A				Plot kinematic coverage of data
@@ -68,6 +68,6 @@ NNLO pdf                             NNPDF31_nnlo_as_0118            NNPDF3.1 NN
 NNLO pdf hessian                     NNPDF31_nnlo_as_0118_hessian    NNPDF3.1 NNLO hessian PDF set generated from replicas
 NLO fit                              NNPDF31_nlo_as_0118             NNPDF3.1 NLO fit with 100 replicas (+ central replica)
 NNLO fit                             NNPDF31_nnlo_as_0118_DISonly    NNPDF3.1 DIS-only NNLO fit with 95 replicas (+ central replica)
-fit                                  191015-mw-001                   n3fit closure test fit with 30 replicas before and after postfit
+fit                                  191015-mw-001                   ``n3fit`` closure test fit with 30 replicas before and after postfit
 fit (iterated)                       191015-mw-001_ite2_for_testing  Iteration of 191015-mw-001
 ===================================  ==============================  ==================================================================

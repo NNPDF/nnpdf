@@ -76,7 +76,7 @@ positivity is not. They work as follows:
 
 * Positivity: for each positivity observable appearing in the runcard, a positivity threshold is
   given. By default this is taken to be :math:`10^{-6}`. During the fit the Positivity class,
-  implemented as part of the stopping object in n3fit, checks whether the positivity losses (which
+  implemented as part of the stopping object in ``n3fit``, checks whether the positivity losses (which
   are the terms proportional to the lagrange multipliers) are below the threshold. This check is
   performed at the level of each positivity observable. If none of the positivity checks fail the
   replica is labelled with the flag :code:`POS_PASS`, otherwise with :code:`POS_VETO`. At the level

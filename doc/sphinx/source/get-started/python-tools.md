@@ -113,3 +113,74 @@ surprising. It is a good idea to measure where the problems actually are.
     documents. We enable the
     [recommonmark](https://recommonmark.readthedocs.io/en/latest/) extension to
     be able to compose files also in markdown format.
+
+## Python static checks and code style
+
+We use [Pylint](https://www.pylint.org/) to provide static checking e.g.
+finding basic errors that a compiler would catch in compiled languages. An example
+is using an unknown variable name. Pylint also provides basic guidelines on the
+structure of the code (e.g. avoid functions that are to complicated). Because
+Pylint is way too pedantic by default, we limit the checks to only those
+considered useful. The `.pylintrc` file at the top level configures Pylint to
+only mind those checks. Most Python IDEs and editors have some kind of support
+for Pylint. It is strongly recommended to configure the editor to show the
+problematic pieces of code proactively.
+
+New code should use the [Black](https://black.readthedocs.io/en/stable/>) tool to
+format the code. This tool should not be used to aggressively reformat existing
+files.
+
+
+## Matplotlib Image Comparison Tests
+
+It is possible to create tests which perform an image comparison between a
+generated plot and a pre-existing baseline plot. Clearly this allows one to check
+consistency in figure generation.
+
+Before beginning you will need to ensure that you have the tests dependencies,
+which can be checked in `nnpdf/conda-recipe/meta.yml`.
+
+The next step is to write the test function. It is highly recommended to use the
+[validphys API](../vp/api.md) for this, both to simplify the code and to make it agnostic to the
+structure of backend providers - provided that they produce the same results. See
+for example a function which tests the `plot_pdfs` provider:
+
+```python
+@pytest.mark.mpl_image_compare
+def test_plotpdfs():
+    pdfs = ['NNPDF31_nnlo_as_0118']
+    Q = 10
+    flavours = ['g']
+    #plot_pdfs returns a generator with (figure, name_hint)
+    return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
+```
+
+We see that the function needs to return a valid matplotlib figure, and should
+be decorated with `@pytest.mark.mpl_image_compare`.
+
+Now the baseline figure needs to be generated, this can be achieved by running
+
+```
+pytest -k <name of file containing test function> --mpl-generate-path=baseline
+```
+
+which will generate a PNG of the figure in the `src/validphys/tests/baseline`
+directory. It is recommended to put all baseline plots in this directory so that
+they are automatically installed, and so will be in the correct location when
+the [CI](../ci/index.md)  runs the test suite.
+
+Now that the baseline figure exists you can check that your test works:
+
+```
+pytest -k <name of file containing test function> --mpl
+```
+
+Also you can check that the test has been added to the full test suite:
+
+```
+pytest --pyargs --mpl validphys
+```
+
+Just note that if you do not put the `--mpl` flag then the test will just check
+that the function runs without error, and won't check that the output matches to
+baseline.
