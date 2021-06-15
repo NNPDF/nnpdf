@@ -461,10 +461,7 @@ def procs_index_matched(groups_index, procs_index):
     """procs_index but matched to the dataset order given
     by groups_index. """
     # Making list with exps ordered like in groups_index
-    groups_ds_order = []
-    for ds in groups_index.get_level_values(level=1):
-        if ds not in groups_ds_order:
-            groups_ds_order.append(ds)
+    groups_ds_order = groups_index.get_level_values(level=1).unique().tolist()
     # Tuples to make multiindex, ordered like in groups_index
     tups = []
     for ds in groups_ds_order:
