@@ -32,17 +32,20 @@ members:
 
 * Richard D. Ball - University of Edinburgh
 * Stefano Carrazza - Universita' degli Studi di Milano
-* Juan Cruz-Martinez 
+* Juan Cruz-Martinez - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
 * Luigi Del Debbio - University of Edinburgh
-* Stefano Forte - Universita' degli Studi di Milano
-* Tommaso Giani
-* Shayan Iranipour
-* Zahari Kassabov
-* Rabah Abdul Khalek
-* José Ignacio Latorre - Singapore
+* Stefano Forte - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
+* Tommaso Giani  - University of Edinburgh
+* Shayan Iranipour - University of Cambridge
+* Zahari Kassabov - University of Cambridge
+* Rabah Abdul Khalek - Nikhef Theory Group and VU University
+* José Ignacio Latorre - Quantum Research Centre, Technology
+  Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
 * Emanuele R. Nocera - University of Edinburgh 
 * Rosalyn Pearson - University of Edinburgh
-* Juan Rojo - Nikhef Theory Group
+* Juan Rojo - Nikhef Theory Group and VU University
 * Maria Ubiali - University of Cambridge
 * Cameron Voisey - University of Cambridge
 * Michael Wilson - University of Edinburgh
@@ -60,23 +63,39 @@ Former members of the NNPDF collaboration include
 
 The NNPDF publications
 =====================
-* "Future tests of parton distributions", Juan Cruz-Martinez, Stefano
+* *"Future tests of parton distributions"*, Juan Cruz-Martinez, Stefano
   Forte, Emanuele R. Nocera :cite:p:`Cruz-Martinez:2021rgy`
-* "Deuteron Uncertainties in the Determination of Proton PDFs",
+* *"Deuteron Uncertainties in the Determination of Proton PDFs"*,
   Richard D. Ball, Emanuele R. Nocera, Rosalyn L. Pearson,
   :cite:p:`Ball:2020xqw`
-* "Parton Distribution Functions", Stefano Carrazza, Stefano Forte :cite:p:`Forte:2020yip`	
-* "Parton Distributions with Theory Uncertainties: General Formalism
-  and First Phenomenological Studies",
+* *"Parton Distribution Functions"*, Stefano Carrazza, Stefano Forte
+  :cite:p:`Forte:2020yip`
+* *"Phenomenology of NNLO jet production at the LHC and its impact on
+  parton distributions"*,
+  Rabah Abdul Khalek, Stefano Forte, Thomas Gehrmann, Aude Gehrmann-De
+  Ridder, Tommaso Giani, Nigel Glover, Alexander Huss,
+  Emanuele R. Nocera, Joao Pires, Juan Rojo, Giovanni Stagnitto
+  :cite:p:`AbdulKhalek:2020jut`
+* *"Why αs Cannot be Determined from Hadronic Processes without
+  Simultaneously Determining the Parton Distributions"*, Stefano Forte,
+  Zahari Kassabov, :cite:p:`Forte:2020pyp`
+* *"Single top production in PDF fits"*, Emanuele R. Nocera, Maria
+  Ubiali, Cameron Voisey, :cite:p:`Nocera:2019wyk`
+* *"Parton Distributions with Theory Uncertainties: General Formalism
+  and First Phenomenological Studies"*,
   Rabah Abdul Khalek, Richard D. Ball, Stefano Carrazza, Stefano
   Forte, Tommaso Giani, Zahari Kassabov, Rosalyn L. Pearson,
-  Emanuele R. Nocera,  Juan Rojo, Luca Rottoli, Maria Ubiali, Cameron Voisey and Michael Wilson  :cite:p:`AbdulKhalek:2019bux`
-* "A First Determination of Parton Distributions with Theoretical
-  Uncertainties", Rabah Abdul Khalek, Richard D. Ball, Stefano
+  Emanuele R. Nocera,  Juan Rojo, Luca Rottoli, Maria Ubiali, Cameron
+  Voisey and Michael Wilson  :cite:p:`AbdulKhalek:2019bux`
+* *"Nuclear Parton Distributions from Lepton-Nucleus Scattering and
+  the Impact of an Electron-Ion Collider"*, Rabah Abdul Khalek,
+  Jacob J. Ethier, Juan Rojo, :cite:p:`AbdulKhalek:2019mzd` 
+* *"A First Determination of Parton Distributions with Theoretical
+  Uncertainties"*, Rabah Abdul Khalek, Richard D. Ball, Stefano
   Carrazza, Stefano Forte, Tommaso Giani, Zahari Kassabov,
   Emanuele R. Nocera, Rosalyn L. Pearson, Juan Rojo, Luca Rottoli,
   Maria Ubiali, Cameron Voise, and Michael Wilson :cite:p:`AbdulKhalek:2019ihb`
-* "Parton distributions from high-precision collider data",
+* *"Parton distributions from high-precision collider data"*,
   Richard D. Ball, Valerio Bertone, Stefano Carrazza, Luigi Del
   Debbio, Stefano Forte, Patrick Groth-Merrild, Alberto Guffanti,
   Nathan P. Hartland, Zahari Kassabov,  Jose I. Latorre,
