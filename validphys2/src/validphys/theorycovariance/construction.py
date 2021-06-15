@@ -173,10 +173,6 @@ def total_covmat_procs(procs_results_theory, fivetheories: (str, type(None)) = N
         proc_result_covmats.append(cov)
     return proc_result_covmats
 
-
-commondata_procs = collect("commondata", ["group_dataset_inputs_by_process", "data"])
-
-
 def dataset_names(data_input):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
