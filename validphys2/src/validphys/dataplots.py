@@ -713,7 +713,7 @@ def plot_fits_datasets_chi2(fits_datasets_chi2_table):
         dfs.append(df[col].dropna())
     df_out = pd.concat(dfs, axis=1, keys=cols, sort=False)
     fig, ax = _plot_chis_df(df_out)
-    ax.set_title(r"$\chi^2$ for datasets", fontsize=30)
+    ax.set_title(r"$\chi^2$ for datasets")
     return fig
 
 @figure
