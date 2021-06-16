@@ -184,7 +184,7 @@ To add a new module to document, add a new line in `sphinx/Makefile` under:
 
 ### Currently documented
 - [Validphys2 guide](https://data.nnpdf.science/validphys-docs/guide.html)
-- [Data format specifications](sphinx/source/data/exp-data-files.html#exp-data-files)
+- [Data format specifications](https://docs.nnpdf.science/data/exp-data-files.html)
 - Ancient (NNPDF3.0) cut specifications
 
 ### Immediate TODO
