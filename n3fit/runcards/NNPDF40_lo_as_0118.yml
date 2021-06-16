@@ -1,7 +1,7 @@
-# Configuration file for n3fit
 #
-description: NNPDF4.0 LO global, deuteron and nuclear uncertainties. Runcard for the
-  baseline LO fit. alphas=0.118
+# Configuration file for NNPDF++
+#
+description: NNPDF4.0 LO global,  alphas=0.118
 
 ############################################################
 # frac: training fraction
@@ -180,7 +180,6 @@ NNLODatasets: &NNLODatasets
 - {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}
 
 
-
 do_not_require_similarity_for:
 - ATLAS_WCHARM_WP_DIFF_7TEV
 - ATLAS_WCHARM_WM_DIFF_7TEV
@@ -214,10 +213,10 @@ theory:
   theoryid: 213     # database id
 
 ############################################################
-
-trvlseed: 1520585894
-nnseed: 2647869818
-mcseed: 1101490705
+sum_rules: MSR
+trvlseed: 285649527
+nnseed: 1880517920
+mcseed: 2056988674
 save: false
 genrep: true   # true = generate MC replicas, false = use real data
 
@@ -239,24 +238,18 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   stopping_patience: 0.1
   layer_type: dense
   dropout: 0.0
-  #    threshold_chi2: 3.5
 
 fitting:
-  sum_rules: MSR
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: FLAVOUR  # EVOL (7), EVOLQED (8), etc.
   basis:
-  - {fl: u, trainable: false, smallx: [1,1], largex: [1.655, 4.386]}
-  - {fl: ubar, trainable: false, smallx: [1,1], largex: [2.766, 11.61]}
-  - {fl: d, trainable: false, smallx: [1,1], largex: [3.48, 6.71]}
-  - {fl: dbar, trainable: false, smallx: [1,1], largex: [4.274, 13.33]}
-  - {fl: s, trainable: false, smallx: [1,1], largex: [4.861, 9.974]}
-  - {fl: sbar, trainable: false, smallx: [1,1], largex: [4.648, 12.43]}
-  - {fl: c, trainable: false, smallx: [1,1], largex: [2.878, 7.57]}
-  - {fl: g, trainable: false, smallx: [1,1], largex: [3.453, 13.24]}
+  - {fl: u, trainable: false, smallx: [   1,1  ], largex: [1.685, 5.147]}
+  - {fl: ubar, trainable: false, smallx: [1,1  ], largex: [2.787, 6.319]}
+  - {fl: d, trainable: false, smallx: [   1,1  ], largex: [3.31, 5.887]}
+  - {fl: dbar, trainable: false, smallx: [1,1  ], largex: [3.81, 7.111]}
+  - {fl: s, trainable: false, smallx: [   1,1  ], largex: [4.78, 9.937]}
+  - {fl: sbar, trainable: false, smallx: [1,1  ], largex: [4.814, 10.19]}
+  - {fl: c, trainable: false, smallx: [   1,1  ], largex: [2.973, 7.285]}
+  - {fl: g, trainable: false, smallx: [   1,1  ], largex: [4.193, 13.35]}
 
 ############################################################
 positivity:
@@ -264,11 +257,9 @@ positivity:
   - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
   - {dataset: POSF2DW, maxlambda: 1e6}
   - {dataset: POSF2S, maxlambda: 1e6}
-#  - {dataset: POSFLL, maxlambda: 1e6}
   - {dataset: POSDYU, maxlambda: 1e10}
   - {dataset: POSDYD, maxlambda: 1e10}
   - {dataset: POSDYS, maxlambda: 1e10}
-#  - {dataset: POSF2C, maxlambda: 1e6}
   - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
   - {dataset: POSXUB, maxlambda: 1e6}
   - {dataset: POSXDQ, maxlambda: 1e6}
