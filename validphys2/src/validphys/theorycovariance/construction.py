@@ -175,9 +175,6 @@ def total_covmat_procs(procs_results_theory, fivetheories: (str, type(None)) = N
     return proc_result_covmats
 
 
-commondata_procs = collect("commondata", ["group_dataset_inputs_by_process", "data"])
-
-
 def dataset_names(data_input):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
@@ -559,7 +556,7 @@ def total_theory_covmat(
         data_input,
         group_dataset_inputs_by_metadata,
         groups_index,
-     #   theory_covmat_custom,
+        theory_covmat_custom,
         user_covmat,
         use_scalevar_uncertainties: bool = False,
         use_user_uncertainties: bool = False):
@@ -570,11 +567,36 @@ def total_theory_covmat(
     """
     f = pd.DataFrame(0, index=groups_index, columns=groups_index)
 
-#    if use_scalevar_uncertainties is True:
- #       f = f + theory_covmat_custom
+    if use_scalevar_uncertainties is True:
+        f = f + theory_covmat_custom
     if use_user_uncertainties is True:
         f = f + user_covmat
     return f
+
+def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
+    """theory_covmat_custom but reindexed so the order of the datasets matches  
+    those in the experiment covmat so they are aligned when fitting."""
+    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
+    return df
+  
+def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
+  """total_theory_covmat but reindexed so the order of the datasets matches 
+  those in the experiment covmat so they are aligned when fitting."""
+  return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
+
+def procs_index_matched(groups_index, procs_index):
+    """procs_index but matched to the dataset order given
+    by groups_index. """
+    # Making list with exps ordered like in groups_index
+    groups_ds_order = groups_index.get_level_values(level=1).unique().tolist()
+    # Tuples to make multiindex, ordered like in groups_index
+    tups = []
+    for ds in groups_ds_order:
+        for orig in procs_index:
+            if orig[1] == ds:
+                tups.append(orig)
+
+    return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_procs(

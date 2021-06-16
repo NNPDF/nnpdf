@@ -34,7 +34,8 @@ looping_example.yaml		N/A				Shows how to do actions in a loop over resources
 mc_gen_example.yaml		N/A				Analysis of pseudodata generation
 new_data_specification.yaml	N/A				Shows how to specify data in runcards
 pdfdistanceplots.yaml		How to plot PDFs		Distance PDF plots
-simple_runcard.yaml		N/A				Simple runcard example
+simple_runcard.yaml 		N/A				Simple runcard example
+spiderplots.yaml      		N/A				Plot spider/radar diagram for χ2 and ϕ
 taking_data_from_fit.yaml	N/A				Shows how to take ``theoryids`` and ``pdfs`` from a fit	
 theory_covariance/            	:ref:`vptheorycov-index`	Runcards for the ``theorycovariance`` module	
 ============================= 	===========================    =========================================================

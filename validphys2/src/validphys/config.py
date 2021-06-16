@@ -916,19 +916,13 @@ class CoreConfig(configparser.Config):
     def produce_nnfit_theory_covmat(
         self,
         use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool,
-        thcovmat_type: str = "full",
+        use_thcovmat_in_fitting: bool
     ):
         """
         Return the theory covariance matrix used in the fit.
-        Possible contributions are : scale variation covmat;
-        general user covmat provided via ``use_user_uncertainties``
-        flag in ``theorycovmatconfig`` in the runcard. See 
-        documentation for details.
         """
-
-        from validphys.theorycovariance.construction import total_theory_covmat
-
+        from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+        
         f = total_theory_covmat
         
         @functools.wraps(f)
