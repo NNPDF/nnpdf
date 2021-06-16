@@ -174,9 +174,6 @@ def total_covmat_procs(procs_results_theory, fivetheories: (str, type(None)) = N
     return proc_result_covmats
 
 
-commondata_procs = collect("commondata", ["group_dataset_inputs_by_process", "data"])
-
-
 def dataset_names(data_input):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
@@ -454,6 +451,26 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
     return df
 
+@table
+def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
+    """theory_covmat_custom but reindexed so the order of the datasets matches  
+    those in the experiment covmat so they are aligned when fitting."""
+    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
+    return df
+
+def procs_index_matched(groups_index, procs_index):
+    """procs_index but matched to the dataset order given
+    by groups_index. """
+    # Making list with exps ordered like in groups_index
+    groups_ds_order = groups_index.get_level_values(level=1).unique().tolist()
+    # Tuples to make multiindex, ordered like in groups_index
+    tups = []
+    for ds in groups_ds_order:
+        for orig in procs_index:
+            if orig[1] == ds:
+                tups.append(orig)
+
+    return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_procs(

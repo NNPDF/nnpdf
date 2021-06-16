@@ -901,47 +901,14 @@ class CoreConfig(configparser.Config):
     def produce_nnfit_theory_covmat(
         self,
         use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool,
-        thcovmat_type: str = "full",
+        use_thcovmat_in_fitting: bool
     ):
         """
         Return the theory covariance matrix used in the fit.
-        By default it is set to be the full one, the user can
-        set it to be block-diagonal or diagonal, based on the
-        value of ``thcovmat_type``. The possible options are:
-
-        ``thcovmat_type = "full"`` (default):
-            Include all correlations. The covarance matrix is
-            computed using ``theory_covmat_custom``.
-
-        ``thcovmat_type = "diagonal"``:
-            Only diagonal entries are computes included. The
-            covariance matrix is computed using
-            ``theory_diagonal_covmat``.
-
-        ``thcovmat_type = "blockdiagonal"``:
-            Only correlations by process type are included.
-            The covariance matrix is computed using
-            ``theory_block_diag_covmat``.
         """
-        valid_type = {"full", "blockdiagonal", "diagonal"}
-        if thcovmat_type not in valid_type:
-            raise ConfigError(
-                f"Invalid thcovmat_type setting: '{valid_type}'.",
-                thcovmat_type,
-                valid_type,
-            )
+        from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
-        from validphys.theorycovariance.construction import theory_covmat_custom
-        from validphys.theorycovariance.construction import theory_diagonal_covmat
-        from validphys.theorycovariance.construction import theory_block_diag_covmat
-
-        if thcovmat_type == "full":
-            f = theory_covmat_custom
-        if thcovmat_type == "diagonal":
-            f = theory_diagonal_covmat
-        if thcovmat_type == "blockdiagonal":
-            f = theory_block_diag_covmat
+        f = theory_covmat_custom_fitting
 
         @functools.wraps(f)
         def res(*args, **kwargs):
