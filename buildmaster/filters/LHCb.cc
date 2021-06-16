@@ -158,6 +158,15 @@ void LHCBW36PBFilter::ReadData()
       fSys[i][l+1].type = MULT;
       fSys[i][l+1].name = "CORR";
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
   f3.close();
@@ -308,6 +317,15 @@ void LHCBW36PB_40Filter::ReadData()
       fSys[i][l+1].type = MULT;
       fSys[i][l+1].name = "CORR";
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
   f3.close();
@@ -444,6 +462,15 @@ void LHCBZ940PBFilter::ReadData()
       fSys[i][l+2].type = MULT;
       fSys[i][l+2].name = "CORR";
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }

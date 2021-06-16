@@ -194,6 +194,22 @@ void ATLASCMS_hxsec_RunIFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
     }
+
+  for(int i=0; i<fNData; i++)
+    {
+      delete[] syscor[i];
+      delete[] corrmat_cmp[i];
+    }
+  
+  for(int i=0; i<fNData-2; i++)
+    {
+      delete[] corrmat[i];;
+    }
+  
+  delete[] corrmat;
+  delete[] syscor;
+  delete[] corrmat_cmp;
+  delete[] Sys;
   
   f1.close();
   f2.close();

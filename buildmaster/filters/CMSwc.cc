@@ -156,6 +156,14 @@ void CMSWCHARMTOTFilter::ReadData()
   f1.close();
   f2.close();
   
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
 }
 
 ///////////////////////////
