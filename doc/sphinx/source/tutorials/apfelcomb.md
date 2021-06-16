@@ -7,10 +7,8 @@ achieved by taking DGLAP evolution kernels from ``APFEL`` and combining them
 with interpolated parton-level observable kernels in the APPLgrid or
 FastNLO format 
 (see [How to generate APPLgrid and fastNLO tables](../tutorials/APPLgrids.md)).
-The various data formats used in APFELcomb are described in 
-```
-nnpdf/nnpdfcpp/data/doc/data_layout.pdf
-```
+The various data formats used in APFELcomb are described in [Experimental data files](../data/exp-data-files.html#exp-data-files).
+
 The user is strongly encouraged to go through that note with care, in order to
 familiarise himself with the features and the structure of the APFELcomb
 project.
@@ -234,12 +232,10 @@ points. The N operator is used to perform unit conversions or the like.
 ### Compound files and C-factors
 If the new dataset is a compound observable (that is, theory predictions are a 
 function of more than one FK-product), then one should write a corresponding 
-`COMPOUND` file as described in the data specifications at 
-`nnpdf/nnpdfcpp/data/doc/data_layout.pdf`. This compound file should be stored 
+`COMPOUND` file as described in [Theory data files](../data/th-data-files.html#compound-file-format). This compound file should be stored 
 in the APFELcomb repository under the `compound` directory.
 
-C-factors should be in the format once again specified in 
-`nnpdf/nnpdfcpp/data/doc/data_layout.pdf`, and stored in the nnpdfcpp 
+C-factors should be in the format specified in [Theory data files](../data/th-data-files.html#cfactor-file-format) and stored in the nnpdfcpp 
 repository under
 ```
 nnpdf/nnpdfcpp/data/N*LOCFAC/
