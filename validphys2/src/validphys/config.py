@@ -921,9 +921,9 @@ class CoreConfig(configparser.Config):
         """
         Return the theory covariance matrix used in the fit.
         """
-        from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+        from validphys.theorycovariance.construction import total_theory_covmat_fitting
         
-        f = total_theory_covmat
+        f = total_theory_covmat_fitting
         
         @functools.wraps(f)
         def res(*args, **kwargs):
