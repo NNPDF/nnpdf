@@ -70,9 +70,12 @@ generation). The default is ``True`` for both.
    
 5. For an example runcard, see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_user_covmat.yaml.>`_
 
+.. warning::
+	Theory covariance matrices can currently only be included using the legacy `nnfit` code. When 	running `vp-setupfit` you need to include the `--legacy` flag
+
 Including both scale variation uncertainties and user uncertainties
 -------------------------------------------------------------------
 User uncertainties and scale variation uncertainties are included independently.
 By default neither are included. To include both
 see the separate tutorial on scale variation uncertainties and use the 
-union of the contributions in ``theorycovmatconfig``.	
+union of the contributions in ``theorycovmatconfig``.	For an example runcard see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_sv_and_user_covmat.yaml.>`_
