@@ -532,7 +532,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     return full_df
 
 @table
-def user_covmat(groups_data, groups_index,
+def user_covmat(procs_data, procs_index,
                 loaded_user_covmat_path):
     """
     General theory covariance matrix provided by the user. 
@@ -543,7 +543,7 @@ def user_covmat(groups_data, groups_index,
     ``user_covmat_path`` in ``theorycovmatconfig`` in the 
     runcard. For more information see documentation. 
     """
-    return fromfile_covmat(loaded_user_covmat_path, groups_data, groups_index)
+    return fromfile_covmat(loaded_user_covmat_path, procs_data, procs_index)
 
 @table
 @check_fit_dataset_order_matches_grouped
