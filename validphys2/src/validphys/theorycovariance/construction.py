@@ -533,8 +533,7 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
 
 @table
 def user_covmat(groups_data, groups_index,
-                loaded_user_covmat_path,
-                use_user_uncertainties: bool = False):
+                loaded_user_covmat_path):
     """
     General theory covariance matrix provided by the user. 
     Useful for testing the impact of externally produced
@@ -544,34 +543,17 @@ def user_covmat(groups_data, groups_index,
     ``user_covmat_path`` in ``theorycovmatconfig`` in the 
     runcard. For more information see documentation. 
     """
-    if use_user_uncertainties is False:
-        return pd.DataFrame(0, index=groups_index, columns=groups_index)
-    else:
-        return fromfile_covmat(loaded_user_covmat_path, groups_data, groups_index)
+    return fromfile_covmat(loaded_user_covmat_path, groups_data, groups_index)
 
 @table
 @check_fit_dataset_order_matches_grouped
 def total_theory_covmat(
-        processed_metadata_group,
-        data_input,
-        group_dataset_inputs_by_metadata,
-        groups_index,
         theory_covmat_custom,
-        user_covmat,
-        use_scalevar_uncertainties: bool = False,
-        use_user_uncertainties: bool = False):
+        user_covmat):
     """
-    Sum of all contributions to the theory covariance matrix.
-    Possible contributions are: scale variation covmat;
-    general user covmat.
+    Sum of scale variation and user covmat, where both are used.
     """
-    f = pd.DataFrame(0, index=groups_index, columns=groups_index)
-
-    if use_scalevar_uncertainties is True:
-        f = f + theory_covmat_custom
-    if use_user_uncertainties is True:
-        f = f + user_covmat
-    return f
+    return theory_covmat_custom + user_covmat
 
 def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
     """theory_covmat_custom but reindexed so the order of the datasets matches  
