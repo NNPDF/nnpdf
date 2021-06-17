@@ -584,6 +584,11 @@ def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
   those in the experiment covmat so they are aligned when fitting."""
   return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
 
+def user_covmat_fitting(user_covmat, procs_index_matched):
+  """user_covmat but reindexed so the order of the datasets matches 
+  those in the experiment covmat so they are aligned when fitting."""
+  return theory_covmat_custom_fitting(user_covmat, procs_index_matched)
+
 def procs_index_matched(groups_index, procs_index):
     """procs_index but matched to the dataset order given
     by groups_index. """

@@ -916,15 +916,27 @@ class CoreConfig(configparser.Config):
     def produce_nnfit_theory_covmat(
         self,
         use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool
+        use_thcovmat_in_fitting: bool,
+        use_scalevar_uncertainties: bool = False,
+        use_user_uncertainties: bool = False
     ):
         """
         Return the theory covariance matrix used in the fit.
         """
-        from validphys.theorycovariance.construction import total_theory_covmat_fitting
-        
-        f = total_theory_covmat_fitting
-        
+        if use_scalevar_uncertainties is True:
+            if use_user_uncertainties is True:
+                # Both scalevar and user uncertainties
+                from validphys.theorycovariance.construction import total_theory_covmat_fitting
+                f = total_theory_covmat_fitting
+            else: 
+                # Only scalevar uncertainties
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+                f = theory_covmat_custom_fitting
+        elif use_user_uncertainties is True:
+            # Only user uncertainties
+            from validphys.theorycovariance.construction import user_covmat_fitting
+            f = user_covmat_fitting
+     
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
