@@ -218,6 +218,15 @@ class CoreConfig(configparser.Config):
 
         return res
 
+    def produce_inclusive_use_scalevar_uncertainties(self, use_scalevar_uncertainties: bool = False,
+                                        point_prescription: (str, None) = None):
+        """Whether to use a scale variation uncertainty theory covmat.
+        Checks whether a point prescription is included in the runcard and if so 
+        assumes scale uncertainties are to be used."""
+        if ((use_scalevar_uncertainties is False) and (point_prescription is not None)):
+                use_scalevar_uncertainties = True
+        return use_scalevar_uncertainties
+
     # TODO: load fit config from here
     @element_of("fits")
     @_id_with_label
@@ -917,13 +926,13 @@ class CoreConfig(configparser.Config):
         self,
         use_thcovmat_in_sampling: bool,
         use_thcovmat_in_fitting: bool,
-        use_scalevar_uncertainties: bool = False,
+        inclusive_use_scalevar_uncertainties,
         use_user_uncertainties: bool = False
     ):
         """
         Return the theory covariance matrix used in the fit.
         """
-        if use_scalevar_uncertainties is True:
+        if inclusive_use_scalevar_uncertainties is True:
             if use_user_uncertainties is True:
                 # Both scalevar and user uncertainties
                 from validphys.theorycovariance.construction import total_theory_covmat_fitting
