@@ -453,7 +453,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     return df
 
 @table
-def fromfile_covmat(covmatpath, groups_data, groups_index):
+def fromfile_covmat(covmatpath, procs_data, procs_index):
     """Reads a general theory covariance matrix from file. Then
     1: Applies cuts to match experiment covariance matrix
     2: Expands dimensions to match experiment covariance matrix
@@ -467,7 +467,7 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     # Reordering covmat to match exp order in runcard
     # Datasets in exp covmat
     dslist = []
-    for group in groups_data:
+    for group in procs_data:
         for ds in group.datasets:
             dslist.append(ds.name)
     # Datasets in filecovmat in exp covmat order
@@ -482,7 +482,7 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     # ------------- #
     # Loading cuts to apply to covariance matrix
     indextuples = []
-    for group in groups_data:
+    for group in procs_data:
         for ds in group.datasets:
             # Load cuts for each dataset in the covmat
             if ds.name in filecovmat.index.get_level_values(1):
@@ -500,12 +500,12 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     # 2: Expand dimensions #
     # -------------------- #
     # First make empty df of exp covmat dimensions
-    empty_df = pd.DataFrame(0, index=groups_index, columns=groups_index)
+    empty_df = pd.DataFrame(0, index=procs_index, columns=procs_index)
     covmats = []
     # Make a piece of the covmat for each combination of two datasetes
     for ds1 in dslist:
         for ds2 in dslist:
-            if (ds1 in newindex.unique(level=1)) and (ds2 in newindex.unique(level=1)):
+            if (ds1 in shortlist) and (ds2 in shortlist):
                 # If both datasets in the fromfile covmat, use the piece of the fromfile covmat
                 covmat = cut_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
             else:
@@ -527,8 +527,8 @@ def fromfile_covmat(covmatpath, groups_data, groups_index):
     # Concatenate the strips to make the full matrix
     full_df = pd.concat(strips, axis=1)
     # Reindex to align with experiment covmat index
-    full_df = full_df.reindex(groups_index)
-    full_df = ((full_df.T).reindex(groups_index)).T
+    full_df = full_df.reindex(procs_index)
+    full_df = ((full_df.T).reindex(procs_index)).T
     return full_df
 
 @table
