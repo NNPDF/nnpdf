@@ -54,7 +54,6 @@ experiments:
      - {dataset: LHCBZEE2FB, frac: 1.0}
      - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
      - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
-     - {dataset: LHCBZ940PB, frac: 1.0}   
       # JETS
      - {dataset: ATLAS1JET11, frac: 0.5}
      - {dataset: CMSJETS11, frac: 0.5}
