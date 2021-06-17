@@ -11,8 +11,7 @@ If you use this code please consider citing at least the following papers:
   that are released with this version of the code. In particular:
 
   * Z pT - :cite:p:`Boughezal:2017nla`, :cite:p:`Boughezal:2015ded`,
-    :cite:p:`Gavin:2010az`, :cite:p:`Boughezal:2016isb`,
-	  :cite:p:`Boughezal:2015dva`, :cite:p:`Boughezal:2015eha`, :cite:p:`Gaunt:2015pea`, :cite:p:`Denner:2011vu`
+    :cite:p:`Gavin:2010az`, :cite:p:`Boughezal:2016isb`, :cite:p:`Boughezal:2015dva`, :cite:p:`Boughezal:2015eha`, :cite:p:`Gaunt:2015pea`, :cite:p:`Denner:2011vu`
   * Inclusive jets -
   * Dijets -
   * Top pair productions -

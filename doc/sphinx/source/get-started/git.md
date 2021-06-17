@@ -82,7 +82,6 @@ git clone git@github.com:NNPDF/external.git 	  # Codes written outside of NNPDF 
 git clone git@github.com:NNPDF/applgrids.git 	  # Where APPLgrids get stored
 git clone git@github.com:NNPDF/apfelcomb.git 	  # Turns APPLgrids into FK tables
 git clone git@github.com:NNPDF/reportengine.git   # A framework for data analysis that validphys relies on
-git clone git@github.com:NNPDF/papers.git         # Where papers and minutes are stored
 ```
 
 ### GitHub development workflow
