@@ -117,7 +117,7 @@ Contents
    serverconf/index
    external-code/index
    tutorials/index
-   ./sphinx-documentation.md
+   internal/index
 
 Bibliography
 ============

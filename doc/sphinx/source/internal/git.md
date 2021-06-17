@@ -1,7 +1,7 @@
 ```eval_rst
 .. _git:
 ```
-# Downloading the code
+# Git, GitHub and GitLab
 
 *Author: Cameron Voisey, 13/10/2019*
 

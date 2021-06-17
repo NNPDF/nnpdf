@@ -12,15 +12,7 @@ Essential first steps
 .. toctree::
    :maxdepth: 1
 
-   ./access
-   ./git
+   ./git.md
    ./installation.rst
    ./cite.rst
 
-Necessary for developers
-------------------------
-.. toctree::
-   :maxdepth: 1
-
-   ./rules
-   ./python-tools
