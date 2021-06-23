@@ -1,6 +1,5 @@
 How to include a theory covariance matrix in a fit
 ==================================================
-:Author: Contact Rosalyn (r.l.pearson@ed.ac.uk) for further information.
 
 This section details how to include :ref:`scale variation covariance matrices (covmats) <vptheorycov-index>`
 in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the
