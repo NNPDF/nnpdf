@@ -348,16 +348,11 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
 
 
 @make_argcheck
-def can_run_multiple_replicas(
-    replicas, parameters, hyperopt, parallel_models, same_trvl_per_replica
-):
-    """Checks whether a runcard which is trying to run several replicas at once
-    (parallel_models =/= 1) is valid
+def check_consistent_parallel(hyperopt, parameters, parallel_models, same_trvl_per_replica):
+    """Checks whether the multiple-replica fit options are consistent among them
+    i.e., that the trvl seed is fixed, hyperopt is not on and the layer type is correct
     """
     if not parallel_models:
-        return
-    if len(replicas) == 1:
-        log.warning("parallel_models is set to true for only one replica")
         return
     if not same_trvl_per_replica:
         raise CheckError(
@@ -368,6 +363,16 @@ def can_run_multiple_replicas(
         raise CheckError("Running replicas in parallel with hyperopt is still not supported")
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
+
+
+@make_argcheck
+def can_run_multiple_replicas(replicas, parallel_models):
+    """Warns the user if trying to run just one replica in parallel"""
+    if not parallel_models:
+        return
+    if len(replicas) == 1:
+        log.warning("parallel_models is set to true for only one replica")
+        return
 
 
 @make_argcheck

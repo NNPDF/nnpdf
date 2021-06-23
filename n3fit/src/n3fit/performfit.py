@@ -15,10 +15,11 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
+@n3fit.checks.can_run_multiple_replicas
 def performfit(
     *,
-    n3fit_checks_action, # used for checks
-    replicas, # used for checks specific to performfit
+    n3fit_checks_action, # wrapper for all checks
+    replicas, # checks specific to performfit
     replicas_nnseed_fitting_data_dict,
     posdatasets_fitting_pos_dict,
     integdatasets_fitting_integ_dict,
