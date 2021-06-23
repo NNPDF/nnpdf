@@ -72,7 +72,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     # List of length 1 due to the collect
     context_index = context_index[0]
     # The [0] is because of how pandas handles sorting a MultiIndex
-    sorted_index = context_index.sortlevel(level=range(3))[0]
+    sorted_index = context_index.sortlevel(level=range(1,3))[0]
 
     pdf = fitcontext["pdf"]
     log.debug(f"Using same pseudodata & training/validation splits as {pdf.name}.")
@@ -101,7 +101,7 @@ def read_fit_pseudodata(fitcontext, context_index):
         tr["type"], val["type"] = "training", "validation"
 
         pseudodata = pd.concat((tr, val))
-        pseudodata.sort_index(level=range(3), inplace=True)
+        pseudodata.sort_index(level=range(1,3), inplace=True)
 
         pseudodata.index = sorted_index
 
