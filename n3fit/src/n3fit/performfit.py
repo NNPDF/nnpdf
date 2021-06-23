@@ -165,7 +165,7 @@ def performfit(
             all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
             all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
-            "Starting replica fits %d to %d",
+            "Starting parallel fits from replica %d to %d",
             replicas[0],
             replicas[0] + n_models - 1,
         )
