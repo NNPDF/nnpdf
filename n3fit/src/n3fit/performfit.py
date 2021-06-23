@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-@n3fit.checks.can_run_multiple_replicas
 def performfit(
     *,
     n3fit_checks_action, # used for checks
