@@ -3,8 +3,6 @@
 ```
 # Git, GitHub and GitLab
 
-*Author: Cameron Voisey, 13/10/2019*
-
 ## Git
 
 [Git](https://git-scm.com/) is the version control system adopted within the NNPDF Collaboration.

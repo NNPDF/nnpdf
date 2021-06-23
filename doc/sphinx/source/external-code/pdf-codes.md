@@ -3,9 +3,6 @@
 ```
 # PDF set storage and interpolation
 
-*Author: Cameron Voisey, 13/10/2019*
-
-
 [LHAPDF](https://lhapdf.hepforge.org/) is a C++ library that evaluates PDFs by interpolating the
 discretised PDF 'grids' that PDF collaborations produce. It also gives its users access to proton
 and nuclear PDF sets from a variety of PDF collaborations, including NNPDF, MMHT and CTEQ. A list
