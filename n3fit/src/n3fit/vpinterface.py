@@ -82,7 +82,7 @@ class N3PDF(PDF):
 
     @property
     def stats_class(self):
-        """The stats class of N3PDF is always be MCStats"""
+        """The stats class of N3PDF is always MCStats"""
         return MCStats
 
     def load(self):
@@ -161,7 +161,7 @@ class N3PDF(PDF):
         mod_xgrid = xarr.reshape(1, -1, 1)
 
         if replica is None or replica == 0:
-            # We need to run over all replicas and take the average
+            # We need generate output values for all replicas
             result = np.concatenate([m.predict([mod_xgrid]) for m in self._models], axis=0)
             if replica == 0:
                 # We want _only_ the central value

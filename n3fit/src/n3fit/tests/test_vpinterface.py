@@ -54,7 +54,7 @@ def test_N3PDF(members, layers):
     assert n3pdf.compute_arclength().shape == (5,)
     # Try to get a plotting grid
     res = xplotting_grid(n3pdf, 1.6, xx)
-    res.grid_values.shape == (members, 8, xsize)
+    assert res.grid_values.shape == (members, 8, xsize)
 
 
 def test_vpinterface():
