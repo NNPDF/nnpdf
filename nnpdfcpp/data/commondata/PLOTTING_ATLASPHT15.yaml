@@ -1,9 +1,8 @@
-dataset_label: "ATLAS direct photon production 13 TeV"
-x: k2
-y_label: '$d\sigma_{\gamma}}/dp_T ^\gamma$ (fb)'
+dataset_label: ATLAS direct photon production 13 TeV
+experiment: ATLAS
 figure_by:
-    - k1
-
-experiment: "ATLAS"
-
+- k1
 nnpdf31_process: PHOTON
+spiderplot_group: JETS/DIJETS/PHOTON
+x: k2
+y_label: $d\sigma_{\gamma}}/dp_T ^\gamma$ (fb)

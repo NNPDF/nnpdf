@@ -1,20 +1,44 @@
-dataset_label: "ATLAS $W,Z$ 7 TeV 2010"
-x: k1
-
-x_label: '$\left\|\eta/y\right|$'
-
-y_label: '$d\sigma/dy$ (fb)'
-
-line_by:
-  - Boson
-
-normalize:
-    figure_by:
-        - Boson
-
+dataset_label: ATLAS $W,Z$ 7 TeV 2010
+experiment: ATLAS
 extra_labels:
-   Boson:  ["$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$"]
-
-experiment: "ATLAS"
-
+  Boson:
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $Z$
+  - $Z$
+  - $Z$
+  - $Z$
+  - $Z$
+  - $Z$
+  - $Z$
+  - $Z$
+line_by:
+- Boson
 nnpdf31_process: DY
+normalize:
+  figure_by:
+  - Boson
+spiderplot_group: DY
+x: k1
+x_label: $\left\|\eta/y\right|$
+y_label: $d\sigma/dy$ (fb)

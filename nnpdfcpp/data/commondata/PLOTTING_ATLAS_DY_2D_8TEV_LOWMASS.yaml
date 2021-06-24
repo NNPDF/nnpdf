@@ -1,10 +1,9 @@
-dataset_label: "ATLAS DY 2D 8 TeV low mass"
-x: k1
-y_label: '$d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]'
+dataset_label: ATLAS DY 2D 8 TeV low mass
+experiment: ATLAS
 figure_by:
-  - k2 
-
-x_label: '$|y_{\ell\ell}|$'
-
-experiment: "ATLAS"
+- k2
 nnpdf31_process: DY
+spiderplot_group: DY
+x: k1
+x_label: $|y_{\ell\ell}|$
+y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]

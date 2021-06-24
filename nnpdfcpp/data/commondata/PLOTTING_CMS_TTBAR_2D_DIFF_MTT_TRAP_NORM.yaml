@@ -1,13 +1,11 @@
-dataset_label: "CMS $t\\bar{t}$ double differential $(m_{t\\bar{t}},y_{t})$"
-y_scale: "log"
-
-x: k1
-
-x_label: '$|y_t|$'
-y_label: '$\frac{1}{\sigma_{t\bar{t}}}\ \frac{d^2\sigma_{t\bar{t}}}{dm_{t\bar{t}}\ dy_{t}}$'
-
-figure_by: 
-  - k2
-
-experiment: "CMS"
+dataset_label: CMS $t\bar{t}$ double differential $(m_{t\bar{t}},y_{t})$
+experiment: CMS
+figure_by:
+- k2
 nnpdf31_process: TOP
+spiderplot_group: TOP
+x: k1
+x_label: $|y_t|$
+y_label: $\frac{1}{\sigma_{t\bar{t}}}\ \frac{d^2\sigma_{t\bar{t}}}{dm_{t\bar{t}}\
+  dy_{t}}$
+y_scale: log

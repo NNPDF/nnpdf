@@ -1,9 +1,8 @@
-dataset_label: "ATLAS $t\\bar{t}$ absolute $|y_{t\\bar{t}}|$"
-x: k1
-y_label: '$d\sigma_{t\bar{t}}/d|y_{t\bar{t}}|$ (pb)'
+dataset_label: ATLAS $t\bar{t}$ absolute $|y_{t\bar{t}}|$
+experiment: ATLAS
 figure_by:
-  - k3
-
-experiment: "ATLAS"
-
+- k3
 nnpdf31_process: TOP
+spiderplot_group: TOP
+x: k1
+y_label: $d\sigma_{t\bar{t}}/d|y_{t\bar{t}}|$ (pb)

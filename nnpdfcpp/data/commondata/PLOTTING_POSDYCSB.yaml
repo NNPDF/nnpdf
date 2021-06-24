@@ -1,6 +1,5 @@
-dataset_label: "positivity dataset: DY cross section $\\frac{d^2\\sigma_{c\\bar{s}}}{dM^2dy}$"
-x: k2
-
-experiment: "POSDYCSB"
-
+dataset_label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{c\bar{s}}}{dM^2dy}$'
+experiment: POSDYCSB
 nnpdf31_process: DY
+spiderplot_group: DY
+x: k2

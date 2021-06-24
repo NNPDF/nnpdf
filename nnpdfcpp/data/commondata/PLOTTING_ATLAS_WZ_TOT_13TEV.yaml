@@ -1,20 +1,17 @@
-dataset_label: "ATLAS $W,Z$ inclusive 13 TeV"
-
-x: " "
-
-y_label: $\sigma^{fid}$ (fb)
-figure_by:
-    - boson
+dataset_label: ATLAS $W,Z$ inclusive 13 TeV
+experiment: ATLAS
 extra_labels:
-    " ":
-        - $W^-$
-        - $W^+$
-        - Z
-    boson:
-        - W
-        - W
-        - Z
-
-experiment: "ATLAS"
-
+  ' ':
+  - $W^-$
+  - $W^+$
+  - Z
+  boson:
+  - W
+  - W
+  - Z
+figure_by:
+- boson
 nnpdf31_process: DY
+spiderplot_group: DY
+x: ' '
+y_label: $\sigma^{fid}$ (fb)

@@ -1,22 +1,19 @@
-dataset_label: "NMC $p$"
-x: k2
-y_label: '$10^{i}F_2(x,Q^2)$'
-result_transform: qbindis
-kinematics_override: nmc_process
-data_reference: "Arneodo:1996kd"
-
-y_scale: linear
+data_reference: Arneodo:1996kd
+dataset_label: NMC $p$
+experiment: NMC
 figure_by:
- - k3
+- k3
+kinematics_override: nmc_process
 line_by:
- - k1
-
-normalize:
-    line_by: []
-    figure_by:
-        - k3
-        - k1
-
-experiment: "NMC"
-
+- k1
 nnpdf31_process: DIS NC
+normalize:
+  figure_by:
+  - k3
+  - k1
+  line_by: []
+result_transform: qbindis
+spiderplot_group: DIS NC
+x: k2
+y_label: $10^{i}F_2(x,Q^2)$
+y_scale: linear

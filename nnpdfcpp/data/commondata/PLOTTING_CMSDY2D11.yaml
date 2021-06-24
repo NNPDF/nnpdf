@@ -1,9 +1,8 @@
-dataset_label: "CMS Drell-Yan 2D 7 TeV 2011"
-x: k1
-y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
+dataset_label: CMS Drell-Yan 2D 7 TeV 2011
+experiment: CMS
 figure_by:
-  - k2 
-
-experiment: "CMS"
-
+- k2
 nnpdf31_process: DY
+spiderplot_group: DY
+x: k1
+y_label: $d\sigma_{Z/\gamma^{*}}/dy$ (fb)

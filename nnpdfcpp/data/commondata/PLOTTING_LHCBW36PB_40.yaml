@@ -1,15 +1,20 @@
-dataset_label: "LHCb $W$ inclusive 7 TeV"
-
-x: k1
-
-y_label: '$d\sigma/dy$ (fb)' 
-
-line_by:
-  - Boson
-
+dataset_label: LHCb $W$ inclusive 7 TeV
+experiment: LHCb
 extra_labels:
-   Boson:  ["$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$"]
-
-experiment: "LHCb"
-
+  Boson:
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^+$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+  - $W^-$
+line_by:
+- Boson
 nnpdf31_process: DY
+spiderplot_group: DY
+x: k1
+y_label: $d\sigma/dy$ (fb)

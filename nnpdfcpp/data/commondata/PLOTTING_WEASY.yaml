@@ -1,5 +1,5 @@
-dataset_label: "CMS $W\\to e\\nu$ asymmetry"
+dataset_label: CMS $W\to e\nu$ asymmetry
+experiment: CMS
+spiderplot_group: OTHER
 x: k1
-y_label: '$dA_{e}/dy$' 
-#x_label: 'Boson rapidity $|y|$'
-experiment: "CMS"
+y_label: $dA_{e}/dy$

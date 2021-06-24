@@ -1,19 +1,15 @@
-dataset_label: "ATLAS jets 2010 7 TeV"
-x: k2
-
-y_label: '$10^{3*qbin} d\sigma/dp_T$' 
-y_scale: log
-x_scale: linear
-result_transform: qbinjets
+dataset_label: ATLAS jets 2010 7 TeV
+experiment: ATLAS
 kinematics_override: jet_sqrt_scale
-
 line_by:
-    - k1
-
-normalize:
-    figure_by:
-        - k1
-
-experiment: "ATLAS"
-
+- k1
 nnpdf31_process: JETS
+normalize:
+  figure_by:
+  - k1
+result_transform: qbinjets
+spiderplot_group: JETS/DIJETS/PHOTON
+x: k2
+x_scale: linear
+y_label: $10^{3*qbin} d\sigma/dp_T$
+y_scale: log

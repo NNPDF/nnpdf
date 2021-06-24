@@ -1,7 +1,6 @@
-dataset_label: "CMS $W+c$ total"
-x: k1
-y_label: '$d\sigma(W+c)/d|\eta_l|$ (fb)' 
-#x_label: 'Boson rapidity $|y|$'
-experiment: "CMS"
-
+dataset_label: CMS $W+c$ total
+experiment: CMS
 nnpdf31_process: DY
+spiderplot_group: DY
+x: k1
+y_label: $d\sigma(W+c)/d|\eta_l|$ (fb)

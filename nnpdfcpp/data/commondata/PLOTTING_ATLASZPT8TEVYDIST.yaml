@@ -1,11 +1,9 @@
-dataset_label: "ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$"
-x: k2
-y_label: '$d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)'
+dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+experiment: ATLAS
 figure_by:
-  - k1
-
+- k1
 kinematics_override: jet_sqrt_scale
-
-experiment: "ATLAS"
-
 nnpdf31_process: DY
+spiderplot_group: DY
+x: k2
+y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
