@@ -26,10 +26,13 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
-N3FIT_PROVIDERS = ["n3fit.performfit",
-                   "validphys.results",
-                   "validphys.n3fit_data",
-                   "n3fit.n3fit_checks_provider"
+N3FIT_PROVIDERS = [
+    "n3fit.performfit",
+    "n3fit.n3fit_checks_provider",
+    "validphys.results",
+    "validphys.n3fit_data",
+    "validphys.pseudodata",
+    "validphys.commondata",
 ]
 
 log = logging.getLogger(__name__)

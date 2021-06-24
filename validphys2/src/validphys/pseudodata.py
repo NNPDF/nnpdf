@@ -115,7 +115,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     return data_indices_list
 
 
-def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):
+def make_replica(dataset_inputs_loaded_cd_with_cuts, replica_mcseed):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -153,7 +153,7 @@ def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):
         0.34843355, 0.34730928, 0.3090914 , 0.32825111, 0.3485292 ,
     """
     # Seed the numpy RNG with the seed.
-    rng = np.random.default_rng(seed=seed)
+    rng = np.random.default_rng(seed=replica_mcseed)
 
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica

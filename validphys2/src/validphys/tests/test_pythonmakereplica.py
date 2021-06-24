@@ -16,6 +16,8 @@ from validphys.tests.conftest import DATA
 from validphys.tests.test_covmats import CORR_DATA
 
 
+SEED = 123456
+
 SINGLE_SYS_DATASETS = [
     {"dataset": "DYE886R"},
     {"dataset": "D0ZRAP", "cfac": ["QCD"]},
@@ -42,7 +44,7 @@ def test_commondata_unchanged(data_config, dataset_inputs, use_cuts):
     pre_mkrep_sys_tabs = [deepcopy(cd.systematics_table) for cd in ld_cds]
     pre_mkrep_cd_tabs = [deepcopy(cd.commondata_table) for cd in ld_cds]
 
-    make_replica(ld_cds)
+    make_replica(ld_cds, SEED)
 
     for post_mkrep_cd, pre_mkrep_cv in zip(ld_cds, pre_mkrep_cvs):
         assert_series_equal(post_mkrep_cd.central_values, pre_mkrep_cv)
@@ -63,13 +65,12 @@ def test_pseudodata_seeding(data_config, dataset_inputs, use_cuts):
     the random numbers are generated and used identically.
 
     """
-    seed = 123456
     config = dict(data_config)
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
-    ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
-    rep_1 = make_replica(ld_cds, seed=seed)
-    rep_2 = make_replica(ld_cds, seed=seed)
+    config["replica_mcseed"] = SEED
+    rep_1 = API.make_replica(**config)
+    rep_2 = API.make_replica(**config)
     np.testing.assert_allclose(rep_1, rep_2)
 
 
@@ -80,7 +81,8 @@ def test_pseudodata_has_correct_ndata(data_config, dataset_inputs, use_cuts):
     config = dict(data_config)
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
+    config["replica_mcseed"] = SEED
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
-    rep = make_replica(ld_cds)
+    rep = API.make_replica(**config)
     ndata = np.sum([cd.ndata for cd in ld_cds])
     assert len(rep) == ndata

@@ -205,7 +205,7 @@ def generate_data_replica(data, replica_mcseed):
 
 def fitting_data_dict(
     data,
-    generate_data_replica,
+    make_replica,
     tr_masks,
     kfold_masks,
     t0set=None,
@@ -258,7 +258,7 @@ def fitting_data_dict(
         t0pdfset = t0set.load_t0()
         spec_c.SetT0(t0pdfset)
 
-    expdata = generate_data_replica
+    expdata = make_replica
 
     datasets = common_data_reader_experiment(spec_c, data)
 
