@@ -169,10 +169,8 @@ class N3FitConfig(Config):
         """
         return fakedata
 
-    def produce_kfold_parameters(self, hyperscan=None, hyperopt=None):
-        if hyperscan and hyperopt:
-            return hyperscan["kfold"]
-        return None
+    def produce_kfold_parameters(self, kfold):
+        return kfold
 
     def produce_kpartitions(self, kfold_parameters):
         if kfold_parameters:

@@ -90,6 +90,7 @@ class ModelTrainer:
         pass_status="ok",
         failed_status="fail",
         debug=False,
+        hyperopt=None,
         kfold_parameters=None,
         max_cores=None,
         model_file=None,
@@ -156,7 +157,7 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
         self.hyperkeys = None
-        if kfold_parameters is None:
+        if kfold_parameters is None or hyperopt is None:
             self.kpartitions = [None]
             self.hyper_threshold = None
         else:

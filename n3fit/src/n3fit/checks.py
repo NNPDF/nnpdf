@@ -285,7 +285,7 @@ def check_hyperopt_stopping(stopping_dict):
 
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
+def wrapper_hyperopt(hyperopt, hyperscan, kfold, genrep, data):
     """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
@@ -295,13 +295,13 @@ def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
         raise CheckError("Generation of replicas is not accepted during hyperoptimization")
     if hyperscan is None:
         raise CheckError("Can't perform hyperoptimization without the hyperscan key")
-    if "kfold" not in hyperscan:
-        raise CheckError("The hyperscan::kfold dictionary is not defined")
+    if kfold is None:
+        raise CheckError("Can't perform hyperoptimization without folds")
     check_hyperopt_stopping(hyperscan.get("stopping"))
     check_hyperopt_architecture(hyperscan.get("architecture"))
     check_hyperopt_positivity(hyperscan.get("positivity"))
-    check_kfold_options(hyperscan["kfold"])
-    check_correct_partitions(hyperscan["kfold"], data)
+    check_kfold_options(kfold)
+    check_correct_partitions(kfold, data)
 
 
 def check_sumrules(sum_rules):

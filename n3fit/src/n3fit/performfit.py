@@ -191,6 +191,7 @@ def performfit(
             fitbasis,
             nnseeds,
             debug=debug,
+            hyperopt=hyperopt,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
             model_file=load,
