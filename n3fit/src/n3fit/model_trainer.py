@@ -699,12 +699,9 @@ class ModelTrainer:
         # Else, loop over all different keys and unroll the dictionaries within hyperparameters
         for hyperkey in self._hyperkeys:
             item = params[hyperkey]
-            params.update(item)
+            if isinstance(item, dict):
+                params.update(item)
         return params
-#             if isinstance(item, dict):
-#                 for key, value in item.items():
-#                     params[key] = value
-#         return None
 
     def enable_tensorboard(self, logdir, weight_freq=0, profiling=False):
         """Enables tensorboard callback for further runs of the fitting procedure
