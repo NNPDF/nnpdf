@@ -3,6 +3,7 @@ This module contains checks to be perform by n3fit on the input
 """
 import os
 import logging
+import pathlib
 import numbers
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
@@ -284,6 +285,17 @@ def check_hyperopt_stopping(stopping_dict):
                 )
 
 
+def check_hyperscan_folder(hyperscan):
+    """If the hyperscan is a folder instead of a dictionary with ranges
+    check that it contain json files"""
+    trial_path = pathlib.Path(hyperscan)
+    if not trial_path.is_dir():
+        raise CheckError(f"Folder {hyperscan} not found")
+    jsons = trial_path.glob("nnfit/replica_*/tries.json")
+    if next(jsons, None) is None:
+        raise CheckError(f"No tries.json found in {hyperscan}")
+
+
 @make_argcheck
 def wrapper_hyperopt(hyperopt, hyperscan, kfold, genrep, data):
     """Wrapper function for all hyperopt-related checks
@@ -297,11 +309,14 @@ def wrapper_hyperopt(hyperopt, hyperscan, kfold, genrep, data):
         raise CheckError("Can't perform hyperoptimization without the hyperscan key")
     if kfold is None:
         raise CheckError("Can't perform hyperoptimization without folds")
-    check_hyperopt_stopping(hyperscan.get("stopping"))
-    check_hyperopt_architecture(hyperscan.get("architecture"))
-    check_hyperopt_positivity(hyperscan.get("positivity"))
     check_kfold_options(kfold)
     check_correct_partitions(kfold, data)
+    if isinstance(hyperscan, str):
+        check_hyperscan_folder(hyperscan)
+    else:
+        check_hyperopt_stopping(hyperscan.get("stopping"))
+        check_hyperopt_architecture(hyperscan.get("architecture"))
+        check_hyperopt_positivity(hyperscan.get("positivity"))
 
 
 def check_sumrules(sum_rules):

@@ -104,8 +104,8 @@ def performfit(
                 ``load``.
             load: None, str
                 model file from which to load weights from.
-            hyperscan: dict
-                dictionary containing the details of the hyperscan
+            hyperscan: dict or str
+                dictionary containing the details of the hyperscan or the path to a previous run
             hyperopt: int
                 if given, number of hyperopt iterations to run
             kfold_parameters: None, dict

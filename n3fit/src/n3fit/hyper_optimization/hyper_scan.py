@@ -27,6 +27,7 @@ import hyperopt
 import numpy as np
 from n3fit.backends import MetaModel, MetaLayer
 import n3fit.hyper_optimization.filetrials as filetrials
+from n3fit.hyper_optimization.trial_parser import produce_trials
 import logging
 
 log = logging.getLogger(__name__)
@@ -67,7 +68,7 @@ def hp_loguniform(key, lower_end, higher_end):
 
 def hp_choice(key, choices):
     """ Sample from the list `choices` """
-    if not choices:
+    if len(choices) == 0:
         return None
     return hyperopt.hp.choice(key, choices)
 
@@ -93,30 +94,49 @@ def optimizer_arg_wrapper(hp_key, option_dict):
 # Wrapper for the hyperscanning
 def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1):
     """
-    This function receives a `ModelTrainer` object as well as a dictionary of parameters (`parameters`) and a dictionary defining the
-    space to search (`hyperscan_dict`) and performs `max_evals` evaluations of the function trying to find the best model.
+    This function receives a ``ModelTrainer`` object as well as a dictionary of hyperparameters
+    which define the fit.
+    It also receives a space of hyperparameters (in the form of a dictionary or a file) to scan.
 
-    The return value of this function is a dictionary containing a dictionary similar to `parameters` with the best model found.
-    It will also write a json file with the information of all separate trials inside the replica_path_set directory.
+    With the given information it will perform a scan with whatever figure of merit
+    the ``MoldeTrainer`` has been defined with and the result of all trials will
+    be saved to a file inside the ``replica_path_set`` folder.
 
-    # Arguments:
-        - `replica_path_set`: folder where to create json file with info about all trials
-        - `model_trainer`: a ModelTrainer object
-        - `parameters`: a dictionary of parameters to pass to hyperparametrizable
-        - `hyperscan_dict`: dictionary definining the sampling
-        - `max_evals`: how many runs of hyperopt to run
+    Parameters
+    ----------
+        replica_path_set: path
+            folder where to create json file with info about all trials
+        model_trainer: ModelTrainer
+            ModelTrainer object defining the fit
+        parameter: dict
+            Full dictionary of hyperparameters for the ModelTrainer
+        hyperscan_dict: dict or str
+            Space of hyperparameters to scan in the form of a dictionary or path
+        max_evals: int
+            hoy many runs of hyperopt to run
     """
-    # Create a HyperScanner object
-    the_scanner = HyperScanner(parameters, hyperscan_dict)
-    # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
-    # Generate the trials object
-    trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
+    if isinstance(hyperscan_dict, str):
+        all_trials = produce_trials(hyperscan_dict, original_parameters=parameters, size=max_evals)
+        # 1) Change the filetrials to work well with my Trials objects
+        # 2) make it so that the hyperopt.fmin function can get values from my trial instead of the scanner
+        #    actually, it is fine if hyperopt is just doing a loop instead of a miniimization...
+        keys = ["parameters"]
+        space = {keys[0] : hp_choice(keys[0], all_trials)}
+    else:
+        # Create a HyperScanner object
+        the_scanner = HyperScanner(parameters, hyperscan_dict)
+        # Generate the trials object
+        keys = the_scanner.hyper_keys
+        space = the_scanner.dict()
+
+    # Tell the trainer we are doing hyperopt
+    model_trainer.set_hyperopt(True, keys=keys, status_ok=hyperopt.STATUS_OK)
+    trials = filetrials.FileTrials(replica_path_set, parameters=space)
 
     # Perform the scan
     best = hyperopt.fmin(
         fn=model_trainer.hyperparametrizable,
-        space=the_scanner.dict(),
+        space=space,
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
         show_progressbar=False,
