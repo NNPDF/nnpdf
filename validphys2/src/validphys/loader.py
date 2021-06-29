@@ -882,7 +882,7 @@ class RemoteLoader(LoaderBase):
             download_file(url, self._vp_cache()/filename, make_parents=True)
         except requests.HTTPError as e:
             if e.response.status_code == requests.codes.not_found:
-                raise RemoteLoaderError(f"Ressource {filename} could not "
+                raise RemoteLoaderError(f"Resource {filename} could not "
                                         f"be found on the validphys "
                                         f"server {url}") from e
             elif e.response.status_code == requests.codes.unauthorized:
