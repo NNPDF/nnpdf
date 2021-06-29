@@ -28,7 +28,7 @@ from reportengine import filefinder
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
-                            InternalCutsWrapper, HyperSpec)
+                            InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
 import NNPDF as nnpath
@@ -408,7 +408,7 @@ class Loader(LoaderBase):
             )
         p = resultspath / hyperscan_name
         if p.is_dir():
-            return HyperSpec(hyperscan_name, p)
+            return HyperscanSpec(hyperscan_name, p)
         raise HyperscanNotFound(f"Could not find hyperscan '{hyperscan_name}' in '{resultspath}'."
                 f" Folder '{hyperscan_name}' not found")
 

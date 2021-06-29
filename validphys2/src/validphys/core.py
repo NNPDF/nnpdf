@@ -646,7 +646,7 @@ class FitSpec(TupleComp):
     __slots__ = ('label','name', 'path')
 
 
-class HyperSpec(FitSpec):
+class HyperscanSpec(FitSpec):
     """The hyperscan spec is just a special case of FitSpec"""
 
 
