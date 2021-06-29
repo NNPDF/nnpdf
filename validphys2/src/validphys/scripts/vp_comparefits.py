@@ -61,17 +61,15 @@ class CompareFitApp(App):
         mandatory.add_argument('--author', help="The author of the report.")
         mandatory.add_argument(
             '--keywords', nargs='+', help="keywords to index the report with.")
-        mandatory.add_argument(
+
+        parser.add_argument(
             '--thcovmat_if_present',
-            dest='thcovmat_if_present',
             action='store_true',
             help="Use theory cov mat for calculating statistical estimators if available.")
-        mandatory.add_argument(
+        parser.add_argument(
             '--no-thcovmat_if_present',
-            dest='thcovmat_if_present',
-            action='store_false',
-            help="Do not use theory cov mat for calculating statistical estimators.")
-
+            action='store_true',
+            help="DEPRECATED: does nothing")
         parser.add_argument(
             '--current_fit_label',
             nargs='?',
@@ -94,7 +92,7 @@ class CompareFitApp(App):
             help="Use the closure comparison template.",
             action='store_true')
 
-        parser.set_defaults(thcovmat_if_present=None)
+        parser.set_defaults()
 
     def try_complete_args(self):
         args = self.args
