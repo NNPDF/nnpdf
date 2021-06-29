@@ -59,6 +59,7 @@ def main():
 
     uploader_dict = {
             'report': uploadutils.ReportUploader,
+            'hyperscan': uploadutils.HyperscanUploader,
             'fit': uploadutils.FitUploader,
             'pdf': uploadutils.PDFUploader
     }

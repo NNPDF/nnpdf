@@ -646,6 +646,9 @@ class FitSpec(TupleComp):
     __slots__ = ('label','name', 'path')
 
 
+class HyperSpec(FitSpec):
+    """The hyperscan spec is just a special case of FitSpec"""
+
 
 class TheoryIDSpec:
     def __init__(self, id, path):
