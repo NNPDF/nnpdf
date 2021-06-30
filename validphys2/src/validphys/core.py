@@ -9,6 +9,7 @@ Created on Wed Mar  9 15:19:52 2016
 from __future__ import generator_stop
 
 from collections import namedtuple, OrderedDict
+from glob import glob
 import enum
 import functools
 import inspect
@@ -648,6 +649,14 @@ class FitSpec(TupleComp):
 
 class HyperscanSpec(FitSpec):
     """The hyperscan spec is just a special case of FitSpec"""
+
+    def __init__(self, name, path):
+        super().__init__(name, path)
+
+    @property
+    def tries_files(self):
+        """Return a list with all tries.json files"""
+        return glob(f"{self.path}/nnfit/replica_*/tries.json")
 
 
 class TheoryIDSpec:

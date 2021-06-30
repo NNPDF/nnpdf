@@ -408,7 +408,11 @@ class Loader(LoaderBase):
             )
         p = resultspath / hyperscan_name
         if p.is_dir():
-            return HyperscanSpec(hyperscan_name, p)
+            hyperspec = HyperscanSpec(hyperscan_name, p)
+            if hyperspec.tries_files:
+                return hyperspec
+            raise HyperscanNotFound(f"No hyperscan output find in {hyperscan_name}")
+
         raise HyperscanNotFound(f"Could not find hyperscan '{hyperscan_name}' in '{resultspath}'."
                 f" Folder '{hyperscan_name}' not found")
 
