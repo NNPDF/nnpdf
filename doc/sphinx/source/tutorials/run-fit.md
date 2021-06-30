@@ -59,11 +59,11 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
 ...
 ```
 
-On the other hand, we have also introduced a new ``hyperscan`` key which specifies
+On the other hand, we have also introduced a new ``hyperscan_config`` key which specifies
 the trial ranges for the hyperparameter scan procedure. See the following self
 explanatory example:
 ```yaml
-hyperscan:
+hyperscan_config:
     stopping: # setup for stopping scan
         min_epochs: 5e2  # minimum number of epochs
         max_epochs: 40e2 # maximum number of epochs

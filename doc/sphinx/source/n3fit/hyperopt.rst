@@ -210,7 +210,7 @@ Practical Usage
 .. note::
   An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
 
-The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hyperscan`` dictionary.
+The partitions can be chosen by adding a ``kfold::partitions`` key to the runcard.
 
 .. code-block:: yaml
 
