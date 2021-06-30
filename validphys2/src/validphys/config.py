@@ -264,7 +264,7 @@ class CoreConfig(configparser.Config):
         try:
             return self.loader.check_hyperscan(hyperscan)
         except LoadFailedError as e:
-            raise ConfigError(str(e), hyperscan, self.loader.available_fits) from e
+            raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
 
     def parse_hyperscan_config(self, hyperscan_config):
         """Configuration of the hyperscan"""

@@ -103,6 +103,13 @@ class LoaderBase:
                                       f"{profile_path}: {e}") from e
         return self._nnprofile
 
+    @property
+    def hyperscan_resultpath(self):
+        hyperscan_path = pathlib.Path(self.nnprofile["hyperscan_path"])
+        if not hyperscan_path.exists():
+            raise LoaderError(f"The hyperscan results path {hyperscan_path} does not exist")
+        return hyperscan_path
+
     def _vp_cache(self):
         """Return the vp-cache path, and create it if it doesn't exist"""
         vpcache = pathlib.Path(self.nnprofile['validphys_cache_path'])
@@ -183,6 +190,13 @@ class Loader(LoaderBase):
     def available_fits(self):
         try:
             return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
+        except OSError:
+            return []
+
+    @property
+    def available_hyperscans(self):
+        try:
+            return [p.name for p in self.hyperscan_resultpath.iterdir() if p.is_dir()]
         except OSError:
             return []
 
@@ -400,7 +414,7 @@ class Loader(LoaderBase):
 
     def check_hyperscan(self, hyperscan_name):
         """Obtain a hyperscan run"""
-        resultspath = self.resultspath
+        resultspath = self.hyperscan_resultpath
         if hyperscan_name != osp.basename(hyperscan_name):
             raise HyperscanNotFound(
                 f"Could not find fit '{hyperscan_name}' in '{resultspath} "
@@ -835,18 +849,18 @@ class RemoteLoader(LoaderBase):
             )
 
         with tempfile_cleaner(
-            root=self.resultspath,
+            root=self.hyperscan_resultpath,
             exit_func=shutil.rmtree,
             exc=KeyboardInterrupt,
             prefix='fit_download_deleteme_',
         ) as tempdir:
-            download_and_extract(self.remote_fits[hyperscan_name], tempdir)
+            download_and_extract(self.remote_hyperscans[hyperscan_name], tempdir)
             move_target = tempdir/hyperscan_name
             if not move_target.is_dir():
                 raise RemoteLoaderError(
                     f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}"
                 )
-            hyperscan_path = self.resultspath / hyperscan_name
+            hyperscan_path = self.hyperscan_resultpath / hyperscan_name
             shutil.move(move_target, hyperscan_path)
 
 
