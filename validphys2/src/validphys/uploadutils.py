@@ -422,7 +422,7 @@ def check_input(path):
     elif 'filter.yml' in files:
         # The product of a n3fit run, usually a fit but could be a hyperopt scan
         # For that there should be a) tries.json files and b) no postfit
-        if "postfit" not in files and glob(path / "nnfit/replica_*/tries.json"):
+        if "postfit" not in files and glob((path / "nnfit/replica_*/tries.json").as_posix()):
             return 'hyperscan'
         return 'fit'
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):

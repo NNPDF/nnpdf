@@ -22,7 +22,7 @@ def n3fit_checks_action(
     parameters,
     save=None,
     load=None,
-    hyperscan=None,
+    hyperscan_config=None,
     hyperopt=None,
     tensorboard=None,
     parallel_models=False,

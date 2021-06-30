@@ -32,7 +32,7 @@ def performfit(
     output_path,
     save=None,
     load=None,
-    hyperscan=None,
+    hyperscan_config=None,
     hyperopt=None,
     kfold_parameters,
     tensorboard=None,
@@ -56,7 +56,7 @@ def performfit(
         1. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
             1.1 (if hyperopt) generates the hyperopt scanning dictionary
-                    taking as a base the fitting dictionary  and the runcard's hyperscan dictionary
+                    taking as a base the fitting dictionary  and the runcard's hyperscan_config dictionary
         2. Pass the dictionary of parameters to ModelTrainer
                                         for the NN to be generated and the fit performed
             2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
@@ -104,8 +104,8 @@ def performfit(
                 ``load``.
             load: None, str
                 model file from which to load weights from.
-            hyperscan: dict
-                dictionary containing the details of the hyperscan
+            hyperscan_config: dict
+                dictionary containing the details of the hyperscan_config
             hyperopt: int
                 if given, number of hyperopt iterations to run
             kfold_parameters: None, dict
@@ -217,7 +217,7 @@ def performfit(
             # Note that hyperopt will not run in parallel or with more than one model _for now_
             replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             true_best = hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt,
+                replica_path_set, the_model_trainer, parameters, hyperscan_config, max_evals=hyperopt,
             )
             print("##################")
             print("Best model found: ")
