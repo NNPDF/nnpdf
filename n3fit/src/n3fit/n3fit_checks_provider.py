@@ -24,6 +24,7 @@ def n3fit_checks_action(
     load=None,
     hyperscan_config=None,
     hyperopt=None,
+    kfold=None,
     tensorboard=None,
     parallel_models=False,
     same_trvl_per_replica=False
