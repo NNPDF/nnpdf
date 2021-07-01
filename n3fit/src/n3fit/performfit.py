@@ -217,7 +217,7 @@ def performfit(
             # Note that hyperopt will not run in parallel or with more than one model _for now_
             replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             true_best = hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt,
+                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )
             print("##################")
             print("Best model found: ")

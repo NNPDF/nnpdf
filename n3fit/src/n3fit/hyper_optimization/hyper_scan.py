@@ -25,14 +25,14 @@ log = logging.getLogger(__name__)
 # https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
 # with a bit of extra documentation for the ones that are not obvious
 def hp_uniform(key, lower_end, higher_end):
-    """ Sample uniformly between lower_end and higher_end """
+    """Sample uniformly between lower_end and higher_end"""
     if lower_end is None or higher_end is None:
         return None
     return hyperopt.hp.uniform(key, lower_end, higher_end)
 
 
 def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None):
-    """ Like uniform but admits a step_size """
+    """Like uniform but admits a step_size"""
     if lower_end is None or higher_end is None:
         return None
     if not step_size:
@@ -56,8 +56,8 @@ def hp_loguniform(key, lower_end, higher_end):
 
 
 def hp_choice(key, choices):
-    """ Sample from the list `choices` """
-    if not choices:
+    """Sample from the list or array ``choices``"""
+    if len(choices) == 0:
         return None
     return hyperopt.hp.choice(key, choices)
 
@@ -123,9 +123,6 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     return hyperscanner.space_eval(best)
 
 
-###
-
-
 class ActivationStr:
     """
     Upon call this class returns an array where the activation function
@@ -172,13 +169,21 @@ class HyperScanner:
     """
 
     def __init__(self, parameters, sampling_dict, steps=5):
-        self.parameter_keys = parameters.keys()
         self._original_parameters = parameters
+        self.parameter_keys = parameters.keys()
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
 
         self.hyper_keys = set([])
 
+        if "parameters" in sampling_dict:
+            parameter_choices = hp_choice("parameters", sampling_dict["parameters"])
+            # Drop the parameters dictionary
+            self.parameters = {}
+            self._update_param("parameters", parameter_choices)
+            return
+
+        # A hyperparameter scan will contain either a "parameters" or one of:
         stopping_dict = sampling_dict.get("stopping")
         optimizer_list = sampling_dict.get("optimizer")
         positivity_dict = sampling_dict.get("positivity")
@@ -226,7 +231,7 @@ class HyperScanner:
         if key is None or sampler is None:
             return
 
-        if key not in self.parameter_keys:
+        if key not in self.parameter_keys and key != "parameters":
             raise ValueError(
                 "Trying to update a parameter not declared in the `parameters` dictionary: {0} @ HyperScanner._update_param".format(
                     key
@@ -326,7 +331,11 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None,
+        self,
+        min_multiplier=None,
+        max_multiplier=None,
+        min_initial=None,
+        max_initial=None,
     ):
         """
         Modifies the following entries of the `parameters` dictionary:

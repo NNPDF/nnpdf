@@ -187,8 +187,6 @@ class N3FitConfig(Config):
         constructed from the original hyperscan_config"""
         if hyperscan_config is None or hyperopt is None:
             return None
-        if "use_tries" in hyperscan_config:
-            import ipdb; ipdb.set_trace()
         return HyperScanner(parameters, hyperscan_config)
 
 

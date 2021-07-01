@@ -266,12 +266,19 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
 
-    def parse_hyperscan_config(self, hyperscan_config):
-        """Configuration of the hyperscan"""
+    def parse_hyperscan_config(self, hyperscan_config, hyperopt=None):
+        """Configuration of the hyperscan
+        """
         if "from_hyperscan" in hyperscan_config:
             hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
             log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
             return hyperscan.as_input().get("hyperscan_config")
+
+        if "use_tries_from" in hyperscan_config:
+            hyperscan = self.parse_hyperscan(hyperscan_config["use_tries_from"])
+            log.info("Reusing tries from: %s", hyperscan)
+            return {"parameters": hyperscan.sample_trials(n = hyperopt)}
+
         return hyperscan_config
 
     def produce_multiclosure_underlyinglaw(self, fits):
