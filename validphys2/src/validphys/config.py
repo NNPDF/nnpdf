@@ -270,6 +270,7 @@ class CoreConfig(configparser.Config):
         """Configuration of the hyperscan"""
         if "from_hyperscan" in hyperscan_config:
             hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
+            log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
             return hyperscan.as_input().get("hyperscan_config")
         return hyperscan_config
 
