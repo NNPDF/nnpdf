@@ -681,7 +681,7 @@ class RemoteLoader(LoaderBase):
     @property
     @_key_or_loader_error
     def hyperscan_url(self):
-        return [self.nnprofile['hyperscan_root_url']]
+        return self.nnprofile['hyperscan_urls']
 
     @property
     @_key_or_loader_error
