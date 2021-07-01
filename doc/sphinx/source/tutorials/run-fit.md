@@ -99,6 +99,12 @@ hyperscan_config:
   from_hyperscan: 'some_previous_hyperscan'
 ```
 
+or to directly take the trials from said hyperscan:
+```yaml
+hyperscan_config:
+  use_tries_from: 'some_previous_hyperscan'
+```
+
 Finally, complete working examples of DIS-only and global fits are available at
 the git repository in
 [n3fit/runcards](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
