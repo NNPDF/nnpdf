@@ -92,6 +92,12 @@ hyperscan_config:
         activations: ['sigmoid', 'tanh'] # list of activation functions
 ```
 
+It is also possible to take the configuration of the hyperparameter scan from a previous
+run in the NNPDF server by using the key `from_hyperscan`:
+```yaml
+hyperscan_config:
+  from_hyperscan: 'some_previous_hyperscan'
+```
 
 Finally, complete working examples of DIS-only and global fits are available at
 the git repository in
