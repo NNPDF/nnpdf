@@ -81,39 +81,46 @@ def optimizer_arg_wrapper(hp_key, option_dict):
 
 
 # Wrapper for the hyperscanning
-def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1):
+def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=1):
     """
-    This function receives a `ModelTrainer` object as well as a dictionary of parameters (`parameters`) and a dictionary defining the
-    space to search (`hyperscan_dict`) and performs `max_evals` evaluations of the function trying to find the best model.
+    This function receives a ``ModelTrainer`` object as well as the definition of the
+    hyperparameter scan (``hyperscanner``)
+    and performs ``max_evals`` evaluations of the hyperparametrizable function of ``model_trainer``.
 
-    The return value of this function is a dictionary containing a dictionary similar to `parameters` with the best model found.
-    It will also write a json file with the information of all separate trials inside the replica_path_set directory.
+    A ``tries.json`` file will be saved in the ``replica_path_set`` folder with the information
+    of all trials.
 
-    # Arguments:
-        - `replica_path_set`: folder where to create json file with info about all trials
-        - `model_trainer`: a ModelTrainer object
-        - `parameters`: a dictionary of parameters to pass to hyperparametrizable
-        - `hyperscan_dict`: dictionary definining the sampling
-        - `max_evals`: how many runs of hyperopt to run
+    Parameters
+    -----------
+        replica_path_set: path
+            folder where to create the json ``tries.json`` file
+        model_trainer: :py:class:`n3fit.ModelTrainer.ModelTrainer`
+            a ``ModelTrainer`` object with the ``hyperparametrizable`` method
+        hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
+            a ``HyperScanner`` object defining the scan
+        max_evals: int
+            Number of trials to run
+
+    Returns
+    -------
+        dict
+        parameters of the best trial as found by ``hyperopt``
     """
-    # Create a HyperScanner object
-    the_scanner = HyperScanner(parameters, hyperscan_dict)
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
+    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
     # Generate the trials object
-    trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
+    trials = filetrials.FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
 
     # Perform the scan
     best = hyperopt.fmin(
         fn=model_trainer.hyperparametrizable,
-        space=the_scanner.dict(),
+        space=hyperscanner.as_dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
         show_progressbar=False,
         trials=trials,
     )
-    true_best = hyperopt.space_eval(parameters, best)
-    return true_best
+    return hyperscanner.space_eval(best)
 
 
 ###
@@ -166,6 +173,7 @@ class HyperScanner:
 
     def __init__(self, parameters, sampling_dict, steps=5):
         self.parameter_keys = parameters.keys()
+        self._original_parameters = parameters
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
 
@@ -203,7 +211,7 @@ class HyperScanner:
                 layer_types=nn_dict.get("layer_types"),
             )
 
-    def dict(self):
+    def as_dict(self):
         return self.parameters
 
     def _update_param(self, key, sampler):
@@ -437,3 +445,7 @@ class HyperScanner:
             drop_key = "dropout"
             drop_val = hp_quniform(drop_key, 0.0, max_drop, steps=self.steps)
             self._update_param(drop_key, drop_val)
+
+    def space_eval(self, trial):
+        """Evaluate a trial using the original parameters dictionary"""
+        return hyperopt.space_eval(self._original_parameters, trial)

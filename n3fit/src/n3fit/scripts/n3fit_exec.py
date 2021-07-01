@@ -15,6 +15,7 @@ from validphys.app import App
 from validphys.config import Environment, Config
 from validphys.config import EnvironmentError_, ConfigError
 from validphys.core import FitSpec
+from n3fit.hyper_optimization.hyper_scan import HyperScanner
 from reportengine import colors
 from reportengine.compat import yaml
 from reportengine.namespaces import NSList
@@ -180,6 +181,15 @@ class N3FitConfig(Config):
         if kfold_parameters:
             return kfold_parameters["partitions"]
         return None
+
+    def produce_hyperscanner(self, parameters, hyperscan_config=None, hyperopt=None):
+        """For a hyperparameter scan to be run, a hyperscanner must be
+        constructed from the original hyperscan_config"""
+        if hyperscan_config is None or hyperopt is None:
+            return None
+        if "use_tries" in hyperscan_config:
+            import ipdb; ipdb.set_trace()
+        return HyperScanner(parameters, hyperscan_config)
 
 
 class N3FitApp(App):
