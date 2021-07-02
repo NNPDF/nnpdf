@@ -295,7 +295,7 @@ def wrapper_hyperopt(hyperopt, hyperscan_config, kfold, genrep, data):
         raise CheckError("Generation of replicas is not accepted during hyperoptimization")
     if hyperscan_config is None:
         raise CheckError("Can't perform hyperoptimization without the hyperscan_config key")
-    if "kfold" is None:
+    if kfold is None:
         raise CheckError("Can't perform hyperoptimization without folds")
     check_hyperopt_stopping(hyperscan_config.get("stopping"))
     check_hyperopt_architecture(hyperscan_config.get("architecture"))
