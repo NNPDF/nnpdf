@@ -1,7 +1,7 @@
 """
 Penalties that can be applied to the hyperopt loss
 
-All functions in this module have the same signature of positional arguments:
+All penalties in this module have the same signature of positional arguments:
 
     pdf_models: list(:py:class:`n3fit.backends.keras_backend.MetaModel`)
         list of models or functions taking a ``(1, xgrid_size, 1)`` array as input

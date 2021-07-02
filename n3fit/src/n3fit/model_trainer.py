@@ -16,6 +16,7 @@ import n3fit.model_gen as model_gen
 from n3fit.backends import MetaModel, clear_backend_state, callbacks
 from n3fit.backends import operations as op
 from n3fit.stopping import Stopping
+from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 
@@ -175,7 +176,7 @@ class ModelTrainer:
                 hyper_loss = "average"
                 log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
-            self.hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
+            self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -795,6 +796,7 @@ class ModelTrainer:
         l_valid = []
         l_exper = []
         l_hyper = []
+        n3pdf_objects = []
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -885,9 +887,11 @@ class ModelTrainer:
                     hyper_loss += penalty(pdf_models, stopping_object)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
+                # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
+                n3pdf_objects.append(N3PDF(pdf_models, name=f"fold_{k}"))
 
                 if hyper_loss > self.hyper_threshold:
                     log.info(
@@ -908,7 +912,7 @@ class ModelTrainer:
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self.hyper_loss(l_hyper),
+                "loss": self._hyper_loss(l_hyper, n3pdf_objects),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
