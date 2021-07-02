@@ -15,7 +15,6 @@ from validphys.app import App
 from validphys.config import Environment, Config
 from validphys.config import EnvironmentError_, ConfigError
 from validphys.core import FitSpec
-from n3fit.hyper_optimization.hyper_scan import HyperScanner
 from reportengine import colors
 from reportengine.compat import yaml
 from reportengine.namespaces import NSList
@@ -185,6 +184,9 @@ class N3FitConfig(Config):
     def produce_hyperscanner(self, parameters, hyperscan_config=None, hyperopt=None):
         """For a hyperparameter scan to be run, a hyperscanner must be
         constructed from the original hyperscan_config"""
+        # This needs to be imported here because it needs Tensorflow and n3fit
+        from n3fit.hyper_optimization.hyper_scan import HyperScanner
+
         if hyperscan_config is None or hyperopt is None:
             return None
         return HyperScanner(parameters, hyperscan_config)
