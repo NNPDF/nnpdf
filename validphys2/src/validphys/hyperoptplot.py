@@ -21,7 +21,7 @@ from reportengine.table import table
 import seaborn as sns
 import matplotlib.pyplot as plt
 # TODO: move this also to vp
-from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
+from validphys.hyper_algorithm import autofilter_dataframe
 
 log = logging.getLogger(__name__)
 
