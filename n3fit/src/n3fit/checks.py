@@ -285,14 +285,12 @@ def check_hyperopt_stopping(stopping_dict):
 
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan_config, kfold, genrep, data):
+def wrapper_hyperopt(hyperopt, hyperscan_config, kfold, data):
     """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
         return
-    if genrep:
-        raise CheckError("Generation of replicas is not accepted during hyperoptimization")
     if hyperscan_config is None:
         raise CheckError("Can't perform hyperoptimization without the hyperscan_config key")
     if kfold is None:
@@ -348,9 +346,9 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
 
 
 @make_argcheck
-def check_consistent_parallel(hyperopt, parameters, parallel_models, same_trvl_per_replica):
+def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica):
     """Checks whether the multiple-replica fit options are consistent among them
-    i.e., that the trvl seed is fixed, hyperopt is not on and the layer type is correct
+    i.e., that the trvl seed is fixed and the layer type is correct
     """
     if not parallel_models:
         return
@@ -359,8 +357,6 @@ def check_consistent_parallel(hyperopt, parameters, parallel_models, same_trvl_p
             "Replicas cannot be run in parallel with different training/validation "
             " masks, please set `same_trvl_per_replica` to True in the runcard"
         )
-    if hyperopt:
-        raise CheckError("Running replicas in parallel with hyperopt is still not supported")
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 

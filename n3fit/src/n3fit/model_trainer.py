@@ -802,7 +802,7 @@ class ModelTrainer:
             # and the seed needs to be updated accordingly
             seeds = self._nn_seeds
             if k > 0:
-                seeds = [np.random.randint(0, pow(2, 31))]
+                seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
@@ -865,12 +865,12 @@ class ModelTrainer:
             )
 
             if self.mode_hyperopt:
-                # TODO: currently only working for one single replica!
                 # If doing a hyperparameter scan we need to keep track of the loss function
-                validation_loss = stopping_object.vl_chi2[0]
+                # Since hyperopt needs _one_ number take the average in case of many replicas
+                validation_loss = np.mean(stopping_object.vl_chi2)
 
                 # Compute experimental loss
-                exp_loss_raw = np.take(models["experimental"].compute_losses()["loss"], -1)
+                exp_loss_raw = np.average(models["experimental"].compute_losses()["loss"])
                 # And divide by the number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
                 ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
@@ -882,7 +882,7 @@ class ModelTrainer:
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_models[0], stopping_object)
+                    hyper_loss += penalty(pdf_models, stopping_object)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 l_hyper.append(hyper_loss)
