@@ -33,18 +33,29 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, **kwargs):
+    def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
         # If we have a diagonal matrix, padd with 0s and hope it's not too heavy on memory
         if len(invcovmat.shape) == 1:
             invcovmat = np.diag(invcovmat)
-        self.invcovmat = op.numpy_to_tensor(invcovmat)
+        self._invcovmat = op.numpy_to_tensor(invcovmat)
+        self._covmat = covmat
         self.y_true = op.numpy_to_tensor(y_true)
         if mask is None or all(mask):
             self.mask = None
         else:
-            mask = np.array(mask, dtype=np.float32).reshape((1,1,-1))
+            mask = np.array(mask, dtype=np.float32).reshape((1, 1, -1))
             self.mask = op.numpy_to_tensor(mask)
         super().__init__(**kwargs)
+
+    def build(self, input_shape):
+        """Make the inverse covmat into weights"""
+        init = MetaLayer.init_constant(self._invcovmat)
+        self.kernel = self.builder_helper("invcovmat", self._invcovmat.shape, init, trainable=False)
+
+    def add_covmat(self, covmat):
+        """Add a piece to the covmat"""
+        new_covmat = np.linalg.inv(self._covmat + covmat)
+        self.kernel.assign(new_covmat)
 
     def call(self, y_pred, **kwargs):
         tmp = self.y_true - y_pred
@@ -52,10 +63,10 @@ class LossInvcovmat(MetaLayer):
             tmp = op.op_multiply([tmp, self.mask])
         if tmp.shape[1] == 1:
             # einsum is not well suited for CPU, so use tensordot if not multimodel
-            right_dot = op.tensor_product(self.invcovmat, tmp[0,0,:], axes=1)
-            res = op.tensor_product(tmp[0,:,:], right_dot, axes=1)
+            right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
+            res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
         else:
-            res = op.einsum("bri, ij, brj -> r", tmp, self.invcovmat, tmp)
+            res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
         return res
 
 
