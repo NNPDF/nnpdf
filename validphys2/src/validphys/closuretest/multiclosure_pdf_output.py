@@ -91,6 +91,35 @@ def plot_xi_flavour_x(
         yield fig
 
 
+def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
+    """Histogram of the difference between central PDF
+    and underlying law normalised by the corresponding replica
+    standard deviation for all points in x and flavour alongside a scaled
+    Gaussian. Total xi is proportion of the histogram which falls within the
+    central 1-sigma confidence interval.
+
+    """
+    sigma, delta = replica_and_central_diff_totalpdf
+    scaled_diffs = (delta / sigma).flatten()
+    fig, ax = plt.subplots()
+    ax.hist(
+        scaled_diffs, bins=50, density=True, label="Central PDF distribution"
+    )
+    xlim = (-5, 5)
+    ax.set_xlim(xlim)
+
+    x = np.linspace(*xlim, 100)
+    ax.plot(
+        x,
+        scipy.stats.norm.pdf(x),
+        "-k",
+        label=f"Normal distribution",
+    )
+    ax.legend()
+    ax.set_xlabel("Difference to input PDF.")
+    return fig
+
+
 @table
 def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
     """Returns a table with the values of mean bias / mean variance with mean
