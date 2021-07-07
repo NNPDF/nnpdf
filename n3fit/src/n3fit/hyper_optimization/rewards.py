@@ -23,7 +23,6 @@
 """
 import numpy as np
 from validphys.pdfgrids import xplotting_grid, distance_grids
-from n3fit.backends import operations as op
 
 
 def average(fold_losses, **kwargs):
