@@ -25,7 +25,8 @@ dataset_inputs:
 - {dataset: HERACOMBNCEP820, frac: 0.75}
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
-- {dataset: HERACOMBCCEP, frac: 0.75}  
+- {dataset: HERACOMBCCEP, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_BC frac: 0.75}
 - {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
@@ -67,7 +68,7 @@ dataset_inputs:
 - {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}                                   
-- {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: [QCD]}                               
+- {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: [QCD]}                               
 - {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}
