@@ -382,6 +382,40 @@ def plot_data_xi_histogram(data_xi, data):
     return plot_dataset_xi_histogram(data_xi, data)
 
 
+@figure
+def plot_data_central_diff_histogram(experiments_replica_central_diff):
+    """Histogram of the difference between central prediction
+    and underlying law prediction normalised by the corresponding replica
+    standard deviation by concatenating the difference across all data. plot a
+    scaled gaussian for reference. Total xi is the number of central differences
+    which fall within the 1-sigma confidence interval of the scaled gaussian.
+
+    """
+    scaled_diffs = np.concatenate([
+        (central_diff / sigma).flatten()
+        for sigma, central_diff
+        in experiments_replica_central_diff
+    ])
+    fig, ax = plt.subplots()
+    ax.hist(
+        scaled_diffs, bins=50, density=True, label="Central prediction distribution"
+    )
+    xlim = (-5, 5)
+    ax.set_xlim(xlim)
+
+    x = np.linspace(*xlim, 100)
+    ax.plot(
+        x,
+        scipy.stats.norm.pdf(x),
+        "-k",
+        label=f"Normal distribution",
+    )
+    ax.legend()
+    ax.set_xlabel("Difference to underlying prediction.")
+    return fig
+
+
+
 @table
 def dataset_ratio_error_finite_effects(
     bias_variance_resampling_dataset, n_fit_samples, n_replica_samples

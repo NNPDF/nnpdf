@@ -205,14 +205,43 @@ def expected_total_bias_variance(fits_total_bias_variance):
     return expected_dataset_bias_variance(fits_total_bias_variance)
 
 
-
-def dataset_xi(internal_multiclosure_dataset_loader):
+def dataset_replica_and_central_diff(
+    internal_multiclosure_dataset_loader, diagonal_basis=True):
     """For a given dataset calculate sigma, the RMS difference between
     replica predictions and central predictions, and delta, the difference
     between the central prediction and the underlying prediction.
 
-    The differences are calculated in the basis which would diagonalise the
-    dataset's covariance matrix.
+    If ``diagonal_basis`` is ``True`` he differences are calculated in the
+    basis which would diagonalise the dataset's covariance matrix. This is the
+    default behaviour.
+
+    """
+    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
+    replicas = np.asarray([th._rawdata for th in closures_th])
+    centrals = np.mean(replicas, axis=-1)
+    underlying = law_th.central_value
+
+    _, e_vec = la.eigh(covmat)
+
+    central_diff = centrals - underlying[np.newaxis, :]
+    var_diff_sqrt = centrals[:, :, np.newaxis] - replicas
+
+    if diagonal_basis:
+        # project into basis which diagonalises covariance matrix
+        var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
+        central_diff = e_vec.T @ central_diff.T
+    else:
+        var_diff_sqrt = var_diff_sqrt.transpose(2, 1, 0)
+        central_diff = central_diff.T
+
+    var_diff = var_diff_sqrt ** 2
+    sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
+    return sigma, central_diff
+
+def dataset_xi(dataset_replica_and_central_diff):
+    """Take sigma and delta for a dataset, where sigma is the RMS difference
+    between replica predictions and central predictions, and delta is the
+    difference between the central prediction and the underlying prediction.
 
     Then the indicator function is evaluated elementwise for sigma and delta
 
@@ -230,34 +259,28 @@ def dataset_xi(internal_multiclosure_dataset_loader):
             ascending eigenvalues
 
     """
-    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
-    replicas = np.asarray([th._rawdata for th in closures_th])
-    centrals = np.mean(replicas, axis=-1)
-    underlying = law_th.central_value
-
-    _, e_vec = la.eigh(covmat)
-
-    central_diff = centrals - underlying[np.newaxis, :]
-    var_diff_sqrt = centrals[:, :, np.newaxis] - replicas
-
-    # project into basis which diagonalises covariance matrix
-    var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
-    central_diff = e_vec.T @ central_diff.T
-
-    var_diff = var_diff_sqrt ** 2
-    sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
+    sigma, central_diff = dataset_replica_and_central_diff
+    # sigma is always positive
     in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
     # mean across fits
     return in_1_sigma.mean(axis=1)
 
 
-def data_xi(internal_multiclosure_data_loader):
+def data_replica_and_central_diff(
+    internal_multiclosure_data_loader, diagonal_basis=True):
+    """Like ``dataset_replica_and_central_diff`` but for all data"""
+    return dataset_replica_and_central_diff(
+        internal_multiclosure_data_loader, diagonal_basis)
+
+
+def data_xi(data_replica_and_central_diff):
     """Like dataset_xi but for all data"""
-    return dataset_xi(internal_multiclosure_data_loader)
+    return dataset_xi(data_replica_and_central_diff)
 
 
 experiments_xi_measured = collect("data_xi", ("group_dataset_inputs_by_experiment",))
-
+experiments_replica_central_diff = collect(
+    "data_replica_and_central_diff", ("group_dataset_inputs_by_experiment",))
 
 @check_at_least_10_fits
 def n_fit_samples(fits):
