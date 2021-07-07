@@ -91,6 +91,7 @@ def plot_xi_flavour_x(
         yield fig
 
 
+@figure
 def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
     """Histogram of the difference between central PDF
     and underlying law normalised by the corresponding replica
