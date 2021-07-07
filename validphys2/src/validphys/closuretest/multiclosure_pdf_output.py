@@ -20,6 +20,7 @@ from validphys.closuretest.multiclosure_pdf import (
     XI_FLAVOURS,
     bootstrap_pdf_differences,
     xi_flavour_x,
+    replica_and_central_diff_totalpdf,
     xi_totalpdf,
     fits_covariance_matrix_by_flavour,
     fits_covariance_matrix_totalpdf,
@@ -208,10 +209,11 @@ def fits_bootstrap_pdf_xi_table(
 
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, multiclosure_nx)
-        xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
-        xi_total = xi_totalpdf(
+        rep_cent_diff = replica_and_central_diff_totalpdf(
             boot_rep_diff, boot_central_diff, total_cov, multiclosure_nx, use_x_basis
         )
+        xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
+        xi_total = xi_totalpdf(rep_cent_diff)
         xi_data = np.concatenate((xi_flav.mean(axis=-1), [xi_total]), axis=0)
         xi_boot.append(xi_data)
     # construct table in this action, since bootstrap rawdata isn't required elsewhere

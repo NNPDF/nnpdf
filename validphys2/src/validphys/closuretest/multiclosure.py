@@ -539,7 +539,9 @@ def xi_resampling_dataset(
                     use_repeats,
                 )
                 # append the 1d array for individual eigenvectors
-                xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
+                xi_1sigma_boot.append(
+                    dataset_xi(dataset_replica_and_central_diff(boot_internal_loader))
+                )
             fixed_n_rep_xi_1sigma.append(xi_1sigma_boot)
         xi_1sigma.append(fixed_n_rep_xi_1sigma)
     return np.array(xi_1sigma)
@@ -725,7 +727,9 @@ def fits_bootstrap_data_xi(
             _internal_max_reps,
             True,
         )
-        xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
+        xi_1sigma_boot.append(
+            dataset_xi(dataset_replica_and_central_diff(boot_internal_loader))
+        )
     return xi_1sigma_boot
 
 
