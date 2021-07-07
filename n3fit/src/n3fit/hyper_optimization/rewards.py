@@ -23,6 +23,7 @@
 """
 import numpy as np
 from validphys.pdfgrids import xplotting_grid, distance_grids
+from n3fit.backends import operations as op
 
 
 def average(fold_losses, **kwargs):
@@ -70,6 +71,9 @@ def _set_central_value(n3pdf, model):
     full_pdf = n3pdf(input_x)
     cv_pdf = op.numpy_to_tensor(np.mean(full_pdf, axis=0, keepdims=True))
 
+    def central_value(x, training=None):
+        return cv_pdf
+
     model.get_layer("PDF_0").call = central_value
     # This model won't be trainable ever again
     model.trainable = False
@@ -112,13 +116,10 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
             # Get the full predictions and generate the PDF covmat
             y = model_output.predict()[0]  # The first is a dummy-dim
             pdf_covmat = np.cov(y, rowvar=False)
+            # Update the covmat of the loss
             layer.add_covmat(pdf_covmat)
-            # Finally ensure the last_model has its mask syncthed with this
-            last_model.get_layer(layer.name).mask = layer.mask
-
-        # Recompile the models to take into account the new covmats and masks
-        exp_model.compile()
-        last_model.compile()
+            # Update the mask of the last_model so that its syncthed with this layer
+            last_model.get_layer(layer.name).update_mask(layer.mask)
 
         # Compute the loss with pdf errors
         pdf_chi2 = exp_model.compute_losses()["loss"][0]
