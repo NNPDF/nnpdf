@@ -197,6 +197,15 @@ The product of a hyperparameter scan are ``tries.json`` files which can be accce
    hyperscan = API.hyperscan(hyperscan="test_hyperopt_fit_300621")
 
 
+It is also possible to access a ``hyperscan`` by using the ``validphys`` loader with:
+
+.. code-block:: python
+
+        from validphys.loader import Loader
+        l = Loader()
+        hyperscan = l.check_hyperscan("test_hyperopt_fit_300621")
+
+
 .. _pos-int-hyperopt:
 
 Positivity and integrability

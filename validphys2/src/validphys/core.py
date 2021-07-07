@@ -10,6 +10,7 @@ from __future__ import generator_stop
 
 from collections import namedtuple, OrderedDict
 from glob import glob
+import re
 import enum
 import functools
 import inspect
@@ -652,11 +653,23 @@ class HyperscanSpec(FitSpec):
 
     def __init__(self, name, path):
         super().__init__(name, path)
+        self._tries_files = None
 
     @property
     def tries_files(self):
-        """Return a list with all tries.json files"""
-        return glob(f"{self.path}/nnfit/replica_*/tries.json")
+        """Return a dictionary with all tries.json files mapped to their replica number"""
+        if self._tries_files is None:
+            re_idx = re.compile(r"(?<=replica_)\d+$")
+            get_idx = lambda x: int(re_idx.findall(x.as_posix())[-1])
+            all_rep = map(get_idx, self.path.glob("nnfit/replica_*"))
+            # Now loop over all replicas and save them when they include a tries.json file
+            tries = {}
+            for idx in sorted(all_rep):
+                test_path = self.path / f"nnfit/replica_{idx}/tries.json"
+                if test_path.exists():
+                    tries[idx] = test_path
+            self._tries_files = tries
+        return self._tries_files
 
 
 class TheoryIDSpec:
