@@ -411,7 +411,7 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
         label=f"Normal distribution",
     )
     ax.legend()
-    ax.set_xlabel("Difference to underlying prediction.")
+    ax.set_xlabel("Difference to underlying prediction")
     return fig
 
 

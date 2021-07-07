@@ -117,7 +117,7 @@ def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
         label=f"Normal distribution",
     )
     ax.legend()
-    ax.set_xlabel("Difference to input PDF.")
+    ax.set_xlabel("Difference to input PDF")
     return fig
 
 
