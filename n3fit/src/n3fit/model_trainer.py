@@ -93,7 +93,7 @@ class ModelTrainer:
         kfold_parameters=None,
         max_cores=None,
         model_file=None,
-        sum_rules=True,
+        sum_rules=None,
         parallel_models=1,
     ):
         """

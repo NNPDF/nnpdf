@@ -383,7 +383,7 @@ def pdfNN_layer_generator(
     dropout=0.0,
     regularizer=None,
     regularizer_args=None,
-    impose_sumrule=True,
+    impose_sumrule=None,
     scaler=None,
     parallel_models=1,
 ):  # pylint: disable=too-many-locals
@@ -493,6 +493,9 @@ def pdfNN_layer_generator(
     if nodes is None:
         nodes = [15, 8]
     ln = len(nodes)
+
+    if impose_sumrule is None:
+        impose_sumrule = True
 
     if scaler:
         inp = 1
