@@ -495,7 +495,7 @@ def pdfNN_layer_generator(
     ln = len(nodes)
 
     if impose_sumrule is None:
-        impose_sumrule = True
+        impose_sumrule = "All"
 
     if scaler:
         inp = 1
