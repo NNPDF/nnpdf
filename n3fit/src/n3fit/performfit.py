@@ -56,7 +56,7 @@ def performfit(
         1. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
             1.1 (if hyperopt) generates the hyperopt scanning dictionary
-                    taking as a base the fitting dictionary  and the runcard's hyperscanner dictionary
+                    taking as a base the fitting dictionary and the runcard's hyperscanner dictionary
         2. Pass the dictionary of parameters to ModelTrainer
                                         for the NN to be generated and the fit performed
             2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times

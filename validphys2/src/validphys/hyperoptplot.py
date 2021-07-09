@@ -20,7 +20,6 @@ from reportengine.figure import figure
 from reportengine.table import table
 import seaborn as sns
 import matplotlib.pyplot as plt
-# TODO: move this also to vp
 from validphys.hyper_algorithm import autofilter_dataframe
 
 log = logging.getLogger(__name__)

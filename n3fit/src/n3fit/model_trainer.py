@@ -690,7 +690,7 @@ class ModelTrainer:
 
     def _hyperopt_override(self, params):
         """ Unrolls complicated hyperopt structures into very simple dictionaries"""
-        # If the input contains all parameters, then that's your dicttionary of hyperparameters
+        # If the input contains all parameters, then that's your dictionary of hyperparameters
         hyperparameters = params.get("parameters")
         if hyperparameters is not None:
             return hyperparameters
