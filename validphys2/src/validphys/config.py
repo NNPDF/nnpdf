@@ -260,7 +260,7 @@ class CoreConfig(configparser.Config):
 
     @element_of("hyperscans")
     def parse_hyperscan(self, hyperscan):
-        """A hyperscan in the results folder, containing at least one tries.json file"""
+        """A hyperscan in the hyperscan_results folder, containing at least one tries.json file"""
         try:
             return self.loader.check_hyperscan(hyperscan)
         except LoadFailedError as e:
