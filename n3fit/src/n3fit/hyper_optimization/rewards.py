@@ -14,7 +14,7 @@
     >>> f = ["average", "best_worst", "std"]
     >>> losses = [2.34, 1.234, 3.42]
     >>> for fname in f:
-    >>>    fun = getattr(n3fit.hyper_optimization.rewards, fname) 
+    >>>    fun = getattr(n3fit.hyper_optimization.rewards, fname)
     >>>    print(f"{fname}: {fun(losses, None):2.4f}")
     average: 2.3313
     best_worst: 3.4200
@@ -60,6 +60,8 @@ def fit_distance(fold_losses, n3pdfs=None, **kwargs):
 def _set_central_value(n3pdf, model):
     """Given an N3PDF object and a MetaModel, set the PDF_0 layer
     to be the central value of the n3pdf object"""
+    from n3fit.backends import operations as op
+
     # Get the input x
     for key, grid in model.x_in.items():
         if key != "integration_grid":
@@ -91,7 +93,6 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
         raise ValueError("fit_future_test needs experimental_models to compute chi2")
 
     from n3fit.backends import MetaModel
-    from n3fit.backends import operations as op
 
     # For the last model (the one containing all data) the PDF covmat doesn't need to be computed
     # but the mask needs to be flipped in the folding for the appropiate datasets
