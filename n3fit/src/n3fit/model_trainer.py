@@ -356,7 +356,7 @@ class ModelTrainer:
 
         # If we are in a kfolding partition, select which datasets are out
         training_mask = validation_mask = experimental_mask = [None]
-        if partition:
+        if partition partition["datasets"]:
             if partition.get("overfit", False):
                 # If overfitting, don't apply folding masks to the training/validation
                 training_mask = [i[partition_idx] for i in self.training["folds"]]
@@ -878,6 +878,9 @@ class ModelTrainer:
                 # And divide by the number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
                 ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
+                # If ndata == 0 then it's the opposite, all data is in!
+                if ndata == 0:
+                    ndata = self.experimental["ndata"]
                 experimental_loss = exp_loss_raw / ndata
 
                 hyper_loss = experimental_loss
