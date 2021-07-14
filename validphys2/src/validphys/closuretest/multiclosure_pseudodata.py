@@ -219,12 +219,9 @@ def compare_delta_chi2_bias_variance_table(
 
 fits_data = collect("data", ("fits",))
 
-
-fits_data_cd_with_cuts = collect("dataset_inputs_loaded_cd_with_cuts", ("fits",))
-
 @check_use_fitcommondata
 def expected_data_delta_chi2(
-    fits_data_cd_with_cuts,
+    fits_data,
     internal_multiclosure_data_loader
 ):
     """For ``data``, calculate the mean of delta chi2 across all fits, returns
@@ -234,8 +231,18 @@ def expected_data_delta_chi2(
     law_central = law_th.central_value
     fits_delta_chi2 = []
     for i_fit, fit_th in enumerate(closures_th):
-        fit_dt = fits_data_cd_with_cuts[i_fit]
-        dt_central = fit_dt.central_values.to_numpy()
+        dsets_cv = []
+        for ds in fits_data[i_fit].datasets:
+            # using the official loader is really slow, open the CSV
+            # and then cut the central values manually.
+            # TODO: Save central values in nice table like pseudodata
+            # but this should be done beyond NNPDF4.0
+            cd_df = pd.read_csv(ds.commondata.datafile, sep=r'\s+', skiprows=1, header=None)
+            # based on columns from python cd reader:
+            # ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
+            dsets_cv.append(cd_df.iloc[cut_mask(ds.cuts), 5].to_numpy())
+
+        dt_central = np.concatenate(dsets_cv)
         th_replicas = fit_th._rawdata
         th_central = np.mean(th_replicas, axis=-1)
         shift = calc_chi2(sqrt_covmat, law_central - dt_central)
