@@ -279,8 +279,8 @@ def expected_delta_chi2_table(
     """
     records = []
     for group, delta_chi2_res in zip(
+        group_dataset_inputs_by_experiment,
         groups_expected_delta_chi2,
-        group_dataset_inputs_by_experiment
     ):
         name = group["group_name"]
         ndata, delta_chi2 = delta_chi2_res
