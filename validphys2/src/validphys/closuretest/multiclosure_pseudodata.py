@@ -232,17 +232,16 @@ def expected_data_delta_chi2(
     fits_delta_chi2 = []
     for i_fit, fit_th in enumerate(closures_th):
         dsets_cv = []
-        print(i_fit)
         for ds in fits_data[i_fit].datasets:
             # using the official loader is really slow, open the CSV
             # and then cut the central values manually.
             # TODO: Save central values in nice table like pseudodata
             # but this should be done beyond NNPDF4.0
+            print(ds.commondata.datafile)
             cd_df = pd.read_csv(ds.commondata.datafile, sep=r'\s+', skiprows=1, header=None)
             # based on columns from python cd reader:
             # ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
             dsets_cv.append(cd_df.iloc[cut_mask(ds.cuts), 5].to_numpy())
-        print("data loaded")
         dt_central = np.concatenate(dsets_cv)
         th_replicas = fit_th._rawdata
         th_central = np.mean(th_replicas, axis=-1)
@@ -272,7 +271,7 @@ groups_expected_delta_chi2 = collect(
 @table
 def expected_delta_chi2_table(
     groups_expected_delta_chi2,
-    group_dataset_inputs_by_experiment,
+    group_dataset_inputs_by_metadata,
     total_expected_data_delta_chi2,
 ):
     """Tabulate the expectation value of delta chi2 across fits for groups
@@ -280,7 +279,7 @@ def expected_delta_chi2_table(
     """
     records = []
     for group, delta_chi2_res in zip(
-        group_dataset_inputs_by_experiment,
+        group_dataset_inputs_by_metadata,
         groups_expected_delta_chi2,
     ):
         name = group["group_name"]
