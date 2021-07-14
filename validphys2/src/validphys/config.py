@@ -38,6 +38,7 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
+from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.loader import (
     Loader,
     LoaderError,
@@ -227,6 +228,31 @@ class CoreConfig(configparser.Config):
             return self.loader.check_fit(fit)
         except LoadFailedError as e:
             raise ConfigError(str(e), fit, self.loader.available_fits)
+
+    def produce_fitreplicas(self, fit):
+        num_replicas = num_fitted_replicas(fit)
+        return NSList(range(1, num_replicas + 1), nskey='replica')
+
+    def produce_pdfreplicas(self, fitpdf):
+        pdf = fitpdf['pdf']
+        replicas = fitted_replica_indexes(pdf)
+        return NSList(replicas, nskey='replica')
+
+    def produce_fitenvironment(self, fitinputcontext):
+        theoryid = fitinputcontext['theoryid']
+        data_input = fitinputcontext['data_input']
+
+        _, fitting_ns = self.parse_from_("fit", "fitting", write=False)
+        mcseed = fitting_ns['mcseed']
+        genrep = fitting_ns['genrep']
+
+        return {
+            "dataset_inputs": data_input,
+            "theoryid": theoryid,
+            "use_cuts": CutsPolicy.FROMFIT,
+            "mcseed": mcseed,
+            "genrep": genrep
+        }
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""

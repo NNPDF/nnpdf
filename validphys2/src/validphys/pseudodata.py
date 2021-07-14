@@ -235,112 +235,20 @@ def indexed_make_replica(groups_index, make_replica):
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
 
-def _make_replica_task(dataset_inputs, theoryid, fit, mcseed, genrep, API, replica):
-    """A global function for
-    :py:func:`validphys.pseudodata.indexed_make_replica`, to be used in
-    conjunction with :py:func:`validphys.pseudodata.recreate_fit_pseudodata`.
-    Defined at top level to be picklable for use with multiprocessing.
-    """
-    res = API.indexed_make_replica(
-        dataset_inputs=dataset_inputs,
-        theoryid=theoryid,
-        use_cuts="fromfit",
-        fit=str(fit),
-        mcseed=mcseed,
-        genrep=genrep,
-        replica=replica,
-    )
-    return res
+_recreate_fit_pseudodata = collect('indexed_make_replica', ('fitreplicas', 'fitenvironment'))
+_recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fitenvironment'))
 
-
-def recreate_fit_pseudodata(fit, fitinputcontext, num_fitted_replicas, NPROC=None):
-    """Function that recreates the pseudodata seen by each Monte Carlo replica.
-    Returns a dataframe with each column labelled ``replica i`` for ``i`` 1 through
-    to the number of fitted replicas.
-
-    # TODO: Finish this example
-    Example
-    -------
-
-    Notes
-    -----
-    By default this function computes the replicas in parallel using the maximum
-    number of available CPUs. Consider setting the ``NPROC`` flag to something
-    smaller to leave resources available.
-    """
-    # The + 1 coming from the fact that we wish to
-    # include the last replica
-    replicas = range(1, num_fitted_replicas + 1)
-
-    mcseed = fit.as_input()["mcseed"]
-    genrep = fit.as_input()["genrep"]
-
-    dataset_inputs = fit.as_input()['dataset_inputs']
-    theoryid = fitinputcontext["theoryid"].id
-
-    # Because of the fact that only global functions can be
-    # pickled, we need to define the task as a high level function.
-    # As such we need to do this annoying repeating of function arguments,
-    # since only `replica` changes between monte carlo replicas, but
-    # dataset_inputs, fit, mcseed and genrep stay identical. See:
-    # https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments
-    repeated_di = [dataset_inputs] * num_fitted_replicas
-    repeated_theoryid = [theoryid] * num_fitted_replicas
-    repeated_fit = [str(fit)] * num_fitted_replicas
-    repeated_mcseed = [mcseed] * num_fitted_replicas
-    repeated_genrep = [genrep] * num_fitted_replicas
-    # Import here to avoid cyclical imports, but we don't
-    # want to import this in the task function because
-    # loading the api is expensive.
-    from validphys.api import API
-    repeated_api = [API] * num_fitted_replicas
-
-    args = zip(
-        repeated_di,
-        repeated_theoryid,
-        repeated_fit,
-        repeated_mcseed,
-        repeated_genrep,
-        repeated_api,
-        replicas
-    )
-
-    if NPROC is None:
-        NPROC = mp.cpu_count()
-        log.warning(
-            f"Using all {NPROC} cores available, this may be dangerous "
-            "especially for use on a cluster. Consider setting the NPROC "
-            "variable to something sensible."
-        )
-
-    if NPROC == 1:
-        res = list(map(lambda x: _make_replica_task(*x), args))
-    else:
-        with mp.Pool(processes=NPROC) as pool:
-            res = pool.starmap(_make_replica_task, args)
-
-    df = pd.concat(res, axis=1)
-    df.columns = [f"replica {i}" for i in replicas]
-
+def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas):
+    columns = [f'replica {i}' for i in fitreplicas]
+    df = pd.concat(_recreate_fit_pseudodata, axis=1)
+    df.columns = columns
     return df
 
-
-def recreate_pdf_pseudodata(pdf, NPROC=None):
-    """Function that recreates the pseudodata of a PDF set
-    accounting for the postfit reordering.
-
-    # TODO: finish this example
-    Example
-    -------
-    """
-    # Import here to avoid cyclical imports
-    from validphys.api import API
-
-    fit_pseudodata = API.recreate_fit_pseudodata(fit=str(pdf), NPROC=NPROC)
-    fitted_replica_indexes = API.fitted_replica_indexes(pdf=str(pdf))
-    cols = [f"replica {i}" for i in fitted_replica_indexes]
-    return fit_pseudodata.loc[:, cols]
-
+def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas):
+    columns = [f'replica {i}' for i in pdfreplicas]
+    df = pd.concat(_recreate_pdf_pseudodata, axis=1)
+    df.columns = columns
+    return df
 
 def _datasets_mask(experiment_list):
     """Function to obtain a per datasets training/validation
