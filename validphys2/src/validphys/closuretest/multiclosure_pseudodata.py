@@ -216,3 +216,85 @@ def compare_delta_chi2_bias_variance_table(
     return total_df[
         ["ndata", "bias", r"$\Delta_{\chi^2}$", "variance", r"$\Delta_{\epsilon}$"]
     ]
+
+fits_data = collect("data", ("fits",))
+
+
+fits_data_cd_with_cuts = collect("dataset_inputs_loaded_cd_with_cuts", ("fits",))
+
+@check_use_fitcommondata
+def expected_data_delta_chi2(
+    fits_data_cd_with_cuts,
+    internal_multiclosure_data_loader
+):
+    """For ``data``, calculate the mean of delta chi2 across all fits, returns
+    a tuple of number of data points and unnormalised delta chi2.
+    """
+    closures_th, law_th, _, sqrt_covmat = internal_multiclosure_data_loader
+    law_central = law_th.central_value
+    fits_delta_chi2 = []
+    for i_fit, fit_th in enumerate(closures_th):
+        fit_dt = fits_data_cd_with_cuts[i_fit]
+        dt_central = fit_dt.central_values.to_numpy()
+        th_replicas = fit_th._rawdata
+        th_central = np.mean(th_replicas, axis=-1)
+        shift = calc_chi2(sqrt_covmat, law_central - dt_central)
+        chi2_cent = calc_chi2(sqrt_covmat, th_central - dt_central)
+        fits_delta_chi2.append(chi2_cent - shift)
+    ndata = len(law_central)
+    return ndata, np.mean(fits_delta_chi2)
+
+
+exps_expected_delta_chi2 = collect(
+    "expected_data_delta_chi2", ("group_dataset_inputs_by_experiment",))
+
+
+def total_expected_data_delta_chi2(exps_expected_delta_chi2):
+    """Takes :py:func:`expected_data_delta_chi2` evaluated for each experiment
+    and then sums across experiments. Returns the total number of datapoints
+    and unnormalised delta chi2.
+    """
+    ndata, delta_chi2 = np.sum(exps_expected_delta_chi2, axis=0)
+    return ndata, delta_chi2
+
+
+groups_expected_delta_chi2 = collect(
+    "expected_data_delta_chi2", ("group_dataset_inputs_by_metadata",))
+
+@table
+def expected_delta_chi2_table(
+    groups_expected_delta_chi2,
+    group_dataset_inputs_by_experiment,
+    total_expected_data_delta_chi2,
+):
+    """Tabulate the expectation value of delta chi2 across fits for groups
+    with an additional row with the total across all data at the bottom.
+    """
+    records = []
+    for group, delta_chi2_res in zip(
+        groups_expected_delta_chi2,
+        group_dataset_inputs_by_experiment
+    ):
+        name = group["group_name"]
+        ndata, delta_chi2 = delta_chi2_res
+        records.append(
+            dict(
+                group=name,
+                ndata=ndata,
+                delta_chi2=delta_chi2 / ndata,
+            )
+        )
+    ndata, delta_chi2 = total_expected_data_delta_chi2
+    records.append(
+        dict(
+            group="Total",
+            ndata=ndata,
+            delta_chi2=delta_chi2 / ndata,
+        )
+    )
+    df = pd.DataFrame.from_records(records, index="group")
+    df.columns = [
+        "ndata",
+        r"$\Delta_{\chi^2}$",
+    ]
+    return df
