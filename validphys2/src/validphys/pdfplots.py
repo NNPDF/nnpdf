@@ -98,7 +98,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             return '$x{}(x)$'.format(parton_name)
 
     def get_title(self, parton_name):
-        return "$%s$ at %.1f GeV" % (parton_name, self.Q)
+        return f"${parton_name}$ at {self.Q} GeV"
 
     @property
     def xscale(self):
