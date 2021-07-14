@@ -158,7 +158,7 @@ Cron jobs
 The following cron jobs are registered for the `nnpdf` user:
 
 - every day at 4 AM run the `index-email.py` script.
-- at every reboot run `index-reports.py`, `index-fits.py`,
+- at every reboot run `index-reports.py`, `index-fits.py`, `index-hyperscan.py`,
 	`index-packahes-public.sh` and `index-packages-private.sh`, which monitor
 	continuously the respective folders and create indexes that can be used by
 	various applications. The first two are homegrown scripts (see [Web

@@ -35,7 +35,7 @@ datacuts:
 theory:
   theoryid: 162        # database id
 
-hyperscan:
+hyperscan_config:
     stopping:
         min_epochs: 2e1
         max_epochs: 5e1
@@ -64,17 +64,18 @@ hyperscan:
         min_units: 10
         max_units: 50
         activations: ['sigmoid', 'tanh']
-    kfold:
-        target: average
-        penalties:
-          - saturation
-        threshold: 2.0
-        partitions:
-            - datasets:
-                - NMC
-            - datasets:
-                - SLACP
-                - CMSZDIFF12
+
+kfold:
+    target: average
+    penalties:
+      - saturation
+    threshold: 2.0
+    partitions:
+        - datasets:
+            - NMC
+        - datasets:
+            - SLACP
+            - CMSZDIFF12
 
 ############################################################
 genrep: False    # on = generate MC replicas, False = use real data

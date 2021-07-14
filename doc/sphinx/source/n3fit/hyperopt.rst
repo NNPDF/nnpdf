@@ -183,6 +183,29 @@ Note that this is not a boolean mask that drops the points but rather it just se
 The reason for doing it in this way is to minimize the number of things that change when doing a
 hyperparameter scan with respect to a fit.
 
+Implementation in ``validphys``
+-------------------------------
+
+A ``hyperscan`` object is also available from ``validphys`` which behaves as a special case of ``fit``.
+It can be accessed and inspected through the validphys API (see :ref:`vpapi`).
+The product of a hyperparameter scan are ``tries.json`` files which can be acccessed with the
+``tries_files`` attribute.
+
+.. code-block:: python
+
+   from validphys.api import API
+   hyperscan = API.hyperscan(hyperscan="test_hyperopt_fit_300621")
+
+
+It is also possible to access a ``hyperscan`` by using the ``validphys`` loader with:
+
+.. code-block:: python
+
+        from validphys.loader import Loader
+        l = Loader()
+        hyperscan = l.check_hyperscan("test_hyperopt_fit_300621")
+
+
 .. _pos-int-hyperopt:
 
 Positivity and integrability
@@ -210,7 +233,7 @@ Practical Usage
 .. note::
   An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
 
-The partitions can be chosen by adding a ``kfold::partitions`` key to the ``hyperscan`` dictionary.
+The partitions can be chosen by adding a ``kfold::partitions`` key to the runcard.
 
 .. code-block:: yaml
 
