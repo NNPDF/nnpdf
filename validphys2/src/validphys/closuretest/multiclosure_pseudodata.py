@@ -232,6 +232,7 @@ def expected_data_delta_chi2(
     fits_delta_chi2 = []
     for i_fit, fit_th in enumerate(closures_th):
         dsets_cv = []
+        print(i_fit)
         for ds in fits_data[i_fit].datasets:
             # using the official loader is really slow, open the CSV
             # and then cut the central values manually.
@@ -241,7 +242,7 @@ def expected_data_delta_chi2(
             # based on columns from python cd reader:
             # ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
             dsets_cv.append(cd_df.iloc[cut_mask(ds.cuts), 5].to_numpy())
-
+        print("data loaded")
         dt_central = np.concatenate(dsets_cv)
         th_replicas = fit_th._rawdata
         th_central = np.mean(th_replicas, axis=-1)
