@@ -26,7 +26,7 @@ dataset_inputs:
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_BC frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_C frac: 0.75}
 - {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
