@@ -260,7 +260,8 @@ The partitions can be chosen by adding a ``kfold::partitions`` key to the runcar
                 - data_5
 
 The ``overfit`` flag, when applied to one of the partitions, introduces this partition in the
-training data. This is useful for very broad scans where we want to find an architecture which is able to
+fitted data, i.e., the training and validation are blind to that partition and will work normally.
+This is useful for very broad scans where we want to find an architecture which is able to
 fit, without worrying about things like overlearning which might be a second-order problem.
 
 The ``weight`` (default 1.0) is multiplied with the loss function of the partition for which it is set.
