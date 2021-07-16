@@ -356,7 +356,7 @@ class ModelTrainer:
         splitted_pdf = splitting_layer(full_pdf_per_replica)
 
         # If we are in a kfolding partition, select which datasets are out
-        if partition:
+        if partition and not partition.get("overfit", False):
             training_mask = [i[partition_idx] for i in self.training["folds"]]
             validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
