@@ -72,11 +72,11 @@ class HyperoptTrial:
             hyperparameters = trial_results
         # Ensure that no hyperparameters has the wrong shape/form
         # 1. For n3fit, activation_per_layer must be a list
-        apl = hyperparameters["activation_per_layer"]
-        if isinstance(apl, str):
+        apl = hyperparameters.get("activation_per_layer")
+        if apl is not None and isinstance(apl, str) and "nodes_per_layer" in hyperparameters:
+            # If apl is a string, it can only bring information if there is `nodes_per_layer`
             apl = [apl]*(len(hyperparameters["nodes_per_layer"])-1) + ["linear"]
             hyperparameters["activation_per_layer"] = apl
-        hyperparameters["epochs"] = 250
         return hyperparameters
 
     # Slightly fake a dictionary behaviour with the params attribute
