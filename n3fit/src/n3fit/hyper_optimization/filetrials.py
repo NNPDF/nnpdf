@@ -4,6 +4,7 @@
 """
 import json
 import logging
+from validphys.hyperoptplot import HyperoptTrial
 from hyperopt import Trials, space_eval
 
 log = logging.getLogger(__name__)
@@ -37,7 +38,12 @@ def space_eval_trial(space, trial):
             for_eval[key] = values[0]
         else:
             for_eval[key] = None
-    return space_eval(space, for_eval)
+    ret = space_eval(space, for_eval)
+    # If the result includes a trial, expand it
+    if isinstance(ret.get("parameters"), HyperoptTrial):
+        used_trial = ret.pop("parameters")
+        ret = dict(ret, **used_trial.params)
+    return ret
 
 
 class FileTrials(Trials):
