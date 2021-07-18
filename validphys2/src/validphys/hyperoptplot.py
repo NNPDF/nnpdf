@@ -29,19 +29,19 @@ regex_not_op = re.compile(r"[\w\.]+")
 
 class HyperoptTrial:
     """
-        Hyperopt trial class.
-        Makes the dictionary-like output of ``hyperopt`` into an object
-        that can be easily managed
+    Hyperopt trial class.
+    Makes the dictionary-like output of ``hyperopt`` into an object
+    that can be easily managed
 
-        Parameters
-        ----------
-            trial_dict: dict
-                one single result (a dictionary) from a ``tries.json`` file
-            base_params: dict
-                Base parameters of the runcard which can be used to complete the hyperparameter
-                dictionary when not all parameters were scanned
-            minimum_losses: int
-                Minimum number of losses to be found in the trial for it to be considered succesful
+    Parameters
+    ----------
+        trial_dict: dict
+            one single result (a dictionary) from a ``tries.json`` file
+        base_params: dict
+            Base parameters of the runcard which can be used to complete the hyperparameter
+            dictionary when not all parameters were scanned
+        minimum_losses: int
+            Minimum number of losses to be found in the trial for it to be considered succesful
     """
 
     def __init__(self, trial_dict, base_params=None, minimum_losses=1):
@@ -60,6 +60,8 @@ class HyperoptTrial:
     @property
     def loss(self):
         """Return the loss of the hyperopt dict"""
+        if self._trial_dict["result"].get("status") != "ok":
+            return False
         return self._trial_dict["result"]["loss"]
 
     @property
@@ -118,7 +120,7 @@ class HyperoptTrial:
     def __lt__(self, another_trial):
         """Return true if the target trial is preferred
         when compared to the current (self) one"""
-        return not self > another_tria
+        return not self > another_trial
 
 
 #########
@@ -518,7 +520,7 @@ def hyperopt_dataframe(commandline_args):
 
 
 @table
-def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
+def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
     """
     Generates a clean table with information on the hyperparameter settings of the best setup. 
     """
