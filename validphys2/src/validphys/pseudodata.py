@@ -239,12 +239,52 @@ _recreate_fit_pseudodata = collect('indexed_make_replica', ('fitreplicas', 'fite
 _recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fitenvironment'))
 
 def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas):
+    """Function used to reconstruct the pseudodata seen by each of the
+    Monte Carlo fit replicas.
+
+    Returns
+    -------
+    df : pd.Dataframe
+        Pandas dataframe indexed appropriately with column names
+        corresponding to fit replicas.
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> API.recreate_fit_pseudodata(fit="210219-01-rs-nnpdf40-baseline")
+
+    Notes
+    -----
+    - This function does not account for the postfit reshuffling.
+
+    See Also
+    --------
+    :py:func:`validphys.pseudodata.recreate_pdf_pseudodata`
+    """
     columns = [f'replica {i}' for i in fitreplicas]
     df = pd.concat(_recreate_fit_pseudodata, axis=1)
     df.columns = columns
     return df
 
 def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas):
+    """Like :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
+    but accounts for the postfit reshuffling of replicas.
+
+    Returns
+    -------
+    df : pd.Dataframe
+        Pandas dataframe indexed appropriately with column names
+        corresponding to postfit replicas.
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> API.recreate_pdf_pseudodata(fit="210219-01-rs-nnpdf40-baseline")
+
+    See Also
+    --------
+    :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
+    """
     columns = [f'replica {i}' for i in pdfreplicas]
     df = pd.concat(_recreate_pdf_pseudodata, axis=1)
     df.columns = columns
