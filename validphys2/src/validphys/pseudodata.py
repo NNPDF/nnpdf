@@ -5,7 +5,6 @@ networks during the fitting.
 """
 from collections import namedtuple
 import logging
-import multiprocessing as mp
 import os
 import pathlib
 
@@ -16,8 +15,6 @@ from validphys.checks import check_cuts_fromfit
 from validphys.covmats import INTRA_DATASET_SYS_NAME
 
 from reportengine import collect
-
-import validphys.n3fit_data_utils as reader
 
 log = logging.getLogger(__name__)
 
