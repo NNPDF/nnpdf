@@ -137,8 +137,9 @@ class N3FitConfig(Config):
                     "to `false` or fit replicas one at a time."
                 )
             # take same namespace configuration on the pseudodata_table action.
-            table_action = fit_action.replace('performfit', 'pseudodata_table')
-            N3FIT_FIXED_CONFIG['actions_'].append(table_action)
+            training_action = fit_action.replace('performfit', 'training_pseudodata')
+            validation_action = fit_action.replace('performfit', 'validation_pseudodata')
+            N3FIT_FIXED_CONFIG['actions_'].extend([training_action, validation_action])
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
