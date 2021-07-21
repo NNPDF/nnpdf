@@ -50,19 +50,18 @@ def read_replica_pseudodata(fit, context_index, replica):
     Example
     -------
     >>> from validphys.api import API
-    >>> data_indices_list = API.read_fit_pseudodata(fit="NNPDF31_nnlo_as_0118_DISonly_pseudodata", use_cuts="fromfit")
+    >>> data_indices_list = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
     >>> len(data_indices_list) # Same as nrep
-    100
+    5
     >>> rep_info = data_indices_list[0]
     >>> rep_info.pseudodata.loc[rep_info.tr_idx].head()
-                          data
-    group dataset id
-    BCDMS BCDMSD  0   0.371510
-                1   0.365659
-                2   0.350234
-                4   0.355560
-                6   0.346234
-                        data
+                                replica 1
+    group dataset           id
+    ATLAS ATLASZPT8TEVMDIST 1   30.665835
+                            3   15.795880
+                            4    8.769734
+                            5    3.117819
+                            6    0.771079
     """
     # List of length 1 due to the collect
     context_index = context_index[0]
@@ -240,7 +239,7 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks)
     Example
     -------
     >>> from validphys.api import API
-    >>> API.recreate_fit_pseudodata(fit="210219-01-rs-nnpdf40-baseline")
+    >>> API.recreate_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
 
     Notes
     -----
@@ -273,7 +272,7 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas)
     Example
     -------
     >>> from validphys.api import API
-    >>> API.recreate_pdf_pseudodata(fit="210219-01-rs-nnpdf40-baseline")
+    >>> API.recreate_pdf_pseudodata(fit="pseudodata_test_fit_n3fit")
 
     See Also
     --------
