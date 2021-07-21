@@ -10,7 +10,6 @@ import pathlib
 import numpy as np
 import pandas as pd
 
-from validphys.checks import check_cuts_fromfit
 from validphys.covmats import INTRA_DATASET_SYS_NAME
 
 from reportengine import collect
