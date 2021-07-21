@@ -5,7 +5,6 @@ networks during the fitting.
 """
 from collections import namedtuple
 import logging
-import os
 import pathlib
 
 import numpy as np
