@@ -15,15 +15,16 @@ from validphys.covmats import INTRA_DATASET_SYS_NAME
 
 from reportengine import collect
 
+FILE_PREFIX = "datacuts_theory_fitting_"
+
 log = logging.getLogger(__name__)
 
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
 
 context_index = collect("groups_index", ("fitcontext",))
-read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas',))
-read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas',))
+read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitenvironment'))
+read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitenvironment'))
 
-@check_cuts_fromfit
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
@@ -73,12 +74,12 @@ def read_replica_pseudodata(fit, context_index, replica):
     path = pathlib.Path(fit.path) / 'nnfit'
     replica_path = path / ("replica_" + str(replica))
 
-    training_path = replica_path / "training.dat"
-    validation_path = replica_path / "validation.dat"
+    training_path = replica_path / (FILE_PREFIX + "training_pseudodata.csv")
+    validation_path = replica_path / (FILE_PREFIX + "validation_pseudodata.csv")
 
     try:
-        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
-        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
+        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", header=0)
+        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", header=0)
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
@@ -223,15 +224,19 @@ def indexed_make_replica(groups_index, make_replica):
 _recreate_fit_pseudodata = collect('indexed_make_replica', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fitenvironment'))
 
-def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas):
+fit_tr_masks = collect('tr_masks', ('fitreplicas', 'fitenvironment'))
+pdf_tr_masks = collect('tr_masks', ('pdfreplicas', 'fitenvironment'))
+
+def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks):
     """Function used to reconstruct the pseudodata seen by each of the
     Monte Carlo fit replicas.
 
     Returns
     -------
-    df : pd.Dataframe
-        Pandas dataframe indexed appropriately with column names
-        corresponding to fit replicas.
+    res : list[namedtuple]
+          List of namedtuples, each of which contains a dataframe
+          containing all the data points, the training indices, and
+          the validation indices.
 
     Example
     -------
@@ -246,20 +251,25 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas):
     --------
     :py:func:`validphys.pseudodata.recreate_pdf_pseudodata`
     """
-    columns = [f'replica {i}' for i in fitreplicas]
-    df = pd.concat(_recreate_fit_pseudodata, axis=1)
-    df.columns = columns
-    return df
+    res = []
+    for pseudodata, mask, rep in zip(_recreate_fit_pseudodata, fit_tr_masks, fitreplicas):
+        df = pseudodata
+        df.columns = [f"replica {rep}"]
+        tr_idx = df.loc[np.concatenate(mask)].index
+        val_idx = df.loc[~np.concatenate(mask)].index
+        res.append(DataTrValSpec(pseudodata, tr_idx, val_idx))
+    return res
 
-def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas):
+def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas):
     """Like :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     but accounts for the postfit reshuffling of replicas.
 
     Returns
     -------
-    df : pd.Dataframe
-        Pandas dataframe indexed appropriately with column names
-        corresponding to postfit replicas.
+    res : list[namedtuple]
+          List of namedtuples, each of which contains a dataframe
+          containing all the data points, the training indices, and
+          the validation indices.
 
     Example
     -------
@@ -270,7 +280,11 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas):
     --------
     :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     """
-    columns = [f'replica {i}' for i in pdfreplicas]
-    df = pd.concat(_recreate_pdf_pseudodata, axis=1)
-    df.columns = columns
-    return df
+    res = []
+    for pseudodata, mask, rep in zip(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas):
+        df = pseudodata
+        df.columns = [f"replica {rep}"]
+        tr_idx = df.loc[np.concatenate(mask)].index
+        val_idx = df.loc[~np.concatenate(mask)].index
+        res.append(DataTrValSpec(pseudodata, tr_idx, val_idx))
+    return res
