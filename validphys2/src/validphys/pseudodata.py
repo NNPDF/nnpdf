@@ -224,8 +224,8 @@ def indexed_make_replica(groups_index, make_replica):
 _recreate_fit_pseudodata = collect('indexed_make_replica', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fitenvironment'))
 
-fit_tr_masks = collect('tr_masks', ('fitreplicas', 'fitenvironment'))
-pdf_tr_masks = collect('tr_masks', ('pdfreplicas', 'fitenvironment'))
+fit_tr_masks = collect('replica_training_mask_table', ('fitreplicas', 'fitenvironment'))
+pdf_tr_masks = collect('replica_training_mask_table', ('pdfreplicas', 'fitenvironment'))
 
 def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks):
     """Function used to reconstruct the pseudodata seen by each of the
@@ -255,8 +255,8 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks)
     for pseudodata, mask, rep in zip(_recreate_fit_pseudodata, fit_tr_masks, fitreplicas):
         df = pseudodata
         df.columns = [f"replica {rep}"]
-        tr_idx = df.loc[np.concatenate(mask)].index
-        val_idx = df.loc[~np.concatenate(mask)].index
+        tr_idx = df.loc[mask.values].index
+        val_idx = df.loc[~mask.values].index
         res.append(DataTrValSpec(pseudodata, tr_idx, val_idx))
     return res
 
@@ -284,7 +284,7 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas)
     for pseudodata, mask, rep in zip(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas):
         df = pseudodata
         df.columns = [f"replica {rep}"]
-        tr_idx = df.loc[np.concatenate(mask)].index
-        val_idx = df.loc[~np.concatenate(mask)].index
+        tr_idx = df.loc[mask.values].index
+        val_idx = df.loc[~mask.values].index
         res.append(DataTrValSpec(pseudodata, tr_idx, val_idx))
     return res
