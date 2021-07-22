@@ -46,6 +46,10 @@ members:
 * Emanuele R. Nocera - University of Edinburgh 
 * Rosalyn Pearson - University of Edinburgh
 * Juan Rojo - Nikhef Theory Group and VU University
+* Roy Stegeman - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
+* Christopher Schwan - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
 * Maria Ubiali - University of Cambridge
 * Cameron Voisey - University of Cambridge
 * Michael Wilson - University of Edinburgh
@@ -53,6 +57,8 @@ members:
 Former members of the NNPDF collaboration include
 
 * Valerio Bertone
+* Francesco Cerutti
+* Christopher S. Deans
 * Alberto Guffanti
 * Patrick Groth-Merrild
 * Nathan P. Hartland
