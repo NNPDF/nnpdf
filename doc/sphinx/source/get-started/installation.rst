@@ -12,53 +12,30 @@ code, while the :ref:`source` is necessary if you want to develop the code.
 Installation using conda
 ------------------------
 
-Adding RSA key to Github
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-To clone the NNPDF Github repositories, you must add a public RSA key to
-Github.
-
--  Checking for an existing RSA key
-
+.. comment: Adding RSA key to Github
+   To clone the NNPDF Github repositories, you must add a public RSA
+   key to Github.
+   -  Checking for an existing RSA key
    Firstly, check if your machine has already generated an RSA key. This
-   can be done by the following:
-
-   .. code::
-
+   can be done by the following: .. code::
         cd ~/.ssh
         ls -a
-
    and verify the files ``id_rsa`` and ``id_rsa.pub`` exist. An
    alternative is to perform ``find ~ -name 'id_rsa.*'`` and verify
    ``id_rsa.pub`` is found.
-
--  Generating an RSA key
-
-   If no RSA key exists use the command
-
-   .. code::
-
+.. comment: -  Generating an RSA key
+   If no RSA key exists use the command   .. code::
         ssh-keygen
-
    and follow the instructions to generate an RSA key.
-
--  Adding the RSA key to Github
-
+.. comment: -  Adding the RSA key to Github
    Copy the public RSA key stored in ``id_rsa.pub`` to your clipboard
-   using
-
-   .. code::
-
+   using   .. code::
         cat ~/.ssh/id_rsa.pub
-
    and copying the output.
-
    The public RSA key must be pasted to Github `here`_ and clicking on
    the ‘New SSH key’ button. Enter an appropriate title and paste the
    RSA Key.
-
-Obtain the helper script
-~~~~~~~~~~~~~~~~~~~~~~~~
+.. comment: Obtain the helper script ~~~~~~~~~~~~~~~~~~~~~~~~
 
 A helper script exists to aid the configuration. To obtain it use:
 

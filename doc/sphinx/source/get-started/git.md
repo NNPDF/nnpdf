@@ -39,27 +39,21 @@ backed up. Note that GitLab was originally used by NNPDF instead of GitHub, but 
 encountered since the number of users without CERN accounts is limited and these users cannot
 make use of the advanced tools that GitLab offers.
 
-### Setting up GitHub
+### The NNPDF github repositories
 
-You can get an account for free by going to their [website](https://github.com/join). Once you have
+<!-- You can get an account on github for free by going to their [website](https://github.com/join). Once you have
 an account, you should join the NNPDF organisation by asking Stefano Carrazza or Zahari Kassabov to
-send you an invitation. Once you have accepted the invitation, you can access the NNPDF code at
-[https://github.com/NNPDF](https://github.com/NNPDF).
-
+send you an invitation. Once you have accepted the invitation,  you
+can access the NNPDF code at [https://github.com/NNPDF](https://github.com/NNPDF).
 In order to work on the NNPDF code, you will need to be able to push code to the NNPDF repositories.
 To be able to do this, your SSH keys should be installed in one of GitHub or GitLab. In particular:
-
 * You should add your valid SSH key(s) to your GitHub account. You can do this by following the
 instructions [here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account).
-
 * If you have a valid CERN account, you should
 [login](https://login.cern.ch/adfs/ls/?SAMLRequest=fZFdT8IwFIb%2Fyu56NbqOQaDZliwQExI0BtQLb8xZKdDYtbPnzI9%2F74ZRMTHcNu%2FznLfn5AiNbWXV0dFt9EunkaIKUQcy3i28w67RYavDq1H6frMu2JGoRcn5wZCFeqR0cCN15F2PIIdewwcjV2BtDeqZRcteaRwMvl%2Fa%2BoNxPzDs9sgtchatlgV7mkE2niqAWGTzWZyJtI5huhOxqOvJTCsxVknWRxE7vXJI4KhgaSLmcTKPRXonpnKSyMnskUUPfanT3HSUsOi9sQ7lUK9gXXDSAxqUDhqNkpTcVtdr2QclfP%2F%2FHGkvM23w5JW3rMyHtDy1C%2BX%2F28r5eSb%2FOsFN71wtb7016iOqrPVvi6CBdMEodJpFVz40QJdbDC9mF%2B9PUUkBHBrtiPHya%2BTfQ5ef)
 and add the public SSH key(s) from your computer.
-
 * If you do not have a valid CERN account, you should send your public SSH key(s) to Stefano
-Carrazza and he will add them for you.
-
-### Available repositories on GitHub
+Carrazza and he will add them for you. ### Available repositories on GitHub-->
 
 The following is a list of the repositories that are available on GitHub as part of the NNPDF
 organization. To use the code it is not a requirement that you download any of these yourself,
