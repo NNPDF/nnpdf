@@ -12,7 +12,6 @@ import numpy as np
 
 from reportengine.checks import CheckError
 
-from validphys.core import PDF
 from validphys.gridvalues import grid_values, central_grid_values
 
 

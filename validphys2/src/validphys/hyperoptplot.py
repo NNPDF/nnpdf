@@ -4,7 +4,6 @@ hyperoptplot.py
 Module for the parsing and plotting of hyperopt results.
 """
 
-from argparse import ArgumentParser
 import os
 import re
 import glob
