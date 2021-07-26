@@ -852,7 +852,7 @@ class ModelTrainer:
 
             # Compile each of the models with the right parameters
             for model in models.values():
-                model.compile(**params["optimizer"])
+                model.compile(**params["optimizer"], run_eagerly=self.debug)
 
             passed = self._train_and_fit(
                 models["training"],

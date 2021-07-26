@@ -245,6 +245,7 @@ class MetaModel(Model):
         loss=None,
         target_output=None,
         clipnorm=None,
+        run_eagerly=None,
         **kwargs,
     ):
         """
@@ -303,7 +304,7 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss)
+        super().compile(optimizer=opt, loss=loss, run_eagerly=run_eagerly)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value
