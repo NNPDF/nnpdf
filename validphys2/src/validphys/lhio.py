@@ -182,7 +182,7 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
         if irep in loaded_grids:
             grid = loaded_grids[irep]
         else:
-            grid = load_replica(pdf, irep, kin_grids=kin_grids)[1]
+            _header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
             loaded_grids[irep] = grid
         grids.append(grid)
     # This takes care of failing if headers don't match
