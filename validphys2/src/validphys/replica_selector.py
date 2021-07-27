@@ -5,12 +5,16 @@ Tools for filtering replica sets based on criteria on the replicas.
 """
 import logging
 import numbers
+import os
+import pathlib
+import shutil
 import warnings
 
 import numpy as np
 import pandas as pd
 
 from reportengine.checks import check_positive
+from reportengine.compat import yaml
 from reportengine.table import table
 from reportengine.figure import figuregen
 
@@ -18,9 +22,63 @@ from validphys.pdfbases import flavour
 from validphys.pdfoutput import pdfset
 from validphys.lhio import new_pdf_from_indexes
 from validphys.checks import check_pdf_is_montecarlo, check_scale
+from validphys.core import PDF
 from validphys.pdfplots import ReplicaPDFPlotter
+from validphys.renametools import rename_pdf
+from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
+
+def bundle_pdfs(pdf, pdfs, output_path, target_name=None):
+    base_pdf_path = pathlib.Path(pdf.infopath).parent
+    nrep = len(pdf)
+
+    target_name = target_name or pdf.name + '_pdfas'
+
+    alphas_paths = [pathlib.Path(i.infopath).parent for i in pdfs]
+    alphas_replica0s = [path / f'{p}_0000.dat' for path, p in zip(alphas_paths, pdfs)]
+    new_nrep = nrep + len(alphas_replica0s)
+
+    # We create a temporary directory to handle the manipulations inside.
+    # We move the files to the new directory at the end.
+    with tempfile_cleaner(root='./', exit_func=shutil.rmtree, exc=KeyboardInterrupt) as tempdir:
+        # Copy the base pdf into the temporary directory
+        temp_pdf = shutil.copytree(base_pdf_path, tempdir / pdf.name)
+
+        # Copy the alphas PDF replica0s into the new PDF
+        for i, (alphas_pdf, rep) in enumerate(zip(pdfs, alphas_replica0s)):
+            to = temp_pdf / f'{pdf.name}_{str(i + nrep).zfill(4)}.dat'
+            shutil.copy(rep, to)
+            _fixup_new_replica(alphas_pdf, to)
+
+        # Fixup the info file
+        info_file = (temp_pdf/temp_pdf.name).with_suffix('.info')
+        os.system(f"sed -i -e 's/NumMembers.*/NumMembers: {new_nrep}/g' {info_file}")
+        os.system(f"sed -i -e 's/ErrorType.*/ErrorType: replicas+as/g' {info_file}")
+
+        # Rename the base pdf to the final name
+        rename_pdf(temp_pdf, pdf.name, target_name)
+        # This is the pdf path after the above renaming
+        # i.e new_pdf.exists() == True
+        new_pdf = temp_pdf.with_name(target_name)
+        # Move the final pdf outside the temporary directory
+        new_pdf.rename(output_path / target_name)
+
+
+def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
+    info_file = pathlib.Path(alphas_pdf.infopath)
+
+    with open(info_file, 'r') as stream:
+        info = yaml.safe_load(stream)
+
+    AlphaS_MZ = info['AlphaS_MZ']
+    AlphaS_Vals = info['AlphaS_Vals']
+    # Replace the AlphaS_MZ and AlphaS_Vals key
+    os.system(fr"sed -i -e '1s/^/AlphaS_MZ: {str(AlphaS_MZ)}\n/' {new_replica_file}")
+    os.system(fr"sed -i -e '1s/^/AlphaS_Vals: {str(AlphaS_Vals)}\n/' {new_replica_file}")
+    # Delete the from replica key
+    os.system(f"sed -i -e '/FromMCReplica.*/d' {new_replica_file}")
+
 
 
 @check_positive('Q')
