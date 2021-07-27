@@ -8,8 +8,7 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
-from collections import namedtuple, OrderedDict
-from glob import glob
+from collections import namedtuple
 import re
 import enum
 import functools

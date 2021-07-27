@@ -16,7 +16,6 @@ import pytest
 
 from validphys.api import API
 from validphys.pseudodata import training_validation_pseudodata
-from validphys.tests.conftest import FIT
 import validphys.tests.regressions
 
 from reportengine.checks import CheckError

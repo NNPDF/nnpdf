@@ -4,7 +4,6 @@ Filters for NNPDF fits
 """
 
 import logging
-import numbers
 import re
 from collections.abc import Mapping
 from importlib.resources import read_text

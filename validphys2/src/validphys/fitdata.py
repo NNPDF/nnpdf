@@ -21,7 +21,6 @@ from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
 from validphys import sumrules
-from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
