@@ -182,10 +182,9 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
         if irep in loaded_grids:
             grid = loaded_grids[irep]
         else:
-            header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
+            _header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
             loaded_grids[irep] = grid
         grids.append(grid)
-
     # This takes care of failing if headers don't match
     try:
         M = rep_matrix(grids)
@@ -193,6 +192,7 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
         raise ValueError("Null values found in replica grid matrix. "
                          "This may indicate that the headers don't match"
                          "If this is intentional try using use_rep0grid=True") from e
+    header = b'PdfType: central\nFormat: lhagrid1\n'
     write_replica(0, set_root, header, M.mean(axis=1))
 
 def new_pdf_from_indexes(
