@@ -913,7 +913,7 @@ class CoreConfig(configparser.Config):
         If no path is provided, returns None.
         For use in theorycovariance.construction.user_covmat.
         """
-        if use_user_uncertainties is False:
+        if not use_user_uncertainties:
             return None
         else:
             l = self.loader
@@ -932,7 +932,7 @@ class CoreConfig(configparser.Config):
         """
         Return the theory covariance matrix used in the fit.
         """
-        if inclusive_use_scalevar_uncertainties is True:
+        if inclusive_use_scalevar_uncertainties:
             if use_user_uncertainties is True:
                 # Both scalevar and user uncertainties
                 from validphys.theorycovariance.construction import total_theory_covmat_fitting
@@ -941,7 +941,7 @@ class CoreConfig(configparser.Config):
                 # Only scalevar uncertainties
                 from validphys.theorycovariance.construction import theory_covmat_custom_fitting
                 f = theory_covmat_custom_fitting
-        elif use_user_uncertainties is True:
+        elif use_user_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
             f = user_covmat_fitting
