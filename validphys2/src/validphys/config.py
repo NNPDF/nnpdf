@@ -223,7 +223,7 @@ class CoreConfig(configparser.Config):
         """Whether to use a scale variation uncertainty theory covmat.
         Checks whether a point prescription is included in the runcard and if so 
         assumes scale uncertainties are to be used."""
-        if ((use_scalevar_uncertainties is False) and (point_prescription is not None)):
+        if ((not use_scalevar_uncertainties) and (point_prescription is not None)):
                 use_scalevar_uncertainties = True
         return use_scalevar_uncertainties
 
