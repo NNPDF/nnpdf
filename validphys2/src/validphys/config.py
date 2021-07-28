@@ -933,7 +933,7 @@ class CoreConfig(configparser.Config):
         Return the theory covariance matrix used in the fit.
         """
         if inclusive_use_scalevar_uncertainties:
-            if use_user_uncertainties is True:
+            if use_user_uncertainties:
                 # Both scalevar and user uncertainties
                 from validphys.theorycovariance.construction import total_theory_covmat_fitting
                 f = total_theory_covmat_fitting
