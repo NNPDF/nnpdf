@@ -100,7 +100,7 @@ The NNPDF publications
   Uncertainties"*, Rabah Abdul Khalek, Richard D. Ball, Stefano
   Carrazza, Stefano Forte, Tommaso Giani, Zahari Kassabov,
   Emanuele R. Nocera, Rosalyn L. Pearson, Juan Rojo, Luca Rottoli,
-  Maria Ubiali, Cameron Voise, and Michael Wilson
+  Maria Ubiali, Cameron Voisey, and Michael Wilson
   :cite:p:`AbdulKhalek:2019ihb`
 * *"Towards a new generation of parton densities with deep learning
   models"*, Stefano Carrazza and Juan Cruz-Martinez :cite:p:`Carrazza:2019mzf`
