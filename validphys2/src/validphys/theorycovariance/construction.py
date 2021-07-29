@@ -476,7 +476,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
         if ds in filecovmat.index.get_level_values(level="dataset"):
             shortlist.append(ds)
     filecovmat = filecovmat.reindex(shortlist, level="dataset")
-    filecovmat = ((filecovmat.T).reindex(shortlist, level="dataset")).T
+    filecovmat = filecovmat.reindex(shortlist, level="dataset", axis=1)
     # ------------- #
     # 1: Apply cuts #
     # ------------- #
@@ -528,7 +528,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     full_df = pd.concat(strips, axis=1)
     # Reindex to align with experiment covmat index
     full_df = full_df.reindex(procs_index)
-    full_df = ((full_df.T).reindex(procs_index)).T
+    full_df = full_df.reindex(procs_index, axis=1)
     return full_df
 
 @table
