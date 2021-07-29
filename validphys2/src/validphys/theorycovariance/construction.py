@@ -488,8 +488,14 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
             if ds.name in filecovmat.index.get_level_values(1):
                 cuts = ds.cuts
                 # Creating new index for post cuts
-                for keeploc in cuts.load():
-                    indextuples.append((group.name, ds.name, keeploc))
+                if cuts.load() is not None:
+                    for keeploc in cuts.load():
+                        indextuples.append((group.name, ds.name, keeploc))
+                # If loaded cuts are None, keep all index points for that dataset
+                else:
+                    for ind in filecovmat.index():
+                        if ind[1] == ds:
+                            indextuples.append(ind)
     newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0) 
     # Reindex covmat with the new cut index
     cut_df = filecovmat.reindex(newindex).T
