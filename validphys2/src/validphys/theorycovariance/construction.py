@@ -18,7 +18,6 @@ from reportengine import collect
 from validphys.results import (
     procs_central_values,
     procs_central_values_no_table,
-    procs_data_values,
 )
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory

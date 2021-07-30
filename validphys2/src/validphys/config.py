@@ -267,6 +267,22 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts["fakepdf"])
         return {"pdf": underlyinglaw}
 
+    @element_of("hyperscans")
+    def parse_hyperscan(self, hyperscan):
+        """A hyperscan in the hyperscan_results folder, containing at least one tries.json file"""
+        try:
+            return self.loader.check_hyperscan(hyperscan)
+        except LoadFailedError as e:
+            raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
+
+    def parse_hyperscan_config(self, hyperscan_config):
+        """Configuration of the hyperscan"""
+        if "from_hyperscan" in hyperscan_config:
+            hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
+            log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
+            return hyperscan.as_input().get("hyperscan_config")
+        return hyperscan_config
+
     def produce_multiclosure_underlyinglaw(self, fits):
         """Produce the underlying law for a set of fits. This allows a single t0
         like covariance matrix to be loaded for all fits, for use with

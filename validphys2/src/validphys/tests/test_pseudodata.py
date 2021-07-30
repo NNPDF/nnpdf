@@ -16,7 +16,6 @@ import pytest
 
 from validphys.api import API
 from validphys.pseudodata import training_validation_pseudodata
-from validphys.tests.conftest import FIT
 import validphys.tests.regressions
 
 from reportengine.checks import CheckError
@@ -71,8 +70,7 @@ def test_read_fit_pseudodata():
       data, tr_idx, val_idx = data_indices
       # Check the training and validation index are disjoint
       assert set(tr_idx).isdisjoint(set(val_idx))
-      # Check the union is equal to the full dataset
-      assert all(tr_idx.union(val_idx) == data.index)
+
 
     with pytest.raises(FileNotFoundError):
         # Check a FileNotFoundError is raised

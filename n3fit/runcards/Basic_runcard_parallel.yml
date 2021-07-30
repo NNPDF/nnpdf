@@ -38,7 +38,7 @@ theory:
 trvlseed: 1
 nnseed: 2
 mcseed: 3
-genrep: False     # true = generate MC replicas, false = use real data
+genrep: True     # true = generate MC replicas, false = use real data
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
@@ -86,4 +86,5 @@ positivity:
 ############################################################
 debug: False
 maxcores: 8
-parallel_models: 4
+parallel_models: true
+same_trvl_per_replica: true

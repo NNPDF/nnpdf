@@ -4,7 +4,6 @@ Filters for NNPDF fits
 """
 
 import logging
-import numbers
 import re
 from collections.abc import Mapping
 from importlib.resources import read_text
@@ -67,7 +66,7 @@ def check_nonnegative(var: str):
 def make_dataset_dir(path):
     """Creates directory at path location."""
     if path.exists():
-        log.warning(f"Dataset output folder exists: {path} Overwritting contents")
+        log.warning(f"Dataset output folder exists: {path} Overwriting contents")
     else:
         path.mkdir(exist_ok=True)
 

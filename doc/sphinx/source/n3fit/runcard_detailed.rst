@@ -290,14 +290,43 @@ as well as a detailed analysis of the amount of time that TensorFlow spent on ea
 Running fits in parallel
 ------------------------
 
-It is possible to run fits in parallel with ``n3fit`` by using the ``parallel_models``
-flag in the runcard (by default the number of ``parallel_models`` is set to 1).
+It is possible to run fits in parallel with ``n3fit`` by setting the ``parallel_models``
+flag in the runcard to ``true`` when running a range of replicas.
 Running in parallel can be quite hard on memory and it is only advantageous when
 fitting on a GPU, where one can find a speed up equal to the number of models run
 in parallel (each model being a different replica).
 
-At present it cannot be used together with the ``hyperopt`` module.
+Running in parallel leverages the fact that the only difference between two replicas
+is the output data the prediction is compared to.
+In order to ensure this is indeed the case it is necessary to also
+use the `same_trvl_per_replica` flag in the runcard.
 
+In other words, in order to run several replicas in parallel in a machine
+(be it a big CPU or, most likely, a GPU)
+it is necessary to modify the ``n3fit`` runcard by adding the following two
+top-level options:
+
+.. code-block:: yaml
+
+  parallel_models: true
+  same_trvl_per_replica: true
+
+
+And then run ``n3fit`` with a replica range to be parallelized
+(in this case from replica 1 to replica 4).
+
+.. code-block:: bash
+  
+   n3fit runcard.yml 1 -r 4
+
+
+In machines with more than one GPU you can select the GPU in which the code
+should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
+to the right index (usually ``0, 1, 2``) or leaving it explicitly empty
+to avoid running on GPU: ``export CUDA_VISIBLE_DEVICES=""``
+
+
+Note that at present it cannot be used together with the ``hyperopt`` module.
 
 .. _otheroptions-label:
 

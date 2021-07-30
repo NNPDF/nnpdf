@@ -15,6 +15,7 @@ import sys
 import contextlib
 import pathlib
 import tempfile
+from glob import glob
 from urllib.parse import urljoin
 import hashlib
 
@@ -306,6 +307,14 @@ class FitUploader(ArchiveUploader):
         return super().upload_output(output_path, force)
 
 
+class HyperscanUploader(FitUploader):
+    """Uploader for hyperopt scans, which are just special cases of fits"""
+    _resource_type = "hyperscans"
+    _loader_name = "downloadable_hyperscans"
+    target_dir = _profile_key('hyperscan_target_dir')
+    root_url = _profile_key('hyperscan_root_url')
+
+
 class PDFUploader(ArchiveUploader):
     """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
@@ -411,6 +420,10 @@ def check_input(path):
         # --interactive flag to create one
         return 'report'
     elif 'filter.yml' in files:
+        # The product of a n3fit run, usually a fit but could be a hyperopt scan
+        # For that there should be a) tries.json files and b) no postfit
+        if "postfit" not in files and glob(path.as_posix() + "/nnfit/replica_*/tries.json"):
+            return 'hyperscan'
         return 'fit'
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'

@@ -26,10 +26,14 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
-N3FIT_PROVIDERS = ["n3fit.performfit",
-                   "validphys.results",
-                   "validphys.n3fit_data",
-                   "n3fit.n3fit_checks_provider"
+N3FIT_PROVIDERS = [
+    "n3fit.performfit",
+    "n3fit.n3fit_checks_provider",
+    "validphys.results",
+    "validphys.n3fit_data",
+    "validphys.pseudodata",
+    "validphys.covmats",
+    "validphys.commondata",
 ]
 
 log = logging.getLogger(__name__)
@@ -166,9 +170,11 @@ class N3FitConfig(Config):
         """
         return fakedata
 
-    def produce_kfold_parameters(self, hyperscan=None, hyperopt=None):
-        if hyperscan and hyperopt:
-            return hyperscan["kfold"]
+    def produce_kfold_parameters(self, kfold=None, hyperopt=None):
+        """Return None even if there are kfolds in the runcard if the hyperopt flag is not active
+        """
+        if hyperopt is not None:
+            return kfold
         return None
 
     def produce_kpartitions(self, kfold_parameters):

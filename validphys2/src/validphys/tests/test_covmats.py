@@ -11,7 +11,8 @@ import numpy as np
 
 
 from validphys.api import API
-from validphys.covmats import sqrt_covmat
+from validphys.commondataparser import load_commondata
+from validphys.covmats import sqrt_covmat, dataset_t0_predictions
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID, PDF, HESSIAN_PDF, DATA
 
@@ -173,3 +174,18 @@ def test_systematic_matrix(
     sys_mat = API.systematics_matrix_from_commondata(**config)
     covmat_from_sys_mat = sys_mat @ sys_mat.T
     np.testing.assert_allclose(covmat_from_sys_mat, covmat)
+
+
+def test_single_datapoint():
+    # Make the t0 predictions
+    di = {'dataset': 'ATLASTTBARTOT8TEV'}
+
+    ds = API.dataset(dataset_input=di, theoryid=THEORYID, use_cuts='internal')
+    t0set = API.pdf(pdf=PDF)
+    t0_predictions = dataset_t0_predictions(ds, t0set)
+
+    cd = API.commondata(dataset_input=di)
+    ld = load_commondata(cd)
+    # Ensure the dataset is only a single datapoint
+    assert ld.ndata == 1
+    ld.systematic_errors(t0_predictions)
