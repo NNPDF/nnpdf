@@ -488,8 +488,9 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
             if ds.name in filecovmat.index.get_level_values(1):
                 cuts = ds.cuts
                 # Creating new index for post cuts
-                if cuts.load() is not None:
-                    for keeploc in cuts.load():
+                lcuts = cuts.load()
+                if lcuts is not None:
+                    for keeploc in lcuts:
                         indextuples.append((group.name, ds.name, keeploc))
                 # If loaded cuts are None, keep all index points for that dataset
                 else:
