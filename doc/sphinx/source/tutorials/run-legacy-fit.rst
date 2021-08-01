@@ -22,6 +22,24 @@ The resources that are required to launch the fit, such as the theory ID and the
 :math:`t_0` PDF set, will be downloaded automatically. Alternatively, such
 resources can be obtained with the :ref:`vp-get<vp-get>` tool.
 
+.. warning::
+
+   The flat ``dataset_inputs`` structure for listing datasets in the runcard is
+   not supported by ``nnfit``. Instead, datasets must be grouped explicitly by
+   experiment, e.g.
+   
+.. code:: yaml
+
+    experiments:
+      - experiment: NMC
+        datasets:
+        - dataset: NMCPD
+        - dataset: NMC
+      - experiment: SLAC
+        datasets:
+        - dataset: SLACP
+        - dataset: SLACD
+   
 3. To run the fit, use the :code:`nnfit` program. This takes a
 :code:`<runcard_folder>` as input, as well a number that indexes the PDF replica
 that will be produced. It is used as follows: :code:`nnfit <replica_number>

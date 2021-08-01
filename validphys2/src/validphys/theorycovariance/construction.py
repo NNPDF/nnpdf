@@ -22,9 +22,10 @@ from validphys.results import (
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import (
-    process_lookup,
-    check_correct_theory_combination,
-)
+                                                process_lookup, 
+                                                check_correct_theory_combination,
+                                                check_fit_dataset_order_matches_grouped)
+
 
 log = logging.getLogger(__name__)
 
@@ -451,11 +452,130 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     return df
 
 @table
+def fromfile_covmat(covmatpath, procs_data, procs_index):
+    """Reads a general theory covariance matrix from file. Then
+    1: Applies cuts to match experiment covariance matrix
+    2: Expands dimensions to match experiment covariance matrix
+       by filling additional entries with 0."""
+    # Load covmat as pandas DataFrame
+    filecovmat = pd.read_csv(covmatpath,
+            index_col=[0,1,2], header=[0,1,2],
+            sep="\t|,", engine="python")
+    # Remove string in column id
+    filecovmat.columns = filecovmat.index 
+    # Reordering covmat to match exp order in runcard
+    # Datasets in exp covmat
+    dslist = []
+    for group in procs_data:
+        for ds in group.datasets:
+            dslist.append(ds.name)
+    # Datasets in filecovmat in exp covmat order
+    shortlist = []
+    for ds in dslist:
+        if ds in filecovmat.index.get_level_values(level="dataset"):
+            shortlist.append(ds)
+    filecovmat = filecovmat.reindex(shortlist, level="dataset")
+    filecovmat = filecovmat.reindex(shortlist, level="dataset", axis=1)
+    # ------------- #
+    # 1: Apply cuts #
+    # ------------- #
+    # Loading cuts to apply to covariance matrix
+    indextuples = []
+    for group in procs_data:
+        for ds in group.datasets:
+            # Load cuts for each dataset in the covmat
+            if ds.name in filecovmat.index.get_level_values(1):
+                cuts = ds.cuts
+                # Creating new index for post cuts
+                lcuts = cuts.load()
+                if lcuts is not None:
+                    for keeploc in lcuts:
+                        indextuples.append((group.name, ds.name, keeploc))
+                # If loaded cuts are None, keep all index points for that dataset
+                else:
+                    for ind in filecovmat.index():
+                        if ind[1] == ds:
+                            indextuples.append(ind)
+    newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0) 
+    # Reindex covmat with the new cut index
+    cut_df = filecovmat.reindex(newindex).T
+    cut_df = cut_df.reindex(newindex).T
+    # Elements where cuts are applied will become NaN - remove these rows and columns
+    cut_df = cut_df.dropna(0).dropna(1)
+    # -------------------- #
+    # 2: Expand dimensions #
+    # -------------------- #
+    # First make empty df of exp covmat dimensions
+    empty_df = pd.DataFrame(0, index=procs_index, columns=procs_index)
+    covmats = []
+    # Make a piece of the covmat for each combination of two datasetes
+    for ds1 in dslist:
+        for ds2 in dslist:
+            if (ds1 in shortlist) and (ds2 in shortlist):
+                # If both datasets in the fromfile covmat, use the piece of the fromfile covmat
+                covmat = cut_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+            else:
+                # Otherwise use a covmat of 0s
+                covmat = empty_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+            covmats.append(covmat)
+    chunks = []
+    # Arrange into chunks, each chunk is a list of pieces of covmat which are associated with 
+    # one dataset in particular
+    for x in range(0, len(covmats), len(dslist)):
+        chunk = covmats[x:x+len(dslist)]
+        chunks.append(chunk)
+    strips = []
+    # Concatenate each chunk into a strip of the covariance matrix 
+    for chunk in chunks:
+        strip = pd.concat(chunk, axis=1)
+        strips.append(strip.T)
+   # strips.reverse()
+    # Concatenate the strips to make the full matrix
+    full_df = pd.concat(strips, axis=1)
+    # Reindex to align with experiment covmat index
+    full_df = full_df.reindex(procs_index)
+    full_df = full_df.reindex(procs_index, axis=1)
+    return full_df
+
+@table
+def user_covmat(procs_data, procs_index,
+                loaded_user_covmat_path):
+    """
+    General theory covariance matrix provided by the user. 
+    Useful for testing the impact of externally produced
+    covariance matrices. Matrices must be produced as a 
+    csv of pandas DataFrame, and uploaded to the validphys
+    server. The server path is then provided via 
+    ``user_covmat_path`` in ``theorycovmatconfig`` in the 
+    runcard. For more information see documentation. 
+    """
+    return fromfile_covmat(loaded_user_covmat_path, procs_data, procs_index)
+
+@table
+@check_fit_dataset_order_matches_grouped
+def total_theory_covmat(
+        theory_covmat_custom,
+        user_covmat):
+    """
+    Sum of scale variation and user covmat, where both are used.
+    """
+    return theory_covmat_custom + user_covmat
+
 def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
     """theory_covmat_custom but reindexed so the order of the datasets matches  
     those in the experiment covmat so they are aligned when fitting."""
     df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
     return df
+  
+def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
+  """total_theory_covmat but reindexed so the order of the datasets matches 
+  those in the experiment covmat so they are aligned when fitting."""
+  return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
+
+def user_covmat_fitting(user_covmat, procs_index_matched):
+  """user_covmat but reindexed so the order of the datasets matches 
+  those in the experiment covmat so they are aligned when fitting."""
+  return theory_covmat_custom_fitting(user_covmat, procs_index_matched)
 
 def procs_index_matched(groups_index, procs_index):
     """procs_index but matched to the dataset order given
