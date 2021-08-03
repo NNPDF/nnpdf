@@ -28,7 +28,7 @@ from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
 
-def bundle_pdfs(pdf, pdfs, output_path, target_name=None):
+def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name=None):
     """Action that bundles PDFs for distributing to the LHAPDF
     format. The baseline pdf is declared as the ``pdf`` key
     and the PDFs from which the replica 0s are to be added is
@@ -71,11 +71,11 @@ def bundle_pdfs(pdf, pdfs, output_path, target_name=None):
         # Fixup the info file
         info_file = (temp_pdf/temp_pdf.name).with_suffix('.info')
 
-        with open(info_file, 'r') as stream:
+        with open(info_file, 'rb') as stream:
             info_yaml = yaml.safe_load(stream)
         info_yaml['NumMembers'] = new_nrep
         info_yaml['ErrorType'] += '+as'
-        with open(info_file, 'w') as stream:
+        with open(info_file, 'wb') as stream:
             yaml.dump(info_yaml, stream, Dumper=yaml.RoundTripDumper)
 
         # Rename the base pdf to the final name
@@ -96,7 +96,7 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
     """
     info_file = pathlib.Path(alphas_pdf.infopath)
 
-    with open(info_file, 'r') as stream:
+    with open(info_file, 'rb') as stream:
         info = yaml.safe_load(stream)
 
     AlphaS_MZ = info['AlphaS_MZ']
