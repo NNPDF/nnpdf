@@ -5,7 +5,6 @@ Tools for filtering replica sets based on criteria on the replicas.
 """
 import logging
 import numbers
-import os
 import pathlib
 import shutil
 import warnings
@@ -53,8 +52,13 @@ def bundle_pdfs(pdf, pdfs, output_path, target_name=None):
 
         # Fixup the info file
         info_file = (temp_pdf/temp_pdf.name).with_suffix('.info')
-        os.system(f"sed -i -e 's/NumMembers.*/NumMembers: {new_nrep}/g' {info_file}")
-        os.system(f"sed -i -e 's/ErrorType.*/ErrorType: replicas+as/g' {info_file}")
+
+        with open(info_file, 'r') as stream:
+            info_yaml = yaml.safe_load(stream)
+        info_yaml['NumMembers'] = new_nrep
+        info_yaml['ErrorType'] += '+as'
+        with open(info_file, 'w') as stream:
+            yaml.dump(info_yaml, stream, Dumper=yaml.RoundTripDumper)
 
         # Rename the base pdf to the final name
         rename_pdf(temp_pdf, pdf.name, target_name)
@@ -73,11 +77,12 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
 
     AlphaS_MZ = info['AlphaS_MZ']
     AlphaS_Vals = info['AlphaS_Vals']
-    # Replace the AlphaS_MZ and AlphaS_Vals key
-    os.system(fr"sed -i -e '1s/^/AlphaS_MZ: {str(AlphaS_MZ)}\n/' {new_replica_file}")
-    os.system(fr"sed -i -e '1s/^/AlphaS_Vals: {str(AlphaS_Vals)}\n/' {new_replica_file}")
-    # Delete the from replica key
-    os.system(f"sed -i -e '/FromMCReplica.*/d' {new_replica_file}")
+    with open(new_replica_file, 'r') as in_stream:
+        data = in_stream.read()
+    with open(new_replica_file, 'w') as out_stream:
+        # Replace the AlphaS_MZ and AlphaS_Vals key
+        new_data = f"AlphaS_MZ: {AlphaS_MZ}\n" + f"AlphaS_Vals: {AlphaS_Vals}\n" + data
+        out_stream.write(new_data)
 
 
 
