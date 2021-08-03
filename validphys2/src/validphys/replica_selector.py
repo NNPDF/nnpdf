@@ -104,9 +104,9 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
     with open(new_replica_file, 'r') as in_stream:
         data = in_stream.read()
     with open(new_replica_file, 'w') as out_stream:
-        # Replace the AlphaS_MZ and AlphaS_Vals key
-        new_data = f"AlphaS_MZ: {AlphaS_MZ}\n" + f"AlphaS_Vals: {AlphaS_Vals}\n" + data
-        out_stream.write(new_data)
+        # Add the AlphaS_MZ and AlphaS_Vals keys
+        out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\n" + f"AlphaS_Vals: {AlphaS_Vals}\n")
+        out_stream.write(data)
 
 
 
