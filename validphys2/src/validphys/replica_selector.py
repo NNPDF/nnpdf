@@ -29,6 +29,24 @@ from validphys.utils import tempfile_cleaner
 log = logging.getLogger(__name__)
 
 def bundle_pdfs(pdf, pdfs, output_path, target_name=None):
+    """Action that bundles PDFs for distributing to the LHAPDF
+    format. The baseline pdf is declared as the ``pdf`` key
+    and the PDFs from which the replica 0s are to be added is
+    declared as the ``pdfs`` list.
+
+    The bundled PDF set is stored inside the ``output`` directory.
+
+    Parameters
+    ----------
+    pdf: :py:class:`validphys.core.PDF`
+        The baseline PDF to which the new replicas will be added
+    pdfs: list of :py:class:`validphys.core.PDF`
+        The list of PDFs from which replica0 will be appended
+    target_name: str or None
+        Optional argument specifying the name of the output PDF.
+        If ``None``, then the name of the original pdf is used
+        but with ``_pdfas`` appended
+    """
     base_pdf_path = pathlib.Path(pdf.infopath).parent
     nrep = len(pdf)
 
@@ -70,6 +88,12 @@ def bundle_pdfs(pdf, pdfs, output_path, target_name=None):
 
 
 def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
+    """Helper function that takes in a
+    :py:class:`validphys.core.PDF` object as well as
+    the path to the central replica corresponding to the
+    PDF and handles the writing of the alphas values
+    to the header file.
+    """
     info_file = pathlib.Path(alphas_pdf.infopath)
 
     with open(info_file, 'r') as stream:
