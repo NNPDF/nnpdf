@@ -313,7 +313,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
         if extra_fields is not None:
             yaml.dump(extra_fields, out, default_flow_style=False)
 
-    headers, grids = load_all_replicas(pdf, db=db)
+    _headers, grids = load_all_replicas(pdf, db=db)
     result  = (big_matrix(grids).dot(V)).add(grids[0], axis=0, )
     hess_header = b"PdfType: error\nFormat: lhagrid1\n"
     for column in result.columns:

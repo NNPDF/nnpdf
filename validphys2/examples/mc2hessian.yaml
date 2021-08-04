@@ -1,18 +1,7 @@
 pdf: NNPDF31_nlo_as_0118
 
 Neig: 100
-sample_Q: 8
-Q: 1.65
-prefix: test
-
-# grid_names: {('mc2hessian', pdf): test}
-
-action: mc2hessian
-
-group:
-  prefix: testststss
-  pdfsets: 
-    - NNPDF31_nlo_as_0118
+Q: 8
 
 actions_:
-  - create_mc2hessian(installgrids=true)
+  - mc2hessian(installgrids=true)
