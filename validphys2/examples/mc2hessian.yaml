@@ -1,7 +1,7 @@
 pdf: NNPDF31_nlo_as_0118
 
 Neig: 100
-Q: 8
+Q: 1.651
 
 actions_:
   - mc2hessian(installgrids=true)
