@@ -280,8 +280,7 @@ def new_pdf_from_indexes(
         shutil.copytree(set_root, newpath)
 
 
-def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
-                         extra_fields=None):
+def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None):
     """Construct a new LHAPDF grid from a linear combination of members"""
 
     # preparing output folder
@@ -313,10 +312,26 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
         if extra_fields is not None:
             yaml.dump(extra_fields, out, default_flow_style=False)
 
-    _headers, grids = load_all_replicas(pdf, db=db)
+    _headers, grids = load_all_replicas(pdf)
     result  = (big_matrix(grids).dot(V)).add(grids[0], axis=0, )
     hess_header = b"PdfType: error\nFormat: lhagrid1\n"
     for column in result.columns:
         write_replica(column + 1, set_root, hess_header, result[column])
 
     return set_root
+
+
+def install_mc2hessian_grids(gridname, output_path):
+    lhafolder = pathlib.Path(lhaindex.get_lha_datapath())
+    dest = lhafolder / gridname
+    if lhaindex.isinstalled(gridname):
+        log.warning(
+            "Target directory for new PDF, %s, already exists. " "Overwriting contents.", gridname
+        )
+        if dest.is_dir():
+            shutil.rmtree(str(dest))
+        else:
+            dest.unlink()
+    source = output_path / gridname
+    shutil.copytree(source, dest)
+    log.info("Hessian PDF %s succesfully written to the folder %s", gridname, dest)
