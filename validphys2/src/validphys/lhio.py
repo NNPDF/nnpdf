@@ -2,18 +2,17 @@
 A module that reads and writes LHAPDF grids.
 """
 
+import logging
 import os
 import os.path as osp
-import shutil
-import logging
 import pathlib
-
-import numpy as np
-import pandas as pd
-from reportengine.compat import yaml
+import shutil
 
 import lhapdf
+import numpy as np
+import pandas as pd
 
+from reportengine.compat import yaml
 from validphys import lhaindex
 from validphys.core import PDF
 
@@ -286,9 +285,9 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None
     # preparing output folder
     neig = V.shape[1]
 
-    base = pathlib.Path(lhapdf.paths()[-1])  / str(pdf)
+    base = pathlib.Path(lhapdf.paths()[-1])  / pdf.name
     if set_name is None:
-        set_name = str(pdf) + "_hessian_" + str(neig)
+        set_name = pdf.name + "_hessian_" + str(neig)
     if folder is None:
         folder = ''
     set_root = pathlib.Path(folder) / set_name
