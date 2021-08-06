@@ -16,8 +16,6 @@ from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.checks import check_pdf_normalize_to, check_xlimits
 
-ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
-
 @make_argcheck
 def _check_scale(scale):
     scales = ('linear', 'log')
