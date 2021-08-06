@@ -17,7 +17,7 @@ from validphys.pdfgrids import xplotting_grid
 log = logging.getLogger(__name__)
 
 
-def gridname(pdf, Neig, mc2hname: str=None):
+def gridname(pdf, Neig, mc2hname: (str, type(None))=None):
     """If no custom `mc2hname' is specified, the name of the Hessian PDF is automatically generated.
     """
     if mc2hname is None:
@@ -27,7 +27,15 @@ def gridname(pdf, Neig, mc2hname: str=None):
     return grid_name
 
 
-def mc2hessian_xgrid(xmin=1e-5, xminlin=1e-1, xmax=1, nplog=50, nplin=50):
+import numbers
+
+def mc2hessian_xgrid(
+    xmin: float = 1e-5,
+    xminlin: float = 1e-1,
+    xmax: numbers.Real = 1,
+    nplog: int = 50,
+    nplin: int = 50,
+):
     """Provides the points in x to sample the PDF. `logspace` and `linspace`
     will be called with the respsctive parameters."""
     return np.append(
