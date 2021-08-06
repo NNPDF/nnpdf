@@ -11,6 +11,8 @@ import shutil
 
 import numpy as np
 
+from reportengine.checks import make_argcheck, check, check_positive
+
 from validphys import lhaindex
 from validphys.lhio import hessian_from_lincomb
 from validphys.pdfgrids import xplotting_grid
@@ -27,7 +29,13 @@ def gridname(pdf, Neig, mc2hname: (str, type(None)) = None):
         grid_name = mc2hname
     return grid_name
 
+@make_argcheck
+def _check_xminmax(xmin, xminlin, xmax):
+    check(0 < xmin < xminlin < xmax <= 1, "Expecting 0 < xmin < xminlin < xmax <= 1")
 
+@_check_xminmax
+@check_positive("nplog")
+@check_positive("nplin")
 def mc2hessian_xgrid(
     xmin: float = 1e-5,
     xminlin: float = 1e-1,
@@ -36,7 +44,12 @@ def mc2hessian_xgrid(
     nplin: int = 50,
 ):
     """Provides the points in x to sample the PDF. `logspace` and `linspace`
-    will be called with the respsctive parameters."""
+    will be called with the respsctive parameters.
+
+    Generates a grid with ``nplog`` logarithmically spaced points between
+    ``xmin`` and ``xminlin`` followed by ``nplin`` linearly spaced points
+    between ``xminlin`` and ``xmax``
+    """
     return np.append(
         np.geomspace(xmin, xminlin, num=nplog, endpoint=False),
         np.linspace(xminlin, xmax, num=nplin, endpoint=False),
