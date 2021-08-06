@@ -4,18 +4,20 @@ mc2hessian.py
 This module containts the functionality to compute reduced set using the `mc2hessian` algorithm 
 (See section 2.1 of of `1505.06736 <https://arxiv.org/pdf/1602.00005.pdf#subsection.2.1>`_).
 """
-
 import logging
+import pathlib
+import shutil
 
 import numpy as np
 
-from validphys.lhio import hessian_from_lincomb, install_mc2hessian_grids
+from validphys import lhaindex
+from validphys.lhio import hessian_from_lincomb
 from validphys.pdfgrids import xplotting_grid
 
 log = logging.getLogger(__name__)
 
 
-def gridname(pdf, Neig, mc2hname=None):
+def gridname(pdf, Neig, mc2hname: str=None):
     """If no custom `mc2hname' is specified, the name of the Hessian PDF is automatically generated.
     """
     if mc2hname is None:
@@ -35,16 +37,26 @@ def mc2hessian_xgrid(xmin=1e-5, xminlin=1e-1, xmax=1, nplog=50, nplin=50):
 
 
 def mc2hessian(
-    pdf, Q, mc2hessian_xgrid, Neig: int, output_path, gridname, installgrid: bool = True
+    pdf, Q, Neig: int, mc2hessian_xgrid, output_path, gridname, installgrid: bool = False
 ):
     """Produces a Hessian PDF by transfroming a Monte Carlo PDF set.
 
-    Noteworthy args:
-        Neig (float): Number of basis eigenvectors
-        Q (float): Energy scale
-        gridname (str): Name of the output Hessian PDF
-        installgrids (bool, optional): If True, the Hessian PDF is installed in the LHAPDF 
-            directory. Defaults to False.
+    Parameters
+    -----------
+    pdf : validphys.core.PDF
+        An existng validphys PDF object which will be converted into a Hessian PDF set
+    Q : float
+        Energy scale at which the Monte Carlo PDF is sampled
+    Neig : int
+        Number of basis eigenvectors in the Hessian PDF set
+    mc2hessian_xgrid : numpy.ndarray
+        The points in x at which to sample the Monte Carlo PDF set
+    output path : pathlib.PosixPath
+        The validphys output path where the PDF will be written
+    gridname : str
+        Name of the Hessian PDF set
+    installgrid : bool, optional, default=``False``
+        Whether to copyt the Hessian grid to the LHAPDF path
     """
     gridpaths = []
     result = _create_mc2hessian(
@@ -52,7 +64,20 @@ def mc2hessian(
     )
     gridpaths.append(result)
     if installgrid:
-        install_mc2hessian_grids(gridname, output_path)
+        lhafolder = pathlib.Path(lhaindex.get_lha_datapath())
+        dest = lhafolder / gridname
+        if lhaindex.isinstalled(gridname):
+            log.warning(
+                "Target directory for new PDF, %s, already exists. " "Overwriting contents.",
+                gridname,
+            )
+            if dest.is_dir():
+                shutil.rmtree(str(dest))
+            else:
+                dest.unlink()
+        source = output_path / gridname
+        shutil.copytree(source, dest)
+        log.info("Hessian PDF set installed at %s", dest)
 
 
 def _create_mc2hessian(pdf, Q, xgrid, Neig, output_path, name=None):

@@ -318,19 +318,3 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None
         write_replica(column + 1, set_root, hess_header, result[column])
 
     return set_root
-
-
-def install_mc2hessian_grids(gridname, output_path):
-    lhafolder = pathlib.Path(lhaindex.get_lha_datapath())
-    dest = lhafolder / gridname
-    if lhaindex.isinstalled(gridname):
-        log.warning(
-            "Target directory for new PDF, %s, already exists. " "Overwriting contents.", gridname
-        )
-        if dest.is_dir():
-            shutil.rmtree(str(dest))
-        else:
-            dest.unlink()
-    source = output_path / gridname
-    shutil.copytree(source, dest)
-    log.info("Hessian PDF %s succesfully written to the folder %s", gridname, dest)
