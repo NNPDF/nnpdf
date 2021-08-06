@@ -5,6 +5,7 @@ This module containts the functionality to compute reduced set using the `mc2hes
 (See section 2.1 of of `1505.06736 <https://arxiv.org/pdf/1602.00005.pdf#subsection.2.1>`_).
 """
 import logging
+import numbers
 import pathlib
 import shutil
 
@@ -17,7 +18,7 @@ from validphys.pdfgrids import xplotting_grid
 log = logging.getLogger(__name__)
 
 
-def gridname(pdf, Neig, mc2hname: (str, type(None))=None):
+def gridname(pdf, Neig, mc2hname: (str, type(None)) = None):
     """If no custom `mc2hname' is specified, the name of the Hessian PDF is automatically generated.
     """
     if mc2hname is None:
@@ -26,8 +27,6 @@ def gridname(pdf, Neig, mc2hname: (str, type(None))=None):
         grid_name = mc2hname
     return grid_name
 
-
-import numbers
 
 def mc2hessian_xgrid(
     xmin: float = 1e-5,
