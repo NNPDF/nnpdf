@@ -57,4 +57,4 @@ Miscellaneous
    ./newplottingfn.rst
    ./addspecialgrouping.rst
    ./conda.md
-   ./mc2hessian.md
+   ./mc2hessian.rst
