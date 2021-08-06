@@ -11,7 +11,7 @@ import shutil
 
 import numpy as np
 
-from reportengine.checks import make_argcheck, check, check_positive
+from reportengine.checks import check, check_positive, make_argcheck
 
 from validphys import lhaindex
 from validphys.lhio import hessian_from_lincomb
@@ -29,9 +29,11 @@ def gridname(pdf, Neig, mc2hname: (str, type(None)) = None):
         grid_name = mc2hname
     return grid_name
 
+
 @make_argcheck
 def _check_xminmax(xmin, xminlin, xmax):
     check(0 < xmin < xminlin < xmax <= 1, "Expecting 0 < xmin < xminlin < xmax <= 1")
+
 
 @_check_xminmax
 @check_positive("nplog")
@@ -78,25 +80,22 @@ def mc2hessian(
     installgrid : bool, optional, default=``False``
         Whether to copyt the Hessian grid to the LHAPDF path
     """
-    gridpaths = []
-    result = _create_mc2hessian(
+    result_path = _create_mc2hessian(
         pdf, Q=Q, xgrid=mc2hessian_xgrid, Neig=Neig, output_path=output_path, name=gridname
     )
-    gridpaths.append(result)
     if installgrid:
         lhafolder = pathlib.Path(lhaindex.get_lha_datapath())
         dest = lhafolder / gridname
         if lhaindex.isinstalled(gridname):
             log.warning(
-                "Target directory for new PDF, %s, already exists. " "Overwriting contents.",
-                gridname,
+                "Target directory for new PDF, %s, already exists. " "Removing contents.",
+                dest,
             )
             if dest.is_dir():
                 shutil.rmtree(str(dest))
             else:
                 dest.unlink()
-        source = output_path / gridname
-        shutil.copytree(source, dest)
+        shutil.copytree(result_path, dest)
         log.info("Hessian PDF set installed at %s", dest)
 
 

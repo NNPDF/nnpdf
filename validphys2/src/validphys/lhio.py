@@ -291,7 +291,13 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None
     if folder is None:
         folder = ''
     set_root = pathlib.Path(folder) / set_name
-    if not os.path.exists(set_root): os.makedirs(os.path.join(set_root))
+    # In case a Hessian PDF of the same name already exists, we first remove it. Not doing this
+    # can lead to the wrong result if Neig is not the same between both PDF sets.
+    if os.path.exists(set_root):
+        shutil.rmtree(set_root)
+        log.warning("Target directory for new PDF, %s, already exists. " "Removing contents.",
+                set_root,)
+    os.makedirs(os.path.join(set_root))
 
     # copy replica 0
     shutil.copy(base/f'{pdf}_0000.dat', set_root / f"{set_name }_0000.dat")
@@ -316,5 +322,5 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None
     hess_header = b"PdfType: error\nFormat: lhagrid1\n"
     for column in result.columns:
         write_replica(column + 1, set_root, hess_header, result[column])
-
+    log.info("Hessian PDF stored at %s", set_root)
     return set_root
