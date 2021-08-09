@@ -2,7 +2,7 @@
 mc2hessian.py
 
 This module containts the functionality to compute reduced set using the `mc2hessian` algorithm
-(See section 2.1 of of `1602.0000 <https://arxiv.org/pdf/1602.00005.pdf#subsection.2.1>`_).
+(See section 2.1 of of `1602.00005 <https://arxiv.org/pdf/1602.00005.pdf#subsection.2.1>`_).
 """
 import logging
 import numbers
