@@ -8,11 +8,12 @@ import numbers
 import pathlib
 import shutil
 import warnings
+import re
 
 import numpy as np
 import pandas as pd
 
-from reportengine.checks import check_positive
+from reportengine.checks import check_positive, make_argcheck, check
 from reportengine.compat import yaml
 from reportengine.table import table
 from reportengine.figure import figuregen
@@ -44,8 +45,18 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
         out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\n" + f"AlphaS_Vals: {AlphaS_Vals}\n")
         out_stream.write(data)
 
+@make_argcheck
+def _check_target_name(target_name):
+    """Make sure this specifies a name and not some kid of path"""
+    if target_name is None:
+        return
+    check(
+        re.fullmatch(r'[\w]+', target_name),
+        "`target_name` must contain alphnumeric characters and underscores only",
+    )
 
-def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None))=None):
+@_check_target_name
+def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = None):
     """Action that bundles PDFs for distributing to the LHAPDF
     format. The baseline pdf is declared as the ``pdf`` key
     and the PDFs from which the replica 0s are to be added is
