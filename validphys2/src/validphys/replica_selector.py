@@ -75,7 +75,7 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None))=No
 
     # We create a temporary directory to handle the manipulations inside.
     # We move the files to the new directory at the end.
-    with tempfile_cleaner(root='./', exit_func=shutil.rmtree, exc=KeyboardInterrupt) as tempdir:
+    with tempfile_cleaner(root=output_path, exit_func=shutil.rmtree, exc=KeyboardInterrupt) as tempdir:
         # Copy the base pdf into the temporary directory
         temp_pdf = shutil.copytree(base_pdf_path, tempdir / pdf.name)
 
