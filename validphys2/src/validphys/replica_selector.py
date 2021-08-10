@@ -84,9 +84,15 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
     alphas_replica0s = [path / f'{p}_0000.dat' for path, p in zip(alphas_paths, pdfs)]
     new_nrep = nrep + len(alphas_replica0s)
 
+    if target_path.exists():
+        log.warning(f"{target_path} already exists. Deleting contents.")
+        shutil.rmtree(target_path)
+
     # We create a temporary directory to handle the manipulations inside.
     # We move the files to the new directory at the end.
-    with tempfile_cleaner(root=output_path, exit_func=shutil.rmtree, exc=KeyboardInterrupt) as tempdir:
+    with tempfile_cleaner(
+        root=output_path, exit_func=shutil.rmtree, exc=KeyboardInterrupt
+    ) as tempdir:
         # Copy the base pdf into the temporary directory
         temp_pdf = shutil.copytree(base_pdf_path, tempdir / pdf.name)
 
