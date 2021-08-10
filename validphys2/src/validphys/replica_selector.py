@@ -79,10 +79,12 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
     nrep = len(pdf)
 
     target_name = target_name or pdf.name + '_pdfas'
+    target_path = output_path / target_name
 
     alphas_paths = [pathlib.Path(i.infopath).parent for i in pdfs]
     alphas_replica0s = [path / f'{p}_0000.dat' for path, p in zip(alphas_paths, pdfs)]
     new_nrep = nrep + len(alphas_replica0s)
+    alphas_values = [str(p.AlphaS_MZ) for p in pdfs]
 
     if target_path.exists():
         log.warning(f"{target_path} already exists. Deleting contents.")
@@ -102,15 +104,21 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
             shutil.copy(rep, to)
             _fixup_new_replica(alphas_pdf, to)
 
-        # Fixup the info file
-        info_file = (temp_pdf/temp_pdf.name).with_suffix('.info')
+        #  Fixup the info file
+        info_file = (temp_pdf / temp_pdf.name).with_suffix('.info')
 
-        with open(info_file, 'rb') as stream:
-            info_yaml = yaml.safe_load(stream)
+        with open(info_file, 'r') as stream:
+            yaml_obj = yaml.YAML()
+            info_yaml = yaml_obj.load(stream)
         info_yaml['NumMembers'] = new_nrep
         info_yaml['ErrorType'] += '+as'
-        with open(info_file, 'wb') as stream:
-            yaml.dump(info_yaml, stream, Dumper=yaml.RoundTripDumper)
+        extra_desc = '; '.join(
+            f"mem={i} => alphas(MZ)={val}"
+            for val, i in zip(alphas_values, range(nrep, new_nrep))
+        )
+        info_yaml['SetDesc'] += f"; {extra_desc}"
+        with open(info_file, 'w') as stream:
+            yaml_obj.dump(info_yaml, stream)
 
         # Rename the base pdf to the final name
         rename_pdf(temp_pdf, pdf.name, target_name)
@@ -118,8 +126,9 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
         # i.e new_pdf.exists() == True
         new_pdf = temp_pdf.with_name(target_name)
         # Move the final pdf outside the temporary directory
-        new_pdf.rename(output_path / target_name)
-
+        new_pdf = new_pdf.rename(target_path)
+    log.info(f"alpha_s bundle written at {new_pdf}")
+    return target_name
 
 
 
