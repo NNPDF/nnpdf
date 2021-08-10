@@ -28,7 +28,24 @@ from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
 
-def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name=None):
+def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
+    """Helper function that takes in a
+    :py:class:`validphys.core.PDF` object as well as
+    the path to the central replica corresponding to the
+    PDF and handles the writing of the alphas values
+    to the header file.
+    """
+    AlphaS_MZ = alphas_pdf.AlphaS_MZ
+    AlphaS_Vals = alphas_pdf.AlphaS_Vals
+    with open(new_replica_file, 'r') as in_stream:
+        data = in_stream.read()
+    with open(new_replica_file, 'w') as out_stream:
+        # Add the AlphaS_MZ and AlphaS_Vals keys
+        out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\n" + f"AlphaS_Vals: {AlphaS_Vals}\n")
+        out_stream.write(data)
+
+
+def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None))=None):
     """Action that bundles PDFs for distributing to the LHAPDF
     format. The baseline pdf is declared as the ``pdf`` key
     and the PDFs from which the replica 0s are to be added is
@@ -86,27 +103,6 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name=None):
         # Move the final pdf outside the temporary directory
         new_pdf.rename(output_path / target_name)
 
-
-def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
-    """Helper function that takes in a
-    :py:class:`validphys.core.PDF` object as well as
-    the path to the central replica corresponding to the
-    PDF and handles the writing of the alphas values
-    to the header file.
-    """
-    info_file = pathlib.Path(alphas_pdf.infopath)
-
-    with open(info_file, 'rb') as stream:
-        info = yaml.safe_load(stream)
-
-    AlphaS_MZ = info['AlphaS_MZ']
-    AlphaS_Vals = info['AlphaS_Vals']
-    with open(new_replica_file, 'r') as in_stream:
-        data = in_stream.read()
-    with open(new_replica_file, 'w') as out_stream:
-        # Add the AlphaS_MZ and AlphaS_Vals keys
-        out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\n" + f"AlphaS_Vals: {AlphaS_Vals}\n")
-        out_stream.write(data)
 
 
 
