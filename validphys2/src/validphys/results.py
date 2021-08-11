@@ -809,12 +809,13 @@ def predictions_by_kinematics_table(results, kinematics_table_notable):
     tb['prediction'] = theory.central_value
     return tb
 
+groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_metadata",))
 
 @table
-def groups_chi2_table(groups_data, pdf, groups_chi2, each_dataset_chi2):
+def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
     the groups."""
-    dschi2 = iter(each_dataset_chi2)
+    dschi2 = iter(sum(groups_each_dataset_chi2, []))
     records = []
     for group, groupres in zip(groups_data, groups_chi2):
         stats = chi2_stats(groupres)
