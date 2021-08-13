@@ -1,7 +1,7 @@
 dataset_label: LHCb $Z\to ee$
 experiment: LHCb
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 x_label: y
 y_label: $d\sigma_{Z}/dy$ (fb)

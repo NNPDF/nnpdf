@@ -1,7 +1,7 @@
 dataset_label: CMS $W+c$ total 13 TeV
 experiment: CMS
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. ($p_T$ and jets)
 x: k1
 x_label: $|\eta^\mu|$
 y_label: $d\sigma(W+c)/d|\eta^\mu|$ (fb)

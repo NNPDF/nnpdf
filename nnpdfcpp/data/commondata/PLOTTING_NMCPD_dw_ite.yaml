@@ -5,6 +5,6 @@ figure_by:
 - k1
 kinematics_override: dis_sqrt_scale
 nnpdf31_process: DIS NC
-spiderplot_group: DIS NC
+spiderplot_group: DIS NC (fixed-target)
 x: k2
 y_label: $F_2^d/F_2^p(x,Q^2)$

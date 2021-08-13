@@ -1,6 +1,6 @@
 dataset_label: ATLAS low-mass DY 2011
 experiment: ATLAS
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k2
 y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)

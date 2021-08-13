@@ -377,7 +377,7 @@ line_by:
 - qbin
 nnpdf31_process: DY
 result_transform: qbinexp
-spiderplot_group: DY
+spiderplot_group: DY (fixed-target)
 x: k2
 y_label: $d\sigma_{pp}/dx_FdM$
 y_scale: linear

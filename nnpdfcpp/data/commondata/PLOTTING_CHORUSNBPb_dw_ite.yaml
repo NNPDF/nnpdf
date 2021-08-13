@@ -11,7 +11,7 @@ normalize:
   line_by: []
   y_scale: linear
 result_transform: qbindis
-spiderplot_group: DIS CC
+spiderplot_group: DIS CC (fixed-target)
 x: k2
 y_label: $10^{i}\sigma_{CC}^{\bar{\nu}}(x,Q^2)$
 y_scale: symlog

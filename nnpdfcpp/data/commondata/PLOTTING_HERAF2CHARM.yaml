@@ -9,7 +9,7 @@ normalize:
   line_by: []
   y_scale: linear
 result_transform: qbinexp
-spiderplot_group: DIS NC
+spiderplot_group: DIS NC (collider)
 x: k1
 x_scale: log
 y_label: $10^{qbin} F_{2,c}(x,Q^2)$

@@ -5,7 +5,7 @@ figure_by:
 line_by:
 - k2
 nnpdf31_process: DIS NC
-spiderplot_group: DIS NC
+spiderplot_group: DIS NC (collider)
 x: k1
 x_scale: log
 y_label: $F_2(x,Q^2)$

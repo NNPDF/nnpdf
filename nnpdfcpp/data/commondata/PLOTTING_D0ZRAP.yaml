@@ -1,6 +1,6 @@
 dataset_label: D0 $Z$ rapidity
 experiment: D0
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: Tevatron W,Z prod. (inclusive)
 x: k1
 y_label: $1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$

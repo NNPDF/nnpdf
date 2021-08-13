@@ -1,6 +1,6 @@
 dataset_label: CMS $W$ asymmetry 4.7 fb
 experiment: CMS
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 y_label: $dA_{\mu}/dy$

@@ -3,6 +3,6 @@ experiment: CMS
 figure_by:
 - k2
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 y_label: $d\sigma_{Z/\gamma^{*}}/dy$ (fb)

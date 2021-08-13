@@ -3,7 +3,7 @@ experiment: ATLAS
 figure_by:
 - k2
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 x_label: $|y_{\ell\ell}|$
 y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]

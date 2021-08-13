@@ -18,6 +18,6 @@ extra_labels:
   - 0.269
   - 0.315
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: DY (fixed-target)
 x: $x_2$
 y_label: $\sigma_{pd}/\sigma_{pp}$

@@ -10,7 +10,7 @@ normalize:
   line_by: []
   y_scale: linear
 result_transform: qbinjets
-spiderplot_group: JETS/DIJETS/PHOTON
+spiderplot_group: LHC jet prod.
 x: k2
 x_scale: linear
 y_label: $10^{3*qbin} d\sigma/dp_T$

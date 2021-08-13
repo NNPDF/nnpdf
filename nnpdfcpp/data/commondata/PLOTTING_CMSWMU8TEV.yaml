@@ -1,6 +1,6 @@
 dataset_label: CMS $W$ rapidity 8 TeV
 experiment: CMS
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 y_label: $d\sigma(W\to l\nu)/dy_l$

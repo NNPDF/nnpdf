@@ -12,7 +12,7 @@ normalize:
   line_by: []
   y_scale: linear
 result_transform: qbindis
-spiderplot_group: DIS NC
+spiderplot_group: DIS NC (fixed-target)
 x: k2
 y_label: $10^{i}F_2(x,Q^2)$
 y_scale: symlog

@@ -39,6 +39,6 @@ figure_by:
 - Boson
 kinematics_override: ewk_pseudorapity_sqrt_scale
 nnpdf31_process: DY
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 y_label: $d\sigma/dy$ (fb)

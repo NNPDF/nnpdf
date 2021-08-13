@@ -38,7 +38,7 @@ nnpdf31_process: DY
 normalize:
   figure_by:
   - Boson
-spiderplot_group: DY
+spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1
 x_label: $\left\|\eta/y\right|$
 y_label: $d\sigma/dy$ (fb)
