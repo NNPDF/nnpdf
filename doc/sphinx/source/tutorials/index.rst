@@ -56,5 +56,6 @@ Miscellaneous
    ./pseudodata.md
    ./newplottingfn.rst
    ./addspecialgrouping.rst
+   ./bundle-pdfs.rst
    ./conda.md
    ./mc2hessian.rst
