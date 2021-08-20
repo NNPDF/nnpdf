@@ -10,13 +10,5 @@ Access resources
    :maxdepth: 1
 	      
    ./access
-   ./git
+   ./repos
 
-Necessary for developers
-------------------------
-.. toctree::
-   :maxdepth: 1
-
-   ./rules
-   ./python-tools
-   ./sphinx-documentation.md
