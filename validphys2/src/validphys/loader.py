@@ -28,7 +28,7 @@ from reportengine import filefinder
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
-                            InternalCutsWrapper)
+                            InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
 import NNPDF as nnpath
@@ -55,6 +55,8 @@ class TheoryNotFound(LoadFailedError): pass
 class TheoryDataBaseNotFound(LoadFailedError): pass
 
 class FitNotFound(LoadFailedError): pass
+
+class HyperscanNotFound(LoadFailedError): pass
 
 class CutsNotFound(LoadFailedError): pass
 
@@ -100,6 +102,13 @@ class LoaderBase:
                     raise LoaderError(f"Could not parse profile file "
                                       f"{profile_path}: {e}") from e
         return self._nnprofile
+
+    @property
+    def hyperscan_resultpath(self):
+        hyperscan_path = pathlib.Path(self.nnprofile["hyperscan_path"])
+        if not hyperscan_path.exists():
+            raise LoaderError(f"The hyperscan results path {hyperscan_path} does not exist")
+        return hyperscan_path
 
     def _vp_cache(self):
         """Return the vp-cache path, and create it if it doesn't exist"""
@@ -181,6 +190,13 @@ class Loader(LoaderBase):
     def available_fits(self):
         try:
             return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
+        except OSError:
+            return []
+
+    @property
+    def available_hyperscans(self):
+        try:
+            return [p.name for p in self.hyperscan_resultpath.iterdir() if p.is_dir()]
         except OSError:
             return []
 
@@ -395,6 +411,24 @@ class Loader(LoaderBase):
             f"'{p}' must be a folder"
         )
         raise FitNotFound(msg)
+
+    def check_hyperscan(self, hyperscan_name):
+        """Obtain a hyperscan run"""
+        resultspath = self.hyperscan_resultpath
+        if hyperscan_name != osp.basename(hyperscan_name):
+            raise HyperscanNotFound(
+                f"Could not find fit '{hyperscan_name}' in '{resultspath} "
+                "because the name doesn't correspond to a valid filename"
+            )
+        p = resultspath / hyperscan_name
+        if p.is_dir():
+            hyperspec = HyperscanSpec(hyperscan_name, p)
+            if hyperspec.tries_files:
+                return hyperspec
+            raise HyperscanNotFound(f"No hyperscan output find in {hyperscan_name}")
+
+        raise HyperscanNotFound(f"Could not find hyperscan '{hyperscan_name}' in '{resultspath}'."
+                f" Folder '{hyperscan_name}' not found")
 
     def check_default_filter_rules(self, theoryid, defaults=None):
         # avoid circular import
@@ -646,6 +680,16 @@ class RemoteLoader(LoaderBase):
 
     @property
     @_key_or_loader_error
+    def hyperscan_url(self):
+        return self.nnprofile['hyperscan_urls']
+
+    @property
+    @_key_or_loader_error
+    def hyperscan_index(self):
+        return self.nnprofile['hyperscan_index']
+
+    @property
+    @_key_or_loader_error
     def theory_urls(self):
         return self.nnprofile['theory_urls']
 
@@ -706,6 +750,11 @@ class RemoteLoader(LoaderBase):
 
     @property
     @functools.lru_cache()
+    def remote_hyperscans(self):
+        return self.remote_files(self.hyperscan_url, self.hyperscan_index, thing="hyperscan")
+
+    @property
+    @functools.lru_cache()
     def remote_theories(self):
         token = 'theory_'
         rt = self.remote_files(self.theory_urls, self.theory_index, thing="theories")
@@ -720,6 +769,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_fits(self):
         return list(self.remote_fits)
+
+    @property
+    def downloadable_hyperscans(self):
+        return list(self.remote_hyperscans)
 
     @property
     def downloadable_theories(self):
@@ -785,6 +838,30 @@ class RemoteLoader(LoaderBase):
         else:
             log.warning(f"Cannot find {gridpath}. Falling back to old behaviour")
             p.symlink_to(gridpath_old, target_is_directory=True)
+
+    def download_hyperscan(self, hyperscan_name):
+        """Download a hyperscan run from the remote server
+        Downloads the run to the results folder
+        """
+        if not hyperscan_name in self.remote_hyperscans:
+            raise HyperscanNotFound(
+                f"Could not find hyperscan {hyperscan_name} in remote index {self.hyperscan_index}"
+            )
+
+        with tempfile_cleaner(
+            root=self.hyperscan_resultpath,
+            exit_func=shutil.rmtree,
+            exc=KeyboardInterrupt,
+            prefix='fit_download_deleteme_',
+        ) as tempdir:
+            download_and_extract(self.remote_hyperscans[hyperscan_name], tempdir)
+            move_target = tempdir/hyperscan_name
+            if not move_target.is_dir():
+                raise RemoteLoaderError(
+                    f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}"
+                )
+            hyperscan_path = self.hyperscan_resultpath / hyperscan_name
+            shutil.move(move_target, hyperscan_path)
 
 
     def download_pdf(self, name):
@@ -882,7 +959,7 @@ class RemoteLoader(LoaderBase):
             download_file(url, self._vp_cache()/filename, make_parents=True)
         except requests.HTTPError as e:
             if e.response.status_code == requests.codes.not_found:
-                raise RemoteLoaderError(f"Ressource {filename} could not "
+                raise RemoteLoaderError(f"Resource {filename} could not "
                                         f"be found on the validphys "
                                         f"server {url}") from e
             elif e.response.status_code == requests.codes.unauthorized:

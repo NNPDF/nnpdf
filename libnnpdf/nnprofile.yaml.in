@@ -1,6 +1,7 @@
 # Local resource locations
 data_path: '@PROFILE_PREFIX@/data/'
 results_path: '@PROFILE_PREFIX@/results/'
+hyperscan_path: '@PROFILE_PREFIX@/hyperscan_results/'
 validphys_cache_path: '@PROFILE_PREFIX@/vp-cache/'
 config_path: '@PROFILE_PREFIX@/config/'
 
@@ -10,6 +11,11 @@ fit_urls:
     - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
 
 fit_index: 'fitdata.json'
+
+hyperscan_urls:
+  - 'https://data.nnpdf.science/hyperscans/'
+
+hyperscan_index: 'hyperscandata.json'
 
 theory_urls:
     - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
@@ -30,3 +36,5 @@ fits_target_dir: "WEB/fits/"
 fits_root_url: 'https://data.nnpdf.science/fits/'
 pdfs_target_dir: "WEB/pdfs/"
 pdfs_root_url: 'https://data.nnpdf.science/pdfs/'
+hyperscan_target_dir: "WEB/hyperscans/"
+hyperscan_root_url: 'https://data.nnpdf.science/hyperscans/'

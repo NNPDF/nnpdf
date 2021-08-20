@@ -127,7 +127,6 @@ Contents
    serverconf/index
    external-code/index
    tutorials/index
-   contrubuting/index
    internal/index
 
 Bibliography

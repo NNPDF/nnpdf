@@ -111,7 +111,7 @@ def hatch_iter():
     """An infinite iterator that yields increasingly denser patterns of
     hatches suitable for passing as the ``hatch`` argument of matplotlib
     functions."""
-    hatches = "/ \\ - + o 0".split()
+    hatches = "/ \\ - + o O".split()
     i = 1
     while True:
         for hatch in hatches:

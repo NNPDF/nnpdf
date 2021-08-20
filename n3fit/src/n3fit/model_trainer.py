@@ -86,14 +86,14 @@ class ModelTrainer:
         integ_info,
         flavinfo,
         fitbasis,
-        nnseed,
+        nnseeds,
         pass_status="ok",
         failed_status="fail",
         debug=False,
         kfold_parameters=None,
         max_cores=None,
         model_file=None,
-        sum_rules=True,
+        sum_rules=None,
         parallel_models=1,
     ):
         """
@@ -109,8 +109,8 @@ class ModelTrainer:
                 the object returned by fitting['basis']
             fitbasis: str
                 the name of the basis being fitted
-            nnseed: int
-                the seed used to initialise the Neural Network, will be passed to model_gen
+            nnseeds: list(int)
+                the seed used to initialise the NN for each model to be passed to model_gen
             pass_status: str
                 flag to signal a good run
             failed_status: str
@@ -128,7 +128,6 @@ class ModelTrainer:
             parallel_models: int
                 number of models to fit in parallel
         """
-
         # Save all input information
         self.exp_info = exp_info
         self.pos_info = pos_info
@@ -139,7 +138,7 @@ class ModelTrainer:
             self.all_info = exp_info + pos_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
-        self.NNseed = nnseed
+        self._nn_seeds = nnseeds
         self.pass_status = pass_status
         self.failed_status = failed_status
         self.debug = debug
@@ -357,12 +356,13 @@ class ModelTrainer:
         splitted_pdf = splitting_layer(full_pdf_per_replica)
 
         # If we are in a kfolding partition, select which datasets are out
+        training_mask = validation_mask = experimental_mask = [None]
         if partition:
-            training_mask = [i[partition_idx] for i in self.training["folds"]]
-            validation_mask = [i[partition_idx] for i in self.validation["folds"]]
+            if partition.get("overfit", False):
+                # If overfitting, don't apply folding masks to the training/validation
+                training_mask = [i[partition_idx] for i in self.training["folds"]]
+                validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
-        else:
-            training_mask = validation_mask = experimental_mask = [None]
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
@@ -795,10 +795,10 @@ class ModelTrainer:
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
-            seed = self.NNseed
+            # and the seed needs to be updated accordingly
+            seeds = self._nn_seeds
             if k > 0:
-                # Update the seed
-                seed = np.random.randint(0, pow(2, 31))
+                seeds = [np.random.randint(0, pow(2, 31))]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
@@ -809,7 +809,7 @@ class ModelTrainer:
                 params["dropout"],
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
-                seed,
+                seeds,
             )
 
             # Model generation joins all the different observable layers

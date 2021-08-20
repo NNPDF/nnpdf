@@ -126,6 +126,15 @@ void LHCBZEE2FBFilter::ReadData()
       fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }
@@ -246,6 +255,15 @@ void LHCBZEE2FB_40Filter::ReadData()
       fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }

@@ -13,12 +13,11 @@ import scipy as sp
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
-from reportengine import collect
 
 from validphys import plotutils
 from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
 from validphys.core import PDF
-from validphys.pdfplots import PDFPlotter, BandPDFPlotter, FlavourState
+from validphys.pdfplots import PDFPlotter, BandPDFPlotter
 
 
 log = logging.getLogger(__name__)

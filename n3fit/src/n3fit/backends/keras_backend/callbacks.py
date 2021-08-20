@@ -67,7 +67,7 @@ class StoppingCallback(Callback):
         stopping_object: Stopping
             instance of Stopping which controls when the fit should stop
         log_freq: int
-            each how manwy epochs the ``print_stats`` argument of ``stopping_object``
+            each how many epochs the ``print_stats`` argument of ``stopping_object``
             will be set to true
     """
 

@@ -2,18 +2,17 @@
 A module that reads and writes LHAPDF grids.
 """
 
+import logging
 import os
 import os.path as osp
-import shutil
-import logging
 import pathlib
-
-import numpy as np
-import pandas as pd
-from reportengine.compat import yaml
+import shutil
 
 import lhapdf
+import numpy as np
+import pandas as pd
 
+from reportengine.compat import yaml
 from validphys import lhaindex
 from validphys.core import PDF
 
@@ -182,10 +181,9 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
         if irep in loaded_grids:
             grid = loaded_grids[irep]
         else:
-            header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
+            _header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
             loaded_grids[irep] = grid
         grids.append(grid)
-
     # This takes care of failing if headers don't match
     try:
         M = rep_matrix(grids)
@@ -193,6 +191,7 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
         raise ValueError("Null values found in replica grid matrix. "
                          "This may indicate that the headers don't match"
                          "If this is intentional try using use_rep0grid=True") from e
+    header = b'PdfType: central\nFormat: lhagrid1\n'
     write_replica(0, set_root, header, M.mean(axis=1))
 
 def new_pdf_from_indexes(
@@ -280,20 +279,25 @@ def new_pdf_from_indexes(
         shutil.copytree(set_root, newpath)
 
 
-def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
-                         extra_fields=None):
+def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None):
     """Construct a new LHAPDF grid from a linear combination of members"""
 
     # preparing output folder
     neig = V.shape[1]
 
-    base = pathlib.Path(lhapdf.paths()[-1])  / str(pdf)
+    base = pathlib.Path(lhapdf.paths()[-1])  / pdf.name
     if set_name is None:
-        set_name = str(pdf) + "_hessian_" + str(neig)
+        set_name = pdf.name + "_hessian_" + str(neig)
     if folder is None:
         folder = ''
     set_root = pathlib.Path(folder) / set_name
-    if not os.path.exists(set_root): os.makedirs(os.path.join(set_root))
+    # In case a Hessian PDF of the same name already exists, we first remove it. Not doing this
+    # can lead to the wrong result if Neig is not the same between both PDF sets.
+    if os.path.exists(set_root):
+        shutil.rmtree(set_root)
+        log.warning("Target directory for new PDF, %s, already exists. " "Removing contents.",
+                set_root,)
+    os.makedirs(os.path.join(set_root))
 
     # copy replica 0
     shutil.copy(base/f'{pdf}_0000.dat', set_root / f"{set_name }_0000.dat")
@@ -313,10 +317,10 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
         if extra_fields is not None:
             yaml.dump(extra_fields, out, default_flow_style=False)
 
-    headers, grids = load_all_replicas(pdf, db=db)
+    _headers, grids = load_all_replicas(pdf)
     result  = (big_matrix(grids).dot(V)).add(grids[0], axis=0, )
     hess_header = b"PdfType: error\nFormat: lhagrid1\n"
     for column in result.columns:
         write_replica(column + 1, set_root, hess_header, result[column])
-
+    log.info("Hessian PDF stored at %s", set_root)
     return set_root

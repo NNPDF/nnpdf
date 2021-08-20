@@ -265,20 +265,18 @@ def check_hyperopt_stopping(stopping_dict):
         if min_ep is None or max_ep is None:
             raise CheckError("Need to set both the max_epochs and the min_epochs")
         if min_ep < 1:
-            raise CheckError(f"Can't run for less than 1 epoch: " "selected min_ep = {min_ep}")
+            raise CheckError(f"Can't run for less than 1 epoch: selected min_ep = {min_ep}")
         if max_ep <= min_ep:
             raise CheckError(f"min_epochs cannot be greater than max_epochs: ({min_ep} > {max_ep})")
     min_pat = stopping_dict.get("min_patience")
     max_pat = stopping_dict.get("max_patience")
     if min_pat is not None or max_pat is not None:
         if min_pat is not None and min_pat < 0.0:
-            raise CheckError(
-                f"min_patience cannot be less than 0.0: " "selected min_pat = {min_pat}"
-            )
+            raise CheckError(f"min_patience cannot be less than 0.0: selected min_pat = {min_pat}")
         if max_pat is not None:
             if max_pat > 1.0:
                 raise CheckError(
-                    f"max_patience cannot be greater than 1.0: " "selected max_pat = {max_pat}"
+                    f"max_patience cannot be greater than 1.0: selected max_pat = {max_pat}"
                 )
             if min_pat is not None and max_pat < min_pat:
                 raise CheckError(
@@ -287,23 +285,23 @@ def check_hyperopt_stopping(stopping_dict):
 
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
+def wrapper_hyperopt(hyperopt, hyperscan_config, kfold, genrep, data):
     """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
-        return None
+        return
     if genrep:
         raise CheckError("Generation of replicas is not accepted during hyperoptimization")
-    if hyperscan is None:
-        raise CheckError("Can't perform hyperoptimization without the hyperscan key")
-    if "kfold" not in hyperscan:
-        raise CheckError("The hyperscan::kfold dictionary is not defined")
-    check_hyperopt_stopping(hyperscan.get("stopping"))
-    check_hyperopt_architecture(hyperscan.get("architecture"))
-    check_hyperopt_positivity(hyperscan.get("positivity"))
-    check_kfold_options(hyperscan["kfold"])
-    check_correct_partitions(hyperscan["kfold"], data)
+    if hyperscan_config is None:
+        raise CheckError("Can't perform hyperoptimization without the hyperscan_config key")
+    if kfold is None:
+        raise CheckError("Can't perform hyperoptimization without folds")
+    check_hyperopt_stopping(hyperscan_config.get("stopping"))
+    check_hyperopt_architecture(hyperscan_config.get("architecture"))
+    check_hyperopt_positivity(hyperscan_config.get("positivity"))
+    check_kfold_options(kfold)
+    check_correct_partitions(kfold, data)
 
 
 def check_sumrules(sum_rules):
@@ -350,31 +348,31 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
 
 
 @make_argcheck
-def can_run_multiple_replicas(replicas, genrep, parallel_models):
-    """Checks whether a runcard which is trying to run several replicas at once
-    (parallel_models =/= 1) is valid
+def check_consistent_parallel(hyperopt, parameters, parallel_models, same_trvl_per_replica):
+    """Checks whether the multiple-replica fit options are consistent among them
+    i.e., that the trvl seed is fixed, hyperopt is not on and the layer type is correct
     """
-    rp = len(replicas)
-    if rp > 1 and not genrep:
-        raise CheckError(
-            "Can't run more than one replica at once if no replicas are to be generated"
-        )
-    if rp > 1 and parallel_models != 1:
-        raise CheckError("Parallel mode cannot be used together with multireplica runs")
-
-@make_argcheck
-def can_run_parallel_replicas(genrep, parameters, hyperopt, parallel_models):
-    """Checks whether a runcard which is trying to run several replicas at once
-    (parallel_models =/= 1) is valid
-    """
-    if parallel_models == 1:
+    if not parallel_models:
         return
+    if not same_trvl_per_replica:
+        raise CheckError(
+            "Replicas cannot be run in parallel with different training/validation "
+            " masks, please set `same_trvl_per_replica` to True in the runcard"
+        )
     if hyperopt:
         raise CheckError("Running replicas in parallel with hyperopt is still not supported")
-    if genrep:
-        raise CheckError("Replica generation is not supported yet for parallel models")
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
+
+
+@make_argcheck
+def can_run_multiple_replicas(replicas, parallel_models):
+    """Warns the user if trying to run just one replica in parallel"""
+    if not parallel_models:
+        return
+    if len(replicas) == 1:
+        log.warning("parallel_models is set to true for only one replica")
+        return
 
 
 @make_argcheck

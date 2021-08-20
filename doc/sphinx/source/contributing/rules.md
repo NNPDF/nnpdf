@@ -3,8 +3,6 @@
 ```
 # Code development 
 
-*Author: Cameron Voisey, 13/10/2019*
-
 Code development is carried out using Github. 
 For more information on the Git workflow that NNPDF adopts, see the [Git and GitHub](./git.md) section.
 

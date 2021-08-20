@@ -3,7 +3,6 @@
 """
 import numpy as np
 from n3fit.layers import losses
-from n3fit.backends import operations as op
 from .test_backend import are_equal, DIM
 
 ARR1 = np.random.rand(DIM)

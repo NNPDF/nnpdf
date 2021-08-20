@@ -1,0 +1,9 @@
+pdf: NNPDF31_nlo_as_0118
+
+Neig: 100
+Q: 1.651
+
+installgrid: True
+
+actions_:
+  - mc2hessian
