@@ -122,10 +122,12 @@ Contents
    ./buildmaster.md
    data/index
    theory/index
+   contributing/index
    ci/index
    serverconf/index
    external-code/index
    tutorials/index
+   contrubuting/index
    internal/index
 
 Bibliography
