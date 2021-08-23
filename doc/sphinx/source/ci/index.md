@@ -10,15 +10,15 @@ on the code and produce [binary builds](conda) which allow it to be
 automatically deployed. The services are configured so that they react to
 [git](git) pushes to the GitHub server.
 
-Currently we are using actively [GitHub Actions](https://help.github.com/en/actions).  We benefit
-from using it for free (because we asked nicely and we got a 100% off forever), but it is typically paid for
-private repositories. The [Travis CI](https://travis-ci.com/) service was used in the past, but thanks to timeout failures on Mac we have decided to move the CI to GitHub Actions. The [Gitlab CI service hosted at
-CERN](https://gitlab.cern.ch/) was used in the past, but support was
+Currently we are using actively [GitHub Actions](https://help.github.com/en/actions).  
+In the past, the [Travis CI](https://travis-ci.com/) service was used in the past, but thanks to timeout failures on Mac we have decided to move the CI to GitHub Actions.
+The [Gitlab CI service hosted at
+CERN](https://gitlab.cern.ch/) was also used in the past, but support was
 discontinued due to the burden of requiring everyone to have a CERN account.
 
 Furthermore, we implement a self-hosted runner for GitHub Actions for long duration workflows, such as running a full fit pipeline.
 
-## Operation of Travis CI tools
+## Operation of CI tools
 
 Our CI service works roughly as follows:
 
@@ -67,8 +67,9 @@ The secrets are.
 
 ### Repository configuration
 
-The main entry point for GitHub Actions is a file called
-[`.github/workflows/rules.yml`](https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/.rules.yml). It specifies which operating systems and versions are tested, which
+The entry point for GitHub Actions are yaml rules files that can be found in the 
+[`.github/workflows/`](https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/) folder.
+They specify which operating systems and versions are tested, which
 versions of Python, some environment variables, and command instructions for linux and macos. The commands basically call `conda build` and upload the relevant packages if required.
 
 By default only packages corresponding to commits to the master branch get
@@ -77,12 +78,7 @@ discarded in the end. This behavior can be changed by (temporarily) commenting t
 useful to test modifications to the uploading.
 
 
-Linux builds are executed on top of a [docker image](https://www.docker.com/)
-which is defined by the configuration file under [the `docker`
-folder](https://github.com/NNPDF/nnpdf/tree/master/docker). This is mostly for
-historical reasons.
-
-## Operation of GitHub Actions
+## Operation of automatic fit bot
 
 Our GitHub Action service implements:
 
