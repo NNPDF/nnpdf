@@ -24,7 +24,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install macOS SDK
-      if: runner.os == 'macOS'
+      if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
       run: |
         conda activate test
@@ -41,13 +41,13 @@ jobs:
         conda activate test
         conda install conda-build --yes
     - name: Build recipe and run tests on linux
-      if: runner.os == 'ubuntu'
+      if: startsWith(matrix.os, 'ubuntu')
       shell: bash -l {0}
       run: |
         conda activate test
         conda build -q conda-recipe
     - name: Build recipe and run tests on macOS
-      if: runner.os == 'macOS'
+      if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
       run: |
         conda activate test
