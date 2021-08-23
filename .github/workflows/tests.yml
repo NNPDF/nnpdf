@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.7]
+        python-version: [3.8]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
@@ -20,15 +20,14 @@ jobs:
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
     steps:
     - uses: actions/checkout@v1
-    - uses: goanpeca/setup-miniconda@v1
+    - uses: conda-incubator/setup-miniconda@v2
       with:
-        auto-update-conda: true
         python-version: ${{ matrix.python-version }}
     - name: Install macOS SDK
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
       run: |
-        conda activate root
+        conda activate test
         curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
         tar xfz MacOSX10.9.sdk.tar.xz -C $CONDA_PREFIX
     - name: Setup conda and install conda-build
@@ -39,19 +38,19 @@ jobs:
         conda config --prepend channels https://packages.nnpdf.science/conda
         conda config --prepend channels https://packages.nnpdf.science/conda-private
         conda config --set show_channel_urls true
-        conda activate root
+        conda activate test
         conda install conda-build --yes
     - name: Build recipe and run tests on linux
       if: startsWith(matrix.os, 'ubuntu')
       shell: bash -l {0}
       run: |
-        conda activate root
+        conda activate test
         conda build -q conda-recipe
     - name: Build recipe and run tests on macOS
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
       run: |
-        conda activate root
+        conda activate test
         export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/MacOSX10.9.sdk
         conda build -q conda-recipe
     - name: Upload conda package to NNPDF server
@@ -60,7 +59,7 @@ jobs:
       run: |
         KEY=$( mktemp )
         echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
-        conda activate root
+        conda activate test
         scp -i "$KEY" -o StrictHostKeyChecking=no\
           $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
           dummy@packages.nnpdf.science:~/packages/conda-private/${{matrix.CONDA_OS}}
@@ -70,7 +69,7 @@ jobs:
       run: |
         KEY=$( mktemp )
         echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
-        conda activate root
+        conda activate test
         conda install nnpdf --yes
         cd doc/sphinx
         make html
