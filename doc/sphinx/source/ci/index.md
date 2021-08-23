@@ -11,7 +11,7 @@ automatically deployed. The services are configured so that they react to
 [git](git) pushes to the GitHub server.
 
 Currently we are using actively [GitHub Actions](https://help.github.com/en/actions).  
-In the past, the [Travis CI](https://travis-ci.com/) service was used in the past, but thanks to timeout failures on Mac we have decided to move the CI to GitHub Actions.
+In the past, the [Travis CI](https://travis-ci.com/) service was used, but owing to timeout failures on Mac we have decided to move the CI to GitHub Actions.
 The [Gitlab CI service hosted at
 CERN](https://gitlab.cern.ch/) was also used in the past, but support was
 discontinued due to the burden of requiring everyone to have a CERN account.
