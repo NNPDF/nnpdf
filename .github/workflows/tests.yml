@@ -12,8 +12,8 @@ jobs:
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
-          - os: macos-latest
-            CONDA_OS: osx-64
+#           - os: macos-latest
+#             CONDA_OS: osx-64
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
