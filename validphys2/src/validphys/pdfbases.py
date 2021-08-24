@@ -606,6 +606,20 @@ def ud_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
+@scalar_function_transformation(label="d/u")
+def du_ratio(func, xmat, qmat):
+    gv = func([1, 2], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
+@scalar_function_transformation(label="d/u")
+def dbarubar_ratio(func, xmat, qmat):
+    gv = func([-1, -2], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
   
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
