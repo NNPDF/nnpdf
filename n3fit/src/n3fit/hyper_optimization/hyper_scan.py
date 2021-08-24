@@ -12,16 +12,6 @@ another hyperoptimization library, assuming that it also takes just
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the miniimization).
 """
-# TODO: make this part of Report Engine
-# in principle Report Engine would be reading everything from the runcard and then providing
-# basically a list of strings or similar to ModelTrainer, which would in turn make them into
-# the keras/tensorflow/whatever objects it needs.
-# If the --hpyeropt flag is active, then report engine should return a sampler from the dict
-# basically returning the wrapper functions defined below
-# (but instead of simply calling the hyperopt ones having done some checks on them)
-# even more, depending on the syntax of the fitting part of the runcard,
-# it should do one thing or another but the design of this needs someone who is actually good at UX
-
 import copy
 import hyperopt
 import numpy as np

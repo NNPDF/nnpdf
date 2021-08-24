@@ -113,6 +113,15 @@ void ATLAS_hxsec_RunIIFilter::ReadData()
 	}
     } 
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] corrmat[i];
+    }
+  delete[] Sys;
+  delete[] syscor;
+  delete[] corrmat;
+  
   f1.close();
   f2.close();
 

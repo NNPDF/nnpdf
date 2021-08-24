@@ -27,7 +27,6 @@ LODatasets: &LODatasets
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}  
-#- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75}
 - {dataset: DYE886P, frac: 0.75, cfac: []}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: []}
@@ -43,12 +42,8 @@ LODatasets: &LODatasets
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: []}
 - {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: []} 
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM]}
-#- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}         
-#- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75, cfac: []}
-#- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: []}  # zero contribution at LO
-#- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: []}  # zero contribution at LO
 - {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: []}
 - {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: []}
 - {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 0.75, cfac: []}
@@ -68,9 +63,8 @@ LODatasets: &LODatasets
 - {dataset: CMSWMASY47FB, frac: 0.75, cfac: []}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: []}
 - {dataset: CMSWMU8TEV, frac: 0.75, cfac: []}
-#- {dataset: CMSZDIFF12, frac: 0.75, cfac: [NRM]}     # zero contribution at LO
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: []}
-- {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: []}
+- {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: []}
@@ -113,8 +107,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: HERACOMBNCEP820, frac: 0.75}
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
-- {dataset: HERACOMBCCEP, frac: 0.75}  
-#- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+- {dataset: HERACOMBCCEP, frac: 0.75}   
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
@@ -130,12 +123,6 @@ NNLODatasets: &NNLODatasets
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
 - {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
-# - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
-# - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
-# - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-# - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-# - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10} # zreo contribution at LO
-# - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10} # zero contribution at LO
 - {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 0.75, cfac: [QCD]}
@@ -157,7 +144,7 @@ NNLODatasets: &NNLODatasets
 - {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
 - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}
-- {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}
@@ -169,9 +156,6 @@ NNLODatasets: &NNLODatasets
 - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
-# - {dataset: CMSWCHARMTOT, frac: 0.75} # No Cfactors at NNLO
-# - {dataset: CMSWCHARMRAT, frac: 0.75} # No Cfactors at NNLO
-# - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV, frac: 0.75} # No Cfactors at NNLO
 - {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}

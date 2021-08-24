@@ -1,7 +1,12 @@
 dataset_label: ATLAS DY 2D 8 TeV high mass
 experiment: ATLAS
 figure_by:
-- k2
+  - k2 
+
+x_label: '$|y_{\ell\ell}|$'
+
+kinematics_override: ewk_rap_sqrt_scale
+
 nnpdf31_process: DY
 spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1

@@ -72,7 +72,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     # List of length 1 due to the collect
     context_index = context_index[0]
     # The [0] is because of how pandas handles sorting a MultiIndex
-    sorted_index = context_index.sortlevel(level=range(3))[0]
+    sorted_index = context_index.sortlevel(level=range(1,3))[0]
 
     pdf = fitcontext["pdf"]
     log.debug(f"Using same pseudodata & training/validation splits as {pdf.name}.")
@@ -101,7 +101,7 @@ def read_fit_pseudodata(fitcontext, context_index):
         tr["type"], val["type"] = "training", "validation"
 
         pseudodata = pd.concat((tr, val))
-        pseudodata.sort_index(level=range(3), inplace=True)
+        pseudodata.sort_index(level=range(1,3), inplace=True)
 
         pseudodata.index = sorted_index
 
@@ -115,7 +115,7 @@ def read_fit_pseudodata(fitcontext, context_index):
     return data_indices_list
 
 
-def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):
+def make_replica(dataset_inputs_loaded_cd_with_cuts, replica_mcseed):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -153,7 +153,7 @@ def make_replica(dataset_inputs_loaded_cd_with_cuts, seed=None):
         0.34843355, 0.34730928, 0.3090914 , 0.32825111, 0.3485292 ,
     """
     # Seed the numpy RNG with the seed.
-    rng = np.random.default_rng(seed=seed)
+    rng = np.random.default_rng(seed=replica_mcseed)
 
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica

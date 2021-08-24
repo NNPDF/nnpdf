@@ -1,6 +1,5 @@
 How to include a theory covariance matrix in a fit
 ==================================================
-:Author: Contact Rosalyn (r.l.pearson@ed.ac.uk) for further information.
 
 This section details how to include :ref:`scale variation covariance matrices (covmats) <vptheorycov-index>`
 in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the
@@ -49,6 +48,11 @@ Next, add necessary flags to the runcard
 .. warning::
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
+      
+.. warning::
+	Theory covariance matrices can currently only be included using the legacy `nnfit` code.
+	When running `vp-setupfit` you need to include the `--legacy` flag
+
 
 If you want to compare data to another fit
 ------------------------------------------

@@ -5,3 +5,7 @@ spiderplot_group: LHC W,Z prod. (inclusive)
 x: k2
 y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
 y_scale: log
+
+kinematics_override: ewk_mll_sqrt_scale
+
+nnpdf31_process: DY

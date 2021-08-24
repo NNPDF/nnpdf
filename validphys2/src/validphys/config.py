@@ -10,7 +10,7 @@ import functools
 import inspect
 import numbers
 import copy
-import os
+import glob
 from importlib.resources import read_text, contents
 
 from collections import ChainMap, defaultdict
@@ -218,6 +218,15 @@ class CoreConfig(configparser.Config):
 
         return res
 
+    def produce_inclusive_use_scalevar_uncertainties(self, use_scalevar_uncertainties: bool = False,
+                                        point_prescription: (str, None) = None):
+        """Whether to use a scale variation uncertainty theory covmat.
+        Checks whether a point prescription is included in the runcard and if so 
+        assumes scale uncertainties are to be used."""
+        if ((not use_scalevar_uncertainties) and (point_prescription is not None)):
+                use_scalevar_uncertainties = True
+        return use_scalevar_uncertainties
+
     # TODO: load fit config from here
     @element_of("fits")
     @_id_with_label
@@ -257,6 +266,22 @@ class CoreConfig(configparser.Config):
             _, datacuts = self.parse_from_("fit", "closuretest", write=False)
         underlyinglaw = self.parse_pdf(datacuts["fakepdf"])
         return {"pdf": underlyinglaw}
+
+    @element_of("hyperscans")
+    def parse_hyperscan(self, hyperscan):
+        """A hyperscan in the hyperscan_results folder, containing at least one tries.json file"""
+        try:
+            return self.loader.check_hyperscan(hyperscan)
+        except LoadFailedError as e:
+            raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
+
+    def parse_hyperscan_config(self, hyperscan_config):
+        """Configuration of the hyperscan"""
+        if "from_hyperscan" in hyperscan_config:
+            hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
+            log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
+            return hyperscan.as_input().get("hyperscan_config")
+        return hyperscan_config
 
     def produce_multiclosure_underlyinglaw(self, fits):
         """Produce the underlying law for a set of fits. This allows a single t0
@@ -897,19 +922,46 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {"lumi_channels": self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    def produce_loaded_user_covmat_path(self, user_covmat_path: str = "",
+                                        use_user_uncertainties: bool = False):
+        """
+        Path to the user covmat provided by user_covmat_path in the runcard.
+        If no path is provided, returns None.
+        For use in theorycovariance.construction.user_covmat.
+        """
+        if not use_user_uncertainties:
+            return None
+        else:
+            l = self.loader
+            fileloc = l.check_vp_output_file(user_covmat_path)
+            return fileloc
+
+
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self,
         use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool
+        use_thcovmat_in_fitting: bool,
+        inclusive_use_scalevar_uncertainties,
+        use_user_uncertainties: bool = False
     ):
         """
         Return the theory covariance matrix used in the fit.
         """
-        from validphys.theorycovariance.construction import theory_covmat_custom_fitting
-
-        f = theory_covmat_custom_fitting
-
+        if inclusive_use_scalevar_uncertainties:
+            if use_user_uncertainties:
+                # Both scalevar and user uncertainties
+                from validphys.theorycovariance.construction import total_theory_covmat_fitting
+                f = total_theory_covmat_fitting
+            else: 
+                # Only scalevar uncertainties
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+                f = theory_covmat_custom_fitting
+        elif use_user_uncertainties:
+            # Only user uncertainties
+            from validphys.theorycovariance.construction import user_covmat_fitting
+            f = user_covmat_fitting
+     
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
@@ -951,18 +1003,24 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected path of covmat hardcoded
+            # Expected directory of theory covmat hardcoded
             covmat_path = (
                 fit.path
                 / "tables"
-                / "datacuts_theory_theorycovmatconfig_theory_covmat.csv"
             )
-            if not os.path.exists(covmat_path):
+            # All possible valid files
+            covfiles = sorted(covmat_path.glob("*theory_covmat.csv"))
+            if not covfiles:
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
+                )                
+            if len(covfiles) > 1:
+                raise ConfigError(
+                    "More than one valid theory covmat file found at the "
+                    f"usual location: {covmat_path}. These are {covfiles}."
                 )
-            fit_theory_covmat = ThCovMatSpec(covmat_path)
+            fit_theory_covmat = ThCovMatSpec(covfiles[0])
         else:
             fit_theory_covmat = None
         return fit_theory_covmat

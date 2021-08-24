@@ -26,9 +26,7 @@ import shutil
 import pathlib
 import logging
 import subprocess as sp
-from collections import namedtuple
 from numpy.testing import assert_equal, assert_allclose
-from reportengine.compat import yaml
 import n3fit
 from validphys.n3fit_data import replica_trvlseed, replica_nnseed, replica_mcseed
 

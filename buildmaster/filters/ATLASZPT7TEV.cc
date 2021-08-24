@@ -79,7 +79,7 @@ void ATLASZPT7TEVFilter::ReadData()
   double corrmat3[DataBin][DataBin];
   for(int i = 0; i < DataBin; i++)
     {
-      covmat[i] = new double[fNData];
+      //covmat[i] = new double[fNData];
       getline(c1,line1);
       getline(c2,line2);
       getline(c3,line3);
@@ -116,7 +116,14 @@ void ATLASZPT7TEVFilter::ReadData()
   	  fSys[i][l].type = MULT;
   	  fSys[i][l].name = "CORR";
   	}
-
+  
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
 
   f1.close();
   c1.close();

@@ -46,6 +46,10 @@ members:
 * Emanuele R. Nocera - University of Edinburgh 
 * Rosalyn Pearson - University of Edinburgh
 * Juan Rojo - Nikhef Theory Group and VU University
+* Roy Stegeman - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
+* Christopher Schwan - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
 * Maria Ubiali - University of Cambridge
 * Cameron Voisey - University of Cambridge
 * Michael Wilson - University of Edinburgh
@@ -53,6 +57,8 @@ members:
 Former members of the NNPDF collaboration include
 
 * Valerio Bertone
+* Francesco Cerutti
+* Christopher S. Deans
 * Alberto Guffanti
 * Patrick Groth-Merrild
 * Nathan P. Hartland
@@ -94,7 +100,10 @@ The NNPDF publications
   Uncertainties"*, Rabah Abdul Khalek, Richard D. Ball, Stefano
   Carrazza, Stefano Forte, Tommaso Giani, Zahari Kassabov,
   Emanuele R. Nocera, Rosalyn L. Pearson, Juan Rojo, Luca Rottoli,
-  Maria Ubiali, Cameron Voise, and Michael Wilson :cite:p:`AbdulKhalek:2019ihb`
+  Maria Ubiali, Cameron Voisey, and Michael Wilson
+  :cite:p:`AbdulKhalek:2019ihb`
+* *"Towards a new generation of parton densities with deep learning
+  models"*, Stefano Carrazza and Juan Cruz-Martinez :cite:p:`Carrazza:2019mzf`
 * *"Parton distributions from high-precision collider data"*,
   Richard D. Ball, Valerio Bertone, Stefano Carrazza, Luigi Del
   Debbio, Stefano Forte, Patrick Groth-Merrild, Alberto Guffanti,
@@ -113,11 +122,12 @@ Contents
    ./buildmaster.md
    data/index
    theory/index
+   contributing/index
    ci/index
    serverconf/index
    external-code/index
    tutorials/index
-   ./sphinx-documentation.md
+   internal/index
 
 Bibliography
 ============

@@ -16,8 +16,6 @@ from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.checks import check_pdf_normalize_to, check_xlimits
 
-ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
-
 @make_argcheck
 def _check_scale(scale):
     scales = ('linear', 'log')
@@ -152,7 +150,7 @@ def lumigrid1d(
     pdf: PDF,
     lumi_channel,
     sqrts: numbers.Real,
-    nbins_m: int = 30,
+    nbins_m: int = 40,
     mxmin: numbers.Real = 10,
     mxmax: (type(None), numbers.Real) = None,
     scale="log",
@@ -171,7 +169,7 @@ def lumigrid1d(
     """
     s = sqrts*sqrts
     if mxmax is None:
-        mxmax = sqrts/10
+        mxmax = sqrts/3
     if scale=="log":
         mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
     elif scale=="linear":

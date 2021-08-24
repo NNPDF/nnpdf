@@ -219,13 +219,13 @@ void  CMS_TTBAR_2D_DIFF_PT_TRAP_NORMFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
     }
-  
-  for(int i=0; i<fNData; i++)
-   {
-     delete [] covmat[i]; 
-     delete [] syscor[i];
-   }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  
   delete [] covmat; 
   delete [] syscor;
   

@@ -1,7 +1,10 @@
 dataset_label: CMS Drell-Yan 2D 7 TeV 2011
 experiment: CMS
 figure_by:
-- k2
+  - k2 
+
+kinematics_override: ewk_mll_sqrt_scale
+
 nnpdf31_process: DY
 spiderplot_group: LHC W,Z prod. (inclusive)
 x: k1

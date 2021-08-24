@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import pandas as pd
 
-from reportengine.checks import make_argcheck
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect

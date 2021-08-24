@@ -1,10 +1,8 @@
  .. _vptheorycov-index:
  
-The theorycovariance module
+The `theorycovariance` module
 ===============================
 
-:Author: Rosalyn Pearson (r.l.pearson@ed.ac.uk)
-  
 The ``theorycovariance`` module deals with constructing, testing and 
 outputting theory covariance matrices (covmats). Primarily, it is concerned
 with scale variation covariance matrices used to model missing higher order

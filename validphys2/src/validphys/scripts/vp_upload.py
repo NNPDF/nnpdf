@@ -4,8 +4,8 @@ Upload a resource to the NNPDF server.
 The script automatically detects (:py:func:`validphys.uploadutils.check_input`)
 the type of the input.
 
- - A ``fit`` is defined to be any folder structure that contains a ``filter.yml``
-   file at its root
+ - A ``fit`` is defined to be any folder structure that contains a ``filter.yml`` file at its root
+ - A ``hyperscan`` is a ``fit`` that contains ``tries.json`` file without a ``postfit`` folder.
  - a ``PDF`` is any folder containing a ``.info`` file at the root and a replica 0
  - a report is any such structure containing an ``index.html`` file at the root.
 
@@ -20,7 +20,12 @@ import sys
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description=__doc__)
+    # Parse the __doc__ str to remove the rtd formatting
+    doc_help = __doc__.replace("``", "'")
+    doc_help = doc_help.replace("(:py:func:`validphys.uploadutils.check_input`)\n", "")
+    parser = argparse.ArgumentParser(
+        description=doc_help, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument('output', help="Folder to upload.")
     parser.add_argument(
         '-i',
@@ -59,6 +64,7 @@ def main():
 
     uploader_dict = {
             'report': uploadutils.ReportUploader,
+            'hyperscan': uploadutils.HyperscanUploader,
             'fit': uploadutils.FitUploader,
             'pdf': uploadutils.PDFUploader
     }
