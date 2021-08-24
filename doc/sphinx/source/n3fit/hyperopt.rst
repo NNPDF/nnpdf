@@ -1,4 +1,6 @@
-================================ 
+.. _hyperoptimization:
+
+================================
 Hyperoptimization algorithm
 ================================
 
@@ -77,10 +79,10 @@ An example of a DIS fit using this loss function can be found here: [`best worst
   \begin{array}{lr}
          std(\{\chi^{2}\}) & \text{  if } avg(\chi^2) < \text{ threshold } \\
          \infty & \text{otherwise}
-  \end{array} 
+  \end{array}
   \right.
-  
-An example of a DIS fit using this loss function with the threshold :math:`\chi^2` set to 2.0 
+
+An example of a DIS fit using this loss function with the threshold :math:`\chi^2` set to 2.0
 can be found here: [`best std <https://vp.nnpdf.science/vcPtqM8KSXCVB2GheENd8Q==>`_].
 It can be selected in the runcard using the target ``std``.
 

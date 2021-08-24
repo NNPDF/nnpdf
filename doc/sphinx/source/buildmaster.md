@@ -1,3 +1,7 @@
+```eval_rst
+.. _buildmaster:
+```
+
 ## Handling experimental data: Buildmaster
 
 Buildmaster is the code that allows the user to generate the ``DATA`` and
