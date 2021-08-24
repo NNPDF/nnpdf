@@ -613,7 +613,7 @@ def du_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
-@scalar_function_transformation(label="d/u")
+@scalar_function_transformation(label=r"\bar{d}/\bar{u}")
 def dbarubar_ratio(func, xmat, qmat):
     gv = func([-1, -2], xmat, qmat)
     num = gv[:, [0], ...]
