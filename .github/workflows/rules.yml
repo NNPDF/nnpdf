@@ -17,18 +17,27 @@ jobs:
   build:
     # perform build only if PR has run-fit-bot label
     if: contains(github.event.pull_request.labels.*.name, 'run-fit-bot')
-    runs-on: self-hosted # uses our custom runner based on ubuntu
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
+    runs-on: ${{ matrix.os }}
     steps:
-    # ugly but needed: cleanup runner workspace before starting
-    - name: Cleanup workspace
-      run: |
-        rm -rf ~/miniconda3/conda-bld
-        rm -rf ~/miniconda3/envs/*
-        rm -rf "${{ github.workspace }}"
-    # clone repo
     - uses: actions/checkout@v1
-    # build conda package without running tests
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup conda and install conda-build
+      shell: bash -l {0}
+      run: |
+        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        conda config --append channels conda-forge
+        conda config --prepend channels https://packages.nnpdf.science/conda
+        conda config --prepend channels https://packages.nnpdf.science/conda-private
+        conda config --set show_channel_urls true
+        conda install conda-build --yes
     - name: Build recipe
+      shell: bash -l {0}
       run: |
         CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
     # install local build
