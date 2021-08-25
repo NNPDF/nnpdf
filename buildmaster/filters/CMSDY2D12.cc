@@ -90,6 +90,14 @@ void CMSDY2D12Filter::ReadData()
     fSys[i][fNSys-1].name = "CMSLUMI12";
   }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }

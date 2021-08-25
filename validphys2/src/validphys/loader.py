@@ -681,7 +681,7 @@ class RemoteLoader(LoaderBase):
     @property
     @_key_or_loader_error
     def hyperscan_url(self):
-        return [self.nnprofile['hyperscan_root_url']]
+        return self.nnprofile['hyperscan_urls']
 
     @property
     @_key_or_loader_error
@@ -959,7 +959,7 @@ class RemoteLoader(LoaderBase):
             download_file(url, self._vp_cache()/filename, make_parents=True)
         except requests.HTTPError as e:
             if e.response.status_code == requests.codes.not_found:
-                raise RemoteLoaderError(f"Ressource {filename} could not "
+                raise RemoteLoaderError(f"Resource {filename} could not "
                                         f"be found on the validphys "
                                         f"server {url}") from e
             elif e.response.status_code == requests.codes.unauthorized:

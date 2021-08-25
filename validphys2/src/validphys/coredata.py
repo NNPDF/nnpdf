@@ -162,9 +162,9 @@ class CommonData:
     commondataproc: str
     nkin: int
     nsys: int
-    commondata_table: pd.DataFrame
-    systype_table: pd.DataFrame
-    systematics_table: pd.DataFrame = dataclasses.field(init=None)
+    commondata_table: pd.DataFrame = dataclasses.field(repr=False)
+    systype_table: pd.DataFrame = dataclasses.field(repr=False)
+    systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(

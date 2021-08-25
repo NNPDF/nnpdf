@@ -21,7 +21,7 @@ from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
 from validphys.core import PDF, FitSpec
-from validphys.pdfbases import check_basis, Basis, UnknownElement
+from validphys.pdfbases import check_basis, Basis
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids

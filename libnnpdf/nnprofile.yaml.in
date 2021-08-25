@@ -11,6 +11,10 @@ fit_urls:
     - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
 
 fit_index: 'fitdata.json'
+
+hyperscan_urls:
+  - 'https://data.nnpdf.science/hyperscans/'
+
 hyperscan_index: 'hyperscandata.json'
 
 theory_urls:

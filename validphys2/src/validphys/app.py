@@ -51,6 +51,7 @@ providers = [
              'validphys.hyperoptplot',
              'validphys.deltachi2',
              'validphys.n3fit_data',
+             'validphys.mc2hessian',
              'reportengine.report',
             ]
 

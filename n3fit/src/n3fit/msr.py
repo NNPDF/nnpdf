@@ -6,7 +6,6 @@ import numpy as np
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations as op
-from n3fit.backends import MetaModel
 
 
 log = logging.getLogger(__name__)

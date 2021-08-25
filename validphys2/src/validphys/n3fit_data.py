@@ -206,9 +206,9 @@ def generate_data_replica(data, replica_mcseed):
 def fitting_data_dict(
     data,
     make_replica,
+    dataset_inputs_t0_covmat_from_systematics,
     tr_masks,
     kfold_masks,
-    t0set=None,
     diagonal_basis=None,
 ):
     """
@@ -254,16 +254,13 @@ def fitting_data_dict(
     spec_c = data.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
-    if t0set:
-        t0pdfset = t0set.load_t0()
-        spec_c.SetT0(t0pdfset)
 
     expdata = make_replica
 
     datasets = common_data_reader_experiment(spec_c, data)
 
     # t0 covmat
-    covmat = spec_c.get_covmat()
+    covmat = dataset_inputs_t0_covmat_from_systematics
     inv_true = np.linalg.inv(covmat)
 
     if diagonal_basis:

@@ -216,5 +216,5 @@ Optionally, users can provide custom metadata (:code:`title`, :code:`author`, an
 :code:`keywords`), as well as the energy scale :code:`Q` using commandline arguments. By default
 the energy scale is set to 1.7 GeV. 
 
-To run this analysis one first has to prepare the corresponding Hessian PDF set by performing a
-Monte Carlo to Hessian conversion using `mc2hessian <https://github.com/scarrazza/mc2hessian>`_.
+To run this analysis one first has to prepare the corresponding Hessian PDF set
+by performing a Monte Carlo to Hessian conversion using the :ref:`mc2hessian <mc2hessian>` action.

@@ -100,14 +100,14 @@ def test_predictions(data_config):
     # be changed.
     res_tab = API.group_result_table_no_table(**data_config)
     th = res_tab.iloc[:, 2:].values
-    return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
+    return pd.DataFrame(th, columns=map(str, range(th.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
 def test_dataset_t0_predictions(data_witht0_config):
     # TODO: As in `test_predictions`
     res_tab = API.group_result_table_no_table(**data_witht0_config)
     th = res_tab.iloc[:, 2:].values
-    return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
+    return pd.DataFrame(th, columns=map(str, range(th.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
 def test_cv(data_config):

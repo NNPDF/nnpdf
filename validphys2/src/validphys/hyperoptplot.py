@@ -7,7 +7,6 @@
 # and the older pre-vp hyperopt stuff, which can be considered deprecated but it is
 # still used for the plotting script
 
-
 import os
 import re
 import glob

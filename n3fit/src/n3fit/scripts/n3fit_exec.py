@@ -32,6 +32,7 @@ N3FIT_PROVIDERS = [
     "validphys.results",
     "validphys.n3fit_data",
     "validphys.pseudodata",
+    "validphys.covmats",
     "validphys.commondata",
 ]
 

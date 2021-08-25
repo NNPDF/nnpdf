@@ -12,7 +12,6 @@ import numpy as np
 
 from reportengine.checks import CheckError
 
-from validphys.core import PDF
 from validphys.gridvalues import grid_values, central_grid_values
 
 
@@ -603,6 +602,20 @@ r'\bar{d}': {'dbar':1},
 @scalar_function_transformation(label="u/d")
 def ud_ratio(func, xmat, qmat):
     gv = func([2, 1], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
+@scalar_function_transformation(label="d/u")
+def du_ratio(func, xmat, qmat):
+    gv = func([1, 2], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
+@scalar_function_transformation(label=r"\bar{d}/\bar{u}")
+def dbarubar_ratio(func, xmat, qmat):
+    gv = func([-1, -2], xmat, qmat)
     num = gv[:, [0], ...]
     den = gv[:, [1], ...]
     return num / den

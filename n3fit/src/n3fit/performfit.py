@@ -3,7 +3,6 @@
 """
 
 # Backend-independent imports
-from collections import namedtuple
 import copy
 import logging
 import numpy as np

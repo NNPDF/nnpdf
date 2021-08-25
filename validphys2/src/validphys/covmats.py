@@ -235,8 +235,9 @@ def dataset_t0_predictions(dataset, t0set):
         1-D numpy array with predictions for each of the cut datapoints.
 
     """
-    # squeeze because the underlying data has shape ndata * 1
-    return central_predictions(dataset, t0set).to_numpy().squeeze()
+    # reshape because the underlying data has shape ndata * 1
+    # accounting for the fact that some datasets are single datapoint
+    return central_predictions(dataset, t0set).to_numpy().reshape(-1)
 
 
 def t0_covmat_from_systematics(

@@ -12,7 +12,7 @@
 from dataclasses import dataclass
 import numpy as np
 from n3fit.msr import msr_impose
-from n3fit.layers import DIS, DY, Mask, ObsRotation, losses
+from n3fit.layers import DIS, DY, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
 
 from n3fit.backends import MetaModel, Input
@@ -383,7 +383,7 @@ def pdfNN_layer_generator(
     dropout=0.0,
     regularizer=None,
     regularizer_args=None,
-    impose_sumrule=False,
+    impose_sumrule=None,
     scaler=None,
     parallel_models=1,
 ):  # pylint: disable=too-many-locals
@@ -493,6 +493,9 @@ def pdfNN_layer_generator(
     if nodes is None:
         nodes = [15, 8]
     ln = len(nodes)
+
+    if impose_sumrule is None:
+        impose_sumrule = "All"
 
     if scaler:
         inp = 1
