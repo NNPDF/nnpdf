@@ -45,7 +45,7 @@ jobs:
     # install local build
     - name: Installing NNPDF conda package
       run: |
-        conda create -n nnpdfenv -c file:///home/runner/miniconda3/conda-bld/ nnpdf
+        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
     # create fancy runcards
     - name: Preparing fit runcard
       run: |
