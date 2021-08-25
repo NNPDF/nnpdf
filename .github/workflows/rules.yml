@@ -29,6 +29,12 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.NNPDF_SSH_KEY }}
+        name: id_rsa
+        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
     - name: Setup conda and install conda-build
       shell: bash -l {0}
       run: |
@@ -78,11 +84,6 @@ jobs:
     # running postfit
     - name: Postfit and upload fit
       shell: bash -l {0}
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.NNPDF_SSH_KEY }}
-        name: id_rsa
-        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }} # will be appended to existing .ssh/known_hosts
       run: |
         conda activate nnpdfenv
         cd n3fit/runcards
