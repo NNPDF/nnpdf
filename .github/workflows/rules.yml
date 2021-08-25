@@ -44,6 +44,7 @@ jobs:
         CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
     # install local build
     - name: Installing NNPDF conda package
+      shell: bash -l {0}
       run: |
         conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
     # create fancy runcards
@@ -55,27 +56,31 @@ jobs:
         echo "RUNCARD=NNBOT-$COMMIT-$TIMESTAMP" >> $GITHUB_ENV
     # downloading theory and t0
     - name: Downloading requirements
+      shell: bash -l {0}
       run: |
-        source activate nnpdfenv
+        conda activate nnpdfenv
         cd n3fit/runcards
         cp developing.yml $RUNCARD.yml
         vp-setupfit $RUNCARD.yml
     # running n3fit replicas
     - name: Running n3fit
+      shell: bash -l {0}
       run: |
-        source activate nnpdfenv
+        conda activate nnpdfenv
         cd n3fit/runcards
         for ((i=1; i<=$N3FIT_MAXNREP; i+=2)); do n3fit $RUNCARD.yml $i -r $((i+1)); done
     # performing DGLAP
     - name: Running dglap
+      shell: bash -l {0}
       run: |
-        source activate nnpdfenv
+        conda activate nnpdfenv
         cd n3fit/runcards
         evolven3fit $RUNCARD $N3FIT_MAXNREP
     # running postfit
     - name: Postfit and upload fit
+      shell: bash -l {0}
       run: |
-        source activate nnpdfenv
+        conda activate nnpdfenv
         cd n3fit/runcards
         postfit $POSTFIT_NREP $RUNCARD
         res=$(vp-upload $RUNCARD 2>&1)
@@ -88,8 +93,9 @@ jobs:
         echo "FIT_URL=$url" >> $GITHUB_ENV
     # running validphys report
     - name: Building and upload report
+      shell: bash -l {0}
       run: |
-        source activate nnpdfenv
+        conda activate nnpdfenv
         vp-comparefits $RUNCARD $REFERENCE_SET \
                     --title "Automatic check fit $RUNCARD" \
                     --author bot \
