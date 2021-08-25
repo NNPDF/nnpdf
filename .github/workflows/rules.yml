@@ -78,6 +78,11 @@ jobs:
     # running postfit
     - name: Postfit and upload fit
       shell: bash -l {0}
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.NNPDF_SSH_KEY }}
+        name: id_rsa
+        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }} # will be appended to existing .ssh/known_hosts
       run: |
         conda activate nnpdfenv
         cd n3fit/runcards
