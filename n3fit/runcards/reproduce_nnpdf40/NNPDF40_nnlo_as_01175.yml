@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ############################################################
-description: "NNPDF4.0 NNLO global, deuteron and nuclear uncertainties. Runcard for the NNLO pert. charm fit. alphas=0.118"
+description: NNPDF4.0 NNLO global, alphas=0.1175
 
 ############################################################
 # frac: training fraction
@@ -31,7 +31,7 @@ dataset_inputs:
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC,QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC, QCD]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
@@ -41,7 +41,7 @@ dataset_inputs:
 - {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
-- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
 - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
@@ -87,25 +87,26 @@ dataset_inputs:
 - {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}
 
+
 ############################################################
 datacuts:
-  t0pdfset: 210127-n3fit-theory-003 # PDF set to generate t0 covmat
+  t0pdfset: 210716-n3fit-alphas-003   # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
 
 ############################################################
 theory:
-  theoryid: 211     # database id
+  theoryid: 203     # database id
 
 ############################################################
-trvlseed: 475038818
-nnseed: 2394641471
-mcseed: 1831662593
+trvlseed: 1444683225
+nnseed: 638044093
+mcseed: 677668655
 save: false
 genrep: true      # true = generate MC replicas, false = use real data
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-  nodes_per_layer: [25, 20, 7]
+  nodes_per_layer: [25, 20, 8]
   activation_per_layer: [tanh, tanh, linear]
   initializer: glorot_normal
   optimizer:
@@ -125,33 +126,16 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 3.5
 
 fitting:
-  # N23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
-  fitbasis: NN31PC  # EVOL (7), EVOLQED (8), etc.
+  fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
-  - {fl: sng, trainable: false, smallx: [1.093, 1.122], largex: [1.482, 3.418]}
-  - {fl: g, trainable: false, smallx: [0.8072, 1.064], largex: [3.09, 7.07]}
-  - {fl: v, trainable: false, smallx: [0.5307, 0.7518], largex: [1.565, 3.659]}
-  - {fl: v3, trainable: false, smallx: [0.07457, 0.5159], largex: [1.725, 3.527]}
-  - {fl: v8, trainable: false, smallx: [0.5854, 0.8039], largex: [1.556, 3.565]}
-  - {fl: t3, trainable: false, smallx: [-0.5149, 1.121], largex: [1.734, 3.495]}
-  - {fl: t8, trainable: false, smallx: [0.6185, 0.8848], largex: [1.535, 3.599]}
-
-############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta: 0            # Delta for look-back stopping
-  mingen: 0             # Minimum number of generations
-  window: 500           # Window for moving average
-  minchi2: 3.5          # Minimum chi2
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear: 200           # Smear for stopping
-  deltasm: 200          # Delta smear for stopping
-  rv: 2                 # Ratio for validation stopping
-  rt: 0.5               # Ratio for training stopping
-  epsilon: 1e-6         # Gradient epsilon
+  - {fl: sng, trainable: false, smallx: [1.09, 1.121], largex: [1.481, 3.345]}
+  - {fl: g, trainable: false, smallx: [0.8105, 1.076], largex: [2.97, 6.003]}
+  - {fl: v, trainable: false, smallx: [0.4887, 0.7563], largex: [1.585, 3.635]}
+  - {fl: v3, trainable: false, smallx: [0.1185, 0.5034], largex: [1.752, 3.597]}
+  - {fl: v8, trainable: false, smallx: [0.5872, 0.8068], largex: [1.571, 3.648]}
+  - {fl: t3, trainable: false, smallx: [-0.5205, 1.0], largex: [1.76, 3.623]}
+  - {fl: t8, trainable: false, smallx: [0.5717, 0.9016], largex: [1.575, 3.441]}
+  - {fl: t15, trainable: false, smallx: [1.089, 1.141], largex: [1.489, 3.165]}
 
 ############################################################
 positivity:
@@ -163,7 +147,7 @@ positivity:
   - {dataset: POSDYU, maxlambda: 1e10}
   - {dataset: POSDYD, maxlambda: 1e10}
   - {dataset: POSDYS, maxlambda: 1e10}
-#  - {dataset: POSF2C, maxlambda: 1e6}
+  - {dataset: POSF2C, maxlambda: 1e6}
   - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
   - {dataset: POSXUB, maxlambda: 1e6}
   - {dataset: POSXDQ, maxlambda: 1e6}
@@ -171,22 +155,12 @@ positivity:
   - {dataset: POSXSQ, maxlambda: 1e6}
   - {dataset: POSXSB, maxlambda: 1e6}
   - {dataset: POSXGL, maxlambda: 1e6}
+
 ############################################################
 integrability:
   integdatasets:
   - {dataset: INTEGXT8, maxlambda: 1e2}
   - {dataset: INTEGXT3, maxlambda: 1e2}
-
-closuretest:
-  filterseed: 621616460  # Random seed to be used in filtering data partitions
-  fakedata: false     # true = to use FAKEPDF to generate pseudo-data
-  fakepdf: MSTW2008nlo68cl      # Theory input for pseudo-data
-  errorsize: 1.0    # uncertainties rescaling
-  fakenoise: false    # true = to add random fluctuations to pseudo-data
-  rancutprob: 1.0   # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: false # To print info on PDFs during minimization
 
 ############################################################
 debug: false
