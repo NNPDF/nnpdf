@@ -6,7 +6,7 @@ for an NNPDF fit is displayed in the figure below.
 
 .. figure:: diagram.png
     :align: center
-    :alt: Code strucure diagram
+    :alt: Code structure diagram
 
     Code structure diagram
 
