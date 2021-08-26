@@ -8,7 +8,7 @@ for an NNPDF fit is displayed in the figure below.
     :align: center
     :alt: Code strucure diagram
 
-    Code structture diagram
+    Code structure diagram
 
 
 The :ref:`APFELcomb <apfelcomb>` interpolation table generator
