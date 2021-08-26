@@ -19,8 +19,7 @@ from  `APPLgrid <https://applgrid.hepforge.org/>`_ and
 `APFEL <https://apfel.hepforge.org/>`_ (for DIS structure functions) and
 combines them with the DGLAP evolution kernels provided by ``APFEL`` to
 construct the fast interpolation grids called
-FK-tables (generated using the open source tool
-`APFELgrid <https://github.com/nhartland/APFELgrid>`_, for further instructions
+FK-tables (for further instructions
 see :ref:`tutorialfktables`). In this way, physical
 observables can be evaluated in a highly efficient manner as a tensor sum of
 FK-tables with a grid of PDFs at an initial parametrisation scale :math:`Q_0`.
