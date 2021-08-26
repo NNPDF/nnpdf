@@ -1,5 +1,3 @@
-.. _tutorials:
-
 Tutorials
 =========
 This section contains tutorials for common things you might want to do using the code.
@@ -52,6 +50,7 @@ Miscellaneous
 .. toctree ::
    :maxdepth: 1
 
+   ./reproduce
    ./list-resources.md
    ./pseudodata.md
    ./newplottingfn.rst
