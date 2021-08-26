@@ -41,4 +41,4 @@ jobs:
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         echo "Running"
         echo "I'm github" > test.txt
-        scp test.txt nnpdf.fisica.unimi.it:test.txt
+        scp test.txt nnpdf@nnpdf.fisica.unimi.it:test.txt
