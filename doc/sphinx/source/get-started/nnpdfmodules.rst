@@ -4,9 +4,11 @@ Here, we describe the structure of the NNPDF code and we present a
 high-level description of its functionalities. The workflow
 for an NNPDF fit is displayed in the figure below.
 
-.. image:: diagram.png
-  :width: 300
-  :alt: Alternative text
+.. figure:: diagram.png
+    :align: center
+    :alt: Code strucure diagram
+
+    Code structture diagram
 
 
 The :ref:`APFELcomb <apfelcomb>` interpolation table generator
