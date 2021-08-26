@@ -96,4 +96,4 @@ current methodology against the previous one.
 To facilitate the interaction between the NNPDF C++ and Python
 codebases, we have developed Python wrappers using the ``SWIG`` library.
 
-For instructions on how to run a legacy fit, see :ref:`nnfit-usage`
+For instructions on how to run a legacy fit, see :ref:`nnfit-usage`.
