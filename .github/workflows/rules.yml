@@ -64,6 +64,8 @@ jobs:
       shell: bash -l {0}
       run: |
         conda activate nnpdfenv
+        echo "Helo from github!" > github_hello.txt
+        scp github_hello.txt nnpdf@vp.nnpdf.science:github_hello.txt
         cd n3fit/runcards
         cp developing.yml $RUNCARD.yml
         vp-setupfit $RUNCARD.yml
