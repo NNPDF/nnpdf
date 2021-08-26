@@ -112,6 +112,10 @@ the git repository in
 For a more detailed explanation on the parameters that are specific for the
 ``n3fit`` runcard see the [detailed guide](runcard-detailed).
 
+```eval_rst
+.. _run-n3fit-fit:
+```
+
 Running the fitting code
 ------------------------
 
