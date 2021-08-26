@@ -39,5 +39,6 @@ jobs:
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        echo "Running"
         echo "I'm github" > test.txt
-        scp test.txt nnpdf
+        scp test.txt nnpdf.fisica.unimi.it
