@@ -33,12 +33,17 @@ jobs:
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.NNPDF_SSH_KEY }}
-        name: id_rsa
+        name: id_rsa-nnpdf
         known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
+        config: |
+          Host nnpdf
+          Hostname nnpdf.fisica.unimi.it
+          User nnpdf
+          IdentityFile ~/.ssh/id_rsa-nnpdf
     - name: Setup conda and install conda-build
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         echo "Running"
         echo "I'm github" > test.txt
-        scp test.txt nnpdf@nnpdf.fisica.unimi.it:test.txt
+        scp test.txt nnpdf:test.txt
