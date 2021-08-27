@@ -228,3 +228,25 @@ explained above, if the user has not already done so.
 .. _here: https://github.com/settings/keys
 .. _Mac Software Development Kit: https://github.com/phracker/MacOSX-SDKs
 .. _anconda documentation: https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html#macos-sdk
+
+
+Using the code with docker
+--------------------------
+
+We provide docker images for tag release of the code using GitHub Packages. The
+docker images contain a pre-configured linux environment with the NNPDF
+framework installed with the specific tag version. The code is installed using
+miniconda3 in the `nnpdfenv` environment.
+
+Please refer to the download instructions from the `NNPDF GitHub Packages`_.
+
+In order to start the docker image in interactive mode please use docker standard syntax, for example:
+
+.. code::
+
+    docker run -it ghcr.io/nnpdf/nnpdf:<tag_version> bash
+
+This will open a bash shell with the `nnpdfenv` already activated, with all
+binaries and scripts from the NNPDF framework available.
+
+.. _NNPDF GitHub Packages: https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf
