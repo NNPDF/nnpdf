@@ -1,4 +1,5 @@
 ![Build status](https://github.com/NNPDF/nnpdf/actions/workflows/tests.yml/badge.svg)
+<img src="doc/sphinx/source/_static/LogoNNPDF.png" height="80">
 
 # NNPDF: An open-source machine learning framework for global analyses of parton distributions
 
