@@ -39,7 +39,6 @@ jobs:
         CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
     # install local build
     - name: Copying conda channel locally
-      shell: bash -l {0}
       run: |
         cp -r /usr/share/miniconda/envs/test/conda-bld/ .
     # create fancy runcards
