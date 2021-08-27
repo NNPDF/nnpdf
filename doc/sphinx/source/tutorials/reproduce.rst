@@ -7,7 +7,6 @@ available through LHAPDF as discussed in section 10 of the NNPDF4.0 paper
 
 
 The files needed to reproduce the results are available in the folder
-The files needed to reproduce the results are available in the folder
 |n3fit_nnpdf40_folder|_
 of the `project repository <https://github.com/NNPDF/nnpdf>`_ on Github. The
 `.yml` files referenced on this page can be found in that folder.
