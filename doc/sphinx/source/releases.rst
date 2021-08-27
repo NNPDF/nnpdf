@@ -29,11 +29,11 @@ significant releases since the code was made public are:
 Compatibility Policy
 --------------------
 
-Fits runcards, and Physics results
+Fit runcards, and Physics results
 ````````````````````````````````````
 
 We attempt to maintain strict compatibility for all published results for at
-least one major PDF release cycle, in order to be able to exactly reproduce the
+least one major PDF release cycle, in order to be able to reproduce the
 current published release (while the new one is under development) and compare
 new and old results. For example the code that produces NNPDF 4.0 should be
 able to reproduce the results for 3.1 as well. Once NNPDF 4.0 is released, new
@@ -42,15 +42,21 @@ should maintain it with 4.0 (until after 4.1 would be released).
 
 This compatibility policy concerns :ref:`n3fit <runcard-detailed>` and
 :ref:`validphys <complex_runcards>` *runcards* (and :ref:`nnfit runcards
-<nnfit-usage>` for older fits): For fits the baseline expectation is that the
-same runcard is able to produce the same PDF *bugs and all* when given the
-runcard for a published PDF set. So for example, if bugs are discovered in
-experimental data or theory predictions, new fixed copies of the data would
-be made with different names, while keeping the old ones in such a way that
-they are selected with the original runcards. Analysis runcards used for
-published results are expected to be able to produce the *same physics*,
-while bugfixes (that don't affect fits) or changes in presentation can happen
-in between.
+<nnfit-usage>` for older fits): The baseline expectation for fits is that a
+given runcard for a published PDF set is able to produce an equivalent PDF. If
+bugs are discovered in experimental data or theory predictions, new fixed
+copies of the data would be made with different names, while keeping the old
+ones in such a way that they are selected with the original runcards. Minor
+differences in the result can happen as a consequence of small enhancements or
+differences in random number generation, although that would be avoided when
+practicable. If significative changes are necessary, for example as a result of
+discovering a bug, this will be clearly indicated by a tagged release.
+
+
+Analysis runcards used for published results are expected to be able to produce
+the *same physics*, while bugfixes (that don't affect fits) or changes in
+presentation can happen in between. Similarly, important enough bugfixes will
+be marked by a tag.
 
 Internal interfaces
 `````````````````````
