@@ -9,7 +9,8 @@
 [The NNPDF collaboration](https://nnpdf.science) determines the structure of the
 proton using Machine Learning methods. This is the main repository of the
 fitting and analysis frameworks. In particular it contains all the necessary
-tools to reproduce the NNPDF4.0 PDF determinations.
+tools to [reproduce](https://docs.nnpdf.science/tutorials/reproduce.html) the
+NNPDF4.0 PDF determinations.
 
 ## Documentation
 
