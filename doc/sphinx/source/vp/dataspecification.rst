@@ -72,6 +72,7 @@ continue to work.
      - groups_chi2_table_diagtheory
 
 
+.. _datasetspec-core-label:
 
 ``DataSetSpec`` - Core dataset object
 -------------------------------------
