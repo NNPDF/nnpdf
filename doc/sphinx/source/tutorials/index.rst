@@ -1,3 +1,5 @@
+.. _tutorials:
+
 Tutorials
 =========
 This section contains tutorials for common things you might want to do using the code.
