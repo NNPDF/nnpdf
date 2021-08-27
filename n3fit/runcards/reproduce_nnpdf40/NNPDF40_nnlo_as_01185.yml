@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ############################################################
-description: "NNPDF4.0 NNLO global, deuteron and nuclear uncertainties, alphas=0.1170"
+description: NNPDF4.0 NNLO global, alphas=0.1185
 
 ############################################################
 # frac: training fraction
@@ -26,25 +26,25 @@ dataset_inputs:
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC,QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC, QCD]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               
+- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
-- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}       
-- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
@@ -61,7 +61,7 @@ dataset_inputs:
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
@@ -74,7 +74,7 @@ dataset_inputs:
 - {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}
-- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]} 
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}
@@ -85,22 +85,23 @@ dataset_inputs:
 - {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
 - {dataset: LHCBWZMU8TEV, frac: 0.75, cfac: [NRM, QCD]}
 - {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}
-- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]} 
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}
+
 
 ############################################################
 datacuts:
-  t0pdfset: 210225-n3fit-alphas-002  # PDF set to generate t0 covmat
+  t0pdfset: 210716-n3fit-alphas-004   # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
 
 ############################################################
 theory:
-  theoryid: 202     # database id
+  theoryid: 204     # database id
 
 ############################################################
-trvlseed: 475038818
-nnseed: 2394641471
-mcseed: 1831662593
+trvlseed: 2064232754
+nnseed: 379537151
+mcseed: 378200002
 save: false
 genrep: true      # true = generate MC replicas, false = use real data
 
@@ -125,19 +126,16 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 3.5
 
 fitting:
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
-  - {fl: sng, trainable: false, smallx: [1.095, 1.121], largex: [1.519, 3.207]}
-  - {fl: g, trainable: false, smallx: [0.8119, 1.106], largex: [2.877, 6.781]}
-  - {fl: v, trainable: false, smallx: [0.5361, 0.7263], largex: [1.592, 3.459]}
-  - {fl: v3, trainable: false, smallx: [0.1419, 0.4964], largex: [1.737, 3.623]}
-  - {fl: v8, trainable: false, smallx: [0.5851, 0.7927], largex: [1.589, 3.651]}
-  - {fl: t3, trainable: false, smallx: [-0.543, 1.13], largex: [1.778, 3.554]}
-  - {fl: t8, trainable: false, smallx: [0.6476, 0.8731], largex: [1.572, 3.586]}
-  - {fl: t15, trainable: false, smallx: [1.084, 1.141], largex: [1.524, 3.424]}
+  - {fl: sng, trainable: false, smallx: [1.095, 1.117], largex: [1.455, 3.049]}
+  - {fl: g, trainable: false, smallx: [0.8231, 1.016], largex: [2.803, 5.827]}
+  - {fl: v, trainable: false, smallx: [0.5093, 0.7196], largex: [1.535, 3.499]}
+  - {fl: v3, trainable: false, smallx: [0.1, 0.4791], largex: [1.722, 3.312]}
+  - {fl: v8, trainable: false, smallx: [0.5674, 0.7709], largex: [1.483, 3.295]}
+  - {fl: t3, trainable: false, smallx: [-0.4955, 1.0], largex: [1.736, 3.163]}
+  - {fl: t8, trainable: false, smallx: [0.5861, 0.8803], largex: [1.512, 3.355]}
+  - {fl: t15, trainable: false, smallx: [1.075, 1.144], largex: [1.45, 3.152]}
 
 ############################################################
 positivity:
