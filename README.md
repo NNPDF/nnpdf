@@ -1,12 +1,15 @@
+<div align="center">
+  <img src="doc/sphinx/source/_static/LogoNNPDF.png" height=100>
+</div>
+
 ![Build status](https://github.com/NNPDF/nnpdf/actions/workflows/tests.yml/badge.svg)
-<img src="doc/sphinx/source/_static/LogoNNPDF.png" height="80">
 
 # NNPDF: An open-source machine learning framework for global analyses of parton distributions
 
 [The NNPDF collaboration](https://nnpdf.science) determines the structure of the
-proton using methods of Machine Learning. This is the main repository of the
+proton using Machine Learning methods. This is the main repository of the
 fitting and analysis frameworks. In particular it contains all the necessary
-tools to reproduce the NNPDF 4.0 PDF determinations.
+tools to reproduce the NNPDF4.0 PDF determinations.
 
 ## Documentation
 
