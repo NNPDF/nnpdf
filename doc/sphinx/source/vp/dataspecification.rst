@@ -8,10 +8,15 @@ Data specification
 ``DataSetSpec`` - Core dataset object
 -------------------------------------
 
-The data specification has been updated from a more rigid structure based on 
-experiments to a flatter structure based on individual datasets, which can be
-grouped in a more flexible way for different purposes. This grouping is specified
-by ``metadata_group``, and the default grouping is by ``experiment``.
+The declaration of dataset specifications within the ``validphys`` framework
+is handled using the ``dataset_input`` (or ``dataset_inputs`` namespace
+list for a collection of datasets) key. Through this keyword the user
+is provided a granular degree of customizability for each dataset considered
+in the runcard; in particular the handling of K-factors, systematic uncertainties,
+training fraction, or dataset weight can be modified in this declaration. Moreover,
+the ``metadata_group`` keyword allows for a flexible grouping of a collection of
+datasets, organizing them into disjoint subsets depending on, for example, the
+experiment class to which they belong or their process type.
 
 The core dataset object in ``validphys`` is the
 :py:mod:`validphys.core.DataSetSpec` which is responsible for loading the
