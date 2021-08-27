@@ -124,15 +124,16 @@ Here we are obtaining the result from the production rule
 are ``dataset_input``, ``cuts`` and ``theoryid``.
 
 .. note::
-    It seems odd to require theory settings such as a `theoryid` in the
-    `dataset_input` in order to load data. However, this is a relic of the
+
+    It seems odd to require theory settings such as a ``theoryid`` in the
+    ``dataset_input`` in order to load data. However, this is a relic of the
     underlying C++ code that performs the loading of data, which intrinsically
     groups together the commondata (CSVs containing data central values and
     uncertainties) and :ref:`fktables`.
 
     Clearly there is a big margin for error when manually entering
-    `dataset_input` and so there is a
-    [project](https://github.com/NNPDF/nnpdf/issues/226) that aims to have a
+    ``dataset_input`` and so there is a
+    `project <https://github.com/NNPDF/nnpdf/issues/226>`_ that aims to have a
     stable way of filling many of these settings with correct default values.
 
 The ``DataSetSpec`` contains all of the information used to construct it, e.g.
