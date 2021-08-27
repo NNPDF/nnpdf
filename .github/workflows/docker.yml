@@ -11,7 +11,7 @@ on: [push] # WARNING TESTING
 # some general variables
 env:
   CONDA_PY: 38
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: nnpdf
 
 jobs:
   build:
