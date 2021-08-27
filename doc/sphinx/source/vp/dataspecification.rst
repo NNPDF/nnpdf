@@ -3,79 +3,15 @@
 Data specification
 ==================
 
+.. _datasetspec-core-label:
 
-At a glance: what do I need to change in my runcards?
------------------------------------------------------
+``DataSetSpec`` - Core dataset object
+-------------------------------------
 
 The data specification has been updated from a more rigid structure based on 
 experiments to a flatter structure based on individual datasets, which can be
 grouped in a more flexible way for different purposes. This grouping is specified
 by ``metadata_group``, and the default grouping is by ``experiment``.
-
-Efforts have been made to ensure a degree of backwards compatibility, however
-there are two main things which may need to be changed in old runcards.
-
-1. For theorycovariance runcards, you must add a line with
-``metadata_group: nnpdf31_process``, or else the prescriptions for scale
-variations will not vary scales coherently for data
-within the same process type, as usually desired, but rather for data within
-the same experiment.
-
-2. Many actions which were based on experiments have changed names as they are
-now based on arbitrary groupings given by ``metadata_group``. The table below gives
-the old name alongside the new one. These need to be updated for the runcards to 
-continue to work.
-
-.. list-table:: Updated names for old actions
-   :widths: 25 25
-   :header-rows: 1
-
-   * - Old name
-     - New name
-   * - plot_fits_experiments_phi
-     - plot_fits_groups_data_phi
-   * - plot_phi_experiment_dist
-     - plot_dataset_inputs_phi_dist
-   * - plot_experiments_chi2
-     - plot_groups_data_chi2
-   * - plot_fits_experiments_chi2
-     - plot_fits_groups_data_chi2
-   * - experiment_result_table
-     - group_result_table
-   * - experiment_result_table_68cl
-     - group_result_table_68cl
-   * - experiments_covmat
-     - groups_covmat
-   * - experiments_sqrtcovmat
-     - groups_sqrtcovmat
-   * - experiments_invcovmat
-     - groups_invcovmat
-   * - experiments_normcovmat
-     - groups_normcovmat
-   * - experiments_corrmat
-     - groups_corrmat
-   * - experiment_results
-     - dataset_inputs_results
-   * - experiments_chi2_table
-     - groups_chi2_table
-   * - fits_experiments_chi2_table
-     - fits_groups_chi2_table
-   * - fits_experiments_phi_table
-     - fits_groups_phi_table
-   * - dataspecs_experiments_chi2_table
-     - dataspecs_groups_chi2_table
-   * - experiments_central_values
-     - groups_central_values
-   * - experiments_chi2_table_theory
-     - groups_chi2_table_theory
-   * - experiments_chi2_table_diagtheory
-     - groups_chi2_table_diagtheory
-
-
-.. _datasetspec-core-label:
-
-``DataSetSpec`` - Core dataset object
--------------------------------------
 
 The core dataset object in ``validphys`` is the
 :py:mod:`validphys.core.DataSetSpec` which is responsible for loading the
@@ -484,3 +420,65 @@ always require ``experiments`` to be specified in the runcard.
   group will contain all of the datasets from the fit - which is incorrect.
   This is regarded as a bug, the relevant issue is:
   https://github.com/NNPDF/reportengine/issues/38
+
+At a glance: what do I need to change in my runcards?
+-----------------------------------------------------
+
+Efforts have been made to ensure a degree of backwards compatibility, however
+there are two main things which may need to be changed in old runcards.
+
+1. For theorycovariance runcards, you must add a line with
+``metadata_group: nnpdf31_process``, or else the prescriptions for scale
+variations will not vary scales coherently for data
+within the same process type, as usually desired, but rather for data within
+the same experiment.
+
+2. Many actions which were based on experiments have changed names as they are
+now based on arbitrary groupings given by ``metadata_group``. The table below gives
+the old name alongside the new one. These need to be updated for the runcards to 
+continue to work.
+
+.. list-table:: Updated names for old actions
+   :widths: 25 25
+   :header-rows: 1
+
+   * - Old name
+     - New name
+   * - plot_fits_experiments_phi
+     - plot_fits_groups_data_phi
+   * - plot_phi_experiment_dist
+     - plot_dataset_inputs_phi_dist
+   * - plot_experiments_chi2
+     - plot_groups_data_chi2
+   * - plot_fits_experiments_chi2
+     - plot_fits_groups_data_chi2
+   * - experiment_result_table
+     - group_result_table
+   * - experiment_result_table_68cl
+     - group_result_table_68cl
+   * - experiments_covmat
+     - groups_covmat
+   * - experiments_sqrtcovmat
+     - groups_sqrtcovmat
+   * - experiments_invcovmat
+     - groups_invcovmat
+   * - experiments_normcovmat
+     - groups_normcovmat
+   * - experiments_corrmat
+     - groups_corrmat
+   * - experiment_results
+     - dataset_inputs_results
+   * - experiments_chi2_table
+     - groups_chi2_table
+   * - fits_experiments_chi2_table
+     - fits_groups_chi2_table
+   * - fits_experiments_phi_table
+     - fits_groups_phi_table
+   * - dataspecs_experiments_chi2_table
+     - dataspecs_groups_chi2_table
+   * - experiments_central_values
+     - groups_central_values
+   * - experiments_chi2_table_theory
+     - groups_chi2_table_theory
+   * - experiments_chi2_table_diagtheory
+     - groups_chi2_table_diagtheory
