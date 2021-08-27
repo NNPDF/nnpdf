@@ -19,7 +19,7 @@ In this section we fine-grain the explanation of the different parameters that e
 
 Dataset selection
 -----------------
-The first and more important thing one finds when building a fit runcard for
+The first thing one finds when building a fit runcard for
 ``nnpdf`` is the dataset selection, `dataset_inputs`.
 
 .. code-block:: yaml
@@ -352,5 +352,5 @@ It is however possible to disable them by setting to false the ``sum_rules`` fla
       sum_rules: False
       
 
-It is also possible to impose just the valence or the gluon sum rules by using the
-``MSR`` or ``VSR`` flags (``True`` is equal to ``All``).
+It is also possible to impose just the valence or the momentum sum rules by using the
+``VSR`` or ``MSR`` flags, respectively (``True`` is equal to ``All``).
