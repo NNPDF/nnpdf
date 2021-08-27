@@ -1,12 +1,10 @@
 # A single CI script with github workflow.
 name: Store docker for tag
 
-# TODO: REPLACE THIS
-on: [push] # WARNING TESTING
-# on:
-#   push:
-#     tags:
-#     - '*'
+on:
+  push:
+    tags:
+    - '*'
 
 # some general variables
 env:
