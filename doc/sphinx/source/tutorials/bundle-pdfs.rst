@@ -1,3 +1,5 @@
+.. _bundled-sets:
+
 Bundle PDFs with :math:`\alpha_s` replicas
 ==========================================
 
