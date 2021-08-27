@@ -1,0 +1,60 @@
+# A single CI script with github workflow.
+name: Store docker for tag
+
+# TODO: REPLACE THIS
+on: [push] # WARNING TESTING
+# on:
+#   push:
+#     tags:
+#     - '*'
+
+# some general variables
+env:
+  CONDA_PY: 38
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    # setup job
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup conda and install conda-build
+      shell: bash -l {0}
+      run: |
+        conda config --append channels conda-forge
+        conda config --prepend channels https://packages.nnpdf.science/conda
+        conda config --set show_channel_urls true
+        conda install conda-build --yes
+    - name: Build recipe
+      shell: bash -l {0}
+      run: |
+        CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
+    # install local build
+    - name: Copying conda channel locally
+      shell: bash -l {0}
+      run: |
+        cp -r /usr/share/miniconda/envs/test/conda-bld/ .
+    # create fancy runcards
+    - name: Build image
+      run: |
+        docker build . --file docker/Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+    # upload to github packages
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Push image
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
+        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+        docker push $IMAGE_ID:$VERSION
