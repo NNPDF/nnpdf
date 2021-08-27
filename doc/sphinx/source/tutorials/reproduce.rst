@@ -15,13 +15,11 @@ of the `project repository <https://github.com/NNPDF/nnpdf>`_ on Github. The
 .. |n3fit_nnpdf40_folder| replace:: ``n3fit/runcards/reproduce_nnpdf40``
 .. _n3fit_nnpdf40_folder: https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40
 
-To start, we need to set up a :ref:`conda environment <conda>` that is the same
-as the one used to produce the NNPDF4.0 PDF sets.
+The exact :ref:`conda environment <conda>`, including all transitive
+dependencies, used to produce all the publicly released PDF sets has been
+preserved to ensure precise reproducibility.
 The environment can be found in the `project repository <https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40/nnpdf40_env.yml>`_
-This is an a conda
-environment with a version of ``nnpdf`` and all its
-dependencies equal to those originally used to produce the NNPDF4.0 PDF
-sets. Such an environment can be generated and activated by running
+It can be generated and activated by running
 
 .. code:: bash
 
