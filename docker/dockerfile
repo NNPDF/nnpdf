@@ -11,6 +11,10 @@ ENV CONDA_FILE Miniconda3-latest-Linux-x86_64.sh
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Get conda environemnt name
+ARG CONDA_ENV_NAME
+ENV CONDA_ENV_NAME=$CONDA_ENV_NAME
+
 # Update Ubuntu Software repository
 RUN apt update
 
@@ -35,8 +39,9 @@ RUN conda config --append channels conda-forge                                  
 COPY conda-bld /root/conda-bld
 
 # install the nnpdf framework
-RUN conda create -n nnpdfenv -c file:///root/conda-bld/linux-64 nnpdf && \
-    echo "conda activate nnpdfenv" >> /root/.bashrc
+RUN conda create -n $CONDA_ENV_NAME -c file:///root/conda-bld/linux-64 nnpdf && \
+    echo "conda activate $CONDA_ENV_NAME" >> /root/.bashrc                   && \
+    conda env export --name $CONDA_ENV_NAME > /root/$CONDA_ENV_NAME.yml
 
 # delete package
 RUN rm -r /root/conda-bld
