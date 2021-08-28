@@ -44,8 +44,8 @@ jobs:
     # create fancy runcards
     - name: Build docker image and export environment
       run: |
-        echo "VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')" >> $GITHUB_ENV
-        CONDA_ENV_NAME=nnpdf${{ env.VERSION }}
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,'); echo "VERSION=$VERSION" >> $GITHUB_ENV
+        CONDA_ENV_NAME=nnpdf$VERSION
         docker build . --build-arg CONDA_ENV_NAME=$CONDA_ENV_NAME --file docker/dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
         docker run --rm --entrypoint cat nnpdf /root/$CONDA_ENV_NAME.yml > n3fit/runcards/$CONDA_ENV_NAME.yml
         rm -r conda-bld/
@@ -71,7 +71,7 @@ jobs:
         commit-message: add conda environment
         committer: GitHub <noreply@github.com>
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-        signoff: false
+        base: master
         branch: add-tag-environment
         branch-suffix: random
         delete-branch: true
