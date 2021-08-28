@@ -46,7 +46,7 @@ jobs:
       run: |
         echo "VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')" >> $GITHUB_ENV
         CONDA_ENV_NAME=nnpdf$VERSION
-        docker build . --build-arg TAG=$CONDA_ENV_NAME --file docker/dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        docker build . --build-arg CONDA_ENV_NAME=$CONDA_ENV_NAME --file docker/dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
         docker run --rm --entrypoint cat nnpdf /root/$CONDA_ENV_NAME.yml > n3fit/runcards/$CONDA_ENV_NAME.yml
         rm -r conda-bld/
     # upload to github packages
