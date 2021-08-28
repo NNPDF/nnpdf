@@ -123,11 +123,11 @@ Contents
    data/index
    theory/index
    contributing/index
+   releases
    ci/index
    serverconf/index
    external-code/index
    tutorials/index
-   internal/index
 
 Bibliography
 ============

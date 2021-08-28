@@ -43,6 +43,7 @@ eyeballs and once merged it will be maintained and kept in sync with the rest
 of the code, making runcards using it much more likely to work in the future.
 That others can benefit from the work is of course also a good thing.
 
+.. _extramodules:
 Hooking ``validphys`` to external code
 --------------------------------------
 
