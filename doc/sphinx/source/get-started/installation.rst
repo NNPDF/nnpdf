@@ -240,7 +240,7 @@ docker images contain a pre-configured linux environment with the NNPDF
 framework installed with the specific tag version. The code is installed using
 miniconda3.
 
-Please refer to the download instructions from the `NNPDF GitHub Packages`_.
+Please refer to the download and authentication instructions from the `NNPDF GitHub Packages`_.
 
 In order to start the docker image in interactive mode please use docker
 standard syntax, for example:

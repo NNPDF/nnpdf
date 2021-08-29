@@ -59,8 +59,9 @@ It can be generated and activated by running
     conda env create --file nnpdf40_env.yaml
     conda activate nnpdf40
 
-Alternativelly, we provide a ready to run docker image with a pre-installed
-environment. You can download and open the environment by running
+Alternatively, we provide a ready to run docker image with a pre-installed
+environment. After :ref:`setting it up <docker>`, you can download and open
+the environment by running
 
 .. code:: bash
 
