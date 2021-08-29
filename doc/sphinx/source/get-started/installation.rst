@@ -230,6 +230,8 @@ explained above, if the user has not already done so.
 .. _anconda documentation: https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html#macos-sdk
 
 
+.. _docker:
+
 Using the code with docker
 --------------------------
 
