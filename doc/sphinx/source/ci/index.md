@@ -82,7 +82,9 @@ When a new tag is created the github action stored in
 `.github/workflows/docker.yml` is executed. This action generates a new docker
 image containing the tagged code. This docker image is then uploaded to the
 [NNPDF GitHub Package
-registry](https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf). This feature
+registry](https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf). Finally, the
+action stores the conda environment file created during the installation process
+and opens a pull request placing the file inside `n3fit/runcards`. This feature
 allows recovering the code and results obtained with specific tag of the code.
 
 ## Operation of automatic fit bot

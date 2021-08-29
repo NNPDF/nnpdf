@@ -247,7 +247,7 @@ standard syntax, for example:
 
     docker run -it ghcr.io/nnpdf/nnpdf:<tag_version> bash
 
-This will open a bash shell with the nnpdf environemtn already activated, with
-all binaries and scripts from the NNPDF framework available.
+This will open a bash shell with the nnpdf environment already activated, with
+all binaries and scripts from the NNPDF framework.
 
 .. _NNPDF GitHub Packages: https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf
