@@ -224,7 +224,7 @@ def main():
         nargs='?',
         default=NSIGMA_DISCARD_CHI2,
         help="The number of standard deviations in the chi2, calculated over PDF replicas, "
-             " above which the replicas are cut. The default is four.",
+             f" above which the replicas are cut. The default is {NSIGMA_DISCARD_CHI2}.",
         type=float,
     )
     parser.add_argument(
@@ -232,7 +232,7 @@ def main():
         nargs='?',
         default=NSIGMA_DISCARD_ARCLENGTH,
         help="The number of standard deviations in the arclength, calculated over PDF replicas, "
-             " above which the replicas are cut. The default is four.",
+             f" above which the replicas are cut. The default is {NSIGMA_DISCARD_ARCLENGTH}.",
         type=float,
     )
     parser.add_argument(
@@ -240,7 +240,7 @@ def main():
         nargs='?',
         default=INTEG_THRESHOLD,
         help="The maximum value allowed for integrable distributions at small-x. "
-             "The default is 1e-2.",
+             f"The default is {INTEG_THRESHOLD}.",
         type=float,
     )
     parser.add_argument(
