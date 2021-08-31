@@ -30,7 +30,7 @@ can be found in the [detailed guide](runcard-detailed).
 
 For newcomers, it is recommended to start from an already existing runcard,
 complete examples (and runcard used in NNPDF releases) are available at
-[n3fit/runcards](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
+[``n3fit/runcards``](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
 The runcards are mostly self explanatory, see for instance below an
 example of the ``parameter`` dictionary that defines the Machine Learning framework.
 
