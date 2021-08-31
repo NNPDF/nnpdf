@@ -60,10 +60,10 @@ tinker with the codebase.
 One can simply modify the options in ``parameters`` to specify the
 desired architecture of the Neural Network as well as the settings for the optimization algorithm.
 
-An important feature of ``n3fit`` possibility of performing [hyperparameter scans](hyperoptimization),
+An important feature of ``n3fit`` is the ability to perform [hyperparameter scans](hyperoptimization),
 for this we have also introduced a ``hyperscan_config`` key which specifies
 the trial ranges for the hyperparameter scan procedure.
-See the following self explanatory example:
+See the following self-explanatory example:
 ```yaml
 hyperscan_config:
     stopping: # setup for stopping scan
