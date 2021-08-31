@@ -2,11 +2,10 @@
 Test to ensure the validphys.pseudodata.get_pseudodata action
 correctly obtains the appropriate pseudodata for an n3fit fit.
 
-To this end, a 10 replica fit has been uploaded named
-`pseudodata_test_fit` obtained using 100 epochs, theoryID 162 and a
-subset of DIS datasets. When this fit was performed, the `all_exp_infos`
-was pickled and stored in `exp_infos.pickle` which is the benchmark
-we use to ensure the action is working appropriately.
+A fit has been generated called pseudodata_test_fit_n3fit
+which has the pseudodata saved as training and validation splits.
+This is used to benchmark the correctness of the pseudodata
+recreation.
 """
 import pandas as pd
 import pytest
