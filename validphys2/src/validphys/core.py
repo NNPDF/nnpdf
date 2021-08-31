@@ -673,15 +673,20 @@ class HyperscanSpec(FitSpec):
         return self._tries_files
 
     def get_all_trials(self, base_params=None):
-        """Read all trials from all tries files
+        """Read all trials from all tries files.
         If there are original runcard-based parameters, a reference to them can be passed
         to the trials so that a full hyperparameter dictionary can be defined
+
+        Each hyperopt trial object will also have a reference to all trials in its own file
         """
         all_trials = []
-        for trial_file in self.tries_files:
+        for trial_file in self.tries_files.values():
             with open(trial_file, "r") as tf:
-                all_trials += [HyperoptTrial(i, base_params=base_params) for i in json.load(tf)]
-        self._all_trials = all_trials
+                run_trials = []
+                for trial in json.load(tf):
+                    trial = HyperoptTrial(trial, base_params=base_params, linked_trials=run_trials)
+                    run_trials.append(trial)
+            all_trials += run_trials
         return all_trials
 
     def sample_trials(self, n=None, base_params=None, sigma=4.0):
@@ -702,7 +707,7 @@ class HyperscanSpec(FitSpec):
         if len(all_trials) < n:
             log.warning("Asked for %d trials, only %d valid trials found", n, len(all_trials))
         # Compute weights proportionally to the reward (goes from 0 (worst) to 1 (best, loss=1))
-        rewards = np.array([i.reward for i in all_trials])
+        rewards = np.array([i.weighted_reward for i in all_trials])
         weight_raw = np.exp(sigma * rewards ** 2)
         total = np.sum(weight_raw)
         weights = weight_raw / total

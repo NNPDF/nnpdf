@@ -129,6 +129,10 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
 
         # Now make this into a measure of the total loss
         # for instance, any deviation from the "best" value is bad
+        print(f"chi2 of the full fit: {best_chi2}")
+        print(f"chi2 without the PDF errors: {exp_chi2}")
+        print(f"chi2 with the PDF errors: {pdf_chi2}")
+        # TODO: forgot the (very important) ndata!!
         total_loss += np.abs(best_chi2 - pdf_chi2)
 
     return total_loss

@@ -7,6 +7,7 @@
 # and the older pre-vp hyperopt stuff, which can be considered deprecated but it is
 # still used for the plotting script
 
+
 import os
 import re
 import glob
@@ -28,26 +29,29 @@ regex_not_op = re.compile(r"[\w\.]+")
 
 class HyperoptTrial:
     """
-    Hyperopt trial class.
-    Makes the dictionary-like output of ``hyperopt`` into an object
-    that can be easily managed
+        Hyperopt trial class.
+        Makes the dictionary-like output of ``hyperopt`` into an object
+        that can be easily managed
 
-    Parameters
-    ----------
-        trial_dict: dict
-            one single result (a dictionary) from a ``tries.json`` file
-        base_params: dict
-            Base parameters of the runcard which can be used to complete the hyperparameter
-            dictionary when not all parameters were scanned
-        minimum_losses: int
-            Minimum number of losses to be found in the trial for it to be considered succesful
+        Parameters
+        ----------
+            trial_dict: dict
+                one single result (a dictionary) from a ``tries.json`` file
+            base_params: dict
+                Base parameters of the runcard which can be used to complete the hyperparameter
+                dictionary when not all parameters were scanned
+            minimum_losses: int
+                Minimum number of losses to be found in the trial for it to be considered succesful
+            linked_trials: list
+                List of trials coming from the same file as this trial
     """
 
-    def __init__(self, trial_dict, base_params=None, minimum_losses=1):
+    def __init__(self, trial_dict, base_params=None, minimum_losses=1, linked_trials=None):
         self._trial_dict = trial_dict
         self._minimum_losses = minimum_losses
         self._original_params = base_params
         self._reward = None
+        self._linked_trials = linked_trials if linked_trials is not None else []
 
     @property
     def reward(self):
@@ -59,8 +63,6 @@ class HyperoptTrial:
     @property
     def loss(self):
         """Return the loss of the hyperopt dict"""
-        if self._trial_dict["result"].get("status") != "ok":
-            return False
         return self._trial_dict["result"]["loss"]
 
     @property
@@ -112,9 +114,9 @@ class HyperoptTrial:
         when compared to the target"""
         if not another_trial.reward:
             return True
-        if not self._reward:
+        if not self.reward:
             return False
-        return self._reward > another_trial._reward
+        return self.reward > another_trial.reward
 
     def __lt__(self, another_trial):
         """Return true if the target trial is preferred
@@ -519,7 +521,7 @@ def hyperopt_dataframe(commandline_args):
 
 
 @table
-def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
+def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
     """
     Generates a clean table with information on the hyperparameter settings of the best setup. 
     """
