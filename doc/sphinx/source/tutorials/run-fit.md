@@ -8,14 +8,14 @@ How to run a PDF fit
 
 The user should perform the steps documented below in order to obtain a complete
 PDF fit using the latest release of the NNPDF fitting code: ``n3fit``.
-The techniques fit methodology is detailed in the [Methodology](methodology) page.
+The fitting methodology is detailed in the [Methodology](methodology) page.
 
 - [Preparing a fit runcard](#preparing-a-fit-runcard)
 - [Running the fitting code](#running-the-fitting-code)
 - [Upload and analyse the fit](#upload-and-analyse-the-fit)
 
 
-These steps are similar to those required to run the [``nnfit`` code](nnfit-usage),
+These steps are similar to those required to run the legacy [``nnfit`` code](nnfit-usage),
 although the runcards for both programs are not completely compatible.
 
 Preparing a fit runcard
@@ -29,7 +29,7 @@ A detailed explanation on the parameters accepted by the ``n3fit`` runcards
 can be found in the [detailed guide](runcard-detailed).
 
 For newcomers, it is recommended to start from an already existing runcard,
-complete examples (and runcard used in NNPDF releases) are available at
+example runcards (and runcard used in NNPDF releases) are available at
 [``n3fit/runcards``](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
 The runcards are mostly self explanatory, see for instance below an
 example of the ``parameter`` dictionary that defines the Machine Learning framework.
