@@ -338,6 +338,25 @@ and load it in a different runcard and continue the training from there.
 While the load file is read as an absolute path, the file to save to will be found
 inside the replica folder.
 
+Saving and loading fit pseudodata
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the user wishes to save the Monte Carlo pseudodata used for each replica within a fit,
+they can do so using the ``savepseudodata`` flag under the ``fitting`` top-level namespace:
+
+.. code-block:: yaml
+
+   fitting:
+      savepseudodata: true
+
+This will cause a ``csv`` file to be saved for each replica under
+``<fit_directory>/replica_<number>/datacuts_theory_fitting_training_pseudodata.csv`` and
+``<fit_directory>/replica_<number>/datacuts_theory_fitting_validation_pseudodata.csv``
+for the training and validation splits respectively. The data points are indexed
+according to their experiment. Additionally, the union of these two is saved in
+``<fit_directory>/replica_<number>/datacuts_theory_fitting_pseudodata_table.csv``
+if one is not interested in the exact nature of the splitting.
+
 
 Imposing sum rules
 ^^^^^^^^^^^^^^^^^^

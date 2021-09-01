@@ -26,6 +26,9 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
+FIT_NAMESPACE = "datacuts::theory::fitting "
+CLOSURE_NAMESPACE = "datacuts::theory::closuretest::fitting "
+
 N3FIT_PROVIDERS = [
     "n3fit.performfit",
     "n3fit.n3fit_checks_provider",
@@ -124,10 +127,11 @@ class N3FitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
 
         if file_content.get('closuretest') is not None:
-            fit_action = 'datacuts::theory::closuretest::fitting performfit'
+            namespace = CLOSURE_NAMESPACE
         else:
-            fit_action = 'datacuts::theory::fitting performfit'
-        N3FIT_FIXED_CONFIG['actions_'].append(fit_action)
+            namespace = FIT_NAMESPACE
+
+        N3FIT_FIXED_CONFIG['actions_'].append(namespace + "performfit")
 
         if file_content["fitting"].get("savepseudodata"):
             if len(kwargs["environment"].replicas) != 1:
@@ -137,8 +141,10 @@ class N3FitConfig(Config):
                     "to `false` or fit replicas one at a time."
                 )
             # take same namespace configuration on the pseudodata_table action.
-            table_action = fit_action.replace('performfit', 'pseudodata_table')
-            N3FIT_FIXED_CONFIG['actions_'].append(table_action)
+            training_action = namespace + "training_pseudodata"
+            validation_action = namespace + "validation_pseudodata"
+
+            N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
