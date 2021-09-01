@@ -7,8 +7,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest] #, macos-latest]
-        python-version: [3.8]
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.7, 3.8]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
