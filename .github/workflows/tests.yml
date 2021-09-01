@@ -35,7 +35,7 @@ jobs:
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/conda
+        conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
         conda activate test
         conda install conda-build --yes

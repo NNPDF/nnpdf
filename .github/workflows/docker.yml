@@ -28,7 +28,7 @@ jobs:
       shell: bash -l {0}
       run: |
         conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/conda
+        conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
         conda install conda-build --yes
     - name: Build recipe
