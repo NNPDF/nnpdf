@@ -9,8 +9,8 @@ Data specification
 -------------------------------------
 
 The declaration of dataset specifications within the ``validphys`` framework
-is handled using the ``dataset_input`` (or ``dataset_inputs`` namespace
-list for a collection of datasets) key. Through this keyword the user
+is handled using the ``dataset_input``  key, or ``dataset_inputs`` namespace
+list for a collection of datasets. Through this keyword the user
 is provided a granular degree of customizability for each dataset considered
 in the runcard; in particular the handling of K-factors, systematic uncertainties,
 training fraction, or dataset weight can be modified in this declaration. Moreover,
@@ -426,7 +426,7 @@ always require ``experiments`` to be specified in the runcard.
   This is regarded as a bug, the relevant issue is:
   https://github.com/NNPDF/reportengine/issues/38
 
-At a glance: what do I need to change in my runcards?
+What do I need to change in my runcards?
 -----------------------------------------------------
 
 Efforts have been made to ensure a degree of backwards compatibility, however
