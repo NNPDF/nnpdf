@@ -42,8 +42,8 @@ of the `project repository <https://github.com/NNPDF/nnpdf>`_ on Github. The
 .. |n3fit_nnpdf40_folder| replace:: ``n3fit/runcards/reproduce_nnpdf40``
 .. _n3fit_nnpdf40_folder: https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40
 
-Below we will describe how these runcards can be used to generate the NNPDF4.0 
-PDF grids. 
+Below we will describe how these runcards can be used to generate the NNPDF4.0
+PDF grids.
 
 Setting up the NNPDF4.0 conda envirnoment
 --------------------------------------------------------------------------------
@@ -59,12 +59,21 @@ It can be generated and activated by running
     conda env create --file nnpdf40_env.yaml
     conda activate nnpdf40
 
+Alternatively, we provide a ready to run docker image with a pre-installed
+environment. After :ref:`setting it up <docker>`, you can download and open
+the environment by running
+
+.. code:: bash
+
+    docker run -it ghcr.io/nnpdf/nnpdf:4.0.3 bash
+
+
 
 Hyperoptimization for NNPDF4.0
 --------------------------------------------------------------------------------
 The |NNPDF40_hyperopt.yml|_ runcard can be used to run the
-:ref:`hyperoptimization <hyperoptimization>` with the exact same settings used 
-to identify the NNPDF4.0 architecture. This step can be skipped if the aim is 
+:ref:`hyperoptimization <hyperoptimization>` with the exact same settings used
+to identify the NNPDF4.0 architecture. This step can be skipped if the aim is
 simply to reproduce the NNPDF4.0 grids, which requires using the exact same
 architecture as was used to create the NNPDF4.0 grids. Nevertheless, this
 runcard is made available to provide a complete overview of each step in the
@@ -78,9 +87,9 @@ Producing the NNPDF4.0 fits
 --------------------------------------------------------------------------------
 After setting up the conda environment, we can use it to produce the fits in the
 :ref:`usual way <run-n3fit-fit>`. The names of the "fit runcards" listed in the
-:ref:`textblock <nnpdf40 runcard textblock>` above are the same as those of 
-the corresponding (public) LHAPDF grids of the same name. For example, 
-baseline fit with :math:`\alpha_s(m_Z)=0.118` and a  variable-flavor-number 
+:ref:`textblock <nnpdf40 runcard textblock>` above are the same as those of
+the corresponding (public) LHAPDF grids of the same name. For example,
+baseline fit with :math:`\alpha_s(m_Z)=0.118` and a  variable-flavor-number
 scheme with up to five active flavors can be generated with
 |NNPDF40_nnlo_as_0118_1000.yml|_.
 
@@ -90,8 +99,8 @@ scheme with up to five active flavors can be generated with
 
 Hessian conversion, compression, bundled sets and flavor number variations
 --------------------------------------------------------------------------------
-Among the released PDF sets of NNPDF4.0 are also some sets that are the result 
-of a transformation or combination of the fits produced using the 
+Among the released PDF sets of NNPDF4.0 are also some sets that are the result
+of a transformation or combination of the fits produced using the
 "fit runcards", these PDF grids are:
 
 .. code-block::
@@ -116,25 +125,25 @@ of a transformation or combination of the fits produced using the
 
 Section 10 of the NNPDF4.0 states how these can be obtained from the fits
 produced using the method discussion under `Producing the NNPDF4.0 fits`_, but
-we will again give some pointers here. 
+we will again give some pointers here.
 
-Both ``NNPDF40_nnlo_as_0118`` and ``NNPDF40_nnlo_as_0118_hessian`` are based on 
-a 1000 replica PDF set ``NNPDF40_nnlo_as_0118_1000``. Specifically, 
+Both ``NNPDF40_nnlo_as_0118`` and ``NNPDF40_nnlo_as_0118_hessian`` are based on
+a 1000 replica PDF set ``NNPDF40_nnlo_as_0118_1000``. Specifically,
 ``NNPDF40_nnlo_as_0118`` is the result of a compression of
-``NNPDF40_nnlo_as_0118_1000`` using the 
-:ref:`pycompressor <https://github.com/N3PDF/pycompressor>` package, while 
-``NNPDF40_nnlo_as_0118_hessian`` can be created by running 
+``NNPDF40_nnlo_as_0118_1000`` using the
+:ref:`pycompressor <https://github.com/N3PDF/pycompressor>` package, while
+``NNPDF40_nnlo_as_0118_hessian`` can be created by running
 
 .. code:: bash
 
     validphys NNPDF40_nnlo_as_0118_hessian.yml
 
-For more information, see 
-:ref:`the tutorial on how to transform a Monte Carlo PDF set into a Hessian PDF set <mc2hessian>`. 
+For more information, see
+:ref:`the tutorial on how to transform a Monte Carlo PDF set into a Hessian PDF set <mc2hessian>`.
 
 The bundled PDF + :math:`\alpha_s` variation set ``NNPDF40_nnlo_pdfas`` can be
-generated using the runcard |NNPDF40_nnlo_pdfas.yml|_, again, for more 
-information on how to bundle PDFs with :math:`\alpha_s` replicas, see 
+generated using the runcard |NNPDF40_nnlo_pdfas.yml|_, again, for more
+information on how to bundle PDFs with :math:`\alpha_s` replicas, see
 :ref:`the relevant tutorial <bundled-sets>`.
 
 Finally, to produce the PDF sets with a flavor-number different from the default
