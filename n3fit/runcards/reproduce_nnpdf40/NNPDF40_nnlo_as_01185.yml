@@ -1,0 +1,167 @@
+#
+# Configuration file for n3fit
+#
+############################################################
+description: NNPDF4.0 NNLO global, alphas=0.1185
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+- {dataset: NMCPD_dw_ite, frac: 0.75}
+- {dataset: NMC, frac: 0.75}
+- {dataset: SLACP_dwsh, frac: 0.75}
+- {dataset: SLACD_dw_ite, frac: 0.75}
+- {dataset: BCDMSP_dwsh, frac: 0.75}
+- {dataset: BCDMSD_dw_ite, frac: 0.75}
+- {dataset: CHORUSNUPb_dw_ite, frac: 0.75}
+- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
+- {dataset: NTVNUDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
+- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
+- {dataset: HERACOMBNCEM, frac: 0.75}
+- {dataset: HERACOMBNCEP460, frac: 0.75}
+- {dataset: HERACOMBNCEP575, frac: 0.75}
+- {dataset: HERACOMBNCEP820, frac: 0.75}
+- {dataset: HERACOMBNCEP920, frac: 0.75}
+- {dataset: HERACOMBCCEM, frac: 0.75}
+- {dataset: HERACOMBCCEP, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}
+- {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC, QCD]}
+- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
+- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
+- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
+- {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASPHT15_SF, frac: 0.75, cfac: [QCD, EWK]}
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
+- {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCBWZMU8TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}
+
+
+############################################################
+datacuts:
+  t0pdfset: 210716-n3fit-alphas-004   # PDF set to generate t0 covmat
+  q2min: 3.49                        # Q2 minimum
+  w2min: 12.5                        # W2 minimum
+
+############################################################
+theory:
+  theoryid: 204     # database id
+
+############################################################
+trvlseed: 2064232754
+nnseed: 379537151
+mcseed: 378200002
+save: false
+genrep: true      # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [25, 20, 8]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 17000
+  positivity:
+    initial: 184.8
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.095, 1.117], largex: [1.455, 3.049]}
+  - {fl: g, trainable: false, smallx: [0.8231, 1.016], largex: [2.803, 5.827]}
+  - {fl: v, trainable: false, smallx: [0.5093, 0.7196], largex: [1.535, 3.499]}
+  - {fl: v3, trainable: false, smallx: [0.1, 0.4791], largex: [1.722, 3.312]}
+  - {fl: v8, trainable: false, smallx: [0.5674, 0.7709], largex: [1.483, 3.295]}
+  - {fl: t3, trainable: false, smallx: [-0.4955, 1.0], largex: [1.736, 3.163]}
+  - {fl: t8, trainable: false, smallx: [0.5861, 0.8803], largex: [1.512, 3.355]}
+  - {fl: t15, trainable: false, smallx: [1.075, 1.144], largex: [1.45, 3.152]}
+
+############################################################
+positivity:
+  posdatasets:
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSF2DW, maxlambda: 1e6}
+  - {dataset: POSF2S, maxlambda: 1e6}
+  - {dataset: POSFLL, maxlambda: 1e6}
+  - {dataset: POSDYU, maxlambda: 1e10}
+  - {dataset: POSDYD, maxlambda: 1e10}
+  - {dataset: POSDYS, maxlambda: 1e10}
+  - {dataset: POSF2C, maxlambda: 1e6}
+  - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: POSXUB, maxlambda: 1e6}
+  - {dataset: POSXDQ, maxlambda: 1e6}
+  - {dataset: POSXDB, maxlambda: 1e6}
+  - {dataset: POSXSQ, maxlambda: 1e6}
+  - {dataset: POSXSB, maxlambda: 1e6}
+  - {dataset: POSXGL, maxlambda: 1e6}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
+
+############################################################
+debug: false
+maxcores: 4

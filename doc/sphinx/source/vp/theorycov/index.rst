@@ -1,6 +1,6 @@
  .. _vptheorycov-index:
  
-The theorycovariance module
+The `theorycovariance` module
 ===============================
 
 The ``theorycovariance`` module deals with constructing, testing and 

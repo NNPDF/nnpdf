@@ -7,7 +7,7 @@ uset0         : false   # use t0 in chi2check, validphys
 pdfcteq       : CT14nlo
 pdfmstw       : MMHT2014nlo68cl
 plotformat    : eps   # root file format
-errorband     : true     # 1 for 1sigma, 0 for 68% c.l.
+errorband     : true    # 1 for 1sigma, 0 for 68% c.l.
 nxpoints      : 100   # points in x
 q2            : 2.0   # Q2 for plots
 ymaxdistances : 20.0  # maximum y for distances plot

@@ -8,8 +8,6 @@
     For instance: np_to_tensor is just a call to K.constant
 """
 
-import tensorflow as tf
-from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.initializers import (
     Constant,

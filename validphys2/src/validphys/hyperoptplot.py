@@ -1,30 +1,128 @@
 """
-hyperoptplot.py
-
-Module for the parsing and plotting of hyperopt results.
+    Module for the parsing and plotting of the results and output of
+    previous hyperparameter scans
 """
 
-from argparse import ArgumentParser
+# Within this file you can find the "more modern" vp-integrated hyperopt stuff
+# and the older pre-vp hyperopt stuff, which can be considered deprecated but it is
+# still used for the plotting script
+
 import os
 import re
 import glob
 import json
 import logging
+from types import SimpleNamespace
 import numpy as np
 import pandas as pd
-from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
-from types import SimpleNamespace
 from reportengine.figure import figure
-import numpy as np
-import matplotlib.pyplot as plt
 from reportengine.table import table
 import seaborn as sns
+import matplotlib.pyplot as plt
+from validphys.hyper_algorithm import autofilter_dataframe
 
 log = logging.getLogger(__name__)
 
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
+class HyperoptTrial:
+    """
+    Hyperopt trial class.
+    Makes the dictionary-like output of ``hyperopt`` into an object
+    that can be easily managed
+
+    Parameters
+    ----------
+        trial_dict: dict
+            one single result (a dictionary) from a ``tries.json`` file
+        base_params: dict
+            Base parameters of the runcard which can be used to complete the hyperparameter
+            dictionary when not all parameters were scanned
+        minimum_losses: int
+            Minimum number of losses to be found in the trial for it to be considered succesful
+    """
+
+    def __init__(self, trial_dict, base_params=None, minimum_losses=1):
+        self._trial_dict = trial_dict
+        self._minimum_losses = minimum_losses
+        self._original_params = base_params
+        self._reward = None
+
+    @property
+    def reward(self):
+        """Return and cache the reward value"""
+        if self._reward is None:
+            self._reward = self._evaluate()
+        return self._reward
+
+    @property
+    def loss(self):
+        """Return the loss of the hyperopt dict"""
+        if self._trial_dict["result"].get("status") != "ok":
+            return False
+        return self._trial_dict["result"]["loss"]
+
+    @property
+    def params(self):
+        """Parameters for the fit"""
+        trial_results = self._trial_dict["misc"]["space_vals"]
+        if self._original_params:
+            hyperparameters = dict(self._original_params, **trial_results)
+        else:
+            hyperparameters = trial_results
+        # Ensure that no hyperparameters has the wrong shape/form
+        # 1. For n3fit, activation_per_layer must be a list
+        apl = hyperparameters.get("activation_per_layer")
+        if apl is not None and isinstance(apl, str) and "nodes_per_layer" in hyperparameters:
+            # If apl is a string, it can only bring information if there is `nodes_per_layer`
+            apl = [apl]*(len(hyperparameters["nodes_per_layer"])-1) + ["linear"]
+            hyperparameters["activation_per_layer"] = apl
+        return hyperparameters
+
+    # Slightly fake a dictionary behaviour with the params attribute
+    def __getitem__(self, item):
+        return self.params[item]
+
+    def get(self, item, default=None):
+        return self.params.get(item, default)
+    #####
+
+    def __str__(self):
+        strs = ["Parameters:"] + [f"  {i}: {k}" for i, k in self.params.items()]
+        strs.append(f"Reward: {self.reward}")
+        str_out = "\n".join(strs)
+        return str_out
+
+    def _evaluate(self):
+        """Evaluate the reward function for a given trial
+        Reward = 1.0/loss
+        """
+        result = self._trial_dict["result"]
+        if result.get("status") != "ok":
+            return False
+        # If we don't have enough validation losses, fail
+        val_loss = result["kfold_meta"].get("validation_losses", [])
+        if self._minimum_losses and len(val_loss) < self._minimum_losses:
+            return False
+        return 1.0 / result["loss"]
+
+    def __gt__(self, another_trial):
+        """Return true if the current trial is preferred
+        when compared to the target"""
+        if not another_trial.reward:
+            return True
+        if not self._reward:
+            return False
+        return self._reward > another_trial._reward
+
+    def __lt__(self, another_trial):
+        """Return true if the target trial is preferred
+        when compared to the current (self) one"""
+        return not self > another_trial
+
+
+#########
 
 # A mapping between the names the fields have in the json file
 # and more user-friendly names
@@ -421,7 +519,7 @@ def hyperopt_dataframe(commandline_args):
 
 
 @table
-def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
+def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
     """
     Generates a clean table with information on the hyperparameter settings of the best setup. 
     """

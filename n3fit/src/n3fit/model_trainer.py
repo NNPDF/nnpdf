@@ -155,7 +155,7 @@ class ModelTrainer:
         self.print_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
-        self.hyperkeys = None
+        self._hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]
             self.hyper_threshold = None
@@ -228,7 +228,7 @@ class ModelTrainer:
         self.pass_status = status_ok
         if keys is None:
             keys = []
-        self.hyperkeys = keys
+        self._hyperkeys = keys
         if hyperopt_on:
             self.print_summary = False
             self.mode_hyperopt = True
@@ -691,12 +691,16 @@ class ModelTrainer:
 
     def _hyperopt_override(self, params):
         """ Unrolls complicated hyperopt structures into very simple dictionaries"""
-        # I love the smell of napalm in the morning
-        for hyperkey in self.hyperkeys:
+        # If the input contains all parameters, then that's your dictionary of hyperparameters
+        hyperparameters = params.get("parameters")
+        if hyperparameters is not None:
+            return hyperparameters
+        # Else, loop over all different keys and unroll the dictionaries within hyperparameters
+        for hyperkey in self._hyperkeys:
             item = params[hyperkey]
             if isinstance(item, dict):
-                for key, value in item.items():
-                    params[key] = value
+                params.update(item)
+        return params
 
     def enable_tensorboard(self, logdir, weight_freq=0, profiling=False):
         """Enables tensorboard callback for further runs of the fitting procedure
@@ -759,18 +763,18 @@ class ModelTrainer:
         print("")
         clear_backend_state()
 
-        # Preprocess some hyperparameters
-        epochs = int(params["epochs"])
-        stopping_patience = params["stopping_patience"]
-        stopping_epochs = int(epochs * stopping_patience)
-
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
         if self.mode_hyperopt:
             log.info("Performing hyperparameter scan")
-            for key in self.hyperkeys:
+            for key in self._hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
-            self._hyperopt_override(params)
+            params = self._hyperopt_override(params)
+
+        # Preprocess some hyperparameters
+        epochs = int(params["epochs"])
+        stopping_patience = params["stopping_patience"]
+        stopping_epochs = int(epochs * stopping_patience)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds

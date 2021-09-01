@@ -8,12 +8,12 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
-from collections import namedtuple, OrderedDict
-from glob import glob
+from collections import namedtuple
 import re
 import enum
 import functools
 import inspect
+import json
 import logging
 
 import numpy as np
@@ -35,6 +35,7 @@ from NNPDF import (LHAPDFSet,
 from validphys import lhaindex, filters
 from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
+from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 
 log = logging.getLogger(__name__)
@@ -670,6 +671,42 @@ class HyperscanSpec(FitSpec):
                     tries[idx] = test_path
             self._tries_files = tries
         return self._tries_files
+
+    def get_all_trials(self, base_params=None):
+        """Read all trials from all tries files
+        If there are original runcard-based parameters, a reference to them can be passed
+        to the trials so that a full hyperparameter dictionary can be defined
+        """
+        all_trials = []
+        for trial_file in self.tries_files:
+            with open(trial_file, "r") as tf:
+                all_trials += [HyperoptTrial(i, base_params=base_params) for i in json.load(tf)]
+        self._all_trials = all_trials
+        return all_trials
+
+    def sample_trials(self, n=None, base_params=None, sigma=4.0):
+        """Parse all trials in the hyperscan object
+        and then return an array of ``n`` trials read from the ``tries.json`` files
+        and sampled according to their reward.
+        If ``n`` is ``None``, no sapling is performed and all trials are returned
+
+        Returns
+        -------
+            Dictionary on the form {parameters: list of trials}
+        """
+        all_trials_raw = self.get_all_trials(base_params=base_params)
+        # Drop all failing trials
+        all_trials = list(filter(lambda i: i.reward, all_trials_raw))
+        if n is None:
+            return all_trials
+        if len(all_trials) < n:
+            log.warning("Asked for %d trials, only %d valid trials found", n, len(all_trials))
+        # Compute weights proportionally to the reward (goes from 0 (worst) to 1 (best, loss=1))
+        rewards = np.array([i.reward for i in all_trials])
+        weight_raw = np.exp(sigma * rewards ** 2)
+        total = np.sum(weight_raw)
+        weights = weight_raw / total
+        return np.random.choice(all_trials, replace=False, size=n, p=weights)
 
 
 class TheoryIDSpec:

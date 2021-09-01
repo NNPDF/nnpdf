@@ -4,6 +4,8 @@ y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
 figure_by:
   - k2 
 
+kinematics_override: ewk_mll_sqrt_scale
+
 experiment: "CMS"
 
 nnpdf31_process: DY

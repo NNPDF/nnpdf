@@ -6,8 +6,8 @@
 
 In this section we fine-grain the explanation of the different parameters that enter the runcard.
 
+- :ref:`datasetsel-label`
 - :ref:`preprocessing-label`
-- :ref:`trval-label`
 - :ref:`networkarch-label`
 - :ref:`optimizer-label`
 - :ref:`positivity-label`
@@ -15,6 +15,45 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`parallel-label`
 - :ref:`otheroptions-label`
 
+.. _datasetsel-label:
+
+Dataset selection
+-----------------
+The first thing one finds when building a fit runcard for
+``nnpdf`` is the dataset selection, `dataset_inputs`.
+
+.. code-block:: yaml
+
+    dataset_inputs:
+        - { dataset: SLACP_dwsh, frac: 0.5}
+        - { dataset: NMCPD_dw, frac: 0.5 }
+        - { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
+
+        
+The `dataset_inputs` key contains a list of dictionaries defining the datasets
+to be used in the fit as well as their options (which are detailed in :ref:`datasetspec-core-label`).
+
+Training / Validation split
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The fraction of events that are considered for the training and validation sets is defined by the ``frac`` key in the ``experiment:dataset`` parameter of the nnpdf runcard. A fraction of ``X`` means that ``X`` of the event will go into the training set while ``1-X`` will enter the validation set for that dataset.
+
+.. code-block:: yaml
+
+    dataset_inputs:
+    - { dataset: SLACP_dwsh, frac: 0.75}
+  
+It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
+
+The random seed for the training/validation split is defined by the variable ``trvlseed``.
+By default the seed is further modified by the replica index, but it is possible
+to fix it such that it is the same for all replicas with ``same_trvl_per_replica``
+(``false`` by default).
+
+.. code-block:: yaml
+
+    trvlseed: 7
+    same_trvl_per_replica: true
+                
 
 .. _preprocessing-label:
 
@@ -87,34 +126,6 @@ by running
 
 More information on ``vp-nextfitruncard`` can be found in
 :ref:`run-iterated-fit`.
-
-.. _trval-label:
-
-Training / Validation split
----------------------------
-The fraction of events that are considered for the training and validation sets is defined by the ``frac`` key in the ``experiment:dataset`` parameter of the nnpdf runcard. A fraction of ``X`` means that ``X`` of the event will go into the training set while ``1-X`` will enter the validation set for that dataset.
-
-.. code-block:: yaml
-
-    experiments:
-    - experiment: ALL
-        datasets:
-        - { dataset: SLACP, frac: 0.8}
-        - { dataset: NMCPD, frac: 0.8 }      
-        - { dataset: CMSJETS11, frac: 0.8, sys: 10 }
-
-It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
-
-The random seed for the training/validation split is defined by the variable ``trvlseed``.
-By default the seed is further modified by the replica index, but it is possible
-to fix it such that it is the same for all replicas with ``same_trvl_per_replica``
-(``false`` by default).
-
-.. code-block:: yaml
-
-    trvlseed: 7
-    same_trvl_per_replica: true
-
 
 .. _networkarch-label:
 
@@ -215,41 +226,6 @@ During the fit, the positivity loss will be compared to this value. If it is abo
 the positivity won't be considered good (and thus the fit won't stop).
 If the replica reaches the maximum number of epochs with the positivity loss above
 this value, it will be tagged as ``POS_VETO`` and the replica removed from postfit.
-     
-              
-.. _otheroptions-label:
-
-Other options
--------------
-
-Imposing sum rules
-^^^^^^^^^^^^^^^^^^
-
-By default in ``n3fit`` sum rules are imposed following the definitions in Eq. (10) of
-the `NNPDF3.0 paper <https://arxiv.org/pdf/1410.8849.pdf#page=29>`_.
-It is however possible to disable them by setting to false the ``sum_rules`` flag.
-
-.. code-block:: yaml
-
-    fitting:
-      sum_rules: False
-      
-
-It is also possible to impose just the valence or the gluon sum rules by using the
-``MSR`` or ``VSR`` flags (``True`` is equal to ``All``).
-      
-
-Threshold :math:`\chi2`
-^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: yaml
-
-    parameters:
-        threshold_chi2: 4.0
-
-- ``threshold_chi2``: sets a maximum validation :math:`\chi2` for the stopping to activate. Avoids (too) early stopping.
-
-
 
 
 .. _tensorboard-label:
@@ -325,8 +301,8 @@ should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
 to the right index (usually ``0, 1, 2``) or leaving it explicitly empty
 to avoid running on GPU: ``export CUDA_VISIBLE_DEVICES=""``
 
-
 Note that at present it cannot be used together with the ``hyperopt`` module.
+
 
 .. _otheroptions-label:
 
@@ -380,3 +356,20 @@ for the training and validation splits respectively. The data points are indexed
 according to their experiment. Additionally, the union of these two is saved in
 ``<fit_directory>/replica_<number>/datacuts_theory_fitting_pseudodata_table.csv``
 if one is not interested in the exact nature of the splitting.
+
+
+Imposing sum rules
+^^^^^^^^^^^^^^^^^^
+
+By default in ``n3fit`` sum rules are imposed following the definitions in Eq. (10) of
+the `NNPDF3.0 paper <https://arxiv.org/pdf/1410.8849.pdf#page=29>`_.
+It is however possible to disable them by setting to false the ``sum_rules`` flag.
+
+.. code-block:: yaml
+
+    fitting:
+      sum_rules: False
+      
+
+It is also possible to impose just the valence or the momentum sum rules by using the
+``VSR`` or ``MSR`` flags, respectively (``True`` is equal to ``All``).

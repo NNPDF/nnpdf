@@ -6,7 +6,6 @@
 """
 
 import os
-import time
 import json
 import numpy as np
 from reportengine.compat import yaml
