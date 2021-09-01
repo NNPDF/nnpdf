@@ -1,6 +1,7 @@
-dataset_label: CMS $W+c$ total
-experiment: CMS
-nnpdf31_process: DY
-spiderplot_group: LHC W,Z prod. ($p_T$ and jets)
+dataset_label: "CMS $W+c$ total"
 x: k1
-y_label: $d\sigma(W+c)/d|\eta_l|$ (fb)
+y_label: '$d\sigma(W+c)/d|\eta_l|$ (fb)' 
+#x_label: 'Boson rapidity $|y|$'
+experiment: "CMS"
+
+nnpdf31_process: DY

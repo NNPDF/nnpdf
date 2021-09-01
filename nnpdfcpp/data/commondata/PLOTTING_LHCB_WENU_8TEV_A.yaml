@@ -1,7 +1,9 @@
-dataset_label: LHCb $W \to e\nu$ 8 TeV
-experiment: LHCb
-nnpdf31_process: DY
-spiderplot_group: DY
+dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
 x: k1
-x_label: $\eta^e$
-y_label: $A_e$
+
+y_label: '$A_e$' 
+x_label: '$\eta^e$'
+
+experiment: "LHCb"
+
+nnpdf31_process: DY

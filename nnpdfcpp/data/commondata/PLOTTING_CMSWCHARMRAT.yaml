@@ -1,6 +1,7 @@
-dataset_label: CMS $W+c$ ratio
-experiment: CMS
-nnpdf31_process: DY
-spiderplot_group: LHC W,Z prod. ($p_T$ and jets)
+dataset_label: "CMS $W+c$ ratio"
 x: k1
-y_label: $\sigma(W^+ + \bar{c})/\sigma(W^- + c)$
+y_label: '$\sigma(W^+ + \bar{c})/\sigma(W^- + c)$' 
+#x_label: 'Boson rapidity $|y|$'
+experiment: "CMS"
+
+nnpdf31_process: DY

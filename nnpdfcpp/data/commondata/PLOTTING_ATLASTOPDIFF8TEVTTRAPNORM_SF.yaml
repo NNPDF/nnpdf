@@ -1,8 +1,8 @@
 dataset_label: "ATLAS $t\\bar{t}$ $y_{t\bar{t}}$"
-experiment: ATLAS
-figure_by:
-- k3
-nnpdf31_process: TOP
-spiderplot_group: TOP
 x: k1
-y_label: $(1/\sigma_{t\bar{t}})d\sigma_{t\bar{t}}/dy_{t\bar{t}}$
+y_label: '$(1/\sigma_{t\bar{t}})d\sigma_{t\bar{t}}/dy_{t\bar{t}}$'
+figure_by:
+  - k3
+
+experiment: "ATLAS"
+nnpdf31_process: TOP

@@ -1,8 +1,10 @@
-dataset_label: ATLAS $W^-$+jet 8 TeV
-experiment: ATLAS
-nnpdf31_process: DY
-spiderplot_group: LHC W,Z prod. ($p_T$ and jets)
+dataset_label: "ATLAS $W^-$+jet 8 TeV"
+
 x: k1
-x_label: $p_T^{W^-}$ (GeV)
-y_label: $d\sigma/dp_T^{W^-}$ (fb/GeV)
+x_label: '$p_T^{W^-}$ (GeV)'
+y_label: '$d\sigma/dp_T^{W^-}$ (fb/GeV)'
 y_scale: log
+
+experiment: "ATLAS"
+
+nnpdf31_process: DY

@@ -1,12 +1,15 @@
-dataset_label: D0 jet run II 1.96 TeV
-experiment: D0
-kinematics_override: jet_sqrt_scale
-line_by:
-- k1
-nnpdf31_process: JETS
-result_transform: qbinjets
-spiderplot_group: JETS/DIJETS/PHOTON
+dataset_label: "D0 jet run II 1.96 TeV"
+
 x: k2
-x_scale: linear
-y_label: $10^{3*qbin} d\sigma/dp_T$
+
+y_label: '$10^{3*qbin} d\sigma/dp_T$' 
 y_scale: log
+x_scale: linear
+result_transform: qbinjets
+kinematics_override: jet_sqrt_scale
+
+line_by:
+    - k1
+experiment: "D0"
+
+nnpdf31_process: JETS

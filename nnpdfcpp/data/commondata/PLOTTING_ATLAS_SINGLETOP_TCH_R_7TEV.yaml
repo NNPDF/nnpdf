@@ -1,4 +1,4 @@
-dataset_label: ATLAS single top $R_{t}$ 7 TeV
-experiment: ATLAS
+dataset_label: "ATLAS single top $R_{t}$ 7 TeV"
+
+experiment: "ATLAS"
 nnpdf31_process: SINGLETOP
-spiderplot_group: LHC single $t$

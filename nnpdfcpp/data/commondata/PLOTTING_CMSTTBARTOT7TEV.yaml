@@ -1,4 +1,5 @@
-dataset_label: CMS $\sigma_{tt}^{\rm tot}$ 7 TeV
-experiment: CMS
+dataset_label: "CMS $\\sigma_{tt}^{\\rm tot}$ 7 TeV"
+
+experiment: "CMS"
+
 nnpdf31_process: TOP
-spiderplot_group: LHC top-quark pair prod.

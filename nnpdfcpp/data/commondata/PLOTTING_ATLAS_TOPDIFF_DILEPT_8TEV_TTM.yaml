@@ -1,8 +1,8 @@
-dataset_label: ATLAS $t\bar{t}$ absolute $m_{t\bar{t}}$
-experiment: ATLAS
-figure_by:
-- k3
-nnpdf31_process: TOP
-spiderplot_group: TOP
+dataset_label: "ATLAS $t\\bar{t}$ absolute $m_{t\\bar{t}}$"
 x: k1
-y_label: $d\sigma_{t\bar{t}}/dm_{t\bar{t}}$ (pb/GeV)
+y_label: '$d\sigma_{t\bar{t}}/dm_{t\bar{t}}$ (pb/GeV)'
+figure_by:
+  - k3 
+
+experiment: "ATLAS"
+nnpdf31_process: TOP

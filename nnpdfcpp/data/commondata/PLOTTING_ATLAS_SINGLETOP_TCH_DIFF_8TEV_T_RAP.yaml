@@ -1,8 +1,8 @@
-dataset_label: ATLAS single top $y$
-experiment: ATLAS
-figure_by:
-- k3
-nnpdf31_process: SINGLETOP
-spiderplot_group: SINGLETOP
+dataset_label: "ATLAS single top $y$"
 x: k1
-y_label: $d\sigma_t/d|y_t|$ (pb)
+y_label: '$d\sigma_t/d|y_t|$ (pb)'
+figure_by:
+  - k3
+
+experiment: "ATLAS"
+nnpdf31_process: SINGLETOP

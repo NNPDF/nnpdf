@@ -91,12 +91,14 @@ class PlotInfo:
         process_description='-',
         nnpdf31_process,
         spiderplot_group,
+        nuclear_group,
         **kwargs,
     ):
         self.kinlabels = kinlabels
         self.experiment = experiment
         self.nnpdf31_process = nnpdf31_process
         self.spiderplot_group = spiderplot_group
+        self.nuclear_group = nuclear_group
         if x is None:
             x = 'idat'
         self.x = x
@@ -216,6 +218,7 @@ class PlottingOptions:
     experiment: typing.Optional[str] = None
     nnpdf31_process: typing.Optional[str] = None
     spiderplot_group: typing.Optional[str] = None
+    nuclear_group: typing.Optional[str] = None
     data_reference: typing.Optional[str] = None
     theory_reference: typing.Optional[str] = None
     process_description: typing.Optional[str] = None

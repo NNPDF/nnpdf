@@ -1,6 +1,7 @@
-dataset_label: 'integrability dataset: $xV_8$ PDF, Q=Q_0'
-experiment: INTEGXV8_543
-kinematics_override: dis_sqrt_scale
-nnpdf31_process: DIS CC
-spiderplot_group: DIS CC
+dataset_label: "integrability dataset: $xV_8$ PDF, Q=Q_0"
 x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "INTEGXV8_543"
+
+nnpdf31_process: DIS CC

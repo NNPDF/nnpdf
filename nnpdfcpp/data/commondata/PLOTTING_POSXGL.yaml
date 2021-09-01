@@ -1,6 +1,7 @@
-dataset_label: 'positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$'
-experiment: POSXGL
-kinematics_override: dis_sqrt_scale
-nnpdf31_process: DIS CC
-spiderplot_group: DIS CC
+dataset_label: "positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$"
 x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "POSXGL"
+
+nnpdf31_process: DIS CC

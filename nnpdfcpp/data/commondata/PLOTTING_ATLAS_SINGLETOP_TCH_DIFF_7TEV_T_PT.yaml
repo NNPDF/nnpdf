@@ -1,8 +1,8 @@
-dataset_label: ATLAS single top $p^T$
-experiment: ATLAS
-figure_by:
-- k3
-nnpdf31_process: SINGLETOP
-spiderplot_group: SINGLETOP
+dataset_label: "ATLAS single top $p^T$"
 x: k1
-y_label: $d\sigma_t/dp^T_t$ (pb/GeV)
+y_label: '$d\sigma_t/dp^T_t$ (pb/GeV)'
+figure_by:
+  - k3
+
+experiment: "ATLAS"
+nnpdf31_process: SINGLETOP

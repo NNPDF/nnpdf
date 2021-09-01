@@ -1,7 +1,10 @@
-dataset_label: ATLAS $W$ $p_t$ 7 TeV
-experiment: ATLAS
-kinematics_override: ewk_pt_sqrt_scale
-nnpdf31_process: DY
-spiderplot_group: DY
+dataset_label: "ATLAS $W$ $p_t$ 7 TeV"
+
 x: k1
-y_label: $d\sigma_{W}/dp_T$
+y_label: '$d\sigma_{W}/dp_T$' 
+#x_label: 'W $|p_T|$'
+
+kinematics_override: ewk_pt_sqrt_scale
+experiment: "ATLAS"
+
+nnpdf31_process: DY
