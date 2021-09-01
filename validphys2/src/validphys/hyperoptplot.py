@@ -80,6 +80,10 @@ class HyperoptTrial:
             # If apl is a string, it can only bring information if there is `nodes_per_layer`
             apl = [apl]*(len(hyperparameters["nodes_per_layer"])-1) + ["linear"]
             hyperparameters["activation_per_layer"] = apl
+        # 2. If there _was_ originally a reward included in this parameter (because it comes from and
+        #   previous hyperoptimization) mark it as such
+#         if (reward:=hyperparameters.pop("reward", None)) is not None:
+#             hyperparameters["old_reward"] = reward
         return hyperparameters
 
     # Slightly fake a dictionary behaviour with the params attribute
@@ -106,6 +110,9 @@ class HyperoptTrial:
         # If we don't have enough validation losses, fail
         val_loss = result["kfold_meta"].get("validation_losses", [])
         if self._minimum_losses and len(val_loss) < self._minimum_losses:
+            return False
+        # This is equivalent to the case above
+        if result["loss"] == 0.0:
             return False
         return 1.0 / result["loss"]
 
