@@ -521,6 +521,8 @@ PDF4LHC20 = LinearBasis.from_mapping({
 
         'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
         'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+    
+        'photon': {'photon': 1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
                'v': 'V', 'v3': 'V3', 't3': 'T3', 't8': 'T8'},
@@ -698,7 +700,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         v8 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
-        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
 
     flist = [sng, g, v, v3, v8, t3, t8, cp]
