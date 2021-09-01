@@ -3,12 +3,16 @@ name: Tests
 
 on: [push]
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.7, 3.8]
+        python-version: [3.8]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
