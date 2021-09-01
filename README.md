@@ -3,6 +3,7 @@
 </div>
 
 ![Build status](https://github.com/NNPDF/nnpdf/actions/workflows/tests.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/118135201.svg)](https://zenodo.org/badge/latestdoi/118135201)
 
 # NNPDF: An open-source machine learning framework for global analyses of parton distributions
 
