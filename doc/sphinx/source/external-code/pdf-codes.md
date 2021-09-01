@@ -27,10 +27,10 @@ section](dglap.md).
 
 ## PDF compression
 In order to maintain the faithfulness of released NNPDF grids, while keeping a reasonable number of replicas,
-1000 replicas are generated and then compressed to a set of 100 replicas.
+a PDF set with 1000 replicas is generated and then compressed to a set of 100 replicas.
 This is done with the [pyCompressor](https://n3pdf.github.io/pycompressor/) library,
 a python compression code that extracts, from an initial PDF set of replicas,
-the subset that most truthfully reproduces the statistical properties of the prior. 
+the subset that most truthfully reproduces the underlying probability distribution of the prior. 
 [pyCompressor](https://n3pdf.github.io/pycompressor/) is an updated python version of
 [compressor](https://github.com/scarrazza/compressor), which was used in previous releases.
 
