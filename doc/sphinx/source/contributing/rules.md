@@ -10,7 +10,7 @@ For more information on the Git workflow that NNPDF adopts, see the [Git and Git
 
 Code contributions should be presented in the form of [Pull
 Requests](https://github.com/NNPDF/nnpdf/pulls)(PRs) to the repository.
-Never commit modifications directly to the master version of the code. Instead,
+Avoid committing modifications directly to the master version of the code. Instead,
 create a new branch and make modifications on it.
 
 This PR should adhere to the following rules:
