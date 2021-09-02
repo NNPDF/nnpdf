@@ -178,7 +178,7 @@ explained above, if the user has not already done so.
    
    .. code::
    
-       conda install sysroot_linux-64
+       conda install sysroot_linux-64=2.17
 
 5. We now need to make the installation prefix point to our
    ``nnpdf-dev`` environment. Fortunately, when you activate the environment,
