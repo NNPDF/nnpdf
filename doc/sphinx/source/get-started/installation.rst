@@ -171,7 +171,14 @@ explained above, if the user has not already done so.
 
    .. code::
 
-       conda install pkg-config swig=3.0.10 cmake
+       conda install pkg-config swig cmake
+      
+   When working on a Linux system it is `currently 
+   <https://github.com/NNPDF/nnpdf/pull/1280>`_ also needed to run
+   
+   .. code::
+   
+       conda install sysroot_linux-64
 
 5. We now need to make the installation prefix point to our
    ``nnpdf-dev`` environment. Fortunately, when you activate the environment,
