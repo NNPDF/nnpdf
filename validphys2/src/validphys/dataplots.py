@@ -495,6 +495,11 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
         kwargs['s'] += 10
 
 @figure
+def plot_dataspecs_groups_chi2_spider(dataspecs_groups_chi2_table):
+    fig, ax = _plot_chi2s_spider_df(dataspecs_groups_chi2_table)
+    return fig
+
+@figure
 def plot_fits_chi2_spider(fits, fits_groups_chi2,
                           fits_groups_data, processed_metadata_group):
     """Plots the chi²s of all groups of datasets
