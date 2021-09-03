@@ -25,6 +25,18 @@ written to replace APFEL, which is currently dubbed EKO ('Evolution Kernel Opera
 general information about PDF evolution and the DGLAP equations, you can go to the [Theory
 section](dglap.md).
 
+## PDF compression
+PDF compression seeks to maintain the statistical accuracy of a large sample of replicas
+produced by a fit when using a PDF set with a smaller number of replicas (and thus fewer 
+convolutions required to compute cross sections with PDF uncertainties). For example the 
+main published PDFs are typically based on a 1000 replica fit, which can then be compressed to 
+around a 100 replicas PDF set while maintaining good accuracy of most relevant statistical estimators.
+This is done with the [pyCompressor](https://n3pdf.github.io/pycompressor/) library,
+a python compression code that extracts, from an initial PDF set of replicas,
+the subset that most truthfully reproduces the underlying probability distribution of the prior. 
+[pyCompressor](https://n3pdf.github.io/pycompressor/) is an updated python version of
+[compressor](https://github.com/scarrazza/compressor), which was used in previous releases.
+
 ### Other codes
 
 [Hoppet](https://hoppet.hepforge.org/) ('Higher Order Perturbative Parton Evolution Toolkit') is an
