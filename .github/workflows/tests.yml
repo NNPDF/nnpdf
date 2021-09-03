@@ -3,17 +3,21 @@ name: Tests
 
 on: [push]
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest] #, macos-latest]
+        os: [ubuntu-latest, macos-latest]
         python-version: [3.8]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
-#           - os: macos-latest
-#             CONDA_OS: osx-64
+          - os: macos-latest
+            CONDA_OS: osx-64
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
@@ -35,8 +39,7 @@ jobs:
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/conda
-        conda config --prepend channels https://packages.nnpdf.science/conda-private
+        conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
         conda activate test
         conda install conda-build --yes
@@ -62,7 +65,7 @@ jobs:
         conda activate test
         scp -i "$KEY" -o StrictHostKeyChecking=no\
           $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
-          dummy@packages.nnpdf.science:~/packages/conda-private/${{matrix.CONDA_OS}}
+          dummy@packages.nnpdf.science:~/packages/conda/${{matrix.CONDA_OS}}
     - name: Build and upload sphinx documentation to NNPDF server
       if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master'
       shell: bash -l {0}

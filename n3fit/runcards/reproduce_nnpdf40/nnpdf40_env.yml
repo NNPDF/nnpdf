@@ -1,4 +1,4 @@
-name: nn4deploy
+name: nnpdf40
 channels:
   - https://packages.nnpdf.science/private
   - https://packages.nnpdf.science/public

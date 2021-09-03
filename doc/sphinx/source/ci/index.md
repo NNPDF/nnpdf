@@ -10,7 +10,7 @@ on the code and produce [binary builds](conda) which allow it to be
 automatically deployed. The services are configured so that they react to
 [git](git) pushes to the GitHub server.
 
-Currently we are using actively [GitHub Actions](https://help.github.com/en/actions).  
+Currently we are using actively [GitHub Actions](https://help.github.com/en/actions).
 In the past, the [Travis CI](https://travis-ci.com/) service was used, but owing to timeout failures on Mac we have decided to move the CI to GitHub Actions.
 The [Gitlab CI service hosted at
 CERN](https://gitlab.cern.ch/) was also used in the past, but support was
@@ -38,6 +38,7 @@ Our CI service works roughly as follows:
 	server, which displays that information next to the relevant pull request or
 	commit. Some logs are generated, which can aid in determining the cause of
 	errors.
+ 4. Generate docker images for tag releases with ready-to-run NNPDF installation.
 
 The progress reports of the various jobs at GitHub Actions, as well as the
 corresponding logs are available at <https://github.com/NNPDF/nnpdf/actions>, upon logging in
@@ -67,7 +68,7 @@ The secrets are.
 
 ### Repository configuration
 
-The entry point for GitHub Actions are yaml rules files that can be found in the 
+The entry point for GitHub Actions are yaml rules files that can be found in the
 [`.github/workflows/`](https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/) folder.
 They specify which operating systems and versions are tested, which
 versions of Python, some environment variables, and command instructions for linux and macos. The commands basically call `conda build` and upload the relevant packages if required.
@@ -77,6 +78,14 @@ uploaded. For other branches, the build and testing happens, but the results are
 discarded in the end. This behavior can be changed by (temporarily) commenting the lines starting with `if: github.ref == 'refs/heads/master'` in the `.github/workflows/rules.yml` file. This can be
 useful to test modifications to the uploading.
 
+When a new tag is created the github action stored in
+`.github/workflows/docker.yml` is executed. This action generates a new docker
+image containing the tagged code. This docker image is then uploaded to the
+[NNPDF GitHub Package
+registry](https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf). Finally, the
+action stores the conda environment file created during the installation process
+and opens a pull request placing the file inside `n3fit/runcards`. This feature
+allows recovering the code and results obtained with specific tag of the code.
 
 ## Operation of automatic fit bot
 

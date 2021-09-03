@@ -52,6 +52,7 @@ Miscellaneous
 .. toctree ::
    :maxdepth: 1
 
+   ./reproduce
    ./list-resources.md
    ./pseudodata.md
    ./newplottingfn.rst

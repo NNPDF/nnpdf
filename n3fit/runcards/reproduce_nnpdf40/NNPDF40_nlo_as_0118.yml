@@ -1,7 +1,7 @@
 #
 # Configuration file for n3fit
 #
-description: "NNPDF4.0 NLO global, deuteron and nuclear uncertainties. Runcard for the baseline NLO fit, pending iteration. alphas=0.118"
+description: NNPDF4.0 NLO global, alphas=0.118
 
 ############################################################
 # frac: training fraction
@@ -27,8 +27,8 @@ NLODatasets: &NLODatasets
 - {dataset: HERACOMBNCEP920, frac: 0.75}
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75} 
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}
 - {dataset: DYE886R_dw_ite, frac: 0.75}
 - {dataset: DYE886P, frac: 0.75, cfac: []}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: []}
@@ -39,12 +39,12 @@ NLODatasets: &NLODatasets
 - {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: []}
 - {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: []}
 - {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: []}
-- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: []}               
+- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: []}
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: []}
 - {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: []}
-- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: []} 
-- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM]}       
-- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}         
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: []}
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM]}
+- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75, cfac: []}
 - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75, cfac: []}
@@ -63,25 +63,25 @@ NLODatasets: &NLODatasets
 - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: []}
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: []}
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: []}
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: []} 
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: []}
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: []}
 - {dataset: CMSWEASY840PB, frac: 0.75, cfac: []}
 - {dataset: CMSWMASY47FB, frac: 0.75, cfac: []}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: []}
 - {dataset: CMSWMU8TEV, frac: 0.75, cfac: []}
 - {dataset: CMSZDIFF12, frac: 0.75, cfac: [NRM]}
-- {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: []} 
+- {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: []}
 - {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: []}
 - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 0.75, cfac: []}
-- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: []}     
-- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: []}  
+- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: []}
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: []}
 - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: []}
 - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: []}
 - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: []}
-- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: []}                
+- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: []}
 - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: []}
 - {dataset: CMSWCHARMTOT, frac: 0.75}
 - {dataset: CMSWCHARMRAT, frac: 0.75}
@@ -116,41 +116,43 @@ NNLODatasets: &NNLODatasets
 - {dataset: HERACOMBCCEM, frac: 0.75}
 - {dataset: HERACOMBCCEP, frac: 0.75}
 - {dataset: HERACOMB_SIGMARED_C, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}
 - {dataset: DYE886R_dw_ite, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
 - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC,QCD]}
+- {dataset: DYE906R_dw_ite, frac: 0.75, cfac: [ACC, QCD]}
 - {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
 - {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
 - {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               
+- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}             
-- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]} 
+- {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}
+- {dataset: ATLAS_DY_2D_8TEV_LOWMASS, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}
-- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
+# - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
+# - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 0.75} # No Cfactors at NNLO
+- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
 - {dataset: ATLASTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_TTBARTOT_13TEV_FULLLUMI, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}    
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}    
-- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}    
-- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}  
-- {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]} 
-- {dataset: ATLASPHT15_SF, frac: 0.75, cfac: [QCD, EWK]}    
-- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]} 
-- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}  
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}  
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}     
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASPHT15_SF, frac: 0.75, cfac: [QCD, EWK]}
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
 - {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
@@ -169,6 +171,9 @@ NNLODatasets: &NNLODatasets
 - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}
 - {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSWCHARMTOT, frac: 0.75} # No Cfactors at NNLO
+# - {dataset: CMSWCHARMRAT, frac: 0.75} # No Cfactors at NNLO
+# - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV, frac: 0.75} # No Cfactors at NNLO
 - {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
 - {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
@@ -179,29 +184,29 @@ NNLODatasets: &NNLODatasets
 
 
 do_not_require_similarity_for:
-    - ATLAS_WCHARM_WP_DIFF_7TEV
-    - ATLAS_WCHARM_WM_DIFF_7TEV
-    - CMSWCHARMTOT
-    - CMSWCHARMRAT
-    - CMS_WCHARM_DIFF_UNNORM_13TEV
+- ATLAS_WCHARM_WP_DIFF_7TEV
+- ATLAS_WCHARM_WM_DIFF_7TEV
+- CMSWCHARMTOT
+- CMSWCHARMRAT
+- CMS_WCHARM_DIFF_UNNORM_13TEV
 
 
 cut_similarity_threshold: 2
 
 cuts_intersection_spec:
-    - theoryid: 208
-      pdf: NNPDF31_nlo_as_0118
-      dataset_inputs: *NLODatasets
+- theoryid: 208
+  pdf: NNPDF31_nlo_as_0118
+  dataset_inputs: *NLODatasets
 
-    - theoryid: 200
-      pdf: NNPDF31_nlo_as_0118
-      dataset_inputs: *NNLODatasets
+- theoryid: 200
+  pdf: NNPDF31_nlo_as_0118
+  dataset_inputs: *NNLODatasets
 
 
 
 ############################################################
 datacuts:
-  t0pdfset: NNPDF31_nlo_as_0118 # PDF set to generate t0 covmat
+  t0pdfset: 210712-theory-001   # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
   use_cuts: fromsimilarpredictions
@@ -211,9 +216,9 @@ theory:
   theoryid: 208     # database id
 
 ############################################################
-trvlseed: 475038818
-nnseed: 2394641471
-mcseed: 1831662593
+trvlseed: 376191634
+nnseed: 2080989803
+mcseed: 75955222
 save: false
 genrep: true      # true = generate MC replicas, false = use real data
 
@@ -240,14 +245,14 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
 fitting:
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
-  - {fl: sng, trainable: false, smallx: [1.093, 1.121], largex: [1.486, 3.287]}
-  - {fl: g, trainable: false, smallx: [0.8329, 1.071], largex: [3.084, 6.767]}
-  - {fl: v, trainable: false, smallx: [0.5202, 0.7431], largex: [1.556, 3.639]}
-  - {fl: v3, trainable: false, smallx: [0.1205, 0.4839], largex: [1.736, 3.622]}
-  - {fl: v8, trainable: false, smallx: [0.5864, 0.7987], largex: [1.559, 3.569]}
-  - {fl: t3, trainable: false, smallx: [-0.5019, 1.126], largex: [1.754, 3.479]}
-  - {fl: t8, trainable: false, smallx: [0.6305, 0.8806], largex: [1.544, 3.481]}
-  - {fl: t15, trainable: false, smallx: [1.087, 1.139], largex: [1.48, 3.365]}
+  - {fl: sng, trainable: false, smallx: [1.121, 1.154], largex: [1.498, 3.138]}
+  - {fl: g, trainable: false, smallx: [0.9224, 1.149], largex: [3.266, 6.214]}
+  - {fl: v, trainable: false, smallx: [0.5279, 0.8017], largex: [1.6, 3.588]}
+  - {fl: v3, trainable: false, smallx: [0.2011, 0.4374], largex: [1.761, 3.427]}
+  - {fl: v8, trainable: false, smallx: [0.5775, 0.8357], largex: [1.589, 3.378]}
+  - {fl: t3, trainable: false, smallx: [-0.484, 1.0], largex: [1.763, 3.397]}
+  - {fl: t8, trainable: false, smallx: [0.6714, 0.9197], largex: [1.572, 3.496]}
+  - {fl: t15, trainable: false, smallx: [1.073, 1.164], largex: [1.503, 3.636]}
 
 ############################################################
 positivity:

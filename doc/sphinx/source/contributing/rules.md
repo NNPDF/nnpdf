@@ -1,16 +1,17 @@
 ```eval_rst
 .. _rules:
 ```
-# Code development 
+# Code development
 
-Code development is carried out using Github. 
+Code development is carried out using Github.
 For more information on the Git workflow that NNPDF adopts, see the [Git and GitHub](./git.md) section.
 
-## Rules 
+## Code contributions
 
-**Never commit modifications directly to the master version of the code! Instead, 
-open a new branch of the code and make modifications on that branch. To merge
-changes to master a pull request (PR) should be opened.**
+Code contributions should be presented in the form of [Pull
+Requests](https://github.com/NNPDF/nnpdf/pulls)(PRs) to the repository.
+Avoid committing modifications directly to the master version of the code. Instead,
+create a new branch and make modifications on it.
 
 This PR should adhere to the following rules:
 
@@ -18,9 +19,8 @@ This PR should adhere to the following rules:
 address? If the reason for the PR has already been detailed in an issue, then this issue should be
 linked in the PR.
 
-* The PR should contain **documentation describing the new features**, if applicable. This obviously
-does not apply if the PR is itself proposing an addition or an alteration to the documentation. For
-information on adding to the documentation see [this section](../sphinx-documentation.md).
+* The PR should contain **[documentation](../sphinx-documentation.md) describing
+  the new features**, if applicable.
 
 * If the PR is fixing a bug, information should be given such that a reviewer can reproduce the bug.
 
@@ -32,17 +32,19 @@ Practically, this means that you should find a green tick next to your PR on the
 page](https://github.com/NNPDF/nnpdf/pulls). If you instead find a red cross next to your PR, the
 reason for the failure must be investigated and dealt with appropriately.
 
-* Please use the recommended resources detailed [here](../vp/examples.rst).
+* When writing examples, please use the recommended resources detailed
+[here](../vp/examples.rst).
 
 ## Example pull request
 
 You may find it instructive to go though this pull request that
-implements an arc-length computation:
+implements new convolution methods:
 
-<https://github.com/NNPDF/validphys2/pull/64>
+<https://github.com/NNPDF/nnpdf/pull/708/>
 
-It demonstrates how to leverage existing functionality to perform new
-computations and then present those as plots and tables.
+It demonstrates how to add a new feature, together with relevant tests and
+documentation, and refine it based on the discussion.
+
 
 ```eval_rst
 .. _reviews:

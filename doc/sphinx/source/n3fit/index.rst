@@ -10,17 +10,14 @@ Fitting code: ``n3fit``
    and `Keras <https://keras.io/>`_.
 -  The sections below are an overview of the ``n3fit`` design.
 
-``n3fit`` design
-----------------
-.. toctree::
-   :maxdepth: 1
-
-   methodology
-   hyperopt
-   runcard_detailed
 
 .. important::
     If you just want to know how to run a fit using ``n3fit``, head to :ref:`n3fit-usage`.
 
 
+.. toctree::
+   :maxdepth: 2
 
+   methodology
+   runcard_detailed
+   hyperopt

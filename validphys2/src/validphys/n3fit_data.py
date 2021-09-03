@@ -354,8 +354,11 @@ replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", 
 exps_pseudodata = collect("generate_data_replica", ("group_dataset_inputs_by_experiment",))
 replicas_exps_pseudodata = collect("exps_pseudodata", ("replicas",))
 
+replicas_indexed_make_replica = collect('indexed_make_replica', ('replicas',))
+
+
 @table
-def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
+def pseudodata_table(replicas_indexed_make_replica, replicas):
     """Creates a pandas DataFrame containing the generated pseudodata. The
     index is :py:func:`validphys.results.experiments_index` and the columns
     are the replica numbers.
@@ -367,15 +370,35 @@ def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
     The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
 
     """
-    rep_dfs = []
-    for rep_exps_pseudodata, rep in zip(replicas_exps_pseudodata, replicas):
-        all_pseudodata = np.concatenate(rep_exps_pseudodata)
-        rep_dfs.append(pd.DataFrame(
-            all_pseudodata,
-            columns=[f"replica {rep}"],
-            index=experiments_index
-        ))
-    return pd.concat(rep_dfs, axis=1)
+    df = pd.concat(replicas_indexed_make_replica)
+    df.columns = [f"replica {rep}" for rep in replicas]
+    return df
+
+
+@table
+def training_pseudodata(pseudodata_table, training_mask):
+    """Save the training data for the given replica.
+    Activate by setting ``fitting::savepseudodata: True``
+    from within the fit runcard.
+
+    See Also
+    --------
+    :py:func:`validphys.n3fit_data.validation_pseudodata`
+    """
+    return pseudodata_table.loc[training_mask.values]
+
+
+@table
+def validation_pseudodata(pseudodata_table, training_mask):
+    """Save the training data for the given replica.
+    Activate by setting ``fitting::savepseudodata: True``
+    from within the fit runcard.
+
+    See Also
+    --------
+    :py:func:`validphys.n3fit_data.training_pseudodata`
+    """
+    return pseudodata_table.loc[~training_mask.values]
 
 
 exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_experiment",))
@@ -483,6 +506,11 @@ def training_mask_table(replicas_training_mask_table):
 
     """
     return pd.concat(replicas_training_mask_table, axis=1)
+
+
+@table
+def training_mask_table(training_mask):
+    return training_mask
 
 def fitting_pos_dict(posdataset):
     """Loads a positivity dataset. For more information see
