@@ -146,10 +146,7 @@ generated using the runcard |NNPDF40_nnlo_pdfas.yml|_, again, for more
 information on how to bundle PDFs with :math:`\alpha_s` replicas, see
 :ref:`the relevant tutorial <bundled-sets>`.
 
-Finally, to produce the PDF sets with a flavor-number different from the default
-five flavor scheme, the DGLAP evolution should be performed differently.
-Following the usual steps, as outlined in `Running the fitting code`_, we now
-do ...................
+
 
 .. |NNPDF40_nnlo_pdfas.yml| replace:: ``NNPDF40_nnlo_as_0118_1000.yml``
 .. _NNPDF40_nnlo_pdfas.yml: https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40/NNPDF40_nnlo_pdfas.yml
