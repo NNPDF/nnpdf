@@ -26,8 +26,11 @@ general information about PDF evolution and the DGLAP equations, you can go to t
 section](dglap.md).
 
 ## PDF compression
-In order to maintain the faithfulness of released NNPDF grids, while keeping a reasonable number of replicas,
-a PDF set with 1000 replicas is generated and then compressed to a set of 100 replicas.
+PDF compression seeks to maintain the statistical accuracy of a large sample of replicas
+produced by a fit when using a PDF set with a smaller number of replicas (and thus fewer 
+convolutions required to compute cross sections with PDF uncertainties). For example the 
+main published PDFs are typically based on a 1000 replica fit, which can then be compressed to 
+around a 100 replicas PDF set while maintaining good accuracy of most relevant statistical estimators.
 This is done with the [pyCompressor](https://n3pdf.github.io/pycompressor/) library,
 a python compression code that extracts, from an initial PDF set of replicas,
 the subset that most truthfully reproduces the underlying probability distribution of the prior. 
