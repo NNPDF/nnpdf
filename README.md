@@ -27,7 +27,20 @@ the code in different ways, we won't be able to provide any assistance.
 
 ## Cite
 
-This code is described in `<<CODE PAPER REFERENCE>>`.
+This code is described [in](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%202109.02671).
+
+```
+@article{Ball:2021xlu,
+    author = "Ball, Richard D. and others",
+    title = "{An open-source machine learning framework for global analyses of parton distributions}",
+    eprint = "2109.02671",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-ph",
+    reportNumber = "Edinburgh 2021/13, Nikhef-2021-020, TIF-UNIMI-2021-12",
+    month = "9",
+    year = "2021"
+}
+```
 
 If you use the code to produce new results in a scientific publication, please
 follow the [Citation Policy](https://docs.nnpdf.science/get-started/cite.html),
