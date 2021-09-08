@@ -11,7 +11,7 @@
 proton using Machine Learning methods. This is the main repository of the
 fitting and analysis frameworks. In particular it contains all the necessary
 tools to [reproduce](https://docs.nnpdf.science/tutorials/reproduce.html) the
-NNPDF4.0 PDF determinations.
+[NNPDF4.0 PDF determinations](https://arxiv.org/abs/2109.02653).
 
 ## Documentation
 
