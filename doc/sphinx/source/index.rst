@@ -5,7 +5,7 @@
 
 The NNPDF collaboration
 =================
-The `NNPDF collaboration <https://nnpdf.mi.infn.it/>`_ performs research in the field of  high-energy physics, determining the structure of the proton using
+The `NNPDF collaboration <https://nnpdf.mi.infn.it/>`_ performs research in the field of high-energy physics, determining the structure of the proton using
 contemporary methods of artificial intelligence. This is done through striving
 for precise knowledge
 of the so-called **Parton Distribution Functions (PDFs)** of
