@@ -10,7 +10,7 @@ contemporary methods of artificial intelligence. This is done through striving
 for precise knowledge
 of the so-called **Parton Distribution Functions (PDFs)** of
 protons, which describe their structure in terms of their quark and
-gluon constituents.  PDFs are a crucial ingredient of the physics program of
+gluon constituents. PDFs are a crucial ingredient of the physics program of
 the Large Hadron Collider of CERN.
 
 
