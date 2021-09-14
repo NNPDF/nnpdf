@@ -69,8 +69,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     sorted_index = context_index.sortlevel(level=range(1,3))[0]
 
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
-    path = pathlib.Path(fit.path) / 'nnfit'
-    replica_path = path / ("replica_" + str(replica))
+    replica_path = fit.path / "nnfit" / f"replica_{replica}"
 
     training_path = replica_path / (FILE_PREFIX + "training_pseudodata.csv")
     validation_path = replica_path / (FILE_PREFIX + "validation_pseudodata.csv")
