@@ -508,10 +508,6 @@ def training_mask_table(replicas_training_mask_table):
     return pd.concat(replicas_training_mask_table, axis=1)
 
 
-@table
-def training_mask_table(training_mask):
-    return training_mask
-
 def fitting_pos_dict(posdataset):
     """Loads a positivity dataset. For more information see
     :py:func:`validphys.n3fit_data_utils.positivity_reader`.

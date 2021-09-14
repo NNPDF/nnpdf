@@ -52,7 +52,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     >>> from validphys.api import API
     >>> data_indices_list = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
     >>> len(data_indices_list) # Same as nrep
-    5
+    10
     >>> rep_info = data_indices_list[0]
     >>> rep_info.pseudodata.loc[rep_info.tr_idx].head()
                                 replica 1
