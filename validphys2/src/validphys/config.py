@@ -266,6 +266,7 @@ class CoreConfig(configparser.Config):
               can be added to freely, e.g by setting trvlseed to be from
               the fit runcard.
         """
+        log.warning(f"Using mcseed and trvlseed from fit: {fit}")
         theoryid = fitinputcontext['theoryid']
         data_input = fitinputcontext['data_input']
 
