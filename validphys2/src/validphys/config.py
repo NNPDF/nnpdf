@@ -38,6 +38,7 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
+from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.loader import (
     Loader,
     LoaderError,
@@ -236,6 +237,52 @@ class CoreConfig(configparser.Config):
             return self.loader.check_fit(fit)
         except LoadFailedError as e:
             raise ConfigError(str(e), fit, self.loader.available_fits)
+
+    def produce_fitreplicas(self, fit):
+        """Production rule mapping the ``replica`` key to each Monte Carlo
+        fit replica.
+        """
+        num_replicas = num_fitted_replicas(fit)
+        return NSList(range(1, num_replicas + 1), nskey='replica')
+
+    def produce_pdfreplicas(self, fitpdf):
+        """Production rule mapping the ``replica`` key to each postfit
+        replica.
+        """
+        pdf = fitpdf['pdf']
+        replicas = fitted_replica_indexes(pdf)
+        return NSList(replicas, nskey='replica')
+
+    def produce_fitenvironment(self, fit, fitinputcontext):
+        """Like fitcontext, but additionally forcing various other
+        parameters, such as the cuts policy and Monte Carlo seeding to be
+        the same as the fit.
+
+        Notes
+        -----
+            - This production rule is designed to be used as a namespace
+              to collect over, for use with
+              :py:func:`validphys.pseudodata.recreate_fit_pseudodata` and
+              can be added to freely, e.g by setting trvlseed to be from
+              the fit runcard.
+        """
+        log.warning(f"Using mcseed and trvlseed from fit: {fit}")
+        theoryid = fitinputcontext['theoryid']
+        data_input = fitinputcontext['data_input']
+
+        runcard = fit.as_input()
+        trvlseed = runcard['trvlseed']
+        mcseed = runcard['mcseed']
+        genrep = runcard['genrep']
+
+        return {
+            "dataset_inputs": data_input,
+            "theoryid": theoryid,
+            "use_cuts": CutsPolicy.FROMFIT,
+            "mcseed": mcseed,
+            "trvlseed": trvlseed,
+            "genrep": genrep,
+        }
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""

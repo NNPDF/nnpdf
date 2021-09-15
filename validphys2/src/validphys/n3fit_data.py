@@ -405,7 +405,67 @@ exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_experiment",))
 replicas_exps_tr_masks = collect("exps_tr_masks", ("replicas",))
 
 
-def training_mask(replicas_exps_tr_masks, replicas, experiments_index):
+@table
+def replica_training_mask_table(exps_tr_masks, replica, experiments_index):
+    """Save the boolean mask used to split data into training and validation
+    for a given replica as a pandas DataFrame, indexed by
+    :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
+    the training and validation data used in a fit.
+
+    Parameters
+    ----------
+    exps_tr_masks: list[list[np.array]]
+        Result of :py:func:`tr_masks` collected over experiments, which creates
+        the nested structure. The outer list is
+        len(group_dataset_inputs_by_experiment) and the inner-most list has an
+        array for each dataset in that particular experiment - as defined by the
+        metadata. The arrays should be 1-D boolean arrays which can be used as
+        masks.
+    replica: int
+        The index of the replica.
+    experiments_index: pd.MultiIndex
+        Index returned by :py:func:`validphys.results.experiments_index`.
+
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> ds_inp = [
+    ...     {'dataset': 'NMC', 'frac': 0.75},
+    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
+    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
+    ... ]
+    >>> API.replica_training_mask_table(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+                         replica 1
+    group dataset    id
+    NMC   NMC        0        True
+                    1        True
+                    2       False
+                    3        True
+                    4        True
+    ...                        ...
+    CMS   CMSZDIFF12 45       True
+                    46       True
+                    47       True
+                    48      False
+                    49       True
+
+    [345 rows x 1 columns]
+    """
+    all_masks = np.concatenate([
+        ds_mask
+        for exp_masks in exps_tr_masks
+        for ds_mask in exp_masks
+    ])
+    return pd.DataFrame(
+        all_masks,
+        columns=[f"replica {replica}"],
+        index=experiments_index
+    )
+
+replicas_training_mask_table = collect("replica_training_mask_table", ("replicas",))
+@table
+def training_mask_table(replicas_training_mask_table):
     """Save the boolean mask used to split data into training and validation
     for each replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -414,19 +474,7 @@ def training_mask(replicas_exps_tr_masks, replicas, experiments_index):
     Parameters
     ----------
     replicas_exps_tr_masks: list[list[list[np.array]]]
-        Result of :py:func:`tr_masks` collected over experiments then replicas,
-        which creates the nested structure. The outer list is len(replicas),
-        the next list is len(group_dataset_inputs_by_experiment) and the
-        inner-most list has an array for each dataset in that particular
-        experiment - as defined by the metadata. The arrays should be 1-D
-        boolean arrays which can be used as masks.
-    replicas: NSlist
-        Namespace list of replica numbers to tabulate masks for, each element
-        of the list should be a `replica`. See example below for more
-        information.
-    experiments_index: pd.MultiIndex
-        Index returned by :py:func:`validphys.results.experiments_index`.
-
+        Result of :py:func:`replica_tr_masks` collected over replicas
 
     Example
     -------
@@ -457,26 +505,8 @@ def training_mask(replicas_exps_tr_masks, replicas, experiments_index):
     [345 rows x 3 columns]
 
     """
-    rep_dfs = []
-    for rep_exps_masks, rep in zip(replicas_exps_tr_masks, replicas):
-        # create flat list with all dataset masks in, then concatenate to single
-        # array.
-        all_masks = np.concatenate([
-            ds_mask
-            for exp_masks in rep_exps_masks
-            for ds_mask in exp_masks
-        ])
-        rep_dfs.append(pd.DataFrame(
-            all_masks,
-            columns=[f"replica {rep}"],
-            index=experiments_index
-        ))
-    return pd.concat(rep_dfs, axis=1)
+    return pd.concat(replicas_training_mask_table, axis=1)
 
-
-@table
-def training_mask_table(training_mask):
-    return training_mask
 
 def fitting_pos_dict(posdataset):
     """Loads a positivity dataset. For more information see
