@@ -42,7 +42,7 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
         data = in_stream.read()
     with open(new_replica_file, 'wb') as out_stream:
         # Add the AlphaS_MZ and AlphaS_Vals keys
-        out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\n AlphaS_Vals: {AlphaS_Vals}\n".encode())
+        out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\nAlphaS_Vals: {AlphaS_Vals}\n".encode())
         out_stream.write(data)
 
 @make_argcheck
