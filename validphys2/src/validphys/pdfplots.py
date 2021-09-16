@@ -447,7 +447,7 @@ class BandPDFPlotter(PDFPlotter):
             ax.plot(xgrid, errorstdup, linestyle='--', color=color)
             ax.plot(xgrid, errorstddown, linestyle='--', color=color)
             label = (
-                rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
+                rf"{pdf.label} ($68\%$ c.l.+$1\sigma$)"
                 if self.legend_stat_labels
                 else pdf.label
             )
@@ -456,7 +456,6 @@ class BandPDFPlotter(PDFPlotter):
             outer = False
             label = (
                 rf"{pdf.label} ($68\%$ c.l.)"
-                rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
                 if self.legend_stat_labels
                 else pdf.label
             )
