@@ -388,11 +388,19 @@ def plot_pdfvardistances(pdfs, variance_distance_grids, *,
 
 
 class BandPDFPlotter(PDFPlotter):
-    def __init__(self, *args, pdfs_noband=None, show_mc_errors=True, **kwargs):
+    def __init__(
+        self,
+        *args,
+        pdfs_noband=None,
+        show_mc_errors=True,
+        legend_stat_labels=True,
+        **kwargs
+    ):
         if pdfs_noband is None:
             pdfs_noband = []
         self.pdfs_noband = pdfs_noband
         self.show_mc_errors = show_mc_errors
+        self.legend_stat_labels = legend_stat_labels
         super().__init__(*args, **kwargs)
 
     def setup_flavour(self, flstate):
@@ -438,11 +446,20 @@ class BandPDFPlotter(PDFPlotter):
             errorstdup, errorstddown = stats.errorbarstd()
             ax.plot(xgrid, errorstdup, linestyle='--', color=color)
             ax.plot(xgrid, errorstddown, linestyle='--', color=color)
-            label  = rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
+            label = (
+                rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
+                if self.legend_stat_labels
+                else pdf.label
+            )
             outer = True
         else:
             outer = False
-            label = rf"{pdf.label} ($68\%$ c.l.)"
+            label = (
+                rf"{pdf.label} ($68\%$ c.l.)"
+                rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
+                if self.legend_stat_labels
+                else pdf.label
+            )
         handle = plotutils.HandlerSpec(color=color, alpha=alpha,
                                                hatch=hatch,
                                                outer=outer)
@@ -472,6 +489,7 @@ def plot_pdfs(
     ymax=None,
     pdfs_noband: (list, type(None)) = None,
     show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
 ):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
@@ -493,6 +511,9 @@ def plot_pdfs(
 
     show_mc_errors (bool): Plot 1σ bands in addition to 68% errors for Monte Carlo
     PDF.
+
+    legend_stat_labels (bool): Show detailed information on what kind of confidence
+    interval is being plotted in the legend labels.
     """
     yield from BandPDFPlotter(
         pdfs,
@@ -503,6 +524,7 @@ def plot_pdfs(
         ymax,
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
     )
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
