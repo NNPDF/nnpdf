@@ -557,6 +557,7 @@ def plot_lumi1d(
     ymax: (numbers.Real, type(None)) = None,
     pdfs_noband=None,
     scale="log",
+    legend_stat_labels: bool=True,
 ):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
@@ -568,7 +569,9 @@ def plot_lumi1d(
     exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
     bands are shown in addition to the 68% confidence intervals for Monte Carlo
     PDFs. A list `pdfs_noband` can be passed to supress the error bands for
-    certain PDFs and plot the central values only.
+    certain PDFs and plot the central values only. `legend_stat_labels` controls
+    whether to show detailed information on what kind of confidence interval
+    is being plotted in the legend labels.
     """
 
     fig, ax = plt.subplots()
@@ -622,10 +625,10 @@ def plot_lumi1d(
         if isinstance(gv, MCStats) and show_mc_errors:
             ax.plot(mx, errstddown / norm, linestyle="--", color=color)
             ax.plot(mx, errstdup / norm, linestyle="--", color=color)
-            label_add = r"($68%$ c.l.+$1\sigma$)"
+            label_add = r"($68%$ c.l.+$1\sigma$)" if legend_stat_labels else ""
             outer = True
         else:
-            label_add = r"($68\%$ c.l.)"
+            label_add = r"($68\%$ c.l.)" if legend_stat_labels else ""
             outer = False
 
         handle = plotutils.HandlerSpec(
