@@ -1,0 +1,82 @@
+.. _futuretests:
+How to run a Future Test
+========================
+
+The PDF sets generated with the NNPDF methodology are, of course, able to describe the data they were fitted with.
+However, for them to be truly useful, they should be also able to describe data that the methodology has never seen.
+Ideally, that would entail constructing a new experiment and obtaining more data to test the PDF against,
+if we could time travel, it would be a very robust test of the generalization power of the methodology.
+
+Instead, we test the generalization power of the methodology by fitting subsets of data.
+In order to keep consistent with the analogy, in ::cite:p:`Cruz-Martinez:2021rgy` we chose Pre-Hera and Pre-LHC as
+those subsets but in reality (and despite the name) any subset of data is valid.
+The chronological choice ensures also that no leakage of information occurs between the in-sample and out-of-sample data
+(for instance, some unknown systematic error that biases data from one given experiment).
+
+Since we are interested in the generalization power of the PDF, we need to take into account the pdf errors when
+computing the :math:`\chi2`, to that end the flag ``use_pdferr`` is provided.
+Below you can see an example runcard when we perform the "future test" of two fits, conveniently called "Future fit" and "Past fit".
+The "Past fit" contains only data from NMC and HERA while the "Future fit" contain also data from LHCb.
+The resulting report will contain a table with the :math:`\chi2` for each of the custom groups declared (past and future)
+as well as a kinematic coverage report of the included datasets.
+
+.. code:: yaml
+
+  meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+  use_pdferr: True
+
+  future:
+    pdf: {id: future_fit, label: "Future"}
+    fit: {id: future_fit, label: "Future"}
+
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+
+  past:
+    pdf: {id: past_fit, label: "Past"}
+    fit: {id: past_fit, label: "Past"}
+
+  dataset_inputs:
+    - { dataset: NMC, custom_group: "Past dataset"}
+    - { dataset: HERACOMBNCEP920, custom_group: "Past dataset"}
+    - { dataset: LHCBWZMU7TEV, custom_group: "Future dataset" }
+    - { dataset: LHCBWZMU8TEV, custom_group: "Future dataset" }
+
+  use_cuts: "fromfit"
+  fit:
+    from_: future
+
+  metadata_group: custom_group
+  marker_by: group
+
+  dataspecs:
+    - pdf:
+      from_: past
+    speclabel: "Past"
+    - pdf:
+      from_: future
+    speclabel: "Future"
+
+  template_text: |
+   Future Test with PDF errors
+   ---------------------------
+
+   $\chi^2$ by custom group
+   -----------------------------
+                                  
+   {@dataspecs_groups_chi2_table@}
+                                  
+   Kinematic coverage     
+   ------------------     
+   {@plot_xq2@}
+
+  actions_:
+    - report(main=True)
+
+A more complete Future Test example can be found in the `examples folder <https://github.com/NNPDF/nnpdf/blob/master/validphys2/examples/future_test_example.yaml>`_.
