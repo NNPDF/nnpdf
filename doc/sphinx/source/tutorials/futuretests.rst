@@ -15,7 +15,23 @@ The chronological choice, which in practice separates by experiment, ensures tha
 (for instance, some unknown systematic error that biases data from one given experiment).
 
 Since we are interested in the generalization power of the PDF, we need to take into account the pdf errors when
-computing the :math:`\chi2`, to that end the flag ``use_pdferr`` is provided in ``validphys``.
+computing the :math:`\chi2`, to that end the flag ``use_pdferr`` is provided in ``validphys`` by which the covariance matrix
+is modified as:
+
+.. math::
+
+   \begin{equation}
+        {\rm cov}_{ij}^{\rm (tot)} = {\rm cov}_{ij}^{\rm (exp)}  + {\rm cov}_{ij}^{\rm (pdf)},
+   \end{equation}
+
+with
+
+.. math:: 
+
+   \begin{equation}
+        {\rm cov}_{ij}^{\rm (pdf)} = \langle \mathcal{F}_i\mathcal{F}_j  \rangle_{\rm rep} - \langle \mathcal{F}_i  \rangle_{\rm rep}\langle \mathcal{F}_j  \rangle_{\rm rep}.
+   \end{equation}
+
 Below you can see an example runcard in which we perform the "future test" of two fits, conveniently called "Future fit" and "Past fit".
 The "Past fit" contains only data from NMC and HERA while the "Future fit" contain also data from LHCb.
 The resulting report will contain a table with the :math:`\chi2` for each of the custom groups declared (past and future)
