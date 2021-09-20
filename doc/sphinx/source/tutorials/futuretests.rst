@@ -72,13 +72,16 @@ as well as a kinematic coverage report of the included datasets.
   metadata_group: custom_group
   marker_by: group
 
+  theoryid:
+    from_: future
+
   dataspecs:
     - pdf:
-      from_: past
-    speclabel: "Past"
+        from_: past
+      speclabel: "Past"
     - pdf:
-      from_: future
-    speclabel: "Future"
+        from_: future
+      speclabel: "Future"
 
   template_text: |
    Future Test with PDF errors
