@@ -46,7 +46,7 @@ as well as a kinematic coverage report of the included datasets.
 
   use_pdferr: True
 
-  future:
+  Future:
     pdf: {id: future_fit, label: "Future"}
     fit: {id: future_fit, label: "Future"}
 
