@@ -55,7 +55,7 @@ as well as a kinematic coverage report of the included datasets.
     theoryid:
       from_: theory
 
-  past:
+  Past:
     pdf: {id: past_fit, label: "Past"}
     fit: {id: past_fit, label: "Past"}
 
@@ -67,7 +67,7 @@ as well as a kinematic coverage report of the included datasets.
 
   use_cuts: "fromfit"
   fit:
-    from_: future
+    from_: Future
 
   metadata_group: custom_group
   marker_by: group
@@ -77,10 +77,10 @@ as well as a kinematic coverage report of the included datasets.
 
   dataspecs:
     - pdf:
-        from_: past
+        from_: Past
       speclabel: "Past"
     - pdf:
-        from_: future
+        from_: Future
       speclabel: "Future"
 
   template_text: |
