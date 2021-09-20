@@ -47,8 +47,9 @@ as well as a kinematic coverage report of the included datasets.
   use_pdferr: True
 
   Future:
-    pdf: {id: future_fit, label: "Future"}
     fit: {id: future_fit, label: "Future"}
+    pdf:
+      from_: fit
 
     theory:
       from_: fit
@@ -56,8 +57,9 @@ as well as a kinematic coverage report of the included datasets.
       from_: theory
 
   Past:
-    pdf: {id: past_fit, label: "Past"}
     fit: {id: past_fit, label: "Past"}
+    pdf:
+       from_: fit
 
   dataset_inputs:
     - { dataset: NMC, custom_group: "Past dataset"}
