@@ -3,19 +3,20 @@ How to run a Future Test
 ========================
 
 The PDF sets generated with the NNPDF methodology are, of course, able to describe the data they were fitted with.
-However, for them to be truly useful, they should be also able to describe data that the methodology has never seen.
-Ideally, that would entail constructing a new experiment and obtaining more data to test the PDF against,
-if we could time travel, it would be a very robust test of the generalization power of the methodology.
+However, for them to be truly useful, they should be also able to faithfully describe data that the methodology has never seen.
+By checking the :math:`\chi2` of said unseen data we can test the generalization power of the methodology.
 
-Instead, we test the generalization power of the methodology by fitting subsets of data.
-In order to keep consistent with the analogy, in ::cite:p:`Cruz-Martinez:2021rgy` we chose Pre-Hera and Pre-LHC as
-those subsets but in reality (and despite the name) any subset of data is valid.
-The chronological choice ensures also that no leakage of information occurs between the in-sample and out-of-sample data
+Ideally, that would entail constructing a new experiment and obtaining new data we can test the PDF against,
+however, we cannot time travel so we must resort to less robust techniques.
+In NNPDF4 we test the generalization power of the methodology by fitting coherent subsets of data.
+In order to keep consistent with the analogy, in :cite:p:`Cruz-Martinez:2021rgy` we chose Pre-Hera and Pre-LHC as
+those subsets but in reality (and despite the name) any subset of data would be valid.
+The chronological choice, which in practice separates by experiment, ensures that no leakage of information occurs between the in-sample and out-of-sample data
 (for instance, some unknown systematic error that biases data from one given experiment).
 
 Since we are interested in the generalization power of the PDF, we need to take into account the pdf errors when
-computing the :math:`\chi2`, to that end the flag ``use_pdferr`` is provided.
-Below you can see an example runcard when we perform the "future test" of two fits, conveniently called "Future fit" and "Past fit".
+computing the :math:`\chi2`, to that end the flag ``use_pdferr`` is provided in ``validphys``.
+Below you can see an example runcard in which we perform the "future test" of two fits, conveniently called "Future fit" and "Past fit".
 The "Past fit" contains only data from NMC and HERA while the "Future fit" contain also data from LHCb.
 The resulting report will contain a table with the :math:`\chi2` for each of the custom groups declared (past and future)
 as well as a kinematic coverage report of the included datasets.
@@ -79,4 +80,4 @@ as well as a kinematic coverage report of the included datasets.
   actions_:
     - report(main=True)
 
-A more complete Future Test example can be found in the `examples folder <https://github.com/NNPDF/nnpdf/blob/master/validphys2/examples/future_test_example.yaml>`_.
+A more complete (and runnable out-of-the-box) Future Test example can be found in the `examples folder <https://github.com/NNPDF/nnpdf/blob/master/validphys2/examples/future_test_example.yaml>`_.
