@@ -8,7 +8,7 @@ By checking the :math:`\chi2` of said unseen data we can test the generalization
 
 Ideally, that would entail constructing a new experiment and obtaining new data we can test the PDF against,
 however, we cannot time travel so we must resort to less robust techniques.
-In NNPDF4 we test the generalization power of the methodology by fitting coherent subsets of data.
+In NNPDF4.0 we test the generalization power of the methodology by fitting coherent subsets of data.
 In order to keep consistent with the analogy, in :cite:p:`Cruz-Martinez:2021rgy` we chose Pre-Hera and Pre-LHC as
 those subsets but in reality (and despite the name) any subset of data would be valid.
 The chronological choice, which in practice separates by experiment, ensures that no leakage of information occurs between the in-sample and out-of-sample data
