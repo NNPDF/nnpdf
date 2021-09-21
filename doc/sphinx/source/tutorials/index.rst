@@ -60,3 +60,4 @@ Miscellaneous
    ./bundle-pdfs.rst
    ./conda.md
    ./mc2hessian.rst
+   ./futuretests.rst
