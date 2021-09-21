@@ -548,7 +548,7 @@ def hyperopt_dataframe(commandline_args):
 
 
 @table
-def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
+def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
     """
     Generates a clean table with information on the hyperparameter settings of the best setup.
     """
@@ -705,12 +705,23 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
     key = plotting_parameter
     mode = plotting_styles[plotting_parameter]
 
-    if mode == 0 or mode == 2:  # normal scatter plot
+    if mode in (0,2):  # normal scatter plot
         ax = sns.scatterplot(x=key, y=loss_k, data=df, ax=ax)
         best_x = best_df.get(key)
         if mode == 2:
             ax.set_xscale("log")
     elif mode == 1:
+        sample = best_df.get(key).tolist()[0]
+        if isinstance(sample, list):
+            # activation_per_layer is tricky as it can be a list (with the last layer linear)
+            # and can change size, the legacy way of plotting it was to take just the first function
+            # For that we'll modify the dataframe that we pass down
+            original_column = df[key]
+            original_best = best_df[key]
+            key += "_0"
+            if key not in df:
+                df[key] = original_column.apply(lambda x: x[0])
+                best_df[key] = original_best.apply(lambda x: x[0])
         ordering_true, best_x = order_axis(df, best_df, key=key)
         ax = sns.violinplot(
             x=key,
@@ -730,6 +741,7 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
             order=ordering_true,
             alpha=0.4,
         )
+
 
     # Finally plot the "best" one, which will be first
     if include_best:
