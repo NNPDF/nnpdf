@@ -56,7 +56,6 @@ def saturation(pdf_models, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavo
     extra_loss = 0.0
     for pdf_model in pdf_models:
         y = pdf_model.predict([xin])
-        extra_loss = 0.0
         xpdf = y[0, :, flavors]
         slope = np.diff(xpdf) / np.diff(np.log10(x))
         pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)

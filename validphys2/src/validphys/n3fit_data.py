@@ -226,6 +226,8 @@ def fitting_data_dict(
             name of the ``data`` - typically experiment/group name
         'expdata_true'
             non-replica data
+        'covmat'
+            full covmat
         'invcovmat_true'
             inverse of the covmat (non-replica)
         'trmask'
