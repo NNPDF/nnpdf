@@ -30,14 +30,18 @@ def square_activation(x):
     """ Squares the input """
     return x*x
 
+def modified_tanh(x):
+    return (nn.relu(x)+nn.relu(-x))*nn.tanh(x)
+
 def leaky_relu(x):
     """ Computes the Leaky ReLU activation function """
     return nn.leaky_relu(x, alpha=0.2)
 
 custom_activations = {
-        "square" : square_activation,
-        "leaky_relu": leaky_relu,
-        }
+    "square" : square_activation,
+    "leaky_relu": leaky_relu,
+    "modified_tanh": modified_tanh,
+}
 
 def LSTM_modified(**kwargs):
     """
