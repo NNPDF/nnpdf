@@ -1,0 +1,10 @@
+pdf: NNPDF40_nnlo_as_01180
+
+pdfs:
+  - NNPDF40_nnlo_as_01170
+  - NNPDF40_nnlo_as_01190
+
+target_name: NNPDF40_nnlo_pdfas
+
+actions_:
+  - alpha_s_bundle_pdf

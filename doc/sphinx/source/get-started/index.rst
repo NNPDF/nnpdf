@@ -1,26 +1,18 @@
-.. _getstarted:
-
 Getting started
 ===============
-This section provides an introduction to the NNPDF code and workflow.
+
+This section provides an introduction to the NNPDF code.
+To get started, find below the instructions on how to download and
+install the code, as well as a description of the different modules that compose
+the NNPDF code.
 
 If you use the public NNPDF code, please cite all references listed on
-the :ref:`cite` page
+the :ref:`cite` page.
 
-Essential first steps
----------------------
 .. toctree::
-   :maxdepth: 1
+  :maxdepth: 1
 
-   ./access
-   ./git
-   ./installation.rst
-   ./cite.rst
-
-Necessary for developers
-------------------------
-.. toctree::
-   :maxdepth: 1
-
-   ./rules
-   ./python-tools
+  ./git.md
+  ./installation.rst
+  ./nnpdfmodules.rst
+  ./cite.rst
