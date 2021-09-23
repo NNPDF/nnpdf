@@ -32,6 +32,7 @@ def square_activation(x):
     return x*x
 
 def modified_tanh(x):
+    """ A non-saturating version of the tanh function """
     return math.abs(x)*nn.tanh(x)
 
 def leaky_relu(x):
