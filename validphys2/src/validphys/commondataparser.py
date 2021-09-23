@@ -19,8 +19,7 @@ def load_commondata(spec):
     Returns an instance of CommonData
     """
     commondatafile = spec.datafile
-    # Getting set name from commondata file name
-    setname = commondatafile.name[5:-4] # DATA prefix and .dat suffix
+    setname = spec.name
     systypefile = spec.sysfile
 
     commondata = parse_commondata(commondatafile, systypefile, setname)
@@ -55,7 +54,7 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondatatable.set_index("entry", inplace=True)
     ndata = len(commondatatable)
     commondataproc = commondatatable["process"][1]
-     # Check for consistency with commondata metadata
+    # Check for consistency with commondata metadata
     cdmetadata =  peek_commondata_metadata(commondatafile)
     if (setname, nsys, ndata) != attrgetter('name', 'nsys', 'ndata')(cdmetadata):
         raise ValueError("Commondata table information does not match metadata")
