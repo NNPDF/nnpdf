@@ -22,7 +22,7 @@ from tensorflow.keras.layers import concatenate, Input # pylint: disable=unused-
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
 from tensorflow.keras.regularizers import l1_l2
-from tensorflow import nn
+from tensorflow import nn, math
 
 from n3fit.backends import MetaLayer
 
@@ -32,7 +32,7 @@ def square_activation(x):
     return x*x
 
 def modified_tanh(x):
-    return (nn.relu(x)+nn.relu(-x))*nn.tanh(x)
+    return math.abs(x)*nn.tanh(x)
 
 def leaky_relu(x):
     """ Computes the Leaky ReLU activation function """
