@@ -21,8 +21,8 @@ log = logging.getLogger(__name__)
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
 
 context_index = collect("groups_index", ("fitcontext",))
-read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitenvironment'))
-read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitenvironment'))
+read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitcontextwithcuts'))
+read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitcontextwithcuts'))
 
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
