@@ -519,22 +519,23 @@ def plot_fits_chi2_spider(fits, fits_groups_chi2,
     return fig
 
 @figure
-def plot_fits_phi_spider(fits, fits_groups_data,
-                         fits_groups_data_phi, processed_metadata_group):
-   """Like plot_fits_chi2_spider but for phi."""
+def plot_fits_phi_spider(
+    fits, fits_groups_data, fits_groups_data_phi, processed_metadata_group
+):
+    """Like plot_fits_chi2_spider but for phi."""
 
-   fig = plt.figure(figsize=(12,12))
-   ax = fig.add_subplot(projection='polar')
+    fig = plt.figure(figsize=(12, 12))
+    ax = fig.add_subplot(projection='polar')
 
-   for fit, fitphi, fitgroup in zip(fits, fits_groups_data_phi, fits_groups_data):
-       phi = [exp_phi for (exp_phi, npoints) in fitphi]
-       xticks = [group.name for group in fitgroup]
+    for fit, fitphi, fitgroup in zip(fits, fits_groups_data_phi, fits_groups_data):
+        phi = [exp_phi for (exp_phi, _npoints) in fitphi]
+        xticks = [group.name for group in fitgroup]
 
-       ax = plotutils.spiderplot(xticks, phi, fit)
+        ax = plotutils.spiderplot(xticks, phi, fit)
 
-   ax.set_title(rf"$\phi$ by {processed_metadata_group}")
+    ax.set_title(rf"$\phi$ by {processed_metadata_group}")
 
-   return fig
+    return fig
 
 @figure
 def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_group, pdf):
@@ -552,7 +553,7 @@ def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_gr
 @figure
 def plot_groups_data_phi_spider(groups_data, groups_data_phi, processed_metadata_group, pdf):
     """Plot the phi of all groups of datasets as a spider plot."""
-    phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
+    phi = [exp_phi for (exp_phi, _npoints) in groups_data_phi]
     xticks = [group.name for group in groups_data]
 
     fig = plt.figure()
@@ -575,9 +576,8 @@ def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
 plot_experiments_chi2 = collect("plot_groups_data_chi2",  ("group_dataset_inputs_by_experiment",))
 
 @figure
-def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
+def plot_datasets_chi2(groups_data, groups_chi2):
     """Plot the chi² of all datasets with bars."""
-    ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
     for group, group_res in zip(groups_data, groups_chi2):
@@ -591,9 +591,8 @@ def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     return fig
 
 @figure
-def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
+def plot_datasets_chi2_spider(groups_data, groups_chi2):
     """Plot the chi² of all datasets with bars."""
-    ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
     for group, group_res in zip(groups_data, groups_chi2):
@@ -602,7 +601,7 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
 
     fig = plt.figure(figsize=(4,4))
     ax = fig.add_subplot(projection='polar')
-    ax = plotutils.spiderplot(xticks, dschi2, label==[r'$\chi^2$'])
+    ax = plotutils.spiderplot(xticks, dschi2, label=[r'$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
 
