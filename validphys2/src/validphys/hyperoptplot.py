@@ -93,7 +93,7 @@ class HyperoptTrial:
             # If apl is a string, it can only bring information if there is `nodes_per_layer`
             apl = [apl] * (len(hyperparameters["nodes_per_layer"]) - 1) + ["linear"]
             hyperparameters["activation_per_layer"] = apl
-        # 2. If there _was_ originally a reward included in this parameter (because it comes from and
+        # 2. If there _was_ originally a reward included in this parameter (because it comes from a
         #   previous hyperoptimization) mark it as such
         #         if (reward:=hyperparameters.pop("reward", None)) is not None:
         #             hyperparameters["old_reward"] = reward

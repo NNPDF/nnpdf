@@ -532,7 +532,7 @@ class ModelTrainer:
             force_set_smallest = input_arr.min() > 1e-9
             if force_set_smallest:
                 new_xgrid = np.linspace(
-                    start=1 / input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
+                    start=1/input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
                 )
             else:
                 new_xgrid = np.linspace(start=0, stop=1.0, endpoint=False, num=input_arr_size)
@@ -692,7 +692,7 @@ class ModelTrainer:
 
     def _hyperopt_override(self, params):
         """Unrolls complicated hyperopt structures into very simple dictionaries"""
-        # If the input contains all parameters, then that's your dicttionary of hyperparameters
+        # If the input contains all parameters, then that's your dictionary of hyperparameters
         hyperparameters = params.get("parameters")
         if hyperparameters is not None:
             return hyperparameters

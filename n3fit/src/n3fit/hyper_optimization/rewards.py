@@ -94,7 +94,7 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
 
     from n3fit.backends import MetaModel
 
-    # For the last model (the one containing all data) the PDF covmat doesn't need to be computed
+    # For the last model the PDF covmat doesn't need to be computed. This is because the last model corresponds to an empty k-fold partition, meaning that all datasets were used during training.  
     # but the mask needs to be flipped in the folding for the appropiate datasets
     last_model = experimental_models[-1]
     _set_central_value(n3pdfs[-1], last_model)
@@ -118,7 +118,7 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
             pdf_covmat = np.cov(y, rowvar=False)
             # Update the covmat of the loss
             layer.add_covmat(pdf_covmat)
-            # Update the mask of the last_model so that its syncthed with this layer
+            # Update the mask of the last_model so that its synced with this layer
             last_model.get_layer(layer.name).update_mask(layer.mask)
 
         # Compute the loss with pdf errors

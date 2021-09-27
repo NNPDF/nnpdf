@@ -320,9 +320,9 @@ These were chosen attending to their `process type` as defined in their :ref:`co
 Changing the hyperoptimization target
 -----------------------------------
 
-Beyond the usual :math:`\chi2` optimization based figures above, it is possible to utilize other measures as the target for hyperoptimization.
-One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets.
-In order to achieve PDF errors it is necessary to run more than one replicas, luckily ``n3fit`` provides such a possibility also during hyperoptimization.
+Beyond the usual :math:`\chi2`-based optimization figures above, it is possible to utilize other measures as the target for hyperoptimization.
+One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets. The idea is that this way we select models of which the prediction is stable upon variations in the dataset. 
+In order to obtain the PDF errors used in the figure of merit it is necessary to run multiple replicas, luckily ``n3fit`` provides such a possibility also during hyperoptimization.
 
 Take the following modifications to a normal hyperopt runcard 
 (note that for convenience we take the trials directly from a previous run, so we don't have to create a new
@@ -365,7 +365,7 @@ We can run this hyperparameter scan for 10 parallel replicas for 20 trials with:
 The above runcard will, for a sample of 20 trials in ``210508-hyperopt_for_paper`` (according to their rewards),
 run two fits of 10 replicas each.
 The first fit will hide the data from HERA and the second one (an empty fold) will take into consideration all data.
-The figure of metric will be the difference between the :math:`\chi2` of the second fit to the folded data and the :math:`\chi2` of the first fit to the folded data *including* pdf errors.
+The figure of metrit will be the difference between the :math:`\chi2` of the second fit to the folded data and the :math:`\chi2` of the first fit to the folded data *including* pdf errors.
 
 .. math::
    L_{\rm hyperopt} = \chi^{2}_{(1) \rm pdferr} - \chi^{2}_{(2)}
