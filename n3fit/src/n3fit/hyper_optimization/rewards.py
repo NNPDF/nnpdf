@@ -96,6 +96,17 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
 
     from n3fit.backends import MetaModel
 
+    compatibility_mode = False
+    try:
+        import tensorflow as tf
+        from n3fit.backends import set_eager
+        tf_version = tf.__version__.split(".")
+        if int(tf_version[0]) == 2 and int(tf_version[1]) < 4:
+            set_eager(True)
+            compatibility_mode = True
+    except ImportError:
+        pass
+
     # For the last model the PDF covmat doesn't need to be computed.
     # This is because the last model corresponds to an empty k-fold partition,
     # meaning that all datasets were used during training.
@@ -133,5 +144,8 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
         # Now make this into a measure of the total loss
         # for instance, any deviation from the "best" value is bad
         total_loss += np.abs(best_chi2 - pdf_chi2)
+
+    if compatibility_mode:
+        set_eager(False)
 
     return total_loss
