@@ -241,6 +241,13 @@ def check_kfold_options(kfold):
                 f"The hyperoptimization target '{loss_target}' loss is not recognized, "
                 "ensure it is implemented in hyper_optimization/rewards.py"
             )
+    partitions = kfold["partitions"]
+    # Check specific errors for specific targets
+    if loss_target == "fit_future_tests":
+        if len(partitions) == 1:
+            raise CheckError("Cannot use target 'fit_future_tests' with just one partition")
+        if partitions[-1]["datasets"]:
+            log.warning("Last partition in future test is not empty, some datasets will be ignored")
 
 
 def check_correct_partitions(kfold, data):

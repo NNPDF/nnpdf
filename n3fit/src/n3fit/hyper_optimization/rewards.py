@@ -24,6 +24,8 @@
 import numpy as np
 from validphys.pdfgrids import xplotting_grid, distance_grids
 
+# pylint: disable=unused-argument
+
 
 def average(fold_losses, **kwargs):
     """Returns the average of fold losses"""
@@ -94,7 +96,9 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
 
     from n3fit.backends import MetaModel
 
-    # For the last model the PDF covmat doesn't need to be computed. This is because the last model corresponds to an empty k-fold partition, meaning that all datasets were used during training.  
+    # For the last model the PDF covmat doesn't need to be computed.
+    # This is because the last model corresponds to an empty k-fold partition,
+    # meaning that all datasets were used during training.
     # but the mask needs to be flipped in the folding for the appropiate datasets
     last_model = experimental_models[-1]
     _set_central_value(n3pdfs[-1], last_model)
@@ -107,7 +111,6 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
 
         # Get the full input and the total chi2
         full_input = exp_model.input
-        exp_chi2 = exp_model.compute_losses()["loss"][0]
 
         # Now update the loss with the PDF covmat
         for layer in exp_model.get_layer_re(".*_exp$"):
@@ -129,10 +132,6 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
 
         # Now make this into a measure of the total loss
         # for instance, any deviation from the "best" value is bad
-        print(f"chi2 of the full fit: {best_chi2}")
-        print(f"chi2 without the PDF errors: {exp_chi2}")
-        print(f"chi2 with the PDF errors: {pdf_chi2}")
-        # TODO: forgot the (very important) ndata!!
         total_loss += np.abs(best_chi2 - pdf_chi2)
 
     return total_loss

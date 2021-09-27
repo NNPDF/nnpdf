@@ -365,7 +365,9 @@ We can run this hyperparameter scan for 10 parallel replicas for 20 trials with:
 The above runcard will, for a sample of 20 trials in ``210508-hyperopt_for_paper`` (according to their rewards),
 run two fits of 10 replicas each.
 The first fit will hide the data from HERA and the second one (an empty fold) will take into consideration all data.
-The figure of metrit will be the difference between the :math:`\chi2` of the second fit to the folded data and the :math:`\chi2` of the first fit to the folded data *including* pdf errors.
+In order to propertly set up a future test the last fold (the future) is recommended to be left as an empty fold such that no data is masked out.
+The figure of metrit will be the difference between the :math:`\chi2` of the second fit to the folded data and the :math:`\chi2` of the first fit to the folded data *including* pdf errors
+(the :ref:`future test<futuretests>` :math:`\chi2`).
 
 .. math::
    L_{\rm hyperopt} = \chi^{2}_{(1) \rm pdferr} - \chi^{2}_{(2)}

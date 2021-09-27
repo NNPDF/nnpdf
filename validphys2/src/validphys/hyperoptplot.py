@@ -95,8 +95,9 @@ class HyperoptTrial:
             hyperparameters["activation_per_layer"] = apl
         # 2. If there _was_ originally a reward included in this parameter (because it comes from a
         #   previous hyperoptimization) mark it as such
-        #         if (reward:=hyperparameters.pop("reward", None)) is not None:
-        #             hyperparameters["old_reward"] = reward
+        reward = hyperparameters.pop("reward", None)
+        if reward is not None:
+            hyperparameters["old_reward"] = reward
         return hyperparameters
 
     # Slightly fake a dictionary behaviour with the params attribute
