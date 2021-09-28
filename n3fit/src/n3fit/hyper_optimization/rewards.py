@@ -1,9 +1,12 @@
 """
     Target functions to minimize during hyperparameter scan
 
-    All functions in this module have the same signature:
-        fold_losses: list of loss-per-fold
-        **kwargs
+    Not all functions will use all arguments.
+    Keyword arguments that model_trainer.py will pass to this file are:
+
+    - fold_losses: a list with the loss of each fold
+    - n3pdfs: a list of N3PDF objects for each fit (which can contain more than 1 replica)
+    - experimental_models: a reference to the model that contains the cv for all data (no masks)
 
     New loss functions can be added directly in this module
     the name in the runcard must match the name in the module
@@ -24,25 +27,23 @@
 import numpy as np
 from validphys.pdfgrids import xplotting_grid, distance_grids
 
-# pylint: disable=unused-argument
 
-
-def average(fold_losses, **kwargs):
+def average(fold_losses=None, **_kwargs):
     """Returns the average of fold losses"""
     return np.average(fold_losses)
 
 
-def best_worst(fold_losses, **kwargs):
+def best_worst(fold_losses=None, **_kwargs):
     """Returns the maximum loss of all k folds"""
     return np.max(fold_losses)
 
 
-def std(fold_losses, **kwargs):
+def std(fold_losses=None, **_kwargs):
     """Return the standard dev of the losses of the folds"""
     return np.std(fold_losses)
 
 
-def fit_distance(fold_losses, n3pdfs=None, **kwargs):
+def fit_distance(n3pdfs=None, **_kwargs):
     """Loss function for hyperoptimization based on the distance of
     the fits of all folds to the first fold
     """
@@ -74,7 +75,7 @@ def _set_central_value(n3pdf, model):
     full_pdf = n3pdf(input_x)
     cv_pdf = op.numpy_to_tensor(np.mean(full_pdf, axis=0, keepdims=True))
 
-    def central_value(x, training=None):
+    def central_value(x, training=None):  # pylint: disable=unused-argument
         return cv_pdf
 
     model.get_layer("PDF_0").call = central_value
@@ -83,7 +84,7 @@ def _set_central_value(n3pdf, model):
     model.compile()
 
 
-def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwargs):
+def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     """Use the future tests as a metric for hyperopt
 
     NOTE: this function should only be called once at the end of
@@ -100,6 +101,7 @@ def fit_future_tests(fold_losses, n3pdfs=None, experimental_models=None, **kwarg
     try:
         import tensorflow as tf
         from n3fit.backends import set_eager
+
         tf_version = tf.__version__.split(".")
         if int(tf_version[0]) == 2 and int(tf_version[1]) < 4:
             set_eager(True)

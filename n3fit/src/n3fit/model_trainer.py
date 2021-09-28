@@ -918,7 +918,7 @@ class ModelTrainer:
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self._hyper_loss(l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models),
+                "loss": self._hyper_loss(fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
