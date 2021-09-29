@@ -147,6 +147,18 @@ information on how to bundle PDFs with :math:`\alpha_s` replicas, see
 :ref:`the relevant tutorial <bundled-sets>`.
 
 
-
 .. |NNPDF40_nnlo_pdfas.yml| replace:: ``NNPDF40_nnlo_as_0118_1000.yml``
 .. _NNPDF40_nnlo_pdfas.yml: https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40/NNPDF40_nnlo_pdfas.yml
+
+
+The PDF sets released as part of NNPDF4.0 also includes sets in which the 
+maximum value of ``nf`` differs from the baseline value of ``nf=5``. To produce
+these sets, the steps described in :ref:`howto nf variations`. In particular, 
+the ID's of the required theories can be found in the 
+:ref:`theory dabase <https://github.com/NNPDF/nnpdf/blob/master/nnpdfcpp/data/theory.db>`,
+where the id's of the theories used to do the flavor-number variations are 
+218-227. 
+
+
+
+

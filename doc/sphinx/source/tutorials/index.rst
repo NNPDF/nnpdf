@@ -46,18 +46,24 @@ Closure tests
    ./closuretest.md
    ./closureestimators.rst
 
+Special PDF sets
+----------------
+.. toctree ::
+   :maxdepth: 1
+
+   ./reproduce
+   ./bundle-pdfs.rst
+   ./mc2hessian.rst
+   ./nf_variation.rst
 
 Miscellaneous
 -------------
 .. toctree ::
    :maxdepth: 1
 
-   ./reproduce
    ./list-resources.md
    ./pseudodata.md
    ./newplottingfn.rst
    ./addspecialgrouping.rst
-   ./bundle-pdfs.rst
    ./conda.md
-   ./mc2hessian.rst
    ./futuretests.rst
