@@ -33,7 +33,8 @@ differs from the ``nf=5`` flavor scheme used during the fit.
 If we do this, the values for  ``AlphaS_MZ`` and ``MZ`` in the ``.info`` file
 need to be changed to take values from the theory used to do the evolution 
 rather than from the theory used to do the fit. These values can be corrected by
-using the ``varflavors.py`` code:
+using the ``varflavors.py`` script, found under `n3fit/evolven3fit/
+<https://github.com/NNPDF/nnpdf/blob/master/n3fit/evolven3fit/>`_:
 
 .. code-block:: bash
 
@@ -42,4 +43,4 @@ using the ``varflavors.py`` code:
 where ``THEORYID`` is again the theoryID of the theory used to do the DGLAP 
 evolution.
 
-To finalize the PDF set, ``postfit`` should be run in the usual manner. 
+To finalize the PDF set, ``postfit`` should be run in the usual manner.
