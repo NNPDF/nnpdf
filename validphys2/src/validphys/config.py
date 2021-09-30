@@ -253,6 +253,18 @@ class CoreConfig(configparser.Config):
         replicas = fitted_replica_indexes(pdf)
         return NSList(replicas, nskey='replica')
 
+    def produce_fitcontextwithcuts(self, fit, fitinputcontext):
+        """Like fitinputcontext but setting the cuts policy.
+        """
+        theoryid = fitinputcontext['theoryid']
+        data_input = fitinputcontext['data_input']
+
+        return {
+            "dataset_inputs": data_input,
+            "theoryid": theoryid,
+            "use_cuts": CutsPolicy.FROMFIT,
+        }
+
     def produce_fitenvironment(self, fit, fitinputcontext):
         """Like fitcontext, but additionally forcing various other
         parameters, such as the cuts policy and Monte Carlo seeding to be

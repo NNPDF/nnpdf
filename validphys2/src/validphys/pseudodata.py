@@ -21,8 +21,8 @@ log = logging.getLogger(__name__)
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
 
 context_index = collect("groups_index", ("fitcontext",))
-read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitenvironment'))
-read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitenvironment'))
+read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitcontextwithcuts'))
+read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitcontextwithcuts'))
 
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
@@ -77,6 +77,12 @@ def read_replica_pseudodata(fit, context_index, replica):
     try:
         tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", header=0)
         val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", header=0)
+    except FileNotFoundError:
+        # Old 3.1 style fits had pseudodata called training.dat and validation.dat
+        training_path = replica_path / "training.dat"
+        validation_path = replica_path / "validation.dat"
+        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
+        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
