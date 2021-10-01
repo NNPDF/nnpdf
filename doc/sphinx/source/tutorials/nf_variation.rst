@@ -36,12 +36,11 @@ used to do the evolution.
 
 Both, the running of ``evolven3fit`` using a theory id different from the one
 used during the fit, and correcting the values for ``AlphaS_MZ`` and ``MZ`` can
-be done using the ``varflavors.py`` script, found under `n3fit/evolven3fit/
-<https://github.com/NNPDF/nnpdf/blob/master/n3fit/evolven3fit/>`_.
+be done using the ``varflavors`` script:
 
 .. code-block:: bash
 
-  python varflavors.py [configuration folder] [max replicas] [THEORYID] --new_name=[name of output fit]
+  varflavors [fit folder] [max replicas] [THEORYID] --new_name=[name of output fit]
 
 where ``max replicas`` are the maximum number of replicas evolved by
 ``evolven3vfit``, ``THEORYID`` is again the theoryID of the theory used to do
