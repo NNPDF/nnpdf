@@ -1,39 +1,84 @@
 """
 varflavors.py
 
-When producing a PDF with different maximal flavor number than the nf during the fit, we first run
-evolven3fit by manually selecting a theory id of the theory correspodning to the desired nf
-evolution.
+When producing a PDF with different maximal flavor number than the nf during the fit, this script
+should be used. It copies the original fit folder after which it run ``evolven3fit``  on this fit
+using the manually selected theory_id.
 
-After running evolven3fit, but before running posfit, this script should be run to replace the
-``AlphaS_MZ'' and ``MZ'' values in the .info file, with the ``alphas'' and  ``Qref'' valuse from the
-theory database.
+After running evolven3fit, this script replaces the ``AlphaS_MZ'' and ``MZ'' values in the .info
+file, with the ``alphas`` and  ``Qref`` values from the theory database.
+
+This script does not run postfit, that should still be done manually.
 """
 
+import logging
+import shutil
+import subprocess
+import sys
+import tempfile
 from argparse import ArgumentParser
 from pathlib import Path
 
 from validphys.loader import Loader
+from validphys.renametools import change_name
 from validphys.theorydbutils import fetch_theory
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 ll = Loader()
 path_db = ll.theorydb_file
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
+    parser = ArgumentParser(description="Script to produce PDFs with flavor-number variations")
     parser.add_argument(
-        "--fit_folder", required=True, help=f"Path to the folder containing the evolved fit"
+        "fit_folder",
+        help="Path to the folder containing the (pre-DGLAP) fit result",
     )
     parser.add_argument(
-        "--theory_id", required=True, help=f"ID of the theory used to evolve the fit"
+        "max_replicas",
+        help="Maximum number of replicas on which to perform DGLAP evolution",
+        type=int,
+    )
+    parser.add_argument(
+        "theory_id",
+        help="ID of the theory used to evolve the fit",
+        type=int,
+    )
+    parser.add_argument(
+        "--new_name",
+        help="(optional) new name of the fit",
+        type=str,
     )
     args = parser.parse_args()
 
-    path_fit_folder = Path(args.fit_folder)
-    fit_name = path_fit_folder.name
-    path_info_file = path_fit_folder / f"nnfit/{fit_name}.info"
+    path_input_fit = Path(args.fit_folder)
+    input_fit_name = path_input_fit.name
+    path_info_file = path_input_fit / f"nnfit/{input_fit_name}.info"
 
+    # 1. If the new_name flag is used, create a copy of the input fit
+    if args.new_name:
+        path_output_fit = path_input_fit.with_name(args.new_name)
+        if path_output_fit.exists():
+            log.error("Destination path %s already exists.", path_output_fit.absolute())
+            sys.exit(1)
+        with tempfile.TemporaryDirectory(dir=path_input_fit.parent) as tmp:
+            tmp = Path(tmp)
+            copied_fit = tmp / input_fit_name
+            shutil.copytree(path_input_fit, copied_fit, symlinks=True)
+            newpath = change_name(copied_fit, args.new_name)
+            newpath.rename(path_output_fit)
+        log.info("Renaming with copy completed")
+
+    # 2. Run evolven3fit
+    evolven3fit_command = (
+        f"evolven3fit {path_output_fit} {args.max_replicas} --theory_id {args.theory_id} "
+    )
+    subprocess.call(evolven3fit_command, shell=True)
+    log.info("DGLAP evolution completed")
+
+    # 3. Overwrite the MZ and AlphaS_MZ values in the .info file with Qref and alphas values from
+    # the theory db, repsectively
     theory_dict = fetch_theory(path_db, args.theory_id)
     Qref = theory_dict["Qref"]
     alphas = theory_dict["alphas"]
@@ -47,5 +92,8 @@ if __name__ == "__main__":
                 if line.startswith("MZ"):
                     line = f"MZ: {Qref}\n"
                 tempfile.write(line)
-
     path_temp_info.rename(path_info_file)
+    log.info(
+        "AlphaS_MZ and MZ in the .info file replace with alphas and Qref" 
+        "corresponding to theory %s in the theory db", args.theory_id
+    )
