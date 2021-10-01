@@ -15,7 +15,6 @@ import logging
 import shutil
 import subprocess
 import sys
-import tempfile
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -29,8 +28,8 @@ log = logging.getLogger(__name__)
 ll = Loader()
 path_db = ll.theorydb_file
 
-if __name__ == "__main__":
-    parser = ArgumentParser(description="Script to produce PDFs with flavor-number variations")
+def main():
+    parser = ArgumentParser(description="varflavors - a script to produce PDFs with flavor-number variations")
     parser.add_argument(
         "fit_folder",
         help="Path to the folder containing the (pre-DGLAP) fit result",
@@ -47,7 +46,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--new_name",
-        help="(optional) new name of the fit",
+        help="Create a copy of the input fit with this name before varying flavors of this new fit",
         type=str,
     )
     args = parser.parse_args()
@@ -58,6 +57,7 @@ if __name__ == "__main__":
 
     # 1. If the new_name flag is used, create a copy of the input fit
     if args.new_name:
+        import tempfile
         path_output_fit = path_input_fit.with_name(args.new_name)
         if path_output_fit.exists():
             log.error("Destination path %s already exists.", path_output_fit.absolute())
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     evolven3fit_command = (
         f"evolven3fit {path_output_fit} {args.max_replicas} --theory_id {args.theory_id} "
     )
-    subprocess.call(evolven3fit_command, shell=True)
+    subprocess.run(evolven3fit_command, check=True, shell=True)
     log.info("DGLAP evolution completed")
 
     # 3. Overwrite the MZ and AlphaS_MZ values in the .info file with Qref and alphas values from
@@ -94,6 +94,6 @@ if __name__ == "__main__":
                 tempfile.write(line)
     path_temp_info.rename(path_info_file)
     log.info(
-        "AlphaS_MZ and MZ in the .info file replace with alphas and Qref" 
+        "AlphaS_MZ and MZ in the .info file replace with alphas and Qref"
         "corresponding to theory %s in the theory db", args.theory_id
     )
