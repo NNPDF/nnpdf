@@ -441,65 +441,6 @@ def groups_corrmat(groups_covmat):
 def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
-@table
-def closure_pseudodata_replicas(
-    experiments, pdf, nclosure: int, experiments_index, nnoisy: int = 0
-):
-    """Generate closure pseudodata replicas from the given pdf.
-
-    nclosure: Number of Level 1 pseudodata replicas.
-
-    nnoisy:   Number of Level 2 replicas generated out of each pseudodata replica.
-
-    The columns of the table are of the form (clos_0, noise_0_n0 ..., clos_1, ...)
-    """
-
-    # TODO: Do this somewhere else
-    from NNPDF import RandomGenerator
-
-    RandomGenerator.InitRNG(0, 0)
-    data = np.zeros((len(experiments_index), nclosure * (1 + nnoisy)))
-
-    cols = []
-    for i in range(nclosure):
-        cols += ["clos_%04d" % i, *["noise_%04d_%04d" % (i, j) for j in range(nnoisy)]]
-
-    loaded_pdf = pdf.load()
-
-    for exp in experiments:
-        # Since we are going to modify the experiments, we copy them
-        # (and work on the copies) to avoid all
-        # sorts of weirdness with other providers. We don't want this to interact
-        # with DataGroupSpec at all, because it could do funny things with the
-        # cache when calling load(). We need to copy this yet again, for each
-        # of the noisy replicas.
-        closure_exp = Experiment(exp.load())
-
-        # TODO: This is probably computed somewhere else... All this code is
-        # very error prone.
-        # The predictions are for the unmodified experiment.
-        predictions = [ThPredictions(loaded_pdf, d.load()) for d in exp]
-
-        exp_location = experiments_index.get_loc(closure_exp.GetExpName())
-
-        index = itertools.count()
-        for i in range(nclosure):
-            # Generate predictions with experimental noise, a different for
-            # each closure set.
-            closure_exp.MakeClosure(predictions, True)
-            data[exp_location, next(index)] = closure_exp.get_cv()
-            for j in range(nnoisy):
-                # If we don't copy, we generate noise on top of the noise,
-                # which is not what we want.
-                replica_exp = Experiment(closure_exp)
-                replica_exp.MakeReplica()
-
-                data[exp_location, next(index)] = replica_exp.get_cv()
-
-    df = pd.DataFrame(data, index=experiments_index, columns=cols)
-
-    return df
-
 
 def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     """Tuple of data and theory results for a single pdf. The data will have an associated
