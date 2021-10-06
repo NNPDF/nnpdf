@@ -628,6 +628,7 @@ def chi2_breakdown_by_dataset(
     """Return a dict with the central chi² of each dataset in the experiment,
     by breaking down the experiment results. If ``prepend_total`` is True.
     """
+    raise Exception
     dt, th = experiment_results
     sqrtcovmat = dt.sqrtcovmat
     central_diff = th.central_value - dt.central_value
