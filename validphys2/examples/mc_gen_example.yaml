@@ -6,17 +6,17 @@ meta:
     author: Rosalyn Pearson
     keywords: [pseudodata, test, artificial replica]
 
-fit: NNPDF31_nlo_as_0118
+fit: 210629-n3fit-001
 
-theoryid: 52
+theoryid: 200
+mcseed: 4
+genrep: True
 
 template: mc_gen_report.md
 
 actions_:
   - report(main=true)
 
-experiments:
-  - experiment: BIGEXP
-    datasets:
-      - { dataset: CHORUSNB, frac: 0.5}
-
+dataset_inputs:
+  - { dataset: NMC, frac: 0.5}
+  - { dataset: D0WMASY, frac: 0.5}
