@@ -1,7 +1,7 @@
 """
 Penalties that can be applied to the hyperopt loss
 
-All penalties in this module have the same signature of positional arguments:
+Penalties in this module usually take as signature the positional arguments:
 
     pdf_models: list(:py:class:`n3fit.backends.keras_backend.MetaModel`)
         list of models or functions taking a ``(1, xgrid_size, 1)`` array as input
@@ -11,7 +11,7 @@ All penalties in this module have the same signature of positional arguments:
         object holding the information about the validation model
         and the stopping parameters
 
-although not all penalties must use both.
+although not all penalties use both.
 
 And return a float to be added to the hyperscan loss.
 
@@ -23,7 +23,7 @@ from validphys import fitveto
 from n3fit.vpinterface import N3PDF
 
 
-def saturation(pdf_models, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavors=None):
+def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_kwargs):
     """Checks the pdf models for saturation at small x
     by checking the slope from ``min_x`` to ``max_x``.
     Sum the saturation loss of all pdf models
@@ -63,7 +63,7 @@ def saturation(pdf_models, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavo
     return extra_loss
 
 
-def patience(pdf_models, stopping_object, alpha=1e-4):
+def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     """Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
     The penalty is proportional to the validation loss and will be 0
@@ -93,7 +93,7 @@ def patience(pdf_models, stopping_object, alpha=1e-4):
     return vl_loss * np.exp(alpha * diff)
 
 
-def integrability(pdf_models, stopping_object):
+def integrability(pdf_models=None):
     """Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
     of the threshold defined in validphys::fitveto

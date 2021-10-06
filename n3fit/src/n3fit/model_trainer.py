@@ -889,7 +889,7 @@ class ModelTrainer:
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_models, stopping_object)
+                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 # Now save all information from this fold
