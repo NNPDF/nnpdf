@@ -171,7 +171,6 @@ def _filter_real_data(filter_path, data):
 
 def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
-    import ipdb; ipdb.set_trace()
     total_data_points = 0
     total_cut_data_points = 0
     fakeset = fakepdfset.load()
