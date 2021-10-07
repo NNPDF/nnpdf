@@ -13,10 +13,7 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.table import table
-
 from validphys.calcutils import calc_chi2
-from validphys.n3fit_data import replica_mcseed
-from validphys.pseudodata import make_replica
 
 PseudoReplicaExpChi2Data = namedtuple(
     "PseudoReplicaChi2Data", ["group", "ndata", "chi2", "nnfit_index"]
@@ -27,9 +24,7 @@ log = logging.getLogger(__name__)
 
 
 def computed_pseudoreplicas_chi2(
-    mcseed,
-    dataset_inputs_loaded_cd_with_cuts,
-    fitted_replica_indexes,
+    fitted_make_replicas,
     group_result_table_no_table,  # to get the results already in the form of a dataframe
     groups_sqrtcovmat,
 ):
@@ -39,13 +34,8 @@ def computed_pseudoreplicas_chi2(
         ``['group',  'ndata' , 'nnfit_index']``
     where ``nnftix_index`` is the name of the corresponding replica
     """
-    # Get the replica pseudodata
-    all_data_replicas = []
-    for replica in fitted_replica_indexes:
-        value_of_mcseed = replica_mcseed(replica, mcseed, True)
-        all_data_replicas.append(make_replica(dataset_inputs_loaded_cd_with_cuts, value_of_mcseed))
-    r_data = np.array(all_data_replicas).T
-    ########################
+    # Stack the replica pseudodata to have the prediction shape
+    r_data = np.stack(fitted_make_replicas, axis=1)
 
     # Drop data central and theory central which is not useful here
     r_prediction = group_result_table_no_table.drop(columns=["data_central", "theory_central"])
