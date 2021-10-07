@@ -14,8 +14,9 @@ import pandas as pd
 from reportengine import collect
 from reportengine.table import table
 
-from validphys.core import PDF
 from validphys.calcutils import calc_chi2
+from validphys.n3fit_data import replica_mcseed
+from validphys.pseudodata import make_replica
 
 PseudoReplicaExpChi2Data = namedtuple(
     "PseudoReplicaChi2Data", ["group", "ndata", "chi2", "nnfit_index"]
@@ -26,13 +27,11 @@ log = logging.getLogger(__name__)
 
 
 def computed_pseudoreplicas_chi2(
-    # TODO: these three are just so I can call make_replica?
     mcseed,
     dataset_inputs_loaded_cd_with_cuts,
     fitted_replica_indexes,
     group_result_table_no_table,  # to get the results already in the form of a dataframe
     groups_sqrtcovmat,
-    t0set: (PDF, type(None)),
 ):
     """Return a dataframe with the chi² of each replica with its corresponding
     pseudodata (i.e. the one it was fitted with). The chi² is computed by group.
@@ -40,26 +39,16 @@ def computed_pseudoreplicas_chi2(
         ``['group',  'ndata' , 'nnfit_index']``
     where ``nnftix_index`` is the name of the corresponding replica
     """
-    #######
     # Get the replica pseudodata
-    # TODO: it looks like I should be able to have directly make_replica in the arguments
-    # but don't really see how
-    from validphys.n3fit_data import replica_mcseed
-    from validphys.pseudodata import make_replica
-
     all_data_replicas = []
     for replica in fitted_replica_indexes:
         value_of_mcseed = replica_mcseed(replica, mcseed, True)
-        all_data_replicas.append(
-            make_replica(dataset_inputs_loaded_cd_with_cuts, value_of_mcseed)
-        )
+        all_data_replicas.append(make_replica(dataset_inputs_loaded_cd_with_cuts, value_of_mcseed))
     r_data = np.array(all_data_replicas).T
     ########################
 
     # Drop data central and theory central which is not useful here
-    r_prediction = group_result_table_no_table.drop(
-        columns=["data_central", "theory_central"]
-    )
+    r_prediction = group_result_table_no_table.drop(columns=["data_central", "theory_central"])
 
     # Now compute the chi2 in a per-group basis
     diff = r_prediction - r_data
@@ -87,9 +76,7 @@ def computed_pseudoreplicas_chi2(
 # them explicitly than setting some, so we require the user to do that.
 fits_computed_pseudoreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("fits",))
 
-dataspecs_computed_pseudorreplicas_chi2 = collect(
-    computed_pseudoreplicas_chi2, ("dataspecs",)
-)
+dataspecs_computed_pseudorreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("dataspecs",))
 
 
 @table

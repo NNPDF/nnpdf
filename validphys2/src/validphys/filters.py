@@ -10,7 +10,7 @@ from importlib.resources import read_text
 
 import numpy as np
 
-from NNPDF import CommonData, RandomGenerator
+from NNPDF import CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
@@ -83,6 +83,13 @@ def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
     be an integer between 0 and 16, seeded with ``filterseed``.
     The RNG can then be subsequently used to i.e generate pseudodata.
     """
+    try:
+        from NNPDF import RandomGenerator
+    except ImportError as e:
+        logging.error("Generating closure data needs a valid installation of libNNPDF")
+        raise e
+
+    log.warning("Importing libNNPDF")
     log.info("Initialising RNG")
     RandomGenerator.InitRNG(rngalgo, seed)
     RandomGenerator.GetRNG().SetSeed(filterseed)
@@ -164,6 +171,7 @@ def _filter_real_data(filter_path, data):
 
 def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
+    import ipdb; ipdb.set_trace()
     total_data_points = 0
     total_cut_data_points = 0
     fakeset = fakepdfset.load()
