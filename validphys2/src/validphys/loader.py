@@ -111,7 +111,7 @@ class _NNPDFprofile:
         if not new_path.exists():
             raise ProfileNotFound(f"NNPDF profile path: {new_path} does not exist")
         try:
-            self._profile = yaml.safe_load(new_path.read_text())
+            self._profile = yaml.safe_load(new_path.open("r"))
         except yaml.YAMLError as e:
             raise LoaderError(f"Could not parse profile file {new_path}: {e}") from e
         self._profile_path = new_path
