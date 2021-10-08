@@ -31,8 +31,8 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
-import NNPDF as nnpath
 
+DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
 
 log = logging.getLogger(__name__)
 
@@ -62,18 +62,75 @@ class CutsNotFound(LoadFailedError): pass
 
 class PDFNotFound(LoadFailedError): pass
 
+class ProfileNotFound(LoadFailedError): pass
+
 class RemoteLoaderError(LoaderError): pass
 
 class InconsistentMetaDataError(LoaderError): pass
+
+
+class _NNPDFprofile:
+    """Get access to the NNPDF profile yaml file
+    In order to facilitate access, instances of this class can be directly
+    accessed as a dictionary, but properties can offer extra fine-grained control
+    and directly return paths
+    For legacy purposes, instances of this class can be accessed as a dictionary
+    """
+
+    def __init__(self, main_path=None):
+        env_path = os.environ.get("NNPDF_PROFILE_PATH")
+        self._profile_path = None
+        if main_path is not None:
+            mpath = main_path
+        elif env_path is not None:
+            mpath = env_path
+        else:
+            mpath = DEFAULT_NNPDF_PROFILE_PATH
+        mpath = pathlib.Path(mpath)
+        self.profile_path = mpath
+
+    @property
+    def data_path(self) -> pathlib.Path:
+        """Get path for the data folder"""
+        return pathlib.Path(self._profile["data_path"])
+
+    @property
+    def results_path(self) -> pathlib.Path:
+        """Get path for the results folder"""
+        return pathlib.Path(self._profile["results_path"])
+
+    @property
+    def profile_path(self) -> pathlib.Path:
+        """Get profile path"""
+        return self._profile_path
+
+    @profile_path.setter
+    def profile_path(self, new_val):
+        """Check whether the new profile path is valid and load it"""
+        new_path = pathlib.Path(new_val)
+        if not new_path.exists():
+            raise ProfileNotFound(f"NNPDF profile path: {new_path} does not exist")
+        try:
+            self._profile = yaml.safe_load(new_path.read_text())
+        except yaml.YAMLError as e:
+            raise LoaderError(f"Could not parse profile file {new_path}: {e}") from e
+        self._profile_path = new_path
+
+    def __getitem__(self, key):
+        """Directly return a property from ``self._profile``"""
+        return self._profile[key]
+
+
+nnprofile = _NNPDFprofile()
 
 class LoaderBase:
 
     def __init__(self, datapath=None, resultspath=None):
         if datapath is None:
-            datapath = nnpath.get_data_path()
+            datapath = nnprofile.data_path
 
         if resultspath is None:
-            resultspath = nnpath.get_results_path()
+            resultspath = nnprofile.results_path
         datapath = pathlib.Path(datapath)
         resultspath = pathlib.Path(resultspath)
 
@@ -88,20 +145,7 @@ class LoaderBase:
         self._nnprofile = None
         self._old_commondata_fits = set()
 
-    @property
-    def nnprofile(self):
-        if self._nnprofile is None:
-            profile_path = nnpath.get_profile_path()
-            if not osp.exists(profile_path):
-                raise LoaderError(f"Could not find the profile path at "
-                                  "{profile_path}. Check your libnnpdf configuration")
-            with open(profile_path) as f:
-                try:
-                    self._nnprofile = yaml.safe_load(f)
-                except yaml.YAMLError as e:
-                    raise LoaderError(f"Could not parse profile file "
-                                      f"{profile_path}: {e}") from e
-        return self._nnprofile
+    nnprofile = nnprofile._profile
 
     @property
     def hyperscan_resultpath(self):
@@ -658,7 +702,7 @@ def _key_or_loader_error(f):
         except KeyError as e:
             log.error(f"nnprofile is configured "
                       f"improperly: Key {e} is missing! "
-                      f"Fix it at {nnpath.get_profile_path()}")
+                      f"Fix it at {nnprofile.profile_path}")
             raise LoaderError("Cannot attempt download because "
                               "nnprofile is configured improperly: "
                               f"Missing key '{e}'") from e
@@ -1020,3 +1064,5 @@ class FallbackLoader(Loader, RemoteLoader):
             if hasattr(RemoteLoader, 'download_' + resname):
                 return super().__getattribute__('make_checker')(resname)
         return super().__getattribute__(attr)
+
+
