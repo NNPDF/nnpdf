@@ -24,7 +24,7 @@ from prompt_toolkit.completion import WordCompleter
 
 from reportengine.compat import yaml
 from reportengine.colors import t
-from validphys.loader import RemoteLoader, nnpath
+from validphys.loader import RemoteLoader, nnprofile
 from validphys.renametools import Spinner
 
 log = logging.getLogger(__name__)
