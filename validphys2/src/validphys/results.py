@@ -8,14 +8,13 @@ from __future__ import generator_stop
 
 from collections import OrderedDict, namedtuple
 from collections.abc import Sequence
-import itertools
 import logging
 
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
 
-from NNPDF import ThPredictions, CommonData, Experiment
+from NNPDF import CommonData
 from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
@@ -35,6 +34,7 @@ from validphys.calcutils import (
     calc_phi,
     bootstrap_values,
 )
+from validphys.convolution import predictions, central_predictions, PredictionsRequireCutsError
 
 log = logging.getLogger(__name__)
 
@@ -45,10 +45,16 @@ class Result:
 
 # TODO: Eventually,only one of (NNPDFDataResult, StatsResult) should survive
 class NNPDFDataResult(Result):
-    """A result fills its values from a libnnpf data object"""
+    """A result fills its values from a pandas dataframe
+    For legacy (libNNPDF) compatibility, falls back to libNNPDF attributes"""
 
-    def __init__(self, dataobj):
-        self._central_value = dataobj.get_cv()
+    def __init__(self, dataobj, central_value=None):
+        if central_value is None:
+            try:
+                central_value = dataobj.mean(axis=1).to_numpy()
+            except AttributeError:
+                central_value = dataobj.get_cv()
+        self._central_value = np.array(central_value).squeeze()
 
     @property
     def central_value(self):
@@ -72,8 +78,8 @@ class StatsResult(Result):
 
 
 class DataResult(NNPDFDataResult):
-    def __init__(self, dataobj, covmat, sqrtcovmat):
-        super().__init__(dataobj)
+    def __init__(self, dataobj, covmat, sqrtcovmat, central_value=None):
+        super().__init__(dataobj, central_value=central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
 
@@ -96,12 +102,20 @@ class DataResult(NNPDFDataResult):
 
 
 class ThPredictionsResult(NNPDFDataResult):
-    def __init__(self, dataobj, stats_class, label=None):
+    """Class holding theory prediction
+    For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
+    """
+    def __init__(self, dataobj, stats_class, label=None, central_value=None):
         self.stats_class = stats_class
         self.label = label
-        self._std_error = dataobj.get_error()
-        self._rawdata = dataobj.get_data()
-        super().__init__(dataobj)
+        # Ducktype the input into numpy arrays
+        try:
+            self._std_error = dataobj.std(axis=1).to_numpy()
+            self._rawdata = dataobj.to_numpy()
+        except AttributeError:
+            self._std_error = dataobj.get_error()
+            self._rawdata = dataobj.get_data()
+        super().__init__(dataobj, central_value=central_value)
 
     @property
     def std_error(self):
@@ -124,15 +138,34 @@ class ThPredictionsResult(NNPDFDataResult):
 
     @classmethod
     def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
-        if loaded_pdf is None:
-            loaded_pdf = pdf.load()
-        if loaded_data is None:
-            loaded_data = dataset.load()
-        th_predictions = ThPredictions(loaded_pdf, loaded_data)
+        if loaded_pdf is not None:
+            log.warning("Deprecation Notice: ThPredictionsResult received an loaded PDF.")
+        if loaded_data is not None:
+            log.warning("Deprecation Notice: ThPredictionsResult received an loaded dataset.")
+
+        # This should work for both single dataset and whole groups
+        try:
+            datasets = dataset.datasets
+        except AttributeError:
+            datasets = (dataset,)
+
+        try:
+            all_preds = []
+            all_centrals = []
+            for d in datasets:
+                member_predictions = predictions(d, pdf)
+                central_value = central_predictions(d, pdf)
+                all_preds.append(member_predictions)
+                all_centrals.append(central_value)
+        except PredictionsRequireCutsError as e:
+            raise PredictionsRequireCutsError("Predictcions from FKTables always require cuts, "
+                    "if using an old (pre 4.0) runcard please add `use_cuts: 'nocuts'`") from e
+        th_predictions = pd.concat(all_preds)
+        central_values = pd.concat(all_centrals)
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label)
+        return cls(th_predictions, pdf.stats_class, label, central_value=central_values)
 
 
 class PositivityResult(StatsResult):

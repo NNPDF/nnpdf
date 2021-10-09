@@ -9,10 +9,12 @@ pdfs:
 
 theoryid: 162
 
-use_cuts: "nocuts"
+use_cuts: "internal"
 
 dataset_inputs:
       - { dataset: BCDMSP}
+      - { dataset: H1HERAF2B}
+      - { dataset: ZEUSHERAF2B}
 
 template: dthcomparison.md
 
