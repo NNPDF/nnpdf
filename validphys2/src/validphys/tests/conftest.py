@@ -94,6 +94,12 @@ def weighted_data_witht0_config(data_witht0_config):
     config_dict.update({'dataset_inputs': WEIGHTED_DATA})
     return config_dict
 
+@pytest.fixture(scope='module')
+def weighted_data_witht0_internal_cuts_config(data_witht0_internal_cuts_config):
+    config_dict = dict(data_witht0_internal_cuts_config)
+    config_dict.update({'dataset_inputs': WEIGHTED_DATA})
+    return config_dict
+
 def pytest_runtest_setup(item):
     ALL = {"darwin", "linux"}
     supported_platforms = ALL.intersection(mark.name for mark in item.iter_markers())
