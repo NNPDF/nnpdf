@@ -62,7 +62,7 @@ Miscellaneous
    :maxdepth: 1
 
    ./list-resources.md
-   ./pseudodata.md
+   ./pseudodata.rst
    ./newplottingfn.rst
    ./addspecialgrouping.rst
    ./conda.md
