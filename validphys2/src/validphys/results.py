@@ -158,8 +158,8 @@ class ThPredictionsResult(NNPDFDataResult):
                 all_preds.append(member_predictions)
                 all_centrals.append(central_value)
         except PredictionsRequireCutsError as e:
-            raise PredictionsRequireCutsError("Predictcions from FKTables always require cuts, "
-                    "if using an old (pre 4.0) runcard please add `use_cuts: 'nocuts'`") from e
+            raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
+                    "if using an old (pre 4.0) runcard please add `use_cuts: 'internal'`") from e
         th_predictions = pd.concat(all_preds)
         central_values = pd.concat(all_centrals)
 
