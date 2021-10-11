@@ -75,10 +75,17 @@ def data_witht0_config():
     return config_dict
 
 @pytest.fixture(scope='module')
+def data_witht0_internal_cuts_config(data_witht0_config):
+    config_dict = dict(data_witht0_config)
+    config_dict.update(use_cuts='internal')
+    return config_dict
+
+@pytest.fixture(scope='module')
 def data_singleexp_witht0_config(data_witht0_config):
     config_dict = dict(data_witht0_config)
     config_dict.pop("dataset_inputs")
     config_dict.update({'experiments': SINGLE_EXP})
+    config_dict.update(use_cuts='internal')
     return config_dict
 
 @pytest.fixture(scope='module')
@@ -130,5 +137,12 @@ def hessian_pdf_config(flavour_basis_initial_scale_config):
 def hessian_data_config(data_config):
     """Same as data config but with hessian PDF"""
     new_config = dict(data_config)
+    new_config["pdf"] = HESSIAN_PDF
+    return new_config
+
+@pytest.fixture(scope='module')
+def hessian_data_internal_cuts_config(data_internal_cuts_config):
+    """Same as data config but with hessian PDF"""
+    new_config = dict(data_internal_cuts_config)
     new_config["pdf"] = HESSIAN_PDF
     return new_config
