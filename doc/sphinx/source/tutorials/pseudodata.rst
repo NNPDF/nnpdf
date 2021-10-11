@@ -3,10 +3,10 @@ Obtaining the pseudodata used by an ``n3fit`` fit
 =================================================
 
 Suppose one has obtained a fit using the ``n3fit`` framework and wants to do some analysis that requires
-knowing exactly the data that the neural networks saw during the fitting procedure. Thankfully, this
-information is reproducible due to the various seeds in the fit runcard.
+knowing exactly the data that the neural networks saw during the fitting procedure. The
+information is reproducible given the various seeds in the fit runcard.
 
-The 3 seeds of interest are ``trvlseed`` which determines the training/validation splitting, ``nnseed``
+The 3 random seeds used in the fit are ``trvlseed`` which determines the training/validation splitting, ``nnseed``
 which concerns the initialization of the neural netowrks themselves, and finally ``mcseed`` which is the
 seed used by the pseudodata generation. Clearly, the ones we are interested in are ``trvlseed`` and ``mcseed``.
 
