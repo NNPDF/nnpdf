@@ -63,3 +63,42 @@ is a ``namedtuple`` containing the entire dataset, alongside the training and va
   When running this action from a runcard, it may be worthwhile to use the ``--parallel`` flag when calling validphys.
   This flag parallelizes dependencies which will compute the pseudodata replicas in an asynchronous manner. This is
   advantageous since the MC replica generation is computationally intensive.
+
+Saving and loading pseudodata
+-----------------------------
+
+It is possible to instead save the Monte Carlo replicas to disk as the fit is performed. This can be achieved by setting
+the ``savepseudodata`` flag to ``true`` under the ``fitting`` namespace in the fit runcard:
+
+.. code-block :: yaml
+
+   fitting:
+    savepseudodata: true
+
+This will save the training and validation splits to disk under files named ``datacuts_theory_fitting_training_pseudodata.csv``
+and similarly for the validation split. These can then be loaded within validphys be leveraging the
+:py:func:`validphys.pseudodata.read_fit_pseudodata` action:
+
+.. code-block :: python
+
+   >>> from validphys.api import API
+   >>> pseudodata = API.read_fit_pseudodata(fit="pseudodata_test_fit_n3fit")
+   >>> replica1_info = pseudodata[0]
+   >>> replica1_info.pseudodata.loc[replica1_info.tr_idx]
+                                  replica 1
+  group dataset           id
+  ATLAS ATLASZPT8TEVMDIST 1    29.856281
+                          3    14.686290
+                          4     8.568288
+                          5     2.848544
+                          6     0.704977
+  ...                                ...
+  NMC   NMCPD             247   0.688019
+                          249   0.713272
+                          255   0.673997
+                          256   0.751973
+                          259   0.750572
+
+  [223 rows x 1 columns]
+
+With the postfit reshuffling be handled instead by the :py:func:`validphys.pseudodata.read_pdf_pseudodata`.
