@@ -52,6 +52,7 @@ import numpy as np
 
 from validphys.pdfbases import evolution
 from validphys.fkparser import load_fktable
+from validphys.checks import check_cuts_considered
 
 
 FK_FLAVOURS = evolution.to_known_elements(
@@ -126,6 +127,7 @@ def _predictions(dataset, pdf, fkfunc):
     return opfunc(*all_predictions)
 
 
+@check_cuts_considered
 def predictions(dataset, pdf):
     """"Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
@@ -179,6 +181,7 @@ def predictions(dataset, pdf):
     return _predictions(dataset, pdf, fk_predictions)
 
 
+@check_cuts_considered
 def central_predictions(dataset, pdf):
     """Same as :py:func:`predictions` but computing the predictions for the
     central member of the PDF set only. For Monte Carlo PDFs, this is a faster
@@ -189,6 +192,7 @@ def central_predictions(dataset, pdf):
     return _predictions(dataset, pdf, central_fk_predictions)
 
 
+@check_cuts_considered
 def linear_predictions(dataset, pdf):
     """Same as :py:func:`predictions` but computing *linearized* predictions.
     These are the same as ``predictions`` for DIS, but truncates to the terms
