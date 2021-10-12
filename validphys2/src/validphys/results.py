@@ -48,12 +48,12 @@ class NNPDFDataResult(Result):
     """A result fills its values from a pandas dataframe
     For legacy (libNNPDF) compatibility, falls back to libNNPDF attributes"""
 
-    def __init__(self, dataobj, central_value=None):
+    def __init__(self, dataobj=None, central_value=None):
+        # This class is used by both validphys and libNNPDF objects
+        # when central_value is not explictly passed, fallback to
+        # libNNPDF object .get_cv()
         if central_value is None:
-            try:
-                central_value = dataobj.mean(axis=1).to_numpy()
-            except AttributeError:
-                central_value = dataobj.get_cv()
+            central_value = dataobj.get_cv()
         self._central_value = np.array(central_value).squeeze()
 
     @property
@@ -148,10 +148,8 @@ class ThPredictionsResult(NNPDFDataResult):
             all_preds = []
             all_centrals = []
             for d in datasets:
-                member_predictions = predictions(d, pdf)
-                central_value = central_predictions(d, pdf)
-                all_preds.append(member_predictions)
-                all_centrals.append(central_value)
+                all_preds.append(predictions(d, pdf))
+                all_centrals.append(central_predictions(d, pdf))
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
                     "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
