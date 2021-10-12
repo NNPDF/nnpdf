@@ -59,6 +59,7 @@ def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_
         xpdf = y[0, :, flavors]
         slope = np.diff(xpdf) / np.diff(np.log10(x))
         pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
+        # Add a small offset to avoid ZeroDivisionError
         extra_loss += np.sum(1.0 / (1e-7 + pen))
     return extra_loss
 
