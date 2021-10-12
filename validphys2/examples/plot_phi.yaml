@@ -7,7 +7,7 @@ pdf: {id: "NNPDF40_nnlo_as_01180", label: "4.0 NNLO"}
 
 theoryid: 162
 
-use_cuts : nocuts
+use_cuts : internal
 
 dataset_inputs:
   - { dataset: NMC }
