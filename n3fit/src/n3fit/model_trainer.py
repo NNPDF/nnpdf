@@ -566,8 +566,8 @@ class ModelTrainer:
                 scaler = PchipInterpolator(map_from, map_to)
             except ValueError:
                 raise ValueError(
-                    "interpolation_points is larger than the number of unique \
-                                    input x-values"
+                    "interpolation_points is larger than the number of unique "
+                                    "input x-values"
                 )
             self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
 
