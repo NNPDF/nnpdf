@@ -16,7 +16,7 @@ pdfs:
 theoryids:
     - 208
     - 162
-use_cuts : nocuts
+use_cuts : internal
 
 dataset_inputs:
   - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
