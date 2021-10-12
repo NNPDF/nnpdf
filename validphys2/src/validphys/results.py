@@ -137,12 +137,7 @@ class ThPredictionsResult(NNPDFDataResult):
         return label
 
     @classmethod
-    def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
-        if loaded_pdf is not None:
-            log.warning("Deprecation Notice: ThPredictionsResult received an loaded PDF.")
-        if loaded_data is not None:
-            log.warning("Deprecation Notice: ThPredictionsResult received an loaded dataset.")
-
+    def from_convolution(cls, pdf, dataset):
         # This should work for both single dataset and whole groups
         try:
             datasets = dataset.datasets
@@ -159,7 +154,7 @@ class ThPredictionsResult(NNPDFDataResult):
                 all_centrals.append(central_value)
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
-                    "if using an old (pre 4.0) runcard please add `use_cuts: 'internal'`") from e
+                    "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
         th_predictions = pd.concat(all_preds)
         central_values = pd.concat(all_centrals)
 
@@ -487,7 +482,7 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     data = dataset.load()
     return (
         DataResult(data, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data),
+        ThPredictionsResult.from_convolution(pdf, dataset),
     )
 
 
@@ -513,13 +508,9 @@ def pdf_results(
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
-    data = dataset.load()
-    th_results = []
-    for pdf in pdfs:
-        th_result = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
-        th_results.append(th_result)
+    th_results = [ThPredictionsResult.from_convolution(pdf, dataset) for pdf in pdfs]
 
-    return (DataResult(data, covariance_matrix, sqrt_covmat), *th_results)
+    return (DataResult(dataset.load(), covariance_matrix, sqrt_covmat), *th_results)
 
 
 @require_one("pdfs", "pdf")

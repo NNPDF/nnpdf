@@ -84,11 +84,11 @@ def internal_multiclosure_dataset_loader(
         data = dataset.load.__wrapped__(dataset)
 
     fits_dataset_predictions = [
-        ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
+        ThPredictionsResult.from_convolution(pdf, dataset)
         for pdf in fits_pdf
     ]
     fits_underlying_predictions = ThPredictionsResult.from_convolution(
-        multiclosure_underlyinglaw, dataset, loaded_data=data
+        multiclosure_underlyinglaw, dataset
     )
 
     # copy data to make t0 cov
