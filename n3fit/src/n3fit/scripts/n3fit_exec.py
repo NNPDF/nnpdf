@@ -186,7 +186,7 @@ class N3FitConfig(Config):
     def produce_kpartitions(self, kfold_parameters):
         if kfold_parameters:
             partitions = kfold_parameters["partitions"]
-            # Note that one of the partitions could be empty ([]) or, by yaml usual notiation, None
+            # Note that one of the partitions could be empty ([]) or, by yaml usual notation, None
             for partition in partitions:
                 if partition["datasets"] is None:
                     partition["datasets"] = []
