@@ -637,8 +637,7 @@ def pdferr_plus_covmat(dataset, pdf, covmat):
     --------
     covmat: Standard experimental covariance matrix
     """
-    loaded_data = dataset.load()
-    th = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=loaded_data)
+    th = ThPredictionsResult.from_convolution(pdf, dataset)
     pdf_cov = np.cov(th._rawdata, rowvar=True)
     return pdf_cov + covmat
 
