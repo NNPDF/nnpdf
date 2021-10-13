@@ -3,6 +3,35 @@
     using the official lhapdf python interface.
 
     It exposes an interface (almost) compatible with libNNPDF::LHAPDFSet
+
+    The ``.members`` and ``.central_member`` of the ``LHAPDFSet`` are
+    LHAPDF objects (the typical output from ``mkPDFs``) and can be used normally.
+
+    For MC PDFs the ``central_member`` is the average of all replicas (members 1-100)
+    while for Hessian PDFs the ``central_member`` is also ``member[0]``
+
+    Examples
+    --------
+    >>> from validphys.lhapdfset import LHAPDFSet, ER_MC
+    >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", ER_MC)
+    >>> pdf.get_members()
+    100
+    >>> len(pdf.members)
+    100
+    >>> pdf.central_member.alphasQ(91.19)
+    0.11800
+    >>> pdf.member[0].xfxQ2(0.5, 15625)
+    {-5: 6.983360500601136e-05,
+    -4: 0.0021818063617227604,
+    -3: 0.00172453472243952,
+    -2: 0.0010906577230485718,
+    -1: 0.0022049272225017286,
+    1: 0.020051104853608722,
+    2: 0.0954139944889494,
+    3: 0.004116641378803191,
+    4: 0.002180124185625795,
+    5: 6.922722705177504e-05,
+    21: 0.007604124516892057}
 """
 import logging
 from typing import NamedTuple
@@ -32,13 +61,6 @@ ER_SYMEIG = PDFErrorType("erType_ER_SYMEIG", False, 6, False, "Symmetric eigenve
 _libNNPDF_errors = [ER_NONE, ER_MC, ER_MC68, ER_MCT0, ER_EIG, ER_EIG90, ER_SYMEIG]
 
 
-def _parse_flavs(f):
-    # TODO: for now we believe what the user unless they say 0, then they're wrong
-    if f == 0:
-        return 21
-    return f
-
-
 class LHAPDFSet:
     """Wrapper for the lhapdf python interface"""
 
@@ -52,7 +74,7 @@ class LHAPDFSet:
         self._lhapdf_set = lhapdf.mkPDFs(name)
         self._libNNPDF_set = None
         self.legacy_interface()
-        log.info("PDF: %s ErrorType: %s", name, error_type.name)
+        log.info("PDF: %s ErrorType: %s", name, error_type.description)
         lhapdf.setVerbosity(lhapdf_verbosity)
 
     def legacy_interface(self):
@@ -87,23 +109,28 @@ class LHAPDFSet:
             return self._lhapdf_set[1:]
         return self._lhapdf_set
 
+    @property
+    def central_member(self):
+        """Returns a reference to member 0 of the PDF list"""
+        return self._lhapdf_set[0]
+
     def as_libNNPDF(self):
         """Imports libNNPDF to return the PDF set in NNPDF form
         needed for classes that still rely in libNNPDF and will need a PDF
         (at the moment due to closure tests)
         """
         if self._libNNPDF_set is None:
-            # TODO obvs
+            # TODO needed for C++ datatypes
             from NNPDF import LHAPDFSet
 
             self._libNNPDF_set = LHAPDFSet(self._name, self._error_type.libNNPDF)
         return self._libNNPDF_set
 
     def xfxQ(self, x, q, member_idx, flavour):
-        """Return the PDF value for one single point"""
+        """Return the PDF value for one single point for one single member"""
         member_pdf = self.members[member_idx]
         res = member_pdf.xfxQ(x, q)
-        return res[_parse_flavs(flavour)]
+        return res[flavour]
 
     @property
     def flavors(self):
@@ -127,15 +154,18 @@ class LHAPDFSet:
         >>> flavs = np.arange(-4,4)
         >>> results = valid_pdf.grid_values(flavs, xgrid, qgrid)
         """
-        # TODO Digest the input flavors in a less confusing way
-        parsed_flavors = [_parse_flavs(f) for f in flavors]
-        flavs = []
-        non_flavs = []
-        for pf in parsed_flavors:
-            if pf in self.flavors:
-                flavs.append(pf)
+        # LHAPDFSet.grid_values accepts flavours not included in the the PDF
+        # keep track of which they are to add them later as 0s
+        # The LHAPDFSet way is that it is accepted to ask for flavours outside the ones
+        # accepted by the PDF, they will just be made of 0s
+        flavs, zero_idxs = [], []
+        for idx, f in enumerate(flavors):
+            if f in self.flavors:
+                flavs.append(f)
             else:
-                non_flavs.append(pf)
+                zero_idxs.append(idx)
+
+        # Grid values loop
         xvals = []
         for x in xgrid:
             qvals = []
@@ -147,15 +177,16 @@ class LHAPDFSet:
                 qvals.append(mres)
             xvals.append(qvals)
         ret = np.array(xvals)
+
         # Add 0s for flavours that were not in the PDF but the user asked for
-        # Could equally well be done in the loop above but looked like an unnecesary complication
-        zeros = np.zeros_like(ret[..., 0])
-        for f in non_flavs:
-            idx = parsed_flavors.index(f)
+        for idx in zero_idxs:
             # Do it one by one to keep the index in the right places
-            ret = np.insert(ret, idx, zeros, -1)
+            ret = np.insert(ret, idx, 0.0, -1)
+
+        # Finally return in the preferred shape
         return np.transpose(ret, (2, 3, 0, 1))
 
 
+# libNNPDF compatibility
 for error_type in _libNNPDF_errors:
     setattr(LHAPDFSet, error_type.name, error_type)
