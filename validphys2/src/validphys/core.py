@@ -22,7 +22,7 @@ from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
-from NNPDF import (LHAPDFSet,
+from NNPDF import (
     CommonData,
     FKTable,
     FKSet,
@@ -37,22 +37,9 @@ from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
+from validphys.lhapdfset import LHAPDFSet
 
 log = logging.getLogger(__name__)
-
-
-#TODO: Remove this eventually
-#Bacward compatibility error type names
-#Swig renamed these for no reason whatsoever.
-try:
-    LHAPDFSet.erType_ER_EIG
-except AttributeError:
-    import warnings
-    warnings.warn("libnnpdf out of date. Setting backwards compatible names")
-    LHAPDFSet.erType_ER_MC = LHAPDFSet.ER_MC
-    LHAPDFSet.erType_ER_EIG = LHAPDFSet.ER_EIG
-    LHAPDFSet.erType_ER_EIG90 = LHAPDFSet.ER_EIG90
-    LHAPDFSet.erType_ER_SYMEIG = LHAPDFSet.ER_SYMEIG
 
 class TupleComp:
 
@@ -166,7 +153,6 @@ class PDF(TupleComp):
     def load_t0(self):
         """Load the PDF as a t0 set"""
         return LHAPDFSet(self.name, LHAPDFSet.erType_ER_MCT0)
-
 
     def __str__(self):
         return self.label

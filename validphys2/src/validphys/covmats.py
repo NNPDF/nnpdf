@@ -489,7 +489,7 @@ def dataset_inputs_covmat(
         #Copy data to avoid chaos
         loaded_data = type(loaded_data)(loaded_data)
         log.debug("Setting T0 predictions for %s" % data)
-        loaded_data.SetT0(t0set.load_t0())
+        loaded_data.SetT0(t0set.load_t0().as_libNNPDF())
 
     covmat = loaded_data.get_covmat()
 
@@ -581,7 +581,7 @@ def covmat(
         #Copy data to avoid chaos
         loaded_data = type(loaded_data)(loaded_data)
         log.debug("Setting T0 predictions for %s" % dataset)
-        loaded_data.SetT0(t0set.load_t0())
+        loaded_data.SetT0(t0set.load_t0().as_libNNPDF())
 
     covmat = loaded_data.get_covmat()
     if fitthcovmat:

@@ -13,13 +13,13 @@ import numpy as np
 import pandas as pd
 import scipy.integrate as integrate
 
-from NNPDF import LHAPDFSet
 from reportengine.table import table
 from reportengine.checks import check_positive
 from reportengine.floatformatting import format_error_value_columns
 
 from validphys.core import PDF
 from validphys.pdfbases import ALL_FLAVOURS, parse_flarr
+from validphys.lhapdfset import LHAPDFSet
 
 
 def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):

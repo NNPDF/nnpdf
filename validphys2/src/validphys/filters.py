@@ -170,7 +170,7 @@ def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
     # Load data, don't cache result
     loaded_data = data.load.__wrapped__(data)
     # generate level 1 shift if fakenoise
-    loaded_data.MakeClosure(fakeset, fakenoise)
+    loaded_data.MakeClosure(fakeset.as_libNNPDF(), fakenoise)
     for j, dataset in enumerate(data.datasets):
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
