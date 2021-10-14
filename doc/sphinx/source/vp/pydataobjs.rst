@@ -255,3 +255,36 @@ from the API::
         "theoryid": 162
     }
     total_cov = API.dataset_inputs_covmat_from_systematics(**inp)
+
+Loading LHAPDF PDFs
+-------------------
+
+A wrapper class for LHAPDF PDFs is implemented in the :py:mod:`validphys.lhapdfset` module.
+An instance of this module will provide with a handful of useful wrappers to the underlying
+LHAPDF python interface. This is also the output of the ``pdf.load()`` method.
+
+For example, the following will return the values for all 100 members of NNPDF4.0 for
+the gluon and the d-quark, at three values of ``x`` at ``Q=91.2``.
+
+.. code-block:: python
+
+    from validphys.api import API
+    pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
+    l_pdf = pdf.load()
+    alpha_s = l_pdf.central_member.alphasQ(91.2)
+    results = l_pdf.grid_values([21,1], [0.1, 0.2, 0.3], [91.2])
+
+For Monte Carlo PDFs the result of the replica 0 (the average of all replicas) is not returned
+when using the ``grid_values`` method 
+(or in general when utilizing any action that computes a value per replica),
+for convenience, a ``enable_central_value`` is provided as part of the :py:class:`validphys.core.PDF`
+class:
+
+.. code-block:: python
+
+    from validphys.api import API
+    pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
+    l_pdf = pdf.load()
+    with pdf.enable_central_value():
+        m101 = l_pdf.get_members()
+    m100 = l_pdf.get_members()
