@@ -62,20 +62,40 @@ _libNNPDF_errors = [ER_NONE, ER_MC, ER_MC68, ER_MCT0, ER_EIG, ER_EIG90, ER_SYMEI
 
 
 class LHAPDFSet:
-    """Wrapper for the lhapdf python interface"""
+    """Wrapper for the lhapdf python interface.
+
+    Once instantiated this class will load the PDF set according to whether it is to be
+    treated as a T0 set (only the CV) or not.
+
+    It is possible to control the LHAPDF verbosity with the flag ``lhapdf_verbosity``.
+
+    For Monte Carlo sets the central value (member 0) is by default not included when taking
+    the resutls for all members (i.e., when using ``grid_values``).
+    However, it is possible to add member 0 by changing the ``include_cv`` attribute to True.
+
+    Temporarily: it exposes all libNNPDF attributes that were exposed and used prior to
+    the introduction of this class
+    """
 
     def __init__(self, name, error_type, lhapdf_verbosity=0):
+        log.info("PDF: %s ErrorType: %s", name, error_type.description)
         if isinstance(error_type, int):
             # libNNPDF error types were int
             error_type = _libNNPDF_errors[error_type]
         self._name = name
         self._error_type = error_type
+        # If at this point we already know this is a T0 set, load only the CV
+        if error_type.t0:
+            self._lhapdf_set = [lhapdf.mkPDF(name)]
+        else:
+            self._lhapdf_set = lhapdf.mkPDFs(name)
         self._flavors = None
-        self._lhapdf_set = lhapdf.mkPDFs(name)
         self._libNNPDF_set = None
-        self.legacy_interface()
-        log.info("PDF: %s ErrorType: %s", name, error_type.description)
+        self.include_cv = False
+        # Set the verbosity of LHAPDF
         lhapdf.setVerbosity(lhapdf_verbosity)
+        # Prepare a Legacy Interface
+        self.legacy_interface()
 
     def legacy_interface(self):
         """Setting some methods and attribute as per libNNPDF specs"""
@@ -105,7 +125,7 @@ class LHAPDFSet:
         """
         if self.is_t0:
             return self._lhapdf_set[0:1]
-        if self.is_monte_carlo:
+        if self.is_monte_carlo and not self.include_cv:
             return self._lhapdf_set[1:]
         return self._lhapdf_set
 
@@ -139,10 +159,14 @@ class LHAPDFSet:
             self._flavors = self.members[0].flavors()
         return self._flavors
 
-    def grid_values(self, flavors, xgrid, qgrid):
+    def grid_values(self, flavors: np.ndarray, xgrid: np.ndarray, qgrid: np.ndarray):
         """Reimplementation of libNNPDF grid_values
         The return shape is
             (members, flavors, xgrid, qgrid)
+
+        Return
+        ------
+            ndarray of shape (members, flavors, xgrid, qgrid)
 
         Examples
         --------

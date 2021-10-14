@@ -48,11 +48,13 @@ class NNPDFDataResult(Result):
     """A result fills its values from a pandas dataframe
     For legacy (libNNPDF) compatibility, falls back to libNNPDF attributes"""
 
-    def __init__(self, dataobj=None, central_value=None):
+    def __init__(self, dataobj):
         # This class is used by both validphys and libNNPDF objects
-        # when central_value is not explictly passed, fallback to
-        # libNNPDF object .get_cv()
-        if central_value is None:
+        # At this point only the result of the ThPredictions is a vp object
+        # which includes a special CV column which needs to be pop'd
+        try:
+            central_value = dataobj.pop("CV")
+        except AttributeError:
             central_value = dataobj.get_cv()
         self._central_value = np.array(central_value).squeeze()
 
@@ -78,8 +80,8 @@ class StatsResult(Result):
 
 
 class DataResult(NNPDFDataResult):
-    def __init__(self, dataobj, covmat, sqrtcovmat, central_value=None):
-        super().__init__(dataobj, central_value=central_value)
+    def __init__(self, dataobj, covmat, sqrtcovmat):
+        super().__init__(dataobj)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
 
@@ -105,17 +107,19 @@ class ThPredictionsResult(NNPDFDataResult):
     """Class holding theory prediction
     For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
     """
-    def __init__(self, dataobj, stats_class, label=None, central_value=None):
+    def __init__(self, dataobj, stats_class, label=None):
+        super().__init__(dataobj)
         self.stats_class = stats_class
         self.label = label
-        # Ducktype the input into numpy arrays
+        # Ducktype the input into numpy arrays for the rawdata
+        # TODO: once all of them are dataframes, the rawdata could be made of
+        # dataframes as well
         try:
             self._std_error = dataobj.std(axis=1).to_numpy()
             self._rawdata = dataobj.to_numpy()
         except AttributeError:
             self._std_error = dataobj.get_error()
             self._rawdata = dataobj.get_data()
-        super().__init__(dataobj, central_value=central_value)
 
     @property
     def std_error(self):
@@ -145,20 +149,18 @@ class ThPredictionsResult(NNPDFDataResult):
             datasets = (dataset,)
 
         try:
-            all_preds = []
-            all_centrals = []
-            for d in datasets:
-                all_preds.append(predictions(d, pdf))
-                all_centrals.append(central_predictions(d, pdf))
+            with pdf.enable_central_value():
+                th_predictions = pd.concat(predictions(d, pdf) for d in datasets)
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
                     "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
-        th_predictions = pd.concat(all_preds)
-        central_values = pd.concat(all_centrals)
+	    # For Hessian sets        
+        if "CV" not in th_predictions:
+            th_predictions["CV"] = th_predictions[0]
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label, central_value=central_values)
+        return cls(th_predictions, pdf.stats_class, label)
 
 
 class PositivityResult(StatsResult):

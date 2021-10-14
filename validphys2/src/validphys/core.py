@@ -9,6 +9,7 @@ Created on Wed Mar  9 15:19:52 2016
 from __future__ import generator_stop
 
 from collections import namedtuple
+from contextlib import contextmanager
 import re
 import enum
 import functools
@@ -78,10 +79,33 @@ class _PDFSETS():
 PDFSETS = _PDFSETS()
 
 class PDF(TupleComp):
+    """Wrapper class for the validphys PDF object to easily manage
+    both Monte Carlo and Hessian sets
+
+    Offers a context manager (``enable_central_value``) to include the central value
+    in Monte Carlo sets.
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> from validphys.convolution import predictions
+    >>> args = {"dataset_input":{"dataset": "ATLASTTBARTOT"}, "theoryid":200, "use_cuts":"internal"}
+    >>> ds = API.dataset(**args)
+    >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
+    >>> with pdf.enable_central_value():
+    >>>     preds_with_cv = predictions(ds, pdf)
+    >>> preds_no_cv = predictions(ds, pdf)
+    >>> len(preds_with_cv.columns)
+    101
+    >>> len(preds_no_cv.columns)
+    100
+    """
 
     def __init__(self, name):
         self.name = name
         self._plotname = name
+        self._lhapdfset = None
+        self._include_cv = False
         super().__init__(name)
 
 
@@ -145,13 +169,14 @@ class PDF(TupleComp):
         else:
             return 1
 
-    @functools.lru_cache(maxsize=16)
     def load(self):
-        return LHAPDFSet(self.name, self.nnpdf_error)
+        if self._lhapdfset is None:
+            self._lhapdfset = LHAPDFSet(self.name, self.nnpdf_error)
+        return self._lhapdfset
 
     @functools.lru_cache(maxsize=2)
     def load_t0(self):
-        """Load the PDF as a t0 set"""
+        """Reload the PDF as a t0 set"""
         return LHAPDFSet(self.name, LHAPDFSet.erType_ER_MCT0)
 
     def __str__(self):
@@ -164,7 +189,7 @@ class PDF(TupleComp):
 
     @property
     def nnpdf_error(self):
-        """Return the NNPDF error tag, used to build the `LHAPDFSet` objeect"""
+        """Return the NNPDF error tag, used to build the `LHAPDFSet` object"""
         error = self.ErrorType
         if error == "replicas":
             return LHAPDFSet.erType_ER_MC
@@ -203,6 +228,8 @@ class PDF(TupleComp):
         len(pdf))`` for Monte Carlo sets, because replica 0 is not selected
         and ``range(0, len(pdf))`` for hessian sets.
 
+        If ``include_cv`` is set to True, add a central value column for member 0
+        for Monte Carlo error sets
 
         Returns
         -------
@@ -215,7 +242,10 @@ class PDF(TupleComp):
         """
         err = self.nnpdf_error
         if err is LHAPDFSet.erType_ER_MC:
-            return range(1, len(self))
+            if self._include_cv:
+                return ["CV"] + list(range(1, len(self)))
+            else:
+                return range(1, len(self))
         elif err in (LHAPDFSet.erType_ER_SYMEIG, LHAPDFSet.erType_ER_EIG, LHAPDFSet.erType_ER_EIG90):
             return range(0, len(self))
         else:
@@ -228,6 +258,17 @@ class PDF(TupleComp):
         """
         return len(self.grid_values_index)
 
+    @contextmanager
+    def enable_central_value(self):
+        """Context manager within which the central value is included
+        regardless of the error type of the PDF set"""
+        # Get a reference to the base PDF set of this class
+        pdfset = self.load()
+        pdfset.include_cv = True
+        self._include_cv = True
+        yield
+        self._include_cv = False
+        pdfset.include_cv = False
 
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
