@@ -152,7 +152,8 @@ class LHAPDFSet:
         >>> xgrid = np.random.rand(10)
         >>> qgrid = np.random.rand(3)
         >>> flavs = np.arange(-4,4)
-        >>> results = valid_pdf.grid_values(flavs, xgrid, qgrid)
+        >>> flavs[4] = 21
+        >>> results = pdf.grid_values(flavs, xgrid, qgrid)
         """
         # LHAPDFSet.grid_values accepts flavours not included in the the PDF
         # keep track of which they are to add them later as 0s
