@@ -127,7 +127,6 @@ def _predictions(dataset, pdf, fkfunc):
     return opfunc(*all_predictions)
 
 
-@check_cuts_considered
 def predictions(dataset, pdf):
     """"Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
