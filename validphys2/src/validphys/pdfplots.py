@@ -567,7 +567,8 @@ def plot_lumi1d(
     function of invariant mass for all PDFs for a single lumi channel.
     ``normalize_to`` works as for `plot_pdfs` and allows to plot a ratio to the
     central value of some of the PDFs. `ymin` and `ymax` can be used to set
-    exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
+    exact bounds for the scale. `y_cut` can be used to specify a rapidity cut
+    over the integration range. `show_mc_errors` controls whether the 1σ error
     bands are shown in addition to the 68% confidence intervals for Monte Carlo
     PDFs. A list `pdfs_noband` can be passed to supress the error bands for
     certain PDFs and plot the central values only. `legend_stat_labels` controls
@@ -675,7 +676,8 @@ def plot_lumi1d_uncertainties(
     sqrts is the center of mass energy (GeV).
 
     If `normalize_to` is set, the values are normalized to the central value of
-    the corresponding PDFs.
+    the corresponding PDFs. `y_cut` can be used to specify a rapidity cut
+    over the integration range.
     """
 
     fig, ax = plt.subplots()
