@@ -185,28 +185,28 @@ def lumigrid1d(
     nmembers = pdf.get_members()
 
     weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
-
-    for irep in range(nmembers):
-        for im, mx in enumerate(mxs):
-            if y_cut==None:
+            
+    for im, mx in enumerate(mxs):
+        if y_cut==None:
+            x_min = taus[im]
+            x_max = 1.0
+        else:
+            if mx/sqrts*np.exp(y_cut)>1.0 or mx/sqrts*np.exp(-y_cut)>1.0:
                 x_min = taus[im]
                 x_max = 1.0
             else:
-                if mx/sqrts*np.exp(y_cut)>1.0 or mx/sqrts*np.exp(-y_cut)>1.0:
-                    x_min = taus[im]
-                    x_max = 1.0
-                else:
-                    x_min = mx/sqrts*np.exp(-y_cut)
-                    x_max = mx/sqrts*np.exp(+y_cut)
-                                    
+                x_min = mx/sqrts*np.exp(-y_cut)
+                x_max = mx/sqrts*np.exp(+y_cut)
+                
+        for irep in range(nmembers):                    
             f = lambda x1: evaluate_luminosity(lpdf, irep,
                                                s, mx,
                                                x1, taus[im] / x1,
                                                lumi_channel)
             res = integrate.quad(f, x_min, x_max, epsrel=0.05, limit=10)[0]
-                    
+            
             weights[irep, im] = res
-
+            
     return Lumi1dGrid(mxs, pdf.stats_class(weights))
 
 
