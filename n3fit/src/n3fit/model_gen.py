@@ -38,6 +38,7 @@ class ObservableWrapper:
     observables: list
     dataset_xsizes: list
     invcovmat: np.array = None
+    covmat: np.array = None
     multiplier: float = 1.0
     integrability: bool = False
     positivity: bool = False
@@ -48,7 +49,9 @@ class ObservableWrapper:
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
         if self.invcovmat is not None:
-            loss = losses.LossInvcovmat(self.invcovmat, self.data, mask, name=self.name)
+            loss = losses.LossInvcovmat(
+                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name
+            )
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
         elif self.integrability:
@@ -231,17 +234,11 @@ def observable_generator(
         obsrot_tr = None
         obsrot_vl = None
 
-    # Prepare the inverse covmats for each of the loss functions
-    # (that are only instantiated when the output layer is created)
-    invcovmat_tr = spec_dict["invcovmat"]
-    invcovmat_vl = spec_dict["invcovmat_vl"]
-    invcovmat = spec_dict["invcovmat_true"]
-
     out_tr = ObservableWrapper(
         spec_name,
         model_obs_tr,
         dataset_xsizes,
-        invcovmat=invcovmat_tr,
+        invcovmat=spec_dict["invcovmat"],
         data=spec_dict["expdata"],
         rotation=obsrot_tr,
     )
@@ -249,7 +246,7 @@ def observable_generator(
         f"{spec_name}_val",
         model_obs_vl,
         dataset_xsizes,
-        invcovmat=invcovmat_vl,
+        invcovmat=spec_dict["invcovmat_vl"],
         data=spec_dict["expdata_vl"],
         rotation=obsrot_vl,
     )
@@ -257,7 +254,8 @@ def observable_generator(
         f"{spec_name}_exp",
         model_obs_ex,
         dataset_xsizes,
-        invcovmat=invcovmat,
+        invcovmat=spec_dict["invcovmat_true"],
+        covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
         rotation=None,
     )
