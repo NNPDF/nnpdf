@@ -68,6 +68,7 @@ class LHAPDFSet:
     treated as a T0 set (only the CV) or not.
 
     It is possible to control the LHAPDF verbosity with the flag ``lhapdf_verbosity``.
+    This will override the global value set in ``app.py``
 
     For Monte Carlo sets the central value (member 0) is by default not included when taking
     the resutls for all members (i.e., when using ``grid_values``).
@@ -77,7 +78,7 @@ class LHAPDFSet:
     the introduction of this class
     """
 
-    def __init__(self, name, error_type, lhapdf_verbosity=0):
+    def __init__(self, name, error_type, lhapdf_verbosity=None):
         log.info("PDF: %s ErrorType: %s", name, error_type.description)
         if isinstance(error_type, int):
             # libNNPDF error types were int
@@ -93,7 +94,8 @@ class LHAPDFSet:
         self._libNNPDF_set = None
         self.include_cv = False
         # Set the verbosity of LHAPDF
-        lhapdf.setVerbosity(lhapdf_verbosity)
+        if lhapdf_verbosity is not None:
+            lhapdf.setVerbosity(lhapdf_verbosity)
         # Prepare a Legacy Interface
         self.legacy_interface()
 
