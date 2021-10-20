@@ -125,7 +125,7 @@ KNOWN_SUM_RULES_EXPECTED = {
 
 def _sum_rules(rules_dict, lpdf, Q):
     """Compute a SumRulesGrid from the loaded PDF, at Q"""
-    nmembers = lpdf.GetMembers()
+    nmembers = lpdf.n_members
     #TODO: Write this in something fast
     #If nothing else, at least allocate and store the result contiguously
     res = np.zeros((len(rules_dict), nmembers))

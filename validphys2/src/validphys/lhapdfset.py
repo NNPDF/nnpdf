@@ -74,7 +74,7 @@ class LHAPDFSet:
     the resutls for all members (i.e., when using ``grid_values``).
     However, it is possible to add member 0 by changing the ``include_cv`` attribute to True.
 
-    Temporarily: it exposes all libNNPDF attributes that were exposed and used prior to
+    Temporarily: it exposes all libNNPDF error attributes that were exposed and used prior to
     the introduction of this class
     """
 
@@ -96,17 +96,6 @@ class LHAPDFSet:
         # Set the verbosity of LHAPDF
         if lhapdf_verbosity is not None:
             lhapdf.setVerbosity(lhapdf_verbosity)
-        # Prepare a Legacy Interface
-        self.legacy_interface()
-
-    def legacy_interface(self):
-        """Setting some methods and attribute as per libNNPDF specs"""
-        self.GetMembers = self.get_members
-        self.GetSetName = lambda self: self.name
-
-    def get_members(self):
-        """Get the number of members"""
-        return len(self.members)
 
     @property
     def is_monte_carlo(self):
@@ -117,6 +106,10 @@ class LHAPDFSet:
     def is_t0(self):
         """Check whether we are in t0 mode"""
         return self._error_type.t0
+
+    @property
+    def n_members(self):
+        return len(self.members)
 
     @property
     def members(self):
@@ -162,7 +155,8 @@ class LHAPDFSet:
         return self._flavors
 
     def grid_values(self, flavors: np.ndarray, xgrid: np.ndarray, qgrid: np.ndarray):
-        """Reimplementation of libNNPDF grid_values
+        """Returns the PDF values for every member for the required
+        flavours, points in x and pointx in q
         The return shape is
             (members, flavors, xgrid, qgrid)
 
@@ -183,8 +177,6 @@ class LHAPDFSet:
         """
         # LHAPDFSet.grid_values accepts flavours not included in the the PDF
         # keep track of which they are to add them later as 0s
-        # The LHAPDFSet way is that it is accepted to ask for flavours outside the ones
-        # accepted by the PDF, they will just be made of 0s
         flavs, zero_idxs = [], []
         for idx, f in enumerate(flavors):
             if f in self.flavors:
