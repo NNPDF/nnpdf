@@ -150,6 +150,7 @@ def lumigrid1d(
     pdf: PDF,
     lumi_channel,
     sqrts: numbers.Real,
+    y_cut: (type(None), numbers.Real) = None,
     nbins_m: int = 40,
     mxmin: numbers.Real = 10,
     mxmax: (type(None), numbers.Real) = None,
@@ -158,7 +159,8 @@ def lumigrid1d(
     """
     Return the integrated luminosity in a grid of nbins_m points, for the
     values of invariant mass given (proton-proton) collider energy ``sqrts``
-    (given in GeV).
+    (given in GeV). A rapidity cut on the integration range (if specified) 
+    is taken into account.
 
     The grid is sampled logarithmically in mass. The limits are given by
     ``mxmin`` and ``mxmax``, given in GeV. By default ``mxmin`` is 10 GeV and
@@ -186,11 +188,23 @@ def lumigrid1d(
 
     for irep in range(nmembers):
         for im, mx in enumerate(mxs):
+            if y_cut==None:
+                x_min = taus[im]
+                x_max = 1.0
+            else:
+                if mx/sqrts*np.exp(y_cut)>1.0 or mx/sqrts*np.exp(-y_cut)>1.0:
+                    x_min = taus[im]
+                    x_max = 1.0
+                else:
+                    x_min = mx/sqrts*np.exp(-y_cut)
+                    x_max = mx/sqrts*np.exp(+y_cut)
+                                    
             f = lambda x1: evaluate_luminosity(lpdf, irep,
                                                s, mx,
                                                x1, taus[im] / x1,
                                                lumi_channel)
-            res = integrate.quad(f, taus[im], 1.0, epsrel=0.05, limit=10)[0]
+            res = integrate.quad(f, x_min, x_max, epsrel=0.05, limit=10)[0]
+                    
             weights[irep, im] = res
 
     return Lumi1dGrid(mxs, pdf.stats_class(weights))
