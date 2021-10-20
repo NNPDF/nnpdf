@@ -651,10 +651,17 @@ def plot_lumi1d(
     ax.set_ylim(ymin, ymax)
     ax.set_xscale(scale)
     ax.grid(False)
-    ax.set_title(
-        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
-        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
-    )
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
+            f"$\\|y|<{format_number(y_cut)}$"
+        )      
 
     return fig
 
@@ -705,10 +712,17 @@ def plot_lumi1d_uncertainties(
     ax.set_xlim(mx[0], mx[-1])
     ax.set_xscale(scale)
     ax.grid(False)
-    ax.set_title(
-        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
-        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
-    )
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "    
+            f"$\\|y|<{format_number(y_cut)}$"
+        )
     ax.set_ylim(ymin, ymax)
     current_ymin, _ = ax.get_ylim()
     ax.set_ylim(max(0, current_ymin), None)
