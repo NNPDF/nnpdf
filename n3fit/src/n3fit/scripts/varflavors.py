@@ -69,6 +69,12 @@ def main():
             newpath = change_name(copied_fit, args.new_name)
             newpath.rename(path_output_fit)
         log.info("Renaming with copy completed")
+    else:
+        if path_input_fit.exists():
+            path_output_fit = path_input_fit
+        else:
+            log.error("Could not find fit. Path %s is not a directory.", path_input_fit.absolute())
+            sys.exit(1)
 
     # 2. Run evolven3fit
     evolven3fit_command = (
