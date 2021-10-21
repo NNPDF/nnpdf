@@ -150,6 +150,7 @@ def lumigrid1d(
     pdf: PDF,
     lumi_channel,
     sqrts: numbers.Real,
+    y_cut: (type(None), numbers.Real) = None,
     nbins_m: int = 40,
     mxmin: numbers.Real = 10,
     mxmax: (type(None), numbers.Real) = None,
@@ -158,21 +159,22 @@ def lumigrid1d(
     """
     Return the integrated luminosity in a grid of nbins_m points, for the
     values of invariant mass given (proton-proton) collider energy ``sqrts``
-    (given in GeV).
+    (given in GeV). A rapidity cut on the integration range (if specified)
+    is taken into account.
 
-    The grid is sampled logarithmically in mass. The limits are given by
-    ``mxmin`` and ``mxmax``, given in GeV. By default ``mxmin`` is 10 GeV and
-    ``mxmax`` is set based on ``sqrts``.
+    By default, the grid is sampled logarithmically in mass. The limits are
+    given by ``mxmin`` and ``mxmax``, given in GeV. By default ``mxmin`` is 10
+    GeV and ``mxmax`` is set based on ``sqrts``.
 
     The results are computed for all relevant PDF members and wrapped in a
     stats class, to compute statistics regardless of the ErrorType.
     """
-    s = sqrts*sqrts
+    s = sqrts * sqrts
     if mxmax is None:
-        mxmax = sqrts/3
-    if scale=="log":
+        mxmax = sqrts / 3
+    if scale == "log":
         mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
-    elif scale=="linear":
+    elif scale == "linear":
         mxs = np.linspace(mxmin, mxmax, nbins_m)
     else:
         raise ValueError("Unknown scale")
@@ -184,13 +186,22 @@ def lumigrid1d(
 
     weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
 
-    for irep in range(nmembers):
-        for im, mx in enumerate(mxs):
-            f = lambda x1: evaluate_luminosity(lpdf, irep,
-                                               s, mx,
-                                               x1, taus[im] / x1,
-                                               lumi_channel)
-            res = integrate.quad(f, taus[im], 1.0, epsrel=0.05, limit=10)[0]
+    for im, mx in enumerate(mxs):
+        x_min = taus[im]
+        x_max = 1.
+        if y_cut is not None:
+            minus = mx / sqrts * np.exp(-y_cut)
+            plus = mx / sqrts * np.exp(y_cut)
+            if plus < 1 and minus < 1:
+                x_min = minus
+                x_max = plus
+
+        for irep in range(nmembers):
+            f = lambda x1: evaluate_luminosity(
+                lpdf, irep, s, mx, x1, taus[im] / x1, lumi_channel
+            )
+            res = integrate.quad(f, x_min, x_max, epsrel=0.05, limit=10)[0]
+
             weights[irep, im] = res
 
     return Lumi1dGrid(mxs, pdf.stats_class(weights))
