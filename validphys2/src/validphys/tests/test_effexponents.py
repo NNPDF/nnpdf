@@ -1,10 +1,11 @@
 import pytest
 
+from reportengine.compat import yaml
+
 from validphys.api import API
 from validphys.loader import FallbackLoader as Loader
+from validphys.scripts.vp_nextfitruncard import PREPROCESSING_LIMS
 from validphys.tests.conftest import FIT, FIT_ITERATED
-
-from reportengine.compat import yaml
 
 
 def test_next_runcard():
@@ -28,21 +29,19 @@ def test_next_runcard():
         ite2_runcard = yaml.safe_load(f)
 
     predicted_ite2_runcard = yaml.safe_load(
-        API.iterated_runcard_yaml(fit=FIT)
+        API.iterated_runcard_yaml(fit=FIT, _flmap_np_clip_arg=PREPROCESSING_LIMS)
     )
 
     # Remove all seed keys from the runcards since these are randomly generated
     # each time, so will not be the same between different runs
     # NB: since some seeds are n3fit-specific, we check that each seed key exists
     runcards = [predicted_ite2_runcard, ite2_runcard]
-    fitting_seeds = ["seed", "trvlseed", "nnseed", "mcseed"]
+    fitting_seeds = ["trvlseed", "nnseed", "mcseed"]
 
     for runcard in runcards:
-        if "filterseed" in runcard["closuretest"]:
-            runcard["closuretest"].pop("filterseed")
         for seed in fitting_seeds:
-            if seed in runcard["fitting"]:
-                runcard["fitting"].pop(seed)
+            if seed in runcard:
+                runcard.pop(seed)
 
     # Check that the actual ite2 runcard matches what vp thinks it should be
     assert predicted_ite2_runcard == ite2_runcard
