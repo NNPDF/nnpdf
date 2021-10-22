@@ -170,35 +170,16 @@ class LHAPDFSet:
         >>> flavs[4] = 21
         >>> results = pdf.grid_values(flavs, xgrid, qgrid)
         """
-        # LHAPDFSet.grid_values accepts flavours not included in the the PDF
-        # keep track of which they are to add them later as 0s
-        flavs, zero_idxs = [], []
-        for idx, f in enumerate(flavors):
-            if f in self.flavors:
-                flavs.append(f)
-            else:
-                zero_idxs.append(idx)
-
         # Grid values loop
-        xvals = []
-        for x in xgrid:
-            qvals = []
-            for q in qgrid:
-                mres = []
-                for member in self.members:
-                    all_flavs_dict = member.xfxQ(x, q)
-                    mres.append([all_flavs_dict[i] for i in flavs])
-                qvals.append(mres)
-            xvals.append(qvals)
-        ret = np.array(xvals)
+        ret = np.array(
+            [
+                [[member.xfxQ(flavors, x, q) for x in xgrid] for q in qgrid]
+                for member in self.members
+            ]
+        )
 
-        # Add 0s for flavours that were not in the PDF but the user asked for
-        for idx in zero_idxs:
-            # Do it one by one to keep the index in the right places
-            ret = np.insert(ret, idx, 0.0, -1)
-
-        # Finally return in the preferred shape
-        return np.transpose(ret, (2, 3, 0, 1))
+        # Finally return in the documented shape
+        return np.transpose(ret, (0, 3, 2, 1))
 
 
 # libNNPDF compatibility
