@@ -3,7 +3,7 @@
 #
 
 ############################################################
-description: NNPDF3.1 NNLO fitted charm global dataset
+description: Regression runcard for the automatic github fitbot
 
 ############################################################
 # frac: training fraction

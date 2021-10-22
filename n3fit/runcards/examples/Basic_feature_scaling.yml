@@ -11,12 +11,12 @@ description: Basic feature scaling
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 - { dataset: SLACP, frac: 0.5}
-- { dataset: NMCPD, frac: 0.5 }
-- { dataset: CMSJETS11, frac: 0.5, sys: 10 }
+- {dataset: NMCPD_dw_ite, frac: 0.75}
+- {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: [QCD]}
 
 ############################################################
 datacuts:
-  t0pdfset     : NNPDF31_nlo_as_0118 # PDF set to generate t0 covmat
+  t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -31,13 +31,13 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
+  theoryid: 200       # database id
 
 ############################################################
 trvlseed: 1
 nnseed: 2
 mcseed: 3
-genrep   : True     # true = generate MC replicas, false = use real data
+genrep: True     # true = generate MC replicas, false = use real data
 
 save: 'weights.h5'
 
