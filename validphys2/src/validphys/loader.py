@@ -68,84 +68,66 @@ class RemoteLoaderError(LoaderError): pass
 
 class InconsistentMetaDataError(LoaderError): pass
 
+def _get_nnpdf_profile(profile_path=None):
+    """Returns the NNPDF profile as a dictionary
+    If no ``profile_path`` is provided it will be autodiscovered in the following order:
 
-class _NNPDFprofile:
-    """Get access to the NNPDF profile yaml file
-    In order to facilitate access, instances of this class can be directly
-    accessed as a dictionary, but properties can offer extra fine-grained control
-    and directly return paths
-    For legacy purposes, instances of this class can be accessed as a dictionary
+    Environment variable $NNPDF_PROFILE_PATH
+    {sys.prefix}/share/NNPDF/nnprofile.yaml
+    {sys.base_prefix}/share/NNPDF/nnprofile.yaml
+
+    If no profile is found a LoaderError will be thrown
     """
+    profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
+    if profile_path is None:
+        # Check both sys paths
+        prefix_paths = [sys.prefix, sys.base_prefix]
+        for prefix in prefix_paths:
+            check = pathlib.Path(prefix) / "share/NNPDF/nnprofile.yaml"
+            if check.exists():
+                profile_path = check
+                break
+    if profile_path is None:
+        raise LoaderError("Missing an NNPDF profile file")
 
-    def __init__(self, main_path=None):
-        env_path = os.environ.get("NNPDF_PROFILE_PATH")
-        self._profile_path = None
-        if main_path is not None:
-            mpath = main_path
-        elif env_path is not None:
-            mpath = env_path
-        else:
-            mpath = DEFAULT_NNPDF_PROFILE_PATH
-        mpath = pathlib.Path(mpath)
-        self.profile_path = mpath
+    mpath = pathlib.Path(profile_path)
+    try:
+        profile_dict = yaml.safe_load(mpath.open("r"))
+    except yaml.YAMLError as e:
+        raise LoaderError(f"Could not parse profile file {mpath}: {e}") from e
+    return profile_dict
 
-    @property
-    def data_path(self) -> pathlib.Path:
-        """Get path for the data folder"""
-        return pathlib.Path(self._profile["data_path"])
-
-    @property
-    def results_path(self) -> pathlib.Path:
-        """Get path for the results folder"""
-        return pathlib.Path(self._profile["results_path"])
-
-    @property
-    def profile_path(self) -> pathlib.Path:
-        """Get profile path"""
-        return self._profile_path
-
-    @profile_path.setter
-    def profile_path(self, new_val):
-        """Check whether the new profile path is valid and load it"""
-        new_path = pathlib.Path(new_val)
-        if not new_path.exists():
-            raise ProfileNotFound(f"NNPDF profile path: {new_path} does not exist")
-        try:
-            self._profile = yaml.safe_load(new_path.open("r"))
-        except yaml.YAMLError as e:
-            raise LoaderError(f"Could not parse profile file {new_path}: {e}") from e
-        self._profile_path = new_path
-
-    def __getitem__(self, key):
-        """Directly return a property from ``self._profile``"""
-        return self._profile[key]
-
-
-nnprofile = _NNPDFprofile()
+nnprofile = _get_nnpdf_profile()
 
 class LoaderBase:
+    """
+    Base class for the NNPDF loader.
+    It can take as input a profile dictionary from which all data can be read.
+    It is possible to override the datapath and resultpath when the class is instantiated.
+    """
 
-    def __init__(self, datapath=None, resultspath=None):
+    def __init__(self, datapath=None, resultspath=None, profile=None):
+        if profile is None:
+            profile = nnprofile
+
+        # Retrieve important paths from the profile if not given
         if datapath is None:
-            datapath = nnprofile.data_path
-
+            datapath = pathlib.Path(profile["data_path"])
         if resultspath is None:
-            resultspath = nnprofile.results_path
-        datapath = pathlib.Path(datapath)
-        resultspath = pathlib.Path(resultspath)
+            resultspath = pathlib.Path(profile["results_path"])
 
+        # Check whether they exist
         if not datapath.exists():
             raise LoaderError(f"The data path {datapath} does not exist.")
 
         if not resultspath.exists():
              raise LoaderError(f"The results path {resultspath} does not exist.")
 
+        # And save them up
         self.datapath = datapath
         self.resultspath = resultspath
-        self._nnprofile = None
         self._old_commondata_fits = set()
-
-    nnprofile = nnprofile._profile
+        self.nnprofile = profile
 
     @property
     def hyperscan_resultpath(self):
