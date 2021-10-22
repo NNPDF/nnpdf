@@ -43,11 +43,10 @@ def computed_pseudoreplicas_chi2(
     # Now compute the chi2 in a per-group basis
     diff = r_prediction - r_data
     group_level = r_prediction.index.get_level_values("group")
-    groups = group_level.drop_duplicates().to_list()
 
     # Save the results in a dataframe similar (but not equal) to the old one
     df_output = []
-    for group in groups:
+    for group in group_level.unique():
         group_diff = diff.loc[group_level == group]
         its_covmat = groups_sqrtcovmat[group_level == group][group]
         chi2_per_replica = calc_chi2(its_covmat, group_diff)
