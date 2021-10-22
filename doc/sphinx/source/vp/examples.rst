@@ -53,8 +53,8 @@ The recommended resources are:
 ===================================  ==============================  ==================================================================
 Resource                             ID                              Description
 ===================================  ==============================  ==================================================================
-NLO theoryid                         52                              NNPDF3.1 NLO theory predictions with central scales
-NNLO theoryid                        162                             (Low precision) NNPDF3.1 NNLO theory predictions with central scales
+NLO theoryid                         208                             NNPDF4.0 NLO theory predictions with central scales
+NNLO theoryid                        162                             Low precision NNLO theory predictions with central scales
 NLO theoryid for scale variations 1  163                             Central scales, :math:`k_F = 1, k_R = 1`
 NLO theoryid for scale variations 2  173                             :math:`k_F = 0.5, k_R = 0.5`
 NLO theoryid for scale variations 3  174                             :math:`k_F = 1, k_R = 0.5`
@@ -64,11 +64,11 @@ NLO theoryid for scale variations 6  177                             :math:`k_F 
 NLO theoryid for scale variations 7  178                             :math:`k_F = 0.5, k_R = 2`
 NLO theoryid for scale variations 8  179                             :math:`k_F = 1, k_R = 2`
 NLO theoryid for scale variations 9  180                             :math:`k_F = 2, k_R = 2`
-NLO pdf                              NNPDF40_nlo_as_0118             NNPDF4.0 NLO PDF set with 100 replicas (+ central replica)
+NLO pdf                              NNPDF40_nlo_as_01180            NNPDF4.0 NLO PDF set with 100 replicas (+ central replica)
 NNLO pdf                             NNPDF40_nnlo_as_01180           NNPDF4.0 NNLO PDF set with 100 replicas (+ central replica)
 NNLO pdf hessian                     NNPDF40_nnlo_as_01180_hessian   NNPDF4.0 NNLO hessian PDF set generated from replicas
-NLO fit                              210629-theory-001               NNPDF4.0 NLO fit with 100 replicas (+ central replica)
-NNLO fit                             211020-jcm-001                  NNPDF4.0 NNLO simplified fit (theory 162) with 50 replicas (+ central replica)
+NLO fit                              NNPDF40_nlo_as_01180            NNPDF4.0 NLO fit with 100 replicas (+ central replica)
+NNLO fit                             211020-jcm-001                  NNPDF4.0 NNLO low precision fit (theory 162) with 50 replicas (+ central replica)
 NNLO fit (iterated)                  211020-jcm-001_iterated         Iteration of 211020-jcm-001
 fit                                  191015-mw-001                   ``n3fit`` closure test fit with 30 replicas before and after postfit
 ===================================  ==============================  ==================================================================

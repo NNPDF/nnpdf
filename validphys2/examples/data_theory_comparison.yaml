@@ -4,8 +4,8 @@ meta:
     author: Rosalyn Pearson
 
 pdfs:
-    - id: NNPDF31_nnlo_as_0118_DISonly
-      label: NNPDF31_nnlo_as_0118_DISonly
+    - id: 211020-jcm-001
+      label: 211020-jcm-001
 
 theoryid: 162
 

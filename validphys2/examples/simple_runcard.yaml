@@ -4,11 +4,11 @@ meta:
     author: Lazy Person
 
 pdfs:
-    - NNPDF31_nlo_as_0118
-    - NNPDF31_nnlo_as_0118_DISonly
+    - NNPDF40_nlo_as_01180
+    - NNPDF40_nnlo_as_01180
 
 norm:
-    normalize_to: NNPDF31_nlo_as_0118
+    normalize_to: NNPDF40_nlo_as_01180
 
 First:
     Q: 1
