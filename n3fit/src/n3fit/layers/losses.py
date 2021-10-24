@@ -20,6 +20,10 @@ class LossInvcovmat(MetaLayer):
     Takes as argument the inverse of the covmat and the target data.
     It also takes an optional argument to mask part of the predictions
 
+    Both the inverse covmat and the mask (if any) are stored as layer weights
+    and can be updated at any points either directly or by using the
+    ``update_mask`` and ``add_covmat`` methods.
+
     Example
     -------
     >>> import numpy as np
@@ -33,29 +37,58 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, **kwargs):
+    def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
         # If we have a diagonal matrix, padd with 0s and hope it's not too heavy on memory
         if len(invcovmat.shape) == 1:
             invcovmat = np.diag(invcovmat)
-        self.invcovmat = op.numpy_to_tensor(invcovmat)
-        self.y_true = op.numpy_to_tensor(y_true)
+        self._invcovmat = op.numpy_to_tensor(invcovmat)
+        self._covmat = covmat
+        self._y_true = op.numpy_to_tensor(y_true)
+        self._ndata = y_true.shape[-1]
         if mask is None or all(mask):
-            self.mask = None
+            self._mask = None
         else:
-            mask = np.array(mask, dtype=np.float32).reshape((1,1,-1))
-            self.mask = op.numpy_to_tensor(mask)
+            mask = np.array(mask, dtype=np.float32).reshape((1, 1, -1))
+            self._mask = op.numpy_to_tensor(mask)
         super().__init__(**kwargs)
 
+    def build(self, input_shape):
+        """Transform the inverse covmat and the mask into
+        weights of the layers"""
+        init = MetaLayer.init_constant(self._invcovmat)
+        self.kernel = self.builder_helper(
+            "invcovmat", (self._ndata, self._ndata), init, trainable=False
+        )
+        mask_shape = (1, 1, self._ndata)
+        if self._mask is None:
+            init_mask = MetaLayer.init_constant(np.ones(mask_shape))
+        else:
+            init_mask = MetaLayer.init_constant(self._mask)
+        self.mask = self.builder_helper("mask", mask_shape, init_mask, trainable=False)
+
+    def add_covmat(self, covmat):
+        """Add a piece to the inverse covmat weights
+        Note, however, that the _covmat attribute of the layer will
+        still refer to the original data covmat
+        """
+        new_covmat = np.linalg.inv(self._covmat + covmat)
+        self.kernel.assign(new_covmat)
+
+    def update_mask(self, new_mask):
+        """Update the mask"""
+        self.mask.assign(new_mask)
+
     def call(self, y_pred, **kwargs):
-        tmp = self.y_true - y_pred
-        if self.mask is not None:
-            tmp = op.op_multiply([tmp, self.mask])
+        tmp_raw = self._y_true - y_pred
+        # TODO: most of the time this is a y * I multiplication and can be skipped
+        # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
+        tmp = op.op_multiply([tmp_raw, self.mask])
         if tmp.shape[1] == 1:
             # einsum is not well suited for CPU, so use tensordot if not multimodel
-            right_dot = op.tensor_product(self.invcovmat, tmp[0,0,:], axes=1)
-            res = op.tensor_product(tmp[0,:,:], right_dot, axes=1)
+            right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
+            res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
         else:
-            res = op.einsum("bri, ij, brj -> r", tmp, self.invcovmat, tmp)
+            res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
         return res
 
 

@@ -132,11 +132,14 @@ def make_replica(dataset_inputs_loaded_cd_with_cuts, replica_mcseed):
     >>> pseudodata = API.make_replica(
                                     dataset_inputs=[{"dataset":"NMC"}, {"dataset": "NMCPD"}],
                                     use_cuts="nocuts",
-                                    theoryid=53
+                                    theoryid=53,
+                                    replica=1,
+                                    mcseed=123,
+                                    genrep=True,
                                 )
-    array([0.25721162, 0.2709698 , 0.27525357, 0.28903442, 0.3114298 ,
-        0.3005844 , 0.3184538 , 0.31094522, 0.30750703, 0.32673155,
-        0.34843355, 0.34730928, 0.3090914 , 0.32825111, 0.3485292 ,
+    array([0.25640033, 0.25986534, 0.27165461, 0.29001009, 0.30863588,
+       0.30100351, 0.31781208, 0.30827054, 0.30258217, 0.32116842,
+       0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
     # Seed the numpy RNG with the seed.
     rng = np.random.default_rng(seed=replica_mcseed)

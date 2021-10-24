@@ -847,7 +847,23 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     mark_threshold is the proportion of the maximum absolute correlation
     that will be used to mark the corresponding area in x in the
     background of the plot. The maximum absolute values are used for
-    the comparison."""
+    the comparison.
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> data_input = {
+    >>>    "dataset_input" : {"dataset": "HERACOMBNCEP920"},
+    >>>    "theoryid": 200,
+    >>>     "use_cuts": "internal",
+    >>>     "pdf": "NNPDF40_nnlo_as_01180",
+    >>>     "Q": 1.6,
+    >>>     "mark_threshold": 0.2
+    >>> }
+    >>> smpdf_gen = API.plot_smpdf(**data_input)
+    >>> fig = next(smpdf_gen)
+    >>> fig.show()
+    """
     info = get_info(dataset)
 
     table = kitable(dataset, info)
@@ -871,7 +887,6 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         norm = mcolors.Normalize(vmin, vmax)
     #http://stackoverflow.com/a/11558629/1007990
     sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
-    sm._A = []
 
     for same_vals, fb in figby:
         grid = fullgrid[ np.asarray(fb.index),...]

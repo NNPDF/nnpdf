@@ -226,6 +226,8 @@ def fitting_data_dict(
             name of the ``data`` - typically experiment/group name
         'expdata_true'
             non-replica data
+        'covmat'
+            full covmat
         'invcovmat_true'
             inverse of the covmat (non-replica)
         'trmask'
@@ -318,6 +320,7 @@ def fitting_data_dict(
         "name": str(data),
         "expdata_true": expdata_true,
         "invcovmat_true": inv_true,
+        "covmat": covmat,
         "trmask": tr_mask,
         "invcovmat": invcovmat_tr,
         "ndata": ndata_tr,
@@ -406,7 +409,12 @@ replicas_exps_tr_masks = collect("exps_tr_masks", ("replicas",))
 
 
 @table
-def replica_training_mask_table(exps_tr_masks, replica, experiments_index):
+def replica_training_mask_table(replica_training_mask):
+    """Same as ``replica_training_mask`` but with a table decorator.
+    """
+    return replica_training_mask
+
+def replica_training_mask(exps_tr_masks, replica, experiments_index):
     """Save the boolean mask used to split data into training and validation
     for a given replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -435,7 +443,7 @@ def replica_training_mask_table(exps_tr_masks, replica, experiments_index):
     ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
     ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
     ... ]
-    >>> API.replica_training_mask_table(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
                          replica 1
     group dataset    id
     NMC   NMC        0        True
@@ -463,9 +471,15 @@ def replica_training_mask_table(exps_tr_masks, replica, experiments_index):
         index=experiments_index
     )
 
-replicas_training_mask_table = collect("replica_training_mask_table", ("replicas",))
+replicas_training_mask = collect("replica_training_mask", ("replicas",))
+
 @table
-def training_mask_table(replicas_training_mask_table):
+def training_mask_table(training_mask):
+    """Same as ``training_mask`` but with a table decorator
+    """
+    return training_mask
+
+def training_mask(replicas_training_mask):
     """Save the boolean mask used to split data into training and validation
     for each replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -487,7 +501,7 @@ def training_mask_table(replicas_training_mask_table):
     ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
     ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
     ... ]
-    >>> API.training_mask_table(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+    >>> API.training_mask(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
                         replica 1  replica 2  replica 3
     group dataset    id                                 
     NMC   NMC        0        True      False      False
@@ -505,7 +519,7 @@ def training_mask_table(replicas_training_mask_table):
     [345 rows x 3 columns]
 
     """
-    return pd.concat(replicas_training_mask_table, axis=1)
+    return pd.concat(replicas_training_mask, axis=1)
 
 
 def fitting_pos_dict(posdataset):

@@ -31,7 +31,7 @@ def test_dataspecschi2():
     return API.plot_dataspecs_datasets_chi2(
         dataset_inputs=dsinpts,
         dataspecs=dataspecs,
-        use_cuts='nocuts',
+        use_cuts='internal',
         metadata_group='experiment'
     )
 

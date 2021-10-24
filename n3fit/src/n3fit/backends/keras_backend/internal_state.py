@@ -13,13 +13,18 @@ import random as rn
 import logging
 import numpy as np
 import tensorflow as tf
-
-# for (very slow but fine grained) debugging turn eager mode on
-# tf.config.run_functions_eagerly(True)
 from tensorflow.keras import backend as K
 
 
 log = logging.getLogger(__name__)
+
+
+def set_eager(flag=True):
+    """Set eager mode on or off
+    for a very slow but fine grained debugging call this function as early as possible
+    ideally after the first tf import
+    """
+    tf.config.run_functions_eagerly(flag)
 
 
 def set_number_of_cores(max_cores=None):
