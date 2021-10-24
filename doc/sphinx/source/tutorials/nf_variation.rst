@@ -31,7 +31,7 @@ To finalize the PDF set, :ref:`postfit<postfit>` should be run in the usual mann
 Implementation details
 ----------------------
 
-Under the hood, the script ``varflavors`` script uses the ``--theory_id`` flag
+Under the hood, the ``varflavors`` script uses the ``--theory_id`` flag
 of ``evolven3fit`` which allows for the possibility to use a different theory
 during evolution than was used during the fit itself.
 
