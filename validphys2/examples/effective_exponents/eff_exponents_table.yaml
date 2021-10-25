@@ -2,7 +2,7 @@
 # The effective exponents are used to find the exponents a (alpha) and
 # b (beta) used to parametrize the PDF in the fit: pdf = x^{-a} (1-x)^b NN(x).
 
-fit: NNPDF31_nlo_as_0118
+fit: NNPDF40_nlo_as_01180
 
 meta:
     author: Rabah Abdul Khalek
