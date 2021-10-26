@@ -200,7 +200,7 @@ def lumigrid1d(
             f = lambda x1: evaluate_luminosity(
                 lpdf, irep, s, mx, x1, taus[im] / x1, lumi_channel
             )
-            res = integrate.quad(f, x_min, x_max, epsrel=0.05, limit=10)[0]
+            res = integrate.quad(f, x_min, x_max, epsrel=0.00001, limit=50)[0]
 
             weights[irep, im] = res
 

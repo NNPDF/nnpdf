@@ -167,4 +167,4 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     else:
         raise ValueError("Bad channel")
 
-    return res/x1/x2/s
+    return res/x1/x2/s/x1
