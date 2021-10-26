@@ -201,7 +201,7 @@ def lumigrid1d(
                 np.sqrt(taus[im]) * np.exp(y), np.sqrt(taus[im]) * np.exp(-y),
                 lumi_channel
             )
-            res = integrate.quad(f, y_min, y_max, epsrel=1e-5, limit=40)[0]
+            res = integrate.quad(f, y_min, y_max, epsrel=1e-5, limit=50)[0]
 
             weights[irep, im] = res
 
