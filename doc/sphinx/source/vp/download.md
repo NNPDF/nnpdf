@@ -24,10 +24,10 @@ the profile).
 For example a `validphys` runcard such as
 
 ```yaml
-pdf: NNPDF30_nnlo_as_0118
-fit: NNPDF31_nnlo_as_0118_uncorr_s3
+pdf: NNPDF40_nnlo_as_01180
+fit: NNPDF40_nlo_as_01180
 
-theoryid: 53
+theoryid: 208
 
 use_cuts: "fromfit"
 
@@ -40,8 +40,8 @@ actions_:
   - plot_chi2dist
 ```
 
-Will download if necessary the fit called `NNPDF31_nnlo_as_0118_uncorr_s3`, the
-PDF set called `NNPDF30_nnlo_as_0118` and the theory with ID 52, when validphys
+Will download if necessary the fit called `NNPDF40_nlo_as_01180`, the
+PDF set called `NNPDF40_nnlo_as_01180` and the theory with ID 208, when validphys
 is executed with the default settings. In practice one rarely has to worry about
 installing resources by hand when working with NNPDF tools.
 
