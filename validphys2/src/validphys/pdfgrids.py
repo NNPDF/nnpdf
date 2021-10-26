@@ -196,6 +196,7 @@ def lumigrid1d(
                 y_max =  y_cut
             
         for irep in range(nmembers):
+            # Eq.(3) in arXiv:1607.01831
             f = lambda y: evaluate_luminosity(
                 lpdf, irep, s, mx,
                 np.sqrt(taus[im]) * np.exp(y), np.sqrt(taus[im]) * np.exp(-y),
