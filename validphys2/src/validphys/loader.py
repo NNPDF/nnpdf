@@ -97,8 +97,6 @@ def _get_nnpdf_profile(profile_path=None):
         raise LoaderError(f"Could not parse profile file {mpath}: {e}") from e
     return profile_dict
 
-nnprofile = _get_nnpdf_profile()
-
 class LoaderBase:
     """
     Base class for the NNPDF loader.
@@ -106,15 +104,14 @@ class LoaderBase:
     It is possible to override the datapath and resultpath when the class is instantiated.
     """
 
-    def __init__(self, datapath=None, resultspath=None, profile=None):
-        if profile is None:
-            profile = nnprofile
+    def __init__(self, profile=None):
+        if not isinstance(profile, dict):
+            # If profile is a path, a str or None, read it from the default path
+            profile = _get_nnpdf_profile(profile)
 
         # Retrieve important paths from the profile if not given
-        if datapath is None:
-            datapath = pathlib.Path(profile["data_path"])
-        if resultspath is None:
-            resultspath = pathlib.Path(profile["results_path"])
+        datapath = pathlib.Path(profile["data_path"])
+        resultspath = pathlib.Path(profile["results_path"])
 
         # Check whether they exist
         if not datapath.exists():
@@ -683,8 +680,7 @@ def _key_or_loader_error(f):
             return f(*args, **kwargs)
         except KeyError as e:
             log.error(f"nnprofile is configured "
-                      f"improperly: Key {e} is missing! "
-                      f"Fix it at {nnprofile.profile_path}")
+                      f"improperly: Key {e} is missing from the profile!")
             raise LoaderError("Cannot attempt download because "
                               "nnprofile is configured improperly: "
                               f"Missing key '{e}'") from e

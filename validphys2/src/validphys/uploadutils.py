@@ -24,7 +24,7 @@ from prompt_toolkit.completion import WordCompleter
 
 from reportengine.compat import yaml
 from reportengine.colors import t
-from validphys.loader import RemoteLoader, nnprofile
+from validphys.loader import RemoteLoader, Loader
 from validphys.renametools import Spinner
 
 log = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ class Uploader():
     result. The various derived classes should be used."""
 
     upload_host = _profile_key('upload_host')
-    _profile = nnprofile
+    _profile = Loader().nnprofile
 
     def get_relative_path(self, output_path):
         """Return the relative path to the ``target_dir``."""

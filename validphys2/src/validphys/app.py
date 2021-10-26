@@ -23,37 +23,37 @@ from validphys import mplstyles
 
 
 providers = [
-             'validphys.results',
-             'validphys.commondata',
-             'validphys.pdfgrids',
-             'validphys.pdfplots',
-             'validphys.dataplots',
-             'validphys.fitdata',
-             'validphys.arclength',
-             'validphys.sumrules',
-             'validphys.reweighting',
-             'validphys.kinematics',
-             'validphys.correlations',
-             'validphys.chi2grids',
-             'validphys.eff_exponents',
-             'validphys.paramfits.dataops',
-             'validphys.paramfits.plots',
-             'validphys.theorycovariance.construction',
-             'validphys.theorycovariance.output',
-             'validphys.theorycovariance.tests',
-             'validphys.replica_selector',
-             'validphys.closuretest',
-             'validphys.mc_gen',
-             'validphys.theoryinfo',
-             'validphys.pseudodata',
-             'validphys.renametools',
-             'validphys.covmats',
-             'validphys.hyperoptplot',
-             'validphys.deltachi2',
-             'validphys.n3fit_data',
-             'validphys.mc2hessian',
-             'reportengine.report',
-            ]
+        'validphys.results',
+        'validphys.commondata',
+        'validphys.pdfgrids',
+        'validphys.pdfplots',
+        'validphys.dataplots',
+        'validphys.fitdata',
+        'validphys.arclength',
+        'validphys.sumrules',
+        'validphys.reweighting',
+        'validphys.kinematics',
+        'validphys.correlations',
+        'validphys.chi2grids',
+        'validphys.eff_exponents',
+        'validphys.paramfits.dataops',
+        'validphys.paramfits.plots',
+        'validphys.theorycovariance.construction',
+        'validphys.theorycovariance.output',
+        'validphys.theorycovariance.tests',
+        'validphys.replica_selector',
+        'validphys.closuretest',
+        'validphys.mc_gen',
+        'validphys.theoryinfo',
+        'validphys.pseudodata',
+        'validphys.renametools',
+        'validphys.covmats',
+        'validphys.hyperoptplot',
+        'validphys.deltachi2',
+        'validphys.n3fit_data',
+        'validphys.mc2hessian',
+        'reportengine.report',
+        ]
 
 log = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ class App(app.App):
     config_class = Config
 
     critical_message = (
-"""A critical error ocurred. This is likely due to one of the following reasons:
+            """A critical error ocurred. This is likely due to one of the following reasons:
 
  - A bug in validphys.
  - Corruption of the provided resources (e.g. incorrect plotting files).
@@ -76,7 +76,7 @@ including the contents of the following file:
 
 %s
 """
-    )
+)
 
     @property
     def default_style(self):
@@ -89,33 +89,23 @@ including the contents of the following file:
     def argparser(self):
         parser = super().argparser
 
-        parser.add_argument('-p','--datapath', help="DEPRECATED USE nnprofile "
-            "INSTEAD. path where the NNPDF "
-            "data is located",
-            default=None)
-
-        parser.add_argument('--resultspath', help="DEPRECATED USE nnprofile "
-                         "INSTEAD. path where the fit results "
-                          "are located. Calculated from 'datapath' by default",
-                         )
-
         cout = parser.add_mutually_exclusive_group()
         #We want True False or None, so that none defaults to debug or quiet.
         #That's why we use store_const
         cout.add_argument('--cout', action='store_const', const=True,
-                          help = "display C output. Default depends on log level")
+                help = "display C output. Default depends on log level")
         cout.add_argument('--no-cout', dest='cout',
-                              action='store_const', const=False)
+                action='store_const', const=False)
 
         net = parser.add_mutually_exclusive_group()
         net.add_argument('--net', action='store_true', default=True,
-                         help="Enable remote loader. "
-                         "Try to download missing resources. This is the default")
+                help="Enable remote loader. "
+                "Try to download missing resources. This is the default")
         net.add_argument('--no-net', dest='net', action='store_false',
-                         help="Disable remote loader. Use only local resources.")
+                help="Disable remote loader. Use only local resources.")
 
         parser.add_argument('--upload', action='store_true',
-                            help="Upload the resulting output folder to the Milan server.")
+                help="Upload the resulting output folder to the Milan server.")
 
         return parser
 
