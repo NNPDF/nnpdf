@@ -151,7 +151,7 @@ def lumigrid1d(
     lumi_channel,
     sqrts: numbers.Real,
     y_cut: (type(None), numbers.Real) = None,
-    nbins_m: int = 40,
+    nbins_m: int = 50,
     mxmin: numbers.Real = 10,
     mxmax: (type(None), numbers.Real) = None,
     scale="log",
@@ -187,20 +187,21 @@ def lumigrid1d(
     weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
 
     for im, mx in enumerate(mxs):
-        x_min = taus[im]
-        x_max = 1.
+        y_min = -np.log(1/np.sqrt(taus[im]))
+        y_max =  np.log(1/np.sqrt(taus[im]))
+                       
         if y_cut is not None:
-            minus = mx / sqrts * np.exp(-y_cut)
-            plus = mx / sqrts * np.exp(y_cut)
-            if plus < 1 and minus < 1:
-                x_min = minus
-                x_max = plus
-
+            if -y_cut > y_min and  y_cut < y_max:
+                y_min = -y_cut
+                y_max =  y_cut
+            
         for irep in range(nmembers):
-            f = lambda x1: 1/x1 * evaluate_luminosity(
-                lpdf, irep, s, mx, x1, taus[im] / x1, lumi_channel
+            f = lambda y: evaluate_luminosity(
+                lpdf, irep, s, mx,
+                np.sqrt(taus[im]) * np.exp(y), np.sqrt(taus[im]) * np.exp(-y),
+                lumi_channel
             )
-            res = integrate.quad(f, x_min, x_max, epsrel=0.00001, limit=50)[0]
+            res = integrate.quad(f, y_min, y_max, epsrel=0.05, limit=20)[0]
 
             weights[irep, im] = res
 
