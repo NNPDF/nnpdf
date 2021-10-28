@@ -135,11 +135,19 @@ lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
 
 Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
 
+def _default_mxmax(sqrts):
+    return sqrts / 3
+
 @make_argcheck
 def _check_mx(mxmin, mxmax, sqrts):
+    if mxmax is None:
+        mxmax = _default_mxmax(sqrts)
+
     check(
-        0 <= mxmin < (mxmax if mxmax is not None else sqrts) <= sqrts,
-        "mxmin and mxmax not consistent: Should be 0 <= mxmin < mxmax <= sqrts",
+        0 <= mxmin < mxmax <= sqrts,
+        ("mxmin and mxmax not consistent: Should be 0 <= mxmin < mxmax <= sqrts, "
+        f"but mxmin={mxmin} GeV, mxmax={mxmax} GeV and sqrts={sqrts} GeV."
+        ),
     )
 
 @_check_mx
@@ -151,7 +159,7 @@ def lumigrid1d(
     lumi_channel,
     sqrts: numbers.Real,
     y_cut: (type(None), numbers.Real) = None,
-    nbins_m: int = 40,
+    nbins_m: int = 50,
     mxmin: numbers.Real = 10,
     mxmax: (type(None), numbers.Real) = None,
     scale="log",
@@ -171,14 +179,14 @@ def lumigrid1d(
     """
     s = sqrts * sqrts
     if mxmax is None:
-        mxmax = sqrts / 3
+        mxmax = _default_mxmax(sqrts)
     if scale == "log":
         mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
     elif scale == "linear":
         mxs = np.linspace(mxmin, mxmax, nbins_m)
     else:
         raise ValueError("Unknown scale")
-    taus = (mxs / sqrts) ** 2
+    sqrt_taus = (mxs / sqrts)
 
     # TODO: Write this in something fast
     lpdf = pdf.load()
@@ -186,21 +194,23 @@ def lumigrid1d(
 
     weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
 
-    for im, mx in enumerate(mxs):
-        x_min = taus[im]
-        x_max = 1.
+    for im, (mx, sqrt_tau) in enumerate(zip(mxs, sqrt_taus)):
+        y_min = -np.log(1/sqrt_tau)
+        y_max =  np.log(1/sqrt_tau)
+
         if y_cut is not None:
-            minus = mx / sqrts * np.exp(-y_cut)
-            plus = mx / sqrts * np.exp(y_cut)
-            if plus < 1 and minus < 1:
-                x_min = minus
-                x_max = plus
+            if -y_cut > y_min and  y_cut < y_max:
+                y_min = -y_cut
+                y_max =  y_cut
 
         for irep in range(nmembers):
-            f = lambda x1: evaluate_luminosity(
-                lpdf, irep, s, mx, x1, taus[im] / x1, lumi_channel
+            # Eq.(3) in arXiv:1607.01831
+            f = lambda y: evaluate_luminosity(
+                lpdf, irep, s, mx,
+                sqrt_tau * np.exp(y), sqrt_tau * np.exp(-y),
+                lumi_channel
             )
-            res = integrate.quad(f, x_min, x_max, epsrel=0.05, limit=10)[0]
+            res = integrate.quad(f, y_min, y_max, epsrel=5e-4, limit=50)[0]
 
             weights[irep, im] = res
 
