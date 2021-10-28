@@ -70,6 +70,11 @@ positivity:
   posdatasets:
     - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
 
+integrability:
+  integdatasets:
+    - {dataset: INTEGXT8, maxlambda: 1e2}
+    - {dataset: INTEGXT3, maxlambda: 1e2}
+
 ############################################################
 closuretest:
   fakedata: False
