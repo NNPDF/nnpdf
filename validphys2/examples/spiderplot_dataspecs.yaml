@@ -21,10 +21,6 @@ dataspecs:
     - speclabel: NNPDF40_nlo_as_01180
       pdf: NNPDF40_nlo_as_01180
 
-pdfs:
-    - NNPDF40_nnlo_as_01180
-    - NNPDF40_nlo_as_01180
-
 use_cuts: internal
 
 normalize_to: 1
