@@ -376,7 +376,7 @@ this will do what you expect:
 
 	fits:
 	    - NNPDF40_nlo_as_01180
-	    - 211020-jcm-001
+	    - NNPDF40_nnlo_lowprecision
 
 	use_cuts: "nocuts"
 
@@ -421,7 +421,7 @@ the `fitcontext` rule. The above example can be simplified like this:
 
 	fits:
 	    - NNPDF40_nlo_as_01180
-	    - 211020-jcm-001
+	    - NNPDF40_nnlo_lowprecision
 
 	use_cuts: "nocuts"
 

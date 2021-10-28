@@ -45,8 +45,8 @@ WEIGHTED_DATA = [
 PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
-FIT = "211020-jcm-001"
-FIT_ITERATED = "211020-jcm-001_iterated"
+FIT = "NNPDF40_nnlo_lowprecision"
+FIT_ITERATED = "NNPDF40_nnlo_lowprecision_iterated"
 
 base_config = dict(
         pdf=PDF,

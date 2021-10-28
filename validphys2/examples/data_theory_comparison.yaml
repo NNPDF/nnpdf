@@ -4,8 +4,8 @@ meta:
     author: Rosalyn Pearson
 
 pdfs:
-    - id: 211020-jcm-001
-      label: 211020-jcm-001
+    - id: NNPDF40_nnlo_lowprecision
+      label: NNPDF40_nnlo_lowprecision
 
 theoryid: 162
 

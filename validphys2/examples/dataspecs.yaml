@@ -27,9 +27,9 @@ dataspecs:
       fit: NNPDF40_nlo_as_01180
 
     - theoryid: 162
-      pdf: 211020-jcm-001
+      pdf: NNPDF40_nnlo_lowprecision
       speclabel: "NNLO"
-      fit: 211020-jcm-001
+      fit: NNPDF40_nnlo_lowprecision
 
 
 template_text: |

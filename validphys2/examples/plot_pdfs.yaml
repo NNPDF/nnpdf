@@ -6,7 +6,7 @@ meta:
 
 pdfs:
   - {id: "NNPDF40_nlo_as_01180", label: "4.0 NLO"}
-  - {id: "211020-jcm-001", label: "4.0 NNLO low precision"}
+  - {id: "NNPDF40_nnlo_lowprecision", label: "4.0 NNLO low precision"}
   - {id: "NNPDF40_nnlo_as_01180", label: "4.0 NNLO"}
 
 
