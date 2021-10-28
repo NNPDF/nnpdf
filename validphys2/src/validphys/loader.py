@@ -216,7 +216,7 @@ class Loader(LoaderBase):
         return {
             file.stem[len(data_str) :]
             for file in self.commondata_folder.glob(f'{data_str}*.dat')
-            if not file.stem.startswith(f"{data_str}POS")
+            if not file.stem.startswith((f"{data_str}POS", f"{data_str}INTEG"))
         }
 
     @property

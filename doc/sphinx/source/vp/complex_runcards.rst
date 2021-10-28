@@ -98,7 +98,7 @@ respect to the outer. For example, if we add a PDF specification to the
 
 	With_cuts:
 	  use_cuts: "fromfit"
-	  pdf: 191015-mw-001
+	  pdf: NNPDF40_example_closure_test
 
 	Without_cuts:
 	  use_cuts: "nocuts"
@@ -114,7 +114,7 @@ respect to the outer. For example, if we add a PDF specification to the
 
 The `plot_fancy` action will ignore the outer pdf
 (NNPDF40\_nnlo\_as\_01180) and use the one defined in the innermost
-namespace (191015-mw-001). Because we have not specified `plot_chi2dist` to
+namespace (NNPDF40_example_closure_test). Because we have not specified `plot_chi2dist` to
 be executed within the `With_cuts` namespace, it will continue to use
 NNPDF40\_nlo\_as\_01180.
 
@@ -131,7 +131,7 @@ result for each. For example:
 
 	theoryid: 208
 
-	fit: 191015-mw-001
+	fit: NNPDF40_example_closure_test
 
 	Specifications:
 	- use_cuts: "fromfit"
@@ -148,7 +148,7 @@ result for each. For example:
 
 Now a different `plot_fancy` action will be executed for each of the
 two mappings of the list "*Specifications*": one will use the NNLO PDF
-and use the cuts from 191015-mw-001, and the other will plot all points
+and use the cuts from NNPDF40_example_closure_test, and the other will plot all points
 in the dataset.
 
 Some keys are appropriately interpreted either as lists of objects or
