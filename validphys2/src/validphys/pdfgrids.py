@@ -178,7 +178,7 @@ def lumigrid1d(
         mxs = np.linspace(mxmin, mxmax, nbins_m)
     else:
         raise ValueError("Unknown scale")
-    taus = (mxs / sqrts) ** 2
+    sqrt_taus = (mxs / sqrts)
 
     # TODO: Write this in something fast
     lpdf = pdf.load()
@@ -186,20 +186,20 @@ def lumigrid1d(
 
     weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
 
-    for im, mx in enumerate(mxs):
-        y_min = -np.log(1/np.sqrt(taus[im]))
-        y_max =  np.log(1/np.sqrt(taus[im]))
-                       
+    for im, (mx, sqrt_tau) in enumerate(zip(mxs, sqrt_taus)):
+        y_min = -np.log(1/sqrt_tau)
+        y_max =  np.log(1/sqrt_tau)
+
         if y_cut is not None:
             if -y_cut > y_min and  y_cut < y_max:
                 y_min = -y_cut
                 y_max =  y_cut
-            
+
         for irep in range(nmembers):
             # Eq.(3) in arXiv:1607.01831
             f = lambda y: evaluate_luminosity(
                 lpdf, irep, s, mx,
-                np.sqrt(taus[im]) * np.exp(y), np.sqrt(taus[im]) * np.exp(-y),
+                sqrt_tau * np.exp(y), sqrt_tau * np.exp(-y),
                 lumi_channel
             )
             res = integrate.quad(f, y_min, y_max, epsrel=5e-4, limit=50)[0]
