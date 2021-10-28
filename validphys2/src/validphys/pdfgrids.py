@@ -135,11 +135,19 @@ lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
 
 Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
 
+def _default_mxmax(sqrts):
+    return sqrts / 3
+
 @make_argcheck
 def _check_mx(mxmin, mxmax, sqrts):
+    if mxmax is None:
+        mxmax = _default_mxmax(sqrts)
+
     check(
-        0 <= mxmin < (mxmax if mxmax is not None else sqrts) <= sqrts,
-        "mxmin and mxmax not consistent: Should be 0 <= mxmin < mxmax <= sqrts",
+        0 <= mxmin < mxmax <= sqrts,
+        ("mxmin and mxmax not consistent: Should be 0 <= mxmin < mxmax <= sqrts, "
+        f"but mxmin={mxmin} GeV, mxmax={mxmax} GeV and sqrts={sqrts} GeV."
+        ),
     )
 
 @_check_mx
@@ -171,7 +179,7 @@ def lumigrid1d(
     """
     s = sqrts * sqrts
     if mxmax is None:
-        mxmax = sqrts / 3
+        mxmax = _default_mxmax(sqrts)
     if scale == "log":
         mxs = np.logspace(np.log10(mxmin), np.log10(mxmax), nbins_m)
     elif scale == "linear":
