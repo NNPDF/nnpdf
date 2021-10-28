@@ -3,7 +3,7 @@ meta:
     author: Rosalyn Pearson
     keywords: [example, spider]
 
-fit: NNPDF40_nnlo_as_01180_1000
+fit: 211020-jcm-001
 
 theory:
     from_: fit

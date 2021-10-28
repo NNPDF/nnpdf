@@ -54,7 +54,7 @@ Now in a notebook we can do
 from validphys.api import API
 
 expensive1 = API.expesnive_provider1(pdf="NNPDF40_nlo_as_01180", Q=100, theoryid=208)
-expensive2 = API.expensive_provider2(experiments={"from_": "fit"}, fit="NNPDF40_nlo_as_01180")
+expensive2 = API.expensive_provider2(dataset_inputs={"from_": "fit"}, fit="NNPDF40_nlo_as_01180")
 
 ```
 

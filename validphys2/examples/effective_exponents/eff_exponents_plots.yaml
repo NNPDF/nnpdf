@@ -12,7 +12,7 @@ beta:
 fits:
   - NNPDF40_nlo_as_01180
 
-basis: EVOL
+basis: evolution
 
 meta:
     author: Rabah Abdul Khalek
