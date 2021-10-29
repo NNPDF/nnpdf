@@ -163,5 +163,5 @@ where the id's of the theories used to do the flavor-number variations are
 .. warning::
     Please note that the Hessian and ``_pdfas`` conversion runcards won't work
     with the 4.0.3 version of the code (and thus the fixed enviroment) and
-    instead require a version 4.0.3.392 or newer.
+    instead require a version 4.0.4 or newer.
 

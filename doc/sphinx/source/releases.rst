@@ -21,9 +21,15 @@ The code is tagged to contextualize the versioning, mark significant
 developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
+`Version 4.0.4 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.4>`_
+    Incremental bugfix and enhancementent release: most importantly fixing an
+    error in the definition of integrated luminosity (`Github issue #1442
+    <https://github.com/NNPDF/nnpdf/issues/1442>`_), as well as adding
+    ancillary features for the NNPDF4.0 analysis and results, and extending
+    the documentation.
 `Version 4.0.3 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.3>`_
     Used to :ref:`produce <reproduce40>` the NNPDF 4.0 :cite:p:`nnpdf40`
-    analysis.
+    fits.
 
 .. _compatibility_policy:
 Compatibility Policy
