@@ -11,6 +11,9 @@ categories:
   - title: Worflow
     labels:
       - devtools
+  - title: Refactoring
+    labels:
+      - Refactoring
 
 template: |
   ## What's Changed
