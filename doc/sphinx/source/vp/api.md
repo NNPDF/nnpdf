@@ -16,7 +16,7 @@ For example:
 ```python
 from validphys.api import API
 
-figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
+figs = API.plot_pdfs(pdfs=["NNPDF40_nlo_as_01180"], Q=2)
 for f, _ in figs:
     f.show()
 ```
@@ -53,8 +53,8 @@ Now in a notebook we can do
 ```python
 from validphys.api import API
 
-expensive1 = API.expesnive_provider1(pdf="NNPDF31_nlo_as_0118", Q=100, theoryid=52)
-expensive2 = API.expensive_provider2(experiments={"from_": "fit"}, fit="NNPDF31_nlo_as_0118")
+expensive1 = API.expesnive_provider1(pdf="NNPDF40_nlo_as_01180", Q=100, theoryid=208)
+expensive2 = API.expensive_provider2(dataset_inputs={"from_": "fit"}, fit="NNPDF40_nlo_as_01180")
 
 ```
 
@@ -85,7 +85,7 @@ input2 = {
     "experiments": {
         "from_": "fit"
     },
-    "fit": "NNPDF31_nlo_as_0118"
+    "fit": "NNPDF40_nlo_as_01180"
 }
 expensive2 = API.expensive_provider2(**input2)
 ```
@@ -126,7 +126,7 @@ matplotlib.style.use(str(mplstyles.smallstyle))
 
 from validphys.api import API
 
-figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
+figs = API.plot_pdfs(pdfs=["NNPDF40_nlo_as_01180"], Q=2)
 for f, _ in figs:
     f.tight_layout()
     f.show()
@@ -146,7 +146,7 @@ import numpy as np
 from validphys.api import API
 
 new_xgrid = ("linear", np.array([0.1, 0.2])
-pdf_grid = API.xplotting_grid(pdf="NNPDF31_nlo_as_0118", Q=2, xgrid=new_xgrid)
+pdf_grid = API.xplotting_grid(pdf="NNPDF40_nlo_as_01180", Q=2, xgrid=new_xgrid)
 
 ```
 

@@ -17,11 +17,11 @@ We start with the following simple example:
 
 .. code:: yaml
 
-	pdf: NNPDF31_nlo_as_0118
+	pdf: NNPDF40_nnlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
-	use_cuts: "nocuts"
+	use_cuts: "internal"
 
 	dataset_input:
 	    dataset: ATLASWZRAP36PB
@@ -52,11 +52,11 @@ In this case we can modify the example as follows:
 
 .. code:: yaml
 
-	pdf: NNPDF31_nlo_as_0118
+	pdf: NNPDF40_nnlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
-	fit: 161222-jr-004
+	fit: NNPDF40_nlo_as_01180
 
 	With_cuts:
 	  use_cuts: "fromfit"
@@ -90,15 +90,15 @@ respect to the outer. For example, if we add a PDF specification to the
 
 .. code:: yaml
 
-	pdf: NNPDF31_nlo_as_0118
+	pdf: NNPDF40_nnlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
-	fit: 161222-jr-004
+	fit: NNPDF40_nlo_as_01180
 
 	With_cuts:
 	  use_cuts: "fromfit"
-	  pdf: 191015-mw-001
+	  pdf: NNPDF40_example_closure_test
 
 	Without_cuts:
 	  use_cuts: "nocuts"
@@ -113,10 +113,10 @@ respect to the outer. For example, if we add a PDF specification to the
 
 
 The `plot_fancy` action will ignore the outer pdf
-(NNPDF31\_nlo\_as\_0118) and use the one defined in the innermost
-namespace (191015-mw-001). Because we have not specified `plot_chi2dist` to
+(NNPDF40\_nnlo\_as\_01180) and use the one defined in the innermost
+namespace (NNPDF40_example_closure_test). Because we have not specified `plot_chi2dist` to
 be executed within the `With_cuts` namespace, it will continue to use
-NNPDF31\_nlo\_as\_0118.
+NNPDF40\_nlo\_as\_01180.
 
 
 2. Lists of namespaces
@@ -127,15 +127,15 @@ result for each. For example:
 
 .. code:: yaml
 
-	pdf: NNPDF31_nlo_as_0118
+	pdf: NNPDF40_nlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
-	fit: 191015-mw-001
+	fit: NNPDF40_example_closure_test
 
 	Specifications:
 	- use_cuts: "fromfit"
-	  pdf: NNPDF31_nnlo_as_0118
+	  pdf: NNPDF40_nnlo_as_01180
 
 	- use_cuts: "nocuts"
 
@@ -148,7 +148,7 @@ result for each. For example:
 
 Now a different `plot_fancy` action will be executed for each of the
 two mappings of the list "*Specifications*": one will use the NNLO PDF
-and use the cuts from 191015-mw-001, and the other will plot all points
+and use the cuts from NNPDF40_example_closure_test, and the other will plot all points
 in the dataset.
 
 Some keys are appropriately interpreted either as lists of objects or
@@ -159,8 +159,8 @@ a list of LHAPDF ids:
 .. code:: yaml
 
 	pdfs:
-	  - NNPDF31_nlo_as_0118
-	  - NNPDF31_nlo_as_0118
+	  - NNPDF40_nlo_as_01180
+	  - NNPDF40_nnlo_as_01180
 
 
 Because the `plot_fancy` action takes a list of pdfs as input,
@@ -169,10 +169,10 @@ something like this:
 .. code:: yaml
 
 	pdfs:
-	  - NNPDF31_nlo_as_0118
-	  - NNPDF31_nnlo_as_0118
+	  - NNPDF40_nlo_as_01180
+	  - NNPDF40_nnlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
 	use_cuts: "nocuts"
 
@@ -191,10 +191,10 @@ specifying that we want to loop over `pdfs`:
 .. code:: yaml
 
 	pdfs:
-	  - NNPDF30_nlo_as_0118
-	  - NNPDF31_nnlo_as_0118
+	  - NNPDF40_nlo_as_01180
+	  - NNPDF40_nnlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
 	use_cuts: "nocuts"
 
@@ -211,8 +211,8 @@ In this case the value of the `pdfs` key is seen as equivalent to:
 .. code:: yaml
 
 	pdfs:
-	  - {pdf: NNPDF31_nlo_as_0118}
-	  - {pdf: NNPDF31_nnlo_as_0118}
+	  - {pdf: NNPDF40_nlo_as_01180}
+	  - {pdf: NNPDF40_nnlo_as_01180}
 
 
 However, the special treatment allows us to simplify both the input
@@ -231,15 +231,15 @@ Consider the example:
 .. code:: yaml
 
 	pdfs:
-	    - NNPDF31_nlo_as_0118
-	    - NNPDF31_nnlo_as_0118
-	    - NNPDF31_nnlo_as_0118_hessian
+	    - NNPDF40_nlo_as_01180
+	    - NNPDF40_nnlo_as_01180
+	    - NNPDF40_nnlo_as_01180_hessian
 
-	fit: NNPDF31_nlo_as_0118
+	fit: NNPDF40_nlo_as_01180
 
 	theoryids:
-	    - 52
-	    - 53
+	    - 208
+	    - 162
 
 	With_cuts:
 	    use_cuts : "nocuts"
@@ -293,9 +293,9 @@ checks. For example, in the PDF plotting example above:
 .. code:: yaml
 
 	pdfs:
-	    - NNPDF31_nlo_as_0118
-	    - NNPDF31_nnlo_as_0118
-	    - NNPDF31_nnlo_as_0118_hessian
+	    - NNPDF40_nlo_as_01180
+	    - NNPDF40_nnlo_as_01180
+	    - NNPDF40_nnlo_as_01180_hessian
 
 	First:
 	    Q: 1
@@ -306,7 +306,7 @@ checks. For example, in the PDF plotting example above:
 	    xgrid: linear
 
 	actions_:
-	  - First::plot_pdfreplicas (normalize_to=NNPDF31_nlo_as_0118)
+	  - First::plot_pdfreplicas (normalize_to=NNPDF40_nlo_as_01180)
 	  - First plot_pdfs
 	  - Second plot_pdfreplicas
 
@@ -325,7 +325,7 @@ that). For example:
 
 .. code:: yaml
 
-	fit: NNPDF31_nlo_as_0118
+	fit: NNPDF40_nlo_as_01180
 
 	use_cuts: "nocuts"
 
@@ -350,7 +350,7 @@ that). For example:
 
 	pdfs:
 	    - from_: fit
-	    - NNPDF31_nnlo_as_0118
+	    - NNPDF40_nnlo_as_01180
 
 	data_inputs:
 	    from_: fit
@@ -375,8 +375,8 @@ this will do what you expect:
 .. code::  yaml
 
 	fits:
-	    - NNPDF31_nlo_as_0118
-	    - NNPDF31_nnlo_as_0118
+	    - NNPDF40_nlo_as_01180
+	    - NNPDF40_nnlo_lowprecision
 
 	use_cuts: "nocuts"
 
@@ -401,7 +401,7 @@ this will do what you expect:
 
 	pdfs:
 	    - from_: fit
-	    - NNPDF31_nlo_as_0118_hessian
+	    - NNPDF40_nnlo_as_01180_hessian
 
 	dataset_inputs:
 	    from_: fit
@@ -420,8 +420,8 @@ the `fitcontext` rule. The above example can be simplified like this:
 .. code:: yaml
 
 	fits:
-	    - NNPDF31_nlo_as_0118
-	    - NNPDF31_nnlo_as_0118
+	    - NNPDF40_nlo_as_01180
+	    - NNPDF40_nnlo_lowprecision
 
 	use_cuts: "nocuts"
 
@@ -440,7 +440,7 @@ the `fitcontext` rule. The above example can be simplified like this:
 
 	pdfs:
 	    - from_: fit
-	    - NNPDF31_nlo_as_0118_hessian
+	    - NNPDF40_nnlo_as_01180_hessian
 
 	actions_:
 	  - fits::fitcontext report
@@ -457,7 +457,7 @@ other items. Consider for example:
 .. code:: yaml
 
 	Base:
-	    fit: NNPDF31_nnlo_as_0118_1000
+	    fit: NNPDF40_nnlo_as_01180_1000
 
 	Pairs:
 	    fits:
@@ -465,19 +465,18 @@ other items. Consider for example:
 		- from_: null
 
 	fits:
-	    - NNPDF31_nnlo_as_0118_30dataset
-	    - NNPDF31_nnlo_as_0118_collider
-	    - NNPDF31_nnlo_as_0118_noAWZrap11
-	    - NNPDF31_nnlo_as_0118_nojets
-	    - NNPDF31_nnlo_as_0118_noLHCb
-	    - NNPDF31_nnlo_as_0118_noLHC
-	    - NNPDF31_nnlo_as_0118_nonuclear
-	    - NNPDF31_nnlo_as_0118_notop
-	    - NNPDF31_nnlo_as_0118_noZpt
-	    - NNPDF31_nnlo_as_0118_proton
-	    - NNPDF31_nnlo_as_0118_wAZPT7TEV
-	    - NNPDF31_nnlo_as_0118_wCMSDY12
-	    - NNPDF31_nnlo_as_0118_wEMC
+	    - NNPDF40_nnlo_as_01180_NNPDF31
+	    - NNPDF40_nnlo_as_01180_collider_only
+	    - NNPDF40_nnlo_as_01180_DIS_only
+	    - NNPDF40_nnlo_as_01180_nojets
+	    - NNPDF40_nnlo_as_01180_noLHCbb
+	    - NNPDF40_nnlo_as_01180_noLHC
+	    - NNPDF40_nnlo_as_01180_notop
+	    - NNPDF40_nnlo_as_01180_noZpT
+	    - NNPDF40_nnlo_as_01180_nophoton
+	    - NNPDF40_nnlo_as_01180_ATLASW8TeV
+	    - NNPDF40_nnlo_as_01180_noATLASCMSDY
+	    - NNPDF40_nnlo_as_01180_EMC
 
 	use_cuts: "fromfit"
 
@@ -489,7 +488,7 @@ other items. Consider for example:
 
 	meta:
 	    author: Zahari Kassabov
-	    keywords: [nn31final, gallery]
+	    keywords: [nn40final, gallery]
 
 	template_text: |
 	    % Non-default datasets
@@ -541,8 +540,8 @@ report.  Consider the following example:
 
 	dataspec_input:
 	  - fitdeclarations:
-	       - NNPDF31_nlo_as_0118
-	       - NNPDF31_nnlo_as_0118
+	       - NNPDF40_nlo_as_01180
+	       - NNPDF40_nnlo_as_01180
 	    fits_computed_psedorreplicas_chi2_output: new-alldata/fits_matched_pseudorreplicas_chi2_table.csv
 	    fits_chi2_paramfits_output: new-alldata/central_global.csv
 	    badspecs:
@@ -622,13 +621,13 @@ layer is specified together with the ID. For example:
 .. code:: yaml
 
 	pdfs:
-	    - id:  NNPDF31_nlo_as_0118
+	    - id:  NNPDF40_nlo_as_01180
 	      label: NLO
 
-	    - id: NNPDF31_nnlo_as_0118
+	    - id: NNPDF40_nnlo_as_01180
 	      label: NNLO
 
-	    - id: NNPDF31_nnlo_as_0118
+	    - id: NNPDF40_nnlo_as_01180_hessian
 	      label: Hessian NNLO
 
 

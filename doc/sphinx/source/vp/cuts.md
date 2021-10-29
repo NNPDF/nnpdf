@@ -58,7 +58,7 @@ meta:
     author: Zahari Kassabov
     keywords: [test, debug]
 
-fit: NNPDF31_nlo_as_0118_1000
+fit: NNPDF40_nlo_as_01180
 
 theory:
     from_: fit
@@ -73,10 +73,10 @@ datacuts:
 
 # Used for intersection cuts
 cuts_intersection_spec:
-    - theoryid: 52
-    - theoryid: 53
+    - theoryid: 208
+    - theoryid: 162
 
-dataset_input: {dataset: ATLAS1JET11}
+dataset_input: {dataset: ATLASDY2D8TEV}
 
 dataspecs:
   - speclabel: "No cuts"
@@ -149,17 +149,17 @@ do_not_require_similarity_for: [ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM]
 dataset_inputs: *NLODatasts
 
 cuts_intersection_spec:
-    - theoryid: 52
-      pdf: NNPDF31_nlo_as_0118
+    - theoryid: 208
+      pdf: NNPDF40_nlo_as_01180
       dataset_inputs: *NLODatasts
 
-    - theoryid: 53
-      pdf: NNPDF31_nlo_as_0118
+    - theoryid: 200
+      pdf: NNPDF40_nnlo_as_01180
       dataset_inputs: *NNLODatasts
 
 
-theoryid: 52
-pdf: NNPDF31_nlo_as_0118
+theoryid: 208
+pdf: NNPDF40_nlo_as_01180
 
 dataspecs:
 

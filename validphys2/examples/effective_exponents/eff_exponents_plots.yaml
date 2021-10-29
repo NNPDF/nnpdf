@@ -10,9 +10,9 @@ beta:
   ybottom: 0
 
 fits:
-  - NNPDF31_nlo_as_0118
+  - NNPDF40_nlo_as_01180
 
-basis: NN31IC
+basis: evolution
 
 meta:
     author: Rabah Abdul Khalek

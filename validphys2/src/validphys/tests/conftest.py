@@ -42,11 +42,11 @@ WEIGHTED_DATA = [
     {'dataset': 'NMC', 'weight': 100},
 ]
 
-PDF = "NNPDF31_nnlo_as_0118"
-HESSIAN_PDF = "NNPDF31_nnlo_as_0118_hessian"
+PDF = "NNPDF40_nnlo_as_01180"
+HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
-FIT = "191015-mw-001_for_testing"
-FIT_ITERATED = "191015-mw-001_for_testing_iterated"
+FIT = "NNPDF40_nnlo_lowprecision"
+FIT_ITERATED = "NNPDF40_nnlo_lowprecision_iterated"
 
 base_config = dict(
         pdf=PDF,

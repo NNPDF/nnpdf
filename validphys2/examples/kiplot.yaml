@@ -3,7 +3,7 @@ meta:
     keywords: [Guilty]
     author: Lazy Person
 
-fit: NNPDF31_nlo_as_0118
+fit: NNPDF40_nlo_as_01180
 
 Markers:
     - marker_by: process type
@@ -14,7 +14,7 @@ display_cuts: False
 
 dataset_inputs:
   - { dataset: NMC }
-  - { dataset: NMCPD }
+  - { dataset: NMCPD_dw_ite }
   - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
   - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
   - { dataset: ATLASWZRAP36PB}

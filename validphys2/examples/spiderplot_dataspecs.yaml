@@ -3,7 +3,7 @@ meta:
     author: Rosalyn Pearson
     keywords: [example, spider]
 
-fit: NNPDF31_nnlo_as_0118_1000
+fit: NNPDF40_nnlo_lowprecision
 
 theory:
     from_: fit
@@ -11,19 +11,15 @@ theory:
 theoryid:
     from_: theory
 
-experiments:
+dataset_inputs:
     from_: fit
 
 dataspecs:
-    - speclabel: NNPDF31_nnlo_as_0118
-      pdf: NNPDF31_nnlo_as_0118
+    - speclabel: NNPDF40_nnlo_as_01180
+      pdf: NNPDF40_nnlo_as_01180
 
-    - speclabel: NNPDF31_nlo_as_0118
-      pdf: NNPDF31_nlo_as_0118
-
-pdfs:
-    - NNPDF31_nnlo_as_0118
-    - NNPDF31_nlo_as_0118
+    - speclabel: NNPDF40_nlo_as_01180
+      pdf: NNPDF40_nlo_as_01180
 
 use_cuts: internal
 

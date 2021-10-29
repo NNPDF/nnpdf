@@ -13,23 +13,23 @@ meta:
     keywords: [Guilty]
     author: Lazy Person
 
-fit: NNPDF31_nlo_as_0118
+fit: NNPDF40_nlo_as_01180
 
 use_cuts: "fromfit"
 
-experiments:
+dataset_inputs:
     from_: fit
 
 dataspecs:
-    - theoryid: 52
-      pdf: NNPDF31_nlo_as_0118
+    - theoryid: 208
+      pdf: NNPDF40_nlo_as_01180
       speclabel: "NLO"
-      fit: NNPDF31_nlo_as_0118
+      fit: NNPDF40_nlo_as_01180
 
     - theoryid: 162
-      pdf: NNPDF31_nnlo_as_0118_DISonly
+      pdf: NNPDF40_nnlo_lowprecision
       speclabel: "NNLO"
-      fit: NNPDF31_nnlo_as_0118_DISonly
+      fit: NNPDF40_nnlo_lowprecision
 
 
 template_text: |
