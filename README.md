@@ -34,7 +34,7 @@ expected to be stable, tested and correct. For more information see our
 
 ## Cite
 
-This code is described [in](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%202109.02671).
+This code is described in the following [paper](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%202109.02671):
 
 ```
 @article{Ball:2021xlu,
