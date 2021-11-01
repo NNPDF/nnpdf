@@ -84,7 +84,7 @@ def _get_nnpdf_profile(profile_path=None):
         prefix_paths = [sys.prefix, sys.base_prefix]
         for prefix in prefix_paths:
             check = pathlib.Path(prefix) / "share/NNPDF/nnprofile.yaml"
-            if check.exists():
+            if check.is_file():
                 profile_path = check
                 break
     if profile_path is None:
@@ -92,8 +92,9 @@ def _get_nnpdf_profile(profile_path=None):
 
     mpath = pathlib.Path(profile_path)
     try:
-        profile_dict = yaml.safe_load(mpath.open("r"))
-    except yaml.YAMLError as e:
+        with mpath.open() as f:
+            profile_dict = yaml.safe_load(f)
+    except (OSError, yaml.YAMLError) as e:
         raise LoaderError(f"Could not parse profile file {mpath}: {e}") from e
     return profile_dict
 
@@ -1042,5 +1043,4 @@ class FallbackLoader(Loader, RemoteLoader):
             if hasattr(RemoteLoader, 'download_' + resname):
                 return super().__getattribute__('make_checker')(resname)
         return super().__getattribute__(attr)
-
 
