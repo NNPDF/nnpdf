@@ -13,7 +13,7 @@ requirements:
         - cmake
         - pkg-config
         # See https://github.com/NNPDF/nnpdf/pull/1280
-        - sysroot_linux-64==2.17 # [linux]
+        - sysroot_linux-64 >=2.17 # [linux]
     host:
         - lhapdf      # with python wrapper
         - apfel
@@ -21,34 +21,7 @@ requirements:
         - yaml-cpp
         - libarchive
         - gsl         # Gsl doesn't link openblas on old debian 7
-    run:
-        # Only install tensorflow on linux. Select eigen build
-        - tensorflow >=2 *eigen* # [linux]
-        - psutil # to ensure n3fit affinity is with the right processors
-        - hyperopt
-        - seaborn
-        - lhapdf
-        - sqlite
-        - gsl
-        - numpy
-        - libarchive
-        - yaml-cpp >=0.6.3
-        - apfel
-        - pkg-config
-        - python # requirements for validphys
-        - reportengine >=0.30.25 # see https://github.com/NNPDF/reportengine
-        - matplotlib >=3.3.0
-        - blessings >=1.7
-        - scipy >=0.19.1
-        - pandas
-        - requests
-        - prompt_toolkit
-        - validobj
-        - sphinx >=4.0.2 # documentation. Needs pinning becasue https://github.com/sphinx-doc/sphinx/issues/9216
-        - recommonmark
-        - sphinx_rtd_theme >0.5
-        - sphinxcontrib-bibtex
-        - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
+        - openssl >=3.0
 
 test:
     requires:
