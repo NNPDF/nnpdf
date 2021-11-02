@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.8]
+        python-version: [3.9]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
@@ -42,13 +42,14 @@ jobs:
         conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
         conda activate test
-        conda install conda-build --yes
+        conda install boa --yes
     - name: Build recipe and run tests on linux
       if: startsWith(matrix.os, 'ubuntu')
       shell: bash -l {0}
       run: |
         conda activate test
-        conda build -q conda-recipe
+        conda mambabuild --python 3.9 -q conda-recipe
+        #conda build -q conda-recipe
     - name: Build recipe and run tests on macOS
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
