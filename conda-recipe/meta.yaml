@@ -39,7 +39,6 @@ requirements:
         - pkg-config
         - python # requirements for validphys
         - reportengine >=0.30.25 # see https://github.com/NNPDF/reportengine
-        - curio
         - matplotlib >=3.3.0
         - blessings >=1.7
         - scipy >=0.19.1
@@ -52,6 +51,7 @@ requirements:
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
         - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
+        - curio >=1.0
 
 test:
     requires:
