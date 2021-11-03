@@ -26,8 +26,6 @@ requirements:
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
-        - gast ==0.3.3 # Conda tensorflow uses the wrong version
-        - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
