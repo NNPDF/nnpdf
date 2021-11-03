@@ -66,8 +66,6 @@ class Environment(Environment):
     def __init__(
         self,
         *,
-        datapath=None,
-        resultspath=None,
         this_folder=None,
         net=True,
         upload=False,
@@ -87,12 +85,11 @@ class Environment(Environment):
             loader_class = FallbackLoader
 
         try:
-            self.loader = loader_class(datapath, resultspath)
+            self.loader = loader_class()
         except LoaderError as e:
             log.error(
                 "Failed to find the paths. These are configured "
-                "in the nnprofile settings or with the "
-                "--datapath and --resultpath options."
+                "in the nnprofile settings"
             )
             raise EnvironmentError_(e) from e
         self.deta_path = self.loader.datapath
