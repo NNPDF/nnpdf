@@ -111,7 +111,7 @@ jobs:
         url=$(vp-upload output/ 2>&1 | grep https)
         echo "REPORT_URL=$url" >> $GITHUB_ENV
     - name: Save the package if something fails
-      if: ${{ failure }}
+      if: failure()
       shell: bash -l ${0}
       run: |
         scp /usr/share/miniconda/envs/test/conda-bld/linux-64/nnpdf*.tar.bz2  nnpdf.fisica.unimi.it:debug_pkgs/
