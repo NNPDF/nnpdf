@@ -2,7 +2,7 @@
   FCC.cc
   Pseudo-data
   LR
- 
+
   The original pseudo-data are taken from here
   FCC
   http://hep.ph.liv.ac.uk/~mklein/fccdata/
@@ -11,17 +11,17 @@
   LHeC
   http://hep.ph.liv.ac.uk/~mklein/lhecdata/
   http://hep.ph.liv.ac.uk/~mklein/lhecdata/datlhecreadme
-  
-  where READMEs are also available. 
+
+  where READMEs are also available.
 
   The files LHeC.dat and FCC.dat contain the systematics,
-  but here only the total error is included without 
+  but here only the total error is included without
   any breakdown of the systematics, and is taken as fully uncorrelated.
 
   The central values originally included in LHeC.dat and FCC.dat
   are replaced by values computed with APFEL using resummed theory
   and resummed PDFs as commented in the rawdata files.
- 
+
  */
 
 #include "FutureColliders.h"
@@ -59,12 +59,12 @@ void FutureColliderFilter::ReadData()
 
   // Filtering data
   vector<double> uncorr, data, syst;
-  uncorr.reserve(fNData); 
-  data.reserve(fNData);
-  syst.reserve(fNData); 
+  uncorr.resize(fNData);
+  data.resize(fNData);
+  syst.resize(fNData);
 
   string tmp;
-  
+
   //skip first three lines
   getline(rawdata_systematics,tmp);
   getline(rawdata_systematics,tmp);
@@ -82,7 +82,7 @@ void FutureColliderFilter::ReadData()
     rawdata_systematics >> fKin2[i] >> fKin1[i] >> fKin3[i]
     >> tmp >> tmp >> tmp
     >> data[i]
-    >> tmp 
+    >> tmp
     >> syst[i]
     >> tmp >> tmp
     >> uncorr[i]
@@ -92,11 +92,11 @@ void FutureColliderFilter::ReadData()
     rawdata_central >> tmp >> thres >> tmp;
     if(thres>0)
     {
-      data[i] = thres; 
+      data[i] = thres;
       //For the data point whose values computed by APFEL are zero
-      //because Q is too low the value is set to the value contained 
+      //because Q is too low the value is set to the value contained
       //in the original data files
-      //This points will be however cut 
+      //This points will be however cut
       //as they do not pass the generic cuts
       //usually applied in any NNPDF fits
     }
@@ -108,8 +108,8 @@ void FutureColliderFilter::ReadData()
 
     // Statistical errors
     fStat[i] = syst[i]*data[i]*1e-2;
-    
-    // Additive errors   
+
+    // Additive errors
     for (int l = 0; l < fNSys; l++)
       fSys[i][l].add = fSys[i][l].mult*data[i]*1e-2;
 
@@ -117,7 +117,7 @@ void FutureColliderFilter::ReadData()
     double tmp = -1;
     while( tmp <= 0 ) //ensure that the central value is bigger than zero
     {
-      normal_distribution<double> nd(data[i], sqrt(pow(fSys[i][0].add,2)+pow(fStat[i],2)) ); 
+      normal_distribution<double> nd(data[i], sqrt(pow(fSys[i][0].add,2)+pow(fStat[i],2)) );
       tmp = nd(random_engine);
     }
     fData[i] = tmp;
@@ -160,12 +160,12 @@ void FutureColliderFilterCC::ReadData()
 
   // Filtering data
   vector<double> uncorr, data, syst;
-  uncorr.reserve(fNData); 
-  data.reserve(fNData);
-  syst.reserve(fNData); 
+  uncorr.resize(fNData);
+  data.resize(fNData);
+  syst.resize(fNData);
 
   string tmp;
-  
+
   //skip first three lines
   getline(rawdata_systematics,tmp);
   getline(rawdata_systematics,tmp);
@@ -183,7 +183,7 @@ void FutureColliderFilterCC::ReadData()
     rawdata_systematics >> fKin2[i] >> fKin1[i] >> fKin3[i]
     >> tmp
     >> data[i]
-    >> tmp 
+    >> tmp
     >> syst[i]
     >> tmp >> tmp
     >> uncorr[i];
@@ -192,11 +192,11 @@ void FutureColliderFilterCC::ReadData()
     rawdata_central >> tmp >> thres >> tmp;
     if(thres>0)
     {
-      data[i] = thres; 
+      data[i] = thres;
       //For the data point whose values computed by APFEL are zero
-      //because Q is too low the value is set to the value contained 
+      //because Q is too low the value is set to the value contained
       //in the original data files
-      //This points will be however cut 
+      //This points will be however cut
       //as they do not pass the generic cuts
       //usually applied in any NNPDF fits
     }
@@ -208,8 +208,8 @@ void FutureColliderFilterCC::ReadData()
 
     // Statistical errors
     fStat[i] = syst[i]*data[i]*1e-2;
-    
-    // Additive errors   
+
+    // Additive errors
     for (int l = 0; l < fNSys; l++)
       fSys[i][l].add = fSys[i][l].mult*data[i]*1e-2;
 
@@ -217,7 +217,7 @@ void FutureColliderFilterCC::ReadData()
     double tmp = -1;
     while( tmp <= 0 ) //ensure that the central value is bigger than zero
     {
-      normal_distribution<double> nd(data[i], sqrt(pow(fSys[i][0].add,2)+pow(fStat[i],2)) ); 
+      normal_distribution<double> nd(data[i], sqrt(pow(fSys[i][0].add,2)+pow(fStat[i],2)) );
       tmp = nd(random_engine);
     }
     fData[i] = tmp;
