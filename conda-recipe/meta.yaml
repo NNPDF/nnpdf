@@ -26,8 +26,6 @@ requirements:
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
-        - gast ==0.3.3 # Conda tensorflow uses the wrong version
-        - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -53,6 +51,7 @@ requirements:
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
         - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
+        - curio >=1.0
 
 test:
     requires:
