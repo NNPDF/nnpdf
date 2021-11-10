@@ -49,9 +49,10 @@ Setting up the NNPDF4.0 conda envirnoment
 --------------------------------------------------------------------------------
 
 The exact :ref:`conda environment <conda>`, including all transitive
-dependencies, used to produce all the publicly released PDF sets has been
-preserved to ensure precise reproducibility.
-The environment can be found in the `project repository <https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40/nnpdf40_env.yml>`_
+dependencies, used to produce all the publicly released PDF fits has been
+preserved to ensure precise reproducibility.  The environment can be found in
+the `project repository
+<https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40/nnpdf40_env.yml>`_
 It can be generated and activated by running
 
 .. code:: bash
@@ -159,6 +160,8 @@ the ID's of the required theories can be found in the
 where the id's of the theories used to do the flavor-number variations are 
 218-227. 
 
-
-
+.. warning::
+    Please note that the Hessian and ``_pdfas`` conversion runcards won't work
+    with the 4.0.3 version of the code (and thus the fixed enviroment) and
+    instead require a version 4.0.4 or newer.
 

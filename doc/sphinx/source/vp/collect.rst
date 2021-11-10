@@ -95,8 +95,8 @@ A minimal runcard to use the action above is:
 .. code:: yaml
 
 	fits:
-	  - NNPDF31_nlo_as_0118
-	  - NNPDF31_nnlo_as_0118
+	  - NNPDF40_nlo_as_01180
+	  - NNPDF40_nnlo_as_01180
 
 	use_cuts: "fromfit"
 

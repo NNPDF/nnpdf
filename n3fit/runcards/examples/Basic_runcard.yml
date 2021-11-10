@@ -16,7 +16,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  t0pdfset     : NNPDF31_nlo_as_0118 # PDF set to generate t0 covmat
+  t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts

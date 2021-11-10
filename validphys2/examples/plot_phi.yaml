@@ -3,9 +3,9 @@ meta:
     keywords: [Guilty]
     author: Lazy Person
 
-pdf: {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
+pdf: {id: "NNPDF40_nnlo_as_01180", label: "4.0 NNLO"}
 
-theoryid: 53
+theoryid: 162
 
 use_cuts : nocuts
 

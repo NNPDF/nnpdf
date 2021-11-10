@@ -33,7 +33,7 @@ page](https://github.com/NNPDF/nnpdf/pulls). If you instead find a red cross nex
 reason for the failure must be investigated and dealt with appropriately.
 
 * When writing examples, please use the recommended resources detailed
-[here](../vp/examples.rst).
+[here](vpexamples).
 
 ## Example pull request
 

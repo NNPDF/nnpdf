@@ -9,13 +9,13 @@ meta:
 
 use_cuts: "nocuts"
 
-pdf: NNPDF31_nlo_as_0118
+pdf: NNPDF40_nlo_as_01180
 
 dataset_inputs:
-      - { dataset: SLACP }
-      - { dataset: SLACD }
+      - { dataset: SLACP_dwsh }
+      - { dataset: SLACD_dw_ite }
 
-theoryid: 52       # database id
+theoryid: 208      # database id
 
 actions_:
       - group_result_table

@@ -551,6 +551,7 @@ def plot_lumi1d(
     pdfs_lumis,
     lumi_channel,
     sqrts: numbers.Real,
+    y_cut: (numbers.Real, type(None)) = None,
     normalize_to=None,
     show_mc_errors: bool = True,
     ymin: (numbers.Real, type(None)) = None,
@@ -566,7 +567,8 @@ def plot_lumi1d(
     function of invariant mass for all PDFs for a single lumi channel.
     ``normalize_to`` works as for `plot_pdfs` and allows to plot a ratio to the
     central value of some of the PDFs. `ymin` and `ymax` can be used to set
-    exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
+    exact bounds for the scale. `y_cut` can be used to specify a rapidity cut
+    over the integration range. `show_mc_errors` controls whether the 1σ error
     bands are shown in addition to the 68% confidence intervals for Monte Carlo
     PDFs. A list `pdfs_noband` can be passed to supress the error bands for
     certain PDFs and plot the central values only. `legend_stat_labels` controls
@@ -649,10 +651,17 @@ def plot_lumi1d(
     ax.set_ylim(ymin, ymax)
     ax.set_xscale(scale)
     ax.grid(False)
-    ax.set_title(
-        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
-        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
-    )
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
+            f"$\\|y|<{format_number(y_cut)}$"
+        )      
 
     return fig
 
@@ -664,6 +673,7 @@ def plot_lumi1d_uncertainties(
     pdfs_lumis,
     lumi_channel,
     sqrts: numbers.Real,
+    y_cut: (numbers.Real, type(None)) = None,    
     normalize_to=None,
     ymin: (numbers.Real, type(None)) = None,
     ymax: (numbers.Real, type(None)) = None,
@@ -673,7 +683,8 @@ def plot_lumi1d_uncertainties(
     sqrts is the center of mass energy (GeV).
 
     If `normalize_to` is set, the values are normalized to the central value of
-    the corresponding PDFs.
+    the corresponding PDFs. `y_cut` can be used to specify a rapidity cut
+    over the integration range.
     """
 
     fig, ax = plt.subplots()
@@ -701,10 +712,17 @@ def plot_lumi1d_uncertainties(
     ax.set_xlim(mx[0], mx[-1])
     ax.set_xscale(scale)
     ax.grid(False)
-    ax.set_title(
-        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
-        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
-    )
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "    
+            f"$\\|y|<{format_number(y_cut)}$"
+        )
     ax.set_ylim(ymin, ymax)
     current_ymin, _ = ax.get_ylim()
     ax.set_ylim(max(0, current_ymin), None)

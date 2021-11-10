@@ -6,9 +6,8 @@ meta:
     author: Rosalyn Pearson
     keywords: [pseudodata, test, artificial replica]
 
-fit: 210629-n3fit-001
-
-theoryid: 162
+fit: NNPDF40_nlo_as_01180
+theoryid: 208
 mcseed: 4
 genrep: True
 
@@ -18,5 +17,4 @@ actions_:
   - report(main=true)
 
 dataset_inputs:
-  - { dataset: NMC, frac: 0.5}
-  - { dataset: D0WMASY, frac: 0.5}
+  - { dataset: CHORUSNBPb_dw_ite, frac: 0.5}

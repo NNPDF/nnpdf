@@ -3,7 +3,7 @@ meta:
     author: Zahari Kassabov
     keywords: [test, debug]
 
-fit: NNPDF31_nlo_as_0118
+fit: NNPDF40_nlo_as_01180
 
 pdf:
     from_: fit
@@ -21,10 +21,10 @@ datacuts:
 
 # Used for intersection cuts
 cuts_intersection_spec:
-    - theoryid: 52
+    - theoryid: 208
     - theoryid: 162
 
-dataset_input: {dataset: ATLAS1JET11}
+dataset_input: {dataset: ATLAS_1JET_8TEV_R06_DEC}
 
 dataspecs:
   - speclabel: "No cuts"

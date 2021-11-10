@@ -77,7 +77,7 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     normalizer = MSR_Normalization(input_shape=(basis_size,), mode=mode)
 
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
-    xgrid_input = op.numpy_to_input(xgrid)
+    xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
 
     # Finally prepare a function which will take as input the output of the PDF model
     # and will return it appropiately normalized.

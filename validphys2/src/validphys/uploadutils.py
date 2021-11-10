@@ -24,10 +24,8 @@ from prompt_toolkit.completion import WordCompleter
 
 from reportengine.compat import yaml
 from reportengine.colors import t
-from validphys.loader import RemoteLoader
+from validphys.loader import RemoteLoader, Loader
 from validphys.renametools import Spinner
-
-from NNPDF import get_profile_path
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +40,7 @@ def _profile_key(k):
         try:
             return self._profile[k]
         except KeyError as e:
-            raise UploadError(f"Profile '{get_profile_path()}' does not contain key '{k}'") from e
+            raise UploadError(f"Profile '{self._profile_path}' does not contain key '{k}'") from e
 
     return f
 
@@ -52,17 +50,8 @@ class Uploader():
     possible, then does the work inside the context and then uploads the
     result. The various derived classes should be used."""
 
-    def __init__(self):
-        self._lazy_profile = None
-
     upload_host = _profile_key('upload_host')
-
-    @property
-    def _profile(self):
-        if self._lazy_profile is None:
-            with open(get_profile_path()) as f:
-                self._lazy_profile = yaml.safe_load(f)
-        return self._lazy_profile
+    _profile = Loader().nnprofile
 
     def get_relative_path(self, output_path):
         """Return the relative path to the ``target_dir``."""

@@ -14,9 +14,12 @@ void register_integrability(vector<unique_ptr<CommonData>>& list)
     "INTEGXV_543",
     "INTEGXV3_543",
     "INTEGXV8_543"};
-  const std::array<std::string, 2>  INTsets = {
+  const std::array<std::string, 5>  INTsets = {
     "INTEGXT3",
-    "INTEGXT8"};
+    "INTEGXT8",
+    "INTEGXV",
+    "INTEGXV3",
+    "INTEGXV8"};
 
 
   for (auto set : INTsets543)

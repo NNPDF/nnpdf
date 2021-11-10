@@ -21,7 +21,7 @@ as :code:`replica_0` is produced, which is the average of the replicas in the se
 
 The standard usage of postfit is something like the following::
 
-    $ postfit 100 NNPDF31_nnlo_as_0118
+    $ postfit 100 NNPDF40_nnlo_as_01180
 
 where here the fit being processed is :code:`NNPDF31_nnlo_as_0118` and it requires that
 the LHAPDF set contains 100 PDF replicas, excluding :code:`replica_0`. If there are not 100
@@ -32,7 +32,7 @@ satisfy the criteria.
 If the user wishes to include *all* replicas that satisfy the criteria in the LHAPDF set, and not
 just the amount specified in their command, they can use the :code:`--at-least-nrep` flag, as in::
 
-    $ postfit 100 NNPDF31_nnlo_as_0118 --at-least-nrep
+    $ postfit 100 NNPDF40_nnlo_as_01180 --at-least-nrep
 
 Note that the command will still fail if fewer than the requested amount meet the criteria. This
 flag can be useful when, for example, processing many fits simultaneously, where a specific number

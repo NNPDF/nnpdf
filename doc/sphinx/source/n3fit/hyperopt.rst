@@ -61,21 +61,21 @@ The choice of figure of merit is still under development, but we have several po
 1. By default we take the combination that produces the best average for the partitions' :math:`\chi^2`.
 
 .. math::
-    L_{hyperopt} = \frac{1}{N_{k}} \sum \chi^2
+    L_{\rm hyperopt} = \frac{1}{N_{k}} \sum \chi^2
 
 An example of a DIS fit using this loss function can be found here: [`best average <https://vp.nnpdf.science/iAaUMPgsTKyngsK5haLYMw==>`_]. It can be selected in the runcard using the target ``average``.
 
 2. We can take the combination that produces the *best* *worst* loss.
 
 .. math::
-    L_{hyperopt} = max(\chi^2)
+    L_{\rm hyperopt} = max(\chi^2)
 
 An example of a DIS fit using this loss function can be found here: [`best worst <https://vp.nnpdf.science/0sWyhJZGQbuezEc7nMGATQ==>`_]. It can be selected in the runcard using the target ``best_worst``.
 
 3. We can take the most stable combination which gets the loss under a certain threshold.
 
 .. math::
-   L_{hyperopt} = \left\{
+   L_{\rm hyperopt} = \left\{
   \begin{array}{lr}
          std(\{\chi^{2}\}) & \text{  if } avg(\chi^2) < \text{ threshold } \\
          \infty & \text{otherwise}
@@ -287,7 +287,7 @@ By default, and if no ``target`` is chosen, ``n3fit`` defaults to
 the average of the loss function over the partition sets (``average``).
 
 .. math::
-    L_{hyperopt} = \frac{1}{N_{k}} \sum L_{k}
+    L_{\rm hyperopt} = \frac{1}{N_{k}} \sum L_{k}
 
 New target functions can be easily added in the ``src/n3fit/hyper_optimization/rewards.py`` file.
 
@@ -297,7 +297,7 @@ by leaving out a number of datasets to compute a "testing set".
 The loss function was then computed as
 
 .. math::
-    L_{hyperopt} = \frac{1}{2} (L_{validation} + L_{testing})
+    L_{\rm hyperopt} = \frac{1}{2} (L_{\rm validation} + L_{\rm testing})
 
 The group of datasets that were left out followed the algorithm :ref:`mentioned above<hyperextrapolation-label>` with only one fold:
 
@@ -315,3 +315,59 @@ The group of datasets that were left out followed the algorithm :ref:`mentioned 
 * ATLASTTBARTOT
 
 These were chosen attending to their `process type` as defined in their :ref:`commondata files <exp_data_files>`.
+
+
+Changing the hyperoptimization target
+-----------------------------------
+
+Beyond the usual :math:`\chi2`-based optimization figures above, it is possible to utilize other measures as the target for hyperoptimization.
+One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets. The idea is that this way we select models of which the prediction is stable upon variations in the dataset. 
+In order to obtain the PDF errors used in the figure of merit it is necessary to run multiple replicas, luckily ``n3fit`` provides such a possibility also during hyperoptimization.
+
+Take the following modifications to a normal hyperopt runcard 
+(note that for convenience we take the trials directly from a previous run, so we don't have to create a new
+hyperopt configuration dictionary).
+
+.. code-block:: yaml
+
+        dataset_inputs:
+        - {dataset: NMCPD_dw_ite, frac: 0.75}
+        - {dataset: NMC, frac: 0.75}
+        - {dataset: SLACP_dwsh, frac: 0.75}
+        - {dataset: SLACD_dw_ite, frac: 0.75}
+        - {dataset: BCDMSP_dwsh, frac: 0.75}
+        - {dataset: BCDMSD_dw_ite, frac: 0.75}
+        - {dataset: HERACOMBNCEP575, frac: 0.75}
+        - {dataset: HERACOMBCCEM, frac: 0.75}
+        - {dataset: HERACOMBCCEP, frac: 0.75}
+
+        hyperscan_config:
+          use_tries_from: 210508-hyperopt_for_paper
+
+        kfold:
+          target: fit_future_tests
+          partitions: 
+          - datasets:
+            - HERACOMBCCEP
+            - HERACOMBCCEM
+            - HERACOMBNCEP575
+          - datasets:
+
+        parallel_models: true
+        same_trvl_per_replica: true
+
+We can run this hyperparameter scan for 10 parallel replicas for 20 trials with:
+
+.. code-block:: bash
+
+   n3fit runcard.yml 1 -r 10 --hyperopt 20
+
+The above runcard will, for a sample of 20 trials in ``210508-hyperopt_for_paper`` (according to their rewards),
+run two fits of 10 replicas each.
+The first fit will hide the data from HERA and the second one (an empty fold) will take into consideration all data.
+In order to properly set up a future test the last fold (the future) is recommended to be left as an empty fold such that no data is masked out.
+The figure of merit will be the difference between the :math:`\chi2` of the second fit to the folded data and the :math:`\chi2` of the first fit to the folded data *including* pdf errors
+(the :ref:`future test<futuretests>` :math:`\chi2`).
+
+.. math::
+   L_{\rm hyperopt} = \chi^{2}_{(1) \rm pdferr} - \chi^{2}_{(2)}

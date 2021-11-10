@@ -8,7 +8,7 @@ on:
 
 # some general variables
 env:
-  CONDA_PY: 38
+  CONDA_PY: 39
   IMAGE_NAME: nnpdf
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.8]
+        python-version: [3.9]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v1

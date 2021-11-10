@@ -5,11 +5,11 @@ meta:
 
 metadata_group: nnpdf31_process
 
-fit: NNPDF31_nlo_as_0118
+fit: NNPDF40_nlo_as_01180
 
 dataspecs:
- - pdf: NNPDF31_nlo_as_0118
-   speclabel: "3.1 NLO"
+ - pdf: NNPDF40_nlo_as_01180
+   speclabel: "4.0 NLO"
 
 use_cuts: internal
 

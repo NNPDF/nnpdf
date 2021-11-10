@@ -21,7 +21,7 @@ in the :py:mod:`validphys.fkparser` module. For example::
     from validphys.fkparser import load_fktable
     from validphys.loader import Loader
     l = Loader()
-    fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
+    fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=162, cfac=('QCD',))
     res = load_fktable(fk)
 
 results in an :py:mod:`validphys.coredata.FKTableData` object containing all
@@ -45,7 +45,7 @@ terms of PDF and dataset objects that can be obtained directly from
         'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
         'theoryid': 162,
         'use_cuts': 'internal',
-        'pdf': 'NNPDF31_nnlo_as_0118'
+        'pdf': 'NNPDF40_nnlo_as_01180'
     }
 
     preds = predictions(API.dataset(**inp), API.pdf(**inp))
@@ -65,10 +65,10 @@ datasets using the `Dask <https://dask.org/>`_ library::
     c = Client()
 
     inp = {
-        'fit': '181023-001-sc',
+        'fit': 'NNPDF40_nlo_as_01180',
         'use_cuts': 'internal',
         'theoryid': 162,
-        'pdf': 'NNPDF31_nlo_as_0118',
+        'pdf': 'NNPDF40_nnlo_as_01180',
         'experiments': {'from_': 'fit'}
     }
 
@@ -102,7 +102,7 @@ The previous example can be simpler using ``central_predictions``::
         'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
         'theoryid': 162,
         'use_cuts': 'internal',
-        'pdf': 'NNPDF31_nnlo_as_0118'
+        'pdf': 'NNPDF40_nnlo_as_01180'
     }
 
 
@@ -126,8 +126,8 @@ central replica is the same as the mean of the replica predictions::
     from validphys.convolution import predictions, linear_predictions, central_predictions
 
     l = Loader()
-    pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
-    ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
+    pdf = l.check_pdf('NNPDF40_nnlo_as_01180')
+    ds = l.check_dataset('ATLASTTBARTOT', theoryid=162, cfac=('QCD',))
 
     # "Exact" predictions
     p = predictions(ds, pdf).T
