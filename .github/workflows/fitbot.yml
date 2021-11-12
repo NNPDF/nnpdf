@@ -74,36 +74,36 @@ jobs:
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        for ((i=1; i<=$N3FIT_MAXNREP; i+=2)); do n3fit $RUNCARD.yml $i -r $((i+1)); done
+        #for ((i=1; i<=$N3FIT_MAXNREP; i+=2)); do n3fit $RUNCARD.yml $i -r $((i+1)); done
     # performing DGLAP
     - name: Running dglap
       shell: bash -l {0}
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        evolven3fit $RUNCARD $N3FIT_MAXNREP
+        #evolven3fit $RUNCARD $N3FIT_MAXNREP
     # running postfit
     - name: Postfit and upload fit
       shell: bash -l {0}
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        postfit $POSTFIT_NREP $RUNCARD
-        res=$(vp-upload $RUNCARD 2>&1)
-        echo ${res}
-        while echo ${res} | grep ERROR >/dev/null
-        do
-          sleep 30s
-          res=$(vp-upload $RUNCARD 2>&1)
-        done
-        url=$( echo "${res}" | grep https )
-        echo "FIT_URL=$url" >> $GITHUB_ENV
+#         postfit $POSTFIT_NREP $RUNCARD
+#         res=$(vp-upload $RUNCARD 2>&1)
+#         echo ${res}
+#         while echo ${res} | grep ERROR >/dev/null
+#         do
+#           sleep 30s
+#           res=$(vp-upload $RUNCARD 2>&1)
+#         done
+#         url=$( echo "${res}" | grep https )
+#         echo "FIT_URL=$url" >> $GITHUB_ENV
     # running validphys report
     - name: Building and upload report
       shell: bash -l {0}
       run: |
         conda activate nnpdfenv
-        vp-comparefits $RUNCARD $REFERENCE_SET \
+        vp-comparefits NNBOT-e157c02e7-2021-11-11 $REFERENCE_SET \
                     --title "Automatic check fit $RUNCARD" \
                     --author bot \
                     --keywords run-fit-bot \
@@ -114,7 +114,7 @@ jobs:
       if: failure()
       shell: bash -l ${0}
       run: |
-        scp /usr/share/miniconda/envs/test/conda-bld/linux-64/nnpdf*.tar.bz2  nnpdf.fisica.unimi.it:debug_pkgs/
+        scp -o StrictHostKeyChecking=no $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 nnpdf@fisica.unimi.it:debug_pkgs/
     # write reminder
     - name: Write summary on PR
       uses: unsplash/comment-on-pr@master
