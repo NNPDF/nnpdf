@@ -114,7 +114,8 @@ jobs:
       if: failure()
       shell: bash -l ${0}
       run: |
-        scp -o StrictHostKeyChecking=no $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 nnpdf@fisica.unimi.it:debug_pkgs/
+        ls $CONDA_PREFIX/conda-bld/*/*.tar.bz2
+        scp -v -o StrictHostKeyChecking=no $CONDA_PREFIX/conda-bld/*/*.tar.bz2 nnpdf@fisica.unimi.it:debug_pkgs/
     # write reminder
     - name: Write summary on PR
       uses: unsplash/comment-on-pr@master
