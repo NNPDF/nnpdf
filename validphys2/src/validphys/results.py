@@ -115,8 +115,10 @@ class ThPredictionsResult(NNPDFDataResult):
         self.label = label
         # Ducktype the input into numpy arrays
         try:
-            self._std_error = dataobj.std(axis=1).to_numpy()
             self._rawdata = dataobj.to_numpy()
+            # If the numpy conversion worked then we don't have a libNNPDF in our hands
+            stats = stats_class(self._rawdata.T)
+            self._std_error = stats.std_error()
         except AttributeError:
             self._std_error = dataobj.get_error()
             self._rawdata = dataobj.get_data()
