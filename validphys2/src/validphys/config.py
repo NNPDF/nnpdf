@@ -16,8 +16,6 @@ from importlib.resources import read_text, contents
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 
-import numpy as np
-
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
 from reportengine.configparser import (
@@ -220,7 +218,7 @@ class CoreConfig(configparser.Config):
 
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
-        return NSList(np.arange(1, nreplica+1), nskey="replica")
+        return NSList(range(1, nreplica+1), nskey="replica")
 
     def produce_inclusive_use_scalevar_uncertainties(self, use_scalevar_uncertainties: bool = False,
                                         point_prescription: (str, None) = None):
