@@ -14,7 +14,6 @@ import logging
 import numpy as np
 import pandas as pd
 
-from NNPDF import RandomGenerator
 from reportengine import collect
 from reportengine.table import table
 
@@ -186,23 +185,6 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     return np.concatenate(trmask_partial)
 
 
-def generate_data_replica(data, replica_mcseed):
-    """Generate a pseudodata replica for ``data`` given the ``replica_seed``"""
-    spec_c = data.load()
-    base_mcseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
-    # copy C++ object to avoid mutation
-    # t0 not required for replica generation, since libnnpdf uses experimental
-    # covmat to generate replicas.
-    spec_replica_c = type(spec_c)(spec_c)
-
-    # Replica generation
-    if replica_mcseed is not None:
-        mcseed = base_mcseed + replica_mcseed
-        RandomGenerator.InitRNG(0, mcseed)
-        spec_replica_c.MakeReplica()
-    return spec_replica_c.get_cv()
-
-
 def fitting_data_dict(
     data,
     make_replica,
@@ -353,10 +335,6 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
-
-exps_pseudodata = collect("generate_data_replica", ("group_dataset_inputs_by_experiment",))
-replicas_exps_pseudodata = collect("exps_pseudodata", ("replicas",))
-
 replicas_indexed_make_replica = collect('indexed_make_replica', ('replicas',))
 
 
@@ -503,7 +481,7 @@ def training_mask(replicas_training_mask):
     ... ]
     >>> API.training_mask(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
                         replica 1  replica 2  replica 3
-    group dataset    id                                 
+    group dataset    id
     NMC   NMC        0        True      False      False
                     1        True       True       True
                     2       False       True       True

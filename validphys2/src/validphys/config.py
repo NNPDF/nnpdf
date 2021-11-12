@@ -216,6 +216,10 @@ class CoreConfig(configparser.Config):
 
         return res
 
+    def produce_replicas(self, nreplica: int):
+        """Produce a replicas array"""
+        return NSList(range(1, nreplica+1), nskey="replica")
+
     def produce_inclusive_use_scalevar_uncertainties(self, use_scalevar_uncertainties: bool = False,
                                         point_prescription: (str, None) = None):
         """Whether to use a scale variation uncertainty theory covmat.

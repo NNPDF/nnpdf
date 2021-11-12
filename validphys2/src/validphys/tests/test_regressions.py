@@ -131,7 +131,8 @@ def test_datasetchi2(data_singleexp_witht0_config):
 def test_art_rep_generation(data_config):
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
-    config["fitting"] = {"seed": 123456}
+    config["mcseed"] = 123456
+    config["genrep"] = True
     config["nreplica"] = 1
     _, art_replicas, _,_ = API.art_rep_generation(**config)
     return pd.DataFrame(art_replicas.T, columns=['rep0'])

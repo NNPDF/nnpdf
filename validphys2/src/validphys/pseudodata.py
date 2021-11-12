@@ -232,6 +232,9 @@ _recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fite
 
 fit_tr_masks = collect('replica_training_mask_table', ('fitreplicas', 'fitenvironment'))
 pdf_tr_masks = collect('replica_training_mask_table', ('pdfreplicas', 'fitenvironment'))
+make_replicas = collect('make_replica', ('replicas',))
+fitted_make_replicas = collect('make_replica', ('pdfreplicas',))
+indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
 
 def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks):
     """Function used to reconstruct the pseudodata seen by each of the

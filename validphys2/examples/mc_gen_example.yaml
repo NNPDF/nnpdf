@@ -7,8 +7,9 @@ meta:
     keywords: [pseudodata, test, artificial replica]
 
 fit: NNPDF40_nlo_as_01180
-
 theoryid: 208
+mcseed: 4
+genrep: True
 
 template: mc_gen_report.md
 
@@ -17,4 +18,3 @@ actions_:
 
 dataset_inputs:
   - { dataset: CHORUSNBPb_dw_ite, frac: 0.5}
-
