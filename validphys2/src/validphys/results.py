@@ -34,7 +34,12 @@ from validphys.calcutils import (
     calc_phi,
     bootstrap_values,
 )
-from validphys.convolution import predictions, central_predictions, PredictionsRequireCutsError
+from validphys.convolution import (
+    predictions,
+    central_predictions,
+    PredictionsRequireCutsError,
+)
+
 
 log = logging.getLogger(__name__)
 
