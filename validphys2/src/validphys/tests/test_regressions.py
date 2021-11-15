@@ -109,7 +109,7 @@ def test_thprediction_results(single_data_internal_cuts_config):
     pdf = API.pdf(**single_data_internal_cuts_config)
     dataset = API.dataset(**single_data_internal_cuts_config)
     res = results.ThPredictionsResult.from_convolution(pdf, dataset)
-    tp = np.stack([res.central_value, res.std_error])
+    tp = np.stack([res.central_value, res.std_error]).T
     return pd.DataFrame(tp, columns=map(str, range(tp.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
@@ -118,7 +118,7 @@ def test_thprediction_results_hessian(hessian_single_data_internal_cuts_config):
     pdf = API.pdf(**hessian_single_data_internal_cuts_config)
     dataset = API.dataset(**hessian_single_data_internal_cuts_config)
     res = results.ThPredictionsResult.from_convolution(pdf, dataset)
-    tp = np.stack([res.central_value, res.std_error])
+    tp = np.stack([res.central_value, res.std_error]).T
     return pd.DataFrame(tp, columns=map(str, range(tp.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
