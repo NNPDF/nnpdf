@@ -7,6 +7,7 @@ updates.
 import pathlib
 import logging
 import functools
+import copy
 
 import numpy as np
 import scipy.linalg as la
@@ -103,6 +104,22 @@ def test_predictions(data_internal_cuts_config):
     return pd.DataFrame(th, columns=map(str, range(th.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
+def test_thprediction_results(single_data_internal_cuts_config):
+    pdf = API.pdf(**single_data_internal_cuts_config)
+    dataset = API.dataset(**single_data_internal_cuts_config)
+    res = results.ThPredictionsResult.from_convolution(pdf, dataset)
+    tp = np.stack([res.central_value, res.std_error])
+    return pd.DataFrame(tp, columns=map(str, range(tp.shape[1])), dtype='float64')
+
+@make_table_comp(sane_load)
+def test_thprediction_results_hessian(hessian_single_data_internal_cuts_config):
+    pdf = API.pdf(**hessian_single_data_internal_cuts_config)
+    dataset = API.dataset(**hessian_single_data_internal_cuts_config)
+    res = results.ThPredictionsResult.from_convolution(pdf, dataset)
+    tp = np.stack([res.central_value, res.std_error])
+    return pd.DataFrame(tp, columns=map(str, range(tp.shape[1])), dtype='float64')
+
+@make_table_comp(sane_load)
 def test_dataset_t0_predictions(data_witht0_internal_cuts_config):
     # TODO: As in `test_predictions`
     res_tab = API.group_result_table_no_table(**data_witht0_internal_cuts_config)
@@ -119,6 +136,13 @@ def test_cv(data_internal_cuts_config):
 @make_table_comp(load_perreplica_chi2_table)
 def test_replicachi2data(data_witht0_internal_cuts_config):
     return API.perreplica_chi2_table(**data_witht0_internal_cuts_config)
+
+@make_table_comp(load_fits_chi2_table)
+def test_datasetchi2(data_singleexp_witht0_config):
+    # This is a bit hacky but avoids requiring a fit
+    exps = API.groups_data(**data_singleexp_witht0_config)
+    chi2s = API.groups_datasets_chi2_data(**data_singleexp_witht0_config)
+    return results.fits_datasets_chi2_table(['test'], [exps], [chi2s])
 
 @make_table_comp(load_fits_chi2_table)
 def test_datasetchi2(data_singleexp_witht0_config):
