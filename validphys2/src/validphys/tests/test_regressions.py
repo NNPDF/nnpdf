@@ -105,6 +105,7 @@ def test_predictions(data_internal_cuts_config):
 
 @make_table_comp(sane_load)
 def test_thprediction_results(single_data_internal_cuts_config):
+    """Test the central prediction and the resulting std deviation for a MC PDF"""
     pdf = API.pdf(**single_data_internal_cuts_config)
     dataset = API.dataset(**single_data_internal_cuts_config)
     res = results.ThPredictionsResult.from_convolution(pdf, dataset)
@@ -113,6 +114,7 @@ def test_thprediction_results(single_data_internal_cuts_config):
 
 @make_table_comp(sane_load)
 def test_thprediction_results_hessian(hessian_single_data_internal_cuts_config):
+    """Test the central prediction and the resulting std deviation for a hessian PDF"""
     pdf = API.pdf(**hessian_single_data_internal_cuts_config)
     dataset = API.dataset(**hessian_single_data_internal_cuts_config)
     res = results.ThPredictionsResult.from_convolution(pdf, dataset)

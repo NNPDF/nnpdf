@@ -68,6 +68,7 @@ def data_internal_cuts_config(data_config):
 
 @pytest.fixture(scope='module')
 def single_data_internal_cuts_config(data_internal_cuts_config):
+    """Like data_internal_cuts_config but for a single dataset"""
     config_dict = dict(data_internal_cuts_config)
     config_dict.pop("dataset_inputs")
     config_dict.update(dataset_input=DATA[0])
@@ -162,7 +163,7 @@ def hessian_data_internal_cuts_config(data_internal_cuts_config):
 
 @pytest.fixture(scope='module')
 def hessian_single_data_internal_cuts_config(single_data_internal_cuts_config):
-    """Same as data config but with hessian PDF"""
+    """Same as single data config but with hessian PDF"""
     new_config = dict(single_data_internal_cuts_config)
     new_config["pdf"] = HESSIAN_PDF
     return new_config
