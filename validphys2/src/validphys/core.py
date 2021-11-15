@@ -790,7 +790,8 @@ class MCStats(Stats):
         return np.mean(self.data, axis=0)
 
     def std_error(self):
-        return np.std(self.data, axis=0)
+        # ddof == 1 to match libNNPDF behaviour
+        return np.std(self.data, ddof=1, axis=0)
 
     def moment(self, order):
         return np.mean(np.power(self.data-self.central_value(),order), axis=0)
