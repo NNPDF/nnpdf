@@ -103,6 +103,24 @@ def test_predictions(data_internal_cuts_config):
     return pd.DataFrame(th, columns=map(str, range(th.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
+def test_thprediction_results(single_data_internal_cuts_config):
+    """Test the central prediction and the resulting std deviation for a MC PDF"""
+    pdf = API.pdf(**single_data_internal_cuts_config)
+    dataset = API.dataset(**single_data_internal_cuts_config)
+    res = results.ThPredictionsResult.from_convolution(pdf, dataset)
+    tp = np.stack([res.central_value, res.std_error]).T
+    return pd.DataFrame(tp, columns=map(str, range(tp.shape[1])), dtype='float64')
+
+@make_table_comp(sane_load)
+def test_thprediction_results_hessian(hessian_single_data_internal_cuts_config):
+    """Test the central prediction and the resulting std deviation for a hessian PDF"""
+    pdf = API.pdf(**hessian_single_data_internal_cuts_config)
+    dataset = API.dataset(**hessian_single_data_internal_cuts_config)
+    res = results.ThPredictionsResult.from_convolution(pdf, dataset)
+    tp = np.stack([res.central_value, res.std_error]).T
+    return pd.DataFrame(tp, columns=map(str, range(tp.shape[1])), dtype='float64')
+
+@make_table_comp(sane_load)
 def test_dataset_t0_predictions(data_witht0_internal_cuts_config):
     # TODO: As in `test_predictions`
     res_tab = API.group_result_table_no_table(**data_witht0_internal_cuts_config)
