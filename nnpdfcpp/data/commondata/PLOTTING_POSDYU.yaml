@@ -1,4 +1,4 @@
-dataset_label: : "positivity dataset: DY cross section $\\frac{d^2\\sigma_{u\\bar{u}}}{dM^2dy}$
+dataset_label: "positivity dataset: DY cross section $\\frac{d^2\\sigma_{u\\bar{u}}}{dM^2dy}$"
 x: k2
 
 experiment: "POSDYU"

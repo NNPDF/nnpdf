@@ -109,6 +109,14 @@ void CMSWEASY840PBFilter::ReadData()
       fSys[i][l].name = "CORR";
     }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }
@@ -219,6 +227,14 @@ void CMSWMASY47FBFilter::ReadData()
       fSys[i][l].name = "CORR";
     }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }
@@ -327,6 +343,15 @@ void CMSDY2D11Filter::ReadData()
       fSys[i][fNSys-1].type = MULT;
       fSys[i][fNSys-1].name = "CMSLUMI11";
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }

@@ -102,6 +102,16 @@ void ATLAS_hxsec_RunII_diffFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
     } 
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] corrmat[i];
+    }
+
+  delete[] Sys;
+  delete[] syscor;
+  delete[] corrmat;
   
   f1.close();
   f2.close();
@@ -171,6 +181,8 @@ void ATLAS_hxsec_RunII_diff_pTHFilter::ReadData()
       cout << endl;
     }
 
+  delete[] SM_cov;
+  
   f1.close();
 
 }

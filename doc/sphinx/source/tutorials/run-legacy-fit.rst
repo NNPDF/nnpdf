@@ -15,13 +15,31 @@ the code yourself.
 1. Create a runcard by, for example, using one of the configuration files
 available `here <https://github.com/NNPDF/nnpdf/tree/master/nnpdfcpp/config/>`_.
 
-2. Prepare the fit: use the command :code:`vp-setupfit <runcard>.yaml` to
+2. Prepare the fit: use the command :code:`vp-setupfit --legacy <runcard>.yaml` to
 generate a :code:`<runcard_folder>` in the current directory. This will have the
 same name as the runcard and it will also contain a copy of the runcard itself.
 The resources that are required to launch the fit, such as the theory ID and the
 :math:`t_0` PDF set, will be downloaded automatically. Alternatively, such
 resources can be obtained with the :ref:`vp-get<vp-get>` tool.
 
+.. warning::
+
+   The flat ``dataset_inputs`` structure for listing datasets in the runcard is
+   not supported by ``nnfit``. Instead, datasets must be grouped explicitly by
+   experiment, e.g.
+   
+.. code:: yaml
+
+    experiments:
+      - experiment: NMC
+        datasets:
+        - dataset: NMCPD
+        - dataset: NMC
+      - experiment: SLAC
+        datasets:
+        - dataset: SLACP
+        - dataset: SLACD
+   
 3. To run the fit, use the :code:`nnfit` program. This takes a
 :code:`<runcard_folder>` as input, as well a number that indexes the PDF replica
 that will be produced. It is used as follows: :code:`nnfit <replica_number>

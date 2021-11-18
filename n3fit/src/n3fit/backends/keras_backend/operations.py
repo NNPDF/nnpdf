@@ -27,7 +27,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
-from tensorflow.keras.layers import Concatenate as keras_concatenate
 from tensorflow.keras.layers import subtract as keras_subtract
 
 from tensorflow.keras.layers import Input
@@ -240,6 +239,13 @@ def transpose(tensor, **kwargs):
     return K.transpose(tensor, **kwargs)
 
 
+def stack(tensor_list, axis=0, **kwargs):
+    """ Stack a list of tensors
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
+    """
+    return tf.stack(tensor_list, axis=axis, **kwargs)
+
+
 def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     """
     Concatenates a list of numbers or tensor into a bigger tensor
@@ -256,12 +262,15 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
 def pdf_masked_convolution(raw_pdf, basis_mask):
     """Computes a masked convolution of two equal pdfs
     And applies a basis_mask so that only the actually useful values
-    of the convolution are returned
+    of the convolution are returned.
+
+    If training many PDFs at once, it will use as a backend `einsum`, which
+    is better suited for running on GPU (but slower on CPU).
 
     Parameters
     ----------
         pdf: tf.tensor
-            rank 3 (batchsize, xgrid, flavours)
+            rank 4 (batchsize, xgrid, flavours, replicas)
         basis_mask: tf.tensor
             rank  2 tensor (flavours, flavours)
             mask to apply to the pdf convolution
@@ -269,15 +278,27 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     Return
     ------
         pdf_x_pdf: tf.tensor
-            rank3 (len(mask_true), xgrid, xgrid)
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
     """
-    pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
-    luminosity = tensor_product(pdf, pdf, axes=0)
-    # (xgrid, flavour, xgrid, flavour)
-    # reshape to put the flavour indices at the beginning to apply mask
-    lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
-    pdf_x_pdf = boolean_mask(lumi_tmp, basis_mask)
+    if raw_pdf.shape[-1] == 1: # only one replica!
+        pdf = tf.squeeze(raw_pdf, axis=(0,-1))
+        luminosity = tensor_product(pdf, pdf, axes=0)
+        lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
+        pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), -1)
+    else:
+        pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
+        luminosity = tf.einsum('air,bjr->jibar', pdf, pdf)
+        # (xgrid, flavour, xgrid, flavour)
+        pdf_x_pdf = boolean_mask(luminosity, basis_mask)
     return pdf_x_pdf
+
+
+def einsum(equation, *args, **kwargs):
+    """
+    Computes the tensor product using einsum
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/einsum>`_
+    """
+    return tf.einsum(equation, *args, **kwargs)
 
 
 def tensor_product(*args, **kwargs):
@@ -328,3 +349,13 @@ def op_subtract(inputs, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
     """
     return keras_subtract(inputs, **kwargs)
+
+
+@tf.function
+def backend_function(fun_name, *args, **kwargs):
+    """
+    Wrapper to call non-explicitly implemented backend functions by name: (``fun_name``)
+    see full `docs <https://keras.io/api/utils/backend_utils/>`_ for some possibilities
+    """
+    fun = getattr(K, fun_name)
+    return fun(*args, **kwargs)

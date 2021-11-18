@@ -14,6 +14,7 @@ Running fits
    ./run-fit.md
    ./run-legacy-fit.rst
    ./run-iterated-fit.rst
+   ./general_th_covmat.rst
    ./thcov_tutorial.rst
 
 Analysing results
@@ -32,7 +33,7 @@ Adding new data
 .. toctree ::
    :maxdepth: 1
 
-   ./buildmaster.md
+   ./buildmaster.rst
    ./APPLgrids.md
    ./APPLgrids_comp.md
    ./apfelcomb.md
@@ -45,6 +46,15 @@ Closure tests
    ./closuretest.md
    ./closureestimators.rst
 
+Special PDF sets
+----------------
+.. toctree ::
+   :maxdepth: 1
+
+   ./reproduce
+   ./bundle-pdfs.rst
+   ./mc2hessian.rst
+   ./nf_variation.rst
 
 Miscellaneous
 -------------
@@ -52,7 +62,8 @@ Miscellaneous
    :maxdepth: 1
 
    ./list-resources.md
-   ./pseudodata.md
+   ./pseudodata.rst
    ./newplottingfn.rst
    ./addspecialgrouping.rst
    ./conda.md
+   ./futuretests.rst

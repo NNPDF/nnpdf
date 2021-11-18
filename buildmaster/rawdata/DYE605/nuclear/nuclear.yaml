@@ -2,15 +2,14 @@ meta:
    author: Rosalyn Pearson
    title: Theoretical predictions
 
-theoryid: 53
+theoryid: 200
 
 use_cuts: nocuts
 
-fit: 201130-jcm-001
 pdf: nNNPDF20_nlo_as_0118_p_A64_Z32
 
 dataset_inputs:
-         - dataset: DYE605
+         - { dataset: DYE605, cfac: [QCD] }
 
 actions_:
    - group_result_table

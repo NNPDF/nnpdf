@@ -15,9 +15,10 @@ information on correlations is provided.
 void CMS_2JET_5TEVFilter::ReadData()
 {
 
+  //These are the bin limits. The data is in the middle
   std::vector<double> pTavg_bins = {55., 75., 95., 115., 150., 400.};
   int n = 0;
-  for (int ibin = 1; ibin < pTavg_bins.size(); ibin++)
+  for (size_t ibin = 1; ibin < pTavg_bins.size(); ibin++)
   {
     // Opening files
     fstream f;

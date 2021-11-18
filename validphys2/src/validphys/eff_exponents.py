@@ -21,7 +21,7 @@ from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
 from validphys.core import PDF, FitSpec
-from validphys.pdfbases import check_basis, Basis, UnknownElement
+from validphys.pdfbases import check_basis, Basis
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
@@ -423,7 +423,8 @@ fmt = lambda a: float(significant_digits(a, 4))
 next_fit_eff_exps_table = collect("next_effective_exponents_table", ("fitpdfandbasis",))
 
 
-def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
+def iterate_preprocessing_yaml(
+    fit, next_fit_eff_exps_table, _flmap_np_clip_arg=None):
     """Using py:func:`next_effective_exponents_table` update the preprocessing
     exponents of the input ``fit``. This is part of the usual pipeline referred
     to as "iterating a fit", for more information see: :ref:`run-iterated-fit`.
@@ -445,6 +446,23 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
     >>> with open("output.yml", "w+") as f:
     ...     f.write(yaml_output)
 
+    Parameters
+    ----------
+    fit: validphys.core.FitSpec
+        Whose preprocessing range will be iterated, the output runcard will be
+        the same as the one used to run this fit, except with new preprocessing
+        range.
+    next_fit_eff_exps_table: pd.DataFrame
+        Table outputted by :py:func:`next_fit_eff_exps_table` containing
+        the next preprocessing ranges.
+    _flmap_np_clip_arg: dict
+        Internal argument used by ``vp-nextfitruncard``. Dictionary containing
+        a mapping like
+        ``{<flavour>: {<largex/smallx>: {a_min: <min value>, a_max: <max value>}}}``.
+        If a flavour is present in ``_flmap_np_clip_arg`` then the preprocessing
+        ranges will be passed through ``np.clip`` with the arguments supplied
+        in the mapping.
+
     """
     (df_effexps,) = next_fit_eff_exps_table
     # Use round trip loader rather than safe_load in fit.as_input()
@@ -461,6 +479,14 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table):
     for i, fl in enumerate(runcard_flavours):
         alphas = df_effexps.loc[(f"${fl}$", r"$\alpha$")].values
         betas = df_effexps.loc[(f"${fl}$", r"$\beta$")].values
+        flmap_key = previous_exponents[i]["fl"]
+        if _flmap_np_clip_arg is not None and _flmap_np_clip_arg.get(flmap_key) is not None:
+            smallx_args = _flmap_np_clip_arg[flmap_key].get("smallx")
+            largex_args = _flmap_np_clip_arg[flmap_key].get("largex")
+            if smallx_args is not None:
+                alphas = np.clip(alphas, **smallx_args)
+            if largex_args is not None:
+                betas = np.clip(betas, **largex_args)
         previous_exponents[i]["smallx"] = [
             fmt(alpha) for alpha in alphas
         ]
@@ -530,17 +556,21 @@ def iterated_runcard_yaml(
     # Update seeds with valid pseudorandom unsigned long int
     # Check if seeds exist especially since extra seeds needed in n3fit vs nnfit
     # Start with seeds in "fitting" section of runcard
-    fitting_data = filtermap["fitting"]
     fitting_seeds = ["seed", "trvlseed", "nnseed", "mcseed"]
-
+    fitting_data = filtermap.get("fitting")
+    maxint = np.iinfo('int32').max
     for seed in fitting_seeds:
-        if seed in fitting_data:
-            fitting_data[seed] = random.randrange(0, 2**32)
+        if seed in filtermap:
+            filtermap[seed] = random.randrange(0, maxint)
+        elif fitting_data is not None and seed in fitting_data:
+            #BCH
+            # For older runcards the seeds are inside the `fitting` namespace
+            fitting_data[seed] = random.randrange(0, maxint)
 
     # Next "closuretest" section of runcard
     if "closuretest" in filtermap:
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
-            closuretest_data["filterseed"] = random.randrange(0, 2**32)
+            closuretest_data["filterseed"] = random.randrange(0, maxint)
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)

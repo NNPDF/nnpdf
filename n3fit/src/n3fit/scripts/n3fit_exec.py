@@ -26,7 +26,18 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = []
 )
 
-N3FIT_PROVIDERS = ["n3fit.performfit", "validphys.results", "validphys.n3fit_data"]
+FIT_NAMESPACE = "datacuts::theory::fitting "
+CLOSURE_NAMESPACE = "datacuts::theory::closuretest::fitting "
+
+N3FIT_PROVIDERS = [
+    "n3fit.performfit",
+    "n3fit.n3fit_checks_provider",
+    "validphys.results",
+    "validphys.n3fit_data",
+    "validphys.pseudodata",
+    "validphys.covmats",
+    "validphys.commondata",
+]
 
 log = logging.getLogger(__name__)
 
@@ -116,10 +127,11 @@ class N3FitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
 
         if file_content.get('closuretest') is not None:
-            fit_action = 'datacuts::theory::closuretest::fitting performfit'
+            namespace = CLOSURE_NAMESPACE
         else:
-            fit_action = 'datacuts::theory::fitting performfit'
-        N3FIT_FIXED_CONFIG['actions_'].append(fit_action)
+            namespace = FIT_NAMESPACE
+
+        N3FIT_FIXED_CONFIG['actions_'].append(namespace + "performfit")
 
         if file_content["fitting"].get("savepseudodata"):
             if len(kwargs["environment"].replicas) != 1:
@@ -129,8 +141,10 @@ class N3FitConfig(Config):
                     "to `false` or fit replicas one at a time."
                 )
             # take same namespace configuration on the pseudodata_table action.
-            table_action = fit_action.replace('performfit', 'pseudodata_table')
-            N3FIT_FIXED_CONFIG['actions_'].append(table_action)
+            training_action = namespace + "training_pseudodata"
+            validation_action = namespace + "validation_pseudodata"
+
+            N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
 
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -162,15 +176,32 @@ class N3FitConfig(Config):
         """
         return fakedata
 
-    def produce_kfold_parameters(self, hyperscan=None, hyperopt=None):
-        if hyperscan and hyperopt:
-            return hyperscan["kfold"]
+    def produce_kfold_parameters(self, kfold=None, hyperopt=None):
+        """Return None even if there are kfolds in the runcard if the hyperopt flag is not active
+        """
+        if hyperopt is not None:
+            return kfold
         return None
 
     def produce_kpartitions(self, kfold_parameters):
         if kfold_parameters:
-            return kfold_parameters["partitions"]
+            partitions = kfold_parameters["partitions"]
+            # Note that one of the partitions could be empty ([]) or, by yaml usual notation, None
+            for partition in partitions:
+                if partition["datasets"] is None:
+                    partition["datasets"] = []
+            return partitions
         return None
+
+    def produce_hyperscanner(self, parameters, hyperscan_config=None, hyperopt=None):
+        """For a hyperparameter scan to be run, a hyperscanner must be
+        constructed from the original hyperscan_config"""
+        # This needs to be imported here because it needs Tensorflow and n3fit
+        from n3fit.hyper_optimization.hyper_scan import HyperScanner
+
+        if hyperscan_config is None or hyperopt is None:
+            return None
+        return HyperScanner(parameters, hyperscan_config)
 
 
 class N3FitApp(App):

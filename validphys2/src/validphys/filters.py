@@ -4,14 +4,13 @@ Filters for NNPDF fits
 """
 
 import logging
-import numbers
 import re
 from collections.abc import Mapping
 from importlib.resources import read_text
 
 import numpy as np
 
-from NNPDF import CommonData, RandomGenerator
+from NNPDF import CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
@@ -67,7 +66,7 @@ def check_nonnegative(var: str):
 def make_dataset_dir(path):
     """Creates directory at path location."""
     if path.exists():
-        log.warning(f"Dataset output folder exists: {path} Overwritting contents")
+        log.warning(f"Dataset output folder exists: {path} Overwriting contents")
     else:
         path.mkdir(exist_ok=True)
 
@@ -84,6 +83,13 @@ def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
     be an integer between 0 and 16, seeded with ``filterseed``.
     The RNG can then be subsequently used to i.e generate pseudodata.
     """
+    try:
+        from NNPDF import RandomGenerator
+    except ImportError as e:
+        logging.error("Generating closure data needs a valid installation of libNNPDF")
+        raise e
+
+    log.warning("Importing libNNPDF")
     log.info("Initialising RNG")
     RandomGenerator.InitRNG(rngalgo, seed)
     RandomGenerator.GetRNG().SetSeed(filterseed)
@@ -403,6 +409,18 @@ class Rule:
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
 
+    @property
+    def _properties(self):
+        """Attributes of the Rule class that are defining. Two
+        Rules with identical ``_properties`` are considered equal.
+        """
+        return (self.rule_string, self.dataset, self.process_type, self.theory_params['ID'])
+
+    def __eq__(self, other):
+        return self._properties == other._properties
+
+    def __hash__(self):
+        return hash(self._properties)
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)

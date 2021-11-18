@@ -47,8 +47,12 @@ class TimerCallback(Callback):
     def on_train_end(self, logs=None):
         """ Print the results """
         total_time = time() - self.starting_time
-        log.info(f"> Values of the {self.x_count}: {self.every_x}")
-        log.info(f"> > Average time per epoch: {np.mean(self.all_times[3:]):.5} s")
+        n_times = len(self.all_times)
+        # Skip the first 100 epochs to avoid fluctuations due to compilations of part of the code
+        # by epoch 100 all parts of the code have usually been called so it's a good compromise
+        mean = np.mean(self.all_times[min(110, n_times-1):])
+        std = np.std(self.all_times[min(110, n_times-1):])
+        log.info(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
         log.info(f"> > > Total time: {total_time/60:.5} min")
 
 
@@ -63,7 +67,7 @@ class StoppingCallback(Callback):
         stopping_object: Stopping
             instance of Stopping which controls when the fit should stop
         log_freq: int
-            each how manwy epochs the ``print_stats`` argument of ``stopping_object``
+            each how many epochs the ``print_stats`` argument of ``stopping_object``
             will be set to true
     """
 

@@ -37,44 +37,33 @@ theory:
   theoryid: 162        # database id
 
 ############################################################
+trvlseed: 6416578340
+nnseed: 4106399685
+mcseed: 6355854418
+genrep: true          # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [30, 30, 42, 18, 8]
+  activation_per_layer: [tanh, sigmoid, sigmoid, sigmoid, linear]
+  initializer: glorot_uniform
+  optimizer:
+    clipnorm: 46.2
+    learning_rate: 0.73
+    optimizer_name: Adadelta
+  epochs: 50000
+  positivity:
+    initial: 370
+    multiplier:
+  integrability:
+    initial:
+    multiplier: 1.03
+  stopping_patience: 0.30
+  layer_type: dense
+  dropout: 0.005
+
 fitting:
-
-  trvlseed: 6416578340
-  nnseed: 4106399685
-  mcseed: 6355854418
-  epochs: 20000
-  save: false
-  savefile: weights.hd5
-  load: false
-  loadfile: weights.hd5
-
-  seed: 577993051               # set the seed for the random generator
-  genrep: true          # true = generate MC replicas, false = use real data
-  rngalgo: 0        # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
-  fitmethod: NGA    # Minimization algorithm
-  nmutants: 80      # Number of mutants for replica
-  paramtype: NN
-  nnodes: [2, 5, 3, 1]
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [30, 30, 42, 18, 8]
-    activation_per_layer: [tanh, sigmoid, sigmoid, sigmoid, linear]
-    initializer: glorot_uniform
-    optimizer:
-      clipnorm: 46.2
-      learning_rate: 0.73
-      optimizer_name: Adadelta
-    epochs: 50000
-    positivity:
-      initial: 370
-      multiplier:
-    integrability:
-      initial:
-      multiplier: 1.03
-    stopping_patience: 0.30
-    layer_type: dense
-    dropout: 0.005
-
+  seed: 577993051       # set the seed for the random generator
+  rngalgo: 0    # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
@@ -82,52 +71,28 @@ fitting:
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
-      # pos: True for NN squared
-      # mutsize: mutation size
-      # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
-  - {fl: sng, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
-      1.086, 1.124], largex: [1.466, 3.33]}
-  - {fl: g, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7804,
-      1.112], largex: [2.499, 6.501]}
-  - {fl: v, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5347,
-      0.7183], largex: [1.503, 3.976]}
-  - {fl: v3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.2016,
-      0.4753], largex: [1.781, 4.003]}
-  - {fl: v8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.5735,
-      0.7563], largex: [1.531, 4.101]}
-  - {fl: t3, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [-0.3324,
-      0.8232], largex: [1.781, 4.254]}
-  - {fl: t8, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [0.7985,
-      1.018], largex: [1.515, 4.107]}
-  - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [
-      1.033, 1.161], largex: [1.506, 3.504]}
-
-############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta: 0            # Delta for look-back stopping
-  mingen: 0             # Minimum number of generations
-  window: 500           # Window for moving average
-  minchi2: 3.5          # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear: 200           # Smear for stopping
-  deltasm: 200          # Delta smear for stopping
-  rv: 2                 # Ratio for validation stopping
-  rt: 0.5               # Ratio for training stopping
-  epsilon: 1e-6         # Gradient epsilon
+  - {fl: sng, trainable: false, smallx: [1.086, 1.124], largex: [1.466, 3.33]}
+  - {fl: g, trainable: false, smallx: [0.7804,1.112], largex: [2.499, 6.501]}
+  - {fl: v, trainable: false, smallx: [0.5347,0.7183], largex: [1.503, 3.976]}
+  - {fl: v3, trainable: false, smallx: [0.2016,0.4753], largex: [1.781, 4.003]}
+  - {fl: v8, trainable: false, smallx: [0.5735,0.7563], largex: [1.531, 4.101]}
+  - {fl: t3, trainable: false, smallx: [-0.3324,0.8232], largex: [1.781, 4.254]}
+  - {fl: t8, trainable: false, smallx: [0.7985,1.018], largex: [1.515, 4.107]}
+  - {fl: t15, trainable: false, smallx: [1.033, 1.161], largex: [1.506, 3.504]}
 
 ############################################################
 positivity:
   posdatasets:
-  - {dataset: POSDYC, poslambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSDYC, maxlambda: 1e6}        # Positivity Lagrange Multiplier
 
 ############################################################
 integrability:
   integdatasets:
-  - {dataset: INTEGXT8, poslambda: 1e2}
-  - {dataset: INTEGXT3, poslambda: 1e2}
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
 
+############################################################
 closuretest:
   filterseed: 9116129314 # Random seed to be used in filtering data partitions
   fakedata: True     # true = to use FAKEPDF to generate pseudo-data
@@ -150,3 +115,6 @@ lhagrid:
 
 ############################################################
 debug: false
+
+save: false
+load: false

@@ -12,6 +12,7 @@
 
 // ********* Filters ************
 
+/*
 class ATLASLOMASSDY11Filter: public CommonData
 { public: ATLASLOMASSDY11Filter():
   CommonData("ATLASLOMASSDY11") { ReadData(); }
@@ -19,6 +20,8 @@ class ATLASLOMASSDY11Filter: public CommonData
   private:
     void ReadData();
 };
+*/
+
 
 class ATLASLOMASSDY11EXTFilter: public CommonData
 { public: ATLASLOMASSDY11EXTFilter():

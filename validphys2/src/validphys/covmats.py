@@ -21,7 +21,7 @@ from validphys.checks import (
 )
 from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
-from validphys.covmats_utils import construct_covmat
+from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
@@ -235,8 +235,9 @@ def dataset_t0_predictions(dataset, t0set):
         1-D numpy array with predictions for each of the cut datapoints.
 
     """
-    # squeeze because the underlying data has shape ndata * 1
-    return central_predictions(dataset, t0set).to_numpy().squeeze()
+    # reshape because the underlying data has shape ndata * 1
+    # accounting for the fact that some datasets are single datapoint
+    return central_predictions(dataset, t0set).to_numpy().reshape(-1)
 
 
 def t0_covmat_from_systematics(
@@ -651,6 +652,81 @@ def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
 def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
     """Like `sqrt_covmat` but for an group of datasets"""
     return sqrt_covmat(dataset_inputs_covariance_matrix)
+
+
+def systematics_matrix_from_commondata(
+    loaded_commondata_with_cuts,
+    dataset_input,
+    use_weights_in_covmat=True,
+    _central_values=None
+):
+    """Returns a systematics matrix, :math:`A`, for the corresponding dataset.
+    The systematics matrix is a square root of the covmat:
+
+    .. math::
+
+        C = A A^T
+
+    and is obtained by concatenating a block diagonal of the uncorrelated uncertainties
+    with the correlated systematics.
+
+    """
+    sqrt_covmat = systematics_matrix(
+        loaded_commondata_with_cuts.stat_errors.to_numpy(),
+        loaded_commondata_with_cuts.systematic_errors(_central_values)
+    )
+    if use_weights_in_covmat:
+        return sqrt_covmat / np.sqrt(dataset_input.weight)
+    return sqrt_covmat
+
+def covmat_stability_characteristic(systematics_matrix_from_commondata):
+    """
+    Return a number characterizing the stability of an experimental covariance
+    matrix against uncertainties in the correlation. It is defined as the L2
+    norm (largest singular value) of the square root of the inverse correlation
+    matrix. This is equivalent to the square root of the inverse of the
+    smallest singular value of the correlation matrix:
+
+    Z = (1/λ⁰)^½
+
+    Where λ⁰ is the smallest eigenvalue of the correlation matrix.
+
+    This is the number used as
+    threshold in :py:func:`calcutils.regularize_covmat`. The interpretation
+    is roughly what precision does the worst correlation need to
+    have in order to not affect meaningfully the χ² computed using the
+    covariance matrix, so for example a stability characteristic of 4 means
+    that correlations need to be known with uncetainties less than 0.25.
+
+    Examples
+    --------
+
+    >>> from validphys.api import API
+    >>> API.covmat_stability_characteristic(dataset_input={"dataset": "NMC"},
+    ... theoryid=162, use_cuts="internal")
+    2.742658604186114
+
+    """
+    sqrtcov = systematics_matrix_from_commondata
+    # copied from calcutils.regularize_l2 but just return stability condition.
+    d = np.sqrt(np.sum(sqrtcov ** 2, axis=1))[:, np.newaxis]
+    sqrtcorr = sqrtcov / d
+    _, s, _ = la.svd(sqrtcorr, full_matrices=False)
+    return 1 / s[-1]
+
+
+dataset_inputs_stability = collect('covmat_stability_characteristic', ('dataset_inputs',))
+
+
+@table
+def dataset_inputs_stability_table(dataset_inputs_stability, dataset_inputs):
+    """Return a table with py:func:`covmat_stability_characteristic` for all
+    dataset inputs"""
+    res = {}
+    for ds, stab in zip(dataset_inputs, dataset_inputs_stability):
+        res[ds.name] = stab
+
+    return pd.Series(res, name="stability").sort_values()
 
 
 def fit_name_with_covmat_label(fit, fitthcovmat):

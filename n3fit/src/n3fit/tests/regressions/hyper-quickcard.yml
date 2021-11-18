@@ -18,7 +18,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  use_t0 : False
+  t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -35,7 +35,7 @@ datacuts:
 theory:
   theoryid: 162        # database id
 
-hyperscan:
+hyperscan_config:
     stopping:
         min_epochs: 2e1
         max_epochs: 5e1
@@ -64,51 +64,43 @@ hyperscan:
         min_units: 10
         max_units: 50
         activations: ['sigmoid', 'tanh']
-    kfold:
-        target: average
-        penalties:
-          - saturation
-        threshold: 2.0
-        partitions:
-            - datasets:
-                - NMC
-            - datasets:
-                - SLACP
-                - CMSZDIFF12
+
+kfold:
+    target: average
+    penalties:
+      - saturation
+    threshold: 2.0
+    partitions:
+        - datasets:
+            - NMC
+        - datasets:
+            - SLACP
+            - CMSZDIFF12
 
 ############################################################
+genrep: False    # on = generate MC replicas, False = use real data
+trvlseed: 3
+nnseed: 2
+mcseed: 1  
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.00001
+  epochs: 10
+  positivity:
+    multiplier: 1.05
+    initial: 1.5
+  stopping_patience: 0.30 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.0
+
 fitting:
-  genrep: False    # on = generate MC replicas, False = use real data
-  trvlseed: 3
-  nnseed: 2
-  mcseed: 1  
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [15, 10, 8]
-    activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
-    initializer: 'glorot_normal'
-    optimizer:
-      optimizer_name: 'RMSprop'
-      learning_rate: 0.00001
-    epochs: 10
-    positivity:
-      multiplier: 1.05
-      initial: 1.5
-    stopping_patience: 0.30 # percentage of the number of epochs
-    layer_type: 'dense'
-    dropout: 0.0
-
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
   basis:
-      # remeber to change the name of PDF accordingly with fitbasis
-      # pos: True for NN squared
-      # mutsize: mutation size
-      # mutprob: mutation probability
-      # smallx, largex: preprocessing ranges
       - { fl: sng, pos: False, mutsize: [15], mutprob: [0.05], smallx: [1.05,1.19], largex: [1.47,2.70] }
       - { fl: g,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.94,1.25], largex: [0.11,5.87] }
       - { fl: v,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.54,0.75], largex: [1.15,2.76] }
@@ -119,33 +111,15 @@ fitting:
       - { fl: cp,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.12,1.19], largex: [1.83,6.70] }
 
 ############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta   : 0         # Delta for look-back stopping
-  mingen    : 0         # Minimum number of generations
-  window    : 500       # Window for moving average
-  minchi2   : 3.5       # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear    : 200       # Smear for stopping
-  deltasm   : 200       # Delta smear for stopping
-  rv        : 2         # Ratio for validation stopping
-  rt        : 0.5       # Ratio for training stopping
-  epsilon   : 1e-6      # Gradient epsilon  
-
-############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSDYC    , poslambda: 1e5 }
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSDYC    , maxlambda: 1e5 }
 
-############################################################
-lhagrid:
-  nx  : 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq  : 50
-  qmax: 1e5
+integrability:
+  integdatasets:
+    - {dataset: INTEGXT8, maxlambda: 1e2}
+    - {dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 closuretest:

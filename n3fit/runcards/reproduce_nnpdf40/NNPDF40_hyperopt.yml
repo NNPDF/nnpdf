@@ -1,0 +1,310 @@
+#
+# Configuration file for n3fit
+#
+############################################################
+description: "NNPDF4.0 NNLO reduced set for hyperoptimization"
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+- {dataset: NMCPD_dw, frac: 0.75}
+- {dataset: NMC, frac: 0.75}
+- {dataset: SLACP_dwsh, frac: 0.75}
+- {dataset: SLACD_dw, frac: 0.75}
+- {dataset: BCDMSP_dwsh, frac: 0.75}
+- {dataset: BCDMSD_dw, frac: 0.75}
+- {dataset: CHORUSNUPb_dw, frac: 0.75}
+- {dataset: CHORUSNBPb_dw, frac: 0.75}
+- {dataset: NTVNUDMNFe_dw, frac: 0.75, cfac: [MAS]}
+- {dataset: NTVNBDMNFe_dw, frac: 0.75, cfac: [MAS]}
+- {dataset: HERACOMBNCEM, frac: 0.75}
+- {dataset: HERACOMBNCEP460, frac: 0.75}
+- {dataset: HERACOMBNCEP575, frac: 0.75}
+- {dataset: HERACOMBNCEP820, frac: 0.75}
+- {dataset: HERACOMBNCEP920, frac: 0.75}
+- {dataset: HERACOMBCCEM, frac: 0.75}
+- {dataset: HERACOMBCCEP, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   # N
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   # N
+- {dataset: DYE886R_dw, frac: 0.75}
+- {dataset: DYE886P, frac: 0.75, cfac: [QCD]}
+- {dataset: DYE605_dw, frac: 0.75, cfac: [QCD]}
+- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
+- {dataset: D0ZRAP, frac: 0.75, cfac: [QCD]}
+- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASLOMASSDY11EXT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP11CC, frac: 0.75, cfac: [QCD]}               # N
+- {dataset: ATLASWZRAP11CF, frac: 0.75, cfac: [QCD]}               # N
+- {dataset: ATLASDY2D8TEV, frac: 0.75, cfac: [QCDEWK]}             # N
+- {dataset: ATLAS_WZ_TOT_13TEV, frac: 0.75, cfac: [NRM, QCD]}       # N
+- {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         # N
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         # N
+- {dataset: ATLASZPT8TEVMDIST, frac: 0.75, cfac: [QCD], sys: 10}
+- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
+- {dataset: ATLASTTBARTOT, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 0.75, cfac: [QCD]}                 # N
+- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, frac: 0.75, cfac: [QCD]}                # N
+- {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, frac: 0.75, cfac: [QCD]}             # N
+- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        # N
+- {dataset: ATLAS_2JET_7TEV_R06, frac: 0.75, cfac: [QCD]}                            # N
+- {dataset: ATLASPHT15, frac: 0.75, cfac: [QCD, EWK]}                                # N
+- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 0.75, cfac: [QCD]}                      # N
+- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                     # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}        # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}     # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       # N
+- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: [QCD]}    # N
+- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
+- {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}                                  # N 
+- {dataset: CMS_2JET_3D_8TEV, frac: 0.75, cfac: [QCD]}                               # N
+- {dataset: CMSTTBARTOT, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}                                 # N
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 # N
+- {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, frac: 0.75, cfac: [QCD]}                 # N
+- {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, frac: 0.75, cfac: [QCD]}                 # N
+- {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, frac: 0.75, cfac: [QCD]}                      # N
+- {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}                        # N
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       # N
+- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZEE2FB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBWZMU7TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCBWZMU8TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}                             # N
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}                         # N
+
+
+############################################################
+datacuts:
+  t0pdfset: NNPDF31_nnlo_as_0118    # PDF set to generate t0 covmat
+  q2min: 3.49                        # Q2 minimum
+  w2min: 12.5                        # W2 minimum
+  combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
+  jetptcut_tev: 0                    # jet pt cut for tevatron
+  jetptcut_lhc: 0                    # jet pt cut for lhc
+  wptcut_lhc: 30.0                   # Minimum pT for W pT diff distributions
+  jetycut_tev: 1e30                  # jet rap. cut for tevatron
+  jetycut_lhc: 1e30                  # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut: 1e30                  # jet cfact. cut
+
+############################################################
+theory:
+  theoryid: 200     # database id
+
+hyperscan:
+  stopping:
+      min_epochs: 15e3
+      max_epochs: 45e3
+      min_patience: 0.1
+      max_patience: 0.3
+  positivity:
+      min_initial: 1
+      max_initial: 1000  
+  integrability:
+      min_initial: 2
+      max_initial: 50
+  optimizer:
+  - optimizer_name: 'Adadelta'
+    learning_rate:
+      sampling: log
+      min: 1e-1
+      max: 10
+    clipnorm:
+      sampling: log
+      min: 1e-3 
+      max: 1e0
+  - optimizer_name: 'Amsgrad'
+    learning_rate:
+      sampling: log
+      min: 1e-4 
+      max: 1e-2 
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4    
+  - optimizer_name: 'Nadam'
+    learning_rate:
+      sampling: log
+      min: 1e-4 
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  - optimizer_name: 'Adam'
+    learning_rate:
+      sampling: log
+      min: 1e-4 
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  architecture:
+      initializers: ['glorot_normal', 'glorot_uniform']
+      max_drop: 0.5
+      n_layers: [1,2,3,4]
+      min_units: 10
+      max_units: 45 
+      activations: ['tanh', 'sigmoid']
+  kfold:
+      target: average
+      penalties:
+        - saturation
+        - patience
+        - integrability
+      threshold: 10
+      partitions:
+      - datasets:
+        # DIS
+          - HERACOMBCCEM
+          - HERACOMBNCEP460
+          - HERACOMB_SIGMARED_B
+          - NMC
+          - NTVNBDMNFe_dw
+        # EWK
+          - LHCBZEE2FB
+          - CMSWEASY840PB
+          - ATLASZPT8TEVMDIST
+          - D0WMASY
+          - DYE886P
+        # JETS+TOP
+          - ATLASPHT15
+          - ATLAS_2JET_7TEV_R06
+          - ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM
+          - CMSTTBARTOT
+          - CMS_SINGLETOP_TCH_TOT_7TEV
+      - datasets:
+        # DIS
+          - CHORUSNUPb_dw
+          - HERACOMBNCEP920
+          - BCDMSP_dwsh
+        # EWK
+          - LHCBZ940PB
+          - ATLASWZRAP36PB
+          - CMSZDIFF12
+          - DYE605_dw
+          - CMSDY2D11
+        # JET+TOP
+          - CMS_2JET_3D_8TEV
+          - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM
+          - ATLAS_SINGLETOP_TCH_R_7TEV
+          - CMSTOPDIFF8TEVTTRAPNORM
+          - CMS_SINGLETOP_TCH_R_8TEV
+      - datasets:
+        # DIS
+          - HERACOMBCCEP
+          - HERACOMBNCEP575
+          - NMCPD_dw
+          - NTVNUDMNFe_dw
+        # EWK
+          - LHCBWZMU7TEV
+          - LHCB_Z_13TEV_DIELECTRON
+          - ATLASWZRAP11CC
+          - ATLAS_WP_JET_8TEV_PT
+          - ATLASZHIGHMASS49FB
+          - CMSWMASY47FB
+          - DYE886R_dw
+          - CDFZRAP_NEW
+        # JET+TOP
+          - ATLASTTBARTOT
+          - ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM
+          - CMSTTBARTOT5TEV
+          - CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM
+      - datasets:
+        # DIS
+          - CHORUSNBPb_dw
+          - HERACOMBNCEP820
+        # EWK
+          - LHCBWZMU8TEV
+          - LHCB_Z_13TEV_DIMUON
+          - ATLASWZRAP11CF
+          - ATLAS_WM_JET_8TEV_PT
+          - ATLASLOMASSDY11EXT
+          - ATLASZPT8TEVYDIST
+          - CMSWMU8TEV
+          - D0ZRAP
+        # JET+TOP
+          - CMS_2JET_7TEV
+          - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM
+          - ATLAS_SINGLETOP_TCH_R_13TEV
+          - CMS_SINGLETOP_TCH_R_13TEV
+
+############################################################
+trvlseed: 2182363835
+nnseed: 4044040809
+mcseed: 1977428487
+genrep: false      # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [18, 24, 36, 8]
+  activation_per_layer: [tanh, sigmoid, sigmoid, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 2.0e-5
+    learning_rate: 2.0e-3
+    optimizer_name: Nadam
+  epochs: 45000
+  positivity:
+    initial: 338
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.15
+  layer_type: dense
+  dropout: 0.0
+
+fitting:
+  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
+  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
+  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
+  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
+  fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.086, 1.121], largex: [1.459, 3.165]}
+  - {fl: g,   trainable: false, smallx: [0.7832, 1.059], largex: [2.734, 8.173]}
+  - {fl: v,   trainable: false, smallx: [0.5596, 0.7524], largex: [1.534, 3.82]}
+  - {fl: v3,  trainable: false, smallx: [-0.0291, 0.5957], largex: [1.708, 3.706]}
+  - {fl: v8,  trainable: false, smallx: [0.6072, 0.819], largex: [1.519, 3.691]}
+  - {fl: t3,  trainable: false, smallx: [-0.4322, 1.087], largex: [1.718, 3.742]}
+  - {fl: t8,  trainable: false, smallx: [0.6132, 0.958], largex: [1.531, 3.506]}
+  - {fl: t15, trainable: false, smallx: [1.057, 1.142], largex: [1.469, 3.23]}
+
+############################################################
+positivity:
+  posdatasets:
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSF2DW, maxlambda: 1e6}
+  - {dataset: POSF2S, maxlambda: 1e6}
+  - {dataset: POSFLL, maxlambda: 1e6}
+  - {dataset: POSDYU, maxlambda: 1e10}
+  - {dataset: POSDYD, maxlambda: 1e10}
+  - {dataset: POSDYS, maxlambda: 1e10}
+  - {dataset: POSF2C, maxlambda: 1e6}
+  - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: POSXUB, maxlambda: 1e6}
+  - {dataset: POSXDQ, maxlambda: 1e6}
+  - {dataset: POSXDB, maxlambda: 1e6}
+  - {dataset: POSXSQ, maxlambda: 1e6}
+  - {dataset: POSXSB, maxlambda: 1e6}
+  - {dataset: POSXGL, maxlambda: 1e6}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
+
+############################################################
+debug: false
+maxcores: 4

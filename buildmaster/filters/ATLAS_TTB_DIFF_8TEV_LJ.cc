@@ -314,9 +314,23 @@ void statcorrs(int dist, string norm, double** extrasys)
 	}    
     }
 
+  for(int i=0; i<totdata; i++)
+    {
+      delete[] syscor[i];
+      delete[] corrcoeff[i];
+    }
+  
+  for(int i=0; i<ndist; i++)
+    {
+      delete[] tabcorr[i];
+    }
+
   delete[] syscor;
   delete[] corrcoeff;
   delete[] tabcorr;
+  delete[] tabstat;
+  delete[] stat;
+  delete[] data;
   
   return;
   
@@ -470,7 +484,13 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
 	}
 
     }
- 
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
+  
   f1.close();
 
 }
@@ -620,7 +640,13 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter::ReadData()
 	}
     
     }
- 
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
+  
   f1.close();
 
 }
@@ -770,7 +796,13 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter::ReadData()
 	}
     
     }
- 
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
+  
   f1.close();
 
 }
@@ -920,6 +952,12 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter::ReadData()
 	}
     
     }
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;  
  
   f1.close();
 
@@ -1061,7 +1099,13 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter::ReadData()
 	}
     
     }
- 
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
+  
   f1.close();
 
 }
@@ -1200,6 +1244,12 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter::ReadData()
 	}
       
     }
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
   
   f1.close();
   
@@ -1339,7 +1389,13 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter::ReadData()
 	}
     
     }
- 
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
+  
   f1.close();
 
 }
@@ -1478,6 +1534,12 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter::ReadData()
 	}
       
     }
+
+  for(int i=0; i<25; i++)
+    {
+      delete[] extrasys[i];
+    }
+  delete[] extrasys;
   
   f1.close();
   

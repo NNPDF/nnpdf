@@ -3,7 +3,7 @@
 """
 
 # Backend-independent imports
-from collections import namedtuple
+import copy
 import logging
 import numpy as np
 import n3fit.checks
@@ -14,13 +14,11 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-@n3fit.checks.check_consistent_basis
-@n3fit.checks.wrapper_check_NN
-@n3fit.checks.wrapper_hyperopt
+@n3fit.checks.can_run_multiple_replicas
 def performfit(
     *,
-    genrep, # used for checks
-    data, # used for checks
+    n3fit_checks_action, # wrapper for all checks
+    replicas, # checks specific to performfit
     replicas_nnseed_fitting_data_dict,
     posdatasets_fitting_pos_dict,
     integdatasets_fitting_integ_dict,
@@ -31,15 +29,15 @@ def performfit(
     parameters,
     replica_path,
     output_path,
-    save_weights_each=None,
     save=None,
     load=None,
-    hyperscan=None,
+    hyperscanner=None,
     hyperopt=None,
     kfold_parameters,
     tensorboard=None,
     debug=False,
     maxcores=None,
+    parallel_models=False
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -57,7 +55,7 @@ def performfit(
         1. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
             1.1 (if hyperopt) generates the hyperopt scanning dictionary
-                    taking as a base the fitting dictionary  and the runcard's hyperscan dictionary
+                    taking as a base the fitting dictionary and the runcard's hyperscanner dictionary
         2. Pass the dictionary of parameters to ModelTrainer
                                         for the NN to be generated and the fit performed
             2.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
@@ -100,16 +98,13 @@ def performfit(
                 path to the output of this run
             output_path: str
                 name of the fit
-            save_weights_each: None, int
-                if set, save the state of the fit every ``save_weights_each``
-                epochs
             save: None, str
                 model file where weights will be saved, used in conjunction with
                 ``load``.
             load: None, str
                 model file from which to load weights from.
-            hyperscan: dict
-                dictionary containing the details of the hyperscan
+            hyperscanner: dict
+                dictionary containing the details of the hyperscanner
             hyperopt: int
                 if given, number of hyperopt iterations to run
             kfold_parameters: None, dict
@@ -121,7 +116,8 @@ def performfit(
                 activate some debug options
             maxcores: int
                 maximum number of (logical) cores that the backend should be aware of
-
+            parallel_models: bool
+                whether to run models in parallel
     """
     from n3fit.backends import set_initial_state
 
@@ -134,15 +130,55 @@ def performfit(
 
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
-    from n3fit.ModelTrainer import ModelTrainer
+    from n3fit.model_trainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
 
-    # Note: In the basic scenario we are only running for one replica and thus this loop is only
-    # run once as replicas_nnseed_fitting_data_dict is a list of just one element
-    stopwatch.register_times("data_loaded")
-    for replica_number, exp_info, nnseed in replicas_nnseed_fitting_data_dict:
-        replica_path_set = replica_path / f"replica_{replica_number}"
-        log.info("Starting replica fit %s", replica_number)
+    # Note: there are three possible scenarios for the loop of replicas:
+    #   1.- Only one replica is being run, in this case the loop is only evaluated once
+    #   2.- Many replicas being run, in this case each will have a replica_number, seed, etc
+    #       and they will be fitted sequentially
+    #   3.- Many replicas being run in parallel. In this case the loop will be evaluated just once
+    #       but a model per replica will be generated
+    #
+    # In the main scenario (1) replicas_nnseed_fitting_data_dict is a list of just one element
+    # case (3) is similar but the one element of replicas_nnseed_fitting_data_dict will be modified
+    # to be (
+    #       [list of all replica idx],
+    #       one experiment with data=(replicas, ndata),
+    #       [list of all NN seeds]
+    #       )
+    #
+
+    n_models = len(replicas_nnseed_fitting_data_dict)
+    if parallel_models and n_models != 1:
+        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
+        # Parse the experiments so that the output data contain information for all replicas
+        # as the only different from replica to replica is the experimental training/validation data
+        all_experiments = copy.deepcopy(replica_experiments[0])
+        for i_exp in range(len(all_experiments)):
+            training_data = []
+            validation_data = []
+            for i_rep in range(n_models):
+                training_data.append(replica_experiments[i_rep][i_exp]['expdata'])
+                validation_data.append(replica_experiments[i_rep][i_exp]['expdata_vl'])
+            all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
+            all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
+        log.info(
+            "Starting parallel fits from replica %d to %d",
+            replicas[0],
+            replicas[0] + n_models - 1,
+        )
+        replicas_info = [(replicas, all_experiments, nnseeds)]
+    else:
+        replicas_info = replicas_nnseed_fitting_data_dict
+
+    for replica_idxs, exp_info, nnseeds in replicas_info:
+        if not parallel_models or n_models == 1:
+            # Cases 1 and 2 above are a special case of 3 where the replica idx and the seed should
+            # be a list of just one element
+            replica_idxs = [replica_idxs]
+            nnseeds = [nnseeds]
+            log.info("Starting replica fit %d", replica_idxs[0])
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
@@ -152,13 +188,13 @@ def performfit(
             integdatasets_fitting_integ_dict,
             basis,
             fitbasis,
-            nnseed,
+            nnseeds,
             debug=debug,
-            save_weights_each=save_weights_each,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,
             model_file=load,
-            sum_rules=sum_rules
+            sum_rules=sum_rules,
+            parallel_models=n_models
         )
 
         # This is just to give a descriptive name to the fit function
@@ -177,8 +213,10 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
+            # Note that hyperopt will not run in parallel or with more than one model _for now_
+            replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             true_best = hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt,
+                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
             )
             print("##################")
             print("Best model found: ")
@@ -197,6 +235,12 @@ def performfit(
         if tensorboard is not None:
             profiling = tensorboard.get("profiling", False)
             weight_freq = tensorboard.get("weight_freq", 0)
+            if parallel_models and n_models != 1:
+                # If using tensorboard when running in parallel
+                # dump the debugging data to the nnfit folder
+                replica_path_set = replica_path
+            else:
+                replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             log_path = replica_path_set / "tboard"
             the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
 
@@ -208,65 +252,53 @@ def performfit(
         result = pdf_gen_and_train_function(parameters)
         stopwatch.register_ref("replica_fitted", "replica_set")
 
-        # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
-        pdf_model = result["pdf_model"]
-        true_chi2 = result["loss"]
-        training = result["training"]
-        log.info("Total exp chi2: %s", true_chi2)
+        log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
 
-        # Where has the stopping point happened (this is only for debugging purposes)
-        print(
-            """
-        > > The stopping point has been at: {0} with a loss of {1}
-                which it got at {2}. Stopping degree {3}
-                Positivity state: {4}
-                """.format(
-                stopping_object.stop_epoch,
-                stopping_object.vl_chi2,
-                stopping_object.e_best_chi2,
-                stopping_object.stopping_degree,
-                stopping_object.positivity_status(),
+        final_time = stopwatch.stop()
+        all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
+
+        pdf_models = result["pdf_models"]
+        for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
+            # Each model goes into its own replica folder
+            replica_path_set = replica_path / f"replica_{replica_number}"
+
+            # Create a pdf instance
+            pdf_instance = N3PDF(pdf_model, fit_basis=basis)
+
+            # Generate the writer wrapper
+            writer_wrapper = WriterWrapper(
+                replica_number,
+                pdf_instance,
+                stopping_object,
+                theoryid.get_description().get("Q0") ** 2,
+                final_time,
             )
-        )
 
-        # Create a pdf instance
-        pdf_instance = N3PDF(pdf_model, fit_basis=basis)
+            # Get the right chi2s
+            training_chi2 = np.take(all_training_chi2, i)
+            val_chi2 = np.take(all_val_chi2, i)
+            exp_chi2 = np.take(all_exp_chi2, i)
 
-        # Generate the writer wrapper
-        writer_wrapper = WriterWrapper(
-            replica_number,
-            pdf_instance,
-            stopping_object,
-            theoryid.get_description().get("Q0") ** 2,
-            stopwatch.stop(),
-        )
+            # And write the data down
+            writer_wrapper.write_data(
+                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
+            )
+            log.info(
+                    "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
+                    replica_number,
+                    exp_chi2,
+                    training_chi2,
+                    val_chi2
+                    )
 
-        # Now write the data down
-        training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-        writer_wrapper.write_data(
-            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
-        )
 
-        # Save the weights to some file for the given replica
-        model_file = save
-        if model_file:
-            model_file_path = replica_path_set / model_file
-            log.info(" > Saving the weights for future in %s", model_file_path)
-            # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3 though)
-            pdf_model.save_weights(str(model_file_path), save_format="h5")
-
-        # If the history of weights is active then loop over it
-        # rewind the state back to every step and write down the results
-        for step in range(len(stopping_object.history.reloadable_history)):
-            stopping_object.history.rewind(step)
-            new_path = output_path / f"history_step_{step}/replica_{replica_number}"
-            # We need to recompute the experimental chi2 for this point
-            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-            writer_wrapper.write_data(new_path, output_path.name, training_chi2, val_chi2, exp_chi2)
-
-        # So every time we want to capture output_path.name and addd a history_step_X
-        # parallel to the nnfit folder
+            # Save the weights to some file for the given replica
+            if save:
+                model_file_path = replica_path_set / save
+                log.info(" > Saving the weights for future in %s", model_file_path)
+                # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3)
+                pdf_model.save_weights(str(model_file_path), save_format="h5")
 
         if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)

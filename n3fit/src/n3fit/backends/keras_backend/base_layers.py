@@ -17,11 +17,12 @@
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
-from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate, Input
+from tensorflow.keras.layers import Lambda, LSTM, Dropout, Concatenate
+from tensorflow.keras.layers import concatenate, Input # pylint: disable=unused-import
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
 from tensorflow.keras.regularizers import l1_l2
-from tensorflow import nn
+from tensorflow import nn, math
 
 from n3fit.backends import MetaLayer
 
@@ -30,14 +31,19 @@ def square_activation(x):
     """ Squares the input """
     return x*x
 
+def modified_tanh(x):
+    """ A non-saturating version of the tanh function """
+    return math.abs(x)*nn.tanh(x)
+
 def leaky_relu(x):
     """ Computes the Leaky ReLU activation function """
     return nn.leaky_relu(x, alpha=0.2)
 
 custom_activations = {
-        "square" : square_activation,
-        "leaky_relu": leaky_relu,
-        }
+    "square" : square_activation,
+    "leaky_relu": leaky_relu,
+    "modified_tanh": modified_tanh,
+}
 
 def LSTM_modified(**kwargs):
     """

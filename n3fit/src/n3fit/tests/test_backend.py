@@ -3,10 +3,8 @@
     and ensures they do the same thing as their numpy counterparts
 """
 import operator
-import functools
 import numpy as np
 from n3fit.backends import operations as op
-from n3fit.backends import losses
 
 # General parameters
 DIM = 7
@@ -53,6 +51,12 @@ def numpy_check(backend_op, python_op, mode="same"):
     elif mode == "four":
         tensors = [T1, T2, T1, T1]
         arrays = [ARR1, ARR2, ARR1, ARR1]
+    elif mode == "twenty":
+        tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1, T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
+        arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
+    elif mode == "ten":
+        tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
+        arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
     elif mode == "single":
         tensors = [T1]
         arrays = [ARR1]
@@ -84,7 +88,14 @@ def test_c_to_py_fun():
     op_smn = op.c_to_py_fun("SMN")
     reference = lambda x, y, z, d: (x + y) / (z + d)
     numpy_check(op_smn, reference, "four")
-
+    # COM
+    op_com = op.c_to_py_fun("COM")
+    reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t : (x + y + z + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
+    numpy_check(op_com, reference, "twenty")
+    # SMT
+    op_smt = op.c_to_py_fun("SMT")
+    reference = lambda x, y, z, d, e, f, g, h, i, j : (x + y + z + d + e + f + g + h + i + j)
+    numpy_check(op_smt, reference, "ten")
 
 # Tests operations
 def test_op_multiply():
@@ -117,34 +128,3 @@ def test_tensor_product():
 
 def test_sum():
     numpy_check(op.sum, np.sum, mode='single')
-
-
-# Tests loss functions
-def test_l_invcovmat():
-    loss_f = losses.l_invcovmat(INVCOVMAT)
-    result = loss_f(T1, T2)
-    y = ARR1 - ARR2
-    tmp = np.dot(INVCOVMAT, y)
-    reference = np.dot(y, tmp)
-    are_equal(result, reference)
-
-
-def test_l_positivity():
-    alpha = 1e-7
-    loss_f = losses.l_positivity(alpha=alpha)
-    result = loss_f(0.0, T1)
-
-    def elu_sum(yarr_in):
-        """ Applies Exponential Linear Unit
-        to an array and sums it up """
-        yarr = -yarr_in
-        res = 0.0
-        for y in yarr:
-            if y > 0:
-                res += y
-            else:
-                res += alpha * (np.exp(y) - 1)
-        return res
-
-    reference = elu_sum(ARR1)
-    are_equal(result, reference)

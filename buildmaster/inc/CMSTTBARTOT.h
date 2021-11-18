@@ -23,3 +23,12 @@ public: CMSTTBARTOTFilter():
 private:
   void ReadData();
 };
+
+class CMSTTBARTOT_40Filter: public CommonData
+{
+public: CMSTTBARTOT_40Filter():
+  CommonData("CMSTTBARTOT_40") { ReadData(); }
+
+private:
+  void ReadData();
+};

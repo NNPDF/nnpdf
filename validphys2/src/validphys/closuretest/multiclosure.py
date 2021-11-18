@@ -716,3 +716,61 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
 
     """
     return np.concatenate(experiments_bootstrap_xi, axis=1)
+
+def dataset_fits_bias_replicas_variance_samples(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    """For a single dataset, calculate the samples of chi2-quantities which
+    are used to calculate the bias and variance for each fit. The output of this
+    function is similar to :py:func:`fits_dataset_bias_variance` except that
+    the mean is not taken across replicas when calculating the mean squared
+    difference between replica predictions and central predictions and instead
+    the results are concatenated. The mean of this array would be the expected
+    value of the variance across fits.
+
+    Return tuple (fits_bias, fits_replica_variance, n_data), where fits_bias is
+    1-D array of length N_fits and fits_replica_variance is 1-D array length
+    N_fits * N_replicas.
+
+    For more information on bias see closuretest.bias_dataset and for more information
+    on variance see :py:func:`validphys.closuretest.closure_results.variance_dataset`.
+
+    The fits should each have the same underlying law and t0 PDF, but have
+    different filterseeds, so that the level 1 shift is different.
+
+    Can control the number of replicas taken from each fit with
+    ``_internal_max_reps``.
+
+    """
+    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th._rawdata[:, :_internal_max_reps] for th in closures_th])
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
+    # place bins on first axis
+    diffs = law_th.central_value[:, np.newaxis] - centrals.T
+    biases = calc_chi2(sqrtcov, diffs)
+    variances = []
+    # this seems slow but breaks for datasets with single data point otherwise
+    for i in range(reps.shape[0]):
+        diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+        variances.append(calc_chi2(sqrtcov, diffs))
+    return biases, np.concatenate(variances), len(law_th)
+
+def dataset_inputs_fits_bias_replicas_variance_samples(
+    internal_multiclosure_data_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    return dataset_fits_bias_replicas_variance_samples(
+        internal_multiclosure_data_loader,
+        _internal_max_reps=None,
+        _internal_min_reps=20,
+    )
+
+experiments_fits_bias_replicas_variance_samples = collect(
+    "dataset_inputs_fits_bias_replicas_variance_samples",
+    ("group_dataset_inputs_by_experiment",)
+)

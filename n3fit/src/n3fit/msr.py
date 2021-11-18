@@ -5,8 +5,7 @@ import logging
 import numpy as np
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
-from n3fit.backends import operations
-from n3fit.backends import MetaModel
+from n3fit.backends import operations as op
 
 
 log = logging.getLogger(__name__)
@@ -37,26 +36,31 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(fit_layer, final_pdf_layer, mode='All', scaler=None, verbose=False):
+def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     """
-    Applies the normalization due to the sum rules to the final_pdf_layer.
-    The sum rules are computed in the ``fit_layer``
-    while they are applied in the ``final_pdf_layer`` which is in the fk-basis.
+        This function receives:
+        Generates a function that applies a normalization layer to the fit.
+            - fit_layer: the 8-basis layer of PDF which we fit
+        The normalization is computed from the direct output of the NN (so the 7,8-flavours basis)
+            - final_layer: the 14-basis which is fed to the fktable
+        and it is applied to the input of the fktable (i.e., to the 14-flavours fk-basis).
+        It uses pdf_fit to compute the sum rule and returns a modified version of
+        the final_pdf layer with a normalisation by which the sum rule is imposed
 
-    Parameters
-    ----------
-        fit_layer: layer
-            The basis of the fit
-        final_pdf_layer: layer
-            The 14-flavours layers that goes into the fktable
-        mode: str
-            Which sum rules to apply (All/MSR/VSR/None)
-        scaler: scaler
-            Function to apply to the input. If given the input to the model
-            will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
+        Parameters
+        ----------
+            nx: int
+                number of points for the integration grid, default: 2000
+            basis_size: int
+                number of flavours output of the NN, default: 8
+            mode: str
+                what sum rules to compute (MSR, VSR or All), default: All
+            scaler: scaler
+                Function to apply to the input. If given the input to the model
+                will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
     """
+
     # 1. Generate the fake input which will be used to integrate
-    nx = int(2e3)
     xgrid, weights_array = gen_integration_input(nx)
     # 1b If a scaler is provided, scale the input xgrid
     if scaler:
@@ -66,74 +70,28 @@ def msr_impose(fit_layer, final_pdf_layer, mode='All', scaler=None, verbose=Fals
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide()
 
-    def pdf_integrand(x):
-        """ If a scaler is given, the division needs to take only the original input """
-        x_original = operations.op_gather_keep_dims(x, -1, axis=-1)
-        res = operations.op_multiply([division_by_x(x_original), fit_layer(x)])
-        return res
-
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
     integrator = xIntegrator(weights_array, input_shape=(nx,))
 
     # 4. Now create the normalization by selecting the right integrations
-    normalizer = MSR_Normalization(input_shape=(8,), mode=mode)
+    normalizer = MSR_Normalization(input_shape=(basis_size,), mode=mode)
 
-    # 5. Make the xgrid numpy array into a backend input layer so it can be given
-    xgrid_input = operations.numpy_to_input(xgrid)
-    normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
+    # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
+    xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
 
-    def ultimate_pdf(x):
-        return operations.op_multiply_dim([final_pdf_layer(x), normalization])
-
-    if verbose:
-        #         only_int = integrator(pdf_integrand(xgrid_input))
-        #         modelito = MetaModel(xgrid_input, only_int)
-        #         result = modelito.predict(x = None, steps = 1)
-
-        print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input)
-
-    # Save a reference to xgrid in ultimate_pdf, very useful for debugging
-    ultimate_pdf.ref_xgrid = xgrid_input
-
-    return ultimate_pdf, xgrid_input
-
-
-def check_integration(ultimate_pdf, integration_input):
-    """
-    Naive integrator for quick checks.
-    Receives the final PDF layer, computes the 4 MSR and prints out the result
-
-    Called only (for debugging purposes) by msr_impose above
-    """
-    nx = int(1e4)
-    xgrid, weights_array = gen_integration_input(nx)
-    xgrid_input = operations.numpy_to_input(xgrid)
-
-    multiplier = xDivide(output_dim=14, div_list=range(3, 9))
-
-    def pdf_integrand(x):
-        res = operations.op_multiply([multiplier(x), ultimate_pdf(x)])
-        return res
-
-    modelito = MetaModel([xgrid_input, integration_input], pdf_integrand(xgrid_input))
-    modelito.summary()
-    result = modelito.predict(x=None, steps=1)
-
-    result_weighted = result * weights_array
-    result_integrated = np.sum(result_weighted, axis=0)
-
-    msr = result_integrated[1] + result_integrated[2]
-    v = result_integrated[3]
-    v3 = result_integrated[4]
-    v8 = result_integrated[5]
-    print(
+    # Finally prepare a function which will take as input the output of the PDF model
+    # and will return it appropiately normalized.
+    def apply_normalization(layer_pdf):
         """
-     > > > Int from 0 to 1 of:
-    x*g(x) + x*sigma(x) = {0}
-    v                   = {1}
-    v3                  = {2}
-    v8                  = {3}""".format(
-            msr, v, v3, v8
-        )
-    )
+            layer_pdf: output of the PDF, unnormalized, ready for the fktable
+        """
+        x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
+        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
+        normalization = normalizer(integrator(pdf_integrand))
+
+        def ultimate_pdf(x):
+            return layer_pdf(x)*normalization
+
+        return ultimate_pdf
+
+    return apply_normalization, xgrid_input

@@ -20,8 +20,8 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = 'NNPDF'
-copyright = '2019, SI & MU'
-author = 'SI & MU'
+copyright = '2021, NNPDF collaboration'
+author = 'NNPDF collaboration'
 
 # The short X.Y version
 version = ''
@@ -48,12 +48,16 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
+    'sphinxcontrib.bibtex',
     # To generate section headings,
     # particularly in markdown. See
     # https://recommonmark.readthedocs.io/en/latest/#linking-to-headings-in-other-files
     'sphinx.ext.autosectionlabel',
     'recommonmark',
 ]
+
+
+bibtex_bibfiles = ['references.bib']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -159,7 +163,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'NNPDFDocumentation.tex', 'NNPDF Documentation Documentation',
-     'SI \\& MU', 'manual'),
+     'NNPDF collaboration', 'manual'),
 ]
 
 

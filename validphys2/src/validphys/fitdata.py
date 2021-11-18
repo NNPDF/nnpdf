@@ -21,11 +21,17 @@ from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
 from validphys import sumrules
-from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
 REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
+FIT_SUMRULES = [
+    "momentum",
+    "uvalence",
+    "dvalence",
+    "svalence",
+]
+FitSumRulesGrid = namedtuple('FitSumRulesGrid', FIT_SUMRULES)
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -108,9 +114,8 @@ def load_fitinfo(replica_path, prefix):
 
 #TODO: Produce a more informative .sumrules file.
 def load_sumrules(replica_path, prefix):
-    """Load the values of the sum rules defined in
-    ``validphys.pdfgrids.SUM_RULES`` from a given replica."""
-    return np.loadtxt(replica_path/f'{prefix}.sumrules')[:len(sumrules.SUM_RULES)]
+    """Load the values of the sum rules from a given replica."""
+    return np.loadtxt(replica_path/f'{prefix}.sumrules')[:len(FIT_SUMRULES)]
 
 @checks.check_has_fitted_replicas
 def replica_paths(fit):
@@ -188,14 +193,14 @@ def fit_sum_rules(fit, replica_paths):
     the one produced by
     ``validphys.pdfgrids.sum_rules`` which is instead obtained from LHAPDF at
     a given energy"""
-    res = np.zeros((len(sumrules.SUM_RULES),len(replica_paths)))
+    res = np.zeros((len(FIT_SUMRULES),len(replica_paths)))
     for i, p in enumerate(replica_paths):
         res[:, i] = load_sumrules(p, fit.name)
-    return sumrules.SumRulesGrid(*res)
+    return FitSumRulesGrid(*res)
 
 @table
 def fit_sum_rules_table(fit_sum_rules):
-    return sumrules.sum_rules_table(fit_sum_rules)
+    return sumrules.sum_rules_table(fit_sum_rules._asdict())
 
 
 fits_replica_data = collect('replica_data', ('fits',))
@@ -335,7 +340,7 @@ def summarise_theory_covmat_fits(fits_theory_covmat_summary):
     return pd.concat(fits_theory_covmat_summary, axis=1)
 
 def _get_fitted_index(pdf, i):
-    """Return the nnfit index for the replcia i"""
+    """Return the nnfit index for the replica i"""
     p = pathlib.Path(pdf.infopath).with_name(f'{pdf.name}_{i:04d}.dat')
     with open(p) as f:
         it = yaml.safe_load_all(f)

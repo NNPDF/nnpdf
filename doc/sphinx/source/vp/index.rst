@@ -14,15 +14,18 @@ Introduction to ``validphys 2``
   tables or entire reports as an output.
 
 * The code also provides a Python library
-  (also called ``validphys``) which is used to implement executables providing
+  (also called `validphys`) which is used to implement executables providing
   interfaces to more specific analyses such as the ``vp-comparefits``, and to
   serve as basis to other NNPDF codes such as ``n3fit``.
 
-* ``validphys 2`` is implemented on top of the ``reportengine`` framework.
-  ``reportengine`` provides the logic to process the runcards by building  task
+* ``validphys 2`` is implemented on top of the
+  `reportengine <https://github.com/NNPDF/reportengine>`_ framework.
+  ``reportengine`` provides the logic to process the runcards by building task
   execution graphs based on individual actions (which are Python functions). The
   runcards can execute complex analysis and parameter scans with  the appropriate
-  use of namespaces.
+  use of namespaces. More information on ``reportengine`` and its interface with
+  ``validphys`` can be found in the
+  :ref:`Design <design>` section.
 
 * Some parts of ``validphys`` use the ``libnnpdf`` library in C++, through SWIG
   wrappers.
@@ -30,8 +33,8 @@ Introduction to ``validphys 2``
 * The ideas behind the design of the code are explained in the
   :ref:`Design <design>` section.
 
-Some things which ``validphys`` does
--------------------------------------
+Some things that `validphys` does
+---------------------------------
 
 * Download resources (``vp-get``) - see :ref:`download`
 * Upload resources (``vp-upload``, ``wiki-upload`` and ``--upload`` flag) - see :ref:`upload`
@@ -52,8 +55,14 @@ Using validphys
    ./download.md
    ./upload.md
    ./nnprofile.md
+   ./complex_runcards.rst
+   ./cuts.md
+   ./datthcomp.md
+   ./reports.rst
    ./scripts.rst
    ./api.md
+   ./developer.rst
+   ./tables_figs.rst
    ./customplots.rst
    ./examples.rst
 
@@ -67,9 +76,14 @@ How validphys handles data
    ./theorycov/index
    ./dataspecification.rst
 
-Structure and design of validphys
----------------------------------
+More detailed functionality
+---------------------------
 .. toctree::
    :maxdepth: 1
 
    ./design.md
+   ./namespaces.rst
+   ./resolving_dependencies.rst
+   ./collect.rst
+   ./checks.rst
+   ./custom_pipelines.rst

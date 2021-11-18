@@ -1,17 +1,17 @@
 """
 Penalties that can be applied to the hyperopt loss
 
-All functions in this module have the same signature of positional arguments:
+Penalties in this module usually take as signature the positional arguments:
 
-    pdf_model: :py:class:`n3fit.backends.keras_backend.MetaModel`
-        model or function taking a ``(1, xgrid_size, 1)`` array as input 
+    pdf_models: list(:py:class:`n3fit.backends.keras_backend.MetaModel`)
+        list of models or functions taking a ``(1, xgrid_size, 1)`` array as input
         and returns a ``(1, xgrid_size, 14)`` pdf.
 
     stopping_object: :py:class:`n3fit.stopping.Stopping`
         object holding the information about the validation model
         and the stopping parameters
 
-although not all penalties must use both.
+although not all penalties use both.
 
 And return a float to be added to the hyperscan loss.
 
@@ -23,9 +23,10 @@ from validphys import fitveto
 from n3fit.vpinterface import N3PDF
 
 
-def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavors=None):
-    """Checks the pdf model for saturation at small x
+def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_kwargs):
+    """Checks the pdf models for saturation at small x
     by checking the slope from ``min_x`` to ``max_x``.
+    Sum the saturation loss of all pdf models
 
     Parameters
     ----------
@@ -44,7 +45,7 @@ def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavor
     >>> from n3fit.model_gen import pdfNN_layer_generator
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> isinstance(saturation(pdf_model, None), float)
+    >>> isinstance(saturation([pdf_model], None), float)
     True
 
     """
@@ -52,16 +53,18 @@ def saturation(pdf_model, stopping_object, n=100, min_x=1e-6, max_x=1e-4, flavor
         flavors = [1, 2]
     x = np.logspace(np.log10(min_x), np.log10(max_x), n)
     xin = np.expand_dims(x, axis=[0, -1])
-    y = pdf_model.predict([xin])
     extra_loss = 0.0
-    xpdf = y[0, :, flavors]
-    slope = np.diff(xpdf) / np.diff(np.log10(x))
-    pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
-    extra_loss = np.sum(1.0 / (1e-7 + pen))
+    for pdf_model in pdf_models:
+        y = pdf_model.predict([xin])
+        xpdf = y[0, :, flavors]
+        slope = np.diff(xpdf) / np.diff(np.log10(x))
+        pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
+        # Add a small offset to avoid ZeroDivisionError
+        extra_loss += np.sum(1.0 / (1e-7 + pen))
     return extra_loss
 
 
-def patience(pdf_model, stopping_object, alpha=1e-4):
+def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     """Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
     The penalty is proportional to the validation loss and will be 0
@@ -83,15 +86,15 @@ def patience(pdf_model, stopping_object, alpha=1e-4):
     3.434143467595683
 
     """
-    epoch_best = stopping_object.e_best_chi2
+    epoch_best = np.take(stopping_object.e_best_chi2, 0)
     patience = stopping_object.stopping_patience
     max_epochs = stopping_object.total_epochs
     diff = abs(max_epochs - patience - epoch_best)
-    vl_loss = stopping_object.vl_chi2
+    vl_loss = np.take(stopping_object.vl_chi2, 0)
     return vl_loss * np.exp(alpha * diff)
 
 
-def integrability(pdf_model, stopping_object):
+def integrability(pdf_models=None):
     """Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
     of the threshold defined in validphys::fitveto
@@ -104,11 +107,11 @@ def integrability(pdf_model, stopping_object):
     >>> from n3fit.model_gen import pdfNN_layer_generator
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> isinstance(integrability(pdf_model, None), float)
+    >>> isinstance(integrability([pdf_model], None), float)
     True
 
     """
-    pdf_instance = N3PDF(pdf_model)
+    pdf_instance = N3PDF(pdf_models)
     integ_values = pdf_instance.integrability_numbers()
     integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
     if integ_overflow > 50.0:

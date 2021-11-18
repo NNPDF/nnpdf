@@ -1,0 +1,22 @@
+meta:
+    title: χ2 spider plots by group
+    keywords: [example, spider]
+    author: Rosalyn Pearson
+
+metadata_group: nnpdf31_process
+
+
+fits:
+    - {id: "NNPDF40_nnlo_as_01180_1000", label: NNLO}
+    - {id: "NNPDF40_nlo_as_01180", label: NLO}
+
+use_cuts: "internal"
+
+template_text: |
+    
+    # Spider plot for χ2
+    
+    {@plot_fits_datasets_chi2_spider_bygroup@}
+    
+actions_:
+  - report(main=true)

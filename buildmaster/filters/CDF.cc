@@ -536,8 +536,9 @@ void CDFZRAP_NEWFilter::ReadData()
     lstream >> fData[i];
     lstream >> fStat[i];
 
-    fSys[i][0].mult = 6.0;  //luminosity
-    lstream >> fSys[i][0].add;         //absolute value of 6% luminosity
+    //Luminosity uncertainty (6%)
+    lstream >> fSys[i][0].add;
+    fSys[i][0].mult = fSys[i][0].add/fData[i]*100.;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CDFLUMI";
 

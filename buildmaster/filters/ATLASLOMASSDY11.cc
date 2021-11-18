@@ -19,6 +19,7 @@
  * d sigma/dM_{LL} [pb / GeV], |eta^{gamma}|
  */
 
+/*
 void ATLASLOMASSDY11Filter::ReadData()
 {
   // Opening files
@@ -57,7 +58,7 @@ void ATLASLOMASSDY11Filter::ReadData()
     lstream >> mbin[idat] >> mbin[idat+1] >> fData[idat]
 	    >> fStatP >> fStatM
 	    >> fUncorrP >> fUncorrM
-      >> fCorr[1] >> fCorr[2] >> fCorr[3] >> fCorr[4] >> fCorr[5]
+	    >> fCorr[1] >> fCorr[2] >> fCorr[3] >> fCorr[4] >> fCorr[5]
 	    >> fCorr[6] >> fCorr[7] >> fCorr[8] >> fCorr[9] >> fCorr[10]
 	    >> fCorr[11] >> fCorr[12] >> fCorr[13]
  	    >> fATLAS2011Luminosity;
@@ -97,13 +98,14 @@ void ATLASLOMASSDY11Filter::ReadData()
     // Kinematic variables
     fKin1[idat] = (mbin[idat] + mbin[idat+1]) * 0.5;  // Avg. M_ll of each bin
     fKin2[idat] = pow(fKin1[idat], 2.0);              // Avg. M_ll of each bin squared
-    fKin3[idat] = 7E3;                                // LHC 7 TeV
+    fKin3[idat] = 7000.;                                // LHC 7 TeV
 
   }
 
   f1.close();
 
 }
+*/
 
 /*
  * ATLASLOMASSDY11EXT dataset

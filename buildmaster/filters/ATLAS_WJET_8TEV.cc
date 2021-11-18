@@ -176,7 +176,7 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 	}
     }
 
-  //Real systematics (correlated across bins and W=/W- distributions)
+  //Real systematics (correlated across bins and W+/W- distributions)
   for(int i=0; i<fNData; i++)
     {
       
@@ -310,7 +310,7 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
       fSys[i][123].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][123].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][123].type = MULT;
-      fSys[i][123].name = "CORR";
+      fSys[i][123].name = "SKIP";
 
     }
 
@@ -619,7 +619,7 @@ void ATLAS_WM_JET_8TEV_PTFilter::ReadData()
       fSys[i][123].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][123].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][123].type = MULT;
-      fSys[i][123].name = "CORR";
+      fSys[i][123].name = "SKIP";
 
     }
 
@@ -920,7 +920,7 @@ void ATLAS_WP_JET_8TEV_PTJFilter::ReadData()
       fSys[i][129].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][129].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][129].type = MULT;
-      fSys[i][129].name = "CORR";
+      fSys[i][129].name = "SKIP";
 
     }
 
@@ -1229,7 +1229,7 @@ void ATLAS_WM_JET_8TEV_PTJFilter::ReadData()
       fSys[i][129].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][129].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][129].type = MULT;
-      fSys[i][129].name = "CORR";
+      fSys[i][129].name = "SKIP";
 
     }
 

@@ -2,9 +2,8 @@
     This module contains layers acting on the x-grid input of the NN
 
     The three operations included are:
-        - `xDivide`
-        - `xMultiply`
-        - `xIntegrator`
+        - ``xDivide``
+        - ``xIntegrator``
 
     The names are self-describing. The only subtlety is that they do not act equally
     for all flavours. The choice of flavours on which to act in a different way is given
@@ -14,26 +13,30 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
+BASIS_SIZE=14
 
 class xDivide(MetaLayer):
     """
-        Divide the pdf by x
-        By default: dimension = 8 dividing the entries corresponding to v, v3, v8
+    Divide some PDFs by x
 
-        Parameters:
-        -----------
-            output_dim: int
-                dimension of the pdf
-            div_list: list
-                list of indices to be divided by X (by default [2,3,4]; [v, v3, v8]
+    By default it utilizes the 14-flavour FK basis and divides [v, v3, v8]
+    which corresponds to indices (3,4,5) from
+    (photon, sigma, g, v, v3, v8, v15, v24, v35, t3, t8, t15, t24, t35)
+
+    Parameters:
+    -----------
+        output_dim: int
+            dimension of the pdf
+        div_list: list
+            list of indices to be divided by X (by default [3,4,5]; [v, v3, v8]
     """
 
-    def __init__(self, output_dim=8, div_list=None, **kwargs):
+    def __init__(self, output_dim=BASIS_SIZE, div_list=None, **kwargs):
         if div_list is None:
-            div_list = [2, 3, 4]
+            div_list = [3, 4, 5]
         self.output_dim = output_dim
         self.div_list = div_list
-        super(MetaLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def call(self, x):
         out_array = []
@@ -62,11 +65,11 @@ class xIntegrator(MetaLayer):
             weights of the grid
     """
 
-    def __init__(self, grid_weights, **kwargs):
+    def __init__(self, grid_weights, output_dim=BASIS_SIZE, **kwargs):
         grid_weights_tensor = op.numpy_to_tensor(grid_weights)
         # Open up the grid weights
-        self.grid_weights = op.many_replication(grid_weights_tensor, 8, axis=1)
-        super(MetaLayer, self).__init__(**kwargs)
+        self.grid_weights = op.many_replication(grid_weights_tensor, output_dim, axis=1)
+        super().__init__(**kwargs)
 
     def call(self, x):
         xx = x * self.grid_weights

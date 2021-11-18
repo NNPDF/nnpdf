@@ -3,78 +3,20 @@
 Data specification
 ==================
 
-
-At a glance: what do I need to change in my runcards?
------------------------------------------------------
-
-The data specification has been updated from a more rigid structure based on 
-experiments to a flatter structure based on individual datasets, which can be
-grouped in a more flexible way for different purposes. This grouping is specified
-by ``metadata_group``, and the default grouping is by ``experiment``.
-
-Efforts have been made to ensure a degree of backwards compatibility, however
-there are two main things which may need to be changed in old runcards.
-
-1. For theorycovariance runcards, you must add a line with
-``metadata_group: nnpdf31_process``, or else the prescriptions for scale
-variations will not vary scales coherently for data
-within the same process type, as usually desired, but rather for data within
-the same experiment.
-
-2. Many actions which were based on experiments have changed names as they are
-now based on arbitrary groupings given by ``metadata_group``. The table below gives
-the old name alongside the new one. These need to be updated for the runcards to 
-continue to work.
-
-.. list-table:: Updated names for old actions
-   :widths: 25 25
-   :header-rows: 1
-
-   * - Old name
-     - New name
-   * - plot_fits_experiments_phi
-     - plot_fits_groups_data_phi
-   * - plot_phi_experiment_dist
-     - plot_dataset_inputs_phi_dist
-   * - plot_experiments_chi2
-     - plot_groups_data_chi2
-   * - plot_fits_experiments_chi2
-     - plot_fits_groups_data_chi2
-   * - experiment_result_table
-     - group_result_table
-   * - experiment_result_table_68cl
-     - group_result_table_68cl
-   * - experiments_covmat
-     - groups_covmat
-   * - experiments_sqrtcovmat
-     - groups_sqrtcovmat
-   * - experiments_invcovmat
-     - groups_invcovmat
-   * - experiments_normcovmat
-     - groups_normcovmat
-   * - experiments_corrmat
-     - groups_corrmat
-   * - experiment_results
-     - dataset_inputs_results
-   * - experiments_chi2_table
-     - groups_chi2_table
-   * - fits_experiments_chi2_table
-     - fits_groups_chi2_table
-   * - fits_experiments_phi_table
-     - fits_groups_phi_table
-   * - dataspecs_experiments_chi2_table
-     - dataspecs_groups_chi2_table
-   * - experiments_central_values
-     - groups_central_values
-   * - experiments_chi2_table_theory
-     - groups_chi2_table_theory
-   * - experiments_chi2_table_diagtheory
-     - groups_chi2_table_diagtheory
-
-
+.. _datasetspec-core-label:
 
 ``DataSetSpec`` - Core dataset object
 -------------------------------------
+
+The declaration of dataset specifications within the ``validphys`` framework
+is handled using the ``dataset_input``  key, or ``dataset_inputs`` namespace
+list for a collection of datasets. Through this keyword the user
+is provided a granular degree of customizability for each dataset considered
+in the runcard; in particular the handling of K-factors, systematic uncertainties,
+training fraction, or dataset weight can be modified in this declaration. Moreover,
+the ``metadata_group`` keyword allows for a flexible grouping of a collection of
+datasets, organizing them into disjoint subsets depending on, for example, the
+experiment class to which they belong or their process type.
 
 The core dataset object in ``validphys`` is the
 :py:mod:`validphys.core.DataSetSpec` which is responsible for loading the
@@ -123,15 +65,16 @@ Here we are obtaining the result from the production rule
 are ``dataset_input``, ``cuts`` and ``theoryid``.
 
 .. note::
-    It seems odd to require theory settings such as a `theoryid` in the
-    `dataset_input` in order to load data. However, this is a relic of the
+
+    It seems odd to require theory settings such as a ``theoryid`` in the
+    ``dataset_input`` in order to load data. However, this is a relic of the
     underlying C++ code that performs the loading of data, which intrinsically
     groups together the commondata (CSVs containing data central values and
     uncertainties) and :ref:`fktables`.
 
     Clearly there is a big margin for error when manually entering
-    `dataset_input` and so there is a
-    [project](https://github.com/NNPDF/nnpdf/issues/226) that aims to have a
+    ``dataset_input`` and so there is a
+    `project <https://github.com/NNPDF/nnpdf/issues/226>`_ that aims to have a
     stable way of filling many of these settings with correct default values.
 
 The ``DataSetSpec`` contains all of the information used to construct it, e.g.
@@ -458,9 +401,12 @@ results in the table or plot will have been collected over ``fits`` with
 .. warning::
   Whilst it is possible to specify ``data_input: {from_: fitinputcontext}``
   directly in the runcard, it is highly recommended **not** to do this where
-  possible. Instead take either ``dataset_inputs`` or ``experiments``
-  directly ``from_: fit`` depending on whether the fit uses new or old data
-  specification respectively. (See below for a detailed explanation).
+  possible. Instead take ``dataset_inputs`` directly ``from_: fit``
+  irrespective of whether the fit uses new or old data specification; since
+  the conversion from the old style data specification is handled internally
+  using :py:func:`validphys.utils.experiments_to_dataset_inputs` in
+  conjunction with :py:meth:`validphys.core.FitSpec.as_input`.  (See below for
+  a detailed explanation).
 
 Currently the ``pseudodata`` and ``chi2grids`` modules have not been updated to
 use ``dataset_inputs`` and so require ``experiments`` to be specified in the
@@ -479,3 +425,65 @@ always require ``experiments`` to be specified in the runcard.
   group will contain all of the datasets from the fit - which is incorrect.
   This is regarded as a bug, the relevant issue is:
   https://github.com/NNPDF/reportengine/issues/38
+
+What do I need to change in my runcards?
+-----------------------------------------------------
+
+Efforts have been made to ensure a degree of backwards compatibility, however
+there are two main things which may need to be changed in old runcards.
+
+1. For theorycovariance runcards, you must add a line with
+``metadata_group: nnpdf31_process``, or else the prescriptions for scale
+variations will not vary scales coherently for data
+within the same process type, as usually desired, but rather for data within
+the same experiment.
+
+2. Many actions which were based on experiments have changed names as they are
+now based on arbitrary groupings given by ``metadata_group``. The table below gives
+the old name alongside the new one. These need to be updated for the runcards to 
+continue to work.
+
+.. list-table:: Updated names for old actions
+   :widths: 25 25
+   :header-rows: 1
+
+   * - Old name
+     - New name
+   * - plot_fits_experiments_phi
+     - plot_fits_groups_data_phi
+   * - plot_phi_experiment_dist
+     - plot_dataset_inputs_phi_dist
+   * - plot_experiments_chi2
+     - plot_groups_data_chi2
+   * - plot_fits_experiments_chi2
+     - plot_fits_groups_data_chi2
+   * - experiment_result_table
+     - group_result_table
+   * - experiment_result_table_68cl
+     - group_result_table_68cl
+   * - experiments_covmat
+     - groups_covmat
+   * - experiments_sqrtcovmat
+     - groups_sqrtcovmat
+   * - experiments_invcovmat
+     - groups_invcovmat
+   * - experiments_normcovmat
+     - groups_normcovmat
+   * - experiments_corrmat
+     - groups_corrmat
+   * - experiment_results
+     - dataset_inputs_results
+   * - experiments_chi2_table
+     - groups_chi2_table
+   * - fits_experiments_chi2_table
+     - fits_groups_chi2_table
+   * - fits_experiments_phi_table
+     - fits_groups_phi_table
+   * - dataspecs_experiments_chi2_table
+     - dataspecs_groups_chi2_table
+   * - experiments_central_values
+     - groups_central_values
+   * - experiments_chi2_table_theory
+     - groups_chi2_table_theory
+   * - experiments_chi2_table_diagtheory
+     - groups_chi2_table_diagtheory

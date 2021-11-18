@@ -5,18 +5,29 @@
     backend-dependent calls.
 """
 
+import re
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
-from n3fit.backends.keras_backend.operations import numpy_to_tensor, numpy_to_input
+from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
+import n3fit.backends.keras_backend.operations as op
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
-tf_version = tf.__version__.split('.')
+tf_version = tf.__version__.split(".")
 if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
-    LEGACY = True
-else:
-    LEGACY = False
+    raise NotImplementedError("n3fit needs TF > 2.2 in order to work")
+
+
+# We need a function to transform tensors to numpy/python primitives
+# which is not part of the official TF interface and can change with the version
+if hasattr(tf_utils, "to_numpy_or_python_type"):
+    _to_numpy_or_python_type = tf_utils.to_numpy_or_python_type
+elif hasattr(tf_utils, "sync_to_numpy_or_python_type"):  # from TF 2.5
+    _to_numpy_or_python_type = tf_utils.sync_to_numpy_or_python_type
+else:  # in case of disaster
+    _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
+
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -34,6 +45,12 @@ optimizers = {
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
+
+
+def _default_loss(y_true, y_pred): # pylint: disable=unused-argument
+    """Default loss to be used when the model is compiled with loss = Null
+    (for instance if the prediction of the model is already the loss"""
+    return op.sum(y_pred)
 
 
 def _fill_placeholders(original_input, new_input=None):
@@ -122,10 +139,10 @@ class MetaModel(Model):
         for input_tensor in input_list:
             # If the input contains a tensor_content, store it to use at predict/fit/eval times
             # otherwise, put a placeholder None as it will come from the outside
-            name = input_tensor.name.rsplit(":",1)[0]
+            name = input_tensor.name.rsplit(":", 1)[0]
             input_dict[name] = input_tensor
             try:
-                x_in[name] = numpy_to_tensor(input_tensor.tensor_content)
+                x_in[name] = op.numpy_to_tensor(input_tensor.tensor_content)
                 tensors_in[name] = input_tensor
             except AttributeError:
                 x_in[name] = None
@@ -137,21 +154,20 @@ class MetaModel(Model):
         self.tensors_in = tensors_in
 
         self.target_tensors = None
-        self.eval_fun = None
+        self.compute_losses_function = None
         self._scaler = scaler
 
     def _parse_input(self, extra_input=None):
-        """ Returns the input data the model was compiled with.
+        """Returns the input data the model was compiled with.
         Introduces the extra_input in the places asigned to the placeholders.
 
         If the model was generated with a scaler, the input will be scaled accordingly
         """
         if isinstance(extra_input, dict) and self._scaler is not None:
-            extra_input = {k: self._scaler(i) for k,i in extra_input.items()}
+            extra_input = {k: self._scaler(i) for k, i in extra_input.items()}
         elif isinstance(extra_input, (tuple, list)) and self._scaler is not None:
             extra_input = [self._scaler(i) for i in extra_input]
         return _fill_placeholders(self.x_in, extra_input)
-
 
     def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
@@ -174,7 +190,7 @@ class MetaModel(Model):
         x = self._parse_input(x)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x, y=y, epochs=epochs, **kwargs,)
+        history = super().fit(x=x, y=y, epochs=epochs, **kwargs)
         loss_dict = history.history
         return loss_dict
 
@@ -186,45 +202,41 @@ class MetaModel(Model):
 
     def compute_losses(self):
         """
-        This function is the fast-equivalent to the model ``evaluate(x,y)`` method.
-
-        On first call it calls ``.evaluate(return_dict=True, verbose=0)`` to force
-        the initialization of the test function.
-        Subsequent calls of this method will (when applicable)
-        directly call the internal evaluation function ``eval_fun``.
-        This bypasses the pre- and post- evaluation steps, resulting in a ~10% speed up
-        with respect to ``.evaluate(...)``
+        This function is equivalent to the model ``evaluate(x,y)`` method of most TensorFlow models
+        which return a dictionary of losses per output layer.
+        The losses reported in the ``evaluate`` method for n3fit are, however, summed over replicas.
+        Instead the loss we are interested in is usually the output of the model (i.e., predict)
+        This function then generates a dict of partial losses of the model separated per replica.
+        i.e., the output for experiment {'LHC_exp'} will be an array of Nrep elements.
 
         Returns
         -------
             dict
                 a dictionary with all partial losses of the model
         """
-        if self.eval_fun is None:
-            # We still need to perform some initialization
-            if LEGACY:
-                # For TF < 2.2 we need to generate the test_function ourselves
-                self.make_test_function()
-            else:
-                return self.evaluate(return_dict=True, verbose=False)
-        if LEGACY:
-            # For tF < 2.2 we need to force the output to be a float
-            ret = self.eval_fun()
-            ret['loss'] = ret['loss'].numpy()
-            return ret
-        else:
-            return self.eval_fun()
+        if self.compute_losses_function is None:
+            # If it is the first time we are passing through, compile the function and save it
+            out_names = [f"{i}_loss" for i in self.output_names]
+            out_names.insert(0, "loss")
 
-    def evaluate(self, x=None, y=None, **kwargs):
-        """
-        Wrapper around evaluate to take into account the case in which the data is already known
-        when the model is compiled.
-        """
-        x = self._parse_input(x)
-        if LEGACY and y is None:
-            y = self.target_tensors
-        result = super().evaluate(x=x, y=y, **kwargs)
-        return result
+            # Compile a evaluation function
+            @tf.function
+            def losses_fun():
+                predictions = self(self._parse_input(None))
+                # If we only have one dataset the output changes
+                if len(out_names) == 2:
+                    predictions = [predictions]
+                total_loss = tf.reduce_sum(predictions, axis=0)
+                ret = [total_loss] + predictions
+                return dict(zip(out_names, ret))
+
+            self.compute_losses_function = losses_fun
+
+        ret = self.compute_losses_function()
+
+        # The output of this function is to be used by python (and numpy)
+        # so we need to convert the tensors
+        return _to_numpy_or_python_type(ret)
 
     def compile(
         self,
@@ -267,6 +279,9 @@ class MetaModel(Model):
                 f"[MetaModel.select_initializer] optimizer not implemented: {optimizer_name}"
             ) from e
 
+        if loss is None:
+            loss = _default_loss
+
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
@@ -280,62 +295,18 @@ class MetaModel(Model):
         # Instantiate the optimizer
         opt = opt_function(**opt_args)
 
-        # If given target output, compile it together with the model for better performance
-        if target_output is not None:
+        # If given target output is None, target_output is unnecesary, save just a zero per output
+        if target_output is None:
+            self.target_tensors = [np.zeros((1, 1)) for i in self.output_shape]
+        else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
-            # Tensorize
             self.target_tensors = target_output
 
-        # Reset the evaluation function (if any)
-        self.eval_fun = None
-
-        super(MetaModel, self).compile(optimizer=opt, loss=loss)
-
-    def make_test_function(self):
-        """ If the model has been compiled with target data, it creates
-        a specific evaluate function with the target data already evaluated.
-        Otherwise return the normal tensorflow behaviour.
-        """
-        if self.eval_fun is not None:
-            return self.eval_fun
-
-        if self.target_tensors is None:
-            return super().make_test_function()
-
-        # Recover the target tensors and their lengths, we cannot rely
-        # directly on the output from the model as we might have target_tensors
-        # with 0 data points (if the tr/vl mask covers the whole set)
-        lens = []
-        tt = []
-        for target in self.target_tensors:
-            lens.append(target.size)
-            tt.append(numpy_to_tensor(target))
-        # Save target_tensors as tensors, as it might be useful for LEGACY
-        self.target_tensors = tt
-
-        # Get the name of the output layer
-        # and add the suffix _loss to match TF behaviour
-        out_names = [f"{i}_loss" for i in self.output_names]
-        out_names.insert(0, "loss")
-
-        @tf.function
-        def eval_fun(*args):
-            predictions = self(self._parse_input(None))
-            # Concatenate the output to split them again as a list
-            ypred = tf.concat(predictions, axis=-1)
-            predspl = tf.split(ypred, lens, axis=-1)
-            loss_list = [lfun(target, pred) for target, pred, lfun in zip(tt, predspl, self.loss)]
-            ret = [tf.reduce_sum(loss_list)] + loss_list
-            return dict(zip(out_names, ret))
-
-        # Save the function so we don't go through this again
-        self.eval_fun = eval_fun
-
-        return eval_fun
+        super().compile(optimizer=opt, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
-        """ Set all mask value to the selected value
+        """Set all mask value to the selected value
         Masks in MetaModel should be named {name}_mask
 
         Mask are layers with one single weight (shape=(1,)) that multiplies the input
@@ -354,7 +325,7 @@ class MetaModel(Model):
             mask_w.assign(mask_val)
 
     def reset_layer_weights_to(self, layer_names, reference_vals):
-        """ Set weights for the given layer to the given reference values
+        """Set weights for the given layer to the given reference values
 
         The ``reference_vals`` values list must be a list of the same size
         of ``layer_names`` and it must consist of numpy arrays that perfectly
@@ -379,10 +350,9 @@ class MetaModel(Model):
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
         all_input = _fill_placeholders(self.tensors_in, x)
-        try:
-            return all_input, super().__call__(all_input)
-        except ValueError:
-            # TF < 2.1
-            # TF 2.0 seems to fail with ValueError when passing a dictionary as an input
-            y = all_input.values()
-            return all_input, super().__call__(y)
+        return all_input, super().__call__(all_input)
+
+    def get_layer_re(self, regex):
+        """ Get all layers matching the given regular expression """
+        check = lambda x: re.match(regex, x.name)
+        return list(filter(check, self.layers))

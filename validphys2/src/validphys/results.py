@@ -27,7 +27,7 @@ from validphys.checks import (
     check_two_dataspecs,
 )
 
-from validphys.core import DataSetSpec, PDF, DataGroupSpec, cut_mask
+from validphys.core import DataSetSpec, PDF, DataGroupSpec
 from validphys.calcutils import (
     all_chi2,
     central_chi2,
@@ -441,65 +441,6 @@ def groups_corrmat(groups_covmat):
 def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
-@table
-def closure_pseudodata_replicas(
-    experiments, pdf, nclosure: int, experiments_index, nnoisy: int = 0
-):
-    """Generate closure pseudodata replicas from the given pdf.
-
-    nclosure: Number of Level 1 pseudodata replicas.
-
-    nnoisy:   Number of Level 2 replicas generated out of each pseudodata replica.
-
-    The columns of the table are of the form (clos_0, noise_0_n0 ..., clos_1, ...)
-    """
-
-    # TODO: Do this somewhere else
-    from NNPDF import RandomGenerator
-
-    RandomGenerator.InitRNG(0, 0)
-    data = np.zeros((len(experiments_index), nclosure * (1 + nnoisy)))
-
-    cols = []
-    for i in range(nclosure):
-        cols += ["clos_%04d" % i, *["noise_%04d_%04d" % (i, j) for j in range(nnoisy)]]
-
-    loaded_pdf = pdf.load()
-
-    for exp in experiments:
-        # Since we are going to modify the experiments, we copy them
-        # (and work on the copies) to avoid all
-        # sorts of weirdness with other providers. We don't want this to interact
-        # with DataGroupSpec at all, because it could do funny things with the
-        # cache when calling load(). We need to copy this yet again, for each
-        # of the noisy replicas.
-        closure_exp = Experiment(exp.load())
-
-        # TODO: This is probably computed somewhere else... All this code is
-        # very error prone.
-        # The predictions are for the unmodified experiment.
-        predictions = [ThPredictions(loaded_pdf, d.load()) for d in exp]
-
-        exp_location = experiments_index.get_loc(closure_exp.GetExpName())
-
-        index = itertools.count()
-        for i in range(nclosure):
-            # Generate predictions with experimental noise, a different for
-            # each closure set.
-            closure_exp.MakeClosure(predictions, True)
-            data[exp_location, next(index)] = closure_exp.get_cv()
-            for j in range(nnoisy):
-                # If we don't copy, we generate noise on top of the noise,
-                # which is not what we want.
-                replica_exp = Experiment(closure_exp)
-                replica_exp.MakeReplica()
-
-                data[exp_location, next(index)] = replica_exp.get_cv()
-
-    df = pd.DataFrame(data, index=experiments_index, columns=cols)
-
-    return df
-
 
 def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     """Tuple of data and theory results for a single pdf. The data will have an associated
@@ -517,81 +458,6 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     )
 
 
-def get_shifted_results(results, commondata, cutlist):
-    """Returns the theory results shifted according to correlated experimental uncertainties.
-
-    Parameters
-    ----------
-    results: tuple 
-        A tuple of data and theory results where the theory results' central values are 
-        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
-        impact of correlated experimental uncertainties.
-    commondata : ``CommonDataSpec``
-        The specification corresponfing to the commondata to be plotted.
-    cutlist : list
-        The list of ``CutSpecs`` or ``None`` corresponding to the cuts for each
-        result.
-
-    Returns
-    -------
-    results: tuple 
-        A tuple of data and theory results where the theory results' central values are 
-        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
-        impact of correlated experimental uncertainties.
-    shifted: list 
-        A list of booleans indicating which datasets have been shifted. Note: the datasets with 
-        uncorrelated uncertainties doesn't include the correlated shifts."""
-
-    shifted = []
-
-    cd = commondata.load()
-
-    ## fill uncertainties
-    Ndat, Nsys = cd.GetNData(), cd.GetNSys()
-
-    # square root of sum of uncorrelated uncertainties
-    uncorrE = np.zeros(Ndat)
-    corrE = np.zeros((Ndat, Nsys))  # table of all the correlated uncertainties
-
-    for idat in range(Ndat):
-        uncorrE[idat] = cd.GetUncE(idat)
-        for isys in range(Nsys):
-            if cd.GetSys(idat, isys).name != "UNCORR":
-                corrE[idat, isys] = cd.GetSys(idat, isys).add
-
-    mask = cut_mask(cutlist[0])
-    uncorrE = uncorrE[mask]
-    corrE = corrE[mask]
-    data = results[0].central_value
-
-    for i, result in enumerate(results):
-        if i == 0:
-            continue
-
-        lambda_sys = np.zeros(Nsys)  # nuisance parameters
-        theory = results[i].central_value
-
-        ## isys is equivalent to alpha index and lsys to delta in eq.85
-        if np.any(uncorrE == 0):
-            temp_shifts = np.zeros(Ndat)
-            shifted.append(False)
-        else:
-            f1 = (data - theory)/uncorrE  # first part of eq.85
-            A = np.eye(Nsys) + \
-                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2)  # eq.86
-            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A),
-                           corrE, 1./uncorrE)  # second part of eq.85
-            lambda_sys = np.einsum('i,ik->k', f1, f2)  # nuisance parameter
-            shifts = np.einsum('ik,k->i', corrE, lambda_sys)  # the shift
-
-            results[i]._central_value += shifts
-            shifted.append(True)
-
-    #now that theory is shifted, take only the uncorr component of the uncertainty in the data
-    if any(shifted):
-        results[0].covmat[np.diag_indices_from(results[0].covmat)] = uncorrE**2
-
-    return results, shifted
 
 def dataset_inputs_results(
     data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
@@ -751,48 +617,6 @@ def dataset_inputs_bootstrap_chi2_central(
     return chi2_central_resample
 
 
-# TODO: deprecate this function?
-def chi2_breakdown_by_dataset(
-    experiment_results,
-    experiment,
-    t0set,
-    prepend_total: bool = True,
-    datasets_sqrtcovmat=None,
-) -> dict:
-    """Return a dict with the central chi² of each dataset in the experiment,
-    by breaking down the experiment results. If ``prepend_total`` is True.
-    """
-    dt, th = experiment_results
-    sqrtcovmat = dt.sqrtcovmat
-    central_diff = th.central_value - dt.central_value
-    d = {}
-    if prepend_total:
-        d["Total"] = (calc_chi2(sqrtcovmat, central_diff), len(sqrtcovmat))
-
-    # Allow lower level access useful for pseudodata and such.
-    # TODO: This is a hack and we should get rid of it.
-    if isinstance(experiment, Experiment):
-        loaded_exp = experiment
-    else:
-        loaded_exp = experiment.load()
-
-    # TODO: This is horrible. find a better way to do it.
-    if t0set:
-        loaded_exp = type(loaded_exp)(loaded_exp)
-        loaded_exp.SetT0(t0set.load_T0())
-
-    indmin = indmax = 0
-
-    if datasets_sqrtcovmat is None:
-        datasets_sqrtcovmat = (ds.get_sqrtcovmat() for ds in loaded_exp.DataSets())
-
-    for ds, mat in zip(loaded_exp.DataSets(), datasets_sqrtcovmat):
-        indmax += len(ds)
-        d[ds.GetSetName()] = (calc_chi2(mat, central_diff[indmin:indmax]), len(mat))
-        indmin = indmax
-    return d
-
-
 def _chs_per_replica(chs):
     th, _, l = chs
     return th.data.ravel() / l
@@ -809,18 +633,18 @@ def predictions_by_kinematics_table(results, kinematics_table_notable):
     tb['prediction'] = theory.central_value
     return tb
 
+groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_metadata",))
 
 @table
-def groups_chi2_table(groups_data, pdf, groups_chi2, each_dataset_chi2):
+def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
     the groups."""
-    dschi2 = iter(each_dataset_chi2)
     records = []
-    for group, groupres in zip(groups_data, groups_chi2):
+    for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2):
         stats = chi2_stats(groupres)
         stats["group"] = group.name
         records.append(stats)
-        for dataset, dsres in zip(group, dschi2):
+        for dataset, dsres in zip(group, dsresults):
             stats = chi2_stats(dsres)
             stats["group"] = dataset.name
             records.append(stats)
@@ -1342,7 +1166,7 @@ each_dataset_chi2 = collect(abs_chi2_data, ("data",))
 
 pdfs_total_chi2 = collect(total_chi2_per_point_data, ("pdfs",))
 
-# These are convenient ways to iterate and extract varios data from fits
+# These are convenient ways to iterate and extract various data from fits
 fits_chi2_data = collect(abs_chi2_data, ("fits", "fitcontext", "dataset_inputs"))
 
 fits_total_chi2 = collect("total_chi2_per_point_data", ("fits", "fitcontext"))
@@ -1357,11 +1181,15 @@ fits_pdf = collect("pdf", ("fits", "fitpdf"))
 groups_data_phi = collect(
     dataset_inputs_phi_data, ("group_dataset_inputs_by_metadata",)
 )
+fits_groups_data_phi = collect("groups_data_phi", ("fits", "fitcontext"))
 groups_bootstrap_phi = collect(
     dataset_inputs_bootstrap_phi_data, ("group_dataset_inputs_by_metadata",)
 )
 
-# Dataspec is so
+fits_groups_chi2 = collect("groups_chi2", ("fits", "fitcontext"))
+fits_groups_data = collect("groups_data", ("fits", "fitcontext"))
+
+# Collections over dataspecs
 dataspecs_groups = collect("groups_data", ("dataspecs",))
 dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
 dataspecs_groups_bootstrap_phi = collect("groups_bootstrap_phi", ("dataspecs",))

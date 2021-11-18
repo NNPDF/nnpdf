@@ -1,0 +1,15 @@
+********************************************************************************
+SetName: DYE906R_D_BIN07
+Author: Emanuele R. Nocera <enocera@ed.ac.uk>
+Date: May 2021
+CodesUsed: acceptance factors given in Extended Data Tab.3 of arXiv:2103.04024
+TheoryInput:
+PDFset:
+Warnings: 
+********************************************************************************
+0.0064  0.00000
+0.0299  0.00000
+0.0384  0.00000
+0.0436  0.00000
+0.0455  0.00000
+0.0374  0.00000

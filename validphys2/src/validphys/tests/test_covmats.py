@@ -11,7 +11,8 @@ import numpy as np
 
 
 from validphys.api import API
-from validphys.covmats import sqrt_covmat
+from validphys.commondataparser import load_commondata
+from validphys.covmats import sqrt_covmat, dataset_t0_predictions
 from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID, PDF, HESSIAN_PDF, DATA
 
@@ -153,3 +154,38 @@ def test_python_t0_covmat_matches_cpp(
         np.testing.assert_allclose(
             covmat, API.dataset_inputs_covmat_from_systematics(**config)
         )
+
+
+@pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
+@pytest.mark.parametrize("dataset_input", DATA)
+def test_systematic_matrix(
+    data_config, use_cuts, dataset_input):
+    """Test which checks the python computation of the t0 covmat relating to a
+    collection of datasets matches that of the C++ computation.
+
+    Tests all combinations of hessian/MC t0pdfset and correlated/uncorrelated
+    data.
+
+    """
+    config = dict(data_config)
+    config["dataset_input"] = dataset_input
+    config["use_cuts"] = use_cuts
+    covmat = API.covmat_from_systematics(**config)
+    sys_mat = API.systematics_matrix_from_commondata(**config)
+    covmat_from_sys_mat = sys_mat @ sys_mat.T
+    np.testing.assert_allclose(covmat_from_sys_mat, covmat)
+
+
+def test_single_datapoint():
+    # Make the t0 predictions
+    di = {'dataset': 'ATLASTTBARTOT8TEV'}
+
+    ds = API.dataset(dataset_input=di, theoryid=THEORYID, use_cuts='internal')
+    t0set = API.pdf(pdf=PDF)
+    t0_predictions = dataset_t0_predictions(ds, t0set)
+
+    cd = API.commondata(dataset_input=di)
+    ld = load_commondata(cd)
+    # Ensure the dataset is only a single datapoint
+    assert ld.ndata == 1
+    ld.systematic_errors(t0_predictions)

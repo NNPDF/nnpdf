@@ -19,6 +19,15 @@ private:
   void ReadData();
 };
 
+class LHCBW36PB_40Filter: public CommonData
+{
+public: LHCBW36PB_40Filter():
+  CommonData("LHCBW36PB_40") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class LHCBZ940PBFilter: public CommonData
 {
 public: LHCBZ940PBFilter():
@@ -59,6 +68,15 @@ class LHCBZEE2FBFilter: public CommonData
 {
 public: LHCBZEE2FBFilter():
   CommonData("LHCBZEE2FB") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class LHCBZEE2FB_40Filter: public CommonData
+{
+public: LHCBZEE2FB_40Filter():
+  CommonData("LHCBZEE2FB_40") { ReadData(); }
 
 private:
   void ReadData();

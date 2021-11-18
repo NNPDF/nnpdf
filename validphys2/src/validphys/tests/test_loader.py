@@ -4,14 +4,16 @@ test_loader.py
 Test loading utilities.
 """
 import numpy as np
+import pytest
 from hypothesis.strategies import sampled_from, sets, composite
 from hypothesis import given, settings
 
 from validphys.core import Cuts, CommonDataSpec
-from validphys.loader import Loader, rebuild_commondata_without_cuts
+from validphys.loader import FallbackLoader, rebuild_commondata_without_cuts, FitNotFound
 from validphys.plotoptions import kitable, get_info
+from validphys.tests.conftest import FIT
 
-l = Loader()
+l = FallbackLoader()
 #The sorted is to appease hypothesis
 dss = sorted(l.available_datasets - {"PDFEVOLTEST"})
 
@@ -57,3 +59,8 @@ def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
         nocuts = np.ones(cd.ndata, dtype=bool)
         nocuts[cuts] = False
         assert (lncd.get_cv()[nocuts] == 0).all()
+
+def test_load_fit():
+    assert l.check_fit(FIT)
+    with pytest.raises(FitNotFound):
+        l.check_fit(f"{FIT}/")

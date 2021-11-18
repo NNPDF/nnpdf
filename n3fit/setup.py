@@ -13,6 +13,8 @@ setup(
 
         entry_points = {'console_scripts':
             ['n3fit = n3fit.scripts.n3fit_exec:main',
+             'vp-setupfit = n3fit.scripts.vp_setupfit:main',
+             'varflavors = n3fit.scripts.varflavors:main',
              ]
             },
 )

@@ -63,7 +63,7 @@ class HyperoptPlotApp(App):
             "theory": {"from_": "fit"},
             "theoryid": {"from_": "theory"},
             "use_cuts": "fromfit",
-            "experiments": {"from_": "fit"},
+            "dataset_inputs": {"from_": "fit"},
             "normalize_to": fit,
         }
 

@@ -1,0 +1,9 @@
+pdf: NNPDF40_nnlo_as_01180
+
+Neig: 100
+Q: 1.651
+
+installgrid: True
+
+actions_:
+  - mc2hessian

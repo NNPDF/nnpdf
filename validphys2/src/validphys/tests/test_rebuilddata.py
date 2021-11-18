@@ -6,6 +6,7 @@ and produces expected results
 
 """
 import pathlib
+import pytest
 import shutil
 import subprocess as sp
 
@@ -30,6 +31,7 @@ def parse_test_output(filename):
     return df
 
 
+@pytest.mark.linux
 @make_table_comp(parse_test_output)
 def test_filter_rebuild_closure_data(tmp):
     """

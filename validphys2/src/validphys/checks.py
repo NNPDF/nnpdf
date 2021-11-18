@@ -106,7 +106,7 @@ def check_cuts_fromfit(use_cuts):
 
 @make_argcheck
 def check_cuts_considered(use_cuts):
-    if use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL):
+    if use_cuts == CutsPolicy.NOCUTS:
         raise CheckError(f"Cuts must be computed for this action, but they are set to {use_cuts.value}")
 
 

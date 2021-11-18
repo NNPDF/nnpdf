@@ -14,10 +14,8 @@ APFELcomb is available from
 ```
 https://github.com/NNPDF/apfelcomb
 ````
-The various data formats used in APFELcomb are described in 
-```
-nnpdf/nnpdfcpp/data/doc/data_layout.pdf
-```
+The various data formats used in APFELcomb are described in [Experimental data files](../data/exp-data-files.html#exp-data-files).
+
 
 APFELcomb depends on the following libraries
 * [APFEL](https://github.com/scarrazza/apfel)

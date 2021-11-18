@@ -29,7 +29,7 @@ def _is_floatable(num):
 
 # Checks on the NN parameters
 def check_existing_parameters(parameters):
-    """ Check that non-optional parameters are defined and are not empty """
+    """Check that non-optional parameters are defined and are not empty"""
     for param_name in NN_PARAMETERS:
         if param_name in parameters:
             val = parameters[param_name]
@@ -41,13 +41,14 @@ def check_existing_parameters(parameters):
     if "pos_initial" in parameters or "pos_multiplier" in parameters:
         raise CheckError(
             "The definition of the positivity parameters is deprecated, please "
-            "use instead: fitting:parameters:positivity: {multiplier: x, initial: y} "
-            "as can be seen in the example runcard n3fit/runcards/Basic_runcard.yml"
+            "use instead:\nparameters:\n  positivity\n"
+            "    multiplier: x\n    initial: y\n"
+            "as can be seen in the example runcard: n3fit/runcards/Basic_runcard.yml"
         )
 
 
 def check_consistent_layers(parameters):
-    """ Checks that all layers have an activation function defined """
+    """Checks that all layers have an activation function defined"""
     npl = len(parameters["nodes_per_layer"])
     apl = len(parameters["activation_per_layer"])
     if npl != apl:
@@ -68,7 +69,7 @@ def check_stopping(parameters):
 
 
 def check_basis_with_layers(basis, parameters):
-    """ Check that the last layer matches the number of flavours defined in the runcard"""
+    """Check that the last layer matches the number of flavours defined in the runcard"""
     number_of_flavours = len(basis)
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
@@ -79,7 +80,7 @@ def check_basis_with_layers(basis, parameters):
 
 
 def check_optimizer(optimizer_dict):
-    """ Checks whether the optimizer setup is valid """
+    """Checks whether the optimizer setup is valid"""
     name_key = "optimizer_name"
     name = optimizer_dict[name_key]
     from n3fit.backends import MetaModel
@@ -96,7 +97,7 @@ def check_optimizer(optimizer_dict):
 
 
 def check_initializer(initializer):
-    """ Checks whether the initializer is implemented """
+    """Checks whether the initializer is implemented"""
     from n3fit.backends import MetaLayer
 
     accepted_init = MetaLayer.initializers
@@ -105,14 +106,14 @@ def check_initializer(initializer):
 
 
 def check_dropout(parameters):
-    """ Checks the dropout setup (positive and smaller than 1.0) """
+    """Checks the dropout setup (positive and smaller than 1.0)"""
     dropout = parameters.get("dropout")
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
 
 def check_tensorboard(tensorboard):
-    """ Check that the tensorbard callback can be enabled correctly """
+    """Check that the tensorbard callback can be enabled correctly"""
     if tensorboard is not None:
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
@@ -138,7 +139,7 @@ def check_lagrange_multipliers(parameters, key):
 
 
 def check_model_file(save, load):
-    """ Checks whether the model_files given in the runcard are acceptable """
+    """Checks whether the model_files given in the runcard are acceptable"""
     if save:
         if not isinstance(save, str):
             raise CheckError(f"Model file to save to: {save} not understood")
@@ -154,9 +155,10 @@ def check_model_file(save, load):
         if os.stat(load).st_size == 0:
             raise CheckError(f"Model file {load} seems to be empty")
 
+
 @make_argcheck
 def wrapper_check_NN(basis, tensorboard, save, load, parameters):
-    """ Wrapper function for all NN-related checks """
+    """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
     check_existing_parameters(parameters)
@@ -222,7 +224,7 @@ def check_hyperopt_positivity(positivity_dict):
 
 
 def check_kfold_options(kfold):
-    """ Warns the user about potential bugs on the kfold setup"""
+    """Warns the user about potential bugs on the kfold setup"""
     threshold = kfold.get("threshold")
     if threshold is not None and threshold < 2.0:
         log.warning("The kfolding loss threshold might be too low: %f", threshold)
@@ -239,6 +241,13 @@ def check_kfold_options(kfold):
                 f"The hyperoptimization target '{loss_target}' loss is not recognized, "
                 "ensure it is implemented in hyper_optimization/rewards.py"
             )
+    partitions = kfold["partitions"]
+    # Check specific errors for specific targets
+    if loss_target == "fit_future_tests":
+        if len(partitions) == 1:
+            raise CheckError("Cannot use target 'fit_future_tests' with just one partition")
+        if partitions[-1]["datasets"]:
+            log.warning("Last partition in future test is not empty, some datasets will be ignored")
 
 
 def check_correct_partitions(kfold, data):
@@ -254,7 +263,7 @@ def check_correct_partitions(kfold, data):
 
 
 def check_hyperopt_stopping(stopping_dict):
-    """ Checks that the options selected for the stopping are consistent """
+    """Checks that the options selected for the stopping are consistent"""
     if stopping_dict is None:
         return
     min_ep = stopping_dict.get("min_epochs")
@@ -263,20 +272,18 @@ def check_hyperopt_stopping(stopping_dict):
         if min_ep is None or max_ep is None:
             raise CheckError("Need to set both the max_epochs and the min_epochs")
         if min_ep < 1:
-            raise CheckError(f"Can't run for less than 1 epoch: " "selected min_ep = {min_ep}")
+            raise CheckError(f"Can't run for less than 1 epoch: selected min_ep = {min_ep}")
         if max_ep <= min_ep:
             raise CheckError(f"min_epochs cannot be greater than max_epochs: ({min_ep} > {max_ep})")
     min_pat = stopping_dict.get("min_patience")
     max_pat = stopping_dict.get("max_patience")
     if min_pat is not None or max_pat is not None:
         if min_pat is not None and min_pat < 0.0:
-            raise CheckError(
-                f"min_patience cannot be less than 0.0: " "selected min_pat = {min_pat}"
-            )
+            raise CheckError(f"min_patience cannot be less than 0.0: selected min_pat = {min_pat}")
         if max_pat is not None:
             if max_pat > 1.0:
                 raise CheckError(
-                    f"max_patience cannot be greater than 1.0: " "selected max_pat = {max_pat}"
+                    f"max_patience cannot be greater than 1.0: selected max_pat = {max_pat}"
                 )
             if min_pat is not None and max_pat < min_pat:
                 raise CheckError(
@@ -285,28 +292,25 @@ def check_hyperopt_stopping(stopping_dict):
 
 
 @make_argcheck
-def wrapper_hyperopt(hyperopt, hyperscan, genrep, data):
+def wrapper_hyperopt(hyperopt, hyperscan_config, kfold, data):
     """Wrapper function for all hyperopt-related checks
     No check is performed if hyperopt is not active
     """
     if not hyperopt:
-        return None
-    if genrep:
-        raise CheckError("Generation of replicas is not accepted during hyperoptimization")
-    if hyperscan is None:
-        raise CheckError("Can't perform hyperoptimization without the hyperscan key")
-    if "kfold" not in hyperscan:
-        raise CheckError("The hyperscan::kfold dictionary is not defined")
-    check_hyperopt_stopping(hyperscan.get("stopping"))
-    check_hyperopt_architecture(hyperscan.get("architecture"))
-    check_hyperopt_positivity(hyperscan.get("positivity"))
-    check_kfold_options(hyperscan["kfold"])
-    check_correct_partitions(hyperscan["kfold"], data)
+        return
+    if hyperscan_config is None:
+        raise CheckError("Can't perform hyperoptimization without the hyperscan_config key")
+    if kfold is None:
+        raise CheckError("Can't perform hyperoptimization without folds")
+    check_hyperopt_stopping(hyperscan_config.get("stopping"))
+    check_hyperopt_architecture(hyperscan_config.get("architecture"))
+    check_hyperopt_positivity(hyperscan_config.get("positivity"))
+    check_kfold_options(kfold)
+    check_correct_partitions(kfold, data)
 
 
 def check_sumrules(sum_rules):
-    """Checks that the chosen option for the sum rules are sensible
-    """
+    """Checks that the chosen option for the sum rules are sensible"""
     if isinstance(sum_rules, bool):
         return
     accepted_options = ["ALL", "MSR", "VSR"]
@@ -346,3 +350,46 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
         raise CheckError(f"{theoryid} (intrinsic charm) is incompatible with basis {fitbasis}")
     if not theoryid.get_description()["IC"] and has_c:
         raise CheckError(f"{theoryid} (perturbative charm) is incompatible with basis {fitbasis}")
+
+
+@make_argcheck
+def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica):
+    """Checks whether the multiple-replica fit options are consistent among them
+    i.e., that the trvl seed is fixed and the layer type is correct
+    """
+    if not parallel_models:
+        return
+    if not same_trvl_per_replica:
+        raise CheckError(
+            "Replicas cannot be run in parallel with different training/validation "
+            " masks, please set `same_trvl_per_replica` to True in the runcard"
+        )
+    if parameters.get("layer_type") != "dense":
+        raise CheckError("Parallelization has only been tested with layer_type=='dense'")
+
+
+@make_argcheck
+def can_run_multiple_replicas(replicas, parallel_models):
+    """Warns the user if trying to run just one replica in parallel"""
+    if not parallel_models:
+        return
+    if len(replicas) == 1:
+        log.warning("parallel_models is set to true for only one replica")
+        return
+
+
+@make_argcheck
+def check_deprecated_options(fitting):
+    """Checks whether the runcard is using deprecated options"""
+    options_outside = ["trvlseed", "nnseed", "mcseed", "save", "load", "genrep", "parameters"]
+    for option in options_outside:
+        if option in fitting:
+            raise CheckError(
+                f"The key '{option}' should be top-level key and not part of the 'fitting' namespace"
+            )
+    if "epochs" in fitting:
+        raise CheckError("The key 'epoch' should only appear as part of the 'parameters' namespace")
+    nnfit_options = ["seed", "rnalgo", "fitmethod", "nmutants", "paramtype", "nnodes"]
+    for option in nnfit_options:
+        if option in fitting:
+            log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)

@@ -12,20 +12,20 @@ requirements:
         - swig
         - cmake
         - pkg-config
+        # See https://github.com/NNPDF/nnpdf/pull/1280
+        - sysroot_linux-64==2.17 # [linux]
     host:
         - lhapdf      # with python wrapper
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
         - libarchive ==3.4.2 # See https://github.com/NNPDF/nnpdf/pull/1130
-        - yaml-cpp
+        - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
-        - gast ==0.3.3 # Conda tensorflow uses the wrong version
-        - opt_einsum >=2.3.2 # Conda tensorflow uses the wrong version
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -34,20 +34,24 @@ requirements:
         - gsl
         - numpy
         - libarchive
-        - yaml-cpp
+        - yaml-cpp >=0.6.3
         - apfel
         - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.28.60 # see https://github.com/NNPDF/reportengine
+        - reportengine >=0.30.25 # see https://github.com/NNPDF/reportengine
         - matplotlib >=3.3.0
         - blessings >=1.7
         - scipy >=0.19.1
         - pandas
         - requests
         - prompt_toolkit
-        - sphinx # documentation
+        - validobj
+        - sphinx >=4.0.2 # documentation. Needs pinning becasue https://github.com/sphinx-doc/sphinx/issues/9216
         - recommonmark
         - sphinx_rtd_theme >0.5
+        - sphinxcontrib-bibtex
+        - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
+        - curio >=1.0
 
 test:
     requires:
@@ -58,6 +62,7 @@ test:
         #Build dependencies for catch tests
         - {{ compiler("cxx") }}
         - {{ compiler("c") }}
+        - sysroot_linux-64==2.17 # [linux]
         - swig ==3.0.10
         - cmake
 

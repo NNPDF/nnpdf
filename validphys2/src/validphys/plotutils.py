@@ -54,7 +54,7 @@ def ax_or_newfig(f):
 
 def frame_center(ax, x, values):
     """Set the `ylims` of the axis ``ax`` to appropriately display
-    ``values``, which cna be 1 or 2D and are assumed to be sampled uniformly
+    ``values``, which can be 1 or 2D and are assumed to be sampled uniformly
     in the coordinates of the plot (in the second dimension, for 2D arrays)."""
     values = np.atleast_2d(values)
     scale = mscale.scale_factory(ax.xaxis.get_scale(), ax.xaxis)
@@ -111,7 +111,7 @@ def hatch_iter():
     """An infinite iterator that yields increasingly denser patterns of
     hatches suitable for passing as the ``hatch`` argument of matplotlib
     functions."""
-    hatches = "/ \\ - + o 0".split()
+    hatches = "/ \\ - + o O".split()
     i = 1
     while True:
         for hatch in hatches:
@@ -495,4 +495,37 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     )
     ax.add_collection(rugs)
     ax.set_ylim(ymin=0)
+    return ax
+
+@ax_or_gca
+def spiderplot(xticks, vals, label, ax=None):
+    """
+    Makes a spider/radar plot.
+
+    xticks: list of names of x tick labels, e.g. datasets
+    vals: list of values to plot corresponding to each xtick
+    label: label for values, e.g. fit name
+    """
+    N = len(xticks)
+
+    angles = [n / float(N) * 2 * np.pi for n in range(N)]
+    # Add this on so that the plot line connects back to the start
+    angles += angles[:1]
+    vals = list(vals)
+    vals += vals[:1]
+
+    maxval = np.max(vals)
+
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    plt.xticks(angles[:-1], xticks, size=8, zorder=6)
+
+    # Draw ylabels
+
+    ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1)
+    ax.fill(angles, vals, alpha=0.4, zorder=1)
+    ax.grid(linewidth=1)
+    ax.legend(fontsize=12)
+
     return ax

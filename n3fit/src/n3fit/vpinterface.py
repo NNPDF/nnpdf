@@ -18,12 +18,15 @@
 
 
 """
+import logging
+from collections.abc import Iterable
 import numpy as np
 import numpy.linalg as la
 from validphys.core import PDF, MCStats
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
 from validphys.arclength import integrability_number, arc_lengths
 
+log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
 EVOL_LIST = [
     "photon",
@@ -50,7 +53,7 @@ class N3PDF(PDF):
 
     Parameters
     ----------
-        pdf_model: :py:class:`n3fit.backends.MetaModel`
+        pdf_models: :py:class:`n3fit.backends.MetaModel` (or list thereof)
             PDF trained with n3fit, x -> f(x)_{i} where i are the flavours in the evol basis
         fit_basis: list(dict)
             basis of the training, used for reporting
@@ -58,19 +61,28 @@ class N3PDF(PDF):
             name of the N3PDF object
     """
 
-    def __init__(self, pdf_model, fit_basis=None, name="n3fit"):
-        self.model = pdf_model
+    def __init__(self, pdf_models, fit_basis=None, name="n3fit"):
         self.fit_basis = fit_basis
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
-        # Set the number of members to two for legacy compatibility
-        # in this case replica 0 and replica 1 are the same
-        self.NumMembers = 2
+
+        if isinstance(pdf_models, Iterable):
+            self._models = pdf_models
+        else:
+            self._models = [pdf_models]
+
+        # The number of members will be minimum 2, needed for legacy compatibility
+        # Note that the member 0 does not exist as an actual model as it corresponds
+        # to the average of all others
         self.ErrorType = "replicas"
         super().__init__(name)
 
     @property
+    def NumMembers(self):
+        return len(self._models) + 1
+
+    @property
     def stats_class(self):
-        """ The stats class of N3PDF is always be MCStats """
+        """The stats class of N3PDF is always MCStats"""
         return MCStats
 
     def load(self):
@@ -79,17 +91,29 @@ class N3PDF(PDF):
         """
         return self
 
-    def get_nn_weights(self):
-        """Outputs all weights of the NN as numpy.ndarrays """
-        return self.model.get_weights()
+    def get_member_model(self, replica):
+        """Return the member corresponding to the given replica"""
+        return self._models[replica - 1]
 
-    def get_preprocessing_factors(self):
+    def get_nn_weights(self):
+        """Outputs all weights of the NN as numpy.ndarrays"""
+        return [model.get_weights() for model in self._models]
+
+    def get_preprocessing_factors(self, replica=None):
         """Loads the preprocessing alpha and beta arrays from the PDF trained model.
         If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
         to generate a new dictionary with the names, the exponent and whether they are trainable
         otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
         """
-        preprocessing_layer = self.model.get_layer("pdf_prepro")
+        # If no replica is explicitly requested, get the preprocessing layer for the first model
+        if replica is None:
+            replica = 1
+        preprocessing_layers = self.get_member_model(replica).get_layer_re(r"pdf_prepro_\d")
+        if len(preprocessing_layers) != 1:
+            # We really don't want to fail at this point, but print a warning at least...
+            log.warning("More than one preprocessing layer found within the model!")
+        preprocessing_layer = preprocessing_layers[0]
+
         if self.fit_basis is not None:
             output_dictionaries = []
             for d in self.fit_basis:
@@ -111,7 +135,7 @@ class N3PDF(PDF):
             alphas_and_betas = output_dictionaries
         return alphas_and_betas
 
-    def __call__(self, xarr, flavours=None):
+    def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values.
         The output is on the evolution basis.
 
@@ -121,6 +145,9 @@ class N3PDF(PDF):
                 x-points with shape (xgrid_size,) (size-1 dimensions are removed)
             flavours: list
                 list of flavours to output
+            replica: int
+                replica whose value must be returned (by default return all members)
+                replica 0 corresponds to the central value
 
         Returns
         -------
@@ -130,13 +157,23 @@ class N3PDF(PDF):
         if flavours is None:
             flavours = EVOL_LIST
         # Ensures that the input has the shape the model expect, no matter the input
+        # as the scaling is done by the model itself
         mod_xgrid = xarr.reshape(1, -1, 1)
-        result = self.model.predict([mod_xgrid])
+
+        if replica is None or replica == 0:
+            # We need generate output values for all replicas
+            result = np.concatenate([m.predict([mod_xgrid]) for m in self._models], axis=0)
+            if replica == 0:
+                # We want _only_ the central value
+                result = np.mean(result, axis=0, keepdims=True)
+        else:
+            result = self.get_member_model(replica).predict([mod_xgrid])
+
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
             result[:, :, ii] = result
-        return result.squeeze(0)
+        return result
 
     def grid_values(self, flavours, xarr, qmat=None):
         """
@@ -152,8 +189,8 @@ class N3PDF(PDF):
         Returns
         ------
             numpy.ndarray
-            array of shape (1, flavours, xgrid_size, qmat) with the values of the ``pdf_model``
-            evaluated in ``xarr``
+            array of shape (replicas, flavours, xgrid_size, qmat) with the values of
+                the ``pdf_model``(s) evaluated in ``xarr``
         """
         n3fit_result = self(xarr.reshape(1, -1, 1))
 
@@ -166,12 +203,12 @@ class N3PDF(PDF):
         flav_result = np.tensordot(n3fit_result, to_flav, axes=[-1, 1])
         # Now drop the indices that are not requested
         requested_flavours = [ALL_FLAVOURS.index(i) for i in flavours]
-        flav_result = flav_result[:, requested_flavours]
+        flav_result = flav_result[..., requested_flavours]
 
         # Swap the flavour and xgrid axis for vp-compatibility
-        ret = flav_result.swapaxes(0, 1)
+        ret = flav_result.swapaxes(-2, -1)
         # If given, insert as many copies of the grid as q values
-        ret = np.expand_dims(ret, (0, -1))
+        ret = np.expand_dims(ret, -1)
         if qmat is not None:
             lq = len(qmat)
             ret = ret.repeat(lq, -1)

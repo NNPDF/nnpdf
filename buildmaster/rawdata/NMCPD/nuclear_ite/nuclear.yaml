@@ -2,12 +2,11 @@ meta:
    author: Rosalyn Pearson
    title: Theoretical predictions
 
-theoryid: 53
+theoryid: 200
 
 use_cuts: nocuts
 
-fit: NNPDF31_nnlo_as_0118_deuteron_only_ite
-pdf: NNPDF31_nnlo_as_0118_deuteron_only_ite
+pdf: 210525-ern-002
 
 dataset_inputs:
          - { dataset: NMCPD_D, cfac: [DEU1] }

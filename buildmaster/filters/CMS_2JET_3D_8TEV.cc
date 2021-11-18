@@ -262,11 +262,11 @@ void CMS_2JET_3D_8TEVFilter::ReadData()
 	      >> np_corr_erm >> perc;
 
       fSys[i][28].mult = (np_corr*(1. + np_corr_erp/100.) - 1)/sqrt(2.)*100.;
-      fSys[i][28].add  = fSys[i][0].mult*fData[i]/100;
+      fSys[i][28].add  = fSys[i][28].mult*fData[i]/100;
       fSys[i][28].type = MULT;   
       fSys[i][28].name = "SKIP";
       fSys[i][29].mult = (np_corr*(1. + np_corr_erm/100.) - 1)/sqrt(2.)*100.;	
-      fSys[i][29].add  = fSys[i][1].mult*fData[i]/100;
+      fSys[i][29].add  = fSys[i][29].mult*fData[i]/100;
       fSys[i][29].type = MULT;   
       fSys[i][29].name = "SKIP";
 

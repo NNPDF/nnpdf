@@ -1,30 +1,158 @@
 """
-hyperoptplot.py
-
-Module for the parsing and plotting of hyperopt results.
+    Module for the parsing and plotting of the results and output of
+    previous hyperparameter scans
 """
 
-from argparse import ArgumentParser
+# Within this file you can find the "more modern" vp-integrated hyperopt stuff
+# and the older pre-vp hyperopt stuff, which can be considered deprecated but it is
+# still used for the plotting script
+
+
 import os
 import re
 import glob
 import json
 import logging
+from types import SimpleNamespace
 import numpy as np
 import pandas as pd
-from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
-from types import SimpleNamespace
 from reportengine.figure import figure
-import numpy as np
-import matplotlib.pyplot as plt
 from reportengine.table import table
 import seaborn as sns
+import matplotlib.pyplot as plt
+from validphys.hyper_algorithm import autofilter_dataframe
 
 log = logging.getLogger(__name__)
 
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
+
+class HyperoptTrial:
+    """
+    Hyperopt trial class.
+    Makes the dictionary-like output of ``hyperopt`` into an object
+    that can be easily managed
+
+    Parameters
+    ----------
+        trial_dict: dict
+            one single result (a dictionary) from a ``tries.json`` file
+        base_params: dict
+            Base parameters of the runcard which can be used to complete the hyperparameter
+            dictionary when not all parameters were scanned
+        minimum_losses: int
+            Minimum number of losses to be found in the trial for it to be considered succesful
+        linked_trials: list
+            List of trials coming from the same file as this trial
+    """
+
+    def __init__(self, trial_dict, base_params=None, minimum_losses=1, linked_trials=None):
+        self._trial_dict = trial_dict
+        self._minimum_losses = minimum_losses
+        self._original_params = base_params
+        self._reward = None
+        self._weighted_reward = None
+        self._linked_trials = linked_trials if linked_trials is not None else []
+
+    @property
+    def weighted_reward(self):
+        """Return the reward weighted to the mean value of the linked trials"""
+        if self._weighted_reward is None:
+            mean_reward = np.mean([i.reward for i in self._linked_trials if i.reward])
+            if self.reward:
+                self._weighted_reward = self.reward / mean_reward
+            else:
+                self._weighted_reward = False
+        return self._weighted_reward
+
+    @property
+    def reward(self):
+        """Return and cache the reward value"""
+        if self._reward is None:
+            self._reward = self._evaluate()
+        return self._reward
+
+    @property
+    def loss(self):
+        """Return the loss of the hyperopt dict"""
+        return self._trial_dict["result"]["loss"]
+
+    @property
+    def params(self):
+        """Parameters for the fit"""
+        trial_results = self._trial_dict["misc"]["space_vals"]
+        if self._original_params:
+            hyperparameters = dict(self._original_params, **trial_results)
+        else:
+            hyperparameters = trial_results
+        # Ensure that no hyperparameters has the wrong shape/form
+        # 1. For n3fit, activation_per_layer must be a list
+        apl = hyperparameters.get("activation_per_layer")
+        if apl is not None and isinstance(apl, str) and "nodes_per_layer" in hyperparameters:
+            # If apl is a string, it can only bring information if there is `nodes_per_layer`
+            apl = [apl] * (len(hyperparameters["nodes_per_layer"]) - 1) + ["linear"]
+            hyperparameters["activation_per_layer"] = apl
+        # 2. If there _was_ originally a reward included in this parameter (because it comes from a
+        #   previous hyperoptimization) mark it as such
+        reward = hyperparameters.pop("reward", None)
+        if reward is not None:
+            hyperparameters["old_reward"] = reward
+        return hyperparameters
+
+    # Slightly fake a dictionary behaviour with the params attribute
+    def __getitem__(self, item):
+        return self.params[item]
+
+    def get(self, item, default=None):
+        return self.params.get(item, default)
+
+    #####
+
+    def __str__(self):
+        strs = ["Parameters:"] + [f"  {i}: {k}" for i, k in self.params.items()]
+        strs.append(f"Reward: {self.reward}")
+        str_out = "\n".join(strs)
+        return str_out
+
+    def _evaluate(self):
+        """Evaluate the reward function for a given trial
+        Reward = 1.0/loss
+        """
+        result = self._trial_dict["result"]
+        if result.get("status") != "ok":
+            return False
+        # If we don't have enough validation losses, fail
+        val_loss = result["kfold_meta"].get("validation_losses", [])
+        if self._minimum_losses and len(val_loss) < self._minimum_losses:
+            return False
+        # This is equivalent to the case above
+        if result["loss"] == 0.0:
+            return False
+        return 1.0 / result["loss"]
+
+    def __gt__(self, another_trial):
+        """Return true if the current trial is preferred
+        when compared to the target"""
+        if not another_trial.reward:
+            return True
+        if not self.reward:
+            return False
+        return self.reward > another_trial.reward
+
+    def __lt__(self, another_trial):
+        """Return true if the target trial is preferred
+        when compared to the current (self) one"""
+        return not self > another_trial
+
+    def link_trials(self, list_of_trials):
+        """Link a list of trials to this trial"""
+        self._linked_trials = list_of_trials
+        # Reset the weighted reward
+        self._weighted_reward = None
+
+
+#########
 
 # A mapping between the names the fields have in the json file
 # and more user-friendly names
@@ -215,7 +343,7 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
     Read a trial dictionary and compute the true loss and decide whether the run passes or not
     """
     test_f = 1.0 - validation_multiplier
-    val_loss = trial_dict[KEYWORDS["vl"]]
+    val_loss = float(trial_dict[KEYWORDS["vl"]])
     if loss_target == "average":
         test_loss = np.array(trial_dict["hlosses"]).mean()
     elif loss_target == "best_worst":
@@ -334,10 +462,10 @@ def filter_by_string(filter_string):
 
 def hyperopt_dataframe(commandline_args):
     """
-    Loads the data generated by running hyperopt and stored in json files into a dataframe, and 
-    then filters the data according to the selection criteria provided by the command line 
-    arguments. It then returns both the entire dataframe as well as a dataframe object with the 
-    hyperopt parametesr of the best setup. 
+    Loads the data generated by running hyperopt and stored in json files into a dataframe, and
+    then filters the data according to the selection criteria provided by the command line
+    arguments. It then returns both the entire dataframe as well as a dataframe object with the
+    hyperopt parametesr of the best setup.
     """
     args = SimpleNamespace(**commandline_args)
 
@@ -421,9 +549,9 @@ def hyperopt_dataframe(commandline_args):
 
 
 @table
-def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
+def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
     """
-    Generates a clean table with information on the hyperparameter settings of the best setup. 
+    Generates a clean table with information on the hyperparameter settings of the best setup.
     """
     _, best_trial = hyperopt_dataframe
     best_idx = best_trial.index[0]
@@ -452,18 +580,18 @@ def best_setup(hyperopt_dataframe, hyperscan, commandline_args):
 @table
 def hyperopt_table(hyperopt_dataframe):
     """
-    Generates a table containing complete information on all the tested setups that passed the 
+    Generates a table containing complete information on all the tested setups that passed the
     filters set in the commandline arguments.
     """
     dataframe, _ = hyperopt_dataframe
-    dataframe.sort_values(by=['loss'], inplace=True)
+    dataframe.sort_values(by=["loss"], inplace=True)
     return dataframe
 
 
 @figure
 def plot_iterations(hyperopt_dataframe):
     """
-    Generates a scatter plot of the loss as a function of the iteration index. 
+    Generates a scatter plot of the loss as a function of the iteration index.
     """
     dataframe, best_trial = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "iteration")
@@ -483,7 +611,7 @@ def plot_optimizers(hyperopt_dataframe):
 @figure
 def plot_clipnorm(hyperopt_dataframe, optimizer_name):
     """
-    Generates a scatter plot of the loss as a function of the clipnorm for a given optimizer. 
+    Generates a scatter plot of the loss as a function of the clipnorm for a given optimizer.
     """
     dataframe, best_trial = hyperopt_dataframe
     filtered_dataframe = dataframe[dataframe.optimizer == optimizer_name]
@@ -578,12 +706,23 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
     key = plotting_parameter
     mode = plotting_styles[plotting_parameter]
 
-    if mode == 0 or mode == 2:  # normal scatter plot
+    if mode in (0,2):  # normal scatter plot
         ax = sns.scatterplot(x=key, y=loss_k, data=df, ax=ax)
         best_x = best_df.get(key)
         if mode == 2:
             ax.set_xscale("log")
     elif mode == 1:
+        sample = best_df.get(key).tolist()[0]
+        if isinstance(sample, list):
+            # activation_per_layer is tricky as it can be a list (with the last layer linear)
+            # and can change size, the legacy way of plotting it was to take just the first function
+            # For that we'll modify the dataframe that we pass down
+            original_column = df[key]
+            original_best = best_df[key]
+            key += "_0"
+            if key not in df:
+                df[key] = original_column.apply(lambda x: x[0])
+                best_df[key] = original_best.apply(lambda x: x[0])
         ordering_true, best_x = order_axis(df, best_df, key=key)
         ax = sns.violinplot(
             x=key,
@@ -603,6 +742,7 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
             order=ordering_true,
             alpha=0.4,
         )
+
 
     # Finally plot the "best" one, which will be first
     if include_best:

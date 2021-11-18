@@ -68,20 +68,19 @@ A perhaps surprising step in this tutorial is that you must tell the part of
 the code which parses the metadata about your new key or else it will get
 very upset.
 
-This involves going into :py:mod:`validphys.plotoptions.core` and adding a
-special ``parse`` method to
-:py:class:`validphys.plotoptions.core.PlotConfigParser`. There are pre-existing
-examples that you can use as templates. For the example used above I would have
-to add:
+This involves adding an attribute related to the new key to
+:py:class:`validphys.plotoptions.core.PlottingOptions`.
+There are pre-existing examples that you can use as templates.
+For the example used above I would have to add:
 
 .. code:: python
 
-    def parse_nnpdf40_process(self, proc: str):
-        return proc
+    nnpdf40_process: str
 
-The name of the variable (in this case ``proc``) is unimportant, however the
-type hint in the signature should be ``str`` to confirm that the key is read
-from the config file as a string.
+
+which tells the code to look for an ``nnpdf40_process`` key within the metadata file and
+to attempt to parse it as a string. We do not attribute a default value to this new key,
+which implies that it must be provided within the metadata file.
 
 .. note::
    The reason the group name should be a string is because it is sometimes

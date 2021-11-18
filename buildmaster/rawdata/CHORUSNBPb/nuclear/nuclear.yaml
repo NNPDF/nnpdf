@@ -2,11 +2,10 @@ meta:
    author: Rosalyn Pearson
    title: Theoretical predictions
 
-theoryid: 53
+theoryid: 200
 
 use_cuts: nocuts
 
-fit: 201130-jcm-001
 pdf: nNNPDF20_nlo_as_0118_p_A208_Z82 
 
 dataset_inputs:

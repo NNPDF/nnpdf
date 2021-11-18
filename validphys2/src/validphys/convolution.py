@@ -83,6 +83,11 @@ def _asy(a, b):
 def _smn(a, b, c, d):
     return (a + b) / (c + d)
 
+def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
+    return (a + b + c + d + e + f + g + h + i + j) / ( k + l + m + n + o + p + q + r + s + t)
+
+def _smt(a, b, c, d, e, f, g, h, i, j):
+    return (a + b + c + d + e + f + g + h + i + j)
 
 def _id(a):
     return a
@@ -93,6 +98,8 @@ OP = {
     "ASY": _asy,
     "ADD": operator.add,
     "SMN": _smn,
+    "COM": _com,
+    "SMT": _smt,
     "NULL": _id,
 }
 
@@ -308,14 +315,17 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     # combinations correspond to the combination encoded in the FKTable.
     expanded_gv1 = gv1[:, fl1, :]
     expanded_gv2 = gv2[:, fl2, :]
+    # Create a luminosity tensor holding the value f1(x1)*f2(x2) for all
+    # possible x1-x2 combinations (f1, f2, x1, x2)
+    luminosity = np.einsum("ijk, ijl->ijkl", expanded_gv1, expanded_gv2)
 
     def appl(df):
         # x1 and x2 are encoded as the first and second index levels.
         xx1 = df.index.get_level_values(1)
         xx2 = df.index.get_level_values(2)
-        gv1 = expanded_gv1[:, :, xx1]
-        gv2 = expanded_gv2[:, :, xx2]
-        return pd.Series(np.einsum("ijk,ijk,kj->i", gv1, gv2, df.values))
+        # take the active combinations from the luminosity tensor
+        partial_lumi = luminosity[..., xx1, xx2]
+        return pd.Series(np.einsum("ijk,kj->i",partial_lumi, df.values))
 
     return sigma.groupby(level=0).apply(appl)
 

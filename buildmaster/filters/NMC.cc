@@ -639,12 +639,21 @@ void NMCFilter::ReadData()
     fData[i] = rxsec_qed;
     fStat[i] = datain[i][11] / obs * rxsec_qed;
 
-    for (int l = 0; l < fNSys; l++)
+    for (int l = 0; l < fNSys-4; l++)
     {
       fSys[i][l].add = fSys[i][l].mult * fData[i] * 1e-2;
       fSys[i][l].type = ADD;
       fSys[i][l].name = "CORR";
     }
+
+    for (int l = fNSys-4; l < fNSys; l++)
+    {
+      fSys[i][l].add = fSys[i][l].mult * fData[i] * 1e-2;
+      fSys[i][l].type = MULT;
+      fSys[i][l].name = "CORR";
+    }
+
+    
   }
 }
 

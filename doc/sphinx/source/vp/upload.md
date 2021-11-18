@@ -121,7 +121,9 @@ to share. Otherwise use [`vp-upload`](#the-vp-upload-script) after checking the 
 `validphys` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
 
-
+```eval_rst
+.. _vpupload:
+```
 The `vp-upload` script
 ----------------------
 

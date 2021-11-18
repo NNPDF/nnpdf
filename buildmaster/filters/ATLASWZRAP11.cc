@@ -91,6 +91,7 @@ void ATLASWZRAP11CCFilter::ReadData()
     low_bin = ndataWZ[b];
   }
 
+  delete[] sysNames;
   
   f1.close();
 }
@@ -166,6 +167,6 @@ void ATLASWZRAP11CFFilter::ReadData()
     low_bin = ndataWZ[b];
   }
 
-  
+  delete[] sysNames;
   f1.close();
 }

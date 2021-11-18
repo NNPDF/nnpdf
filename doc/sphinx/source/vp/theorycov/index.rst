@@ -1,10 +1,8 @@
  .. _vptheorycov-index:
  
-The theorycovariance module
+The `theorycovariance` module
 ===============================
 
-:Author: Rosalyn Pearson (r.l.pearson@ed.ac.uk)
-  
 The ``theorycovariance`` module deals with constructing, testing and 
 outputting theory covariance matrices (covmats). Primarily, it is concerned
 with scale variation covariance matrices used to model missing higher order
@@ -49,12 +47,12 @@ Summary
    process type. These process types are categorised as {DIS CC, DIS NC,
    Drell-Yan, Jets, Top}. 
 
--  **Outputs** include tables and heat plots of theoretical and combined
+-  :ref:`Outputs <thcov_outputs>` includes tables and heat plots of theoretical and combined
    (theoretical + experimental) covariance matrices, comparisons of
    theoretical and experimental errors, and plots and tables of
    :math:`\chi^2` values.
 
--  Various **validation** outputs also exist, including tables of eigenvalues, 
+-  Various :ref:`testing <vptheorycov-tests>` outputs also exist, including tables of eigenvalues, 
    plots of eigenvectors and shift vs theory comparisons.
    
 

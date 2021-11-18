@@ -1,10 +1,12 @@
-dataset_label: "ATLAS DY 2D 8 TeV"
+dataset_label: "ATLAS DY 2D 8 TeV high mass"
 x: k1
 y_label: '$d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)'
 figure_by:
   - k2 
 
 x_label: '$|y_{\ell\ell}|$'
+
+kinematics_override: ewk_rap_sqrt_scale
 
 experiment: "ATLAS"
 nnpdf31_process: DY

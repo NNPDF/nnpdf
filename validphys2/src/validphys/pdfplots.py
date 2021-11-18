@@ -98,7 +98,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             return '$x{}(x)$'.format(parton_name)
 
     def get_title(self, parton_name):
-        return "$%s$ at %.1f GeV" % (parton_name, self.Q)
+        return f"${parton_name}$ at {self.Q} GeV"
 
     @property
     def xscale(self):
@@ -205,7 +205,7 @@ class ReplicaPDFPlotter(PDFPlotter):
 @_warn_any_pdf_not_montecarlo
 def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None, ymin = None, ymax = None):
-    """Plot the replicas of the specifid PDFs. Otherise it works the same as
+    """Plot the replicas of the specified PDFs. Otherise it works the same as
     plot_pdfs.
 
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
@@ -388,11 +388,19 @@ def plot_pdfvardistances(pdfs, variance_distance_grids, *,
 
 
 class BandPDFPlotter(PDFPlotter):
-    def __init__(self, *args, pdfs_noband=None, show_mc_errors=True, **kwargs):
+    def __init__(
+        self,
+        *args,
+        pdfs_noband=None,
+        show_mc_errors=True,
+        legend_stat_labels=True,
+        **kwargs
+    ):
         if pdfs_noband is None:
             pdfs_noband = []
         self.pdfs_noband = pdfs_noband
         self.show_mc_errors = show_mc_errors
+        self.legend_stat_labels = legend_stat_labels
         super().__init__(*args, **kwargs)
 
     def setup_flavour(self, flstate):
@@ -438,11 +446,19 @@ class BandPDFPlotter(PDFPlotter):
             errorstdup, errorstddown = stats.errorbarstd()
             ax.plot(xgrid, errorstdup, linestyle='--', color=color)
             ax.plot(xgrid, errorstddown, linestyle='--', color=color)
-            label  = rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
+            label = (
+                rf"{pdf.label} ($68\%$ c.l.+$1\sigma$)"
+                if self.legend_stat_labels
+                else pdf.label
+            )
             outer = True
         else:
             outer = False
-            label = rf"{pdf.label} ($68\%$ c.l.)"
+            label = (
+                rf"{pdf.label} ($68\%$ c.l.)"
+                if self.legend_stat_labels
+                else pdf.label
+            )
         handle = plotutils.HandlerSpec(color=color, alpha=alpha,
                                                hatch=hatch,
                                                outer=outer)
@@ -472,6 +488,7 @@ def plot_pdfs(
     ymax=None,
     pdfs_noband: (list, type(None)) = None,
     show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
 ):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
@@ -493,6 +510,9 @@ def plot_pdfs(
 
     show_mc_errors (bool): Plot 1σ bands in addition to 68% errors for Monte Carlo
     PDF.
+
+    legend_stat_labels (bool): Show detailed information on what kind of confidence
+    interval is being plotted in the legend labels.
     """
     yield from BandPDFPlotter(
         pdfs,
@@ -503,6 +523,7 @@ def plot_pdfs(
         ymax,
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
     )
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
@@ -530,12 +551,14 @@ def plot_lumi1d(
     pdfs_lumis,
     lumi_channel,
     sqrts: numbers.Real,
+    y_cut: (numbers.Real, type(None)) = None,
     normalize_to=None,
     show_mc_errors: bool = True,
     ymin: (numbers.Real, type(None)) = None,
     ymax: (numbers.Real, type(None)) = None,
     pdfs_noband=None,
     scale="log",
+    legend_stat_labels: bool=True,
 ):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
@@ -544,10 +567,13 @@ def plot_lumi1d(
     function of invariant mass for all PDFs for a single lumi channel.
     ``normalize_to`` works as for `plot_pdfs` and allows to plot a ratio to the
     central value of some of the PDFs. `ymin` and `ymax` can be used to set
-    exact bounds for the scale. `show_mc_errors` controls whether the 1σ error
+    exact bounds for the scale. `y_cut` can be used to specify a rapidity cut
+    over the integration range. `show_mc_errors` controls whether the 1σ error
     bands are shown in addition to the 68% confidence intervals for Monte Carlo
     PDFs. A list `pdfs_noband` can be passed to supress the error bands for
-    certain PDFs and plot the central values only.
+    certain PDFs and plot the central values only. `legend_stat_labels` controls
+    whether to show detailed information on what kind of confidence interval
+    is being plotted in the legend labels.
     """
 
     fig, ax = plt.subplots()
@@ -601,10 +627,10 @@ def plot_lumi1d(
         if isinstance(gv, MCStats) and show_mc_errors:
             ax.plot(mx, errstddown / norm, linestyle="--", color=color)
             ax.plot(mx, errstdup / norm, linestyle="--", color=color)
-            label_add = r"($68%$ c.l.+$1\sigma$)"
+            label_add = r"($68%$ c.l.+$1\sigma$)" if legend_stat_labels else ""
             outer = True
         else:
-            label_add = r"($68\%$ c.l.)"
+            label_add = r"($68\%$ c.l.)" if legend_stat_labels else ""
             outer = False
 
         handle = plotutils.HandlerSpec(
@@ -625,10 +651,17 @@ def plot_lumi1d(
     ax.set_ylim(ymin, ymax)
     ax.set_xscale(scale)
     ax.grid(False)
-    ax.set_title(
-        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
-        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
-    )
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
+            f"$\\|y|<{format_number(y_cut)}$"
+        )      
 
     return fig
 
@@ -640,6 +673,7 @@ def plot_lumi1d_uncertainties(
     pdfs_lumis,
     lumi_channel,
     sqrts: numbers.Real,
+    y_cut: (numbers.Real, type(None)) = None,    
     normalize_to=None,
     ymin: (numbers.Real, type(None)) = None,
     ymax: (numbers.Real, type(None)) = None,
@@ -649,7 +683,8 @@ def plot_lumi1d_uncertainties(
     sqrts is the center of mass energy (GeV).
 
     If `normalize_to` is set, the values are normalized to the central value of
-    the corresponding PDFs.
+    the corresponding PDFs. `y_cut` can be used to specify a rapidity cut
+    over the integration range.
     """
 
     fig, ax = plt.subplots()
@@ -677,10 +712,17 @@ def plot_lumi1d_uncertainties(
     ax.set_xlim(mx[0], mx[-1])
     ax.set_xscale(scale)
     ax.grid(False)
-    ax.set_title(
-        f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
-        f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
-    )
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "    
+            f"$\\|y|<{format_number(y_cut)}$"
+        )
     ax.set_ylim(ymin, ymax)
     current_ymin, _ = ax.get_ylim()
     ax.set_ylim(max(0, current_ymin), None)

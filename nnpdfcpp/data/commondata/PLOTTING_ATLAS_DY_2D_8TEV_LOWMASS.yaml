@@ -1,0 +1,10 @@
+dataset_label: "ATLAS DY 2D 8 TeV low mass"
+x: k1
+y_label: '$d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]'
+figure_by:
+  - k2 
+
+x_label: '$|y_{\ell\ell}|$'
+
+experiment: "ATLAS"
+nnpdf31_process: DY

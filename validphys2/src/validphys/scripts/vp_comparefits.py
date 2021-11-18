@@ -54,12 +54,22 @@ class CompareFitApp(App):
             default=None,
             nargs='?',
             help="The fit to compare with.")
-        #These are not really positional, but if here they show up before others.
-        parser.add_argument(
+        # Group together mandatory arguments that are not positional
+        mandatory = parser.add_argument_group("mandatory", "Mandatory command line arguments")
+        mandatory.add_argument(
             '--title', help="The title that will be indexed with the report.")
-        parser.add_argument('--author', help="The author of the report.")
-        parser.add_argument(
+        mandatory.add_argument('--author', help="The author of the report.")
+        mandatory.add_argument(
             '--keywords', nargs='+', help="keywords to index the report with.")
+
+        parser.add_argument(
+            '--thcovmat_if_present',
+            action='store_true',
+            help="Use theory cov mat for calculating statistical estimators if available.")
+        parser.add_argument(
+            '--no-thcovmat_if_present',
+            action='store_true',
+            help="DEPRECATED: does nothing")
         parser.add_argument(
             '--current_fit_label',
             nargs='?',
@@ -71,7 +81,6 @@ class CompareFitApp(App):
             nargs='?',
             default=REFERENCE_FIT_LABEL_DEFAULT,
             help="The label for the fit that is being compared to.")
-
         parser.add_argument(
             '-i',
             '--interactive',
@@ -82,21 +91,8 @@ class CompareFitApp(App):
             '--closure',
             help="Use the closure comparison template.",
             action='store_true')
-#        parser.add_argument(
-#            '--use_thcovmat_if_present',
-#            help="Use theory cov mat for calculating statistical estimators.",
-#            action='store_true')
-        parser.add_argument(
-            '--thcovmat_if_present',
-            dest='thcovmat_if_present',
-            action='store_true',
-            help="Use theory cov mat for calculating statistical estimators if available.")
-        parser.add_argument(
-            '--no-thcovmat_if_present',
-            dest='thcovmat_if_present',
-            action='store_false',
-            help="Do not use theory cov mat for calculating statistical estimators.")
-        parser.set_defaults(thcovmat_if_present=None)
+
+        parser.set_defaults()
 
     def try_complete_args(self):
         args = self.args

@@ -8,10 +8,12 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
+import re
 import enum
 import functools
 import inspect
+import json
 import logging
 
 import numpy as np
@@ -33,6 +35,8 @@ from NNPDF import (LHAPDFSet,
 from validphys import lhaindex, filters
 from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
+from validphys.hyperoptplot import HyperoptTrial
+from validphys.utils import experiments_to_dataset_inputs
 
 log = logging.getLogger(__name__)
 
@@ -378,7 +382,7 @@ class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
         self.rules = rules
         self.commondata = commondata
-        super().__init__(commondata)
+        super().__init__(commondata, tuple(rules))
 
     def load(self):
         return np.atleast_1d(
@@ -528,13 +532,13 @@ class FKTableSpec(TupleComp):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
 class PositivitySetSpec(TupleComp):
-    def __init__(self, name ,commondataspec, fkspec, poslambda, thspec):
+    def __init__(self, name ,commondataspec, fkspec, maxlambda, thspec):
         self.name = name
         self.commondataspec = commondataspec
         self.fkspec = fkspec
-        self.poslambda = poslambda
+        self.maxlambda = maxlambda
         self.thspec = thspec
-        super().__init__(name, commondataspec, fkspec, poslambda, thspec)
+        super().__init__(name, commondataspec, fkspec, maxlambda, thspec)
 
 
 
@@ -545,9 +549,8 @@ class PositivitySetSpec(TupleComp):
     def load(self):
         cd = self.commondataspec.load()
         fk = self.fkspec.load()
-        return PositivitySet(cd, fk, self.poslambda)
+        return PositivitySet(cd, fk, self.maxlambda)
 
-    #__slots__ = ('__weakref__', 'commondataspec', 'fkspec', 'poslambda')
 
 
 #We allow to expand the experiment as a list of datasets
@@ -623,6 +626,21 @@ class FitSpec(TupleComp):
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
         d['pdf'] = {'id': self.name, 'label': self.label}
+
+        if 'experiments' in d:
+            # Flatten old style experiments to dataset_inputs
+            dataset_inputs = experiments_to_dataset_inputs(d['experiments'])
+            d['dataset_inputs'] = dataset_inputs
+
+        #BCH
+        # backwards compatibility hack for runcards with the 'fitting' namespace
+        # if a variable already exists outside 'fitting' it takes precedence
+        fitting = d.get("fitting")
+        if fitting is not None:
+            to_take_out = ["genrep", "trvlseed", "mcseed", "nnseed", "parameters"]
+            for vari in to_take_out:
+                if vari in fitting and vari not in d:
+                    d[vari] = fitting[vari]
         return d
 
     def __str__(self):
@@ -630,6 +648,70 @@ class FitSpec(TupleComp):
 
     __slots__ = ('label','name', 'path')
 
+
+class HyperscanSpec(FitSpec):
+    """The hyperscan spec is just a special case of FitSpec"""
+
+    def __init__(self, name, path):
+        super().__init__(name, path)
+        self._tries_files = None
+
+    @property
+    def tries_files(self):
+        """Return a dictionary with all tries.json files mapped to their replica number"""
+        if self._tries_files is None:
+            re_idx = re.compile(r"(?<=replica_)\d+$")
+            get_idx = lambda x: int(re_idx.findall(x.as_posix())[-1])
+            all_rep = map(get_idx, self.path.glob("nnfit/replica_*"))
+            # Now loop over all replicas and save them when they include a tries.json file
+            tries = {}
+            for idx in sorted(all_rep):
+                test_path = self.path / f"nnfit/replica_{idx}/tries.json"
+                if test_path.exists():
+                    tries[idx] = test_path
+            self._tries_files = tries
+        return self._tries_files
+
+    def get_all_trials(self, base_params=None):
+        """Read all trials from all tries files.
+        If there are original runcard-based parameters, a reference to them can be passed
+        to the trials so that a full hyperparameter dictionary can be defined
+
+        Each hyperopt trial object will also have a reference to all trials in its own file
+        """
+        all_trials = []
+        for trial_file in self.tries_files.values():
+            with open(trial_file, "r") as tf:
+                run_trials = []
+                for trial in json.load(tf):
+                    trial = HyperoptTrial(trial, base_params=base_params, linked_trials=run_trials)
+                    run_trials.append(trial)
+            all_trials += run_trials
+        return all_trials
+
+    def sample_trials(self, n=None, base_params=None, sigma=4.0):
+        """Parse all trials in the hyperscan object
+        and then return an array of ``n`` trials read from the ``tries.json`` files
+        and sampled according to their reward.
+        If ``n`` is ``None``, no sapling is performed and all trials are returned
+
+        Returns
+        -------
+            Dictionary on the form {parameters: list of trials}
+        """
+        all_trials_raw = self.get_all_trials(base_params=base_params)
+        # Drop all failing trials
+        all_trials = list(filter(lambda i: i.reward, all_trials_raw))
+        if n is None:
+            return all_trials
+        if len(all_trials) < n:
+            log.warning("Asked for %d trials, only %d valid trials found", n, len(all_trials))
+        # Compute weights proportionally to the reward (goes from 0 (worst) to 1 (best, loss=1))
+        rewards = np.array([i.weighted_reward for i in all_trials])
+        weight_raw = np.exp(sigma * rewards ** 2)
+        total = np.sum(weight_raw)
+        weights = weight_raw / total
+        return np.random.choice(all_trials, replace=False, size=n, p=weights)
 
 
 class TheoryIDSpec:

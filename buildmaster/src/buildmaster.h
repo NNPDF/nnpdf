@@ -17,4 +17,4 @@
 using namespace std;
 
 // Push all available filters into vector
-void InitCommonData(vector<CommonData*>&);
+vector<unique_ptr<CommonData>> InitCommonData();

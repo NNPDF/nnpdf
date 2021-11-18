@@ -124,6 +124,50 @@ def experiments_bias_variance_ratio(
 
 
 @table
+def experiments_bias_variance_table(
+    experiments_expected_bias_variance,
+    group_dataset_inputs_by_experiment,
+    expected_total_bias_variance,
+):
+    """Tabulate the values of bias and variance for each experiment as well
+    as the sqrt ratio of the two as in
+    :py:func`sqrt_experiments_bias_variance_ratio`. Used as a performance
+    indicator.
+
+    """
+    records = []
+    for exp, (bias, var, ndata) in zip(
+        group_dataset_inputs_by_experiment,
+        experiments_expected_bias_variance
+    ):
+        records.append(dict(
+            experiment=exp["group_name"],
+            ndata=ndata,
+            bias=bias/ndata,
+            variance=var/ndata,
+            sqrt_ratio=np.sqrt(bias/var)
+        ))
+
+    bias_tot, var_tot, ntotal = expected_total_bias_variance
+
+    records.append(dict(
+        experiment="Total",
+        ndata=ntotal,
+        bias=bias_tot/ntotal,
+        variance=var_tot/ntotal,
+        sqrt_ratio=np.sqrt(bias_tot/var_tot)
+    ))
+    df = pd.DataFrame.from_records(records, index="experiment")
+    df.columns = [
+        "ndata",
+        "bias",
+        "variance",
+        "sqrt(bias/variance)"
+    ]
+    return df
+
+
+@table
 def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
     """Given `datasets_bias_variance_ratio` take the sqrt and tabulate the
     results. This gives an idea of how
@@ -702,3 +746,50 @@ def plot_experiments_xi_bootstrap_distribution(
         ax.set_title(r"Bootstrap distribution of $\xi_{1\sigma}$ for " + str(exp))
         ax.set_xlabel(r"$\xi_{1\sigma}$")
         yield fig
+
+@figuregen
+def plot_bias_variance_distributions(
+    experiments_fits_bias_replicas_variance_samples,
+    group_dataset_inputs_by_experiment
+):
+    """For each experiment, plot the distribution across fits of bias
+    and the distribution across fits and replicas of
+
+    fit_rep_var = (E[g] - g)_i inv(cov)_ij (E[g] - g)_j
+
+    where g is the replica prediction for fit l, replica k and E[g] is the
+    mean across replicas of g for fit l.
+
+    """
+    for (exp_biases, exp_vars, _), group_spec in zip(
+            experiments_fits_bias_replicas_variance_samples,
+            group_dataset_inputs_by_experiment
+        ):
+        fig, ax = plt.subplots()
+        labels = [
+            "fits bias distribution",
+            "replicas variance distribution",
+        ]
+        ax.hist(
+            [exp_biases, exp_vars],
+            density=True,
+            label=labels
+        )
+        ax.legend()
+        ax.set_title(
+            f"Bias and variance distributions for {group_spec['group_name']}."
+        )
+        yield fig
+    total_bias, total_var, _ = np.sum(
+        experiments_fits_bias_replicas_variance_samples,
+        axis=0
+    )
+    fig, ax = plt.subplots()
+    ax.hist(
+        [total_bias, total_var],
+        density=True,
+        label=labels
+    )
+    ax.legend()
+    ax.set_title("Total bias and variance distributions.")
+    yield fig

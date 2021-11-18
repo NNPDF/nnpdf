@@ -1,11 +1,11 @@
 import pytest
 
+from validphys.api import API
 from validphys.loader import FallbackLoader as Loader
 from validphys.filters import (
     Rule,
     RuleProcessingError,
     default_filter_settings_input,
-    default_filter_rules_input,
     PerturbativeOrder,
     BadPerturbativeOrder,
 )
@@ -43,6 +43,23 @@ def mkrule(inp):
     desc = th.get_description()
     defaults = default_filter_settings_input()
     return Rule(initial_data=inp, defaults=defaults, theory_parameters=desc)
+
+
+def test_rule_caching():
+    rule_list_1, *rule_list_2 = good_rules
+    rule_list_1 = [rule_list_1]
+
+    cut_list = []
+    for rule_list in (rule_list_1, rule_list_2):
+        cut_list.append(
+            API.cuts(
+                dataset_input={"dataset": "NMC"},
+                use_cuts="internal",
+                theoryid=THEORYID,
+                filter_rules=rule_list,
+            )
+        )
+    assert not cut_list[0] == cut_list[1]
 
 
 def test_PTO():

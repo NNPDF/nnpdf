@@ -102,3 +102,39 @@ class DYE605_sh_iteFilter: public CommonData
 private:
   void ReadData();
 };
+
+class DYE906RFilter: public CommonData
+{
+public: DYE906RFilter():
+  CommonData("DYE906R") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE906R_dw_iteFilter: public CommonData
+{
+public: DYE906R_dw_iteFilter():
+  CommonData("DYE906R_dw_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE906R_sh_iteFilter: public CommonData
+{
+public: DYE906R_sh_iteFilter():
+  CommonData("DYE906R_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE906R_BINFilter: public CommonData
+{
+public: DYE906R_BINFilter(std::string setname):
+  CommonData(setname) { ReadData(); }
+
+private:
+  void ReadData();
+};

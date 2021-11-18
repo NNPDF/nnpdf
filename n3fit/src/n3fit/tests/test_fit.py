@@ -26,9 +26,7 @@ import shutil
 import pathlib
 import logging
 import subprocess as sp
-from collections import namedtuple
 from numpy.testing import assert_equal, assert_allclose
-from reportengine.compat import yaml
 import n3fit
 from validphys.n3fit_data import replica_trvlseed, replica_nnseed, replica_mcseed
 
@@ -141,6 +139,7 @@ def test_performfit_and_timing(tmp_path):
     auxiliary_performfit(tmp_path, replica=2, timing=True)
 
 
+@pytest.mark.skip(reason="Still not implemented in parallel mode")
 def test_hyperopt(tmp_path):
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"

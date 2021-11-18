@@ -38,7 +38,15 @@ Sum rules
 ---------
 {@with pdfs@}
 ### {@pdf@}
+
+#### Known sum rules
+
 {@sum_rules_table@}
+
+#### Unknown sum rules
+
+{@unknown_sum_rules_table@}
+
 {@endwith@}
 
 PDF plots
@@ -65,20 +73,26 @@ Training-validation
 -------------------
 {@fits plot_training_validation@}
 
+{@with DataGroups@}
 $\chi^2$ by {@processed_metadata_group@}
 ----------------------------------------
 {@plot_fits_groups_data_chi2@}
+{@endwith@}
+
 
 $\chi^2$ by dataset
 -------------------
 ### Plot
 {@plot_fits_datasets_chi2@}
 ### Table
-{@fits_chi2_table(show_total=true)@}
+{@ProcessGroup fits_chi2_table(show_total=true)@}
 
+
+{@with DataGroups@}
 $\phi$ by {@processed_metadata_group@}
 --------------------------------------
 {@plot_fits_groups_data_phi@}
+{@endwith@}
 
 Dataset plots
 -------------

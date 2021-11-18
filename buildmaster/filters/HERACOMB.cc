@@ -77,7 +77,8 @@ void HERACOMBFilter::ReadData()
     for (int l = 0; l < fNSys; l++)
       fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
   }
-  
+
+  delete[] sysNames;
   f1.close();
 }
 

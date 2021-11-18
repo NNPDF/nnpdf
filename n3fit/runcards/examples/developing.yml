@@ -1,0 +1,123 @@
+#
+# Configuration file for n3fit
+#
+
+############################################################
+description: Regression runcard for the automatic github fitbot
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+- {dataset: NMCPD_dw_ite, frac: 0.75}
+- {dataset: NMC, frac: 0.75}
+- {dataset: SLACP_dwsh, frac: 0.75}
+- {dataset: SLACD_dw_ite, frac: 0.75}
+- {dataset: BCDMSD_dw_ite, frac: 0.75}
+- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
+- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
+- {dataset: HERACOMBNCEM, frac: 0.75}
+- {dataset: HERACOMBNCEP575, frac: 0.75}
+- {dataset: HERACOMBNCEP920, frac: 0.75}
+- {dataset: HERACOMBCCEM, frac: 0.75}
+- {dataset: HERACOMBCCEP, frac: 0.75}
+- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
+- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
+- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
+- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
+- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
+- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
+- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        
+- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
+- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
+- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 
+- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       
+- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
+- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}   
+
+############################################################
+datacuts:
+  t0pdfset: 210219-02-rs-nnpdf40-1000 # PDF set to generate t0 covmat
+  q2min        : 3.49                # Q2 minimum
+  w2min        : 12.5                # W2 minimum
+  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
+  jetptcut_tev : 0                   # jet pt cut for tevatron
+  jetptcut_lhc : 0                   # jet pt cut for lhc
+  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
+  jetycut_tev  : 1e30                # jet rap. cut for tevatron
+  jetycut_lhc  : 1e30                # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut  : 1e30                # jet cfact. cut
+
+############################################################
+theory:
+  theoryid: 200        # database id
+
+############################################################
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+load: 'developing_weights.h5'
+genrep: true    # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [50, 35, 25, 8]
+  activation_per_layer: ['tanh', 'sigmoid', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+      optimizer_name: 'Adadelta'
+      learning_rate: 1.0
+      clipnorm: 0.1
+  epochs: 2000
+  ntegrability:
+    initial:
+    multiplier: 1.03
+  positivity:
+      initial:
+      multiplier: 1.10
+  stopping_patience: 0.1 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.001
+
+fitting:
+  fitbasis: EVOL # EVOL (7), EVOLQED (8), etc.
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.093, 1.121], largex: [1.486, 3.287]}
+  - {fl: g, trainable: false, smallx: [0.8329, 1.071], largex: [3.084, 6.767]}
+  - {fl: v, trainable: false, smallx: [0.5202, 0.7431], largex: [1.556, 3.639]}
+  - {fl: v3, trainable: false, smallx: [0.1205, 0.4839], largex: [1.736, 3.622]}
+  - {fl: v8, trainable: false, smallx: [0.5864, 0.7987], largex: [1.559, 3.569]}
+  - {fl: t3, trainable: false, smallx: [-0.5019, 1.126], largex: [1.754, 3.479]}
+  - {fl: t8, trainable: false, smallx: [0.6305, 0.8806], largex: [1.544, 3.481]}
+  - {fl: t15, trainable: false, smallx: [1.087, 1.139], largex: [1.48, 3.365]}
+
+############################################################
+positivity:
+  posdatasets:
+    - { dataset: POSF2U, maxlambda: 1e6}  # Positivity Lagrange Multiplier
+    - {dataset: POSF2DW, maxlambda: 1e6}
+    - { dataset: POSDYU, maxlambda: 1e10}
+    - { dataset: POSDYD, maxlambda: 1e10}
+    - { dataset: POSDYS, maxlambda: 1e10}
+    - { dataset: POSXDB, maxlambda: 1e6}
+    - { dataset: POSXSQ, maxlambda: 1e6}
+    - { dataset: POSXSB, maxlambda: 1e6}
+    - { dataset: POSXGL, maxlambda: 1e6}
+
+integrability:
+ integdatasets:
+    - { dataset: INTEGXT8, maxlambda: 1e2}
+    - { dataset: INTEGXT3, maxlambda: 1e2}
+
+############################################################
+debug: True
+maxcores: 4

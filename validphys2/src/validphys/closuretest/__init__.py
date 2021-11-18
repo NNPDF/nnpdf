@@ -10,3 +10,4 @@ from validphys.closuretest.multiclosure_output import *
 from validphys.closuretest.multiclosure_pdf import *
 from validphys.closuretest.multiclosure_pdf_output import *
 from validphys.closuretest.multiclosure_preprocessing import *
+from validphys.closuretest.multiclosure_pseudodata import *

@@ -61,7 +61,7 @@ def test_mcreplica(data_config):
     seed = 123456
     # Use no cuts because if filter rules change in the
     # future then this test will end up failing
-    rep = API.indexed_make_replica(**config, seed=seed)
+    rep = API.indexed_make_replica(**config, replica_mcseed=seed)
     return rep
 
 
@@ -89,36 +89,36 @@ def test_t0sqrtcovmat(data_witht0_config):
     return API.groups_sqrtcovmat(**data_witht0_config)
 
 @make_table_comp(parse_exp_mat)
-def test_pdf_plus_exp_covmat(data_config):
-    return API.groups_covmat_no_table(use_pdferr=True, **data_config)
+def test_pdf_plus_exp_covmat(data_internal_cuts_config):
+    return API.groups_covmat_no_table(use_pdferr=True, **data_internal_cuts_config)
 
 @make_table_comp(sane_load)
-def test_predictions(data_config):
+def test_predictions(data_internal_cuts_config):
     # TODO: ideally we would change the baseline to just be corresponding columns
     # of `experiment_result_table`, however sane_load expects just a single level
     # of column and index - if we use a different format like parquet this could
     # be changed.
-    res_tab = API.group_result_table_no_table(**data_config)
+    res_tab = API.group_result_table_no_table(**data_internal_cuts_config)
     th = res_tab.iloc[:, 2:].values
-    return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
+    return pd.DataFrame(th, columns=map(str, range(th.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
-def test_dataset_t0_predictions(data_witht0_config):
+def test_dataset_t0_predictions(data_witht0_internal_cuts_config):
     # TODO: As in `test_predictions`
-    res_tab = API.group_result_table_no_table(**data_witht0_config)
+    res_tab = API.group_result_table_no_table(**data_witht0_internal_cuts_config)
     th = res_tab.iloc[:, 2:].values
-    return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
+    return pd.DataFrame(th, columns=map(str, range(th.shape[1])), dtype='float64')
 
 @make_table_comp(sane_load)
-def test_cv(data_config):
+def test_cv(data_internal_cuts_config):
     # TODO: As in `test_predictions`
-    res_tab = API.group_result_table_no_table(**data_config)
+    res_tab = API.group_result_table_no_table(**data_internal_cuts_config)
     data_values = res_tab.iloc[:, 0].values[:, np.newaxis]
     return pd.DataFrame(data_values, columns=['CV'])
 
 @make_table_comp(load_perreplica_chi2_table)
-def test_replicachi2data(data_witht0_config):
-    return API.perreplica_chi2_table(**data_witht0_config)
+def test_replicachi2data(data_witht0_internal_cuts_config):
+    return API.perreplica_chi2_table(**data_witht0_internal_cuts_config)
 
 @make_table_comp(load_fits_chi2_table)
 def test_datasetchi2(data_singleexp_witht0_config):
@@ -131,7 +131,8 @@ def test_datasetchi2(data_singleexp_witht0_config):
 def test_art_rep_generation(data_config):
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
-    config["fitting"] = {"seed": 123456}
+    config["mcseed"] = 123456
+    config["genrep"] = True
     config["nreplica"] = 1
     _, art_replicas, _,_ = API.art_rep_generation(**config)
     return pd.DataFrame(art_replicas.T, columns=['rep0'])

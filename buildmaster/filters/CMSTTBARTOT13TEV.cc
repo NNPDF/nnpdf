@@ -47,23 +47,19 @@ void CMSTTBARTOT13TEVFilter::ReadData()
       lstream >> fData[i];       //central value
       lstream >> fStat[i];       //statistical uncertainty
       lstream >> sys1 >> sys2;   //Asymmetric systematic uncertainty
-      sys1 = sys1/fData[i]*100;
-      sys2 = sys2/fData[i]*100;
+
       symmetriseErrors(sys1,sys2,&stmp,&dtmp);
       
-      fSys[i][0].mult = stmp;    //Symmetric systematic uncertainty
-      lstream >> fSys[i][1].add; //Luminosity uncertainty
-      
-      fSys[i][0].add = fSys[i][0].mult*fData[i]/100; 
+      fSys[i][0].add = stmp;    //Symmetric systematic uncertainty
+      fData[i] += dtmp; //Shift from asymmetric errors
+      fSys[i][0].mult = fSys[i][0].add/fData[i]*100;
       fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";      
 
+      lstream >> fSys[i][1].add; //Luminosity uncertainty
       fSys[i][1].mult = fSys[i][1].add/fData[i]*100;
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CMSLUMI13";
-      
-      fData[i]*=(1.0 + dtmp*0.01); //Shift from asymmetric errors
-
     }  
 
   f1.close();

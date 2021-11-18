@@ -1,163 +1,64 @@
-# NNPDF/nnpdf
+<div align="center">
+  <img src="doc/sphinx/source/_static/LogoNNPDF.png" height=100>
+</div>
 
-The main repository of the NNPDF framework. 
+![Build status](https://github.com/NNPDF/nnpdf/actions/workflows/tests.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/118135201.svg)](https://zenodo.org/badge/latestdoi/118135201)
 
-This project contains the following components:
-- libnnpdf: core NNPDF utility library.
-- nnpdfcpp: programs used in the NNPDF fitting framework. 
-- validphys2: the fit result analysis framework.
+# NNPDF: An open-source machine learning framework for global analyses of parton distributions
 
-**Table of Contents**
-  * [Installation](#installation)
-    * [Binary packages](#binary-packages)
-    * [From source](#from-source)    
-  * [Using the code](#using-the-code)
- 
+[The NNPDF collaboration](http://nnpdf.science) determines the structure of the
+proton using Machine Learning methods. This is the main repository of the
+fitting and analysis frameworks. In particular it contains all the necessary
+tools to [reproduce](https://docs.nnpdf.science/tutorials/reproduce.html) the
+[NNPDF4.0 PDF determinations](https://arxiv.org/abs/2109.02653).
 
-## Installation
+## Documentation
 
-Two installation options are available: using a binary package, and building
-from source. For production purposes (rather than for code development) the binary
-package is the recommended approach.
+The documentation is available at <https://docs.nnpdf.science/>
 
-### Binary packages
+## Install
 
-The master version of the `nnpdf` package and its dependencies can be obtained
-in binary format, as a conda package. Installation of the conda package is managed
-by the `NNPDF/binary-bootstrap` code. It can be cloned as: 
+See the [NNPDF installation
+guide](https://docs.nnpdf.science/get-started/installation.html) for the 
+conda package, and how to build from source.
 
-```Shell 
-    git clone git@github.com:NNPDF/binary-bootstrap.git 
-    ./binary-botstrap/bootstrap.sh 
+Please note
+that the [conda](https://docs.conda.io/en/latest/) based workflow described in
+the documentation is the only supported one. While it may be possible to set up
+the code in different ways, we won't be able to provide any assistance.
+
+We follow a rolling development model where the tip of the master branch is 
+expected to be stable, tested and correct. For more information see our 
+[releases and compatibility policy](https://docs.nnpdf.science/releases.html).
+
+## Cite
+
+This code is described in the following [paper](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%202109.02671):
+
+```
+@article{Ball:2021xlu,
+    author = "Ball, Richard D. and others",
+    title = "{An open-source machine learning framework for global analyses of parton distributions}",
+    eprint = "2109.02671",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-ph",
+    reportNumber = "Edinburgh 2021/13, Nikhef-2021-020, TIF-UNIMI-2021-12",
+    month = "9",
+    year = "2021"
+}
 ```
 
-The script will ask for the password of the private NNPDF repositories. It is:
-``` BifaSali9 ```. Once the script has finished, the nnpdf software can be
-installed by:
+If you use the code to produce new results in a scientific publication, please
+follow the [Citation Policy](https://docs.nnpdf.science/get-started/cite.html),
+particularly in regards to the papers relevant for QCD NNLO and EW NLO
+calculations incorporated in the NNPDF dataset.
 
-```Shell 
-    conda install nnpdf
-```
+## Contribute
 
-When the packages are installed, the necessary binaries are added to the `bin/`
-directory of the corresponding conda environment (which is typically in the
-`PATH`). Users can run `vp-setupfit`, `nnfit`, or `postfit` from any directory.
+We welcome bug reports or feature requests sent to the [issue
+tracker](https://github.com/NNPDF/nnpdf/issues). You may use the issue tracker
+for help and questions as well.
 
-By default, data files (both from theory and experiment) are installed to:
-`<conda root>/share/NNPDF/data` and fit results will be written to 
-`<conda root>/share/NNPDF/results`.
-
-These paths can be changed by tweaking `nnprofile.yaml` as described in [NNPDF
-paths and URLs](#nnpdf-paths-and-urls).
-
-Detailed conda installation instructions can be found in the [validphy2 guide](
-https://data.nnpdf.science/validphys-docs/guide.html).
-
-### From source
-
-If you intend to work on the code, then building from source is the
-recommended installation procedure. However, you can still use conda
-to get all the dependecies and setup the validphys and C++ development
-environment. Further information is available in the
-[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
-
-For precise version requirements, see
-[the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
-
-
-#### Compiling the code
-
-Compile-time configuration is handled by cmake. A typical installation begins
-to the directory [installation prefix] begins with:
-
-```Shell 
-    mkdir build 
-    cd build 
-    cmake .. -DCMAKE_INSTALL_PREFIX=[installation prefix] 
-``` 
-
-You can then check the configuration with `ccmake .. `. Once you are happy with
-your settings, proceed with
-
-```Shell 
-    make && make install
-``` 
-
-Which will copy binaries and scripts to the `CMAKE_INSTALL_PREFIX` that you
-selected, while the content of `nnpdfcpp/data` folder will be copied to the
-`data_path` set in nnprofile.yaml.
-
-## Using the code
-
-### nnfit runcard
-
-The runcard is written in YAML. The runcard is the unique identifier of a fit, it is also the
-only required configuration input required for many programs of this repository.
-
-### Workflow
-
-0. Install the code
-
-1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`. 
-The `<profile_prefix>` path is by default `<install prefix>/share/NNPDF` for source installation 
-while `<conda root>/share/NNPDF` for conda installation.
-
-2. Prepare the fit: `vp-setupfit <runcard>.yml` this command will
-generate a `<runcard_folder>` folder in the current directory with a
-copy of the original YAML runcard.  The required resources (such as the theory
-and t0 PDF) will be downloaded automatically. Alternatively they can be obtained
-with the `vp-get` tool.
-
-3. The `nnfit` program takes a `<runcard_folder>` as input, e.g.  ```nnfit
-<replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
-
-4. Wait until you have fit results, then use `postfit
-<number_of_replicas> <runcard_folder>` to finalize the PDF set by
-applying post selection criteria. This will produce a set of
-`<number_of_replicas>+1` replicas.
-
-5. Upload the results using `vp-uploadfit <runcard_folder>` then
-install the fitted set with `vp-get fit <fit_name>`.
-
-6. Analyze results with `validphys`, see the
-[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
-Consider using the `vp-comparefits` tool.
-
-## NNPDF paths and URLS
-
-The paths that various codes (such as `nnfit` and `validphys`) will use to find
-and write resources, as well as the URLS to upload and download them are defined
-in a `nnprofile.yaml` file. By default, it is stored in the `nnpdf` install
-prefix, under `<nnpdf install prefix>/share/NNPDF/nnprofile.yaml`. For binary
-packages, the `nnpdf` install prefix is simply the path of the conda
-environment where the packages is installed.  The paths and URLs can be
-modified: This can be useful to make the code work under specific cluster
-configurations, for example to avoid excessive I/O in NFS mounts. However, do
-not do it by editing the `nnprofile.yaml` file in the default location, since it
-will be overwritten every time that `nnpdf` is installed.  Instead copy it to
-some other location, make the changes you wish, and define an
-`NNPDF_PROFILE_PATH` environment variable pointing to your modified file. For
-example, you could write in your `.bashrc`: ```shell export
-NNPDF_PROFILE_PATH=/home/user/mynnprofile.yaml ```
-
-### Code development policy/rules
-
-Developers must never commit code structure modifications to master. The
-development pattern should follow these rules:
-- Open an issue explaining your bug or feature request. If you report a bug,
-  post information to reproduce it.
-- The resolution of issues must be performed in a new branch through a pull
-  request.
-- If you have already a local version of the code that you would like to merge
-  in the master, open a pull request.
-- The pull request must be reviewed by at least 2 core developers.
-
-### Code documentation
-
-The C++ code is documented with Doxygen, if you find methods or classes not fully
-documented open a issue request.
-
-### Layout documentation
-
-For specifications about data please check `data/doc`.  For specifications about
-the code design see Chapter 3 of http://arxiv.org/pdf/1509.00209.pdf
+If you would like contribute to the code, please follow the [Contribution
+Guidelines](https://docs.nnpdf.science/contributing/index.html).

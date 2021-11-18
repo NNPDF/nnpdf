@@ -16,7 +16,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  use_t0 : False
+  t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -34,26 +34,26 @@ theory:
   theoryid: 162        # database id
 
 ############################################################
+genrep: True    # on = generate MC replicas, False = use real data
+trvlseed: 3
+nnseed: 2
+mcseed: 1  
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 10, 7]
+  activation_per_layer: ['tanh', 'sigmoid', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.00001
+    clipnorm: 1.0
+  epochs: 20000
+  stopping_patience: 1.00 # percentage of the number of epochs
+  layer_type: 'dense_per_flavour'
+  dropout: 0.6
+  threshold_chi2: 50.0
+
 fitting:
-  genrep: True    # on = generate MC replicas, False = use real data
-  trvlseed: 3
-  nnseed: 2
-  mcseed: 1  
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [15, 10, 7]
-    activation_per_layer: ['tanh', 'sigmoid', 'linear']
-    initializer: 'glorot_normal'
-    optimizer:
-      optimizer_name: 'RMSprop'
-      learning_rate: 0.00001
-      clipnorm: 1.0
-    epochs: 20000
-    stopping_patience: 1.00 # percentage of the number of epochs
-    layer_type: 'dense_per_flavour'
-    dropout: 0.6
-    threshold_chi2: 50.0
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
@@ -65,41 +65,18 @@ fitting:
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
-      - { fl: sng, pos: False, mutsize: [15], mutprob: [0.05], smallx: [1.05,1.19], largex: [1.47,2.70] }
-      - { fl: g,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.94,1.25], largex: [0.11,5.87] }
-      - { fl: v,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.54,0.75], largex: [1.15,2.76] }
-      - { fl: v3,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.21,0.57], largex: [1.35,3.08] }
-      - { fl: v8,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.52,0.76], largex: [0.77,3.56] }
-      - { fl: t3,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [-0.37,1.52], largex: [1.74,3.39] }
-      - { fl: t8,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.56,1.29], largex: [1.45,3.03] }
-
-############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta   : 0         # Delta for look-back stopping
-  mingen    : 0         # Minimum number of generations
-  window    : 500       # Window for moving average
-  minchi2   : 3.5       # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear    : 200       # Smear for stopping
-  deltasm   : 200       # Delta smear for stopping
-  rv        : 2         # Ratio for validation stopping
-  rt        : 0.5       # Ratio for training stopping
-  epsilon   : 1e-6      # Gradient epsilon  
+      - { fl: sng, smallx: [1.05,1.19], largex: [1.47,2.70] }
+      - { fl: g,   smallx: [0.94,1.25], largex: [0.11,5.87] }
+      - { fl: v,   smallx: [0.54,0.75], largex: [1.15,2.76] }
+      - { fl: v3,  smallx: [0.21,0.57], largex: [1.35,3.08] }
+      - { fl: v8,  smallx: [0.52,0.76], largex: [0.77,3.56] }
+      - { fl: t3,  smallx: [-0.37,1.52], largex: [1.74,3.39] }
+      - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
 
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
-
-############################################################
-lhagrid:
-  nx  : 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq  : 50
-  qmax: 1e5
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
 
 ############################################################
 closuretest:

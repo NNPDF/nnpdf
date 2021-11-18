@@ -109,6 +109,9 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
 
   }
 
+  delete[] EWcorr;
+  delete[] NPerr;
+  
 }
 
 void ATLAS1JET11Filter::ReadData()

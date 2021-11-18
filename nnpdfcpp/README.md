@@ -1,6 +1,6 @@
 # nnpdfcpp
-The main programs used in the NNPDF fitting framework. 
- 
+The main programs used in the NNPDF fitting framework.
+
 ## Project summary and aim
 
 This project contains the principle fitting code of the NNPDF collaboration,
@@ -13,6 +13,5 @@ The main projects are
   but filter.
 
 and the extra optional programs:
-- revolve:    (re-)evolve PDF set using APFEL
-- revolvenet: (re-)evolve PDF neural network using APFEL
+- evolvefit: evolve PDF neural network using APFEL
 - fiatlux: generate a T0 set with the photon PDF via `libfiatlux`

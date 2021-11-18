@@ -1,0 +1,35 @@
+meta:
+    title: χ2 spider plot from dataspecs
+    author: Rosalyn Pearson
+    keywords: [example, spider]
+
+fit: NNPDF40_nnlo_lowprecision
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+dataset_inputs:
+    from_: fit
+
+dataspecs:
+    - speclabel: NNPDF40_nnlo_as_01180
+      pdf: NNPDF40_nnlo_as_01180
+
+    - speclabel: NNPDF40_nlo_as_01180
+      pdf: NNPDF40_nlo_as_01180
+
+use_cuts: internal
+
+normalize_to: 1
+
+template_text: |
+
+    # χ2 spider plot
+
+    {@plot_dataspecs_datasets_chi2_spider@}
+
+actions_:
+    - report(main=true)

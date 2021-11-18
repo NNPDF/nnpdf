@@ -231,6 +231,14 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -379,6 +387,14 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
 	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -530,6 +546,14 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
 	}
       
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -678,6 +702,14 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -826,6 +858,14 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
+  
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -1028,7 +1068,15 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       fSys[i][20].name = sysdescr[20-fNData];
 
     }
-  
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+
   f1.close();
   f2.close();
   f3.close();
@@ -1224,6 +1272,14 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       fSys[i][18].type = MULT;
       fSys[i][18].name = sysdescr[18-fNData];
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -1421,6 +1477,14 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       fSys[i][22].type = MULT;
       fSys[i][22].name = sysdescr[22-fNData];
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -1619,6 +1683,14 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       fSys[i][22].type = MULT;
       fSys[i][22].name = sysdescr[22-fNData];
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -1818,6 +1890,14 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       fSys[i][19].name = sysdescr[19-fNData];
     }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
   f3.close();

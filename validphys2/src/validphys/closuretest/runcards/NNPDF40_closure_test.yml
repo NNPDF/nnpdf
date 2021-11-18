@@ -95,41 +95,33 @@ theory:
   theoryid: 53        # database id
 
 ############################################################
+trvlseed: 1727532335
+nnseed: 1737785873
+mcseed: 2123509817
+genrep: true          # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [18, 24, 36, 8]
+  activation_per_layer: [tanh, sigmoid, sigmoid, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 100.0
+    learning_rate: 1.0
+    optimizer_name: Adadelta
+  epochs: 45000
+  positivity:
+    initial: 338
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.15
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+
 fitting:
-
-  trvlseed: 1727532335
-  nnseed: 1737785873
-  mcseed: 2123509817
-  save: false
-
-  seed: 1881658207              # set the seed for the random generator
-  genrep: true          # true = generate MC replicas, false = use real data
-  rngalgo: 0        # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
-  fitmethod: NGA    # Minimization algorithm
-  nmutants: 80      # Number of mutants for replica
-  paramtype: NN
-  nnodes: [2, 5, 3, 1]
-
-  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-    nodes_per_layer: [18, 24, 36, 8]
-    activation_per_layer: [tanh, sigmoid, sigmoid, linear]
-    initializer: glorot_normal
-    optimizer:
-      clipnorm: 100.0
-      learning_rate: 1.0
-      optimizer_name: Adadelta
-    epochs: 45000
-    positivity:
-      initial: 338
-      multiplier:
-    integrability:
-      initial: 10
-      multiplier:
-    stopping_patience: 0.15
-    layer_type: dense
-    dropout: 0.0
-    threshold_chi2: 3.5
-
   # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
   # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
   # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
@@ -146,42 +138,28 @@ fitting:
   - {fl: t15, pos: false, trainable: false, mutsize: [15], mutprob: [0.05], smallx: [1.014, 1.137], largex: [1.43, 3.752]}
 
 ############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta: 0            # Delta for look-back stopping
-  mingen: 0             # Minimum number of generations
-  window: 500           # Window for moving average
-  minchi2: 3.5          # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear: 200           # Smear for stopping
-  deltasm: 200          # Delta smear for stopping
-  rv: 2                 # Ratio for validation stopping
-  rt: 0.5               # Ratio for training stopping
-  epsilon: 1e-6         # Gradient epsilon
-
-############################################################
 positivity:
   posdatasets:
-  - {dataset: POSF2U, poslambda: 1e6}        # Positivity Lagrange Multiplier
-  - {dataset: POSF2DW, poslambda: 1e6}
-  - {dataset: POSF2S, poslambda: 1e6}
-  - {dataset: POSFLL, poslambda: 1e6}
-  - {dataset: POSDYU, poslambda: 1e10}
-  - {dataset: POSDYD, poslambda: 1e10}
-  - {dataset: POSDYS, poslambda: 1e10}
-  - {dataset: POSF2C, poslambda: 1e6}
-  - {dataset: POSXUQ, poslambda: 1e6}        # Positivity of MSbar PDFs
-  - {dataset: POSXUB, poslambda: 1e6}
-  - {dataset: POSXDQ, poslambda: 1e6}
-  - {dataset: POSXDB, poslambda: 1e6}
-  - {dataset: POSXSQ, poslambda: 1e6}
-  - {dataset: POSXSB, poslambda: 1e6}
-  - {dataset: POSXGL, poslambda: 1e6}
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSF2DW, maxlambda: 1e6}
+  - {dataset: POSF2S, maxlambda: 1e6}
+  - {dataset: POSFLL, maxlambda: 1e6}
+  - {dataset: POSDYU, maxlambda: 1e10}
+  - {dataset: POSDYD, maxlambda: 1e10}
+  - {dataset: POSDYS, maxlambda: 1e10}
+  - {dataset: POSF2C, maxlambda: 1e6}
+  - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: POSXUB, maxlambda: 1e6}
+  - {dataset: POSXDQ, maxlambda: 1e6}
+  - {dataset: POSXDB, maxlambda: 1e6}
+  - {dataset: POSXSQ, maxlambda: 1e6}
+  - {dataset: POSXSB, maxlambda: 1e6}
+  - {dataset: POSXGL, maxlambda: 1e6}
 ############################################################
 integrability:
   integdatasets:
-  - {dataset: INTEGXT8, poslambda: 1e2}
-  - {dataset: INTEGXT3, poslambda: 1e2}
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
 
 closuretest:
   filterseed: 3345348918 # Random seed to be used in filtering data partitions
@@ -193,15 +171,6 @@ closuretest:
   rancutmethod: 0   # Method to select rancutprob data fraction
   rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
   printpdf4gen: false # To print info on PDFs during minimization
-
-############################################################
-lhagrid:
-  nx: 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq: 50
-  qmax: 1e5
 
 ############################################################
 debug: false

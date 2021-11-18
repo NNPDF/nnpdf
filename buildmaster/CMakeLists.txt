@@ -47,6 +47,7 @@ pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -march=nocona -mtune=haswell \
                          -fvisibility-inlines-hidden -fmessage-length=0 \
                          -ftree-vectorize -fPIC -fstack-protector-strong \
+                         -fsanitize=address \
                          -O2 -pipe")
 
 # Get rid of annoying semi colon in pkg_config output - slightly hacky way

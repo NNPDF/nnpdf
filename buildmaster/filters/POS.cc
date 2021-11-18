@@ -6,14 +6,14 @@
 #include "POS.h"
 #include <array>
 
-void register_positivity(vector<CommonData*>& list)
+void register_positivity(vector<unique_ptr<CommonData>>& list)
 {
   // DIS positivity sets
-  const std::array<std::string, 13>  DISsets = { 
-    "POSF2DW", 
-    "POSF2S", 
-    "POSF2U", 
-    "POSF2C", 
+  const std::array<std::string, 13>  DISsets = {
+    "POSF2DW",
+    "POSF2S",
+    "POSF2U",
+    "POSF2C",
     "POSFLL",
     "POSXUQ",
     "POSXUB",
@@ -46,9 +46,9 @@ void register_positivity(vector<CommonData*>& list)
     "POSDYUSB"
   };
   for (auto set : DYPsets)
-    list.push_back(new DYPosFilter(set));
+    list.emplace_back(new DYPosFilter(set));
   for (auto set : DISsets)
-    list.push_back(new DISPosFilter(set));
+    list.emplace_back(new DISPosFilter(set));
 }
 
 void DYPosFilter::ReadData()
@@ -56,7 +56,7 @@ void DYPosFilter::ReadData()
   const double xmin = 1E-2;
   const double xmax = 0.9;
   const double xch = 0.1;
-  
+
   const int nxposlog = fNData/2.0;
   const double step   = ( xmax - xch ) / ( fNData - nxposlog );
 
@@ -72,7 +72,7 @@ void DYPosFilter::ReadData()
       const double x1 =  xmin*pow( xch / xmin ,(double)i/(double)(nxposlog-1));
       fKin1[i] = log( x1 / sqrt(tau) );
     }
-    else 
+    else
     {
       const double x1 = xch + step * ( 1 + i - nxposlog);
       fKin1[i] = log( x1 / sqrt(tau) );
@@ -93,7 +93,7 @@ void DISPosFilter::ReadData()
   const double xmin = 5E-7;
   const double xmax = 0.9;
   const double xch = 0.1;
-  
+
   const int nxposlog = fNData/2.0;
   const double step  = ( xmax - xch ) / ( fNData - nxposlog );
 
@@ -101,7 +101,7 @@ void DISPosFilter::ReadData()
   {
     if (i < nxposlog)
       fKin1[i] = xmin*pow( xch / xmin ,(double)i/(double)(nxposlog-1));
-    else 
+    else
       fKin1[i] = xch + step * ( 1 + i - nxposlog);
 
     fData[i] = 0;

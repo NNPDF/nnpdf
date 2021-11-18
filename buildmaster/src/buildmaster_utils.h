@@ -17,6 +17,7 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
+#include <memory>
 
 #include <NNPDF/commondata.h>
 

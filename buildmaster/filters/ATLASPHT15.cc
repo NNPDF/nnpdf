@@ -88,17 +88,21 @@ void ATLASPHT15Filter::ReadData()
     // Convert stat to absolute val
     fStat[idat] = fStat[idat]*fData[idat]*1e-2;
 
-     // fSystP = fSystP*100/fData[idat];
-     // fSystM = fSystM*100/fData[idat];
+    // and systematics
+    fSystP = fSystP*fData[idat]*1e-2;
+    fSystM = fSystM*fData[idat]*1e-2;
 
     // Total systematics
     symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
-    fSys[idat][0].mult=stmp;
+    fSys[idat][0].add=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
-    // convert to additive uncertainties
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
+    // Shift of central values due to asymmetric uncertainties
+    fData[idat] += datshift;
+
+    // convert to mult uncertainties
+    fSys[idat][0].mult = fSys[idat][0].add/fData[idat]*1e2;
 
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
@@ -106,11 +110,6 @@ void ATLASPHT15Filter::ReadData()
     fSys[idat][1].type = MULT;
     fSys[idat][1].name = "ATLASLUMI15";
     fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
-
-    // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
-
-    fData[idat]*=(1.0 + datshift*0.01); //Shift from asymmetric errors
 
     // Kinematic variables
     
@@ -137,32 +136,30 @@ void ATLASPHT15Filter::ReadData()
     >> fATLAS2015Luminosity; 
 
     // Convert to percentages
-   //  Convert stat to absolute val
+    //  Convert stat to absolute val
      
     fStat[idat] = fStat[idat]*fData[idat]*1e-2;
 
-
-// fSystP = fSystP*100/fData[idat];
-     // fSystM = fSystM*100/fData[idat];
+    // and systematics
+    fSystP = fSystP*fData[idat]*1e-2;
+    fSystM = fSystM*fData[idat]*1e-2;
 
     // Total systematics
-       symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
-    fSys[idat][0].mult=stmp;
+    fSys[idat][0].add=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
-    // convert to additive uncertainties
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
+    // Shift of central values due to asymmetric uncertainties
+    fData[idat] += datshift;
+    // convert to mult uncertainties
+    fSys[idat][0].mult = fSys[idat][0].add/fData[idat]*1e2;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
     fSys[idat][1].type = MULT;
     fSys[idat][1].name = "ATLASLUMI15";
     fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
-    // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
-
-    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     
@@ -193,31 +190,26 @@ void ATLASPHT15Filter::ReadData()
     // Convert stat to absolute val
     fStat[idat] = fStat[idat]*fData[idat]*1e-2;
 
-
- 	// Convert to percentages
-
-     // fSystP = fSystP*100/fData[idat];
-     // fSystM = fSystM*100/fData[idat];
+    // and systematics
+    fSystP = fSystP*fData[idat]*1e-2;
+    fSystM = fSystM*fData[idat]*1e-2;
 
     // Total systematics
     symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
-    fSys[idat][0].mult=stmp;
+    fSys[idat][0].add=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
-    // convert to additive uncertainties
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
+    // Shift of central values due to asymmetric uncertainties
+    fData[idat] += datshift;
+    // convert to mult uncertainties
+    fSys[idat][0].mult = fSys[idat][0].add/fData[idat]*1e2;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
     fSys[idat][1].type = MULT;
     fSys[idat][1].name = "ATLASLUMI15";
     fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
-
-    // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
-
-    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     
@@ -248,29 +240,26 @@ void ATLASPHT15Filter::ReadData()
 
     fStat[idat] = fStat[idat]*fData[idat]*1e-2;
 
-
-     // fSystP = fSystP*100/fData[idat];
-     // fSystM = fSystM*100/fData[idat];
+    // and systematics
+    fSystP = fSystP*fData[idat]*1e-2;
+    fSystM = fSystM*fData[idat]*1e-2;
 
     // Total systematics
-       symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
-    fSys[idat][0].mult=stmp;
+    fSys[idat][0].add=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
-    // convert to additive uncertainties
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
+    // Shift of central values due to asymmetric uncertainties
+    fData[idat] += datshift;
+    // convert to mult uncertainties
+    fSys[idat][0].mult = fSys[idat][0].add/fData[idat]*1e2;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
     fSys[idat][1].type = MULT;
     fSys[idat][1].name = "ATLASLUMI15";
     fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
-
-    // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
-
-    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     

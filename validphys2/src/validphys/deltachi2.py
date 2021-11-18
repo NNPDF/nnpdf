@@ -9,15 +9,15 @@ from collections import namedtuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy as sp
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
-from reportengine import collect
 
 from validphys import plotutils
 from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
 from validphys.core import PDF
-from validphys.pdfplots import PDFPlotter, BandPDFPlotter, FlavourState
+from validphys.pdfplots import PDFPlotter, BandPDFPlotter
 
 
 log = logging.getLogger(__name__)
@@ -75,9 +75,9 @@ def plot_kullback_leibler(delta_chi2_hessian):
     )
     # compute Kullback-Leibler (null values set to 1e-8)
     vals_nnpdf[vals_nnpdf==0] = 1e-8
-    kl_nnpdf = entropy(chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
+    kl_nnpdf = sp.stats.entropy(sp.stats.chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
 
-    ax.plot(x, chi2.cdf(x, 1), label="$\chi^2$ CDF")
+    ax.plot(x, sp.stats.chi2.cdf(x, 1), label="$\chi^2$ CDF")
 
     ax.set_title(f"KL divergence: {kl_nnpdf:.4f}")
     ax.set_xlabel("$<\Delta\chi^2>$")

@@ -220,6 +220,14 @@ void LHCBWZMU8TEVFilter::ReadData()
       fSys[i][l].name = "CORR";
     }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   fZ.close();
   fWp.close();
   fWm.close();
