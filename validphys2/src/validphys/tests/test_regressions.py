@@ -7,7 +7,6 @@ updates.
 import pathlib
 import logging
 import functools
-import copy
 
 import numpy as np
 import scipy.linalg as la
@@ -138,13 +137,6 @@ def test_cv(data_internal_cuts_config):
 @make_table_comp(load_perreplica_chi2_table)
 def test_replicachi2data(data_witht0_internal_cuts_config):
     return API.perreplica_chi2_table(**data_witht0_internal_cuts_config)
-
-@make_table_comp(load_fits_chi2_table)
-def test_datasetchi2(data_singleexp_witht0_config):
-    # This is a bit hacky but avoids requiring a fit
-    exps = API.groups_data(**data_singleexp_witht0_config)
-    chi2s = API.groups_datasets_chi2_data(**data_singleexp_witht0_config)
-    return results.fits_datasets_chi2_table(['test'], [exps], [chi2s])
 
 @make_table_comp(load_fits_chi2_table)
 def test_datasetchi2(data_singleexp_witht0_config):
