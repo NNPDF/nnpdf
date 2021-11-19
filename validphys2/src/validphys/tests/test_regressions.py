@@ -9,13 +9,11 @@ import logging
 import functools
 
 import numpy as np
-import scipy.linalg as la
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
 from reportengine.table import savetable
 
-import NNPDF
 from validphys import results
 from validphys.api import API
 from validphys.tests.test_covmats import CORR_DATA
@@ -67,14 +65,7 @@ def test_mcreplica(data_config):
 
 @make_table_comp(parse_exp_mat)
 def test_expcovmat(data_config):
-    mat = API.groups_covmat_no_table(**data_config)
-    covmats = []
-    for exp in API.experiments_data(**data_config):
-        cd = exp.datasets[0].commondata.load()
-        covmats.append(NNPDF.ComputeCovMat(cd, cd.get_cv()))
-    othermat = la.block_diag(*covmats)
-    assert np.allclose(mat.values, othermat)
-    return mat
+    return API.groups_covmat_no_table(**data_config)
 
 @make_table_comp(parse_exp_mat)
 def test_t0covmat(data_witht0_config):
