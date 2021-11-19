@@ -21,11 +21,13 @@ def tmp(tmpdir):
     return pathlib.Path(tmpdir)
 
 # Here define the default config items like the PDF, theory and experiment specs
+SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
-    {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
+    {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10},
+    SINGLE_DATAPOINT
 ]
 
 
@@ -72,6 +74,12 @@ def single_data_internal_cuts_config(data_internal_cuts_config):
     config_dict = dict(data_internal_cuts_config)
     config_dict.pop("dataset_inputs")
     config_dict.update(dataset_input=DATA[0])
+    return config_dict
+
+@pytest.fixture(scope='module')
+def single_data_single_point_internal_cuts_config(single_data_internal_cuts_config):
+    config_dict = dict(single_data_internal_cuts_config)
+    config_dict.update(dataset_input=SINGLE_DATAPOINT)
     return config_dict
 
 @pytest.fixture(scope='module')
