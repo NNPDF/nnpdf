@@ -94,16 +94,15 @@ def check_fit_dataset_order_matches_grouped(
             )
 
 def process_lookup(name):
-    """Produces a dictionary with keys corresponding to dataset names
-    and values corresponding to process types. Process types are
-    regrouped into the five categories 'Drell-Yan', 'Top', Jets',
-    'DIS NC' and 'DIS CC'.
+    """
+    Returns the `nnpdf31_process` as stored in the the PLOTTING_*.yaml file
+    corresponding to the input `name`.
     """
 
     cd = Loader().check_commondata(setname=name)
     data_plotting = open(cd.plotfiles[1])
-    with open(data_plotting.name, 'r') as stream:
-        data_loaded = yaml.safe_load(stream)
+    with open(data_plotting.name, 'r') as f:
+        data_loaded = yaml.safe_load(f)
     proc = data_loaded['nnpdf31_process']
 
     return proc
