@@ -26,8 +26,8 @@ SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
-    {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10},
-    SINGLE_DATAPOINT
+    SINGLE_DATAPOINT,
+    {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
 ]
 
 
