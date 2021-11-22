@@ -71,4 +71,4 @@ NLO fit                              NNPDF40_nlo_as_01180                NNPDF4.
 NNLO fit                             NNPDF40_nnlo_lowprecision           NNPDF4.0 NNLO low precision fit (theory 162) with 50 replicas (+ central replica)
 NNLO fit (iterated)                  NNPDF40_nnlo_lowprecision_iterated  Iteration of NNPDF40_nnlo_lowprecision
 fit                                  NNPDF40_example_closure_test        ``n3fit`` closure test fit with 30 replicas before and after postfit
-===================================  ==================================  ==================================================================
+===================================  =================================== ==================================================================
