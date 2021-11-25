@@ -78,3 +78,17 @@ def test_mc_total_chi2(data_internal_cuts_config):
     np.testing.assert_allclose(dsinp_cent_chi2, cent_chi2)
 
     assert dsinp_ndata == ndata
+
+def _abs_chi2_data(input_config):
+    """Checks the chi2 can be computed and has the right shape"""
+    pdf = API.pdf(**input_config)
+    chi2 = API.abs_chi2_data(**input_config)
+    assert chi2.replica_result.data.shape == (pdf.get_members(), 1)
+
+def test_abs_chi2_data(single_data_internal_cuts_config):
+    """Test abs_chi2_data with a normal dataset"""
+    _abs_chi2_data(single_data_internal_cuts_config)
+
+def test_abs_chi2_data_singlepoint(single_data_single_point_internal_cuts_config):
+    """Test abs_chi2_data with the corner case of a single datapoint dataset"""
+    _abs_chi2_data(single_data_single_point_internal_cuts_config)
