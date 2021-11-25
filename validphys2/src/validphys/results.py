@@ -59,7 +59,7 @@ class NNPDFDataResult(Result):
         # libNNPDF object .get_cv()
         if central_value is None:
             central_value = dataobj.get_cv()
-        self._central_value = np.array(central_value).squeeze()
+        self._central_value = np.array(central_value).reshape(-1)
 
     @property
     def central_value(self):
