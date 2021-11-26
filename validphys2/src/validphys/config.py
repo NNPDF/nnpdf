@@ -697,6 +697,30 @@ class CoreConfig(configparser.Config):
         }
 
     @configparser.explicit_node
+    def produce_covmat_t0_considered(self, use_t0: bool = False):
+        """Modifies which action is used as covariance_matrix depending on
+        the flag `use_t0`
+        """
+        from validphys import covmats
+
+        if use_t0:
+            return covmats.t0_covmat_from_systematics
+        else:
+            return covmats.covmat_from_systematics
+
+    @configparser.explicit_node
+    def produce_dataset_inputs_covmat_t0_considered(self, use_t0: bool = False):
+        """Modifies which action is used as experiment_covariance_matrix
+        depending on the flag `use_t0`
+        """
+        from validphys import covmats
+
+        if use_t0:
+            return covmats.dataset_inputs_t0_covmat_from_systematics
+        else:
+            return covmats.dataset_inputs_covmat_from_systematics
+
+    @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as covariance_matrix depending on
         the flag `use_pdferr`
@@ -706,7 +730,7 @@ class CoreConfig(configparser.Config):
         if use_pdferr:
             return covmats.pdferr_plus_covmat
         else:
-            return covmats.covmat
+            return covmats._covmat_t0_considered
 
     @configparser.explicit_node
     def produce_dataset_inputs_covariance_matrix(self, use_pdferr: bool = False):
@@ -718,7 +742,7 @@ class CoreConfig(configparser.Config):
         if use_pdferr:
             return covmats.pdferr_plus_dataset_inputs_covmat
         else:
-            return covmats.dataset_inputs_covmat
+            return covmats._dataset_inputs_covmat_t0_considered
 
     # TODO: Do this better and elsewhere
     @staticmethod
