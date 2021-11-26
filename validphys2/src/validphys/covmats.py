@@ -33,6 +33,7 @@ def covmat_from_systematics(
     loaded_commondata_with_cuts,
     dataset_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     _central_values=None
 ):
     """Take the statistical uncertainty and systematics table from
@@ -83,6 +84,8 @@ def covmat_from_systematics(
         the returned covmat will be unmodified.
     use_weights_in_covmat: bool
         Whether to weight the covmat, True by default.
+    norm_threshold: number
+        threshold used to regularize covariance matrix
     _central_values : None, np.array
         1-D array containing alternative central values to combine with the
         multiplicative errors to calculate their absolute contributions. By
@@ -116,7 +119,12 @@ def covmat_from_systematics(
         loaded_commondata_with_cuts.systematic_errors(_central_values)
     )
     if use_weights_in_covmat:
-        return covmat / dataset_input.weight
+        covmat = covmat / dataset_input.weight
+    if norm_threshold is not None:
+        covmat = regularize_covmat(
+            covmat,
+            norm_threshold=norm_threshold
+        )
     return covmat
 
 
@@ -124,6 +132,7 @@ def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
     data_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     _list_of_central_values=None
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
@@ -147,6 +156,8 @@ def dataset_inputs_covmat_from_systematics(
         the returned covmat will be unmodified.
     use_weights_in_covmat: bool
         Whether to weight the covmat, True by default.
+    norm_threshold: number
+        threshold used to regularize covariance matrix
     _list_of_central_values: None, list[np.array]
         list of 1-D arrays which contain alternative central values which are
         combined with the multiplicative errors to calculate their absolute
@@ -210,7 +221,12 @@ def dataset_inputs_covmat_from_systematics(
         # concatenate weights and sqrt
         sqrt_weights = np.sqrt(np.concatenate(weights))
         # returns C_ij / (sqrt(w_i) * sqrt(w_j))
-        return (covmat / sqrt_weights).T / sqrt_weights
+        covmat = (covmat / sqrt_weights).T / sqrt_weights
+    if norm_threshold is not None:
+        covmat = regularize_covmat(
+            covmat,
+            norm_threshold=norm_threshold
+        )
     return covmat
 
 
@@ -245,6 +261,7 @@ def t0_covmat_from_systematics(
     *,
     dataset_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     dataset_t0_predictions
 ):
     """Like :py:func:`covmat_from_systematics` except uses the t0 predictions
@@ -276,6 +293,7 @@ def t0_covmat_from_systematics(
         loaded_commondata_with_cuts,
         dataset_input,
         use_weights_in_covmat,
+        norm_threshold=norm_threshold,
         _central_values=dataset_t0_predictions
     )
 
@@ -288,6 +306,7 @@ def dataset_inputs_t0_covmat_from_systematics(
     *,
     data_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     dataset_inputs_t0_predictions
 ):
     """Like :py:func:`t0_covmat_from_systematics` except for all data
@@ -316,6 +335,7 @@ def dataset_inputs_t0_covmat_from_systematics(
         dataset_inputs_loaded_cd_with_cuts,
         data_input,
         use_weights_in_covmat,
+        norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
 
