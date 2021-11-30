@@ -4,10 +4,11 @@ theorycovariance.py
 Low level utilities for theorycovariance module
 """
 import logging
-import yaml
 
 from reportengine.checks import make_argcheck, check
 from validphys.loader import Loader
+from validphys.plotoptions import get_info
+
 log = logging.getLogger(__name__)
 
 
@@ -95,14 +96,8 @@ def check_fit_dataset_order_matches_grouped(
 
 def process_lookup(name):
     """
-    Returns the `nnpdf31_process` as stored in the the PLOTTING_*.yaml file
-    corresponding to the input `name`.
+    Returns the `nnpdf31_process` of the corresponding dataset.
     """
-
     cd = Loader().check_commondata(setname=name)
-    data_plotting = open(cd.plotfiles[1])
-    with open(data_plotting.name, 'r') as f:
-        data_loaded = yaml.safe_load(f)
-    proc = data_loaded['nnpdf31_process']
-
+    proc = get_info(cd).nnpdf31_process
     return proc
