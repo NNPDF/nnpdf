@@ -118,6 +118,18 @@ void CMS_HMDY_13TEVFilter::ReadData()
 
   file1.close();
   file2.close();
+  
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+  
+  for (int i=0; i<fNData; i++)
+    delete[] covmat[i];
+  
+  delete[] covmat;
+  
 }
 
 /*
@@ -221,6 +233,18 @@ void CMS_HMDY_DE_13TEVFilter::ReadData()
 
   file1.close();
   file2.close();
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+  
+  for (int i=0; i<fNData; i++)
+    delete[] covmat[i];
+  
+  delete[] covmat;
+  
 }
 
 /*
@@ -324,4 +348,16 @@ void CMS_HMDY_DM_13TEVFilter::ReadData()
 
   file1.close();
   file2.close();
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+  
+  for (int i=0; i<fNData; i++)
+    delete[] covmat[i];
+  
+  delete[] covmat;
+  
 }
