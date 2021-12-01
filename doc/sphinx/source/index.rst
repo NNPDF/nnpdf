@@ -123,6 +123,7 @@ Contents
    ./buildmaster.md
    data/index
    theory/index
+   figuresofmerit/index
    contributing/index
    releases
    ci/index
