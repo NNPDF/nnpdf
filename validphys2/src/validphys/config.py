@@ -1468,7 +1468,7 @@ class CoreConfig(configparser.Config):
                 except AttributeError as e:
                     raise ConfigError(
                         f"Unable to find key: {processed_metadata_group} in "
-                        "metadata for {dsinput.name}. Ensure the PLOTTING file "
+                        f"metadata for {dsinput.name}. Ensure the PLOTTING file "
                         "for this dataset contains the key.",
                         bad_item=processed_metadata_group,
                         alternatives=metadata.__dict__,
