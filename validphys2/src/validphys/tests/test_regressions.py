@@ -68,16 +68,16 @@ def test_expcovmat(data_config):
     return API.groups_covmat_no_table(**data_config)
 
 @make_table_comp(parse_exp_mat)
-def test_t0covmat(data_witht0_config):
-    return API.groups_covmat_no_table(**data_witht0_config)
+def test_t0covmat(data_witht0_internal_cuts_config):
+    return API.groups_covmat_no_table(**data_witht0_internal_cuts_config)
 
 @make_table_comp(parse_exp_mat)
 def test_expsqrtcovmat(data_config):
     return API.groups_sqrtcovmat(**data_config)
 
 @make_table_comp(parse_exp_mat)
-def test_t0sqrtcovmat(data_witht0_config):
-    return API.groups_sqrtcovmat(**data_witht0_config)
+def test_t0sqrtcovmat(data_witht0_internal_cuts_config):
+    return API.groups_sqrtcovmat(**data_witht0_internal_cuts_config)
 
 @make_table_comp(parse_exp_mat)
 def test_pdf_plus_exp_covmat(data_internal_cuts_config):
