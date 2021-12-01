@@ -52,7 +52,6 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
-from validphys.theorycovariance.theorycovarianceutils import process_lookup
 from validphys.plotoptions import get_info
 
 import validphys.scalevariations
@@ -787,9 +786,13 @@ class CoreConfig(configparser.Config):
 
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-                names = {
-                    (process_lookup(dsin.name), dsin.name): dsin for dsin in data_input
-                }
+
+                names = {}
+                for dsin in data_input:
+                    cd = self.produce_commondata(dataset_input=dsin)
+                    proc = get_info(cd).nnpdf31_process
+                    ds = dsin.name
+                    names[(proc, ds)] = dsin
 
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
