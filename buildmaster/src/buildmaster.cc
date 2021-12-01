@@ -112,9 +112,9 @@
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
+#include "CMS_HMDY_13TEV.h"
 #include "ATLAS_DY_2D_8TEV_LOWMASS.h"
 #include "ATLAS_WMU_8TEV.h"
-
 /**
  * \param argv the filename containing the configuration
  */
@@ -223,18 +223,23 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
 
   // ************************* CMS ******************************
 
-  target.emplace_back(new CMSWEASY840PBFilter());
-  target.emplace_back(new CMSWMASY47FBFilter());
+  target.emplace_back(new CMS1JET276TEVFilter());
   target.emplace_back(new CMSDY2D11Filter());
   target.emplace_back(new CMSDY2D12Filter());
   target.emplace_back(new CMSJETS11Filter());
-  target.emplace_back(new CMSZDIFF12Filter());
-  target.emplace_back(new CMS1JET276TEVFilter());
+  target.emplace_back(new CMSWEASY840PBFilter());
+  target.emplace_back(new CMSWMASY47FBFilter());
   target.emplace_back(new CMSWMU8TEVFilter());
-  target.emplace_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
+  target.emplace_back(new CMSZDIFF12Filter());
   target.emplace_back(new CMS_1JET_8TEVFilter());
-  target.emplace_back(new CMS_2JET_7TEVFilter());
   target.emplace_back(new CMS_2JET_3D_8TEVFilter());
+  target.emplace_back(new CMS_2JET_7TEVFilter());
+  target.emplace_back(new CMS_HMDY_13TEVFilter());
+  target.emplace_back(new CMS_HMDY_DE_13TEVFilter());
+  target.emplace_back(new CMS_HMDY_DM_13TEVFilter());
+  target.emplace_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
+
+
 
  // ************************* CMSwc ******************************
 
