@@ -27,8 +27,10 @@ cuts_intersection_spec:
 dataset_input: {dataset: ATLAS_1JET_8TEV_R06_DEC}
 
 dataspecs:
-  - speclabel: "No cuts"
-    use_cuts: "nocuts"
+# A special cuts option is "no cuts", although not all actions
+# are compatible with no cuts at all
+#   - speclabel: "No cuts"
+#     use_cuts: "nocuts"
 
   - speclabel: "Fit cuts"
     use_cuts: "fromfit"

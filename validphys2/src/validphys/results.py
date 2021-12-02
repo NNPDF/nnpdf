@@ -8,14 +8,13 @@ from __future__ import generator_stop
 
 from collections import OrderedDict, namedtuple
 from collections.abc import Sequence
-import itertools
 import logging
 
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
 
-from NNPDF import ThPredictions, CommonData, Experiment
+from NNPDF import CommonData
 from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
@@ -35,6 +34,12 @@ from validphys.calcutils import (
     calc_phi,
     bootstrap_values,
 )
+from validphys.convolution import (
+    predictions,
+    central_predictions,
+    PredictionsRequireCutsError,
+)
+
 
 log = logging.getLogger(__name__)
 
@@ -45,10 +50,16 @@ class Result:
 
 # TODO: Eventually,only one of (NNPDFDataResult, StatsResult) should survive
 class NNPDFDataResult(Result):
-    """A result fills its values from a libnnpf data object"""
+    """A result fills its values from a pandas dataframe
+    For legacy (libNNPDF) compatibility, falls back to libNNPDF attributes"""
 
-    def __init__(self, dataobj):
-        self._central_value = dataobj.get_cv()
+    def __init__(self, dataobj=None, central_value=None):
+        # This class is used by both validphys and libNNPDF objects
+        # when central_value is not explictly passed, fallback to
+        # libNNPDF object .get_cv()
+        if central_value is None:
+            central_value = dataobj.get_cv()
+        self._central_value = np.array(central_value).reshape(-1)
 
     @property
     def central_value(self):
@@ -72,8 +83,8 @@ class StatsResult(Result):
 
 
 class DataResult(NNPDFDataResult):
-    def __init__(self, dataobj, covmat, sqrtcovmat):
-        super().__init__(dataobj)
+    def __init__(self, dataobj, covmat, sqrtcovmat, central_value=None):
+        super().__init__(dataobj, central_value=central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
 
@@ -96,12 +107,22 @@ class DataResult(NNPDFDataResult):
 
 
 class ThPredictionsResult(NNPDFDataResult):
-    def __init__(self, dataobj, stats_class, label=None):
+    """Class holding theory prediction
+    For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
+    """
+    def __init__(self, dataobj, stats_class, label=None, central_value=None):
         self.stats_class = stats_class
         self.label = label
-        self._std_error = dataobj.get_error()
-        self._rawdata = dataobj.get_data()
-        super().__init__(dataobj)
+        # Ducktype the input into numpy arrays
+        try:
+            self._rawdata = dataobj.to_numpy()
+            # If the numpy conversion worked then we don't have a libNNPDF in our hands
+            stats = stats_class(self._rawdata.T)
+            self._std_error = stats.std_error()
+        except AttributeError:
+            self._std_error = dataobj.get_error()
+            self._rawdata = dataobj.get_data()
+        super().__init__(dataobj, central_value=central_value)
 
     @property
     def std_error(self):
@@ -123,16 +144,28 @@ class ThPredictionsResult(NNPDFDataResult):
         return label
 
     @classmethod
-    def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
-        if loaded_pdf is None:
-            loaded_pdf = pdf.load()
-        if loaded_data is None:
-            loaded_data = dataset.load()
-        th_predictions = ThPredictions(loaded_pdf, loaded_data)
+    def from_convolution(cls, pdf, dataset):
+        # This should work for both single dataset and whole groups
+        try:
+            datasets = dataset.datasets
+        except AttributeError:
+            datasets = (dataset,)
+
+        try:
+            all_preds = []
+            all_centrals = []
+            for d in datasets:
+                all_preds.append(predictions(d, pdf))
+                all_centrals.append(central_predictions(d, pdf))
+        except PredictionsRequireCutsError as e:
+            raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
+                    "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
+        th_predictions = pd.concat(all_preds)
+        central_values = pd.concat(all_centrals)
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label)
+        return cls(th_predictions, pdf.stats_class, label, central_value=central_values)
 
 
 class PositivityResult(StatsResult):
@@ -454,7 +487,7 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     data = dataset.load()
     return (
         DataResult(data, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data),
+        ThPredictionsResult.from_convolution(pdf, dataset),
     )
 
 
@@ -480,13 +513,9 @@ def pdf_results(
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
-    data = dataset.load()
-    th_results = []
-    for pdf in pdfs:
-        th_result = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
-        th_results.append(th_result)
+    th_results = [ThPredictionsResult.from_convolution(pdf, dataset) for pdf in pdfs]
 
-    return (DataResult(data, covariance_matrix, sqrt_covmat), *th_results)
+    return (DataResult(dataset.load(), covariance_matrix, sqrt_covmat), *th_results)
 
 
 @require_one("pdfs", "pdf")
