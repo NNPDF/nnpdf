@@ -140,7 +140,11 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
         if not fitdata.check_nnfit_results_path(result_path):
             raise PostfitError('Postfit cannot find a valid results path')
         if not fitdata.check_lhapdf_info(result_path, fitname):
-            raise PostfitError('Postfit cannot find a valid LHAPDF info file')
+            raise PostfitError(
+                'Postfit cannot find a valid LHAPDF info file\n'
+                'Note: Perhaps you forgot to run evolven3fit? See\n'
+                'https://docs.nnpdf.science/tutorials/run-fit.html#running-the-fitting-code'
+            )
 
         nrep = int(nrep)
         if at_least_nrep:
