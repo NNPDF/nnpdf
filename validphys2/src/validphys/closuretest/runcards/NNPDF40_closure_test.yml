@@ -99,6 +99,9 @@ trvlseed: 1727532335
 nnseed: 1737785873
 mcseed: 2123509817
 genrep: true          # true = generate MC replicas, false = use real data
+# Legacy options required by closure tests
+rngalg: 0
+seed: 4
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [18, 24, 36, 8]
