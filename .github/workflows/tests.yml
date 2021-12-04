@@ -56,7 +56,7 @@ jobs:
       run: |
         conda activate test
         export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/MacOSX10.9.sdk
-        conda build -q conda-recipe
+        conda mambabuild -q conda-recipe
     - name: Upload conda package to NNPDF server
       if: github.ref == 'refs/heads/master'
       shell: bash -l {0}
