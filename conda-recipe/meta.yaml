@@ -14,6 +14,7 @@ requirements:
         - pkg-config
         # See https://github.com/NNPDF/nnpdf/pull/1280
         - sysroot_linux-64==2.17 # [linux]
+        - openssl==1.1.*
     host:
         - lhapdf      # with python wrapper
         - sqlite
