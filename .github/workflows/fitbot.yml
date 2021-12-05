@@ -53,7 +53,7 @@ jobs:
       shell: bash -l {0}
       run: |
         conda clean --all
-        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
+        mamba create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
     # create fancy runcards
     - name: Preparing fit runcard
       run: |
