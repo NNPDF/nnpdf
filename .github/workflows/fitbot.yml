@@ -41,6 +41,7 @@ jobs:
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         conda config --prepend channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
+        conda config --set channel_priority strict
         conda config --set show_channel_urls true
         conda install boa --yes
     - name: Build recipe

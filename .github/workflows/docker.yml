@@ -29,6 +29,7 @@ jobs:
       run: |
         conda config --prepend channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
+        conda config --set channel_priority strict
         conda config --set show_channel_urls true
         conda install conda-build --yes
     - name: Build recipe
