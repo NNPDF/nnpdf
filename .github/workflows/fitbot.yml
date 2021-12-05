@@ -35,7 +35,7 @@ jobs:
         key: ${{ secrets.NNPDF_SSA }}
         name: id_rsa
         known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
-    - name: Setup conda and install conda-build
+    - name: Setup conda and install boa
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc

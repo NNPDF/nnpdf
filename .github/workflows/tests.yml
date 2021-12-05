@@ -34,7 +34,7 @@ jobs:
         conda activate test
         curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
         tar xfz MacOSX10.9.sdk.tar.xz -C $CONDA_PREFIX
-    - name: Setup conda and install conda-build
+    - name: Setup conda and install boa
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc

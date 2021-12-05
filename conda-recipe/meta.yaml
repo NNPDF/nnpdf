@@ -13,7 +13,7 @@ requirements:
         - cmake
         - pkg-config
         # See https://github.com/NNPDF/nnpdf/pull/1280
-        - sysroot_linux-64==2.17 # [linux]
+        - sysroot_linux-64==2.31 # [linux]
     host:
         - lhapdf      # with python wrapper
         - sqlite
@@ -64,7 +64,7 @@ test:
         #Build dependencies for catch tests
         - {{ compiler("cxx") }}
         - {{ compiler("c") }}
-        - sysroot_linux-64==2.17 # [linux]
+        - sysroot_linux-64==2.31 # [linux]
         - swig ==3.0.10
         - cmake
 
