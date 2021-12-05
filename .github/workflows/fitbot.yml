@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.9]
+        python-version: [3.8]
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
@@ -41,7 +41,7 @@ jobs:
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         conda config --prepend channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
-        conda config --set channel_priority flexible
+        conda config --set channel_priority strict
         conda config --set show_channel_urls true
         conda install boa --yes
     - name: Build recipe
@@ -52,7 +52,6 @@ jobs:
     - name: Installing NNPDF conda package
       shell: bash -l {0}
       run: |
-        conda clean --all
         mamba create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
     # create fancy runcards
     - name: Preparing fit runcard
