@@ -21,6 +21,7 @@ from validphys.closuretest.closure_checks import (
     check_fits_underlying_law_match,
     check_fits_areclosures,
     check_fits_different_filterseed,
+    check_t0pdfset_matches_multiclosure_law
 )
 from validphys.checks import check_use_t0
 
@@ -34,6 +35,7 @@ SAMPLING_INTERVAL = 5
 @check_fits_areclosures
 @check_fits_different_filterseed
 @check_use_t0
+@check_t0pdfset_matches_multiclosure_law
 def internal_multiclosure_dataset_loader(
     dataset, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
@@ -95,6 +97,7 @@ def internal_multiclosure_dataset_loader(
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
+@check_t0pdfset_matches_multiclosure_law
 @check_use_t0
 def internal_multiclosure_data_loader(
     data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics

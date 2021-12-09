@@ -77,6 +77,14 @@ def check_t0pdfset_matches_law(t0pdfset, fit):
             f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}"
         )
 
+@make_argcheck
+def check_t0pdfset_matches_multiclosure_law(multiclosure_underlyinglaw, t0set):
+    """Checks that, if a multiclosure_underlyinglaw is present, it matches the t0set
+    Checks t0set instead of t0pdfset since different mechanisms can fill t0set
+    """
+    if str(t0set) != str(multiclosure_underlyinglaw):
+        raise CheckError(f"The underlying pdf {multiclosure_underlyinglaw} does not match t0pdfset: {t0set}")
+
 
 @make_argcheck
 def check_at_least_10_fits(fits):
