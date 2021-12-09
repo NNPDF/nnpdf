@@ -34,7 +34,7 @@ SAMPLING_INTERVAL = 5
 @check_fits_areclosures
 @check_fits_different_filterseed
 def internal_multiclosure_dataset_loader(
-    dataset, fits_pdf, multiclosure_underlyinglaw, fits
+    dataset, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
     """Internal function for loading multiple theory predictions for a given
     dataset and a single covariance matrix using underlying law as t0 PDF,
@@ -77,12 +77,6 @@ def internal_multiclosure_dataset_loader(
     typically used in these studies.
 
     """
-    if isinstance(dataset, DataSetSpec):
-        data = dataset.load()  # just use internal loader
-    else:
-        # don't cache result
-        data = dataset.load.__wrapped__(dataset)
-
     fits_dataset_predictions = [
         ThPredictionsResult.from_convolution(pdf, dataset)
         for pdf in fits_pdf
@@ -91,25 +85,21 @@ def internal_multiclosure_dataset_loader(
         multiclosure_underlyinglaw, dataset
     )
 
-    # copy data to make t0 cov
-    loaded_data = type(data)(data)
-    loaded_data.SetT0(multiclosure_underlyinglaw.load_t0())
-    covmat = loaded_data.get_covmat()
-    sqrt_covmat = la.cholesky(covmat, lower=True)
+    sqrt_covmat = la.cholesky(dataset_inputs_t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (fits_dataset_predictions, fits_underlying_predictions, covmat, sqrt_covmat)
+    return (fits_dataset_predictions, fits_underlying_predictions, dataset_inputs_t0_covmat_from_systematics, sqrt_covmat)
 
 
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
 def internal_multiclosure_data_loader(
-    data, fits_pdf, multiclosure_underlyinglaw, fits
+    data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
     """Like `internal_multiclosure_dataset_loader` except for all data"""
     return internal_multiclosure_dataset_loader(
-        data, fits_pdf, multiclosure_underlyinglaw, fits
+        data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
     )
 
 
