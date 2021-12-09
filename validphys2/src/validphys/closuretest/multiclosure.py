@@ -15,7 +15,6 @@ from reportengine import collect
 
 from validphys.results import ThPredictionsResult
 from validphys.calcutils import calc_chi2
-from validphys.core import DataSetSpec
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
     check_multifit_replicas,
@@ -23,6 +22,7 @@ from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_different_filterseed,
 )
+from validphys.checks import check_use_t0
 
 # bootstrap seed default
 DEFAULT_SEED = 9689372
@@ -33,6 +33,7 @@ SAMPLING_INTERVAL = 5
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
+@check_use_t0
 def internal_multiclosure_dataset_loader(
     dataset, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
@@ -94,6 +95,7 @@ def internal_multiclosure_dataset_loader(
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
+@check_use_t0
 def internal_multiclosure_data_loader(
     data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
