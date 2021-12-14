@@ -18,12 +18,11 @@ requirements:
         - lhapdf      # with python wrapper
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
-        - libarchive ==3.5.2 # See https://github.com/NNPDF/nnpdf/pull/1130
+        - libarchive ==3.4.2 # See https://github.com/NNPDF/nnpdf/pull/1130
         - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
-        - blas=*=mkl # [osx]
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
@@ -53,7 +52,6 @@ requirements:
         - sphinxcontrib-bibtex
         - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
         - curio >=1.0
-        - blas=*=mkl # [osx]
 
 test:
     requires:
