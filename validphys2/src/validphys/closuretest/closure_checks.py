@@ -4,9 +4,12 @@ closuretest/checks.py
 Module containing checks specific to the closure tests.
 
 """
+import logging
 from collections import defaultdict
 
 from reportengine.checks import make_argcheck, CheckError
+
+log = logging.getLogger(__name__)
 
 
 @make_argcheck
@@ -83,7 +86,7 @@ def check_t0pdfset_matches_multiclosure_law(multiclosure_underlyinglaw, t0set):
     Checks t0set instead of t0pdfset since different mechanisms can fill t0set
     """
     if str(t0set) != str(multiclosure_underlyinglaw):
-        raise CheckError(f"The underlying pdf {multiclosure_underlyinglaw} does not match t0pdfset: {t0set}")
+        log.warning(f"The underlying pdf {multiclosure_underlyinglaw} does not match t0pdfset: {t0set}")
 
 
 @make_argcheck
