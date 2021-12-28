@@ -101,7 +101,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed):
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genrep):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -141,6 +141,9 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed):
        0.30100351, 0.31781208, 0.30827054, 0.30258217, 0.32116842,
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
+    if not genrep:
+        return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
+
     # Seed the numpy RNG with the seed.
     rng = np.random.default_rng(seed=replica_mcseed)
 
