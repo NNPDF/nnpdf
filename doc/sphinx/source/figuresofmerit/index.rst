@@ -37,7 +37,7 @@ experimental collaborations.
 
 
 Avoiding bias: t₀ method
---------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 The :math:`t_0` method introduced in
 `arXiv:0912.2276 <https://arxiv.org/abs/0912.2276>`_ aims to
 remove systematic biases as a result of a naive treatment of multiplicative
