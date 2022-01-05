@@ -136,7 +136,7 @@ of the :math:`\chi^2` loss function, namely the experimental loss
 validation loss :math:`\chi^2_{val}`, all of which are defined using the
 :math:`t_0` method. Here the experimental loss is calculated with respect to the
 experimental covariance matrix and corresponding central values, while the
-training and validation losses are defined with respect to the central values 
+training and validation losses are defined with respect to the central values
 of the psuedodata replicas.
 
 The training and validation losses are used for cross-correlation in the
@@ -153,17 +153,18 @@ of the neural network can be found in the :ref:`methodology overview
 Positivity and integrability: Lagrange multipliers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Generally in an NNPDF fit we will want to ensure positivity and integrability of
-the resulting PDFs. This is enforced by means of Lagrange multipliers, which 
-provide an additional contribution to the definition of the chi squared 
-loss function. 
+the resulting PDFs. This is enforced by means of Lagrange multipliers, which
+provide an additional contribution to the definition of the chi squared
+loss function.
 
 For an discussion of how exactly the loss function is adjusted upon including
 the Lagrange multipliers, see sections 3.1.3 and 3.1.4 of the NNPDF4.0 paper
 :cite:p:`nnpdf40`.
 
 An explanation of how the runcard should be adjusted to include the additional
-positivity Lagrange multiplier can be found :ref:`elsewhere in the documentation
-<positivity-label>`
+positivity Lagrange multiplier can be found :ref:`here <positivity-label>`,
+while the analogous information for integrability can be found 
+:ref:`here <integrability-label>`.
 
 
 Hyperoptimized figure of merit

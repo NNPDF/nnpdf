@@ -11,6 +11,7 @@ In this section we fine-grain the explanation of the different parameters that e
 - :ref:`networkarch-label`
 - :ref:`optimizer-label`
 - :ref:`positivity-label`
+- :ref:`integrability-label`
 - :ref:`tensorboard-label`
 - :ref:`parallel-label`
 - :ref:`otheroptions-label`
@@ -209,11 +210,11 @@ the Neural Network as:
 .. code-block:: yaml
 
     parameters:
-        positivity:
-          threshold: 1e-6
-          multiplier: 1.05
-          initial: 14.5
-              
+      positivity:
+        threshold: 1e-6
+        multiplier: 1.05
+        initial: 14.5
+
 Note that by defining the positivity in this way all datasets will share the same Lagrange multiplier.
 
 It is also possible to not define the positivity hyperparameters (or define them only partially).
@@ -226,6 +227,36 @@ During the fit, the positivity loss will be compared to this value. If it is abo
 the positivity won't be considered good (and thus the fit won't stop).
 If the replica reaches the maximum number of epochs with the positivity loss above
 this value, it will be tagged as ``POS_VETO`` and the replica removed from postfit.
+
+
+.. _integrability-label:
+
+Integrability
+-------------
+Integrability in ``n3fit`` is enforced through a Lagrange multiplier, this is 
+the same basic concept as how positivity is enforced, and therefore the 
+input in the runcard is analogous to the case of positivity where one can 
+apply the integrability contraints through an optional ``integrability`` 
+dictionary as (not that as opposed to positivity, for integrability no 
+threshold value can be set):
+
+.. code-block:: yaml
+
+    parameters:
+      integrability:
+        multiplier: 1.05
+        initial: 14.5
+
+
+Again similar to positivity, it is also possible to leave either the ``initial``
+or ``multiplier`` keys empty and instead define a ``maxlambda`` per dataset:
+
+.. code-block:: yaml
+
+    integrability:
+      integdatasets:
+        - {dataset: INTEGXT8, maxlambda: 1e2}
+
 
 
 .. _tensorboard-label:
