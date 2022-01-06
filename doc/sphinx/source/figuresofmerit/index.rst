@@ -15,7 +15,7 @@ when each of them is used.
 The basis of the loss functions: 𝜒²
 --------------------------------------------------------------------------------
 The :math:`\chi^2` figures of merit used in the NNPDF methodology are all
-based on the chi square distribution:
+based on the chi square statistic:
 
 .. math::
     \chi^{2}=\sum_{i, j}^{N_{\text {dat }}}(D-P)_{i} C_{i j}^{-1}(D-P)_{j},
