@@ -175,6 +175,39 @@ for Markdown and
 for RestructuredText, as described in its
 `documentation <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html?highlight=cross%20reference#role-ref>`__.
 
+Adding BibTeX references
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The documentation build supports BibTeX references via the
+`sphinxcontrib-bibtex extension
+<https://github.com/mcmtroffaes/sphinxcontrib-bibtex>`_. Citations in the
+BibTeX format are added to the ``references.bib`` file in the Sphinx source
+directory. For example a citation like
+
+.. code-block:: bib
+
+    @article{Carrazza:2016htc,
+        author = "Carrazza, Stefano and Forte, Stefano and Kassabov, Zahari and Rojo, Juan",
+        title = "{Specialized minimal PDFs for optimized LHC calculations}",
+        eprint = "1602.00005",
+        archivePrefix = "arXiv",
+        primaryClass = "hep-ph",
+        reportNumber = "CERN-PH-TH-2015-243, TIF-UNIMI-2015-13, OUTP-15-24P",
+        doi = "10.1140/epjc/s10052-016-4042-8",
+        journal = "Eur. Phys. J. C",
+        volume = "76",
+        number = "4",
+        pages = "205",
+        year = "2016"
+    }
+
+can be appended to the ``refererences.bib`` file.
+
+References can be added to
+RST documents using some variation of the ``cite`` role.  For example
+``:cite:p:`<BibTeX ID>``` adds a parenthetical reference, and the above article
+can be cited using ``:cite:p:`Carrazza:2016htc```.
+
 Adding indices for modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
