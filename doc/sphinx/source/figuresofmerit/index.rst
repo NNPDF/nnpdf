@@ -39,7 +39,7 @@ experimental collaborations.
 Avoiding bias: t₀ method
 ~~~~~~~~~~~~~~~~~~~~~~~~
 The :math:`t_0` method introduced in
-`arXiv:0912.2276 <https://arxiv.org/abs/0912.2276>`_ aims to
+:cite:p:`Ball:2009qv` aims to
 remove systematic biases as a result of a naive treatment of multiplicative
 uncertainties. This is done by redefining the covariance matrix in the
 definition of :math:`\chi^2`, resulting in a :math:`t_0` covariance matrix
@@ -58,7 +58,7 @@ matrix are theoretical uncertainties, particularly missing higher order
 uncertainties estimated through scale variations. These unceratinties can be
 considered in the figure of merit through the implementation of a 'theory
 covariance matrix'. A paper discussing the formalism can be found here:
-`arXiv:1905.04311 <https://arxiv.org/abs/1905.04311>`_. For a tutorial see
+:cite:p:`AbdulKhalek:2019bux`. For a tutorial see
 :ref:`How to include a theory covariance matrix in a fit <thcov_tutorial>`.
 
 
@@ -73,7 +73,7 @@ matrix describing the data uncertainties and the covariance matrix describing
 the PDF uncertainties.
 
 For a more detailed discussion of the future test formalism see e.g.
-`arXiv:2103.08606 <https://arxiv.org/abs/2103.08606>`_, or learn
+:cite:p:`Cruz-Martinez:2021rgy`, or learn
 :ref:`How to run a Future Test <futuretests>`
 
 
