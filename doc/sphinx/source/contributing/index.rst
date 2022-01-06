@@ -5,6 +5,6 @@ Contributing guidelines and tools
    :maxdepth: 1
 
    ./rules
-   ./sphinx-documentation.md
+   ./sphinx-documentation
    ./git.md
    ./python-tools
