@@ -21,9 +21,9 @@ based on the chi square statistic:
     \chi^{2}=\sum_{i, j}^{N_{\text {dat }}}(D-P)_{i} C_{i j}^{-1}(D-P)_{j},
 
 where :math:`D_i` is the :math:`i`-th datapoint, :math:`P_i` is the prediction
-of the corresponding datapoint calculated by performing the convolution product
+of the corresponding datapoint calculated from the convolution product
 between the :ref:`FastKernel tables<fktables>` for point :math:`i` and the PDF
-model, and :math:`C_{ij}` is the covariance matrix between datapoints :math:`i`
+model, and :math:`C_{ij}` is the covariance between datapoints :math:`i`
 and :math:`j`.
 
 The covariance matrix accounts for correlated systematic uncertainties,
@@ -32,7 +32,7 @@ experimental collaborations.
 
 .. note::
     This definition of :math:`\chi^2` is not used as a figure of merit
-    anywhere in the NNDPF methodology. Instead, variations of this :math:`\chi^2`
+    anywhere in NNDPF fits. Instead, variations discussed below
     are used.
 
 
