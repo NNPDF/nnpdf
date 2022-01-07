@@ -26,6 +26,7 @@ SINGLE_SYS_DATASETS = [
     {"dataset": "CMS_SINGLETOP_TCH_R_13TEV", "cfac": ["QCD"]},
 ]
 
+
 @pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
 @pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA, SINGLE_SYS_DATASETS])
 def test_commondata_unchanged(data_config, dataset_inputs, use_cuts):
@@ -86,3 +87,18 @@ def test_pseudodata_has_correct_ndata(data_config, dataset_inputs, use_cuts):
     rep = API.make_replica(**config)
     ndata = np.sum([cd.ndata for cd in ld_cds])
     assert len(rep) == ndata
+
+
+@pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
+@pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA, SINGLE_SYS_DATASETS])
+def test_genrep_off(data_config, dataset_inputs, use_cuts):
+    """Check that when genrep is set to False replicas are not generated."""
+    config = dict(data_config)
+    config["dataset_inputs"] = dataset_inputs
+    config["use_cuts"] = use_cuts
+    config["replica_mcseed"] = SEED
+    config["genrep"] = False
+    ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
+    not_replica = API.make_replica(**config)
+    central_data = np.concatenate([d.central_values for d in ld_cds])
+    np.testing.assert_allclose(not_replica, central_data)
