@@ -1,5 +1,5 @@
 """
-theorycovariance.py
+theorycovarianceutils.py
 
 Low level utilities for theorycovariance module
 """

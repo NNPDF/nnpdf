@@ -1,3 +1,4 @@
+.. _thcov_tutorial:
 How to include a theory covariance matrix in a fit
 ==================================================
 
