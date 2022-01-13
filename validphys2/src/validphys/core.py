@@ -95,8 +95,8 @@ class PDF(TupleComp):
     """Base validphys PDF providing high level access to metadata.
 
     Statistical estimators which depends on the PDF type (MC, Hessian...)
-    are exposed as a :py:class:`Stats` object through the :py:meth:`stats_class` attribute
-    The LHAPDF metadata can directly be accessed through the :py:meth:`info` attribute
+    are exposed as a :py:class:`Stats` object through the :py:attr:`stats_class` attribute
+    The LHAPDF metadata can directly be accessed through the :py:attr:`info` attribute
     """
 
     def __init__(self, name):
