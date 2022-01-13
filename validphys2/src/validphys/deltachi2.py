@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 @make_argcheck
 def check_pdf_is_symmhessian(pdf, **kwargs):
     """Check ``pdf`` has error type of ``symmhessian``"""
-    etype = pdf.ErrorType
+    etype = pdf.error_type
     if etype != "symmhessian":
         raise CheckError(
             "Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype)
@@ -256,7 +256,7 @@ class PDFEpsilonPlotter(PDFPlotter):
 def check_pdfs_are_montecarlo(pdfs, **kwargs):
     """Checks that the action is applied only to a pdf consisiting of MC replicas."""
     for pdf in pdfs:
-        etype = pdf.ErrorType
+        etype = pdf.error_type
         if etype != "replicas":
             raise CheckError(
                 "Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype)

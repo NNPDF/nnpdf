@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 @make_check
 def check_pdf_is_montecarlo(ns, **kwargs):
     pdf = ns['pdf']
-    etype = pdf.ErrorType
+    etype = pdf.error_type
     if etype != 'replicas':
         raise CheckError("Error type of PDF %s must be 'replicas' and not %s"
                           % (pdf, etype))

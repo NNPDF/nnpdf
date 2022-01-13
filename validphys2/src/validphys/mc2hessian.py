@@ -125,14 +125,14 @@ def _compress_X(X, neig):
 
 def _pdf_normalization(pdf):
     """Extract the quantity by which we have to divide the eigenvectors to
-    get the correct errors, depending on the `ErrorType` of `pdf`."""
+    get the correct errors, depending on the `error_type` of `pdf`."""
     nrep = len(pdf) - 1
-    if pdf.ErrorType == "replicas":
+    if pdf.error_type == "replicas":
         norm = np.sqrt(nrep - 1)
-    elif pdf.ErrorType in ("hessian", "symmhessian"):
+    elif pdf.error_type in ("hessian", "symmhessian"):
         norm = 1
     else:
         raise NotImplementedError(
-            "This PDF error type is not supported." "PDF error: %s" % pdf.ErrorType
+            "This PDF error type is not supported." "PDF error: %s" % pdf.error_type
         )
     return norm
