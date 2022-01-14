@@ -118,8 +118,8 @@ class PDF(TupleComp):
         """Return the stats calculator for this error type"""
         error = self.error_type
         klass = STAT_TYPES[error]
-        if self._has_error_conf_level():
-            klass = functools.partial(klass, rescale_factor=self._rescale_factor)
+        if self.error_conf_level is not None:
+            klass = functools.partial(klass, rescale_factor=self._rescale_factor())
         return klass
 
     @property
@@ -146,24 +146,21 @@ class PDF(TupleComp):
         """Error type as defined in the LHAPDF .info file"""
         return self.info["ErrorType"]
 
-    def _has_error_conf_level(self):
-        """Utility method to check whether an info file contains ErrorConfLevel"""
-        return "ErrorConfLevel" in self.info
-
     @property
     def error_conf_level(self):
         """Error confidence level as defined in the LHAPDF .info file
         if no number is given in the LHAPDF .info file defaults to 68%
         """
+        key_name = "ErrorConfLevel"
         # Check possible misconfigured info file
         if self.error_type == "replicas":
-            if self._has_error_conf_level():
+            if key_name in self.info:
                 raise ValueError(
                     f"Attribute at {self.infopath} 'ErrorConfLevel' doesn't "
                     "make sense with 'replicas' error type"
                 )
             return None
-        return self.info.get("ErrorConfLevel", 68)
+        return self.info.get(key_name, 68)
 
     @property
     def isinstalled(self):
