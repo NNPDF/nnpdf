@@ -217,7 +217,7 @@ class PDF(TupleComp):
                 return LHAPDFSet.erType_ER_SYMEIG
             else:
                 raise NotImplementedError(
-                    "No symmetric hessian errors " f"with confidence interval {cl}"
+                    f"No symmetric hessian errors with confidence interval {cl}"
                 )
 
         raise NotImplementedError(f"Error type for {self}: '{error}' is not implemented")
