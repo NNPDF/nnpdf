@@ -22,6 +22,12 @@ import logging
 log = logging.getLogger(__name__)
 
 @make_check
+def check_use_t0(ns, **kwargs):
+    """Checks use_t0 is set to true"""
+    if not ns.get("use_t0"):
+        raise CheckError("The flag 'use_t0' needs to be set to 'true' for this action.")
+
+@make_check
 def check_pdf_is_montecarlo(ns, **kwargs):
     pdf = ns['pdf']
     etype = pdf.ErrorType

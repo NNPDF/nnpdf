@@ -10,7 +10,6 @@ import functools
 import inspect
 import numbers
 import copy
-import glob
 from importlib.resources import read_text, contents
 
 from collections import ChainMap, defaultdict
@@ -915,13 +914,13 @@ class CoreConfig(configparser.Config):
     # TODO: Find a good name for this
     def produce_t0set(self, use_t0=False, t0pdfset=None):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
-        error if t0 is requested but no t0set is given."""
+        error if t0 is requested but no t0set is given.
+        """
         if use_t0:
             if not t0pdfset:
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
-        else:
-            return None
+        return None
 
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
         """ Lagrange multiplier constraints are mappings
