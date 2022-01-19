@@ -17,8 +17,9 @@ data_kinematics: kinematics.json
 
 #Theory
 proctype: "DIS_F2R"
-FK: FK_NMCPD_D.dat
-FK: FK_NMCPDF_P.dat
+FK_tables:
+  - FK_NMCPD_D.dat
+  - FK_NMCPDF_P.dat
 compound: "RATIO"
 nnpdf31_process: "DIS NC"
 
