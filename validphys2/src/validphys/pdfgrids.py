@@ -98,7 +98,7 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
     The grid is sampled linearly in rapidity and logarithmically in mass.
 
     The results are computed for all relevant PDF members and wrapped in a
-    stats class, to compute statistics regardless of the ErrorType.
+    stats class, to compute statistics regardless of the error_type.
     """
     s = sqrts*sqrts
     mxs = np.logspace(1, np.log10(sqrts), nbins_m)
@@ -175,7 +175,7 @@ def lumigrid1d(
     GeV and ``mxmax`` is set based on ``sqrts``.
 
     The results are computed for all relevant PDF members and wrapped in a
-    stats class, to compute statistics regardless of the ErrorType.
+    stats class, to compute statistics regardless of the error_type.
     """
     s = sqrts * sqrts
     if mxmax is None:

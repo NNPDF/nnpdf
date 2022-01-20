@@ -63,7 +63,7 @@ def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
         ax.set_facecolor("#ffcccc")
         log.warning("Chi² distribution plots have a "
                 "different meaning for non MC sets.")
-        label += " (%s!)" % pdf.ErrorType
+        label += " (%s!)" % pdf.error_type
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in stats.items())
     ax.set_xlabel(r"Replica $\chi^2$")
 
@@ -828,7 +828,7 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
     fig, axes = plt.subplots(nrows=len(sum_rules), sharex=True)
     #TODO: Get rid of this nonsense
     ncomputed = len(sum_rules[0])
-    if pdf.ErrorType == 'replicas':
+    if pdf.error_type == 'replicas':
         x = np.arange(1, ncomputed + 1)
     else:
         x = np.arange(ncomputed)

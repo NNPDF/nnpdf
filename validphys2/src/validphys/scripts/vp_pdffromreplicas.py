@@ -93,9 +93,9 @@ def main():
     loader = FallbackLoader()
     input_pdf = loader.check_pdf(args.input_pdf)
 
-    if input_pdf.ErrorType != "replicas":
+    if input_pdf.error_type != "replicas":
         log.error(
-            "Error type of input PDF must be `replicas` not `%s`", input_pdf.ErrorType
+            "Error type of input PDF must be `replicas` not `%s`", input_pdf.error_type
         )
         sys.exit(1)
 

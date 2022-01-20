@@ -221,7 +221,7 @@ def bad_replica_sumrules(pdf, sum_rules, threshold: numbers.Real = 0.01):
     farther from the correct value than ``threshold`` (in absolute value).
     """
     ncomputed = len(sum_rules[0])
-    if pdf.ErrorType == "replicas":
+    if pdf.error_type == "replicas":
         x = np.arange(1, ncomputed + 1)
     else:
         x = np.arange(ncomputed)

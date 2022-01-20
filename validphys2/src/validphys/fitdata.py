@@ -341,7 +341,7 @@ def summarise_theory_covmat_fits(fits_theory_covmat_summary):
 
 def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replica i"""
-    p = pathlib.Path(pdf.infopath).with_name(f'{pdf.name}_{i:04d}.dat')
+    p = pdf.infopath.with_name(f'{pdf.name}_{i:04d}.dat')
     with open(p) as f:
         it = yaml.safe_load_all(f)
         metadata = next(it)

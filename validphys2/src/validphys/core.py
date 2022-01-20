@@ -15,6 +15,7 @@ import functools
 import inspect
 import json
 import logging
+from pathlib import Path
 
 import numpy as np
 
@@ -91,24 +92,18 @@ class _PDFSETS():
 PDFSETS = _PDFSETS()
 
 class PDF(TupleComp):
+    """Base validphys PDF providing high level access to metadata.
+
+    Statistical estimators which depends on the PDF type (MC, Hessian...)
+    are exposed as a :py:class:`Stats` object through the :py:attr:`stats_class` attribute
+    The LHAPDF metadata can directly be accessed through the :py:attr:`info` attribute
+    """
 
     def __init__(self, name):
         self.name = name
         self._plotname = name
+        self._info = None
         super().__init__(name)
-
-
-    def __getattr__(self, attr):
-        #We don't even try to get reserved attributes from the info file
-        if attr.startswith('__'):
-            raise AttributeError(attr)
-        try:
-            return lhaindex.parse_info(self.name)[attr]
-        except KeyError as e:
-            raise AttributeError("'%r' has no attribute '%s'" % (type(self),
-                                                                 attr)) from e
-        except IOError as e:
-            raise PDFDoesNotExist(self.name) from e
 
     @property
     def label(self):
@@ -121,42 +116,68 @@ class PDF(TupleComp):
     @property
     def stats_class(self):
         """Return the stats calculator for this error type"""
-        error = self.ErrorType
+        error = self.error_type
         klass = STAT_TYPES[error]
-        if hasattr(self, 'ErrorConfLevel'):
-            klass = functools.partial(klass, rescale_factor=self.rescale_factor)
+        if self.error_conf_level is not None:
+            klass = functools.partial(klass, rescale_factor=self._rescale_factor())
         return klass
 
-    #TODO: Make this a proper Path
     @property
     def infopath(self):
-        return lhaindex.infofilename(self.name)
+        return Path(lhaindex.infofilename(self.name))
+
+    @property
+    def info(self):
+        """Information contained in the LHAPDF .info file"""
+        if self._info is None:
+            try:
+                self._info = lhaindex.parse_info(self.name)
+            except IOError as e:
+                raise PDFDoesNotExist(self.name) from e
+        return self._info
+
+    @property
+    def q_min(self):
+        """Minimum Q as given by the LHAPDF .info file"""
+        return self.info["QMin"]
+
+    @property
+    def error_type(self):
+        """Error type as defined in the LHAPDF .info file"""
+        return self.info["ErrorType"]
+
+    @property
+    def error_conf_level(self):
+        """Error confidence level as defined in the LHAPDF .info file
+        if no number is given in the LHAPDF .info file defaults to 68%
+        """
+        key_name = "ErrorConfLevel"
+        # Check possible misconfigured info file
+        if self.error_type == "replicas":
+            if key_name in self.info:
+                raise ValueError(
+                    f"Attribute at {self.infopath} 'ErrorConfLevel' doesn't "
+                    "make sense with 'replicas' error type"
+                )
+            return None
+        return self.info.get(key_name, 68)
 
     @property
     def isinstalled(self):
         try:
-            self.infopath
+            return self.infopath.is_file()
         except FileNotFoundError:
             return False
-        else:
-            return True
 
-
-    @property
-    def rescale_factor(self):
-        #This is imported here for performance reasons.
+    def _rescale_factor(self):
+        """Compute the rescale factor for the stats class"""
+        # This is imported here for performance reasons.
         import scipy.stats
-        if hasattr(self, "ErrorConfLevel"):
-            if self.ErrorType == 'replicas':
-                raise ValueError("Attribute at %s 'ErrorConfLevel' doesn't "
-                "make sense with 'replicas' error type" % self.infopath)
-            val = scipy.stats.norm.isf((1 - 0.01*self.ErrorConfLevel)/2)
-            if np.isnan(val):
-                raise ValueError("Invalid 'ErrorConfLevel' of PDF %s: %s" %
-                                 (self, val))
-            return val
-        else:
-            return 1
+
+        val = scipy.stats.norm.isf((1 - 0.01 * self.error_conf_level) / 2)
+        if np.isnan(val):
+            raise ValueError(f"Invalid 'ErrorConfLevel' for PDF {self}: {val}")
+        return val
 
     @functools.lru_cache(maxsize=16)
     def load(self):
@@ -167,48 +188,36 @@ class PDF(TupleComp):
         """Load the PDF as a t0 set"""
         return LHAPDFSet(self.name, LHAPDFSet.erType_ER_MCT0)
 
-
     def __str__(self):
         return self.label
 
     def __len__(self):
-        return self.NumMembers
-
-
+        return self.info["NumMembers"]
 
     @property
     def nnpdf_error(self):
         """Return the NNPDF error tag, used to build the `LHAPDFSet` objeect"""
-        error = self.ErrorType
+        error = self.error_type
         if error == "replicas":
             return LHAPDFSet.erType_ER_MC
+
+        cl = self.error_conf_level
         if error == "hessian":
-            if hasattr(self, 'ErrorConfLevel'):
-                cl = self.ErrorConfLevel
-                if cl == 90:
-                    return LHAPDFSet.erType_ER_EIG90
-                elif cl == 68:
-                    return LHAPDFSet.erType_ER_EIG
-                else:
-                    raise NotImplementedError("No hessian errors with confidence"
-                                              " interval %s" % (cl,) )
-            else:
+            if cl == 90:
+                return LHAPDFSet.erType_ER_EIG90
+            elif cl == 68:
                 return LHAPDFSet.erType_ER_EIG
-
-        if error == "symmhessian":
-            if hasattr(self, 'ErrorConfLevel'):
-                cl = self.ErrorConfLevel
-                if cl == 68:
-                    return LHAPDFSet.erType_ER_SYMEIG
-                else:
-                    raise NotImplementedError("No symmetric hessian errors "
-                                              "with confidence"
-                                              " interval %s" % (cl,) )
             else:
+                raise NotImplementedError(f"No hessian errors with confidence interval {cl}")
+        if error == "symmhessian":
+            if cl == 68:
                 return LHAPDFSet.erType_ER_SYMEIG
+            else:
+                raise NotImplementedError(
+                    f"No symmetric hessian errors with confidence interval {cl}"
+                )
 
-        raise NotImplementedError("Error type for %s: '%s' is not implemented" %
-                                  (self.name, error))
+        raise NotImplementedError(f"Error type for {self}: '{error}' is not implemented")
 
     @property
     def grid_values_index(self):
@@ -230,7 +239,11 @@ class PDF(TupleComp):
         err = self.nnpdf_error
         if err is LHAPDFSet.erType_ER_MC:
             return range(1, len(self))
-        elif err in (LHAPDFSet.erType_ER_SYMEIG, LHAPDFSet.erType_ER_EIG, LHAPDFSet.erType_ER_EIG90):
+        elif err in (
+            LHAPDFSet.erType_ER_SYMEIG,
+            LHAPDFSet.erType_ER_EIG,
+            LHAPDFSet.erType_ER_EIG90,
+        ):
             return range(0, len(self))
         else:
             raise RuntimeError("Unknown error type")
@@ -243,10 +256,8 @@ class PDF(TupleComp):
         return len(self.grid_values_index)
 
 
-
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
 _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
-
 
 
 def get_plot_kinlabels(commondata):

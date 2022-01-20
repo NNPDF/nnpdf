@@ -5,7 +5,6 @@ Tools for filtering replica sets based on criteria on the replicas.
 """
 import logging
 import numbers
-import pathlib
 import shutil
 import warnings
 import re
@@ -75,13 +74,13 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
         If ``None``, then the name of the original pdf is used
         but with ``_pdfas`` appended
     """
-    base_pdf_path = pathlib.Path(pdf.infopath).parent
+    base_pdf_path = pdf.infopath.parent
     nrep = len(pdf)
 
     target_name = target_name or pdf.name + '_pdfas'
     target_path = output_path / target_name
 
-    alphas_paths = [pathlib.Path(i.infopath).parent for i in pdfs]
+    alphas_paths = [i.infopath.parent for i in pdfs]
     alphas_replica0s = [path / f'{p}_0000.dat' for path, p in zip(alphas_paths, pdfs)]
     new_nrep = nrep + len(alphas_replica0s)
     alphas_values = [str(p.AlphaS_MZ) for p in pdfs]
@@ -111,7 +110,7 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
             yaml_obj = yaml.YAML()
             info_yaml = yaml_obj.load(stream)
         info_yaml['NumMembers'] = new_nrep
-        info_yaml['ErrorType'] += '+as'
+        info_yaml['error_type'] += '+as'
         extra_desc = '; '.join(
             f"mem={i} => alphas(MZ)={val}"
             for val, i in zip(alphas_values, range(nrep, new_nrep))

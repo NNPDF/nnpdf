@@ -169,7 +169,7 @@ def generate_replica0(pdf, kin_grids=None, extra_fields=None):
     if extra_fields is not None:
         raise NotImplementedError()
 
-    set_info = pathlib.Path(pdf.infopath)
+    set_info = pdf.infopath
     set_root = set_info.parent
     if not set_root.exists():
         raise RuntimeError(f"Target directory {set_root} does not exist")
@@ -238,7 +238,7 @@ def new_pdf_from_indexes(
 
     set_root.mkdir()
 
-    original_info = pathlib.Path(pdf.infopath)
+    original_info = pdf.infopath
     original_folder = original_info.parent
 
     new_info = set_root/(set_name + '.info')
@@ -310,8 +310,8 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None
                 out.write(f"SetDesc: \"Hessian {pdf}_hessian\"\n")
             elif l.find("NumMembers:") >= 0:
                 out.write(f"NumMembers: {neig+1}\n")
-            elif l.find("ErrorType: replicas") >= 0:
-                out.write("ErrorType: symmhessian\n")
+            elif l.find("error_type: replicas") >= 0:
+                out.write("error_type: symmhessian\n")
             else:
                 out.write(l)
         if extra_fields is not None:

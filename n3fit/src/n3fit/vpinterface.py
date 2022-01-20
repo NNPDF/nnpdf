@@ -70,15 +70,11 @@ class N3PDF(PDF):
         else:
             self._models = [pdf_models]
 
+        super().__init__(name)
         # The number of members will be minimum 2, needed for legacy compatibility
         # Note that the member 0 does not exist as an actual model as it corresponds
         # to the average of all others
-        self.ErrorType = "replicas"
-        super().__init__(name)
-
-    @property
-    def NumMembers(self):
-        return len(self._models) + 1
+        self._info = {"ErrorType": "replicas", "NumMembers": len(self._models) + 1}
 
     @property
     def stats_class(self):
@@ -114,6 +110,7 @@ class N3PDF(PDF):
             log.warning("More than one preprocessing layer found within the model!")
         preprocessing_layer = preprocessing_layers[0]
 
+        alphas_and_betas = None
         if self.fit_basis is not None:
             output_dictionaries = []
             for d in self.fit_basis:
@@ -200,7 +197,7 @@ class N3PDF(PDF):
         # we don't care that much for precision here
         to_flav = la.inv(self.basis.from_flavour_mat)
         to_flav[np.abs(to_flav) < 1e-12] = 0.0
-        flav_result = np.tensordot(n3fit_result, to_flav, axes=[-1, 1])
+        flav_result = np.tensordot(n3fit_result, to_flav, axes=(-1, 1))
         # Now drop the indices that are not requested
         requested_flavours = [ALL_FLAVOURS.index(i) for i in flavours]
         flav_result = flav_result[..., requested_flavours]

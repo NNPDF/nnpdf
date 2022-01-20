@@ -339,7 +339,7 @@ def next_effective_exponents_table(
         max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
 
     """
-    Qmin = pdf.QMin
+    Qmin = pdf.q_min
 
     alpha_effs = alpha_eff(
         pdf, xmin=x1_alpha, xmax=x2_alpha, npoints=2, Q=Qmin, basis=basis, flavours=flavours)

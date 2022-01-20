@@ -173,7 +173,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
 @functools.lru_cache()
 def _warn_pdf_not_montecarlo(pdf):
-    et = pdf.ErrorType
+    et = pdf.error_type
     if et != 'replicas':
         log.warning("Plotting members of a non-Monte Carlo PDF set:"
         f" {pdf.name} with error type '{et}'.")
