@@ -1,22 +1,24 @@
 """
     Module containing an LHAPDF class compatible with validphys
     using the official lhapdf python interface.
-    It exposes an interface (almost) compatible with libNNPDF::LHAPDFSet
+
+    It exposes an interface mostly compatible with libNNPDF::LHAPDFSet
+    so it can be used as a drop-in replacement.
+
     The ``.members`` and ``.central_member`` of the ``LHAPDFSet`` are
     LHAPDF objects (the typical output from ``mkPDFs``) and can be used normally.
     For MC PDFs the ``central_member`` is the average of all replicas (members 1-100)
-    while for Hessian PDFs the ``central_member`` is also ``member[0]``
+    while for Hessian PDFfs the ``central_member`` is also ``members[0]``
+
     Examples
     --------
-    >>> from validphys.lhapdfset import LHAPDFSet, ER_MC
-    >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", ER_MC)
-    >>> pdf.get_members()
-    100
+    >>> from validphys.lhapdfset import LHAPDFSet
+    >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
     >>> len(pdf.members)
     100
     >>> pdf.central_member.alphasQ(91.19)
     0.11800
-    >>> pdf.member[0].xfxQ2(0.5, 15625)
+    >>> pdf.members[0].xfxQ2(0.5, 15625)
     {-5: 6.983360500601136e-05,
     -4: 0.0021818063617227604,
     -3: 0.00172453472243952,
@@ -30,41 +32,20 @@
     21: 0.007604124516892057}
 """
 import logging
-from typing import NamedTuple
 import numpy as np
 import lhapdf
 
 log = logging.getLogger(__name__)
 
 
-class PDFErrorType(NamedTuple):
-    """Namedtuple containing the information about the error type of the PDF"""
-
-    name: str
-    monte_carlo: bool
-    libNNPDF: int
-    t0: bool
-    description: str
-
-
-ER_NONE = PDFErrorType("erType_ER_NONE", False, 0, False, "No error info")
-ER_MC = PDFErrorType("erType_ER_MC", True, 1, False, "Monte Carlo")
-ER_MC68 = PDFErrorType("erType_ER_MC68", True, 2, False, "Monte Carlo 68pc")
-ER_MCT0 = PDFErrorType("erType_ER_MCT0", False, 3, True, "Monte Carlo t0")
-ER_EIG = PDFErrorType("erType_ER_EIG", False, 4, False, "Eigenvector 68pc")
-ER_EIG90 = PDFErrorType("erType_ER_EIG90", False, 5, False, "Eigenvector 90pc")
-ER_SYMEIG = PDFErrorType("erType_ER_SYMEIG", False, 6, False, "Symmetric eigenvectors")
-
-
 class LHAPDFSet:
     """Wrapper for the lhapdf python interface.
-    Once instantiated this class will load the PDF set according to whether it is to be
-    treated as a T0 set (only the CV) or not.
+
+    Once instantiated this class will load the PDF set from LHAPDF.
+    If it is a T0 set only the CV will be loaded.
+
     For Monte Carlo sets the central value (member 0) is by default not included when taking
-    the resutls for all members (i.e., when using ``grid_values``).
-    However, it is possible to add member 0 by changing the ``include_cv`` attribute to True.
-    Temporarily: it exposes all libNNPDF error attributes that were exposed and used prior to
-    the introduction of this class
+    the results for all members (i.e., when using ``grid_values``).
     """
 
     def __init__(self, name, error_type):
@@ -96,9 +77,9 @@ class LHAPDFSet:
     @property
     def members(self):
         """Return the members of the set, this depends on the error type:
-            t0: returns only member 0
-            MC: skip member 0
-            Hessian: return all
+        t0: returns only member 0
+        MC: skip member 0
+        Hessian: return all
         """
         if self.is_t0:
             return self._lhapdf_set[0:1]

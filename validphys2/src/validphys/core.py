@@ -84,6 +84,18 @@ class PDF(TupleComp):
     Statistical estimators which depends on the PDF type (MC, Hessian...)
     are exposed as a :py:class:`Stats` object through the :py:attr:`stats_class` attribute
     The LHAPDF metadata can directly be accessed through the :py:attr:`info` attribute
+
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> from validphys.convolution import predictions
+    >>> args = {"dataset_input":{"dataset": "ATLASTTBARTOT"}, "theoryid":162, "use_cuts":"internal"}
+    >>> ds = API.dataset(**args)
+    >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
+    >>> preds = predictions(ds, pdf)
+    >>> preds.shape
+    (3, 100)
     """
 
     def __init__(self, name):
