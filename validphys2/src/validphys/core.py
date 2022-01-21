@@ -103,6 +103,7 @@ class PDF(TupleComp):
         self.name = name
         self._plotname = name
         self._info = None
+        self._stats_class = None
         super().__init__(name)
 
     @property
@@ -116,11 +117,15 @@ class PDF(TupleComp):
     @property
     def stats_class(self):
         """Return the stats calculator for this error type"""
-        error = self.error_type
-        klass = STAT_TYPES[error]
-        if self.error_conf_level is not None:
-            klass = functools.partial(klass, rescale_factor=self._rescale_factor())
-        return klass
+        if self._stats_class is None:
+            try:
+                klass = STAT_TYPES[self.error_type]
+            except KeyError:
+                raise NotImplementedError(f"No Stats class for error type {self.error_type}")
+            if self.error_conf_level is not None:
+                klass = functools.partial(klass, rescale_factor=self._rescale_factor())
+            self._stats_class = klass
+        return self._stats_class
 
     @property
     def infopath(self):
@@ -236,17 +241,12 @@ class PDF(TupleComp):
         -----
         The range object can be used efficiently as a Pandas index.
         """
-        err = self.nnpdf_error
-        if err is LHAPDFSet.erType_ER_MC:
+        if self.error_type == "replicas":
             return range(1, len(self))
-        elif err in (
-            LHAPDFSet.erType_ER_SYMEIG,
-            LHAPDFSet.erType_ER_EIG,
-            LHAPDFSet.erType_ER_EIG90,
-        ):
+        elif self.error_type in ("hessian", "symmhessian"):
             return range(0, len(self))
         else:
-            raise RuntimeError("Unknown error type")
+            raise RuntimeError(f"Unknown error type: {self.stats_class}")
 
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
@@ -822,7 +822,7 @@ class MCStats(Stats):
 
 
 class SymmHessianStats(Stats):
-    """Compute stats in the 'assymetric' hessian format: The first index (0)
+    """Compute stats in the 'symetric' hessian format: The first index (0)
     is the
     central value. The rest of the indexes are results for each eigenvector.
     A 'rescale_factor is allowed in case the eigenvector confidence interval
