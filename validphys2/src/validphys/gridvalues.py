@@ -10,14 +10,8 @@ import itertools
 
 import numpy as np
 
-from NNPDF import REALDOUBLE, LHAPDFSet
-
 from validphys.core import PDF
-
-#Numpy is unhappy about downcasting double to float implicitly, so we have
-#to manually make sure all input arrays correspond to NNPDF::real.
-FLTYPE = np.int32
-REALTYPE = np.double if REALDOUBLE else np.float32
+from validphys.lhapdfset import LHAPDFSet
 
 # Canonical ordering of PDG quark flavour codes
 QUARK_FLAVOURS = (-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6)
@@ -54,9 +48,9 @@ QUARK_COMBINATIONS = {
 
 def _grid_values(lpdf, flmat, xmat, qmat):
     """Compute lpdf.grid_values with more forgiving argument types"""
-    flmat = np.atleast_1d(np.asanyarray(flmat, dtype=FLTYPE))
-    xmat = np.atleast_1d(np.asarray(xmat, dtype=REALTYPE))
-    qmat = np.atleast_1d(np.asarray(qmat, dtype=REALTYPE))
+    flmat = np.atleast_1d(np.asanyarray(flmat))
+    xmat = np.atleast_1d(np.asarray(xmat))
+    qmat = np.atleast_1d(np.asarray(qmat))
     return lpdf.grid_values(flmat, xmat, qmat)
 
 def grid_values(pdf:PDF, flmat, xmat, qmat):
