@@ -69,6 +69,6 @@ NNLO pdf                             NNPDF40_nnlo_as_01180               NNPDF4.
 NNLO pdf hessian                     NNPDF40_nnlo_as_01180_hessian       NNPDF4.0 NNLO hessian PDF set generated from replicas
 NLO fit                              NNPDF40_nlo_as_01180                NNPDF4.0 NLO fit with 100 replicas (+ central replica)
 NNLO fit                             NNPDF40_nnlo_lowprecision           NNPDF4.0 NNLO low precision fit (theory 162) with 50 replicas (+ central replica)
-NNLO fit (iterated)                  NNPDF40_nnlo_lowprecision_iterated  Iteration of NNPDF40_nnlo_lowprecision
+NNLO fit (iterated)                  NNPDF40_nnlo_low_precision_iterated  Iteration of NNPDF40_nnlo_lowprecision
 fit                                  NNPDF40_example_closure_test        ``n3fit`` closure test fit with 30 replicas before and after postfit
 ===================================  =================================== ==================================================================
