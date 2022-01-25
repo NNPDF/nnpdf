@@ -6,6 +6,7 @@ networks during the fitting.
 from collections import namedtuple
 import logging
 import pathlib
+import dataclasses
 
 import numpy as np
 import pandas as pd
@@ -103,8 +104,151 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
+class CommondataGenerationData:
+    """Helper class intended to make computing pseudodata faster by unrolling
+    and storing some dataframe operations most dataframe operations
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genrep=True):
+    Parameters
+    ----------
+    commondata: validphys.coredata.CommonData
+       The input loaded commondata instance to process
+
+    Attributes
+    ----------
+    central_values: ndarray
+        The central calues of the CommonData
+
+    stat_errors: ndarray
+        The (computed) stat_errors of the commondata. See :py:class:`validphys.coredata.CommonData`.
+
+    add_corr_errors: ndarray
+        An array with the correlated subset of the additive errors.
+
+    add_uncorr_errors: ndaarray
+        An array with the uncorrelated subset of the additive errors.
+
+    special_add: ndarray
+        An array with the additive uncertainties that have a special meaning.
+
+    mult_corr_errors: ndarray
+        An array with the correlated subset of the multiplicative errors.
+
+    mult_uncorr_errors: ndaarray
+        An array with the uncorrelated subset of the multiplicative errors.
+
+    special_mult: ndarray
+        An array with the multiplicative uncertainties that have a special meaning.
+
+    check_positive_mask: ndarray
+        A boolean mask with the points that should be considered for positivity checks.
+    """
+    def __init__(self, commondata):
+        # Note we are evaluating the properties of the input commondata so we
+        # are not merely copying the data
+        self.central_values = commondata.central_values.to_numpy()
+        self.stat_errors = commondata.stat_errors.to_numpy()
+        # Handle add errors
+        add_errors = commondata.additive_errors
+        self.add_corr_errors = add_errors.loc[:, add_errors.columns == "CORR"].to_numpy()
+        self.add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
+        self.special_add = add_errors.loc[:, ~add_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
+        # Handle mult errors
+        mult_errors = commondata.multiplicative_errors
+        self.mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
+        self.mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
+        self.special_mult = mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
+        # mask out the data we want to check are all positive
+        if "ASY" in commondata.commondataproc:
+            self.check_positive_mask  = np.zeros_like(self.central_values, dtype=bool)
+        else:
+            self.check_positive_mask = np.ones_like(self.central_values, dtype=bool)
+
+@dataclasses.dataclass
+class PseudodataGenerationData:
+    """Helper class storing the input for pseudodata replica computations. Use
+    :py:func:`pseudodata_generation_data` to compute it.
+
+    Attributes
+    ----------
+
+    per_cd_data: list[CommondataGenerationData]
+        The computed properties for each commondata.
+
+    special_add_errors: np.ndarray
+        The concatenation matrix of all additive special errors, in order
+
+    special_mult_errors: np.ndarray
+        The concatenation matrix of all multiplicative special errors, in order
+
+    check_positive_mask: np.ndarray
+        The concatenated mask for positivity checks
+    """
+    per_cd_data: list[CommondataGenerationData]
+    special_add_errors: np.ndarray
+    special_mult_errors: np.ndarray
+    check_positive_mask: np.ndarray
+
+    @classmethod
+    def from_cd_list(cls, commondata_list):
+        """Return an instance of this class from a list of loaded commondata
+        objects"""
+        per_cd_data = [
+            CommondataGenerationData(cd) for cd in commondata_list
+        ]
+        special_add_errors = (
+            pd.concat([d.special_add for d in per_cd_data], axis=0, sort=True)
+            .fillna(0)
+            .to_numpy()
+        )
+        special_mult_errors = (
+            pd.concat([d.special_mult for d in per_cd_data], axis=0, sort=True)
+            .fillna(0)
+            .to_numpy()
+        )
+
+        check_positive_mask = np.concatenate(
+            [d.check_positive_mask for d in per_cd_data], axis=0
+        )
+
+
+        return cls(
+            per_cd_data, special_add_errors, special_mult_errors, check_positive_mask
+        )
+
+
+def pseudodata_generation_data(groups_dataset_inputs_loaded_cd_with_cuts):
+    """Construct a PseudodataGenerationData object for the dataset inputs in
+    the way they would appear in the fit.
+
+    Parameters
+    ---------
+    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`validphys.coredata.CommonData`]
+        List of CommonData objects which stores information about systematic errors,
+        their treatment and description, for each dataset.
+
+    Returns
+    -------
+
+    PseudodataGenerationData
+        An object suitable for sampling pseudodata replicas
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> inp = API.pseudodata_generation_data(
+                                    dataset_inputs=[{"dataset":"NMC"}, {"dataset": "NMCPD"}],
+                                    use_cuts="nocuts",
+                                )
+
+    >>> type(inp)
+    <class 'validphys.pseudodata.PseudodataGenerationData'>
+    """
+    return PseudodataGenerationData.from_cd_list(
+        groups_dataset_inputs_loaded_cd_with_cuts
+    )
+
+
+def make_replica(pseudodata_generation_data, replica_mcseed, genrep=True):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -115,9 +259,8 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
 
     Parameters
     ---------
-    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`validphys.coredata.CommonData`]
-        List of CommonData objects which stores information about systematic errors,
-        their treatment and description, for each dataset.
+    pseudodata_generation_data: PseudodataGenerationData
+        Input generation data with some precomputed matrices.
 
     seed: int, None
         Seed used to initialise the numpy random number generator. If ``None`` then a random seed is
@@ -145,8 +288,13 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
     if not genrep:
-        return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
+        return np.concatenate([d.central_values for d in pseudodata_generation_data.per_cd_data])
 
+
+
+    special_add_errors = pseudodata_generation_data.special_add_errors
+    special_mult_errors = pseudodata_generation_data.special_mult_errors
+    positive_mask = pseudodata_generation_data.check_positive_mask
     # Seed the numpy RNG with the seed.
     rng = np.random.default_rng(seed=replica_mcseed)
 
@@ -154,62 +302,34 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
     # pseudodata replica
     while True:
         pseudodatas = []
-        special_add = []
-        special_mult = []
         mult_shifts = []
-        check_positive_masks = []
-        for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        for d in pseudodata_generation_data.per_cd_data:
             # copy here to avoid mutating the central values.
-            pseudodata = cd.central_values.to_numpy(copy=True)
+            pseudodata = d.central_values.copy()
+            ndata = len(pseudodata)
 
             # add contribution from statistical uncertainty
-            pseudodata += (cd.stat_errors.to_numpy() * rng.normal(size=cd.ndata))
+            pseudodata += (d.stat_errors * rng.normal(size=ndata))
 
             # ~~~ ADDITIVE ERRORS  ~~~
-            add_errors = cd.additive_errors
-            add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
-
-            pseudodata += (add_uncorr_errors * rng.normal(size=add_uncorr_errors.shape)).sum(axis=1)
+            pseudodata += (d.add_uncorr_errors * rng.normal(size=d.add_uncorr_errors.shape)).sum(axis=1)
 
             # correlated within dataset
-            add_corr_errors = add_errors.loc[:, add_errors.columns == "CORR"].to_numpy()
-            pseudodata += add_corr_errors @ rng.normal(size=add_corr_errors.shape[1])
+            pseudodata += d.add_corr_errors @ rng.normal(size=d.add_corr_errors.shape[1])
 
             # append the partially shifted pseudodata
             pseudodatas.append(pseudodata)
-            # store the additive errors with correlations between datasets for later use
-            special_add.append(
-                add_errors.loc[:, ~add_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-            )
             # ~~~ MULTIPLICATIVE ERRORS ~~~
-            mult_errors = cd.multiplicative_errors
-            mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
             # convert to from percent to fraction
             mult_shift = (
-                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
+                1 + d.mult_uncorr_errors * rng.normal(size=d.mult_uncorr_errors.shape) / 100
             ).prod(axis=1)
 
-            mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
             mult_shift *= (
-                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
+                1 + d.mult_corr_errors * rng.normal(size=(1, d.mult_corr_errors.shape[1])) / 100
             ).prod(axis=1)
 
             mult_shifts.append(mult_shift)
-
-            # store the multiplicative errors with correlations between datasets for later use
-            special_mult.append(
-                mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-            )
-
-            # mask out the data we want to check are all positive
-            if "ASY" in cd.commondataproc:
-                check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
-            else:
-                check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-
-        # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
-        special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
-        special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
 
 
         all_pseudodata = (
@@ -220,7 +340,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
             * (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
         )
 
-        if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
+        if np.all(all_pseudodata[positive_mask] >= 0):
             break
 
     return all_pseudodata
@@ -242,13 +362,12 @@ make_replicas = collect('make_replica', ('replicas',))
 indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
 
 
-def _fitted_make_replicas(fit, groups_dataset_inputs_loaded_cd_with_cuts, genrep: bool, mcseed: int):
+def _fitted_make_replicas(fit, pseudodata_generation_data, genrep: bool, mcseed: int):
     res = []
-    g = groups_dataset_inputs_loaded_cd_with_cuts
     for i in range(1, num_fitted_replicas(fit) + 1):
         log.debug(f"Computing pseudodata for replica {i} in {fit}")
         seed = replica_mcseed(i, mcseed, genrep)
-        pseudodata_replica = make_replica(g, seed, genrep)
+        pseudodata_replica = make_replica(pseudodata_generation_data, seed, genrep)
         res.append(pseudodata_replica)
     return res
 
