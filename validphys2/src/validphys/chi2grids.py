@@ -60,10 +60,7 @@ def computed_pseudoreplicas_chi2(
     return df
 
 
-# TODO: Probably fitcontext should set all of the variables required to compute
-# this. But better setting
-# them explicitly than setting some, so we require the user to do that.
-fits_computed_pseudoreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("fits",))
+fits_computed_pseudoreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("fits", "fitenvironment", "fitpdf"))
 
 dataspecs_computed_pseudorreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("dataspecs",))
 

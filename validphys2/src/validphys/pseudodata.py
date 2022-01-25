@@ -10,9 +10,12 @@ import pathlib
 import numpy as np
 import pandas as pd
 
-from validphys.covmats import INTRA_DATASET_SYS_NAME
-
 from reportengine import collect
+
+from validphys.covmats import INTRA_DATASET_SYS_NAME
+from validphys.fitdata import num_fitted_replicas
+from validphys.n3fit_data import replica_mcseed
+
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -236,8 +239,21 @@ _recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fite
 fit_tr_masks = collect('replica_training_mask_table', ('fitreplicas', 'fitenvironment'))
 pdf_tr_masks = collect('replica_training_mask_table', ('pdfreplicas', 'fitenvironment'))
 make_replicas = collect('make_replica', ('replicas',))
-fitted_make_replicas = collect('make_replica', ('pdfreplicas',))
 indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
+
+
+def _fitted_make_replicas(fit, groups_dataset_inputs_loaded_cd_with_cuts, genrep: bool, mcseed: int):
+    res = []
+    g = groups_dataset_inputs_loaded_cd_with_cuts
+    for i in range(1, num_fitted_replicas(fit) + 1):
+        seed = replica_mcseed(i, mcseed, genrep)
+        pseudodata_replica = make_replica(g, seed, genrep)
+        res.append(pseudodata_replica)
+    print(res)
+    return res
+
+fitted_make_replicas = collect("_fitted_make_replicas", ("fitenvironment",))
+
 
 def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks):
     """Function used to reconstruct the pseudodata seen by each of the
