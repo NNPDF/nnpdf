@@ -246,10 +246,10 @@ def _fitted_make_replicas(fit, groups_dataset_inputs_loaded_cd_with_cuts, genrep
     res = []
     g = groups_dataset_inputs_loaded_cd_with_cuts
     for i in range(1, num_fitted_replicas(fit) + 1):
+        log.debug(f"Computing pseudodata for replica {i} in {fit}")
         seed = replica_mcseed(i, mcseed, genrep)
         pseudodata_replica = make_replica(g, seed, genrep)
         res.append(pseudodata_replica)
-    print(res)
     return res
 
 fitted_make_replicas = collect("_fitted_make_replicas", ("fitenvironment",))
