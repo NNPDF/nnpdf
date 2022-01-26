@@ -14,7 +14,6 @@ import pandas as pd
 from reportengine import collect
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME
-from validphys.fitdata import num_fitted_replicas
 from validphys.n3fit_data import replica_mcseed
 
 
@@ -362,14 +361,17 @@ make_replicas = collect('make_replica', ('replicas',))
 indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
 
 
-def _fitted_make_replicas(fit, pseudodata_generation_data, genrep: bool, mcseed: int):
+def _fitted_make_replicas(
+    fit, pseudodata_generation_data, fitted_replica_indexes, genrep: bool, mcseed: int
+):
     res = []
-    for i in range(1, num_fitted_replicas(fit) + 1):
-        log.debug(f"Computing pseudodata for replica {i} in {fit}")
+    for order, i in enumerate(fitted_replica_indexes):
+        log.debug(f"Computing pseudodata for replica {order} in {fit}")
         seed = replica_mcseed(i, mcseed, genrep)
         pseudodata_replica = make_replica(pseudodata_generation_data, seed, genrep)
         res.append(pseudodata_replica)
     return res
+
 
 fitted_make_replicas = collect("_fitted_make_replicas", ("fitenvironment",))
 

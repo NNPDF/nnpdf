@@ -25,6 +25,7 @@ log = logging.getLogger(__name__)
 
 def computed_pseudoreplicas_chi2(
     fitted_make_replicas,
+    fitted_replica_indexes,
     group_result_table_no_table,  # to get the results already in the form of a dataframe
     groups_sqrtcovmat,
 ):
@@ -35,7 +36,7 @@ def computed_pseudoreplicas_chi2(
     where ``nnftix_index`` is the name of the corresponding replica
     """
     # Stack the replica pseudodata to have the prediction shape
-    r_data = np.stack(fitted_make_replicas, axis=1)
+    r_data = np.stack(fitted_make_replicas[0], axis=1)
 
     # Drop data central and theory central which is not useful here
     r_prediction = group_result_table_no_table.drop(columns=["data_central", "theory_central"])
@@ -51,7 +52,7 @@ def computed_pseudoreplicas_chi2(
         its_covmat = groups_sqrtcovmat[group_level == group][group]
         chi2_per_replica = calc_chi2(its_covmat, group_diff)
         ndata = len(group_diff)
-        for i, chi2 in enumerate(chi2_per_replica):
+        for i, chi2 in zip(fitted_replica_indexes, chi2_per_replica):
             df_output.append(PseudoReplicaExpChi2Data(group, ndata, chi2, i))
 
     df = pd.DataFrame(df_output, columns=PseudoReplicaExpChi2Data._fields)
@@ -60,7 +61,9 @@ def computed_pseudoreplicas_chi2(
     return df
 
 
-fits_computed_pseudoreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("fits", "fitenvironment", "fitpdf"))
+fits_computed_pseudoreplicas_chi2 = collect(
+    computed_pseudoreplicas_chi2, ("fits", "fitenvironment", "fitpdf")
+)
 
 dataspecs_computed_pseudorreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("dataspecs",))
 
