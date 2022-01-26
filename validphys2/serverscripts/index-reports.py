@@ -11,6 +11,7 @@ import datetime
 import json
 import re
 import sys
+import traceback
 from collections import ChainMap, defaultdict
 
 import ruamel_yaml as yaml
@@ -125,10 +126,15 @@ def handle_thumbnail(p):
         return thumbnail_tag(name)
     figures = (p / 'figures')
     if figures.is_dir():
-        res = make_thumbnail(figures)
-        if res is not None:
-            skimage.io.imsave(dest, res)
-            return thumbnail_tag(name)
+        try:
+            res = make_thumbnail(figures)
+            if res is not None:
+                skimage.io.imsave(dest, res)
+                return thumbnail_tag(name)
+        except Exception as e:
+            print("Could not process thumbnails in", figures, e, file=sys.stderr)
+            traceback.print_exc()
+            return None
     return None
 
 def register(p, emails):
@@ -175,14 +181,18 @@ def make_index():
     keywords = defaultdict(TagProps)
     for p in root_path.iterdir():
         if p.is_dir():
-            res = register(p, emails.get(p.name, []))
-            data.append(res)
-            newkeywords = res[3]
-            timestamp = res[2][1]
-            for k in newkeywords:
-                props = keywords[k]
-                props.count+=1
-                props.last_timestamp = max(props.last_timestamp, timestamp)
+            try:
+                res = register(p, emails.get(p.name, []))
+                data.append(res)
+                newkeywords = res[3]
+                timestamp = res[2][1]
+                for k in newkeywords:
+                    props = keywords[k]
+                    props.count+=1
+                    props.last_timestamp = max(props.last_timestamp, timestamp)
+            except:
+                print("Error processing folder", p,file=sys.stderr)
+                raise
 
     keylist = sorted(keywords.items(), key=lambda x: -x[1].last_timestamp)
     keywordmap = [(k, v.count) for k,v in keylist]
