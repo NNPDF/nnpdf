@@ -229,10 +229,8 @@ class PDF(TupleComp):
     @property
     def grid_values_index(self):
         """A range object describing which members are selected in a
-        ``pdf.load().grid_values`` operation.  This is ``range(1,
-        len(pdf))`` for Monte Carlo sets, because replica 0 is not selected
-        and ``range(0, len(pdf))`` for hessian sets.
-
+        ``pdf.load().grid_values`` operation.
+        Equal to range(0, len(pdf))
 
         Returns
         -------
@@ -243,12 +241,7 @@ class PDF(TupleComp):
         -----
         The range object can be used efficiently as a Pandas index.
         """
-        if self.error_type == "replicas":
-            return range(1, len(self))
-        elif self.error_type in ("hessian", "symmhessian"):
-            return range(0, len(self))
-        else:
-            raise RuntimeError(f"Unknown error type: {self.stats_class}")
+        return range(0, len(self))
 
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
@@ -760,18 +753,27 @@ class ThCovMatSpec:
     def __str__(self):
         return str(self.path)
 
-#TODO: Decide if we want methods or properties
 class Stats:
+    """The stats class holds the results of computations that involve PDFs
+    and knows how to compute statistical estimators for each kind of PDF.
+    The first index is always the central value.
+
+
+    Parameters
+    ----------
+        data: np.array
+            Result of the computation, should always be N_pdf * N_bins
+    """
 
     def __init__(self, data):
         """`data `should be N_pdf*N_bins"""
         self.data = np.atleast_2d(data)
 
     def central_value(self):
-        raise NotImplementedError()
+        return self.data[0]
 
     def error_members(self):
-        raise NotImplementedError()
+        return self.data[1:]
 
     def std_error(self):
         raise NotImplementedError()
@@ -798,10 +800,6 @@ class Stats:
 
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
-
-    def central_value(self):
-        return np.mean(self.data, axis=0)
-
     def std_error(self):
         # ddof == 1 to match libNNPDF behaviour
         return np.std(self.data, ddof=1, axis=0)
@@ -819,9 +817,6 @@ class MCStats(Stats):
     def sample_values(self, size):
         return np.random.choice(self, size=size)
 
-    def error_members(self):
-        return self.data
-
 
 class SymmHessianStats(Stats):
     """Compute stats in the 'symetric' hessian format: The first index (0)
@@ -833,14 +828,8 @@ class SymmHessianStats(Stats):
         super().__init__(data)
         self.rescale_factor = rescale_factor
 
-    def central_value(self):
-        return self.data[0]
-
     def errorbar68(self):
         return self.errorbarstd()
-
-    def error_members(self):
-        return self.data[1:]
 
     def std_error(self):
         data = self.data
