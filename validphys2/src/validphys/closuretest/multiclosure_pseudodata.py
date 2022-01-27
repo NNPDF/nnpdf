@@ -126,7 +126,7 @@ def experiments_closure_pseudodata_estimators_table(
         fits_erep_delta_chi2 = []
         for i_fit, fit_th in enumerate(closures_th):
             # some of these could be done outside of loop, but easier to do here.
-            th_replicas = fit_th._rawdata
+            th_replicas = fit_th.error_members
             th_central = np.mean(th_replicas, axis=-1)
             dt_replicas = fits_reps_pseudo[i_fit].xs(exp_name, axis=0, level=0).to_numpy()
             dt_central = fits_cv.xs(exp_name, axis=0, level=0).iloc[:, i_fit].to_numpy()
