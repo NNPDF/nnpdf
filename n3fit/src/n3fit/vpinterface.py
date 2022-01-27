@@ -74,7 +74,7 @@ class N3PDF(PDF):
         # The number of members will be minimum 2, needed for legacy compatibility
         # Note that the member 0 does not exist as an actual model as it corresponds
         # to the average of all others
-        self._info = {"ErrorType": "replicas", "NumMembers": len(self._models) + 1}
+        self._info = {"ErrorType": "replicas", "NumMembers": len(self._models)}
 
     @property
     def stats_class(self):

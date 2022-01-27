@@ -40,7 +40,7 @@ def test_N3PDF(members, layers):
     xsize = np.random.randint(2, 20)
     xx = np.random.rand(xsize)
     n3pdf = generate_n3pdf(layers=layers, members=members)
-    assert len(n3pdf) == members + 1
+    assert len(n3pdf) == members
     assert n3pdf.stats_class == MCStats
     assert n3pdf.load() is n3pdf
     w = n3pdf.get_nn_weights()
