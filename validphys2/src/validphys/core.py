@@ -762,7 +762,7 @@ class Stats:
     Parameters
     ----------
         data: np.array
-            Result of the computation, should always be N_pdf * N_bins
+            Result of the computation, should always be N_pdf * N_bins * ...
     """
 
     def __init__(self, data):

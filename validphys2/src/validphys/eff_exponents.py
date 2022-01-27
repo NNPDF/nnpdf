@@ -348,17 +348,14 @@ def next_effective_exponents_table(
 
     eff_exp_data = []
 
-    alphagrid = alpha_effs.grid_values
-    betagrid = beta_effs.grid_values
-
-    alphastats = pdf.stats_class(alphagrid)
-    betastats = pdf.stats_class(betagrid)
+    alphastats = pdf.stats_class(alpha_effs.grid_values)
+    betastats = pdf.stats_class(beta_effs.grid_values)
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
 
-        alpha_cv = np.nanmean(alphagrid, axis=0)
-        beta_cv = np.nanmean(betagrid, axis=0)
+        alpha_cv = np.nanmean(alphastats.error_members(), axis=0)
+        beta_cv = np.nanmean(betastats.error_members(), axis=0)
         #tuple of low and high values repectively
         alpha68 = alphastats.errorbar68()
         beta68 = betastats.errorbar68()
