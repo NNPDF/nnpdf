@@ -47,6 +47,8 @@ def test_cuts():
 
 
 def test_predictions():
+    """Check that the different kind of predictions can be performed
+    and that the results stay unchanged after they are processed by ThPredictionsResult"""
     l = Loader()
     pdf = l.check_pdf(PDF)
     dss = [
@@ -63,10 +65,8 @@ def test_predictions():
     ]
     for ds in dss:
         preds = predictions(ds, pdf)
-        cppres = ThPredictionsResult.from_convolution(pdf, ds)
-        # Change the atol and rtol from 1e-8 and 1e-7 since DYE906R
-        # fails with the default setting
-        assert_allclose(preds.values, cppres._rawdata, atol=1e-8, rtol=1e-3)
+        nnpdf_res = ThPredictionsResult.from_convolution(pdf, ds)
+        assert_allclose(preds, nnpdf_res._rawdata)
 
 def test_extended_predictions():
     l = Loader()

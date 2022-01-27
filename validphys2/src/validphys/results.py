@@ -36,7 +36,6 @@ from validphys.calcutils import (
 )
 from validphys.convolution import (
     predictions,
-    central_predictions,
     PredictionsRequireCutsError,
 )
 
@@ -70,6 +69,12 @@ class NNPDFDataResult(Result):
 
 
 class StatsResult(Result):
+    """Wrapper for a Results-holding Stats-class
+    It uses properties instead of methods.
+    Also while internally the `Stats` class holds the data
+    in a N_pdf x N_bins, this class treats data instead
+    as N_bins x N_pdf
+    """
     def __init__(self, stats):
         self.stats = stats
 
@@ -80,6 +85,22 @@ class StatsResult(Result):
     @property
     def std_error(self):
         return self.stats.std_error()
+
+    @property
+    def data(self):
+        return self.stats.data.T
+
+    @property
+    def _rawdata(self):
+        """Legacy"""
+        return self.data
+
+    @property
+    def error_members(self):
+        return self.stats.error_members().T
+
+    def __len__(self):
+        return len(self.central_value)
 
 
 class DataResult(NNPDFDataResult):
@@ -106,27 +127,12 @@ class DataResult(NNPDFDataResult):
         return self._sqrtcovmat
 
 
-class ThPredictionsResult(NNPDFDataResult):
-    """Class holding theory prediction
-    For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
-    """
-    def __init__(self, dataobj, stats_class, label=None, central_value=None):
+class ThPredictionsResult(StatsResult):
+    """Class holding theory predictions"""
+    def __init__(self, stats_data, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
-        # Ducktype the input into numpy arrays
-        try:
-            self._rawdata = dataobj.to_numpy()
-            # If the numpy conversion worked then we don't have a libNNPDF in our hands
-            stats = stats_class(self._rawdata.T)
-            self._std_error = stats.std_error()
-        except AttributeError:
-            self._std_error = dataobj.get_error()
-            self._rawdata = dataobj.get_data()
-        super().__init__(dataobj, central_value=central_value)
-
-    @property
-    def std_error(self):
-        return self._std_error
+        super().__init__(stats_data)
 
     @staticmethod
     def make_label(pdf, dataset):
@@ -152,20 +158,15 @@ class ThPredictionsResult(NNPDFDataResult):
             datasets = (dataset,)
 
         try:
-            all_preds = []
-            all_centrals = []
-            for d in datasets:
-                all_preds.append(predictions(d, pdf))
-                all_centrals.append(central_predictions(d, pdf))
+            th_predictions = pd.concat([predictions(d, pdf) for d in datasets])
+            stats_th = pdf.stats_class(th_predictions.T)
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
                     "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
-        th_predictions = pd.concat(all_preds)
-        central_values = pd.concat(all_centrals)
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label, central_value=central_values)
+        return cls(stats_th, pdf.stats_class, label)
 
 
 class PositivityResult(StatsResult):
