@@ -802,10 +802,10 @@ class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
     def std_error(self):
         # ddof == 1 to match libNNPDF behaviour
-        return np.std(self.data, ddof=1, axis=0)
+        return np.std(self.error_members(), ddof=1, axis=0)
 
     def moment(self, order):
-        return np.mean(np.power(self.data-self.central_value(),order), axis=0)
+        return np.mean(np.power(self.error_members()-self.central_value(),order), axis=0)
 
     def errorbar68(self):
         #Use nanpercentile here because we can have e.g. 0/0==nan normalization

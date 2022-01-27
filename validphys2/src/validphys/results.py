@@ -91,11 +91,6 @@ class StatsResult(Result):
         return self.stats.data.T
 
     @property
-    def _rawdata(self):
-        """Legacy"""
-        return self.data
-
-    @property
     def error_members(self):
         return self.stats.error_members().T
 
@@ -260,7 +255,7 @@ def group_result_table_no_table(groups_results, groups_index):
         ):
             replicas = (
                 ("rep_%05d" % (i + 1), th_rep)
-                for i, th_rep in enumerate(th._rawdata[index, :])
+                for i, th_rep in enumerate(th.error_members[index, :])
             )
 
             result_records.append(
@@ -615,7 +610,7 @@ def dataset_inputs_bootstrap_phi_data(dataset_inputs_results, bootstrap_samples=
     For more information on how phi is calculated see `phi_data`
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(
         diff,
         bootstrap_samples,
@@ -635,7 +630,7 @@ def dataset_inputs_bootstrap_chi2_central(
     a different value can be specified in the runcard.
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
     chi2_central_resample = bootstrap_values(
         diff,

@@ -66,7 +66,7 @@ def test_predictions():
     for ds in dss:
         preds = predictions(ds, pdf)
         nnpdf_res = ThPredictionsResult.from_convolution(pdf, ds)
-        assert_allclose(preds, nnpdf_res._rawdata)
+        assert_allclose(preds, nnpdf_res.data)
 
 def test_extended_predictions():
     l = Loader()
