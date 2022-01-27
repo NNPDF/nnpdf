@@ -122,7 +122,7 @@ def bootstrap_bias_experiment(
     """
     dt_ct, th_ct = dataset_inputs_results
     ((_, th_ul),) = underlying_dataset_inputs_results
-    th_ct_boot_cv = bootstrap_values(th_ct.error_members, bootstrap_samples)
+    th_ct_boot_cv = bootstrap_values(th_ct.data, bootstrap_samples)
     boot_diffs = th_ct_boot_cv - th_ul.central_value[:, np.newaxis]
     boot_bias = calc_chi2(dt_ct.sqrtcovmat, boot_diffs) / len(dt_ct)
     return boot_bias
@@ -191,7 +191,7 @@ def variance_dataset(results, fit, use_fitcommondata):
 
     """
     dt, th = results
-    diff = th.central_value[:, np.newaxis] - th.error_members
+    diff = th.central_value[:, np.newaxis] - th.data
     var_unnorm = calc_chi2(dt.sqrtcovmat, diff).mean()
     return VarianceData(var_unnorm, len(th))
 
@@ -210,7 +210,7 @@ def bootstrap_variance_experiment(dataset_inputs_results, bootstrap_samples=500)
     normalised to the number of data in the experiment.
     """
     dt_ct, th_ct = dataset_inputs_results
-    diff = th_ct.central_value[:, np.newaxis] - th_ct.error_members
+    diff = th_ct.central_value[:, np.newaxis] - th_ct.data
     var_unnorm_boot = bootstrap_values(
         diff,
         bootstrap_samples,

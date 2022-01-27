@@ -20,6 +20,10 @@ class TestResult:
     def __len__(self,):
         return self.ndata
 
+    @property
+    def error_members(self):
+        return self.data[:, 1:]
+
 N_DATA = 5
 N_REPLICAS = 10
 

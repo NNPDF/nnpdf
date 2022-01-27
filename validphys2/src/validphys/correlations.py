@@ -60,13 +60,13 @@ def _basic_obs_obs_correlation(obsarr1, obsarr2):
 
     return x@y/np.outer(la.norm(x,axis=1),la.norm(y,axis=0))
 
-#TODO: Implement for other error types.
 @check_pdf_is_montecarlo
 def obs_pdf_correlations(pdf, results, xplotting_grid):
     """Return the correlations between each point in a dataset and the PDF
     values on a grid of (x,f) points in a format similar to `xplotting_grid`."""
     _ , th = results
-    corrs = _basic_obs_pdf_correlation(xplotting_grid.grid_values, th.error_members)
+    pdf_replicas = pdf.stats_class(xplotting_grid.grid_values).error_members()
+    corrs = _basic_obs_pdf_correlation(pdf_replicas, th.error_members)
     return xplotting_grid._replace(grid_values=corrs)
 
 
