@@ -55,7 +55,8 @@ base_config = dict(
         use_cuts='nocuts',
         dataset_inputs=DATA,
         theoryid=THEORYID,
-        use_fitthcovmat=False
+        use_fitthcovmat=False,
+        Q=10,
     )
 
 @pytest.fixture(scope='module')
