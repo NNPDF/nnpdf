@@ -92,11 +92,13 @@ class LHAPDFSet:
         """Returns a reference to member 0 of the PDF list"""
         return self._lhapdf_set[0]
 
-    def xfxQ(self, x, q, member_idx, flavour):
-        """Return the PDF value for one single point for one single member"""
-        member_pdf = self.members[member_idx]
-        res = member_pdf.xfxQ(x, q)
-        return res[flavour]
+    def xfxQ(self, x, Q, n, fl):
+        """Return the PDF value for one single point for one single member
+        If the flavour is not included in the PDF (for instance top/antitop) return 0.0
+        """
+        member_pdf = self.members[n]
+        res = member_pdf.xfxQ(x, Q)
+        return res.get(fl, 0.0)
 
     @property
     def flavors(self):
