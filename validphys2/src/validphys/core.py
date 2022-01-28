@@ -383,9 +383,23 @@ class Cuts(TupleComp):
         """Represents a file containing cuts for a given dataset"""
         self.name = name
         self.path = path
+        self._legacy_mask = None
         super().__init__(name, path)
 
+    @classmethod
+    def legacy(cls, name, commondata):
+        """For old fits when no data was cut, no filter was written down.
+        Generate a fake placeholder mask in those scenarios"""
+        log.warning("No filter found for %s, generate a placeholder mask", name)
+        ret = cls(name, None)
+        ret._legacy_mask = np.arange(commondata.ndata)
+        return ret
+
     def load(self):
+        if self._legacy_mask is not None:
+            # This should never happen for new fits so be extra annoying
+            log.warning("Using a placeholder mask for %s", self.name)
+            return self._legacy_mask
         log.debug("Loading cuts for %s", self.name)
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 

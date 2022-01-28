@@ -504,7 +504,7 @@ class Loader(LoaderBase):
             if cuts is CutsPolicy.NOCUTS:
                 cuts = None
             elif cuts is CutsPolicy.FROMFIT:
-                cuts = self.check_fit_cuts(name, fit)
+                cuts = self.check_fit_cuts(name, fit, fallback=commondata)
             elif cuts is CutsPolicy.INTERNAL:
                 if rules is None:
                     rules = self.check_default_filter_rules(theoryid)
@@ -552,7 +552,7 @@ class Loader(LoaderBase):
     def get_pdf(self, name):
         return self.check_pdf(name).load()
 
-    def check_fit_cuts(self, setname, fit):
+    def check_fit_cuts(self, setname, fit, fallback_commondata=None):
         if fit is None:
             raise TypeError("Must specify a fit to use the cuts.")
         if not isinstance(fit, FitSpec):
@@ -560,10 +560,11 @@ class Loader(LoaderBase):
         fitname, fitpath = fit
         p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
         if not p.parent.exists():
-            raise CutsNotFound("Bad filter configuration. "
-            "Could not find: %s" % p.parent)
+            raise CutsNotFound(f"Bad filter configuration. Could not find {p.parent}")
         if not p.exists():
-            return None
+            if fallback_commondata is None:
+                raise CutsNotFound(f"Bad filter configuration, no cuts found for {setname}: {p}")
+            return Cuts.legacy(setname, fallback_commondata)
         return Cuts(setname, p)
 
     def check_internal_cuts(self, commondata, rules):

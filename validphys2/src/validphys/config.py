@@ -476,7 +476,7 @@ class CoreConfig(configparser.Config):
         name = commondata.name
         _, fit = self.parse_from_(None, "fit", write=False)
         try:
-            return self.loader.check_fit_cuts(name, fit)
+            return self.loader.check_fit_cuts(name, fit, fallback_commondata=commondata)
         except LoadFailedError as e:
             raise ConfigError(e) from e
 
