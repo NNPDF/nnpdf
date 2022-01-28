@@ -67,7 +67,7 @@ def obs_pdf_correlations(pdf, results, xplotting_grid):
     _ , th = results
     pdf_replicas = pdf.stats_class(xplotting_grid.grid_values).error_members()
     corrs = _basic_obs_pdf_correlation(pdf_replicas, th.error_members)
-    return xplotting_grid._replace(grid_values=corrs)
+    return xplotting_grid.copy_grid(grid_values=corrs)
 
 
 corrpair_results = collect('results', ['corrpair'])

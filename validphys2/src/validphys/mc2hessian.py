@@ -108,9 +108,8 @@ def _create_mc2hessian(pdf, Q, xgrid, Neig, output_path, name=None):
 
 def _get_X(pdf, Q, xgrid, reshape=False):
     pdf_grid = xplotting_grid(pdf, Q, xgrid=xgrid)
-    pdf_grid_values = pdf_grid.grid_values
-    replicas = pdf_grid_values
-    mean = pdf_grid_values.mean(axis=0)
+    replicas = pdf_grid.stats_gv.error_members()
+    mean = pdf_grid.stats_gv.central_value()
     Xt = replicas - mean
     if reshape:
         Xt = Xt.reshape(Xt.shape[0], Xt.shape[1] * Xt.shape[2])

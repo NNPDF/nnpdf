@@ -3,6 +3,7 @@ High level providers for PDF and luminosity grids, formatted in such a way
 to facilitate plotting and analysis.
 """
 from collections import namedtuple
+from dataclasses import dataclass
 import numbers
 
 import numpy as np
@@ -11,7 +12,7 @@ import scipy.integrate as integrate
 from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError, check_positive, check
 
-from validphys.core import PDF
+from validphys.core import PDF, Stats
 from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.checks import check_pdf_normalize_to, check_xlimits
@@ -37,9 +38,30 @@ def xgrid(xmin:numbers.Real=1e-5, xmax:numbers.Real=1,
     return (scale, arr)
 
 
+@dataclass
+class XPlottingGrid:
+    """DataClass holding the value of the PDF at the specified
+    values of x, Q and flavour.
+    It also exposes a `stats_gv` attribute with a `Stats` instance
+    of the raw `grid_values` object in order to compute statistical
+    estimators in a sensible manner.
+    """
+    Q: float
+    basis: (str, Basis)
+    flavours: (list, tuple, type(None))
+    xgrid: np.ndarray
+    grid_values: np.ndarray
+    scale: str
+    stats_gv: Stats
 
-XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'basis', 'flavours', 'xgrid',
-                                             'grid_values', 'scale'))
+    def copy_grid(self, grid_values=None):
+        """Create a copy of the grid with a different set of values"""
+        new_values = {}
+        if grid_values is not None:
+            new_values["grid_values"] = grid_values
+            new_values["stats_gv"] = self.stats_gv.__class__(grid_values)
+        new_variables = {**self.__dict__, **new_values}
+        return self.__class__(**new_variables)
 
 
 @make_argcheck(check_basis)
@@ -55,6 +77,9 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     If None, the defaults for that basis will be selected.
 
     Q: The PDF scale in GeV.
+
+    The results are computed for all relevant PDF members and wrapped in a
+    stats class, to compute statistics regardless of the error_type.
     """
     #Make usable outside reportengine
     checked = check_basis(basis, flavours)
@@ -71,10 +96,11 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
         raise TypeError(f"Invalid xgrid {xgrid!r}")
     gv = basis.grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
-    #TODO: wrap this in pdf.stats_class?
     gv = gv.reshape(gv.shape[:-1])
+    # Transitional
+    gv_stats = pdf.stats_class(gv)
 
-    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale)
+    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale, gv_stats)
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
@@ -242,7 +268,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
     for grid, pdf in zip(xplotting_grids, pdfs):
 
         if pdf == pdfs[normalize_to]:
-            newgrid = grid._replace(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
+            newgrid = grid.copy_grid(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
             newgrids.append(newgrid)
             continue
 
@@ -253,7 +279,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
         # the distance definition
         distance = np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2))
 
-        newgrid = grid._replace(grid_values=distance)
+        newgrid = grid.copy_grid(grid_values=distance)
         newgrids.append(newgrid)
 
     return newgrids
@@ -281,7 +307,7 @@ def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(No
     for grid, pdf in zip(xplotting_grids, pdfs):
 
         if pdf == pdfs[normalize_to]:
-            newgrid = grid._replace(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
+            newgrid = grid.copy_grid(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
             newgrids.append(newgrid)
             continue
 
@@ -293,7 +319,7 @@ def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(No
         # the distance definition
         variance_distance = np.sqrt((sg1**2-sg2**2)**2/(s1+s2))
 
-        newgrid = grid._replace(grid_values=variance_distance)
+        newgrid = grid.copy_grid(grid_values=variance_distance)
         newgrids.append(newgrid)
 
     return newgrids

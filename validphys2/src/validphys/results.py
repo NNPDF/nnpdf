@@ -167,7 +167,7 @@ class ThPredictionsResult(StatsResult):
 class PositivityResult(StatsResult):
     @classmethod
     def from_convolution(cls, pdf, posset):
-        loaded_pdf = pdf.load()
+        loaded_pdf = pdf.legacy_load()
         loaded_pos = posset.load()
         data = loaded_pos.GetPredictions(loaded_pdf)
         stats = pdf.stats_class(data.T)
@@ -714,7 +714,7 @@ def closure_shifts(experiments_index, fit, use_cuts, experiments):
 
 
 def positivity_predictions_data_result(pdf, posdataset):
-    """Return an object containing the values of the positivuty observable."""
+    """Return an object containing the values of the positivity observable."""
     return PositivityResult.from_convolution(pdf, posdataset)
 
 
