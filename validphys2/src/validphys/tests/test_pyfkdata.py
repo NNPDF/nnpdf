@@ -70,7 +70,9 @@ def test_predictions():
 
 
 def test_positivity():
-    """Test that the PositivityResult is sensible"""
+    """Test that the PositivityResult is sensible and like test_predictions
+    that no internal step modifies the result
+    """
     l = Loader()
     pdf = l.check_pdf(PDF)
     for posset in POSITIVITIES:

@@ -171,9 +171,7 @@ class ThPredictionsResult(NNPDFDataResult):
 class PositivityResult(StatsResult):
     @classmethod
     def from_convolution(cls, pdf, posset):
-        loaded_pdf = pdf.legacy_load()
-        loaded_pos = posset.load()
-        data = loaded_pos.GetPredictions(loaded_pdf)
+        data = predictions(posset, pdf)
         stats = pdf.stats_class(data.T)
         return cls(stats)
 
