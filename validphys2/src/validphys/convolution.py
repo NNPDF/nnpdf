@@ -111,6 +111,8 @@ def _predictions(dataset, pdf, fkfunc):
     all replicas, central, etc) according to the provided ``fkfunc``, which
     should have the same interface as e.g. ``fk_predictions``.
     """
+    if hasattr(dataset, "positivity") and dataset.positivity:
+        return fkfunc(load_fktable(dataset.fkspec), pdf)
     opfunc = OP[dataset.op]
     if dataset.cuts is None:
         raise PredictionsRequireCutsError(

@@ -3,10 +3,10 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 from validphys.loader import Loader
-from validphys.results import ThPredictionsResult
+from validphys.results import ThPredictionsResult, PositivityResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions
-from validphys.tests.conftest import PDF, THEORYID
+from validphys.tests.conftest import PDF, THEORYID, POSITIVITIES
 
 
 def test_basic_loading():
@@ -47,6 +47,8 @@ def test_cuts():
 
 
 def test_predictions():
+    """Test that the ThPredictionsResult class do not break the raw predictions
+    coming from the convolution module"""
     l = Loader()
     pdf = l.check_pdf(PDF)
     dss = [
@@ -63,10 +65,20 @@ def test_predictions():
     ]
     for ds in dss:
         preds = predictions(ds, pdf)
-        cppres = ThPredictionsResult.from_convolution(pdf, ds)
-        # Change the atol and rtol from 1e-8 and 1e-7 since DYE906R
-        # fails with the default setting
-        assert_allclose(preds.values, cppres._rawdata, atol=1e-8, rtol=1e-3)
+        core_predictions = ThPredictionsResult.from_convolution(pdf, ds)
+        assert_allclose(preds.values, core_predictions._rawdata, atol=1e-8, rtol=1e-3)
+
+
+def test_positivity():
+    """Test that the PositivityResult is sensible"""
+    l = Loader()
+    pdf = l.check_pdf(PDF)
+    for posset in POSITIVITIES:
+        ps = l.check_posset(setname=posset, theoryID=THEORYID, postlambda=1e6)
+        preds = predictions(ps, pdf)
+        core_predictions = PositivityResult.from_convolution(pdf, ps)
+        assert_allclose(preds.values, core_predictions.rawdata.T, atol=1e-4)
+
 
 def test_extended_predictions():
     l = Loader()
