@@ -7,7 +7,7 @@ from validphys.api import API
 from validphys.tableloader import sane_load
 
 from .conftest import PDF, HESSIAN_PDF
-from .test_regressions import make_table_comp, parse_data_cv
+from .test_regressions import make_table_comp
 
 Q = 10  # GeV
 
@@ -22,9 +22,7 @@ def test_central_value(pdf_name):
     """Check that the central value is the same as the mean"""
     all_sr = API.sum_rules_table(pdf=pdf_name, Q=Q)
     cv_sr = API.central_sum_rules_table(pdf=pdf_name, Q=Q)
-    pd.testing.assert_series_equal(
-        cv_sr.squeeze(), all_sr["mean"], atol=1e-5, check_names=False
-    )
+    pd.testing.assert_series_equal(cv_sr.squeeze(), all_sr["mean"], atol=1e-5, check_names=False)
 
 
 def _regression_sum_rules(pdf_name):
