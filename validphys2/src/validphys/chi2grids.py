@@ -67,6 +67,10 @@ fits_computed_pseudoreplicas_chi2 = collect(
 
 dataspecs_computed_pseudorreplicas_chi2 = collect(computed_pseudoreplicas_chi2, ("dataspecs",))
 
+@table
+def export_computed_pseudoreplicas_chi2(computed_pseudoreplicas_chi2):
+    return computed_pseudoreplicas_chi2
+
 
 @table
 def export_fits_computed_pseudoreplicas_chi2(fits_computed_pseudoreplicas_chi2):

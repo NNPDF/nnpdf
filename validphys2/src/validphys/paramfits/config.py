@@ -98,7 +98,7 @@ class ParamfitsConfig(Config):
         res = tableloader.combine_pseudoreplica_tables(dfs, finalnames,
                 blacklist_datasets=blacklist_datasets)
 
-        return {'fits_computed_pseudoreplicas_chi2': res}
+        return {'computed_pseudoreplicas_chi2': res}
 
 
     #TODO: autogenerate functions like this
