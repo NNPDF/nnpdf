@@ -60,11 +60,6 @@ class LHAPDFSet:
         self._flavors = None
 
     @property
-    def is_monte_carlo(self):
-        """Check whether the error type is MC"""
-        return self._error_type == "replicas"
-
-    @property
     def is_t0(self):
         """Check whether we are in t0 mode"""
         return self._error_type == "t0"
@@ -83,7 +78,7 @@ class LHAPDFSet:
         """
         if self.is_t0:
             return self._lhapdf_set[0:1]
-        if self.is_monte_carlo:
+        if self._error_type == "replicas":
             return self._lhapdf_set[1:]
         return self._lhapdf_set
 
@@ -129,6 +124,6 @@ class LHAPDFSet:
         # Create an array of x and q of equal length for LHAPDF
         xarr, qarr = (g.ravel() for g in np.meshgrid(xgrid, qgrid))
         # Ask LHAPDF for the values and swap the flavours and xgrid-qgrid axes
-        raw = np.array([member.xfxQ(flavors, xarr, qarr) for member in self.members]).swapaxes(1,2)
+        raw = np.array([member.xfxQ(flavors, xarr, qarr) for member in self.members]).swapaxes(1, 2)
         # Unroll the xgrid-qgrid axes
         return raw.reshape(self.n_members, len(flavors), len(xgrid), len(qgrid))
