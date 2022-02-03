@@ -446,7 +446,6 @@ class CoreConfig(configparser.Config):
     def parse_use_fitcommondata(self, do_use: bool):
         """Use the commondata files in the fit instead of those in the data
         directory."""
-        import ipdb; ipdb.set_trace()
         return do_use
 
     def produce_commondata(self, *, dataset_input, use_fitcommondata=False, fit=None):
