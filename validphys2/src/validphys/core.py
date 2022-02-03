@@ -552,27 +552,27 @@ class FKTableSpec(TupleComp):
     def load(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
-class PositivitySetSpec(TupleComp):
+class PositivitySetSpec(DataSetSpec):
+    """Extends DataSetSpec to work around the particularities of the positivity datasets"""
+
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
+        cuts = Cuts(commondataspec, None)
+        super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
+
+        # Fill in the attributes that vp might expect from positivity
         self.name = name
-        self.commondataspec = commondataspec
         self.fkspec = fkspec
         self.maxlambda = maxlambda
         self.thspec = thspec
-        self.positivity = True
-        super().__init__(name, commondataspec, fkspec, maxlambda, thspec)
-
-
 
     def __str__(self):
         return self.name
 
     @functools.lru_cache()
     def load(self):
-        cd = self.commondataspec.load()
-        fk = self.fkspec.load()
+        cd = self.commondata.load()
+        fk = self.fkspecs[0].load()
         return PositivitySet(cd, fk, self.maxlambda)
-
 
 
 #We allow to expand the experiment as a list of datasets

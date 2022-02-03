@@ -1000,7 +1000,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 def _check_same_posdataset_name(dataspecs_posdataset):
     """Check that the ``posdataset`` key matches for ``dataspecs``"""
     _check_same_dataset_name.__wrapped__(
-        [ds.commondataspec for ds in dataspecs_posdataset]
+        [ds.commondata for ds in dataspecs_posdataset]
     )
 
 @figure

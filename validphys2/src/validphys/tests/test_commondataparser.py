@@ -20,7 +20,7 @@ def test_basic_commondata_loading():
 
     # Test a dataset with no systematics
     emptysyscd = l.check_posset(theoryID=THEORYID, setname='POSDYCBD', postlambda=1e-10)
-    emptysysres = load_commondata(emptysyscd.commondataspec)
+    emptysysres = load_commondata(emptysyscd.commondata)
     assert emptysysres.nsys == 0
     assert emptysysres.systype_table.empty is True
 
