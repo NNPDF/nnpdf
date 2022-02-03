@@ -118,21 +118,17 @@ class LHAPDFSet:
         Examples
         --------
         >>> import numpy as np
-        >>> from validphys.lhapdfset import LHAPDFSet, ER_MC
-        >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", ER_MC)
+        >>> from validphys.lhapdfset import LHAPDFSet
+        >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
         >>> xgrid = np.random.rand(10)
         >>> qgrid = np.random.rand(3)
         >>> flavs = np.arange(-4,4)
         >>> flavs[4] = 21
         >>> results = pdf.grid_values(flavs, xgrid, qgrid)
         """
-        # Grid values loop
-        ret = np.array(
-            [
-                [[member.xfxQ(flavors, x, q) for x in xgrid] for q in qgrid]
-                for member in self.members
-            ]
-        )
-
-        # Finally return in the documented shape
-        return np.transpose(ret, (0, 3, 2, 1))
+        # Create an array of x and q of equal length for LHAPDF
+        xarr, qarr = (g.ravel() for g in np.meshgrid(xgrid, qgrid))
+        # Ask LHAPDF for the values and swap the flavours and xgrid-qgrid axes
+        raw = np.array([member.xfxQ(flavors, xarr, qarr) for member in self.members]).swapaxes(1,2)
+        # Unroll the xgrid-qgrid axes
+        return raw.reshape(self.n_members, len(flavors), len(xgrid), len(qgrid))
