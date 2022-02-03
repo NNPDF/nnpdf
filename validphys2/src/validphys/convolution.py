@@ -397,27 +397,3 @@ def central_dis_predictions(loaded_fk, pdf):
     observables."""
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)
-
-
-def _positivity_predictions(posdataset, pdf, fkfunc):
-    """Implentation of :py:func:`_predictions` but for positivity
-    datasets."""
-    return fkfunc(load_fktable(posdataset.fkspec), pdf)
-
-
-def positivity_predictions(posdataset, pdf):
-    """Implementation of :py:func:`predictions` but for positivity
-    datasets."""
-    return _positivity_predictions(posdataset, pdf, fk_predictions)
-
-
-def linear_positivity_predictions(posdataset, pdf):
-    """Implmentation of :py:func:`linear_predictions` but for positivity
-    datasets."""
-    return _positivity_predictions(posdataset, pdf, linear_fk_predictions)
-
-
-def central_positivity_predictions(posdataset, pdf):
-    """Implementation as :py:func:`central_predictions`, but for postivity datasets
-    """
-    return _positivity_predictions(posdataset, pdf, central_fk_predictions)

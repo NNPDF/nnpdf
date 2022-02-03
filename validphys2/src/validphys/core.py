@@ -557,16 +557,12 @@ class PositivitySetSpec(DataSetSpec):
 
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
         cuts = Cuts(commondataspec, None)
-        super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
-
-        # Fill in the attributes that vp might expect from positivity
-        self.name = name
-        self.fkspec = fkspec
         self.maxlambda = maxlambda
-        self.thspec = thspec
-
-    def __str__(self):
-        return self.name
+        super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
+        if len(self.fkspecs) > 1:
+            # The signature of the function does not accept operations either
+            # so more than one fktable cannot be utilized
+            raise ValueError("Positivity datasets can only contain one fktable")
 
     @functools.lru_cache()
     def load(self):
