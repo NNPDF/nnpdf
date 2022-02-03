@@ -570,6 +570,10 @@ class PositivitySetSpec(DataSetSpec):
         fk = self.fkspecs[0].load()
         return PositivitySet(cd, fk, self.maxlambda)
 
+    def to_unweighted(self):
+        log.warning("Trying to unweight %s, PositivitySetSpec are always unweighted", self.name)
+        return self
+
 
 #We allow to expand the experiment as a list of datasets
 class DataGroupSpec(TupleComp, namespaces.NSList):
