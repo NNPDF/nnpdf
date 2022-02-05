@@ -266,8 +266,9 @@ class Loader(LoaderBase):
                     raise DataNotFoundError(f"Either {newpath} or {oldpath} "
                         "are needed with `use_fitcommondata`")
                 #This is to not repeat all the error handling stuff
-                basedata = self.check_commondata(setname, sysnum=sysnum).datafile
-                cuts = self.check_fit_cuts(setname, fit=fit)
+                basedata = self.check_commondata(setname, sysnum=sysnum)
+                basedata_path = basedata.datafile
+                cuts = self.check_fit_cuts(basedata, fit=fit)
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
@@ -280,7 +281,7 @@ class Loader(LoaderBase):
                         f"Points that do not pass the cuts are set to zero!")
 
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
-                rebuild_commondata_without_cuts(oldpath, cuts, basedata, newpath)
+                rebuild_commondata_without_cuts(oldpath, cuts, basedata_path, newpath)
             datafile = newpath
         else:
             datafile = self.commondata_folder / f'DATA_{setname}.dat'
@@ -504,7 +505,7 @@ class Loader(LoaderBase):
             if cuts is CutsPolicy.NOCUTS:
                 cuts = None
             elif cuts is CutsPolicy.FROMFIT:
-                cuts = self.check_fit_cuts(name, fit)
+                cuts = self.check_fit_cuts(commondata, fit)
             elif cuts is CutsPolicy.INTERNAL:
                 if rules is None:
                     rules = self.check_default_filter_rules(theoryid)
@@ -552,19 +553,19 @@ class Loader(LoaderBase):
     def get_pdf(self, name):
         return self.check_pdf(name).load()
 
-    def check_fit_cuts(self, setname, fit):
+    def check_fit_cuts(self, commondata, fit):
+        setname = commondata.name
         if fit is None:
             raise TypeError("Must specify a fit to use the cuts.")
         if not isinstance(fit, FitSpec):
             fit = self.check_fit(fit)
-        fitname, fitpath = fit
+        _, fitpath = fit
         p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
         if not p.parent.exists():
-            raise CutsNotFound("Bad filter configuration. "
-            "Could not find: %s" % p.parent)
+            raise CutsNotFound(f"Bad filter configuration. Could not find {p.parent}")
         if not p.exists():
-            return None
-        return Cuts(setname, p)
+            p = None
+        return Cuts(commondata, p)
 
     def check_internal_cuts(self, commondata, rules):
         return InternalCutsWrapper(commondata, rules)

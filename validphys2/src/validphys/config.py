@@ -473,10 +473,9 @@ class CoreConfig(configparser.Config):
 
     def _produce_fit_cuts(self, commondata):
         """Produce fit and then attempt to load cuts from that fit."""
-        name = commondata.name
         _, fit = self.parse_from_(None, "fit", write=False)
         try:
-            return self.loader.check_fit_cuts(name, fit)
+            return self.loader.check_fit_cuts(commondata, fit)
         except LoadFailedError as e:
             raise ConfigError(e) from e
 

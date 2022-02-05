@@ -379,13 +379,21 @@ class CutsPolicy(enum.Enum):
 
 
 class Cuts(TupleComp):
-    def __init__(self, name, path):
+    def __init__(self, commondata, path):
         """Represents a file containing cuts for a given dataset"""
+        name = commondata.name
         self.name = name
         self.path = path
+        self._mask = None
+        if path is None:
+            log.debug("No filter found for %s, all points allowed", name)
+            self._mask = np.arange(commondata.ndata)
+        self._legacy_mask = None
         super().__init__(name, path)
 
     def load(self):
+        if self._mask is not None:
+            return self._mask
         log.debug("Loading cuts for %s", self.name)
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 
