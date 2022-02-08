@@ -285,6 +285,7 @@ def fitting_data_dict(
     ndata_tr = np.count_nonzero(tr_mask)
     expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
 
+
     ndata_vl = np.count_nonzero(vl_mask)
     expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
 
@@ -335,11 +336,11 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
-replicas_indexed_make_replica = collect('indexed_make_replica', ('replicas',))
+groups_replicas_indexed_make_replica = collect('indexed_make_replica' , ("group_dataset_inputs_by_experiment","replicas"))
 
 
 @table
-def pseudodata_table(replicas_indexed_make_replica, replicas):
+def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     """Creates a pandas DataFrame containing the generated pseudodata. The
     index is :py:func:`validphys.results.experiments_index` and the columns
     are the replica numbers.
@@ -351,7 +352,8 @@ def pseudodata_table(replicas_indexed_make_replica, replicas):
     The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
 
     """
-    df = pd.concat(replicas_indexed_make_replica)
+    # Concatenate over replicas
+    df = pd.concat(groups_replicas_indexed_make_replica)
     df.columns = [f"replica {rep}" for rep in replicas]
     return df
 
