@@ -230,8 +230,9 @@ def indexed_make_replica(groups_index, make_replica):
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
 
-_recreate_fit_pseudodata = collect('indexed_make_replica', ('fitreplicas', 'fitenvironment'))
-_recreate_pdf_pseudodata = collect('indexed_make_replica', ('pdfreplicas', 'fitenvironment'))
+_group_recreate_pseudodata = collect('indexed_make_replica', ('group_dataset_inputs_by_experiment',))
+_recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
+_recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))
 
 fit_tr_masks = collect('replica_training_mask_table', ('fitreplicas', 'fitenvironment'))
 pdf_tr_masks = collect('replica_training_mask_table', ('pdfreplicas', 'fitenvironment'))
@@ -265,14 +266,14 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks)
     """
     res = []
     for pseudodata, mask, rep in zip(_recreate_fit_pseudodata, fit_tr_masks, fitreplicas):
-        df = pseudodata
+        df = pd.concat(pseudodata)
         df.columns = [f"replica {rep}"]
         tr_idx = df.loc[mask.values].index
         val_idx = df.loc[~mask.values].index
-        res.append(DataTrValSpec(pseudodata, tr_idx, val_idx))
+        res.append(DataTrValSpec(df, tr_idx, val_idx))
     return res
 
-def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas):
+def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks):
     """Like :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     but accounts for the postfit reshuffling of replicas.
 
@@ -292,11 +293,4 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas)
     --------
     :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     """
-    res = []
-    for pseudodata, mask, rep in zip(_recreate_pdf_pseudodata, pdf_tr_masks, pdfreplicas):
-        df = pseudodata
-        df.columns = [f"replica {rep}"]
-        tr_idx = df.loc[mask.values].index
-        val_idx = df.loc[~mask.values].index
-        res.append(DataTrValSpec(pseudodata, tr_idx, val_idx))
-    return res
+    return recreate_fit_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
