@@ -23,7 +23,7 @@ from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
-from NNPDF import (LHAPDFSet,
+from NNPDF import (LHAPDFSet as libNNPDF_LHAPDFSet,
     CommonData,
     FKTable,
     FKSet,
@@ -38,22 +38,9 @@ from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
+from validphys.lhapdfset import LHAPDFSet
 
 log = logging.getLogger(__name__)
-
-
-#TODO: Remove this eventually
-#Bacward compatibility error type names
-#Swig renamed these for no reason whatsoever.
-try:
-    LHAPDFSet.erType_ER_EIG
-except AttributeError:
-    import warnings
-    warnings.warn("libnnpdf out of date. Setting backwards compatible names")
-    LHAPDFSet.erType_ER_MC = LHAPDFSet.ER_MC
-    LHAPDFSet.erType_ER_EIG = LHAPDFSet.ER_EIG
-    LHAPDFSet.erType_ER_EIG90 = LHAPDFSet.ER_EIG90
-    LHAPDFSet.erType_ER_SYMEIG = LHAPDFSet.ER_SYMEIG
 
 class TupleComp:
 
@@ -97,12 +84,25 @@ class PDF(TupleComp):
     Statistical estimators which depends on the PDF type (MC, Hessian...)
     are exposed as a :py:class:`Stats` object through the :py:attr:`stats_class` attribute
     The LHAPDF metadata can directly be accessed through the :py:attr:`info` attribute
+
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> from validphys.convolution import predictions
+    >>> args = {"dataset_input":{"dataset": "ATLASTTBARTOT"}, "theoryid":162, "use_cuts":"internal"}
+    >>> ds = API.dataset(**args)
+    >>> pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
+    >>> preds = predictions(ds, pdf)
+    >>> preds.shape
+    (3, 100)
     """
 
     def __init__(self, name):
         self.name = name
         self._plotname = name
         self._info = None
+        self._stats_class = None
         super().__init__(name)
 
     @property
@@ -116,11 +116,15 @@ class PDF(TupleComp):
     @property
     def stats_class(self):
         """Return the stats calculator for this error type"""
-        error = self.error_type
-        klass = STAT_TYPES[error]
-        if self.error_conf_level is not None:
-            klass = functools.partial(klass, rescale_factor=self._rescale_factor())
-        return klass
+        if self._stats_class is None:
+            try:
+                klass = STAT_TYPES[self.error_type]
+            except KeyError:
+                raise NotImplementedError(f"No Stats class for error type {self.error_type}")
+            if self.error_conf_level is not None:
+                klass = functools.partial(klass, rescale_factor=self._rescale_factor())
+            self._stats_class = klass
+        return self._stats_class
 
     @property
     def infopath(self):
@@ -181,12 +185,12 @@ class PDF(TupleComp):
 
     @functools.lru_cache(maxsize=16)
     def load(self):
-        return LHAPDFSet(self.name, self.nnpdf_error)
+        return LHAPDFSet(self.name, self.error_type)
 
     @functools.lru_cache(maxsize=2)
     def load_t0(self):
         """Load the PDF as a t0 set"""
-        return LHAPDFSet(self.name, LHAPDFSet.erType_ER_MCT0)
+        return LHAPDFSet(self.name, "t0")
 
     def __str__(self):
         return self.label
@@ -194,30 +198,33 @@ class PDF(TupleComp):
     def __len__(self):
         return self.info["NumMembers"]
 
-    @property
-    def nnpdf_error(self):
-        """Return the NNPDF error tag, used to build the `LHAPDFSet` objeect"""
+    def legacy_load(self):
+        """Returns an libNNPDF LHAPDFSet object
+        Deprecated function used only in the `filter.py` module
+        """
         error = self.error_type
-        if error == "replicas":
-            return LHAPDFSet.erType_ER_MC
-
         cl = self.error_conf_level
-        if error == "hessian":
+        et = None
+        if error == "replicas":
+            et = libNNPDF_LHAPDFSet.erType_ER_MC
+        elif error == "hessian":
             if cl == 90:
-                return LHAPDFSet.erType_ER_EIG90
+                et = libNNPDF_LHAPDFSet.erType_ER_EIG90
             elif cl == 68:
-                return LHAPDFSet.erType_ER_EIG
+                et = libNNPDF_LHAPDFSet.erType_ER_EIG
             else:
                 raise NotImplementedError(f"No hessian errors with confidence interval {cl}")
-        if error == "symmhessian":
+        elif error == "symmhessian":
             if cl == 68:
-                return LHAPDFSet.erType_ER_SYMEIG
+                et = libNNPDF_LHAPDFSet.erType_ER_SYMEIG
             else:
                 raise NotImplementedError(
                     f"No symmetric hessian errors with confidence interval {cl}"
                 )
+        else:
+            raise NotImplementedError(f"Error type for {self}: '{error}' is not implemented")
 
-        raise NotImplementedError(f"Error type for {self}: '{error}' is not implemented")
+        return libNNPDF_LHAPDFSet(self.name, et)
 
     @property
     def grid_values_index(self):
@@ -236,17 +243,12 @@ class PDF(TupleComp):
         -----
         The range object can be used efficiently as a Pandas index.
         """
-        err = self.nnpdf_error
-        if err is LHAPDFSet.erType_ER_MC:
+        if self.error_type == "replicas":
             return range(1, len(self))
-        elif err in (
-            LHAPDFSet.erType_ER_SYMEIG,
-            LHAPDFSet.erType_ER_EIG,
-            LHAPDFSet.erType_ER_EIG90,
-        ):
+        elif self.error_type in ("hessian", "symmhessian"):
             return range(0, len(self))
         else:
-            raise RuntimeError("Unknown error type")
+            raise RuntimeError(f"Unknown error type: {self.stats_class}")
 
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
@@ -830,7 +832,7 @@ class MCStats(Stats):
 
 
 class SymmHessianStats(Stats):
-    """Compute stats in the 'assymetric' hessian format: The first index (0)
+    """Compute stats in the 'symetric' hessian format: The first index (0)
     is the
     central value. The rest of the indexes are results for each eigenvector.
     A 'rescale_factor is allowed in case the eigenvector confidence interval
