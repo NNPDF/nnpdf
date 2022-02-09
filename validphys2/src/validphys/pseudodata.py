@@ -5,7 +5,7 @@ networks during the fitting.
 """
 from collections import namedtuple
 import logging
-import pathlib
+import hashlib
 
 import numpy as np
 import pandas as pd
@@ -144,8 +144,10 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
     if not genrep:
         return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
 
-    # Seed the numpy RNG with the seed.
-    rng = np.random.default_rng(seed=replica_mcseed)
+    # Seed the numpy RNG with the seed and the name of the datasets in this run
+    name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
+    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
+    rng = np.random.default_rng(seed=replica_mcseed+name_seed)
 
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
