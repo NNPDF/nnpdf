@@ -295,4 +295,6 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
     --------
     :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     """
-    return recreate_fit_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
+    # Reorder according to the replica index
+    re_replicas, re_pseudodata, re_masks = zip(*sorted(zip(pdfreplicas, _recreate_pdf_pseudodata, pdf_tr_masks)))
+    return recreate_fit_pseudodata(re_pseudodata, re_replicas, re_masks)

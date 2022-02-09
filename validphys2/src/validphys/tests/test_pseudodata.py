@@ -72,7 +72,7 @@ def test_no_savepseudodata():
 def test_read_matches_recreate():
     reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
     recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
-    recreate_pdf = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+    recreate_pdf = API.recreate_pdf_pseudodata(fit=PSEUDODATA_FIT)
     for read, recreate, re_pdf in zip(reads, recreates, recreate_pdf):
         # We ignore the absolute ordering of the dataframes and just check
         # that they contain identical elements.
