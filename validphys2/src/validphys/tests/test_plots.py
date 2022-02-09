@@ -5,7 +5,7 @@ matplotlib.use('agg')
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import PDF, THEORYID
+from validphys.tests.conftest import PDF, THEORYID, DATA
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
@@ -34,6 +34,17 @@ def test_dataspecschi2():
         use_cuts='internal',
         metadata_group='experiment'
     )
+
+@pytest.mark.linux
+@pytest.mark.mpl_image_compare
+def test_plot_smpdf(single_data_internal_cuts_config):
+    return next(API.plot_smpdf(**single_data_internal_cuts_config))
+
+@pytest.mark.linux
+@pytest.mark.mpl_image_compare
+def test_plot_obscorrs(single_data_internal_cuts_config):
+    corrpair = [{"corrpair": (i["dataset"],)} for i in DATA[:2]]
+    return API.plot_obscorrs(**single_data_internal_cuts_config, corrpair=corrpair)
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare

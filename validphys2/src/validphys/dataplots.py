@@ -942,7 +942,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
     ax.set_ylabel(str(ds1))
     ax.set_xlabel(str(ds2))
-    fig.colorbar(im, [ax])
+    fig.colorbar(im, ax=ax)
     return fig
 
 @figure
