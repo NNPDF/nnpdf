@@ -161,7 +161,7 @@ class CoreConfig(configparser.Config):
 
         # Check that we know how to compute errors
         try:
-            pdf.nnpdf_error
+            pdf.stats_class
         except NotImplementedError as e:
             raise ConfigError(str(e))
         return pdf

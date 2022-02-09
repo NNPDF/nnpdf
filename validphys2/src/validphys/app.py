@@ -15,6 +15,7 @@ import logging
 import contextlib
 
 
+import lhapdf
 from reportengine import app
 
 from validphys.config import Config, Environment
@@ -131,7 +132,7 @@ including the contents of the following file:
             import NNPDF
 
             NNPDF.SetVerbosity(0)
-            NNPDF.SetLHAPDFVerbosity(0)
+            lhapdf.setVerbosity(0)
 
     @staticmethod
     def upload_context(do_upload, output):

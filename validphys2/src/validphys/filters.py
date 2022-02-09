@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Filters for NNPDF fits
 """
@@ -173,7 +172,7 @@ def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
     total_data_points = 0
     total_cut_data_points = 0
-    fakeset = fakepdfset.load()
+    fakeset = fakepdfset.legacy_load()
     # Load data, don't cache result
     loaded_data = data.load.__wrapped__(data)
     # generate level 1 shift if fakenoise

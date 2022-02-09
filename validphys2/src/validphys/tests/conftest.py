@@ -48,7 +48,7 @@ PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
 FIT = "NNPDF40_nnlo_lowprecision"
-FIT_ITERATED = "NNPDF40_nnlo_lowprecision_iterated"
+FIT_ITERATED = "NNPDF40_nnlo_low_precision_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_220208"
 
 base_config = dict(
@@ -56,7 +56,8 @@ base_config = dict(
         use_cuts='nocuts',
         dataset_inputs=DATA,
         theoryid=THEORYID,
-        use_fitthcovmat=False
+        use_fitthcovmat=False,
+        Q=10,
     )
 
 @pytest.fixture(scope='module')

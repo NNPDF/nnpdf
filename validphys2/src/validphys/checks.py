@@ -39,7 +39,7 @@ def check_pdf_is_montecarlo(ns, **kwargs):
 def check_know_errors(ns, **kwargs):
     pdf = ns['pdf']
     try:
-        pdf.nnpdf_error
+        pdf.stats_class
     except NotImplementedError as e:
         raise CheckError(e) from e
 
