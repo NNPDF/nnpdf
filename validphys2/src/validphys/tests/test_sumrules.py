@@ -43,11 +43,11 @@ def _regression_sum_rules(pdf_name):
     return pd.concat([ret, unk_sumrules])
 
 
-@make_table_comp(parse_sumrules)
+@make_table_comp(parse_sumrules, tolerance=1e-5)
 def test_sum_rules_MC():
     return _regression_sum_rules(PDF)
 
 
-@make_table_comp(parse_sumrules)
+@make_table_comp(parse_sumrules, tolerance=1e-5)
 def test_sum_rules_hessian():
     return _regression_sum_rules(HESSIAN_PDF)

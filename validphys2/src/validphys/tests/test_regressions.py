@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name('regressions')
 
 #TODO: Move these to a library
-def compare_tables(produced_table, storage_path, loader_func):
+def compare_tables(produced_table, storage_path, loader_func, tolerance=1e-8):
     """Test that the ``produced_table`` is equal (as in allclose) to
     the one loaded from the `storage_path` using the `loader_func`"""
     if not storage_path.exists():
@@ -36,9 +36,9 @@ def compare_tables(produced_table, storage_path, loader_func):
         #Fail test
         assert False, "Storage path does not exist"
     stored_table = loader_func(storage_path)
-    assert_frame_equal(produced_table, stored_table)
+    assert_frame_equal(produced_table, stored_table, atol=tolerance)
 
-def make_table_comp(loader_func):
+def make_table_comp(loader_func, tolerance=1e-8):
     """Compare the dataframe that the decorated function outputs with
     a file with the same name as the function and extension csv, loaded
     using the provided `loader_func`"""
@@ -47,7 +47,7 @@ def make_table_comp(loader_func):
         def f_(*args, **kwargs):
             filename = f'{f.__name__}.csv'
             produced_table = f(*args, **kwargs)
-            compare_tables(produced_table, REGRESSION_FOLDER/filename, loader_func)
+            compare_tables(produced_table, REGRESSION_FOLDER/filename, loader_func, tolerance=tolerance)
         return f_
     return decorator
 
