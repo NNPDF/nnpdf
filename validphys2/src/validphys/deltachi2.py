@@ -152,8 +152,8 @@ def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     pos_grid = xplotting_grid.grid_values[pos_mask]
     neg_grid = xplotting_grid.grid_values[neg_mask]
 
-    pos_xplotting_grid = xplotting_grid._replace(grid_values=pos_grid)
-    neg_xplotting_grid = xplotting_grid._replace(grid_values=neg_grid)
+    pos_xplotting_grid = xplotting_grid.copy_grid(grid_values=pos_grid)
+    neg_xplotting_grid = xplotting_grid.copy_grid(grid_values=neg_grid)
 
     return [xplotting_grid, pos_xplotting_grid, neg_xplotting_grid]
 
