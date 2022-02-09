@@ -67,7 +67,7 @@ def obs_pdf_correlations(pdf, results, xplotting_grid):
     values on a grid of (x,f) points in a format similar to `xplotting_grid`."""
     _ , th = results
     corrs = _basic_obs_pdf_correlation(xplotting_grid.grid_values, th._rawdata)
-    return xplotting_grid._replace(grid_values=corrs)
+    return xplotting_grid.copy_grid(grid_values=corrs)
 
 
 corrpair_results = collect('results', ['corrpair'])
