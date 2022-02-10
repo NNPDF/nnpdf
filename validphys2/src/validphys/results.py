@@ -111,35 +111,13 @@ class DataResult(NNPDFDataResult):
 
 
 class ThPredictionsResult(StatsResult):
-    """Class holding theory prediction
-    For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
+    """Class holding theory prediction, inherits from StatsResult
     """
-    def __init__(self, dataobj, stats_class, label=None, central_value=None):
+    def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
-        # Ducktype the input into numpy arrays
-        try:
-            self._rawdata = dataobj.to_numpy()
-            # If the numpy conversion worked then we don't have a libNNPDF in our hands
-            stats = stats_class(self._rawdata.T)
-            self._std_error = stats.std_error()
-        except AttributeError:
-            self._std_error = dataobj.get_error()
-            self._rawdata = dataobj.get_data()
-
         statsobj = stats_class(dataobj.T)
         super().__init__(statsobj)
-        self._central = central_value
-
-    # TODO: transitional method so that the test pass by themselves for the next commit before
-    # offloading this to the stats class (and updating the regressions)
-    @property
-    def central_value(self):
-        if hasattr(self, '_central') and self._central is not None:
-            return np.array(self._central).reshape(-1)
-        return self.stats.central_value()
-
-
 
     @staticmethod
     def make_label(pdf, dataset):
@@ -165,20 +143,14 @@ class ThPredictionsResult(StatsResult):
             datasets = (dataset,)
 
         try:
-            all_preds = []
-            all_centrals = []
-            for d in datasets:
-                all_preds.append(predictions(d, pdf))
-                all_centrals.append(central_predictions(d, pdf))
+            th_predictions = pd.concat([predictions(d, pdf) for d in datasets])
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
                     "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
-        th_predictions = pd.concat(all_preds)
-        central_values = pd.concat(all_centrals)
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label, central_value=central_values)
+        return cls(th_predictions, pdf.stats_class, label)
 
 
 class PositivityResult(StatsResult):
