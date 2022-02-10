@@ -68,7 +68,7 @@ def test_predictions(pdf_name):
         ds = l.check_dataset(**daset, theoryid=THEORYID)
         preds = predictions(ds, pdf)
         core_predictions = ThPredictionsResult.from_convolution(pdf, ds)
-        assert_allclose(preds.values, core_predictions._rawdata, atol=1e-8, rtol=1e-3)
+        assert_allclose(preds.values, core_predictions.rawdata, atol=1e-8, rtol=1e-3)
         # Now check that the stats class does the right thing with the data
         cv_predictions = central_predictions(ds, pdf).squeeze()
         stats_predictions = pdf.stats_class(preds.T)
@@ -90,12 +90,12 @@ def test_positivity(pdf_name):
         ps = l.check_posset(setname=posset, theoryID=THEORYID, postlambda=1e6)
         preds = predictions(ps, pdf)
         core_predictions = PositivityResult.from_convolution(pdf, ps)
-        assert_allclose(preds.values, core_predictions.rawdata.T)
+        assert_allclose(preds.values, core_predictions.rawdata)
         # Now do the same with the API
         api_predictions = API.positivity_predictions_data_result(
             theoryid=THEORYID, pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
         )
-        assert_allclose(preds.values, api_predictions.rawdata.T)
+        assert_allclose(preds.values, api_predictions.rawdata)
         # And now check that the results are correct for any kind of PDF
         cv_predictions = central_predictions(ps, pdf).squeeze()
         assert_allclose(cv_predictions, api_predictions.central_value, atol=1e-3)

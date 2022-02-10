@@ -17,6 +17,8 @@ from validphys import lhaindex
 from validphys.lhio import hessian_from_lincomb
 from validphys.pdfgrids import xplotting_grid
 
+from validphys.checks import check_pdf_is_montecarlo
+
 log = logging.getLogger(__name__)
 
 
@@ -58,6 +60,7 @@ def mc2hessian_xgrid(
     )
 
 
+@check_pdf_is_montecarlo
 def mc2hessian(
     pdf, Q, Neig: int, mc2hessian_xgrid, output_path, gridname, installgrid: bool = False
 ):

@@ -13,7 +13,7 @@ class TestResult:
     """class for testing base level estimators which expect a results object"""
     def __init__(self, central_value, rawdata=None):
         self.central_value = central_value
-        self._rawdata = rawdata
+        self.rawdata = rawdata
         self.ndata = len(central_value)
         self.sqrtcovmat = np.identity(self.ndata)
 
