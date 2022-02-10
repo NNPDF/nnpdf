@@ -77,10 +77,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
                 np.seterrcall(fp_error)
                 for grid in self._xplotting_grids:
                     newvalues = grid.grid_values/normvals
-                    #newgrid is like the old grid but with updated values
-                    newgrid = type(grid)(**{**grid._asdict(),
-                                             'grid_values':newvalues})
-                    newgrids.append(newgrid)
+                    newgrids.append(grid.copy_grid(grid_values=newvalues))
 
             return newgrids
         return self._xplotting_grids
