@@ -3,7 +3,7 @@ High level providers for PDF and luminosity grids, formatted in such a way
 to facilitate plotting and analysis.
 """
 from collections import namedtuple
-from dataclasses import dataclass
+import dataclasses
 import numbers
 
 import numpy as np
@@ -38,7 +38,7 @@ def xgrid(xmin:numbers.Real=1e-5, xmax:numbers.Real=1,
     return (scale, arr)
 
 
-@dataclass
+@dataclasses.dataclass
 class XPlottingGrid:
     """DataClass holding the value of the PDF at the specified
     values of x, Q and flavour.
@@ -56,12 +56,8 @@ class XPlottingGrid:
 
     def copy_grid(self, grid_values=None):
         """Create a copy of the grid with potentially a different set of values"""
-        new_values = {}
-        if grid_values is not None:
-            new_values["grid_values"] = grid_values
-            new_values["stats_gv"] = self.stats_gv.__class__(grid_values)
-        new_variables = {**self.__dict__, **new_values}
-        return self.__class__(**new_variables)
+        new_stats_gv = self.stats_gv.__class__(grid_values)
+        return dataclasses.replace(self, grid_values=grid_values, stats_gv=new_stats_gv)
 
 
 @make_argcheck(check_basis)

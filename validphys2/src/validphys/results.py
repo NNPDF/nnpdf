@@ -74,6 +74,10 @@ class StatsResult(Result):
         self.stats = stats
 
     @property
+    def rawdata(self):
+        return self.stats.data.T
+
+    @property
     def central_value(self):
         return self.stats.central_value()
 
@@ -106,7 +110,7 @@ class DataResult(NNPDFDataResult):
         return self._sqrtcovmat
 
 
-class ThPredictionsResult(NNPDFDataResult):
+class ThPredictionsResult(StatsResult):
     """Class holding theory prediction
     For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
     """
@@ -122,11 +126,20 @@ class ThPredictionsResult(NNPDFDataResult):
         except AttributeError:
             self._std_error = dataobj.get_error()
             self._rawdata = dataobj.get_data()
-        super().__init__(dataobj, central_value=central_value)
 
+        statsobj = stats_class(dataobj.T)
+        super().__init__(statsobj)
+        self._central = central_value
+
+    # TODO: transitional method so that the test pass by themselves for the next commit before
+    # offloading this to the stats class (and updating the regressions)
     @property
-    def std_error(self):
-        return self._std_error
+    def central_value(self):
+        if hasattr(self, '_central') and self._central is not None:
+            return np.array(self._central).reshape(-1)
+        return self.stats.central_value()
+
+
 
     @staticmethod
     def make_label(pdf, dataset):
@@ -174,10 +187,6 @@ class PositivityResult(StatsResult):
         data = predictions(posset, pdf)
         stats = pdf.stats_class(data.T)
         return cls(stats)
-
-    @property
-    def rawdata(self):
-        return self.stats.data
 
 
 # TODO: finish deprecating all dependencies on this index largely in theorycovmat module
@@ -257,7 +266,7 @@ def group_result_table_no_table(groups_results, groups_index):
         ):
             replicas = (
                 ("rep_%05d" % (i + 1), th_rep)
-                for i, th_rep in enumerate(th._rawdata[index, :])
+                for i, th_rep in enumerate(th.rawdata[index, :])
             )
 
             result_records.append(
@@ -612,7 +621,7 @@ def dataset_inputs_bootstrap_phi_data(dataset_inputs_results, bootstrap_samples=
     For more information on how phi is calculated see `phi_data`
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.rawdata - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(
         diff,
         bootstrap_samples,
@@ -632,7 +641,7 @@ def dataset_inputs_bootstrap_chi2_central(
     a different value can be specified in the runcard.
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.rawdata - dt.central_value[:, np.newaxis])
     cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
     chi2_central_resample = bootstrap_values(
         diff,
@@ -736,7 +745,7 @@ dataspecs_posdataset = collect("posdataset", ("dataspecs",))
 def count_negative_points(possets_predictions):
     """Return the number of replicas with negative predictions for each bin
     in the positivity observable."""
-    return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
+    return np.sum([(r.rawdata < 0).sum(axis=0) for r in possets_predictions], axis=0)
 
 
 chi2_stat_labels = {
