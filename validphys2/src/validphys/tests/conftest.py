@@ -44,6 +44,8 @@ WEIGHTED_DATA = [
     {'dataset': 'NMC', 'weight': 100},
 ]
 
+POSITIVITIES = ["POSDYCBD", "POSF2S"]
+
 PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162

@@ -552,26 +552,27 @@ class FKTableSpec(TupleComp):
     def load(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
-class PositivitySetSpec(TupleComp):
-    def __init__(self, name ,commondataspec, fkspec, maxlambda, thspec):
-        self.name = name
-        self.commondataspec = commondataspec
-        self.fkspec = fkspec
+class PositivitySetSpec(DataSetSpec):
+    """Extends DataSetSpec to work around the particularities of the positivity datasets"""
+
+    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
+        cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
-        self.thspec = thspec
-        super().__init__(name, commondataspec, fkspec, maxlambda, thspec)
-
-
-
-    def __str__(self):
-        return self.name
+        super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
+        if len(self.fkspecs) > 1:
+            # The signature of the function does not accept operations either
+            # so more than one fktable cannot be utilized
+            raise ValueError("Positivity datasets can only contain one fktable")
 
     @functools.lru_cache()
     def load(self):
-        cd = self.commondataspec.load()
-        fk = self.fkspec.load()
+        cd = self.commondata.load()
+        fk = self.fkspecs[0].load()
         return PositivitySet(cd, fk, self.maxlambda)
 
+    def to_unweighted(self):
+        log.warning("Trying to unweight %s, PositivitySetSpec are always unweighted", self.name)
+        return self
 
 
 #We allow to expand the experiment as a list of datasets
