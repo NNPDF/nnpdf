@@ -169,7 +169,7 @@ def not_outlier_mask(
     """Return a boolean mask with the replicas that are never outside of the given
     percentile in the constrained region"""
     lim = unconstrained_region_index
-    gv = xplotting_grid.grid_values[:, :, lim:]
+    gv = xplotting_grid.grid_values.data[:, :, lim:]
     delta = nsigma * np.std(gv, axis=0)
     mean = np.mean(gv, axis=0)
     return ((gv >= mean - delta) & (gv <= mean+delta)).all(axis=2).all(axis=1)
@@ -309,7 +309,7 @@ class FilteredReplicaPlotter(ReplicaPDFPlotter):
             #PDFs, and instead would do something different
             next_prop = next(ax._get_lines.prop_cycler)
             color = next_prop['color']
-            gv = grid.grid_values[filt, flstate.flindex, :]
+            gv = grid.grid_values.data[filt, flstate.flindex, :]
             ax.plot(
                 grid.xgrid,
                 gv.T,

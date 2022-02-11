@@ -5,6 +5,7 @@ to facilitate plotting and analysis.
 from collections import namedtuple
 import dataclasses
 import numbers
+import logging
 
 import numpy as np
 import scipy.integrate as integrate
@@ -16,6 +17,8 @@ from validphys.core import PDF, Stats
 from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.checks import check_pdf_normalize_to, check_xlimits
+
+log = logging.getLogger(__name__)
 
 @make_argcheck
 def _check_scale(scale):
@@ -42,22 +45,22 @@ def xgrid(xmin:numbers.Real=1e-5, xmax:numbers.Real=1,
 class XPlottingGrid:
     """DataClass holding the value of the PDF at the specified
     values of x, Q and flavour.
-    It also exposes a `stats_gv` attribute with a `Stats` instance
-    of the raw `grid_values` object in order to compute statistical
-    estimators in a sensible manner.
+    The `grid_values` attribute corresponds to a `Stats` instance
+    in order to compute statistical estimators in a sensible manner.
     """
     Q: float
     basis: (str, Basis)
     flavours: (list, tuple, type(None))
     xgrid: np.ndarray
-    grid_values: np.ndarray
+    grid_values: Stats
     scale: str
-    stats_gv: Stats # TODO: transitional variable during development, it should substitute grid_values by the end of this PR!!!!!!!!
 
     def copy_grid(self, grid_values=None):
         """Create a copy of the grid with potentially a different set of values"""
-        new_stats_gv = self.stats_gv.__class__(grid_values)
-        return dataclasses.replace(self, grid_values=grid_values, stats_gv=new_stats_gv)
+        if not isinstance(grid_values, Stats):
+            log.warning("XPlottingGrid being called with a numpy grid, should be using Stats instead!")
+            grid_values = self.grid_values.__class__(grid_values)
+        return dataclasses.replace(self, grid_values=grid_values)
 
 
 @make_argcheck(check_basis)
@@ -89,11 +92,9 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
         raise TypeError(f"Invalid xgrid {xgrid!r}")
     gv = basis.grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
-    #TODO: wrap this in pdf.stats_class?
-    gv = gv.reshape(gv.shape[:-1])
-    gv_stats = pdf.stats_class(gv)
+    gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
 
-    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale, gv_stats)
+    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale)
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
@@ -252,25 +253,28 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
     set is computed. At least one grid will be identical to zero.
     """
 
-    gr2 = xplotting_grids[normalize_to]
-    cv2 = pdfs[normalize_to].stats_class(gr2.grid_values).central_value()
-    sg2 = pdfs[normalize_to].stats_class(gr2.grid_values).std_error()
-    N2 = gr2.grid_values.shape[0]
+    gr2_stats = xplotting_grids[normalize_to].grid_values
+    cv2 = gr2_stats.central_value()
+    sg2 = gr2_stats.std_error()
+    N2 = gr2_stats.get_members()
 
-    newgrids = list()
+    newgrids = []
     for grid, pdf in zip(xplotting_grids, pdfs):
 
         if pdf == pdfs[normalize_to]:
-            newgrid = grid.copy_grid(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
+            # Zero the PDF we are normalizing against
+            pdf_zero = pdf.stats_class(np.zeros_like(gr2_stats.data[0]))
+            newgrid = grid.copy_grid(grid_values=pdf_zero)
             newgrids.append(newgrid)
             continue
 
-        cv1 = pdf.stats_class(grid.grid_values).central_value()
-        sg1 = pdf.stats_class(grid.grid_values).std_error()
-        N1 = grid.grid_values.shape[0]
+        g_stats = grid.grid_values
+        cv1 = g_stats.central_value()
+        sg1 = g_stats.std_error()
+        N1 = g_stats.get_members()
 
         # the distance definition
-        distance = np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2))
+        distance = pdf.stats_class(np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2)))
 
         newgrid = grid.copy_grid(grid_values=distance)
         newgrids.append(newgrid)
@@ -290,27 +294,30 @@ def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(No
     set is computed. At least one grid will be identical to zero.
     """
 
-    gr2 = xplotting_grids[normalize_to]
-    sg2 = pdfs[normalize_to].stats_class(gr2.grid_values).std_error()
-    mo2 = pdfs[normalize_to].stats_class(gr2.grid_values).moment(4)
-    N2 = gr2.grid_values.shape[0]
+    gr2_stats = xplotting_grids[normalize_to].grid_values
+    sg2 = gr2_stats.std_error()
+    mo2 = gr2_stats.moment(4)
+    N2 = gr2_stats.get_members()
     s2 = (mo2-(N2-3)/(N2-1)*sg2**4)/N2
 
-    newgrids = list()
+    newgrids = []
     for grid, pdf in zip(xplotting_grids, pdfs):
 
         if pdf == pdfs[normalize_to]:
-            newgrid = grid.copy_grid(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
+            # Zero the PDF we are normalizing against
+            pdf_zero = pdf.stats_class(np.zeros_like(gr2_stats.data[0]))
+            newgrid = grid.copy_grid(grid_values=pdf_zero)
             newgrids.append(newgrid)
             continue
 
-        sg1 = pdf.stats_class(grid.grid_values).std_error()
-        mo1 = pdf.stats_class(grid.grid_values).moment(4)
-        N1 = grid.grid_values.shape[0]
+        g_stats = grid.grid_values
+        sg1 = g_stats.std_error()
+        mo1 = g_stats.moment(4)
+        N1 = g_stats.get_members()
         s1 = (mo1-(N1-3)/(N1-1)*sg1**4)/N1
 
         # the distance definition
-        variance_distance = np.sqrt((sg1**2-sg2**2)**2/(s1+s2))
+        variance_distance = pdf.stats_class(np.sqrt((sg1**2-sg2**2)**2/(s1+s2)))
 
         newgrid = grid.copy_grid(grid_values=variance_distance)
         newgrids.append(newgrid)
