@@ -13,7 +13,7 @@
     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
     >>> n3pdf = N3PDF(pdf_model)
     >>> res = xplotting_grid(n3pdf, 1.6, fake_x)
-    >>> res.grid_values.shape
+    >>> res.grid_values.error_members().shape
     (1, 8, 3)
 
 
