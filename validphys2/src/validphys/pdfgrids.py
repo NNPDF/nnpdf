@@ -256,7 +256,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
     gr2_stats = xplotting_grids[normalize_to].grid_values
     cv2 = gr2_stats.central_value()
     sg2 = gr2_stats.std_error()
-    N2 = gr2_stats.get_members()
+    N2 = pdfs[normalize_to].get_members()
 
     newgrids = []
     for grid, pdf in zip(xplotting_grids, pdfs):
@@ -271,7 +271,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
         g_stats = grid.grid_values
         cv1 = g_stats.central_value()
         sg1 = g_stats.std_error()
-        N1 = g_stats.get_members()
+        N1 = pdf.get_members()
 
         # the distance definition
         distance = pdf.stats_class(np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2)))
@@ -297,7 +297,7 @@ def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(No
     gr2_stats = xplotting_grids[normalize_to].grid_values
     sg2 = gr2_stats.std_error()
     mo2 = gr2_stats.moment(4)
-    N2 = gr2_stats.get_members()
+    N2 = pdfs[normalize_to].get_members()
     s2 = (mo2-(N2-3)/(N2-1)*sg2**4)/N2
 
     newgrids = []
@@ -313,7 +313,7 @@ def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(No
         g_stats = grid.grid_values
         sg1 = g_stats.std_error()
         mo1 = g_stats.moment(4)
-        N1 = g_stats.get_members()
+        N1 = pdf.get_members()
         s1 = (mo1-(N1-3)/(N1-1)*sg1**4)/N1
 
         # the distance definition
