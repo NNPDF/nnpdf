@@ -61,8 +61,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if normalize_to is not None:
             normalize_pdf = self.normalize_pdf
             normalize_grid = self._xplotting_grids[normalize_to]
-            normvals = normalize_pdf.stats_class(
-                            normalize_grid.grid_values).central_value()
+            normvals = normalize_grid.grid_values.central_value()
 
             #Handle division by zero more quietly
             def fp_error(tp, flag):
@@ -75,8 +74,8 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             newgrids = []
             with np.errstate(all='call'):
                 np.seterrcall(fp_error)
-                for grid in self._xplotting_grids:
-                    newvalues = grid.grid_values/normvals
+                for pdf, grid in zip(self.pdfs, self._xplotting_grids):
+                    newvalues = pdf.stats_class(grid.grid_values.data/normvals)
                     newgrids.append(grid.copy_grid(grid_values=newvalues))
 
             return newgrids
@@ -187,7 +186,7 @@ class ReplicaPDFPlotter(PDFPlotter):
         ax = flstate.ax
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop['color']
-        gv = grid.grid_values[:,flstate.flindex,:]
+        gv = grid.grid_values.data[:,flstate.flindex,:]
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
         stats = pdf.stats_class(gv)
@@ -224,7 +223,7 @@ class UncertaintyPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         flindex = flstate.flindex
-        gv = grid.grid_values[:,flindex,:]
+        gv = grid.grid_values.data[:,flindex,:]
         stats = pdf.stats_class(gv)
 
         res = stats.std_error()
@@ -331,7 +330,7 @@ class DistancePDFPlotter(PDFPlotter):
         next_prop = next(pcycler)
         color = next_prop['color']
 
-        gv = grid.grid_values[flindex,:]
+        gv = grid.grid_values.data[flindex,:]
         ax.plot(grid.xgrid, gv, color=color, label='$%s$' % flstate.parton_name)
 
         return gv
@@ -411,7 +410,7 @@ class BandPDFPlotter(PDFPlotter):
         hatchit = flstate.hatchit
         labels = flstate.labels
         handles = flstate.handles
-        stats = pdf.stats_class(grid.grid_values[:,flindex,:])
+        stats = pdf.stats_class(grid.grid_values.data[:,flindex,:])
         pcycler = ax._get_lines.prop_cycler
         #This is ugly but can't think of anything better
 

@@ -134,11 +134,6 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     return fig
 
 
-XPlottingGrid = namedtuple(
-    "XPlottingGrid", ("Q", "basis", "flavours", "xgrid", "grid_values", "scale")
-)
-
-
 def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     """
     Generates xplotting_grids correspodning to positive and negative delta chi2s.
@@ -149,8 +144,8 @@ def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     pos_mask = np.append(True, positive_eigenvalue_mask)
     neg_mask = np.append(True, ~positive_eigenvalue_mask)
 
-    pos_grid = xplotting_grid.grid_values[pos_mask]
-    neg_grid = xplotting_grid.grid_values[neg_mask]
+    pos_grid = xplotting_grid.grid_values.data[pos_mask]
+    neg_grid = xplotting_grid.grid_values.data[neg_mask]
 
     pos_xplotting_grid = xplotting_grid.copy_grid(grid_values=pos_grid)
     neg_xplotting_grid = xplotting_grid.copy_grid(grid_values=neg_grid)
@@ -220,7 +215,7 @@ class PDFEpsilonPlotter(PDFPlotter):
         # Basically stats is an object which says what is the type class of the replicas:
         # MCStats, HessianStats, SymmHessianStats. In this way validphys use the right methods
         # to compute statistical values.
-        stats = pdf.stats_class(grid.grid_values[:, flindex, :])
+        stats = pdf.stats_class(grid.grid_values.data[:, flindex, :])
 
         # Ignore spurious normalization warnings
         with warnings.catch_warnings():

@@ -66,14 +66,14 @@ def alpha_eff(pdf: PDF, *,
 
     pdfGrid = pdfgrids.xplotting_grid(
         pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
-    pdfGrid_values = pdfGrid.grid_values
+    pdfGrid_values = pdfGrid.grid_values.data
     # NOTE: without this I get "setting an array element with a sequence"
     xGrid = pdfGrid.xgrid
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
         alphaGrid_values[alphaGrid_values == - np.inf] = np.nan  # when PDF_i =0
-    alphaGrid = pdfGrid.copy_grid(grid_values=alphaGrid_values)
+    alphaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(alphaGrid_values))
     return alphaGrid
 
 @check_positive('Q')
@@ -110,14 +110,14 @@ def beta_eff(pdf, *,
 
     pdfGrid = pdfgrids.xplotting_grid(
         pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
-    pdfGrid_values = pdfGrid.grid_values
+    pdfGrid_values = pdfGrid.grid_values.data
     # NOTE: without this I get "setting an array element with a sequence"
     xGrid = pdfGrid.xgrid
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
         betaGrid_values[betaGrid_values == -np.inf] = np.nan  # when PDF_i =0
-    betaGrid = pdfGrid.copy_grid(grid_values=betaGrid_values)
+    betaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(betaGrid_values))
 
     return betaGrid  # .grid_values
 
@@ -348,8 +348,8 @@ def next_effective_exponents_table(
 
     eff_exp_data = []
 
-    alphastats = alpha_effs.stats_gv
-    betastats = beta_effs.stats_gv
+    alphastats = alpha_effs.grid_values
+    betastats = beta_effs.grid_values
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
