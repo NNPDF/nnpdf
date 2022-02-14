@@ -51,6 +51,7 @@ HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
 FIT = "NNPDF40_nnlo_lowprecision"
 FIT_ITERATED = "NNPDF40_nnlo_low_precision_iterated"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_220208"
 
 base_config = dict(
         pdf=PDF,

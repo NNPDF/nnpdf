@@ -11,9 +11,7 @@ import pandas as pd
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import FIT
-
-PSEUDODATA_FIT = "pseudodata_test_fit_n3fit"
+from validphys.tests.conftest import FIT, PSEUDODATA_FIT
 
 
 def test_read_fit_pseudodata():
