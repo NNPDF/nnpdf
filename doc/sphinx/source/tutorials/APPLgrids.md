@@ -66,16 +66,21 @@ below.
 
 ### MadGraph5\_aMC@NLO + amcfast
 
-The default version of MG5\_aMC used in NNPDF is v2.6.3.2. It does not
+A docker image of all of the pieces of code required to generate interpolation
+tables in the APPLgrid format with the MadGraph5\_aMC@NLO + amcfast tool chain
+are available at [this link](https://hub.docker.com/r/jamesmmoore/applgrids).
+The default version of MG5\_aMC used in NNPDF is
+[v2.6.4](https://github.com/NNPDF/external/tree/MG5_fixed/MG5_aMC_v2_6_4).
+It does not
 need to be installed, because installation is performed automatically at
 the time of the generation of a given process. MG5_aMC is usually run from the 
 ```text
-external/MG5_aMC_v2_6_3_2/bin
+external/MG5_aMC_v2_6_4/bin
 ```
 folder. Note that python 2(.6 or .7) is required. MG5_aMC does not work with 
 python3. Before the first run, the mg5_configuration.txt file in the 
 ```text
-external/MG5_aMC_v2_6_3_2/input 
+external/MG5_aMC_v2_6_4/input 
 ```
 folder must be edited. In particular, please make sure to uncomment the following 
 lines:
@@ -103,7 +108,7 @@ MG5_aMC can easily be run interactively.
 
 **example**
 
-In the external/MG5_aMC_v2_6_3_2/bin folder run
+In the external/MG5_aMC_v2_6_4/bin folder run
 ```
 python2.7 mg5_aMC
 ```
