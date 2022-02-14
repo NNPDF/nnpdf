@@ -213,7 +213,7 @@ class PDFEpsilonPlotter(PDFPlotter):
         # Create a copy of the `Stats` instance of the grid
         # with only the flavours we are interested in
         gv = grid.grid_values.data
-        stats = grid.grid_values.copy_grid(grid_values=gv[:, flindex, :])
+        stats = grid(grid_values=gv[:, flindex, :]).grid_values
 
         # Ignore spurious normalization warnings
         with warnings.catch_warnings():

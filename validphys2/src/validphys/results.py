@@ -547,7 +547,7 @@ def phi_data(abs_chi2_data):
     1410.8849
     """
     alldata, central, npoints = abs_chi2_data
-    return (np.sqrt((alldata.data.mean() - central) / npoints), npoints)
+    return (np.sqrt((alldata.central_value() - central) / npoints), npoints)
 
 
 def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
@@ -622,11 +622,6 @@ def dataset_inputs_bootstrap_chi2_central(
         args=[dt.sqrtcovmat],
     )
     return chi2_central_resample
-
-
-def _chs_per_replica(chs):
-    th, _, l = chs
-    return th.data.ravel() / l
 
 
 @table
@@ -1041,7 +1036,7 @@ def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
     )
 
     # we sum data, not error_members here because we feed it back into the stats
-    # class, some stats class error_members cuts off the CV
+    # class, the stats class error_members cuts off the CV if needed
     data_sum = np.sum(
         [exp_chi2_data.replica_result.data for exp_chi2_data in experiments_chi2_data],
         axis=0
