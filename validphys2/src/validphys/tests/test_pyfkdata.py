@@ -68,6 +68,7 @@ def test_predictions(pdf_name):
         ds = l.check_dataset(**daset, theoryid=THEORYID)
         preds = predictions(ds, pdf)
         core_predictions = ThPredictionsResult.from_convolution(pdf, ds)
+        # Uses rawdata since we want to check all members for which we computed the convolution
         assert_allclose(preds.values, core_predictions.rawdata, atol=1e-8, rtol=1e-3)
         # Now check that the stats class does the right thing with the data
         cv_predictions = central_predictions(ds, pdf).squeeze()
@@ -75,6 +76,8 @@ def test_predictions(pdf_name):
         # rtol to 1e-2 due to DYE906R and DYE906_D for MC sets
         # TODO: check whether this tolerance can be decreased when using double precision
         assert_allclose(cv_predictions, stats_predictions.central_value(), rtol=1e-2)
+        assert_allclose(core_predictions.error_members, stats_predictions.error_members().T, rtol=1e-3)
+        assert_allclose(core_predictions.central_value, stats_predictions.central_value(), rtol=1e-2)
 
 
 @pytest.mark.parametrize("pdf_name", [PDF, HESSIAN_PDF])

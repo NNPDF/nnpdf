@@ -410,7 +410,9 @@ class BandPDFPlotter(PDFPlotter):
         hatchit = flstate.hatchit
         labels = flstate.labels
         handles = flstate.handles
-        stats = pdf.stats_class(grid.grid_values.data[:,flindex,:])
+        # Take only the flavours we are interested in
+        gv = grid.grid_values.data
+        stats = grid.copy_grid(grid_values=gv[:, flindex, :]).grid_values
         pcycler = ax._get_lines.prop_cycler
         #This is ugly but can't think of anything better
 

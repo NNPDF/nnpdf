@@ -68,7 +68,7 @@ def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
     ax.set_xlabel(r"Replica $\chi^2$")
 
     if plot_type == "hist":
-        ax.hist(alldata.data, label=label, zorder=100)
+        ax.hist(alldata.error_members(), label=label, zorder=100)
     elif plot_type == "kde":
         # We need the squeeze here to change shape from (x, 1) to (x,)
         ax = plotutils.kde_plot(alldata.data.squeeze(), label=label)
