@@ -26,7 +26,7 @@ from validphys.checks import (
     check_two_dataspecs,
 )
 
-from validphys.core import DataSetSpec, PDF, DataGroupSpec
+from validphys.core import DataSetSpec, PDF, DataGroupSpec, Stats
 from validphys.calcutils import (
     all_chi2,
     central_chi2,
@@ -36,7 +36,6 @@ from validphys.calcutils import (
 )
 from validphys.convolution import (
     predictions,
-    central_predictions,
     PredictionsRequireCutsError,
 )
 
@@ -48,33 +47,13 @@ class Result:
     pass
 
 
-# TODO: Eventually,only one of (NNPDFDataResult, StatsResult) should survive
-class NNPDFDataResult(Result):
-    """A result fills its values from a pandas dataframe
-    For legacy (libNNPDF) compatibility, falls back to libNNPDF attributes"""
-
-    def __init__(self, dataobj=None, central_value=None):
-        # This class is used by both validphys and libNNPDF objects
-        # when central_value is not explictly passed, fallback to
-        # libNNPDF object .get_cv()
-        if central_value is None:
-            central_value = dataobj.get_cv()
-        self._central_value = np.array(central_value).reshape(-1)
-
-    @property
-    def central_value(self):
-        return self._central_value
-
-    def __len__(self):
-        return len(self.central_value)
-
-
 class StatsResult(Result):
     def __init__(self, stats):
         self.stats = stats
 
     @property
     def rawdata(self):
+        """Returns the raw data with shape (Npoints, Npdf)"""
         return self.stats.data.T
 
     @property
@@ -85,16 +64,27 @@ class StatsResult(Result):
     def std_error(self):
         return self.stats.std_error()
 
+    def __len__(self):
+        """Returns the number of data points in the result"""
+        return self.rawdata.shape[0]
 
-class DataResult(NNPDFDataResult):
-    def __init__(self, dataobj, covmat, sqrtcovmat, central_value=None):
-        super().__init__(dataobj, central_value=central_value)
+
+class DataResult(StatsResult):
+    """Holds the relevant information from a given dataset"""
+    def __init__(self, dataobj, covmat, sqrtcovmat):
+        self._central_value = dataobj.get_cv()
+        stats = Stats(self._central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
+        super().__init__(stats)
 
     @property
     def label(self):
         return "Data"
+
+    @property
+    def central_value(self):
+        return self._central_value
 
     @property
     def std_error(self):
