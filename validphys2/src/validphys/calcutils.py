@@ -67,8 +67,8 @@ def calc_chi2(sqrtcov, diffs):
     return np.einsum('i...,i...->...', vec,vec)
 
 def all_chi2(results):
-    """Return the chi² for all elements in the result. Note that the
-    interpretation of the result will depend on the PDF error type"""
+    """Return the chi² for all elements in the result, regardless of the Stats class
+    Note that the interpretation of the result will depend on the PDF error type"""
     data_result, th_result = results
     diffs = th_result.rawdata - data_result.central_value[:,np.newaxis]
     return calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)

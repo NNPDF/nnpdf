@@ -186,7 +186,7 @@ class ReplicaPDFPlotter(PDFPlotter):
         ax = flstate.ax
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop['color']
-        gv = grid.grid_values.data[:,flstate.flindex,:]
+        gv = grid.grid_values.error_members()[:,flstate.flindex,:]
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
         stats = pdf.stats_class(gv)
@@ -223,7 +223,7 @@ class UncertaintyPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         flindex = flstate.flindex
-        gv = grid.grid_values.data[:,flindex,:]
+        gv = grid.grid_values.error_members()[:,flindex,:]
         stats = pdf.stats_class(gv)
 
         res = stats.std_error()
@@ -330,7 +330,7 @@ class DistancePDFPlotter(PDFPlotter):
         next_prop = next(pcycler)
         color = next_prop['color']
 
-        gv = grid.grid_values.data[flindex,:]
+        gv = grid.grid_values.error_members()[flindex,:]
         ax.plot(grid.xgrid, gv, color=color, label='$%s$' % flstate.parton_name)
 
         return gv
