@@ -140,7 +140,7 @@ def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     """
     positive_eigenvalue_mask = delta_chi2_hessian >= 0
 
-    # include replica 0 in both new grids
+    # include replica 0 in both new grids, thus use the raw .data
     pos_mask = np.append(True, positive_eigenvalue_mask)
     neg_mask = np.append(True, ~positive_eigenvalue_mask)
 
@@ -210,12 +210,10 @@ class PDFEpsilonPlotter(PDFPlotter):
         labels = flstate.labels
         handles = flstate.handles
 
-        # pick all replicas grid_values for the flavour flindex. stats_class is a method
-        # of the PDF class, which returns the stats calculator (object) for the pdf error type.
-        # Basically stats is an object which says what is the type class of the replicas:
-        # MCStats, HessianStats, SymmHessianStats. In this way validphys use the right methods
-        # to compute statistical values.
-        stats = pdf.stats_class(grid.grid_values.data[:, flindex, :])
+        # Create a copy of the `Stats` instance of the grid
+        # with only the flavours we are interested in
+        gv = grid.grid_values.data
+        stats = grid.grid_values.copy_grid(grid_values=gv[:, flindex, :])
 
         # Ignore spurious normalization warnings
         with warnings.catch_warnings():

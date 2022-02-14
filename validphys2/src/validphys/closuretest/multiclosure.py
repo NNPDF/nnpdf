@@ -130,7 +130,7 @@ def fits_dataset_bias_variance(
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
-    reps = np.asarray([th.rawdata[:, :_internal_max_reps] for th in closures_th])
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis
@@ -226,7 +226,7 @@ def dataset_xi(internal_multiclosure_dataset_loader):
 
     """
     closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
-    replicas = np.asarray([th.rawdata for th in closures_th])
+    replicas = np.asarray([th.error_members for th in closures_th])
     centrals = np.mean(replicas, axis=-1)
     underlying = law_th.central_value
 
@@ -341,7 +341,7 @@ def _bootstrap_multiclosure_fits(
     # construct proxy fits theory predictions
     for fit_th in fit_boot_th:
         rep_boot_index = rng.choice(n_rep_max, size=n_rep, replace=use_repeats)
-        boot_ths.append(BootstrappedTheoryResult(fit_th.rawdata[:, rep_boot_index]))
+        boot_ths.append(BootstrappedTheoryResult(fit_th.error_members[:, rep_boot_index]))
     return (boot_ths, *input_tuple)
 
 
@@ -741,7 +741,7 @@ def dataset_fits_bias_replicas_variance_samples(
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
-    reps = np.asarray([th.rawdata[:, :_internal_max_reps] for th in closures_th])
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis

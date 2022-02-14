@@ -57,6 +57,11 @@ class StatsResult(Result):
         return self.stats.data.T
 
     @property
+    def error_members(self):
+        """Returns the error members with shape (Npoints, Npdf)"""
+        return self.stats.error_members().T
+
+    @property
     def central_value(self):
         return self.stats.central_value()
 
@@ -71,6 +76,7 @@ class StatsResult(Result):
 
 class DataResult(StatsResult):
     """Holds the relevant information from a given dataset"""
+
     def __init__(self, dataobj, covmat, sqrtcovmat):
         self._central_value = dataobj.get_cv()
         stats = Stats(self._central_value)
@@ -101,8 +107,8 @@ class DataResult(StatsResult):
 
 
 class ThPredictionsResult(StatsResult):
-    """Class holding theory prediction, inherits from StatsResult
-    """
+    """Class holding theory prediction, inherits from StatsResult"""
+
     def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
@@ -135,8 +141,10 @@ class ThPredictionsResult(StatsResult):
         try:
             th_predictions = pd.concat([predictions(d, pdf) for d in datasets])
         except PredictionsRequireCutsError as e:
-            raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
-                    "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
+            raise PredictionsRequireCutsError(
+                "Predictions from FKTables always require cuts, "
+                "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`"
+            ) from e
 
         label = cls.make_label(pdf, dataset)
 
@@ -157,6 +165,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
+
 
 def groups_index(groups_data):
     """Return a pandas.MultiIndex with levels for group, dataset and point
@@ -228,7 +237,7 @@ def group_result_table_no_table(groups_results, groups_index):
         ):
             replicas = (
                 ("rep_%05d" % (i + 1), th_rep)
-                for i, th_rep in enumerate(th.rawdata[index, :])
+                for i, th_rep in enumerate(th.error_members[index, :])
             )
 
             result_records.append(
@@ -583,7 +592,7 @@ def dataset_inputs_bootstrap_phi_data(dataset_inputs_results, bootstrap_samples=
     For more information on how phi is calculated see `phi_data`
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th.rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(
         diff,
         bootstrap_samples,
@@ -603,7 +612,7 @@ def dataset_inputs_bootstrap_chi2_central(
     a different value can be specified in the runcard.
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th.rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
     chi2_central_resample = bootstrap_values(
         diff,
@@ -698,7 +707,7 @@ dataspecs_posdataset = collect("posdataset", ("dataspecs",))
 def count_negative_points(possets_predictions):
     """Return the number of replicas with negative predictions for each bin
     in the positivity observable."""
-    return np.sum([(r.rawdata < 0).sum(axis=0) for r in possets_predictions], axis=0)
+    return np.sum([(r.error_members < 0).sum(axis=0) for r in possets_predictions], axis=0)
 
 
 chi2_stat_labels = {

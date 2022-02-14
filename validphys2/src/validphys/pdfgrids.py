@@ -92,9 +92,9 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
         raise TypeError(f"Invalid xgrid {xgrid!r}")
     gv = basis.grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
-    gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
+    stats_gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
 
-    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale)
+    res = XPlottingGrid(Q, basis, flavours, xgrid, stats_gv, scale)
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
