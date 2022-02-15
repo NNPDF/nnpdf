@@ -541,13 +541,14 @@ def dataset_inputs_abs_chi2_data(dataset_inputs_results):
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
-    Returns tuple of (phi, numpoints)
+    Returns tuple of (float, int): (phi, numpoints)
 
     For more information on how phi is calculated see Eq.(24) in
     1410.8849
     """
     alldata, central, npoints = abs_chi2_data
-    return (np.sqrt((alldata.central_value() - central) / npoints), npoints)
+    cv = float(alldata.central_value())
+    return (np.sqrt((cv - central) / npoints), npoints)
 
 
 def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
