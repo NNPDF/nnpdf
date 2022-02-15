@@ -243,19 +243,12 @@ class PDF(TupleComp):
         -----
         The range object can be used efficiently as a Pandas index.
         """
-        if self.error_type == "replicas":
-            return range(1, len(self))
-        elif self.error_type in ("hessian", "symmhessian"):
-            return range(0, len(self))
-        else:
-            raise RuntimeError(f"Unknown error type: {self.stats_class}")
+        return range(0, len(self))
 
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
-        operation. See :py:meth:`PDF.grid_values_index` for details on differences
-        between types of PDF sets.
         """
-        return len(self.grid_values_index)
+        return len(self)
 
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
@@ -780,7 +773,7 @@ class Stats:
         raise NotImplementedError()
 
     def error_members(self):
-        raise NotImplementedError()
+        return self.data[1:]
 
     def std_error(self):
         raise NotImplementedError()
@@ -809,14 +802,14 @@ class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
 
     def central_value(self):
-        return np.mean(self.data, axis=0)
+        return np.mean(self.error_members(), axis=0)
 
     def std_error(self):
         # ddof == 1 to match libNNPDF behaviour
-        return np.std(self.data, ddof=1, axis=0)
+        return np.std(self.error_members(), ddof=1, axis=0)
 
     def moment(self, order):
-        return np.mean(np.power(self.data-self.central_value(),order), axis=0)
+        return np.mean(np.power(self.error_members()-self.central_value(),order), axis=0)
 
     def errorbar68(self):
         #Use nanpercentile here because we can have e.g. 0/0==nan normalization
@@ -827,9 +820,6 @@ class MCStats(Stats):
 
     def sample_values(self, size):
         return np.random.choice(self, size=size)
-
-    def error_members(self):
-        return self.data
 
 
 class SymmHessianStats(Stats):
@@ -847,9 +837,6 @@ class SymmHessianStats(Stats):
 
     def errorbar68(self):
         return self.errorbarstd()
-
-    def error_members(self):
-        return self.data[1:]
 
     def std_error(self):
         data = self.data

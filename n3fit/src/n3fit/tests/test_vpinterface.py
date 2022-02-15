@@ -6,7 +6,6 @@ import numpy as np
 from hypothesis import given, settings, example
 from hypothesis.strategies import integers
 from validphys.pdfgrids import xplotting_grid, distance_grids
-from validphys.core import MCStats
 from n3fit.vpinterface import N3PDF
 from n3fit.model_gen import pdfNN_layer_generator
 
@@ -41,7 +40,6 @@ def test_N3PDF(members, layers):
     xx = np.random.rand(xsize)
     n3pdf = generate_n3pdf(layers=layers, members=members)
     assert len(n3pdf) == members + 1
-    assert n3pdf.stats_class == MCStats
     assert n3pdf.load() is n3pdf
     w = n3pdf.get_nn_weights()
     assert len(w) == members

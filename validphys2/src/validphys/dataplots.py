@@ -871,7 +871,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
     basis = obs_pdf_correlations.basis
 
-    fullgrid = obs_pdf_correlations.grid_values.error_members()
+    fullgrid = obs_pdf_correlations.grid_values.data
 
     fls = obs_pdf_correlations.flavours
     x = obs_pdf_correlations.xgrid

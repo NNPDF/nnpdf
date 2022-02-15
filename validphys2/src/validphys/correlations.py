@@ -9,8 +9,7 @@ import numpy.linalg as la
 
 from reportengine import collect
 
-from validphys.checks import check_pdf_is_montecarlo
-
+from validphys.core import Stats
 
 #This would be a good candidate to be optimized to calculate everything in one
 #pass over x,
@@ -62,7 +61,9 @@ def obs_pdf_correlations(pdf, results, xplotting_grid):
     """Return the correlations between each point in a dataset and the PDF
     values on a grid of (x,f) points in a format similar to `xplotting_grid`."""
     _, th = results
-    corrs = pdf.stats_class(_basic_obs_pdf_correlation(xplotting_grid.grid_values, th.stats))
+    # Wrap the result in a standard Stats class
+    # since the result is (npoints, flavours, ndata) and has nothing to do with the PDF replicas
+    corrs = Stats(_basic_obs_pdf_correlation(xplotting_grid.grid_values, th.stats))
     return xplotting_grid.copy_grid(grid_values=corrs)
 
 
