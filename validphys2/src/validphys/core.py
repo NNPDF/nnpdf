@@ -770,7 +770,7 @@ class Stats:
         self.data = np.atleast_2d(data)
 
     def central_value(self):
-        raise NotImplementedError()
+        return self.data[0]
 
     def error_members(self):
         return self.data[1:]
@@ -800,10 +800,6 @@ class Stats:
 
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
-
-    def central_value(self):
-        return np.mean(self.error_members(), axis=0)
-
     def std_error(self):
         # ddof == 1 to match libNNPDF behaviour
         return np.std(self.error_members(), ddof=1, axis=0)
@@ -831,9 +827,6 @@ class SymmHessianStats(Stats):
     def __init__(self, data, rescale_factor=1):
         super().__init__(data)
         self.rescale_factor = rescale_factor
-
-    def central_value(self):
-        return self.data[0]
 
     def errorbar68(self):
         return self.errorbarstd()
