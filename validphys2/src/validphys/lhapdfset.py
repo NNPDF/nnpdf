@@ -43,9 +43,6 @@ class LHAPDFSet:
 
     Once instantiated this class will load the PDF set from LHAPDF.
     If it is a T0 set only the CV will be loaded.
-
-    For Monte Carlo sets the central value (member 0) is by default not included when taking
-    the results for all members (i.e., when using ``grid_values``).
     """
 
     def __init__(self, name, error_type):
@@ -78,8 +75,6 @@ class LHAPDFSet:
         """
         if self.is_t0:
             return self._lhapdf_set[0:1]
-        if self._error_type == "replicas":
-            return self._lhapdf_set[1:]
         return self._lhapdf_set
 
     @property

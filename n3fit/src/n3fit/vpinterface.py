@@ -45,6 +45,10 @@ EVOL_LIST = [
     "T35",
 ]
 
+class N3Stats(MCStats):
+    def central_value(self):
+        return self.data[0]
+
 
 class N3PDF(PDF):
     """
@@ -76,10 +80,13 @@ class N3PDF(PDF):
         # to the average of all others
         self._info = {"ErrorType": "replicas", "NumMembers": len(self._models) + 1}
 
+    def get_members(self):
+        return max(len(self._models), 2)
+
     @property
     def stats_class(self):
         """The stats class of N3PDF is always MCStats"""
-        return MCStats
+        return N3Stats
 
     def load(self):
         """Many vp functions ask for a LHAPDF pdf

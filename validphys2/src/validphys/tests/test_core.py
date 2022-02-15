@@ -16,9 +16,8 @@ def test_pdf(pdf_name):
     assert pdf.isinstalled
     error_type = pdf.error_type
     if error_type == "replicas":
-        assert pdf.get_members() == (len(pdf)-1)
         assert pdf.error_conf_level is None
     else:
-        assert pdf.get_members() == len(pdf)
         assert isinstance(pdf.error_conf_level, (int, float))
+    assert pdf.get_members() == len(pdf)
     assert pdf.name == pdf._plotname == pdf_name == str(pdf)
