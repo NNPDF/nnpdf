@@ -27,8 +27,7 @@ def _momentum_sum_rule_integrand(x, lpdf, Q):
 
 def _make_momentum_fraction_integrand(fldict):
     """Make a suitable integrand function, which takes x to be integrated over
-    and fixed loaded PDF, replica number and Q that computes the momentum
-    fraction based on ``fldict``.
+    and a PDF member and Q that computes the momentum fraction based on ``fldict``.
 
     The keys of ``fldict`` are free form values corresponding to PDG parton ids
     (that end up being passed by :py:func:`validphys.pdfbases.parse_flarr` and
@@ -59,8 +58,7 @@ def _make_momentum_fraction_integrand(fldict):
 
 def _make_pdf_integrand(fldict):
     """Make a suitable integrand function, which takes x to be integrated over
-    and fixed loaded PDF, replica number and Q that computes the integrand of
-    the PDFs based on ``fldict``.
+    and a PDF member and Q that computes the integrand of the PDFs based on ``fldict``.
 
     The keys of ``fldict`` are free form values corresponfing to PDG parton ids
     (that end up being passed :py:func:`validphys.pdfbases.parse_flarr` and
@@ -149,17 +147,14 @@ def sum_rules(pdf:PDF, Q:numbers.Real):
     SumRulesGrid object with the list of values for each sum rule.  The
     integration is performed with absolute and relative tolerance of 1e-4."""
     lpdf = pdf.load()
-    tmp = _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
-    if pdf.error_type == "replicas":
-        return {k: v[1:] for k,v in tmp.items()}
-    return tmp
+    return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
+
 
 @check_positive('Q')
 def central_sum_rules(pdf:PDF, Q:numbers.Real):
     """Compute the sum rules for the central member, at the scale Q"""
     lpdf = pdf.load_t0()
     return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
-
 
 
 @check_positive('Q')
@@ -177,10 +172,7 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
        - T8
     """
     lpdf = pdf.load()
-    tmp = _sum_rules(UNKNOWN_SUM_RULES, lpdf, Q)
-    if pdf.error_type == "replicas":
-        return {k: v[1:] for k,v in tmp.items()}
-    return tmp
+    return _sum_rules(UNKNOWN_SUM_RULES, lpdf, Q)
 
 def _simple_description(d):
     res = {}
