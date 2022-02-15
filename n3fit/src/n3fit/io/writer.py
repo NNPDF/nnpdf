@@ -11,6 +11,8 @@ import numpy as np
 from reportengine.compat import yaml
 import validphys
 import n3fit
+from n3fit import vpinterface
+from n3fit.vpinterface import integrability_numbers, compute_arclength
 
 
 class WriterWrapper:
@@ -60,11 +62,11 @@ class WriterWrapper:
                 chi2 of the replica to the central experimental data
         """
         # # Compute the arclengths
-        # arc_lengths = self.pdf_object.compute_arclength()
+        # arc_lengths = vpinterface.compute_arclength(self.pdf_object)
         # # Compute the integrability numbers
-        # integrability_numbers = self.pdf_object.integrability_numbers()
-        arc_lengths, integrability_numbers = [], []
+        # integrability_numbers = vpinterface.integrability_numbers(self.pdf_object)
         # Construct the chi2exp file
+        arc_lengths, integrability_numbers = [], []
         allchi2_lines = self.stopping_object.chi2exps_str()
         # Construct the preproc file (the information is only in the json file)
         preproc_lines = ""
@@ -154,10 +156,10 @@ def jsonfit(
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = replica_status.positivity_status
-    # all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
-    # all_info["integrability"] = pdf_object.integrability_numbers().tolist()
     all_info["arc_lengths"] = []
     all_info["integrability"] = []
+    # all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
+    # all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
     all_info["timing"] = timing
     # Versioning info
     all_info["version"] = version()

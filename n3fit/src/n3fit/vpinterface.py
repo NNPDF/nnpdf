@@ -24,6 +24,7 @@ import numpy as np
 import numpy.linalg as la
 from validphys.core import PDF, MCStats
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
+from validphys.lhapdfset import LHAPDFSet
 from validphys.arclength import integrability_number, arc_lengths
 
 log = logging.getLogger(__name__)
@@ -45,104 +46,35 @@ EVOL_LIST = [
     "T35",
 ]
 
+
 class N3Stats(MCStats):
+    """The PDFs from n3fit are MC PDFs
+    however, since there is no grid, the CV has to be computed manually"""
+
+    def error_members(self):
+        return self.data
+
     def central_value(self):
-        return self.data[0]
+        return np.mean(self.data, axis=0)
 
 
-class N3PDF(PDF):
-    """
-    Creates a N3PDF object, extension of the validphys PDF object to perform calculation
-    with a n3fit generated model.
+class N3LHAPDFSet(LHAPDFSet):
+    """Extension of LHAPDFSet using n3fit models"""
 
-    Parameters
-    ----------
-        pdf_models: :py:class:`n3fit.backends.MetaModel` (or list thereof)
-            PDF trained with n3fit, x -> f(x)_{i} where i are the flavours in the evol basis
-        fit_basis: list(dict)
-            basis of the training, used for reporting
-        name: str
-            name of the N3PDF object
-    """
-
-    def __init__(self, pdf_models, map_pdfs, fit_basis=None, name="n3fit"):
-        self.map_pdfs = map_pdfs
-        self.fit_basis = fit_basis
+    def __init__(self, name, pdf_models):
+        log.info("Creating LHAPDF-like n3fit PDF")
+        self._error_type = "replicas"
+        self._name = name
+        self._lhapdf_set = pdf_models
+        self._flavors = None
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
 
-        if isinstance(pdf_models, Iterable):
-            self._models = pdf_models
-        else:
-            self._models = [pdf_models]
-
-        super().__init__(name)
-        # The number of members will be minimum 2, needed for legacy compatibility
-        # Note that the member 0 does not exist as an actual model as it corresponds
-        # to the average of all others
-        self._info = {"ErrorType": "replicas", "NumMembers": len(self._models) + 1}
-
-    def get_members(self):
-        return max(len(self._models), 2)
-
-    @property
-    def stats_class(self):
-        """The stats class of N3PDF is always MCStats"""
-        return N3Stats
-
-    def load(self):
-        """Many vp functions ask for a LHAPDF pdf
-        from nnpdflib, this class fakes it until a time in which vp is free from C++
-        """
-        return self
-
-    def get_member_model(self, replica):
-        """Return the member corresponding to the given replica"""
-        return self._models[replica - 1]
-
-    def get_nn_weights(self):
-        """Outputs all weights of the NN as numpy.ndarrays"""
-        return [model.get_weights() for model in self._models]
-
-    def get_preprocessing_factors(self, replica=None):
-        """Loads the preprocessing alpha and beta arrays from the PDF trained model.
-        If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
-        to generate a new dictionary with the names, the exponent and whether they are trainable
-        otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
-        """
-        # If no replica is explicitly requested, get the preprocessing layer for the first model
-        if replica is None:
-            replica = 1
-        preprocessing_layers = self.get_member_model(replica).get_layer_re(r"pdf_prepro_\d")
-        if len(preprocessing_layers) != 1:
-            # We really don't want to fail at this point, but print a warning at least...
-            log.warning("More than one preprocessing layer found within the model!")
-        preprocessing_layer = preprocessing_layers[0]
-
-        alphas_and_betas = None
-        if self.fit_basis is not None:
-            output_dictionaries = []
-            for idx in range(len(self.map_pdfs)):
-                for d in self.fit_basis:
-                    flavour = d["fl"] + "_idx_" + str(idx)
-                    alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
-                    beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
-                    if alpha is not None:
-                        alpha = float(alpha.numpy())
-                    if beta is not None:
-                        beta = float(beta.numpy())
-                    output_dictionaries.append(
-                        {
-                            "fl": flavour,
-                            "smallx": alpha,
-                            "largex": beta,
-                            "trainable": d.get("trainable", True),
-                        }
-                    )
-            alphas_and_betas = output_dictionaries
-        return alphas_and_betas
+    def xfxQ(self, x, Q, n, fl):
+        """Return the value of the PDF member for the given value in x"""
+        return self.grid_values([fl], [x]).squeeze()[n]
 
     def __call__(self, xarr, flavours=None, replica=None):
-        """Uses the internal model to produce pdf values.
+        """Uses the internal model to produce pdf values for the grid
         The output is on the evolution basis.
 
         Parameters
@@ -168,12 +100,12 @@ class N3PDF(PDF):
 
         if replica is None or replica == 0:
             # We need generate output values for all replicas
-            result = np.concatenate([m.predict([mod_xgrid]) for m in self._models], axis=0)
+            result = np.concatenate([m.predict([mod_xgrid]) for m in self._lhapdf_set], axis=0)
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
         else:
-            result = self.get_member_model(replica).predict([mod_xgrid])
+            result = self._lhapdf_set[replica - 1].predict([mod_xgrid])
 
         # Split PDF according to the number of nuclei involved
         # TODO: Make the following split more consistent. The below might break!!
@@ -230,66 +162,160 @@ class N3PDF(PDF):
             ret = ret.repeat(lq, -1)
         return ret
 
-    # # Utilities
-    # def integrability_numbers(self, q0=1.65, flavours=None):
-    #     """Compute the integrability numbers for the current PDF
-    #     using the corresponding validphys action
+class N3PDF(PDF):
+    """
+    Creates a N3PDF object, extension of the validphys PDF object to perform calculation
+    with a n3fit generated model.
 
-    #     Parameters
-    #     ----------
-    #         q0: float
-    #             energy at which the integrability is computed
-    #         flavours: list
-    #             flavours for which the integrability is computed
+    Parameters
+    ----------
+        pdf_models: :py:class:`n3fit.backends.MetaModel` (or list thereof)
+            PDF trained with n3fit, x -> f(x)_{i} where i are the flavours in the evol basis
+        fit_basis: list(dict)
+            basis of the training, used for reporting
+        name: str
+            name of the N3PDF object
+    """
 
-    #     Returns
-    #     -------
-    #         np.array(float)
-    #             Value for the integrability for each of the flavours
+    def __init__(self, pdf_models, fit_basis=None, name="n3fit"):
+        self.fit_basis = fit_basis
 
-    #     Example
-    #     -------
-    #     >>> from n3fit.vpinterface import N3PDF
-    #     >>> from n3fit.model_gen import pdfNN_layer_generator
-    #     >>> fake_fl = [
-    #         {'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']
-    #         ]
-    #     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    #     >>> n3pdf = N3PDF(pdf_model)
-    #     >>> res = n3pdf.integrability_numbers()
-    #     """
-    #     if flavours is None:
-    #         flavours = ["V", "T3", "V3", "T8", "V8"]
-    #     return integrability_number(self, [q0], flavours=flavours)
+        if isinstance(pdf_models, Iterable):
+            self._models = pdf_models
+        else:
+            self._models = [pdf_models]
 
-    # def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
-    #     """
-    #     Given the layer with the fit basis computes the arc length
-    #     using the corresponding validphys action
+        super().__init__(name)
+        self._stats_class = N3Stats
+        self._lhapdf_set = N3LHAPDFSet(self.name, self._models)
+        # Since there is no info file, create a fake `_info` dictionary
+        self._info = {"ErrorType": "replicas", "NumMembers": len(self._models)}
 
-    #     Parameters
-    #     ----------
-    #         pdf_function: function
-    #             pdf function has received by the writer or ``pdf_model``
-    #         q0: float
-    #             energy at which the arc length is computed
-    #         basis: str
-    #             basis in which to compute the arc length
-    #         flavours: list
-    #             output flavours
+    def load(self):
+        """If the function needs an LHAPDF object, return a N3LHAPDFSet"""
+        return self._lhapdf_set
 
-    #     Example
-    #     -------
-    #     >>> from n3fit.vpinterface import N3PDF
-    #     >>> from n3fit.model_gen import pdfNN_layer_generator
-    #     >>> fake_fl = [
-    #         {'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']
-    #     ]
-    #     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    #     >>> n3pdf = N3PDF(pdf_model)
-    #     >>> res = n3pdf.compute_arclength()
-    #     """
-    #     if flavours is None:
-    #         flavours = ["sigma", "gluon", "V", "V3", "V8"]
-    #     ret = arc_lengths(self, [q0], basis, flavours)
-    #     return ret.stats.central_value()
+    def get_nn_weights(self):
+        """Outputs all weights of the NN as numpy.ndarrays"""
+        return [model.get_weights() for model in self._models]
+
+    def get_preprocessing_factors(self, replica=None):
+        """Loads the preprocessing alpha and beta arrays from the PDF trained model.
+        If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
+        to generate a new dictionary with the names, the exponent and whether they are trainable
+        otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
+        """
+        # If no replica is explicitly requested, get the preprocessing layer for the first model
+        if replica is None:
+            replica = 1
+        # Replicas start counting in 1 so:
+        preprocessing_layers = self._models[replica - 1].get_layer_re(r"pdf_prepro_\d")
+        if len(preprocessing_layers) != 1:
+            # We really don't want to fail at this point, but print a warning at least...
+            log.warning("More than one preprocessing layer found within the model!")
+        preprocessing_layer = preprocessing_layers[0]
+
+        alphas_and_betas = None
+        if self.fit_basis is not None:
+            output_dictionaries = []
+            for d in self.fit_basis:
+                flavour = d["fl"]
+                alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
+                beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
+                if alpha is not None:
+                    alpha = float(alpha.numpy())
+                if beta is not None:
+                    beta = float(beta.numpy())
+                output_dictionaries.append(
+                    {
+                        "fl": flavour,
+                        "smallx": alpha,
+                        "largex": beta,
+                        "trainable": d.get("trainable", True),
+                    }
+                )
+            alphas_and_betas = output_dictionaries
+        return alphas_and_betas
+
+    def __call__(self, xarr, flavours=None, replica=None):
+        """Uses the internal model to produce pdf values for the grid
+        The output is on the evolution basis.
+
+        Parameters
+        ----------
+            xarr: numpy.ndarray
+                x-points with shape (xgrid_size,) (size-1 dimensions are removed)
+            flavours: list
+                list of flavours to output
+            replica: int
+                replica whose value must be returned (by default return all members)
+                replica 0 corresponds to the central value
+
+        Returns
+        -------
+            numpy.ndarray
+                (xgrid_size, flavours) pdf result
+        """
+        return self._lhapdf_set(xarr, flavours=flavours, replica=replica)
+
+
+# Utilities and wrapper to avoid having to pass around unnecessary information
+def integrability_numbers(n3pdf, q0=1.65, flavours=None):
+    """Compute the integrability numbers for the current PDF
+    using the corresponding validphys action
+
+    Parameters
+    ----------
+        q0: float
+            energy at which the integrability is computed
+        flavours: list
+            flavours for which the integrability is computed
+
+    Returns
+    -------
+        np.array(float)
+            Value for the integrability for each of the flavours
+
+    Example
+    -------
+    >>> from n3fit.vpinterface import N3PDF
+    >>> from n3fit.model_gen import pdfNN_layer_generator
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> n3pdf = N3PDF(pdf_model)
+    >>> res = n3pdf.integrability_numbers()
+    """
+    if flavours is None:
+        flavours = ["V", "T3", "V3", "T8", "V8"]
+    return integrability_number(n3pdf, [q0], flavours=flavours)
+
+
+def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
+    """
+    Given the layer with the fit basis computes the arc length
+    using the corresponding validphys action
+
+    Parameters
+    ----------
+        pdf_function: function
+            pdf function has received by the writer or ``pdf_model``
+        q0: float
+            energy at which the arc length is computed
+        basis: str
+            basis in which to compute the arc length
+        flavours: list
+            output flavours
+
+    Example
+    -------
+    >>> from n3fit.vpinterface import N3PDF
+    >>> from n3fit.model_gen import pdfNN_layer_generator
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> n3pdf = N3PDF(pdf_model)
+    >>> res = n3pdf.compute_arclength()
+    """
+    if flavours is None:
+        flavours = ["sigma", "gluon", "V", "V3", "V8"]
+    ret = arc_lengths(self, [q0], basis, flavours)
+    return ret.stats.central_value()
