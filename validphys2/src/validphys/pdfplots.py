@@ -186,10 +186,11 @@ class ReplicaPDFPlotter(PDFPlotter):
         ax = flstate.ax
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop['color']
-        gv = grid.grid_values.error_members()[:,flstate.flindex,:]
+        flavour_grid = grid.select_flavour(flstate.flindex)
+        stats = flavour_grid.grid_values
+        gv = stats.data
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
-        stats = pdf.stats_class(gv)
         ax.plot(grid.xgrid, stats.central_value(), color=color,
                 linewidth=2,
                 label=pdf.label)
@@ -223,8 +224,7 @@ class UncertaintyPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         flindex = flstate.flindex
-        gv = grid.grid_values.error_members()[:,flindex,:]
-        stats = pdf.stats_class(gv)
+        stats = grid.select_flavour(flindex).grid_values
 
         res = stats.std_error()
 
@@ -330,7 +330,10 @@ class DistancePDFPlotter(PDFPlotter):
         next_prop = next(pcycler)
         color = next_prop['color']
 
-        gv = grid.grid_values.error_members()[flindex,:]
+        # The grid for the distance is (1, flavours, points)
+        # take only the flavour we are interested in
+        gv = grid.select_flavour(flindex).grid_values.data.squeeze()
+
         ax.plot(grid.xgrid, gv, color=color, label='$%s$' % flstate.parton_name)
 
         return gv
@@ -406,13 +409,11 @@ class BandPDFPlotter(PDFPlotter):
 
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
-        flindex = flstate.flindex
         hatchit = flstate.hatchit
         labels = flstate.labels
         handles = flstate.handles
         # Take only the flavours we are interested in
-        gv = grid.grid_values.data
-        stats = grid.copy_grid(grid_values=gv[:, flindex, :]).grid_values
+        stats = grid.select_flavour(flstate.flindex).grid_values
         pcycler = ax._get_lines.prop_cycler
         #This is ugly but can't think of anything better
 

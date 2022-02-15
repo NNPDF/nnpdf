@@ -140,15 +140,12 @@ def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     """
     positive_eigenvalue_mask = delta_chi2_hessian >= 0
 
-    # include replica 0 in both new grids, thus use the raw .data
+    # The masks do not include replica 0, add it in both grids
     pos_mask = np.append(True, positive_eigenvalue_mask)
     neg_mask = np.append(True, ~positive_eigenvalue_mask)
 
-    pos_grid = xplotting_grid.grid_values.data[pos_mask]
-    neg_grid = xplotting_grid.grid_values.data[neg_mask]
-
-    pos_xplotting_grid = xplotting_grid.copy_grid(grid_values=pos_grid)
-    neg_xplotting_grid = xplotting_grid.copy_grid(grid_values=neg_grid)
+    pos_xplotting_grid = xplotting_grid.mask_replicas(pos_mask)
+    neg_xplotting_grid = xplotting_grid.mask_replicas(neg_mask)
 
     return [xplotting_grid, pos_xplotting_grid, neg_xplotting_grid]
 
