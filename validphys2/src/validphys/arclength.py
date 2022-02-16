@@ -49,7 +49,7 @@ def arc_lengths(
         # Finite diff. step-size, x-grid
         eps = (b - a) / npoints
         ixgrid = xgrid(a, b, "linear", npoints)
-        # PDFs evaluated on grid, use the entire thing, the stats class will chose later
+        # PDFs evaluated on grid, use the entire thing, the Stats class will chose later
         xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data * ixgrid[1]
         fdiff = np.diff(xfgrid) / eps  # Compute forward differences
         res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
