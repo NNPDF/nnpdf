@@ -65,6 +65,8 @@ class DIS(Observable):
         # Separate the two possible paths this layer can take
         if self.many_masks:
             for mask, fktable in zip(self.all_masks, self.fktables):
+                tmp_fktable = fktable*self.alphas
+                fktable = tmp_fktable
                 pdf_masked = op.boolean_mask(pdf, mask, axis=2)
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                 results.append(res)

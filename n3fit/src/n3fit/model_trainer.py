@@ -742,7 +742,8 @@ class ModelTrainer:
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2 = stopping_object.vl_chi2
         exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
-        return train_chi2, val_chi2, exp_chi2
+        alphas = [i for i in self.training["model"].variables if "alphas" in i.name][0].numpy()
+        return train_chi2, val_chi2, exp_chi2, alphas
 
     def hyperparametrizable(self, params):
         """

@@ -38,10 +38,11 @@ class Observable(MetaLayer, ABC):
                 number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_dicts, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(self, fktable_dicts, fktable_arr, operation_name, alphas, nfl=14, **kwargs):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
+        self.alphas = alphas
 
         basis = []
         xgrids = []

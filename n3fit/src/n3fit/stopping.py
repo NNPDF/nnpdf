@@ -156,13 +156,14 @@ class FitState:
     tr_ndata = None
     vl_suffix = None
 
-    def __init__(self, training_info, validation_info):
+    def __init__(self, training_info, validation_info, alphas):
         if self.vl_ndata is None or self.tr_ndata is None or self.vl_suffix is None:
             raise ValueError(
                 "FitState cannot be instantiated until vl_ndata, tr_ndata and vl_suffix are filled"
             )
         self.training = training_info
         self.validation = validation_info
+        self.alphas = alphas
         self._parsed = False
         self._vl_chi2 = None
         self._tr_chi2 = None
@@ -368,7 +369,7 @@ class FitHistory:
         """ Returns the best validation loss for each replica """
         return np.array([i.best_vl for i in self._replicas])
 
-    def register(self, epoch, training_info, validation_info):
+    def register(self, epoch, training_info, validation_info, alphas):
         """Save a new fitstate and updates the current final epoch
 
         Parameters
@@ -380,7 +381,7 @@ class FitHistory:
                 the current epoch of the fit
         """
         # Save all the information in a fitstate object
-        fitstate = FitState(training_info, validation_info)
+        fitstate = FitState(training_info, validation_info, alphas)
         self.final_epoch = epoch
         self._history.append(fitstate)
         return fitstate
@@ -464,7 +465,7 @@ class Stopping:
     def vl_chi2(self):
         """ Current validation chi2 """
         validation_info = self._validation.compute_losses()
-        fitstate = FitState(None, validation_info)
+        fitstate = FitState(None, validation_info, None)
         return fitstate.vl_chi2
 
     @property
@@ -498,7 +499,7 @@ class Stopping:
                 chi2 of the given ``training_model``
         """
         training_info = training_model.compute_losses()
-        fitstate = FitState(training_info, None)
+        fitstate = FitState(training_info, None, None)
         return fitstate.tr_chi2
 
     def monitor_chi2(self, training_info, epoch, print_stats=False):
@@ -532,13 +533,14 @@ class Stopping:
             self.make_stop()
             return False
 
-        # Step 2. Compute the validation metrics
+        # Step 2. Compute the validation metrics and alphas value
         validation_info = self._validation.compute_losses()
+        alphas = [i for i in self._validation.variables if "alphas" in i.name][0].numpy()
 
         # Step 3. Register the current point in (the) history
-        fitstate = self._history.register(epoch, training_info, validation_info)
+        fitstate = self._history.register(epoch, training_info, validation_info, alphas)
         if print_stats:
-            self.print_current_stats(epoch, fitstate)
+            self.print_current_stats(epoch, fitstate, alphas)
 
         # Step 4. Check whether this is a better fit
         #         this means improving vl_chi2 and passing positivity
@@ -574,7 +576,7 @@ class Stopping:
         self.stop_now = True
         self._history.reload()
 
-    def print_current_stats(self, epoch, fitstate):
+    def print_current_stats(self, epoch, fitstate, alphas):
         """
         Prints ``fitstate`` training and validation chi2s
         """
@@ -590,7 +592,8 @@ class Stopping:
             for experiment, chi2 in partial_tr_chi2.items():
                 partials.append(f"{experiment}: {chi2:.3f}")
             total_str += ", ".join(partials) + "\n"
-        total_str += f"Validation chi2 at this point: {vl_chi2}"
+        total_str += f"Validation chi2 at this point: {vl_chi2}\n"
+        total_str += f"alphas at this point: {alphas}"
         log.info(total_str)
 
     def stop_here(self):

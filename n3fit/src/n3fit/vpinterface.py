@@ -132,6 +132,12 @@ class N3PDF(PDF):
             alphas_and_betas = output_dictionaries
         return alphas_and_betas
 
+    def get_alphas_values(self, replica=None):
+        # If no replica is explicitly requested, get the preprocessing layer for the first model
+        if replica is None:
+            replica = 1
+
+
     def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values.
         The output is on the evolution basis.

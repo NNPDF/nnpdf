@@ -256,7 +256,7 @@ def performfit(
         log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
 
         final_time = stopwatch.stop()
-        all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
+        all_training_chi2, all_val_chi2, all_exp_chi2, alphas = the_model_trainer.evaluate(stopping_object)
 
         pdf_models = result["pdf_models"]
         for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
@@ -291,7 +291,7 @@ def performfit(
                     training_chi2,
                     val_chi2
                     )
-
+            log.info(f"Best alphas is {alphas}")
 
             # Save the weights to some file for the given replica
             if save:

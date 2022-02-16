@@ -20,6 +20,13 @@ from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
+import tensorflow as tf
+ALPHAS = tf.Variable(
+    initial_value=0.118,
+    trainable=True,
+    name="alphas",
+    dtype=tf.float32,
+)
 
 @dataclass
 class ObservableWrapper:
@@ -162,6 +169,7 @@ def observable_generator(
                 dataset_dict["tr_fktables"],
                 operation_name,
                 name=f"dat_{dataset_name}",
+                alphas=ALPHAS
             )
             obs_layer_ex = obs_layer_vl = None
         elif spec_dict.get("data_transformation_tr") is not None:
@@ -171,6 +179,7 @@ def observable_generator(
                 dataset_dict["ex_fktables"],
                 operation_name,
                 name=f"exp_{dataset_name}",
+                alphas=ALPHAS
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
         else:
@@ -179,18 +188,21 @@ def observable_generator(
                 dataset_dict["tr_fktables"],
                 operation_name,
                 name=f"dat_{dataset_name}",
+                alphas=ALPHAS
             )
             obs_layer_ex = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
                 operation_name,
                 name=f"exp_{dataset_name}",
+                alphas=ALPHAS
             )
             obs_layer_vl = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["vl_fktables"],
                 operation_name,
                 name=f"val_{dataset_name}",
+                alphas=ALPHAS
             )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
