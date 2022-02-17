@@ -1,0 +1,54 @@
+meta:
+   author: Andrea Barontini
+   keywords: [theory uncertainties, 5-point]
+   title: NLO 5nobar-point variations for 1 process type - DIS CC
+
+
+default_theory:
+   - theoryid: 163
+
+theoryid: 163
+point_prescription: '5 point'
+
+theoryids:
+   from_: scale_variation_theories
+
+dataspecs:
+        - theoryid: 163
+          speclabel: $(\xi_F,\xi_R)=(1,1)$
+        - theoryid: 177
+          speclabel: $(\xi_F,\xi_R)=(2,1)$
+        - theoryid: 176
+          speclabel: $(\xi_F,\xi_R)=(0.5,1)$
+        - theoryid: 179
+          speclabel: $(\xi_F,\xi_R)=(1,2)$
+        - theoryid: 174
+          speclabel: $(\xi_F,\xi_R)=(1,0.5)$
+
+normalize_to: 1
+
+fit: 190315_ern_nlo_central_163_global
+use_cuts: "fromfit"
+
+pdf:
+    from_: fit
+
+dataset_inputs:
+  - dataset: CHORUSNU
+  - dataset: CHORUSNB
+  - dataset: NTVNUDMN
+  - dataset: NTVNBDMN
+  - dataset: HERACOMBCCEM
+  - dataset: HERACOMBCCEP
+
+template: template_matrix_plots_new.md
+
+dataset_report:
+   meta: Null
+   template_text: |
+      ## Scale variations as a function of the kinematics for {@dataset_name@}
+      {@plot_fancy_dataspecs@}
+
+actions_:
+  - report(main=true)
+
