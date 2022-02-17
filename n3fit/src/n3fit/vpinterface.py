@@ -62,7 +62,7 @@ class N3LHAPDFSet(LHAPDFSet):
     """Extension of LHAPDFSet using n3fit models"""
 
     def __init__(self, name, pdf_models):
-        log.info("Creating LHAPDF-like n3fit PDF")
+        log.debug("Creating LHAPDF-like n3fit PDF")
         self._error_type = "replicas"
         self._name = name
         self._lhapdf_set = pdf_models
