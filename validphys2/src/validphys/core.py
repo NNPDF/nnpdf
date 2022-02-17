@@ -37,6 +37,7 @@ from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
+from validphys.libnnpdf_var import kinlabels_latex
 
 log = logging.getLogger(__name__)
 
@@ -243,10 +244,7 @@ class PDF(TupleComp):
         return len(self.grid_values_index)
 
 
-
-kinlabels_latex = CommonData.kinLabel_latex.asdict()
 _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
-
 
 
 def get_plot_kinlabels(commondata):
@@ -266,83 +264,150 @@ def get_kinlabel_key(process_label):
                          "variables matching  the process %s Check the "
                          "labels defined in commondata.cc. " % (l)) from e
 
-CommonDataMetadata = namedtuple('CommonDataMetadata', ('name', 'nsys', 'ndata', 'process_type'))
 
-def peek_commondata_metadata(commondatafilename):
-    """Check some basic properties commondata object without going though the
-    trouble of processing it on the C++ side"""
-    with open(commondatafilename) as f:
-        try:
-            l = f.readline()
-            name, nsys_str, ndata_str = l.split()
-            l = f.readline()
-            process_type_str = l.split()[1]
-        except Exception:
-            log.error(f"Error processing {commondatafilename}")
-            raise
+class UncertaintiesSpec(TupleComp):
+    """Holds the information about the uncertainties for a given dataset"""
 
-    return CommonDataMetadata(name, int(nsys_str), int(ndata_str),
-                              get_kinlabel_key(process_type_str))
+    def __init__(self, uncertainties_file):
+        jj = json.load(uncertainties_file.open("r", encoding="utf-8"))
+        self.statistical = jj["statistical"]
+        self.systematic = jj["systematic"]
+        super().__init__(uncertainties_file)
+
+
+class KinematicsSpec(TupleComp):
+    """Holds the kinematic information about a given dataset"""
+
+    def __init__(self, kinematics_file):
+        jj = json.load(kinematics_file.open("r", encoding="utf-8"))
+
+        avg = jj["kinematics_avg"]
+        min_d = jj["kinematics_min"]
+        max_d = jj["kinematics_max"]
+
+        self.variables = list(avg.keys())
+        self._averages = {}
+        self._mins = {}
+        self._maxs = {}
+
+        for var in self.variables:
+            arr_avg = np.array(avg[var])
+            self._averages[var] = arr_avg
+            self._mins[var] = arr_avg if min_d[var] is None else np.array(min_d[var])
+            self._maxs[var] = arr_avg if max_d[var] is None else np.array(max_d[var])
+
+        super().__init__(kinematics_file)
+
+    def get_kin(self, var):
+        """Get a ((avg, min, max), npoints) array for the given variable"""
+        return np.stack([self._averages[var], self._mins[var], self._maxs[var]], axis=0)
+
+    def get_kin_cv(self, var):
+        """Get the cv for a given kinematic variable"""
+        return self._averages[var]
+
+    def get_kintable(self):
+        """Get all kinematic variables as (npoints, 3)"""
+        return np.stack(list(self._averages.values()), axis=1)
 
 
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None):
-        self.datafile = datafile
-        self.sysfile = sysfile
-        self.plotfiles = tuple(plotfiles)
-        self._name=name
-        self._metadata = metadata
-        super().__init__(datafile, sysfile, self.plotfiles)
+
+    def __init__(self, datafile, name, metadata, variant=None):
+        self._data_file = datafile
+        self._kinematics_file = datafile.parent / metadata["data_kinematics"]
+
+        if variant is None:
+            uncertainties_file = metadata["default_variant"]
+        else:
+            # TODO: the variants can override, if necessary, the kinematics, data and uncertainties?
+            try:
+                uncertainties_file = metadata["variants"][variant]
+            except KeyError:
+                raise FileNotFoundError(f"Variant {variant} is not declared in the metadata for {name}")
+
+        self._uncertainties_file = datafile.parent / uncertainties_file
+        if not self._uncertainties_file.exists():
+            raise FileNotFoundError(f"Uncertainties file {self._uncertainties_file} not found for {name}")
+
+        # Public attributes
+        self.name = name
+        self.variant = variant
+        self.metadata = metadata
+
+        # lazy loading
+        self._data = None
+        self._uncertainties = None
+        self._kinematics = None
+
+        super().__init__(datafile, self._uncertainties_file)
 
     @property
-    def name(self):
-        return self.metadata.name
+    def data(self):
+        """Reads the data as a 1-d numpy array"""
+        if self._data is None:
+            jj = json.load(self._data_file.open("r", encoding="utf-8"))
+            self._data = np.array(jj["data"])
+        return self._data
+
+    @property
+    def uncertainties(self):
+        """Reads the uncertainties"""
+        if self._uncertainties is None:
+            self._uncertainties = UncertaintiesSpec(self._uncertainties_file)
+        return self._uncertainties
+
+    @property
+    def kinematics(self):
+        """Reads the kinematics of the dataset as a {'var':'values'} dict"""
+        if self._kinematics is None:
+            self._kinematics = KinematicsSpec(self._kinematics_file)
+        return self._kinematics
 
     @property
     def nsys(self):
-        return self.metadata.nsys
+        return len(self.uncertainties.systematic)
 
     @property
     def ndata(self):
-        return self.metadata.ndata
+        """Return the number of datapoints"""
+        return len(self.data)
 
     @property
     def process_type(self):
-        return self.metadata.process_type
-
-    @property
-    def metadata(self):
-        if self._metadata is None:
-            self._metadata = peek_commondata_metadata(self.datafile)
-        return self._metadata
+        """Return the number of systematic uncertainties"""
+        return self.metadata.get("proctype")
 
     def __str__(self):
         return self.name
 
     def __iter__(self):
-        return iter((self.datafile, self.sysfile, self.plotfiles))
-
-    @functools.lru_cache()
-    def load(self)->CommonData:
-        #TODO: Use better path handling in python 3.6
-        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+        return iter((self.data, self.uncertainties))
 
     @property
     def plot_kinlabels(self):
         return get_plot_kinlabels(self)
 
+    # Legacy libNNPDF-like interface
+    def get_cv(self):
+        return self.data
+
+    def get_kintable(self):
+        return self.kinematics.get_kintable()
+
 
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specidy a
     dataset."""
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variant):
         self.name=name
         self.sys=sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
-        super().__init__(name, sys, cfac, frac, weight, custom_group)
+        self.variant = variant
+        super().__init__(name, sys, cfac, frac, weight, custom_group, variant)
 
     def __str__(self):
         return self.name

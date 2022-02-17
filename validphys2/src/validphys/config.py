@@ -405,7 +405,7 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
+        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -418,6 +418,9 @@ class CoreConfig(configparser.Config):
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
         frac = dataset.get("frac", 1)
+        variant = dataset.get("variant")
+        if variant is not None and sysnum is not None:
+            raise ConfigError("variant (new) and sysnum (legacy) cannot be selected at the same time")
         if not isinstance(frac, numbers.Real):
             raise ConfigError(f"'frac' must be a number, not '{frac}'")
         if frac < 0 or frac > 1:
@@ -441,7 +444,8 @@ class CoreConfig(configparser.Config):
             cfac=cfac,
             frac=frac,
             weight=weight,
-            custom_group=custom_group
+            custom_group=custom_group,
+            variant=variant
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -454,12 +458,14 @@ class CoreConfig(configparser.Config):
 
         name = dataset_input.name
         sysnum = dataset_input.sys
+        variant = dataset_input.variant
         try:
             return self.loader.check_commondata(
                 setname=name,
                 sysnum=sysnum,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
+                variant=variant,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets) from e

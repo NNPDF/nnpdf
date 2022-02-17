@@ -34,6 +34,11 @@ from validphys import lhaindex
 
 DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
 
+if os.env.get("BUILDMASTER_PATH"):
+    NEWPATH = pathlib.Path(os.env["BUILDMASTER_PATH"])
+else:
+    NEWPATH=pathlib.Path("/mount/storage/Academic_Workspace/NNPDF/src/nnpdf/buildmaster")
+
 log = logging.getLogger(__name__)
 
 class LoaderError(Exception): pass
@@ -43,6 +48,10 @@ class LoadFailedError(FileNotFoundError, LoaderError): pass
 class DataNotFoundError(LoadFailedError): pass
 
 class SysNotFoundError(LoadFailedError): pass
+
+class UncertaintiesNotFoundError(LoadFailedError): pass
+
+class MetadataNotFoundError(LoadFailedError): pass
 
 class FKTableNotFound(LoadFailedError): pass
 
@@ -253,7 +262,10 @@ class Loader(LoaderBase):
         return self.datapath / 'commondata'
 
     def check_commondata(self, setname, sysnum=None, use_fitcommondata=False,
-                         fit=None):
+                         fit=None, variant=None):
+        # Set up the legacy file
+        datafile = self.commondata_folder / f'DATA_{setname}.dat'
+
         if use_fitcommondata:
             if not fit:
                 raise LoadFailedError(
@@ -282,12 +294,26 @@ class Loader(LoaderBase):
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
                 rebuild_commondata_without_cuts(oldpath, cuts, basedata, newpath)
             datafile = newpath
-        else:
-            datafile = self.commondata_folder / f'DATA_{setname}.dat'
+
+        # The database is one-folder-per-dataset
+        setdir = NEWPATH/setname
+        if not setdir.is_dir():
+            raise DataNotFoundError(f"The dataset '{setname}' could not be found at {setdir}")
+
+        # Load the metadata as a dictionary
+        # eventually we will want to have a metadataspec to fix the keys?
+        metadatafile = setdir / "metadata.yaml"
+        if not metadatafile.exists():
+            raise MetadataNotFoundError(f"Metadata not found for {setname}")
+        metadata = yaml.safe_load(metadatafile.open("r", encoding="utf-8"))
+
+        # Ask the metadata for the data to load
+        datafile = setdir / metadata["data_central"]
         if not datafile.exists():
-            raise DataNotFoundError(("Could not find Commondata set: '%s'. "
-                  "File '%s' does not exist.")
-                 % (setname, datafile))
+            raise DataNotFoundError(f"Datafile '{datafile}' not found")
+        
+        return CommonDataSpec(datafile, name=setname, metadata=metadata, variant=variant)
+
         if sysnum is None:
             sysnum = 'DEFAULT'
         sysfile = (self.commondata_folder / 'systypes' /
@@ -321,6 +347,7 @@ class Loader(LoaderBase):
                 f"The name found in the CommonData file, {metadata.name}, did "
                 f"not match the dataset name, {setname}."
             )
+
         return CommonDataSpec(datafile, sysfile, plotfiles, name=setname, metadata=metadata)
 
     @functools.lru_cache()
