@@ -252,7 +252,7 @@ def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
 def plot_normthcovmat_heatmap_custom(
     theory_normcovmat_custom,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
@@ -281,7 +281,7 @@ def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
 def plot_thcorrmat_heatmap_custom(
     theory_corrmat_custom,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
@@ -311,7 +311,7 @@ def plot_normexpplusblockthcovmat_heatmap(
 def plot_normexpplusthcovmat_heatmap_custom(
     experimentplustheory_normcovmat_custom,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
@@ -341,7 +341,7 @@ def plot_expplusblockthcorrmat_heatmap(experimentplusblocktheory_corrmat):
 def plot_expplusthcorrmat_heatmap_custom(
     experimentplustheory_corrmat_custom,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
@@ -376,7 +376,7 @@ def plot_covdiff_heatmap_custom(
     theory_covmat_custom,
     procs_covmat,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
@@ -400,7 +400,7 @@ def plot_diag_cov_comparison(
     procs_covmat,
     procs_data_values,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
@@ -454,7 +454,7 @@ def plot_diag_cov_impact(
     procs_covmat,
     procs_data_values,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)

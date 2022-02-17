@@ -61,7 +61,7 @@ def theory_covmat_singleprocess_no_table(
     theoryids_procs_central_values_no_table,
     procs_index,
     theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
 ):
 
     """Calculates the theory covariance matrix for scale variations.
@@ -74,7 +74,7 @@ def theory_covmat_singleprocess_no_table(
 @table
 @check_correct_theory_combination
 def theory_covmat_singleprocess(
-    theory_covmat_singleprocess_no_table, fivetheories: (str, type(None)) = None
+    theory_covmat_singleprocess_no_table, fivetheories
 ):
     """Duplicate of theory_covmat_singleprocess_no_table but with a table decorator."""
     return theory_covmat_singleprocess_no_table
@@ -88,7 +88,7 @@ each_dataset_results_bytheory = collect(
 
 @check_correct_theory_combination
 def theory_covmat_datasets(
-    each_dataset_results_bytheory, fivetheories: (str, type(None)) = None
+    each_dataset_results_bytheory, fivetheories
 ):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard."""
@@ -102,7 +102,7 @@ def theory_covmat_datasets(
 
 @check_correct_theory_combination
 def total_covmat_datasets(
-    each_dataset_results_bytheory, fivetheories: (str, type(None)) = None
+    each_dataset_results_bytheory, fivetheories
 ):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
@@ -120,7 +120,7 @@ def total_covmat_datasets(
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_datasets(
-    each_dataset_results_bytheory, fivetheories: (str, type(None)) = None
+    each_dataset_results_bytheory, fivetheories
 ):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats = []
@@ -161,7 +161,7 @@ procs_results_theory = collect("procs_results", ("theoryids",))
 
 
 @check_correct_theory_combination
-def total_covmat_procs(procs_results_theory, fivetheories: (str, type(None)) = None):
+def total_covmat_procs(procs_results_theory, fivetheories):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     proc_result_covmats = []
@@ -377,9 +377,9 @@ def covs_pt_prescrip(
     combine_by_type,
     process_starting_points,
     theoryids,
-    point_prescription: (str, type(None)) = None,
-    fivetheories: (str, type(None)) = None,
-    seventheories: (str, type(None)) = None,
+    point_prescription,
+    fivetheories,
+    seventheories
 ):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
@@ -593,7 +593,7 @@ def procs_index_matched(groups_index, procs_index):
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_procs(
-    procs_results_theory, fivetheories: (str, type(None)) = None
+    procs_results_theory, fivetheories
 ):
     """Same as total_covmat_datasets but per proc rather than
     per dataset. Needed for calculation of chi2 per proc."""

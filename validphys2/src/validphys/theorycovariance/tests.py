@@ -199,16 +199,18 @@ def covs_pt_prescrip_dataspecs(
     combine_by_type_dataspecs,
     process_starting_points_dataspecs,
     dataspecs_theoryids,
-    fivetheories: (str, type(None)) = None,
-    seventheories: (str, type(None)) = None,
+    point_prescription,
+    fivetheories,
+    seventheories,
 ):
     """Like covs_pt_prescrip but for matched dataspecs."""
     return covs_pt_prescrip(
         combine_by_type_dataspecs,
         process_starting_points_dataspecs,
         dataspecs_theoryids,
+        point_prescription,
         fivetheories,
-        seventheories,
+        seventheories
     )
 
 
@@ -501,7 +503,7 @@ def evals_nonzero_basis(
     thx_covmat,
     thx_vector,
     collected_theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
     seventheories: (str, type(None)) = None,
     orthonormalisation: (str, type(None)) = None,
 ):

@@ -12,9 +12,9 @@ from validphys.plotoptions import get_info
 log = logging.getLogger(__name__)
 
 
-def check_correct_theory_combination_internal(theoryids, 
-                                              point_prescription:(str, type(None)) = None,
-                                              fivetheories:(str, type(None)) = None):
+def check_correct_theory_combination_internal(theoryids, fivetheories,
+                                             point_prescription:(str, type(None)) = None
+):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
@@ -62,12 +62,12 @@ check_correct_theory_combination = make_argcheck(check_correct_theory_combinatio
 
 @make_argcheck
 def check_correct_theory_combination_theoryconfig(collected_theoryids,
-                                                   fivetheories:(str, type(None)) = None):
+                                                   fivetheories):
     check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
 
 @make_argcheck
 def check_correct_theory_combination_dataspecs(dataspecs_theoryids,
-                                                fivetheories:(str, type(None)) = None):
+                                                fivetheories):
     """Like check_correct_theory_combination but for matched dataspecs."""
     return check_correct_theory_combination.__wrapped__(
         dataspecs_theoryids, fivetheories)
