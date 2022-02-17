@@ -68,7 +68,7 @@ below.
 
 A docker image of all of the pieces of code required to generate interpolation
 tables in the APPLgrid format with the MadGraph5\_aMC@NLO + amcfast tool chain
-are available at [this link](https://hub.docker.com/r/jamesmmoore/applgrids).
+are available at [this link](https://github.com/J-M-Moore/applgrid_docker).
 The default version of MG5\_aMC used in NNPDF is
 [v2.6.4](https://github.com/NNPDF/external/tree/MG5_fixed/MG5_aMC_v2_6_4).
 It does not
