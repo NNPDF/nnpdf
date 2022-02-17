@@ -66,14 +66,24 @@ below.
 
 ### MadGraph5\_aMC@NLO + amcfast
 
-A docker image of all of the pieces of code required to generate interpolation
-tables in the APPLgrid format with the MadGraph5\_aMC@NLO + amcfast tool chain
-are available at [this link](https://github.com/J-M-Moore/applgrid_docker).
-The default version of MG5\_aMC used in NNPDF is
-[v2.6.4](https://github.com/NNPDF/external/tree/MG5_fixed/MG5_aMC_v2_6_4).
-It does not
-need to be installed, because installation is performed automatically at
-the time of the generation of a given process. MG5_aMC is usually run from the 
+Generating APPLgrids with `amcfast` requires old (and unmaintained) versions of
+various pieces of software and a complex setup. The best way to obtain the
+dependencies is using the docker image produced by James Moore, available at
+
+https://hub.docker.com/r/jamesmmoore/applgrids
+
+The source and setup is documented in a [git
+repository]((https://github.com/J-M-Moore/applgrid_docker). Users of computer
+clusters might be able to take advantage of the image using the
+[Singularity](https://sylabs.io/) software.
+
+The image contains of all of the pieces of code required to generate
+interpolation tables in the APPLgrid format with the MadGraph5\_aMC@NLO +
+amcfast tool chain.  The default version of MG5\_aMC used in NNPDF is
+[v2.6.4](https://github.com/NNPDF/external/tree/MG5_fixed/MG5_aMC_v2_6_4).  It
+does not need to be installed, because installation is performed automatically
+at the time of the generation of a given process. MG5_aMC is usually run from
+the 
 ```text
 external/MG5_aMC_v2_6_4/bin
 ```
