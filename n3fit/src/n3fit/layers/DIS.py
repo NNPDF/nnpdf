@@ -61,19 +61,30 @@ class DIS(Observable):
         if self.splitting is not None:
             raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
 
-        results = []
-        # Separate the two possible paths this layer can take
-        if self.many_masks:
-            for mask, fktable in zip(self.all_masks, self.fktables):
-                tmp_fktable = fktable*self.alphas
-                fktable = tmp_fktable
-                pdf_masked = op.boolean_mask(pdf, mask, axis=2)
-                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-                results.append(res)
-        else:
-            pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
-            for fktable in self.fktables:
-                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-                results.append(res)
+        list_alphas_results = []
+        for alphas_fk in self.alphas_fktabs:
+            results = []
+            # Separate the two possible paths this layer can take
+            if self.many_masks:
+                for mask, fktable in zip(self.all_masks, alphas_fk):
+                    pdf_masked = op.boolean_mask(pdf, mask, axis=2)
+                    res = op.tensor_product(pdf_masked, fktable*factor, axes=[(1, 2), (2, 1)])
+                    results.append(res)
+            else:
+                pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
+                for fktable in alphas_fk:
+                    res = op.tensor_product(pdf_masked, fktable*factor, axes=[(1, 2), (2, 1)])
+                    results.append(res)
+            list_alphas_results.append(self.operation(results))
 
-        return self.operation(results)
+
+        import tensorflow_probability as tfp
+        out = tfp.math.interp_regular_1d_grid(
+            self.alphas,
+            0.116,
+            0.118,
+            [0.1,0.5,1.],
+            fill_value="extrapolate"
+        )
+
+        return out
