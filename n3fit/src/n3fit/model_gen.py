@@ -151,10 +151,8 @@ def observable_generator(
         else:
             Obs_Layer = DIS
 
-        try: 
-            alphas_fktabs = spec_dict['alphas_fktabsdict'][dataset_name]
-        except:
-            import ipdb; ipdb.set_trace()
+        alphas_fktabs = spec_dict['alphas_fktabsdict'][dataset_name]
+
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset_dict["operation"]
 

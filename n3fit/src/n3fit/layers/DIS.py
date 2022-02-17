@@ -68,12 +68,12 @@ class DIS(Observable):
             if self.many_masks:
                 for mask, fktable in zip(self.all_masks, alphas_fk):
                     pdf_masked = op.boolean_mask(pdf, mask, axis=2)
-                    res = op.tensor_product(pdf_masked, fktable*factor, axes=[(1, 2), (2, 1)])
+                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                     results.append(res)
             else:
                 pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
                 for fktable in alphas_fk:
-                    res = op.tensor_product(pdf_masked, fktable*factor, axes=[(1, 2), (2, 1)])
+                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                     results.append(res)
             list_alphas_results.append(self.operation(results))
 
@@ -83,8 +83,11 @@ class DIS(Observable):
             self.alphas,
             0.116,
             0.118,
-            [0.1,0.5,1.],
-            fill_value="extrapolate"
+            list_alphas_results,
+            fill_value="extrapolate",
+            axis=0
         )
 
+        test = self.alphas*list_alphas_results[1]
+        return test
         return out

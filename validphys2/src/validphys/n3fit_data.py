@@ -597,41 +597,53 @@ def fitting_pos_dict(posdataset, posdataset_interpolate_fktables):
             break
     return res
 
+
+def fitting_integ_dict(integdataset, integdataset_interpolate_fktables):
+    log.info("Loading inegrability dataset %s", integdataset)
+    res = positivity_reader(integdataset)
+    for i in integdataset_interpolate_fktables:
+        if i[1] == integdataset.name:
+            res['alphas_fktabsdict'] = {i[1]:i[0]}
+            break
+    return res
+
 posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
+integdatasets_fitting_integ_dict = collect("fitting_integ_dict", ("integdatasets",))
 
 
-#can't use collect here because integdatasets might not exist.
-def integdatasets_fitting_integ_dict(integdatasets=None):
-    """Loads a integrability dataset. Calls same function as
-    :py:func:`fitting_pos_dict`, except on each element of
-    ``integdatasets`` if ``integdatasets`` is not None.
 
-    Parameters
-    ----------
-    integdatasets: list[validphys.core.PositivitySetSpec]
-        list containing the settings for the integrability sets. Examples of
-        these can be found in the runcards located in n3fit/runcards. They have
-        a format similar to ``dataset_input``.
+# #can't use collect here because integdatasets might not exist.
+# def integdatasets_fitting_integ_dict(integdatasets=None):
+#     """Loads a integrability dataset. Calls same function as
+#     :py:func:`fitting_pos_dict`, except on each element of
+#     ``integdatasets`` if ``integdatasets`` is not None.
 
-    Examples
-    --------
-    >>> from validphys.api import API
-    >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
-    >>> len(res), len(res[0])
-    (1, 9)
-    >>> res = API.integdatasets_fitting_integ_dict(integdatasets=None)
-    >>> print(res)
-    None
+#     Parameters
+#     ----------
+#     integdatasets: list[validphys.core.PositivitySetSpec]
+#         list containing the settings for the integrability sets. Examples of
+#         these can be found in the runcards located in n3fit/runcards. They have
+#         a format similar to ``dataset_input``.
 
-    """
-    if integdatasets is not None:
-        integ_info = []
-        for integ_set in integdatasets:
-            log.info("Loading integrability dataset %s", integ_set)
-            # Use the same reader as positivity observables
-            integ_dict = positivity_reader(integ_set)
-            integ_info.append(integ_dict)
-        return integ_info
-    log.warning("Not using any integrability datasets.")
-    return None
+#     Examples
+#     --------
+#     >>> from validphys.api import API
+#     >>> integdatasets = [{"dataset": "INTEGXT3", "maxlambda": 1e2}]
+#     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=integdatasets, theoryid=53)
+#     >>> len(res), len(res[0])
+#     (1, 9)
+#     >>> res = API.integdatasets_fitting_integ_dict(integdatasets=None)
+#     >>> print(res)
+#     None
+
+#     """
+#     if integdatasets is not None:
+#         integ_info = []
+#         for integ_set in integdatasets:
+#             log.info("Loading integrability dataset %s", integ_set)
+#             # Use the same reader as positivity observables
+#             integ_dict = positivity_reader(integ_set)
+#             integ_info.append(integ_dict)
+#         return integ_info
+#     log.warning("Not using any integrability datasets.")
+#     return None

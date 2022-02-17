@@ -40,25 +40,39 @@ class DY(Observable):
         # Hadronic observables might need splitting of the input pdf in the x dimension
         # so we have 3 different paths for this layer
 
-        results = []
-        if self.many_masks:
-            if self.splitting:
-                splitted_pdf = op.split(pdf_raw, self.splitting, axis=1)
-                for mask, pdf, fk in zip(self.all_masks, splitted_pdf, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=3)
-                    results.append(res)
+        list_alphas_results = []
+        for alphas_fk in self.alphas_fktabs:
+            results = []
+            if self.many_masks:
+                if self.splitting:
+                    splitted_pdf = op.split(pdf_raw, self.splitting, axis=1)
+                    for mask, pdf, fk in zip(self.all_masks, splitted_pdf, alphas_fk):
+                        pdf_x_pdf = op.pdf_masked_convolution(pdf, mask)
+                        res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                        results.append(res)
+                else:
+                    for mask, fk in zip(self.all_masks, alphas_fk):
+                        pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, mask)
+                        res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                        results.append(res)
             else:
-                for mask, fk in zip(self.all_masks, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, mask)
+                pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.all_masks[0])
+                for fk in alphas_fk:
                     res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                     results.append(res)
-        else:
-            pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.all_masks[0])
-            for fk in self.fktables:
-                res = op.tensor_product(fk, pdf_x_pdf, axes=3)
-                results.append(res)
 
-        # the masked convolution removes the batch dimension
-        ret = op.transpose(self.operation(results))
-        return op.batchit(ret)
+            # the masked convolution removes the batch dimension
+            ret = op.transpose(self.operation(results))
+            list_alphas_results.append(op.batchit(ret))
+
+        import tensorflow_probability as tfp
+        out = tfp.math.interp_regular_1d_grid(
+            self.alphas,
+            0.116,
+            0.118,
+            list_alphas_results,
+            fill_value="extrapolate",
+            axis=0
+        )
+
+        return out
