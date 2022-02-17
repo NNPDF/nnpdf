@@ -49,7 +49,6 @@ class LHAPDFSet:
     """
 
     def __init__(self, name, error_type):
-        log.info("PDF: %s ErrorType: %s", name, error_type)
         self._name = name
         self._error_type = error_type
         if self.is_t0:
