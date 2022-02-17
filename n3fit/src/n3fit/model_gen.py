@@ -151,8 +151,10 @@ def observable_generator(
         else:
             Obs_Layer = DIS
 
-        alphas_fktabs = alphas_fktabsdict[dataset_name]
-
+        try: 
+            alphas_fktabs = spec_dict['alphas_fktabsdict'][dataset_name]
+        except:
+            import ipdb; ipdb.set_trace()
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset_dict["operation"]
 
@@ -163,10 +165,6 @@ def observable_generator(
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
 
-        tr_alphas = [i["tr_fktables"] for i in alphas_fktabs]
-        vl_alphas = [i["vl_fktables"] for i in alphas_fktabs]
-        ex_alphas = [i["ex_fktables"] for i in alphas_fktabs]
-
         if spec_dict["positivity"]:
             # Positivity (and integrability, which is a special kind of positivity...)
             # enters only at the "training" part of the models
@@ -176,7 +174,7 @@ def observable_generator(
                 operation_name,
                 name=f"dat_{dataset_name}",
                 alphas=ALPHAS,
-                alphas_fktabs=tr_alphas,
+                alphas_fktabs=[i["tr_fktables"] for i in alphas_fktabs],
             )
             obs_layer_ex = obs_layer_vl = None
         elif spec_dict.get("data_transformation_tr") is not None:
@@ -187,7 +185,7 @@ def observable_generator(
                 operation_name,
                 name=f"exp_{dataset_name}",
                 alphas=ALPHAS,
-                alphas_fktabs=ex_alphas,
+                alphas_fktabs=[i["ex_fktables"] for i in alphas_fktabs],
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
         else:
@@ -197,7 +195,7 @@ def observable_generator(
                 operation_name,
                 name=f"dat_{dataset_name}",
                 alphas=ALPHAS,
-                alphas_fktabs=tr_alphas,
+                alphas_fktabs=[i["tr_fktables"] for i in alphas_fktabs],
             )
             obs_layer_ex = Obs_Layer(
                 dataset_dict["fktables"],
@@ -205,7 +203,7 @@ def observable_generator(
                 operation_name,
                 name=f"exp_{dataset_name}",
                 alphas=ALPHAS,
-                alphas_fktabs=ex_alphas,
+                alphas_fktabs=[i["ex_fktables"] for i in alphas_fktabs],
             )
             obs_layer_vl = Obs_Layer(
                 dataset_dict["fktables"],
@@ -213,7 +211,7 @@ def observable_generator(
                 operation_name,
                 name=f"val_{dataset_name}",
                 alphas=ALPHAS,
-                alphas_fktabs=vl_alphas,
+                alphas_fktabs=[i["vl_fktables"] for i in alphas_fktabs],
             )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer

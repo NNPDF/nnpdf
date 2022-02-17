@@ -198,8 +198,8 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
 
 
 theoryids_dataset = collect("dataset", ("theoryids",))
-theoryids_posdataset = collect("posdatasets", ("theoryids",))
-theoryids_integdataset = collect("integdatasets", ("theoryids",))
+theoryids_posdatasets = collect("posdatasets", ("theoryids",))
+theoryids_integdatasets = collect("integdatasets", ("theoryids",))
 
 def dataset_interpolate_fktables(theoryids, theoryids_dataset):
 
@@ -210,48 +210,35 @@ def dataset_interpolate_fktables(theoryids, theoryids_dataset):
         dataset_different_alphas.append(dataset)
 
     name = dataset["name"]
-    
-    return dataset_different_alphas, name
+
+    return [dataset_different_alphas, name]
 
 
-def posdataset_interpolate_fktables(theoryids, theoryids_posdataset):
-
+def posdataset_interpolate_fktables(theoryids, theoryids_posdatasets):
     datasets_and_name = []
-
-    arr_theoryids_posdataset = np.array(theoryids_posdataset)
+    arr_theoryids_posdataset = np.array(theoryids_posdatasets)
     for i in range(arr_theoryids_posdataset.shape[1]):
         dataset_different_alphas = arr_theoryids_posdataset[:,i]
         dicts_different_alphas = []
-        for dataset in dataset_different_alphas:
-            dicts_different_alphas.append(positivity_reader(dataset)["datasets"])
+        for dataset_single_alpha in dataset_different_alphas:
+            dicts_different_alphas.append(positivity_reader(dataset_single_alpha)["datasets"][0])
         name = dataset_different_alphas[0].name
         datasets_and_name.append([dicts_different_alphas, name])
-
     return datasets_and_name
 
 
-def integdataset_interpolate_fktables(theoryids, theoryids_integdataset):
-    return posdataset_interpolate_fktables(theoryids, theoryids_integdataset)
+def integdataset_interpolate_fktables(theoryids, theoryids_integdatasets):
+    return posdataset_interpolate_fktables(theoryids, theoryids_integdatasets)
 
-_dataset_inputs_interpolate_fktables = collect("dataset_interpolate_fktables", ("dataset_inputs",))
-_posdatasets_interpolate_fktables = collect("posdataset_interpolate_fktables", ("posdatasets", ))
-_integdatasets_interpolate_fktables = collect("integdataset_interpolate_fktables", ("integdatasets", ))
+_dataset_inputs_interpolate_fktables = collect("dataset_interpolate_fktables", ("data",))
 def dataset_inputs_interpolate_fktables(
     _dataset_inputs_interpolate_fktables,
-    _posdatasets_interpolate_fktables, 
-    _integdatasets_interpolate_fktables,
-    # dataset_inputs,
-    # posdatasets, 
-    # integdatasets
+    posdataset_interpolate_fktables, 
+    integdataset_interpolate_fktables,
     ):
 
-    # we sater with dataset inputs since there is no list to unpack while for
-    # posdatasets and intdatasets there is (see functions above)
-    all_datasets_list = _dataset_inputs_interpolate_fktables
-    for i in _posdatasets_interpolate_fktables:
-        all_datasets_list += i
-    for i in _integdatasets_interpolate_fktables:
-        all_datasets_list += i
+    all_datasets_list = deepcopy(_dataset_inputs_interpolate_fktables)
+    all_datasets_list += posdataset_interpolate_fktables + integdataset_interpolate_fktables
 
     fkdict = {}
     for dataset_fktables in all_datasets_list:
@@ -332,10 +319,12 @@ def fitting_data_dict(
         dt_trans_tr = None
         dt_trans_vl = None
 
-    datasets_alphas_fktabs = [dataset_inputs_interpolate_fktables[i["name"]] for i in datasets]
+    datasets_alphas_fktabs = [
+        dataset_inputs_interpolate_fktables[i["name"]] for i in datasets
+    ]
     for num, dataset_alphas_fktabs in enumerate(datasets_alphas_fktabs):
         for dataset_alphas_fktab in dataset_alphas_fktabs:
-            _ = _mask_fk_tables([dataset_alphas_fktab], [tr_masks[num]])
+            _mask_fk_tables([dataset_alphas_fktab], [tr_masks[num]])
 
     # Copy dataset dict because we mutate it.
     datasets_copy = deepcopy(datasets)
@@ -582,7 +571,7 @@ def training_mask(replicas_training_mask):
     return pd.concat(replicas_training_mask, axis=1)
 
 
-def fitting_pos_dict(posdataset):
+def fitting_pos_dict(posdataset, posdataset_interpolate_fktables):
     """Loads a positivity dataset. For more information see
     :py:func:`validphys.n3fit_data_utils.positivity_reader`.
 
@@ -601,7 +590,12 @@ def fitting_pos_dict(posdataset):
 
     """
     log.info("Loading positivity dataset %s", posdataset)
-    return positivity_reader(posdataset)
+    res = positivity_reader(posdataset)
+    for i in posdataset_interpolate_fktables:
+        if i[1] == posdataset.name:
+            res['alphas_fktabsdict'] = {i[1]:i[0]}
+            break
+    return res
 
 posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
 
