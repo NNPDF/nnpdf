@@ -19,6 +19,7 @@ from reportengine.table import table
 
 from validphys.n3fit_data_utils import (
     common_data_reader_experiment,
+    common_data_reader_dataset,
     positivity_reader,
 )
 
@@ -185,7 +186,82 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     return np.concatenate(trmask_partial)
 
 
+
+
+
+
+
+
+
+
+
+
+
+theoryids_dataset = collect("dataset", ("theoryids",))
+theoryids_posdataset = collect("posdatasets", ("theoryids",))
+theoryids_integdataset = collect("integdatasets", ("theoryids",))
+
+def dataset_interpolate_fktables(theoryids, theoryids_dataset):
+
+    dataset_different_alphas = []
+    for data_theoryid in theoryids_dataset:
+        spec_c = data_theoryid.load()
+        dataset = common_data_reader_dataset(spec_c, data_theoryid)[0]
+        dataset_different_alphas.append(dataset)
+
+    name = dataset["name"]
+    
+    return dataset_different_alphas, name
+
+
+def posdataset_interpolate_fktables(theoryids, theoryids_posdataset):
+
+    datasets_and_name = []
+
+    arr_theoryids_posdataset = np.array(theoryids_posdataset)
+    for i in range(arr_theoryids_posdataset.shape[1]):
+        dataset_different_alphas = arr_theoryids_posdataset[:,i]
+        dicts_different_alphas = []
+        for dataset in dataset_different_alphas:
+            dicts_different_alphas.append(positivity_reader(dataset)["datasets"])
+        name = dataset_different_alphas[0].name
+        datasets_and_name.append([dicts_different_alphas, name])
+
+    return datasets_and_name
+
+
+def integdataset_interpolate_fktables(theoryids, theoryids_integdataset):
+    return posdataset_interpolate_fktables(theoryids, theoryids_integdataset)
+
+_dataset_inputs_interpolate_fktables = collect("dataset_interpolate_fktables", ("dataset_inputs",))
+_posdatasets_interpolate_fktables = collect("posdataset_interpolate_fktables", ("posdatasets", ))
+_integdatasets_interpolate_fktables = collect("integdataset_interpolate_fktables", ("integdatasets", ))
+def dataset_inputs_interpolate_fktables(
+    _dataset_inputs_interpolate_fktables,
+    _posdatasets_interpolate_fktables, 
+    _integdatasets_interpolate_fktables,
+    # dataset_inputs,
+    # posdatasets, 
+    # integdatasets
+    ):
+
+    # we sater with dataset inputs since there is no list to unpack while for
+    # posdatasets and intdatasets there is (see functions above)
+    all_datasets_list = _dataset_inputs_interpolate_fktables
+    for i in _posdatasets_interpolate_fktables:
+        all_datasets_list += i
+    for i in _integdatasets_interpolate_fktables:
+        all_datasets_list += i
+
+    fkdict = {}
+    for dataset_fktables in all_datasets_list:
+        fkdict[dataset_fktables[1]]=dataset_fktables[0]
+
+    return fkdict
+
+
 def fitting_data_dict(
+    dataset_inputs_interpolate_fktables,
     data,
     make_replica,
     dataset_inputs_t0_covmat_from_systematics,
@@ -297,7 +373,6 @@ def fitting_data_dict(
         folds["training"].append(fold[tr_mask])
         folds["validation"].append(fold[vl_mask])
         folds["experimental"].append(~fold)
-
     dict_out = {
         "datasets": datasets_copy,
         "name": str(data),
@@ -317,6 +392,7 @@ def fitting_data_dict(
         "folds" : folds,
         "data_transformation_tr": dt_trans_tr,
         "data_transformation_vl": dt_trans_vl,
+        "alphas_fktabsdict": dataset_inputs_interpolate_fktables,
     }
     return dict_out
 

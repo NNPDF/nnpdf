@@ -93,7 +93,7 @@ class ObservableWrapper:
 
 
 def observable_generator(
-    spec_dict, positivity_initial=1.0, integrability=False
+    spec_dict, alphas_fktabsdict, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -151,6 +151,8 @@ def observable_generator(
         else:
             Obs_Layer = DIS
 
+        alphas_fktabs = alphas_fktabsdict[dataset_name]
+
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset_dict["operation"]
 
@@ -169,7 +171,8 @@ def observable_generator(
                 dataset_dict["tr_fktables"],
                 operation_name,
                 name=f"dat_{dataset_name}",
-                alphas=ALPHAS
+                alphas=ALPHAS,
+                alphas_fktabs=alphas_fktabs,
             )
             obs_layer_ex = obs_layer_vl = None
         elif spec_dict.get("data_transformation_tr") is not None:
@@ -179,7 +182,8 @@ def observable_generator(
                 dataset_dict["ex_fktables"],
                 operation_name,
                 name=f"exp_{dataset_name}",
-                alphas=ALPHAS
+                alphas=ALPHAS,
+                alphas_fktabs=alphas_fktabs,
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
         else:
@@ -188,21 +192,24 @@ def observable_generator(
                 dataset_dict["tr_fktables"],
                 operation_name,
                 name=f"dat_{dataset_name}",
-                alphas=ALPHAS
+                alphas=ALPHAS,
+                alphas_fktabs=alphas_fktabs,
             )
             obs_layer_ex = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
                 operation_name,
                 name=f"exp_{dataset_name}",
-                alphas=ALPHAS
+                alphas=ALPHAS,
+                alphas_fktabs=alphas_fktabs,
             )
             obs_layer_vl = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["vl_fktables"],
                 operation_name,
                 name=f"val_{dataset_name}",
-                alphas=ALPHAS
+                alphas=ALPHAS,
+                alphas_fktabs=alphas_fktabs,
             )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer

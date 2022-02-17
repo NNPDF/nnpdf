@@ -33,6 +33,12 @@ datacuts:
 theory:
   theoryid: 200       # database id
 
+theoryids:
+  - 201
+  - 202
+  - 200
+
+
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
   activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
@@ -75,15 +81,20 @@ fitting:
       - { fl: cp,   smallx: [0.12,1.19], largex: [1.83,6.70] }
 
 ############################################################
-positivity:
-  posdatasets:
-    - { dataset: POSF2U, maxlambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSFLL, maxlambda: 1e4 }
+
+# NOTE: remove `postivity'  and `integrability' to have 
+# the theory ids from `theoryids' instead of `theory::theoryid'
+
+# positivity:
+posdatasets:
+  - { dataset: POSF2U, maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+  - { dataset: POSFLL, maxlambda: 1e4 }
 
 ############################################################
-integrability:
-  integdatasets:
-    - {dataset: INTEGXT3,   maxlambda: 1e2}
+# integrability:
+integdatasets:
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 debug: True

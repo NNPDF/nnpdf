@@ -3,6 +3,7 @@ import numpy as np
 from abc import abstractmethod, ABC
 from n3fit.backends import operations as op
 
+from validphys.fkparser import load_fktable
 
 def _is_unique(list_of_arrays):
     """ Check whether the list of arrays more than one different arrays """
@@ -38,11 +39,12 @@ class Observable(MetaLayer, ABC):
                 number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_dicts, fktable_arr, operation_name, alphas, nfl=14, **kwargs):
+    def __init__(self, fktable_dicts, fktable_arr, operation_name, alphas, alphas_fktabs, nfl=14, **kwargs):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
         self.alphas = alphas
+        self.alphas_fktabs = alphas_fktabs
 
         basis = []
         xgrids = []
