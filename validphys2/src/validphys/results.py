@@ -547,8 +547,7 @@ def phi_data(abs_chi2_data):
     1410.8849
     """
     alldata, central, npoints = abs_chi2_data
-    cv = float(alldata.central_value())
-    return (np.sqrt((cv - central) / npoints), npoints)
+    return (np.sqrt((alldata.error_members().mean() - central) / npoints), npoints)
 
 
 def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
