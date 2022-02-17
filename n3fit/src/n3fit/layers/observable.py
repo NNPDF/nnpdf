@@ -43,7 +43,13 @@ class Observable(MetaLayer, ABC):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
+
+        # alphas trainable parameter
         self.alphas = alphas
+
+        # the fktbales listed in alphas_fktabs are in order of `theorids` listed
+        # in the runcard, i.e. alphas_fktabs[0] corresponds to the first
+        # theoryid under `theoryids`
         self.alphas_fktabs = alphas_fktabs
 
         basis = []

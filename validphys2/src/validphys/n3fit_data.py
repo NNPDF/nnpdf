@@ -332,6 +332,10 @@ def fitting_data_dict(
         dt_trans_tr = None
         dt_trans_vl = None
 
+    datasets_alphas_fktabs = [dataset_inputs_interpolate_fktables[i["name"]] for i in datasets]
+    for num, dataset_alphas_fktabs in enumerate(datasets_alphas_fktabs):
+        for dataset_alphas_fktab in dataset_alphas_fktabs:
+            _ = _mask_fk_tables([dataset_alphas_fktab], [tr_masks[num]])
 
     # Copy dataset dict because we mutate it.
     datasets_copy = deepcopy(datasets)
