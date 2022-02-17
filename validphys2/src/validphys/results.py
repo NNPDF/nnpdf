@@ -678,13 +678,11 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     return pd.DataFrame(records)
 
 
-@table
-def procs_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2):
-    return groups_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2)
-    
 experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
 )
+
+procs_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_process",))
 
 @check_cuts_considered
 @table
