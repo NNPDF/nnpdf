@@ -173,6 +173,7 @@ def observable_generator(
                 name=f"dat_{dataset_name}",
                 alphas=ALPHAS,
                 alphas_fktabs=[i["tr_fktables"] for i in alphas_fktabs],
+                positivity = True,
             )
             obs_layer_ex = obs_layer_vl = None
         elif spec_dict.get("data_transformation_tr") is not None:

@@ -39,18 +39,26 @@ class Observable(MetaLayer, ABC):
                 number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_dicts, fktable_arr, operation_name, alphas, alphas_fktabs, nfl=14, **kwargs):
+    def __init__(self,
+                 fktable_dicts,
+                 fktable_arr,
+                 operation_name,
+                 alphas,
+                 alphas_fktabs,
+                 nfl=14,
+                 positivity=False,
+                 **kwargs):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
 
         # alphas trainable parameter
         self.alphas = alphas
+        self.positivity = positivity
 
         # the fktbales listed in alphas_fktabs are in order of `theorids` listed
         # in the runcard, i.e. alphas_fktabs[0] corresponds to the first
         # theoryid under `theoryids`
-        self.alphas_fktabs = alphas_fktabs
 
         basis = []
         xgrids = []
@@ -59,6 +67,11 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fktable["xgrid"])
             basis.append(fktable["basis"])
             self.fktables.append(op.numpy_to_tensor(fk))
+
+        if alphas_fktabs:
+            self.alphas_fktabs = alphas_fktabs
+        else:
+            self.alphas_fktabs = [self.fktables]
 
         # check how many xgrids this dataset needs
         if _is_unique(xgrids):

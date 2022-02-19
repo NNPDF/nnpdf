@@ -82,12 +82,13 @@ class DIS(Observable):
         out = tfp.math.interp_regular_1d_grid(
             self.alphas,
             0.116,
-            0.118,
+            0.120,
             list_alphas_results,
             fill_value="extrapolate",
             axis=0
         )
 
-        test = self.alphas*list_alphas_results[1]
-        return test
-        return out
+        if self.positivity:
+            return list_alphas_results[2]
+        else:
+            return out
