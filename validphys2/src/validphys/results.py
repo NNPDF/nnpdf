@@ -660,17 +660,16 @@ def predictions_by_kinematics_table(results, kinematics_table_notable):
     tb['prediction'] = theory.central_value
     return tb
 
-groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_process",))
-groups_data_by_process = collect("data", ("group_dataset_inputs_by_process",))
+groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_metadata",))
 groups_chi2_by_process = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_process",))
-
+groups_each_dataset_chi2_by_process = collect("each_dataset_chi2", ("group_dataset_inputs_by_process",))
 
 @table
-def groups_chi2_table(groups_data_by_process, pdf, groups_chi2_by_process, groups_each_dataset_chi2):
+def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
-    the groups."""
+    the groups, grouped by metadata."""
     records = []
-    for group, groupres, dsresults in zip(groups_data_by_process, groups_chi2_by_process, groups_each_dataset_chi2):
+    for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2):
         for dataset, dsres in zip(group, dsresults):
             stats = chi2_stats(dsres)
             stats["group"] = dataset.name
@@ -682,7 +681,19 @@ experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
 )
 
-procs_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_process",))
+@table
+def procs_chi2_table(
+    procs_data, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process
+):
+    """Same as groups_chi2_table but by process"""
+    return groups_chi2_table(
+        procs_data,
+        pdf,
+        groups_chi2_by_process,
+        groups_each_dataset_chi2_by_process,
+    )
+
+#procs_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_process",))
 
 @check_cuts_considered
 @table
