@@ -68,10 +68,12 @@ class Observable(MetaLayer, ABC):
             basis.append(fktable["basis"])
             self.fktables.append(op.numpy_to_tensor(fk))
 
-        if alphas_fktabs:
-            self.alphas_fktabs = alphas_fktabs
-        else:
-            self.alphas_fktabs = [self.fktables]
+        self.alphas_fktabs = []
+        for theories in alphas_fktabs:
+            fktabs = []
+            for fktab in theories:
+                fktabs.append(op.numpy_to_tensor(fktab))
+            self.alphas_fktabs.append(fktabs)
 
         # check how many xgrids this dataset needs
         if _is_unique(xgrids):
@@ -89,6 +91,8 @@ class Observable(MetaLayer, ABC):
 
         self.operation = op.c_to_py_fun(operation_name)
         self.output_dim = self.fktables[0].shape[0]
+
+        self.fktables = None
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)

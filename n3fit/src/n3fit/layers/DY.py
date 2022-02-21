@@ -69,7 +69,7 @@ class DY(Observable):
         out = tfp.math.interp_regular_1d_grid(
             self.alphas,
             0.116,
-            0.118,
+            0.120,
             list_alphas_results,
             fill_value="extrapolate",
             axis=0
