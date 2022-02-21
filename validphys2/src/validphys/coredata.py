@@ -9,6 +9,71 @@ import numpy as np
 import pandas as pd
 
 
+@dataclasses.dataclass
+class _FancyDataframe:
+    """Holds a dataframe in a dataclass to which vp cuts can be applied"""
+
+    dataframe: pd.DataFrame
+
+    def __post_init__(self):
+        pass
+
+    def with_cuts(self, cuts):
+        """Apply cuts to a _FancyDataframe object
+        The cuts this object receives are already something that can be easily understood
+        """
+        return dataclasses.replace(self, dataframe=self.dataframe.loc[cuts])
+
+
+class Kinematics(_FancyDataframe):
+    """Hold all kinematic information for a given dataset
+    in the from of histograms
+    """
+
+    def __post_init__(self):
+        """Save a reference to the variables"""
+        self.variables = self.dataframe.columns.get_level_values(0).unique().to_list()
+
+    def nkin(self):
+        return len(self.variables)
+
+    def get_kin(self, var):
+        """Get a dataframe with all kinematic information for var
+
+        Parameters
+        ----------
+            var: str
+        """
+        return self.dataframe[var]
+
+    def get_kin_cv(self, var):
+        """Get the cv for a given kinematic variable"""
+        return self.get_kin(var)["avg"]
+
+    def get_all_kin_cv(self):
+        return pd.concat([self.get_kin_cv(i) for i in self.variables], axis=1, keys=self.variables)
+
+    def get_kintable(self):
+        """Get the full kinematic table"""
+        return self.dataframe
+
+
+class Uncertainties(_FancyDataframe):
+    """Holds the information about the uncertainties for a given dataset"""
+
+    @property
+    def nsys(self):
+        return len(self.dataframe.columns.drop("stat"))
+
+    def get_stat(self):
+        """Get a Series for the statistical uncertainties"""
+        return self.dataframe["stat"]
+
+    def get_systematic(self):
+        """Get a DataFrame for the systematic uncertainties"""
+        return self.dataframe.drop(columns=["stat"])
+
+
 @dataclasses.dataclass(eq=False)
 class FKTableData:
     """
@@ -87,7 +152,7 @@ class FKTableData:
         >>> assert newtable.ndata == 2
         >>> assert newtable.metadata['GridInfo'].ndata == 3
         """
-        if hasattr(cuts, 'load'):
+        if hasattr(cuts, "load"):
             cuts = cuts.load()
         if cuts is None:
             return self
@@ -157,19 +222,36 @@ class CommonData:
         type (ADD/MULT/RAND) and name
         (CORR/UNCORR/THEORYCORR/SKIP)
     """
+
     setname: str
-    ndata: int
-    commondataproc: str
-    nkin: int
-    nsys: int
-    commondata_table: pd.DataFrame = dataclasses.field(repr=False)
-    systype_table: pd.DataFrame = dataclasses.field(repr=False)
-    systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
+    variant: str
+    process: str
+    data: pd.Series
+    kinematics: Kinematics
+    uncertainties: Uncertainties
+
+    # Derived quantities (which used to be attributes)
+    @property
+    def ndata(self):
+        return len(self.data)
+
+    @property
+    def nkin(self):
+        return self.kinematics.nkin
+
+    @property
+    def nsys(self):
+        return self.uncertainties.nsys
+
+    @property
+    def systematics_table(self):
+        return self.uncertainties.get_systematic()
 
     def __post_init__(self):
-        self.systematics_table = self.commondata_table.drop(
-            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
-        )
+        # Prepare a "commondata_table" in the same format as before
+        kin = self.kinematics.get_all_kin_cv()
+        unc = self.uncertainties.dataframe
+        self.commondata_table = pd.concat([kin, self.data, unc], axis=1)
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where
@@ -185,24 +267,26 @@ class CommonData:
         """
         # Ensure that the cuts we're applying applies to this dataset
         # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
-        if hasattr(cuts, 'name') and self.setname != cuts.name:
-            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
-                    f"to this commondata file: {self.setname}")
+        if hasattr(cuts, "name") and self.setname != cuts.name:
+            raise ValueError(
+                f"The cuts provided are for {cuts.name} which does not apply "
+                f"to this commondata file: {self.setname}"
+            )
 
-        if hasattr(cuts, 'load'):
+        if hasattr(cuts, "load"):
             cuts = cuts.load()
         if cuts is None:
             return self
 
         # We must shift the cuts up by 1 since a cut of 0 implies the first data point
         # while commondata indexing starts at 1.
+        # TODO: is this true?
         cuts = list(map(lambda x: x + 1, cuts))
 
-        newndata = len(cuts)
-        new_commondata_table = self.commondata_table.loc[cuts]
-        return dataclasses.replace(
-            self, ndata=newndata, commondata_table=new_commondata_table
-        )
+        new_data = self.data.loc[cuts]
+        new_kin = self.kinematics.with_cuts(cuts)
+        new_unc = self.uncertainties.with_cuts(cuts)
+        return dataclasses.replace(self, data=new_data, kinematics=new_kin, uncertainties=new_unc)
 
     @property
     def central_values(self):
@@ -245,7 +329,6 @@ class CommonData:
         add_table.columns = add_systype["name"].to_numpy()
         return add_table.loc[:, add_table.columns != "SKIP"]
 
-
     def systematic_errors(self, central_values=None):
         """Returns all systematic errors as absolute uncertainties, with a
         single column for each uncertainty. Converts
@@ -272,7 +355,5 @@ class CommonData:
         """
         if central_values is None:
             central_values = self.central_values.to_numpy()
-        converted_mult_errors = (
-            self.multiplicative_errors * central_values[:, np.newaxis] / 100
-        )
+        converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)

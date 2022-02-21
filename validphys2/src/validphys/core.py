@@ -17,13 +17,13 @@ import json
 import logging
 
 import numpy as np
+import pandas as pd
 
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
 from NNPDF import (LHAPDFSet,
-    CommonData,
     FKTable,
     FKSet,
     DataSet,
@@ -38,6 +38,7 @@ from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.libnnpdf_var import kinlabels_latex
+from validphys.coredata import CommonData, Kinematics, Uncertainties
 
 log = logging.getLogger(__name__)
 
@@ -176,7 +177,6 @@ class PDF(TupleComp):
         return self.NumMembers
 
 
-
     @property
     def nnpdf_error(self):
         """Return the NNPDF error tag, used to build the `LHAPDFSet` objeect"""
@@ -265,70 +265,29 @@ def get_kinlabel_key(process_label):
                          "labels defined in commondata.cc. " % (l)) from e
 
 
-class UncertaintiesSpec(TupleComp):
-    """Holds the information about the uncertainties for a given dataset"""
-
-    def __init__(self, uncertainties_file):
-        jj = json.load(uncertainties_file.open("r", encoding="utf-8"))
-        self.statistical = jj["statistical"]
-        self.systematic = jj["systematic"]
-        super().__init__(uncertainties_file)
-
-
-class KinematicsSpec(TupleComp):
-    """Holds the kinematic information about a given dataset"""
-
-    def __init__(self, kinematics_file):
-        jj = json.load(kinematics_file.open("r", encoding="utf-8"))
-
-        avg = jj["kinematics_avg"]
-        min_d = jj["kinematics_min"]
-        max_d = jj["kinematics_max"]
-
-        self.variables = list(avg.keys())
-        self._averages = {}
-        self._mins = {}
-        self._maxs = {}
-
-        for var in self.variables:
-            arr_avg = np.array(avg[var])
-            self._averages[var] = arr_avg
-            self._mins[var] = arr_avg if min_d[var] is None else np.array(min_d[var])
-            self._maxs[var] = arr_avg if max_d[var] is None else np.array(max_d[var])
-
-        super().__init__(kinematics_file)
-
-    def get_kin(self, var):
-        """Get a ((avg, min, max), npoints) array for the given variable"""
-        return np.stack([self._averages[var], self._mins[var], self._maxs[var]], axis=0)
-
-    def get_kin_cv(self, var):
-        """Get the cv for a given kinematic variable"""
-        return self._averages[var]
-
-    def get_kintable(self):
-        """Get all kinematic variables as (npoints, 3)"""
-        return np.stack(list(self._averages.values()), axis=1)
-
-
 class CommonDataSpec(TupleComp):
 
-    def __init__(self, datafile, name, metadata, variant=None):
-        self._data_file = datafile
-        self._kinematics_file = datafile.parent / metadata["data_kinematics"]
+    def __init__(self, name, variant, metadata_file=None):
+        parent = metadata_file.parent
+        metadata = yaml.safe_load(metadata_file.open("r", encoding="utf-8"))
 
+        # Prepare to read the defaults
+        dat = metadata["data_central"]
+        unc = metadata["data_uncertainties"]
+        kin = metadata["data_kinematics"]
+
+        # Check whether the variants override any of the files
+        # TODO: various try-except in case things don't work as expected
         if variant is None:
-            uncertainties_file = metadata["default_variant"]
-        else:
-            # TODO: the variants can override, if necessary, the kinematics, data and uncertainties?
-            try:
-                uncertainties_file = metadata["variants"][variant]
-            except KeyError:
-                raise FileNotFoundError(f"Variant {variant} is not declared in the metadata for {name}")
+            variant_info = metadata[variant]
+            dat = variant_info.get("data", dat)
+            unc = variant_info.get("uncertainties", unc)
+            kin = variant_info.get("kinematics", kin)
 
-        self._uncertainties_file = datafile.parent / uncertainties_file
-        if not self._uncertainties_file.exists():
-            raise FileNotFoundError(f"Uncertainties file {self._uncertainties_file} not found for {name}")
+        self._data_file = parent / dat
+        self._kinematics_file = parent / kin
+        self._uncertainties_file = parent / unc
+        # Check files exist and all that
 
         # Public attributes
         self.name = name
@@ -340,7 +299,7 @@ class CommonDataSpec(TupleComp):
         self._uncertainties = None
         self._kinematics = None
 
-        super().__init__(datafile, self._uncertainties_file)
+        super().__init__(name, variant)
 
     @property
     def data(self):
@@ -352,21 +311,47 @@ class CommonDataSpec(TupleComp):
 
     @property
     def uncertainties(self):
-        """Reads the uncertainties"""
+        """Loads the uncertainties when needed"""
         if self._uncertainties is None:
-            self._uncertainties = UncertaintiesSpec(self._uncertainties_file)
+            jj = json.load(self._uncertainties_file.open("r", encoding="utf-8"))
+            statistical = pd.Series(jj["statistical"], name="stat")
+            systematics = []
+            for uncertainty in jj["systematic"]:
+                # TODO: the uncertainties file will change
+                for i, v in uncertainty.items():
+                    name = f"{i}_{v[0]}_{v[1]}"
+                    systematics.append(pd.Series(v[2:], name=name))
+            systematics_df = pd.concat(systematics, axis=1)
+            # Drop nan
+            systematics_df.dropna(axis="columns", inplace=True)
+            self._uncertainties = Uncertainties(pd.concat([statistical, systematics_df], axis=1))
         return self._uncertainties
 
     @property
     def kinematics(self):
         """Reads the kinematics of the dataset as a {'var':'values'} dict"""
         if self._kinematics is None:
-            self._kinematics = KinematicsSpec(self._kinematics_file)
+            jj = json.load(self._kinematics_file.open("r", encoding="utf-8"))
+            avg = jj["kinematics_avg"]
+            min_d = jj["kinematics_min"]
+            max_d = jj["kinematics_max"]
+
+            all_kin = []
+            for k, v in avg.items():
+                vm = v if min_d[k] is None else min_d[k]
+                vp = v if max_d[k] is None else max_d[k]
+                dd = pd.DataFrame({"avg": v, "min": vm, "max": vp})
+                dd.columns = pd.MultiIndex.from_product([[k], dd.columns])
+                all_kin.append(dd)
+            self.all_kin = all_kin
+            kin_df = pd.concat(all_kin, axis=1)
+
+            self._kinematics = Kinematics(kin_df)
         return self._kinematics
 
     @property
     def nsys(self):
-        return len(self.uncertainties.systematic)
+        return self.uncertainties.nsys
 
     @property
     def ndata(self):
@@ -387,6 +372,15 @@ class CommonDataSpec(TupleComp):
     @property
     def plot_kinlabels(self):
         return get_plot_kinlabels(self)
+
+    def load(self):
+        """Load completely the dataset, creating a full CommonData object"""
+        # Load all information
+        d = pd.Series(self.data, name="data")
+        k = self.kinematics
+        u = self.uncertainties
+        return CommonData(self.name, self.variant, self.process_type, d, k, u)
+
 
     # Legacy libNNPDF-like interface
     def get_cv(self):
