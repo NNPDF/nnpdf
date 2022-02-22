@@ -39,6 +39,7 @@ from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
+from validphys.fkparser import pineappl_reader
 
 log = logging.getLogger(__name__)
 
@@ -515,16 +516,32 @@ class DataSetSpec(TupleComp):
         return self.name
 
 class FKTableSpec(TupleComp):
-    def __init__(self, fkpath, cfactors):
+    """
+    In Legacy Mode each fktable has one single path.
+    For pineappl tables instead a FKTable is formed by any number of grids
+    therefore in order to check whether we have a new-format or old-format table
+    we will just check whether fkpath is a list
+    For now holds the metadata as an attribute to this function.
+    This is useless/transitional since this metadata is already in the new CommonData format
+    """
+    def __init__(self, fkpath, cfactors, metadata=None):
         self.fkpath = fkpath
-        self.cfactors = cfactors
+        self.cfactors = cfactors if cfactors is not None else []
+        self.legacy = not isinstance(fkpath, list)
+        self.metadata = metadata
         super().__init__(fkpath, cfactors)
 
-    #NOTE: We cannot do this because Fkset owns the fktable, and trying
-    #to reuse the loaded one fails after it gets deleted.
-    #@functools.lru_cache()
-    def load(self):
+    def _load_legacy(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
+
+    def _load_pineappl(self):
+        return pineappl_reader(self)
+
+    def load(self):
+        if self.legacy:
+            return self._load_legacy()
+        return self._load_pineappl()
+
 
 class PositivitySetSpec(DataSetSpec):
     """Extends DataSetSpec to work around the particularities of the positivity datasets"""
