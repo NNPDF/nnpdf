@@ -124,6 +124,7 @@ class LoaderBase:
 
         # And save them up
         self.datapath = datapath
+        self.yamlpath = datapath / "yamldb"
         self.resultspath = resultspath
         self._old_commondata_fits = set()
         self.nnprofile = profile
@@ -483,7 +484,17 @@ class Loader(LoaderBase):
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1):
+                      weight=1,
+                      ):
+        """Loads a given dataset
+        If the dataset contains new-type fktables, use the
+        pineappl loading function, otherwise fallback to legacy
+        """
+        # TODO: this is just so I can load both types at once from the jupyter notebook
+        readyaml = True
+        if "oldmode" in cfac:
+            cfac = [i for i in cfac if i != "oldmode"]
+            readyaml = False
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -492,11 +503,22 @@ class Loader(LoaderBase):
 
         commondata = self.check_commondata(
             name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit)
-        try:
-            fkspec, op = self.check_compound(theoryno, name, cfac)
-        except CompoundNotFound:
-            fkspec = self.check_fktable(theoryno, name, cfac)
-            op = None
+
+        # Let's first see whether this is a new type of fktable
+        fkpath = (self.yamlpath / name).with_suffix(".yaml")
+        if fkpath.exists() and readyaml:
+            # Importing everything here from fkparser
+            # eventually it can substitute check_fktable
+            from .fkparser import check_fkyaml
+            _, theopath = self.check_theoryID(theoryno)
+            cfactors = self.check_cfactor(theoryno, name, cfac)
+            fkspec, op = check_fkyaml(fkpath, theopath, cfactors)
+        else:
+            try:
+                fkspec, op = self.check_compound(theoryno, name, cfac)
+            except CompoundNotFound:
+                fkspec = self.check_fktable(theoryno, name, cfac)
+                op = None
 
         #Note this is simply for convenience when scripting. The config will
         #construct the actual Cuts object by itself

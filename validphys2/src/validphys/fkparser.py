@@ -24,13 +24,13 @@ import io
 import functools
 import tarfile
 import dataclasses
+from itertools import zip_longest
 
 import numpy as np
 import pandas as pd
 
 from validphys.coredata import FKTableData, CFactorData
-
-
+from reportengine.compat import yaml
 
 
 class BadCFactorError(Exception):
@@ -44,17 +44,25 @@ class BadFKTableError(Exception):
 @dataclasses.dataclass(frozen=True)
 class GridInfo:
     """Class containing the basic properties of an FKTable grid."""
+
     setname: str
     hadronic: bool
     ndata: int
     nx: int
 
-@functools.lru_cache()
+
 def load_fktable(spec):
     """Load the data corresponding to a FKSpec object. The cfactors
-    will be applied to the grid."""
-    with open_fkpath(spec.fkpath) as handle:
-        tabledata = parse_fktable(handle)
+    will be applied to the grid.
+    If we have a new-type fktable, call directly `load()`, otherwise
+    fallback to the old parser
+    """
+    if spec.legacy:
+        with open_fkpath(spec.fkpath) as handle:
+            tabledata = parse_fktable(handle)
+    else:
+        tabledata = spec.load()
+
     if not spec.cfactors:
         return tabledata
 
@@ -72,13 +80,13 @@ def load_fktable(spec):
     tabledata.sigma = tabledata.sigma.multiply(pd.Series(cfprod), axis=0, level=0)
     return tabledata
 
+
 def _get_compressed_buffer(path):
     archive = tarfile.open(path)
     members = archive.getmembers()
     l = len(members)
     if l != 1:
-        raise BadFKTableError(
-            f"Archive {path} should contain one file, but it contains {l}.")
+        raise BadFKTableError(f"Archive {path} should contain one file, but it contains {l}.")
     return archive.extractfile(members[0])
 
 
@@ -99,14 +107,16 @@ def open_fkpath(path):
     """
     if tarfile.is_tarfile(path):
         return _get_compressed_buffer(path)
-    return open(path, 'rb')
+    return open(path, "rb")
 
 
 def _is_header_line(line):
-    return line.startswith((b'_', b'{'))
+    return line.startswith((b"_", b"{"))
+
 
 def _bytes_to_bool(x):
     return bool(int(x))
+
 
 def _parse_fk_options(line_and_stream, value_parsers=None):
     """Parse a sequence of lines of the form
@@ -119,10 +129,10 @@ def _parse_fk_options(line_and_stream, value_parsers=None):
     for lineno, next_line in line_and_stream:
         if _is_header_line(next_line):
             return res, lineno, next_line
-        if not next_line.startswith(b'*'):
+        if not next_line.startswith(b"*"):
             raise BadFKTableError(f"Error on line {lineno}: Expecting an option starting with '*'")
         try:
-            keybytes, valuebytes = next_line.split(b':', maxsplit=1)
+            keybytes, valuebytes = next_line.split(b":", maxsplit=1)
         except ValueError:
             raise BadFKTableError(f"Error on line {lineno}: Expecting an option containing ':'")
         key = keybytes[1:].strip().decode()
@@ -148,20 +158,25 @@ def _segment_parser(f):
                 return processed, lineno, next_line
             buf.write(next_line)
         raise BadFKTableError("FKTable should end with FastKernel spec, not with a segment string")
+
     return f_
+
 
 @_segment_parser
 def _parse_string(buf):
     return buf.getvalue().decode()
+
 
 @_segment_parser
 def _parse_flavour_map(buf):
     buf.seek(0)
     return np.loadtxt(buf, dtype=bool)
 
+
 @_segment_parser
 def _parse_xgrid(buf):
-    return np.fromstring(buf.getvalue(), sep='\n')
+    return np.fromstring(buf.getvalue(), sep="\n")
+
 
 # This used a different interface from segment parser because we want it to
 # be fast.
@@ -172,55 +187,51 @@ def _parse_hadronic_fast_kernel(f):
     # Note that we need the slower whitespace here because it turns out
     # that there are fktables where space and tab are used as separators
     # within the same table.
-    df = pd.read_csv(f, sep=r'\s+', header=None, index_col=(0,1,2))
-    df.columns = list(range(14*14))
-    df.index.names = ['data', 'x1', 'x2']
+    df = pd.read_csv(f, sep=r"\s+", header=None, index_col=(0, 1, 2))
+    df.columns = list(range(14 * 14))
+    df.index.names = ["data", "x1", "x2"]
     return df
+
 
 def _parse_dis_fast_kernel(f):
     """Parse the FastKernel section of a DIS FKTable into a DataFrame.
     ``f`` should be a stream containing only the section"""
-    df = pd.read_csv(f, sep=r'\s+', header=None, index_col=(0,1))
+    df = pd.read_csv(f, sep=r"\s+", header=None, index_col=(0, 1))
     df.columns = list(range(14))
-    df.index.names = ['data', 'x']
+    df.index.names = ["data", "x"]
     return df
 
 
 def _parse_gridinfo(line_and_stream):
     dict_result, line_number, next_line = _parse_fk_options(
-        line_and_stream,
-        value_parsers={
-            "HADRONIC": _bytes_to_bool,
-            "NDATA": int,
-            "NX": int
-        })
+        line_and_stream, value_parsers={"HADRONIC": _bytes_to_bool, "NDATA": int, "NX": int}
+    )
     gi = GridInfo(**{k.lower(): v for k, v in dict_result.items()})
     return gi, line_number, next_line
 
 
-
 def _parse_header(lineno, header):
     if not _is_header_line(header):
-        raise BadFKTableError(f"Bad header at line {lineno}: First "
-                "character should be either '_' or '{'")
+        raise BadFKTableError(
+            f"Bad header at line {lineno}: First " "character should be either '_' or '{'"
+        )
     try:
-        endname = header.index(b'_', 1)
+        endname = header.index(b"_", 1)
     except ValueError:
         raise BadFKTableError(f"Bad header at line {lineno}: Expected '_' after name") from None
     header_name = header[1:endname]
-    #Note: This is not the same as header[0]. Bytes iterate as ints.
+    # Note: This is not the same as header[0]. Bytes iterate as ints.
     return header[0:1], header_name.decode()
 
 
 def _build_sigma(f, res):
     gi = res["GridInfo"]
     fm = res["FlavourMap"]
-    table = (
-        _parse_hadronic_fast_kernel(f) if gi.hadronic else _parse_dis_fast_kernel(f)
-    )
+    table = _parse_hadronic_fast_kernel(f) if gi.hadronic else _parse_dis_fast_kernel(f)
     # Filter out empty flavour indices
     table = table.loc[:, fm.ravel()]
     return table
+
 
 _KNOWN_SEGMENTS = {
     "GridDesc": _parse_string,
@@ -268,14 +279,14 @@ _KNOWN_SEGMENTS = {
     ),
 }
 
+
 def _check_required_sections(res, lineno):
     """Check that we have found all the required sections by the time we
     reach 'FastKernel'"""
     for section in _KNOWN_SEGMENTS:
         if section not in res:
-            raise BadFKTableError(
-                f"{section} must come before 'FastKernel' section at {lineno}"
-            )
+            raise BadFKTableError(f"{section} must come before 'FastKernel' section at {lineno}")
+
 
 def parse_fktable(f):
     """Parse an open byte stream into an FKTableData. Raise a BadFKTableError
@@ -304,11 +315,11 @@ def parse_fktable(f):
         marker, header_name = _parse_header(lineno, header)
         if header_name == "FastKernel":
             _check_required_sections(res, lineno)
-            Q0 = res['TheoryInfo']['Q0']
+            Q0 = res["TheoryInfo"]["Q0"]
             sigma = _build_sigma(f, res)
-            hadronic = res['GridInfo'].hadronic
-            ndata = res['GridInfo'].ndata
-            xgrid = res.pop('xGrid')
+            hadronic = res["GridInfo"].hadronic
+            ndata = res["GridInfo"].ndata
+            xgrid = res.pop("xGrid")
             return FKTableData(
                 sigma=sigma,
                 ndata=ndata,
@@ -319,9 +330,9 @@ def parse_fktable(f):
             )
         elif header_name in _KNOWN_SEGMENTS:
             parser = _KNOWN_SEGMENTS[header_name]
-        elif marker == b'{':
+        elif marker == b"{":
             parser = _parse_string
-        elif marker == b'_':
+        elif marker == b"_":
             parser = _parse_fk_options
         else:
             raise RuntimeError("Should not be here")
@@ -329,9 +340,7 @@ def parse_fktable(f):
             out, lineno, header = parser(line_and_stream)
         except Exception as e:
             # Note that the old lineno is the one we want
-            raise BadFKTableError(
-                f"Failed processing header {header_name} on line {lineno}"
-            ) from e
+            raise BadFKTableError(f"Failed processing header {header_name} on line {lineno}") from e
         res[header_name] = out
 
 
@@ -350,11 +359,11 @@ def parse_cfactor(f):
         An object containing the data on the cfactor for each point.
     """
     stars = f.readline()
-    if not stars.startswith(b'*'):
+    if not stars.startswith(b"*"):
         raise BadCFactorError("First line should start with '*'.")
     descbytes = io.BytesIO()
     for line in f:
-        if line.startswith(b'*'):
+        if line.startswith(b"*"):
             break
         descbytes.write(line)
     description = descbytes.getvalue().decode()
@@ -368,3 +377,154 @@ def parse_cfactor(f):
     return CFactorData(
         description=description, central_value=central_value, uncertainty=uncertainty
     )
+
+
+##### New fktable loader
+ext = "pineappl.lz4"
+
+
+class PineAPPLEquivalentNotKnown(Exception):
+    pass
+
+
+class YamlFileNotFound(FileNotFoundError):
+    pass
+
+
+@dataclasses.dataclass
+class FKTableComposer:
+    """In the most general case, an FKTable for a given observable
+    is formed by a number of pineappl grids that then need to be concatenated
+    """
+
+    grid_paths: list
+    cfactor: str
+
+
+def _load_yaml(yaml_file):
+    """Load a dataset.yaml file"""
+    if not yaml_file.exists():
+        raise YamlFileNotFound(yaml_file)
+    ret = yaml.safe_load(yaml_file.read_text())
+    # Make sure the operations are upper-cased for compound-compatibility
+    ret["operation"] = "NULL" if ret["operation"] is None else ret["operation"].upper()
+    return ret
+
+
+def _get_yaml_information(yaml_file, theorypath, check_pineappl=False):
+    """
+    Given a yaml_file, return the corresponding dictionary
+    with all information and an extra field "paths"
+    with all the grids to be loaded for the given dataset.
+    Checks whether the grid is apfelcomb or pineappl
+    if check_pineappl is True this function will raise PineAPPLEquivalentNotKnown
+    if a pineappl grid is not found.
+    Parameters
+    ----------
+        yaml_file: Path
+            path of the yaml file for the given dataset
+        theorypath: Path
+            path of the theory folder where to find the grids
+    Returns
+    -------
+        yaml_content: dict
+            Metadata prepared for the FKTables
+        paths: list(list(path))
+            List (of lists) with all the grids that will need to be loaded
+    """
+    yaml_content = _load_yaml(yaml_file)
+    grids_folder = theorypath / "pineappls"
+
+    if yaml_content.get("appl") and check_pineappl:
+        # This might be useful to use the "legacy loader" when there is no actual pineappl available
+        raise PineAPPLEquivalentNotKnown(yaml_content["target_dataset"])
+
+    # Turn the operans and the members into paths (and check all of them exist)
+    ret = []
+    for operand in yaml_content["operands"]:
+        tmp = []
+        for member in operand:
+            p = grids_folder / f"{member}.{ext}"
+            if not p.exists():
+                raise FileNotFoundError(f"Failed to find {p}")
+            tmp.append(p)
+        ret.append(tmp)
+
+    # We have added a new operation, "NORM" so we need to play this game here:
+    if yaml_content["operation"] == "NORM":
+        # Case not yet considered in VP
+        yaml_content["operation_function"] = "NULL"
+    else:
+        yaml_content["operation_function"] = yaml_content["operation"]
+
+    return yaml_content, ret
+
+
+def check_fkyaml(yaml_file, theorypath, cfactors):
+    """Receives a yaml file describing the fktables necessary for a given observable"""
+    from .core import FKTableSpec
+
+    metadata, fklist = _get_yaml_information(yaml_file, theorypath)
+    fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip_longest(fklist, cfactors)]
+    op = metadata["operation"]
+    return fkspecs, op
+
+
+def pineappl_reader(fkspec):
+    """
+    Receives a fkspec, which contains the appropiate references to
+    the pineappl grid to load and concatenate
+
+    For more information: https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
+    """
+    from pineappl.fk_table import FkTable
+
+    pines = [FkTable.read(i) for i in fkspec.fkpath]
+
+    pp = pines[0]
+    Q0 = np.sqrt(pp.muf2())
+    xgrid = pp.x_grid()
+    # Hadronic means in practice that not all luminosity combinations are just electron X proton
+    hadronic = not all(-11 in i for i in pp.lumi())
+    # Now prepare the concatenation of grids
+    fktables = []
+    for p in pines:
+        tmp = p.table().T/p.bin_normalizations()
+        fktables.append(tmp.T)
+    fktable = np.concatenate(fktables, axis=0)
+    ndata = fktable.shape[0]
+
+    # Step 1), make the luminosity into a 14x14 mask for the evolution basis
+    eko_numbering_scheme = (22, 100, 21, 200, 203, 208, 215, 224, 235, 103, 108, 115, 124, 135)
+    # note that this is the same ordering that was used in fktables
+    # the difference is that the fktables where doing this silently and now
+    # we have the information made explicit
+    flavour_map = np.zeros((14, 14), dtype=bool)
+    for i, j in pp.lumi():
+        idx = eko_numbering_scheme.index(i)
+        jdx = eko_numbering_scheme.index(j)
+        flavour_map[idx, jdx] = True
+
+    # Step 2) prepare the indices for the dataframe
+    xi = np.arange(len(xgrid))
+    ni = np.arange(ndata)
+    mi = pd.MultiIndex.from_product([ni, xi, xi], names=["data", "x1", "x2"])
+    co = np.where(flavour_map.ravel())[0]
+
+    # Step 3) Now put the flavours at the end and flatten
+    # The output of pineappl is (ndata, flavours, x, x)
+    # The fktables for pineappl have an extra factor of x that we need to remove
+    lf = len(co)
+    xfktable = fktable.reshape(ndata, lf, -1)/(xgrid[:,None]*xgrid[None,:]).flatten()
+    fkmod = np.moveaxis(xfktable, 1, -1)
+    fkframe = fkmod.reshape(-1, lf)
+
+    df = pd.DataFrame(fkframe, index=mi, columns=co)
+
+    # Now prepare the FKTableData object
+    # For the metadata use the one we have kept in the fkspec
+    fkdata = FKTableData(
+        sigma=df, ndata=ndata, Q0=Q0, metadata=fkspec.metadata, hadronic=hadronic, xgrid=xgrid
+    )
+
+    return fkdata
