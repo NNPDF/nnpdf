@@ -1053,7 +1053,6 @@ class CoreConfig(configparser.Config):
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
             f = user_covmat_fitting
-     
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
@@ -1511,6 +1510,7 @@ class CoreConfig(configparser.Config):
 
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
+
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point

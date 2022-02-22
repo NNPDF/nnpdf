@@ -148,7 +148,6 @@ def performfit(
     #       [list of all NN seeds]
     #       )
     #
-
     n_models = len(replicas_nnseed_fitting_data_dict)
     if parallel_models and n_models != 1:
         replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)

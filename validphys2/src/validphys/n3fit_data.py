@@ -320,7 +320,9 @@ def fitting_data_dict(
     }
     return dict_out
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+#exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+exps_fitting_data_dict = collect("fitting_data_dict", () )
+
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
     """For a single replica return a tuple of the inputs to this function.

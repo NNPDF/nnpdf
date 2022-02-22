@@ -6,6 +6,7 @@ import logging
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
+import pathlib
 
 from reportengine import collect
 from reportengine.table import table
@@ -23,7 +24,7 @@ from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
-
+from validphys.commondata import loaded_commondata_with_cuts
 log = logging.getLogger(__name__)
 
 INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
@@ -227,7 +228,19 @@ def dataset_inputs_covmat_from_systematics(
             covmat,
             norm_threshold=norm_threshold
         )
-    return covmat
+    try:
+        theory_covmat_path = pathlib.Path.cwd()
+        data = pd.read_csv(theory_covmat_path / "prov_moredata" / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv", sep='\t')
+        datael = data.iloc[3:]
+        datael = datael.drop(['group'], axis=1)
+        datael = datael.drop(['Unnamed: 1'], axis=1)
+        datael = datael.drop(['Unnamed: 2'], axis=1)
+        theory_covmat = np.copy(datael.values)
+        theory_covmat = theory_covmat.astype(np.float)
+    except FileNotFoundError:
+        theory_covmat = np.zeros(covmat.shape) 
+    total_covmat = np.add(covmat, theory_covmat)   
+    return total_covmat
 
 
 @check_cuts_considered
