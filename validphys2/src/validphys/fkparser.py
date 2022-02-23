@@ -497,7 +497,7 @@ def pineappl_reader(fkspec):
     # Step 1), make the luminosity into a 14x14 mask for the evolution basis
     eko_numbering_scheme = (22, 100, 21, 200, 203, 208, 215, 224, 235, 103, 108, 115, 124, 135)
     # note that this is the same ordering that was used in fktables
-    # the difference is that the fktables where doing this silently and now
+    # the difference is that the fktables were doing this silently and now
     # we have the information made explicit
     flavour_map = np.zeros((14, 14), dtype=bool)
     for i, j in pp.lumi():

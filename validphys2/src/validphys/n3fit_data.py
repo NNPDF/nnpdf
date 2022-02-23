@@ -18,7 +18,7 @@ from reportengine import collect
 from reportengine.table import table
 
 from validphys.n3fit_data_utils import (
-    common_data_reader_experiment,
+    validphys_group_extractor,
     positivity_reader,
 )
 
@@ -235,13 +235,14 @@ def fitting_data_dict(
     """
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
+    import ipdb; ipdb.set_trace()
     spec_c = data.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
 
     expdata = make_replica
 
-    datasets = common_data_reader_experiment(spec_c, data)
+    datasets = validphys_group_extractor(data)
 
     # t0 covmat
     covmat = dataset_inputs_t0_covmat_from_systematics
