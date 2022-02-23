@@ -39,7 +39,7 @@ class WriterWrapper:
         self.q2 = q2
         self.timings = timings
 
-    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2):
+    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2, alphas):
         """
         Wrapper around the `storefit` function.
 
@@ -90,12 +90,13 @@ class WriterWrapper:
             preproc_lines,
             replica_status.positivity_status,
             self.timings,
+            alphas,
         )
 
         # export all metadata from the fit to a single yaml file
         output_file = f"{replica_path_set}/{fitname}.json"
         json_dict = jsonfit(
-            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings
+            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings, alphas
         )
         with open(output_file, "w") as fs:
             json.dump(json_dict, fs, indent=2, cls = SuperEncoder)
@@ -109,7 +110,7 @@ class SuperEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing):
+def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing, alphas):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
@@ -143,6 +144,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
     all_info["integrability"] = pdf_object.integrability_numbers().tolist()
     all_info["timing"] = timing
+    all_info["alpahs"] = alphas
     # Versioning info
     all_info["version"] = version()
     return all_info
@@ -253,6 +255,7 @@ def storefit(
     all_preproc_lines,
     pos_state,
     timings,
+    alphas
 ):
     """
     One-trick function which generates all output in the NNPDF format
@@ -332,6 +335,7 @@ def storefit(
         fs.write(arc_line)
         fs.write(f"\n")
         fs.write(integrability_line)
+        fs.write(f"{alphas}")
 
     # create .time file
     with open(f"{replica_path}/{fitname}.time", "w") as fs:

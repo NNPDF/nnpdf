@@ -282,7 +282,7 @@ def performfit(
 
             # And write the data down
             writer_wrapper.write_data(
-                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
+                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2, alphas
             )
             log.info(
                     "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",

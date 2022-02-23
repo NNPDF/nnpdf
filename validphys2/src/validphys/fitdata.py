@@ -93,7 +93,7 @@ def check_replica_files(replica_path, prefix):
         log.warning(f"Found invalid replica {path}")
     return valid
 
-FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers'))
+FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers', 'alphas'))
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
@@ -101,6 +101,7 @@ def load_fitinfo(replica_path, prefix):
         fitinfo_line = fitinfo_file.readline().split() # General fit properties
         fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
         fitinfo_integ = fitinfo_file.readline()         # Replica integ-numbers
+        fitinfo_alphas = fitinfo_file.readline()
 
         n_iterations   = int(  fitinfo_line[0])
         erf_validation = float(fitinfo_line[1])
@@ -109,7 +110,7 @@ def load_fitinfo(replica_path, prefix):
         is_positive    = fitinfo_line[4] == "POS_PASS"
         arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
         integnumbers   = np.fromstring(fitinfo_integ, sep=' ')
-    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers, fitinfo_alphas)
 
 
 #TODO: Produce a more informative .sumrules file.
