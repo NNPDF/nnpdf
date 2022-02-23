@@ -144,7 +144,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     all_info["arc_lengths"] = pdf_object.compute_arclength().tolist()
     all_info["integrability"] = pdf_object.integrability_numbers().tolist()
     all_info["timing"] = timing
-    all_info["alpahs"] = alphas
+    all_info["alphas"] = alphas
     # Versioning info
     all_info["version"] = version()
     return all_info
