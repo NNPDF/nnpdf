@@ -335,6 +335,7 @@ def storefit(
         fs.write(arc_line)
         fs.write(f"\n")
         fs.write(integrability_line)
+        fs.write(f"\n")
         fs.write(f"{alphas}")
 
     # create .time file
