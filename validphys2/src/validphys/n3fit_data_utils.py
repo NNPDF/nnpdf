@@ -1,9 +1,13 @@
 """
 n3fit_data_utils.py
 
-Library of helper functions to n3fit_data.py for reading libnnpdf objects.
+Library of function that read validphys object and make them into clean numpy objects
+for its usage for the fitting framework
 """
+# TODO:
+# Wrap them into a single dataclass with all relevant information instead of using dictionaries
 import numpy as np
+import pandas as pd
 
 
 def fk_parser(fk, is_hadronic=False):
@@ -71,9 +75,13 @@ def fk_parser(fk, is_hadronic=False):
     return dict_out
 
 
-def common_data_reader_dataset(dataset_c, dataset_spec):
+def common_data_reader_dataset(dataset_spec):
     """
     Import fktable, common data and experimental data for the given data_name
+
+    Parameters
+    ----------
+        dataset: validphys representation of a dataset object, a ``validphys.core.DataSetSpec``
 
     # Arguments:
         - `dataset_c`: c representation of the dataset object
@@ -94,40 +102,22 @@ def common_data_reader_dataset(dataset_c, dataset_spec):
 
     instead of the dictionary object that model_gen needs
     """
-    how_many = dataset_c.GetNSigma()
-    dict_fktables = []
-    for i in range(how_many):
-        fktable = dataset_c.GetFK(i)
-        dict_fktables.append(fk_parser(fktable, dataset_c.IsHadronic()))
+    dict_fktables = [fk_to_np(fk.load_with_cuts(dataset_spec.cuts)) for fk in dataset_spec.fkspecs]
+
+    # Ask the first fktable for this info
+    hadronic = dict_fktables[0]["hadronic"]
+    ndata = dict_fktables[0]["ndata"]
 
     dataset_dict = {
         "fktables": dict_fktables,
-        "hadronic": dataset_c.IsHadronic(),
+        "hadronic": hadronic,
         "operation": dataset_spec.op,
-        "name": dataset_c.GetSetName(),
+        "name": dataset_spec.name,
         "frac": dataset_spec.frac,
-        "ndata": dataset_c.GetNData(),
+        "ndata": ndata,
     }
 
-    return [dataset_dict]
-
-
-def common_data_reader_experiment(experiment_c, experiment_spec):
-    """
-    Wrapper around the experiments. Loop over all datasets in an experiment,
-    calls common_data_reader on them and return a list with the content.
-
-    # Arguments:
-        - `experiment_c`: c representation of the experiment object
-        - `experiment_spec`: python representation of the experiment object
-
-    # Returns:
-        - `[parsed_datasets]`: a list of dictionaries output from `common_data_reader_dataset`
-    """
-    parsed_datasets = []
-    for dataset_c, dataset_spec in zip(experiment_c.DataSets(), experiment_spec.datasets):
-        parsed_datasets += common_data_reader_dataset(dataset_c, dataset_spec)
-    return parsed_datasets
+    return dataset_dict
 
 
 def positivity_reader(pos_spec):
@@ -166,3 +156,77 @@ def positivity_reader(pos_spec):
     }
 
     return dict_out
+
+#### new functions ####
+def fk_to_np(fkobject):
+    """
+    Reads a validphys fktable (``validphys.coredata.FKTableData``) and extract
+    all necessary information in a clean way, ready to be used with the fitting framework
+    """
+    #TODO: add this as a method to FKTableData that returns a (tensor, luminosity)
+    ndata = fkobject.ndata
+    xgrid = fkobject.xgrid
+    basis = fkobject.sigma.columns.to_numpy()
+    nbasis = len(basis)
+
+    # TODO: I'm sure there's a better way to do this with pandas, please
+    # modify it if you know how:
+    # The data index needs to be dropped (the data is already cut and is unnecesary sparsing)
+    # The flavour index (columns) is correct: only flavours that contribute are included in the tensor
+    # The xgrid index instead might need to be filled with 0s or part of the xgrid removed
+    # because not all combinations of x-data-flavour contribute
+
+    if fkobject.hadronic:
+        # Recover the flavour mapping and make it into a matrix of indices
+        ret = np.zeros(14*14, dtype=bool)
+        ret[basis] = True
+        basis = np.array(np.where(ret.reshape(14, 14))).T.reshape(-1)
+        nx = len(xgrid)
+        # For non-DIS grids the x1-x2 combinations might be non trivial
+        # so I rather not just remove the x i don't like
+
+        # TODO: again, I'm sure there's a better way but the df are not even ordered?
+        # get data out of the way
+        ns = fkobject.sigma.unstack(["data"], 0)
+        # Now let's make sure x1 is complete
+        ns = ns.unstack("x2", 0).sort_values("x1").reindex(range(nx), fill_value=0.0)
+        # For completeness, the let's ensure the same is true for x2
+        ns = ns.stack("x2").unstack("x1", 0).sort_values("x2").reindex(range(nx), fill_value=0.0)
+        # Now we have (x2, basis, data, x1) and want (data, basis, x1, x2)
+        fktable = np.transpose(ns.values.reshape(nx, nbasis, ndata, nx), (2,1,3,0))
+    else:
+        # For DIS we can unstack and restack to ensure the ordering makes sense, it should be fast
+        full_sigma = fkobject.sigma.unstack(level=["x"],fill_value=0).stack()
+        # Turns out that some of the 'x' are actually 0 for all combinations for DIS
+        # (and for some reason we kept them!)
+        index_x = full_sigma.index.to_frame()["x"].unique()
+        xgrid = xgrid[index_x]
+        nx = len(xgrid)
+        fktable = full_sigma.values.reshape(ndata, nx, nbasis).swapaxes(-2, -1)
+
+    return {
+            "ndata": ndata,
+            "nbasis": nbasis,
+            "nonzero": nbasis,
+            "basis": basis,
+            "nx": nx,
+            "xgrid": xgrid.reshape(1,-1),
+            "fktable": fktable,
+            "hadronic": fkobject.hadronic
+            }
+
+def validphys_group_extractor(group_spec):
+    """
+    Receives a groupping spec from validphys (most likely and experiment)
+    and loops over its content extracting and parsing all information required for the fit
+
+    Parameters
+    ----------
+        group_spec: Any grouping spec from vp
+
+    Returns
+    -------
+        parsed_observables: a list of (for now dictionaries) containing the information
+                              required to fit the given observable 
+    """
+    return [common_data_reader_dataset(ds) for ds in group_spec.datasets]

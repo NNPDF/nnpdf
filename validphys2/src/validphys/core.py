@@ -39,7 +39,7 @@ from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
-from validphys.fkparser import pineappl_reader
+from validphys.fkparser import pineappl_reader, load_fktable
 
 log = logging.getLogger(__name__)
 
@@ -56,7 +56,10 @@ class TupleComp:
         return self.comp_tuple == other.comp_tuple
 
     def __hash__(self):
-        return hash(self.comp_tuple)
+        try:
+            return hash(self.comp_tuple)
+        except:
+            return hash("ffff") # TODO
 
     def __repr__(self):
         argvals = ', '.join('%s=%r'%vals for vals in zip(self.argnames(),
@@ -321,7 +324,7 @@ class CommonDataSpec(TupleComp):
 
 
 class DataSetInput(TupleComp):
-    """Represents whatever the user enters in the YAML to specidy a
+    """Represents whatever the user enters in the YAML to specify a
     dataset."""
     def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
         self.name=name
@@ -473,6 +476,8 @@ class DataSetSpec(TupleComp):
         cd = self.commondata.load()
 
         fktables = []
+
+        # We don't want to load these fktables any longer
         for p in self.fkspecs:
             fktable = p.load()
             #IMPORTANT: We need to tell the python garbage collector to NOT free the
@@ -536,6 +541,14 @@ class FKTableSpec(TupleComp):
 
     def _load_pineappl(self):
         return pineappl_reader(self)
+
+    def load_with_cuts(self, cuts):
+        """Load the fktable and apply cuts inmediately. Returns a FKTableData"""
+        if self.legacy:
+            res = load_fktable(self)
+        else:
+            res = self._load_pineappl()
+        return res.with_cuts(cuts)
 
     def load(self):
         if self.legacy:
