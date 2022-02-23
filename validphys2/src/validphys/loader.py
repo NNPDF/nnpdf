@@ -489,7 +489,7 @@ class Loader(LoaderBase):
         If the dataset contains new-type fktables, use the
         pineappl loading function, otherwise fallback to legacy
         """
-        # TODO: this is just so I can load both types at once from the jupyter notebook
+        # TODO: this is just so I can load both types at once during development
         readyaml = True
         if "oldmode" in cfac:
             cfac = [i for i in cfac if i != "oldmode"]

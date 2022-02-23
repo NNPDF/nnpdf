@@ -188,6 +188,7 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
 def fitting_data_dict(
     data,
     make_replica,
+    dataset_inputs_loaded_cd_with_cuts,
     dataset_inputs_t0_covmat_from_systematics,
     tr_masks,
     kfold_masks,
@@ -235,10 +236,12 @@ def fitting_data_dict(
     """
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
-    import ipdb; ipdb.set_trace()
-    spec_c = data.load()
-    ndata = spec_c.GetNData()
-    expdata_true = spec_c.get_cv().reshape(1, ndata)
+    ndata = 0
+    expdata_true_raw = []
+    for d in dataset_inputs_loaded_cd_with_cuts:
+        ndata += d.ndata
+        expdata_true_raw.append(d.central_values.to_numpy())
+    expdata_true = np.concatenate(expdata_true_raw).reshape(1, ndata)
 
     expdata = make_replica
 
@@ -256,7 +259,6 @@ def fitting_data_dict(
         dt_trans = None
         dt_trans_tr = None
         dt_trans_vl = None
-
 
     # Copy dataset dict because we mutate it.
     datasets_copy = deepcopy(datasets)
