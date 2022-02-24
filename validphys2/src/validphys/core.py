@@ -56,10 +56,7 @@ class TupleComp:
         return self.comp_tuple == other.comp_tuple
 
     def __hash__(self):
-        try:
-            return hash(self.comp_tuple)
-        except:
-            return hash("ffff") # TODO
+        return hash(self.comp_tuple)
 
     def __repr__(self):
         argvals = ', '.join('%s=%r'%vals for vals in zip(self.argnames(),
@@ -530,9 +527,12 @@ class FKTableSpec(TupleComp):
     This is useless/transitional since this metadata is already in the new CommonData format
     """
     def __init__(self, fkpath, cfactors, metadata=None):
-        self.fkpath = fkpath
         self.cfactors = cfactors if cfactors is not None else []
-        self.legacy = not isinstance(fkpath, list)
+        self.legacy = True
+        if isinstance(fkpath, (tuple, list)):
+            self.legacy = False
+            fkpath = tuple(fkpath)
+        self.fkpath = fkpath
         self.metadata = metadata
         super().__init__(fkpath, cfactors)
 
