@@ -4,91 +4,86 @@ n3fit_data_utils.py
 Library of function that read validphys object and make them into clean numpy objects
 for its usage for the fitting framework
 """
+from itertools import zip_longest
+import dataclasses
 import numpy as np
 
 
-def common_data_reader_dataset(dataset_spec):
+@dataclasses.dataclass
+class FittableDataSet:
     """
-    Import fktable, common data and experimental data for the given data_name
-
-    Parameters
-    ----------
-        dataset: validphys representation of a dataset object, a ``validphys.core.DataSetSpec``
-
-    #Returns:
-        - `[dataset_dict]`: a (len 1 list of) dictionary with:
-            - dataset: full dataset object from which all data has been extracted
-            - hadronic: is hadronic?
-            - operation: operation to perform on the fktables below
-            - fktables : a list of validphys.coredata.FKTableData objects
+    Python version of the libNNPDF dataset
+    to be merged with the product of the new CommonData dataset
     """
-    dict_fktables = [fk.load_with_cuts(dataset_spec.cuts) for fk in dataset_spec.fkspecs]
+    # TODO:
+    # this class is basically equal to the normal DataSet
+    # plus calls to generate a training_fktable, validation_fktable, etc
+    # _once_ the python commondata is completed this should inherit from
+    # the python-dataset adding the masking methods
 
-    # Ask the first fktable for this info
-    hadronic = dict_fktables[0].hadronic
-    ndata = dict_fktables[0].ndata
+    name: str
+    # Now, this is a confusing one because I want to hold
+    # the list of all FKTableData
+    # but I want to also have methods to return directly a masked fktable
+    # so I'm not sure what the names should be...
+    fktables_data: list  # of validphys.coredata.FKTableData objects
+    # Things that can have default values:
+    operation: str = "NULL"
+    frac: float = 1.0
+    training_mask: bool = None
 
-    dataset_dict = {
-        "fktables": dict_fktables,
-        "hadronic": hadronic,
-        "operation": dataset_spec.op,
-        "name": dataset_spec.name,
-        "frac": dataset_spec.frac,
-        "ndata": ndata,
-    }
+    def __post_init__(self):
+        self._raw_fktables = None
 
-    return dataset_dict
+    @property
+    def ndata(self):
+        return self.fktables_data[0].ndata
 
+    @property
+    def hadronic(self):
+        return self.fktables_data[0].hadronic
 
-def positivity_reader(pos_spec):
-    """
-    Specific reader for positivity sets
-    """
-    parsed_set = [fk.load_with_cuts(pos_spec.cuts) for fk in pos_spec.fkspecs]
-    hadronic = parsed_set[0].hadronic
-    ndata = parsed_set[0].ndata
+    def fktables(self):
+        if self._raw_fktables is None:
+            self._raw_fktables = [i.get_np_fktable() for i in self.fktables_data]
+        return self._raw_fktables
 
-    pos_sets = [
-        {
-            "fktables": parsed_set,
-            "hadronic": hadronic,
-            "operation": "NULL",
-            "name": pos_spec.name,
-            "frac": 1.0,
-            "ndata": ndata,
-            "tr_fktables": [i.get_np_fktable() for i in parsed_set],
-        }
-    ]
+    def training_fktables(self):
+        if self.training_mask is not None:
+            return [f[self.training_mask] for f in self.fktables()]
+        return self.fktables()
 
-    positivity_factor = pos_spec.maxlambda
+    def validation_fktables(self):
+        if self.training_mask is not None:
+            return [f[~self.training_mask] for f in self.fktables()]
+        return self.fktables()
 
-    dict_out = {
-        "datasets": pos_sets,
-        "trmask": np.ones(ndata, dtype=np.bool),
-        "name": pos_spec.name,
-        "expdata": np.zeros((1, ndata)),
-        "ndata": ndata,
-        "positivity": True,
-        "lambda": positivity_factor,
-        "count_chi2": False,
-        "integrability": "INTEG" in pos_spec.name,
-    }
-
-    return dict_out
+    def set_mask(self, mask):
+        self.training_mask = mask
 
 
-def validphys_group_extractor(group_spec):
+def validphys_group_extractor(datasets, tr_masks):
     """
     Receives a groupping spec from validphys (most likely and experiment)
     and loops over its content extracting and parsing all information required for the fit
 
     Parameters
     ----------
-        group_spec: Any grouping spec from vp
+        datasets: list of DataSetSpecs
+        tr_masks: list of training mask to be applied to each dataset
 
     Returns
     -------
         parsed_observables: a list of (for now dictionaries) containing the information
                               required to fit the given observable
     """
-    return [common_data_reader_dataset(ds) for ds in group_spec.datasets]
+    ret = []
+    for dataset_spec, mask in zip_longest(datasets, tr_masks):
+        # Load all fktables
+        fktables = [fk.load_with_cuts(dataset_spec.cuts) for fk in dataset_spec.fkspecs]
+        # And now put them in an object that contains the same information as dataset_spec save for the fact that the tables have been loaded
+        # TODO: we could have a `DataSetSpec.load_for_fit(mask)` method I guess
+        ret.append(
+            FittableDataSet(dataset_spec.name, fktables, dataset_spec.op, dataset_spec.frac, mask)
+        )
+    return ret

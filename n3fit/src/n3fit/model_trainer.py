@@ -275,7 +275,7 @@ class ModelTrainer:
             self.experimental["ndata"] += nd_tr + nd_vl
 
             for dataset in exp_dict["datasets"]:
-                self.all_datasets.append(dataset["name"])
+                self.all_datasets.append(dataset.name)
         self.all_datasets = set(self.all_datasets)
 
         for pos_dict in self.pos_info:

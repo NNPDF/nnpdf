@@ -19,7 +19,6 @@ from reportengine.table import table
 
 from validphys.n3fit_data_utils import (
     validphys_group_extractor,
-    positivity_reader,
 )
 
 log = logging.getLogger(__name__)
@@ -151,37 +150,6 @@ def kfold_masks(kpartitions, data):
     return list_folds
 
 
-def _mask_fk_tables(dataset_dicts, tr_masks):
-    """
-    Mask the fktables and update each dataset_dict with
-    the entries `tr_fktables`, `vl_fktables` and `ex_fktables`
-    which corresponds to list of numpy fktables where only the
-    training (validation or total) data is included.
-
-    Parameters
-    ----------
-        dataset_dicts: list[dict]
-            list of datasets dictionaries returned by
-            :py:func:`validphys.n3fit_data_utils.common_data_reader_experiment`.
-        tr_masks: list[np.array]
-            a tuple containing the lists of training masks for each dataset.
-    """
-    for dataset_dict, tr_mask in zip(dataset_dicts, tr_masks):
-        # Generate the training and validation fktables
-        tr_fks = []
-        vl_fks = []
-        ex_fks = []
-        vl_mask = ~tr_mask
-        for fktable_data in dataset_dict["fktables"]:
-            fktable = fktable_data.get_np_fktable()
-            tr_fks.append(fktable[tr_mask])
-            vl_fks.append(fktable[vl_mask])
-            ex_fks.append(fktable)
-        dataset_dict["tr_fktables"] = tr_fks
-        dataset_dict["vl_fktables"] = vl_fks
-        dataset_dict["ex_fktables"] = ex_fks
-
-
 def fitting_data_dict(
     data,
     make_replica,
@@ -242,7 +210,7 @@ def fitting_data_dict(
 
     expdata = make_replica
 
-    datasets = validphys_group_extractor(data)
+    datasets = validphys_group_extractor(data.datasets, tr_masks)
 
     # t0 covmat
     covmat = dataset_inputs_fitting_covmat
@@ -257,7 +225,6 @@ def fitting_data_dict(
         dt_trans_tr = None
         dt_trans_vl = None
 
-    _mask_fk_tables(datasets, tr_masks)
     tr_mask = np.concatenate(tr_masks)
     vl_mask = ~tr_mask
 
@@ -495,7 +462,7 @@ def training_mask(replicas_training_mask):
     return pd.concat(replicas_training_mask, axis=1)
 
 
-def fitting_pos_dict(posdataset):
+def fitting_pos_dict(posdataset, integrability=False):
     """Loads a positivity dataset. For more information see
     :py:func:`validphys.n3fit_data_utils.positivity_reader`.
 
@@ -511,14 +478,27 @@ def fitting_pos_dict(posdataset):
     >>> pos = API.fitting_pos_dict(posdataset=posdataset, theoryid=162)
     >>> len(pos)
     9
-
     """
-    log.info("Loading positivity dataset %s", posdataset)
-    return positivity_reader(posdataset)
+    mode = "integrability" if integrability else "positivity"
+    log.info("Loading %s dataset %s", mode, posdataset)
+    positivity_datasets = validphys_group_extractor([posdataset], [])
+    ndata = positivity_datasets[0].ndata
+    # Move the dictionary from `positivity_reader` to here
+    # to make it consistent with the rest of the functions
+    return {
+        "datasets": positivity_datasets,
+        "trmask": np.ones(ndata, dtype=np.bool),
+        "name": posdataset.name,
+        "expdata": np.zeros((1, ndata)),
+        "ndata": ndata,
+        "positivity": True,
+        "lambda": posdataset.maxlambda,
+        "count_chi2": False,
+        "integrability": integrability,
+    }
 
 
 posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
-
 
 # can't use collect here because integdatasets might not exist.
 def integdatasets_fitting_integ_dict(integdatasets=None):
@@ -548,9 +528,8 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
     if integdatasets is not None:
         integ_info = []
         for integ_set in integdatasets:
-            log.info("Loading integrability dataset %s", integ_set)
             # Use the same reader as positivity observables
-            integ_dict = positivity_reader(integ_set)
+            integ_dict = fitting_pos_dict(integ_set, integrability=True)
             integ_info.append(integ_dict)
         return integ_info
     log.warning("Not using any integrability datasets.")

@@ -134,18 +134,18 @@ def observable_generator(
     model_obs_ex = []
     model_inputs = []
     # The first step is to compute the observable for each of the datasets
-    for dataset_dict in spec_dict["datasets"]:
+    for dataset in spec_dict["datasets"]:
         # Get the generic information of the dataset
-        dataset_name = dataset_dict["name"]
+        dataset_name = dataset.name
 
         # Look at what kind of layer do we need for this dataset
-        if dataset_dict["hadronic"]:
+        if dataset.hadronic:
             Obs_Layer = DY
         else:
             Obs_Layer = DIS
 
         # Set the operation (if any) to be applied to the fktables of this dataset
-        operation_name = dataset_dict["operation"]
+        operation_name = dataset.operation
 
         # Now generate the observable layer, which takes the following information:
         # operation name
@@ -158,8 +158,8 @@ def observable_generator(
             # Positivity (and integrability, which is a special kind of positivity...)
             # enters only at the "training" part of the models
             obs_layer_tr = Obs_Layer(
-                dataset_dict["fktables"],
-                dataset_dict["tr_fktables"],
+                dataset.fktables_data,
+                dataset.training_fktables(),
                 operation_name,
                 name=f"dat_{dataset_name}",
             )
@@ -167,39 +167,39 @@ def observable_generator(
         elif spec_dict.get("data_transformation_tr") is not None:
             # Data transformation needs access to the full array of output data
             obs_layer_ex = Obs_Layer(
-                dataset_dict["fktables"],
-                dataset_dict["ex_fktables"],
+                dataset.fktables_data,
+                dataset.fktables(),
                 operation_name,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
         else:
             obs_layer_tr = Obs_Layer(
-                dataset_dict["fktables"],
-                dataset_dict["tr_fktables"],
+                dataset.fktables_data,
+                dataset.training_fktables(),
                 operation_name,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = Obs_Layer(
-                dataset_dict["fktables"],
-                dataset_dict["ex_fktables"],
+                dataset.fktables_data,
+                dataset.fktables(),
                 operation_name,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
-                dataset_dict["fktables"],
-                dataset_dict["vl_fktables"],
+                dataset.fktables_data,
+                dataset.validation_fktables(),
                 operation_name,
                 name=f"val_{dataset_name}",
             )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         if obs_layer_tr.splitting is None:
-            xgrid = dataset_dict["fktables"][0].xgrid.reshape(1,-1)
+            xgrid = dataset.fktables_data[0].xgrid.reshape(1,-1)
             model_inputs.append(xgrid)
             dataset_xsizes.append(xgrid.shape[1])
         else:
-            xgrids = [i.xgrid.reshape(1,-1) for i in dataset_dict["fktables"]]
+            xgrids = [i.xgrid.reshape(1,-1) for i in dataset.fktables_data]
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
