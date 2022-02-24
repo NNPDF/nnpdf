@@ -20,15 +20,7 @@ def common_data_reader_dataset(dataset_spec):
             - dataset: full dataset object from which all data has been extracted
             - hadronic: is hadronic?
             - operation: operation to perform on the fktables below
-            - fktables : a list of dictionaries with the following items
-                - ndata: number of data points
-                - nonzero/nbasis: number of PDF entries which are non zero
-                - basis: array containing the information of the non-zero PDF entries
-                - nx: number of points in the xgrid (1-D), i.e., for hadronic the total number is nx * nx
-                - xgrid: grid of x points
-                - fktable: 3/4-D array of shape (ndata, nonzero, nx, (nx))
-
-    instead of the dictionary object that model_gen needs
+            - fktables : a list of validphys.coredata.FKTableData objects
     """
     dict_fktables = [fk.load_with_cuts(dataset_spec.cuts) for fk in dataset_spec.fkspecs]
 
