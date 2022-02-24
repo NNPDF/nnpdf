@@ -6,6 +6,7 @@ for its usage for the fitting framework
 """
 import numpy as np
 
+
 def common_data_reader_dataset(dataset_spec):
     """
     Import fktable, common data and experimental data for the given data_name
@@ -29,11 +30,11 @@ def common_data_reader_dataset(dataset_spec):
 
     instead of the dictionary object that model_gen needs
     """
-    dict_fktables = [fk_to_np(fk.load_with_cuts(dataset_spec.cuts)) for fk in dataset_spec.fkspecs]
+    dict_fktables = [fk.load_with_cuts(dataset_spec.cuts) for fk in dataset_spec.fkspecs]
 
     # Ask the first fktable for this info
-    hadronic = dict_fktables[0]["hadronic"]
-    ndata = dict_fktables[0]["ndata"]
+    hadronic = dict_fktables[0].hadronic
+    ndata = dict_fktables[0].ndata
 
     dataset_dict = {
         "fktables": dict_fktables,
@@ -51,9 +52,9 @@ def positivity_reader(pos_spec):
     """
     Specific reader for positivity sets
     """
-    parsed_set = [fk_to_np(fk.load_with_cuts(pos_spec.cuts)) for fk in pos_spec.fkspecs]
-    hadronic = parsed_set[0]["hadronic"]
-    ndata = parsed_set[0]["ndata"]
+    parsed_set = [fk.load_with_cuts(pos_spec.cuts) for fk in pos_spec.fkspecs]
+    hadronic = parsed_set[0].hadronic
+    ndata = parsed_set[0].ndata
 
     pos_sets = [
         {
@@ -63,7 +64,7 @@ def positivity_reader(pos_spec):
             "name": pos_spec.name,
             "frac": 1.0,
             "ndata": ndata,
-            "tr_fktables": [i["fktable"] for i in parsed_set],
+            "tr_fktables": [i.get_np_fktable() for i in parsed_set],
         }
     ]
 
@@ -82,31 +83,6 @@ def positivity_reader(pos_spec):
     }
 
     return dict_out
-
-
-#### new functions ####
-def fk_to_np(fkobject):
-    """
-    Reads a validphys fktable (``validphys.coredata.FKTableData``) and extract
-    all necessary information in a clean way, ready to be used with the fitting framework
-    """
-    ndata = fkobject.ndata
-    xgrid = fkobject.xgrid
-    basis = fkobject.luminosity_mapping
-    nbasis = len(basis) / 2 if fkobject.hadronic else len(basis)
-    nx = len(xgrid)
-    fktable = fkobject.get_np_fktable()
-
-    return {
-        "ndata": ndata,
-        "nbasis": nbasis,
-        "nonzero": nbasis,
-        "basis": basis,
-        "nx": nx,
-        "xgrid": xgrid.reshape(1, -1),
-        "fktable": fktable,
-        "hadronic": fkobject.hadronic,
-    }
 
 
 def validphys_group_extractor(group_spec):

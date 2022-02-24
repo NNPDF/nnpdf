@@ -51,6 +51,9 @@ class FKTableData:
     sigma: pd.DataFrame
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
 
+    def __post_init__(self):
+        self._fktable = None
+
     # TODO: When we move to something other than the current fktable format,
     # we should apply the cuts directly before loading the file.
     def with_cuts(self, cuts):
@@ -121,6 +124,9 @@ class FKTableData:
         where nx is the length of the xgrid
         and nbasis the number of flavour contributions that contribute
         """
+        if self._fktable is not None:
+            return self._fktable
+
         # Read up the shape of the output table
         ndata = self.ndata
         nx = len(self.xgrid)
@@ -144,6 +150,7 @@ class FKTableData:
             # for DIS one could equivalently remove the missing points from xgrid
             full_sigma = ns.sort_values("x").reindex(range(nx), fill_value=0.0)
             fktable = full_sigma.values.reshape(nx, -1, ndata).T
+        self._fktable = fktable
         return fktable
 
 
