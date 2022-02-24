@@ -12,7 +12,7 @@ from collections.abc import Sequence
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, ticker as mticker
+from matplotlib import cm, colors as mcolors, ticker as mticker, offsetbox
 import scipy.stats as stats
 import pandas as pd
 
@@ -28,6 +28,29 @@ from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
 
 log = logging.getLogger(__name__)
+
+
+@figure
+def alphas_hist(replica_data, pdf):
+    alphas_values = np.array([replica.alphas for replica in replica_data])
+
+    mean = alphas_values.mean()
+    std = alphas_values.std()
+    
+    fig, ax = plt.subplots()
+    ax.set_xlabel(r"$\alpha_s$")
+    ax.set_ylabel("density")
+    ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
+    anchored_text = offsetbox.AnchoredText(
+        r"$\alpha_s=$" + f"{mean:.4f}" + r"$\pm$" + f"{std:.4f}",
+        loc='upper left')
+    anchored_text.patch.set_linewidth(0)
+    ax.add_artist(anchored_text)
+    
+    ax.hist(alphas_values, density=False, edgecolor="black")
+
+    return fig
+
 
 @figure
 def plot_chi2dist_experiments(total_chi2_data, experiments_chi2_stats, pdf):
@@ -875,19 +898,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
     fls = obs_pdf_correlations.flavours
     x = obs_pdf_correlations.xgrid
-    nf = len(fls)
-
-    plotting_var = info.get_xcol(table)
-
-    #TODO: vmin vmax should be global or by figure?
-    vmin,vmax = min(plotting_var), max(plotting_var)
-    if info.x_scale == 'log':
-        norm = mcolors.LogNorm(vmin, vmax)
-    else:
-        norm = mcolors.Normalize(vmin, vmax)
-    #http://stackoverflow.com/a/11558629/1007990
-    sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
-
+def foo(replica_data):
+    import ipdb; ipdb.set_trace()
     for same_vals, fb in figby:
         grid = fullgrid[ np.asarray(fb.index),...]
 

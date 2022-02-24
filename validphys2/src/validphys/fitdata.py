@@ -110,7 +110,8 @@ def load_fitinfo(replica_path, prefix):
         is_positive    = fitinfo_line[4] == "POS_PASS"
         arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
         integnumbers   = np.fromstring(fitinfo_integ, sep=' ')
-    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers, fitinfo_alphas)
+        alphas         = float(fitinfo_alphas)
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers, alphas)
 
 
 #TODO: Produce a more informative .sumrules file.
