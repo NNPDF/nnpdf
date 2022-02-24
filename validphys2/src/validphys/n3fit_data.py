@@ -24,6 +24,7 @@ from validphys.n3fit_data_utils import (
 
 log = logging.getLogger(__name__)
 
+
 def replica_trvlseed(replica, trvlseed, same_trvl_per_replica=False):
     """Generates the ``trvlseed`` for a ``replica``."""
     # TODO: move to the new infrastructure
@@ -35,12 +36,14 @@ def replica_trvlseed(replica, trvlseed, same_trvl_per_replica=False):
         res = np.random.randint(0, pow(2, 31))
     return res
 
+
 def replica_nnseed(replica, nnseed):
     """Generates the ``nnseed`` for a ``replica``."""
     np.random.seed(seed=nnseed)
     for _ in range(replica):
         res = np.random.randint(0, pow(2, 31))
     return res
+
 
 def replica_mcseed(replica, mcseed, genrep):
     """Generates the ``mcseed`` for a ``replica``."""
@@ -61,7 +64,7 @@ def tr_masks(data, replica_trvlseed):
         tr_data = data[tr_mask]
 
     """
-    nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
+    nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     # TODO: update this to new random infrastructure.
     np.random.seed(nameseed)
@@ -79,6 +82,7 @@ def tr_masks(data, replica_trvlseed):
         np.random.shuffle(mask)
         trmask_partial.append(mask)
     return trmask_partial
+
 
 def kfold_masks(kpartitions, data):
     """Collect the masks (if any) due to kfolding for this data.
@@ -149,7 +153,10 @@ def kfold_masks(kpartitions, data):
 
 def _mask_fk_tables(dataset_dicts, tr_masks):
     """
-    Internal function which masks the fktables for a group of datasets.
+    Mask the fktables and update each dataset_dict with
+    the entries `tr_fktables`, `vl_fktables` and `ex_fktables`
+    which corresponds to list of numpy fktables where only the
+    training (validation or total) data is included.
 
     Parameters
     ----------
@@ -158,31 +165,21 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
             :py:func:`validphys.n3fit_data_utils.common_data_reader_experiment`.
         tr_masks: list[np.array]
             a tuple containing the lists of training masks for each dataset.
-
-    Return
-    ------
-        data_trmask: np.array
-            boolean array resulting from concatenating the training masks of
-            each dataset.
-
-    Note: the returned masks are only used in order to mask the covmat
     """
-    trmask_partial = tr_masks
-    for dataset_dict, tr_mask in zip(dataset_dicts, trmask_partial):
+    for dataset_dict, tr_mask in zip(dataset_dicts, tr_masks):
         # Generate the training and validation fktables
         tr_fks = []
         vl_fks = []
         ex_fks = []
         vl_mask = ~tr_mask
-        for fktable_dict in dataset_dict["fktables"]:
-            tr_fks.append(fktable_dict["fktable"][tr_mask])
-            vl_fks.append(fktable_dict["fktable"][vl_mask])
-            ex_fks.append(fktable_dict.get("fktable"))
+        for fktable_data in dataset_dict["fktables"]:
+            fktable = fktable_data.get_np_fktable()
+            tr_fks.append(fktable[tr_mask])
+            vl_fks.append(fktable[vl_mask])
+            ex_fks.append(fktable)
         dataset_dict["tr_fktables"] = tr_fks
         dataset_dict["vl_fktables"] = vl_fks
         dataset_dict["ex_fktables"] = ex_fks
-
-    return np.concatenate(trmask_partial)
 
 
 def fitting_data_dict(
@@ -260,20 +257,18 @@ def fitting_data_dict(
         dt_trans_tr = None
         dt_trans_vl = None
 
-    # Copy dataset dict because we mutate it.
-    datasets_copy = deepcopy(datasets)
-
-    tr_mask = _mask_fk_tables(datasets_copy, tr_masks)
+    _mask_fk_tables(datasets, tr_masks)
+    tr_mask = np.concatenate(tr_masks)
     vl_mask = ~tr_mask
 
     if diagonal_basis:
         expdata = np.matmul(dt_trans, expdata)
         # make a 1d array of the diagonal
         covmat_tr = eig[tr_mask]
-        invcovmat_tr = 1./covmat_tr
+        invcovmat_tr = 1.0 / covmat_tr
 
         covmat_vl = eig[vl_mask]
-        invcovmat_vl = 1./covmat_vl
+        invcovmat_vl = 1.0 / covmat_vl
 
         # prepare a masking rotation
         dt_trans_tr = dt_trans[tr_mask]
@@ -301,7 +296,7 @@ def fitting_data_dict(
         folds["validation"].append(fold[vl_mask])
         folds["experimental"].append(~fold)
     dict_out = {
-        "datasets": datasets_copy,
+        "datasets": datasets,
         "name": str(data),
         "expdata_true": expdata_true,
         "invcovmat_true": inv_true,
@@ -316,13 +311,15 @@ def fitting_data_dict(
         "expdata_vl": expdata_vl,
         "positivity": False,
         "count_chi2": True,
-        "folds" : folds,
+        "folds": folds,
         "data_transformation_tr": dt_trans_tr,
         "data_transformation_vl": dt_trans_vl,
     }
     return dict_out
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_fitting_group",))
+
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
     """For a single replica return a tuple of the inputs to this function.
@@ -392,9 +389,9 @@ replicas_exps_tr_masks = collect("exps_tr_masks", ("replicas",))
 
 @table
 def replica_training_mask_table(replica_training_mask):
-    """Same as ``replica_training_mask`` but with a table decorator.
-    """
+    """Same as ``replica_training_mask`` but with a table decorator."""
     return replica_training_mask
+
 
 def replica_training_mask(exps_tr_masks, replica, experiments_index):
     """Save the boolean mask used to split data into training and validation
@@ -442,24 +439,18 @@ def replica_training_mask(exps_tr_masks, replica, experiments_index):
 
     [345 rows x 1 columns]
     """
-    all_masks = np.concatenate([
-        ds_mask
-        for exp_masks in exps_tr_masks
-        for ds_mask in exp_masks
-    ])
-    return pd.DataFrame(
-        all_masks,
-        columns=[f"replica {replica}"],
-        index=experiments_index
-    )
+    all_masks = np.concatenate([ds_mask for exp_masks in exps_tr_masks for ds_mask in exp_masks])
+    return pd.DataFrame(all_masks, columns=[f"replica {replica}"], index=experiments_index)
+
 
 replicas_training_mask = collect("replica_training_mask", ("replicas",))
 
+
 @table
 def training_mask_table(training_mask):
-    """Same as ``training_mask`` but with a table decorator
-    """
+    """Same as ``training_mask`` but with a table decorator"""
     return training_mask
+
 
 def training_mask(replicas_training_mask):
     """Save the boolean mask used to split data into training and validation
@@ -525,10 +516,11 @@ def fitting_pos_dict(posdataset):
     log.info("Loading positivity dataset %s", posdataset)
     return positivity_reader(posdataset)
 
+
 posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
 
 
-#can't use collect here because integdatasets might not exist.
+# can't use collect here because integdatasets might not exist.
 def integdatasets_fitting_integ_dict(integdatasets=None):
     """Loads a integrability dataset. Calls same function as
     :py:func:`fitting_pos_dict`, except on each element of

@@ -28,8 +28,8 @@ class Observable(MetaLayer, ABC):
 
         Parameters
         ----------
-            fktable_dicts: list
-                list of fktable_dicts which define basis and xgrid for the fktables in the list
+            fktable_data: list(validphys.coredata.FKTableData)
+                list of FK which define basis and xgrid for the fktables in the list
             fktable_arr: list
                 list of fktables for this observable
             operation_name: str
@@ -38,7 +38,7 @@ class Observable(MetaLayer, ABC):
                 number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_dicts, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(self, fktable_data, fktable_arr, operation_name, nfl=14, **kwargs):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
@@ -46,9 +46,9 @@ class Observable(MetaLayer, ABC):
         basis = []
         xgrids = []
         self.fktables = []
-        for fktable, fk in zip(fktable_dicts, fktable_arr):
-            xgrids.append(fktable["xgrid"])
-            basis.append(fktable["basis"])
+        for fkdata, fk in zip(fktable_data, fktable_arr):
+            xgrids.append(fkdata.xgrid.reshape(1,-1))
+            basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
 
         # check how many xgrids this dataset needs
