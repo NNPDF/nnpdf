@@ -491,7 +491,7 @@ class Loader(LoaderBase):
         """
         # TODO: this is just so I can load both types at once during development
         readyaml = True
-        if "oldmode" in cfac:
+        if "oldmode" in cfac or True:
             cfac = [i for i in cfac if i != "oldmode"]
             readyaml = False
 

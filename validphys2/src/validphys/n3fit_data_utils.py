@@ -4,76 +4,7 @@ n3fit_data_utils.py
 Library of function that read validphys object and make them into clean numpy objects
 for its usage for the fitting framework
 """
-# TODO:
-# Wrap them into a single dataclass with all relevant information instead of using dictionaries
 import numpy as np
-import pandas as pd
-
-
-def fk_parser(fk, is_hadronic=False):
-    """
-    # Arguments:
-        - `fk`: fktable object
-
-    # Return:
-        - `dict_out`: dictionary with all information about the fktable
-            - 'xgrid'
-            - 'nx'
-            - 'ndata'
-            - 'basis'
-            - 'fktable'
-    """
-
-    # Dimensional information
-    nonzero = fk.GetNonZero()
-    ndata = fk.GetNData()
-    nx = fk.GetTx()
-
-    # Basis of active flavours
-    nbasis = nonzero
-    basis = fk.get_flmap()
-
-    # Read the xgrid and the fktable to numpy arrays
-    xgrid_flat = fk.get_xgrid()
-    fktable_flat = fk.get_sigma()
-
-    # target shape
-    if is_hadronic:
-        nxsqrt = int(np.sqrt(nx))
-        shape_out = (ndata, nbasis, nxsqrt, nxsqrt)
-        xgrid = xgrid_flat.reshape(1, nxsqrt)
-    else:
-        shape_out = (ndata, nbasis, nx)
-        xgrid = xgrid_flat.reshape(1, nx)
-
-    # remove padding from the fktable (if any)
-    l = len(fktable_flat)
-    # get the padding
-    pad_position = fk.GetDSz()
-    pad_size = fk.GetDSz() - nx * nonzero
-    # remove the padding
-    if pad_size > 0:
-        mask = np.ones(l, dtype=bool)
-        for i in range(1, int(l / pad_position) + 1):
-            marker = pad_position * i
-            mask[marker - pad_size : marker] = False
-        fktable_array = fktable_flat[mask]
-    else:
-        fktable_array = fktable_flat
-    # reshape
-    fktable = fktable_array.reshape(shape_out)
-
-    dict_out = {
-        "ndata": ndata,
-        "nbasis": nbasis,
-        "nonzero": nbasis,
-        "basis": basis,
-        "nx": nx,
-        "xgrid": xgrid,
-        "fktable": fktable,
-    }
-    return dict_out
-
 
 def common_data_reader_dataset(dataset_spec):
     """
@@ -82,10 +13,6 @@ def common_data_reader_dataset(dataset_spec):
     Parameters
     ----------
         dataset: validphys representation of a dataset object, a ``validphys.core.DataSetSpec``
-
-    # Arguments:
-        - `dataset_c`: c representation of the dataset object
-        - `dataset_spec`: python representation of the dataset object
 
     #Returns:
         - `[dataset_dict]`: a (len 1 list of) dictionary with:
@@ -124,15 +51,14 @@ def positivity_reader(pos_spec):
     """
     Specific reader for positivity sets
     """
-    pos_c = pos_spec.load()
-    ndata = pos_c.GetNData()
-
-    parsed_set = [fk_parser(pos_c, pos_c.IsHadronic())]
+    parsed_set = [fk_to_np(fk.load_with_cuts(pos_spec.cuts)) for fk in pos_spec.fkspecs]
+    hadronic = parsed_set[0]["hadronic"]
+    ndata = parsed_set[0]["ndata"]
 
     pos_sets = [
         {
             "fktables": parsed_set,
-            "hadronic": pos_c.IsHadronic(),
+            "hadronic": hadronic,
             "operation": "NULL",
             "name": pos_spec.name,
             "frac": 1.0,
