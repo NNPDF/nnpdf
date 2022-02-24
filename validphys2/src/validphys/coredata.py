@@ -87,13 +87,64 @@ class FKTableData:
         >>> assert newtable.ndata == 2
         >>> assert newtable.metadata['GridInfo'].ndata == 3
         """
-        if hasattr(cuts, 'load'):
+        if hasattr(cuts, "load"):
             cuts = cuts.load()
         if cuts is None:
             return self
         newndata = len(cuts)
         newsigma = self.sigma.loc[cuts]
         return dataclasses.replace(self, ndata=newndata, sigma=newsigma)
+
+    @property
+    def luminosity_mapping(self):
+        """Return the flavour combinations that contribute to the fktable
+        in the form of a single array
+
+        The return shape is:
+            (nbasis,) for DIS
+            (nbasis*2,) for hadronic
+        """
+        basis = self.sigma.columns.to_numpy()
+        if self.hadronic:
+            ret = np.zeros(14 * 14, dtype=bool)
+            ret[basis] = True
+            basis = np.array(np.where(ret.reshape(14, 14))).T.reshape(-1)
+        return basis
+
+    def get_np_fktable(self):
+        """Returns the fktable as a dense numpy array that can be directly
+        manipulated with numpy
+
+        The return shape is:
+            (ndata, nx, nbasis) for DIS
+            (ndata, nx, nx, nbasis) for hadronic
+        where nx is the length of the xgrid
+        and nbasis the number of flavour contributions that contribute
+        """
+        # Read up the shape of the output table
+        ndata = self.ndata
+        nx = len(self.xgrid)
+
+        # TODO: make the dataframe into a dense numpy array
+        # there might be a better way of doing this but not sure how
+        # some pitfalls: the dataframe does not contain values for all x
+        # or for all combinations of x1/x2 in hadronic
+        # also x1-x2 are not necessary equal or ordered
+
+        # first get the data out of the way
+        ns = self.sigma.unstack(level=["data"], fill_value=0)
+        if self.hadronic:
+            # Now let's make sure x1 is complete
+            ns = ns.unstack("x2", 0).sort_values("x1").reindex(range(nx), fill_value=0.0)
+            # For completeness, the let's ensure the same is true for x2
+            ns = ns.stack("x2").unstack("x1", 0).sort_values("x2").reindex(range(nx), fill_value=0)
+            # Now we have (x2, basis, data, x1) and want (data, basis, x1, x2)
+            fktable = np.transpose(ns.values.reshape(nx, -1, ndata, nx), (2, 1, 3, 0))
+        else:
+            # for DIS one could equivalently remove the missing points from xgrid
+            full_sigma = ns.sort_values("x").reindex(range(nx), fill_value=0.0)
+            fktable = full_sigma.values.reshape(nx, -1, ndata).T
+        return fktable
 
 
 @dataclasses.dataclass(eq=False)
@@ -157,6 +208,7 @@ class CommonData:
         type (ADD/MULT/RAND) and name
         (CORR/UNCORR/THEORYCORR/SKIP)
     """
+
     setname: str
     ndata: int
     commondataproc: str
@@ -185,11 +237,13 @@ class CommonData:
         """
         # Ensure that the cuts we're applying applies to this dataset
         # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
-        if hasattr(cuts, 'name') and self.setname != cuts.name:
-            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
-                    f"to this commondata file: {self.setname}")
+        if hasattr(cuts, "name") and self.setname != cuts.name:
+            raise ValueError(
+                f"The cuts provided are for {cuts.name} which does not apply "
+                f"to this commondata file: {self.setname}"
+            )
 
-        if hasattr(cuts, 'load'):
+        if hasattr(cuts, "load"):
             cuts = cuts.load()
         if cuts is None:
             return self
@@ -200,9 +254,7 @@ class CommonData:
 
         newndata = len(cuts)
         new_commondata_table = self.commondata_table.loc[cuts]
-        return dataclasses.replace(
-            self, ndata=newndata, commondata_table=new_commondata_table
-        )
+        return dataclasses.replace(self, ndata=newndata, commondata_table=new_commondata_table)
 
     @property
     def central_values(self):
@@ -245,7 +297,6 @@ class CommonData:
         add_table.columns = add_systype["name"].to_numpy()
         return add_table.loc[:, add_table.columns != "SKIP"]
 
-
     def systematic_errors(self, central_values=None):
         """Returns all systematic errors as absolute uncertainties, with a
         single column for each uncertainty. Converts
@@ -272,7 +323,5 @@ class CommonData:
         """
         if central_values is None:
             central_values = self.central_values.to_numpy()
-        converted_mult_errors = (
-            self.multiplicative_errors * central_values[:, np.newaxis] / 100
-        )
+        converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)

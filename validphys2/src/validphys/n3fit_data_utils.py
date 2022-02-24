@@ -157,63 +157,31 @@ def positivity_reader(pos_spec):
 
     return dict_out
 
+
 #### new functions ####
 def fk_to_np(fkobject):
     """
     Reads a validphys fktable (``validphys.coredata.FKTableData``) and extract
     all necessary information in a clean way, ready to be used with the fitting framework
     """
-    #TODO: add this as a method to FKTableData that returns a (tensor, luminosity)
     ndata = fkobject.ndata
     xgrid = fkobject.xgrid
-    basis = fkobject.sigma.columns.to_numpy()
-    nbasis = len(basis)
-
-    # TODO: I'm sure there's a better way to do this with pandas, please
-    # modify it if you know how:
-    # The data index needs to be dropped (the data is already cut and is unnecesary sparsing)
-    # The flavour index (columns) is correct: only flavours that contribute are included in the tensor
-    # The xgrid index instead might need to be filled with 0s or part of the xgrid removed
-    # because not all combinations of x-data-flavour contribute
-
-    if fkobject.hadronic:
-        # Recover the flavour mapping and make it into a matrix of indices
-        ret = np.zeros(14*14, dtype=bool)
-        ret[basis] = True
-        basis = np.array(np.where(ret.reshape(14, 14))).T.reshape(-1)
-        nx = len(xgrid)
-        # For non-DIS grids the x1-x2 combinations might be non trivial
-        # so I rather not just remove the x i don't like
-
-        # TODO: again, I'm sure there's a better way but the df are not even ordered?
-        # get data out of the way
-        ns = fkobject.sigma.unstack(["data"], 0)
-        # Now let's make sure x1 is complete
-        ns = ns.unstack("x2", 0).sort_values("x1").reindex(range(nx), fill_value=0.0)
-        # For completeness, the let's ensure the same is true for x2
-        ns = ns.stack("x2").unstack("x1", 0).sort_values("x2").reindex(range(nx), fill_value=0.0)
-        # Now we have (x2, basis, data, x1) and want (data, basis, x1, x2)
-        fktable = np.transpose(ns.values.reshape(nx, nbasis, ndata, nx), (2,1,3,0))
-    else:
-        # For DIS we can unstack and restack to ensure the ordering makes sense, it should be fast
-        full_sigma = fkobject.sigma.unstack(level=["x"],fill_value=0).stack()
-        # Turns out that some of the 'x' are actually 0 for all combinations for DIS
-        # (and for some reason we kept them!)
-        index_x = full_sigma.index.to_frame()["x"].unique()
-        xgrid = xgrid[index_x]
-        nx = len(xgrid)
-        fktable = full_sigma.values.reshape(ndata, nx, nbasis).swapaxes(-2, -1)
+    basis = fkobject.luminosity_mapping
+    nbasis = len(basis) / 2 if fkobject.hadronic else len(basis)
+    nx = len(xgrid)
+    fktable = fkobject.get_np_fktable()
 
     return {
-            "ndata": ndata,
-            "nbasis": nbasis,
-            "nonzero": nbasis,
-            "basis": basis,
-            "nx": nx,
-            "xgrid": xgrid.reshape(1,-1),
-            "fktable": fktable,
-            "hadronic": fkobject.hadronic
-            }
+        "ndata": ndata,
+        "nbasis": nbasis,
+        "nonzero": nbasis,
+        "basis": basis,
+        "nx": nx,
+        "xgrid": xgrid.reshape(1, -1),
+        "fktable": fktable,
+        "hadronic": fkobject.hadronic,
+    }
+
 
 def validphys_group_extractor(group_spec):
     """
@@ -227,6 +195,6 @@ def validphys_group_extractor(group_spec):
     Returns
     -------
         parsed_observables: a list of (for now dictionaries) containing the information
-                              required to fit the given observable 
+                              required to fit the given observable
     """
     return [common_data_reader_dataset(ds) for ds in group_spec.datasets]
