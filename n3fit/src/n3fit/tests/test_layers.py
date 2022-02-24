@@ -2,7 +2,7 @@
     Tests for the layers of n3fit
     This module checks that the layers do what they would do with numpy
 """
-
+import dataclasses
 import numpy as np
 from validphys.pdfbases import fitbasis_to_NN31IC
 from n3fit.backends import operations as op
@@ -14,9 +14,19 @@ XSIZE = 4
 NDATA = 3
 THRESHOLD = 1e-6
 
+
+@dataclasses.dataclass
+class _fake_FKTableData:
+    """Fake validphys.coredata.FKTableData to be used in the tests"""
+
+    fktable: np.array
+    luminosity_mapping: np.array
+    xgrid: np.array
+
+
 # Helper functions
 def generate_input_had(flavs=3, xsize=2, ndata=4, n_combinations=None):
-    """ Generates fake input (fktable and array of combinations) for the hadronic convolution
+    """Generates fake input (fktable and array of combinations) for the hadronic convolution
 
     Parameters
     ----------
@@ -39,9 +49,7 @@ def generate_input_had(flavs=3, xsize=2, ndata=4, n_combinations=None):
         lc = len(combinations)
     else:
         bchoice = sorted(
-            np.random.choice(
-                np.arange(flavs * flavs), size=n_combinations, replace=False
-            )
+            np.random.choice(np.arange(flavs * flavs), size=n_combinations, replace=False)
         )
         combinations = [all_combinations[i] for i in bchoice]
         lc = n_combinations
@@ -52,7 +60,7 @@ def generate_input_had(flavs=3, xsize=2, ndata=4, n_combinations=None):
 
 # Generate an FK table, PDF and combinations list for DIS
 def generate_input_DIS(flavs=3, xsize=2, ndata=5, n_combinations=-1):
-    """ Generates fake input (fktable and array of combinations) for the DIS convolution
+    """Generates fake input (fktable and array of combinations) for the DIS convolution
 
     Parameters
     ----------
@@ -82,34 +90,32 @@ def generate_input_DIS(flavs=3, xsize=2, ndata=5, n_combinations=-1):
 
 
 def generate_DIS(nfk=1):
-    fkdicts = []
-    for i in range(nfk):
+    fktables = []
+    for _ in range(nfk):
         fk, comb = generate_input_DIS(
             flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
         )
-        fkdicts.append({"fktable": fk, "basis": comb, "xgrid": np.ones((1, XSIZE))})
-    return fkdicts
+        fktables.append(_fake_FKTableData(fk, comb, np.ones((1, XSIZE))))
+    return fktables
 
 
 def generate_had(nfk=1):
-    fkdicts = []
-    for i in range(nfk):
-        fk, comb = generate_input_had(
-            flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS
-        )
-        fkdicts.append({"fktable": fk, "basis": comb, "xgrid": np.ones((1, XSIZE))})
-    return fkdicts
+    fktables = []
+    for _ in range(nfk):
+        fk, comb = generate_input_had(flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS)
+        fktables.append(_fake_FKTableData(fk, comb, np.ones((1, XSIZE))))
+    return fktables
 
 
 # Tests
 def test_DIS_basis():
-    fkdicts = generate_DIS(2)
-    fks = [i['fktable'] for i in fkdicts]
-    obs_layer = layers.DIS(fkdicts, fks, "NULL", nfl=FLAVS)
+    fktables = generate_DIS(2)
+    fks = [i.fktable for i in fktables]
+    obs_layer = layers.DIS(fktables, fks, "NULL", nfl=FLAVS)
     # Get the masks from the layer
     all_masks = obs_layer.all_masks
-    for result, fk in zip(all_masks, fkdicts):
-        comb = fk["basis"]
+    for result, fk in zip(all_masks, fktables):
+        comb = fk.luminosity_mapping
         # Compute the basis with numpy
         reference = np.zeros(FLAVS, dtype=bool)
         for i in comb:
@@ -118,13 +124,13 @@ def test_DIS_basis():
 
 
 def test_DY_basis():
-    fkdicts = generate_had(2)
-    fks = [i['fktable'] for i in fkdicts]
-    obs_layer = layers.DY(fkdicts, fks, "NULL", nfl=FLAVS)
+    fktables = generate_had(2)
+    fks = [i.fktable for i in fktables]
+    obs_layer = layers.DY(fktables, fks, "NULL", nfl=FLAVS)
     # Get the mask from the layer
     all_masks = obs_layer.all_masks
-    for result, fk in zip(all_masks, fkdicts):
-        comb = fk["basis"]
+    for result, fk in zip(all_masks, fktables):
+        comb = fk.luminosity_mapping
         reference = np.zeros((FLAVS, FLAVS))
         for i, j in comb:
             reference[i, j] = True
@@ -135,9 +141,9 @@ def test_DIS():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
-        fkdicts = generate_DIS(nfk)
-        fks = [i['fktable'] for i in fkdicts]
-        obs_layer = layers.DIS(fkdicts, fks, ope, nfl=FLAVS)
+        fktables = generate_DIS(nfk)
+        fks = [i.fktable for i in fktables]
+        obs_layer = layers.DIS(fktables, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
         # generate the n3fit results
@@ -148,8 +154,8 @@ def test_DIS():
         if len(all_masks) < nfk:
             all_masks *= nfk
         reference = 0
-        for fkdict, mask in zip(fkdicts, all_masks):
-            fk = fkdict["fktable"]
+        for fktabledata, mask in zip(fktables, all_masks):
+            fk = fktabledata.fktable
             pdf_masked = pdf.T[mask.numpy()].T
             reference += np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
         assert np.allclose(result, reference, THRESHOLD)
@@ -159,12 +165,12 @@ def test_DY():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
-        fkdicts = generate_had(nfk)
-        fks = [i['fktable'] for i in fkdicts]
-        obs_layer = layers.DY(fkdicts, fks, ope, nfl=FLAVS)
+        fktables = generate_had(nfk)
+        fks = [i.fktable for i in fktables]
+        obs_layer = layers.DY(fktables, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
         # Add batch dimension (0) and replica dimension (-1)
-        kp = op.numpy_to_tensor(np.expand_dims(pdf, [0,-1]))
+        kp = op.numpy_to_tensor(np.expand_dims(pdf, [0, -1]))
         # generate the n3fit results
         result_tensor = obs_layer(kp)
         result = op.evaluate(result_tensor)
@@ -173,8 +179,8 @@ def test_DY():
         if len(all_masks) < nfk:
             all_masks *= nfk
         reference = 0
-        for fkdict, mask in zip(fkdicts, all_masks):
-            fk = fkdict["fktable"]
+        for fktabledata, mask in zip(fktables, all_masks):
+            fk = fktabledata.fktable
             lumi = np.tensordot(pdf, pdf, axes=0)
             lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
             lumi_masked = lumi_perm[mask.numpy()]
@@ -197,12 +203,12 @@ def test_rotation_flavour():
     # Apply the rotation using numpy tensordot
     x = np.ones(8)  # Vector in the flavour basis v_i
     x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
-    mat = fitbasis_to_NN31IC(flav_info, 'FLAVOUR')  # Rotation matrix R_ij, i=flavour, j=evolution
+    mat = fitbasis_to_NN31IC(flav_info, "FLAVOUR")  # Rotation matrix R_ij, i=flavour, j=evolution
     res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)
-    rotmat = layers.FlavourToEvolution(flav_info, 'FLAVOUR')
+    rotmat = layers.FlavourToEvolution(flav_info, "FLAVOUR")
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)
 
@@ -222,33 +228,34 @@ def test_rotation_evol():
     # Apply the rotation using numpy tensordot
     x = np.ones(8)  # Vector in the flavour basis v_i
     x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
-    mat = fitbasis_to_NN31IC(flav_info, 'EVOL')  # Rotation matrix R_ij, i=flavour, j=evolution
+    mat = fitbasis_to_NN31IC(flav_info, "EVOL")  # Rotation matrix R_ij, i=flavour, j=evolution
     res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)
-    rotmat = layers.FlavourToEvolution(flav_info, 'EVOL')
+    rotmat = layers.FlavourToEvolution(flav_info, "EVOL")
     res_layer = rotmat(x)
-    assert np.alltrue(res_np == res_layer)    
-    
+    assert np.alltrue(res_np == res_layer)
+
+
 def test_mask():
-    """ Test the mask layer """
+    """Test the mask layer"""
     SIZE = 100
     fi = np.random.rand(SIZE)
     # Check that the multiplier works
     vals = [0.0, 2.0, np.random.rand()]
     for val in vals:
-        masker = layers.Mask(c = val)
+        masker = layers.Mask(c=val)
         ret = masker(fi)
-        np.testing.assert_allclose(ret, val*fi, rtol=1e-5)
+        np.testing.assert_allclose(ret, val * fi, rtol=1e-5)
     # Check that the boolean works
     np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
-    masker = layers.Mask(bool_mask = np_mask)
+    masker = layers.Mask(bool_mask=np_mask)
     ret = masker(fi)
     masked_fi = fi[np_mask]
     np.testing.assert_allclose(ret, masked_fi, rtol=1e-5)
     # Check that the combination works!
     rn_val = vals[-1]
-    masker = layers.Mask(bool_mask = np_mask, c = rn_val)
+    masker = layers.Mask(bool_mask=np_mask, c=rn_val)
     ret = masker(fi)
-    np.testing.assert_allclose(ret, masked_fi*rn_val, rtol=1e-5)
+    np.testing.assert_allclose(ret, masked_fi * rn_val, rtol=1e-5)
