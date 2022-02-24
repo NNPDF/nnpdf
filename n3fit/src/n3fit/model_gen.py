@@ -150,7 +150,7 @@ def observable_generator(
         # Now generate the observable layer, which takes the following information:
         # operation name
         # dataset name
-        # list of fktable_dictionaries
+        # list of validphys.coredata.FKTableData objects
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
 
@@ -195,11 +195,11 @@ def observable_generator(
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         if obs_layer_tr.splitting is None:
-            xgrid = dataset_dict["fktables"][0]["xgrid"]
+            xgrid = dataset_dict["fktables"][0].xgrid.reshape(1,-1)
             model_inputs.append(xgrid)
             dataset_xsizes.append(xgrid.shape[1])
         else:
-            xgrids = [i["xgrid"] for i in dataset_dict["fktables"]]
+            xgrids = [i.xgrid.reshape(1,-1) for i in dataset_dict["fktables"]]
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
