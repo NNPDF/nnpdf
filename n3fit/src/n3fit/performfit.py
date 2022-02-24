@@ -37,7 +37,7 @@ def performfit(
     tensorboard=None,
     debug=False,
     maxcores=None,
-    parallel_models=False
+    parallel_models=False,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit

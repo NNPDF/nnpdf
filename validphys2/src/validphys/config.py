@@ -1056,7 +1056,6 @@ class CoreConfig(configparser.Config):
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
-
         # Set this to get the same filename regardless of the action.
         res.__name__ = "theory_covmat"
         return res
@@ -1503,6 +1502,11 @@ class CoreConfig(configparser.Config):
             {"data_input": NSList(group, nskey="dataset_input"), "group_name": name}
             for name, group in res.items()
         ]
+    
+    def produce_group_dataset_inputs_by_fitting_group(self, data_input, theory_covmat_flag):
+        if theory_covmat_flag is True:
+            return self.produce_group_dataset_inputs_by_metadata(data_input, "custom_group")
+        return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
 
     def produce_group_dataset_inputs_by_experiment(self, data_input):

@@ -228,19 +228,18 @@ def dataset_inputs_covmat_from_systematics(
             covmat,
             norm_threshold=norm_threshold
         )
-    try:
-        theory_covmat_path = pathlib.Path.cwd()
-        data = pd.read_csv(theory_covmat_path / "prov_moredata" / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv", sep='\t')
-        datael = data.iloc[3:]
-        datael = datael.drop(['group'], axis=1)
-        datael = datael.drop(['Unnamed: 1'], axis=1)
-        datael = datael.drop(['Unnamed: 2'], axis=1)
-        theory_covmat = np.copy(datael.values)
-        theory_covmat = theory_covmat.astype(np.float)
-    except FileNotFoundError:
-        theory_covmat = np.zeros(covmat.shape) 
-    total_covmat = np.add(covmat, theory_covmat)   
-    return total_covmat
+   # try:
+   #     theory_covmat_path = pathlib.Path.cwd()
+   #     data = pd.read_csv(theory_covmat_path / "prov_moredata" / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv", sep='\t')
+   #     datael = data.iloc[3:]
+    #    datael = datael.drop(['group'], axis=1)
+    #    datael = datael.drop(['Unnamed: 1'], axis=1)
+    #    datael = datael.drop(['Unnamed: 2'], axis=1)
+    #    theory_covmat = np.copy(datael.values)
+    #except FileNotFoundError:
+    #    theory_covmat = np.zeros(covmat.shape) 
+    #total_covmat = np.add(covmat, theory_covmat)   
+    return covmat
 
 
 @check_cuts_considered
@@ -351,6 +350,41 @@ def dataset_inputs_t0_covmat_from_systematics(
         norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
+
+def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    dataset_inputs_t0_predictions,
+    output_path,
+    theory_covmat_flag,
+    use_user_uncertainties,
+    use_scalevar_uncertainties):
+    exp_covmat = dataset_inputs_covmat_from_systematics(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        norm_threshold=norm_threshold,
+        _list_of_central_values=dataset_inputs_t0_predictions
+    )
+    if theory_covmat_flag is True:
+        generic_path = None
+        if use_scalevar_uncertainties is True:
+            if use_user_uncertainties is True:
+                generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_total_theory_covmat.csv")
+            else:
+                generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
+        else:
+            if use_user_uncertainties is True:
+                generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_user_covmat.csv")
+            else:
+                generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
+        theorypath = pathlib.Path(str(output_path/"tables"/generic_path.relative_to(generic_path.anchor)))
+        theory_covmat = pd.read_csv(theorypath, sep='\t')
+        theory_covmat = theory_covmat.iloc[3:].drop(['group'], axis=1).drop(['Unnamed: 1'], axis=1).drop(['Unnamed: 2'], axis=1)
+        return np.add(exp_covmat,theory_covmat.values.astype(np.float))
+    return exp_covmat
 
 
 def sqrt_covmat(covariance_matrix):
