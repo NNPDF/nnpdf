@@ -39,7 +39,7 @@ def alphas_hist(replica_data, pdf):
     
     fig, ax = plt.subplots()
     ax.set_xlabel(r"$\alpha_s$")
-    ax.set_ylabel("density")
+    ax.set_ylabel("number of replicas")
     ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
     anchored_text = offsetbox.AnchoredText(
         r"$\alpha_s=$" + f"{mean:.4f}" + r"$\pm$" + f"{std:.4f}",
