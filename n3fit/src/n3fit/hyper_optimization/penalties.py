@@ -94,7 +94,7 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     return vl_loss * np.exp(alpha * diff)
 
 
-def integrability(pdf_models=None):
+def integrability(pdf_models=None, **_kwargs):
     """Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
     of the threshold defined in validphys::fitveto
