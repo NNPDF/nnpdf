@@ -359,6 +359,33 @@ class Loader(LoaderBase):
         cfactors = self.check_cfactor(theoryID, setname, cfac)
         return FKTableSpec(fkpath, cfactors)
 
+    def check_fkyaml(self, fkpath, theoryID, cfac):
+        """Load a new-style fktable
+        Receives a yaml file describing the fktables necessary for a given observable
+        the theory ID and the corresponding cfactors
+        """
+        from .fkparser import get_yaml_information
+        _, theopath = self.check_theoryID(theoryID)
+        metadata, fklist = get_yaml_information(fkpath, theopath)
+        op = metadata["operation"]
+
+        # TODO:
+        # at the moment cfactors are shared and are following NNPDF names
+        # so we need to use the NNPDF names for now and use the compounds if they exist
+        cfac_name = metadata["target_dataset"]
+        ##### compound reader
+        cpath = theopath / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
+        if cpath.exists():
+            # Get the target filenames
+            tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
+            cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
+        ##### end compound reader
+        else:
+            cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
+        fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
+        
+        return fkspecs, op
+
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
         compound_spec_path = theopath / 'compound' / ('FK_%s-COMPOUND.dat' % setname)
@@ -491,7 +518,7 @@ class Loader(LoaderBase):
         """
         # TODO: this is just so I can load both types at once during development
         readyaml = True
-        if "oldmode" in cfac or True:
+        if "oldmode" in cfac:
             cfac = [i for i in cfac if i != "oldmode"]
             readyaml = False
 
@@ -506,12 +533,7 @@ class Loader(LoaderBase):
         # Let's first see whether this is a new type of fktable
         fkpath = (self.yamlpath / name).with_suffix(".yaml")
         if fkpath.exists() and readyaml:
-            # Importing everything here from fkparser
-            # eventually it can substitute check_fktable
-            from .fkparser import check_fkyaml
-            _, theopath = self.check_theoryID(theoryno)
-            cfactors = self.check_cfactor(theoryno, name, cfac)
-            fkspec, op = check_fkyaml(fkpath, theopath, cfactors)
+            fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
         else:
             try:
                 fkspec, op = self.check_compound(theoryno, name, cfac)

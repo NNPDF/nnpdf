@@ -411,7 +411,7 @@ def _load_yaml(yaml_file):
     return ret
 
 
-def _get_yaml_information(yaml_file, theorypath, check_pineappl=False):
+def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
     """
     Given a yaml_file, return the corresponding dictionary
     with all information and an extra field "paths"
@@ -458,16 +458,6 @@ def _get_yaml_information(yaml_file, theorypath, check_pineappl=False):
         yaml_content["operation_function"] = yaml_content["operation"]
 
     return yaml_content, ret
-
-
-def check_fkyaml(yaml_file, theorypath, cfactors):
-    """Receives a yaml file describing the fktables necessary for a given observable"""
-    from .core import FKTableSpec
-
-    metadata, fklist = _get_yaml_information(yaml_file, theorypath)
-    fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip_longest(fklist, cfactors)]
-    op = metadata["operation"]
-    return fkspecs, op
 
 
 def pineappl_reader(fkspec):
