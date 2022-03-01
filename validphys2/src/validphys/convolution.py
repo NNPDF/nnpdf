@@ -112,9 +112,16 @@ def _predictions(dataset, pdf, fkfunc):
             "commondata and is not supported."
         )
     cuts = dataset.cuts.load()
-    all_predictions = [
-        fkfunc(load_fktable(fk).with_cuts(cuts), pdf) for fk in dataset.fkspecs
-    ]
+    all_predictions = []
+    for fk in dataset.fkspecs:
+        fk_w_cuts = load_fktable(fk).with_cuts(cuts)
+        ret = fkfunc(fk_w_cuts, pdf)
+        # TODO: old fktables just repeated values to keep the size the same
+        # which is a waste of space, this is not kept in pineappl for obvious reasons
+        # but not sure how to make this work for both cases...
+        if fk_w_cuts.protected:
+            ret = ret.reindex(cuts, method="pad")
+        all_predictions.append(ret)
     return opfunc(*all_predictions)
 
 
