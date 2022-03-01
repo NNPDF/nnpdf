@@ -475,7 +475,8 @@ def pineappl_reader(fkspec):
     Q0 = np.sqrt(pp.muf2())
     xgrid = pp.x_grid()
     # Hadronic means in practice that not all luminosity combinations are just electron X proton
-    hadronic = not all(-11 in i for i in pp.lumi())
+    non_hadronic = {11, 12, -11, -12}
+    hadronic = all(non_hadronic.isdisjoint(i) for i in pp.lumi())
     # Now prepare the concatenation of grids
     fktables = []
     for p in pines:
@@ -484,28 +485,39 @@ def pineappl_reader(fkspec):
     fktable = np.concatenate(fktables, axis=0)
     ndata = fktable.shape[0]
 
+    # To create a dataframe compatible with that validphys creates from the old fktables we need to:
     # Step 1), make the luminosity into a 14x14 mask for the evolution basis
+    # Step 2) prepare the indices for the dataframe
     eko_numbering_scheme = (22, 100, 21, 200, 203, 208, 215, 224, 235, 103, 108, 115, 124, 135)
+    xi = np.arange(len(xgrid))
+    ni = np.arange(ndata)
     # note that this is the same ordering that was used in fktables
     # the difference is that the fktables were doing this silently and now
     # we have the information made explicit
-    flavour_map = np.zeros((14, 14), dtype=bool)
-    for i, j in pp.lumi():
-        idx = eko_numbering_scheme.index(i)
-        jdx = eko_numbering_scheme.index(j)
-        flavour_map[idx, jdx] = True
+    if hadronic:
+        flavour_map = np.zeros((14, 14), dtype=bool)
+        for i, j in pp.lumi():
+            idx = eko_numbering_scheme.index(i)
+            jdx = eko_numbering_scheme.index(j)
+            flavour_map[idx, jdx] = True
 
-    # Step 2) prepare the indices for the dataframe
-    xi = np.arange(len(xgrid))
-    ni = np.arange(ndata)
-    mi = pd.MultiIndex.from_product([ni, xi, xi], names=["data", "x1", "x2"])
-    co = np.where(flavour_map.ravel())[0]
+        mi = pd.MultiIndex.from_product([ni, xi, xi], names=["data", "x1", "x2"])
+        co = np.where(flavour_map.ravel())[0]
+        xdivision = (xgrid[:,None]*xgrid[None,:]).flatten()
+    else:
+        mi = pd.MultiIndex.from_product([ni, xi], names=["data", "x"])
+        try:
+            co = [eko_numbering_scheme.index(i) for _, i in pp.lumi()]
+        except ValueError:
+            co = [eko_numbering_scheme.index(i) for i, _ in pp.lumi()]
+        xdivision = xgrid
+    # The fktables for pineappl have an extra factor of x that we need to remove
+    # hence xdivision
 
     # Step 3) Now put the flavours at the end and flatten
     # The output of pineappl is (ndata, flavours, x, x)
-    # The fktables for pineappl have an extra factor of x that we need to remove
     lf = len(co)
-    xfktable = fktable.reshape(ndata, lf, -1)/(xgrid[:,None]*xgrid[None,:]).flatten()
+    xfktable = fktable.reshape(ndata, lf, -1)/xdivision
     fkmod = np.moveaxis(xfktable, 1, -1)
     fkframe = fkmod.reshape(-1, lf)
 
