@@ -69,6 +69,8 @@ kfold:
     target: average
     penalties:
       - saturation
+      - patience
+      - integrability
     threshold: 2.0
     partitions:
         - datasets:
