@@ -1543,7 +1543,6 @@ class CoreConfig(configparser.Config):
             str(scalevarsfor_dict["theoryid"])
             for scalevarsfor_dict in scalevarsfor_list
         ]
-
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
             raise ConfigError(
