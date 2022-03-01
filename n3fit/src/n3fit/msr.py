@@ -84,13 +84,27 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     def apply_normalization(layer_pdf):
         """
             layer_pdf: output of the PDF, unnormalized, ready for the fktable
+
+            Modifications:
+            --------------
+            The way in which sum rules are imposed for A!=1 is the same as in
+            proton PDF fit (A=1). Hence, the same sum rule constraints for A=1
+            are imposed for all values of A. This is done by splitting the
+            output of the NN into a sets of 14-flavour bases.
         """
         x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
-        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
-        normalization = normalizer(integrator(pdf_integrand))
+        layer_pdf_xi = layer_pdf(xgrid_input)
+        divided_by_x = division_by_x(x_original)
+        split_size = int(layer_pdf_xi.shape[-1] / divided_by_x.shape[-1])
+        splitted_layer_xi = op.split(layer_pdf_xi, split_size, axis=-1)
+        normalization_per_A = []
+        for splitted_layer in splitted_layer_xi:
+            pdf_integrand = op.op_multiply([divided_by_x, splitted_layer])
+            normalization_per_A.append(normalizer(integrator(pdf_integrand)))
+        normalization = op.concatenate(normalization_per_A, axis=0)
 
         def ultimate_pdf(x):
-            return layer_pdf(x)*normalization
+            return layer_pdf(x) * normalization
 
         return ultimate_pdf
 
