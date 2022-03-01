@@ -50,7 +50,7 @@ def arc_lengths(
         eps = (b - a) / npoints
         ixgrid = xgrid(a, b, "linear", npoints)
         # PDFs evaluated on grid
-        xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values * ixgrid[1]
+        xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data * ixgrid[1]
         fdiff = np.diff(xfgrid) / eps  # Compute forward differences
         res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
     stats = pdf.stats_class(res)
@@ -127,6 +127,6 @@ def integrability_number(
     checked = check_basis(basis, flavours)
     basis, flavours = checked["basis"], checked["flavours"]
     ixgrid = xgrid(1e-9, 1e-6, "log", 3)
-    xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values
+    xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data
     res = np.sum(np.abs(xfgrid), axis=2)
     return res.squeeze()

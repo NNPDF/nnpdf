@@ -17,6 +17,8 @@ from validphys import lhaindex
 from validphys.lhio import hessian_from_lincomb
 from validphys.pdfgrids import xplotting_grid
 
+from validphys.checks import check_pdf_is_montecarlo
+
 log = logging.getLogger(__name__)
 
 
@@ -58,6 +60,7 @@ def mc2hessian_xgrid(
     )
 
 
+@check_pdf_is_montecarlo
 def mc2hessian(
     pdf, Q, Neig: int, mc2hessian_xgrid, output_path, gridname, installgrid: bool = False
 ):
@@ -109,8 +112,8 @@ def _create_mc2hessian(pdf, Q, xgrid, Neig, output_path, name=None):
 def _get_X(pdf, Q, xgrid, reshape=False):
     pdf_grid = xplotting_grid(pdf, Q, xgrid=xgrid)
     pdf_grid_values = pdf_grid.grid_values
-    replicas = pdf_grid_values
-    mean = pdf_grid_values.mean(axis=0)
+    replicas = pdf_grid_values.error_members()
+    mean = pdf_grid_values.central_value()
     Xt = replicas - mean
     if reshape:
         Xt = Xt.reshape(Xt.shape[0], Xt.shape[1] * Xt.shape[2])
