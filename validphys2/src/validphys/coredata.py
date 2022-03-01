@@ -54,6 +54,23 @@ class FKTableData:
     def __post_init__(self):
         self._fktable = None
 
+    @property
+    def protected(self):
+        """Protects the fktable from being cut kinematically.
+        Due to old limitations inclusive cross sections got kinematic cuts applied
+        this cannot be done to pineapplgrids
+        for which one inclusive cross section is just one number
+        There are three different scenarios:
+            - no repetition flag: false
+            - repetition flag only on the denominator: true
+            - two repetitions flags: false
+                (this last case is due to some inconsistencies in apfelcomb where there is
+                no repetition in the database but somehow the grid had a different number of points)
+        """
+        if self.metadata.get("repetition_flag") and self.ndata==1:
+            return not all(self.metadata.get("repetition_flag"))
+        return False
+
     # TODO: When we move to something other than the current fktable format,
     # we should apply the cuts directly before loading the file.
     def with_cuts(self, cuts):
@@ -93,6 +110,8 @@ class FKTableData:
         if hasattr(cuts, "load"):
             cuts = cuts.load()
         if cuts is None:
+            return self
+        if self.protected:
             return self
         newndata = len(cuts)
         newsigma = self.sigma.loc[cuts]

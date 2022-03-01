@@ -6,7 +6,17 @@ for its usage for the fitting framework
 """
 from itertools import zip_longest
 import dataclasses
-import numpy as np
+
+
+def _mask_fk(fktables, fk_datas, mask):
+    """Mask a dataset taking into account their protections status"""
+    ret = []
+    for fk, fk_data in zip(fktables, fk_datas):
+        if fk_data.protected:
+            ret.append(fk)
+        else:
+            ret.append(fk[mask])
+    return ret
 
 
 @dataclasses.dataclass
@@ -15,6 +25,7 @@ class FittableDataSet:
     Python version of the libNNPDF dataset
     to be merged with the product of the new CommonData dataset
     """
+
     # TODO:
     # this class is basically equal to the normal DataSet
     # plus calls to generate a training_fktable, validation_fktable, etc
@@ -50,12 +61,12 @@ class FittableDataSet:
 
     def training_fktables(self):
         if self.training_mask is not None:
-            return [f[self.training_mask] for f in self.fktables()]
+            return _mask_fk(self.fktables(), self.fktables_data, self.training_mask)
         return self.fktables()
 
     def validation_fktables(self):
         if self.training_mask is not None:
-            return [f[~self.training_mask] for f in self.fktables()]
+            return _mask_fk(self.fktables(), self.fktables_data, ~self.training_mask)
         return self.fktables()
 
     def set_mask(self, mask):
