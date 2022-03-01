@@ -74,27 +74,33 @@ class FkRotation(MetaLayer):
         super().__init__(name=name, **kwargs)
 
     def call(self, pdf_raw):
-        # Transpose the PDF so that the flavour index is the first one
-        x = op.transpose(pdf_raw)
-        pdf_raw_list = [
-            0 * x[0],  # photon
-            x[0],  # sigma
-            x[1],  # g
-            x[2],  # v
-            x[3],  # v3
-            x[4],  # v8
-            x[2],  # v15
-            x[2],  # v24
-            x[2],  # v35
-            x[5],  # t3
-            x[6],  # t8
-            x[0] - 4 * x[7],  # t15 (c-)
-            x[0],  # t24
-            x[0],  # t35
-        ]
-        ret = op.concatenate(pdf_raw_list)
-        # Concatenating destroys the batch index so we have to regenerate it
-        return op.batchit(ret)
+        # TODO: Replace 8 with a more consistent definition
+        split_size = int(pdf_raw.shape[-1] / 8)
+        result = []
+        splitted_pdfraw = op.split(pdf_raw, split_size, axis=-1)
+        for pdfraw_split in splitted_pdfraw:
+            # Transpose the PDF so that the flavour index is the first one
+            x = op.transpose(pdfraw_split)
+            pdf_raw_list = [
+                0 * x[0],  # photon
+                x[0],  # sigma
+                x[1],  # g
+                x[2],  # v
+                x[3],  # v3
+                x[4],  # v8
+                x[2],  # v15
+                x[2],  # v24
+                x[2],  # v35
+                x[5],  # t3
+                x[6],  # t8
+                x[0] - 4 * x[7],  # t15 (c-)
+                x[0],  # t24
+                x[0],  # t35
+            ]
+            ret = op.concatenate(pdf_raw_list)
+            # Restore broken batch
+            result.append(op.batchit(ret))
+        return op.concatenate(result)
 
 
 class ObsRotation(MetaLayer):
