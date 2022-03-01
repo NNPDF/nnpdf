@@ -535,7 +535,11 @@ class Loader(LoaderBase):
         fkpath = (self.yamlpath / name).with_suffix(".yaml")
         if fkpath.exists() and readyaml:
             fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
-        else:
+            if op == "NORM":
+                # Don't use pineappl for these ones...
+                readyaml = False
+
+        if not fkpath.exists() or not readyaml:
             try:
                 fkspec, op = self.check_compound(theoryno, name, cfac)
             except CompoundNotFound:
