@@ -455,11 +455,6 @@ def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
             tmp.append(p)
         ret.append(tmp)
 
-    # We have added a new operation, "NORM" so we need to play this game here:
-    if yaml_content["operation"] == "NORM":
-        # Case not yet considered in VP
-        yaml_content["operation"] = "NULL"
-        log.warning("OPERATION NORM STILL NOT IMPLEMENTED")
     return yaml_content, ret
 
 
@@ -487,7 +482,6 @@ def pineappl_reader(fkspec):
         tmp = p.table().T / p.bin_normalizations()
         fktables.append(tmp.T)
     fktable = np.concatenate(fktables, axis=0)
-    ndata = fktable.shape[0]
 
     # To create a dataframe compatible with that validphys creates from the old fktables we need to:
     # Step 1), make the luminosity into a 14x14 mask for the evolution basis
@@ -518,10 +512,28 @@ def pineappl_reader(fkspec):
     # Step 3) Now put the flavours at the end and flatten
     # The output of pineappl is (ndata, flavours, x, x)
     lf = len(co)
+    ndata = fktable.shape[0]
     xfktable = fktable.reshape(ndata, lf, -1) / xdivision
     fkmod = np.moveaxis(xfktable, 1, -1)
 
     # TODO: due to apfelcomb-pineappl incompatibilities
+    # note: if it can be simplified it will be simplified but it should hopefully not get out
+    #       of this function, hopefully fixing this should be done in the theory-pipeline
+    #       before they get here
+
+    # This needs to be always be applied first
+    if fkspec.metadata.get("apfelcomb_norm"):
+        total_norm = []
+        for norms, operands in zip(
+            fkspec.metadata.get("apfelcomb_norm"), fkspec.metadata["operands"]
+        ):
+            # Now check, in case of an operation, what is our index in this operation
+            if len(operands) == len(fkspec.fkpath):
+                for operand, fkpath, norm, fk in zip(operands, fkspec.fkpath, norms, fktables):
+                    if fkpath.name == f"{operand}.{EXT}":
+                        total_norm += [norm] * fk.shape[0]
+        fkmod *= np.array(total_norm)[:, None, None]
+
     # we need to play some games with the dataframe
     # Look at the metadata to see whether we should apply a repetition cut here
     # Note: repetition always happen to the denominator when there's only 1
