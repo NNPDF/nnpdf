@@ -29,7 +29,7 @@ Summary
 -  Theoretical covariance matrices are built according to the various prescriptions
    in :ref:`prescrips`. 
  
--  The prescription must be one of 3 point, 5 point, 5bar point, 7 point or 9 point. You can specify
+-  The prescription must be one of 3 point, 5 point, 5bar point, 7 point, 7original point or 9 point. You can specify
    this using ``point_prescription: "x point"`` in the runcard. The translation of this flag 
    into the relevant ``theoryids`` is handled by the ``scalevariations`` module in ``validphys``.
 
