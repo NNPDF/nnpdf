@@ -540,6 +540,7 @@ class FKTableSpec(TupleComp):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
     def _load_pineappl(self):
+        log.info("Reading: %s", self.fkpath)
         return pineappl_reader(self)
 
     def load_with_cuts(self, cuts):
