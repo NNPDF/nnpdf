@@ -55,6 +55,23 @@ class XPlottingGrid:
     grid_values: Stats
     scale: str
 
+    def select_flavour(self, flindex):
+        """Return a new grid for one single flavour"""
+        if isinstance(flindex, str):
+            flstr = flindex
+            flindex = self.flavours.index(flindex)
+        else:
+            flstr = self.flavours[flindex]
+        new_grid = self.grid_values.data[:, flindex]
+        gv = self.grid_values.__class__(new_grid)
+        return dataclasses.replace(self, grid_values=gv, flavours=[flstr])
+
+    def mask_replicas(self, mask):
+        """Return a copy of XPlottingGrid with the mask applied to the replicas"""
+        new_grid = self.grid_values.data[mask]
+        gv = self.grid_values.__class__(new_grid)
+        return dataclasses.replace(self, grid_values=gv)
+
     def copy_grid(self, grid_values=None):
         """Create a copy of the grid with potentially a different set of values"""
         if not isinstance(grid_values, Stats):
@@ -92,9 +109,9 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
         raise TypeError(f"Invalid xgrid {xgrid!r}")
     gv = basis.grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
-    gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
+    stats_gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
 
-    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale)
+    res = XPlottingGrid(Q, basis, flavours, xgrid, stats_gv, scale)
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
@@ -263,7 +280,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
 
         if pdf == pdfs[normalize_to]:
             # Zero the PDF we are normalizing against
-            pdf_zero = pdf.stats_class(np.zeros_like(gr2_stats.data[0]))
+            pdf_zero = pdf.stats_class(np.zeros_like(gr2_stats.data[0:1]))
             newgrid = grid.copy_grid(grid_values=pdf_zero)
             newgrids.append(newgrid)
             continue
@@ -273,8 +290,8 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
         sg1 = g_stats.std_error()
         N1 = pdf.get_members()
 
-        # the distance definition
-        distance = pdf.stats_class(np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2)))
+        # Wrap the distance into a Stats (1, flavours, points)
+        distance = Stats([np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2))])
 
         newgrid = grid.copy_grid(grid_values=distance)
         newgrids.append(newgrid)
@@ -316,8 +333,8 @@ def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(No
         N1 = pdf.get_members()
         s1 = (mo1-(N1-3)/(N1-1)*sg1**4)/N1
 
-        # the distance definition
-        variance_distance = pdf.stats_class(np.sqrt((sg1**2-sg2**2)**2/(s1+s2)))
+        # Wrap the distance into a Stats (1, flavours, points)
+        variance_distance = Stats([np.sqrt((sg1**2-sg2**2)**2/(s1+s2))])
 
         newgrid = grid.copy_grid(grid_values=variance_distance)
         newgrids.append(newgrid)
