@@ -24,13 +24,15 @@ import io
 import functools
 import tarfile
 import dataclasses
-from itertools import zip_longest
+import logging
 
 import numpy as np
 import pandas as pd
 
 from validphys.coredata import FKTableData, CFactorData
 from reportengine.compat import yaml
+
+log = logging.getLogger(__name__)
 
 
 class BadCFactorError(Exception):
@@ -72,6 +74,9 @@ def load_fktable(spec):
         with open(cf, "rb") as f:
             cfdata = parse_cfactor(f)
         if len(cfdata.central_value) != ndata:
+            if tabledata.metadata.get("repetition_flag"):
+                cfprod *= cfdata.central_value[0]
+                continue
             raise BadCFactorError(
                 "Length of cfactor data does not match the length of the fktable."
             )
@@ -380,7 +385,7 @@ def parse_cfactor(f):
 
 
 ##### New fktable loader
-ext = "pineappl.lz4"
+EXT = "pineappl.lz4"
 
 
 class PineAPPLEquivalentNotKnown(Exception):
@@ -444,7 +449,7 @@ def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
     for operand in yaml_content["operands"]:
         tmp = []
         for member in operand:
-            p = grids_folder / f"{member}.{ext}"
+            p = grids_folder / f"{member}.{EXT}"
             if not p.exists():
                 raise FileNotFoundError(f"Failed to find {p}")
             tmp.append(p)
@@ -453,10 +458,8 @@ def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
     # We have added a new operation, "NORM" so we need to play this game here:
     if yaml_content["operation"] == "NORM":
         # Case not yet considered in VP
-        yaml_content["operation_function"] = "NULL"
-    else:
-        yaml_content["operation_function"] = yaml_content["operation"]
-
+        yaml_content["operation"] = "NULL"
+        log.warning("OPERATION NORM STILL NOT IMPLEMENTED")
     return yaml_content, ret
 
 
@@ -471,6 +474,7 @@ def pineappl_reader(fkspec):
 
     pines = [FkTable.read(i) for i in fkspec.fkpath]
 
+    # Use the first fktable to get some metadata from pineappl
     pp = pines[0]
     Q0 = np.sqrt(pp.muf2())
     xgrid = pp.x_grid()
@@ -480,7 +484,7 @@ def pineappl_reader(fkspec):
     # Now prepare the concatenation of grids
     fktables = []
     for p in pines:
-        tmp = p.table().T/p.bin_normalizations()
+        tmp = p.table().T / p.bin_normalizations()
         fktables.append(tmp.T)
     fktable = np.concatenate(fktables, axis=0)
     ndata = fktable.shape[0]
@@ -490,7 +494,6 @@ def pineappl_reader(fkspec):
     # Step 2) prepare the indices for the dataframe
     eko_numbering_scheme = (22, 100, 21, 200, 203, 208, 215, 224, 235, 103, 108, 115, 124, 135)
     xi = np.arange(len(xgrid))
-    ni = np.arange(ndata)
     # note that this is the same ordering that was used in fktables
     # the difference is that the fktables were doing this silently and now
     # we have the information made explicit
@@ -501,11 +504,9 @@ def pineappl_reader(fkspec):
             jdx = eko_numbering_scheme.index(j)
             flavour_map[idx, jdx] = True
 
-        mi = pd.MultiIndex.from_product([ni, xi, xi], names=["data", "x1", "x2"])
         co = np.where(flavour_map.ravel())[0]
-        xdivision = (xgrid[:,None]*xgrid[None,:]).flatten()
+        xdivision = (xgrid[:, None] * xgrid[None, :]).flatten()
     else:
-        mi = pd.MultiIndex.from_product([ni, xi], names=["data", "x"])
         try:
             co = [eko_numbering_scheme.index(i) for _, i in pp.lumi()]
         except ValueError:
@@ -517,12 +518,45 @@ def pineappl_reader(fkspec):
     # Step 3) Now put the flavours at the end and flatten
     # The output of pineappl is (ndata, flavours, x, x)
     lf = len(co)
-    xfktable = fktable.reshape(ndata, lf, -1)/xdivision
+    xfktable = fktable.reshape(ndata, lf, -1) / xdivision
     fkmod = np.moveaxis(xfktable, 1, -1)
+
+    # TODO: due to apfelcomb-pineappl incompatibilities
+    # we need to play some games with the dataframe
+    # Look at the metadata to see whether we should apply a repetition cut here
+    # Note: repetition always happen to the denominator when there's only 1
+    if fkspec.metadata.get("repetition_flag"):
+        valid_targets = []
+        for operand, flag_state in zip(
+            fkspec.metadata["operands"], fkspec.metadata.get("repetition_flag")
+        ):
+            if flag_state:
+                valid_targets.append(f"{operand[0]}.{EXT}")
+        # Now check whether the current fktable is part of the valid targets
+        if fkspec.fkpath[0].name in valid_targets:
+            fkmod = fkmod[0:1]
+            ndata = 1
+
+    ni = np.arange(ndata)
+    if fkspec.metadata.get("shifts"):
+        # Again, once we are here, anything different from this better fail
+        shifts = fkspec.metadata.get("shifts")[0]
+        ndata = 0
+        ni = []
+        for fk, shift in zip(fktables, shifts):
+            if shift is not None:
+                ndata += shift
+            new_ndata = ndata + fk.shape[0]
+            ni += list(range(ndata, new_ndata))
+            ndata = new_ndata
+
+    if hadronic:
+        mi = pd.MultiIndex.from_product([ni, xi, xi], names=["data", "x1", "x2"])
+    else:
+        mi = pd.MultiIndex.from_product([ni, xi], names=["data", "x"])
+
     fkframe = fkmod.reshape(-1, lf)
-
     df = pd.DataFrame(fkframe, index=mi, columns=co)
-
     # Now prepare the FKTableData object
     # For the metadata use the one we have kept in the fkspec
     fkdata = FKTableData(

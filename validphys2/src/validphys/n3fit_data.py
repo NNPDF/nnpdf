@@ -7,7 +7,6 @@ functions make calls to libnnpdf C++ library.
 
 """
 from collections import defaultdict
-from copy import deepcopy
 import hashlib
 import logging
 
