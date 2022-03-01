@@ -36,7 +36,12 @@ class Rotation(MetaLayer):
             return np.allclose(self.rotation_matrix, iden)
 
     def call(self, x_raw):
-        return op.tensor_product(x_raw, self.rotation_matrix, self.axes)
+        split_size = int(x_raw.shape[-1] / self.rotation_matrix.shape[-1])
+        # Returns a list containing the splitting `x_raw`
+        splitted_xraw = op.split(x_raw, split_size, axis=-1)
+        # Rotate each element by performing the tensor product
+        result = [op.tensor_product(i, self.rotation_matrix, self.axes) for i in splitted_xraw]
+        return op.concatenate(result)
 
 
 class FlavourToEvolution(Rotation):
