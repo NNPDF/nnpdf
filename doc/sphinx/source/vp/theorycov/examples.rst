@@ -11,8 +11,7 @@ matrices. In this case, the 3 point prescription is shown, for a global data
 at NLO.
 
 You need to provide the central theory under the ``default_theory`` flag, 
-corresponding to :math:`(\mu_F, \mu_R) = (0,0)`,
-which for NLO is theory 163.
+corresponding to :math:`(\mu_F, \mu_R) = (0,0)`, which for NLO is theory 163.
 
 You need to provide the required point prescription using the flag in 
 :ref:`this section <pointprescrips>`, e.g. ``point_prescription: "3 point"``
@@ -23,7 +22,7 @@ choices. This details what scale variation the theory corresponds to.
 
 Here the cuts and PDF are taken from the central NLO scale-varied fit.
 
-You must also list all the experiments you wish to include, along with any 
+You must also list all the datasets you wish to include, along with any 
 relevant c-factors. 
 
 .. warning::
@@ -35,121 +34,100 @@ relevant c-factors.
 
 .. code-block::  yaml
    :linenos:
-   
+
    meta:
-      author: Rosalyn Pearson
-      keywords: [theory uncertainties, 3-point]
-      title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
-    
-   metadata_group: nnpdf31_process
-    
+   author: Andrea Barontini
+   keywords: [theory uncertainties, 3-point]
+   title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
+
    default_theory:
-      - theoryid: 163
+    - theoryid: 163
 
    theoryid: 163
    point_prescription: '3 point'
 
+
    theoryids:
-      from_: scale_variation_theories
+     from_: scale_variation_theories
 
    dataspecs:
-           - theoryid: 163
-             speclabel: $(\xi_F,\xi_R)=(1,1)$
-           - theoryid: 180
-             speclabel: $(\xi_F,\xi_R)=(2,2)$ 
-           - theoryid: 173
-             speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
+        - theoryid: 163
+          speclabel: $(\xi_F,\xi_R)=(1,1)$
+        - theoryid: 180
+          speclabel: $(\xi_F,\xi_R)=(2,2)$
+        - theoryid: 173
+          speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
 
    normalize_to: 1
 
    fit: 190315_ern_nlo_central_163_global
    use_cuts: "fromfit"
 
-   pdf: 
-       from_: fit
+   pdf:
+    from_: fit
 
-   experiments:
-     - experiment: NMC
-       datasets:
-         - dataset: NMCPD
-         - dataset: NMC
-     - experiment: SLAC
-       datasets:
-         - dataset: SLACP
-         - dataset: SLACD
-     - experiment: BCDMS
-       datasets:
-         - dataset: BCDMSP
-         - dataset: BCDMSD
-     - experiment: NTVDMN
-       datasets:
-         - dataset: NTVNUDMN
-         - dataset: NTVNBDMN
-     - experiment: CHORUS
-       datasets:
-         - dataset: CHORUSNU
-         - dataset: CHORUSNB
-     - experiment: HERAF2CHARM
-       datasets:
-         - dataset: HERAF2CHARM
-     - experiment: HERACOMB
-       datasets:
-         - dataset: HERACOMBNCEM 
-         - dataset: HERACOMBNCEP460
-         - dataset: HERACOMBNCEP575
-         - dataset: HERACOMBNCEP820
-         - dataset: HERACOMBNCEP920
-         - dataset: HERACOMBCCEM 
-         - dataset: HERACOMBCCEP 
-     - experiment: ATLAS
-       datasets:
-         - dataset: ATLASWZRAP36PB
-         - dataset: ATLASZHIGHMASS49FB
-         - dataset: ATLASLOMASSDY11EXT
-         - dataset: ATLASWZRAP11
-         - dataset: ATLAS1JET11
-         - dataset: ATLASZPT8TEVMDIST
-         - dataset: ATLASZPT8TEVYDIST
-         - dataset: ATLASTTBARTOT
-         - dataset: ATLASTOPDIFF8TEVTRAPNORM
-     - experiment: CMS
-       datasets:
-         - dataset: CMSWEASY840PB
-         - dataset: CMSWMASY47FB
-         - dataset: CMSDY2D11
-         - dataset: CMSWMU8TEV
-         - { dataset: CMSZDIFF12, cfac: [NRM] }
-         - dataset: CMSJETS11
-         - dataset: CMSTTBARTOT
-         - dataset: CMSTOPDIFF8TEVTTRAPNORM
-     - experiment: LHCb
-       datasets:
-         - dataset: LHCBZ940PB
-         - dataset: LHCBZEE2FB
-         - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-         - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-     - experiment: CDF
-       datasets:
-         - dataset: CDFZRAP
-     - experiment: D0
-       datasets:
-         - dataset: D0ZRAP
-         - dataset: D0WEASY
-         - dataset: D0WMASY
+   dataset_inputs:
+    - dataset: NMCPD
+    - dataset: NMC
+    - dataset: SLACP
+    - dataset: SLACD
+    - dataset: BCDMSP
+    - dataset: BCDMSD
+    - dataset: CHORUSNU
+    - dataset: CHORUSNB
+    - dataset: NTVNUDMN
+    - dataset: NTVNBDMN
+    - dataset: HERACOMBNCEM
+    - dataset: HERACOMBNCEP460
+    - dataset: HERACOMBNCEP575
+    - dataset: HERACOMBNCEP820
+    - dataset: HERACOMBNCEP920
+    - dataset: HERACOMBCCEM
+    - dataset: HERACOMBCCEP
+    - dataset: HERAF2CHARM
+    - dataset: CDFZRAP
+    - dataset: D0ZRAP
+    - dataset: D0WEASY
+    - dataset: D0WMASY
+    - dataset: ATLASWZRAP36PB
+    - dataset: ATLASZHIGHMASS49FB
+    - dataset: ATLASLOMASSDY11EXT
+    - dataset: ATLASWZRAP11
+    - dataset: ATLAS1JET11
+    - dataset: ATLASZPT8TEVMDIST
+    - dataset: ATLASZPT8TEVYDIST
+    - dataset: ATLASTTBARTOT
+    - dataset: ATLASTOPDIFF8TEVTRAPNORM
+    - dataset: CMSWEASY840PB
+    - dataset: CMSWMASY47FB
+    - dataset: CMSDY2D11
+    - dataset: CMSWMU8TEV
+    - {dataset: CMSZDIFF12, cfac: [NRM]}
+    - dataset: CMSJETS11
+    - dataset: CMSTTBARTOT
+    - dataset: CMSTOPDIFF8TEVTTRAPNORM
+    - dataset: LHCBZ940PB
+    - dataset: LHCBZEE2FB
+    - {dataset: LHCBWZMU7TEV, cfac: [NRM]}
+    - {dataset: LHCBWZMU8TEV, cfac: [NRM]}
 
-   template: template.md
+
+   template: template_matrix_plots.md
 
    dataset_report:
-      meta: Null
-      template_text: |
-         ## Scale variations as a function of the kinematics for {@dataset_name@}
-         {@plot_fancy_dataspecs@}
+     meta: Null
+     template_text: |
+        ## Scale variations as a function of the kinematics for {@dataset_name@}
+        {@plot_fancy_dataspecs@}
 
    actions_:
-     - report(main=true) 
+     - report(main=true)
 
 
-The corresponding template file is ``template.md``, shown below. This will produce
+ 
+
+
+The corresponding template file is ``template_matrix_plots.md``, shown below. This will produce
 a comprehensive set of plots and tables describing the covariance matrices.
 
 .. code-block::  md
@@ -213,11 +191,8 @@ Validation report
 ----------------- 
 
 Here is an example of a runcard for a report validating the theory covariance
-matrix against the NNLO-NLO shift. In this case the 5 point prescription is chosen,
-and Drell-Yan experiments only are considered.
-
-Note that as we are dealing with 5 theories, we need to set the ``fivetheories``
-flag, which in this case is set to ``nobar``.
+matrix against the NNLO-NLO shift. In this case the 5bar point prescription is chosen,
+and only a single Drell-Yan dataset is considered.
 
 The flag ``orthonormalisation`` corresponds to the method used to orthonormalise 
 the basis vectors of the theory covariance matrix. There are three choices:
@@ -228,7 +203,7 @@ the basis vectors of the theory covariance matrix. There are three choices:
 
 #. An in-built Gram-Schmidt orthonormalisation, with the flag ``gs``.
 
-``_experiments_list_nlo`` is a list of all the experiments to be included at NLO.
+``_datasets_list_nlo`` is a list of all the experiments to be included at NLO.
 Defining them as a list here avoids the need to repeat the same block of text
 many times later on for each theory.
 
@@ -251,206 +226,88 @@ For each dataspec we can give the ``_experiments_list_nlo``.
    :linenos:
 
    meta:
-       title: Theory shift validation test, 5 point, DY-only, QR
-       author: Rosalyn Pearson
-       keywords: [test, theory uncertainties, eigenvalues, 5 point]
+     title: Theory shift validation test, 5bar point, single-dataset, QR
+     author: Andrea Barontini
+     keywords: [example]
 
-   metadata_group: nnpdf31_process
-   
-   fivetheories: nobar
+   # This is a single dataset comparison. For a full comparison extend
+   # the datasets accordingly.
 
-   orthonormalisation: qr
+   metadata_group: nnpdf31_process #!IMPORTANT! Do not remove
 
+   orthonormalisation: qr # Choice of orthonormalisation scheme
+                       # for finding th covmat basis. Default is qr.
    theoryid: 163
 
+   fit: 190315_ern_nlo_central_163_global
+
+   use_cuts: fromfit
+
+   pdf:
+     from_: fit
+
+   _datasets_list_nlo: &datasets_list_nlo
+     - dataset: D0WMASY
+
+   shiftconfig:     # For calculating NNLO-NLO shift
+
+   use_cuts: fromfit
+   fit: 190315_ern_nlo_central_163_global
+  
+   theoryid: 163
+
+   dataspecs:
+       - theoryid: 163
+         pdf:
+           from_: fit
+         speclabel: "NLO"
+         dataset_inputs:
+                  - dataset: D0WMASY
+       - theoryid: 166
+         pdf:
+           from_: fit
+         speclabel: "NNLO"
+         dataset_inputs:
+              - { dataset: D0WMASY, cfac: [QCD] }
+
+   theoryconfig:  # For generating theory covariance matrix
+
+   theoryid: 163
+   
+   theoryids:
+      from_: scale_variation_theories
+   
+   point_prescription: '5bar point'
+
+   use_cuts: fromfit
    fit: 190315_ern_nlo_central_163_global
 
    pdf:
      from_: fit
 
-   _experiments_list_nlo: &experiments_list_nlo
-     - experiment: NMC
-       datasets:
-         - dataset: NMCPD
-         - dataset: NMC
-     - experiment: SLAC
-       datasets:
-         - dataset: SLACP
-         - dataset: SLACD
-     - experiment: BCDMS
-       datasets:
-         - dataset: BCDMSP
-         - dataset: BCDMSD
-     - experiment: NTVDMN
-       datasets:
-         - dataset: NTVNUDMN
-         - dataset: NTVNBDMN
-     - experiment: CHORUS
-       datasets:
-         - dataset: CHORUSNU
-         - dataset: CHORUSNB
-     - experiment: HERAF2CHARM
-       datasets:
-         - dataset: HERAF2CHARM
-     - experiment: HERACOMB
-       datasets:
-         - dataset: HERACOMBNCEM 
-         - dataset: HERACOMBNCEP460
-         - dataset: HERACOMBNCEP575
-         - dataset: HERACOMBNCEP820
-         - dataset: HERACOMBNCEP920
-         - dataset: HERACOMBCCEM 
-         - dataset: HERACOMBCCEP 
-     - experiment: ATLAS
-       datasets:
-         - dataset: ATLASWZRAP36PB
-         - dataset: ATLASZHIGHMASS49FB
-         - dataset: ATLASLOMASSDY11EXT
-         - dataset: ATLASWZRAP11
-         - dataset: ATLAS1JET11
-         - dataset: ATLASZPT8TEVMDIST
-         - dataset: ATLASZPT8TEVYDIST
-         - dataset: ATLASTTBARTOT
-         - dataset: ATLASTOPDIFF8TEVTRAPNORM
-     - experiment: CMS
-       datasets:
-         - dataset: CMSWEASY840PB
-         - dataset: CMSWMASY47FB
-         - dataset: CMSDY2D11
-         - dataset: CMSWMU8TEV
-         - { dataset: CMSZDIFF12, cfac: [NRM] }
-         - dataset: CMSJETS11
-         - dataset: CMSTTBARTOT
-         - dataset: CMSTOPDIFF8TEVTTRAPNORM
-     - experiment: LHCb
-       datasets:
-         - dataset: LHCBZ940PB
-         - dataset: LHCBZEE2FB
-         - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-         - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-     - experiment: CDF
-       datasets:
-         - dataset: CDFZRAP
-     - experiment: D0
-       datasets:
-         - dataset: D0ZRAP
-         - dataset: D0WEASY
-         - dataset: D0WMASY
-
-   shiftconfig:
-
-      use_cuts: fromfit
-      fit: 190315_ern_nlo_central_163_global
-
-      theoryid: 163
-
-      dataspecs:
-          - theoryid: 163
-            pdf:
-              from_: fit
-            speclabel: "NLO"
-            experiments:
-                - experiment: ATLAS
-                  datasets:
-                     - dataset: ATLASWZRAP36PB
-                     - dataset: ATLASZHIGHMASS49FB
-                     - dataset: ATLASLOMASSDY11EXT
-                     - dataset: ATLASWZRAP11
-                     - dataset: ATLASZPT8TEVMDIST
-                     - dataset: ATLASZPT8TEVYDIST
-                - experiment: CMS
-                  datasets:
-                     - dataset: CMSWEASY840PB
-                     - dataset: CMSWMASY47FB
-                     - dataset: CMSDY2D11
-                     - dataset: CMSWMU8TEV
-                     - { dataset: CMSZDIFF12, cfac: [NRM] }
-                - experiment: LHCb
-                  datasets:
-                     - dataset: LHCBZ940PB
-                     - dataset: LHCBZEE2FB
-                     - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-                     - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-                - experiment: CDF
-                  datasets:
-                     - dataset: CDFZRAP
-                - experiment: D0
-                  datasets:
-                     - dataset: D0ZRAP
-                     - dataset: D0WEASY
-                     - dataset: D0WMASY
-          - theoryid: 166
-            pdf:
-              from_: fit
-            speclabel: "NNLO"
-            experiments:
-                - experiment: ATLAS
-                  datasets:
-                     - { dataset: ATLASWZRAP36PB, cfac: [QCD]}
-                     - { dataset: ATLASZHIGHMASS49FB, cfac: [QCD] }
-                     - { dataset: ATLASLOMASSDY11EXT, cfac: [QCD] }
-                     - { dataset: ATLASWZRAP11, cfac: [QCD] }
-                     - { dataset: ATLASZPT8TEVMDIST, cfac: [QCD], sys: 10 }
-                     - { dataset: ATLASZPT8TEVYDIST, cfac: [QCD], sys: 10 }
-                - experiment: CMS
-                  datasets:
-                     - { dataset: CMSWEASY840PB, cfac: [QCD] }
-                     - { dataset: CMSWMASY47FB, cfac: [QCD]}
-                     - { dataset: CMSDY2D11, cfac: [QCD] }
-                     - { dataset: CMSWMU8TEV, cfac: [QCD] }
-                     - { dataset: CMSZDIFF12, cfac: [QCD, NRM], sys: 10 }
-                - experiment: LHCb
-                  datasets:
-                     - { dataset: LHCBZ940PB, cfac: [QCD] }
-                     - { dataset: LHCBZEE2FB, cfac: [QCD] }
-                     - { dataset: LHCBWZMU7TEV, cfac: [QCD, NRM] }
-                     - { dataset: LHCBWZMU8TEV, cfac: [QCD, NRM] }
-                - experiment: CDF
-                  datasets:
-                     - { dataset: CDFZRAP, cfac: [QCD] }
-                - experiment: D0
-                  datasets:
-                     - { dataset: D0ZRAP, cfac: [QCD] }
-                     - { dataset: D0WEASY, cfac: [QCD] }
-                     - { dataset: D0WMASY, cfac: [QCD] }
-
-   theoryconfig:
-
-      theoryid: 163
-      point_prescription: '5 point'
-
-      theoryids:
-        from_: scale_variation_theories
-
-      use_cuts: fromfit
-      fit: 190315_ern_nlo_central_163_global
-
-      pdf:
-        from_: fit
-
-      dataspecs:
-              - theoryid: 163
-                speclabel: $(\xi_F,\xi_R)=(1,1)$
-                experiments: *experiments_list_nlo
-              - theoryid: 177
-                speclabel: $(\xi_F,\xi_R)=(2,1)$
-                experiments: *experiments_list_nlo
-              - theoryid: 176
-                speclabel: $(\xi_F,\xi_R)=(0.5,1)$
-                experiments: *experiments_list_nlo
-              - theoryid: 179
-                speclabel: $(\xi_F,\xi_R)=(1,2)$
-                experiments: *experiments_list_nlo
-              - theoryid: 174
-                speclabel: $(\xi_F,\xi_R)=(1,0.5)$
-                experiments: *experiments_list_nlo
-
+   dataspecs:
+           - theoryid: 163
+             speclabel: $(\xi_F,\xi_R)=(1,1)$
+             dataset_inputs: *datasets_list_nlo
+           - theoryid: 180
+             speclabel: $(\xi_F,\xi_R)=(2,2)$
+             dataset_inputs: *datasets_list_nlo
+           - theoryid: 173
+             speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
+             dataset_inputs: *datasets_list_nlo
+           - theoryid: 175
+             speclabel: $(\xi_F,\xi_R)=(2,0.5)$
+             dataset_inputs: *datasets_list_nlo
+           - theoryid: 178
+             speclabel: $(\xi_F,\xi_R)=(0.5,2)$
+             dataset_inputs: *datasets_list_nlo
+     
    template: template_test.md
 
    dataset_report:
-      meta: Null
-      template_text: |
-         ## Testing 5pt NLO global covariance matrix against NNLO-NLO shift
+     meta: Null
+     template_text: |
+        ## Testing 5barpt NLO global covariance matrix against NNLO-NLO shift
    actions_:
      - report(main=true, mathjax=True)
 
