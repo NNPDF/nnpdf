@@ -144,8 +144,13 @@ def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     pos_mask = np.append(True, positive_eigenvalue_mask)
     neg_mask = np.append(True, ~positive_eigenvalue_mask)
 
-    pos_xplotting_grid = xplotting_grid.mask_replicas(pos_mask)
-    neg_xplotting_grid = xplotting_grid.mask_replicas(neg_mask)
+    pos_grid = xplotting_grid.grid_values.data[pos_mask]
+    neg_grid = xplotting_grid.grid_values.data[neg_mask]
+
+    # Wrap everything back into the original stats class
+    stats_class = xplotting_grid.grid_values.__class__
+    pos_xplotting_grid = xplotting_grid.copy_grid(stats_class(pos_grid))
+    neg_xplotting_grid = xplotting_grid.copy_grid(stats_class(neg_grid))
 
     return [xplotting_grid, pos_xplotting_grid, neg_xplotting_grid]
 
