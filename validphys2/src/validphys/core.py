@@ -526,7 +526,7 @@ class FKTableSpec(TupleComp):
     For now holds the metadata as an attribute to this function.
     This is useless/transitional since this metadata is already in the new CommonData format
     """
-    def __init__(self, fkpath, cfactors, metadata=None):
+    def __init__(self, fkpath, cfactors, metadata=None, norm=False):
         self.cfactors = cfactors if cfactors is not None else []
         self.legacy = True
         if isinstance(fkpath, (tuple, list)):
@@ -534,6 +534,7 @@ class FKTableSpec(TupleComp):
             fkpath = tuple(fkpath)
         self.fkpath = fkpath
         self.metadata = metadata
+        self.norm = norm
         super().__init__(fkpath, cfactors)
 
     def _load_legacy(self):
