@@ -71,12 +71,6 @@ class XPlottingGrid:
         gv = self.grid_values.__class__(new_grid)
         return dataclasses.replace(self, grid_values=gv, flavours=[flstr])
 
-    def mask_replicas(self, mask):
-        """Return a copy of XPlottingGrid with the mask applied to the replicas"""
-        new_grid = self.grid_values.data[mask]
-        gv = self.grid_values.__class__(new_grid)
-        return dataclasses.replace(self, grid_values=gv)
-
     def copy_grid(self, grid_values):
         """Create a copy of the grid with potentially a different set of values"""
         return dataclasses.replace(self, grid_values=grid_values)
