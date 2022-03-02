@@ -74,7 +74,7 @@ def load_fktable(spec):
         with open(cf, "rb") as f:
             cfdata = parse_cfactor(f)
         if len(cfdata.central_value) != ndata:
-            if tabledata.metadata.get("repetition_flag"):
+            if tabledata.metadata.get("repetition_flag") or spec.norm:
                 cfprod *= cfdata.central_value[0]
                 continue
             raise BadCFactorError(
@@ -477,10 +477,10 @@ def pineappl_reader(fkspec):
     non_hadronic = {11, 12, -11, -12}
     hadronic = all(non_hadronic.isdisjoint(i) for i in pp.lumi())
     # Now prepare the concatenation of grids
-    fktables = []
-    for p in pines:
-        tmp = p.table().T / p.bin_normalizations()
-        fktables.append(tmp.T)
+    if fkspec.norm:
+        fktables = [np.sum(p.table(), axis=0, keepdims=True) for p in pines]
+    else:
+        fktables = [(p.table().T/p.bin_normalizations()).T for p in pines]
     fktable = np.concatenate(fktables, axis=0)
 
     # To create a dataframe compatible with that validphys creates from the old fktables we need to:
