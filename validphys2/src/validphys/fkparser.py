@@ -480,7 +480,7 @@ def pineappl_reader(fkspec):
     if fkspec.norm:
         fktables = [np.sum(p.table(), axis=0, keepdims=True) for p in pines]
     else:
-        fktables = [(p.table().T/p.bin_normalizations()).T for p in pines]
+        fktables = [(p.table().T / p.bin_normalizations()).T for p in pines]
     fktable = np.concatenate(fktables, axis=0)
 
     # To create a dataframe compatible with that validphys creates from the old fktables we need to:
@@ -523,16 +523,14 @@ def pineappl_reader(fkspec):
 
     # This needs to be always be applied first
     if fkspec.metadata.get("apfelcomb_norm"):
-        total_norm = []
         for norms, operands in zip(
             fkspec.metadata.get("apfelcomb_norm"), fkspec.metadata["operands"]
         ):
             # Now check, in case of an operation, what is our index in this operation
-            if len(operands) == len(fkspec.fkpath):
-                for operand, fkpath, norm, fk in zip(operands, fkspec.fkpath, norms, fktables):
-                    if fkpath.name == f"{operand}.{EXT}":
-                        total_norm += [norm] * fk.shape[0]
-        fkmod *= np.array(total_norm)[:, None, None]
+            if len(operands) == len(fkspec.fkpath) and all(
+                f.name == f"{o}.{EXT}" for f, o in zip(fkspec.fkpath, operands)
+            ):
+                fkmod *= np.array(norms)[:, None, None]
 
     # we need to play some games with the dataframe
     # Look at the metadata to see whether we should apply a repetition cut here
@@ -566,6 +564,9 @@ def pineappl_reader(fkspec):
         mi = pd.MultiIndex.from_product([ni, xi, xi], names=["data", "x1", "x2"])
     else:
         mi = pd.MultiIndex.from_product([ni, xi], names=["data", "x"])
+
+    # Finally, check whether there is a conversion factor to be applied (pb -> fb)
+    fkmod *= fkspec.metadata.get("conversion_factor", 1.0)
 
     fkframe = fkmod.reshape(-1, lf)
     df = pd.DataFrame(fkframe, index=mi, columns=co)
