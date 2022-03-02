@@ -383,7 +383,19 @@ class Loader(LoaderBase):
         ##### end compound reader
         else:
             cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
-        fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
+
+        # If the operation is of type "norm", tell everyone that it is actually a ratio
+        if op == "NORM":
+            op = "RATIO"
+            fkspecs = []
+            for i, c in enumerate(cfactors):
+                if i >= len(fklist):
+                    fkspecs.append(FKTableSpec(fklist[i-len(fklist)], c, metadata, norm=True))
+                else:
+                    fkspecs.append(FKTableSpec(fklist[i], c, metadata, norm=False))
+        else:
+            fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
+
         
         return fkspecs, op
 
@@ -535,11 +547,7 @@ class Loader(LoaderBase):
         fkpath = (self.yamlpath / name).with_suffix(".yaml")
         if fkpath.exists() and readyaml:
             fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
-            if op == "NORM":
-                # Don't use pineappl for these ones...
-                readyaml = False
-
-        if not fkpath.exists() or not readyaml:
+        else:
             try:
                 fkspec, op = self.check_compound(theoryno, name, cfac)
             except CompoundNotFound:

@@ -13,6 +13,7 @@ def _mask_fk(fktables, fk_datas, mask):
     ret = []
     for fk, fk_data in zip(fktables, fk_datas):
         if fk_data.protected:
+            # TODO: this cannot be correct?
             ret.append(fk)
         else:
             ret.append(fk[mask])

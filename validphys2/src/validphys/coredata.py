@@ -69,6 +69,8 @@ class FKTableData:
         """
         if self.metadata.get("repetition_flag") and self.ndata==1:
             return not all(self.metadata.get("repetition_flag"))
+        if self.metadata.get("operation") == "NORM" and self.ndata==1:
+            return True
         return False
 
     # TODO: When we move to something other than the current fktable format,
