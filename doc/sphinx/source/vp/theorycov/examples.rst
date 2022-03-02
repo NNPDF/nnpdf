@@ -36,27 +36,27 @@ relevant c-factors.
    :linenos:
 
    meta:
-   author: Andrea Barontini
-   keywords: [theory uncertainties, 3-point]
-   title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
+     author: Andrea Barontini
+     keywords: [theory uncertainties, 3-point]
+     title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
 
    default_theory:
-    - theoryid: 163
+     - theoryid: 163
 
    theoryid: 163
-   point_prescription: '3 point'
+     point_prescription: '3 point'
 
 
    theoryids:
      from_: scale_variation_theories
 
    dataspecs:
-        - theoryid: 163
-          speclabel: $(\xi_F,\xi_R)=(1,1)$
-        - theoryid: 180
-          speclabel: $(\xi_F,\xi_R)=(2,2)$
-        - theoryid: 173
-          speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
+     - theoryid: 163
+      speclabel: $(\xi_F,\xi_R)=(1,1)$
+     - theoryid: 180
+      speclabel: $(\xi_F,\xi_R)=(2,2)$
+     - theoryid: 173
+      speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
 
    normalize_to: 1
 
@@ -64,52 +64,52 @@ relevant c-factors.
    use_cuts: "fromfit"
 
    pdf:
-    from_: fit
+     from_: fit
 
    dataset_inputs:
-    - dataset: NMCPD
-    - dataset: NMC
-    - dataset: SLACP
-    - dataset: SLACD
-    - dataset: BCDMSP
-    - dataset: BCDMSD
-    - dataset: CHORUSNU
-    - dataset: CHORUSNB
-    - dataset: NTVNUDMN
-    - dataset: NTVNBDMN
-    - dataset: HERACOMBNCEM
-    - dataset: HERACOMBNCEP460
-    - dataset: HERACOMBNCEP575
-    - dataset: HERACOMBNCEP820
-    - dataset: HERACOMBNCEP920
-    - dataset: HERACOMBCCEM
-    - dataset: HERACOMBCCEP
-    - dataset: HERAF2CHARM
-    - dataset: CDFZRAP
-    - dataset: D0ZRAP
-    - dataset: D0WEASY
-    - dataset: D0WMASY
-    - dataset: ATLASWZRAP36PB
-    - dataset: ATLASZHIGHMASS49FB
-    - dataset: ATLASLOMASSDY11EXT
-    - dataset: ATLASWZRAP11
-    - dataset: ATLAS1JET11
-    - dataset: ATLASZPT8TEVMDIST
-    - dataset: ATLASZPT8TEVYDIST
-    - dataset: ATLASTTBARTOT
-    - dataset: ATLASTOPDIFF8TEVTRAPNORM
-    - dataset: CMSWEASY840PB
-    - dataset: CMSWMASY47FB
-    - dataset: CMSDY2D11
-    - dataset: CMSWMU8TEV
-    - {dataset: CMSZDIFF12, cfac: [NRM]}
-    - dataset: CMSJETS11
-    - dataset: CMSTTBARTOT
-    - dataset: CMSTOPDIFF8TEVTTRAPNORM
-    - dataset: LHCBZ940PB
-    - dataset: LHCBZEE2FB
-    - {dataset: LHCBWZMU7TEV, cfac: [NRM]}
-    - {dataset: LHCBWZMU8TEV, cfac: [NRM]}
+     - dataset: NMCPD
+     - dataset: NMC
+     - dataset: SLACP
+     - dataset: SLACD
+     - dataset: BCDMSP
+     - dataset: BCDMSD
+     - dataset: CHORUSNU
+     - dataset: CHORUSNB
+     - dataset: NTVNUDMN
+     - dataset: NTVNBDMN
+     - dataset: HERACOMBNCEM
+     - dataset: HERACOMBNCEP460
+     - dataset: HERACOMBNCEP575
+     - dataset: HERACOMBNCEP820
+     - dataset: HERACOMBNCEP920
+     - dataset: HERACOMBCCEM
+     - dataset: HERACOMBCCEP
+     - dataset: HERAF2CHARM
+     - dataset: CDFZRAP
+     - dataset: D0ZRAP
+     - dataset: D0WEASY
+     - dataset: D0WMASY
+     - dataset: ATLASWZRAP36PB
+     - dataset: ATLASZHIGHMASS49FB
+     - dataset: ATLASLOMASSDY11EXT
+     - dataset: ATLASWZRAP11
+     - dataset: ATLAS1JET11
+     - dataset: ATLASZPT8TEVMDIST
+     - dataset: ATLASZPT8TEVYDIST
+     - dataset: ATLASTTBARTOT
+     - dataset: ATLASTOPDIFF8TEVTRAPNORM
+     - dataset: CMSWEASY840PB
+     - dataset: CMSWMASY47FB
+     - dataset: CMSDY2D11
+     - dataset: CMSWMU8TEV
+     - {dataset: CMSZDIFF12, cfac: [NRM]}
+     - dataset: CMSJETS11
+     - dataset: CMSTTBARTOT
+     - dataset: CMSTOPDIFF8TEVTTRAPNORM
+     - dataset: LHCBZ940PB
+     - dataset: LHCBZEE2FB
+     - {dataset: LHCBWZMU7TEV, cfac: [NRM]}
+     - {dataset: LHCBWZMU8TEV, cfac: [NRM]}
 
 
    template: template_matrix_plots.md
