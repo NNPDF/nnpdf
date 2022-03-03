@@ -381,7 +381,7 @@ def covs_pt_prescrip(
                     s = covmat_3pt(name1, name2, deltas1, deltas2)
             elif l == 5:
                 # 5 point --------------------------------------------------------------
-                elif fivetheories == "nobar":
+                if fivetheories == "nobar":
                     s = covmat_5pt(name1, name2, deltas1, deltas2)
                 # 5bar-point -----------------------------------------------------------
                 else:
