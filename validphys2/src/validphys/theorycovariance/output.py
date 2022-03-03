@@ -259,8 +259,6 @@ def plot_normthcovmat_heatmap_custom(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     fig = plot_covmat_heatmap(
         theory_normcovmat_custom, f"Theory Covariance matrix ({l} pt)"
     )
@@ -288,8 +286,6 @@ def plot_thcorrmat_heatmap_custom(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     fig = plot_corrmat_heatmap(
         theory_corrmat_custom, f"Theory Correlation matrix ({l} pt)"
     )
@@ -318,8 +314,6 @@ def plot_normexpplusthcovmat_heatmap_custom(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     fig = plot_covmat_heatmap(
         experimentplustheory_normcovmat_custom,
         f"Experimental + Theory Covariance Matrix ({l} pt)"
@@ -348,8 +342,6 @@ def plot_expplusthcorrmat_heatmap_custom(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     fig = plot_corrmat_heatmap(
         experimentplustheory_corrmat_custom,
         f"Experimental + Theory Correlation Matrix ({l} pt)"
@@ -383,8 +375,6 @@ def plot_covdiff_heatmap_custom(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     df = (theory_covmat_custom + procs_covmat) / np.mean(procs_covmat.values)
     fig = plot_covmat_heatmap(
         df,
@@ -407,8 +397,6 @@ def plot_diag_cov_comparison(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     data = np.abs(procs_data_values)
     plot_index = theory_covmat_custom.index
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
@@ -461,8 +449,6 @@ def plot_diag_cov_impact(
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-        elif fivetheories == "linear":
-            l = "linear 5"
     matrix_theory = theory_covmat_custom.values
     matrix_experiment = procs_covmat.values
     inv_exp = (np.diag(la.inv(matrix_experiment))) ** (-0.5) / procs_data_values
