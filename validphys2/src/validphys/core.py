@@ -226,25 +226,6 @@ class PDF(TupleComp):
 
         return libNNPDF_LHAPDFSet(self.name, et)
 
-    @property
-    def grid_values_index(self):
-        """A range object describing which members are selected in a
-        ``pdf.load().grid_values`` operation.  This is ``range(1,
-        len(pdf))`` for Monte Carlo sets, because replica 0 is not selected
-        and ``range(0, len(pdf))`` for hessian sets.
-
-
-        Returns
-        -------
-        index : range
-            A range object describing the proper indexing.
-
-        Notes
-        -----
-        The range object can be used efficiently as a Pandas index.
-        """
-        return range(0, len(self))
-
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
         """
