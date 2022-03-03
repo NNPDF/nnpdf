@@ -561,10 +561,6 @@ class PositivitySetSpec(DataSetSpec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
         super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
-        if len(self.fkspecs) > 1:
-            # The signature of the function does not accept operations either
-            # so more than one fktable cannot be utilized
-            raise ValueError("Positivity datasets can only contain one fktable")
 
     @functools.lru_cache()
     def load(self):
@@ -573,8 +569,12 @@ class PositivitySetSpec(DataSetSpec):
         return PositivitySet(cd, fk, self.maxlambda)
 
     def to_unweighted(self):
-        log.warning("Trying to unweight %s, PositivitySetSpec are always unweighted", self.name)
+        log.warning("Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name)
         return self
+
+
+class IntegrabilitySetSpec(PositivitySetSpec):
+    pass
 
 
 #We allow to expand the experiment as a list of datasets
