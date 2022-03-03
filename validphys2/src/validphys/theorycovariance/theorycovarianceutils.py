@@ -20,7 +20,7 @@ def check_correct_theory_combination_internal(theoryids, fivetheories,
     l = len(theoryids)
     check(l in {3, 5, 7, 9},
           "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar', 'nobar', 'linear'}
+    opts = {'bar', 'nobar'}
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l == 3:
@@ -36,12 +36,12 @@ def check_correct_theory_combination_internal(theoryids, fivetheories,
     elif l == 5:
         check(
             fivetheories is not None,
-            "For five input theories a prescription bar, nobar or linear "
+            "For five input theories a prescription bar or nobar"
             "for the flag fivetheories must be specified.")
         check(fivetheories in opts,
               "Invalid choice of prescription for 5 points", fivetheories,
               opts)
-        if fivetheories in ("nobar", "linear"):
+        if fivetheories == "nobar":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
         elif fivetheories == "bar":

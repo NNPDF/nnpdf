@@ -271,32 +271,6 @@ def covmat_3pt(name1, name2, deltas1, deltas2):
         s = 0.25 * (np.outer((deltas1[0] + deltas1[1]), (deltas2[0] + deltas2[1])))
     return s
 
-
-def covmat_5pt_linear(name1, name2, deltas1, deltas2):
-    """Returns theory covariance sub-matrix for Zahari's 5pt
-    linear prescription, given two dataset names and collections
-    of scale variation shifts"""
-    if name1 == name2:
-        s = 0.25 * (
-            np.outer(deltas1[0], deltas2[0])
-            - np.outer(deltas1[0], deltas2[1])
-            - np.outer(deltas1[1], deltas2[0])
-            + np.outer(deltas1[1], deltas2[1])
-            + np.outer(deltas1[2], deltas2[2])
-            - np.outer(deltas1[2], deltas2[3])
-            - np.outer(deltas1[3], deltas2[2])
-            + np.outer(deltas1[3], deltas2[3])
-        )
-    else:
-        s = 0.25 * (
-            np.outer(deltas1[0], deltas2[0])
-            - np.outer(deltas1[0], deltas2[1])
-            - np.outer(deltas1[1], deltas2[0])
-            + np.outer(deltas1[1], deltas2[1])
-        )
-    return s
-
-
 def covmat_5pt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 5pt prescription,
     given two dataset names and collections of scale variation shifts"""
@@ -406,9 +380,6 @@ def covs_pt_prescrip(
                 else:
                     s = covmat_3pt(name1, name2, deltas1, deltas2)
             elif l == 5:
-                # Zahari's proposal for the theoretical covariance matrix --------------
-                if fivetheories == "linear":
-                    s = covmat_5pt_linear(name1, name2, deltas1, deltas2)
                 # 5 point --------------------------------------------------------------
                 elif fivetheories == "nobar":
                     s = covmat_5pt(name1, name2, deltas1, deltas2)
