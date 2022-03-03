@@ -930,10 +930,9 @@ class CoreConfig(configparser.Config):
         )
         theoryno, _ = theoryid
         lambda_key = "maxlambda"
-        #BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
+        #Don't allow for old-style runcards with 'poslambda' instead of 'maxlambda'
         if "poslambda" in setdict and "maxlambda" not in setdict:
-            log.warning("The `poslambda` argument has been deprecated in favour of `maxlambda`")
-            lambda_key = "poslambda"
+            raise ConfigError("The `poslambda` argument has been deprecated in favour of `maxlambda`")
         try:
             name = setdict["dataset"]
             maxlambda = float(setdict[lambda_key])
@@ -941,7 +940,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
-        return self.loader.check_posset(theoryno, name, maxlambda)
+        return self.loader.check_posset(theoryno, name, maxlambda, kind)
 
     @element_of("posdatasets")
     def parse_posdataset(self, posset: dict, *, theoryid):
