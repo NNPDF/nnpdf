@@ -19,6 +19,7 @@ from reportengine.table import table
 from validphys.n3fit_data_utils import (
     validphys_group_extractor,
 )
+from validphys.core import IntegrabilitySetSpec
 
 log = logging.getLogger(__name__)
 
@@ -462,7 +463,7 @@ def training_mask(replicas_training_mask):
     return pd.concat(replicas_training_mask, axis=1)
 
 
-def fitting_pos_dict(posdataset, integrability=False):
+def fitting_pos_dict(posdataset):
     """Loads a positivity dataset. For more information see
     :py:func:`validphys.n3fit_data_utils.positivity_reader`.
 
@@ -479,6 +480,7 @@ def fitting_pos_dict(posdataset, integrability=False):
     >>> len(pos)
     9
     """
+    integrability = isinstance(posdataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
     log.info("Loading %s dataset %s", mode, posdataset)
     positivity_datasets = validphys_group_extractor([posdataset], [])
@@ -526,11 +528,6 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
 
     """
     if integdatasets is not None:
-        integ_info = []
-        for integ_set in integdatasets:
-            # Use the same reader as positivity observables
-            integ_dict = fitting_pos_dict(integ_set, integrability=True)
-            integ_info.append(integ_dict)
-        return integ_info
+        return [fitting_pos_dict(i) for i in integdatasets]
     log.warning("Not using any integrability datasets.")
     return None

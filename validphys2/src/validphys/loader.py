@@ -26,8 +26,8 @@ from reportengine.compat import yaml
 from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
-                            peek_commondata_metadata, CutsPolicy,
+                            PositivitySetSpec, IntegrabilitySetSpec, DataSetSpec, PDF, Cuts,
+                            DataGroupSpec, peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
@@ -446,11 +446,14 @@ class Loader(LoaderBase):
 
         return tuple(cf)
 
-    def check_posset(self, theoryID, setname, postlambda):
+    def check_posset(self, theoryID, setname, postlambda, kind="positivity"):
         cd = self.check_commondata(setname, 'DEFAULT')
         fk = self.check_fktable(theoryID, setname, [])
         th =  self.check_theoryID(theoryID)
-        return PositivitySetSpec(setname, cd, fk, postlambda, th)
+        if kind == "posdataset":
+            return PositivitySetSpec(setname, cd, fk, postlambda, th)
+        else:
+            return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
 
     def get_posset(self, theoryID, setname, postlambda):
         return self.check_posset(theoryID, setname, postlambda).load()
