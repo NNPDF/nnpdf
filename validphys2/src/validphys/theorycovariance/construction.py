@@ -22,9 +22,10 @@ from validphys.results import (
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import (
-                                                process_lookup, 
-                                                check_correct_theory_combination,
-                                                check_fit_dataset_order_matches_grouped)
+    process_lookup,
+    check_correct_theory_combination,
+    check_fit_dataset_order_matches_grouped,
+)
 
 
 log = logging.getLogger(__name__)
@@ -58,10 +59,7 @@ def make_scale_var_covmat(predictions):
 
 @check_correct_theory_combination
 def theory_covmat_singleprocess_no_table(
-    theoryids_procs_central_values_no_table,
-    procs_index,
-    theoryids,
-    fivetheories,
+    theoryids_procs_central_values_no_table, procs_index, theoryids, fivetheories,
 ):
 
     """Calculates the theory covariance matrix for scale variations.
@@ -73,9 +71,7 @@ def theory_covmat_singleprocess_no_table(
 
 @table
 @check_correct_theory_combination
-def theory_covmat_singleprocess(
-    theory_covmat_singleprocess_no_table, fivetheories
-):
+def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table, fivetheories):
     """Duplicate of theory_covmat_singleprocess_no_table but with a table decorator."""
     return theory_covmat_singleprocess_no_table
 
@@ -87,9 +83,7 @@ each_dataset_results_bytheory = collect(
 
 
 @check_correct_theory_combination
-def theory_covmat_datasets(
-    each_dataset_results_bytheory, fivetheories
-):
+def theory_covmat_datasets(each_dataset_results_bytheory, fivetheories):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard."""
     dataset_covmats = []
@@ -101,9 +95,7 @@ def theory_covmat_datasets(
 
 
 @check_correct_theory_combination
-def total_covmat_datasets(
-    each_dataset_results_bytheory, fivetheories
-):
+def total_covmat_datasets(each_dataset_results_bytheory, fivetheories):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -119,9 +111,7 @@ def total_covmat_datasets(
 
 
 @check_correct_theory_combination
-def total_covmat_diagtheory_datasets(
-    each_dataset_results_bytheory, fivetheories
-):
+def total_covmat_diagtheory_datasets(each_dataset_results_bytheory, fivetheories):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats = []
     for dataset in each_dataset_results_bytheory:
@@ -271,6 +261,7 @@ def covmat_3pt(name1, name2, deltas1, deltas2):
         s = 0.25 * (np.outer((deltas1[0] + deltas1[1]), (deltas2[0] + deltas2[1])))
     return s
 
+
 def covmat_5pt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 5pt prescription,
     given two dataset names and collections of scale variation shifts"""
@@ -353,7 +344,7 @@ def covs_pt_prescrip(
     theoryids,
     point_prescription,
     fivetheories,
-    seventheories
+    seventheories,
 ):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
@@ -422,6 +413,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
     return df
 
+
 @table
 def fromfile_covmat(covmatpath, procs_data, procs_index):
     """Reads a general theory covariance matrix from file. Then
@@ -429,11 +421,11 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     2: Expands dimensions to match experiment covariance matrix
        by filling additional entries with 0."""
     # Load covmat as pandas DataFrame
-    filecovmat = pd.read_csv(covmatpath,
-            index_col=[0,1,2], header=[0,1,2],
-            sep="\t|,", engine="python")
+    filecovmat = pd.read_csv(
+        covmatpath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"
+    )
     # Remove string in column id
-    filecovmat.columns = filecovmat.index 
+    filecovmat.columns = filecovmat.index
     # Reordering covmat to match exp order in runcard
     # Datasets in exp covmat
     dslist = []
@@ -467,7 +459,9 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
                     for ind in filecovmat.index():
                         if ind[1] == ds:
                             indextuples.append(ind)
-    newindex = pd.MultiIndex.from_tuples(indextuples, names=["group", "dataset", "index"], sortorder=0) 
+    newindex = pd.MultiIndex.from_tuples(
+        indextuples, names=["group", "dataset", "index"], sortorder=0
+    )
     # Reindex covmat with the new cut index
     cut_df = filecovmat.reindex(newindex).T
     cut_df = cut_df.reindex(newindex).T
@@ -484,23 +478,31 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
         for ds2 in dslist:
             if (ds1 in shortlist) and (ds2 in shortlist):
                 # If both datasets in the fromfile covmat, use the piece of the fromfile covmat
-                covmat = cut_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+                covmat = (
+                    cut_df.xs(ds1, level=1, drop_level=False)
+                    .T.xs(ds2, level=1, drop_level=False)
+                    .T
+                )
             else:
                 # Otherwise use a covmat of 0s
-                covmat = empty_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+                covmat = (
+                    empty_df.xs(ds1, level=1, drop_level=False)
+                    .T.xs(ds2, level=1, drop_level=False)
+                    .T
+                )
             covmats.append(covmat)
     chunks = []
-    # Arrange into chunks, each chunk is a list of pieces of covmat which are associated with 
+    # Arrange into chunks, each chunk is a list of pieces of covmat which are associated with
     # one dataset in particular
     for x in range(0, len(covmats), len(dslist)):
-        chunk = covmats[x:x+len(dslist)]
+        chunk = covmats[x : x + len(dslist)]
         chunks.append(chunk)
     strips = []
-    # Concatenate each chunk into a strip of the covariance matrix 
+    # Concatenate each chunk into a strip of the covariance matrix
     for chunk in chunks:
         strip = pd.concat(chunk, axis=1)
         strips.append(strip.T)
-   # strips.reverse()
+    # strips.reverse()
     # Concatenate the strips to make the full matrix
     full_df = pd.concat(strips, axis=1)
     # Reindex to align with experiment covmat index
@@ -508,9 +510,9 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     full_df = full_df.reindex(procs_index, axis=1)
     return full_df
 
+
 @table
-def user_covmat(procs_data, procs_index,
-                loaded_user_covmat_path):
+def user_covmat(procs_data, procs_index, loaded_user_covmat_path):
     """
     General theory covariance matrix provided by the user. 
     Useful for testing the impact of externally produced
@@ -522,31 +524,36 @@ def user_covmat(procs_data, procs_index,
     """
     return fromfile_covmat(loaded_user_covmat_path, procs_data, procs_index)
 
+
 @table
 @check_fit_dataset_order_matches_grouped
-def total_theory_covmat(
-        theory_covmat_custom,
-        user_covmat):
+def total_theory_covmat(theory_covmat_custom, user_covmat):
     """
     Sum of scale variation and user covmat, where both are used.
     """
     return theory_covmat_custom + user_covmat
 
+
 def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
     """theory_covmat_custom but reindexed so the order of the datasets matches  
     those in the experiment covmat so they are aligned when fitting."""
-    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
+    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(
+        procs_index_matched
+    )
     return df
-  
+
+
 def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
-  """total_theory_covmat but reindexed so the order of the datasets matches 
+    """total_theory_covmat but reindexed so the order of the datasets matches 
   those in the experiment covmat so they are aligned when fitting."""
-  return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
+    return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
+
 
 def user_covmat_fitting(user_covmat, procs_index_matched):
-  """user_covmat but reindexed so the order of the datasets matches 
+    """user_covmat but reindexed so the order of the datasets matches 
   those in the experiment covmat so they are aligned when fitting."""
-  return theory_covmat_custom_fitting(user_covmat, procs_index_matched)
+    return theory_covmat_custom_fitting(user_covmat, procs_index_matched)
+
 
 def procs_index_matched(groups_index, procs_index):
     """procs_index but matched to the dataset order given
@@ -562,10 +569,9 @@ def procs_index_matched(groups_index, procs_index):
 
     return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
+
 @check_correct_theory_combination
-def total_covmat_diagtheory_procs(
-    procs_results_theory, fivetheories
-):
+def total_covmat_diagtheory_procs(procs_results_theory, fivetheories):
     """Same as total_covmat_datasets but per proc rather than
     per dataset. Needed for calculation of chi2 per proc."""
     exp_result_covmats = []
