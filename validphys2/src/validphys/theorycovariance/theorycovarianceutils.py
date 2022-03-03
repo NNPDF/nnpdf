@@ -12,17 +12,16 @@ from validphys.plotoptions import get_info
 log = logging.getLogger(__name__)
 
 
-def check_correct_theory_combination_internal(theoryids, fivetheories,
-                                             point_prescription:(str, type(None)) = None
+def check_correct_theory_combination_internal(
+    theoryids, fivetheories, point_prescription: (str, type(None)) = None
 ):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9},
-          "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar', 'nobar'}
-    xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
-    xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
+    check(l in {3, 5, 7, 9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    opts = {"bar", "nobar"}
+    xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
+    xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
     if l == 3:
         if point_prescription == "3f point":
             correct_xifs = [1.0, 2.0, 0.5]
@@ -37,10 +36,14 @@ def check_correct_theory_combination_internal(theoryids, fivetheories,
         check(
             fivetheories is not None,
             "For five input theories a prescription bar or nobar"
-            "for the flag fivetheories must be specified.")
-        check(fivetheories in opts,
-              "Invalid choice of prescription for 5 points", fivetheories,
-              opts)
+            "for the flag fivetheories must be specified.",
+        )
+        check(
+            fivetheories in opts,
+            "Invalid choice of prescription for 5 points",
+            fivetheories,
+            opts,
+        )
         if fivetheories == "nobar":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
@@ -56,25 +59,32 @@ def check_correct_theory_combination_internal(theoryids, fivetheories,
     check(
         xifs == correct_xifs and xirs == correct_xirs,
         "Choice of input theories does not correspond to a valid "
-        "prescription for theory covariance matrix calculation")
+        "prescription for theory covariance matrix calculation",
+    )
 
-check_correct_theory_combination = make_argcheck(check_correct_theory_combination_internal)
+
+check_correct_theory_combination = make_argcheck(
+    check_correct_theory_combination_internal
+)
+
 
 @make_argcheck
-def check_correct_theory_combination_theoryconfig(collected_theoryids,
-                                                   fivetheories):
+def check_correct_theory_combination_theoryconfig(collected_theoryids, fivetheories):
     check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
 
+
 @make_argcheck
-def check_correct_theory_combination_dataspecs(dataspecs_theoryids,
-                                                fivetheories):
+def check_correct_theory_combination_dataspecs(dataspecs_theoryids, fivetheories):
     """Like check_correct_theory_combination but for matched dataspecs."""
     return check_correct_theory_combination.__wrapped__(
-        dataspecs_theoryids, fivetheories)
+        dataspecs_theoryids, fivetheories
+    )
+
 
 @make_argcheck
 def check_fit_dataset_order_matches_grouped(
-    group_dataset_inputs_by_metadata, data_input, processed_metadata_group):
+    group_dataset_inputs_by_metadata, data_input, processed_metadata_group
+):
     """
     Check for use with theory covmat generation. 
 
@@ -91,8 +101,9 @@ def check_fit_dataset_order_matches_grouped(
                 grouped_ds == input_ds,
                 "Dataset ordering is changed by grouping, this will cause "
                 "errors when running fits with theory covmat. Datasets should "
-                f"be ordered by {processed_metadata_group} in the runcard." 
+                f"be ordered by {processed_metadata_group} in the runcard.",
             )
+
 
 def process_lookup(name):
     """

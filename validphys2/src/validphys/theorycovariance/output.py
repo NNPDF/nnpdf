@@ -223,18 +223,14 @@ def plot_corrmat_heatmap(corrmat, title):
 @figure
 def plot_normexpcovmat_heatmap(procs_normcovmat):
     """Matrix plot of the experiment covariance matrix normalised to data."""
-    fig = plot_covmat_heatmap(
-        procs_normcovmat, "Experimental Covariance Matrix"
-    )
+    fig = plot_covmat_heatmap(procs_normcovmat, "Experimental Covariance Matrix")
     return fig
 
 
 @figure
 def plot_expcorrmat_heatmap(procs_corrmat):
     """Matrix plot of the experiment correlation matrix"""
-    fig = plot_corrmat_heatmap(
-        procs_corrmat, "Experimental Correlation Matrix"
-    )
+    fig = plot_corrmat_heatmap(procs_corrmat, "Experimental Correlation Matrix")
     return fig
 
 
@@ -242,17 +238,14 @@ def plot_expcorrmat_heatmap(procs_corrmat):
 def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
     """Matrix plot for block diagonal theory covariance matrix"""
     fig = plot_covmat_heatmap(
-        theory_normblockcovmat,
-        "Block diagonal theory covariance matrix by dataset",
+        theory_normblockcovmat, "Block diagonal theory covariance matrix by dataset",
     )
     return fig
 
 
 @figure
 def plot_normthcovmat_heatmap_custom(
-    theory_normcovmat_custom,
-    theoryids,
-    fivetheories,
+    theory_normcovmat_custom, theoryids, fivetheories,
 ):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
@@ -269,17 +262,14 @@ def plot_normthcovmat_heatmap_custom(
 def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
     """Matrix plot of the theory correlation matrix"""
     fig = plot_corrmat_heatmap(
-        theory_blockcorrmat,
-        "Theory correlation matrix block diagonal by dataset"
+        theory_blockcorrmat, "Theory correlation matrix block diagonal by dataset"
     )
     return fig
 
 
 @figure
 def plot_thcorrmat_heatmap_custom(
-    theory_corrmat_custom,
-    theoryids,
-    fivetheories,
+    theory_corrmat_custom, theoryids, fivetheories,
 ):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
@@ -293,8 +283,7 @@ def plot_thcorrmat_heatmap_custom(
 
 
 @figure
-def plot_normexpplusblockthcovmat_heatmap(
-    experimentplusblocktheory_normcovmat):
+def plot_normexpplusblockthcovmat_heatmap(experimentplusblocktheory_normcovmat):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     fig = plot_covmat_heatmap(
         experimentplusblocktheory_normcovmat,
@@ -305,9 +294,7 @@ def plot_normexpplusblockthcovmat_heatmap(
 
 @figure
 def plot_normexpplusthcovmat_heatmap_custom(
-    experimentplustheory_normcovmat_custom,
-    theoryids,
-    fivetheories,
+    experimentplustheory_normcovmat_custom, theoryids, fivetheories,
 ):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
@@ -316,7 +303,7 @@ def plot_normexpplusthcovmat_heatmap_custom(
             l = r"$\bar{5}$"
     fig = plot_covmat_heatmap(
         experimentplustheory_normcovmat_custom,
-        f"Experimental + Theory Covariance Matrix ({l} pt)"
+        f"Experimental + Theory Covariance Matrix ({l} pt)",
     )
     return fig
 
@@ -333,9 +320,7 @@ def plot_expplusblockthcorrmat_heatmap(experimentplusblocktheory_corrmat):
 
 @figure
 def plot_expplusthcorrmat_heatmap_custom(
-    experimentplustheory_corrmat_custom,
-    theoryids,
-    fivetheories,
+    experimentplustheory_corrmat_custom, theoryids, fivetheories,
 ):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
@@ -344,7 +329,7 @@ def plot_expplusthcorrmat_heatmap_custom(
             l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(
         experimentplustheory_corrmat_custom,
-        f"Experimental + Theory Correlation Matrix ({l} pt)"
+        f"Experimental + Theory Correlation Matrix ({l} pt)",
     )
     return fig
 
@@ -358,17 +343,14 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, procs_covmat):
     fig = plot_covmat_heatmap(
         df,
         "(Theory + experiment)/mean(experiment)"
-        + "for block diagonal theory covmat by dataset"
+        + "for block diagonal theory covmat by dataset",
     )
     return fig
 
 
 @figure
 def plot_covdiff_heatmap_custom(
-    theory_covmat_custom,
-    procs_covmat,
-    theoryids,
-    fivetheories,
+    theory_covmat_custom, procs_covmat, theoryids, fivetheories,
 ):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
@@ -379,18 +361,14 @@ def plot_covdiff_heatmap_custom(
     fig = plot_covmat_heatmap(
         df,
         "(Theory + experiment)/mean(experiment)"
-        + f"covariance matrices for {l} points"
+        + f"covariance matrices for {l} points",
     )
     return fig
 
 
 @figure
 def plot_diag_cov_comparison(
-    theory_covmat_custom,
-    procs_covmat,
-    procs_data_values,
-    theoryids,
-    fivetheories,
+    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, fivetheories,
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
@@ -438,11 +416,7 @@ def plot_diag_cov_comparison(
 
 @figure
 def plot_diag_cov_impact(
-    theory_covmat_custom,
-    procs_covmat,
-    procs_data_values,
-    theoryids,
-    fivetheories,
+    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, fivetheories,
 ):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
