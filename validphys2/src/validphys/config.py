@@ -1514,6 +1514,7 @@ class CoreConfig(configparser.Config):
     
     def produce_seventheories(self, point_prescription):
         if point_prescription == "7 point":
+            #This is None because is the default choice 
             return None
         elif point_prescription == "7original point":
             return "original"
