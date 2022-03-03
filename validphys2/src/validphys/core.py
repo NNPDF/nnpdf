@@ -546,11 +546,7 @@ class FKTableSpec(TupleComp):
 
     def load_with_cuts(self, cuts):
         """Load the fktable and apply cuts inmediately. Returns a FKTableData"""
-        if self.legacy:
-            res = load_fktable(self)
-        else:
-            res = self._load_pineappl()
-        return res.with_cuts(cuts)
+        return load_fktable(self).with_cuts(cuts)
 
     def load(self):
         if self.legacy:
