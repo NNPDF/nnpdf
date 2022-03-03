@@ -75,12 +75,6 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
 
         grid_values[replica][flavour][x][Q]
 
-    Notes
-    ----
-    This uses libnnpdf, and therefore follows the convention to throw away
-    replica 0 for Monte Carlo ensembles (so index 0 corresponds to replica 1).
-    Use ``pdf.grid_values_index`` to index the result properly.
-
     See Also
     --------
     :py:meth:`validphys.pdfbases.Basis.grid_values` offers a higher level

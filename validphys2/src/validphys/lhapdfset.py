@@ -7,15 +7,13 @@
 
     The ``.members`` and ``.central_member`` of the ``LHAPDFSet`` are
     LHAPDF objects (the typical output from ``mkPDFs``) and can be used normally.
-    For MC PDFs the ``central_member`` is the average of all replicas (members 1-100)
-    while for Hessian PDFfs the ``central_member`` is also ``members[0]``
 
     Examples
     --------
     >>> from validphys.lhapdfset import LHAPDFSet
     >>> pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
     >>> len(pdf.members)
-    100
+    101
     >>> pdf.central_member.alphasQ(91.19)
     0.11800
     >>> pdf.members[0].xfxQ2(0.5, 15625)
@@ -67,10 +65,8 @@ class LHAPDFSet:
 
     @property
     def members(self):
-        """Return the members of the set, this depends on the error type:
-        t0: returns only member 0
-        MC: skip member 0
-        Hessian: return all
+        """Return the members of the set
+        the special error type t0 returns only member 0
         """
         if self.is_t0:
             return self._lhapdf_set[0:1]
