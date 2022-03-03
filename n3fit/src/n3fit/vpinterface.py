@@ -61,16 +61,21 @@ class N3Stats(MCStats):
 class N3LHAPDFSet(LHAPDFSet):
     """Extension of LHAPDFSet using n3fit models"""
 
-    def __init__(self, name, pdf_models):
+    def __init__(self, name, pdf_models, Q=1.65):
         log.debug("Creating LHAPDF-like n3fit PDF")
         self._error_type = "replicas"
         self._name = name
         self._lhapdf_set = pdf_models
         self._flavors = None
+        self._fitting_q = Q
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
 
     def xfxQ(self, x, Q, n, fl):
         """Return the value of the PDF member for the given value in x"""
+        if Q != self._fitting_q:
+            log.warning(
+                "Querying N3LHAPDFSet at a value of Q=%f different from %f", Q, self._fitting_q
+            )
         return self.grid_values([fl], [x]).squeeze()[n]
 
     def __call__(self, xarr, flavours=None, replica=None):
@@ -168,7 +173,7 @@ class N3PDF(PDF):
             name of the N3PDF object
     """
 
-    def __init__(self, pdf_models, fit_basis=None, name="n3fit"):
+    def __init__(self, pdf_models, fit_basis=None, name="n3fit", Q=1.65):
         self.fit_basis = fit_basis
 
         if isinstance(pdf_models, Iterable):
@@ -178,7 +183,7 @@ class N3PDF(PDF):
 
         super().__init__(name)
         self._stats_class = N3Stats
-        self._lhapdf_set = N3LHAPDFSet(self.name, self._models)
+        self._lhapdf_set = N3LHAPDFSet(self.name, self._models, Q=Q)
         # Since there is no info file, create a fake `_info` dictionary
         self._info = {"ErrorType": "replicas", "NumMembers": len(self._models)}
 
