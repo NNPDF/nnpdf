@@ -74,7 +74,7 @@ dataset_inputs:
   - {dataset: LHCBWZMU7TEV, cfac: [NRM]}
   - {dataset: LHCBWZMU8TEV, cfac: [NRM]}
 
-template: template_matrix_plots.md
+template: template_matrix_plots_new.md
 
 dataset_report:
    meta: Null

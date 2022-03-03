@@ -1505,18 +1505,18 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
-    def produce_fivetheories(self,point_prescription):
+    def produce_fivetheories(self, point_prescription):
         if point_prescription == "5bar point":
-            return 'bar'
+            return "bar"
         elif point_prescription == "5 point":
-            return 'nobar'
+            return "nobar"
         return None 
     
-    def produce_seventheories(self,point_prescription):
+    def produce_seventheories(self, point_prescription):
         if point_prescription == "7 point":
             return None
         elif point_prescription == "7original point":
-            return 'original'
+            return "original"
         return None
 
     def produce_group_dataset_inputs_by_experiment(self, data_input):
