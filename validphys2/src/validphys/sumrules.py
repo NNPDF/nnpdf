@@ -137,7 +137,6 @@ def _integral(rule_f, pdf_member, Q, config=None):
 def _sum_rules(rules_dict, lpdf, Q):
     """Compute a SumRulesGrid from the loaded PDF, at Q"""
     return {k: [_integral(r, m, Q) for m in lpdf.members] for k,r in rules_dict.items()}
-    # I very much doubt that looping over PDF members is the slow piece here...
 
 
 @check_positive('Q')

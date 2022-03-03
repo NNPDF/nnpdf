@@ -12,7 +12,6 @@ from reportengine.compat import yaml
 import validphys
 import n3fit
 from n3fit import vpinterface
-from n3fit.vpinterface import integrability_numbers, compute_arclength
 
 
 class WriterWrapper:
