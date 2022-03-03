@@ -25,6 +25,7 @@ def set_eager(flag=True):
     ideally after the first tf import
     """
     tf.config.run_functions_eagerly(flag)
+set_eager()
 
 
 def set_number_of_cores(max_cores=None):
