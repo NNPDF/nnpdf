@@ -32,7 +32,7 @@ We follow a rolling development model where the tip of the master branch is
 expected to be stable, tested and correct. For more information see our 
 [releases and compatibility policy](https://docs.nnpdf.science/releases.html).
 
-## Cite
+## Citeg
 
 This code is described in the following [paper](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%202109.02671):
 
