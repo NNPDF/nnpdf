@@ -1,7 +1,9 @@
 # A single CI script with github workflow.
 name: Tests
 
-on: [push]
+on:
+  pull_request:
+    types: [opened, reopened]
 
 concurrency:
   group: ${{ github.ref }}
