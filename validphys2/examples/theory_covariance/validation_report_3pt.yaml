@@ -1,12 +1,11 @@
 meta:
-    title: Theory shift validation test, 5nobar point, single-dataset, QR
+    title: Theory shift validation test, 3 point, single_dataset, QR
     author: Andrea Barontini
     keywords: [example]
 
-# This is a single dataset comparison. For a full comparison extend
+# This is a one dataset only comparison. For a full comparison extend
 # the datasets accordingly.
 
-metadata_group: nnpdf31_process #!IMPORTANT! Do not remove
 
 orthonormalisation: qr # Choice of orthonormalisation scheme
                        # for finding th covmat basis. Default is qr.
@@ -20,7 +19,7 @@ pdf:
   from_: fit
 
 _datasets_list_nlo: &datasets_list_nlo
-  - dataset: CMSWEASY840PB
+  - dataset: ATLASWZRAP36PB
 
 shiftconfig:     # For calculating NNLO-NLO shift
 
@@ -35,22 +34,22 @@ shiftconfig:     # For calculating NNLO-NLO shift
            from_: fit
          speclabel: "NLO"
          dataset_inputs:
-                  - dataset: CMSWEASY840PB
+                  - dataset: ATLASWZRAP36PB
        - theoryid: 166
          pdf:
            from_: fit
          speclabel: "NNLO"
          dataset_inputs:
-              - { dataset: CMSWEASY840PB, cfac: [QCD] }
+              - { dataset: ATLASWZRAP36PB, cfac: [QCD]}
 
 theoryconfig:  # For generating theory covariance matrix
 
    theoryid: 163
-   
+
    theoryids:
      from_: scale_variation_theories
 
-   point_prescription: '5 point'
+   point_prescription: '3 point'
 
    use_cuts: fromfit
    fit: 190315_ern_nlo_central_163_global
@@ -62,24 +61,18 @@ theoryconfig:  # For generating theory covariance matrix
            - theoryid: 163
              speclabel: $(\xi_F,\xi_R)=(1,1)$
              dataset_inputs: *datasets_list_nlo
-           - theoryid: 177
-             speclabel: $(\xi_F,\xi_R)=(2,1)$
+           - theoryid: 180
+             speclabel: $(\xi_F,\xi_R)=(2,2)$
              dataset_inputs: *datasets_list_nlo
-           - theoryid: 176
-             speclabel: $(\xi_F,\xi_R)=(0.5,1)$
-             dataset_inputs: *datasets_list_nlo
-           - theoryid: 179
-             speclabel: $(\xi_F,\xi_R)=(1,2)$
-             dataset_inputs: *datasets_list_nlo
-           - theoryid: 174
-             speclabel: $(\xi_F,\xi_R)=(1,0.5)$
+           - theoryid: 173
+             speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
              dataset_inputs: *datasets_list_nlo
     
-template: template_test_new.md
+template: template_test.md
 
 dataset_report:
    meta: Null
    template_text: |
-      ## Testing 5nobarpt NLO global covariance matrix against NNLO-NLO shift
+      ## Testing 3pt NLO global covariance matrix against NNLO-NLO shift
 actions_:
   - report(main=true, mathjax=True)
