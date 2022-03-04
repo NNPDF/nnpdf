@@ -448,6 +448,8 @@ class Loader(LoaderBase):
         return tuple(cf)
 
     def check_posset(self, theoryID, setname, postlambda, kind="positivity"):
+        """ Loader for the positivity and integrabiltiy datasets
+        The mode of the loader can be controled with the key `kind`"""
         cd = self.check_commondata(setname, 'DEFAULT')
         fk = self.check_fktable(theoryID, setname, [])
         th =  self.check_theoryID(theoryID)
