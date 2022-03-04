@@ -930,9 +930,10 @@ class CoreConfig(configparser.Config):
         )
         theoryno, _ = theoryid
         lambda_key = "maxlambda"
-        #Don't allow for old-style runcards with 'poslambda' instead of 'maxlambda'
+        #BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
         if "poslambda" in setdict and "maxlambda" not in setdict:
-            raise ConfigError("The `poslambda` argument has been deprecated in favour of `maxlambda`")
+            log.warning("The `poslambda` argument has been deprecated in favour of `maxlambda`")
+            lambda_key = "poslambda"
         try:
             name = setdict["dataset"]
             maxlambda = float(setdict[lambda_key])
