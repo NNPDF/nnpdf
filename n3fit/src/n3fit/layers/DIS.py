@@ -88,7 +88,4 @@ class DIS(Observable):
             axis=0
         )
 
-        if self.positivity:
-            return list_alphas_results[2]
-        else:
-            return out
+        return out
