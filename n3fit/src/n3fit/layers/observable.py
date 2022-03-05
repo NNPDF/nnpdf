@@ -38,7 +38,7 @@ class Observable(MetaLayer, ABC):
                 number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_dicts, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(self, fktable_dicts, fktable_arr, operation_name, map_pdfs, a_list, z_list, nfl=14, **kwargs):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
@@ -46,6 +46,12 @@ class Observable(MetaLayer, ABC):
         basis = []
         xgrids = []
         self.fktables = []
+        # Add information on the atomic number Z and the atomic mass number A
+        # as an attribute to the Observable class. The lenght of each should be
+        # the same as `fktable_dicts` or `fktable_arr`.
+        self.a_list = a_list
+        self.z_list = z_list
+        self.map_pdfs = map_pdfs
         for fktable, fk in zip(fktable_dicts, fktable_arr):
             xgrids.append(fktable["xgrid"])
             basis.append(fktable["basis"])

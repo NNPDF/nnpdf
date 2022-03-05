@@ -78,6 +78,11 @@ class ModelTrainer:
 
     *called in this way because it accept a dictionary of hyper-parameters
     which defines the Neural Network
+
+    Modifications:
+    --------------
+    Include as input parameters the ordered list of active A's involved in the fit. If
+    only free-proton fit is considered, the the list contains only one element A=1.
     """
 
     def __init__(
@@ -85,6 +90,7 @@ class ModelTrainer:
         exp_info,
         pos_info,
         integ_info,
+        map_pdfs,
         flavinfo,
         fitbasis,
         nnseeds,
@@ -133,6 +139,7 @@ class ModelTrainer:
         self.exp_info = exp_info
         self.pos_info = pos_info
         self.integ_info = integ_info
+        self.map_pdfs = map_pdfs
         if self.integ_info is not None:
             self.all_info = exp_info + pos_info + integ_info
         else:
@@ -460,7 +467,7 @@ class ModelTrainer:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            exp_layer = model_gen.observable_generator(exp_dict, self.map_pdfs)
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
@@ -483,7 +490,9 @@ class ModelTrainer:
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(
+                pos_dict, self.map_pdfs, positivity_initial=pos_initial
+            )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
             self.input_sizes.append(pos_layer["experiment_xsize"])
@@ -509,7 +518,7 @@ class ModelTrainer:
                 )
 
                 integ_layer = model_gen.observable_generator(
-                    integ_dict, positivity_initial=integ_initial, integrability=True
+                    integ_dict, self.map_pdfs, positivity_initial=integ_initial, integrability=True
                 )
                 # The input list is still common
                 self.input_list += integ_layer["inputs"]
@@ -621,6 +630,7 @@ class ModelTrainer:
         pdf_models = model_gen.pdfNN_layer_generator(
             nodes=nodes_per_layer,
             activations=activation_per_layer,
+            number_amn=len(self.map_pdfs),
             layer_type=layer_type,
             flav_info=self.flavinfo,
             fitbasis=self.fitbasis,

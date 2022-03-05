@@ -7,6 +7,8 @@ import copy
 import logging
 import numpy as np
 import n3fit.checks
+from n3fit.add_nuclear_info import add_nuclear_dependence
+from n3fit.add_nuclear_info import list_active_nuclei
 from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
@@ -180,12 +182,23 @@ def performfit(
             nnseeds = [nnseeds]
             log.info("Starting replica fit %d", replica_idxs[0])
 
+        # Add nuclear dependence if nuclear datasets are being fitted
+        # TODO: This part could surely be moved outside of the loop even in case of multireplica fit
+        exp_info = add_nuclear_dependence(exp_info)
+        posdatasets_fitting_pos_dict = add_nuclear_dependence(posdatasets_fitting_pos_dict)
+        integdatasets_fitting_integ_dict = add_nuclear_dependence(integdatasets_fitting_integ_dict)
+        # Extract an ordered list of the A involved in the fit. This is how the output PDFs f^A
+        # will be order in the output of the NN.
+        map_pdfs = list_active_nuclei(exp_info)
+        log.info(f"Number of nuclei fitted in addition to the proton: {len(map_pdfs) - 1}")
+
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
             exp_info,
             posdatasets_fitting_pos_dict,
             integdatasets_fitting_integ_dict,
+            map_pdfs,
             basis,
             fitbasis,
             nnseeds,

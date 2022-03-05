@@ -86,7 +86,7 @@ class ObservableWrapper:
 
 
 def observable_generator(
-    spec_dict, positivity_initial=1.0, integrability=False
+    spec_dict, map_pdfs, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -161,6 +161,9 @@ def observable_generator(
                 dataset_dict["fktables"],
                 dataset_dict["tr_fktables"],
                 operation_name,
+                map_pdfs,
+                dataset_dict.get("A", None),
+                dataset_dict.get("Z", None),
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = obs_layer_vl = None
@@ -170,6 +173,9 @@ def observable_generator(
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
                 operation_name,
+                map_pdfs,
+                dataset_dict.get("A", None),
+                dataset_dict.get("Z", None),
                 name=f"exp_{dataset_name}",
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
@@ -178,18 +184,27 @@ def observable_generator(
                 dataset_dict["fktables"],
                 dataset_dict["tr_fktables"],
                 operation_name,
+                map_pdfs,
+                dataset_dict.get("A", None),
+                dataset_dict.get("Z", None),
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["ex_fktables"],
                 operation_name,
+                map_pdfs,
+                dataset_dict.get("A", None),
+                dataset_dict.get("Z", None),
                 name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
                 dataset_dict["fktables"],
                 dataset_dict["vl_fktables"],
                 operation_name,
+                map_pdfs,
+                dataset_dict.get("A", None),
+                dataset_dict.get("Z", None),
                 name=f"val_{dataset_name}",
             )
 
@@ -276,6 +291,7 @@ def generate_dense_network(
     nodes,
     activations,
     initializer_name="glorot_normal",
+    number_amn=1,
     seed=0,
     dropout_rate=0.0,
     regularizer=None,
@@ -286,8 +302,15 @@ def generate_dense_network(
     the dropout rate, if selected, is set
     for the next to last layer (i.e., the last layer of the dense network before getting to
     the output layer for the basis choice)
+
+    Modifications:
+    --------------
+    Adjust the number of outputs of the NN depending on the number of A's involved.
     """
     list_of_pdf_layers = []
+    # Modifications: Multiply the number of nodes in the last layer
+    # with the number of active As involved in the fitting procedure.
+    nodes[-1] *= number_amn
     number_of_layers = len(nodes)
     if dropout_rate > 0:
         dropout_layer = number_of_layers - 2
@@ -318,13 +341,16 @@ def generate_dense_network(
 
 
 def generate_dense_per_flavour_network(
-    nodes_in, nodes, activations, initializer_name="glorot_normal", seed=0, basis_size=8
+    nodes_in, nodes, activations, initializer_name="glorot_normal", number_amn=0, seed=0, basis_size=8
 ):
     """
     For each flavour generates a dense network of the chosen size
 
     """
     list_of_pdf_layers = []
+    # Modifications: Multiply the number of nodes in the last layer
+    # with the number of active As involved in the fitting procedure.
+    nodes[-1] *= number_amn
     number_of_layers = len(nodes)
     current_seed = seed
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
@@ -372,6 +398,7 @@ def pdfNN_layer_generator(
     inp=2,
     nodes=None,
     activations=None,
+    number_amn=1,
     initializer_name="glorot_normal",
     layer_type="dense",
     flav_info=None,
@@ -456,6 +483,9 @@ def pdfNN_layer_generator(
             list of activation functions to apply to each layer. Default: ["tanh", "linear"]
             if the number of activation function does not match the number of layers, it will add
             copies of the first activation function found
+        number_amn: int
+            number of atomic mass numbers A involved in the fit. By default, one only has A=1
+            which corresponds to the free-proton fit
         initializer_name: str
             selects the initializer of the weights of the NN. Default: glorot_normal
         layer_type: str
@@ -561,6 +591,7 @@ def pdfNN_layer_generator(
                 nodes,
                 activations,
                 initializer_name,
+                number_amn=number_amn,
                 seed=layer_seed,
                 dropout_rate=dropout,
                 regularizer=reg,
@@ -574,6 +605,7 @@ def pdfNN_layer_generator(
                 nodes,
                 activations,
                 initializer_name,
+                number_amn=number_amn,
                 seed=layer_seed,
                 basis_size=last_layer_nodes,
             )
@@ -591,6 +623,7 @@ def pdfNN_layer_generator(
         preproseed = layer_seed + number_of_layers
         layer_preproc = Preprocessing(
             flav_info=flav_info,
+            number_amn=number_amn,
             input_shape=(1,),
             name=f"pdf_prepro_{i}",
             seed=preproseed,

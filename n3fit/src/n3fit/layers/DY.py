@@ -43,19 +43,54 @@ class DY(Observable):
         results = []
         if self.many_masks:
             if self.splitting:
+                # TODO: Avoid repeated computations by improving the loop below
                 for a, (mask, fk) in enumerate(zip(self.all_masks, self.fktables)):
-                    pdf = op.split(pdf_raw, self.splitting, axis=1)[a]
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf, pdf, mask)
+                    # First we need to split the PDFs to select the corresponding f^A
+                    a_value = 1 if self.a_list is None else self.a_list[a]
+                    z_value = 1 if self.z_list is None else self.z_list[a]
+                
+                    output_index = self.map_pdfs.index(a_value)
+                    split_size = int(pdf_raw.shape[2] / self.nfl)
+                    splitted_pdf = op.split(pdf_raw, num_or_size_splits=split_size, axis=2)
+                    nonsplitted_pdf1 = splitted_pdf[0]
+                    nonsplitted_pdf2 = splitted_pdf[output_index]
+
+                    # Then performing the standard splitting of a given f^A
+                    pdf1 = op.split(nonsplitted_pdf1, self.splitting, axis=1)[a]
+                    pdf2 = op.split(nonsplitted_pdf2, self.splitting, axis=1)[a]
+                    pdf_x_pdf = op.pdf_masked_convolution(pdf1, pdf2, mask)
                     res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                     results.append(res)
             else:
-                for mask, fk in zip(self.all_masks, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, pdf_raw, mask)
+                for a, (mask, fk) in enumerate(zip(self.all_masks, self.fktables)):
+                    # First we need to split the PDFs to select the corresponding f^A
+                    a_value = 1 if self.a_list is None else self.a_list[a]
+                    z_value = 1 if self.z_list is None else self.z_list[a]
+                
+                    output_index = self.map_pdfs.index(a_value)
+                    split_size = int(pdf_raw.shape[2] / self.nfl)
+                    splitted_pdf = op.split(pdf_raw, num_or_size_splits=split_size, axis=2)
+
+                    # Then performing the standard splitting of a given f^A
+                    pdf1 = splitted_pdf[0]
+                    pdf2 = splitted_pdf[output_index]
+                    pdf_x_pdf = op.pdf_masked_convolution(pdf1, pdf2, mask)
                     res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                     results.append(res)
         else:
-            pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, pdf_raw, self.all_masks[0])
-            for fk in self.fktables:
+            for a, fk in enumerate(self.fktables):
+                # First we need to split the PDFs to select the corresponding f^A
+                a_value = 1 if self.a_list is None else self.a_list[a]
+                z_value = 1 if self.z_list is None else self.z_list[a]
+                
+                output_index = self.map_pdfs.index(a_value)
+                split_size = int(pdf_raw.shape[2] / self.nfl)
+                splitted_pdf = op.split(pdf_raw, num_or_size_splits=split_size, axis=2)
+
+                # Then performing the standard splitting of a given f^A
+                pdf1 = splitted_pdf[0]
+                pdf2 = splitted_pdf[output_index]
+                pdf_x_pdf = op.pdf_masked_convolution(pdf1, pdf2, self.all_masks[0])
                 res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                 results.append(res)
 

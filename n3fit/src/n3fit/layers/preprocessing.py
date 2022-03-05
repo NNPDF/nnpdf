@@ -37,7 +37,7 @@ class Preprocessing(MetaLayer):
     def __init__(
         self,
         flav_info=None,
-        As_number=1,
+        number_amn=1,
         seed=0,
         initializer="random_uniform",
         large_x=True,
@@ -51,7 +51,7 @@ class Preprocessing(MetaLayer):
         self.initializer = initializer
         self.large_x = large_x
         self.kernel = []
-        self.As_number = As_number
+        self.number_amn = number_amn
         super().__init__(**kwargs)
 
     def generate_weight(self, weight_name, kind, dictionary, set_to_zero=False):
@@ -106,7 +106,7 @@ class Preprocessing(MetaLayer):
     def build(self, input_shape):
         # First run over f^A if more A values are being fitted
         # then run through the whole basis as usual.
-        for _ in range(self.As_number):
+        for _ in range(self.number_amn):
             for flav_dict in self.flav_info:
                 flav_name = flav_dict["fl"]
                 alpha_name = f"alpha_{flav_name}"
@@ -119,6 +119,6 @@ class Preprocessing(MetaLayer):
     def call(self, inputs, **kwargs):
         x = inputs
         pdf_list = []
-        for i in range(0, 2 * self.output_dim * self.As_number, 2):
+        for i in range(0, 2 * self.output_dim * self.number_amn, 2):
             pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i + 1][0])
         return op.concatenate(pdf_list, axis=-1)
