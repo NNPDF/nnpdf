@@ -64,19 +64,22 @@ class DIS(Observable):
 
         results = []
         # Separate the two possible paths this layer can take
-        # TODO: Possibly merge these two separtations since all are now in a loop
+        # TODO: Check which one is better between `op.split` and `op.gather`
+        # TODO: Possibly merge these two separtations since both are now in a loop
         if self.many_masks:
             for a, (mask, fktable) in enumerate(zip(self.all_masks, self.fktables)):
                 # Get the values of A & Z from the dictionary. If None, the default
                 # is the free-proton ie. A=Z=1.
                 a_value = 1 if self.a_list is None else self.a_list[a]
                 z_value = 1 if self.z_list is None else self.z_list[a]
+
                 # Check index of the nucleus/proton in the ordered list and select
                 # only that PDF for the convolution.
                 output_index = self.map_pdfs.index(a_value)
                 split_size = int(pdf.shape[2] / self.nfl)
                 splitted_pdf = op.split(pdf, num_or_size_splits=split_size, axis=2)
                 output_pdf_range = splitted_pdf[output_index]
+
                 # Perform standard convolution to either proton or nuclear PDF
                 pdf_masked = op.boolean_mask(output_pdf_range, mask, axis=2)
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
@@ -87,12 +90,14 @@ class DIS(Observable):
                 # is the free-proton ie. A=Z=1.
                 a_value = 1 if self.a_list is None else self.a_list[a]
                 z_value = 1 if self.z_list is None else self.z_list[a]
+
                 # Check index of the nucleus/proton in the ordered list and select
                 # only that PDF for the convolution.
                 output_index = self.map_pdfs.index(a_value)
                 split_size = int(pdf.shape[2] / self.nfl)
                 splitted_pdf = op.split(pdf, num_or_size_splits=split_size, axis=2)
                 output_pdf_range = splitted_pdf[output_index]
+
                 # Perform standard convolution to either proton or nuclear PDF
                 pdf_masked = op.boolean_mask(output_pdf_range, self.all_masks[0], axis=2)
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])

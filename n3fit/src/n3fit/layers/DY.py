@@ -41,6 +41,7 @@ class DY(Observable):
         # so we have 3 different paths for this layer
 
         results = []
+        # TODO: Check which one is better between `op.split` and `op.gather`
         if self.many_masks:
             if self.splitting:
                 # TODO: Avoid repeated computations by improving the loop below
