@@ -748,14 +748,21 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
     identify whether training or validation chi² is larger.
 
     """
-    training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
+    # import ipdb; ipdb.set_trace()
+    training, valid, alphas = zip(*((dt.training, dt.validation, dt.alphas) for dt in replica_data))
     fig, ax = plt.subplots(
         figsize=(
             max(plt.rcParams.get("figure.figsize")),
             max(plt.rcParams.get("figure.figsize")),
         )
     )
-    ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
+    sc = ax.scatter(training, valid, marker="o", s=20, c=alphas)
+    legend1 = ax.legend(*sc.legend_elements(),
+                    loc="upper left", title=r"$\alpha_s$")
+    ax.add_artist(legend1)
+    # fig.colorbar(sc, label=r"$\alpha_s$")
+
+
     if replica_filters:
         _scatter_marked(ax, training, valid, replica_filters, zorder=90)
         ax.legend().set_zorder(10000)
