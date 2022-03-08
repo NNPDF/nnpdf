@@ -501,6 +501,16 @@ class DataSetSpec(TupleComp):
                 data = DataSet(data, intmask)
         return data
 
+    def load_commondata(self):
+        """Strips the commondata loading from `load`"""
+        cd = self.commondata.load()
+        if self.cuts is not None:
+            loaded_cuts = self.cuts.load()
+            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
+                intmask = [int(ele) for ele in loaded_cuts]
+                cd = CommonData(cd, intmask)
+        return cd
+
     def to_unweighted(self):
         """Return a copy of the dataset with the weight set to one."""
         return self.__class__(
@@ -605,6 +615,10 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
             loaded_data = dataset.load()
             sets.append(loaded_data)
         return Experiment(sets, self.name)
+
+    @functools.lru_cache(maxsize=32)
+    def load_commondata(self):
+        return [d.load_commondata() for d in self.datasets]
 
     @property
     def thspec(self):
