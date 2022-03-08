@@ -32,6 +32,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
+from validphys import fkparser
 
 DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
 
@@ -124,6 +125,8 @@ class LoaderBase:
 
         # And save them up
         self.datapath = datapath
+        # TODO: eventually the yaml database will be the new commondata format
+        #       so this is a temporary location?
         self.yamlpath = datapath / "yamldb"
         self.resultspath = resultspath
         self._old_commondata_fits = set()
@@ -361,30 +364,30 @@ class Loader(LoaderBase):
         return FKTableSpec(fkpath, cfactors)
 
     def check_fkyaml(self, fkpath, theoryID, cfac):
-        """Load a new-style fktable
+        """Load a pineappl fktable
         Receives a yaml file describing the fktables necessary for a given observable
         the theory ID and the corresponding cfactors
         """
-        from .fkparser import get_yaml_information
         _, theopath = self.check_theoryID(theoryID)
-        metadata, fklist = get_yaml_information(fkpath, theopath)
+        metadata, fklist = fkparser.get_yaml_information(fkpath, theopath)
         op = metadata["operation"]
 
         # TODO:
-        # at the moment cfactors are shared and are following NNPDF names
-        # so we need to use the NNPDF names for now and use the compounds if they exist
+        #      at the moment there are no pineappl specific c-factors
+        #      so they need to be loaded from the NNPDF names / compounds files
         cfac_name = metadata["target_dataset"]
-        ##### compound reader
+        # check whether there is a compound file
         cpath = theopath / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
         if cpath.exists():
             # Get the target filenames
             tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
             cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
-        ##### end compound reader
         else:
             cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
+        ###
 
-        # If the operation is of type "norm", tell everyone that it is actually a ratio
+        # If the operation is of type "norm", tell vp that it is actually a ratio
+        # and prepare a normalized fktable spec
         if op == "NORM":
             op = "RATIO"
             fkspecs = []
@@ -447,16 +450,19 @@ class Loader(LoaderBase):
 
         return tuple(cf)
 
-    def check_posset(self, theoryID, setname, postlambda, kind="positivity"):
-        """ Loader for the positivity and integrabiltiy datasets
-        The mode of the loader can be controled with the key `kind`"""
+    def check_posset(self, theoryID, setname, postlambda):
+        """Load a positivity dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
         fk = self.check_fktable(theoryID, setname, [])
         th =  self.check_theoryID(theoryID)
-        if kind == "posdataset":
-            return PositivitySetSpec(setname, cd, fk, postlambda, th)
-        else:
-            return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
+        return PositivitySetSpec(setname, cd, fk, postlambda, th)
+
+    def check_integset(self, theoryID, setname, postlambda):
+        """Load an integrability dataset"""
+        cd = self.check_commondata(setname, 'DEFAULT')
+        fk = self.check_fktable(theoryID, setname, [])
+        th =  self.check_theoryID(theoryID)
+        return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
 
     def get_posset(self, theoryID, setname, postlambda):
         return self.check_posset(theoryID, setname, postlambda).load()

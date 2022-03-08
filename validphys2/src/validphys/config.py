@@ -941,7 +941,12 @@ class CoreConfig(configparser.Config):
             raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
-        return self.loader.check_posset(theoryno, name, maxlambda, kind)
+        if kind == "posdataset":
+            return self.loader.check_posset(theoryno, name, maxlambda)
+        elif kind == "integdataset":
+            return self.loader.check_integset(theoryno, name, maxlambda)
+        else:
+            raise ConfigError(f"The lagrange multiplier type {kind} is not understood")
 
     @element_of("posdatasets")
     def parse_posdataset(self, posset: dict, *, theoryid):
