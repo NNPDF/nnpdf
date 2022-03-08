@@ -166,11 +166,21 @@ class N3PDF(PDF):
         else:
             result = self.get_member_model(replica).predict([mod_xgrid])
 
+        # Split PDF according to the number of nuclei involved
+        # TODO: Make the following split more consistent. The below might break!!
+        split_size = int(result.shape[-1] / len(EVOL_LIST))
+        pdf_per_amn = np.split(result, split_size, axis=-1)
+
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
-            result[:, :, ii] = result
-        return result
+            copy_pdf_per_amn = []
+            for reslt in pdf_per_amn:
+                reslt[:, :, ii] = reslt
+                copy_pdf_per_amn.append(reslt)
+            # Overwrite previous result
+            pdf_per_amn = copy_pdf_per_amn
+        return pdf_per_amn
 
     def grid_values(self, flavours, xarr, qmat=None):
         """
@@ -211,62 +221,66 @@ class N3PDF(PDF):
             ret = ret.repeat(lq, -1)
         return ret
 
-    # Utilities
-    def integrability_numbers(self, q0=1.65, flavours=None):
-        """Compute the integrability numbers for the current PDF
-        using the corresponding validphys action
+    # # Utilities
+    # def integrability_numbers(self, q0=1.65, flavours=None):
+    #     """Compute the integrability numbers for the current PDF
+    #     using the corresponding validphys action
 
-        Parameters
-        ----------
-            q0: float
-                energy at which the integrability is computed
-            flavours: list
-                flavours for which the integrability is computed
+    #     Parameters
+    #     ----------
+    #         q0: float
+    #             energy at which the integrability is computed
+    #         flavours: list
+    #             flavours for which the integrability is computed
 
-        Returns
-        -------
-            np.array(float)
-                Value for the integrability for each of the flavours
+    #     Returns
+    #     -------
+    #         np.array(float)
+    #             Value for the integrability for each of the flavours
 
-        Example
-        -------
-        >>> from n3fit.vpinterface import N3PDF
-        >>> from n3fit.model_gen import pdfNN_layer_generator
-        >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-        >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-        >>> n3pdf = N3PDF(pdf_model)
-        >>> res = n3pdf.integrability_numbers()
-        """
-        if flavours is None:
-            flavours = ["V", "T3", "V3", "T8", "V8"]
-        return integrability_number(self, [q0], flavours=flavours)
+    #     Example
+    #     -------
+    #     >>> from n3fit.vpinterface import N3PDF
+    #     >>> from n3fit.model_gen import pdfNN_layer_generator
+    #     >>> fake_fl = [
+    #         {'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']
+    #         ]
+    #     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    #     >>> n3pdf = N3PDF(pdf_model)
+    #     >>> res = n3pdf.integrability_numbers()
+    #     """
+    #     if flavours is None:
+    #         flavours = ["V", "T3", "V3", "T8", "V8"]
+    #     return integrability_number(self, [q0], flavours=flavours)
 
-    def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
-        """
-        Given the layer with the fit basis computes the arc length
-        using the corresponding validphys action
+    # def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
+    #     """
+    #     Given the layer with the fit basis computes the arc length
+    #     using the corresponding validphys action
 
-        Parameters
-        ----------
-            pdf_function: function
-                pdf function has received by the writer or ``pdf_model``
-            q0: float
-                energy at which the arc length is computed
-            basis: str
-                basis in which to compute the arc length
-            flavours: list
-                output flavours
+    #     Parameters
+    #     ----------
+    #         pdf_function: function
+    #             pdf function has received by the writer or ``pdf_model``
+    #         q0: float
+    #             energy at which the arc length is computed
+    #         basis: str
+    #             basis in which to compute the arc length
+    #         flavours: list
+    #             output flavours
 
-        Example
-        -------
-        >>> from n3fit.vpinterface import N3PDF
-        >>> from n3fit.model_gen import pdfNN_layer_generator
-        >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-        >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-        >>> n3pdf = N3PDF(pdf_model)
-        >>> res = n3pdf.compute_arclength()
-        """
-        if flavours is None:
-            flavours = ["sigma", "gluon", "V", "V3", "V8"]
-        ret = arc_lengths(self, [q0], basis, flavours)
-        return ret.stats.central_value()
+    #     Example
+    #     -------
+    #     >>> from n3fit.vpinterface import N3PDF
+    #     >>> from n3fit.model_gen import pdfNN_layer_generator
+    #     >>> fake_fl = [
+    #         {'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']
+    #     ]
+    #     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    #     >>> n3pdf = N3PDF(pdf_model)
+    #     >>> res = n3pdf.compute_arclength()
+    #     """
+    #     if flavours is None:
+    #         flavours = ["sigma", "gluon", "V", "V3", "V8"]
+    #     ret = arc_lengths(self, [q0], basis, flavours)
+    #     return ret.stats.central_value()

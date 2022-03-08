@@ -283,6 +283,7 @@ def performfit(
             writer_wrapper = WriterWrapper(
                 replica_number,
                 pdf_instance,
+                map_pdfs,
                 stopping_object,
                 theoryid.get_description().get("Q0") ** 2,
                 final_time,
