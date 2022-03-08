@@ -32,7 +32,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
-from validphys import fkparser
+from validphys import pineparser
 
 DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
 
@@ -369,7 +369,7 @@ class Loader(LoaderBase):
         the theory ID and the corresponding cfactors
         """
         _, theopath = self.check_theoryID(theoryID)
-        metadata, fklist = fkparser.get_yaml_information(fkpath, theopath)
+        metadata, fklist = pineparser.get_yaml_information(fkpath, theopath)
         op = metadata["operation"]
 
         # TODO:
@@ -386,19 +386,16 @@ class Loader(LoaderBase):
             cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
         ###
 
-        # If the operation is of type "norm", tell vp that it is actually a ratio
-        # and prepare a normalized fktable spec
+        fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
+        # If the operation is a normalization tell vp to consider a ratio
+        # and duplicate the fktable with a tag for normalization
+        # The operation norm might disappear or work differently in the future
+        # see here https://github.com/NNPDF/fktables/issues/26
         if op == "NORM":
             op = "RATIO"
-            fkspecs = []
-            for i, c in enumerate(cfactors):
-                if i >= len(fklist):
-                    fkspecs.append(FKTableSpec(fklist[i-len(fklist)], c, metadata, norm=True))
-                else:
-                    fkspecs.append(FKTableSpec(fklist[i], c, metadata, norm=False))
-        else:
-            fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
-
+            # Then half of the cfactors have not been used yet
+            norm_cfac = cfactors[len(fklist):]
+            fkspecs += [FKTableSpec(i, c, metadata, norm=True) for i, c in zip(fklist, norm_cfac)]
         
         return fkspecs, op
 

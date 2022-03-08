@@ -39,7 +39,8 @@ from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
-from validphys.fkparser import pineappl_reader, load_fktable
+from validphys.fkparser import load_fktable
+from validphys.pineparser import pineappl_reader
 
 log = logging.getLogger(__name__)
 
