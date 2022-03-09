@@ -55,8 +55,9 @@ def evolve_fit(conf_folder, max_replicas):
     #theory_card construction
     theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
     del theory["FNS"]
-    #theory_card = gen_theory.gen_theory_card(theory["PTO"],theory["Q0"], update = theory )
-    theory_card = gen_theory.gen_theory_card(0,theory["Q0"] )
+    theory_card = gen_theory.gen_theory_card(theory["PTO"],theory["Q0"], update = theory )
+    #for testing
+    #theory_card = gen_theory.gen_theory_card(0,theory["Q0"] ) 
     #construct operator card
     q2_grid = utils.generate_q2grid(theory["Q0"])
     op_card = gen_op.gen_op_card(q2_grid) #Change also x-grid according to pdf one?

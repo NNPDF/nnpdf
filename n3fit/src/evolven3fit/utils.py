@@ -36,9 +36,9 @@ def generate_q2grid(Q0):
     Generate the q2grid used in the final evolved pdfs (Temporary solution)
     """
     Qfin = 1.e5
-    #grid = np.geomspace(Q0**2,Qfin**2, num = 100)
+    grid = np.geomspace(Q0**2,Qfin**2, num = 100)
     #for testing
-    grid = np.array([100.]) 
+    #grid = np.array([100.]) 
     return grid
 
     
