@@ -73,8 +73,17 @@ class FKTableData:
             return True
         return False
 
-    # TODO: When we move to something other than the current fktable format,
-    # we should apply the cuts directly before loading the file.
+    def with_cfactor(self, cfactor, norm=False):
+        """Returns a copy of the FKTableData object with cfactors applied to the fktable"""
+        if len(cfactor) != self.ndata:
+            if self.metadata.get("repetition_flag") or norm:
+                cfactor = cfactor[0]
+            else:
+                name = self.metadata.get("target_dataset")
+                raise ValueError(f"The length of cfactor for {name} does not the fktable shape")
+        new_sigma = self.sigma.multiply(pd.Series(cfactor), axis=0, level=0)
+        return dataclasses.replace(self, sigma=new_sigma)
+
     def with_cuts(self, cuts):
         """Return a copy of the FKTabe with the cuts applied.  The data index
         of the sigma operator (the outermost level), contains the data point
@@ -111,9 +120,7 @@ class FKTableData:
         """
         if hasattr(cuts, "load"):
             cuts = cuts.load()
-        if cuts is None:
-            return self
-        if self.protected:
+        if cuts is None or self.protected:
             return self
         newndata = len(cuts)
         newsigma = self.sigma.loc[cuts]

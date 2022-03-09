@@ -64,22 +64,12 @@ def load_fktable(spec):
     if not spec.cfactors:
         return tabledata
 
-    ndata = tabledata.ndata
-    cfprod = np.ones(ndata)
+    cfprod = 1.0
     for cf in spec.cfactors:
         with open(cf, "rb") as f:
             cfdata = parse_cfactor(f)
-        if len(cfdata.central_value) != ndata:
-            if tabledata.metadata.get("repetition_flag") or spec.norm:
-                cfprod *= cfdata.central_value[0]
-                continue
-            raise BadCFactorError(
-                "Length of cfactor data does not match the length of the fktable."
-            )
         cfprod *= cfdata.central_value
-    # TODO: Find a way to do this in place
-    tabledata.sigma = tabledata.sigma.multiply(pd.Series(cfprod), axis=0, level=0)
-    return tabledata
+    return tabledata.with_cfactor(cfprod, norm=spec.norm)
 
 def _get_compressed_buffer(path):
     archive = tarfile.open(path)
