@@ -453,7 +453,8 @@ class DataSetSpec(TupleComp):
 
         if isinstance(fkspecs, FKTableSpec):
             fkspecs = (fkspecs,)
-        self.fkspecs = tuple(fkspecs)
+        fkspecs = tuple(fkspecs)
+        self.fkspecs = fkspecs
         self.thspec = thspec
 
         self.cuts = cuts
