@@ -22,8 +22,8 @@ from validphys.pdfbases import parse_flarr
 
 
 def _momentum_sum_rule_integrand(x, lpdf, Q):
-    res = lpdf.xfxQ(x, Q)
-    return sum([res[f] for f in lpdf.flavors()])
+    xqvals = lpdf.xfxQ(x, Q)
+    return sum([xqvals[f] for f in lpdf.flavors()])
 
 def _make_momentum_fraction_integrand(fldict):
     """Make a suitable integrand function, which takes x to be integrated over
