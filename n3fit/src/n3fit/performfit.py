@@ -264,14 +264,15 @@ def performfit(
             replica_path_set = replica_path / f"replica_{replica_number}"
 
             # Create a pdf instance
-            pdf_instance = N3PDF(pdf_model, fit_basis=basis)
+            q0 = theoryid.get_description().get("Q0")
+            pdf_instance = N3PDF(pdf_model, fit_basis=basis, Q=q0)
 
             # Generate the writer wrapper
             writer_wrapper = WriterWrapper(
                 replica_number,
                 pdf_instance,
                 stopping_object,
-                theoryid.get_description().get("Q0") ** 2,
+                q0**2,
                 final_time,
             )
 

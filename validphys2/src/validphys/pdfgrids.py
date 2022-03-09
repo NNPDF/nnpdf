@@ -55,6 +55,11 @@ class XPlottingGrid:
     grid_values: Stats
     scale: str
 
+    def __post_init__(self):
+        """Enforce grid_values being a Stats instance"""
+        if not isinstance(self.grid_values, Stats):
+            raise ValueError("`XPlottingGrid` grid_values can only be instances of `Stats`")
+
     def select_flavour(self, flindex):
         """Return a new grid for one single flavour"""
         if isinstance(flindex, str):
@@ -66,17 +71,8 @@ class XPlottingGrid:
         gv = self.grid_values.__class__(new_grid)
         return dataclasses.replace(self, grid_values=gv, flavours=[flstr])
 
-    def mask_replicas(self, mask):
-        """Return a copy of XPlottingGrid with the mask applied to the replicas"""
-        new_grid = self.grid_values.data[mask]
-        gv = self.grid_values.__class__(new_grid)
-        return dataclasses.replace(self, grid_values=gv)
-
-    def copy_grid(self, grid_values=None):
+    def copy_grid(self, grid_values):
         """Create a copy of the grid with potentially a different set of values"""
-        if not isinstance(grid_values, Stats):
-            log.warning("XPlottingGrid being called with a numpy grid, should be using Stats instead!")
-            grid_values = self.grid_values.__class__(grid_values)
         return dataclasses.replace(self, grid_values=grid_values)
 
 

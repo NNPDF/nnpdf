@@ -6,8 +6,7 @@ import numpy as np
 from hypothesis import given, settings, example
 from hypothesis.strategies import integers
 from validphys.pdfgrids import xplotting_grid, distance_grids
-from validphys.core import MCStats
-from n3fit.vpinterface import N3PDF
+from n3fit.vpinterface import N3PDF, integrability_numbers, compute_arclength
 from n3fit.model_gen import pdfNN_layer_generator
 
 
@@ -40,20 +39,18 @@ def test_N3PDF(members, layers):
     xsize = np.random.randint(2, 20)
     xx = np.random.rand(xsize)
     n3pdf = generate_n3pdf(layers=layers, members=members)
-    assert len(n3pdf) == members + 1
-    assert n3pdf.stats_class == MCStats
-    assert n3pdf.load() is n3pdf
+    assert len(n3pdf) == members
     w = n3pdf.get_nn_weights()
     assert len(w) == members
     assert len(w[0]) == 16 + (layers + 1) * 2  # 16=8*2 preprocessing
     ret = n3pdf(xx)
     assert ret.shape == (members, xsize, 14)
-    int_numbers = n3pdf.integrability_numbers()
+    int_numbers = integrability_numbers(n3pdf)
     if members == 1:
         assert int_numbers.shape == (5,)
     else:
         assert int_numbers.shape == (members, 5)
-    assert n3pdf.compute_arclength().shape == (5,)
+    assert compute_arclength(n3pdf).shape == (5,)
     # Try to get a plotting grid
     res = xplotting_grid(n3pdf, 1.6, xx)
     assert res.grid_values.data.shape == (members, 8, xsize)

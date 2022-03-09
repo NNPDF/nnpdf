@@ -11,24 +11,23 @@ import numbers
 
 import numpy as np
 import pandas as pd
-import scipy.integrate as integrate
+from scipy.integrate import quad
 
 from reportengine.table import table
 from reportengine.checks import check_positive
 from reportengine.floatformatting import format_error_value_columns
 
 from validphys.core import PDF
-from validphys.pdfbases import ALL_FLAVOURS, parse_flarr
-from validphys.lhapdfset import LHAPDFSet
+from validphys.pdfbases import parse_flarr
 
 
-def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
+def _momentum_sum_rule_integrand(x, lpdf, Q):
+    xqvals = lpdf.xfxQ(x, Q)
+    return sum([xqvals[f] for f in lpdf.flavors()])
 
 def _make_momentum_fraction_integrand(fldict):
     """Make a suitable integrand function, which takes x to be integrated over
-    and fixed loaded PDF, replica number and Q that computes the momentum
-    fraction based on ``fldict``.
+    and a PDF member and Q that computes the momentum fraction based on ``fldict``.
 
     The keys of ``fldict`` are free form values corresponding to PDG parton ids
     (that end up being passed by :py:func:`validphys.pdfbases.parse_flarr` and
@@ -49,9 +48,9 @@ def _make_momentum_fraction_integrand(fldict):
     # Do this outside to aid integration time
     fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
 
-    def f(x, lpdf, irep, Q):
+    def f(x, lpdf, Q):
         return sum(
-            multiplier * lpdf.xfxQ(x, Q=Q, n=irep, fl=flavour)
+            multiplier * lpdf.xfxQ(x, Q)[flavour]
             for flavour, multiplier in fldict.items()
         )
 
@@ -59,8 +58,7 @@ def _make_momentum_fraction_integrand(fldict):
 
 def _make_pdf_integrand(fldict):
     """Make a suitable integrand function, which takes x to be integrated over
-    and fixed loaded PDF, replica number and Q that computes the integrand of
-    the PDFs based on ``fldict``.
+    and a PDF member and Q that computes the integrand of the PDFs based on ``fldict``.
 
     The keys of ``fldict`` are free form values corresponfing to PDG parton ids
     (that end up being passed :py:func:`validphys.pdfbases.parse_flarr` and
@@ -81,10 +79,10 @@ def _make_pdf_integrand(fldict):
     # Do this outsde to aid integration time
     fldict = {parse_flarr([k])[0]: v for k, v in fldict.items()}
 
-    def f(x, lpdf, irep, Q):
+    def f(x, lpdf, Q):
         return (
             sum(
-                multiplier * lpdf.xfxQ(x, Q=Q, n=irep, fl=flavour)
+                multiplier * lpdf.xfxQ(x, Q)[flavour]
                 for flavour, multiplier in fldict.items()
             )
             / x
@@ -123,24 +121,22 @@ KNOWN_SUM_RULES_EXPECTED = {
 }
 
 
+def _integral(rule_f, pdf_member, Q, config=None):
+    """Integrate `rule_f` for a given `pdf_member` at a given energy
+    separating the regions of integration. Uses quad.
+    """
+    if config is None:
+        config = {"limit":1000, "epsabs": 1e-4, "epsrel": 1e-4}
+    res = 0.0
+    lims = [(1e-9, 1e-5), (1e-5, 1e-3), (1e-3, 1)]
+    for lim in lims:
+        res += quad(rule_f, *lim, args=(pdf_member, Q), **config)[0]
+    return res
+
+
 def _sum_rules(rules_dict, lpdf, Q):
     """Compute a SumRulesGrid from the loaded PDF, at Q"""
-    nmembers = lpdf.n_members
-    #TODO: Write this in something fast
-    #If nothing else, at least allocate and store the result contiguously
-    res = np.zeros((len(rules_dict), nmembers))
-    integrands = rules_dict.values()
-    def integral(f, a, b, irep):
-        #We increase the limit to capture the log scale fluctuations
-        return integrate.quad(f, a, b, args=(lpdf, irep, Q),
-               limit=1000,
-               epsabs=1e-4, epsrel=1e-4)[0]
-
-    for irep in range(nmembers):
-        for r, f in enumerate(integrands):
-            res[r,irep] =  (integral(f, 1e-9, 1e-5, irep)  +
-               integral(f, 1e-5, 1e-3, irep) + integral(f, 1e-3, 1, irep))
-    return {k: v for k,v in zip(rules_dict, res)}
+    return {k: [_integral(r, m, Q) for m in lpdf.members] for k,r in rules_dict.items()}
 
 
 @check_positive('Q')
@@ -152,12 +148,12 @@ def sum_rules(pdf:PDF, Q:numbers.Real):
     lpdf = pdf.load()
     return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
 
+
 @check_positive('Q')
 def central_sum_rules(pdf:PDF, Q:numbers.Real):
     """Compute the sum rules for the central member, at the scale Q"""
     lpdf = pdf.load_t0()
     return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
-
 
 
 @check_positive('Q')
