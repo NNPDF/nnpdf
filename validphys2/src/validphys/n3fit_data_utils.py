@@ -13,7 +13,8 @@ def _mask_fk(fktables, fk_datas, mask):
     ret = []
     for fk, fk_data in zip(fktables, fk_datas):
         if fk_data.protected:
-            # TODO: this cannot be correct?
+            # The protected datasets are always 1-point datasets
+            # used as denominator, so if we got here this is safe
             ret.append(fk)
         else:
             ret.append(fk[mask])
