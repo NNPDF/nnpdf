@@ -5,52 +5,51 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
-#include <string>
 #include <iomanip>
 #include <sstream>
+#include <string>
 #include <sys/stat.h>
 
+#include <APFEL/APFELdev.h>
 #include <NNPDF/exceptions.h>
 #include <NNPDF/nnpdfdb.h>
-#include <NNPDF/utils.h>
 #include <NNPDF/pathlib.h>
-#include <APFEL/APFELdev.h>
+#include <NNPDF/utils.h>
 
-#include "exportgrid.h"
 #include "evolgrid.h"
+#include "exportgrid.h"
 
 using namespace NNPDF;
+using std::cerr;
 using std::cout;
 using std::endl;
-using std::cerr;
+using std::stoi;
 using std::string;
 using std::stringstream;
-using std::stoi;
+using std::to_string;
 
 // Check if folder exists
-bool CheckConsistency(string const& folder, string const& exportfile)
-{
+bool CheckConsistency(string const &folder, string const &exportfile) {
   bool status1 = false, status2 = false;
   struct stat s, t;
   if (stat(folder.c_str(), &s) == 0)
     if (s.st_mode & S_IFDIR)
-        status1 = true;
+      status1 = true;
   if (stat(exportfile.c_str(), &t) == 0)
     if (t.st_mode)
       status2 = true;
-  if (status1 == true && status2 == true) return true;
-  else return false;
+  if (status1 == true && status2 == true)
+    return true;
+  else
+    return false;
 }
 
 // return theoryid from runcard
-int get_theory_id_from_runcard(string const& filteryaml_path)
-{
+int get_theory_id_from_runcard(string const &filteryaml_path) {
   YAML::Node runcard;
   try {
     runcard = YAML::LoadFile(filteryaml_path);
-  }
-  catch(YAML::BadFile &e)
-  {
+  } catch (YAML::BadFile &e) {
     throw FileError("evolven3fit", "runcard not found: " + filteryaml_path);
   }
   return runcard["theory"]["theoryid"].as<int>();
@@ -64,38 +63,36 @@ int get_theory_id_from_runcard(string const& filteryaml_path)
  * - applies the evolution operators to the ExportGrid objects
  * - outputs the evolved PDFs in the LHAPDF format to the fit folder.
  */
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   // Read configuration filename from arguments
-  if (argc != 3 && argc != 5)
-    {
-      cerr << "\nusage: evolven3fit [configuration folder] [max_replicas] [--theory_id ID]\n" << endl;
-      exit(EXIT_FAILURE);
-    }
+  if (argc != 4 && argc != 6) {
+    cerr << "\nusage: evolven3fit [configuration folder] [max_replicas] "
+            "[atomic_massnb] [--theory_id ID]\n"
+         << endl;
+    exit(EXIT_FAILURE);
+  }
 
   const string fit_path = argv[1];
   const int maxreplica = stoi(argv[2]);
+  const int atomic_massnb = stoi(argv[3]);
   const string filteryaml_path = fit_path + "/filter.yml";
   int theory_id;
 
   // Get theory id
-  if (argc == 5)
-  {
-    const string flag = argv[3];
+  if (argc == 6) {
+    const string flag = argv[4];
     if (flag == "--theory_id")
-      theory_id = stoi(argv[4]);
-    else
-    {
+      theory_id = stoi(argv[5]);
+    else {
       cerr << "\nNot supported flag: " << flag << endl;
       exit(EXIT_FAILURE);
     }
-  }
-  else
+  } else
     theory_id = get_theory_id_from_runcard(filteryaml_path);
   cout << "Theory ID = " << theory_id << endl;
 
   // load theory from db
-  std::map<string,string> theory_map;
+  std::map<string, string> theory_map;
   NNPDF::IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
   auto keys = APFEL::kValues;
   keys.push_back("EScaleVar");
@@ -104,41 +101,34 @@ int main(int argc, char **argv)
   // load grids
   vector<ExportGrid> initialscale_grids;
   vector<int> replicas;
-  for (int nrep = 1; nrep <= maxreplica; nrep++)
-    {
-      const string folder = fit_path + "/nnfit/replica_" + std::to_string(nrep);
-      const string path = folder + "/" + fit_path + ".exportgrid";
-      bool status = CheckConsistency(folder, path);
-      if (status)
-        {
-          initialscale_grids.emplace_back(path);
-          replicas.push_back(nrep);
-        }
-      else
-        {
-          cout << "Skipping exportgrid (missing file): " << path << endl;
-        }
+  const string expgrid_atmnb = fit_path + "_A" + to_string(atomic_massnb);
+  for (int nrep = 1; nrep <= maxreplica; nrep++) {
+    const string folder = fit_path + "/nnfit/replica_" + std::to_string(nrep);
+    const string path = folder + "/" + expgrid_atmnb + ".exportgrid";
+    bool status = CheckConsistency(folder, path);
+    if (status) {
+      initialscale_grids.emplace_back(path);
+      replicas.push_back(nrep);
+    } else {
+      cout << "Skipping exportgrid (missing file): " << path << endl;
     }
+  }
 
   if (initialscale_grids.size() == 0)
-      throw NNPDF::RuntimeException("main", "nrep = 0, check replica folder/files.");
+    throw NNPDF::RuntimeException("main",
+                                  "nrep = 0, check replica folder/files.");
 
-  string infofile = fit_path + "/nnfit/" + fit_path + ".info";
+  string infofile = fit_path + "/nnfit/" + expgrid_atmnb + ".info";
   auto dglapg = EvolveGrid(initialscale_grids, theory_map);
   dglapg.WriteInfoFile(infofile);
 
   const auto outstream = dglapg.WriteLHAFile();
-  for (size_t i = 0; i < outstream.size(); i++)
-    {
-      stringstream replica_file;
-      replica_file << fit_path
-                   << "/nnfit/replica_"
-                   << replicas[i]
-                   << "/"
-                   << fit_path
-                   << ".dat";
-      write_to_file(replica_file.str(), outstream[i].str());
-    }
+  for (size_t i = 0; i < outstream.size(); i++) {
+    stringstream replica_file;
+    replica_file << fit_path << "/nnfit/replica_" << replicas[i] << "/"
+                 << expgrid_atmnb << ".dat";
+    write_to_file(replica_file.str(), outstream[i].str());
+  }
 
   return 0;
 }
