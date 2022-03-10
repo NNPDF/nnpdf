@@ -227,18 +227,7 @@ def dataset_inputs_covmat_from_systematics(
         covmat = regularize_covmat(
             covmat,
             norm_threshold=norm_threshold
-        )
-   # try:
-   #     theory_covmat_path = pathlib.Path.cwd()
-   #     data = pd.read_csv(theory_covmat_path / "prov_moredata" / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv", sep='\t')
-   #     datael = data.iloc[3:]
-    #    datael = datael.drop(['group'], axis=1)
-    #    datael = datael.drop(['Unnamed: 1'], axis=1)
-    #    datael = datael.drop(['Unnamed: 2'], axis=1)
-    #    theory_covmat = np.copy(datael.values)
-    #except FileNotFoundError:
-    #    theory_covmat = np.zeros(covmat.shape) 
-    #total_covmat = np.add(covmat, theory_covmat)   
+        )  
     return covmat
 
 
