@@ -1,8 +1,11 @@
 """
 n3fit_data_utils.py
 
-Library of function that read validphys object and make them into clean numpy objects
-for its usage for the fitting framework
+This module reads validphys :py:class:`validphys.core.DataSetSpec`
+and extracts the relevant information into :py:class:`validphys.n3fit_data_utils.FittableDataSet`
+
+The ``validphys_group_extractor`` will loop over every dataset of a given group
+loading their fktables (and applying any necessary cuts).
 """
 from itertools import zip_longest
 import dataclasses
@@ -26,20 +29,30 @@ class FittableDataSet:
     """
     Python version of the libNNPDF dataset
     to be merged with the product of the new CommonData dataset
+
+    Parameters
+    ----------
+        name: str
+            name of the dataset
+        fktables_data: list(:py:class:`validphys.coredata.FKTableData`)
+            list of coredata fktable objects
+
+        operation: str
+            operation to be applied to the fktables in the dataset, default "NULL"
+        frac: float
+            fraction of the data to enter the training set
+        training_mask: bool
+            training mask to apply to the fktable
     """
 
-    # TODO:
-    # this class is basically equal to the normal DataSet
-    # plus calls to generate a training_fktable, validation_fktable, etc
-    # _once_ the python commondata is completed this should inherit from
-    # the python-dataset adding the masking methods
+    # NOTE:
+    # This class extends the libNNPDF dataset class
+    # after the class is moved to python, this can inherit from dataset
+    # and the dataset should know how to generate its "fittable" version
 
     name: str
-    # Now, this is a confusing one because I want to hold
-    # the list of all FKTableData
-    # but I want to also have methods to return directly a masked fktable
-    # so I'm not sure what the names should be...
     fktables_data: list  # of validphys.coredata.FKTableData objects
+
     # Things that can have default values:
     operation: str = "NULL"
     frac: float = 1.0
@@ -50,29 +63,31 @@ class FittableDataSet:
 
     @property
     def ndata(self):
+        """Number of datapoints in the dataset"""
         return self.fktables_data[0].ndata
 
     @property
     def hadronic(self):
+        """Returns true if this is a hadronic collision dataset"""
         return self.fktables_data[0].hadronic
 
     def fktables(self):
+        """Return the list of fktable tensors for the dataset"""
         if self._raw_fktables is None:
             self._raw_fktables = [i.get_np_fktable() for i in self.fktables_data]
         return self._raw_fktables
 
     def training_fktables(self):
+        """Return the fktable tensors for the trainig data"""
         if self.training_mask is not None:
             return _mask_fk(self.fktables(), self.fktables_data, self.training_mask)
         return self.fktables()
 
     def validation_fktables(self):
+        """Return the fktable tensors for the validation data"""
         if self.training_mask is not None:
             return _mask_fk(self.fktables(), self.fktables_data, ~self.training_mask)
         return self.fktables()
-
-    def set_mask(self, mask):
-        self.training_mask = mask
 
 
 def validphys_group_extractor(datasets, tr_masks):
@@ -82,21 +97,20 @@ def validphys_group_extractor(datasets, tr_masks):
 
     Parameters
     ----------
-        datasets: list of DataSetSpecs
-        tr_masks: list of training mask to be applied to each dataset
+        datasets: list(:py:class:`validphys.core.DataSetSpec`)
+            List of dataset spec in this group
+        tr_masks: list(np.array)
+            List of training mask to be set for each dataset
 
     Returns
     -------
-        parsed_observables: a list of (for now dictionaries) containing the information
-                              required to fit the given observable
+        loaded_obs: list (:py:class:`validphys.n3fit_data_utils.FittableDataSet`)
     """
-    ret = []
-    for dataset_spec, mask in zip_longest(datasets, tr_masks):
-        # Load all fktables
-        fktables = [fk.load_with_cuts(dataset_spec.cuts) for fk in dataset_spec.fkspecs]
-        # And now put them in an object that contains the same information as dataset_spec save for the fact that the tables have been loaded
-        # TODO: we could have a `DataSetSpec.load_for_fit(mask)` method I guess
-        ret.append(
-            FittableDataSet(dataset_spec.name, fktables, dataset_spec.op, dataset_spec.frac, mask)
-        )
-    return ret
+    loaded_obs = []
+    # Use zip_longest since tr_mask can be (and it is fine) an empty list
+    for dspec, mask in zip_longest(datasets, tr_masks):
+        # Load all fktables with the appropiate cuts
+        fktables = [fk.load_with_cuts(dspec.cuts) for fk in dspec.fkspecs]
+        # And now put them in a FittableDataSet object which
+        loaded_obs.append(FittableDataSet(dspec.name, fktables, dspec.op, dspec.frac, mask))
+    return loaded_obs

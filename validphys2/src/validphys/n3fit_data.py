@@ -262,6 +262,11 @@ def fitting_data_dict(
         folds["training"].append(fold[tr_mask])
         folds["validation"].append(fold[vl_mask])
         folds["experimental"].append(~fold)
+
+    # This dictionary contains a list of fittable datasets
+    # which contains the instructions on how to generaet each observable for the fit
+    # plus the information that glue all of them together (covmat, ndata, etc)
+    # TODO: for consistency with the rest of validphys a FittableGroup should be created
     dict_out = {
         "datasets": datasets,
         "name": str(data),
@@ -484,8 +489,6 @@ def fitting_pos_dict(posdataset):
     log.info("Loading %s dataset %s", mode, posdataset)
     positivity_datasets = validphys_group_extractor([posdataset], [])
     ndata = positivity_datasets[0].ndata
-    # Move the dictionary from `positivity_reader` to here
-    # to make it consistent with the rest of the functions
     return {
         "datasets": positivity_datasets,
         "trmask": np.ones(ndata, dtype=np.bool),
