@@ -1482,6 +1482,9 @@ class CoreConfig(configparser.Config):
             # special case of custom group, take the grouping from the dataset input
             if processed_metadata_group == "custom_group":
                 group_name = str(dsinput.custom_group)
+            #special case of ALL, grouping everything together 
+            if processed_metadata_group == "ALL":
+                group_name = processed_metadata_group
             # otherwise try and take the key from the metadata.
             else:
                 cd = self.produce_commondata(dataset_input=dsinput)
@@ -1505,7 +1508,7 @@ class CoreConfig(configparser.Config):
     
     def produce_group_dataset_inputs_by_fitting_group(self, data_input, theory_covmat_flag):
         if theory_covmat_flag is True:
-            return self.produce_group_dataset_inputs_by_metadata(data_input, "custom_group")
+            return self.produce_group_dataset_inputs_by_metadata(data_input, "ALL")
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
 

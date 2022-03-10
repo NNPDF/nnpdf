@@ -369,7 +369,7 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
                 generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_user_covmat.csv")
             else:
                 generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
-        theorypath = pathlib.Path(str(output_path/"tables"/generic_path.relative_to(generic_path.anchor)))
+        theorypath = pathlib.Path(str(output_path/"tables"/generic_path))
         theory_covmat = pd.read_csv(theorypath, sep='\t')
         theory_covmat = theory_covmat.iloc[3:].drop(['group'], axis=1).drop(['Unnamed: 1'], axis=1).drop(['Unnamed: 2'], axis=1)
         return np.add(exp_covmat,theory_covmat.values.astype(np.float))

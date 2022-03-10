@@ -148,10 +148,10 @@ class N3FitConfig(Config):
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
         N3FIT_FIXED_CONFIG['use_user_uncertainties'] = None
         N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = None
-        if thconfig:=file_content.get('theorycovmatconfig') is not None:
+        if file_content.get('theorycovmatconfig') is not None:
             N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
-            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('theorycovmatconfig').get('use_user_uncertainties')
-            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('theorycovmatconfig').get('use_scalevar_uncertainties')
+            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = file_content.get('theorycovmatconfig').get('use_user_uncertainties')
+            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = file_content.get('theorycovmatconfig').get('use_scalevar_uncertainties')
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
