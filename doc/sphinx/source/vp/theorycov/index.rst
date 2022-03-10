@@ -30,7 +30,7 @@ Summary
    in :ref:`prescrips`. 
  
 -  The prescription must be one of 3(f, r) point, 5(bar) point, 7(original) point or 9 point, see  :ref:`definitions <prescrips>`. 
-   You can specify this using ``point_prescription: "x point"`` in the runcard. The translation of this flag  
+   You can specify this using ``point_prescription: "x point"`` in the runcard. The translation of this flag 
    into the relevant ``theoryids`` is handled by the ``scalevariations`` module in ``validphys``.
 
 -  As input you need theories for the relevant scale combinations which
