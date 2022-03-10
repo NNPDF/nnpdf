@@ -1,0 +1,150 @@
+#
+# Configuration file for NNPDF++
+#
+##########################################################################################
+description: "NNPDF4.0 methodology fit with theory covariance matrix (9pt prescription) like NNPDF31_nlo_as_0118_scalecov_9pt"
+
+##########################################################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+  - {dataset: NMCPD, frac: 0.5}
+  - {dataset: NMC, frac: 0.5}
+  - {dataset: SLACP, frac: 0.5}
+  - {dataset: SLACD, frac: 0.5}
+  - {dataset: BCDMSP, frac: 0.5}
+  - {dataset: BCDMSD, frac: 0.5}
+  - {dataset: CHORUSNU, frac: 0.5}
+  - {dataset: CHORUSNB, frac: 0.5}
+  - {dataset: NTVNUDMN, frac: 0.5}
+  - {dataset: NTVNBDMN, frac: 0.5}
+  - {dataset: HERACOMBNCEM, frac: 0.5}
+  - {dataset: HERACOMBNCEP460, frac: 0.5}
+  - {dataset: HERACOMBNCEP575, frac: 0.5}
+  - {dataset: HERACOMBNCEP820, frac: 0.5}
+  - {dataset: HERACOMBNCEP920, frac: 0.5}
+  - {dataset: HERACOMBCCEM, frac: 0.5}
+  - {dataset: HERACOMBCCEP, frac: 0.5}
+  - {dataset: HERAF2CHARM, frac: 0.5}
+  - {dataset: CDFZRAP, frac: 1.0}
+  - {dataset: D0ZRAP, frac: 1.0}
+  - {dataset: D0WEASY, frac: 1.0}
+  - {dataset: D0WMASY, frac: 1.0}
+  - {dataset: ATLASWZRAP36PB, frac: 1.0}
+  - {dataset: ATLASZHIGHMASS49FB, frac: 1.0}
+  - {dataset: ATLASLOMASSDY11EXT, frac: 1.0}
+  - {dataset: ATLASWZRAP11, frac: 0.5}
+  - {dataset: ATLAS1JET11, frac: 0.5}
+  - {dataset: ATLASZPT8TEVMDIST, frac: 0.5}
+  - {dataset: ATLASZPT8TEVYDIST, frac: 0.5}
+  - {dataset: ATLASTTBARTOT, frac: 1.0}
+  - {dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0}
+  - {dataset: CMSWEASY840PB, frac: 1.0}
+  - {dataset: CMSWMASY47FB, frac: 1.0}
+  - {dataset: CMSDY2D11, frac: 0.5}
+  - {dataset: CMSWMU8TEV, frac: 1.0}
+  - {dataset: CMSZDIFF12, frac: 1.0, cfac: [NRM]}
+  - {dataset: CMSJETS11, frac: 0.5}
+  - {dataset: CMSTTBARTOT, frac: 1.0}
+  - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0}
+  - {dataset: LHCBZ940PB, frac: 1.0}
+  - {dataset: LHCBZEE2FB, frac: 1.0}
+  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
+  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
+
+
+############################################################
+datacuts:  
+  t0pdfset: 190310-tg-nlo-global     # PDF set to generate t0 covmat
+  q2min: 13.96                       # Q2 minimum
+  w2min: 12.5                        # W2 minimum
+  combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
+  jetptcut_tev: 0                    # jet pt cut for tevatron
+  jetptcut_lhc: 0                    # jet pt cut for lhc
+  wptcut_lhc: 30.0                   # Minimum pT for W pT diff distributions
+  jetycut_tev: 1e30                  # jet rap. cut for tevatron
+  jetycut_lhc: 1e30                  # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut: 1e30                  # jet cfact. cut
+  use_cuts: fromintersection
+  cuts_intersection_spec:
+  - theoryid: 163
+  - theoryid: 53 
+
+############################################################
+theory:
+  theoryid: 163        # database id
+theorycovmatconfig:
+  point_prescription: "9 point"
+  theoryids:
+    from_: scale_variation_theories
+  pdf: NNPDF31_nlo_as_0118
+  use_thcovmat_in_fitting: true
+  use_thcovmat_in_sampling: true
+
+sampling_t0:
+  use_t0: false
+fitting_t0:
+  use_t0: true
+
+############################################################
+trvlseed: 376191634
+nnseed: 2080989803
+mcseed: 75955222
+save: false
+genrep: true      # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [25, 20, 8]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 17000
+  positivity:
+    initial: 184.8
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+############################################################
+fitting:
+  fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.046, 1.188], largex: [1.437, 2.716]}
+  - {fl: g, trainable: false, smallx: [0.9604, 1.23], largex: [0.08459, 6.137]}
+  - {fl: v, trainable: false, smallx: [0.5656, 0.7242], largex: [1.153, 2.838]}
+  - {fl: v3, trainable: false, smallx: [0.1521, 0.5611], largex: [1.236, 2.976]}
+  - {fl: v8, trainable: false, smallx: [0.5264, 0.7246], largex: [0.6919, 3.198]}
+  - {fl: t3, trainable: false, smallx: [-0.3687, 1.459], largex: [1.664, 3.373]}
+  - {fl: t8, trainable: false, smallx: [0.5357, 1.267], largex: [1.433, 2.866]}
+  - {fl: t15, trainable: false, smallx: [1.073, 1.164], largex: [1.503, 3.636]}
+#   basis:
+#   - {fl: sng, trainable: false, smallx: [1.121, 1.154], largex: [1.498, 3.138]}
+#   - {fl: g, trainable: false, smallx: [0.9224, 1.149], largex: [3.266, 6.214]}
+#   - {fl: v, trainable: false, smallx: [0.5279, 0.8017], largex: [1.6, 3.588]}
+#   - {fl: v3, trainable: false, smallx: [0.2011, 0.4374], largex: [1.761, 3.427]}
+#   - {fl: v8, trainable: false, smallx: [0.5775, 0.8357], largex: [1.589, 3.378]}
+#   - {fl: t3, trainable: false, smallx: [-0.484, 1.0], largex: [1.763, 3.397]}
+#   - {fl: t8, trainable: false, smallx: [0.6714, 0.9197], largex: [1.572, 3.496]}
+#   - {fl: t15, trainable: false, smallx: [1.073, 1.164], largex: [1.503, 3.636]}
+
+############################################################
+positivity:
+  posdatasets:
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSF2DW, maxlambda: 1e6}
+  - {dataset: POSF2S, maxlambda: 1e6}
+  - {dataset: POSFLL, maxlambda: 1e6}
+  - {dataset: POSDYU, maxlambda: 1e10}
+  - {dataset: POSDYD, maxlambda: 1e10}
+  - {dataset: POSDYS, maxlambda: 1e10}
+
+############################################################
+debug: False
+maxcores: 4
