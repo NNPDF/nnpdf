@@ -1,5 +1,8 @@
 """
-    Fktable Loader using pineappl
+    Loader for the pineappl-based FKTables
+
+    The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
+    directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
 """
 import numpy as np
 import pandas as pd
@@ -107,13 +110,10 @@ def pineappl_reader(fkspec):
     pines = [FkTable.read(i) for i in fkspec.fkpath]
 
     # Extract some theory metadata from the first grid
-    pine_representative = pines[0]
-    hadronic = (
-        pine_representative.key_values()["initial_state_1"]
-        == pine_representative.key_values()["initial_state_2"]
-    )
-    Q0 = np.sqrt(pine_representative.muf2())
-    xgrid = pine_representative.x_grid()
+    pine_rep = pines[0]
+    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    Q0 = np.sqrt(pine_rep.muf2())
+    xgrid = pine_rep.x_grid()
     # fktables in pineapplgrid are for o = fk * f while previous fktables were o = fk * xf
     # prepare the grid all tables will be divided by
     if hadronic:
@@ -127,8 +127,7 @@ def pineappl_reader(fkspec):
     # (so before the fktable -concatenation of all grids- is constructed)
     operands = fkspec.metadata["operands"]
     apfelcomb_norm = None
-    if fkspec.metadata.get("apfelcomb_norm"):
-        norms = fkspec.metadata.get("apfelcomb_norm")  # would like to use the Walrus
+    if norms := fkspec.metadata.get("apfelcomb_norm"):
         # There's no easy way for an fktable to know its role in given operation:
         for factors, grids in zip(norms, operands):
             # Now check, in case of an operation, what is our index in this operation

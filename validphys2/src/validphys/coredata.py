@@ -159,11 +159,7 @@ class FKTableData:
         ndata = self.ndata
         nx = len(self.xgrid)
 
-        # TODO: make the dataframe into a dense numpy array
-        # there might be a better way of doing this but not sure how
-        # some pitfalls: the dataframe does not contain values for all x
-        # or for all combinations of x1/x2 in hadronic
-        # also x1-x2 are not necessary equal or ordered
+        # The code belows makes the dataframe into a dense numpy array
 
         # first get the data out of the way
         ns = self.sigma.unstack(level=["data"], fill_value=0)
@@ -178,6 +174,7 @@ class FKTableData:
             # for DIS one could equivalently remove the missing points from xgrid
             full_sigma = ns.sort_values("x").reindex(range(nx), fill_value=0.0)
             fktable = full_sigma.values.reshape(nx, -1, ndata).T
+
         self._fktable = fktable
         return fktable
 
