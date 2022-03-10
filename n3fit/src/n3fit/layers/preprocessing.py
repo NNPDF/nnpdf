@@ -106,9 +106,9 @@ class Preprocessing(MetaLayer):
     def build(self, input_shape):
         # First run over f^A if more A values are being fitted
         # then run through the whole basis as usual.
-        for _ in range(self.number_amn):
+        for idx in range(self.number_amn):
             for flav_dict in self.flav_info:
-                flav_name = flav_dict["fl"]
+                flav_name = flav_dict["fl"] + "_idx_" + str(idx)
                 alpha_name = f"alpha_{flav_name}"
                 self.generate_weight(alpha_name, "smallx", flav_dict)
                 beta_name = f"beta_{flav_name}"

@@ -277,7 +277,7 @@ def performfit(
             replica_path_set = replica_path / f"replica_{replica_number}"
 
             # Create a pdf instance
-            pdf_instance = N3PDF(pdf_model, fit_basis=basis)
+            pdf_instance = N3PDF(pdf_model, map_pdfs, fit_basis=basis)
 
             # Generate the writer wrapper
             writer_wrapper = WriterWrapper(
