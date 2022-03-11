@@ -1,0 +1,11 @@
+dataset_label: "DYE 866 $\\sigma^d_{\\rm DY}/\\sigma^p_{\\rm DY}$"
+x: $x_2$
+
+y_label: '$\sigma_{pd}/\sigma_{pp}$' 
+
+extra_labels:
+   $x_2$:  [0.026,0.038,0.053,0.067,0.082,0.097,0.112,0.127,0.141,0.162,0.186,0.212,0.237,0.269,0.315]
+
+experiment: "NUCLEAR"
+
+nnpdf31_process: DY

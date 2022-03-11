@@ -1,0 +1,16 @@
+dataset_label: "NMC $d/p$"
+x: k2
+y_label: '$F_2^d/F_2^p(x,Q^2)$' 
+#result_transform: qbinNMC
+kinematics_override: dis_sqrt_scale
+data_reference: Arneodo:1996qe
+
+
+#x_scale: log
+#y_scale: log
+figure_by:
+  - k1
+
+experiment: "NUCLEAR"
+
+nnpdf31_process: DIS NC
