@@ -72,19 +72,18 @@ def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
     return yaml_content, ret
 
 
-def _pinelumi_to_vplumi(pine_luminosity, hadronic):
+def _pinelumi_to_vplumi(pine_luminosity, hadronic, flav_size=14):
     """Convert the pineappl luminosity into vp-luminosity
     i.e., the non-zero indices of the 14x14 luminosity matrix for hadronic
     and the non-zero indices of the 14 flavours for DIS
     """
     eko_numbering_scheme = (22, 100, 21, 200, 203, 208, 215, 224, 235, 103, 108, 115, 124, 135)
+    co = []
     if hadronic:
-        flavour_map = np.zeros((14, 14), dtype=bool)
         for i, j in pine_luminosity:
             idx = eko_numbering_scheme.index(i)
             jdx = eko_numbering_scheme.index(j)
-            flavour_map[idx, jdx] = True
-            co = np.where(flavour_map.ravel())[0]
+            co.append(flav_size * idx + jdx)
     else:
         # The proton might come from both sides
         try:
@@ -94,37 +93,21 @@ def _pinelumi_to_vplumi(pine_luminosity, hadronic):
     return co
 
 
-def pineappl_reader(fkspec):
+def _apfelcomb_compatibility_flags(fkspec):
     """
-    Receives a fkspec, which contains the appropiate references to
-    the pineappl grid to load and concatenate
+    Prepare the apfelcomb-pineappl compatibility fixes
 
-    For more information: https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
+    Returns
+    -------
+        apfelcomb_norm: np.array
+            Per-point normalization factor to be applied to the grid
+            to be compatible with the data
+        apfelcomb_repetition_flag: bool
+            Whether the fktable is a single point which gets repeated up to a certain size
+            (for instance to normalize a distribution)
+        shift: list(int)
+            Shift in the data index for each grid that forms the fktable
     """
-    try:
-        from pineappl.fk_table import FkTable
-    except ImportError as e:
-        raise ImportError("Please install pineappl: ~$ pip install pineappl") from e
-
-    # Read each of the pineappl fktables
-    pines = [FkTable.read(i) for i in fkspec.fkpath]
-
-    # Extract some theory metadata from the first grid
-    pine_rep = pines[0]
-    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
-    Q0 = np.sqrt(pine_rep.muf2())
-    xgrid = pine_rep.x_grid()
-    # fktables in pineapplgrid are for o = fk * f while previous fktables were o = fk * xf
-    # prepare the grid all tables will be divided by
-    if hadronic:
-        xdivision = (xgrid[:, None] * xgrid[None, :]).flatten()
-    else:
-        xdivision = xgrid
-
-    ####
-    # Prepare the apfelcomb-pineappl compatibility fixes
-    # Note that these are applied at the grid level
-    # (so before the fktable -concatenation of all grids- is constructed)
     operands = fkspec.metadata["operands"]
     apfelcomb_norm = None
     if norms := fkspec.metadata.get("apfelcomb_norm"):
@@ -154,7 +137,37 @@ def pineappl_reader(fkspec):
         if len(operands) > 1:
             raise ValueError("Wrong shifts for {fkspec.metadata['target_dataset']}")
         shifts = [0 if shift is None else shift for shift in fkspec.metadata["shifts"][0]]
-    ###
+    return apfelcomb_norm, apfelcomb_repetition_flag, shifts
+
+
+def pineappl_reader(fkspec):
+    """
+    Receives a fkspec, which contains the appropiate references to
+    the pineappl grid to load and concatenate
+
+    For more information: https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
+    """
+    try:
+        from pineappl.fk_table import FkTable
+    except ImportError as e:
+        raise ImportError("Please install pineappl: ~$ pip install pineappl") from e
+
+    # Read each of the pineappl fktables
+    pines = [FkTable.read(i) for i in fkspec.fkpath]
+
+    # Extract some theory metadata from the first grid
+    pine_rep = pines[0]
+    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    Q0 = np.sqrt(pine_rep.muf2())
+    xgrid = pine_rep.x_grid()
+    # fktables in pineapplgrid are for o = fk * f while previous fktables were o = fk * xf
+    # prepare the grid all tables will be divided by
+    if hadronic:
+        xdivision = (xgrid[:, None] * xgrid[None, :]).flatten()
+    else:
+        xdivision = xgrid
+
+    apfelcomb_norm, apfelcomb_repetition_flag, shifts = _apfelcomb_compatibility_flags(fkspec)
 
     # Read each separated grid and luminosity
     fktables = []
