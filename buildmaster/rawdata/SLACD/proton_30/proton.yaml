@@ -6,7 +6,7 @@ theoryid: 200
 
 use_cuts: nocuts
 
-pdf: 210219-01-rs-nnpdf40-baseline
+pdf: NNPDF40_nnlo_as_01180
 
 dataset_inputs:
          - dataset: SLACD

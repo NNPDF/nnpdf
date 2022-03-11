@@ -6,7 +6,7 @@ theoryid: 200
 
 use_cuts: nocuts
 
-pdf: nNNPDF30_nlo_as_0118_p_A208_Z82 
+pdf: nNNPDF30_nlo_as_0118_p_Pb208
 
 dataset_inputs:
          - dataset: CHORUSNBPb

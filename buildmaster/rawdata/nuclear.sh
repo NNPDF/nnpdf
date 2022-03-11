@@ -9,10 +9,9 @@ exp[6]="BCDMSD"
 exp[7]="SLACD"
 exp[8]="NMCPD"
 exp[9]="DYE886R"
-exp[10]="EMCF2C"
-exp[11]="DYE906R"
+exp[10]="DYE906R"
 
-for i in `seq 1 11`
+for i in `seq 1 10`
 do
     echo "${exp[i]}"
     cd "${exp[i]}"

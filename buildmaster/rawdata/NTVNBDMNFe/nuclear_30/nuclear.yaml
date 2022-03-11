@@ -6,7 +6,7 @@ theoryid: 200
 
 use_cuts: nocuts
 
-pdf: nNNPDF30_nlo_as_0118_p_A56_Z26
+pdf: nNNPDF30_nlo_as_0118_p_Fe56
 
 dataset_inputs:
          - {dataset: NTVNBDMNFe, cfac: [MAS]}

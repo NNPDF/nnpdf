@@ -6,7 +6,7 @@ theoryid: 200
 
 use_cuts: nocuts
 
-pdf: nNNPDF30_nlo_as_0118_p_A64_Z32
+pdf: nNNPDF30_nlo_as_0118_p_Cu64
 
 dataset_inputs:
          - { dataset: DYE605, cfac: [QCD] }
