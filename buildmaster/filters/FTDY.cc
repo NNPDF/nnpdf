@@ -573,33 +573,6 @@ void DYE605_sh_iteFilter::ReadData()
   
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void DYE605_dw_30Filter::ReadData()
 {
   // Opening files
@@ -829,14 +802,6 @@ void DYE605_sh_30Filter::ReadData()
   f3.close();
   
 }
-
-
-
-
-
-
-
-
 
 /**
  *     Drell-Yan experiment E886 ---- Also known as NuSea
@@ -1509,7 +1474,7 @@ void DYE866R_dw_30Filter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
@@ -1611,12 +1576,12 @@ void DYE866R_sh_30Filter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
     
     //Compute shifts
-    //cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
     
   }
   
@@ -2232,7 +2197,7 @@ void DYE906R_dw_30Filter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
   }
@@ -2392,7 +2357,7 @@ void DYE906R_sh_30Filter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
@@ -2444,26 +2409,6 @@ void DYE906R_sh_30Filter::ReadData()
   f2.close();
   f3.close();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //Auxiliary files for each sub-bin
 void DYE906R_BINFilter::ReadData()

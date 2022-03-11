@@ -1214,25 +1214,6 @@ void BCDMSD_sh_iteFilter::ReadData()
   f5.close();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void BCDMSD_dw_30Filter::ReadData()
 {
   // Opening files
@@ -1421,7 +1402,7 @@ void BCDMSD_dw_30Filter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
   }
@@ -1621,7 +1602,7 @@ void BCDMSD_sh_30Filter::ReadData()
 	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
 	fSys[i][l].type = ADD;
 	ostringstream sysname;
-	sysname << "DEUTERON" << l-nrealsys;
+	sysname << "NUCLEAR" << l-nrealsys;
 	fSys[i][l].name = sysname.str();
       }
 
