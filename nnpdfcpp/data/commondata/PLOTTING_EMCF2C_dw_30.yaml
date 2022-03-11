@@ -1,0 +1,15 @@
+x: k1
+dataset_label: "EMC $F^2_c^{\\rm NC}$"
+
+y_label: '$10^{qbin}F^c_{2}(x,Q^2)$' 
+y_scale: log
+x_scale: log
+result_transform: qbinexp
+
+line_by:
+    - k2
+
+
+experiment: "NUCLEAR"
+
+nnpdf31_process: DIS NC
