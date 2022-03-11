@@ -1,0 +1,21 @@
+dataset_label: "CHORUS $\\sigma_{CC}^{\\nu}$"
+x: k2
+y_label: '$10^{i}\sigma_{CC}^{\nu}(x,Q^2)$' 
+result_transform: qbindis
+kinematics_override: dis_sqrt_scale
+data_reference: Onengut:2005kv
+
+#x_scale: log
+y_scale: symlog
+line_by:
+  - k1
+
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k1
+
+experiment: "NUCLEAR"
+
+nnpdf31_process: DIS CC
