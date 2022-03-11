@@ -1607,7 +1607,7 @@ void BCDMSD_sh_30Filter::ReadData()
       }
 
     //Compute shifts
-    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    //cout << nuclear/proton_cv << "   " << 0.0 << endl;
   }
   
   f1.close();

@@ -793,7 +793,7 @@ void DYE605_sh_30Filter::ReadData()
       }
 
     //Compute shifts
-    cout << nuclear/proton_cv << "   " << 0.0 << endl;   
+    //cout << nuclear/proton_cv << "   " << 0.0 << endl;   
 
   }
   
@@ -1581,7 +1581,7 @@ void DYE866R_sh_30Filter::ReadData()
       }
     
     //Compute shifts
-    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    //cout << nuclear/proton_cv << "   " << 0.0 << endl;
     
   }
   
@@ -2362,7 +2362,7 @@ void DYE906R_sh_30Filter::ReadData()
       }
 
     //Compute shifts
-    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    //cout << nuclear/proton_cv << "   " << 0.0 << endl;
     
   }
 
