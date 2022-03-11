@@ -547,3 +547,226 @@ void EMCF2C_sh_iteFilter::ReadData()
   f2.close();
   f3.close();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+void EMCF2C_dw_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/EMCF2C/EMCF2C.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/EMCF2C/nuclear_30/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/EMCF2C/proton_30/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+  
+  // Filtering data
+  double x[fNData], y[fNData], q2[fNData];
+  double xmin, xmax, q2min, q2max;
+  string line;
+
+  getline(f2,line);
+  getline(f3,line);
+
+  string tmp;
+  getline(f1,tmp);
+  getline(f1,tmp);
+  for (int i = 0; i < fNData; i++)
+  {
+    f1 >> xmin >> xmax >> q2min >> q2max >> fData[i] >> fStat[i];
+    x[i]   = (xmin + xmax)/2.;
+    q2[i]  = (q2min + q2max)/2.;
+    y[i]   = 0.0;
+
+    fKin1[i] = x[i];
+    fKin2[i] = q2[i];
+    fKin3[i] = y[i];
+
+    //rescaling for BR - check
+    fData[i] = fData[i]*0.82;
+    double sist = fData[i]*0.15;
+    fSys[i][0].add = sist;
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "CORREMC";
+    fSys[i][0].mult = 15;
+
+    int nrep=200;
+    int nrealsys=1;
+    
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+  }
+
+  f1.close();
+  f2.close();
+  f3.close();
+}
+
+void EMCF2C_sh_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/EMCF2C/EMCF2C.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/EMCF2C/nuclear_30/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/EMCF2C/proton_30/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+  
+  // Filtering data
+  double x[fNData], y[fNData], q2[fNData];
+  double xmin, xmax, q2min, q2max;
+  string line;
+
+  getline(f2,line);
+  getline(f3,line);
+
+  string tmp;
+  getline(f1,tmp);
+  getline(f1,tmp);
+  for (int i = 0; i < fNData; i++)
+  {
+    f1 >> xmin >> xmax >> q2min >> q2max >> fData[i] >> fStat[i];
+    x[i]   = (xmin + xmax)/2.;
+    q2[i]  = (q2min + q2max)/2.;
+    y[i]   = 0.0;
+
+    fKin1[i] = x[i];
+    fKin2[i] = q2[i];
+    fKin3[i] = y[i];
+
+    //rescaling for BR - check
+    fData[i] = fData[i]*0.82;
+    double sist = fData[i]*0.15;
+    fSys[i][0].add = sist;
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "CORREMC";
+    fSys[i][0].mult = 15;
+
+    int nrep=200;
+    int nrealsys=1;
+    
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    
+  }
+
+  f1.close();
+  f2.close();
+  f3.close();
+}

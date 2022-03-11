@@ -267,6 +267,8 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new EMCF2C_shFilter());
   target.emplace_back(new EMCF2C_dw_iteFilter());
   target.emplace_back(new EMCF2C_sh_iteFilter());
+  target.emplace_back(new EMCF2C_dw_30Filter());
+  target.emplace_back(new EMCF2C_sh_30Filter());
   target.emplace_back(new EMCF2c1987Filter());
 
   // ************************ EMC *****************************
