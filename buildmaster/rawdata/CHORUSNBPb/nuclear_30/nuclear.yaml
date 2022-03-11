@@ -1,0 +1,15 @@
+meta:
+   author: Rosalyn Pearson
+   title: Theoretical predictions
+
+theoryid: 200
+
+use_cuts: nocuts
+
+pdf: nNNPDF30_nlo_as_0118_p_A208_Z82 
+
+dataset_inputs:
+         - dataset: CHORUSNBPb
+
+actions_:
+   - group_result_table

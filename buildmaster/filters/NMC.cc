@@ -498,6 +498,210 @@ void NMCpd_sh_iteFilter::ReadData()
   f3.close();
 }
 
+void NMCpd_dw_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/NMCPD/nmc_f2df2p.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/NMCPD/nuclear_30/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/NMCPD/proton_30/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  int nrep=200;
+  int nrealsys=5;
+  
+  string line;
+
+  getline(f2,line);
+  getline(f3,line);
+  
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    lstream >> fKin1[i];
+    lstream >> fKin2[i];
+    lstream >> fData[i];
+    lstream >> fStat[i];
+    fKin3[i] = 0;
+
+    double tmp;
+    lstream >> tmp;
+
+    for (int l = 0; l < fNSys; l++)
+    {
+      lstream >> fSys[i][l].mult;
+      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+      fSys[i][l].type = ADD;
+      fSys[i][l].name = "CORR";
+    }
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+    
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "DEUTERON" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+
+  }
+
+  f1.close();
+  f2.close();
+  f3.close();
+}
+
+void NMCpd_sh_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3;
+
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/NMCPD/nmc_f2df2p.data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/NMCPD/nuclear_30/output/tables/group_result_table.csv";
+  f2.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/NMCPD/proton_30/output/tables/group_result_table.csv";
+  f3.open(protonfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  int nrep=200;
+  int nrealsys=5;
+  
+  string line;
+
+  getline(f2,line);
+  getline(f3,line);
+  
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    lstream >> fKin1[i];
+    lstream >> fKin2[i];
+    lstream >> fData[i];
+    lstream >> fStat[i];
+    fKin3[i] = 0;
+
+    double tmp;
+    lstream >> tmp;
+
+    for (int l = 0; l < fNSys; l++)
+    {
+      lstream >> fSys[i][l].mult;
+      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+      fSys[i][l].type = ADD;
+      fSys[i][l].name = "CORR";
+    }
+
+    //Get proton central value
+    getline(f3,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f2,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+    
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "DEUTERON" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+
+  }
+
+  f1.close();
+  f2.close();
+  f3.close();
+}
+
 /**
  *     NMC: hep-ph/9610231, M. Arneodo et al., Nucl. Phys. B 483 (1997) 3
  *

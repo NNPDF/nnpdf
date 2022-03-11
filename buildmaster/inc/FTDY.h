@@ -55,6 +55,24 @@ private:
   void ReadData();
 };
 
+class DYE866R_dw_30Filter: public CommonData
+{
+public: DYE866R_dw_30Filter():
+  CommonData("DYE886R_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE866R_sh_30Filter: public CommonData
+{
+public: DYE866R_sh_30Filter():
+  CommonData("DYE886R_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class DYE866PFilter: public CommonData
 { public: DYE866PFilter():
   CommonData("DYE886P") { ReadData(); }
@@ -103,6 +121,22 @@ private:
   void ReadData();
 };
 
+class DYE605_dw_30Filter: public CommonData
+{ public: DYE605_dw_30Filter():
+  CommonData("DYE605_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE605_sh_30Filter: public CommonData
+{ public: DYE605_sh_30Filter():
+  CommonData("DYE605_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class DYE906RFilter: public CommonData
 {
 public: DYE906RFilter():
@@ -125,6 +159,24 @@ class DYE906R_sh_iteFilter: public CommonData
 {
 public: DYE906R_sh_iteFilter():
   CommonData("DYE906R_sh_ite") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE906R_dw_30Filter: public CommonData
+{
+public: DYE906R_dw_30Filter():
+  CommonData("DYE906R_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DYE906R_sh_30Filter: public CommonData
+{
+public: DYE906R_sh_30Filter():
+  CommonData("DYE906R_sh_30") { ReadData(); }
 
 private:
   void ReadData();

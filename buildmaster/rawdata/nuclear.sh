@@ -16,13 +16,13 @@ for i in `seq 1 11`
 do
     echo "${exp[i]}"
     cd "${exp[i]}"
-    cd nuclear
+    cd nuclear_30
     validphys nuclear.yaml
     cd ../
-    cd proton_ite
+    cd proton_30
     validphys proton.yaml
     cd ../../
 done
 
-sed -i 's/nan/0.00000/g' NMCPD/proton/output/tables/group_result_table.csv
-sed -i 's/nan/0.00000/g' NMCPD/proton_ite/output/tables/group_result_table.csv
+sed -i 's/nan/0.00000/g' NMCPD/nuclear_30/output/tables/group_result_table.csv
+sed -i 's/nan/0.00000/g' NMCPD/proton_30/output/tables/group_result_table.csv

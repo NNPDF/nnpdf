@@ -58,3 +58,19 @@ class BCDMSD_sh_iteFilter: public CommonData
 private:
   void ReadData();
 };
+
+class BCDMSD_dw_30Filter: public CommonData
+{ public: BCDMSD_dw_30Filter():
+  CommonData("BCDMSD_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class BCDMSD_sh_30Filter: public CommonData
+{ public: BCDMSD_sh_30Filter():
+  CommonData("BCDMSD_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};

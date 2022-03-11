@@ -198,6 +198,8 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new BCDMSD_shFilter());
   target.emplace_back(new BCDMSD_dw_iteFilter());
   target.emplace_back(new BCDMSD_sh_iteFilter());
+  target.emplace_back(new BCDMSD_dw_30Filter());
+  target.emplace_back(new BCDMSD_sh_30Filter());
 
   // ************************* CDF ******************************
 
@@ -220,6 +222,10 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new CHORUSNBPb_dw_iteFilter());
   target.emplace_back(new CHORUSNUPb_sh_iteFilter());
   target.emplace_back(new CHORUSNBPb_sh_iteFilter());
+  target.emplace_back(new CHORUSNUPb_dw_30Filter());
+  target.emplace_back(new CHORUSNBPb_dw_30Filter());
+  target.emplace_back(new CHORUSNUPb_sh_30Filter());
+  target.emplace_back(new CHORUSNBPb_sh_30Filter());
 
   // ************************* CMS ******************************
 
@@ -276,15 +282,21 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new DYE605_shFilter());
   target.emplace_back(new DYE605_dw_iteFilter());
   target.emplace_back(new DYE605_sh_iteFilter());
+  target.emplace_back(new DYE605_dw_30Filter());
+  target.emplace_back(new DYE605_sh_30Filter());
   target.emplace_back(new DYE866PFilter());
   target.emplace_back(new DYE866RFilter());
   target.emplace_back(new DYE866R_dwFilter());
   target.emplace_back(new DYE866R_shFilter());
   target.emplace_back(new DYE866R_dw_iteFilter());
   target.emplace_back(new DYE866R_sh_iteFilter());
+  target.emplace_back(new DYE866R_dw_30Filter());
+  target.emplace_back(new DYE866R_sh_30Filter());
   target.emplace_back(new DYE906RFilter());
   target.emplace_back(new DYE906R_dw_iteFilter());
   target.emplace_back(new DYE906R_sh_iteFilter());
+  target.emplace_back(new DYE906R_dw_30Filter());
+  target.emplace_back(new DYE906R_sh_30Filter());
   target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN01"));
   target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN02"));
   target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN03"));
@@ -343,6 +355,8 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new NMCpd_shFilter());
   target.emplace_back(new NMCpd_dw_iteFilter());
   target.emplace_back(new NMCpd_sh_iteFilter());
+  target.emplace_back(new NMCpd_dw_30Filter());
+  target.emplace_back(new NMCpd_sh_30Filter());
 
   // ************************* NuTeV ******************************
 
@@ -358,6 +372,10 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new NTVNUDMNFe_dw_iteFilter());
   target.emplace_back(new NTVNBDMNFe_sh_iteFilter());
   target.emplace_back(new NTVNUDMNFe_sh_iteFilter());
+  target.emplace_back(new NTVNBDMNFe_dw_30Filter());
+  target.emplace_back(new NTVNUDMNFe_dw_30Filter());
+  target.emplace_back(new NTVNBDMNFe_sh_30Filter());
+  target.emplace_back(new NTVNUDMNFe_sh_30Filter());
 
   // ************************* SLAC ******************************
 
@@ -367,6 +385,8 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new SLACD_shFilter());
   target.emplace_back(new SLACD_dw_iteFilter());
   target.emplace_back(new SLACD_sh_iteFilter());
+  target.emplace_back(new SLACD_dw_30Filter());
+  target.emplace_back(new SLACD_sh_30Filter());
 
   // ************************* TOP *******************************
 

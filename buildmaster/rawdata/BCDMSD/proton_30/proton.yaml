@@ -1,0 +1,16 @@
+meta:
+   author: Rosalyn Pearson
+   title: Theoretical predictions
+
+theoryid: 200
+
+use_cuts: nocuts
+
+pdf: NNPDF40_nnlo_as_01180
+
+dataset_inputs:
+         - dataset: BCDMSD
+
+actions_:
+   - group_result_table
+   

@@ -1,0 +1,14 @@
+meta:
+  author: Rosalyn Pearson
+  title: Theoretical predictions
+
+theoryid: 200
+use_cuts: nocuts
+pdf: 210525-ern-002
+dataset_inputs:
+- dataset: SLACD
+
+actions_:
+- group_result_table
+data_grouping_recorded_spec_:
+  standard_report: experiment

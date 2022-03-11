@@ -101,3 +101,39 @@ public: CHORUSNBPb_sh_iteFilter():
 private:
   void ReadData();
 };
+
+class CHORUSNUPb_dw_30Filter: public CommonData
+{
+public: CHORUSNUPb_dw_30Filter():
+  CommonData("CHORUSNUPb_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_dw_30Filter: public CommonData
+{
+public: CHORUSNBPb_dw_30Filter():
+  CommonData("CHORUSNBPb_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNUPb_sh_30Filter: public CommonData
+{
+public: CHORUSNUPb_sh_30Filter():
+  CommonData("CHORUSNUPb_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CHORUSNBPb_sh_30Filter: public CommonData
+{
+public: CHORUSNBPb_sh_30Filter():
+  CommonData("CHORUSNBPb_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};

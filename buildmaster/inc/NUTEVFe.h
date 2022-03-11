@@ -99,3 +99,39 @@ public: NTVNBDMNFe_sh_iteFilter():
 private:
   void ReadData();
 };
+
+class NTVNUDMNFe_dw_30Filter: public CommonData
+{
+public: NTVNUDMNFe_dw_30Filter():
+  CommonData("NTVNUDMNFe_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class NTVNBDMNFe_dw_30Filter: public CommonData
+{
+public: NTVNBDMNFe_dw_30Filter():
+  CommonData("NTVNBDMNFe_dw_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class NTVNUDMNFe_sh_30Filter: public CommonData
+{
+public: NTVNUDMNFe_sh_30Filter():
+  CommonData("NTVNUDMNFe_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class NTVNBDMNFe_sh_30Filter: public CommonData
+{
+public: NTVNBDMNFe_sh_30Filter():
+  CommonData("NTVNBDMNFe_sh_30") { ReadData(); }
+
+private:
+  void ReadData();
+};

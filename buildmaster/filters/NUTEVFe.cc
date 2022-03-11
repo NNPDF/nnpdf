@@ -1689,3 +1689,660 @@ void NTVNBDMNFe_sh_iteFilter::ReadData()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void NTVNUDMNFe_dw_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3, f4;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/NTVNUDMNFe/NuTeVtable.dat";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream datafile2("");
+  datafile2 << dataPath() << "rawdata/NTVNUDMNFe/nf20-1.25-0.60.nu.cor";
+  f2.open(datafile2.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << datafile2.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/NTVNUDMNFe/nuclear_30/output/tables/group_result_table.csv";
+  f3.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/NTVNUDMNFe/proton_30/output/tables/group_result_table.csv";
+  f4.open(protonfile.str().c_str(), ios::in);
+  
+  if (f4.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  double mn = 0.938;
+  double BrC = 0.087;
+  double BrCunc = 0.005;
+  int nrep=200;
+  int nrealsys=3;
+  
+  double acc_cor[fNData];
+  string line;
+
+  getline(f3,line);
+  getline(f4,line);
+
+  //Get NLO acceptance tables
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f2,line);
+    istringstream lstream(line);
+    lstream >> acc_cor[i];
+  } 
+  
+  double tmp, DOF, enu;
+ 
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> tmp;  // Neutrino polarity (not used)
+    
+    lstream >> enu;  //Neutrion energy
+    lstream >> fKin3[i];    // Inelasticity y
+    lstream >> fKin1[i];   // Bjorken x
+    
+    
+    fKin2[i] = 2.0*mn*enu*fKin1[i]*fKin3[i];    // Q2
+    
+    // Dimuon neutrino double differencial cross section
+    // Corrected for NLO acceptance and branching ratio
+    // to yield the NLO charm production cross section
+    lstream >> fData[i];
+    fData[i] /= acc_cor[i]*BrC;
+    
+    // Statistical uncertainties  
+    lstream >> fStat[i];
+    fStat[i] /= acc_cor[i]*BrC;        // Be careful with the acceptance corrections here 
+    
+    // Systematic uncertainties (treated as uncorrelated)
+    lstream >> fSys[i][0].add;
+    fSys[i][0].add /= acc_cor[i]*BrC;
+    fSys[i][0].mult = fSys[i][0].add*100/fData[i];
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "UNCORR";
+       
+    // Normalization uncertainty
+    fSys[i][1].mult = 2.1;
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "NUTEVNORM1";
+
+    // Br uncertainty
+    fSys[i][2].mult = BrCunc/BrC * 100;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
+    fSys[i][2].type = MULT;
+    fSys[i][2].name = "NUTEVBRC1";
+    
+    for(int i = 0; i < 8; i++)
+      lstream >> tmp;           //Individual systematics (not used)
+    
+    lstream >> tmp;    //LO acceptance correction (not used)
+    lstream >> DOF;    //DOF (not used)
+
+    //Get proton central value
+    getline(f4,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f3,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+    
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+    
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+  f4.close();
+}
+
+/**
+ * See filterNTVNUDMN()
+ */
+void NTVNBDMNFe_dw_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3, f4;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/NTVNBDMNFe/NuTeVtable.dat";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream datafile2("");
+  datafile2 << dataPath() << "rawdata/NTVNBDMNFe/nf20-1.25-0.60.bar.cor";
+  f2.open(datafile2.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << datafile2.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/NTVNBDMNFe/nuclear_30/output/tables/group_result_table.csv";
+  f3.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/NTVNBDMNFe/proton_30/output/tables/group_result_table.csv";
+  f4.open(protonfile.str().c_str(), ios::in);
+  
+  if (f4.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  double mn = 0.938;
+  double BrC = 0.087;
+  double BrCunc = 0.005;
+  int nrep=200;
+  int nrealsys=3;
+  
+  double acc_cor[fNData];
+  string line;
+
+  getline(f3,line);
+  getline(f4,line);
+
+  //Get NLO acceptance tables
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f2,line);
+    istringstream lstream(line);
+    lstream >> acc_cor[i];
+  } 
+  
+  double tmp, DOF, enu;
+ 
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> tmp;  // Neutrino polarity (not used)
+    
+    lstream >> enu;  //Neutrion energy
+    lstream >> fKin3[i];    // Inelasticity y
+    lstream >> fKin1[i];   // Bjorken x
+    
+    
+    fKin2[i] = 2.0*mn*enu*fKin1[i]*fKin3[i];    // Q2
+    
+    // Dimuon neutrino double differencial cross section
+    // Corrected for NLO acceptance and branching ratio
+    // to yield the NLO charm production cross section
+    lstream >> fData[i];
+    fData[i] /= acc_cor[i]*BrC;
+    
+    // Statistical and systematic uncertainties  
+    lstream >> fStat[i];
+    fStat[i] /= acc_cor[i]*BrC;        // Be careful with the acceptance corrections here 
+    
+    // Systematic uncertainties (treated as uncorrelated)
+    lstream >> fSys[i][0].add;
+    fSys[i][0].add /= acc_cor[i]*BrC;
+    fSys[i][0].mult = fSys[i][0].add*100/fData[i];
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "UNCORR";
+       
+    // Normalization uncertainty
+    fSys[i][1].mult = 2.1;
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "NUTEVNORM1";
+    
+    // Br uncertainty
+    fSys[i][2].mult = BrCunc/BrC * 100;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
+    fSys[i][2].type = MULT;
+    fSys[i][2].name = "NUTEVBRC1";
+
+    for(int i = 0; i < 8; i++)
+      lstream >> tmp;           //Individual systematics (not used)
+    
+    lstream >> tmp;    //LO acceptance correction (not used)
+    lstream >> DOF;    //DOF (not used)
+
+    //Get proton central value
+    getline(f4,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f3,line);
+    istringstream nstream(line);
+    nstream >> sdum >> sdum >> idum >> ddum >> ddum;
+    
+    vector<double> nuclear_cv (nrep);
+    
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+    
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - proton_cv)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+  f4.close();
+}
+
+void NTVNUDMNFe_sh_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3, f4;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/NTVNUDMNFe/NuTeVtable.dat";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream datafile2("");
+  datafile2 << dataPath() << "rawdata/NTVNUDMNFe/nf20-1.25-0.60.nu.cor";
+  f2.open(datafile2.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << datafile2.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/NTVNUDMNFe/nuclear_30/output/tables/group_result_table.csv";
+  f3.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/NTVNUDMNFe/proton_30/output/tables/group_result_table.csv";
+  f4.open(protonfile.str().c_str(), ios::in);
+  
+  if (f4.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  double mn = 0.938;
+  double BrC = 0.087;
+  double BrCunc = 0.005;
+  int nrep=200;
+  int nrealsys=3;
+  
+  double acc_cor[fNData];
+  string line;
+
+  getline(f3,line);
+  getline(f4,line);
+
+  //Get NLO acceptance tables
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f2,line);
+    istringstream lstream(line);
+    lstream >> acc_cor[i];
+  } 
+  
+  double tmp, DOF, enu;
+ 
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> tmp;  // Neutrino polarity (not used)
+    
+    lstream >> enu;  //Neutrion energy
+    lstream >> fKin3[i];    // Inelasticity y
+    lstream >> fKin1[i];   // Bjorken x
+    
+    
+    fKin2[i] = 2.0*mn*enu*fKin1[i]*fKin3[i];    // Q2
+    
+    // Dimuon neutrino double differencial cross section
+    // Corrected for NLO acceptance and branching ratio
+    // to yield the NLO charm production cross section
+    lstream >> fData[i];
+    fData[i] /= acc_cor[i]*BrC;
+    
+    // Statistical uncertainties  
+    lstream >> fStat[i];
+    fStat[i] /= acc_cor[i]*BrC;        // Be careful with the acceptance corrections here 
+    
+    // Systematic uncertainties (treated as uncorrelated)
+    lstream >> fSys[i][0].add;
+    fSys[i][0].add /= acc_cor[i]*BrC;
+    fSys[i][0].mult = fSys[i][0].add*100/fData[i];
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "UNCORR";
+       
+    // Normalization uncertainty
+    fSys[i][1].mult = 2.1;
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "NUTEVNORM1";
+
+    // Br uncertainty
+    fSys[i][2].mult = BrCunc/BrC * 100;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
+    fSys[i][2].type = MULT;
+    fSys[i][2].name = "NUTEVBRC1";
+    
+    for(int i = 0; i < 8; i++)
+      lstream >> tmp;           //Individual systematics (not used)
+    
+    lstream >> tmp;    //LO acceptance correction (not used)
+    lstream >> DOF;    //DOF (not used)
+
+    //Get proton central value
+    getline(f4,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f3,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+    vector<double> nuclear_cv (nrep);
+      
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+    
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+  f4.close();
+}
+
+/**
+ * See filterNTVNUDMN()
+ */
+void NTVNBDMNFe_sh_30Filter::ReadData()
+{
+  // Opening files
+  fstream f1, f2, f3, f4;
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/NTVNBDMNFe/NuTeVtable.dat";
+  f1.open(datafile.str().c_str(), ios::in);
+  
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream datafile2("");
+  datafile2 << dataPath() << "rawdata/NTVNBDMNFe/nf20-1.25-0.60.bar.cor";
+  f2.open(datafile2.str().c_str(), ios::in);
+  
+  if (f2.fail()) {
+    cerr << "Error opening data file " << datafile2.str() << endl;
+    exit(-1);
+  }
+
+  stringstream nuclearfile("");
+  nuclearfile << dataPath() << "rawdata/NTVNBDMNFe/nuclear_30/output/tables/group_result_table.csv";
+  f3.open(nuclearfile.str().c_str(), ios::in);
+  
+  if (f3.fail()) {
+    cerr << "Error opening data file " << nuclearfile.str() << endl;
+    exit(-1);
+  }
+  
+  stringstream protonfile("");
+  protonfile << dataPath() << "rawdata/NTVNBDMNFe/proton_30/output/tables/group_result_table.csv";
+  f4.open(protonfile.str().c_str(), ios::in);
+  
+  if (f4.fail()) {
+    cerr << "Error opening data file " << protonfile.str() << endl;
+    exit(-1);
+  }
+
+  // Starting filter
+  double mn = 0.938;
+  double BrC = 0.087;
+  double BrCunc = 0.005;
+  int nrep=200;
+  int nrealsys=3;
+  
+  double acc_cor[fNData];
+  string line;
+
+  getline(f3,line);
+  getline(f4,line);
+
+  //Get NLO acceptance tables
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f2,line);
+    istringstream lstream(line);
+    lstream >> acc_cor[i];
+  } 
+  
+  double tmp, DOF, enu;
+ 
+  for (int i = 0; i < fNData; i++)
+  {
+    getline(f1,line);
+    istringstream lstream(line);
+    
+    lstream >> tmp;  // Neutrino polarity (not used)
+    
+    lstream >> enu;  //Neutrion energy
+    lstream >> fKin3[i];    // Inelasticity y
+    lstream >> fKin1[i];   // Bjorken x
+    
+    
+    fKin2[i] = 2.0*mn*enu*fKin1[i]*fKin3[i];    // Q2
+    
+    // Dimuon neutrino double differencial cross section
+    // Corrected for NLO acceptance and branching ratio
+    // to yield the NLO charm production cross section
+    lstream >> fData[i];
+    fData[i] /= acc_cor[i]*BrC;
+    
+    // Statistical and systematic uncertainties  
+    lstream >> fStat[i];
+    fStat[i] /= acc_cor[i]*BrC;        // Be careful with the acceptance corrections here 
+    
+    // Systematic uncertainties (treated as uncorrelated)
+    lstream >> fSys[i][0].add;
+    fSys[i][0].add /= acc_cor[i]*BrC;
+    fSys[i][0].mult = fSys[i][0].add*100/fData[i];
+    fSys[i][0].type = ADD;
+    fSys[i][0].name = "UNCORR";
+       
+    // Normalization uncertainty
+    fSys[i][1].mult = 2.1;
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "NUTEVNORM1";
+    
+    // Br uncertainty
+    fSys[i][2].mult = BrCunc/BrC * 100;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
+    fSys[i][2].type = MULT;
+    fSys[i][2].name = "NUTEVBRC1";
+
+    for(int i = 0; i < 8; i++)
+      lstream >> tmp;           //Individual systematics (not used)
+    
+    lstream >> tmp;    //LO acceptance correction (not used)
+    lstream >> DOF;    //DOF (not used)
+
+    //Get proton central value
+    getline(f4,line);
+    istringstream pstream(line);
+    string sdum;
+    int idum;
+    double ddum;
+    double proton_cv;
+    pstream >> sdum >> sdum >> idum >> ddum >> proton_cv;
+    
+    //Get nuclear replicas
+    getline(f3,line);
+    istringstream nstream(line);
+    double nuclear;
+    nstream >> sdum >> sdum >> idum >> ddum >> nuclear;
+    vector<double> nuclear_cv (nrep);
+    
+    for(int irep=0; irep<nrep; irep++)
+      {
+	nstream >> nuclear_cv[irep];
+      }
+    
+    //Compute additional uncertainties
+    for(int l=nrealsys; l<fNSys; l++)
+      {
+	fSys[i][l].add = (nuclear_cv[l-nrealsys] - nuclear)/sqrt(nrep);
+	fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+	fSys[i][l].type = ADD;
+	ostringstream sysname;
+	sysname << "NUCLEAR" << l-nrealsys;
+	fSys[i][l].name = sysname.str();
+      }
+    
+    //Compute shifts
+    cout << nuclear/proton_cv << "   " << 0.0 << endl;
+    
+  }
+  
+  f1.close();
+  f2.close();
+  f3.close();
+  f4.close();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
