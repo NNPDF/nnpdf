@@ -1,0 +1,15 @@
+dataset_label: "SLAC $p$"
+x: k2
+y_label: '$10^{i}F_2(x,Q^2)$'
+result_transform: qbindis
+kinematics_override: dis_sqrt_scale
+data_reference: Whitlow:1991uw
+
+#x_scale: log
+y_scale: symlog
+line_by:
+  - k1
+
+experiment: "NUCLEAR"
+
+nnpdf31_process: DIS NC
