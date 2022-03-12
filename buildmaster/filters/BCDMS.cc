@@ -1349,19 +1349,19 @@ void BCDMSD_dw_30Filter::ReadData()
     fData[i] = datain[i][3];  //obs
     fStat[i] = datain[i][4];  //stat
 
-    fSys[i][0].name = "BCDMSFB1";
+    fSys[i][0].name = "BCDMSFB_30";
     fSys[i][0].type = ADD;
-    fSys[i][1].name = "BCDMSFS1";
+    fSys[i][1].name = "BCDMSFS_30";
     fSys[i][1].type = ADD;
-    fSys[i][2].name = "BCDMSFR1";
+    fSys[i][2].name = "BCDMSFR_30";
     fSys[i][2].type = ADD;
     
     fSys[i][3].mult = 3.0;   //normalisation uncertianty of 3%
-    fSys[i][3].name = "BCDMSNORM1";
+    fSys[i][3].name = "BCDMSNORM_30";
     fSys[i][3].type = MULT;
     
     fSys[i][4].mult = -relnortarget;  //relative normalisation
-    fSys[i][4].name = "BCDMSRELNORMTARGET1";
+    fSys[i][4].name = "BCDMSRELNORMTARGET_30";
     fSys[i][4].type = MULT;
     
     for (int l = 5; l < fNSys; l++)
@@ -1549,19 +1549,19 @@ void BCDMSD_sh_30Filter::ReadData()
     fData[i] = datain[i][3];  //obs
     fStat[i] = datain[i][4];  //stat
 
-    fSys[i][0].name = "BCDMSFB1";
+    fSys[i][0].name = "BCDMSFB_30";
     fSys[i][0].type = ADD;
-    fSys[i][1].name = "BCDMSFS1";
+    fSys[i][1].name = "BCDMSFS_30";
     fSys[i][1].type = ADD;
-    fSys[i][2].name = "BCDMSFR1";
+    fSys[i][2].name = "BCDMSFR_30";
     fSys[i][2].type = ADD;
     
     fSys[i][3].mult = 3.0;   //normalisation uncertianty of 3%
-    fSys[i][3].name = "BCDMSNORM1";
+    fSys[i][3].name = "BCDMSNORM_30";
     fSys[i][3].type = MULT;
     
     fSys[i][4].mult = -relnortarget;  //relative normalisation
-    fSys[i][4].name = "BCDMSRELNORMTARGET1";
+    fSys[i][4].name = "BCDMSRELNORMTARGET_30";
     fSys[i][4].type = MULT;
     
     for (int l = 5; l < fNSys; l++)
