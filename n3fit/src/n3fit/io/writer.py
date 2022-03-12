@@ -66,7 +66,6 @@ class WriterWrapper:
         # integrability_numbers = vpinterface.integrability_numbers(self.pdf_object)
         arc_lengths, integrability_numbers = [], []
         # Construct the chi2exp file
-        arc_lengths, integrability_numbers = [], []
         allchi2_lines = self.stopping_object.chi2exps_str()
         # Construct the preproc file (the information is only in the json file)
         preproc_lines = ""

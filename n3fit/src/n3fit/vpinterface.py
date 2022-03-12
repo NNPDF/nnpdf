@@ -182,7 +182,8 @@ class N3PDF(PDF):
             name of the N3PDF object
     """
 
-    def __init__(self, pdf_models, fit_basis=None, name="n3fit", Q=1.65):
+    def __init__(self, pdf_models, map_pdfs, fit_basis=None, name="n3fit", Q=1.65):
+        self.map_pdfs = map_pdfs
         self.fit_basis = fit_basis
 
         if isinstance(pdf_models, Iterable):
@@ -223,22 +224,23 @@ class N3PDF(PDF):
         alphas_and_betas = None
         if self.fit_basis is not None:
             output_dictionaries = []
-            for d in self.fit_basis:
-                flavour = d["fl"]
-                alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
-                beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
-                if alpha is not None:
-                    alpha = float(alpha.numpy())
-                if beta is not None:
-                    beta = float(beta.numpy())
-                output_dictionaries.append(
-                    {
-                        "fl": flavour,
-                        "smallx": alpha,
-                        "largex": beta,
-                        "trainable": d.get("trainable", True),
-                    }
-                )
+            for idx in range(len(self.map_pdfs)):
+                for d in self.fit_basis:
+                    flavour = d["fl"] + "_idx_" + str(idx)
+                    alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
+                    beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
+                    if alpha is not None:
+                        alpha = float(alpha.numpy())
+                    if beta is not None:
+                        beta = float(beta.numpy())
+                    output_dictionaries.append(
+                        {
+                            "fl": flavour,
+                            "smallx": alpha,
+                            "largex": beta,
+                            "trainable": d.get("trainable", True),
+                        }
+                    )
             alphas_and_betas = output_dictionaries
         return alphas_and_betas
 

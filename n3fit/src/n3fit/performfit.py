@@ -278,7 +278,7 @@ def performfit(
 
             # Create a pdf instance
             q0 = theoryid.get_description().get("Q0")
-            pdf_instance = N3PDF(pdf_model, fit_basis=basis, Q=q0)
+            pdf_instance = N3PDF(pdf_model, map_pdfs, fit_basis=basis, Q=q0)
 
             # Generate the writer wrapper
             writer_wrapper = WriterWrapper(
