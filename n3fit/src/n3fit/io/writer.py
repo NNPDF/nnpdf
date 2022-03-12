@@ -64,6 +64,7 @@ class WriterWrapper:
         # arc_lengths = vpinterface.compute_arclength(self.pdf_object)
         # # Compute the integrability numbers
         # integrability_numbers = vpinterface.integrability_numbers(self.pdf_object)
+        arc_lengths, integrability_numbers = [], []
         # Construct the chi2exp file
         arc_lengths, integrability_numbers = [], []
         allchi2_lines = self.stopping_object.chi2exps_str()
@@ -155,10 +156,10 @@ def jsonfit(
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = replica_status.positivity_status
+    # all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
+    # all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
     all_info["arc_lengths"] = []
     all_info["integrability"] = []
-    # all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
-    # all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
     all_info["timing"] = timing
     # Versioning info
     all_info["version"] = version()
