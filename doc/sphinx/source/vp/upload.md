@@ -183,7 +183,7 @@ The `validphys` index page
 
 The source of the report index page is
 ```
-serverscripts/WEB/validphys-reports/index.html
+serverscripts/validphys-reports/index.html
 ```
 inside the `validphys2` directory in the main repository. This page can be
 edited to reflect the current interests (the Makefile directly uploads to the

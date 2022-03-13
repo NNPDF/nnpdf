@@ -21,10 +21,10 @@ import skimage.transform
 import skimage.io
 import numpy as np
 
-ROOT = '/home/nnpdf/WEB/validphys-reports'
+ROOT = '/home/nnpdf/validphys-reports'
 ROOT_URL = 'https://vp.nnpdf.science/'
-OUT = '/home/nnpdf/WEB/validphys-reports/index.json'
-THUMBNAILS = '/home/nnpdf/WEB/thumbnails/'
+OUT = '/home/nnpdf/validphys-reports/index.json'
+THUMBNAILS = '/home/nnpdf/thumbnails/'
 EMAIL_MENTIONS_FILE = 'email_mentions.json'
 
 EMPTY = '-'

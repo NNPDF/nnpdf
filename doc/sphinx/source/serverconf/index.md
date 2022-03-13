@@ -48,7 +48,7 @@ The `nnpdf` is not allowed to login with password.
 The `nnpdf` user shares a common `/home/nnpdf` folder where all NNPDF
 material is stored. Public access to data is available for all files
 in the `/home/nnpdf/WEB` folder. The `validphys` reports are stored in
-`/home/nnpdf/WEB/validphys-reports` and the wiki in
+`/home/nnpdf/validphys-reports` and the wiki in
 `/home/nnpdf/WEB/wiki`.
 
 ### Access for continuous deployment tools
@@ -134,7 +134,7 @@ The report index uses the
 filtering and sorting capabilities to the indexes tables. The source
 file is:
 ```
-serverscripts/WEB/validphys-reports/index.html
+serverscripts/validphys-reports/index.html
 ```
 in the validphys2 directory. It should be updated from time to time to
 highlight the most interesting reports at a given moment. This can be
@@ -199,18 +199,18 @@ server {
     listen [::]:80;
     server_name vp.nnpdf.science;
 
-    root /home/nnpdf/WEB/validphys-reports;
+    root /home/nnpdf/validphys-reports;
     location / {
       try_files $uri $uri/ =404;
 	    auth_basic "Restricted";
-	    auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+	    auth_basic_user_file /home/nnpdf/validphys-reports/.htpasswd;
     }
 
     location /thumbnails {
-    	alias /home/nnpdf/WEB/thumbnails;
+    	alias /home/nnpdf/thumbnails;
 	    try_files $uri $uri/ =404;
 	    auth_basic "Restricted";
-      auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+      auth_basic_user_file /home/nnpdf/validphys-reports/.htpasswd;
     }
 }
 ```
