@@ -340,7 +340,7 @@ def dataset_inputs_t0_covmat_from_systematics(
         _list_of_central_values=dataset_inputs_t0_predictions
     )
 
-def load_theory_covmat(output_path,
+def loaded_theory_covmat(output_path,
     use_user_uncertainties,
     use_scalevar_uncertainties
     ):
@@ -355,7 +355,7 @@ def load_theory_covmat(output_path,
             generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_user_covmat.csv")
         else:
             generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
-    theorypath = pathlib.Path(str(output_path/"tables"/generic_path))
+    theorypath = output_path/"tables"/generic_path
     theory_covmat = pd.read_csv(theorypath, sep='\t')
     theory_covmat = theory_covmat.iloc[3:].drop(['group'], axis=1).drop(['Unnamed: 1'], axis=1).drop(['Unnamed: 2'], axis=1)
     return theory_covmat.values.astype(np.float)
@@ -368,7 +368,7 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     use_weights_in_covmat=True,
     norm_threshold=None,
     dataset_inputs_t0_predictions,
-    load_theory_covmat,
+    loaded_theory_covmat,
     theory_covmat_flag
     ):
     exp_covmat = dataset_inputs_covmat_from_systematics(
@@ -378,9 +378,8 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
-    import ipdb; ipdb.set_trace()
     if theory_covmat_flag is True:
-        return np.add(exp_covmat,load_theory_covmat)
+        return np.add(exp_covmat,loaded_theory_covmat)
     return exp_covmat
 
 

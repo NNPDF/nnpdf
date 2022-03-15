@@ -9,6 +9,7 @@ import hashlib
 
 import numpy as np
 import pandas as pd
+from scipy import linalg as lin
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME
 
@@ -103,7 +104,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
 def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
     theory_covmat_flag,
-    load_theory_covmat,
+    loaded_theory_covmat,
     genrep=True):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -156,7 +157,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
     #loading theory_covmat if requested 
     theory_covmat = pd.DataFrame([])
     if theory_covmat_flag is True:
-        theory_covmat = load_theory_covmat
+        theory_covmat = loaded_theory_covmat
 
     while True:
         pseudodatas = []
@@ -216,10 +217,20 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
         # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
         special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
+        import ipdb; ipdb.set_trace()
+        #eliminate negative eignvalues of thcovmat
+        eigval, eigvec = lin.eig(theory_covmat)
+        for j in range(len(eigval)):
+            if eigval[j] < 0.:
+                eigval[j] = 1.e-8
+        Lambda = np.diag(eigval)
+        new_theory_covmat = eigvec @ Lambda @ lin.inv(eigvec)
+        #compute cholesky
+        chol_theory_covmat = lin.cholesky(new_theory_covmat)         
         all_pseudodata = (
             np.concatenate(pseudodatas, axis=0)
             + special_add_errors @ rng.normal(size=special_add_errors.shape[1])
-            + theory_covmat @ rng.normal(size=theory_covmat.shape[1])
+            + chol_theory_covmat @ rng.normal(size=theory_covmat.shape[1])
         ) * (
             np.concatenate(mult_shifts, axis=0)
             * (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
