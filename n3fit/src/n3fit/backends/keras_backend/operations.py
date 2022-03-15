@@ -295,6 +295,31 @@ def pdf_masked_convolution(raw_pdf_1, raw_pdf_2, basis_mask):
     return pdf_x_pdf
 
 
+def extract_neutron_pdf(raw_pdf, mask, axis=2):
+    """Take a raw (bound)-proton PDF and extract the neutron-bound
+    PDF with the same rank/dimension/shape.
+
+
+    Parameters
+    ----------
+        raw_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
+        mask: tf.tensor
+            rank1 (len(nfl),)
+
+    Return
+    ------
+        neutron_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
+    """
+    dim_reshape = np.ones(len(raw_pdf.shape))
+    dim_reshape[axis] = -1
+    mask_reshaped = tf.reshape(mask, dim_reshape)
+    # Perform element-wise multiplications
+    neutron_pdf = mask_reshaped * raw_pdf
+    return neutron_pdf
+
+
 def einsum(equation, *args, **kwargs):
     """
     Computes the tensor product using einsum

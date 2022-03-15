@@ -74,6 +74,16 @@ class Observable(MetaLayer, ABC):
         self.operation = op.c_to_py_fun(operation_name)
         self.output_dim = self.fktables[0].shape[0]
 
+        # Generate the mask that will be applied to the bound-proton PDFs
+        # in order to get the bound-neutron PDFs. Assumming isospin asymmetry
+        # the relation between the two bound PDFs is trivial. Basically, the
+        # bound-neutron PDFs are extracted from the proton counterpart by
+        # adding a `minus` to T3 and V3.
+        neutron_mask = np.ones(nfl)
+        neutron_mask[4] = -1  # replace V3 coefficient
+        neutron_mask[9] = -1  # replace T3 coefficient
+        self.neutron_mask = op.numpy_to_tensor(neutron_mask)
+
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
 

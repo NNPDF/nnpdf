@@ -58,7 +58,18 @@ class DY(Observable):
 
                     # Then performing the standard splitting of a given f^A
                     pdf1 = op.split(nonsplitted_pdf1, self.splitting, axis=1)[a]
+                    # Notice that the nuclear PDF below is only the bound-proton
                     pdf2 = op.split(nonsplitted_pdf2, self.splitting, axis=1)[a]
+
+                    # Compute bound-neutron PDF out of the bound-proton
+                    # TODO: offload some of the computations below elsewhere. The way it is done
+                    # now gives myself a nightmare. At least skip them for free-proton fit.
+                    if a_value == z_value:
+                        neutron_pdf = op.extract_neutron_pdf(pdf2, self.neutron_mask)
+                        # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+                        pdf2 = z_value * pdf2 + (a_value - z_value) * neutron_pdf
+                        pdf2 /= a_value
+
                     pdf_x_pdf = op.pdf_masked_convolution(pdf1, pdf2, mask)
                     res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                     results.append(res)
@@ -74,7 +85,18 @@ class DY(Observable):
 
                     # Then performing the standard splitting of a given f^A
                     pdf1 = splitted_pdf[0]
+                    # Notice that the nuclear PDF below is only the bound-proton
                     pdf2 = splitted_pdf[output_index]
+
+                    # Compute bound-neutron PDF out of the bound-proton
+                    # TODO: offload some of the computations below elsewhere. The way it is done
+                    # now gives myself a nightmare. At least skip them for free-proton fit.
+                    if a_value == z_value:
+                        neutron_pdf = op.extract_neutron_pdf(pdf2, self.neutron_mask)
+                        # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+                        pdf2 = z_value * pdf2 + (a_value - z_value) * neutron_pdf
+                        pdf2 /= a_value
+
                     pdf_x_pdf = op.pdf_masked_convolution(pdf1, pdf2, mask)
                     res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                     results.append(res)
@@ -90,7 +112,18 @@ class DY(Observable):
 
                 # Then performing the standard splitting of a given f^A
                 pdf1 = splitted_pdf[0]
+                # Notice that the nuclear PDF below is only the bound-proton
                 pdf2 = splitted_pdf[output_index]
+
+                # Compute bound-neutron PDF out of the bound-proton
+                # TODO: offload some of the computations below elsewhere. The way it is done
+                # now gives myself a nightmare. At least skip them for free-proton fit.
+                if a_value == z_value:
+                    neutron_pdf = op.extract_neutron_pdf(pdf2, self.neutron_mask)
+                    # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+                    pdf2 = z_value * pdf2 + (a_value - z_value) * neutron_pdf
+                    pdf2 /= a_value
+
                 pdf_x_pdf = op.pdf_masked_convolution(pdf1, pdf2, self.all_masks[0])
                 res = op.tensor_product(fk, pdf_x_pdf, axes=3)
                 results.append(res)

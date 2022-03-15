@@ -65,7 +65,9 @@ class DIS(Observable):
         results = []
         # Separate the two possible paths this layer can take
         # TODO: Check which one is better between `op.split` and `op.gather`
-        # TODO: Possibly merge these two separtations since both are now in a loop
+        # TODO: Possibly merge these two separtations since both are now in a loop. This
+        # means that the `if` statement will be called several times (mostly twice) in
+        # the loop which is not that a big of a deal.
         if self.many_masks:
             for a, (mask, fktable) in enumerate(zip(self.all_masks, self.fktables)):
                 # Get the values of A & Z from the dictionary. If None, the default
@@ -78,10 +80,19 @@ class DIS(Observable):
                 output_index = self.map_pdfs.index(a_value)
                 split_size = int(pdf.shape[2] / self.nfl)
                 splitted_pdf = op.split(pdf, num_or_size_splits=split_size, axis=2)
-                output_pdf_range = splitted_pdf[output_index]
+                pdf_range = splitted_pdf[output_index]
+
+                # Compute bound-neutron PDF out of the bound-proton
+                # TODO: offload some of the computations below elsewhere. The way it is done
+                # now gives myself a nightmare. At least skip them for free-proton fit.
+                if a_value == z_value:
+                    neutron_pdf = op.extract_neutron_pdf(pdf_range, self.neutron_mask)
+                    # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+                    pdf_range = z_value * pdf_range + (a_value - z_value) * neutron_pdf
+                    pdf_range /= a_value
 
                 # Perform standard convolution to either proton or nuclear PDF
-                pdf_masked = op.boolean_mask(output_pdf_range, mask, axis=2)
+                pdf_masked = op.boolean_mask(pdf_range, mask, axis=2)
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                 results.append(res)
         else:
@@ -96,10 +107,19 @@ class DIS(Observable):
                 output_index = self.map_pdfs.index(a_value)
                 split_size = int(pdf.shape[2] / self.nfl)
                 splitted_pdf = op.split(pdf, num_or_size_splits=split_size, axis=2)
-                output_pdf_range = splitted_pdf[output_index]
+                pdf_range = splitted_pdf[output_index]
+
+                # Compute bound-neutron PDF out of the bound-proton
+                # TODO: offload some of the computations below elsewhere. The way it is done
+                # now gives myself a nightmare. At least skip them for free-proton fit.
+                if a_value == z_value:
+                    neutron_pdf = op.extract_neutron_pdf(pdf_range, self.neutron_mask)
+                    # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+                    pdf_range = z_value * pdf_range + (a_value - z_value) * neutron_pdf
+                    pdf_range /= a_value
 
                 # Perform standard convolution to either proton or nuclear PDF
-                pdf_masked = op.boolean_mask(output_pdf_range, self.all_masks[0], axis=2)
+                pdf_masked = op.boolean_mask(pdf_range, self.all_masks[0], axis=2)
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                 results.append(res)
 
