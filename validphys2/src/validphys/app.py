@@ -9,6 +9,11 @@ declared here.
 The entry point of the validphys application is the ``main`` funcion of this
 module.
 """
+#TODO
+import NNPDF
+NNPDF.SetVerbosity(0)
+
+
 import sys
 import os
 import logging

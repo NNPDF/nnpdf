@@ -386,16 +386,6 @@ class Loader(LoaderBase):
         ###
 
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
-        # If the operation is a normalization tell vp to consider a ratio
-        # and duplicate the fktable with a tag for normalization
-        # The operation norm might disappear or work differently in the future
-        # see here https://github.com/NNPDF/fktables/issues/26
-        if op == "NORM":
-            op = "RATIO"
-            # Then half of the cfactors have not been used yet
-            norm_cfac = cfactors[len(fklist):]
-            fkspecs += [FKTableSpec(i, c, metadata, norm=True) for i, c in zip(fklist, norm_cfac)]
-        
         return fkspecs, op
 
     def check_compound(self, theoryID, setname, cfac):
