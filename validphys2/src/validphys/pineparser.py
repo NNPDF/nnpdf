@@ -175,15 +175,12 @@ def pineappl_reader(fkspec):
     for i, p in enumerate(pines):
         luminosity_columns = _pinelumi_to_vplumi(p.lumi(), hadronic)
 
-        # Check whether this is a normalization table
-        if fkspec.norm:
-            raw_fktable = np.sum(p.table(), axis=0, keepdims=True)
-        else:  # remove the bin normalization
-            raw_fktable = (p.table().T / p.bin_normalizations()).T
+        # Remove the bin normalization
+        raw_fktable = (p.table().T / p.bin_normalizations()).T
         n = raw_fktable.shape[0]
         lf = len(luminosity_columns)
 
-        # Apply the apfelcomb fixex
+        # Apply the apfelcomb fixes
         if apfelcomb_norm is not None:
             raw_fktable = (raw_fktable.T * apfelcomb_norm[ndata : ndata + n]).T
         if apfelcomb_repetition_flag:

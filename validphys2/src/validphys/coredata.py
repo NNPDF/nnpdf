@@ -69,14 +69,12 @@ class FKTableData:
         """
         if self.metadata.get("repetition_flag") and self.ndata==1:
             return not all(self.metadata.get("repetition_flag"))
-        if self.metadata.get("operation") == "NORM" and self.ndata==1:
-            return True
         return False
 
-    def with_cfactor(self, cfactor, norm=False):
+    def with_cfactor(self, cfactor):
         """Returns a copy of the FKTableData object with cfactors applied to the fktable"""
         if len(cfactor) != self.ndata:
-            if self.metadata.get("repetition_flag") or norm:
+            if self.metadata.get("repetition_flag"):
                 cfactor = cfactor[0]
             else:
                 name = self.metadata.get("target_dataset")

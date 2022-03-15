@@ -69,7 +69,7 @@ def load_fktable(spec):
         with open(cf, "rb") as f:
             cfdata = parse_cfactor(f)
         cfprod *= cfdata.central_value
-    return tabledata.with_cfactor(cfprod, norm=spec.norm)
+    return tabledata.with_cfactor(cfprod)
 
 def _get_compressed_buffer(path):
     archive = tarfile.open(path)
