@@ -341,9 +341,13 @@ def dataset_inputs_t0_covmat_from_systematics(
     )
 
 def loaded_theory_covmat(output_path,
+    theory_covmat_flag,
     use_user_uncertainties,
     use_scalevar_uncertainties
     ):
+    if theory_covmat_flag is False:
+        return np.array([])
+
     generic_path = None
     if use_scalevar_uncertainties is True:
         if use_user_uncertainties is True:
