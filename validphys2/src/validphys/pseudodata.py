@@ -101,7 +101,10 @@ def read_replica_pseudodata(fit, context_index, replica):
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genrep=True):
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
+    theory_covmat_flag,
+    load_theory_covmat,
+    genrep=True):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -143,14 +146,18 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
     """
     if not genrep:
         return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
-
     # Seed the numpy RNG with the seed and the name of the datasets in this run
     name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
-
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
+
+    #loading theory_covmat if requested 
+    theory_covmat = pd.DataFrame([])
+    if theory_covmat_flag is True:
+        theory_covmat = load_theory_covmat
+
     while True:
         pseudodatas = []
         special_add = []
@@ -209,11 +216,10 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed, genr
         # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
         special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
-
-
         all_pseudodata = (
             np.concatenate(pseudodatas, axis=0)
             + special_add_errors @ rng.normal(size=special_add_errors.shape[1])
+            + theory_covmat @ rng.normal(size=theory_covmat.shape[1])
         ) * (
             np.concatenate(mult_shifts, axis=0)
             * (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)

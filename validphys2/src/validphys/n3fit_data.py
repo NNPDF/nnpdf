@@ -238,7 +238,6 @@ def fitting_data_dict(
     spec_c = data.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
-
     expdata = make_replica
 
     datasets = common_data_reader_experiment(spec_c, data)
