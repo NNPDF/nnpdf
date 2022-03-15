@@ -155,9 +155,19 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
     # pseudodata replica
 
     #loading theory_covmat if requested 
-    
     theory_covmat = loaded_theory_covmat
-
+    #eliminate negative eignvalues of thcovmat and compute sqrt
+    chol_theory_covmat = np.zeros(shape = (1,1))
+    if theory_covmat_flag is True:
+        tr = 1.e-9
+        eigval, eigvec = lin.eig(theory_covmat)
+        for j in range(len(eigval)):
+            if eigval[j] < tr:
+                eigval[j] = tr
+        new_eigval_diag = np.diag(eigval)
+        new_theory_covmat = eigvec @ new_eigval_diag @ lin.inv(eigvec)
+        chol_theory_covmat = sqrt_covmat(new_theory_covmat) 
+               
     while True:
         pseudodatas = []
         special_add = []
@@ -217,16 +227,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
         special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
         
-        #eliminate negative eignvalues of thcovmat
-        chol_theory_covmat = np.zeros(shape = (1,1))
-        if theory_covmat_flag is True:
-            eigval, eigvec = lin.eig(theory_covmat)
-            for j in range(len(eigval)):
-                if eigval[j] < 0.:
-                    eigval[j] = 1.e-9
-            new_eigval_diag = np.diag(eigval)
-            new_theory_covmat = eigvec @ new_eigval_diag @ lin.inv(eigvec)
-            chol_theory_covmat = sqrt_covmat(new_theory_covmat)    
+           
         all_pseudodata = (
             np.concatenate(pseudodatas, axis=0)
             + special_add_errors @ rng.normal(size=special_add_errors.shape[1])
