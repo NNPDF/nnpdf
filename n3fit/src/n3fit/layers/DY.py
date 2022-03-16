@@ -64,7 +64,7 @@ class DY(Observable):
                     # Compute bound-neutron PDF out of the bound-proton
                     # TODO: offload some of the computations below elsewhere. The way it is done
                     # now gives myself a nightmare. At least skip them for free-proton fit.
-                    if a_value == z_value:
+                    if a_value != z_value:
                         neutron_pdf = op.extract_neutron_pdf(pdf2, self.neutron_mask)
                         # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
                         pdf2 = z_value * pdf2 + (a_value - z_value) * neutron_pdf
@@ -91,7 +91,7 @@ class DY(Observable):
                     # Compute bound-neutron PDF out of the bound-proton
                     # TODO: offload some of the computations below elsewhere. The way it is done
                     # now gives myself a nightmare. At least skip them for free-proton fit.
-                    if a_value == z_value:
+                    if a_value != z_value:
                         neutron_pdf = op.extract_neutron_pdf(pdf2, self.neutron_mask)
                         # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
                         pdf2 = z_value * pdf2 + (a_value - z_value) * neutron_pdf
@@ -118,7 +118,7 @@ class DY(Observable):
                 # Compute bound-neutron PDF out of the bound-proton
                 # TODO: offload some of the computations below elsewhere. The way it is done
                 # now gives myself a nightmare. At least skip them for free-proton fit.
-                if a_value == z_value:
+                if a_value != z_value:
                     neutron_pdf = op.extract_neutron_pdf(pdf2, self.neutron_mask)
                     # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
                     pdf2 = z_value * pdf2 + (a_value - z_value) * neutron_pdf
