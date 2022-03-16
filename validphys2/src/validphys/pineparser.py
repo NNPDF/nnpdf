@@ -158,6 +158,9 @@ def pineappl_reader(fkspec):
     # Extract some theory metadata from the first grid
     pine_rep = pines[0]
     hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    # Sanity check (in case at some point we start fitting things that are not protons)
+    if hadronic and pine_rep.key_values()["initial_state_1"] != "2212":
+        raise ValueError("pineappl_reader is not prepared to read a hadronic fktable with no protons!")
     Q0 = np.sqrt(pine_rep.muf2())
     xgrid = pine_rep.x_grid()
     # fktables in pineapplgrid are for o = fk * f while previous fktables were o = fk * xf
