@@ -115,13 +115,12 @@ def _predictions(dataset, pdf, fkfunc):
     all_predictions = []
     for fk in dataset.fkspecs:
         fk_w_cuts = load_fktable(fk).with_cuts(cuts)
-        ret = fkfunc(fk_w_cuts, pdf)
-        # TODO: old fktables just repeated values to keep the size the same
-        # which is a waste of space, this is not kept in pineappl for obvious reasons
-        # but not sure how to make this work for both cases...
-        if fk_w_cuts.protected:
-            ret = ret.reindex(cuts, method="pad")
-        all_predictions.append(ret)
+        all_predictions.append(fkfunc(fk_w_cuts, pdf))
+    # TODO: old fktables just repeated values to keep the size the same
+    # for RATIO operations, with pineappl this is no longer the case
+    # divide by the numpy representation instead
+    if dataset.op == "RATIO":
+        all_predictions[-1] = all_predictions[-1].values
     return opfunc(*all_predictions)
 
 

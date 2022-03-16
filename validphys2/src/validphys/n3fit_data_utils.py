@@ -9,19 +9,7 @@ loading their fktables (and applying any necessary cuts).
 """
 from itertools import zip_longest
 import dataclasses
-
-
-def _mask_fk(fktables, fk_datas, mask):
-    """Mask a dataset taking into account their protections status"""
-    ret = []
-    for fk, fk_data in zip(fktables, fk_datas):
-        if fk_data.protected:
-            # The protected datasets are always 1-point datasets
-            # used as denominator, so if we got here this is safe
-            ret.append(fk)
-        else:
-            ret.append(fk[mask])
-    return ret
+import numpy as np
 
 
 @dataclasses.dataclass
@@ -56,10 +44,15 @@ class FittableDataSet:
     # Things that can have default values:
     operation: str = "NULL"
     frac: float = 1.0
-    training_mask: bool = None
+    training_mask: np.ndarray = None # boolean array
 
     def __post_init__(self):
-        self._raw_fktables = None
+        self._tr_mask = None
+        self._vl_mask = None
+        if self.training_mask is not None:
+            data_idx = self.fktables_data[0].sigma.index.get_level_values(0).unique()
+            self._tr_mask = data_idx[self.training_mask].values
+            self._vl_mask = data_idx[~self.training_mask].values
 
     @property
     def ndata(self):
@@ -73,20 +66,18 @@ class FittableDataSet:
 
     def fktables(self):
         """Return the list of fktable tensors for the dataset"""
-        if self._raw_fktables is None:
-            self._raw_fktables = [i.get_np_fktable() for i in self.fktables_data]
-        return self._raw_fktables
+        return [fk.get_np_fktable() for fk in self.fktables_data]
 
     def training_fktables(self):
         """Return the fktable tensors for the trainig data"""
-        if self.training_mask is not None:
-            return _mask_fk(self.fktables(), self.fktables_data, self.training_mask)
+        if self._tr_mask is not None:
+            return [fk.with_cuts(self._tr_mask).get_np_fktable() for fk in self.fktables_data]
         return self.fktables()
 
     def validation_fktables(self):
         """Return the fktable tensors for the validation data"""
-        if self.training_mask is not None:
-            return _mask_fk(self.fktables(), self.fktables_data, ~self.training_mask)
+        if self._vl_mask is not None:
+            return [fk.with_cuts(self._vl_mask).get_np_fktable() for fk in self.fktables_data]
         return self.fktables()
 
 

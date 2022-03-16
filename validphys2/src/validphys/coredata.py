@@ -50,12 +50,13 @@ class FKTableData:
     xgrid: np.array
     sigma: pd.DataFrame
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
+    protected: bool = False
 
     def __post_init__(self):
         self._fktable = None
 
     @property
-    def protected(self):
+    def _protected(self):
         """Protects the fktable from being cut kinematically.
         Due to old limitations inclusive cross sections got kinematic cuts applied
         this cannot be done to pineapplgrids
@@ -118,7 +119,7 @@ class FKTableData:
         """
         if hasattr(cuts, "load"):
             cuts = cuts.load()
-        if cuts is None or self.protected:
+        if cuts is None or self._protected:
             return self
         newndata = len(cuts)
         newsigma = self.sigma.loc[cuts]
@@ -156,6 +157,12 @@ class FKTableData:
         # Read up the shape of the output table
         ndata = self.ndata
         nx = len(self.xgrid)
+        if ndata == 0:
+            # All poitns have been cut out from this dataframe, no need to play calvinball
+            if self.hadronic:
+                return np.zeros((ndata, nx, nx, self.sigma.shape[1]))
+            else:
+                return np.zeros((ndata, nx, self.sigma.shape[1]))
 
         # The code belows makes the dataframe into a dense numpy array
 
@@ -165,7 +172,7 @@ class FKTableData:
             # Now let's make sure x1 is complete
             ns = ns.unstack("x2", 0).sort_values("x1").reindex(range(nx), fill_value=0.0)
             # For completeness, the let's ensure the same is true for x2
-            ns = ns.stack("x2").unstack("x1", 0).sort_values("x2").reindex(range(nx), fill_value=0)
+            ns = ns.stack("x2").unstack("x1", 0).sort_values("x2").reindex(range(nx), fill_value=0.0)
             # Now we have (x2, basis, data, x1) and want (data, basis, x1, x2)
             fktable = np.transpose(ns.values.reshape(nx, -1, ndata, nx), (2, 1, 3, 0))
         else:
