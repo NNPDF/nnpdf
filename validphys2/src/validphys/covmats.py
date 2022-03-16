@@ -360,9 +360,8 @@ def loaded_theory_covmat(output_path,
         else:
             generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
     theorypath = output_path/"tables"/generic_path
-    theory_covmat = pd.read_csv(theorypath, sep='\t')
-    theory_covmat = theory_covmat.iloc[3:].drop(['group'], axis=1).drop(['Unnamed: 1'], axis=1).drop(['Unnamed: 2'], axis=1)
-    return theory_covmat.values.astype(np.float)
+    theory_covmat = pd.read_csv(theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python").fillna(0)
+    return theory_covmat.values
     
 
 
