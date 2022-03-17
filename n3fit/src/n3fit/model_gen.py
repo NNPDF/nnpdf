@@ -540,7 +540,7 @@ def pdfNN_layer_generator(
 
     number_of_layers = len(nodes)
     # The number of nodes in the last layer is equal to the number of fitted flavours
-    last_layer_nodes = nodes[-1]  # (== len(flav_info))
+    last_layer_nodes = number_amn * nodes[-1]  # (== number_amn * len(flav_info))
 
     # Generate the generic layers that will not depend on extra considerations
 
