@@ -1,0 +1,77 @@
+dependent_variables:
+- header: {name: F2(Q=DEUT)/F2(Q=P)}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE(Q=DEUT), value: MUON DEUT --> MUON X}
+  - {name: RE(Q=P), value: MUON P --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '29.709'}
+  - {name: X, value: '0.35'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0158}
+    - {label: sys, symerror: 0.008}
+    value: 0.8205
+  - errors:
+    - {label: stat, symerror: 0.0134}
+    - {label: sys, symerror: 0.0045}
+    value: 0.7953
+  - errors:
+    - {label: stat, symerror: 0.0143}
+    - {label: sys, symerror: 0.0041}
+    value: 0.8332
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.0031}
+    value: 0.7939
+  - errors:
+    - {label: stat, symerror: 0.0165}
+    - {label: sys, symerror: 0.0026}
+    value: 0.8222
+  - errors:
+    - {label: stat, symerror: 0.0118}
+    - {label: sys, symerror: 0.0028}
+    value: 0.8188
+  - errors:
+    - {label: stat, symerror: 0.0113}
+    - {label: sys, symerror: 0.0025}
+    value: 0.7828
+  - errors:
+    - {label: stat, symerror: 0.0109}
+    - {label: sys, symerror: 0.0023}
+    value: 0.792
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.002}
+    value: 0.8055
+  - errors:
+    - {label: stat, symerror: 0.0147}
+    - {label: sys, symerror: 0.0018}
+    value: 0.8197
+  - errors:
+    - {label: stat, symerror: 0.0162}
+    - {label: sys, symerror: 0.0013}
+    value: 0.762
+  - errors:
+    - {label: stat, symerror: 0.0213}
+    - {label: sys, symerror: 0.0011}
+    value: 0.7732
+  - errors:
+    - {label: stat, symerror: 0.0253}
+    - {label: sys, symerror: 0.001}
+    value: 0.7614
+independent_variables:
+- header: {name: MEAN(NAME=Q**2)}
+  values:
+  - {value: 3.57}
+  - {value: 4.51}
+  - {value: 5.48}
+  - {value: 6.9}
+  - {value: 8.91}
+  - {value: 11.43}
+  - {value: 14.85}
+  - {value: 19.74}
+  - {value: 26.63}
+  - {value: 35.45}
+  - {value: 47.12}
+  - {value: 63.52}
+  - {value: 96.35}

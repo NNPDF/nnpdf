@@ -1,0 +1,92 @@
+dependent_variables:
+- header: {name: F2(Q=DEUT)/F2(Q=P)}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE(Q=DEUT), value: MUON DEUT --> MUON X}
+  - {name: RE(Q=P), value: MUON P --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '29.709'}
+  - {name: X, value: '0.09'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.054}
+    - {label: sys, symerror: 0.0065}
+    value: 0.9678
+  - errors:
+    - {label: stat, symerror: 0.0537}
+    - {label: sys, symerror: 0.0062}
+    value: 0.9351
+  - errors:
+    - {label: stat, symerror: 0.0281}
+    - {label: sys, symerror: 0.0032}
+    value: 0.9385
+  - errors:
+    - {label: stat, symerror: 0.014}
+    - {label: sys, symerror: 0.0028}
+    value: 0.9413
+  - errors:
+    - {label: stat, symerror: 0.0136}
+    - {label: sys, symerror: 0.0025}
+    value: 0.9313
+  - errors:
+    - {label: stat, symerror: 0.0124}
+    - {label: sys, symerror: 0.0024}
+    value: 0.9445
+  - errors:
+    - {label: stat, symerror: 0.0082}
+    - {label: sys, symerror: 0.0021}
+    value: 0.936
+  - errors:
+    - {label: stat, symerror: 0.0089}
+    - {label: sys, symerror: 0.0018}
+    value: 0.9397
+  - errors:
+    - {label: stat, symerror: 0.0106}
+    - {label: sys, symerror: 0.0016}
+    value: 0.942
+  - errors:
+    - {label: stat, symerror: 0.0092}
+    - {label: sys, symerror: 0.0016}
+    value: 0.9245
+  - errors:
+    - {label: stat, symerror: 0.0114}
+    - {label: sys, symerror: 0.0014}
+    value: 0.9218
+  - errors:
+    - {label: stat, symerror: 0.0115}
+    - {label: sys, symerror: 0.0017}
+    value: 0.9254
+  - errors:
+    - {label: stat, symerror: 0.0116}
+    - {label: sys, symerror: 0.0014}
+    value: 0.9291
+  - errors:
+    - {label: stat, symerror: 0.0114}
+    - {label: sys, symerror: 0.0013}
+    value: 0.9319
+  - errors:
+    - {label: stat, symerror: 0.0147}
+    - {label: sys, symerror: 0.0012}
+    value: 0.9554
+  - errors:
+    - {label: stat, symerror: 0.0222}
+    - {label: sys, symerror: 0.0017}
+    value: 0.9233
+independent_variables:
+- header: {name: MEAN(NAME=Q**2)}
+  values:
+  - {value: 0.9}
+  - {value: 1.11}
+  - {value: 1.38}
+  - {value: 1.76}
+  - {value: 2.24}
+  - {value: 2.75}
+  - {value: 3.49}
+  - {value: 4.47}
+  - {value: 5.46}
+  - {value: 6.91}
+  - {value: 8.92}
+  - {value: 11.37}
+  - {value: 14.87}
+  - {value: 19.74}
+  - {value: 26.36}
+  - {value: 34.74}

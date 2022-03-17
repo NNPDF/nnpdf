@@ -1,0 +1,57 @@
+dependent_variables:
+- header: {name: F2(Q=DEUT)/F2(Q=P)}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE(Q=DEUT), value: MUON DEUT --> MUON X}
+  - {name: RE(Q=P), value: MUON P --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '29.709'}
+  - {name: X, value: '0.005'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0615}
+    - {label: sys, symerror: 0.003}
+    value: 1.005
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.0037}
+    value: 1.0
+  - errors:
+    - {label: stat, symerror: 0.0208}
+    - {label: sys, symerror: 0.0043}
+    value: 1.014
+  - errors:
+    - {label: stat, symerror: 0.0172}
+    - {label: sys, symerror: 0.0046}
+    value: 0.9945
+  - errors:
+    - {label: stat, symerror: 0.0092}
+    - {label: sys, symerror: 0.0094}
+    value: 0.9795
+  - errors:
+    - {label: stat, symerror: 0.0157}
+    - {label: sys, symerror: 0.0032}
+    value: 0.9966
+  - errors:
+    - {label: stat, symerror: 0.0137}
+    - {label: sys, symerror: 0.0033}
+    value: 0.9893
+  - errors:
+    - {label: stat, symerror: 0.0128}
+    - {label: sys, symerror: 0.0032}
+    value: 0.9959
+  - errors:
+    - {label: stat, symerror: 0.0098}
+    - {label: sys, symerror: 0.0048}
+    value: 0.9842
+independent_variables:
+- header: {name: MEAN(NAME=Q**2)}
+  values:
+  - {value: 0.16}
+  - {value: 0.25}
+  - {value: 0.35}
+  - {value: 0.45}
+  - {value: 0.61}
+  - {value: 0.88}
+  - {value: 1.13}
+  - {value: 1.38}
+  - {value: 1.71}
