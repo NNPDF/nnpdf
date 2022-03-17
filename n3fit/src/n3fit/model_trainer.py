@@ -20,6 +20,8 @@ from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 
+from n3fit.layers.alphas import AlphasLayer
+
 log = logging.getLogger(__name__)
 
 # Threshold defaults
@@ -455,6 +457,8 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
+        alphas = AlphasLayer(name="alphas_layer")
+
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
         for exp_dict in self.exp_info:
             if not self.mode_hyperopt:
@@ -462,6 +466,7 @@ class ModelTrainer:
             exp_layer = model_gen.observable_generator(
                 exp_dict,
                 alphas_fktabsdict=self.exp_info[0]["alphas_fktabsdict"],
+                alphas=alphas,
             )
 
             # Save the input(s) corresponding to this experiment
@@ -488,7 +493,8 @@ class ModelTrainer:
             pos_layer = model_gen.observable_generator(
                 pos_dict,
                 alphas_fktabsdict=self.exp_info[0]["alphas_fktabsdict"],
-                positivity_initial=pos_initial
+                alphas=alphas,
+                positivity_initial=pos_initial,
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
@@ -517,6 +523,7 @@ class ModelTrainer:
                 integ_layer = model_gen.observable_generator(
                     integ_dict,
                     alphas_fktabsdict=self.exp_info[0]["alphas_fktabsdict"],
+                    alphas=alphas,
                     positivity_initial=integ_initial, integrability=True
                 )
                 # The input list is still common

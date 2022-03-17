@@ -13,6 +13,8 @@ from tensorflow.keras import optimizers as Kopt
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 import n3fit.backends.keras_backend.operations as op
 
+alphas_opt = tf.keras.optimizers.Adam(learning_rate=0)
+
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split(".")
 if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
@@ -303,7 +305,13 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss)
+        from tensorflow_addons.optimizers import MultiOptimizer
+        non_alphas_layers = [i for i in self.layers if i.name is not "alphas_layer"]
+        alphas_layers = [i for i in self.layers if i.name is "alphas_layer"]
+        opts_and_layers = [(opt, non_alphas_layers), (alphas_opt, alphas_layers)]
+        multi_optimizers = MultiOptimizer(opts_and_layers)
+
+        super().compile(optimizer=multi_optimizers, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value

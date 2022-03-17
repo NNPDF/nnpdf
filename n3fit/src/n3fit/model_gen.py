@@ -20,13 +20,10 @@ from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
-import tensorflow as tf
-ALPHAS = tf.Variable(
-    initial_value=0.118,
-    trainable=True,
-    name="alphas",
-    dtype=tf.float32,
-)
+
+from n3fit.layers.alphas import AlphasLayer
+
+ALPHAS=1
 
 @dataclass
 class ObservableWrapper:
@@ -51,6 +48,7 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
+    alphaslayer: AlphasLayer = None
 
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
@@ -79,7 +77,7 @@ class ObservableWrapper:
         else:
             split_pdf = [pdf]
         # Every obs gets its share of the split
-        output_layers = [obs(p_pdf) for p_pdf, obs in zip(split_pdf, self.observables)]
+        output_layers = [self.alphaslayer(obs(p_pdf)) for p_pdf, obs in zip(split_pdf, self.observables)]
         # Concatenate all datasets (so that experiments are one single entity)
         ret = op.concatenate(output_layers, axis=2)
         if self.rotation is not None:
@@ -93,7 +91,7 @@ class ObservableWrapper:
 
 
 def observable_generator(
-    spec_dict, alphas_fktabsdict, positivity_initial=1.0, integrability=False
+    spec_dict, alphas_fktabsdict, alphas, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -235,6 +233,7 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
+            alphaslayer=alphas,
         )
 
         layer_info = {
@@ -260,6 +259,7 @@ def observable_generator(
         invcovmat=spec_dict["invcovmat"],
         data=spec_dict["expdata"],
         rotation=obsrot_tr,
+        alphaslayer=alphas,
     )
     out_vl = ObservableWrapper(
         f"{spec_name}_val",
@@ -268,6 +268,7 @@ def observable_generator(
         invcovmat=spec_dict["invcovmat_vl"],
         data=spec_dict["expdata_vl"],
         rotation=obsrot_vl,
+        alphaslayer=alphas,
     )
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
@@ -277,6 +278,7 @@ def observable_generator(
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
         rotation=None,
+        alphaslayer=alphas,
     )
 
     layer_info = {

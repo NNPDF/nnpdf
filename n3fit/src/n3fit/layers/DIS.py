@@ -10,7 +10,6 @@ import numpy as np
 from .observable import Observable
 from n3fit.backends import operations as op
 
-
 class DIS(Observable):
     """
         The DIS class receives a list of active flavours and a fktable
@@ -78,14 +77,16 @@ class DIS(Observable):
             list_alphas_results.append(self.operation(results))
 
 
-        import tensorflow_probability as tfp
-        out = tfp.math.interp_regular_1d_grid(
-            self.alphas,
-            0.116,
-            0.120,
-            list_alphas_results,
-            fill_value="extrapolate",
-            axis=0
-        )
+        # import tensorflow_probability as tfp
+        # out = tfp.math.interp_regular_1d_grid(
+        #     self.alphas,
+        #     0.116,
+        #     0.120,
+        #     list_alphas_results,
+        #     fill_value="extrapolate",
+        #     axis=0
+        # )
 
-        return out
+        # out = self.alphas(list_alphas_results)
+
+        return list_alphas_results
