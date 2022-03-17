@@ -145,7 +145,9 @@ def dataset_inputs_only_additive_covmat_plus_thcovmat(
     _list_of_central_values, _only_additive = True)
     if theory_covmat_flag:
         if use_thcovmat_in_sampling:
-            return  exp_covmat + loaded_theory_covmat
+            #Adding a small contribution to the diagonal to regularize it (make it positive definite)
+            diag_enha = 1.e-6
+            return  exp_covmat + loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
     return exp_covmat
     
 
