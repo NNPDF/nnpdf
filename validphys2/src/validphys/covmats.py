@@ -132,6 +132,7 @@ def dataset_inputs_only_additive_covmat_plus_thcovmat(
     dataset_inputs_loaded_cd_with_cuts,
     data_input,
     theory_covmat_flag,
+    use_thcovmat_in_sampling,
     loaded_theory_covmat,
     use_weights_in_covmat=True,
     norm_threshold=None,
@@ -143,7 +144,8 @@ def dataset_inputs_only_additive_covmat_plus_thcovmat(
     norm_threshold,
     _list_of_central_values, _only_additive = True)
     if theory_covmat_flag:
-        return  exp_covmat + loaded_theory_covmat
+        if use_thcovmat_in_sampling:
+            return  exp_covmat + loaded_theory_covmat
     return exp_covmat
     
 
@@ -397,7 +399,8 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     norm_threshold=None,
     dataset_inputs_t0_predictions,
     loaded_theory_covmat,
-    theory_covmat_flag
+    theory_covmat_flag,
+    use_thcovmat_in_fitting,
     ):
     exp_covmat = dataset_inputs_covmat_from_systematics(
         dataset_inputs_loaded_cd_with_cuts,
@@ -407,7 +410,8 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
     if theory_covmat_flag is True:
-        return exp_covmat + loaded_theory_covmat
+        if use_thcovmat_in_fitting is True:
+            return exp_covmat + loaded_theory_covmat
     return exp_covmat
 
 
