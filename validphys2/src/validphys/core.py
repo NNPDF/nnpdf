@@ -305,46 +305,40 @@ class CommonDataSpec(TupleComp):
     def data(self):
         """Reads the data as a 1-d numpy array"""
         if self._data is None:
-            jj = json.load(self._data_file.open("r", encoding="utf-8"))
-            self._data = np.array(jj["data"])
+            datayaml = yaml.safe_load(self._data_file.read_text(encoding="utf-8"))
+            self._data = pd.DataFrame.from_records(datayaml["data_central"], index="index")
+            self._data.rename(columns={self._data.columns[0]:"data"}, inplace=True)
         return self._data
 
     @property
     def uncertainties(self):
         """Loads the uncertainties when needed"""
         if self._uncertainties is None:
-            jj = json.load(self._uncertainties_file.open("r", encoding="utf-8"))
-            statistical = pd.Series(jj["statistical"], name="stat")
-            systematics = []
-            for uncertainty in jj["systematic"]:
-                # TODO: the uncertainties file will change
-                for i, v in uncertainty.items():
-                    name = f"{i}_{v[0]}_{v[1]}"
-                    systematics.append(pd.Series(v[2:], name=name))
-            systematics_df = pd.concat(systematics, axis=1)
-            # Drop nan
-            systematics_df.dropna(axis="columns", inplace=True)
-            self._uncertainties = Uncertainties(pd.concat([statistical, systematics_df], axis=1))
+            unyaml = yaml.safe_load(self._uncertainties_file.read_text(encoding="utf-8"))
+            unc_data = []
+            keys = []
+            for key, data in unyaml.items():
+                if key == "stat":
+                    unc_data.append(pd.DataFrame.from_records(data, index="index"))
+                    keys.append(key)
+                else:
+                    unc_data.append(pd.DataFrame.from_records(data["errors"], index="index"))
+                    keys.append(f"{key}_" + "_".join(data["mode"]))
+            unc_df = pd.concat(unc_data, axis=1, keys=keys).droplevel(1, axis=1).dropna()
+            self._uncertainties = Uncertainties(unc_df)
         return self._uncertainties
 
     @property
     def kinematics(self):
-        """Reads the kinematics of the dataset as a {'var':'values'} dict"""
+        """Reads the kinematics of the dataset into a pandas dataframe"""
         if self._kinematics is None:
-            jj = json.load(self._kinematics_file.open("r", encoding="utf-8"))
-            avg = jj["kinematics_avg"]
-            min_d = jj["kinematics_min"]
-            max_d = jj["kinematics_max"]
-
-            all_kin = []
-            for k, v in avg.items():
-                vm = v if min_d[k] is None else min_d[k]
-                vp = v if max_d[k] is None else max_d[k]
-                dd = pd.DataFrame({"avg": v, "min": vm, "max": vp})
-                dd.columns = pd.MultiIndex.from_product([[k], dd.columns])
-                all_kin.append(dd)
-            self.all_kin = all_kin
-            kin_df = pd.concat(all_kin, axis=1)
+            kinyaml = yaml.safe_load(self._kinematics_file.read_text(encoding="utf-8"))
+            kin_data = []
+            keys = []
+            for key, data in kinyaml.items():
+                kin_data.append(pd.DataFrame.from_records(data, index="index"))
+                keys.append(key.replace("kin_", ""))
+            kin_df = pd.concat(kin_data, axis=1, keys=keys).swaplevel(0,1, axis=1).sort_values(1, axis="columns")
 
             self._kinematics = Kinematics(kin_df)
         return self._kinematics
@@ -376,7 +370,7 @@ class CommonDataSpec(TupleComp):
     def load(self):
         """Load completely the dataset, creating a full CommonData object"""
         # Load all information
-        d = pd.Series(self.data, name="data")
+        d = self.data
         k = self.kinematics
         u = self.uncertainties
         return CommonData(self.name, self.variant, self.process_type, d, k, u)
@@ -384,7 +378,7 @@ class CommonDataSpec(TupleComp):
 
     # Legacy libNNPDF-like interface
     def get_cv(self):
-        return self.data
+        return self.data.to_numpy().squeeze()
 
     def get_kintable(self):
         return self.kinematics.get_kintable()
