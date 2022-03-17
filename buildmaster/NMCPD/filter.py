@@ -33,9 +33,9 @@ def filter_NMCPD():
             y = Q2 / ( sqrts * sqrts * x )
             kin_avg_value = {'index' : index , 'x' : x , 'q2' : Q2 , 'y' : y}
             kin_avg.append(kin_avg_value)
-            kin_min_value = {'index' : index , 'x' : None , 'q2' : None , 'y' : None}
+            kin_min_value = {'index' : index , 'x' : x , 'q2' : Q2 , 'y' : y}
             kin_min.append(kin_min_value)
-            kin_max_value = {'index' : index , 'x' : None , 'q2' : None , 'y' : None}
+            kin_max_value = {'index' : index , 'x' : x , 'q2' : Q2 , 'y' : y}
             kin_max.append(kin_max_value)
             
             stat_error_value = {'index' : index, 'value' : input['dependent_variables'][0]['values'][j]['errors'][0]['symerror']}
