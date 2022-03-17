@@ -128,13 +128,34 @@ def covmat_from_systematics(
         )
     return covmat
 
+def dataset_inputs_only_additive_covmat_plus_thcovmat(
+    dataset_inputs_loaded_cd_with_cuts,
+    data_input,
+    theory_covmat_flag,
+    loaded_theory_covmat,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    _list_of_central_values=None,
+):
+    exp_covmat = dataset_inputs_covmat_from_systematics(dataset_inputs_loaded_cd_with_cuts,
+    data_input,
+    use_weights_in_covmat,
+    norm_threshold,
+    _list_of_central_values, _only_additive = True)
+    if theory_covmat_flag:
+        return  exp_covmat + loaded_theory_covmat
+    return exp_covmat
+    
+
+
 
 def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    _list_of_central_values=None
+    _list_of_central_values=None,
+    _only_additive=False
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -201,7 +222,11 @@ def dataset_inputs_covmat_from_systematics(
         data_input,
         _list_of_central_values
     ):
-        sys_errors = cd.systematic_errors(central_values)
+        if _only_additive:
+            sys_errors = cd.additive_errors
+        else:
+            sys_errors = cd.systematic_errors(central_values)
+
         stat_errors = cd.stat_errors.to_numpy()
         weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
@@ -382,7 +407,7 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
     if theory_covmat_flag is True:
-        return np.add(exp_covmat,loaded_theory_covmat)
+        return exp_covmat + loaded_theory_covmat
     return exp_covmat
 
 

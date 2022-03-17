@@ -101,10 +101,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
-
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
-    theory_covmat_flag,
-    loaded_theory_covmat,
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, dataset_inputs_only_additive_covmat_plus_thcovmat, replica_mcseed,
     genrep=True):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -153,24 +150,8 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
-
-    #loading theory_covmat if requested 
-    theory_covmat = loaded_theory_covmat
-    #eliminate negative eignvalues of thcovmat and compute sqrt
-    chol_theory_covmat = np.zeros(shape = (1,1))
-    if theory_covmat_flag is True:
-        tr = 1.e-3
-        eigval, eigvec = lin.eig(theory_covmat)
-        for j in range(len(eigval)):
-            if eigval[j] < max(eigval)*tr:
-                eigval[j] = max(eigval)*tr
-        new_eigval_diag = np.diag(eigval)
-        new_theory_covmat = eigvec @ new_eigval_diag @ lin.inv(eigvec)
-        chol_theory_covmat = np.real(sqrt_covmat(new_theory_covmat))
-               
     while True:
         pseudodatas = []
-        special_add = []
         special_mult = []
         mult_shifts = []
         check_positive_masks = []
@@ -180,23 +161,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
 
             # add contribution from statistical uncertainty
             pseudodata += (cd.stat_errors.to_numpy() * rng.normal(size=cd.ndata))
-
-            # ~~~ ADDITIVE ERRORS  ~~~
-            add_errors = cd.additive_errors
-            add_uncorr_errors = add_errors.loc[:, add_errors.columns=="UNCORR"].to_numpy()
-
-            pseudodata += (add_uncorr_errors * rng.normal(size=add_uncorr_errors.shape)).sum(axis=1)
-
-            # correlated within dataset
-            add_corr_errors = add_errors.loc[:, add_errors.columns == "CORR"].to_numpy()
-            pseudodata += add_corr_errors @ rng.normal(size=add_corr_errors.shape[1])
-
-            # append the partially shifted pseudodata
             pseudodatas.append(pseudodata)
-            # store the additive errors with correlations between datasets for later use
-            special_add.append(
-                add_errors.loc[:, ~add_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
-            )
             # ~~~ MULTIPLICATIVE ERRORS ~~~
             mult_errors = cd.multiplicative_errors
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
@@ -222,16 +187,12 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
                 check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
             else:
                 check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-
         # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
-        special_add_errors = pd.concat(special_add, axis=0, sort=True).fillna(0).to_numpy()
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
-        
-           
+        total_covmat_sqrt = sqrt_covmat(dataset_inputs_only_additive_covmat_plus_thcovmat)
         all_pseudodata = (
             np.concatenate(pseudodatas, axis=0)
-            + special_add_errors @ rng.normal(size=special_add_errors.shape[1])
-            + chol_theory_covmat @ rng.normal(size=chol_theory_covmat.shape[1])
+            + total_covmat_sqrt @ rng.normal(size=total_covmat_sqrt.shape[1])
         ) * (
             np.concatenate(mult_shifts, axis=0)
             * (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
