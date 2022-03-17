@@ -1,0 +1,87 @@
+dependent_variables:
+- header: {name: F2(Q=DEUT)/F2(Q=P)}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE(Q=DEUT), value: MUON DEUT --> MUON X}
+  - {name: RE(Q=P), value: MUON P --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '29.709'}
+  - {name: X, value: '0.025'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0375}
+    - {label: sys, symerror: 0.0063}
+    value: 0.9493
+  - errors:
+    - {label: stat, symerror: 0.0287}
+    - {label: sys, symerror: 0.0064}
+    value: 0.9601
+  - errors:
+    - {label: stat, symerror: 0.0313}
+    - {label: sys, symerror: 0.0037}
+    value: 0.9408
+  - errors:
+    - {label: stat, symerror: 0.0131}
+    - {label: sys, symerror: 0.0022}
+    value: 0.962
+  - errors:
+    - {label: stat, symerror: 0.0154}
+    - {label: sys, symerror: 0.002}
+    value: 0.9585
+  - errors:
+    - {label: stat, symerror: 0.0124}
+    - {label: sys, symerror: 0.0023}
+    value: 0.9631
+  - errors:
+    - {label: stat, symerror: 0.0107}
+    - {label: sys, symerror: 0.0027}
+    value: 0.9849
+  - errors:
+    - {label: stat, symerror: 0.0076}
+    - {label: sys, symerror: 0.0023}
+    value: 0.9802
+  - errors:
+    - {label: stat, symerror: 0.0071}
+    - {label: sys, symerror: 0.002}
+    value: 0.9677
+  - errors:
+    - {label: stat, symerror: 0.0074}
+    - {label: sys, symerror: 0.0018}
+    value: 0.9581
+  - errors:
+    - {label: stat, symerror: 0.0065}
+    - {label: sys, symerror: 0.0023}
+    value: 0.979
+  - errors:
+    - {label: stat, symerror: 0.0085}
+    - {label: sys, symerror: 0.0017}
+    value: 0.9764
+  - errors:
+    - {label: stat, symerror: 0.0097}
+    - {label: sys, symerror: 0.0017}
+    value: 0.9592
+  - errors:
+    - {label: stat, symerror: 0.0085}
+    - {label: sys, symerror: 0.0032}
+    value: 0.9893
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - {label: sys, symerror: 0.0043}
+    value: 0.9738
+independent_variables:
+- header: {name: MEAN(NAME=Q**2)}
+  values:
+  - {value: 0.26}
+  - {value: 0.35}
+  - {value: 0.45}
+  - {value: 0.62}
+  - {value: 0.86}
+  - {value: 1.13}
+  - {value: 1.37}
+  - {value: 1.74}
+  - {value: 2.24}
+  - {value: 2.74}
+  - {value: 3.45}
+  - {value: 4.47}
+  - {value: 5.48}
+  - {value: 6.92}
+  - {value: 8.92}

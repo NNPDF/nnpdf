@@ -1,42 +1,30 @@
-#Generalia
+# Generalia
 setname: "NMPCPD"
 experiment: "NMC"
-#ndata: 260 #not needed because it follows from data_central?
-#nsys_exp: 5 #not needed because it follows from data_uncertainties?
 
-#References
-arXiv: "hep-ex/9611022"
-iNSPIRE: "https://inspirehep.net/literature/424154"
-hepdata: "https://www.hepdata.net/record/ins426595"
-   tables:
-     - 2
-     - 3
-     - 4
-     - 5
-     - 6
-     - 7
-     - 8
-     - 9
-     - 10
-     - 11
-     - 12
-     - 13
-     - 14
-     - 15
-     - 16
-     - 17
-     - 18
-     - 19
-     - 20
-     - 21
-bibtex: "NewMuon:1996fwh"
+# References
+arXiv:
+   url: "https://arxiv.org/abs/hep-ex/9611022"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/424154"
+hepdata:
+   url: "https://www.hepdata.net/record/ins426595"
+   version: "v1"
+   tables: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
-#Data (defaults)
-data_central: data.json
-data_uncertainties: uncertainties.json
-data_kinematics: kinematics.json
+# Data (defaults)
+data_central: data.yaml
+data_uncertainties: uncertainties.yaml
+data_kinematics: kinematics.yaml
 
-#Theory
+# Data (variants)
+variants:
+  deweighted:
+     data_uncertainties: uncertainties_dw.yaml
+  shifted:
+     data_uncertainties: uncertainties_sh.yaml
+
+# Theory
 proctype: "DIS_F2R"
 FK_tables:
   - FK_NMCPD_D.dat
@@ -44,7 +32,7 @@ FK_tables:
 compound: "RATIO"
 nnpdf31_process: "DIS NC"
 
-#Plotting
+# Plotting
 dataset_label: "NMC $d/p$"
 x: k2
 y_label: "$F_2^d/F_2^p(x,Q^2)$" 
@@ -52,9 +40,3 @@ kinematics_override: dis_sqrt_scale
 figure_by:
   - k1
 
-#Variants
-variants:
-  - nuclear_uncertainty_choice:
-       deweighted: uncertainties_dw.json
-       shifted: uncertainties_dw.json
-default_variant: none

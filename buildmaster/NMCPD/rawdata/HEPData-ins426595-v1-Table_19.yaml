@@ -1,0 +1,72 @@
+dependent_variables:
+- header: {name: F2(Q=DEUT)/F2(Q=P)}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE(Q=DEUT), value: MUON DEUT --> MUON X}
+  - {name: RE(Q=P), value: MUON P --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '29.709'}
+  - {name: X, value: '0.45'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0242}
+    - {label: sys, symerror: 0.0092}
+    value: 0.7771
+  - errors:
+    - {label: stat, symerror: 0.0245}
+    - {label: sys, symerror: 0.0066}
+    value: 0.7608
+  - errors:
+    - {label: stat, symerror: 0.0161}
+    - {label: sys, symerror: 0.0044}
+    value: 0.7698
+  - errors:
+    - {label: stat, symerror: 0.0211}
+    - {label: sys, symerror: 0.0035}
+    value: 0.7793
+  - errors:
+    - {label: stat, symerror: 0.0227}
+    - {label: sys, symerror: 0.0026}
+    value: 0.7754
+  - errors:
+    - {label: stat, symerror: 0.0158}
+    - {label: sys, symerror: 0.0036}
+    value: 0.7626
+  - errors:
+    - {label: stat, symerror: 0.0146}
+    - {label: sys, symerror: 0.0027}
+    value: 0.7529
+  - errors:
+    - {label: stat, symerror: 0.016}
+    - {label: sys, symerror: 0.0025}
+    value: 0.7705
+  - errors:
+    - {label: stat, symerror: 0.0187}
+    - {label: sys, symerror: 0.002}
+    value: 0.7474
+  - errors:
+    - {label: stat, symerror: 0.0222}
+    - {label: sys, symerror: 0.0015}
+    value: 0.7575
+  - errors:
+    - {label: stat, symerror: 0.0281}
+    - {label: sys, symerror: 0.0012}
+    value: 0.7632
+  - errors:
+    - {label: stat, symerror: 0.0296}
+    - {label: sys, symerror: 0.001}
+    value: 0.7254
+independent_variables:
+- header: {name: MEAN(NAME=Q**2)}
+  values:
+  - {value: 4.54}
+  - {value: 5.47}
+  - {value: 6.93}
+  - {value: 8.92}
+  - {value: 11.34}
+  - {value: 14.89}
+  - {value: 19.77}
+  - {value: 26.64}
+  - {value: 35.5}
+  - {value: 47.26}
+  - {value: 63.65}
+  - {value: 98.05}
