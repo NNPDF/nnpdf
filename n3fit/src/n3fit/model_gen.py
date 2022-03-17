@@ -13,7 +13,7 @@ from dataclasses import dataclass
 import numpy as np
 from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
+from n3fit.layers import Preprocessing, FkRotation, RotateBasis
 
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations as op
@@ -572,7 +572,7 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
+    basis_rotation = RotateBasis(flav_info=flav_info, fitbasis=fitbasis)
 
     # Normalization and sum rules
     if impose_sumrule:

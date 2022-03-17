@@ -202,7 +202,7 @@ def test_rotation_flavour():
 
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)
-    rotmat = layers.FlavourToEvolution(flav_info, 'FLAVOUR')
+    rotmat = layers.RotateBasis(flav_info, 'FLAVOUR')
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)
 
@@ -227,7 +227,7 @@ def test_rotation_evol():
 
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)
-    rotmat = layers.FlavourToEvolution(flav_info, 'EVOL')
+    rotmat = layers.RotateBasis(flav_info, 'EVOL')
     res_layer = rotmat(x)
     assert np.alltrue(res_np == res_layer)    
     

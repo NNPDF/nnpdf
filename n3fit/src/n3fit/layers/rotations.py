@@ -44,7 +44,7 @@ class Rotation(MetaLayer):
         return op.concatenate(result)
 
 
-class FlavourToEvolution(Rotation):
+class RotateBasis(Rotation):
     """
         Rotates from the flavour basis to
         the evolution basis.
