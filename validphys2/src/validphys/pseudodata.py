@@ -159,8 +159,6 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, dataset_inputs_only_
             # copy here to avoid mutating the central values.
             pseudodata = cd.central_values.to_numpy(copy=True)
 
-            # add contribution from statistical uncertainty
-            pseudodata += (cd.stat_errors.to_numpy() * rng.normal(size=cd.ndata))
             pseudodatas.append(pseudodata)
             # ~~~ MULTIPLICATIVE ERRORS ~~~
             mult_errors = cd.multiplicative_errors
@@ -187,7 +185,9 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, dataset_inputs_only_
                 check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
             else:
                 check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
+
         # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
+        import ipdb; ipdb.set_trace()
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
         total_covmat_sqrt = sqrt_covmat(dataset_inputs_only_additive_covmat_plus_thcovmat)
         all_pseudodata = (
