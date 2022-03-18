@@ -302,6 +302,32 @@
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 
+- dataset: DYE605_dw_30
+  reason: |
+    Remove data points for which the fixed-order perturbative expansion is not
+    reliable since resummation effects are large. A justification of these cuts
+    can be found in arXiv:1507.01006.
+  process_type: DYP
+  local_variables:
+    tau: M2 / sqrts**2
+    ymax: -0.5 * log(tau)
+    maxTau: 0.080
+    maxY: 0.663
+  rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
+
+- dataset: DYE605_sh_30
+  reason: |
+    Remove data points for which the fixed-order perturbative expansion is not
+    reliable since resummation effects are large. A justification of these cuts
+    can be found in arXiv:1507.01006.
+  process_type: DYP
+  local_variables:
+    tau: M2 / sqrts**2
+    ymax: -0.5 * log(tau)
+    maxTau: 0.080
+    maxY: 0.663
+  rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
+
 - process_type: DIS_ALL
   reason: Generalised cut for all DIS processes
   local_variables:
