@@ -128,30 +128,6 @@ def covmat_from_systematics(
         )
     return covmat
 
-def dataset_inputs_only_additive_covmat_plus_thcovmat(
-    dataset_inputs_loaded_cd_with_cuts,
-    data_input,
-    theory_covmat_flag,
-    use_thcovmat_in_sampling,
-    loaded_theory_covmat,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
-    _list_of_central_values=None,
-):
-    exp_covmat = dataset_inputs_covmat_from_systematics(dataset_inputs_loaded_cd_with_cuts,
-    data_input,
-    use_weights_in_covmat,
-    norm_threshold,
-    _list_of_central_values, _only_additive = True)
-    if theory_covmat_flag:
-        if use_thcovmat_in_sampling:
-            #Adding a small contribution to the diagonal to regularize it (make it positive definite)
-            diag_enha = 1.e-6
-            return  exp_covmat + loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
-    return exp_covmat
-    
-
-
 
 def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
@@ -226,10 +202,8 @@ def dataset_inputs_covmat_from_systematics(
         data_input,
         _list_of_central_values
     ):
-        if _only_additive:
-            sys_errors = cd.additive_errors
-        else:
-            sys_errors = cd.systematic_errors(central_values)
+        
+        sys_errors = cd.systematic_errors(central_values)
 
         stat_errors = cd.stat_errors.to_numpy()
         weights.append(np.full_like(stat_errors, dsinp.weight))

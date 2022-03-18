@@ -448,6 +448,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     for i in range(matlength):
         for j in range(matlength):
             cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
+    import ipdb; ipdb.set_trace()
     df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
     return df
 

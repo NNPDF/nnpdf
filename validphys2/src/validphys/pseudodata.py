@@ -101,7 +101,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, dataset_inputs_only_additive_covmat_plus_thcovmat, replica_mcseed,
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,
     genrep=True):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
