@@ -6,6 +6,7 @@ Providers which prepare the data ready for
 functions make calls to libnnpdf C++ library.
 
 """
+import functools
 from collections import defaultdict
 import hashlib
 import logging
@@ -19,7 +20,7 @@ from reportengine.table import table
 from validphys.n3fit_data_utils import (
     validphys_group_extractor,
 )
-from validphys.core import IntegrabilitySetSpec
+from validphys.core import IntegrabilitySetSpec, TupleComp
 
 log = logging.getLogger(__name__)
 
@@ -54,6 +55,21 @@ def replica_mcseed(replica, mcseed, genrep):
     return res
 
 
+class _TrMasks(TupleComp):
+    """Class holding the training validation mask for a group of datasets
+    If the same group of dataset receives the same trvlseed then the mask
+    will be the same.
+    This class holds said information so it can be reused easily
+    """
+    def __init__(self, group_name, seed, masks=None):
+        self.masks = masks
+        super().__init__(group_name, seed)
+
+    def __iter__(self):
+        for m in self.masks:
+            yield m
+
+
 def tr_masks(data, replica_trvlseed):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
@@ -80,7 +96,7 @@ def tr_masks(data, replica_trvlseed):
         )
         np.random.shuffle(mask)
         trmask_partial.append(mask)
-    return trmask_partial
+    return _TrMasks(str(data), replica_trvlseed, trmask_partial)
 
 
 def kfold_masks(kpartitions, data):
@@ -150,6 +166,16 @@ def kfold_masks(kpartitions, data):
     return list_folds
 
 
+@functools.lru_cache
+def fittable_datasets_masked(data, tr_masks):
+    """Generate a list of :py:class:`validphys.n3fit_data_utils.FittableDataSet`
+    from a group of dataset and the corresponding training/validation masks
+    """
+    # This is separated from fitting_data_dict so that we can cache the result
+    # when the trvlseed is the same for all replicas (great for parallel replicas)
+    return validphys_group_extractor(data.datasets, tr_masks.masks)
+
+
 def fitting_data_dict(
     data,
     make_replica,
@@ -157,6 +183,7 @@ def fitting_data_dict(
     dataset_inputs_t0_covmat_from_systematics,
     tr_masks,
     kfold_masks,
+    fittable_datasets_masked,
     diagonal_basis=None,
 ):
     """
@@ -201,20 +228,14 @@ def fitting_data_dict(
     """
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
-    ndata = 0
-    expdata_true_raw = []
-    for d in dataset_inputs_loaded_cd_with_cuts:
-        ndata += d.ndata
-        expdata_true_raw.append(d.central_values.to_numpy())
-    expdata_true = np.concatenate(expdata_true_raw).reshape(1, ndata)
+    expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
 
+    # Use more sensible naming
     expdata = make_replica
-
-    datasets = validphys_group_extractor(data.datasets, tr_masks)
-
-    # t0 covmat
-    covmat = dataset_inputs_t0_covmat_from_systematics
+    tr_masks = tr_masks.masks
+    covmat = dataset_inputs_t0_covmat_from_systematics # t0 covmat
     inv_true = np.linalg.inv(covmat)
+    datasets = fittable_datasets_masked
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
@@ -270,7 +291,7 @@ def fitting_data_dict(
     dict_out = {
         "datasets": datasets,
         "name": str(data),
-        "expdata_true": expdata_true,
+        "expdata_true": expdata_true.reshape(1, -1),
         "invcovmat_true": inv_true,
         "covmat": covmat,
         "trmask": tr_mask,
