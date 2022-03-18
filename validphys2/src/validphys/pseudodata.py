@@ -152,7 +152,10 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     covmat = dataset_inputs_t0_covmat_from_systematics
     if theory_covmat_flag:
         if use_thcovmat_in_sampling:
-            covmat += loaded_theory_covmat
+            #Adding a little regularization to theory covmat to do the sqrt
+            diag_enha = 1.e-6
+            covmat += loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
+
     covmat_sqrt = sqrt_covmat(covmat)
 
     # The inner while True loop is for ensuring a positive definite
