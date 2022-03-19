@@ -13,7 +13,7 @@ from tensorflow.keras import optimizers as Kopt
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 import n3fit.backends.keras_backend.operations as op
 
-alphas_opt = tf.keras.optimizers.Adam(learning_rate=0)
+alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.01)
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split(".")
@@ -139,8 +139,7 @@ class MetaModel(Model):
         tensors_in = {}
         input_dict = {}
         for input_tensor in input_list:
-            # If the input contains a tensor_content, store it to use at predict/fit/eval times
-            # otherwise, put a placeholder None as it will come from the outside
+            # If the input containsis notholder None as it will come from the outside
             name = input_tensor.name.rsplit(":", 1)[0]
             input_dict[name] = input_tensor
             try:
@@ -306,8 +305,8 @@ class MetaModel(Model):
             self.target_tensors = target_output
 
         from tensorflow_addons.optimizers import MultiOptimizer
-        non_alphas_layers = [i for i in self.layers if i.name is not "alphas_layer"]
-        alphas_layers = [i for i in self.layers if i.name is "alphas_layer"]
+        non_alphas_layers = [i for i in self.layers if i.name != "alphas_layer"]
+        alphas_layers = [i for i in self.layers if i.name == "alphas_layer"]
         opts_and_layers = [(opt, non_alphas_layers), (alphas_opt, alphas_layers)]
         multi_optimizers = MultiOptimizer(opts_and_layers)
 

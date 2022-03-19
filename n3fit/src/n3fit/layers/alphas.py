@@ -10,7 +10,7 @@ from tensorflow.keras.layers import Layer
 class AlphasLayer(Layer):
     def __init__(self, **kwargs):
         self.alphas = tf.Variable(
-        initial_value=0.118,
+        initial_value=0.117,
         trainable=True,
         name="alphas",
         dtype=tf.float32,
