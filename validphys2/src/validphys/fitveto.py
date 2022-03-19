@@ -70,7 +70,10 @@ def determine_vetoes(fitinfos: list, nsigma_discard_chi2: float, nsigma_discard_
 
     # Positivity veto
     posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
+    # alphasmask = np.array([replica.alphas > 0.11666 for replica in fitinfos], dtype=bool)
     vetoes = {"Positivity": posmask}
+    # vetoes["alphas"] = alphasmask
+    # posmask = posmask & alphasmask
     total_mask = posmask.copy()
 
     # Integrability veto
