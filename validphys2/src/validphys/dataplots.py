@@ -47,7 +47,7 @@ def alphas_hist(replica_data, pdf):
     anchored_text.patch.set_linewidth(0)
     ax.add_artist(anchored_text)
     
-    ax.hist(alphas_values, density=False, edgecolor="black")
+    ax.hist(alphas_values, density=False, edgecolor="black", bins=6)
 
     return fig
 
@@ -748,7 +748,6 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
     identify whether training or validation chi² is larger.
 
     """
-    # import ipdb; ipdb.set_trace()
     training, valid, alphas = zip(*((dt.training, dt.validation, dt.alphas) for dt in replica_data))
     fig, ax = plt.subplots(
         figsize=(
@@ -757,10 +756,10 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
         )
     )
     sc = ax.scatter(training, valid, marker="o", s=20, c=alphas)
-    legend1 = ax.legend(*sc.legend_elements(),
-                    loc="upper left", title=r"$\alpha_s$")
-    ax.add_artist(legend1)
-    # fig.colorbar(sc, label=r"$\alpha_s$")
+    # legend1 = ax.legend(*sc.legend_elements(),
+    #                 loc="upper left", title=r"$\alpha_s$")
+    # ax.add_artist(legend1)
+    fig.colorbar(sc, label=r"$\alpha_s$")
 
 
     if replica_filters:
@@ -905,49 +904,6 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
     fls = obs_pdf_correlations.flavours
     x = obs_pdf_correlations.xgrid
-def foo(replica_data):
-    import ipdb; ipdb.set_trace()
-    for same_vals, fb in figby:
-        grid = fullgrid[ np.asarray(fb.index),...]
-
-
-        #Use the maximum absolute correlation for plotting purposes
-        absgrid = np.max(np.abs(grid), axis=0)
-        mark_mask = absgrid > np.max(absgrid)*mark_threshold
-
-        label = info.group_label(same_vals, info.figure_by)
-        #TODO: PY36ScalarMappable
-        #TODO Improve title?
-        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
-
-        #Start plotting
-        w,h = plt.rcParams["figure.figsize"]
-        h*=2.5
-        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
-        fig.suptitle(title)
-        colors = sm.to_rgba(info.get_xcol(fb))
-        for flindex, (ax, fl) in enumerate(zip(axes, fls)):
-            for i,color in enumerate(colors):
-                ax.plot(x, grid[i,flindex,:].T, color=color)
-
-
-            flmask = mark_mask[flindex,:]
-            ranges = split_ranges(x, flmask, filter_falses=True)
-            for r in ranges:
-                ax.axvspan(r[0], r[-1], color='#eeeeff')
-
-            ax.set_ylabel("$%s$"%basis.elementlabel(fl))
-            ax.set_xscale(scale_from_grid(obs_pdf_correlations))
-            ax.set_ylim(-1,1)
-            ax.set_xlim(x[0], x[-1])
-        ax.set_xlabel('$x$')
-        #fig.subplots_adjust(hspace=0)
-
-        fig.colorbar(sm, ax=axes.ravel().tolist(), label=info.xlabel,
-                     aspect=100)
-        #TODO: Fix title for this
-        #fig.tight_layout()
-        yield fig
 
 @figure
 def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
