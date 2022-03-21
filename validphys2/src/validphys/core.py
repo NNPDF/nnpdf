@@ -546,7 +546,14 @@ class FKTableSpec(TupleComp):
             fkpath = tuple(fkpath)
         self.fkpath = fkpath
         self.metadata = metadata
-        super().__init__(fkpath, cfactors)
+
+        # If this is a yaml file that loads an applgrid, keep also the name of the target
+        # this is needed since we can now easily reutilize grids 
+        if not self.legacy and self.metadata.get("appl"):
+            super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
+        else:
+            super().__init__(fkpath, cfactors)
+
 
     def _load_legacy(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
