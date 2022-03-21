@@ -30,14 +30,12 @@ def _load_yaml(yaml_file):
     return ret
 
 
-def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
+def get_yaml_information(yaml_file, theorypath):
     """
     Given a yaml_file, return the corresponding dictionary
     with all information and an extra field "paths"
     with all the grids to be loaded for the given dataset.
-    Checks whether the grid is apfelcomb or pineappl
-    if check_pineappl is True this function will raise PineAPPLEquivalentNotKnown
-    if a pineappl grid is not found.
+
     Parameters
     ----------
         yaml_file: Path
@@ -53,10 +51,6 @@ def get_yaml_information(yaml_file, theorypath, check_pineappl=False):
     """
     yaml_content = _load_yaml(yaml_file)
     grids_folder = theorypath / "pineappls"
-
-    if yaml_content.get("appl") and check_pineappl:
-        # This might be useful to use the "legacy loader" when there is no actual pineappl available
-        raise PineAPPLEquivalentNotKnown(yaml_content["target_dataset"])
 
     # Turn the operans and the members into paths (and check all of them exist)
     ret = []
