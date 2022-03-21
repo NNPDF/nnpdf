@@ -310,6 +310,7 @@ def generate_dense_network(
     list_of_pdf_layers = []
     # Modifications: Multiply the number of nodes in the last layer
     # with the number of active As involved in the fitting procedure.
+    nodes = list(nodes)  # Make sure it's a list during hyperopt
     nodes[-1] *= number_amn
     number_of_layers = len(nodes)
     if dropout_rate > 0:
