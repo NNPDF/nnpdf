@@ -150,7 +150,6 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
     #construct covmat
     covmat = dataset_inputs_total_covmat
-    import ipdb; ipdb.set_trace()
     covmat_sqrt = sqrt_covmat(covmat)
 
     # The inner while True loop is for ensuring a positive definite

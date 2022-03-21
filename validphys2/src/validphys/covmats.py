@@ -371,11 +371,14 @@ def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
+    dataset_inputs_t0_predictions,
     loaded_theory_covmat,
     theory_covmat_flag,
     use_thcovmat_in_sampling,
+    use_t0_sampling
     ):
-    covmat = dataset_inputs_t0_total_covmat(
+    if use_t0_sampling is False:
+        covmat = dataset_inputs_t0_total_covmat(
         dataset_inputs_loaded_cd_with_cuts,
         data_input=data_input,
         use_weights_in_covmat=use_weights_in_covmat,
@@ -384,6 +387,19 @@ def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         loaded_theory_covmat=loaded_theory_covmat,
         theory_covmat_flag=theory_covmat_flag,
         use_thcovmat_in_fitting=use_thcovmat_in_sampling,
+        use_t0_fitting=use_t0_sampling
+    )
+    else:
+        covmat = dataset_inputs_t0_total_covmat(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input=data_input,
+        use_weights_in_covmat=use_weights_in_covmat,
+        norm_threshold=norm_threshold,
+        dataset_inputs_t0_predictions=dataset_inputs_t0_predictions,
+        loaded_theory_covmat=loaded_theory_covmat,
+        theory_covmat_flag=theory_covmat_flag,
+        use_thcovmat_in_fitting=use_thcovmat_in_sampling,
+        use_t0_fitting=use_t0_sampling
     )
     
     return covmat
@@ -398,8 +414,18 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     loaded_theory_covmat,
     theory_covmat_flag,
     use_thcovmat_in_fitting,
+    use_t0_fitting
     ):
-    exp_covmat = dataset_inputs_covmat_from_systematics(
+    if use_t0_fitting is False:
+        exp_covmat = dataset_inputs_covmat_from_systematics(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        norm_threshold=norm_threshold,
+        _list_of_central_values=None
+    )
+    else:
+        exp_covmat = dataset_inputs_covmat_from_systematics(
         dataset_inputs_loaded_cd_with_cuts,
         data_input,
         use_weights_in_covmat,

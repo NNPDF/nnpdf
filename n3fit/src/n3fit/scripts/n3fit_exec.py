@@ -156,6 +156,12 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling')
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties')
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties')
+        N3FIT_FIXED_CONFIG['use_t0_sampling'] = False
+        if(sam_t0:=file_content.get('sampling_t0')) is not None:
+            N3FIT_FIXED_CONFIG['use_t0_sampling'] = sam_t0.get('use_t0')
+        N3FIT_FIXED_CONFIG['use_t0_fitting'] = True
+        if(fit_t0:=file_content.get('fitting_t0')) is not None:
+            N3FIT_FIXED_CONFIG['use_t0_fitting'] = fit_t0.get('use_t0')
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
