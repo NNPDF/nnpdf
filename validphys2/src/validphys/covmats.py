@@ -135,7 +135,6 @@ def dataset_inputs_covmat_from_systematics(
     use_weights_in_covmat=True,
     norm_threshold=None,
     _list_of_central_values=None,
-    _only_additive=False
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -367,6 +366,28 @@ def loaded_theory_covmat(output_path,
     return theory_covmat.values
     
 
+def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    loaded_theory_covmat,
+    theory_covmat_flag,
+    use_thcovmat_in_sampling,
+    ):
+    covmat = dataset_inputs_t0_total_covmat(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input=data_input,
+        use_weights_in_covmat=use_weights_in_covmat,
+        norm_threshold=norm_threshold,
+        dataset_inputs_t0_predictions=None,
+        loaded_theory_covmat=loaded_theory_covmat,
+        theory_covmat_flag=theory_covmat_flag,
+        use_thcovmat_in_fitting=use_thcovmat_in_sampling,
+    )
+    
+    return covmat
+
 
 def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     *,
@@ -385,9 +406,10 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
-    if theory_covmat_flag is True:
-        if use_thcovmat_in_fitting is True:
-            return exp_covmat + loaded_theory_covmat
+    if theory_covmat_flag and use_thcovmat_in_fitting:
+            #Adding regularization to theory covmat to make sqrt possible  
+            diag_enha = 1.e-6
+            return exp_covmat + loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
     return exp_covmat
 
 

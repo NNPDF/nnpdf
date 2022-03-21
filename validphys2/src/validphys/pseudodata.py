@@ -101,7 +101,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dataset_inputs_t0_covmat_from_systematics, loaded_theory_covmat, theory_covmat_flag, use_thcovmat_in_sampling, genrep=True):
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dataset_inputs_total_covmat, genrep=True):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -149,13 +149,8 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
     #construct covmat
-    covmat = dataset_inputs_t0_covmat_from_systematics
-    if theory_covmat_flag:
-        if use_thcovmat_in_sampling:
-            #Adding a little regularization to theory covmat to do the sqrt
-            diag_enha = 1.e-6
-            covmat += loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
-
+    covmat = dataset_inputs_total_covmat
+    import ipdb; ipdb.set_trace()
     covmat_sqrt = sqrt_covmat(covmat)
 
     # The inner while True loop is for ensuring a positive definite
