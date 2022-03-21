@@ -17,6 +17,8 @@ This module will become completely obsolete once the new pipeline is
 in place and working.
 """
 
+from collections.abc import Iterable
+
 
 NUCLEAR_DATASPEC = {
     "NMC_AL_C": {"A": [27, 12], "Z": [13, 6]},
@@ -52,6 +54,23 @@ NUCLEAR_DATASPEC = {
     "FNAL_XE_D": {"A": [131, 2], "Z": [54, 1]},
     "SLAC_D": {"A": [2], "Z": [1]},
     "BCDMS_D": {"A": [2], "Z": [1]},
+    "NTVNBDMN_FE": {"A": [56], "Z": [26]},
+    "NTVNUDMN_FE": {"A": [56], "Z": [26]},
+    "CHORUSNU_PB": {"A": [208], "Z": [82]},
+    "CHORUSNB_PB": {"A": [208], "Z": [82]},
+    "ALICE_pPb_WM_5TEV": {"A":[208], "Z": [82]},
+    "ALICE_pPb_WP_5TEV": {"A":[208], "Z": [82]},
+    "ALICE_pPb_Z_5TEV": {"A":[208], "Z": [82]},
+    "ALICE_pPb_Z_8TEV": {"A":[208], "Z": [82]},
+    "ATLAS_pPb_PHT_8TEV": {"A":[208], "Z": [82]},
+    "ATLAS_pPb_Z_5TEV": {"A":[208], "Z": [82]},
+    "CMS_pPb_WM_5TEV": {"A":[208], "Z": [82]},
+    "CMS_pPb_WP_5TEV": {"A":[208], "Z": [82]},
+    "CMS_pPb_WM_8TEV": {"A":[208], "Z": [82]},
+    "CMS_pPb_WP_8TEV": {"A":[208], "Z": [82]},
+    "CMS_pPb_Z_5TEV": {"A":[208], "Z": [82]},
+    "CMS_pPb_Z_8TEV": {"A":[208], "Z": [82]},
+    "LHCb_pPb_Z_5TEV": {"A":[208], "Z": [82]}
 }
 
 
@@ -70,11 +89,12 @@ def add_nuclear_dependence(datasetinfo: list) -> list:
         the same list as the input but with extra-information on the
         nuclear datasets
     """
-    for dataset_group in datasetinfo:
-        for dataset in dataset_group["datasets"]:
-            if dataset["name"] in NUCLEAR_DATASPEC.keys():
-                dataset['A'] = NUCLEAR_DATASPEC[dataset["name"]]["A"]
-                dataset['Z'] = NUCLEAR_DATASPEC[dataset["name"]]["Z"]
+    if isinstance(datasetinfo, Iterable):
+        for dataset_group in datasetinfo:
+            for dataset in dataset_group["datasets"]:
+                if dataset["name"] in NUCLEAR_DATASPEC.keys():
+                    dataset['A'] = NUCLEAR_DATASPEC[dataset["name"]]["A"]
+                    dataset['Z'] = NUCLEAR_DATASPEC[dataset["name"]]["Z"]
     return datasetinfo
 
 
@@ -92,6 +112,8 @@ def list_active_nuclei(datasetinfo: list) -> list:
     --------
         ordered list of the active A involved in the fit
     """
+    if not isinstance(datasetinfo, Iterable):
+        raise ValueError("Object is not iterable. Check input!")
     nuclear_lists = []
     for dataset_group in datasetinfo:
         for dataset in dataset_group["datasets"]:
