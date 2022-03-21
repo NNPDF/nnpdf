@@ -529,9 +529,13 @@ class Loader(LoaderBase):
         """
         # TODO: this is just so I can load both types at once during development
         readyaml = True
+        force_pineappl = False
         if "oldmode" in cfac:
             cfac = [i for i in cfac if i != "oldmode"]
             readyaml = False
+        elif "forcepineappl" in cfac:
+            cfac = [i for i in cfac if i != "forcepineappl"]
+            force_pineappl = True
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -546,6 +550,8 @@ class Loader(LoaderBase):
         if fkpath.exists() and readyaml:
             fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
         else:
+            if force_pineappl:
+                raise pineparser.PineAPPLEquivalentNotKnown(f"No pineappl version for {name}")
             try:
                 fkspec, op = self.check_compound(theoryno, name, cfac)
             except CompoundNotFound:
