@@ -148,32 +148,69 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
+
     #construct covmat
     covmat = dataset_inputs_total_covmat
     covmat_sqrt = sqrt_covmat(covmat)
 
+    # Prepare the reusable ingredients for the replica generation
+    pseudodata_raw = []
+    check_positive_masks = []
+    nonspecial_mult = []
+    special_mult = []
+
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        p = cd.central_values.to_numpy()
+        pseudodata_raw.append(p)
+
+        mult_errors = cd.multiplicative_errors
+        mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
+        mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
+        nonspecial_mult.append( (mult_uncorr_errors, mult_corr_errors) )
+        special_mult.append(
+            mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
+        )
+
+        if "ASY" in cd.commondataproc:
+            check_positive_masks.append(np.zeros_like(p, dtype=bool))
+        else:
+            check_positive_masks.append(np.ones_like(p, dtype=bool))
+
+    special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
+    pseudodata = np.concatenate(pseudodata_raw, axis=0)
+
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
+    counter = 0
     while True:
-        pseudodatas = []
-        check_positive_masks = []
-        for cd in groups_dataset_inputs_loaded_cd_with_cuts:
-            # copy here to avoid mutating the central values.
-            pseudodata = cd.central_values.to_numpy(copy=True)
+        mult_shifts = []
+        counter += 1
 
-            pseudodatas.append(pseudodata)
-            if "ASY" in cd.commondataproc:
-                check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
-            else:
-                check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
+        # Prepare the per-dataset multiplicative shifts
+        for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
+            # convert to from percent to fraction
+            mult_shift = (
+                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
+            ).prod(axis=1)
+
+            mult_shift *= (
+                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
+            ).prod(axis=1)
+
+            mult_shifts.append(mult_shift)
+
+        # Prepare the additive shift
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
-        all_pseudodata = (
-            np.concatenate(pseudodatas, axis=0)
-            + shifts
-        )
+        # And the multiplicative error
+        special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
+
+        # All together now
+        all_pseudodata = (pseudodata + shifts)*np.concatenate(mult_shifts, axis=0)*special_mult
+
         if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
             break
 
+    print(f"{counter=}")
     return all_pseudodata
 
 
