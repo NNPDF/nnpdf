@@ -205,7 +205,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
 
         # All together now
-        all_pseudodata = (pseudodata + shifts)*np.concatenate(mult_shifts, axis=0)*special_mult
+        all_pseudodata = pseudodata*np.concatenate(mult_shifts, axis=0)*special_mult + shifts
 
         if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
             break
