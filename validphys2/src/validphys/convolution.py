@@ -124,9 +124,9 @@ def _predictions(dataset, pdf, fkfunc):
     for fk in dataset.fkspecs:
         fk_w_cuts = load_fktable(fk).with_cuts(cuts)
         all_predictions.append(fkfunc(fk_w_cuts, pdf))
-    # TODO: old fktables just repeated values to keep the size the same
-    # for RATIO operations, with pineappl this is no longer the case
-    # divide by the numpy representation instead
+    # Old fktables repeated values to make DEN and NUM sizes match in RATIO operations
+    # pineappl tables instead just contain the one value used
+    # The code below works for both situation while keeping `true_div` as the operation
     if dataset.op == "RATIO":
         all_predictions[-1] = all_predictions[-1].values
     return opfunc(*all_predictions)
