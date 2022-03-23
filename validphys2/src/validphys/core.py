@@ -475,8 +475,6 @@ class DataSetSpec(TupleComp):
         cd = self.commondata.load()
 
         fktables = []
-
-        # We don't want to load these fktables any longer
         for p in self.fkspecs:
             fktable = p.load()
             #IMPORTANT: We need to tell the python garbage collector to NOT free the
