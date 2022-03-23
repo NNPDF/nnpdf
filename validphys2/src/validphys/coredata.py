@@ -74,6 +74,8 @@ class FKTableData:
 
     def with_cfactor(self, cfactor):
         """Returns a copy of the FKTableData object with cfactors applied to the fktable"""
+        if all(c == 1.0 for c in cfactor):
+            return self
         if len(cfactor) != self.ndata:
             if self.metadata.get("repetition_flag"):
                 cfactor = cfactor[0]
