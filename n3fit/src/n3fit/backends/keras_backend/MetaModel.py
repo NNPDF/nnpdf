@@ -13,7 +13,6 @@ from tensorflow.keras import optimizers as Kopt
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 import n3fit.backends.keras_backend.operations as op
 
-alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.01)
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split(".")
@@ -246,6 +245,7 @@ class MetaModel(Model):
         loss=None,
         target_output=None,
         clipnorm=None,
+        frozen_alphas=False,
         **kwargs,
     ):
         """
@@ -304,6 +304,10 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
+        if frozen_alphas:
+            alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0)
+        else:
+            alphas_opt = tf.keras.optimizers.SGD(learning_rate=1e-8)
         from tensorflow_addons.optimizers import MultiOptimizer
         non_alphas_layers = [i for i in self.layers if i.name != "alphas_layer"]
         alphas_layers = [i for i in self.layers if i.name == "alphas_layer"]

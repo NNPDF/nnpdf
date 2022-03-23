@@ -694,10 +694,10 @@ class ModelTrainer:
         )
 
         training_model.perform_fit(
-            epochs=epochs,
-            verbose=False,
-            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
-        )
+                epochs=epochs,
+                verbose=False,
+                callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
+            )
 
         # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
         # for now consider the run as good if any replica passed
@@ -877,6 +877,22 @@ class ModelTrainer:
             # Compile each of the models with the right parameters
             for model in models.values():
                 model.compile(**params["optimizer"])
+
+            models["training"].compile(frozen_alphas=True, **params["optimizer"])
+
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=4000,
+            )
+
+            from pathlib import Path
+            savemodelpath = str(Path.home()) + "/test.h5"
+            models["training"].save_weights(savemodelpath)
+            models["training"].compile(frozen_alphas=False, **params["optimizer"])
+            models["training"].load_weights(savemodelpath)
+
+            stopping_object.stop_now = False
 
             passed = self._train_and_fit(
                 models["training"],
