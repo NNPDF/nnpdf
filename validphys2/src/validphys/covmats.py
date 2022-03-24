@@ -342,6 +342,7 @@ def dataset_inputs_t0_covmat_from_systematics(
     )
 
 def loaded_theory_covmat(output_path,
+    data_input,
     theory_covmat_flag,
     use_user_uncertainties,
     use_scalevar_uncertainties
@@ -360,8 +361,11 @@ def loaded_theory_covmat(output_path,
 
     theorypath = output_path/"tables"/generic_path
     theory_covmat = pd.read_csv(theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python").fillna(0)
-    return theory_covmat.values
-    
+    #change ordering
+    tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
+    bb = [str(i) for i in data_input]
+    return tmp.reindex(index=bb, columns=bb, level=0).values
+
 
 def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     *,
@@ -430,9 +434,7 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
     if theory_covmat_flag and use_thcovmat_in_fitting:
-            #Adding regularization to theory covmat to make sqrt possible 
-            diag_enha = 1.e-6
-            return exp_covmat + loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
+            return exp_covmat + loaded_theory_covmat
     return exp_covmat
 
 
