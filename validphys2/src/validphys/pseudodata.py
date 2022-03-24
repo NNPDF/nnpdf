@@ -151,21 +151,23 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     #construct covmat
     covmat = dataset_inputs_total_covmat
     covmat_sqrt = sqrt_covmat(covmat)
+    #Loading the data
+    pseudodatas = []
+    check_positive_masks = []
+    for cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        # copy here to avoid mutating the central values.
+        pseudodata = cd.central_values.to_numpy()
+
+        pseudodatas.append(pseudodata)
+        if "ASY" in cd.commondataproc:
+            check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
+        else:
+            check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
 
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
+    all_pseudodata = []
     while True:
-        pseudodatas = []
-        check_positive_masks = []
-        for cd in groups_dataset_inputs_loaded_cd_with_cuts:
-            # copy here to avoid mutating the central values.
-            pseudodata = cd.central_values.to_numpy()
-
-            pseudodatas.append(pseudodata)
-            if "ASY" in cd.commondataproc:
-                check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
-            else:
-                check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         all_pseudodata = (np.concatenate(pseudodatas, axis=0) + shifts)
         if np.all(all_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
