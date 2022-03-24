@@ -24,6 +24,7 @@ from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
+
 from validphys.commondata import loaded_commondata_with_cuts
 log = logging.getLogger(__name__)
 
@@ -201,9 +202,7 @@ def dataset_inputs_covmat_from_systematics(
         data_input,
         _list_of_central_values
     ):
-        
         sys_errors = cd.systematic_errors(central_values)
-
         stat_errors = cd.stat_errors.to_numpy()
         weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
@@ -351,16 +350,14 @@ def loaded_theory_covmat(output_path,
         return np.array([])
 
     generic_path = None
-    if use_scalevar_uncertainties is True:
-        if use_user_uncertainties is True:
-            generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_total_theory_covmat.csv")
+    if use_user_uncertainties is True:
+        if use_scalevar_uncertainties is True:
+            generic_path = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
         else:
-            generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
+            generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
     else:
-        if use_user_uncertainties is True:
-            generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_user_covmat.csv")
-        else:
-            generic_path = pathlib.Path("datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv")
+        generic_path = "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+
     theorypath = output_path/"tables"/generic_path
     theory_covmat = pd.read_csv(theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python").fillna(0)
     return theory_covmat.values
@@ -433,7 +430,7 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
     if theory_covmat_flag and use_thcovmat_in_fitting:
-            #Adding regularization to theory covmat to make sqrt possible  
+            #Adding regularization to theory covmat to make sqrt possible 
             diag_enha = 1.e-6
             return exp_covmat + loaded_theory_covmat*(np.ones_like(loaded_theory_covmat) + diag_enha*np.eye(loaded_theory_covmat.shape[0]))
     return exp_covmat

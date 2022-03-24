@@ -1053,6 +1053,7 @@ class CoreConfig(configparser.Config):
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
             f = user_covmat_fitting
+            
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
