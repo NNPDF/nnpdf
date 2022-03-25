@@ -1,4 +1,4 @@
-from ekobox import evol_pdf, gen_theory, gen_op, genpdf, gen_info
+from ekobox import evol_pdf, theory_card, operators_card, genpdf, info_file
 import pathlib
 import numpy as np
 import yaml
@@ -7,7 +7,7 @@ from validphys.loader import Loader
 import os
 from ekomark import apply
 from eko import basis_rotation as br
-
+from eko import run_dglap
 
 def evolve_fit(conf_folder):
     """
@@ -73,14 +73,14 @@ def construct_eko_for_fit(conf_folder):
     # theory_card construction
     theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
     theory.pop("FNS")
-    theory_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
+    t_card = theory_card.generate(theory["PTO"], theory["Q0"], update=theory)
 
     # construct operator card
     q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
-    op_card = gen_op.gen_op_card(q2_grid)
+    op_card = operators_card.generate(q2_grid)
     # generate eko operator (temporary because it will be loaded from theory)
-    eko = evol_pdf.gen_out(theory_card, op_card)
-    return eko, theory_card, op_card
+    eko = run_dglap(t_card, op_card)
+    return eko, t_card, op_card
     #
 
 
@@ -115,12 +115,12 @@ def evolve_exportgrid(
     # construct and dump info file if not already there
     info_path = pathlib.Path(conf_folder) / "nnfit" / (conf_folder + ".info")
     if not info_path.is_file():
-        info = gen_info.create_info_file(
+        info = info_file.build(
             theory_card, operator_card, 1, info_update={}
         )  # to be changed
         genpdf.export.dump_info(path_where_dump, info)
     # generate block to dump
-    targetgrid = operator_card["interpolation_xgrid"]
+    targetgrid = operator_card["xgrid"]
     block = genpdf.generate_block(
         lambda pid, x, Q2, evolved_PDF=evolved_pdf: targetgrid[targetgrid.index(x)]
         * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
