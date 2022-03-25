@@ -167,10 +167,11 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
     all_pseudodata = np.concatenate(pseudodatas, axis=0)
+    full_mask=np.concatenate(check_positive_masks, axis=0)
     while True:
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         shifted_pseudodata = (all_pseudodata + shifts)
-        if np.all(shifted_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
+        if np.all(shifted_pseudodata[full_mask] >= 0):
             break
 
     return shifted_pseudodata
