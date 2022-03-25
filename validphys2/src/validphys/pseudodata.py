@@ -173,7 +173,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         if np.all(shifted_pseudodata[np.concatenate(check_positive_masks, axis=0)] >= 0):
             break
 
-    return all_pseudodata
+    return shifted_pseudodata
 
 
 def indexed_make_replica(groups_index, make_replica):
