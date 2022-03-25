@@ -136,7 +136,7 @@ def dataset_inputs_covmat_from_systematics(
     use_weights_in_covmat=True,
     norm_threshold=None,
     _list_of_central_values=None,
-    only_additive=False,
+    _only_additive=False,
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -204,7 +204,7 @@ def dataset_inputs_covmat_from_systematics(
         _list_of_central_values
     ):
         #used if we want to separate additive and multiplicative errors in make_replica
-        if only_additive:
+        if _only_additive:
             sys_errors = cd.additive_errors
         else:
             sys_errors = cd.systematic_errors(central_values)
@@ -372,7 +372,7 @@ def loaded_theory_covmat(output_path,
     return tmp.reindex(index=bb, columns=bb, level=0).values
 
 #Function called by make_replica
-def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
+def dataset_inputs_sampling_covmat(dataset_inputs_loaded_cd_with_cuts,
     *,
     data_input,
     use_weights_in_covmat=True,
@@ -384,33 +384,9 @@ def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     use_t0_sampling,
     separate_multiplicative,
     ):
-    if use_t0_sampling is False:
-        covmat = dataset_inputs_t0_total_covmat(
-        dataset_inputs_loaded_cd_with_cuts,
-        data_input=data_input,
-        use_weights_in_covmat=use_weights_in_covmat,
-        norm_threshold=norm_threshold,
-        dataset_inputs_t0_predictions=None,
-        loaded_theory_covmat=loaded_theory_covmat,
-        theory_covmat_flag=theory_covmat_flag,
-        use_thcovmat_in_fitting=use_thcovmat_in_sampling,
-        use_t0_fitting=use_t0_sampling,
-        only_add = separate_multiplicative
-    )
-    else:
-        covmat = dataset_inputs_t0_total_covmat(
-        dataset_inputs_loaded_cd_with_cuts,
-        data_input=data_input,
-        use_weights_in_covmat=use_weights_in_covmat,
-        norm_threshold=norm_threshold,
-        dataset_inputs_t0_predictions=dataset_inputs_t0_predictions,
-        loaded_theory_covmat=loaded_theory_covmat,
-        theory_covmat_flag=theory_covmat_flag,
-        use_thcovmat_in_fitting=use_thcovmat_in_sampling,
-        use_t0_fitting=use_t0_sampling,
-        only_add = separate_multiplicative
-    )
-    
+    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions if use_t0_sampling is True else None, separate_multiplicative )
+    if theory_covmat_flag and use_thcovmat_in_sampling:
+        covmat += loaded_theory_covmat
     return covmat
 
 #Function called by n3fit_data
@@ -426,27 +402,20 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     use_t0_fitting,
     only_add=False,
     ):
-    if use_t0_fitting is False:
-        exp_covmat = dataset_inputs_covmat_from_systematics(
-        dataset_inputs_loaded_cd_with_cuts,
-        data_input,
-        use_weights_in_covmat,
-        norm_threshold=norm_threshold,
-        _list_of_central_values=None,
-        only_additive = only_add
-    )
-    else:
-        exp_covmat = dataset_inputs_covmat_from_systematics(
-        dataset_inputs_loaded_cd_with_cuts,
-        data_input,
-        use_weights_in_covmat,
-        norm_threshold=norm_threshold,
-        _list_of_central_values=dataset_inputs_t0_predictions,
-        only_additive = only_add
-    )
+    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions if use_t0_fitting is True else None, only_add)
     if theory_covmat_flag and use_thcovmat_in_fitting:
-            return exp_covmat + loaded_theory_covmat
-    return exp_covmat
+        covmat += loaded_theory_covmat
+    return covmat
+
+def generate_exp_covmat(datasets_input, data, use_weights, norm_thre, _list_of_c_values, only_add):
+    return dataset_inputs_covmat_from_systematics(
+        datasets_input,
+        data,
+        use_weights,
+        norm_threshold=norm_thre,
+        _list_of_central_values=_list_of_c_values,
+        _only_additive = only_add
+    )
 
 
 def sqrt_covmat(covariance_matrix):

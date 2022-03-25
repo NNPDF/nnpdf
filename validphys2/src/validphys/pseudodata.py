@@ -101,7 +101,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dataset_inputs_total_covmat, separate_multiplicative, genrep=True, ):
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dataset_inputs_sampling_covmat, separate_multiplicative, genrep=True, ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -149,7 +149,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
     #construct covmat
-    covmat = dataset_inputs_total_covmat
+    covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
     #Loading the data
     pseudodatas = []
@@ -183,28 +183,28 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
     while True:
-        if separate_multiplicative:
-            mult_shifts = []
-            # Prepare the per-dataset multiplicative shifts
-            for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
-            # convert to from percent to fraction
-                mult_shift = (
-                    1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
-                ).prod(axis=1)
+        mult_shifts = []
+        # Prepare the per-dataset multiplicative shifts
+        for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
+        # convert to from percent to fraction
+            mult_shift = (
+                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
+            ).prod(axis=1)
 
-                mult_shift *= (
-                    1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
-                ).prod(axis=1)
+            mult_shift *= (
+                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
+            ).prod(axis=1)
 
-                mult_shifts.append(mult_shift)
-            special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
+            mult_shifts.append(mult_shift)
+            
         #Additive shifts (if separate_multiplicative is True) or total shifts (if separate_multiplicative is False)
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.
         if separate_multiplicative:
+            special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
             mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
         #Shifting pseudodata
-        shifted_pseudodata = (all_pseudodata*mult_part + shifts)
+        shifted_pseudodata = (all_pseudodata + shifts)*mult_part
         #positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
             break

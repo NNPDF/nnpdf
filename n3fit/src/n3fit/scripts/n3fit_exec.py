@@ -151,23 +151,20 @@ class N3FitConfig(Config):
         N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = None
         N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = None
         N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = None
-        import ipdb; ipdb.set_trace()
         if (thconfig:=file_content.get('theorycovmatconfig')) is not None:
             N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting') if thconfig.get('use_thcovmat_in_fitting') is not None else True 
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling') if thconfig.get('use_thcovmat_in_sampling') is not None else True 
-            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties') if thconfig.get('use_user_uncertainties') is not None else False
-            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties') if thconfig.get('use_scalevar_uncertainties') is not None else True
+            N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting', True) 
+            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True)  
+            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties', False) 
+            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties', True) 
         #Sampling flags and defaults
         N3FIT_FIXED_CONFIG['use_t0_sampling'] = False
         N3FIT_FIXED_CONFIG['separate_multiplicative'] = False
         if (sam_t0:=file_content.get('sampling')) is not None:
-            N3FIT_FIXED_CONFIG['use_t0_sampling'] = sam_t0.get('use_t0') if sam_t0.get('use_t0') is not None else False
-            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative') if sam_t0.get('separate_multiplicative') is not None else False
-        N3FIT_FIXED_CONFIG['use_t0_fitting'] = True
-        #Fitting flags and defaults 
-        if(fit_t0:=file_content.get('fitting')) is not None:
-            N3FIT_FIXED_CONFIG['use_t0_fitting'] = fit_t0.get('use_t0')
+            N3FIT_FIXED_CONFIG['use_t0_sampling'] = sam_t0.get('use_t0', False) 
+            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative', False) 
+        #Fitting flag
+        N3FIT_FIXED_CONFIG['use_t0_fitting'] = file_content.get('fitting').get('use_t0', True)
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
