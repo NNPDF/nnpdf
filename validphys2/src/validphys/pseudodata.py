@@ -161,6 +161,8 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         pseudodata = cd.central_values.to_numpy()
 
         pseudodatas.append(pseudodata)
+        #Separation of multiplicative errors. If separate_multiplicative is True also the exp_covmat is produced 
+        # without multiplicative errors
         if separate_multiplicative:
             mult_errors = cd.multiplicative_errors
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
@@ -173,13 +175,13 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
             check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-
-    # The inner while True loop is for ensuring a positive definite
-    # pseudodata replica
+    #concatenating special multiplicative errors, pseudodatas and positive mask 
     if separate_multiplicative:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
     all_pseudodata = np.concatenate(pseudodatas, axis=0)
     full_mask=np.concatenate(check_positive_masks, axis=0)
+    # The inner while True loop is for ensuring a positive definite
+    # pseudodata replica
     while True:
         if separate_multiplicative:
             mult_shifts = []
@@ -196,12 +198,14 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
 
                 mult_shifts.append(mult_shift)
             special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
-
+        #Additive shifts (if separate_multiplicative is True) or total shifts (if separate_multiplicative is False)
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.
         if separate_multiplicative:
             mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
+        #Shifting pseudodata
         shifted_pseudodata = (all_pseudodata*mult_part + shifts)
+        #positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
             break
 

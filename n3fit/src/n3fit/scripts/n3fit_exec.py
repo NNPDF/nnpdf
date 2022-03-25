@@ -161,11 +161,12 @@ class N3FitConfig(Config):
         #Sampling flags and defaults
         N3FIT_FIXED_CONFIG['use_t0_sampling'] = False
         N3FIT_FIXED_CONFIG['separate_multiplicative'] = False
-        if (sam_t0:=file_content.get('sampling_t0')) is not None:
+        if (sam_t0:=file_content.get('sampling')) is not None:
             N3FIT_FIXED_CONFIG['use_t0_sampling'] = sam_t0.get('use_t0') if sam_t0.get('use_t0') is not None else False
             N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative') if sam_t0.get('separate_multiplicative') is not None else False
         N3FIT_FIXED_CONFIG['use_t0_fitting'] = True
-        if(fit_t0:=file_content.get('fitting_t0')) is not None:
+        #Fitting flags and defaults 
+        if(fit_t0:=file_content.get('fitting')) is not None:
             N3FIT_FIXED_CONFIG['use_t0_fitting'] = fit_t0.get('use_t0')
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
