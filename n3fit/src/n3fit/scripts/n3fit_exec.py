@@ -145,6 +145,7 @@ class N3FitConfig(Config):
             validation_action = namespace + "validation_pseudodata"
 
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
+        #Theorycovmat_flags
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
         N3FIT_FIXED_CONFIG['use_user_uncertainties'] = None
         N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = None
@@ -157,8 +158,10 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties')
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties')
         N3FIT_FIXED_CONFIG['use_t0_sampling'] = False
-        if(sam_t0:=file_content.get('sampling_t0')) is not None:
+        N3FIT_FIXED_CONFIG['separate_multiplicative'] = False
+        if (sam_t0:=file_content.get('sampling_t0')) is not None:
             N3FIT_FIXED_CONFIG['use_t0_sampling'] = sam_t0.get('use_t0')
+            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative')
         N3FIT_FIXED_CONFIG['use_t0_fitting'] = True
         if(fit_t0:=file_content.get('fitting_t0')) is not None:
             N3FIT_FIXED_CONFIG['use_t0_fitting'] = fit_t0.get('use_t0')

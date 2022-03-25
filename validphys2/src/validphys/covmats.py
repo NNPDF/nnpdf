@@ -136,6 +136,7 @@ def dataset_inputs_covmat_from_systematics(
     use_weights_in_covmat=True,
     norm_threshold=None,
     _list_of_central_values=None,
+    only_additive=False,
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -202,7 +203,10 @@ def dataset_inputs_covmat_from_systematics(
         data_input,
         _list_of_central_values
     ):
-        sys_errors = cd.systematic_errors(central_values)
+        if only_additive:
+            sys_errors = cd.additive_errors
+        else:
+            sys_errors = cd.systematic_errors(central_values)
         stat_errors = cd.stat_errors.to_numpy()
         weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
@@ -376,7 +380,8 @@ def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     loaded_theory_covmat,
     theory_covmat_flag,
     use_thcovmat_in_sampling,
-    use_t0_sampling
+    use_t0_sampling,
+    separate_multiplicative,
     ):
     if use_t0_sampling is False:
         covmat = dataset_inputs_t0_total_covmat(
@@ -388,7 +393,8 @@ def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         loaded_theory_covmat=loaded_theory_covmat,
         theory_covmat_flag=theory_covmat_flag,
         use_thcovmat_in_fitting=use_thcovmat_in_sampling,
-        use_t0_fitting=use_t0_sampling
+        use_t0_fitting=use_t0_sampling,
+        only_add = separate_multiplicative
     )
     else:
         covmat = dataset_inputs_t0_total_covmat(
@@ -400,7 +406,8 @@ def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         loaded_theory_covmat=loaded_theory_covmat,
         theory_covmat_flag=theory_covmat_flag,
         use_thcovmat_in_fitting=use_thcovmat_in_sampling,
-        use_t0_fitting=use_t0_sampling
+        use_t0_fitting=use_t0_sampling,
+        only_add = separate_multiplicative
     )
     
     return covmat
@@ -415,7 +422,8 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     loaded_theory_covmat,
     theory_covmat_flag,
     use_thcovmat_in_fitting,
-    use_t0_fitting
+    use_t0_fitting,
+    only_add=False,
     ):
     if use_t0_fitting is False:
         exp_covmat = dataset_inputs_covmat_from_systematics(
@@ -423,7 +431,8 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         data_input,
         use_weights_in_covmat,
         norm_threshold=norm_threshold,
-        _list_of_central_values=None
+        _list_of_central_values=None,
+        only_additive = only_add
     )
     else:
         exp_covmat = dataset_inputs_covmat_from_systematics(
@@ -431,7 +440,8 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
         data_input,
         use_weights_in_covmat,
         norm_threshold=norm_threshold,
-        _list_of_central_values=dataset_inputs_t0_predictions
+        _list_of_central_values=dataset_inputs_t0_predictions,
+        only_additive = only_add
     )
     if theory_covmat_flag and use_thcovmat_in_fitting:
             return exp_covmat + loaded_theory_covmat
