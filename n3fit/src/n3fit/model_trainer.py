@@ -889,7 +889,7 @@ class ModelTrainer:
             from pathlib import Path
             savemodelpath = str(Path.home()) + "/test.h5"
             models["training"].save_weights(savemodelpath)
-            models["training"].compile(frozen_alphas=False, **params["optimizer"])
+            models["training"].compile(frozen_alphas=False)
             models["training"].load_weights(savemodelpath)
 
             stopping_object.stop_now = False
