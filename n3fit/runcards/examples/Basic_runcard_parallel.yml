@@ -34,6 +34,9 @@ datacuts:
 theory:
   theoryid: 162        # database id
 
+sampling:
+  use_t0: false
+  separate_multiplicative: true
 ############################################################
 trvlseed: 1
 nnseed: 2

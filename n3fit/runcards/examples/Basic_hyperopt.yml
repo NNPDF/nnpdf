@@ -48,6 +48,10 @@ datacuts:
 theory:
   theoryid: 200        # database id
 
+sampling:
+  use_t0: false
+  separate_multiplicative: true
+
 hyperscan_config:
   stopping:
       min_epochs: 1e3
