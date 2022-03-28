@@ -8,7 +8,7 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 import re
 import enum
 import functools
@@ -315,16 +315,31 @@ class CommonDataSpec(TupleComp):
         """Loads the uncertainties when needed"""
         if self._uncertainties is None:
             unyaml = yaml.safe_load(self._uncertainties_file.read_text(encoding="utf-8"))
-            unc_data = []
-            keys = []
+            K_MODE = "Mode"
+            K_TREAT = "Treatment"
+            sys_dfs = defaultdict(list)
+            # Below, some abusing of pandas dataframes
             for key, data in unyaml.items():
                 if key == "stat":
-                    unc_data.append(pd.DataFrame.from_records(data, index="index"))
-                    keys.append(key)
+                    lol = pd.concat({"": pd.DataFrame.from_records(data, index="index")}, names=[K_MODE], axis=1)
+                    lol.rename(columns={"value": key}, inplace=True)
+                    stat_df = pd.concat({"": lol}, axis=1, names=[K_TREAT])
                 else:
-                    unc_data.append(pd.DataFrame.from_records(data["errors"], index="index"))
-                    keys.append(f"{key}_" + "_".join(data["mode"]))
-            unc_df = pd.concat(unc_data, axis=1, keys=keys).droplevel(1, axis=1).dropna()
+                    tmp = pd.DataFrame.from_records(data["errors"], index="index")
+                    tmp.rename(columns={"value": key}, inplace=True)
+                    mode = data["mode"]
+                    if "CORR" in mode:
+                        tmp_df = pd.concat({"CORR": tmp}, axis=1, names=[K_MODE])
+                    else:
+                        tmp_df = pd.concat({"UNCORR": tmp}, axis=1, names=[K_MODE])
+                    if "ADD" in mode:
+                        sys_dfs["ADD"].append(tmp_df)
+                    else:
+                        sys_dfs["MULT"].append(tmp_df)  
+            all_sys = {k: pd.concat(i) for k,i in sys_dfs.items()}
+            sys_df = pd.concat(all_sys, axis=1, names=[K_TREAT])
+            unc_df = pd.concat({"stat": stat_df, "sys": sys_df}, axis=1, names=["Type"])
+
             self._uncertainties = Uncertainties(unc_df)
         return self._uncertainties
 

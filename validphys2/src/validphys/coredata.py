@@ -9,14 +9,28 @@ import numpy as np
 import pandas as pd
 
 
+def _get_or_empty(df, keys=[]) -> pd.DataFrame:
+    """Return dataframe consuming all keys or an empty one if some key is
+    not found"""
+    if keys:
+        try:
+            return _get_or_empty(df[keys[0]], keys=keys[1:])
+        except KeyError:
+            return pd.DataFrame({keys[0]: []})
+    return df
+
 @dataclasses.dataclass
 class _FancyDataframe:
     """Holds a dataframe in a dataclass to which vp cuts can be applied"""
-
     dataframe: pd.DataFrame
 
     def __post_init__(self):
         pass
+
+    def _get(self, keys) -> pd.DataFrame:
+        if isinstance(keys, str):
+            keys = [keys]
+        return _get_or_empty(self.dataframe, keys)
 
     def with_cuts(self, cuts):
         """Apply cuts to a _FancyDataframe object
@@ -62,16 +76,24 @@ class Uncertainties(_FancyDataframe):
     """Holds the information about the uncertainties for a given dataset"""
 
     @property
-    def nsys(self):
+    def nsys(self) -> int:
         return len(self.dataframe.columns.drop("stat"))
 
-    def get_stat(self):
+    def get_stat(self) -> pd.DataFrame:
         """Get a Series for the statistical uncertainties"""
-        return self.dataframe["stat"]
+        return self._get("stat")
 
-    def get_systematic(self):
+    def get_systematic(self) -> pd.DataFrame:
         """Get a DataFrame for the systematic uncertainties"""
-        return self.dataframe.drop(columns=["stat"])
+        return self._get("sys")
+
+    def get_additive(self) -> pd.DataFrame:
+        """Get a DataFrame only with the additive uncertainties"""
+        return self._get(["sys", "ADD"])
+
+    def get_multiplicative(self) -> pd.DataFrame:
+        """Get a DataFrame only with the additive uncertainties"""
+        return self._get(["sys", "MULT"])
 
 
 @dataclasses.dataclass(eq=False)
@@ -240,11 +262,11 @@ class CommonData:
         return self.kinematics.nkin
 
     @property
-    def nsys(self):
+    def nsys(self) -> int:
         return self.uncertainties.nsys
 
     @property
-    def systematics_table(self):
+    def systematics_table(self) -> pd.DataFrame | None:
         return self.uncertainties.get_systematic()
 
     def __post_init__(self):
@@ -294,40 +316,23 @@ class CommonData:
 
     @property
     def stat_errors(self):
-        return self.commondata_table["stat"]
+        return self.uncertainties.get_stat()
 
+    # TODO: what are SKIP uncertainties?
     @property
     def multiplicative_errors(self):
         """Returns the systematics which are multiplicative (systype is MULT)
         in a percentage format, with SKIP uncertainties removed.
-
         """
-        mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
-        # NOTE: Index with list here so that return is always a DataFrame, even
-        # if N_sys = 1 (else a Series could be returned)
-        mult_table = self.systematics_table.loc[:, ["MULT"]]
-        # Minus 1 because iloc starts from 0, while the systype counting starts
-        # from 1.
-        mult_table = mult_table.iloc[:, mult_systype.index - 1]
-        mult_table.columns = mult_systype["name"].to_numpy()
-        return mult_table.loc[:, mult_table.columns != "SKIP"]
+        return self.uncertainties.get_multiplicative()
 
     @property
     def additive_errors(self):
         """Returns the systematics which are additive (systype is ADD) as
         absolute uncertainties (same units as data), with SKIP uncertainties
         removed.
-
         """
-        add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
-        # NOTE: Index with list here so that return is always a DataFrame, even
-        # if N_sys = 1 (else a Series could be returned)
-        add_table = self.systematics_table.loc[:, ["ADD"]]
-        # Minus 1 because iloc starts from 0, while the systype counting starts
-        # from 1.
-        add_table = add_table.iloc[:, add_systype.index - 1]
-        add_table.columns = add_systype["name"].to_numpy()
-        return add_table.loc[:, add_table.columns != "SKIP"]
+        return self.uncertainties.get_additive()
 
     def systematic_errors(self, central_values=None):
         """Returns all systematic errors as absolute uncertainties, with a
