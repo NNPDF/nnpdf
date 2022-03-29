@@ -10,18 +10,40 @@ import pandas as pd
 
 
 def _get_or_empty(df, keys=[]) -> pd.DataFrame:
+    """
+    Extracts information from a dataframe as given by keys.
+    If any key is not found within the dataframe, returns an empty dataframe
+    with the right indices so that it can still be manipulated.
+
+    For instance: ``_get_or_empty(df, keys=["data", "DIS", "NMC"])`` will
+    return ``df["data"]["DIS"]["NMC"]``
+    or an empty dataframe if any of the 3 keys is not found.
+
+    Parameters
+    ----------
+        df: pd.DataFrame
+            dataframe from which extract the values
+        keys: list(str)
+            list of keys to iteratively extract values from the dataframe
+
+    Returns
+    -------
+        pd.DataFrame
+    """
     """Return dataframe consuming all keys or an empty one if some key is
     not found"""
     if keys:
         try:
             return _get_or_empty(df[keys[0]], keys=keys[1:])
         except KeyError:
-            return pd.DataFrame({keys[0]: []})
+            return pd.DataFrame([], index=df.index)
     return df
+
 
 @dataclasses.dataclass
 class _FancyDataframe:
     """Holds a dataframe in a dataclass to which vp cuts can be applied"""
+
     dataframe: pd.DataFrame
 
     def __post_init__(self):
@@ -48,10 +70,11 @@ class Kinematics(_FancyDataframe):
         """Save a reference to the variables"""
         self.variables = self.dataframe.columns.get_level_values(0).unique().to_list()
 
-    def nkin(self):
+    @property
+    def nkin(self) -> int:
         return len(self.variables)
 
-    def get_kin(self, var):
+    def get_kin(self, var) -> pd.DataFrame:
         """Get a dataframe with all kinematic information for var
 
         Parameters
@@ -60,14 +83,15 @@ class Kinematics(_FancyDataframe):
         """
         return self.dataframe[var]
 
-    def get_kin_cv(self, var):
+    def get_kin_cv(self, var) -> pd.DataFrame:
         """Get the cv for a given kinematic variable"""
-        return self.get_kin(var)["avg"]
+        return self.get_kin(var)[["avg"]].rename(columns={"avg": var})
 
-    def get_all_kin_cv(self):
-        return pd.concat([self.get_kin_cv(i) for i in self.variables], axis=1, keys=self.variables)
+    def get_all_kin_cv(self) -> pd.DataFrame:
+        return pd.concat({k: self.get_kin_cv(k) for k in self.variables}, axis=1)
+        # return pd.concat([self.get_kin_cv(i) for i in self.variables], axis=1, keys=self.variables)
 
-    def get_kintable(self):
+    def get_kintable(self) -> pd.DataFrame:
         """Get the full kinematic table"""
         return self.dataframe
 
@@ -254,11 +278,11 @@ class CommonData:
 
     # Derived quantities (which used to be attributes)
     @property
-    def ndata(self):
+    def ndata(self) -> int:
         return len(self.data)
 
     @property
-    def nkin(self):
+    def nkin(self) -> int:
         return self.kinematics.nkin
 
     @property
@@ -266,7 +290,7 @@ class CommonData:
         return self.uncertainties.nsys
 
     @property
-    def systematics_table(self) -> pd.DataFrame | None:
+    def systematics_table(self) -> pd.DataFrame:
         return self.uncertainties.get_systematic()
 
     def __post_init__(self):
@@ -302,7 +326,7 @@ class CommonData:
 
         # We must shift the cuts up by 1 since a cut of 0 implies the first data point
         # while commondata indexing starts at 1.
-        # TODO: is this true?
+        # TODO: is this true? Wouldn't it be better to force the cuts to follow the same indexing as the commondata?
         cuts = list(map(lambda x: x + 1, cuts))
 
         new_data = self.data.loc[cuts]
@@ -311,30 +335,32 @@ class CommonData:
         return dataclasses.replace(self, data=new_data, kinematics=new_kin, uncertainties=new_unc)
 
     @property
-    def central_values(self):
-        return self.commondata_table["data"]
+    def central_values(self) -> pd.DataFrame:
+        """Return only the central values"""
+        return self.commondata_table[["data"]]
 
     @property
-    def stat_errors(self):
+    def stat_errors(self) -> pd.DataFrame:
+        """Return the statistical uncertainties"""
         return self.uncertainties.get_stat()
 
     # TODO: what are SKIP uncertainties?
     @property
-    def multiplicative_errors(self):
+    def multiplicative_errors(self) -> pd.DataFrame:
         """Returns the systematics which are multiplicative (systype is MULT)
         in a percentage format, with SKIP uncertainties removed.
         """
         return self.uncertainties.get_multiplicative()
 
     @property
-    def additive_errors(self):
+    def additive_errors(self) -> pd.DataFrame:
         """Returns the systematics which are additive (systype is ADD) as
         absolute uncertainties (same units as data), with SKIP uncertainties
         removed.
         """
         return self.uncertainties.get_additive()
 
-    def systematic_errors(self, central_values=None):
+    def systematic_errors(self, central_values=None) -> pd.DataFrame:
         """Returns all systematic errors as absolute uncertainties, with a
         single column for each uncertainty. Converts
         :py:attr:`multiplicative_errors` to units of data and then appends
