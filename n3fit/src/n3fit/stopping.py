@@ -439,9 +439,11 @@ class Stopping:
         stopping_patience=7000,
         threshold_chi2=10.0,
         dont_stop=False,
+        frozen_alphas=False,
     ):
         # Save the validation object
         self._validation = validation_model
+        self.frozen_alphas = frozen_alphas
 
         # Create the History object
         tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
@@ -567,6 +569,11 @@ class Stopping:
         # By using the stopping degree we only stop when none of the replicas are improving anymore
         if min(self.stopping_degree) > self.stopping_patience:
             self.make_stop()
+
+        if self.frozen_alphas:
+            if fitstate.vl_chi2 < 2.6:
+                self.make_stop()
+
         return True
 
     def make_stop(self):
@@ -574,7 +581,8 @@ class Stopping:
         and reload the history to the point of the best model if any
         """
         self.stop_now = True
-        self._history.reload()
+        if not self.frozen_alphas:
+            self._history.reload()
 
     def print_current_stats(self, epoch, fitstate, alphas):
         """

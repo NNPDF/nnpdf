@@ -671,7 +671,7 @@ class ModelTrainer:
             reporting_list.append(reporting_dict)
         return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100):
+    def _train_and_fit(self, training_model, stopping_object, epochs=100, frozen_alphas=False):
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -875,15 +875,18 @@ class ModelTrainer:
             )
 
             # Compile each of the models with the right parameters
-            for model in models.values():
-                model.compile(**params["optimizer"])
+            for model_name in models.keys():
+                if model_name != "training":
+                    model = models[model_name]
+                    model.compile(**params["optimizer"])
+                else: 
+                    models["training"].compile(frozen_alphas=True, **params["optimizer"])
 
-            models["training"].compile(frozen_alphas=True, **params["optimizer"])
-
+            stopping_object.frozen_alphas = True
             passed = self._train_and_fit(
                 models["training"],
                 stopping_object,
-                epochs=4000,
+                epochs=epochs,
             )
 
             from pathlib import Path
@@ -893,7 +896,7 @@ class ModelTrainer:
             models["training"].load_weights(savemodelpath)
 
             stopping_object.stop_now = False
-
+            stopping_object.frozen_alphas = False
             passed = self._train_and_fit(
                 models["training"],
                 stopping_object,
