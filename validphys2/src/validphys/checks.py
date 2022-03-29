@@ -7,6 +7,7 @@ Created on Thu Jun  2 19:35:40 2016
 from collections import Counter
 import platform
 import tempfile
+import json
 
 from matplotlib import scale as mscale
 
@@ -234,6 +235,18 @@ def _check_list_different(l, name):
 def check_fits_different(fits):
     """Need this check because oterwise the pandas object gets confused"""
     return _check_list_different(fits, 'fits')
+
+@make_argcheck
+def check_fit_versions_equal(fit):
+    """Check that all replicas in the fit used matching versions of the repository
+    and python modules"""
+    original_version = None
+    for json_path in fit.path.glob("nnfit/replica_*/*.json"):
+        version_info = json.loads(json_path.read_text(encoding="utf-8")).get("version")
+        if version_info is not None:
+            if original_version is not None and version_info != original_version:
+                raise CheckError(f"Different replicas of {fit} were run with different versions")
+            original_version = version_info
 
 @make_argcheck
 def check_dataspecs_fits_different(dataspecs_fit):

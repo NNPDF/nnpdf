@@ -444,36 +444,21 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return "No overlap of systypes"
 
 @table
-def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
+@checks.check_fit_versions_equal
+def fit_code_version(fit):
+    """ Returns table with the code version from ``replica_1/{fitname}.json`` files.
     """
-    Returns table with the code version from ``replica_{repno}/{fitname}.json`` files.
-
-    Checks and asserts that the version information matches for all replicas.
-    """
-    version_info = []
-    # First check if first replica has .json file
-    p_1 = replica_paths[0] / (f'{fit.name}.json')
-    if not p_1.exists():
-        undef_tuple = [("unavailable", "unavailable")]
-        # Return df with "undefined" in name, version locations
-        vinfo = pd.DataFrame(undef_tuple).set_index(0)
-    # Otherwise look at .json files
+    for json_path in fit.path.glob("nnfit/replica_*/*.json"):
+        version_info = json.loads(json_path.read_text(encoding="utf-8")).get("version")
+        if version_info is not None:
+            # As soon as you found a version, get out
+            vinfo = pd.DataFrame(version_info.items()).set_index(0)
+            break
     else:
-        for path in replica_paths:
-            p = path / (f'{fit.name}.json')
-            with open(p, 'r') as stream:
-                json_info = json.load(stream)
-                # Taking version info from .json
-                rep_version = json_info["version"]
-            version_info.append(rep_version)
-        versionset = (set(x.items()) for x in version_info)
-        reducedset = set.union(*versionset)
-        vinfo = pd.DataFrame(reducedset).set_index(0)
-    vinfo.columns = [f"{fit_name_with_covmat_label}"]
+        # There was no version or json files in the fit, it must be old
+        vinfo = pd.DataFrame([("unavailable", "unavailable")]).set_index(0)
+    vinfo.columns = [fit.name]
     vinfo.index.name = "module"
-    # Check for conflicting versions
-    version_names = list(vinfo.index)
-    assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
     return vinfo
 
 fits_fit_code_version = collect("fit_code_version", ("fits",))
