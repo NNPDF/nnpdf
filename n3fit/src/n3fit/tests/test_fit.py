@@ -39,29 +39,8 @@ EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
-    """Loads the information of the fit.
-    Automatically checks whether it is the fitinfo file or not and
-    creates the object correspondingly
-    """
-    with open(info_file, "r") as f:
-        if info_file.suffix == ".fitinfo":
-            ret = {}
-            lines = f.readlines()
-            # Line 2 contains epochs, val, tr, exp, POS
-            sp_lineone = lines[0].split()
-            ret["best_epoch"] = int(sp_lineone[0])
-            ret["erf_vl"] = float(sp_lineone[1])
-            ret["erf_tr"] = float(sp_lineone[2])
-            ret["chi2"] = float(sp_lineone[3])
-            ret["pos_state"] = sp_lineone[4]
-            # Line 2 arclengths
-            ret["arc_lengths"] = [float(i) for i in lines[1].split()]
-            # Line 3 integrabilities
-            ret["integrability"] = [float(i) for i in lines[2].split()]
-            return ret
-        elif info_file.suffix == ".json":
-            return json.load(f)
-        raise ValueError(f"Wrong information file: {info_file}")
+    """Loads the information of the fit from the json files"""
+    return json.loads(info_file.read_text(encoding="utf-8"))
 
 
 def test_initialize_seeds():
@@ -87,8 +66,6 @@ def test_initialize_seeds():
 
 def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
     """Fits quickcard and checks the json file to ensure the results have not changed.
-    In order to ensure backwards compatibility checks that the information contained
-    in the .fitinfo file corresponds to the information in the .json
     """
     quickcard = f"{QUICKNAME}.yml"
     # Prepare the runcard
@@ -101,14 +78,9 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
     shutil.copy(weightpath, tmp_path / "weights.h5")
     # run the fit
     sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
-    # read up the .fitinfo and json files
-    full_fitinfo = tmp_path / f"{QUICKNAME}/nnfit/replica_{replica}/{QUICKNAME}.fitinfo"
+    # read up json files
     full_json = tmp_path / f"{QUICKNAME}/nnfit/replica_{replica}/{QUICKNAME}.json"
-    new_fitinfo = load_data(full_fitinfo)
     new_json = load_data(full_json)
-    # ensure that the json and fitinfo contain the exact same information
-    for key, item in new_fitinfo.items():
-        assert_equal(item, new_json[key])
     # Now compare to regression results, taking into account precision won't be 100%
     equal_checks = ["stop_epoch", "pos_state"]
     approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "arc_lengths", "integrability", "best_epoch"]
