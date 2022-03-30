@@ -302,17 +302,12 @@ class Loader(LoaderBase):
 
         # Load the metadata as a dictionary
         # eventually we will want to have a metadataspec to fix the keys?
-        metadatafile = setdir / "metadata.yaml"
-        if not metadatafile.exists():
+        metadata_file = setdir / "metadata.yaml"
+        if not metadata_file.exists():
             raise MetadataNotFoundError(f"Metadata not found for {setname}")
-        metadata = yaml.safe_load(metadatafile.open("r", encoding="utf-8"))
-
-        # Ask the metadata for the data to load
-        datafile = setdir / metadata["data_central"]
-        if not datafile.exists():
-            raise DataNotFoundError(f"Datafile '{datafile}' not found")
+        metadata = yaml.safe_load(metadata_file.open("r", encoding="utf-8"))
         
-        return CommonDataSpec(datafile, name=setname, metadata=metadata, variant=variant)
+        return CommonDataSpec(metadata_file, variant)
 
         if sysnum is None:
             sysnum = 'DEFAULT'

@@ -47,6 +47,7 @@ class _FancyDataframe:
     dataframe: pd.DataFrame
 
     def __post_init__(self):
+        # Neded for the children classes ot call it
         pass
 
     def _get(self, keys) -> pd.DataFrame:
@@ -89,7 +90,6 @@ class Kinematics(_FancyDataframe):
 
     def get_all_kin_cv(self) -> pd.DataFrame:
         return pd.concat({k: self.get_kin_cv(k) for k in self.variables}, axis=1)
-        # return pd.concat([self.get_kin_cv(i) for i in self.variables], axis=1, keys=self.variables)
 
     def get_kintable(self) -> pd.DataFrame:
         """Get the full kinematic table"""
@@ -385,6 +385,6 @@ class CommonData:
 
         """
         if central_values is None:
-            central_values = self.central_values.to_numpy()
+            central_values = self.central_values.values.flatten()
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)

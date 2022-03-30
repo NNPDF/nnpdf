@@ -266,8 +266,14 @@ def get_kinlabel_key(process_label):
 
 
 class CommonDataSpec(TupleComp):
+    """A commondata is defined by its metadata_file containing all information
+    about the dataset.
+    And the select variant.
+    """
 
-    def __init__(self, name, variant, metadata_file=None):
+    def __init__(self, metadata_file, variant):
+        # Probably the metadata contain the name as well but anyway
+        name = metadata_file.parent.stem
         parent = metadata_file.parent
         metadata = yaml.safe_load(metadata_file.open("r", encoding="utf-8"))
 
@@ -278,8 +284,8 @@ class CommonDataSpec(TupleComp):
 
         # Check whether the variants override any of the files
         # TODO: various try-except in case things don't work as expected
-        if variant is None:
-            variant_info = metadata[variant]
+        if variant is not None:
+            variant_info = metadata["variants"][variant]
             dat = variant_info.get("data", dat)
             unc = variant_info.get("uncertainties", unc)
             kin = variant_info.get("kinematics", kin)
@@ -296,70 +302,64 @@ class CommonDataSpec(TupleComp):
 
         # lazy loading
         self._data = None
-        self._uncertainties = None
         self._kinematics = None
 
-        super().__init__(name, variant)
+        super().__init__(metadata_file, variant)
 
-    @property
+    @functools.cached_property
     def data(self):
         """Reads the data as a 1-d numpy array"""
-        if self._data is None:
-            datayaml = yaml.safe_load(self._data_file.read_text(encoding="utf-8"))
-            self._data = pd.DataFrame.from_records(datayaml["data_central"], index="index")
-            self._data.rename(columns={self._data.columns[0]:"data"}, inplace=True)
-        return self._data
+        datayaml = yaml.safe_load(self._data_file.read_text(encoding="utf-8"))
+        data = pd.DataFrame.from_records(datayaml["data_central"], index="index")
+        data.rename(columns={data.columns[0]:"data"}, inplace=True)
+        return data
 
-    @property
+    @functools.cached_property
     def uncertainties(self):
         """Loads the uncertainties when needed"""
-        if self._uncertainties is None:
-            unyaml = yaml.safe_load(self._uncertainties_file.read_text(encoding="utf-8"))
-            K_MODE = "Mode"
-            K_TREAT = "Treatment"
-            sys_dfs = defaultdict(list)
-            # Below, some abusing of pandas dataframes
-            for key, data in unyaml.items():
-                if key == "stat":
-                    lol = pd.concat({"": pd.DataFrame.from_records(data, index="index")}, names=[K_MODE], axis=1)
-                    lol.rename(columns={"value": key}, inplace=True)
-                    stat_df = pd.concat({"": lol}, axis=1, names=[K_TREAT])
+        unyaml = yaml.safe_load(self._uncertainties_file.read_text(encoding="utf-8"))
+        K_MODE = "Mode"
+        K_TREAT = "Treatment"
+        sys_dfs = defaultdict(list)
+        # Below, some abusing of pandas dataframes
+        for key, data in unyaml.items():
+            if key == "stat":
+                lol = pd.concat({"": pd.DataFrame.from_records(data, index="index")}, names=[K_MODE], axis=1)
+                lol.rename(columns={"value": key}, inplace=True)
+                stat_df = pd.concat({"": lol}, axis=1, names=[K_TREAT])
+            else:
+                tmp = pd.DataFrame.from_records(data["errors"], index="index")
+                tmp.rename(columns={"value": key}, inplace=True)
+                mode = data["mode"]
+                if "CORR" in mode:
+                    tmp_df = pd.concat({"CORR": tmp}, axis=1, names=[K_MODE])
                 else:
-                    tmp = pd.DataFrame.from_records(data["errors"], index="index")
-                    tmp.rename(columns={"value": key}, inplace=True)
-                    mode = data["mode"]
-                    if "CORR" in mode:
-                        tmp_df = pd.concat({"CORR": tmp}, axis=1, names=[K_MODE])
-                    else:
-                        tmp_df = pd.concat({"UNCORR": tmp}, axis=1, names=[K_MODE])
-                    if "ADD" in mode:
-                        sys_dfs["ADD"].append(tmp_df)
-                    else:
-                        sys_dfs["MULT"].append(tmp_df)  
-            all_sys = {k: pd.concat(i) for k,i in sys_dfs.items()}
-            sys_df = pd.concat(all_sys, axis=1, names=[K_TREAT])
-            unc_df = pd.concat({"stat": stat_df, "sys": sys_df}, axis=1, names=["Type"])
+                    tmp_df = pd.concat({"UNCORR": tmp}, axis=1, names=[K_MODE])
+                if "ADD" in mode:
+                    sys_dfs["ADD"].append(tmp_df)
+                else:
+                    sys_dfs["MULT"].append(tmp_df)  
+        all_sys = {k: pd.concat(i) for k,i in sys_dfs.items()}
+        sys_df = pd.concat(all_sys, axis=1, names=[K_TREAT])
+        unc_df = pd.concat({"stat": stat_df, "sys": sys_df}, axis=1, names=["Type"])
+        return Uncertainties(unc_df)
 
-            self._uncertainties = Uncertainties(unc_df)
-        return self._uncertainties
-
-    @property
+    @functools.cached_property
     def kinematics(self):
         """Reads the kinematics of the dataset into a pandas dataframe"""
-        if self._kinematics is None:
-            kinyaml = yaml.safe_load(self._kinematics_file.read_text(encoding="utf-8"))
-            kin_data = []
-            keys = []
-            for key, data in kinyaml.items():
-                kin_data.append(pd.DataFrame.from_records(data, index="index"))
-                keys.append(key.replace("kin_", ""))
-            kin_df = pd.concat(kin_data, axis=1, keys=keys).swaplevel(0,1, axis=1).sort_values(1, axis="columns")
+        kinyaml = yaml.safe_load(self._kinematics_file.read_text(encoding="utf-8"))
+        kin_data = []
+        keys = []
+        for key, data in kinyaml.items():
+            kin_data.append(pd.DataFrame.from_records(data, index="index"))
+            keys.append(key.replace("kin_", ""))
+        kin_df = pd.concat(kin_data, axis=1, keys=keys).swaplevel(0,1, axis=1).sort_values(1, axis="columns")
 
-            self._kinematics = Kinematics(kin_df)
-        return self._kinematics
+        return Kinematics(kin_df)
 
     @property
     def nsys(self):
+        """Return the number of systematic uncertainties"""
         return self.uncertainties.nsys
 
     @property
@@ -369,7 +369,7 @@ class CommonDataSpec(TupleComp):
 
     @property
     def process_type(self):
-        """Return the number of systematic uncertainties"""
+        """Return the name of the process type"""
         return self.metadata.get("proctype")
 
     def __str__(self):
