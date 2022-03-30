@@ -442,22 +442,29 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return "No overlap of systypes"
 
 @table
-@checks.check_fit_versions_equal
 def fit_code_version(fit):
     """ Returns table with the code version from ``replica_1/{fitname}.json`` files.
     """
-    for json_path in fit.path.glob("nnfit/replica_*/*.json"):
-        version_info = json.loads(json_path.read_text(encoding="utf-8")).get("version")
-        if version_info is not None:
-            # As soon as you found a version, get out
-            vinfo = pd.DataFrame(version_info.items()).set_index(0)
-            break
-    else:
+    vinfo = previnfo = None
+    for json_path in fit.path.glob(f"nnfit/replica_*/{fit.name}.json"):
+        vinfo = json.loads(json_path.read_text(encoding="utf-8")).get("version")
+        if previnfo is not None and vinfo != previnfo:
+                # There's a mismatch of versions, just get out and say that it was unavailable
+                print(vinfo)
+                print(previnfo)
+                vinfo = None
+                break
+        previnfo = None
+
+    if vinfo is None:
         # There was no version or json files in the fit, it must be old
-        vinfo = pd.DataFrame([("unavailable", "unavailable")]).set_index(0)
-    vinfo.columns = [fit.name]
-    vinfo.index.name = "module"
-    return vinfo
+        vinfo_df = pd.DataFrame([("unavailable", "unavailable")]).set_index(0)
+    else:
+        vinfo_df = pd.DataFrame(vinfo.items()).set_index(0)
+
+    vinfo_df.columns = [fit.name]
+    vinfo_df.index.name = "module"
+    return vinfo_df
 
 fits_fit_code_version = collect("fit_code_version", ("fits",))
 
