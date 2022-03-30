@@ -73,6 +73,10 @@ class WriterWrapper:
             self.q2,
         )
 
+        # write the log file for the chi2
+        chi2_log = "\n".join(self.stopping_object.chi2exps_str())
+        (replica_path_set / "chi2exps.log").write_text(chi2_log)
+
         # export all metadata from the fit to a single yaml file
         output_file = f"{replica_path_set}/{fitname}.json"
         json_dict = jsonfit(
