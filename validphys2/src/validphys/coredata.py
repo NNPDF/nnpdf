@@ -43,12 +43,7 @@ def _get_or_empty(df, keys=[]) -> pd.DataFrame:
 @dataclasses.dataclass
 class _FancyDataframe:
     """Holds a dataframe in a dataclass to which vp cuts can be applied"""
-
     dataframe: pd.DataFrame
-
-    def __post_init__(self):
-        # Neded for the children classes ot call it
-        pass
 
     def _get(self, keys) -> pd.DataFrame:
         if isinstance(keys, str):
@@ -62,6 +57,7 @@ class _FancyDataframe:
         return dataclasses.replace(self, dataframe=self.dataframe.loc[cuts])
 
 
+@dataclasses.dataclass
 class Kinematics(_FancyDataframe):
     """Hold all kinematic information for a given dataset
     in the from of histograms
@@ -96,6 +92,7 @@ class Kinematics(_FancyDataframe):
         return self.dataframe
 
 
+@dataclasses.dataclass
 class Uncertainties(_FancyDataframe):
     """Holds the information about the uncertainties for a given dataset"""
 
