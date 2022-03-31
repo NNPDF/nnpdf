@@ -38,8 +38,17 @@ def test_read_pdf_pseudodata():
 
 
 def test_recreate_fit_pseudodata():
-    fit_pseudodata = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
-
+    config = {}
+    config["use_t0_sampling"] = False
+    config["separate_multiplicative"]= True
+    config["output_path"] = None
+    config["theory_covmat_flag"] = False
+    config["use_user_uncertainties"] = None 
+    config["use_scalevar_uncertainties"] = None
+    config["use_thcovmat_in_sampling"]=None
+    config["dataset_t0_predictions"] = None
+    
+    fit_pseudodata = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT, **config)
     nrep = API.num_fitted_replicas(fit=PSEUDODATA_FIT)
     assert nrep == len(fit_pseudodata)
 
@@ -49,7 +58,17 @@ def test_recreate_fit_pseudodata():
 
 
 def test_recreate_pdf_pseudodata():
-    pdf_pseudodata = API.recreate_pdf_pseudodata(fit=PSEUDODATA_FIT)
+    config = {}
+    config["use_t0_sampling"] = False
+    config["separate_multiplicative"]= True
+    config["output_path"] = None
+    config["theory_covmat_flag"] = False
+    config["use_user_uncertainties"] = None 
+    config["use_scalevar_uncertainties"] = None
+    config["use_thcovmat_in_sampling"]=None
+    config["dataset_t0_predictions"] = None
+
+    pdf_pseudodata = API.recreate_pdf_pseudodata(fit=PSEUDODATA_FIT, **config)
 
     pdf = API.pdf(pdf=PSEUDODATA_FIT)
     # -1 because we ignore replica 0
@@ -70,8 +89,18 @@ def test_no_savepseudodata():
 
 
 def test_read_matches_recreate():
+    config = {}
+    config["use_t0_sampling"] = False
+    config["separate_multiplicative"]= True
+    config["output_path"] = None
+    config["theory_covmat_flag"] = False
+    config["use_user_uncertainties"] = None 
+    config["use_scalevar_uncertainties"] = None
+    config["use_thcovmat_in_sampling"]=None
+    config["dataset_t0_predictions"] = None
+
     reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
-    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT, **config)
     for read, recreate in zip(reads, recreates):
         # We ignore the absolute ordering of the dataframes and just check
         # that they contain identical elements.
