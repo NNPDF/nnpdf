@@ -384,6 +384,13 @@ def dataset_inputs_sampling_covmat(dataset_inputs_loaded_cd_with_cuts,
     use_t0_sampling,
     separate_multiplicative,
     ):
+    """
+    Function to compute the total covmat to be used to generate replicas by make_replica.
+    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
+    experimental covmat or not. With the use_t0_sampling flag it is possible to choose
+    if using the t0 prescription in the covmat computation. In order to compute the covmat
+    only using the additive errors, you can set separate_multiplicative to True.
+    """
     covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions if use_t0_sampling is True else None, separate_multiplicative )
     if theory_covmat_flag and use_thcovmat_in_sampling:
         covmat += loaded_theory_covmat
@@ -402,12 +409,50 @@ def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
     use_t0_fitting,
     only_add=False,
     ):
+    """
+    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
+    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
+    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
+    if using the t0 prescription in the covmat computation. In order to compute the covmat
+    only using the additive errors, you can set only_add to True.
+    """
     covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions if use_t0_fitting is True else None, only_add)
     if theory_covmat_flag and use_thcovmat_in_fitting:
         covmat += loaded_theory_covmat
     return covmat
 
 def generate_exp_covmat(datasets_input, data, use_weights, norm_thre, _list_of_c_values, only_add):
+    """
+    Function to generate the experimental covmat eventually using the t0 prescription. It is also 
+    possible to compute it only with the additive errors.
+
+    Parameters
+    ----------
+        dataset_inputs: list[validphys.coredata.CommonData]
+            list of CommonData objects.
+        data: list[validphys.core.DataSetInput]
+            Settings for each dataset, each element contains the weight for the
+            current dataset. The elements of the returned covmat for dataset
+            i and j will be divided by sqrt(weight_i)*sqrt(weight_j), if
+            ``use_weights_in_covmat``. The default weight is 1, which means
+            the returned covmat will be unmodified.
+        use_weights: bool
+            Whether to weight the covmat, True by default.
+        norm_thre: number
+            threshold used to regularize covariance matrix
+        _list_of_c_values: None, list[np.array]
+            list of 1-D arrays which contain alternative central values which are
+            combined with the multiplicative errors to calculate their absolute
+            contribution. By default this is None and the experimental central
+            values are used.
+        only_add: bool
+            specifies whether to use only the additive errors to compute the covmat
+    
+    Returns
+    -------
+        : np.array
+        experimental covariance matrix
+    """
     return dataset_inputs_covmat_from_systematics(
         datasets_input,
         data,

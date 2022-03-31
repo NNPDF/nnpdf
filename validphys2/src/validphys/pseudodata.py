@@ -116,10 +116,20 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         List of CommonData objects which stores information about systematic errors,
         their treatment and description, for each dataset.
 
-    seed: int, None
+    replica_mcseed: int, None
         Seed used to initialise the numpy random number generator. If ``None`` then a random seed is
         allocated using the default numpy behaviour.
 
+    dataset_inputs_sampling_covmat: np.array
+        Full covmat to be used. It can be either only experimental or also theoretical.
+
+    separate_multiplicative: bool
+        Specifies whether computing the shifts with the full covmat or separating multiplicative
+        errors (in the latter case remember to generate the covmat coherently)
+    
+    genrep: bool
+        Specifies whether computing replicas or not
+        
     Returns
     -------
     pseudodata: np.array
