@@ -760,7 +760,7 @@ class ModelTrainer:
         alphas = [i for i in self.training["model"].variables if "alphas" in i.name][0].numpy()
         return train_chi2, val_chi2, exp_chi2, alphas
 
-    def hyperparametrizable(self, params):
+    def hyperparametrizable(self, params, replica_path=None):
         """
         Wrapper around all the functions defining the fit.
 
@@ -889,8 +889,7 @@ class ModelTrainer:
                 epochs=epochs,
             )
 
-            from pathlib import Path
-            savemodelpath = str(Path.home()) + "/test.h5"
+            savemodelpath = str(replica_path) + "/test.h5"
             models["training"].save_weights(savemodelpath)
             models["training"].compile(frozen_alphas=False)
             models["training"].load_weights(savemodelpath)
