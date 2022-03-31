@@ -1,17 +1,16 @@
 # Generalia
 setname: "NMCPD"
 ndata: 260
-kinematics: kinematics.yaml
+kinematics:
+   variables:
+      q2: {"description":  "Parton momentum transfer", "units": "GeV²", label: '$Q^2$'}
+      x: {"description": "Bjorken x", label: '$x$'}
+      y: {"description": "Inelasticity"}  
+   file: kinematics.yaml
+
 version: 0 # when something breaks, the version is bumped up and the previous metadata is saved and remembered 4ever
 version_comment: this was broken whatever whatever
 
-# Plotting
-dataset_label: "NMC $d/p$"
-x: k2
-y_label: "$F_2^d/F_2^p(x,Q^2)$" 
-kinematics_override: dis_sqrt_scale
-figure_by:
-  - k1
 
 # References
 arXiv:
@@ -32,6 +31,17 @@ variants:
       data_uncertainties: uncertainties_dw.yaml
    shifted:
       data_uncertainties: uncertainties_sh.yaml
+
+
+# Plotting  
+kinematic_coverage:
+   x: x
+   q2: q2
+dataset_label: "NMC $d/p$"
+x: x
+y_label: "$F_2^d/F_2^p(x,Q^2)$"
+figure_by: 
+   - q2
 
 # Theory
 theory:

@@ -1,3 +1,13 @@
+bins:
+    - q2: {min: null, avg: 0.16, max: null}
+      x: {min: null, avg: 0.0015, max: null}
+      y: {min: null, avg: 0.12085, max: null}
+
+    - q2: {min: null, avg: 0.16, max: null}
+      x: {min: null, avg: 0.0015, max: null}
+      y: {min: null, avg: 0.12085, max: null}
+
+# remove index everyhwere
 kin_avg:
 - index: 1
   q2: 0.16
