@@ -1100,7 +1100,7 @@ class CoreConfig(configparser.Config):
                 / "tables"
             )
             # All possible valid files
-            covfiles = sorted(covmat_path.glob("*theory_covmat_*.csv"))
+            covfiles = sorted(covmat_path.glob("*theory_covmat*.csv"))
             if not covfiles:
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
