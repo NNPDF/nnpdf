@@ -22,9 +22,9 @@ SEED = 123456
 SINGLE_SYS_DATASETS = [
     {"dataset": "DYE886R"},
     {"dataset": "D0ZRAP", "cfac": ["QCD"]},
-  #  {"dataset": "ATLAS_SINGLETOP_TCH_R_13TEV", "cfac": ["QCD"]},
-  #  {"dataset": "CMS_SINGLETOP_TCH_R_8TEV", "cfac": ["QCD"]},
-   # {"dataset": "CMS_SINGLETOP_TCH_R_13TEV", "cfac": ["QCD"]},
+    {"dataset": "NMC"},
+    {"dataset": "NMCPD"},
+    {"dataset": "ATLASZPT8TEVMDIST", "cfac": ["QCD"], }
 ]
 
 
