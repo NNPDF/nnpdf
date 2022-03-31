@@ -1,3 +1,30 @@
+definition:
+  stat:
+    description: counting
+    treatment: ADD
+    type: UNCORR
+  sys_1:
+    description: calorimeter
+    treatment: MULT
+    type: CORR
+  sys_2:
+    description: luminosity
+    treatment: MULT
+    type: ATLAS_LUMI
+
+bins:
+  - stat: 4.12
+    sys_1: 2.6
+    sys_2: 3.4
+
+  - stat: 4.16
+    sys_1: 2.78
+    sys_2: 9.18
+
+
+# cut below the line
+#--------------------
+
 stat:
 - index: 1
   value: 0.0203

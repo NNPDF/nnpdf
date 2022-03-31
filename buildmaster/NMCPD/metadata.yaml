@@ -1,11 +1,12 @@
 # Generalia
 setname: "NMCPD"
 ndata: 260
+observable: {"description": "Structure function ratio of deuteron/proton", label: "$F_2^d/F_2^p(x,Q^2)$", units: ""}
 kinematics:
    variables:
-      q2: {"description":  "Parton momentum transfer", "units": "GeV²", label: '$Q^2$'}
-      x: {"description": "Bjorken x", label: '$x$'}
-      y: {"description": "Inelasticity"}  
+      q2: {"description":  "Parton momentum transfer", units: "GeV²", label: '$Q^2$'}
+      x: {"description": "Bjorken x", label: '$x$', units: ""}
+      y: {"description": "Inelasticity", units: ""}
    file: kinematics.yaml
 
 version: 0 # when something breaks, the version is bumped up and the previous metadata is saved and remembered 4ever
@@ -23,14 +24,22 @@ hepdata:
    tables: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
 data_central: data.yaml
-data_uncertainties: uncertainties.yaml
+data_uncertainties: 
+   - uncertainties.yaml
 
 # Data (variants)
 variants:
    deweighted:
-      data_uncertainties: uncertainties_dw.yaml
+      data_uncertainties: 
+         - uncertainties.yaml
+         - uncertainties_dw.yaml # adds just some extra stuff to the previous file
    shifted:
-      data_uncertainties: uncertainties_sh.yaml
+      data_uncertainties: 
+         - uncertainties.yaml
+         - uncertainties_sh.yaml # adds just some extra stuff to the previous file
+   electroweak:
+      data_uncertainties: 
+         - uncertainties_ew.yaml
 
 
 # Plotting  
@@ -38,8 +47,7 @@ kinematic_coverage:
    x: x
    q2: q2
 dataset_label: "NMC $d/p$"
-x: x
-y_label: "$F_2^d/F_2^p(x,Q^2)$"
+plot_x: x
 figure_by: 
    - q2
 
