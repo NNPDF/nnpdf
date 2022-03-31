@@ -1,6 +1,17 @@
 # Generalia
-setname: "NMPCPD"
-experiment: "NMC"
+setname: "NMCPD"
+ndata: 260
+kinematics: kinematics.yaml
+version: 0 # when something breaks, the version is bumped up and the previous metadata is saved and remembered 4ever
+version_comment: this was broken whatever whatever
+
+# Plotting
+dataset_label: "NMC $d/p$"
+x: k2
+y_label: "$F_2^d/F_2^p(x,Q^2)$" 
+kinematics_override: dis_sqrt_scale
+figure_by:
+  - k1
 
 # References
 arXiv:
@@ -12,31 +23,26 @@ hepdata:
    version: "v1"
    tables: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
-# Data (defaults)
 data_central: data.yaml
 data_uncertainties: uncertainties.yaml
-data_kinematics: kinematics.yaml
 
 # Data (variants)
 variants:
-  deweighted:
-     data_uncertainties: uncertainties_dw.yaml
-  shifted:
-     data_uncertainties: uncertainties_sh.yaml
+   deweighted:
+      data_uncertainties: uncertainties_dw.yaml
+   shifted:
+      data_uncertainties: uncertainties_sh.yaml
 
 # Theory
-proctype: "DIS_F2R"
-FK_tables:
-  - FK_NMCPD_D.dat
-  - FK_NMCPDF_P.dat
-compound: "RATIO"
-nnpdf31_process: "DIS NC"
+theory:
+   FK_tables:
+     - - NMCPD_D1
+       - NMCPD_D2
+     - - NMCPD_P
+   compound: "RATIO"
 
-# Plotting
-dataset_label: "NMC $d/p$"
-x: k2
-y_label: "$F_2^d/F_2^p(x,Q^2)$" 
-kinematics_override: dis_sqrt_scale
-figure_by:
-  - k1
+nnpdf_metadata:
+   nnpdf31_process: "DIS NC"
+   experiment: "NMC"
+
 
