@@ -6,7 +6,6 @@ import logging
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
-import pathlib
 
 from reportengine import collect
 from reportengine.table import table
@@ -24,7 +23,6 @@ from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
-
 from validphys.commondata import loaded_commondata_with_cuts
 log = logging.getLogger(__name__)
 
