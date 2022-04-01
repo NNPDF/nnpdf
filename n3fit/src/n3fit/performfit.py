@@ -249,7 +249,7 @@ def performfit(
         # This function performs the actual fit, it reads all the parameters in the #
         # "parameters" dictionary, uses them to generate the NN and trains the net  #
         #############################################################################
-        result = pdf_gen_and_train_function(parameters, replica_path_set)
+        result = pdf_gen_and_train_function(parameters, replica_path/f"replica_{replica_idxs[0]}")
         stopwatch.register_ref("replica_fitted", "replica_set")
 
         stopping_object = result["stopping_object"]
