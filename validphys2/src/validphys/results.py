@@ -8,14 +8,13 @@ from __future__ import generator_stop
 
 from collections import OrderedDict, namedtuple
 from collections.abc import Sequence
-import itertools
 import logging
 
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
 
-from NNPDF import ThPredictions, CommonData, Experiment
+from NNPDF import CommonData
 from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
@@ -27,7 +26,7 @@ from validphys.checks import (
     check_two_dataspecs,
 )
 
-from validphys.core import DataSetSpec, PDF, DataGroupSpec, cut_mask
+from validphys.core import DataSetSpec, PDF, DataGroupSpec, Stats
 from validphys.calcutils import (
     all_chi2,
     central_chi2,
@@ -35,6 +34,11 @@ from validphys.calcutils import (
     calc_phi,
     bootstrap_values,
 )
+from validphys.convolution import (
+    predictions,
+    PredictionsRequireCutsError,
+)
+
 
 log = logging.getLogger(__name__)
 
@@ -43,24 +47,19 @@ class Result:
     pass
 
 
-# TODO: Eventually,only one of (NNPDFDataResult, StatsResult) should survive
-class NNPDFDataResult(Result):
-    """A result fills its values from a libnnpf data object"""
-
-    def __init__(self, dataobj):
-        self._central_value = dataobj.get_cv()
-
-    @property
-    def central_value(self):
-        return self._central_value
-
-    def __len__(self):
-        return len(self.central_value)
-
-
 class StatsResult(Result):
     def __init__(self, stats):
         self.stats = stats
+
+    @property
+    def rawdata(self):
+        """Returns the raw data with shape (Npoints, Npdf)"""
+        return self.stats.data.T
+
+    @property
+    def error_members(self):
+        """Returns the error members with shape (Npoints, Npdf)"""
+        return self.stats.error_members().T
 
     @property
     def central_value(self):
@@ -70,16 +69,28 @@ class StatsResult(Result):
     def std_error(self):
         return self.stats.std_error()
 
+    def __len__(self):
+        """Returns the number of data points in the result"""
+        return self.rawdata.shape[0]
 
-class DataResult(NNPDFDataResult):
+
+class DataResult(StatsResult):
+    """Holds the relevant information from a given dataset"""
+
     def __init__(self, dataobj, covmat, sqrtcovmat):
-        super().__init__(dataobj)
+        self._central_value = dataobj.get_cv()
+        stats = Stats(self._central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
+        super().__init__(stats)
 
     @property
     def label(self):
         return "Data"
+
+    @property
+    def central_value(self):
+        return self._central_value
 
     @property
     def std_error(self):
@@ -95,17 +106,14 @@ class DataResult(NNPDFDataResult):
         return self._sqrtcovmat
 
 
-class ThPredictionsResult(NNPDFDataResult):
+class ThPredictionsResult(StatsResult):
+    """Class holding theory prediction, inherits from StatsResult"""
+
     def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
-        self._std_error = dataobj.get_error()
-        self._rawdata = dataobj.get_data()
-        super().__init__(dataobj)
-
-    @property
-    def std_error(self):
-        return self._std_error
+        statsobj = stats_class(dataobj.T)
+        super().__init__(statsobj)
 
     @staticmethod
     def make_label(pdf, dataset):
@@ -123,12 +131,20 @@ class ThPredictionsResult(NNPDFDataResult):
         return label
 
     @classmethod
-    def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
-        if loaded_pdf is None:
-            loaded_pdf = pdf.load()
-        if loaded_data is None:
-            loaded_data = dataset.load()
-        th_predictions = ThPredictions(loaded_pdf, loaded_data)
+    def from_convolution(cls, pdf, dataset):
+        # This should work for both single dataset and whole groups
+        try:
+            datasets = dataset.datasets
+        except AttributeError:
+            datasets = (dataset,)
+
+        try:
+            th_predictions = pd.concat([predictions(d, pdf) for d in datasets])
+        except PredictionsRequireCutsError as e:
+            raise PredictionsRequireCutsError(
+                "Predictions from FKTables always require cuts, "
+                "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`"
+            ) from e
 
         label = cls.make_label(pdf, dataset)
 
@@ -138,15 +154,9 @@ class ThPredictionsResult(NNPDFDataResult):
 class PositivityResult(StatsResult):
     @classmethod
     def from_convolution(cls, pdf, posset):
-        loaded_pdf = pdf.load()
-        loaded_pos = posset.load()
-        data = loaded_pos.GetPredictions(loaded_pdf)
+        data = predictions(posset, pdf)
         stats = pdf.stats_class(data.T)
         return cls(stats)
-
-    @property
-    def rawdata(self):
-        return self.stats.data
 
 
 # TODO: finish deprecating all dependencies on this index largely in theorycovmat module
@@ -155,6 +165,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
+
 
 def groups_index(groups_data):
     """Return a pandas.MultiIndex with levels for group, dataset and point
@@ -226,7 +237,7 @@ def group_result_table_no_table(groups_results, groups_index):
         ):
             replicas = (
                 ("rep_%05d" % (i + 1), th_rep)
-                for i, th_rep in enumerate(th._rawdata[index, :])
+                for i, th_rep in enumerate(th.error_members[index, :])
             )
 
             result_records.append(
@@ -441,65 +452,6 @@ def groups_corrmat(groups_covmat):
 def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
-@table
-def closure_pseudodata_replicas(
-    experiments, pdf, nclosure: int, experiments_index, nnoisy: int = 0
-):
-    """Generate closure pseudodata replicas from the given pdf.
-
-    nclosure: Number of Level 1 pseudodata replicas.
-
-    nnoisy:   Number of Level 2 replicas generated out of each pseudodata replica.
-
-    The columns of the table are of the form (clos_0, noise_0_n0 ..., clos_1, ...)
-    """
-
-    # TODO: Do this somewhere else
-    from NNPDF import RandomGenerator
-
-    RandomGenerator.InitRNG(0, 0)
-    data = np.zeros((len(experiments_index), nclosure * (1 + nnoisy)))
-
-    cols = []
-    for i in range(nclosure):
-        cols += ["clos_%04d" % i, *["noise_%04d_%04d" % (i, j) for j in range(nnoisy)]]
-
-    loaded_pdf = pdf.load()
-
-    for exp in experiments:
-        # Since we are going to modify the experiments, we copy them
-        # (and work on the copies) to avoid all
-        # sorts of weirdness with other providers. We don't want this to interact
-        # with DataGroupSpec at all, because it could do funny things with the
-        # cache when calling load(). We need to copy this yet again, for each
-        # of the noisy replicas.
-        closure_exp = Experiment(exp.load())
-
-        # TODO: This is probably computed somewhere else... All this code is
-        # very error prone.
-        # The predictions are for the unmodified experiment.
-        predictions = [ThPredictions(loaded_pdf, d.load()) for d in exp]
-
-        exp_location = experiments_index.get_loc(closure_exp.GetExpName())
-
-        index = itertools.count()
-        for i in range(nclosure):
-            # Generate predictions with experimental noise, a different for
-            # each closure set.
-            closure_exp.MakeClosure(predictions, True)
-            data[exp_location, next(index)] = closure_exp.get_cv()
-            for j in range(nnoisy):
-                # If we don't copy, we generate noise on top of the noise,
-                # which is not what we want.
-                replica_exp = Experiment(closure_exp)
-                replica_exp.MakeReplica()
-
-                data[exp_location, next(index)] = replica_exp.get_cv()
-
-    df = pd.DataFrame(data, index=experiments_index, columns=cols)
-
-    return df
-
 
 def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     """Tuple of data and theory results for a single pdf. The data will have an associated
@@ -513,85 +465,10 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     data = dataset.load()
     return (
         DataResult(data, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data),
+        ThPredictionsResult.from_convolution(pdf, dataset),
     )
 
 
-def get_shifted_results(results, commondata, cutlist):
-    """Returns the theory results shifted according to correlated experimental uncertainties.
-
-    Parameters
-    ----------
-    results: tuple 
-        A tuple of data and theory results where the theory results' central values are 
-        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
-        impact of correlated experimental uncertainties.
-    commondata : ``CommonDataSpec``
-        The specification corresponfing to the commondata to be plotted.
-    cutlist : list
-        The list of ``CutSpecs`` or ``None`` corresponding to the cuts for each
-        result.
-
-    Returns
-    -------
-    results: tuple 
-        A tuple of data and theory results where the theory results' central values are 
-        shifted according to the paper: arXiv:1709.04922. These shifts encapsulates the 
-        impact of correlated experimental uncertainties.
-    shifted: list 
-        A list of booleans indicating which datasets have been shifted. Note: the datasets with 
-        uncorrelated uncertainties doesn't include the correlated shifts."""
-
-    shifted = []
-
-    cd = commondata.load()
-
-    ## fill uncertainties
-    Ndat, Nsys = cd.GetNData(), cd.GetNSys()
-
-    # square root of sum of uncorrelated uncertainties
-    uncorrE = np.zeros(Ndat)
-    corrE = np.zeros((Ndat, Nsys))  # table of all the correlated uncertainties
-
-    for idat in range(Ndat):
-        uncorrE[idat] = cd.GetUncE(idat)
-        for isys in range(Nsys):
-            if cd.GetSys(idat, isys).name != "UNCORR":
-                corrE[idat, isys] = cd.GetSys(idat, isys).add
-
-    mask = cut_mask(cutlist[0])
-    uncorrE = uncorrE[mask]
-    corrE = corrE[mask]
-    data = results[0].central_value
-
-    for i, result in enumerate(results):
-        if i == 0:
-            continue
-
-        lambda_sys = np.zeros(Nsys)  # nuisance parameters
-        theory = results[i].central_value
-
-        ## isys is equivalent to alpha index and lsys to delta in eq.85
-        if np.any(uncorrE == 0):
-            temp_shifts = np.zeros(Ndat)
-            shifted.append(False)
-        else:
-            f1 = (data - theory)/uncorrE  # first part of eq.85
-            A = np.eye(Nsys) + \
-                np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2)  # eq.86
-            f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A),
-                           corrE, 1./uncorrE)  # second part of eq.85
-            lambda_sys = np.einsum('i,ik->k', f1, f2)  # nuisance parameter
-            shifts = np.einsum('ik,k->i', corrE, lambda_sys)  # the shift
-
-            results[i]._central_value += shifts
-            shifted.append(True)
-
-    #now that theory is shifted, take only the uncorr component of the uncertainty in the data
-    if any(shifted):
-        results[0].covmat[np.diag_indices_from(results[0].covmat)] = uncorrE**2
-
-    return results, shifted
 
 def dataset_inputs_results(
     data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
@@ -614,13 +491,9 @@ def pdf_results(
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
-    data = dataset.load()
-    th_results = []
-    for pdf in pdfs:
-        th_result = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
-        th_results.append(th_result)
+    th_results = [ThPredictionsResult.from_convolution(pdf, dataset) for pdf in pdfs]
 
-    return (DataResult(data, covariance_matrix, sqrt_covmat), *th_results)
+    return (DataResult(dataset.load(), covariance_matrix, sqrt_covmat), *th_results)
 
 
 @require_one("pdfs", "pdf")
@@ -668,13 +541,13 @@ def dataset_inputs_abs_chi2_data(dataset_inputs_results):
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
-    Returns tuple of (phi, numpoints)
+    Returns tuple of (float, int): (phi, numpoints)
 
     For more information on how phi is calculated see Eq.(24) in
     1410.8849
     """
     alldata, central, npoints = abs_chi2_data
-    return (np.sqrt((alldata.data.mean() - central) / npoints), npoints)
+    return (np.sqrt((alldata.error_members().mean() - central) / npoints), npoints)
 
 
 def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
@@ -719,7 +592,7 @@ def dataset_inputs_bootstrap_phi_data(dataset_inputs_results, bootstrap_samples=
     For more information on how phi is calculated see `phi_data`
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(
         diff,
         bootstrap_samples,
@@ -739,7 +612,7 @@ def dataset_inputs_bootstrap_chi2_central(
     a different value can be specified in the runcard.
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
     chi2_central_resample = bootstrap_values(
         diff,
@@ -749,53 +622,6 @@ def dataset_inputs_bootstrap_chi2_central(
         args=[dt.sqrtcovmat],
     )
     return chi2_central_resample
-
-
-# TODO: deprecate this function?
-def chi2_breakdown_by_dataset(
-    experiment_results,
-    experiment,
-    t0set,
-    prepend_total: bool = True,
-    datasets_sqrtcovmat=None,
-) -> dict:
-    """Return a dict with the central chi² of each dataset in the experiment,
-    by breaking down the experiment results. If ``prepend_total`` is True.
-    """
-    dt, th = experiment_results
-    sqrtcovmat = dt.sqrtcovmat
-    central_diff = th.central_value - dt.central_value
-    d = {}
-    if prepend_total:
-        d["Total"] = (calc_chi2(sqrtcovmat, central_diff), len(sqrtcovmat))
-
-    # Allow lower level access useful for pseudodata and such.
-    # TODO: This is a hack and we should get rid of it.
-    if isinstance(experiment, Experiment):
-        loaded_exp = experiment
-    else:
-        loaded_exp = experiment.load()
-
-    # TODO: This is horrible. find a better way to do it.
-    if t0set:
-        loaded_exp = type(loaded_exp)(loaded_exp)
-        loaded_exp.SetT0(t0set.load_T0())
-
-    indmin = indmax = 0
-
-    if datasets_sqrtcovmat is None:
-        datasets_sqrtcovmat = (ds.get_sqrtcovmat() for ds in loaded_exp.DataSets())
-
-    for ds, mat in zip(loaded_exp.DataSets(), datasets_sqrtcovmat):
-        indmax += len(ds)
-        d[ds.GetSetName()] = (calc_chi2(mat, central_diff[indmin:indmax]), len(mat))
-        indmin = indmax
-    return d
-
-
-def _chs_per_replica(chs):
-    th, _, l = chs
-    return th.data.ravel() / l
 
 
 @table
@@ -809,31 +635,40 @@ def predictions_by_kinematics_table(results, kinematics_table_notable):
     tb['prediction'] = theory.central_value
     return tb
 
+groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_metadata",))
+groups_chi2_by_process = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_process",))
+groups_each_dataset_chi2_by_process = collect("each_dataset_chi2", ("group_dataset_inputs_by_process",))
 
 @table
-def groups_chi2_table(groups_data, pdf, groups_chi2, each_dataset_chi2):
+def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
-    the groups."""
-    dschi2 = iter(each_dataset_chi2)
+    the groups, grouped by metadata."""
     records = []
-    for group, groupres in zip(groups_data, groups_chi2):
-        stats = chi2_stats(groupres)
-        stats["group"] = group.name
-        records.append(stats)
-        for dataset, dsres in zip(group, dschi2):
+    for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2):
+        for dataset, dsres in zip(group, dsresults):
             stats = chi2_stats(dsres)
             stats["group"] = dataset.name
             records.append(stats)
     return pd.DataFrame(records)
 
 
-@table
-def procs_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2):
-    return groups_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2)
-    
 experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
 )
+
+@table
+def procs_chi2_table(
+    procs_data, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process
+):
+    """Same as groups_chi2_table but by process"""
+    return groups_chi2_table(
+        procs_data,
+        pdf,
+        groups_chi2_by_process,
+        groups_each_dataset_chi2_by_process,
+    )
+
+#procs_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_process",))
 
 @check_cuts_considered
 @table
@@ -876,7 +711,7 @@ dataspecs_posdataset = collect("posdataset", ("dataspecs",))
 def count_negative_points(possets_predictions):
     """Return the number of replicas with negative predictions for each bin
     in the positivity observable."""
-    return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
+    return np.sum([(r.error_members < 0).sum(axis=0) for r in possets_predictions], axis=0)
 
 
 chi2_stat_labels = {
@@ -1210,7 +1045,7 @@ def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
     )
 
     # we sum data, not error_members here because we feed it back into the stats
-    # class, some stats class error_members cuts off the CV
+    # class, the stats class error_members cuts off the CV if needed
     data_sum = np.sum(
         [exp_chi2_data.replica_result.data for exp_chi2_data in experiments_chi2_data],
         axis=0

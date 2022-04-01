@@ -18,11 +18,10 @@ import sys
 import tempfile
 import logging
 
-import NNPDF as nnpath
-
 from reportengine import colors
 
 from validphys.renametools import change_name
+from validphys.loader import Loader
 
 
 #Taking command line arguments
@@ -59,7 +58,7 @@ def main():
         if len(initial_dir.parts) != 1:
             log.error("Enter a fit name and not a path with the -r option")
             sys.exit(1)
-        fitpath = pathlib.Path(nnpath.get_results_path())/initial_fit_name
+        fitpath = Loader().resultspath / initial_fit_name
     else:
         fitpath = initial_dir
     if not fitpath.is_dir():

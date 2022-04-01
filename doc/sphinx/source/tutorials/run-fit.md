@@ -7,16 +7,16 @@ How to run a PDF fit
 
 
 The user should perform the steps documented below in order to obtain a complete
-PDF fit:
+PDF fit using the latest release of the NNPDF fitting code: ``n3fit``.
+The fitting methodology is detailed in the [Methodology](methodology) page.
 
 - [Preparing a fit runcard](#preparing-a-fit-runcard)
 - [Running the fitting code](#running-the-fitting-code)
 - [Upload and analyse the fit](#upload-and-analyse-the-fit)
 
 
-These steps are similar to those required to run the
-[``nnfit`` code](nnfit-usage) as ``n3fit`` is designed to maintain close
-compatibility with it.
+These steps are similar to those required to run the legacy [``nnfit`` code](nnfit-usage),
+although the runcards for both programs are not completely compatible.
 
 Preparing a fit runcard
 -----------------------
@@ -25,45 +25,47 @@ The runcard is written in YAML. The runcard is the unique identifier of a fit
 and contains all required information to perform a fit, which includes the
 experimental data, the theory setup and the fitting setup.
 
-The ``n3fit`` code accepts the same YAML keys used by ``nnfit`` and extra keys
-required by the new techniques introduced in [Methodology](methodology).
+A detailed explanation on the parameters accepted by the ``n3fit`` runcards
+can be found in the [detailed guide](runcard-detailed).
 
-In particular we introduce new keys in the fit runcard such as:
-- different seeds for the training and validation split (``trvlseed``), neural
-network intialization (``nnseed``) and the MC data replica generation (``mcseed``).
-- some debug flags to store or load the model in/from hd5 files (``save``, ``load``)
-- a new ``parameters`` dictionnary with the model specifications based on the
-arguments described in [Methodology](methodology).
+For newcomers, it is recommended to start from an already existing runcard,
+example runcards (and runcard used in NNPDF releases) are available at
+[``n3fit/runcards``](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
+The runcards are mostly self explanatory, see for instance below an
+example of the ``parameter`` dictionary that defines the Machine Learning framework.
 
-See, as an example, the following self explanatory runcard fragment:
 ```yaml
 # runcard example
 ...
-trvlseed: 1
-nnseed: 2
-mcseed: 3
-genrep: true
-
-parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+parameters:
   nodes_per_layer: [15, 10, 8]
   activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
   initializer: 'glorot_normal'
-  learning_rate: 0.01
-  optimizer: 'RMSprop'
+  optimizer:
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.01
+    clipnorm: 1.0
   epochs: 900
-  pos_multiplier: 1.05
-  pos_initial:  # believe the pos_lambda below
-  stopping_patience: 0.30 # percentage of the number of epochs
+  positivity:
+    multiplier: 1.05
+    threshold: 1e-5
+  stopping_patience: 0.30 # Ratio of the number of epochs
   layer_type: 'dense'
   dropout: 0.0
 ...
 ```
 
-On the other hand, we have also introduced a new ``hyperscan`` key which specifies
-the trial ranges for the hyperparameter scan procedure. See the following self
-explanatory example:
+The runcard system is designed such that the user can utilize the program without having to
+tinker with the codebase.
+One can simply modify the options in ``parameters`` to specify the
+desired architecture of the Neural Network as well as the settings for the optimization algorithm.
+
+An important feature of ``n3fit`` is the ability to perform [hyperparameter scans](hyperoptimization),
+for this we have also introduced a ``hyperscan_config`` key which specifies
+the trial ranges for the hyperparameter scan procedure.
+See the following self-explanatory example:
 ```yaml
-hyperscan:
+hyperscan_config:
     stopping: # setup for stopping scan
         min_epochs: 5e2  # minimum number of epochs
         max_epochs: 40e2 # maximum number of epochs
@@ -92,13 +94,23 @@ hyperscan:
         activations: ['sigmoid', 'tanh'] # list of activation functions
 ```
 
+It is also possible to take the configuration of the hyperparameter scan from a previous
+run in the NNPDF server by using the key `from_hyperscan`:
+```yaml
+hyperscan_config:
+  from_hyperscan: 'some_previous_hyperscan'
+```
 
-Finally, complete working examples of DIS-only and global fits are available at
-the git repository in
-[n3fit/runcards](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
+or to directly take the trials from said hyperscan:
+```yaml
+hyperscan_config:
+  use_tries_from: 'some_previous_hyperscan'
+```
 
-For a more detailed explanation on the parameters that are specific for the
-``n3fit`` runcard see the [detailed guide](runcard-detailed).
+
+```eval_rst
+.. _run-n3fit-fit:
+```
 
 Running the fitting code
 ------------------------
@@ -161,13 +173,17 @@ script to analyse the output of the hyperparameter scan.
 
 Output of the fit
 -----------------
-In the same fashion as ``nnfit``, every time a replica is finalized a folder is
-created in ```runcard/nnfit/replica_$replica```. This folder contains several
-files which follow the same structure as ``nnfit``:
+Every time a replica is finalized, the output is saved to the ```runcard/nnfit/replica_$replica```
+folder, which contains a number of files:
 
-- ``runcard.exportgrid``: a file containing the PDF grid.
 - ``chi2exps.log``: a log file with the χ² of the training every 100 epochs.
-- ``runcard.preproc``: Empty file.
+- ``runcard.exportgrid``: a file containing the PDF grid.
+- ``runcard.json``: Includes information about the fit (metadata, parameters, times) in json format.
+
+For legacy compatibility with the ``nnfit`` structure the following files are also included
+(all their information is now included in ``runcard.json``):
+
+- ``runcard.preproc``: Preprocessing factors used by the replicas.
 - ``runcard.fitinfo``: Includes information about the fit. The first line
 contains, in this order, the number of epochs, the validation χ², training
 χ², experimental χ² and the state of the positivity. The second line the

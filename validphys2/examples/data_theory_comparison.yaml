@@ -4,15 +4,17 @@ meta:
     author: Rosalyn Pearson
 
 pdfs:
-    - id: NNPDF31_nnlo_as_0118_DISonly
-      label: NNPDF31_nnlo_as_0118_DISonly
+    - id: NNPDF40_nnlo_lowprecision
+      label: NNPDF40_nnlo_lowprecision
 
 theoryid: 162
 
-use_cuts: "nocuts"
+use_cuts: "internal"
 
 dataset_inputs:
       - { dataset: BCDMSP}
+      - { dataset: H1HERAF2B}
+      - { dataset: ZEUSHERAF2B}
 
 template: dthcomparison.md
 

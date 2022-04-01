@@ -9,17 +9,17 @@ import numpy.linalg as la
 
 from reportengine import collect
 
+from validphys.core import Stats
 from validphys.checks import check_pdf_is_montecarlo
-
 
 #This would be a good candidate to be optimized to calculate everything in one
 #pass over x,
-def _basic_obs_pdf_correlation(pdfarr, obsarr):
+def _basic_obs_pdf_correlation(pdf_val, obs_val):
     """Calculate the correlation between pdfs and observables.
-    The expected format is:
+    The expected format is two arrays
 
-    obsarr: (nbins x nreplicas), as returned from thresult.
-    pdfarr: (nreplicas x nf x nx), as returned from xplotting_grid.grid_values
+    obs_val: (nbin x nreplicas) as returned from thresults.error_members
+    pdf_val: (nreplicas x nf x nf) as returned from xplotting_grid.grid_values.error_members
 
     The returned array contains the PDF correlation between
     the value of the obsevable and the PDF at the corresponding point in (fl,x)
@@ -27,11 +27,8 @@ def _basic_obs_pdf_correlation(pdfarr, obsarr):
     (nbins x nf x nx), compatible with grid_values, upon
     changing replicas->bins.
     """
-
-    #Remove mean
-    #TODO: This should be done at the Result level
-    x = pdfarr  - np.mean(pdfarr, axis=0)
-    y = obsarr.T - np.mean(obsarr, axis=1)
+    x = pdf_val - np.mean(pdf_val, axis=0)
+    y = (obs_val - np.mean(obs_val, axis=-1, keepdims=True)).T
 
     #We want to compute:
     #sum(x*y)/(norm(x)*norm(y))
@@ -46,35 +43,39 @@ def _basic_obs_pdf_correlation(pdfarr, obsarr):
 
     return num/den
 
-def _basic_obs_obs_correlation(obsarr1, obsarr2):
+def _basic_obs_obs_correlation(obs1, obs2):
     """Calculate the correlation between two observables. The expected format is
-    obsarr1: (nbins1, nreplicas)
-    obsarr2: (nbins2, nreplicas)
+    arrays instances of:
+    
+    obs1: (nbins, nreplicas)
+    obs2: (nbins, nreplicas)
 
     The result is (nbins1 , nbins2), a mareix containing the correlation
     coefficients between the two sets.
     """
-    #TODO: Do this at Result level taking into account error type
-    x = (obsarr1.T - np.mean(obsarr1, axis=1)).T
-    y = (obsarr2.T - np.mean(obsarr2, axis=1))
+    x = obs1 - np.mean(obs1, axis=1, keepdims=True)
+    y = (obs2 - np.mean(obs2, axis=1, keepdims=True)).T
 
     return x@y/np.outer(la.norm(x,axis=1),la.norm(y,axis=0))
 
-#TODO: Implement for other error types. Do not use the _rawdata.
 @check_pdf_is_montecarlo
 def obs_pdf_correlations(pdf, results, xplotting_grid):
     """Return the correlations between each point in a dataset and the PDF
     values on a grid of (x,f) points in a format similar to `xplotting_grid`."""
-    _ , th = results
-    corrs = _basic_obs_pdf_correlation(xplotting_grid.grid_values, th._rawdata)
-    return xplotting_grid._replace(grid_values=corrs)
+    _, th = results
+    # Wrap the result in a standard Stats class
+    # since the result is (npoints, flavours, ndata) and has nothing to do with the PDF replicas
+    pdf_val = xplotting_grid.grid_values.error_members()
+    obs_val = th.error_members
+    corrs = Stats(_basic_obs_pdf_correlation(pdf_val, obs_val))
+    return xplotting_grid.copy_grid(grid_values=corrs)
 
 
-corrpair_results = collect('results', ['corrpair'])
-corrpair_datasets = collect('dataset', ['corrpair'])
+corrpair_results = collect("results", ["corrpair"])
+corrpair_datasets = collect("dataset", ["corrpair"])
 
 @check_pdf_is_montecarlo
 def obs_obs_correlations(pdf, corrpair_results):
     """Return the theoretical correlation matrix between a pair of observables."""
-    (_,th1), (_,th2) = corrpair_results
-    return _basic_obs_obs_correlation(th1._rawdata, th2._rawdata)
+    (_, th1), (_, th2) = corrpair_results
+    return _basic_obs_obs_correlation(th1.error_members, th2.error_members)

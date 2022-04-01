@@ -137,13 +137,13 @@ one looks like this:
 
 .. code:: yaml
 
-   pdfs:
-       - NNPDF31_nlo_as_0118
-       - NNPDF31_nnlo_as_0118
-       - NNPDF31_nnlo_as_0118_hessian
+    pdfs:
+        - NNPDF40_nlo_as_01180
+        - NNPDF40_nnlo_as_01180
+        - NNPDF40_nnlo_as_01180_hessian
 
    norm:
-       normalize_to: NNPDF31_nlo_as_0118
+       normalize_to: NNPDF40_nlo_as_01180
 
    first:
        Q: 1
@@ -225,16 +225,16 @@ runcard:
 .. code:: yaml
 
    pdfs:
-       - id:  NNPDF31_nlo_as_0118
+       - id:  NNPDF40_nlo_as_01180
          label: NLO
 
-       - id: NNPDF31_nnlo_as_0118
+       - id: NNPDF40_nnlo_as_01180
          label: NNLO
 
 
    theoryids:
-       - 52
-       - 53
+       - 208
+       - 200
    use_cuts : nocuts
 
    experiments:
@@ -251,8 +251,8 @@ runcard:
     - theoryids::pdfs::experiments::experiment plot_fancy
 
 Will produce a separate plot for each combination of the two theories
-(52 and 53), the three PDFs at the top, and each dataset in the two
-experiments (so 18 plots in total). This syntax is discussed in more
+(200 and 208), the two PDFs at the top, and each dataset in the two
+experiments (so 28 plots in total). This syntax is discussed in more
 detail in the [Usage] section.
 
 It should be trivial to repeat an action for different sets of inputs.

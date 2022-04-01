@@ -15,6 +15,7 @@ import sys
 import contextlib
 import pathlib
 import tempfile
+from glob import glob
 from urllib.parse import urljoin
 import hashlib
 
@@ -23,10 +24,8 @@ from prompt_toolkit.completion import WordCompleter
 
 from reportengine.compat import yaml
 from reportengine.colors import t
-from validphys.loader import RemoteLoader
+from validphys.loader import RemoteLoader, Loader
 from validphys.renametools import Spinner
-
-from NNPDF import get_profile_path
 
 log = logging.getLogger(__name__)
 
@@ -41,7 +40,7 @@ def _profile_key(k):
         try:
             return self._profile[k]
         except KeyError as e:
-            raise UploadError(f"Profile '{get_profile_path()}' does not contain key '{k}'") from e
+            raise UploadError(f"Profile '{self._profile_path}' does not contain key '{k}'") from e
 
     return f
 
@@ -51,17 +50,8 @@ class Uploader():
     possible, then does the work inside the context and then uploads the
     result. The various derived classes should be used."""
 
-    def __init__(self):
-        self._lazy_profile = None
-
     upload_host = _profile_key('upload_host')
-
-    @property
-    def _profile(self):
-        if self._lazy_profile is None:
-            with open(get_profile_path()) as f:
-                self._lazy_profile = yaml.safe_load(f)
-        return self._lazy_profile
+    _profile = Loader().nnprofile
 
     def get_relative_path(self, output_path):
         """Return the relative path to the ``target_dir``."""
@@ -81,7 +71,7 @@ class Uploader():
         except subprocess.CalledProcessError as e:
             raise BadSSH(("Could not validate the SSH key. "
             "The command\n%s\nreturned a non zero exit status. "
-            "Please make sure thet your public SSH key is on the server.")
+            "Please make sure that your public SSH key is on the server.")
             % str_line) from e
         except OSError as e:
             raise BadSSH("Could not run the command\n%s\n: %s" % (str_line, e)) from e
@@ -306,6 +296,14 @@ class FitUploader(ArchiveUploader):
         return super().upload_output(output_path, force)
 
 
+class HyperscanUploader(FitUploader):
+    """Uploader for hyperopt scans, which are just special cases of fits"""
+    _resource_type = "hyperscans"
+    _loader_name = "downloadable_hyperscans"
+    target_dir = _profile_key('hyperscan_target_dir')
+    root_url = _profile_key('hyperscan_root_url')
+
+
 class PDFUploader(ArchiveUploader):
     """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
@@ -411,6 +409,10 @@ def check_input(path):
         # --interactive flag to create one
         return 'report'
     elif 'filter.yml' in files:
+        # The product of a n3fit run, usually a fit but could be a hyperopt scan
+        # For that there should be a) tries.json files and b) no postfit
+        if "postfit" not in files and glob(path.as_posix() + "/nnfit/replica_*/tries.json"):
+            return 'hyperscan'
         return 'fit'
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'

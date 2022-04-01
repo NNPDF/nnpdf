@@ -33,6 +33,7 @@ def covmat_from_systematics(
     loaded_commondata_with_cuts,
     dataset_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     _central_values=None
 ):
     """Take the statistical uncertainty and systematics table from
@@ -83,6 +84,8 @@ def covmat_from_systematics(
         the returned covmat will be unmodified.
     use_weights_in_covmat: bool
         Whether to weight the covmat, True by default.
+    norm_threshold: number
+        threshold used to regularize covariance matrix
     _central_values : None, np.array
         1-D array containing alternative central values to combine with the
         multiplicative errors to calculate their absolute contributions. By
@@ -116,7 +119,12 @@ def covmat_from_systematics(
         loaded_commondata_with_cuts.systematic_errors(_central_values)
     )
     if use_weights_in_covmat:
-        return covmat / dataset_input.weight
+        covmat = covmat / dataset_input.weight
+    if norm_threshold is not None:
+        covmat = regularize_covmat(
+            covmat,
+            norm_threshold=norm_threshold
+        )
     return covmat
 
 
@@ -124,6 +132,7 @@ def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
     data_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     _list_of_central_values=None
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
@@ -147,6 +156,8 @@ def dataset_inputs_covmat_from_systematics(
         the returned covmat will be unmodified.
     use_weights_in_covmat: bool
         Whether to weight the covmat, True by default.
+    norm_threshold: number
+        threshold used to regularize covariance matrix
     _list_of_central_values: None, list[np.array]
         list of 1-D arrays which contain alternative central values which are
         combined with the multiplicative errors to calculate their absolute
@@ -210,7 +221,12 @@ def dataset_inputs_covmat_from_systematics(
         # concatenate weights and sqrt
         sqrt_weights = np.sqrt(np.concatenate(weights))
         # returns C_ij / (sqrt(w_i) * sqrt(w_j))
-        return (covmat / sqrt_weights).T / sqrt_weights
+        covmat = (covmat / sqrt_weights).T / sqrt_weights
+    if norm_threshold is not None:
+        covmat = regularize_covmat(
+            covmat,
+            norm_threshold=norm_threshold
+        )
     return covmat
 
 
@@ -245,6 +261,7 @@ def t0_covmat_from_systematics(
     *,
     dataset_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     dataset_t0_predictions
 ):
     """Like :py:func:`covmat_from_systematics` except uses the t0 predictions
@@ -276,6 +293,7 @@ def t0_covmat_from_systematics(
         loaded_commondata_with_cuts,
         dataset_input,
         use_weights_in_covmat,
+        norm_threshold=norm_threshold,
         _central_values=dataset_t0_predictions
     )
 
@@ -288,6 +306,7 @@ def dataset_inputs_t0_covmat_from_systematics(
     *,
     data_input,
     use_weights_in_covmat=True,
+    norm_threshold=None,
     dataset_inputs_t0_predictions
 ):
     """Like :py:func:`t0_covmat_from_systematics` except for all data
@@ -316,6 +335,7 @@ def dataset_inputs_t0_covmat_from_systematics(
         dataset_inputs_loaded_cd_with_cuts,
         data_input,
         use_weights_in_covmat,
+        norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
 
@@ -472,133 +492,10 @@ def groups_corrmat(groups_covmat):
     return mat
 
 
-@check_data_cuts_match_theorycovmat
-def dataset_inputs_covmat(
-        data: DataGroupSpec,
-        fitthcovmat,
-        t0set:(PDF, type(None)) = None,
-        use_weights_in_covmat: bool = True,
-        norm_threshold=None):
-    """Like `covmat` except for a group of datasets"""
-    if not use_weights_in_covmat:
-        data = data.to_unweighted()
-
-    loaded_data = data.load()
-
-    if t0set:
-        #Copy data to avoid chaos
-        loaded_data = type(loaded_data)(loaded_data)
-        log.debug("Setting T0 predictions for %s" % data)
-        loaded_data.SetT0(t0set.load_t0())
-
-    covmat = loaded_data.get_covmat()
-
-    if fitthcovmat:
-        loaded_thcov = fitthcovmat.load()
-        ds_names = loaded_thcov.index.get_level_values(1)
-        indices = np.in1d(ds_names, [ds.name for ds in data.datasets]).nonzero()[0]
-        covmat += loaded_thcov.iloc[indices, indices].values
-    if norm_threshold is not None:
-        covmat = regularize_covmat(
-            covmat,
-            norm_threshold=norm_threshold
-        )
-    return covmat
-
-
-@check_dataset_cuts_match_theorycovmat
-def covmat(
-    dataset:DataSetSpec,
-    fitthcovmat,
-    t0set:(PDF, type(None)) = None,
-    use_weights_in_covmat: bool = True,
-    norm_threshold=None,
-    ):
-    """Returns the covariance matrix for a given `dataset`. By default the
-    data central values will be used to calculate the multiplicative contributions
-    to the covariance matrix.
-
-    The matrix can instead be constructed with
-    the t0 proceedure if the user sets `use_t0` to True and gives a
-    `t0pdfset`. In this case the central predictions from the `t0pdfset` will be
-    used to calculate the multiplicative contributions to the covariance matrix.
-    More information on the t0 procedure can be found here:
-    https://arxiv.org/abs/0912.2276
-
-    The user can specify `use_fit_thcovmat_if_present` to be True
-    and provide a corresponding `fit`. If the theory covmat was used in the
-    corresponding `fit` and the specfied `dataset` was used in the fit then
-    the theory covariance matrix for this `dataset` will be added in quadrature
-    to the experimental covariance matrix.
-
-    Covariance matrix can be regularized according to
-    `calcutils.regularize_covmat` if the user specifies `norm_threshold. This
-    algorithm sets a minimum threshold for eigenvalues that the corresponding
-    correlation matrix can have to be:
-
-    1/(norm_threshold)^2
-
-    which has the effect of limiting the L2 norm of the inverse of the correlation
-    matrix. By default norm_threshold is None, to which means no regularization
-    is performed.
-
-    Parameters
-    ----------
-    dataset : DataSetSpec
-        object parsed from the `dataset_input` runcard key
-    fitthcovmat: None or ThCovMatSpec
-        None if either `use_thcovmat_if_present` is False or if no theory
-        covariance matrix was used in the corresponding fit
-    t0set: None or PDF
-        None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
-    use_weights_in_covmat: bool, default True
-        Rescale the covmat by the dataset weights.
-    norm_threshold: number
-        threshold used to regularize covariance matrix
-
-    Returns
-    -------
-    covmat : array
-        a covariance matrix as a numpy array
-
-    Examples
-    --------
-
-    >>> from validphys.api import API
-    >>> inp = {
-            'dataset_input': {'ATLASTTBARTOT'},
-            'theoryid': 52,
-            'use_cuts': 'no_cuts'
-        }
-    >>> cov = API.covmat(**inp)
-    TODO: complete example
-    """
-    if not use_weights_in_covmat:
-        dataset = dataset.to_unweighted()
-    loaded_data = dataset.load()
-
-    if t0set:
-        #Copy data to avoid chaos
-        loaded_data = type(loaded_data)(loaded_data)
-        log.debug("Setting T0 predictions for %s" % dataset)
-        loaded_data.SetT0(t0set.load_t0())
-
-    covmat = loaded_data.get_covmat()
-    if fitthcovmat:
-        loaded_thcov = fitthcovmat.load()
-        covmat += get_df_block(loaded_thcov, dataset.name, level=1)
-    if norm_threshold is not None:
-        covmat = regularize_covmat(
-            covmat,
-            norm_threshold=norm_threshold
-        )
-    return covmat
-
-
 @check_pdf_is_montecarlo
-def pdferr_plus_covmat(dataset, pdf, covmat):
+def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
-    `covmat` and the PDF error: a covariance matrix estimated from the
+    `covmat_t0_considered` and the PDF error: a covariance matrix estimated from the
     replica theory predictions from a given monte carlo `pdf`
 
     Parameters
@@ -607,8 +504,8 @@ def pdferr_plus_covmat(dataset, pdf, covmat):
         object parsed from the `dataset_input` runcard key
     pdf: PDF
         monte carlo pdf used to estimate PDF error
-    covmat: np.array
-        experimental covariance matrix
+    covmat_t0_considered: np.array
+        experimental covariance matrix with the t0 considered
 
     Returns
     -------
@@ -632,21 +529,16 @@ def pdferr_plus_covmat(dataset, pdf, covmat):
     >>> b = API.pdferr_plus_covmat(**inp)
     >>> np.allclose(a == b)
     True
-
-    See Also
-    --------
-    covmat: Standard experimental covariance matrix
     """
-    loaded_data = dataset.load()
-    th = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=loaded_data)
-    pdf_cov = np.cov(th._rawdata, rowvar=True)
-    return pdf_cov + covmat
+    th = ThPredictionsResult.from_convolution(pdf, dataset)
+    pdf_cov = np.cov(th.error_members, rowvar=True)
+    return pdf_cov + covmat_t0_considered
 
 
-def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
+def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat_t0_considered):
     """Like `pdferr_plus_covmat` except for an experiment"""
     # do checks get performed here?
-    return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat)
+    return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered)
 
 
 def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
@@ -789,6 +681,21 @@ def dataspecs_datasets_covmat_differences_table(
     df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
     return df
 
+
+def _covmat_t0_considered(covmat_t0_considered):
+    """Helper function so we can dispatch the full
+    covariance matrix, having considered both ``use_t0``
+    and ``use_pdferr``
+    """
+    return covmat_t0_considered
+
+
+def _dataset_inputs_covmat_t0_considered(dataset_inputs_covmat_t0_considered):
+    """Helper function so we can dispatch the full
+    covariance matrix accross dataset_inputs, having considered both ``use_t0``
+    and ``use_pdferr``
+    """
+    return dataset_inputs_covmat_t0_considered
 
 groups_covmat_collection = collect(
     'dataset_inputs_covariance_matrix', ('group_dataset_inputs_by_metadata',)

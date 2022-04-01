@@ -1,0 +1,85 @@
+# A single CI script with github workflow.
+name: Store docker for tag
+
+on:
+  push:
+    tags:
+    - '*'
+
+# some general variables
+env:
+  CONDA_PY: 39
+  IMAGE_NAME: nnpdf
+
+jobs:
+  build:
+    # setup job
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v1
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup conda and install conda-build
+      shell: bash -l {0}
+      run: |
+        conda config --append channels conda-forge
+        conda config --prepend channels https://packages.nnpdf.science/public
+        conda config --set show_channel_urls true
+        conda install conda-build --yes
+    - name: Build recipe
+      shell: bash -l {0}
+      run: |
+        CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
+    # install local build
+    - name: Copying conda channel locally
+      run: |
+        cp -r /usr/share/miniconda/envs/test/conda-bld/ .
+    # create fancy runcards
+    - name: Build docker image and export environment
+      run: |
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,'); echo "VERSION=$VERSION" >> $GITHUB_ENV
+        CONDA_ENV_NAME=nnpdfenv-tag-$VERSION
+        docker build . --build-arg CONDA_ENV_NAME=$CONDA_ENV_NAME --file docker/dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        docker run --rm --entrypoint cat nnpdf /root/$CONDA_ENV_NAME.yml > n3fit/runcards/$CONDA_ENV_NAME.yml
+        rm -r conda-bld/
+    # upload to github packages
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Push image
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+        # Change all uppercase to lowercase
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        # Strip git ref prefix from version
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
+        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+        docker push $IMAGE_ID:$VERSION
+    # Create PR with the docker conda environment
+    - name: Create Pull Request with docker conda environment
+      id: cpr
+      uses: peter-evans/create-pull-request@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: add conda environment
+        committer: GitHub <noreply@github.com>
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        base: master
+        branch: add-tag-environment
+        branch-suffix: random
+        delete-branch: true
+        title: '[bot] Add conda environment for tag ${{ env.VERSION }}'
+        body: |
+          Included conda environment for tag ${{ env.VERSION }}.
+          Please review and merge.
+        reviewers: scarrazza
+        draft: false
+    - name: Check outputs
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"

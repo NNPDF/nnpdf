@@ -4,7 +4,8 @@
    contain the root `toctree` directive.
 
 The NNPDF collaboration
-=================
+=======================
+
 The `NNPDF collaboration <https://nnpdf.mi.infn.it/>`_ performs research in the field of  high-energy physics. The NNPDF
 collaboration determines the structure of the proton using
 contemporary methods of artificial intelligence. A precise knowledge
@@ -15,18 +16,18 @@ the Large Hadron Collider of CERN.
 
 
 The NNPDF code
-=============
+==============
 The scientific output of the collaboration is freely available to the
-publi through the arXiv, journal repositories, and software
+public through the arXiv, journal repositories, and software
 repositories. Along with this online documentation, we release the
-`NNPDF code <https://github.com/NNPDF/nnpdf>`_ used to produce the latest family of PDFs from NNPDF, NNPDF4.0. The code is made available as an open-source package together with the user-friendly examples and an extensive documentation presented here.
+`NNPDF code <https://github.com/NNPDF/nnpdf>`_, used to produce the latest family of PDFs from NNPDF: NNPDF4.0. The code is made available as an open-source package together with the user-friendly examples and an extensive documentation presented here.
 
-The code can be used to produce the ingredients needed for PDF fits, to run the fits themselves, and to analyse the results. This is the first framework used to produce a global PDF fit made publicly  available, enabling for a detailed external validation and reproducibility of the NNPDF4.0 analysis. Moreover, the code enables the user to explore a number of phenomenological applications, such as the assessment of the impact of new experimental data on PDFs, the effect of changes in theory settings on the resulting PDFs and a fast quantitative comparison between theoretical predictions and experimental data over a broad range of observables.
+The code can be used to produce the ingredients needed for PDF fits, to run the fits themselves, and to analyse the results. This is the first framework used to produce a global PDF fit made publicly  available, enabling for detailed external validation and reproducibility of the NNPDF4.0 analysis. Moreover, the code enables the user to explore a number of phenomenological applications, such as the assessment of the impact of new experimental data on PDFs, the effect of changes in theory settings on the resulting PDFs and a fast quantitative comparison between theoretical predictions and experimental data over a broad range of observables.
 
-If you are a new user head along to :ref:`getstarted` and check out the :ref:`tutorials`.
-  
+If you are a new user head along to :ref:`getstarted` and check out the :ref:`Tutorials`.
+
 The NNPDF team
-=============
+==============
 The NNPDF collaboration is currently composed by the following
 members:
 
@@ -43,9 +44,13 @@ members:
 * Rabah Abdul Khalek - Nikhef Theory Group and VU University
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
-* Emanuele R. Nocera - University of Edinburgh 
+* Emanuele R. Nocera - University of Edinburgh
 * Rosalyn Pearson - University of Edinburgh
 * Juan Rojo - Nikhef Theory Group and VU University
+* Roy Stegeman - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
+* Christopher Schwan - Tif Lab, Dipartimento di Fisica, Università di
+  Milano and INFN
 * Maria Ubiali - University of Cambridge
 * Cameron Voisey - University of Cambridge
 * Michael Wilson - University of Edinburgh
@@ -53,6 +58,8 @@ members:
 Former members of the NNPDF collaboration include
 
 * Valerio Bertone
+* Francesco Cerutti
+* Christopher S. Deans
 * Alberto Guffanti
 * Patrick Groth-Merrild
 * Nathan P. Hartland
@@ -62,7 +69,7 @@ Former members of the NNPDF collaboration include
 
 
 The NNPDF publications
-=====================
+======================
 * *"Future tests of parton distributions"*, Juan Cruz-Martinez, Stefano
   Forte, Emanuele R. Nocera :cite:p:`Cruz-Martinez:2021rgy`
 * *"Deuteron Uncertainties in the Determination of Proton PDFs"*,
@@ -89,19 +96,22 @@ The NNPDF publications
   Voisey and Michael Wilson  :cite:p:`AbdulKhalek:2019bux`
 * *"Nuclear Parton Distributions from Lepton-Nucleus Scattering and
   the Impact of an Electron-Ion Collider"*, Rabah Abdul Khalek,
-  Jacob J. Ethier, Juan Rojo, :cite:p:`AbdulKhalek:2019mzd` 
+  Jacob J. Ethier, Juan Rojo, :cite:p:`AbdulKhalek:2019mzd`
 * *"A First Determination of Parton Distributions with Theoretical
   Uncertainties"*, Rabah Abdul Khalek, Richard D. Ball, Stefano
   Carrazza, Stefano Forte, Tommaso Giani, Zahari Kassabov,
   Emanuele R. Nocera, Rosalyn L. Pearson, Juan Rojo, Luca Rottoli,
-  Maria Ubiali, Cameron Voise, and Michael Wilson :cite:p:`AbdulKhalek:2019ihb`
+  Maria Ubiali, Cameron Voisey, and Michael Wilson
+  :cite:p:`AbdulKhalek:2019ihb`
+* *"Towards a new generation of parton densities with deep learning
+  models"*, Stefano Carrazza and Juan Cruz-Martinez :cite:p:`Carrazza:2019mzf`
 * *"Parton distributions from high-precision collider data"*,
   Richard D. Ball, Valerio Bertone, Stefano Carrazza, Luigi Del
   Debbio, Stefano Forte, Patrick Groth-Merrild, Alberto Guffanti,
   Nathan P. Hartland, Zahari Kassabov,  Jose I. Latorre,
   Emanuele R. Nocera,  Juan Rojo, Luca Rottoli, Emma Slade, and Maria Ubiali :cite:p:`Ball:2017nwa`
 
-  
+
 Contents
 ========
 .. toctree::
@@ -113,11 +123,13 @@ Contents
    ./buildmaster.md
    data/index
    theory/index
+   figuresofmerit/index
+   contributing/index
+   releases
    ci/index
    serverconf/index
    external-code/index
    tutorials/index
-   ./sphinx-documentation.md
 
 Bibliography
 ============

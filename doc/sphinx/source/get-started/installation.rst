@@ -12,55 +12,7 @@ code, while the :ref:`source` is necessary if you want to develop the code.
 Installation using conda
 ------------------------
 
-Adding RSA key to Github
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-To clone the NNPDF Github repositories, you must add a public RSA key to
-Github.
-
--  Checking for an existing RSA key
-
-   Firstly, check if your machine has already generated an RSA key. This
-   can be done by the following:
-
-   .. code::
-
-        cd ~/.ssh
-        ls -a
-
-   and verify the files ``id_rsa`` and ``id_rsa.pub`` exist. An
-   alternative is to perform ``find ~ -name 'id_rsa.*'`` and verify
-   ``id_rsa.pub`` is found.
-
--  Generating an RSA key
-
-   If no RSA key exists use the command
-
-   .. code::
-
-        ssh-keygen
-
-   and follow the instructions to generate an RSA key.
-
--  Adding the RSA key to Github
-
-   Copy the public RSA key stored in ``id_rsa.pub`` to your clipboard
-   using
-
-   .. code::
-
-        cat ~/.ssh/id_rsa.pub
-
-   and copying the output.
-
-   The public RSA key must be pasted to Github `here`_ and clicking on
-   the ‘New SSH key’ button. Enter an appropriate title and paste the
-   RSA Key.
-
-Obtain the helper script
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-A helper script exists to aid the configuration. To obtain it use:
+A helper script exists to aid the configuration using conda. To obtain it use:
 
 ::
 
@@ -73,10 +25,6 @@ A helper script exists to aid the configuration. To obtain it use:
    ::
 
         ./binary-bootstrap/bootstrap.sh
-
-   The script will ask you for the password of the NNPDF private
-   repository, which can be found
-   `here <https://www.wiki.ed.ac.uk/pages/viewpage.action?pageId=292165461>`__
 
 -  **Path**: the conda installer will ask to add the conda bin path to
    the default *$PATH* environment variable (by editing your .bashrc
@@ -223,7 +171,14 @@ explained above, if the user has not already done so.
 
    .. code::
 
-       conda install pkg-config swig=3.0.10 cmake
+       conda install pkg-config swig cmake
+      
+   When working on a Linux system it is `currently 
+   <https://github.com/NNPDF/nnpdf/pull/1280>`_ also needed to run
+   
+   .. code::
+   
+       conda install sysroot_linux-64=2.17
 
 5. We now need to make the installation prefix point to our
    ``nnpdf-dev`` environment. Fortunately, when you activate the environment,
@@ -280,3 +235,28 @@ explained above, if the user has not already done so.
 .. _here: https://github.com/settings/keys
 .. _Mac Software Development Kit: https://github.com/phracker/MacOSX-SDKs
 .. _anconda documentation: https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html#macos-sdk
+
+
+.. _docker:
+
+Using the code with docker
+--------------------------
+
+We provide docker images for tag release of the code using GitHub Packages. The
+docker images contain a pre-configured linux environment with the NNPDF
+framework installed with the specific tag version. The code is installed using
+miniconda3.
+
+Please refer to the download and authentication instructions from the `NNPDF GitHub Packages`_.
+
+In order to start the docker image in interactive mode please use docker
+standard syntax, for example:
+
+.. code::
+
+    docker run -it ghcr.io/nnpdf/nnpdf:<tag_version> bash
+
+This will open a bash shell with the nnpdf environment already activated, with
+all binaries and scripts from the NNPDF framework.
+
+.. _NNPDF GitHub Packages: https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf

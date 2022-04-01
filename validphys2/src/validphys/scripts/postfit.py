@@ -140,7 +140,11 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
         if not fitdata.check_nnfit_results_path(result_path):
             raise PostfitError('Postfit cannot find a valid results path')
         if not fitdata.check_lhapdf_info(result_path, fitname):
-            raise PostfitError('Postfit cannot find a valid LHAPDF info file')
+            raise PostfitError(
+                'Postfit cannot find a valid LHAPDF info file\n'
+                'Note: Perhaps you forgot to run evolven3fit? See\n'
+                'https://docs.nnpdf.science/tutorials/run-fit.html#running-the-fitting-code'
+            )
 
         nrep = int(nrep)
         if at_least_nrep:
@@ -224,7 +228,7 @@ def main():
         nargs='?',
         default=NSIGMA_DISCARD_CHI2,
         help="The number of standard deviations in the chi2, calculated over PDF replicas, "
-             " above which the replicas are cut. The default is four.",
+             f" above which the replicas are cut. The default is {NSIGMA_DISCARD_CHI2}.",
         type=float,
     )
     parser.add_argument(
@@ -232,7 +236,7 @@ def main():
         nargs='?',
         default=NSIGMA_DISCARD_ARCLENGTH,
         help="The number of standard deviations in the arclength, calculated over PDF replicas, "
-             " above which the replicas are cut. The default is four.",
+             f" above which the replicas are cut. The default is {NSIGMA_DISCARD_ARCLENGTH}.",
         type=float,
     )
     parser.add_argument(
@@ -240,7 +244,7 @@ def main():
         nargs='?',
         default=INTEG_THRESHOLD,
         help="The maximum value allowed for integrable distributions at small-x. "
-             "The default is 1e-2.",
+             f"The default is {INTEG_THRESHOLD}.",
         type=float,
     )
     parser.add_argument(

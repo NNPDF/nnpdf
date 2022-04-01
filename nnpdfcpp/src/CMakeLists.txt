@@ -45,32 +45,6 @@ if (COMPILE_chi2check)
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_chi2check)
 
-# ROOT
-#find_program(ROOT_CONFIG root-config)
-#if (ROOT_CONFIG)
-#  exec_program(${ROOT_CONFIG}
-#    ARGS --cflags
-#    OUTPUT_VARIABLE ROOT_CXX_FLAGS
-#    )
-#  exec_program(${ROOT_CONFIG}
-#    ARGS --libs
-#    OUTPUT_VARIABLE ROOT_LIBRARIES
-#    )
-#  # validphys
-#  option(COMPILE_validphys "Compile validphys program." OFF)
-#  if (COMPILE_validphys)
-#    add_executable(validphys validphys/src/validphys.cc
-#      validphys/src/plotdata.cc
-#      validphys/src/plotutils.cc)
-#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
-#    include_directories(validphys/inc)
-#    target_link_libraries(validphys common nnpdf ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
-#    install(TARGETS validphys DESTINATION bin
-#          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-#  endif(COMPILE_validphys)
-#else(ROOT_CONFIG)
-#  message(WARNING "ROOT not found: validphys compilation is disabled, install ROOT and rerun cmake to enable the validphys compilation")
-#endif(ROOT_CONFIG)
 
 # evolvefit
 option(COMPILE_evolvefit "Compile evolvefit program." OFF)

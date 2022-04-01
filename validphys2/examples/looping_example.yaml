@@ -4,19 +4,19 @@ meta:
     author: Lazy Person
 
 pdfs:
-    - id:  NNPDF31_nlo_as_0118
+    - id:  NNPDF40_nlo_as_01180
       label: NLO
 
-    - id: NNPDF31_nnlo_as_0118_DISonly
+    - id: NNPDF40_nnlo_as_01180
       label: NNLO
 
     - id: NNPDF31_nnlo_as_0118_hessian
       label: NNLO hessian
 
 theoryids:
-    - 52
+    - 208
     - 162
-use_cuts : nocuts
+use_cuts : internal
 
 dataset_inputs:
   - { dataset: LHCBWZMU7TEV, cfac: [NRM] }

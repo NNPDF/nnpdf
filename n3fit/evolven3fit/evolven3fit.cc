@@ -67,18 +67,31 @@ int get_theory_id_from_runcard(string const& filteryaml_path)
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
-  if (argc != 3)
+  if (argc != 3 && argc != 5)
     {
-      cerr << "\nusage: evolven3fit [configuration folder] [max_replicas]\n" << endl;
+      cerr << "\nusage: evolven3fit [configuration folder] [max_replicas] [--theory_id ID]\n" << endl;
       exit(EXIT_FAILURE);
     }
 
   const string fit_path = argv[1];
   const int maxreplica = stoi(argv[2]);
   const string filteryaml_path = fit_path + "/filter.yml";
+  int theory_id;
 
   // Get theory id
-  const int theory_id = get_theory_id_from_runcard(filteryaml_path);
+  if (argc == 5)
+  {
+    const string flag = argv[3];
+    if (flag == "--theory_id")
+      theory_id = stoi(argv[4]);
+    else
+    {
+      cerr << "\nNot supported flag: " << flag << endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+  else
+    theory_id = get_theory_id_from_runcard(filteryaml_path);
   cout << "Theory ID = " << theory_id << endl;
 
   // load theory from db

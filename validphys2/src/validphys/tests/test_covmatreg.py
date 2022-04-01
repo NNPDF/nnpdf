@@ -4,6 +4,7 @@ test_covmatreg
 functions to test the covariance matrix regularization
 """
 import numpy as np
+import pandas as pd
 
 from validphys.tests.test_regressions import make_table_comp
 from validphys.tableloader import parse_exp_mat
@@ -29,6 +30,12 @@ def test_regularize_expcov(data_config):
     np.testing.assert_allclose(df1.values, sqrt_df1.values@sqrt_df1.values.T)
     # check that same result obtained
     return df1
+
+@make_table_comp(parse_exp_mat)
+def test_regularized_covmat_generation(data_config):
+    covmat = API.dataset_inputs_covariance_matrix(**data_config, norm_threshold=3)
+    index = API.groups_index(**data_config)
+    return pd.DataFrame(covmat, index=index, columns=index)
 
 def test_regularization_matches_sane():
     """Check that regularizing the sqrt cov produces same result as regularizing

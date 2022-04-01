@@ -6,23 +6,26 @@
 #include "INT.h"
 #include <array>
 
-void register_integrability(vector<CommonData*>& list)
+void register_integrability(vector<unique_ptr<CommonData>>& list)
 {
   // Integrability sets
-  const std::array<std::string, 4>  INTsets543 = { 
+  const std::array<std::string, 4>  INTsets543 = {
     "INTEGXT3_543",
     "INTEGXV_543",
     "INTEGXV3_543",
     "INTEGXV8_543"};
-  const std::array<std::string, 2>  INTsets = { 
+  const std::array<std::string, 5>  INTsets = {
     "INTEGXT3",
-    "INTEGXT8"};
+    "INTEGXT8",
+    "INTEGXV",
+    "INTEGXV3",
+    "INTEGXV8"};
 
-  
+
   for (auto set : INTsets543)
-    list.push_back(new IntFilter543(set));
+    list.emplace_back(new IntFilter543(set));
   for (auto set : INTsets)
-    list.push_back(new IntFilter(set));
+    list.emplace_back(new IntFilter(set));
 }
 
 void IntFilter543::ReadData()
@@ -56,4 +59,4 @@ void IntFilter::ReadData()
     fKin3[i] = 0;
   }
 
-}  
+}

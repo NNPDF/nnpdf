@@ -21,10 +21,12 @@ def tmp(tmpdir):
     return pathlib.Path(tmpdir)
 
 # Here define the default config items like the PDF, theory and experiment specs
+SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+    SINGLE_DATAPOINT,
     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
 ]
 
@@ -42,18 +44,22 @@ WEIGHTED_DATA = [
     {'dataset': 'NMC', 'weight': 100},
 ]
 
-PDF = "NNPDF31_nnlo_as_0118"
-HESSIAN_PDF = "NNPDF31_nnlo_as_0118_hessian"
+POSITIVITIES = ["POSDYCBD", "POSF2S"]
+
+PDF = "NNPDF40_nnlo_as_01180"
+HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
-FIT = "191015-mw-001_for_testing"
-FIT_ITERATED = "191015-mw-001_for_testing_iterated"
+FIT = "NNPDF40_nnlo_lowprecision"
+FIT_ITERATED = "NNPDF40_nnlo_low_precision_iterated"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_220208"
 
 base_config = dict(
         pdf=PDF,
         use_cuts='nocuts',
         dataset_inputs=DATA,
         theoryid=THEORYID,
-        use_fitthcovmat=False
+        use_fitthcovmat=False,
+        Q=10,
     )
 
 @pytest.fixture(scope='module')
@@ -67,6 +73,20 @@ def data_internal_cuts_config(data_config):
     return config_dict
 
 @pytest.fixture(scope='module')
+def single_data_internal_cuts_config(data_internal_cuts_config):
+    """Like data_internal_cuts_config but for a single dataset"""
+    config_dict = dict(data_internal_cuts_config)
+    config_dict.pop("dataset_inputs")
+    config_dict.update(dataset_input=DATA[0])
+    return config_dict
+
+@pytest.fixture(scope='module')
+def single_data_single_point_internal_cuts_config(single_data_internal_cuts_config):
+    config_dict = dict(single_data_internal_cuts_config)
+    config_dict.update(dataset_input=SINGLE_DATAPOINT)
+    return config_dict
+
+@pytest.fixture(scope='module')
 def data_witht0_config():
     config_dict = dict(
         **base_config,
@@ -75,15 +95,28 @@ def data_witht0_config():
     return config_dict
 
 @pytest.fixture(scope='module')
+def data_witht0_internal_cuts_config(data_witht0_config):
+    config_dict = dict(data_witht0_config)
+    config_dict.update(use_cuts='internal')
+    return config_dict
+
+@pytest.fixture(scope='module')
 def data_singleexp_witht0_config(data_witht0_config):
     config_dict = dict(data_witht0_config)
     config_dict.pop("dataset_inputs")
     config_dict.update({'experiments': SINGLE_EXP})
+    config_dict.update(use_cuts='internal')
     return config_dict
 
 @pytest.fixture(scope='module')
 def weighted_data_witht0_config(data_witht0_config):
     config_dict = dict(data_witht0_config)
+    config_dict.update({'dataset_inputs': WEIGHTED_DATA})
+    return config_dict
+
+@pytest.fixture(scope='module')
+def weighted_data_witht0_internal_cuts_config(data_witht0_internal_cuts_config):
+    config_dict = dict(data_witht0_internal_cuts_config)
     config_dict.update({'dataset_inputs': WEIGHTED_DATA})
     return config_dict
 
@@ -130,5 +163,19 @@ def hessian_pdf_config(flavour_basis_initial_scale_config):
 def hessian_data_config(data_config):
     """Same as data config but with hessian PDF"""
     new_config = dict(data_config)
+    new_config["pdf"] = HESSIAN_PDF
+    return new_config
+
+@pytest.fixture(scope='module')
+def hessian_data_internal_cuts_config(data_internal_cuts_config):
+    """Same as data config but with hessian PDF"""
+    new_config = dict(data_internal_cuts_config)
+    new_config["pdf"] = HESSIAN_PDF
+    return new_config
+
+@pytest.fixture(scope='module')
+def hessian_single_data_internal_cuts_config(single_data_internal_cuts_config):
+    """Same as single data config but with hessian PDF"""
+    new_config = dict(single_data_internal_cuts_config)
     new_config["pdf"] = HESSIAN_PDF
     return new_config

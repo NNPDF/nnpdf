@@ -242,6 +242,14 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     }  
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -487,6 +495,14 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
        fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     }  
+
+  for(int i = 0; i < fNData/2; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -653,6 +669,14 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
        fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     }  
+
+  for(int i = 0; i < fNData/2; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -782,6 +806,14 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     }  
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -923,6 +955,14 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       
     }  
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
+  
   f1.close();
   f2.close();
 }
@@ -1218,7 +1258,13 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	}
     } 
 */
-
+  for(int i = 0; i < fNData/2; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -1396,6 +1442,14 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
     
     }  
+
+  for(int i = 0; i < fNData/2; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();
@@ -1532,6 +1586,14 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
  
     }  
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat;
   
   f1.close();
   f2.close();

@@ -147,9 +147,7 @@ def predictions(dataset, pdf):
         A dataframe corresponding to the hadronic prediction for each data
         point for the PDF members. The index of the dataframe corresponds to
         the selected data points, based on the dataset :ref:`cuts <filters>`. The
-        columns correspond to the selected PDF members in the LHAPDF set, which
-        depend on the PDF error type (see
-        :py:meth:`validphys.core.PDF.grid_values_index`)
+        columns correspond to the selected PDF members in the LHAPDF set.
 
     Examples
     --------
@@ -219,9 +217,7 @@ def fk_predictions(loaded_fk, pdf):
         point for the PDF members. The index of the dataframe corresponds to
         the selected data points (use
         :py:meth:`validphys.coredata.FKTableData.with_cuts` to filter out
-        points). The columns correspond to the selected PDF members in the
-        LHAPDF set, which depend on the PDF error type (see
-        :py:meth:`validphys.core.PDF.grid_values_index`)
+        points). The columns correspond to the selected PDF members in the LHAPDF set.
 
     Notes
     -----
@@ -315,14 +311,17 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     # combinations correspond to the combination encoded in the FKTable.
     expanded_gv1 = gv1[:, fl1, :]
     expanded_gv2 = gv2[:, fl2, :]
+    # Create a luminosity tensor holding the value f1(x1)*f2(x2) for all
+    # possible x1-x2 combinations (f1, f2, x1, x2)
+    luminosity = np.einsum("ijk, ijl->ijkl", expanded_gv1, expanded_gv2)
 
     def appl(df):
         # x1 and x2 are encoded as the first and second index levels.
         xx1 = df.index.get_level_values(1)
         xx2 = df.index.get_level_values(2)
-        gv1 = expanded_gv1[:, :, xx1]
-        gv2 = expanded_gv2[:, :, xx2]
-        return pd.Series(np.einsum("ijk,ijk,kj->i", gv1, gv2, df.values))
+        # take the active combinations from the luminosity tensor
+        partial_lumi = luminosity[..., xx1, xx2]
+        return pd.Series(np.einsum("ijk,kj->i",partial_lumi, df.values))
 
     return sigma.groupby(level=0).apply(appl)
 
@@ -348,7 +347,7 @@ def hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for hadronic observables."""
     gv = functools.partial(evolution.grid_values, pdf=pdf)
     res = _gv_hadron_predictions(loaded_fk, gv)
-    res.columns = pdf.grid_values_index
+    res.columns = range(pdf.get_members())
     return res
 
 
@@ -377,7 +376,7 @@ def linear_hadron_predictions(loaded_fk, pdf):
         return 2 * replica_values - central_value
 
     res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
-    res.columns = pdf.grid_values_index
+    res.columns = range(pdf.get_members())
     return res
 
 
@@ -385,7 +384,7 @@ def dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for DIS observables."""
     gv = functools.partial(evolution.grid_values, pdf=pdf)
     res = _gv_dis_predictions(loaded_fk, gv)
-    res.columns = pdf.grid_values_index
+    res.columns = range(pdf.get_members())
     return res
 
 
@@ -394,27 +393,3 @@ def central_dis_predictions(loaded_fk, pdf):
     observables."""
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)
-
-
-def _positivity_predictions(posdataset, pdf, fkfunc):
-    """Implentation of :py:func:`_predictions` but for positivity
-    datasets."""
-    return fkfunc(load_fktable(posdataset.fkspec), pdf)
-
-
-def positivity_predictions(posdataset, pdf):
-    """Implementation of :py:func:`predictions` but for positivity
-    datasets."""
-    return _positivity_predictions(posdataset, pdf, fk_predictions)
-
-
-def linear_positivity_predictions(posdataset, pdf):
-    """Implmentation of :py:func:`linear_predictions` but for positivity
-    datasets."""
-    return _positivity_predictions(posdataset, pdf, linear_fk_predictions)
-
-
-def central_positivity_predictions(posdataset, pdf):
-    """Implementation as :py:func:`central_predictions`, but for postivity datasets
-    """
-    return _positivity_predictions(posdataset, pdf, central_fk_predictions)

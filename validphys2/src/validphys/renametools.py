@@ -12,6 +12,10 @@ class Spinner:
     """ Context manager to provide a spinning cursor
     while validphys performs some other task silently.
 
+    When exececuted in a TTY, it shows a spinning cursor for the duration of
+    the context manager. In non interactive prompts, it prints to stdout at the
+    beginning and end.
+
     Example
     -------
     >>> from validphys.renametools import Spinner
@@ -24,6 +28,10 @@ class Spinner:
         self.spinner_generator = self.spinning_cursor()
         self.delay = delay
 
+    @property
+    def interactive(self):
+        return os.isatty(sys.stdout.fileno())
+
     def spinner_task(self):
         while not self.event.isSet():
             sys.stdout.write(next(self.spinner_generator))
@@ -33,13 +41,20 @@ class Spinner:
             sys.stdout.flush()
 
     def __enter__(self):
-        self.event = threading.Event()
-        threading.Thread(target=self.spinner_task).start()
+        if self.interactive:
+            self.event = threading.Event()
+            threading.Thread(target=self.spinner_task).start()
+        else:
+            print("Waiting...")
 
     def __exit__(self, exception, value, tb):
-        self.event.set()
-        sys.stdout.write('\r')
-        sys.stdout.flush()
+        if self.interactive:
+            self.event.set()
+            sys.stdout.write('\r')
+            sys.stdout.flush()
+        else:
+            print("Done")
+
 
     @staticmethod
     def spinning_cursor():

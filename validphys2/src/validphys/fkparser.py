@@ -49,6 +49,7 @@ class GridInfo:
     ndata: int
     nx: int
 
+@functools.lru_cache()
 def load_fktable(spec):
     """Load the data corresponding to a FKSpec object. The cfactors
     will be applied to the grid."""

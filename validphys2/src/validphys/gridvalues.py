@@ -10,14 +10,8 @@ import itertools
 
 import numpy as np
 
-from NNPDF import REALDOUBLE, LHAPDFSet
-
 from validphys.core import PDF
-
-#Numpy is unhappy about downcasting double to float implicitly, so we have
-#to manually make sure all input arrays correspond to NNPDF::real.
-FLTYPE = np.int32
-REALTYPE = np.double if REALDOUBLE else np.float32
+from validphys.lhapdfset import LHAPDFSet
 
 # Canonical ordering of PDG quark flavour codes
 QUARK_FLAVOURS = (-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6)
@@ -54,9 +48,9 @@ QUARK_COMBINATIONS = {
 
 def _grid_values(lpdf, flmat, xmat, qmat):
     """Compute lpdf.grid_values with more forgiving argument types"""
-    flmat = np.atleast_1d(np.asanyarray(flmat, dtype=FLTYPE))
-    xmat = np.atleast_1d(np.asarray(xmat, dtype=REALTYPE))
-    qmat = np.atleast_1d(np.asarray(qmat, dtype=REALTYPE))
+    flmat = np.atleast_1d(np.asanyarray(flmat))
+    xmat = np.atleast_1d(np.asarray(xmat))
+    qmat = np.atleast_1d(np.asarray(qmat))
     return lpdf.grid_values(flmat, xmat, qmat)
 
 def grid_values(pdf:PDF, flmat, xmat, qmat):
@@ -80,12 +74,6 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
     for each replica. The return value is indexed as follows::
 
         grid_values[replica][flavour][x][Q]
-
-    Notes
-    ----
-    This uses libnnpdf, and therefore follows the convention to throw away
-    replica 0 for Monte Carlo ensembles (so index 0 corresponds to replica 1).
-    Use ``pdf.grid_values_index`` to index the result properly.
 
     See Also
     --------
@@ -141,6 +129,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
     elif channel == 'gq':
         for i in QUARK_FLAVOURS:
+            # as in the first of Eq.(4) in arXiv:1607.01831
             res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
                     + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
     elif channel == 'gp':
@@ -150,6 +139,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         res = pdf_set.xfxQ(x1, mx, n, 22) * pdf_set.xfxQ(x2, mx, n, 22)
     elif channel == 'qqbar':
         for i in QUARK_FLAVOURS:
+            # as in the third of Eq.(4) in arXiv:1607.01831
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
     elif channel == 'qq':
         r1 = []
@@ -158,6 +148,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
             r1.append(pdf_set.xfxQ(x1, mx, n, i))
             r2.append(pdf_set.xfxQ(x2, mx, n, i))
 
+        # as in the second of Eq.(4) in arXiv:1607.01831
         res = sum(a*b for a,b in itertools.product(r1,r2))
     elif channel in QUARK_COMBINATIONS.keys():
         i, j = QUARK_COMBINATIONS[channel]
@@ -167,4 +158,5 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     else:
         raise ValueError("Bad channel")
 
+    # The following is equivalent to Eq.(2) in arXiv:1607.01831
     return res/x1/x2/s

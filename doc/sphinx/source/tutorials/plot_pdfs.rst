@@ -198,6 +198,8 @@ Luminosity plots
 	lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
 	                   #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
 
+	y_cut: 2.5
+			   
 	PDFscalespecs:
 	  - xscale: log
 	    Xscaletitle: Log
@@ -234,5 +236,7 @@ Luminosity plots
 - The options ``ymin`` and ``ymax`` can be supplied to control the vertical
   range of the plot, while ``mxmin`` and ``mxmax`` (in GeV) control the
   horizontal axis of invariant masses.
+- The option ``y_cut`` can be supplied to define a rapidity cut
+  (|y|<``y_cut``) on the integration range of 1D plots.
 - Other options for the band plots, such as ``pdfs_noband`` and
   ``show_mc_errors`` work for ``plot_lumi1d``.

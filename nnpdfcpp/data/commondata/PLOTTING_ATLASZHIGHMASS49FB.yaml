@@ -3,6 +3,8 @@ x: k2
 y_label: '$d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)' 
 y_scale: log
 
+kinematics_override: ewk_mll_sqrt_scale
+
 experiment: "ATLAS"
 
 nnpdf31_process: DY

@@ -176,15 +176,13 @@ def test_systematic_matrix(
     np.testing.assert_allclose(covmat_from_sys_mat, covmat)
 
 
-def test_single_datapoint():
+def test_single_datapoint(single_data_single_point_internal_cuts_config):
     # Make the t0 predictions
-    di = {'dataset': 'ATLASTTBARTOT8TEV'}
-
-    ds = API.dataset(dataset_input=di, theoryid=THEORYID, use_cuts='internal')
-    t0set = API.pdf(pdf=PDF)
+    ds = API.dataset(**single_data_single_point_internal_cuts_config)
+    t0set = API.pdf(**single_data_single_point_internal_cuts_config)
     t0_predictions = dataset_t0_predictions(ds, t0set)
 
-    cd = API.commondata(dataset_input=di)
+    cd = API.commondata(**single_data_single_point_internal_cuts_config)
     ld = load_commondata(cd)
     # Ensure the dataset is only a single datapoint
     assert ld.ndata == 1

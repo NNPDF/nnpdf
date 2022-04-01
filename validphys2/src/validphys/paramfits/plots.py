@@ -778,7 +778,7 @@ def plot_total_as_distribution_dataspecs(
             dataspecs_parabolic_as_determination_for_total,
             dataspecs_speclabel):
         #Remember that *_for_total is a len 1 list, so take the first element.
-        kde_plot(dist[0].data, ax=ax, label=label)
+        kde_plot(dist[0].error_members(), ax=ax, label=label)
     ax.set_xlabel(r"$\alpha_S$")
     ax.legend()
     return fig

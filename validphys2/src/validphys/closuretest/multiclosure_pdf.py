@@ -90,7 +90,7 @@ def xi_grid_values(xi_pdfgrids):
     glu_sin_grid, nonsin_grid = xi_pdfgrids
     # grid values have shape: replica, flavour, x
     # concatenate along flavour
-    return np.concatenate((glu_sin_grid.grid_values, nonsin_grid.grid_values), axis=1)
+    return np.concatenate((glu_sin_grid.grid_values.error_members(), nonsin_grid.grid_values.error_members()), axis=1)
 
 
 def underlying_xi_grid_values(

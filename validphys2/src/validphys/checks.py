@@ -22,9 +22,15 @@ import logging
 log = logging.getLogger(__name__)
 
 @make_check
+def check_use_t0(ns, **kwargs):
+    """Checks use_t0 is set to true"""
+    if not ns.get("use_t0"):
+        raise CheckError("The flag 'use_t0' needs to be set to 'true' for this action.")
+
+@make_check
 def check_pdf_is_montecarlo(ns, **kwargs):
     pdf = ns['pdf']
-    etype = pdf.ErrorType
+    etype = pdf.error_type
     if etype != 'replicas':
         raise CheckError("Error type of PDF %s must be 'replicas' and not %s"
                           % (pdf, etype))
@@ -33,7 +39,7 @@ def check_pdf_is_montecarlo(ns, **kwargs):
 def check_know_errors(ns, **kwargs):
     pdf = ns['pdf']
     try:
-        pdf.nnpdf_error
+        pdf.stats_class
     except NotImplementedError as e:
         raise CheckError(e) from e
 
@@ -106,7 +112,7 @@ def check_cuts_fromfit(use_cuts):
 
 @make_argcheck
 def check_cuts_considered(use_cuts):
-    if use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL):
+    if use_cuts == CutsPolicy.NOCUTS:
         raise CheckError(f"Cuts must be computed for this action, but they are set to {use_cuts.value}")
 
 

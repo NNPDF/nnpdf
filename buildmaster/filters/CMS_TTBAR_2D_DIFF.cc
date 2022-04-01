@@ -237,6 +237,12 @@ void  CMS_TTBAR_2D_DIFF_PT_TRAPFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
     }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
   
   delete [] covmat; 
   delete [] syscor;
@@ -396,7 +402,13 @@ void  CMS_TTBAR_2D_DIFF_PT_TRAPFilter::ReadData()
       fSys[i][fNSys-1].name = "CMSLUMI12";
 
     }
-    
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] sys1[i];
+      delete[] sys2[i];
+    }
+  
   delete [] sys1;
   delete [] sys2; 
   
@@ -538,6 +550,12 @@ void  CMS_TTBAR_2D_DIFF_MTT_TRAPFilter::ReadData()
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
 	}
+    }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
     }
   
   delete [] covmat; 
@@ -701,6 +719,12 @@ void  CMS_TTBAR_2D_DIFF_MTT_TRAPFilter::ReadData()
 
     }
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] sys1[i];
+      delete[] sys2[i];
+    }
+  
   delete [] sys1;
   delete [] sys2;
 
@@ -842,6 +866,12 @@ void  CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter::ReadData()
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
 	}
+    }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
     }
   
   delete [] covmat; 
@@ -1002,7 +1032,13 @@ void  CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter::ReadData()
       fSys[i][fNSys-1].name = "CMSLUMI12";
 
     }
-    
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] sys1[i];
+      delete[] sys2[i];
+    }
+  
   delete [] sys1;
   delete [] sys2;
 
