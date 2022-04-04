@@ -7,8 +7,6 @@
 import numpy as np
 import pandas as pd
 
-from pineappl.fk_table import FkTable
-from eko.basis_rotation import evol_basis_pids
 from reportengine.compat import yaml
 
 from validphys.coredata import FKTableData
@@ -172,6 +170,7 @@ def _pinelumi_to_columns(pine_luminosity, hadronic):
     -------
         list(int): list of labels for the columns
     """
+    from eko.basis_rotation import evol_basis_pids
     flav_size = len(evol_basis_pids)
     columns = []
     if hadronic:
@@ -236,6 +235,7 @@ def pineappl_reader(fkspec):
         validphys.coredata.FKTableData
             an FKTableData object containing all necessary information to compute predictions
     """
+    from pineappl.fk_table import FkTable
     pines = [FkTable.read(i) for i in fkspec.fkpath]
 
     # Extract metadata from the first grid
