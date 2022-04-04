@@ -164,3 +164,22 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
         profile_batch=profile_batch,
     )
     return clb
+
+class CustomLearningRate(Callback):
+
+    def __init__(self):
+        super().__init__()
+
+    def _lr_schedule(self, epoch, lr):
+        if epoch > 200:
+            lr = 1e-8
+        else:
+            lr = lr
+        return lr
+
+    def on_epoch_begin(self, epoch, logs=None):
+        lr = float(tf.keras.backend.get_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate))
+        # Call schedule function to get the scheduled learning rate.
+        scheduled_lr = self._lr_schedule(epoch, lr)
+        # Set the value back to the optimizer before this epoch starts
+        tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, scheduled_lr)

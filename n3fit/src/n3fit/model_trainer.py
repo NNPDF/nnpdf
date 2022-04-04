@@ -671,7 +671,7 @@ class ModelTrainer:
             reporting_list.append(reporting_dict)
         return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100, frozen_alphas=False):
+    def _train_and_fit(self, training_model, stopping_object, epochs=100):
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -692,11 +692,12 @@ class ModelTrainer:
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
+        callback_lr = callbacks.CustomLearningRate()
 
         training_model.perform_fit(
                 epochs=epochs,
                 verbose=False,
-                callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
+                callbacks=self.callbacks + [callback_st, callback_pos, callback_integ, callback_lr],
             )
 
         # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
@@ -882,20 +883,20 @@ class ModelTrainer:
                 else: 
                     models["training"].compile(frozen_alphas=True, **params["optimizer"])
 
-            stopping_object.frozen_alphas = True
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            # stopping_object.frozen_alphas = True
+            # passed = self._train_and_fit(
+            #     models["training"],
+            #     stopping_object,
+            #     epochs=epochs,
+            # )
 
-            savemodelpath = str(replica_path) + "/test.h5"
-            models["training"].save_weights(savemodelpath)
-            models["training"].compile(frozen_alphas=False)
-            models["training"].load_weights(savemodelpath)
+            # savemodelpath = str(replica_path) + "/test.h5"
+            # models["training"].save_weights(savemodelpath)
+            # models["training"].compile(frozen_alphas=False)
+            # models["training"].load_weights(savemodelpath)
 
-            stopping_object.stop_now = False
-            stopping_object.frozen_alphas = False
+            # stopping_object.stop_now = False
+            # stopping_object.frozen_alphas = False
             passed = self._train_and_fit(
                 models["training"],
                 stopping_object,

@@ -305,7 +305,7 @@ class MetaModel(Model):
             self.target_tensors = target_output
 
         if frozen_alphas:
-            alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0)
+            alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0, clipnorm = 100)
         else:
             alphas_opt = tf.keras.optimizers.SGD(learning_rate=1e-8)
         from tensorflow_addons.optimizers import MultiOptimizer
