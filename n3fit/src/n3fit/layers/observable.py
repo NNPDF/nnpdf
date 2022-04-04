@@ -28,7 +28,7 @@ class Observable(MetaLayer, ABC):
 
         Parameters
         ----------
-            fktable_data: list(validphys.coredata.FKTableData)
+            fktable_data: list[validphys.coredata.FKTableData]
                 list of FK which define basis and xgrid for the fktables in the list
             fktable_arr: list
                 list of fktables for this observable
