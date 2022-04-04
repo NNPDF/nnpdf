@@ -1,6 +1,16 @@
 # Generalia
-setname: "NMPCPD"
-experiment: "NMC"
+setname: "NMCPD"
+ndata: 260
+observable: {description: "Ratio of deuterium to proton structure function F2", label:"$F_2^d/F_2^p(x,Q^2)$", units: "" }
+kinematics:
+   variables:
+      q2: {description: "Parton momentum transfer", label: "$Q^2$", units: "GeV²"}
+      x:  {description: "Bjorken x", label: '$x$', units: ""}
+      y:  {description: "Inelasticity", units: ""}
+   file: kinematics.yaml
+
+version: 0
+version_comment: "Initial implementation"
 
 # References
 arXiv:
@@ -12,31 +22,39 @@ hepdata:
    version: "v1"
    tables: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
-# Data (defaults)
+# Data 
 data_central: data.yaml
-data_uncertainties: uncertainties.yaml
-data_kinematics: kinematics.yaml
+data_uncertainties:
+   - uncertainties.yaml
 
 # Data (variants)
 variants:
   deweighted:
-     data_uncertainties: uncertainties_dw.yaml
+     data_uncertainties:
+        - uncertainties.yaml
+        - uncertainties_dw.yaml
   shifted:
-     data_uncertainties: uncertainties_sh.yaml
+     data_uncertainties:
+        - uncertainties.yaml
+        - uncertainties_sh.yaml
+
+# Plotting  
+kinematic_coverage:
+   x: x
+   q2: q2
+dataset_label: "NMC $d/p$"
+plot_x: x
+figure_by: 
+   - q2
 
 # Theory
-proctype: "DIS_F2R"
-FK_tables:
-  - FK_NMCPD_D.dat
-  - FK_NMCPDF_P.dat
-compound: "RATIO"
-nnpdf31_process: "DIS NC"
+theory:
+   FK_tables:
+     - - NMCPD_D1
+       - NMCPD_D2
+     - - NMCPD_P
+   compound: "RATIO"
 
-# Plotting
-dataset_label: "NMC $d/p$"
-x: k2
-y_label: "$F_2^d/F_2^p(x,Q^2)$" 
-kinematics_override: dis_sqrt_scale
-figure_by:
-  - k1
-
+nnpdf_metadata:
+   nnpdf31_process: "DIS NC"
+   experiment: "NMC"
