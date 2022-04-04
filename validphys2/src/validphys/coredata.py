@@ -153,7 +153,7 @@ class FKTableData:
 
         if self.hadronic:
             x2 = ns.index.get_level_values(1)
-            fk_raw = np.zeros((nx, nx, nbasis))
+            fk_raw = np.zeros((nx, nx, ns.shape[1]))
             fk_raw[x2, x1, :] = ns.values
 
             # The output is (ndata, basis, x1, x2)
