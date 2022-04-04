@@ -43,41 +43,20 @@ class FKTableData:
     metadata : dict
         Other information contained in the FKTable.
     """
-
     hadronic: bool
     Q0: float
     ndata: int
-    xgrid: np.array
+    xgrid: np.ndarray
     sigma: pd.DataFrame
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
-
-    def __post_init__(self):
-        self._fktable = None
-
-    @property
-    def _protected(self):
-        """Protects the fktable from being cut kinematically.
-        Due to old limitations inclusive cross sections got kinematic cuts applied
-        this cannot be done to pineapplgrids
-        for which one inclusive cross section is just one number
-        There are three different scenarios:
-            - no repetition flag: false
-            - repetition flag only on the denominator: true
-            - two repetitions flags: false
-                (this last case is due to some inconsistencies in apfelcomb where there is
-                no repetition in the database but somehow the grid had a different number of points)
-        """
-        if self.metadata.get("repetition_flag") and self.ndata==1:
-            return not all(self.metadata.get("repetition_flag"))
-        return False
 
     def with_cfactor(self, cfactor):
         """Returns a copy of the FKTableData object with cfactors applied to the fktable"""
         if all(c == 1.0 for c in cfactor):
             return self
         if len(cfactor) != self.ndata:
-            if self.metadata.get("repetition_flag"):
+            if self.protected:
                 cfactor = cfactor[0]
             else:
                 name = self.metadata.get("target_dataset")
@@ -121,7 +100,7 @@ class FKTableData:
         """
         if hasattr(cuts, "load"):
             cuts = cuts.load()
-        if cuts is None or self._protected:
+        if cuts is None or self.protected:
             return self
         newndata = len(cuts)
         newsigma = self.sigma.loc[cuts]
@@ -153,36 +132,39 @@ class FKTableData:
         where nx is the length of the xgrid
         and nbasis the number of flavour contributions that contribute
         """
-        if self._fktable is not None:
-            return self._fktable
-
         # Read up the shape of the output table
         ndata = self.ndata
         nx = len(self.xgrid)
+        nbasis = self.sigma.shape[1]
+
         if ndata == 0:
-            # All poitns have been cut out from this dataframe, no need to play calvinball
+            # No need to play calvinball
             if self.hadronic:
-                return np.zeros((ndata, nx, nx, self.sigma.shape[1]))
-            else:
-                return np.zeros((ndata, nx, self.sigma.shape[1]))
+                return np.zeros((ndata, nbasis, nx, nx))
+            return np.zeros((ndata, nbasis, nx))
 
-        # The code belows makes the dataframe into a dense numpy array
+        # Make the dataframe into a dense numpy array
 
-        # first get the data out of the way
-        ns = self.sigma.unstack(level=["data"], fill_value=0)
+        # First get the data index out of the way
+        #   this is necessary because cuts/shifts and for performance reasons
+        #   otherwise we will be putting things in a numpy array in very awkward orders
+        ns = self.sigma.unstack(level=("data",), fill_value=0)
+        x1 = ns.index.get_level_values(0)
+
         if self.hadronic:
-            # Now let's make sure x1 is complete
-            ns = ns.unstack("x2", 0).sort_values("x1").reindex(range(nx), fill_value=0.0)
-            # For completeness, the let's ensure the same is true for x2
-            ns = ns.stack("x2").unstack("x1", 0).sort_values("x2").reindex(range(nx), fill_value=0.0)
-            # Now we have (x2, basis, data, x1) and want (data, basis, x1, x2)
-            fktable = np.transpose(ns.values.reshape(nx, -1, ndata, nx), (2, 1, 3, 0))
-        else:
-            # for DIS one could equivalently remove the missing points from xgrid
-            full_sigma = ns.sort_values("x").reindex(range(nx), fill_value=0.0)
-            fktable = full_sigma.values.reshape(nx, -1, ndata).T
+            x2 = ns.index.get_level_values(1)
+            fk_raw = np.zeros((nx, nx, nbasis))
+            fk_raw[x2, x1, :] = ns.values
 
-        self._fktable = fktable
+            # The output is (ndata, basis, x1, x2)
+            fktable = fk_raw.reshape((nx, nx, nbasis, ndata)).T
+        else:
+            fk_raw = np.zeros((nx, ns.shape[1]))
+            fk_raw[x1, :] = ns.values
+
+            # The output is (ndata, basis, x1)
+            fktable = fk_raw.reshape((nx, nbasis, ndata)).T
+
         return fktable
 
 
