@@ -188,7 +188,7 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
 def fitting_data_dict(
     data,
     make_replica,
-    dataset_inputs_t0_total_covmat,
+    dataset_inputs_fitting_covmat,
     tr_masks,
     kfold_masks,
     diagonal_basis=None,
@@ -243,7 +243,7 @@ def fitting_data_dict(
     datasets = common_data_reader_experiment(spec_c, data)
 
     # t0 covmat
-    covmat = dataset_inputs_t0_total_covmat
+    covmat = dataset_inputs_fitting_covmat
     inv_true = np.linalg.inv(covmat)
 
     if diagonal_basis:

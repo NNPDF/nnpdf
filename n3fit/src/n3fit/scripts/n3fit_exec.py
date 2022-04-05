@@ -147,19 +147,13 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
         #Theorycovmat flags and defaults
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
-        N3FIT_FIXED_CONFIG['use_user_uncertainties'] = None
-        N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = None
-        N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = None
-        N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = None
         if (thconfig:=file_content.get('theorycovmatconfig')) is not None:
             N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
             N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting', True) 
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True)  
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties', False) 
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties', True) 
-        #Sampling flags and defaults
-        N3FIT_FIXED_CONFIG['use_t0_sampling'] = False
-        N3FIT_FIXED_CONFIG['separate_multiplicative'] = True
+        #Sampling flags
         if (sam_t0:=file_content.get('sampling')) is not None:
             N3FIT_FIXED_CONFIG['use_t0_sampling'] = sam_t0.get('use_t0', False) 
             N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative', True) 
