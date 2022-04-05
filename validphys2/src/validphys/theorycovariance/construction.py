@@ -8,6 +8,7 @@ from __future__ import generator_stop
 import logging
 
 from collections import defaultdict, namedtuple
+import pdb
 import numpy as np
 import scipy.linalg as la
 import pandas as pd
@@ -502,23 +503,14 @@ def thcovmat(shifts: list[np.ndarray]) -> np.ndarray:
 
 
 @table
-def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
+def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index, combine_by_type):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-   # matlength = int(
-   #     sum([len(covmat) for covmat in covs_pt_prescrip.values()])
-   #     / int(np.sqrt(len(covs_pt_prescrip)))
-   # )
-    # Initialise arrays of zeros and set precision to same as FK tables
-    #mat = np.zeros((matlength, matlength), dtype=np.float32)
-    matlength = covs_pt_prescrip.shape[0]
-    cov_by_exp = np.zeros((matlength, matlength), dtype=np.float64)
-    for i in range(matlength):
-        for j in range(matlength):
-            cov_by_exp[covmap[i]][covmap[j]] = covs_pt_prescrip[i][j]
-    df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
-    return df
+    datasets_shifts = list(combine_by_type.sizes.keys())
+    new_procs_index = procs_index.to_frame().sort_index(level=1, key=lambda x: [datasets_shifts.index(i) for i in x]).index
+    tmp = pd.DataFrame(covs_pt_prescrip, index=new_procs_index, columns=new_procs_index)
+    return tmp.sort_index(level=0)
 
 
 @table
