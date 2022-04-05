@@ -118,7 +118,7 @@ def load_fitinfo(replica_path, prefix):
     If the ``.json`` file does not exist an old-format fit is assumed and ``old_load_fitinfo``
     will be called instead.
     """
-    p = replica_path / (prefix + '.json')
+    p = replica_path / (prefix + ".json")
     if not p.exists():
         return _old_load_fitinfo(p.with_suffix(".fitinfo"))
     fitinfo_dict = json.loads(p.read_text(encoding="utf-8"))
@@ -445,26 +445,15 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
 def fit_code_version(fit):
     """ Returns table with the code version from ``replica_1/{fitname}.json`` files.
     """
-    vinfo = previnfo = None
+    vinfo = {}
     for json_path in fit.path.glob(f"nnfit/replica_*/{fit.name}.json"):
-        vinfo = json.loads(json_path.read_text(encoding="utf-8")).get("version")
-        if previnfo is not None and vinfo != previnfo:
-                # There's a mismatch of versions, just get out and say that it was unavailable
-                print(vinfo)
-                print(previnfo)
-                vinfo = None
-                break
-        previnfo = None
+        tmp = json.loads(json_path.read_text(encoding="utf-8")).get("version")
+        if (vinfo and vinfo != tmp) or tmp is None:
+            vinfo = {i: "inconsistent" for i in tmp}
+            break
+        vinfo = tmp
 
-    if vinfo is None:
-        # There was no version or json files in the fit, it must be old
-        vinfo_df = pd.DataFrame([("unavailable", "unavailable")]).set_index(0)
-    else:
-        vinfo_df = pd.DataFrame(vinfo.items()).set_index(0)
-
-    vinfo_df.columns = [fit.name]
-    vinfo_df.index.name = "module"
-    return vinfo_df
+    return pd.DataFrame(vinfo.items(), columns=["module", fit.name]).set_index("module")
 
 fits_fit_code_version = collect("fit_code_version", ("fits",))
 
@@ -472,9 +461,6 @@ fits_fit_code_version = collect("fit_code_version", ("fits",))
 def fits_version_table(fits_fit_code_version):
     """ Produces a table of version information for multiple fits."""
     vtable = pd.concat(fits_fit_code_version, axis=1)
-    # Drops any rows starting with "unavailable"
-    # If no such row is present, the error is suppressed and nothing changes
-    vtable.drop("unavailable", inplace=True, errors="ignore")
     # Fill NaNs with "unavailable"
     vtable.fillna("unavailable", inplace=True)
     return vtable
