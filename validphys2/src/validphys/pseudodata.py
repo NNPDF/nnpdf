@@ -101,7 +101,7 @@ def read_replica_pseudodata(fit, context_index, replica):
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
-def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dataset_inputs_sampling_covmat, separate_multiplicative, genrep=True, ):
+def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dataset_inputs_sampling_covmat, sep_mult, genrep=True, ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -173,7 +173,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         pseudodatas.append(pseudodata)
         #Separation of multiplicative errors. If separate_multiplicative is True also the exp_covmat is produced 
         # without multiplicative errors
-        if separate_multiplicative:
+        if sep_mult:
             mult_errors = cd.multiplicative_errors
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
             mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
@@ -186,7 +186,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
     #concatenating special multiplicative errors, pseudodatas and positive mask 
-    if separate_multiplicative:
+    if sep_mult:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
     all_pseudodata = np.concatenate(pseudodatas, axis=0)
     full_mask=np.concatenate(check_positive_masks, axis=0)
@@ -210,7 +210,7 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
         #Additive shifts (if separate_multiplicative is True) or total shifts (if separate_multiplicative is False)
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.
-        if separate_multiplicative:
+        if sep_mult:
             special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
             mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
         #Shifting pseudodata

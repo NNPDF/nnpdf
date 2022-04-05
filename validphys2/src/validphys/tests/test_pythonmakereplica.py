@@ -12,7 +12,6 @@ import pytest
 
 from validphys.api import API
 from validphys.pseudodata import make_replica
-from validphys.covmats import dataset_inputs_sampling_covmat
 from validphys.tests.conftest import DATA
 from validphys.tests.test_covmats import CORR_DATA
 
@@ -40,14 +39,6 @@ def test_commondata_unchanged(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
-    config["separate_multiplicative"]= True
-    config["output_path"] = None
-    config["theory_covmat_flag"] = False
-    config["use_user_uncertainties"] = None 
-    config["use_scalevar_uncertainties"] = None
-    config["use_thcovmat_in_sampling"]=None
-    config["dataset_t0_predictions"] = None
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
 
     # keep a copy of all dataframes/series pre make replica
@@ -81,14 +72,6 @@ def test_pseudodata_seeding(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
-    config["separate_multiplicative"]= True
-    config["output_path"] = None
-    config["theory_covmat_flag"] = False
-    config["use_user_uncertainties"] = None 
-    config["use_scalevar_uncertainties"] = None
-    config["use_thcovmat_in_sampling"]=None
-    config["dataset_t0_predictions"] = None
     rep_1 = API.make_replica(**config)
     rep_2 = API.make_replica(**config)
     np.testing.assert_allclose(rep_1, rep_2)
@@ -102,14 +85,6 @@ def test_pseudodata_has_correct_ndata(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
-    config["separate_multiplicative"]= True
-    config["output_path"] = None
-    config["theory_covmat_flag"] = False
-    config["use_user_uncertainties"] = None 
-    config["use_scalevar_uncertainties"] = None
-    config["use_thcovmat_in_sampling"]=None
-    config["dataset_t0_predictions"] = None
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
     rep = API.make_replica(**config)
     ndata = np.sum([cd.ndata for cd in ld_cds])
@@ -124,14 +99,6 @@ def test_genrep_off(data_config, dataset_inputs, use_cuts):
     config["dataset_inputs"] = dataset_inputs
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
-    config["use_t0_sampling"] = False
-    config["separate_multiplicative"]= True
-    config["output_path"] = None
-    config["theory_covmat_flag"] = False
-    config["use_user_uncertainties"] = None 
-    config["use_scalevar_uncertainties"] = None
-    config["use_thcovmat_in_sampling"]=None
-    config["dataset_t0_predictions"] = None
     config["genrep"] = False
     ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
     not_replica = API.make_replica(**config)

@@ -695,9 +695,15 @@ class CoreConfig(configparser.Config):
                 fit=fit,
             )
         }
+
+    def produce_sep_mult(self,separate_multiplicative=None):
+        if separate_multiplicative is False:
+            return False
+        return True
+
     @configparser.explicit_node   
     def produce_dataset_inputs_fitting_covmat(self,theory_covmat_flag=False,
-    use_thcovmat_in_fitting=None,
+    use_thcovmat_in_fitting=False,
     use_t0_fitting=True,
     ):
         from validphys import covmats
@@ -711,32 +717,32 @@ class CoreConfig(configparser.Config):
                 return covmats.dataset_inputs_total_covmat
             else:
                 return covmats.dataset_inputs_exp_covmat
+
     @configparser.explicit_node
-    def produce_dataset_inputs_sampling_covmat(self,theory_covmat_flag=False,
-    use_thcovmat_in_sampling=None,
-    use_t0_sampling=True,
-    separate_multiplicative=True
+    def produce_dataset_inputs_sampling_covmat(self,sep_mult,theory_covmat_flag=False,
+    use_thcovmat_in_sampling=False,
+    use_t0_sampling=False,
     ):
         from validphys import covmats
         if use_t0_sampling:
             if theory_covmat_flag and use_thcovmat_in_sampling:
-                if separate_multiplicative:
+                if sep_mult:
                     return covmats.dataset_inputs_t0_total_covmat_separate
                 else:
                     return covmats.dataset_inputs_t0_total_covmat
             else:
-                if separate_multiplicative:
+                if sep_mult:
                     return covmats.dataset_inputs_t0_exp_covmat_separate
                 else:
                     return covmats.dataset_inputs_t0_exp_covmat
         else:
             if theory_covmat_flag and use_thcovmat_in_sampling:
-                if separate_multiplicative:
+                if sep_mult:
                     return covmats.dataset_inputs_total_covmat_separate
                 else:
                     return covmats.dataset_inputs_total_covmat
             else:
-                if separate_multiplicative:
+                if sep_mult:
                     return covmats.dataset_inputs_exp_covmat_separate
                 else:
                     return covmats.dataset_inputs_exp_covmat
@@ -985,13 +991,13 @@ class CoreConfig(configparser.Config):
         return do_use_t0
 
     # TODO: Find a good name for this
-    def produce_t0set(self, use_t0=False, t0pdfset=None):
+    def produce_t0set(self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True, ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
         """
-        if use_t0:
+        if use_t0_sampling or use_t0_fitting:
             if not t0pdfset:
-                raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
+                raise ConfigError("Setting use_t0_* requires specifying a valid t0pdfset")
             return t0pdfset
         return None
 

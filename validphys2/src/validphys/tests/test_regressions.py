@@ -57,14 +57,6 @@ def test_mcreplica(data_config):
     ####
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
-    config["use_t0_sampling"] = False
-    config["separate_multiplicative"]= True
-    config["output_path"] = None
-    config["theory_covmat_flag"] = False
-    config["use_user_uncertainties"] = None 
-    config["use_scalevar_uncertainties"] = None
-    config["use_thcovmat_in_sampling"]=None
-    config["dataset_t0_predictions"] = None
     seed = 123456
     # Use no cuts because if filter rules change in the
     # future then this test will end up failing
@@ -153,13 +145,6 @@ def test_art_rep_generation(data_config):
     config["mcseed"] = 123456
     config["genrep"] = True
     config["nreplica"] = 1
-    config["use_t0_sampling"] = False
-    config["separate_multiplicative"]= True
-    config["output_path"] = None
-    config["theory_covmat_flag"] = False
-    config["use_user_uncertainties"] = None 
-    config["use_scalevar_uncertainties"] = None
-    config["use_thcovmat_in_sampling"]=None
-    config["dataset_t0_predictions"] = None
+
     _, art_replicas, _,_ = API.art_rep_generation(**config)
     return pd.DataFrame(art_replicas.T, columns=['rep0'])
