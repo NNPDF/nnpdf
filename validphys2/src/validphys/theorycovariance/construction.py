@@ -506,19 +506,17 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-    matlength = int(
-        sum([len(covmat) for covmat in covs_pt_prescrip.values()])
-        / int(np.sqrt(len(covs_pt_prescrip)))
-    )
+   # matlength = int(
+   #     sum([len(covmat) for covmat in covs_pt_prescrip.values()])
+   #     / int(np.sqrt(len(covs_pt_prescrip)))
+   # )
     # Initialise arrays of zeros and set precision to same as FK tables
-    mat = np.zeros((matlength, matlength), dtype=np.float32)
-    cov_by_exp = np.zeros((matlength, matlength), dtype=np.float32)
-    for locs in covs_pt_prescrip:
-        cov = covs_pt_prescrip[locs]
-        mat[locs[0] : (len(cov) + locs[0]), locs[1] : (len(cov.T) + locs[1])] = cov
+    #mat = np.zeros((matlength, matlength), dtype=np.float32)
+    matlength = covs_pt_prescrip.shape[0]
+    cov_by_exp = np.zeros((matlength, matlength), dtype=np.float64)
     for i in range(matlength):
         for j in range(matlength):
-            cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
+            cov_by_exp[covmap[i]][covmap[j]] = covs_pt_prescrip[i][j]
     df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
     return df
 
