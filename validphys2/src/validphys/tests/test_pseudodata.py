@@ -39,6 +39,7 @@ def test_read_pdf_pseudodata():
 
 def test_recreate_fit_pseudodata():
     fit_pseudodata = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+
     nrep = API.num_fitted_replicas(fit=PSEUDODATA_FIT)
     assert nrep == len(fit_pseudodata)
 
@@ -48,8 +49,6 @@ def test_recreate_fit_pseudodata():
 
 
 def test_recreate_pdf_pseudodata():
-    
-
     pdf_pseudodata = API.recreate_pdf_pseudodata(fit=PSEUDODATA_FIT)
 
     pdf = API.pdf(pdf=PSEUDODATA_FIT)
