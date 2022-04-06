@@ -507,9 +507,9 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index, combine_by_type)
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-    datasets_shifts = list(combine_by_type.sizes.keys())
-    new_procs_index = procs_index.to_frame().sort_index(level=1, key=lambda x: [datasets_shifts.index(i) for i in x]).index
-    tmp = pd.DataFrame(covs_pt_prescrip, index=new_procs_index, columns=new_procs_index)
+    #datasets_shifts = list(combine_by_type.sizes.keys())
+    #new_procs_index = procs_index.to_frame().sort_index(level=1, key=lambda x: [datasets_shifts.index(i) for i in x]).index
+    tmp = pd.DataFrame(covs_pt_prescrip, index=procs_index, columns=procs_index)
     return tmp.sort_index(level=0)
 
 
