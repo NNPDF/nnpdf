@@ -20,6 +20,7 @@ from validphys.closuretest.multiclosure_pdf import (
     XI_FLAVOURS,
     bootstrap_pdf_differences,
     xi_flavour_x,
+    replica_and_central_diff_totalpdf,
     xi_totalpdf,
     fits_covariance_matrix_by_flavour,
     fits_covariance_matrix_totalpdf,
@@ -89,6 +90,36 @@ def plot_xi_flavour_x(
         ax.set_ylabel(r"$\xi_{1\sigma}$")
         ax.legend()
         yield fig
+
+
+@figure
+def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
+    """Histogram of the difference between central PDF
+    and underlying law normalised by the corresponding replica
+    standard deviation for all points in x and flavour alongside a scaled
+    Gaussian. Total xi is proportion of the histogram which falls within the
+    central 1-sigma confidence interval.
+
+    """
+    sigma, delta = replica_and_central_diff_totalpdf
+    scaled_diffs = (delta / sigma).flatten()
+    fig, ax = plt.subplots()
+    ax.hist(
+        scaled_diffs, bins=50, density=True, label="Central PDF distribution"
+    )
+    xlim = (-5, 5)
+    ax.set_xlim(xlim)
+
+    x = np.linspace(*xlim, 100)
+    ax.plot(
+        x,
+        scipy.stats.norm.pdf(x),
+        "-k",
+        label="Normal distribution",
+    )
+    ax.legend()
+    ax.set_xlabel("Difference to input PDF")
+    return fig
 
 
 @table
@@ -178,10 +209,11 @@ def fits_bootstrap_pdf_xi_table(
 
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, multiclosure_nx)
-        xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
-        xi_total = xi_totalpdf(
+        rep_cent_diff = replica_and_central_diff_totalpdf(
             boot_rep_diff, boot_central_diff, total_cov, multiclosure_nx, use_x_basis
         )
+        xi_flav = xi_flavour_x(boot_rep_diff, boot_central_diff, flav_cov, use_x_basis)
+        xi_total = xi_totalpdf(rep_cent_diff)
         xi_data = np.concatenate((xi_flav.mean(axis=-1), [xi_total]), axis=0)
         xi_boot.append(xi_data)
     # construct table in this action, since bootstrap rawdata isn't required elsewhere

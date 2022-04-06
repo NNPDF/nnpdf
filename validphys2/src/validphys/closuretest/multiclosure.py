@@ -200,14 +200,43 @@ def expected_total_bias_variance(fits_total_bias_variance):
     return expected_dataset_bias_variance(fits_total_bias_variance)
 
 
-
-def dataset_xi(internal_multiclosure_dataset_loader):
+def dataset_replica_and_central_diff(
+    internal_multiclosure_dataset_loader, diagonal_basis=True):
     """For a given dataset calculate sigma, the RMS difference between
     replica predictions and central predictions, and delta, the difference
     between the central prediction and the underlying prediction.
 
-    The differences are calculated in the basis which would diagonalise the
-    dataset's covariance matrix.
+    If ``diagonal_basis`` is ``True`` he differences are calculated in the
+    basis which would diagonalise the dataset's covariance matrix. This is the
+    default behaviour.
+
+    """
+    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
+    replicas = np.asarray([th._rawdata for th in closures_th])
+    centrals = np.mean(replicas, axis=-1)
+    underlying = law_th.central_value
+
+    _, e_vec = la.eigh(covmat)
+
+    central_diff = centrals - underlying[np.newaxis, :]
+    var_diff_sqrt = centrals[:, :, np.newaxis] - replicas
+
+    if diagonal_basis:
+        # project into basis which diagonalises covariance matrix
+        var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
+        central_diff = e_vec.T @ central_diff.T
+    else:
+        var_diff_sqrt = var_diff_sqrt.transpose(2, 1, 0)
+        central_diff = central_diff.T
+
+    var_diff = var_diff_sqrt ** 2
+    sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
+    return sigma, central_diff
+
+def dataset_xi(dataset_replica_and_central_diff):
+    """Take sigma and delta for a dataset, where sigma is the RMS difference
+    between replica predictions and central predictions, and delta is the
+    difference between the central prediction and the underlying prediction.
 
     Then the indicator function is evaluated elementwise for sigma and delta
 
@@ -225,34 +254,29 @@ def dataset_xi(internal_multiclosure_dataset_loader):
             ascending eigenvalues
 
     """
-    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
-    replicas = np.asarray([th.error_members for th in closures_th])
-    centrals = np.mean(replicas, axis=-1)
-    underlying = law_th.central_value
 
-    _, e_vec = la.eigh(covmat)
-
-    central_diff = centrals - underlying[np.newaxis, :]
-    var_diff_sqrt = centrals[:, :, np.newaxis] - replicas
-
-    # project into basis which diagonalises covariance matrix
-    var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
-    central_diff = e_vec.T @ central_diff.T
-
-    var_diff = var_diff_sqrt ** 2
-    sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
+    sigma, central_diff = dataset_replica_and_central_diff
+    # sigma is always positive
     in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
     # mean across fits
     return in_1_sigma.mean(axis=1)
 
 
-def data_xi(internal_multiclosure_data_loader):
+def data_replica_and_central_diff(
+    internal_multiclosure_data_loader, diagonal_basis=True):
+    """Like ``dataset_replica_and_central_diff`` but for all data"""
+    return dataset_replica_and_central_diff(
+        internal_multiclosure_data_loader, diagonal_basis)
+
+
+def data_xi(data_replica_and_central_diff):
     """Like dataset_xi but for all data"""
-    return dataset_xi(internal_multiclosure_data_loader)
+    return dataset_xi(data_replica_and_central_diff)
 
 
 experiments_xi_measured = collect("data_xi", ("group_dataset_inputs_by_experiment",))
-
+experiments_replica_central_diff = collect(
+    "data_replica_and_central_diff", ("group_dataset_inputs_by_experiment",))
 
 @check_at_least_10_fits
 def n_fit_samples(fits):
@@ -511,7 +535,9 @@ def xi_resampling_dataset(
                     use_repeats,
                 )
                 # append the 1d array for individual eigenvectors
-                xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
+                xi_1sigma_boot.append(
+                    dataset_xi(dataset_replica_and_central_diff(boot_internal_loader))
+                )
             fixed_n_rep_xi_1sigma.append(xi_1sigma_boot)
         xi_1sigma.append(fixed_n_rep_xi_1sigma)
     return np.array(xi_1sigma)
@@ -620,7 +646,25 @@ experiments_bootstrap_bias_variance = collect(
 )
 
 
-def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
+def total_bootstrap_ratio(experiments_bootstrap_bias_variance):
+    """Calculate the total bootstrap ratio for all data. Leverages the
+    fact that the covariance matrix is block diagonal in experiments so
+
+        Total ratio = sum(bias) / sum(variance)
+
+    Which is valid provided there are no inter-experimental correlations.
+
+    Returns
+    -------
+    bias_var_total: tuple
+        tuple of the total bias and variance
+
+    """
+    bias_tot, var_tot = np.sum(experiments_bootstrap_bias_variance, axis=0)
+    return bias_tot, var_tot
+
+
+def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance, total_bootstrap_ratio):
     """Returns a bootstrap resampling of the ratio of bias/variance for
     each experiment and total. Total is calculated as sum(bias)/sum(variance)
     where each sum refers to the sum across experiments.
@@ -634,13 +678,8 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
         resampled.
 
     """
-    bias_tot, var_tot = experiments_bootstrap_bias_variance[0]
-    # add first ratio to list
-    ratios = [bias_tot / var_tot]
-    for bias, var in experiments_bootstrap_bias_variance[1:]:
-        bias_tot += bias
-        var_tot += var
-        ratios.append(bias / var)
+    ratios = [bias / var for bias, var in experiments_bootstrap_bias_variance]
+    bias_tot, var_tot = total_bootstrap_ratio
     ratios.append(bias_tot / var_tot)
     return ratios
 
@@ -648,7 +687,6 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
 def experiments_bootstrap_sqrt_ratio(experiments_bootstrap_ratio):
     """Square root of experiments_bootstrap_ratio"""
     return np.sqrt(experiments_bootstrap_ratio)
-
 
 
 def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
@@ -663,7 +701,24 @@ def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
     return estimated_integral
 
+groups_bootstrap_bias_variance = collect(
+    "fits_bootstrap_data_bias_variance", ("group_dataset_inputs_by_metadata",)
+)
 
+
+def groups_bootstrap_ratio(groups_bootstrap_bias_variance, total_bootstrap_ratio):
+    """Like :py:func:`experiments_bootstrap_ratio` but for metadata groups."""
+    return experiments_bootstrap_ratio(groups_bootstrap_bias_variance, total_bootstrap_ratio)
+
+
+def groups_bootstrap_sqrt_ratio(groups_bootstrap_ratio):
+    """Like :py:func:`experiments_bootstrap_sqrt_ratio` but for metadata groups."""
+    return experiments_bootstrap_sqrt_ratio(groups_bootstrap_ratio)
+
+
+def groups_bootstrap_expected_xi(groups_bootstrap_sqrt_ratio):
+    """Like :py:func:`experiments_bootstrap_expected_xi` but for metadata groups."""
+    return experiments_bootstrap_expected_xi(groups_bootstrap_sqrt_ratio)
 
 
 @check_multifit_replicas
@@ -697,7 +752,9 @@ def fits_bootstrap_data_xi(
             _internal_max_reps,
             True,
         )
-        xi_1sigma_boot.append(dataset_xi(boot_internal_loader))
+        xi_1sigma_boot.append(
+            dataset_xi(dataset_replica_and_central_diff(boot_internal_loader))
+        )
     return xi_1sigma_boot
 
 
@@ -711,6 +768,10 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
 
     """
     return np.concatenate(experiments_bootstrap_xi, axis=1)
+
+groups_bootstrap_xi = collect(
+    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",))
+
 
 def dataset_fits_bias_replicas_variance_samples(
     internal_multiclosure_dataset_loader,
