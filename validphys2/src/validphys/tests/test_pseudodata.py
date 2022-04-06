@@ -71,7 +71,6 @@ def test_no_savepseudodata():
 
 
 def test_read_matches_recreate():
-    
     reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
     recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
     for read, recreate in zip(reads, recreates):

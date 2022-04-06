@@ -6,8 +6,6 @@ Created on Wed Mar  9 15:43:10 2016
 """
 import logging
 import pathlib
-import numpy as np
-import pandas as pd
 import functools
 import inspect
 import numbers
@@ -16,6 +14,9 @@ from importlib.resources import read_text, contents
 
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
+
+import numpy as np
+import pandas as pd
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_

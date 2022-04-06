@@ -230,7 +230,7 @@ def dataset_inputs_covmat_from_systematics(
         covmat = regularize_covmat(
             covmat,
             norm_threshold=norm_threshold
-        )  
+        ) 
     return covmat
 
 
