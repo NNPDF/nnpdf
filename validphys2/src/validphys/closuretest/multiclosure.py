@@ -646,7 +646,25 @@ experiments_bootstrap_bias_variance = collect(
 )
 
 
-def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
+def total_bootstrap_ratio(experiments_bootstrap_bias_variance):
+    """Calculate the total bootstrap ratio for all data. Leverages the
+    fact that the covariance matrix is block diagonal in experiments so
+
+        Total ratio = sum(bias) / sum(variance)
+
+    Which is valid provided there are no inter-experimental correlations.
+
+    Returns
+    -------
+    bias_var_total: tuple
+        tuple of the total bias and variance
+
+    """
+    bias_tot, var_tot = np.sum(experiments_bootstrap_bias_variance, axis=0)
+    return bias_tot, var_tot
+
+
+def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance, total_bootstrap_ratio):
     """Returns a bootstrap resampling of the ratio of bias/variance for
     each experiment and total. Total is calculated as sum(bias)/sum(variance)
     where each sum refers to the sum across experiments.
@@ -660,13 +678,8 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
         resampled.
 
     """
-    bias_tot, var_tot = experiments_bootstrap_bias_variance[0]
-    # add first ratio to list
-    ratios = [bias_tot / var_tot]
-    for bias, var in experiments_bootstrap_bias_variance[1:]:
-        bias_tot += bias
-        var_tot += var
-        ratios.append(bias / var)
+    ratios = [bias / var for bias, var in experiments_bootstrap_bias_variance]
+    bias_tot, var_tot = total_bootstrap_ratio
     ratios.append(bias_tot / var_tot)
     return ratios
 
@@ -674,7 +687,6 @@ def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance):
 def experiments_bootstrap_sqrt_ratio(experiments_bootstrap_ratio):
     """Square root of experiments_bootstrap_ratio"""
     return np.sqrt(experiments_bootstrap_ratio)
-
 
 
 def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
@@ -689,7 +701,24 @@ def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
     return estimated_integral
 
+groups_bootstrap_bias_variance = collect(
+    "fits_bootstrap_data_bias_variance", ("group_dataset_inputs_by_metadata",)
+)
 
+
+def groups_bootstrap_ratio(groups_bootstrap_bias_variance, total_bootstrap_ratio):
+    """Like :py:func:`experiments_bootstrap_ratio` but for metadata groups."""
+    return experiments_bootstrap_ratio(groups_bootstrap_bias_variance, total_bootstrap_ratio)
+
+
+def groups_bootstrap_sqrt_ratio(groups_bootstrap_ratio):
+    """Like :py:func:`experiments_bootstrap_sqrt_ratio` but for metadata groups."""
+    return experiments_bootstrap_sqrt_ratio(groups_bootstrap_ratio)
+
+
+def groups_bootstrap_expected_xi(groups_bootstrap_sqrt_ratio):
+    """Like :py:func:`experiments_bootstrap_expected_xi` but for metadata groups."""
+    return experiments_bootstrap_expected_xi(groups_bootstrap_sqrt_ratio)
 
 
 @check_multifit_replicas
@@ -739,6 +768,10 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
 
     """
     return np.concatenate(experiments_bootstrap_xi, axis=1)
+
+groups_bootstrap_xi = collect(
+    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",))
+
 
 def dataset_fits_bias_replicas_variance_samples(
     internal_multiclosure_dataset_loader,

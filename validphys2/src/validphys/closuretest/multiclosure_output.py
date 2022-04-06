@@ -661,6 +661,20 @@ def experiments_bootstrap_sqrt_ratio_table(
 
 
 @table
+def groups_bootstrap_sqrt_ratio_table(
+    groups_bootstrap_sqrt_ratio, groups_data
+):
+    """Like :py:func:`experiments_bootstrap_sqrt_ratio_table` but for
+    metadata groups.
+    """
+    df = experiments_bootstrap_sqrt_ratio_table(
+        groups_bootstrap_sqrt_ratio, groups_data
+    )
+    idx = df.index.rename("group")
+    return df.set_index(idx)
+
+
+@table
 def experiments_bootstrap_expected_xi_table(
     experiments_bootstrap_expected_xi, experiments_data
 ):
@@ -680,6 +694,16 @@ def experiments_bootstrap_expected_xi_table(
     ]
     return df
 
+
+@table
+def groups_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data):
+    """Like :py:func:`experiments_bootstrap_expected_xi_table` but for metadata
+    groups.
+    """
+    df = experiments_bootstrap_expected_xi_table(
+        groups_bootstrap_expected_xi, groups_data)
+    idx = df.index.rename("group")
+    return df.set_index(idx)
 
 @table
 def experiments_bootstrap_xi_table(
@@ -706,6 +730,17 @@ def experiments_bootstrap_xi_table(
 
 
 @table
+def groups_bootstrap_xi_table(
+    groups_bootstrap_xi, groups_data, total_bootstrap_xi
+):
+    """Like :py:func:`experiments_bootstrap_xi_table` but for metadata groups."""
+    df = experiments_bootstrap_xi_table(
+        groups_bootstrap_xi, groups_data, total_bootstrap_xi)
+    idx = df.index.rename("group")
+    return df.set_index(idx)
+
+
+@table
 def experiments_bootstrap_xi_comparison(
     experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table
 ):
@@ -717,6 +752,18 @@ def experiments_bootstrap_xi_comparison(
     return pd.concat(
         (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
         axis=1,
+    )
+
+
+@table
+def groups_bootstrap_xi_comparison(
+    groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table
+):
+    """Like :py:func:`experiments_bootstrap_xi_comparison` but for metadata
+    groups.
+    """
+    return experiments_bootstrap_xi_comparison(
+        groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table
     )
 
 
