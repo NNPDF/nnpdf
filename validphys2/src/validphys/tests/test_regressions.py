@@ -54,7 +54,6 @@ def make_table_comp(loader_func, tolerance=1e-8):
 
 @make_table_comp(parse_data_cv)
 def test_mcreplica(data_config):
-    ####
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
     seed = 123456
@@ -139,12 +138,10 @@ def test_datasetchi2(data_singleexp_witht0_config):
 
 @make_table_comp(sane_load)
 def test_art_rep_generation(data_config):
-    ###
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA
     config["mcseed"] = 123456
     config["genrep"] = True
     config["nreplica"] = 1
-
     _, art_replicas, _,_ = API.art_rep_generation(**config)
     return pd.DataFrame(art_replicas.T, columns=['rep0'])

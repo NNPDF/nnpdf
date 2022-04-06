@@ -344,26 +344,21 @@ def dataset_inputs_t0_covmat_from_systematics(
     )
 
 
-def dataset_inputs_t0_total_covmat_separate(dataset_inputs_loaded_cd_with_cuts,
-    *,
-    data_input,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
-    dataset_inputs_t0_predictions,
-    loaded_theory_covmat,
+def dataset_inputs_t0_total_covmat_separate(
+    dataset_inputs_t0_exp_covmat_separate,
+    loaded_theory_covmat
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.  
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , True)
+    covmat = dataset_inputs_t0_exp_covmat_separate
     covmat += loaded_theory_covmat
     return covmat
 
-def dataset_inputs_t0_exp_covmat_separate(dataset_inputs_loaded_cd_with_cuts,
+def dataset_inputs_t0_exp_covmat_separate(
+    dataset_inputs_loaded_cd_with_cuts,
     *,
     data_input,
     use_weights_in_covmat=True,
@@ -371,68 +366,56 @@ def dataset_inputs_t0_exp_covmat_separate(dataset_inputs_loaded_cd_with_cuts,
     dataset_inputs_t0_predictions,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
+    errors are separated.
     """
     covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , True)
     return covmat
 
-def dataset_inputs_total_covmat_separate(dataset_inputs_loaded_cd_with_cuts,
-    *,
-    data_input,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
+def dataset_inputs_total_covmat_separate(
+    dataset_inputs_exp_covmat_separate,
     loaded_theory_covmat,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , True)
+    covmat = dataset_inputs_exp_covmat_separate
     covmat += loaded_theory_covmat
     return covmat
 
-def dataset_inputs_exp_covmat_separate(dataset_inputs_loaded_cd_with_cuts,
+def dataset_inputs_exp_covmat_separate(
+    dataset_inputs_loaded_cd_with_cuts,
     *,
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
+    errors are separated. 
     """
     covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , True)
     return covmat
 
-def dataset_inputs_t0_total_covmat(dataset_inputs_loaded_cd_with_cuts,
-    *,
-    data_input,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
-    dataset_inputs_t0_predictions,
+def dataset_inputs_t0_total_covmat(
+    dataset_inputs_t0_exp_covmat,
     loaded_theory_covmat,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , False)
+    covmat = dataset_inputs_t0_exp_covmat
     covmat += loaded_theory_covmat
     return covmat
-def dataset_inputs_t0_exp_covmat(dataset_inputs_loaded_cd_with_cuts,
+
+def dataset_inputs_t0_exp_covmat(
+    dataset_inputs_loaded_cd_with_cuts,
     *,
     data_input,
     use_weights_in_covmat=True,
@@ -440,51 +423,49 @@ def dataset_inputs_t0_exp_covmat(dataset_inputs_loaded_cd_with_cuts,
     dataset_inputs_t0_predictions,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
+    and the multiplicative errors are included in it. 
     """
     covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , False)
     return covmat
 
-def dataset_inputs_total_covmat(dataset_inputs_loaded_cd_with_cuts,
-    *,
-    data_input,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
+def dataset_inputs_total_covmat(
+    dataset_inputs_exp_covmat,
     loaded_theory_covmat,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , False)
+    covmat = dataset_inputs_exp_covmat
     covmat += loaded_theory_covmat
     return covmat
-def dataset_inputs_exp_covmat(dataset_inputs_loaded_cd_with_cuts,
+
+def dataset_inputs_exp_covmat(
+    dataset_inputs_loaded_cd_with_cuts,
     *,
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
     ):
     """
-    Function to compute the total covmat to be used for the chi2 by fitting_data_dict.
-    Depending on the theory_covmat_flag value, the theory covmat will be added to the 
-    experimental covmat or not. With the use_t0_fitting flag it is possible to choose
-    if using the t0 prescription in the covmat computation. In order to compute the covmat
-    only using the additive errors, you can set only_add to True.
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
+    and the multiplicative errors are included in it.
     """
     covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , False)
     return covmat
 
-def generate_exp_covmat(datasets_input, data, use_weights, norm_thre, _list_of_c_values, only_add):
+def generate_exp_covmat(datasets_input,
+    data,
+    use_weights, 
+    norm_thre, 
+    _list_of_c_values, 
+    only_add):
     """
-    Function to generate the experimental covmat eventually using the t0 prescription. It is also 
+    Function to generate the experimental covmat eventually using the t0 prescription. It is also
     possible to compute it only with the additive errors.
 
     Parameters

@@ -50,7 +50,6 @@ def test_commondata_unchanged(data_config, dataset_inputs, use_cuts):
     pre_mkrep_sys_tabs = [deepcopy(cd.systematics_table) for cd in ld_cds]
     pre_mkrep_cd_tabs = [deepcopy(cd.commondata_table) for cd in ld_cds]
     
-    
     make_replica = API.make_replica(**config)
 
     for post_mkrep_cd, pre_mkrep_cv in zip(ld_cds, pre_mkrep_cvs):

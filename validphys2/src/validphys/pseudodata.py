@@ -207,11 +207,14 @@ def make_replica(groups_dataset_inputs_loaded_cd_with_cuts, replica_mcseed,  dat
 
             mult_shifts.append(mult_shift)
             
-        #Additive shifts (if separate_multiplicative is True) or total shifts (if separate_multiplicative is False)
+        #If sep_mult is true then the multiplicative shifts were not included in the covmat
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.
         if sep_mult:
-            special_mult = (1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100).prod(axis=1)
+            special_mult = (
+                1 + special_mult_errors * rng.normal(size=(1, 
+                special_mult_errors.shape[1])) / 100
+                ).prod(axis=1)
             mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
         #Shifting pseudodata
         shifted_pseudodata = (all_pseudodata + shifts)*mult_part
