@@ -67,10 +67,10 @@ def calc_chi2(sqrtcov, diffs):
     return np.einsum('i...,i...->...', vec,vec)
 
 def all_chi2(results):
-    """Return the chi² for all elements in the result. Note that the
-    interpretation of the result will depend on the PDF error type"""
+    """Return the chi² for all elements in the result, regardless of the Stats class
+    Note that the interpretation of the result will depend on the PDF error type"""
     data_result, th_result = results
-    diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
+    diffs = th_result.rawdata - data_result.central_value[:,np.newaxis]
     return calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
 
 def central_chi2(results):
@@ -85,7 +85,7 @@ def all_chi2_theory(results, totcov):
     """Like all_chi2 but here the chi² are calculated using a covariance matrix
     that is the sum of the experimental covmat and the theory covmat."""
     data_result, th_result = results
-    diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
+    diffs = th_result.rawdata - data_result.central_value[:,np.newaxis]
     total_covmat = np.array(totcov)
     return calc_chi2(sqrtcov=la.cholesky(total_covmat, lower=True), diffs=diffs)
 

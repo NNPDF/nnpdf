@@ -21,7 +21,7 @@ from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
 from validphys.core import PDF, FitSpec
-from validphys.pdfbases import check_basis, Basis, UnknownElement
+from validphys.pdfbases import check_basis, Basis
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
@@ -66,14 +66,14 @@ def alpha_eff(pdf: PDF, *,
 
     pdfGrid = pdfgrids.xplotting_grid(
         pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
-    pdfGrid_values = pdfGrid.grid_values
+    pdfGrid_values = pdfGrid.grid_values.data
     # NOTE: without this I get "setting an array element with a sequence"
     xGrid = pdfGrid.xgrid
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
         alphaGrid_values[alphaGrid_values == - np.inf] = np.nan  # when PDF_i =0
-    alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
+    alphaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(alphaGrid_values))
     return alphaGrid
 
 @check_positive('Q')
@@ -110,14 +110,14 @@ def beta_eff(pdf, *,
 
     pdfGrid = pdfgrids.xplotting_grid(
         pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
-    pdfGrid_values = pdfGrid.grid_values
+    pdfGrid_values = pdfGrid.grid_values.data
     # NOTE: without this I get "setting an array element with a sequence"
     xGrid = pdfGrid.xgrid
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
         betaGrid_values[betaGrid_values == -np.inf] = np.nan  # when PDF_i =0
-    betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
+    betaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(betaGrid_values))
 
     return betaGrid  # .grid_values
 
@@ -339,7 +339,7 @@ def next_effective_exponents_table(
         max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
 
     """
-    Qmin = pdf.QMin
+    Qmin = pdf.q_min
 
     alpha_effs = alpha_eff(
         pdf, xmin=x1_alpha, xmax=x2_alpha, npoints=2, Q=Qmin, basis=basis, flavours=flavours)
@@ -348,17 +348,14 @@ def next_effective_exponents_table(
 
     eff_exp_data = []
 
-    alphagrid = alpha_effs.grid_values
-    betagrid = beta_effs.grid_values
-
-    alphastats = pdf.stats_class(alphagrid)
-    betastats = pdf.stats_class(betagrid)
+    alphastats = alpha_effs.grid_values
+    betastats = beta_effs.grid_values
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
 
-        alpha_cv = np.nanmean(alphagrid, axis=0)
-        beta_cv = np.nanmean(betagrid, axis=0)
+        alpha_cv = np.nanmean(alphastats.error_members(), axis=0)
+        beta_cv = np.nanmean(betastats.error_members(), axis=0)
         #tuple of low and high values repectively
         alpha68 = alphastats.errorbar68()
         beta68 = betastats.errorbar68()

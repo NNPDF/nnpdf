@@ -22,7 +22,7 @@ from reportengine.floatformatting import format_number
 from reportengine import collect
 
 from validphys.core import MCStats, cut_mask, CutsPolicy
-from validphys.results import chi2_stat_labels, get_shifted_results
+from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
@@ -63,12 +63,12 @@ def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
         ax.set_facecolor("#ffcccc")
         log.warning("Chi² distribution plots have a "
                 "different meaning for non MC sets.")
-        label += " (%s!)" % pdf.ErrorType
+        label += " (%s!)" % pdf.error_type
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in stats.items())
     ax.set_xlabel(r"Replica $\chi^2$")
 
     if plot_type == "hist":
-        ax.hist(alldata.data, label=label, zorder=100)
+        ax.hist(alldata.error_members(), label=label, zorder=100)
     elif plot_type == "kde":
         # We need the squeeze here to change shape from (x, 1) to (x,)
         ax = plotutils.kde_plot(alldata.data.squeeze(), label=label)
@@ -198,7 +198,7 @@ def check_normalize_to(ns, **kwargs):
 #TODO: This interface is horrible. We need to think how to adapt libnnpdf
 #to make this use case easier
 def _plot_fancy_impl(results, commondata, cutlist,
-               normalize_to:(int,type(None)) = None, labellist=None, withshifts=False):
+               normalize_to:(int,type(None)) = None, labellist=None):
 
     """Implementation of the data-theory comparison plots. Providers are
     supposed to call (yield from) this.
@@ -218,9 +218,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
     labellist : list or None
         The labesl that will appear in the plot. They sill be deduced
         (from the PDF names) if None is given.
-    withshifts: bool
-        Add the correlated shifts to the theory predctions based on 
-        eq.84 of arXiv:1709.04922
     Returns
     -------
     A generator over figures.
@@ -272,50 +269,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[('err', i)] = err/norm_cv
         cvcols.append(cvcol)
 
-    ### Computing correlated shifts according to the paper: arXiv:1709.04922
-    if withshifts:
-        for i, (result, cuts) in enumerate(zip(results, cutlist)):
-            if i==0: continue
-
-            cd = commondata.load()
-            mask = cut_mask(cuts)
-
-            ## fill uncertainties
-            Ndat = len(table[('cv', i)])
-            Nsys = cd.GetNSys()
-
-            uncorrE = np.zeros(Ndat) # square root of sum of uncorrelated uncertainties
-            corrE = np.zeros((Ndat, Nsys)) # table of all the correlated uncertainties
-            lambda_sys = np.zeros(Nsys) # nuisance parameters
-
-            for idat in range(Ndat):
-                convi = table[('cv', 0)][idat]/cd.GetData(idat) # conversion constant
-                uncorrE[idat] = cd.GetUncE(idat)*convi
-                for isys in range(Nsys):
-                    if cd.GetSys(idat, isys).name != "UNCORR":
-                        corrE[idat, isys] = cd.GetSys(idat, isys).add*convi
-
-            ## applying cuts
-            uncorrE=uncorrE[mask]
-            corrE=corrE[mask]
-            data = table[('cv', 0)][mask]
-            theory = table[('cv', i)][mask]
-
-            ## isys is equivalent to alpha index and lsys to delta in eq.85
-            if np.any(uncorrE == 0):
-                temp_shifts = np.zeros(Ndat)
-            else:
-                f1 = (data - theory)/uncorrE # first part of eq.85
-                A = np.diag(np.diag(np.ones((Nsys, Nsys)))) + \
-                    np.einsum('ik,il,i->kl', corrE, corrE, 1./uncorrE**2) # eq.86
-                f2 = np.einsum('kl,il,i->ik', np.linalg.inv(A), corrE, 1./uncorrE) # second part of eq.85
-                lambda_sys= np.einsum('i,ik->k', f1,f2) #nuisance parameter
-                temp_shifts = np.einsum('ik,k->i',corrE,lambda_sys) # the shift
-
-                shifts = np.full(Ndat, np.nan)
-                shifts[mask] = temp_shifts
-
-                table[('cv', i)] += shifts
 
     figby = sane_groupby_iter(table, info.figure_by)
 
@@ -429,7 +382,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 @check_normalize_to
 @figuregen
 def plot_fancy(one_or_more_results, commondata, cuts,
-               normalize_to: (int, str, type(None)) = None, withshifts=False):
+               normalize_to: (int, str, type(None)) = None):
     """
     Read the PLOTTING configuration for the dataset and generate the
     corrspondig data theory plot.
@@ -443,23 +396,10 @@ def plot_fancy(one_or_more_results, commondata, cuts,
     result (0 for the data, and i for the ith pdf). None means plotting
     absolute values.
 
-    withshifts: bool
-        Add the correlated shifts to the theory predctions based on 
-        eq.84 of arXiv:1709.04922
 
     See docs/plotting_format.md for details on the format of the PLOTTING
     files.
     """
-    if withshifts:
-        one_or_more_results, shifted = get_shifted_results(results=one_or_more_results,
-                                               commondata=commondata,
-                                               cutlist=cutlist)
-        for ilabel in range(len(labellist)): 
-            if ilabel == 0:
-                continue
-            if shifted[ilabel-1]:
-                labellist[ilabel] += " (shifted)"
-
 
     yield from _plot_fancy_impl(results=one_or_more_results,
                                 commondata=commondata,
@@ -493,10 +433,13 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
 @_check_same_dataset_name
 @_check_dataspec_normalize_to
 @figuregen
-def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
-                         dataspecs_cuts, dataspecs_speclabel,
-                         normalize_to:(str, int, type(None))=None,
-                         withshifts=False):
+def plot_fancy_dataspecs(
+    dataspecs_results,
+    dataspecs_commondata,
+    dataspecs_cuts,
+    dataspecs_speclabel,
+    normalize_to: (str, int, type(None)) = None,
+):
     """
     General interface for data-theory comparison plots.
 
@@ -522,10 +465,6 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
 
         - or None (default) to plot absolute values.
 
-    withshifts: bool
-        Add the correlated shifts to the theory predctions based on 
-        eq.84 of arXiv:1709.04922
-
     A limitation at the moment is that the data cuts and errors will be taken
     from the first specifiaction.
     """
@@ -538,16 +477,6 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
     cutlist = [dataspecs_cuts[0], *dataspecs_cuts]
     commondata = dataspecs_commondata[0]
     labellist = [None, *dataspecs_speclabel]
-
-    if withshifts:
-        results, shifted = get_shifted_results(results=results,
-                                               commondata=commondata,
-                                               cutlist=cutlist)
-        for ilabel in range(len(labellist)):
-            if ilabel == 0:
-                continue
-            if shifted[ilabel-1]:
-                labellist[ilabel] += " (shifted)"
 
     yield from _plot_fancy_impl(results = results, commondata=commondata,
                                 cutlist=cutlist, labellist=labellist,
@@ -564,6 +493,11 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
         ax.scatter(x[indexes],y[indexes], *args, **kwargs, label=label,
                    facecolors='none', linewidth=0.5, edgecolor='red')
         kwargs['s'] += 10
+
+@figure
+def plot_dataspecs_groups_chi2_spider(dataspecs_groups_chi2_table):
+    fig, ax = _plot_chi2s_spider_df(dataspecs_groups_chi2_table)
+    return fig
 
 @figure
 def plot_fits_chi2_spider(fits, fits_groups_chi2,
@@ -585,22 +519,23 @@ def plot_fits_chi2_spider(fits, fits_groups_chi2,
     return fig
 
 @figure
-def plot_fits_phi_spider(fits, fits_groups_data,
-                         fits_groups_data_phi, processed_metadata_group):
-   """Like plot_fits_chi2_spider but for phi."""
+def plot_fits_phi_spider(
+    fits, fits_groups_data, fits_groups_data_phi, processed_metadata_group
+):
+    """Like plot_fits_chi2_spider but for phi."""
 
-   fig = plt.figure(figsize=(12,12))
-   ax = fig.add_subplot(projection='polar')
+    fig = plt.figure(figsize=(12, 12))
+    ax = fig.add_subplot(projection='polar')
 
-   for fit, fitphi, fitgroup in zip(fits, fits_groups_data_phi, fits_groups_data):
-       phi = [exp_phi for (exp_phi, npoints) in fitphi]
-       xticks = [group.name for group in fitgroup]
+    for fit, fitphi, fitgroup in zip(fits, fits_groups_data_phi, fits_groups_data):
+        phi = [exp_phi for (exp_phi, _npoints) in fitphi]
+        xticks = [group.name for group in fitgroup]
 
-       ax = plotutils.spiderplot(xticks, phi, fit)
+        ax = plotutils.spiderplot(xticks, phi, fit)
 
-   ax.set_title(rf"$\phi$ by {processed_metadata_group}")
+    ax.set_title(rf"$\phi$ by {processed_metadata_group}")
 
-   return fig
+    return fig
 
 @figure
 def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_group, pdf):
@@ -618,7 +553,7 @@ def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_gr
 @figure
 def plot_groups_data_phi_spider(groups_data, groups_data_phi, processed_metadata_group, pdf):
     """Plot the phi of all groups of datasets as a spider plot."""
-    phi = [exp_phi for (exp_phi, npoints) in groups_data_phi]
+    phi = [exp_phi for (exp_phi, _npoints) in groups_data_phi]
     xticks = [group.name for group in groups_data]
 
     fig = plt.figure()
@@ -641,9 +576,8 @@ def plot_groups_data_chi2(groups_data, groups_chi2, processed_metadata_group):
 plot_experiments_chi2 = collect("plot_groups_data_chi2",  ("group_dataset_inputs_by_experiment",))
 
 @figure
-def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
+def plot_datasets_chi2(groups_data, groups_chi2):
     """Plot the chi² of all datasets with bars."""
-    ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
     for group, group_res in zip(groups_data, groups_chi2):
@@ -657,9 +591,8 @@ def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     return fig
 
 @figure
-def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
+def plot_datasets_chi2_spider(groups_data, groups_chi2):
     """Plot the chi² of all datasets with bars."""
-    ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
     for group, group_res in zip(groups_data, groups_chi2):
@@ -668,7 +601,7 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2, each_dataset_chi2):
 
     fig = plt.figure(figsize=(4,4))
     ax = fig.add_subplot(projection='polar')
-    ax = plotutils.spiderplot(xticks, dschi2, label==[r'$\chi^2$'])
+    ax = plotutils.spiderplot(xticks, dschi2, label=[r'$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
 
@@ -895,7 +828,7 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
     fig, axes = plt.subplots(nrows=len(sum_rules), sharex=True)
     #TODO: Get rid of this nonsense
     ncomputed = len(sum_rules[0])
-    if pdf.ErrorType == 'replicas':
+    if pdf.error_type == 'replicas':
         x = np.arange(1, ncomputed + 1)
     else:
         x = np.arange(ncomputed)
@@ -914,7 +847,23 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     mark_threshold is the proportion of the maximum absolute correlation
     that will be used to mark the corresponding area in x in the
     background of the plot. The maximum absolute values are used for
-    the comparison."""
+    the comparison.
+
+    Examples
+    --------
+    >>> from validphys.api import API
+    >>> data_input = {
+    >>>    "dataset_input" : {"dataset": "HERACOMBNCEP920"},
+    >>>    "theoryid": 200,
+    >>>     "use_cuts": "internal",
+    >>>     "pdf": "NNPDF40_nnlo_as_01180",
+    >>>     "Q": 1.6,
+    >>>     "mark_threshold": 0.2
+    >>> }
+    >>> smpdf_gen = API.plot_smpdf(**data_input)
+    >>> fig = next(smpdf_gen)
+    >>> fig.show()
+    """
     info = get_info(dataset)
 
     table = kitable(dataset, info)
@@ -922,7 +871,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
     basis = obs_pdf_correlations.basis
 
-    fullgrid = obs_pdf_correlations.grid_values
+    fullgrid = obs_pdf_correlations.grid_values.data
 
     fls = obs_pdf_correlations.flavours
     x = obs_pdf_correlations.xgrid
@@ -938,7 +887,6 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         norm = mcolors.Normalize(vmin, vmax)
     #http://stackoverflow.com/a/11558629/1007990
     sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
-    sm._A = []
 
     for same_vals, fb in figby:
         grid = fullgrid[ np.asarray(fb.index),...]
@@ -994,7 +942,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
     ax.set_ylabel(str(ds1))
     ax.set_xlabel(str(ds2))
-    fig.colorbar(im, [ax])
+    fig.colorbar(im, ax=ax)
     return fig
 
 @figure
@@ -1052,7 +1000,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 def _check_same_posdataset_name(dataspecs_posdataset):
     """Check that the ``posdataset`` key matches for ``dataspecs``"""
     _check_same_dataset_name.__wrapped__(
-        [ds.commondataspec for ds in dataspecs_posdataset]
+        [ds.commondata for ds in dataspecs_posdataset]
     )
 
 @figure

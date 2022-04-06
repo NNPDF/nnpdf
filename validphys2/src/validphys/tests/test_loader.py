@@ -41,7 +41,7 @@ def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
     if cuts:
         cutpath = tmp / "cuts.txt"
         np.savetxt(cutpath, np.asarray(cuts, dtype=int), fmt="%u")
-        cutspec = Cuts(cd.name, cutpath)
+        cutspec = Cuts(cd, cutpath)
         lcd = type(lcd)(lcd, cuts)
     lcd.Export(str(tmp))
     # We have to reconstruct the name here...

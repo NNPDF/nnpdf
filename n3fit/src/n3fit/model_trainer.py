@@ -16,6 +16,7 @@ import n3fit.model_gen as model_gen
 from n3fit.backends import MetaModel, clear_backend_state, callbacks
 from n3fit.backends import operations as op
 from n3fit.stopping import Stopping
+from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 
@@ -93,7 +94,7 @@ class ModelTrainer:
         kfold_parameters=None,
         max_cores=None,
         model_file=None,
-        sum_rules=True,
+        sum_rules=None,
         parallel_models=1,
     ):
         """
@@ -124,7 +125,7 @@ class ModelTrainer:
             model_file: str
                 whether to save the models
             sum_rules: str
-		        whether sum rules should be enabled (All, MSR, VSR, False)
+                        whether sum rules should be enabled (All, MSR, VSR, False)
             parallel_models: int
                 number of models to fit in parallel
         """
@@ -155,7 +156,7 @@ class ModelTrainer:
         self.print_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
-        self.hyperkeys = None
+        self._hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]
             self.hyper_threshold = None
@@ -175,7 +176,7 @@ class ModelTrainer:
                 hyper_loss = "average"
                 log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
-            self.hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
+            self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -224,11 +225,11 @@ class ModelTrainer:
             self.callbacks.append(callbacks.TimerCallback())
 
     def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
-        """ Set hyperopt options on and off (mostly suppresses some printing) """
+        """Set hyperopt options on and off (mostly suppresses some printing)"""
         self.pass_status = status_ok
         if keys is None:
             keys = []
-        self.hyperkeys = keys
+        self._hyperkeys = keys
         if hyperopt_on:
             self.print_summary = False
             self.mode_hyperopt = True
@@ -350,18 +351,17 @@ class ModelTrainer:
         # we need now to split the output on a different array per experiment
         sp_ar = [self.input_sizes]
         sp_kw = {"axis": 1}
-        splitting_layer = op.as_layer(
-            op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
-        )
+        splitting_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
         splitted_pdf = splitting_layer(full_pdf_per_replica)
 
         # If we are in a kfolding partition, select which datasets are out
-        if partition:
-            training_mask = [i[partition_idx] for i in self.training["folds"]]
-            validation_mask = [i[partition_idx] for i in self.validation["folds"]]
+        training_mask = validation_mask = experimental_mask = [None]
+        if partition and partition["datasets"]:
+            if partition.get("overfit", False):
+                # If overfitting, don't apply folding masks to the training/validation
+                training_mask = [i[partition_idx] for i in self.training["folds"]]
+                validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
-        else:
-            training_mask = validation_mask = experimental_mask = [None]
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
@@ -532,8 +532,8 @@ class ModelTrainer:
             force_set_smallest = input_arr.min() > 1e-9
             if force_set_smallest:
                 new_xgrid = np.linspace(
-                        start=1/input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
-                        )
+                    start=1/input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
+                )
             else:
                 new_xgrid = np.linspace(start=0, stop=1.0, endpoint=False, num=input_arr_size)
 
@@ -565,8 +565,10 @@ class ModelTrainer:
             try:
                 scaler = PchipInterpolator(map_from, map_to)
             except ValueError:
-                raise ValueError("interpolation_points is larger than the number of unique \
-                                    input x-values")
+                raise ValueError(
+                    "interpolation_points is larger than the number of unique "
+                                    "input x-values"
+                )
             self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
 
     def _generate_pdf(
@@ -629,7 +631,7 @@ class ModelTrainer:
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
-            parallel_models=self._parallel_models
+            parallel_models=self._parallel_models,
         )
         return pdf_models
 
@@ -689,13 +691,17 @@ class ModelTrainer:
         return self.failed_status
 
     def _hyperopt_override(self, params):
-        """ Unrolls complicated hyperopt structures into very simple dictionaries"""
-        # I love the smell of napalm in the morning
-        for hyperkey in self.hyperkeys:
+        """Unrolls complicated hyperopt structures into very simple dictionaries"""
+        # If the input contains all parameters, then that's your dictionary of hyperparameters
+        hyperparameters = params.get("parameters")
+        if hyperparameters is not None:
+            return hyperparameters
+        # Else, loop over all different keys and unroll the dictionaries within hyperparameters
+        for hyperkey in self._hyperkeys:
             item = params[hyperkey]
             if isinstance(item, dict):
-                for key, value in item.items():
-                    params[key] = value
+                params.update(item)
+        return params
 
     def enable_tensorboard(self, logdir, weight_freq=0, profiling=False):
         """Enables tensorboard callback for further runs of the fitting procedure
@@ -710,8 +716,8 @@ class ModelTrainer:
                 flag to enable the tensorboard profiler
         """
         callback_tb = callbacks.gen_tensorboard_callback(
-                logdir, profiling=profiling, histogram_freq=weight_freq
-                )
+            logdir, profiling=profiling, histogram_freq=weight_freq
+        )
         self.callbacks.append(callback_tb)
 
     def evaluate(self, stopping_object):
@@ -758,18 +764,18 @@ class ModelTrainer:
         print("")
         clear_backend_state()
 
-        # Preprocess some hyperparameters
-        epochs = int(params["epochs"])
-        stopping_patience = params["stopping_patience"]
-        stopping_epochs = int(epochs * stopping_patience)
-
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
         if self.mode_hyperopt:
             log.info("Performing hyperparameter scan")
-            for key in self.hyperkeys:
+            for key in self._hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
-            self._hyperopt_override(params)
+            params = self._hyperopt_override(params)
+
+        # Preprocess some hyperparameters
+        epochs = int(params["epochs"])
+        stopping_patience = params["stopping_patience"]
+        stopping_epochs = int(epochs * stopping_patience)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         # when k-folding, these are the same for all folds
@@ -790,6 +796,9 @@ class ModelTrainer:
         l_valid = []
         l_exper = []
         l_hyper = []
+        # And lists to save hyperopt utilities
+        n3pdfs = []
+        exp_models = []
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -797,7 +806,7 @@ class ModelTrainer:
             # and the seed needs to be updated accordingly
             seeds = self._nn_seeds
             if k > 0:
-                seeds = [np.random.randint(0, pow(2, 31))]
+                seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
@@ -846,7 +855,7 @@ class ModelTrainer:
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 threshold_positivity=threshold_pos,
-                threshold_chi2=threshold_chi2
+                threshold_chi2=threshold_chi2,
             )
 
             # Compile each of the models with the right parameters
@@ -860,15 +869,18 @@ class ModelTrainer:
             )
 
             if self.mode_hyperopt:
-                # TODO: currently only working for one single replica!
                 # If doing a hyperparameter scan we need to keep track of the loss function
-                validation_loss = stopping_object.vl_chi2[0]
+                # Since hyperopt needs _one_ number take the average in case of many replicas
+                validation_loss = np.mean(stopping_object.vl_chi2)
 
                 # Compute experimental loss
-                exp_loss_raw = np.take(models["experimental"].compute_losses()["loss"], -1)
+                exp_loss_raw = np.average(models["experimental"].compute_losses()["loss"])
                 # And divide by the number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
                 ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
+                # If ndata == 0 then it's the opposite, all data is in!
+                if ndata == 0:
+                    ndata = self.experimental["ndata"]
                 experimental_loss = exp_loss_raw / ndata
 
                 hyper_loss = experimental_loss
@@ -877,12 +889,15 @@ class ModelTrainer:
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_models[0], stopping_object)
+                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
+                # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
+                n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
+                exp_models.append(models["experimental"])
 
                 if hyper_loss > self.hyper_threshold:
                     log.info(
@@ -903,7 +918,7 @@ class ModelTrainer:
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self.hyper_loss(l_hyper),
+                "loss": self._hyper_loss(fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {

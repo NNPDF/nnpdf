@@ -71,8 +71,8 @@ void CMS_hxsec_RunII_diff_pTHFilter::ReadData()
       fKin3[i] = 0.;
       lstream >> ddum >> ddum >> fData[i] >> Sys[i]
 	      >> SS_cv >> SS_er;
-
-      cout << fData[i]/SS_cv << endl;
+      
+      //cout << fData[i]/SS_cv << endl;
       SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
 
       fStat[i] = 0.0;
@@ -114,6 +114,7 @@ void CMS_hxsec_RunII_diff_pTHFilter::ReadData()
 	}
     } 
 
+  /*
   //Generate SM covariance matrix
   for(int i=0; i< fNData; i++)
     {
@@ -123,6 +124,18 @@ void CMS_hxsec_RunII_diff_pTHFilter::ReadData()
 	}
       cout << endl;
     }
+  */
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] corrmat[i];
+    }
+  
+  delete[] SM_cov;
+  delete[] Sys;
+  delete[] syscor;
+  delete[] corrmat;
   
   f1.close();
   f2.close();
@@ -178,7 +191,7 @@ void CMS_hxsec_RunII_diff_pTH_ggHFilter::ReadData()
       lstream >> ddum >> ddum >> fData[i] >> Sys[i]
 	      >> SS_cv >> SS_er;
 
-      cout << fData[i]/SS_cv << endl;
+      //cout << fData[i]/SS_cv << endl;
       SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
 
       fStat[i] = 0.0;
@@ -220,6 +233,7 @@ void CMS_hxsec_RunII_diff_pTH_ggHFilter::ReadData()
 	}
     } 
 
+  /*
   //Generate SM covariance matrix
   for(int i=0; i< fNData; i++)
     {
@@ -229,7 +243,19 @@ void CMS_hxsec_RunII_diff_pTH_ggHFilter::ReadData()
 	}
       cout << endl;
     }
-
+  */
+  
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] corrmat[i];
+    }
+  
+  delete[] SM_cov;
+  delete[] Sys;
+  delete[] syscor;
+  delete[] corrmat;
+  
   f1.close();
   f2.close();
 
@@ -285,7 +311,7 @@ void CMS_hxsec_RunII_diff_yHFilter::ReadData()
       lstream >> ddum >> ddum >> fData[i] >> Sys[i]
 	      >> SS_cv >> SS_er;
 
-      cout << fData[i]/SS_cv << endl;
+      //cout << fData[i]/SS_cv << endl;
       SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
 
       fStat[i] = 0.0;
@@ -327,6 +353,7 @@ void CMS_hxsec_RunII_diff_yHFilter::ReadData()
 	}
     } 
 
+  /*
   //Generate SM covariance matrix
   for(int i=0; i< fNData; i++)
     {
@@ -336,7 +363,18 @@ void CMS_hxsec_RunII_diff_yHFilter::ReadData()
 	}
       cout << endl;
     }
+  */
 
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] corrmat[i];
+    }
+  delete[] SM_cov;
+  delete[] Sys;
+  delete[] syscor;
+  delete[] corrmat;
+  
   f1.close();
   f2.close();
 }

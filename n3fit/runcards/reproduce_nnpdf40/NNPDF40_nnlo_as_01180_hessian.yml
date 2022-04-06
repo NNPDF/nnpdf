@@ -1,0 +1,9 @@
+pdf: NNPDF40_nnlo_as_01180_1000
+
+Neig: 50 # Number of basis eigenvectors of the Hessian PDF set
+Q: 100 # Energy scale at which the MC PDF set is sampled
+mc2hname: NNPDF40_nnlo_as_01180_hessian # Name of the Hessian PDF set
+installgrid: True
+
+actions_:
+  - mc2hessian

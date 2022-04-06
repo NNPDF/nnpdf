@@ -2,112 +2,81 @@
 Test to ensure the validphys.pseudodata.get_pseudodata action
 correctly obtains the appropriate pseudodata for an n3fit fit.
 
-To this end, a 10 replica fit has been uploaded named
-`pseudodata_test_fit` obtained using 100 epochs, theoryID 162 and a
-subset of DIS datasets. When this fit was performed, the `all_exp_infos`
-was pickled and stored in `exp_infos.pickle` which is the benchmark
-we use to ensure the action is working appropriately.
+A fit has been generated called pseudodata_test_fit_n3fit
+which has the pseudodata saved as training and validation splits.
+This is used to benchmark the correctness of the pseudodata
+recreation.
 """
-import pickle
-from importlib.resources import read_binary
-
-import numpy as np
+import pandas as pd
 import pytest
 
 from validphys.api import API
-from validphys.pseudodata import training_validation_pseudodata
-from validphys.tests.conftest import FIT
-import validphys.tests.regressions
-
-from reportengine.checks import CheckError
-from reportengine.compat import yaml
-from reportengine.resourcebuilder import ResourceError
-
-EXAMPLE_RUNCARD = """fit: pseudodata_test_fit
-pdf: pseudodata_test_fit
-
-experiments:
-  from_: fit
-
-t0pdfset:
-  from_: datacuts
-
-datacuts:
-  from_: fit
-
-use_cuts: fromfit
-"""
-
-
-@pytest.fixture(
-    scope="session",
-    params=[1, pytest.param(None, marks=pytest.mark.linux)],
-)
-def setup_dicts(request):
-    n_process_config = dict(NPROC=request.param)
-    exp_infos_bytes = read_binary(validphys.tests.regressions, "test_exp_infos.pickle")
-    ns = yaml.safe_load(EXAMPLE_RUNCARD)
-    # This is what all the fitted replicas saw
-    exp_infos = pickle.loads(exp_infos_bytes)
-
-    # We now need to convert these to postfit replicas
-    fitted_indices = API.fitted_replica_indexes(**ns)
-    fit_postfit_mapping = dict(enumerate(exp_infos, 1))
-    exp_infos = [fit_postfit_mapping[i] for i in fitted_indices]
-
-    pseudodata_info = API.get_pseudodata(**ns, **n_process_config)
-
-    return exp_infos, pseudodata_info
+from validphys.tests.conftest import FIT, PSEUDODATA_FIT
 
 
 def test_read_fit_pseudodata():
-    data_indices_list = API.read_fit_pseudodata(
-      fit="dummy_pseudodata_read_test_fit",
-      use_cuts="fromfit"
-    )
+    fit_pseudodata = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
 
-    # Only bother checking the first ten replicas
-    for data_indices in data_indices_list[:10]:
-      data, tr_idx, val_idx = data_indices
-      # Check the training and validation index are disjoint
-      assert set(tr_idx).isdisjoint(set(val_idx))
+    nrep = API.num_fitted_replicas(fit=PSEUDODATA_FIT)
+    assert nrep == len(fit_pseudodata)
+
+    for data, tr_idx, val_idx in fit_pseudodata:
+        assert set(tr_idx).isdisjoint(set(val_idx))
+        assert set(tr_idx).union(val_idx) == set(data.index)
 
 
-    with pytest.raises(FileNotFoundError):
-        # Check a FileNotFoundError is raised
-        # if the input fit wasn't generated
-        # with the savepseudodata flag set to true
-        bad_gen = API.read_fit_pseudodata(
-            fit="dummy_pseudodata_read_failure_test_fit", use_cuts="fromfit"
+def test_read_pdf_pseudodata():
+    pdf_pseudodata = API.read_pdf_pseudodata(fit=PSEUDODATA_FIT)
+
+    pdf = API.pdf(pdf=PSEUDODATA_FIT)
+    # -1 because we ignore replica 0
+    assert len(pdf) - 1 == len(pdf_pseudodata)
+
+    for data, tr_idx, val_idx in pdf_pseudodata:
+        assert set(tr_idx).isdisjoint(set(val_idx))
+        assert set(tr_idx).union(val_idx) == set(data.index)
+
+
+def test_recreate_fit_pseudodata():
+    fit_pseudodata = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+
+    nrep = API.num_fitted_replicas(fit=PSEUDODATA_FIT)
+    assert nrep == len(fit_pseudodata)
+
+    for data, tr_idx, val_idx in fit_pseudodata:
+        assert set(tr_idx).isdisjoint(set(val_idx))
+        assert set(tr_idx).union(val_idx) == set(data.index)
+
+
+def test_recreate_pdf_pseudodata():
+    pdf_pseudodata = API.recreate_pdf_pseudodata(fit=PSEUDODATA_FIT)
+
+    pdf = API.pdf(pdf=PSEUDODATA_FIT)
+    # -1 because we ignore replica 0
+    assert len(pdf) - 1 == len(pdf_pseudodata)
+
+    for data, tr_idx, val_idx in pdf_pseudodata:
+        assert set(tr_idx).isdisjoint(set(val_idx))
+        assert set(tr_idx).union(val_idx) == set(data.index)
+
+
+def test_no_savepseudodata():
+    for func in (API.read_fit_pseudodata, API.read_pdf_pseudodata):
+        with pytest.raises(FileNotFoundError):
+            # Check a FileNotFoundError is raised
+            # if the input fit wasn't generated
+            # with the savepseudodata flag set to true
+            func(fit=FIT)
+
+
+def test_read_matches_recreate():
+    reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
+    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
+    for read, recreate in zip(reads, recreates):
+        # We ignore the absolute ordering of the dataframes and just check
+        # that they contain identical elements.
+        pd.testing.assert_frame_equal(
+            read.pseudodata, recreate.pseudodata, check_like=True
         )
-        next(bad_gen)
-
-    with pytest.raises(ResourceError) as e_info:
-        # Check the enforcement of use_cuts being set
-        # to fromfit is in place
-        API.read_fit_pseudodata(
-          fit="dummy_pseudodata_read_test_fit",
-          use_cuts="nocuts"
-        )
-        assert isinstance(e_info.__cause__, CheckError)
-
-
-def test_pseudodata(setup_dicts):
-    exp_infos, pseudodata_info = setup_dicts
-    # Loop over replicas
-    for i, j in zip(exp_infos, pseudodata_info):
-        # For each replica, loop over experiments
-        for exp1, exp2 in zip(i, j):
-            assert np.allclose(exp1["expdata"], exp2["expdata"])
-            assert np.allclose(exp1["expdata_vl"], exp2["expdata_vl"])
-
-
-def test_pseudodata_generator(setup_dicts):
-    exp_infos, pseudodata_info = setup_dicts
-    gen = training_validation_pseudodata(pseudodata_info)
-    for i, j in enumerate(gen):
-        continue
-    # There is only one postfit replica in this fit
-    assert i == 0
-    # The training and validation split should be disjoint
-    assert set(j["trdata"].index).isdisjoint(j["vldata"].index)
+        pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
+        pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)

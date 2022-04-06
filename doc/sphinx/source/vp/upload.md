@@ -121,7 +121,9 @@ to share. Otherwise use [`vp-upload`](#the-vp-upload-script) after checking the 
 `validphys` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
 
-
+```eval_rst
+.. _vpupload:
+```
 The `vp-upload` script
 ----------------------
 
@@ -181,7 +183,7 @@ The `validphys` index page
 
 The source of the report index page is
 ```
-serverscripts/WEB/validphys-reports/index.html
+serverscripts/validphys-reports/index.html
 ```
 inside the `validphys2` directory in the main repository. This page can be
 edited to reflect the current interests (the Makefile directly uploads to the

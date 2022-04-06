@@ -12,13 +12,13 @@
 
 // ********* Register *************
 
-void register_positivity(vector<CommonData*>& list);
+void register_positivity(vector<unique_ptr<CommonData>>& list);
 
 // ********* Filters **************
 
 class DYPosFilter: public CommonData
 {
-public: 
+public:
 	DYPosFilter(std::string setname):
   	CommonData(setname) { ReadData(); }
 
@@ -28,7 +28,7 @@ private:
 
 class DISPosFilter: public CommonData
 {
-public: 
+public:
 	DISPosFilter(std::string setname):
   	CommonData(setname) { ReadData(); }
 

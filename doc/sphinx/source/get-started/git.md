@@ -1,7 +1,7 @@
 ```eval_rst
 .. _git:
 ```
-# Git, GitHub and GitLab
+# Downloading the code
 
 ## Git
 
@@ -37,27 +37,21 @@ backed up. Note that GitLab was originally used by NNPDF instead of GitHub, but 
 encountered since the number of users without CERN accounts is limited and these users cannot
 make use of the advanced tools that GitLab offers.
 
-### Setting up GitHub
+### The NNPDF github repositories
 
-You can get an account for free by going to their [website](https://github.com/join). Once you have
+<!-- You can get an account on github for free by going to their [website](https://github.com/join). Once you have
 an account, you should join the NNPDF organisation by asking Stefano Carrazza or Zahari Kassabov to
-send you an invitation. Once you have accepted the invitation, you can access the NNPDF code at
-[https://github.com/NNPDF](https://github.com/NNPDF).
-
+send you an invitation. Once you have accepted the invitation,  you
+can access the NNPDF code at [https://github.com/NNPDF](https://github.com/NNPDF).
 In order to work on the NNPDF code, you will need to be able to push code to the NNPDF repositories.
 To be able to do this, your SSH keys should be installed in one of GitHub or GitLab. In particular:
-
 * You should add your valid SSH key(s) to your GitHub account. You can do this by following the
 instructions [here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account).
-
 * If you have a valid CERN account, you should
 [login](https://login.cern.ch/adfs/ls/?SAMLRequest=fZFdT8IwFIb%2Fyu56NbqOQaDZliwQExI0BtQLb8xZKdDYtbPnzI9%2F74ZRMTHcNu%2FznLfn5AiNbWXV0dFt9EunkaIKUQcy3i28w67RYavDq1H6frMu2JGoRcn5wZCFeqR0cCN15F2PIIdewwcjV2BtDeqZRcteaRwMvl%2Fa%2BoNxPzDs9sgtchatlgV7mkE2niqAWGTzWZyJtI5huhOxqOvJTCsxVknWRxE7vXJI4KhgaSLmcTKPRXonpnKSyMnskUUPfanT3HSUsOi9sQ7lUK9gXXDSAxqUDhqNkpTcVtdr2QclfP%2F%2FHGkvM23w5JW3rMyHtDy1C%2BX%2F28r5eSb%2FOsFN71wtb7016iOqrPVvi6CBdMEodJpFVz40QJdbDC9mF%2B9PUUkBHBrtiPHya%2BTfQ5ef)
 and add the public SSH key(s) from your computer.
-
 * If you do not have a valid CERN account, you should send your public SSH key(s) to Stefano
-Carrazza and he will add them for you.
-
-### Available repositories on GitHub
+Carrazza and he will add them for you. ### Available repositories on GitHub-->
 
 The following is a list of the repositories that are available on GitHub as part of the NNPDF
 organization. To use the code it is not a requirement that you download any of these yourself,
@@ -73,36 +67,9 @@ into which you clone the desired repositories. This way all code related to NNPD
 mkdir nnpdfgit
 cd nnpdfgit
 
-git clone git@github.com:NNPDF/nnpdf.git          # The main body of NNPDF code
+git clone git@github.com:NNPDF/nnpdf.git          # The main body of NNPDF code: validphys, n3fit and buildmaster
 git clone https://github.com/scarrazza/apfel.git  # Handles the DGLAP PDF evolution as well as the production of NNLO DIS predictions
-git clone git@github.com:NNPDF/buildmaster.git    # Where experimental data are turned into a format suitable for NNPDF fits
-git clone git@github.com:NNPDF/external.git 	  # Codes written outside of NNPDF that are required to produce theoretical predictions (i.e. APPLgrids)
 git clone git@github.com:NNPDF/applgrids.git 	  # Where APPLgrids get stored
 git clone git@github.com:NNPDF/apfelcomb.git 	  # Turns APPLgrids into FK tables
 git clone git@github.com:NNPDF/reportengine.git   # A framework for data analysis that validphys relies on
-git clone git@github.com:NNPDF/papers.git         # Where papers and minutes are stored
 ```
-
-### GitHub development workflow
-
-GitHub provides the following workflow:
-
-* Users can create Projects and Milestones for each project.
-
-* For each project users can open issues, which can be used to request bug fixes, new features, new
-documentation, or simply to facilitate a general discussion. The user can then assign one or more
-people to help deal with the issue. Issues should be opened in the relevant repository. For
-example, for something that is related to validphys, one should open an issue in
-[nnpdf](https://github.com/NNPDF/nnpdf), while for something that is related to data
-implementation, one should open an issue in [buildmaster](https://github.com/NNPDF/buildmaster).
-Example issues can be found [here](https://github.com/NNPDF/nnpdf/issues).
-
-* When it is clear how an issue should be dealt with, a
-[branch](https://github.com/NNPDF/nnpdf/branches) can be opened where a user can implement the
-requested feature.
-
-* Once a feature is ready to be considered for merging into the master version of the code, a [pull
-request](https://github.com/NNPDF/nnpdf/pulls) (PR) can be opened. At least two code reviewers
-must then be assigned, after which the code will be reviewed and discussed. The modification will
-then be accepted or rejected. Further general information on PRs can found
-[here](https://help.github.com/en/articles/about-pull-requests).

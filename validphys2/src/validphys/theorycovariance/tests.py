@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import pandas as pd
 
-from reportengine.checks import make_argcheck
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
@@ -46,9 +45,7 @@ log = logging.getLogger(__name__)
 
 matched_dataspecs_results = collect("results", ["dataspecs"])
 
-LabeledShifts = namedtuple(
-    "LabeledShifts", ("process", "dataset_name", "shifts")
-)
+LabeledShifts = namedtuple("LabeledShifts", ("process", "dataset_name", "shifts"))
 
 
 @check_two_dataspecs
@@ -62,9 +59,7 @@ def dataspecs_dataset_prediction_shift(
     """
     r1, r2 = matched_dataspecs_results
     res = r1[1].central_value - r2[1].central_value
-    return LabeledShifts(
-        dataset_name=dataset_name, process=process, shifts=res
-    )
+    return LabeledShifts(dataset_name=dataset_name, process=process, shifts=res)
 
 
 matched_dataspecs_dataset_prediction_shift = collect(
@@ -106,9 +101,7 @@ def dataspecs_dataset_theory(matched_dataspecs_results, process, dataset_name):
     for matched dataspecs."""
     central = matched_dataspecs_results[0]
     res = central[1].central_value
-    return LabeledShifts(
-        dataset_name=dataset_name, process=process, shifts=res
-    )
+    return LabeledShifts(dataset_name=dataset_name, process=process, shifts=res)
 
 
 matched_dataspecs_dataset_theory = collect("dataspecs_dataset_theory", ["dataspecs"])
@@ -135,17 +128,13 @@ def theory_vector(matched_dataspecs_dataset_theory):
     return pd.DataFrame(all_theory, index=index)
 
 
-def dataspecs_dataset_alltheory(
-    matched_dataspecs_results, process, dataset_name
-):
+def dataspecs_dataset_alltheory(matched_dataspecs_results, process, dataset_name):
     """Returns a LabeledShifts tuple corresponding to the theory
     vectors for all the scale varied theories (not the central one),
     processed by data set and experiment for matched dataspecs."""
     others = matched_dataspecs_results[1:]
     res = [other[1].central_value for other in others]
-    return LabeledShifts(
-        dataset_name=dataset_name, process=process, shifts=res
-    )
+    return LabeledShifts(dataset_name=dataset_name, process=process, shifts=res)
 
 
 matched_dataspecs_dataset_alltheory = collect(
@@ -200,14 +189,16 @@ def covs_pt_prescrip_dataspecs(
     combine_by_type_dataspecs,
     process_starting_points_dataspecs,
     dataspecs_theoryids,
-    fivetheories: (str, type(None)) = None,
-    seventheories: (str, type(None)) = None,
+    point_prescription,
+    fivetheories,
+    seventheories,
 ):
     """Like covs_pt_prescrip but for matched dataspecs."""
     return covs_pt_prescrip(
         combine_by_type_dataspecs,
         process_starting_points_dataspecs,
         dataspecs_theoryids,
+        point_prescription,
         fivetheories,
         seventheories,
     )
@@ -502,7 +493,7 @@ def evals_nonzero_basis(
     thx_covmat,
     thx_vector,
     collected_theoryids,
-    fivetheories: (str, type(None)) = None,
+    fivetheories,
     seventheories: (str, type(None)) = None,
     orthonormalisation: (str, type(None)) = None,
 ):

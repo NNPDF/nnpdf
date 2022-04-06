@@ -5,11 +5,9 @@ Module for testing postfit.
 """
 import json
 import subprocess as sp
-import pathlib
 import os
 import shutil
 
-from validphys.scripts.postfit import main as postfit
 from validphys.loader import FallbackLoader as Loader
 from validphys.tests.conftest import FIT
 from reportengine.compat import yaml

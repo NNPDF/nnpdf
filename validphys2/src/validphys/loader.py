@@ -28,11 +28,11 @@ from reportengine import filefinder
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
-                            InternalCutsWrapper)
+                            InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
-import NNPDF as nnpath
 
+DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
 
 log = logging.getLogger(__name__)
 
@@ -56,50 +56,83 @@ class TheoryDataBaseNotFound(LoadFailedError): pass
 
 class FitNotFound(LoadFailedError): pass
 
+class HyperscanNotFound(LoadFailedError): pass
+
 class CutsNotFound(LoadFailedError): pass
 
 class PDFNotFound(LoadFailedError): pass
+
+class ProfileNotFound(LoadFailedError): pass
 
 class RemoteLoaderError(LoaderError): pass
 
 class InconsistentMetaDataError(LoaderError): pass
 
+def _get_nnpdf_profile(profile_path=None):
+    """Returns the NNPDF profile as a dictionary
+    If no ``profile_path`` is provided it will be autodiscovered in the following order:
+
+    Environment variable $NNPDF_PROFILE_PATH
+    {sys.prefix}/share/NNPDF/nnprofile.yaml
+    {sys.base_prefix}/share/NNPDF/nnprofile.yaml
+
+    If no profile is found a LoaderError will be thrown
+    """
+    profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
+    if profile_path is None:
+        # Check both sys paths
+        prefix_paths = [sys.prefix, sys.base_prefix]
+        for prefix in prefix_paths:
+            check = pathlib.Path(prefix) / "share/NNPDF/nnprofile.yaml"
+            if check.is_file():
+                profile_path = check
+                break
+    if profile_path is None:
+        raise LoaderError("Missing an NNPDF profile file")
+
+    mpath = pathlib.Path(profile_path)
+    try:
+        with mpath.open() as f:
+            profile_dict = yaml.safe_load(f)
+    except (OSError, yaml.YAMLError) as e:
+        raise LoaderError(f"Could not parse profile file {mpath}: {e}") from e
+    return profile_dict
+
 class LoaderBase:
+    """
+    Base class for the NNPDF loader.
+    It can take as input a profile dictionary from which all data can be read.
+    It is possible to override the datapath and resultpath when the class is instantiated.
+    """
 
-    def __init__(self, datapath=None, resultspath=None):
-        if datapath is None:
-            datapath = nnpath.get_data_path()
+    def __init__(self, profile=None):
+        if not isinstance(profile, dict):
+            # If profile is a path, a str or None, read it from the default path
+            profile = _get_nnpdf_profile(profile)
 
-        if resultspath is None:
-            resultspath = nnpath.get_results_path()
-        datapath = pathlib.Path(datapath)
-        resultspath = pathlib.Path(resultspath)
+        # Retrieve important paths from the profile if not given
+        datapath = pathlib.Path(profile["data_path"])
+        resultspath = pathlib.Path(profile["results_path"])
 
+        # Check whether they exist
         if not datapath.exists():
             raise LoaderError(f"The data path {datapath} does not exist.")
 
         if not resultspath.exists():
              raise LoaderError(f"The results path {resultspath} does not exist.")
 
+        # And save them up
         self.datapath = datapath
         self.resultspath = resultspath
-        self._nnprofile = None
         self._old_commondata_fits = set()
+        self.nnprofile = profile
 
     @property
-    def nnprofile(self):
-        if self._nnprofile is None:
-            profile_path = nnpath.get_profile_path()
-            if not osp.exists(profile_path):
-                raise LoaderError(f"Could not find the profile path at "
-                                  "{profile_path}. Check your libnnpdf configuration")
-            with open(profile_path) as f:
-                try:
-                    self._nnprofile = yaml.safe_load(f)
-                except yaml.YAMLError as e:
-                    raise LoaderError(f"Could not parse profile file "
-                                      f"{profile_path}: {e}") from e
-        return self._nnprofile
+    def hyperscan_resultpath(self):
+        hyperscan_path = pathlib.Path(self.nnprofile["hyperscan_path"])
+        if not hyperscan_path.exists():
+            raise LoaderError(f"The hyperscan results path {hyperscan_path} does not exist")
+        return hyperscan_path
 
     def _vp_cache(self):
         """Return the vp-cache path, and create it if it doesn't exist"""
@@ -185,6 +218,13 @@ class Loader(LoaderBase):
             return []
 
     @property
+    def available_hyperscans(self):
+        try:
+            return [p.name for p in self.hyperscan_resultpath.iterdir() if p.is_dir()]
+        except OSError:
+            return []
+
+    @property
     @functools.lru_cache()
     def available_theories(self):
         """Return a string token for each of the available theories"""
@@ -200,7 +240,7 @@ class Loader(LoaderBase):
         return {
             file.stem[len(data_str) :]
             for file in self.commondata_folder.glob(f'{data_str}*.dat')
-            if not file.stem.startswith(f"{data_str}POS")
+            if not file.stem.startswith((f"{data_str}POS", f"{data_str}INTEG"))
         }
 
     @property
@@ -226,8 +266,9 @@ class Loader(LoaderBase):
                     raise DataNotFoundError(f"Either {newpath} or {oldpath} "
                         "are needed with `use_fitcommondata`")
                 #This is to not repeat all the error handling stuff
-                basedata = self.check_commondata(setname, sysnum=sysnum).datafile
-                cuts = self.check_fit_cuts(setname, fit=fit)
+                basedata = self.check_commondata(setname, sysnum=sysnum)
+                basedata_path = basedata.datafile
+                cuts = self.check_fit_cuts(basedata, fit=fit)
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
@@ -240,7 +281,7 @@ class Loader(LoaderBase):
                         f"Points that do not pass the cuts are set to zero!")
 
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
-                rebuild_commondata_without_cuts(oldpath, cuts, basedata, newpath)
+                rebuild_commondata_without_cuts(oldpath, cuts, basedata_path, newpath)
             datafile = newpath
         else:
             datafile = self.commondata_folder / f'DATA_{setname}.dat'
@@ -396,6 +437,24 @@ class Loader(LoaderBase):
         )
         raise FitNotFound(msg)
 
+    def check_hyperscan(self, hyperscan_name):
+        """Obtain a hyperscan run"""
+        resultspath = self.hyperscan_resultpath
+        if hyperscan_name != osp.basename(hyperscan_name):
+            raise HyperscanNotFound(
+                f"Could not find fit '{hyperscan_name}' in '{resultspath} "
+                "because the name doesn't correspond to a valid filename"
+            )
+        p = resultspath / hyperscan_name
+        if p.is_dir():
+            hyperspec = HyperscanSpec(hyperscan_name, p)
+            if hyperspec.tries_files:
+                return hyperspec
+            raise HyperscanNotFound(f"No hyperscan output find in {hyperscan_name}")
+
+        raise HyperscanNotFound(f"Could not find hyperscan '{hyperscan_name}' in '{resultspath}'."
+                f" Folder '{hyperscan_name}' not found")
+
     def check_default_filter_rules(self, theoryid, defaults=None):
         # avoid circular import
         from validphys.filters import (
@@ -446,7 +505,7 @@ class Loader(LoaderBase):
             if cuts is CutsPolicy.NOCUTS:
                 cuts = None
             elif cuts is CutsPolicy.FROMFIT:
-                cuts = self.check_fit_cuts(name, fit)
+                cuts = self.check_fit_cuts(commondata, fit)
             elif cuts is CutsPolicy.INTERNAL:
                 if rules is None:
                     rules = self.check_default_filter_rules(theoryid)
@@ -494,19 +553,19 @@ class Loader(LoaderBase):
     def get_pdf(self, name):
         return self.check_pdf(name).load()
 
-    def check_fit_cuts(self, setname, fit):
+    def check_fit_cuts(self, commondata, fit):
+        setname = commondata.name
         if fit is None:
             raise TypeError("Must specify a fit to use the cuts.")
         if not isinstance(fit, FitSpec):
             fit = self.check_fit(fit)
-        fitname, fitpath = fit
+        _, fitpath = fit
         p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
         if not p.parent.exists():
-            raise CutsNotFound("Bad filter configuration. "
-            "Could not find: %s" % p.parent)
+            raise CutsNotFound(f"Bad filter configuration. Could not find {p.parent}")
         if not p.exists():
-            return None
-        return Cuts(setname, p)
+            p = None
+        return Cuts(commondata, p)
 
     def check_internal_cuts(self, commondata, rules):
         return InternalCutsWrapper(commondata, rules)
@@ -623,8 +682,7 @@ def _key_or_loader_error(f):
             return f(*args, **kwargs)
         except KeyError as e:
             log.error(f"nnprofile is configured "
-                      f"improperly: Key {e} is missing! "
-                      f"Fix it at {nnpath.get_profile_path()}")
+                      f"improperly: Key {e} is missing from the profile!")
             raise LoaderError("Cannot attempt download because "
                               "nnprofile is configured improperly: "
                               f"Missing key '{e}'") from e
@@ -643,6 +701,16 @@ class RemoteLoader(LoaderBase):
     @_key_or_loader_error
     def fit_index(self):
         return self.nnprofile['fit_index']
+
+    @property
+    @_key_or_loader_error
+    def hyperscan_url(self):
+        return self.nnprofile['hyperscan_urls']
+
+    @property
+    @_key_or_loader_error
+    def hyperscan_index(self):
+        return self.nnprofile['hyperscan_index']
 
     @property
     @_key_or_loader_error
@@ -706,6 +774,11 @@ class RemoteLoader(LoaderBase):
 
     @property
     @functools.lru_cache()
+    def remote_hyperscans(self):
+        return self.remote_files(self.hyperscan_url, self.hyperscan_index, thing="hyperscan")
+
+    @property
+    @functools.lru_cache()
     def remote_theories(self):
         token = 'theory_'
         rt = self.remote_files(self.theory_urls, self.theory_index, thing="theories")
@@ -720,6 +793,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_fits(self):
         return list(self.remote_fits)
+
+    @property
+    def downloadable_hyperscans(self):
+        return list(self.remote_hyperscans)
 
     @property
     def downloadable_theories(self):
@@ -785,6 +862,30 @@ class RemoteLoader(LoaderBase):
         else:
             log.warning(f"Cannot find {gridpath}. Falling back to old behaviour")
             p.symlink_to(gridpath_old, target_is_directory=True)
+
+    def download_hyperscan(self, hyperscan_name):
+        """Download a hyperscan run from the remote server
+        Downloads the run to the results folder
+        """
+        if not hyperscan_name in self.remote_hyperscans:
+            raise HyperscanNotFound(
+                f"Could not find hyperscan {hyperscan_name} in remote index {self.hyperscan_index}"
+            )
+
+        with tempfile_cleaner(
+            root=self.hyperscan_resultpath,
+            exit_func=shutil.rmtree,
+            exc=KeyboardInterrupt,
+            prefix='fit_download_deleteme_',
+        ) as tempdir:
+            download_and_extract(self.remote_hyperscans[hyperscan_name], tempdir)
+            move_target = tempdir/hyperscan_name
+            if not move_target.is_dir():
+                raise RemoteLoaderError(
+                    f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}"
+                )
+            hyperscan_path = self.hyperscan_resultpath / hyperscan_name
+            shutil.move(move_target, hyperscan_path)
 
 
     def download_pdf(self, name):
@@ -943,3 +1044,4 @@ class FallbackLoader(Loader, RemoteLoader):
             if hasattr(RemoteLoader, 'download_' + resname):
                 return super().__getattribute__('make_checker')(resname)
         return super().__getattribute__(attr)
+

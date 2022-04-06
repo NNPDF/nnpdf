@@ -18,7 +18,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  use_t0 : False
+  t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -35,7 +35,7 @@ datacuts:
 theory:
   theoryid: 162        # database id
 
-hyperscan:
+hyperscan_config:
     stopping:
         min_epochs: 2e1
         max_epochs: 5e1
@@ -64,17 +64,20 @@ hyperscan:
         min_units: 10
         max_units: 50
         activations: ['sigmoid', 'tanh']
-    kfold:
-        target: average
-        penalties:
-          - saturation
-        threshold: 2.0
-        partitions:
-            - datasets:
-                - NMC
-            - datasets:
-                - SLACP
-                - CMSZDIFF12
+
+kfold:
+    target: average
+    penalties:
+      - saturation
+      - patience
+      - integrability
+    threshold: 2.0
+    partitions:
+        - datasets:
+            - NMC
+        - datasets:
+            - SLACP
+            - CMSZDIFF12
 
 ############################################################
 genrep: False    # on = generate MC replicas, False = use real data
@@ -114,6 +117,11 @@ positivity:
   posdatasets:
     - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
     - { dataset: POSDYC    , maxlambda: 1e5 }
+
+integrability:
+  integdatasets:
+    - {dataset: INTEGXT8, maxlambda: 1e2}
+    - {dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 closuretest:

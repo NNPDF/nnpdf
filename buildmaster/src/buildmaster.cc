@@ -112,9 +112,9 @@
 #include "CMS_WZ_13TEV.h"
 #include "EIC.h"
 #include "CMS_2JET_5TEV.h"
+#include "CMS_HMDY_13TEV.h"
 #include "ATLAS_DY_2D_8TEV_LOWMASS.h"
 #include "ATLAS_WMU_8TEV.h"
-
 /**
  * \param argv the filename containing the configuration
  */
@@ -126,8 +126,7 @@ int main(int, char**)
   cout << "\n Build master record for experiment sets:\n" << endl;
 
   // Read and filter raw data into commondata format
-  vector<CommonData*> dataSets;
-  InitCommonData(dataSets);
+  const auto dataSets = InitCommonData();
 
   // Export results
   cout << "***** Exporting ******"<<endl;
@@ -140,8 +139,9 @@ int main(int, char**)
 
 // ****************** Datasets to be converted to commondata ***************
 
-void InitCommonData(vector<CommonData*>& target)
+vector<std::unique_ptr<CommonData>> InitCommonData()
 {
+  vector<std::unique_ptr<CommonData>> target;
 
   // ************************* POS ******************************
 
@@ -153,403 +153,410 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************* ATLAS ******************************
 
-  target.push_back(new ATLASWZRAP36PBFilter());
-  target.push_back(new ATLASWZRAP11CCFilter());
-  target.push_back(new ATLASWZRAP11CFFilter());
-  target.push_back(new ATLASR04JETS36PBFilter());
-  target.push_back(new ATLASR06JETS36PBFilter());
-  target.push_back(new ATLASR04JETS2P76TEVFilter());
-  target.push_back(new ATLASZHIGHMASS49FBFilter());
-  target.push_back(new ATLASWPT31PBFilter());
-  target.push_back(new ATLAS1JET11Filter());
-  //target.push_back(new ATLASLOMASSDY11Filter());
-  target.push_back(new ATLASLOMASSDY11EXTFilter());
-  target.push_back(new ATLASWZTOT13TEV81PBFilter());
-  target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
+  target.emplace_back(new ATLASWZRAP36PBFilter());
+  target.emplace_back(new ATLASWZRAP11CCFilter());
+  target.emplace_back(new ATLASWZRAP11CFFilter());
+  target.emplace_back(new ATLASR04JETS36PBFilter());
+  target.emplace_back(new ATLASR06JETS36PBFilter());
+  target.emplace_back(new ATLASR04JETS2P76TEVFilter());
+  target.emplace_back(new ATLASZHIGHMASS49FBFilter());
+  target.emplace_back(new ATLASWPT31PBFilter());
+  target.emplace_back(new ATLAS1JET11Filter());
+  //target.emplace_back(new ATLASLOMASSDY11Filter());
+  target.emplace_back(new ATLASLOMASSDY11EXTFilter());
+  target.emplace_back(new ATLASWZTOT13TEV81PBFilter());
+  target.emplace_back(new ATLAS_WZ_TOT_13TEVFilter());
   //
-  target.push_back(new ATLASZPT7TEVFilter());
-  target.push_back(new ATLAS_WCHARM_WP_DIFF_7TEVFilter());
-  target.push_back(new ATLAS_WCHARM_WM_DIFF_7TEVFilter());
-  target.push_back(new ATLASZPT8TEVYDISTFilter());
-  //  target.push_back(new ATLASZPT8TEVYDISTNORMFilter());
-  target.push_back(new ATLASZPT8TEVMDISTFilter());
-  target.push_back(new ATLASDY2D8TEVFilter());
-  target.push_back(new ATLAS_DY_2D_8TEV_LOWMASSFilter());
+  target.emplace_back(new ATLASZPT7TEVFilter());
+  target.emplace_back(new ATLAS_WCHARM_WP_DIFF_7TEVFilter());
+  target.emplace_back(new ATLAS_WCHARM_WM_DIFF_7TEVFilter());
+  target.emplace_back(new ATLASZPT8TEVYDISTFilter());
+  //  target.emplace_back(new ATLASZPT8TEVYDISTNORMFilter());
+  target.emplace_back(new ATLASZPT8TEVMDISTFilter());
+  target.emplace_back(new ATLASDY2D8TEVFilter());
+  target.emplace_back(new ATLAS_DY_2D_8TEV_LOWMASSFilter());
 
-  target.push_back(new ATLASPHT15Filter());
-  target.push_back(new ATLASPHT12Filter());
-  target.push_back(new ATLAS_1JET_8TEV_R04Filter());
-  target.push_back(new ATLAS_1JET_8TEV_R06Filter());
-  target.push_back(new ATLAS_1JET_8TEV_R06_DECFilter());
-  target.push_back(new ATLAS_1JET_8TEV_R06_UNCFilter());
-  target.push_back(new ATLAS_2JET_7TEV_R04Filter());
-  target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
-  target.push_back(new ATLAS_WP_JET_8TEV_PTFilter()); 
-  target.push_back(new ATLAS_WM_JET_8TEV_PTFilter());
-  target.push_back(new ATLAS_WP_JET_8TEV_PTJFilter()); 
-  target.push_back(new ATLAS_WM_JET_8TEV_PTJFilter());
-  target.push_back(new ATLAS_WMU_8TEVFilter());
-  
+  target.emplace_back(new ATLASPHT15Filter());
+  target.emplace_back(new ATLASPHT12Filter());
+  target.emplace_back(new ATLAS_1JET_8TEV_R04Filter());
+  target.emplace_back(new ATLAS_1JET_8TEV_R06Filter());
+  target.emplace_back(new ATLAS_1JET_8TEV_R06_DECFilter());
+  target.emplace_back(new ATLAS_1JET_8TEV_R06_UNCFilter());
+  target.emplace_back(new ATLAS_2JET_7TEV_R04Filter());
+  target.emplace_back(new ATLAS_2JET_7TEV_R06Filter());
+  target.emplace_back(new ATLAS_WP_JET_8TEV_PTFilter());
+  target.emplace_back(new ATLAS_WM_JET_8TEV_PTFilter());
+  target.emplace_back(new ATLAS_WP_JET_8TEV_PTJFilter());
+  target.emplace_back(new ATLAS_WM_JET_8TEV_PTJFilter());
+  target.emplace_back(new ATLAS_WMU_8TEVFilter());
+
   // ************************* BCDMS ******************************
 
-  target.push_back(new BCDMSPFilter());
-  target.push_back(new BCDMSDFilter());
-  target.push_back(new BCDMSD_dwFilter());
-  target.push_back(new BCDMSD_shFilter());
-  target.push_back(new BCDMSD_dw_iteFilter());
-  target.push_back(new BCDMSD_sh_iteFilter());
+  target.emplace_back(new BCDMSPFilter());
+  target.emplace_back(new BCDMSDFilter());
+  target.emplace_back(new BCDMSD_dwFilter());
+  target.emplace_back(new BCDMSD_shFilter());
+  target.emplace_back(new BCDMSD_dw_iteFilter());
+  target.emplace_back(new BCDMSD_sh_iteFilter());
 
   // ************************* CDF ******************************
 
-  target.push_back(new CDFR2KTFilter());
-  target.push_back(new CDFWASYMFilter());
-  target.push_back(new CDFZRAPFilter());
-  target.push_back(new CDFZRAP_NEWFilter());
+  target.emplace_back(new CDFR2KTFilter());
+  target.emplace_back(new CDFWASYMFilter());
+  target.emplace_back(new CDFZRAPFilter());
+  target.emplace_back(new CDFZRAP_NEWFilter());
 
   // ************************* CHORUS ******************************
 
-  target.push_back(new CHORUSNUFilter());
-  target.push_back(new CHORUSNBFilter());
-  target.push_back(new CHORUSNUPbFilter());
-  target.push_back(new CHORUSNBPbFilter());
-  target.push_back(new CHORUSNUPb_dwFilter());
-  target.push_back(new CHORUSNBPb_dwFilter());
-  target.push_back(new CHORUSNUPb_shFilter());
-  target.push_back(new CHORUSNBPb_shFilter());
-  target.push_back(new CHORUSNUPb_dw_iteFilter());
-  target.push_back(new CHORUSNBPb_dw_iteFilter());
-  target.push_back(new CHORUSNUPb_sh_iteFilter());
-  target.push_back(new CHORUSNBPb_sh_iteFilter()); 
+  target.emplace_back(new CHORUSNUFilter());
+  target.emplace_back(new CHORUSNBFilter());
+  target.emplace_back(new CHORUSNUPbFilter());
+  target.emplace_back(new CHORUSNBPbFilter());
+  target.emplace_back(new CHORUSNUPb_dwFilter());
+  target.emplace_back(new CHORUSNBPb_dwFilter());
+  target.emplace_back(new CHORUSNUPb_shFilter());
+  target.emplace_back(new CHORUSNBPb_shFilter());
+  target.emplace_back(new CHORUSNUPb_dw_iteFilter());
+  target.emplace_back(new CHORUSNBPb_dw_iteFilter());
+  target.emplace_back(new CHORUSNUPb_sh_iteFilter());
+  target.emplace_back(new CHORUSNBPb_sh_iteFilter());
 
   // ************************* CMS ******************************
 
-  target.push_back(new CMSWEASY840PBFilter());
-  target.push_back(new CMSWMASY47FBFilter());
-  target.push_back(new CMSDY2D11Filter());
-  target.push_back(new CMSDY2D12Filter());
-  target.push_back(new CMSJETS11Filter());
-  target.push_back(new CMSZDIFF12Filter());
-  target.push_back(new CMS1JET276TEVFilter());
-  target.push_back(new CMSWMU8TEVFilter());
-  target.push_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
-  target.push_back(new CMS_1JET_8TEVFilter());
-  target.push_back(new CMS_2JET_7TEVFilter());
-  target.push_back(new CMS_2JET_3D_8TEVFilter());
+  target.emplace_back(new CMS1JET276TEVFilter());
+  target.emplace_back(new CMSDY2D11Filter());
+  target.emplace_back(new CMSDY2D12Filter());
+  target.emplace_back(new CMSJETS11Filter());
+  target.emplace_back(new CMSWEASY840PBFilter());
+  target.emplace_back(new CMSWMASY47FBFilter());
+  target.emplace_back(new CMSWMU8TEVFilter());
+  target.emplace_back(new CMSZDIFF12Filter());
+  target.emplace_back(new CMS_1JET_8TEVFilter());
+  target.emplace_back(new CMS_2JET_3D_8TEVFilter());
+  target.emplace_back(new CMS_2JET_7TEVFilter());
+  target.emplace_back(new CMS_HMDY_13TEVFilter());
+  target.emplace_back(new CMS_HMDY_DE_13TEVFilter());
+  target.emplace_back(new CMS_HMDY_DM_13TEVFilter());
+  target.emplace_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
+
+
 
  // ************************* CMSwc ******************************
 
-  target.push_back(new CMSWCHARMTOTFilter());
-  target.push_back(new CMSWCHARMRATFilter());
-  target.push_back(new CMS_WCHARM_DIFF_UNNORM_13TEVFilter());
+  target.emplace_back(new CMSWCHARMTOTFilter());
+  target.emplace_back(new CMSWCHARMRATFilter());
+  target.emplace_back(new CMS_WCHARM_DIFF_UNNORM_13TEVFilter());
 
   // ************************* D0 ******************************
 
-  target.push_back(new D0ZRAPFilter());
-  target.push_back(new D0ZRAP_40Filter());
-  target.push_back(new D0WMASYFilter());
-  target.push_back(new D0WEASYFilter());
+  target.emplace_back(new D0ZRAPFilter());
+  target.emplace_back(new D0ZRAP_40Filter());
+  target.emplace_back(new D0WMASYFilter());
+  target.emplace_back(new D0WEASYFilter());
 
   // ************************ EMCF2C *****************************
 
-  target.push_back(new EMCF2CFilter());
-  target.push_back(new EMCF2C_dwFilter());
-  target.push_back(new EMCF2C_shFilter());
-  target.push_back(new EMCF2C_dw_iteFilter());
-  target.push_back(new EMCF2C_sh_iteFilter());
-  target.push_back(new EMCF2c1987Filter());
+  target.emplace_back(new EMCF2CFilter());
+  target.emplace_back(new EMCF2C_dwFilter());
+  target.emplace_back(new EMCF2C_shFilter());
+  target.emplace_back(new EMCF2C_dw_iteFilter());
+  target.emplace_back(new EMCF2C_sh_iteFilter());
+  target.emplace_back(new EMCF2c1987Filter());
 
   // ************************ EMC *****************************
 
-  target.push_back(new EMCF2PFilter());
-  target.push_back(new EMCF2DFilter());
+  target.emplace_back(new EMCF2PFilter());
+  target.emplace_back(new EMCF2DFilter());
 
 
   // ************************* FTDY ******************************
 
-  target.push_back(new DYE605Filter());
-  target.push_back(new DYE605_dwFilter());
-  target.push_back(new DYE605_shFilter());
-  target.push_back(new DYE605_dw_iteFilter());
-  target.push_back(new DYE605_sh_iteFilter());
-  target.push_back(new DYE866PFilter());
-  target.push_back(new DYE866RFilter());
-  target.push_back(new DYE866R_dwFilter());
-  target.push_back(new DYE866R_shFilter());
-  target.push_back(new DYE866R_dw_iteFilter());
-  target.push_back(new DYE866R_sh_iteFilter());
-  target.push_back(new DYE906RFilter());
-  target.push_back(new DYE906R_dw_iteFilter());
-  target.push_back(new DYE906R_sh_iteFilter());
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN01"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN02"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN03"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN04"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN05"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN06"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN07"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN08"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN09"));
-  target.push_back(new DYE906R_BINFilter("DYE906R_BIN10"));
-  
+  target.emplace_back(new DYE605Filter());
+  target.emplace_back(new DYE605_dwFilter());
+  target.emplace_back(new DYE605_shFilter());
+  target.emplace_back(new DYE605_dw_iteFilter());
+  target.emplace_back(new DYE605_sh_iteFilter());
+  target.emplace_back(new DYE866PFilter());
+  target.emplace_back(new DYE866RFilter());
+  target.emplace_back(new DYE866R_dwFilter());
+  target.emplace_back(new DYE866R_shFilter());
+  target.emplace_back(new DYE866R_dw_iteFilter());
+  target.emplace_back(new DYE866R_sh_iteFilter());
+  target.emplace_back(new DYE906RFilter());
+  target.emplace_back(new DYE906R_dw_iteFilter());
+  target.emplace_back(new DYE906R_sh_iteFilter());
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN01"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN02"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN03"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN04"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN05"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN06"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN07"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN08"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN09"));
+  target.emplace_back(new DYE906R_BINFilter("DYE906R_BIN10"));
+
   // ************************* HERA-I Combined ******************************
 
-  target.push_back(new HERA1NCEMFilter());
-  target.push_back(new HERA1NCEPFilter());
-  target.push_back(new HERA1CCEMFilter());
-  target.push_back(new HERA1CCEPFilter());
+  target.emplace_back(new HERA1NCEMFilter());
+  target.emplace_back(new HERA1NCEPFilter());
+  target.emplace_back(new HERA1CCEMFilter());
+  target.emplace_back(new HERA1CCEPFilter());
 
 
   // ************************* H1 HERA-II high Q2 *****************************
 
-  target.push_back(new H1HERA2NCEPFilter());
-  target.push_back(new H1HERA2NCEMFilter());
-  target.push_back(new H1HERA2CCEPFilter());
-  target.push_back(new H1HERA2CCEMFilter());
+  target.emplace_back(new H1HERA2NCEPFilter());
+  target.emplace_back(new H1HERA2NCEMFilter());
+  target.emplace_back(new H1HERA2CCEPFilter());
+  target.emplace_back(new H1HERA2CCEMFilter());
 
   // ************************* H1 HERA-II low Q2 and high-y ****************
 
-  target.push_back(new H1HERA2LOWQ2Filter());
-  target.push_back(new H1HERA2HGHYFilter());
+  target.emplace_back(new H1HERA2LOWQ2Filter());
+  target.emplace_back(new H1HERA2HGHYFilter());
 
   // ************************* HERA-II F2C ******************************
 
-  target.push_back(new HERAF2CHARMFilter());
+  target.emplace_back(new HERAF2CHARMFilter());
 
   // ************************* LHCb ******************************
 
-  target.push_back(new LHCBW36PBFilter());
-  target.push_back(new LHCBW36PB_40Filter());
-  target.push_back(new LHCBZ940PBFilter());
-  target.push_back(new LHCBLOWMASS37PBFilter());
-  target.push_back(new LHCBZEE2FBFilter());
-  target.push_back(new LHCBZEE2FB_40Filter());
-  target.push_back(new LHCBWZMU7TEVFilter());
-  target.push_back(new LHCBWZMU8TEVFilter());
-  target.push_back(new LHCB_WENU_8TEV_RFilter());
-  target.push_back(new LHCB_WENU_8TEV_AFilter());
-  target.push_back(new LHCB_Z_13TEV_DIMUONFilter());
-  target.push_back(new LHCB_Z_13TEV_DIELECTRONFilter());
+  target.emplace_back(new LHCBW36PBFilter());
+  target.emplace_back(new LHCBW36PB_40Filter());
+  target.emplace_back(new LHCBZ940PBFilter());
+  target.emplace_back(new LHCBLOWMASS37PBFilter());
+  target.emplace_back(new LHCBZEE2FBFilter());
+  target.emplace_back(new LHCBZEE2FB_40Filter());
+  target.emplace_back(new LHCBWZMU7TEVFilter());
+  target.emplace_back(new LHCBWZMU8TEVFilter());
+  target.emplace_back(new LHCB_WENU_8TEV_RFilter());
+  target.emplace_back(new LHCB_WENU_8TEV_AFilter());
+  target.emplace_back(new LHCB_Z_13TEV_DIMUONFilter());
+  target.emplace_back(new LHCB_Z_13TEV_DIELECTRONFilter());
 
   // ************************* NMC ******************************
 
-  target.push_back(new NMCFilter());
-  target.push_back(new NMCpdFilter());
-  target.push_back(new NMCpd_dwFilter());
-  target.push_back(new NMCpd_shFilter());
-  target.push_back(new NMCpd_dw_iteFilter());
-  target.push_back(new NMCpd_sh_iteFilter());
+  target.emplace_back(new NMCFilter());
+  target.emplace_back(new NMCpdFilter());
+  target.emplace_back(new NMCpd_dwFilter());
+  target.emplace_back(new NMCpd_shFilter());
+  target.emplace_back(new NMCpd_dw_iteFilter());
+  target.emplace_back(new NMCpd_sh_iteFilter());
 
   // ************************* NuTeV ******************************
 
-  target.push_back(new NTVNBDMNFilter());
-  target.push_back(new NTVNUDMNFilter());
-  target.push_back(new NTVNBDMNFeFilter());
-  target.push_back(new NTVNUDMNFeFilter());
-  target.push_back(new NTVNBDMNFe_dwFilter());
-  target.push_back(new NTVNUDMNFe_dwFilter());
-  target.push_back(new NTVNBDMNFe_shFilter());
-  target.push_back(new NTVNUDMNFe_shFilter());
-  target.push_back(new NTVNBDMNFe_dw_iteFilter());
-  target.push_back(new NTVNUDMNFe_dw_iteFilter());
-  target.push_back(new NTVNBDMNFe_sh_iteFilter());
-  target.push_back(new NTVNUDMNFe_sh_iteFilter());
+  target.emplace_back(new NTVNBDMNFilter());
+  target.emplace_back(new NTVNUDMNFilter());
+  target.emplace_back(new NTVNBDMNFeFilter());
+  target.emplace_back(new NTVNUDMNFeFilter());
+  target.emplace_back(new NTVNBDMNFe_dwFilter());
+  target.emplace_back(new NTVNUDMNFe_dwFilter());
+  target.emplace_back(new NTVNBDMNFe_shFilter());
+  target.emplace_back(new NTVNUDMNFe_shFilter());
+  target.emplace_back(new NTVNBDMNFe_dw_iteFilter());
+  target.emplace_back(new NTVNUDMNFe_dw_iteFilter());
+  target.emplace_back(new NTVNBDMNFe_sh_iteFilter());
+  target.emplace_back(new NTVNUDMNFe_sh_iteFilter());
 
   // ************************* SLAC ******************************
 
-  target.push_back(new SLACPFilter());
-  target.push_back(new SLACDFilter());
-  target.push_back(new SLACD_dwFilter());
-  target.push_back(new SLACD_shFilter());
-  target.push_back(new SLACD_dw_iteFilter());
-  target.push_back(new SLACD_sh_iteFilter());
+  target.emplace_back(new SLACPFilter());
+  target.emplace_back(new SLACDFilter());
+  target.emplace_back(new SLACD_dwFilter());
+  target.emplace_back(new SLACD_shFilter());
+  target.emplace_back(new SLACD_dw_iteFilter());
+  target.emplace_back(new SLACD_sh_iteFilter());
 
   // ************************* TOP *******************************
 
-  target.push_back(new TTBARTOTFilter());
-  target.push_back(new ATLASTTBARTOT7TEVFilter());
-  target.push_back(new ATLASTTBARTOT8TEVFilter());
-  target.push_back(new ATLASTTBARTOT13TEVFilter());
-  target.push_back(new ATLAS_TTBARTOT_13TEV_FULLLUMIFilter());
-  target.push_back(new ATLASTTBARTOTFilter());
-  target.push_back(new CMSTTBARTOT5TEVFilter());
-  target.push_back(new CMSTTBARTOT7TEVFilter());
-  target.push_back(new CMSTTBARTOT8TEVFilter());
-  target.push_back(new CMSTTBARTOT13TEVFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_R_7TEVFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_R_8TEVFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_R_13TEVFilter());
-  target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
-  target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
-  target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
-  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAP_NORMFilter());
-  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAP_NORMFilter());
-  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORMFilter());
-  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
-  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
-  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter());
-  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter());
+  target.emplace_back(new TTBARTOTFilter());
+  target.emplace_back(new ATLASTTBARTOT7TEVFilter());
+  target.emplace_back(new ATLASTTBARTOT8TEVFilter());
+  target.emplace_back(new ATLASTTBARTOT13TEVFilter());
+  target.emplace_back(new ATLAS_TTBARTOT_13TEV_FULLLUMIFilter());
+  target.emplace_back(new ATLASTTBARTOTFilter());
+  target.emplace_back(new CMSTTBARTOT5TEVFilter());
+  target.emplace_back(new CMSTTBARTOT7TEVFilter());
+  target.emplace_back(new CMSTTBARTOT8TEVFilter());
+  target.emplace_back(new CMSTTBARTOT13TEVFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_R_7TEVFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_R_8TEVFilter());
+  target.emplace_back(new ATLAS_SINGLETOP_TCH_R_13TEVFilter());
+  target.emplace_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
+  target.emplace_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
+  target.emplace_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
+  target.emplace_back(new CMS_TTBAR_2D_DIFF_PT_TRAP_NORMFilter());
+  target.emplace_back(new CMS_TTBAR_2D_DIFF_MTT_TRAP_NORMFilter());
+  target.emplace_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORMFilter());
+  target.emplace_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
+  target.emplace_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
+  target.emplace_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter());
+  target.emplace_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter());
 
   //***************************F2B******************************
 
-  target.push_back(new ZEUSF2BFilter());
-  target.push_back(new H1F2BFilter());
+  target.emplace_back(new ZEUSF2BFilter());
+  target.emplace_back(new H1F2BFilter());
 
   // ************************ HERACOMB  ****************************
 
-  target.push_back(new HERACOMBCCEMFilter());
-  target.push_back(new HERACOMBCCEPFilter());
-  target.push_back(new HERACOMBNCEMFilter());
-  target.push_back(new HERACOMBNCEP460Filter());
-  target.push_back(new HERACOMBNCEP575Filter());
-  target.push_back(new HERACOMBNCEP820Filter());
-  target.push_back(new HERACOMBNCEP920Filter());
-  target.push_back(new HERACOMB_SIGMARED_CFilter());
-  target.push_back(new HERACOMB_SIGMARED_BFilter());
+  target.emplace_back(new HERACOMBCCEMFilter());
+  target.emplace_back(new HERACOMBCCEPFilter());
+  target.emplace_back(new HERACOMBNCEMFilter());
+  target.emplace_back(new HERACOMBNCEP460Filter());
+  target.emplace_back(new HERACOMBNCEP575Filter());
+  target.emplace_back(new HERACOMBNCEP820Filter());
+  target.emplace_back(new HERACOMBNCEP920Filter());
+  target.emplace_back(new HERACOMB_SIGMARED_CFilter());
+  target.emplace_back(new HERACOMB_SIGMARED_BFilter());
 
   // ************************ ATLAS TTBAR DIFF 8 TeV  ***************
-  target.push_back(new ATLASTOPDIFF8TEVTPTFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTRAPFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTTRAPFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTTPTFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTTMFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTPTFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTRAPFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTTRAPFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTTPTFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTTMFilter());
 
-  target.push_back(new ATLASTOPDIFF8TEVTPTNORMFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTRAPNORMFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTTRAPNORMFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTTPTNORMFilter());
-  target.push_back(new ATLASTOPDIFF8TEVTTMNORMFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTPTNORMFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTRAPNORMFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTTRAPNORMFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTTPTNORMFilter());
+  target.emplace_back(new ATLASTOPDIFF8TEVTTMNORMFilter());
 
-  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter());
-  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter());
+  target.emplace_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter());
+  target.emplace_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter());
 
-  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter());
-  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter());
+  target.emplace_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter());
+  target.emplace_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter());
 
   // ************************ CMS TTBAR DIFF TeV  ***************
-  target.push_back(new CMSTOPDIFF8TEVTPTFilter());
-  target.push_back(new CMSTOPDIFF8TEVTRAPFilter());
-  target.push_back(new CMSTOPDIFF8TEVTTRAPFilter());
-  target.push_back(new CMSTOPDIFF8TEVTTPTFilter());
-  target.push_back(new CMSTOPDIFF8TEVTTMFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTPTFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTRAPFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTTRAPFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTTPTFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTTMFilter());
 
-  target.push_back(new CMSTOPDIFF8TEVTPTNORMFilter());
-  target.push_back(new CMSTOPDIFF8TEVTRAPNORMFilter());
-  target.push_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
-  target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
-  target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
-  
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter());
-  
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTPTNORMFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTRAPNORMFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
+  target.emplace_back(new CMSTOPDIFF8TEVTTMNORMFilter());
+
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter());
+
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter());
+  target.emplace_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter());
 
   // ************************ LHeC + FCC pseudo-data ***************
-  target.push_back(new LHeCFilter());
-  target.push_back(new FCCFilter());
-  target.push_back(new LHeCCCFilter());
-  target.push_back(new FCCCCFilter());
+  target.emplace_back(new LHeCFilter());
+  target.emplace_back(new FCCFilter());
+  target.emplace_back(new LHeCCCFilter());
+  target.emplace_back(new FCCCCFilter());
 
-  target.push_back(new LHeC160NCEMFilter());
-  target.push_back(new LHeC160CCEMFilter());
-  target.push_back(new LHeC760NCEMFilter());
-  target.push_back(new LHeC760CCEMFilter());
+  target.emplace_back(new LHeC160NCEMFilter());
+  target.emplace_back(new LHeC160CCEMFilter());
+  target.emplace_back(new LHeC760NCEMFilter());
+  target.emplace_back(new LHeC760CCEMFilter());
 
   // *********************** HIGGS **********************************
-  target.push_back(new ATLAS_hW_hbb_13TeVFilter());
-  target.push_back(new ATLAS_hZ_hbb_13TeVFilter());
-  target.push_back(new ATLASCMS_hxsec_RunIFilter());
-  target.push_back(new ATLAS_hxsec_RunIIFilter());
-  target.push_back(new ATLAS_hxsec_RunII_diffFilter());
-  target.push_back(new ATLAS_hxsec_RunII_diff_pTHFilter());
-  target.push_back(new CMS_hxsec_RunIIFilter());
-  target.push_back(new CMS_hxsec_RunII_diff_pTHFilter());
-  target.push_back(new CMS_hxsec_RunII_diff_pTH_ggHFilter());
-  target.push_back(new CMS_hxsec_RunII_diff_yHFilter());
+  target.emplace_back(new ATLAS_hW_hbb_13TeVFilter());
+  target.emplace_back(new ATLAS_hZ_hbb_13TeVFilter());
+  target.emplace_back(new ATLASCMS_hxsec_RunIFilter());
+  target.emplace_back(new ATLAS_hxsec_RunIIFilter());
+  target.emplace_back(new ATLAS_hxsec_RunII_diffFilter());
+  target.emplace_back(new ATLAS_hxsec_RunII_diff_pTHFilter());
+  target.emplace_back(new CMS_hxsec_RunIIFilter());
+  target.emplace_back(new CMS_hxsec_RunII_diff_pTHFilter());
+  target.emplace_back(new CMS_hxsec_RunII_diff_pTH_ggHFilter());
+  target.emplace_back(new CMS_hxsec_RunII_diff_yHFilter());
 
   // *********************** DIBOSON *********************************
-  target.push_back(new ATLAS_WZ_13TEV_pTZFilter());
-  target.push_back(new ATLAS_WZ_13TEV_pTWFilter());
-  target.push_back(new ATLAS_WZ_13TEV_mTWZFilter());
-  target.push_back(new ATLAS_WZ_13TEV_phiWZFilter());
-  target.push_back(new ATLAS_WZ_13TEV_totWZFilter());
-  target.push_back(new CMS_WZ_13TEV_pTZFilter());
-  target.push_back(new CMS_WZ_13TEV_mTZFilter());
-  target.push_back(new CMS_WZ_13TEV_pTleadFilter());
-  
+  target.emplace_back(new ATLAS_WZ_13TEV_pTZFilter());
+  target.emplace_back(new ATLAS_WZ_13TEV_pTWFilter());
+  target.emplace_back(new ATLAS_WZ_13TEV_mTWZFilter());
+  target.emplace_back(new ATLAS_WZ_13TEV_phiWZFilter());
+  target.emplace_back(new ATLAS_WZ_13TEV_totWZFilter());
+  target.emplace_back(new CMS_WZ_13TEV_pTZFilter());
+  target.emplace_back(new CMS_WZ_13TEV_mTZFilter());
+  target.emplace_back(new CMS_WZ_13TEV_pTleadFilter());
+
   // *********************** ATLAS Z (8 TeV) 3D ********************************
-  target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
-  target.push_back(new ATLAS_Z_3D_ELE_HRAP_8TEVFilter());
+  target.emplace_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
+  target.emplace_back(new ATLAS_Z_3D_ELE_HRAP_8TEVFilter());
 
   // *********************** EIC pseudodata ***********************************
-  target.push_back(new EICFilter("EIC_CC_EMP_140_OPT"));
-  target.push_back(new EICFilter("EIC_CC_EMP_140_PES"));
-  target.push_back(new EICFilter("EIC_CC_EPP_140_OPT"));
-  target.push_back(new EICFilter("EIC_CC_EPP_140_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMP_140_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMP_140_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMP_63_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMP_63_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMP_44_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMP_44_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMP_28_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMP_28_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPP_140_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPP_140_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPP_63_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPP_63_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPP_44_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPP_44_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPP_28_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPP_28_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMD_88_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMD_88_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMD_66_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMD_66_PES"));
-  target.push_back(new EICFilter("EIC_NC_EMD_28_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EMD_28_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPD_88_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPD_88_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPD_66_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPD_66_PES"));
-  target.push_back(new EICFilter("EIC_NC_EPD_28_OPT"));
-  target.push_back(new EICFilter("EIC_NC_EPD_28_PES"));
+  target.emplace_back(new EICFilter("EIC_CC_EMP_140_OPT"));
+  target.emplace_back(new EICFilter("EIC_CC_EMP_140_PES"));
+  target.emplace_back(new EICFilter("EIC_CC_EPP_140_OPT"));
+  target.emplace_back(new EICFilter("EIC_CC_EPP_140_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_140_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_140_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_63_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_63_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_44_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_44_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_28_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMP_28_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_140_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_140_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_63_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_63_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_44_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_44_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_28_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPP_28_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMD_88_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMD_88_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMD_66_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMD_66_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EMD_28_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EMD_28_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPD_88_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPD_88_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPD_66_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPD_66_PES"));
+  target.emplace_back(new EICFilter("EIC_NC_EPD_28_OPT"));
+  target.emplace_back(new EICFilter("EIC_NC_EPD_28_PES"));
 
   // **************** CMS Dijet production pp 5TEV *****************************
-  target.push_back(new CMS_2JET_5TEVFilter()); // DIJET
+  target.emplace_back(new CMS_2JET_5TEVFilter()); // DIJET
+
+  return target;
 }

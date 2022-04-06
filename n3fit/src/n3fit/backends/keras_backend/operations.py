@@ -27,7 +27,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
-from tensorflow.keras.layers import Concatenate as keras_concatenate
 from tensorflow.keras.layers import subtract as keras_subtract
 
 from tensorflow.keras.layers import Input

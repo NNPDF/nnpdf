@@ -95,6 +95,7 @@ def expected_delta_chi2_table(
     ):
         name = group["group_name"]
         ndata, delta_chi2 = delta_chi2_res
+
         records.append(
             dict(
                 group=name,

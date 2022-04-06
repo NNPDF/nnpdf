@@ -30,7 +30,7 @@ execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
     import sysconfig;
     lcom = sysconfig.get_config_var(\"LDSHARED\");
-    cc, _, flags = lcom.partition(\" \");
+    cc, _, flags = lcom.strip().partition(\" \");
     print(flags)"
     OUTPUT_VARIABLE PYTHON_EXTENSION_LINKFLAGS
 	RESULT_VARIABLE ret

@@ -1,0 +1,20 @@
+categories:
+  - title: "New Features"
+    labels:
+      - enhancement
+  - title: "Bug fixes"
+    labels:
+      - bug
+  - title: Documentation
+    labels:
+      - documentation
+  - title: Worflow
+    labels:
+      - devtools
+  - title: Refactoring
+    labels:
+      - Refactoring
+
+template: |
+  ## What's Changed
+  $CHANGES

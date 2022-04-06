@@ -14,7 +14,7 @@ with the fits.
 The project is separated in two codes with well defined and separated
 scopes:
 
-reportengine 
+reportengine
   ~ It is a compiler of user-entered configuration (in the YAML
   format) into directed acyclic graphs of Python executable functions,
   which are defined by client applications. One such function that
@@ -577,7 +577,7 @@ development environment for `nnpdf`.
     -- Detecting CXX compiler ABI info - done
     -- Detecting CXX compile features
     -- Detecting CXX compile features - done
-    -- Found PkgConfig: /home/zah/anaconda3/envs/nnpdf-dev/bin/pkg-config (found version "0.29.2") 
+    -- Found PkgConfig: /home/zah/anaconda3/envs/nnpdf-dev/bin/pkg-config (found version "0.29.2")
     -- Checking for one of the modules 'libarchive'
     -- Checking for one of the modules 'sqlite3'
     -- Checking for one of the modules 'gsl'
@@ -706,13 +706,13 @@ The following resources are read from the configuration:
     use_cuts(bool or str): Whether to filter the points based on the
   cuts applied in the fit, or the whole data in the dataset. The
   possible options are:
-  
+
   - internal: Calculate the cuts based on the existing rules. This
   is
     the default.
-  
+
   - fromfit: Read the cuts stored in the fit.
-  
+
   - nocuts: Use the whole dataset.
   [Used by cuts]
 
@@ -1999,15 +1999,15 @@ If the user wishes to retain a copy of the original fit, they can do so with the
 $ fitrename -c ../181109-si-nlo-central_DISonly new_name
 ```
 
-Will result in a fit named `181109-si-nlo-central_DISonly` and a copy named `new_name` in the 
+Will result in a fit named `181109-si-nlo-central_DISonly` and a copy named `new_name` in the
 original directory.
 
 However, by default, fits that are download with `vp-get fit` will be located in the NNPDF results
-directory. This is usually located in `~/miniconda3/envs/<nnpdf env>/share/NNPDF/results`. Fits 
-located in this directory can be renamed with the `-r` flag. 
+directory. This is usually located in `~/miniconda3/envs/<nnpdf env>/share/NNPDF/results`. Fits
+located in this directory can be renamed with the `-r` flag.
 
 As an example, suppose the fit `181109-si-nlo-central_DISonly` is located in the NNPDF results directory.
-It can be renamed, irrespective of the current working directory, using 
+It can be renamed, irrespective of the current working directory, using
 
 ```
 $ fitrename -r 181109-si-nlo-central_DISonly new_name
@@ -2184,7 +2184,7 @@ The theory covariance can be used to sample the pseudodata by setting
 in covariance matrix used in the fit by specifying
 `use_thcovmat_in_fitting: true`.
 The user can choose what kind of theory covariance matrix should be used in the
-fit, by setting the flag `thcovmat_type ` to be one among 
+fit, by setting the flag `thcovmat_type ` to be one among
 `full, blockdiagonal, diagonal`. If the flag does not appear in the runcard
 the full theory covariance matrix is used by default.
 
@@ -2403,7 +2403,7 @@ set them properly, to aid the discoverability of the result. Some tags
 may be used to display the report in a prominent place in the index
 page. The source of the report index page is
 ```
-serverscripts/WEB/validphys-reports/index.html
+serverscripts/validphys-reports/index.html
 ```
 inside the `validphys2` repository. This page can be edited to reflect
 the current interests (the Makefile directly uploads to the
@@ -3336,9 +3336,9 @@ Server configuration
 Overview
 --------
 
-The NNPDF server is a virtual machine (VM) maintained by 
-the Centro Calcolo at the physics department of the 
-University of Milan. The machine has 2 CPUs, 4GB of RAM, 
+The NNPDF server is a virtual machine (VM) maintained by
+the Centro Calcolo at the physics department of the
+University of Milan. The machine has 2 CPUs, 4GB of RAM,
 1 TB of disk and it is running CentOS7.
 
 The full disk is backed up every week by the Centro Calcolo.
@@ -3393,14 +3393,14 @@ The access to the server is provided by
 `ssh`/[`vp-upload`](#uploading-the-result) with the following restrictions:
 
 - `ssh` access to `root` is forbidden.
-- there is a shared `nnpdf` user with low privileges. In order to login 
+- there is a shared `nnpdf` user with low privileges. In order to login
 the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
 The `nnpdf` is not allowed to login with password.
 
-The `nnpdf` user shares a common `/home/nnpdf` folder 
-where all NNPDF material is stored. Public access to data is 
-available for all files in the `/home/nnpdf/WEB` folder. The 
-`validphys` reports are stored in `/home/nnpdf/WEB/validphys-reports` 
+The `nnpdf` user shares a common `/home/nnpdf` folder
+where all NNPDF material is stored. Public access to data is
+available for all files in the `/home/nnpdf/WEB` folder. The
+`validphys` reports are stored in `/home/nnpdf/validphys-reports`
 and the wiki in `/home/nnpdf/WEB/wiki`.
 
 The  [`conda` packages](#installing)  are automatically uploaded to the server
@@ -3438,19 +3438,19 @@ server {
     listen  80;
     listen [::]:80;
     server_name vp.nnpdf.science;
-    
-    root /home/nnpdf/WEB/validphys-reports;
+
+    root /home/nnpdf/validphys-reports;
     location / {
       try_files $uri $uri/ =404;
 	    auth_basic "Restricted";
-	    auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+	    auth_basic_user_file /home/nnpdf/validphys-reports/.htpasswd;
     }
 
     location /thumbnails {
-    	alias /home/nnpdf/WEB/thumbnails;
+    	alias /home/nnpdf/thumbnails;
 	    try_files $uri $uri/ =404;
 	    auth_basic "Restricted";
-      auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+      auth_basic_user_file /home/nnpdf/validphys-reports/.htpasswd;
     }
 }
 ```
@@ -3468,7 +3468,7 @@ SSL encryption
 SSL encription is provided by [Let's Encrypt](https://letsencrypt.org).
 The certificates are created using the `certbot` program with the `nginx` module.
 
-In order to create new ssl certificates, first prepare the `nginx` server block 
+In order to create new ssl certificates, first prepare the `nginx` server block
 configuration file and then run the interactive command:
 ```
 sudo certbot --nginx -d <domain>
@@ -3547,7 +3547,7 @@ The report index uses the
 filtering and sorting capabilities to the indexes tables. The source
 file is:
 ```
-serverscripts/WEB/validphys-reports/index.html
+serverscripts/validphys-reports/index.html
 ```
 in the validphys2 directory. It should be updated from time to time to
 highlight the most interesting reports at a given moment. This can be

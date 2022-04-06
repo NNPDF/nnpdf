@@ -10,7 +10,6 @@ import functools
 import inspect
 import numbers
 import copy
-import os
 from importlib.resources import read_text, contents
 
 from collections import ChainMap, defaultdict
@@ -38,6 +37,7 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
+from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.loader import (
     Loader,
     LoaderError,
@@ -51,7 +51,6 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
-from validphys.theorycovariance.theorycovarianceutils import process_lookup
 from validphys.plotoptions import get_info
 
 import validphys.scalevariations
@@ -65,8 +64,6 @@ class Environment(Environment):
     def __init__(
         self,
         *,
-        datapath=None,
-        resultspath=None,
         this_folder=None,
         net=True,
         upload=False,
@@ -86,12 +83,11 @@ class Environment(Environment):
             loader_class = FallbackLoader
 
         try:
-            self.loader = loader_class(datapath, resultspath)
+            self.loader = loader_class()
         except LoaderError as e:
             log.error(
                 "Failed to find the paths. These are configured "
-                "in the nnprofile settings or with the "
-                "--datapath and --resultpath options."
+                "in the nnprofile settings"
             )
             raise EnvironmentError_(e) from e
         self.deta_path = self.loader.datapath
@@ -165,7 +161,7 @@ class CoreConfig(configparser.Config):
 
         # Check that we know how to compute errors
         try:
-            pdf.nnpdf_error
+            pdf.stats_class
         except NotImplementedError as e:
             raise ConfigError(str(e))
         return pdf
@@ -218,6 +214,19 @@ class CoreConfig(configparser.Config):
 
         return res
 
+    def produce_replicas(self, nreplica: int):
+        """Produce a replicas array"""
+        return NSList(range(1, nreplica+1), nskey="replica")
+
+    def produce_inclusive_use_scalevar_uncertainties(self, use_scalevar_uncertainties: bool = False,
+                                        point_prescription: (str, None) = None):
+        """Whether to use a scale variation uncertainty theory covmat.
+        Checks whether a point prescription is included in the runcard and if so 
+        assumes scale uncertainties are to be used."""
+        if ((not use_scalevar_uncertainties) and (point_prescription is not None)):
+                use_scalevar_uncertainties = True
+        return use_scalevar_uncertainties
+
     # TODO: load fit config from here
     @element_of("fits")
     @_id_with_label
@@ -227,6 +236,64 @@ class CoreConfig(configparser.Config):
             return self.loader.check_fit(fit)
         except LoadFailedError as e:
             raise ConfigError(str(e), fit, self.loader.available_fits)
+
+    def produce_fitreplicas(self, fit):
+        """Production rule mapping the ``replica`` key to each Monte Carlo
+        fit replica.
+        """
+        num_replicas = num_fitted_replicas(fit)
+        return NSList(range(1, num_replicas + 1), nskey='replica')
+
+    def produce_pdfreplicas(self, fitpdf):
+        """Production rule mapping the ``replica`` key to each postfit
+        replica.
+        """
+        pdf = fitpdf['pdf']
+        replicas = fitted_replica_indexes(pdf)
+        return NSList(replicas, nskey='replica')
+
+    def produce_fitcontextwithcuts(self, fit, fitinputcontext):
+        """Like fitinputcontext but setting the cuts policy.
+        """
+        theoryid = fitinputcontext['theoryid']
+        data_input = fitinputcontext['data_input']
+
+        return {
+            "dataset_inputs": data_input,
+            "theoryid": theoryid,
+            "use_cuts": CutsPolicy.FROMFIT,
+        }
+
+    def produce_fitenvironment(self, fit, fitinputcontext):
+        """Like fitcontext, but additionally forcing various other
+        parameters, such as the cuts policy and Monte Carlo seeding to be
+        the same as the fit.
+
+        Notes
+        -----
+            - This production rule is designed to be used as a namespace
+              to collect over, for use with
+              :py:func:`validphys.pseudodata.recreate_fit_pseudodata` and
+              can be added to freely, e.g by setting trvlseed to be from
+              the fit runcard.
+        """
+        log.warning(f"Using mcseed and trvlseed from fit: {fit}")
+        theoryid = fitinputcontext['theoryid']
+        data_input = fitinputcontext['data_input']
+
+        runcard = fit.as_input()
+        trvlseed = runcard['trvlseed']
+        mcseed = runcard['mcseed']
+        genrep = runcard['genrep']
+
+        return {
+            "dataset_inputs": data_input,
+            "theoryid": theoryid,
+            "use_cuts": CutsPolicy.FROMFIT,
+            "mcseed": mcseed,
+            "trvlseed": trvlseed,
+            "genrep": genrep,
+        }
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""
@@ -257,6 +324,29 @@ class CoreConfig(configparser.Config):
             _, datacuts = self.parse_from_("fit", "closuretest", write=False)
         underlyinglaw = self.parse_pdf(datacuts["fakepdf"])
         return {"pdf": underlyinglaw}
+
+    @element_of("hyperscans")
+    def parse_hyperscan(self, hyperscan):
+        """A hyperscan in the hyperscan_results folder, containing at least one tries.json file"""
+        try:
+            return self.loader.check_hyperscan(hyperscan)
+        except LoadFailedError as e:
+            raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
+
+    def parse_hyperscan_config(self, hyperscan_config, hyperopt=None):
+        """Configuration of the hyperscan
+        """
+        if "from_hyperscan" in hyperscan_config:
+            hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
+            log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
+            return hyperscan.as_input().get("hyperscan_config")
+
+        if "use_tries_from" in hyperscan_config:
+            hyperscan = self.parse_hyperscan(hyperscan_config["use_tries_from"])
+            log.info("Reusing tries from: %s", hyperscan)
+            return {"parameters": hyperscan.sample_trials(n = hyperopt)}
+
+        return hyperscan_config
 
     def produce_multiclosure_underlyinglaw(self, fits):
         """Produce the underlying law for a set of fits. This allows a single t0
@@ -383,10 +473,9 @@ class CoreConfig(configparser.Config):
 
     def _produce_fit_cuts(self, commondata):
         """Produce fit and then attempt to load cuts from that fit."""
-        name = commondata.name
         _, fit = self.parse_from_(None, "fit", write=False)
         try:
-            return self.loader.check_fit_cuts(name, fit)
+            return self.loader.check_fit_cuts(commondata, fit)
         except LoadFailedError as e:
             raise ConfigError(e) from e
 
@@ -605,6 +694,30 @@ class CoreConfig(configparser.Config):
         }
 
     @configparser.explicit_node
+    def produce_covmat_t0_considered(self, use_t0: bool = False):
+        """Modifies which action is used as covariance_matrix depending on
+        the flag `use_t0`
+        """
+        from validphys import covmats
+
+        if use_t0:
+            return covmats.t0_covmat_from_systematics
+        else:
+            return covmats.covmat_from_systematics
+
+    @configparser.explicit_node
+    def produce_dataset_inputs_covmat_t0_considered(self, use_t0: bool = False):
+        """Modifies which action is used as experiment_covariance_matrix
+        depending on the flag `use_t0`
+        """
+        from validphys import covmats
+
+        if use_t0:
+            return covmats.dataset_inputs_t0_covmat_from_systematics
+        else:
+            return covmats.dataset_inputs_covmat_from_systematics
+
+    @configparser.explicit_node
     def produce_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as covariance_matrix depending on
         the flag `use_pdferr`
@@ -614,7 +727,7 @@ class CoreConfig(configparser.Config):
         if use_pdferr:
             return covmats.pdferr_plus_covmat
         else:
-            return covmats.covmat
+            return covmats._covmat_t0_considered
 
     @configparser.explicit_node
     def produce_dataset_inputs_covariance_matrix(self, use_pdferr: bool = False):
@@ -626,7 +739,7 @@ class CoreConfig(configparser.Config):
         if use_pdferr:
             return covmats.pdferr_plus_dataset_inputs_covmat
         else:
-            return covmats.dataset_inputs_covmat
+            return covmats._dataset_inputs_covmat_t0_considered
 
     # TODO: Do this better and elsewhere
     @staticmethod
@@ -671,9 +784,13 @@ class CoreConfig(configparser.Config):
 
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
-                names = {
-                    (process_lookup(dsin.name), dsin.name): dsin for dsin in data_input
-                }
+
+                names = {}
+                for dsin in data_input:
+                    cd = self.produce_commondata(dataset_input=dsin)
+                    proc = get_info(cd).nnpdf31_process
+                    ds = dsin.name
+                    names[(proc, ds)] = dsin
 
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
@@ -796,13 +913,13 @@ class CoreConfig(configparser.Config):
     # TODO: Find a good name for this
     def produce_t0set(self, use_t0=False, t0pdfset=None):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
-        error if t0 is requested but no t0set is given."""
+        error if t0 is requested but no t0set is given.
+        """
         if use_t0:
             if not t0pdfset:
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
-        else:
-            return None
+        return None
 
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
         """ Lagrange multiplier constraints are mappings
@@ -897,19 +1014,46 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {"lumi_channels": self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    def produce_loaded_user_covmat_path(self, user_covmat_path: str = "",
+                                        use_user_uncertainties: bool = False):
+        """
+        Path to the user covmat provided by user_covmat_path in the runcard.
+        If no path is provided, returns None.
+        For use in theorycovariance.construction.user_covmat.
+        """
+        if not use_user_uncertainties:
+            return None
+        else:
+            l = self.loader
+            fileloc = l.check_vp_output_file(user_covmat_path)
+            return fileloc
+
+
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self,
         use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool
+        use_thcovmat_in_fitting: bool,
+        inclusive_use_scalevar_uncertainties,
+        use_user_uncertainties: bool = False
     ):
         """
         Return the theory covariance matrix used in the fit.
         """
-        from validphys.theorycovariance.construction import theory_covmat_custom_fitting
-
-        f = theory_covmat_custom_fitting
-
+        if inclusive_use_scalevar_uncertainties:
+            if use_user_uncertainties:
+                # Both scalevar and user uncertainties
+                from validphys.theorycovariance.construction import total_theory_covmat_fitting
+                f = total_theory_covmat_fitting
+            else: 
+                # Only scalevar uncertainties
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+                f = theory_covmat_custom_fitting
+        elif use_user_uncertainties:
+            # Only user uncertainties
+            from validphys.theorycovariance.construction import user_covmat_fitting
+            f = user_covmat_fitting
+     
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
@@ -951,18 +1095,24 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected path of covmat hardcoded
+            # Expected directory of theory covmat hardcoded
             covmat_path = (
                 fit.path
                 / "tables"
-                / "datacuts_theory_theorycovmatconfig_theory_covmat.csv"
             )
-            if not os.path.exists(covmat_path):
+            # All possible valid files
+            covfiles = sorted(covmat_path.glob("*theory_covmat*.csv"))
+            if not covfiles:
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
+                )                
+            if len(covfiles) > 1:
+                raise ConfigError(
+                    "More than one valid theory covmat file found at the "
+                    f"usual location: {covmat_path}. These are {covfiles}."
                 )
-            fit_theory_covmat = ThCovMatSpec(covmat_path)
+            fit_theory_covmat = ThCovMatSpec(covfiles[0])
         else:
             fit_theory_covmat = None
         return fit_theory_covmat
@@ -1343,7 +1493,7 @@ class CoreConfig(configparser.Config):
                 except AttributeError as e:
                     raise ConfigError(
                         f"Unable to find key: {processed_metadata_group} in "
-                        "metadata for {dsinput.name}. Ensure the PLOTTING file "
+                        f"metadata for {dsinput.name}. Ensure the PLOTTING file "
                         "for this dataset contains the key.",
                         bad_item=processed_metadata_group,
                         alternatives=metadata.__dict__,
@@ -1355,6 +1505,20 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
+    def produce_fivetheories(self, point_prescription):
+        if point_prescription == "5bar point":
+            return "bar"
+        elif point_prescription == "5 point":
+            return "nobar"
+        return None 
+    
+    def produce_seventheories(self, point_prescription):
+        if point_prescription == "7 point":
+            #This is None because is the default choice 
+            return None
+        elif point_prescription == "7original point":
+            return "original"
+        return None
 
     def produce_group_dataset_inputs_by_experiment(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
@@ -1380,7 +1544,6 @@ class CoreConfig(configparser.Config):
             str(scalevarsfor_dict["theoryid"])
             for scalevarsfor_dict in scalevarsfor_list
         ]
-
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
             raise ConfigError(

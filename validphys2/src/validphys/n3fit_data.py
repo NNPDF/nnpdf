@@ -14,7 +14,6 @@ import logging
 import numpy as np
 import pandas as pd
 
-from NNPDF import RandomGenerator
 from reportengine import collect
 from reportengine.table import table
 
@@ -186,29 +185,12 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
     return np.concatenate(trmask_partial)
 
 
-def generate_data_replica(data, replica_mcseed):
-    """Generate a pseudodata replica for ``data`` given the ``replica_seed``"""
-    spec_c = data.load()
-    base_mcseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10 ** 8
-    # copy C++ object to avoid mutation
-    # t0 not required for replica generation, since libnnpdf uses experimental
-    # covmat to generate replicas.
-    spec_replica_c = type(spec_c)(spec_c)
-
-    # Replica generation
-    if replica_mcseed is not None:
-        mcseed = base_mcseed + replica_mcseed
-        RandomGenerator.InitRNG(0, mcseed)
-        spec_replica_c.MakeReplica()
-    return spec_replica_c.get_cv()
-
-
 def fitting_data_dict(
     data,
     make_replica,
+    dataset_inputs_t0_covmat_from_systematics,
     tr_masks,
     kfold_masks,
-    t0set=None,
     diagonal_basis=None,
 ):
     """
@@ -226,6 +208,8 @@ def fitting_data_dict(
             name of the ``data`` - typically experiment/group name
         'expdata_true'
             non-replica data
+        'covmat'
+            full covmat
         'invcovmat_true'
             inverse of the covmat (non-replica)
         'trmask'
@@ -254,16 +238,13 @@ def fitting_data_dict(
     spec_c = data.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
-    if t0set:
-        t0pdfset = t0set.load_t0()
-        spec_c.SetT0(t0pdfset)
 
     expdata = make_replica
 
     datasets = common_data_reader_experiment(spec_c, data)
 
     # t0 covmat
-    covmat = spec_c.get_covmat()
+    covmat = dataset_inputs_t0_covmat_from_systematics
     inv_true = np.linalg.inv(covmat)
 
     if diagonal_basis:
@@ -304,6 +285,7 @@ def fitting_data_dict(
     ndata_tr = np.count_nonzero(tr_mask)
     expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
 
+
     ndata_vl = np.count_nonzero(vl_mask)
     expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
 
@@ -321,6 +303,7 @@ def fitting_data_dict(
         "name": str(data),
         "expdata_true": expdata_true,
         "invcovmat_true": inv_true,
+        "covmat": covmat,
         "trmask": tr_mask,
         "invcovmat": invcovmat_tr,
         "ndata": ndata_tr,
@@ -353,12 +336,11 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
+groups_replicas_indexed_make_replica = collect('indexed_make_replica' , ("group_dataset_inputs_by_experiment","replicas"))
 
-exps_pseudodata = collect("generate_data_replica", ("group_dataset_inputs_by_experiment",))
-replicas_exps_pseudodata = collect("exps_pseudodata", ("replicas",))
 
 @table
-def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
+def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     """Creates a pandas DataFrame containing the generated pseudodata. The
     index is :py:func:`validphys.results.experiments_index` and the columns
     are the replica numbers.
@@ -370,15 +352,36 @@ def pseudodata_table(replicas_exps_pseudodata, replicas, experiments_index):
     The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
 
     """
-    rep_dfs = []
-    for rep_exps_pseudodata, rep in zip(replicas_exps_pseudodata, replicas):
-        all_pseudodata = np.concatenate(rep_exps_pseudodata)
-        rep_dfs.append(pd.DataFrame(
-            all_pseudodata,
-            columns=[f"replica {rep}"],
-            index=experiments_index
-        ))
-    return pd.concat(rep_dfs, axis=1)
+    # Concatenate over replicas
+    df = pd.concat(groups_replicas_indexed_make_replica)
+    df.columns = [f"replica {rep}" for rep in replicas]
+    return df
+
+
+@table
+def training_pseudodata(pseudodata_table, training_mask):
+    """Save the training data for the given replica.
+    Activate by setting ``fitting::savepseudodata: True``
+    from within the fit runcard.
+
+    See Also
+    --------
+    :py:func:`validphys.n3fit_data.validation_pseudodata`
+    """
+    return pseudodata_table.loc[training_mask.values]
+
+
+@table
+def validation_pseudodata(pseudodata_table, training_mask):
+    """Save the training data for the given replica.
+    Activate by setting ``fitting::savepseudodata: True``
+    from within the fit runcard.
+
+    See Also
+    --------
+    :py:func:`validphys.n3fit_data.training_pseudodata`
+    """
+    return pseudodata_table.loc[~training_mask.values]
 
 
 exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_experiment",))
@@ -386,7 +389,77 @@ replicas_exps_tr_masks = collect("exps_tr_masks", ("replicas",))
 
 
 @table
-def training_mask_table(replicas_exps_tr_masks, replicas, experiments_index):
+def replica_training_mask_table(replica_training_mask):
+    """Same as ``replica_training_mask`` but with a table decorator.
+    """
+    return replica_training_mask
+
+def replica_training_mask(exps_tr_masks, replica, experiments_index):
+    """Save the boolean mask used to split data into training and validation
+    for a given replica as a pandas DataFrame, indexed by
+    :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
+    the training and validation data used in a fit.
+
+    Parameters
+    ----------
+    exps_tr_masks: list[list[np.array]]
+        Result of :py:func:`tr_masks` collected over experiments, which creates
+        the nested structure. The outer list is
+        len(group_dataset_inputs_by_experiment) and the inner-most list has an
+        array for each dataset in that particular experiment - as defined by the
+        metadata. The arrays should be 1-D boolean arrays which can be used as
+        masks.
+    replica: int
+        The index of the replica.
+    experiments_index: pd.MultiIndex
+        Index returned by :py:func:`validphys.results.experiments_index`.
+
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> ds_inp = [
+    ...     {'dataset': 'NMC', 'frac': 0.75},
+    ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
+    ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
+    ... ]
+    >>> API.replica_training_mask(dataset_inputs=ds_inp, replica=1, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+                         replica 1
+    group dataset    id
+    NMC   NMC        0        True
+                    1        True
+                    2       False
+                    3        True
+                    4        True
+    ...                        ...
+    CMS   CMSZDIFF12 45       True
+                    46       True
+                    47       True
+                    48      False
+                    49       True
+
+    [345 rows x 1 columns]
+    """
+    all_masks = np.concatenate([
+        ds_mask
+        for exp_masks in exps_tr_masks
+        for ds_mask in exp_masks
+    ])
+    return pd.DataFrame(
+        all_masks,
+        columns=[f"replica {replica}"],
+        index=experiments_index
+    )
+
+replicas_training_mask = collect("replica_training_mask", ("replicas",))
+
+@table
+def training_mask_table(training_mask):
+    """Same as ``training_mask`` but with a table decorator
+    """
+    return training_mask
+
+def training_mask(replicas_training_mask):
     """Save the boolean mask used to split data into training and validation
     for each replica as a pandas DataFrame, indexed by
     :py:func:`validphys.results.experiments_index`. Can be used to reconstruct
@@ -395,19 +468,7 @@ def training_mask_table(replicas_exps_tr_masks, replicas, experiments_index):
     Parameters
     ----------
     replicas_exps_tr_masks: list[list[list[np.array]]]
-        Result of :py:func:`tr_masks` collected over experiments then replicas,
-        which creates the nested structure. The outer list is len(replicas),
-        the next list is len(group_dataset_inputs_by_experiment) and the
-        inner-most list has an array for each dataset in that particular
-        experiment - as defined by the metadata. The arrays should be 1-D
-        boolean arrays which can be used as masks.
-    replicas: NSlist
-        Namespace list of replica numbers to tabulate masks for, each element
-        of the list should be a `replica`. See example below for more
-        information.
-    experiments_index: pd.MultiIndex
-        Index returned by :py:func:`validphys.results.experiments_index`.
-
+        Result of :py:func:`replica_tr_masks` collected over replicas
 
     Example
     -------
@@ -420,9 +481,9 @@ def training_mask_table(replicas_exps_tr_masks, replicas, experiments_index):
     ...     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD'], 'frac': 0.75},
     ...     {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10, 'frac': 0.75}
     ... ]
-    >>> API.training_mask_table(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
+    >>> API.training_mask(dataset_inputs=ds_inp, replicas=reps, trvlseed=123, theoryid=162, use_cuts="nocuts", mcseed=None, genrep=False)
                         replica 1  replica 2  replica 3
-    group dataset    id                                 
+    group dataset    id
     NMC   NMC        0        True      False      False
                     1        True       True       True
                     2       False       True       True
@@ -438,21 +499,8 @@ def training_mask_table(replicas_exps_tr_masks, replicas, experiments_index):
     [345 rows x 3 columns]
 
     """
-    rep_dfs = []
-    for rep_exps_masks, rep in zip(replicas_exps_tr_masks, replicas):
-        # create flat list with all dataset masks in, then concatenate to single
-        # array.
-        all_masks = np.concatenate([
-            ds_mask
-            for exp_masks in rep_exps_masks
-            for ds_mask in exp_masks
-        ])
-        rep_dfs.append(pd.DataFrame(
-            all_masks,
-            columns=[f"replica {rep}"],
-            index=experiments_index
-        ))
-    return pd.concat(rep_dfs, axis=1)
+    return pd.concat(replicas_training_mask, axis=1)
+
 
 def fitting_pos_dict(posdataset):
     """Loads a positivity dataset. For more information see

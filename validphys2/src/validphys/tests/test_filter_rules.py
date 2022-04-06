@@ -6,7 +6,6 @@ from validphys.filters import (
     Rule,
     RuleProcessingError,
     default_filter_settings_input,
-    default_filter_rules_input,
     PerturbativeOrder,
     BadPerturbativeOrder,
 )

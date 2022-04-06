@@ -19,7 +19,7 @@ Introduction to ``validphys 2``
   serve as basis to other NNPDF codes such as ``n3fit``.
 
 * ``validphys 2`` is implemented on top of the
-  ``reportengine <https://github.com/NNPDF/reportengine>``_ framework.
+  `reportengine <https://github.com/NNPDF/reportengine>`_ framework.
   ``reportengine`` provides the logic to process the runcards by building task
   execution graphs based on individual actions (which are Python functions). The
   runcards can execute complex analysis and parameter scans with  the appropriate

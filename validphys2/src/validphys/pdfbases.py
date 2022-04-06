@@ -12,7 +12,6 @@ import numpy as np
 
 from reportengine.checks import CheckError
 
-from validphys.core import PDF
 from validphys.gridvalues import grid_values, central_grid_values
 
 
@@ -478,6 +477,7 @@ flavour = LinearBasis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIAS
 
 #dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
 #though
+#see Eqs.(56),(57) https://arxiv.org/pdf/0808.1231.pdf for evolution basis definition
 evolution = LinearBasis.from_mapping({
     r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
     'V'        : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1 ,'b':1, 'bbar':-1, 't': 1, 'tbar':-1},
@@ -492,8 +492,8 @@ evolution = LinearBasis.from_mapping({
     'V15'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c':-3, 'cbar':+3},
 
 
-    'T24'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'b':-4, 'bbar':-4},
-    'V24'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'b':-4, 'bbar':+4},
+    'T24'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b':-4, 'bbar':-4},
+    'V24'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1, 'b':-4, 'bbar':+4},
 
     'T35'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't':-5, 'tbar':-5},
     'V35'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1, 'b': 1, 'bbar':-1, 't':-5, 'tbar':+5},
@@ -522,6 +522,8 @@ PDF4LHC20 = LinearBasis.from_mapping({
 
         'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
         'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+    
+        'photon': {'photon': 1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
                'v': 'V', 'v3': 'V3', 't3': 'T3', 't8': 'T8'},
@@ -607,6 +609,20 @@ def ud_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
+@scalar_function_transformation(label="d/u")
+def du_ratio(func, xmat, qmat):
+    gv = func([1, 2], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
+@scalar_function_transformation(label=r"\bar{d}/\bar{u}")
+def dbarubar_ratio(func, xmat, qmat):
+    gv = func([-1, -2], xmat, qmat)
+    num = gv[:, [0], ...]
+    den = gv[:, [1], ...]
+    return num / den
+
   
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
@@ -685,7 +701,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         v8 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
-        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
 
     flist = [sng, g, v, v3, v8, t3, t8, cp]

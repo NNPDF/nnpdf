@@ -3,7 +3,6 @@
     and ensures they do the same thing as their numpy counterparts
 """
 import operator
-import functools
 import numpy as np
 from n3fit.backends import operations as op
 

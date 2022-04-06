@@ -33,13 +33,13 @@ Consider the following example:
 .. code:: yaml
 
 	First:
-	   pdf: NNPDF31_nlo_as_0118
+	   pdf: NNPDF40_nlo_as_01180
 	   normalize_to: None
 	   use_cuts: "nocuts"
 
 	Second:
-	   pdf: NNPDF31_nnlo_as_0118
-	   normalize_to: NNPDF31_nnlo_as_0118
+	   pdf: NNPDF40_nnlo_as_01180
+	   normalize_to: NNPDF40_nnlo_as_01180
 
 	cutspecs:
 	 - {use_cuts: "nocuts"}

@@ -12,13 +12,13 @@
 
 // ********* Register *************
 
-void register_integrability(vector<CommonData*>& list);
+void register_integrability(vector<unique_ptr<CommonData>>& list);
 
 // ********* Filters **************
 
 class IntFilter: public CommonData
 {
-public: 
+public:
 	IntFilter(std::string setname):
   	CommonData(setname) { ReadData(); }
 
@@ -28,7 +28,7 @@ private:
 
 class IntFilter543: public CommonData
 {
-public: 
+public:
 	IntFilter543(std::string setname):
   	CommonData(setname) { ReadData(); }
 

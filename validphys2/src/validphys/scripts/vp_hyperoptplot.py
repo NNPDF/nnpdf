@@ -1,4 +1,5 @@
 from validphys.app import App
+from validphys.loader import Loader, HyperscanNotFound
 from validphys import hyperplottemplates
 from reportengine.compat import yaml
 import pwd
@@ -14,7 +15,7 @@ class HyperoptPlotApp(App):
         """ Wrapper around argumentparser """
         # Hyperopt settings
         parser.add_argument(
-            "hyperopt_folder",
+            "hyperopt_name",
             help="Folder of the hyperopt fit to generate the report for",
         )
         parser.add_argument(
@@ -87,7 +88,16 @@ class HyperoptPlotApp(App):
 
     def complete_mapping(self):
         args = self.args
-        hyperop_folder = args["hyperopt_folder"]
+        hyperop_name = args["hyperopt_name"]
+        ll = Loader()
+        try:
+            hyperop_spec = ll.check_hyperscan(hyperop_name)
+            hyperop_folder = hyperop_spec.path.as_posix()
+        except HyperscanNotFound as e:
+            log.error(e)
+            log.warning("No hyperscan of '%s' found, falling back to old behaviour", hyperop_name)
+            hyperop_folder = hyperop_name
+
         hyperopt_filter = f"{hyperop_folder}/filter.yml"
 
         while hyperop_folder[-1] == "/":
@@ -119,7 +129,12 @@ class HyperoptPlotApp(App):
             "debug": args["debug"],
             "loss_target": args["loss_target"]
         }
-        autosettings["hyperscan"] = filtercard["hyperscan"]
+
+        try:
+            autosettings["hyperscan_config"] = filtercard["hyperscan_config"]
+        except KeyError:
+            # Work with the older hyperscan runs
+            autosettings["hyperscan_config"] = filtercard["hyperscan"]
 
         return autosettings
 

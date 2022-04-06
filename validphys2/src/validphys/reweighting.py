@@ -50,7 +50,7 @@ def nnpdf_weights_numerator(chi2_data_for_reweighting_experiments):
     """Compute the numerator of the NNPDF weights. This is useful for P(α),
     which uses a different normalization."""
     total_ndata = 0
-    chi2s = np.zeros_like(chi2_data_for_reweighting_experiments[0][0].data)
+    chi2s = np.zeros_like(chi2_data_for_reweighting_experiments[0][0].error_members())
     for data in chi2_data_for_reweighting_experiments:
         res, _, ndata = data
         total_ndata += ndata
@@ -102,7 +102,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
     return pd.Series(result, index=result.keys(), name='Reweighting stats')
 
 def _get_p_alpha_val(alpha, chi2_data_for_reweighting_experiments):
-     new_chi2 = [((type(res)(res.data/alpha**2)), central, ndata)
+     new_chi2 = [((type(res)(res.error_members()/alpha**2)), central, ndata)
                     for (res,central,ndata) in
                     chi2_data_for_reweighting_experiments]
 

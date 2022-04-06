@@ -1,0 +1,63 @@
+meta:
+   author: Andrea Barontini
+   keywords: [theory uncertainties, 3-point]
+   title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
+
+default_theory:
+   - theoryid: 163
+
+theoryid: 163
+point_prescription: '3 point'
+
+
+theoryids:
+   from_: scale_variation_theories
+
+dataspecs:
+        - theoryid: 163
+          speclabel: $(\xi_F,\xi_R)=(1,1)$
+        - theoryid: 180
+          speclabel: $(\xi_F,\xi_R)=(2,2)$
+        - theoryid: 173
+          speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
+
+normalize_to: 1
+
+fit: 190315_ern_nlo_central_163_global
+use_cuts: "fromfit"
+
+pdf:
+    from_: fit
+
+dataset_inputs:
+  - dataset: NMCPD
+  - dataset: NMC
+  - dataset: SLACP
+  - dataset: SLACD
+  - dataset: BCDMSP
+  - dataset: CHORUSNU
+  - dataset: CHORUSNB
+  - dataset: NTVNUDMN
+  - dataset: NTVNBDMN
+  - dataset: HERACOMBNCEM
+  - dataset: HERACOMBCCEP
+  - dataset: HERAF2CHARM
+  - dataset: CDFZRAP
+  - dataset: D0ZRAP
+  - dataset: D0WEASY
+  - dataset: D0WMASY
+  - dataset: ATLASWZRAP36PB
+  - dataset: ATLASZHIGHMASS49FB
+
+
+template: template_matrix_plots.md
+
+dataset_report:
+   meta: Null
+   template_text: |
+      ## Scale variations as a function of the kinematics for {@dataset_name@}
+      {@plot_fancy_dataspecs@}
+
+actions_:
+  - report(main=true)
+

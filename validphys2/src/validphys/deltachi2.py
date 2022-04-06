@@ -13,12 +13,11 @@ import scipy as sp
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
-from reportengine import collect
 
 from validphys import plotutils
 from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
 from validphys.core import PDF
-from validphys.pdfplots import PDFPlotter, BandPDFPlotter, FlavourState
+from validphys.pdfplots import PDFPlotter, BandPDFPlotter
 
 
 log = logging.getLogger(__name__)
@@ -27,7 +26,7 @@ log = logging.getLogger(__name__)
 @make_argcheck
 def check_pdf_is_symmhessian(pdf, **kwargs):
     """Check ``pdf`` has error type of ``symmhessian``"""
-    etype = pdf.ErrorType
+    etype = pdf.error_type
     if etype != "symmhessian":
         raise CheckError(
             "Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype)
@@ -135,26 +134,23 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     return fig
 
 
-XPlottingGrid = namedtuple(
-    "XPlottingGrid", ("Q", "basis", "flavours", "xgrid", "grid_values", "scale")
-)
-
-
 def pos_neg_xplotting_grids(delta_chi2_hessian, xplotting_grid):
     """
     Generates xplotting_grids correspodning to positive and negative delta chi2s.
     """
     positive_eigenvalue_mask = delta_chi2_hessian >= 0
 
-    # include replica 0 in both new grids
+    # The masks do not include replica 0, add it in both grids
     pos_mask = np.append(True, positive_eigenvalue_mask)
     neg_mask = np.append(True, ~positive_eigenvalue_mask)
 
-    pos_grid = xplotting_grid.grid_values[pos_mask]
-    neg_grid = xplotting_grid.grid_values[neg_mask]
+    pos_grid = xplotting_grid.grid_values.data[pos_mask]
+    neg_grid = xplotting_grid.grid_values.data[neg_mask]
 
-    pos_xplotting_grid = xplotting_grid._replace(grid_values=pos_grid)
-    neg_xplotting_grid = xplotting_grid._replace(grid_values=neg_grid)
+    # Wrap everything back into the original stats class
+    stats_class = xplotting_grid.grid_values.__class__
+    pos_xplotting_grid = xplotting_grid.copy_grid(stats_class(pos_grid))
+    neg_xplotting_grid = xplotting_grid.copy_grid(stats_class(neg_grid))
 
     return [xplotting_grid, pos_xplotting_grid, neg_xplotting_grid]
 
@@ -216,12 +212,10 @@ class PDFEpsilonPlotter(PDFPlotter):
         labels = flstate.labels
         handles = flstate.handles
 
-        # pick all replicas grid_values for the flavour flindex. stats_class is a method
-        # of the PDF class, which returns the stats calculator (object) for the pdf error type.
-        # Basically stats is an object which says what is the type class of the replicas:
-        # MCStats, HessianStats, SymmHessianStats. In this way validphys use the right methods
-        # to compute statistical values.
-        stats = pdf.stats_class(grid.grid_values[:, flindex, :])
+        # Create a copy of the `Stats` instance of the grid
+        # with only the flavours we are interested in
+        gv = grid.grid_values.data
+        stats = grid(grid_values=gv[:, flindex, :]).grid_values
 
         # Ignore spurious normalization warnings
         with warnings.catch_warnings():
@@ -257,7 +251,7 @@ class PDFEpsilonPlotter(PDFPlotter):
 def check_pdfs_are_montecarlo(pdfs, **kwargs):
     """Checks that the action is applied only to a pdf consisiting of MC replicas."""
     for pdf in pdfs:
-        etype = pdf.ErrorType
+        etype = pdf.error_type
         if etype != "replicas":
             raise CheckError(
                 "Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype)

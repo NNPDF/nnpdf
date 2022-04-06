@@ -16,11 +16,11 @@ A simple example is:
 
 .. code:: yaml
 
-	pdf: NNPDF31_nlo_as_0118
+	pdf: NNPDF40_nlo_as_01180
 
-	theoryid: 52
+	theoryid: 208
 
-	use_cuts: "nocuts"
+	use_cuts: "internal"
 
 	dataset_input:
 	    dataset: ATLASWZRAP36PB

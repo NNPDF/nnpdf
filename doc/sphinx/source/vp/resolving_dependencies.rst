@@ -113,7 +113,7 @@ once in each of the `scan_params` namespaces. If we instead had this:
 .. code:: yaml
 
 	pdfs:
-	 - NNPDF30_nlo_as_0118
+	 - NNPDF40_nnlo_as_01180
 	 - CT14nlo
 
 	scan_params:

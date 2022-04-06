@@ -6,8 +6,8 @@ meta:
     author: Lazy Person
 
 closure:
-    fit: {id: 191015-mw-001}
-    pdf: {id: 191015-mw-001, label: "test closures"}
+    fit: {id: NNPDF40_example_closure_test}
+    pdf: {id: NNPDF40_example_closure_test, label: "test closures"}
     theory:
       from_: fit
     theoryid:

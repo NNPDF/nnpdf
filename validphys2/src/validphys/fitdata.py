@@ -21,7 +21,6 @@ from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
 from validphys import sumrules
-from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
@@ -341,8 +340,8 @@ def summarise_theory_covmat_fits(fits_theory_covmat_summary):
     return pd.concat(fits_theory_covmat_summary, axis=1)
 
 def _get_fitted_index(pdf, i):
-    """Return the nnfit index for the replcia i"""
-    p = pathlib.Path(pdf.infopath).with_name(f'{pdf.name}_{i:04d}.dat')
+    """Return the nnfit index for the replica i"""
+    p = pdf.infopath.with_name(f'{pdf.name}_{i:04d}.dat')
     with open(p) as f:
         it = yaml.safe_load_all(f)
         metadata = next(it)

@@ -4,11 +4,11 @@ meta:
   keywords: [example]
 
 pdfs:
-  - {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
-  - {id: "NNPDF31_nnlo_as_0118", label: "3.1 NNLO"}
-  - {id: "NNPDF31_nnlo_as_0118_DISonly", label: "3.1 DIS only NNLO"}
+  - {id: "NNPDF40_nlo_as_01180", label: "4.0 NLO"}
+  - {id: "NNPDF40_nnlo_as_01180", label: "4.0 NNLO"}
+  - {id: "NNPDF40_nnlo_lowprecision", label: "4.0 NNLO low precision"}
 
-pdf: {id: "NNPDF31_nlo_as_0118", label: "3.1 NLO"}
+pdf: {id: "NNPDF40_nlo_as_01180", label: "4.0 NLO"}
 
 sqrts: 13000 # GeV
 

@@ -15,14 +15,15 @@ from reportengine import collect
 
 from validphys.results import ThPredictionsResult
 from validphys.calcutils import calc_chi2
-from validphys.core import DataSetSpec
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
     check_multifit_replicas,
     check_fits_underlying_law_match,
     check_fits_areclosures,
     check_fits_different_filterseed,
+    check_t0pdfset_matches_multiclosure_law
 )
+from validphys.checks import check_use_t0
 
 # bootstrap seed default
 DEFAULT_SEED = 9689372
@@ -33,8 +34,10 @@ SAMPLING_INTERVAL = 5
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
+@check_use_t0
+@check_t0pdfset_matches_multiclosure_law
 def internal_multiclosure_dataset_loader(
-    dataset, fits_pdf, multiclosure_underlyinglaw, fits
+    dataset, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
     """Internal function for loading multiple theory predictions for a given
     dataset and a single covariance matrix using underlying law as t0 PDF,
@@ -77,39 +80,31 @@ def internal_multiclosure_dataset_loader(
     typically used in these studies.
 
     """
-    if isinstance(dataset, DataSetSpec):
-        data = dataset.load()  # just use internal loader
-    else:
-        # don't cache result
-        data = dataset.load.__wrapped__(dataset)
-
     fits_dataset_predictions = [
-        ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
+        ThPredictionsResult.from_convolution(pdf, dataset)
         for pdf in fits_pdf
     ]
     fits_underlying_predictions = ThPredictionsResult.from_convolution(
-        multiclosure_underlyinglaw, dataset, loaded_data=data
+        multiclosure_underlyinglaw, dataset
     )
 
-    # copy data to make t0 cov
-    loaded_data = type(data)(data)
-    loaded_data.SetT0(multiclosure_underlyinglaw.load_t0())
-    covmat = loaded_data.get_covmat()
-    sqrt_covmat = la.cholesky(covmat, lower=True)
+    sqrt_covmat = la.cholesky(dataset_inputs_t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (fits_dataset_predictions, fits_underlying_predictions, covmat, sqrt_covmat)
+    return (fits_dataset_predictions, fits_underlying_predictions, dataset_inputs_t0_covmat_from_systematics, sqrt_covmat)
 
 
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
+@check_t0pdfset_matches_multiclosure_law
+@check_use_t0
 def internal_multiclosure_data_loader(
-    data, fits_pdf, multiclosure_underlyinglaw, fits
+    data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
 ):
     """Like `internal_multiclosure_dataset_loader` except for all data"""
     return internal_multiclosure_dataset_loader(
-        data, fits_pdf, multiclosure_underlyinglaw, fits
+        data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
     )
 
 
@@ -135,7 +130,7 @@ def fits_dataset_bias_variance(
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
-    reps = np.asarray([th._rawdata[:, :_internal_max_reps] for th in closures_th])
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis
@@ -259,6 +254,7 @@ def dataset_xi(dataset_replica_and_central_diff):
             ascending eigenvalues
 
     """
+
     sigma, central_diff = dataset_replica_and_central_diff
     # sigma is always positive
     in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
@@ -325,7 +321,7 @@ class BootstrappedTheoryResult:
     """
 
     def __init__(self, data):
-        self._rawdata = data
+        self.rawdata = data
         self.central_value = data.mean(axis=1)
 
 
@@ -369,7 +365,7 @@ def _bootstrap_multiclosure_fits(
     # construct proxy fits theory predictions
     for fit_th in fit_boot_th:
         rep_boot_index = rng.choice(n_rep_max, size=n_rep, replace=use_repeats)
-        boot_ths.append(BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index]))
+        boot_ths.append(BootstrappedTheoryResult(fit_th.error_members[:, rep_boot_index]))
     return (boot_ths, *input_tuple)
 
 
@@ -773,7 +769,7 @@ def dataset_fits_bias_replicas_variance_samples(
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
-    reps = np.asarray([th._rawdata[:, :_internal_max_reps] for th in closures_th])
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis

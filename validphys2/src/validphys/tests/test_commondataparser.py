@@ -20,7 +20,7 @@ def test_basic_commondata_loading():
 
     # Test a dataset with no systematics
     emptysyscd = l.check_posset(theoryID=THEORYID, setname='POSDYCBD', postlambda=1e-10)
-    emptysysres = load_commondata(emptysyscd.commondataspec)
+    emptysysres = load_commondata(emptysyscd.commondata)
     assert emptysysres.nsys == 0
     assert emptysysres.systype_table.empty is True
 
@@ -32,7 +32,7 @@ def test_commondata_with_cuts():
     cd = l.check_commondata(setname=setname)
     loaded_cd = load_commondata(cd)
 
-    fit_cuts = l.check_fit_cuts(fit=FIT, setname=setname)
+    fit_cuts = l.check_fit_cuts(fit=FIT, commondata=cd)
     internal_cuts = l.check_internal_cuts(
         cd, API.rules(theoryid=THEORYID, use_cuts="internal")
     )
@@ -57,6 +57,7 @@ def test_commondata_with_cuts():
     assert all(loaded_cd.with_cuts([1, 2, 3]).commondata_table.index - 1 == [1, 2, 3])
 
     # Check that giving cuts for another dataset raises the correct ValueError exception
-    bad_cuts = l.check_fit_cuts(fit=FIT, setname="NMCPD")
+    cd_bad = l.check_commondata(setname="NMCPD")
+    bad_cuts = l.check_fit_cuts(fit=FIT, commondata=cd_bad)
     with pytest.raises(ValueError):
         loaded_cd.with_cuts(bad_cuts)

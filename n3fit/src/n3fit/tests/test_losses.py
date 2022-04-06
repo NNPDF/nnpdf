@@ -3,7 +3,6 @@
 """
 import numpy as np
 from n3fit.layers import losses
-from n3fit.backends import operations as op
 from .test_backend import are_equal, DIM
 
 ARR1 = np.random.rand(DIM)
@@ -19,7 +18,7 @@ def test_l_invcovmat():
     y = ARR1 - ARR2
     tmp = np.dot(INVCOVMAT, y)
     reference = np.dot(y, tmp)
-    are_equal(result, reference)
+    are_equal(result, reference, threshold=1e-4)
 
 
 def test_l_positivity():

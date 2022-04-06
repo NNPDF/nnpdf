@@ -120,7 +120,17 @@ void CMS_hxsec_RunIIFilter::ReadData()
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
 	}
-    } 
+    }
+
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] corrmat[i];
+    }
+  
+  delete[] Sys;
+  delete[] syscor;
+  delete[] corrmat;
 
   f1.close();
   f2.close();
