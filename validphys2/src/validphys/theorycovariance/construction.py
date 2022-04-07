@@ -369,7 +369,7 @@ def covs_pt_prescrip(
         batches_list.append(np.transpose(shifts_fin,axes=[2,1,0]))
     shifts = shifts_vec(batches_list)
     thcmat = thcovmat(shifts) 
-    #divide by 12 beacause currently the prescriptions are not implemented yet
+    #divide by 12 because currently the prescriptions are not implemented yet
     thcmat = thcmat/12.
     return thcmat
 
