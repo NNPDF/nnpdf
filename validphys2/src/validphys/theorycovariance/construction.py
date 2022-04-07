@@ -185,7 +185,8 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
+    for dataset in each_dataset_results_bytheory:
+        name = dataset[0][1].name
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)

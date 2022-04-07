@@ -109,7 +109,8 @@ class DataResult(StatsResult):
 class ThPredictionsResult(StatsResult):
     """Class holding theory prediction, inherits from StatsResult"""
 
-    def __init__(self, dataobj, stats_class, label=None):
+    def __init__(self, dataobj, stats_class, label=None, name=None):
+        self.name = name
         self.stats_class = stats_class
         self.label = label
         statsobj = stats_class(dataobj.T)
@@ -148,7 +149,7 @@ class ThPredictionsResult(StatsResult):
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label)
+        return cls(th_predictions, pdf.stats_class, label, name=dataset.name)
 
 
 class PositivityResult(StatsResult):
