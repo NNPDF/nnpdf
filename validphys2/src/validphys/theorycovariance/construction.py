@@ -174,7 +174,7 @@ def dataset_names(data_input):
 ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_bytheory, dataset_names):
+def combine_by_type(each_dataset_results_bytheory):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the
@@ -359,8 +359,8 @@ def covs_pt_prescrip(
     start_proc = process_starting_points
     process_info = combine_by_type
     batches_list = []
-    for name1 in process_info.theory:
-        central, *others = process_info.theory[name1]
+    for name in process_info.theory:
+        central, *others = process_info.theory[name]
         deltas = np.array(list((other - central for other in others)))
         zeros = np.array(list(cen - cen for cen in central))
         fact05 = np.array([deltas[0], deltas[1], deltas[2]])
@@ -506,12 +506,10 @@ def thcovmat(shifts: list[np.ndarray]) -> np.ndarray:
 
 
 @table
-def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index, combine_by_type):
+def theory_covmat_custom(covs_pt_prescrip, procs_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-    #datasets_shifts = list(combine_by_type.sizes.keys())
-    #new_procs_index = procs_index.to_frame().sort_index(level=1, key=lambda x: [datasets_shifts.index(i) for i in x]).index
     tmp = pd.DataFrame(covs_pt_prescrip, index=procs_index, columns=procs_index)
     return tmp.sort_index(level=0)
 
