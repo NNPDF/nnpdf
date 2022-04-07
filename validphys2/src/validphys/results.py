@@ -26,7 +26,7 @@ from validphys.checks import (
     check_two_dataspecs,
 )
 
-from validphys.core import DataSetSpec, PDF, DataGroupSpec
+from validphys.core import DataSetSpec, PDF, DataGroupSpec, Stats
 from validphys.calcutils import (
     all_chi2,
     central_chi2,
@@ -36,7 +36,6 @@ from validphys.calcutils import (
 )
 from validphys.convolution import (
     predictions,
-    central_predictions,
     PredictionsRequireCutsError,
 )
 
@@ -48,30 +47,19 @@ class Result:
     pass
 
 
-# TODO: Eventually,only one of (NNPDFDataResult, StatsResult) should survive
-class NNPDFDataResult(Result):
-    """A result fills its values from a pandas dataframe
-    For legacy (libNNPDF) compatibility, falls back to libNNPDF attributes"""
-
-    def __init__(self, dataobj=None, central_value=None):
-        # This class is used by both validphys and libNNPDF objects
-        # when central_value is not explictly passed, fallback to
-        # libNNPDF object .get_cv()
-        if central_value is None:
-            central_value = dataobj.get_cv()
-        self._central_value = np.array(central_value).reshape(-1)
-
-    @property
-    def central_value(self):
-        return self._central_value
-
-    def __len__(self):
-        return len(self.central_value)
-
-
 class StatsResult(Result):
     def __init__(self, stats):
         self.stats = stats
+
+    @property
+    def rawdata(self):
+        """Returns the raw data with shape (Npoints, Npdf)"""
+        return self.stats.data.T
+
+    @property
+    def error_members(self):
+        """Returns the error members with shape (Npoints, Npdf)"""
+        return self.stats.error_members().T
 
     @property
     def central_value(self):
@@ -81,16 +69,28 @@ class StatsResult(Result):
     def std_error(self):
         return self.stats.std_error()
 
+    def __len__(self):
+        """Returns the number of data points in the result"""
+        return self.rawdata.shape[0]
 
-class DataResult(NNPDFDataResult):
-    def __init__(self, dataobj, covmat, sqrtcovmat, central_value=None):
-        super().__init__(dataobj, central_value=central_value)
+
+class DataResult(StatsResult):
+    """Holds the relevant information from a given dataset"""
+
+    def __init__(self, dataobj, covmat, sqrtcovmat):
+        self._central_value = dataobj.get_cv()
+        stats = Stats(self._central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
+        super().__init__(stats)
 
     @property
     def label(self):
         return "Data"
+
+    @property
+    def central_value(self):
+        return self._central_value
 
     @property
     def std_error(self):
@@ -106,27 +106,14 @@ class DataResult(NNPDFDataResult):
         return self._sqrtcovmat
 
 
-class ThPredictionsResult(NNPDFDataResult):
-    """Class holding theory prediction
-    For legacy purposes it still accepts libNNPDF datatypes, but prefers python-pure stuff
-    """
-    def __init__(self, dataobj, stats_class, label=None, central_value=None):
+class ThPredictionsResult(StatsResult):
+    """Class holding theory prediction, inherits from StatsResult"""
+
+    def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
-        # Ducktype the input into numpy arrays
-        try:
-            self._rawdata = dataobj.to_numpy()
-            # If the numpy conversion worked then we don't have a libNNPDF in our hands
-            stats = stats_class(self._rawdata.T)
-            self._std_error = stats.std_error()
-        except AttributeError:
-            self._std_error = dataobj.get_error()
-            self._rawdata = dataobj.get_data()
-        super().__init__(dataobj, central_value=central_value)
-
-    @property
-    def std_error(self):
-        return self._std_error
+        statsobj = stats_class(dataobj.T)
+        super().__init__(statsobj)
 
     @staticmethod
     def make_label(pdf, dataset):
@@ -152,20 +139,16 @@ class ThPredictionsResult(NNPDFDataResult):
             datasets = (dataset,)
 
         try:
-            all_preds = []
-            all_centrals = []
-            for d in datasets:
-                all_preds.append(predictions(d, pdf))
-                all_centrals.append(central_predictions(d, pdf))
+            th_predictions = pd.concat([predictions(d, pdf) for d in datasets])
         except PredictionsRequireCutsError as e:
-            raise PredictionsRequireCutsError("Predictions from FKTables always require cuts, "
-                    "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`") from e
-        th_predictions = pd.concat(all_preds)
-        central_values = pd.concat(all_centrals)
+            raise PredictionsRequireCutsError(
+                "Predictions from FKTables always require cuts, "
+                "if you want to use the fktable intrinsic cuts set `use_cuts: 'internal'`"
+            ) from e
 
         label = cls.make_label(pdf, dataset)
 
-        return cls(th_predictions, pdf.stats_class, label, central_value=central_values)
+        return cls(th_predictions, pdf.stats_class, label)
 
 
 class PositivityResult(StatsResult):
@@ -175,10 +158,6 @@ class PositivityResult(StatsResult):
         stats = pdf.stats_class(data.T)
         return cls(stats)
 
-    @property
-    def rawdata(self):
-        return self.stats.data
-
 
 # TODO: finish deprecating all dependencies on this index largely in theorycovmat module
 groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
@@ -186,6 +165,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
+
 
 def groups_index(groups_data):
     """Return a pandas.MultiIndex with levels for group, dataset and point
@@ -257,7 +237,7 @@ def group_result_table_no_table(groups_results, groups_index):
         ):
             replicas = (
                 ("rep_%05d" % (i + 1), th_rep)
-                for i, th_rep in enumerate(th._rawdata[index, :])
+                for i, th_rep in enumerate(th.error_members[index, :])
             )
 
             result_records.append(
@@ -561,13 +541,13 @@ def dataset_inputs_abs_chi2_data(dataset_inputs_results):
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
-    Returns tuple of (phi, numpoints)
+    Returns tuple of (float, int): (phi, numpoints)
 
     For more information on how phi is calculated see Eq.(24) in
     1410.8849
     """
     alldata, central, npoints = abs_chi2_data
-    return (np.sqrt((alldata.data.mean() - central) / npoints), npoints)
+    return (np.sqrt((alldata.error_members().mean() - central) / npoints), npoints)
 
 
 def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
@@ -612,7 +592,7 @@ def dataset_inputs_bootstrap_phi_data(dataset_inputs_results, bootstrap_samples=
     For more information on how phi is calculated see `phi_data`
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(
         diff,
         bootstrap_samples,
@@ -632,7 +612,7 @@ def dataset_inputs_bootstrap_chi2_central(
     a different value can be specified in the runcard.
     """
     dt, th = dataset_inputs_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    diff = np.array(th.error_members - dt.central_value[:, np.newaxis])
     cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
     chi2_central_resample = bootstrap_values(
         diff,
@@ -642,11 +622,6 @@ def dataset_inputs_bootstrap_chi2_central(
         args=[dt.sqrtcovmat],
     )
     return chi2_central_resample
-
-
-def _chs_per_replica(chs):
-    th, _, l = chs
-    return th.data.ravel() / l
 
 
 @table
@@ -661,16 +636,15 @@ def predictions_by_kinematics_table(results, kinematics_table_notable):
     return tb
 
 groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_metadata",))
+groups_chi2_by_process = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_process",))
+groups_each_dataset_chi2_by_process = collect("each_dataset_chi2", ("group_dataset_inputs_by_process",))
 
 @table
 def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
-    the groups."""
+    the groups, grouped by metadata."""
     records = []
     for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2):
-        stats = chi2_stats(groupres)
-        stats["group"] = group.name
-        records.append(stats)
         for dataset, dsres in zip(group, dsresults):
             stats = chi2_stats(dsres)
             stats["group"] = dataset.name
@@ -678,13 +652,23 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     return pd.DataFrame(records)
 
 
-@table
-def procs_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2):
-    return groups_chi2_table(procs_data, pdf, procs_chi2, each_dataset_chi2)
-    
 experiments_chi2_table = collect(
     "groups_chi2_table", ("group_dataset_inputs_by_experiment",)
 )
+
+@table
+def procs_chi2_table(
+    procs_data, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process
+):
+    """Same as groups_chi2_table but by process"""
+    return groups_chi2_table(
+        procs_data,
+        pdf,
+        groups_chi2_by_process,
+        groups_each_dataset_chi2_by_process,
+    )
+
+#procs_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_process",))
 
 @check_cuts_considered
 @table
@@ -727,7 +711,7 @@ dataspecs_posdataset = collect("posdataset", ("dataspecs",))
 def count_negative_points(possets_predictions):
     """Return the number of replicas with negative predictions for each bin
     in the positivity observable."""
-    return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
+    return np.sum([(r.error_members < 0).sum(axis=0) for r in possets_predictions], axis=0)
 
 
 chi2_stat_labels = {
@@ -1061,7 +1045,7 @@ def total_chi2_data_from_experiments(experiments_chi2_data, pdf):
     )
 
     # we sum data, not error_members here because we feed it back into the stats
-    # class, some stats class error_members cuts off the CV
+    # class, the stats class error_members cuts off the CV if needed
     data_sum = np.sum(
         [exp_chi2_data.replica_result.data for exp_chi2_data in experiments_chi2_data],
         axis=0

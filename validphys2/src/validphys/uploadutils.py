@@ -71,7 +71,7 @@ class Uploader():
         except subprocess.CalledProcessError as e:
             raise BadSSH(("Could not validate the SSH key. "
             "The command\n%s\nreturned a non zero exit status. "
-            "Please make sure thet your public SSH key is on the server.")
+            "Please make sure that your public SSH key is on the server.")
             % str_line) from e
         except OSError as e:
             raise BadSSH("Could not run the command\n%s\n: %s" % (str_line, e)) from e

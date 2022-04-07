@@ -255,7 +255,8 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps=self.steps)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs,
+                    step_size=1000)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -411,7 +412,8 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units, steps=self.steps)
+                units_sampler = hp_quniform(units_label, min_units, max_units,
+                        step_size=1)
                 units.append(units_sampler)
             # The last layer will always have 8 nodes
             units.append(8)

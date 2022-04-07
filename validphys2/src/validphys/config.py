@@ -1621,6 +1621,20 @@ class CoreConfig(configparser.Config):
             return self.produce_group_dataset_inputs_by_metadata(data_input, "ALL")
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
+    def produce_fivetheories(self, point_prescription):
+        if point_prescription == "5bar point":
+            return "bar"
+        elif point_prescription == "5 point":
+            return "nobar"
+        return None 
+    
+    def produce_seventheories(self, point_prescription):
+        if point_prescription == "7 point":
+            #This is None because is the default choice 
+            return None
+        elif point_prescription == "7original point":
+            return "original"
+        return None
 
     def produce_group_dataset_inputs_by_experiment(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
@@ -1647,7 +1661,6 @@ class CoreConfig(configparser.Config):
             str(scalevarsfor_dict["theoryid"])
             for scalevarsfor_dict in scalevarsfor_list
         ]
-
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
             raise ConfigError(

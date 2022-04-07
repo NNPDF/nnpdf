@@ -30,7 +30,7 @@ nnpdf_pdfs_index: 'pdfdata.json'
 
 #Server side uploading locations
 upload_host: 'nnpdf@vp.nnpdf.science'
-reports_target_dir: "WEB/validphys-reports/"
+reports_target_dir: "validphys-reports/"
 reports_root_url: 'https://vp.nnpdf.science/'
 fits_target_dir: "WEB/fits/"
 fits_root_url: 'https://data.nnpdf.science/fits/'

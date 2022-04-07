@@ -18,7 +18,7 @@ def test_l_invcovmat():
     y = ARR1 - ARR2
     tmp = np.dot(INVCOVMAT, y)
     reference = np.dot(y, tmp)
-    are_equal(result, reference)
+    are_equal(result, reference, threshold=1e-4)
 
 
 def test_l_positivity():

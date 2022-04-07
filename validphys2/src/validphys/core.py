@@ -226,36 +226,10 @@ class PDF(TupleComp):
 
         return libNNPDF_LHAPDFSet(self.name, et)
 
-    @property
-    def grid_values_index(self):
-        """A range object describing which members are selected in a
-        ``pdf.load().grid_values`` operation.  This is ``range(1,
-        len(pdf))`` for Monte Carlo sets, because replica 0 is not selected
-        and ``range(0, len(pdf))`` for hessian sets.
-
-
-        Returns
-        -------
-        index : range
-            A range object describing the proper indexing.
-
-        Notes
-        -----
-        The range object can be used efficiently as a Pandas index.
-        """
-        if self.error_type == "replicas":
-            return range(1, len(self))
-        elif self.error_type in ("hessian", "symmhessian"):
-            return range(0, len(self))
-        else:
-            raise RuntimeError(f"Unknown error type: {self.stats_class}")
-
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
-        operation. See :py:meth:`PDF.grid_values_index` for details on differences
-        between types of PDF sets.
         """
-        return len(self.grid_values_index)
+        return len(self)
 
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
@@ -777,10 +751,10 @@ class Stats:
         self.data = np.atleast_2d(data)
 
     def central_value(self):
-        raise NotImplementedError()
+        return self.data[0]
 
     def error_members(self):
-        raise NotImplementedError()
+        return self.data[1:]
 
     def std_error(self):
         raise NotImplementedError()
@@ -807,16 +781,12 @@ class Stats:
 
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
-
-    def central_value(self):
-        return np.mean(self.data, axis=0)
-
     def std_error(self):
         # ddof == 1 to match libNNPDF behaviour
-        return np.std(self.data, ddof=1, axis=0)
+        return np.std(self.error_members(), ddof=1, axis=0)
 
     def moment(self, order):
-        return np.mean(np.power(self.data-self.central_value(),order), axis=0)
+        return np.mean(np.power(self.error_members()-self.central_value(),order), axis=0)
 
     def errorbar68(self):
         #Use nanpercentile here because we can have e.g. 0/0==nan normalization
@@ -827,9 +797,6 @@ class MCStats(Stats):
 
     def sample_values(self, size):
         return np.random.choice(self, size=size)
-
-    def error_members(self):
-        return self.data
 
 
 class SymmHessianStats(Stats):
@@ -842,14 +809,8 @@ class SymmHessianStats(Stats):
         super().__init__(data)
         self.rescale_factor = rescale_factor
 
-    def central_value(self):
-        return self.data[0]
-
     def errorbar68(self):
         return self.errorbarstd()
-
-    def error_members(self):
-        return self.data[1:]
 
     def std_error(self):
         data = self.data

@@ -147,9 +147,7 @@ def predictions(dataset, pdf):
         A dataframe corresponding to the hadronic prediction for each data
         point for the PDF members. The index of the dataframe corresponds to
         the selected data points, based on the dataset :ref:`cuts <filters>`. The
-        columns correspond to the selected PDF members in the LHAPDF set, which
-        depend on the PDF error type (see
-        :py:meth:`validphys.core.PDF.grid_values_index`)
+        columns correspond to the selected PDF members in the LHAPDF set.
 
     Examples
     --------
@@ -219,9 +217,7 @@ def fk_predictions(loaded_fk, pdf):
         point for the PDF members. The index of the dataframe corresponds to
         the selected data points (use
         :py:meth:`validphys.coredata.FKTableData.with_cuts` to filter out
-        points). The columns correspond to the selected PDF members in the
-        LHAPDF set, which depend on the PDF error type (see
-        :py:meth:`validphys.core.PDF.grid_values_index`)
+        points). The columns correspond to the selected PDF members in the LHAPDF set.
 
     Notes
     -----
@@ -351,7 +347,7 @@ def hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for hadronic observables."""
     gv = functools.partial(evolution.grid_values, pdf=pdf)
     res = _gv_hadron_predictions(loaded_fk, gv)
-    res.columns = pdf.grid_values_index
+    res.columns = range(pdf.get_members())
     return res
 
 
@@ -380,7 +376,7 @@ def linear_hadron_predictions(loaded_fk, pdf):
         return 2 * replica_values - central_value
 
     res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
-    res.columns = pdf.grid_values_index
+    res.columns = range(pdf.get_members())
     return res
 
 
@@ -388,7 +384,7 @@ def dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for DIS observables."""
     gv = functools.partial(evolution.grid_values, pdf=pdf)
     res = _gv_dis_predictions(loaded_fk, gv)
-    res.columns = pdf.grid_values_index
+    res.columns = range(pdf.get_members())
     return res
 
 

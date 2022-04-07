@@ -61,8 +61,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if normalize_to is not None:
             normalize_pdf = self.normalize_pdf
             normalize_grid = self._xplotting_grids[normalize_to]
-            normvals = normalize_pdf.stats_class(
-                            normalize_grid.grid_values).central_value()
+            normvals = normalize_grid.grid_values.central_value()
 
             #Handle division by zero more quietly
             def fp_error(tp, flag):
@@ -75,12 +74,9 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             newgrids = []
             with np.errstate(all='call'):
                 np.seterrcall(fp_error)
-                for grid in self._xplotting_grids:
-                    newvalues = grid.grid_values/normvals
-                    #newgrid is like the old grid but with updated values
-                    newgrid = type(grid)(**{**grid._asdict(),
-                                             'grid_values':newvalues})
-                    newgrids.append(newgrid)
+                for pdf, grid in zip(self.pdfs, self._xplotting_grids):
+                    newvalues = pdf.stats_class(grid.grid_values.data/normvals)
+                    newgrids.append(grid.copy_grid(grid_values=newvalues))
 
             return newgrids
         return self._xplotting_grids
@@ -190,10 +186,11 @@ class ReplicaPDFPlotter(PDFPlotter):
         ax = flstate.ax
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop['color']
-        gv = grid.grid_values[:,flstate.flindex,:]
+        flavour_grid = grid.select_flavour(flstate.flindex)
+        stats = flavour_grid.grid_values
+        gv = stats.data
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
-        stats = pdf.stats_class(gv)
         ax.plot(grid.xgrid, stats.central_value(), color=color,
                 linewidth=2,
                 label=pdf.label)
@@ -227,8 +224,7 @@ class UncertaintyPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         flindex = flstate.flindex
-        gv = grid.grid_values[:,flindex,:]
-        stats = pdf.stats_class(gv)
+        stats = grid.select_flavour(flindex).grid_values
 
         res = stats.std_error()
 
@@ -334,7 +330,10 @@ class DistancePDFPlotter(PDFPlotter):
         next_prop = next(pcycler)
         color = next_prop['color']
 
-        gv = grid.grid_values[flindex,:]
+        # The grid for the distance is (1, flavours, points)
+        # take only the flavour we are interested in
+        gv = grid.select_flavour(flindex).grid_values.data.squeeze()
+
         ax.plot(grid.xgrid, gv, color=color, label='$%s$' % flstate.parton_name)
 
         return gv
@@ -410,11 +409,11 @@ class BandPDFPlotter(PDFPlotter):
 
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
-        flindex = flstate.flindex
         hatchit = flstate.hatchit
         labels = flstate.labels
         handles = flstate.handles
-        stats = pdf.stats_class(grid.grid_values[:,flindex,:])
+        # Take only the flavours we are interested in
+        stats = grid.select_flavour(flstate.flindex).grid_values
         pcycler = ax._get_lines.prop_cycler
         #This is ugly but can't think of anything better
 

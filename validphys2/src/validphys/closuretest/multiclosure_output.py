@@ -382,6 +382,40 @@ def plot_data_xi_histogram(data_xi, data):
     return plot_dataset_xi_histogram(data_xi, data)
 
 
+@figure
+def plot_data_central_diff_histogram(experiments_replica_central_diff):
+    """Histogram of the difference between central prediction
+    and underlying law prediction normalised by the corresponding replica
+    standard deviation by concatenating the difference across all data. plot a
+    scaled gaussian for reference. Total xi is the number of central differences
+    which fall within the 1-sigma confidence interval of the scaled gaussian.
+
+    """
+    scaled_diffs = np.concatenate([
+        (central_diff / sigma).flatten()
+        for sigma, central_diff
+        in experiments_replica_central_diff
+    ])
+    fig, ax = plt.subplots()
+    ax.hist(
+        scaled_diffs, bins=50, density=True, label="Central prediction distribution"
+    )
+    xlim = (-5, 5)
+    ax.set_xlim(xlim)
+
+    x = np.linspace(*xlim, 100)
+    ax.plot(
+        x,
+        scipy.stats.norm.pdf(x),
+        "-k",
+        label="Normal distribution",
+    )
+    ax.legend()
+    ax.set_xlabel("Difference to underlying prediction")
+    return fig
+
+
+
 @table
 def dataset_ratio_error_finite_effects(
     bias_variance_resampling_dataset, n_fit_samples, n_replica_samples
@@ -627,6 +661,20 @@ def experiments_bootstrap_sqrt_ratio_table(
 
 
 @table
+def groups_bootstrap_sqrt_ratio_table(
+    groups_bootstrap_sqrt_ratio, groups_data
+):
+    """Like :py:func:`experiments_bootstrap_sqrt_ratio_table` but for
+    metadata groups.
+    """
+    df = experiments_bootstrap_sqrt_ratio_table(
+        groups_bootstrap_sqrt_ratio, groups_data
+    )
+    idx = df.index.rename("group")
+    return df.set_index(idx)
+
+
+@table
 def experiments_bootstrap_expected_xi_table(
     experiments_bootstrap_expected_xi, experiments_data
 ):
@@ -646,6 +694,16 @@ def experiments_bootstrap_expected_xi_table(
     ]
     return df
 
+
+@table
+def groups_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data):
+    """Like :py:func:`experiments_bootstrap_expected_xi_table` but for metadata
+    groups.
+    """
+    df = experiments_bootstrap_expected_xi_table(
+        groups_bootstrap_expected_xi, groups_data)
+    idx = df.index.rename("group")
+    return df.set_index(idx)
 
 @table
 def experiments_bootstrap_xi_table(
@@ -672,6 +730,17 @@ def experiments_bootstrap_xi_table(
 
 
 @table
+def groups_bootstrap_xi_table(
+    groups_bootstrap_xi, groups_data, total_bootstrap_xi
+):
+    """Like :py:func:`experiments_bootstrap_xi_table` but for metadata groups."""
+    df = experiments_bootstrap_xi_table(
+        groups_bootstrap_xi, groups_data, total_bootstrap_xi)
+    idx = df.index.rename("group")
+    return df.set_index(idx)
+
+
+@table
 def experiments_bootstrap_xi_comparison(
     experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table
 ):
@@ -683,6 +752,18 @@ def experiments_bootstrap_xi_comparison(
     return pd.concat(
         (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
         axis=1,
+    )
+
+
+@table
+def groups_bootstrap_xi_comparison(
+    groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table
+):
+    """Like :py:func:`experiments_bootstrap_xi_comparison` but for metadata
+    groups.
+    """
+    return experiments_bootstrap_xi_comparison(
+        groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table
     )
 
 
