@@ -310,8 +310,8 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, extra_fields=None
                 out.write(f"SetDesc: \"Hessian {pdf}_hessian\"\n")
             elif l.find("NumMembers:") >= 0:
                 out.write(f"NumMembers: {neig+1}\n")
-            elif l.find("error_type: replicas") >= 0:
-                out.write("error_type: symmhessian\n")
+            elif l.find("ErrorType: replicas") >= 0:
+                out.write("ErrorType: symmhessian\n")
             else:
                 out.write(l)
         if extra_fields is not None:
