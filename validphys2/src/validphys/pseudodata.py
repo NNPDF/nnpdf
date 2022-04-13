@@ -224,7 +224,6 @@ def make_replica(
         mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
     #Shifting pseudodata
     shifted_pseudodata = (all_pseudodata + shifts)*mult_part
-    import ipdb; ipdb.set_trace()
     #positivity control
     for index,dat in enumerate(shifted_pseudodata[full_mask]):
         if dat < 0.:
