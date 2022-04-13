@@ -198,35 +198,37 @@ def make_replica(
     full_mask=np.concatenate(check_positive_masks, axis=0)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
-    while True:
-        mult_shifts = []
-        # Prepare the per-dataset multiplicative shifts
-        for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
-        # convert to from percent to fraction
-            mult_shift = (
-                1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
-            ).prod(axis=1)
 
-            mult_shift *= (
-                1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
-            ).prod(axis=1)
+    mult_shifts = []
+    # Prepare the per-dataset multiplicative shifts
+    for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
+    # convert to from percent to fraction
+        mult_shift = (
+            1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
+        ).prod(axis=1)
 
-            mult_shifts.append(mult_shift)
+        mult_shift *= (
+            1 + mult_corr_errors * rng.normal(size=(1, mult_corr_errors.shape[1])) / 100
+        ).prod(axis=1)
+
+        mult_shifts.append(mult_shift)
             
-        #If sep_mult is true then the multiplicative shifts were not included in the covmat
-        shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
-        mult_part = 1.
-        if sep_mult:
-            special_mult = (
-                1 + special_mult_errors * rng.normal(size=(1, 
-                special_mult_errors.shape[1])) / 100
-                ).prod(axis=1)
-            mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
-        #Shifting pseudodata
-        shifted_pseudodata = (all_pseudodata + shifts)*mult_part
-        #positivity control
-        if np.all(shifted_pseudodata[full_mask] >= 0):
-            break
+    #If sep_mult is true then the multiplicative shifts were not included in the covmat
+    shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
+    mult_part = 1.
+    if sep_mult:
+        special_mult = (
+            1 + special_mult_errors * rng.normal(size=(1, 
+        special_mult_errors.shape[1])) / 100
+        ).prod(axis=1)
+        mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
+    #Shifting pseudodata
+    shifted_pseudodata = (all_pseudodata + shifts)*mult_part
+    import ipdb; ipdb.set_trace()
+    #positivity control
+    for index,dat in enumerate(shifted_pseudodata[full_mask]):
+        if dat < 0.:
+            shifted_pseudodata[index] = np.abs(dat)        
 
     return shifted_pseudodata
 
