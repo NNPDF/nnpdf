@@ -225,9 +225,7 @@ def make_replica(
     #Shifting pseudodata
     shifted_pseudodata = (all_pseudodata + shifts)*mult_part
     #positivity control
-    for index,dat in enumerate(shifted_pseudodata[full_mask]):
-        if dat < 0.:
-            shifted_pseudodata[index] = np.abs(dat)        
+    shifted_pseudodata[full_mask] = np.abs(shifted_pseudodata[full_mask])        
 
     return shifted_pseudodata
 
