@@ -49,28 +49,31 @@ def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
 
 
 def calculate_chi2s_per_replica(
-    recreate_pdf_pseudodata,
+    recreate_pdf_pseudodata_no_table,
     preds,
     dataset_inputs,
-    groups_covmat,
+    groups_covmat_no_table,
     ):
+
+    groups_covmat = groups_covmat_no_table
 
     pp = []
     for i, dss in enumerate(dataset_inputs):
-        df = pd.concat({dss.name: preds[i]}, names=['dataset'])
+        preds_witout_cv = preds[i]
+        df = pd.concat({dss.name: preds_witout_cv}, names=['dataset'])
         pp.append(df)
 
     PDF_predictions = pd.concat(pp)
 
     chi2s_per_replica=[]
-    for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata):
+    for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
 
         prediction_filter=pdf_data_index.val_idx.droplevel(level=0)
         prediction_filter.rename(["dataset","data"], inplace=True)
         PDF_predictions_val = PDF_predictions.loc[prediction_filter]
-        PDF_predictions_val = PDF_predictions_val.values[:,enum]
+        PDF_predictions_val = PDF_predictions_val.values[:,enum+1]
 
-        new_val_pseudodata_list = _create_new_val_pseudodata(pdf_data_index, recreate_pdf_pseudodata)
+        new_val_pseudodata_list = _create_new_val_pseudodata(pdf_data_index, recreate_pdf_pseudodata_no_table)
 
         invcovmat_vl = np.linalg.inv(groups_covmat[pdf_data_index.val_idx].T[pdf_data_index.val_idx])
         
