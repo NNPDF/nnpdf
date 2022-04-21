@@ -230,12 +230,10 @@ def make_replica(
     return shifted_pseudodata
 
 def delta(shifts, data, mask):
-    new_shifts = []
-    for sh, dat, ma in zip(shifts, data, mask):
-        if ma:
-            if sh < 0.:
-                sh = dat*(np.exp(sh/dat)-1.)
-        new_shifts.append(sh)
+    new_shifts = shifts.copy()
+    neg = shifts < 0.
+    negtofix = np.logical_and(neg, mask)
+    new_shifts[negtofix] = data[negtofix] * (np.exp(shifts[negtofix] / data[negtofix]) - 1.)
     return np.array(new_shifts)
 
 
