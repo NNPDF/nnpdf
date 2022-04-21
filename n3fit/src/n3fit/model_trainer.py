@@ -457,7 +457,7 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
-        alphas = AlphasLayer(name="alphas_layer")
+        self.alphas = alphas = AlphasLayer(name="alphas_layer", seed=self._nn_seeds[0])
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
         for exp_dict in self.exp_info:

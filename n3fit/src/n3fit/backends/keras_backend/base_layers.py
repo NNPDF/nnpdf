@@ -26,6 +26,13 @@ from tensorflow import nn, math
 
 from n3fit.backends import MetaLayer
 
+
+
+
+
+
+
+
 # Custom activation functions
 def square_activation(x):
     """ Squares the input """
@@ -39,10 +46,14 @@ def leaky_relu(x):
     """ Computes the Leaky ReLU activation function """
     return nn.leaky_relu(x, alpha=0.2)
 
+def alphas_activation(x):
+    return nn.tanh(x)
+
 custom_activations = {
     "square" : square_activation,
     "leaky_relu": leaky_relu,
     "modified_tanh": modified_tanh,
+    "alphas_activation": alphas_activation,
 }
 
 def LSTM_modified(**kwargs):

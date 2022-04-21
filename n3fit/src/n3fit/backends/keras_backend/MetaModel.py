@@ -305,9 +305,10 @@ class MetaModel(Model):
             self.target_tensors = target_output
 
         if frozen_alphas:
-            alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0, clipnorm = 100)
+            # alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0, momentum=0.9, clipnorm = 1000)
+            alphas_opt = tf.keras.optimizers.Adadelta(learning_rate=0.0, clipnorm = 3000)
         else:
-            alphas_opt = tf.keras.optimizers.SGD(learning_rate=1e-8)
+            alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0) # unsed but to compile the validation and experimental model
         from tensorflow_addons.optimizers import MultiOptimizer
         non_alphas_layers = [i for i in self.layers if i.name != "alphas_layer"]
         alphas_layers = [i for i in self.layers if i.name == "alphas_layer"]

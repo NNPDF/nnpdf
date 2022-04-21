@@ -47,7 +47,21 @@ def alphas_hist(replica_data, pdf):
     anchored_text.patch.set_linewidth(0)
     ax.add_artist(anchored_text)
     
-    ax.hist(alphas_values, density=False, edgecolor="black", bins=6)
+    ax.hist(alphas_values, density=False, edgecolor="black", bins=8)
+
+    return fig
+
+@figure
+def alphas_chi2_plot(replica_data, pdf):
+    alphas_values = np.array([replica.alphas for replica in replica_data])
+    vl_chi2_values = np.array([replica.validation for replica in replica_data])
+
+    fig, ax = plt.subplots()
+    ax.set_xlabel(r"$\alpha_s$")
+    ax.set_ylabel(r"$\chi^2_{\mathrm{val}}$")
+    ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
+    
+    ax.plot(alphas_values, vl_chi2_values, "o")
 
     return fig
 

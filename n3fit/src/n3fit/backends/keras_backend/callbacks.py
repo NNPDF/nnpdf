@@ -171,8 +171,10 @@ class CustomLearningRate(Callback):
         super().__init__()
 
     def _lr_schedule(self, epoch, lr):
-        if epoch > 200:
-            lr = 1e-8
+        if epoch > 3000:
+            lr = 3e-3
+        #elif epoch > 6000:
+           # lr = 1e-10
         else:
             lr = lr
         return lr
@@ -183,3 +185,22 @@ class CustomLearningRate(Callback):
         scheduled_lr = self._lr_schedule(epoch, lr)
         # Set the value back to the optimizer before this epoch starts
         tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, scheduled_lr)
+
+
+# class CustomLearningRate(Callback):
+
+#     def __init__(self):
+#         # self.init_lr_nn = 2.621e-6
+#         self.init_lr_alphas = 1e-10
+#         super().__init__()
+
+#     def on_epoch_begin(self, epoch, logs=None):
+#         # lr_alphas = float(tf.keras.backend.get_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate))
+#         # lr_nn = float(tf.keras.backend.get_value(self.model.optimizer.optimizer_specs[0]["optimizer"].learning_rate))
+#         if epoch > 3000:
+#             if epoch % 500 == 0 and epoch % 1000 !=0:
+#                 tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, 0.0)
+#                 # tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[0]["optimizer"].learning_rate, self.init_lr_nn)
+#             elif epoch % 1000 == 0:
+#                 tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, self.init_lr_alphas)
+#                 # tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[0]["optimizer"].learning_rate, 0.0)
