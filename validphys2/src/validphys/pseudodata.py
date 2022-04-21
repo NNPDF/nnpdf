@@ -222,12 +222,23 @@ def make_replica(
         special_mult_errors.shape[1])) / 100
         ).prod(axis=1)
         mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
+    #regularize the negative shifts
+    reg_shifts = delta(shifts, all_pseudodata, full_mask)
     #Shifting pseudodata
-    shifted_pseudodata = (all_pseudodata + shifts)*mult_part
-    #positivity control
-    shifted_pseudodata[full_mask] = np.abs(shifted_pseudodata[full_mask])        
-
+    shifted_pseudodata = (all_pseudodata + reg_shifts)*mult_part
+          
     return shifted_pseudodata
+
+def delta(shifts, data, mask):
+    new_shifts = []
+    for sh, dat, ma in zip(shifts, data, mask):
+        if ma:
+            if sh < 0.:
+                sh = dat*(np.exp(sh/dat)-1.)
+        new_shifts.append(sh)
+    return np.array(new_shifts)
+
+
 
 
 def indexed_make_replica(groups_index, make_replica):
