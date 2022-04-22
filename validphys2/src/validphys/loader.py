@@ -18,6 +18,7 @@ import os
 import os.path as osp
 import urllib.parse as urls
 import mimetypes
+from functools import cached_property
 
 from typing import List
 
@@ -789,6 +790,19 @@ class RemoteLoader(LoaderBase):
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index,
                                  thing="PDFs")
+
+    @cached_property
+    def remote_keywords(self):
+        root = self.nnprofile['reports_root_url']
+        url = urls.urljoin(root, 'index.json')
+        try:
+           req = requests.get(url)
+           req.raise_for_status()
+           keyobjs= req.json()['keywords']
+           l = [k[0] for k in keyobjs]
+        except requests.RequestException as e:
+            raise RemoteLoaderError(e) from e
+        return l
 
     @property
     def downloadable_fits(self):
