@@ -167,16 +167,27 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
 
 class CustomLearningRate(Callback):
 
-    def __init__(self):
+    def __init__(self, alphas_settings_dict, epochs):
         super().__init__()
+        self.init_learning_rate = alphas_settings_dict["optimizer_settings"]["learning_rate"]
+        learning_rate_settings = alphas_settings_dict["learning_rate_settings"]
+        try:
+            self.start_epoch = learning_rate_settings["start_epoch"]
+        except:
+            self.start_epoch = 0
+        try:
+            self.decay_rate =  learning_rate_settings["decay_rate"]
+            self.decay_steps =  learning_rate_settings["decay_steps"]
+        except: 
+            self.decay_rate = 1.0
+            self.decay_steps = 1.0
+        self.epochs = epochs
 
     def _lr_schedule(self, epoch, lr):
-        if epoch > 3000:
-            lr = 3e-3
-        #elif epoch > 6000:
-           # lr = 1e-10
+        if epoch == self.start_epoch:
+            lr = self.init_learning_rate
         else:
-            lr = lr
+            lr = lr*self.decay_rate**((epoch - self.start_epoch)/(self.start_epoch - self.decay_steps))
         return lr
 
     def on_epoch_begin(self, epoch, logs=None):

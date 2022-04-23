@@ -246,6 +246,7 @@ class MetaModel(Model):
         target_output=None,
         clipnorm=None,
         frozen_alphas=False,
+        alphas_settings_dict={"alphas_optimizer_name": "SGD"},
         **kwargs,
     ):
         """
@@ -280,6 +281,15 @@ class MetaModel(Model):
                 f"[MetaModel.select_initializer] optimizer not implemented: {optimizer_name}"
             ) from e
 
+        try:
+            alphas_optimizer_name = alphas_settings_dict["optimizer_name"]
+            alphas_opt = optimizers[alphas_optimizer_name]
+        except KeyError as e:
+            raise NotImplementedError(
+                f"[MetaModel.select_initializer] optimizer not implemented: {alphas_optimizer_name}"
+            ) from e
+
+
         if loss is None:
             loss = _default_loss
 
@@ -304,9 +314,14 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
+
+        alphas_opt_function = alphas_opt[0]
+        alphas_opt_args = alphas_opt[1]
+        alphas_opt_args.update(alphas_settings_dict["optimizer_settings"])
+        
         if frozen_alphas:
-            # alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0, momentum=0.9, clipnorm = 1000)
-            alphas_opt = tf.keras.optimizers.Adadelta(learning_rate=0.0, clipnorm = 3000)
+            alphas_opt_args["learning_rate"] = 0.0
+            alphas_opt = alphas_opt_function(**alphas_opt_args)
         else:
             alphas_opt = tf.keras.optimizers.SGD(learning_rate=0.0) # unsed but to compile the validation and experimental model
         from tensorflow_addons.optimizers import MultiOptimizer

@@ -671,7 +671,7 @@ class ModelTrainer:
             reporting_list.append(reporting_dict)
         return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100):
+    def _train_and_fit(self, training_model, stopping_object, epochs=100, alphas_settings_dict = None):
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -692,7 +692,7 @@ class ModelTrainer:
             self.training["integmultipliers"],
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
-        callback_lr = callbacks.CustomLearningRate()
+        callback_lr = callbacks.CustomLearningRate(alphas_settings_dict, epochs)
 
         training_model.perform_fit(
                 epochs=epochs,
@@ -879,9 +879,9 @@ class ModelTrainer:
             for model_name in models.keys():
                 if model_name != "training":
                     model = models[model_name]
-                    model.compile(**params["optimizer"])
+                    model.compile(alphas_settings_dict = params["alphas_settings"], **params["optimizer"])
                 else: 
-                    models["training"].compile(frozen_alphas=True, **params["optimizer"])
+                    models["training"].compile(frozen_alphas=True, alphas_settings_dict = params["alphas_settings"], **params["optimizer"])
 
             # stopping_object.frozen_alphas = True
             # passed = self._train_and_fit(
@@ -901,6 +901,7 @@ class ModelTrainer:
                 models["training"],
                 stopping_object,
                 epochs=epochs,
+                alphas_settings_dict = params["alphas_settings"],
             )
 
             if self.mode_hyperopt:

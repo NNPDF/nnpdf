@@ -11,8 +11,8 @@ description: Basic runcard
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 - { dataset: SLACP_dwsh, frac: 0.5}
-- { dataset: NMCPD_dw, frac: 0.5 }
-- { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
+# - { dataset: NMCPD_dw, frac: 0.5 }
+# - { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
 
 ############################################################
 datacuts:
@@ -56,6 +56,16 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   layer_type: 'dense'
   dropout: 0.0
   threshold_chi2: 5.0
+  alphas_settings:
+    optimizer_name: SGD
+    optimizer_settings:
+      learning_rate: 1e-3
+      clipnorm: 2000
+      momentum: 0.9
+    learning_rate_settings:
+      decay_rate: 1e-4
+      decay_steps: 10e3
+      start_epoch: 3000
 
 ############################################################
 trvlseed: 1
