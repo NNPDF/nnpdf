@@ -10,6 +10,7 @@ from reportengine.compat import yaml
 from reportengine.colors import t
 
 from validphys.app import App
+from validphys.loader import RemoteLoader
 from validphys import comparefittemplates, compareclosuretemplates
 from validphys.promptutils import confirm, KeywordsWithCache
 
@@ -152,9 +153,13 @@ class CompareFitApp(App):
         return prompt_toolkit.prompt("Enter author name: ", default=default)
 
     def interactive_keywords(self):
+        if isinstance(self.environment.loader, RemoteLoader):
+            completer = WordCompleter(words=KeywordsWithCache(self.environment.loader))
+        else:
+            completer = None
         kwinp = prompt_toolkit.prompt(
             "Enter keywords: ",
-            completer=WordCompleter(words=KeywordsWithCache(self.environment.loader)),
+            completer=completer,
             complete_in_thread=True,
         )
         return [k.strip() for k in kwinp.split(',') if k]

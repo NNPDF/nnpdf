@@ -60,20 +60,17 @@ def confirm(message, default=None):
 
 # We need some sort of cache because prompt_toolkit calls the callable
 # every time it tries to complete.
-class KeywordsWithCache():
+class KeywordsWithCache:
     def __init__(self, loader):
         self.loader = loader
         self.words = None
 
     def __call__(self):
         if self.words is None:
-            if hasattr(self.loader, "remote_keywords"):
-                try:
-                    self.words = self.loader.remote_keywords
-                # Catch a broad exception here as we don't want the completion
-                # to break the app
-                except Exception as e:
-                    self.words= []
-            else:
+            try:
+                self.words = self.loader.remote_keywords
+            # Catch a broad exception here as we don't want the completion
+            # to break the app
+            except Exception as e:
                 self.words = []
         return self.words
