@@ -30,6 +30,8 @@ The covariance matrix accounts for correlated systematic uncertainties,
 normalization uncertainties, and statistical uncertainties as provided by the
 experimental collaborations.
 
+We refer to this figure of merit as *experimental* :math:`\chi^2`.
+
 .. note::
     This definition of :math:`\chi^2` is not used as a figure of merit
     anywhere in NNDPF fits. Instead, variations discussed below
@@ -44,18 +46,37 @@ remove systematic biases as a result of a naive treatment of multiplicative
 uncertainties. This is done by redefining the covariance matrix in the
 definition of :math:`\chi^2`, resulting in a :math:`t_0` covariance matrix
 :math:`C_{t_0}` and a corresponding figure of merit sometimes denoted by
-:math:`\chi^2_{t_0}`, though often simply written as :math:`\chi^2`.
+:math:`\chi^2_{t_0}`. The new covariance matrix is constructed by replacing the
+central value of the data (which is used as reference for multiplicative
+uncertainties) with the theory predictions computed using some existing PDF
+set, which needs to be specified.
 
 .. note::
     From NNPDF2.0 onwards the t₀ formalism has been used to define the figure of
     merit used during the fitting of the PDFs.
+
+.. note::
+
+    The :math:`t_0` method is **not** used by default in other :ref:`validphys
+    applications <vp-index>`, and instead the default is to compute the
+    experimental :math:`\chi^2`. To compute :math:`\chi^2_{t_0}`, users need to
+    specify
+
+    .. code-block::  yaml
+
+        use_t0: True
+        t0pdfset: <Some LHAPDF set>
+
+    in the relevant :ref:`namespace <namespaces>`. This will instruct actions
+    such as :py:func:`validphys.results.dataset_chi2_table` to compute the
+    :math:`t_0` estimator.
 
 
 Missing higher order uncertainties
 --------------------------------------------------------------------------------
 Another source of uncertainties that we may want to include in the covariance
 matrix are theoretical uncertainties, particularly missing higher order
-uncertainties estimated through scale variations. These unceratinties can be
+uncertainties estimated through scale variations. These uncertainties can be
 considered in the figure of merit through the implementation of a 'theory
 covariance matrix'. A paper discussing the formalism can be found here:
 :cite:p:`AbdulKhalek:2019bux`. For a tutorial see
