@@ -58,8 +58,8 @@ def confirm(message, default=None):
     session = PromptSession(complete_message, key_bindings=bindings)
     return session.prompt()
 
-#We need some sort of cache because prompt_toolkit calls the callable
-#every time it tries to complete.
+# We need some sort of cache because prompt_toolkit calls the callable
+# every time it tries to complete.
 class KeywordsWithCache():
     def __init__(self, loader):
         self.loader = loader
@@ -70,7 +70,7 @@ class KeywordsWithCache():
             if hasattr(self.loader, "remote_keywords"):
                 try:
                     self.words = self.loader.remote_keywords
-                # Catch a borad exception here as we don't want the completion
+                # Catch a broad exception here as we don't want the completion
                 # to break the app
                 except Exception as e:
                     self.words= []
