@@ -40,8 +40,8 @@ The approach presented here inherits the technology developed by the NNPDF colla
 of fit pipeline but extends the possibility to test and improve fitting performance with modern
 techniques inspired by the deep learning community.
 
-The ``n3fit`` code is designed in python and one of its main goals is to replace the ``nnfit``
-program. It provides a simple abstraction layer which simplifies the life of developers when
+The ``n3fit`` code is designed in python and replaces the ``nnfit`` program used in the NNPDF3 family of fits.
+It provides a simple abstraction layer which simplifies the life of developers when
 considering the possibility of adding new fitting algorithms.
 
 In the following table we list some of the differences between both codes:
