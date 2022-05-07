@@ -17,7 +17,7 @@ endif()
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
     from distutils.sysconfig import get_python_lib;
-    print(get_python_lib())"
+    print(get_python_lib(prefix=\"${CMAKE_INSTALL_PREFIX}\"))"
     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
 	RESULT_VARIABLE ret
   OUTPUT_STRIP_TRAILING_WHITESPACE)
