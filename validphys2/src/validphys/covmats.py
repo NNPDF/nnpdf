@@ -534,22 +534,22 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     pdf_cov = np.cov(th.error_members, rowvar=True)
     return pdf_cov + covmat_t0_considered
 
-def reorder_thcovmat_as_expcovmat(theory_covmat, dataset_names):
+def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     """
     Reorder the thcovmat in such a way to match the order of the experimental covmat, which
     means the order of the runcard
     """
+    theory_covmat = fitthcovmat.load()
+    bb = [str(i) for i in data]
     tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
-    return tmp.reindex(index=dataset_names, columns=dataset_names, level=0)
+    return tmp.reindex(index=bb, columns=bb, level=0)
 
 def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat_t0_considered, fitthcovmat):
     """Like `pdferr_plus_covmat` except for an experiment"""
     # do checks get performed here?
     if fitthcovmat is not None:
-        theory_covmat = fitthcovmat.load()
-        bb = [str(i) for i in data]
         #change ordering according to exp_covmat (so according to runcard order)
-        return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered+ reorder_thcovmat_as_expcovmat(theory_covmat,bb).values)
+        return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered+ reorder_thcovmat_as_expcovmat(fitthcovmat,data).values)
     return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered)
 
 
@@ -708,11 +708,8 @@ def _dataset_inputs_covmat_t0_considered(dataset_inputs_covmat_t0_considered, fi
     and ``use_pdferr``
     """
     if fitthcovmat is not None:
-        theory_covmat = fitthcovmat.load()
         #change ordering according to exp_covmat (so according to runcard order)
-        tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
-        bb = [str(i) for i in data]
-        return dataset_inputs_covmat_t0_considered + tmp.reindex(index=bb, columns=bb, level=0).values
+        return dataset_inputs_covmat_t0_considered + reorder_thcovmat_as_expcovmat(fitthcovmat,data).values
     return dataset_inputs_covmat_t0_considered 
 
 groups_covmat_collection = collect(
