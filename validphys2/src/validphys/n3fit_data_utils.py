@@ -34,7 +34,7 @@ class FittableDataSet:
     """
 
     # NOTE:
-    # This class tries to be compatible the libNNPDF dataset class
+    # This class tries to be compatible with the libNNPDF dataset class
     # after commondata is also in python, FittableDataSet can inherit from the vp dataset
     # which knows how to generate its "fittable" version.
 
@@ -83,15 +83,15 @@ class FittableDataSet:
 
 def validphys_group_extractor(datasets, tr_masks):
     """
-    Receives a groupping spec from validphys (most likely and experiment)
+    Receives a grouping spec from validphys (most likely an experiment)
     and loops over its content extracting and parsing all information required for the fit
 
     Parameters
     ----------
         datasets: list(:py:class:`validphys.core.DataSetSpec`)
-            List of dataset spec in this group
+            List of dataset specs in this group
         tr_masks: list(np.array)
-            List of training mask to be set for each dataset
+            List of training masks to be set for each dataset
 
     Returns
     -------

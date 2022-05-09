@@ -143,7 +143,7 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
                 raise ValueError(f"The yaml info for {metadata['target_dataset']} is broken")
 
     # Check whether the dataset has shifts
-    # Note: this only happens for ATLASZPT8TEVMDIST, if that gets fixed we might as well remove it
+    # NOTE: this only happens for ATLASZPT8TEVMDIST, if that gets fixed we might as well remove it
     if metadata["apfelcomb"].get("shifts") is not None:
         shift_info = metadata["apfelcomb"]["shifts"]
         ret["shifts"] = [shift_info.get(op, 0) for op in operands]
@@ -151,12 +151,11 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
     return ret
 
 
-###########
 
 
 def _pinelumi_to_columns(pine_luminosity, hadronic):
     """Makes the pineappl luminosity into the column indices of a dataframe
-    These corresponds to the indices of a flat (14x14) matrix for hadronic observables
+    These corresponds to the indices of a flattened (14x14) matrix for hadronic observables
     and the non-zero indices of the 14-flavours for DIS
 
     Parameters
@@ -193,7 +192,7 @@ def get_yaml_information(yaml_file, theorypath):
     Transitional function: the call to "pineko" might be to some other commondata reader
     that will know how to extract the information from the commondata
     """
-    # TODO Tell the reader where to look for the pineappl grids
+    # TODO: Tell the reader where to look for the pineappl grids
     # for debugging purposes they are inside "share/NNPDF/data/theory_X/pineappls"
     grids_folder = theorypath / "pineappls"
     return pineko_yaml(yaml_file, grids_folder)
@@ -280,7 +279,6 @@ def pineappl_reader(fkspec):
                 protected = True
             if apfelcomb.get("shifts") is not None:
                 ndata += apfelcomb["shifts"][i]
-        ###
 
         # Check conversion factors and remove the x* from the fktable
         raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
