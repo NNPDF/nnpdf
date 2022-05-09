@@ -489,14 +489,14 @@ def training_mask(replicas_training_mask):
     return pd.concat(replicas_training_mask, axis=1)
 
 
-def fitting_pos_dict(posdataset):
-    """Loads a positivity dataset. For more information see
-    :py:func:`validphys.n3fit_data_utils.positivity_reader`.
+def _fitting_lagrange_dict(lambdadataset):
+    """Loads a generic lambda dataset, often used for positivity and integrability datasets
+    For more information see :py:func:`validphys.n3fit_data_utils.positivity_reader`.
 
     Parameters
     ----------
-    posdataset: validphys.core.PositivitySetSpec
-        Positivity set which is to be loaded.
+    lambdadataset: validphys.core.LagrangeSetSpec
+        Positivity (or integrability) set which is to be loaded.
 
     Examples
     --------
@@ -506,35 +506,46 @@ def fitting_pos_dict(posdataset):
     >>> len(pos)
     9
     """
-    integrability = isinstance(posdataset, IntegrabilitySetSpec)
+    integrability = isinstance(lambdadataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
-    log.info("Loading %s dataset %s", mode, posdataset)
-    positivity_datasets = validphys_group_extractor([posdataset], [])
+    log.info("Loading %s dataset %s", mode, lambdadataset)
+    positivity_datasets = validphys_group_extractor([lambdadataset], [])
     ndata = positivity_datasets[0].ndata
     return {
         "datasets": positivity_datasets,
         "trmask": np.ones(ndata, dtype=np.bool),
-        "name": posdataset.name,
+        "name": lambdadataset.name,
         "expdata": np.zeros((1, ndata)),
         "ndata": ndata,
         "positivity": True,
-        "lambda": posdataset.maxlambda,
+        "lambda": lambdadataset.maxlambda,
         "count_chi2": False,
         "integrability": integrability,
     }
 
 
-posdatasets_fitting_pos_dict = collect("fitting_pos_dict", ("posdatasets",))
+def posdatasets_fitting_pos_dict(posdatasets):
+    """Loads all positivity datasets. It is not allowed to be empty.
+
+    Parameters
+    ----------
+    integdatasets: list[validphys.core.PositivitySetSpec]
+        list containing the settings for the positivity sets. Examples of
+        these can be found in the runcards located in n3fit/runcards. They have
+        a format similar to ``dataset_input``.
+    """
+    return [_fitting_lagrange_dict(i) for i in posdatasets]
+
 
 # can't use collect here because integdatasets might not exist.
 def integdatasets_fitting_integ_dict(integdatasets=None):
-    """Loads a integrability dataset. Calls same function as
+    """Loads the integrability datasets. Calls same function as
     :py:func:`fitting_pos_dict`, except on each element of
     ``integdatasets`` if ``integdatasets`` is not None.
 
     Parameters
     ----------
-    integdatasets: list[validphys.core.PositivitySetSpec]
+    integdatasets: list[validphys.core.IntegrabilitySetSpec]
         list containing the settings for the integrability sets. Examples of
         these can be found in the runcards located in n3fit/runcards. They have
         a format similar to ``dataset_input``.
@@ -552,6 +563,6 @@ def integdatasets_fitting_integ_dict(integdatasets=None):
 
     """
     if integdatasets is not None:
-        return [fitting_pos_dict(i) for i in integdatasets]
+        return [_fitting_lagrange_dict(i) for i in integdatasets]
     log.warning("Not using any integrability datasets.")
     return None

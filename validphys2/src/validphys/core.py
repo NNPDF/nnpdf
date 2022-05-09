@@ -572,13 +572,20 @@ class FKTableSpec(TupleComp):
         return self._load_pineappl()
 
 
-class PositivitySetSpec(DataSetSpec):
-    """Extends DataSetSpec to work around the particularities of the positivity datasets"""
+class LagrangeSetSpec(DataSetSpec):
+    """Extends DataSetSpec to work around the particularities of the positivity, integrability
+    and other Lagrange Multiplier datasets.
+    Internally (for libNNPDF) they are always PositivitySets
+    """
 
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
         super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
+
+    def to_unweighted(self):
+        log.warning("Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name)
+        return self
 
     @functools.lru_cache()
     def load(self):
@@ -586,12 +593,12 @@ class PositivitySetSpec(DataSetSpec):
         fk = self.fkspecs[0].load()
         return PositivitySet(cd, fk, self.maxlambda)
 
-    def to_unweighted(self):
-        log.warning("Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name)
-        return self
+
+class PositivitySetSpec(LagrangeSetSpec):
+    pass
 
 
-class IntegrabilitySetSpec(PositivitySetSpec):
+class IntegrabilitySetSpec(LagrangeSetSpec):
     pass
 
 
