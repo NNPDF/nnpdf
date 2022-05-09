@@ -35,8 +35,8 @@ class FittableDataSet:
 
     # NOTE:
     # This class tries to be compatible the libNNPDF dataset class
-    # after the class is moved to python, this can inherit from dataset
-    # and the dataset should know how to generate its "fittable" version
+    # after commondata is also in python, FittableDataSet can inherit from the vp dataset
+    # which knows how to generate its "fittable" version.
 
     name: str
     fktables_data: list  # of validphys.coredata.FKTableData objects

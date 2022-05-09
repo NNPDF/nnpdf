@@ -59,7 +59,8 @@ class _TrMasks(TupleComp):
     """Class holding the training validation mask for a group of datasets
     If the same group of dataset receives the same trvlseed then the mask
     will be the same.
-    This class holds said information so it can be reused easily
+    This class holds said information so it can be reused easily, i.e.,
+    ``group_name`` and ``seed`` define the ``masks``.
     """
     def __init__(self, group_name, seed, masks=None):
         self.masks = masks
@@ -235,7 +236,7 @@ def fitting_data_dict(
     tr_masks = tr_masks.masks
     covmat = dataset_inputs_t0_covmat_from_systematics # t0 covmat
     inv_true = np.linalg.inv(covmat)
-    datasets = fittable_datasets_masked
+    fittable_datasets = fittable_datasets_masked
 
     if diagonal_basis:
         log.info("working in diagonal basis.")
@@ -289,7 +290,7 @@ def fitting_data_dict(
     # plus the information that glue all of them together (covmat, ndata, etc)
     # TODO: for consistency with the rest of validphys a FittableGroup should be created
     dict_out = {
-        "datasets": datasets,
+        "datasets": fittable_datasets,
         "name": str(data),
         "expdata_true": expdata_true.reshape(1, -1),
         "invcovmat_true": inv_true,
