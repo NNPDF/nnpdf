@@ -66,7 +66,7 @@ class FKTableData:
                 cfactor = cfactor[0]
             else:
                 name = self.metadata.get("target_dataset")
-                raise ValueError(f"The length of cfactor for {name} does not the fktable shape")
+                raise ValueError(f"The length of cfactor for {name} differs from the number of datapoints in the grid")
         new_sigma = self.sigma.multiply(pd.Series(cfactor), axis=0, level=0)
         return dataclasses.replace(self, sigma=new_sigma)
 
@@ -144,7 +144,6 @@ class FKTableData:
         nbasis = self.sigma.shape[1]
 
         if ndata == 0:
-            # No need to play calvinball
             if self.hadronic:
                 return np.zeros((ndata, nbasis, nx, nx))
             return np.zeros((ndata, nbasis, nx))

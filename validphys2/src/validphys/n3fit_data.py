@@ -231,7 +231,6 @@ def fitting_data_dict(
     # limited to: central values, ndata, replica generation, covmat construction
     expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
 
-    # Use more sensible naming
     expdata = make_replica
     tr_masks = tr_masks.masks
     covmat = dataset_inputs_t0_covmat_from_systematics # t0 covmat
