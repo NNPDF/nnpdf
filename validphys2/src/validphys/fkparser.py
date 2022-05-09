@@ -61,6 +61,7 @@ def load_fktable(spec):
             tabledata = parse_fktable(handle)
     else:
         tabledata = spec.load()
+
     if not spec.cfactors:
         return tabledata
 

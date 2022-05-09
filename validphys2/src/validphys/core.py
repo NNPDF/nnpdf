@@ -538,6 +538,8 @@ class FKTableSpec(TupleComp):
     """
     def __init__(self, fkpath, cfactors, metadata=None):
         self.cfactors = cfactors if cfactors is not None else []
+        # Note: the legacy interface is expected to be removed by NNPDF5.0
+        # so please don't write code that relies on it
         self.legacy = True
         if isinstance(fkpath, (tuple, list)):
             self.legacy = False

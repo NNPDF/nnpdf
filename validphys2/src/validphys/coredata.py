@@ -42,6 +42,12 @@ class FKTableData:
 
     metadata : dict
         Other information contained in the FKTable.
+
+    protected: bool
+        When a fktable is protected cuts will not be applied.
+        The most common use-case is when a total cross section is used
+        as a normalization table for a differential cross section,
+        in legacy code (<= NNPDF4.0) both fktables would be cut using the differential index.
     """
     hadronic: bool
     Q0: float
@@ -146,8 +152,8 @@ class FKTableData:
         # Make the dataframe into a dense numpy array
 
         # First get the data index out of the way
-        #   this is necessary because cuts/shifts and for performance reasons
-        #   otherwise we will be putting things in a numpy array in very awkward orders
+        # this is necessary because cuts/shifts and for performance reasons
+        # otherwise we will be putting things in a numpy array in very awkward orders
         ns = self.sigma.unstack(level=("data",), fill_value=0)
         x1 = ns.index.get_level_values(0)
 
