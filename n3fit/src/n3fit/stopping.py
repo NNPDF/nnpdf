@@ -631,6 +631,8 @@ class Stopping:
 
             tmp = {exp: {"training": tr_chi2} for exp, tr_chi2 in all_tr.items()}
             for exp, vl_chi2 in all_vl.items():
+                if exp not in tmp:
+                    tmp[exp] = {"training": None}
                 tmp[exp]["validation"] = vl_chi2
 
             json_dict[i + 1] = tmp
