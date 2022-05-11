@@ -27,7 +27,6 @@
     which will tell `Validation` that no validation set was found and that the training is to
     be used instead.
 """
-import json
 import logging
 import numpy as np
 
