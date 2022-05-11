@@ -171,7 +171,7 @@ Output of the fit
 Every time a replica is finalized, the output is saved to the ```runcard/nnfit/replica_$replica```
 folder, which contains a number of files:
 
-- ``chi2exps.log``: a json-like log file with the χ² of the training every 100 epochs.
+- ``chi2exps.log``: a json log file with the χ² of the training every 100 epochs.
 - ``runcard.exportgrid``: a file containing the PDF grid.
 - ``runcard.json``: Includes information about the fit (metadata, parameters, times) in json format.
 
