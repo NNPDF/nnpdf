@@ -27,7 +27,7 @@
     which will tell `Validation` that no validation set was found and that the training is to
     be used instead.
 """
-
+import json
 import logging
 import numpy as np
 
@@ -606,10 +606,9 @@ class Stopping:
         """ Return the next ReplicaState object"""
         return next(self._history)
 
-    def chi2exps_str(self, replica=0, log_each=100):
+    def chi2exps_json(self, replica=0, log_each=100):
         """
-        Returns a list of log-string with the status of the fit
-        every `log_each` epochs
+        Returns and apt-for-json dictionary with the status of the fit every `log_each` epochs
 
         Parameters
         ----------
@@ -624,25 +623,19 @@ class Stopping:
                 a list of strings to be printed as `chi2exps.log`
         """
         final_epoch = self._history.final_epoch
-        file_list = []
+        json_dict = {}
+
         for i in range(log_each - 1, final_epoch + 1, log_each):
             fitstate = self._history.get_state(i)
             all_tr = fitstate.all_tr_chi2_for_replica(replica)
             all_vl = fitstate.all_vl_chi2_for_replica(replica)
-            # Here it is assumed the validation exp set is always a subset of the training exp set
-            data_list = []
-            for exp, tr_loss in all_tr.items():
-                vl_loss = all_vl.get(exp, 0.0)
-                data_str = f"{exp}: {tr_loss} {vl_loss}"
-                data_list.append(data_str)
-            data = "\n".join(data_list)
-            epoch_index = i + 1
-            strout = f"""
-Epoch: {epoch_index}
-{data}
-"""
-            file_list.append(strout)
-        return file_list
+
+            tmp = {exp: {"training": tr_chi2} for exp, tr_chi2 in all_tr.items()}
+            for exp, vl_chi2 in all_vl.items():
+                tmp[exp]["validation"] = vl_chi2
+
+            json_dict[i + 1] = tmp
+        return json_dict
 
 
 class Positivity:
