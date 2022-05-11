@@ -410,9 +410,7 @@ results in the table or plot will have been collected over ``fits`` with
 
 Currently the ``pseudodata`` and ``chi2grids`` modules have not been updated to
 use ``dataset_inputs`` and so require ``experiments`` to be specified in the
-runcard. The C++ fitting code
-``nnfit`` is not scheduled to be updated to use ``dataset_inputs`` and so will
-always require ``experiments`` to be specified in the runcard.
+runcard.
 
 .. seealso:: Why not to use ``data_input: {from_: fitinputcontext}``?
 

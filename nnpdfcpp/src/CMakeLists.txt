@@ -20,7 +20,7 @@ if (COMPILE_filter)
 endif(COMPILE_filter)
 
 # nnfit
-option(COMPILE_nnfit "Compile nnfit program." ON)
+option(COMPILE_nnfit "Compile nnfit program." OFF)
 if (COMPILE_nnfit)
   add_executable(nnfit nnfit/src/nnfit.cc
                        nnfit/src/evolgrid.cc
@@ -37,7 +37,7 @@ if (COMPILE_nnfit)
 endif(COMPILE_nnfit)
 
 # chi2check
-option(COMPILE_chi2check "Compile chi2check program." ON)
+option(COMPILE_chi2check "Compile chi2check program." OFF)
 if (COMPILE_chi2check)
   add_executable(chi2check chi2check/src/chi2check.cc)
   target_link_libraries(chi2check common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})

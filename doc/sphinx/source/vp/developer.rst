@@ -51,7 +51,7 @@ Tools for interpreting the dataset PLOTTING files, including the
 transformations on the kinematics and the data.
 
 - `validphys.fitdata`
-Contains parsers for various files produced by `nnfit` along with
+Contains parsers for various files produced by the fitting code along with
 tools to manipulate and display them.
 
 - `validphys.checks`

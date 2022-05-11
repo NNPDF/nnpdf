@@ -50,10 +50,6 @@ Next, add necessary flags to the runcard
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
       
-.. warning::
-	Theory covariance matrices can currently only be included using the legacy `nnfit` code.
-	When running `vp-setupfit` you need to include the `--legacy` flag
-
 
 If you want to compare data to another fit
 ------------------------------------------
