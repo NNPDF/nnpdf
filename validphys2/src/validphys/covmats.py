@@ -534,10 +534,22 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     pdf_cov = np.cov(th.error_members, rowvar=True)
     return pdf_cov + covmat_t0_considered
 
+def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
+    """
+    Reorder the thcovmat in such a way to match the order of the experimental covmat, which
+    means the order of the runcard
+    """
+    theory_covmat = fitthcovmat.load()
+    bb = [str(i) for i in data]
+    tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
+    return tmp.reindex(index=bb, columns=bb, level=0)
 
-def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat_t0_considered):
+def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat_t0_considered, fitthcovmat):
     """Like `pdferr_plus_covmat` except for an experiment"""
     # do checks get performed here?
+    if fitthcovmat is not None:
+        #change ordering according to exp_covmat (so according to runcard order)
+        return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered+ reorder_thcovmat_as_expcovmat(fitthcovmat,data).values)
     return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered)
 
 
@@ -690,12 +702,15 @@ def _covmat_t0_considered(covmat_t0_considered):
     return covmat_t0_considered
 
 
-def _dataset_inputs_covmat_t0_considered(dataset_inputs_covmat_t0_considered):
+def _dataset_inputs_covmat_t0_considered(dataset_inputs_covmat_t0_considered, fitthcovmat, data):
     """Helper function so we can dispatch the full
     covariance matrix accross dataset_inputs, having considered both ``use_t0``
     and ``use_pdferr``
     """
-    return dataset_inputs_covmat_t0_considered
+    if fitthcovmat is not None:
+        #change ordering according to exp_covmat (so according to runcard order)
+        return dataset_inputs_covmat_t0_considered + reorder_thcovmat_as_expcovmat(fitthcovmat,data).values
+    return dataset_inputs_covmat_t0_considered 
 
 groups_covmat_collection = collect(
     'dataset_inputs_covariance_matrix', ('group_dataset_inputs_by_metadata',)
