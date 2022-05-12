@@ -1,9 +1,8 @@
-""" This module implements tools for computing convolutions. It reimplements
-the relevant C++ functionality in pure Python (using numpy and pandas).
+""" This module implements tools for computing convolutions between PDFs and
+theory grids, which yield observables.
 
 The high level :py:func:`predictions` function can be used to extact theory
-predictions for experimentally measured quantities, in a way that is directly
-comparable with the C++ code::
+predictions for experimentally measured quantities::
 
     import numpy as np
     from validphys.api import API
@@ -14,22 +13,17 @@ comparable with the C++ code::
         'fit': '181023-001-sc',
         'use_cuts': 'internal',
         'theoryid': 162,
-        'pdf': 'NNPDF31_nlo_as_0118',
-        'experiments': {'from_': 'fit'}
+        'pdf': 'NNPDF40_nnlo_lowprecision',
+        'dataset_inputs': {'from_': 'fit'}
     }
 
-    tb = API.experiment_result_table(**inp)
 
-    all_datasets = [ds for e in API.experiments(**inp) for ds in e.datasets]
+    all_datasets = API.data(**inp).datasets
 
     pdf = API.pdf(**inp)
 
 
     all_preds = [predictions(ds, pdf) for ds in all_datasets]
-
-    for ds, pred in zip(all_datasets, all_preds):
-        cpp = tb.loc[(slice(None),ds.name), :]
-        assert np.allclose(pred.values, cpp.values[:, 2:], atol=1e-7, rtol=1e-4)
 
 
 
@@ -41,8 +35,6 @@ These functions work with :py:class:`validphys.core.DatasetSpec` objects,
 allowing to account for information on COMPOUND predictions and cuts. A lower
 level interface which operates with :py:class:`validphys.coredata.FKTableData`
 objects is also available.
-
-Note that currently no effort has been made to optimize these operations.
 """
 import operator
 import functools
