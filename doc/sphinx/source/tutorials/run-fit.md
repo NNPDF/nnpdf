@@ -15,9 +15,6 @@ The fitting methodology is detailed in the [Methodology](methodology) page.
 - [Upload and analyse the fit](#upload-and-analyse-the-fit)
 
 
-These steps are similar to those required to run the legacy [``nnfit`` code](nnfit-usage),
-although the runcards for both programs are not completely compatible.
-
 Preparing a fit runcard
 -----------------------
 
@@ -128,9 +125,7 @@ following the points presented above you can proceed with a fit.
     ```eval_rst
     .. note::
        This step is not strictly necessary when producing a standard fit with
-       ``n3fit`` - notice that in the next step the first command-line argument is
-       the runcard itself and not a folder, unlike with the legacy code
-       :ref:`nnfit <nnfit-usage>` - but it is required by :ref:`validphys <vp-index>`
+       ``n3fit`` but it is required by :ref:`validphys <vp-index>`
        and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
        will fail unless this step has been followed. If necessary, this step can
        be done after the fit has been run.
@@ -176,21 +171,9 @@ Output of the fit
 Every time a replica is finalized, the output is saved to the ```runcard/nnfit/replica_$replica```
 folder, which contains a number of files:
 
-- ``chi2exps.log``: a log file with the χ² of the training every 100 epochs.
+- ``chi2exps.log``: a json log file with the χ² of the training every 100 epochs.
 - ``runcard.exportgrid``: a file containing the PDF grid.
 - ``runcard.json``: Includes information about the fit (metadata, parameters, times) in json format.
-
-For legacy compatibility with the ``nnfit`` structure the following files are also included
-(all their information is now included in ``runcard.json``):
-
-- ``runcard.preproc``: Preprocessing factors used by the replicas.
-- ``runcard.fitinfo``: Includes information about the fit. The first line
-contains, in this order, the number of epochs, the validation χ², training
-χ², experimental χ² and the state of the positivity. The second line the
-arclength for each flavour.
-- ``runcard.time``: Includes the total time the fit took in CPU time and walltime.
-The times are separated by the time of the actual fit and the time of the data
-load.
 
 ``` note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 ```

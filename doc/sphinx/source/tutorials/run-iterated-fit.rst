@@ -47,8 +47,4 @@ changed by the user to reflect the fact that the fit is an iteration of a previo
 Finally, after all relevant parameters have been updated, the iterated fit runcard is written to
 file and opened with the user's default text editor, or vi if one is not set. The user is then able
 to make any further adjustments to the runcard that they see fit.
-
-The usual steps can then be followed to run the iterated fit. Depending on whether the user wishes
-to use ``n3fit`` or ``nnfit``, the instructions at :ref:`n3fit-usage` or :ref:`nnfit-usage` can be
-followed, respectively.
-
+The usual steps can then be followed to run the iterated fit: :ref:`n3fit-usage`.

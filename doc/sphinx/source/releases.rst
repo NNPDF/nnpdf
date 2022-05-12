@@ -46,9 +46,7 @@ able to reproduce the results for 3.1 as well. Once NNPDF 4.0 is released, new
 developments in the code are allowed to break compatibility with 3.1, but
 should maintain it with 4.0 (until after 4.1 would be released).
 
-This compatibility policy concerns :ref:`n3fit <runcard-detailed>` and
-:ref:`validphys <complex_runcards>` *runcards* (and :ref:`nnfit runcards
-<nnfit-usage>` for older fits): The baseline expectation for fits is that a
+The baseline expectation for fits is that a
 given runcard for a published PDF set is able to produce an equivalent PDF. If
 bugs are discovered in experimental data or theory predictions, new fixed
 copies of the data would be made with different names, while keeping the old

@@ -10,9 +10,8 @@ While the methodology used up to the 3.1 release of NNPDF considerably reduced t
 functional form of the PDFs compared to other collaborations, there existed a bias regarding the choice of hyperparameters that define
 the NNPDF neural network and optimization strategy.
 
-One of the main advantages introduced by the ``n3fit`` framework with respect to ``nnfit`` is the
-possibility of running the fits in a fraction of the time. This allow us to reduce the dependence of the
-hyperparameters by running a grid scan on the relevant parameters. Together with an appropriate
+The hyperparameters of the model used by ``n3fit`` are determined by running a grid scan on the
+relevant parameters. Together with an appropriate
 figure of merit this grid search or *hyperparameter scan* will minimize the bias of the network
 by finding the best one for each possible situation.
 

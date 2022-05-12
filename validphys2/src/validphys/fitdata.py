@@ -20,18 +20,16 @@ from reportengine.floatformatting import ValueErrorTuple
 from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
-from validphys import sumrules
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
-REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
+REPLICA_FILES = ['.dat', '.json']
 FIT_SUMRULES = [
     "momentum",
     "uvalence",
     "dvalence",
     "svalence",
 ]
-FitSumRulesGrid = namedtuple('FitSumRulesGrid', FIT_SUMRULES)
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -94,10 +92,13 @@ def check_replica_files(replica_path, prefix):
     return valid
 
 FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers'))
-def load_fitinfo(replica_path, prefix):
-    """Process the data in the ".fitinfo" file of a single replica."""
-    p = replica_path / (prefix + '.fitinfo')
-    with open(p, 'r') as fitinfo_file:
+
+
+def _old_load_fitinfo(old_fitinfo):
+    """Process the data in the old ``.fitinfo`` files
+    so that comparisons can still be run against very old fits
+    """
+    with old_fitinfo.open("r", encoding="utf-8") as fitinfo_file:
         fitinfo_line = fitinfo_file.readline().split() # General fit properties
         fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
         fitinfo_integ = fitinfo_file.readline()         # Replica integ-numbers
@@ -112,10 +113,25 @@ def load_fitinfo(replica_path, prefix):
     return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
 
 
-#TODO: Produce a more informative .sumrules file.
-def load_sumrules(replica_path, prefix):
-    """Load the values of the sum rules from a given replica."""
-    return np.loadtxt(replica_path/f'{prefix}.sumrules')[:len(FIT_SUMRULES)]
+def load_fitinfo(replica_path, prefix):
+    """Process the data in the ``.json.`` file for a single replica into a ``FitInfo`` object.
+    If the ``.json`` file does not exist an old-format fit is assumed and ``old_load_fitinfo``
+    will be called instead.
+    """
+    p = replica_path / (prefix + ".json")
+    if not p.exists():
+        return _old_load_fitinfo(p.with_suffix(".fitinfo"))
+    fitinfo_dict = json.loads(p.read_text(encoding="utf-8"))
+
+    n_iterations = fitinfo_dict["best_epoch"]
+    erf_validation = fitinfo_dict["erf_vl"]
+    erf_training = fitinfo_dict["erf_tr"]
+    chisquared = fitinfo_dict["chi2"]
+    is_positive = fitinfo_dict["pos_state"] == "POS_PASS"
+    arclengths = np.array(fitinfo_dict["arc_lengths"])
+    integnumbers = np.array(fitinfo_dict["integrability"])
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
+
 
 @checks.check_has_fitted_replicas
 def replica_paths(fit):
@@ -128,8 +144,9 @@ def replica_paths(fit):
         return [postfit_path / f'replica_{index}' for index in range(1, l)]
     return [old_postfit_path / f'replica_{index}' for index in range(1, l)]
 
+
 def replica_data(fit, replica_paths):
-    """Load the data from the fitinfo file of each of the replicas.
+    """Load the necessary data from the ``.json`` file of each of the replicas.
     The corresponding PDF set must be installed in the LHAPDF path.
 
     The included information is:
@@ -185,22 +202,6 @@ def summarise_fits(collected_fit_summaries):
     """ Produces a table of basic comparisons between fits, includes
     all the fields used in fit_summary """
     return pd.concat(collected_fit_summaries, axis=1)
-
-
-def fit_sum_rules(fit, replica_paths):
-    """Return a SumRulesGrid object with the sumrules for each replica as
-    calculated by nnfit at the initial scale. This is the same object as
-    the one produced by
-    ``validphys.pdfgrids.sum_rules`` which is instead obtained from LHAPDF at
-    a given energy"""
-    res = np.zeros((len(FIT_SUMRULES),len(replica_paths)))
-    for i, p in enumerate(replica_paths):
-        res[:, i] = load_sumrules(p, fit.name)
-    return FitSumRulesGrid(*res)
-
-@table
-def fit_sum_rules_table(fit_sum_rules):
-    return sumrules.sum_rules_table(fit_sum_rules._asdict())
 
 
 fits_replica_data = collect('replica_data', ('fits',))
@@ -441,39 +442,18 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
         return "No overlap of systypes"
 
 @table
-def fit_code_version(fit_name_with_covmat_label, fit, replica_paths):
+def fit_code_version(fit):
+    """ Returns table with the code version from ``replica_1/{fitname}.json`` files.
     """
-    Returns table with the code version from
-    'replica_{repno}/{fitname}.json' files.
-    Old fits return 'undefined'. 
-    Asserts that version information matches 
-    for all replicas.
-    """
-    version_info = []
-    # First check if first replica has .json file
-    p_1 = replica_paths[0] / (f'{fit.name}.json')
-    if not p_1.exists():
-        undef_tuple = [("unavailable", "unavailable")]
-        # Return df with "undefined" in name, version locations
-        vinfo = pd.DataFrame(undef_tuple).set_index(0)
-    # Otherwise look at .json files
-    else:
-        for path in replica_paths:
-            p = path / (f'{fit.name}.json')
-            with open(p, 'r') as stream:
-                json_info = json.load(stream)
-                # Taking version info from .json
-                rep_version = json_info["version"]
-            version_info.append(rep_version)
-        versionset = (set(x.items()) for x in version_info)
-        reducedset = set.union(*versionset)
-        vinfo = pd.DataFrame(reducedset).set_index(0)
-    vinfo.columns = [f"{fit_name_with_covmat_label}"]
-    vinfo.index.name = "module"
-    # Check for conflicting versions
-    version_names = list(vinfo.index)
-    assert (len(version_names) == len(set(version_names))), "Version information does not match for all replicas."
-    return vinfo
+    vinfo = {}
+    for json_path in fit.path.glob(f"nnfit/replica_*/{fit.name}.json"):
+        tmp = json.loads(json_path.read_text(encoding="utf-8")).get("version")
+        if (vinfo and vinfo != tmp) or tmp is None:
+            vinfo = {i: "inconsistent" for i in tmp}
+            break
+        vinfo = tmp
+
+    return pd.DataFrame(vinfo.items(), columns=["module", fit.name]).set_index("module")
 
 fits_fit_code_version = collect("fit_code_version", ("fits",))
 
@@ -481,9 +461,6 @@ fits_fit_code_version = collect("fit_code_version", ("fits",))
 def fits_version_table(fits_fit_code_version):
     """ Produces a table of version information for multiple fits."""
     vtable = pd.concat(fits_fit_code_version, axis=1)
-    # Drops any rows starting with "unavailable"
-    # If no such row is present, the error is suppressed and nothing changes
-    vtable.drop("unavailable", inplace=True, errors="ignore")
     # Fill NaNs with "unavailable"
     vtable.fillna("unavailable", inplace=True)
     return vtable
