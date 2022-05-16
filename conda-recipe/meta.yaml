@@ -53,6 +53,9 @@ requirements:
         - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
         - curio >=1.0
         - pineappl >=0.5.2
+        - eko
+        - banana-hep
+
 
 test:
     requires:
