@@ -124,9 +124,6 @@ class LoaderBase:
 
         # And save them up
         self.datapath = datapath
-        # TODO: eventually the yaml database will be the new commondata format
-        #       so this is a temporary location?
-        self.yamlpath = datapath / "yamldb"
         self.resultspath = resultspath
         self._old_commondata_fits = set()
         self.nnprofile = profile
@@ -526,16 +523,6 @@ class Loader(LoaderBase):
         If the dataset contains new-type fktables, use the
         pineappl loading function, otherwise fallback to legacy
         """
-        # TODO: this is just so I can load both types at once during development
-        readyaml = True
-        force_pineappl = False
-        if "oldmode" in cfac:
-            cfac = [i for i in cfac if i != "oldmode"]
-            readyaml = False
-        elif "forcepineappl" in cfac:
-            cfac = [i for i in cfac if i != "forcepineappl"]
-            force_pineappl = True
-
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
 
@@ -544,13 +531,11 @@ class Loader(LoaderBase):
         commondata = self.check_commondata(
             name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit)
 
-        # Let's first see whether this is a new type of fktable
-        fkpath = (self.yamlpath / name).with_suffix(".yaml")
-        if fkpath.exists() and readyaml:
+        if theoryid.is_pineappl():
+            # If it is a pineappl theory, use the pineappl reader
+            fkpath = (theoryid.yamldb_path / name).with_suffix(".yaml")
             fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
         else:
-            if force_pineappl:
-                raise pineparser.PineAPPLEquivalentNotKnown(f"No pineappl version for {name}")
             try:
                 fkspec, op = self.check_compound(theoryno, name, cfac)
             except CompoundNotFound:

@@ -538,7 +538,7 @@ class FKTableSpec(TupleComp):
     """
     def __init__(self, fkpath, cfactors, metadata=None):
         self.cfactors = cfactors if cfactors is not None else []
-        # Note: the legacy interface is expected to be removed by NNPDF5.0
+        # NOTE: the legacy interface is expected to be removed by NNPDF5.0
         # so please don't write code that relies on it
         self.legacy = True
         if isinstance(fkpath, (tuple, list)):
@@ -547,7 +547,8 @@ class FKTableSpec(TupleComp):
         self.fkpath = fkpath
         self.metadata = metadata
 
-        # If this is a yaml file that loads an applgrid, keep also the name of the target
+        # If this is a yaml file that loads an applgrid-converted pineappl,
+        # keep also the name of the target
         # this is needed since we can now easily reutilize grids 
         if not self.legacy and self.metadata.get("appl"):
             super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
@@ -787,6 +788,14 @@ class TheoryIDSpec:
 
     def __str__(self):
         return f"Theory {self.id}"
+
+    @property
+    def yamldb_path(self):
+        return self.path / "yamldb"
+
+    def is_pineappl(self):
+        """Check whether this theory is a pineappl-based theory"""
+        return self.yamldb_path.exists()
 
 class ThCovMatSpec:
     def __init__(self, path):

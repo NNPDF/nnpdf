@@ -192,9 +192,8 @@ def get_yaml_information(yaml_file, theorypath):
     Transitional function: the call to "pineko" might be to some other commondata reader
     that will know how to extract the information from the commondata
     """
-    # TODO: Tell the reader where to look for the pineappl grids
-    # for debugging purposes they are inside "share/NNPDF/data/theory_X/pineappls"
-    grids_folder = theorypath / "pineappls"
+    # The pineappl grids are just stored where the fktables would be, "fastkernel"
+    grids_folder = theorypath / "fastkernel"
     return pineko_yaml(yaml_file, grids_folder)
 
 
