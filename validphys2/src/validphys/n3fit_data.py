@@ -523,7 +523,7 @@ def _fitting_lagrange_dict(lambdadataset):
     }
 
 
-def posdatasets_fitting_pos_dict(posdatasets):
+def posdatasets_fitting_pos_dict(posdatasets=None):
     """Loads all positivity datasets. It is not allowed to be empty.
 
     Parameters
@@ -533,7 +533,10 @@ def posdatasets_fitting_pos_dict(posdatasets):
         these can be found in the runcards located in n3fit/runcards. They have
         a format similar to ``dataset_input``.
     """
-    return [_fitting_lagrange_dict(i) for i in posdatasets]
+    if posdatasets is not None:
+        return [_fitting_lagrange_dict(i) for i in posdatasets]
+    log.warning("Not using any positivity datasets.")
+    return None
 
 
 # can't use collect here because integdatasets might not exist.
