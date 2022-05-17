@@ -16,7 +16,7 @@ def filter_NMCPD():
     error_nuc = []
     
     for i in tables:
-        hepdata_tables="rawdata/HEPData-ins426595-"+version+"-Table_"+str(i)+".yaml"
+        hepdata_tables="rawdata/HEPData-ins426595-v"+str(version)+"-Table_"+str(i)+".yaml"
         with open(hepdata_tables, 'r') as file:
             input = yaml.safe_load(file)
             
