@@ -131,6 +131,8 @@ class ModelTrainer:
         """
         # Save all input information
         self.exp_info = exp_info
+        if pos_info is None:
+            pos_info = []
         self.pos_info = pos_info
         self.integ_info = integ_info
         if self.integ_info is not None:
