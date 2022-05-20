@@ -114,6 +114,12 @@ def load_fitinfo(replica_path, prefix):
     return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers, alphas)
 
 
+def load_alphaslog(replica_path):
+    p = replica_path / "alphas.log"
+    alphaslog = np.loadtxt(p)
+    return alphaslog
+
+
 #TODO: Produce a more informative .sumrules file.
 def load_sumrules(replica_path, prefix):
     """Load the values of the sum rules from a given replica."""
@@ -138,6 +144,15 @@ def replica_data(fit, replica_paths):
 
     ('nite', 'training', 'validation', 'chi2', 'pos_status', 'arclenghts')"""
     return [load_fitinfo(path, fit.name) for path in replica_paths]
+
+def replica_alphaslog(replica_paths):
+    """Load the data from the fitinfo file of each of the replicas.
+    The corresponding PDF set must be installed in the LHAPDF path.
+
+    The included information is:
+
+    ('nite', 'training', 'validation', 'chi2', 'pos_status', 'arclenghts')"""
+    return [load_alphaslog(path) for path in replica_paths]
 
 
 @table

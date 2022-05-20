@@ -112,7 +112,7 @@ maxcores: 8
 
 tensorboard:
   weight_freq: 100
-  profiling: False
+  profiling: True
 
 save: 'weights.h5'
 # load: '/path/to/weights.h5/file'

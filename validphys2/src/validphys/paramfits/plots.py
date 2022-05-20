@@ -6,6 +6,7 @@ Plots for the paramfits package.
 import logging
 import numbers
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -821,8 +822,6 @@ def plot_poly_as_fit(fits_as,
             ax.plot(alphas, np.polyval(fit, alphas), color=color)
             ax.plot(asarr[filt], row[filt], 'o', color=color)
     minimums = np.asarray(minimums)
-
-
     ax.set_xlim(min(alphas), max(alphas))
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
     plt.title(rf"$\alpha_S$ from order {polorder} polynomial fit "
@@ -884,7 +883,7 @@ def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
     #Add total sum
     #sp = np.atleast_2d(np.nansum(pulls, axis=0))
     #pulls =np.concatenate([pulls, sp], axis=0)
-    #fig,ax = barplot(pulls.T, [*d.keys(), 'sum'], dataspecs_speclabel)
+    #fig,ax = barplot(pull_s.T, [*d.keys(), 'sum'], dataspecs_speclabel)
 
     fig,ax = barplot(pulls.T, d.keys(), dataspecs_speclabel)
 
@@ -895,3 +894,17 @@ def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
 # Do this so that old runcards still work
 plot_as_datasets_pseudorreplicas_chi2 = plot_as_datasets_pseudoreplicas_chi2
 plot_dataspecs_pseudorreplica_means = plot_dataspecs_pseudoreplica_means
+
+@figure
+def plot_alphas_history(replica_alphaslog):
+    fig, ax = plt.subplots()
+    cmap = plt.cm.viridis
+    norm = matplotlib.colors.Normalize(
+        vmin=np.concatenate(replica_alphaslog).min(),
+        vmax=np.concatenate(replica_alphaslog).max()
+        )
+    for alphas_history in replica_alphaslog:
+        ax.plot(alphas_history, color=cmap(norm(alphas_history[-1])))
+    ax.set_xlabel("epochs")
+    ax.set_ylabel(r"$\alpha_s$")
+    return fig

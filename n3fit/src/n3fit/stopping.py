@@ -218,6 +218,9 @@ class FitState:
         """" Return the tr chi2 per dataset for a given replica """
         return {k: np.take(i, r) for k, i in self.all_tr_chi2.items()}
 
+    def all_alphas_for_replica(self, r):
+        return self.alphas
+
     def all_vl_chi2_for_replica(self, r):
         """" Return the vl chi2 per dataset for a given replica """
         return {k: np.take(i, r) for k, i in self.all_vl_chi2.items()}
@@ -616,6 +619,37 @@ class Stopping:
     def get_next_replica(self):
         """ Return the next ReplicaState object"""
         return next(self._history)
+
+    def alphas_str(self, replica=0, log_each=1):
+        """
+        Returns a list of log-string with the status of the fit
+        every `log_each` epochs
+
+        Parameters
+        ----------
+            replica: int
+                which replica are we writing the log for
+            log_each: int
+                every how many epochs to print the log
+
+        Returns
+        -------
+            file_list: list(str)
+                a list of strings to be printed as `chi2exps.log`
+        """
+        final_epoch = self._history.final_epoch
+        file_list = []
+        for i in range(log_each - 1, final_epoch + 1, log_each):
+            fitstate = self._history.get_state(i)
+            all_tr = fitstate.all_alphas_for_replica(replica)
+            # Here it is assumed the validation exp set is always a subset of the training exp set
+            data_list = []
+            data_str = f"{all_tr}"
+            data_list.append(data_str)
+            data = "\n".join(data_list)
+            strout = f"{data}\n"
+            file_list.append(strout)
+        return file_list
 
     def chi2exps_str(self, replica=0, log_each=100):
         """

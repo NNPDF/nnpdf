@@ -62,6 +62,7 @@ class WriterWrapper:
         integrability_numbers = self.pdf_object.integrability_numbers()
         # Construct the chi2exp file
         allchi2_lines = self.stopping_object.chi2exps_str()
+        allalphas_lines = self.stopping_object.alphas_str()
         # Construct the preproc file (the information is only in the json file)
         preproc_lines = "" 
 
@@ -87,6 +88,7 @@ class WriterWrapper:
             arc_lengths,
             integrability_numbers,
             allchi2_lines,
+            allalphas_lines,
             preproc_lines,
             replica_status.positivity_status,
             self.timings,
@@ -252,6 +254,7 @@ def storefit(
     arc_lengths,
     integrability_numbers,
     all_chi2_lines,
+    all_alphas_lines,
     all_preproc_lines,
     pos_state,
     timings,
@@ -320,6 +323,11 @@ def storefit(
     # Write chi2exp
     with open(f"{replica_path}/chi2exps.log", "w") as fs:
         for line in all_chi2_lines:
+            fs.write(line)
+
+    # Write alphas
+    with open(f"{replica_path}/alphas.log", "w") as fs:
+        for line in all_alphas_lines:
             fs.write(line)
 
     # Write preproc information

@@ -52,13 +52,27 @@ def alphas_hist(replica_data, pdf):
     return fig
 
 @figure
-def alphas_chi2_plot(replica_data, pdf):
+def alphas_vl_chi2_plot(replica_data, pdf):
     alphas_values = np.array([replica.alphas for replica in replica_data])
     vl_chi2_values = np.array([replica.validation for replica in replica_data])
 
     fig, ax = plt.subplots()
     ax.set_xlabel(r"$\alpha_s$")
     ax.set_ylabel(r"$\chi^2_{\mathrm{val}}$")
+    ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
+    
+    ax.plot(alphas_values, vl_chi2_values, "o")
+
+    return fig
+
+@figure
+def alphas_tr_chi2_plot(replica_data, pdf):
+    alphas_values = np.array([replica.alphas for replica in replica_data])
+    vl_chi2_values = np.array([replica.training for replica in replica_data])
+
+    fig, ax = plt.subplots()
+    ax.set_xlabel(r"$\alpha_s$")
+    ax.set_ylabel(r"$\chi^2_{\mathrm{tr}}$")
     ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
     
     ax.plot(alphas_values, vl_chi2_values, "o")
@@ -774,7 +788,6 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
     #                 loc="upper left", title=r"$\alpha_s$")
     # ax.add_artist(legend1)
     fig.colorbar(sc, label=r"$\alpha_s$")
-
 
     if replica_filters:
         _scatter_marked(ax, training, valid, replica_filters, zorder=90)
