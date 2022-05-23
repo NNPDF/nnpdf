@@ -897,14 +897,29 @@ plot_dataspecs_pseudorreplica_means = plot_dataspecs_pseudoreplica_means
 
 @figure
 def plot_alphas_history(replica_alphaslog):
+    number_of_replicas = len(replica_alphaslog)
+    if number_of_replicas > 20:
+        random_ordered_replica_indices = list(range(number_of_replicas))
+        import random
+        random.shuffle(random_ordered_replica_indices)
+        random_replicas_to_plot = [random_ordered_replica_indices.pop() for _ in range(20)]
+    else:
+        random_replicas_to_plot = list(range(number_of_replicas))
+    replica_alphaslog=[replica_alphaslog[i] for i in random_replicas_to_plot]
     fig, ax = plt.subplots()
     cmap = plt.cm.viridis
+    aa=[i[0] for i in replica_alphaslog]
     norm = matplotlib.colors.Normalize(
-        vmin=np.concatenate(replica_alphaslog).min(),
-        vmax=np.concatenate(replica_alphaslog).max()
+        vmin=min(aa),
+        vmax=max(aa)
         )
     for alphas_history in replica_alphaslog:
-        ax.plot(alphas_history, color=cmap(norm(alphas_history[-1])))
+        ax.plot(alphas_history, color=cmap(norm(alphas_history[0])))
     ax.set_xlabel("epochs")
     ax.set_ylabel(r"$\alpha_s$")
+    if number_of_replicas > 20:
+        ax.set_title(r"$\alpha_s$ history of "
+                    f"{len(random_replicas_to_plot)} randomly drawn replica fits")
+    else:
+        ax.set_title(r"$\alpha_s$ history of the replica fits")
     return fig
