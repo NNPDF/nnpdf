@@ -896,9 +896,23 @@ plot_as_datasets_pseudorreplicas_chi2 = plot_as_datasets_pseudoreplicas_chi2
 plot_dataspecs_pseudorreplica_means = plot_dataspecs_pseudoreplica_means
 
 @figure
-def plot_alphas_history(replica_alphaslog):
+def plot_alphas_history(replica_alphaslog, number_alphas_history_to_plot):
     number_of_replicas = len(replica_alphaslog)
-    if number_of_replicas > 20:
+
+    # Get history of the average alphas value
+    max_epochs = max([len(i) for i in replica_alphaslog])
+    arr = np.empty((number_of_replicas, max_epochs))
+    for i in range(number_of_replicas):
+        arr[i, :replica_alphaslog[i].size] = replica_alphaslog[i]
+        arr[i,replica_alphaslog[i].size:] = replica_alphaslog[i][-1]
+    # arr = np.ma.empty((number_of_replicas, max_epochs))
+    # arr.mask = True
+    # for i in range(number_of_replicas):
+    #     arr[i, :replica_alphaslog[i].size] = replica_alphaslog[i]
+    average_alphas_history = arr.mean(axis=0)
+
+    # Get history of alphas for random replicas
+    if number_of_replicas > number_alphas_history_to_plot:
         random_ordered_replica_indices = list(range(number_of_replicas))
         import random
         random.shuffle(random_ordered_replica_indices)
@@ -906,6 +920,8 @@ def plot_alphas_history(replica_alphaslog):
     else:
         random_replicas_to_plot = list(range(number_of_replicas))
     replica_alphaslog=[replica_alphaslog[i] for i in random_replicas_to_plot]
+
+    # Make the figure
     fig, ax = plt.subplots()
     cmap = plt.cm.viridis
     aa=[i[0] for i in replica_alphaslog]
@@ -915,9 +931,11 @@ def plot_alphas_history(replica_alphaslog):
         )
     for alphas_history in replica_alphaslog:
         ax.plot(alphas_history, color=cmap(norm(alphas_history[0])))
+    ax.plot(average_alphas_history, color="red", label=r"mean $\alpha_s$ value")
     ax.set_xlabel("epochs")
     ax.set_ylabel(r"$\alpha_s$")
-    if number_of_replicas > 20:
+    ax.legend()
+    if number_of_replicas > number_alphas_history_to_plot:
         ax.set_title(r"$\alpha_s$ history of "
                     f"{len(random_replicas_to_plot)} randomly drawn replica fits")
     else:
