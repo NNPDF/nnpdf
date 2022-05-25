@@ -44,7 +44,7 @@ class FittableDataSet:
     # Things that can have default values:
     operation: str = "NULL"
     frac: float = 1.0
-    training_mask: np.ndarray = None # boolean array
+    training_mask: np.ndarray = None  # boolean array
 
     def __post_init__(self):
         self._tr_mask = None

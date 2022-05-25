@@ -49,6 +49,7 @@ class FKTableData:
         as a normalization table for a differential cross section,
         in legacy code (<= NNPDF4.0) both fktables would be cut using the differential index.
     """
+
     hadronic: bool
     Q0: float
     ndata: int
@@ -66,7 +67,9 @@ class FKTableData:
                 cfactor = cfactor[0]
             else:
                 name = self.metadata.get("target_dataset")
-                raise ValueError(f"The length of cfactor for {name} differs from the number of datapoints in the grid")
+                raise ValueError(
+                    f"The length of cfactor for {name} differs from the number of datapoints in the grid"
+                )
         new_sigma = self.sigma.multiply(pd.Series(cfactor), axis=0, level=0)
         return dataclasses.replace(self, sigma=new_sigma)
 
@@ -171,7 +174,6 @@ class FKTableData:
             fktable = fk_raw.reshape((nx, nbasis, ndata)).T
 
         return fktable
-
 
 @dataclasses.dataclass(eq=False)
 class CFactorData:

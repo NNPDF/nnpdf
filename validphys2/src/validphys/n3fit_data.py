@@ -62,6 +62,7 @@ class _TrMasks(TupleComp):
     This class holds said information so it can be reused easily, i.e.,
     ``group_name`` and ``seed`` define the ``masks``.
     """
+
     def __init__(self, group_name, seed, masks=None):
         self.masks = masks
         super().__init__(group_name, seed)
@@ -233,7 +234,7 @@ def fitting_data_dict(
 
     expdata = make_replica
     tr_masks = tr_masks.masks
-    covmat = dataset_inputs_t0_covmat_from_systematics # t0 covmat
+    covmat = dataset_inputs_t0_covmat_from_systematics  # t0 covmat
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
 
@@ -270,7 +271,6 @@ def fitting_data_dict(
 
     ndata_tr = np.count_nonzero(tr_mask)
     expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
-
 
     ndata_vl = np.count_nonzero(vl_mask)
     expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
@@ -327,8 +327,11 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     """
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
+
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
-groups_replicas_indexed_make_replica = collect('indexed_make_replica' , ("group_dataset_inputs_by_experiment","replicas"))
+groups_replicas_indexed_make_replica = collect(
+    "indexed_make_replica", ("group_dataset_inputs_by_experiment", "replicas")
+)
 
 
 @table
