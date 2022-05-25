@@ -169,7 +169,11 @@ def _pinelumi_to_columns(pine_luminosity, hadronic):
     -------
         list(int): list of labels for the columns
     """
-    from eko.basis_rotation import evol_basis_pids
+    evol_basis_pids = tuple(
+        [22, 100, 21, 200]
+        + [200 + n**2 - 1 for n in range(2, 6 + 1)]
+        + [100 + n**2 - 1 for n in range(2, 6 + 1)]
+    )
     flav_size = len(evol_basis_pids)
     columns = []
     if hadronic:
