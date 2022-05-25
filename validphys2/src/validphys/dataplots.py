@@ -52,9 +52,20 @@ def alphas_hist(replica_data, pdf):
     return fig
 
 @figure
-def alphas_vl_chi2_plot(replica_data, pdf):
+def alphas_vl_chi2_plot(replica_data):
     alphas_values = np.array([replica.alphas for replica in replica_data])
     vl_chi2_values = np.array([replica.validation for replica in replica_data])
+
+    alphas_min = np.round(alphas_values.min()-0.0005,decimals=3)
+    alphas_max = np.round(alphas_values.max()+0.0005,decimals=3)
+    alphas_bins = np.linspace(alphas_min,alphas_max,int((alphas_max-alphas_min)/0.001+2))
+    alphas_middle_of_bins = alphas_bins[:-1]+0.0005
+    vl_chi2_groups = [[] for _ in range(alphas_bins.size-1)]
+    for alphas, vl_chi2 in zip(alphas_values, vl_chi2_values):
+        for ind in range(alphas_bins.size-1):
+            if alphas_bins[ind] < alphas < alphas_bins[ind+1]:
+                vl_chi2_groups[ind].append(vl_chi2)
+    vl_chi2_bin_mean = [np.mean(i) for i in vl_chi2_groups]
 
     fig, ax = plt.subplots()
     ax.set_xlabel(r"$\alpha_s$")
@@ -62,13 +73,26 @@ def alphas_vl_chi2_plot(replica_data, pdf):
     ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
     
     ax.plot(alphas_values, vl_chi2_values, "o")
+    ax.plot(alphas_middle_of_bins, vl_chi2_bin_mean, "ro", label=r"mean $\chi^2$ in $\alpha_s$ bin")
+    ax.legend()
 
     return fig
 
 @figure
-def alphas_tr_chi2_plot(replica_data, pdf):
+def alphas_tr_chi2_plot(replica_data):
     alphas_values = np.array([replica.alphas for replica in replica_data])
     vl_chi2_values = np.array([replica.training for replica in replica_data])
+
+    alphas_min = np.round(alphas_values.min()-0.0005,decimals=3)
+    alphas_max = np.round(alphas_values.max()+0.0005,decimals=3)
+    alphas_bins = np.linspace(alphas_min,alphas_max,int((alphas_max-alphas_min)/0.001+2))
+    alphas_middle_of_bins = alphas_bins[:-1]+0.0005
+    vl_chi2_groups = [[] for _ in range(alphas_bins.size-1)]
+    for alphas, vl_chi2 in zip(alphas_values, vl_chi2_values):
+        for ind in range(alphas_bins.size-1):
+            if alphas_bins[ind] < alphas < alphas_bins[ind+1]:
+                vl_chi2_groups[ind].append(vl_chi2)
+    vl_chi2_bin_mean = [np.mean(i) for i in vl_chi2_groups]
 
     fig, ax = plt.subplots()
     ax.set_xlabel(r"$\alpha_s$")
@@ -76,9 +100,10 @@ def alphas_tr_chi2_plot(replica_data, pdf):
     ax.set_title(f"simultaneous " + r"$\alpha_s$" f"+PDF fit")
     
     ax.plot(alphas_values, vl_chi2_values, "o")
+    ax.plot(alphas_middle_of_bins, vl_chi2_bin_mean, "ro", label=r"mean $\chi^2$ in $\alpha_s$ bin")
+    ax.legend()
 
     return fig
-
 
 @figure
 def plot_chi2dist_experiments(total_chi2_data, experiments_chi2_stats, pdf):
