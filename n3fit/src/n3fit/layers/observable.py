@@ -5,7 +5,7 @@ from n3fit.backends import operations as op
 
 
 def _is_unique(list_of_arrays):
-    """ Check whether the list of arrays more than one different arrays """
+    """Check whether the list of arrays more than one different arrays"""
     the_first = list_of_arrays[0]
     for i in list_of_arrays[1:]:
         if not np.array_equal(the_first, i):
@@ -15,27 +15,27 @@ def _is_unique(list_of_arrays):
 
 class Observable(MetaLayer, ABC):
     """
-        This class is the parent of the DIS and DY convolutions.
-        All backend-dependent code necessary for the convolutions
-                                    is (must be) concentrated here
+    This class is the parent of the DIS and DY convolutions.
+    All backend-dependent code necessary for the convolutions
+                                is (must be) concentrated here
 
-        The methods gen_mask and call must be overriden by the observables
-        where
-            - gen_mask: it is called by the initializer and generates the mask between
-                        fktables and pdfs
-            - call: this is what does the actual operation
+    The methods gen_mask and call must be overriden by the observables
+    where
+        - gen_mask: it is called by the initializer and generates the mask between
+                    fktables and pdfs
+        - call: this is what does the actual operation
 
 
-        Parameters
-        ----------
-            fktable_data: list[validphys.coredata.FKTableData]
-                list of FK which define basis and xgrid for the fktables in the list
-            fktable_arr: list
-                list of fktables for this observable
-            operation_name: str
-                string defining the name of the operation to be applied to the fktables
-            nfl: int
-                number of flavours in the pdf (default:14)
+    Parameters
+    ----------
+        fktable_data: list[validphys.coredata.FKTableData]
+            list of FK which define basis and xgrid for the fktables in the list
+        fktable_arr: list
+            list of fktables for this observable
+        operation_name: str
+            string defining the name of the operation to be applied to the fktables
+        nfl: int
+            number of flavours in the pdf (default:14)
     """
 
     def __init__(self, fktable_data, fktable_arr, operation_name, nfl=14, **kwargs):
@@ -47,7 +47,7 @@ class Observable(MetaLayer, ABC):
         xgrids = []
         self.fktables = []
         for fkdata, fk in zip(fktable_data, fktable_arr):
-            xgrids.append(fkdata.xgrid.reshape(1,-1))
+            xgrids.append(fkdata.xgrid.reshape(1, -1))
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
 

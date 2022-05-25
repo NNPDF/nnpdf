@@ -195,11 +195,11 @@ def observable_generator(
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         if obs_layer_tr.splitting is None:
-            xgrid = dataset.fktables_data[0].xgrid.reshape(1,-1)
+            xgrid = dataset.fktables_data[0].xgrid.reshape(1, -1)
             model_inputs.append(xgrid)
             dataset_xsizes.append(xgrid.shape[1])
         else:
-            xgrids = [i.xgrid.reshape(1,-1) for i in dataset.fktables_data]
+            xgrids = [i.xgrid.reshape(1, -1) for i in dataset.fktables_data]
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 

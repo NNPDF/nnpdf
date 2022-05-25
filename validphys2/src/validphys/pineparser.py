@@ -151,8 +151,6 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
     return ret
 
 
-
-
 def _pinelumi_to_columns(pine_luminosity, hadronic):
     """Makes the pineappl luminosity into the column indices of a dataframe
     These corresponds to the indices of a flattened (14x14) matrix for hadronic observables
@@ -238,6 +236,7 @@ def pineappl_reader(fkspec):
             an FKTableData object containing all necessary information to compute predictions
     """
     from pineappl.fk_table import FkTable
+
     pines = [FkTable.read(i) for i in fkspec.fkpath]
 
     # Extract metadata from the first grid
