@@ -3,8 +3,10 @@
 import argparse
 import logging
 import requests
+import sys
 
 from pathlib import Path
+from typing import Union
 
 from reportengine.compat import yaml
 from reportengine.checks import CheckError
@@ -53,12 +55,11 @@ class HepDataConfig:
         # however assumes any existing tables were downloaded with the version found in
         # the metadata.yaml file (as it should be).
         if self.version != self.webversion and not self.force_download:
-            print(
-                f"The required version and the HepData one do not match. The version in"
-                f"the metadata is {self.version} while the HepData is {self.webversion}."
+            sys.exit(
+                f"The required version and the HepData one do not match. The version in the "
+                f"metadata is v{self.version} while the one on HepData is v{self.webversion}. "
                 f"Please use the flag --force in order to download the new tables."
             )
-            exit()
 
     def extract_metadata(self, metadata_path: str) -> dict:
         """
@@ -72,7 +73,7 @@ class HepDataConfig:
             metadata_dic = yaml.safe_load(stream_metadata)
         return metadata_dic["hepdata"]
 
-    def write_tables(self, file: bytes, table_id: int) -> None:
+    def write_tables(self, file: bytes, table_id: Union[int, None]) -> None:
         """
         Write a given table into a file and save it into the disk afterwards.
 
@@ -90,15 +91,21 @@ class HepDataConfig:
         with open(f"{self.folder}/{filename}.yaml", "wb") as table_yaml:
             table_yaml.write(file)
 
-    def check_downloaded_tables(self, table_numbers: list) -> None:
+    def check_downloaded_tables(self, table_numbers: list, vcheck: bool=False) -> None:
         """
         Check if the number of downloaded tables correspond to the list of tables
         in the metadata.yaml file. This function should also be extended to include
         more checks (something much more relevant than this).
         """
-        nb_yaml_files_rawdata = sum(1 for _ in self.folder.glob("**/*.yaml"))
+        nb_yaml_files_rawdata = sum(1 for _ in self.folder.glob("**/*.yaml")) - 1
         if (nb_yaml_files_rawdata != len(table_numbers)):
             raise DownloadFail("Some of the tables were not downloaded properly.")
+        # Check if the version in the hep-metadata and the online one is the same
+        if vcheck and Path(f"{self.folder}/hep-metadata-v{self.version}.yaml").is_file():
+            with open(f"{self.folder}/hep-metadata-v{self.version}.yaml", "r") as file:
+                hep_metadata = yaml.safe_load(file)
+            if hep_metadata["version"] != self.webversion and not self.force_download:
+                raise VersionMismatch("The local version is different from HepData.")
 
     def download_heptables(self, table_numbers: list) -> None:
         """
@@ -119,9 +126,14 @@ class HepDataConfig:
                         get_reads_yaml = requests.get(url_tab["contentUrl"])
                         self.write_tables(get_reads_yaml.content, table_id)
                 log.info(f"Table {table_id} downloaded and stored properly.")
+        # Download the HepData metdata to be used as crosscheck in future.
+        # Here, we do not want all the information concerning all the tables
+        data = {k:v for k,v in self.hep_webinfo.items() if k != "hasPart"}
+        with open(f"{self.folder}/hep-metadata-v{self.version}.yaml", "w") as file:
+            yaml.safe_dump(data, file)
         # Crudely check if all the tables have been downloaded successfully.
         # The following check could also be performed much more efficiently.
-        self.check_downloaded_tables(table_numbers)
+        self.check_downloaded_tables(table_numbers, vcheck=False)
         print("All the tables have been downloaded and stored properly.")
 
     def check_hepdata_tables(self) -> None:
@@ -132,8 +144,7 @@ class HepDataConfig:
         """
         # Check if the rawdata folder already exists and if so if it contains tables
         if self.folder.exists() and sum(1 for _ in self.folder.glob("**/*.yaml")) > 0:
-            self.check_downloaded_tables(self.tables)
-            log.info("The already downloaded tables match the ones from HepData.")
+            self.check_downloaded_tables(self.tables, vcheck=True)
             print("The already downloaded tables match the ones from HepData.")
             return
         self.download_heptables(self.tables)
