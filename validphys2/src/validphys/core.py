@@ -536,6 +536,7 @@ class FKTableSpec(TupleComp):
     For now holds the metadata as an attribute to this function.
     This is useless/transitional since this metadata is already in the new CommonData format
     """
+
     def __init__(self, fkpath, cfactors, metadata=None):
         self.cfactors = cfactors if cfactors is not None else []
         # NOTE: the legacy interface is expected to be removed by NNPDF5.0
@@ -549,12 +550,11 @@ class FKTableSpec(TupleComp):
 
         # If this is a yaml file that loads an applgrid-converted pineappl,
         # keep also the name of the target
-        # this is needed since we can now easily reutilize grids 
+        # this is needed since we can now easily reutilize grids
         if not self.legacy and self.metadata.get("appl"):
             super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
         else:
             super().__init__(fkpath, cfactors)
-
 
     def _load_legacy(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
@@ -582,10 +582,20 @@ class LagrangeSetSpec(DataSetSpec):
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
-        super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
+        super().__init__(
+            name=name,
+            commondata=commondataspec,
+            fkspecs=fkspec,
+            thspec=thspec,
+            cuts=cuts,
+        )
 
     def to_unweighted(self):
-        log.warning("Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name)
+        log.warning(
+            "Trying to unweight %s, %s are always unweighted",
+            self.__class__.__name__,
+            self.name,
+        )
         return self
 
     @functools.lru_cache()
@@ -601,7 +611,6 @@ class PositivitySetSpec(LagrangeSetSpec):
 
 class IntegrabilitySetSpec(LagrangeSetSpec):
     pass
-
 
 #We allow to expand the experiment as a list of datasets
 class DataGroupSpec(TupleComp, namespaces.NSList):
