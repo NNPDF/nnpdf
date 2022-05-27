@@ -15,10 +15,13 @@ import scipy.stats as stats
 import pandas as pd
 import numpy as np
 
+
 log = logging.getLogger(__name__)
 
-
 preds = collect("predictions", ("pdfs","dataset_inputs",))
+
+def foo(get_val_erf, calculate_chi2s_per_replica):
+    import ipdb; ipdb.set_trace()
 
 def array_expected_delta_chi2(calculate_chi2s_per_replica, replica_data):
 
@@ -59,7 +62,7 @@ def calculate_chi2s_per_replica(
 
     pp = []
     for i, dss in enumerate(dataset_inputs):
-        preds_witout_cv = preds[i]
+        preds_witout_cv = preds[i].drop(0, axis=1)
         df = pd.concat({dss.name: preds_witout_cv}, names=['dataset'])
         pp.append(df)
 
@@ -71,7 +74,7 @@ def calculate_chi2s_per_replica(
         prediction_filter=pdf_data_index.val_idx.droplevel(level=0)
         prediction_filter.rename(["dataset","data"], inplace=True)
         PDF_predictions_val = PDF_predictions.loc[prediction_filter]
-        PDF_predictions_val = PDF_predictions_val.values[:,enum+1]
+        PDF_predictions_val = PDF_predictions_val.values[:,enum]
 
         new_val_pseudodata_list = _create_new_val_pseudodata(pdf_data_index, recreate_pdf_pseudodata_no_table)
 
