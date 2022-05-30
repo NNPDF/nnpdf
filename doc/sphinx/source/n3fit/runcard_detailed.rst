@@ -259,6 +259,22 @@ or ``multiplier`` keys empty and instead define a ``maxlambda`` per dataset:
 
 
 
+Regularized covariance matrices
+-------------------------------
+
+The :ref:`covariance matrix regularization <covmat-reg>` is controlled by a
+`norm_threshold` parameter. By default if the parameter is not set, no
+regularization is applied. It is found that the effect of aggressive
+correlation models can be tested by setting values of 4 (which roughly
+corresponds to the assumptions that correlations are controlled to an accuracy
+of better than 35%) or higher.
+
+
+.. code-block:: yaml
+
+    norm_threshold: 4
+
+
 .. _tensorboard-label:
 
 Inspecting and profiling the code

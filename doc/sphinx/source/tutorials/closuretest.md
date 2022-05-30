@@ -163,17 +163,7 @@ closuretest:
   ...
 ```
 
-## Running a closure test
-
-### With `nnfit`
-
-The process of running the closure test is the same as [running a
-standard fit](./runafit.md), simply filter the runcard and run ``nnfit`` on the
-filter results. Before uploading the fit, it is helpful if you rebuild the
-filtered closure data by running ``vp-rebuild-data <fit output directory>``. It is
-vital that the data is not rebuilt until all replicas have finished running.
-
-### With ``n3fit``
+## Running a closure test with ``n3fit``
 
 Running a closure test with ``n3fit`` will require a valid ``n3fit`` runcard, with
 the closure test settings modified as shown

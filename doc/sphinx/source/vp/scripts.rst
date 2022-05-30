@@ -140,7 +140,7 @@ fit name in these files as the :code:`vp-fitrename` command will also rename the
 PDF renaming
 ------------
 
-A :code:`fit` is produced as a result of running :code:`nnfit`, these are treated differently by
+A :code:`fit` is produced as a result of running :code:`n3fit`, these are treated differently by
 :code:`validphys` from a :code:`PDF`. Such a :code:`PDF` is in the LHAPDF grid format. One can
 rename PDFs in a similar fashion to fits using the :code:`vp-pdfrename` helper script.
 

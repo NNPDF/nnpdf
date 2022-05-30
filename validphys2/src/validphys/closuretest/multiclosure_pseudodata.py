@@ -54,8 +54,8 @@ def expected_data_delta_chi2(
     for i_fit, fit_th in enumerate(closures_th):
         # transpose the datasets fits cvs into the cvs for all datasets for single fit
         dt_central = np.concatenate([fits_cvs[i_fit] for fits_cvs in data_fits_cv])
-        th_replicas = fit_th._rawdata
-        th_central = np.mean(th_replicas, axis=-1)
+        th_replicas = fit_th.error_members
+        th_central = fit_th.central_value
         shift = calc_chi2(sqrt_covmat, law_central - dt_central)
         chi2_cent = calc_chi2(sqrt_covmat, th_central - dt_central)
         fits_delta_chi2.append(chi2_cent - shift)

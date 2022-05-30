@@ -7,6 +7,7 @@ Created on Thu Jun  2 19:35:40 2016
 from collections import Counter
 import platform
 import tempfile
+import json
 
 from matplotlib import scale as mscale
 

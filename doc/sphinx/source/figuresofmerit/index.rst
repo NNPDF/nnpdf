@@ -30,6 +30,8 @@ The covariance matrix accounts for correlated systematic uncertainties,
 normalization uncertainties, and statistical uncertainties as provided by the
 experimental collaborations.
 
+We refer to this figure of merit as *experimental* :math:`\chi^2`.
+
 .. note::
     This definition of :math:`\chi^2` is not used as a figure of merit
     anywhere in NNDPF fits. Instead, variations discussed below
@@ -44,18 +46,37 @@ remove systematic biases as a result of a naive treatment of multiplicative
 uncertainties. This is done by redefining the covariance matrix in the
 definition of :math:`\chi^2`, resulting in a :math:`t_0` covariance matrix
 :math:`C_{t_0}` and a corresponding figure of merit sometimes denoted by
-:math:`\chi^2_{t_0}`, though often simply written as :math:`\chi^2`.
+:math:`\chi^2_{t_0}`. The new covariance matrix is constructed by replacing the
+central value of the data (which is used as reference for multiplicative
+uncertainties) with the theory predictions computed using some existing PDF
+set, which needs to be specified.
 
 .. note::
     From NNPDF2.0 onwards the t₀ formalism has been used to define the figure of
     merit used during the fitting of the PDFs.
+
+.. note::
+
+    The :math:`t_0` method is **not** used by default in other :ref:`validphys
+    applications <vp-index>`, and instead the default is to compute the
+    experimental :math:`\chi^2`. To compute :math:`\chi^2_{t_0}`, users need to
+    specify
+
+    .. code-block::  yaml
+
+        use_t0: True
+        t0pdfset: <Some LHAPDF set>
+
+    in the relevant :ref:`namespace <namespaces>`. This will instruct actions
+    such as :py:func:`validphys.results.dataset_chi2_table` to compute the
+    :math:`t_0` estimator.
 
 
 Missing higher order uncertainties
 --------------------------------------------------------------------------------
 Another source of uncertainties that we may want to include in the covariance
 matrix are theoretical uncertainties, particularly missing higher order
-uncertainties estimated through scale variations. These unceratinties can be
+uncertainties estimated through scale variations. These uncertainties can be
 considered in the figure of merit through the implementation of a 'theory
 covariance matrix'. A paper discussing the formalism can be found here:
 :cite:p:`AbdulKhalek:2019bux`. For a tutorial see
@@ -77,6 +98,8 @@ For a more detailed discussion of the future test formalism see e.g.
 :ref:`How to run a Future Test <futuretests>`
 
 
+.. _covmat-reg:
+
 Regularized covariance matrices
 --------------------------------------------------------------------------------
 Information about the accuracy of the experimental uncertainty is generally not
@@ -87,16 +110,23 @@ where the regularized covariance matrix comes in: it aims to provide a matrix
 which is closely related to the original experimental covariance matrix while
 avoiding the problems during optimization.
 
-The function that performs the regularization is
-:py:meth:`validphys.calcutils.regularize_l2`. A regularized covarinace marix
-cannot be generated while performing a fit as it is necesarry to produce
-corresponding :ref:`FastKernel tables<fktables>` and include it in the theory
-as a separete dataset. For instructions on how to do this see
-:ref:`tutorialfktables`
+The stability characteristic for a given dataset can be computed using the
+:py:func:`validphys.covmats.covmat_stability_characteristic`. All the dataset
+covariance matrices can be altered so that their stability characteristic is
+less than a given value by specifying such value as a `norm_threshold`
+parameter in the runcard. Adding it in an analysis results in computing a
+regularized :math:`\chi^2` that is less sensitive to inaccuracies in the
+correlation model. Adding it in a :ref:`fit runcard <runcard-detailed>` results
+in a fit with regularized covariance matrices.
+
+.. note::
+    There is currently no support for displaying regularized :math:`\chi^2`
+    values in :ref:`vp-comparefits <compare-fits>`
 
 A more detailed discussion of regularization procedure, and how it is used
 within NNPDF can be found in sections 4.2 and 8.7 of the NNPDF4.0 paper
 :cite:p:`nnpdf40`.
+
 
 
 The weighted fit method
