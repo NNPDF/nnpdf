@@ -153,7 +153,6 @@ class SetupFitConfig(Config):
         else:
             filter_action = 'datacuts::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
-        
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
         
         if file_content.get('theorycovmatconfig') is not None:
