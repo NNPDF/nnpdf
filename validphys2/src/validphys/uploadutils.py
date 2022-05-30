@@ -349,7 +349,7 @@ def interactive_meta(path):
     None
     """
     # Import here to avoid circular imports
-    from validphys.scripts.vp_comparefits import KeywordsWithCache
+    from validphys.promptutils import KeywordsWithCache
 
     title = prompt_toolkit.prompt("Enter report title: ")
 
@@ -364,7 +364,7 @@ def interactive_meta(path):
 
     kwinp = prompt_toolkit.prompt(
         "Enter keywords: ",
-        completer=WordCompleter(words=KeywordsWithCache()),
+        completer=WordCompleter(words=KeywordsWithCache(RemoteLoader())),
         complete_in_thread=True)
     keywords = [k.strip() for k in kwinp.split(",") if k]
 

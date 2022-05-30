@@ -155,7 +155,7 @@ class SetupFitConfig(Config):
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
         
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
-        
+       
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
@@ -180,9 +180,6 @@ class SetupFitApp(App):
         parser.add_argument('-o','--output',
                         help="Output folder and name of the fit",
                         default=None)
-        parser.add_argument("--legacy",
-                            help="Filter an old nnfit runcard by skipping n3fit specific checks",
-                            action='store_true')
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -195,7 +192,6 @@ class SetupFitApp(App):
         try:
             # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
-            self.environment.legacy = self.args["legacy"]
 
             # proceed with default run
             super().run()

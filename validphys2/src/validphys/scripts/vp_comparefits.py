@@ -10,35 +10,15 @@ from reportengine.compat import yaml
 from reportengine.colors import t
 
 from validphys.app import App
+from validphys.loader import RemoteLoader
 from validphys import comparefittemplates, compareclosuretemplates
-from validphys.promptutils import confirm
+from validphys.promptutils import confirm, KeywordsWithCache
 
 log = logging.getLogger(__name__)
 
 CURRENT_FIT_LABEL_DEFAULT = "Current Fit"
 REFERENCE_FIT_LABEL_DEFAULT = "Reference Fit"
 
-def get_remote_keywords():
-    import requests
-    from validphys import loader
-    from urllib.parse import urljoin
-    root = loader.Loader().nnprofile['reports_root_url']
-    url = urljoin(root, 'index.json')
-    try:
-        keyobjs= requests.get(url).json()['keywords']
-        l = [k[0] for k in keyobjs]
-    except requests.RequestException:
-        l = []
-    return l
-
-#We need some sort of cache because prompt_toolkit calls the callable
-#every time it tries to complete.
-class KeywordsWithCache():
-    words = None
-    def __call__(self):
-        if self.words is None:
-            self.words = get_remote_keywords()
-        return self.words
 
 
 class CompareFitApp(App):
@@ -173,10 +153,15 @@ class CompareFitApp(App):
         return prompt_toolkit.prompt("Enter author name: ", default=default)
 
     def interactive_keywords(self):
+        if isinstance(self.environment.loader, RemoteLoader):
+            completer = WordCompleter(words=KeywordsWithCache(self.environment.loader))
+        else:
+            completer = None
         kwinp = prompt_toolkit.prompt(
             "Enter keywords: ",
-            completer=WordCompleter(words=KeywordsWithCache()),
-            complete_in_thread=True)
+            completer=completer,
+            complete_in_thread=True,
+        )
         return [k.strip() for k in kwinp.split(',') if k]
 
     def interactive_thcovmat_if_present(self):
