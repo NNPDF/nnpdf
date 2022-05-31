@@ -116,17 +116,6 @@ Dataset differences and cuts
 {@print_dataset_differences@}
 {@print_different_cuts@}
 
-Overfitting metric
-------------------
-### Table
-{@summarise_deltachi2@}
-
-
-### Histogram plot
-{@with dataspecs@}
-{@plot_deltachi2_histogram@}
-{@endwith@}
-
 Code versions
 -------------
 {@fits_version_table@}
