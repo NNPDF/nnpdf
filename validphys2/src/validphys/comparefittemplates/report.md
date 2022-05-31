@@ -69,6 +69,11 @@ Training lengths
 ----------------
 {@fits plot_training_length@}
 
+Overfit measure
+----------------
+{@fits plot_deltachi2_histogram@}
+{@summarise_deltachi2@}
+
 Training-validation
 -------------------
 {@fits plot_training_validation@}
