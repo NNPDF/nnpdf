@@ -91,7 +91,7 @@ def calculate_chi2s_per_replica(
 
 
 @figure
-def plot_deltachi2_histogram(array_expected_delta_chi2):
+def plot_deltachi2_histogram(fit, array_expected_delta_chi2):
     mean = array_expected_delta_chi2.mean()
     std = array_expected_delta_chi2.std()
 
@@ -105,7 +105,7 @@ def plot_deltachi2_histogram(array_expected_delta_chi2):
     ax.plot(xgrid, stats.norm.pdf(xgrid, mean, std))
     ax.set_xlabel(r"$\Delta \chi^2_{\mathrm{overfit}}$")
     ax.set_ylabel("density")
-    ax.set_title(f"fitname")
+    ax.set_title(f"{fit.label}")
     plt.tight_layout()
     return f
 
