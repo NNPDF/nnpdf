@@ -117,9 +117,9 @@ def fit_deltachi2_summary(fit, array_expected_delta_chi2):
     mean = array_expected_delta_chi2.mean()
     std = array_expected_delta_chi2.std()
     return pd.DataFrame(
-        [mean, std, abs(mean / std)],
+        [mean, std, mean / std],
         columns=[fit.label],
-        index=["mean", "bootstrap error", "abs(mean/bootsrap error)"],
+        index=["mean", "bootstrap error", "mean/bootsrap error"],
     )
 
 
