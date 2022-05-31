@@ -71,7 +71,7 @@ Training lengths
 
 Overfit measure
 ----------------
-{@fits plot_deltachi2_histogram@}
+{@fits::fitcontext plot_deltachi2_histogram@}
 {@summarise_deltachi2@}
 
 Training-validation
