@@ -357,8 +357,10 @@ class ModelTrainer:
         # If we are in a kfolding partition, select which datasets are out
         training_mask = validation_mask = experimental_mask = [None]
         if partition and partition["datasets"]:
-            if partition.get("overfit", False):
-                # If overfitting, don't apply folding masks to the training/validation
+            # If we want to overfit the fold, leave the training and validation masks as [None]
+            # otherwise, use the mask generated for the fold.
+            # The experimental model instead is always limited to the fold
+            if not partition.get("overfit", False):
                 training_mask = [i[partition_idx] for i in self.training["folds"]]
                 validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
