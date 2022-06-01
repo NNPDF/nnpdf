@@ -28,7 +28,7 @@ def array_expected_delta_chi2(calculate_chi2s_per_replica, replica_data):
 
     number_pdfs = res_over.shape[0]
     list_expected_delta_chi2 = []
-    for i in range(number_pdfs * 1000):
+    for _ in range(number_pdfs * 1000):
         mask = np.random.randint(0, number_pdfs, size=int(0.95 * number_pdfs))
         res_tmp = res_over[mask][:, mask]
 
@@ -112,7 +112,7 @@ def plot_deltachi2_histogram(fit, array_expected_delta_chi2):
 
 fits_deltachi2_summary = collect("fit_deltachi2_summary", ("fits", "fitcontext"))
 
-
+@table
 def fit_deltachi2_summary(fit, array_expected_delta_chi2):
     mean = array_expected_delta_chi2.mean()
     std = array_expected_delta_chi2.std()
