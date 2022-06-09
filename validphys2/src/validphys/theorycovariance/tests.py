@@ -219,7 +219,7 @@ def all_matched_data_lengths(all_matched_datasets):
     """Returns a list of the data sets lengths."""
     lens = []
     for rlist in all_matched_datasets:
-        lens.append(rlist[0].load().GetNData())
+        lens.append(rlist[0].load_commondata().GetNData())
     return lens
 
 
