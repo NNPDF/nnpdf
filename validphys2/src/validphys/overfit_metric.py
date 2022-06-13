@@ -1,7 +1,8 @@
 """
 overfit_metric.py
 
-This calculates the overfit metric
+This module contains the functions used to calculate the overfit metric and 
+produce the corresponding tables and figures.
 """
 
 import logging
@@ -15,48 +16,65 @@ from reportengine import collect
 from reportengine.figure import figure
 from reportengine.table import table
 
+from validphys.checks import check_at_least_two_pdfs
+
 log = logging.getLogger(__name__)
 
-preds = collect("predictions", ("pdfs","dataset_inputs",))
-
-
-def array_expected_delta_chi2(calculate_chi2s_per_replica, replica_data):
-
-    res_over = calculate_chi2s_per_replica
-
-    fitted_val_erf = np.array([info.validation for info in replica_data])
-
-    number_pdfs = res_over.shape[0]
-    list_expected_delta_chi2 = []
-    for _ in range(number_pdfs * 1000):
-        mask = np.random.randint(0, number_pdfs, size=int(0.95 * number_pdfs))
-        res_tmp = res_over[mask][:, mask]
-
-        fitted_val_erf_tmp = fitted_val_erf[mask]
-        expected_val_chi2 = res_tmp.mean(axis=0)
-        delta_chi2 = fitted_val_erf_tmp - expected_val_chi2
-        expected_delta_chi2 = delta_chi2.mean()
-
-        list_expected_delta_chi2.append(expected_delta_chi2)
-    return np.array(list_expected_delta_chi2)
+preds = collect(
+    "predictions",
+    (
+        "pdfs",
+        "dataset_inputs",
+    ),
+)
 
 
 def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
+    """ Loads all validation psuedodata replicas used during the fiting of the
+    pdf replicas
+
+    -------
+    np.ndarray
+        (nrep,ndata) sized numpy array containingt the validation data used to 
+        fit the pdfs.
+    """
     vl_data_fitrep = []
     for fitreplica_info in fit_data_indices_list:
-        vl_data_fitrep.append(fitreplica_info.pseudodata.loc[pdf_data_index.val_idx])
-    return np.array(vl_data_fitrep).squeeze()
+        vl_data_fitrep.append(
+            fitreplica_info.pseudodata.loc[pdf_data_index.val_idx]
+        )
+    return np.array(vl_data_fitrep)[:,:,0]
 
 
+@check_at_least_two_pdfs
 def calculate_chi2s_per_replica(
     recreate_pdf_pseudodata_no_table,
     preds,
     dataset_inputs,
     groups_covmat_no_table,
 ):
+    """ Calculates the chi2 for each PDF relica to many pseudodata replicas.
 
-    groups_covmat = groups_covmat_no_table
+    Parameters
+    ----------
+    recreate_pdf_pseudodata_no_table : list[namedtuple]
+        List of namedtuples, each of which contains a dataframe
+        containing all the data points, the training indices, and
+        the validation indices.
+    preds : list[pd.core.frame.DataFrame]
+        List of pandas dataframes, each containing the predictions of the pdf
+        replicas for a dataset_input
+    dataset_inputs : list[DatasetInput]
+    groups_covmat_no_table : pdf.core.frame.DataFrame
 
+    Returns
+    -------
+    np.ndarray
+        (Npdfs, Npdfs) sized matrix containing the chi2 of a pdf replica 
+        calculated to a given psuedodata replica. The diagonal values correspond
+        to the cases where the PDF replica has been fitted to the coresponding 
+        pseudodata replica
+    """
     pp = []
     for i, dss in enumerate(dataset_inputs):
         preds_witout_cv = preds[i].drop(0, axis=1)
@@ -78,7 +96,7 @@ def calculate_chi2s_per_replica(
         )
 
         invcovmat_vl = np.linalg.inv(
-            groups_covmat[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
+            groups_covmat_no_table[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
         )
 
         tmp = PDF_predictions_val - new_val_pseudodata_list
@@ -86,20 +104,74 @@ def calculate_chi2s_per_replica(
         chi2 = np.einsum("ij,jk,ik->i", tmp, invcovmat_vl, tmp) / tmp.shape[1]
         chi2s_per_replica.append(chi2)
 
-    # array of chi2 per replica
     return np.array(chi2s_per_replica)
 
 
+def array_expected_overfitting(
+    calculate_chi2s_per_replica,
+    replica_data,
+    number_of_resamples=1000,
+    resampling_fraction=0.95,
+):
+    """ Calculates the expected difference in chi2 between:
+    1. The chi2 of a PDF replica calculated using the corresponding pseudodata
+        replica using during the fit
+    2. The chi2 of a PDF replica calculated using an alternative i.i.d random
+        pseudododata replicas
+
+    The expected difference along with an error estimate is obtained through a
+    bootstrapping consisting of `number_of_resamples` resamples per pdf replica
+    where each resampling contains a fraction `resampling_fraction` of all 
+    replicas.
+
+    Parameters
+    ----------
+    calculate_chi2s_per_replica : np.ndarray
+        validation chi2 per pdf replica
+    replica_data : list(vp.fitdata.FitInfo)
+        
+    number_of_resamples : int, optional
+        _description_, by default 1000
+    resampling_fraction : float, optional
+        _description_, by default 0.95
+
+    Returns
+    -------
+    np.ndarray
+        (number_of_resamples*Npdfs,) sized array containing the mean delta chi2 
+        values per resampled list. 
+    """    
+    fitted_val_erf = np.array([info.validation for info in replica_data])
+
+    number_pdfs = calculate_chi2s_per_replica.shape[0]
+    list_expected_overfitting = []
+    for _ in range(number_pdfs * number_of_resamples):
+        mask = np.random.randint(
+            0, number_pdfs, size=int(resampling_fraction * number_pdfs)
+        )
+        res_tmp = calculate_chi2s_per_replica[mask][:, mask]
+
+        fitted_val_erf_tmp = fitted_val_erf[mask]
+        expected_val_chi2 = res_tmp.mean(axis=0)
+        delta_chi2 = fitted_val_erf_tmp - expected_val_chi2
+        expected_delta_chi2 = delta_chi2.mean()
+
+        list_expected_overfitting.append(expected_delta_chi2)
+    return np.array(list_expected_overfitting)
+
+
 @figure
-def plot_deltachi2_histogram(fit, array_expected_delta_chi2):
-    mean = array_expected_delta_chi2.mean()
-    std = array_expected_delta_chi2.std()
+def plot_overfitting_histogram(fit, array_expected_overfitting):
+    """Plots the bootrap error and central value of the overfittedness in a 
+    historgram"""
+    mean = array_expected_overfitting.mean()
+    std = array_expected_overfitting.std()
 
     f, ax = plt.subplots(1, 1)
 
-    ax.hist(array_expected_delta_chi2, bins=50, density=True)
+    ax.hist(array_expected_overfitting, bins=50, density=True)
     ax.axvline(x=mean, color="black")
-    xrange = [array_expected_delta_chi2.min(), array_expected_delta_chi2.max()]
+    xrange = [array_expected_overfitting.min(), array_expected_overfitting.max()]
     xgrid = np.linspace(xrange[0], xrange[1], num=100)
     ax.set_xlim(xrange[0], xrange[1])
     ax.plot(xgrid, stats.norm.pdf(xgrid, mean, std))
@@ -110,19 +182,30 @@ def plot_deltachi2_histogram(fit, array_expected_delta_chi2):
     return f
 
 
-fits_deltachi2_summary = collect("fit_deltachi2_summary", ("fits", "fitcontext"))
+fits_overfitting_summary = collect(
+    "fit_overfitting_summary", ("fits", "fitcontext")
+)
+
 
 @table
-def fit_deltachi2_summary(fit, array_expected_delta_chi2):
-    mean = array_expected_delta_chi2.mean()
-    std = array_expected_delta_chi2.std()
+def fit_overfitting_summary(fit, array_expected_overfitting):
+    """ Creates a table containing the overfitting information:
+        - mean chi2 difference
+        - bootstrap error
+        - sigmas away from 0  
+    """
+    mean = array_expected_overfitting.mean()
+    std = array_expected_overfitting.std()
     return pd.DataFrame(
         [mean, std, mean / std],
         columns=[fit.label],
-        index=["mean", "bootstrap error", "mean/bootsrap error"],
+        index=["mean", "bootstrap error", "sigmas away from 0"],
     )
 
 
 @table
-def summarise_deltachi2(fits_deltachi2_summary):
-    return pd.concat(fits_deltachi2_summary, axis=1)
+def summarise_overfitting(fits_overfitting_summary):
+    """ Same as `fit_overfitting_summary`, but collected over all `fits` in the 
+    runcard 
+    """
+    return pd.concat(fits_overfitting_summary, axis=1)
