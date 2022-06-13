@@ -72,8 +72,8 @@ Training lengths
 Overfit measure
 ----------------
 {@with overfitmetric@}
-{@plot_deltachi2_histogram@}
-{@fit_deltachi2_summary@}
+{@plot_overfitting_histogram@}
+{@fit_overfitting_summary@}
 {@endwith@}
 
 
