@@ -54,8 +54,8 @@ def calculate_chi2s_per_replica(
     dataset_inputs,
     groups_covmat_no_table,
 ):
-    """Calculates, for each PDF replica, the chi2 of the validation with the pseudodata generated
-    for all other replicas in the fit
+    """Calculates, for each PDF replica, the chi2 of the validation with the
+    pseudodata generated for all other replicas in the fit
 
     Parameters
     ----------
