@@ -16,7 +16,7 @@ from reportengine import collect
 from reportengine.figure import figure
 from reportengine.table import table
 
-from validphys.checks import check_at_least_two_pdfs
+from validphys.checks import check_at_least_two_replicas
 
 log = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
     return np.array(vl_data_fitrep)[:, :, 0]
 
 
-@check_at_least_two_pdfs
+@check_at_least_two_replicas
 def calculate_chi2s_per_replica(
     recreate_pdf_pseudodata_no_table,
     preds,

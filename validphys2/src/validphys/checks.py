@@ -154,7 +154,7 @@ def check_have_two_pdfs(pdfs):
 
 
 @make_argcheck
-def check_at_least_two_pdfs(pdfs):
+def check_at_least_two_replicas(pdfs):
     for pdf in pdfs:
         # The get_members function also includes the central value replica, 
         # therefore we need it to be larger than 3
