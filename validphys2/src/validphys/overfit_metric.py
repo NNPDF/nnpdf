@@ -30,13 +30,13 @@ preds = collect(
 
 
 def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
-    """Loads all validation psuedodata replicas used during the fiting of the
+    """Loads all validation pseudodata replicas used during the fiting of the
     pdf replicas
 
     Returns
     -------
     np.ndarray
-        (nrep,ndata) sized numpy array containingt the validation data used to
+        (nrep,ndata) sized numpy array containing the validation data used to
         fit the pdfs.
     """
     vl_data_fitrep = []
@@ -54,7 +54,8 @@ def calculate_chi2s_per_replica(
     dataset_inputs,
     groups_covmat_no_table,
 ):
-    """Calculates the chi2 for each PDF relica to many pseudodata replicas.
+    """Calculates, for each PDF replica, the chi2 of the validation with the pseudodata generated
+    for all other replicas in the fit
 
     Parameters
     ----------
@@ -118,13 +119,13 @@ def array_expected_overfitting(
 ):
     """Calculates the expected difference in chi2 between:
     1. The chi2 of a PDF replica calculated using the corresponding pseudodata
-        replica using during the fit
+        replica used during the fit
     2. The chi2 of a PDF replica calculated using an alternative i.i.d random
         pseudododata replicas
 
     The expected difference along with an error estimate is obtained through a
-    bootstrapping consisting of `number_of_resamples` resamples per pdf replica
-    where each resampling contains a fraction `resampling_fraction` of all
+    bootstrapping consisting of ``number_of_resamples`` resamples per pdf replica
+    where each resampling contains a fraction ``resampling_fraction`` of all
     replicas.
 
     Parameters
@@ -132,11 +133,10 @@ def array_expected_overfitting(
     calculate_chi2s_per_replica : np.ndarray
         validation chi2 per pdf replica
     replica_data : list(vp.fitdata.FitInfo)
-
     number_of_resamples : int, optional
         number of resamples per pdf replica, by default 1000
     resampling_fraction : float, optional
-        fraction of replcias used in the bootstrap resampling, by default 0.95
+        fraction of replicas used in the bootstrap resampling, by default 0.95
 
     Returns
     -------
