@@ -165,58 +165,24 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
     )
     return clb
 
-# class CustomLearningRate(Callback):
-
-#     def __init__(self, alphas_settings_dict, epochs):
-#         super().__init__()
-#         self.init_learning_rate = alphas_settings_dict["optimizer_settings"]["learning_rate"]
-#         learning_rate_settings = alphas_settings_dict["learning_rate_settings"]
-#         try:
-#             self.start_epoch = learning_rate_settings["start_epoch"]
-#         except:
-#             self.start_epoch = 0
-#         try:
-#             self.decay_rate =  learning_rate_settings["decay_rate"]
-#             self.decay_steps =  learning_rate_settings["decay_steps"]
-#         except: 
-#             self.decay_rate = 1.0
-#             self.decay_steps = 1.0
-#         self.epochs = epochs
-
-#     def _lr_schedule(self, epoch, lr):
-#         if epoch == self.start_epoch:
-#             lr = self.init_learning_rate
-#         else:
-#             lr = lr*self.decay_rate**((epoch - self.start_epoch)/(self.start_epoch - self.decay_steps))
-#         return lr
-
-#     def on_epoch_begin(self, epoch, logs=None):
-#         lr = float(tf.keras.backend.get_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate))
-#         # Call schedule function to get the scheduled learning rate.
-#         scheduled_lr = self._lr_schedule(epoch, lr)
-#         # Set the value back to the optimizer before this epoch starts
-#         tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, scheduled_lr)
-
-
 class CustomLearningRate(Callback):
 
     def __init__(self, alphas_settings_dict, epochs):
-        # self.init_lr_nn = 2.621e-6
-        self.init_lr_alphas = 1e-10
+        power = alphas_settings_dict["learning_rate_settings"]["power"]
+        decay_steps = alphas_settings_dict["learning_rate_settings"]["decay_steps"]
+        initial_learning_rate = alphas_settings_dict["learning_rate_settings"]["initial_learning_rate"]
+        end_learning_rate = alphas_settings_dict["learning_rate_settings"]["end_learning_rate"]
+        def decayed_learning_rate(step):
+            # step = min(step, decay_steps)
+            decay_steps = decay_steps * np.ceil(step / decay_steps)
+            return ((initial_learning_rate - end_learning_rate) *
+                    (1 - step / decay_steps) ** (power)
+                    ) + end_learning_rate
+        self.lr = decayed_learning_rate
         super().__init__()
 
     def on_epoch_begin(self, epoch, logs=None):
-        # lr_alphas = float(tf.keras.backend.get_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate))
-        # lr_nn = float(tf.keras.backend.get_value(self.model.optimizer.optimizer_specs[0]["optimizer"].learning_rate))
-        if epoch > 300:
-            tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate,0.0)
-        if epoch > 600:
-            tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, 0.0)
-
-
-            # if epoch % 500 == 0 and epoch % 1000 !=0:
-            #     tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, 0.0)
-            #     # tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[0]["optimizer"].learning_rate, self.init_lr_nn)
-            # elif epoch % 1000 == 0:
-            #     tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate, self.init_lr_alphas)
-            #     # tf.keras.backend.set_value(self.model.optimizer.optimizer_specs[0]["optimizer"].learning_rate, 0.0)
+        tf.keras.backend.set_value(
+            self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate,
+            self.lr(epoch)
+            )
