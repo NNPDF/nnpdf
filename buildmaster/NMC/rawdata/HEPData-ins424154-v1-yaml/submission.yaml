@@ -1,0 +1,506 @@
+comment: |
+  CERN-SPS. Measurement of the proton and deuteron structure functions F2 and of the ratio R = SIG(L)/SIG(T) in muon proton and muon deuteron deep inelastic scattering at incident muon energies of 90, 120, 200 and 280 GeV. Data covers the kinematic range of x from 0.002 to 0.60 and Q**2 from 0.5 to 75 GeV**2. This is an analysis of the full data set collected by the NMC including the small angle trigger.
+dateupdated: 18/04/1997 00:00:00
+hepdata_doi: 10.17182/hepdata.32752.v1
+modifications:
+- {action: Encoded, date: 18 April 1997, who: Mike Whalley}
+record_ids:
+- {id: 424154, type: inspire}
+- {id: 3150, type: red}
+---
+data_file: Table1.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 1
+table_doi: 10.17182/hepdata.32752.v1/t1
+---
+data_file: Table2.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 2
+table_doi: 10.17182/hepdata.32752.v1/t2
+---
+data_file: Table3.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 3
+table_doi: 10.17182/hepdata.32752.v1/t3
+---
+data_file: Table4.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 4
+table_doi: 10.17182/hepdata.32752.v1/t4
+---
+data_file: Table5.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 5
+table_doi: 10.17182/hepdata.32752.v1/t5
+---
+data_file: Table6.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 6
+table_doi: 10.17182/hepdata.32752.v1/t6
+---
+data_file: Table7.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 7
+table_doi: 10.17182/hepdata.32752.v1/t7
+---
+data_file: Table8.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 8
+table_doi: 10.17182/hepdata.32752.v1/t8
+---
+data_file: Table9.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 9
+table_doi: 10.17182/hepdata.32752.v1/t9
+---
+data_file: Table10.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 10
+table_doi: 10.17182/hepdata.32752.v1/t10
+---
+data_file: Table11.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 11
+table_doi: 10.17182/hepdata.32752.v1/t11
+---
+data_file: Table12.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 12
+table_doi: 10.17182/hepdata.32752.v1/t12
+---
+data_file: Table13.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 13
+table_doi: 10.17182/hepdata.32752.v1/t13
+---
+data_file: Table14.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 14
+table_doi: 10.17182/hepdata.32752.v1/t14
+---
+data_file: Table15.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 15
+table_doi: 10.17182/hepdata.32752.v1/t15
+---
+data_file: Table16.yaml
+description: |
+  Corrected F2P measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON P --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T 5
+name: Table 16
+table_doi: 10.17182/hepdata.32752.v1/t16
+---
+data_file: Table17.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 17
+table_doi: 10.17182/hepdata.32752.v1/t17
+---
+data_file: Table18.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 18
+table_doi: 10.17182/hepdata.32752.v1/t18
+---
+data_file: Table19.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 19
+table_doi: 10.17182/hepdata.32752.v1/t19
+---
+data_file: Table20.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 20
+table_doi: 10.17182/hepdata.32752.v1/t20
+---
+data_file: Table21.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 21
+table_doi: 10.17182/hepdata.32752.v1/t21
+---
+data_file: Table22.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 22
+table_doi: 10.17182/hepdata.32752.v1/t22
+---
+data_file: Table23.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 23
+table_doi: 10.17182/hepdata.32752.v1/t23
+---
+data_file: Table24.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 24
+table_doi: 10.17182/hepdata.32752.v1/t24
+---
+data_file: Table25.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 25
+table_doi: 10.17182/hepdata.32752.v1/t25
+---
+data_file: Table26.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 26
+table_doi: 10.17182/hepdata.32752.v1/t26
+---
+data_file: Table27.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 27
+table_doi: 10.17182/hepdata.32752.v1/t27
+---
+data_file: Table28.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 28
+table_doi: 10.17182/hepdata.32752.v1/t28
+---
+data_file: Table29.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 29
+table_doi: 10.17182/hepdata.32752.v1/t29
+---
+data_file: Table30.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 30
+table_doi: 10.17182/hepdata.32752.v1/t30
+---
+data_file: Table31.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 31
+table_doi: 10.17182/hepdata.32752.v1/t31
+---
+data_file: Table32.yaml
+description: |
+  Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X]
+- name: observables
+  values: [F2]
+- name: phrases
+  values: [Inclusive, Structure Function, Muon production, Deep Inelastic Scattering]
+location: Data from T 6
+name: Table 32
+table_doi: 10.17182/hepdata.32752.v1/t32
+---
+data_file: Table33.yaml
+description: |
+  Measurement of R=(SIG(L)/SIG(T)).
+keywords:
+- name: reactions
+  values: [MUON DEUT --> MUON X, MUON P --> MUON X]
+- name: observables
+  values: [R, SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, Muon production, Deep
+      Inelastic Scattering]
+- name: cmenergies
+  values: [21.677]
+location: Data from T7
+name: Table 33
+table_doi: 10.17182/hepdata.32752.v1/t33

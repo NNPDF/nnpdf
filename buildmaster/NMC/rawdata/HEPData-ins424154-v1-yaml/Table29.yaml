@@ -1,0 +1,84 @@
+dependent_variables:
+- header: {name: F2}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE, value: MUON DEUT --> MUON X}
+  - {name: X, value: '0.225'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.026}
+    - {label: sys, symerror: 0.008}
+    value: 0.2939
+  - errors:
+    - {label: stat, symerror: 0.007}
+    - {label: sys, symerror: 0.0065}
+    value: 0.2904
+  - errors:
+    - {label: stat, symerror: 0.006}
+    - {label: sys, symerror: 0.0052}
+    value: 0.2796
+  - errors:
+    - {label: stat, symerror: 0.0066}
+    - {label: sys, symerror: 0.0046}
+    value: 0.2853
+  - errors:
+    - {label: stat, symerror: 0.0056}
+    - {label: sys, symerror: 0.0038}
+    value: 0.2799
+  - errors:
+    - {label: stat, symerror: 0.0075}
+    - {label: sys, symerror: 0.0038}
+    value: 0.2798
+  - errors:
+    - {label: stat, symerror: 0.0077}
+    - {label: sys, symerror: 0.0041}
+    value: 0.2876
+  - errors:
+    - {label: stat, symerror: 0.0057}
+    - {label: sys, symerror: 0.0043}
+    value: 0.2614
+  - errors:
+    - {label: stat, symerror: 0.0042}
+    - {label: sys, symerror: 0.0046}
+    value: 0.2695
+  - errors:
+    - {label: stat, symerror: 0.0041}
+    - {label: sys, symerror: 0.0053}
+    value: 0.2686
+  - errors:
+    - {label: stat, symerror: 0.0047}
+    - {label: sys, symerror: 0.0058}
+    value: 0.2599
+  - errors:
+    - {label: stat, symerror: 0.0075}
+    - {label: sys, symerror: 0.0071}
+    value: 0.2611
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 2.5}
+  - {value: 3.5}
+  - {value: 4.5}
+  - {value: 5.5}
+  - {value: 7.0}
+  - {value: 9.0}
+  - {value: 11.5}
+  - {value: 15.0}
+  - {value: 20.0}
+  - {value: 27.0}
+  - {value: 36.0}
+  - {value: 48.0}
+- header: {name: SIG(L)/SIG(T)}
+  values:
+  - {value: 0.234}
+  - {value: 0.191}
+  - {value: 0.161}
+  - {value: 0.14}
+  - {value: 0.118}
+  - {value: 0.1}
+  - {value: 0.086}
+  - {value: 0.074}
+  - {value: 0.064}
+  - {value: 0.056}
+  - {value: 0.05}
+  - {value: 0.045}

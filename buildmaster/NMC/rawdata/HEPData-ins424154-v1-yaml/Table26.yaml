@@ -1,0 +1,84 @@
+dependent_variables:
+- header: {name: F2}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE, value: MUON DEUT --> MUON X}
+  - {name: X, value: '0.11'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0117}
+    - {label: sys, symerror: 0.0141}
+    value: 0.322
+  - errors:
+    - {label: stat, symerror: 0.0065}
+    - {label: sys, symerror: 0.0084}
+    value: 0.331
+  - errors:
+    - {label: stat, symerror: 0.0059}
+    - {label: sys, symerror: 0.0056}
+    value: 0.3382
+  - errors:
+    - {label: stat, symerror: 0.0062}
+    - {label: sys, symerror: 0.0046}
+    value: 0.3373
+  - errors:
+    - {label: stat, symerror: 0.0073}
+    - {label: sys, symerror: 0.0046}
+    value: 0.3377
+  - errors:
+    - {label: stat, symerror: 0.0066}
+    - {label: sys, symerror: 0.0052}
+    value: 0.3434
+  - errors:
+    - {label: stat, symerror: 0.0093}
+    - {label: sys, symerror: 0.006}
+    value: 0.3412
+  - errors:
+    - {label: stat, symerror: 0.007}
+    - {label: sys, symerror: 0.0063}
+    value: 0.348
+  - errors:
+    - {label: stat, symerror: 0.0061}
+    - {label: sys, symerror: 0.0059}
+    value: 0.3611
+  - errors:
+    - {label: stat, symerror: 0.0051}
+    - {label: sys, symerror: 0.0055}
+    value: 0.3616
+  - errors:
+    - {label: stat, symerror: 0.0055}
+    - {label: sys, symerror: 0.0067}
+    value: 0.3583
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.01}
+    value: 0.3862
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 1.75}
+  - {value: 2.5}
+  - {value: 3.5}
+  - {value: 4.5}
+  - {value: 5.5}
+  - {value: 7.0}
+  - {value: 9.0}
+  - {value: 11.5}
+  - {value: 15.0}
+  - {value: 20.0}
+  - {value: 27.0}
+  - {value: 36.0}
+- header: {name: SIG(L)/SIG(T)}
+  values:
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}
+  - {value: 0.043}

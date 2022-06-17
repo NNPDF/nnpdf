@@ -1,0 +1,42 @@
+dependent_variables:
+- header: {name: F2}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE, value: MUON DEUT --> MUON X}
+  - {name: X, value: '0.008'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0026}
+    - {label: sys, symerror: 0.0072}
+    value: 0.2595
+  - errors:
+    - {label: stat, symerror: 0.0038}
+    - {label: sys, symerror: 0.0089}
+    value: 0.2983
+  - errors:
+    - {label: stat, symerror: 0.0047}
+    - {label: sys, symerror: 0.0134}
+    value: 0.3354
+  - errors:
+    - {label: stat, symerror: 0.0038}
+    - {label: sys, symerror: 0.0131}
+    value: 0.3673
+  - errors:
+    - {label: stat, symerror: 0.0061}
+    - {label: sys, symerror: 0.0137}
+    value: 0.4056
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.75}
+  - {value: 1.25}
+  - {value: 1.75}
+  - {value: 2.5}
+  - {value: 3.5}
+- header: {name: SIG(L)/SIG(T)}
+  values:
+  - {value: 0.337}
+  - {value: 0.337}
+  - {value: 0.337}
+  - {value: 0.337}
+  - {value: 0.337}

@@ -1,0 +1,84 @@
+dependent_variables:
+- header: {name: R}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE, value: MUON NUCLEON --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '21.677'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.067}
+    - {label: sys, symerror: 0.11}
+    value: 0.537
+  - errors:
+    - {label: stat, symerror: 0.044}
+    - {label: sys, symerror: 0.112}
+    value: 0.337
+  - errors:
+    - {label: stat, symerror: 0.037}
+    - {label: sys, symerror: 0.11}
+    value: 0.246
+  - errors:
+    - {label: stat, symerror: 0.036}
+    - {label: sys, symerror: 0.109}
+    value: 0.19
+  - errors:
+    - {label: stat, symerror: 0.032}
+    - {label: sys, symerror: 0.09}
+    value: 0.099
+  - errors:
+    - {label: stat, symerror: 0.03}
+    - {label: sys, symerror: 0.08}
+    value: 0.108
+  - errors:
+    - {label: stat, symerror: 0.03}
+    - {label: sys, symerror: 0.079}
+    value: 0.117
+  - errors:
+    - {label: stat, symerror: 0.049}
+    - {label: sys, symerror: 0.076}
+    value: 0.113
+  - errors:
+    - {label: stat, symerror: 0.036}
+    - {label: sys, symerror: 0.079}
+    value: 0.096
+  - errors:
+    - {label: stat, symerror: 0.041}
+    - {label: sys, symerror: 0.067}
+    value: 0.043
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.0045}
+  - {value: 0.008}
+  - {value: 0.0125}
+  - {value: 0.0175}
+  - {value: 0.025}
+  - {value: 0.035}
+  - {value: 0.05}
+  - {value: 0.07}
+  - {value: 0.09}
+  - {value: 0.11}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 1.38}
+  - {value: 1.31}
+  - {value: 2.2}
+  - {value: 3.12}
+  - {value: 4.5}
+  - {value: 7.0}
+  - {value: 10.2}
+  - {value: 14.1}
+  - {value: 16.9}
+  - {value: 20.6}
+- header: {name: Y}
+  values:
+  - {high: 0.74, low: 0.63}
+  - {high: 0.77, low: 0.49}
+  - {high: 0.75, low: 0.4}
+  - {high: 0.73, low: 0.28}
+  - {high: 0.74, low: 0.2}
+  - {high: 0.73, low: 0.2}
+  - {high: 0.69, low: 0.17}
+  - {high: 0.69, low: 0.12}
+  - {high: 0.57, low: 0.1}
+  - {high: 0.6, low: 0.1}

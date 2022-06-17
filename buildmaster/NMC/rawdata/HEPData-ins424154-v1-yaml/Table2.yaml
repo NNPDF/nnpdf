@@ -1,0 +1,43 @@
+dependent_variables:
+- header: {name: F2}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 90 + 120 + 200 + 280}
+  - {name: RE, value: MUON P --> MUON X}
+  - {name: SQRT(S), units: GeV, value: '21.677'}
+  - {name: X, value: '0.008'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0033}
+    - {label: sys, symerror: 0.0078}
+    value: 0.2647
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.0102}
+    value: 0.3088
+  - errors:
+    - {label: stat, symerror: 0.0062}
+    - {label: sys, symerror: 0.0127}
+    value: 0.3483
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.0139}
+    value: 0.3869
+  - errors:
+    - {label: stat, symerror: 0.0082}
+    - {label: sys, symerror: 0.0143}
+    value: 0.4209
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.75}
+  - {value: 1.25}
+  - {value: 1.75}
+  - {value: 2.5}
+  - {value: 3.5}
+- header: {name: SIG(L)/SIG(T)}
+  values:
+  - {value: 0.337}
+  - {value: 0.337}
+  - {value: 0.337}
+  - {value: 0.337}
+  - {value: 0.337}
