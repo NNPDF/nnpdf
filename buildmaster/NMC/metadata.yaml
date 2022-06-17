@@ -1,0 +1,56 @@
+# Generalia
+setname: "NMC"
+ndata: 158
+observable: {description: "NMC proton structure function F2", label:"$F_2^p(x,Q^2)$", units: "" }
+kinematics:
+   variables:
+      q2: {description: "Parton momentum transfer", label: "$Q^2$", units: "GeV²"}
+      x:  {description: "Bjorken x", label: '$x$', units: ""}
+      y:  {description: "Inelasticity", label: '$y$', units: ""}
+   file: kinematics.yaml
+
+version: 2
+version_comment: "Implementation based on HEPData tables"
+
+# References
+arXiv:
+   url: "https://arxiv.org/abs/hep-ph/9610231"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/424154"
+hepdata:
+   url: "https://www.hepdata.net/record/ins424154"
+   version: 1
+   tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+  #  tables: [1]
+
+# Data 
+data_central: data.yaml
+data_uncertainties:
+   - uncertainties.yaml
+
+# Data (variants)
+variants:
+  
+# Plotting  
+kinematic_coverage:
+   x: x
+   q2: q2
+   y: y
+
+dataset_label: "NMC $p$"
+plot_x: x
+figure_by: 
+   - q2
+line_by:
+   - y 
+   
+# Theory
+theory:
+   FK_tables:
+     - NMC_F2BINAVG
+
+   # compound: "RATIO"
+
+nnpdf_metadata:
+   nnpdf31_process: "DIS NC"
+   experiment: "NMC"
