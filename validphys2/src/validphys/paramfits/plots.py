@@ -896,7 +896,7 @@ plot_as_datasets_pseudorreplicas_chi2 = plot_as_datasets_pseudoreplicas_chi2
 plot_dataspecs_pseudorreplica_means = plot_dataspecs_pseudoreplica_means
 
 @figure
-def plot_alphas_history(replica_alphaslog, number_alphas_history_to_plot):
+def plot_alphas_history(replica_alphaslog, number_alphas_history_to_plot="all"):
     number_of_replicas = len(replica_alphaslog)
 
     # Get history of the average alphas value
@@ -912,6 +912,8 @@ def plot_alphas_history(replica_alphaslog, number_alphas_history_to_plot):
     average_alphas_history = arr.mean(axis=0)
 
     # Get history of alphas for random replicas
+    if number_alphas_history_to_plot == "all":
+        number_alphas_history_to_plot = number_of_replicas 
     if number_of_replicas > number_alphas_history_to_plot:
         random_ordered_replica_indices = list(range(number_of_replicas))
         import random
