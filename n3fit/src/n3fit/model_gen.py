@@ -153,7 +153,7 @@ def observable_generator(
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-
+# TODO: Make these more memory-efficient, i.e. factoring FKTables and separate Mask layer...
         if spec_dict["positivity"]:
             # Positivity (and integrability, which is a special kind of positivity...)
             # enters only at the "training" part of the models
