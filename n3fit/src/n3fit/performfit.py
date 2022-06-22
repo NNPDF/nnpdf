@@ -155,6 +155,7 @@ def performfit(
         # Parse the experiments so that the output data contain information for all replicas
         # as the only different from replica to replica is the experimental training/validation data
         all_experiments = copy.deepcopy(replica_experiments[0])
+        # n_experiments dicts
         for i_exp in range(len(all_experiments)):
             training_data = []
             validation_data = []
@@ -168,17 +169,18 @@ def performfit(
             replicas[0],
             replicas[0] + n_models - 1,
         )
-        replicas_info = [(replicas, all_experiments, nnseeds)]
+        replicas_info = [(replicas, replica_experiments, nnseeds)]
     else:
+        # Cases 1 and 2 above are a special case of 3 where the replica idx and the seed should
+        # be a list of just one element
         replicas_info = replicas_nnseed_fitting_data_dict
+        for i, info_tuple in enumerate(replicas_info):
+            replica_idxs = info_tuple[0]
+            nnseeds = info_tuple[2]
+            replicas_info[i] = (tuple([replica_idxs]), info_tuple[1], tuple([nnseeds]))
 
     for replica_idxs, exp_info, nnseeds in replicas_info:
-        if not parallel_models or n_models == 1:
-            # Cases 1 and 2 above are a special case of 3 where the replica idx and the seed should
-            # be a list of just one element
-            replica_idxs = [replica_idxs]
-            nnseeds = [nnseeds]
-            log.info("Starting replica fit %d", replica_idxs[0])
+        log.info("Starting replica fit " + str(replica_idxs))
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
