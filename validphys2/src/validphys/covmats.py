@@ -23,7 +23,7 @@ from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
-from validphys.commondata import loaded_commondata_with_cuts
+
 log = logging.getLogger(__name__)
 
 INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
@@ -191,6 +191,7 @@ def dataset_inputs_covmat_from_systematics(
     special_corrs = []
     block_diags = []
     weights = []
+    
     if _list_of_central_values is None:
         # want to just pass None to systematic_errors method
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
