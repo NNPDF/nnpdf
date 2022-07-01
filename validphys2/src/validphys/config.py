@@ -788,10 +788,15 @@ class CoreConfig(configparser.Config):
             if use_scalevar_uncertainties is True:
                 generic_path = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
             else:
-                generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
-                    
+                generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"   
         theorypath = output_path/"tables"/generic_path
-        theory_covmat = pd.read_csv(theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python").fillna(0)
+        theory_covmat = pd.read_csv(
+            theorypath,
+            index_col=[0, 1, 2],
+            header=[0, 1, 2],
+            sep="\t|,",
+            engine="python",
+        ).fillna(0)
         #change ordering according to exp_covmat (so according to runcard order)
         tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
         bb = [str(i) for i in data_input]

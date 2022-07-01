@@ -1,5 +1,5 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 ##########################################################################################
 description: "NNPDF4.0 methodology fit with theory covariance matrix (9pt prescription) like NNPDF31_nlo_as_0118_scalecov_9pt"
@@ -59,15 +59,6 @@ datacuts:
   t0pdfset: 190310-tg-nlo-global     # PDF set to generate t0 covmat
   q2min: 13.96                       # Q2 minimum
   w2min: 12.5                        # W2 minimum
-  combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
-  jetptcut_tev: 0                    # jet pt cut for tevatron
-  jetptcut_lhc: 0                    # jet pt cut for lhc
-  wptcut_lhc: 30.0                   # Minimum pT for W pT diff distributions
-  jetycut_tev: 1e30                  # jet rap. cut for tevatron
-  jetycut_lhc: 1e30                  # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut: 1e30                  # jet cfact. cut
   use_cuts: fromintersection
   cuts_intersection_spec:
   - theoryid: 163
@@ -123,15 +114,6 @@ fitting:
   - {fl: t3, trainable: false, smallx: [-0.3687, 1.459], largex: [1.664, 3.373]}
   - {fl: t8, trainable: false, smallx: [0.5357, 1.267], largex: [1.433, 2.866]}
   - {fl: t15, trainable: false, smallx: [1.073, 1.164], largex: [1.503, 3.636]}
-#   basis:
-#   - {fl: sng, trainable: false, smallx: [1.121, 1.154], largex: [1.498, 3.138]}
-#   - {fl: g, trainable: false, smallx: [0.9224, 1.149], largex: [3.266, 6.214]}
-#   - {fl: v, trainable: false, smallx: [0.5279, 0.8017], largex: [1.6, 3.588]}
-#   - {fl: v3, trainable: false, smallx: [0.2011, 0.4374], largex: [1.761, 3.427]}
-#   - {fl: v8, trainable: false, smallx: [0.5775, 0.8357], largex: [1.589, 3.378]}
-#   - {fl: t3, trainable: false, smallx: [-0.484, 1.0], largex: [1.763, 3.397]}
-#   - {fl: t8, trainable: false, smallx: [0.6714, 0.9197], largex: [1.572, 3.496]}
-#   - {fl: t15, trainable: false, smallx: [1.073, 1.164], largex: [1.503, 3.636]}
 
 ############################################################
 positivity:
@@ -144,6 +126,12 @@ positivity:
   - {dataset: POSDYD, maxlambda: 1e10}
   - {dataset: POSDYS, maxlambda: 1e10}
 
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
+  
 ############################################################
 debug: False
 maxcores: 4

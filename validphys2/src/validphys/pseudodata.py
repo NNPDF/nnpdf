@@ -9,7 +9,6 @@ import hashlib
 
 import numpy as np
 import pandas as pd
-from scipy import linalg as lin
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat
 
@@ -195,7 +194,7 @@ def make_replica(
     if sep_mult:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
     all_pseudodata = np.concatenate(pseudodatas, axis=0)
-    full_mask=np.concatenate(check_positive_masks, axis=0)
+    full_mask = np.concatenate(check_positive_masks, axis=0)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
     while True:

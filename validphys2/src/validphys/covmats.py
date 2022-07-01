@@ -230,7 +230,7 @@ def dataset_inputs_covmat_from_systematics(
         covmat = regularize_covmat(
             covmat,
             norm_threshold=norm_threshold
-        ) 
+        )
     return covmat
 
 
@@ -461,7 +461,7 @@ def dataset_inputs_exp_covmat(
 def generate_exp_covmat(datasets_input,
     data,
     use_weights, 
-    norm_thre, 
+    norm_threshold, 
     _list_of_c_values, 
     only_add):
     """
@@ -480,7 +480,7 @@ def generate_exp_covmat(datasets_input,
             the returned covmat will be unmodified.
         use_weights: bool
             Whether to weight the covmat, True by default.
-        norm_thre: number
+        norm_threshold: number
             threshold used to regularize covariance matrix
         _list_of_c_values: None, list[np.array]
             list of 1-D arrays which contain alternative central values which are
@@ -499,7 +499,7 @@ def generate_exp_covmat(datasets_input,
         datasets_input,
         data,
         use_weights,
-        norm_threshold=norm_thre,
+        norm_threshold=norm_threshold,
         _list_of_central_values=_list_of_c_values,
         _only_additive = only_add
     )
