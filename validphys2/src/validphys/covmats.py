@@ -349,7 +349,7 @@ def dataset_inputs_t0_covmat_from_systematics(
 def dataset_inputs_t0_total_covmat_separate(
     dataset_inputs_t0_exp_covmat_separate,
     loaded_theory_covmat
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is used for the experimental covmat and the multiplicative 
@@ -366,7 +366,7 @@ def dataset_inputs_t0_exp_covmat_separate(
     use_weights_in_covmat=True,
     norm_threshold=None,
     dataset_inputs_t0_predictions,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is used for the experimental covmat and the multiplicative 
@@ -378,7 +378,7 @@ def dataset_inputs_t0_exp_covmat_separate(
 def dataset_inputs_total_covmat_separate(
     dataset_inputs_exp_covmat_separate,
     loaded_theory_covmat,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
@@ -394,7 +394,7 @@ def dataset_inputs_exp_covmat_separate(
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
@@ -406,7 +406,7 @@ def dataset_inputs_exp_covmat_separate(
 def dataset_inputs_t0_total_covmat(
     dataset_inputs_t0_exp_covmat,
     loaded_theory_covmat,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
@@ -423,7 +423,7 @@ def dataset_inputs_t0_exp_covmat(
     use_weights_in_covmat=True,
     norm_threshold=None,
     dataset_inputs_t0_predictions,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
@@ -435,7 +435,7 @@ def dataset_inputs_t0_exp_covmat(
 def dataset_inputs_total_covmat(
     dataset_inputs_exp_covmat,
     loaded_theory_covmat,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
@@ -451,7 +451,7 @@ def dataset_inputs_exp_covmat(
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    ):
+):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
@@ -465,7 +465,8 @@ def generate_exp_covmat(datasets_input,
     use_weights, 
     norm_threshold, 
     _list_of_c_values, 
-    only_add):
+    only_add
+):
     """
     Function to generate the experimental covmat eventually using the t0 prescription. It is also
     possible to compute it only with the additive errors.
