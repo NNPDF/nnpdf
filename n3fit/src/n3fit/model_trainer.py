@@ -8,6 +8,7 @@
     This allows to use hyperscanning libraries, that need to change the parameters of the network
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
+import copy
 import logging
 from itertools import zip_longest
 import numpy as np
@@ -36,7 +37,7 @@ PUSH_INTEGRABILITY_EACH = 100
 def _pdf_injection(pdf_layers, observables, masks):
     """
     Takes as input a list of PDF layers each corresponding to one observable (also given as a list)
-    And (where neded) a mask to select the output.
+    And (where needed) a mask to select the output.
     Returns a list of obs(pdf).
     Note that the list of masks don't need to be the same size as the list of layers/observables
     """
@@ -280,6 +281,7 @@ class ModelTrainer:
                 for dataset in exp_dict["datasets"]:
                     self.all_datasets.append(dataset.name)
 
+# TODO: Figure out how parallel replicas are supposed to work with k-folding
                 if replica == 0:
                     self.training["folds"].append(exp_dict["folds"]["training"])
                     self.validation["folds"].append(exp_dict["folds"]["validation"])
@@ -302,8 +304,6 @@ class ModelTrainer:
                 self.training["integdatasets"].append(integ_dict["name"])
 
         self.all_datasets = set(self.all_datasets)
-
-        import pdb; pdb.set_trace()
 
     def _model_generation(self, pdf_models, partition, partition_idx):
         """
@@ -372,6 +372,7 @@ class ModelTrainer:
         splitted_pdf = splitting_layer(full_pdf_per_replica)
 
         # If we are in a kfolding partition, select which datasets are out
+        # TODO: Figure out how parallel replicas are supposed to work with k-folding
         training_mask = validation_mask = experimental_mask = [None]
         if partition and partition["datasets"]:
             # If we want to overfit the fold, leave the training and validation masks as [None]
@@ -382,9 +383,8 @@ class ModelTrainer:
                 validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
 
-        # Training and validation leave out the kofld dataset
+        # Training and validation leave out the k-fold dataset
         # experiment leaves out the negation
-
         output_tr = _pdf_injection(splitted_pdf, self.training["output"], training_mask)
         training = MetaModel(full_model_input_dict, output_tr)
 
@@ -513,8 +513,11 @@ class ModelTrainer:
             self.input_sizes.append(pos_layer["experiment_xsize"])
 
             # The positivity should be on both training and validation models
-            self.training["output"].append(pos_layer["output_tr"])
-            self.validation["output"].append(pos_layer["output_tr"])
+            for replica in range(self._parallel_models):
+                # TODO: Check whether deepcopy is necessary and how much memory it consumes...
+                layer_copy = copy.deepcopy(pos_layer["output_tr"])
+                self.training["output"][replica].append(layer_copy)
+                self.validation["output"][replica].append(layer_copy)
 
             self.training["posmultipliers"].append(pos_multiplier)
             self.training["posinitials"].append(pos_initial)
@@ -540,7 +543,11 @@ class ModelTrainer:
                 self.input_sizes.append(integ_layer["experiment_xsize"])
 
                 # The integrability all falls to the training
-                self.training["output"].append(integ_layer["output_tr"])
+                for replica in range(self._parallel_models):
+                    # TODO: Check whether deepcopy is necessary and how much memory it consumes...
+                    layer_copy = copy.deepcopy(integ_layer["output_tr"])
+                    self.training["output"][replica].append(layer_copy)
+
                 self.training["integmultipliers"].append(integ_multiplier)
                 self.training["integinitials"].append(integ_initial)
 
