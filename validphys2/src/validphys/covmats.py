@@ -23,6 +23,7 @@ from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
+from validphys.commondata import loaded_commondata_with_cuts
 
 log = logging.getLogger(__name__)
 
@@ -133,7 +134,8 @@ def dataset_inputs_covmat_from_systematics(
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    _list_of_central_values=None
+    _list_of_central_values=None,
+    _only_additive=False,
 ):
     """Given a list containing :py:class:`validphys.coredata.CommonData` s,
     construct the full covariance matrix.
@@ -200,7 +202,11 @@ def dataset_inputs_covmat_from_systematics(
         data_input,
         _list_of_central_values
     ):
-        sys_errors = cd.systematic_errors(central_values)
+        #used if we want to separate additive and multiplicative errors in make_replica
+        if _only_additive:
+            sys_errors = cd.additive_errors
+        else:
+            sys_errors = cd.systematic_errors(central_values)
         stat_errors = cd.stat_errors.to_numpy()
         weights.append(np.full_like(stat_errors, dsinp.weight))
         # separate out the special uncertainties which can be correlated across
@@ -337,6 +343,168 @@ def dataset_inputs_t0_covmat_from_systematics(
         use_weights_in_covmat,
         norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
+    )
+
+
+def dataset_inputs_t0_total_covmat_separate(
+    dataset_inputs_t0_exp_covmat_separate,
+    loaded_theory_covmat
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.  
+    """
+    covmat = dataset_inputs_t0_exp_covmat_separate
+    covmat += loaded_theory_covmat
+    return covmat
+
+def dataset_inputs_t0_exp_covmat_separate(
+    dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    dataset_inputs_t0_predictions,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
+    errors are separated.
+    """
+    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , True)
+    return covmat
+
+def dataset_inputs_total_covmat_separate(
+    dataset_inputs_exp_covmat_separate,
+    loaded_theory_covmat,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
+    """
+    covmat = dataset_inputs_exp_covmat_separate
+    covmat += loaded_theory_covmat
+    return covmat
+
+def dataset_inputs_exp_covmat_separate(
+    dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica.
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
+    errors are separated. 
+    """
+    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , True)
+    return covmat
+
+def dataset_inputs_t0_total_covmat(
+    dataset_inputs_t0_exp_covmat,
+    loaded_theory_covmat,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    covmat = dataset_inputs_t0_exp_covmat
+    covmat += loaded_theory_covmat
+    return covmat
+
+def dataset_inputs_t0_exp_covmat(
+    dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    dataset_inputs_t0_predictions,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
+    and the multiplicative errors are included in it. 
+    """
+    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , False)
+    return covmat
+
+def dataset_inputs_total_covmat(
+    dataset_inputs_exp_covmat,
+    loaded_theory_covmat,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
+    and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
+    """
+    covmat = dataset_inputs_exp_covmat
+    covmat += loaded_theory_covmat
+    return covmat
+
+def dataset_inputs_exp_covmat(
+    dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+):
+    """
+    Function to compute the covmat to be used for the sampling by make_replica and for the chi2
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
+    and the multiplicative errors are included in it.
+    """
+    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , False)
+    return covmat
+
+def generate_exp_covmat(datasets_input,
+    data,
+    use_weights, 
+    norm_threshold, 
+    _list_of_c_values, 
+    only_add
+):
+    """
+    Function to generate the experimental covmat eventually using the t0 prescription. It is also
+    possible to compute it only with the additive errors.
+
+    Parameters
+    ----------
+        dataset_inputs: list[validphys.coredata.CommonData]
+            list of CommonData objects.
+        data: list[validphys.core.DataSetInput]
+            Settings for each dataset, each element contains the weight for the
+            current dataset. The elements of the returned covmat for dataset
+            i and j will be divided by sqrt(weight_i)*sqrt(weight_j), if
+            ``use_weights_in_covmat``. The default weight is 1, which means
+            the returned covmat will be unmodified.
+        use_weights: bool
+            Whether to weight the covmat, True by default.
+        norm_threshold: number
+            threshold used to regularize covariance matrix
+        _list_of_c_values: None, list[np.array]
+            list of 1-D arrays which contain alternative central values which are
+            combined with the multiplicative errors to calculate their absolute
+            contribution. By default this is None and the experimental central
+            values are used.
+        only_add: bool
+            specifies whether to use only the additive errors to compute the covmat
+    
+    Returns
+    -------
+        : np.array
+        experimental covariance matrix
+    """
+    return dataset_inputs_covmat_from_systematics(
+        datasets_input,
+        data,
+        use_weights,
+        norm_threshold=norm_threshold,
+        _list_of_central_values=_list_of_c_values,
+        _only_additive = only_add
     )
 
 

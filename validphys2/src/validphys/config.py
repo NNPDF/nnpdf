@@ -15,6 +15,9 @@ from importlib.resources import read_text, contents
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 
+import pandas as pd
+import glob
+
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
 from reportengine.configparser import (
@@ -62,13 +65,7 @@ class Environment(Environment):
     """Container for information to be filled at run time"""
 
     def __init__(
-        self,
-        *,
-        this_folder=None,
-        net=True,
-        upload=False,
-        dry=False,
-        **kwargs,
+        self, *, this_folder=None, net=True, upload=False, dry=False, **kwargs,
     ):
         if this_folder:
             self.this_folder = pathlib.Path(this_folder)
@@ -76,8 +73,10 @@ class Environment(Environment):
         if not net:
             loader_class = Loader
         elif dry and net:
-            log.warning("The --dry flag overrides the --net flag. No resources will be downloaded "
-                        "while executing a dry run")
+            log.warning(
+                "The --dry flag overrides the --net flag. No resources will be downloaded "
+                "while executing a dry run"
+            )
             loader_class = Loader
         else:
             loader_class = FallbackLoader
@@ -216,15 +215,18 @@ class CoreConfig(configparser.Config):
 
     def produce_replicas(self, nreplica: int):
         """Produce a replicas array"""
-        return NSList(range(1, nreplica+1), nskey="replica")
+        return NSList(range(1, nreplica + 1), nskey="replica")
 
-    def produce_inclusive_use_scalevar_uncertainties(self, use_scalevar_uncertainties: bool = False,
-                                        point_prescription: (str, None) = None):
+    def produce_inclusive_use_scalevar_uncertainties(
+        self,
+        use_scalevar_uncertainties: bool = False,
+        point_prescription: (str, None) = None,
+    ):
         """Whether to use a scale variation uncertainty theory covmat.
         Checks whether a point prescription is included in the runcard and if so 
         assumes scale uncertainties are to be used."""
-        if ((not use_scalevar_uncertainties) and (point_prescription is not None)):
-                use_scalevar_uncertainties = True
+        if (not use_scalevar_uncertainties) and (point_prescription is not None):
+            use_scalevar_uncertainties = True
         return use_scalevar_uncertainties
 
     # TODO: load fit config from here
@@ -242,21 +244,21 @@ class CoreConfig(configparser.Config):
         fit replica.
         """
         num_replicas = num_fitted_replicas(fit)
-        return NSList(range(1, num_replicas + 1), nskey='replica')
+        return NSList(range(1, num_replicas + 1), nskey="replica")
 
     def produce_pdfreplicas(self, fitpdf):
         """Production rule mapping the ``replica`` key to each postfit
         replica.
         """
-        pdf = fitpdf['pdf']
+        pdf = fitpdf["pdf"]
         replicas = fitted_replica_indexes(pdf)
-        return NSList(replicas, nskey='replica')
+        return NSList(replicas, nskey="replica")
 
     def produce_fitcontextwithcuts(self, fit, fitinputcontext):
         """Like fitinputcontext but setting the cuts policy.
         """
-        theoryid = fitinputcontext['theoryid']
-        data_input = fitinputcontext['data_input']
+        theoryid = fitinputcontext["theoryid"]
+        data_input = fitinputcontext["data_input"]
 
         return {
             "dataset_inputs": data_input,
@@ -278,13 +280,13 @@ class CoreConfig(configparser.Config):
               the fit runcard.
         """
         log.warning(f"Using mcseed and trvlseed from fit: {fit}")
-        theoryid = fitinputcontext['theoryid']
-        data_input = fitinputcontext['data_input']
+        theoryid = fitinputcontext["theoryid"]
+        data_input = fitinputcontext["data_input"]
 
         runcard = fit.as_input()
-        trvlseed = runcard['trvlseed']
-        mcseed = runcard['mcseed']
-        genrep = runcard['genrep']
+        trvlseed = runcard["trvlseed"]
+        mcseed = runcard["mcseed"]
+        genrep = runcard["genrep"]
 
         return {
             "dataset_inputs": data_input,
@@ -305,9 +307,7 @@ class CoreConfig(configparser.Config):
         _, theory = self.parse_from_("fit", "theory", write=False)
         thid = theory["theoryid"]
 
-        data_input = self._parse_data_input_from_(
-            "fit", {"theoryid": thid}
-        )
+        data_input = self._parse_data_input_from_("fit", {"theoryid": thid})
         return {"theoryid": thid, "data_input": data_input}
 
     def produce_fitpdf(self, fit):
@@ -331,20 +331,24 @@ class CoreConfig(configparser.Config):
         try:
             return self.loader.check_hyperscan(hyperscan)
         except LoadFailedError as e:
-            raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
+            raise ConfigError(
+                str(e), hyperscan, self.loader.available_hyperscans
+            ) from e
 
     def parse_hyperscan_config(self, hyperscan_config, hyperopt=None):
         """Configuration of the hyperscan
         """
         if "from_hyperscan" in hyperscan_config:
             hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
-            log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
+            log.info(
+                "Using previous hyperscan: '%s' to generate the search space", hyperscan
+            )
             return hyperscan.as_input().get("hyperscan_config")
 
         if "use_tries_from" in hyperscan_config:
             hyperscan = self.parse_hyperscan(hyperscan_config["use_tries_from"])
             log.info("Reusing tries from: %s", hyperscan)
-            return {"parameters": hyperscan.sample_trials(n = hyperopt)}
+            return {"parameters": hyperscan.sample_trials(n=hyperopt)}
 
         return hyperscan_config
 
@@ -379,7 +383,6 @@ class CoreConfig(configparser.Config):
             )
         return self.parse_pdf(laws.pop())
 
-
     def produce_basisfromfit(self, fit):
         """Set the basis from fit config. In the fit config file the basis
         is set using the key ``fitbasis``, but it is exposed to validphys
@@ -394,11 +397,9 @@ class CoreConfig(configparser.Config):
         basis = fitting["fitbasis"]
         return {"basis": basis}
 
-
     def produce_fitpdfandbasis(self, fitpdf, basisfromfit):
         """ Set the PDF and basis from the fit config. """
         return {**fitpdf, **basisfromfit}
-
 
     @element_of("dataset_inputs")
     def parse_dataset_input(self, dataset: Mapping):
@@ -440,7 +441,7 @@ class CoreConfig(configparser.Config):
             cfac=cfac,
             frac=frac,
             weight=weight,
-            custom_group=custom_group
+            custom_group=custom_group,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -658,7 +659,6 @@ class CoreConfig(configparser.Config):
 
         dsinputs = [self.parse_dataset_input(ds) for ds in datasets]
 
-
         return self.produce_data(group_name=name, data_input=dsinputs)
 
     @configparser.element_of("experiment_inputs")
@@ -692,6 +692,139 @@ class CoreConfig(configparser.Config):
                 fit=fit,
             )
         }
+
+    def produce_sep_mult(self, separate_multiplicative=None):
+        """
+        Specifies whether to separate the multiplicative errors in the 
+        experimental covmat construction. The default is True. 
+        """
+        if separate_multiplicative is False:
+            return False
+        return True
+
+    @configparser.explicit_node
+    def produce_dataset_inputs_fitting_covmat(
+        self,
+        theory_covmat_flag=False,
+        use_thcovmat_in_fitting=False,
+        use_t0_fitting=True,
+    ):
+        """
+        Produces the correct covmat to be used in fitting_data_dict according
+        to some options: whether to include the theory covmat, whether to
+        separate the multiplcative errors and whether to compute the
+        experimental covmat using the t0 prescription.
+        """
+        from validphys import covmats
+
+        if use_t0_fitting:
+            if theory_covmat_flag and use_thcovmat_in_fitting:
+                return covmats.dataset_inputs_t0_total_covmat
+            else:
+                return covmats.dataset_inputs_t0_exp_covmat
+        else:
+            if theory_covmat_flag and use_thcovmat_in_fitting:
+                return covmats.dataset_inputs_total_covmat
+            else:
+                return covmats.dataset_inputs_exp_covmat
+
+    @configparser.explicit_node
+    def produce_dataset_inputs_sampling_covmat(
+        self,
+        sep_mult,
+        theory_covmat_flag=False,
+        use_thcovmat_in_sampling=False,
+        use_t0_sampling=False,
+    ):
+        """
+        Produces the correct covmat to be used in make_replica according
+        to some options: whether to include the theory covmat, whether to
+        separate the multiplcative errors and whether to compute the
+        experimental covmat using the t0 prescription.
+        """
+        from validphys import covmats
+
+        if use_t0_sampling:
+            if theory_covmat_flag and use_thcovmat_in_sampling:
+                if sep_mult:
+                    return covmats.dataset_inputs_t0_total_covmat_separate
+                else:
+                    return covmats.dataset_inputs_t0_total_covmat
+            else:
+                if sep_mult:
+                    return covmats.dataset_inputs_t0_exp_covmat_separate
+                else:
+                    return covmats.dataset_inputs_t0_exp_covmat
+        else:
+            if theory_covmat_flag and use_thcovmat_in_sampling:
+                if sep_mult:
+                    return covmats.dataset_inputs_total_covmat_separate
+                else:
+                    return covmats.dataset_inputs_total_covmat
+            else:
+                if sep_mult:
+                    return covmats.dataset_inputs_exp_covmat_separate
+                else:
+                    return covmats.dataset_inputs_exp_covmat
+
+    def produce_loaded_theory_covmat(
+        self,
+        output_path,
+        data_input,
+        theory_covmat_flag=False,
+        use_user_uncertainties=False,
+        use_scalevar_uncertainties=True,
+    ):
+        """
+        Loads the theory covmat from the correct file according to how it
+        was generated by vp-setupfit. 
+        """
+        if theory_covmat_flag is False:
+            return 0.0
+        # Load correct file according to how the thcovmat was generated by vp-setupfit
+        generic_path = "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+        if use_user_uncertainties is True:
+            if use_scalevar_uncertainties is True:
+                generic_path = (
+                    "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+                )
+            else:
+                generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
+        # check if there are multiple files
+        files = glob.glob(str(output_path / "tables/*theorycovmat*"))
+        paths = [
+            str(
+                output_path
+                / "tables/datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
+            ),
+            str(
+                output_path
+                / "tables/datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
+            ),
+            str(
+                output_path
+                / "tables/datacuts_theory_theorycovmatconfig_user_covmat.csv"
+            ),
+        ]
+        paths.remove(str(output_path / "tables" / generic_path))
+        for f in files:
+            for path in paths:
+                if f == path:
+                    raise ValueError(
+                        "More than one theory_covmat file in folder tables"
+                    )
+        theorypath = output_path / "tables" / generic_path
+        theory_covmat = pd.read_csv(
+            theorypath,
+            index_col=[0, 1, 2],
+            header=[0, 1, 2],
+            sep="\t|,",
+            engine="python",
+        ).fillna(0)
+        # change ordering according to exp_covmat (so according to runcard order)
+        tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
+        bb = [str(i) for i in data_input]
+        return tmp.reindex(index=bb, columns=bb, level=0).values
 
     @configparser.explicit_node
     def produce_covmat_t0_considered(self, use_t0: bool = False):
@@ -911,11 +1044,13 @@ class CoreConfig(configparser.Config):
         return do_use_t0
 
     # TODO: Find a good name for this
-    def produce_t0set(self, use_t0=False, t0pdfset=None):
+    def produce_t0set(
+        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True,
+    ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
         """
-        if use_t0:
+        if use_t0_sampling or use_t0_fitting:
             if not t0pdfset:
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
@@ -925,14 +1060,14 @@ class CoreConfig(configparser.Config):
         """ Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
         defines the maximum value allowed for the multiplier """
-        bad_msg = (
-            f"{kind} must be a mapping with a name ('dataset') and a float multiplier (maxlambda)"
-        )
+        bad_msg = f"{kind} must be a mapping with a name ('dataset') and a float multiplier (maxlambda)"
         theoryno, _ = theoryid
         lambda_key = "maxlambda"
-        #BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
+        # BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
         if "poslambda" in setdict and "maxlambda" not in setdict:
-            log.warning("The `poslambda` argument has been deprecated in favour of `maxlambda`")
+            log.warning(
+                "The `poslambda` argument has been deprecated in favour of `maxlambda`"
+            )
             lambda_key = "poslambda"
         try:
             name = setdict["dataset"]
@@ -1014,8 +1149,9 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {"lumi_channels": self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
-    def produce_loaded_user_covmat_path(self, user_covmat_path: str = "",
-                                        use_user_uncertainties: bool = False):
+    def produce_loaded_user_covmat_path(
+        self, user_covmat_path: str = "", use_user_uncertainties: bool = False
+    ):
         """
         Path to the user covmat provided by user_covmat_path in the runcard.
         If no path is provided, returns None.
@@ -1028,14 +1164,13 @@ class CoreConfig(configparser.Config):
             fileloc = l.check_vp_output_file(user_covmat_path)
             return fileloc
 
-
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self,
         use_thcovmat_in_sampling: bool,
         use_thcovmat_in_fitting: bool,
         inclusive_use_scalevar_uncertainties,
-        use_user_uncertainties: bool = False
+        use_user_uncertainties: bool = False,
     ):
         """
         Return the theory covariance matrix used in the fit.
@@ -1043,17 +1178,24 @@ class CoreConfig(configparser.Config):
         if inclusive_use_scalevar_uncertainties:
             if use_user_uncertainties:
                 # Both scalevar and user uncertainties
-                from validphys.theorycovariance.construction import total_theory_covmat_fitting
+                from validphys.theorycovariance.construction import (
+                    total_theory_covmat_fitting,
+                )
+
                 f = total_theory_covmat_fitting
-            else: 
+            else:
                 # Only scalevar uncertainties
-                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+                from validphys.theorycovariance.construction import (
+                    theory_covmat_custom_fitting,
+                )
+
                 f = theory_covmat_custom_fitting
         elif use_user_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
+
             f = user_covmat_fitting
-     
+
         @functools.wraps(f)
         def res(*args, **kwargs):
             return f(*args, **kwargs)
@@ -1096,17 +1238,14 @@ class CoreConfig(configparser.Config):
 
         if use_thcovmat_if_present and thcovmat_present:
             # Expected directory of theory covmat hardcoded
-            covmat_path = (
-                fit.path
-                / "tables"
-            )
+            covmat_path = fit.path / "tables"
             # All possible valid files
             covfiles = sorted(covmat_path.glob("*theory_covmat*.csv"))
             if not covfiles:
                 raise ConfigError(
                     "Fit appeared to use theory covmat in fit but the file was not at the "
                     f"usual location: {covmat_path}."
-                )                
+                )
             if len(covfiles) > 1:
                 raise ConfigError(
                     "More than one valid theory covmat file found at the "
@@ -1338,10 +1477,7 @@ class CoreConfig(configparser.Config):
         return filter_defaults
 
     def produce_data(
-        self,
-        data_input,
-        *,
-        group_name="data",
+        self, data_input, *, group_name="data",
     ):
         """A set of datasets where correlated systematics are taken
         into account
@@ -1386,7 +1522,7 @@ class CoreConfig(configparser.Config):
 
         """
         with self.set_context(ns=self._curr_ns.new_child(additional_context)):
-                # new fits have dataset_inputs, old fits have experiments
+            # new fits have dataset_inputs, old fits have experiments
             data_key = "dataset_inputs"
             try:
                 _, data_val = self.parse_from_(parse_from_value, data_key, write=False)
@@ -1398,10 +1534,17 @@ class CoreConfig(configparser.Config):
                 )
                 # We need to make theoryid available if using experiments
                 try:
-                    _, experiments = self.parse_from_(parse_from_value, data_key, write=False)
-                    data_val = NSList([
-                        dsinput for experiment in experiments for dsinput in experiment.dsinputs
-                    ], nskey='dataset_input')
+                    _, experiments = self.parse_from_(
+                        parse_from_value, data_key, write=False
+                    )
+                    data_val = NSList(
+                        [
+                            dsinput
+                            for experiment in experiments
+                            for dsinput in experiment.dsinputs
+                        ],
+                        nskey="dataset_input",
+                    )
                 except ConfigError as inner_error:
                     log.error(inner_error)
                     raise e from inner_error
@@ -1471,7 +1614,6 @@ class CoreConfig(configparser.Config):
             return processed_data_grouping
         return metadata_group
 
-
     def produce_group_dataset_inputs_by_metadata(
         self, data_input, processed_metadata_group,
     ):
@@ -1484,6 +1626,9 @@ class CoreConfig(configparser.Config):
             # special case of custom group, take the grouping from the dataset input
             if processed_metadata_group == "custom_group":
                 group_name = str(dsinput.custom_group)
+            # special case of ALL, grouping everything together
+            if processed_metadata_group == "ALL":
+                group_name = processed_metadata_group
             # otherwise try and take the key from the metadata.
             else:
                 cd = self.produce_commondata(dataset_input=dsinput)
@@ -1505,16 +1650,27 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
+    def produce_group_dataset_inputs_by_fitting_group(
+        self, data_input, theory_covmat_flag
+    ):
+        """
+        Groups datasets all together in a group called ALL if the theory covariance matrix
+        is used in the fit, otherwise it groups them by experiment.
+        """
+        if theory_covmat_flag:
+            return self.produce_group_dataset_inputs_by_metadata(data_input, "ALL")
+        return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
+
     def produce_fivetheories(self, point_prescription):
         if point_prescription == "5bar point":
             return "bar"
         elif point_prescription == "5 point":
             return "nobar"
-        return None 
-    
+        return None
+
     def produce_seventheories(self, point_prescription):
         if point_prescription == "7 point":
-            #This is None because is the default choice 
+            # This is None because is the default choice
             return None
         elif point_prescription == "7original point":
             return "original"
@@ -1524,7 +1680,9 @@ class CoreConfig(configparser.Config):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
     def produce_group_dataset_inputs_by_process(self, data_input):
-        return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
+        return self.produce_group_dataset_inputs_by_metadata(
+            data_input, "nnpdf31_process"
+        )
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
@@ -1596,7 +1754,6 @@ class CoreConfig(configparser.Config):
         # NSList needs to be used for theoryids to be recognised as a namespace
         return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
-
     @configparser.explicit_node
     def produce_filter_data(self, fakedata: bool = False, theorycovmatconfig=None):
         """Set the action used to filter the data to filter either real or
@@ -1604,12 +1761,12 @@ class CoreConfig(configparser.Config):
         theory covariance matrix is not being closure tested then filter
         data by experiment for efficiency"""
         import validphys.filters
+
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            if (
-                theorycovmatconfig is not None and
-                theorycovmatconfig.get("use_thcovmat_in_sampling")
+            if theorycovmatconfig is not None and theorycovmatconfig.get(
+                "use_thcovmat_in_sampling"
             ):
                 # NOTE: By the time we run theory covmat closure tests,
                 # hopefully the generation of pseudodata will be done in python.
@@ -1640,7 +1797,6 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
-
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

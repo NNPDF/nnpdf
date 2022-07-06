@@ -188,7 +188,7 @@ def _mask_fk_tables(dataset_dicts, tr_masks):
 def fitting_data_dict(
     data,
     make_replica,
-    dataset_inputs_t0_covmat_from_systematics,
+    dataset_inputs_fitting_covmat,
     tr_masks,
     kfold_masks,
     diagonal_basis=None,
@@ -238,13 +238,12 @@ def fitting_data_dict(
     spec_c = data.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
-
     expdata = make_replica
 
     datasets = common_data_reader_experiment(spec_c, data)
 
     # t0 covmat
-    covmat = dataset_inputs_t0_covmat_from_systematics
+    covmat = dataset_inputs_fitting_covmat
     inv_true = np.linalg.inv(covmat)
 
     if diagonal_basis:
@@ -297,7 +296,6 @@ def fitting_data_dict(
         folds["training"].append(fold[tr_mask])
         folds["validation"].append(fold[vl_mask])
         folds["experimental"].append(~fold)
-
     dict_out = {
         "datasets": datasets_copy,
         "name": str(data),
@@ -320,7 +318,7 @@ def fitting_data_dict(
     }
     return dict_out
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_fitting_group",))
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
     """For a single replica return a tuple of the inputs to this function.
