@@ -182,7 +182,7 @@ def fitting_data_dict(
     data,
     make_replica,
     dataset_inputs_loaded_cd_with_cuts,
-    dataset_inputs_t0_covmat_from_systematics,
+    dataset_inputs_fitting_covmat,
     tr_masks,
     kfold_masks,
     fittable_datasets_masked,
@@ -234,7 +234,7 @@ def fitting_data_dict(
 
     expdata = make_replica
     tr_masks = tr_masks.masks
-    covmat = dataset_inputs_t0_covmat_from_systematics  # t0 covmat
+    covmat = dataset_inputs_fitting_covmat # t0 covmat, or theory covmat or whatever was decided by the runcard
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
 
