@@ -1,4 +1,4 @@
-# A single CI script with github workflow.
+# A single CI script with github workflow to test NNPDF, and upload the conda package and documentation
 name: Tests
 
 on: [push]
