@@ -169,12 +169,12 @@ class CustomLearningRate(Callback):
 
     def __init__(self, alphas_settings_dict, epochs):
         power = alphas_settings_dict["learning_rate_settings"]["power"]
-        decay_steps = alphas_settings_dict["learning_rate_settings"]["decay_steps"]
+        self.decay_steps = alphas_settings_dict["learning_rate_settings"]["decay_steps"]
         initial_learning_rate = alphas_settings_dict["learning_rate_settings"]["initial_learning_rate"]
         end_learning_rate = alphas_settings_dict["learning_rate_settings"]["end_learning_rate"]
-        def decayed_learning_rate(step):
-            # step = min(step, decay_steps)
-            decay_steps = decay_steps * np.ceil(step / decay_steps)
+        def decayed_learning_rate(step, decay_steps):
+            step = min(step, decay_steps)
+            #decay_steps = self.decay_steps * np.ceil(step / self.decay_steps)
             return ((initial_learning_rate - end_learning_rate) *
                     (1 - step / decay_steps) ** (power)
                     ) + end_learning_rate
@@ -184,5 +184,5 @@ class CustomLearningRate(Callback):
     def on_epoch_begin(self, epoch, logs=None):
         tf.keras.backend.set_value(
             self.model.optimizer.optimizer_specs[1]["optimizer"].learning_rate,
-            self.lr(epoch)
+            self.lr(epoch, self.decay_steps)
             )
