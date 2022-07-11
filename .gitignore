@@ -378,6 +378,9 @@ ENV/
 env.bak/
 venv.bak/
 
+#conda-build
+conda_bld/
+
 # Spyder project settings
 .spyderproject
 .spyproject

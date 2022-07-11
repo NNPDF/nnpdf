@@ -145,8 +145,8 @@ add_subdirectory(libnnpdf)
 # nnpdfcpp configuration
 add_subdirectory(nnpdfcpp)
 
-# evolven3fit
-add_subdirectory(n3fit/evolven3fit)
+# evolven3fit_cpp
+add_subdirectory(n3fit/evolven3fit_cpp)
 
 if((BURN_TAG) AND (NOT (VP_DEV) OR NOT (N3_DEV)))
     # Find out where is the root of the git repository (if available) and finds the correct tag to burn down
