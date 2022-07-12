@@ -12,7 +12,7 @@ def cli():
     pass
 
 
-@cli.command("evolven3fit")
+@cli.command("evolve")
 @click.argument("configuration_folder", nargs=1)
 def cli_evolven3fit(configuration_folder):
     """Evolves the fitted PDFs"""
