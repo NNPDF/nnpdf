@@ -127,7 +127,7 @@ def evolve_exportgrid(
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # construct and dump info file if not already there
-    info_path = usr_path / "nnfit" / (usr_path.stem + ".info")
+    info_path = usr_path / "nnfit" / usr_path.stem / (usr_path.stem + ".info")
     if not info_path.is_file():
         info = gen_info.create_info_file(
             theory_card, operator_card, 1, info_update={}
