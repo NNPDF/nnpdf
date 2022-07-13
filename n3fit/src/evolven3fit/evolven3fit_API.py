@@ -105,7 +105,11 @@ def evolve_exportgrid(
         conf_folder: str
             path to fit folder
     """
-    path_where_dump = pathlib.Path(conf_folder) / "nnfit" / conf_folder
+    usr_path = pathlib.Path(conf_folder)
+    path_where_dump = usr_path / "nnfit" / usr_path.stem
+    #create folder to dump the evolved replica if it does not exists
+    if not os.path.exists(path_where_dump): 
+        os.makedirs(path_where_dump)
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     x_grid = np.array(exportgrid["xgrid"]).astype(np.float)
