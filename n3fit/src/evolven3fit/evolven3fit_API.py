@@ -55,8 +55,11 @@ def load_fit(conf_folder):
         for dir in dirs:
             replica_list.append(dir)
     replica_list.remove("input")
-    #remove the eventual evolution folder 
-    replica_list.remove(usr_path.stem)
+    #remove the eventual evolution folder
+    try: 
+        replica_list.remove(usr_path.stem)
+    except:
+        pass
     pdf_dict = {}
     for replica in replica_list:
         rep_path = pathlib.Path(replica) / (usr_path.stem + ".exportgrid")
