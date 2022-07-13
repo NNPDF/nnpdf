@@ -1,4 +1,4 @@
-from ekobox import evol_pdf, theory_card, operators_card, genpdf, info_file
+from ekobox import evol_pdf, gen_theory, gen_op, genpdf, gen_info
 import pathlib
 import numpy as np
 import yaml
@@ -82,10 +82,10 @@ def construct_eko_for_fit(conf_folder):
     # theory_card construction
     theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
     theory.pop("FNS")
-    t_card = theory_card.generate(theory["PTO"], theory["Q0"], update=theory)
+    t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
     q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
-    op_card = operators_card.generate(q2_grid)
+    op_card = gen_op.gen_op_card(q2_grid)
     #generate eko operator (temporary because it will be loaded from theory)
     eko_op = run_dglap(t_card, op_card)
     return eko_op, t_card, op_card
@@ -114,7 +114,7 @@ def evolve_exportgrid(
     """
     usr_path = pathlib.Path(conf_folder)
     path_where_dump = usr_path / "nnfit" / usr_path.stem
-    #create folder to dump the evolved replica if it does not exists
+    #create folder to dump the evolved replica if it does not exist
     if not os.path.exists(path_where_dump): 
         os.makedirs(path_where_dump)
     # construct LhapdfLike object
@@ -124,14 +124,14 @@ def evolve_exportgrid(
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # construct and dump info file if not already there
-    info_path = pathlib.Path(conf_folder) / "nnfit" / (conf_folder + ".info")
+    info_path = usr_path / "nnfit" / (usr_path.stem + ".info")
     if not info_path.is_file():
-        info = info_file.build(
+        info = gen_info.create_info_file(
             theory_card, operator_card, 1, info_update={}
         )  # to be changed
         genpdf.export.dump_info(path_where_dump, info)
     # generate block to dump
-    targetgrid = operator_card["xgrid"]
+    targetgrid = operator_card["interpolation_xgrid"]
     block = genpdf.generate_block(
         lambda pid, x, Q2, evolved_PDF=evolved_pdf: targetgrid[targetgrid.index(x)]
         * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
