@@ -63,7 +63,8 @@ def read_runcard(conf_folder):
     """
     reads the runcard and returns the relevant information for evolven3fit
     """
-    runcard_path = pathlib.Path(conf_folder + "/filter.yml")
+    usr_path = pathlib.Path(conf_folder)
+    runcard_path = conf_folder / "filter.yml"
     with runcard_path.open() as fp:
         data = yaml.safe_load(fp)
     return data
