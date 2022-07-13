@@ -12,6 +12,12 @@ from eko import run_dglap
 def evolve_fit(conf_folder):
     """
     Evolves all the fitted replica in conf_folder/nnfit 
+
+    Parameters
+    ----------
+
+        conf_folder: str or pathlib.Path
+            path to the folder containing the fit
     """
     initial_PDFs_dict = load_fit(conf_folder)
     eko, theory, op = construct_eko_for_fit(conf_folder)
@@ -33,7 +39,7 @@ def load_fit(conf_folder):
     Parameters
     ----------
 
-        conf_folder: str
+        conf_folder: str or pathlib.Path
             path to the folder containing the fit  
     
     Returns
@@ -42,15 +48,18 @@ def load_fit(conf_folder):
             : dict
             exportgrids info
     """
-    nnfitpath = pathlib.Path(conf_folder) / "nnfit"
+    usr_path = pathlib.Path(conf_folder)
+    nnfitpath = usr_path / "nnfit"
     replica_list = []
     for subdir, dirs, files in os.walk(nnfitpath):
         for dir in dirs:
             replica_list.append(dir)
     replica_list.remove("input")
+    #remove the eventual evolution folder 
+    replica_list.remove(usr_path.stem)
     pdf_dict = {}
     for replica in replica_list:
-        rep_path = pathlib.Path(replica) / (conf_folder + ".exportgrid")
+        rep_path = pathlib.Path(replica) / (usr_path.stem + ".exportgrid")
         yaml_file = nnfitpath / rep_path.relative_to(rep_path.anchor)
         with yaml_file.open() as fp:
             data = yaml.safe_load(fp)
@@ -65,7 +74,7 @@ def construct_eko_for_fit(conf_folder):
 
     Parameters
     ----------
-        conf_folder: str
+        conf_folder: str or pathlib.Path
             path to the folder containing the fit  
     """
     # read the runcard
