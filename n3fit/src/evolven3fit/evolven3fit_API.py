@@ -83,14 +83,12 @@ def construct_eko_for_fit(conf_folder):
     theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
     theory.pop("FNS")
     t_card = theory_card.generate(theory["PTO"], theory["Q0"], update=theory)
-
     # construct operator card
     q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
     op_card = operators_card.generate(q2_grid)
-    # generate eko operator (temporary because it will be loaded from theory)
-    eko = run_dglap(t_card, op_card)
-    return eko, t_card, op_card
-    #
+    #generate eko operator (temporary because it will be loaded from theory)
+    eko_op = run_dglap(t_card, op_card)
+    return eko_op, t_card, op_card
 
 
 def evolve_exportgrid(
