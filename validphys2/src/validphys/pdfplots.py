@@ -730,6 +730,89 @@ def plot_lumi1d_uncertainties(
     return fig
 
 
+
+@figure
+@check_pdf_normalize_to
+def plot_lumi1d_replicas(
+    pdfs,
+    pdfs_lumis,
+    lumi_channel,
+    sqrts: numbers.Real,
+    y_cut: (numbers.Real, type(None)) = None,
+    normalize_to=None,
+    ymin: (numbers.Real, type(None)) = None,
+    ymax: (numbers.Real, type(None)) = None,
+    scale="log",
+):
+    """This function is similar to `plot_lumi1d`, but instead of plotting
+    the standard deviation and 68% c.i. it plots the luminosities for 
+    individual replicas.
+
+    Plot PDF replica luminosities at a given center of mass energy.
+    sqrts is the center of mass energy (GeV).
+
+    This action plots the luminosity (as computed by `lumigrid1d`) as a
+    function of invariant mass for all PDFs for a single lumi channel.
+    ``normalize_to`` works as for `plot_pdfs` and allows to plot a ratio to the
+    central value of some of the PDFs. `ymin` and `ymax` can be used to set
+    exact bounds for the scale. `y_cut` can be used to specify a rapidity cut
+    over the integration range. `show_mc_errors` controls whether the 1σ error
+    bands are shown in addition to the 68% confidence intervals for Monte Carlo
+    PDFs.
+    """
+
+    fig, ax = plt.subplots()
+    if normalize_to is not None:
+        norm = pdfs_lumis[normalize_to].grid_values.central_value()
+        ylabel = f"Ratio to {pdfs[normalize_to]}"
+    else:
+        norm = 1
+        ylabel = r"$\mathcal{L} (GeV^{-2})$"
+
+    pcycler = plotutils.color_iter()
+
+    lines = []
+    labels = []
+    for pdf, lumigrid1d in zip(pdfs, pdfs_lumis):
+        mx = lumigrid1d.m
+        gv = lumigrid1d.grid_values
+
+        cv = gv.central_value()
+
+        replicas = gv.data
+
+        color = next(pcycler)
+
+        ax.plot(mx, (replicas/norm).T, alpha=0.2, linewidth=0.5,
+                color=color, zorder=1)
+        line, = ax.plot(mx, cv/norm, color=color,
+                linewidth=2)
+        lines.append(line)
+        labels.append(pdf.label)
+
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel("$m_{X}$ (GeV)")
+    ax.set_xlim(mx[0], mx[-1])
+    ax.set_ylim(ymin, ymax)
+    ax.set_xscale(scale)
+    ax.legend(lines,labels)
+    ax.grid(False)
+    if y_cut==None:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV"
+        )
+    else:
+        ax.set_title(
+            f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
+            f"$\\|y|<{format_number(y_cut)}$"
+        )      
+
+    return fig
+
+
+
 #TODO: Move these to utils somewhere? Find better implementations?
 def _reflect_matrl(mat, odd=False):
     """Reflect a matrix with positive values in the first axis to have the
