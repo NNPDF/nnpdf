@@ -601,6 +601,28 @@ r'\bar{d}': {'dbar':1},
 'c': {'c':1},
 })
 
+@scalar_function_transformation(label="u_V")
+def u_valence(func, xmat, qmat):
+    gv = func([2, -2], xmat, qmat)
+    u = gv[:, [0], ...]
+    ubar = gv[:, [1], ...]
+    return u - ubar
+
+@scalar_function_transformation(label="d_V")
+def d_valence(func, xmat, qmat):
+    gv = func([1, -1], xmat, qmat)
+    d = gv[:, [0], ...]
+    dbar = gv[:, [1], ...]
+    return d - dbar
+
+@scalar_function_transformation(label="S")
+def total_sea(func, xmat, qmat):
+    gv = func([3, -2, -1, -3], xmat, qmat)
+    s = gv[:, [0], ...]
+    ubar = gv[:, [1], ...]
+    dbar = gv[:, [2], ...]
+    sbar = gv[:, [3], ...]
+    return 2.*(ubar + dbar) + s + sbar
 
 @scalar_function_transformation(label="u/d")
 def ud_ratio(func, xmat, qmat):

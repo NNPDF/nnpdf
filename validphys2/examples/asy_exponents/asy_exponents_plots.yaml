@@ -1,0 +1,42 @@
+meta:
+    author: Emanuele R. Nocera
+    title: Asymptotic Exponents
+    keywords: [asy_exp]
+
+pdfs:
+  - {id: "NNPDF40_nnlo_as_01180", label: "NNPDF4.0"}
+
+Q: 5000 # GeV
+
+alpha:
+  xmin: 1e-5
+  xmax: 1e-3
+  ybottom: 0.0
+  ytop: 1.0
+  basis: flavour
+  npoints: 70
+
+beta:
+  xmin: 0.6
+  xmax: 0.9
+  ybottom: 0
+  ytop: 10
+  basis: flavour
+  npoints: 70
+
+show_mc_errors: False
+
+template_text: |
+  ---
+  title: Asymptotic exponents
+  keywords: [asy_exp]
+  ---
+  Asymptotic exponents plots
+  -----------
+  {@alpha plot_alpha_asy@}
+  {@beta plot_beta_asy@}
+  -----------
+
+actions_:
+  - report(main=true)
+  
