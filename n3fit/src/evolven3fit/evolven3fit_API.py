@@ -9,6 +9,7 @@ from ekomark import apply
 from eko import basis_rotation as br
 from eko import run_dglap
 
+
 def evolve_fit(conf_folder):
     """
     Evolves all the fitted replica in conf_folder/nnfit 
@@ -19,27 +20,27 @@ def evolve_fit(conf_folder):
         conf_folder: str or pathlib.Path
             path to the folder containing the fit
     """
-    initial_PDFs_dict = load_fit(conf_folder)
-    eko, theory, op = construct_eko_for_fit(conf_folder)
+    usr_path = pathlib.Path(conf_folder)
+    initial_PDFs_dict = load_fit(usr_path)
+    eko, theory, op = construct_eko_for_fit(usr_path)
+    # construct info file
+    info = gen_info.create_info_file(theory, op, 1, info_update={})  # to be changed
+    dump_info_file(usr_path, info)
     for replica in initial_PDFs_dict.keys():
-        evolve_exportgrid(
-            initial_PDFs_dict[replica],
-            eko,
-            theory,
-            op,
-            int(replica.removeprefix("replica_")),
-            conf_folder,
+        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko, theory, op)
+        dump_evolved_replica(
+            evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
 
 
-def load_fit(conf_folder):
+def load_fit(usr_path):
     """
-    Loads all the replica pdfs at fitting scale in conf_folder and return the exportgrids
+    Loads all the replica pdfs at fitting scale in usr_path and return the exportgrids
 
     Parameters
     ----------
 
-        conf_folder: str or pathlib.Path
+        usr_path: pathlib.Path
             path to the folder containing the fit  
     
     Returns
@@ -48,15 +49,14 @@ def load_fit(conf_folder):
             : dict
             exportgrids info
     """
-    usr_path = pathlib.Path(conf_folder)
     nnfitpath = usr_path / "nnfit"
     replica_list = []
     for subdir, dirs, files in os.walk(nnfitpath):
         for dir in dirs:
             replica_list.append(dir)
     replica_list.remove("input")
-    #remove the eventual evolution folder
-    try: 
+    # remove the eventual evolution folder
+    try:
         replica_list.remove(usr_path.stem)
     except:
         pass
@@ -71,17 +71,17 @@ def load_fit(conf_folder):
 
 
 # Temporary solution. Then it will be loaded from the theory itself
-def construct_eko_for_fit(conf_folder):
+def construct_eko_for_fit(usr_path):
     """
     Construct the eko operator needed for evolution of fitted pdfs
 
     Parameters
     ----------
-        conf_folder: str or pathlib.Path
+        usr_path: pathlib.Path
             path to the folder containing the fit  
     """
     # read the runcard
-    my_runcard = utils.read_runcard(conf_folder)
+    my_runcard = utils.read_runcard(usr_path)
     # theory_card construction
     theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
     theory.pop("FNS")
@@ -89,16 +89,14 @@ def construct_eko_for_fit(conf_folder):
     # construct operator card
     q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
     op_card = gen_op.gen_op_card(q2_grid)
-    #generate eko operator (temporary because it will be loaded from theory)
+    # generate eko operator (temporary because it will be loaded from theory)
     eko_op = run_dglap(t_card, op_card)
     return eko_op, t_card, op_card
 
 
-def evolve_exportgrid(
-    exportgrid, eko, theory_card, operator_card, replica, conf_folder
-):
+def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
     """
-    Evolves the provided exportgrid for the desired replica with the eko and dump the replica in conf_folder/nnfit
+    Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
 
     Parameters
     ----------
@@ -110,29 +108,13 @@ def evolve_exportgrid(
             theory card
         operator_card: dict
             operator card
-        replica: int
-            num replica
-        conf_folder: str
-            path to fit folder
     """
-    usr_path = pathlib.Path(conf_folder)
-    path_where_dump = usr_path / "nnfit" / usr_path.stem
-    #create folder to dump the evolved replica if it does not exist
-    if not os.path.exists(path_where_dump): 
-        os.makedirs(path_where_dump)
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     x_grid = np.array(exportgrid["xgrid"]).astype(np.float)
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
-    # construct and dump info file if not already there
-    info_path = usr_path / "nnfit" / usr_path.stem / (usr_path.stem + ".info")
-    if not info_path.is_file():
-        info = gen_info.create_info_file(
-            theory_card, operator_card, 1, info_update={}
-        )  # to be changed
-        genpdf.export.dump_info(path_where_dump, info)
     # generate block to dump
     targetgrid = operator_card["interpolation_xgrid"]
     block = genpdf.generate_block(
@@ -142,7 +124,23 @@ def evolve_exportgrid(
         Q2grid=operator_card["Q2grid"],
         pids=br.flavor_basis_pids,
     )
-    to_write_in_head = "PdfType: replica\nFromMCReplica: " + str(replica) + "\n"
+    return block
+
+
+def dump_evolved_replica(evolved_block, usr_path, replica_num):
+    path_where_dump = usr_path / "nnfit" / usr_path.stem
+    # create folder to dump the evolved replica if it does not exist
+    if not os.path.exists(path_where_dump):
+        os.makedirs(path_where_dump)
+    to_write_in_head = "PdfType: replica\nFromMCReplica: " + str(replica_num) + "\n"
     genpdf.export.dump_blocks(
-        path_where_dump, replica, [block], pdf_type=to_write_in_head
+        path_where_dump, replica_num, [evolved_block], pdf_type=to_write_in_head
     )
+
+
+def dump_info_file(usr_path, info):
+    # dump info file if not already there
+    path_where_dump = usr_path / "nnfit" / usr_path.stem
+    info_path = path_where_dump / (usr_path.stem + ".info")
+    if not info_path.is_file():
+        genpdf.export.dump_info(path_where_dump, info)

@@ -59,11 +59,10 @@ class LhapdfLike:
         return False
 
 
-def read_runcard(conf_folder):
+def read_runcard(usr_path):
     """
     reads the runcard and returns the relevant information for evolven3fit
     """
-    usr_path = pathlib.Path(conf_folder)
     runcard_path = usr_path / "filter.yml"
     with runcard_path.open() as fp:
         data = yaml.safe_load(fp)
