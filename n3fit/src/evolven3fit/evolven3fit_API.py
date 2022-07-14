@@ -23,7 +23,6 @@ def evolve_fit(conf_folder):
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
     eko, theory, op = construct_eko_for_fit(usr_path)
-    # construct info file
     info = gen_info.create_info_file(theory, op, 1, info_update={})  # to be changed
     dump_info_file(usr_path, info)
     for replica in initial_PDFs_dict.keys():
@@ -79,6 +78,14 @@ def construct_eko_for_fit(usr_path):
     ----------
         usr_path: pathlib.Path
             path to the folder containing the fit  
+    Returns
+    -------
+        : eko.output.Output
+        eko operator
+        : dict
+        theory runcard
+        : dict
+        operator runcard
     """
     # read the runcard
     my_runcard = utils.read_runcard(usr_path)
@@ -108,6 +115,10 @@ def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
             theory card
         operator_card: dict
             operator card
+    Returns
+    -------
+        : np.array
+        evolved block
     """
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
