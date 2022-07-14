@@ -123,8 +123,8 @@ def beta_asy(pdf, *,
 
     return betaGrid
 
-class AsyExponentPlotter(PDFPlotter):
-    """ Class inherenting from BandPDFPlotter, changing title and ylabel to reflect the effective
+class AsyExponentBandPlotter(BandPDFPlotter):
+    """ Class inheriting from BandPDFPlotter, changing title and ylabel to reflect the asymptotic
     exponent being plotted.
     """
 
@@ -140,10 +140,6 @@ class AsyExponentPlotter(PDFPlotter):
             return "Ratio to {}".format(self.normalize_pdf.label)
         else:
             return fr"$\{self.exponent}_a$ for ${parton_name}$"
-
-class AsyExponentBandPlotter(BandPDFPlotter, AsyExponentPlotter):
-    def __init__(self, exponent, *args,  **kwargs):
-        super().__init__(exponent, *args,  **kwargs)
 
 alpha_asy_pdfs = collect('alpha_asy', ('pdfs',))
 
