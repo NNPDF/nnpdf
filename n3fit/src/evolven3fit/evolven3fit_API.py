@@ -25,11 +25,16 @@ def evolve_fit(conf_folder):
     eko, theory, op = construct_eko_for_fit(usr_path)
     info = gen_info.create_info_file(theory, op, 1, info_update={})  # to be changed
     dump_info_file(usr_path, info)
+    utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
         evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko, theory, op)
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
+        # fixing_replica_path
+        utils.fix_replica_path(usr_path, int(replica.removeprefix("replica_")))
+    # remove folder
+    os.rmdir(usr_path / "nnfit" / usr_path.stem)
 
 
 def load_fit(usr_path):

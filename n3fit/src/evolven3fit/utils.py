@@ -3,6 +3,7 @@ import numpy as np
 import math
 import pathlib
 import yaml
+import shutil
 
 
 class LhapdfLike:
@@ -75,3 +76,23 @@ def generate_q2grid(Q0, Qfin):
     """
     grid = np.geomspace(Q0 ** 2, Qfin ** 2, num=100)
     return grid
+
+
+def mv_file(file_path, dest_path):
+    shutil.move(str(file_path), str(dest_path))
+
+
+def fix_info_path(usr_path):
+    info_file_path = usr_path / "nnfit" / usr_path.stem / (usr_path.stem + ".info")
+    dest_path_info = usr_path / "nnfit" / (usr_path.stem + ".info")
+    mv_file(info_file_path, dest_path_info)
+
+
+def fix_replica_path(usr_path, replica_num):
+    replica_file_path = (
+        usr_path / "nnfit" / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
+    )
+    dest_path_replica = (
+        usr_path / "nnfit" / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
+    )
+    mv_file(replica_file_path, dest_path_replica)
