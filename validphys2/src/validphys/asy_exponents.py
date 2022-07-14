@@ -1,26 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-Tools for computing and plotting effective exponents.
+Tools for computing and plotting asymptotic exponents.
 """
-from __future__ import generator_stop
-
 import logging
 import numbers
-import random
 import warnings
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from reportengine import collect
-from reportengine.compat import yaml
 from reportengine.figure import figuregen
-from reportengine.floatformatting import format_number, significant_digits, format_error_value_columns
+from reportengine.floatformatting import format_number 
 from reportengine.table import table
 
 from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
-from validphys.core import PDF, FitSpec
+from validphys.core import PDF
 from validphys.pdfbases import check_basis, Basis
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
@@ -29,9 +24,6 @@ import validphys.pdfgrids as pdfgrids
 from findiff import FinDiff
 
 log = logging.getLogger(__name__)
-
-INTERNAL_LINESTYLE = ['-.', ':']
-INTERNAL_COLOR = plt.rcParams['axes.prop_cycle'].by_key()["color"]
 
 @check_positive('Q')
 @make_argcheck(check_basis)
