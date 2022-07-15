@@ -78,6 +78,14 @@ def generate_q2grid(Q0, Qfin):
     return grid
 
 
+def generate_x_grid():
+    """
+    Generate the xgrid used for the eko
+    """
+    grid = np.geomspace(1e-09, 1.0, num=196)
+    return grid
+
+
 def mv_file(file_path, dest_path):
     shutil.move(str(file_path), str(dest_path))
 
