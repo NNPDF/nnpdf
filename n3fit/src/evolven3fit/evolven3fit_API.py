@@ -99,8 +99,9 @@ def construct_eko_for_fit(usr_path):
     theory.pop("FNS")
     t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
+    op_x_grid = utils.generate_x_grid()
     q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
-    op_card = gen_op.gen_op_card(q2_grid)
+    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": op_x_grid})
     # generate eko operator (temporary because it will be loaded from theory)
     eko_op = run_dglap(t_card, op_card)
     return eko_op, t_card, op_card
