@@ -172,12 +172,16 @@ class CustomLearningRate(Callback):
         self.decay_steps = alphas_settings_dict["learning_rate_settings"]["decay_steps"]
         initial_learning_rate = alphas_settings_dict["learning_rate_settings"]["initial_learning_rate"]
         end_learning_rate = alphas_settings_dict["learning_rate_settings"]["end_learning_rate"]
+        start_fitting_alphas_epoch = alphas_settings_dict["learning_rate_settings"]["start_fitting_alphas_epoch"]
         def decayed_learning_rate(step, decay_steps):
             step = min(step, decay_steps)
             #decay_steps = self.decay_steps * np.ceil(step / self.decay_steps)
-            return ((initial_learning_rate - end_learning_rate) *
-                    (1 - step / decay_steps) ** (power)
-                    ) + end_learning_rate
+            if step < start_fitting_alphas_epoch:
+                return 0.0
+            else:
+                return ((initial_learning_rate - end_learning_rate) *
+                        (1 - step / decay_steps) ** (power)
+                        ) + end_learning_rate
         self.lr = decayed_learning_rate
         super().__init__()
 
