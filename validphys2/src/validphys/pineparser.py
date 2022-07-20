@@ -158,7 +158,7 @@ def _pinelumi_to_columns(pine_luminosity, hadronic):
 
     Parameters
     ----------
-        pine_luminosity: list(tuple)
+        pine_luminosity: list(tuple(int))
             list with a pair of flavours per channel
         hadronic: bool
             flag for hadronic / DIS observables

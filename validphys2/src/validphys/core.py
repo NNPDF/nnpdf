@@ -529,22 +529,28 @@ class DataSetSpec(TupleComp):
 
 class FKTableSpec(TupleComp):
     """
-    In Legacy Mode each fktable has one single path.
-    For pineappl tables instead a FKTable is formed by any number of grids
-    therefore in order to check whether we have a new-format or old-format table
-    we will just check whether fkpath is a list
-    For now holds the metadata as an attribute to this function.
-    This is useless/transitional since this metadata is already in the new CommonData format
+    Each FKTable is formed by a number of sub-fktables to be concatenated
+    each of which having its own path.
+    Therefore the ``fkpath`` variable is a list of paths.
+
+    Before the pineappl implementation, FKTable were already pre-concatenated.
+    The Legacy interface therefore relies on fkpath being just a string or path instead
+
+    The metadata of the FKTable for the given dataset is stored as an attribute to this function.
+    This is transitional, eventually it will be held by the associated CommonData in the new format.
     """
 
     def __init__(self, fkpath, cfactors, metadata=None):
         self.cfactors = cfactors if cfactors is not None else []
-        # NOTE: the legacy interface is expected to be removed by NNPDF5.0
+
+        self.legacy = False
+        # NOTE: the legacy interface is expected to be removed by future releases of NNPDF
         # so please don't write code that relies on it
-        self.legacy = True
-        if isinstance(fkpath, (tuple, list)):
-            self.legacy = False
-            fkpath = tuple(fkpath)
+        if not isinstance(fkpath, (tuple, list)):
+            self.legacy = True
+            fkpath = (fkpath,)
+
+        fkpath = tuple(fkpath)
         self.fkpath = fkpath
         self.metadata = metadata
 

@@ -285,7 +285,7 @@ def fitting_data_dict(
         folds["experimental"].append(~fold)
 
     # This dictionary contains a list of fittable datasets
-    # which contains the instructions on how to generaet each observable for the fit
+    # which contains the instructions on how to generate each observable for the fit
     # plus the information that glue all of them together (covmat, ndata, etc)
     # TODO: for consistency with the rest of validphys a FittableGroup should be created
     dict_out = {
@@ -311,7 +311,7 @@ def fitting_data_dict(
     return dict_out
 
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_experiment",))
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_fitting_group",))
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
