@@ -548,9 +548,10 @@ class FKTableSpec(TupleComp):
         # so please don't write code that relies on it
         if not isinstance(fkpath, (tuple, list)):
             self.legacy = True
-            fkpath = (fkpath,)
+        else:
+            # Make it into a tuple only for the new format
+            fkpath = tuple(fkpath)
 
-        fkpath = tuple(fkpath)
         self.fkpath = fkpath
         self.metadata = metadata
 
