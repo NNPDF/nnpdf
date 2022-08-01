@@ -75,11 +75,16 @@ def _asy(a, b):
 def _smn(a, b, c, d):
     return (a + b) / (c + d)
 
+
 def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
-    return (a + b + c + d + e + f + g + h + i + j) / ( k + l + m + n + o + p + q + r + s + t)
+    return (a + b + c + d + e + f + g + h + i + j) / (
+        k + l + m + n + o + p + q + r + s + t
+    )
+
 
 def _smt(a, b, c, d, e, f, g, h, i, j):
-    return (a + b + c + d + e + f + g + h + i + j)
+    return a + b + c + d + e + f + g + h + i + j
+
 
 def _id(a):
     return a
@@ -95,7 +100,10 @@ OP = {
     "NULL": _id,
 }
 
-class PredictionsRequireCutsError(Exception): pass
+
+class PredictionsRequireCutsError(Exception):
+    pass
+
 
 def _predictions(dataset, pdf, fkfunc):
     """Combine data on all the FKTables in the database according to the
@@ -112,9 +120,15 @@ def _predictions(dataset, pdf, fkfunc):
             "commondata and is not supported."
         )
     cuts = dataset.cuts.load()
-    all_predictions = [
-        fkfunc(load_fktable(fk).with_cuts(cuts), pdf) for fk in dataset.fkspecs
-    ]
+    all_predictions = []
+    for fk in dataset.fkspecs:
+        fk_w_cuts = load_fktable(fk).with_cuts(cuts)
+        all_predictions.append(fkfunc(fk_w_cuts, pdf))
+    # Old fktables repeated values to make DEN and NUM sizes match in RATIO operations
+    # pineappl tables instead just contain the one value used
+    # The code below works for both situation while keeping `true_div` as the operation
+    if dataset.op == "RATIO":
+        all_predictions[-1] = all_predictions[-1].values
     return opfunc(*all_predictions)
 
 
@@ -313,7 +327,7 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
         xx2 = df.index.get_level_values(2)
         # take the active combinations from the luminosity tensor
         partial_lumi = luminosity[..., xx1, xx2]
-        return pd.Series(np.einsum("ijk,kj->i",partial_lumi, df.values))
+        return pd.Series(np.einsum("ijk,kj->i", partial_lumi, df.values))
 
     return sigma.groupby(level=0).apply(appl)
 

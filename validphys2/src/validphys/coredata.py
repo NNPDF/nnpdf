@@ -42,17 +42,37 @@ class FKTableData:
 
     metadata : dict
         Other information contained in the FKTable.
+
+    protected: bool
+        When a fktable is protected cuts will not be applied.
+        The most common use-case is when a total cross section is used
+        as a normalization table for a differential cross section,
+        in legacy code (<= NNPDF4.0) both fktables would be cut using the differential index.
     """
 
     hadronic: bool
     Q0: float
     ndata: int
-    xgrid: np.array
+    xgrid: np.ndarray
     sigma: pd.DataFrame
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
+    protected: bool = False
 
-    # TODO: When we move to something other than the current fktable format,
-    # we should apply the cuts directly before loading the file.
+    def with_cfactor(self, cfactor):
+        """Returns a copy of the FKTableData object with cfactors applied to the fktable"""
+        if all(c == 1.0 for c in cfactor):
+            return self
+        if len(cfactor) != self.ndata:
+            if self.protected:
+                cfactor = cfactor[0]
+            else:
+                name = self.metadata.get("target_dataset")
+                raise ValueError(
+                    f"The length of cfactor for {name} differs from the number of datapoints in the grid"
+                )
+        new_sigma = self.sigma.multiply(pd.Series(cfactor), axis=0, level=0)
+        return dataclasses.replace(self, sigma=new_sigma)
+
     def with_cuts(self, cuts):
         """Return a copy of the FKTabe with the cuts applied.  The data index
         of the sigma operator (the outermost level), contains the data point
@@ -87,14 +107,73 @@ class FKTableData:
         >>> assert newtable.ndata == 2
         >>> assert newtable.metadata['GridInfo'].ndata == 3
         """
-        if hasattr(cuts, 'load'):
+        if hasattr(cuts, "load"):
             cuts = cuts.load()
-        if cuts is None:
+        if cuts is None or self.protected:
             return self
         newndata = len(cuts)
         newsigma = self.sigma.loc[cuts]
         return dataclasses.replace(self, ndata=newndata, sigma=newsigma)
 
+    @property
+    def luminosity_mapping(self):
+        """Return the flavour combinations that contribute to the fktable
+        in the form of a single array
+
+        The return shape is:
+            (nbasis,) for DIS
+            (nbasis*2,) for hadronic
+        """
+        basis = self.sigma.columns.to_numpy()
+        if self.hadronic:
+            ret = np.zeros(14 * 14, dtype=bool)
+            ret[basis] = True
+            basis = np.array(np.where(ret.reshape(14, 14))).T.reshape(-1)
+        return basis
+
+    def get_np_fktable(self):
+        """Returns the fktable as a dense numpy array that can be directly
+        manipulated with numpy
+
+        The return shape is:
+            (ndata, nx, nbasis) for DIS
+            (ndata, nx, nx, nbasis) for hadronic
+        where nx is the length of the xgrid
+        and nbasis the number of flavour contributions that contribute
+        """
+        # Read up the shape of the output table
+        ndata = self.ndata
+        nx = len(self.xgrid)
+        nbasis = self.sigma.shape[1]
+
+        if ndata == 0:
+            if self.hadronic:
+                return np.zeros((ndata, nbasis, nx, nx))
+            return np.zeros((ndata, nbasis, nx))
+
+        # Make the dataframe into a dense numpy array
+
+        # First get the data index out of the way
+        # this is necessary because cuts/shifts and for performance reasons
+        # otherwise we will be putting things in a numpy array in very awkward orders
+        ns = self.sigma.unstack(level=("data",), fill_value=0)
+        x1 = ns.index.get_level_values(0)
+
+        if self.hadronic:
+            x2 = ns.index.get_level_values(1)
+            fk_raw = np.zeros((nx, nx, ns.shape[1]))
+            fk_raw[x2, x1, :] = ns.values
+
+            # The output is (ndata, basis, x1, x2)
+            fktable = fk_raw.reshape((nx, nx, nbasis, ndata)).T
+        else:
+            fk_raw = np.zeros((nx, ns.shape[1]))
+            fk_raw[x1, :] = ns.values
+
+            # The output is (ndata, basis, x1)
+            fktable = fk_raw.reshape((nx, nbasis, ndata)).T
+
+        return fktable
 
 @dataclasses.dataclass(eq=False)
 class CFactorData:
@@ -157,6 +236,7 @@ class CommonData:
         type (ADD/MULT/RAND) and name
         (CORR/UNCORR/THEORYCORR/SKIP)
     """
+
     setname: str
     ndata: int
     commondataproc: str
@@ -185,11 +265,13 @@ class CommonData:
         """
         # Ensure that the cuts we're applying applies to this dataset
         # only check, however, if the cuts is of type :py:class:`validphys.core.Cuts`
-        if hasattr(cuts, 'name') and self.setname != cuts.name:
-            raise ValueError(f"The cuts provided are for {cuts.name} which does not apply "
-                    f"to this commondata file: {self.setname}")
+        if hasattr(cuts, "name") and self.setname != cuts.name:
+            raise ValueError(
+                f"The cuts provided are for {cuts.name} which does not apply "
+                f"to this commondata file: {self.setname}"
+            )
 
-        if hasattr(cuts, 'load'):
+        if hasattr(cuts, "load"):
             cuts = cuts.load()
         if cuts is None:
             return self
@@ -200,9 +282,7 @@ class CommonData:
 
         newndata = len(cuts)
         new_commondata_table = self.commondata_table.loc[cuts]
-        return dataclasses.replace(
-            self, ndata=newndata, commondata_table=new_commondata_table
-        )
+        return dataclasses.replace(self, ndata=newndata, commondata_table=new_commondata_table)
 
     @property
     def central_values(self):
@@ -245,7 +325,6 @@ class CommonData:
         add_table.columns = add_systype["name"].to_numpy()
         return add_table.loc[:, add_table.columns != "SKIP"]
 
-
     def systematic_errors(self, central_values=None):
         """Returns all systematic errors as absolute uncertainties, with a
         single column for each uncertainty. Converts
@@ -272,7 +351,5 @@ class CommonData:
         """
         if central_values is None:
             central_values = self.central_values.to_numpy()
-        converted_mult_errors = (
-            self.multiplicative_errors * central_values[:, np.newaxis] / 100
-        )
+        converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)

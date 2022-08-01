@@ -131,6 +131,8 @@ class ModelTrainer:
         """
         # Save all input information
         self.exp_info = exp_info
+        if pos_info is None:
+            pos_info = []
         self.pos_info = pos_info
         self.integ_info = integ_info
         if self.integ_info is not None:
@@ -275,7 +277,7 @@ class ModelTrainer:
             self.experimental["ndata"] += nd_tr + nd_vl
 
             for dataset in exp_dict["datasets"]:
-                self.all_datasets.append(dataset["name"])
+                self.all_datasets.append(dataset.name)
         self.all_datasets = set(self.all_datasets)
 
         for pos_dict in self.pos_info:
@@ -534,7 +536,7 @@ class ModelTrainer:
             force_set_smallest = input_arr.min() > 1e-9
             if force_set_smallest:
                 new_xgrid = np.linspace(
-                    start=1/input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
+                    start=1 / input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
                 )
             else:
                 new_xgrid = np.linspace(start=0, stop=1.0, endpoint=False, num=input_arr_size)
@@ -568,8 +570,7 @@ class ModelTrainer:
                 scaler = PchipInterpolator(map_from, map_to)
             except ValueError:
                 raise ValueError(
-                    "interpolation_points is larger than the number of unique "
-                                    "input x-values"
+                    "interpolation_points is larger than the number of unique " "input x-values"
                 )
             self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
 
@@ -920,7 +921,9 @@ class ModelTrainer:
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self._hyper_loss(fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models),
+                "loss": self._hyper_loss(
+                    fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models
+                ),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {

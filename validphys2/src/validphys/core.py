@@ -39,6 +39,8 @@ from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
+from validphys.fkparser import load_fktable
+from validphys.pineparser import pineappl_reader
 
 log = logging.getLogger(__name__)
 
@@ -320,7 +322,7 @@ class CommonDataSpec(TupleComp):
 
 
 class DataSetInput(TupleComp):
-    """Represents whatever the user enters in the YAML to specidy a
+    """Represents whatever the user enters in the YAML to specify a
     dataset."""
     def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
         self.name=name
@@ -451,7 +453,8 @@ class DataSetSpec(TupleComp):
 
         if isinstance(fkspecs, FKTableSpec):
             fkspecs = (fkspecs,)
-        self.fkspecs = tuple(fkspecs)
+        fkspecs = tuple(fkspecs)
+        self.fkspecs = fkspecs
         self.thspec = thspec
 
         self.cuts = cuts
@@ -498,6 +501,16 @@ class DataSetSpec(TupleComp):
                 data = DataSet(data, intmask)
         return data
 
+    def load_commondata(self):
+        """Strips the commondata loading from `load`"""
+        cd = self.commondata.load()
+        if self.cuts is not None:
+            loaded_cuts = self.cuts.load()
+            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
+                intmask = [int(ele) for ele in loaded_cuts]
+                cd = CommonData(cd, intmask)
+        return cd
+
     def to_unweighted(self):
         """Return a copy of the dataset with the weight set to one."""
         return self.__class__(
@@ -515,28 +528,82 @@ class DataSetSpec(TupleComp):
         return self.name
 
 class FKTableSpec(TupleComp):
-    def __init__(self, fkpath, cfactors):
-        self.fkpath = fkpath
-        self.cfactors = cfactors
-        super().__init__(fkpath, cfactors)
+    """
+    Each FKTable is formed by a number of sub-fktables to be concatenated
+    each of which having its own path.
+    Therefore the ``fkpath`` variable is a list of paths.
 
-    #NOTE: We cannot do this because Fkset owns the fktable, and trying
-    #to reuse the loaded one fails after it gets deleted.
-    #@functools.lru_cache()
-    def load(self):
+    Before the pineappl implementation, FKTable were already pre-concatenated.
+    The Legacy interface therefore relies on fkpath being just a string or path instead
+
+    The metadata of the FKTable for the given dataset is stored as an attribute to this function.
+    This is transitional, eventually it will be held by the associated CommonData in the new format.
+    """
+
+    def __init__(self, fkpath, cfactors, metadata=None):
+        self.cfactors = cfactors if cfactors is not None else []
+
+        self.legacy = False
+        # NOTE: the legacy interface is expected to be removed by future releases of NNPDF
+        # so please don't write code that relies on it
+        if not isinstance(fkpath, (tuple, list)):
+            self.legacy = True
+        else:
+            # Make it into a tuple only for the new format
+            fkpath = tuple(fkpath)
+
+        self.fkpath = fkpath
+        self.metadata = metadata
+
+        # If this is a yaml file that loads an applgrid-converted pineappl,
+        # keep also the name of the target
+        # this is needed since we can now easily reutilize grids
+        if not self.legacy and self.metadata.get("appl"):
+            super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
+        else:
+            super().__init__(fkpath, cfactors)
+
+    def _load_legacy(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
-class PositivitySetSpec(DataSetSpec):
-    """Extends DataSetSpec to work around the particularities of the positivity datasets"""
+    def _load_pineappl(self):
+        log.info("Reading: %s", self.fkpath)
+        return pineappl_reader(self)
+
+    def load_with_cuts(self, cuts):
+        """Load the fktable and apply cuts inmediately. Returns a FKTableData"""
+        return load_fktable(self).with_cuts(cuts)
+
+    def load(self):
+        if self.legacy:
+            return self._load_legacy()
+        return self._load_pineappl()
+
+
+class LagrangeSetSpec(DataSetSpec):
+    """Extends DataSetSpec to work around the particularities of the positivity, integrability
+    and other Lagrange Multiplier datasets.
+    Internally (for libNNPDF) they are always PositivitySets
+    """
 
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
-        super().__init__(name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts)
-        if len(self.fkspecs) > 1:
-            # The signature of the function does not accept operations either
-            # so more than one fktable cannot be utilized
-            raise ValueError("Positivity datasets can only contain one fktable")
+        super().__init__(
+            name=name,
+            commondata=commondataspec,
+            fkspecs=fkspec,
+            thspec=thspec,
+            cuts=cuts,
+        )
+
+    def to_unweighted(self):
+        log.warning(
+            "Trying to unweight %s, %s are always unweighted",
+            self.__class__.__name__,
+            self.name,
+        )
+        return self
 
     @functools.lru_cache()
     def load(self):
@@ -544,10 +611,13 @@ class PositivitySetSpec(DataSetSpec):
         fk = self.fkspecs[0].load()
         return PositivitySet(cd, fk, self.maxlambda)
 
-    def to_unweighted(self):
-        log.warning("Trying to unweight %s, PositivitySetSpec are always unweighted", self.name)
-        return self
 
+class PositivitySetSpec(LagrangeSetSpec):
+    pass
+
+
+class IntegrabilitySetSpec(LagrangeSetSpec):
+    pass
 
 #We allow to expand the experiment as a list of datasets
 class DataGroupSpec(TupleComp, namespaces.NSList):
@@ -577,6 +647,10 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
             loaded_data = dataset.load()
             sets.append(loaded_data)
         return Experiment(sets, self.name)
+
+    @functools.lru_cache(maxsize=32)
+    def load_commondata(self):
+        return [d.load_commondata() for d in self.datasets]
 
     @property
     def thspec(self):
@@ -730,6 +804,14 @@ class TheoryIDSpec:
 
     def __str__(self):
         return f"Theory {self.id}"
+
+    @property
+    def yamldb_path(self):
+        return self.path / "yamldb"
+
+    def is_pineappl(self):
+        """Check whether this theory is a pineappl-based theory"""
+        return self.yamldb_path.exists()
 
 class ThCovMatSpec:
     def __init__(self, path):

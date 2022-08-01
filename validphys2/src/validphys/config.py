@@ -1063,11 +1063,9 @@ class CoreConfig(configparser.Config):
         bad_msg = f"{kind} must be a mapping with a name ('dataset') and a float multiplier (maxlambda)"
         theoryno, _ = theoryid
         lambda_key = "maxlambda"
-        # BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
+        #BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
         if "poslambda" in setdict and "maxlambda" not in setdict:
-            log.warning(
-                "The `poslambda` argument has been deprecated in favour of `maxlambda`"
-            )
+            log.warning("The `poslambda` argument has been deprecated in favour of `maxlambda`")
             lambda_key = "poslambda"
         try:
             name = setdict["dataset"]
@@ -1076,7 +1074,12 @@ class CoreConfig(configparser.Config):
             raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e
         except ValueError as e:
             raise ConfigError(bad_msg) from e
-        return self.loader.check_posset(theoryno, name, maxlambda)
+        if kind == "posdataset":
+            return self.loader.check_posset(theoryno, name, maxlambda)
+        elif kind == "integdataset":
+            return self.loader.check_integset(theoryno, name, maxlambda)
+        else:
+            raise ConfigError(f"The lagrange multiplier type {kind} is not understood")
 
     @element_of("posdatasets")
     def parse_posdataset(self, posset: dict, *, theoryid):

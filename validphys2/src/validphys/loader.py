@@ -27,11 +27,12 @@ from reportengine.compat import yaml
 from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
-                            peek_commondata_metadata, CutsPolicy,
+                            PositivitySetSpec, IntegrabilitySetSpec, DataSetSpec, PDF, Cuts,
+                            DataGroupSpec, peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper, HyperscanSpec)
 from validphys.utils import tempfile_cleaner
 from validphys import lhaindex
+from validphys import pineparser
 
 DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
 
@@ -359,6 +360,32 @@ class Loader(LoaderBase):
         cfactors = self.check_cfactor(theoryID, setname, cfac)
         return FKTableSpec(fkpath, cfactors)
 
+    def check_fkyaml(self, fkpath, theoryID, cfac):
+        """Load a pineappl fktable
+        Receives a yaml file describing the fktables necessary for a given observable
+        the theory ID and the corresponding cfactors
+        """
+        _, theopath = self.check_theoryID(theoryID)
+        metadata, fklist = pineparser.get_yaml_information(fkpath, theopath)
+        op = metadata["operation"]
+
+        # TODO:
+        #      at the moment there are no pineappl specific c-factors
+        #      so they need to be loaded from the NNPDF names / compounds files
+        cfac_name = metadata["target_dataset"]
+        # check whether there is a compound file
+        cpath = theopath / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
+        if cpath.exists():
+            # Get the target filenames
+            tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
+            cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
+        else:
+            cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
+        ###
+
+        fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
+        return fkspecs, op
+
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
         compound_spec_path = theopath / 'compound' / ('FK_%s-COMPOUND.dat' % setname)
@@ -408,10 +435,18 @@ class Loader(LoaderBase):
         return tuple(cf)
 
     def check_posset(self, theoryID, setname, postlambda):
+        """Load a positivity dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
         fk = self.check_fktable(theoryID, setname, [])
         th =  self.check_theoryID(theoryID)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
+
+    def check_integset(self, theoryID, setname, postlambda):
+        """Load an integrability dataset"""
+        cd = self.check_commondata(setname, 'DEFAULT')
+        fk = self.check_fktable(theoryID, setname, [])
+        th =  self.check_theoryID(theoryID)
+        return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
 
     def get_posset(self, theoryID, setname, postlambda):
         return self.check_posset(theoryID, setname, postlambda).load()
@@ -483,8 +518,12 @@ class Loader(LoaderBase):
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1):
-
+                      weight=1,
+                      ):
+        """Loads a given dataset
+        If the dataset contains new-type fktables, use the
+        pineappl loading function, otherwise fallback to legacy
+        """
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
 
@@ -492,11 +531,17 @@ class Loader(LoaderBase):
 
         commondata = self.check_commondata(
             name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit)
-        try:
-            fkspec, op = self.check_compound(theoryno, name, cfac)
-        except CompoundNotFound:
-            fkspec = self.check_fktable(theoryno, name, cfac)
-            op = None
+
+        if theoryid.is_pineappl():
+            # If it is a pineappl theory, use the pineappl reader
+            fkpath = (theoryid.yamldb_path / name).with_suffix(".yaml")
+            fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
+        else:
+            try:
+                fkspec, op = self.check_compound(theoryno, name, cfac)
+            except CompoundNotFound:
+                fkspec = self.check_fktable(theoryno, name, cfac)
+                op = None
 
         #Note this is simply for convenience when scripting. The config will
         #construct the actual Cuts object by itself
