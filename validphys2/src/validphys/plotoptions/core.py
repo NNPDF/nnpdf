@@ -159,10 +159,8 @@ class PlotInfo:
         plot_params = ChainMap()
         if commondata.plotfiles:
             for file in commondata.plotfiles:
-                with open(file) as f:
-                    processed_input = yaml.round_trip_load(f)
-                    pf = parse_yaml_inp(processed_input, PlottingFile, file)
-                    config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
+                pf = parse_yaml_inp(file, PlottingFile)
+                config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
                 plot_params = plot_params.new_child(config_params)
             if normalize and 'normalize' in plot_params:
                 plot_params = plot_params.new_child(config_params['normalize'])

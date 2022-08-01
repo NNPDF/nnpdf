@@ -53,7 +53,7 @@ theory:
      - - NMCPD_D1
        - NMCPD_D2
      - - NMCPD_P
-   compound: "RATIO"
+   operation: "RATIO"
 
 nnpdf_metadata:
    nnpdf31_process: "DIS NC"
