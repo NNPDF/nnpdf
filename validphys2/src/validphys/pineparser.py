@@ -68,6 +68,13 @@ def pineko_yaml(yaml_file, grids_folder, check_grid_existence=True):
     """
     yaml_content = _load_yaml(yaml_file)
 
+    # TODO: the theory metadata can be found inside the commondata metadata
+    # however, for the time being, pineappl tables contain this information in the `yamldb` database
+    # they should be 100% compatible (and if they are not there is something wrong somewhere)
+    # For now this is inside just to check for compatibility (as there are circular imports to fix)
+    from validphys.commondataparser import ValidTheory
+    theory_meta = ValidTheory(yaml_content)
+
     # Turn the operands and the members into paths (and check all of them exist)
     ret = []
     for operand in yaml_content["operands"]:
