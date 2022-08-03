@@ -2,8 +2,13 @@
 This module implements parsers for commondata and its associated metadata and uncertainties files
 into useful structures that can be fed to the main :py:class:`validphys.coredata.CommonData` class.
 
+A CommonData file is completely defined by a name (which defines the folder in which the information is)
+and a variant (which defines which files inside of the folder will be read).
+
+
 In this module a few auxiliary dataclasses that hold special information:
     - TheoryMeta: contains the necessary information to read the (new style) fktables
+    - KinematicsMeta: containins metadata about the kinematics
     - ReferenceMeta: literature references for the dataset
 
 The CommonMetaData defines how the CommonData file is to be loaded,
@@ -11,12 +16,14 @@ by modifying the CommonMetaData using one of the loaded Variants one can change 
 :py:class:`validphys.coredata.CommonData` object.
 """
 from copy import copy
+from functools import cached_property
 from operator import attrgetter
 from dataclasses import dataclass, field
 from pathlib import Path
 import typing
 
 import pandas as pd
+from reportengine.compat import yaml
 from validobj.custom import Parser
 from validobj import ValidationError, parse_input
 
@@ -60,6 +67,18 @@ class TheoryMeta:
 
 
 @dataclass
+class KinematicsMeta:
+    """Contains all metadata for the kinematics of the dataset"""
+
+    file: ValidPath
+    variables: dict
+
+    @classmethod
+    def parser(cls, meta: dict):
+        parse_input(meta, cls)
+
+
+@dataclass
 class ReferenceMeta:
     """Holds literature information for the dataset"""
 
@@ -82,6 +101,7 @@ class Variant:
 # Define parsers for the more complicated structures
 ValidTheory = Parser(TheoryMeta.parser)
 ValidReference = Parser(ReferenceMeta.parser)
+ValidKinematics = Parser(KinematicsMeta.parser)
 
 
 @Parser
@@ -98,7 +118,7 @@ class CommonMetaData:
     setname: str
     ndata: int
     observable: dict
-    kinematics: dict
+    kinematics: ValidKinematics
     kinematic_coverage: dict
     data_central: ValidPath
     data_uncertainties: typing.List[ValidPath]
@@ -117,10 +137,14 @@ class CommonMetaData:
     _enabled_variant: typing.List[str] = field(default=None, repr=False)
     _default: dict = field(default=None, repr=False)
 
+    # TODO: these methods will be moved to the main CommonData class
+    # as any change of variant should trigger a reload of the commondata
     def enable_variant(self, variant):
         """Enable a variant for this class by giving its name.
         Note that more than one variant can be enabled at once, but the last one will take priority
         """
+        if variant is None:
+            return self.disable_variants()
         if self.variants is None:
             raise ValueError(f"There are no variants defined for {self.setname}")
         if variant not in self.variants:
@@ -141,24 +165,106 @@ class CommonMetaData:
 
 
 # TODO: will be moved to coredata.py and will substitute CommonData.py
-@dataclass(eq=False)
+# and obviously the folder here is only for development purposes
+_folder_data = Path(__file__).parent / "../../../buildmaster"
+
+
+@dataclass
 class _CommonData:
-    metadata: CommonMetaData
-    kinematics: pd.DataFrame
-    uncertainties: pd.DataFrame
-    data: pd.DataFrame
+    """
+    Data, kinematics and uncertainties contained in Commondata files.
+    A CommonData is only defined by its name and the enabled variant.
+
+    The information from CommonData is provided by the following properties
+        - metadata: all metadata information for the dataset
+        - data: central data for the dataset
+        - uncertainties: uncertainties of the dataset
+        - kinematics: kinematic information
+    """
+
+    name: str
+    variant: typing.Optional[str] = None
+
+    def enable_variant(self, new_variant):
+        if new_variant != self.variant:
+            self.variant = new_variant
+            self.metadata.enable_variant(self.variant)
+            # Delete loaded information as it will need to be recomputed
+            del self.data
+            del self.uncertainties
+
+    # The files where the CommonData information is retreived from as defined by the metadata
+    @property
+    def metadata_file(self):
+        return _folder_data / self.name / "metadata.yaml"
+
+    @property
+    def data_file(self):
+        return _folder_data / self.name / self.metadata.data_central
+
+    @property
+    def uncertainity_files(self):
+        return [_folder_data / self.name / i for i in self.metadata.data_uncertainties]
+
+    @property
+    def kinematics_file(self):
+        return _folder_data / self.name / self.metadata.kinematics.file
+
+    @property
+    def ndata(self):
+        return self.metadata.ndata
+
+    @cached_property
+    def metadata(self):
+        ret = parse_yaml_inp(self.metadata_file, CommonMetaData)
+        if self.variant:
+            ret.enable_variant(self.variant)
+        return ret
+
+    @cached_property
+    def data(self):
+        """Pandas DataFrame containing the central data"""
+        datayaml = yaml.safe_load(self.data_file.read_text(encoding="utf-8"))
+        data_df = pd.DataFrame(
+            datayaml["data_central"], index=range(1, self.ndata + 1), columns=["data"]
+        )
+        data_df.index.name = "index"
+        return data_df
+
+    @cached_property
+    def uncertainties(self):
+        """Pandas DataFrame containing all uncertainties"""
+        # TODO: uncertainties are complicated enough that they _might_ need their own class
+        all_df = []
+        for ufile in self.uncertainity_files:
+            uncyaml = yaml.safe_load(ufile.read_text())
+
+            mindex = pd.MultiIndex.from_tuples(
+                [(k, v["treatment"], v["type"]) for k, v in uncyaml["definition"].items()],
+                names=["name", "treatment", "type"],
+            )
+            # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
+            final_df = pd.DataFrame(
+                pd.DataFrame(uncyaml["bins"]).values, columns=mindex, index=range(1, self.ndata + 1)
+            )
+            final_df.index.name = "index"
+            all_df.append(final_df)
+        return pd.concat(all_df, axis=1)
+
+    @cached_property
+    def kinematics(self):
+        """Pandas DataFrame containing kinematic information"""
+        kinyaml = yaml.safe_load(self.kinematics_file.read_text())
+
+        kin_dict = {i + 1: pd.DataFrame(d).stack() for i, d in enumerate(kinyaml["bins"])}
+        kin_df = pd.concat(kin_dict, axis=1, names=["index"]).swaplevel(0, 1).T
+        return kin_df
 
 
 def parse_commondata_folder(commondata, variant=None):
     """Given a commondata folder, parse the entire content into the appropiate objects"""
-    # First read the metadata which will define the commondata being read
-    metadata_file = commondata / "metadata.yaml"
-    common_meta = parse_yaml_inp(metadata_file, CommonMetaData)
-    if variant is not None:
-        common_meta.enable_variant(variant)
-
-    #
-    return common_meta
+    cmdata = _CommonData(commondata, variant=variant)
+    return cmdata
 
 
 def parse_commondata_metadata(metadata_file):
