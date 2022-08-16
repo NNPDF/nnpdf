@@ -64,18 +64,14 @@ def read_runcard(usr_path):
     """
     reads the runcard and returns the relevant information for evolven3fit
     """
-    runcard_path = usr_path / "filter.yml"
-    with runcard_path.open() as fp:
-        data = yaml.safe_load(fp)
-    return data
+    return yaml.safe_load((usr_path / "filter.yml").read_text())
 
 
 def generate_q2grid(Q0, Qfin):
     """
     Generate the q2grid used in the final evolved pdfs (Temporary solution)
     """
-    grid = np.geomspace(Q0 ** 2, Qfin ** 2, num=100)
-    return grid
+    return np.geomspace(Q0 ** 2, Qfin ** 2, num=100)
 
 
 def generate_x_grid():
