@@ -87,16 +87,19 @@ def mv_file(file_path, dest_path):
 
 
 def fix_info_path(usr_path):
-    info_file_path = usr_path / "nnfit" / usr_path.stem / (usr_path.stem + ".info")
-    dest_path_info = usr_path / "nnfit" / (usr_path.stem + ".info")
+    nnfit = usr_path / "nnfit" 
+    info_file = usr_path.stem + ".info"
+    info_file_path = nnfit / usr_path.stem / info_file
+    dest_path_info = nnfit / info_file
     mv_file(info_file_path, dest_path_info)
 
 
 def fix_replica_path(usr_path, replica_num):
+    nnfit = usr_path / "nnfit" 
     replica_file_path = (
-        usr_path / "nnfit" / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
+        nnfit / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
     )
     dest_path_replica = (
-        usr_path / "nnfit" / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
+        nnfit / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
     )
     mv_file(replica_file_path, dest_path_replica)
