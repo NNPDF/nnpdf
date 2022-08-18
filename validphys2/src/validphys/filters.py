@@ -199,14 +199,14 @@ def check_positivity(posdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying positivity tables:')
     for pos in posdatasets:
-        pos.load()
+        pos.load_commondata()
         log.info(f'{pos.name} checked.')
 
 def check_integrability(integdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying integrability tables:')
     for integ in integdatasets:
-        integ.load()
+        integ.load_commondata()
         log.info(f'{integ.name} checked.')
 
 class PerturbativeOrder:
