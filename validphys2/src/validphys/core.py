@@ -606,6 +606,10 @@ class LagrangeSetSpec(DataSetSpec):
         return self
 
     @functools.lru_cache()
+    def load_commondata(self):
+        return self.commondata.load()
+
+    @functools.lru_cache()
     def load(self):
         cd = self.commondata.load()
         fk = self.fkspecs[0].load()
