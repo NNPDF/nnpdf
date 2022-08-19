@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 from n3fit.backends import operations as op
 
 
-def _is_unique(list_of_arrays):
+def is_unique(list_of_arrays):
     """Check whether the list of arrays more than one different arrays"""
     the_first = list_of_arrays[0]
     for i in list_of_arrays[1:]:
@@ -52,13 +52,13 @@ class Observable(MetaLayer, ABC):
             self.fktables.append(op.numpy_to_tensor(fk))
 
         # check how many xgrids this dataset needs
-        if _is_unique(xgrids):
+        if is_unique(xgrids):
             self.splitting = None
         else:
             self.splitting = [i.shape[1] for i in xgrids]
 
         # check how many basis this dataset needs
-        if _is_unique(basis) and _is_unique(xgrids):
+        if is_unique(basis) and is_unique(xgrids):
             self.all_masks = [self.gen_mask(basis[0])]
             self.many_masks = False
         else:

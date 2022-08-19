@@ -12,7 +12,7 @@ import logging
 from itertools import zip_longest
 import numpy as np
 from scipy.interpolate import PchipInterpolator
-import n3fit.model_gen as model_gen
+from n3fit import model_gen
 from n3fit.backends import MetaModel, clear_backend_state, callbacks
 from n3fit.backends import operations as op
 from n3fit.stopping import Stopping
@@ -182,7 +182,6 @@ class ModelTrainer:
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
-        self.input_sizes = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -312,8 +311,8 @@ class ModelTrainer:
         and output (1, masked_ndata) where masked_ndata can be the training/validation
         or the experimental mask (in which cased masked_ndata == ndata).
         Several models can be fitted at once by passing a list of models with a shared input
-        this function will give the same input to every model and will concatenate the output at the end
-        so that the final output of the model is (1, None, 14, n) (with n=number of parallel models)
+        so that every mode receives the same input and the output will be concatenated at the end
+        the final output of the model is then (1, None, 14, n) (with n=number of parallel models).
 
         Parameters
         ----------
@@ -327,15 +326,39 @@ class ModelTrainer:
         """
         log.info("Generating the Model")
 
-        # Construct the input array that will be given to the pdf
-        input_arr = np.concatenate(self.input_list, axis=1).T
+        # In the case of pineappl models all fktables ask for the same grid in x
+        # and so the input can be simplified to be a single grid for all dataset
+        # instead of a concatenation that gets splitted afterwards
+        # However, this is not a _strict_ requirement for pineappl so the solution below
+        # aims to be completely general
+        # Detailed:
+        #    let's assume an input [x1, x1, x1, x2, x2, x3]
+        #    where each xi is a different grid, this will be broken into two lists:
+        #    [x1, x2, x3] (unique grids) and [0,0,0,1,1,2] (index of the grid per dataset)
+        #    The pdf will then be evaluated to concatenate([x1,x2,x3]) and then split (x1, x2, x3)
+        #    Then each of the experiment, looking at the indexes, will receive one of the 3 PDFs
+
+        # Clean the input list
+        inputs_hash = []
+        inputs_unique = []
+        inputs_idx = []
+        for input_grid in self.input_list:
+            ghash = hash(tuple(input_grid.flatten()))
+            if ghash not in inputs_hash:
+                inputs_hash.append(ghash)
+                inputs_unique.append(input_grid)
+            inputs_idx.append(inputs_hash.index(ghash))
+
+        # Concatenate the unique inputs
+        input_arr = np.concatenate(inputs_unique, axis=1).T
         if self._scaler:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
         input_layer = op.numpy_to_input(input_arr)
 
-        # The trainable part of the n3fit framework is a concatenation of all PDF models
-        # each model, in the NNPDF language, corresponds to a different replica
+        # For multireplica fits:
+        #   The trainable part of the n3fit framework is a concatenation of all PDF models
+        #   each model, in the NNPDF language, corresponds to a different replica
         all_replicas_pdf = []
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
@@ -348,13 +371,15 @@ class ModelTrainer:
 
         full_pdf_per_replica = op.stack(all_replicas_pdf, axis=-1)
 
-        # The input layer was a concatenation of all experiments
-        # the output of the pdf on input_layer will be thus a concatenation
-        # we need now to split the output on a different array per experiment
-        sp_ar = [self.input_sizes]
+        # The PDF model was called with a concatenation of all inputs
+        # now the output needs to be splitted so that each experiment takes its corresponding input
+        sp_ar = [[i.shape[1] for i in inputs_unique]]
         sp_kw = {"axis": 1}
         splitting_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
-        splitted_pdf = splitting_layer(full_pdf_per_replica)
+        splitted_pdf_unique = splitting_layer(full_pdf_per_replica)
+
+        # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
+        splitted_pdf = [splitted_pdf_unique[i] for i in inputs_idx]
 
         # If we are in a kfolding partition, select which datasets are out
         training_mask = validation_mask = experimental_mask = [None]
@@ -369,7 +394,6 @@ class ModelTrainer:
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
-
         output_tr = _pdf_injection(splitted_pdf, self.training["output"], training_mask)
         training = MetaModel(full_model_input_dict, output_tr)
 
@@ -412,7 +436,6 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
-        self.input_sizes = []
         for key in ["output", "posmultipliers", "integmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
@@ -467,8 +490,7 @@ class ModelTrainer:
             exp_layer = model_gen.observable_generator(exp_dict)
 
             # Save the input(s) corresponding to this experiment
-            self.input_list += exp_layer["inputs"]
-            self.input_sizes.append(exp_layer["experiment_xsize"])
+            self.input_list.append(exp_layer["inputs"])
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -489,8 +511,7 @@ class ModelTrainer:
 
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
-            self.input_list += pos_layer["inputs"]
-            self.input_sizes.append(pos_layer["experiment_xsize"])
+            self.input_list.append(pos_layer["inputs"])
 
             # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
@@ -516,8 +537,7 @@ class ModelTrainer:
                     integ_dict, positivity_initial=integ_initial, integrability=True
                 )
                 # The input list is still common
-                self.input_list += integ_layer["inputs"]
-                self.input_sizes.append(integ_layer["experiment_xsize"])
+                self.input_list.append(integ_layer["inputs"])
 
                 # The integrability all falls to the training
                 self.training["output"].append(integ_layer["output_tr"])

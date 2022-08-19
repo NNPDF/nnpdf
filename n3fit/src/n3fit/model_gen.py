@@ -9,11 +9,13 @@
 
 
 """
+from itertools import zip_longest
 from dataclasses import dataclass
 import numpy as np
 from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
+from n3fit.layers.observable import is_unique
 
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations as op
@@ -23,7 +25,7 @@ from n3fit.backends import base_layer_selector, regularizer_selector
 
 @dataclass
 class ObservableWrapper:
-    """Wrapper to generate the observable layer once the PDF model is prepared
+    """Wraps many observables into an experimental layer once the PDF model is prepared
     It can take normal datasets or Lagrange-multiplier-like datasets
     (such as positivity or integrability)
     """
@@ -59,8 +61,10 @@ class ObservableWrapper:
         return loss
 
     def _generate_experimental_layer(self, pdf):
-        """Generates the experimental layer from the PDF"""
-        # First split the layer into the different datasets (if needed!)
+        """Generate the experimental layer by feeding to each observable its PDF.
+        In the most general case, each observable might need a PDF evaluated on a different xgrid,
+        the input PDF is evaluated in all points that the experiment needs and needs to be split
+        """
         if len(self.dataset_xsizes) > 1:
             splitting_layer = op.as_layer(
                 op.split,
@@ -68,12 +72,12 @@ class ObservableWrapper:
                 op_kwargs={"axis": 1},
                 name=f"{self.name}_split",
             )
-            split_pdf = splitting_layer(pdf)
+            sp_pdf = splitting_layer(pdf)
+            output_layers = [obs(p) for obs, p in zip(self.observables, sp_pdf)]
         else:
-            split_pdf = [pdf]
-        # Every obs gets its share of the split
-        output_layers = [obs(p_pdf) for p_pdf, obs in zip(split_pdf, self.observables)]
-        # Concatenate all datasets (so that experiments are one single entity)
+            output_layers = [obs(pdf) for obs in self.observables]
+
+        # Finally concatenate all observables (so that experiments are one single entitiy)
         ret = op.concatenate(output_layers, axis=2)
         if self.rotation is not None:
             ret = self.rotation(ret)
@@ -89,11 +93,16 @@ def observable_generator(
     spec_dict, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
     """
-    This function generates the observable model for each experiment.
+    This function generates the observable models for each experiment.
     These are models which takes as input a PDF tensor (1 x size_of_xgrid x flavours) and outputs
-    the result of the observable for each contained dataset (n_points,)
+    the result of the observable for each contained dataset (n_points,).
 
-    An experiment contains an fktable, which is loaded by the convolution layer
+    In summary the model has the following structure:
+        One experiment layer, made of any number of observable layers.
+        Observable layers, corresponding to commondata datasets
+        and made of any number of fktables (and an operation on them).
+
+    An observable contains an fktable, which is loaded by the convolution layer
     (be it hadronic or DIS) and a inv covmat which loaded by the loss.
 
     This function also outputs three "output objects" (which are functions that generate layers)
@@ -129,10 +138,10 @@ def observable_generator(
     """
     spec_name = spec_dict["name"]
     dataset_xsizes = []
+    model_inputs = []
     model_obs_tr = []
     model_obs_vl = []
     model_obs_ex = []
-    model_inputs = []
     # The first step is to compute the observable for each of the datasets
     for dataset in spec_dict["datasets"]:
         # Get the generic information of the dataset
@@ -193,19 +202,30 @@ def observable_generator(
                 name=f"val_{dataset_name}",
             )
 
-        # To know how many xpoints we compute we are duplicating functionality from obs_layer
+        # If the observable layer found that all input grids are equal, the splitting will be None
+        # otherwise the different xgrids need to be stored separately
+        # Note: for pineappl grids, obs_layer_tr.splitting should always be None
         if obs_layer_tr.splitting is None:
-            xgrid = dataset.fktables_data[0].xgrid.reshape(1, -1)
+            xgrid = dataset.fktables_data[0].xgrid
             model_inputs.append(xgrid)
-            dataset_xsizes.append(xgrid.shape[1])
+            dataset_xsizes.append(len(xgrid))
         else:
-            xgrids = [i.xgrid.reshape(1, -1) for i in dataset.fktables_data]
+            xgrids = [i.xgrid for i in dataset.fktables_data]
             model_inputs += xgrids
-            dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
+            dataset_xsizes.append(sum([len(i) for i in xgrids]))
 
         model_obs_tr.append(obs_layer_tr)
         model_obs_vl.append(obs_layer_vl)
         model_obs_ex.append(obs_layer_ex)
+
+    # Check whether all xgrids of all observables in this experiment are equal
+    # if so, simplify the model input
+    if is_unique(model_inputs):
+        model_inputs = model_inputs[0:1]
+        dataset_xsizes = dataset_xsizes[0:1]
+
+    # Reshape all inputs arrays to be (1, nx)
+    model_inputs = np.concatenate(model_inputs).reshape(1, -1)
 
     full_nx = sum(dataset_xsizes)
     if spec_dict["positivity"]:
