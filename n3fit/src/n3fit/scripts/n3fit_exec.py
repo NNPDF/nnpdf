@@ -148,9 +148,10 @@ class N3FitConfig(Config):
         #Theorycovmat flags and defaults
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
         if (thconfig:=file_content.get('theorycovmatconfig')) is not None:
-            N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
             N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting', True) 
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True)  
+            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True) 
+            if N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] or N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting']:
+                N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties', False) 
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties', True) 
         #Sampling flags
