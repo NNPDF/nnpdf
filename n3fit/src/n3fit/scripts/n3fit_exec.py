@@ -147,6 +147,8 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
         #Theorycovmat flags and defaults
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
+        N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = False
+        N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = False
         if (thconfig:=file_content.get('theorycovmatconfig')) is not None:
             N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting', True) 
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True) 

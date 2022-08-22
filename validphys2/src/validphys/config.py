@@ -1584,11 +1584,12 @@ class CoreConfig(configparser.Config):
         # somebody will want to add to this at some point e.g for th. uncertainties
         allowed = {
             "standard_report": "experiment",
+            "thcovmat_fit": "ALL"
         }
         return allowed[spec]
 
     def produce_processed_data_grouping(
-        self, data_grouping=None, data_grouping_recorded_spec_=None
+        self, use_thcovmat_in_fitting, use_thcovmat_in_sampling, data_grouping=None, data_grouping_recorded_spec_=None
     ):
         """Process the data_grouping key from the runcard, or lockfile. If
         `data_grouping_recorded_spec_` is present then its value is taken, and
@@ -1602,6 +1603,8 @@ class CoreConfig(configparser.Config):
         if data_grouping is None:
             # fallback to old default behaviour, but still record to lockfile
             data_grouping = self.parse_data_grouping("standard_report")
+            if use_thcovmat_in_fitting or use_thcovmat_in_sampling:
+                data_grouping = self.parse_data_grouping("thcovmat_fit")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
@@ -1652,17 +1655,6 @@ class CoreConfig(configparser.Config):
             {"data_input": NSList(group, nskey="dataset_input"), "group_name": name}
             for name, group in res.items()
         ]
-
-    def produce_group_dataset_inputs_by_fitting_group(
-        self, data_input, theory_covmat_flag
-    ):
-        """
-        Groups datasets all together in a group called ALL if the theory covariance matrix
-        is used in the fit, otherwise it groups them by experiment.
-        """
-        if theory_covmat_flag:
-            return self.produce_group_dataset_inputs_by_metadata(data_input, "ALL")
-        return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
     def produce_fivetheories(self, point_prescription):
         if point_prescription == "5bar point":
