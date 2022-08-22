@@ -1595,8 +1595,10 @@ class CoreConfig(configparser.Config):
         `data_grouping_recorded_spec_` is present then its value is taken, and
         the runcard is assumed to be a lockfile.
 
-        If data_grouping is None, then fall back to old behaviour of grouping
-        by experiment.
+        If data_grouping is None, then, if either use_thcovmat_in_fitting or use_thcovmat_in_sampling
+        (or both) are true (which means that the fit is a thcovmat fit), group all the datasets 
+        together, otherwise fall back to the default behaviour of grouping by 
+        experiment (called standard_report).
 
         Else, the user can specfiy their own grouping, for example metadata_process.
         """
