@@ -1589,7 +1589,7 @@ class CoreConfig(configparser.Config):
         return allowed[spec]
 
     def produce_processed_data_grouping(
-        self, use_thcovmat_in_fitting, use_thcovmat_in_sampling, data_grouping=None, data_grouping_recorded_spec_=None
+        self, use_thcovmat_in_fitting=False, use_thcovmat_in_sampling=False, data_grouping=None, data_grouping_recorded_spec_=None
     ):
         """Process the data_grouping key from the runcard, or lockfile. If
         `data_grouping_recorded_spec_` is present then its value is taken, and
