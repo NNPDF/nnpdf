@@ -9,7 +9,6 @@
 
 
 """
-from itertools import zip_longest
 from dataclasses import dataclass
 import numpy as np
 from n3fit.msr import msr_impose
