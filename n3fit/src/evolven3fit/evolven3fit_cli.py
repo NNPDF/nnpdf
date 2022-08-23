@@ -14,13 +14,13 @@ def cli():
 
 @cli.command("evolve")
 @click.argument("configuration_folder", nargs=1)
-@click.option("-o", "--ev_ord", type=int)
-@click.option("-i", "--ev_it", type=int)
-@click.option("-n", "--n_cores", type=int)
-@click.option("-b", "--back", type=str)
-@click.option("-d", "--dump", type=click.Path)
-@click.option("-l", "--load", type=click.Path)
-def cli_evolven3fit(configuration_folder, ev_ord=10, ev_it=1, n_cores=1, back="expanded", dump=None, load=None):
+@click.option("-o", "--ev_ord", type=int, default = 10)
+@click.option("-i", "--ev_it", type=int, default = 1)
+@click.option("-n", "--n_cores", type=int, default = 1)
+@click.option("-b", "--back", type=str, default = "expanded")
+@click.option("-d", "--dump")
+@click.option("-l", "--load")
+def cli_evolven3fit(configuration_folder, ev_ord, ev_it, n_cores, back, dump, load):
     """Evolves the fitted PDFs.
 
         If a path is given for the dump option, the eko 

@@ -33,7 +33,7 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=N
             path where the eko is dumped (if None the eko won't be
             stored)
     """
-    log_file = logging.FileHandler(pathlib.Path(conf_folder / "eko_log.log"))
+    log_file = logging.FileHandler(pathlib.Path(conf_folder) / "eko_log.log")
     log_file.setLevel(logging.INFO)
     log_file.setFormatter(
             logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
