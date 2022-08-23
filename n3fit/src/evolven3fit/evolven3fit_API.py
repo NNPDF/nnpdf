@@ -8,9 +8,12 @@ import os
 from ekomark import apply
 from eko import basis_rotation as br
 from eko import run_dglap
+from eko import output
+import logging
 
+logger = logging.getLogger(__name__) 
 
-def evolve_fit(conf_folder):
+def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=None):
     """
     Evolves all the fitted replica in conf_folder/nnfit 
 
@@ -19,15 +22,39 @@ def evolve_fit(conf_folder):
 
         conf_folder: str or pathlib.Path
             path to the folder containing the fit
+        op_card_dict: dict
+            user settings for the op_card
+        t_card_dict: dict
+            user settings for the t_card
+        eko_path: str or pathlib.Path
+            path where the eko is stored (if None the eko will be
+            recomputed)
+        dump_eko: str or pathlib.Path
+            path where the eko is dumped (if None the eko won't be
+            stored)
     """
+    log_file = logging.FileHandler(pathlib.Path(conf_folder / "eko_log.log"))
+    log_file.setLevel(logging.INFO)
+    log_file.setFormatter(
+            logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
+        )
+    for logger_ in (logger, *[logging.getLogger("eko")]):
+        logger_.handlers = []
+        logger_.setLevel(logging.INFO)
+        logger_.addHandler(log_file)
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    eko, theory, op = construct_eko_for_fit(usr_path)
+    theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict)
+    if eko_path is not None:
+        eko_path = pathlib.Path(eko_path)
+        eko_op = output.Output.load_tar(eko_path) 
+    else:
+        eko_op = construct_eko_for_fit(theory, op, dump_eko)
     info = gen_info.create_info_file(theory, op, 1, info_update={})  # to be changed
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko, theory, op)
+        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, theory, op)
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
@@ -74,8 +101,24 @@ def load_fit(usr_path):
     return pdf_dict
 
 
+def construct_eko_cards(usr_path, op_card_dict, t_card_dict):
+    """Return the theory and operator cards used to construct the eko"""
+    # read the runcard
+    my_runcard = utils.read_runcard(usr_path)
+    # theory_card construction
+    theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
+    theory.pop("FNS")
+    theory.update(t_card_dict)
+    t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
+    # construct operator card
+    op_x_grid = utils.generate_x_grid()
+    q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
+    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": op_x_grid})
+    op_card.update(op_card_dict)
+    return t_card, op_card
+
 # Temporary solution. Then it will be loaded from the theory itself
-def construct_eko_for_fit(usr_path):
+def construct_eko_for_fit(t_card, op_card, save_path=None):
     """
     Construct the eko operator needed for evolution of fitted pdfs
 
@@ -83,6 +126,9 @@ def construct_eko_for_fit(usr_path):
     ----------
         usr_path: pathlib.Path
             path to the folder containing the fit  
+        save_path: pathlib.Path
+            path where the eko will be saved (the eko
+            won't be saved if save_path is None)
     Returns
     -------
         : eko.output.Output
@@ -92,19 +138,15 @@ def construct_eko_for_fit(usr_path):
         : dict
         operator runcard
     """
-    # read the runcard
-    my_runcard = utils.read_runcard(usr_path)
-    # theory_card construction
-    theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
-    theory.pop("FNS")
-    t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
-    # construct operator card
-    op_x_grid = utils.generate_x_grid()
-    q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
-    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": op_x_grid})
+    
     # generate eko operator (temporary because it will be loaded from theory)
     eko_op = run_dglap(t_card, op_card)
-    return eko_op, t_card, op_card
+    if save_path is not None:
+        try:
+            eko_op.dump_tar(save_path)
+        except:
+            pass
+    return eko_op
 
 
 def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
