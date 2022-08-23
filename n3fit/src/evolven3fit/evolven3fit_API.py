@@ -24,6 +24,7 @@ def evolve_fit(conf_folder):
     initial_PDFs_dict = load_fit(usr_path)
     eko, theory, op = construct_eko_for_fit(usr_path)
     info = gen_info.create_info_file(theory, op, 1, info_update={})  # to be changed
+    info["NumMembers"] = "REPLACE_NREP"
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
