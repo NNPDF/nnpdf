@@ -71,14 +71,14 @@ def generate_q2grid(Q0, Qfin):
     """
     Generate the q2grid used in the final evolved pdfs (Temporary solution)
     """
-    return np.geomspace(Q0 ** 2, Qfin ** 2, num=100)
+    return np.geomspace(Q0 ** 2, Qfin ** 2, num=100).tolist()
 
 
 def generate_x_grid():
     """
     Generate the xgrid used for the eko
     """
-    grid = np.geomspace(1e-09, 1.0, num=196)
+    grid = np.geomspace(1e-09, 1.0, num=196).tolist()
     return grid
 
 
