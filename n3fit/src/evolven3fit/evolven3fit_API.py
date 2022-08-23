@@ -51,6 +51,7 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=N
     else:
         eko_op = construct_eko_for_fit(theory, op, dump_eko)
     info = gen_info.create_info_file(theory, op, 1, info_update={})  # to be changed
+    info["NumMembers"] = "REPLACE_NREP"
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
