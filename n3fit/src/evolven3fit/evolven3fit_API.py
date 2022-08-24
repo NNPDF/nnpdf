@@ -1,4 +1,4 @@
-from ekobox import evol_pdf, gen_theory, gen_op, genpdf, gen_info
+from ekobox import gen_theory, gen_op, genpdf, gen_info
 import pathlib
 import numpy as np
 import yaml
@@ -33,7 +33,10 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=N
             path where the eko is dumped (if None the eko won't be
             stored)
     """
-    log_file = logging.FileHandler(pathlib.Path(conf_folder) / "eko_log.log")
+    log_file = pathlib.Path(conf_folder) / f"evolven3fit.log"
+    if log_file.exists():
+        log_file.unlink()
+    log_file = logging.FileHandler(log_file)
     log_file.setLevel(logging.INFO)
     log_file.setFormatter(
             logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
