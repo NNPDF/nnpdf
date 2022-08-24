@@ -179,8 +179,7 @@ def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
     # generate block to dump
     targetgrid = operator_card["interpolation_xgrid"]
     block = genpdf.generate_block(
-        lambda pid, x, Q2, evolved_PDF=evolved_pdf: targetgrid[targetgrid.index(x)]
-        * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
+        lambda pid, x, Q2, evolved_PDF=evolved_pdf: x * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
         xgrid=targetgrid,
         Q2grid=operator_card["Q2grid"],
         pids=br.flavor_basis_pids,

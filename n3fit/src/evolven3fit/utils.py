@@ -45,14 +45,14 @@ class LhapdfLike:
         self.q20 = q20
         self.x_grid = x_grid
         self.funcs = [
-            interp1d(self.x_grid, self.pdf_grid[pid])
+            interp1d(self.x_grid, self.pdf_grid[pid], kind='cubic')
             for pid in range(len(self.pids_order))
         ]
 
     def xfxQ2(self, pid, x, q2):
         if not math.isclose(q2, self.q20, rel_tol=1e-6):
             raise ValueError("The q2 requested is not the fitting scale of this pdf")
-        return x * (self.funcs[self.pids_order.index(self.pids_dict[pid])](x))
+        return self.funcs[self.pids_order.index(self.pids_dict[pid])](x)
 
     def hasFlavor(self, pid):
         if pid in self.pids_dict.keys():
@@ -78,7 +78,7 @@ def generate_x_grid():
     """
     Generate the xgrid used for the eko
     """
-    grid = np.geomspace(1e-09, 1.0, num=50).tolist()
+    grid = np.geomspace(1e-09, 1.0, num=196).tolist()
     return grid
 
 
