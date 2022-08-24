@@ -1039,7 +1039,7 @@ def plot_positivity(
     fig, ax = plt.subplots()
     ax.axhline(0, color="red")
 
-    posset = posdataset.load()
+    posset = posdataset.load_commondata()
     ndata = posset.GetNData()
     xvals = []
 

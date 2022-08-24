@@ -360,13 +360,14 @@ class Loader(LoaderBase):
         cfactors = self.check_cfactor(theoryID, setname, cfac)
         return FKTableSpec(fkpath, cfactors)
 
-    def check_fkyaml(self, fkpath, theoryID, cfac):
+    def check_fkyaml(self, name, theoryID, cfac):
         """Load a pineappl fktable
         Receives a yaml file describing the fktables necessary for a given observable
         the theory ID and the corresponding cfactors
         """
-        _, theopath = self.check_theoryID(theoryID)
-        metadata, fklist = pineparser.get_yaml_information(fkpath, theopath)
+        theory = self.check_theoryID(theoryID)
+        fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
+        metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
         op = metadata["operation"]
 
         # TODO:
@@ -374,7 +375,7 @@ class Loader(LoaderBase):
         #      so they need to be loaded from the NNPDF names / compounds files
         cfac_name = metadata["target_dataset"]
         # check whether there is a compound file
-        cpath = theopath / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
+        cpath = theory.path / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
         if cpath.exists():
             # Get the target filenames
             tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
@@ -437,15 +438,21 @@ class Loader(LoaderBase):
     def check_posset(self, theoryID, setname, postlambda):
         """Load a positivity dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
-        fk = self.check_fktable(theoryID, setname, [])
-        th =  self.check_theoryID(theoryID)
+        th = self.check_theoryID(theoryID)
+        if th.is_pineappl():
+            fk, _ = self.check_fkyaml(setname, theoryID, [])
+        else:
+            fk = self.check_fktable(theoryID, setname, [])
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 
     def check_integset(self, theoryID, setname, postlambda):
         """Load an integrability dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
-        fk = self.check_fktable(theoryID, setname, [])
-        th =  self.check_theoryID(theoryID)
+        th = self.check_theoryID(theoryID)
+        if th.is_pineappl():
+            fk, _ = self.check_fkyaml(setname, theoryID, [])
+        else:
+            fk = self.check_fktable(theoryID, setname, [])
         return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
 
     def get_posset(self, theoryID, setname, postlambda):
@@ -534,8 +541,7 @@ class Loader(LoaderBase):
 
         if theoryid.is_pineappl():
             # If it is a pineappl theory, use the pineappl reader
-            fkpath = (theoryid.yamldb_path / name).with_suffix(".yaml")
-            fkspec, op = self.check_fkyaml(fkpath, theoryno, cfac)
+            fkspec, op = self.check_fkyaml(name, theoryno, cfac)
         else:
             try:
                 fkspec, op = self.check_compound(theoryno, name, cfac)
