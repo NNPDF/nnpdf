@@ -49,7 +49,7 @@
       "trainable": true
     }
   ],
-  "stop_epoch": 313,
+  "stop_epoch": 314,
   "best_epoch": 11,
   "erf_tr": 3.859008312225342,
   "erf_vl": 3.781097650527954,
