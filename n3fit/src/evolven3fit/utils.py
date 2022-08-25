@@ -88,7 +88,7 @@ def read_runcard(usr_path):
     """
     reads the runcard and returns the relevant information for evolven3fit
     """
-    return yaml.safe_load((usr_path / "filter.yml").read_text())
+    return yaml.safe_load((usr_path / "filter.yml"))
 
 
 def generate_q2grid(Q0, Qfin):
