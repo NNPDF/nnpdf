@@ -60,6 +60,7 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=N
     theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict)
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
+        logger.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
         eko_op = construct_eko_for_fit(theory, op, dump_eko)
@@ -153,6 +154,7 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
     eko_op = run_dglap(t_card, op_card)
     if save_path is not None:
         try:
+            logger.info(f"Saving computed eko to : {save_path}")
             eko_op.dump_tar(save_path)
         except:
             pass
