@@ -1,4 +1,3 @@
-
 """
 The evolven3fit_API module provides the necessary tools to evolve a fit 
 using eko and to prepare it for postfit.  
@@ -20,11 +19,12 @@ from . import utils
 from validphys.loader import Loader
 
 
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__name__)
 
-def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=None):
+
+def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=None):
     """
-    Evolves all the fitted replica in conf_folder/nnfit 
+    Evolves all the fitted replica in conf_folder/nnfit
 
     Parameters
     ----------
@@ -42,14 +42,14 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=N
             path where the eko is dumped (if None the eko won't be
             stored)
     """
-    log_file = pathlib.Path(conf_folder) / f"evolven3fit.log"
+    log_file = pathlib.Path(conf_folder) / "evolven3fit.log"
     if log_file.exists():
         log_file.unlink()
     log_file = logging.FileHandler(log_file)
     log_file.setLevel(logging.INFO)
     log_file.setFormatter(
-            logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
-        )
+        logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
+    )
     for logger_ in (logger, *[logging.getLogger("eko")]):
         logger_.handlers = []
         logger_.setLevel(logging.INFO)
@@ -59,16 +59,18 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict ,eko_path=None, dump_eko=N
     theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict)
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
-        eko_op = output.Output.load_tar(eko_path) 
+        eko_op = output.Output.load_tar(eko_path)
     else:
         eko_op = construct_eko_for_fit(theory, op, dump_eko)
-    info = gen_info.create_info_file(theory, op, 1, info_update={})  
+    info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, theory, op)
+        evolved_block = evolve_exportgrid(
+            initial_PDFs_dict[replica], eko_op, theory, op
+        )
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
@@ -86,8 +88,8 @@ def load_fit(usr_path):
     ----------
 
         usr_path: pathlib.Path
-            path to the folder containing the fit  
-    
+            path to the folder containing the fit
+
     Returns
     -------
 
@@ -131,6 +133,7 @@ def construct_eko_cards(usr_path, op_card_dict, t_card_dict):
     op_card.update(op_card_dict)
     return t_card, op_card
 
+
 # Temporary solution. Then it will be loaded from the theory itself
 def construct_eko_for_fit(t_card, op_card, save_path=None):
     """
@@ -139,7 +142,7 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
     Parameters
     ----------
         usr_path: pathlib.Path
-            path to the folder containing the fit  
+            path to the folder containing the fit
         save_path: pathlib.Path
             path where the eko will be saved (the eko
             won't be saved if save_path is None)
@@ -152,7 +155,7 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
         : dict
         operator runcard
     """
-    
+
     # generate eko operator (temporary because it will be loaded from theory)
     eko_op = run_dglap(t_card, op_card)
     if save_path is not None:
@@ -191,7 +194,8 @@ def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
     # generate block to dump
     targetgrid = operator_card["interpolation_xgrid"]
     block = genpdf.generate_block(
-        lambda pid, x, Q2, evolved_PDF=evolved_pdf: x * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
+        lambda pid, x, Q2, evolved_PDF=evolved_pdf: x
+        * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
         xgrid=targetgrid,
         Q2grid=operator_card["Q2grid"],
         pids=br.flavor_basis_pids,
