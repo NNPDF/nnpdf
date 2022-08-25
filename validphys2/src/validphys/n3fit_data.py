@@ -311,7 +311,7 @@ def fitting_data_dict(
     return dict_out
 
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_fitting_group",))
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
