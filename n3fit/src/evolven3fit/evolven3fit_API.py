@@ -8,6 +8,7 @@ import logging
 import numpy as np
 import yaml
 import os
+import glob
 
 from ekobox import gen_theory, gen_op, genpdf, gen_info
 from ekomark import apply
@@ -98,22 +99,14 @@ def load_fit(usr_path):
     """
     nnfitpath = usr_path / "nnfit"
     replica_list = []
-    for subdir, dirs, files in os.walk(nnfitpath):
-        for dir in dirs:
-            replica_list.append(dir)
-    replica_list.remove("input")
-    # remove the eventual evolution folder
-    try:
-        replica_list.remove(usr_path.stem)
-    except:
-        pass
+    for file in nnfitpath.glob("replica_*"):
+            replica_list.append(file)
     pdf_dict = {}
     for replica in replica_list:
-        rep_path = pathlib.Path(replica) / (usr_path.stem + ".exportgrid")
-        yaml_file = nnfitpath / rep_path.relative_to(rep_path.anchor)
+        yaml_file = pathlib.Path(replica) / (usr_path.stem + ".exportgrid")
         with yaml_file.open() as fp:
             data = yaml.safe_load(fp)
-        pdf_dict[replica] = data
+        pdf_dict[replica.stem] = data
     return pdf_dict
 
 
