@@ -1,3 +1,9 @@
+
+"""
+The evolven3fit_API module provides the necessary tools to evolve a fit 
+using eko and to prepare it for postfit.  
+"""
+
 import pathlib
 import logging
 import numpy as np
