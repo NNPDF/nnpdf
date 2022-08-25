@@ -148,8 +148,10 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
         : dict
         operator runcard
     """
-
     # generate eko operator (temporary because it will be loaded from theory)
+    if save_path is not None:
+        if not save_path.parent.exists():
+            raise ValueError("Path where eko should be dumped does not exists")
     eko_op = run_dglap(t_card, op_card)
     if save_path is not None:
         try:
