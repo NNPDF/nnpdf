@@ -55,9 +55,8 @@ class LhapdfLike:
         return self.funcs[self.pids_order.index(self.pids_dict[pid])](x)
 
     def hasFlavor(self, pid):
-        if pid in self.pids_dict.keys():
-            return True
-        return False
+        return pid in self.pids_dict.keys():
+            
 
 
 def read_runcard(usr_path):
