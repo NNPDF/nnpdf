@@ -100,7 +100,7 @@ def load_fit(usr_path):
     nnfitpath = usr_path / "nnfit"
     replica_list = []
     for file in nnfitpath.glob("replica_*"):
-            replica_list.append(file)
+        replica_list.append(file)
     pdf_dict = {}
     for replica in replica_list:
         yaml_file = pathlib.Path(replica) / (usr_path.stem + ".exportgrid")
@@ -134,8 +134,10 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
 
     Parameters
     ----------
-        usr_path: pathlib.Path
-            path to the folder containing the fit
+        t_card: dict
+            theory card to use for the eko
+        op_card: dict
+            operator card to use for the eko
         save_path: pathlib.Path
             path where the eko will be saved (the eko
             won't be saved if save_path is None)
@@ -143,10 +145,6 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
     -------
         : eko.output.Output
         eko operator
-        : dict
-        theory runcard
-        : dict
-        operator runcard
     """
     # generate eko operator (temporary because it will be loaded from theory)
     if save_path is not None:
@@ -199,6 +197,19 @@ def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
 
 
 def dump_evolved_replica(evolved_block, usr_path, replica_num):
+    """
+    Dump the evolved replica given by evolved_block as the replica num "replica_num" in
+    the folder usr_path/nnfit/usr_path.stem.
+
+    Parameters
+    ----------
+        evolved_block: numpyp.array
+            block of an evolved PDF
+        usr_path: pathlib.Path
+            path of the fit folder
+        replica_num: int
+            replica number
+    """
     path_where_dump = usr_path / "nnfit" / usr_path.stem
     # create folder to dump the evolved replica if it does not exist
     path_where_dump.mkdir(exist_ok=True)
@@ -209,6 +220,16 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
 
 
 def dump_info_file(usr_path, info):
+    """
+    Dump the info file given by info in the folder usr_path/nnfit/usr_path.stem.
+
+    Parameters
+    ----------
+        usr_path: pathlib.Path
+            path of the fit folder
+        info: dict
+            info of the fit
+    """
     # dump info file if not already there
     path_where_dump = usr_path / "nnfit" / usr_path.stem
     info_path = path_where_dump / (usr_path.stem + ".info")
