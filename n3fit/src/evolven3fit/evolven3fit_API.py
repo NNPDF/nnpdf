@@ -44,7 +44,7 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=N
     """
     log_file = pathlib.Path(conf_folder) / "evolven3fit.log"
     if log_file.exists():
-        log_file.unlink()
+        raise SystemError("Log file already exists: evolven3fit has already been run?")
     log_file = logging.FileHandler(log_file)
     log_file.setLevel(logging.INFO)
     log_file.setFormatter(
