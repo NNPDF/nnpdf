@@ -2,7 +2,7 @@ from scipy.interpolate import interp1d
 import numpy as np
 import math
 import pathlib
-import yaml
+from reportengine.compat import yaml
 import shutil
 
 
