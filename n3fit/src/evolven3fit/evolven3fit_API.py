@@ -77,7 +77,7 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=N
         # fixing_replica_path
         utils.fix_replica_path(usr_path, int(replica.removeprefix("replica_")))
     # remove folder
-    os.rmdir(usr_path / "nnfit" / usr_path.stem)
+    (usr_path / "nnfit" / usr_path.stem).rmdir()
 
 
 def load_fit(usr_path):
