@@ -10,9 +10,7 @@ import pandas as pd
 from reportengine.compat import yaml
 
 from validphys.coredata import FKTableData
-
-########### This part might eventually be part of whatever commondata reader
-EXT = "pineappl.lz4"
+from validphys.commondataparser import TheoryMeta, EXT
 
 
 class YamlFileNotFound(FileNotFoundError):
@@ -44,7 +42,7 @@ def _load_yaml(yaml_file):
     return ret
 
 
-def pineko_yaml(yaml_file, grids_folder, check_grid_existence=True):
+def pineko_yaml(yaml_file, grids_folder):
     """Given a yaml_file, returns the corresponding dictionary and grids.
 
     The dictionary contains all information and we return an extra field
@@ -56,8 +54,6 @@ def pineko_yaml(yaml_file, grids_folder, check_grid_existence=True):
         path of the yaml file for the given dataset
     grids_folder : pathlib.Path
         path of the grids folder
-    check_grid_existence: bool
-        if True (default) checks whether the grid exists
 
     Returns
     -------
@@ -71,22 +67,10 @@ def pineko_yaml(yaml_file, grids_folder, check_grid_existence=True):
     # TODO: the theory metadata can be found inside the commondata metadata
     # however, for the time being, pineappl tables contain this information in the `yamldb` database
     # they should be 100% compatible (and if they are not there is something wrong somewhere)
-    # For now this is inside just to check for compatibility (as there are circular imports to fix)
-    from validphys.commondataparser import ValidTheory
-    theory_meta = ValidTheory(yaml_content)
-
-    # Turn the operands and the members into paths (and check all of them exist)
-    ret = []
-    for operand in yaml_content["operands"]:
-        tmp = []
-        for member in operand:
-            p = grids_folder / f"{member}.{EXT}"
-            if not p.exists() and check_grid_existence:
-                raise GridFileNotFound(f"Failed to find {p}")
-            tmp.append(p)
-        ret.append(tmp)
-
-    return yaml_content, ret
+    # so already at this stage, use TheoryMeta parser to get the metadata for pineappl theories
+    theory_meta = TheoryMeta.parser(yaml_content) # TODO: why ValidTheory is not usable here?
+    member_paths = theory_meta.fktables_to_paths(grids_folder)
+    return theory_meta, member_paths
 
 
 def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
@@ -127,7 +111,8 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
         shift: list(int)
             Shift in the data index for each grid that forms the fktable
     """
-    if metadata.get("apfelcomb") is None:
+    apfelcomb = metadata.apfelcomb
+    if apfelcomb is None:
         return None
 
     # Can't pathlib understand double suffixes?
@@ -135,24 +120,24 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
     ret = {}
 
     # Check whether we have a normalization active and whether it affects any of the grids
-    if metadata["apfelcomb"].get("normalization") is not None:
-        norm_info = metadata["apfelcomb"]["normalization"]
+    if apfelcomb.normalization is not None:
+        norm_info = apfelcomb.normalization
         # Now fill the operands that need normalization
         ret["normalization"] = [norm_info.get(op, 1.0) for op in operands]
 
     # Check whether the repetition flag is active
-    if metadata["apfelcomb"].get("repetition_flag") is not None:
+    if apfelcomb.repetition_flag is not None:
         if len(operands) == 1:
-            ret["repetition_flag"] = operands[0] in metadata["apfelcomb"]["repetition_flag"]
+            ret["repetition_flag"] = operands[0] in apfelcomb.repetition_flag
         else:
             # Just for the sake of it, let's check whether we did something stupid
-            if any(op in metadata["apfelcomb"]["repetition_flag"] for op in operands):
+            if any(op in apfelcomb.repetition_flag for op in operands):
                 raise ValueError(f"The yaml info for {metadata['target_dataset']} is broken")
 
     # Check whether the dataset has shifts
     # NOTE: this only happens for ATLASZPT8TEVMDIST, if that gets fixed we might as well remove it
-    if metadata["apfelcomb"].get("shifts") is not None:
-        shift_info = metadata["apfelcomb"]["shifts"]
+    if apfelcomb.shifts is not None:
+        shift_info = apfelcomb.shifts
         ret["shifts"] = [shift_info.get(op, 0) for op in operands]
 
     return ret
@@ -290,7 +275,7 @@ def pineappl_reader(fkspec):
                 ndata += apfelcomb["shifts"][i]
 
         # Check conversion factors and remove the x* from the fktable
-        raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
+        raw_fktable *= fkspec.metadata.conversion_factor / xdivision
 
         # Create the multi-index for the dataframe
         # for optimized pineappls different grids can potentially have different indices
