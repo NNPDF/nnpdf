@@ -17,7 +17,6 @@ by modifying the CommonMetaData using one of the loaded Variants one can change 
 """
 from copy import copy
 from functools import cached_property
-from operator import attrgetter
 from dataclasses import dataclass, field
 from pathlib import Path
 import typing
@@ -27,10 +26,11 @@ from reportengine.compat import yaml
 from validobj.custom import Parser
 from validobj import ValidationError, parse_input
 
-from validphys import convolution
 from validphys.utils import parse_yaml_inp
-from validphys.core import peek_commondata_metadata
 from validphys.coredata import CommonData
+
+EXT = "pineappl.lz4"
+
 
 # Auxiliary parser for common types or sanity checks
 @Parser
@@ -43,8 +43,11 @@ def ValidPath(path_str: str) -> Path:
 def ValidOperation(op_str: str) -> str:
     """Ensures that the operation defined in the commondata file is implemented in validphys"""
     ret = op_str.upper()
-    # TODO: make eventually operations into an enum
-    if ret not in convolution.OP:
+    # TODO: move accepted operations to this module so that the convolution receives an operation to apply
+    # instead of an operation to understand
+    from validphys.convolution import OP
+
+    if ret not in OP:
         raise ValidationError(f"The operation '{op_str}' is not implemented in validphys")
     return ret
 
@@ -54,7 +57,7 @@ def ValidOperation(op_str: str) -> str:
 class ApfelComb:
     """Some of the grids might have been converted from apfelcomb and introduce hacks.
     These are the allowed hacks:
-        - repetition_flags:
+        - repetition_flag:
             list of fktables which might need to be repeated
             necessary to apply c-factors in compound observables
         - normalization:
@@ -65,7 +68,7 @@ class ApfelComb:
             necessary to create "gaps" that some cfactors or datasets might expect
     """
 
-    repetition_flags: typing.Optional[typing.List[str]] = None
+    repetition_flag: typing.Optional[typing.List[str]] = None
     normalization: typing.Optional[dict] = None
     shifts: typing.Optional[dict] = None
 
@@ -73,21 +76,34 @@ class ApfelComb:
     def parser(cls, meta: dict):
         return parse_input(meta, cls)
 
-
 ValidApfelComb = Parser(ApfelComb.parser)
-
 
 @dataclass
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables"""
 
-    FK_tables: list
+    FK_tables: typing.List[list]
     operation: ValidOperation
-    conversion_factor: float = 1.0
+    conversion_factor: float = 1.0 
+    comment: typing.Optional[str] = None
     apfelcomb: typing.Optional[ValidApfelComb] = None
+    # The following options are transitional so that the yamldb can be used from the theory
+    appl: typing.Optional[bool] = False
+    target_dataset: typing.Optional[str] = None
 
+    def fktables_to_paths(self, grids_folder):
+        """Given a source for pineappl grids, constructs the lists of fktables
+        to be loaded"""
+        ret = []
+        for operand in self.FK_tables:
+            ret.append([grids_folder / f"{m}.{EXT}" for m in operand])
+        return ret
+    
     @classmethod
     def parser(cls, meta: dict):
+        """The yaml databases in the server use "operands" instead of "FK_tables" """
+        if "operands" in meta:
+            meta["FK_tables"] = meta.pop("operands")
         return parse_input(meta, cls)
 
 
@@ -340,6 +356,11 @@ def parse_commondata(commondatafile, systypefile, setname):
     ndata = len(commondatatable)
     commondataproc = commondatatable["process"][1]
     # Check for consistency with commondata metadata
+    # TODO: the check for consistency would introduce a circular import
+    # this entire function is to be removed _anyway_
+    from validphys.core import peek_commondata_metadata
+    from operator import attrgetter
+
     cdmetadata = peek_commondata_metadata(commondatafile)
     if (setname, nsys, ndata) != attrgetter("name", "nsys", "ndata")(cdmetadata):
         raise ValueError("Commondata table information does not match metadata")

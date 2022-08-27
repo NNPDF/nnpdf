@@ -367,12 +367,11 @@ class Loader(LoaderBase):
         """
         _, theopath = self.check_theoryID(theoryID)
         metadata, fklist = pineparser.get_yaml_information(fkpath, theopath)
-        op = metadata["operation"]
 
         # TODO:
         #      at the moment there are no pineappl specific c-factors
         #      so they need to be loaded from the NNPDF names / compounds files
-        cfac_name = metadata["target_dataset"]
+        cfac_name = metadata.target_dataset
         # check whether there is a compound file
         cpath = theopath / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
         if cpath.exists():
@@ -384,7 +383,7 @@ class Loader(LoaderBase):
         ###
 
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
-        return fkspecs, op
+        return fkspecs, metadata.operation
 
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
