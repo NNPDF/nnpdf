@@ -36,16 +36,14 @@ from validphys.coredata import CommonData
 @Parser
 def ValidPath(path_str: str) -> Path:
     """Parse strings into paths"""
-    try:
-        return Path(path_str)
-    except Exception as e:
-        raise ValidationError(f"{path_str} is not a valid path") from e
+    return Path(path_str)
 
 
 @Parser
 def ValidOperation(op_str: str) -> str:
     """Ensures that the operation defined in the commondata file is implemented in validphys"""
     ret = op_str.upper()
+    # TODO: make eventually operations into an enum
     if ret not in convolution.OP:
         raise ValidationError(f"The operation '{op_str}' is not implemented in validphys")
     return ret
@@ -53,13 +51,40 @@ def ValidOperation(op_str: str) -> str:
 
 # Auxiliary objects
 @dataclass
+class ApfelComb:
+    """Some of the grids might have been converted from apfelcomb and introduce hacks.
+    These are the allowed hacks:
+        - repetition_flags:
+            list of fktables which might need to be repeated
+            necessary to apply c-factors in compound observables
+        - normalization:
+            mapping with the single fktables which need to be normalized and the factor
+            note that when they are global factors they are promoted to conversion_factor
+        - shifts:
+            mapping with the single fktables and their respective shifts
+            necessary to create "gaps" that some cfactors or datasets might expect
+    """
+
+    repetition_flags: typing.Optional[typing.List[str]] = None
+    normalization: typing.Optional[dict] = None
+    shifts: typing.Optional[dict] = None
+
+    @classmethod
+    def parser(cls, meta: dict):
+        return parse_input(meta, cls)
+
+
+ValidApfelComb = Parser(ApfelComb.parser)
+
+
+@dataclass
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables"""
 
     FK_tables: list
     operation: ValidOperation
     conversion_factor: float = 1.0
-    apfelcomb: typing.Optional[dict] = None
+    apfelcomb: typing.Optional[ValidApfelComb] = None
 
     @classmethod
     def parser(cls, meta: dict):
