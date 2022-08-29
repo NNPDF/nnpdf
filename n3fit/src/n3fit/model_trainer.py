@@ -337,18 +337,18 @@ class ModelTrainer:
         #    [x1, x2, x3] (unique grids) and [0,0,0,1,1,2] (index of the grid per dataset)
         #    The pdf will then be evaluated to concatenate([x1,x2,x3]) and then split (x1, x2, x3)
         #    Then each of the experiment, looking at the indexes, will receive one of the 3 PDFs
-
-        # Clean the input list
-        inputs_hash = []
+        #    The decision whether two grids (x1 and x1) are really the same is decided below
         inputs_unique = []
         inputs_idx = []
-        for input_grid in self.input_list:
-            ghash = hash(tuple(input_grid.flatten()))
-            if ghash not in inputs_hash:
-                inputs_hash.append(ghash)
-                inputs_unique.append(input_grid)
-            inputs_idx.append(inputs_hash.index(ghash))
-
+        for igrid in self.input_list:
+            for idx, arr in enumerate(inputs_unique):
+                if igrid.size == arr.size and np.allclose(igrid, arr):
+                    inputs_idx.append(idx)
+                    break
+            else:
+                inputs_idx.append(len(inputs_unique))
+                inputs_unique.append(igrid)
+        
         # Concatenate the unique inputs
         input_arr = np.concatenate(inputs_unique, axis=1).T
         if self._scaler:
