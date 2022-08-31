@@ -11,7 +11,7 @@ scale_variations_for:
       (2, 0.5): 175
       (2, 1): 177
       (2, 2): 180
-  
+
   - theoryid: 405
     variations:
       (0.5, 0.5): 401
@@ -23,7 +23,7 @@ scale_variations_for:
       (2, 0.5): 407
       (2, 1): 408
       (2, 2): 409
-  
+
   - theoryid: 414
     variations:
       (0.5, 0.5): 410
@@ -35,7 +35,7 @@ scale_variations_for:
       (2, 0.5): 416
       (2, 1): 417
       (2, 2): 418
-  
+
   - theoryid: 424
     variations:
       (0.5, 0.5): 420
@@ -47,7 +47,7 @@ scale_variations_for:
       (2, 0.5): 426
       (2, 1): 427
       (2, 2): 428
-  
+
   - theoryid: 434
     variations:
       (0.5, 0.5): 430
