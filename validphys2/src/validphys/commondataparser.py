@@ -19,7 +19,7 @@ from copy import copy
 from functools import cached_property
 from dataclasses import dataclass, field
 from pathlib import Path
-import typing
+from typing import Optional
 
 import pandas as pd
 from reportengine.compat import yaml
@@ -68,9 +68,9 @@ class ApfelComb:
             necessary to create "gaps" that some cfactors or datasets might expect
     """
 
-    repetition_flag: typing.Optional[typing.List[str]] = None
-    normalization: typing.Optional[dict] = None
-    shifts: typing.Optional[dict] = None
+    repetition_flag: Optional[list[str]] = None
+    normalization: Optional[dict] = None
+    shifts: Optional[dict] = None
 
     @classmethod
     def parser(cls, meta: dict):
@@ -82,14 +82,14 @@ ValidApfelComb = Parser(ApfelComb.parser)
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables"""
 
-    FK_tables: typing.List[list]
+    FK_tables: list[list]
     operation: ValidOperation
     conversion_factor: float = 1.0 
-    comment: typing.Optional[str] = None
-    apfelcomb: typing.Optional[ValidApfelComb] = None
+    comment: Optional[str] = None
+    apfelcomb: Optional[ValidApfelComb] = None
     # The following options are transitional so that the yamldb can be used from the theory
-    appl: typing.Optional[bool] = False
-    target_dataset: typing.Optional[str] = None
+    appl: Optional[bool] = False
+    target_dataset: Optional[str] = None
 
     def fktables_to_paths(self, grids_folder):
         """Given a source for pineappl grids, constructs the lists of fktables
@@ -116,7 +116,7 @@ class KinematicsMeta:
 
     @classmethod
     def parser(cls, meta: dict):
-        parse_input(meta, cls)
+        return parse_input(meta, cls)
 
 
 @dataclass
@@ -125,7 +125,7 @@ class ReferenceMeta:
 
     url: str
     version: int = 0
-    tables: typing.List[int] = field(default_factory=list)
+    tables: list[int] = field(default_factory=list)
 
     @classmethod
     def parser(cls, meta: dict):
@@ -136,7 +136,7 @@ class ReferenceMeta:
 class Variant:
     """Defines the keys of the CommonMetaData that can be overwritten"""
 
-    data_uncertainties: typing.List[ValidPath]
+    data_uncertainties: list[ValidPath]
 
 
 # Define parsers for the more complicated structures
@@ -162,20 +162,20 @@ class CommonMetaData:
     kinematics: ValidKinematics
     kinematic_coverage: dict
     data_central: ValidPath
-    data_uncertainties: typing.List[ValidPath]
+    data_uncertainties: list[ValidPath]
     dataset_label: str
     plot_x: str
-    figure_by: typing.List[str]
+    figure_by: list[str]
     theory: ValidTheory
     nnpdf_metadata: dict
     version: int
     version_comment: str = ""
-    arXiv: typing.Optional[ValidReference] = None
-    iNSPIRE: typing.Optional[ValidReference] = None
-    hepdata: typing.Optional[ValidReference] = None
-    variants: typing.Optional[ValidVariants] = None
+    arXiv: Optional[ValidReference] = None
+    iNSPIRE: Optional[ValidReference] = None
+    hepdata: Optional[ValidReference] = None
+    variants: Optional[ValidVariants] = None
 
-    _enabled_variant: typing.List[str] = field(default=None, repr=False)
+    _enabled_variant: list[str] = field(default=None, repr=False)
     _default: dict = field(default=None, repr=False)
 
     # TODO: these methods will be moved to the main CommonData class
@@ -224,7 +224,7 @@ class _CommonData:
     """
 
     name: str
-    variant: typing.Optional[str] = None
+    variant: Optional[str] = None
 
     def enable_variant(self, new_variant):
         if new_variant != self.variant:
