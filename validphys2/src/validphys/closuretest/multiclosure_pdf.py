@@ -226,15 +226,15 @@ fits_indicator_function_totalpdf = collect(
 )
 
 
-def xi_totalpdf(
+def replica_and_central_diff_totalpdf(
     fits_replica_difference,
     fits_central_difference,
     fits_covariance_matrix_totalpdf,
     multiclosure_nx=4,
     use_x_basis=False,
 ):
-    """Like :py:func:`xi_flavour_x` except calculate the total xi across flavours and x
-    accounting for correlations
+    """Calculate sigma and delta, like :py:func:`xi_flavour_x` but return
+    before calculating xi.
     """
     # keep fits and reps then reshape flavour x to one dim
     rep_diff = np.asarray(fits_replica_difference).reshape(
@@ -255,8 +255,16 @@ def xi_totalpdf(
 
     var_diff = (diag_rep_diff) ** 2
     sigma = np.sqrt(var_diff.mean(axis=0))  # mean across reps
+    return sigma, diag_central_diff
+
+
+def xi_totalpdf(replica_and_central_diff_totalpdf):
+    """Like :py:func:`xi_flavour_x` except calculate the total xi across flavours and x
+    accounting for correlations
+    """
+    sigma, delta = replica_and_central_diff_totalpdf
     # indicator and mean across all
-    return np.asarray(abs(diag_central_diff) < sigma, dtype=int).mean()
+    return np.asarray(abs(delta) < sigma, dtype=int).mean()
 
 
 def fits_sqrt_covmat_by_flavour(fits_covariance_matrix_by_flavour):
