@@ -959,7 +959,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     fig, ax = plt.subplots()
     ax.axhline(0, color='red')
 
-    posset = posdataset.load()
+    posset = posdataset.load_commondata()
     ndata  = posset.GetNData()
     xvals = []
 
