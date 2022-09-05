@@ -37,14 +37,19 @@ expected to be stable, tested and correct. For more information see our
 This code is described in the following [paper](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%202109.02671):
 
 ```
-@article{Ball:2021xlu,
+@article{NNPDF:2021uiq,
     author = "Ball, Richard D. and others",
+    collaboration = "NNPDF",
     title = "{An open-source machine learning framework for global analyses of parton distributions}",
     eprint = "2109.02671",
     archivePrefix = "arXiv",
     primaryClass = "hep-ph",
     reportNumber = "Edinburgh 2021/13, Nikhef-2021-020, TIF-UNIMI-2021-12",
-    month = "9",
+    doi = "10.1140/epjc/s10052-021-09747-9",
+    journal = "Eur. Phys. J. C",
+    volume = "81",
+    number = "10",
+    pages = "958",
     year = "2021"
 }
 ```
