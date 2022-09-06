@@ -105,21 +105,22 @@ def generate_x_grid():
     grid = np.geomspace(1e-09, 1.0, num=196).tolist()
     return grid
 
-
-def mv_file(file_path, dest_path):
-    shutil.move(str(file_path), str(dest_path))
-
-
 def fix_info_path(usr_path):
+    """Fix the location of the info file from the folder nnfit/usr_path to 
+    just nnfit
+    """
     nnfit = usr_path / "nnfit"
     info_file = usr_path.stem + ".info"
     info_file_path = nnfit / usr_path.stem / info_file
     dest_path_info = nnfit / info_file
-    mv_file(info_file_path, dest_path_info)
+    shutil.move(info_file_path, dest_path_info)
 
 
 def fix_replica_path(usr_path, replica_num):
+    """Fix the location of the dat file of the replica <replica_num> from the folder nnfit/usr_path to 
+    just nnfit/replica_<replica_num>
+    """
     nnfit = usr_path / "nnfit"
     replica_file_path = nnfit / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
     dest_path_replica = nnfit / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
-    mv_file(replica_file_path, dest_path_replica)
+    shutil.move(replica_file_path, dest_path_replica)
