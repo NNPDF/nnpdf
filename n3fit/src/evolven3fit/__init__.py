@@ -79,6 +79,8 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=N
         # fixing_replica_path
         utils.fix_replica_path(usr_path, int(replica.removeprefix("replica_")))
     # remove folder
+    # The function dump_evolved_replica dumps the replica files in a temporary folder
+    # We need then to remove it after fixing the position of those replica files
     (usr_path / "nnfit" / usr_path.stem).rmdir()
 
 
