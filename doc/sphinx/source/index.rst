@@ -32,41 +32,41 @@ The NNPDF collaboration is currently composed by the following
 members:
 
 * Richard D. Ball - University of Edinburgh
-* Stefano Carrazza - Universita' degli Studi di Milano
-* Juan Cruz-Martinez - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
+* Andrea Barontini - Università degli Studi di Milano and INFN
+* Alessandro Candido - Università degli Studi di Milano and INFN
+* Stefano Carrazza - Università degli Studi di Milano and INFN
+* Juan Cruz-Martinez - Università degli Studi di Milano and INFN
 * Luigi Del Debbio - University of Edinburgh
-* Stefano Forte - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
-* Tommaso Giani  - University of Edinburgh
-* Shayan Iranipour - University of Cambridge
+* Stefano Forte - Università degli Studi di Milano and INFN
+* Tommaso Giani - Vrije University Amsterdam and Nikhef
+* Felix Hekhorn - Università degli Studi di Milano and INFN
 * Zahari Kassabov - University of Cambridge
-* Rabah Abdul Khalek - Nikhef Theory Group and VU University
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
-* Emanuele R. Nocera - University of Edinburgh
-* Rosalyn Pearson - University of Edinburgh
-* Juan Rojo - Nikhef Theory Group and VU University
-* Roy Stegeman - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
-* Christopher Schwan - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
+* Niccolò Laurenti - Università degli Studi di Milano and INFN
+* Giacomo Magni - Vrije University Amsterdam and Nikhef 
+* Emanuele R. Nocera - Università degli Studi di Torino and INFN
+* Juan Rojo - Vrije University Amsterdam and Nikhef
+* Christopher Schwan - University of Würzburg
+* Roy Stegeman - Università degli Studi di Milano and INFN
 * Maria Ubiali - University of Cambridge
-* Cameron Voisey - University of Cambridge
-* Michael Wilson - University of Edinburgh
 
 Former members of the NNPDF collaboration include
 
+* Rabah Abdul Khalek
 * Valerio Bertone
 * Francesco Cerutti
 * Christopher S. Deans
 * Alberto Guffanti
 * Patrick Groth-Merrild
 * Nathan P. Hartland
+* Shayan Iranipour
+* Rosalyn Pearson
 * Andrea Piccione
 * Luca Rottoli
 * Emma Slade
-
+* Cameron Voisey
+* Michael Wilson
 
 The NNPDF publications
 ======================
