@@ -64,21 +64,24 @@ def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path
         eko_op = output.Output.load_tar(eko_path)
     else:
         eko_op = construct_eko_for_fit(theory, op, dump_eko)
+    x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(np.float)
+    eko_op.xgrid_reshape(targetgrid = x_grid, inputgrid = x_grid)
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
+    info["AlphaS_Qs"] = list(eko_op["Q2grid"].keys())
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
         evolved_block = evolve_exportgrid(
-            initial_PDFs_dict[replica], eko_op, theory, op
+            initial_PDFs_dict[replica], eko_op, x_grid
         )
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
         # fixing_replica_path
         utils.fix_replica_path(usr_path, int(replica.removeprefix("replica_")))
-    # remove folder
+    # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
     (usr_path / "nnfit" / usr_path.stem).rmdir()
@@ -163,7 +166,7 @@ def construct_eko_for_fit(t_card, op_card, save_path=None):
     return eko_op
 
 
-def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
+def evolve_exportgrid(exportgrid, eko, x_grid):
     """
     Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
 
@@ -173,10 +176,8 @@ def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
             exportgrid of pdf at fitting scale
         eko: eko object
             eko operator for evolution
-        theory_card: dict
-            theory card
-        operator_card: dict
-            operator card
+        xgrid: list
+            xgrid to be used as the targetgrid
     Returns
     -------
         : np.array
@@ -184,17 +185,16 @@ def evolve_exportgrid(exportgrid, eko, theory_card, operator_card):
     """
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
-    x_grid = np.array(exportgrid["xgrid"]).astype(np.float)
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # generate block to dump
-    targetgrid = operator_card["interpolation_xgrid"]
+    targetgrid = list(eko["targetgrid"])
     block = genpdf.generate_block(
         lambda pid, x, Q2, evolved_PDF=evolved_pdf: x
         * evolved_PDF[Q2]["pdfs"][pid][targetgrid.index(x)],
         xgrid=targetgrid,
-        Q2grid=operator_card["Q2grid"],
+        Q2grid=list(eko["Q2grid"].keys()),
         pids=br.flavor_basis_pids,
     )
     return block
