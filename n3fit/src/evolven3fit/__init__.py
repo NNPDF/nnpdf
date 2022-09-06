@@ -57,14 +57,14 @@ def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path
         logger_.addHandler(log_file)
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points)
+    x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(np.float)
+    theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points, x_grid)
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         logger.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
         eko_op = construct_eko_for_fit(theory, op, dump_eko)
-    x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(np.float)
     eko_op.xgrid_reshape(targetgrid = x_grid, inputgrid = x_grid)
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
@@ -116,7 +116,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points):
+def construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points, x_grid):
     """Return the theory and operator cards used to construct the eko"""
     # read the runcard
     my_runcard = utils.read_runcard(usr_path)
@@ -126,9 +126,8 @@ def construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points):
     theory.update(t_card_dict)
     t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
-    op_x_grid = utils.generate_x_grid()
     q2_grid = utils.generate_q2grid(theory["Q0"], q_fin, q_points)
-    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": op_x_grid})
+    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": x_grid})
     op_card.update(op_card_dict)
     return t_card, op_card
 

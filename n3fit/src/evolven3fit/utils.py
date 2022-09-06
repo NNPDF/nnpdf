@@ -104,13 +104,6 @@ def generate_q2grid(Q0, Qfin, Q_points):
                 3.7444017e+04, 6.0599320e+04, 1.0000000e+05])**2)
     return np.geomspace(Q0**2, Qfin**2, num=Q_points).tolist()
 
-
-def generate_x_grid():
-    """Generate the xgrid used for the eko
-    """
-    grid = np.geomspace(1e-09, 1.0, num=196).tolist()
-    return grid
-
 def fix_info_path(usr_path):
     """Fix the location of the info file from the folder nnfit/usr_path to 
     just nnfit
