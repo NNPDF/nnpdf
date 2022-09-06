@@ -15,8 +15,8 @@ def cli():
 
 @cli.command("evolve")
 @click.argument("configuration_folder", nargs=1)
-@click.option("-q", "--q_fin", type=float, default=1.0e5)
-@click.option("-p", "--q_points", type=int, default=20)
+@click.option("-q", "--q_fin", type=float)
+@click.option("-p", "--q_points", type=int)
 @click.option("-o", "--ev_ord", type=int, default = 10)
 @click.option("-i", "--ev_it", type=int, default = 1)
 @click.option("-n", "--n_cores", type=int, default = 1)
@@ -28,7 +28,9 @@ def cli_evolven3fit(configuration_folder, q_fin, q_points, ev_ord, ev_it, n_core
 
         The q_grid starts at the Q0 given by the theory but 
         the last point is q_fin and its number of 
-        points can be specified by q_points.
+        points can be specified by q_points. If just one of the 
+        two is not specified by the user, the default grid
+        will be used.
 
         If a path is given for the dump option, the eko 
         will be dumped in that path after the computation.
