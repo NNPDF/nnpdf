@@ -53,18 +53,18 @@ members:
 
 Former members of the NNPDF collaboration include
 
-* Rabah Abdul Khalek
-* Valerio Bertone
+* Rabah Abdul Khalek - Post-doc at Jefferson Lab, USA
+* Valerio Bertone - Post-doc at CEA Saclay, FR
 * Francesco Cerutti
 * Christopher S. Deans
-* Alberto Guffanti
+* Alberto Guffanti - Data Scientist at PIVIGO, UK
 * Patrick Groth-Merrild
-* Nathan P. Hartland
-* Shayan Iranipour
-* Rosalyn Pearson
-* Andrea Piccione
-* Luca Rottoli
-* Emma Slade
+* Nathan P. Hartland - Senior Data Analyst at Dott, NL
+* Shayan Iranipour - Quantitative Researcher at Tudor Investment Corporation, UK
+* Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
+* Andrea Piccione - High School Teacher at IPIA G. Piana, IT
+* Luca Rottoli - Post-doc at the University of Zurich, CH
+* Emma Slade - Senior AI/ML Engineer at GSK, UK
 * Cameron Voisey
 * Michael Wilson
 
