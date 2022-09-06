@@ -91,11 +91,11 @@ def read_runcard(usr_path):
     return yaml.safe_load((usr_path / "filter.yml"))
 
 
-def generate_q2grid(Q0, Qfin):
+def generate_q2grid(Q0, Qfin, Q_points):
     """
     Generate the q2grid used in the final evolved pdfs (Temporary solution)
     """
-    return np.geomspace(Q0**2, Qfin**2, num=20).tolist()
+    return np.geomspace(Q0**2, Qfin**2, num=Q_points).tolist()
 
 
 def generate_x_grid():

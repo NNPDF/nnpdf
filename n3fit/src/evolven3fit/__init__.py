@@ -23,7 +23,7 @@ from validphys.loader import Loader
 logger = logging.getLogger(__name__)
 
 
-def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=None):
+def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path=None, dump_eko=None):
     """
     Evolves all the fitted replica in conf_folder/nnfit
 
@@ -57,7 +57,7 @@ def evolve_fit(conf_folder, op_card_dict, t_card_dict, eko_path=None, dump_eko=N
         logger_.addHandler(log_file)
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict)
+    theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points)
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         logger.info(f"Loading eko from : {eko_path}")
@@ -113,7 +113,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def construct_eko_cards(usr_path, op_card_dict, t_card_dict):
+def construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points):
     """Return the theory and operator cards used to construct the eko"""
     # read the runcard
     my_runcard = utils.read_runcard(usr_path)
@@ -124,7 +124,7 @@ def construct_eko_cards(usr_path, op_card_dict, t_card_dict):
     t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
     op_x_grid = utils.generate_x_grid()
-    q2_grid = utils.generate_q2grid(theory["Q0"], 1.0e5)
+    q2_grid = utils.generate_q2grid(theory["Q0"], q_fin, q_points)
     op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": op_x_grid})
     op_card.update(op_card_dict)
     return t_card, op_card
