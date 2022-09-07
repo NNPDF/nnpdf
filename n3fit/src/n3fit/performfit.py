@@ -39,6 +39,7 @@ def performfit(
     maxcores=None,
     parallel_models=False,
 ):
+    raise Exception("Break the fitbot")
     """
         This action will (upon having read a validcard) process a full PDF fit
         for a set of replicas.
