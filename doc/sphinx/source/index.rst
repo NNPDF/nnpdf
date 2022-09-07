@@ -32,44 +32,59 @@ The NNPDF collaboration is currently composed by the following
 members:
 
 * Richard D. Ball - University of Edinburgh
-* Stefano Carrazza - Universita' degli Studi di Milano
-* Juan Cruz-Martinez - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
+* Andrea Barontini - Università degli Studi di Milano and INFN
+* Alessandro Candido - Università degli Studi di Milano and INFN
+* Stefano Carrazza - Università degli Studi di Milano and INFN
+* Juan Cruz-Martinez - Università degli Studi di Milano and INFN
 * Luigi Del Debbio - University of Edinburgh
-* Stefano Forte - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
-* Tommaso Giani  - University of Edinburgh
-* Shayan Iranipour - University of Cambridge
+* Stefano Forte - Università degli Studi di Milano and INFN
+* Tommaso Giani - Vrije University Amsterdam and Nikhef
+* Felix Hekhorn - Università degli Studi di Milano and INFN
 * Zahari Kassabov - University of Cambridge
-* Rabah Abdul Khalek - Nikhef Theory Group and VU University
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
-* Emanuele R. Nocera - University of Edinburgh
-* Rosalyn Pearson - University of Edinburgh
-* Juan Rojo - Nikhef Theory Group and VU University
-* Roy Stegeman - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
-* Christopher Schwan - Tif Lab, Dipartimento di Fisica, Università di
-  Milano and INFN
+* Niccolò Laurenti - Università degli Studi di Milano and INFN
+* Giacomo Magni - Vrije University Amsterdam and Nikhef 
+* Emanuele R. Nocera - Università degli Studi di Torino and INFN
+* Juan Rojo - Vrije University Amsterdam and Nikhef
+* Christopher Schwan - University of Würzburg
+* Roy Stegeman - Università degli Studi di Milano and INFN
 * Maria Ubiali - University of Cambridge
-* Cameron Voisey - University of Cambridge
-* Michael Wilson - University of Edinburgh
 
 Former members of the NNPDF collaboration include
 
-* Valerio Bertone
+* Rabah Abdul Khalek - Post-doc at Jefferson Lab, USA
+* Valerio Bertone - Post-doc at CEA Saclay, FR
 * Francesco Cerutti
 * Christopher S. Deans
-* Alberto Guffanti
+* Alberto Guffanti - Data Scientist at PIVIGO, UK
 * Patrick Groth-Merrild
-* Nathan P. Hartland
-* Andrea Piccione
-* Luca Rottoli
-* Emma Slade
-
+* Nathan P. Hartland - Senior Data Analyst at Dott, NL
+* Shayan Iranipour - Quantitative Researcher at Tudor Investment Corporation, UK
+* Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
+* Andrea Piccione - High School Teacher at IPIA G. Piana, IT
+* Luca Rottoli - Post-doc at the University of Zurich, CH
+* Emma Slade - Senior AI/ML Engineer at GSK, UK
+* Cameron Voisey
+* Michael Wilson
 
 The NNPDF publications
 ======================
+* *"Evidence for intrinsic charm quarks in the proton",
+  Richard D. Ball et al. :cite:p:`Ball:2022qks`
+* *"Regularising experimental correlations in LHC data:
+  theory and application to a global analysis of parton distributions"*,
+  Zahari Kassabov, Emanuele R. Nocera, Michael Wilson :cite:p:`Kassabov:2022pps`
+* *"Bayesian approach to inverse problems: an application to NNPDF closure testing"*,
+  Luigi Del Debbio, Tommaso Giani, Michael Wilson :cite:p:`DelDebbio:2021whr`
+* *"A data-based parametrization of parton distribution functions"*,
+  Stefano Carrazza, Juan Cruz-Martinez, Roy Stegeman :cite:p:`Carrazza:2021yrg`
+* *"Correlation and combination of sets of parton distributions"*, Richard D. Ball,
+  Stefano Forte, Roy Stegeman :cite:p:`Ball:2021dab`
+* *"The path to proton structure at 1% accuracy"*, Richard D. Ball et al.
+  :cite:p:`NNPDF:2021njg`
+* *"An open-source machine learning framework for global analyses of parton distributions"*,
+  Richard D. Ball et al. :cite:p:`NNPDF:2021uiq`
 * *"Future tests of parton distributions"*, Juan Cruz-Martinez, Stefano
   Forte, Emanuele R. Nocera :cite:p:`Cruz-Martinez:2021rgy`
 * *"Deuteron Uncertainties in the Determination of Proton PDFs"*,
