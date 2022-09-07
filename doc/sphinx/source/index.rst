@@ -70,6 +70,8 @@ Former members of the NNPDF collaboration include
 
 The NNPDF publications
 ======================
+* *"Evidence for intrinsic charm quarks in the proton",
+  Richard D. Ball et al. :cite:p:`Ball:2022qks`
 * *"Regularising experimental correlations in LHC data:
   theory and application to a global analysis of parton distributions"*,
   Zahari Kassabov, Emanuele R. Nocera, Michael Wilson :cite:p:`Kassabov:2022pps`
