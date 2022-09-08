@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _rules:
+.. _rules:
 
 Code development
 ================
@@ -57,9 +55,7 @@ https://github.com/NNPDF/nnpdf/pull/708/
 It demonstrates how to add a new feature, together with relevant tests
 and documentation, and refine it based on the discussion.
 
-.. code:: {eval-rst}
-
-   .. _reviews:
+.. _reviews:
 
 Reviewing pull requests
 -----------------------

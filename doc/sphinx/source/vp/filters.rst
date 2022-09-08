@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _filters:
+.. _filters:
 
 Filtering data
 ==============
@@ -65,11 +63,10 @@ By default, these filters can have several entries:
 5. ``local_variables``: (optional) Any additional, non-standard local
    variables the user wishes to add for this rule only.
 
-.. code:: {eval-rst}
 
-   .. note::
-     At least one of :code:`dataset` or :code:`process_type` is required.
-     Additionally, a :code:`rule` entry is always required.
+.. note::
+  At least one of :code:`dataset` or :code:`process_type` is required.
+  Additionally, a :code:`rule` entry is always required.
 
 The ``rule`` entry in the rule definition is ``eval``\ uated as
 ``Python`` code. If the rule does not apply to this particular datapoint
@@ -88,14 +85,11 @@ only if the theory is NNLO. These are discussed further `here <#PTO>`__.
 One can see a full list of possible theory parameters using:
 ``vp-checktheory <theory id>``
 
-.. code:: {eval-rst}
-
-
-   .. important::
-       The :code:`rule` entry should be interpreted as a :code:`str` type within :code:`Python`. As such
-       a rule such as :code:`rule: True` is not valid since this is read in as a boolean,
-       however, :code:`rule: "True"` is perfectly valid notation. Moreover, the string
-       itself should be valid :code:`Python` code.
+.. important::
+    The :code:`rule` entry should be interpreted as a :code:`str` type within :code:`Python`. As such
+    a rule such as :code:`rule: True` is not valid since this is read in as a boolean,
+    however, :code:`rule: "True"` is perfectly valid notation. Moreover, the string
+    itself should be valid :code:`Python` code.
 
 By default the user can use the following non-builtin mathematical
 functions in their rules: ``sqrt``, ``log`` or ``fabs`` (floating point
@@ -125,12 +119,11 @@ in my rule, so long as I define what I mean by ``w2``:
      local_variables:
        w2: Q2 * (1 - x) / x
 
-.. code:: {eval-rst}
 
-   .. danger::
-     Defining :code:`local_variables` is non-commutative. The order of definition is important.
-     If a local variable depends on other local variables, then the user must ensure all other
-     dependencies have already been defined.
+.. danger::
+  Defining :code:`local_variables` is non-commutative. The order of definition is important.
+  If a local variable depends on other local variables, then the user must ensure all other
+  dependencies have already been defined.
 
 The following would raise an error
 
@@ -148,11 +141,10 @@ The following would not
        w2: Q2 * (1 - x) / x
        w: sqrt(w2)
 
-.. code:: {eval-rst}
 
-   .. note::
-     :code:`local_variables` have a local scope. They apply to only the rule within which
-     they are defined.
+.. note::
+  :code:`local_variables` have a local scope. They apply to only the rule within which
+  they are defined.
 
 Theory parameters and perturbative orders
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -184,13 +176,12 @@ simply add:
 Similarly, one can add any such theory description ``key`` into their
 rule.
 
-.. code:: {eval-rst}
 
-   .. tip::
-     Sometimes, we may want to evaluate a rule provided the perturbative order is within
-     a certain range. For example, we may want a rule to be evaluated if the perturbative
-     order is strictly less than NLO. This can be done by using directives succeeding the
-     :code:`PTO` declaration.
+.. tip::
+  Sometimes, we may want to evaluate a rule provided the perturbative order is within
+  a certain range. For example, we may want a rule to be evaluated if the perturbative
+  order is strictly less than NLO. This can be done by using directives succeeding the
+  :code:`PTO` declaration.
 
 In the above example, one would thus simply use:
 
@@ -232,13 +223,12 @@ above. For example:
      - dataset: NMC
        rule: x > 0.2
 
-.. code:: {eval-rst}
 
-   .. warning::
-     Adding a :code:`filter_rules` section to the runcard overwrites the default behaviour and does
-     **not** append to the default behaviour. This is done intentionally since a rule cannot be 
-     overwritten by another rule. By adding the above code snippet, this would be the **only** rule used by
-     :code:`vp-setupfit`. As such a bit of copy and pasting may be necessary if one wishes to append a rule.
+.. warning::
+  Adding a :code:`filter_rules` section to the runcard overwrites the default behaviour and does
+  **not** append to the default behaviour. This is done intentionally since a rule cannot be 
+  overwritten by another rule. By adding the above code snippet, this would be the **only** rule used by
+  :code:`vp-setupfit`. As such a bit of copy and pasting may be necessary if one wishes to append a rule.
 
 Similarly the defaults can be overwritten by adding a
 ``filter_defaults`` namespace to the runcard. For example:
@@ -252,12 +242,10 @@ Similarly the defaults can be overwritten by adding a
 As in the case of the rules, this overwrites the original defaults and
 does not append to them.
 
-.. code:: {eval-rst}
-
-   .. attention::
-     To ensure backwards compatibility with old style runcards, if :code:`q2min` and :code:`w2min` are defined
-     under the :code:`datacuts` namespace within the runcard, these values are read in and override the default
-     values. However, if this overriding occurs, a warning is displayed in standard output.
+.. attention::
+  To ensure backwards compatibility with old style runcards, if :code:`q2min` and :code:`w2min` are defined
+  under the :code:`datacuts` namespace within the runcard, these values are read in and override the default
+  values. However, if this overriding occurs, a warning is displayed in standard output.
 
 Examples
 --------

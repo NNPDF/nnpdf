@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _upload:
+.. _upload:
 
 Uploading results to the ``validphys`` repository
 =================================================
@@ -135,9 +133,7 @@ output is going to be good enough to share. Otherwise use
 ``validphys`` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
 
-.. code:: {eval-rst}
-
-   .. _vpupload:
+.. _vpupload:
 
 The ``vp-upload`` script
 ------------------------
@@ -155,24 +151,21 @@ The output folder is expected to contain the `metadata <#metadata>`__
 want to upload and index arbitrary files, use the ```wiki-upload``
 command <#the-wiki-upload-script>`__.
 
-.. code:: {eval-rst}
 
-   The script automatically detects (:py:func:`validphys.uploadutils.check_input`) the type of the input.
-   A `fit` is defined to be any folder structure that contains a `filter.yml` file at its root, a `PDF` is any
-   folder containing a `.info` file at the root and a replica 0, and a report is any such structure containing an
-   `index.html` file at the root. The input folder is then placed in the correct location in the
-   server accordingly.
+The script automatically detects (:py:func:`validphys.uploadutils.check_input`) the type of the input.
+A `fit` is defined to be any folder structure that contains a `filter.yml` file at its root, a `PDF` is any
+folder containing a `.info` file at the root and a replica 0, and a report is any such structure containing an
+`index.html` file at the root. The input folder is then placed in the correct location in the
+server accordingly.
 
-.. code:: {eval-rst}
 
-   .. note::
-     If there is already a fit or PDF on the server with the same name as the fit or PDF
-     you wish to upload, then this command will *not* overwrite the resource that already
-     exists. To overwite such a resource on the server, use the :code:`--force` option.
+.. note::
+  If there is already a fit or PDF on the server with the same name as the fit or PDF
+  you wish to upload, then this command will *not* overwrite the resource that already
+  exists. To overwite such a resource on the server, use the :code:`--force` option.
 
-.. code:: {eval-rst}
 
-   The code is documented at :py:mod:`validphys.scripts.vp_upload`.
+The code is documented at :py:mod:`validphys.scripts.vp_upload`.
 
 Note that fits are indexed separately, and can be retrieved with the
 ```vp-get`` command <download>`__.
@@ -193,9 +186,8 @@ This will cause the user to be prompted for the various metadata fields
 and the file or folder to be uploaded to the server, together with a
 generated ``meta.yaml`` file used for indexing.
 
-.. code:: {eval-rst}
 
-   The code is documented at :py:mod:`validphys.scripts.wiki_upload`.
+The code is documented at :py:mod:`validphys.scripts.wiki_upload`.
 
 The ``validphys`` index page
 ----------------------------

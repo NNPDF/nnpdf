@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _CI:
+.. _CI:
 
 Continuous integration and deployment
 =====================================

@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _n3fit-usage:
+.. _n3fit-usage:
 
 How to run a PDF fit
 ====================
@@ -111,9 +109,7 @@ or to directly take the trials from said hyperscan:
    hyperscan_config:
      use_tries_from: 'some_previous_hyperscan'
 
-.. code:: {eval-rst}
-
-   .. _run-n3fit-fit:
+.. _run-n3fit-fit:
 
 Running the fitting code
 ------------------------
@@ -128,14 +124,13 @@ runcard following the points presented above you can proceed with a fit.
    t0 PDF set) will be downloaded automatically. Alternatively they can
    be obtained with the ``vp-get`` tool.
 
-   .. code:: {eval-rst}
 
-      .. note::
-         This step is not strictly necessary when producing a standard fit with
-         ``n3fit`` but it is required by :ref:`validphys <vp-index>`
-         and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
-         will fail unless this step has been followed. If necessary, this step can
-         be done after the fit has been run.
+   .. note::
+      This step is not strictly necessary when producing a standard fit with
+      ``n3fit`` but it is required by :ref:`validphys <vp-index>`
+      and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
+      will fail unless this step has been followed. If necessary, this step can
+      be done after the fit has been run.
 
 2. The ``n3fit`` program takes a ``runcard.yml`` as input and a replica
    number, e.g. ``n3fit runcard.yml replica`` where ``replica`` goes
@@ -190,9 +185,8 @@ files:
 
 ``note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.``
 
-.. code:: {eval-rst}
 
-   .. _upload-fit:
+.. _upload-fit:
 
 Upload and analyse the fit
 --------------------------

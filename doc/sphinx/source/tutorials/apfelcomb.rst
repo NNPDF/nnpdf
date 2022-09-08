@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _tutorialfktables:
+.. _tutorialfktables:
 
 How to generate and implement FK tables
 =======================================
@@ -11,7 +9,7 @@ theoretical predicitons in the NNPDF framework. Broadly speaking, this
 is achieved by taking DGLAP evolution kernels from ``APFEL`` and
 combining them with interpolated parton-level observable kernels in the
 APPLgrid or FastNLO format (see `How to generate APPLgrid and fastNLO
-tables <../tutorials/APPLgrids.md>`__). The various data formats used in
+tables <../tutorials/APPLgrids>`__). The various data formats used in
 APFELcomb are described in `Experimental data
 files <../data/exp-data-files.rst#exp-data-files>`__.
 

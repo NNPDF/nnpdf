@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _nnprofile:
+.. _nnprofile:
 
 The ``nnprofile.yaml`` file
 ===========================
@@ -37,55 +35,53 @@ Options
 The following settings in the profile file are interpreted by different
 parts of the code. These should be specified in YAML format.
 
-.. code:: {eval-rst}
 
+``data_path``
+    The path in the user's system where input data such as CommonData files and
+    FKtables are to be found, and stored when :ref:`downloaded <download>`.
 
-   ``data_path``
-       The path in the user's system where input data such as CommonData files and
-       FKtables are to be found, and stored when :ref:`downloaded <download>`.
+``results_path``
+    A path where completed fits are to be retrieved from,
+    and stored when :ref:`downloaded <download>`.
 
-   ``results_path``
-       A path where completed fits are to be retrieved from,
-       and stored when :ref:`downloaded <download>`.
+``validphys_cache_path``
+    A path where to store downloaded validphys resources.
 
-   ``validphys_cache_path``
-       A path where to store downloaded validphys resources.
+``fit_urls``
+    A list of URLs where to search completed fits from.
 
-   ``fit_urls``
-       A list of URLs where to search completed fits from.
+``fit_index``
+    A filename that, when appended to each fit urls, points to an index with a
+    list of fits available from that location. You shouldn't change this as it
+    is configurable for historical reasons.
 
-   ``fit_index``
-       A filename that, when appended to each fit urls, points to an index with a
-       list of fits available from that location. You shouldn't change this as it
-       is configurable for historical reasons.
+``theory_urls``
+    A list of URLs pointing to theory repositories.
 
-   ``theory_urls``
-       A list of URLs pointing to theory repositories.
+``theory_index``
+    The name of the remote theory index. Shouldn't be changed.
 
-   ``theory_index``
-       The name of the remote theory index. Shouldn't be changed.
+``lhapdf_urls``
+    A list of URLs of LHAPDF repositories from where to download PDF sets.
 
-   ``lhapdf_urls``
-       A list of URLs of LHAPDF repositories from where to download PDF sets.
+``nnpdf_pdfs_urls``
+    A list of URLs of NNPDF repositories repositories from where to download PDF sets.
 
-   ``nnpdf_pdfs_urls``
-       A list of URLs of NNPDF repositories repositories from where to download PDF sets.
+``nnpdf_pdfs_index``
+    The name of the remote PDF index. Shouldn't be changed.
 
-   ``nnpdf_pdfs_index``
-       The name of the remote PDF index. Shouldn't be changed.
+``upload_host``
+    The SSH host (with user name as in ``user@host``) used to upload
+    ``validphys`` reports and fits.
 
-   ``upload_host``
-       The SSH host (with user name as in ``user@host``) used to upload
-       ``validphys`` reports and fits.
+``reports_target_dir``
+    The file path in the server where reports are uploaded to.
 
-   ``reports_target_dir``
-       The file path in the server where reports are uploaded to.
+``reports_root_url``
+    The HTTP URL where to download ``validphys`` reports from.
 
-   ``reports_root_url``
-       The HTTP URL where to download ``validphys`` reports from.
+``fits_target_dir``
+    The file path in the server where fits are uploaded to.
 
-   ``fits_target_dir``
-       The file path in the server where fits are uploaded to.
-
-   ``fits_root_url``
-       The HTTP URL where to download fits from.
+``fits_root_url``
+    The HTTP URL where to download fits from.

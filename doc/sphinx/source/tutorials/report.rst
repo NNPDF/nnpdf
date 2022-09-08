@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _tut_report:
+.. _tut_report:
 
 How to generate a report
 ========================

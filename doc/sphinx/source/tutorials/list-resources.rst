@@ -1,9 +1,7 @@
 How to list the available resources
 ===================================
 
-.. code:: {eval-rst}
-
-   .. _vp-list:
+.. _vp-list:
 
 Using ``vp-list``
 -----------------

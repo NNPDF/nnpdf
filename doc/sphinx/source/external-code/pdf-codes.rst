@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _lhapdf:
+.. _lhapdf:
 
 PDF set storage and interpolation
 =================================

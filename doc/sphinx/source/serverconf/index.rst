@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _server:
+.. _server:
 
 Servers
 =======
@@ -28,9 +26,8 @@ The full disk is backed up every week by the Centro Calcolo. We perform
 every Sunday a ``rsync`` from the ``/home/nnpdf`` folder to the
 ``nnpdf@lxplus`` account at CERN.
 
-.. code:: {eval-rst}
 
-   .. _server-access:
+.. _server-access:
 
 Access
 ------
@@ -87,9 +84,8 @@ generated at `installation <conda>`__ time. It should look similar to
 The relevant passwords can be found
 `here <https://www.wiki.ed.ac.uk/pages/viewpage.action?pageId=292165461>`__.
 
-.. code:: {eval-rst}
 
-   .. _web-scripts:
+.. _web-scripts:
 
 Web scripts
 -----------

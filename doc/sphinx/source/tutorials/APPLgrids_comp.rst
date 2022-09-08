@@ -87,9 +87,7 @@ see the `APPLgrid <https://applgrid.hepforge.org/>`__ and
 `FastNLO <https://fastnlo.hepforge.org/>`__ documentation for further
 details.
 
-.. code:: {eval-rst}
-
-   .. _storage:
+.. _storage:
 
 Storage
 -------

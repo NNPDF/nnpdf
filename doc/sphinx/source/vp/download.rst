@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _download:
+.. _download:
 
 Downloading resources
 =====================
@@ -58,34 +56,30 @@ What can be downloaded
 
 The following resources are found automatically:
 
-.. code:: {eval-rst}
+Fits
+    Fits (specified by the ``fit`` key) can be downloaded if they have previously
+    been uploaded with :ref:`vp-upload <upload>`. The corresponding PDF
+    set will be installed as appropriate.
 
-   Fits
-       Fits (specified by the ``fit`` key) can be downloaded if they have previously
-       been uploaded with :ref:`vp-upload <upload>`. The corresponding PDF
-       set will be installed as appropriate.
+PDF sets
+    PDF sets (specified among others by the ``pdf`` key) are searched for in
+    both NNPDF and LHAPDF repositories. If the PDF is not found and a fit with
+    the same name exists, it will be downloaded and the corresponding PDF set
+    will be installed and made available for usage.
 
-   PDF sets
-       PDF sets (specified among others by the ``pdf`` key) are searched for in
-       both NNPDF and LHAPDF repositories. If the PDF is not found and a fit with
-       the same name exists, it will be downloaded and the corresponding PDF set
-       will be installed and made available for usage.
+Theories
+    Theories (specified by the ``theoryid`` key) are downloaded and
+    uncompressed.
 
-   Theories
-       Theories (specified by the ``theoryid`` key) are downloaded and
-       uncompressed.
+``validphys`` output files
+    Files produced by ``validphys`` can be used as input to subsequent validphys
+    analyses (for example χ² tables are used for αs fits). The user needs to
+    have HTTP access to the repository, which is provided when installing using
+    the :ref:`bootstrap script <conda>`. Output files are not specified by any
+    top level config key, but instead actions can specify their own logic, for
+    example for using an existing file instead of computing it.
 
-   ``validphys`` output files
-       Files produced by ``validphys`` can be used as input to subsequent validphys
-       analyses (for example χ² tables are used for αs fits). The user needs to
-       have HTTP access to the repository, which is provided when installing using
-       the :ref:`bootstrap script <conda>`. Output files are not specified by any
-       top level config key, but instead actions can specify their own logic, for
-       example for using an existing file instead of computing it.
-
-.. code:: {eval-rst}
-
-   .. _vp-get:
+.. _vp-get:
 
 The ``vp-get`` tool
 -------------------
@@ -130,22 +124,21 @@ information on it and bail out:
 Downloading resources in code (``validphys.loader``)
 ----------------------------------------------------
 
-.. code:: {eval-rst}
 
-   The automatic download logic is implemented in the :py:mod:`validphys.loader`,
-   specifically by the :py:class:`validphys.loader.RemoteLoader` and
-   :py:class:`validphys.loader.FallbackLoader` classes.
+The automatic download logic is implemented in the :py:mod:`validphys.loader`,
+specifically by the :py:class:`validphys.loader.RemoteLoader` and
+:py:class:`validphys.loader.FallbackLoader` classes.
 
-   The logic is as follows: Given a resource type ``<foo>``, the normal
-   :py:class:`validphys.loader.Loader` class would implement a ``check_<foo>`` method
-   returning an object containing the appropriate metadata (such as file paths), or
-   raise a ``LoaderError`` if the object cannot be found. The ``check_<foo>`` method
-   of ``FallbackLoader`` (which is generated dynamically) will intercept the
-   ``LoaderError`` and, if it happens, call the ``download_<foo>`` method of
-   ``RemoteLoader``, if it exists. That method should cause the resource to be
-   installed in such a way that the subsequent call of the ``Loader.check_<foo>``
-   method succeeds. That is it should downoad the resource to the relevant search
-   path, and uncompress it if needed.
+The logic is as follows: Given a resource type ``<foo>``, the normal
+:py:class:`validphys.loader.Loader` class would implement a ``check_<foo>`` method
+returning an object containing the appropriate metadata (such as file paths), or
+raise a ``LoaderError`` if the object cannot be found. The ``check_<foo>`` method
+of ``FallbackLoader`` (which is generated dynamically) will intercept the
+``LoaderError`` and, if it happens, call the ``download_<foo>`` method of
+``RemoteLoader``, if it exists. That method should cause the resource to be
+installed in such a way that the subsequent call of the ``Loader.check_<foo>``
+method succeeds. That is it should downoad the resource to the relevant search
+path, and uncompress it if needed.
 
 In practice one can get a download aware loader by using a
 ``FallbackLoader`` instance, which will try to obtain all the required

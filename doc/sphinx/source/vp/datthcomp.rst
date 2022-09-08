@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _data-theory-comp:
+.. _data-theory-comp:
 
 Comparing data and theory
 -------------------------

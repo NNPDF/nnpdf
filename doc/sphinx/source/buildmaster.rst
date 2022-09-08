@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _buildmaster:
+.. _buildmaster:
 
 Handling experimental data: Buildmaster
 ---------------------------------------

@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _datthcomp:
+.. _datthcomp:
 
 How to do a data theory comparison
 ==================================

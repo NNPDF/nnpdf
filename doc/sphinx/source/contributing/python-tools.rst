@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _pytools:
+.. _pytools:
 
 Tools for developing with the Python programming language
 =========================================================
@@ -33,11 +31,10 @@ development.
 -  `Jupyter notebook <https://jupyter.org/>`__: Interactive development
    environment running on the browser. Useful for bigger experiments.
 
-.. code:: {eval-rst}
 
-   .. note::
-       When developing :ref:`validphys <validphys>` related code interactively, be
-       sure to read about the :ref:`API functionality <vpapi>`.
+.. note::
+    When developing :ref:`validphys <validphys>` related code interactively, be
+    sure to read about the :ref:`API functionality <vpapi>`.
 
 Testing
 -------
@@ -55,9 +52,8 @@ Testing
    a given Python program (notably pytest) is running. The main use case
    is to verify that tests probe our code paths.
 
-.. code:: {eval-rst}
 
-   .. _pytoolsqa:
+.. _pytoolsqa:
 
 Code quality and reviewing
 --------------------------

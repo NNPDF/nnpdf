@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _apfelcomb:
+.. _apfelcomb:
 
 Using APFELcomb
 ===============

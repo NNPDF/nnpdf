@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _tut_closure:
+.. _tut_closure:
 
 How to run a closure test
 =========================

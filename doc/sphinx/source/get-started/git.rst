@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _git:
+.. _git:
 
 Downloading the code
 ====================

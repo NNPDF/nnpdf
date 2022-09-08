@@ -1,6 +1,4 @@
-.. code:: {eval-rst}
-
-   .. _plotting-format:
+.. _plotting-format:
 
 Plotting format
 ===============
