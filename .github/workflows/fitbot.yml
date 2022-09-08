@@ -51,7 +51,7 @@ jobs:
     - name: Installing NNPDF conda package
       shell: bash -l {0}
       run: |
-        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
+        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ --override-channels nnpdf
     # create fancy runcards
     - name: Preparing fit runcard
       run: |
