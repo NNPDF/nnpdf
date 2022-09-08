@@ -4,8 +4,8 @@ Code development
 ================
 
 Code development is carried out using Github. For more information on
-the Git workflow that NNPDF adopts, see the `Git and
-GitHub <./git.md>`__ section.
+the Git workflow that NNPDF adopts, see the :ref:`Git and
+GitHub <git>` section.
 
 Code contributions
 ------------------
@@ -24,7 +24,7 @@ This PR should adhere to the following rules:
    linked in the PR.
 
 -  The PR should contain
-   `documentation <./sphinx-documentation.md>`__\ **describing the new
+   :ref:`documentation <add_docs>` **describing the new
    features**, if applicable.
 
 -  If the PR is fixing a bug, information should be given such that a
@@ -34,8 +34,8 @@ This PR should adhere to the following rules:
    task it is to `review <reviews>`__ the code. The PR cannot be merged
    into master before the reviewer has approved it.
 
--  Before a PR can be merged into master, the **Travis build for it must
-   pass** (see `here <../ci/index.md>`__). Practically, this means that
+-  Before a PR can be merged into master, the **:ref:`CI` build for it must
+   pass**. Practically, this means that
    you should find a green tick next to your PR on the relevant `PR
    page <https://github.com/NNPDF/nnpdf/pulls>`__. If you instead find a
    red cross next to your PR, the reason for the failure must be
@@ -113,10 +113,10 @@ reviewing pull requests:
 
    -  Do look at the automated tests that run with the PR. New code
       should not break them.
-   -  Use ```pylint`` <https://www.pylint.org/>`__ with `our default
+   -  Use `pylint <https://www.pylint.org/>`__ with `our default
       configuration <https://github.com/NNPDF/nnpdf/blob/master/.pylintrc>`__
       to catch common problems with Python code.
-   -  New Python code should come formatted with ```black``
+   -  New Python code should come formatted with `Black
       tool <https://github.com/psf/black>`__.
    -  Changes in compiled code should be tested in debug mode, with the
       address sanitizer enabled. This is done with the

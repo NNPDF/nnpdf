@@ -72,11 +72,10 @@ The following is a list of the repositories that are available on GitHub
 as part of the NNPDF organization. To use the code it is not a
 requirement that you download any of these yourself, since the NNDPF
 code needed to e.g. run a fit is available in conda packages (see
-`Installation using conda <installation.md>`__). However, if you wish to
+:ref:`Installation using conda <installing>`). However, if you wish to
 develop the code then it is required that you download the
 repository/repositories that you wish to work on. You must then install
-the relevant code yourself (see `Installation from
-source <installation-source.md>`__).
+the relevant code yourself (see :ref:`Installation from source <source>`).
 
 When downloading the code, it is recommended that you create a folder
 (below called ``nnpdfgit``) into which you clone the desired

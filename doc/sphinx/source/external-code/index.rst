@@ -15,7 +15,7 @@ various external codes that you will frequently encounter are described.
 .. toctree::
    :maxdepth: 1
 
-   ./pdf-codes.md
-   ./grids.md
-   ./cross-secs.md
+   ./pdf-codes
+   ./grids
+   ./cross-secs
    ./apfelcomb

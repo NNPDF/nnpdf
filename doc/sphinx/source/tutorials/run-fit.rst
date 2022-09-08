@@ -25,7 +25,7 @@ runcards can be found in the `detailed guide <runcard-detailed>`__.
 For newcomers, it is recommended to start from an already existing
 runcard, example runcards (and runcard used in NNPDF releases) are
 available at
-```n3fit/runcards`` <https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards>`__.
+`n3fit/runcards <https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards>`__.
 The runcards are mostly self explanatory, see for instance below an
 example of the ``parameter`` dictionary that defines the Machine
 Learning framework.

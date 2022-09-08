@@ -1,4 +1,5 @@
 .. _vp-index:
+
 Code for data: validphys
 ========================
 
@@ -48,42 +49,44 @@ Some things that `validphys` does
 
 Using validphys
 ---------------
+
 .. toctree::
    :maxdepth: 1
 
-   ./getting-started.rst
-   ./download.md
-   ./upload.md
-   ./nnprofile.md
-   ./complex_runcards.rst
-   ./cuts.md
-   ./datthcomp.md
-   ./reports.rst
-   ./scripts.rst
-   ./api.md
-   ./developer.rst
-   ./tables_figs.rst
-   ./customplots.rst
-   ./examples.rst
+   ./getting-started
+   ./download
+   ./upload
+   ./nnprofile
+   ./complex_runcards
+   ./cuts
+   ./datthcomp
+   ./reports
+   ./scripts
+
+   ./developer
+   ./tables_figs
+   ./customplots
+   ./examples
 
 How validphys handles data
 --------------------------
 .. toctree::
    :maxdepth: 1
 
-   ./pydataobjs.rst
-   ./filters.md
+   ./pydataobjs
+   ./filters
    ./theorycov/index
-   ./dataspecification.rst
+   ./dataspecification
 
 More detailed functionality
 ---------------------------
 .. toctree::
    :maxdepth: 1
 
-   ./design.md
-   ./namespaces.rst
-   ./resolving_dependencies.rst
-   ./collect.rst
-   ./checks.rst
-   ./custom_pipelines.rst
+   ./design
+   ./namespaces
+   ./resolving_dependencies
+   ./checks
+   ./collect
+   ./api
+   ./custom_pipelines

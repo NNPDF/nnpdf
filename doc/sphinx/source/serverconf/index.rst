@@ -9,7 +9,7 @@ following URLs:
 
 -  https://data.nnpdf.science: Hosts **public** NNPDF data such as PDF
    fits, releases etc.
--  https://vp.nnpdf.science: Hosts the ```validphys`` <vp-index>`__
+-  https://vp.nnpdf.science: Hosts the `validphys <vp-index>`__
    report and displays an index of all of the reports.
 -  https://wiki.nnpdf.science: Hosts the github wiki version.
 -  https://packages.nnpdf.science/: Hosts the ``conda`` binary packages.
@@ -36,7 +36,7 @@ User access
 ~~~~~~~~~~~
 
 The access to the server is provided by
-``ssh``/```vp-upload`` <upload>`__ with the following restrictions:
+``ssh``/:ref:`vp-upload <upload>` with the following restrictions:
 
 -  ``ssh`` access to ``root`` is forbidden.
 -  There is a shared ``nnpdf`` user with low privileges. In order to
@@ -53,10 +53,10 @@ stored in ``/home/nnpdf/validphys-reports`` and the wiki in
 Access for continuous deployment tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ```conda`` packages <conda>`__ as well as the documentation are
+The `conda packages <conda>`__ as well as the documentation are
 automatically uploaded to the server by the Continous Integration
 service (Travis), through an user called ``dummy`` which has further
-reduction in privileges (it uses the ```rssh``
+reduction in privileges (it uses the `rssh
 shell <https://linux.die.net/man/1/rssh>`__) and it is only allowed to
 run the ``scp`` command. An accepted private key is stored securely in
 the `Travis configuration <travis-variables>`__. The packages are
@@ -104,7 +104,7 @@ LHAPDF sets) which essentially list the files in a given directory. The
 indexes are regenerated automatically when their correspondent folders
 are modified. This is achieved by waiting for changes using the Linux
 ``inotify`` API and the
-```asynwatch`` <https://github.com/Zaharid/asyncwatch>`__ module. These
+`asynwatch <https://github.com/Zaharid/asyncwatch>`__ module. These
 scripts are often controlled by `cron jobs <#cron-jobs>`__.
 
 The report index is used to display a webpage indexing the reports. It
@@ -163,7 +163,7 @@ The following cron jobs are registered for the ``nnpdf`` user:
    respective folders and create indexes that can be used by various
    applications. The first two are homegrown scripts (see `Web
    Scripts <#web-scripts>`__) and the later two use
-   ```conda-index`` <https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-index.html>`__.
+   `conda-index <https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-index.html>`__.
 
 The following cron jobs are registered for the ``root`` user:
 

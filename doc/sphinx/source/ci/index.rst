@@ -86,7 +86,7 @@ Repository configuration
 
 The entry point for GitHub Actions are yaml rules files that can be
 found in the
-```.github/workflows/`` <https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/>`__
+`.github/workflows/ <https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/>`__
 folder. They specify which operating systems and versions are tested,
 which versions of Python, some environment variables, and command
 instructions for linux and macos. The commands basically call

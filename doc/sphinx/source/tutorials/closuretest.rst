@@ -205,5 +205,4 @@ follows:
    $ vp-rebuild-data fitname
    $ n3fit fitname.yml <replica_number>
 
-You will still need to evolve the fit and run ``postfit`` as with a
-standard ```n3fit`` <../tutorials/run-fit.md>`__
+You will still need to evolve the fit and run ``postfit`` :ref:`as usual <n3fit-usage>`.

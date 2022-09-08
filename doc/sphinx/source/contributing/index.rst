@@ -6,5 +6,5 @@ Contributing guidelines and tools
 
    ./rules
    ./sphinx-documentation
-   ./git.md
+   ./git
    ./python-tools

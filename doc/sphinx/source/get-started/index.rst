@@ -1,3 +1,5 @@
+.. _getstarted:
+
 Getting started
 ===============
 
@@ -12,7 +14,7 @@ the :ref:`cite` page.
 .. toctree::
   :maxdepth: 1
 
-  ./git.md
+  ./git
   ./installation.rst
   ./nnpdfmodules.rst
   ./cite.rst

@@ -27,13 +27,14 @@ in QCD, although work is ongoing to also include NLO electroweak
 corrections in the APPLgrid format. In addition to the standard version
 of APPLgrid, a modified version of APPLgrid exists which includes photon
 channels. This is known as APPLgridphoton. To learn how to generate
-APPLgrids, please see the tutorial `here <../tutorials/APPLgrids.md>`__.
+APPLgrids, please see the :ref:`tutorial <applgrids>`.
 
 APFELcomb generates FK tables for NNPDF fits. Information on how to use
-it can be found `here <./apfelcomb.md>`__. You can read about the
-mechanism behind APFELcomb `here <https://arxiv.org/abs/1605.02070>`__
-and find more information about the theory behind FK tables in the
-`Theory section <../theory/FastInterface.rst>`__.
+it can be found in the :ref:`corresponding tutorial <tutorialfktables>`. You
+can read about the mechanism behind APFELcomb `here
+<https://arxiv.org/abs/1605.02070>`__ and find more information about the
+theory behind FK tables in the `Theory section
+<../theory/FastInterface.rst>`__.
 
 Other codes
 -----------

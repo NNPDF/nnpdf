@@ -1,11 +1,11 @@
 How to benchmark and store APPLgrid/FastNLO tables
 ==================================================
 
-APPLgrid and fastNLO tables produced according to `How to generate
-APPLgrid and FastNLO tables <../tutorials/APPLgrids.md>`__ must be
+APPLgrid and fastNLO tables produced according to :ref:`How to generate
+APPLgrid and FastNLO tables <applgrids>` must be
 benchmarked and properly stored before they can be used to produce FK
-tables, as outlined in `How to generate and implement FK
-tables <../tutorials/apfelcomb.md>`__.
+tables, as outlined in :ref:`How to generate and implement FK
+tables <tutorialfktables>`.
 
 Benchmark
 ---------

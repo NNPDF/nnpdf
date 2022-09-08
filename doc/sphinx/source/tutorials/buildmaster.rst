@@ -1,3 +1,5 @@
+.. _buildmastertuto:
+
 How to implement a new experiment in buildmaster
 ================================================
 

@@ -135,7 +135,7 @@ Contents
    get-started/index
    n3fit/index
    vp/index
-   ./buildmaster.md
+   ./buildmaster
    data/index
    theory/index
    figuresofmerit/index

@@ -18,9 +18,9 @@ The uploading system is designed to be integrated with ``validphys``.
 Reports, hopefully filled with the `appropriate metadata <#metadata>`__
 in the runcard, can be `uploaded
 directly <#uploading-directly-from-validphys>`__, or after they have
-been completed using the ```vp-upload``
+been completed using the `vp-upload
 script <#the-vp-upload-script>`__. Arbitrary files can be uploaded using
-the ```wiki-upload`` script <#the-wiki-upload-script>`__, which will
+the `wiki-upload script <#the-wiki-upload-script>`__, which will
 interactively ask the user to fill in the metadata. In either case an
 URL will be returned with the location of the resource accessible with a
 web browser.
@@ -128,7 +128,7 @@ command, the contents of the output folder will be uploaded to the NNPDF
 data server, after validphys is done. Use this if you have `filled the
 meta mapping in the runcard <#metadata>`__ and already know that the
 output is going to be good enough to share. Otherwise use
-```vp-upload`` <#the-vp-upload-script>`__ after checking the result.
+`vp-upload <#the-vp-upload-script>`__ after checking the result.
 
 ``validphys`` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
@@ -148,7 +148,7 @@ use
 
 The output folder is expected to contain the `metadata <#metadata>`__
 (e.g. in the form of a ``meta.yaml`` file). If it doesn’t exist or you
-want to upload and index arbitrary files, use the ```wiki-upload``
+want to upload and index arbitrary files, use the `wiki-upload
 command <#the-wiki-upload-script>`__.
 
 
@@ -168,7 +168,7 @@ server accordingly.
 The code is documented at :py:mod:`validphys.scripts.vp_upload`.
 
 Note that fits are indexed separately, and can be retrieved with the
-```vp-get`` command <download>`__.
+`vp-get command <download>`__.
 
 The ``wiki-upload`` script
 --------------------------

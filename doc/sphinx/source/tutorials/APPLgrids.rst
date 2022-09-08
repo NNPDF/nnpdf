@@ -1,3 +1,5 @@
+.. _applgridtuto:
+
 How to generate APPLgrid and FastNLO tables
 ===========================================
 

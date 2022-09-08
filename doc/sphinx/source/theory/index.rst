@@ -1,3 +1,5 @@
+.. _theory:
+
 Theory
 ======
 
@@ -11,6 +13,7 @@ this information using the NNPDF code itself is detailed.
 .. toctree::
    :maxdepth: 1
 
+   ./PTevol
    ./FastInterface
    ./theoryparamsdefinitions
    ./theoryindex

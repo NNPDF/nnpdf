@@ -13,10 +13,10 @@ Python editors
 -  The `Spyder editor <https://www.spyder-ide.org/>`__ is good for
    getting started with scientific Python coding, because of various
    inspection and interactive features.
--  ```vscode`` <https://code.visualstudio.com/>`__ is a more full
+-  `vscode <https://code.visualstudio.com/>`__ is a more full
    featured editor.
 -  In the long run, the most efficient approach is to learn a terminal
-   based editor such as ```vim`` <https://www.vim.org/>`__. Note that
+   based editor such as `vim <https://www.vim.org/>`__. Note that
    ``vim`` editing modes can be added as extensions to graphical editors
    such as ``vscode``.
 
@@ -33,13 +33,14 @@ development.
 
 
 .. note::
-    When developing :ref:`validphys <validphys>` related code interactively, be
+    When developing :ref:`validphys <vp-index>` related code interactively, be
     sure to read about the :ref:`API functionality <vpapi>`.
 
 Testing
 -------
 
--  ```pytest`` <https://docs.pytest.org/en/latest/>`__: It is a
+
+-  `pytest <https://docs.pytest.org/en/latest/>`__: It is a
    framework for writing and running tests. It finds tests in the
    codebase (basically modules and functions that start with ``test``),
    enhances the ``assert`` statement to provide rich error reporting and
@@ -47,7 +48,7 @@ Testing
    to ``reportengine``). Tests are stored in the codebase and executed
    by pytest either manually or as a part of the continuous integration
    process.
--  ```coverage.py`` <https://coverage.readthedocs.io/en/coverage-5.2.1/>`__
+-  `coverage.py <https://coverage.readthedocs.io/en/coverage-5.2.1/>`__
    is a program that traces which lines of code have been executed when
    a given Python program (notably pytest) is running. The main use case
    is to verify that tests probe our code paths.
@@ -61,12 +62,12 @@ Code quality and reviewing
 See also `Reviewing pull requests <reviews>`__. Note that these can
 typically be integrated with your editor of choice.
 
--  The ```pylint`` <https://www.pylint.org/>`__ tool allows for the
+-  The `pylint <https://www.pylint.org/>`__ tool allows for the
    catching of common problems in Python code. The top level
-   ```.pylintrc``
+   `.pylintrc
    file <https://github.com/NNPDF/nnpdf/blob/master/.pylintrc>`__ comes
    with a useful and not overly noisy configuration.
--  The ```black`` code formatter <https://github.com/psf/black>`__ runs
+-  The `Black code formatter <https://github.com/psf/black>`__ runs
    almost without configuration and produces typically good results. It
    is good to run it by default, to avoid spending time on formatting
    (or arguing about it).
@@ -93,7 +94,7 @@ is not enough:
    it allows to automatically step in the execution of the code, but the
    disadvantage that the interface is somewhat more complex and often
    surprising (hint: always `prefix interpreter commands with
-   ``!`` <https://docs.python.org/3/library/pdb.html#pdbcommand-!>`__).
+   ! <https://docs.python.org/3/library/pdb.html#pdbcommand-!>`__).
 
 Performance profiling
 ---------------------
@@ -102,7 +103,7 @@ Sometimes a piece of code runs slower than expected. The reasons can
 often be surprising. It is a good idea to measure where the problems
 actually are.
 
--  ```py-spy`` <https://github.com/benfred/py-spy>`__: A performance
+-  `py-spy <https://github.com/benfred/py-spy>`__: A performance
    measuring program (*profiler*) that provides good information and
    little overhead. Prefer it to the standard ``cProfile``. The output
    is typically presented in the form of “Flamegraphs” that show the
@@ -118,11 +119,9 @@ Documentation
    customization and plugins. In particular because the default
    formatting for docstrings is somewhat unwieldy, it is recommended to
    enable the ``napoleon`` extension which allows for a more lenient
-   ```numpydoc`` <https://numpydoc.readthedocs.io/en/latest/format.html>`__
+   `numpydoc <https://numpydoc.readthedocs.io/en/latest/format.html>`__
    style. Similarly the default RST markup language can be overwhelming
-   for simple documents. We enable the
-   `recommonmark <https://recommonmark.readthedocs.io/en/latest/>`__
-   extension to be able to compose files also in markdown format.
+   for simple documents.
 
 Python static checks and code style
 -----------------------------------
@@ -154,7 +153,7 @@ Before beginning you will need to ensure that you have the tests
 dependencies, which can be checked in ``nnpdf/conda-recipe/meta.yml``.
 
 The next step is to write the test function. It is highly recommended to
-use the `validphys API <../vp/api.md>`__ for this, both to simplify the
+use the :ref:`validphys API <vpapi>` for this, both to simplify the
 code and to make it agnostic to the structure of backend providers -
 provided that they produce the same results. See for example a function
 which tests the ``plot_pdfs`` provider:
@@ -183,7 +182,7 @@ which will generate a PNG of the figure in the
 ``src/validphys/tests/baseline`` directory. It is recommended to put all
 baseline plots in this directory so that they are automatically
 installed, and so will be in the correct location when the
-`CI <../ci/index.md>`__ runs the test suite.
+:ref`CI` runs the test suite.
 
 Now that the baseline figure exists you can check that your test works:
 

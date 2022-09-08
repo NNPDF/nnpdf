@@ -146,7 +146,7 @@ The applgrid filename assumes that the grid can be found at
 where ``APPL_PATH`` is defined in Makefile.am, ``<setname>`` is the
 corresponding ``COMMONDATA`` set name specified in the grids table (that
 should match the name used in the
-`buildmaster <../tutorials/buildmaster.md>`__ implementation), and
+:ref:`buildmaster` implementation), and
 ``<applgrid>`` is specified in the field described above.
 
 Implementing a new DIS or DYP subgrid

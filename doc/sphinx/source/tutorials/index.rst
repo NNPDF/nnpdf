@@ -11,40 +11,39 @@ Running fits
 .. toctree::
    :maxdepth: 1
 
-   ./run-fit.md
-   ./run-legacy-fit.rst
-   ./run-iterated-fit.rst
-   ./general_th_covmat.rst
-   ./thcov_tutorial.rst
+   ./run-fit
+   ./run-iterated-fit
+   ./general_th_covmat
+   ./thcov_tutorial
 
 Analysing results
 -----------------
 .. toctree::
    :maxdepth: 1
 
-   ./compare-fits.md
-   ./report.md
-   ./plot_pdfs.rst
-   ./pdfbases.rst
-   ./datthcomp.md
+   ./compare-fits
+   ./report
+   ./plot_pdfs
+   ./pdfbases
+   ./datthcomp
 
 Adding new data
 ---------------
 .. toctree ::
    :maxdepth: 1
 
-   ./buildmaster.rst
-   ./APPLgrids.md
-   ./APPLgrids_comp.md
-   ./apfelcomb.md
+   ./buildmaster
+   ./APPLgrids
+   ./APPLgrids_comp
+   ./apfelcomb
 
 Closure tests
 -------------
 .. toctree::
    :maxdepth: 1
 
-   ./closuretest.md
-   ./closureestimators.rst
+   ./closuretest
+   ./closureestimators
 
 Special PDF sets
 ----------------
@@ -52,18 +51,18 @@ Special PDF sets
    :maxdepth: 1
 
    ./reproduce
-   ./bundle-pdfs.rst
-   ./mc2hessian.rst
-   ./nf_variation.rst
+   ./bundle-pdfs
+   ./mc2hessian
+   ./nf_variation
 
 Miscellaneous
 -------------
 .. toctree ::
    :maxdepth: 1
 
-   ./list-resources.md
-   ./pseudodata.rst
-   ./newplottingfn.rst
-   ./addspecialgrouping.rst
-   ./conda.md
-   ./futuretests.rst
+   ./list-resources
+   ./pseudodata
+   ./newplottingfn
+   ./addspecialgrouping
+   ./conda
+   ./futuretests

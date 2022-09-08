@@ -47,5 +47,5 @@ They should then be copied into
 
 Whenever a new data set is implemented, the buildmaster code should be
 updated accordingly. Detailed instructions on how to do so are provided
-in the tutorial `Implementing a new experiment in
-buildmaster <../tutorials/buildmaster.md>`__.
+in the tutorial :ref:`Implementing a new experiment in
+buildmaster <buildmastertuto>`.
