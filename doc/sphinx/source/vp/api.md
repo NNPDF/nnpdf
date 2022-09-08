@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _vpapi:
 ```
 # Using the validphys API

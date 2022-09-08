@@ -1,7 +1,7 @@
 # How to benchmark and store APPLgrid/FastNLO tables
 
 APPLgrid and fastNLO tables produced according to 
-[How to generate APPLgrid and FastNLO tables](.../tutorials/APPLgrids.md)
+[How to generate APPLgrid and FastNLO tables](../tutorials/APPLgrids.md)
 must be benchmarked and properly stored before they can be used to produce
 FK tables, as outlined in 
 [How to generate and implement FK tables](../tutorials/apfelcomb.md).
@@ -68,7 +68,7 @@ fnlo-tk-merge
 see the [APPLgrid](https://applgrid.hepforge.org/) and 
 [FastNLO](https://fastnlo.hepforge.org/) documentation for further details.
 
-```eval_rst
+```{eval-rst}
 .. _storage:
 ```
 

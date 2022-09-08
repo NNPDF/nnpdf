@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _filters:
 ```
 
@@ -59,7 +59,7 @@ By default, these filters can have several entries:
 5. `local_variables`: (optional) Any additional, non-standard local variables the user
 wishes to add for this rule only.
 
-```eval_rst
+```{eval-rst}
 .. note::
   At least one of :code:`dataset` or :code:`process_type` is required.
   Additionally, a :code:`rule` entry is always required.
@@ -80,7 +80,7 @@ discussed further [here](#PTO). One can see a full list of possible theory param
 `vp-checktheory <theory id>`
 
 
-```eval_rst
+```{eval-rst}
 
 .. important::
     The :code:`rule` entry should be interpreted as a :code:`str` type within :code:`Python`. As such
@@ -113,7 +113,7 @@ I mean by `w2`:
     w2: Q2 * (1 - x) / x
 ```
 
-```eval_rst
+```{eval-rst}
 .. danger::
   Defining :code:`local_variables` is non-commutative. The order of definition is important.
   If a local variable depends on other local variables, then the user must ensure all other
@@ -131,7 +131,7 @@ The following would not
     w2: Q2 * (1 - x) / x
     w: sqrt(w2)
 ```
-```eval_rst
+```{eval-rst}
 .. note::
   :code:`local_variables` have a local scope. They apply to only the rule within which
   they are defined.
@@ -158,7 +158,7 @@ and note that the relevant `key` is `'FNS'`. Thus to only evaluate my rule if th
 ```
 Similarly, one can add any such theory description `key` into their rule.
 
-```eval_rst
+```{eval-rst}
 .. tip::
   Sometimes, we may want to evaluate a rule provided the perturbative order is within
   a certain range. For example, we may want a rule to be evaluated if the perturbative
@@ -196,7 +196,7 @@ filter_rules:
     rule: x > 0.2
 ```
 
-```eval_rst
+```{eval-rst}
 .. warning::
   Adding a :code:`filter_rules` section to the runcard overwrites the default behaviour and does
   **not** append to the default behaviour. This is done intentionally since a rule cannot be 
@@ -212,7 +212,7 @@ filter_defaults:
 ```
 As in the case of the rules, this overwrites the original defaults and does not append to them.
 
-```eval_rst
+```{eval-rst}
 .. attention::
   To ensure backwards compatibility with old style runcards, if :code:`q2min` and :code:`w2min` are defined
   under the :code:`datacuts` namespace within the runcard, these values are read in and override the default

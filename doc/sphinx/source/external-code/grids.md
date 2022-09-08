@@ -24,7 +24,7 @@ learn how to generate APPLgrids, please see the tutorial [here](../tutorials/APP
 APFELcomb generates FK tables for NNPDF fits. Information on how to use it can be found 
 [here](./apfelcomb.md). You can read about the mechanism behind APFELcomb
 [here](https://arxiv.org/abs/1605.02070) and find more information about the theory behind FK tables
-in the [Theory section](../Theory/FastInterface.rst).
+in the [Theory section](../theory/FastInterface.rst).
 
 ## Other codes
 

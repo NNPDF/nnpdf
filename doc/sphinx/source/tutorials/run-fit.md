@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _n3fit-usage:
 ```
 
@@ -105,7 +105,7 @@ hyperscan_config:
 ```
 
 
-```eval_rst
+```{eval-rst}
 .. _run-n3fit-fit:
 ```
 
@@ -122,7 +122,7 @@ following the points presented above you can proceed with a fit.
     downloaded automatically. Alternatively they can be obtained with the
     ``vp-get`` tool.
 
-    ```eval_rst
+    ```{eval-rst}
     .. note::
        This step is not strictly necessary when producing a standard fit with
        ``n3fit`` but it is required by :ref:`validphys <vp-index>`
@@ -180,7 +180,7 @@ folder, which contains a number of files:
 
 
 
-```eval_rst
+```{eval-rst}
 .. _upload-fit:
 ```
 

@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _datthcomp:
 ```
 # How to do a data theory comparison

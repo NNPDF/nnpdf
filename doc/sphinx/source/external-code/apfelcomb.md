@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _apfelcomb:
 ```
 # Using APFELcomb
@@ -14,7 +14,7 @@ APFELcomb is available from
 ```
 https://github.com/NNPDF/apfelcomb
 ````
-The various data formats used in APFELcomb are described in [Experimental data files](../data/exp-data-files.html#exp-data-files).
+The various data formats used in APFELcomb are described in [Experimental data files](../data/exp-data-files.rst#exp-data-files).
 
 
 APFELcomb depends on the following libraries

@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _server:
 ```
 Servers
@@ -29,7 +29,7 @@ We perform every Sunday a `rsync` from the `/home/nnpdf` folder
 to the `nnpdf@lxplus` account at CERN.
 
 
-```eval_rst
+```{eval-rst}
 .. _server-access:
 ```
 Access
@@ -82,7 +82,7 @@ The relevant passwords can be found
 [here](https://www.wiki.ed.ac.uk/pages/viewpage.action?pageId=292165461).
 
 
-```eval_rst
+```{eval-rst}
 .. _web-scripts:
 ```
 Web scripts

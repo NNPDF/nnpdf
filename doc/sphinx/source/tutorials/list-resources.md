@@ -1,6 +1,6 @@
 # How to list the available resources
 
-```eval_rst
+```{eval-rst}
 .. _vp-list:
 ```
 

@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _download:
 ```
 
@@ -56,7 +56,7 @@ What can be downloaded
 
 The following resources are found automatically:
 
-```eval_rst
+```{eval-rst}
 Fits
     Fits (specified by the ``fit`` key) can be downloaded if they have previously
     been uploaded with :ref:`vp-upload <upload>`. The corresponding PDF
@@ -81,7 +81,7 @@ Theories
     example for using an existing file instead of computing it.
 ```
 
-```eval_rst
+```{eval-rst}
 .. _vp-get:
 ```
 
@@ -123,7 +123,7 @@ FitSpec(name='NNPDF31_nlo_as_0118_1000', path=PosixPath('/home/zah/anaconda3/env
 Downloading resources in code (``validphys.loader``)
 ----------------------------------------------------
 
-```eval_rst
+```{eval-rst}
 The automatic download logic is implemented in the :py:mod:`validphys.loader`,
 specifically by the :py:class:`validphys.loader.RemoteLoader` and
 :py:class:`validphys.loader.FallbackLoader` classes.

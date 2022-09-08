@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _lhapdf:
 ```
 # PDF set storage and interpolation

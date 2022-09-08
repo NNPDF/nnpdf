@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _upload:
 ```
 Uploading results to the `validphys` repository
@@ -121,7 +121,7 @@ to share. Otherwise use [`vp-upload`](#the-vp-upload-script) after checking the 
 `validphys` will check the SSH connection before doing any work, and
 it will fail early if it cannot be established.
 
-```eval_rst
+```{eval-rst}
 .. _vpupload:
 ```
 The `vp-upload` script
@@ -136,7 +136,7 @@ The output folder is expected to contain the [metadata](#metadata) (e.g. in the
 form of a `meta.yaml` file). If it doesn't exist or you want to upload and index
 arbitrary files, use the [`wiki-upload` command](#the-wiki-upload-script).
 
-```eval_rst
+```{eval-rst}
 The script automatically detects (:py:func:`validphys.uploadutils.check_input`) the type of the input.
 A `fit` is defined to be any folder structure that contains a `filter.yml` file at its root, a `PDF` is any
 folder containing a `.info` file at the root and a replica 0, and a report is any such structure containing an
@@ -144,14 +144,14 @@ folder containing a `.info` file at the root and a replica 0, and a report is an
 server accordingly.
 ```
 
-```eval_rst
+```{eval-rst}
 .. note::
   If there is already a fit or PDF on the server with the same name as the fit or PDF
   you wish to upload, then this command will *not* overwrite the resource that already
   exists. To overwite such a resource on the server, use the :code:`--force` option.
 ```
 
-```eval_rst
+```{eval-rst}
 The code is documented at :py:mod:`validphys.scripts.vp_upload`.
 ```
 
@@ -174,7 +174,7 @@ This will cause the user to be prompted for the various metadata fields and the
 file or folder to be uploaded to the server, together with a generated
 `meta.yaml` file used for indexing.
 
-```eval_rst
+```{eval-rst}
 The code is documented at :py:mod:`validphys.scripts.wiki_upload`.
 ```
 

@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _rules:
 ```
 # Code development
@@ -19,7 +19,7 @@ This PR should adhere to the following rules:
 address? If the reason for the PR has already been detailed in an issue, then this issue should be
 linked in the PR.
 
-* The PR should contain **[documentation](../sphinx-documentation.md) describing
+* The PR should contain **[documentation](./sphinx-documentation.md) describing
   the new features**, if applicable.
 
 * If the PR is fixing a bug, information should be given such that a reviewer can reproduce the bug.
@@ -46,7 +46,7 @@ It demonstrates how to add a new feature, together with relevant tests and
 documentation, and refine it based on the discussion.
 
 
-```eval_rst
+```{eval-rst}
 .. _reviews:
 ```
 ## Reviewing pull requests

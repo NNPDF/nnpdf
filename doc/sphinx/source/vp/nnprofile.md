@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _nnprofile:
 ```
 
@@ -35,7 +35,7 @@ Options
 The following settings in the profile file are interpreted by different parts of
 the code. These should be specified in YAML format.
 
-```eval_rst
+```{eval-rst}
 
 ``data_path``
     The path in the user's system where input data such as CommonData files and

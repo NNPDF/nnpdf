@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _pytools:
 ```
 
@@ -29,7 +29,7 @@ Python code can be evaluated interactively, which can speed up the development.
   - [Jupyter notebook](https://jupyter.org/): Interactive development
     environment running on the browser. Useful for bigger experiments.
 
-```eval_rst
+```{eval-rst}
 .. note::
     When developing :ref:`validphys <validphys>` related code interactively, be
     sure to read about the :ref:`API functionality <vpapi>`.
@@ -51,7 +51,7 @@ Python code can be evaluated interactively, which can speed up the development.
 
 
 
-```eval_rst
+```{eval-rst}
 .. _pytoolsqa:
 ```
 ## Code quality and reviewing

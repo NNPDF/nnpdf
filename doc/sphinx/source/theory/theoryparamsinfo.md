@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _th_parameter_info:
 ```
 # Looking up the parameters of a theory

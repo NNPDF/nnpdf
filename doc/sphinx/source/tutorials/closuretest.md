@@ -1,4 +1,4 @@
-```eval_rst
+```{eval-rst}
 .. _tut_closure:
 ```
 
@@ -182,4 +182,4 @@ $ n3fit fitname.yml <replica_number>
 ```
 
 You will still need to evolve the fit and run ``postfit`` as with a standard
-[``n3fit``](../n3fit/usage.md).
+[``n3fit``](../tutorials/run-fit.md)
