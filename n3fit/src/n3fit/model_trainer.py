@@ -362,10 +362,18 @@ class ModelTrainer:
         # The input layer was a concatenation of all experiments
         # the output of the pdf on input_layer will be thus a concatenation
         # we need now to split the output on a different array per experiment
+
         sp_ar = [self.input_sizes]
         sp_kw = {"axis": 1}
+        splitting_op = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
         splitting_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
-        splitted_pdf = splitting_layer(full_pdf_per_replica)
+        # splitted_pdf = splitting_layer(full_pdf_per_replica)
+
+        splitted_pdfs = []
+        for layer in all_replicas_pdf:
+            split_layers = splitting_op(layer)
+            splitted_pdfs.append([op.expand(sl) for sl in split_layers])
+
 
         # If we are in a kfolding partition, select which datasets are out
         # TODO: Figure out how parallel replicas are supposed to work with k-folding
@@ -379,29 +387,46 @@ class ModelTrainer:
                 validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
 
+
         # Training and validation leave out the k-fold dataset
         # experiment leaves out the negation
-        output_tr = _pdf_injection(splitted_pdf, self.training["output"], training_mask)
-        training = MetaModel(full_model_input_dict, output_tr)
+
+        nrep = len(all_replicas_pdf)
+
+        # output_tr_orig = _pdf_injection(splitted_pdf, self.training["output"][0], training_mask)
+        output_tr = [_pdf_injection(splitted_pdfs[r], self.training["output"][r], training_mask) for r in range(nrep)]
+        output_tr_t = list(map(list, zip(*output_tr)))
+        output_layers_tr = [op.stack(seq, axis=-1) for seq in output_tr_t]
+        training = MetaModel(full_model_input_dict, output_layers_tr)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
         # so we must only use the corresponding subset of PDF functions
         val_pdfs = []
         exp_pdfs = []
-        for partial_pdf, obs in zip(splitted_pdf, self.training["output"]):
-            if not obs.positivity and not obs.integrability:
-                val_pdfs.append(partial_pdf)
-                exp_pdfs.append(partial_pdf)
-            elif not obs.integrability and obs.positivity:
-                val_pdfs.append(partial_pdf)
+#        import pdb; pdb.set_trace()
+        for replica in range(nrep):
+            val_pdfs.append([])
+            exp_pdfs.append([])
+            for partial_pdf, obs in zip(splitted_pdfs[replica], self.training["output"][replica]):
+                if not obs.positivity and not obs.integrability:
+                    val_pdfs[replica].append(partial_pdf)
+                    exp_pdfs[replica].append(partial_pdf)
+                elif not obs.integrability and obs.positivity:
+                    val_pdfs[replica].append(partial_pdf)
 
-        # We don't want to included the integrablity in the validation
-        output_vl = _pdf_injection(val_pdfs, self.validation["output"], validation_mask)
-        validation = MetaModel(full_model_input_dict, output_vl)
+        # We don't want to include the integrablity in the validation
+        import pdb; pdb.set_trace()
+        output_vl = [_pdf_injection(val_pdfs[r], self.validation["output"][r], validation_mask) for r in range(nrep)]
+        output_vl_t = list(map(list, zip(*output_vl)))
+        output_layers_vl = [op.stack(seq, axis=-1) for seq in output_vl_t]
+        validation = MetaModel(full_model_input_dict, output_layers_vl)
 
         # Or the positivity in the total chi2
-        output_ex = _pdf_injection(exp_pdfs, self.experimental["output"], experimental_mask)
-        experimental = MetaModel(full_model_input_dict, output_ex)
+        output_ex = [_pdf_injection(exp_pdfs[r], self.experimental["output"][r],
+                                    experimental_mask) for r in range(nrep)]
+        output_ex_t = list(map(list, zip(*output_ex)))
+        output_layers_ex = [op.stack(seq, axis=-1) for seq in output_ex_t]
+        experimental = MetaModel(full_model_input_dict, output_layers_ex)
 
         if self.print_summary:
             training.summary()
@@ -479,8 +504,7 @@ class ModelTrainer:
                 if not self.mode_hyperopt:
                     log.info("Generating layers for experiment %s", exp_dict["name"])
 # TODO: Make this generator less memory-consuming by factorizing out the FK-tables mask into a separate layer...
-                exp_layer = model_gen.observable_generator(exp_dict)
-
+                exp_layer = model_gen.observable_generator(exp_dict, name_suffix="rep"+str(replica))
                 # Now save the observable layer, the losses and the experimental data
                 self.training["output"][replica].append(exp_layer["output_tr"])
                 self.validation["output"][replica].append(exp_layer["output_vl"])
@@ -503,17 +527,16 @@ class ModelTrainer:
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
-            # The input list is still common
-            self.input_list += pos_layer["inputs"]
-            self.input_sizes.append(pos_layer["experiment_xsize"])
-
             # The positivity should be on both training and validation models
             for replica in range(self._parallel_models):
-                # TODO: Check whether deepcopy is necessary and how much memory it consumes...
-                layer_copy = copy.deepcopy(pos_layer["output_tr"])
-                self.training["output"][replica].append(layer_copy)
-                self.validation["output"][replica].append(layer_copy)
+                pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial,
+                                                           name_suffix="rep"+str(replica))
+                self.training["output"][replica].append(pos_layer["output_tr"])
+                self.validation["output"][replica].append(pos_layer["output_tr"])
+                # The input list is still common
+                if replica == 0:
+                    self.input_list += pos_layer["inputs"]
+                    self.input_sizes.append(pos_layer["experiment_xsize"])
 
             self.training["posmultipliers"].append(pos_multiplier)
             self.training["posinitials"].append(pos_initial)

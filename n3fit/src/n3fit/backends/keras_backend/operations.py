@@ -220,6 +220,11 @@ def flatten(x):
     return tf.reshape(x, (-1,))
 
 
+def expand(x, axis=-1):
+    """ Reshape tensor x """
+    return tf.expand_dims(x, axis)
+
+
 def boolean_mask(*args, **kwargs):
     """
     Applies a boolean mask to a tensor
