@@ -11,24 +11,13 @@ the appropriate ``nnpdf`` conda environment. This produces the
 documentation in the ``build/index/`` directory. The ``index.html`` can
 be viewed with any appropriate browser.
 
-New documentation can be added in markdown, naming the source files with
-the ``.md`` suffix, or restructured text, with the ``.rst`` suffix
-formats.
+New documentation needs to be formatted as `reStructuredText
+<https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html>`_.
 
-
-.. note::
-  The ``md`` format is now deprecated and only supported for legacy reasons.
-  The reStructured Text format natively supports equation displaying as well as
-  directives such as this note and is thus the preferred format for `NNPDF`
-  documentation. Despite this, it is possible to evaluate inline ``rst`` in a
-  ``md`` file using the ``eval_rst`` command in legacy files written in
-  markdown.
 
 To add a new section to the documentation, create an appropriately named
-directory in the ``sphinx/source/`` directory. Inside the new directory,
-add all relevant documentation in the markdown or restructured text
-formats. In addition to these files, create an ``index.rst`` file
-containing:
+directory in the ``sphinx/source/`` directory. In addition to these files,
+create an ``index.rst`` file containing:
 
 ::
 
@@ -38,8 +27,8 @@ containing:
    .. toctree::
       :maxdepth: 1
 
-      ./file1.md
-      ./file2.rst
+      ./file1
+      ./file2
 
 ensuring that the number of ``=`` signs is the same as the number of
 characters in ``Chapter Name``.
@@ -75,16 +64,14 @@ The next step is to reference the newly made ``index.rst`` in the main
    * :ref:`modindex`
    * :ref:`search`
 
-Useful Markdown and Restructured Text Tools
+Useful reStructuredText Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Various
-`markdown <https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet>`__
-and `restructured
-text <http://docutils.sourceforge.net/docs/user/rst/quickref.html>`__
-cheatsheets exist online.
+Various `reStructuredText
+<http://docutils.sourceforge.net/docs/user/rst/quickref.html>`__ cheatsheets
+exist online. We list some markup constructs useful to the NNPDF documentation.
 
-In restructured text, a :math:`\LaTeX` block can be generated using
+A :math:`\LaTeX` block can be generated using
 
 ::
 
@@ -98,44 +85,7 @@ while inline maths is generated using
 
    :math:`\frac{1}{2}`
 
-with attention being brought to the backticks. Note: the markdown
-interpreter being used here does not support inline maths, so if formula
-dense documentation is being implemented, it is advised to use
-restructured text instead.
-
-One can cross reference various parts of their markdown file using
-``anchors``, which provide clickable pieces of text which transport the
-reader to a particular part of the document.
-
-To do this: add an anchor point in the text. This may look like the
-following:
-
-::
-
-   Lorem ipsum dolor sit amet <a name="label"</a> consectetur adipiscing elit, sed do 
-
-we can then jump to ``label`` from an arbitrary point in the text by
-using ``[text](#label)``
-
-As an example, clicking `this <#top>`__ will take the reader to the top
-of the page.
-
-This was done by having the following lines of code:
-
-::
-
-   For example, clicking [this](#top) will take the reader to the top of the page.
-
-as well as
-
-::
-
-   # NNPDF code and standards documentation <a name="top"></a>
-
-at the top of this file.
-
-In addition, one can link to other pages within the documentation by
-``[text](<relative-path-to-md-or-rst-file>.<extension>)``.
+with attention being brought to the backticks.
 
 One can define “labels” for RestructuredText, which can be referred to
 from anywhere, like this:
@@ -151,28 +101,14 @@ from anywhere, like this:
 
        It refers to the section itself, see :ref:`my-reference-label`.
 
-Such labels can also be defined in Markdown by using ``rst`` syntax
-embedded in code markers in markdown:
-
-::
-
-   ```eval_rst
-   .. _my-reference-label:
-   ```
 
 Labels can be linked to from anywhere using the syntax
 
 ::
 
-   [link text](my-reference-label)
-
-for Markdown and
-
-::
-
    :ref:`my-reference-label`
 
-for RestructuredText, as described in its
+as described in the
 `documentation <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html?highlight=cross%20reference#role-ref>`__.
 
 Adding BibTeX references
