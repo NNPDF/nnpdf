@@ -47,11 +47,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinxcontrib.bibtex',
-    # To generate section headings,
-    # particularly in markdown. See
-    # https://recommonmark.readthedocs.io/en/latest/#linking-to-headings-in-other-files
     'sphinx.ext.autosectionlabel',
-    'myst_parser'
 ]
 
 
@@ -67,13 +63,9 @@ templates_path = ['_templates']
 #
 source_suffix = {
     '.rst': 'restructuredtext',
-    '.txt': 'markdown',
-    '.md': 'markdown',
 }
 
 autosectionlabel_prefix_document = True
-# Allow to embed rst syntax in  markdown files.
-enable_eval_rst = True
 
 # The master toctree document.
 master_doc = 'index'
@@ -216,5 +208,3 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
-myst_heading_anchors = 3
