@@ -1,4 +1,5 @@
 .. _reproduce40:
+
 How to reproduce an NNPDF4.0 fit
 ================================================================================
 
@@ -13,6 +14,7 @@ of the `project repository <https://github.com/NNPDF/nnpdf>`_ on Github. The
 `.yml` files that folder are the following:
 
 .. _nnpdf40 runcard textblock:
+
 .. code-block::
 
     nnpdf40_env.yml # conda environment
@@ -132,7 +134,7 @@ Both ``NNPDF40_nnlo_as_0118`` and ``NNPDF40_nnlo_as_0118_hessian`` are based on
 a 1000 replica PDF set ``NNPDF40_nnlo_as_0118_1000``. Specifically,
 ``NNPDF40_nnlo_as_0118`` is the result of a compression of
 ``NNPDF40_nnlo_as_0118_1000`` using the
-:ref:`pycompressor <https://github.com/N3PDF/pycompressor>` package, while
+`pycompressor <https://github.com/N3PDF/pycompressor>`_ package, while
 ``NNPDF40_nnlo_as_0118_hessian`` can be created by running
 
 .. code:: bash
@@ -156,7 +158,7 @@ The PDF sets released as part of NNPDF4.0 also includes sets in which the
 maximum value of ``nf`` differs from the baseline value of ``nf=5``. To produce
 these sets, the steps described in :ref:`howto nf variations`. In particular, 
 the ID's of the required theories can be found in the 
-:ref:`theory dabase <https://github.com/NNPDF/nnpdf/blob/master/nnpdfcpp/data/theory.db>`,
+`theory dabase <https://github.com/NNPDF/nnpdf/blob/master/nnpdfcpp/data/theory.db>`_,
 where the id's of the theories used to do the flavor-number variations are 
 218-227. 
 

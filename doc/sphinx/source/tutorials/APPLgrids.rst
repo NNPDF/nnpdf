@@ -79,8 +79,8 @@ observable involved, for which one Monte Carlo can be more suited than
 another (because it is faster or more flexible). The details of each of
 these methods are discussed below.
 
-MadGraph5_aMC@NLO + amcfast
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MadGraph5_aMC\@NLO + amcfast
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Generating APPLgrids with ``amcfast`` requires old (and unmaintained)
 versions of various pieces of software and a complex setup. The best way
@@ -95,7 +95,7 @@ computer clusters might be able to take advantage of the image using the
 `Singularity <https://sylabs.io/>`__ software.
 
 The image contains of all of the pieces of code required to generate
-interpolation tables in the APPLgrid format with the MadGraph5_aMC@NLO +
+interpolation tables in the APPLgrid format with the MadGraph5_aMC\@NLO +
 amcfast tool chain. The default version of MG5_aMC used in NNPDF is
 `v2.6.4 <https://github.com/NNPDF/external/tree/MG5_fixed/MG5_aMC_v2_6_4>`__.
 It does not need to be installed, because installation is performed

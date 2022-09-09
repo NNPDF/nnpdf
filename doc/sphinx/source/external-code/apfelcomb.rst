@@ -9,7 +9,7 @@ theoretical predicitons in the NNPDF framework. Broadly speaking, this
 is achieved by taking DGLAP evolution kernels from ``APFEL`` and
 combining them with interpolated parton-level observable kernels of
 various forms. The mechanism behind APFELcomb is presented in
-`arXiv:1605.02070 <>`__.
+`arXiv:1605.02070 <https://arxiv.org/abs/1605.02070>`__.
 
 APFELcomb is available from
 
@@ -30,7 +30,7 @@ and data files from
 -  `applgrids <https://github.com/NNPDF/applgrids>`__
 
 There are various ways of generating the latter, as explained in :ref:`How to
-generate applgrids <applgrids>`.
+generate applgrids <applgridtuto>`.
 
 Once the above libraries and data files are set up, the APFELcomb
 project can be compiled as follows

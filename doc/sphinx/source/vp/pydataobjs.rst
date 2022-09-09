@@ -5,8 +5,8 @@ Python based data objects
 
 Internal data formats such as PDF sets, CommonData, or :ref:`FKTables
 <fktables>` files are currently accessed through the `libnnpdf` C++ code
-(interfaced trough the SWIG wrappers). However there is a :ref:`project
-<https://github.com/NNPDF/nnpdf/issues?q=label%3Adestroyingc%2B%2B+>` underway
+(interfaced trough the SWIG wrappers). However there is a `project
+<https://github.com/NNPDF/nnpdf/issues?q=label%3Adestroyingc%2B%2B+>`_ underway
 to make these resources available in terms of standard Python containers
 (particularly numpy arrays and pandas dataframes). The objectives include
 simplifying the codebase, increasing the ease of use and enabling more advanced
@@ -267,6 +267,7 @@ For example, the following will return the values for all 100 members of NNPDF4.
 the gluon and the d-quark, at three values of ``x`` at ``Q=91.2``.
 
 .. code-block:: python
+
     from validphys.api import API
     pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
     l_pdf = pdf.load()

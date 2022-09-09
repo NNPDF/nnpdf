@@ -1,4 +1,5 @@
 .. _howto nf variations:
+
 How to create PDF sets with flavor-number variations
 ================================================================================
 

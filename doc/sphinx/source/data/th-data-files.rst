@@ -4,6 +4,9 @@
 Theory data files
 =================
 
+FKTables
+========
+
 In the ``nnpdf++`` project, ``FK`` tables (or grids) are used to provide the
 information required to compute perturbative QCD cross sections in a compact fashion.  With
 the ``FK`` method a typical hadronic observable data point :math:`\mathcal{O}`, is
@@ -55,9 +58,13 @@ configurations. The first configuration consists of a list of key-value pairs,
 and the second is a simple data 'blob' with no requirements as to its
 formatting. Each segment begins with a delineating line which for key-value pairs is
 
+.. code::
+
     _SegmentName_____________________________________________
 
 and for data blobs is
+
+.. code::
 
     {SegmentName_____________________________________________
 
@@ -67,6 +74,8 @@ the segment is specified from the second character, to a terminating
 underscore (``_``). The line is then typically padded out with underscores up
 to 60 characters. Following this delineating line, for a key-value segment, the
 following lines must all be of the format
+
+.. code::
 
     *KEY: VALUE
 
@@ -103,29 +112,33 @@ These are, specified by their segment name:
   basis specified :ref:`here<flavours>`. For DIS processes, an example
   section would be
 
-    | {FlavourMap_____________________________________________
-    | 0 1 1 0 0 0 0 0 0 0 1 0 0 0
+  .. code::
+
+     {FlavourMap_____________________________________________
+     0 1 1 0 0 0 0 0 0 0 1 0 0 0
 
   which specifies that only the Singlet, gluon and :math:`T_8` channels are populated in
   the grid. In the case of hadronic FK tables, the full :math:`14\times 14` flavour
   combination matrix is specified in the same manner. Consider the flavourmap for
   the CDFR2KT *Dataset*:
 
-    | {FlavourMap_____________________________________________
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 1 1 0 0 0 0 0 0 0 0 0 0 0
-    | 0 1 1 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 1 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 1 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 1 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 1 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 1 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    | 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  .. code::
+
+     {FlavourMap_____________________________________________
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
+     0 1 1 0 0 0 0 0 0 0 0 0 0 0
+     0 1 1 0 0 0 0 0 0 0 0 0 0 0
+     0 0 0 1 0 0 0 0 0 0 0 0 0 0
+     0 0 0 0 1 0 0 0 0 0 0 0 0 0
+     0 0 0 0 0 1 0 0 0 0 0 0 0 0
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
+     0 0 0 0 0 0 0 0 0 1 0 0 0 0
+     0 0 0 0 0 0 0 0 0 0 1 0 0 0
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
+     0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
   This flavourmap contains 9 nonzero entries, demonstrating the importance of only
   computing those flavour combinations that are relevant to the process.
@@ -141,6 +154,8 @@ These are, specified by their segment name:
   list of the grid points, here is an example of an :math:`x`-grid with :math:`N_x=5`
   entries:
 
+  .. code::
+
     | {xGrid_____________________________________________
     | 0.10000000000000001
     | 0.13750000000000001
@@ -152,7 +167,7 @@ For examples of complete DIS and hadronic ``FK`` table headers, see
 :ref:`example_fk_preamble`.
 
 ``FK`` grid layout
-------------------
+---------------------
 
 To start the section of the file with the ``FK`` grid itself, we begin with a
 blob-type segment delineator:
@@ -215,27 +230,31 @@ These fields are formatted as
 and may be accompanied by any additional information, within the star delineated
 header region. Consider the following as a complete example of the header,
 
-  | *******************************************
-  | SetName: D0ZRAP
-  | Author: John Doe john.doe@cern.ch
-  | Date: 2014
-  | CodesUsed: MCFM 15.01
-  | TheoryInput: as 0.118, central scale 91.2 GeV
-  | PDFset: NNPDF30\_as\_0118\_nnlo
-  | Warnings: None
-  | Additional Information here
-  | *******************************************
+.. code::
+
+   *******************************************
+   SetName: D0ZRAP
+   Author: John Doe john.doe@cern.ch
+   Date: 2014
+   CodesUsed: MCFM 15.01
+   TheoryInput: as 0.118, central scale 91.2 GeV
+   PDFset: NNPDF30\_as\_0118\_nnlo
+   Warnings: None
+   Additional Information here
+   *******************************************
 
 The remainder of the file consists of the :math:`C`-factors themselves, and the error
 upon the :math:`C`-factors. Each line is now the :math:`C`-factor for each data point, with
 the whitespace separated uncertainty. For example, for *Dataset* with five
 points, the data section of a ``CFACTOR`` file may be:
 
-  | 1.1	0.1
-  | 1.2	0.12
-  | 1.3	0.13
-  | 1.4	0.14
-  | 1.5	0.15
+.. code::
+
+   1.1	0.1
+   1.2	0.12
+   1.3	0.13
+   1.4	0.14
+   1.5	0.15
 
 where the :math:`i^{\text{th}}` line corresponds to the :math:`C`-factor to be applied to
 the ``FK`` prediction for the :math:`(i-1)^{\text{th}}` data point.  The first column
@@ -283,8 +302,10 @@ requirements other than its presence. Following this line should come a list of
 the ``FK`` tables required for the calculation. This must be given as the
 table's filename *without* its path, preceded by the string '**FK:**'. For example,
 
-  | FK: FK_SETNAME_1.dat
-  | FK: FK_SETNAME_2.dat
+.. code::
+
+   FK: FK_SETNAME_1.dat
+   FK: FK_SETNAME_2.dat
 
 The ordering of the list is once again important, and must match the above
 table. For example, the observables :math:`\mathcal{O}^{(i)}` arise from the
@@ -292,12 +313,16 @@ computation with the :math:`i^{\text{th}}` element of this list. The final line
 specified the operation to be performed upon the list of tables, and must take
 the form
 
-  OP: **[CODE]**
+.. code::
+
+  OP: [CODE]
 
 where the **[CODE]** is given in the above table. Here is an example of a
 complete ``COMPOUND`` file
 
-  | # COMPOUND FK
-  | FK: FK\_NUMERATOR.dat
-  | FK: FK\_DENOMINATOR.dat
-  | OP: RATIO
+.. code::
+
+    # COMPOUND FK
+    FK: FK_NUMERATOR.dat
+    FK: FK_DENOMINATOR.dat
+    OP: RATIO

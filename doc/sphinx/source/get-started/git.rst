@@ -1,4 +1,4 @@
-.. _git:
+.. _gitinit:
 
 Downloading the code
 ====================

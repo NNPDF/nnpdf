@@ -27,7 +27,7 @@ in QCD, although work is ongoing to also include NLO electroweak
 corrections in the APPLgrid format. In addition to the standard version
 of APPLgrid, a modified version of APPLgrid exists which includes photon
 channels. This is known as APPLgridphoton. To learn how to generate
-APPLgrids, please see the :ref:`tutorial <applgrids>`.
+APPLgrids, please see the :ref:`tutorial <applgridtuto>`.
 
 APFELcomb generates FK tables for NNPDF fits. Information on how to use
 it can be found in the :ref:`corresponding tutorial <tutorialfktables>`. You

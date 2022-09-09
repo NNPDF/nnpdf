@@ -1,4 +1,5 @@
 .. _releases:
+
 Releases and compatibility policy
 =================================
 
@@ -8,12 +9,13 @@ and correct. Binary packages for the latest commit on the branch, with
 appropriate version information are :ref:`generated automatically<CI>` and can
 be :ref:`readily installed<conda>`. In general the version of the code should be
 preferred for producing new results, but see the :ref:`compatibility
-policy<compatibility policy>` below. The main results, such as NNPDF 4.0
+policy<compatibility_policy>` below. The main results, such as NNPDF 4.0
 :cite:p:`nnpdf40` will be produced with a frozen :ref:`tag <tags>`, a
 :ref:`conda environment <conda>` and a :ref:`docker image <docker>` so that they
 can be :ref:`reproduced <reproduce40>` entirely.
 
 .. _tags:
+
 Tags
 ----
 
@@ -34,6 +36,7 @@ significant releases since the code was made public are:
     fits.
 
 .. _compatibility_policy:
+
 Compatibility Policy
 --------------------
 

@@ -44,6 +44,7 @@ of the code, making runcards using it much more likely to work in the future.
 That others can benefit from the work is of course also a good thing.
 
 .. _extramodules:
+
 Hooking ``validphys`` to external code
 --------------------------------------
 
@@ -71,6 +72,7 @@ There are two ways to take advantage of resources produced using the
      way. Prefer this for actions that are too difficult to upstream to
      ``validphys``, but should work as if they were internal. A minimal example
      for an external module could be::
+
          # extra_plots.py
 
          import matplotlib.pyplot as plt

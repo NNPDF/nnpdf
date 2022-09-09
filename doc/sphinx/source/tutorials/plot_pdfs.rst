@@ -237,6 +237,6 @@ Luminosity plots
   range of the plot, while ``mxmin`` and ``mxmax`` (in GeV) control the
   horizontal axis of invariant masses.
 - The option ``y_cut`` can be supplied to define a rapidity cut
-  (|y|<``y_cut``) on the integration range of 1D plots.
+  ( ``|y|<y_cut``) on the integration range of 1D plots.
 - Other options for the band plots, such as ``pdfs_noband`` and
   ``show_mc_errors`` work for ``plot_lumi1d``.

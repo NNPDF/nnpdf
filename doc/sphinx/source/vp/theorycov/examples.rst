@@ -14,7 +14,7 @@ You need to provide the central theory under the ``default_theory`` flag,
 corresponding to :math:`(\mu_F, \mu_R) = (0,0)`, which for NLO is theory 163.
 
 You need to provide the required point prescription using the flag in 
-:ref:`this section <pointprescrips>`, e.g. ``point_prescription: "3 point"``
+:ref:`this section <prescrips>`, e.g. ``point_prescription: "3 point"``
 in the case below.
 
 ``dataspecs`` associates a chosen label (``speclabel``) with each of the theory

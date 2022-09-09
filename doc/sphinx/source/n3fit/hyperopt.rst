@@ -317,7 +317,7 @@ These were chosen attending to their `process type` as defined in their :ref:`co
 
 
 Changing the hyperoptimization target
------------------------------------
+-------------------------------------
 
 Beyond the usual :math:`\chi2`-based optimization figures above, it is possible to utilize other measures as the target for hyperoptimization.
 One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets. The idea is that this way we select models of which the prediction is stable upon variations in the dataset. 

@@ -177,13 +177,15 @@ Every time a replica is finalized, the output is saved to the
 ``runcard/nnfit/replica_$replica`` folder, which contains a number of
 files:
 
--  ``chi2exps.log``: a json log file with the χ² of the training every
+*  ``chi2exps.log``: a json log file with the χ² of the training every
    100 epochs.
--  ``runcard.exportgrid``: a file containing the PDF grid.
--  ``runcard.json``: Includes information about the fit (metadata,
+*  ``runcard.exportgrid``: a file containing the PDF grid.
+*  ``runcard.json``: Includes information about the fit (metadata,
    parameters, times) in json format.
 
-``note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.``
+.. note::
+
+    The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.``
 
 
 .. _upload-fit:
@@ -209,7 +211,9 @@ The ``n3fit`` framework is currently based on
 approximation, anything that makes Tensorflow faster will also make
 ``n3fit`` faster.
 
-``note:: Tensorflow only supports the installation via pip. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.``
+.. note::
+
+    Tensorflow only supports the installation via pip. Note, however, that the TensorFlow pip package has been known to break third party packages. Install it at your own risk. Only the conda tensorflow-eigen package is tested by our CI systems.``
 
 When you install the nnpdf conda package, you get the
 `tensorflow-eigen <https://anaconda.org/anaconda/tensorflow-eigen>`__
@@ -251,15 +255,24 @@ Below we present a benchmark that have been run for the Global NNPDF 3.1
 case, as found in the example runcards
 `folder <https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards>`__.
 
-Settings of the benchmark: - TF version: tensorflow-eigen from conda, TF
-2.2 - NNPDF commit:
+Settings of the benchmark: 
+
+* TF version: tensorflow-eigen from conda, TF 2.2
+* NNPDF commit:
 `f878fc95a4f32e8c3b4c454fc12d438cbb87ea80 <https://github.com/NNPDF/nnpdf/commit/f878fc95a4f32e8c3b4c454fc12d438cbb87ea80>`__
-- Number of epochs: 5000 - maxcores: 4 - no early stopping
+* Number of epochs: 5000 
+* maxcores: 4 
+* no early stopping
 
-Hardware: - Intel(R) Core(TM) i7-6700 CPU @ 4.00GHz - 16 GB RAM 3000 MHz
-DDR4
+Hardware: 
 
-Timing for a fit: - Walltime: 397s - CPUtime: 1729s
+* Intel(R) Core(TM) i7-6700 CPU @ 4.00GHz 
+* 16 GB RAM 3000 MHz DDR4
+
+Timing for a fit:
+
+* Walltime: 397s 
+* CPUtime: 1729s
 
 Iterate the fit
 ---------------

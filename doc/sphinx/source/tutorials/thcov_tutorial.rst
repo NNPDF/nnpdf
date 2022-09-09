@@ -1,4 +1,5 @@
 .. _thcov_tutorial:
+
 How to include a theory covariance matrix in a fit
 ==================================================
 
@@ -46,10 +47,12 @@ Next, add necessary flags to the runcard
    where to use the theory covmat in the code. There are two possible places:
    the fitting (i.e. :math:`\chi^2` minimiser) and the sampling (i.e. pseudodata
    generation). The default is ``True`` for both.
-.. warning::
-      Changing either of these to ``False`` will affect the fit outcome and should
-      be avoided unless you know what you are doing.
-      
+
+    .. warning::
+
+          Changing either of these to ``False`` will affect the fit outcome and should
+          be avoided unless you know what you are doing.
+
 
 If you want to compare data to another fit
 ------------------------------------------

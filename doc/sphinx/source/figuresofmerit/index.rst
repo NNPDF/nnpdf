@@ -180,6 +180,7 @@ of the neural network can be found in the :ref:`methodology overview
 
 
 .. _lagrange-multipliers:
+
 Positivity and integrability: Lagrange multipliers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Generally in an NNPDF fit we will want to ensure positivity and integrability of

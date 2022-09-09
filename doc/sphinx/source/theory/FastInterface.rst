@@ -72,6 +72,7 @@ using the (interpolated) DGLAP evolution operators,
     \begin{equation}
     f_{i,\beta \tau} = \sum_j \sum_{\alpha} \Gamma^{\tau}_{ij,\alpha \beta}\,f_j(x_{\alpha},Q_0^2) \, ,
     \end{equation}
+
 so that the nuclear DIS structure function can be
 evaluated as
 

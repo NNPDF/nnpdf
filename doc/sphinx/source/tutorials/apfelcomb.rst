@@ -85,13 +85,22 @@ Whenever a new dataset is implemented, it should be accompanied by the
 corresponding ``FK`` table. To implement a new ``FK`` table, one must
 first add a corresponding entry into the apfelcomb database (by editing
 the ``./db/apfelcomb.dat`` file) under the ``grids`` table. These
-entries are comprised of the following fields. - **id** - The primary
-key identifier of the FK table. - **setname** - The COMMONDATA set name
-of the corresponding dataset. - **name** - The name of the FK table. -
-**description** - A one-line description of the FK table. - **nx** - The
-number of x-grid interpolation points. - **positivity** - A flag
-specifying if the FK table is a positivity set. - **source** - Specifies
-if the corresponding subgrids are [APP/DIS/DYP].
+entries are comprised of the following fields.
+
+id
+    The primary key identifier of the FK table. 
+setname
+    The COMMONDATA set name of the corresponding dataset. 
+name
+    The name of the FK table.
+description
+    A one-line description of the FK table.
+nx
+    The number of x-grid interpolation points.
+positivity
+    A flagspecifying if the FK table is a positivity set.
+source
+    Specifies if the corresponding subgrids are [APP/DIS/DYP].
 
 Note that **setname** and **name** may be different in the case of
 compound observables such as ratios, where multiple FK tables are
@@ -108,27 +117,35 @@ Implementing a new APPLgrid/FastNLO subgrid
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To add a new APPLgrid- or FastNLO–based subgrid, one must add a
-corresponding entry into the ``app\_subgrids`` table of the apfelcomb
+corresponding entry into the ``app_subgrids`` table of the apfelcomb
 database. One entry should be added for each APPLgrid making up the
-final target ``FK`` table. The entries have the following fields: -
-**id** - The primary key identifier of the subgrid. - **fktarget** - The
-name of the FK table this subgrid belongs to. - **applgrid** - The
-filename of the corresponding APPLgrid. - **fnlobin** - The fastNLO
-index if the table is a fastNLO grid, or -1 if not. - **ptmin** - The
-minimum perturbative order (1 when the LO is zero, 0 if not). -
-**pdfwgt** - A boolean flag, 1 if the APPLgrid has PDF weighting, 0 if
-not (depending on how the native applgrid was generated). - **ppbar** -
-A boolean flag, 1 if the APPLgrid should be transformed to *ppbar*
-beams, 0 if not. - **mask** - A boolean mask, specifying which APPLgrid
-entries should be considered data points. - **operators** - A list of
-operators to handle certain special cases (see below). The mask should
-have as many entries as APPLgrid bins and each boolean value should be
-separated by a space. For example, for an applgrid with five bins where
-we want to exclude the penultimate bin, the mask would be:
+final target ``FK`` table. The entries have the following fields:
 
-::
+id
+    The primary key identifier of the subgrid.
+fktarget
+    The name of the FK table this subgrid belongs to.
+applgrid
+    The filename of the corresponding APPLgrid.
+fnlobin
+    The fastNLO index if the table is a fastNLO grid, or -1 if not.
+ptmin
+    The minimum perturbative order (1 when the LO is zero, 0 if not).
+pdfwgt
+    A boolean flag, 1 if the APPLgrid has PDF weighting, 0 if not (depending on
+    how the native applgrid was generated).
+ppbar
+    A boolean flag, 1 if the APPLgrid should be transformed to *ppbar*
+    beams, 0 if not.
+mask
+    A boolean mask, specifying which APPLgrid entries should be considered data points.
+operators
+    A list of operators to handle certain special cases (see below). The mask
+    should have as many entries as APPLgrid bins and each boolean value should
+    be separated by a space. For example, for an applgrid with five bins where
+    we want to exclude the penultimate bin, the mask would be::
 
-   1 1 1 0 1
+        1 1 1 0 1
 
 Note that there is no way to know a priori whether ``pdfwgt`` should be
 set to 0 or to 1, that is whether the grid is unweighted or weighted.
@@ -155,12 +172,21 @@ Implementing a new DIS or DYP subgrid
 New DIS or DYP subgrids should be entered respectively into the
 ``dis_subgrids`` or ``dyp_subgrids`` tables of the apfelcomb database.
 Typically only one subgrid is needed per DIS or DYP FK table. Each
-subgrid entry has the following fields: - **id** - The primary key
-identifier of the subgrid - **fktarget** - The name of the FK table this
-subgrid belongs to - **operators** - A list of operators to handle
-certain special cases (see Subgrid operators). For DIS there is one
-additional field: - **process** - The process string of the observable
-(e.g DIS_F2P, see DIS Processes in APFEL below)
+subgrid entry has the following fields:
+
+id
+    The primary key identifier of the subgrid
+fktarget
+    The name of the FK table this subgrid belongs to
+operators
+    A list of operators to handle certain special cases (see Subgrid operators).
+
+For DIS there is one
+additional field: 
+
+process
+    The process string of the observable (e.g DIS_F2P, see DIS Processes in
+    APFEL below)
 
 DIS Processes in APFEL
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -171,92 +197,84 @@ in ``dis_subgrids`` following ``APFEL``\ ’s nomenclature. The list of
 processes below can be found in ``apfel/src/DIS/FKObservables.f`` in the
 headers corresponding to the different observables called.
 
-**Deep Inelastic Scattering Structure Functions**: - DIS_F2L: [EM] Light
-structure function F2light (electron-proton) - DIS_F2U: [EM] Up
-structure function F2u (electron-proton[up]) - DIS_F2d: [EM] Down
-structure function F2d (electron-proton[down]) - DIS_F2S: [EM] Strange
-structure function F2s (electron-proton[strange]) - DIS_F2C: [EM] Charm
-structure function F2charm (electron-proton) - DIS_F2B: [EM] Bottom
-structure function F2bottom (electron-proton) - DIS_F2T: [EM] Top
-structure function F2top (electron-proton) - DIS_F2D: [EM] Deuteron
-structure function F2 (electron-isoscalar) - DIS_FLL: [EM] Light
-structure function FLlight (electron-proton) - DIS_FLC: [EM] Charm
-structure function FLcharm (electron-proton) - DIS_FLB: [EM] Bottom
-structure function FLbottom (electron-proton) - DIS_FLT: [EM] Top
-structure function FLtop (electron-proton) - DIS_FLD: [EM] Deuteron
-structure function FL (electron-isoscalar) - DIS_F2P_NC: [NC] Proton
-structure function F2 (electron-isoscalar) - DIS_F2P: [EM] Proton
-structure function F2 (electron-proton) - DIS_FLP_NC: [NC] Proton
-structure function FL (electron-proton) - DIS_FLP_CON_NC: [NC] Proton
-structure function FL (electron-proton) - DIS_FLP: [EM] Proton structure
-function FL (electron-proton) - DIS_F3P_NC: [NC] F3 structure function
-(electron-proton)
+**Deep Inelastic Scattering Structure Functions**: 
 
-**Deep Inelastic Scattering Reduced Cross-Sections**: - DIS_NCE_L: [NC]
-Electron scattering Reduced Cross-Section, light (electron-proton) -
-DIS_NCP_L: [NC] Positron scattering Reduced Cross-Section, light
-(positron-proton) - DIS_NCE_CH: [NC] Electron scattering Reduced
-Cross-Section, charm (electron-proton) - DIS_NCP_CH: [NC] Positron
-scattering Reduced Cross-Section, charm (positron-proton) - DIS_NCE_BT:
-[NC] Electron scattering Reduced Cross-Section, bottom (electron-proton)
-- DIS_NCP_BT: [NC] Positron scattering Reduced Cross-Section, bottom
-(positron-proton) - DIS_NCE_TP: [NC] Electron scattering Reduced
-Cross-Section, top (electron-proton) - DIS_NCP_TP: [NC] Positron
-scattering Reduced Cross-Section, top (positron-proton) - DIS_NCE_D:
-[NC] Electron scattering Reduced Cross-Section on deuteron, inclusive
-(electron-isosclar) - DIS_NCP_D: [NC] Positron scattering Reduced
-Cross-Section on deuteron, inclusive (positron-isoscalar) - DIS_NCE:
-[NC] Electron scattering Reduced Cross-Section, inclusive
-(electron-proton) - DIS_NCP: [NC] Positron scattering Reduced
-Cross-Section, inclusive (positron-proton) - DIS_CCE_L: [CC] Electron
-scattering Reduced Cross-Section, light (electron-proton) - DIS_CCP_L:
-[CC] Positron scattering Reduced Cross-Section, light (positron-proton)
-- DIS_CCE_C: [CC] Electron scattering Reduced Cross-Section, charm
-(electron-proton) - DIS_CCP_C: [CC] Positron scattering Reduced
-Cross-Section, charm (positron-proton) - DIS_CCE: [CC] Electron
-scattering Reduced Cross-Section, inclusive (electron-proton) - DIS_CCP:
-[CC] Positron scattering Reduced Cross-Section, inclusive
-(positron-proton)
+* DIS_F2L: [EM] Light structure function F2light (electron-proton) 
+* DIS_F2U: [EM] Up structure function F2u (electron-proton[up]) 
+* DIS_F2d: [EM] Down structure function F2d (electron-proton[down]) 
+* DIS_F2S: [EM] Strange structure function F2s (electron-proton[strange])
+* DIS_F2C: [EM] Charm structure function F2charm (electron-proton)
+* DIS_F2B: [EM] Bottom structure function F2bottom (electron-proton)
+* DIS_F2T: [EM] Top structure function F2top (electron-proton)
+* DIS_F2D: [EM] Deuteron structure function F2 (electron-isoscalar)
+* DIS_FLL: [EM] Light structure function FLlight (electron-proton)
+* DIS_FLC: [EM] Charm structure function FLcharm (electron-proton)
+* DIS_FLB: [EM] Bottom structure function FLbottom (electron-proton)
+* DIS_FLT: [EM] Top structure function FLtop (electron-proton)
+* DIS_FLD: [EM] Deuteron structure function FL (electron-isoscalar)
+* DIS_F2P_NC: [NC] Proton structure function F2 (electron-isoscalar)
+* DIS_F2P: [EM] Proton structure function F2 (electron-proton)
+* DIS_FLP_NC: [NC] Proton structure function FL (electron-proton)
+* DIS_FLP_CON_NC: [NC] Proton structure function FL (electron-proton)
+* DIS_FLP: [EM] Proton structure function FL (electron-proton)
+* DIS_F3P_NC: [NC] F3 structure function (electron-proton)
 
-**Deep Inelastic Scattering Reduced Cross-Sections (heavy-ion)**: -
-DIS_SNU_L_Pb: [CC] Neutrino scattering Reduced Cross-Section, light
-(neutrino-lead) - DIS_SNB_L_Pb: [CC] Antineutrino scattering Reduced
-Cross-Section, light (antineutrino-lead) - DIS_SNU_C_Pb: [CC] Neutrino
-scattering Reduced Cross-Section, charm (neutrino-lead) - DIS_SNB_C_Pb:
-[CC] Antineutrino scattering Reduced Cross-Section, charm
-(antineutrino-lead) - DIS_SNU_Pb: [CC] Neutrino scattering Reduced
-Cross-Section, inclusive (neutrino-lead) - DIS_SNB_Pb: [CC] Antineutrino
-scattering Reduced Cross-Section, inclusive (antineutrino-lead) -
-DIS_SNU_L: [CC] Neutrino scattering Reduced Cross-Section, light
-(neutrino-isoscalar) - DIS_SNB_L: [CC] Antineutrino scattering Reduced
-Cross-Section, light (antineutrino-isoscalar) - DIS_SNU_C: [CC] Neutrino
-scattering Reduced Cross-Section, charm (neutrino-isoscalar) -
-DIS_SNB_C: [CC] Antineutrino scattering Reduced Cross-Section, charm
-(antineutrino-isoscalar) - DIS_SNU: [CC] Neutrino scattering Reduced
-Cross-Section, inclusive (neutrino-isoscalar) - DIS_SNB: [CC]
-Antineutrino scattering Reduced Cross-Section, inclusive
-(antineutrino-isoscalar) - DIS_DM_NU: [CC] Dimuon neutrino cross section
-(neutrino-iron) - DIS_DM_NB: [CC] Dimuon anti-neutrino cross section
-(antineutrino-iron)
 
-**Single-Inclusive electron-positron annihilation, Time-Like Evolution
-(SIA)**: - SIA_F2: [NC] SIA structure function F2 = FT + FL
-(electron-proton) - SIA_FL: [NC] SIA structure function FL
-(electron-proton) - SIA_FA: [NC] SIA structure function FA
-(electron-proton) - SIA_XSEC_NF4: [NC] SIA absolute cross section (nf=4)
-(electron-proton) - SIA_XSEC: [NC] SIA absolute cross section
-(electron-proton) - SIA_NORM_XSEC_LONG_L: [NC] SIA normalized light
-longitudinal cross section (electron-proton) - SIA_NORM_XSEC_LONG_BT:
-[NC] SIA normalized bottom longitudinal cross section (electron-proton)
-- SIA_NORM_XSEC_LONG: [NC] SIA normalized total longitudinal cross
-section (electron-proton) - SIA_NORM_XSEC_L: [NC] SIA normalized light
-cross section (electron-proton) - SIA_NORM_XSEC_CH: [NC] SIA normalized
-charm cross section (electron-proton) - SIA_NORM_XSEC_BT: [NC] SIA
-normalized bottom cross section (electron-proton) - SIA_NORM_XSEC_TP:
-[NC] SIA normalized top cross section (electron-proton) -
-SIA_NORM_XSEC_NF4: [NC] SIA normalized total cross section (nf=4)
-(electron-proton) - SIA_NORM_XSEC: [NC] SIA normalized total cross
-section (electron-proton)
+**Deep Inelastic Scattering Reduced Cross-Sections**:
+
+* DIS_NCE_L: [NC] Electron scattering Reduced Cross-Section, light (electron-proton)
+* DIS_NCP_L: [NC] Positron scattering Reduced Cross-Section, light (positron-proton)
+* DIS_NCE_CH: [NC] Electron scattering Reduced Cross-Section, charm (electron-proton)
+* DIS_NCP_CH: [NC] Positron scattering Reduced Cross-Section, charm (positron-proton)
+* DIS_NCE_BT: [NC] Electron scattering Reduced Cross-Section, bottom (electron-proton)
+* DIS_NCP_BT: [NC] Positron scattering Reduced Cross-Section, bottom (positron-proton)
+* DIS_NCE_TP: [NC] Electron scattering Reduced Cross-Section, top (electron-proton)
+* DIS_NCP_TP: [NC] Positron scattering Reduced Cross-Section, top (positron-proton)
+* DIS_NCE_D: [NC] Electron scattering Reduced Cross-Section on deuteron, inclusive (electron-isosclar)
+* DIS_NCP_D: [NC] Positron scattering Reduced Cross-Section on deuteron, inclusive (positron-isoscalar)
+* DIS_NCE: [NC] Electron scattering Reduced Cross-Section, inclusive (electron-proton)
+* DIS_NCP: [NC] Positron scattering Reduced Cross-Section, inclusive (positron-proton)
+* DIS_CCE_L: [CC] Electron scattering Reduced Cross-Section, light (electron-proton)
+* DIS_CCP_L: [CC] Positron scattering Reduced Cross-Section, light (positron-proton)
+* DIS_CCE_C: [CC] Electron scattering Reduced Cross-Section, charm (electron-proton)
+* DIS_CCP_C: [CC] Positron scattering Reduced Cross-Section, charm (positron-proton)
+* DIS_CCE: [CC] Electron scattering Reduced Cross-Section, inclusive (electron-proton)
+* DIS_CCP: [CC] Positron scattering Reduced Cross-Section, inclusive (positron-proton)
+
+**Deep Inelastic Scattering Reduced Cross-Sections (heavy-ion)**:
+
+* DIS_SNU_L_Pb: [CC] Neutrino scattering Reduced Cross-Section, light (neutrino-lead)
+* DIS_SNB_L_Pb: [CC] Antineutrino scattering Reduced Cross-Section, light (antineutrino-lead)
+* DIS_SNU_C_Pb: [CC] Neutrino scattering Reduced Cross-Section, charm (neutrino-lead)
+* DIS_SNB_C_Pb: [CC] Antineutrino scattering Reduced Cross-Section, charm (antineutrino-lead)
+* DIS_SNU_Pb: [CC] Neutrino scattering Reduced Cross-Section, inclusive (neutrino-lead)
+* DIS_SNB_Pb: [CC] Antineutrino scattering Reduced Cross-Section, inclusive (antineutrino-lead)
+* DIS_SNU_L: [CC] Neutrino scattering Reduced Cross-Section, light (neutrino-isoscalar)
+* DIS_SNB_L: [CC] Antineutrino scattering Reduced Cross-Section, light (antineutrino-isoscalar)
+* DIS_SNU_C: [CC] Neutrino scattering Reduced Cross-Section, charm (neutrino-isoscalar)
+* DIS_SNB_C: [CC] Antineutrino scattering Reduced Cross-Section, charm (antineutrino-isoscalar)
+* DIS_SNU: [CC] Neutrino scattering Reduced Cross-Section, inclusive (neutrino-isoscalar)
+* DIS_SNB: [CC] Antineutrino scattering Reduced Cross-Section, inclusive (antineutrino-isoscalar)
+* DIS_DM_NU: [CC] Dimuon neutrino cross section (neutrino-iron)
+* DIS_DM_NB: [CC] Dimuon anti-neutrino cross section (antineutrino-iron)
+
+**Single-Inclusive electron-positron annihilation, Time-Like Evolution (SIA)**:
+
+* SIA_F2: [NC] SIA structure function F2 =  FT + FL (electron-proton)
+* SIA_FL: [NC] SIA structure function FL (electron-proton)
+* SIA_FA: [NC] SIA structure function FA (electron-proton)
+* SIA_XSEC_NF4: [NC] SIA absolute cross section (nf=4) (electron-proton)
+* SIA_XSEC: [NC] SIA absolute cross section (electron-proton)
+* SIA_NORM_XSEC_LONG_L: [NC] SIA normalized light longitudinal cross section (electron-proton)
+* SIA_NORM_XSEC_LONG_BT: [NC] SIA normalized bottom longitudinal cross section (electron-proton)
+* SIA_NORM_XSEC_LONG: [NC] SIA normalized total longitudinal cross section (electron-proton)
+* SIA_NORM_XSEC_L: [NC] SIA normalized light cross section (electron-proton)
+* SIA_NORM_XSEC_CH: [NC] SIA normalized charm cross section (electron-proton)
+* SIA_NORM_XSEC_BT: [NC] SIA normalized bottom cross section (electron-proton)
+* SIA_NORM_XSEC_TP: [NC] SIA normalized top cross section (electron-proton)
+* SIA_NORM_XSEC_NF4: [NC] SIA normalized total cross section (nf=4) (electron-proton)
+* SIA_NORM_XSEC: [NC] SIA normalized total cross section (electron-proton)
+
 
 Subgrid operators
 ~~~~~~~~~~~~~~~~~
@@ -355,8 +373,12 @@ Generating a complete theory
 ----------------------------
 
 The general workflow for generating a complete version of a given theory
-(on a cluster) cluster is then: \``\` ./run_allgrids.py
-./hydra_submit.sh # Submit all APFELcomb subgrid-jobs # Once all subgrid
-jobs have successfully finished ./merge_allgrids.py # Merge subgrids
-into FK tables # If merging is successful ./finalise.sh # Results in a
-final theory at ./results/theory\_.tgz
+(on a cluster) cluster is then: 
+
+.. code: bash
+    ./run_allgrids.py
+    ./hydra_submit.sh # Submit all APFELcomb subgrid-jobs
+    # Once all subgrid jobs have successfully finished 
+    ./merge_allgrids.py # Merge subgrids into FK tables 
+    # If merging is successful 
+    ./finalise.sh  # Results in afinal theory at ./results/theory\_.tgz

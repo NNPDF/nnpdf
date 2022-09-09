@@ -41,7 +41,7 @@ Below is an example runcard for a data theory comparison for BCDMSP,
 
 The corresponding template, ``dthcomparison.md``, looks like this:
 
-.. code:: yaml
+.. code::
 
    %BCDMSP (theory ID 52)
 
