@@ -70,6 +70,8 @@ def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
     info["AlphaS_Qs"] = list(eko_op["Q2grid"].keys())
+    info["XMin"] = float(x_grid[0])
+    info["XMax"] = float(x_grid[-1])
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
