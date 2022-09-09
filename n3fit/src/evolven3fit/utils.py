@@ -88,7 +88,7 @@ def read_runcard(usr_path):
     return yaml.safe_load((usr_path / "filter.yml").read_text())
 
 
-def generate_q2grid(Q0, Qfin, Q_points):
+def generate_q2grid(Q0, Qfin, Q_points, match_dict):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
     """
@@ -102,7 +102,18 @@ def generate_q2grid(Q0, Qfin, Q_points):
                 4.1270732e+02, 5.5671861e+02, 7.6011795e+02, 1.0509694e+03, 1.4722574e+03, 2.0906996e+03,
                 3.0112909e+03, 4.4016501e+03, 6.5333918e+03, 9.8535186e+03, 1.5109614e+04, 2.3573066e+04,
                 3.7444017e+04, 6.0599320e+04, 1.0000000e+05])**2)
-    return np.geomspace(Q0**2, Qfin**2, num=Q_points).tolist()
+    grids = []
+    Q_ini=Q0
+    num_points_list = []
+    for masses in match_dict.keys():
+        match_scale = masses*match_dict[masses]
+        num_points = int(Q_points*(np.log(match_scale/Q0)/np.log(Qfin/Q_ini)))
+        num_points_list.append(num_points)
+        grids.append(np.geomspace(Q0**2, match_scale**2, num=num_points))
+        Q0 = match_scale
+    num_points = Q_points - sum(num_points_list)
+    grids.append(np.geomspace(Q0**2, Qfin**2, num=num_points ))
+    return np.concatenate(grids).tolist()
 
 def fix_info_path(usr_path):
     """Fix the location of the info file from the folder nnfit/usr_path to 

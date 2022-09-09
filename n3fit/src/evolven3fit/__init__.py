@@ -128,7 +128,7 @@ def construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points, x_
     theory.update(t_card_dict)
     t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
-    q2_grid = utils.generate_q2grid(theory["Q0"], q_fin, q_points)
+    q2_grid = utils.generate_q2grid(theory["Q0"], q_fin, q_points, {theory["mb"]:theory["kbThr"], theory["mt"]:theory["ktThr"] })
     op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": x_grid})
     op_card.update(op_card_dict)
     return t_card, op_card
