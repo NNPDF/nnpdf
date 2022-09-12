@@ -258,8 +258,7 @@ case, as found in the example runcards
 Settings of the benchmark: 
 
 * TF version: tensorflow-eigen from conda, TF 2.2
-* NNPDF commit:
-`f878fc95a4f32e8c3b4c454fc12d438cbb87ea80 <https://github.com/NNPDF/nnpdf/commit/f878fc95a4f32e8c3b4c454fc12d438cbb87ea80>`__
+* NNPDF commit: `f878fc95a4f32e8c3b4c454fc12d438cbb87ea80 <https://github.com/NNPDF/nnpdf/commit/f878fc95a4f32e8c3b4c454fc12d438cbb87ea80>`__
 * Number of epochs: 5000 
 * maxcores: 4 
 * no early stopping
@@ -278,5 +277,5 @@ Iterate the fit
 ---------------
 
 It may be desirable to iterate a fit to achieve a higher degree of
-convergence/stability in the fit. To read more about this, see `How to
-run an iterated fit <run-iterated-fit>`__.
+convergence/stability in the fit. To read more about this, see :ref:`How to
+run an iterated fit <run-iterated-fit>`.
