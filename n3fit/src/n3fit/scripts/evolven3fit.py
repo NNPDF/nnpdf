@@ -7,7 +7,7 @@ import numpy as np
 from argparse import ArgumentParser
 import sys
 
-from evolven3fit import eko_utils, evolve
+from evolven3fit import eko_utils, evolve, utils
 
 log = logging.getLogger(__name__)
 
@@ -352,6 +352,7 @@ def cli_evolven3fit(
 
     The two options are mutually exclusive.
     """
+    utils.check_is_a_fit(configuration_folder)
     return evolve.evolve_fit(
         configuration_folder, q_fin, q_points, op_card_info, t_card_info, load, dump
     )

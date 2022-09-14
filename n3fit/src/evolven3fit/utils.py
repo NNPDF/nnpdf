@@ -4,6 +4,7 @@ import math
 from reportengine.compat import yaml
 import shutil
 from validphys.pdfbases import PIDS_DICT
+import pathlib
 
 
 class LhapdfLike:
@@ -155,3 +156,12 @@ def fix_replica_path(usr_path, replica_num):
     replica_file_path = nnfit / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
     dest_path_replica = nnfit / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
     shutil.move(replica_file_path, dest_path_replica)
+
+def check_is_a_fit(config_folder):
+    usr_path = pathlib.Path(config_folder)
+    filter_path = usr_path / "filter.yml"
+    if not filter_path.is_file():
+        raise ValueError("filter.yaml file not found: provided path is not valid")
+    nnfitpath = usr_path / "nnfit"
+    if not nnfitpath.is_dir():
+        raise ValueError("nnfit folder not found: provided path is not valid")
