@@ -10,7 +10,6 @@ from eko import basis_rotation as br
 from eko import output
 
 from . import utils, eko_utils
-from validphys.loader import Loader
 
 
 logger = logging.getLogger(__name__)

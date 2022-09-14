@@ -1,5 +1,3 @@
-import logging
-
 from validphys.loader import Loader
 from . import utils
 from ekobox import gen_theory, gen_op

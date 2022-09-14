@@ -9,7 +9,6 @@ from argparse import ArgumentParser
 import sys
 
 from . import evolve
-from validphys.core import CommonDataMetadata
 
 logger = logging.getLogger(__name__)
 
