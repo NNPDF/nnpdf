@@ -1,9 +1,9 @@
 from scipy.interpolate import interp1d
 import numpy as np
 import math
-import pathlib
 from reportengine.compat import yaml
 import shutil
+
 
 
 class LhapdfLike:
@@ -86,6 +86,12 @@ def read_runcard(usr_path):
     """Read the runcard and return the relevant information for evolven3fit
     """
     return yaml.safe_load((usr_path / "filter.yml").read_text())
+
+def get_theoryID_from_runcard(usr_path):
+    """Return the theoryID from the runcard"""
+    # read the runcard
+    my_runcard = read_runcard(usr_path)
+    return my_runcard["theory"]["theoryid"]
 
 
 def generate_q2grid(Q0, Qfin, Q_points, match_dict):

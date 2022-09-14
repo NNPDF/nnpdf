@@ -6,7 +6,7 @@ import pathlib
 import numpy as np
 from argparse import ArgumentParser
 
-from evolven3fit import evolven3fit_API
+from . import evolve
 from validphys.core import CommonDataMetadata
 
 logging.basicConfig(level=logging.INFO)
@@ -316,10 +316,10 @@ def main():
             )
         else:
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
-        tcard, opcard = evolven3fit_API.construct_eko_cards(
+        tcard, opcard = evolve.construct_eko_cards(
             args.theoryID, op_card_info, t_card_info, args.q_fin, args.q_points, x_grid
         )
-        eko_op = evolven3fit_API.construct_eko_for_fit(tcard, opcard, args.dump)
+        eko_op = evolve.construct_eko_for_fit(tcard, opcard, args.dump)
 
 
 def cli_evolven3fit(
@@ -342,7 +342,7 @@ def cli_evolven3fit(
 
     The two options are mutually exclusive.
     """
-    return evolven3fit_API.evolve_fit(
+    return evolve.evolve_fit(
         configuration_folder, q_fin, q_points, op_card_info, t_card_info, load, dump
     )
 
