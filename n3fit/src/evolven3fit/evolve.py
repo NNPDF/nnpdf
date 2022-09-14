@@ -83,14 +83,11 @@ def evolve_fit(
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
     dump_info_file(usr_path, info)
-    utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
         evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
-        # fixing_replica_path
-        utils.fix_replica_path(usr_path, int(replica.removeprefix("replica_")))
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
@@ -181,6 +178,8 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
     genpdf.export.dump_blocks(
         path_where_dump, replica_num, [evolved_block], pdf_type=to_write_in_head
     )
+    # fixing_replica_path
+    utils.fix_replica_path(usr_path, replica_num)
 
 
 def dump_info_file(usr_path, info):
@@ -199,3 +198,4 @@ def dump_info_file(usr_path, info):
     info_path = path_where_dump / (usr_path.stem + ".info")
     if not info_path.is_file():
         genpdf.export.dump_info(path_where_dump, info)
+    utils.fix_info_path(usr_path)
