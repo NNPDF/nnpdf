@@ -3,12 +3,11 @@ This module contains the CLI for evolven3fit
 """
 import logging
 import pathlib
-from evolven3fit import eko_utils
 import numpy as np
 from argparse import ArgumentParser
 import sys
 
-from . import evolve
+from evolven3fit import eko_utils, evolve
 
 logger = logging.getLogger(__name__)
 
