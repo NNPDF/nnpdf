@@ -40,7 +40,7 @@ def main():
         "-p",
         "--q_points",
         type=int,
-        default=None,
+        default= None,
         help="Number of q points for the evolution",
     )
     parser.add_argument(

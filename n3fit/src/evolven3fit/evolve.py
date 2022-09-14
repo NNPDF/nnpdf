@@ -168,7 +168,7 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
 
     Parameters
     ----------
-        evolved_block: numpyp.array
+        evolved_block: numpy.array
             block of an evolved PDF
         usr_path: pathlib.Path
             path of the fit folder
