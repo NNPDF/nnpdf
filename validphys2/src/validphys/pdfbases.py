@@ -34,6 +34,23 @@ PDG_PARTONS = dict((
         (21 , r"g"),
     ))
 
+PIDS_DICT = {
+        -6: "TBAR",
+        -5: "BBAR",
+        -4: "CBAR",
+        -3: "SBAR",
+        -2: "UBAR",
+        -1: "DBAR",
+        21: "GLUON",
+        1: "D",
+        2: "U",
+        3: "S",
+        4: "C",
+        5: "B",
+        6: "T",
+        22: "PHT",
+    }
+
 # Canonical ordering of PDG codes (so flavour basis)
 ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
