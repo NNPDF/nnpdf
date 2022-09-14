@@ -50,5 +50,6 @@ def construct_eko_for_fit(t_card, op_card, log, save_path=None):
             log.info(f"Saving computed eko to : {save_path}")
             eko_op.dump_tar(save_path)
         except:
+            log.error(f"Error saving the eko to : {save_path}")
             pass
     return eko_op
