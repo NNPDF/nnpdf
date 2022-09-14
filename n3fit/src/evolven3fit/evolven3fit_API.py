@@ -18,7 +18,15 @@ from validphys.loader import Loader
 logger = logging.getLogger(__name__)
 
 
-def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path=None, dump_eko=None):
+def evolve_fit(
+    conf_folder,
+    q_fin,
+    q_points,
+    op_card_dict,
+    t_card_dict,
+    eko_path=None,
+    dump_eko=None,
+):
     """
     Evolves all the fitted replica in conf_folder/nnfit
 
@@ -52,15 +60,20 @@ def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path
         logger_.addHandler(log_file)
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(np.float)
-    theory, op = construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points, x_grid)
+    x_grid = np.array(
+        initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]
+    ).astype(np.float)
+    theoryID = get_theoryID_from_runcard(usr_path)
+    theory, op = construct_eko_cards(
+        theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_grid
+    )
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         logger.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
         eko_op = construct_eko_for_fit(theory, op, dump_eko)
-    eko_op.xgrid_reshape(targetgrid = x_grid, inputgrid = x_grid)
+    eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
@@ -70,9 +83,7 @@ def evolve_fit(conf_folder, q_fin, q_points, op_card_dict, t_card_dict, eko_path
     dump_info_file(usr_path, info)
     utils.fix_info_path(usr_path)
     for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(
-            initial_PDFs_dict[replica], eko_op, x_grid
-        )
+        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
@@ -113,17 +124,27 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def construct_eko_cards(usr_path, op_card_dict, t_card_dict, q_fin, q_points, x_grid):
-    """Return the theory and operator cards used to construct the eko"""
+def get_theoryID_from_runcard(usr_path):
+    """Return the theoryID from the runcard"""
     # read the runcard
     my_runcard = utils.read_runcard(usr_path)
+    return my_runcard["theory"]["theoryid"]
+
+
+def construct_eko_cards(theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_grid):
+    """Return the theory and operator cards used to construct the eko"""
     # theory_card construction
-    theory = Loader().check_theoryID(my_runcard["theory"]["theoryid"]).get_description()
+    theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
     theory.update(t_card_dict)
     t_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
-    q2_grid = utils.generate_q2grid(theory["Q0"], q_fin, q_points, {theory["mb"]:theory["kbThr"], theory["mt"]:theory["ktThr"] })
+    q2_grid = utils.generate_q2grid(
+        theory["Q0"],
+        q_fin,
+        q_points,
+        {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
+    )
     op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": x_grid})
     op_card.update(op_card_dict)
     return t_card, op_card
