@@ -31,6 +31,10 @@ def evolve_fit(
 
         conf_folder: str or pathlib.Path
             path to the folder containing the fit
+        q_fin: float
+            final point of the q_grid
+        q_points: int
+            number of points in the q_grid
         op_card_dict: dict
             user settings for the op_card
         t_card_dict: dict
