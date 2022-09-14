@@ -5,7 +5,7 @@ This module contains the CLI for evolven3fit
 import pathlib
 import click
 
-from . import evolve_fit
+from evolven3fit import evolven3fit_API
 
 
 @click.group()
@@ -43,4 +43,4 @@ def cli_evolven3fit(configuration_folder, q_fin, q_points, ev_ord, ev_it, n_core
     """
     op_card_info = {"ev_op_max_order": ev_ord, "ev_op_iterations": ev_it, "n_integration_cores": n_cores, "backward_inversion": back}
     t_card_info = {}
-    return evolve_fit(configuration_folder, q_fin, q_points, op_card_info, t_card_info, load, dump)
+    return evolven3fit_API.evolve_fit(configuration_folder, q_fin, q_points, op_card_info, t_card_info, load, dump)
