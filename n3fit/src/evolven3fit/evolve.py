@@ -116,14 +116,12 @@ def load_fit(usr_path):
     """
     nnfitpath = usr_path / "nnfit"
     replica_list = []
-    for file in nnfitpath.glob("replica_*"):
-        replica_list.append(file)
+    for yaml_file in nnfitpath.glob("replica_*/*.exportgrid"):
+        replica_list.append(yaml_file)
     pdf_dict = {}
     for replica in replica_list:
-        yaml_file = pathlib.Path(replica) / (usr_path.stem + ".exportgrid")
-        with yaml_file.open() as fp:
-            data = yaml.safe_load(fp)
-        pdf_dict[replica.stem] = data
+        data = yaml.safe_load(replica.read_text())
+        pdf_dict[replica.parent.stem] = data
     return pdf_dict
 
 
