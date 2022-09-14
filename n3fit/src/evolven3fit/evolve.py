@@ -12,7 +12,7 @@ from eko import output
 from . import utils, eko_utils
 
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 def evolve_fit(
     conf_folder,
@@ -55,7 +55,7 @@ def evolve_fit(
     stdout_log.setFormatter(
         logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
     )
-    for logger_ in (logger, *[logging.getLogger("eko")]):
+    for logger_ in (log, *[logging.getLogger("eko")]):
         logger_.handlers = []
         logger_.setLevel(logging.INFO)
         logger_.addHandler(log_file)
@@ -71,10 +71,10 @@ def evolve_fit(
     )
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
-        logger.info(f"Loading eko from : {eko_path}")
+        log.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
-        eko_op = eko_utils.construct_eko_for_fit(theory, op, logger, dump_eko)
+        eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
     eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"

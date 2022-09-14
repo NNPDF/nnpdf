@@ -24,7 +24,7 @@ def construct_eko_cards(theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_
 
 
 # Temporary solution. Then it will be loaded from the theory itself
-def construct_eko_for_fit(t_card, op_card, logger, save_path=None):
+def construct_eko_for_fit(t_card, op_card, log, save_path=None):
     """
     Construct the eko operator needed for evolution of fitted pdfs
 
@@ -49,7 +49,7 @@ def construct_eko_for_fit(t_card, op_card, logger, save_path=None):
     eko_op = run_dglap(t_card, op_card)
     if save_path is not None:
         try:
-            logger.info(f"Saving computed eko to : {save_path}")
+            log.info(f"Saving computed eko to : {save_path}")
             eko_op.dump_tar(save_path)
         except:
             pass

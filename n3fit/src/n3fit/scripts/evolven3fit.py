@@ -9,7 +9,7 @@ import sys
 
 from evolven3fit import eko_utils, evolve
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -110,7 +110,7 @@ def main():
         stdout_log.setFormatter(
             logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
         )
-        for logger_ in (logger, *[logging.getLogger("eko")]):
+        for logger_ in (log, *[logging.getLogger("eko")]):
             logger_.handlers = []
             logger_.setLevel(logging.INFO)
             logger_.addHandler(stdout_log)
@@ -329,7 +329,7 @@ def main():
         tcard, opcard = eko_utils.construct_eko_cards(
             args.theoryID, op_card_info, t_card_info, args.q_fin, args.q_points, x_grid
         )
-        eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, logger, args.dump)
+        eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, log, args.dump)
 
 
 def cli_evolven3fit(
