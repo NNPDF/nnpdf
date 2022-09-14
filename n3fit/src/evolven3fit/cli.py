@@ -3,14 +3,15 @@ This module contains the CLI for evolven3fit
 """
 import logging
 import pathlib
+from evolven3fit import eko_utils
 import numpy as np
 from argparse import ArgumentParser
+import sys
 
 from . import evolve
 from validphys.core import CommonDataMetadata
 
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -74,13 +75,15 @@ def main():
         help="Path where the EKO is dumped",
     )
     eko_parser.add_argument(
-        "-i" "--x_grid_ini",
+        "-i", 
+        "--x_grid_ini",
         default=None,
         type=float,
         help="Starting point of the x-grid",
     )
     eko_parser.add_argument(
-        "-p" "--x_grid_points",
+        "-p", 
+        "--x_grid_points",
         default=None,
         type=int,
         help="Number of points of the x-grid",
@@ -104,6 +107,15 @@ def main():
             args.load,
         )
     elif args.actions == "produce_eko":
+        stdout_log = logging.StreamHandler(sys.stdout)
+        stdout_log.setLevel(logging.INFO)
+        stdout_log.setFormatter(
+            logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
+        )
+        for logger_ in (logger, *[logging.getLogger("eko")]):
+            logger_.handlers = []
+            logger_.setLevel(logging.INFO)
+            logger_.addHandler(stdout_log)
         if args.x_grid_ini is None:
             if args.x_grid_points is None:
                 x_grid = np.array(
@@ -305,7 +317,7 @@ def main():
                         9.91610196150662e-01,
                         1.00000000000000e00,
                     ]
-                ).reshape(-1, 1)
+                )
             else:
                 raise ValueError(
                     "x_grid_ini and x_grid_points must be specified either both or none of them"
@@ -316,10 +328,10 @@ def main():
             )
         else:
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
-        tcard, opcard = evolve.construct_eko_cards(
+        tcard, opcard = eko_utils.construct_eko_cards(
             args.theoryID, op_card_info, t_card_info, args.q_fin, args.q_points, x_grid
         )
-        eko_op = evolve.construct_eko_for_fit(tcard, opcard, args.dump)
+        eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, logger, args.dump)
 
 
 def cli_evolven3fit(

@@ -2,6 +2,7 @@ import pathlib
 import logging
 import numpy as np
 import yaml
+import sys
 
 from ekobox import genpdf, gen_info
 from ekomark import apply
@@ -13,7 +14,6 @@ from validphys.loader import Loader
 
 
 logger = logging.getLogger(__name__)
-
 
 def evolve_fit(
     conf_folder,
@@ -47,14 +47,20 @@ def evolve_fit(
     if log_file.exists():
         raise SystemError("Log file already exists: evolven3fit has already been run?")
     log_file = logging.FileHandler(log_file)
+    stdout_log = logging.StreamHandler(sys.stdout)
     log_file.setLevel(logging.INFO)
+    stdout_log.setLevel(logging.INFO)
     log_file.setFormatter(
+        logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
+    )
+    stdout_log.setFormatter(
         logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
     )
     for logger_ in (logger, *[logging.getLogger("eko")]):
         logger_.handlers = []
         logger_.setLevel(logging.INFO)
         logger_.addHandler(log_file)
+        logger_.addHandler(stdout_log)
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(
