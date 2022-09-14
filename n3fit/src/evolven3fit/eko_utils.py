@@ -22,8 +22,6 @@ def construct_eko_cards(theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_
     op_card.update(op_card_dict)
     return t_card, op_card
 
-
-# Temporary solution. Then it will be loaded from the theory itself
 def construct_eko_for_fit(t_card, op_card, log, save_path=None):
     """
     Construct the eko operator needed for evolution of fitted pdfs
