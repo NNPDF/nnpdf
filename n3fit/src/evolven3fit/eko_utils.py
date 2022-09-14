@@ -40,7 +40,7 @@ def construct_eko_for_fit(t_card, op_card, log, save_path=None):
         : eko.output.Output
         eko operator
     """
-    # generate eko operator (temporary because it will be loaded from theory)
+    # generate eko operator
     if save_path is not None:
         if not save_path.parent.exists():
             raise ValueError("Path where eko should be dumped does not exists")
