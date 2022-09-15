@@ -172,7 +172,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
 def dump_evolved_replica(evolved_block, usr_path, replica_num):
     """
     Dump the evolved replica given by evolved_block as the replica num "replica_num" in
-    the folder usr_path/nnfit/usr_path.stem.
+    the folder usr_path/nnfit/replica_<replica_num>/usr_path.stem.dat
 
     Parameters
     ----------
@@ -196,7 +196,7 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
 
 def dump_info_file(usr_path, info):
     """
-    Dump the info file given by info in the folder usr_path/nnfit/usr_path.stem.
+    Dump the info file given by info in the folder usr_path/nnfit/usr_path.stem.info.
 
     Parameters
     ----------
