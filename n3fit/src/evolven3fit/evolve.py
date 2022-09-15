@@ -184,7 +184,7 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
     path_where_dump = usr_path / "nnfit" / usr_path.stem
     # create folder to dump the evolved replica if it does not exist
     path_where_dump.mkdir(exist_ok=True)
-    to_write_in_head = "PdfType: replica\nFromMCReplica: " + str(replica_num) + "\n"
+    to_write_in_head = f"PdfType: replica\nFromMCReplica: {replica_num}\n"
     genpdf.export.dump_blocks(
         path_where_dump, replica_num, [evolved_block], pdf_type=to_write_in_head
     )
