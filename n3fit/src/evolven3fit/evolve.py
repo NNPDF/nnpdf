@@ -201,7 +201,5 @@ def dump_info_file(usr_path, info):
             info of the fit
     """
     path_where_dump = usr_path / "nnfit" / usr_path.stem
-    info_path = path_where_dump / (usr_path.stem + ".info")
-    if not info_path.is_file():
-        genpdf.export.dump_info(path_where_dump, info)
+    genpdf.export.dump_info(path_where_dump, info)
     utils.fix_info_path(usr_path)
