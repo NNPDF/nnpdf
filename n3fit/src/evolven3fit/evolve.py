@@ -200,7 +200,6 @@ def dump_info_file(usr_path, info):
         info: dict
             info of the fit
     """
-    # dump info file if not already there
     path_where_dump = usr_path / "nnfit" / usr_path.stem
     info_path = path_where_dump / (usr_path.stem + ".info")
     if not info_path.is_file():
