@@ -64,6 +64,12 @@ def main():
         default=None,
         help="Path where the EKO is dumped (optional)",
     )
+    evolvefit_parser.add_argument(
+        "-f",
+        "--force",
+        action="store_true",
+        help="Force the evolution to be done even if it has already been done",
+    )
     eko_parser.add_argument(
         "theoryID", type=int, help="ID of the theory used to produce the eko"
     )
@@ -103,6 +109,7 @@ def main():
             t_card_info,
             args.dump,
             args.load,
+            args.force,
         )
     elif args.actions == "produce_eko":
         stdout_log = logging.StreamHandler(sys.stdout)
@@ -333,7 +340,7 @@ def main():
 
 
 def cli_evolven3fit(
-    configuration_folder, q_fin, q_points, op_card_info, t_card_info, dump, load
+    configuration_folder, q_fin, q_points, op_card_info, t_card_info, dump, load, force
 ):
     """Evolves the fitted PDFs.
 
@@ -354,7 +361,7 @@ def cli_evolven3fit(
     """
     utils.check_is_a_fit(configuration_folder)
     return evolve.evolve_fit(
-        configuration_folder, q_fin, q_points, op_card_info, t_card_info, load, dump
+        configuration_folder, q_fin, q_points, op_card_info, t_card_info, force, load, dump,
     )
 
 

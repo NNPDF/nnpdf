@@ -21,6 +21,7 @@ def evolve_fit(
     q_points,
     op_card_dict,
     t_card_dict,
+    force,
     eko_path=None,
     dump_eko=None,
 ):
@@ -40,6 +41,8 @@ def evolve_fit(
             user settings for the op_card
         t_card_dict: dict
             user settings for the t_card
+        force: bool
+            whether to force the evolution to be done again
         eko_path: str or pathlib.Path
             path where the eko is stored (if None the eko will be
             recomputed)
@@ -49,7 +52,10 @@ def evolve_fit(
     """
     log_file = pathlib.Path(conf_folder) / "evolven3fit.log"
     if log_file.exists():
-        raise FileExistsError(f"Log file already exists: {log_file} evolven3fit has already been run?")
+        if force:
+            log_file.unlink()
+        else:
+            raise FileExistsError(f"Log file already exists: {log_file} evolven3fit has already been run?")
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
     log_file.setLevel(logging.INFO)
