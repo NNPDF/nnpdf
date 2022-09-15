@@ -15,6 +15,7 @@ from . import utils, eko_utils
 
 log = logging.getLogger(__name__)
 
+
 def evolve_fit(
     conf_folder,
     q_fin,
@@ -55,7 +56,9 @@ def evolve_fit(
         if force:
             log_file.unlink()
         else:
-            raise FileExistsError(f"Log file already exists: {log_file} evolven3fit has already been run?")
+            raise FileExistsError(
+                f"Log file already exists: {log_file} evolven3fit has already been run?"
+            )
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
     log_file.setLevel(logging.INFO)
@@ -123,7 +126,7 @@ def load_fit(usr_path):
     """
     nnfitpath = usr_path / "nnfit"
     pdf_dict = {}
-    for yaml_file in nnfitpath.glob("replica_*/*.exportgrid"):    
+    for yaml_file in nnfitpath.glob("replica_*/*.exportgrid"):
         data = yaml.safe_load(yaml_file.read_text())
         pdf_dict[yaml_file.parent.stem] = data
     return pdf_dict
@@ -153,8 +156,10 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # generate block to dump
     targetgrid = list(eko["targetgrid"])
+
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
+
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,

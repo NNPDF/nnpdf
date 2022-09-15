@@ -40,7 +40,7 @@ def main():
         "-p",
         "--q_points",
         type=int,
-        default= None,
+        default=None,
         help="Number of q points for the evolution",
     )
     parser.add_argument(
@@ -79,14 +79,14 @@ def main():
         help="Path where the EKO is dumped",
     )
     eko_parser.add_argument(
-        "-i", 
+        "-i",
         "--x_grid_ini",
         default=None,
         type=float,
         help="Starting point of the x-grid",
     )
     eko_parser.add_argument(
-        "-p", 
+        "-p",
         "--x_grid_points",
         default=None,
         type=int,
@@ -361,7 +361,14 @@ def cli_evolven3fit(
     """
     utils.check_is_a_fit(configuration_folder)
     return evolve.evolve_fit(
-        configuration_folder, q_fin, q_points, op_card_info, t_card_info, force, load, dump,
+        configuration_folder,
+        q_fin,
+        q_points,
+        op_card_info,
+        t_card_info,
+        force,
+        load,
+        dump,
     )
 
 

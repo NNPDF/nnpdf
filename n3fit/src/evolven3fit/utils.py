@@ -125,16 +125,22 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
                 ** 2
             )
         else:
-            raise ValueError("q_fin and q_points must be specified either both or none of them")
+            raise ValueError(
+                "q_fin and q_points must be specified either both or none of them"
+            )
     elif Q_points is None:
-        raise ValueError("q_fin and q_points must be specified either both or none of them")
+        raise ValueError(
+            "q_fin and q_points must be specified either both or none of them"
+        )
     else:
         grids = []
         Q_ini = Q0
         num_points_list = []
         for masses in match_dict.keys():
             match_scale = masses * match_dict[masses]
-            num_points = int(Q_points * (np.log(match_scale / Q0) / np.log(Qfin / Q_ini)))
+            num_points = int(
+                Q_points * (np.log(match_scale / Q0) / np.log(Qfin / Q_ini))
+            )
             num_points_list.append(num_points)
             grids.append(np.geomspace(Q0**2, match_scale**2, num=num_points))
             Q0 = match_scale
@@ -162,6 +168,7 @@ def fix_replica_path(usr_path, replica_num):
     replica_file_path = nnfit / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
     dest_path_replica = nnfit / f"replica_{replica_num}" / f"{usr_path.stem}.dat"
     shutil.move(replica_file_path, dest_path_replica)
+
 
 def check_is_a_fit(config_folder):
     usr_path = pathlib.Path(config_folder)

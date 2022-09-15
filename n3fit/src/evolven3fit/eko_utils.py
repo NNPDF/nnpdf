@@ -23,6 +23,7 @@ def construct_eko_cards(theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_
     op_card.update(op_card_dict)
     return t_card, op_card
 
+
 def construct_eko_for_fit(t_card, op_card, log, save_path=None):
     """
     Construct the eko operator needed for evolution of fitted pdfs
@@ -44,7 +45,9 @@ def construct_eko_for_fit(t_card, op_card, log, save_path=None):
     # generate eko operator
     if save_path is not None:
         if not save_path.parent.exists():
-            raise FileNotFoundError(f"Path where eko should be dumped does not exist: {save_path}")
+            raise FileNotFoundError(
+                f"Path where eko should be dumped does not exist: {save_path}"
+            )
     eko_op = run_dglap(t_card, op_card)
     if save_path is not None:
         try:
