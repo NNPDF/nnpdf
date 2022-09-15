@@ -1051,7 +1051,7 @@ class CoreConfig(configparser.Config):
 
     # TODO: Find a good name for this
     def produce_t0set(
-        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True, use_t0=False
+        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True, use_t0=True
     ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
