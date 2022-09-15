@@ -49,7 +49,7 @@ def evolve_fit(
     """
     log_file = pathlib.Path(conf_folder) / "evolven3fit.log"
     if log_file.exists():
-        raise SystemError("Log file already exists: evolven3fit has already been run?")
+        raise FileExistsError(f"Log file already exists: {log_file} evolven3fit has already been run?")
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
     log_file.setLevel(logging.INFO)
