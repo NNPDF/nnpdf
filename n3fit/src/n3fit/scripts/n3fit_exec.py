@@ -22,7 +22,6 @@ from reportengine.namespaces import NSList
 
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
-    use_t0 = True,
     actions_ = []
 )
 

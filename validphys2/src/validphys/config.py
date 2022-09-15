@@ -1051,14 +1051,15 @@ class CoreConfig(configparser.Config):
 
     # TODO: Find a good name for this
     def produce_t0set(
-        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True, use_t0=True
+        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=False, use_t0=False
     ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
+        Note that ``n3fit`` will set ``use_t0_fitting`` to `True` by default
         """
         if use_t0_sampling or use_t0_fitting or use_t0:
             if not t0pdfset:
-                raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
+                raise ConfigError("Setting use_t0* requires specifying a valid t0pdfset")
             return t0pdfset
         return None
 
