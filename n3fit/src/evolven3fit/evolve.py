@@ -1,8 +1,9 @@
 import pathlib
 import logging
-import numpy as np
-import yaml
 import sys
+
+import numpy as np
+from reportengine.compat import yaml
 
 from ekobox import genpdf, gen_info
 from ekomark import apply
