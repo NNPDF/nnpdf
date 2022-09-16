@@ -1059,7 +1059,8 @@ class CoreConfig(configparser.Config):
         """
         if use_t0_sampling or use_t0_fitting or use_t0:
             if not t0pdfset:
-                raise ConfigError("Setting use_t0* requires specifying a valid t0pdfset")
+                raise ConfigError("""Setting use_t0, use_t0_sampling or use_t0_fitting
+                                  requires specifying a valid t0pdfset""")
             return t0pdfset
         return None
 
