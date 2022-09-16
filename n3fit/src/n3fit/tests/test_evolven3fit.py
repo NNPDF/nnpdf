@@ -1,9 +1,11 @@
 from evolven3fit import utils
+import pathlib
 from numpy.testing import assert_allclose
 import numpy as np
 import pytest 
 from validphys.pdfbases import PIDS_DICT
 
+REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 
 def test_utils():
     #Testing the default grid 
@@ -30,3 +32,11 @@ def test_utils():
     for pid in PIDS_DICT.keys():
         for x in x_grid:
             assert_allclose(my_PDF.xfxQ2(pid, x, q20), x*(1.-x) )
+    #Testing read_runcard
+    runcard = utils.read_runcard(REGRESSION_FOLDER)
+    assert runcard["description"] == "n3fit regression test"
+    assert runcard["datacuts"]["t0pdfset"] == "NNPDF40_nnlo_as_01180"
+    #Testing get_theoryID_from_runcard
+    ID = utils.get_theoryID_from_runcard(REGRESSION_FOLDER)
+    assert ID == 162
+
