@@ -118,7 +118,7 @@ def parse_losses(history_object, data, suffix="loss"):
     total_points = 0
     total_loss = 0
     for exp_name, npoints in data.items():
-        loss = np.array(hobj[exp_name + f"_{suffix}"])
+        loss = np.array(hobj["tf_op_layer_" + exp_name + f"_{suffix}"])
         dict_chi2[exp_name] = loss / npoints
         total_points += npoints
         total_loss += loss
@@ -282,6 +282,7 @@ class ReplicaState:
 
     def register_best(self, chi2, epoch):
         """ Register a new best state and some metadata about it """
+#        import pdb; pdb.set_trace()
         self._weights = self._pdf_model.get_weights()
         self._best_epoch = epoch
         self._best_vl_chi2 = chi2
@@ -355,9 +356,10 @@ class FitHistory:
         If an epoch is given, save the best as the given epoch, otherwise
         use the last one
         """
+
         if epoch is None:
             epoch = self.final_epoch
-        loss = self.get_state(epoch).vl_loss[i]
+        loss = self.get_state(epoch).vl_loss[0][i]
         self._replicas[i].register_best(loss, epoch)
 
     def all_positivity_status(self):
@@ -682,7 +684,7 @@ class Positivity:
         """
         positivity_pass = True
         for key in self.positivity_sets:
-            key_loss = f"{key}_loss"
+            key_loss = f"tf_op_layer_{key}_val_loss"
             positivity_pass &= history_object[key_loss] < self.threshold
         return np.array(positivity_pass)
 

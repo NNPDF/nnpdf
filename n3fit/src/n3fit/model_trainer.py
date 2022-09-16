@@ -10,6 +10,7 @@
 """
 import copy
 import logging
+import pdb
 from itertools import zip_longest
 import numpy as np
 from scipy.interpolate import PchipInterpolator
@@ -398,14 +399,13 @@ class ModelTrainer:
         # output_tr_orig = _pdf_injection(splitted_pdf, self.training["output"][0], training_mask)
         output_tr = [_pdf_injection(splitted_pdfs[r], self.training["output"][r], training_mask) for r in range(nrep)]
         output_tr_t = list(map(list, zip(*output_tr)))
-        output_layers_tr = [op.stack(seq, axis=-1) for seq in output_tr_t]
+        output_layers_tr = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_tr_t]
         training = MetaModel(full_model_input_dict, output_layers_tr)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
         # so we must only use the corresponding subset of PDF functions
         val_pdfs = []
         exp_pdfs = []
-#        import pdb; pdb.set_trace()
         for replica in range(nrep):
             val_pdfs.append([])
             exp_pdfs.append([])
@@ -417,21 +417,25 @@ class ModelTrainer:
                     val_pdfs[replica].append(partial_pdf)
 
         # We don't want to include the integrablity in the validation
-        import pdb; pdb.set_trace()
         output_vl = [_pdf_injection(val_pdfs[r], self.validation["output"][r], validation_mask) for r in range(nrep)]
         output_vl_t = list(map(list, zip(*output_vl)))
-        output_layers_vl = [op.stack(seq, axis=-1) for seq in output_vl_t]
+#        output_layers_vl = [op.stack(seq, axis=-1) for seq in output_vl_t]
+        output_layers_vl = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0] + "_val") for seq in output_vl_t]
+
         validation = MetaModel(full_model_input_dict, output_layers_vl)
 
         # Or the positivity in the total chi2
         output_ex = [_pdf_injection(exp_pdfs[r], self.experimental["output"][r],
                                     experimental_mask) for r in range(nrep)]
         output_ex_t = list(map(list, zip(*output_ex)))
-        output_layers_ex = [op.stack(seq, axis=-1) for seq in output_ex_t]
+#        output_layers_ex = [op.stack(seq, axis=-1) for seq in output_ex_t]
+        output_layers_ex = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_ex_t]
         experimental = MetaModel(full_model_input_dict, output_layers_ex)
 
         if self.print_summary:
             training.summary()
+            print("The validation model is:")
+            validation.summary()
 
         models = {
             "training": training,
@@ -693,12 +697,13 @@ class ModelTrainer:
         """
         reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
         reporting_list = []
-        for exp_dict in self.all_info:
+
+        for exp_dict in self.all_info[0] + self.all_info[self._parallel_models:]:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
             if partition:
                 # If we are in a partition we need to remove the number of datapoints
                 # in order to avoid calculating the chi2 wrong
-                for dataset in exp_dict["datasets"]:
+                for dataset in exp_dict[0]["datasets"]:
                     if dataset in partition["datasets"]:
                         ndata = dataset["ndata"]
                         frac = dataset["frac"]
@@ -718,21 +723,26 @@ class ModelTrainer:
         will be multiplied by their respective integrability multipliers
         """
         callback_st = callbacks.StoppingCallback(stopping_object)
-        callback_pos = callbacks.LagrangeCallback(
-            self.training["posdatasets"],
-            self.training["posmultipliers"],
-            update_freq=PUSH_POSITIVITY_EACH,
-        )
-        callback_integ = callbacks.LagrangeCallback(
-            self.training["integdatasets"],
-            self.training["integmultipliers"],
-            update_freq=PUSH_INTEGRABILITY_EACH,
-        )
+
+        callbacks_pos, callbacks_integ = [], []
+        for replica in range(self._parallel_models):
+            callback_pos = callbacks.LagrangeCallback(
+                [s + "_rep" + str(replica) for s in self.training["posdatasets"]],
+                self.training["posmultipliers"],
+                update_freq=PUSH_POSITIVITY_EACH,
+            )
+            callbacks_pos.append(callback_pos)
+            callback_integ = callbacks.LagrangeCallback(
+                [s + "_rep" + str(replica) for s in self.training["integdatasets"]],
+                self.training["integmultipliers"],
+                update_freq=PUSH_INTEGRABILITY_EACH,
+            )
+            callbacks_integ.append(callback_integ)
 
         training_model.perform_fit(
             epochs=epochs,
-            verbose=False,
-            callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
+            verbose=True,
+            callbacks=self.callbacks + [callback_st] + callbacks_pos + callbacks_integ,
         )
 
         # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
