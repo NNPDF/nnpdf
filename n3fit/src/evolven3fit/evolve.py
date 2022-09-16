@@ -89,7 +89,6 @@ def evolve_fit(
         log.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
-        import ipdb; ipdb.set_trace()
         try:
             log.info(f"Loading eko from theory {theoryID}")
             theory_eko_path = Loader().check_theoryID(theoryID).get_eko()
