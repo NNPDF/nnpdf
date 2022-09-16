@@ -94,7 +94,7 @@ def evolve_fit(
             theory_eko_path = Loader().check_theoryID(theoryID).get_eko()
             eko_op = output.Output.load_tar(theory_eko_path)
         except TypeError:
-            log.info(f"eko not found in theory {theoryID}: maybe it is not a pineappl theory?")
+            log.info(f"eko not found in theory {theoryID}, we will construct it")
             eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
             pass   
     eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
