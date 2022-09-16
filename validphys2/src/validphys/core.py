@@ -801,11 +801,6 @@ class TheoryIDSpec:
         dbpath = self.path.parent/'theory.db'
         return fetch_theory(dbpath, self.id)
 
-    def get_eko(self):
-        if self.is_pineappl():
-            return self.path/'eko.tar'
-        raise TypeError(f"the requested eko does not exists because the theory {self.id} is not a pineappl theory")
-
     __slots__ = ('id', 'path')
 
     def __repr__(self):
