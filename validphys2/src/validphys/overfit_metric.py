@@ -181,7 +181,7 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
     ]
     xgrid = np.linspace(xrange[0], xrange[1], num=100)
     ax.plot(xgrid, stats.norm.pdf(xgrid, mean, std))
-    ax.set_xlabel(r"$\Delta \chi^2_{\mathrm{overfit}}$")
+    ax.set_xlabel(r"$\mathcal{R}_O$")
     ax.set_ylabel("density")
     ax.set_title(f"{fit.label}")
     plt.tight_layout()
