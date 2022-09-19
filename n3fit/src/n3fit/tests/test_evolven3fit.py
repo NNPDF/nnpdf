@@ -46,14 +46,12 @@ def test_utils():
 def test_eko_utils():
     #Testing construct eko cards
     theoryID = 208
-    theory = Loader().check_theoryID(theoryID).get_description()
     q_fin = 100
     q_points = 5
     x_grid = [1.e-7, 1.e-5, 1.e-3, 0.1, 1.0]
     t_card, op_card = eko_utils.construct_eko_cards(theoryID, {'n_integration_cores' : 6}, {'Comments' : "Test"}, q_fin, q_points, x_grid)
     assert t_card['Qref'] == 91.2
-    assert t_card['PTO'] == theory['PTO']
-    assert t_card['Q0'] == theory['Q0']
+    assert t_card['PTO'] == 1
     assert t_card['Comments'] == "Test"
     assert op_card['n_integration_cores'] == 6
     assert_allclose(op_card["interpolation_xgrid"], x_grid)
