@@ -1,10 +1,10 @@
 .. _tut_overfit_metric:
 
 =====================================================================
-Interperting the :math:`\mathcal{R}_O` overfit metric
+Interpreting the :math:`\mathcal{R}_O` overfit metric
 =====================================================================
 
-One way to define overfitting can be defined through the validation loss used to
+One way to define overfitting is through the validation loss used to
 define the stopping point in the early stopping algorithm. Namely, since the 
 validation and training datasets are not fully uncorrelated, a sufficiently 
 efficient setup of hyperparameters may succeed at learning even the validation 
@@ -48,3 +48,5 @@ between the right hand side and the left hand side of the equation above:
 If this value is negative, that is an indicator of an overfitted PDF. The 
 :math:`\mathcal{R}_O` is impacted by statistical fluctuations that can be
 estimated using a bootstrapping method.
+
+The overfit metric is available in validphys through the ``overfitmetric`` action and it is a standard component of the :ref:`vp-comparefits report<compare-fits>`.
