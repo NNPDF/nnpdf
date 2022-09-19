@@ -27,6 +27,7 @@ Analysing results
    ./plot_pdfs.rst
    ./pdfbases.rst
    ./datthcomp.md
+   ./overfit_metric.rst
 
 Adding new data
 ---------------
