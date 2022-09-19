@@ -1054,10 +1054,16 @@ class CoreConfig(configparser.Config):
         self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=False, use_t0=False
     ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
-        error if t0 is requested but no t0set is given.
-        Note that ``n3fit`` will set ``use_t0_fitting`` to `True` by default
+        error if t0 is requested but no t0set is given or if an ambiguous combination is requested
+        Note that ``n3fit`` will set ``use_t0_fitting`` to `True` by default.
         """
-        if use_t0_sampling or use_t0_fitting or use_t0:
+        if not use_t0:
+            # Check that sampling and fitting t0 are also set to False
+            if use_t0_sampling:
+                raise ConfigError("Incompatible: sampling::use_t0 is True, but use_t0 is False")
+            if use_t0_fitting:
+                raise ConfigError("Incompatible: fitting::use_t0 is True, but use_t0 is False")
+        if use_t0:
             if not t0pdfset:
                 raise ConfigError("""Setting use_t0, use_t0_sampling or use_t0_fitting
                                   requires specifying a valid t0pdfset""")
