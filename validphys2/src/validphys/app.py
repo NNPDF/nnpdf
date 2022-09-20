@@ -54,6 +54,7 @@ providers = [
     "validphys.n3fit_data",
     "validphys.mc2hessian",
     "reportengine.report",
+    "validphys.overfit_metric"
 ]
 
 log = logging.getLogger(__name__)

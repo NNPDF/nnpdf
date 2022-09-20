@@ -69,6 +69,14 @@ Training lengths
 ----------------
 {@fits plot_training_length@}
 
+Overfit measure
+----------------
+{@with overfitmetric@}
+{@plot_overfitting_histogram@}
+{@fit_overfitting_summary@}
+{@endwith@}
+
+
 Training-validation
 -------------------
 {@fits plot_training_validation@}

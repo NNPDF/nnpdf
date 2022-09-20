@@ -142,5 +142,31 @@ DataGroups:
 ProcessGroup:
     metadata_group: nnpdf31_process
 
+overfitmetric:
+  - use_t0: True
+    fit:
+      from_: reference
+    datacuts:
+      from_: fit
+    t0pdfset:
+      from_: datacuts
+    theory:
+        from_: fit
+    theoryid:
+        from_: theory
+
+  - use_t0: True
+    fit:
+      from_: current
+    datacuts:
+      from_: fit
+    t0pdfset:
+      from_: datacuts
+    theory:
+        from_: fit
+    theoryid:
+        from_: theory
+
+
 actions_:
   - report(main=true)
