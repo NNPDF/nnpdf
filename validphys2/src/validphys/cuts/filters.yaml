@@ -22,6 +22,18 @@
    linearly dependent on the others
   rule: "MQQ<1350"
 
+- dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "yQQ<2.00"
+
+- dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "MQQ<1000"
+
 - dataset: CMSTOPDIFF8TEVTRAPNORM
   reason: |
    We remove the last bin of the normalised distribution because it is
