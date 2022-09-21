@@ -9,6 +9,7 @@ from ekobox import genpdf, gen_info
 from ekomark import apply
 from eko import basis_rotation as br
 from eko import output
+from validphys.loader import Loader
 
 from . import utils, eko_utils
 
@@ -88,7 +89,14 @@ def evolve_fit(
         log.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
-        eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
+        try:
+            log.info(f"Loading eko from theory {theoryID}")
+            theory_eko_path = (Loader().check_theoryID(theoryID).path)/'eko.tar'
+            eko_op = output.Output.load_tar(theory_eko_path)
+        except:
+            log.info(f"eko not found in theory {theoryID}, we will construct it")
+            eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
+            pass   
     eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
