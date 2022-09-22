@@ -6,7 +6,7 @@ How to run a PDF fit
 The user should perform the steps documented below in order to obtain a
 complete PDF fit using the latest release of the NNPDF fitting code:
 ``n3fit``. The fitting methodology is detailed in the
-`Methodology <methodology>`__ page.
+:ref:`Methodology <methodology>` page.
 
 -  `Preparing a fit runcard <#preparing-a-fit-runcard>`__
 -  `Running the fitting code <#running-the-fitting-code>`__
@@ -20,7 +20,7 @@ a fit and contains all required information to perform a fit, which
 includes the experimental data, the theory setup and the fitting setup.
 
 A detailed explanation on the parameters accepted by the ``n3fit``
-runcards can be found in the `detailed guide <runcard-detailed>`__.
+runcards can be found in the :ref:`detailed guide <runcard-detailed>`.
 
 For newcomers, it is recommended to start from an already existing
 runcard, example runcards (and runcard used in NNPDF releases) are
@@ -58,7 +58,7 @@ of the Neural Network as well as the settings for the optimization
 algorithm.
 
 An important feature of ``n3fit`` is the ability to perform
-`hyperparameter scans <hyperoptimization>`__, for this we have also
+:ref:`hyperparameter scans <hyperoptimization>`, for this we have also
 introduced a ``hyperscan_config`` key which specifies the trial ranges
 for the hyperparameter scan procedure. See the following
 self-explanatory example:
@@ -137,8 +137,8 @@ runcard following the points presented above you can proceed with a fit.
    from 1-n where n is the maximum number of desired replicas. Note that
    if you desire, for example, a 100 replica fit you should launch more
    than 100 replicas (e.g. 130) because not all of the replicas will
-   pass the checks in ``postfit`` (`see
-   here <postfit-selection-criteria>`__ for more info).
+   pass the checks in ``postfit`` (:ref:`see
+   here <postfit-selection-criteria>` for more info).
 
 3. Wait until you have fit results. Then run the ``evolven3fit`` program
    once to evolve all replicas using DGLAP. The arguments are
@@ -153,7 +153,7 @@ runcard following the points presented above you can proceed with a fit.
    should be that which you desire in the final fit (100 in the above
    example). Note that the standard behaviour of ``postfit`` can be
    modified by using various flags. More information can be found at
-   `Processing a fit <postfit>`__.
+   :ref:`Processing a fit <postfit>`.
 
 It is possible to run more than one replica in one single run of
 ``n3fit`` by using the ``--replica_range`` option. Running ``n3fit`` in
@@ -200,7 +200,7 @@ by:
    the fitted set with ``vp-get fit fit_name``.
 
 2. Analysing the results with ``validphys``, see the
-   `vp-guide <../vp/index>`__. Consider using the ``vp-comparefits``
+   :ref:`vp-guide <vp-index>`. Consider using the ``vp-comparefits``
    tool.
 
 Performance of the fit

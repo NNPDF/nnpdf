@@ -39,11 +39,7 @@ GitHub provides the following workflow:
    bug fixes, new features, new documentation, or simply to facilitate a
    general discussion. The user can then assign one or more people to
    help deal with the issue. Issues should be opened in the relevant
-   repository. For example, for something that is related to validphys,
-   one should open an issue in
-   `nnpdf <https://github.com/NNPDF/nnpdf>`__, while for something that
-   is related to data implementation, one should open an issue in
-   `buildmaster <https://github.com/NNPDF/buildmaster>`__. Example
+   repository. Example
    issues can be found `here <https://github.com/NNPDF/nnpdf/issues>`__.
 
 -  When it is clear how an issue should be dealt with, a

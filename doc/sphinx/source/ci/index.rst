@@ -136,5 +136,5 @@ Our GitHub Action service implements:
    appear with link references to the generated report and fit.
 
 The progress reports of the various jobs at `GitHub
-Actions <https://github.com/NNPDF/actions>`__, upon logging in with an
+Actions <https://github.com/NNPDF/nnpdf/actions>`__, upon logging in with an
 authorized GitHub account.

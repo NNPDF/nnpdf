@@ -97,7 +97,7 @@ scheme with up to five active flavors can be generated with
 |NNPDF40_nnlo_as_0118_1000.yml|_.
 
 .. |NNPDF40_nnlo_as_0118_1000.yml| replace:: ``NNPDF40_nnlo_as_0118_1000.yml``
-.. _NNPDF40_nnlo_as_0118_1000.yml: https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards/reproduce_nnpdf40/NNPDF40_nnlo_as_0118_1000.yml
+.. _NNPDF40_nnlo_as_0118_1000.yml: https://github.com/NNPDF/nnpdf/blob/master/n3fit/runcards/reproduce_nnpdf40/NNPDF40_nnlo_as_01180_1000.yml
 
 
 Hessian conversion, compression, bundled sets and flavor number variations

@@ -8,10 +8,10 @@ These are lookup tables that contain the relevant information to compute
 theoretical predicitons in the NNPDF framework. Broadly speaking, this
 is achieved by taking DGLAP evolution kernels from ``APFEL`` and
 combining them with interpolated parton-level observable kernels in the
-APPLgrid or FastNLO format (see `How to generate APPLgrid and fastNLO
-tables <../tutorials/APPLgrids>`__). The various data formats used in
-APFELcomb are described in `Experimental data
-files <../data/exp-data-files.rst#exp-data-files>`__.
+APPLgrid or FastNLO format (see :ref:`How to generate APPLgrid and fastNLO
+tables <applgridtuto>`). The various data formats used in
+APFELcomb are described in :ref:`Experimental data
+files <exp_data_files>`.
 
 The user is strongly encouraged to go through that note with care, in
 order to familiarise himself with the features and the structure of the
@@ -43,7 +43,7 @@ fucnctions computed by ``APFEL``. - DYP: Drell-Yan, partonic cross
 sections computed by ``APFEL``.
 
 ``<subgrid id>`` is the corresponding ID in that database (visible in
-the ``disp\_grids`` script) and ``<theory id>`` specifies the desired
+the ``disp_grids`` script) and ``<theory id>`` specifies the desired
 NNPDF theory index (the entry in nnpdf/nnpdfcpp/data/theory.db). As an
 example:
 
