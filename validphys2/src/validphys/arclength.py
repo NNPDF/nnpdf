@@ -33,6 +33,7 @@ def arc_lengths(
     Q: numbers.Real,
     basis: (str, Basis) = "flavour",
     flavours: (list, tuple, type(None)) = None,
+    xscale:(str,type(None)) = "linear"
 ):
     """Compute arc lengths at scale Q"""
     checked = check_basis(basis, flavours)
@@ -46,7 +47,7 @@ def arc_lengths(
     for a, b in zip(seg_min, seg_max):
         # Finite diff. step-size, x-grid
         eps = (b - a) / npoints
-        ixgrid = xgrid(a, b, "linear", npoints)
+        ixgrid = xgrid(a, b, xscale, npoints)
         # PDFs evaluated on grid, use the entire thing, the Stats class will chose later
         xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data * ixgrid[1]
         fdiff = np.diff(xfgrid) / eps  # Compute forward differences
