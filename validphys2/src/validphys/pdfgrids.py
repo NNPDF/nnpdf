@@ -75,10 +75,22 @@ class XPlottingGrid:
         """Create a copy of the grid with potentially a different set of values"""
         return dataclasses.replace(self, grid_values=grid_values)
 
+    def derivative(self):
+        """Return the derivative of the grid with respect to dlogx"""
+        new_data = np.gradient(self.grid_values.data, self.xgrid, axis=-1)*self.xgrid
+        gv = self.grid_values.__class__(new_data)
+        return dataclasses.replace(self, grid_values=gv)
+
 
 @make_argcheck(check_basis)
-def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavour',
-                   flavours:(list, tuple, type(None))=None):
+def xplotting_grid(
+    pdf: PDF,
+    Q: (float, int),
+    xgrid=None,
+    basis: (str, Basis) = 'flavour',
+    flavours: (list, tuple, type(None)) = None,
+    derivative: bool = False,
+):
     """Return an object containing the value of the PDF at the specified values
     of x and flavour.
 
@@ -89,6 +101,8 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     If None, the defaults for that basis will be selected.
 
     Q: The PDF scale in GeV.
+
+    derivative (bool): if True, take the derivative of the PDF instead
     """
     #Make usable outside reportengine
     checked = check_basis(basis, flavours)
@@ -108,6 +122,10 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     stats_gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
 
     res = XPlottingGrid(Q, basis, flavours, xgrid, stats_gv, scale)
+
+    if derivative:
+        return res.derivative()
+
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))

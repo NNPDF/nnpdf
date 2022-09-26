@@ -33,7 +33,7 @@ def arc_lengths(
     Q: numbers.Real,
     basis: (str, Basis) = "flavour",
     flavours: (list, tuple, type(None)) = None,
-    xscale:(str,type(None)) = "linear"
+    xscale: str = "linear"
 ):
     """Compute arc lengths at scale Q"""
     checked = check_basis(basis, flavours)
@@ -79,7 +79,7 @@ def plot_arc_lengths(
     pdfs_arc_lengths: Sequence,
     Q: numbers.Real,
     normalize_to: (type(None), int) = None,
-    xscale: (str, type(None)) = "linear",
+    xscale: str = "linear",
 ):
     """Plot the arc lengths of provided pdfs"""
     fig, ax = plt.subplots()
