@@ -76,15 +76,19 @@ def arc_length_table(arc_lengths):
 @figure
 @check_pdf_normalize_to
 def plot_arc_lengths(
-    pdfs_arc_lengths: Sequence, Q: numbers.Real, normalize_to: (type(None), int) = None
+    pdfs_arc_lengths: Sequence,
+    Q: numbers.Real,
+    normalize_to: (type(None), int) = None,
+    xscale: (str, type(None)) = "linear",
 ):
     """Plot the arc lengths of provided pdfs"""
     fig, ax = plt.subplots()
-    if normalize_to is not None:
-        ax.set_ylabel(f"Arc length $Q={Q}$ GeV (normalised)")
-    else:
-        ax.set_ylabel(f"Arc length $Q={Q}$ GeV")
 
+    scl_txt = "" if xscale == "linear" else "log-"
+    if normalize_to is not None:
+        ax.set_ylabel(f"Arc {scl_txt}length $Q={Q}$ GeV (normalised)")
+    else:
+        ax.set_ylabel(f"Arc {scl_txt}length $Q={Q}$ GeV")
     for ipdf, arclengths in enumerate(pdfs_arc_lengths):
         xvalues = np.array(range(len(arclengths.flavours)))
         xlabels = [
