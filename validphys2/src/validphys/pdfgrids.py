@@ -54,6 +54,7 @@ class XPlottingGrid:
     xgrid: np.ndarray
     grid_values: Stats
     scale: str
+    derivative_degree: int = 0 # keep track of the degree of the derivative
 
     def __post_init__(self):
         """Enforce grid_values being a Stats instance"""
@@ -79,7 +80,8 @@ class XPlottingGrid:
         """Return the derivative of the grid with respect to dlogx"""
         new_data = np.gradient(self.grid_values.data, self.xgrid, axis=-1)*self.xgrid
         gv = self.grid_values.__class__(new_data)
-        return dataclasses.replace(self, grid_values=gv)
+        nd = self.derivative_degree + 1
+        return dataclasses.replace(self, grid_values=gv, derivative_degree=nd)
 
 
 @make_argcheck(check_basis)

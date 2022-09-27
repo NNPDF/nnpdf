@@ -89,9 +89,16 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
     def get_ylabel(self, parton_name):
         if self.normalize_to is not None:
-            return "Ratio to {}".format(self.normalize_pdf.label)
-        else:
-            return '$x{}(x)$'.format(parton_name)
+            return f"Ratio to {self.normalize_pdf.label}"
+
+        # If it is a derivative, add the operator to the plot
+        derivative_str = ""
+        if self.firstgrid.derivative_degree > 0:
+            derivative_str = r"\frac{d}{dlogx}"
+        if self.firstgrid.derivative_degree > 1:
+            derivative_str = f"({derivative_str})^{self.firstgrid.derivative_degree}"
+        
+        return f"${derivative_str} x{parton_name}(x)$"
 
     def get_title(self, parton_name):
         return f"${parton_name}$ at {self.Q} GeV"
