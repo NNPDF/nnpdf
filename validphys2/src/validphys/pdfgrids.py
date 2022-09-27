@@ -89,7 +89,7 @@ def xplotting_grid(
     xgrid=None,
     basis: (str, Basis) = 'flavour',
     flavours: (list, tuple, type(None)) = None,
-    derivative: bool = False,
+    derivative: int = 0,
 ):
     """Return an object containing the value of the PDF at the specified values
     of x and flavour.
@@ -102,7 +102,7 @@ def xplotting_grid(
 
     Q: The PDF scale in GeV.
 
-    derivative (bool): if True, take the derivative of the PDF instead
+    derivative (int): how many derivtives of the PDF should be taken (default=0)
     """
     #Make usable outside reportengine
     checked = check_basis(basis, flavours)
@@ -123,8 +123,8 @@ def xplotting_grid(
 
     res = XPlottingGrid(Q, basis, flavours, xgrid, stats_gv, scale)
 
-    if derivative:
-        return res.derivative()
+    for _ in range(derivative):
+        res = res.derivative()
 
     return res
 
