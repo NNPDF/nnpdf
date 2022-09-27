@@ -93,10 +93,10 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
         # If it is a derivative, add the operator to the plot
         derivative_str = ""
-        if self.firstgrid.derivative_degree > 0:
-            derivative_str = r"\frac{d}{dlogx}"
-        if self.firstgrid.derivative_degree > 1:
-            derivative_str = f"({derivative_str})^{self.firstgrid.derivative_degree}"
+        dg = self.firstgrid.derivative_degree
+        if dg > 0:
+            dgs = f"{dg}" if dg > 0 else ""
+            derivative_str = fr"\frac{{d^{dgs}}}{{d^{dgs}logx}}"
         
         return f"${derivative_str} x{parton_name}(x)$"
 
