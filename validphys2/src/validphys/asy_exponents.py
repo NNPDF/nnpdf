@@ -65,7 +65,7 @@ def alpha_asy(pdf: PDF, *,
         warnings.simplefilter('ignore', RuntimeWarning)
         dx = np.log(xGrid[1]) - np.log(xGrid[0])
         alphaGrid_values = -np.log(abs(pdfGrid_values))
-        alphaGrid_values = np.gradient(alphaGrid_values, dx, axis=2, edge_order=1)
+        alphaGrid_values = np.gradient(alphaGrid_values, dx, axis=2, edge_order=2)
         alphaGrid_values[alphaGrid_values == -np.inf] = np.nan  # when PDF_i =0
         alphaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(alphaGrid_values))
         
@@ -113,7 +113,7 @@ def beta_asy(pdf, *,
         warnings.simplefilter('ignore', RuntimeWarning)
         dx = xGrid[1] - xGrid[0]
         betaGrid_values = np.log(abs(pdfGrid_values))
-        betaGrid_values = (xGrid - 1.) * np.gradient(betaGrid_values, dx, axis=2,edge_order=1)
+        betaGrid_values = (xGrid - 1.) * np.gradient(betaGrid_values, dx, axis=2,edge_order=2)
         betaGrid_values[betaGrid_values == -np.inf] = np.nan  # when PDF_i =0
         betaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(betaGrid_values))
 
