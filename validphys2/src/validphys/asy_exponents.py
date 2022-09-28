@@ -21,8 +21,6 @@ from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 import validphys.pdfgrids as pdfgrids
 
-from findiff import FinDiff
-
 log = logging.getLogger(__name__)
 
 @check_positive('Q')
@@ -66,9 +64,8 @@ def alpha_asy(pdf: PDF, *,
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         dx = np.log(xGrid[1]) - np.log(xGrid[0])
-        d_dx = FinDiff(2,dx,acc=4)
         alphaGrid_values = -np.log(abs(pdfGrid_values))
-        alphaGrid_values = d_dx(alphaGrid_values)
+        alphaGrid_values = np.gradient(alphaGrid_values, dx, axis=2, edge_order=1)
         alphaGrid_values[alphaGrid_values == -np.inf] = np.nan  # when PDF_i =0
         alphaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(alphaGrid_values))
         
@@ -115,9 +112,8 @@ def beta_asy(pdf, *,
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         dx = xGrid[1] - xGrid[0]
-        d_dx = FinDiff(2,dx,acc=4)
         betaGrid_values = np.log(abs(pdfGrid_values))
-        betaGrid_values = (xGrid - 1.) * d_dx(betaGrid_values)
+        betaGrid_values = (xGrid - 1.) * np.gradient(betaGrid_values, dx, axis=2,edge_order=1)
         betaGrid_values[betaGrid_values == -np.inf] = np.nan  # when PDF_i =0
         betaGrid = pdfGrid.copy_grid(grid_values=pdf.stats_class(betaGrid_values))
 
