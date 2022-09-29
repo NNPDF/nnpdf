@@ -91,14 +91,12 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if self.normalize_to is not None:
             return f"Ratio to {self.normalize_pdf.label}"
 
-        # If it is a derivative, add the operator to the plot
-        derivative_str = ""
-        dg = self.firstgrid.derivative_degree
-        if dg > 0:
-            dgs = f"{dg}" if dg > 0 else ""
-            derivative_str = fr"\frac{{d^{dgs}}}{{d^{dgs}logx}}"
-        
-        return f"${derivative_str} x{parton_name}(x)$"
+        base_str = f"x{parton_name}(x)"
+        # Ask the xplotting grid if it has something to add:
+        final_str = self.firstgrid.process_label(base_str)
+
+        # Wrap it in latex
+        return f"${final_str}$"
 
     def get_title(self, parton_name):
         return f"${parton_name}$ at {self.Q} GeV"
