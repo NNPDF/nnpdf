@@ -221,6 +221,30 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                                  xscale=xscale, normalize_to=normalize_to, ymin=ymin, ymax=ymax)
 
 
+@figuregen
+@check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
+@_warn_any_pdf_not_montecarlo
+def plot_pdfreplicas_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+):
+    """Plot the kinetic energy of the replicas of the specified PDFs.
+    Otherise it works the same as ``plot_pdfs_kinetic_energy``.
+    """
+    yield from ReplicaPDFPlotter(
+        pdfs=pdfs,
+        xplotting_grids=kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+    )
+
 class UncertaintyPDFPlotter(PDFPlotter):
 
     def get_ylabel(self, parton_name):
