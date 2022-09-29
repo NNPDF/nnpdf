@@ -33,7 +33,6 @@ def arc_lengths(
     Q: numbers.Real,
     basis: (str, Basis) = "flavour",
     flavours: (list, tuple, type(None)) = None,
-    xscale: str = "linear"
 ):
     """Compute arc lengths at scale Q"""
     checked = check_basis(basis, flavours)
@@ -47,7 +46,7 @@ def arc_lengths(
     for a, b in zip(seg_min, seg_max):
         # Finite diff. step-size, x-grid
         eps = (b - a) / npoints
-        ixgrid = xgrid(a, b, xscale, npoints)
+        ixgrid = xgrid(a, b, "linear", npoints)
         # PDFs evaluated on grid, use the entire thing, the Stats class will chose later
         xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data * ixgrid[1]
         fdiff = np.diff(xfgrid) / eps  # Compute forward differences
@@ -76,19 +75,15 @@ def arc_length_table(arc_lengths):
 @figure
 @check_pdf_normalize_to
 def plot_arc_lengths(
-    pdfs_arc_lengths: Sequence,
-    Q: numbers.Real,
-    normalize_to: (type(None), int) = None,
-    xscale: str = "linear",
+    pdfs_arc_lengths: Sequence, Q: numbers.Real, normalize_to: (type(None), int) = None
 ):
     """Plot the arc lengths of provided pdfs"""
     fig, ax = plt.subplots()
-
-    scl_txt = "" if xscale == "linear" else "log-"
     if normalize_to is not None:
-        ax.set_ylabel(f"Arc {scl_txt}length $Q={Q}$ GeV (normalised)")
+        ax.set_ylabel(f"Arc length $Q={Q}$ GeV (normalised)")
     else:
-        ax.set_ylabel(f"Arc {scl_txt}length $Q={Q}$ GeV")
+        ax.set_ylabel(f"Arc length $Q={Q}$ GeV")
+
     for ipdf, arclengths in enumerate(pdfs_arc_lengths):
         xvalues = np.array(range(len(arclengths.flavours)))
         xlabels = [
