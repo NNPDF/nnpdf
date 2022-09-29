@@ -133,9 +133,35 @@ def xplotting_grid(
 
     return res
 
+@make_argcheck(check_basis)
+def kinetic_xplotting_grid(
+    pdf: PDF,
+    Q: (float, int),
+    xgrid=None,
+    basis: (str, Basis) = 'flavour',
+    flavours: (list, tuple, type(None)) = None,
+):
+    r"""Returns an object containing the value of the kinetic energy of the PDF
+    at the specified values of x and flavour for a given Q.
+    Utilizes ``xplotting_grid``
+    The kinetic energy of the PDF is defined as:
+
+    .. math::
+
+        k = \sqrt{1 + (d/dlogx f)^2}
+    """
+    # Get the pdf derived wrt logx
+    xpg = xplotting_grid(
+        pdf=pdf, Q=Q, xgrid=xgrid, basis=basis, flavours=flavours, derivative=1
+    )
+    # Compute the kinetic energy
+    kinen_rawdata = np.sqrt(1 + xpg.grid_values.data**2)
+    kinen_gv = pdf.stats_class(kinen_rawdata)
+    return xpg.copy_grid(kinen_gv)
+
+
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
-
-
+kinetic_xplotting_grids = collect(kinetic_xplotting_grid, ('pdfs',))
 
 
 Lumi2dGrid = namedtuple('Lumi2dGrid', ['y','m','grid_values'])

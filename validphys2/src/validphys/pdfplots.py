@@ -532,6 +532,37 @@ def plot_pdfs(
         legend_stat_labels=legend_stat_labels,
     )
 
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_pdfs_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+):
+    """Band plotting of the "kinetic energy" of the PDF as a function of x for a given value of Q.
+    The input of this function is similar to those of ``plot_pdfs``.
+    """
+    yield from BandPDFPlotter(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+    )
+
+
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
     def get_title(self, parton_name):
         return f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
