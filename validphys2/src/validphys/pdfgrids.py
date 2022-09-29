@@ -77,7 +77,10 @@ class XPlottingGrid:
         return dataclasses.replace(self, grid_values=grid_values)
 
     def derivative(self):
-        """Return the derivative of the grid with respect to dlogx"""
+        """Return the derivative of the grid with respect to dlogx
+        A call to this function will return a new ``XPlottingGrid`` instance with
+        the derivative as grid values and with an increased ``derivative_degree``
+        """
         new_data = np.gradient(self.grid_values.data, self.xgrid, axis=-1)*self.xgrid
         gv = self.grid_values.__class__(new_data)
         nd = self.derivative_degree + 1

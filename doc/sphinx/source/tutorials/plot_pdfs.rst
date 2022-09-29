@@ -98,6 +98,8 @@ Plotting PDFs, uncertainties and replicas
 - Here the ``PDFscalespecs`` namespace specifies two x-scales to be plotted.
 - The actions are called: ``plot_pdfs``, ``plot_uncertainties`` and
   ``plot_pdfreplicas``. Their output is fairly self-evident!
+- PDF plotting routines allow to perform the derivative of the PDFs with respect to logx
+  by using the ``derivative: N`` flag, where ``N`` is the degree of the desired derivative. [Example](https://vp.nnpdf.science/Tj8jTeWhSki5ObB17nV1BQ==/#pdf-bands-2)
 
 Plotting PDF distances
 ----------------------
