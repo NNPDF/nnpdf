@@ -196,7 +196,7 @@ class ReplicaPDFPlotter(PDFPlotter):
         gv = stats.data
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
-        ax.plot(grid.xgrid, stats.central_value(), color=color,
+        ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], color=color,
                 linewidth=2,
                 label=pdf.label)
         return gv
@@ -543,7 +543,7 @@ def plot_pdfs(
     legend_stat_labels (bool): Show detailed information on what kind of confidence
     interval is being plotted in the legend labels.
     """
-    yield from BandPDFPlotter(
+    yield from MixMatchPDFPlotter(
         pdfs,
         xplotting_grids,
         xscale,
@@ -1044,3 +1044,15 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.grid(False)
 
     return fig
+
+
+class MixMatchPDFPlotter(BandPDFPlotter, ReplicaPDFPlotter):
+    """Special wrapper class to plot, in the same figure, PDF bands and PDF replicas
+    depending on the type of PDF.
+    Practical use: plot together the PDF central values with the NNPDF bands
+    """
+    def draw(self, pdf, grid, flstate):
+        if pdf.label.startswith("HOP"):
+            # Go then to the draw method of ReplicaPDFPlotter
+            return super(BandPDFPlotter, self).draw(pdf, grid, flstate)
+        return super().draw(pdf, grid, flstate)
