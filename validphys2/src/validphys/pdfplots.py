@@ -1052,6 +1052,9 @@ class MixMatchPDFPlotter(BandPDFPlotter, ReplicaPDFPlotter):
     Practical use: plot together the PDF central values with the NNPDF bands
     """
     def draw(self, pdf, grid, flstate):
+        # small values corresponding to charm result in a +1 placed on top of
+        # the y-axis if axes.formatter.useoffset is not False
+        plt.rcParams['axes.formatter.useoffset'] = False 
         if pdf.label.startswith("HOP"):
             # Go then to the draw method of ReplicaPDFPlotter
             return super(BandPDFPlotter, self).draw(pdf, grid, flstate)
