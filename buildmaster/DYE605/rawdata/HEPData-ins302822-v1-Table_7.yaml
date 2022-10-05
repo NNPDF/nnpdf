@@ -1,0 +1,82 @@
+dependent_variables:
+- header: {name: S*D2(SIG)/D(SQRT(TAU))/DYRAP, units: NB*GEV**2/NUCLEON}
+  qualifiers:
+  - {name: RE, value: P CU --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '38.8'}
+  - {name: YRAP, value: '0.4'}
+  values:
+  - errors:
+    - {symerror: 33.3}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 198.0
+  - errors:
+    - {symerror: 26.8}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 173.0
+  - errors:
+    - {symerror: 25.6}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 149.0
+  - errors:
+    - {symerror: 14.8}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 98.6
+  - errors:
+    - {symerror: 11.3}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 71.1
+  - errors:
+    - {symerror: 6.61}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 28.7
+  - errors:
+    - {symerror: 8.08}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 36.8
+  - errors:
+    - {symerror: 3.03}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 24.7
+  - errors:
+    - {symerror: 1.55}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 14.6
+  - errors:
+    - {symerror: 0.709}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 6.14
+  - errors:
+    - {symerror: 0.342}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 1.95
+  - errors:
+    - {symerror: 0.142}
+    - {label: 'sys,Normalisation error', symerror: 15.0%}
+    - {label: 'sys,Point-to-point systematic error', symerror: 5.0%}
+    value: 0.423
+independent_variables:
+- header: {name: SQRT(TAU)}
+  values:
+  - {value: 0.2141}
+  - {value: 0.2192}
+  - {value: 0.2244}
+  - {value: 0.2296}
+  - {value: 0.2708}
+  - {value: 0.276}
+  - {value: 0.2812}
+  - {value: 0.2915}
+  - {value: 0.3121}
+  - {value: 0.3431}
+  - {value: 0.3843}
+  - {value: 0.4359}
