@@ -744,7 +744,7 @@ def experiments_chi2_stats(total_chi2_data):
     """
     rep_data, central_result, npoints = total_chi2_data
     m = central_result.mean()
-    rep_mean = rep_data.central_value().mean()
+    rep_mean = rep_data.error_members().mean()
     return OrderedDict(
         [
             ("central_mean", m),
