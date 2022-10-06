@@ -154,6 +154,8 @@ overfitmetric:
         from_: fit
     theoryid:
         from_: theory
+    pdfs:
+      - from_: fit
 
   - use_t0: True
     fit:
@@ -166,6 +168,8 @@ overfitmetric:
         from_: fit
     theoryid:
         from_: theory
+    pdfs:
+      - from_: fit
 
 
 actions_:
