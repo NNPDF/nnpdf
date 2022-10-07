@@ -11,6 +11,8 @@ We are comparing:
 
 {@ summarise_fits @}
 
+{@ dataspecs::t0_info t0_chi2_info_table @}
+
 Theory covariance summary
 -------------------------
 {@summarise_theory_covmat_fits@}
