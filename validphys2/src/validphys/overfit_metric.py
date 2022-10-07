@@ -20,14 +20,7 @@ from validphys.checks import check_at_least_two_replicas
 
 log = logging.getLogger(__name__)
 
-preds = collect(
-    "predictions",
-    (
-        "pdfs",
-        "dataset_inputs",
-    ),
-)
-
+preds = collect("predictions",("dataset_inputs",))
 
 def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
     """Loads all validation pseudodata replicas used during the fiting of the

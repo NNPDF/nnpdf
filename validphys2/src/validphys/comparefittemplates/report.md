@@ -71,9 +71,9 @@ Training lengths
 
 Overfit measure
 ----------------
-{@with overfitmetric@}
-{@plot_overfitting_histogram@}
-{@fit_overfitting_summary@}
+{@with dataspecs::t0_info@}
+{@t0_info plot_overfitting_histogram@}
+{@t0_info fit_overfitting_summary@}
 {@endwith@}
 
 
