@@ -105,6 +105,7 @@ def calculate_chi2s_per_replica(
 
 
 def array_expected_overfitting(
+    fit_code_version,
     calculate_chi2s_per_replica,
     replica_data,
     number_of_resamples=1000,
@@ -137,22 +138,30 @@ def array_expected_overfitting(
         (number_of_resamples*Npdfs,) sized array containing the mean delta chi2
         values per resampled list.
     """
-    fitted_val_erf = np.array([info.validation for info in replica_data])
+    fit_name = fit_code_version.columns[0]
+    nnpdf_version = fit_code_version[fit_name]['nnpdf']
+    if nnpdf_version>='4.0.5':
 
-    number_pdfs = calculate_chi2s_per_replica.shape[0]
-    list_expected_overfitting = []
-    for _ in range(number_pdfs * number_of_resamples):
-        mask = np.random.randint(
-            0, number_pdfs, size=int(resampling_fraction * number_pdfs)
-        )
-        res_tmp = calculate_chi2s_per_replica[mask][:, mask]
+        fitted_val_erf = np.array([info.validation for info in replica_data])
 
-        fitted_val_erf_tmp = fitted_val_erf[mask]
-        expected_val_chi2 = res_tmp.mean(axis=0)
-        delta_chi2 = fitted_val_erf_tmp - expected_val_chi2
-        expected_delta_chi2 = delta_chi2.mean()
+        number_pdfs = calculate_chi2s_per_replica.shape[0]
+        list_expected_overfitting = []
+        for _ in range(number_pdfs * number_of_resamples):
+            mask = np.random.randint(
+                0, number_pdfs, size=int(resampling_fraction * number_pdfs)
+            )
+            res_tmp = calculate_chi2s_per_replica[mask][:, mask]
 
-        list_expected_overfitting.append(expected_delta_chi2)
+            fitted_val_erf_tmp = fitted_val_erf[mask]
+            expected_val_chi2 = res_tmp.mean(axis=0)
+            delta_chi2 = fitted_val_erf_tmp - expected_val_chi2
+            expected_delta_chi2 = delta_chi2.mean()
+
+            list_expected_overfitting.append(expected_delta_chi2)
+    else:
+        log.warning(f"""Since {fit_name} pseudodata generation has changed,
+            hence the overfit metric cannot be determined.""")
+        list_expected_overfitting = np.array([0])
     return np.array(list_expected_overfitting)
 
 
