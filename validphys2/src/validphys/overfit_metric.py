@@ -42,6 +42,8 @@ def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
 
 @check_at_least_two_replicas
 def calculate_chi2s_per_replica(
+    pdf, # for the check
+    fit_code_version,
     recreate_pdf_pseudodata_no_table,
     preds,
     dataset_inputs,
@@ -70,42 +72,49 @@ def calculate_chi2s_per_replica(
         to the cases where the PDF replica has been fitted to the coresponding
         pseudodata replica
     """
-    pp = []
-    for i, dss in enumerate(dataset_inputs):
-        preds_witout_cv = preds[i].drop(0, axis=1)
-        df = pd.concat({dss.name: preds_witout_cv}, names=["dataset"])
-        pp.append(df)
+    fit_name = fit_code_version.columns[0]
+    nnpdf_version = fit_code_version[fit_name]['nnpdf']
+    if nnpdf_version>='4.0.5':
+        pp = []
+        for i, dss in enumerate(dataset_inputs):
+            preds_witout_cv = preds[i].drop(0, axis=1)
+            df = pd.concat({dss.name: preds_witout_cv}, names=["dataset"])
+            pp.append(df)
 
-    PDF_predictions = pd.concat(pp)
+        PDF_predictions = pd.concat(pp)
 
-    chi2s_per_replica = []
-    for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
+        chi2s_per_replica = []
+        for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
 
-        prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
-        prediction_filter.rename(["dataset", "data"], inplace=True)
-        PDF_predictions_val = PDF_predictions.loc[prediction_filter]
-        PDF_predictions_val = PDF_predictions_val.values[:, enum]
+            prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
+            prediction_filter.rename(["dataset", "data"], inplace=True)
+            PDF_predictions_val = PDF_predictions.loc[prediction_filter]
+            PDF_predictions_val = PDF_predictions_val.values[:, enum]
 
-        new_val_pseudodata_list = _create_new_val_pseudodata(
-            pdf_data_index, recreate_pdf_pseudodata_no_table
-        )
+            new_val_pseudodata_list = _create_new_val_pseudodata(
+                pdf_data_index, recreate_pdf_pseudodata_no_table
+            )
 
-        invcovmat_vl = np.linalg.inv(
-            groups_covmat_no_table[pdf_data_index.val_idx].T[
-                pdf_data_index.val_idx
-            ]
-        )
+            invcovmat_vl = np.linalg.inv(
+                groups_covmat_no_table[pdf_data_index.val_idx].T[
+                    pdf_data_index.val_idx
+                ]
+            )
 
-        tmp = PDF_predictions_val - new_val_pseudodata_list
+            tmp = PDF_predictions_val - new_val_pseudodata_list
 
-        chi2 = np.einsum("ij,jk,ik->i", tmp, invcovmat_vl, tmp) / tmp.shape[1]
-        chi2s_per_replica.append(chi2)
+            chi2 = np.einsum("ij,jk,ik->i", tmp, invcovmat_vl, tmp) / tmp.shape[1]
+            chi2s_per_replica.append(chi2)
+            ret = np.array(chi2s_per_replica)
+    else:
+        log.warning(f"""Since {fit_name} pseudodata generation has changed,
+            hence the overfit metric cannot be determined.""")
+        ret = np.array([0])
 
-    return np.array(chi2s_per_replica)
+    return ret
 
 
 def array_expected_overfitting(
-    fit_code_version,
     calculate_chi2s_per_replica,
     replica_data,
     number_of_resamples=1000,
@@ -138,10 +147,7 @@ def array_expected_overfitting(
         (number_of_resamples*Npdfs,) sized array containing the mean delta chi2
         values per resampled list.
     """
-    fit_name = fit_code_version.columns[0]
-    nnpdf_version = fit_code_version[fit_name]['nnpdf']
-    if nnpdf_version>='4.0.5':
-
+    if calculate_chi2s_per_replica != 0:
         fitted_val_erf = np.array([info.validation for info in replica_data])
 
         number_pdfs = calculate_chi2s_per_replica.shape[0]
@@ -159,9 +165,7 @@ def array_expected_overfitting(
 
             list_expected_overfitting.append(expected_delta_chi2)
     else:
-        log.warning(f"""Since {fit_name} pseudodata generation has changed,
-            hence the overfit metric cannot be determined.""")
-        list_expected_overfitting = np.array([0])
+        list_expected_overfitting = calculate_chi2s_per_replica
     return np.array(list_expected_overfitting)
 
 

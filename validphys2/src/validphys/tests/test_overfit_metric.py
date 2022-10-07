@@ -15,7 +15,7 @@ config = {
     "theoryid": {"from_": "theory"},
     "datacuts": {"from_": "fit"},
     "t0pdfset": {"from_": "datacuts"},
-    "pdfs": [{"from_": "fit"}],
+    "pdf": {"from_": "fit"},
     "dataset_inputs": {"from_": "fit"},
 }
 
