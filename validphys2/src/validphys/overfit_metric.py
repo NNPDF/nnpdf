@@ -147,7 +147,12 @@ def array_expected_overfitting(
         (number_of_resamples*Npdfs,) sized array containing the mean delta chi2
         values per resampled list.
     """
-    if calculate_chi2s_per_replica != 0:
+    # calculate_chi2s_per_replica is set to zero if the pseudodata generation 
+    # has changed sinc the fit has been performed. As a result the overfitting
+    # metric can no longer be determined.
+    if (calculate_chi2s_per_replica == 0).all():
+        list_expected_overfitting = calculate_chi2s_per_replica
+    else:
         fitted_val_erf = np.array([info.validation for info in replica_data])
 
         number_pdfs = calculate_chi2s_per_replica.shape[0]
@@ -164,8 +169,6 @@ def array_expected_overfitting(
             expected_delta_chi2 = delta_chi2.mean()
 
             list_expected_overfitting.append(expected_delta_chi2)
-    else:
-        list_expected_overfitting = calculate_chi2s_per_replica
     return np.array(list_expected_overfitting)
 
 
