@@ -109,7 +109,7 @@ def calculate_chi2s_per_replica(
     else:
         log.warning(f"""Since {fit_name} pseudodata generation has changed,
             hence the overfit metric cannot be determined.""")
-        ret = np.array([0])
+        ret = np.array(np.nan)
 
     return ret
 
@@ -147,10 +147,10 @@ def array_expected_overfitting(
         (number_of_resamples*Npdfs,) sized array containing the mean delta chi2
         values per resampled list.
     """
-    # calculate_chi2s_per_replica is set to zero if the pseudodata generation 
+    # calculate_chi2s_per_replica is set to NaN if the pseudodata generation 
     # has changed sinc the fit has been performed. As a result the overfitting
     # metric can no longer be determined.
-    if (calculate_chi2s_per_replica == 0).all():
+    if (calculate_chi2s_per_replica != calculate_chi2s_per_replica).all():
         list_expected_overfitting = calculate_chi2s_per_replica
     else:
         fitted_val_erf = np.array([info.validation for info in replica_data])
