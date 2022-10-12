@@ -204,6 +204,25 @@ def summarise_fits(collected_fit_summaries):
     return pd.concat(collected_fit_summaries, axis=1)
 
 
+@checks.check_use_t0
+@table
+def t0_chi2_info_table(pdf, dataset_inputs_abs_chi2_data, t0pdfset, use_t0):
+    """ Provides table with
+        - t0pdfset name
+        - Central t0-chi-squared
+        - Average t0-chi-squared
+    """
+    ndata = dataset_inputs_abs_chi2_data.ndata
+    central_chi2 = dataset_inputs_abs_chi2_data.central_result / ndata
+    member_chi2 = dataset_inputs_abs_chi2_data.replica_result.error_members() / ndata
+
+    VET = ValueErrorTuple
+    data = OrderedDict( (("t0pdfset",        f"{t0pdfset}"),
+                         (r"$\chi^2_{t0}$",   f"{central_chi2:.5f}"),
+                         (r"$<\chi^2_{t0}>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}")))
+
+    return pd.Series(data, index=data.keys(), name=pdf.label)
+
 fits_replica_data = collect('replica_data', ('fits',))
 
 #Do collect in two parts so we get a list for each fit instead of a single list
