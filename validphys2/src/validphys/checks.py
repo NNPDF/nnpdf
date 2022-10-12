@@ -154,11 +154,10 @@ def check_have_two_pdfs(pdfs):
 
 
 @make_argcheck
-def check_at_least_two_replicas(pdfs):
-    for pdf in pdfs:
-        # The get_members function also includes the central value replica, 
-        # therefore we need it to be larger than 3
-        check(pdf.get_members() >= 3,'Expecting at least two replicas.')
+def check_at_least_two_replicas(pdf):
+    # The get_members function also includes the central value replica,
+    # therefore we need it to be larger than 3
+    check(pdf.get_members() >= 3,'Expecting at least two replicas.')
 
 
 #The indexing to one instead of zero is so that we can be consistent with
