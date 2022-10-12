@@ -37,6 +37,7 @@ providers = [
     "validphys.correlations",
     "validphys.chi2grids",
     "validphys.eff_exponents",
+    "validphys.asy_exponents",    
     "validphys.paramfits.dataops",
     "validphys.paramfits.plots",
     "validphys.theorycovariance.construction",
