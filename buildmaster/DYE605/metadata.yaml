@@ -1,11 +1,11 @@
 # Generalia
 setname: "DYE605"
 ndata: 119
-observable: {description: "Double differential distribution in muon pair tau and rapidity", label: "", units: "nb*GeV**2 / nucleon" }
+observable: {description: "Double differential distribution in muon pair tau and rapidity", label: "$s*d^2sigma/dsqt(tau)/dy$", units: "nb*GeV**2 / nucleon" }
 kinematics:
    variables:
       s: {description: "Center of mass energy of the collision squared", label: $s$, units: "GeV²"}
-      sqrt(tau):  {description: " M/sqrt(s), with M the invariant mass of the muon pair", label: $\sqrt(\tau)$, units: ""}
+      sqrttau:  {description: " M/sqrt(s), with M the invariant mass of the muon pair", label: $\sqrt(\tau)$, units: ""}
       y:  {description: "lepton rapidity: log( ( q0 + qz ) / ( q0 - qz ) ) / 2", label: "$y$",  units: ""}
    file: kinematics.yaml
 
@@ -42,9 +42,9 @@ data_uncertainties:
 # Plotting  
 kinematic_coverage:
    y: y
-   sqrt(tau): sqrt(tau)
+   sqrttau: sqrttau
 dataset_label: "E605"
-plot_x: sqrt(tau)
+plot_x: sqrttau
 figure_by: 
    - y
 
