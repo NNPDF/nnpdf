@@ -28,10 +28,10 @@ def filter_E605():
 
             data_central_value = input["dependent_variables"][0]["values"][j]["value"]
             data_central.append(data_central_value)
-            sqrtau = input["independent_variables"][0]["values"][j]["value"]
+            sqrttau = input["independent_variables"][0]["values"][j]["value"]
             kin_value = {
                 "s": {"min": None, "mid": sqrts**2, "max": None},
-                "sqrtau": {"min": None, "mid": sqrtau, "max": None},
+                "sqrttau": {"min": None, "mid": sqrttau, "max": None},
                 "y": {"min": None, "mid": y, "max": None},
             }
             kin.append(kin_value)
