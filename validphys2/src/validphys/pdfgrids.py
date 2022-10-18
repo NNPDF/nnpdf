@@ -48,14 +48,13 @@ class XPlottingGrid:
     The `grid_values` attribute corresponds to a `Stats` instance
     in order to compute statistical estimators in a sensible manner.
     """
-
     Q: float
     basis: (str, Basis)
     flavours: (list, tuple, type(None))
     xgrid: np.ndarray
     grid_values: Stats
     scale: str
-    derivative_degree: int = 0  # keep track of the degree of the derivative
+    derivative_degree: int = 0 # keep track of the degree of the derivative
 
     def __post_init__(self):
         """Enforce grid_values being a Stats instance"""
