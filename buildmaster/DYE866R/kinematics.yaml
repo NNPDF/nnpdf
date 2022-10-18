@@ -1,0 +1,181 @@
+bins:
+- x2:
+    min: 0.015
+    mid: 0.026
+    max: 0.03
+  xF:
+    min: null
+    mid: 0.534
+    max: null
+  M:
+    min: null
+    mid: 4.6
+    max: null
+- x2:
+    min: 0.03
+    mid: 0.038
+    max: 0.045
+  xF:
+    min: null
+    mid: 0.415
+    max: null
+  M:
+    min: null
+    mid: 5.1
+    max: null
+- x2:
+    min: 0.045
+    mid: 0.052
+    max: 0.06
+  xF:
+    min: null
+    mid: 0.356
+    max: null
+  M:
+    min: null
+    mid: 5.6
+    max: null
+- x2:
+    min: 0.06
+    mid: 0.067
+    max: 0.075
+  xF:
+    min: null
+    mid: 0.326
+    max: null
+  M:
+    min: null
+    mid: 6.2
+    max: null
+- x2:
+    min: 0.075
+    mid: 0.082
+    max: 0.09
+  xF:
+    min: null
+    mid: 0.296
+    max: null
+  M:
+    min: null
+    mid: 6.8
+    max: null
+- x2:
+    min: 0.09
+    mid: 0.097
+    max: 0.105
+  xF:
+    min: null
+    mid: 0.261
+    max: null
+  M:
+    min: null
+    mid: 7.2
+    max: null
+- x2:
+    min: 0.105
+    mid: 0.112
+    max: 0.12
+  xF:
+    min: null
+    mid: 0.227
+    max: null
+  M:
+    min: null
+    mid: 7.5
+    max: null
+- x2:
+    min: 0.12
+    mid: 0.127
+    max: 0.135
+  xF:
+    min: null
+    mid: 0.199
+    max: null
+  M:
+    min: null
+    mid: 7.8
+    max: null
+- x2:
+    min: 0.135
+    mid: 0.142
+    max: 0.15
+  xF:
+    min: null
+    mid: 0.182
+    max: null
+  M:
+    min: null
+    mid: 8.2
+    max: null
+- x2:
+    min: 0.15
+    mid: 0.161
+    max: 0.175
+  xF:
+    min: null
+    mid: 0.164
+    max: null
+  M:
+    min: null
+    mid: 8.7
+    max: null
+- x2:
+    min: 0.175
+    mid: 0.186
+    max: 0.2
+  xF:
+    min: null
+    mid: 0.146
+    max: null
+  M:
+    min: null
+    mid: 9.5
+    max: null
+- x2:
+    min: 0.2
+    mid: 0.211
+    max: 0.225
+  xF:
+    min: null
+    mid: 0.133
+    max: null
+  M:
+    min: null
+    mid: 10.3
+    max: null
+- x2:
+    min: 0.225
+    mid: 0.236
+    max: 0.25
+  xF:
+    min: null
+    mid: 0.12
+    max: null
+  M:
+    min: null
+    mid: 11.1
+    max: null
+- x2:
+    min: 0.25
+    mid: 0.269
+    max: 0.3
+  xF:
+    min: null
+    mid: 0.097
+    max: null
+  M:
+    min: null
+    mid: 12.0
+    max: null
+- x2:
+    min: 0.3
+    mid: 0.315
+    max: 0.35
+  xF:
+    min: null
+    mid: 0.046
+    max: null
+  M:
+    min: null
+    mid: 12.9
+    max: null
