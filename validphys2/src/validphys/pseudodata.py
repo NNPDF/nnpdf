@@ -103,17 +103,16 @@ def read_replica_pseudodata(fit, context_index, replica):
 def make_replica(
     groups_dataset_inputs_loaded_cd_with_cuts, 
     replica_mcseed,  
-    dataset_inputs_sampling_covmat, 
+    dataset_inputs_sampling_covmat_eigs, 
     sep_mult, 
     genrep=True 
     ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
-    objects and returns a pseudodata replica accounting for
-    possible correlations between systematic uncertainties.
-
-    The function loops until positive definite pseudodata is generated for any
-    non-asymmetry datasets. In the case of an asymmetry dataset negative values are
-    permitted so the loop block executes only once.
+    objects and returns a pseudodata replica accounting for possible correlations
+    between systematic uncertainties. The function loops until positive definite
+    pseudodata is generated for any non-asymmetry datasets. In the case of an 
+    asymmetry dataset negative values are permitted so the loop block executes 
+    only once.
 
     Parameters
     ---------
@@ -125,8 +124,8 @@ def make_replica(
         Seed used to initialise the numpy random number generator. If ``None`` then a random seed is
         allocated using the default numpy behaviour.
 
-    dataset_inputs_sampling_covmat: np.array
-        Full covmat to be used. It can be either only experimental or also theoretical.
+    dataset_inputs_sampling_covmat_eigs: tuple of np.arrays
+        Eigenvalues and eigenvectors of the covariance sampling matrix.
 
     separate_multiplicative: bool
         Specifies whether computing the shifts with the full covmat or separating multiplicative
@@ -155,6 +154,13 @@ def make_replica(
     array([0.25640033, 0.25986534, 0.27165461, 0.29001009, 0.30863588,
        0.30100351, 0.31781208, 0.30827054, 0.30258217, 0.32116842,
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
+
+    Note
+    ----
+    In this new approach, we define a new way to get the square root of the covmat
+    so that we don't need the covmat itself, but its eigenvalues and eigenvectors.
+    This is true, since UD^{1/2} is a Cholesky decomposition of the covmat when
+    U is the eigenvectors matrix (base change) and D is the diagonal covmat.
     """
     if not genrep:
         return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
@@ -163,9 +169,7 @@ def make_replica(
     name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
     rng = np.random.default_rng(seed=replica_mcseed+name_seed)
-    #construct covmat
-    covmat = dataset_inputs_sampling_covmat
-    covmat_sqrt = sqrt_covmat(covmat)
+    
     #Loading the data
     pseudodatas = []
     check_positive_masks = []
@@ -190,6 +194,10 @@ def make_replica(
             check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
+    
+    #get eigenvalues and eigenvectors of sampling covmat
+    eigval, eigvect = dataset_inputs_sampling_covmat_eigs
+
     #concatenating special multiplicative errors, pseudodatas and positive mask 
     if sep_mult:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
@@ -213,7 +221,7 @@ def make_replica(
             mult_shifts.append(mult_shift)
             
         #If sep_mult is true then the multiplicative shifts were not included in the covmat
-        shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
+        shifts = np.dot(eigvect * np.sqrt(eigval), rng.normal(size=eigval.shape))
         mult_part = 1.
         if sep_mult:
             special_mult = (
