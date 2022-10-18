@@ -4,13 +4,13 @@ ndata: 15
 observable: {description: "Data on the ratio of pd DY cross sections over pp cross sections", label:"$\sigma^d/2 \sigma^p$", units: "" }
 kinematics:
    variables:
-      x2: {description: "Bjorken x of the partons from the target", label: "$x_2$", units: ""}
-      xF:  {description: "Feynamn-x, x_1 - x_2", label: '$x_F$', units: ""}
+      y: {description: "y", label: "$x_2$", units: ""}
       M:  {description: "Dilepton mass", units: ""}
+      sqrts:  {description: "Center of mass energy", units: ""}
    file: kinematics.yaml
 
 version: 0
-version_comment: "Initial implementation, hepdata kinemamtic"
+version_comment: "Initial implementation"
 
 # References
 arXiv:
@@ -56,4 +56,4 @@ theory:
 
 nnpdf_metadata:
    nnpdf31_process: "DY"
-   experiment: "DYE866"
+   experiment: "E866"
