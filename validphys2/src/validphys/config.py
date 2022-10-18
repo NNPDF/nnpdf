@@ -773,6 +773,17 @@ class CoreConfig(configparser.Config):
                 else:
                     return covmats.dataset_inputs_exp_covmat
 
+    @configparser.explicit_node
+    def produce_dataset_inputs_sampling_covmat_eigs(
+        self
+    ):
+        """
+        Produces the diagonalization of the sampling covmat to be used in new
+        approach to make_replica.
+        """
+        from validphys import covmats_utils
+        return covmats_utils.diagonalize_sampling_covmat
+
     def produce_loaded_theory_covmat(
         self,
         output_path,
