@@ -13,6 +13,7 @@ from time import time
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.callbacks import TensorBoard, Callback
+from n3fit.backends.keras_backend.MetaModel import aggregate_replicas
 
 log = logging.getLogger(__name__)
 
@@ -80,7 +81,8 @@ class StoppingCallback(Callback):
         """ Function to be called at the end of every epoch """
         print_stats = ((epoch + 1) % self.log_freq) == 0
         # Note that the input logs correspond to the fit before the weights are updated
-        self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
+        training_info = aggregate_replicas(logs)
+        self.stopping_object.monitor_chi2(training_info, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
             self.model.stop_training = True
 
