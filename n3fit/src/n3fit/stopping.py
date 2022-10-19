@@ -118,13 +118,13 @@ def parse_losses(history_object, data, suffix="loss"):
     total_points = 0
     total_loss = 0
     for exp_name, npoints in data.items():
-        loss = np.array(hobj["tf_op_layer_" + exp_name + f"_{suffix}"])
+        loss = np.array(hobj[exp_name + f"_{suffix}"])
         dict_chi2[exp_name] = loss / npoints
         total_points += npoints
         total_loss += loss
 
     # By taking the loss from the history object we would be saving the total loss
-    # including positivity sets and (if added/enabled) regularizsers
+    # including positivity sets and (if added/enabled) regularizers
     # instead we want to restrict ourselves to the loss coming from experiments
     # total_loss = np.mean(hobj["loss"]) / total_points
     total_loss /= total_points
@@ -282,7 +282,6 @@ class ReplicaState:
 
     def register_best(self, chi2, epoch):
         """ Register a new best state and some metadata about it """
-#        import pdb; pdb.set_trace()
         self._weights = self._pdf_model.get_weights()
         self._best_epoch = epoch
         self._best_vl_chi2 = chi2
@@ -359,7 +358,8 @@ class FitHistory:
 
         if epoch is None:
             epoch = self.final_epoch
-        loss = self.get_state(epoch).vl_loss[0][i]
+        state = self.get_state(epoch)
+        loss = state.vl_loss[i]
         self._replicas[i].register_best(loss, epoch)
 
     def all_positivity_status(self):
@@ -535,6 +535,7 @@ class Stopping:
             return False
 
         # Step 2. Compute the validation metrics
+#        import pdb; pdb.set_trace()
         validation_info = self._validation.compute_losses()
 
         # Step 3. Register the current point in (the) history
@@ -676,7 +677,7 @@ class Positivity:
                 If the positivity loss is above the threshold, the positivity fails
                 otherwise, it passes.
                 It returns an array booleans which are True if positivity passed
-        story_object[key_loss] < self.threshold
+                history_object[key_loss] < self.threshold
                 Parameters
                 ----------
                     history_object: dict
@@ -684,7 +685,7 @@ class Positivity:
         """
         positivity_pass = True
         for key in self.positivity_sets:
-            key_loss = f"tf_op_layer_{key}_val_loss"
+            key_loss = f"{key}_loss"
             positivity_pass &= history_object[key_loss] < self.threshold
         return np.array(positivity_pass)
 
