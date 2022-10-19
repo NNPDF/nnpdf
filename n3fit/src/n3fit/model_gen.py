@@ -243,7 +243,7 @@ def observable_generator(
         rotation=obsrot_tr,
     )
     out_vl = ObservableWrapper(
-        f"{spec_name}_val_{name_suffix}",
+        f"{spec_name}_{name_suffix}_val",
         model_obs_vl,
         dataset_xsizes,
         invcovmat=spec_dict["invcovmat_vl"],
@@ -251,7 +251,7 @@ def observable_generator(
         rotation=obsrot_vl,
     )
     out_exp = ObservableWrapper(
-        f"{spec_name}_exp_{name_suffix}",
+        f"{spec_name}_{name_suffix}_exp",
         model_obs_ex,
         dataset_xsizes,
         invcovmat=spec_dict["invcovmat_true"],

@@ -80,6 +80,38 @@ def _fill_placeholders(original_input, new_input=None):
     return x
 
 
+def aggregate_replicas(dictionary, method="append", rep_token_index=1):
+    result = {}
+    if method == "append":
+        for key, value in dictionary.items():
+            tokens = key.split('_')
+            if len(tokens) > rep_token_index and tokens[rep_token_index].startswith("rep"):
+                tokens.pop(rep_token_index)
+                newname = '_'.join(tokens)
+                if newname in result:
+                    result[newname].append(value)
+                else:
+                    result[newname] = [value]
+            else:
+                result[key] = value
+        for key, value in result.items():
+            result[key] = np.array(value)
+    elif method == "sum":
+        for key, value in dictionary.items():
+            tokens = key.split('_')
+            if len(tokens) > rep_token_index and tokens[rep_token_index].startswith("rep"):
+                tokens.pop(rep_token_index)
+                newname = '_'.join(tokens)
+                if newname in result:
+                    result[newname] += value
+                else:
+                    result[newname] = value
+            else:
+                result[key] = value
+    else:
+        raise ValueError(f"Invalid replica aggregation method: {method}")
+    return result
+
 class MetaModel(Model):
     """
     The `MetaModel` behaves as the tensorflow.keras.model.Model class,
@@ -191,8 +223,7 @@ class MetaModel(Model):
         if y is None:
             y = self.target_tensors
         history = super().fit(x=x, y=y, epochs=epochs, **kwargs)
-        loss_dict = history.history
-        return loss_dict
+        return aggregate_replicas(history.history, method="sum")
 
     def predict(self, x=None, **kwargs):
         """ Call super().predict with the right input arguments """
@@ -200,6 +231,7 @@ class MetaModel(Model):
         result = super().predict(x=x, **kwargs)
         return result
 
+#TODO: Fix this!!!!!!!!!!!!!!
     def compute_losses(self):
         """
         This function is equivalent to the model ``evaluate(x,y)`` method of most TensorFlow models
@@ -216,19 +248,44 @@ class MetaModel(Model):
         """
         if self.compute_losses_function is None:
             # If it is the first time we are passing through, compile the function and save it
-            out_names = [f"{i}_loss" for i in self.output_names]
+            names = {}
+            for output_name in self.output_names:
+                tokens = output_name.split('_')
+                if tokens[1].startswith("rep"):
+                    tokens.pop(1)
+                data_name = '_'.join(tokens)
+                if data_name in names:
+                    names[data_name] += 1
+                else:
+                    names[data_name] = 1
+            n_replicas = next(iter(names.values()))
+            for name in names:
+                if names[name] != n_replicas:
+                    raise ValueError(f"Dataset {name} has unexpected no replica output layers {names[name]}")
+
+            out_names = [f"{i}_loss" for i in names]
             out_names.insert(0, "loss")
 
-            # Compile a evaluation function
+            # Compile evaluation function
             @tf.function
             def losses_fun():
                 predictions = self(self._parse_input(None))
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = tf.reduce_sum(predictions, axis=0)
-                ret = [total_loss] + predictions
-                return dict(zip(out_names, ret))
+#                total_loss = tf.reduce_sum(predictions, axis=0)
+                total_losses = []
+                if n_replicas > 1:
+                    stacked_predictions = []
+                    for i in range(len(out_names)-1):
+                        reps = predictions[i * n_replicas: (i + 1) * n_replicas]
+                        stacked_predictions.append(tf.concat(reps, axis=0))
+                    for i in range(n_replicas):
+                        rep_losses = [predictions[i + d] for d in range(0, len(predictions), n_replicas)]
+                        total_losses.append(tf.reduce_sum(rep_losses, axis=0))
+                    predictions = stacked_predictions
+                result = [tf.concat(total_losses, axis=0)] + predictions
+                return dict(zip(out_names, result))
 
             self.compute_losses_function = losses_fun
 
@@ -236,7 +293,9 @@ class MetaModel(Model):
 
         # The output of this function is to be used by python (and numpy)
         # so we need to convert the tensors
-        return _to_numpy_or_python_type(ret)
+        ret2 = _to_numpy_or_python_type(ret)
+#        import pdb; pdb.set_trace()
+        return ret2
 
     def compile(
         self,

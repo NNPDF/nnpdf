@@ -396,9 +396,9 @@ class ModelTrainer:
 
         # output_tr_orig = _pdf_injection(splitted_pdf, self.training["output"][0], training_mask)
         output_tr = [_pdf_injection(splitted_pdfs[r], self.training["output"][r], training_mask) for r in range(nrep)]
-        output_tr_t = list(map(list, zip(*output_tr)))
-        output_layers_tr = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_tr_t]
-        training = MetaModel(full_model_input_dict, output_layers_tr)
+        output_tr_t = sum(map(list, zip(*output_tr)), [])
+        #output_layers_tr = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_tr_t]
+        training = MetaModel(full_model_input_dict, output_tr_t)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
         # so we must only use the corresponding subset of PDF functions
@@ -416,19 +416,20 @@ class ModelTrainer:
 
         # We don't want to include the integrablity in the validation
         output_vl = [_pdf_injection(val_pdfs[r], self.validation["output"][r], validation_mask) for r in range(nrep)]
-        output_vl_t = list(map(list, zip(*output_vl)))
+        # import pdb; pdb.set_trace()
+        output_vl_t = sum(map(list, zip(*output_vl)), [])
 #        output_layers_vl = [op.stack(seq, axis=-1) for seq in output_vl_t]
-        output_layers_vl = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0] + "_val") for seq in output_vl_t]
+#        output_layers_vl = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0] + "_val") for seq in output_vl_t]
 
-        validation = MetaModel(full_model_input_dict, output_layers_vl)
+        validation = MetaModel(full_model_input_dict, output_vl_t)
 
         # Or the positivity in the total chi2
         output_ex = [_pdf_injection(exp_pdfs[r], self.experimental["output"][r],
                                     experimental_mask) for r in range(nrep)]
-        output_ex_t = list(map(list, zip(*output_ex)))
+        output_ex_t = sum(map(list, zip(*output_ex)), [])
 #        output_layers_ex = [op.stack(seq, axis=-1) for seq in output_ex_t]
-        output_layers_ex = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_ex_t]
-        experimental = MetaModel(full_model_input_dict, output_layers_ex)
+#        output_layers_ex = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_ex_t]
+        experimental = MetaModel(full_model_input_dict, output_ex_t)
 
         if self.print_summary:
             training.summary()
