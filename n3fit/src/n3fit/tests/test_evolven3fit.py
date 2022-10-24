@@ -1,4 +1,4 @@
-from evolven3fit import utils, eko_utils
+from evolven3fit_new import utils, eko_utils
 import pathlib
 import logging
 from numpy.testing import assert_allclose

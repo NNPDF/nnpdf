@@ -84,7 +84,7 @@ jobs:
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        evolven3fit evolve $RUNCARD 
+        evolven3fit_new evolve $RUNCARD 
     # running postfit
     - name: Postfit and upload fit
       shell: bash -l {0}

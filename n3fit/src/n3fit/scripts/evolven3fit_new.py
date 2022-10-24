@@ -1,5 +1,5 @@
 """
-This module contains the CLI for evolven3fit
+This module contains the CLI for evolven3fit_new
 """
 import logging
 import pathlib
@@ -7,14 +7,14 @@ import numpy as np
 from argparse import ArgumentParser
 import sys
 
-from evolven3fit import eko_utils, evolve, utils
+from evolven3fit_new import eko_utils, evolve, utils
 
 log = logging.getLogger(__name__)
 
 
 def main():
     parser = ArgumentParser(
-        description="evolven3fit - a script with tools to evolve PDF fits"
+        description="evolven3fit_new - a script with tools to evolve PDF fits"
     )
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     evolvefit_parser = subparsers.add_parser(
@@ -101,7 +101,7 @@ def main():
     }
     t_card_info = {}
     if args.actions == "evolve":
-        cli_evolven3fit(
+        cli_evolven3fit_new(
             args.configuration_folder,
             args.q_fin,
             args.q_points,
@@ -339,7 +339,7 @@ def main():
         eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, log, args.dump)
 
 
-def cli_evolven3fit(
+def cli_evolven3fit_new(
     configuration_folder, q_fin, q_points, op_card_info, t_card_info, dump, load, force
 ):
     """Evolves the fitted PDFs.

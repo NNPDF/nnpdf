@@ -2,10 +2,10 @@
 varflavors.py
 
 When producing a PDF with different maximal flavor number than the nf during the fit, we first run
-evolven3fit_cpp by manually selecting a theory id of the theory correspodning to the desired nf
+evolven3fit by manually selecting a theory id of the theory correspodning to the desired nf
 evolution.
 
-After running evolven3fit_cpp, but before running posfit, this script should be run to replace the
+After running evolven3fit, but before running posfit, this script should be run to replace the
 ``AlphaS_MZ'' and ``MZ'' values in the .info file, with the ``alphas'' and  ``Qref'' valuse from the
 theory database.
 """

@@ -51,7 +51,7 @@ int get_theory_id_from_runcard(string const& filteryaml_path)
   }
   catch(YAML::BadFile &e)
   {
-    throw FileError("evolven3fit_cpp", "runcard not found: " + filteryaml_path);
+    throw FileError("evolven3fit", "runcard not found: " + filteryaml_path);
   }
   return runcard["theory"]["theoryid"].as<int>();
 }
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
   // Read configuration filename from arguments
   if (argc != 3 && argc != 5)
     {
-      cerr << "\nusage: evolven3fit_cpp [configuration folder] [max_replicas] [--theory_id ID]\n" << endl;
+      cerr << "\nusage: evolven3fit [configuration folder] [max_replicas] [--theory_id ID]\n" << endl;
       exit(EXIT_FAILURE);
     }
 

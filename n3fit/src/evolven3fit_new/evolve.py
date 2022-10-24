@@ -52,13 +52,13 @@ def evolve_fit(
             path where the eko is dumped (if None the eko won't be
             stored)
     """
-    log_file = pathlib.Path(conf_folder) / "evolven3fit.log"
+    log_file = pathlib.Path(conf_folder) / "evolven3fit_new.log"
     if log_file.exists():
         if force:
             log_file.unlink()
         else:
             raise FileExistsError(
-                f"Log file already exists: {log_file} evolven3fit has already been run?"
+                f"Log file already exists: {log_file} evolven3fit_new has already been run?"
             )
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
