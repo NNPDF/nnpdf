@@ -1,6 +1,7 @@
 from ekobox import gen_theory, gen_op
 from eko import run_dglap
 
+from validphys.api import API 
 from validphys.loader import Loader
 from . import utils
 
@@ -8,6 +9,7 @@ from . import utils
 def construct_eko_cards(theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_grid):
     """Return the theory and operator cards used to construct the eko"""
     # theory_card construction
+    _ = API.theoryid(theoryid = theoryID)
     theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
     theory.update(t_card_dict)
