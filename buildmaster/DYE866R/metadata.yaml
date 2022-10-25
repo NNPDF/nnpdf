@@ -1,0 +1,59 @@
+# Generalia
+setname: "DYE866R"
+ndata: 15
+observable: {description: "Data on the ratio of pd DY cross sections over pp cross sections", label:"$\sigma^d/2 \sigma^p$", units: "" }
+kinematics:
+   variables:
+      y: {description: "y", label: "$x_2$", units: ""}
+      M:  {description: "Dilepton mass", units: ""}
+      sqrts:  {description: "Center of mass energy", units: ""}
+   file: kinematics.yaml
+
+version: 0
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/pdf/hep-ex/0103030.pdf"
+iNSPIRE:
+   url: "https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%20hep-ex%2F0103030"
+hepdata:
+   url: "https://www.hepdata.net/record/ins5543165"
+   version: 1
+   tables: [4]
+
+# Data 
+data_central: data.yaml
+data_uncertainties:
+   - uncertainties.yaml
+
+# Data (variants)
+# variants:
+#   deweighted:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_dw.yaml
+#   shifted:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_sh.yaml
+
+# Plotting  
+kinematic_coverage:
+   x2: x2
+   M: M
+dataset_label: "E866R $d/2*p$"
+plot_x: x2
+figure_by: 
+   - M
+
+# Theory
+theory:
+   FK_tables:
+     - DYE866_D
+     - DYE866_P
+   operation: "RATIO"
+
+nnpdf_metadata:
+   nnpdf31_process: "DY"
+   experiment: "E866"

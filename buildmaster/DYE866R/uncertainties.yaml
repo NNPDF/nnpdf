@@ -1,0 +1,40 @@
+definition:
+  stat_1:
+    description: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  syst_1:
+    description: total systematic uncertainty, 0.97%
+    treatment: ADD
+    type: CORR
+bins:
+- stat_1: 0.022
+  syst_1: 0.0100686
+- stat_1: 0.011
+  syst_1: 0.010243200000000001
+- stat_1: 0.01
+  syst_1: 0.0104857
+- stat_1: 0.011
+  syst_1: 0.0105342
+- stat_1: 0.013
+  syst_1: 0.0108446
+- stat_1: 0.015
+  syst_1: 0.010825200000000002
+- stat_1: 0.018
+  syst_1: 0.0108155
+- stat_1: 0.023
+  syst_1: 0.0112617
+- stat_1: 0.027
+  syst_1: 0.0109804
+- stat_1: 0.027
+  syst_1: 0.010902800000000002
+- stat_1: 0.038
+  syst_1: 0.011096799999999999
+- stat_1: 0.047
+  syst_1: 0.0105827
+- stat_1: 0.063
+  syst_1: 0.0100783
+- stat_1: 0.067
+  syst_1: 0.009069500000000001
+- stat_1: 0.124
+  syst_1: 0.007071299999999999
