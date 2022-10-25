@@ -1,0 +1,57 @@
+# Generalia
+setname: "DYE866P_old"
+ndata: 184
+observable: {description: "Measurements of the double differential cross section as a function of the invariant mass of the DY pair M and the XF kinematical variable", label: $M^3 d^2\sigma/dM dx_F$, units: "NB*GEV**2/NUCLEON}" }
+kinematics:
+   variables:
+      y: {description: "y", label: "$x_F", units: ""}
+      M:  {description: "Dilepton mass", units: ""}
+      sqrts:  {description: "Center of mass energy", units: ""}
+   file: kinematics.yaml
+
+version: 0
+version_comment: "Kinematic as in old implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/pdf/hep-ex/0302019.pdf"
+iNSPIRE:
+   url: "https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%20hep-ex%2F0302019"
+hepdata:
+   url: "https://www.hepdata.net/record/ins613362"
+   version: 1
+   tables: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+
+# Data 
+data_central: data.yaml
+data_uncertainties:
+   - uncertainties.yaml
+
+# Data (variants)
+# variants:
+#   deweighted:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_dw.yaml
+#   shifted:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_sh.yaml
+
+# Plotting  
+kinematic_coverage:
+   y: y
+   M: M
+dataset_label: E866P $M^3 d^2\sigma/dM dx_F$
+plot_x: xF
+figure_by: 
+   - M
+
+# Theory
+theory:
+   FK_tables:
+     - DYE866P
+
+nnpdf_metadata:
+   nnpdf31_process: "DY"
+   experiment: "E866"
