@@ -39,7 +39,7 @@ class LhapdfLike:
             : float
             x * PDF value
         """
-        if not np.isclose(q2, self.q20, rel_tol=1e-6):
+        if not np.isclose(q2, self.q20, rtol=1e-6):
             raise ValueError("The q2 requested is not the fitting scale of this pdf")
         return self.funcs[list(PIDS_DICT.values()).index(PIDS_DICT[pid])](x)
 
