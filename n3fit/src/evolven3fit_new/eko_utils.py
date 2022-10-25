@@ -2,7 +2,6 @@ from ekobox import gen_theory, gen_op
 from eko import run_dglap
 
 from validphys.api import API 
-from validphys.loader import Loader
 from . import utils
 
 
