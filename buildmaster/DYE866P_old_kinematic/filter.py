@@ -67,12 +67,18 @@ def filter_DYE866P():
             kin.append(kin_value)
 
             error_value = {
-                "stat_1": input["dependent_variables"][0]["values"][j]["errors"][0][
-                    "symerror"
-                ],
-                "syst_1": input["dependent_variables"][0]["values"][j]["errors"][1][
-                    "symerror"
-                ],
+                "stat_1": float(
+                    input["dependent_variables"][0]["values"][j]["errors"][0][
+                        "symerror"
+                    ]
+                    * Jc
+                ),
+                "syst_1": float(
+                    input["dependent_variables"][0]["values"][j]["errors"][1][
+                        "symerror"
+                    ]
+                    * Jc
+                ),
                 "syst_2": data_central_value * 6.5 * 1e-2,
             }
             error.append(error_value)
