@@ -1,7 +1,7 @@
 # Generalia
 setname: "DYE605"
 ndata: 119
-observable: {description: "Double differential distribution in muon pair tau and rapidity", label: "$s*d^2sigma/dsqt(tau)/dy$", units: "nb*GeV**2 / nucleon" }
+observable: {description: "Double differential distribution in muon pair tau and rapidity", label: $s*d^2\sigma/d\sqrt\tau/dy$, units: "nb*GeV**2 / nucleon" }
 kinematics:
    variables:
       s: {description: "Center of mass energy of the collision squared", label: $s$, units: "GeV²"}
@@ -43,7 +43,7 @@ data_uncertainties:
 kinematic_coverage:
    y: y
    sqrttau: sqrttau
-dataset_label: "E605"
+dataset_label: E605
 plot_x: sqrttau
 figure_by: 
    - y
