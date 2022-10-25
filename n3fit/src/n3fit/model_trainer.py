@@ -358,8 +358,6 @@ class ModelTrainer:
             # Note that all models share the same symbolic input so we take as input the last
             # full_model_input_dict in the loop
 
-        full_pdf_per_replica = op.stack(all_replicas_pdf, axis=-1)
-
         # The input layer was a concatenation of all experiments
         # the output of the pdf on input_layer will be thus a concatenation
         # we need now to split the output on a different array per experiment
@@ -367,14 +365,12 @@ class ModelTrainer:
         sp_ar = [self.input_sizes]
         sp_kw = {"axis": 1}
         splitting_op = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
-        splitting_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
-        # splitted_pdf = splitting_layer(full_pdf_per_replica)
 
         splitted_pdfs = []
         for layer in all_replicas_pdf:
             split_layers = splitting_op(layer)
+        # TODO: This shouldn't be necessary, it introduces extra complexity to the NN, solve it another way
             splitted_pdfs.append([op.expand(sl) for sl in split_layers])
-
 
         # If we are in a kfolding partition, select which datasets are out
         # TODO: Figure out how parallel replicas are supposed to work with k-folding
@@ -388,16 +384,13 @@ class ModelTrainer:
                 validation_mask = [i[partition_idx] for i in self.validation["folds"]]
             experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
 
-
         # Training and validation leave out the k-fold dataset
         # experiment leaves out the negation
 
         nrep = len(all_replicas_pdf)
 
-        # output_tr_orig = _pdf_injection(splitted_pdf, self.training["output"][0], training_mask)
         output_tr = [_pdf_injection(splitted_pdfs[r], self.training["output"][r], training_mask) for r in range(nrep)]
         output_tr_t = sum(map(list, zip(*output_tr)), [])
-        #output_layers_tr = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_tr_t]
         training = MetaModel(full_model_input_dict, output_tr_t)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
@@ -416,10 +409,7 @@ class ModelTrainer:
 
         # We don't want to include the integrablity in the validation
         output_vl = [_pdf_injection(val_pdfs[r], self.validation["output"][r], validation_mask) for r in range(nrep)]
-        # import pdb; pdb.set_trace()
         output_vl_t = sum(map(list, zip(*output_vl)), [])
-#        output_layers_vl = [op.stack(seq, axis=-1) for seq in output_vl_t]
-#        output_layers_vl = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0] + "_val") for seq in output_vl_t]
 
         validation = MetaModel(full_model_input_dict, output_vl_t)
 
@@ -427,8 +417,6 @@ class ModelTrainer:
         output_ex = [_pdf_injection(exp_pdfs[r], self.experimental["output"][r],
                                     experimental_mask) for r in range(nrep)]
         output_ex_t = sum(map(list, zip(*output_ex)), [])
-#        output_layers_ex = [op.stack(seq, axis=-1) for seq in output_ex_t]
-#        output_layers_ex = [op.stack(seq, axis=-1, name=seq[0].name.split('_')[0]) for seq in output_ex_t]
         experimental = MetaModel(full_model_input_dict, output_ex_t)
 
         if self.print_summary:
