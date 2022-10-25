@@ -9,7 +9,7 @@ from ekobox import genpdf, gen_info
 from ekomark import apply
 from eko import basis_rotation as br
 from eko import output
-from validphys.loader import Loader
+from validphys.api import API
 
 from . import utils, eko_utils
 
@@ -91,7 +91,7 @@ def evolve_fit(
     else:
         try:
             log.info(f"Loading eko from theory {theoryID}")
-            theory_eko_path = (Loader().check_theoryID(theoryID).path)/'eko.tar'
+            theory_eko_path = (API.theoryid(theoryid = theoryID).path)/'eko.tar'
             eko_op = output.Output.load_tar(theory_eko_path)
         except:
             log.info(f"eko not found in theory {theoryID}, we will construct it")
