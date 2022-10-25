@@ -1,10 +1,9 @@
+import shutil
+import pathlib
 from scipy.interpolate import interp1d
 import numpy as np
-import math
 from reportengine.compat import yaml
-import shutil
 from validphys.pdfbases import PIDS_DICT
-import pathlib
 
 
 class LhapdfLike:
