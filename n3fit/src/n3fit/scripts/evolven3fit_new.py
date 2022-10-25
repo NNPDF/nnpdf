@@ -3,9 +3,9 @@ This module contains the CLI for evolven3fit_new
 """
 import logging
 import pathlib
-import numpy as np
 from argparse import ArgumentParser
 import sys
+import numpy as np
 
 from evolven3fit_new import eko_utils, evolve, utils
 
