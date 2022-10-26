@@ -71,11 +71,11 @@ def evolve_fit(
     stdout_log.setFormatter(
         logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
     )
-    for logger_ in (log, *[logging.getLogger("eko")]):
-        logger_.handlers = []
-        logger_.setLevel(logging.INFO)
-        logger_.addHandler(log_file)
-        logger_.addHandler(stdout_log)
+    for logger in (log, *[logging.getLogger("eko")]):
+        logger.handlers = []
+        logger.setLevel(logging.INFO)
+        logger.addHandler(log_file)
+        logger.addHandler(stdout_log)
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(
