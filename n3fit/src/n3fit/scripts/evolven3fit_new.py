@@ -334,7 +334,7 @@ def main():
         else:
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
         tcard, opcard = eko_utils.construct_eko_cards(
-            args.theoryID, op_card_info, t_card_info, args.q_fin, args.q_points, x_grid
+            args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, t_card_info
         )
         eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, log, args.dump)
 

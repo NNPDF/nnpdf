@@ -83,7 +83,7 @@ def evolve_fit(
     ).astype(np.float)
     theoryID = utils.get_theoryID_from_runcard(usr_path)
     theory, op = eko_utils.construct_eko_cards(
-        theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_grid
+        theoryID, q_fin, q_points, x_grid, op_card_dict, t_card_dict
     )
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)

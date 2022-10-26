@@ -4,9 +4,14 @@ from eko import run_dglap
 from validphys.api import API 
 from . import utils
 
+from typing import Any, Dict, Optional
 
-def construct_eko_cards(theoryID, op_card_dict, t_card_dict, q_fin, q_points, x_grid):
+def construct_eko_cards(theoryID, q_fin, q_points, x_grid, op_card_dict: Optional[Dict[str, Any]] = None, t_card_dict: Optional[Dict[str, Any]] = None):
     """Return the theory and operator cards used to construct the eko"""
+    if t_card_dict is None:
+        t_card_dict = {}
+    if op_card_dict is None:
+        op_card_dict = {}
     # theory_card construction
     theory = API.theoryid(theoryid = theoryID).get_description()
     theory.pop("FNS")

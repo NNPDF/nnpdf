@@ -56,7 +56,7 @@ def test_eko_utils():
     qref = 91.2
     comments = "Test"
     n_cores = 6
-    t_card, op_card = eko_utils.construct_eko_cards(theoryID, {'n_integration_cores' : n_cores}, {'Comments' : comments}, q_fin, q_points, x_grid)
+    t_card, op_card = eko_utils.construct_eko_cards(theoryID, q_fin, q_points, x_grid, {'n_integration_cores' : n_cores}, {'Comments' : comments})
     assert t_card['Qref'] == qref
     assert t_card['PTO'] == pto
     assert t_card['Comments'] == comments
