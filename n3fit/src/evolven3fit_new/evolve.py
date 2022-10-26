@@ -171,7 +171,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,
-        Q2grid=list(eko["Q2grid"].keys()),
+        Q2grid=list(eko["Q2grid"]),
         pids=br.flavor_basis_pids,
     )
     return block
