@@ -75,8 +75,8 @@ class LhapdfLike:
         ]
 
     def xfxQ2(self, pid, x, q2):
-        """Return the value of the PDF for the requested pid and x value. If the requested q2
-        value is different from the (only) value available, it raises an error.
+        """Return the value of the PDF for the requested pid, x value and, whatever the requested
+        q2 value, for the fitting q2. 
 
         Parameters
         ----------
@@ -93,8 +93,6 @@ class LhapdfLike:
             : float
             x * PDF value
         """
-        if not np.isclose(q2, self.q20, rtol=1e-6):
-            raise ValueError("The q2 requested is not the fitting scale of this pdf")
         return self.funcs[list(PIDS_DICT.values()).index(PIDS_DICT[pid])](x)
 
     def hasFlavor(self, pid):
