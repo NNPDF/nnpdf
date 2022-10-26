@@ -188,6 +188,8 @@ def fix_replica_path(usr_path, replica_num):
 
 
 def check_is_a_fit(config_folder):
+    """Check if config_folder is a fit folder, i.e. if it contains the filter.yml file
+    and the nnfit folder."""
     usr_path = pathlib.Path(config_folder)
     filter_path = usr_path / "filter.yml"
     if not filter_path.is_file():
