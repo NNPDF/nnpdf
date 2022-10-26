@@ -45,7 +45,7 @@ class LhapdfLike:
 
     def hasFlavor(self, pid):
         """Check if the requested pid is in the PDF."""
-        return pid in PIDS_DICT.keys()
+        return pid in PIDS_DICT
 
 
 def read_runcard(usr_path):
