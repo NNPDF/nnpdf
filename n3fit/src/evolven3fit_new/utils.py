@@ -137,8 +137,13 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
             # match_dict contains the couples (mass : factor) where factor is the number 
             # to be multiplied to mass in order to obtain the relative matching scale.
             match_scale = masses * match_dict[masses]
+            # Fraction of the total points to be included in this batch is proportional
+            # to the log of the ratio between the initial scale and final scale of the
+            # batch itself (normalized to the same log of the global initial and final 
+            # scales)   
+            frac_of_point = np.log(match_scale / Q0) / np.log(Qfin / Q_ini)
             num_points = int(
-                Q_points * (np.log(match_scale / Q0) / np.log(Qfin / Q_ini))
+                Q_points * frac_of_point
             )
             num_points_list.append(num_points)
             grids.append(np.geomspace(Q0**2, match_scale**2, num=num_points))
