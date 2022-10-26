@@ -10,20 +10,23 @@ from evolven3fit_new import utils, eko_utils
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
 
+def check_consecutive_members(grid, value):
+    """Check if the first occurrence of value in grid is followed by value again"""
+    return np.allclose(grid[list(grid).index(value)+1], value)
+
 def test_utils():
     #Testing the default grid 
     grid = utils.generate_q2grid(1.65, None, None, {})
     assert_allclose(1.65**2, grid[0])
     assert len(grid) == 50
     # We expect the bottom mass to be repeated twice because it is intended once in 4 flavors and once in 5 flavors.
-    assert_allclose(4.92**2, grid[11])
-    assert_allclose(4.92**2, grid[12])
+    assert check_consecutive_members(grid, 4.92**2)
     #Testing if the points of the matching are correctly repeated twice
     matched_grid = utils.generate_q2grid(1.65, 1.0e5, 100, {4.92:2.0, 100:1.0} )
     assert len(matched_grid) ==  100
     assert_allclose((1.0e5)**2, matched_grid[-1])
-    assert_allclose(matched_grid[list(matched_grid).index((4.92*2.0)**2)+1], (4.92*2.0)**2)
-    assert_allclose(matched_grid[list(matched_grid).index((100*1.0)**2)+1], (100*1.0)**2)
+    assert check_consecutive_members(matched_grid, (4.92*2.0)**2)
+    assert check_consecutive_members(matched_grid, (100.*1.0)**2)
     #Testing the fake LHAPDF class
     q20 = 1.65**2
     x_grid = np.geomspace(1.0e-7, 1.0, 30)
