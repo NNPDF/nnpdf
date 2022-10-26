@@ -30,7 +30,8 @@ def test_utils():
     #Testing the fake LHAPDF class
     q20 = 1.65**2
     x_grid = np.geomspace(1.0e-7, 1.0, 30)
-    pdf_grid = dict([(pid,v) for pid,v in zip(range(len(PIDS_DICT)), [[x*(1.-x) for x in x_grid] for pid in PIDS_DICT.keys()] )])
+    fake_grids = [[x*(1.-x) for x in x_grid] for pid in PIDS_DICT.keys()]
+    pdf_grid = dict([(pid,v) for pid,v in zip(range(len(PIDS_DICT)), fake_grids )])
     my_PDF = utils.LhapdfLike(pdf_grid, q20, x_grid)
     assert my_PDF.hasFlavor(6)
     assert not my_PDF.hasFlavor(0)
