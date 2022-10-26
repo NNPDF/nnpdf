@@ -62,7 +62,7 @@ def main():
         "--dump",
         type=pathlib.Path,
         default=None,
-        help="Path where the EKO is dumped (optional)",
+        help="Path where the EKO is dumped",
     )
     evolvefit_parser.add_argument(
         "-f",
