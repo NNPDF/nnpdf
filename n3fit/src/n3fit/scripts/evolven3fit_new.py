@@ -31,21 +31,21 @@ def main():
     )
     parser.add_argument(
         "-q",
-        "--q_fin",
+        "--q-fin",
         type=float,
         default=None,
         help="Final q-value of the evolution",
     )
     parser.add_argument(
         "-p",
-        "--q_points",
+        "--q-points",
         type=int,
         default=None,
         help="Number of q points for the evolution",
     )
     parser.add_argument(
         "-n",
-        "--n_cores",
+        "--n-cores",
         type=int,
         default=1,
         help="Number of cores to be used",
@@ -80,14 +80,14 @@ def main():
     )
     eko_parser.add_argument(
         "-i",
-        "--x_grid_ini",
+        "--x-grid-ini",
         default=None,
         type=float,
         help="Starting point of the x-grid",
     )
     eko_parser.add_argument(
         "-p",
-        "--x_grid_points",
+        "--x-grid-points",
         default=None,
         type=int,
         help="Number of points of the x-grid",
