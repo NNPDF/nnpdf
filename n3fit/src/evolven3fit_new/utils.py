@@ -134,6 +134,8 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
         Q_ini = Q0
         num_points_list = []
         for masses in match_dict:
+            # match_dict contains the couples (mass : factor) where factor is the number 
+            # to be multiplied to mass in order to obtain the relative matching scale.
             match_scale = masses * match_dict[masses]
             num_points = int(
                 Q_points * (np.log(match_scale / Q0) / np.log(Qfin / Q_ini))
