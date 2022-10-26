@@ -16,6 +16,7 @@ from . import utils, eko_utils
 
 log = logging.getLogger(__name__)
 
+LOG_FILE = "evolven3fit_new.log"
 
 def evolve_fit(
     conf_folder,
@@ -52,7 +53,7 @@ def evolve_fit(
             path where the eko is dumped (if None the eko won't be
             stored)
     """
-    log_file = pathlib.Path(conf_folder) / "evolven3fit_new.log"
+    log_file = pathlib.Path(conf_folder) / LOG_FILE
     if log_file.exists():
         if force:
             log_file.unlink()
