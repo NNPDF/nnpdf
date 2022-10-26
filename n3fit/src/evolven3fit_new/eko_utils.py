@@ -7,7 +7,17 @@ from . import utils
 from typing import Any, Dict, Optional
 
 def construct_eko_cards(theoryID, q_fin, q_points, x_grid, op_card_dict: Optional[Dict[str, Any]] = None, t_card_dict: Optional[Dict[str, Any]] = None):
-    """Return the theory and operator cards used to construct the eko"""
+    """Return the theory and operator cards used to construct the eko.
+    
+    theoryID is the ID of the theory for which we are computing the theory and operator card.
+
+    q_fin is the final point of the q grid while q_points is the number of points of the grid.
+
+    x_grid is the x grid to be used. 
+
+    op_card_dict and t_card_dict are optional updates that can be provided respectively to the 
+    operator card and to the theory card.
+    """
     if t_card_dict is None:
         t_card_dict = {}
     if op_card_dict is None:
