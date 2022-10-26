@@ -141,15 +141,15 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
             # to the log of the ratio between the initial scale and final scale of the
             # batch itself (normalized to the same log of the global initial and final 
             # scales)   
-            frac_of_point = np.log(match_scale / Q0) / np.log(Qfin / Q_ini)
+            frac_of_point = np.log(match_scale / Q_ini) / np.log(Qfin / Q0)
             num_points = int(
                 Q_points * frac_of_point
             )
             num_points_list.append(num_points)
-            grids.append(np.geomspace(Q0**2, match_scale**2, num=num_points))
-            Q0 = match_scale
+            grids.append(np.geomspace(Q_ini**2, match_scale**2, num=num_points))
+            Q_ini = match_scale
         num_points = Q_points - sum(num_points_list)
-        grids.append(np.geomspace(Q0**2, Qfin**2, num=num_points))
+        grids.append(np.geomspace(Q_ini**2, Qfin**2, num=num_points))
         return np.concatenate(grids).tolist()
 
 
