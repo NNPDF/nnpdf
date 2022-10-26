@@ -108,7 +108,7 @@ class LhapdfLike:
 
 def read_runcard(usr_path):
     """Read the runcard and return the relevant information for evolven3fit_new"""
-    return yaml.safe_load((usr_path / "filter.yml").read_text())
+    return yaml.safe_load((usr_path / "filter.yml").read_text(encoding="UTF-8"))
 
 
 def get_theoryID_from_runcard(usr_path):
