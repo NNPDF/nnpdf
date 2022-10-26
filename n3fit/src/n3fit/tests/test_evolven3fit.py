@@ -55,11 +55,15 @@ def test_eko_utils():
     q_fin = 100
     q_points = 5
     x_grid = [1.e-7, 1.e-5, 1.e-3, 0.1, 1.0]
-    t_card, op_card = eko_utils.construct_eko_cards(theoryID, {'n_integration_cores' : 6}, {'Comments' : "Test"}, q_fin, q_points, x_grid)
-    assert t_card['Qref'] == 91.2
-    assert t_card['PTO'] == 1
-    assert t_card['Comments'] == "Test"
-    assert op_card['n_integration_cores'] == 6
+    pto = 1
+    qref = 91.2
+    comments = "Test"
+    n_cores = 6
+    t_card, op_card = eko_utils.construct_eko_cards(theoryID, {'n_integration_cores' : n_cores}, {'Comments' : comments}, q_fin, q_points, x_grid)
+    assert t_card['Qref'] == qref
+    assert t_card['PTO'] == pto
+    assert t_card['Comments'] == comments
+    assert op_card['n_integration_cores'] == n_cores
     assert_allclose(op_card["interpolation_xgrid"], x_grid)
     assert_allclose(op_card["Q2grid"], [2.7224999999999997, 24.2064, 259.30618155454425, 2777.7652105392926, 29756.25])
     #Testing construct_eko_for_fit
