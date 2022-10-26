@@ -15,6 +15,7 @@ def test_utils():
     grid = utils.generate_q2grid(1.65, None, None, {})
     assert_allclose(1.65**2, grid[0])
     assert len(grid) == 50
+    # We expect the bottom mass to be repeated twice because it is intended once in 4 flavors and once in 5 flavors.
     assert_allclose(4.92**2, grid[11])
     assert_allclose(4.92**2, grid[12])
     #Testing if the points of the matching are correctly repeated twice
