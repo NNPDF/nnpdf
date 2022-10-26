@@ -36,6 +36,7 @@ def test_utils():
     assert my_PDF.hasFlavor(6)
     assert not my_PDF.hasFlavor(0)
     with pytest.raises(ValueError):
+        # The LhapdfLike class is meant to return an error when asked for a Q2 value different from q20 
         my_PDF.xfxQ2(21, 0.01, 5.0**2)
     for pid in PIDS_DICT.keys():
         for x in x_grid:
