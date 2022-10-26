@@ -69,4 +69,4 @@ def test_eko_utils():
     #Testing construct_eko_for_fit
     eko_op = eko_utils.construct_eko_for_fit(t_card ,op_card,log)
     assert_allclose(eko_op['interpolation_xgrid'], x_grid)
-    assert_allclose(list(eko_op['Q2grid'].keys()), op_card["Q2grid"])
+    assert_allclose(list(eko_op['Q2grid']), op_card["Q2grid"])
