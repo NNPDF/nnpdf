@@ -62,7 +62,13 @@ DEFAULT_Q2GRID = np.array(
 
 class LhapdfLike:
     """
-    Class which emulates lhapdf but only for an initial condition PDF (i.e. with only one q2 value)
+    Class which emulates lhapdf but only for an initial condition PDF (i.e. with only one q2 value).
+
+    Q20 is the fitting scale fo the pdf and it is the only available scale for the objects of this class. 
+
+    X_GRID is the grid of x values on top of which the pdf is interpolated.
+
+    PDF_GRID is a dictionary containing the pdf grids at fitting scale for each pid. 
     """
 
     def __init__(self, pdf_grid, q20, x_grid):
