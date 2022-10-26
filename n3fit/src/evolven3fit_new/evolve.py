@@ -101,7 +101,7 @@ def evolve_fit(
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
-    info["AlphaS_Qs"] = list(eko_op["Q2grid"].keys())
+    info["AlphaS_Qs"] = list(eko_op["Q2grid"])
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
     dump_info_file(usr_path, info)
