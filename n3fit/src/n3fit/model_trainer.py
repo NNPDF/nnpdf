@@ -10,7 +10,6 @@
 """
 import copy
 import logging
-import pdb
 from itertools import zip_longest
 import numpy as np
 from scipy.interpolate import PchipInterpolator
@@ -365,7 +364,7 @@ class ModelTrainer:
         sp_ar = [self.input_sizes]
         sp_kw = {"axis": 1}
         splitting_op = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
-
+#        import pdb; pdb.set_trace()
         splitted_pdfs = []
         for layer in all_replicas_pdf:
             split_layers = splitting_op(layer)
@@ -496,7 +495,6 @@ class ModelTrainer:
             for exp_dict in self.exp_info[replica]:
                 if not self.mode_hyperopt:
                     log.info("Generating layers for experiment %s", exp_dict["name"])
-# TODO: Make this generator less memory-consuming by factorizing out the FK-tables mask into a separate layer...
                 exp_layer = model_gen.observable_generator(exp_dict, name_suffix="rep"+str(replica))
                 # Now save the observable layer, the losses and the experimental data
                 self.training["output"][replica].append(exp_layer["output_tr"])
@@ -547,18 +545,17 @@ class ModelTrainer:
                     all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
                 )
 
-                integ_layer = model_gen.observable_generator(
-                    integ_dict, positivity_initial=integ_initial, integrability=True
-                )
-                # The input list is still common
-                self.input_list += integ_layer["inputs"]
-                self.input_sizes.append(integ_layer["experiment_xsize"])
-
                 # The integrability all falls to the training
                 for replica in range(self._parallel_models):
-                    # TODO: Check whether deepcopy is necessary and how much memory it consumes...
-                    layer_copy = copy.deepcopy(integ_layer["output_tr"])
-                    self.training["output"][replica].append(layer_copy)
+                    integ_layer = model_gen.observable_generator(
+                        integ_dict, positivity_initial=integ_initial, integrability=True,
+                        name_suffix="rep" + str(replica))
+                    self.training["output"][replica].append(integ_layer["output_tr"])
+
+                    if replica == 0:
+                        # The input list is still common
+                        self.input_list += integ_layer["inputs"]
+                        self.input_sizes.append(integ_layer["experiment_xsize"])
 
                 self.training["integmultipliers"].append(integ_multiplier)
                 self.training["integinitials"].append(integ_initial)

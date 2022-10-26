@@ -231,7 +231,6 @@ class MetaModel(Model):
         result = super().predict(x=x, **kwargs)
         return result
 
-#TODO: Fix this!!!!!!!!!!!!!!
     def compute_losses(self):
         """
         This function is equivalent to the model ``evaluate(x,y)`` method of most TensorFlow models
