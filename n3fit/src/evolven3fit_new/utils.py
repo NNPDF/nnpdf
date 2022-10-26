@@ -122,17 +122,12 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
     """
-    if Qfin is None:
-        if Q_points is None:
-            return DEFAULT_Q2GRID
-        else:
-            raise ValueError(
+    if Qfin is None and Q_points is None:
+        return DEFAULT_Q2GRID
+    elif Qfin is None or Q_points is None:
+        raise ValueError(
                 "q_fin and q_points must be specified either both or none of them"
             )
-    elif Q_points is None:
-        raise ValueError(
-            "q_fin and q_points must be specified either both or none of them"
-        )
     else:
         grids = []
         Q_ini = Q0
