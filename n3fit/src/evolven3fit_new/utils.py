@@ -155,6 +155,13 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
 def fix_info_path(usr_path):
     """Fix the location of the info file from the folder nnfit/usr_path to
     just nnfit
+
+    Examples
+    --------
+    Starting from the info path
+        initial_info_file_path = "/myfolder/myfit/nnfit/myfit/myfit.info"
+    and using this function with usr_path = "/myfolder/myfit", one gets
+        final_info_file_path = "/myfolder/myfit/nnfit/myfit.info"
     """
     nnfit = usr_path / "nnfit"
     info_file = usr_path.stem + ".info"
