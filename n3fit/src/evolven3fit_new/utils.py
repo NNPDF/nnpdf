@@ -173,6 +173,13 @@ def fix_info_path(usr_path):
 def fix_replica_path(usr_path, replica_num):
     """Fix the location of the dat file of the replica <replica_num> from the folder nnfit/usr_path to
     just nnfit/replica_<replica_num>
+
+    Examples
+    --------
+    Starting from the replica 5 path
+        initial_replica_file_path = "/myfolder/myfit/nnfit/myfit/myfit_5.dat"
+    and using this function with usr_path = "/myfolder/myfit", one gets
+        final_replica_file_path = "/myfolder/myfit/nnfit/replica_5/myfit.dat"
     """
     nnfit = usr_path / "nnfit"
     replica_file_path = nnfit / usr_path.stem / f"{usr_path.stem}_{replica_num:04d}.dat"
