@@ -133,7 +133,7 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
         grids = []
         Q_ini = Q0
         num_points_list = []
-        for masses in match_dict.keys():
+        for masses in match_dict:
             match_scale = masses * match_dict[masses]
             num_points = int(
                 Q_points * (np.log(match_scale / Q0) / np.log(Qfin / Q_ini))
