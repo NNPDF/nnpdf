@@ -37,7 +37,7 @@ theory:
   theoryid: 162        # database id
 
 ############################################################
-genrep: True    # on = generate MC replicas, False = use real data
+genrep: True    # True = generate MC replicas, False = use real data
 trvlseed: 3
 nnseed: 2
 mcseed: 1  
