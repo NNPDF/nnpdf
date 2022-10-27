@@ -60,7 +60,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 200        # database id
+  theoryid: 400        # database id
 
 sampling:
   use_t0: false
