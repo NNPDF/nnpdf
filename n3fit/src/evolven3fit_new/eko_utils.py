@@ -65,6 +65,7 @@ def construct_eko_for_fit(t_card, op_card, log, save_path=None):
             )
     eko_op = run_dglap(t_card, op_card)
     if save_path is not None:
+        # Here we want to catch all possible exceptions in order to avoid losing the computed eko
         try:
             log.info(f"Saving computed eko to : {save_path}")
             eko_op.dump_tar(save_path)
