@@ -18,6 +18,10 @@ log = logging.getLogger(__name__)
 
 LOG_FILE = "evolven3fit_new.log"
 
+LOGGING_SETTINGS = {"formatter" : "%(asctime)s %(name)s/%(levelname)s: %(message)s",
+                    "level" : logging.INFO
+}
+
 def evolve_fit(
     conf_folder,
     q_fin,
@@ -63,19 +67,17 @@ def evolve_fit(
             )
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
-    log_file.setLevel(logging.INFO)
-    stdout_log.setLevel(logging.INFO)
-    log_file.setFormatter(
-        logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
-    )
-    stdout_log.setFormatter(
-        logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
-    )
+    for log in [log_file, stdout_log]:
+        log.setLevel(LOGGING_SETTINGS["level"])
+        log.setFormatter(
+            logging.Formatter(LOGGING_SETTINGS["formatter"])
+        )
     for logger in (log, *[logging.getLogger("eko")]):
         logger.handlers = []
-        logger.setLevel(logging.INFO)
+        logger.setLevel(LOGGING_SETTINGS["level"])
         logger.addHandler(log_file)
         logger.addHandler(stdout_log)
+
     usr_path = pathlib.Path(conf_folder)
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(
