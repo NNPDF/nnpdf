@@ -313,13 +313,12 @@ def main():
         )
     elif args.actions == "produce_eko":
         stdout_log = logging.StreamHandler(sys.stdout)
-        stdout_log.setLevel(logging.INFO)
+        stdout_log.setLevel(evolve.LOGGING_SETTINGS["level"])
         stdout_log.setFormatter(
-            logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s")
-        )
+            evolve.LOGGING_SETTINGS["formatter"])
         for logger_ in (log, *[logging.getLogger("eko")]):
             logger_.handlers = []
-            logger_.setLevel(logging.INFO)
+            logger_.setLevel(evolve.LOGGING_SETTINGS["level"])
             logger_.addHandler(stdout_log)
         if args.x_grid_ini is None:
             if args.x_grid_points is None:
