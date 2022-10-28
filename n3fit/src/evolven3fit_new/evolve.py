@@ -14,7 +14,7 @@ from validphys.api import API
 from . import utils, eko_utils
 
 
-log = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 LOG_FILE = "evolven3fit_new.log"
 
@@ -72,7 +72,7 @@ def evolve_fit(
         log.setFormatter(
             logging.Formatter(LOGGING_SETTINGS["formatter"])
         )
-    for logger in (log, *[logging.getLogger("eko")]):
+    for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
         logger.addHandler(log_file)

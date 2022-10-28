@@ -9,7 +9,7 @@ import numpy as np
 
 from evolven3fit_new import eko_utils, evolve, cli
 
-log = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def construct_eko_parser(subparsers):
@@ -123,7 +123,7 @@ def main():
         stdout_log.setLevel(evolve.LOGGING_SETTINGS["level"])
         stdout_log.setFormatter(
             evolve.LOGGING_SETTINGS["formatter"])
-        for logger_ in (log, *[logging.getLogger("eko")]):
+        for logger_ in (_logger, *[logging.getLogger("eko")]):
             logger_.handlers = []
             logger_.setLevel(evolve.LOGGING_SETTINGS["level"])
             logger_.addHandler(stdout_log)
@@ -143,7 +143,7 @@ def main():
         tcard, opcard = eko_utils.construct_eko_cards(
             args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, t_card_info
         )
-        eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, log, args.dump)
+        eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, _logger, args.dump)
 
 if __name__ == "__main__":
     main()
