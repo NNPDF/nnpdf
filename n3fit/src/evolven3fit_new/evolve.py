@@ -96,7 +96,7 @@ def evolve_fit(
             log.info(f"Loading eko from theory {theoryID}")
             theory_eko_path = (API.theoryid(theoryid = theoryID).path)/'eko.tar'
             eko_op = output.Output.load_tar(theory_eko_path)
-        except:
+        except FileNotFoundError:
             log.info(f"eko not found in theory {theoryID}, we will construct it")
             eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
             pass   
