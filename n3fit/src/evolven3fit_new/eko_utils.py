@@ -5,6 +5,9 @@ from validphys.api import API
 from . import utils
 
 from typing import Any, Dict, Optional
+import logging
+
+_logger = logging.getLogger(__name__)
 
 def construct_eko_cards(theoryID, q_fin, q_points, x_grid, op_card_dict: Optional[Dict[str, Any]] = None, t_card_dict: Optional[Dict[str, Any]] = None):
     """Return the theory and operator cards used to construct the eko.
@@ -67,9 +70,9 @@ def construct_eko_for_fit(t_card, op_card, log, save_path=None):
     if save_path is not None:
         # Here we want to catch all possible exceptions in order to avoid losing the computed eko
         try:
-            log.info(f"Saving computed eko to : {save_path}")
+            _logger.info(f"Saving computed eko to : {save_path}")
             eko_op.dump_tar(save_path)
         except:
-            log.error(f"Error saving the eko to : {save_path}")
+            _logger.error(f"Error saving the eko to : {save_path}")
             pass
     return eko_op

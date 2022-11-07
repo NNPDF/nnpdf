@@ -89,15 +89,15 @@ def evolve_fit(
     )
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
-        log.info(f"Loading eko from : {eko_path}")
+        _logger.info(f"Loading eko from : {eko_path}")
         eko_op = output.Output.load_tar(eko_path)
     else:
         try:
-            log.info(f"Loading eko from theory {theoryID}")
+            _logger.info(f"Loading eko from theory {theoryID}")
             theory_eko_path = (API.theoryid(theoryid = theoryID).path)/'eko.tar'
             eko_op = output.Output.load_tar(theory_eko_path)
         except FileNotFoundError:
-            log.info(f"eko not found in theory {theoryID}, we will construct it")
+            _logger.info(f"eko not found in theory {theoryID}, we will construct it")
             eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
             pass   
     eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
