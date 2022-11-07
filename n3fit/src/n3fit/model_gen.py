@@ -552,10 +552,10 @@ def pdfNN_layer_generator(
         # create a x --> (x, logx) layer to preppend to everything
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1))
 
-    model_input = [placeholder_input]
+    model_input = {"pdf_input": placeholder_input}
     if subtract_one:
         layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1))
-        model_input.append(layer_x_eq_1)
+        model_input["layer_x_eq_1"] = layer_x_eq_1
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
@@ -566,7 +566,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
-        model_input.append(integrator_input)
+        model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
 

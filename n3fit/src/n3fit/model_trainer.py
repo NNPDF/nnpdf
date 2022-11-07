@@ -363,7 +363,7 @@ class ModelTrainer:
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer([input_layer])
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": input_layer})
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
