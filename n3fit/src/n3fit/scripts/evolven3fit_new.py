@@ -14,7 +14,10 @@ _logger = logging.getLogger(__name__)
 
 def construct_eko_parser(subparsers):
     parser = subparsers.add_parser("produce_eko",
-        help="Produce the eko for the specified theory. The q_grid starts at the Q0 given by the theory but the last point is q_fin and its number of points can be specified by q_points. The x_grid starts at x_grid_ini and ends at 1.0 and contains the provided number of points. The eko will be dumped in the provided path.")
+        help=("Produce the eko for the specified theory."
+        "The q_grid starts at the Q0 given by the theory but the last point is q_fin and its number of points can be specified by q_points."
+        "The x_grid starts at x_grid_ini and ends at 1.0 and contains the provided number of points."
+        "The eko will be dumped in the provided path.")
     parser.add_argument(
         "theoryID", type=int, help="ID of the theory used to produce the eko"
     )
