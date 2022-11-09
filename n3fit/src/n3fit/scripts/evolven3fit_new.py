@@ -13,11 +13,16 @@ _logger = logging.getLogger(__name__)
 
 
 def construct_eko_parser(subparsers):
-    parser = subparsers.add_parser("produce_eko",
-        help=("Produce the eko for the specified theory."
-        "The q_grid starts at the Q0 given by the theory but the last point is q_fin and its number of points can be specified by q_points."
-        "The x_grid starts at x_grid_ini and ends at 1.0 and contains the provided number of points."
-        "The eko will be dumped in the provided path.")
+    parser = subparsers.add_parser(
+        "produce_eko",
+        help=(
+            """Produce the eko for the specified theory.
+            The q_grid starts at the Q0 given by the theory but the last point is q_fin 
+            and its number of points can be specified by q_points.
+            The x_grid starts at x_grid_ini and ends at 1.0 and contains the 
+            provided number of points. The eko will be dumped in the provided path."""
+        ),
+    )
     parser.add_argument(
         "theoryID", type=int, help="ID of the theory used to produce the eko"
     )
@@ -41,6 +46,7 @@ def construct_eko_parser(subparsers):
         help="Number of points of the x-grid",
     )
     return parser
+
 
 def construct_evolven3fit_parser(subparsers):
     parser = subparsers.add_parser(
@@ -73,6 +79,7 @@ def construct_evolven3fit_parser(subparsers):
     )
     return parser
 
+
 def main():
     parser = ArgumentParser(
         description="evolven3fit_new - a script with tools to evolve PDF fits"
@@ -101,7 +108,7 @@ def main():
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     eko_parser = construct_eko_parser(subparsers)
     evolven3fit_parser = construct_evolven3fit_parser(subparsers)
-    
+
     args = parser.parse_args()
     op_card_info = {
         "ev_op_max_order": 10,
@@ -124,8 +131,7 @@ def main():
     elif args.actions == "produce_eko":
         stdout_log = logging.StreamHandler(sys.stdout)
         stdout_log.setLevel(evolve.LOGGING_SETTINGS["level"])
-        stdout_log.setFormatter(
-            evolve.LOGGING_SETTINGS["formatter"])
+        stdout_log.setFormatter(evolve.LOGGING_SETTINGS["formatter"])
         for logger_ in (_logger, *[logging.getLogger("eko")]):
             logger_.handlers = []
             logger_.setLevel(evolve.LOGGING_SETTINGS["level"])
@@ -147,6 +153,7 @@ def main():
             args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, t_card_info
         )
         eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, _logger, args.dump)
+
 
 if __name__ == "__main__":
     main()
