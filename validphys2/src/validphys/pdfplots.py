@@ -29,6 +29,8 @@ from validphys.checks import check_pdfs_noband
 
 log = logging.getLogger(__name__)
 
+PREFIX_TO_FORCE_PLOT_REPLICAS = "plotrep. "
+
 class FlavourState(SimpleNamespace):
     """This is the namespace for the pats specific for each flavour"""
     pass
@@ -53,8 +55,9 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         self.ymax = ymax
 
     def setup_flavour(self, flstate):
-        pass
-
+        flstate.handles=[]
+        flstate.labels=[]
+        flstate.hatchit=plotutils.hatch_iter()
 
     def normalize(self):
         normalize_to = self.normalize_to
@@ -189,17 +192,28 @@ def _warn_any_pdf_not_montecarlo(pdfs):
 class ReplicaPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
+        labels = flstate.labels
+        handles = flstate.handles
+        ax = flstate.ax
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop['color']
-        flavour_grid = grid.select_flavour(flstate.flindex)
-        stats = flavour_grid.grid_values
+        stats = grid.select_flavour(flstate.flindex).grid_values
         gv = stats.data
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
-        ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], color=color,
-                linewidth=2,
-                label=pdf.label)
+        cv_line,  = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], color=color,
+                linewidth=2)
+        handle = cv_line
+        label = pdf.label[len(PREFIX_TO_FORCE_PLOT_REPLICAS):] if pdf.label.startswith(PREFIX_TO_FORCE_PLOT_REPLICAS) else pdf.label
+        labels.append(label)
+        handles.append(handle)
         return gv
+
+    def legend(self, flstate):
+        return flstate.ax.legend(flstate.handles, flstate.labels,
+                                 handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()
+                                             })
 
 @figuregen
 @check_pdf_normalize_to
@@ -432,11 +446,6 @@ class BandPDFPlotter(PDFPlotter):
         self.legend_stat_labels = legend_stat_labels
         super().__init__(*args, **kwargs)
 
-    def setup_flavour(self, flstate):
-        flstate.handles=[]
-        flstate.labels=[]
-        flstate.hatchit=plotutils.hatch_iter()
-
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         hatchit = flstate.hatchit
@@ -444,10 +453,8 @@ class BandPDFPlotter(PDFPlotter):
         handles = flstate.handles
         # Take only the flavours we are interested in
         stats = grid.select_flavour(flstate.flindex).grid_values
-        pcycler = ax._get_lines.prop_cycler
-        #This is ugly but can't think of anything better
 
-        next_prop = next(pcycler)
+        next_prop = next(ax._get_lines.prop_cycler)
         cv = stats.central_value()
         xgrid = grid.xgrid
         #Ignore spurious normalization warnings
@@ -1046,7 +1053,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     return fig
 
 
-class MixMatchPDFPlotter(BandPDFPlotter, ReplicaPDFPlotter):
+class MixMatchPDFPlotter(ReplicaPDFPlotter, BandPDFPlotter):
     """Special wrapper class to plot, in the same figure, PDF bands and PDF replicas
     depending on the type of PDF.
     Practical use: plot together the PDF central values with the NNPDF bands
@@ -1054,8 +1061,8 @@ class MixMatchPDFPlotter(BandPDFPlotter, ReplicaPDFPlotter):
     def draw(self, pdf, grid, flstate):
         # small values corresponding to charm result in a +1 placed on top of
         # the y-axis if axes.formatter.useoffset is not False
-        plt.rcParams['axes.formatter.useoffset'] = False 
-        if pdf.label.startswith("HOP"):
+        plt.rcParams['axes.formatter.useoffset'] = False
+        if pdf.label.startswith(PREFIX_TO_FORCE_PLOT_REPLICAS):
             # Go then to the draw method of ReplicaPDFPlotter
-            return super(BandPDFPlotter, self).draw(pdf, grid, flstate)
-        return super().draw(pdf, grid, flstate)
+            return super().draw(pdf, grid, flstate)
+        return super(ReplicaPDFPlotter, self).draw(pdf, grid, flstate)
