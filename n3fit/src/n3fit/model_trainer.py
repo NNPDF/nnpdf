@@ -19,6 +19,8 @@ from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from validphys.compute_photon import photon_1GeV
+from n3fit.scripts.n3fit_exec import N3FIT_FIXED_CONFIG
 
 log = logging.getLogger(__name__)
 
@@ -355,6 +357,14 @@ class ModelTrainer:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
         input_layer = op.numpy_to_input(input_arr)
+        
+        photon_list = [
+            photon_1GeV(
+                xgrid=grid[0],
+                theoryid=N3FIT_FIXED_CONFIG['theoryid'],
+                fiatlux_runcard = N3FIT_FIXED_CONFIG['fiatlux'],
+            ) for grid in inputs_unique
+        ]
 
         # For multireplica fits:
         #   The trainable part of the n3fit framework is a concatenation of all PDF models

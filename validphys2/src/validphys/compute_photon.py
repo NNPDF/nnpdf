@@ -10,7 +10,7 @@ from eko.runner import Runner
 
 import yaml
 
-def photon_1GeV(xgrid, theoryID, pdf_name, replica):
+def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
     r"""
     Compute the photon PDF for every point in the grid xgrid.
 
@@ -28,18 +28,10 @@ def photon_1GeV(xgrid, theoryID, pdf_name, replica):
         photon_1GeV: numpay.array
             photon PDF at the scale 1 GeV
     """
-    set = lhapdfset.LHAPDFSet(pdf_name, "replicas")
-    pdfs = np.zeros((len(set.flavors()), len(xgrid)))
-    for j, pid in enumerate(set.flavors()):
-        if not set.hasFlavor(pid):
-            continue
-        pdfs[j] = np.array(
-            [
-                set.xfxQ(x, 100., replica, pid) / x
-                for x in xgrid
-            ]
-        )
-    out_grid = {}
+    if fiatlux_runcard is None :
+        return np.zeros(len(xgrid))
+    set = lhapdfset.LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
+    qcd_pdfs = set.members[0] #use for the moment central replica TODO: change it
 
     def f2(x, q):
         # call yadism to give f2
@@ -53,32 +45,22 @@ def photon_1GeV(xgrid, theoryID, pdf_name, replica):
         # call yadism to give f20
         return 0.
 
-    theory = API.theoryid(theoryid = theoryID).get_description()
-    # fiatlux_runcard = <load runcard>
-    fiatlux_runcard = {
-        'apfel': True,
-        'qed_running': True,
-        'q2_max': '1e9',
-        'eps_base': '1e-5',
-        'eps_rel': '1e-1',
-        'mproton': 0.938272046,
-        'mum_proton': 2.792847356,
-        'elastic_param': 'A1_world_pol_spline',
-        'elastic_electric_rescale': 1,
-        'elastic_magnetic_rescale': 1,
-        'inelastic_param': 'LHAPDF_Hermes_ALLM_CLAS',
-        'rescale_r_twist4': 0,
-        'rescale_r': 1, 'allm_limits': 0,
-        'rescale_non_resonance': 1,
-        'rescale_resonance': 1,
-        'use_mu2_as_upper_limit': False,
-        'q2min_inel_override': 0.0,
-        'q2max_inel_override': '1E300',
-        'lhapdf_transition_q2': 9,
-        'verbose': True
-    } 
-    # TODO : move this dict into the runcard and load it
-    lux = fiatlux.FiatLux(yaml.dump(fiatlux_runcard))
+    theory = API.theoryid(theoryid = theoryid).get_description().copy()
+    # import ipdb; ipdb.set_trace()
+    theory["nfref"] = None
+    theory["nf0"] = None
+    theory["fact_to_ren_scale_ratio"] = 1.
+    theory["ModSV"] = None
+    theory["IC"]=0
+    theory["IB"]=0
+    theory["FNS"] = "VFNS"
+    q_in = 100
+    q_in2 = q_in ** 2
+    q_fin = theory["Q0"]
+    theory["Q0"]= q_in
+
+    lux = fiatlux.FiatLux(fiatlux_runcard)
+    # TODO : we are passing a dict but fiatlux wants a yaml file
     qref_qed = theory["Qref"]
 
     couplings = Couplings.from_dict(update_theory(theory))
@@ -88,7 +70,7 @@ def photon_1GeV(xgrid, theoryID, pdf_name, replica):
     lux.PlugAlphaQED(alpha_em, qref_qed)
     lux.PlugStructureFunctions(f2, fl, f2lo)
     lux.InsertInelasticSplitQ([4.18, 1e100])
-    eko_operator = dict(
+    operator_card = dict(
         sorted(
             dict(
                 interpolation_xgrid=xgrid.tolist(),
@@ -100,7 +82,7 @@ def photon_1GeV(xgrid, theoryID, pdf_name, replica):
                 n_integration_cores=0,
                 debug_skip_non_singlet=False,
                 debug_skip_singlet=False,
-                Q2grid=[1.**2],
+                Q2grid=[q_fin**2],
                 inputgrid=None,
                 targetgrid=None,
                 inputpids=None,
@@ -108,23 +90,31 @@ def photon_1GeV(xgrid, theoryID, pdf_name, replica):
             ).items()
         )
     )
-    q2 = 100.**2
-    photon_100GeV = np.array([])
-    for x in xgrid:
-        pht = lux.EvaluatePhoton(x, q2)
-        np.append(photon_100GeV, pht.total)
+
+    photon_100GeV = np.array(
+      [lux.EvaluatePhoton(x, q2).total / x for x in xgrid]
+    )
+    # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
+    runner = Runner(theory, operator_card)
+    output = runner.get_output()
+    pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
+    for j, pid in enumerate(output.rotations.inputpids):
+        if pid == 22 :
+            pdfs[j] = photon_100GeV
+        if not qcd_pdfs.hasFlavor(pid):
+            continue
+        pdfs[j] = np.array(
+            [
+                qcd_pdfs.xfxQ2(pid, x, q_in2) / x
+                for x in xgrid
+            ]
+        )
+    
     pdfs[11] = photon_100GeV
-
-    runner = Runner(theory, eko_operator)
-    eko = runner.get_output()
-
-    for q2, elem in eko.items():
+    for q2, elem in output.items():
         pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-        error_final = np.einsum("ajbk,bk", elem.error, pdfs)
-        out_grid[q2] = {
-            "pdfs": dict(zip(eko.rotations.targetpids, pdf_final)),
-            "errors": dict(zip(eko.rotations.targetpids, error_final)),
-        }
+        # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
+
     photon_1GeV = pdf_final[11]
 
     return photon_1GeV
