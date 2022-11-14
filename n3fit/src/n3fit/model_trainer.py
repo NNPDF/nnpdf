@@ -98,6 +98,7 @@ class ModelTrainer:
         model_file=None,
         sum_rules=None,
         parallel_models=1,
+        replica_id=None,
     ):
         """
         Parameters
@@ -150,6 +151,7 @@ class ModelTrainer:
         self.all_datasets = []
         self._scaler = None
         self._parallel_models = parallel_models
+        self.replica_id = replica_id
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -359,12 +361,14 @@ class ModelTrainer:
         input_layer = op.numpy_to_input(input_arr)
         
         photon_list = [
-            photon_1GeV(
+            np.array([photon_1GeV(
                 xgrid=grid[0],
                 theoryid=N3FIT_FIXED_CONFIG['theoryid'],
                 fiatlux_runcard = N3FIT_FIXED_CONFIG['fiatlux'],
-            ) for grid in inputs_unique
+                replica=self.replica_id,
+            )]) for grid in inputs_unique
         ]
+        input_photon = np.concatenate(photon_list, axis=1).T
 
         # For multireplica fits:
         #   The trainable part of the n3fit framework is a concatenation of all PDF models

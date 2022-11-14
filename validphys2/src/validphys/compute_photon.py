@@ -10,13 +10,13 @@ from eko.runner import Runner
 
 import yaml
 
-def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
+def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     r"""
     Compute the photon PDF for every point in the grid xgrid.
 
     Parameters
     ----------
-        xgrid: list
+        xgrid: numpy.array
             grid of the x points
         pdf_name: string
             name of the QCD set
@@ -25,13 +25,13 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
     
     Returns
     -------
-        photon_1GeV: numpay.array
+        photon_1GeV: numpy.array
             photon PDF at the scale 1 GeV
     """
     if fiatlux_runcard is None :
         return np.zeros(len(xgrid))
     set = lhapdfset.LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
-    qcd_pdfs = set.members[0] #use for the moment central replica TODO: change it
+    qcd_pdfs = set.members[replica]
 
     def f2(x, q):
         # call yadism to give f2
@@ -46,7 +46,6 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
         return 0.
 
     theory = API.theoryid(theoryid = theoryid).get_description().copy()
-    # import ipdb; ipdb.set_trace()
     theory["nfref"] = None
     theory["nf0"] = None
     theory["fact_to_ren_scale_ratio"] = 1.
@@ -59,17 +58,22 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
     q_fin = theory["Q0"]
     theory["Q0"]= q_in
 
-    lux = fiatlux.FiatLux(fiatlux_runcard)
-    # TODO : we are passing a dict but fiatlux wants a yaml file
-    qref_qed = theory["Qref"]
+    # lux = fiatlux.FiatLux(fiatlux_runcard)
+    # we have a dict but fiatlux wants a yaml file
+    # TODO : remove this trick
+    ff = open('fiatlux_runcard.yml', 'w+')
+    yaml.dump(fiatlux_runcard, ff)
+
+    lux = fiatlux.FiatLux('fiatlux_runcard.yml')
 
     couplings = Couplings.from_dict(update_theory(theory))
     def alpha_em(q):
         return couplings.a(q**2)[1] * 4 * np.pi
     
-    lux.PlugAlphaQED(alpha_em, qref_qed)
+    lux.PlugAlphaQED(alpha_em, theory["Qref"])
     lux.PlugStructureFunctions(f2, fl, f2lo)
     lux.InsertInelasticSplitQ([4.18, 1e100])
+
     operator_card = dict(
         sorted(
             dict(
@@ -95,12 +99,12 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
       [lux.EvaluatePhoton(x, q2).total / x for x in xgrid]
     )
     # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
-    runner = Runner(theory, operator_card)
-    output = runner.get_output()
+    
     pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
     for j, pid in enumerate(output.rotations.inputpids):
         if pid == 22 :
             pdfs[j] = photon_100GeV
+            ph_id = j
         if not qcd_pdfs.hasFlavor(pid):
             continue
         pdfs[j] = np.array(
@@ -109,12 +113,14 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard):
                 for x in xgrid
             ]
         )
-    
-    pdfs[11] = photon_100GeV
+
+    runner = Runner(theory, operator_card)
+    output = runner.get_output()
     for q2, elem in output.items():
         pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
         # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
-    photon_1GeV = pdf_final[11]
+    photon_1GeV = pdf_final[ph_id]
 
-    return photon_1GeV
+    # we want x * gamma(x)
+    return xgrid * photon_1GeV
