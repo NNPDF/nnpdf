@@ -405,7 +405,7 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
+        known_keys = {"dataset", "sys", "target_info", "cfac", "frac", "weight", "custom_group"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -424,6 +424,7 @@ class CoreConfig(configparser.Config):
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
         frac = dataset.get("frac", 1)
+        target_info = dataset.get("target_info", {})
         if not isinstance(frac, numbers.Real):
             raise ConfigError(f"'frac' must be a number, not '{frac}'")
         if frac < 0 or frac > 1:
@@ -444,6 +445,7 @@ class CoreConfig(configparser.Config):
         return DataSetInput(
             name=name,
             sys=sysnum,
+            target_info=target_info,
             cfac=cfac,
             frac=frac,
             weight=weight,
@@ -621,6 +623,7 @@ class CoreConfig(configparser.Config):
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
         frac = dataset_input.frac
+        target_info = dataset_input.target_info
         weight = dataset_input.weight
 
         try:
@@ -628,6 +631,7 @@ class CoreConfig(configparser.Config):
                 name=name,
                 sysnum=sysnum,
                 theoryid=theoryid,
+                target_info=target_info,
                 cfac=cfac,
                 cuts=cuts,
                 frac=frac,

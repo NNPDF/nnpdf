@@ -10,6 +10,7 @@ loading their fktables (and applying any necessary cuts).
 from itertools import zip_longest
 import dataclasses
 import numpy as np
+from typing import Union
 
 
 @dataclasses.dataclass
@@ -43,8 +44,9 @@ class FittableDataSet:
 
     # Things that can have default values:
     operation: str = "NULL"
-    frac: float = 1.0
-    training_mask: np.ndarray = None  # boolean array
+    target_info: Union[None, dict]=None
+    frac: float=1.0
+    training_mask: Union[None, np.ndarray] = None  # boolean array
 
     def __post_init__(self):
         self._tr_mask = None
@@ -102,6 +104,8 @@ def validphys_group_extractor(datasets, tr_masks):
     for dspec, mask in zip_longest(datasets, tr_masks):
         # Load all fktables with the appropiate cuts
         fktables = [fk.load_with_cuts(dspec.cuts) for fk in dspec.fkspecs]
+        # Evaluate the stringified target specs of the target info
+        info_target = eval(dspec.target_info) if dspec.target_info is not None else None
         # And now put them in a FittableDataSet object which
-        loaded_obs.append(FittableDataSet(dspec.name, fktables, dspec.op, dspec.frac, mask))
+        loaded_obs.append(FittableDataSet(dspec.name, fktables, dspec.op, info_target, dspec.frac, mask))
     return loaded_obs

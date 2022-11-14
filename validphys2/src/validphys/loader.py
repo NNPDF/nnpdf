@@ -520,6 +520,7 @@ class Loader(LoaderBase):
                       rules=None,
                       sysnum=None,
                       theoryid,
+                      target_info=None,
                       cfac=(),
                       frac=1,
                       cuts=CutsPolicy.INTERNAL,
@@ -567,7 +568,7 @@ class Loader(LoaderBase):
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
-                           frac=frac, op=op, weight=weight)
+                           target_info=target_info, frac=frac, op=op, weight=weight)
 
     def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> DataGroupSpec:
         """Loader method for instantiating DataGroupSpec objects. The NNPDF::Experiment
