@@ -75,9 +75,6 @@ theorycovmatconfig:
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
 
-sampling:
-  use_t0: false
-  separate_multiplicative: false
 
 ############################################################
 trvlseed: 376191634

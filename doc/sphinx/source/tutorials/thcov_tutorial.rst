@@ -164,11 +164,6 @@ It can be found `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/exa
 	  use_thcovmat_in_fitting: true
 	  use_thcovmat_in_sampling: true
 
-	sampling_t0:
-	  use_t0: false
-
-	fitting_t0:
-	  use_t0: true
 
 	############################################################
 	fitting:
