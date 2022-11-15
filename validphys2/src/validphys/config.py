@@ -713,7 +713,6 @@ class CoreConfig(configparser.Config):
         self,
         theory_covmat_flag=False,
         use_thcovmat_in_fitting=False,
-        use_t0_fitting=True,
     ):
         """
         Produces the correct covmat to be used in fitting_data_dict according
@@ -723,16 +722,9 @@ class CoreConfig(configparser.Config):
         """
         from validphys import covmats
 
-        if use_t0_fitting:
-            if theory_covmat_flag and use_thcovmat_in_fitting:
-                return covmats.dataset_inputs_t0_total_covmat
-            else:
-                return covmats.dataset_inputs_t0_exp_covmat
-        else:
-            if theory_covmat_flag and use_thcovmat_in_fitting:
-                return covmats.dataset_inputs_total_covmat
-            else:
-                return covmats.dataset_inputs_exp_covmat
+        if theory_covmat_flag and use_thcovmat_in_fitting:
+            return covmats.dataset_inputs_t0_total_covmat
+        return covmats.dataset_inputs_t0_exp_covmat
 
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
@@ -740,7 +732,6 @@ class CoreConfig(configparser.Config):
         sep_mult,
         theory_covmat_flag=False,
         use_thcovmat_in_sampling=False,
-        use_t0_sampling=False,
     ):
         """
         Produces the correct covmat to be used in make_replica according
@@ -750,28 +741,16 @@ class CoreConfig(configparser.Config):
         """
         from validphys import covmats
 
-        if use_t0_sampling:
-            if theory_covmat_flag and use_thcovmat_in_sampling:
-                if sep_mult:
-                    return covmats.dataset_inputs_t0_total_covmat_separate
-                else:
-                    return covmats.dataset_inputs_t0_total_covmat
+        if theory_covmat_flag and use_thcovmat_in_sampling:
+            if sep_mult:
+                return covmats.dataset_inputs_total_covmat_separate
             else:
-                if sep_mult:
-                    return covmats.dataset_inputs_t0_exp_covmat_separate
-                else:
-                    return covmats.dataset_inputs_t0_exp_covmat
+                return covmats.dataset_inputs_total_covmat
         else:
-            if theory_covmat_flag and use_thcovmat_in_sampling:
-                if sep_mult:
-                    return covmats.dataset_inputs_total_covmat_separate
-                else:
-                    return covmats.dataset_inputs_total_covmat
+            if sep_mult:
+                return covmats.dataset_inputs_exp_covmat_separate
             else:
-                if sep_mult:
-                    return covmats.dataset_inputs_exp_covmat_separate
-                else:
-                    return covmats.dataset_inputs_exp_covmat
+                return covmats.dataset_inputs_exp_covmat
 
     def produce_loaded_theory_covmat(
         self,
@@ -1051,12 +1030,12 @@ class CoreConfig(configparser.Config):
 
     # TODO: Find a good name for this
     def produce_t0set(
-        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True,
+        self, t0pdfset=None, use_t0=False,
     ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
         """
-        if use_t0_sampling or use_t0_fitting:
+        if use_t0:
             if not t0pdfset:
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset

@@ -34,9 +34,7 @@ theory:
   theoryid: 200       # database id
 
 sampling:
-  use_t0: false
   separate_multiplicative: true
-
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
   activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
