@@ -686,7 +686,8 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
 
     """
     if fitbasis == 'NN31IC':
-        return np.identity(9)
+        mat = np.concatenate([np.identity(8), [np.zeros(8)]])
+        return mat.transpose()
 
     elif fitbasis == 'NN31PC':
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
