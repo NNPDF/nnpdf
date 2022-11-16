@@ -25,7 +25,7 @@ def test_generate_dense_network():
     curr_layer = input_layer
     for layer in layers:
         curr_layer = layer(curr_layer)
-    modelito = MetaModel(input_layer, curr_layer)
+    modelito = MetaModel({"input": input_layer}, curr_layer)
     # The number of layers should be input layer + len(OUT_SIZES)
     assert len(modelito.layers) == len(OUT_SIZES) + 1
     # Check that the number of parameters is as expected
@@ -55,7 +55,7 @@ def test_generate_dense_per_flavour_network():
     curr_layer = input_layer
     for layer in layers:
         curr_layer = layer(curr_layer)
-    modelito = MetaModel(input_layer, curr_layer)
+    modelito = MetaModel({"input": input_layer}, curr_layer)
     # The number of layers should be input + BASIS_SIZE*len(OUT_SIZES) + concatenate
     assert len(modelito.layers) == BASIS_SIZE * len(OUT_SIZES) + 2
     # The shape for this network of denses for flavours will depend on the basis_size

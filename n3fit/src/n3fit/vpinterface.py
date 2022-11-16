@@ -105,12 +105,12 @@ class N3LHAPDFSet(LHAPDFSet):
 
         if replica is None or replica == 0:
             # We need generate output values for all replicas
-            result = np.concatenate([m.predict([mod_xgrid]) for m in self._lhapdf_set], axis=0)
+            result = np.concatenate([m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0)
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
         else:
-            result = self._lhapdf_set[replica - 1].predict([mod_xgrid])
+            result = self._lhapdf_set[replica - 1].predict({"pdf_input": mod_xgrid})
 
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order

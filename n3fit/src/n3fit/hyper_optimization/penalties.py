@@ -45,7 +45,7 @@ def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_
     >>> from n3fit.model_gen import pdfNN_layer_generator
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> isinstance(saturation([pdf_model], None), float)
+    >>> isinstance(saturation(pdf_model, 5), float)
     True
 
     """
@@ -55,7 +55,7 @@ def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_
     xin = np.expand_dims(x, axis=[0, -1])
     extra_loss = 0.0
     for pdf_model in pdf_models:
-        y = pdf_model.predict([xin])
+        y = pdf_model.predict({"pdf_input": xin})
         xpdf = y[0, :, flavors]
         slope = np.diff(xpdf) / np.diff(np.log10(x))
         pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
