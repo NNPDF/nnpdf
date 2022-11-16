@@ -15,31 +15,28 @@ from reportengine.checks import CheckError
 from validphys.gridvalues import grid_values, central_grid_values
 
 
-# This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
-PDG_PARTONS = dict(
-    (
-        (-6, r"\bar{t}"),
-        (-5, r"\bar{b}"),
-        (-4, r"\bar{c}"),
-        (-3, r"\bar{s}"),
-        (-2, r"\bar{u}"),
-        (-1, r"\bar{d}"),
-        (0, r"g"),
-        (1, r"d"),
-        (2, r"u"),
-        (3, r"s"),
-        (4, r"c"),
-        (5, r"b"),
-        (6, r"t"),
-        (22, r"\gamma"),
-        (21, r"g"),
-    )
-)
+#This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
+PDG_PARTONS = dict((
+        (-6,  r'\bar{t}'),
+        (-5 , r"\bar{b}"),
+        (-4 , r"\bar{c}"),
+        (-3 , r"\bar{s}"),
+        (-2 , r"\bar{u}"),
+        (-1 , r"\bar{d}"),
+        (0 , r"g"),
+        (1 , r"d"),
+        (2 , r"u"),
+        (3 , r"s"),
+        (4 , r"c"),
+        (5 , r"b"),
+        (6 , r"t"),
+        (22 , r"\gamma"),
+        (21 , r"g"),
+    ))
 
 # Canonical ordering of PDG codes (so flavour basis)
 ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
-DEFAULT_FLARR = (-3, -2, -1, 0, 1, 2, 3, 4)
-
+DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
 def pdg_id_to_canonical_index(flindex):
     """Given an LHAPDF id, return its index in the ALL_FLAVOURS list."""
@@ -47,21 +44,16 @@ def pdg_id_to_canonical_index(flindex):
         return ALL_FLAVOURS.index(21)
     return ALL_FLAVOURS.index(flindex)
 
-
 def list_bases():
-    """List available PDF bases"""
+    """ List available PDF bases """
     import validphys.pdfbases as thismodule
-
-    return dict(
-        inspect.getmembers(thismodule, lambda x: isinstance(x, thismodule.Basis))
-    )
-
+    return dict(inspect.getmembers(thismodule, lambda x: isinstance(x, thismodule.Basis)))
 
 def check_basis(basis, flavours):
     """
-    Check to verify a given basis and set of flavours.
-    Returns a dictionary with the relevant instance of the basis
-    class and flavour specification
+        Check to verify a given basis and set of flavours.
+        Returns a dictionary with the relevant instance of the basis
+        class and flavour specification
     """
 
     if isinstance(basis, str):
@@ -78,49 +70,43 @@ def check_basis(basis, flavours):
         flavours = basis.to_known_elements(flavours)
     except UnknownElement as e:
         bad = e.args[0]
-        raise CheckError(
-            f"Unknown basis element '{bad}'",
-            str(bad),
-            alternatives=basis.indexes,
-            display_alternatives="all",
-        ) from e
+        raise CheckError(f"Unknown basis element '{bad}'", str(bad),
+            alternatives=basis.indexes, display_alternatives='all') from e
 
-    return {"basis": basis, "flavours": flavours}
+    return {'basis':basis, 'flavours':flavours}
 
-
-# These are various ways to refering to the PDG partons with nicer text labels.
+#These are various ways to refering to the PDG partons with nicer text labels.
 PDG_ALIASES = {
-    r"\bar{t}": -6,
-    "tbar": -6,
-    "\\bar{b}": -5,
-    "bbar": -5,
-    "\\bar{c}": -4,
-    "cbar": -4,
-    "\\bar{d}": -1,
-    "dbar": -1,
-    "\\bar{s}": -3,
-    "sbar": -3,
-    "\\bar{u}": -2,
-    "ubar": -2,
-    "\\gamma": 22,
-    "photon": 22,
-    "t": 6,
-    "top": 6,
-    "b": 5,
-    "bottom": 5,
-    "c": 4,
-    "charm": 4,
-    "d": 1,
-    "down": 1,
-    "g": 21,
-    "gluon": 21,
-    "s": 3,
-    "strange": 3,
-    "u": 2,
-    "up": 2,
-    0: 21,
-}
-
+ r'\bar{t}': -6,
+ 'tbar'    : -6,
+ '\\bar{b}': -5,
+ 'bbar'    : -5,
+ '\\bar{c}': -4,
+ 'cbar'    : -4,
+ '\\bar{d}': -1,
+ 'dbar'    : -1,
+ '\\bar{s}': -3,
+  'sbar'   : -3,
+ '\\bar{u}': -2,
+  'ubar'   : -2,
+ '\\gamma': 22,
+ 'photon': 22,
+ 't': 6,
+ 'top': 6,
+ 'b': 5,
+ 'bottom': 5,
+ 'c': 4,
+ 'charm': 4,
+ 'd': 1,
+ 'down': 1,
+ 'g': 21,
+ 'gluon': 21,
+ 's': 3,
+ 'strange': 3,
+ 'u': 2,
+ 'up': 2,
+ 0 : 21,
+ }
 
 def parse_flarr(flarr):
     """Parse a free form list into a list of PDG parton indexes
@@ -141,7 +127,6 @@ def parse_flarr(flarr):
             else:
                 raise ValueError(msg)
     return out
-
 
 class UnknownElement(KeyError):
     pass
@@ -178,18 +163,12 @@ class Basis(abc.ABC):
         of LaTeX is desired.
     """
 
-    def __init__(
-        self,
-        labels,
-        *,
-        aliases=None,
-        default_elements=None,
-        element_representations=None,
-    ):
+    def __init__(self, labels, *, aliases=None,
+            default_elements=None, element_representations=None):
 
         self.labels = labels
 
-        # self._known_flavours = ALL_FLAVOURS[]
+        #self._known_flavours = ALL_FLAVOURS[]
         if default_elements is None:
             default_elements = labels
         self.default_elements = default_elements
@@ -197,11 +176,9 @@ class Basis(abc.ABC):
             element_representations = {}
         self.element_representations = element_representations
 
-        indexes = {lb: i for i, lb in enumerate(labels)}
+        indexes = {lb:i for i,lb in enumerate(labels)}
         if aliases:
-            indexes.update(
-                {alias: indexes[alias_label] for alias, alias_label in aliases.items()}
-            )
+             indexes.update({alias:indexes[alias_label] for alias,alias_label in aliases.items()})
         else:
             aliases = []
 
@@ -221,7 +198,7 @@ class Basis(abc.ABC):
         raise UnknownElement(element)
 
     def has_element(self, element):
-        """Return true if basis has knowledge of the given element"""
+        """ Return true if basis has knowledge of the given element """
         try:
             self.elementlabel(element)
             return True
@@ -313,7 +290,6 @@ class Basis(abc.ABC):
         func = functools.partial(central_grid_values, pdf)
         return self.apply_grid_values(func, vmat, xmat, qmat)
 
-
 class LinearBasis(Basis):
     """A basis that implements a linear transformation of flavours.
 
@@ -330,6 +306,7 @@ class LinearBasis(Basis):
         """
         self.from_flavour_mat = from_flavour_mat
         super().__init__(labels, *args, **kwargs)
+
 
     """
     NOTE: At the moment, we don't need the inverse functionality, namely
@@ -395,6 +372,9 @@ class LinearBasis(Basis):
 
     """
 
+
+
+
     def _flaray_from_flindexes(self, flinds):
         """Convert a list of flavor basis indexes to PDG codes to pass to
         LHAPDF"""
@@ -406,25 +386,28 @@ class LinearBasis(Basis):
         possibly obtained with `_to_indexes`)."""
         return np.count_nonzero(self.from_flavour_mat[inds, :], axis=0) > 0
 
+
     def apply_grid_values(self, func, vmat, xmat, qmat):
 
-        # Indexes in the transformation from the "free form" inpt
+        #Indexes in the transformation from the "free form" inpt
         inds = self._to_indexes(vmat)
 
-        # Indexes in flavour basis required to compute these elements
+        #Indexes in flavour basis required to compute these elements
         flinds = self._flmask_from_base_indexes(inds)
 
-        # The submatrix of the transformation matrix
+        #The submatrix of the transformation matrix
         index = np.ix_(inds, flinds)
         transformation = self.from_flavour_mat[index]
 
-        # The PDG codes for LHAPDF
+        #The PDG codes for LHAPDF
         flmat = self._flaray_from_flindexes(flinds)
 
         gv = func(flmat, xmat, qmat)
-        # Matrix product along the flavour axis
-        rotated_gv = np.einsum("bc,acde->abde", transformation, gv)
+        #Matrix product along the flavour axis
+        rotated_gv = np.einsum('bc,acde->abde', transformation, gv)
         return rotated_gv
+
+
 
     @classmethod
     def from_mapping(cls, mapping, *, aliases=None, default_elements=None):
@@ -433,9 +416,7 @@ class LinearBasis(Basis):
         arr = np.zeros(shape=(len(mapping), len(ALL_FLAVOURS)))
         labels = tuple(mapping)
         for i, coefs in enumerate(mapping.values()):
-            indexes = [
-                pdg_id_to_canonical_index(val) for val in parse_flarr(coefs.keys())
-            ]
+            indexes = [pdg_id_to_canonical_index(val) for val in parse_flarr(coefs.keys())]
             values = coefs.values()
             arr[i, indexes] = list(values)
         return cls(labels, arr, aliases=aliases, default_elements=default_elements)
@@ -456,7 +437,6 @@ class ScalarFunctionTransformation(Basis):
         and returns a grid with a single basis element.
 
     """
-
     def __init__(self, transform_func, *args, **kwargs):
         self.transform_func = transform_func
         super().__init__(*args, **kwargs)
@@ -485,366 +465,143 @@ def scalar_function_transformation(label, *args, **kwargs):
     decorator: callable
        A decorator that can be applied to a suitable transformation function.
     """
-
     def f_(transform_func):
         return ScalarFunctionTransformation(transform_func, [label], *args, **kwargs)
 
     return f_
 
 
-flavour = LinearBasis(
-    ALL_FLAVOURS,
-    np.eye(len(ALL_FLAVOURS)),
-    aliases=PDG_ALIASES,
-    default_elements=DEFAULT_FLARR,
-    element_representations=PDG_PARTONS,
+flavour = LinearBasis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
+    default_elements = DEFAULT_FLARR, element_representations=PDG_PARTONS
 )
 
-# dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
-# though
-# see Eqs.(56),(57) https://arxiv.org/pdf/0808.1231.pdf for evolution basis definition
-evolution = LinearBasis.from_mapping(
-    {
-        r"\Sigma": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": 1,
-            "cbar": 1,
-            "b": 1,
-            "bbar": 1,
-            "t": 1,
-            "tbar": 1,
-        },
-        "V": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": 1,
-            "cbar": -1,
-            "b": 1,
-            "bbar": -1,
-            "t": 1,
-            "tbar": -1,
-        },
-        "T3": {"u": 1, "ubar": 1, "d": -1, "dbar": -1},
-        "V3": {"u": 1, "ubar": -1, "d": -1, "dbar": 1},
-        "T8": {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2},
-        "V8": {"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": -2, "sbar": +2},
-        "T15": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": -3,
-            "cbar": -3,
-        },
-        "V15": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": -3,
-            "cbar": +3,
-        },
-        "T24": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": 1,
-            "cbar": 1,
-            "b": -4,
-            "bbar": -4,
-        },
-        "V24": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": 1,
-            "cbar": -1,
-            "b": -4,
-            "bbar": +4,
-        },
-        "T35": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": 1,
-            "cbar": 1,
-            "b": 1,
-            "bbar": 1,
-            "t": -5,
-            "tbar": -5,
-        },
-        "V35": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": 1,
-            "cbar": -1,
-            "b": 1,
-            "bbar": -1,
-            "t": -5,
-            "tbar": +5,
-        },
-        "g": {"g": 1},
-        "photon": {"photon": 1},
+#dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
+#though
+#see Eqs.(56),(57) https://arxiv.org/pdf/0808.1231.pdf for evolution basis definition
+evolution = LinearBasis.from_mapping({
+    r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
+    'V'        : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1 ,'b':1, 'bbar':-1, 't': 1, 'tbar':-1},
+
+    'T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
+    'V3'       : {'u': 1, 'ubar':-1, 'd':-1, 'dbar': 1},
+
+    'T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
+    'V8'       : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's':-2, 'sbar':+2},
+
+    'T15'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c':-3, 'cbar':-3},
+    'V15'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c':-3, 'cbar':+3},
+
+
+    'T24'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b':-4, 'bbar':-4},
+    'V24'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1, 'b':-4, 'bbar':+4},
+
+    'T35'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't':-5, 'tbar':-5},
+    'V35'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1, 'b': 1, 'bbar':-1, 't':-5, 'tbar':+5},
+
+    'g'        : {'g':1},
+    'photon'   : {'photon':1},
     },
-    aliases={
-        "gluon": "g",
-        "singlet": r"\Sigma",
-        "sng": r"\Sigma",
-        "sigma": r"\Sigma",
-        "v": "V",
-        "v3": "V3",
-        "v8": "V8",
-        "t3": "T3",
-        "t8": "T8",
-        "t15": "T15",
-        "v15": "V15",
-    },
-    default_elements=(
-        r"\Sigma",
-        "V",
-        "T3",
-        "V3",
-        "T8",
-        "V8",
-        "T15",
-        "gluon",
-    ),
+    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15', 'v15': 'V15',},
+    default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
 EVOL = evolution
 
 ccbar_asymm = evolution
 
-PDF4LHC20 = LinearBasis.from_mapping(
-    {
-        r"\Sigma": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": 1,
-            "cbar": 1,
-            "b": 1,
-            "bbar": 1,
-            "t": 1,
-            "tbar": 1,
-        },
-        "g": {"g": 1},
-        "V": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": 1,
-            "cbar": -1,
-            "b": 1,
-            "bbar": -1,
-            "t": 1,
-            "tbar": -1,
-        },
-        "V3": {"u": 1, "ubar": -1, "d": -1, "dbar": 1},
-        "T3": {"u": 1, "ubar": 1, "d": -1, "dbar": -1},
-        "T8": {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2},
-        "photon": {"photon": 1},
+PDF4LHC20 = LinearBasis.from_mapping({
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        'g': {'g': 1},
+
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+    
+        'photon': {'photon': 1},
     },
-    aliases={
-        "gluon": "g",
-        "singlet": r"\Sigma",
-        "sng": r"\Sigma",
-        "sigma": r"\Sigma",
-        "v": "V",
-        "v3": "V3",
-        "t3": "T3",
-        "t8": "T8",
-    },
-    default_elements=(
-        r"\Sigma",
-        "gluon",
-        "V",
-        "V3",
-        "T3",
-        "T8",
-    ),
-)
+    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+               'v': 'V', 'v3': 'V3', 't3': 'T3', 't8': 'T8'},
+    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'T3', 'T8',  ))
 
 NN31IC = LinearBasis.from_mapping(
     {
-        r"\Sigma": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": 1,
-            "cbar": 1,
-            "b": 1,
-            "bbar": 1,
-            "t": 1,
-            "tbar": 1,
-        },
-        "g": {"g": 1},
-        "V": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": 1,
-            "cbar": -1,
-            "b": 1,
-            "bbar": -1,
-            "t": 1,
-            "tbar": -1,
-        },
-        "V3": {"u": 1, "ubar": -1, "d": -1, "dbar": 1},
-        "V8": {"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": -2, "sbar": +2},
-        "T3": {"u": 1, "ubar": 1, "d": -1, "dbar": -1},
-        "T8": {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2},
-        r"c^+": {"c": 1, "cbar": 1},
-        "photon": {"photon": 1},
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        'g': {'g': 1},
+
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+
+        r'c^+': {'c': 1, 'cbar': 1},
+
+        'photon': {'photon': 1},
     },
     aliases={
-        "gluon": "g",
-        "singlet": r"\Sigma",
-        "sng": r"\Sigma",
-        "sigma": r"\Sigma",
-        "cp": r"c^+",
-        "v": "V",
-        "v3": "V3",
-        "v8": "V8",
-        "t3": "T3",
-        "t8": "T8",
-    },
-    default_elements=(
-        r"\Sigma",
-        "gluon",
-        "V",
-        "V3",
-        "V8",
-        "T3",
-        "T8",
-        r"c^+",
-    ),
-)
+        'gluon': 'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma', 'cp': r'c^+',
+        'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
+    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
 NN31PC = LinearBasis.from_mapping(
     {
-        r"\Sigma": {
-            "u": 1,
-            "ubar": 1,
-            "d": 1,
-            "dbar": 1,
-            "s": 1,
-            "sbar": 1,
-            "c": 1,
-            "cbar": 1,
-            "b": 1,
-            "bbar": 1,
-            "t": 1,
-            "tbar": 1,
-        },
-        "g": {"g": 1},
-        "V": {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": 1,
-            "sbar": -1,
-            "c": 1,
-            "cbar": -1,
-            "b": 1,
-            "bbar": -1,
-            "t": 1,
-            "tbar": -1,
-        },
-        "V3": {"u": 1, "ubar": -1, "d": -1, "dbar": 1},
-        "V8": {"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": -2, "sbar": +2},
-        "T3": {"u": 1, "ubar": 1, "d": -1, "dbar": -1},
-        "T8": {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2},
-        "photon": {"photon": 1},
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        'g': {'g': 1},
+
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+        'photon': {'photon': 1},
     },
     aliases={
-        "gluon": "g",
-        "singlet": r"\Sigma",
-        "sng": r"\Sigma",
-        "sigma": r"\Sigma",
-        "v": "V",
-        "v3": "V3",
-        "v8": "V8",
-        "t3": "T3",
-        "t8": "T8",
-    },
-    default_elements=(r"\Sigma", "gluon", "V", "V3", "V8", "T3", "T8"),
-)
+        'gluon': 'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
+        'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
+    default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8'))
 
 FLAVOUR = LinearBasis.from_mapping(
     {
-        "u": {"u": 1},
-        "ubar": {"ubar": 1},
-        "d": {"d": 1},
-        "dbar": {"dbar": 1},
-        "s": {"s": 1},
-        "sbar": {"sbar": 1},
-        "c": {"c": 1},
-        "g": {"g": 1},
+        'u': {'u': 1},
+        'ubar': {'ubar': 1},
+        'd': {'d': 1},
+        'dbar': {'dbar': 1},
+        's': {'s': 1},
+        'sbar': {'sbar': 1},
+        'c': {'c': 1},
+        'g': {'g': 1},
     },
-    default_elements=(
-        "u",
-        "ubar",
-        "d",
-        "dbar",
-        "s",
-        "sbar",
-        "c",
-        "g",
-    ),
-)
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
 
-pdg = LinearBasis.from_mapping(
-    {
-        "g/10": {"g": 0.1},
-        "u_{v}": {"u": 1, "ubar": -1},
-        "d_{v}": {"d": 1, "dbar": -1},
-        "s": {"s": 1},
-        r"\bar{u}": {"ubar": 1},
-        r"\bar{d}": {"dbar": 1},
-        "c": {"c": 1},
-    }
-)
-
+pdg = LinearBasis.from_mapping({
+'g/10': {'g':0.1},
+'u_{v}': {'u':1, 'ubar':-1},
+'d_{v}': {'d':1, 'dbar': -1},
+'s': {'s':1},
+r'\bar{u}': {'ubar':1},
+r'\bar{d}': {'dbar':1},
+'c': {'c':1},
+})
 
 @scalar_function_transformation(label="u_V")
 def u_valence(func, xmat, qmat):
@@ -853,14 +610,12 @@ def u_valence(func, xmat, qmat):
     ubar = gv[:, [1], ...]
     return u - ubar
 
-
 @scalar_function_transformation(label="d_V")
 def d_valence(func, xmat, qmat):
     gv = func([1, -1], xmat, qmat)
     d = gv[:, [0], ...]
     dbar = gv[:, [1], ...]
     return d - dbar
-
 
 @scalar_function_transformation(label="S")
 def total_sea(func, xmat, qmat):
@@ -869,8 +624,7 @@ def total_sea(func, xmat, qmat):
     ubar = gv[:, [1], ...]
     dbar = gv[:, [2], ...]
     sbar = gv[:, [3], ...]
-    return 2.0 * (ubar + dbar) + s + sbar
-
+    return 2.*(ubar + dbar) + s + sbar
 
 @scalar_function_transformation(label="u/d")
 def ud_ratio(func, xmat, qmat):
@@ -879,14 +633,12 @@ def ud_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
-
 @scalar_function_transformation(label="d/u")
 def du_ratio(func, xmat, qmat):
     gv = func([1, 2], xmat, qmat)
     num = gv[:, [0], ...]
     den = gv[:, [1], ...]
     return num / den
-
 
 @scalar_function_transformation(label=r"\bar{d}/\bar{u}")
 def dbarubar_ratio(func, xmat, qmat):
@@ -895,14 +647,14 @@ def dbarubar_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
-
+  
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
     gv = func([-3, 3, -2, -1], xmat, qmat)
     sbar, s, ubar, dbar = (gv[:, [i], ...] for i in range(4))
     return (sbar + s) / (ubar + dbar)
 
-
+  
 def fitbasis_to_NN31IC(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
     of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
@@ -933,173 +685,66 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
             matrix performing the change of basis from fitbasis to NN31IC
 
     """
-    if fitbasis == "NN31IC":
-        return np.identity(8)
+    if fitbasis == 'NN31IC':
+        return np.identity(9)
 
-    elif fitbasis == "NN31PC":
-        sng = {"sng": 1, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "g": 0}
-        v = {"sng": 0, "v": 1, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "g": 0}
-        v3 = {"sng": 0, "v": 0, "v3": 1, "v8": 0, "t3": 0, "t8": 0, "g": 0}
-        v8 = {"sng": 0, "v": 0, "v3": 0, "v8": 1, "t3": 0, "t8": 0, "g": 0}
-        t3 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 1, "t8": 0, "g": 0}
-        t8 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 1, "g": 0}
-        cp = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "g": 0}
-        g = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "g": 1}
-        v15 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
+    elif fitbasis == 'NN31PC':
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        v =  {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0}
 
-    elif fitbasis == "FLAVOUR":
-        sng = {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": 1, "sbar": 1, "c": 2, "g": 0}
-        v = {"u": 1, "ubar": -1, "d": 1, "dbar": -1, "s": 1, "sbar": -1, "c": 0, "g": 0}
-        v3 = {"u": 1, "ubar": -1, "d": -1, "dbar": 1, "s": 0, "sbar": 0, "c": 0, "g": 0}
-        v8 = {
-            "u": 1,
-            "ubar": -1,
-            "d": 1,
-            "dbar": -1,
-            "s": -2,
-            "sbar": 2,
-            "c": 0,
-            "g": 0,
-        }
-        t3 = {"u": 1, "ubar": 1, "d": -1, "dbar": -1, "s": 0, "sbar": 0, "c": 0, "g": 0}
-        t8 = {"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2, "c": 0, "g": 0}
-        cp = {"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 2, "g": 0}
-        g = {"u": 0, "ubar": 0, "d": 0, "dbar": 0, "s": 0, "sbar": 0, "c": 0, "g": 1}
-        v15 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
+    elif fitbasis == 'FLAVOUR':
+        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
+        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
+        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
+        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
+        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
+        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
+        v15 = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
 
-    elif fitbasis == "EVOL" or fitbasis == "evolution":
-        sng = {"sng": 1, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        v = {"sng": 0, "v": 1, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        v3 = {"sng": 0, "v": 0, "v3": 1, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        v8 = {"sng": 0, "v": 0, "v3": 0, "v8": 1, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        t3 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 1, "t8": 0, "t15": 0, "g": 0}
-        t8 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 1, "t15": 0, "g": 0}
-        cp = {
-            "sng": 0.25,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": -0.25,
-            "g": 0,
-        }
-        g = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 1}
-        v15 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
+    elif fitbasis == 'EVOL' or fitbasis == 'evolution':
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
+        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
 
-    elif fitbasis == "PDF4LHC20":
-        sng = {"sng": 1, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        v = {"sng": 0, "v": 1, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        v3 = {"sng": 0, "v": 0, "v3": 1, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        v8 = {"sng": 0, "v": 1, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        t3 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 1, "t8": 0, "t15": 0, "g": 0}
-        t8 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 1, "t15": 0, "g": 0}
-        cp = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-        g = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 1}
-        v15 = {"sng": 0, "v": 0, "v3": 0, "v8": 0, "t3": 0, "t8": 0, "t15": 0, "g": 0}
-
+    elif fitbasis == 'PDF4LHC20':
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+    
     elif fitbasis == "ccbar_asymm":
-        sng = {
-            "sng": 1,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": 0,
-            "g": 0,
-            "v15": 0,
-        }
-        v = {
-            "sng": 0,
-            "v": 1,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": 0,
-            "g": 0,
-            "v15": 0,
-        }
-        v3 = {
-            "sng": 0,
-            "v": 0,
-            "v3": 1,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": 0,
-            "g": 0,
-            "v15": 0,
-        }
-        v8 = {
-            "sng": 0,
-            "v": 1,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": 0,
-            "g": 0,
-            "v15": 0,
-        }
-        v15 = {
-            "sng": 0,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": 0,
-            "g": 0,
-            "v15": 1,
-        }
-        t3 = {
-            "sng": 0,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 1,
-            "t8": 0,
-            "t15": 0,
-            "g": 0,
-            "v15": 0,
-        }
-        t8 = {
-            "sng": 0,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 1,
-            "t15": 0,
-            "g": 0,
-            "v15": 0,
-        }
-        cp = {
-            "sng": 0.25,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": -0.25,
-            "g": 0,
-            "v15": 0,
-        }
-        g = {
-            "sng": 0,
-            "v": 0,
-            "v3": 0,
-            "v8": 0,
-            "t3": 0,
-            "t8": 0,
-            "t15": 0,
-            "g": 1,
-            "v15": 0,
-        }
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0, 'v15': 0 }
+        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0, 'v15': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1, 'v15': 0 }
+        v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 1 }
 
     flist = [sng, g, v, v3, v8, t3, t8, cp, v15]
+
     mat = []
     for f in flist:
         for flav_dict in flav_info:
@@ -1108,6 +753,5 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
 
     nflavs = len(flav_info)
     mat = np.asarray(mat).reshape(9, nflavs)
-
     # Return the transpose of the matrix, to have the first index referring to flavour
     return mat.transpose()
