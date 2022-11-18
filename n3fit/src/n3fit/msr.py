@@ -36,7 +36,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
+def msr_impose(nx=int(2e3), basis_size=9, mode='All', scaler=None):
     """
         This function receives:
         Generates a function that applies a normalization layer to the fit.
@@ -69,7 +69,6 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     # 2. Prepare the pdf for integration
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide()
-
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
     integrator = xIntegrator(weights_array, input_shape=(nx,))
 

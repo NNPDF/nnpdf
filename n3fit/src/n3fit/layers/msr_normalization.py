@@ -2,9 +2,10 @@ from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 GLUON_IDX = [[2]]
-V_IDX = [[3], [6], [7], [8]]
+V_IDX = [[3], [6], [7]]
 V3_IDX = [[4]]
 V8_IDX = [[5]]
+V15_IDX = [[8]]
 
 
 class MSR_Normalization(MetaLayer):
@@ -30,7 +31,7 @@ class MSR_Normalization(MetaLayer):
         if self._msr_enabled:
             idx += GLUON_IDX
         if self._vsr_enabled:
-            idx += V_IDX + V3_IDX + V8_IDX
+            idx += V_IDX + V3_IDX + V8_IDX + V15_IDX
 
         self._out_scatter = op.as_layer(
             op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
@@ -41,9 +42,10 @@ class MSR_Normalization(MetaLayer):
     def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:
         A_g = (1-sigma)/g
-        A_v  = A_v15 = A_v24 = A_v35 = 3/V
+        A_v = A_v24 = A_v35 = 3/V
         A_v3 = 1/V_3
         A_v8 = 3/V_8
+        A_v15 = 3/V_15
 
         Note that both the input and the output are in the 14-flavours fk-basis
         """
@@ -58,6 +60,7 @@ class MSR_Normalization(MetaLayer):
             n_av = [3.0 / y[V_IDX[0][0]]] * len(V_IDX)
             n_av3 = [1.0 / y[V3_IDX[0][0]]] * len(V3_IDX)
             n_av8 = [3.0 / y[V8_IDX[0][0]]] * len(V8_IDX)
-            norm_constants += n_av + n_av3 + n_av8
-
+            n_av15 = [3.0 / y[V15_IDX[0][0]]] * len(V15_IDX)
+            norm_constants += n_av + n_av3 + n_av8 + n_av15
+            
         return self._out_scatter(norm_constants)
