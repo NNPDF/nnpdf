@@ -1,12 +1,14 @@
 """Script that calls fiatlux to add the photon PDF."""
 
-from validphys import lhapdfset
+# from validphys import lhapdfset
 from validphys.api import API
+import lhapdf
 import fiatlux
 import numpy as np
 from eko.couplings import Couplings
 from eko.compatibility import update_theory
 from eko.runner import Runner
+from .structure_functions import StructureFunction
 
 import yaml
 
@@ -30,20 +32,8 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     """
     if fiatlux_runcard is None :
         return np.zeros(len(xgrid))
-    set = lhapdfset.LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
-    qcd_pdfs = set.members[replica]
-
-    def f2(x, q):
-        # call yadism to give f2
-        return 0.
-
-    def fl(x, q):
-        # call yadism to give fl
-        return 0.
-
-    def f2lo(x, q):
-        # call yadism to give f20
-        return 0.
+    pdf_name = fiatlux_runcard["pdf_name"]
+    qcd_pdfs = lhapdf.mkPDF(pdf_name, replica)
 
     theory = API.theoryid(theoryid = theoryid).get_description().copy()
     theory["nfref"] = None
@@ -57,6 +47,7 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     q_in2 = q_in ** 2
     q_fin = theory["Q0"]
     theory["Q0"]= q_in
+    qref = theory["Qref"]
 
     # lux = fiatlux.FiatLux(fiatlux_runcard)
     # we have a dict but fiatlux wants a yaml file
@@ -70,8 +61,22 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     def alpha_em(q):
         return couplings.a(q**2)[1] * 4 * np.pi
     
-    lux.PlugAlphaQED(alpha_em, theory["Qref"])
-    lux.PlugStructureFunctions(f2, fl, f2lo)
+    lux.PlugAlphaQED(alpha_em, qref)
+    
+    path_to_grid = fiatlux_runcard["path_to_grid"]
+    path_to_F2 = fiatlux_runcard["path_to_F2"]
+    path_to_FL = fiatlux_runcard["path_to_FL"]
+    path_to_F2LO = fiatlux_runcard["path_to_F2LO"]
+    order = theory["order"]
+    xir = theory["XIR"]
+    xif = theory["XIF"]
+
+    f2 = StructureFunction(path_to_grid, path_to_F2, pdf_name, order, xir, xif)
+    fl = StructureFunction(path_to_grid, path_to_FL, pdf_name, order, xir, xif)
+    f2lo = StructureFunction(path_to_grid, path_to_F2LO, pdf_name, order, xir, xif)
+    
+    lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, f2lo.FxQ)
+    
     lux.InsertInelasticSplitQ([4.18, 1e100])
 
     operator_card = dict(
