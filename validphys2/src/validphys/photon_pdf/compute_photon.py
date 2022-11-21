@@ -69,9 +69,9 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     # xir = theory["XIR"]
     # xif = theory["XIF"]
 
-    f2 = StructureFunction(path_to_F2, pdf_name)
-    fl = StructureFunction(path_to_FL, pdf_name)
-    f2lo = StructureFunction(path_to_F2LO, pdf_name)
+    f2 = StructureFunction(path_to_F2, qcd_pdfs)
+    fl = StructureFunction(path_to_FL, qcd_pdfs)
+    f2lo = StructureFunction(path_to_F2LO, qcd_pdfs)
     
     lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, f2lo.FxQ)
     
@@ -97,9 +97,11 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
             ).items()
         )
     )
+    for x in xgrid:
+        print(lux.EvaluatePhoton(x, q_in2).total / x)
 
     photon_100GeV = np.array(
-      [lux.EvaluatePhoton(x, q2).total / x for x in xgrid]
+      [lux.EvaluatePhoton(x, q_in2).total / x for x in xgrid]
     )
     # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
     

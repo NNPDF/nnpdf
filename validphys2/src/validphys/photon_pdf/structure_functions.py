@@ -11,7 +11,7 @@ class StructureFunction :
         self.fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
         self.pdfs = pdfs
         self.pdgid = int(pdfs.set().get_entry("Particle"))
-        self.produce_interpolator(self)
+        self.produce_interpolator()
     
 
     def produce_interpolator(self):
@@ -20,8 +20,8 @@ class StructureFunction :
         predictions = self.fktable.convolute_with_one(self.pdgid, self.pdfs.xfxQ2)
         # here we require that the (x,Q2) couples that we passed
         # to pinefarm is a rectangular matrix
-        grid2D = predictions.reshape(len(x),len(q2))
-        # TODO: are len(x) and len(q2) in the correct order? 
+        grid2D = predictions.reshape(len(x),len(q2)).T
+        # TODO: are len(x) and len(q2) in the correct order?
         self.interpolator = interp2d(x, q2, grid2D)
     
     def FxQ(self, x, Q):
