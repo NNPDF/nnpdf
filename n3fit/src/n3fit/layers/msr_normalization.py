@@ -2,10 +2,10 @@ from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 GLUON_IDX = [[2]]
-V_IDX = [[3], [6], [7]]
+V_IDX = [[3], [7], [8]]
 V3_IDX = [[4]]
 V8_IDX = [[5]]
-V15_IDX = [[8]]
+V15_IDX = [[6]]
 
 
 class MSR_Normalization(MetaLayer):
@@ -62,5 +62,5 @@ class MSR_Normalization(MetaLayer):
             n_av8 = [3.0 / y[V8_IDX[0][0]]] * len(V8_IDX)
             n_av15 = [3.0 / y[V15_IDX[0][0]]] * len(V15_IDX)
             norm_constants += n_av + n_av3 + n_av8 + n_av15
-            
+
         return self._out_scatter(norm_constants)
