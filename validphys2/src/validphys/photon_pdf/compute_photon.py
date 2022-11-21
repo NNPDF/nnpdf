@@ -63,17 +63,15 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     
     lux.PlugAlphaQED(alpha_em, qref)
     
-    path_to_grid = fiatlux_runcard["path_to_grid"]
     path_to_F2 = fiatlux_runcard["path_to_F2"]
     path_to_FL = fiatlux_runcard["path_to_FL"]
     path_to_F2LO = fiatlux_runcard["path_to_F2LO"]
-    order = theory["order"]
-    xir = theory["XIR"]
-    xif = theory["XIF"]
+    # xir = theory["XIR"]
+    # xif = theory["XIF"]
 
-    f2 = StructureFunction(path_to_grid, path_to_F2, pdf_name, order, xir, xif)
-    fl = StructureFunction(path_to_grid, path_to_FL, pdf_name, order, xir, xif)
-    f2lo = StructureFunction(path_to_grid, path_to_F2LO, pdf_name, order, xir, xif)
+    f2 = StructureFunction(path_to_F2, pdf_name)
+    fl = StructureFunction(path_to_FL, pdf_name)
+    f2lo = StructureFunction(path_to_F2LO, pdf_name)
     
     lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, f2lo.FxQ)
     

@@ -4,16 +4,13 @@ import numpy as np
 from scipy.interpolate import interp2d
 
 class StructureFunction :
-    def __init__(self, path_to_grid, path_to_fktable, pdfs, order, xir, xif):
+    def __init__(self, path_to_fktable, pdfs):
         # self.path_to_grid = Path(path_to_grid)
         self.path_to_fktable = Path(path_to_fktable)
         # self.grid = pineappl.grid.Grid.read(path_to_grid)
         self.fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
         self.pdfs = pdfs
         self.pdgid = int(pdfs.set().get_entry("Particle"))
-        # self.order = order
-        # self.xir = xir
-        # self.xif = xif
         self.produce_interpolator(self)
     
 
