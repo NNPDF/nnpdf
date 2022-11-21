@@ -36,7 +36,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(nx=int(2e3), basis_size=9, mode='All', scaler=None):
+def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     """
         This function receives:
         Generates a function that applies a normalization layer to the fit.
@@ -77,7 +77,6 @@ def msr_impose(nx=int(2e3), basis_size=9, mode='All', scaler=None):
 
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
     xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
-
     # Finally prepare a function which will take as input the output of the PDF model
     # and will return it appropiately normalized.
     def apply_normalization(layer_pdf):
