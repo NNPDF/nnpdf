@@ -508,7 +508,7 @@ evolution = LinearBasis.from_mapping({
 
 EVOL = evolution
 
-ccbar_asymm = evolution
+CCBAR_ASYMM = evolution
 
 PDF4LHC20 = LinearBasis.from_mapping({
         r'\Sigma': {
@@ -740,7 +740,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
         v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
     
-    elif fitbasis == "ccbar_asymm":
+    elif fitbasis == "CCBAR_ASYMM":
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
         v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
         v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
@@ -760,6 +760,5 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
             mat.append(f[flav_name])
 
     nflavs = len(flav_info)
-    mat = np.asarray(mat).reshape(9, nflavs)
     # Return the transpose of the matrix, to have the first index referring to flavour
-    return mat.transpose()
+    return np.asarray(mat).reshape(9, nflavs).T
