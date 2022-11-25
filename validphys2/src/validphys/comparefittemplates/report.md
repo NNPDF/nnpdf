@@ -74,14 +74,6 @@ Training lengths
 ----------------
 {@fits plot_training_length@}
 
-Overfit measure
-----------------
-{@with dataspecs::t0_info@}
-{@t0_info plot_overfitting_histogram@}
-{@t0_info fit_overfitting_summary@}
-{@endwith@}
-
-
 Training-validation
 -------------------
 {@fits plot_training_validation@}

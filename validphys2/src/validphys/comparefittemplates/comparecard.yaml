@@ -129,13 +129,6 @@ dataspecs:
     speclabel:
       from_: reference
 
-t0_info:
-  - use_t0: True
-    datacuts:
-      from_: fit
-    t0pdfset:
-      from_: datacuts
-
 Normalize:
   normalize_to: 2
 
