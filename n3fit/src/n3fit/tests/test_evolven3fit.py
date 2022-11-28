@@ -2,9 +2,7 @@ import pathlib
 import logging
 from numpy.testing import assert_allclose
 import numpy as np
-import pytest 
 from validphys.pdfbases import PIDS_DICT
-from validphys.loader import Loader
 from evolven3fit_new import utils, eko_utils
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
