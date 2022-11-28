@@ -98,8 +98,7 @@ def evolve_fit(
             eko_op = output.Output.load_tar(theory_eko_path)
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
-            eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko)
-            pass   
+            eko_op = eko_utils.construct_eko_for_fit(theory, op, log, dump_eko) 
     eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
     info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
