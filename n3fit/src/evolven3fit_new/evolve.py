@@ -23,7 +23,7 @@ LOGGING_SETTINGS = {"formatter" : "%(asctime)s %(name)s/%(levelname)s: %(message
 }
 
 def evolve_fit(
-    conf_folder,
+    fit_folder,
     q_fin,
     q_points,
     op_card_dict,
@@ -33,12 +33,12 @@ def evolve_fit(
     dump_eko=None,
 ):
     """
-    Evolves all the fitted replica in conf_folder/nnfit
+    Evolves all the fitted replica in fit_folder/nnfit
 
     Parameters
     ----------
 
-        conf_folder: str or pathlib.Path
+        fit_folder: str or pathlib.Path
             path to the folder containing the fit
         q_fin: float
             final point of the q_grid
@@ -57,7 +57,7 @@ def evolve_fit(
             path where the eko is dumped (if None the eko won't be
             stored)
     """
-    log_file = pathlib.Path(conf_folder) / LOG_FILE
+    log_file = pathlib.Path(fit_folder) / LOG_FILE
     if log_file.exists():
         if force:
             log_file.unlink()
@@ -78,7 +78,7 @@ def evolve_fit(
         logger.addHandler(log_file)
         logger.addHandler(stdout_log)
 
-    usr_path = pathlib.Path(conf_folder)
+    usr_path = pathlib.Path(fit_folder)
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(
         initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]
