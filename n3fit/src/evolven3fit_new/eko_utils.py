@@ -47,7 +47,7 @@ def construct_eko_cards(
     return theory_card, op_card
 
 
-def construct_eko_for_fit(theory_card, op_card, log, save_path=None):
+def construct_eko_for_fit(theory_card, op_card, save_path=None):
     """
     Construct the eko operator needed for evolution of fitted pdfs
 

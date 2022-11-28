@@ -65,6 +65,6 @@ def test_eko_utils():
     #In this case there are not enough points to have twice the bottom matching scale
     assert_allclose(op_card["Q2grid"][1], 4.92**2)
     #Testing construct_eko_for_fit
-    eko_op = eko_utils.construct_eko_for_fit(t_card ,op_card,log)
+    eko_op = eko_utils.construct_eko_for_fit(t_card ,op_card)
     assert_allclose(eko_op['interpolation_xgrid'], x_grid)
     assert_allclose(list(eko_op['Q2grid']), op_card["Q2grid"])
