@@ -116,14 +116,14 @@ def main():
         "n_integration_cores": args.n_cores,
         "backward_inversion": "expanded",
     }
-    t_card_info = {}
+    theory_card_info = {}
     if args.actions == "evolve":
         cli.cli_evolven3fit_new(
             args.configuration_folder,
             args.q_fin,
             args.q_points,
             op_card_info,
-            t_card_info,
+            theory_card_info,
             args.dump,
             args.load,
             args.force,
@@ -150,7 +150,7 @@ def main():
         else:
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
         tcard, opcard = eko_utils.construct_eko_cards(
-            args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, t_card_info
+            args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
         )
         eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, _logger, args.dump)
 

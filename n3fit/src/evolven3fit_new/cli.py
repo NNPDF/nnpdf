@@ -204,7 +204,7 @@ XGRID = np.array(
                 )
 
 def cli_evolven3fit_new(
-    configuration_folder, q_fin, q_points, op_card_info, t_card_info, dump, load, force
+    configuration_folder, q_fin, q_points, op_card_info, theory_card_info, dump, load, force
 ):
     """Evolves the fitted PDFs.
 
@@ -229,7 +229,7 @@ def cli_evolven3fit_new(
         q_fin,
         q_points,
         op_card_info,
-        t_card_info,
+        theory_card_info,
         force,
         load,
         dump,

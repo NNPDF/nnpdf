@@ -27,7 +27,7 @@ def evolve_fit(
     q_fin,
     q_points,
     op_card_dict,
-    t_card_dict,
+    theory_card_dict,
     force,
     eko_path=None,
     dump_eko=None,
@@ -46,7 +46,7 @@ def evolve_fit(
             number of points in the q_grid
         op_card_dict: dict
             user settings for the op_card
-        t_card_dict: dict
+        theory_card_dict: dict
             user settings for the t_card
         force: bool
             whether to force the evolution to be done again
@@ -85,7 +85,7 @@ def evolve_fit(
     ).astype(np.float)
     theoryID = utils.get_theoryID_from_runcard(usr_path)
     theory, op = eko_utils.construct_eko_cards(
-        theoryID, q_fin, q_points, x_grid, op_card_dict, t_card_dict
+        theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
     )
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
