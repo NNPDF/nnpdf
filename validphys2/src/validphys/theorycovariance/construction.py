@@ -414,7 +414,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     process_info = combine_by_type
 
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
-    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index? 
+    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
     # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
     # changing and breaking this function
     indexlist = []
