@@ -84,7 +84,7 @@ def tr_masks(data, replica_trvlseed):
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     # TODO: update this to new random infrastructure.
-    np.random.seed(nameseed)
+    rng = np.random.default_rng(nameseed)
     trmask_partial = []
     for dataset in data.datasets:
         # TODO: python commondata will not require this rubbish.
@@ -92,11 +92,15 @@ def tr_masks(data, replica_trvlseed):
         cuts = dataset.cuts
         ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
         frac = dataset.frac
-        trmax = int(frac * ndata)
+        # We do this so that a given dataset will always have the same number of points masked
+        trmax = int(ndata*frac)
+        if trmax == 0:
+            # If that number is 0, then get 1 point with probability frac
+            trmax = int(rng.random() < frac)
         mask = np.concatenate(
             [np.ones(trmax, dtype=np.bool), np.zeros(ndata - trmax, dtype=np.bool)]
         )
-        np.random.shuffle(mask)
+        rng.shuffle(mask)
         trmask_partial.append(mask)
     return _TrMasks(str(data), replica_trvlseed, trmask_partial)
 
