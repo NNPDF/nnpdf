@@ -84,7 +84,7 @@ def tr_masks(data, replica_trvlseed):
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     # TODO: update this to new random infrastructure.
-    rng = np.random.default_rng(nameseed)
+    rng = np.random.Generator(np.random.PCG64(nameseed))
     trmask_partial = []
     for dataset in data.datasets:
         # TODO: python commondata will not require this rubbish.
