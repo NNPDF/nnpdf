@@ -309,7 +309,7 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
     >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model)
-    >>> res = compute_arclength(n3fit)
+    >>> res = compute_arclength(n3pdf)
     """
     if flavours is None:
         flavours = ["sigma", "gluon", "V", "V3", "V8"]
