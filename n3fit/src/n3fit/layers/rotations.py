@@ -105,25 +105,12 @@ class AddPhoton(MetaLayer):
         super().__init__(**kwargs)
     
     def call(self, pdfs, pdf_ph):
-        photon_tensor = op.numpy_to_tensor(np.expand_dims(pdf_ph, axis=1))
         x = op.transpose(pdfs)
-        pdfs_list=[
-            photon_tensor,
-            x[1],
-            x[2],
-            x[3],
-            x[4],
-            x[5],
-            x[6],
-            x[7],
-            x[8],
-            x[9],
-            x[10],
-            x[11],
-            x[12],
-            x[13]
-        ]
-        ret = op.concatenate(pdfs_list)
+        pdf_ph_t = op.transpose(pdf_ph)
+        pdf_raw_list = [x[i] for i in range(14)]
+        pdf_raw_list[0] = pdf_ph_t[0]
+        ret = op.concatenate(x)
+        # Concatenating destroys the batch index so we have to regenerate it
         return op.batchit(ret)
 
 
