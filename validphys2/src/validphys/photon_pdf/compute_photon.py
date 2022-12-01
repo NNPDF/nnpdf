@@ -12,23 +12,23 @@ from .structure_functions import StructureFunction
 
 import yaml
 
-def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
+def photon_fitting_scale(xgrid, theoryid, fiatlux_runcard, replica):
     r"""
     Compute the photon PDF for every point in the grid xgrid.
 
     Parameters
     ----------
-        xgrid: numpy.array
-            grid of the x points
-        pdf_name: string
-            name of the QCD set
-        replica: int
-            number of replica
+    xgrid: numpy.array
+        grid of the x points
+    pdf_name: string
+        name of the QCD set
+    replica: int
+        number of replica
     
     Returns
     -------
-        photon_1GeV: numpy.array
-            photon PDF at the scale 1 GeV
+    photon_fitting_scale: numpy.array
+        photon PDF at the scale 1 GeV
     """
     if fiatlux_runcard is None :
         return np.zeros(len(xgrid))
@@ -65,15 +65,34 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
     
     path_to_F2 = fiatlux_runcard["path_to_F2"]
     path_to_FL = fiatlux_runcard["path_to_FL"]
-    path_to_F2LO = fiatlux_runcard["path_to_F2LO"]
     # xir = theory["XIR"]
     # xif = theory["XIF"]
+    
+    def F2LO(x, Q):
+        mcharm = theory["mc"]
+        mbottom = theory["mb"]
+        mtop = theory["mt"]
+        # at LO we use ZM-VFS
+        if Q < mcharm :
+            hq = 3
+        elif Q < mbottom :
+            hq = 4
+        elif Q < mtop :
+            hq = 5
+        else :
+            hq = 6
+        e2u = 4/9
+        e2d = 1/9
+        e2q = [e2d, e2u, e2d, e2u, e2d, e2u]
+        res = 0
+        for i in range(1, hq+1):
+            res += e2q[i-1] * (qcd_pdfs.xfxQ(x, Q)[i] + qcd_pdfs.xfxQ(x, Q)[-i])
+        return res
 
     f2 = StructureFunction(path_to_F2, qcd_pdfs)
     fl = StructureFunction(path_to_FL, qcd_pdfs)
-    f2lo = StructureFunction(path_to_F2LO, qcd_pdfs)
     
-    lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, f2lo.FxQ)
+    lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, F2LO)
     
     lux.InsertInelasticSplitQ([4.18, 1e100])
 
@@ -125,7 +144,7 @@ def photon_1GeV(xgrid, theoryid, fiatlux_runcard, replica):
         pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
         # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
-    photon_1GeV = pdf_final[ph_id]
+    photon_fitting_scale = pdf_final[ph_id]
 
     # we want x * gamma(x)
-    return xgrid * photon_1GeV
+    return xgrid * photon_fitting_scale

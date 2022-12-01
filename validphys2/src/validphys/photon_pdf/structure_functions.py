@@ -2,6 +2,7 @@ from pathlib import Path
 import pineappl
 import numpy as np
 from scipy.interpolate import interp2d
+# from scipy.interpolate import RectBivariateSpline
 
 class StructureFunction :
     def __init__(self, path_to_fktable, pdfs):
@@ -23,6 +24,7 @@ class StructureFunction :
         grid2D = predictions.reshape(len(x),len(q2)).T
         # TODO: are len(x) and len(q2) in the correct order?
         self.interpolator = interp2d(x, q2, grid2D)
+        # consider using scipy.RectBivariateSpline.
     
     def FxQ(self, x, Q):
         return self.interpolator(x, Q**2)
