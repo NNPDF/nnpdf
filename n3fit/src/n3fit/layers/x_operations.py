@@ -33,7 +33,7 @@ class xDivide(MetaLayer):
 
     def __init__(self, output_dim=BASIS_SIZE, div_list=None, **kwargs):
         if div_list is None:
-            div_list = [3, 4, 5]
+            div_list = [3, 4, 5, 6]
         self.output_dim = output_dim
         self.div_list = div_list
         super().__init__(**kwargs)
