@@ -274,12 +274,12 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF
+    >>> from n3fit.vpinterface import N3PDF, integrability_numbers
     >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model)
-    >>> res = n3pdf.integrability_numbers()
+    >>> res = integrability_numbers(n3pdf)
     """
     if flavours is None:
         flavours = ["V", "T3", "V3", "T8", "V8"]
@@ -304,12 +304,12 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF
+    >>> from n3fit.vpinterface import N3PDF, compute_arclength
     >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model)
-    >>> res = n3pdf.compute_arclength()
+    >>> res = compute_arclength(n3fit)
     """
     if flavours is None:
         flavours = ["sigma", "gluon", "V", "V3", "V8"]
