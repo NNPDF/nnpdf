@@ -152,7 +152,7 @@ def main():
         tcard, opcard = eko_utils.construct_eko_cards(
             args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
         )
-        eko_op = eko_utils.construct_eko_for_fit(tcard, opcard, args.dump)
+        _ = eko_utils.construct_eko_for_fit(tcard, opcard, args.dump)
 
 
 if __name__ == "__main__":
