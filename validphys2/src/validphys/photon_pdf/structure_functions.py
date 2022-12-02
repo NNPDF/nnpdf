@@ -28,5 +28,3 @@ class StructureFunction :
     
     def FxQ(self, x, Q):
         return self.interpolator(x, Q**2)
-
-

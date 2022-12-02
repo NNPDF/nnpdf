@@ -36,12 +36,12 @@ def photon_fitting_scale(xgrid, theoryid, fiatlux_runcard, replica):
     qcd_pdfs = lhapdf.mkPDF(pdf_name, replica)
 
     theory = API.theoryid(theoryid = theoryid).get_description().copy()
-    theory["nfref"] = None
-    theory["nf0"] = None
-    theory["fact_to_ren_scale_ratio"] = 1.
+    # theory["nfref"] = None
+    # theory["nf0"] = None
+    # theory["fact_to_ren_scale_ratio"] = 1.
     theory["ModSV"] = None
-    theory["IC"]=0
-    theory["IB"]=0
+    # theory["IC"]=0
+    # theory["IB"]=0
     theory["FNS"] = "VFNS"
     q_in = 100
     q_in2 = q_in ** 2
