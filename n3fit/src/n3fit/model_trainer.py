@@ -19,7 +19,7 @@ from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
-from validphys.compute_photon import photon_1GeV
+from validphys.photon_pdf.compute_photon import photon_fitting_scale
 from n3fit.scripts.n3fit_exec import N3FIT_FIXED_CONFIG
 
 log = logging.getLogger(__name__)
@@ -361,7 +361,7 @@ class ModelTrainer:
         input_layer = op.numpy_to_input(input_arr)
         
         photon_list = [
-            np.array([photon_1GeV(
+            np.array([photon_fitting_scale(
                 xgrid=grid[0],
                 theoryid=N3FIT_FIXED_CONFIG['theoryid'],
                 fiatlux_runcard = N3FIT_FIXED_CONFIG['fiatlux'],

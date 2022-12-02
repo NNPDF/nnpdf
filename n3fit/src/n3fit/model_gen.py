@@ -535,6 +535,7 @@ def pdfNN_layer_generator(
 
     # First prepare the input for the PDF model and any scaling if needed
     placeholder_input = Input(shape=(None, 1), batch_size=1)
+    # placeholder_ph = ???
 
     subtract_one = False
     process_input = Lambda(lambda x: x)
@@ -559,7 +560,7 @@ def pdfNN_layer_generator(
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
-    layer_photon = AddPhoton(input_shape=(last_layer_nodes,), output_dim=out)
+    layer_photon = AddPhoton(input_shape=(out,), output_dim=out)
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
