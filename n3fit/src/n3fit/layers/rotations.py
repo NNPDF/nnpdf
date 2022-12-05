@@ -78,7 +78,7 @@ class FkRotation(MetaLayer):
             x[2],  # v
             x[3],  # v3
             x[4],  # v8
-            x[2],  # v15
+            x[8],  # v15
             x[2],  # v24
             x[2],  # v35
             x[5],  # t3

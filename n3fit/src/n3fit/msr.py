@@ -36,7 +36,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
+def msr_impose(nx=int(2e3), mode='All', scaler=None):
     """
         This function receives:
         Generates a function that applies a normalization layer to the fit.
@@ -51,8 +51,6 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
         ----------
             nx: int
                 number of points for the integration grid, default: 2000
-            basis_size: int
-                number of flavours output of the NN, default: 8
             mode: str
                 what sum rules to compute (MSR, VSR or All), default: All
             scaler: scaler
@@ -69,16 +67,14 @@ def msr_impose(nx=int(2e3), basis_size=8, mode='All', scaler=None):
     # 2. Prepare the pdf for integration
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide()
-
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
     integrator = xIntegrator(weights_array, input_shape=(nx,))
 
     # 4. Now create the normalization by selecting the right integrations
-    normalizer = MSR_Normalization(input_shape=(basis_size,), mode=mode)
+    normalizer = MSR_Normalization(mode=mode)
 
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
     xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
-
     # Finally prepare a function which will take as input the output of the PDF model
     # and will return it appropiately normalized.
     def apply_normalization(layer_pdf):
