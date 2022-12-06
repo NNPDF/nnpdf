@@ -20,8 +20,7 @@ from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
-from validphys.photon_pdf.compute_photon import photon_fitting_scale
-from n3fit.scripts.n3fit_exec import N3FIT_FIXED_CONFIG
+from validphys.photon_pdf.compute_photon import Photon
 
 log = logging.getLogger(__name__)
 
@@ -101,6 +100,8 @@ class ModelTrainer:
         model_file=None,
         sum_rules=None,
         parallel_models=1,
+        theoryid=None,
+        fiatlux_runcard=None,
         replica_id=None,
     ):
         """
@@ -154,6 +155,8 @@ class ModelTrainer:
         self.all_datasets = []
         self._scaler = None
         self._parallel_models = parallel_models
+        self.theoryid = theoryid
+        self.fiatlux_runcard = fiatlux_runcard
         self.replica_id = replica_id
 
         # Initialise internal variables which define behaviour
@@ -858,6 +861,9 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
+        
+        # compute photon here
+        # photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):

@@ -145,8 +145,7 @@ class N3FitConfig(Config):
             validation_action = namespace + "validation_pseudodata"
 
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
-        if (thconfig:=file_content.get('theory')) is not None:
-            N3FIT_FIXED_CONFIG['theoryid']=thconfig.get('theoryid', True)
+
         if (thconfig:=file_content.get('fiatlux')) is not None:
             N3FIT_FIXED_CONFIG['fiatlux']=thconfig
         else :

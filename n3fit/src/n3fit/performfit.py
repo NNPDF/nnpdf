@@ -23,6 +23,7 @@ def performfit(
     posdatasets_fitting_pos_dict,
     integdatasets_fitting_integ_dict,
     theoryid,
+    fiatlux,
     basis,
     fitbasis,
     sum_rules=True,
@@ -194,6 +195,8 @@ def performfit(
             model_file=load,
             sum_rules=sum_rules,
             parallel_models=n_models,
+            theoryid=theoryid,
+            fiatlux_runcard=fiatlux,
             replica_id=replica_idxs[0]
         )
 
