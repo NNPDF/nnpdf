@@ -403,6 +403,7 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
+    pdf_ph=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -535,7 +536,6 @@ def pdfNN_layer_generator(
 
     # First prepare the input for the PDF model and any scaling if needed
     placeholder_input = Input(shape=(None, 1), batch_size=1)
-    # placeholder_ph = ???
 
     subtract_one = False
     process_input = Lambda(lambda x: x)
@@ -560,7 +560,7 @@ def pdfNN_layer_generator(
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
-    layer_photon = AddPhoton(input_shape=(out,), output_dim=out)
+    layer_photon = AddPhoton(pdf_ph=pdf_ph, input_shape=(out,), output_dim=out)
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
@@ -639,7 +639,7 @@ def pdfNN_layer_generator(
 
         # Rotation layer, changes from the 8-basis to the 14-basis
         def layer_pdf(x):
-            return layer_evln(layer_fitbasis(x))
+            return layer_photon(layer_evln(layer_fitbasis(x)))
 
         # Final PDF (apply normalization)
         final_pdf = sumrule_layer(layer_pdf)

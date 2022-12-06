@@ -350,7 +350,7 @@ class ModelTrainer:
             op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
         )
 
-        return InputInfo(input_layer, sp_layer, inputs_idx)
+        return InputInfo(input_layer, sp_layer, inputs_idx), inputs_unique
 
     def _model_generation(self, xinput, pdf_models, partition, partition_idx):
         """
@@ -640,6 +640,7 @@ class ModelTrainer:
         regularizer,
         regularizer_args,
         seed,
+        pdf_ph,
     ):
         """
         Defines the internal variable layer_pdf
@@ -691,6 +692,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
+            pdf_ph=pdf_ph,
         )
         return pdf_models
 
@@ -860,10 +862,16 @@ class ModelTrainer:
         exp_models = []
 
         # Generate the grid in x, note this is the same for all partitions
-        xinput = self._xgrid_generation()
+        xinput, inputs_unique = self._xgrid_generation()
         
-        # compute photon here
-        # photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
+        # compute photon:
+        photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
+        photon_array = np.array([])
+        for i in inputs_unique:
+            xgrid = i[0]
+            photon_array = np.append(photon_array, photon.photon_fitting_scale(xgrid))
+        
+        ph_pdf = op.batchit(op.numpy_to_tensor(photon_array))
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -883,6 +891,7 @@ class ModelTrainer:
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
                 seeds,
+                ph_pdf,
             )
 
             # Model generation joins all the different observable layers

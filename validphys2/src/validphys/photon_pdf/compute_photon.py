@@ -15,26 +15,27 @@ import yaml
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replica=0):
         # TODO : for the moment we do the 0-th replica then we change it
-        self.theory = API.theoryid(theoryid = theoryid).get_description().copy()
+        self.theory = API.theoryid(theoryid = theoryid.id).get_description().copy()
         self.fiatlux_runcard = fiatlux_runcard
-        # theory["nfref"] = None
-        # theory["nf0"] = None
-        # theory["fact_to_ren_scale_ratio"] = 1.
-        self.theory["ModSV"] = None
-        # theory["IC"]=0
-        # theory["IB"]=0
-        self.theory["FNS"] = "VFNS"
-        self.q_in = 100
-        self.q_in2 = self.q_in ** 2
-        self.q_fin = self.theory["Q0"]
-        self.theory["Q0"]= self.q_in
-        self.qref = self.theory["Qref"]
-        # xir = theory["XIR"]
-        # xif = theory["XIF"]
-        self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
-        self.couplings = Couplings.from_dict(update_theory(self.theory))
-        self.path_to_F2 = fiatlux_runcard["path_to_F2"]
-        self.path_to_FL = fiatlux_runcard["path_to_FL"]
+        if fiatlux_runcard is not None:
+            # theory["nfref"] = None
+            # theory["nf0"] = None
+            # theory["fact_to_ren_scale_ratio"] = 1.
+            self.theory["ModSV"] = None
+            # theory["IC"]=0
+            # theory["IB"]=0
+            self.theory["FNS"] = "VFNS"
+            self.q_in = 100
+            self.q_in2 = self.q_in ** 2
+            self.q_fin = self.theory["Q0"]
+            self.theory["Q0"]= self.q_in
+            self.qref = self.theory["Qref"]
+            # xir = theory["XIR"]
+            # xif = theory["XIF"]
+            self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
+            self.couplings = Couplings.from_dict(update_theory(self.theory))
+            self.path_to_F2 = fiatlux_runcard["path_to_F2"]
+            self.path_to_FL = fiatlux_runcard["path_to_FL"]
     
     def F2LO(self, x, Q):
         mcharm = self.theory["mc"]
@@ -140,6 +141,7 @@ class Photon:
         # TODO : this EKO should be precomputed and stored since it never changes
         runner = Runner(self.theory, operator_card)
         output = runner.get_output()
+        
         for q2, elem in output.items():
             pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
             # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
