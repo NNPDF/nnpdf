@@ -70,6 +70,7 @@ class FkRotation(MetaLayer):
 
     def call(self, pdf_raw):
         # Transpose the PDF so that the flavour index is the first one
+        import ipdb; ipdb.set_trace()
         x = op.transpose(pdf_raw)
         pdf_raw_list = [
             0 * x[0],  # photon
@@ -100,18 +101,20 @@ class AddPhoton(MetaLayer):
     output it is set to its real value.
     """
 
-    def __init__(self, output_dim=14, **kwargs):
+    def __init__(self, pdf_ph, output_dim=14, **kwargs):
+        # pdf_ph must be a tensor of shape (1, xgrid)
+        self.pdf_ph = pdf_ph
         self.output_dim = output_dim
         super().__init__(**kwargs)
     
-    def call(self, pdfs, pdf_ph):
-        x = op.transpose(pdfs)
-        pdf_ph_t = op.transpose(pdf_ph)
-        pdf_raw_list = [x[i] for i in range(14)]
-        pdf_raw_list[0] = pdf_ph_t[0]
-        ret = op.concatenate(x)
-        # Concatenating destroys the batch index so we have to regenerate it
-        return op.batchit(ret)
+    def call(self, pdfs):
+        pdf_list = [self.pdf_ph]
+        for i in range(1, self.output_dim):
+            pdf_list.append(pdfs[:,:,i])
+        # all the elements of the list must have the same
+        # shape, i.e. (1, xgrid), so that op.stack returns
+        # a tensor of shape (1, xgrid, 14)     
+        return op.stack(pdf_list, axis=2)
 
 
 class ObsRotation(MetaLayer):
