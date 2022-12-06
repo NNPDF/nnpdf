@@ -70,7 +70,6 @@ class FkRotation(MetaLayer):
 
     def call(self, pdf_raw):
         # Transpose the PDF so that the flavour index is the first one
-        import ipdb; ipdb.set_trace()
         x = op.transpose(pdf_raw)
         pdf_raw_list = [
             0 * x[0],  # photon
