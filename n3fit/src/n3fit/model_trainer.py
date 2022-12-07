@@ -33,7 +33,8 @@ PUSH_POSITIVITY_EACH = 100
 # Each how many epochs do we increase the integrability Lagrange Multiplier
 PUSH_INTEGRABILITY_EACH = 100
 
-InputInfo = namedtuple("InputInfo", ["input_l", "split_l", "input_idx"])
+# See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
+InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
 
 def _pdf_injection(pdf_layers, observables, masks):
     """
@@ -313,6 +314,19 @@ class ModelTrainer:
 
         The necessary information to redistribute the x-grid is held by a ``InputInfo`` tuple
         which is returned by this function.
+
+        Returns
+        ------
+            Instance of ``InputInfo`` containing the input information necessary for the PDF model:
+            - input:
+                backend input layer with an array attached which is a concatenation of the unique
+                inputs of the Model
+                two inputs are the same if and only if they have the same shape, values and order
+            - split:
+                backend layer which splits the aforementioned concatenation back into the separate
+                unique inputs, to be applied after the PDF is called
+            - idx:
+                indices of the observables to which the split PDF must be distributed
         """
         log.info("Generating the input grid")
 
@@ -397,7 +411,7 @@ class ModelTrainer:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
             full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
-                {"pdf_input": xinput.input_l}
+                {"pdf_input": xinput.input}
             )
 
             all_replicas_pdf.append(full_pdf)
@@ -405,10 +419,10 @@ class ModelTrainer:
             # full_model_input_dict in the loop
 
         full_pdf_per_replica = op.stack(all_replicas_pdf, axis=-1)
-        split_pdf_unique = xinput.split_l(full_pdf_per_replica)
+        split_pdf_unique = xinput.split(full_pdf_per_replica)
 
         # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
-        split_pdf = [split_pdf_unique[i] for i in xinput.input_idx]
+        split_pdf = [split_pdf_unique[i] for i in xinput.idx]
         # If we are in a kfolding partition, select which datasets are out
         training_mask = validation_mask = experimental_mask = [None]
         if partition and partition["datasets"]:
