@@ -33,7 +33,6 @@ PUSH_POSITIVITY_EACH = 100
 # Each how many epochs do we increase the integrability Lagrange Multiplier
 PUSH_INTEGRABILITY_EACH = 100
 
-# Create a tuple for the input information
 InputInfo = namedtuple("InputInfo", ["input_l", "split_l", "input_idx"])
 
 def _pdf_injection(pdf_layers, observables, masks):
