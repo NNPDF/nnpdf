@@ -1041,6 +1041,10 @@ class CoreConfig(configparser.Config):
             return t0pdfset
         return None
 
+    def parse_fakepdf(self, name):
+        """PDF set used to generate the t0 covmat."""
+        return self.parse_pdf(name)
+
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
         """ Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
