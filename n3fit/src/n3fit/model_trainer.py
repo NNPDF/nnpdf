@@ -866,11 +866,7 @@ class ModelTrainer:
         
         # compute photon:
         photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
-        photon_array = np.array([])
-        for i in inputs_unique:
-            xgrid = i[0]
-            photon_array = np.append(photon_array, photon.photon_fitting_scale(xgrid))
-        
+        photon_array = np.concatenate([photon.photon_fitting_scale(xgrid[0]) for xgrid in inputs_unique])
         ph_pdf = op.batchit(op.numpy_to_tensor(photon_array))
 
         ### Training loop
