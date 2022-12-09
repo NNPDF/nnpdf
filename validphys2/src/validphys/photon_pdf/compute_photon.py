@@ -15,23 +15,23 @@ import yaml
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replica=0):
         # TODO : for the moment we do the 0-th replica then we change it
-        self.theory = API.theoryid(theoryid = theoryid.id).get_description().copy()
+        self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
-            # theory["nfref"] = None
-            # theory["nf0"] = None
-            # theory["fact_to_ren_scale_ratio"] = 1.
+            # the commented objects should be passed from theory runcard,
+            # however EKO complains that he doesn't find them
+            # self.theory["nfref"] = None
+            # self.theory["nf0"] = None
+            # self.theory["fact_to_ren_scale_ratio"] = 1.
             self.theory["ModSV"] = None
-            # theory["IC"]=0
-            # theory["IB"]=0
+            # self.theory["IC"] = 1
+            # self.theory["IB"] = 0
             self.theory["FNS"] = "VFNS"
             self.q_in = 100
             self.q_in2 = self.q_in ** 2
             self.q_fin = self.theory["Q0"]
             self.theory["Q0"]= self.q_in
             self.qref = self.theory["Qref"]
-            # xir = theory["XIR"]
-            # xif = theory["XIF"]
             self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
             self.couplings = Couplings.from_dict(update_theory(self.theory))
             self.path_to_F2 = fiatlux_runcard["path_to_F2"]
@@ -98,9 +98,10 @@ class Photon:
         
         lux.InsertInelasticSplitQ([4.18, 1e100])
 
-        photon_100GeV = np.array(
-        [lux.EvaluatePhoton(x, self.q_in2).total / x for x in xgrid]
-        )
+        photon_100GeV = np.zeros(len(xgrid))
+        for i, x in enumerate(xgrid):
+            print("computing grid point", i+1, "/", len(xgrid))
+            photon_100GeV[i] = lux.EvaluatePhoton(x, self.q_in2).total / x
         # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
         
         pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
