@@ -1042,7 +1042,7 @@ class CoreConfig(configparser.Config):
         return None
 
     def parse_fakepdf(self, name):
-        """PDF set used to generate the t0 covmat."""
+        """PDF set used to generate the fake data in a closure test."""
         return self.parse_pdf(name)
 
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
