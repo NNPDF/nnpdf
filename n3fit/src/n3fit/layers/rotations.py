@@ -101,17 +101,13 @@ class AddPhoton(MetaLayer):
     """
 
     def __init__(self, pdf_ph, output_dim, **kwargs):
-        # pdf_ph must be a tensor of shape (1, xgrid)
+        # pdf_ph must be a tensor of shape (1, xgrid, 1)
         self.pdf_ph = pdf_ph
         self.output_dim = output_dim
         super().__init__(**kwargs)
     
     def call(self, pdfs):
-        pdf_list = [self.pdf_ph] + [pdfs[:,:,i] for i in range(1,self.output_dim)]
-        # all the elements of the list must have the same
-        # shape, i.e. (1, xgrid), so that op.stack returns
-        # a tensor of shape (1, xgrid, 14)     
-        return op.stack(pdf_list, axis=2)
+        return op.concatenate([self.pdf_ph, pdfs[:,:,1:]], axis=-1)
 
 
 class ObsRotation(MetaLayer):

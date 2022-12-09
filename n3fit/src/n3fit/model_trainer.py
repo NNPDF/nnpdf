@@ -350,7 +350,7 @@ class ModelTrainer:
             op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
         )
 
-        return InputInfo(input_layer, sp_layer, inputs_idx), inputs_unique
+        return InputInfo(input_layer, sp_layer, inputs_idx)
 
     def _model_generation(self, xinput, pdf_models, partition, partition_idx):
         """
@@ -862,12 +862,12 @@ class ModelTrainer:
         exp_models = []
 
         # Generate the grid in x, note this is the same for all partitions
-        xinput, inputs_unique = self._xgrid_generation()
+        xinput = self._xgrid_generation()
         
         # compute photon:
         photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
-        photon_array = np.concatenate([photon.photon_fitting_scale(xgrid[0]) for xgrid in inputs_unique])
-        ph_pdf = op.batchit(op.numpy_to_tensor(photon_array))
+        photon_array = photon.photon_fitting_scale(xinput.input_l.tensor_content[0,:,0])
+        ph_pdf = op.batchit(op.numpy_to_tensor(photon_array[:, np.newaxis]))
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):

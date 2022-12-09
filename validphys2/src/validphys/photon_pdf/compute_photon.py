@@ -20,12 +20,12 @@ class Photon:
         if fiatlux_runcard is not None:
             # the commented objects should be passed from theory runcard,
             # however EKO complains that he doesn't find them
-            # self.theory["nfref"] = None
-            # self.theory["nf0"] = None
-            # self.theory["fact_to_ren_scale_ratio"] = 1.
+            self.theory["nfref"] = None
+            self.theory["nf0"] = None
+            self.theory["fact_to_ren_scale_ratio"] = 1.
             self.theory["ModSV"] = None
-            # self.theory["IC"] = 1
-            # self.theory["IB"] = 0
+            self.theory["IC"] = 1
+            self.theory["IB"] = 0
             self.theory["FNS"] = "VFNS"
             self.q_in = 100
             self.q_in2 = self.q_in ** 2
@@ -36,6 +36,16 @@ class Photon:
             self.couplings = Couplings.from_dict(update_theory(self.theory))
             self.path_to_F2 = fiatlux_runcard["path_to_F2"]
             self.path_to_FL = fiatlux_runcard["path_to_FL"]
+    
+    def exctract_grids(self, xgrids):
+        xgrid_list = []
+        imin = 0
+        for i in range(1, len(xgrids)):
+            if xgrids[i-1] > xgrids[i] :
+                xgrid_list.append(xgrids[imin:i])
+                imin = i
+        xgrid_list.append(xgrids[imin:])
+        return xgrid_list
     
     def F2LO(self, x, Q):
         mcharm = self.theory["mc"]
@@ -61,7 +71,7 @@ class Photon:
     def alpha_em(self, q):
         return self.couplings.a(q**2)[1] * 4 * np.pi
 
-    def photon_fitting_scale(self, xgrid):
+    def photon_fitting_scale(self, xgrids):
         r"""
         Compute the photon PDF for every point in the grid xgrid.
 
@@ -80,7 +90,9 @@ class Photon:
             photon PDF at the scale 1 GeV
         """
         if self.fiatlux_runcard is None :
-            return np.zeros(len(xgrid))
+            return np.zeros(len(xgrids))
+        
+        xgrid_list = self.exctract_grids(xgrids)
         
         # lux = fiatlux.FiatLux(fiatlux_runcard)
         # we have a dict but fiatlux wants a yaml file
@@ -97,58 +109,84 @@ class Photon:
         lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, self.F2LO)
         
         lux.InsertInelasticSplitQ([4.18, 1e100])
-
-        photon_100GeV = np.zeros(len(xgrid))
-        for i, x in enumerate(xgrid):
-            print("computing grid point", i+1, "/", len(xgrid))
-            photon_100GeV[i] = lux.EvaluatePhoton(x, self.q_in2).total / x
-        # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
         
-        pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
-        for j, pid in enumerate(output.rotations.inputpids):
-            if pid == 22 :
-                pdfs[j] = photon_100GeV
-                ph_id = j
-            if not self.qcd_pdfs.hasFlavor(pid):
-                continue
-            pdfs[j] = np.array(
-                [
-                    self.qcd_pdfs.xfxQ2(pid, x, self.q_in2) / x
-                    for x in xgrid
-                ]
+        grid_count = 0
+        photon_list = []
+        for xgrid in xgrid_list :
+            photon_100GeV = np.zeros(len(xgrid))
+            for i, x in enumerate(xgrid):
+                print("computing grid point", grid_count + i+1, "/", len(xgrids))
+                photon_100GeV[i] = lux.EvaluatePhoton(x, self.q_in2).total / x
+            # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
+            grid_count += len(xgrid)
+
+            operator_card = dict(
+                sorted(
+                    dict(
+                        interpolation_xgrid=xgrid.tolist(),
+                        interpolation_polynomial_degree=4,
+                        interpolation_is_log=True,
+                        ev_op_max_order=10,
+                        ev_op_iterations=10,
+                        backward_inversion="expanded",
+                        n_integration_cores=0,
+                        debug_skip_non_singlet=False,
+                        debug_skip_singlet=False,
+                        Q2grid=[self.q_fin**2],
+                        inputgrid=None,
+                        targetgrid=None,
+                        inputpids=None,
+                        targetpids=None,
+                    ).items()
+                )
             )
+
+            # TODO : this EKO should be precomputed and stored since it never changes
+            runner = Runner(self.theory, operator_card)
+            output = runner.get_output()
+            
+            # To be used when the new version of EKO (0.11.1) will be available on conda
+            # pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
+            # for j, pid in enumerate(output.rotations.inputpids):
+            #     if pid == 22 :
+            #         pdfs[j] = photon_100GeV
+            #         ph_id = j
+            #     if not self.qcd_pdfs.hasFlavor(pid):
+            #         continue
+            #     pdfs[j] = np.array(
+            #         [
+            #             self.qcd_pdfs.xfxQ2(pid, x, self.q_in2) / x
+            #             for x in xgrid
+            #         ]
+            #     )
+            
+            pdfs = np.zeros((len(output["inputpids"]), len(output["inputgrid"])))
+            for j, pid in enumerate(output["inputpids"]):
+                if pid == 22 :
+                    pdfs[j] = photon_100GeV
+                    ph_id = j
+                if not self.qcd_pdfs.hasFlavor(pid):
+                    continue
+                pdfs[j] = np.array(
+                    [
+                        self.qcd_pdfs.xfxQ2(pid, x, output["q2_ref"]) / x
+                        for x in output["inputgrid"]
+                    ]
+                )
+            
+            # To be used when the new version of EKO (0.11.1) will be available on conda
+            # for q2, elem in output.items():
+            #     pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
+            #     # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
+
+            for q2, elem in output["Q2grid"].items():
+                pdf_final = np.einsum("ajbk,bk", elem["operators"], pdfs)
+                #error_final = np.einsum("ajbk,bk", elem["operator_errors"], pdfs)
+
+            photon_fitting_scale = pdf_final[ph_id]
+
+            # we want x * gamma(x)
+            photon_list.append( xgrid * photon_fitting_scale )
         
-        operator_card = dict(
-            sorted(
-                dict(
-                    interpolation_xgrid=xgrid.tolist(),
-                    interpolation_polynomial_degree=4,
-                    interpolation_is_log=True,
-                    ev_op_max_order=10,
-                    ev_op_iterations=10,
-                    backward_inversion="expanded",
-                    n_integration_cores=0,
-                    debug_skip_non_singlet=False,
-                    debug_skip_singlet=False,
-                    Q2grid=[self.q_fin**2],
-                    inputgrid=None,
-                    targetgrid=None,
-                    inputpids=None,
-                    targetpids=None,
-                ).items()
-            )
-        )
-
-        # TODO : this EKO should be precomputed and stored since it never changes
-        runner = Runner(self.theory, operator_card)
-        output = runner.get_output()
-        
-        for q2, elem in output.items():
-            pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-            # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
-
-        photon_fitting_scale = pdf_final[ph_id]
-
-        # we want x * gamma(x)
-        return xgrid * photon_fitting_scale
+        return np.concatenate(photon_list)
         
