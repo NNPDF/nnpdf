@@ -639,10 +639,14 @@ def pdfNN_layer_generator(
 
         # Rotation layer, changes from the 8-basis to the 14-basis
         def layer_pdf(x):
-            return layer_photon(layer_evln(layer_fitbasis(x)))
+            return layer_evln(layer_fitbasis(x))
+        
+        # Photon layer, changes the photon from zero to non-zero
+        def apply_photon(x):
+            return layer_photon(layer_pdf(x))
 
         # Final PDF (apply normalization)
-        final_pdf = sumrule_layer(layer_pdf)
+        final_pdf = sumrule_layer(apply_photon)
 
         # Create the model
         pdf_model = MetaModel(
