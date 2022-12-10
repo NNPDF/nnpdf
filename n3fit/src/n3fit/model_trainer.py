@@ -20,7 +20,7 @@ from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
-from validphys.photon_pdf.compute_photon import Photon
+from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
 

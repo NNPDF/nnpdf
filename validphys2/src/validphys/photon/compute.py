@@ -1,7 +1,4 @@
 """Script that calls fiatlux to add the photon PDF."""
-
-# from validphys import lhapdfset
-from validphys.api import API
 import lhapdf
 import fiatlux
 import numpy as np
@@ -38,6 +35,24 @@ class Photon:
             self.path_to_FL = fiatlux_runcard["path_to_FL"]
     
     def exctract_grids(self, xgrids):
+        r"""
+        Extract the subgrids inside xgrids.
+
+        xgrids is the concatenation of different grids, i.e.
+        xgrid = np.array([xmin1, ..., xmax1, xmin2, ...,xmax2, xmin3, ...]).
+        The different grids are extracted and stored in a list:
+        xgrid_list = [np.array([xgrid1]), np.array([xgrid2]), ...]
+
+        Parameters
+        ----------
+        xgrids : nd.array
+            concatenation of the subgrids
+        
+        Returns
+        -------
+        xgrid_list : list
+            list containing the different grids
+        """
         xgrid_list = []
         imin = 0
         for i in range(1, len(xgrids)):
@@ -48,6 +63,21 @@ class Photon:
         return xgrid_list
     
     def F2LO(self, x, Q):
+        r"""
+        Compute the LO DIS structure function F2.
+
+        Parameters
+        ----------
+        x : float
+            Bjorken's variable
+        Q : float
+            DIS hard scale
+        
+        Returns
+        -------
+        F2_LO : float
+            Structure function F2 at LO
+        """
         mcharm = self.theory["mc"]
         mbottom = self.theory["mb"]
         mtop = self.theory["mt"]
@@ -69,6 +99,19 @@ class Photon:
         return res
 
     def alpha_em(self, q):
+        r"""
+        Compute the value of alpha_em.
+
+        Parameters
+        ----------
+        q: float
+            value in which the coupling is computed
+        
+        Returns
+        -------
+        alpha_em: float
+            electromagnetic coupling
+        """
         return self.couplings.a(q**2)[1] * 4 * np.pi
 
     def photon_fitting_scale(self, xgrids):
