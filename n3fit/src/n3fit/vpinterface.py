@@ -78,6 +78,20 @@ class N3LHAPDFSet(LHAPDFSet):
             )
         return self.grid_values([fl], [x]).squeeze()[n]
 
+    def _register_photon(self, xgrid):
+        """If the PDF models contain photons, register the xgrid with them"""
+        try:
+            for m in self._lhapdf_set:
+                pl = m.get_layer("add_photon")
+                pl.register_photon(xgrid)
+                # Recompile the model if necessary
+                # (relies on the caching mechanism inside the add_photon layer)
+                if not pl.built:
+                    m.compile()
+        except ValueError:
+            # There's no photon I guess
+            pass
+
     def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values for the grid
         The output is on the evolution basis.
@@ -102,6 +116,9 @@ class N3LHAPDFSet(LHAPDFSet):
         # Ensures that the input has the shape the model expect, no matter the input
         # as the scaling is done by the model itself
         mod_xgrid = xarr.reshape(1, -1, 1)
+
+        # Try registering the grid with the photon
+        self._register_photon(mod_xgrid)
 
         if replica is None or replica == 0:
             # We need generate output values for all replicas
