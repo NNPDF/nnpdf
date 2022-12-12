@@ -560,6 +560,7 @@ def pdfNN_layer_generator(
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
+    # Photon layer
     layer_photon = AddPhoton(pdf_ph=pdf_ph, input_shape=(out,), output_dim=out)
 
     # Basis rotation
