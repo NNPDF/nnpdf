@@ -73,7 +73,11 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None, photon=None):
     # 3.1 If a photon is given, compute the photon component of the MSR
     photon_c = 0.0
     if photon is not None:
-        photon_c = np.sum(photon(np.linspace(0,1,100)))/100
+        photon_c = np.sum(
+            photon(
+                np.linspace(1e-5,1,100)[np.newaxis,:,np.newaxis]
+            )
+        )/100
 
     # 4. Now create the normalization by selecting the right integrations
     normalizer = MSR_Normalization(mode=mode, photon_contribution=photon_c)

@@ -54,7 +54,7 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0]-1] + self._photon) / y[GLUON_IDX[0][0]]] * len(GLUON_IDX)
+            n_ag = [(1.0 - y[GLUON_IDX[0][0]-1] - self._photon) / y[GLUON_IDX[0][0]]] * len(GLUON_IDX)
             norm_constants += n_ag
 
         if self._vsr_enabled:

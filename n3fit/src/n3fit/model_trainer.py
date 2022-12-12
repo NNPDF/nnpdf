@@ -879,16 +879,14 @@ class ModelTrainer:
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
         
-        # compute photon:
-#         photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
-#         photon_array = photon.photon_fitting_scale(xinput.input_l.tensor_content[0,:,0])
-#         ph_pdf = op.batchit(op.numpy_to_tensor(photon_array[:, np.newaxis]))
+        # Initialize photon class:
+        photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
 
         def photon_computer(x):
             """Receives a grid with shape (1, n_x, 1)
             and returns the photon PDF (1, n_x, 1)
             """
-            return np.zeros_like(x)
+            return photon.photon_fitting_scale(x[0,:,0])[np.newaxis,:,np.newaxis]
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -908,14 +906,14 @@ class ModelTrainer:
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
                 seeds,
-                photon_computer,
+                photon_computer if self.fiatlux_runcard is not None else None,
             )
 
             # Register the fitting grid with the photon layer
             try:
                 for m in pdf_models:
                     pl = m.get_layer("add_photon")
-                    pl.register_photon(xinput.input_l.tensor_content)
+                    pl.register_photon(xinput.input.tensor_content)
             except ValueError:
                 # There's no photon I guess
                 pass
