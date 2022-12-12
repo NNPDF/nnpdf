@@ -879,7 +879,7 @@ class ModelTrainer:
         
         # compute photon:
         photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
-        photon_array = photon.photon_fitting_scale(xinput.input_l.tensor_content[0,:,0])
+        photon_array = photon.photon_fitting_scale(xinput.input.tensor_content[0,:,0])
         ph_pdf = op.batchit(op.numpy_to_tensor(photon_array[:, np.newaxis]))
 
         ### Training loop
