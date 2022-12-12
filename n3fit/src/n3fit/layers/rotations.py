@@ -93,21 +93,31 @@ class FkRotation(MetaLayer):
 
 class AddPhoton(MetaLayer):
     """
-    Changes the value of the photon to non-zero.
+    Changes the value of the photon component of the PDF to non-zero.
+    The photon idx of the PDF is always index 0.
 
-    Both input and output have shape (1, None, 14). However,
-    the input has a photon which is set to zero, while for the
-    output it is set to its real value.
+    In order to avoid bottlenecks, this layer can only compute the photon
+    for a given fixed shape.
+    In order to change the shape it is necessary to rebuild the photon.
     """
 
-    def __init__(self, pdf_ph, output_dim, **kwargs):
-        # pdf_ph must be a tensor of shape (1, xgrid, 1)
-        self.pdf_ph = pdf_ph
-        self.output_dim = output_dim
+    def __init__(self, photon, **kwargs):
+        self._photon_generator = photon
+        self._pdf_ph = None
         super().__init__(**kwargs)
+
+    def register_photon(self, xgrid):
+        """Compute the photon array and set the layer to be rebuilt"""
+        # TODO: maybe add here some caching mechanism so that the photon doesn't get
+        # recomputed if the grid hasn't changed!
+        if self._photon_generator is not None:
+            self._pdf_ph = self._photon_generator(xgrid)
+            self.built = False
     
     def call(self, pdfs):
-        return op.concatenate([self.pdf_ph, pdfs[:,:,1:]], axis=-1)
+        if self._pdf_ph is None:
+            return pdfs
+        return op.concatenate([self._pdf_ph, pdfs[:,:,1:]], axis=-1)
 
 
 class ObsRotation(MetaLayer):

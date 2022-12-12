@@ -16,7 +16,8 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, output_dim=14, mode="ALL", **kwargs):
+    def __init__(self, output_dim=14, mode="ALL", photon_contribution=0.0, **kwargs):
+        self._photon = photon_contribution
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -53,7 +54,7 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0]-1]) / y[GLUON_IDX[0][0]]] * len(GLUON_IDX)
+            n_ag = [(1.0 - y[GLUON_IDX[0][0]-1] + self._photon) / y[GLUON_IDX[0][0]]] * len(GLUON_IDX)
             norm_constants += n_ag
 
         if self._vsr_enabled:

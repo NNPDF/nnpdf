@@ -640,7 +640,7 @@ class ModelTrainer:
         regularizer,
         regularizer_args,
         seed,
-        pdf_ph,
+        photon_computer,
     ):
         """
         Defines the internal variable layer_pdf
@@ -667,6 +667,8 @@ class ModelTrainer:
                 dictionary of arguments for the regularizer
             seed: int
                 seed for the NN
+            photon_computer: function
+                function to compute the photon PDF
         see model_gen.pdfNN_layer_generator for more information
 
         Returns
@@ -692,7 +694,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
-            pdf_ph=pdf_ph,
+            photon_computer=photon_computer,
         )
         return pdf_models
 
@@ -865,9 +867,15 @@ class ModelTrainer:
         xinput = self._xgrid_generation()
         
         # compute photon:
-        photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
-        photon_array = photon.photon_fitting_scale(xinput.input_l.tensor_content[0,:,0])
-        ph_pdf = op.batchit(op.numpy_to_tensor(photon_array[:, np.newaxis]))
+#         photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
+#         photon_array = photon.photon_fitting_scale(xinput.input_l.tensor_content[0,:,0])
+#         ph_pdf = op.batchit(op.numpy_to_tensor(photon_array[:, np.newaxis]))
+
+        def photon_computer(x):
+            """Receives a grid with shape (1, n_x, 1)
+            and returns the photon PDF (1, n_x, 1)
+            """
+            return np.zeros_like(x)
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -887,8 +895,18 @@ class ModelTrainer:
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
                 seeds,
-                ph_pdf,
+                photon_computer,
             )
+
+            # Register the fitting grid with the photon layer
+            try:
+                for m in pdf_models:
+                    pl = m.get_layer("add_photon")
+                    pl.register_photon(xinput.input_l.tensor_content)
+            except ValueError:
+                # There's no photon I guess
+                pass
+
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
