@@ -288,6 +288,11 @@ class CommonData:
     def central_values(self):
         return self.commondata_table["data"]
 
+    def with_central_value(self, cv):
+         tb = self.commondata_table.copy()
+         tb["data"] = cv
+         return dataclasses.replace(self, commondata_table=tb)
+         
     @property
     def stat_errors(self):
         return self.commondata_table["stat"]
