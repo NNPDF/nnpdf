@@ -12,6 +12,9 @@ import pandas as pd
 
 from validphys.core import peek_commondata_metadata
 from validphys.coredata import CommonData
+import logging
+
+log = logging.getLogger(__name__)
 
 def load_commondata(spec):
     """
