@@ -1,0 +1,28 @@
+meta:
+    author: Emanuele R. Nocera
+    title: Asymptotic Exponents
+    keywords: [asy_exp]
+
+pdf: NNPDF40_nnlo_as_01180
+
+Q: 5000 # GeV
+
+x_alpha: 1e-5
+x_beta:  0.90
+npoints: 70
+
+basis: flavour
+
+template_text: |
+  ---
+  title: Asymptotic exponents
+  keywords: [asy_exp]
+  ---
+  Asymptotic exponents
+  -----------
+  {@asymptotic_exponents_table@}
+  -----------
+
+actions_:
+  - report(main=true)
+  

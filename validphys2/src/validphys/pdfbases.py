@@ -519,11 +519,13 @@ evolution = LinearBasis.from_mapping({
     'photon'   : {'photon':1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15'},
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15', 'v15': 'V15',},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
 EVOL = evolution
+
+CCBAR_ASYMM = evolution
 
 PDF4LHC20 = LinearBasis.from_mapping({
         r'\Sigma': {
@@ -618,6 +620,28 @@ r'\bar{d}': {'dbar':1},
 'c': {'c':1},
 })
 
+@scalar_function_transformation(label="u_V")
+def u_valence(func, xmat, qmat):
+    gv = func([2, -2], xmat, qmat)
+    u = gv[:, [0], ...]
+    ubar = gv[:, [1], ...]
+    return u - ubar
+
+@scalar_function_transformation(label="d_V")
+def d_valence(func, xmat, qmat):
+    gv = func([1, -1], xmat, qmat)
+    d = gv[:, [0], ...]
+    dbar = gv[:, [1], ...]
+    return d - dbar
+
+@scalar_function_transformation(label="S")
+def total_sea(func, xmat, qmat):
+    gv = func([3, -2, -1, -3], xmat, qmat)
+    s = gv[:, [0], ...]
+    ubar = gv[:, [1], ...]
+    dbar = gv[:, [2], ...]
+    sbar = gv[:, [3], ...]
+    return 2.*(ubar + dbar) + s + sbar
 
 @scalar_function_transformation(label="u/d")
 def ud_ratio(func, xmat, qmat):
@@ -679,7 +703,15 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
 
     """
     if fitbasis == 'NN31IC':
-        return np.identity(8)
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 'cp': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 'cp': 0, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 1, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'cp': 0, 'g': 0 }
 
     elif fitbasis == 'NN31PC':
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
@@ -690,6 +722,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 'g': 0 }
         cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0}
 
     elif fitbasis == 'FLAVOUR':
         sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
@@ -700,6 +733,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
         cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
         g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
+        v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
 
     elif fitbasis == 'EVOL' or fitbasis == 'evolution':
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
@@ -710,6 +744,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
         cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
 
     elif fitbasis == 'PDF4LHC20':
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
@@ -720,10 +755,21 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
         cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+    
+    elif fitbasis == "CCBAR_ASYMM":
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0, 'v15': 0 }
+        cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0, 'v15': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1, 'v15': 0 }
+        v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 1 }
 
-    flist = [sng, g, v, v3, v8, t3, t8, cp]
+    flist = [sng, g, v, v3, v8, t3, t8, cp, v15]
 
-    evol_basis = False
     mat = []
     for f in flist:
         for flav_dict in flav_info:
@@ -731,6 +777,5 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
             mat.append(f[flav_name])
 
     nflavs = len(flav_info)
-    mat = np.asarray(mat).reshape(8, nflavs)
     # Return the transpose of the matrix, to have the first index referring to flavour
-    return mat.transpose()
+    return np.asarray(mat).reshape(9, nflavs).T

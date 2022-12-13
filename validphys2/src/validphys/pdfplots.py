@@ -89,9 +89,14 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
     def get_ylabel(self, parton_name):
         if self.normalize_to is not None:
-            return "Ratio to {}".format(self.normalize_pdf.label)
-        else:
-            return '$x{}(x)$'.format(parton_name)
+            return f"Ratio to {self.normalize_pdf.label}"
+
+        base_str = f"x{parton_name}(x)"
+        # Ask the xplotting grid if it has something to add:
+        final_str = self.firstgrid.process_label(base_str)
+
+        # Wrap it in latex
+        return f"${final_str}$"
 
     def get_title(self, parton_name):
         return f"${parton_name}$ at {self.Q} GeV"
@@ -212,6 +217,31 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """
     yield from ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
                                  xscale=xscale, normalize_to=normalize_to, ymin=ymin, ymax=ymax)
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
+@_warn_any_pdf_not_montecarlo
+def plot_pdfreplicas_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+):
+    """Plot the kinetic energy of the replicas of the specified PDFs.
+    Otherise it works the same as ``plot_pdfs_kinetic_energy``.
+    """
+    return plot_pdfreplicas(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+    )
 
 
 class UncertaintyPDFPlotter(PDFPlotter):
@@ -524,6 +554,38 @@ def plot_pdfs(
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,
     )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_pdfs_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+):
+    """Band plotting of the "kinetic energy" of the PDF as a function of x for a given value of Q.
+    The input of this function is similar to those of ``plot_pdfs``.
+    """
+    return plot_pdfs(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+    )
+
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
     def get_title(self, parton_name):

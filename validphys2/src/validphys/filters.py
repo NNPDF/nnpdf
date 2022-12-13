@@ -94,21 +94,21 @@ def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
     RandomGenerator.GetRNG().SetSeed(filterseed)
 
 @check_positive('errorsize')
-def filter_closure_data(filter_path, data, t0pdfset, fakenoise, errorsize, prepare_nnpdf_rng):
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, errorsize, prepare_nnpdf_rng):
     """Filter closure data. In addition to cutting data points, the data is
-    generated from an underlying ``t0pdfset``, applying a shift to the data
+    generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
     being shifted away from the underlying law.
 
     """
     log.info('Filtering closure-test data.')
     return _filter_closure_data(
-        filter_path, data, t0pdfset, fakenoise, errorsize)
+        filter_path, data, fakepdf, fakenoise, errorsize)
 
 
 @check_positive("errorsize")
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, t0pdfset, fakenoise, errorsize, prepare_nnpdf_rng,
+    filter_path, experiments_data, fakepdf, fakenoise, errorsize, prepare_nnpdf_rng,
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -120,7 +120,7 @@ def filter_closure_data_by_experiment(
 
     """
     return [
-        _filter_closure_data(filter_path, exp, t0pdfset, fakenoise, errorsize)
+        _filter_closure_data(filter_path, exp, fakepdf, fakenoise, errorsize)
         for exp in experiments_data
     ]
 
@@ -168,11 +168,11 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
+def _filter_closure_data(filter_path, data, fakepdf, fakenoise, errorsize):
     """Filter closure test data."""
     total_data_points = 0
     total_cut_data_points = 0
-    fakeset = fakepdfset.legacy_load()
+    fakeset = fakepdf.legacy_load()
     # Load data, don't cache result
     loaded_data = data.load.__wrapped__(data)
     # generate level 1 shift if fakenoise

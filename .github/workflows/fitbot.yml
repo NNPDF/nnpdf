@@ -10,7 +10,7 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-d3034a7cc-2021-06-11 # reference set for vp
+  REFERENCE_SET: NNBOT-90875c07e-2022-11-30 # reference set for vp
   CONDA_PY: 39
 
 jobs:
@@ -113,11 +113,6 @@ jobs:
                     --thcovmat_if_present
         url=$(vp-upload output/ 2>&1 | grep https)
         echo "REPORT_URL=$url" >> $GITHUB_ENV
-    - name: Save the package if something fails
-      if: failure()
-      shell: bash -l ${0}
-      run: |
-        scp /usr/share/miniconda/envs/test/conda-bld/linux-64/nnpdf*.tar.bz2  nnpdf.fisica.unimi.it:debug_pkgs/
     # write reminder
     - name: Write summary on PR
       uses: unsplash/comment-on-pr@master

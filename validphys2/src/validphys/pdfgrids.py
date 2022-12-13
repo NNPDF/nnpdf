@@ -54,6 +54,7 @@ class XPlottingGrid:
     xgrid: np.ndarray
     grid_values: Stats
     scale: str
+    derivative_degree: int = 0 # keep track of the degree of the derivative
 
     def __post_init__(self):
         """Enforce grid_values being a Stats instance"""
@@ -75,10 +76,52 @@ class XPlottingGrid:
         """Create a copy of the grid with potentially a different set of values"""
         return dataclasses.replace(self, grid_values=grid_values)
 
+    def process_label(self, base_label):
+        """Process the base_label used for plotting.
+        For instance, for derivatives it will add d/dlogx to the base_label.
+        """
+        if self.derivative_degree == 0:
+            return base_label
+
+        dgs = f"^{self.derivative_degree}" if self.derivative_degree > 1 else ""
+        derivative_str = fr"\frac{{d{dgs}}}{{d{dgs}logx}}"
+
+        return f"{derivative_str} {base_label}"
+
+    def derivative(self):
+        """Return the derivative of the grid with respect to dlogx
+        A call to this function will return a new ``XPlottingGrid`` instance with
+        the derivative as grid values and with an increased ``derivative_degree``
+        """
+        new_data = np.gradient(self.grid_values.data, self.xgrid, axis=-1) * self.xgrid
+        gv = self.grid_values.__class__(new_data)
+        nd = self.derivative_degree + 1
+        return dataclasses.replace(self, grid_values=gv, derivative_degree=nd)
+
+
+@dataclasses.dataclass
+class KineticXPlottingGrid(XPlottingGrid):
+    """Kinetic Energy version of the XPlottingGrid"""
+
+    def process_label(self, base_label):
+        """Wraps the base_label inside the kinetic energy formula"""
+        # Ask the parent class for the derivative degree
+        dlabel = super().process_label(base_label)
+        return rf"\sqrt{{ 1 + ({dlabel})^2}}"
+
+    def derivative(self):
+        raise NotImplementedError("""The Kinetic energy does not allow further derivatives""")
+
 
 @make_argcheck(check_basis)
-def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavour',
-                   flavours:(list, tuple, type(None))=None):
+def xplotting_grid(
+    pdf: PDF,
+    Q: (float, int),
+    xgrid=None,
+    basis: (str, Basis) = 'flavour',
+    flavours: (list, tuple, type(None)) = None,
+    derivative: int = 0,
+):
     """Return an object containing the value of the PDF at the specified values
     of x and flavour.
 
@@ -89,6 +132,8 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     If None, the defaults for that basis will be selected.
 
     Q: The PDF scale in GeV.
+
+    derivative (int): how many derivtives of the PDF should be taken (default=0)
     """
     #Make usable outside reportengine
     checked = check_basis(basis, flavours)
@@ -108,11 +153,42 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     stats_gv = pdf.stats_class(gv.reshape(gv.shape[:-1]))
 
     res = XPlottingGrid(Q, basis, flavours, xgrid, stats_gv, scale)
+
+    for _ in range(derivative):
+        res = res.derivative()
+
     return res
 
+@make_argcheck(check_basis)
+def kinetic_xplotting_grid(
+    pdf: PDF,
+    Q: (float, int),
+    xgrid=None,
+    basis: (str, Basis) = 'flavour',
+    flavours: (list, tuple, type(None)) = None,
+):
+    r"""Returns an object containing the value of the kinetic energy of the PDF
+    at the specified values of x and flavour for a given Q.
+    Utilizes ``xplotting_grid``
+    The kinetic energy of the PDF is defined as:
+
+    .. math::
+
+        k = \sqrt{1 + (d/dlogx f)^2}
+    """
+    # Get the pdf derived wrt logx
+    xpg = xplotting_grid(
+        pdf=pdf, Q=Q, xgrid=xgrid, basis=basis, flavours=flavours, derivative=1
+    )
+    # Compute the kinetic energy
+    kinen_rawdata = np.sqrt(1 + xpg.grid_values.data**2)
+    kinen_gv = pdf.stats_class(kinen_rawdata)
+    tmp_grid = xpg.copy_grid(kinen_gv)
+    return KineticXPlottingGrid(**tmp_grid.__dict__)
+
+
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
-
-
+kinetic_xplotting_grids = collect(kinetic_xplotting_grid, ('pdfs',))
 
 
 Lumi2dGrid = namedtuple('Lumi2dGrid', ['y','m','grid_values'])

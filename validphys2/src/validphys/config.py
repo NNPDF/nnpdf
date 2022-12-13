@@ -410,6 +410,12 @@ class CoreConfig(configparser.Config):
             name = dataset["dataset"]
             if not isinstance(name, str):
                 raise ConfigError(f"'dataset' must be a string, not {type(name)}")
+            # Check whether this is an integrability or positivity dataset (in the only way we know?)
+            if name.startswith(("INTEG", "POS")):
+                if name.startswith("INTEG"):
+                    raise ConfigError("Please, use `integdataset` for integrability")
+                if name.startswith("POS"):
+                    raise ConfigError("Please, use `posdataset` for positivity")
         except KeyError:
             raise ConfigError(
                 "'dataset' must be a mapping with " "'dataset' and 'sysnum'"
@@ -707,7 +713,6 @@ class CoreConfig(configparser.Config):
         self,
         theory_covmat_flag=False,
         use_thcovmat_in_fitting=False,
-        use_t0_fitting=True,
     ):
         """
         Produces the correct covmat to be used in fitting_data_dict according
@@ -717,16 +722,9 @@ class CoreConfig(configparser.Config):
         """
         from validphys import covmats
 
-        if use_t0_fitting:
-            if theory_covmat_flag and use_thcovmat_in_fitting:
-                return covmats.dataset_inputs_t0_total_covmat
-            else:
-                return covmats.dataset_inputs_t0_exp_covmat
-        else:
-            if theory_covmat_flag and use_thcovmat_in_fitting:
-                return covmats.dataset_inputs_total_covmat
-            else:
-                return covmats.dataset_inputs_exp_covmat
+        if theory_covmat_flag and use_thcovmat_in_fitting:
+            return covmats.dataset_inputs_t0_total_covmat
+        return covmats.dataset_inputs_t0_exp_covmat
 
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
@@ -734,7 +732,6 @@ class CoreConfig(configparser.Config):
         sep_mult,
         theory_covmat_flag=False,
         use_thcovmat_in_sampling=False,
-        use_t0_sampling=False,
     ):
         """
         Produces the correct covmat to be used in make_replica according
@@ -744,28 +741,16 @@ class CoreConfig(configparser.Config):
         """
         from validphys import covmats
 
-        if use_t0_sampling:
-            if theory_covmat_flag and use_thcovmat_in_sampling:
-                if sep_mult:
-                    return covmats.dataset_inputs_t0_total_covmat_separate
-                else:
-                    return covmats.dataset_inputs_t0_total_covmat
+        if theory_covmat_flag and use_thcovmat_in_sampling:
+            if sep_mult:
+                return covmats.dataset_inputs_total_covmat_separate
             else:
-                if sep_mult:
-                    return covmats.dataset_inputs_t0_exp_covmat_separate
-                else:
-                    return covmats.dataset_inputs_t0_exp_covmat
+                return covmats.dataset_inputs_total_covmat
         else:
-            if theory_covmat_flag and use_thcovmat_in_sampling:
-                if sep_mult:
-                    return covmats.dataset_inputs_total_covmat_separate
-                else:
-                    return covmats.dataset_inputs_total_covmat
+            if sep_mult:
+                return covmats.dataset_inputs_exp_covmat_separate
             else:
-                if sep_mult:
-                    return covmats.dataset_inputs_exp_covmat_separate
-                else:
-                    return covmats.dataset_inputs_exp_covmat
+                return covmats.dataset_inputs_exp_covmat
 
     def produce_loaded_theory_covmat(
         self,
@@ -1045,16 +1030,20 @@ class CoreConfig(configparser.Config):
 
     # TODO: Find a good name for this
     def produce_t0set(
-        self, t0pdfset=None, use_t0_sampling=False, use_t0_fitting=True,
+        self, t0pdfset=None, use_t0=False,
     ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
         """
-        if use_t0_sampling or use_t0_fitting:
+        if use_t0:
             if not t0pdfset:
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
         return None
+
+    def parse_fakepdf(self, name):
+        """PDF set used to generate the fake data in a closure test."""
+        return self.parse_pdf(name)
 
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
         """ Lagrange multiplier constraints are mappings
@@ -1584,24 +1573,29 @@ class CoreConfig(configparser.Config):
         # somebody will want to add to this at some point e.g for th. uncertainties
         allowed = {
             "standard_report": "experiment",
+            "thcovmat_fit": "ALL"
         }
         return allowed[spec]
 
     def produce_processed_data_grouping(
-        self, data_grouping=None, data_grouping_recorded_spec_=None
+        self, use_thcovmat_in_fitting=False, use_thcovmat_in_sampling=False, data_grouping=None, data_grouping_recorded_spec_=None
     ):
         """Process the data_grouping key from the runcard, or lockfile. If
         `data_grouping_recorded_spec_` is present then its value is taken, and
         the runcard is assumed to be a lockfile.
 
-        If data_grouping is None, then fall back to old behaviour of grouping
-        by experiment.
+        If data_grouping is None, then, if either use_thcovmat_in_fitting or use_thcovmat_in_sampling
+        (or both) are true (which means that the fit is a thcovmat fit), group all the datasets 
+        together, otherwise fall back to the default behaviour of grouping by 
+        experiment (called standard_report).
 
         Else, the user can specfiy their own grouping, for example metadata_process.
         """
         if data_grouping is None:
             # fallback to old default behaviour, but still record to lockfile
             data_grouping = self.parse_data_grouping("standard_report")
+            if use_thcovmat_in_fitting or use_thcovmat_in_sampling:
+                data_grouping = self.parse_data_grouping("thcovmat_fit")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
@@ -1652,17 +1646,6 @@ class CoreConfig(configparser.Config):
             {"data_input": NSList(group, nskey="dataset_input"), "group_name": name}
             for name, group in res.items()
         ]
-
-    def produce_group_dataset_inputs_by_fitting_group(
-        self, data_input, theory_covmat_flag
-    ):
-        """
-        Groups datasets all together in a group called ALL if the theory covariance matrix
-        is used in the fit, otherwise it groups them by experiment.
-        """
-        if theory_covmat_flag:
-            return self.produce_group_dataset_inputs_by_metadata(data_input, "ALL")
-        return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
     def produce_fivetheories(self, point_prescription):
         if point_prescription == "5bar point":

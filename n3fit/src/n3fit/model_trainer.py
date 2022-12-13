@@ -9,10 +9,11 @@
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 import logging
+from collections import namedtuple
 from itertools import zip_longest
 import numpy as np
 from scipy.interpolate import PchipInterpolator
-import n3fit.model_gen as model_gen
+from n3fit import model_gen
 from n3fit.backends import MetaModel, clear_backend_state, callbacks
 from n3fit.backends import operations as op
 from n3fit.stopping import Stopping
@@ -32,6 +33,8 @@ PUSH_POSITIVITY_EACH = 100
 # Each how many epochs do we increase the integrability Lagrange Multiplier
 PUSH_INTEGRABILITY_EACH = 100
 
+# See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
+InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
 
 def _pdf_injection(pdf_layers, observables, masks):
     """
@@ -182,7 +185,6 @@ class ModelTrainer:
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
-        self.input_sizes = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -290,7 +292,73 @@ class ModelTrainer:
                 self.training["expdata"].append(integ_dict["expdata"])
                 self.training["integdatasets"].append(integ_dict["name"])
 
-    def _model_generation(self, pdf_models, partition, partition_idx):
+    def _xgrid_generation(self):
+        """
+        Generates the full x-grid pertaining to the complete set of observables to be fitted.
+
+        To first approximation, the full x-grid is a concatenation of all x-grid requested by
+        all fk-tables.
+
+        In the case of pineappl models all fktables ask for the same grid in x
+        and so the input can be simplified to be a single grid for all (or most) datasets.
+        However, this is not a _strict_ requirement for pineappl and was not a requirement before
+        so the solution below must be kept general enough.
+
+        Detailed implementation of the union of xgrids:
+            let's assume an input [x1, x1, x1, x2, x2, x3]
+            where each xi is a different grid, this will be broken into two lists:
+            [x1, x2, x3] (unique grids) and [0,0,0,1,1,2] (index of the grid per dataset)
+            The pdf will then be evaluated to concatenate([x1,x2,x3]) and then split (x1, x2, x3)
+            Then each of the experiment, looking at the indexes, will receive one of the 3 PDFs
+            The decision whether two grids (x1 and x1) are really the same is decided below
+
+        The necessary information to redistribute the x-grid is held by a ``InputInfo`` tuple
+        which is returned by this function.
+
+        Returns
+        ------
+            Instance of ``InputInfo`` containing the input information necessary for the PDF model:
+            - input:
+                backend input layer with an array attached which is a concatenation of the unique
+                inputs of the Model
+                two inputs are the same if and only if they have the same shape, values and order
+            - split:
+                backend layer which splits the aforementioned concatenation back into the separate
+                unique inputs, to be applied after the PDF is called
+            - idx:
+                indices of the observables to which the split PDF must be distributed
+        """
+        log.info("Generating the input grid")
+
+        inputs_unique = []
+        inputs_idx = []
+        for igrid in self.input_list:
+            for idx, arr in enumerate(inputs_unique):
+                if igrid.size == arr.size and np.allclose(igrid, arr):
+                    inputs_idx.append(idx)
+                    break
+            else:
+                inputs_idx.append(len(inputs_unique))
+                inputs_unique.append(igrid)
+
+        # Concatenate the unique inputs
+        input_arr = np.concatenate(inputs_unique, axis=1).T
+        if self._scaler:
+            # Apply feature scaling if given
+            input_arr = self._scaler(input_arr)
+        input_layer = op.numpy_to_input(input_arr)
+
+        # The PDF model will be called with a concatenation of all inputs
+        # now the output needs to be splitted so that each experiment takes its corresponding input
+        sp_ar = [[i.shape[1] for i in inputs_unique]]
+        sp_kw = {"axis": 1}
+        sp_layer = op.as_layer(
+            op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
+        )
+
+        return InputInfo(input_layer, sp_layer, inputs_idx)
+
+    def _model_generation(self, xinput, pdf_models, partition, partition_idx):
         """
         Fills the three dictionaries (``training``, ``validation``, ``experimental``)
         with the ``model`` entry
@@ -299,7 +367,7 @@ class ModelTrainer:
         as they are never trained, but this is needed by some backends
         in order to run evaluate on them.
 
-        Before entering this function the dictionaries contain a list of inputs
+        Before entering this function we have the input of the model
         and a list of outputs, but they are not connected.
         This function connects inputs with outputs by injecting the PDF.
         At this point we have a PDF model that takes an input (1, None, 1)
@@ -312,13 +380,21 @@ class ModelTrainer:
         and output (1, masked_ndata) where masked_ndata can be the training/validation
         or the experimental mask (in which cased masked_ndata == ndata).
         Several models can be fitted at once by passing a list of models with a shared input
-        this function will give the same input to every model and will concatenate the output at the end
-        so that the final output of the model is (1, None, 14, n) (with n=number of parallel models)
+        so that every mode receives the same input and the output will be concatenated at the end
+        the final output of the model is then (1, None, 14, n) (with n=number of parallel models).
 
         Parameters
         ----------
+            xinput: InputInfo
+                a tuple containing the input layer (with all values of x), and the information
+                (in the form of a splitting layer and a list of indices) to distribute
+                the results of the PDF (PDF(xgrid)) among the different observables
             pdf_models: list(n3fit.backend.MetaModel)
                 a list of models that produce PDF values
+            partition: dict
+                Only active during k-folding, information about the partition to be fitted
+            partition_idx: int
+                Index of the partition
 
         Returns
         -------
@@ -327,35 +403,26 @@ class ModelTrainer:
         """
         log.info("Generating the Model")
 
-        # Construct the input array that will be given to the pdf
-        input_arr = np.concatenate(self.input_list, axis=1).T
-        if self._scaler:
-            # Apply feature scaling if given
-            input_arr = self._scaler(input_arr)
-        input_layer = op.numpy_to_input(input_arr)
-
-        # The trainable part of the n3fit framework is a concatenation of all PDF models
-        # each model, in the NNPDF language, corresponds to a different replica
+        # For multireplica fits:
+        #   The trainable part of the n3fit framework is a concatenation of all PDF models
+        #   each model, in the NNPDF language, corresponds to a different replica
         all_replicas_pdf = []
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer([input_layer])
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
+                {"pdf_input": xinput.input}
+            )
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
             # full_model_input_dict in the loop
 
         full_pdf_per_replica = op.stack(all_replicas_pdf, axis=-1)
+        split_pdf_unique = xinput.split(full_pdf_per_replica)
 
-        # The input layer was a concatenation of all experiments
-        # the output of the pdf on input_layer will be thus a concatenation
-        # we need now to split the output on a different array per experiment
-        sp_ar = [self.input_sizes]
-        sp_kw = {"axis": 1}
-        splitting_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
-        splitted_pdf = splitting_layer(full_pdf_per_replica)
-
+        # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
+        split_pdf = [split_pdf_unique[i] for i in xinput.idx]
         # If we are in a kfolding partition, select which datasets are out
         training_mask = validation_mask = experimental_mask = [None]
         if partition and partition["datasets"]:
@@ -369,15 +436,14 @@ class ModelTrainer:
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
-
-        output_tr = _pdf_injection(splitted_pdf, self.training["output"], training_mask)
+        output_tr = _pdf_injection(split_pdf, self.training["output"], training_mask)
         training = MetaModel(full_model_input_dict, output_tr)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
         # so we must only use the corresponding subset of PDF functions
         val_pdfs = []
         exp_pdfs = []
-        for partial_pdf, obs in zip(splitted_pdf, self.training["output"]):
+        for partial_pdf, obs in zip(split_pdf, self.training["output"]):
             if not obs.positivity and not obs.integrability:
                 val_pdfs.append(partial_pdf)
                 exp_pdfs.append(partial_pdf)
@@ -412,7 +478,6 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
-        self.input_sizes = []
         for key in ["output", "posmultipliers", "integmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
@@ -467,8 +532,7 @@ class ModelTrainer:
             exp_layer = model_gen.observable_generator(exp_dict)
 
             # Save the input(s) corresponding to this experiment
-            self.input_list += exp_layer["inputs"]
-            self.input_sizes.append(exp_layer["experiment_xsize"])
+            self.input_list.append(exp_layer["inputs"])
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -489,8 +553,7 @@ class ModelTrainer:
 
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
-            self.input_list += pos_layer["inputs"]
-            self.input_sizes.append(pos_layer["experiment_xsize"])
+            self.input_list.append(pos_layer["inputs"])
 
             # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
@@ -516,8 +579,7 @@ class ModelTrainer:
                     integ_dict, positivity_initial=integ_initial, integrability=True
                 )
                 # The input list is still common
-                self.input_list += integ_layer["inputs"]
-                self.input_sizes.append(integ_layer["experiment_xsize"])
+                self.input_list.append(integ_layer["inputs"])
 
                 # The integrability all falls to the training
                 self.training["output"].append(integ_layer["output_tr"])
@@ -803,6 +865,9 @@ class ModelTrainer:
         n3pdfs = []
         exp_models = []
 
+        # Generate the grid in x, note this is the same for all partitions
+        xinput = self._xgrid_generation()
+
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
@@ -825,7 +890,7 @@ class ModelTrainer:
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(pdf_models, partition, k)
+            models = self._model_generation(xinput, pdf_models, partition, k)
 
             # Only after model generation, apply possible weight file
             if self.model_file:

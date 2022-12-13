@@ -105,12 +105,12 @@ class N3LHAPDFSet(LHAPDFSet):
 
         if replica is None or replica == 0:
             # We need generate output values for all replicas
-            result = np.concatenate([m.predict([mod_xgrid]) for m in self._lhapdf_set], axis=0)
+            result = np.concatenate([m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0)
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
         else:
-            result = self._lhapdf_set[replica - 1].predict([mod_xgrid])
+            result = self._lhapdf_set[replica - 1].predict({"pdf_input": mod_xgrid})
 
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
@@ -274,12 +274,12 @@ def integrability_numbers(n3pdf, q0=1.65, flavours=None):
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF
+    >>> from n3fit.vpinterface import N3PDF, integrability_numbers
     >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model)
-    >>> res = n3pdf.integrability_numbers()
+    >>> res = integrability_numbers(n3pdf)
     """
     if flavours is None:
         flavours = ["V", "T3", "V3", "T8", "V8"]
@@ -304,12 +304,12 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF
+    >>> from n3fit.vpinterface import N3PDF, compute_arclength
     >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model)
-    >>> res = n3pdf.compute_arclength()
+    >>> res = compute_arclength(n3pdf)
     """
     if flavours is None:
         flavours = ["sigma", "gluon", "V", "V3", "V8"]
