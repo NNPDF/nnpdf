@@ -8,6 +8,7 @@ This is used to benchmark the correctness of the pseudodata
 recreation.
 """
 import pandas as pd
+import numpy as np
 import pytest
 
 from validphys.api import API
@@ -80,3 +81,22 @@ def test_read_matches_recreate():
         )
         pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
         pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
+
+
+def test_make_level0_data():
+    from validphys.loader import Loader
+    from validphys.covmats import dataset_t0_predictions
+    dataset='NMC'
+    pdfname='NNPDF40_nnlo_as_01180'
+    theoryid=200
+
+    l=Loader()
+    datasetspec = l.check_dataset(dataset,theoryid=theoryid)
+    t0set = l.check_pdf(pdfname)
+
+    l0_cd = API.make_level0_data(dataset_inputs = [{"dataset":dataset}], 
+                                use_cuts="internal", theoryid=theoryid, fakepdf = pdfname)
+
+    l0_vals = l0_cd[0].central_values
+
+    assert(np.abs(np.sum(dataset_t0_predictions(dataset = datasetspec, t0set = t0set) / l0_vals) / len(l0_vals) - 1) <= 1e-15)
