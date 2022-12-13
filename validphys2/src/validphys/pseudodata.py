@@ -236,7 +236,132 @@ def indexed_make_replica(groups_index, make_replica):
 
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
+def make_level0_data(data,fakepdf):
+    """
+    GENERAL DESCRIPTION:
 
+    Given a validphys.core.DataGroupSpec object, load commondata and 
+    generate a new commondata instance with central values replaced
+    by fakepdf prediction 
+
+    Parameters
+    ----------
+
+    data : validphys.core.DataGroupSpec 
+    
+    fakepdf: validphys.core.PDF
+
+    Returns
+    -------
+    list
+        list of validphys.coredata.CommonData instances corresponding to
+        all datasets within one experiment. The central value is replaced 
+        by Level 0 fake data.
+
+    Example
+    -------
+    >>> from validphys.api import API
+    >>> API.make_level0_data(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
+    
+    [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
+    """
+    level0_commondata_instances_wc = []
+
+    #==== Load validphys.coredata.CommonData instance with cuts ====#
+    
+    for j, dataset in enumerate(data.datasets):
+        if dataset.cuts is None:
+            commondata_wc = dataset.commondata.load_commondata_instance()
+        else:
+            cuts = dataset.cuts.load()
+            commondata_wc = dataset.commondata.load_commondata_instance().with_cuts(cuts)
+        
+    
+        #== Generate a new CommonData instance with central value given by Level 0 data generated with fakepdf ==#
+        from validphys.covmats import dataset_t0_predictions
+        t0_prediction = dataset_t0_predictions(dataset=dataset, t0set=fakepdf)  # N.B. cuts already applied to th. pred.
+        level0_commondata_instances_wc.append(commondata_wc.with_central_value(t0_prediction))
+
+    return level0_commondata_instances_wc
+
+
+
+def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed):
+    """
+    GENERAL DESCRIPTION:
+
+    Given 
+
+
+    Parameters
+    ----------
+
+    data : validphys.core.DataGroupSpec 
+
+    commondata_wc : list
+                    list of validphys.coredata.CommonData instances corresponding to
+                    all datasets within one experiment. Cuts already applied.
+                
+    level0_commondata_wc : list
+                        list of validphys.coredata.CommonData instances corresponding to
+                        all datasets within one experiment. The central value is replaced 
+                        by Level 0 fake data. Cuts already applied.
+                    
+    filterseed: int
+                random seed used for the generation of Level 1 data
+    
+
+    Returns
+    -------
+    list
+        list of validphys.coredata.CommonData instances corresponding to
+        all datasets within one experiment. The central value is replaced 
+        by Level 1 fake data.
+
+    Example
+    -------
+    
+    >>> from validphys.api import API
+    >>> from validphys.loader import Loader
+    >>> dataset='NMC'
+    >>> l=Loader()
+    >>> cuts = l.check_dataset(dataset,theoryid=200).cuts.load()
+    >>> cd = l.check_commondata(dataset).load_commondata_instance().with_cuts(cuts)
+    >>> l0_cd = API.make_level0_data(dataset_inputs = [{"dataset":dataset}],use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
+    >>> l1_cd = API.make_level1_data(level0_commondata_wc=l0_cd, commondata_wc=[cd], dataset_inputs = [{"dataset":dataset}], use_cuts="internal",filterseed=1, theoryid=200)
+    >>> l1_cd
+    [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
+    """
+
+    #=============== generate experimental covariance matrix ===============#
+    from validphys.covmats import dataset_inputs_covmat_from_systematics
+    dataset_input_list = list(data.dsinputs)
+
+    covmat = dataset_inputs_covmat_from_systematics(commondata_wc, dataset_input_list,
+                                use_weights_in_covmat=False, norm_threshold=None,
+                                _list_of_central_values=None, _only_additive=False,)
+
+    #================== generation of pseudo data ======================#
+    from validphys.pseudodata import indexed_make_replica, make_replica
+    from validphys.results import groups_index
+    #= generate pseudo data starting from theory predictions
+    level1_data = make_replica(level0_commondata_wc, filterseed, covmat, 
+                            sep_mult=False, genrep=True)
+
+    group_index = groups_index([data]) # already set cuts
+
+    indexed_level1_data = indexed_make_replica(group_index, level1_data)
+    
+    #===== create commondata instances with central values given by pseudo_data =====#
+    level1_commondata_dict = {c.setname:c for c in level0_commondata_wc}
+    level1_commondata_instances_wc = []
+
+    for xx, grp in indexed_level1_data.groupby('dataset'):
+        level1_commondata_instances_wc.append(
+            level1_commondata_dict[xx].with_central_value(grp.values))
+
+    return level1_commondata_instances_wc
+    
 _group_recreate_pseudodata = collect('indexed_make_replica', ('group_dataset_inputs_by_experiment',))
 _recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
 _recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))
