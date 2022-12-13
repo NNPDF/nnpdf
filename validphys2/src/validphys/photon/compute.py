@@ -8,6 +8,7 @@ from eko.runner import Runner
 from .structure_functions import StructureFunction
 
 import yaml
+from os import remove
 
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replica=0):
@@ -15,24 +16,44 @@ class Photon:
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
-            # the commented objects should be passed from theory runcard,
-            # however EKO complains that he doesn't find them
-            self.theory["nfref"] = None
+            self.theory["nfref"] = 5
             self.theory["nf0"] = None
             self.theory["fact_to_ren_scale_ratio"] = 1.
             self.theory["ModSV"] = None
-            self.theory["IC"] = 1
             self.theory["IB"] = 0
             self.theory["FNS"] = "VFNS"
+            self.theory["QED"] = 2
+            self.theory["ModEv"] = "EXA"
+            self.theory["alphaem_running"] = True
             self.q_in = 100
             self.q_in2 = self.q_in ** 2
             self.q_fin = self.theory["Q0"]
             self.theory["Q0"]= self.q_in
             self.qref = self.theory["Qref"]
+            
+            theory_coupling = update_theory(self.theory)
+            theory_coupling["ModEv"] = "TRN"
+            self.couplings = Couplings.from_dict(theory_coupling)
+
             self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
-            self.couplings = Couplings.from_dict(update_theory(self.theory))
-            self.path_to_F2 = fiatlux_runcard["path_to_F2"]
-            self.path_to_FL = fiatlux_runcard["path_to_FL"]
+            path_to_F2 = fiatlux_runcard["path_to_F2"]
+            path_to_FL = fiatlux_runcard["path_to_FL"]
+            f2 = StructureFunction(path_to_F2, self.qcd_pdfs)
+            fl = StructureFunction(path_to_FL, self.qcd_pdfs)
+
+            # lux = fiatlux.FiatLux(fiatlux_runcard)
+            # we have a dict but fiatlux wants a yaml file
+            # TODO : remove this dirty trick
+            ff = open('fiatlux_runcard.yml', 'w+')
+            yaml.dump(self.fiatlux_runcard, ff)
+            self.lux = fiatlux.FiatLux('fiatlux_runcard.yml')
+            remove('fiatlux_runcard.yml')
+            self.lux.PlugAlphaQED(self.alpha_em, self.qref)            
+            self.lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, self.F2LO)
+            self.lux.InsertInelasticSplitQ([4.18, 1e100])
+
+            self.cache = {}
+
     
     def exctract_grids(self, xgrids):
         r"""
@@ -131,27 +152,8 @@ class Photon:
         -------
         photon_fitting_scale: numpy.array
             photon PDF at the scale 1 GeV
-        """
-        if self.fiatlux_runcard is None :
-            return np.zeros(len(xgrids))
-        
+        """        
         xgrid_list = self.exctract_grids(xgrids)
-        
-        # lux = fiatlux.FiatLux(fiatlux_runcard)
-        # we have a dict but fiatlux wants a yaml file
-        # TODO : remove this trick
-        ff = open('fiatlux_runcard.yml', 'w+')
-        yaml.dump(self.fiatlux_runcard, ff)
-
-        lux = fiatlux.FiatLux('fiatlux_runcard.yml')
-        lux.PlugAlphaQED(self.alpha_em, self.qref)
-
-        f2 = StructureFunction(self.path_to_F2, self.qcd_pdfs)
-        fl = StructureFunction(self.path_to_FL, self.qcd_pdfs)
-        
-        lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, self.F2LO)
-        
-        lux.InsertInelasticSplitQ([4.18, 1e100])
         
         grid_count = 0
         photon_list = []
@@ -159,8 +161,7 @@ class Photon:
             photon_100GeV = np.zeros(len(xgrid))
             for i, x in enumerate(xgrid):
                 print("computing grid point", grid_count + i+1, "/", len(xgrids))
-                photon_100GeV[i] = lux.EvaluatePhoton(x, self.q_in2).total / x
-            # TODO: fiatlux returns gamma(x) or x*gamma(x) ?
+                photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
             grid_count += len(xgrid)
 
             operator_card = dict(
@@ -188,23 +189,8 @@ class Photon:
             runner = Runner(self.theory, operator_card)
             output = runner.get_output()
             
-            # To be used when the new version of EKO (0.11.1) will be available on conda
-            # pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
-            # for j, pid in enumerate(output.rotations.inputpids):
-            #     if pid == 22 :
-            #         pdfs[j] = photon_100GeV
-            #         ph_id = j
-            #     if not self.qcd_pdfs.hasFlavor(pid):
-            #         continue
-            #     pdfs[j] = np.array(
-            #         [
-            #             self.qcd_pdfs.xfxQ2(pid, x, self.q_in2) / x
-            #             for x in xgrid
-            #         ]
-            #     )
-            
-            pdfs = np.zeros((len(output["inputpids"]), len(output["inputgrid"])))
-            for j, pid in enumerate(output["inputpids"]):
+            pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
+            for j, pid in enumerate(output.rotations.inputpids):
                 if pid == 22 :
                     pdfs[j] = photon_100GeV
                     ph_id = j
@@ -212,19 +198,14 @@ class Photon:
                     continue
                 pdfs[j] = np.array(
                     [
-                        self.qcd_pdfs.xfxQ2(pid, x, output["q2_ref"]) / x
-                        for x in output["inputgrid"]
+                        self.qcd_pdfs.xfxQ2(pid, x, self.q_in2) / x
+                        for x in xgrid
                     ]
                 )
             
-            # To be used when the new version of EKO (0.11.1) will be available on conda
-            # for q2, elem in output.items():
-            #     pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-            #     # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
-
-            for q2, elem in output["Q2grid"].items():
-                pdf_final = np.einsum("ajbk,bk", elem["operators"], pdfs)
-                #error_final = np.einsum("ajbk,bk", elem["operator_errors"], pdfs)
+            for q2, elem in output.items():
+                pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
+                # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
             photon_fitting_scale = pdf_final[ph_id]
 
