@@ -509,6 +509,7 @@ evolution = LinearBasis.from_mapping({
 EVOL = evolution
 
 CCBAR_ASYMM = evolution
+CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')
 
 PDF4LHC20 = LinearBasis.from_mapping({
         r'\Sigma': {
