@@ -316,6 +316,13 @@ class CommonDataSpec(TupleComp):
         #TODO: Use better path handling in python 3.6
         return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
 
+    def load_commondata_instance(self):
+        """
+        load a validphys.core.CommonDataSpec to validphys.core.CommonData
+        """
+        from validphys.commondataparser import load_commondata
+        return load_commondata(self)
+        
     @property
     def plot_kinlabels(self):
         return get_plot_kinlabels(self)
