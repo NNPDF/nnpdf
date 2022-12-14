@@ -13,7 +13,6 @@ from os import remove
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replica=0):
         # TODO : for the moment we do the 0-th replica then we change it
-        print("+++++++++++++++++SDIGHEDE SDAGHEDE+++++++++++++++++")
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
@@ -215,6 +214,6 @@ class Photon:
 
             # we want x * gamma(x)
             photon_list.append( xgrid * photon_fitting_scale )
-        import ipdb; ipdb.set_trace()        
+       
         return np.concatenate(photon_list)
         
