@@ -87,7 +87,7 @@ def test_make_level0_data():
     
     dataset='NMC'
     pdfname='NNPDF40_nnlo_as_01180'
-    theoryid=200
+    theoryid=162
 
     l0_cd = API.make_level0_data(dataset_inputs = [{"dataset":dataset}], 
                                 use_cuts="internal", theoryid=theoryid, fakepdf = pdfname)
@@ -136,4 +136,8 @@ def test_make_level0_data():
        0.15822622, 0.13056665, 0.12244491, 0.11192735])
     
 
+<<<<<<< HEAD
     assert(np.abs(np.sum(t0_pred / l0_vals) / len(l0_vals) - 1) <= 1e-9)
+=======
+    assert(np.abs(np.sum(dataset_t0_predictions(dataset = datasetspec, t0set = t0set) / l0_vals) / len(l0_vals) - 1) <= 1e-12)
+>>>>>>> tmp
