@@ -4,7 +4,9 @@ import fiatlux
 import numpy as np
 from eko.couplings import Couplings
 from eko.compatibility import update_theory
-from eko.runner import Runner
+from eko.output.legacy import load_tar
+from eko.interpolation import XGrid
+from eko.output.manipulate import xgrid_reshape
 from .structure_functions import StructureFunction
 
 import yaml
@@ -16,23 +18,13 @@ class Photon:
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
-            self.theory["nfref"] = 5
-            self.theory["nf0"] = None
-            self.theory["fact_to_ren_scale_ratio"] = 1.
-            self.theory["ModSV"] = None
-            self.theory["IB"] = 0
-            self.theory["FNS"] = "VFNS"
-            self.theory["QED"] = 2
-            self.theory["ModEv"] = "EXA"
-            self.theory["alphaem_running"] = True
-            self.q_in = 100
-            self.q_in2 = self.q_in ** 2
-            self.q_fin = self.theory["Q0"]
-            self.theory["Q0"]= self.q_in
             self.qref = self.theory["Qref"]
-            
+            self.q_in2 = 100**2
             theory_coupling = update_theory(self.theory)
             theory_coupling["ModEv"] = "TRN"
+            theory_coupling["alphaem_running"] = True
+            theory_coupling["nfref"] = 5
+            theory_coupling['fact_to_ren_scale_ratio'] = 1.
             self.couplings = Couplings.from_dict(theory_coupling)
 
             self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
@@ -99,15 +91,15 @@ class Photon:
         F2_LO : float
             Structure function F2 at LO
         """
-        mcharm = self.theory["mc"]
-        mbottom = self.theory["mb"]
-        mtop = self.theory["mt"]
+        thres_charm = self.theory["Qmc"]
+        thres_bottom = self.theory["Qmb"]
+        thres_top = self.theory["Qmt"]
         # at LO we use ZM-VFS
-        if Q < mcharm :
+        if Q < thres_charm :
             hq = 3
-        elif Q < mbottom :
+        elif Q < thres_bottom :
             hq = 4
-        elif Q < mtop :
+        elif Q < thres_top :
             hq = 5
         else :
             hq = 6
@@ -148,7 +140,7 @@ class Photon:
         -------
         photon_fitting_scale: numpy.array
             photon PDF at the scale 1 GeV
-        """        
+        """
         xgrid_list = self.exctract_grids(xgrids)
         
         grid_count = 0
@@ -167,33 +159,11 @@ class Photon:
                     self.cache[x] = photon_100GeV[i]
             grid_count += len(xgrid)
 
-            operator_card = dict(
-                sorted(
-                    dict(
-                        interpolation_xgrid=xgrid.tolist(),
-                        interpolation_polynomial_degree=4,
-                        interpolation_is_log=True,
-                        ev_op_max_order=10,
-                        ev_op_iterations=10,
-                        backward_inversion="expanded",
-                        n_integration_cores=0,
-                        debug_skip_non_singlet=False,
-                        debug_skip_singlet=False,
-                        Q2grid=[self.q_fin**2],
-                        inputgrid=None,
-                        targetgrid=None,
-                        inputpids=None,
-                        targetpids=None,
-                    ).items()
-                )
-            )
-
-            # TODO : this EKO should be precomputed and stored since it never changes
-            runner = Runner(self.theory, operator_card)
-            output = runner.get_output()
+            eko=load_tar(self.fiatlux_runcard['path_to_eko'])
+            xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
             
-            pdfs = np.zeros((len(output.rotations.inputpids), len(xgrid)))
-            for j, pid in enumerate(output.rotations.inputpids):
+            pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
+            for j, pid in enumerate(eko.rotations.inputpids):
                 if pid == 22 :
                     pdfs[j] = photon_100GeV
                     ph_id = j
@@ -206,7 +176,7 @@ class Photon:
                     ]
                 )
             
-            for q2, elem in output.items():
+            for q2, elem in eko.items():
                 pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
                 # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
