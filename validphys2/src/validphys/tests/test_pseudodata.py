@@ -88,7 +88,7 @@ def test_make_level0_data():
     from validphys.covmats import dataset_t0_predictions
     dataset='NMC'
     pdfname='NNPDF40_nnlo_as_01180'
-    theoryid=200
+    theoryid=162
 
     l=Loader()
     datasetspec = l.check_dataset(dataset,theoryid=theoryid)
@@ -99,4 +99,4 @@ def test_make_level0_data():
 
     l0_vals = l0_cd[0].central_values
 
-    assert(np.abs(np.sum(dataset_t0_predictions(dataset = datasetspec, t0set = t0set) / l0_vals) / len(l0_vals) - 1) <= 1e-15)
+    assert(np.abs(np.sum(dataset_t0_predictions(dataset = datasetspec, t0set = t0set) / l0_vals) / len(l0_vals) - 1) <= 1e-12)
