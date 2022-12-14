@@ -3,7 +3,6 @@
 """
 import logging
 import numpy as np
-from scipy.special import lambertw
 from scipy.integrate import trapezoid
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
@@ -75,20 +74,9 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None, photon=None):
     # 3.1 If a photon is given, compute the photon component of the MSR
     photon_c = 0.0
     if photon is not None:
-
-        def make_lambert_grid(n_pts, x_min, x_max):
-            def direct_relation(x):
-                return 5 * (1 - x) - np.log(x)
-            def inverse_relation(y):
-                return np.real(1 / 5 * lambertw(5 * np.exp(5 - y)))
-            y_min = direct_relation(x_min)
-            y_max = direct_relation(x_max)
-            return np.array([inverse_relation(y) for y in np.linspace(y_min, y_max, n_pts)])
-        
-        xgrid_ph = make_lambert_grid(100, 1e-6, 1)
-        photon_array = photon(xgrid_ph[np.newaxis,:,np.newaxis])[0,:,0]
-        # numerically integrate with the trapeizodal rule
-        photon_c = trapezoid(photon_array, xgrid_ph)
+        xgrid_ph, wgt = gen_integration_input(100)
+        photon_array = photon(np.expand_dims(xgrid_ph, axis=0))[0]
+        photon_c = np.sum(photon_array * wgt)
 
     # 4. Now create the normalization by selecting the right integrations
     normalizer = MSR_Normalization(mode=mode, photon_contribution=photon_c)
