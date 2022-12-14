@@ -19,7 +19,7 @@ from copy import copy
 from functools import cached_property
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict
 
 import pandas as pd
 from reportengine.compat import yaml
@@ -53,8 +53,9 @@ def ValidOperation(op_str: str) -> str:
 
 
 # Auxiliary objects
+
 @dataclass
-class ApfelComb:
+class ValidApfelComb:
     """Some of the grids might have been converted from apfelcomb and introduce hacks.
     These are the allowed hacks:
         - repetition_flag:
@@ -72,11 +73,6 @@ class ApfelComb:
     normalization: Optional[dict] = None
     shifts: Optional[dict] = None
 
-    @classmethod
-    def parser(cls, meta: dict):
-        return parse_input(meta, cls)
-
-ValidApfelComb = Parser(ApfelComb.parser)
 
 @dataclass
 class TheoryMeta:
@@ -106,47 +102,32 @@ class TheoryMeta:
             meta["FK_tables"] = meta.pop("operands")
         return parse_input(meta, cls)
 
+ValidTheory = Parser(TheoryMeta.parser)
 
 @dataclass
-class KinematicsMeta:
+class ValidKinematics:
     """Contains all metadata for the kinematics of the dataset"""
 
     file: ValidPath
     variables: dict
 
-    @classmethod
-    def parser(cls, meta: dict):
-        return parse_input(meta, cls)
-
 
 @dataclass
-class ReferenceMeta:
+class ValidReference:
     """Holds literature information for the dataset"""
-
     url: str
     version: int = 0
     tables: list[int] = field(default_factory=list)
-
-    @classmethod
-    def parser(cls, meta: dict):
-        return parse_input(meta, cls)
 
 
 @dataclass
 class Variant:
     """Defines the keys of the CommonMetaData that can be overwritten"""
-
     data_uncertainties: list[ValidPath]
 
 
-# Define parsers for the more complicated structures
-ValidTheory = Parser(TheoryMeta.parser)
-ValidReference = Parser(ReferenceMeta.parser)
-ValidKinematics = Parser(KinematicsMeta.parser)
-
-
 @Parser
-def ValidVariants(variant_dict: dict) -> dict:
+def ValidVariants(variant_dict: dict) -> Dict[str, Variant]:
     """Variants of a dataset are allowed to overwrite a subset of the keys of a dataset
     (those defined in the Variant dataclass).
     This wrapper class runs over the dictionary of variant and parses them into valid Variants
@@ -178,8 +159,8 @@ class CommonMetaData:
     _enabled_variant: list[str] = field(default=None, repr=False)
     _default: dict = field(default=None, repr=False)
 
-    # TODO: these methods will be moved to the main CommonData class
-    # as any change of variant should trigger a reload of the commondata
+    # TODO: enabling a variant will not modify the CommonMetaData
+    # but rather create a new instance of CommonMetaData
     def enable_variant(self, variant):
         """Enable a variant for this class by giving its name.
         Note that more than one variant can be enabled at once, but the last one will take priority

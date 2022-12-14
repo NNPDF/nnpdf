@@ -49,6 +49,9 @@ figure_by:
 
 # Theory
 theory:
+   apfelcomb:
+     repetition_flag:
+       - NMCPD_P
    FK_tables:
      - - NMCPD_D1
        - NMCPD_D2
