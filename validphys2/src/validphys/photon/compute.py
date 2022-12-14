@@ -13,6 +13,7 @@ from os import remove
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replica=0):
         # TODO : for the moment we do the 0-th replica then we change it
+        print("+++++++++++++++++SDIGHEDE SDAGHEDE+++++++++++++++++")
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
@@ -141,12 +142,8 @@ class Photon:
 
         Parameters
         ----------
-        xgrid: numpy.array
+        xgrids: numpy.array
             grid of the x points
-        pdf_name: string
-            name of the QCD set
-        replica: int
-            number of replica
         
         Returns
         -------
@@ -160,8 +157,15 @@ class Photon:
         for xgrid in xgrid_list :
             photon_100GeV = np.zeros(len(xgrid))
             for i, x in enumerate(xgrid):
-                print("computing grid point", grid_count + i+1, "/", len(xgrids))
-                photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
+                for x_cached in self.cache :
+                    if np.isclose(x, x_cached):
+                        print("using cache for grid point", grid_count + i+1, "/", len(xgrids))
+                        photon_100GeV[i] = self.cache[x_cached]
+                        break
+                else :
+                    print("computing grid point", grid_count + i+1, "/", len(xgrids))
+                    photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
+                    self.cache[x] = photon_100GeV[i]
             grid_count += len(xgrid)
 
             operator_card = dict(
@@ -211,6 +215,6 @@ class Photon:
 
             # we want x * gamma(x)
             photon_list.append( xgrid * photon_fitting_scale )
-        
+        import ipdb; ipdb.set_trace()        
         return np.concatenate(photon_list)
         
