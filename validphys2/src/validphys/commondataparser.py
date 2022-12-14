@@ -15,11 +15,9 @@ The CommonMetaData defines how the CommonData file is to be loaded,
 by modifying the CommonMetaData using one of the loaded Variants one can change the resulting
 :py:class:`validphys.coredata.CommonData` object.
 """
-from copy import copy
-from functools import cached_property
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional, Dict
+import dataclasses
 
 import pandas as pd
 from reportengine.compat import yaml
@@ -54,7 +52,8 @@ def ValidOperation(op_str: str) -> str:
 
 # Auxiliary objects
 
-@dataclass
+
+@dataclasses.dataclass
 class ValidApfelComb:
     """Some of the grids might have been converted from apfelcomb and introduce hacks.
     These are the allowed hacks:
@@ -74,13 +73,13 @@ class ValidApfelComb:
     shifts: Optional[dict] = None
 
 
-@dataclass
+@dataclasses.dataclass
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables"""
 
     FK_tables: list[list]
     operation: ValidOperation
-    conversion_factor: float = 1.0 
+    conversion_factor: float = 1.0
     comment: Optional[str] = None
     apfelcomb: Optional[ValidApfelComb] = None
     # The following options are transitional so that the yamldb can be used from the theory
@@ -94,7 +93,7 @@ class TheoryMeta:
         for operand in self.FK_tables:
             ret.append([grids_folder / f"{m}.{EXT}" for m in operand])
         return ret
-    
+
     @classmethod
     def parser(cls, meta: dict):
         """The yaml databases in the server use "operands" instead of "FK_tables" """
@@ -102,9 +101,11 @@ class TheoryMeta:
             meta["FK_tables"] = meta.pop("operands")
         return parse_input(meta, cls)
 
+
 ValidTheory = Parser(TheoryMeta.parser)
 
-@dataclass
+
+@dataclasses.dataclass
 class ValidKinematics:
     """Contains all metadata for the kinematics of the dataset"""
 
@@ -112,17 +113,19 @@ class ValidKinematics:
     variables: dict
 
 
-@dataclass
+@dataclasses.dataclass
 class ValidReference:
     """Holds literature information for the dataset"""
+
     url: str
     version: int = 0
-    tables: list[int] = field(default_factory=list)
+    tables: list[int] = dataclasses.field(default_factory=list)
 
 
-@dataclass
+@dataclasses.dataclass
 class Variant:
     """Defines the keys of the CommonMetaData that can be overwritten"""
+
     data_uncertainties: list[ValidPath]
 
 
@@ -135,7 +138,7 @@ def ValidVariants(variant_dict: dict) -> Dict[str, Variant]:
     return {k: parse_input(v, Variant) for k, v in variant_dict.items()}
 
 
-@dataclass
+@dataclasses.dataclass
 class CommonMetaData:
     setname: str
     ndata: int
@@ -154,36 +157,19 @@ class CommonMetaData:
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
-    variants: Optional[ValidVariants] = None
+    variants: Optional[ValidVariants] = dataclasses.field(default_factory=dict)
 
-    _enabled_variant: list[str] = field(default=None, repr=False)
-    _default: dict = field(default=None, repr=False)
+    def apply_variant(self, variant_name):
+        """Return a new instance of this class with the variant applied
 
-    # TODO: enabling a variant will not modify the CommonMetaData
-    # but rather create a new instance of CommonMetaData
-    def enable_variant(self, variant):
-        """Enable a variant for this class by giving its name.
-        Note that more than one variant can be enabled at once, but the last one will take priority
+        This class also defines how the variant is applied to the commondata
         """
-        if variant is None:
-            return self.disable_variants()
-        if self.variants is None:
-            raise ValueError(f"There are no variants defined for {self.setname}")
-        if variant not in self.variants:
-            raise ValueError(f"The variant {variant} is not defined for {self.setname}")
-        # If there were not enabled variants, save the current state of the class
-        if self._enabled_variant is None:
-            # A shallow copy is enough because the variants update attributes of this class
-            self._default = copy(self.__dict__)
-            self._enabled_variant = []
+        try:
+            variant = self.variants[variant_name]
+        except KeyError as e:
+            raise ValueError(f"The requested variant does not exist in {ret.name}") from e
 
-        self.__dict__.update(self.variants[variant].__dict__.items())
-        self._enabled_variant.append(variant)
-
-    def disable_variants(self):
-        """Get the CommonMetaData back to its original state"""
-        if self._default is not None:
-            self.__dict__.update(self._default)
+        return dataclasses.replace(self, data_uncertainties=variant.data_uncertainties)
 
 
 # TODO: will be moved to coredata.py and will substitute CommonData.py
@@ -191,11 +177,11 @@ class CommonMetaData:
 _folder_data = Path(__file__).parent / "../../../buildmaster"
 
 
-@dataclass
+@dataclasses.dataclass
 class _CommonData:
     """
     Data, kinematics and uncertainties contained in Commondata files.
-    A CommonData is only defined by its name and the enabled variant.
+    A CommonData is only defined by its name and the enabled variant(s).
 
     The information from CommonData is provided by the following properties
         - metadata: all metadata information for the dataset
@@ -205,15 +191,29 @@ class _CommonData:
     """
 
     name: str
-    variant: Optional[str] = None
+    variants: list[str] = dataclasses.field(default_factory=list)
+
+    _metadata: Optional[CommonMetaData] = None
 
     def enable_variant(self, new_variant):
-        if new_variant != self.variant:
-            self.variant = new_variant
-            self.metadata.enable_variant(self.variant)
-            # Delete loaded information as it will need to be recomputed
-            del self.data
-            del self.uncertainties
+        """Function to enable a new variant for the CommonData
+        This function checks whether the variant is accepted and, if it is,
+        it gets added to the ``variants`` property of this class so that
+        when the metadata is accessed it contains the variant information.
+
+        The attribute ``metadata`` gets then replace with a new instance of ``CommonMetaData``
+        """
+        if new_variant is None:
+            # Reset the metadata to the unvaried state
+            self.variants = []
+            self._metadata = None
+            return
+
+        if new_variant not in self.metadata.variants:
+            raise ValueError(f"The requested variant does not exist in {self.name}")
+
+        self.variants.append(new_variant)
+        self._metadata = None
 
     # The files where the CommonData information is retreived from as defined by the metadata
     @property
@@ -236,14 +236,20 @@ class _CommonData:
     def ndata(self):
         return self.metadata.ndata
 
-    @cached_property
+    @property
     def metadata(self):
-        ret = parse_yaml_inp(self.metadata_file, CommonMetaData)
-        if self.variant:
-            ret.enable_variant(self.variant)
-        return ret
+        if self._metadata is None:
+            # Read the metadata for the first time
+            ret = parse_yaml_inp(self.metadata_file, CommonMetaData)
 
-    @cached_property
+            # Iterate over variants to update the information in the original metadata
+            for variant_name in self.variants:
+                ret = ret.apply_variant(variant_name)
+
+            self._metadata = ret
+        return self._metadata
+
+    @property
     def data(self):
         """Pandas DataFrame containing the central data"""
         datayaml = yaml.safe_load(self.data_file.read_text(encoding="utf-8"))
@@ -253,7 +259,7 @@ class _CommonData:
         data_df.index.name = "index"
         return data_df
 
-    @cached_property
+    @property
     def uncertainties(self):
         """Pandas DataFrame containing all uncertainties"""
         # TODO: uncertainties are complicated enough that they _might_ need their own class
@@ -267,13 +273,15 @@ class _CommonData:
             )
             # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
             final_df = pd.DataFrame(
-                pd.DataFrame(uncyaml["bins"]).values, columns=mindex, index=range(1, self.ndata + 1)
+                pd.DataFrame(uncyaml["bins"]).values,
+                columns=mindex,
+                index=range(1, self.ndata + 1),
             )
             final_df.index.name = "index"
             all_df.append(final_df)
         return pd.concat(all_df, axis=1)
 
-    @cached_property
+    @property
     def kinematics(self):
         """Pandas DataFrame containing kinematic information"""
         kinyaml = yaml.safe_load(self.kinematics_file.read_text())
@@ -283,9 +291,11 @@ class _CommonData:
         return kin_df
 
 
-def parse_commondata_folder(commondata, variant=None):
-    """Given a commondata folder, parse the entire content into the appropiate objects"""
-    cmdata = _CommonData(commondata, variant=variant)
+def parse_commondata_folder(commondata, variants=[]):
+    """Given a commondata folder, parse the entire content into the appropiate objects
+    A list of variants can be also given
+    """
+    cmdata = _CommonData(commondata, variants=variants)
     return cmdata
 
 
