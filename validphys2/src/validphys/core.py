@@ -663,6 +663,13 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
     def load_commondata(self):
         return [d.load_commondata() for d in self.datasets]
 
+    def load_commondata_instances_wc(self):
+        """
+        Given Experiment load list of validphys.coredata.CommonData
+        objects with cuts already applied
+        """
+        return [dataset.commondata.load_commondata_instance().with_cuts(dataset.cuts.load()) for dataset in self.datasets]
+
     @property
     def thspec(self):
         #TODO: Is this good enough? Should we explicitly pass the theory
