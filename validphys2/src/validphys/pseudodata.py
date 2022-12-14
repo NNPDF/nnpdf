@@ -290,7 +290,8 @@ def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed):
     """
     GENERAL DESCRIPTION:
 
-    Given 
+    Given a list of level0 commondata instances, return the same list
+    with central values replaced by level1 data  
 
 
     Parameters
@@ -342,7 +343,6 @@ def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed):
                                 _list_of_central_values=None, _only_additive=False,)
 
     #================== generation of pseudo data ======================#
-    from validphys.pseudodata import indexed_make_replica, make_replica
     from validphys.results import groups_index
     #= generate pseudo data starting from theory predictions
     level1_data = make_replica(level0_commondata_wc, filterseed, covmat, 
