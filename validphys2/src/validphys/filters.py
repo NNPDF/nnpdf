@@ -224,7 +224,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
 
     from validphys.pseudodata import make_level0_data
     level0_commondata_instances_wc = make_level0_data(data,fakepdf)
-    commondata_instances_wc = data.load_commondata_instances_wc() # used to generate experimental covariance matrix 
+    commondata_instances_wc = data.load_commondata_instance() # used to generate experimental covariance matrix 
 
     for j, dataset in enumerate(data.datasets):
         #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
