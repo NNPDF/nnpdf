@@ -224,22 +224,14 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
 
     from validphys.pseudodata import make_level0_data
     level0_commondata_instances_wc = make_level0_data(data,fakepdf)
-    commondata_instances_wc = [] # used to generate experimental covariance matrix 
+    commondata_instances_wc = data.load_commondata_instances_wc() # used to generate experimental covariance matrix 
 
-    #======= Load CommonData instances ========#
     for j, dataset in enumerate(data.datasets):
-        #==== Load validphys.coredata.CommonData instance with cuts ====#
-        commondata = dataset.commondata.load_commondata_instance()
-        cuts = dataset.cuts.load()  
-        commondata_wc = commondata.with_cuts(cuts)
-        commondata_instances_wc.append(commondata_wc)
-        #==== print number of points passing cuts, make dataset directory and write FKMASK  ===+#
-        log.info(f"{len(cuts)}/{len(commondata.central_values)} datapoints in {dataset.name} passed kinematic cuts.")
-        total_cut_data_points += len(cuts)
-        total_data_points += len(commondata.central_values)
+        #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
-        make_dataset_dir(path)
-        export_mask(path / f'FKMASK_{dataset.name}.dat', cuts)
+        nfull, ncut = _write_ds_cut_data(path, dataset)
+        total_data_points += nfull
+        total_cut_data_points += ncut
         # Rescale errors 
         loaded_ds = loaded_data.GetSet(j)
         if errorsize != 1.0:
