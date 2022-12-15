@@ -403,7 +403,7 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
-    photon_computer=None,
+    photon=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -496,7 +496,7 @@ def pdfNN_layer_generator(
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
         parallel_models: int
             How many models should be trained in parallel
-        photon_computer: Function
+        photon: Function
             If given, gives the `add_photon` a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
@@ -566,14 +566,14 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Photon layer
-    layer_photon = AddPhoton(photon=photon_computer)
+    layer_photon = AddPhoton(photon=photon)
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler, photon=photon_computer)
+        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler, photon=photon)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -654,7 +654,7 @@ def pdfNN_layer_generator(
         def apply_photon(x):
             return layer_photon(normalized_pdf(x))
 
-        if photon_computer is None:
+        if photon is None:
             final_pdf = normalized_pdf
         else:
             final_pdf = apply_photon

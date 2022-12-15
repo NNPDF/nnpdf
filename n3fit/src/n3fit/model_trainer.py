@@ -653,7 +653,7 @@ class ModelTrainer:
         regularizer,
         regularizer_args,
         seed,
-        photon_computer,
+        photon,
     ):
         """
         Defines the internal variable layer_pdf
@@ -680,7 +680,7 @@ class ModelTrainer:
                 dictionary of arguments for the regularizer
             seed: int
                 seed for the NN
-            photon_computer: function
+            photon: Photon
                 function to compute the photon PDF
         see model_gen.pdfNN_layer_generator for more information
 
@@ -707,7 +707,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
-            photon_computer=photon_computer,
+            photon=photon,
         )
         return pdf_models
 
@@ -880,13 +880,10 @@ class ModelTrainer:
         xinput = self._xgrid_generation()
         
         # Initialize photon class:
-        photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
-
-        def photon_computer(x):
-            """Receives a grid with shape (1, n_x, 1)
-            and returns the photon PDF (1, n_x, 1)
-            """
-            return photon.photon_fitting_scale(x[0,:,0])[np.newaxis,:,np.newaxis]
+        if self.fiatlux_runcard is not None:
+            photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
+        else:
+            photon=None
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -906,7 +903,7 @@ class ModelTrainer:
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
                 seeds,
-                photon_computer if self.fiatlux_runcard is not None else None,
+                photon,
             )
 
             # Register the fitting grid with the photon layer

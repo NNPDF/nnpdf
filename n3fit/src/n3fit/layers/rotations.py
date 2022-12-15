@@ -111,7 +111,7 @@ class AddPhoton(MetaLayer):
         # TODO: maybe add here some caching mechanism so that the photon doesn't get
         # recomputed if the grid hasn't changed!
         if self._photon_generator is not None:
-            self._pdf_ph = self._photon_generator(xgrid)
+            self._pdf_ph = self._photon_generator.compute(xgrid)
             self.built = False
     
     def call(self, pdfs):
