@@ -2,13 +2,13 @@
 import lhapdf
 import fiatlux
 import numpy as np
-from eko.couplings import Couplings
-from eko.compatibility import update_theory
 from eko.output.legacy import load_tar
 from eko.interpolation import XGrid
 from eko.output.manipulate import xgrid_reshape
-from eko.runner import Runner
+from eko.interpolation import make_grid
 from .structure_functions import StructureFunction
+from scipy.interpolate import interp1d
+from scipy.integrate import trapezoid
 
 import yaml
 from os import remove
@@ -19,14 +19,13 @@ class Photon:
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
-            self.qref = self.theory["Qref"]
             self.q_in2 = 100**2
-            theory_coupling = update_theory(self.theory)
-            theory_coupling["ModEv"] = "TRN"
-            theory_coupling["alphaem_running"] = True
-            theory_coupling["nfref"] = 5
-            theory_coupling['fact_to_ren_scale_ratio'] = 1.
-            self.couplings = Couplings.from_dict(theory_coupling)
+            self.alpha_em_ref = self.theory["alphaqed"]
+            self.qref = self.theory["Qref"]
+            self.eu2 = 4. / 9
+            self.ed2 = 1. / 9
+            self.e2q = [self.ed2, self.eu2, self.ed2, self.eu2, self.ed2, self.eu2] # d u s c b t
+            self.set_thresholds_a_em()
 
             self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
             path_to_F2 = fiatlux_runcard["path_to_F2"]
@@ -45,7 +44,7 @@ class Photon:
             self.lux.PlugStructureFunctions(f2.FxQ, fl.FxQ, self.F2LO)
             self.lux.InsertInelasticSplitQ([4.18, 1e100])
 
-            self.cache = {}
+            self.produce_interpolator()
 
     
     def exctract_grids(self, xgrids):
@@ -92,24 +91,18 @@ class Photon:
         F2_LO : float
             Structure function F2 at LO
         """
-        thres_charm = self.theory["Qmc"]
-        thres_bottom = self.theory["Qmb"]
-        thres_top = self.theory["Qmt"]
         # at LO we use ZM-VFS
-        if Q < thres_charm :
-            hq = 3
-        elif Q < thres_bottom :
-            hq = 4
-        elif Q < thres_top :
-            hq = 5
+        if Q < self.theory["Qmc"] :
+            nf = 3
+        elif Q < self.theory["Qmb"] :
+            nf = 4
+        elif Q < self.theory["Qmt"] :
+            nf = 5
         else :
-            hq = 6
-        e2u = 4/9
-        e2d = 1/9
-        e2q = [e2d, e2u, e2d, e2u, e2d, e2u] # d u s c b t
+            nf = 6
         res = 0
-        for i in range(1, hq+1):
-            res += e2q[i-1] * (self.qcd_pdfs.xfxQ(x, Q)[i] + self.qcd_pdfs.xfxQ(x, Q)[-i])
+        for i in range(1, nf+1):
+            res += self.e2q[i-1] * (self.qcd_pdfs.xfxQ(x, Q)[i] + self.qcd_pdfs.xfxQ(x, Q)[-i])
         return res
 
     def alpha_em(self, q):
@@ -126,9 +119,45 @@ class Photon:
         alpha_em: float
             electromagnetic coupling
         """
-        return self.couplings.a(q**2)[1] * 4 * np.pi
+        # return self.couplings.a(q**2)[1] * 4 * np.pi
+        if q < self.theory["Qmc"] :
+            nf = 3
+        elif q < self.theory["Qmb"] :
+            nf = 4
+        elif q < self.theory["Qmt"] :
+            nf = 5
+        else :
+            nf = 6
+        return self.a_em_nlo(
+            q,
+            self.a_thresh[nf],
+            self.thresh[nf],
+            nf
+        ) * (4 * np.pi)
+    
+    def a_em_nlo(self, q, a_ref, qref, nf):
+        nl = 3
+        nc = 3
+        nu = nf // 2
+        nd = nf - nu
+        beta0 = ( -4.0 / 3 * (nl + nc * (nu * self.eu2 + nd * self.ed2)) )
+        beta1 = -4.0 * ( nl + nc * (nu * self.eu2**2 + nd * self.ed2**2) )
+        lmu = np.log(q / qref)
+        den = 1.0 + beta0 * a_ref * lmu
+        a_LO = a_ref / den
+        as_NLO = a_LO * (1 - beta1 / beta0 * a_LO * np.log(den))
+        return as_NLO
+    
+    def set_thresholds_a_em(self):
+        a_ref = self.alpha_em_ref / (4 * np.pi)
+        self.a_em_mt = self.a_em_nlo(self.theory["Qmt"], a_ref, self.qref, 5)
+        self.a_em_mb = self.a_em_nlo(self.theory["Qmb"], a_ref, self.qref, 5)
+        self.a_em_mc = self.a_em_nlo(self.theory["Qmc"], self.a_em_mb, self.theory["Qmb"], 4)
 
-    def photon_fitting_scale(self, xgrids):
+        self.thresh = {3: self.theory["Qmc"], 4: self.theory["Qmb"], 5: self.qref, 6:self.theory["Qmt"]}
+        self.a_thresh = {3: self.a_em_mc, 4:self.a_em_mb, 5:self.alpha_em_ref/(4*np.pi), 6:self.a_em_mt}
+
+    def compute_photon_array(self, xgrids):
         r"""
         Compute the photon PDF for every point in the grid xgrid.
 
@@ -139,34 +168,20 @@ class Photon:
         
         Returns
         -------
-        photon_fitting_scale: numpy.array
+        compute_photon_array: numpy.array
             photon PDF at the scale 1 GeV
         """
         xgrid_list = self.exctract_grids(xgrids)
         
-        grid_count = 0
         photon_list = []
         for xgrid in xgrid_list :
             photon_100GeV = np.zeros(len(xgrid))
             for i, x in enumerate(xgrid):
-                for x_cached in self.cache :
-                    if np.isclose(x, x_cached, atol=0, rtol=1e-3):
-                        print("using cache for grid point", grid_count + i+1, "/", len(xgrids))
-                        photon_100GeV[i] = self.cache[x_cached]
-                        break
-                else :
-                    print("computing grid point", grid_count + i+1, "/", len(xgrids))
-                    photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
-                    self.cache[x] = photon_100GeV[i]
-            grid_count += len(xgrid)
+                print("computing grid point", i+1, "/", len(xgrids))
+                photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
 
-            # if the grid has less than 5 points we cannot interpolate the precomputed grid
-            # since it has interpolation_polynomial_degree = 4. Therefore we compute the EKO.
-            if len(xgrid) > 4:
-                eko=load_tar(self.fiatlux_runcard['path_to_eko'])
-                xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
-            else :
-                eko = self.compute_eko(xgrid)
+            eko=load_tar(self.fiatlux_runcard['path_to_eko'])
+            xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
             
             pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
             for j, pid in enumerate(eko.rotations.inputpids):
@@ -186,50 +201,19 @@ class Photon:
                 pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
                 # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
-            photon_fitting_scale = pdf_final[ph_id]
-
+            photon_Q0 = pdf_final[ph_id]
             # we want x * gamma(x)
-            photon_list.append( xgrid * photon_fitting_scale )
+            photon_list.append( xgrid * photon_Q0 )
        
         return np.concatenate(photon_list)
     
-    def compute_eko(self, xgrid):
-
-        theory = self.theory.copy()
-        theory["nfref"] = 5
-        theory["nf0"] = None
-        theory["fact_to_ren_scale_ratio"] = 1.
-        theory["ModSV"] = None
-        theory["IB"] = 0
-        theory["FNS"] = "VFNS"
-        theory["QED"] = 2
-        theory["ModEv"] = "EXA"
-        theory["alphaem_running"] = True
-        q_in = 100
-        q_fin = self.theory["Q0"]
-        theory["Q0"]= q_in
-
-        operator_card = dict(
-            sorted(
-                dict(
-                    interpolation_xgrid=xgrid.tolist(),
-                    interpolation_polynomial_degree= 4 if len(xgrid) > 4 else len(xgrid) - 1,
-                    interpolation_is_log=True,
-                    ev_op_max_order=10,
-                    ev_op_iterations=10,
-                    backward_inversion="exact",
-                    n_integration_cores=0,
-                    debug_skip_non_singlet=False,
-                    debug_skip_singlet=False,
-                    Q2grid=[q_fin**2],
-                    inputgrid=None,
-                    targetgrid=None,
-                    inputpids=None,
-                    targetpids=None,
-                ).items()
-            )
-        )
-
-        runner = Runner(theory, operator_card)
-        return runner.get_output()
+    def produce_interpolator(self):
+        self.xgrid = make_grid(98, 99, x_min=1.e-9) # TODO : use the output grid so the EKO will not be reshaped
+        self.photon_array = self.compute_photon_array(self.xgrid)
+        self.interpolator = interp1d(self.xgrid, self.photon_array, fill_value=0.)
     
+    def compute(self, xgrid):
+        return self.interpolator(xgrid[0,:,0])[np.newaxis,:,np.newaxis]
+    
+    def integrate(self):
+        return trapezoid(self.photon_array, self.xgrid)
