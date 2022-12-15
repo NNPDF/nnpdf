@@ -3,7 +3,6 @@
 """
 import logging
 import numpy as np
-from scipy.integrate import trapezoid
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations as op
@@ -12,7 +11,7 @@ from n3fit.backends import operations as op
 log = logging.getLogger(__name__)
 
 
-def gen_integration_input(nx):
+def gen_integration_input(nx, min=-9):
     """
     Generates a np.array (shaped (nx,1)) of nx elements where the
     nx/2 first elements are a logspace between 0 and 0.1
@@ -20,7 +19,7 @@ def gen_integration_input(nx):
     """
     lognx = int(nx / 2)
     linnx = int(nx - lognx)
-    xgrid_log = np.logspace(-9, -1, lognx + 1)
+    xgrid_log = np.logspace(min, -1, lognx + 1)
     xgrid_lin = np.linspace(0.1, 1, linnx)
     xgrid = np.concatenate([xgrid_log[:-1], xgrid_lin]).reshape(nx, 1)
 
@@ -74,7 +73,7 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None, photon=None):
     # 3.1 If a photon is given, compute the photon component of the MSR
     photon_c = 0.0
     if photon is not None:
-        xgrid_ph, wgt = gen_integration_input(100)
+        xgrid_ph, wgt = gen_integration_input(100, min=-6)
         photon_array = photon(np.expand_dims(xgrid_ph, axis=0))[0]
         photon_c = np.sum(photon_array * wgt)
 

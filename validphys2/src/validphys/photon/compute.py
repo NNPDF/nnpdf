@@ -7,6 +7,7 @@ from eko.compatibility import update_theory
 from eko.output.legacy import load_tar
 from eko.interpolation import XGrid
 from eko.output.manipulate import xgrid_reshape
+from eko.runner import Runner
 from .structure_functions import StructureFunction
 
 import yaml
@@ -149,7 +150,7 @@ class Photon:
             photon_100GeV = np.zeros(len(xgrid))
             for i, x in enumerate(xgrid):
                 for x_cached in self.cache :
-                    if np.isclose(x, x_cached):
+                    if np.isclose(x, x_cached, atol=0, rtol=1e-3):
                         print("using cache for grid point", grid_count + i+1, "/", len(xgrids))
                         photon_100GeV[i] = self.cache[x_cached]
                         break
@@ -159,8 +160,13 @@ class Photon:
                     self.cache[x] = photon_100GeV[i]
             grid_count += len(xgrid)
 
-            eko=load_tar(self.fiatlux_runcard['path_to_eko'])
-            xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
+            # if the grid has less than 5 points we cannot interpolate the precomputed grid
+            # since it has interpolation_polynomial_degree = 4. Therefore we compute the EKO.
+            if len(xgrid) > 4:
+                eko=load_tar(self.fiatlux_runcard['path_to_eko'])
+                xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
+            else :
+                eko = self.compute_eko(xgrid)
             
             pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
             for j, pid in enumerate(eko.rotations.inputpids):
@@ -186,4 +192,44 @@ class Photon:
             photon_list.append( xgrid * photon_fitting_scale )
        
         return np.concatenate(photon_list)
-        
+    
+    def compute_eko(self, xgrid):
+
+        theory = self.theory.copy()
+        theory["nfref"] = 5
+        theory["nf0"] = None
+        theory["fact_to_ren_scale_ratio"] = 1.
+        theory["ModSV"] = None
+        theory["IB"] = 0
+        theory["FNS"] = "VFNS"
+        theory["QED"] = 2
+        theory["ModEv"] = "EXA"
+        theory["alphaem_running"] = True
+        q_in = 100
+        q_fin = self.theory["Q0"]
+        theory["Q0"]= q_in
+
+        operator_card = dict(
+            sorted(
+                dict(
+                    interpolation_xgrid=xgrid.tolist(),
+                    interpolation_polynomial_degree= 4 if len(xgrid) > 4 else len(xgrid) - 1,
+                    interpolation_is_log=True,
+                    ev_op_max_order=10,
+                    ev_op_iterations=10,
+                    backward_inversion="exact",
+                    n_integration_cores=0,
+                    debug_skip_non_singlet=False,
+                    debug_skip_singlet=False,
+                    Q2grid=[q_fin**2],
+                    inputgrid=None,
+                    targetgrid=None,
+                    inputpids=None,
+                    targetpids=None,
+                ).items()
+            )
+        )
+
+        runner = Runner(theory, operator_card)
+        return runner.get_output()
+    
