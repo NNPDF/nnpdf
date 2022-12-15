@@ -9,12 +9,38 @@ from importlib.resources import read_text
 
 import numpy as np
 
-from NNPDF import CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
 
 log = logging.getLogger(__name__)
+
+KIN_LABEL = {
+    "DIS": ("x", "Q2", "y"),
+    "DYP": ("y", "M2", "sqrts"),
+    "JET": ("eta", "p_T2", "sqrts"),
+    "DIJET": ("eta", "m_12", "sqrts"),
+    "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
+    "INC": ("0", "mu2", "sqrts"),
+    "EWK_RAP": ("etay", "M2", "sqrts"),
+    "EWK_PT": ("p_T", "M2", "sqrts"),
+    "EWK_PTRAP": ("etay", "p_T2", "sqrts"),
+    "EWK_MLL": ("M_ll", "M_ll2", "sqrts"),
+    "EWJ_RAP": ("etay", "M2", "sqrts"),
+    "EWJ_PT": ("p_T", "M2", "sqrt(s)"),
+    "EWJ_PTRAP": ("etay", "p_T2", "sqrts"),
+    "EWJ_JRAP": ("etay", "M2", "sqrts"),
+    "EWJ_JPT": ("p_T", "M2", "sqrts"),
+    "EWJ_MLL": ("M_ll", "M_ll2", "sqrts"),
+    "HQP_YQQ": ("yQQ", "mu2", "sqrts"),
+    "HQP_MQQ": ("MQQ", "mu2", "sqrts"),
+    "HQP_PTQQ": ("p_TQQ", "mu2", "sqrts"),
+    "HQP_YQ": ("yQ", "mu2", "sqrts"),
+    "HQP_PTQ": ("p_TQ", "mu2", "sqrts"),
+    "HIG_RAP": ("y", "M_H2", "sqrts"),
+    "SIA": ("z", "Q2", "y"),
+}
+
 
 class RuleProcessingError(Exception):
     """Exception raised when we couldn't process a rule."""
@@ -164,7 +190,7 @@ def _filter_real_data(filter_path, data):
         nfull, ncut = _write_ds_cut_data(path, dataset)
         total_data_points += nfull
         total_cut_data_points += ncut
-        dataset.load_commondata().Export(str(path))
+        dataset.load_commondata().export(path)
     return total_data_points, total_cut_data_points
 
 
@@ -343,14 +369,14 @@ class Rule:
                     f"Could not find dataset {self.dataset}"
                 ) from e
             if cd.process_type[:3] == "DIS":
-                self.variables = CommonData.kinLabel["DIS"]
+                self.variables = KIN_LABEL["DIS"]
             else:
-                self.variables = CommonData.kinLabel[cd.process_type]
+                self.variables = KIN_LABEL[cd.process_type]
         else:
             if self.process_type[:3] == "DIS":
-                self.variables = CommonData.kinLabel["DIS"]
+                self.variables = KIN_LABEL["DIS"]
             else:
-                self.variables = CommonData.kinLabel[self.process_type]
+                self.variables = KIN_LABEL[self.process_type]
 
         if hasattr(self, "local_variables"):
             if not isinstance(self.local_variables, Mapping):
@@ -422,19 +448,21 @@ class Rule:
         return hash(self._properties)
 
     def __call__(self, dataset, idat):
-        central_value = dataset.GetData(idat)
+        central_value = dataset.get_cv()[idat]
+        process_name = dataset.commondataproc
+
         # We return None if the rule doesn't apply. This
         # is different to the case where the rule does apply,
         # but the point was cut out by the rule.
         if (
-            dataset.GetSetName() != self.dataset
-            and dataset.GetProc(idat) != self.process_type
+            dataset.setname != self.dataset
+            and process_name != self.process_type
             and self.process_type != "DIS_ALL"
         ):
             return None
 
         # Handle the generalised DIS cut
-        if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] != "DIS":
+        if self.process_type == "DIS_ALL" and not process_name.startswith("DIS"):
             return None
 
         ns = self._make_point_namespace(dataset, idat)
@@ -468,7 +496,7 @@ class Rule:
 
     def _make_kinematics_dict(self, dataset, idat) -> dict:
         """Fill in a dictionary with the kinematics for each point"""
-        kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
+        kinematics = dataset.kinematics.values[idat]
         return dict(zip(self.variables, kinematics))
 
     def _make_point_namespace(self, dataset, idat) -> dict:
@@ -488,7 +516,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
 
     Parameters
     ----------
-    commondata: NNPDF CommonData spec
+    commondata: :py:class:`validphys.coredata.CommonData`
     rules: List[Rule]
         A list of Rule objects specifying the filters.
 
@@ -515,7 +543,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     dataset = commondata.load()
 
     mask = []
-    for idat in range(dataset.GetNData()):
+    for idat in range(dataset.ndata):
         broken = False
         for rule in rules:
             rule_result = rule(dataset, idat)
