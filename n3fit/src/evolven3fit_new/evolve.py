@@ -5,12 +5,10 @@ import sys
 import numpy as np
 from reportengine.compat import yaml
 
-from ekobox import genpdf
-from ekobox import info_file
+from ekobox import genpdf, gen_info
 from ekomark import apply
 from eko import basis_rotation as br
 from eko import output
-from eko.interpolation import XGrid
 from validphys.api import API
 
 from . import utils, eko_utils
@@ -20,11 +18,9 @@ _logger = logging.getLogger(__name__)
 
 LOG_FILE = "evolven3fit_new.log"
 
-LOGGING_SETTINGS = {
-    "formatter": "%(asctime)s %(name)s/%(levelname)s: %(message)s",
-    "level": logging.INFO,
+LOGGING_SETTINGS = {"formatter" : "%(asctime)s %(name)s/%(levelname)s: %(message)s",
+                    "level" : logging.INFO
 }
-
 
 def evolve_fit(
     fit_folder,
@@ -73,7 +69,9 @@ def evolve_fit(
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
         log.setLevel(LOGGING_SETTINGS["level"])
-        log.setFormatter(logging.Formatter(LOGGING_SETTINGS["formatter"]))
+        log.setFormatter(
+            logging.Formatter(LOGGING_SETTINGS["formatter"])
+        )
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
@@ -82,7 +80,9 @@ def evolve_fit(
 
     usr_path = pathlib.Path(fit_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    x_grid = XGrid(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"])
+    x_grid = np.array(
+        initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]
+    ).astype(np.float)
     theoryID = utils.get_theoryID_from_runcard(usr_path)
     theory, op = eko_utils.construct_eko_cards(
         theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
@@ -90,27 +90,25 @@ def evolve_fit(
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
-        eko_op = output.legacy.load_tar(eko_path)
+        eko_op = output.Output.load_tar(eko_path)
     else:
         try:
             _logger.info(f"Loading eko from theory {theoryID}")
-            theory_eko_path = (API.theoryid(theoryid=theoryID).path) / "eko.tar"
-            eko_op = output.legacy.load_tar(theory_eko_path)
+            theory_eko_path = (API.theoryid(theoryid = theoryID).path)/'eko.tar'
+            eko_op = output.Output.load_tar(theory_eko_path)
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
-            eko_op = eko_utils.construct_eko_for_fit(theory, op, dump_eko)
-    output.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid, inputgrid=x_grid)
-    info = info_file.build(theory, op, 1, info_update={})
+            eko_op = eko_utils.construct_eko_for_fit(theory, op, dump_eko) 
+    eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
+    info = gen_info.create_info_file(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
-    info["AlphaS_Qs"] = eko_op.Q2grid.tolist()
-    info["XMin"] = float(x_grid.raw.min())
-    info["XMax"] = float(x_grid.raw.max())
+    info["AlphaS_Qs"] = list(eko_op["Q2grid"])
+    info["XMin"] = float(x_grid[0])
+    info["XMax"] = float(x_grid[-1])
     dump_info_file(usr_path, info)
     for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(
-            initial_PDFs_dict[replica], eko_op, x_grid.tolist()
-        )
+        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
         dump_evolved_replica(
             evolved_block, usr_path, int(replica.removeprefix("replica_"))
         )
@@ -167,7 +165,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # generate block to dump
-    targetgrid = eko.xgrid.tolist()
+    targetgrid = list(eko["targetgrid"])
 
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
@@ -175,7 +173,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,
-        Q2grid=eko.Q2grid.tolist(),
+        Q2grid=list(eko["Q2grid"]),
         pids=br.flavor_basis_pids,
     )
     return block

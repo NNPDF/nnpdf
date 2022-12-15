@@ -1,6 +1,5 @@
-from ekobox import operators_card as oc
-from ekobox import theory_card as tc
-from eko import run_dglap, output
+from ekobox import gen_theory, gen_op
+from eko import run_dglap
 
 from validphys.api import API
 from . import utils
@@ -35,7 +34,7 @@ def construct_eko_cards(
     theory = API.theoryid(theoryid=theoryID).get_description()
     theory.pop("FNS")
     theory.update(theory_card_dict)
-    theory_card = tc.generate(theory["PTO"], theory["Q0"], update=theory)
+    theory_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
     # construct operator card
     q2_grid = utils.generate_q2grid(
         theory["Q0"],
@@ -43,7 +42,7 @@ def construct_eko_cards(
         q_points,
         {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
     )
-    op_card = oc.generate(q2_grid, update={"interpolation_xgrid": x_grid})
+    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": x_grid})
     op_card.update(op_card_dict)
     return theory_card, op_card
 
@@ -77,7 +76,7 @@ def construct_eko_for_fit(theory_card, op_card, save_path=None):
         # Here we want to catch all possible exceptions in order to avoid losing the computed eko
         try:
             _logger.info(f"Saving computed eko to : {save_path}")
-            output.legacy.dump_tar(eko_op, save_path)
+            eko_op.dump_tar(save_path)
         except:
             _logger.error(f"Error saving the eko to : {save_path}")
             pass
