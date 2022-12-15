@@ -115,7 +115,9 @@ def write_commondata(commondata_list, filter_path):
         # path
         path = str(filter_path) + f'/{commondata_instance.setname}'
         path_data = str(path) + f"/DATA_{commondata_instance.setname}.dat"
-        commondata_tab = commondata_instance.commondata_table
+        commondata_tab = commondata_instance.commondata_table.reset_index(drop = True) # do not use maskcut index
+        commondata_tab.index += 1 # index starting from 1
+        
         header = f"{commondata_instance.setname} {commondata_instance.nsys} {commondata_instance.ndata}\n"
         
         #==== write DATA =====#
