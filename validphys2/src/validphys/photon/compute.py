@@ -5,7 +5,6 @@ import numpy as np
 from eko.output.legacy import load_tar
 from eko.interpolation import XGrid
 from eko.output.manipulate import xgrid_reshape
-from eko.interpolation import make_grid
 from .structure_functions import StructureFunction
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
@@ -15,7 +14,6 @@ from os import remove
 
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replica_id):
-        # TODO : for the moment we do the 0-th replica then we change it
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         if fiatlux_runcard is not None:
@@ -106,6 +104,25 @@ class Photon:
         ) * (4 * np.pi)
     
     def a_em_nlo(self, q, a_ref, qref, nf):
+        """
+        Compute the alpha_em running for FFS at NLO.
+
+        Parameters
+        ----------
+        q : float
+            target scale
+        a_ref : float
+            reference value of a = alpha_em/(4*pi)
+        qref: float
+            reference scale
+        nf: int
+            number of flavors
+
+        Returns
+        -------
+        as_NLO : float
+            target value of a
+        """
         nl = 3
         nc = 3
         nu = nf // 2
@@ -119,6 +136,7 @@ class Photon:
         return as_NLO
     
     def set_thresholds_a_em(self):
+        """Compute and store the couplings at thresholds"""
         a_ref = self.alpha_em_ref / (4 * np.pi)
         self.a_em_mt = self.a_em_nlo(self.theory["Qmt"], a_ref, self.qref, 5)
         self.a_em_mb = self.a_em_nlo(self.theory["Qmb"], a_ref, self.qref, 5)
@@ -147,6 +165,8 @@ class Photon:
             photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
 
         eko=load_tar(self.fiatlux_runcard['path_to_eko'])
+        # If we make sure that the grid of the precomputed EKO is the same of 
+        # self.xgrid then we don't need to reshape
         xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
             
         pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
@@ -179,7 +199,21 @@ class Photon:
         self.interpolator = interp1d(self.xgrid, self.photon_array, fill_value=0.)
     
     def compute(self, xgrid):
+        """
+        Compute the photon interpolating the values of self.photon_array.
+
+        Parameters
+        ----------
+        xgrid : nd.array
+            array of x values with shape (1,xgrid,1)
+        
+        Returns
+        -------
+        photon values : nd.array
+            array of photon values with shape (1,xgrid,1)
+        """
         return self.interpolator(xgrid[0,:,0])[np.newaxis,:,np.newaxis]
     
     def integrate(self):
+        """Compute the integral of the photon on the x range"""
         return trapezoid(self.photon_array, self.xgrid)
