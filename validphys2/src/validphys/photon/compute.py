@@ -144,8 +144,7 @@ class Photon:
         photon_100GeV = np.zeros(len(xgrid))
         for i, x in enumerate(xgrid):
             print("computing grid point", i+1, "/", len(xgrid))
-            # photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
-            photon_100GeV[i] = np.exp(-x)
+            photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
 
         eko=load_tar(self.fiatlux_runcard['path_to_eko'])
         xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
