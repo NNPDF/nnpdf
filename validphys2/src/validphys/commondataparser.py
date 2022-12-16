@@ -168,9 +168,9 @@ def write_systype(commondata_list, filter_path):
     for commondata_instance in commondata_list: 
         path = filter_path / commondata_instance.setname / 'systypes'
         make_systype_dir(path)
-        path_data = str(path) + f"/SYSTYPES_{commondata_instance.setname}_DEFAULT.dat"
+        path_data = str(path) + f"/SYSTYPE_{commondata_instance.setname}_DEFAULT.dat"
         systype_tab = commondata_instance.systype_table
-        header = f"{len(systype_tab.index)}\n"
+        header = f"{commondata_instance}\n"
         
         #==== write DATA =====#
         with open(path_data, "w+") as f:
