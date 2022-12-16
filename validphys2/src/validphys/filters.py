@@ -230,6 +230,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
+        make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
         # Rescale errors 
@@ -237,12 +238,13 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         if errorsize != 1.0:
             loaded_ds.RescaleErrors(errorsize)
     
-    from validphys.commondataparser import write_commondata, write_systype
+    from validphys.commondataparser import write_commondata_to_file, write_systypes_to_file
     if not fakenoise:
         #======= Level 0 closure test =======#
         log.info("Writing Level0 data")
-        write_commondata(level0_commondata_instances_wc,filter_path)
-        write_systype(level0_commondata_instances_wc,filter_path)
+        for l0_cd in level0_commondata_instances_wc:
+            write_commondata_to_file(l0_cd, path = filter_path / l0_cd.setname / f"DATA_{l0_cd.setname}.dat")
+            write_systypes_to_file(l0_cd, path = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}.dat")
 
     else:
         #======= Level 1 closure test =======#
@@ -250,8 +252,9 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         level1_commondata_instances_wc = make_level1_data(data,commondata_instances_wc,level0_commondata_instances_wc,filterseed)
         #====== write commondata and systype files ======#
         log.info("Writing Level1 data")
-        write_commondata(level1_commondata_instances_wc,filter_path)
-        write_systype(level1_commondata_instances_wc,filter_path)
+        for l1_cd in level1_commondata_instances_wc:
+            write_commondata_to_file(l1_cd, path = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat")
+            write_systypes_to_file(l1_cd, path = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}.dat")
 
     return total_data_points, total_cut_data_points
 
