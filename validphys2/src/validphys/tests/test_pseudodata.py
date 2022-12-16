@@ -12,7 +12,7 @@ import numpy as np
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import FIT, PSEUDODATA_FIT
+from validphys.tests.conftest import FIT, PSEUDODATA_FIT, THEORYID, SINGLE_DATASET, PDF
 
 
 def test_read_fit_pseudodata():
@@ -87,15 +87,16 @@ def test_make_level0_data():
     from validphys.loader import Loader
     from validphys.covmats import dataset_t0_predictions
 
-    dataset='NMC'
-    pdfname='NNPDF40_nnlo_as_01180'
-    theoryid=162
+    dataset=SINGLE_DATASET
+    pdfname=PDF
+
+
     l = Loader()
-    datasetspec = l.check_dataset(dataset,theoryid=theoryid)
+    datasetspec = l.check_dataset(list(dataset.values())[0],theoryid=THEORYID)
     t0set = l.check_pdf(pdfname)
     
-    l0_cd = API.make_level0_data(dataset_inputs = [{"dataset":dataset}], 
-                                use_cuts="internal", theoryid=theoryid, fakepdf = pdfname)
+    l0_cd = API.make_level0_data(dataset_inputs = [dataset], 
+                                use_cuts="internal", theoryid=THEORYID, fakepdf = pdfname)
                                 
     l0_vals = l0_cd[0].central_values
   
