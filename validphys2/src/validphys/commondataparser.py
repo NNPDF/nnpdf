@@ -93,86 +93,96 @@ def parse_systypes(systypefile):
 
     return systypetable
 
-def write_commondata(commondata_list, filter_path):
+
+def write_commondata_table_to_string(commondata,sio,table="commondata_table"):
     """
     GENERAL DESCRIPTION:
-
-    writes dataset data in filter folder using the commondata file format
-
-    Parameters
-    ----------
-
-    commondata_list : list
-                     commondata object (cuts should be already applied)
-
-    path : str
-         path to filter folder
-
     
-    """
-
-    for commondata_instance in commondata_list:
-        # path
-        path = str(filter_path) + f'/{commondata_instance.setname}'
-        path_data = str(path) + f"/DATA_{commondata_instance.setname}.dat"
-        commondata_tab = commondata_instance.commondata_table.reset_index(drop = True) # do not use maskcut index
-        commondata_tab.index += 1 # index starting from 1
-        
-        header = f"{commondata_instance.setname} {commondata_instance.nsys} {commondata_instance.ndata}\n"
-        
-        #==== write DATA =====#
-        with open(path_data, "w+") as f:
-            f.write(header)
-            commondata_tab.to_csv(f, sep="\t", header=None)
-
-
-
-def make_systype_dir(path):
-    """
-    GENERAL DESCRIPTION:
-
-    creates directory named systypes 
-
-    Parameters
-    ----------
-
-    path : str
-         path to systypes filter/dataset_name/systypes folder
-    
-
-    """
-    if path.exists():
-        log.warning(f"systypes folder exists: {path} Overwriting contents")
-    else:
-        path.mkdir(exist_ok=True)
-
-
-def write_systype(commondata_list, filter_path):
-    """
-    GENERAL DESCRIPTION:
-
-    writes systype data in filter folder using the systype file format  
+    Given a validphys.coredata.CommonData instance and a StringIO,
+    update value of StringIO to contents of specified CommonData table.
     
     Parameters
     ----------
 
-    commondata_list : list
-                    commondata object (cuts should be already applied)
+    commondata: validphys.coredata.CommonData
+    
+    sio: StringIO
+    
+    table: str, default 'commondata_table'
 
-    filter_path : str
-                 path to filter folder
+    Example
+    -------
+    
+    >>> from validphys.loader import Loader
+    >>> from io import StringIO
 
+    >>> l = Loader()
+    >>> obs = "NMC"
+    >>> commondata = l.check_commondata(obs).load_commondata_instance()
+
+    >>> sio = StringIO()
+    >>> print(sio.getvalue())
+    >>> write_commondata_table_to_string(commondata,sio,table="systype_table")
+    >>> sio.getvalue()
+
+
+    """
+    
+    data_frame = getattr(commondata,table)
+    data_frame.to_csv(sio, sep = "\t", header = None)
+    
+    
+
+def write_systypes_to_file(commondata,path):
+    """
+    GENERAL DESCRIPTION:
+    
+    write a systype file to a specified path 
+    (e.g. path = path_to_fit_folder/filter/name_observable/systypes/SYSTYPE_name_observable_DEFAULT.dat)
+
+    Parameters
+    ----------
+
+    commondata: validphys.coredata.CommonData
+    
+    path: str
+         
     
     """
+    from io import StringIO
+    sio = StringIO()
+    
+    write_commondata_table_to_string(commondata,sio,table="systype_table")
+    header = f"{commondata.nsys}\n"
+    
+    with open(path,"w") as file:
+        file.write(header)
+        file.write(sio.getvalue())
 
-    for commondata_instance in commondata_list: 
-        path = filter_path / commondata_instance.setname / 'systypes'
-        make_systype_dir(path)
-        path_data = str(path) + f"/SYSTYPE_{commondata_instance.setname}_DEFAULT.dat"
-        systype_tab = commondata_instance.systype_table
-        header = f"{commondata_instance}\n"
         
-        #==== write DATA =====#
-        with open(path_data, "w+") as f:
-            f.write(header)
-            systype_tab.to_csv(f, sep="\t", header=None)
+        
+def write_commondata_to_file(commondata,path):
+    """
+    GENERAL DESCRIPTION:
+    
+    write a commondata table as file to a specified path
+    
+    Parameters
+    ----------
+
+    commondata: validphys.coredata.CommonData
+    
+    path: str
+         
+         
+    """
+    from io import StringIO
+    
+    sio = StringIO()
+    write_commondata_table_to_string(commondata,sio)
+    
+    header = f"{commondata.setname} {commondata.nsys} {commondata.ndata}\n"
+    
+    with open(path,"w") as file:
+        file.write(header)
+        file.write(sio.getvalue())
