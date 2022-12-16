@@ -14,7 +14,7 @@ import yaml
 from os import remove
 
 class Photon:
-    def __init__(self, theoryid, fiatlux_runcard, replica=0):
+    def __init__(self, theoryid, fiatlux_runcard, replica_id):
         # TODO : for the moment we do the 0-th replica then we change it
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
@@ -27,7 +27,7 @@ class Photon:
             self.eq2 = [self.ed2, self.eu2, self.ed2, self.eu2, self.ed2, self.eu2] # d u s c b t
             self.set_thresholds_a_em()
 
-            self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica)
+            self.qcd_pdfs = lhapdf.mkPDF(fiatlux_runcard["pdf_name"], replica_id)
             path_to_F2 = fiatlux_runcard["path_to_F2"]
             path_to_FL = fiatlux_runcard["path_to_FL"]
             f2 = StructureFunction(path_to_F2, self.qcd_pdfs)
@@ -45,35 +45,6 @@ class Photon:
             self.lux.InsertInelasticSplitQ([4.18, 1e100])
 
             self.produce_interpolator()
-
-    # since we interpolate this is useless now
-    def exctract_grids(self, xgrids):
-        r"""
-        Extract the subgrids inside xgrids.
-
-        xgrids is the concatenation of different grids, i.e.
-        xgrid = np.array([xmin1, ..., xmax1, xmin2, ...,xmax2, xmin3, ...]).
-        The different grids are extracted and stored in a list:
-        xgrid_list = [np.array([xgrid1]), np.array([xgrid2]), ...]
-
-        Parameters
-        ----------
-        xgrids : nd.array
-            concatenation of the subgrids
-        
-        Returns
-        -------
-        xgrid_list : list
-            list containing the different grids
-        """
-        xgrid_list = []
-        imin = 0
-        for i in range(1, len(xgrids)):
-            if xgrids[i-1] > xgrids[i] :
-                xgrid_list.append(xgrids[imin:i])
-                imin = i
-        xgrid_list.append(xgrids[imin:])
-        return xgrid_list
     
     def F2LO(self, x, Q):
         r"""
@@ -156,7 +127,7 @@ class Photon:
         self.thresh = {3: self.theory["Qmc"], 4: self.theory["Qmb"], 5: self.qref, 6:self.theory["Qmt"]}
         self.a_thresh = {3: self.a_em_mc, 4:self.a_em_mb, 5:self.alpha_em_ref/(4*np.pi), 6:self.a_em_mt}
 
-    def compute_photon_array(self, xgrids):
+    def compute_photon_array(self, xgrid):
         r"""
         Compute the photon PDF for every point in the grid xgrid.
 
@@ -169,42 +140,38 @@ class Photon:
         -------
         compute_photon_array: numpy.array
             photon PDF at the scale 1 GeV
-        """
-        xgrid_list = self.exctract_grids(xgrids)
-        
-        photon_list = []
-        for xgrid in xgrid_list :
-            photon_100GeV = np.zeros(len(xgrid))
-            for i, x in enumerate(xgrid):
-                print("computing grid point", i+1, "/", len(xgrids))
-                photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
+        """        
+        photon_100GeV = np.zeros(len(xgrid))
+        for i, x in enumerate(xgrid):
+            print("computing grid point", i+1, "/", len(xgrid))
+            # photon_100GeV[i] = self.lux.EvaluatePhoton(x, self.q_in2).total / x
+            photon_100GeV[i] = np.exp(-x)
 
-            eko=load_tar(self.fiatlux_runcard['path_to_eko'])
-            xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
+        eko=load_tar(self.fiatlux_runcard['path_to_eko'])
+        xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
             
-            pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
-            for j, pid in enumerate(eko.rotations.inputpids):
-                if pid == 22 :
-                    pdfs[j] = photon_100GeV
-                    ph_id = j
-                if not self.qcd_pdfs.hasFlavor(pid):
-                    continue
-                pdfs[j] = np.array(
-                    [
-                        self.qcd_pdfs.xfxQ2(pid, x, self.q_in2) / x
-                        for x in xgrid
-                    ]
-                )
+        pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
+        for j, pid in enumerate(eko.rotations.inputpids):
+            if pid == 22 :
+                pdfs[j] = photon_100GeV
+                ph_id = j
+            if not self.qcd_pdfs.hasFlavor(pid):
+                continue
+            pdfs[j] = np.array(
+                [
+                    self.qcd_pdfs.xfxQ2(pid, x, self.q_in2) / x
+                    for x in xgrid
+                ]
+            )
             
-            for q2, elem in eko.items():
-                pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-                # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
+        for q2, elem in eko.items():
+            pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
+            # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
-            photon_Q0 = pdf_final[ph_id]
-            # we want x * gamma(x)
-            photon_list.append( xgrid * photon_Q0 )
-       
-        return np.concatenate(photon_list)
+        photon_Q0 = pdf_final[ph_id]
+
+        # we want x * gamma(x)
+        return xgrid * photon_Q0
     
     def produce_interpolator(self):
         # TODO : pass the grid in a more clever way
