@@ -36,7 +36,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(nx=int(2e3), mode='All', scaler=None, photon=None):
+def msr_impose(nx=int(2e3), mode='All', scaler=None, photons=None):
     """
         This function receives:
         Generates a function that applies a normalization layer to the fit.
@@ -71,24 +71,24 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None, photon=None):
     integrator = xIntegrator(weights_array, input_shape=(nx,))
 
     # 3.1 If a photon is given, compute the photon component of the MSR
-    photon_c = 0.0
-    if photon is not None:
-        photon_c = photon.integrate()
+    photons_c = None
+    if photons is not None:
+        photons_c = [photon.integrate() for photon in photons]
 
     # 4. Now create the normalization by selecting the right integrations
-    normalizer = MSR_Normalization(mode=mode, photon_contribution=photon_c)
+    normalizer = MSR_Normalization(mode=mode, photons_contribution=photons_c)
 
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
     xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
     # Finally prepare a function which will take as input the output of the PDF model
     # and will return it appropiately normalized.
-    def apply_normalization(layer_pdf):
+    def apply_normalization(layer_pdf, id):
         """
             layer_pdf: output of the PDF, unnormalized, ready for the fktable
         """
         x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
         pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
-        normalization = normalizer(integrator(pdf_integrand))
+        normalization = normalizer(integrator(pdf_integrand), id)
 
         def ultimate_pdf(x):
             return layer_pdf(x)*normalization

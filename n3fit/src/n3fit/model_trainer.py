@@ -102,7 +102,7 @@ class ModelTrainer:
         parallel_models=1,
         theoryid=None,
         fiatlux_runcard=None,
-        replica_id=None,
+        replicas_id=None,
     ):
         """
         Parameters
@@ -157,7 +157,7 @@ class ModelTrainer:
         self._parallel_models = parallel_models
         self.theoryid = theoryid
         self.fiatlux_runcard = fiatlux_runcard
-        self.replica_id = replica_id
+        self.replicas_id = replicas_id
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -653,7 +653,7 @@ class ModelTrainer:
         regularizer,
         regularizer_args,
         seed,
-        photon,
+        photons,
     ):
         """
         Defines the internal variable layer_pdf
@@ -707,7 +707,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
-            photon=photon,
+            photons=photons,
         )
         return pdf_models
 
@@ -879,11 +879,16 @@ class ModelTrainer:
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
         
-        # Initialize photon class:
+        # Initialize all photon classes for the different replicas:
         if self.fiatlux_runcard is not None:
-            photon=Photon(theoryid=self.theoryid, fiatlux_runcard=self.fiatlux_runcard)
+            # TODO : implement the different replicas inside the Photon class
+            photons=[Photon(
+                theoryid=self.theoryid,
+                fiatlux_runcard=self.fiatlux_runcard,
+                replica_id = id
+            ) for id in self.replicas_id]
         else:
-            photon=None
+            photons=None
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -903,7 +908,7 @@ class ModelTrainer:
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
                 seeds,
-                photon,
+                photons,
             )
 
             # Register the fitting grid with the photon layer

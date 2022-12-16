@@ -197,8 +197,7 @@ def performfit(
             parallel_models=n_models,
             theoryid=theoryid,
             fiatlux_runcard=fiatlux,
-            # replica_id=replica_idxs[0],
-            replica_id=None,
+            replicas_id=replica_idxs,
         )
 
         # This is just to give a descriptive name to the fit function

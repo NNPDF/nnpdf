@@ -403,7 +403,7 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
-    photon=None,
+    photons=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -566,14 +566,14 @@ def pdfNN_layer_generator(
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Photon layer
-    layer_photon = AddPhoton(photon=photon)
+    layer_photon = AddPhoton(photons=photons)
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler, photon=photon)
+        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler, photons=photons)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -648,13 +648,13 @@ def pdfNN_layer_generator(
             return layer_evln(layer_fitbasis(x))
         
         # Final PDF (apply normalization)
-        normalized_pdf = sumrule_layer(layer_pdf)
+        normalized_pdf = sumrule_layer(layer_pdf, i)
 
         # Photon layer, changes the photon from zero to non-zero
         def apply_photon(x):
-            return layer_photon(normalized_pdf(x))
+            return layer_photon(normalized_pdf(x), i)
 
-        if photon is None:
+        if photons is None:
             final_pdf = normalized_pdf
         else:
             final_pdf = apply_photon

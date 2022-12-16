@@ -101,8 +101,8 @@ class AddPhoton(MetaLayer):
     In order to change the shape it is necessary to rebuild the photon.
     """
 
-    def __init__(self, photon, **kwargs):
-        self._photon_generator = photon
+    def __init__(self, photons, **kwargs):
+        self._photons_generator = photons
         self._pdf_ph = None
         super().__init__(**kwargs)
 
@@ -110,14 +110,14 @@ class AddPhoton(MetaLayer):
         """Compute the photon array and set the layer to be rebuilt"""
         # TODO: maybe add here some caching mechanism so that the photon doesn't get
         # recomputed if the grid hasn't changed!
-        if self._photon_generator is not None:
-            self._pdf_ph = self._photon_generator.compute(xgrid)
+        if self._photons_generator is not None:
+            self._pdf_ph = [photon.compute(xgrid) for photon in self._photons_generator]
             self.built = False
     
-    def call(self, pdfs):
+    def call(self, pdfs, i):
         if self._pdf_ph is None:
             return pdfs
-        return op.concatenate([self._pdf_ph, pdfs[:,:,1:]], axis=-1)
+        return op.concatenate([self._pdf_ph[i], pdfs[:,:,1:]], axis=-1)
 
 
 class ObsRotation(MetaLayer):
