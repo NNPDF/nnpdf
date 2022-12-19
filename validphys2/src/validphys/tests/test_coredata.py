@@ -29,3 +29,18 @@ def test_with_ADD_sys():
     new_commondata = commondata.with_ADD_sys(add_sys=add_sys)
 
     assert( np.sum((commondata.commondata_table["ADD"] - new_commondata.commondata_table["ADD"]).to_numpy()) <= 1e-12 )
+
+
+def test_multiplicative_errors_rescale():
+    """
+    tests that rescaling both CORR and UNCORR MULT systematics
+    by 1 leaves the MULT sys unchanged
+    """
+    l = Loader()
+    observable = SINGLE_DATASET["dataset"]
+    commondata = l.check_commondata(observable).load_commondata_instance()
+
+    mult_table = commondata.commondata_table["MULT"]
+    rescaled_mult_table = commondata.multiplicative_errors_rescale(CORR=True,UNCORR=True,sys_rescaling_factor=1)
+    
+    assert( np.sum((rescaled_mult_table - mult_table).to_numpy()) <= 1e-12 )
