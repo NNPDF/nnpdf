@@ -11,6 +11,8 @@
 import logging
 from collections import namedtuple
 from itertools import zip_longest
+
+import numpy
 import numpy as np
 from scipy.interpolate import PchipInterpolator
 from n3fit import model_gen
@@ -137,9 +139,9 @@ class ModelTrainer:
         self.pos_info = pos_info
         self.integ_info = integ_info
         if self.integ_info is not None:
-            self.all_info = self.exp_info + pos_info + integ_info
+            self.all_info = self.exp_info[0] + pos_info + integ_info
         else:
-            self.all_info = self.exp_info + pos_info
+            self.all_info = self.exp_info[0] + pos_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -184,9 +186,9 @@ class ModelTrainer:
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
         self.training = {
-            "output": [[] for _ in range(parallel_models)],
-            "expdata": [[] for _ in range(parallel_models)],
-            "ndata": [0 for _ in range(parallel_models)],
+            "output": [],
+            "expdata": [],
+            "ndata": 0,
             "model": None,
             "posdatasets": [],
             "posmultipliers": [],
@@ -194,31 +196,31 @@ class ModelTrainer:
             "integdatasets": [],
             "integmultipliers": [],
             "integinitials": [],
-            "folds": [[] for _ in range(parallel_models)],
+            "folds": [],
         }
         self.validation = {
-            "output": [[] for _ in range(parallel_models)],
-            "expdata": [[] for _ in range(parallel_models)],
-            "ndata": [0 for _ in range(parallel_models)],
+            "output": [],
+            "expdata": [],
+            "ndata": 0,
             "model": None,
-            "folds": [[] for _ in range(parallel_models)],
+            "folds": [],
             "posdatasets": [],
         }
         self.experimental = {
-            "output": [[] for _ in range(parallel_models)],
-            "expdata": [[] for _ in range(parallel_models)],
-            "ndata": [0 for _ in range(parallel_models)],
+            "output": [],
+            "expdata": [],
+            "ndata": 0,
             "model": None,
-            "folds": [[] for _ in range(parallel_models)],
+            "folds": [],
         }
+        self.tr_masks = []
 
         self._fill_the_dictionaries()
 
-        if self.validation["ndata"][0] == 0:
+        if self.validation["ndata"] == 0:
             # If there is no validation, the validation chi2 = training chi2
             self.no_validation = True
-            for replica in range(parallel_models):
-                self.validation["expdata"][replica] = self.training["expdata"][replica]
+            self.validation["expdata"] = self.training["expdata"]
         else:
             # Consider the validation only if there is validation (of course)
             self.no_validation = False
@@ -261,44 +263,36 @@ class ModelTrainer:
             - ``name``: names of the experiment
             - ``ndata``: number of experimental points
         """
-        for replica in range(self._parallel_models):
-            replica_exp_info = self.exp_info[replica]
-            for exp_dict in replica_exp_info:
-                self.training["expdata"][replica].append(exp_dict["expdata"])
-                self.validation["expdata"][replica].append(exp_dict["expdata_vl"])
-                self.experimental["expdata"][replica].append(exp_dict["expdata_true"])
 
-                nd_tr = exp_dict["ndata"]
-                nd_vl = exp_dict["ndata_vl"]
+        for index, exp_dict in enumerate(self.exp_info[0]):
+            self.training["expdata"].append(exp_dict["expdata"])
+            self.validation["expdata"].append(exp_dict["expdata_vl"])
+            self.experimental["expdata"].append(exp_dict["expdata_true"])
 
-                self.training["ndata"][replica] += nd_tr
-                self.validation["ndata"][replica] += nd_vl
-                self.experimental["ndata"][replica] += nd_tr + nd_vl
+            self.training["folds"].append(exp_dict["folds"]["training"])
+            self.validation["folds"].append(exp_dict["folds"]["validation"])
+            self.experimental["folds"].append(exp_dict["folds"]["experimental"])
+
+            nd_tr = exp_dict["ndata"]
+            nd_vl = exp_dict["ndata_vl"]
+
+            self.training["ndata"] += nd_tr
+            self.validation["ndata"] += nd_vl
+            self.experimental["ndata"] += nd_tr + nd_vl
 
             for dataset in exp_dict["datasets"]:
-                self.all_datasets.append(dataset["name"])
-
-            if replica == 0:
-                self.training["folds"].append(exp_dict["folds"]["training"])
-                self.validation["folds"].append(exp_dict["folds"]["validation"])
-                self.experimental["folds"].append(exp_dict["folds"]["experimental"])
-
-            for pos_dict in self.pos_info:
-                self.training["expdata"][replica].append(pos_dict["expdata"])
-                self.validation["expdata"][replica].append(pos_dict["expdata"])
-
-            if self.integ_info is not None:
-                for integ_dict in self.integ_info:
-                    self.training["expdata"][replica].append(integ_dict["expdata"])
-
+                self.all_datasets.append(dataset.name)
         self.all_datasets = set(self.all_datasets)
 
         for pos_dict in self.pos_info:
+            self.training["expdata"].append(pos_dict["expdata"])
             self.training["posdatasets"].append(pos_dict["name"])
+            self.validation["expdata"].append(pos_dict["expdata"])
             self.validation["posdatasets"].append(pos_dict["name"])
 
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
+                self.training["expdata"].append(integ_dict["expdata"])
                 self.training["integdatasets"].append(integ_dict["name"])
 
     def _xgrid_generation(self):
@@ -487,11 +481,7 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
-        self.input_sizes = []
-        self.training["output"] = [[] for _ in range(self._parallel_models)]
-        self.validation["output"] = [[] for _ in range(self._parallel_models)]
-        self.experimental["output"] = [[] for _ in range(self._parallel_models)]
-        for key in ["posmultipliers", "integmultipliers"]:
+        for key in ["output", "posmultipliers", "integmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
@@ -538,22 +528,22 @@ class ModelTrainer:
         log.info("Generating layers")
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for replica in range(self._parallel_models):
-            for exp_dict in self.exp_info[replica]:
-                if not self.mode_hyperopt:
-                    log.info("Generating layers for experiment %s", exp_dict["name"])
-# TODO: Make this generator less memory-consuming by factorizing out the FK-tables mask into a separate layer...
-                exp_layer = model_gen.observable_generator(exp_dict)
+        for index, exp_dict in enumerate(self.exp_info[0]):
+            if not self.mode_hyperopt:
+                log.info("Generating layers for experiment %s", exp_dict["name"])
 
-                # Save the input(s) corresponding to this experiment
-                if replica == 0:
-                    self.input_list.append(exp_layer["inputs"])
+            # Stacked tr-vl mask array for all replicas for this dataset
+            replica_masks = numpy.stack([e[index]["trmask"] for e in self.exp_info])
 
-                # Now save the observable layer, the losses and the experimental data
-                self.training["output"][replica].append(exp_layer["output_tr"])
-                self.validation["output"][replica].append(exp_layer["output_vl"])
-                self.experimental["output"][replica].append(exp_layer["output"])
+            exp_layer = model_gen.observable_generator(exp_dict, mask_array=replica_masks)
 
+            # Save the input(s) corresponding to this experiment
+            self.input_list.append(exp_layer["inputs"])
+
+            # Now save the observable layer, the losses and the experimental data
+            self.training["output"].append(exp_layer["output_tr"])
+            self.validation["output"].append(exp_layer["output_vl"])
+            self.experimental["output"].append(exp_layer["output"])
 
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
