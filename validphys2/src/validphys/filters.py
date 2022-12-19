@@ -13,6 +13,7 @@ from NNPDF import CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
+from validphys.inconsys import process_commondata
 
 log = logging.getLogger(__name__)
 
@@ -171,7 +172,8 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize):
+def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize,
+                        ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit):
     """
     GENERAL DESCRIPTION:
 
@@ -208,6 +210,18 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     errorsize : float 
                 (defined in runcard)
     
+    ADD,MULT,CORR,UNCORR : bool
+    
+    inconsistent_datasets : list
+                        list of the datasets for which to introduce an inconsistency
+    
+    sys_rescaling_factor : float or int
+    
+    reference_fit : bool
+                write the rescaled systematics in the commondata in the fit folder
+                so that the generation of replica data is consistent with the generation
+                of L1 data
+            
 
     Returns
     -------
@@ -224,7 +238,8 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
 
     from validphys.pseudodata import make_level0_data
     level0_commondata_instances_wc = make_level0_data(data,fakepdf)
-    commondata_instances_wc = data.load_commondata_instance() # used to generate experimental covariance matrix 
+    processed_commondata_instances_wc = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+                                        for cd in data.load_commondata_instance()]  # used to generate experimental covariance matrix 
 
     for j, dataset in enumerate(data.datasets):
         #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
@@ -249,10 +264,14 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     else:
         #======= Level 1 closure test =======#
         from validphys.pseudodata import make_level1_data
-        level1_commondata_instances_wc = make_level1_data(data,commondata_instances_wc,level0_commondata_instances_wc,filterseed)
+        level1_commondata_instances_wc = make_level1_data(data,processed_commondata_instances_wc,level0_commondata_instances_wc,filterseed)
         #====== write commondata and systype files ======#
         log.info("Writing Level1 data")
         for l1_cd in level1_commondata_instances_wc:
+            # for reference_fit only modify the L1 data systematics such that the covmat used to generate L2 data
+            # corresponds to the one used for L1 data (apart from the Multiplicative sys obtained from the central values)
+            if reference_fit:
+                l1_cd = process_commondata(l1_cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
             write_commondata_to_file(l1_cd, path = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat")
             write_systypes_to_file(l1_cd, path = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}.dat")
 
