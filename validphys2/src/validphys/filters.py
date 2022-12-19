@@ -95,7 +95,8 @@ def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
     RandomGenerator.GetRNG().SetSeed(filterseed)
 
 @check_positive('errorsize')
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize):
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize,
+ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -104,13 +105,14 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, error
     """
     log.info('Filtering closure-test data.')
     return _filter_closure_data(
-        filter_path, data, fakepdf, fakenoise, filterseed, errorsize)
+        filter_path, data, fakepdf, fakenoise, filterseed, errorsize,
+        ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit)
 
 
 @check_positive("errorsize")
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed
-    , errorsize,
+    , errorsize, ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -122,7 +124,8 @@ def filter_closure_data_by_experiment(
 
     """
     return [
-        _filter_closure_data(filter_path, exp, fakepdf, fakenoise, filterseed, errorsize)
+        _filter_closure_data(filter_path, exp, fakepdf, fakenoise, filterseed, errorsize,
+                            ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit)
         for exp in experiments_data
     ]
 
