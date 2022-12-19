@@ -360,6 +360,41 @@ class CommonData:
 
         return mult_table
 
+    def additive_errors_rescale(self,CORR,UNCORR,sys_rescaling_factor):
+        """
+        rescale the ADD sys by constant factor, sys_rescaling_factor,
+        a distinction is done between CORR and UNCORR systematics
+
+        Parameters
+        ----------
+
+        CORR : bool
+
+        UNCORR : bool
+
+        sys_rescaling_factor : float, int
+
+        Returns
+        -------
+        pd.DataFrame corresponding to the rescaled ADD systematics
+
+        """
+        add_table = self.systematics_table.loc[:,["ADD"]].copy()
+        # get indices of CORR / UNCORR sys
+        add_systype_corr = self.systype_table[(self.systype_table["type"] == "ADD") 
+                            & (~self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+        
+        add_systype_uncorr = self.systype_table[(self.systype_table["type"] == "ADD") 
+                            & (self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+
+        # rescale systematics
+        if CORR:
+            add_table.iloc[:,add_systype_corr.index - 1] *= sys_rescaling_factor
+        if UNCORR:
+            add_table.iloc[:,add_systype_uncorr.index - 1] *= sys_rescaling_factor
+
+        return add_table
+
     @property
     def stat_errors(self):
         return self.commondata_table["stat"]
