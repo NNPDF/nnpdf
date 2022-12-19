@@ -16,3 +16,16 @@ def test_with_MULT_sys():
 
     assert( np.sum((commondata.commondata_table["MULT"] - new_commondata.commondata_table["MULT"]).to_numpy()) <= 1e-12 )
 
+def test_with_ADD_sys():
+    """
+    test that replacement of ADD columns with themselves
+    works
+    """
+    l = Loader()
+    observable = SINGLE_DATASET["dataset"]
+    commondata = l.check_commondata(observable).load_commondata_instance()
+    add_sys = commondata.commondata_table["ADD"].copy()
+
+    new_commondata = commondata.with_ADD_sys(add_sys=add_sys)
+
+    assert( np.sum((commondata.commondata_table["ADD"] - new_commondata.commondata_table["ADD"]).to_numpy()) <= 1e-12 )

@@ -303,11 +303,28 @@ class CommonData:
 
         mult_sys : pd.DataFrame()
                  all MULT columns of CommonData.commondata_table
-                 
+
         """
         table = self.commondata_table.copy()
         table["MULT"] = mult_sys
         return dataclasses.replace(self, commondata_table = table)
+    
+    def with_ADD_sys(self,add_sys):
+        """
+        returns a CommonData instance with ADD systematics
+        replaced by add_sys
+
+        Parameters
+        ----------
+
+        add_sys : pd.DataFrame()
+                 all ADD columns of CommonData.commondata_table
+
+        """
+        table = self.commondata_table.copy()
+        table["ADD"] = add_sys
+        return dataclasses.replace(self, commondata_table = table)
+
     @property
     def stat_errors(self):
         return self.commondata_table["stat"]
