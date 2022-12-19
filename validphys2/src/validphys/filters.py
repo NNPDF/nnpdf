@@ -173,7 +173,7 @@ def _filter_real_data(filter_path, data):
 
 
 def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize,
-                        ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit):
+                        ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor,reference_fit=False):
     """
     GENERAL DESCRIPTION:
 
@@ -217,7 +217,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     
     sys_rescaling_factor : float or int
     
-    reference_fit : bool
+    reference_fit : bool, default =False
                 write the rescaled systematics in the commondata in the fit folder
                 so that the generation of replica data is consistent with the generation
                 of L1 data
