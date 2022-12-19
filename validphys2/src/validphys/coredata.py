@@ -292,7 +292,22 @@ class CommonData:
          tb = self.commondata_table.copy()
          tb["data"] = cv
          return dataclasses.replace(self, commondata_table=tb)
-         
+    
+    def with_MULT_sys(self,mult_sys):
+        """
+        returns a CommonData instance with MULT systematics
+        replaced by mult_sys
+
+        Parameters
+        ----------
+
+        mult_sys : pd.DataFrame()
+                 all MULT columns of CommonData.commondata_table
+                 
+        """
+        table = self.commondata_table.copy()
+        table["MULT"] = mult_sys
+        return dataclasses.replace(self, commondata_table = table)
     @property
     def stat_errors(self):
         return self.commondata_table["stat"]
