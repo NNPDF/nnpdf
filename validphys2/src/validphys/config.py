@@ -1413,7 +1413,7 @@ class CoreConfig(configparser.Config):
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
         filtering data (when using internal cuts).
-        Currently these limits are ``q2min`` and ``w2min``.
+        Currently these limits are ``q2min``, ``w2min`` and ``xmin``.
         """
         log.warning("Overwriting filter defaults")
         return filter_defaults
@@ -1422,12 +1422,13 @@ class CoreConfig(configparser.Config):
         self,
         q2min=None,
         w2min=None,
+        xmin=None,
         default_filter_settings=None,
         filter_defaults={},
         default_filter_settings_recorded_spec_=None,
     ):
         """Produce default values for filters taking into account both the
-        values of ``q2min`` and ` `w2min`` defined at namespace
+        values of ``q2min``,``w2min`` and ``xmin`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
@@ -1442,6 +1443,12 @@ class CoreConfig(configparser.Config):
             w2min is not None
             and "w2min" in filter_defaults
             and w2min != filter_defaults["w2min"]
+        ):
+            raise ConfigError("w2min defined multiple times with different values")
+        if (
+            xmin is not None
+            and "xmin" in filter_defaults
+            and xmin != filter_defaults["xmin"]
         ):
             raise ConfigError("w2min defined multiple times with different values")
 
@@ -1465,6 +1472,10 @@ class CoreConfig(configparser.Config):
         if w2min is not None and defaults_loaded:
             log.warning("Using w2min from runcard")
             filter_defaults["w2min"] = w2min
+        
+        if xmin is not None and defaults_loaded:
+            log.warning("Using xmin from runcard")
+            filter_defaults["xmin"] = xmin
 
         return filter_defaults
 

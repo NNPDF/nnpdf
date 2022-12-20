@@ -360,3 +360,8 @@
   FNS: FONLL-C
   IC: True
   rule: "Q2 > 8"
+
+- process_type: DIS_ALL
+  reason: |
+    Remove small-x data
+  rule: "x > xmin"
