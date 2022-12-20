@@ -25,3 +25,49 @@ class StructureFunction :
     
     def FxQ(self, x, Q):
         return self.interpolator(x, Q**2)[0,0]
+
+class F2LO :
+    def __init__(self, pdfs, theory):
+        self.pdfs = pdfs
+        self.Qmc = theory["Qmc"]
+        self.Qmb = theory["Qmb"]
+        self.Qmt = theory["Qmt"]
+        if theory["MaxNfPdf"] <= 5 :
+            self.Qmt = np.inf
+        if theory["MaxNfPdf"] <= 4 :
+            self.Qmb = np.inf
+        if theory["MaxNfPdf"] <= 3 :
+            self.Qmc = np.inf
+        eu2 = 4. / 9
+        ed2 = 1. / 9
+        self.eq2 = [ed2, eu2, ed2, eu2, ed2, eu2] # d u s c b t
+    
+    def FxQ(self, x, Q):
+        r"""
+        Compute the LO DIS structure function F2.
+
+        Parameters
+        ----------
+        x : float
+            Bjorken's variable
+        Q : float
+            DIS hard scale
+        
+        Returns
+        -------
+        F2_LO : float
+            Structure function F2 at LO
+        """
+        # at LO we use ZM-VFS
+        if Q < self.Qmc :
+            nf = 3
+        elif Q < self.Qmb :
+            nf = 4
+        elif Q < self.Qmt :
+            nf = 5
+        else :
+            nf = 6
+        res = 0
+        for i in range(1, nf+1):
+            res += self.eq2[i-1] * (self.pdfs.xfxQ(x, Q)[i] + self.pdfs.xfxQ(x, Q)[-i])
+        return res

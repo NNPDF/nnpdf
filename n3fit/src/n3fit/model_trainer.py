@@ -881,12 +881,11 @@ class ModelTrainer:
         
         # Initialize all photon classes for the different replicas:
         if self.fiatlux_runcard is not None:
-            # TODO : implement the different replicas inside the Photon class
-            photons=[Photon(
+            photons=Photon(
                 theoryid=self.theoryid,
                 fiatlux_runcard=self.fiatlux_runcard,
-                replica_id = id
-            ) for id in self.replicas_id]
+                replicas_id=self.replicas_id,
+            )
         else:
             photons=None
 
