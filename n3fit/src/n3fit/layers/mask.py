@@ -1,6 +1,6 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
-
+from numpy import count_nonzero
 
 class Mask(MetaLayer):
     """
@@ -25,8 +25,10 @@ class Mask(MetaLayer):
     def __init__(self, bool_mask=None, c=None, axis=None, **kwargs):
         if bool_mask is None:
             self.mask = None
+            self.last_dim = -1
         else:
             self.mask = op.numpy_to_tensor(bool_mask, dtype=bool)
+            self.last_dim = count_nonzero(bool_mask[0,...])
         self.c = c
         self.axis = axis
         super().__init__(**kwargs)
@@ -34,14 +36,16 @@ class Mask(MetaLayer):
     def build(self, input_shape):
         if self.c is not None:
             initializer = MetaLayer.init_constant(value=self.c)
+            output_shape = list(input_shape)
+            output_shape[-1] = self.last_dim
             self.kernel = self.builder_helper(
-                "mask", (1,), initializer, trainable=False
+                "mask", output_shape, initializer, trainable=False
             )
         super(Mask, self).build(input_shape)
 
     def call(self, ret):
         if self.mask is not None:
-            ret = op.boolean_mask(ret, self.mask, axis=self.axis)
+            ret = op.reshape(op.boolean_mask(ret, self.mask, axis=self.axis), shape=(1, -1, self.last_dim))
         if self.c is not None:
             ret = ret * self.kernel
         return ret

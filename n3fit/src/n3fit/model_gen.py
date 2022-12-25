@@ -23,6 +23,7 @@ from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 
+from keras.layers import Masking
 
 @dataclass
 class ObservableWrapper:
@@ -87,7 +88,7 @@ class ObservableWrapper:
             else:
                 masked_output_layers.append(mask_layer(output_layer))
 
-        # Finally concatenate all observables (so that experiments are one single entitiy)
+        # Finally concatenate all observables (so that experiments are one single entity)
         ret = op.concatenate(masked_output_layers)
         if self.rotation is not None:
             ret = self.rotation(ret)
@@ -170,8 +171,8 @@ def observable_generator(
 
         # Extract the masks that will end up in the observable wrappers...
         trmask = mask_array[:, offset:offset + dataset.ndata] if apply_masks else None
-        tr_mask_layers.append(Mask(trmask, axis=1) if apply_masks else None)
-        vl_mask_layers.append(Mask(~trmask, axis=1) if apply_masks else None)
+        tr_mask_layers.append(Mask(trmask, axis=1, c=1) if apply_masks else None)
+        vl_mask_layers.append(Mask(~trmask, axis=1, c=1) if apply_masks else None)
 
         # Now generate the observable layer, which takes the following information:
         # operation name
