@@ -321,8 +321,8 @@ class CoreConfig(configparser.Config):
         pdf
         """
         with self.set_context(ns=self._curr_ns.new_child({"fit": fit})):
-            _, datacuts = self.parse_from_("fit", "closuretest", write=False)
-        underlyinglaw = self.parse_pdf(datacuts["fakepdf"].name)
+            _, datacuts = self.parse_from_("fit", "closuretest", write=False)       
+        underlyinglaw = datacuts["fakepdf"]
         return {"pdf": underlyinglaw}
 
     @element_of("hyperscans")
