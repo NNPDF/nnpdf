@@ -299,7 +299,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
             x = info.get_xcol(line_data)
 
             try:
-                x = np.asanyarray(x, np.float)
+                x = np.asanyarray(x, float)
             except ValueError:
                 xticklabels = x
                 npoints = len(x)
