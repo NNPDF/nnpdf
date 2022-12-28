@@ -173,8 +173,6 @@ def _filter_real_data(filter_path, data):
 
 def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize):
     """
-    GENERAL DESCRIPTION:
-
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
     will be used to write the commondata files).
@@ -218,7 +216,6 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     
     total_data_points = 0
     total_cut_data_points = 0
-    fakeset = fakepdf.legacy_load()
     # Load data, don't cache result
     loaded_data = data.load.__wrapped__(data)
 
