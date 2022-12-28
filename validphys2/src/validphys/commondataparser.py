@@ -94,95 +94,79 @@ def parse_systypes(systypefile):
     return systypetable
 
 
-def write_commondata_table_to_string(commondata,sio,table="commondata_table"):
+
+def write_commondata_data(commondata, buffer):
     """
-    GENERAL DESCRIPTION:
+    write commondata table to buffer, this can be a memory map, 
+    compressed archive or strings (using for instance StringIO)
     
-    Given a validphys.coredata.CommonData instance and a StringIO,
-    update value of StringIO to contents of specified CommonData table.
     
     Parameters
     ----------
-
-    commondata: validphys.coredata.CommonData
     
-    sio: StringIO
+    commondata : validphys.coredata.CommonData
     
-    table: str, default 'commondata_table'
-
+    buffer : memory map, compressed archive or strings
+            example: StringIO object
+            
+            
     Example
     -------
-    
     >>> from validphys.loader import Loader
     >>> from io import StringIO
-
+    
     >>> l = Loader()
-    >>> obs = "NMC"
-    >>> commondata = l.check_commondata(obs).load_commondata_instance()
-
+    >>> cd = l.check_commondata("NMC").load_commondata_instance()
     >>> sio = StringIO()
+    >>> write_commondata_data(cd,sio)
     >>> print(sio.getvalue())
-    >>> write_commondata_table_to_string(commondata,sio,table="systype_table")
-    >>> sio.getvalue()
-
-
-    """
-    
-    data_frame = getattr(commondata,table)
-    data_frame.to_csv(sio, sep = "\t", header = None)
-    
-    
-
-def write_systypes_to_file(commondata,path):
-    """
-    GENERAL DESCRIPTION:
-    
-    write a systype file to a specified path 
-    (e.g. path = path_to_fit_folder/filter/name_observable/systypes/SYSTYPE_name_observable_DEFAULT.dat)
-
-    Parameters
-    ----------
-
-    commondata: validphys.coredata.CommonData
-    
-    path: str
-         
     
     """
-    from io import StringIO
-    sio = StringIO()
-    
-    write_commondata_table_to_string(commondata,sio,table="systype_table")
-    header = f"{commondata.nsys}\n"
-    
-    with open(path,"w") as file:
-        file.write(header)
-        file.write(sio.getvalue())
+    header = f"{commondata.setname} {commondata.nsys} {commondata.ndata}\n"
+    buffer.write(header)
+    commondata.commondata_table.to_csv(buffer, sep="\t", header=None)
 
-        
-        
 def write_commondata_to_file(commondata,path):
     """
-    GENERAL DESCRIPTION:
+    write commondata table to file
+    """
+    with open(path,"w") as file:
+        write_commondata_data(commondata,file)
+
+def write_systype_data(commondata, buffer):
+    """
+    write systype table to buffer, this can be a memory map, 
+    compressed archive or strings (using for instance StringIO)
     
-    write a commondata table as file to a specified path
     
     Parameters
     ----------
-
-    commondata: validphys.coredata.CommonData
     
-    path: str
-         
-         
+    commondata : validphys.coredata.CommonData
+    
+    buffer : memory map, compressed archive or strings
+            example: StringIO object
+            
+            
+    Example
+    -------
+    >>> from validphys.loader import Loader
+    >>> from io import StringIO
+    
+    >>> l = Loader()
+    >>> cd = l.check_commondata("NMC").load_commondata_instance()
+    >>> sio = StringIO()
+    >>> write_systype_data(cd,sio)
+    >>> print(sio.getvalue())
+    
     """
-    from io import StringIO
-    
-    sio = StringIO()
-    write_commondata_table_to_string(commondata,sio)
-    
-    header = f"{commondata.setname} {commondata.nsys} {commondata.ndata}\n"
-    
+    header = f"{commondata.nsys}\n"
+    buffer.write(header)
+    commondata.systype_table.to_csv(buffer, sep="\t", header=None)
+
+def write_systype_to_file(commondata,path):
+    """
+    write systype table to file
+    """
     with open(path,"w") as file:
-        file.write(header)
-        file.write(sio.getvalue())
+        write_systype_data(commondata,file)
