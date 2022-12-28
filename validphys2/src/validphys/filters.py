@@ -235,14 +235,16 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         if errorsize != 1.0:
             loaded_ds.RescaleErrors(errorsize)
     
-    from validphys.commondataparser import write_commondata_to_file, write_systypes_to_file
+    from validphys.commondataparser import write_commondata_to_file, write_systype_to_file
     if not fakenoise:
         #======= Level 0 closure test =======#
         log.info("Writing Level0 data")
         for l0_cd in level0_commondata_instances_wc:
-            write_commondata_to_file(l0_cd, path = filter_path / l0_cd.setname / f"DATA_{l0_cd.setname}.dat")
-            write_systypes_to_file(l0_cd, path = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}.dat")
-
+            path_cd = filter_path / l0_cd.setname / f"DATA_{l0_cd.setname}.dat"
+            path_sys = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}_DEFAULT.dat"
+            write_commondata_to_file(commondata=l0_cd,path=path_cd)
+            write_systype_to_file(commondata=l0_cd,path=path_sys)
+            
     else:
         #======= Level 1 closure test =======#
         from validphys.pseudodata import make_level1_data
@@ -250,8 +252,10 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         #====== write commondata and systype files ======#
         log.info("Writing Level1 data")
         for l1_cd in level1_commondata_instances_wc:
-            write_commondata_to_file(l1_cd, path = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat")
-            write_systypes_to_file(l1_cd, path = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}.dat")
+            path_cd = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat"
+            path_sys = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}_DEFAULT.dat"
+            write_commondata_to_file(commondata=l1_cd,path=path_cd)
+            write_systype_to_file(commondata=l1_cd,path=path_sys)
 
     return total_data_points, total_cut_data_points
 
