@@ -238,8 +238,6 @@ def indexed_make_replica(groups_index, make_replica):
 
 def make_level0_data(data,fakepdf):
     """
-    GENERAL DESCRIPTION:
-
     Given a validphys.core.DataGroupSpec object, load commondata and 
     generate a new commondata instance with central values replaced
     by fakepdf prediction 
@@ -288,8 +286,6 @@ def make_level0_data(data,fakepdf):
 
 def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed):
     """
-    GENERAL DESCRIPTION:
-
     Given a list of level0 commondata instances, return the same list
     with central values replaced by level1 data  
 
