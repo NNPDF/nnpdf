@@ -381,7 +381,7 @@ class CoreConfig(configparser.Config):
                 "Did not find unique underlying law from fits, "
                 f"instead found: {laws}"
             )
-        return laws.pop()
+        return self.parse_pdf(laws.pop())
 
     def produce_basisfromfit(self, fit):
         """Set the basis from fit config. In the fit config file the basis
