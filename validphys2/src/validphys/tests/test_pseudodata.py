@@ -9,6 +9,7 @@ recreation.
 """
 import pandas as pd
 import numpy as np
+from numpy.testing import assert_allclose
 import pytest
 
 from validphys.api import API
@@ -99,5 +100,5 @@ def test_make_level0_data():
                                 use_cuts="internal", theoryid=THEORYID, fakepdf = pdfname)
                                 
     l0_vals = l0_cd[0].central_values
-  
-    assert(np.abs(np.sum(dataset_t0_predictions(dataset = datasetspec, t0set = t0set) / l0_vals) / len(l0_vals) - 1) <= 1e-12)
+    assert_allclose(dataset_t0_predictions(dataset = datasetspec, t0set = t0set),
+        l0_vals,rtol=1e-07, atol=0)
