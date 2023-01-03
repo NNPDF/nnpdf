@@ -43,7 +43,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax, pdfs_plot_replicas):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
@@ -51,7 +51,6 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         self.xplotting_grids = self.normalize()
         self.ymin = ymin
         self.ymax = ymax
-        self.pdfs_plot_replicas = pdfs_plot_replicas
 
     def setup_flavour(self, flstate):
         flstate.handles=[]
@@ -1133,6 +1132,10 @@ class MixMatchPDFPlotter(ReplicaPDFPlotter, BandPDFPlotter):
     depending on the type of PDF.
     Practical use: plot together the PDF central values with the NNPDF bands
     """
+    def __init__(self, *args, pdfs_plot_replicas, **kwargs):
+        self.pdfs_plot_replicas = pdfs_plot_replicas
+        super().__init__(*args, **kwargs)
+    
     def draw(self, pdf, grid, flstate):
         if pdf in self.pdfs_plot_replicas:
             # Go then to the draw method of ReplicaPDFPlotter
