@@ -25,11 +25,9 @@ from validphys.core import MCStats
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.utils import scale_from_grid
 from validphys.checks import check_pdf_normalize_to, check_scale, check_have_two_pdfs
-from validphys.checks import check_pdfs_noband
+from validphys.checks import check_pdfs_noband, check_pdfs_plot_replicas
 
 log = logging.getLogger(__name__)
-
-PREFIX_TO_FORCE_PLOT_REPLICAS = "plotrep. "
 
 class FlavourState(SimpleNamespace):
     """This is the namespace for the pats specific for each flavour"""
@@ -45,7 +43,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax, pdfs_plot_replicas):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
@@ -53,6 +51,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         self.xplotting_grids = self.normalize()
         self.ymin = ymin
         self.ymax = ymax
+        self.pdfs_plot_replicas = pdfs_plot_replicas
 
     def setup_flavour(self, flstate):
         flstate.handles=[]
@@ -204,8 +203,7 @@ class ReplicaPDFPlotter(PDFPlotter):
         cv_line,  = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], color=color,
                 linewidth=2)
         handle = cv_line
-        label = pdf.label[len(PREFIX_TO_FORCE_PLOT_REPLICAS):] if pdf.label.startswith(PREFIX_TO_FORCE_PLOT_REPLICAS) else pdf.label
-        labels.append(label)
+        labels.append(pdf.label)
         handles.append(handle)
         return gv
 
@@ -231,32 +229,6 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """
     yield from ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
                                  xscale=xscale, normalize_to=normalize_to, ymin=ymin, ymax=ymax)
-
-
-@figuregen
-@check_pdf_normalize_to
-@check_scale('xscale', allow_none=True)
-@_warn_any_pdf_not_montecarlo
-def plot_pdfreplicas_kinetic_energy(
-    pdfs,
-    kinetic_xplotting_grids,
-    xscale: (str, type(None)) = None,
-    normalize_to: (int, str, type(None)) = None,
-    ymin=None,
-    ymax=None,
-):
-    """Plot the kinetic energy of the replicas of the specified PDFs.
-    Otherise it works the same as ``plot_pdfs_kinetic_energy``.
-    """
-    return plot_pdfreplicas(
-        pdfs,
-        kinetic_xplotting_grids,
-        xscale=xscale,
-        normalize_to=normalize_to,
-        ymin=ymin,
-        ymax=ymax,
-    )
-
 
 class UncertaintyPDFPlotter(PDFPlotter):
 
@@ -550,6 +522,49 @@ def plot_pdfs(
     legend_stat_labels (bool): Show detailed information on what kind of confidence
     interval is being plotted in the legend labels.
     """
+    yield from BandPDFPlotter(
+        pdfs,
+        xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_plot_replicas
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_pdfs_mixed(
+    pdfs,
+    xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+    pdfs_plot_replicas: (list, type(None)) = None,
+):
+    """This function is similar to plot_pdfs, except instead of only plotting
+    the central value and the uncertainty of the PDFs, those PDFs indicated by
+    pdfs_plot_replicas will be plotted as replicas without the central value.
+
+    Inputs are the same as plot_pdfs, with the exeption of pdfs_plot_replicas,
+    which only exists here.
+
+    pdfs_plot_replicas: A list of PDFs to plot as replicas, i.e. the
+    central values and replicas of these PDFs will be plotted. The list can be
+    formed of strings, corresponding to PDF IDs, integers (starting from one),
+    corresponding to the index of the PDF in the list of PDFs, or a mixture
+    of both.
+    """
     yield from MixMatchPDFPlotter(
         pdfs,
         xplotting_grids,
@@ -560,6 +575,7 @@ def plot_pdfs(
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,
+        pdfs_plot_replicas=pdfs_plot_replicas,
     )
 
 
@@ -591,6 +607,65 @@ def plot_pdfs_kinetic_energy(
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
+@_warn_any_pdf_not_montecarlo
+def plot_pdfreplicas_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+):
+    """Plot the kinetic energy of the replicas of the specified PDFs.
+    Otherise it works the same as ``plot_pdfs_kinetic_energy``.
+    """
+    return plot_pdfreplicas(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_noband
+@check_pdfs_plot_replicas
+@check_scale("xscale", allow_none=True)
+def plot_pdfs_mixed_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+    pdfs_plot_replicas: (list, type(None)) = None,
+):
+    """Mixed band and replica plotting of the "kinetic energy" of the PDF as a
+    function of x for a given value of Q.
+    """
+    return plot_pdfs_mixed(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+        pdfs_plot_replicas=pdfs_plot_replicas,
     )
 
 
@@ -729,7 +804,7 @@ def plot_lumi1d(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
             f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
             f"$\\|y|<{format_number(y_cut)}$"
-        )      
+        )
 
     return fig
 
@@ -741,7 +816,7 @@ def plot_lumi1d_uncertainties(
     pdfs_lumis,
     lumi_channel,
     sqrts: numbers.Real,
-    y_cut: (numbers.Real, type(None)) = None,    
+    y_cut: (numbers.Real, type(None)) = None,
     normalize_to=None,
     ymin: (numbers.Real, type(None)) = None,
     ymax: (numbers.Real, type(None)) = None,
@@ -788,7 +863,7 @@ def plot_lumi1d_uncertainties(
     else:
         ax.set_title(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
-            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "    
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
             f"$\\|y|<{format_number(y_cut)}$"
         )
     ax.set_ylim(ymin, ymax)
@@ -814,7 +889,7 @@ def plot_lumi1d_replicas(
     scale="log",
 ):
     """This function is similar to `plot_lumi1d`, but instead of plotting
-    the standard deviation and 68% c.i. it plots the luminosities for 
+    the standard deviation and 68% c.i. it plots the luminosities for
     individual replicas.
 
     Plot PDF replica luminosities at a given center of mass energy.
@@ -876,7 +951,7 @@ def plot_lumi1d_replicas(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
             f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
             f"$\\|y|<{format_number(y_cut)}$"
-        )      
+        )
 
     return fig
 
@@ -1059,10 +1134,7 @@ class MixMatchPDFPlotter(ReplicaPDFPlotter, BandPDFPlotter):
     Practical use: plot together the PDF central values with the NNPDF bands
     """
     def draw(self, pdf, grid, flstate):
-        # small values corresponding to charm result in a +1 placed on top of
-        # the y-axis if axes.formatter.useoffset is not False
-        plt.rcParams['axes.formatter.useoffset'] = False
-        if pdf.label.startswith(PREFIX_TO_FORCE_PLOT_REPLICAS):
+        if pdf in self.pdfs_plot_replicas:
             # Go then to the draw method of ReplicaPDFPlotter
             return super().draw(pdf, grid, flstate)
         return super(ReplicaPDFPlotter, self).draw(pdf, grid, flstate)
