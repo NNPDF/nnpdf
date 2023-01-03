@@ -189,7 +189,6 @@ def _warn_any_pdf_not_montecarlo(pdfs):
 
 class ReplicaPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
-        ax = flstate.ax
         labels = flstate.labels
         handles = flstate.handles
         ax = flstate.ax
