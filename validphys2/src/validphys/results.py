@@ -224,6 +224,25 @@ def procs_data_values(proc_result_table):
     data_central_values = proc_result_table["data_central"]
     return data_central_values
 
+def commondata_wc(data):
+    """
+    commondata with cuts:
+    given a DataGroupSpec load all the DataSetInput
+    instances into CommonData instances with cuts
+    already applied to
+
+    Parameters
+    ----------
+
+    data : validphys.core.DataGroupSpec
+    
+    Returns
+    -------
+    list containing commondata instances with cuts
+    
+    """
+    return data.load_commondata_instance()
+
 groups_results = collect(
     "dataset_inputs_results", ("group_dataset_inputs_by_metadata",)
 )
