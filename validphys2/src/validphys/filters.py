@@ -109,7 +109,7 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, error
 @check_positive("errorsize")
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed
-    , errorsize,
+    , errorsize, experiments_index
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -120,10 +120,14 @@ def filter_closure_data_by_experiment(
     not reproducible.
 
     """
-    return [
-        _filter_closure_data(filter_path, exp, fakepdf, fakenoise, filterseed, errorsize)
-        for exp in experiments_data
-    ]
+
+    res = []
+    for exp in experiments_data:
+        experiment_index = experiments_index[experiments_index.isin([exp.name],level=0)]
+        res.append(_filter_closure_data(filter_path, exp, fakepdf, fakenoise, 
+                filterseed, errorsize, experiment_index))
+
+    return res
 
 
 def filter_real_data(filter_path, data):
@@ -171,7 +175,7 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize):
+def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize, experiments_index):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -248,7 +252,8 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     else:
         #======= Level 1 closure test =======#
         from validphys.pseudodata import make_level1_data
-        level1_commondata_instances_wc = make_level1_data(data,commondata_instances_wc,level0_commondata_instances_wc,filterseed)
+        level1_commondata_instances_wc = make_level1_data(data,commondata_instances_wc,level0_commondata_instances_wc,
+                                                    filterseed, experiments_index)
         #====== write commondata and systype files ======#
         log.info("Writing Level1 data")
         for l1_cd in level1_commondata_instances_wc:
