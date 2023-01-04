@@ -284,7 +284,7 @@ def make_level0_data(data,fakepdf):
 
 
 
-def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed):
+def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed,experiments_index):
     """
     Given a list of level0 commondata instances, return the same list
     with central values replaced by level1 data  
@@ -339,14 +339,11 @@ def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed):
                                 _list_of_central_values=None, _only_additive=False,)
 
     #================== generation of pseudo data ======================#
-    from validphys.results import groups_index
     #= generate pseudo data starting from theory predictions
     level1_data = make_replica(level0_commondata_wc, filterseed, covmat, 
                             sep_mult=False, genrep=True)
 
-    group_index = groups_index([data]) # already set cuts
-
-    indexed_level1_data = indexed_make_replica(group_index, level1_data)
+    indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
     
     #===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname:c for c in level0_commondata_wc}
