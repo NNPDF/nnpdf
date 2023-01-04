@@ -236,7 +236,7 @@ def indexed_make_replica(groups_index, make_replica):
 
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
-def make_level0_data(data,fakepdf):
+def level0_commondata_wc(data,fakepdf):
     """
     Given a validphys.core.DataGroupSpec object, load commondata and 
     generate a new commondata instance with central values replaced
@@ -259,7 +259,7 @@ def make_level0_data(data,fakepdf):
     Example
     -------
     >>> from validphys.api import API
-    >>> API.make_level0_data(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
+    >>> API.level0_commondata_wc(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
     
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
@@ -319,13 +319,9 @@ def make_level1_data(data,commondata_wc,level0_commondata_wc,filterseed,experime
     -------
     
     >>> from validphys.api import API
-    >>> from validphys.loader import Loader
     >>> dataset='NMC'
-    >>> l=Loader()
-    >>> cuts = l.check_dataset(dataset,theoryid=200).cuts.load()
-    >>> cd = l.check_commondata(dataset).load_commondata_instance().with_cuts(cuts)
-    >>> l0_cd = API.make_level0_data(dataset_inputs = [{"dataset":dataset}],use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
-    >>> l1_cd = API.make_level1_data(level0_commondata_wc=l0_cd, commondata_wc=[cd], dataset_inputs = [{"dataset":dataset}], use_cuts="internal",filterseed=1, theoryid=200)
+    >>> l1_cd = API.make_level1_data(dataset_inputs = [{"dataset":dataset}],use_cuts="internal", theoryid=200,
+                             fakepdf = "NNPDF40_nnlo_as_01180",filterseed=1)
     >>> l1_cd
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """

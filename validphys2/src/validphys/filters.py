@@ -210,6 +210,8 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     errorsize : float 
                 (defined in runcard)
     
+    experiments_index : pandas.MultiIndex
+
 
     Returns
     -------
@@ -223,8 +225,8 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     # Load data, don't cache result
     loaded_data = data.load.__wrapped__(data)
 
-    from validphys.pseudodata import make_level0_data
-    level0_commondata_instances_wc = make_level0_data(data,fakepdf)
+    from validphys.pseudodata import level0_commondata_wc
+    level0_commondata_instances_wc = level0_commondata_wc(data,fakepdf)
     commondata_instances_wc = data.load_commondata_instance() # used to generate experimental covariance matrix 
 
     for j, dataset in enumerate(data.datasets):

@@ -84,21 +84,16 @@ def test_read_matches_recreate():
         pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
 
 
-def test_make_level0_data():
+def test_level0_commondata_wc():
     from validphys.loader import Loader
     from validphys.covmats import dataset_t0_predictions
-
     dataset=SINGLE_DATASET
     pdfname=PDF
-
-
     l = Loader()
     datasetspec = l.check_dataset(list(dataset.values())[0],theoryid=THEORYID)
     t0set = l.check_pdf(pdfname)
-    
-    l0_cd = API.make_level0_data(dataset_inputs = [dataset], 
+    l0_cd = API.level0_commondata_wc(dataset_inputs = [dataset], 
                                 use_cuts="internal", theoryid=THEORYID, fakepdf = pdfname)
-                                
     l0_vals = l0_cd[0].central_values
     assert_allclose(dataset_t0_predictions(dataset = datasetspec, t0set = t0set),
         l0_vals,rtol=1e-07, atol=0)
