@@ -476,7 +476,7 @@ flavour = LinearBasis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIAS
     default_elements = DEFAULT_FLARR, element_representations=PDG_PARTONS
 )
 
-#dicts are ordered in python 3.6+... code shouldn't break if they aren't #though
+# dicts are ordered in python 3.6+... code shouldn't break if they aren't though
 #see Eqs.(56),(57) https://arxiv.org/pdf/0808.1231.pdf for evolution basis definition
 evolution = LinearBasis.from_mapping({
     r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
