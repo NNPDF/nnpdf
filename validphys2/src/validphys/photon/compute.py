@@ -32,7 +32,7 @@ class Photon:
             self.Qmb = np.inf
         if self.theory["MaxNfAs"] <= 3 :
             self.Qmc = np.inf
-        self.set_thresholds_a_em()
+        self.set_thresholds_alpha_em()
 
         # structure functions
         self.qcd_pdfs = [lhapdf.mkPDF(fiatlux_runcard["pdf_name"], id) for id in replicas_id]
@@ -111,14 +111,24 @@ class Photon:
         alpha_NLO = alpha_LO * (1 - self.b1[nf] * alpha_LO * np.log(den))
         return alpha_NLO
     
-    def set_thresholds_a_em(self):
+    def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
         self.alpha_em_mt = self.alpha_em_nlo(self.theory["Qmt"], self.alpha_em_ref, self.qref, 5)
         self.alpha_em_mb = self.alpha_em_nlo(self.theory["Qmb"], self.alpha_em_ref, self.qref, 5)
         self.alpha_em_mc = self.alpha_em_nlo(self.theory["Qmc"], self.alpha_em_mb, self.theory["Qmb"], 4)
 
-        self.thresh = {3: self.theory["Qmc"], 4: self.theory["Qmb"], 5: self.qref, 6:self.theory["Qmt"]}
-        self.alpha_thresh = {3: self.alpha_em_mc, 4:self.alpha_em_mb, 5:self.alpha_em_ref, 6:self.alpha_em_mt}
+        self.thresh = {
+            3: self.theory["Qmc"],
+            4: self.theory["Qmb"],
+            5: self.qref,
+            6: self.theory["Qmt"]
+        }
+        self.alpha_thresh = {
+            3: self.alpha_em_mc,
+            4: self.alpha_em_mb,
+            5: self.alpha_em_ref,
+            6: self.alpha_em_mt
+        }
     
     def set_betas(self):
         """Compute and store beta0 / 4pi and b1 = (beta1/beta0)/4pi as a function of nf."""
