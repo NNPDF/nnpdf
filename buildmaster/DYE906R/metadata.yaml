@@ -1,0 +1,57 @@
+# Generalia
+setname: "DYE906R"
+ndata: 6
+observable: {description: "Ratio between fixed-target DY cross sections with hydrogen and deuterium target", label: $\sigma^pd/2*sigma^pp$, units: "" }
+kinematics:
+   variables:
+      Y: {description: "05*log(xb/xt), with xb and xt the momentum fractions carried by the target and beam partons involved in the parton-level scattering. ", label: $Y$, units: ""}
+      M2:  {description: "Invariant mass", label: $M$, units: "GeV^2"}
+      sqrts:  {description: "Com energy", units: "GeV"}
+   file: kinematics.yaml
+
+version: 1
+version_comment: "Baseline implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/abs/2103.04024"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1849683"
+# hepdata:
+#    url: 
+#    version:
+#    tables:
+
+# Data
+data_central: data.yaml
+data_uncertainties:
+   - uncertainties.yaml
+
+# # Data (variants)
+# variants:
+#   deweighted:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_dw.yaml
+#   shifted:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_sh.yaml
+
+# Plotting  
+kinematic_coverage:
+   Y: Y
+   sqrts: sqrts
+dataset_label: E906R
+plot_x: Y
+figure_by: 
+   - sqrts 
+
+# Theory
+theory:
+   FK_tables:
+     - DYE906R
+
+nnpdf_metadata:
+   nnpdf31_process: "DY"
+   experiment: "DYE906R"

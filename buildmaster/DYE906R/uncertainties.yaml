@@ -1,0 +1,72 @@
+definition:
+  sys_1:
+    description: systemtaic uncertainty
+    treatment: ADD
+    type: CORR
+  sys_2:
+    description: 'artificial systematic 1 '
+    treatment: ADD
+    type: CORR
+  sys_3:
+    description: 'artificial systematic 2 '
+    treatment: ADD
+    type: CORR
+  sys_4:
+    description: 'artificial systematic 3 '
+    treatment: ADD
+    type: CORR
+  sys_5:
+    description: 'artificial systematic 4 '
+    treatment: ADD
+    type: CORR
+  sys_6:
+    description: 'artificial systematic 5 '
+    treatment: ADD
+    type: CORR
+  sys_7:
+    description: 'artificial systematic 6 '
+    treatment: ADD
+    type: CORR
+bins:
+- syst_1: 0.053
+  syst_2: 0.03697438361031275
+  syst_3: 0.016566103817906182
+  syst_4: -0.03026054178594854
+  syst_5: 0.011773500363851075
+  syst_6: 0.0020351697050565967
+  syst_7: 3.930911691206809e-05
+- syst_1: 0.025
+  syst_2: 0.03508793929131129
+  syst_3: 0.008319343886861279
+  syst_4: 0.0032094839128974234
+  syst_5: -0.010425448063896366
+  syst_6: -0.012099063334538728
+  syst_7: -0.017442675989883808
+- syst_1: 0.044
+  syst_2: 0.03381402450305961
+  syst_3: 0.008153161747220687
+  syst_4: 0.003063702812171863
+  syst_5: -0.009699093724039293
+  syst_6: -0.014282045204261263
+  syst_7: 0.016513697079230078
+- syst_1: 0.032
+  syst_2: 0.03646008170977221
+  syst_3: 0.00961149813851745
+  syst_4: 0.004341028839443161
+  syst_5: -0.01825025681090416
+  syst_6: 0.019097506595059478
+  syst_7: 0.0012846719631242052
+- syst_1: 0.034
+  syst_2: 0.03589764560962923
+  syst_3: 0.013320986577661642
+  syst_4: 0.02363980246510531
+  syst_5: 0.02139946932540861
+  syst_6: 0.0026702756356084428
+  syst_7: 4.935903968767656e-05
+- syst_1: 0.039
+  syst_2: 0.04745112016040894
+  syst_3: -0.04233302349583719
+  syst_4: -0.0021966380438586523
+  syst_5: 0.003280644390473044
+  syst_6: 0.0008442839995464583
+  syst_7: 7.520265270054943e-05
