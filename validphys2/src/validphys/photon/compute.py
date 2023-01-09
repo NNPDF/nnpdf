@@ -112,7 +112,7 @@ class Photon:
         nd = nf - nu
         beta0 = ( -4.0 / 3 * (nl + nc * (nu * self.eu2 + nd * self.ed2)) )
         beta1 = -4.0 * ( nl + nc * (nu * self.eu2**2 + nd * self.ed2**2) )
-        lmu = np.log(q / qref)
+        lmu = np.log(q**2 / qref**2)
         den = 1.0 + beta0 * a_ref * lmu
         a_LO = a_ref / den
         as_NLO = a_LO * (1 - beta1 / beta0 * a_LO * np.log(den))
