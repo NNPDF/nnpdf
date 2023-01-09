@@ -476,8 +476,7 @@ flavour = LinearBasis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIAS
     default_elements = DEFAULT_FLARR, element_representations=PDG_PARTONS
 )
 
-#dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
-#though
+#dicts are ordered in python 3.6+... code shouldn't break if they aren't #though
 #see Eqs.(56),(57) https://arxiv.org/pdf/0808.1231.pdf for evolution basis definition
 evolution = LinearBasis.from_mapping({
     r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
@@ -591,9 +590,13 @@ FLAVOUR = LinearBasis.from_mapping(
         's': {'s': 1},
         'sbar': {'sbar': 1},
         'c': {'c': 1},
+        'cbar': {'cbar': 1},
         'g': {'g': 1},
     },
     default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
+
+CCBAR_ASYMM_FLAVOUR = copy.deepcopy(FLAVOUR)
+CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g')
 
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
@@ -752,6 +755,17 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         cp = {'sng': 0.25, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': -0.25, 'g': 0, 'v15': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1, 'v15': 0 }
         v15 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 1 }
+
+    elif fitbasis == 'CCBAR_ASYMM_FLAVOUR':
+        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'g': 0 }
+        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 1, 'cbar': -1, 'g': 0 }
+        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 0 }
+        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'cbar': 0, 'g': 0 }
+        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 0 }
+        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'cbar': 0, 'g': 0 }
+        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 1, 'cbar': 1, 'g': 0 }
+        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 1 }
+        v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': -3, 'cbar': 3, 'g': 0 }
 
     flist = [sng, g, v, v3, v8, t3, t8, cp, v15]
 
