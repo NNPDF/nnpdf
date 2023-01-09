@@ -20,6 +20,7 @@ class Photon:
         self.q_in2 = 100**2
 
         # parameters for the alphaem running
+        self.set_betas()
         self.alpha_em_ref = self.theory["alphaqed"]
         self.qref = self.theory["Qref"]
         self.Qmc = self.theory["Qmc"]
@@ -31,8 +32,6 @@ class Photon:
             self.Qmb = np.inf
         if self.theory["MaxNfAs"] <= 3 :
             self.Qmc = np.inf
-        self.eu2 = 4. / 9
-        self.ed2 = 1. / 9
         self.set_thresholds_a_em()
 
         # structure functions
@@ -79,14 +78,14 @@ class Photon:
             nf = 5
         else :
             nf = 6
-        return self.a_em_nlo(
+        return self.alpha_em_nlo(
             q,
-            self.a_thresh[nf],
+            self.alpha_thresh[nf],
             self.thresh[nf],
             nf
-        ) * (4 * np.pi)
+        )
     
-    def a_em_nlo(self, q, a_ref, qref, nf):
+    def alpha_em_nlo(self, q, alpha_ref, qref, nf):
         """
         Compute the alpha_em running for FFS at NLO.
 
@@ -106,27 +105,34 @@ class Photon:
         as_NLO : float
             target value of a
         """
-        nl = 3
-        nc = 3
-        nu = nf // 2
-        nd = nf - nu
-        beta0 = ( -4.0 / 3 * (nl + nc * (nu * self.eu2 + nd * self.ed2)) )
-        beta1 = -4.0 * ( nl + nc * (nu * self.eu2**2 + nd * self.ed2**2) )
-        lmu = np.log(q**2 / qref**2)
-        den = 1.0 + beta0 * a_ref * lmu
-        a_LO = a_ref / den
-        as_NLO = a_LO * (1 - beta1 / beta0 * a_LO * np.log(den))
-        return as_NLO
+        lmu = 2 * np.log(q / qref)
+        den = 1.0 + self.beta0[nf] * alpha_ref * lmu
+        alpha_LO = alpha_ref / den
+        alpha_NLO = alpha_LO * (1 - self.b1[nf] * alpha_LO * np.log(den))
+        return alpha_NLO
     
     def set_thresholds_a_em(self):
         """Compute and store the couplings at thresholds"""
-        a_ref = self.alpha_em_ref / (4 * np.pi)
-        self.a_em_mt = self.a_em_nlo(self.theory["Qmt"], a_ref, self.qref, 5)
-        self.a_em_mb = self.a_em_nlo(self.theory["Qmb"], a_ref, self.qref, 5)
-        self.a_em_mc = self.a_em_nlo(self.theory["Qmc"], self.a_em_mb, self.theory["Qmb"], 4)
+        self.alpha_em_mt = self.alpha_em_nlo(self.theory["Qmt"], self.alpha_em_ref, self.qref, 5)
+        self.alpha_em_mb = self.alpha_em_nlo(self.theory["Qmb"], self.alpha_em_ref, self.qref, 5)
+        self.alpha_em_mc = self.alpha_em_nlo(self.theory["Qmc"], self.alpha_em_mb, self.theory["Qmb"], 4)
 
         self.thresh = {3: self.theory["Qmc"], 4: self.theory["Qmb"], 5: self.qref, 6:self.theory["Qmt"]}
-        self.a_thresh = {3: self.a_em_mc, 4:self.a_em_mb, 5:self.alpha_em_ref/(4*np.pi), 6:self.a_em_mt}
+        self.alpha_thresh = {3: self.alpha_em_mc, 4:self.alpha_em_mb, 5:self.alpha_em_ref, 6:self.alpha_em_mt}
+    
+    def set_betas(self):
+        """Compute and store beta0 / 4pi and b1 = (beta1/beta0)/4pi as a function of nf."""
+        nl = 3
+        nc = 3
+        eu2 = 4. / 9
+        ed2 = 1. / 9
+        self.beta0 = {}
+        self.b1 = {}
+        for nf in range(3, 6+1):
+            nu = nf // 2
+            nd = nf - nu
+            self.beta0[nf] = ( -4.0 / 3 * (nl + nc * (nu * eu2 + nd * ed2)) ) / (4 * np.pi)
+            self.b1[nf] = -4.0 * ( nl + nc * (nu * eu2**2 + nd * ed2**2) ) / self.beta0[nf] / (4 * np.pi)**2
 
     def compute_photon_array(self, xgrid, id):
         r"""
