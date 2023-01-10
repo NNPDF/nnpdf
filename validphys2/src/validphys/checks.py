@@ -238,11 +238,11 @@ def check_pdfs_plot_replicas(pdfs, pdfs_plot_replicas):
 
     msg = ("pdfs_plot_replicas should be a list of PDF IDs (strings) or a list of "
            "PDF indexes (integers, starting from one)")
-    msg_range = ("At least one of your pdf_noband indexes is out of range. "
+    msg_range = ("At least one of the choices in pdfs_plot_replicas indexes is out of range. "
                  "Note that pdf_noband indexing starts at 1, not 0.")
 
     if pdfs_plot_replicas is None:
-        return
+        return {'pdfs_plot_replicas': []}
 
     names = [pdf.name for pdf in pdfs]
     # A list to which PDF IDs can be added, when the PDF is specified by either
