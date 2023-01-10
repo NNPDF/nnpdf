@@ -198,9 +198,9 @@ class ReplicaPDFPlotter(PDFPlotter):
         gv = stats.data
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
-        cv_line,  = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], color=color,
-                linewidth=2)
-        handle = cv_line
+        cv_line = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], 
+                color=color, linewidth=2)
+        handle = cv_line[0]
         labels.append(pdf.label)
         handles.append(handle)
         return gv
