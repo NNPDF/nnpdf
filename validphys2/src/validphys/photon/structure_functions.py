@@ -68,6 +68,7 @@ class F2LO :
         else :
             nf = 6
         res = 0
+        pdfs_values = self.pdfs.xfxQ(x, Q)
         for i in range(1, nf+1):
-            res += self.eq2[i-1] * (self.pdfs.xfxQ(x, Q)[i] + self.pdfs.xfxQ(x, Q)[-i])
+            res += self.eq2[i-1] * (pdfs_values[i] + pdfs_values[-i])
         return res
