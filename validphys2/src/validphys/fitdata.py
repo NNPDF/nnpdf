@@ -440,10 +440,10 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
     systype_groups = dict()
     for group_cd, group in zip(groups_commondata, group_dataset_inputs_by_metadata):
         systype_groups[group["group_name"]] = {
-            cd.load().GetSys(0, i).name
+            cd.load().systype_table.iloc[i]["name"]
             for cd in group_cd
             for i in range(cd.nsys)
-            if cd.load().GetSys(0, i).name not in allow_list
+            if cd.load().systype_table.iloc[i]["name"] not in allow_list
         }
 
     systype_overlap = set()

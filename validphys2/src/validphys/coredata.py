@@ -8,6 +8,8 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
+KINNAMES = ["kin1", "kin2", "kin3"]
+
 
 @dataclasses.dataclass(eq=False)
 class FKTableData:
@@ -175,6 +177,7 @@ class FKTableData:
 
         return fktable
 
+
 @dataclasses.dataclass(eq=False)
 class CFactorData:
     """
@@ -218,14 +221,8 @@ class CommonData:
     nkin : int
         Number of kinematics specified
 
-    kinematics : list of str with length nkin
-        Kinematic variables kin1, kin2, kin3 ...
-
     nsys : int
         Number of systematics
-
-    sysid : list of str with length nsys
-        ID for systematic
 
     commondata_table : pd.DataFrame
         Pandas dataframe containing the commondata
@@ -235,6 +232,9 @@ class CommonData:
         for each systematic alongside the uncertainty
         type (ADD/MULT/RAND) and name
         (CORR/UNCORR/THEORYCORR/SKIP)
+
+    systematics_table: pd.DataFrame
+        Panda dataframe containing the table of systematics
     """
 
     setname: str
@@ -248,7 +248,7 @@ class CommonData:
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
-            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
+            columns=["process", "data", "stat"] + KINNAMES
         )
 
     def with_cuts(self, cuts):
@@ -285,6 +285,13 @@ class CommonData:
         return dataclasses.replace(self, ndata=newndata, commondata_table=new_commondata_table)
 
     @property
+    def kinematics(self):
+        return self.commondata_table[KINNAMES]
+
+    def get_kintable(self):
+        return self.kinematics.values
+
+    @property
     def central_values(self):
         return self.commondata_table["data"]
 
@@ -293,6 +300,9 @@ class CommonData:
          tb["data"] = cv
          return dataclasses.replace(self, commondata_table=tb)
          
+    def get_cv(self):
+        return self.central_values.values
+
     @property
     def stat_errors(self):
         return self.commondata_table["stat"]
@@ -358,3 +368,22 @@ class CommonData:
             central_values = self.central_values.to_numpy()
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
+
+    def export(self, path):
+        """Export the data, and error types
+        Use the same format as libNNPDF:
+
+        - A DATA_<dataset>.dat file with the dataframe of accepted points
+        - A systypes/STYPES_<dataset>.dat file with the error types
+        """
+        dat_path = path / f"DATA_{self.setname}.dat"
+        sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
+        sys_path.parent.mkdir(exist_ok=True)
+
+        dat_string_raw = self.commondata_table.to_string(index=False, header=False, float_format="{:.8e}".format)
+        header = f"{self.setname}    {self.nsys} {self.ndata}"
+        dat_string = "\n".join([f" {i+1}    {r}" for i, r in enumerate(dat_string_raw.split("\n"))])
+        dat_path.write_text(f"{header}\n{dat_string}\n")
+
+        sys_raw = self.systype_table.to_string(index=True, header=False, index_names=False)
+        sys_path.write_text(f"{self.nsys}\n{sys_raw}\n")

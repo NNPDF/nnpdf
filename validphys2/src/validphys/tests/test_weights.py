@@ -8,9 +8,15 @@ from validphys.api import API
 def test_weights_have_same_commondata(weighted_data_witht0_config):
     data = API.data(**weighted_data_witht0_config)
     normal, weighted = data.datasets
-    normalds, weightedds = normal.load(), weighted.load()
-    assert normalds.GetSys(0, 0).mult == weightedds.GetSys(0, 0).mult
-    assert normalds.GetSys(0, 0).add == weightedds.GetSys(0, 0).add
+    normalds, weightedds = normal.load_commondata(), weighted.load_commondata()
+    assert (
+        normalds.systematics_table["MULT"].iloc[0][0]
+        == weightedds.systematics_table["MULT"].iloc[0][0]
+    )
+    assert (
+        normalds.systematics_table["ADD"].iloc[0][0]
+        == weightedds.systematics_table["ADD"].iloc[0][0]
+    )
 
 
 def test_chi2_arithmetic(weighted_data_witht0_internal_cuts_config):
