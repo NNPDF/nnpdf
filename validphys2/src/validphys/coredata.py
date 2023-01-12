@@ -371,19 +371,14 @@ class CommonData:
 
     def export(self, path):
         """Export the data, and error types
-        Use the same format as libNNPDF:
 
         - A DATA_<dataset>.dat file with the dataframe of accepted points
         - A systypes/STYPES_<dataset>.dat file with the error types
         """
+        from validphys.commondataparser import write_systype_to_file, write_commondata_to_file
         dat_path = path / f"DATA_{self.setname}.dat"
         sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
         sys_path.parent.mkdir(exist_ok=True)
 
-        dat_string_raw = self.commondata_table.to_string(index=False, header=False, float_format="{:.8e}".format)
-        header = f"{self.setname}    {self.nsys} {self.ndata}"
-        dat_string = "\n".join([f" {i+1}    {r}" for i, r in enumerate(dat_string_raw.split("\n"))])
-        dat_path.write_text(f"{header}\n{dat_string}\n")
-
-        sys_raw = self.systype_table.to_string(index=True, header=False, index_names=False)
-        sys_path.write_text(f"{self.nsys}\n{sys_raw}\n")
+        write_systype_to_file(self, sys_path)
+        write_commondata_to_file(self, dat_path)
