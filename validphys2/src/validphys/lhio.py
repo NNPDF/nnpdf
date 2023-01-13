@@ -33,7 +33,7 @@ def read_xqf_from_file(f):
         return None
     xvals = np.fromstring(xtext, sep = " ")
     qvals = np.fromstring(qtext, sep = " ")
-    fvals = np.fromstring(ftext, sep = " ", dtype=np.int)
+    fvals = np.fromstring(ftext, sep = " ", dtype=int)
     vals = np.fromstring(b''.join(lines), sep= " ")
     return pd.Series(vals, index = pd.MultiIndex.from_product((xvals, qvals, fvals)))
 

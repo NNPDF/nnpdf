@@ -451,8 +451,8 @@ class Stopping:
         # Initialize internal variables for the stopping
         self.n_replicas = len(pdf_models)
         self.threshold_chi2 = threshold_chi2
-        self.stopping_degree = np.zeros(self.n_replicas, dtype=np.int)
-        self.count = np.zeros(self.n_replicas, dtype=np.int)
+        self.stopping_degree = np.zeros(self.n_replicas, dtype=int)
+        self.count = np.zeros(self.n_replicas, dtype=int)
 
         self.dont_stop = dont_stop
         self.stop_now = False

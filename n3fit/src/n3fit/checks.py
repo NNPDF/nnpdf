@@ -21,7 +21,7 @@ def _is_floatable(num):
     if isinstance(num, numbers.Number):
         return True
     try:
-        np.float(num)
+        float(num)
         return True
     except (ValueError, TypeError):
         return False
