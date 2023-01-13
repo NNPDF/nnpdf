@@ -125,6 +125,7 @@
 #include "LHCBZMU7TEV.h"
 #include "LHCBWMU8TEV.h"
 #include "LHCBZMU8TEV.h"
+#include "FPF.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -578,6 +579,13 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
 
   // **************** CMS Dijet production pp 5TEV *****************************
   target.emplace_back(new CMS_2JET_5TEVFilter()); // DIJET
+
+  // **************** FPF *****************************
+  target.emplace_back(new FASERVBARFilter());
+  target.emplace_back(new FASERVFilter());
+  target.emplace_back(new FASERVBAR2Filter());
+  target.emplace_back(new FASERV2Filter());
+
 
   return target;
 }
