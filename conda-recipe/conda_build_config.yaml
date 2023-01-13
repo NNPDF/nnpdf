@@ -9,4 +9,3 @@ pin_run_as_build:
     gsl: x.x.x
     yaml-cpp: x.x.x
     libarchive: x.x
-    fiatlux: x.x.x
