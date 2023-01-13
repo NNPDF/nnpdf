@@ -23,6 +23,7 @@ requirements:
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
+        - fiatlux
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
