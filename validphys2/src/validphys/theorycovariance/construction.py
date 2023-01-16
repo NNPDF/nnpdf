@@ -336,6 +336,19 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
         ) + (1 / 8) * (np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
     return s
 
+def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for the n3lo anomalous
+    dimension variation, given two dataset names and collections 
+    of variation shifts."""
+    if name1 == name2:
+        s = np.cov(np.array(deltas1).T)
+    else:
+        full_set = np.concatenate((np.array(deltas1),np.array(deltas2)), axis=1)
+        d1_size = len(deltas1[0])        
+        full_cov = np.cov(full_set.T)
+        s = full_cov[:d1_size,d1_size:]
+    return s
+
 
 @check_correct_theory_combination
 def covs_pt_prescrip(
@@ -387,6 +400,9 @@ def covs_pt_prescrip(
                     s = covmat_7pt(name1, name2, deltas1, deltas2)
             elif l == 9:
                 s = covmat_9pt(name1, name2, deltas1, deltas2)
+            # n3lo ad variation prescriprion
+            elif l == 81:
+                s = covmat_n3lo_ad(name1, name2, deltas1, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
     return covmats

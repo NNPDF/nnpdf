@@ -18,7 +18,7 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    check(l in {3, 5, 7, 9, 81}, f"Expecting exactly 3, 5, 7 or 9 or 81 theories, but got {l}.")
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
@@ -53,6 +53,28 @@ def check_correct_theory_combination_internal(
     elif l == 7:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+    elif l == 81:
+        max_n3lo_var = {
+            "P_gg": 18,
+            "P_gq": 24,
+            "P_qg": 21,
+            "P_qq": 17,
+        }
+        # TODO: for the moment fish the n3lo_ad_variation from the comments
+        n3lo_vars_list = []
+        for theoryid in theoryids:
+            n3lo_vars_list.append([int(val) for val in theoryid.get_description()["Comments"][33:-1].split(",")])
+        full_var_list = [[0,0,0,0]]
+        for entry, max_var in enumerate(max_n3lo_var.values()):
+            for idx in range(1, max_var + 1):
+                base_var = [0,0,0,0]
+                base_var[entry] = idx
+                full_var_list.append(base_var)
+        check(
+            n3lo_vars_list == full_var_list, 
+            f"Theories do not include the full list of N3LO variation but {n3lo_vars_list}"
+        )
+        return
     else:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
