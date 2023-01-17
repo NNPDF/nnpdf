@@ -8,7 +8,7 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
-KINNAMES = ["kin1", "kin2", "kin3"]
+KIN_NAMES = ["kin1", "kin2", "kin3"]
 
 
 @dataclasses.dataclass(eq=False)
@@ -248,7 +248,7 @@ class CommonData:
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
-            columns=["process", "data", "stat"] + KINNAMES
+            columns=["process", "data", "stat"] + KIN_NAMES
         )
 
     def with_cuts(self, cuts):
@@ -286,7 +286,7 @@ class CommonData:
 
     @property
     def kinematics(self):
-        return self.commondata_table[KINNAMES]
+        return self.commondata_table[KIN_NAMES]
 
     def get_kintable(self):
         return self.kinematics.values
