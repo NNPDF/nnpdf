@@ -266,7 +266,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[('err', i)] = err
         else:
             table[cvcol] = cv/norm_cv
-            table[('err', i)] = err/norm_cv
+            table[('err', i)] = np.abs(err/norm_cv)
         cvcols.append(cvcol)
 
 
