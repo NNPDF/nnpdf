@@ -10,38 +10,7 @@ description: Regression runcard for the automatic github fitbot
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMCPD_dw_ite, frac: 0.75}
-- {dataset: NMC, frac: 0.75}
-- {dataset: SLACP_dwsh, frac: 0.75}
-- {dataset: SLACD_dw_ite, frac: 0.75}
-- {dataset: BCDMSD_dw_ite, frac: 0.75}
-- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
-- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
-- {dataset: HERACOMBNCEM, frac: 0.75}
-- {dataset: HERACOMBNCEP575, frac: 0.75}
-- {dataset: HERACOMBNCEP920, frac: 0.75}
-- {dataset: HERACOMBCCEM, frac: 0.75}
-- {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
-- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
-- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
-- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
-- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        
-- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
-- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 
-- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       
-- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
-- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
-- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}   
+- {dataset: NMCPD_dw_ite, frac: 0.75}  
 
 ############################################################
 datacuts:
@@ -81,7 +50,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
       optimizer_name: 'Adadelta'
       learning_rate: 1.0
       clipnorm: 0.1
-  epochs: 2000
+  epochs: 20
   ntegrability:
     initial:
     multiplier: 1.03
@@ -123,5 +92,5 @@ integrability:
     - { dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
-debug: True
+debug: False
 maxcores: 4
