@@ -121,7 +121,7 @@ def parse_systypes(systypefile):
     return systypetable
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class CommonDataMetadata:
     """Contains metadata information about the data being read"""
     name: str
