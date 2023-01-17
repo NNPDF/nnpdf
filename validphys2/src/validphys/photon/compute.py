@@ -2,9 +2,9 @@
 import lhapdf
 import fiatlux
 import numpy as np
-from eko.output.legacy import load_tar
+from eko.io.legacy import load_tar
 from eko.interpolation import XGrid
-from eko.output.manipulate import xgrid_reshape
+from eko.io.manipulate import xgrid_reshape
 from .structure_functions import StructureFunction, F2LO
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
@@ -113,15 +113,15 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
-        self.alpha_em_mt = self.alpha_em_nlo(self.theory["Qmt"], self.alpha_em_ref, self.qref, 5)
-        self.alpha_em_mb = self.alpha_em_nlo(self.theory["Qmb"], self.alpha_em_ref, self.qref, 5)
-        self.alpha_em_mc = self.alpha_em_nlo(self.theory["Qmc"], self.alpha_em_mb, self.theory["Qmb"], 4)
+        self.alpha_em_mt = self.alpha_em_nlo(self.Qmt, self.alpha_em_ref, self.qref, 5)
+        self.alpha_em_mb = self.alpha_em_nlo(self.Qmb, self.alpha_em_ref, self.qref, 5)
+        self.alpha_em_mc = self.alpha_em_nlo(self.Qmc, self.alpha_em_mb, self.Qmb, 4)
 
         self.thresh = {
-            3: self.theory["Qmc"],
-            4: self.theory["Qmb"],
+            3: self.Qmc,
+            4: self.Qmb,
             5: self.qref,
-            6: self.theory["Qmt"]
+            6: self.Qmt
         }
         self.alpha_thresh = {
             3: self.alpha_em_mc,
