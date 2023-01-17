@@ -2,7 +2,7 @@
 This module implements parsers for commondata  and systype files into useful
 datastructures, contained in the :py:mod:`validphys.coredata` module, which are
 not backed by C++ managed memory, and so they can be easily pickled and
-interfaces with common Python libraries. 
+interfaced with common Python libraries. 
 
 The validphys commondata structure is an instance of :py:class:`validphys.coredata.CommonData`
 """
