@@ -54,7 +54,6 @@ requirements:
         - curio >=1.0
         - pineappl >=0.5.2
         - eko
-        - banana-hep
 
 
 test:
