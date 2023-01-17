@@ -516,7 +516,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
 
     Parameters
     ----------
-    commondata: :py:class:`validphys.coredata.CommonData`
+    commondata: validphys.coredata.CommonData
     rules: List[Rule]
         A list of Rule objects specifying the filters.
 

@@ -275,10 +275,7 @@ class CommonDataSpec(TupleComp):
 
     @functools.lru_cache()
     def load(self):
-        cd = parse_commondata(self.datafile, self.sysfile, self.name)
-#         cd_old = LegacyCommonData.ReadFile(str(self.datafile), str(self.sysfile))
-#         cd.old = cd_old # DEBUG
-        return cd
+        return parse_commondata(self.datafile, self.sysfile, self.name)
 
     @property
     def plot_kinlabels(self):
@@ -473,9 +470,7 @@ class DataSetSpec(TupleComp):
             loaded_cuts = self.cuts.load()
             if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
                 intmask = [int(ele) for ele in loaded_cuts]
-#                 cd_old = LegacyCommonData(cd.old, intmask)
                 cd = cd.with_cuts(intmask)
-#                 cd.old = cd_old # DEBUG
         return cd
 
     def to_unweighted(self):
