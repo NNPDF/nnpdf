@@ -6,7 +6,7 @@ interfaces with common Python libraries.
 
 The validphys commondata structure is an instance of :py:class:`validphys.coredata.CommonData`
 """
-from collections import namedtuple
+import dataclasses
 from operator import attrgetter
 import logging
 
@@ -16,7 +16,7 @@ from validphys.coredata import CommonData
 
 log = logging.getLogger(__name__)
 
-kinlabels_latex = {
+KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
     "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
     "DYP": ("$y$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
@@ -41,9 +41,6 @@ kinlabels_latex = {
     "PHT": ("$\\eta_\\gamma$", "$E_{T,\\gamma}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
 }
-
-
-_kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
 
 
 def load_commondata(spec):
@@ -124,12 +121,18 @@ def parse_systypes(systypefile):
     return systypetable
 
 
-CommonDataMetadata = namedtuple("CommonDataMetadata", ("name", "nsys", "ndata", "process_type"))
+@dataclasses.dataclass
+class CommonDataMetadata:
+    """Contains metadata information about the data being read"""
+    name: str
+    nsys: int
+    ndata: int
+    process_type: str
 
 
 def peek_commondata_metadata(commondatafilename):
-    """Check some basic properties commondata object without going though the
-    trouble of processing it on the C++ side"""
+    """Read some of the properties of the commondata object as a CommonData Metadata
+    """
     with open(commondatafilename) as f:
         try:
             l = f.readline()
@@ -149,15 +152,17 @@ def get_plot_kinlabels(commondata):
     """Return the LaTex kinematic labels for a given Commondata"""
     key = commondata.process_type
 
-    return kinlabels_latex[key]
+    return KINLABEL_LATEX[key]
 
 
 def get_kinlabel_key(process_label):
-    # Since there is no 1:1 correspondence between latex keys and GetProc,
-    # we match the longest key such that the proc label starts with it.
+    """
+    Since there is no 1:1 correspondence between latex keys and GetProc,
+    we match the longest key such that the proc label starts with it.
+    """
     l = process_label
     try:
-        return next(k for k in _kinlabels_keys if l.startswith(k))
+        return next(k for k in sorted(KINLABEL_LATEX, key=len, reverse=True) if l.startswith(k))
     except StopIteration as e:
         raise ValueError(
             "Could not find a set of kinematic "
