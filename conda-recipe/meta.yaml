@@ -24,7 +24,7 @@ requirements:
         - python
         - numpy
     run:
-        # Only install tensorflow on linux. Select eigen build
+        # Only install tensorflow and fiatlux on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
@@ -53,7 +53,7 @@ requirements:
         - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
         - curio >=1.0
         - pineappl >=0.5.2
-        - fiatlux
+        - fiatlux *eigen* # [linux]
 
 test:
     requires:

@@ -1,10 +1,9 @@
 """Script that calls fiatlux to add the photon PDF."""
 import lhapdf
-import fiatlux
+
 import numpy as np
-from eko.io.legacy import load_tar
+
 from eko.interpolation import XGrid
-from eko.io.manipulate import xgrid_reshape
 from .structure_functions import StructureFunction, F2LO
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
@@ -43,6 +42,7 @@ class Photon:
         f2lo = [F2LO(pdfs, self.theory) for pdfs in self.qcd_pdfs]
 
         # set fiatlux
+        import fiatlux
         ff = open('fiatlux_runcard.yml', 'w+')
         yaml.dump(self.fiatlux_runcard, ff)
         self.lux = [fiatlux.FiatLux('fiatlux_runcard.yml') for i in range(len(replicas_id))]
@@ -163,9 +163,12 @@ class Photon:
             print("computing grid point", i+1, "/", len(xgrid))
             photon_100GeV[i] = self.lux[id].EvaluatePhoton(x, self.q_in2).total / x
 
+        from eko.io.legacy import load_tar
         eko=load_tar(self.fiatlux_runcard['path_to_eko'])
+
         # If we make sure that the grid of the precomputed EKO is the same of 
         # self.xgrid then we don't need to reshape
+        from eko.io.manipulate import xgrid_reshapes
         xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
 
         pdfs = np.zeros((len(eko.rotations.inputpids), len(xgrid)))
