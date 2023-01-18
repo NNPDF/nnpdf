@@ -108,8 +108,6 @@ class AddPhoton(MetaLayer):
 
     def register_photon(self, xgrid):
         """Compute the photon array and set the layer to be rebuilt"""
-        # TODO: maybe add here some caching mechanism so that the photon doesn't get
-        # recomputed if the grid hasn't changed!
         if self._photons_generator is not None:
             self._pdf_ph = self._photons_generator.compute(xgrid)
             self.built = False
