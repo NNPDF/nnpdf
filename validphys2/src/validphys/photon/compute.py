@@ -167,7 +167,7 @@ class Photon:
 
         # If we make sure that the grid of the precomputed EKO is the same of 
         # self.xgrid then we don't need to reshape
-        from eko.io.manipulate import xgrid_reshapes
+        from eko.io.manipulate import xgrid_reshape
         from eko.interpolation import XGrid
         xgrid_reshape(eko, targetgrid = XGrid(xgrid), inputgrid = XGrid(xgrid))
 
