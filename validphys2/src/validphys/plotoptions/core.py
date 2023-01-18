@@ -175,6 +175,11 @@ class PlotInfo:
 
         kinlabels = commondata.plot_kinlabels
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
+        if "extra_labels" in plot_params and cuts is not None:
+            cut_extra_labels ={
+                k: [v[i] for i in cuts] for k, v in plot_params["extra_labels"].items()
+            }
+            plot_params["extra_labels"] = cut_extra_labels
 
         return cls(kinlabels=kinlabels, **plot_params)
 
