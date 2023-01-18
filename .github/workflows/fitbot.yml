@@ -48,7 +48,6 @@ jobs:
       run: |
         conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
         conda activate nnpdfenv 
-        conda install eko
     # create fancy runcards
     - name: Preparing fit runcard
       run: |
