@@ -51,10 +51,7 @@ jobs:
     - name: Installing NNPDF conda package
       shell: bash -l {0}
       run: |
-        NAME_VERSION=$(basename /usr/share/miniconda/envs/test/conda-bld/linux-64/nnpdf* .tar.bz2)
-        FINAL_NAME_VERSION=${NAME_VERSION#nnpdf-}
-        FINAL_NAME_VERSION=${FINAL_NAME_VERSION%-py*}
-        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ -c defaults -c conda-forge  nnpdf=$FINAL_NAME_VERSION
+        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
     # create fancy runcards
     - name: Preparing fit runcard
       run: |

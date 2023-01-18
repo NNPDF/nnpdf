@@ -249,8 +249,8 @@ def storefit(
             q_0^2
     """
     # build exportgrid
-    xgrid = XGRID
-    
+    xgrid = XGRID.reshape(-1, 1)
+        
     result = pdf_object(xgrid, flavours="n3fit").squeeze()
     lha = evln2lha(result.T).T
 
