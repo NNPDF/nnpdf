@@ -10,7 +10,7 @@ description: Regression runcard for the automatic github fitbot
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMCPD_dw_ite, frac: 0.75}  
+- {dataset: NMCPD_dw_ite, frac: 0.75}
 
 ############################################################
 datacuts:
@@ -77,19 +77,10 @@ fitting:
 positivity:
   posdatasets:
     - { dataset: POSF2U, maxlambda: 1e6}  # Positivity Lagrange Multiplier
-    - {dataset: POSF2DW, maxlambda: 1e6}
-    - { dataset: POSDYU, maxlambda: 1e10}
-    - { dataset: POSDYD, maxlambda: 1e10}
-    - { dataset: POSDYS, maxlambda: 1e10}
-    - { dataset: POSXDB, maxlambda: 1e6}
-    - { dataset: POSXSQ, maxlambda: 1e6}
-    - { dataset: POSXSB, maxlambda: 1e6}
-    - { dataset: POSXGL, maxlambda: 1e6}
 
 integrability:
  integdatasets:
     - { dataset: INTEGXT8, maxlambda: 1e2}
-    - { dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 debug: False
