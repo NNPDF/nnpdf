@@ -23,6 +23,7 @@ requirements:
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
+        - eko
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
@@ -54,6 +55,7 @@ requirements:
         - curio >=1.0
         - pineappl >=0.5.2
         - banana-hep
+        - eko
 
 
 test:
