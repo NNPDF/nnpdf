@@ -22,7 +22,8 @@ requirements:
         - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
-        - numpy >=1.21,<2
+        - numpy
+        - numba >=0.55
     run:
         # Only install tensorflow on linux. Select eigen build
         - tensorflow >=2 *eigen* # [linux]
@@ -32,7 +33,7 @@ requirements:
         - lhapdf
         - sqlite
         - gsl
-        - numpy >=1.21,<2
+        - numpy
         - libarchive
         - yaml-cpp >=0.6.3
         - apfel
@@ -55,7 +56,6 @@ requirements:
         - pineappl >=0.5.8
         - banana-hep
         - eko
-        - sqlalchemy >=1.4.29
 
 
 test:
