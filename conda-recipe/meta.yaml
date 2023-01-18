@@ -55,7 +55,7 @@ requirements:
         - pineappl >=0.5.8
         - eko
         - banana-hep
-        - lz4 >=3.1.10
+        - lz4 >=3.1.10 # see https://github.com/conda-forge/eko-feedstock/issues/10
 
 
 test:
