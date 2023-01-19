@@ -57,10 +57,11 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     if cuts is None:
         if isinstance(data, DataSetSpec):
             cuts = data.cuts.load() if data.cuts else None
-    elif isinstance(cuts, (Cuts, InternalCutsWrapper)):
+    elif hasattr(cuts, 'load'):
         cuts = cuts.load()
-    elif not cuts:
-        cuts = None
+
+    if cuts is not None and not len(cuts):
+        raise NotImplementedError("No point passes the cuts. Cannot retieve info")
 
     if isinstance(data, DataSetSpec):
         data = data.commondata
