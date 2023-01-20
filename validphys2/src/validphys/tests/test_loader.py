@@ -28,7 +28,9 @@ class MockCuts():
 def commondata_and_cuts(draw):
     cd = l.check_commondata(draw(sampled_from(dss)))
     ndata = cd.metadata.ndata
-    mask = sorted(draw(sets(sampled_from(range(ndata)), min_size=1)))
+    # Get a cut mask with at least one selected datapoint
+    masks = sets(sampled_from(range(ndata)), min_size=1)
+    mask = sorted(draw(masks))
     return cd, mask
 
 
