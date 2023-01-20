@@ -26,6 +26,7 @@ from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
+from validphys.coredata import KIN_NAMES
 
 log = logging.getLogger(__name__)
 
@@ -960,12 +961,13 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     ax.axhline(0, color='red')
 
     posset = posdataset.load_commondata()
-    ndata  = posset.GetNData()
+    ndata  = posset.ndata
     xvals = []
 
     if pos_use_kin:
-        ax.set_xlabel('kin1')
-        xvals = [posset.GetKinematics(i, 0) for i in range(0, ndata)]
+        kin_name = KIN_NAMES[0]
+        ax.set_xlabel(kin_name)
+        xvals = posset.kinematics[kin_name].values
     else:
         ax.set_xlabel('idat')
         xvals = np.arange(ndata)

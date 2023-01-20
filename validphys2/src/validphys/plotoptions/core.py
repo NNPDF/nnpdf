@@ -19,8 +19,9 @@ from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
 from reportengine.utils import get_functions, ChainMap
 
-from NNPDF import CommonData, DataSet
+from NNPDF import DataSet
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
+from validphys.coredata import CommonData
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 from validphys.utils import parse_yaml_inp
