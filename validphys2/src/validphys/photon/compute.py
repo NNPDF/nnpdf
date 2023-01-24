@@ -164,41 +164,43 @@ class Photon:
         -------
         compute_photon_array: numpy.array
             photon PDF at the scale 1 GeV
-        """        
+        """
+        # Compute photon PDF
         photon_100GeV = np.zeros(len(self.xgrid))
         for i, x in enumerate(self.xgrid):
             print("computing grid point", i+1, "/", len(self.xgrid))
-            # photon_100GeV[i] = self.lux[id].EvaluatePhoton(x, self.q_in2).total / x
-            photon_100GeV[i] = np.exp(-x)
+            photon_100GeV[i] = self.lux[id].EvaluatePhoton(x, self.q_in2).total / x
         photon_100GeV += self.generate_errors()
 
+        # Load eko and reshape it
         from eko.io import EKO
-        eko=EKO.read(Path(self.fiatlux_runcard['path_to_eko']))
+        with EKO.edit(Path(self.fiatlux_runcard['path_to_eko'])) as eko:
+            # If we make sure that the grid of the precomputed EKO is the same of 
+            # self.xgrid then we don't need to reshape
+            from eko.io.manipulate import xgrid_reshape
+            from eko.interpolation import XGrid
+            xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
 
-        # If we make sure that the grid of the precomputed EKO is the same of 
-        # self.xgrid then we don't need to reshape
-        from eko.io.manipulate import xgrid_reshape
-        from eko.interpolation import XGrid
-        xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
-
-        pdfs = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
-        for j, pid in enumerate(eko.rotations.inputpids):
-            if pid == 22 :
-                pdfs[j] = photon_100GeV
-                ph_id = j
-            if not self.qcd_pdfs[id].hasFlavor(pid):
-                continue
-            pdfs[j] = np.array(
-                [
-                    self.qcd_pdfs[id].xfxQ2(pid, x, self.q_in2) / x
-                    for x in self.xgrid
-                ]
-            )
+            # construct PDFs
+            pdfs = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
+            for j, pid in enumerate(eko.rotations.inputpids):
+                if pid == 22 :
+                    pdfs[j] = photon_100GeV
+                    ph_id = j
+                if not self.qcd_pdfs[id].hasFlavor(pid):
+                    continue
+                pdfs[j] = np.array(
+                    [
+                        self.qcd_pdfs[id].xfxQ2(pid, x, self.q_in2) / x
+                        for x in self.xgrid
+                    ]
+                )
             
-        q2 = eko.Q2grid[0]
-        with eko.operator(q2) as elem:
-            pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-            # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
+            # Apply EKO to PDFs
+            q2 = eko.mu2grid[0]
+            with eko.operator(q2) as elem:
+                pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
+                # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
 
         photon_Q0 = pdf_final[ph_id]
 
@@ -207,7 +209,7 @@ class Photon:
     
     def produce_interpolators(self):
         self.photons_array = [self.compute_photon_array(i) for i in range(len(self.replicas_id))]
-        self.interpolator = [interp1d(self.xgrid, photon_array, fill_value=0.) for photon_array in self.photons_array]
+        self.interpolator = [interp1d(self.xgrid, photon_array, fill_value=0., kind='cubic') for photon_array in self.photons_array]
     
     def compute(self, xgrid):
         """
@@ -236,12 +238,13 @@ class Photon:
         if not self.fiatlux_runcard["additional_errors"] :
             self.error_matrix = None
         extra_set = lhapdf.mkPDFs("LUXqed17_plus_PDF4LHC15_nnlo_100")
+        # TODO : maybe doing it on f instead of xf isn't the same
         self.error_matrix = np.array(
             [
-                [(extra_set[i].xfxQ2(22, x, self.q_in2) - extra_set[0].xfxQ2(22, x, self.q_in2)) / x for x in self.xgrid]
-                for i in range(101, 107+1)
+                [(extra_set[i].xfxQ2(22, x, self.q_in2) - extra_set[0].xfxQ2(22, x, self.q_in2)) / x for i in range(101, 107+1)]
+                for x in self.xgrid
             ]
-        ).T
+        ) # first index must be x, while second one must be replica index
 
     def generate_errors(self):
         if self.error_matrix is None :
