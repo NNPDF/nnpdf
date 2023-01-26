@@ -7,7 +7,7 @@ from n3fit.model_gen import pdfNN_layer_generator
 
 
 def test_saturation():
-    """Check the saturation penalty runs and returns a float"""
+    """Check that the saturation penalty runs and returns a float"""
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
@@ -28,8 +28,7 @@ def test_patience():
 
 
 def test_integrability_numbers():
-    """Check that the integrability penality can be run
-    and that it returns indeed a float"""
+    """Check that the integrability penalty runs and returns a float"""
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
