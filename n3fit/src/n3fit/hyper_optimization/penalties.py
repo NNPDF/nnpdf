@@ -90,7 +90,7 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     patience = stopping_object.stopping_patience
     max_epochs = stopping_object.total_epochs
     diff = abs(max_epochs - patience - epoch_best)
-    vl_loss = np.take(stopping_object.vl_loss, 0)
+    vl_loss = np.take(stopping_object.vl_chi2, 0)
     return vl_loss * np.exp(alpha * diff)
 
 
