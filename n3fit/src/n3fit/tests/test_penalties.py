@@ -21,7 +21,7 @@ def test_saturation():
 def test_patience():
     """Check that the patience penalty runs and returns a float"""
     fake_stopping = SimpleNamespace(
-        e_best_chi2=1000, stopping_patience=500, total_epochs=5000, vl_loss=2.42
+        e_best_chi2=1000, stopping_patience=500, total_epochs=5000, vl_chi2=2.42
     )
     res = patience(stopping_object=fake_stopping, alpha=1e-4)
     assert isinstance(res, float)
