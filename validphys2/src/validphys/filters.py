@@ -119,8 +119,8 @@ def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
     RandomGenerator.InitRNG(rngalgo, seed)
     RandomGenerator.GetRNG().SetSeed(filterseed)
 
-@check_positive('errorsize')
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize):
+
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -129,13 +129,12 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, error
     """
     log.info('Filtering closure-test data.')
     return _filter_closure_data(
-        filter_path, data, fakepdf, fakenoise, filterseed, errorsize)
+        filter_path, data, fakepdf, fakenoise, filterseed)
 
 
-@check_positive("errorsize")
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed
-    , errorsize, experiments_index
+    , experiments_index
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -151,7 +150,7 @@ def filter_closure_data_by_experiment(
     for exp in experiments_data:
         experiment_index = experiments_index[experiments_index.isin([exp.name],level=0)]
         res.append(_filter_closure_data(filter_path, exp, fakepdf, fakenoise, 
-                filterseed, errorsize, experiment_index))
+                filterseed, experiment_index))
 
     return res
 
@@ -201,7 +200,7 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, errorsize, experiments_index):
+def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, experiments_index):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -233,8 +232,6 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
                  random seed used for the generation of 
                  random noise added to Level 0 data
 
-    errorsize : float 
-                (defined in runcard)
     
     experiments_index : pandas.MultiIndex
 
@@ -248,8 +245,6 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
     
     total_data_points = 0
     total_cut_data_points = 0
-    # Load data, don't cache result
-    loaded_data = data.load.__wrapped__(data)
 
     from validphys.pseudodata import level0_commondata_wc
     level0_commondata_instances_wc = level0_commondata_wc(data,fakepdf)
@@ -262,10 +257,6 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
-        # Rescale errors 
-        loaded_ds = loaded_data.GetSet(j)
-        if errorsize != 1.0:
-            loaded_ds.RescaleErrors(errorsize)
     
     from validphys.commondataparser import write_commondata_to_file, write_systype_to_file
     if not fakenoise:
