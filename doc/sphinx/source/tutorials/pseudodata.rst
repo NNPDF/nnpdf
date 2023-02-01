@@ -46,7 +46,7 @@ Reconstructing pseudodata
 .. warning::
 
   The functionality described here is not guaranteed to work between different versions of the code
-  or its dependencies. Specifically, if anything breaks the pseudodata geneartion between commits, 
+  or its dependencies. Specifically, if anything breaks the pseudodata generation between commits, 
   e.g. changes to the theory predictions or settings or the random number generator, it is **not 
   possible to reconstruct previously generated pseudodata** for the code state at such different 
   commits.
