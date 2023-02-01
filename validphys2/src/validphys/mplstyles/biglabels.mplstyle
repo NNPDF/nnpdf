@@ -6,6 +6,7 @@ axes.formatter.limits   : -5,5
 axes.formatter.use_mathtext : True
 axes.spines.top         : False
 axes.spines.right       : False
+axes.formatter.useoffset: False
 
 errorbar.capsize        : 2
 

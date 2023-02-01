@@ -1,3 +1,9 @@
+- dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM
+  reason: |
+   We remove one bin from the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "idat != 8"
+
 - dataset: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
@@ -21,6 +27,18 @@
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
   rule: "MQQ<1350"
+
+- dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "yQQ<2.00"
+
+- dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "MQQ<1000"
 
 - dataset: CMSTOPDIFF8TEVTRAPNORM
   reason: |

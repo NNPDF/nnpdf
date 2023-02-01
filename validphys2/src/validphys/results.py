@@ -720,11 +720,11 @@ def count_negative_points(possets_predictions):
 
 
 chi2_stat_labels = {
-    "central_mean": r"$<\chi^2_{0}>_{data}$",
+    "central_mean": r"$\chi^2_{rep0}$",
     "npoints": r"$N_{data}$",
-    "perreplica_mean": r"$\left< \chi^2 \right>_{rep,data}$",
-    "perreplica_std": r"$\left<std_{rep}(\chi^2)\right>_{data}$",
-    "chi2_per_data": r"$\frac{\chi^2}{N_{data}}$",
+    "perreplica_mean": r"$\left< \chi^2 \right>_{rep}$",
+    "perreplica_std": r"$std_{rep}(\chi^2)$",
+    "chi2_per_data": r"$\chi^2 / N_{data}$",
 }
 
 
@@ -744,7 +744,7 @@ def experiments_chi2_stats(total_chi2_data):
     """
     rep_data, central_result, npoints = total_chi2_data
     m = central_result.mean()
-    rep_mean = rep_data.central_value().mean()
+    rep_mean = rep_data.error_members().mean()
     return OrderedDict(
         [
             ("central_mean", m),
@@ -771,7 +771,7 @@ def chi2_stats(abs_chi2_data):
     """
     rep_data, central_result, npoints = abs_chi2_data
     m = central_result.mean()
-    rep_mean = rep_data.central_value().mean()
+    rep_mean = rep_data.error_members().mean()
     return OrderedDict(
         [
             ("central_mean", m),

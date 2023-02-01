@@ -96,6 +96,7 @@ KNOWN_SUM_RULES = {
     "uvalence": _make_pdf_integrand({"u": 1, "ubar": -1}),
     "dvalence": _make_pdf_integrand({"d": 1, "dbar": -1}),
     "svalence": _make_pdf_integrand({"s": 1, "sbar": -1}),
+    "cvalence": _make_pdf_integrand({"c": 1, "cbar": -1}),
 }
 
 UNKNOWN_SUM_RULES = {
@@ -106,6 +107,7 @@ UNKNOWN_SUM_RULES = {
     "s momentum fraction": _make_momentum_fraction_integrand({"s": 1}),
     "sbar momentum fraction": _make_momentum_fraction_integrand({"sbar": 1}),
     "cp momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": 1}),
+    "cm momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": -1}),
     "g momentum fraction": _make_momentum_fraction_integrand({"g": 1}),
     "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
     "T8": _make_pdf_integrand(
@@ -118,6 +120,7 @@ KNOWN_SUM_RULES_EXPECTED = {
     'uvalence': 2,
     'dvalence': 1,
     'svalence': 0,
+    'cvalence': 0,
 }
 
 
@@ -141,7 +144,7 @@ def _sum_rules(rules_dict, lpdf, Q):
 
 @check_positive('Q')
 def sum_rules(pdf:PDF, Q:numbers.Real):
-    """Compute the momentum, uvalence, dvalence and svalence sum rules for
+    """Compute the momentum, uvalence, dvalence, svalence and cvalence sum rules for
     each member (as defined by libnnpdf), at the energy scale ``Q``. Return a
     SumRulesGrid object with the list of values for each sum rule.  The
     integration is performed with absolute and relative tolerance of 1e-4."""
@@ -166,6 +169,7 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
        - s momentum fraction
        - sbar momentum fraction
        - cp momentum fraction
+       - cm momentum fraction
        - g momentum fraction
        - T3
        - T8

@@ -14,7 +14,7 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
     """Generate a N3PDF model"""
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
-        for i in ["u", "ubar", "d", "dbar", "c", "cbar", "s", "sbar"]
+        for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
     nodes = list(np.random.randint(1, 10, size=layers)) + [8]
     activations = ["tanh"] * layers + ["linear"]
@@ -24,6 +24,7 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
         seed=np.random.randint(100),
         flav_info=fake_fl,
         parallel_models=members,
+        fitbasis="FLAVOUR"
     )
     return N3PDF(pdf_model, name=name)
 

@@ -53,121 +53,98 @@ def _default_loss(y_true, y_pred): # pylint: disable=unused-argument
     return op.sum(y_pred)
 
 
-def _fill_placeholders(original_input, new_input=None):
-    """
-    Fills the placeholders of the original input with a new set of input
-
-    Parameters
-    ----------
-        original_input: dictionary
-            dictionary of input layers, can contain None
-        new_input: list or dictionary
-            list or dictionary of layers to substitute the None with
-    """
-    if new_input is None:
-        return original_input
-    x = {}
-    i = 0
-    for key, value in original_input.items():
-        if value is None:
-            try:
-                x[key] = new_input[key]
-            except TypeError:
-                x[key] = new_input[i]
-                i += 1
-        else:
-            x[key] = value
-    return x
-
 
 class MetaModel(Model):
     """
-    The `MetaModel` behaves as the tensorflow.keras.model.Model class,
-    with the addition of `tensor_content`:
-
-    - tensor_content:
-    Sometimes when fitting a network the input is fixed, in this case the input can be given
-    together with the input_tensors by setting a `tensor_content` equal to the input value.
-    This is done automatically when using the `numpy_to_input` function from
-    `n3fit.backends.keras_backend.operations`
+    The model wraps keras.Model and adds some custom behaviour. Most notably it
+    allows supplying constant values for input arguments, which are used when
+    training and making predictions with the model (note that constants need to
+    be explicitly registered as inputs, see
+    https://github.com/keras-team/keras/issues/11912). These inputs can be
+    passed in the ``input_values`` parameter, or gathered from the
+    ``tensor_content`` attribute of the ``input_tensors``, which is set
+    automatically when using the ``numpy_to_input`` function from
+    :py:mod:`n3fit.backends.keras_backend.operations`.
 
     Parameters
     ----------
-        input_tensors: tensorflow.keras.layers.Input
+        input_tensors: dict[Any, tensorflow.keras.layers.Input]
             Input layer
         output_tensors: tensorflow.keras.layers.Layer
             Output layer
+        input_values: dict[Any, array_like]
+            Constant values for the input layer, to be supplied when making
+            predictions with the model.
+
         **kwargs:
             keyword arguments to pass directly to Model
     """
 
     accepted_optimizers = optimizers
 
-    def __init__(self, input_tensors, output_tensors, scaler=None, **kwargs):
+    def __init__(self, input_tensors, output_tensors, scaler=None, input_values=None, **kwargs):
         self.has_dataset = False
+        self.required_slots = set()
 
-        input_list = input_tensors
-        output_list = output_tensors
+        if input_values is None:
+            input_values = {}
 
-        if isinstance(input_list, dict):
-            # if this is a dictionary, convert it to a list for now
-            input_list = input_tensors.values()
-        elif not isinstance(input_list, list):
-            # if it is not a dict but also not a list, make it into a 1-element list and pray
-            input_list = [input_list]
+        if not isinstance(input_tensors, dict):
+            raise TypeError("Expecting input_tensors to be a dict")
 
-        if isinstance(output_list, dict):
-            # if this is a dictionary, convert it to a list for now
-            output_list = output_tensors.values()
-        elif not isinstance(output_list, list):
-            # if it is not a dict but also not a list, make it into a 1-element list and pray
-            output_list = [output_list]
+        if not isinstance(input_values, dict):
+            raise TypeError("Expecting input_values to be a dict or None")
 
-        # Note: there used to be two possible options when creating a model:
-        # - Give placeholder tensors (for which the content will be given at run time)
-        # - Give tensors with content* (for which the content is stored with the model
-        # *this option was dropped at some point by TF, the code below keeps this behaviour
-        # We will store within the model the following quantities:
-        #   -> x_in: arrays containing the x-input to the model
-        #   -> tensors_in: when the x-input is known at compile time, we store a reference to the tensor
-        # We pass TensorFlow a dictionary {k: tensor} containing placeholders which will be automatically filled
-        # whenever x_in/tensor_in is known at compile time
 
         x_in = {}
-        tensors_in = {}
-        input_dict = {}
-        for input_tensor in input_list:
-            # If the input contains a tensor_content, store it to use at predict/fit/eval times
-            # otherwise, put a placeholder None as it will come from the outside
-            name = input_tensor.name.rsplit(":", 1)[0]
-            input_dict[name] = input_tensor
-            try:
-                x_in[name] = op.numpy_to_tensor(input_tensor.tensor_content)
-                tensors_in[name] = input_tensor
-            except AttributeError:
-                x_in[name] = None
-                tensors_in[name] = None
-
-        super().__init__(input_dict, output_list, **kwargs)
+        # Go over the inputs. If we can deduce a constant value, either because
+        # it is set in input_values or because it has a tensor_content, we
+        # store it. Otherwise we mark the input as required when making
+        # predictions.
+        for k, v in input_tensors.items():
+            if k in input_values:
+                x_in[k] = input_values[k]
+            elif hasattr(v, "tensor_content"):
+                x_in[k] = op.numpy_to_tensor(v.tensor_content)
+            else:
+                self.required_slots.add(k)
+        super().__init__(input_tensors, output_tensors, **kwargs)
 
         self.x_in = x_in
-        self.tensors_in = tensors_in
+        self.tensors_in = input_tensors
 
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
 
+
+    @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
         """Returns the input data the model was compiled with.
         Introduces the extra_input in the places asigned to the placeholders.
 
         If the model was generated with a scaler, the input will be scaled accordingly
         """
-        if isinstance(extra_input, dict) and self._scaler is not None:
+        if extra_input is None:
+            if self.required_slots:
+                raise ValueError(
+                    f"The following inputs must be provided: {self.required_slots}"
+                )
+            return self.x_in
+
+        if not isinstance(extra_input, dict):
+            raise TypeError("extra_input should be a dict or None")
+
+        if diff := (self.required_slots - extra_input.keys()):
+            raise ValueError(f"The following inputs must be provided {diff}")
+
+        if diff := (extra_input.keys() - (self.x_in.keys() | self.required_slots)):
+            raise ValueError(f"The following inputs are unknown {diff}")
+
+        if self._scaler is not None:
             extra_input = {k: self._scaler(i) for k, i in extra_input.items()}
-        elif isinstance(extra_input, (tuple, list)) and self._scaler is not None:
-            extra_input = [self._scaler(i) for i in extra_input]
-        return _fill_placeholders(self.x_in, extra_input)
+
+        return {**self.x_in, **extra_input}
 
     def perform_fit(self, x=None, y=None, epochs=1, **kwargs):
         """
@@ -187,10 +164,10 @@ class MetaModel(Model):
             loss_dict: dict
                 a dictionary with all partial losses of the model
         """
-        x = self._parse_input(x)
+        x_params = self._parse_input(x)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x, y=y, epochs=epochs, **kwargs)
+        history = super().fit(x=x_params, y=y, epochs=epochs, **kwargs)
         loss_dict = history.history
         return loss_dict
 
@@ -349,7 +326,7 @@ class MetaModel(Model):
 
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
-        all_input = _fill_placeholders(self.tensors_in, x)
+        all_input = {**self.tensors_in, **x}
         return all_input, super().__call__(all_input)
 
     def get_layer_re(self, regex):

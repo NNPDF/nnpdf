@@ -37,6 +37,7 @@ providers = [
     "validphys.correlations",
     "validphys.chi2grids",
     "validphys.eff_exponents",
+    "validphys.asy_exponents",    
     "validphys.paramfits.dataops",
     "validphys.paramfits.plots",
     "validphys.theorycovariance.construction",
@@ -54,6 +55,7 @@ providers = [
     "validphys.n3fit_data",
     "validphys.mc2hessian",
     "reportengine.report",
+    "validphys.overfit_metric"
 ]
 
 log = logging.getLogger(__name__)

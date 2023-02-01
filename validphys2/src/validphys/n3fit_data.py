@@ -84,7 +84,7 @@ def tr_masks(data, replica_trvlseed):
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
     # TODO: update this to new random infrastructure.
-    np.random.seed(nameseed)
+    rng = np.random.Generator(np.random.PCG64(nameseed))
     trmask_partial = []
     for dataset in data.datasets:
         # TODO: python commondata will not require this rubbish.
@@ -92,11 +92,15 @@ def tr_masks(data, replica_trvlseed):
         cuts = dataset.cuts
         ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
         frac = dataset.frac
-        trmax = int(frac * ndata)
+        # We do this so that a given dataset will always have the same number of points masked
+        trmax = int(ndata*frac)
+        if trmax == 0:
+            # If that number is 0, then get 1 point with probability frac
+            trmax = int(rng.random() < frac)
         mask = np.concatenate(
-            [np.ones(trmax, dtype=np.bool), np.zeros(ndata - trmax, dtype=np.bool)]
+            [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
         )
-        np.random.shuffle(mask)
+        rng.shuffle(mask)
         trmask_partial.append(mask)
     return _TrMasks(str(data), replica_trvlseed, trmask_partial)
 
@@ -160,10 +164,10 @@ def kfold_masks(kpartitions, data):
                 ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
                 # If the dataset is in the fold, its mask is full of 0s
                 if str(dataset) in data_fold:
-                    mask.append(np.zeros(ndata, dtype=np.bool))
+                    mask.append(np.zeros(ndata, dtype=bool))
                 # otherwise of ones
                 else:
-                    mask.append(np.ones(ndata, dtype=np.bool))
+                    mask.append(np.ones(ndata, dtype=bool))
             list_folds.append(np.concatenate(mask))
     return list_folds
 
@@ -311,7 +315,7 @@ def fitting_data_dict(
     return dict_out
 
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_fitting_group",))
+exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
@@ -515,7 +519,7 @@ def _fitting_lagrange_dict(lambdadataset):
     ndata = positivity_datasets[0].ndata
     return {
         "datasets": positivity_datasets,
-        "trmask": np.ones(ndata, dtype=np.bool),
+        "trmask": np.ones(ndata, dtype=bool),
         "name": lambdadataset.name,
         "expdata": np.zeros((1, ndata)),
         "ndata": ndata,
