@@ -133,7 +133,9 @@ class N3FitConfig(Config):
 
         N3FIT_FIXED_CONFIG['actions_'].append(namespace + "performfit")
 
-        if file_content["fitting"].get("savepseudodata", True) == True:
+        if file_content["fitting"].get("savepseudodata", True):
+            if file_content["fitting"]["savepseudodata"] != True:
+                raise TypeError("fitting::savepseudodata is neither True nor False")
             if len(kwargs["environment"].replicas) != 1:
                 raise ConfigError(
                     "Cannot request that multiple replicas are fitted and that "
