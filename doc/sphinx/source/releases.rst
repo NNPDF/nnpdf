@@ -22,8 +22,8 @@ developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
 `Version 4.0.6 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.6>`_
-    The last version that uses C++ objects in n3fit and validphys, and apfel for PDF 
-    evolution. 
+    The last version that uses C++ objects in n3fit and validphys, and apfel for 
+    PDF evolution. 
 `Version 4.0.5 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.5>`_
     The last version to support legacy genetic algorithms fits based on C++.
 `Version 4.0.4 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.4>`_
