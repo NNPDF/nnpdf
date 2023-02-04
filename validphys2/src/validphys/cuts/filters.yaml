@@ -134,15 +134,14 @@
 
 - dataset: ATLASZPT8TEVMDIST
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "p_T >= 30 and p_T <= 150"
+#  rule: "p_T >= 30"
 
 - dataset: ATLASZPT8TEVYDIST
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T2 >= 30**2"
+  rule: "p_T2 >= 30**2 and p_T2 <= 150**2"
+#  rule: "p_T2 >= 10**2"
 
-- dataset: ATLASZPT8TEVYDIST
-  reason: Avoid the region where EWK corrections are important.
-  rule: "p_T2 <= 150**2"
 
 - dataset: CMSZDIFF12
   reason: Avoid the region where resummation effects become important.
