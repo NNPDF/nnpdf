@@ -98,7 +98,7 @@ def tr_masks(data, replica_trvlseed):
             # If that number is 0, then get 1 point with probability frac
             trmax = int(rng.random() < frac)
         mask = np.concatenate(
-            [np.ones(trmax, dtype=np.bool), np.zeros(ndata - trmax, dtype=np.bool)]
+            [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
         )
         rng.shuffle(mask)
         trmask_partial.append(mask)
@@ -164,10 +164,10 @@ def kfold_masks(kpartitions, data):
                 ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
                 # If the dataset is in the fold, its mask is full of 0s
                 if str(dataset) in data_fold:
-                    mask.append(np.zeros(ndata, dtype=np.bool))
+                    mask.append(np.zeros(ndata, dtype=bool))
                 # otherwise of ones
                 else:
-                    mask.append(np.ones(ndata, dtype=np.bool))
+                    mask.append(np.ones(ndata, dtype=bool))
             list_folds.append(np.concatenate(mask))
     return list_folds
 
@@ -347,8 +347,9 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     Notes
     -----
     Whilst running ``n3fit``, this action will only be called if
-    `fitting::savepseudodata` is `true` and replicas are fitted one at a time.
-    The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
+    `fitting::savepseudodata` is `true` (as per the default setting) and 
+    replicas are fitted one at a time. The table can be found in the replica
+    folder i.e. <fit dir>/nnfit/replica_*/
 
     """
     # Concatenate over replicas
@@ -360,7 +361,7 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
 @table
 def training_pseudodata(pseudodata_table, training_mask):
     """Save the training data for the given replica.
-    Activate by setting ``fitting::savepseudodata: True``
+    Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
 
     See Also
@@ -373,7 +374,7 @@ def training_pseudodata(pseudodata_table, training_mask):
 @table
 def validation_pseudodata(pseudodata_table, training_mask):
     """Save the training data for the given replica.
-    Activate by setting ``fitting::savepseudodata: True``
+    Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
 
     See Also
@@ -519,7 +520,7 @@ def _fitting_lagrange_dict(lambdadataset):
     ndata = positivity_datasets[0].ndata
     return {
         "datasets": positivity_datasets,
-        "trmask": np.ones(ndata, dtype=np.bool),
+        "trmask": np.ones(ndata, dtype=bool),
         "name": lambdadataset.name,
         "expdata": np.zeros((1, ndata)),
         "ndata": ndata,

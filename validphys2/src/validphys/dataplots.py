@@ -26,6 +26,7 @@ from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
+from validphys.coredata import KIN_NAMES
 
 log = logging.getLogger(__name__)
 
@@ -266,7 +267,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
             table[('err', i)] = err
         else:
             table[cvcol] = cv/norm_cv
-            table[('err', i)] = err/norm_cv
+            table[('err', i)] = np.abs(err/norm_cv)
         cvcols.append(cvcol)
 
 
@@ -299,7 +300,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
             x = info.get_xcol(line_data)
 
             try:
-                x = np.asanyarray(x, np.float)
+                x = np.asanyarray(x, float)
             except ValueError:
                 xticklabels = x
                 npoints = len(x)
@@ -964,7 +965,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     xvals = []
 
     if pos_use_kin:
-        kin_name = "kin1"
+        kin_name = KIN_NAMES[0]
         ax.set_xlabel(kin_name)
         xvals = posset.kinematics[kin_name].values
     else:

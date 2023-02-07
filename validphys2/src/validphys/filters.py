@@ -206,33 +206,33 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, expe
     namespace has to be True (If fakedata = False, the _filter_real_data function
     will be used to write the commondata files).
 
-    The function writes commondata and systypes files within the 
+    The function writes commondata and systypes files within the
     name_closure_test/filter folder.
     If fakenoise is True, Level 1 type data is written to the filter folder, otherwise
     Level 0 data is written.
-    
-    Level 1 data is generated from the Level 0 data by adding noise sampled from 
+
+    Level 1 data is generated from the Level 0 data by adding noise sampled from
     the experimental covariance matrix using the validphys.pseudodata.make_replica
     function.
-    
+
     Parameters
     ----------
-    
+
     filter_path : str
                   path to filter folder
 
     data : validphys.core.DataGroupSpec
 
-    fakepdf : validphys.core.PDF 
+    fakepdf : validphys.core.PDF
 
     fakenoise : bool
                 if fakenoise perform level1 shift of central data values
 
     filterseed : int
-                 random seed used for the generation of 
+                 random seed used for the generation of
                  random noise added to Level 0 data
 
-    
+
     experiments_index : pandas.MultiIndex
 
 
@@ -242,13 +242,13 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, expe
          total data points and points passing the cuts
 
     """
-    
+
     total_data_points = 0
     total_cut_data_points = 0
 
     from validphys.pseudodata import level0_commondata_wc
     level0_commondata_instances_wc = level0_commondata_wc(data,fakepdf)
-    commondata_instances_wc = data.load_commondata_instance() # used to generate experimental covariance matrix 
+    commondata_instances_wc = data.load_commondata_instance() # used to generate experimental covariance matrix
 
     for j, dataset in enumerate(data.datasets):
         #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
@@ -257,7 +257,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, expe
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
-    
+
     from validphys.commondataparser import write_commondata_to_file, write_systype_to_file
     if not fakenoise:
         #======= Level 0 closure test =======#
@@ -267,7 +267,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, expe
             path_sys = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}_DEFAULT.dat"
             write_commondata_to_file(commondata=l0_cd,path=path_cd)
             write_systype_to_file(commondata=l0_cd,path=path_sys)
-            
+
     else:
         #======= Level 1 closure test =======#
         from validphys.pseudodata import make_level1_data
@@ -585,7 +585,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
 
     Parameters
     ----------
-    commondata: :py:class:`validphys.coredata.CommonData`
+    commondata: validphys.coredata.CommonData
     rules: List[Rule]
         A list of Rule objects specifying the filters.
 
