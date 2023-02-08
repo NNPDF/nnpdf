@@ -25,8 +25,8 @@ void FASERVBARFilter::ReadData()
     istringstream lstream(line);
     
     lstream >> fKin1[i];   // x
-    lstream >> fKin2[i];   // y
-    lstream >> fKin3[i];   // Q2 
+    lstream >> fKin3[i];   // y
+    lstream >> fKin2[i];   // Q2 
     lstream >> fData[i];
     fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
     lstream >> fSys[i][0].add;
@@ -64,8 +64,8 @@ void FASERVFilter::ReadData()
     istringstream lstream(line);
     
     lstream >> fKin1[i];   // x
-    lstream >> fKin2[i];   // y
-    lstream >> fKin3[i];   // Q2 
+    lstream >> fKin3[i];   // y
+    lstream >> fKin2[i];   // Q2 
     lstream >> fData[i];
     fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
     lstream >> fSys[i][0].add;
@@ -104,8 +104,8 @@ void FASERVBAR2Filter::ReadData()
     istringstream lstream(line);
     
     lstream >> fKin1[i];   // x
-    lstream >> fKin2[i];   // y
-    lstream >> fKin3[i];   // Q2 
+    lstream >> fKin3[i];   // y
+    lstream >> fKin2[i];   // Q2 
     lstream >> fData[i];
     fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
     lstream >> fSys[i][0].add;
@@ -143,8 +143,8 @@ void FASERV2Filter::ReadData()
     istringstream lstream(line);
     
     lstream >> fKin1[i];   // x
-    lstream >> fKin2[i];   // y
-    lstream >> fKin3[i];   // Q2 
+    lstream >> fKin3[i];   // y
+    lstream >> fKin2[i];   // Q2 
     lstream >> fData[i];
     fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
     lstream >> fSys[i][0].add;
