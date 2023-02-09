@@ -634,14 +634,11 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         """
         commodata_list = []
         for dataset in self.datasets:
+            cd = dataset.commondata.load_commondata_instance()
             if dataset.cuts is None:
-                commodata_list.append(dataset.commondata.load_commondata_instance())
+                commodata_list.append(cd)
             else:
-                commodata_list.append(
-                    dataset.commondata.load_commondata_instance().with_cuts(
-                        dataset.cuts.load()
-                    )
-                )
+                commodata_list.append(cd.with_cuts(dataset.cuts.load()))
         return commodata_list
 
     @property
