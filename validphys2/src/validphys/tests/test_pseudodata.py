@@ -14,7 +14,8 @@ import pytest
 
 from validphys.api import API
 from validphys.tests.conftest import FIT, PSEUDODATA_FIT, THEORYID, SINGLE_DATASET, PDF
-
+from validphys.loader import Loader
+from validphys.covmats import dataset_t0_predictions
 
 def test_read_fit_pseudodata():
     fit_pseudodata = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
@@ -85,14 +86,16 @@ def test_read_matches_recreate():
 
 
 def test_level0_commondata_wc():
-    from validphys.loader import Loader
-    from validphys.covmats import dataset_t0_predictions
-
+    """
+    check whether level0_commondata_wc and dataset_t0_predictions
+    coincide
+    """
     dataset = SINGLE_DATASET
     pdfname = PDF
     l = Loader()
     datasetspec = l.check_dataset(list(dataset.values())[0], theoryid=THEORYID)
     t0set = l.check_pdf(pdfname)
+    
     l0_cd = API.level0_commondata_wc(
         dataset_inputs=[dataset],
         use_cuts="internal",
