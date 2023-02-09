@@ -263,6 +263,7 @@ def level0_commondata_wc(data, fakepdf):
 
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
+    from validphys.covmats import dataset_t0_predictions
     level0_commondata_instances_wc = []
 
     # ==== Load validphys.coredata.CommonData instance with cuts ====#
@@ -277,7 +278,6 @@ def level0_commondata_wc(data, fakepdf):
             )
 
         # == Generate a new CommonData instance with central value given by Level 0 data generated with fakepdf ==#
-        from validphys.covmats import dataset_t0_predictions
 
         t0_prediction = dataset_t0_predictions(
             dataset=dataset, t0set=fakepdf
