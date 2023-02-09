@@ -12,7 +12,10 @@ import numpy as np
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
-
+from validphys.commondataparser import (
+        write_commondata_to_file,
+        write_systype_to_file,
+    )
 log = logging.getLogger(__name__)
 
 KIN_LABEL = {
@@ -247,7 +250,6 @@ def _filter_closure_data(
          total data points and points passing the cuts
 
     """
-
     total_data_points = 0
     total_cut_data_points = 0
 
@@ -265,11 +267,6 @@ def _filter_closure_data(
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
-
-    from validphys.commondataparser import (
-        write_commondata_to_file,
-        write_systype_to_file,
-    )
 
     if not fakenoise:
         # ======= Level 0 closure test =======#
@@ -308,7 +305,7 @@ def _filter_closure_data(
             )
             write_commondata_to_file(commondata=l1_cd, path=path_cd)
             write_systype_to_file(commondata=l1_cd, path=path_sys)
-
+            
     return total_data_points, total_cut_data_points
 
 
