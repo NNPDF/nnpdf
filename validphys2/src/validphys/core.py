@@ -282,8 +282,9 @@ class CommonDataSpec(TupleComp):
         load a validphys.core.CommonDataSpec to validphys.core.CommonData
         """
         from validphys.commondataparser import load_commondata
+
         return load_commondata(self)
-        
+
     @property
     def plot_kinlabels(self):
         return get_plot_kinlabels(self)
@@ -625,6 +626,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
     def load_commondata(self):
         return [d.load_commondata() for d in self.datasets]
 
+
     def load_commondata_instance(self):
         """
         Given Experiment load list of validphys.coredata.CommonData
@@ -635,9 +637,13 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
             if dataset.cuts is None:
                 commodata_list.append(dataset.commondata.load_commondata_instance())
             else:
-                commodata_list.append(dataset.commondata.load_commondata_instance().with_cuts(dataset.cuts.load()))
+                commodata_list.append(
+                    dataset.commondata.load_commondata_instance().with_cuts(
+                        dataset.cuts.load()
+                    )
+                )
         return commodata_list
-    
+
     @property
     def thspec(self):
         #TODO: Is this good enough? Should we explicitly pass the theory

@@ -128,13 +128,11 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
 
     """
     log.info('Filtering closure-test data.')
-    return _filter_closure_data(
-        filter_path, data, fakepdf, fakenoise, filterseed)
+    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed)
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed
-    , experiments_index
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -148,9 +146,14 @@ def filter_closure_data_by_experiment(
 
     res = []
     for exp in experiments_data:
-        experiment_index = experiments_index[experiments_index.isin([exp.name],level=0)]
-        res.append(_filter_closure_data(filter_path, exp, fakepdf, fakenoise, 
-                filterseed, experiment_index))
+        experiment_index = experiments_index[
+            experiments_index.isin([exp.name], level=0)
+        ]
+        res.append(
+            _filter_closure_data(
+                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index
+            )
+        )
 
     return res
 
@@ -200,7 +203,9 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, experiments_index):
+def _filter_closure_data(
+    filter_path, data, fakepdf, fakenoise, filterseed, experiments_index
+):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -247,39 +252,62 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, expe
     total_cut_data_points = 0
 
     from validphys.pseudodata import level0_commondata_wc
-    level0_commondata_instances_wc = level0_commondata_wc(data,fakepdf)
-    commondata_instances_wc = data.load_commondata_instance() # used to generate experimental covariance matrix
+
+    level0_commondata_instances_wc = level0_commondata_wc(data, fakepdf)
+    commondata_instances_wc = (
+        data.load_commondata_instance()
+    )  # used to generate experimental covariance matrix
 
     for j, dataset in enumerate(data.datasets):
-        #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
+        # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
 
-    from validphys.commondataparser import write_commondata_to_file, write_systype_to_file
+    from validphys.commondataparser import (
+        write_commondata_to_file,
+        write_systype_to_file,
+    )
+
     if not fakenoise:
-        #======= Level 0 closure test =======#
+        # ======= Level 0 closure test =======#
         log.info("Writing Level0 data")
         for l0_cd in level0_commondata_instances_wc:
             path_cd = filter_path / l0_cd.setname / f"DATA_{l0_cd.setname}.dat"
-            path_sys = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}_DEFAULT.dat"
-            write_commondata_to_file(commondata=l0_cd,path=path_cd)
-            write_systype_to_file(commondata=l0_cd,path=path_sys)
+            path_sys = (
+                filter_path
+                / l0_cd.setname
+                / "systypes"
+                / f"SYSTYPE_{l0_cd.setname}_DEFAULT.dat"
+            )
+            write_commondata_to_file(commondata=l0_cd, path=path_cd)
+            write_systype_to_file(commondata=l0_cd, path=path_sys)
 
     else:
-        #======= Level 1 closure test =======#
+        # ======= Level 1 closure test =======#
         from validphys.pseudodata import make_level1_data
-        level1_commondata_instances_wc = make_level1_data(data,commondata_instances_wc,level0_commondata_instances_wc,
-                                                    filterseed, experiments_index)
-        #====== write commondata and systype files ======#
+
+        level1_commondata_instances_wc = make_level1_data(
+            data,
+            commondata_instances_wc,
+            level0_commondata_instances_wc,
+            filterseed,
+            experiments_index,
+        )
+        # ====== write commondata and systype files ======#
         log.info("Writing Level1 data")
         for l1_cd in level1_commondata_instances_wc:
             path_cd = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat"
-            path_sys = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}_DEFAULT.dat"
-            write_commondata_to_file(commondata=l1_cd,path=path_cd)
-            write_systype_to_file(commondata=l1_cd,path=path_sys)
+            path_sys = (
+                filter_path
+                / l1_cd.setname
+                / "systypes"
+                / f"SYSTYPE_{l1_cd.setname}_DEFAULT.dat"
+            )
+            write_commondata_to_file(commondata=l1_cd, path=path_cd)
+            write_systype_to_file(commondata=l1_cd, path=path_sys)
 
     return total_data_points, total_cut_data_points
 

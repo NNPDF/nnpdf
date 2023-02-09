@@ -369,13 +369,18 @@ class CommonData:
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
 
+
     def export(self, path):
         """Export the data, and error types
 
         - A DATA_<dataset>.dat file with the dataframe of accepted points
         - A systypes/STYPES_<dataset>.dat file with the error types
         """
-        from validphys.commondataparser import write_systype_to_file, write_commondata_to_file
+        from validphys.commondataparser import (
+            write_systype_to_file,
+            write_commondata_to_file,
+        )
+
         dat_path = path / f"DATA_{self.setname}.dat"
         sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
         sys_path.parent.mkdir(exist_ok=True)
