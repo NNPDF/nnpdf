@@ -10,7 +10,7 @@ import hashlib
 import numpy as np
 import pandas as pd
 
-from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat
+from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat, dataset_inputs_covmat_from_systematics
 
 from reportengine import collect
 
@@ -268,14 +268,11 @@ def level0_commondata_wc(data, fakepdf):
 
     # ==== Load validphys.coredata.CommonData instance with cuts ====#
 
-    for j, dataset in enumerate(data.datasets):
-        if dataset.cuts is None:
-            commondata_wc = dataset.commondata.load_commondata_instance()
-        else:
+    for dataset in data.datasets:
+        commondata_wc = dataset.commondata.load_commondata_instance()
+        if dataset.cuts is not None:
             cuts = dataset.cuts.load()
-            commondata_wc = dataset.commondata.load_commondata_instance().with_cuts(
-                cuts
-            )
+            commondata_wc = commondata_wc.with_cuts(cuts)
 
         # == Generate a new CommonData instance with central value given by Level 0 data generated with fakepdf ==#
 
@@ -290,7 +287,7 @@ def level0_commondata_wc(data, fakepdf):
 
 
 def make_level1_data(
-    data, commondata_wc, level0_commondata_wc, filterseed, experiments_index
+    data, level0_commondata_wc, filterseed, experiments_index
 ):
     """
     Given a list of level0 commondata instances, return the same list
@@ -301,10 +298,6 @@ def make_level1_data(
     ----------
 
     data : validphys.core.DataGroupSpec
-
-    commondata_wc : list
-                    list of validphys.coredata.CommonData instances corresponding to
-                    all datasets within one experiment. Cuts already applied.
 
     level0_commondata_wc : list
                         list of validphys.coredata.CommonData instances corresponding to
@@ -332,11 +325,11 @@ def make_level1_data(
     >>> l1_cd
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
-
     # =============== generate experimental covariance matrix ===============#
-    from validphys.covmats import dataset_inputs_covmat_from_systematics
 
     dataset_input_list = list(data.dsinputs)
+    
+    commondata_wc = data.load_commondata_instance()
 
     covmat = dataset_inputs_covmat_from_systematics(
         commondata_wc,
