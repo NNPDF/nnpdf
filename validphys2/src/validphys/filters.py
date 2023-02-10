@@ -262,7 +262,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
         log.info("Writing Level0 data")
         for l0_cd in level0_commondata_instances_wc:
             write_commondata_to_file(l0_cd, path = filter_path / l0_cd.setname / f"DATA_{l0_cd.setname}.dat")
-            write_systypes_to_file(l0_cd, path = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}.dat")
+            write_systypes_to_file(l0_cd, path = filter_path / l0_cd.setname / "systypes" / f"SYSTYPE_{l0_cd.setname}_DEFAULT.dat")
 
     else:
         #======= Level 1 closure test =======#
@@ -276,7 +276,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, erro
             if reference_fit:
                 l1_cd = process_commondata(l1_cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
             write_commondata_to_file(l1_cd, path = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat")
-            write_systypes_to_file(l1_cd, path = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}.dat")
+            write_systypes_to_file(l1_cd, path = filter_path / l1_cd.setname / "systypes" / f"SYSTYPE_{l1_cd.setname}_DEFAULT.dat")
 
     return total_data_points, total_cut_data_points
 
