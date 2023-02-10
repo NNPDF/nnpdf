@@ -9,7 +9,7 @@ from importlib.resources import read_text
 
 import numpy as np
 
-from reportengine.checks import make_argcheck, check, check_positive, make_check
+from reportengine.checks import make_argcheck, check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
 from validphys.commondataparser import (
@@ -194,7 +194,6 @@ def _write_ds_cut_data(path, dataset):
 def _filter_real_data(filter_path, data):
     """Filter real experimental data."""
 
-
     total_data_points = 0
     total_cut_data_points = 0
     for dataset in data.datasets:
@@ -253,59 +252,46 @@ def _filter_closure_data(
     total_data_points = 0
     total_cut_data_points = 0
 
-    from validphys.pseudodata import level0_commondata_wc
+    # circular import generated @ core.py
+    from validphys.pseudodata import level0_commondata_wc, make_level1_data
 
-    level0_commondata_instances_wc = level0_commondata_wc(data, fakepdf)
-    commondata_instances_wc = (
-        data.load_commondata_instance()
-    )  # used to generate experimental covariance matrix
+    closure_data = level0_commondata_wc(data, fakepdf)
 
-    for j, dataset in enumerate(data.datasets):
-        # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
+    for dataset in data.datasets:
+        #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
+    
+    if fakenoise:
+        #======= Level 1 closure test =======#
 
-    if not fakenoise:
-        # ======= Level 0 closure test =======#
-        log.info("Writing Level0 data")
-        for l0_cd in level0_commondata_instances_wc:
-            path_cd = filter_path / l0_cd.setname / f"DATA_{l0_cd.setname}.dat"
-            path_sys = (
-                filter_path
-                / l0_cd.setname
-                / "systypes"
-                / f"SYSTYPE_{l0_cd.setname}_DEFAULT.dat"
+        closure_data = make_level1_data(
+                data,
+                closure_data,
+                filterseed,
+                experiments_index,
             )
-            write_commondata_to_file(commondata=l0_cd, path=path_cd)
-            write_systype_to_file(commondata=l0_cd, path=path_sys)
 
-    else:
-        # ======= Level 1 closure test =======#
-        from validphys.pseudodata import make_level1_data
-
-        level1_commondata_instances_wc = make_level1_data(
-            data,
-            commondata_instances_wc,
-            level0_commondata_instances_wc,
-            filterseed,
-            experiments_index,
-        )
-        # ====== write commondata and systype files ======#
+    #====== write commondata and systype files ======#
+    if fakenoise:
         log.info("Writing Level1 data")
-        for l1_cd in level1_commondata_instances_wc:
-            path_cd = filter_path / l1_cd.setname / f"DATA_{l1_cd.setname}.dat"
-            path_sys = (
-                filter_path
-                / l1_cd.setname
-                / "systypes"
-                / f"SYSTYPE_{l1_cd.setname}_DEFAULT.dat"
-            )
-            write_commondata_to_file(commondata=l1_cd, path=path_cd)
-            write_systype_to_file(commondata=l1_cd, path=path_sys)
-            
+    else:
+        log.info("Writing Level0 data")
+
+    for cd in closure_data:
+        path_cd = filter_path / cd.setname / f"DATA_{cd.setname}.dat"
+        path_sys = (
+            filter_path
+            / cd.setname
+            / "systypes"
+            / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
+        )
+        write_commondata_to_file(commondata=cd, path=path_cd)
+        write_systype_to_file(commondata=cd, path=path_sys)
+
     return total_data_points, total_cut_data_points
 
 
