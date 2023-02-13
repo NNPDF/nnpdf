@@ -1,7 +1,7 @@
 from pathlib import Path
 import pineappl
 import numpy as np
-from scipy.interpolate import RectBivariateSpline
+from scipy.interpolate import interp2d
 
 class StructureFunction :
     def __init__(self, path_to_fktable, pdfs):
@@ -19,12 +19,11 @@ class StructureFunction :
         # here we require that the (x,Q2) couples that we passed
         # to pinefarm is a rectangular matrix
 
-        grid2D = predictions.reshape(len(x),len(q2))
-        # RectBivariateSpline is faster than interp2d
-        self.interpolator = RectBivariateSpline(x, q2, grid2D)
+        grid2D = predictions.reshape(len(x),len(q2)).T
+        self.interpolator = interp2d(x, q2, grid2D, kind='cubic', fill_value=0)
     
     def FxQ(self, x, Q):
-        return self.interpolator(x, Q**2)[0,0]
+        return self.interpolator(x, Q**2)[0]
 
 class F2LO :
     def __init__(self, pdfs, theory):

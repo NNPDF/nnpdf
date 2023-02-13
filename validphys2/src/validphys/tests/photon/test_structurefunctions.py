@@ -25,3 +25,4 @@ def test_zero_pdfs():
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(f2lo.FxQ(x, Q), 0.)
+
