@@ -9,7 +9,7 @@ from importlib.resources import read_text
 
 import numpy as np
 
-from reportengine.checks import make_argcheck, check, make_check
+from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
 from validphys.commondataparser import (
@@ -75,12 +75,6 @@ def default_filter_rules_input():
     return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
 
-@make_argcheck
-def check_rngalgo(rngalgo: int):
-    """Check rngalgo content"""
-    check(0 <= rngalgo < 17,
-          "Invalid rngalgo. Must be int between [0, 16].")
-
 
 def check_nonnegative(var: str):
     """Ensure that `var` is positive"""
@@ -102,25 +96,6 @@ def make_dataset_dir(path):
 def export_mask(path, mask):
     """Dump mask to file"""
     np.savetxt(path, mask, fmt='%d')
-
-@check_rngalgo
-@check_nonnegative('filterseed')
-@check_nonnegative('seed')
-def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
-    """Initialise the internal NNPDF RNG, specified by ``rngalgo`` which must
-    be an integer between 0 and 16, seeded with ``filterseed``.
-    The RNG can then be subsequently used to i.e generate pseudodata.
-    """
-    try:
-        from NNPDF import RandomGenerator
-    except ImportError as e:
-        logging.error("Generating closure data needs a valid installation of libNNPDF")
-        raise e
-
-    log.warning("Importing libNNPDF")
-    log.info("Initialising RNG")
-    RandomGenerator.InitRNG(rngalgo, seed)
-    RandomGenerator.GetRNG().SetSeed(filterseed)
 
 
 def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
