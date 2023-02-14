@@ -3,7 +3,8 @@ import lhapdf
 
 import numpy as np
 
-from .structure_functions import StructureFunction, F2LO
+# from .structure_functions import StructureFunction, F2LO
+from . import structure_functions as sf
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
 from pathlib import Path
@@ -37,9 +38,9 @@ class Photon:
         self.qcd_pdfs = [lhapdf.mkPDF(fiatlux_runcard["pdf_name"], id) for id in replicas_id]
         path_to_F2 = fiatlux_runcard["path_to_F2"]
         path_to_FL = fiatlux_runcard["path_to_FL"]
-        f2 = [StructureFunction(path_to_F2, pdfs) for pdfs in self.qcd_pdfs]
-        fl = [StructureFunction(path_to_FL, pdfs) for pdfs in self.qcd_pdfs]
-        f2lo = [F2LO(pdfs, self.theory) for pdfs in self.qcd_pdfs]
+        f2 = [sf.StructureFunction(path_to_F2, pdfs) for pdfs in self.qcd_pdfs]
+        fl = [sf.StructureFunction(path_to_FL, pdfs) for pdfs in self.qcd_pdfs]
+        f2lo = [sf.F2LO(pdfs, self.theory) for pdfs in self.qcd_pdfs]
 
         # set fiatlux
         import fiatlux
@@ -120,6 +121,8 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
+        # TODO : this is only for qref=91.2 
+        # Generalize it
         self.alpha_em_Qmt = self.alpha_em_nlo(self.Qmt, self.alpha_em_ref, self.qref, 5)
         self.alpha_em_Qmb = self.alpha_em_nlo(self.Qmb, self.alpha_em_ref, self.qref, 5)
         self.alpha_em_Qmc = self.alpha_em_nlo(self.Qmc, self.alpha_em_Qmb, self.Qmb, 4)

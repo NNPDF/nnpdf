@@ -1,7 +1,6 @@
 import pytest
 from validphys.photon.structure_functions import F2LO
 import numpy as np
-import lhapdf
 
 def test_zero_pdfs():
     class fake_pdfs:
@@ -21,6 +20,8 @@ def test_zero_pdfs():
     }
 
     f2lo = F2LO(pdfs, fake_theory)
+
+    np.testing.assert_equal(f2lo.Qmt, np.inf)
 
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
