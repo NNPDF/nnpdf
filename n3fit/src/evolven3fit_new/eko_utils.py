@@ -1,7 +1,7 @@
 from ekobox import gen_theory, gen_op
 from eko import run_dglap
 
-from validphys.api import API
+from validphys.loader import Loader
 from . import utils
 
 from typing import Any, Dict, Optional
@@ -31,7 +31,7 @@ def construct_eko_cards(
     if op_card_dict is None:
         op_card_dict = {}
     # theory_card construction
-    theory = API.theoryid(theoryid=theoryID).get_description()
+    theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
     theory.update(theory_card_dict)
     theory_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
