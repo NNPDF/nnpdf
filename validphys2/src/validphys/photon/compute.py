@@ -120,24 +120,26 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
-        # TODO : this is only for qref=91.2 
-        # Generalize it
-        self.alpha_em_Qmt = self.alpha_em_nlo(self.Qmt, self.alpha_em_ref, self.qref, 5)
-        self.alpha_em_Qmb = self.alpha_em_nlo(self.Qmb, self.alpha_em_ref, self.qref, 5)
-        self.alpha_em_Qmc = self.alpha_em_nlo(self.Qmc, self.alpha_em_Qmb, self.Qmb, 4)
+        thresh_list = [self.Qmc, self.Qmb, self.Qmt]
+        if self.qref < self.Qmc :
+            nfref = 3
+        elif self.qref < self.Qmb :
+            nfref = 4
+        elif self.qref < self.Qmt :
+            nfref = 5
+        else :
+            nfref = 6
+        thresh_list.insert(nfref - 3, self.qref)
 
-        self.thresh = {
-            3: self.Qmc,
-            4: self.Qmb,
-            5: self.qref,
-            6: self.Qmt
-        }
-        self.alpha_thresh = {
-            3: self.alpha_em_Qmc,
-            4: self.alpha_em_Qmb,
-            5: self.alpha_em_ref,
-            6: self.alpha_em_Qmt
-        }
+        self.thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
+
+        self.alpha_thresh = {nfref: self.alpha_em_ref}
+
+        for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
+            self.alpha_thresh[nf] = self.alpha_em_nlo(self.thresh[nf], self.alpha_thresh[nf - 1], self.thresh[nf - 1], nf - 1)
+        
+        for nf in reversed(range(3, nfref)):
+            self.alpha_thresh[nf] = self.alpha_em_nlo(self.thresh[nf], self.alpha_thresh[nf + 1], self.thresh[nf + 1], nf + 1)
     
     def set_betas(self):
         """Compute and store beta0 / 4pi and b1 = (beta1/beta0)/4pi as a function of nf."""
