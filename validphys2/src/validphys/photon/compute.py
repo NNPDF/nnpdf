@@ -235,10 +235,11 @@ class Photon:
         ]
     
     def integrate(self):
-        """Compute the integral of the photon on the x range"""
+        """Compute the integral of the photon on the x range."""
         return [trapezoid(self.photons_array[id], self.xgrid) for id in range(len(self.replicas_id))]
     
     def generate_error_matrix(self):
+        """generate error matrix to be used for the additional errors."""
         if not self.fiatlux_runcard["additional_errors"] :
             return None
         extra_set = lhapdf.mkPDFs("LUXqed17_plus_PDF4LHC15_nnlo_100")
@@ -251,6 +252,7 @@ class Photon:
         ) # first index must be x, while second one must be replica index
 
     def generate_errors(self):
+        """generate LUX additional errors."""
         if self.error_matrix is None :
             return np.zeros_like(self.xgrid)
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
