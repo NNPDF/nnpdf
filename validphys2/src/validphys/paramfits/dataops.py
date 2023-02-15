@@ -57,7 +57,7 @@ class RobustSampleWrapper:
 
     @property
     def scale(self):
-        return np.asscalar(np.diff(np.percentile(self.data, [15.87, 84.13])))/2
+        return (np.diff(np.percentile(self.data, [15.87, 84.13]))).item()/2
 
 
 def get_parabola(asvals, chi2vals):
