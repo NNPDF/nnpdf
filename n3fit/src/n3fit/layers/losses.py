@@ -52,7 +52,7 @@ class LossInvcovmat(MetaLayer):
             self._mask = op.numpy_to_tensor(mask)
         super().__init__(**kwargs)
 
-    def build(self):
+    def build(self, input_shape):
         """Transform the inverse covmat and the mask into
         weights of the layers"""
         init = MetaLayer.init_constant(self._invcovmat)
