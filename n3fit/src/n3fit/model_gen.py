@@ -55,8 +55,7 @@ class ObservableWrapper:
         was initialized with"""
         if self.invcovmat is not None:
             loss = losses.LossInvcovmat(
-                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name
-            )
+                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name)
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
         elif self.integrability:
@@ -100,8 +99,14 @@ class ObservableWrapper:
         return loss_f(experiment_prediction)
 
 
-def observable_generator(
-    spec_dict, mask_array=None, positivity_initial=1.0, integrability=False
+def observable_generator(spec_dict,
+                         mask_array=None,
+                         training_data=None,
+                         validation_data=None,
+                         invcovmat_tr=None,
+                         invcovmat_vl=None,
+                         positivity_initial=1.0,
+                         integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -156,6 +161,7 @@ def observable_generator(
     offset = 0
     apply_masks = spec_dict.get("data_transformation_tr") is None and mask_array is not None
     # The first step is to compute the observable for each of the datasets
+    masks = []
     for dataset in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset.name
@@ -171,6 +177,7 @@ def observable_generator(
 
         # Extract the masks that will end up in the observable wrappers...
         trmask = mask_array[:, offset:offset + dataset.ndata] if apply_masks else None
+        masks.append(trmask)
         tr_mask_layers.append(Mask(trmask, axis=1, c=1) if apply_masks else None)
         vl_mask_layers.append(Mask(~trmask, axis=1, c=1) if apply_masks else None)
 
@@ -245,8 +252,8 @@ def observable_generator(
         model_observables,
         tr_mask_layers,
         dataset_xsizes,
-        invcovmat=spec_dict["invcovmat"],
-        data=spec_dict["expdata"],
+        invcovmat=invcovmat_tr,
+        data=training_data,
         rotation=obsrot_tr,
     )
     out_vl = ObservableWrapper(
@@ -254,8 +261,8 @@ def observable_generator(
         model_observables,
         vl_mask_layers,
         dataset_xsizes,
-        invcovmat=spec_dict["invcovmat_vl"],
-        data=spec_dict["expdata_vl"],
+        invcovmat=invcovmat_vl,
+        data=validation_data,
         rotation=obsrot_vl,
     )
     out_exp = ObservableWrapper(

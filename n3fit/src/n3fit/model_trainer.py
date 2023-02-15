@@ -263,7 +263,6 @@ class ModelTrainer:
             - ``name``: names of the experiment
             - ``ndata``: number of experimental points
         """
-
         for index, exp_dict in enumerate(self.exp_info[0]):
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
@@ -534,8 +533,17 @@ class ModelTrainer:
 
             # Stacked tr-vl mask array for all replicas for this dataset
             replica_masks = numpy.stack([e[index]["trmask"] for e in self.exp_info])
+            training_data = numpy.stack([e[index]["expdata"].flatten() for e in self.exp_info])
+            validation_data = numpy.stack([e[index]["expdata_vl"].flatten() for e in self.exp_info])
+            invcovmat = numpy.stack([e[index]["invcovmat"] for e in self.exp_info])
+            invcovmat_vl = numpy.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
 
-            exp_layer = model_gen.observable_generator(exp_dict, mask_array=replica_masks)
+            exp_layer = model_gen.observable_generator(exp_dict,
+                                                       mask_array=replica_masks,
+                                                       training_data=training_data,
+                                                       validation_data=validation_data,
+                                                       invcovmat_tr=invcovmat,
+                                                       invcovmat_vl=invcovmat_vl)
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -556,8 +564,14 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
+            replica_masks = numpy.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
+            training_data = numpy.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(pos_dict,
+                                                       positivity_initial=pos_initial,
+                                                       mask_array=replica_masks,
+                                                       training_data=training_data,
+                                                       validation_data=training_data)
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
