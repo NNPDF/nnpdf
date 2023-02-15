@@ -3,7 +3,6 @@ import lhapdf
 
 import numpy as np
 
-# from .structure_functions import StructureFunction, F2LO
 from . import structure_functions as sf
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
