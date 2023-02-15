@@ -89,7 +89,7 @@ def test_init(monkeypatch):
     np.testing.assert_almost_equal(photon.alpha_thresh[5], 0.01)
     np.testing.assert_almost_equal(photon.alpha_thresh[4], photon.alpha_em_nlo(4.92, 0.01, 91.2, 5))
     np.testing.assert_almost_equal(photon.alpha_thresh[3], photon.alpha_em_nlo(1.3, photon.alpha_thresh[4], 4.92, 4))
-    np.testing.assert_equal(len((photon.alpha_thresh)), 3)
-    np.testing.assert_equal(len((photon.thresh)), 3)
+    np.testing.assert_equal(len(photon.alpha_thresh), 3)
+    np.testing.assert_equal(len(photon.thresh), 3)
 
 
