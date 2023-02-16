@@ -176,7 +176,7 @@ def performfit(
         for i, info_tuple in enumerate(replicas_info):
             replica_idxs = info_tuple[0]
             nnseeds = info_tuple[2]
-            replicas_info[i] = (tuple([replica_idxs]), info_tuple[1], tuple([nnseeds]))
+            replicas_info[i] = (tuple([replica_idxs]), [info_tuple[1]], tuple([nnseeds]))
 
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))
