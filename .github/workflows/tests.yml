@@ -12,12 +12,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.8, 3.9]
+        python-version: ["3.9", "3.10"]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
           - os: macos-latest
             CONDA_OS: osx-64
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
