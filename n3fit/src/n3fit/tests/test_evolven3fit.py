@@ -49,7 +49,7 @@ def test_eko_utils():
     theoryID = 162
     q_fin = 100
     q_points = 5
-    x_grid = [1.e-7, 1.e-3, 0.1, 1.0]
+    x_grid = [1.e-3, 0.1, 1.0]
     pto = 2
     qref = 91.2
     comments = "Test"
