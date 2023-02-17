@@ -20,7 +20,7 @@ The name in the runcard must match the name used in this module.
 """
 import numpy as np
 from validphys import fitveto
-from n3fit.vpinterface import N3PDF
+from n3fit.vpinterface import N3PDF, integrability_numbers
 
 
 def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_kwargs):
@@ -43,8 +43,8 @@ def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_
     -------
     >>> from n3fit.hyper_optimization.penalties import saturation
     >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> isinstance(saturation(pdf_model, 5), float)
     True
 
@@ -82,7 +82,7 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     >>> from n3fit.hyper_optimization.penalties import patience
     >>> from types import SimpleNamespace
     >>> fake_stopping = SimpleNamespace(e_best_chi2=1000, stopping_patience=500, total_epochs=5000, vl_loss=2.42)
-    >>> patience(None, fake_stopping, alpha=1e-4)
+    >>> patience(fake_stopping, alpha=1e-4)
     3.434143467595683
 
     """
@@ -105,14 +105,14 @@ def integrability(pdf_models=None, **_kwargs):
     -------
     >>> from n3fit.hyper_optimization.penalties import integrability
     >>> from n3fit.model_gen import pdfNN_layer_generator
-    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl)
-    >>> isinstance(integrability([pdf_model], None), float)
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> isinstance(integrability(pdf_model), float)
     True
 
     """
     pdf_instance = N3PDF(pdf_models)
-    integ_values = pdf_instance.integrability_numbers()
+    integ_values = integrability_numbers(pdf_instance)
     integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
     if integ_overflow > 50.0:
         # before reaching an overflow, just give a stupidly big number
