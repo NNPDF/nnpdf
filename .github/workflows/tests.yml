@@ -68,7 +68,7 @@ jobs:
           $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
           dummy@packages.nnpdf.science:~/packages/conda/${{matrix.CONDA_OS}}
     - name: Build and upload sphinx documentation to NNPDF server
-      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master'
+      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master' && matrix.python-version == '3.9'
       shell: bash -l {0}
       run: |
         KEY=$( mktemp )
