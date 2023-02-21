@@ -7,7 +7,10 @@ wrappers.
 import dataclasses
 import numpy as np
 import pandas as pd
-
+from validphys.commondatawriter import (
+            write_systype_to_file,
+            write_commondata_to_file,
+        )
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 
 
@@ -372,14 +375,11 @@ class CommonData:
 
     def export(self, path):
         """Export the data, and error types
+         Use the same format as libNNPDF:
 
         - A DATA_<dataset>.dat file with the dataframe of accepted points
         - A systypes/STYPES_<dataset>.dat file with the error types
         """
-        from validphys.commondataparser import (
-            write_systype_to_file,
-            write_commondata_to_file,
-        )
 
         dat_path = path / f"DATA_{self.setname}.dat"
         sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
