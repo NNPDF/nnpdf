@@ -24,8 +24,7 @@ requirements:
         - python
         - numpy
     run:
-        # Only install tensorflow on linux. Select eigen build
-        - tensorflow >=2 *eigen* # [linux]
+        - tensorflow >=2 *eigen*
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -50,7 +49,6 @@ requirements:
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
-        - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
         - curio >=1.0
         - pineappl >=0.5.8
         - eko
