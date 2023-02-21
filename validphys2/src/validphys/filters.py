@@ -12,7 +12,7 @@ import numpy as np
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
-from validphys.commondataparser import (
+from validphys.commondatawriter import (
         write_commondata_to_file,
         write_systype_to_file,
     )
