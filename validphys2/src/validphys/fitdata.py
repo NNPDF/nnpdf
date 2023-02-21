@@ -323,7 +323,7 @@ def print_different_cuts(fits, test_for_same_cuts):
         res.write("The following datasets are both included but have different kinematical cuts:\n\n")
         for (first, second) in test_for_same_cuts:
             info = get_info(first.commondata)
-            total_points = len(first.commondata.load())
+            total_points = first.commondata.ndata
             res.write(" - %s:\n" % info.dataset_label)
             first_len = len(first.cuts.load()) if first.cuts else total_points
             second_len = len(second.cuts.load()) if second.cuts else total_points
