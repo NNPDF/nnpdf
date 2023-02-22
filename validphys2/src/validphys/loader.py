@@ -370,19 +370,20 @@ class Loader(LoaderBase):
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
         op = metadata["operation"]
 
-        # TODO:
-        #      at the moment there are no pineappl specific c-factors
-        #      so they need to be loaded from the NNPDF names / compounds files
         cfac_name = metadata["target_dataset"]
         # check whether there is a compound file
         cpath = theory.path / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
         if cpath.exists():
-            # Get the target filenames
+            # Get the target filenames for old theories
             tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
             cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
         else:
-            cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
-        ###
+            # load cf according to ymldb for new theories
+            cfac_name = metadata["operands"]
+            cfactors = []
+            for operand in cfac_name:
+                for fk_tab in operand:
+                    cfactors.append(self.check_cfactor(theoryID, fk_tab, cfac))
 
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
         return fkspecs, op
