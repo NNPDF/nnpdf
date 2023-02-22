@@ -1,0 +1,50 @@
+Overview on simulations for LHeC   M.Klein  23.3.2017
+
+-----------------------------------------------------------
+
+Calculations are done of the uncertainties of the NC and CC
+inclusive cross sections as can be expected for the LHeC. 
+These simulations should be compared with the CDR sets and 
+replace those of 2013 after checks.
+
+
+The following sets are provided:
+
+
+NC/CC Name             Ee[GeV]  Ep[TeV]  P(e)   Charge  Lum[ab-1]
+
+nominal, high luminosity data, negative polarisation  
+NC    datlhec760ncem   60        7       -0.8    -1     1
+CC    datlhec760ccem   60        7       -0.8    -1     1
+
+nominal, high luminosity data, opposite polarisation
+NC    datlhec760ncep   60        7        0.8    -1    0.3
+CC    datlhec760ccep   60        7        0.8    -1    0.3
+
+positron data, unpolarised
+NC    datlhec760ncepp  60        7         0    +1     0.1
+CC    datlhec760ccepp  60        7         0    +1     0.1
+
+low energy data, unpolarised 
+NC    datlhec160ncem   60        1         0    -1     0.1
+CC    datlhec160ccem   60        1         0    -1     0.1
+
+each  file has a header which should make the meaning of the numbers clear.
+ 
+In the LHeC Note 2013-002 PHY these simulations are described (for
+the LHeC case)
+http://cds.cern.ch/record/1564929/files/maxvoiSMnote.pdf
+
+For the present simulation the following cuts were applied:
+
+eta_max=5, .95 < y < 0.001
+
+Error assumptions
+
+energy scales: e: 0.1%,  h=0.5%  
+      this is the D/MC scale difference
+
+Radcor 0.3%  Photoproduction at high y: 1%
+uncorrelated extra efficiency 0.5%
+
+The luminosity error is kept aside, one may assume 0.5-1%.

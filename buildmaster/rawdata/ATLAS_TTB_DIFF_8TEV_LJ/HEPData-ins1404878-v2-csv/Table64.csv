@@ -1,0 +1,48 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t64
+#: name: Table 64
+#: description: Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+
+#: data_file: Table_64.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Proton-Proton Scattering | Top Production
+#: keyword cmenergies: 8000.0
+#: RE,P P --> TOP TOPBAR X
+#: SQRT(S) [GeV],8000.0
+|p_{out}^{t\bar{t}}| bin,|p_{out}^{t\bar{t}}| bin,
+1,1,1.0
+2,1,-0.806702413409
+3,1,-0.471133210291
+4,1,-0.137506885483
+5,1,-0.0796010526641
+6,1,-0.0725593926315
+1,2,-0.806702413409
+2,2,1.0
+3,2,0.0234010248165
+4,2,-0.16981661503
+5,2,-0.0233198539196
+6,2,-0.0288456689446
+1,3,-0.471133210291
+2,3,0.0234010248165
+3,3,1.0
+4,3,-0.0420347924803
+5,3,-0.136173100448
+6,3,0.00671832861019
+1,4,-0.137506885483
+2,4,-0.16981661503
+3,4,-0.0420347924803
+4,4,1.0
+5,4,-0.0930379333989
+6,4,-0.0570862466347
+1,5,-0.0796010526641
+2,5,-0.0233198539196
+3,5,-0.136173100448
+4,5,-0.0930379333989
+5,5,1.0
+6,5,-0.1294484871
+1,6,-0.0725593926315
+2,6,-0.0288456689446
+3,6,0.00671832861019
+4,6,-0.0570862466347
+5,6,-0.1294484871
+6,6,1.0
+

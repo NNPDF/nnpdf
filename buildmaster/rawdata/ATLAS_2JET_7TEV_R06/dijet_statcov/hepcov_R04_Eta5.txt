@@ -1,0 +1,17 @@
+Statistical covariance matrix for measured double-differential dijet cross-sections for the range 2.5 <= y* < 3.0 and jet radius parameter R = 0.4
+ABS(YRAP(JET1)) : < 3.0
+ABS(YRAP(JET2)) : < 3.0
+PT(JET1) IN GEV : > 100
+PT(JET2) IN GEV : > 50
+R : 0.4
+RE : P P --> JET JET X
+SQRT(S) : 7000.0 GeV
+YRAP* : 2.5 - 3.0
+x : M(2JET) IN TEV
+y : M(2JET) IN TEV
+z : cov(x,y) IN PB**+2*TEV**-2
+xlow-xhigh
+2.12-2.55 8.04e+01 -1.59e-01 -1.26e-01 8.11e-04 
+2.55-3.04 -1.59e-01 6.82e+00 -1.24e-03 -1.06e-03 
+3.04-3.93 -1.26e-01 -1.24e-03 9.14e-02 8.65e-05 
+3.93-5.04 8.11e-04 -1.06e-03 8.65e-05 1.75e-04 

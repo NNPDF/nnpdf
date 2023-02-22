@@ -1,0 +1,36 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t231
+#: name: Table 231
+#: description: Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+
+#: data_file: Table_231.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Single Differential Cross Section | Proton-Proton Scattering
+#: keyword cmenergies: 8000.0
+#: SQRT(S)(Q = 8 TEV),8000.0
+column,row,BOOT_ABSY_TTBAR_4J2B_ABSY_TTBAR_4J2B (rows vs columns)
+1,1,1
+2,1,-0.344061
+3,1,-0.564894
+4,1,-0.297065
+5,1,-0.100377
+1,2,-0.344061
+2,2,1
+3,2,-0.0398653
+4,2,-0.447599
+5,2,-0.179457
+1,3,-0.564894
+2,3,-0.0398653
+3,3,1
+4,3,-0.0299511
+5,3,-0.295078
+1,4,-0.297065
+2,4,-0.447599
+3,4,-0.0299511
+4,4,1
+5,4,-0.112015
+1,5,-0.100377
+2,5,-0.179457
+3,5,-0.295078
+4,5,-0.112015
+5,5,1
+

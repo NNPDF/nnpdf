@@ -1,0 +1,29 @@
+#: table_doi: 10.17182/hepdata.73611.v1/t24
+#: name: Table 24
+#: description: Correlation coefficients among (W- -> l- nubar), (W+ -> l+ nu), (Z/gamma^* -> l+ l-) where (l = e, mu) excluding the common normalisation uncertainty due to the luminosity calibration.
+#: data_file: Table24.yaml
+#: keyword reactions: P P --> W+ X | P P --> W- X | P P --> Z0 X | P P --> GAMMA* X
+#: keyword observables: SIG
+#: keyword phrases: Inclusive | Integrated Cross Section | Cross Section | Proton-Proton Scattering | Z Production | W Production
+#: keyword cmenergies: 13000.0
+#: PT(C=NU) [GEV],> 25
+#: MT [GEV],> 50
+#: RE(Q=W+),P P --> W+ < E+ MUE + MU+ NUMU >  X
+#: ABS(ETARAP(C=MUON)),< 2.5
+#: RE(Q=Z/GAMMA*),P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E- + MU+ MU- > ) X
+#: ABS(ETARAP(C=ELECTRON)),< 2.5
+#: MZ [GEV],66-116
+#: PT(C=MUON) [GEV],> 25
+#: PT(C=ELECTRON) [GEV],> 25
+#: RE(Q=W-),P P --> W- < E- NUEBAR + MU- NUMUBAR > X
+SQRT(S) [GEV],SQRT(S) [GEV],Q
+13000.0,13000.0,P P --> W- < E- NUEBAR + MU- NUMUBAR> X
+13000.0,13000.0,P P --> W- < E- NUEBAR + MU- NUMUBAR> X
+13000.0,13000.0,P P --> W+ < E+ NUE + MU+ NUMU> X
+13000.0,13000.0,P P --> W+ < E+ NUE + MU+ NUMU> X
+13000.0,13000.0,P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E- + MU+ MU- > ) X
+13000.0,13000.0,P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E- + MU+ MU- > ) X
+13000.0,13000.0,0.93
+13000.0,13000.0,0.18
+13000.0,13000.0,0.19
+

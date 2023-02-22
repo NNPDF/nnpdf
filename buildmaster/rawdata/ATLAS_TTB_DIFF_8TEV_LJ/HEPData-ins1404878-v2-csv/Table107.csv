@@ -1,0 +1,48 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t107
+#: name: Table 107
+#: description: Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+
+#: data_file: Table_107.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Proton-Proton Scattering | Top Production
+#: keyword cmenergies: 8000.0
+#: RE,P P --> TOP TOPBAR X
+#: SQRT(S) [GeV],8000.0
+|p_{out}^{t\bar{t}}| bin,|p_{out}^{t\bar{t}}| bin,
+1,1,1.0
+2,1,0.184644570166
+3,1,-0.22721959171
+4,1,-0.253458692386
+5,1,-0.15676330647
+6,1,-0.0647893197875
+1,2,0.184644570166
+2,2,1.0
+3,2,0.621890696142
+4,2,0.157507275105
+5,2,-0.0292610450932
+6,2,-0.0592842388702
+1,3,-0.22721959171
+2,3,0.621890696142
+3,3,1.0
+4,3,0.641591085908
+5,3,0.167902587277
+6,3,-0.0311337106722
+1,4,-0.253458692386
+2,4,0.157507275105
+3,4,0.641591085908
+4,4,1.0
+5,4,0.555586666019
+6,4,0.0393042418017
+1,5,-0.15676330647
+2,5,-0.0292610450932
+3,5,0.167902587277
+4,5,0.555586666019
+5,5,1.0
+6,5,0.328093729978
+1,6,-0.0647893197875
+2,6,-0.0592842388702
+3,6,-0.0311337106722
+4,6,0.0393042418017
+5,6,0.328093729978
+6,6,1.0
+

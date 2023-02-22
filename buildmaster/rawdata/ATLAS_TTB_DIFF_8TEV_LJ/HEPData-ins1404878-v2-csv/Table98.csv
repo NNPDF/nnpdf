@@ -1,0 +1,37 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t98
+#: name: Table 98
+#: description: Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+
+#: data_file: Table_98.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Proton-Proton Scattering | Top Production
+#: keyword cmenergies: 8000.0
+#: RE,P P --> TOP TOPBAR X
+#: SQRT(S) [GeV],8000.0
+|y^{t\bar{t}}| bin,|y^{t\bar{t}}| bin,
+1,1,1.0
+2,1,0.878475283325
+3,1,0.452999977952
+4,1,-0.397236321866
+5,1,-0.879159759538
+1,2,0.878475283325
+2,2,1.0
+3,2,0.663015318019
+4,2,-0.419855943695
+5,2,-0.909049029445
+1,3,0.452999977952
+2,3,0.663015318019
+3,3,1.0
+4,3,0.232943425909
+5,3,-0.805027870747
+1,4,-0.397236321866
+2,4,-0.419855943695
+3,4,0.232943425909
+4,4,1.0
+5,4,0.0621780021553
+1,5,-0.879159759538
+2,5,-0.909049029445
+3,5,-0.805027870747
+4,5,0.0621780021553
+5,5,1.0
+

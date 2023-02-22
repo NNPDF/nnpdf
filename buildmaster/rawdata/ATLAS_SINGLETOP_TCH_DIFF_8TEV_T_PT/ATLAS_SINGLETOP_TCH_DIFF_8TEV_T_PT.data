@@ -1,0 +1,7 @@
+Taken from Table 18 in paper.
+Columns are: bin low, bin high, cross section, stat., syst. up, syst. down.
+0	50	467	25	+34	-39
+50	100	404	15	+28	-27
+100	150	149	10	+17	-18
+150	200	49.2	6.3	+5.0	-4.1
+200	300	10.2	1.9	+1.2	-1.3

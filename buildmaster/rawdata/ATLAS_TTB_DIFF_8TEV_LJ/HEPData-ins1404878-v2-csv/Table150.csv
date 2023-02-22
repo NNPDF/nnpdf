@@ -1,0 +1,43 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t150
+#: name: Table 150
+#: description: Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+
+#: data_file: Table_150.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Single Differential Cross Section | Proton-Proton Scattering
+#: keyword cmenergies: 8000.0
+#: SQRT(S)(Q = 8 TEV),8000.0
+column,row,BOOT_DPHI_TTBAR_4J2B_PT_TOPH_4J2B (rows vs columns)
+1,1,0.40127
+2,1,0.30299
+3,1,0.115568
+4,1,0.0286095
+5,1,0.0132099
+6,1,0.00047554
+7,1,-0.00065938
+8,1,-0.00270577
+1,2,0.408903
+2,2,0.445244
+3,2,0.296483
+4,2,0.136013
+5,2,0.068303
+6,2,0.0314614
+7,2,0.0155157
+8,2,0.00840856
+1,3,0.209356
+2,3,0.393427
+3,3,0.46094
+4,3,0.336155
+5,3,0.242862
+6,3,0.152168
+7,3,0.0971556
+8,3,0.0542044
+1,4,-0.00524245
+2,4,0.151518
+3,4,0.326226
+4,4,0.326011
+5,4,0.288791
+6,4,0.203441
+7,4,0.141753
+8,4,0.0887154
+

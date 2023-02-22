@@ -1,0 +1,49 @@
+!
+! The data are taken from: arXiv:1309.2591
+!
+! Measurement of the muon charge asymmetry in
+! {\bm{$p\overline{p} \rightarrow W + X \rightarrow \mu\nu + X$}
+!
+! By D0 Collaboration. December 2013
+!
+!
+&Data
+   Name = 'D0 W->mu nu lepton asymmetry ptl > 25 GeV'
+   Reaction  = 'CC ppbar'
+
+   NDATA = 10
+   NColumn = 12
+   ColumnType = 'Flag',2*'Bin','Sigma',8*'Error'
+   ColumnName = 'binFlag','eta1','eta2','sigma','stat const',
+!              'D0_WMUA_EWbkg:A','D0_WMUA_MJbkg:A','D0_WMUA_charge_misid:A','D0_WMUA_rel_charge_efficiency:A','D0_WMUA_magnet_pol_weighting:A','D0_WMUA_momentum_met_resolution:A','D0_WMUA_trigger_isolation:A'
+              'D0_WMUA_EWbkg:A','D0_WMUA_MJbkg:A','D0_WMUA_charge_misid:A','D0_WMUA_rel_charge_efficiency:A','D0_WMUA_magnet_pol_weighting:A','D0_WMUA_momentum_met_resolution:A','uncor const'
+   NInfo   = 2
+   CInfo    = 'theoryunit','ppbar'
+   DataInfo = 1.,1.
+   IndexDataset = 87
+
+  TheoryType     = 'expression'
+  TermName = 'A1', 'A2'
+  TermType = 'applgrid','applgrid'
+  TermSource = 'theoryfiles/tevatron/wzinclusive/grid-40-6-15-3-Wplus_wly_pt25.root', 'theoryfiles/tevatron/wzinclusive/grid-40-6-15-3-Wminus_wly_pt25.root'
+  TheorExpr= '100*(A1-A2)/(A1+A2)'
+  Percent   = 8*false
+&End
+&PlotDesc
+    PlotN = 1
+    PlotDefColumn = 'eta2'
+    PlotDefValue = 0., 5.
+    PlotOptions(1)  = 'Experiment:D0@ExtraLabel:p#bar{p} #rightarrow W #rightarrow #mu#nu; #sqrt{s} = 1.96 TeV; #int L = 7.3 fb^{-1}@Title: p_{T}^{#mu} > 25 GeV @XTitle: |#eta_{#mu}| @YTitle: A_{#eta_{#mu}} [%] '
+!@YminR:0.61@YmaxR:1.39'
+&End
+*flag	eta1   eta2     sigma	stat	EWbkg	MJbkg	charge_misid	rel_charge_efficiency	magnet_pol_weighting	momentum_met_resolution trigger_isolation
+1	0.0	0.2	2.13  	0.17	0.007	0.018	0.001		0.012			0.006			0.107			0.05
+1	0.2	0.4	5.46  	0.18	0.005	0.036	0.006		0.008			0.005			0.129			0.13
+1	0.4	0.6	9.11  	0.18	0.029	0.046	0.007		0.013			0.004			0.151			0.06
+1	0.6	0.8	12.41 	0.18	0.049	0.065	0.012		0.039			0.003			0.165			0.11
+1	0.8	1.0	14.15 	0.19	0.047	0.089	0.012		0.046			0.004			0.134			0.09
+1	1.0	1.2	16.13 	0.16	0.051	0.078	0.014		0.053			0.002			0.251			0.22
+1	1.2	1.4	16.62 	0.14	0.057	0.058	0.006		0.042			0.002			0.187			0.17
+1	1.4	1.6	15.47 	0.16	0.055	0.048	0.013		0.073			0.005			0.183			0.17
+1	1.6	1.8	11.06 	0.70	0.030	0.005	0.047		0.082			0.031			0.312			0.20
+1	1.8	2.0	7.64  	1.07	0.037	0.009	0.048		0.149			0.049			0.385			0.04

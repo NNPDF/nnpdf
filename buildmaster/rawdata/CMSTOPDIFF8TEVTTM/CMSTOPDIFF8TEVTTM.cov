@@ -1,0 +1,16 @@
+Path: /HepData/8846/d40-x1-y1
+Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the invariant mass m_tt of the top quark pair
+Location: Additional table (stat. cov.mat for m(ttbar))
+RE : P P -> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : m(ttbar) (range)
+y : $cov(1/\sigma d\sigma/dm(ttbar))$
+xdesc	x	xlow	xhigh	y	y	y	y	y	y	y	
+	372.5	345.0	400.0	9.979E-9	-7.253E-9	-1.143E-10	2.47E-11	-1.844E-10	-2.21E-11	-3.35E-12
+	435.0	400.0	470.0	-7.253E-9	8.396E-9	-2.28E-9	-1.65E-10	9.255E-11	-1.13E-11	1.487E-12
+	510.0	470.0	550.0	-1.143E-10	-2.28E-9	2.896E-9	-5.731E-10	-4.64E-11	2.038E-12	-4.1E-12
+	600.0	550.0	650.0	2.47E-11	-1.65E-10	-5.731E-10	7.489E-10	-1.054E-10	-1.163E-11	7.554E-13
+	725.0	650.0	800.0	-1.844E-10	9.255E-11	-4.64E-11	-1.054E-10	1.375E-10	-4.911E-12	-2.196E-12
+	950.0	800.0	1100.0	-2.21E-11	-1.13E-11	2.038E-12	-1.163E-11	-4.911E-12	1.125E-11	7.062E-13
+	1350.0	1100.0	1600.0	-3.35E-12	1.487E-12	-4.1E-12	7.554E-13	-2.196E-12	7.062E-13	8.107E-13
+

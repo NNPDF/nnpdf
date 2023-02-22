@@ -1,0 +1,17 @@
+Path: /HepData/9211/d22-x1-y1
+Full covariance matrix of the absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are in units of pb$^2$ GeV$^{-2}$
+Location: Table 12 in Auxiliary Material
+M_TTBAR : 250.0 - 450.0 GeV : 450.0 - 570.0 GeV : 570.0 - 700.0 GeV : 700.0 - 850.0 GeV : 850.0 - 1000.0 GeV : 1000.0 - 2700.0 GeV
+RE : P P --> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : M_TTBAR IN GEV
+y : $cov\left(\frac{d\sigma}{dm_{t\bar{t}}}\right) \left[\rm pb^2 {\rm GeV}^{-2} \, \right]$
+xdesc	x	xlow	xhigh	y	y	y	y	y	y	
+	350.0	250.0	450.0	3.620767E-4	2.744934E-4	1.335124E-4	6.112473E-5	2.579658E-5	1.807407E-6
+	510.0	450.0	570.0	2.744934E-4	0.001579639	6.836133E-4	1.941536E-4	6.506268E-5	5.019278E-6
+	635.0	570.0	700.0	1.335124E-4	6.836133E-4	8.991983E-4	2.358627E-4	8.200134E-5	5.523451E-6
+	775.0	700.0	850.0	6.112473E-5	1.941536E-4	2.358627E-4	2.035827E-4	5.036687E-5	3.267422E-6
+	925.0	850.0	1000.0	2.579658E-5	6.506268E-5	8.200134E-5	5.036687E-5	4.323092E-5	2.092644E-6
+	1850.0	1000.0	2700.0	1.807407E-6	5.019278E-6	5.523451E-6	3.267422E-6	2.092644E-6	3.719884E-7
+
+

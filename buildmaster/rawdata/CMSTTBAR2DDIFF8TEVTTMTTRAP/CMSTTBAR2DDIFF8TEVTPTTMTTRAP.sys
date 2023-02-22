@@ -1,0 +1,494 @@
+#: table_doi: 10.17182/hepdata.77008.v1/t8
+#: name: Table 13
+#: description: Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $y(t\bar{t})$. For bin indices see Table 11.
+#: data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_ytt_syst.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword cmenergies: 8000.0
+#: RE,P P --> TOP TOPBAR X
+#: SQRT(S) [GeV],8000.0
+'bin','syst. source','variation up'
+1,'Jet energy scale',1.1
+1,'Jet energy resolution',-0.8
+1,'Kin. reconstruction',-0.0
+1,'Pileup',0.1
+1,'Trigger',0.2
+1,'Background Z/$\gamma^{*}$',0.1
+1,'Background other',0.3
+1,'b tagging',0.7
+1,'Int. luminosity',-0.0
+1,'$m_{\rm t}$',-2.6
+1,'$\mu_{\rm f}, \mu_{\rm r}$',-1.7
+1,'Matching threshold',1.7
+1,'PDFs',0.1
+1,'Hadronization',-3.8
+1,'Hard scattering',-0.2
+2,'Jet energy scale',2.1
+2,'Jet energy resolution',1.0
+2,'Kin. reconstruction',0.0
+2,'Pileup',0.0
+2,'Trigger',0.2
+2,'Background Z/$\gamma^{*}$',-0.5
+2,'Background other',0.4
+2,'b tagging',1.2
+2,'Int. luminosity',-0.0
+2,'$m_{\rm t}$',-2.2
+2,'$\mu_{\rm f}, \mu_{\rm r}$',-1.2
+2,'Matching threshold',-2.7
+2,'PDFs',0.3
+2,'Hadronization',0.1
+2,'Hard scattering',-1.6
+3,'Jet energy scale',1.7
+3,'Jet energy resolution',-0.3
+3,'Kin. reconstruction',-0.0
+3,'Pileup',0.1
+3,'Trigger',-0.1
+3,'Background Z/$\gamma^{*}$',-1.1
+3,'Background other',0.1
+3,'b tagging',1.2
+3,'Int. luminosity',-0.4
+3,'$m_{\rm t}$',-2.4
+3,'$\mu_{\rm f}, \mu_{\rm r}$',2.0
+3,'Matching threshold',-0.5
+3,'PDFs',0.7
+3,'Hadronization',3.3
+3,'Hard scattering',-1.0
+4,'Jet energy scale',1.1
+4,'Jet energy resolution',0.3
+4,'Kin. reconstruction',0.0
+4,'Pileup',0.4
+4,'Trigger',-0.5
+4,'Background Z/$\gamma^{*}$',-0.9
+4,'Background other',0.4
+4,'b tagging',0.3
+4,'Int. luminosity',0.1
+4,'$m_{\rm t}$',-2.8
+4,'$\mu_{\rm f}, \mu_{\rm r}$',2.3
+4,'Matching threshold',-0.3
+4,'PDFs',0.2
+4,'Hadronization',-0.1
+4,'Hard scattering',-0.0
+5,'Jet energy scale',0.1
+5,'Jet energy resolution',1.0
+5,'Kin. reconstruction',0.0
+5,'Pileup',0.1
+5,'Trigger',0.2
+5,'Background Z/$\gamma^{*}$',0.3
+5,'Background other',-0.1
+5,'b tagging',0.4
+5,'Int. luminosity',0.1
+5,'$m_{\rm t}$',0.2
+5,'$\mu_{\rm f}, \mu_{\rm r}$',1.3
+5,'Matching threshold',-0.1
+5,'PDFs',0.1
+5,'Hadronization',3.7
+5,'Hard scattering',-3.8
+6,'Jet energy scale',-2.2
+6,'Jet energy resolution',-0.7
+6,'Kin. reconstruction',0.0
+6,'Pileup',-0.1
+6,'Trigger',0.2
+6,'Background Z/$\gamma^{*}$',0.3
+6,'Background other',-0.2
+6,'b tagging',0.3
+6,'Int. luminosity',0.1
+6,'$m_{\rm t}$',-0.2
+6,'$\mu_{\rm f}, \mu_{\rm r}$',0.9
+6,'Matching threshold',-0.4
+6,'PDFs',0.2
+6,'Hadronization',-4.4
+6,'Hard scattering',0.1
+7,'Jet energy scale',-1.7
+7,'Jet energy resolution',-0.2
+7,'Kin. reconstruction',-0.0
+7,'Pileup',0.1
+7,'Trigger',-0.0
+7,'Background Z/$\gamma^{*}$',0.0
+7,'Background other',-0.2
+7,'b tagging',0.1
+7,'Int. luminosity',-0.1
+7,'$m_{\rm t}$',0.3
+7,'$\mu_{\rm f}, \mu_{\rm r}$',-3.1
+7,'Matching threshold',1.6
+7,'PDFs',0.3
+7,'Hadronization',-1.3
+7,'Hard scattering',-0.5
+8,'Jet energy scale',-1.1
+8,'Jet energy resolution',0.3
+8,'Kin. reconstruction',0.0
+8,'Pileup',-0.1
+8,'Trigger',-0.3
+8,'Background Z/$\gamma^{*}$',0.3
+8,'Background other',0.1
+8,'b tagging',1.0
+8,'Int. luminosity',0.4
+8,'$m_{\rm t}$',0.9
+8,'$\mu_{\rm f}, \mu_{\rm r}$',3.4
+8,'Matching threshold',1.3
+8,'PDFs',0.1
+8,'Hadronization',4.7
+8,'Hard scattering',-0.2
+9,'Jet energy scale',-0.5
+9,'Jet energy resolution',-0.6
+9,'Kin. reconstruction',-0.0
+9,'Pileup',-0.1
+9,'Trigger',0.1
+9,'Background Z/$\gamma^{*}$',0.2
+9,'Background other',-0.1
+9,'b tagging',0.3
+9,'Int. luminosity',-0.2
+9,'$m_{\rm t}$',1.0
+9,'$\mu_{\rm f}, \mu_{\rm r}$',0.6
+9,'Matching threshold',0.0
+9,'PDFs',0.2
+9,'Hadronization',0.8
+9,'Hard scattering',-1.3
+10,'Jet energy scale',-0.4
+10,'Jet energy resolution',0.1
+10,'Kin. reconstruction',-0.0
+10,'Pileup',-0.2
+10,'Trigger',0.0
+10,'Background Z/$\gamma^{*}$',0.4
+10,'Background other',0.1
+10,'b tagging',0.5
+10,'Int. luminosity',-0.2
+10,'$m_{\rm t}$',0.5
+10,'$\mu_{\rm f}, \mu_{\rm r}$',-0.4
+10,'Matching threshold',-1.8
+10,'PDFs',0.1
+10,'Hadronization',-1.0
+10,'Hard scattering',1.1
+11,'Jet energy scale',-1.5
+11,'Jet energy resolution',-0.3
+11,'Kin. reconstruction',-0.0
+11,'Pileup',0.1
+11,'Trigger',-0.1
+11,'Background Z/$\gamma^{*}$',0.1
+11,'Background other',-0.3
+11,'b tagging',0.5
+11,'Int. luminosity',-0.3
+11,'$m_{\rm t}$',1.2
+11,'$\mu_{\rm f}, \mu_{\rm r}$',-1.2
+11,'Matching threshold',1.0
+11,'PDFs',0.5
+11,'Hadronization',-0.9
+11,'Hard scattering',4.2
+12,'Jet energy scale',2.1
+12,'Jet energy resolution',2.8
+12,'Kin. reconstruction',-0.0
+12,'Pileup',-0.1
+12,'Trigger',-0.5
+12,'Background Z/$\gamma^{*}$',-0.3
+12,'Background other',-0.4
+12,'b tagging',1.3
+12,'Int. luminosity',-0.3
+12,'$m_{\rm t}$',2.1
+12,'$\mu_{\rm f}, \mu_{\rm r}$',-4.2
+12,'Matching threshold',-0.8
+12,'PDFs',0.6
+12,'Hadronization',5.7
+12,'Hard scattering',1.9
+13,'Jet energy scale',-0.4
+13,'Jet energy resolution',-0.4
+13,'Kin. reconstruction',0.0
+13,'Pileup',-0.2
+13,'Trigger',0.1
+13,'Background Z/$\gamma^{*}$',0.3
+13,'Background other',0.1
+13,'b tagging',2.2
+13,'Int. luminosity',0.1
+13,'$m_{\rm t}$',2.2
+13,'$\mu_{\rm f}, \mu_{\rm r}$',-3.2
+13,'Matching threshold',-2.0
+13,'PDFs',0.1
+13,'Hadronization',-2.7
+13,'Hard scattering',-0.3
+14,'Jet energy scale',1.3
+14,'Jet energy resolution',-0.9
+14,'Kin. reconstruction',0.0
+14,'Pileup',-0.5
+14,'Trigger',0.1
+14,'Background Z/$\gamma^{*}$',0.2
+14,'Background other',-0.2
+14,'b tagging',0.1
+14,'Int. luminosity',0.1
+14,'$m_{\rm t}$',3.3
+14,'$\mu_{\rm f}, \mu_{\rm r}$',-1.2
+14,'Matching threshold',-0.6
+14,'PDFs',0.2
+14,'Hadronization',-0.6
+14,'Hard scattering',1.0
+15,'Jet energy scale',3.2
+15,'Jet energy resolution',-1.1
+15,'Kin. reconstruction',0.0
+15,'Pileup',0.5
+15,'Trigger',0.1
+15,'Background Z/$\gamma^{*}$',0.6
+15,'Background other',-0.0
+15,'b tagging',1.2
+15,'Int. luminosity',0.2
+15,'$m_{\rm t}$',3.6
+15,'$\mu_{\rm f}, \mu_{\rm r}$',5.3
+15,'Matching threshold',8.2
+15,'PDFs',0.3
+15,'Hadronization',4.7
+15,'Hard scattering',3.4
+16,'Jet energy scale',0.5
+16,'Jet energy resolution',-3.6
+16,'Kin. reconstruction',0.0
+16,'Pileup',-0.8
+16,'Trigger',-0.1
+16,'Background Z/$\gamma^{*}$',0.8
+16,'Background other',-0.5
+16,'b tagging',0.6
+16,'Int. luminosity',0.3
+16,'$m_{\rm t}$',3.2
+16,'$\mu_{\rm f}, \mu_{\rm r}$',-7.9
+16,'Matching threshold',-0.7
+16,'PDFs',1.0
+16,'Hadronization',-18.8
+16,'Hard scattering',27.9
+
+#: RE,P P --> TOP TOPBAR X
+#: SQRT(S) [GeV],8000.0
+'bin','syst. source','variation down'
+1,'Jet energy scale',-3.1
+1,'Jet energy resolution',0.1
+1,'Kin. reconstruction',0.0
+1,'Pileup',-0.0
+1,'Trigger',-0.2
+1,'Background Z/$\gamma^{*}$',-0.1
+1,'Background other',-0.3
+1,'b tagging',-0.7
+1,'Int. luminosity',0.0
+1,'$m_{\rm t}$',2.4
+1,'$\mu_{\rm f}, \mu_{\rm r}$',3.3
+1,'Matching threshold',3.0
+1,'PDFs',-0.1
+1,'Hadronization',''
+1,'Hard scattering',''
+2,'Jet energy scale',-2.5
+2,'Jet energy resolution',0.7
+2,'Kin. reconstruction',-0.0
+2,'Pileup',-0.2
+2,'Trigger',-0.2
+2,'Background Z/$\gamma^{*}$',0.5
+2,'Background other',-0.4
+2,'b tagging',-1.2
+2,'Int. luminosity',0.0
+2,'$m_{\rm t}$',1.9
+2,'$\mu_{\rm f}, \mu_{\rm r}$',0.3
+2,'Matching threshold',-1.1
+2,'PDFs',-0.3
+2,'Hadronization',''
+2,'Hard scattering',''
+3,'Jet energy scale',-1.1
+3,'Jet energy resolution',-0.8
+3,'Kin. reconstruction',0.0
+3,'Pileup',-0.2
+3,'Trigger',0.1
+3,'Background Z/$\gamma^{*}$',1.1
+3,'Background other',-0.1
+3,'b tagging',-1.2
+3,'Int. luminosity',0.4
+3,'$m_{\rm t}$',2.0
+3,'$\mu_{\rm f}, \mu_{\rm r}$',-1.5
+3,'Matching threshold',3.4
+3,'PDFs',-0.7
+3,'Hadronization',''
+3,'Hard scattering',''
+4,'Jet energy scale',1.1
+4,'Jet energy resolution',0.5
+4,'Kin. reconstruction',-0.0
+4,'Pileup',-0.7
+4,'Trigger',0.5
+4,'Background Z/$\gamma^{*}$',1.0
+4,'Background other',-0.4
+4,'b tagging',-0.3
+4,'Int. luminosity',-0.1
+4,'$m_{\rm t}$',2.0
+4,'$\mu_{\rm f}, \mu_{\rm r}$',-0.0
+4,'Matching threshold',1.0
+4,'PDFs',-0.2
+4,'Hadronization',''
+4,'Hard scattering',''
+5,'Jet energy scale',3.0
+5,'Jet energy resolution',-0.2
+5,'Kin. reconstruction',-0.0
+5,'Pileup',-0.1
+5,'Trigger',-0.2
+5,'Background Z/$\gamma^{*}$',-0.3
+5,'Background other',0.1
+5,'b tagging',-0.4
+5,'Int. luminosity',-0.1
+5,'$m_{\rm t}$',0.9
+5,'$\mu_{\rm f}, \mu_{\rm r}$',-1.2
+5,'Matching threshold',0.5
+5,'PDFs',-0.1
+5,'Hadronization',''
+5,'Hard scattering',''
+6,'Jet energy scale',1.1
+6,'Jet energy resolution',-0.3
+6,'Kin. reconstruction',-0.0
+6,'Pileup',0.1
+6,'Trigger',-0.2
+6,'Background Z/$\gamma^{*}$',-0.2
+6,'Background other',0.2
+6,'b tagging',-0.3
+6,'Int. luminosity',-0.1
+6,'$m_{\rm t}$',0.0
+6,'$\mu_{\rm f}, \mu_{\rm r}$',-1.9
+6,'Matching threshold',-0.2
+6,'PDFs',-0.2
+6,'Hadronization',''
+6,'Hard scattering',''
+7,'Jet energy scale',2.3
+7,'Jet energy resolution',-0.3
+7,'Kin. reconstruction',0.0
+7,'Pileup',-0.0
+7,'Trigger',0.0
+7,'Background Z/$\gamma^{*}$',-0.1
+7,'Background other',0.3
+7,'b tagging',-0.1
+7,'Int. luminosity',0.1
+7,'$m_{\rm t}$',0.3
+7,'$\mu_{\rm f}, \mu_{\rm r}$',0.1
+7,'Matching threshold',-0.2
+7,'PDFs',-0.3
+7,'Hadronization',''
+7,'Hard scattering',''
+8,'Jet energy scale',0.2
+8,'Jet energy resolution',0.2
+8,'Kin. reconstruction',-0.0
+8,'Pileup',0.3
+8,'Trigger',0.3
+8,'Background Z/$\gamma^{*}$',-0.3
+8,'Background other',-0.1
+8,'b tagging',-1.0
+8,'Int. luminosity',-0.4
+8,'$m_{\rm t}$',-1.0
+8,'$\mu_{\rm f}, \mu_{\rm r}$',0.9
+8,'Matching threshold',-2.0
+8,'PDFs',-0.1
+8,'Hadronization',''
+8,'Hard scattering',''
+9,'Jet energy scale',-0.1
+9,'Jet energy resolution',-0.1
+9,'Kin. reconstruction',0.0
+9,'Pileup',0.0
+9,'Trigger',-0.1
+9,'Background Z/$\gamma^{*}$',-0.2
+9,'Background other',0.1
+9,'b tagging',-0.3
+9,'Int. luminosity',0.1
+9,'$m_{\rm t}$',-1.1
+9,'$\mu_{\rm f}, \mu_{\rm r}$',-4.2
+9,'Matching threshold',-1.2
+9,'PDFs',-0.2
+9,'Hadronization',''
+9,'Hard scattering',''
+10,'Jet energy scale',0.3
+10,'Jet energy resolution',-0.5
+10,'Kin. reconstruction',0.0
+10,'Pileup',0.2
+10,'Trigger',-0.0
+10,'Background Z/$\gamma^{*}$',-0.4
+10,'Background other',-0.2
+10,'b tagging',-0.5
+10,'Int. luminosity',0.2
+10,'$m_{\rm t}$',-1.4
+10,'$\mu_{\rm f}, \mu_{\rm r}$',-1.3
+10,'Matching threshold',-0.1
+10,'PDFs',-0.1
+10,'Hadronization',''
+10,'Hard scattering',''
+11,'Jet energy scale',0.3
+11,'Jet energy resolution',-0.1
+11,'Kin. reconstruction',0.0
+11,'Pileup',-0.1
+11,'Trigger',0.1
+11,'Background Z/$\gamma^{*}$',-0.0
+11,'Background other',0.3
+11,'b tagging',-0.5
+11,'Int. luminosity',0.3
+11,'$m_{\rm t}$',-0.6
+11,'$\mu_{\rm f}, \mu_{\rm r}$',0.6
+11,'Matching threshold',-1.3
+11,'PDFs',-0.4
+11,'Hadronization',''
+11,'Hard scattering',''
+12,'Jet energy scale',-0.8
+12,'Jet energy resolution',0.5
+12,'Kin. reconstruction',0.0
+12,'Pileup',0.5
+12,'Trigger',0.5
+12,'Background Z/$\gamma^{*}$',0.3
+12,'Background other',0.3
+12,'b tagging',-1.3
+12,'Int. luminosity',0.3
+12,'$m_{\rm t}$',-1.7
+12,'$\mu_{\rm f}, \mu_{\rm r}$',5.9
+12,'Matching threshold',2.0
+12,'PDFs',-0.6
+12,'Hadronization',''
+12,'Hard scattering',''
+13,'Jet energy scale',-2.8
+13,'Jet energy resolution',0.5
+13,'Kin. reconstruction',-0.0
+13,'Pileup',-0.0
+13,'Trigger',-0.1
+13,'Background Z/$\gamma^{*}$',-0.3
+13,'Background other',-0.1
+13,'b tagging',-2.2
+13,'Int. luminosity',-0.1
+13,'$m_{\rm t}$',-2.5
+13,'$\mu_{\rm f}, \mu_{\rm r}$',-0.4
+13,'Matching threshold',-3.1
+13,'PDFs',-0.1
+13,'Hadronization',''
+13,'Hard scattering',''
+14,'Jet energy scale',-0.6
+14,'Jet energy resolution',1.1
+14,'Kin. reconstruction',-0.0
+14,'Pileup',0.7
+14,'Trigger',-0.1
+14,'Background Z/$\gamma^{*}$',-0.3
+14,'Background other',0.4
+14,'b tagging',-0.1
+14,'Int. luminosity',-0.1
+14,'$m_{\rm t}$',-2.3
+14,'$\mu_{\rm f}, \mu_{\rm r}$',2.5
+14,'Matching threshold',-0.4
+14,'PDFs',-0.3
+14,'Hadronization',''
+14,'Hard scattering',''
+15,'Jet energy scale',-2.8
+15,'Jet energy resolution',-1.3
+15,'Kin. reconstruction',-0.0
+15,'Pileup',-0.7
+15,'Trigger',-0.1
+15,'Background Z/$\gamma^{*}$',-0.6
+15,'Background other',-0.0
+15,'b tagging',-1.2
+15,'Int. luminosity',-0.2
+15,'$m_{\rm t}$',-2.9
+15,'$\mu_{\rm f}, \mu_{\rm r}$',7.8
+15,'Matching threshold',-1.1
+15,'PDFs',-0.3
+15,'Hadronization',''
+15,'Hard scattering',''
+16,'Jet energy scale',-4.9
+16,'Jet energy resolution',0.1
+16,'Kin. reconstruction',-0.0
+16,'Pileup',0.9
+16,'Trigger',0.1
+16,'Background Z/$\gamma^{*}$',-0.9
+16,'Background other',0.5
+16,'b tagging',-0.6
+16,'Int. luminosity',-0.3
+16,'$m_{\rm t}$',-5.3
+16,'$\mu_{\rm f}, \mu_{\rm r}$',-2.6
+16,'Matching threshold',1.8
+16,'PDFs',-1.0
+16,'Hadronization',''
+16,'Hard scattering',''
+

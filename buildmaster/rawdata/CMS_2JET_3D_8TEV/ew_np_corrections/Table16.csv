@@ -1,0 +1,36 @@
+#: table_doi: 10.17182/hepdata.79410.v1/t16
+#: name: Table 16
+#: description: Electroweak correction factor to triple-differential dijet cross section
+#: data_file: table_16.yaml
+#: keyword observables: Electroweak correction factor
+#: keyword phrases: Triple Differential Inclusive Dijet Production
+#: keyword cmenergies: 8000
+#: keyword reactions: P P --> JET JET X
+#: YSTAR,,,0.0 <= YSTAR < 1.0
+#: SQRT(S) [TeV],,,8
+#: YBOOST,,,1.0 <= YBOOST < 2.0
+PTAVG [GeV],PTAVG [GeV] LOW,PTAVG [GeV] HIGH,EWCORR
+143.0,133.0,153.0,0.99892
+163.5,153.0,174.0,0.99855
+185.0,174.0,196.0,0.99813
+208.0,196.0,220.0,0.99764
+232.5,220.0,245.0,0.99716
+258.5,245.0,272.0,0.99662
+286.0,272.0,300.0,0.99611
+315.0,300.0,330.0,0.99565
+346.0,330.0,362.0,0.9952
+378.5,362.0,395.0,0.99482
+412.5,395.0,430.0,0.99457
+449.0,430.0,468.0,0.99439
+487.5,468.0,507.0,0.99436
+527.5,507.0,548.0,0.9946
+570.0,548.0,592.0,0.99492
+615.0,592.0,638.0,0.99561
+662.0,638.0,686.0,0.99648
+711.5,686.0,737.0,0.99787
+763.5,737.0,790.0,0.99943
+818.0,790.0,846.0,1.0016
+875.5,846.0,905.0,1.0038
+936.0,905.0,967.0,1.0069
+999.5,967.0,1032.0,1.0103
+

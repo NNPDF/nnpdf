@@ -1,0 +1,48 @@
+#: table_doi: 10.17182/hepdata.84154.v2/t50
+#: name: Table 50
+#: description: Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+
+#: data_file: Table_50.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword phrases: Inclusive | Top | Proton-Proton Scattering | Top Production
+#: keyword cmenergies: 8000.0
+#: RE,P P --> TOP TOPBAR X
+#: SQRT(S) [GeV],8000.0
+p_{T}^{t\bar{t}} bin,p_{T}^{t\bar{t}} bin,
+1,1,1.0
+2,1,-0.854773613068
+3,1,-0.887416178845
+4,1,-0.584518650002
+5,1,-0.905789618131
+6,1,-0.415549273249
+1,2,-0.854773613068
+2,2,1.0
+3,2,0.533381154579
+4,2,0.152887153557
+5,2,0.629010988846
+6,2,0.125118578684
+1,3,-0.887416178845
+2,3,0.533381154579
+3,3,1.0
+4,3,0.789971785504
+5,3,0.898976950983
+6,3,0.491163962556
+1,4,-0.584518650002
+2,4,0.152887153557
+3,4,0.789971785504
+4,4,1.0
+5,4,0.704856201909
+6,4,0.324756090047
+1,5,-0.905789618131
+2,5,0.629010988846
+3,5,0.898976950983
+4,5,0.704856201909
+5,5,1.0
+6,5,0.551564602658
+1,6,-0.415549273249
+2,6,0.125118578684
+3,6,0.491163962556
+4,6,0.324756090047
+5,6,0.551564602658
+6,6,1.0
+

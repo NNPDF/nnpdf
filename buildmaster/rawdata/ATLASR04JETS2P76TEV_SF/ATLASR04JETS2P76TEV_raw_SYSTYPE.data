@@ -1,0 +1,20 @@
+"JES1: Noise thresholds" 1 1 2 3 4 5 6 Y
+"JES2: Theory UE" 7 7 8 9 10 11 12 Y
+"JES3: Theory showering" 13 13 14 15 16 17 18 Y
+"JES4: Non-closure" 19 19 20 21 22 23 24 Y
+"JES5: Dead material" 25 25 26 27 28 29 30 Y
+"JES6: Forward JES generators" 88 88 88 88 88 88 88 *
+"JES7: E/p response" 32 32 33 34 35 36 37 Y
+"JES8: E/p selection" 38 38 39 40 41 42 43 Y
+"JES9: EM + neutrals" 44 44 45 46 47 48 49 Y
+"JES10: HAD E-scale" 50 50 51 52 53 54 55 Y
+"JES11: High pT" 56 56 57 58 59 60 61 Y
+"JES12: E/p bias" 62 62 63 64 65 66 67 Y
+"JES13: Test-beam bias" 68 68 69 70 71 72 73 Y
+"JES15: Forward JES detector" 89 89 89 89 89 89 89 *
+"Jet energy resolution" 76 76 77 78 79 80 81 Y
+"Jet angle resolution" 82 82 82 82 82 82 82 Y
+"Unfolding: Closure test" 74 74 74 74 74 74 74 N
+"Unfolding: Jet matching" 75 75 75 75 75 75 75 N
+"Jet reconstruction eff." 83 83 83 83 84 85 86 Y
+"Luminosity" 87 87 87 87 87 87 87 N
