@@ -50,10 +50,13 @@ requirements:
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
-        - docutils =0.16 # This dependency is not explicity needed but https://github.com/NNPDF/nnpdf/issues/1220
         - curio >=1.0
-        - pineappl >=0.5.2
+        - pineappl >=0.5.8
+        - eko ==0.10.2
+        - banana-hep ==0.6.6
+        - lz4 >=3.1.10 # see https://github.com/conda-forge/eko-feedstock/issues/10
         - fiatlux # [linux]
+
 
 test:
     requires:

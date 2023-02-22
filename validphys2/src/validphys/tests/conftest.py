@@ -23,6 +23,8 @@ def tmp(tmpdir):
 # Here define the default config items like the PDF, theory and experiment specs
 SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 
+SINGLE_DATASET = {'dataset': 'NMC'}
+
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
@@ -51,6 +53,7 @@ HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
 FIT = "NNPDF40_nnlo_lowprecision"
 FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
+FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"
 FIT_ITERATED = "NNPDF40_nnlo_low_precision_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_221130"
 
