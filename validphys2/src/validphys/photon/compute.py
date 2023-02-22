@@ -170,11 +170,9 @@ class Photon:
             photon PDF at the scale 1 GeV
         """
         # Compute photon PDF
-        photon_100GeV = np.zeros(len(self.xgrid))
-        for i, x in enumerate(self.xgrid):
-            print("computing grid point", i+1, "/", len(self.xgrid))
-            photon_100GeV[i] = self.lux[id].EvaluatePhoton(x, self.q_in2).total / x
+        photon_100GeV = np.array([self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid])
         photon_100GeV += self.generate_errors()
+        photon_100GeV /= self.xgrid
 
         # Load eko and reshape it
         from eko.io import EKO
@@ -243,10 +241,9 @@ class Photon:
         if not self.fiatlux_runcard["additional_errors"] :
             return None
         extra_set = lhapdf.mkPDFs("LUXqed17_plus_PDF4LHC15_nnlo_100")
-        # TODO : maybe doing it on f instead of xf isn't the same
         return np.array(
             [
-                [(extra_set[i].xfxQ2(22, x, self.q_in2) - extra_set[0].xfxQ2(22, x, self.q_in2)) / x for i in range(101, 107+1)]
+                [(extra_set[i].xfxQ2(22, x, self.q_in2) - extra_set[0].xfxQ2(22, x, self.q_in2)) for i in range(101, 107+1)]
                 for x in self.xgrid
             ]
         ) # first index must be x, while second one must be replica index
