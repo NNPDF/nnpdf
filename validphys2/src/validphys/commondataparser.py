@@ -43,8 +43,6 @@ KINLABEL_LATEX = {
 }
 
 
-
-
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.

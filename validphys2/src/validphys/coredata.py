@@ -7,10 +7,7 @@ wrappers.
 import dataclasses
 import numpy as np
 import pandas as pd
-from validphys.commondatawriter import (
-            write_systype_to_file,
-            write_commondata_to_file,
-        )
+from validphys.commondatawriter import write_systype_to_file, write_commondata_to_file
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 
 
