@@ -124,6 +124,7 @@ def parse_systypes(systypefile):
 @dataclasses.dataclass(frozen=True)
 class CommonDataMetadata:
     """Contains metadata information about the data being read"""
+
     name: str
     nsys: int
     ndata: int

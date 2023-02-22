@@ -277,6 +277,14 @@ class CommonDataSpec(TupleComp):
     def load(self):
         return parse_commondata(self.datafile, self.sysfile, self.name)
 
+    def load_commondata_instance(self):
+        """
+        load a validphys.core.CommonDataSpec to validphys.core.CommonData
+        """
+        from validphys.commondataparser import load_commondata
+
+        return load_commondata(self)
+
     @property
     def plot_kinlabels(self):
         return get_plot_kinlabels(self)
@@ -617,6 +625,21 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
     @functools.lru_cache(maxsize=32)
     def load_commondata(self):
         return [d.load_commondata() for d in self.datasets]
+
+
+    def load_commondata_instance(self):
+        """
+        Given Experiment load list of validphys.coredata.CommonData
+        objects with cuts already applied
+        """
+        commodata_list = []
+        for dataset in self.datasets:
+            cd = dataset.commondata.load_commondata_instance()
+            if dataset.cuts is None:
+                commodata_list.append(cd)
+            else:
+                commodata_list.append(cd.with_cuts(dataset.cuts.load()))
+        return commodata_list
 
     @property
     def thspec(self):

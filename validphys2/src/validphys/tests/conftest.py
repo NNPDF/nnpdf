@@ -23,6 +23,8 @@ def tmp(tmpdir):
 # Here define the default config items like the PDF, theory and experiment specs
 SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 
+SINGLE_DATASET = {'dataset': 'NMC'}
+
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
