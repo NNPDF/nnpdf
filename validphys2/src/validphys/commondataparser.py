@@ -203,7 +203,7 @@ class CommonMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist in {ret.name}") from e
+            raise ValueError(f"The requested variant does not exist in {self.setname}") from e
 
         return dataclasses.replace(self, data_uncertainties=variant.data_uncertainties)
 
@@ -212,39 +212,6 @@ class CommonMetaData:
         if self._folder is None:
             self._folder = _folder_data / self.setname
         return self._folder
-
-
-@dataclasses.dataclass
-class ValidKinematics:
-    """Contains all metadata for the kinematics of the dataset"""
-
-    file: ValidPath
-    variables: dict
-
-
-@dataclasses.dataclass
-class ValidReference:
-    """Holds literature information for the dataset"""
-
-    url: str
-    version: int = 0
-    tables: list[int] = dataclasses.field(default_factory=list)
-
-
-@dataclasses.dataclass
-class Variant:
-    """Defines the keys of the CommonMetaData that can be overwritten"""
-
-    data_uncertainties: list[ValidPath]
-
-
-@Parser
-def ValidVariants(variant_dict: dict) -> Dict[str, Variant]:
-    """Variants of a dataset are allowed to overwrite a subset of the keys of a dataset
-    (those defined in the Variant dataclass).
-    This wrapper class runs over the dictionary of variant and parses them into valid Variants
-    """
-    return {k: parse_input(v, Variant) for k, v in variant_dict.items()}
 
 
 # TODO:
