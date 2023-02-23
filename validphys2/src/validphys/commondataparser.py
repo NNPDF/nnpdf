@@ -184,10 +184,10 @@ class CommonMetaData:
     dataset_label: str
     plot_x: str
     figure_by: list[str]
-    theory: TheoryMeta
     nnpdf_metadata: dict
     version: int
     version_comment: str = ""
+    theory: Optional[TheoryMeta] = None
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
