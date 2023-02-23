@@ -528,8 +528,8 @@ class FKTableSpec(TupleComp):
         # If this is a yaml file that loads an applgrid-converted pineappl,
         # keep also the name of the target
         # this is needed since we can now easily reutilize grids
-        if not self.legacy and self.metadata.get("appl"):
-            super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
+        if not self.legacy and self.metadata.appl:
+            super().__init__(fkpath, cfactors, self.metadata.target_dataset)
         else:
             super().__init__(fkpath, cfactors)
 
