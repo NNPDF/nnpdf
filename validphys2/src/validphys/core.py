@@ -476,7 +476,7 @@ class FKTableSpec(TupleComp):
         # For new theories, add also the target_dataset so that we don't reuse fktables
         # Ideally this won't be necessary in the future and we will be able to reutilize fktables.
         if not self.legacy:
-            super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
+            super().__init__(fkpath, cfactors, self.metadata.target_dataset)
         else:
             super().__init__(fkpath, cfactors)
 

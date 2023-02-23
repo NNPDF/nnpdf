@@ -467,20 +467,19 @@ class Loader(LoaderBase):
 
         fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
-        op = metadata["operation"]
+        op = metadata.operation
 
         if not cfac:
             fkspecs = [FKTableSpec(i, None, metadata) for i in fklist]
             return fkspecs, op
 
-        operands = metadata["operands"]
         cfactors = []
-        for operand in operands:
+        for operand in metadata.theory.FK_tables:
             tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
             cfactors.append(tuple(tmp))
 
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
-        return fkspecs, op
+        return fkspecs, metadata.operation
 
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
