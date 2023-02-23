@@ -1,26 +1,5 @@
 from validphys.api import API
-from validphys.fitdata import print_systype_overlap, print_different_cuts
-from validphys.tests.conftest import FIT_3REPLICAS, FIT_3REPLICAS_DCUTS
-
-
-def test_print_different_cuts():
-    """Checks the print_different_cuts functions
-    using two fits with a different choice of q2min and w2min in the runcard
-    One of the datasets (SLACP) gets 0 points in in the most restrictive case
-    The different cuts are:
-    q2min: 3.49 - 13.49
-    w2min: 12.5 - 22.5
-    """
-    fit_1 = API.fit(fit=FIT_3REPLICAS)
-    fit_2 = API.fit(fit=FIT_3REPLICAS_DCUTS)
-    fits = [fit_1, fit_2]
-    testi = API.test_for_same_cuts(fits=[FIT_3REPLICAS, FIT_3REPLICAS_DCUTS], use_cuts="fromfit")
-    res = print_different_cuts(fits, testi)
-    assert "121 out of 260" in res
-    assert "59 out of 260" in res
-    assert "33 out of 211" in res
-    assert "0 out of 211" in res
-
+from validphys.fitdata import print_systype_overlap
 
 def test_print_systype_overlap():
     """Test that print_systype_overlap does expected thing

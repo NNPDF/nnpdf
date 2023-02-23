@@ -8,6 +8,7 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
+from collections import namedtuple
 import re
 import enum
 import functools
@@ -23,7 +24,7 @@ from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
 from NNPDF import (LHAPDFSet as libNNPDF_LHAPDFSet,
-    CommonData as LegacyCommonData,
+    CommonData,
     FKTable,
     FKSet,
     DataSet,
@@ -40,9 +41,6 @@ from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
 from validphys.fkparser import load_fktable
 from validphys.pineparser import pineappl_reader
-from validphys.commondataparser import (peek_commondata_metadata,
-    get_plot_kinlabels,
-    parse_commondata,)
 
 log = logging.getLogger(__name__)
 
@@ -236,6 +234,46 @@ class PDF(TupleComp):
         return len(self)
 
 
+kinlabels_latex = CommonData.kinLabel_latex.asdict()
+_kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
+
+
+def get_plot_kinlabels(commondata):
+    """Return the LaTex kinematic labels for a given Commondata"""
+    key = commondata.process_type
+
+    return kinlabels_latex[key]
+
+def get_kinlabel_key(process_label):
+    #Since there is no 1:1 correspondence between latex keys and GetProc,
+    #we match the longest key such that the proc label starts with it.
+    l = process_label
+    try:
+        return next(k for k in _kinlabels_keys if l.startswith(k))
+    except StopIteration as e:
+        raise ValueError("Could not find a set of kinematic "
+                         "variables matching  the process %s Check the "
+                         "labels defined in commondata.cc. " % (l)) from e
+
+CommonDataMetadata = namedtuple('CommonDataMetadata', ('name', 'nsys', 'ndata', 'process_type'))
+
+def peek_commondata_metadata(commondatafilename):
+    """Check some basic properties commondata object without going though the
+    trouble of processing it on the C++ side"""
+    with open(commondatafilename) as f:
+        try:
+            l = f.readline()
+            name, nsys_str, ndata_str = l.split()
+            l = f.readline()
+            process_type_str = l.split()[1]
+        except Exception:
+            log.error(f"Error processing {commondatafilename}")
+            raise
+
+    return CommonDataMetadata(name, int(nsys_str), int(ndata_str),
+                              get_kinlabel_key(process_type_str))
+
+
 class CommonDataSpec(TupleComp):
     def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None):
         self.datafile = datafile
@@ -274,16 +312,9 @@ class CommonDataSpec(TupleComp):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
     @functools.lru_cache()
-    def load(self):
-        return parse_commondata(self.datafile, self.sysfile, self.name)
-
-    def load_commondata_instance(self):
-        """
-        load a validphys.core.CommonDataSpec to validphys.core.CommonData
-        """
-        from validphys.commondataparser import load_commondata
-
-        return load_commondata(self)
+    def load(self)->CommonData:
+        #TODO: Use better path handling in python 3.6
+        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
 
     @property
     def plot_kinlabels(self):
@@ -441,8 +472,7 @@ class DataSetSpec(TupleComp):
 
     @functools.lru_cache()
     def load(self):
-        """Load the libNNPDF version of the dataset"""
-        cd = LegacyCommonData.ReadFile(str(self.commondata.datafile), str(self.commondata.sysfile))
+        cd = self.commondata.load()
 
         fktables = []
         for p in self.fkspecs:
@@ -478,7 +508,7 @@ class DataSetSpec(TupleComp):
             loaded_cuts = self.cuts.load()
             if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
                 intmask = [int(ele) for ele in loaded_cuts]
-                cd = cd.with_cuts(intmask)
+                cd = CommonData(cd, intmask)
         return cd
 
     def to_unweighted(self):
@@ -625,21 +655,6 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
     @functools.lru_cache(maxsize=32)
     def load_commondata(self):
         return [d.load_commondata() for d in self.datasets]
-
-
-    def load_commondata_instance(self):
-        """
-        Given Experiment load list of validphys.coredata.CommonData
-        objects with cuts already applied
-        """
-        commodata_list = []
-        for dataset in self.datasets:
-            cd = dataset.commondata.load_commondata_instance()
-            if dataset.cuts is None:
-                commodata_list.append(cd)
-            else:
-                commodata_list.append(cd.with_cuts(dataset.cuts.load()))
-        return commodata_list
 
     @property
     def thspec(self):

@@ -17,24 +17,18 @@ l = FallbackLoader()
 #The sorted is to appease hypothesis
 dss = sorted(l.available_datasets - {"PDFEVOLTEST"})
 
-class MockCuts():
-    def __init__(self, arr):
-        self.arr = arr
-    def load(self):
-        return self.arr
-
 
 @composite
-def commondata_and_cuts(draw):
+def commodata_and_cuts(draw):
     cd = l.check_commondata(draw(sampled_from(dss)))
     ndata = cd.metadata.ndata
-    # Get a cut mask with at least one selected datapoint
-    masks = sets(sampled_from(range(ndata)), min_size=1)
-    mask = sorted(draw(masks))
+    #TODO: Maybe upgrade to this
+    #https://github.com/HypothesisWorks/hypothesis/issues/1115
+    mask = sorted(draw(sets(sampled_from(range(ndata)))))
     return cd, mask
 
 
-@given(arg=commondata_and_cuts())
+@given(arg=commodata_and_cuts())
 @settings(deadline=None)
 def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
     # We need to create a new directory for each call of the test
@@ -48,8 +42,8 @@ def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
         cutpath = tmp / "cuts.txt"
         np.savetxt(cutpath, np.asarray(cuts, dtype=int), fmt="%u")
         cutspec = Cuts(cd, cutpath)
-        lcd = lcd.with_cuts(cuts)
-    lcd.export(tmp)
+        lcd = type(lcd)(lcd, cuts)
+    lcd.Export(str(tmp))
     # We have to reconstruct the name here...
     with_cuts = tmp / f"DATA_{cd.name}.dat"
     newpath = tmp / "commondata.dat"
@@ -65,13 +59,6 @@ def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
         nocuts = np.ones(cd.ndata, dtype=bool)
         nocuts[cuts] = False
         assert (lncd.get_cv()[nocuts] == 0).all()
-
-@given(inp=commondata_and_cuts())
-def test_kitable_with_cuts(inp):
-    cd, cuts = inp
-    info = get_info(cd, cuts=cuts)
-    tb = kitable(cd, info, cuts=MockCuts(cuts))
-    assert len(tb) == len(cuts)
 
 def test_load_fit():
     assert l.check_fit(FIT)

@@ -11,7 +11,7 @@ env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
   REFERENCE_SET: NNBOT-90875c07e-2022-11-30 # reference set for vp
-  CONDA_PY: 310
+  CONDA_PY: 39
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.10"]
+        python-version: [3.9]
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}

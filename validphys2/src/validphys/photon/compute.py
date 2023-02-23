@@ -8,10 +8,6 @@ from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
 from pathlib import Path
 
-from eko.io import EKO
-from eko.io.manipulate import xgrid_reshape
-from eko.interpolation import XGrid
-
 import yaml
 from os import remove
 
@@ -179,9 +175,12 @@ class Photon:
         photon_100GeV /= self.xgrid
 
         # Load eko and reshape it
+        from eko.io import EKO
         with EKO.edit(Path(self.fiatlux_runcard['path_to_eko'])) as eko:
             # If we make sure that the grid of the precomputed EKO is the same of 
             # self.xgrid then we don't need to reshape
+            from eko.io.manipulate import xgrid_reshape
+            from eko.interpolation import XGrid
             xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
 
             # construct PDFs

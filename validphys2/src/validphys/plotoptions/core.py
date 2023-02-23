@@ -19,9 +19,8 @@ from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
 from reportengine.utils import get_functions, ChainMap
 
-from NNPDF import DataSet
+from NNPDF import CommonData, DataSet
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
-from validphys.coredata import CommonData
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 from validphys.utils import parse_yaml_inp
@@ -58,11 +57,10 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     if cuts is None:
         if isinstance(data, DataSetSpec):
             cuts = data.cuts.load() if data.cuts else None
-    elif hasattr(cuts, 'load'):
+    elif isinstance(cuts, (Cuts, InternalCutsWrapper)):
         cuts = cuts.load()
-
-    if cuts is not None and not len(cuts):
-        raise NotImplementedError("No point passes the cuts. Cannot retieve info")
+    elif not cuts:
+        cuts = None
 
     if isinstance(data, DataSetSpec):
         data = data.commondata
@@ -177,11 +175,6 @@ class PlotInfo:
 
         kinlabels = commondata.plot_kinlabels
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
-        if "extra_labels" in plot_params and cuts is not None:
-            cut_extra_labels ={
-                k: [v[i] for i in cuts] for k, v in plot_params["extra_labels"].items()
-            }
-            plot_params["extra_labels"] = cut_extra_labels
 
         return cls(kinlabels=kinlabels, **plot_params)
 

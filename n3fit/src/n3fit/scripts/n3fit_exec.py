@@ -133,9 +133,7 @@ class N3FitConfig(Config):
 
         N3FIT_FIXED_CONFIG['actions_'].append(namespace + "performfit")
 
-        if fps := file_content["fitting"].get("savepseudodata", True):
-            if fps != True:
-                raise TypeError(f"fitting::savepseudodata is neither True nor False ({fps})")
+        if file_content["fitting"].get("savepseudodata"):
             if len(kwargs["environment"].replicas) != 1:
                 raise ConfigError(
                     "Cannot request that multiple replicas are fitted and that "

@@ -12,13 +12,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.9", "3.10"]
+        python-version: [3.8, 3.9]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
           - os: macos-latest
             CONDA_OS: osx-64
-      fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
@@ -68,7 +67,7 @@ jobs:
           $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
           dummy@packages.nnpdf.science:~/packages/conda/${{matrix.CONDA_OS}}
     - name: Build and upload sphinx documentation to NNPDF server
-      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master' && matrix.python-version == '3.9'
+      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master'
       shell: bash -l {0}
       run: |
         KEY=$( mktemp )

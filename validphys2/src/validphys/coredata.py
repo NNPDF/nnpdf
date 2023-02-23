@@ -7,8 +7,6 @@ wrappers.
 import dataclasses
 import numpy as np
 import pandas as pd
-from validphys.commondatawriter import write_systype_to_file, write_commondata_to_file
-KIN_NAMES = ["kin1", "kin2", "kin3"]
 
 
 @dataclasses.dataclass(eq=False)
@@ -177,7 +175,6 @@ class FKTableData:
 
         return fktable
 
-
 @dataclasses.dataclass(eq=False)
 class CFactorData:
     """
@@ -221,8 +218,14 @@ class CommonData:
     nkin : int
         Number of kinematics specified
 
+    kinematics : list of str with length nkin
+        Kinematic variables kin1, kin2, kin3 ...
+
     nsys : int
         Number of systematics
+
+    sysid : list of str with length nsys
+        ID for systematic
 
     commondata_table : pd.DataFrame
         Pandas dataframe containing the commondata
@@ -232,9 +235,6 @@ class CommonData:
         for each systematic alongside the uncertainty
         type (ADD/MULT/RAND) and name
         (CORR/UNCORR/THEORYCORR/SKIP)
-
-    systematics_table: pd.DataFrame
-        Panda dataframe containing the table of systematics
     """
 
     setname: str
@@ -248,7 +248,7 @@ class CommonData:
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
-            columns=["process", "data", "stat"] + KIN_NAMES
+            columns=["process", "kin1", "kin2", "kin3", "data", "stat"]
         )
 
     def with_cuts(self, cuts):
@@ -285,23 +285,8 @@ class CommonData:
         return dataclasses.replace(self, ndata=newndata, commondata_table=new_commondata_table)
 
     @property
-    def kinematics(self):
-        return self.commondata_table[KIN_NAMES]
-
-    def get_kintable(self):
-        return self.kinematics.values
-
-    @property
     def central_values(self):
         return self.commondata_table["data"]
-
-    def with_central_value(self, cv):
-         tb = self.commondata_table.copy()
-         tb["data"] = cv
-         return dataclasses.replace(self, commondata_table=tb)
-
-    def get_cv(self):
-        return self.central_values.values
 
     @property
     def stat_errors(self):
@@ -368,19 +353,3 @@ class CommonData:
             central_values = self.central_values.to_numpy()
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
-
-
-    def export(self, path):
-        """Export the data, and error types
-         Use the same format as libNNPDF:
-
-        - A DATA_<dataset>.dat file with the dataframe of accepted points
-        - A systypes/STYPES_<dataset>.dat file with the error types
-        """
-
-        dat_path = path / f"DATA_{self.setname}.dat"
-        sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
-        sys_path.parent.mkdir(exist_ok=True)
-
-        write_systype_to_file(self, sys_path)
-        write_commondata_to_file(self, dat_path)

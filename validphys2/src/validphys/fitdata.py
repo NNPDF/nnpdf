@@ -323,7 +323,7 @@ def print_different_cuts(fits, test_for_same_cuts):
         res.write("The following datasets are both included but have different kinematical cuts:\n\n")
         for (first, second) in test_for_same_cuts:
             info = get_info(first.commondata)
-            total_points = first.commondata.ndata
+            total_points = len(first.commondata.load())
             res.write(" - %s:\n" % info.dataset_label)
             first_len = len(first.cuts.load()) if first.cuts else total_points
             second_len = len(second.cuts.load()) if second.cuts else total_points
@@ -440,10 +440,10 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
     systype_groups = dict()
     for group_cd, group in zip(groups_commondata, group_dataset_inputs_by_metadata):
         systype_groups[group["group_name"]] = {
-            cd.load().systype_table.iloc[i]["name"]
+            cd.load().GetSys(0, i).name
             for cd in group_cd
             for i in range(cd.nsys)
-            if cd.load().systype_table.iloc[i]["name"] not in allow_list
+            if cd.load().GetSys(0, i).name not in allow_list
         }
 
     systype_overlap = set()
