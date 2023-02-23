@@ -38,7 +38,7 @@ from validphys.loader import (
     PDFNotFound,
 )
 from validphys.paramfits.config import ParamfitsConfig
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 from validphys.utils import freeze_args
 
@@ -366,7 +366,7 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
+        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variants"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -383,6 +383,7 @@ class CoreConfig(configparser.Config):
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
         frac = dataset.get("frac", 1)
+        variants = tuple(dataset.get("variants", []))
         if not isinstance(frac, numbers.Real):
             raise ConfigError(f"'frac' must be a number, not '{frac}'")
         if frac < 0 or frac > 1:
@@ -398,7 +399,13 @@ class CoreConfig(configparser.Config):
             # Abuse ConfigError to get the suggestions.
             log.warning(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
         return DataSetInput(
-            name=name, sys=sysnum, cfac=cfac, frac=frac, weight=weight, custom_group=custom_group
+            name=name,
+            sys=sysnum,
+            cfac=cfac,
+            frac=frac,
+            weight=weight,
+            custom_group=custom_group,
+            variants=variants,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -413,7 +420,11 @@ class CoreConfig(configparser.Config):
         sysnum = dataset_input.sys
         try:
             return self.loader.check_commondata(
-                setname=name, sysnum=sysnum, use_fitcommondata=use_fitcommondata, fit=fit
+                setname=name,
+                sysnum=sysnum,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit,
+                variants=dataset_input.variants,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets) from e
@@ -561,6 +572,7 @@ class CoreConfig(configparser.Config):
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
+        variants = dataset_input.variants
 
         try:
             ds = self.loader.check_dataset(
@@ -573,6 +585,7 @@ class CoreConfig(configparser.Config):
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight,
+                variants=variants,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)

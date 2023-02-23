@@ -23,6 +23,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex, pineparser
+from validphys.commondataparser import parse_new_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -40,6 +41,7 @@ from validphys.core import (
     peek_commondata_metadata,
 )
 from validphys.datafiles import path_vpdata
+from validphys.commondataparser import parse_new_metadata
 from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
@@ -75,6 +77,10 @@ class CompoundNotFound(LoadFailedError):
 
 
 class TheoryNotFound(LoadFailedError):
+    pass
+
+
+class TheoryMetadataNotFound(LoadFailedError):
     pass
 
 
@@ -344,7 +350,9 @@ class Loader(LoaderBase):
     def commondata_folder(self):
         return self.datapath / 'commondata'
 
-    def check_commondata(self, setname, sysnum=None, use_fitcommondata=False, fit=None):
+    def check_commondata(
+        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variants=()
+    ):
         if use_fitcommondata:
             if not fit:
                 raise LoadFailedError("Must specify a fit when setting use_fitcommondata")
@@ -376,11 +384,35 @@ class Loader(LoaderBase):
             datafile = newpath
         else:
             datafile = self.commondata_folder / f'DATA_{setname}.dat'
+
         if not datafile.exists():
-            raise DataNotFoundError(
-                ("Could not find Commondata set: '%s'. " "File '%s' does not exist.")
-                % (setname, datafile)
-            )
+            # TODO:
+            # Temporary branching between the old and new commondata
+            # Assuming new commondata if the datafile does not exist
+
+            # TODO: obviously the folder here is only for development purposes once the
+            # whole thing is finished the data path will be given by the profile
+            _folder_data = pathlib.Path(__file__).parents[3] / "new_data"
+
+            # Look at the folder & observable
+            setfolder, observable_name = setname.rsplit("_", 1)
+            commondata_folder = _folder_data / setfolder
+
+            metadata_file = commondata_folder / "metadata.yaml"
+
+            # If the metadata file doesn't exist either, then error out
+            if not metadata_file.exists():
+                raise DataNotFoundError(
+                    f"""The CommonData set {setname} could not be found
+as old ({datafile})
+or new ({metadata_file})"""
+                )
+
+            # Get the instance of ObservableMetaData
+            metadata = parse_new_metadata(metadata_file, observable_name, variants=variants)
+
+            return CommonDataSpec(None, None, None, name=setname, metadata=metadata, legacy=False)
+
         if sysnum is None:
             sysnum = 'DEFAULT'
         sysfile = self.commondata_folder / 'systypes' / ('SYSTYPE_%s_%s.dat' % (setname, sysnum))
@@ -438,6 +470,8 @@ class Loader(LoaderBase):
 
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""
+        # TODO: check where this is used
+        # as this might ignore cfactors or variants
         cd = self.check_commondata(setname, sysnum)
         return cd.load()
 
@@ -453,8 +487,35 @@ class Loader(LoaderBase):
         cfactors = self.check_cfactor(theoryID, setname, cfac)
         return FKTableSpec(fkpath, cfactors)
 
+    def check_fk_from_theory_metadata(self, theory_metadata, theoryID, cfac):
+        """Load a pineappl fktable in the new commondata forma
+        Receives a theory metadata describing the fktables necessary for a given observable
+        the theory ID and the corresponding cfactors.
+        The cfactors should correspond directly to the fktables, the "compound folder"
+        is not supported for pineappl theories. As such, the name of the cfactor is expected to be
+            CF_{cfactor_name}_{fktable_name}
+        """
+        if theory_metadata is None:
+            raise TheoryMetadataNotFound
+
+        theory = self.check_theoryID(theoryID)
+        fklist = theory_metadata.fktables_to_paths(theory.path / "fastkernel")
+        op = theory_metadata.operation
+
+        if not cfac:
+            fkspecs = [FKTableSpec(i, None, theory_metadata) for i in fklist]
+            return fkspecs, op
+
+        cfactors = []
+        for operand in theory_metadata.FK_tables:
+            tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
+            cfactors.append(tuple(tmp))
+
+        fkspecs = [FKTableSpec(i, c, theory_metadata) for i, c in zip(fklist, cfactors)]
+        return fkspecs, theory_metadata.operation
+
     def check_fkyaml(self, name, theoryID, cfac):
-        """Load a pineappl fktable
+        """Load a pineappl fktable in the old commondata format
         Receives a yaml file describing the fktables necessary for a given observable
         the theory ID and the corresponding cfactors.
         The cfactors should correspond directly to the fktables, the "compound folder"
@@ -466,21 +527,8 @@ class Loader(LoaderBase):
             raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
 
         fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
-        metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
-        op = metadata["operation"]
-
-        if not cfac:
-            fkspecs = [FKTableSpec(i, None, metadata) for i in fklist]
-            return fkspecs, op
-
-        operands = metadata["operands"]
-        cfactors = []
-        for operand in operands:
-            tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
-            cfactors.append(tuple(tmp))
-
-        fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
-        return fkspecs, op
+        theory_metadata, _ = pineparser.get_yaml_information(fkpath, theory.path)
+        return self.check_fk_from_theory_metadata(theory_metadata, theoryID, cfac)
 
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
@@ -615,6 +663,7 @@ class Loader(LoaderBase):
         use_fitcommondata=False,
         fit=None,
         weight=1,
+        variants=(),
     ):
         """Loads a given dataset
         If the dataset contains new-type fktables, use the
@@ -625,19 +674,37 @@ class Loader(LoaderBase):
 
         theoryno, _ = theoryid
 
+        # TODO:
+        # The dataset is checked twice, once here
+        # and once by config in produce_commondata
+        # once of the two __must__ be superfluous
+        # note that both use information from dataset_input
         commondata = self.check_commondata(
-            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit
+            name,
+            sysnum,
+            use_fitcommondata=use_fitcommondata,
+            fit=fit,
+            variants=variants,
         )
 
-        if theoryid.is_pineappl():
-            # If it is a pineappl theory, use the pineappl reader
-            fkspec, op = self.check_fkyaml(name, theoryno, cfac)
+        if commondata.legacy:
+            if theoryid.is_pineappl():
+                # If it is a pineappl theory, use the pineappl reader
+                fkspec, op = self.check_fkyaml(name, theoryno, cfac)
+            else:
+                try:
+                    fkspec, op = self.check_compound(theoryno, name, cfac)
+                except CompoundNotFound:
+                    fkspec = self.check_fktable(theoryno, name, cfac)
+                    op = None
         else:
-            try:
-                fkspec, op = self.check_compound(theoryno, name, cfac)
-            except CompoundNotFound:
-                fkspec = self.check_fktable(theoryno, name, cfac)
-                op = None
+            # New commondata files work _only_ with pineappl theory
+            if not theoryid.is_pineappl():
+                raise ValueError(
+                    f"New commondata files accept only pineappl theories (used:{theoryid.id})"
+                )
+            thmeta = commondata.metadata.theory
+            fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
 
         # Note this is simply for convenience when scripting. The config will
         # construct the actual Cuts object by itself

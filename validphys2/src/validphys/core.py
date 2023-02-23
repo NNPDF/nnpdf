@@ -23,6 +23,7 @@ from validphys import filters, lhaindex
 from validphys.commondataparser import (
     get_plot_kinlabels,
     parse_commondata,
+    parse_commondata_new,
     peek_commondata_metadata,
 )
 from validphys.fkparser import load_fktable, parse_cfactor
@@ -211,13 +212,17 @@ class PDF(TupleComp):
 
 
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None):
+    def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None, legacy=True):
+        self.legacy = legacy
+        self._metadata = metadata
         self.datafile = datafile
         self.sysfile = sysfile
-        self.plotfiles = tuple(plotfiles)
-        self._name = name
-        self._metadata = metadata
-        super().__init__(datafile, sysfile, self.plotfiles)
+        if legacy:
+            self.plotfiles = tuple(plotfiles)
+            super().__init__(datafile, sysfile, self.plotfiles)
+        else:
+            self.plotfiles = False
+            super().__init__(name)
 
     @property
     def name(self):
@@ -225,11 +230,19 @@ class CommonDataSpec(TupleComp):
 
     @property
     def nsys(self):
-        return self.metadata.nsys
+        if self.legacy:
+            return self.metadata.nsys
+        else:
+            cd = self.load()
+            return cd.nsys
 
     @property
     def ndata(self):
-        return self.metadata.ndata
+        if self.legacy:
+            return self.metadata.ndata
+        else:
+            cd = self.load()
+            return cd.nsys
 
     @property
     def process_type(self):
@@ -247,9 +260,13 @@ class CommonDataSpec(TupleComp):
     def __iter__(self):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
+    # TODO: one of the two functions below needs to go
     @functools.lru_cache()
     def load(self):
-        return parse_commondata(self.datafile, self.sysfile, self.name)
+        if self.legacy:
+            return parse_commondata(self.datafile, self.sysfile, self.name)
+        else:
+            return parse_commondata_new(self.metadata)
 
     def load_commondata_instance(self):
         """
@@ -261,20 +278,24 @@ class CommonDataSpec(TupleComp):
 
     @property
     def plot_kinlabels(self):
-        return get_plot_kinlabels(self)
+        if self.legacy:
+            return get_plot_kinlabels(self)
+        else:
+            return self.metadata.kinlabels
 
 
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specify a
     dataset."""
 
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variants):
         self.name = name
         self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
+        self.variants = variants
         super().__init__(name, sys, cfac, frac, weight, custom_group)
 
     def __str__(self):
@@ -476,7 +497,7 @@ class FKTableSpec(TupleComp):
         # For new theories, add also the target_dataset so that we don't reuse fktables
         # Ideally this won't be necessary in the future and we will be able to reutilize fktables.
         if not self.legacy:
-            super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
+            super().__init__(fkpath, cfactors, self.metadata.target_dataset)
         else:
             super().__init__(fkpath, cfactors)
 
