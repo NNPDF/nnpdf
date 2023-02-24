@@ -131,9 +131,6 @@ including the contents of the following file:
             if self.args["loglevel"] <= logging.DEBUG:
                 cout = True
         if not cout:
-            import NNPDF
-
-            NNPDF.SetVerbosity(0)
             lhapdf.setVerbosity(0)
 
     @staticmethod
@@ -147,11 +144,11 @@ including the contents of the following file:
         return contextlib.ExitStack()
 
     def run(self):
-        if sys.version_info < (3, 6):
+        if sys.version_info < (3, 9):
             log.warning(
-                "validphys 2 is discontinued on Python<3.6 and will "
+                "validphys 2 is discontinued on Python<3.9 and will "
                 "not be longer updated. Please run\n"
-                "conda install python=3.6\n\n"
+                "conda install python=3.9\n\n"
                 "If you have any problems, please open an issue "
                 "on https://github.com/NNPDF/nnpdf/issues."
             )

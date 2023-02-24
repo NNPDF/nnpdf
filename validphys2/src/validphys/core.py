@@ -22,14 +22,6 @@ from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
-from NNPDF import (LHAPDFSet as libNNPDF_LHAPDFSet,
-    CommonData as LegacyCommonData,
-    FKTable,
-    FKSet,
-    DataSet,
-    Experiment,
-    PositivitySet,)
-
 #TODO: There is a bit of a circular dependency between filters.py and this.
 #Maybe move the cuts logic to its own module?
 from validphys import lhaindex, filters
@@ -201,34 +193,6 @@ class PDF(TupleComp):
 
     def __len__(self):
         return self.info["NumMembers"]
-
-    def legacy_load(self):
-        """Returns an libNNPDF LHAPDFSet object
-        Deprecated function used only in the `filter.py` module
-        """
-        error = self.error_type
-        cl = self.error_conf_level
-        et = None
-        if error == "replicas":
-            et = libNNPDF_LHAPDFSet.erType_ER_MC
-        elif error == "hessian":
-            if cl == 90:
-                et = libNNPDF_LHAPDFSet.erType_ER_EIG90
-            elif cl == 68:
-                et = libNNPDF_LHAPDFSet.erType_ER_EIG
-            else:
-                raise NotImplementedError(f"No hessian errors with confidence interval {cl}")
-        elif error == "symmhessian":
-            if cl == 68:
-                et = libNNPDF_LHAPDFSet.erType_ER_SYMEIG
-            else:
-                raise NotImplementedError(
-                    f"No symmetric hessian errors with confidence interval {cl}"
-                )
-        else:
-            raise NotImplementedError(f"Error type for {self}: '{error}' is not implemented")
-
-        return libNNPDF_LHAPDFSet(self.name, et)
 
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
@@ -442,34 +406,7 @@ class DataSetSpec(TupleComp):
     @functools.lru_cache()
     def load(self):
         """Load the libNNPDF version of the dataset"""
-        cd = LegacyCommonData.ReadFile(str(self.commondata.datafile), str(self.commondata.sysfile))
-
-        fktables = []
-        for p in self.fkspecs:
-            fktable = p.load()
-            #IMPORTANT: We need to tell the python garbage collector to NOT free the
-            #memory owned by the FKTable on garbage collection.
-            #TODO: Do this automatically
-            fktable.thisown = 0
-            fktables.append(fktable)
-
-        fkset = FKSet(FKSet.parseOperator(self.op), fktables)
-
-        data = DataSet(cd, fkset, self.weight)
-
-
-        if self.cuts is not None:
-            #ugly need to convert from numpy.int64 to int, so we can pass
-            #it happily to the vector to the SWIG wrapper.
-            #Do not do this (or find how to enable in SWIG):
-            #data = DataSet(data, list(dataset.cuts))
-            loaded_cuts = self.cuts.load()
-            #This is an optimization to avoid recomputing the dataset if
-            #nothing is discarded
-            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
-                intmask = [int(ele) for ele in loaded_cuts]
-                data = DataSet(data, intmask)
-        return data
+        raise Exception("This function should not be used at all: DataSetSpec!")
 
     def load_commondata(self):
         """Strips the commondata loading from `load`"""
@@ -534,7 +471,7 @@ class FKTableSpec(TupleComp):
             super().__init__(fkpath, cfactors)
 
     def _load_legacy(self):
-        return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
+        raise Exception("This function should not be used at all: FkTable")
 
     def _load_pineappl(self):
         log.info("Reading: %s", self.fkpath)
@@ -581,9 +518,7 @@ class LagrangeSetSpec(DataSetSpec):
 
     @functools.lru_cache()
     def load(self):
-        cd = self.commondata.load()
-        fk = self.fkspecs[0].load()
-        return PositivitySet(cd, fk, self.maxlambda)
+        raise Exception("Should not be used!")
 
 
 class PositivitySetSpec(LagrangeSetSpec):
@@ -615,17 +550,8 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         namespaces.NSList.__init__(self, dsinputs, nskey='dataset_input')
 
     @functools.lru_cache(maxsize=32)
-    def load(self):
-        sets = []
-        for dataset in self.datasets:
-            loaded_data = dataset.load()
-            sets.append(loaded_data)
-        return Experiment(sets, self.name)
-
-    @functools.lru_cache(maxsize=32)
     def load_commondata(self):
         return [d.load_commondata() for d in self.datasets]
-
 
     def load_commondata_instance(self):
         """

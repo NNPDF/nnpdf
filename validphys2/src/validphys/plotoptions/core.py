@@ -19,7 +19,6 @@ from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
 from reportengine.utils import get_functions, ChainMap
 
-from NNPDF import DataSet
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
 from validphys.coredata import CommonData
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
@@ -306,7 +305,7 @@ def kitable(data, info, *, cuts=None):
     table: pd.DataFrame
        A DataFrame containing the kinematics for all points after cuts.
     """
-    if isinstance(data, (DataSet, DataSetSpec)) and cuts is not None:
+    if isinstance(data, (DataSetSpec)) and cuts is not None:
         raise TypeError("Cuts must be None when a dataset is given")
     if isinstance(data, (DataSetSpec, CommonDataSpec)):
         data = data.load()

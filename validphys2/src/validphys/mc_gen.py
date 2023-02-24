@@ -26,8 +26,9 @@ def art_rep_generation(groups_data, make_replicas):
     real_data_list = []
 
     for group in groups_data:
-        real_group = group.load()
-        real_data = real_group.get_cv()
+        # Load all the commondata
+        real_group = group.load_commondata()
+        real_data = np.concatenate([i.get_cv() for i in real_group])
         real_data_list.append(real_data)
 
     real_data = np.concatenate(real_data_list)

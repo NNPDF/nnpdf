@@ -158,7 +158,7 @@ def get_plot_kinlabels(commondata):
 
 def get_kinlabel_key(process_label):
     """
-    Since there is no 1:1 correspondence between latex keys and GetProc,
+    Since there is no 1:1 correspondence between latex keys and the old libNNPDF names
     we match the longest key such that the proc label starts with it.
     """
     l = process_label
