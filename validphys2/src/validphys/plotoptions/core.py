@@ -307,8 +307,10 @@ def kitable(data, info, *, cuts=None):
     """
     if isinstance(data, (DataSetSpec)) and cuts is not None:
         raise TypeError("Cuts must be None when a dataset is given")
-    if isinstance(data, (DataSetSpec, CommonDataSpec)):
+    if isinstance(data, DataSetSpec):
         data = data.load_commondata()
+    elif isinstance(data, CommonDataSpec):
+        data = data.load()    
     table = pd.DataFrame(data.get_kintable(), columns=default_labels[1:])
     if isinstance(data, CommonData) and cuts is not None:
         table = table.loc[cuts.load()]
