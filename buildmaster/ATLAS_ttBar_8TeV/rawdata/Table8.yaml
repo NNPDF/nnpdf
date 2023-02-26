@@ -1,0 +1,90 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/deta(lepton)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/d\eta(lepton)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00183}
+    - {label: sys, symerror: 0.00166}
+    value: 0.0604
+  - errors:
+    - {label: stat, symerror: 0.00213}
+    - {label: sys, symerror: 0.00277}
+    value: 0.0949
+  - errors:
+    - {label: stat, symerror: 0.00263}
+    - {label: sys, symerror: 0.00179}
+    value: 0.14
+  - errors:
+    - {label: stat, symerror: 0.00305}
+    - {label: sys, symerror: 0.00301}
+    value: 0.198
+  - errors:
+    - {label: stat, symerror: 0.00342}
+    - {label: sys, symerror: 0.00149}
+    value: 0.243
+  - errors:
+    - {label: stat, symerror: 0.00353}
+    - {label: sys, symerror: 0.00645}
+    value: 0.286
+  - errors:
+    - {label: stat, symerror: 0.00381}
+    - {label: sys, symerror: 0.00311}
+    value: 0.322
+  - errors:
+    - {label: stat, symerror: 0.00387}
+    - {label: sys, symerror: 0.00244}
+    value: 0.336
+  - errors:
+    - {label: stat, symerror: 0.00391}
+    - {label: sys, symerror: 0.0038}
+    value: 0.317
+  - errors:
+    - {label: stat, symerror: 0.00394}
+    - {label: sys, symerror: 0.00394}
+    value: 0.323
+  - errors:
+    - {label: stat, symerror: 0.00367}
+    - {label: sys, symerror: 0.00309}
+    value: 0.29
+  - errors:
+    - {label: stat, symerror: 0.00343}
+    - {label: sys, symerror: 0.00242}
+    value: 0.243
+  - errors:
+    - {label: stat, symerror: 0.0031}
+    - {label: sys, symerror: 0.00238}
+    value: 0.197
+  - errors:
+    - {label: stat, symerror: 0.00275}
+    - {label: sys, symerror: 0.00345}
+    value: 0.13
+  - errors:
+    - {label: stat, symerror: 0.00224}
+    - {label: sys, symerror: 0.00299}
+    value: 0.097
+  - errors:
+    - {label: stat, symerror: 0.0019}
+    - {label: sys, symerror: 0.00278}
+    value: 0.0538
+independent_variables:
+- header: {name: eta(lepton) (range)}
+  values:
+  - {high: -2.1, low: -2.4}
+  - {high: -1.8, low: -2.1}
+  - {high: -1.5, low: -1.8}
+  - {high: -1.2, low: -1.5}
+  - {high: -0.9, low: -1.2}
+  - {high: -0.6, low: -0.9}
+  - {high: -0.3, low: -0.6}
+  - {high: 0.0, low: -0.3}
+  - {high: 0.3, low: 0.0}
+  - {high: 0.6, low: 0.3}
+  - {high: 0.9, low: 0.6}
+  - {high: 1.2, low: 0.9}
+  - {high: 1.5, low: 1.2}
+  - {high: 1.8, low: 1.5}
+  - {high: 2.1, low: 1.8}
+  - {high: 2.4, low: 2.1}

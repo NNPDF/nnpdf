@@ -1,0 +1,29 @@
+# implemented by Tanishq Sharma
+
+setname: "ATLAS_ttBar_8TeV"
+
+arXiv:
+  url: "https://arxiv.org/abs/1505.04480"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1370682"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1370682"
+  version: 1
+
+version: 
+version_comment:
+
+implemented_observables:
+
+  - observable: {description: "", label: '', units: ""}
+    ndata: 
+    tables: 
+    kinematics:
+      variables:
+        sqrt_s: {description: "", label: '', units: ""}
+      file: kinematics.yaml
+    data_central: 
+      file: data.yaml
+    data_uncertainties:
+      file:
+        - uncertainties.yaml

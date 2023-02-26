@@ -1,0 +1,832 @@
+---
+comment: |
+  CERN-LHC.  The normalized differential cross section for top quark pair (ttbar) production is measured in pp collisions at a centre-of-mass energy of 8 TeV at the CERN LHC using the CMS detector in data corresponding to an integrated luminosity of 19.7 inverse femtobarns. The measurements are performed in the lepton+jets (e/mu+jets) and in the dilepton (e e, mu mu, and e mu) decay channels. The ttbar cross section is measured as a function of the kinematic properties of the charged leptons, the jets associated to b quarks, the top quarks, and the ttbar system. The data are compared with several predictions from perturbative QCD up to approximate next-to-next-to-leading-order precision. No significant deviations are observed relative to the standard model predictions.
+dateupdated: 02/03/2016 14:31:27
+modifications:
+- {action: Encoded, date: 08 JUL 2015, who: Andreas Meyer (CMS)}
+record_ids:
+- {id: 1370682, type: inspire}
+- {id: 6405, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt of the lepton. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 36 of preprint, table A.1, top 8 lines of table, pt(lepton)
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the pseudo-rapidity of the lepton. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 36 of preprint, table A.1, bottom 14 lines of table, eta(lepton)
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(b-jet) of the b-jet. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 37 of preprint, table A.2, first variable in table, pt(b-jet)
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the pseudo-rapidity eta(b-jet) of the b-jet. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 37 of preprint, table A.2, 2nd variable in table, eta(b-jet)
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(bb) of the system consisting of the two selected b-jets. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 37 of preprint, table A.2, 3rd variable in table, pt(bb)
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the invariant mass m(bb) of the system consisting of the two selected b-jets. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 37 of preprint, table A.2, 4th variable in table, m(bb)
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum pt of the lepton. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 38 of preprint, table A.3, top 5 lines of table, pt(lepton)
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the pseudo-rapidity eta of the lepton. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 38 of preprint, table A.3, bottom part of table, eta(lepton)
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum pt of the dilepton system. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 39 of preprint, table A.4, top part of table, pt(dilepton)
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the mass (m) of the dilepton system. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 39 of preprint, table A.4, top part of table, m(dilepton)
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum pt(b-jet) of the b-jet. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 40 of preprint, table A.5, first variable in table, pt(b-jet)
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the pseudo-rapidity eta(b-jet) of the b-jet. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 40 of preprint, table A.5, 2nd variable in table, eta(b-jet)
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum pt(bb) of the system consisting of the two selected b-jets. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 40 of preprint, table A.5, 3rd variable in table, pt(bb)
+name: Table 13
+
+---
+data_file: Table14.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the invariant mass m(bb) of the system consisting of the two selected b-jets. The results are presented at particle level in the fiducial phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 40 of preprint, table A.5, 4th variable in table, m(bb)
+name: Table 14
+
+---
+data_file: Table15.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(top) of the top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 41 of preprint, table A.6, 1st variable in table, pt(top)
+name: Table 15
+
+---
+data_file: Table16.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(top) of the top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for pt(top))
+name: Table 16
+
+---
+data_file: Table17.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(top) of the top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 17
+
+---
+data_file: Table18.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt*(top) of the top quark or antiquark in the ttbar rest frame. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 41 of preprint, table A.6, 2nd variable in table, pt*(top)
+name: Table 18
+
+---
+data_file: Table19.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(top) of the top quark or antiquark in the ttbar rest frame.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for pt*(top))
+name: Table 19
+
+---
+data_file: Table20.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum pt(top) of the top quark or antiquark in the ttbar rest frame.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 20
+
+---
+data_file: Table21.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the rapidity y of the top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Rapidity Dependence,
+    Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 42 of preprint, table A.7, 1st variable in table, y(top)
+name: Table 21
+
+---
+data_file: Table22.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the rapidity y of the top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Rapidity Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for y(top))
+name: Table 22
+
+---
+data_file: Table23.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the rapidity y of the top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Rapidity Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 23
+
+---
+data_file: Table24.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the azimuthal opening angle between the top quark and antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 42 of preprint, table A.7, 2nd variable in table, deltaphi(t,tbar)
+name: Table 24
+
+---
+data_file: Table25.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the azimuthal opening angle between the top quark and antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for deltaphi(t,tbar))
+name: Table 25
+
+---
+data_file: Table26.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the azimuthal opening angle between the top quark and antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 26
+
+---
+data_file: Table27.yaml
+description: |
+  Normalized differential tt cross section in the l+jets channels as a function of the transverse momentum of the leading (pt1) top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 43 of preprint, table A.8, 1st variable in table, pt(t1)
+name: Table 27
+
+---
+data_file: Table28.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section in the l+jets channels as a function of the transverse momentum of the leading (pt1) top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for pt(t1))
+name: Table 28
+
+---
+data_file: Table29.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section in the l+jets channels as a function of the transverse momentum of the leading (pt1) top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 29
+
+---
+data_file: Table30.yaml
+description: |
+  Normalized differential tt cross section in the l+jets channels as a function of the transverse momentum of the trailing (pt2) top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 43 of preprint, table A.8, 2nd variable in table, pt(t2)
+name: Table 30
+
+---
+data_file: Table31.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section in the l+jets channels as a function of the transverse momentum of the trailing (pt2) top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for pt(t2))
+name: Table 31
+
+---
+data_file: Table32.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section in the l+jets channels as a function of the transverse momentum of the trailing (pt2) top quark or antiquark.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 32
+
+---
+data_file: Table33.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum ptt of the top quark pair. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 44 of preprint, table A.9, 1st variable in table, pt(ttbar)
+name: Table 33
+
+---
+data_file: Table34.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum ptt of the top quark pair.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for pt(ttbar))
+name: Table 34
+
+---
+data_file: Table35.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum ptt of the top quark pair.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Transverse Momentum Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 35
+
+---
+data_file: Table36.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the rapidity y_tt of the top quark pair. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Rapidity Dependence,
+    Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 44 of preprint, table A.9, 2nd variable in table, y(ttbar)
+name: Table 36
+
+---
+data_file: Table37.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the rapidity y_tt of the top quark pair.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Rapidity Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for y(ttbar))
+name: Table 37
+
+---
+data_file: Table38.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the rapidity y_tt of the top quark pair.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Rapidity Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 38
+
+---
+data_file: Table39.yaml
+description: |
+  Normalized differential tt cross section (from l+jets channel) as a function of the invariant mass m_tt of the top quark pair. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 44 of preprint, table A.9, 3rd variable in table, m(ttbar)
+name: Table 39
+
+---
+data_file: Table40.yaml
+description: |
+  Statistical covariance matrix for the normalized differential tt cross section (from l+jets channel) as a function of the invariant mass m_tt of the top quark pair.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (stat. cov.mat for m(ttbar))
+name: Table 40
+
+---
+data_file: Table41.yaml
+description: |
+  Breakdown of systematic uncertainties per bin for the normalized differential tt cross section (from l+jets channel) as a function of the invariant mass m_tt of the top quark pair.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Additional table (breakdown of systematics)
+name: Table 41
+
+---
+data_file: Table42.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum pt(top) of the top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 45 of preprint, table A.10, 1st variable in table, pt(top)
+name: Table 42
+
+---
+data_file: Table43.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum pt*(top) of the top quark or antiquark in the ttbar rest frame. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 45 of preprint, table A.10, 2nd variable in table, pt*(top)
+name: Table 43
+
+---
+data_file: Table44.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the rapidity y of the top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Rapidity Dependence,
+    Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 45 of preprint, table A.10, 3rd variable in table, y(top)
+name: Table 44
+
+---
+data_file: Table45.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the azimuthal opening angle between the top quark and antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 45 of preprint, table A.10, 4th variable in table, deltaphi(t,tbar)
+name: Table 45
+
+---
+data_file: Table46.yaml
+description: |
+  Normalized differential tt cross section in the dilepton channels as a function of the transverse momentum of the leading (pt1) top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 46 of preprint, table A.11, 1st variable in table, pt(t1)
+name: Table 46
+
+---
+data_file: Table47.yaml
+description: |
+  Normalized differential tt cross section in the dilepton channels as a function of the transverse momentum of the trailing (pt2) top quark or antiquark. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 46 of preprint, table A.11, 2nd variable in table, pt(t2)
+name: Table 47
+
+---
+data_file: Table48.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the transverse momentum ptt of the top quark pair. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Transverse Momentum
+      Dependence, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 47 of preprint, table A.12, 1st variable in table, pt(ttbar)
+name: Table 48
+
+---
+data_file: Table49.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the rapidity y_tt of the top quark pair. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYRAP]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Rapidity Dependence,
+    Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 47 of preprint, table A.12, 2nd variable in table, y(ttbar)
+name: Table 49
+
+---
+data_file: Table50.yaml
+description: |
+  Normalized differential tt cross section (from dilepton channel) as a function of the invariant mass m_tt of the top quark pair. The horizontally-corrected bin centres according to the MADGRAPH+PYTHIA6 prediction are also provided. The results are presented at parton level in the full phase space. The statistical and systematic uncertainties are added in quadrature to yield the total uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Page 47 of preprint, table A.12, 3rd variable in table, m(ttbar)
+name: Table 50
+

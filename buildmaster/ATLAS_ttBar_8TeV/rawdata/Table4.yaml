@@ -1,0 +1,50 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/deta(b-jet)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/deta(b-jet)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00169}
+    - {label: sys, symerror: 0.00287}
+    value: 0.1
+  - errors:
+    - {label: stat, symerror: 0.00279}
+    - {label: sys, symerror: 0.00315}
+    value: 0.208
+  - errors:
+    - {label: stat, symerror: 0.00315}
+    - {label: sys, symerror: 0.0034}
+    value: 0.277
+  - errors:
+    - {label: stat, symerror: 0.00343}
+    - {label: sys, symerror: 0.00631}
+    value: 0.323
+  - errors:
+    - {label: stat, symerror: 0.00346}
+    - {label: sys, symerror: 0.00609}
+    value: 0.328
+  - errors:
+    - {label: stat, symerror: 0.00328}
+    - {label: sys, symerror: 0.00293}
+    value: 0.289
+  - errors:
+    - {label: stat, symerror: 0.00289}
+    - {label: sys, symerror: 0.00458}
+    value: 0.209
+  - errors:
+    - {label: stat, symerror: 0.00161}
+    - {label: sys, symerror: 0.00292}
+    value: 0.103
+independent_variables:
+- header: {name: eta(b-jet) (range)}
+  values:
+  - {high: -1.5, low: -2.4}
+  - {high: -1.0, low: -1.5}
+  - {high: -0.5, low: -1.0}
+  - {high: 0.0, low: -0.5}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.5, low: 1.0}
+  - {high: 2.4, low: 1.5}

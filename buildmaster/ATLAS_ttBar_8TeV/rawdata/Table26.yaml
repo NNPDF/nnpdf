@@ -1,0 +1,79 @@
+dependent_variables:
+- header: {name: Uncertainty, units: 'each bin (in [%])'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.1}
+  - {value: 0.9}
+  - {value: 1.0}
+  - {value: 1.1}
+  - {value: 0.6}
+  - {value: 0.5}
+  - {value: 3.9}
+  - {value: 1.9}
+  - {value: 5.1}
+  - {value: 0.2}
+  - {value: 0.0}
+- header: {name: Uncertainty, units: 'each bin (in [%])'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.1}
+  - {value: 2.2}
+  - {value: 0.9}
+  - {value: 0.4}
+  - {value: 0.3}
+  - {value: 0.6}
+  - {value: 1.6}
+  - {value: 0.3}
+  - {value: 2.2}
+  - {value: 0.8}
+  - {value: 0.0}
+- header: {name: Uncertainty, units: 'each bin (in [%])'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.0}
+  - {value: 1.0}
+  - {value: 0.8}
+  - {value: 0.3}
+  - {value: 0.1}
+  - {value: 0.5}
+  - {value: 2.0}
+  - {value: 0.3}
+  - {value: 1.3}
+  - {value: 1.6}
+  - {value: 0.0}
+- header: {name: Uncertainty, units: 'each bin (in [%])'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.1}
+  - {value: 2.8}
+  - {value: 1.2}
+  - {value: 0.3}
+  - {value: 0.5}
+  - {value: 1.0}
+  - {value: 2.7}
+  - {value: 0.9}
+  - {value: 4.7}
+  - {value: 1.9}
+  - {value: 0.0}
+independent_variables:
+- header: {name: Source}
+  values:
+  - {value: LEP}
+  - {value: JES}
+  - {value: JER}
+  - {value: BG}
+  - {value: Btag}
+  - {value: PU}
+  - {value: TopScale}
+  - {value: TopMatch}
+  - {value: Hadronization}
+  - {value: TopMass}
+  - {value: PDF}
