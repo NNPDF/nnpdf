@@ -166,9 +166,8 @@ def one_art_data_residuals(groups_data, indexed_make_replicas):
 
     all_normresidual = []
     for group in groups_data:
-
-        real_group = group.load()
-        real_data = real_group.get_cv()
+        real_group = group.load_commondata()
+        real_data = np.concatenate([i.get_cv() for i in real_group])
         one_art_data = all_replicas[group_level == group.name].iloc[one_data_index]
 
         residual = one_art_data - real_data[one_data_index]
@@ -193,8 +192,7 @@ def art_data_mean_table(art_rep_generation, groups_data):
     data = []
     for group in groups_data:
         for dataset in group.datasets:
-            ds = dataset.load()
-            Ndata = ds.GetNData()
+            Ndata = dataset.load_commondata().ndata
             for i in range(Ndata):
                 line = [
                     dataset.name,
