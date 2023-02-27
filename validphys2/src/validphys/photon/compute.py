@@ -10,6 +10,7 @@ from pathlib import Path
 
 import yaml
 from os import remove
+import time
 
 class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replicas_id):
@@ -170,9 +171,12 @@ class Photon:
             photon PDF at the scale 1 GeV
         """
         # Compute photon PDF
+        start_time = time.perf_counter()
         photon_100GeV = np.array([self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid])
         photon_100GeV += self.generate_errors()
         photon_100GeV /= self.xgrid
+        print("Time to compute photon:", time.perf_counter() - start_time)
+        # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
         from eko.io import EKO
