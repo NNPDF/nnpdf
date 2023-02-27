@@ -179,9 +179,52 @@ def _filter_real_data(filter_path, data):
         dataset.load_commondata().export(path)
     return total_data_points, total_cut_data_points
 
+def process_commondata(commondata,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor):
+    """
+    Given a commondata instance return a commondata instance
+    with modified systematics. Note that if commondata.setname
+    is not within the inconsistent_datasets or if both ADD and
+    MULT are False, then the input commondata is outputted
+
+    Parameters
+    ----------
+    
+    commondata : validphys.coredata.CommonData
+    ADD : bool
+    MULT : bool
+    CORR : bool
+    UNCORR : bool
+    inconsistent_datasets : list
+                        list of the datasets for which an inconsistency should be introduced
+    
+    sys_rescaling_factor : float, int
+    Returns
+    -------
+    validphys.coredata.CommonData
+    """
+
+    if not commondata.setname in inconsistent_datasets:
+        return commondata
+    
+    if MULT and ADD:
+        cd_tmp = commondata.with_MULT_sys(commondata.multiplicative_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+        cd = cd_tmp.with_ADD_sys(cd_tmp.additive_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+        return cd
+    
+    if MULT:
+        cd = commondata.with_MULT_sys(commondata.multiplicative_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+        return cd
+   
+    if ADD:
+        cd = commondata.with_ADD_sys(commondata.additive_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+        return cd
+    
+    return commondata
 
 def _filter_closure_data(
-    filter_path, data, fakepdf, fakenoise, filterseed, experiments_index
+    filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
+    ADD=False, MULT=False, CORR=False, UNCORR=False,
+    inconsistent_datasets=[], sys_rescaling_factor=1, inconsistent_fit=False
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
@@ -242,13 +285,19 @@ def _filter_closure_data(
     
     if fakenoise:
         #======= Level 1 closure test =======#
-
+    
         closure_data = make_level1_data(
                 data,
                 closure_data,
                 filterseed,
                 experiments_index,
             )
+        
+        # for inconsistent fit only, modify the L1 data sys (written in filters folder)
+        # such that the covmat used to generate L2 data is underestimating systematics
+        if inconsistent_fit:
+            closure_data = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+                    for cd in closure_data]
 
     #====== write commondata and systype files ======#
     if fakenoise:
