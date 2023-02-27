@@ -2,7 +2,6 @@ import pytest
 from validphys.photon.compute import Photon
 from validphys.photon import structure_functions
 import lhapdf
-import fiatlux
 import numpy as np
 from collections import namedtuple
 
@@ -76,6 +75,7 @@ def test_init(monkeypatch):
     monkeypatch.setattr(structure_functions, "StructureFunction", fakeStructureFunction)
     monkeypatch.setattr(structure_functions, "F2LO", fakeF2LO)
     monkeypatch.setattr(lhapdf, "mkPDF", lambda *args: fiatlux_runcard["pdf_name"])
+    import fiatlux
     monkeypatch.setattr(fiatlux, "FiatLux", fakeFiatlux)
     monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
 
