@@ -1,6 +1,8 @@
 import pytest
-from validphys.photon.structure_functions import F2LO
+import validphys.photon.structure_functions as sf
 import numpy as np
+from pathlib import Path
+import pineappl
 
 def test_zero_pdfs():
     class fake_pdfs:
@@ -19,7 +21,7 @@ def test_zero_pdfs():
         "MaxNfPdf": 5,
     }
 
-    f2lo = F2LO(pdfs, fake_theory)
+    f2lo = sf.F2LO(pdfs, fake_theory)
 
     np.testing.assert_equal(f2lo.Qmt, np.inf)
 
@@ -27,3 +29,46 @@ def test_zero_pdfs():
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(f2lo.FxQ(x, Q), 0.)
 
+class FakeFKTable():
+    def __init__(self, path):
+        self.path = path
+        self.xgrid = np.geomspace(1e-4, 1., 10)
+        self.qgrid = np.geomspace(1.65, 1000, 10)
+
+    def bin_left(self, i):
+        if i == 1:
+            return self.xgrid
+        if i == 0 :
+            return self.qgrid
+        else:
+            return 0
+
+    def convolute_with_one(self, pdgid, xfxQ2):
+        return np.zeros((10, 10))
+
+class fakeset():
+    def get_entry(self, string):
+        return 0
+
+class fakepdf():
+    def __init__(self):
+        self.ao = 1
+    
+    def xfxQ(self, x, Q):
+        return 1.
+    
+    def xfxQ2(self, x, Q):
+        return 1.**2
+    
+    def set(self):
+        return fakeset()
+
+
+def test_F2(monkeypatch):
+    monkeypatch.setattr(pineappl.fk_table.FkTable, "read", FakeFKTable)
+    structurefunc = sf.StructureFunction("", fakepdf())
+    for x in np.geomspace(1e-4, 1., 10):
+        for Q in np.geomspace(10, 1000000, 10):
+            np.testing.assert_allclose(structurefunc.FxQ(x, Q), 0., rtol=1e-5)
+
+    
