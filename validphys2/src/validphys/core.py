@@ -31,7 +31,6 @@ from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
 from validphys.fkparser import load_fktable
-from validphys.pineparser import pineappl_reader
 from validphys.commondataparser import (peek_commondata_metadata,
     get_plot_kinlabels,
     parse_commondata,)
@@ -404,10 +403,6 @@ class DataSetSpec(TupleComp):
                          frac, op, weight)
 
     @functools.lru_cache()
-    def load(self):
-        """Load the libNNPDF version of the dataset"""
-        raise Exception("This function should not be used at all: DataSetSpec!")
-
     def load_commondata(self):
         """Strips the commondata loading from `load`"""
         cd = self.commondata.load()
@@ -451,8 +446,11 @@ class FKTableSpec(TupleComp):
         self.cfactors = cfactors if cfactors is not None else []
 
         self.legacy = False
-        # NOTE: the legacy interface is expected to be removed by future releases of NNPDF
-        # so please don't write code that relies on it
+
+        # NOTE: The legacy interface is currently used by fkparser to decide
+        # whether to read an FKTable using the old parser or the pineappl parser
+        # this attribute (and the difference between both) might be removed in future 
+        # releases of NNPDF so please don't write code that relies on it
         if not isinstance(fkpath, (tuple, list)):
             self.legacy = True
         else:
@@ -470,21 +468,9 @@ class FKTableSpec(TupleComp):
         else:
             super().__init__(fkpath, cfactors)
 
-    def _load_legacy(self):
-        raise Exception("This function should not be used at all: FkTable")
-
-    def _load_pineappl(self):
-        log.info("Reading: %s", self.fkpath)
-        return pineappl_reader(self)
-
     def load_with_cuts(self, cuts):
         """Load the fktable and apply cuts inmediately. Returns a FKTableData"""
         return load_fktable(self).with_cuts(cuts)
-
-    def load(self):
-        if self.legacy:
-            return self._load_legacy()
-        return self._load_pineappl()
 
 
 class LagrangeSetSpec(DataSetSpec):
@@ -515,10 +501,6 @@ class LagrangeSetSpec(DataSetSpec):
     @functools.lru_cache()
     def load_commondata(self):
         return self.commondata.load()
-
-    @functools.lru_cache()
-    def load(self):
-        raise Exception("Should not be used!")
 
 
 class PositivitySetSpec(LagrangeSetSpec):

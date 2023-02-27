@@ -29,8 +29,7 @@ import numpy as np
 import pandas as pd
 
 from validphys.coredata import FKTableData, CFactorData
-
-
+from validphys.pineparser import pineappl_reader
 
 
 class BadCFactorError(Exception):
@@ -60,7 +59,7 @@ def load_fktable(spec):
         with open_fkpath(spec.fkpath) as handle:
             tabledata = parse_fktable(handle)
     else:
-        tabledata = spec.load()
+        tabledata = pineappl_reader(spec)
 
     if not spec.cfactors:
         return tabledata
