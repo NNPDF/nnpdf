@@ -299,6 +299,90 @@ class CommonData:
          tb = self.commondata_table.copy()
          tb["data"] = cv
          return dataclasses.replace(self, commondata_table=tb)
+    
+    def with_MULT_sys(self,mult_sys):
+        """
+        returns a CommonData instance with MULT systematics
+        replaced by mult_sys
+        Parameters
+        ----------
+        mult_sys : pd.DataFrame()
+                 all MULT columns of CommonData.commondata_table
+        """
+        table = self.commondata_table.copy()
+        table["MULT"] = mult_sys
+        return dataclasses.replace(self, commondata_table = table)
+    
+    def with_ADD_sys(self,add_sys):
+        """
+        returns a CommonData instance with ADD systematics
+        replaced by add_sys
+        Parameters
+        ----------
+        add_sys : pd.DataFrame()
+                 all ADD columns of CommonData.commondata_table
+        """
+        table = self.commondata_table.copy()
+        table["ADD"] = add_sys
+        return dataclasses.replace(self, commondata_table = table)
+
+    def multiplicative_errors_rescale(self,CORR,UNCORR,sys_rescaling_factor):
+        """
+        rescale the MULT sys by constant factor, sys_rescaling_factor,
+        a distinction is done between CORR and UNCORR systematics
+        Parameters
+        ----------
+        CORR : bool
+        UNCORR : bool
+        sys_rescaling_factor : float, int
+        Returns
+        -------
+        pd.DataFrame corresponding to the rescaled MULT systematics
+        """
+        mult_table = self.systematics_table.loc[:,["MULT"]].copy()
+        # get indices of CORR / UNCORR sys
+        mult_systype_corr = self.systype_table[(self.systype_table["type"] == "MULT") 
+                            & (~self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+        
+        mult_systype_uncorr = self.systype_table[(self.systype_table["type"] == "MULT") 
+                            & (self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+
+        # rescale systematics
+        if CORR:
+            mult_table.iloc[:,mult_systype_corr.index - 1] *= sys_rescaling_factor
+        if UNCORR:
+            mult_table.iloc[:,mult_systype_uncorr.index - 1] *= sys_rescaling_factor
+
+        return mult_table
+    
+    def additive_errors_rescale(self,CORR,UNCORR,sys_rescaling_factor):
+        """
+        rescale the ADD sys by constant factor, sys_rescaling_factor,
+        a distinction is done between CORR and UNCORR systematics
+        Parameters
+        ----------
+        CORR : bool
+        UNCORR : bool
+        sys_rescaling_factor : float, int
+        Returns
+        -------
+        pd.DataFrame corresponding to the rescaled ADD systematics
+        """
+        add_table = self.systematics_table.loc[:,["ADD"]].copy()
+        # get indices of CORR / UNCORR sys
+        add_systype_corr = self.systype_table[(self.systype_table["type"] == "ADD") 
+                            & (~self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+        
+        add_systype_uncorr = self.systype_table[(self.systype_table["type"] == "ADD") 
+                            & (self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+
+        # rescale systematics
+        if CORR:
+            add_table.iloc[:,add_systype_corr.index - 1] *= sys_rescaling_factor
+        if UNCORR:
+            add_table.iloc[:,add_systype_uncorr.index - 1] *= sys_rescaling_factor
+
+        return add_table
 
     def get_cv(self):
         return self.central_values.values
