@@ -49,19 +49,18 @@ def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
 @pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA])
 def test_covmat_from_systematics(data_config, use_cuts, dataset_inputs):
     """Test which checks the python computation of the covmat relating to a
-    collection of datasets matches that of the C++ computation.
+    collection of datasets from dataset_inputs matches the direct call to groups_covmat
 
     Tests all combinations of internal/no cuts and correlated/uncorrelated data.
-
     """
     config = dict(data_config)
     config["use_cuts"] = use_cuts
     config["dataset_inputs"] = dataset_inputs
 
     covmat = API.dataset_inputs_covmat_from_systematics(**config)
-    cpp_covmat = API.groups_covmat(**config)
+    another_covmat = API.groups_covmat(**config)
 
-    np.testing.assert_allclose(cpp_covmat, covmat)
+    np.testing.assert_allclose(another_covmat, covmat)
 
 def test_covmat_with_one_systematic():
     """Test that a dataset with 1 systematic successfully builds covmat.
@@ -70,18 +69,17 @@ def test_covmat_with_one_systematic():
     dsinput = {"dataset": "D0ZRAP", "frac": 1.0, "cfac": ["QCD"]}
     config = dict(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
 
-    covmat = API.covmat_from_systematics(**config)
     ds = API.dataset(**config)
     # double check that the dataset does indeed only have 1 systematic.
     assert ds.commondata.nsys == 1
-    #TODO needs extra check?
+
+    # Test the covmat can be constructed
+    _ = API.covmat_from_systematics(**config)
 
 
-def test_sqrt_covmat():
-    """Tests the python
-    implementation of the sqrt of the covariance matrix, namely
+def test_sqrt_covmat(data_config):
+    """Tests the python implementation of the sqrt of the covariance matrix, namely
     :py:func:`validphys.covmats.sqrt_covmat`.
-
     """
     rectangular_covmat = np.random.randint(10, size=(4, 5))
 
@@ -90,11 +88,17 @@ def test_sqrt_covmat():
         # rectangular covmat matrix
         sqrt_covmat(rectangular_covmat)
 
+    with pytest.raises(ValueError):
         # Check whether an empty covmat input raises
         # a ValueError
         sqrt_covmat(np.array([]))
 
-    # TODO removed cpp test, do we need some other thing to test?
+    config = dict(data_config)
+    config["dataset_inputs"] = CORR_DATA
+    covmat = API.dataset_inputs_covmat_from_systematics(**config)
+
+    cholesky_cov = sqrt_covmat(covmat)
+    np.testing.assert_allclose(cholesky_cov @ cholesky_cov.T, covmat)
 
 
 @pytest.mark.parametrize("t0pdfset", [PDF, HESSIAN_PDF])
