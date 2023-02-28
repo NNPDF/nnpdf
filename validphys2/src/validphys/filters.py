@@ -110,7 +110,9 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
+    ADD=False, MULT=False, CORR=False, UNCORR=False,
+    inconsistent_datasets=[], sys_rescaling_factor=1, inconsistent_fit=False
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -127,12 +129,14 @@ def filter_closure_data_by_experiment(
         experiment_index = experiments_index[
             experiments_index.isin([exp.name], level=0)
         ]
+        
         res.append(
             _filter_closure_data(
-                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index
-            )
-        )
-
+                        filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
+                        ADD, MULT, CORR, UNCORR,
+                        inconsistent_datasets, sys_rescaling_factor, inconsistent_fit
+                                )
+                )
     return res
 
 
@@ -291,7 +295,7 @@ def _filter_closure_data(
     
     if fakenoise:
         #======= Level 1 closure test =======#
-    
+
         closure_data = make_level1_data(
                 data,
                 closure_data,
