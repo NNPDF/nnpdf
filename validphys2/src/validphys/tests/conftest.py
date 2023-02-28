@@ -72,11 +72,18 @@ base_config = dict(
 def data_config():
     return base_config
 
+
 @pytest.fixture(scope='module')
 def data_internal_cuts_config(data_config):
     config_dict = dict(data_config)
     config_dict.update(use_cuts='internal')
     return config_dict
+
+@pytest.fixture(scope='module')
+def data_internal_cuts_new_theory_config(data_internal_cuts_config):
+    config = dict(data_internal_cuts_config)
+    config["theoryid"] = THEORYID_NEW
+    return config
 
 @pytest.fixture(scope='module')
 def single_data_internal_cuts_config(data_internal_cuts_config):

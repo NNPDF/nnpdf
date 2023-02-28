@@ -8,7 +8,7 @@ from validphys.loader import Loader
 from validphys.results import ThPredictionsResult, PositivityResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions
-from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, POSITIVITIES, DATA, THEORYID_NEW
+from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, POSITIVITIES, DATA
 
 
 def test_basic_loading():
@@ -123,31 +123,32 @@ def test_extended_predictions():
     assert np.all((had_linear - had_all).std() < had_all.std())
 
 
-@pytest.mark.parametrize("dataset_input", [DATA])
-def test_compare_cf(data_config, dataset_input):
+@pytest.mark.parametrize("dataset", ["CMSWMASY47FB", "ATLASWZRAP11CC", "LHCBWZMU7TEV"])
+def test_compare_cf(data_internal_cuts_config, data_internal_cuts_new_theory_config, dataset):
     """Loads datasets from the two low-precision theories (one old, one new)
     and checks that the result is the same despite being read differently"""
-    if "cfac" not in dataset_input:
-        return
-    
-    config_with_cfac = dict(data_config)
-    config_no_cfac = dict(data_config)
+    config = dict(data_internal_cuts_config)
+    config_new = dict(data_internal_cuts_new_theory_config)
 
-    dinput_no_cfac = dict(dataset_input)
-    dinput_no_cfac["cfac"] = []
+    pdf = API.pdf(**config)
 
-    config_with_cfac["dataset_input"] = dataset_input
-    config_no_cfac["dataset_input"] = dinput_no_cfac
+    dinput = {"dataset": dataset}
+    config["dataset_input"] = dinput
+    config_new["dataset_input"] = dinput
 
-    ds_old_cfac = API.dataset(**config_with_cfac)
-    ds_old = API.dataset(**config_no_cfac)
+    ds_old = API.dataset(**config)
+    ds_new = API.dataset(**config_new)
+    res_old = central_predictions(ds_old, pdf)
+    res_new = central_predictions(ds_new, pdf)
 
-    config_with_cfac["theoryid"] = THEORYID_NEW
-    config_no_cfac["theoryid"] = THEORYID_NEW
-    ds_new_cfac = API.dataset(**config_with_cfac)
-    ds_new = API.dataset(**config_no_cfac)
+    dinput["cfac"] = ["QCD"]
+    ds_old_cfac = API.dataset(**config)
+    ds_new_cfac = API.dataset(**config_new)
 
-    old_cfac = ds_old_cfac/ds_old
-    new_cfac = ds_new_cfac/ds_new
+    res_old_cfac = central_predictions(ds_old_cfac, pdf)
+    res_new_cfac = central_predictions(ds_new_cfac, pdf)
 
-    np.testing.assert_allclose(new_cfac, old_cfac)
+    old_cfac = res_old_cfac/res_old
+    new_cfac = res_new_cfac/res_new
+
+    np.testing.assert_allclose(new_cfac, old_cfac, rtol=1e-4)
