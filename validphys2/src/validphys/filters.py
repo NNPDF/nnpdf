@@ -190,14 +190,20 @@ def process_commondata(commondata,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys
     ----------
     
     commondata : validphys.coredata.CommonData
+
     ADD : bool
+
     MULT : bool
+
     CORR : bool
+
     UNCORR : bool
+
     inconsistent_datasets : list
                         list of the datasets for which an inconsistency should be introduced
     
     sys_rescaling_factor : float, int
+
     Returns
     -------
     validphys.coredata.CommonData

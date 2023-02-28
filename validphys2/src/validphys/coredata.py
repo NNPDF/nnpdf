@@ -304,6 +304,7 @@ class CommonData:
         """
         returns a CommonData instance with MULT systematics
         replaced by mult_sys
+
         Parameters
         ----------
         mult_sys : pd.DataFrame()
@@ -317,6 +318,7 @@ class CommonData:
         """
         returns a CommonData instance with ADD systematics
         replaced by add_sys
+
         Parameters
         ----------
         add_sys : pd.DataFrame()
@@ -330,11 +332,13 @@ class CommonData:
         """
         rescale the MULT sys by constant factor, sys_rescaling_factor,
         a distinction is done between CORR and UNCORR systematics
+
         Parameters
         ----------
         CORR : bool
         UNCORR : bool
         sys_rescaling_factor : float, int
+
         Returns
         -------
         pd.DataFrame corresponding to the rescaled MULT systematics
@@ -359,11 +363,13 @@ class CommonData:
         """
         rescale the ADD sys by constant factor, sys_rescaling_factor,
         a distinction is done between CORR and UNCORR systematics
+
         Parameters
         ----------
         CORR : bool
         UNCORR : bool
         sys_rescaling_factor : float, int
+
         Returns
         -------
         pd.DataFrame corresponding to the rescaled ADD systematics
