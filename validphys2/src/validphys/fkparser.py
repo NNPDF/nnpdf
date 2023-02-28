@@ -65,25 +65,15 @@ def load_fktable(spec):
     if not spec.cfactors:
         return tabledata
 
-    # The new cfactor come as one per fktable
-    # while old cfactors come as one per operand in compound operation
+    # The new cfactors come as one per fktable
+    # while the old cfactors come as one per operand (of a compound operation)
     if isinstance(spec.cfactors[0], tuple):
         cfprod = []
-        # Loop over cfactor_list per fktable
-        for partial_cf in spec.cfactors:
-            prod_partial = 1.0
-            # loop over cfactor if more than one is applied at the same time
-            for cf in partial_cf:
-                cfdata = parse_cfactor(cf.open("rb"))
-                prod_partial *= cfdata.central_value
-            cfprod.append(prod_partial)
+        for partial_cfactors in spec.cfactors:
+            cfprod.append(parse_cfactor_list(partial_cfactors))
         cfprod = np.concatenate(cfprod)
     else:
-        cfprod = 1.0
-        for cf in spec.cfactors:
-            with open(cf, "rb") as f:
-                cfdata = parse_cfactor(f)
-            cfprod *= cfdata.central_value
+        cfprod = parse_cfactor_list(spec.cfactors)
     return tabledata.with_cfactor(cfprod)
 
 def _get_compressed_buffer(path):
@@ -347,6 +337,25 @@ def parse_fktable(f):
                 f"Failed processing header {header_name} on line {lineno}"
             ) from e
         res[header_name] = out
+
+
+def parse_cfactor_list(cfactor_paths):
+    """Parse a list of cfactors, all of which refer to the same fktable
+    Returns the product of all applied cfactors
+
+    Parameters
+    ----------
+        cfactor_paths: Path
+
+    Returns
+    -------
+        np.array
+    """
+    cfprod = 1.0
+    for cf in cfactor_paths:
+        cfdata = parse_cfactor(cf.open("rb"))
+        cfprod *= cfdata.central_value
+    return cfprod
 
 
 def parse_cfactor(f):

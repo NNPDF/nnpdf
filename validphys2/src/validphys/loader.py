@@ -370,7 +370,6 @@ class Loader(LoaderBase):
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
         op = metadata["operation"]
 
-
         # Check whether there's a compound folder, if there is, the cfactors are read in the old way
         cmp_folder = theory.path / "compound"
         if cmp_folder.exists():
