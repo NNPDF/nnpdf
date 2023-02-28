@@ -433,7 +433,7 @@ class Loader(LoaderBase):
         cf = []
         for cfactor in cfactors:
             cfactorpath = (theopath / 'cfactor' /
-                           f'CF_{cfactor}_{setname}.dat'.format(**locals()))
+                           f'CF_{cfactor}_{setname}.dat'
             if not cfactorpath.exists():
                 msg = ("Could not find cfactor '{cfactor}' for FKTable {setname} "
                        "in theory {theoryID}. File {cfactorpath} does not "
