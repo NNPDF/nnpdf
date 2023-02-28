@@ -329,10 +329,10 @@ def make_level1_data(
 
     dataset_input_list = list(data.dsinputs)
     
-    # commondata_wc = data.load_commondata_instance()
+    commondata_wc = data.load_commondata_instance()
     
     covmat = dataset_inputs_covmat_from_systematics(
-        level0_commondata_wc, # commondata_wc --> central values from the exp., level0_commondata_wc --> central values from theory
+        commondata_wc, #  --> central values from the exp., level0_commondata_wc --> central values from theory
         dataset_input_list,
         use_weights_in_covmat=False,
         norm_threshold=None,
