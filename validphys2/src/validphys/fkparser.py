@@ -65,11 +65,25 @@ def load_fktable(spec):
     if not spec.cfactors:
         return tabledata
 
-    cfprod = 1.0
-    for cf in spec.cfactors:
-        with open(cf, "rb") as f:
-            cfdata = parse_cfactor(f)
-        cfprod *= cfdata.central_value
+    # The new cfactor come as one per fktable
+    # while old cfactors come as one per operand in compound operation
+    if isinstance(spec.cfactors[0], tuple):
+        cfprod = []
+        # Loop over cfactor_list per fktable
+        for partial_cf in spec.cfactors:
+            prod_partial = 1.0
+            # loop over cfactor if more than one is applied at the same time
+            for cf in partial_cf:
+                cfdata = parse_cfactor(cf.open("rb"))
+                prod_partial *= cfdata.central_value
+            cfprod.append(prod_partial)
+        cfprod = np.concatenate(cfprod)
+    else:
+        cfprod = 1.0
+        for cf in spec.cfactors:
+            with open(cf, "rb") as f:
+                cfdata = parse_cfactor(f)
+            cfprod *= cfdata.central_value
     return tabledata.with_cfactor(cfprod)
 
 def _get_compressed_buffer(path):
