@@ -1,6 +1,6 @@
 # implemented by Tanishq Sharma
 
-setname: "ATLAS_ttBar_8TeV"
+setname: "CMS_ttBar_8TeV"
 
 nnpdf_metadata:
   nnpdf_process: ""
@@ -34,12 +34,15 @@ implemented_observables:
       file:
         - uncertainties_dSig_dpTt.yaml
     kinematic_coverage:
-    dataset_label: 
-    plot_x:
+      sqrt_s: sqrt_s
+      pT: pT
+    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in pT_{t}$'
+    plot_x: pT
     figure_by: 
       -
     theory:
       FK_tables:
+        - - 
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of t", label: '$1/\sigma * d\sigma/dy_{t}$', units: ""}
     observable_name: y_t
@@ -56,12 +59,15 @@ implemented_observables:
       file:
         - uncertainties_dSig_dyt.yaml
     kinematic_coverage:
-    dataset_label: 
-    plot_x:
+      sqrt_s: sqrt_s
+      y_t: y_t
+    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in y_{t}$'
+    plot_x: y_t
     figure_by: 
       -
     theory:
       FK_tables:
+        - -
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of ttBar", label: '$1/\sigma * d\sigma/dy_{t\bar{t}}$', units: ""}
     observable_name: y_ttBar
@@ -78,12 +84,15 @@ implemented_observables:
       file:
         - uncertainties_dSig_dyttBar.yaml
     kinematic_coverage:
-    dataset_label: 
-    plot_x:
+      sqrt_s: sqrt_s
+      y_ttBar: y_ttBar
+    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in y_{t\bar{t}}$'
+    plot_x: y_ttBar
     figure_by: 
       -
     theory:
       FK_tables:
+        - - CMSTOPDIFF8TEVTTRAPNORM
 
   - observable: {description: "normalized differential cross section w.r.t. ttBar invariant mass", label: '$1/\sigma * d\sigma/dm_{t\bar{t}}$', units: "1/GeV"}
     observable_name: m_ttBar
@@ -100,9 +109,12 @@ implemented_observables:
       file:
         - uncertainties_dSig_dmttBar.yaml
     kinematic_coverage:
-    dataset_label: 
-    plot_x:
+      sqrt_s: sqrt_s
+      m_ttBar: m_ttBar
+    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in m_{t\bar{t}}$'
+    plot_x: m_ttBar
     figure_by: 
       -
     theory:
       FK_tables:
+        - -
