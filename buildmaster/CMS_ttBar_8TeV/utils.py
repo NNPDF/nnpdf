@@ -16,14 +16,10 @@ def symmetrize_errors(delta_plus, delta_minus):
     se_sigma = sqrt(average*average + 2*semi_diff*semi_diff)
     return se_delta, se_sigma
 
-def percentage_to_absolute_str(percentage, value):
+def percentage_to_absolute(percentage, value):
     percentage = float(percentage.replace("%", ""))
     absolute = percentage * value * 0.01
     return absolute 
-
-def percentage_to_absolute_num(percentage, value):
-    absolute = percentage * value * 0.01
-    return absolute
 
 def corMat_to_covMat(ndata, errArray, corMatArray):
     covMatArray = []

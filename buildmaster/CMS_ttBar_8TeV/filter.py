@@ -2,7 +2,7 @@
 
 import yaml
 from utils import covMat_to_artUnc as cta
-from utils import percentage_to_absolute_num as ptan
+from utils import percentage_to_absolute as pta
 
 def processData():
     with open('metadata.yaml', 'r') as file:
@@ -64,7 +64,7 @@ def processData():
             error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt[i][j])
         data_central_value = values[i]['value']
         for j in range(11):
-            error_value[input3['independent_variables'][0]['values'][j]['value']] = ptan(input3['dependent_variables'][i]['values'][j]['value'], data_central_value)
+            error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
         kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': pT_t_mid, 'max': pT_t_max}}
         data_central_dSig_dpTt.append(data_central_value)
         kin_dSig_dpTt.append(kin_value)
@@ -124,7 +124,7 @@ def processData():
             error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt[i][j])
         data_central_value = values[i]['value']
         for j in range(11):
-            error_value[input3['independent_variables'][0]['values'][j]['value']] = ptan(input3['dependent_variables'][i]['values'][j]['value'], data_central_value)
+            error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
         kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'y_t': {'min': y_t_min, 'mid': y_t_mid, 'max': y_t_max}}
         data_central_dSig_dyt.append(data_central_value)
         kin_dSig_dyt.append(kin_value)
@@ -184,7 +184,7 @@ def processData():
             error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar[i][j])
         data_central_value = values[i]['value']
         for j in range(11):
-            error_value[input3['independent_variables'][0]['values'][j]['value']] = ptan(input3['dependent_variables'][i]['values'][j]['value'], data_central_value)
+            error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
         kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': y_ttBar_mid, 'max': y_ttBar_max}}
         data_central_dSig_dyttBar.append(data_central_value)
         kin_dSig_dyttBar.append(kin_value)
@@ -244,7 +244,7 @@ def processData():
             error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar[i][j])
         data_central_value = values[i]['value']
         for j in range(11):
-            error_value[input3['independent_variables'][0]['values'][j]['value']] = ptan(input3['dependent_variables'][i]['values'][j]['value'], data_central_value)
+            error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
         kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': m_ttBar_mid, 'max': m_ttBar_max}}
         data_central_dSig_dmttBar.append(data_central_value)
         kin_dSig_dmttBar.append(kin_value)
