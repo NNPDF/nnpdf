@@ -196,8 +196,8 @@ def check_normalize_to(ns, **kwargs):
 
     raise RuntimeError("Should not be here")
 
-#TODO: This interface is horrible. We need to think how to adapt libnnpdf
-#to make this use case easier
+#TODO: This interface is horrible.
+# We need to think how to adapt it to make this use case easier
 def _plot_fancy_impl(results, commondata, cutlist,
                normalize_to:(int,type(None)) = None, labellist=None):
 

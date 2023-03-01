@@ -1,10 +1,7 @@
 """
 This module implements parsers for FKtable  and CFactor files into useful
-datastructures, contained in the :py:mod:`validphys.coredata` module, which are
-not backed by C++ managed memory, and so they can be easily pickled and
-interfaces with common Python libraries.  The integration of these objects into
-the codebase is currently work in progress, and at the moment this module
-serves as a proof of concept.
+datastructures, contained in the :py:mod:`validphys.coredata` module, which can
+be easily pickled and interfaced with common Python libraries.
 
 Most users will be interested in using the high level interface
 :py:func:`load_fktable`.  Given a :py:class:`validphys.core.FKTableSpec`

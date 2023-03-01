@@ -5,9 +5,7 @@ mc_gen.py
 Tools to check the pseudo-data MC generation.
 """
 # The functions in this module have been ported to not use libNNPDF
-# but <art_rep_generation> is still using it under the hood
-# it has been a direct port of the libnnpdf dependent structure 
-# so they should not be used as an example
+# but they should not be used as an example as they follow the libNNPDF logic
 import logging
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt

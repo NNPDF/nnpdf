@@ -145,9 +145,9 @@ def _sum_rules(rules_dict, lpdf, Q):
 @check_positive('Q')
 def sum_rules(pdf:PDF, Q:numbers.Real):
     """Compute the momentum, uvalence, dvalence, svalence and cvalence sum rules for
-    each member (as defined by libnnpdf), at the energy scale ``Q``. Return a
-    SumRulesGrid object with the list of values for each sum rule.  The
-    integration is performed with absolute and relative tolerance of 1e-4."""
+    each member, at the energy scale ``Q``.
+    Return a SumRulesGrid object with the list of values for each sum rule.
+    The integration is performed with absolute and relative tolerance of 1e-4."""
     lpdf = pdf.load()
     return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
 

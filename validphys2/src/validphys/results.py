@@ -463,9 +463,9 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
     where available, however this behaviour can be modified with the flag `use_theorycovmat`.
 
-    The theory is specified as part of the dataset.
+    The theory is specified as part of the dataset (a remnant of the old C++ layout)
     A group of datasets is also allowed.
-    (as a result of the C++ code layout)."""
+    """
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
         ThPredictionsResult.from_convolution(pdf, dataset),

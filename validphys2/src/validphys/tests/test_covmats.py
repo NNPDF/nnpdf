@@ -103,7 +103,7 @@ def test_sqrt_covmat(data_config):
 
 @pytest.mark.parametrize("t0pdfset", [PDF, HESSIAN_PDF])
 @pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA])
-def test_python_t0_covmat_matches_cpp(
+def test_python_t0_covmat_matches_variations(
     data_internal_cuts_config, t0pdfset, dataset_inputs):
     """Test which checks the python computation of the t0 covmat relating to a
     collection of datasets
@@ -131,7 +131,7 @@ def test_python_t0_covmat_matches_cpp(
 def test_systematic_matrix(
     data_config, use_cuts, dataset_input):
     """Test which checks the python computation of the t0 covmat relating to a
-    collection of datasets matches that of the C++ computation.
+    collection of datasets is equivalent using different functions
 
     Tests all combinations of hessian/MC t0pdfset and correlated/uncorrelated
     data.

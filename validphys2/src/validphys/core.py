@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Core datastructures used in the validphys data model. Some of these are inmutable
-specifications representing C++ objects.
+Core datastructures used in the validphys data model.
 Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
@@ -476,7 +475,6 @@ class FKTableSpec(TupleComp):
 class LagrangeSetSpec(DataSetSpec):
     """Extends DataSetSpec to work around the particularities of the positivity, integrability
     and other Lagrange Multiplier datasets.
-    Internally (for libNNPDF) they are always PositivitySets
     """
 
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
@@ -761,7 +759,7 @@ class Stats:
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
     def std_error(self):
-        # ddof == 1 to match libNNPDF behaviour
+        # ddof == 1 to match legacy libNNPDF behaviour
         return np.std(self.error_members(), ddof=1, axis=0)
 
     def moment(self, order):
