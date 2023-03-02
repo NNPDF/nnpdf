@@ -216,19 +216,12 @@ def process_commondata(commondata,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys
     if not commondata.setname in inconsistent_datasets:
         return commondata
     
-    if MULT and ADD:
-        cd_tmp = commondata.with_MULT_sys(commondata.multiplicative_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
-        cd = cd_tmp.with_ADD_sys(cd_tmp.additive_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
-        return cd
-    
     if MULT:
-        cd = commondata.with_MULT_sys(commondata.multiplicative_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
-        return cd
-   
+        commondata = commondata.with_MULT_sys(commondata.multiplicative_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+
     if ADD:
-        cd = commondata.with_ADD_sys(commondata.additive_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
-        return cd
-    
+        commondata = commondata.with_ADD_sys(commondata.additive_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+
     return commondata
 
 def _filter_closure_data(
