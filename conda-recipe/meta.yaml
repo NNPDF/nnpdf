@@ -24,8 +24,7 @@ requirements:
         - python
         - numpy
     run:
-        # Only install tensorflow on linux. Select eigen build
-        - tensorflow >=2 *eigen* # [linux]
+        - tensorflow >=2 *eigen*
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -51,9 +50,10 @@ requirements:
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
         - curio >=1.0
-        - pineappl >=0.5.2
-        - eko
-        - banana-hep
+        - pineappl >=0.5.8
+        - eko ==0.10.2
+        - banana-hep ==0.6.6
+        - lz4 >=3.1.10 # see https://github.com/conda-forge/eko-feedstock/issues/10
 
 
 test:

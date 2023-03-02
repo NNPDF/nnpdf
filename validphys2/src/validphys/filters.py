@@ -9,10 +9,13 @@ from importlib.resources import read_text
 
 import numpy as np
 
-from reportengine.checks import make_argcheck, check, check_positive, make_check
+from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
-
+from validphys.commondatawriter import (
+        write_commondata_to_file,
+        write_systype_to_file,
+    )
 log = logging.getLogger(__name__)
 
 KIN_LABEL = {
@@ -72,12 +75,6 @@ def default_filter_rules_input():
     return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
 
-@make_argcheck
-def check_rngalgo(rngalgo: int):
-    """Check rngalgo content"""
-    check(0 <= rngalgo < 17,
-          "Invalid rngalgo. Must be int between [0, 16].")
-
 
 def check_nonnegative(var: str):
     """Ensure that `var` is positive"""
@@ -100,27 +97,8 @@ def export_mask(path, mask):
     """Dump mask to file"""
     np.savetxt(path, mask, fmt='%d')
 
-@check_rngalgo
-@check_nonnegative('filterseed')
-@check_nonnegative('seed')
-def prepare_nnpdf_rng(filterseed:int, rngalgo:int, seed:int):
-    """Initialise the internal NNPDF RNG, specified by ``rngalgo`` which must
-    be an integer between 0 and 16, seeded with ``filterseed``.
-    The RNG can then be subsequently used to i.e generate pseudodata.
-    """
-    try:
-        from NNPDF import RandomGenerator
-    except ImportError as e:
-        logging.error("Generating closure data needs a valid installation of libNNPDF")
-        raise e
 
-    log.warning("Importing libNNPDF")
-    log.info("Initialising RNG")
-    RandomGenerator.InitRNG(rngalgo, seed)
-    RandomGenerator.GetRNG().SetSeed(filterseed)
-
-@check_positive('errorsize')
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, errorsize, prepare_nnpdf_rng):
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -128,13 +106,11 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, errorsize, prepar
 
     """
     log.info('Filtering closure-test data.')
-    return _filter_closure_data(
-        filter_path, data, fakepdf, fakenoise, errorsize)
+    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed)
 
 
-@check_positive("errorsize")
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, errorsize, prepare_nnpdf_rng,
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -145,10 +121,19 @@ def filter_closure_data_by_experiment(
     not reproducible.
 
     """
-    return [
-        _filter_closure_data(filter_path, exp, fakepdf, fakenoise, errorsize)
-        for exp in experiments_data
-    ]
+
+    res = []
+    for exp in experiments_data:
+        experiment_index = experiments_index[
+            experiments_index.isin([exp.name], level=0)
+        ]
+        res.append(
+            _filter_closure_data(
+                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index
+            )
+        )
+
+    return res
 
 
 def filter_real_data(filter_path, data):
@@ -183,6 +168,7 @@ def _write_ds_cut_data(path, dataset):
 
 def _filter_real_data(filter_path, data):
     """Filter real experimental data."""
+
     total_data_points = 0
     total_cut_data_points = 0
     for dataset in data.datasets:
@@ -194,24 +180,93 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, errorsize):
-    """Filter closure test data."""
+def _filter_closure_data(
+    filter_path, data, fakepdf, fakenoise, filterseed, experiments_index
+):
+    """
+    This function is accessed within a closure test only, that is, the fakedata
+    namespace has to be True (If fakedata = False, the _filter_real_data function
+    will be used to write the commondata files).
+
+    The function writes commondata and systypes files within the
+    name_closure_test/filter folder.
+    If fakenoise is True, Level 1 type data is written to the filter folder, otherwise
+    Level 0 data is written.
+
+    Level 1 data is generated from the Level 0 data by adding noise sampled from
+    the experimental covariance matrix using the validphys.pseudodata.make_replica
+    function.
+
+    Parameters
+    ----------
+
+    filter_path : str
+                  path to filter folder
+
+    data : validphys.core.DataGroupSpec
+
+    fakepdf : validphys.core.PDF
+
+    fakenoise : bool
+                if fakenoise perform level1 shift of central data values
+
+    filterseed : int
+                 random seed used for the generation of
+                 random noise added to Level 0 data
+
+
+    experiments_index : pandas.MultiIndex
+
+
+    Returns
+    -------
+    tuple
+         total data points and points passing the cuts
+
+    """
     total_data_points = 0
     total_cut_data_points = 0
-    fakeset = fakepdf.legacy_load()
-    # Load data, don't cache result
-    loaded_data = data.load.__wrapped__(data)
-    # generate level 1 shift if fakenoise
-    loaded_data.MakeClosure(fakeset, fakenoise)
-    for j, dataset in enumerate(data.datasets):
+
+    # circular import generated @ core.py
+    from validphys.pseudodata import level0_commondata_wc, make_level1_data
+
+    closure_data = level0_commondata_wc(data, fakepdf)
+
+    for dataset in data.datasets:
+        #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
+        make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
-        loaded_ds = loaded_data.GetSet(j)
-        if errorsize != 1.0:
-            loaded_ds.RescaleErrors(errorsize)
-        loaded_ds.Export(str(path))
+    
+    if fakenoise:
+        #======= Level 1 closure test =======#
+
+        closure_data = make_level1_data(
+                data,
+                closure_data,
+                filterseed,
+                experiments_index,
+            )
+
+    #====== write commondata and systype files ======#
+    if fakenoise:
+        log.info("Writing Level1 data")
+    else:
+        log.info("Writing Level0 data")
+
+    for cd in closure_data:
+        path_cd = filter_path / cd.setname / f"DATA_{cd.setname}.dat"
+        path_sys = (
+            filter_path
+            / cd.setname
+            / "systypes"
+            / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
+        )
+        write_commondata_to_file(commondata=cd, path=path_cd)
+        write_systype_to_file(commondata=cd, path=path_sys)
+
     return total_data_points, total_cut_data_points
 
 

@@ -370,20 +370,27 @@ class Loader(LoaderBase):
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
         op = metadata["operation"]
 
-        # TODO:
-        #      at the moment there are no pineappl specific c-factors
-        #      so they need to be loaded from the NNPDF names / compounds files
-        cfac_name = metadata["target_dataset"]
-        # check whether there is a compound file
-        cpath = theory.path / "compound" / f"FK_{cfac_name}-COMPOUND.dat"
-        if cpath.exists():
-            # Get the target filenames
-            tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
-            cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
+        # Check whether there's a compound folder, if there is, the cfactors are read in the old way
+        cmp_folder = theory.path / "compound"
+        if cmp_folder.exists():
+            # Get the target filenames for old theories
+            cfac_name = metadata["target_dataset"]
+            cpath = cmp_folder / f"FK_{cfac_name}-COMPOUND.dat"
+            if cpath.exists():
+                tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
+                cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
+            else:
+                cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
         else:
-            cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
-        ###
-
+            # Prepare cf according to ymldb for new theories, one cfactor per fktable
+            fktable_names = metadata["operands"]
+            cfactors = []
+            for operand in fktable_names:
+                cfactor_per_fk = []
+                if cfac: # Don't try to check for cfactors when none was asked
+                    for fk_tab in operand:
+                        cfactor_per_fk.append(self.check_cfactor(theoryID, fk_tab.upper(), cfac))
+                cfactors.append(tuple(cfactor_per_fk))
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
         return fkspecs, op
 
@@ -424,12 +431,11 @@ class Loader(LoaderBase):
         _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
-            cfactorpath = (theopath / 'cfactor' /
-                           'CF_{cfactor}_{setname}.dat'.format(**locals()))
+            cfactorpath = (theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat")
             if not cfactorpath.exists():
-                msg = ("Could not find cfactor '{cfactor}' for FKTable {setname} "
-                       "in theory {theoryID}. File {cfactorpath} does not "
-                       "exist.").format(**locals())
+                msg = (f"Could not find cfactor '{cfactor}' for FKTable {setname} "
+                       f"in theory {theoryID}. File {cfactorpath} does not "
+                       "exist.")
                 raise CfactorNotFound(msg)
             cf.append(cfactorpath)
 
