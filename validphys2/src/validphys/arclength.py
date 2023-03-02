@@ -134,7 +134,8 @@ def plot_arc_lengths(
             xvalues + shift,
             yvalues,
             yerr=(ylower, yupper),
-            fmt=".",
+            fmt='',
+            linestyle = '',
             label=arclengths.pdf.label,
         )
         ax.set_xticks(xvalues)
