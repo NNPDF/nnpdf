@@ -217,10 +217,11 @@ def process_commondata(commondata,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys
         return commondata
     
     if MULT:
-        commondata = commondata.with_MULT_sys(commondata.multiplicative_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+        commondata = commondata.with_MULT_sys(commondata.rescale_sys("MULT",CORR,UNCORR,sys_rescaling_factor))
+        
 
     if ADD:
-        commondata = commondata.with_ADD_sys(commondata.additive_errors_rescale(CORR,UNCORR,sys_rescaling_factor))
+        commondata = commondata.with_ADD_sys(commondata.rescale_sys("ADD",CORR,UNCORR,sys_rescaling_factor))
 
     return commondata
 
