@@ -328,6 +328,44 @@ class CommonData:
         table["ADD"] = add_sys
         return dataclasses.replace(self, commondata_table = table)
 
+    def rescale_sys(self,type_err,CORR,UNCORR,sys_rescaling_factor):
+        """
+        rescale the MULT sys by constant factor, sys_rescaling_factor,
+        a distinction is done between CORR and UNCORR systematics
+
+        Parameters
+        ----------
+
+        type_err : str 
+                e.g. 'MULT' or 'ADD'
+
+        CORR : bool
+
+        UNCORR : bool
+
+        sys_rescaling_factor : float, int
+
+        Returns
+        -------
+        pd.DataFrame corresponding to the rescaled MULT systematics
+        """
+        
+        err_table = self.systematics_table.loc[:,[type_err]].copy()
+        # get indices of CORR / UNCORR sys
+        systype_corr = self.systype_table[(self.systype_table["type"] == type_err) 
+                            & (~self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+        
+        systype_uncorr = self.systype_table[(self.systype_table["type"] == type_err) 
+                            & (self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+
+        # rescale systematics
+        if CORR:
+            err_table.iloc[:,systype_corr.index - 1] *= sys_rescaling_factor
+        if UNCORR:
+            err_table.iloc[:,systype_uncorr.index - 1] *= sys_rescaling_factor
+
+        return err_table
+
     def multiplicative_errors_rescale(self,CORR,UNCORR,sys_rescaling_factor):
         """
         rescale the MULT sys by constant factor, sys_rescaling_factor,
