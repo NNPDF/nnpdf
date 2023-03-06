@@ -119,21 +119,22 @@ def plot_arc_lengths(
         xlabels = [
             "$" + arclengths.basis.elementlabel(fl) + "$" for fl in arclengths.flavours
         ]
-        yvalues = arclengths.stats.central_value()
+        
         ylower, yupper = arclengths.stats.errorbar68()
-        ylower = np.abs(yvalues - ylower)
-        yupper = np.abs(yupper - yvalues)
+        yvalues = (ylower + yupper) * 0.5
+        yerr = np.abs(yupper - ylower) * 0.5
+
         
         if normalize_to is not None:
             norm_cv = pdfs_arc_lengths[normalize_to].stats.central_value()
             yvalues = np.divide(yvalues, norm_cv)
-            yupper = np.divide(yupper, norm_cv)
-            ylower = np.divide(ylower, norm_cv)
+            yerr = np.divide(yerr, norm_cv)
+            
         shift = (ipdf - (len(pdfs_arc_lengths) - 1) / 2.0) / 5.0
         ax.errorbar(
             xvalues + shift,
             yvalues,
-            yerr=(ylower, yupper),
+            yerr=yerr,
             fmt='',
             linestyle = '',
             label=arclengths.pdf.label,
