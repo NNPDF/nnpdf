@@ -1,0 +1,7 @@
+dataset_label: "positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$"
+x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "POSF2C_CCE"
+
+nnpdf31_process: DIS CC
