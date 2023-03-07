@@ -35,6 +35,7 @@ class StructureFunction :
 class F2LO :
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
+        # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
         self.kcThr = theory["kcThr"] * theory["mc"]
         self.kbThr = theory["kbThr"] * theory["mb"]
         self.ktThr = theory["ktThr"] * theory["mt"]

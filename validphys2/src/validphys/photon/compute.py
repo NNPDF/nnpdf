@@ -22,6 +22,7 @@ class Photon:
         # parameters for the alphaem running
         self.alpha_em_ref = self.theory["alphaqed"]
         self.qref = self.theory["Qref"]
+        # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
         self.kcThr = self.theory["kcThr"] * self.theory["mc"]
         self.kbThr = self.theory["kbThr"] * self.theory["mb"]
         self.ktThr = self.theory["ktThr"] * self.theory["mt"]

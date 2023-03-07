@@ -15,15 +15,18 @@ def test_zero_pdfs():
     pdfs = fake_pdfs()
 
     fake_theory = {
-        "Qmc": 1.3,
-        "Qmb": 5. ,
-        "Qmt": 172.,
+        "mc": 1.3,
+        "mb": 5. ,
+        "mt": 172.,
+        "kcThr": 1.,
+        "kbThr": 1.,
+        "ktThr": 1.,
         "MaxNfPdf": 5,
     }
 
     f2lo = sf.F2LO(pdfs, fake_theory)
 
-    np.testing.assert_equal(f2lo.Qmt, np.inf)
+    np.testing.assert_equal(f2lo.ktThr, np.inf)
 
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
