@@ -35,15 +35,15 @@ class StructureFunction :
 class F2LO :
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
-        self.Qmc = theory["Qmc"]
-        self.Qmb = theory["Qmb"]
-        self.Qmt = theory["Qmt"]
+        self.kcThr = theory["kcThr"] * theory["mc"]
+        self.kbThr = theory["kbThr"] * theory["mb"]
+        self.ktThr = theory["ktThr"] * theory["mt"]
         if theory["MaxNfPdf"] <= 5 :
-            self.Qmt = np.inf
+            self.ktThr = np.inf
         if theory["MaxNfPdf"] <= 4 :
-            self.Qmb = np.inf
+            self.kbThr = np.inf
         if theory["MaxNfPdf"] <= 3 :
-            self.Qmc = np.inf
+            self.kcThr = np.inf
         eu2 = 4. / 9
         ed2 = 1. / 9
         self.eq2 = [ed2, eu2, ed2, eu2, ed2, eu2] # d u s c b t
@@ -65,11 +65,11 @@ class F2LO :
             Structure function F2 at LO
         """
         # at LO we use ZM-VFS
-        if Q < self.Qmc :
+        if Q < self.kcThr :
             nf = 3
-        elif Q < self.Qmb :
+        elif Q < self.kbThr :
             nf = 4
-        elif Q < self.Qmt :
+        elif Q < self.ktThr :
             nf = 5
         else :
             nf = 6

@@ -22,15 +22,15 @@ class Photon:
         # parameters for the alphaem running
         self.alpha_em_ref = self.theory["alphaqed"]
         self.qref = self.theory["Qref"]
-        self.Qmc = self.theory["Qmc"]
-        self.Qmb = self.theory["Qmb"]
-        self.Qmt = self.theory["Qmt"]
+        self.kcThr = self.theory["kcThr"] * self.theory["mc"]
+        self.kbThr = self.theory["kbThr"] * self.theory["mb"]
+        self.ktThr = self.theory["ktThr"] * self.theory["mt"]
         if self.theory["MaxNfAs"] <= 5 :
-            self.Qmt = np.inf
+            self.ktThr = np.inf
         if self.theory["MaxNfAs"] <= 4 :
-            self.Qmb = np.inf
+            self.kbThr = np.inf
         if self.theory["MaxNfAs"] <= 3 :
-            self.Qmc = np.inf
+            self.kcThr = np.inf
         self.set_betas()
         self.set_thresholds_alpha_em()
 
@@ -52,7 +52,7 @@ class Photon:
         # TODO : remove this dirty trick
         for i in range(len(replicas_id)):
             self.lux[i].PlugAlphaQED(self.alpha_em, self.qref)
-            self.lux[i].InsertInelasticSplitQ([4.18, 1e100])        
+            self.lux[i].InsertInelasticSplitQ([self.kbThr, self.ktThr if self.theory["MaxNfPdf"]==6 else 1e100])        
             self.lux[i].PlugStructureFunctions(f2[i].FxQ, fl[i].FxQ, f2lo[i].FxQ)
         
         # TODO : once that #1537 is merged do:
@@ -78,11 +78,11 @@ class Photon:
         alpha_em: float
             electromagnetic coupling
         """
-        if q < self.Qmc :
+        if q < self.kcThr :
             nf = 3
-        elif q < self.Qmb :
+        elif q < self.kbThr :
             nf = 4
-        elif q < self.Qmt :
+        elif q < self.ktThr :
             nf = 5
         else :
             nf = 6
@@ -121,12 +121,12 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
-        thresh_list = [self.Qmc, self.Qmb, self.Qmt]
-        if self.qref < self.Qmc :
+        thresh_list = [self.kcThr, self.kbThr, self.ktThr]
+        if self.qref < self.kcThr :
             nfref = 3
-        elif self.qref < self.Qmb :
+        elif self.qref < self.kbThr :
             nfref = 4
-        elif self.qref < self.Qmt :
+        elif self.qref < self.ktThr :
             nfref = 5
         else :
             nfref = 6
