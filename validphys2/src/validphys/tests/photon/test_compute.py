@@ -10,10 +10,14 @@ class faketheory():
         return {
             "alphaqed": 0.01,
             "Qref": 91.2,
-            "Qmc": 1.3,
-            "Qmb": 4.92,
-            "Qmt": 173.,
+            "mc": 1.3,
+            "mb": 4.92 ,
+            "mt": 172.,
+            "kcThr": 1.,
+            "kbThr": 1.,
+            "ktThr": 1.,
             "MaxNfAs": 5,
+            "MaxNfPdf": 5,
 
         }
 
@@ -88,9 +92,9 @@ def test_init(monkeypatch):
     np.testing.assert_almost_equal(photon.alpha_em_ref, faketheory().get_description()["alphaqed"])
 
     # test masses
-    np.testing.assert_equal(photon.Qmt, np.inf)
-    np.testing.assert_almost_equal(photon.Qmb, 4.92)
-    np.testing.assert_almost_equal(photon.Qmc, 1.3)
+    np.testing.assert_equal(photon.ktThr, np.inf)
+    np.testing.assert_almost_equal(photon.kbThr, 4.92)
+    np.testing.assert_almost_equal(photon.kcThr, 1.3)
 
     # test set_thresholds_alpha_em
     np.testing.assert_almost_equal(photon.thresh[5], 91.2)
