@@ -1,6 +1,6 @@
 # implemented by Tanishq Sharma
 
-setname: "CMS_ttBar_8TeV"
+setname: "CMS_ttBar_lj_8TeV"
 
 nnpdf_metadata:
   nnpdf_process: ""
@@ -27,12 +27,12 @@ implemented_observables:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         pT: {description: "transverse momentum of t", label: "$pT$", units: "GeV"}
-      file: kinematics_dSig_dpTt.yaml
+      file: kinematics_dSig_dpTt_norm.yaml
     data_central: 
-      file: data_dSig_dpTt.yaml
+      file: data_dSig_dpTt_norm.yaml
     data_uncertainties:
       file:
-        - uncertainties_dSig_dpTt.yaml
+        - uncertainties_dSig_dpTt_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       pT: pT
@@ -52,12 +52,12 @@ implemented_observables:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         y_t: {description: "rapidity of t", label: '$y_{t}$', units: ""}
-      file: kinematics_dSig_dyt.yaml
+      file: kinematics_dSig_dyt_norm.yaml
     data_central: 
-      file: data_dSig_dyt.yaml
+      file: data_dSig_dyt_norm.yaml
     data_uncertainties:
       file:
-        - uncertainties_dSig_dyt.yaml
+        - uncertainties_dSig_dyt_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       y_t: y_t
@@ -77,12 +77,12 @@ implemented_observables:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         y_ttBar: {description: "absolute rapidity of ttBar", label: '$y_{t\bar{t}}$', units: ""}
-      file: kinematics_dSig_dyttBar.yaml
+      file: kinematics_dSig_dyttBar_norm.yaml
     data_central: 
-      file: data_dSig_dyttBar.yaml
+      file: data_dSig_dyttBar_norm.yaml
     data_uncertainties:
       file:
-        - uncertainties_dSig_dyttBar.yaml
+        - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       y_ttBar: y_ttBar
@@ -102,12 +102,12 @@ implemented_observables:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "GeV"}
-      file: kinematics_dSig_dmttBar.yaml
+      file: kinematics_dSig_dmttBar_norm.yaml
     data_central: 
-      file: data_dSig_dmttBar.yaml
+      file: data_dSig_dmttBar_norm.yaml
     data_uncertainties:
       file:
-        - uncertainties_dSig_dmttBar.yaml
+        - uncertainties_dSig_dmttBar_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       m_ttBar: m_ttBar

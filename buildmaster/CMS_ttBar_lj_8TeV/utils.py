@@ -29,7 +29,10 @@ def corMat_to_covMat(ndata, errArray, corMatArray):
         covMatArray.append(corMatArray[i] * errArray[a] * errArray[b])
     return covMatArray
 
-def covMat_to_artUnc(ndata, covMatArray):
+def covMat_to_artUnc(ndata, covMatArray, is_normalized):
+    epsilon = -0.0000000001
+    negEValCount = 0
+    psdCheck = True
     covMat = np.zeros((ndata, ndata))
     artUnc = np.zeros((ndata, ndata))
     for i in range(len(covMatArray)):
@@ -37,10 +40,30 @@ def covMat_to_artUnc(ndata, covMatArray):
         b = i % ndata
         covMat[a][b] = covMatArray[i]
     eigVal, eigVec = eig(covMat)
-    for i in range(ndata):
-        for j in range(ndata):
-            if eigVal[j] < 0:
+    if is_normalized == False:
+        for i in range(ndata):
+            for j in range(ndata):
+                if eigVal[j] <= 0:
+                    raise ValueError('The covariance matrix is not positive-semidefinite')
+                else:
+                    artUnc[i][j] = eigVec[i][j] * sqrt(eigVal[j])
+    elif is_normalized == True:
+        for j in range(len(eigVal)):
+            if eigVal[j] < epsilon:
+                psdCheck = False
+            elif eigVal[j] > epsilon and eigVal[j] <= 0:
+                negEValCount = negEValCount + 1
+                if negEValCount == 2:
+                    psdCheck = False
+            elif eigVal[j] > 0:
                 continue
-            else:
-                artUnc[i][j] = eigVec[i][j] * sqrt(eigVal[j])
+        if psdCheck == False:
+            raise ValueError('The covariance matrix is not positive-semidefinite')
+        else:
+            for i in range(ndata):
+                for j in range(ndata):
+                    if eigVal[j] < 0:
+                        continue
+                    else:
+                        artUnc[i][j] = eigVec[i][j] * sqrt(eigVal[j]) 
     return artUnc

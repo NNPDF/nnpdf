@@ -48,7 +48,7 @@ def processData():
     for i in range(ndata_dSig_dpTt*ndata_dSig_dpTt):
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dpTt.append(covMatEl)
-    artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt)
+    artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     values = input['dependent_variables'][0]['values']
@@ -78,18 +78,18 @@ def processData():
     for i in range(11):
         error_definition_dSig_dpTt[input3['independent_variables'][0]['values'][i]['value']] = {'definition': 'systematic uncertainty- '+str(input3['independent_variables'][0]['values'][i]['value']), 'treatment': 'MULT', 'type': 'CORR'}
 
-    data_central_dSig_dpTt_yaml = {'data_central': data_central_dSig_dpTt}
-    kinematics_dSig_dpTt_yaml = {'bins': kin_dSig_dpTt}
-    uncertainties_dSig_dpTt_yaml = {'definitions': error_definition_dSig_dpTt, 'bins': error_dSig_dpTt}
+    data_central_dSig_dpTt_norm_yaml = {'data_central': data_central_dSig_dpTt}
+    kinematics_dSig_dpTt_norm_yaml = {'bins': kin_dSig_dpTt}
+    uncertainties_dSig_dpTt_norm_yaml = {'definitions': error_definition_dSig_dpTt, 'bins': error_dSig_dpTt}
 
-    with open('data_dSig_dpTt.yaml', 'w') as file:
-         yaml.dump(data_central_dSig_dpTt_yaml, file, sort_keys=False)
+    with open('data_dSig_dpTt_norm.yaml', 'w') as file:
+         yaml.dump(data_central_dSig_dpTt_norm_yaml, file, sort_keys=False)
 
-    with open('kinematics_dSig_dpTt.yaml', 'w') as file:
-         yaml.dump(kinematics_dSig_dpTt_yaml, file, sort_keys=False)
+    with open('kinematics_dSig_dpTt_norm.yaml', 'w') as file:
+         yaml.dump(kinematics_dSig_dpTt_norm_yaml, file, sort_keys=False)
 
-    with open('uncertainties_dSig_dpTt.yaml', 'w') as file:
-        yaml.dump(uncertainties_dSig_dpTt_yaml, file, sort_keys=False)
+    with open('uncertainties_dSig_dpTt_norm.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dpTt_norm_yaml, file, sort_keys=False)
 
 # dSig_dyt data
 
@@ -108,7 +108,7 @@ def processData():
     for i in range(ndata_dSig_dyt*ndata_dSig_dyt):
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dyt.append(covMatEl)
-    artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt)
+    artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     values = input['dependent_variables'][0]['values']
@@ -138,18 +138,18 @@ def processData():
     for i in range(11):
         error_definition_dSig_dyt[input3['independent_variables'][0]['values'][i]['value']] = {'definition': 'systematic uncertainty- '+str(input3['independent_variables'][0]['values'][i]['value']), 'treatment': 'MULT', 'type': 'CORR'}
 
-    data_central_dSig_dyt_yaml = {'data_central': data_central_dSig_dyt}
-    kinematics_dSig_dyt_yaml = {'bins': kin_dSig_dyt}
-    uncertainties_dSig_dyt_yaml = {'definitions': error_definition_dSig_dyt, 'bins': error_dSig_dyt}
+    data_central_dSig_dyt_norm_yaml = {'data_central': data_central_dSig_dyt}
+    kinematics_dSig_dyt_norm_yaml = {'bins': kin_dSig_dyt}
+    uncertainties_dSig_dyt_norm_yaml = {'definitions': error_definition_dSig_dyt, 'bins': error_dSig_dyt}
 
-    with open('data_dSig_dyt.yaml', 'w') as file:
-         yaml.dump(data_central_dSig_dyt_yaml, file, sort_keys=False)
+    with open('data_dSig_dyt_norm.yaml', 'w') as file:
+         yaml.dump(data_central_dSig_dyt_norm_yaml, file, sort_keys=False)
 
-    with open('kinematics_dSig_dyt.yaml', 'w') as file:
-         yaml.dump(kinematics_dSig_dyt_yaml, file, sort_keys=False)
+    with open('kinematics_dSig_dyt_norm.yaml', 'w') as file:
+         yaml.dump(kinematics_dSig_dyt_norm_yaml, file, sort_keys=False)
 
-    with open('uncertainties_dSig_dyt.yaml', 'w') as file:
-        yaml.dump(uncertainties_dSig_dyt_yaml, file, sort_keys=False)
+    with open('uncertainties_dSig_dyt_norm.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dyt_norm_yaml, file, sort_keys=False)
 
 # dSig_dyttBar data
 
@@ -168,7 +168,7 @@ def processData():
     for i in range(ndata_dSig_dyttBar*ndata_dSig_dyttBar):
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dyttBar.append(covMatEl)
-    artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar)
+    artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     values = input['dependent_variables'][0]['values']
@@ -198,18 +198,18 @@ def processData():
     for i in range(11):
         error_definition_dSig_dyttBar[input3['independent_variables'][0]['values'][i]['value']] = {'definition': 'systematic uncertainty- '+str(input3['independent_variables'][0]['values'][i]['value']), 'treatment': 'MULT', 'type': 'CORR'}
 
-    data_central_dSig_dyttBar_yaml = {'data_central': data_central_dSig_dyttBar}
-    kinematics_dSig_dyttBar_yaml = {'bins': kin_dSig_dyttBar}
-    uncertainties_dSig_dyttBar_yaml = {'definitions': error_definition_dSig_dyttBar, 'bins': error_dSig_dyttBar}
+    data_central_dSig_dyttBar_norm_yaml = {'data_central': data_central_dSig_dyttBar}
+    kinematics_dSig_dyttBar_norm_yaml = {'bins': kin_dSig_dyttBar}
+    uncertainties_dSig_dyttBar_norm_yaml = {'definitions': error_definition_dSig_dyttBar, 'bins': error_dSig_dyttBar}
 
-    with open('data_dSig_dyttBar.yaml', 'w') as file:
-         yaml.dump(data_central_dSig_dyttBar_yaml, file, sort_keys=False)
+    with open('data_dSig_dyttBar_norm.yaml', 'w') as file:
+         yaml.dump(data_central_dSig_dyttBar_norm_yaml, file, sort_keys=False)
 
-    with open('kinematics_dSig_dyttBar.yaml', 'w') as file:
-         yaml.dump(kinematics_dSig_dyttBar_yaml, file, sort_keys=False)
+    with open('kinematics_dSig_dyttBar_norm.yaml', 'w') as file:
+         yaml.dump(kinematics_dSig_dyttBar_norm_yaml, file, sort_keys=False)
 
-    with open('uncertainties_dSig_dyttBar.yaml', 'w') as file:
-        yaml.dump(uncertainties_dSig_dyttBar_yaml, file, sort_keys=False)
+    with open('uncertainties_dSig_dyttBar_norm.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dyttBar_norm_yaml, file, sort_keys=False)
 
 # dSig_dmttBar data
 
@@ -228,7 +228,7 @@ def processData():
     for i in range(ndata_dSig_dmttBar*ndata_dSig_dmttBar):
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dmttBar.append(covMatEl)
-    artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar)
+    artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
     values = input['dependent_variables'][0]['values']
@@ -258,17 +258,17 @@ def processData():
     for i in range(11):
         error_definition_dSig_dmttBar[input3['independent_variables'][0]['values'][i]['value']] = {'definition': 'systematic uncertainty- '+str(input3['independent_variables'][0]['values'][i]['value']), 'treatment': 'MULT', 'type': 'CORR'}
 
-    data_central_dSig_dmttBar_yaml = {'data_central': data_central_dSig_dmttBar}
-    kinematics_dSig_dmttBar_yaml = {'bins': kin_dSig_dmttBar}
-    uncertainties_dSig_dmttBar_yaml = {'definitions': error_definition_dSig_dmttBar, 'bins': error_dSig_dmttBar}
+    data_central_dSig_dmttBar_norm_yaml = {'data_central': data_central_dSig_dmttBar}
+    kinematics_dSig_dmttBar_norm_yaml = {'bins': kin_dSig_dmttBar}
+    uncertainties_dSig_dmttBar_norm_yaml = {'definitions': error_definition_dSig_dmttBar, 'bins': error_dSig_dmttBar}
 
-    with open('data_dSig_dmttBar.yaml', 'w') as file:
-         yaml.dump(data_central_dSig_dmttBar_yaml, file, sort_keys=False)
+    with open('data_dSig_dmttBar_norm.yaml', 'w') as file:
+         yaml.dump(data_central_dSig_dmttBar_norm_yaml, file, sort_keys=False)
 
-    with open('kinematics_dSig_dmttBar.yaml', 'w') as file:
-         yaml.dump(kinematics_dSig_dmttBar_yaml, file, sort_keys=False)
+    with open('kinematics_dSig_dmttBar_norm.yaml', 'w') as file:
+         yaml.dump(kinematics_dSig_dmttBar_norm_yaml, file, sort_keys=False)
 
-    with open('uncertainties_dSig_dmttBar.yaml', 'w') as file:
-        yaml.dump(uncertainties_dSig_dmttBar_yaml, file, sort_keys=False)
+    with open('uncertainties_dSig_dmttBar_norm.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dmttBar_norm_yaml, file, sort_keys=False)
 
 processData()
