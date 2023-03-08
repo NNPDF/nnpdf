@@ -1,7 +1,0 @@
-dataset_label: "positivity dataset: DIS $c-\\bar{c}$ structure function $F_3^c$"
-x: k1
-kinematics_override: dis_sqrt_scale
-
-experiment: "POSF3C"
-
-nnpdf31_process: DIS CC
