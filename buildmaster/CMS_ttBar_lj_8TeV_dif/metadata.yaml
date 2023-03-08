@@ -1,6 +1,6 @@
 # implemented by Tanishq Sharma
 
-setname: "CMS_ttBar_lj_8TeV"
+setname: "CMS_ttBar_lj_8TeV_dif"
 
 nnpdf_metadata:
   nnpdf_process: ""
