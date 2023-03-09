@@ -14,66 +14,6 @@ dataset_inputs:
 - {dataset: NMCPD, frac: 0.5}
 - {dataset: NMC, frac: 0.5}
 - {dataset: SLACP, frac: 0.5}
-- {dataset: SLACD, frac: 0.5}
-- {dataset: BCDMSP, frac: 0.5}
-- {dataset: BCDMSD, frac: 0.5}
-- {dataset: CHORUSNUPb, frac: 0.5}      #Changed name for consistency with full runcard
-- {dataset: CHORUSNBPb, frac: 0.5}      #Changed name for consistency with full runcard
-- {dataset: NTVNUDMNFe, frac: 0.5, cfac: [MAS]}
-- {dataset: NTVNBDMNFe, frac: 0.5, cfac: [MAS]}
-# HERA data
-- {dataset: HERACOMBNCEM, frac: 0.5}
-- {dataset: HERACOMBNCEP460, frac: 0.5}
-- {dataset: HERACOMBNCEP575, frac: 0.5}
-- {dataset: HERACOMBNCEP820, frac: 0.5}
-- {dataset: HERACOMBNCEP920, frac: 0.5}
-- {dataset: HERACOMBCCEM, frac: 0.5}
-- {dataset: HERACOMBCCEP, frac: 0.5}
-# Combined HERA charm production cross-sections
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.5}     # N
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.5}     # N
-# Fixed target Drell-Yan
-- {dataset: DYE886R, frac: 1.0}
-- {dataset: DYE886P, frac: 0.5, cfac: [QCD]}
-- {dataset: DYE605, frac: 0.5, cfac: [QCD]}
-# Tevatron jets and W,Z production
-- {dataset: CDFZRAP, frac: 1.0, cfac: [QCD]}
-- {dataset: D0ZRAP, frac: 1.0, cfac: [QCD]}
-- {dataset: D0WEASY, frac: 1.0, cfac: [QCD]}
-- {dataset: D0WMASY, frac: 1.0, cfac: [QCD]}
-# ATLAS
-# ATLAS eWK
-- {dataset: ATLASWZRAP36PB, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLASWZRAP11CC, frac: 0.5, cfac: [QCD]}       # N
-# ATLAS Z pt
-- {dataset: ATLASZPT8TEVMDIST, frac: 0.5, cfac: [QCD], sys: 10}
-- {dataset: ATLASZPT8TEVYDIST, frac: 0.5, cfac: [QCD], sys: 10}
-# ATLAS top
-- {dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD]}
-- {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, frac: 1.0, cfac: [QCD]}      # N
-# ATLAS jets
-- { dataset: ATLAS1JET11_NEW_SCALE, frac: 0.5, cfac: [QCD], sys: DECORR }              # N
-# CMS
-# CMS EWK
-- {dataset: CMSWEASY840PB, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSWMASY47FB, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSDY2D11, frac: 0.5, cfac: [QCD]}
-- {dataset: CMSWMU8TEV, frac: 1.0, cfac: [QCD]}
-# CMS Z pt
-- {dataset: CMSZDIFF12, frac: 1.0, cfac: [QCD, NRM], sys: 10}
-# CMS jets
-- { dataset: CMSJETS11_NEW_SCALE,     frac: 0.5, cfac: [QCD] }     # N
-# CMS ttbar
-- {dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD]}
-- {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD]}
-# LHCb
-- {dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD]}
-- {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM, QCD]}
-- {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM, QCD]}
-
 
 ############################################################
 datacuts:
@@ -177,3 +117,4 @@ closuretest:
 
 ############################################################
 debug: false
+

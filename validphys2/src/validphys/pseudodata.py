@@ -156,6 +156,8 @@ def make_replica(
        0.30100351, 0.31781208, 0.30827054, 0.30258217, 0.32116842,
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
+    import ipdb; ipdb.set_trace()
+    print("pippo")
     if not genrep:
         return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
 
@@ -326,7 +328,6 @@ def make_level1_data(
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
     # =============== generate experimental covariance matrix ===============#
-
     dataset_input_list = list(data.dsinputs)
     
     commondata_wc = data.load_commondata_instance()
