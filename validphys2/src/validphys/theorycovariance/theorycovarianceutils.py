@@ -53,7 +53,7 @@ def check_correct_theory_combination_internal(
     elif l == 7:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-    elif l == 81:
+    elif l == 71:
         n3lo_vars_dict = {
             "P_gg": 18,
             "P_gq": 24,
@@ -63,9 +63,9 @@ def check_correct_theory_combination_internal(
         # TODO: for the moment fish the n3lo_ad_variation from the comments
         n3lo_vars_list = []
         for theoryid in theoryids:
-            n3lo_vars_list.append([int(val) for val in theoryid.get_description()["Comments"][33:-1].split(",")])
+            n3lo_vars_list.append([int(val) for val in theoryid.get_description()["Comments"][28:-1].split(",")])
         full_var_list = [[0,0,0,0]]
-        for entry, max_var in enumerate(max_n3lo_var.values()):
+        for entry, max_var in enumerate(n3lo_vars_dict.values()):
             for idx in range(1, max_var + 1):
                 base_var = [0,0,0,0]
                 base_var[entry] = idx
