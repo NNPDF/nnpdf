@@ -10,7 +10,6 @@ import pandas as pd
 from reportengine.compat import yaml
 
 from validphys.coredata import FKTableData
-from validphys.fkparser import parse_cfactor_list
 
 ########### This part might eventually be part of whatever commondata reader
 EXT = "pineappl.lz4"
@@ -242,6 +241,7 @@ def pineappl_reader(fkspec):
     from pineappl.fk_table import FkTable
 
     pines = [FkTable.read(i) for i in fkspec.fkpath]
+    cfactors = fkspec.load_cfactors()
 
     # Extract metadata from the first grid
     pine_rep = pines[0]
@@ -271,10 +271,11 @@ def pineappl_reader(fkspec):
     ndata = 0
     for i, p in enumerate(pines):
 
-        # Start by reading possible cfactors
+        # Start by reading possible cfactors if cfactor is not empty
         cfprod = 1.0
-        if fkspec.cfactors:
-            cfprod = parse_cfactor_list(fkspec.cfactors[i])
+        if cfactors:
+            for cfac in cfactors[i]:
+                cfprod *= cfac.central_value
 
         # Read the table, remove bin normalization and apply cfactors
         raw_fktable = (cfprod * p.table().T / p.bin_normalizations()).T
