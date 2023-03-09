@@ -366,31 +366,30 @@ class Loader(LoaderBase):
         the theory ID and the corresponding cfactors
         """
         theory = self.check_theoryID(theoryID)
+        if (theory.path / "compound").exists():
+            # First thing, check whether there's a compound folder, if there is
+            # raise an exception, compound folders are not accepted for new theories
+            raise LoadFailedError(
+                f"Theory ${theoryID} is a new theory and do not accept compound files"
+            )
+
         fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
         op = metadata["operation"]
 
-        # Check whether there's a compound folder, if there is, the cfactors are read in the old way
-        cmp_folder = theory.path / "compound"
-        if cmp_folder.exists():
-            # Get the target filenames for old theories
-            cfac_name = metadata["target_dataset"]
-            cpath = cmp_folder / f"FK_{cfac_name}-COMPOUND.dat"
-            if cpath.exists():
-                tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
-                cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
-            else:
-                cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
-        else:
-            # Prepare cf according to ymldb for new theories, one cfactor per fktable
-            fktable_names = metadata["operands"]
-            cfactors = []
-            for operand in fktable_names:
-                cfactor_per_fk = []
-                if cfac: # Don't try to check for cfactors when none was asked
-                    for fk_tab in operand:
-                        cfactor_per_fk.append(self.check_cfactor(theoryID, fk_tab.upper(), cfac))
-                cfactors.append(tuple(cfactor_per_fk))
+        if not cfac:
+            fkspecs = [FKTableSpec(i, None, metadata) for i in fklist]
+            return fkspecs, op
+
+        # The name of the cfactors all follow the CF_{cfactor}_{fkable} convention
+        # as defined in `check_cfactor` below
+        operands = metadata["operands"]
+        cfactors = []
+
+        for operand in operands:
+            tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
+            cfactors.append(tuple(tmp))
+
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
         return fkspecs, op
 

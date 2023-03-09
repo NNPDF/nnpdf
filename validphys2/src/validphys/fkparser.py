@@ -31,8 +31,6 @@ import pandas as pd
 from validphys.coredata import FKTableData, CFactorData
 
 
-
-
 class BadCFactorError(Exception):
     """Exception raised when an CFactor cannot be parsed correctly"""
 
@@ -62,18 +60,11 @@ def load_fktable(spec):
     else:
         tabledata = spec.load()
 
-    if not spec.cfactors:
+    # In the new theories, the cfactor get applied as the fktables are loaded
+    if not spec.cfactors or not spec.legacy:
         return tabledata
 
-    # The new cfactors come as one per fktable
-    # while the old cfactors come as one per operand (of a compound operation)
-    if isinstance(spec.cfactors[0], tuple):
-        cfprod = []
-        for partial_cfactors in spec.cfactors:
-            cfprod.append(parse_cfactor_list(partial_cfactors))
-        cfprod = np.concatenate(cfprod)
-    else:
-        cfprod = parse_cfactor_list(spec.cfactors)
+    cfprod = parse_cfactor_list(spec.cfactors)
     return tabledata.with_cfactor(cfprod)
 
 def _get_compressed_buffer(path):
