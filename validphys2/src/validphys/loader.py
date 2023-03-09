@@ -202,7 +202,7 @@ def rebuild_commondata_without_cuts(
                 newfile.write(line[:m.end()])
                 #And value, stat, *sys that we want to drop
                 #Do not use string join to keep up with the ugly format
-                #This should really be nan's, but the c++ streams that read this
+                #This should really be nan's, but the c++ streams that could read this
                 #do not have the right interface.
                 #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
                 zeros = '-0\t'*(2 + 2*nsys)
@@ -363,34 +363,29 @@ class Loader(LoaderBase):
     def check_fkyaml(self, name, theoryID, cfac):
         """Load a pineappl fktable
         Receives a yaml file describing the fktables necessary for a given observable
-        the theory ID and the corresponding cfactors
+        the theory ID and the corresponding cfactors.
+        The cfactors should correspond directly to the fktables, the "compound folder"
+        is not supported for pineappl theories. As such, the name of the cfactor is expected to be
+            CF_{cfactor_name}_{fktable_name}
         """
         theory = self.check_theoryID(theoryID)
+        if (theory.path / "compound").exists():
+            raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
+
         fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
         op = metadata["operation"]
 
-        # Check whether there's a compound folder, if there is, the cfactors are read in the old way
-        cmp_folder = theory.path / "compound"
-        if cmp_folder.exists():
-            # Get the target filenames for old theories
-            cfac_name = metadata["target_dataset"]
-            cpath = cmp_folder / f"FK_{cfac_name}-COMPOUND.dat"
-            if cpath.exists():
-                tnames = [i[3:-4] for i in cpath.read_text().split() if i.endswith(".dat")]
-                cfactors = [self.check_cfactor(theoryID, i, cfac) for i in tnames]
-            else:
-                cfactors = [self.check_cfactor(theoryID, cfac_name, cfac)]
-        else:
-            # Prepare cf according to ymldb for new theories, one cfactor per fktable
-            fktable_names = metadata["operands"]
-            cfactors = []
-            for operand in fktable_names:
-                cfactor_per_fk = []
-                if cfac: # Don't try to check for cfactors when none was asked
-                    for fk_tab in operand:
-                        cfactor_per_fk.append(self.check_cfactor(theoryID, fk_tab.upper(), cfac))
-                cfactors.append(tuple(cfactor_per_fk))
+        if not cfac:
+            fkspecs = [FKTableSpec(i, None, metadata) for i in fklist]
+            return fkspecs, op
+
+        operands = metadata["operands"]
+        cfactors = []
+        for operand in operands:
+            tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
+            cfactors.append(tuple(tmp))
+
         fkspecs = [FKTableSpec(i, c, metadata) for i, c in zip(fklist, cfactors)]
         return fkspecs, op
 
@@ -431,11 +426,10 @@ class Loader(LoaderBase):
         _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
-            cfactorpath = (theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat")
+            cfactorpath = theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat"
             if not cfactorpath.exists():
-                msg = (f"Could not find cfactor '{cfactor}' for FKTable {setname} "
-                       f"in theory {theoryID}. File {cfactorpath} does not "
-                       "exist.")
+                msg = (f"Could not find cfactor '{cfactor}' for FKTable {setname}."
+                    f"File {cfactorpath} does not exist in {theoryID}")
                 raise CfactorNotFound(msg)
             cf.append(cfactorpath)
 

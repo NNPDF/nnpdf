@@ -1,10 +1,7 @@
 """
 This module implements parsers for FKtable  and CFactor files into useful
-datastructures, contained in the :py:mod:`validphys.coredata` module, which are
-not backed by C++ managed memory, and so they can be easily pickled and
-interfaces with common Python libraries.  The integration of these objects into
-the codebase is currently work in progress, and at the moment this module
-serves as a proof of concept.
+datastructures, contained in the :py:mod:`validphys.coredata` module, which can
+be easily pickled and interfaced with common Python libraries.
 
 Most users will be interested in using the high level interface
 :py:func:`load_fktable`.  Given a :py:class:`validphys.core.FKTableSpec`
@@ -29,8 +26,7 @@ import numpy as np
 import pandas as pd
 
 from validphys.coredata import FKTableData, CFactorData
-
-
+from validphys.pineparser import pineappl_reader
 
 
 class BadCFactorError(Exception):
@@ -60,20 +56,18 @@ def load_fktable(spec):
         with open_fkpath(spec.fkpath) as handle:
             tabledata = parse_fktable(handle)
     else:
-        tabledata = spec.load()
+        tabledata = pineappl_reader(spec)
 
-    if not spec.cfactors:
+    # In the new theories, the cfactor get applied as the fktables are loaded
+    if not spec.cfactors or not spec.legacy:
         return tabledata
 
-    # The new cfactors come as one per fktable
-    # while the old cfactors come as one per operand (of a compound operation)
-    if isinstance(spec.cfactors[0], tuple):
-        cfprod = []
-        for partial_cfactors in spec.cfactors:
-            cfprod.append(parse_cfactor_list(partial_cfactors))
-        cfprod = np.concatenate(cfprod)
-    else:
-        cfprod = parse_cfactor_list(spec.cfactors)
+    cfprod = 1.0
+    for cf in spec.cfactors:
+        with open(cf, "rb") as f:
+            cfdata = parse_cfactor(f)
+            cfprod *= cfdata.central_value
+
     return tabledata.with_cfactor(cfprod)
 
 def _get_compressed_buffer(path):
@@ -337,25 +331,6 @@ def parse_fktable(f):
                 f"Failed processing header {header_name} on line {lineno}"
             ) from e
         res[header_name] = out
-
-
-def parse_cfactor_list(cfactor_paths):
-    """Parse a list of cfactors, all of which refer to the same fktable
-    Returns the product of all applied cfactors
-
-    Parameters
-    ----------
-        cfactor_paths: Path
-
-    Returns
-    -------
-        np.array
-    """
-    cfprod = 1.0
-    for cf in cfactor_paths:
-        cfdata = parse_cfactor(cf.open("rb"))
-        cfprod *= cfdata.central_value
-    return cfprod
 
 
 def parse_cfactor(f):

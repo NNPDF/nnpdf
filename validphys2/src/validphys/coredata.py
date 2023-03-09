@@ -1,8 +1,6 @@
 """
 Data containers backed by Python managed memory (Numpy arrays and Pandas
-dataframes).  This module is intended to substitute large parts of the C++
-wrappers.
-
+dataframes). 
 """
 import dataclasses
 import numpy as np

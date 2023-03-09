@@ -201,12 +201,14 @@ def get_yaml_information(yaml_file, theorypath):
 
 def pineappl_reader(fkspec):
     """
-    Receives a fkspec, which contains the path to the grids that are to be read by pineappl
+    Receives a fkspec, which contains the path to the fktables that are to be read by pineappl
     as well as metadata that fixes things like conversion factors or apfelcomb flag.
+    The fkspec contains also the cfactors which are applied _directly_ to each of the fktables.
 
-    Note that both conversion factors and apfelcomb flags will be eventually removed.
+    The output of this function is an instance of FKTableData which can be generated from reading
+    several FKTable files which get concatenated on the ndata (bin) axis.
 
-    For more information on the reading of pienappl tables:
+    For more information on the reading of pineappl tables:
         https://pineappl.readthedocs.io/en/latest/modules/pineappl/pineappl.html#pineappl.pineappl.PyFkTable
 
     About the reader:
@@ -225,10 +227,11 @@ def pineappl_reader(fkspec):
         it is necessary to remove the factor of x and the normalization of the bins.
 
     About apfelcomb flags:
-        old commondata files and old grids have evolved together
+        old commondata files and old grids have evolved (in a Darwinian sense) together
         and fixes and hacks have been incorporated in one or another
         for the new theory to be compatible with old commpondata it is necessary
         to keep track of said hacks (and to apply conversion factors when required)
+    Note that both conversion factors and apfelcomb flags will be eventually removed.
 
     Returns
     -------
@@ -238,6 +241,7 @@ def pineappl_reader(fkspec):
     from pineappl.fk_table import FkTable
 
     pines = [FkTable.read(i) for i in fkspec.fkpath]
+    cfactors = fkspec.load_cfactors()
 
     # Extract metadata from the first grid
     pine_rep = pines[0]
@@ -267,8 +271,14 @@ def pineappl_reader(fkspec):
     ndata = 0
     for i, p in enumerate(pines):
 
-        # Remove the bin normalization
-        raw_fktable = (p.table().T / p.bin_normalizations()).T
+        # Start by reading possible cfactors if cfactor is not empty
+        cfprod = 1.0
+        if cfactors:
+            for cfac in cfactors[i]:
+                cfprod *= cfac.central_value
+
+        # Read the table, remove bin normalization and apply cfactors
+        raw_fktable = (cfprod * p.table().T / p.bin_normalizations()).T
         n = raw_fktable.shape[0]
 
         # Apply the apfelcomb fixes _if_ they are needed

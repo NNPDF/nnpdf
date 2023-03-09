@@ -14,7 +14,6 @@ import numpy as np
 import pandas as pd
 import scipy.linalg as la
 
-from NNPDF import CommonData
 from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
@@ -78,7 +77,6 @@ class DataResult(StatsResult):
     """Holds the relevant information from a given dataset"""
 
     def __init__(self, dataset, covmat, sqrtcovmat):
-        # The commondata is currently a libNNPDF object
         loaded_cd = dataset.load_commondata()
         if isinstance(loaded_cd, list):
             cv = np.concatenate([cd.get_cv() for cd in loaded_cd])
@@ -465,9 +463,9 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
     where available, however this behaviour can be modified with the flag `use_theorycovmat`.
 
-    The theory is specified as part of the dataset.
+    The theory is specified as part of the dataset (a remnant of the old C++ layout)
     A group of datasets is also allowed.
-    (as a result of the C++ code layout)."""
+    """
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
         ThPredictionsResult.from_convolution(pdf, dataset),
@@ -672,36 +670,6 @@ def procs_chi2_table(
         groups_chi2_by_process,
         groups_each_dataset_chi2_by_process,
     )
-
-#procs_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_process",))
-
-@check_cuts_considered
-@table
-def closure_shifts(experiments_index, fit, use_cuts, experiments):
-    """Save the differenve between the fitted data and the real commondata
-    values.
-
-    Actually shifts is what should be saved in the first place, rather than
-    thi confusing fiddling with Commondata, but until we can implement this at
-    the C++ level, we just dave it here.
-    """
-    name, fitpath = fit
-    result = np.zeros(len(experiments_index))
-    for experiment in experiments:
-        for dataset in experiment:
-            dspath = fitpath / "filter" / dataset.name
-            cdpath = dspath / ("DATA_" + dataset.name + ".dat")
-            try:
-                syspath = next((dspath / "systypes").glob("*.dat"))
-            except StopIteration as e:
-                raise FileNotFoundError(
-                    "No systype "
-                    "file found in filter folder %s" % (dspath / "systypes")
-                ) from e
-            cd = CommonData.ReadFile(str(cdpath), str(syspath))
-            loc = experiments_index.get_loc((experiment.name, dataset.name))
-            result[loc] = cd.get_cv() - dataset.load().get_cv()
-    return pd.DataFrame(result, index=experiments_index)
 
 
 def positivity_predictions_data_result(pdf, posdataset):

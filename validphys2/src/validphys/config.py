@@ -433,7 +433,6 @@ class CoreConfig(configparser.Config):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
         if weight < 0:
             raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
-        # Value needs to be string to not break libnnpdf Experiment
         custom_group = str(dataset.get("custom_group", "unset"))
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
