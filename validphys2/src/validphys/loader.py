@@ -363,15 +363,14 @@ class Loader(LoaderBase):
     def check_fkyaml(self, name, theoryID, cfac):
         """Load a pineappl fktable
         Receives a yaml file describing the fktables necessary for a given observable
-        the theory ID and the corresponding cfactors
+        the theory ID and the corresponding cfactors.
+        The cfactors should correspond directly to the fktables, the "compound folder"
+        is not supported for pineappl theories. As such, the name of the cfactor is expected to be
+            CF_{cfactor_name}_{fktable_name}
         """
         theory = self.check_theoryID(theoryID)
         if (theory.path / "compound").exists():
-            # First thing, check whether there's a compound folder, if there is
-            # raise an exception, compound folders are not accepted for new theories
-            raise LoadFailedError(
-                f"Theory ${theoryID} is a new theory and do not accept compound files"
-            )
+            raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
 
         fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
         metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
@@ -381,11 +380,8 @@ class Loader(LoaderBase):
             fkspecs = [FKTableSpec(i, None, metadata) for i in fklist]
             return fkspecs, op
 
-        # The name of the cfactors all follow the CF_{cfactor}_{fkable} convention
-        # as defined in `check_cfactor` below
         operands = metadata["operands"]
         cfactors = []
-
         for operand in operands:
             tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
             cfactors.append(tuple(tmp))
@@ -430,11 +426,10 @@ class Loader(LoaderBase):
         _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
-            cfactorpath = (theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat")
+            cfactorpath = theopath / "cfactor" / f"CF_{cfactor}_{setname}.dat"
             if not cfactorpath.exists():
-                msg = (f"Could not find cfactor '{cfactor}' for FKTable {setname} "
-                       f"in theory {theoryID}. File {cfactorpath} does not "
-                       "exist.")
+                msg = (f"Could not find cfactor '{cfactor}' for FKTable {setname}."
+                    f"File {cfactorpath} does not exist in {theoryID}")
                 raise CfactorNotFound(msg)
             cf.append(cfactorpath)
 
