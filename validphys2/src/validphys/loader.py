@@ -202,7 +202,7 @@ def rebuild_commondata_without_cuts(
                 newfile.write(line[:m.end()])
                 #And value, stat, *sys that we want to drop
                 #Do not use string join to keep up with the ugly format
-                #This should really be nan's, but the c++ streams that read this
+                #This should really be nan's, but the c++ streams that could read this
                 #do not have the right interface.
                 #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
                 zeros = '-0\t'*(2 + 2*nsys)

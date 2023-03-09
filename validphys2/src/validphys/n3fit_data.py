@@ -2,9 +2,7 @@
 n3fit_data.py
 
 Providers which prepare the data ready for
-:py:func:`n3fit.performfit.performfit`. Returns python objects but the underlying
-functions make calls to libnnpdf C++ library.
-
+:py:func:`n3fit.performfit.performfit`.
 """
 import functools
 from collections import defaultdict

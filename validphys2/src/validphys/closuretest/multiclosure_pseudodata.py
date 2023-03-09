@@ -22,10 +22,8 @@ fits_dataset = collect("dataset", ("fits",))
 @check_use_fitcommondata
 def fits_dataset_cvs(fits_dataset):
     """Internal function for loading the level one data for all fits
-    for a single dataset. This function avoids using the c++ loading of
-    commondata which is very slow and also avoids the stringent metadata
+    for a single dataset. This function avoids the stringent metadata
     checks of the newer python commondata parser.
-
     """
     fits_cv = []
     for ds in fits_dataset:
