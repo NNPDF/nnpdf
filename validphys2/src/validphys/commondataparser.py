@@ -1,8 +1,6 @@
 """
 This module implements parsers for commondata  and systype files into useful
-datastructures, contained in the :py:mod:`validphys.coredata` module, which are
-not backed by C++ managed memory, and so they can be easily pickled and
-interfaced with common Python libraries. 
+datastructures, contained in the :py:mod:`validphys.coredata` module.
 
 The validphys commondata structure is an instance of :py:class:`validphys.coredata.CommonData`
 """
@@ -158,7 +156,7 @@ def get_plot_kinlabels(commondata):
 
 def get_kinlabel_key(process_label):
     """
-    Since there is no 1:1 correspondence between latex keys and GetProc,
+    Since there is no 1:1 correspondence between latex keys and the old libNNPDF names
     we match the longest key such that the proc label starts with it.
     """
     l = process_label

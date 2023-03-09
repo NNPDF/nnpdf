@@ -138,9 +138,7 @@ a missing resource. The functions of type `check_<resource>` should
 take the information processed by the Config class and verify that
 a given resource is correct. If so, they should return a "Resource
 specification" (something typically containing metadata information
-such as paths, and a `load()` method to get the C++ object from
-`libnnpdf`). We also define a `get` method that returns the C++ object
-directly.
+such as paths, which are necessary to load the final commondata or fktable)
 
 In the case of the positivity set, this is entirely given in terms of
 existing check functions:
@@ -160,31 +158,28 @@ existing check functions:
 A more complicated example should raise the appropriate loader
 errors (see the other examples in the class).
 
-The `PositivitySetSpec` could be defined roughly like:
+The `PositivitySet` inherits in the code from `DataSetSpec`
+but one could roughly define it as:
 
 .. code:: python
 
-	 class PositivitySetSpec():
-	     def __init__(self, commondataspec, fkspec, poslambda, thspec):
-		 self.commondataspec = commondataspec
-		 self.fkspec = fkspec
-		 self.poslambda = poslambda
-		 self.thspec = thspec
+  class PositivitySetSpec():
+      def __init__(self, commondataspec, fkspec, poslambda, thspec):
+        self.commondataspec = commondataspec
+        self.fkspec = fkspec
+        self.poslambda = poslambda
+        self.thspec = thspec
 
-	     @property
-	     def name(self):
-		 return self.commondataspec.name
+      @property
+      def name(self):
+        return self.commondataspec.name
 
-	     def __str__(self):
-		 return self.name
+      def __str__(self):
+        return self.nam
 
-	     @functools.lru_cache()
-	     def load(self):
-		 cd = self.commondataspec.load()
-		 fk = self.fkspec.load()
-		 return PositivitySet(cd, fk, self.poslambda)
 
-Here `PositivitySet` is the `libnnpdf` object. It is generally better
+This contains all necessary information for `validphys` to be able to load
+the relevant `fktable`. It is generally better
 to pass around the spec objects because they are lighter and have more
 information (e.g. the theory in the above example).
 
@@ -227,9 +222,7 @@ Computing PDF-dependent quantities
 ----------------------------------
 
 Now that we can receive positivity sets as input, let's do something
-with them. The SWIG wrappers allow us to call the C++ methods of
-`libnnpdf` from Python. These things go in the `validphys.results`
-module. We can start by defining a class to produce and hold the
+with them. We can start by defining a class to produce and hold the
 results:
 
 .. code:: python
@@ -255,7 +248,7 @@ way it allows to abstract away the different error types. One
 constructs an object inheriting from `validphys.core.Stats` that is
 appropriate for a given error type by calling `pdf.stats_class(data)`,
 where data is an array where the entries along the first dimension are
-the results from each member computed from `libnnpdf` (and the other
+the results from each member (and the other
 dimensions are arbitrary). `Stats` has methods that appropriately
 collapse along the first axis. For example, `central_value` computes
 the mean along the first axis for Monte Carlo PDFs and yields the

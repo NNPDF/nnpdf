@@ -31,7 +31,7 @@ def describe_kinematics(commondata, titlelevel:int=1):
     import inspect
     cd = commondata
     info = plotoptions.get_info(cd)
-    proc = cd.load().GetProc(0)
+    proc = cd.load_commondata().commondataproc
     src = inspect.getsource(info.kinematics_override.xq2map)
     titlespec = '#'*titlelevel
     return (f"""
