@@ -1,10 +1,10 @@
 # implemented by Tanishq Sharma
 
-setname: "CMS_ttBar_lj_8TeV_dif"
+setname: "CMS_ttBar_8TeV_lj_dif"
 
 nnpdf_metadata:
-  nnpdf_process: ""
-  experiment: ""
+  nnpdf31_process: "TTB"
+  experiment: "CMS"
 
 arXiv:
   url: "https://arxiv.org/abs/1505.04480"
@@ -36,7 +36,7 @@ implemented_observables:
     kinematic_coverage:
       sqrt_s: sqrt_s
       pT: pT
-    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in pT_{t}$'
+    dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $pT_{t}$'
     plot_x: pT
     figure_by: 
       -
@@ -61,7 +61,7 @@ implemented_observables:
     kinematic_coverage:
       sqrt_s: sqrt_s
       y_t: y_t
-    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in y_{t}$'
+    dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $y_{t}$'
     plot_x: y_t
     figure_by: 
       -
@@ -86,7 +86,7 @@ implemented_observables:
     kinematic_coverage:
       sqrt_s: sqrt_s
       y_ttBar: y_ttBar
-    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in y_{t\bar{t}}$'
+    dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $y_{t\bar{t}}$'
     plot_x: y_ttBar
     figure_by: 
       -
@@ -111,7 +111,7 @@ implemented_observables:
     kinematic_coverage:
       sqrt_s: sqrt_s
       m_ttBar: m_ttBar
-    dataset_label: 'CMS 8 TeV $t\bar{t}: differential cross section in m_{t\bar{t}}$'
+    dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $m_{t\bar{t}}$'
     plot_x: m_ttBar
     figure_by: 
       -
