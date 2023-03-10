@@ -1,5 +1,5 @@
 """
-A useful set of functions for implementation of datasets.
+A useful set of functions for implementation of datasets in commondata.
 
 @author: Tanishq Sharma
 """
