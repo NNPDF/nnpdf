@@ -178,8 +178,8 @@ def observable_generator(spec_dict,
         # Extract the masks that will end up in the observable wrappers...
         trmask = mask_array[:, offset:offset + dataset.ndata] if apply_masks else None
         masks.append(trmask)
-        tr_mask_layers.append(Mask(trmask, axis=1, c=1) if apply_masks else None)
-        vl_mask_layers.append(Mask(~trmask, axis=1, c=1) if apply_masks else None)
+        tr_mask_layers.append(Mask(trmask, axis=1, c=1, name=f"trmask_{dataset_name}") if apply_masks else None)
+        vl_mask_layers.append(Mask(~trmask, axis=1, c=1, name=f"vlmask_{dataset_name}") if apply_masks else None)
 
         # Now generate the observable layer, which takes the following information:
         # operation name
