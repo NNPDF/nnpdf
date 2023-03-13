@@ -5,8 +5,7 @@ mc_gen.py
 Tools to check the pseudo-data MC generation.
 """
 # The functions in this module have been ported to not use libNNPDF
-# it has been a direct port of the libnnpdf dependent structure 
-# so they should not be used as an example
+# but they should not be used as an example as they follow the libNNPDF logic
 import logging
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
@@ -25,8 +24,9 @@ def art_rep_generation(groups_data, make_replicas):
     real_data_list = []
 
     for group in groups_data:
-        real_group = group.load()
-        real_data = real_group.get_cv()
+        # Load all the commondata
+        real_group = group.load_commondata()
+        real_data = np.concatenate([i.get_cv() for i in real_group])
         real_data_list.append(real_data)
 
     real_data = np.concatenate(real_data_list)
@@ -164,9 +164,8 @@ def one_art_data_residuals(groups_data, indexed_make_replicas):
 
     all_normresidual = []
     for group in groups_data:
-
-        real_group = group.load()
-        real_data = real_group.get_cv()
+        real_group = group.load_commondata()
+        real_data = np.concatenate([i.get_cv() for i in real_group])
         one_art_data = all_replicas[group_level == group.name].iloc[one_data_index]
 
         residual = one_art_data - real_data[one_data_index]
@@ -191,8 +190,7 @@ def art_data_mean_table(art_rep_generation, groups_data):
     data = []
     for group in groups_data:
         for dataset in group.datasets:
-            ds = dataset.load()
-            Ndata = ds.GetNData()
+            Ndata = dataset.load_commondata().ndata
             for i in range(Ndata):
                 line = [
                     dataset.name,

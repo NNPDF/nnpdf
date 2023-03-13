@@ -27,8 +27,8 @@ such they are assumed to be correct, so in principle they have no
 guarantee of failing early with a good error message. However, you can
 set `check_plotting: True` in the input configurations to cause the
 PLOTTING files to be processed as soon as the dataset is loaded. This
-can be useful while debugging the plotting files, but will cause
-a noticeable delay to the startup (because the C++ DataSet objects
-need to be loaded in memory). This will warn the user of missing plotting files
+can be useful while debugging the plotting files, but might cause
+a noticeable delay to the startup (due to loading datasets and fktables).
+This will warn the user of missing plotting files
 and produce nice early error messages if the configuration is not
 processed correctly.

@@ -68,8 +68,8 @@ are ``dataset_input``, ``cuts`` and ``theoryid``.
 
     It seems odd to require theory settings such as a ``theoryid`` in the
     ``dataset_input`` in order to load data. However, this is a relic of the
-    underlying C++ code that performs the loading of data, which intrinsically
-    groups together the commondata (CSVs containing data central values and
+    legacy C++ code that performs the loading of data, which intrinsically
+    grouped together the commondata (CSVs containing data central values and
     uncertainties) and :ref:`fktables`.
 
     Clearly there is a big margin for error when manually entering
@@ -86,15 +86,14 @@ The ``DataSetSpec`` contains all of the information used to construct it, e.g.
     >>> ds_spec.name
     'CMSZDIFF12'
 
-but also importantly has a ``load`` method, which returns an instance of the
-``DataSet`` that is generated from the C++ code using SWIG. This new object
-contains numpy arrays of data central values and experimental covariance
+but also importantly has a ``load_commondata`` method, which returns an instance of the
+``CommonData``. This new object contains numpy arrays of data central values and experimental covariance
 matrices, e.g:
 
 .. code:: python
 
-    >>> ds_libnnpdf = ds_spec.load()
-    >>> ds_libnnpdf.get_cv() # get central values of dataset
+    >>> cd = ds_spec.load_commondata()
+    >>> cd.get_cv() # get central values of dataset
     array([2917.  , 1074.  ,  460.5 ,  222.6 ,  109.8 ,   61.84,   30.19,
            2863.  , 1047.  ,  446.1 ,  214.5 ,  110.  ,   58.13,   29.85,
            2588.  ,  935.5 ,  416.3 ,  199.  ,  103.1 ,   54.06,   28.45,

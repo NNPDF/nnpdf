@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Core datastructures used in the validphys data model. Some of these are inmutable
-specifications representing C++ objects.
+Core datastructures used in the validphys data model.
 Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
 """
 from __future__ import generator_stop
 
-from collections import namedtuple
 import re
 import enum
 import functools
@@ -23,14 +21,6 @@ from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
-from NNPDF import (LHAPDFSet as libNNPDF_LHAPDFSet,
-    CommonData,
-    FKTable,
-    FKSet,
-    DataSet,
-    Experiment,
-    PositivitySet,)
-
 #TODO: There is a bit of a circular dependency between filters.py and this.
 #Maybe move the cuts logic to its own module?
 from validphys import lhaindex, filters
@@ -40,7 +30,9 @@ from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
 from validphys.fkparser import load_fktable
-from validphys.pineparser import pineappl_reader
+from validphys.commondataparser import (peek_commondata_metadata,
+    get_plot_kinlabels,
+    parse_commondata,)
 
 log = logging.getLogger(__name__)
 
@@ -200,78 +192,10 @@ class PDF(TupleComp):
     def __len__(self):
         return self.info["NumMembers"]
 
-    def legacy_load(self):
-        """Returns an libNNPDF LHAPDFSet object
-        Deprecated function used only in the `filter.py` module
-        """
-        error = self.error_type
-        cl = self.error_conf_level
-        et = None
-        if error == "replicas":
-            et = libNNPDF_LHAPDFSet.erType_ER_MC
-        elif error == "hessian":
-            if cl == 90:
-                et = libNNPDF_LHAPDFSet.erType_ER_EIG90
-            elif cl == 68:
-                et = libNNPDF_LHAPDFSet.erType_ER_EIG
-            else:
-                raise NotImplementedError(f"No hessian errors with confidence interval {cl}")
-        elif error == "symmhessian":
-            if cl == 68:
-                et = libNNPDF_LHAPDFSet.erType_ER_SYMEIG
-            else:
-                raise NotImplementedError(
-                    f"No symmetric hessian errors with confidence interval {cl}"
-                )
-        else:
-            raise NotImplementedError(f"Error type for {self}: '{error}' is not implemented")
-
-        return libNNPDF_LHAPDFSet(self.name, et)
-
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``
         """
         return len(self)
-
-
-kinlabels_latex = CommonData.kinLabel_latex.asdict()
-_kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
-
-
-def get_plot_kinlabels(commondata):
-    """Return the LaTex kinematic labels for a given Commondata"""
-    key = commondata.process_type
-
-    return kinlabels_latex[key]
-
-def get_kinlabel_key(process_label):
-    #Since there is no 1:1 correspondence between latex keys and GetProc,
-    #we match the longest key such that the proc label starts with it.
-    l = process_label
-    try:
-        return next(k for k in _kinlabels_keys if l.startswith(k))
-    except StopIteration as e:
-        raise ValueError("Could not find a set of kinematic "
-                         "variables matching  the process %s Check the "
-                         "labels defined in commondata.cc. " % (l)) from e
-
-CommonDataMetadata = namedtuple('CommonDataMetadata', ('name', 'nsys', 'ndata', 'process_type'))
-
-def peek_commondata_metadata(commondatafilename):
-    """Check some basic properties commondata object without going though the
-    trouble of processing it on the C++ side"""
-    with open(commondatafilename) as f:
-        try:
-            l = f.readline()
-            name, nsys_str, ndata_str = l.split()
-            l = f.readline()
-            process_type_str = l.split()[1]
-        except Exception:
-            log.error(f"Error processing {commondatafilename}")
-            raise
-
-    return CommonDataMetadata(name, int(nsys_str), int(ndata_str),
-                              get_kinlabel_key(process_type_str))
 
 
 class CommonDataSpec(TupleComp):
@@ -312,9 +236,16 @@ class CommonDataSpec(TupleComp):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
     @functools.lru_cache()
-    def load(self)->CommonData:
-        #TODO: Use better path handling in python 3.6
-        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+    def load(self):
+        return parse_commondata(self.datafile, self.sysfile, self.name)
+
+    def load_commondata_instance(self):
+        """
+        load a validphys.core.CommonDataSpec to validphys.core.CommonData
+        """
+        from validphys.commondataparser import load_commondata
+
+        return load_commondata(self)
 
     @property
     def plot_kinlabels(self):
@@ -471,36 +402,6 @@ class DataSetSpec(TupleComp):
                          frac, op, weight)
 
     @functools.lru_cache()
-    def load(self):
-        cd = self.commondata.load()
-
-        fktables = []
-        for p in self.fkspecs:
-            fktable = p.load()
-            #IMPORTANT: We need to tell the python garbage collector to NOT free the
-            #memory owned by the FKTable on garbage collection.
-            #TODO: Do this automatically
-            fktable.thisown = 0
-            fktables.append(fktable)
-
-        fkset = FKSet(FKSet.parseOperator(self.op), fktables)
-
-        data = DataSet(cd, fkset, self.weight)
-
-
-        if self.cuts is not None:
-            #ugly need to convert from numpy.int64 to int, so we can pass
-            #it happily to the vector to the SWIG wrapper.
-            #Do not do this (or find how to enable in SWIG):
-            #data = DataSet(data, list(dataset.cuts))
-            loaded_cuts = self.cuts.load()
-            #This is an optimization to avoid recomputing the dataset if
-            #nothing is discarded
-            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
-                intmask = [int(ele) for ele in loaded_cuts]
-                data = DataSet(data, intmask)
-        return data
-
     def load_commondata(self):
         """Strips the commondata loading from `load`"""
         cd = self.commondata.load()
@@ -508,7 +409,7 @@ class DataSetSpec(TupleComp):
             loaded_cuts = self.cuts.load()
             if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
                 intmask = [int(ele) for ele in loaded_cuts]
-                cd = CommonData(cd, intmask)
+                cd = cd.with_cuts(intmask)
         return cd
 
     def to_unweighted(self):
@@ -544,8 +445,11 @@ class FKTableSpec(TupleComp):
         self.cfactors = cfactors if cfactors is not None else []
 
         self.legacy = False
-        # NOTE: the legacy interface is expected to be removed by future releases of NNPDF
-        # so please don't write code that relies on it
+
+        # NOTE: The legacy interface is currently used by fkparser to decide
+        # whether to read an FKTable using the old parser or the pineappl parser
+        # this attribute (and the difference between both) might be removed in future 
+        # releases of NNPDF so please don't write code that relies on it
         if not isinstance(fkpath, (tuple, list)):
             self.legacy = True
         else:
@@ -555,35 +459,21 @@ class FKTableSpec(TupleComp):
         self.fkpath = fkpath
         self.metadata = metadata
 
-        # If this is a yaml file that loads an applgrid-converted pineappl,
-        # keep also the name of the target
-        # this is needed since we can now easily reutilize grids
-        if not self.legacy and self.metadata.get("appl"):
+        # For new theories, add also the target_dataset so that we don't reuse fktables
+        # Ideally this won't be necessary in the future and we will be able to reutilize fktables.
+        if not self.legacy:
             super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
         else:
             super().__init__(fkpath, cfactors)
-
-    def _load_legacy(self):
-        return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
-
-    def _load_pineappl(self):
-        log.info("Reading: %s", self.fkpath)
-        return pineappl_reader(self)
 
     def load_with_cuts(self, cuts):
         """Load the fktable and apply cuts inmediately. Returns a FKTableData"""
         return load_fktable(self).with_cuts(cuts)
 
-    def load(self):
-        if self.legacy:
-            return self._load_legacy()
-        return self._load_pineappl()
-
 
 class LagrangeSetSpec(DataSetSpec):
     """Extends DataSetSpec to work around the particularities of the positivity, integrability
     and other Lagrange Multiplier datasets.
-    Internally (for libNNPDF) they are always PositivitySets
     """
 
     def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
@@ -608,12 +498,6 @@ class LagrangeSetSpec(DataSetSpec):
     @functools.lru_cache()
     def load_commondata(self):
         return self.commondata.load()
-
-    @functools.lru_cache()
-    def load(self):
-        cd = self.commondata.load()
-        fk = self.fkspecs[0].load()
-        return PositivitySet(cd, fk, self.maxlambda)
 
 
 class PositivitySetSpec(LagrangeSetSpec):
@@ -645,16 +529,22 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         namespaces.NSList.__init__(self, dsinputs, nskey='dataset_input')
 
     @functools.lru_cache(maxsize=32)
-    def load(self):
-        sets = []
-        for dataset in self.datasets:
-            loaded_data = dataset.load()
-            sets.append(loaded_data)
-        return Experiment(sets, self.name)
-
-    @functools.lru_cache(maxsize=32)
     def load_commondata(self):
         return [d.load_commondata() for d in self.datasets]
+
+    def load_commondata_instance(self):
+        """
+        Given Experiment load list of validphys.coredata.CommonData
+        objects with cuts already applied
+        """
+        commodata_list = []
+        for dataset in self.datasets:
+            cd = dataset.commondata.load_commondata_instance()
+            if dataset.cuts is None:
+                commodata_list.append(cd)
+            else:
+                commodata_list.append(cd.with_cuts(dataset.cuts.load()))
+        return commodata_list
 
     @property
     def thspec(self):
@@ -868,7 +758,7 @@ class Stats:
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
     def std_error(self):
-        # ddof == 1 to match libNNPDF behaviour
+        # ddof == 1 to match legacy libNNPDF behaviour
         return np.std(self.error_members(), ddof=1, axis=0)
 
     def moment(self, order):

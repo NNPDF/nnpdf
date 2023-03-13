@@ -2,9 +2,7 @@
 n3fit_data.py
 
 Providers which prepare the data ready for
-:py:func:`n3fit.performfit.performfit`. Returns python objects but the underlying
-functions make calls to libnnpdf C++ library.
-
+:py:func:`n3fit.performfit.performfit`.
 """
 import functools
 from collections import defaultdict
@@ -347,8 +345,9 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     Notes
     -----
     Whilst running ``n3fit``, this action will only be called if
-    `fitting::savepseudodata` is `true` and replicas are fitted one at a time.
-    The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
+    `fitting::savepseudodata` is `true` (as per the default setting) and 
+    replicas are fitted one at a time. The table can be found in the replica
+    folder i.e. <fit dir>/nnfit/replica_*/
 
     """
     # Concatenate over replicas
@@ -360,7 +359,7 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
 @table
 def training_pseudodata(pseudodata_table, training_mask):
     """Save the training data for the given replica.
-    Activate by setting ``fitting::savepseudodata: True``
+    Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
 
     See Also
@@ -373,7 +372,7 @@ def training_pseudodata(pseudodata_table, training_mask):
 @table
 def validation_pseudodata(pseudodata_table, training_mask):
     """Save the training data for the given replica.
-    Activate by setting ``fitting::savepseudodata: True``
+    Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
 
     See Also
