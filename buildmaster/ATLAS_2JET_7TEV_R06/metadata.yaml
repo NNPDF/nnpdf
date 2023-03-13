@@ -1,0 +1,70 @@
+# Created on Mar 2023, author: Mark N. Costantini
+
+# Generalia
+setname: "ATLAS_2JET_7TEV_R06"
+ndata: 90
+observable: 
+  description: "Double-differential dijet cross-sections as functions of dijet mass and half the rapidity separation of the two highest-pT jets."  
+  label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy*$"
+  units: "[pb/GeV]" 
+
+kinematics:
+   variables:
+     ystar: {description: "half the rapidity separation", label: "$y*$", units: ""}
+     m12: {description: "dijet mass", label: "$m_{12}$", units: ""}
+     sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+   file: kinematics.yaml
+
+version: 0
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/pdf/1312.3524.pdf"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1268975"
+hepdata:
+   url: "https://www.hepdata.net/record/ins1268975"
+   version: 1
+   tables: [7,8,9,10,11,12]
+   
+
+# Data 
+# three scenarios for the correlations between jet energy scale uncertainty
+# components are given, denoted as nominal, stronger and weaker
+data_central: data.yaml
+data_uncertainties:
+  nominal:
+    - uncertainties.yaml
+
+# Data (variants)
+variants:
+  stronger:
+     data_uncertainties:
+        - uncertainties.yaml
+        - uncertainties_stronger.yaml
+  weaker:
+     data_uncertainties:
+        - uncertainties.yaml
+        - uncertainties_weaker.yaml
+
+# Plotting  
+kinematic_coverage:
+   x: x
+   q2: q2
+dataset_label: "NMC $d/p$"
+plot_x: x
+figure_by: 
+   - q2
+
+# Theory
+theory:
+   FK_tables:
+     - - NMCPD_D1
+       - NMCPD_D2
+     - - NMCPD_P
+   compound: "RATIO"
+
+nnpdf_metadata:
+   nnpdf31_process: "DIJET"
+   experiment: "ATLAS"

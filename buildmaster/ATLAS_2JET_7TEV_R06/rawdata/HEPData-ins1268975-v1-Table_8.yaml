@@ -1,0 +1,5212 @@
+dependent_variables:
+- header: {name: D2(SIG)/DM(2JET)/DYRAP*, units: PB*TEV*-1}
+  qualifiers:
+  - {name: ABS(YRAP(JET1)), value: < 3.0}
+  - {name: ABS(YRAP(JET2)), value: < 3.0}
+  - {name: Correlation assumptions, value: Nominal}
+  - {name: PT(JET1), units: GEV, value: '> 100'}
+  - {name: PT(JET2), units: GEV, value: '> 50'}
+  - {name: R, value: '0.6'}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  - {name: YRAP*, value: 0.5-1.0}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -4.4%, plus: 4.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.5%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.4%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -5.2%, plus: 5.8%}
+      label: sys
+    - {label: sys, symerror: 2.5%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 961000.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -3.2%, plus: 3.5%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 1.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -4.5%, plus: 4.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.1%, plus: 2.5%}
+      label: sys
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -4.9%, plus: 5.5%}
+      label: sys
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 368000.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -3.5%, plus: 3.6%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 1.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -4.5%, plus: 4.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.0%, plus: -1.3%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -4.6%, plus: 5.0%}
+      label: sys
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 146000.0
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 3.8%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 4.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.5%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -1.3%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -4.3%, plus: 4.5%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 60300.0
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -3.8%, plus: 4.1%}
+      label: sys
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - asymerror: {minus: -4.1%, plus: 4.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.5%}
+      label: sys
+    - asymerror: {minus: 1.2%, plus: -1.3%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.2%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -3.8%, plus: 4.1%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 27300.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -3.9%, plus: 4.2%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.7%, plus: 4.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys
+    - asymerror: {minus: 1.3%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.2%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -3.3%, plus: 3.6%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 12400.0
+  - errors:
+    - {label: stat, symerror: 0.95%}
+    - asymerror: {minus: -4.0%, plus: 4.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.4%, plus: 3.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.5%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 1.3%, plus: -1.0%}
+      label: sys
+    - asymerror: {minus: -1.9%, plus: 2.1%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -3.0%, plus: 3.2%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 5960.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -4.1%, plus: 4.3%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -0.8%}
+      label: sys
+    - asymerror: {minus: -1.7%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -2.7%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 2940.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -4.2%, plus: 4.3%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -2.8%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.2%}
+      label: sys
+    - asymerror: {minus: 0.8%, plus: -0.7%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.5%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 1410.0
+  - errors:
+    - {label: stat, symerror: 0.74%}
+    - asymerror: {minus: -4.3%, plus: 4.4%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys
+    - asymerror: {minus: 0.5%, plus: -0.5%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 683.0
+  - errors:
+    - {label: stat, symerror: 0.76%}
+    - asymerror: {minus: -4.5%, plus: 4.6%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.1%, plus: -0.2%}
+      label: sys
+    - asymerror: {minus: 0.2%, plus: -0.3%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 336.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -4.7%, plus: 4.9%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.7%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 159.0
+  - errors:
+    - {label: stat, symerror: 0.86%}
+    - asymerror: {minus: -5.0%, plus: 5.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 1.6%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: -0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.5%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 76.4
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -5.3%, plus: 5.5%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -2.3%, plus: 2.4%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 36.4
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - asymerror: {minus: -5.5%, plus: 5.8%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -3.2%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 16.7
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - asymerror: {minus: -5.8%, plus: 6.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - asymerror: {minus: -2.2%, plus: 2.3%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - asymerror: {minus: -4.1%, plus: 4.4%}
+      label: sys
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 7.57
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - asymerror: {minus: -6.0%, plus: 6.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - asymerror: {minus: -2.7%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -5.1%, plus: 5.4%}
+      label: sys
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 3.36
+  - errors:
+    - {label: stat, symerror: 4.1%}
+    - asymerror: {minus: -6.3%, plus: 6.6%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -3.3%, plus: 3.4%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -6.1%, plus: 6.4%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - asymerror: {minus: 0.5%, plus: -0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 1.29
+  - errors:
+    - {label: stat, symerror: 6.4%}
+    - asymerror: {minus: -6.5%, plus: 6.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 1.8%}
+    - asymerror: {minus: -3.7%, plus: 3.8%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - asymerror: {minus: -6.8%, plus: 7.2%}
+      label: sys
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - asymerror: {minus: 0.6%, plus: -0.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.544
+  - errors:
+    - {label: stat, symerror: 10.0%}
+    - asymerror: {minus: -6.7%, plus: 7.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - asymerror: {minus: -4.1%, plus: 4.2%}
+      label: sys
+    - asymerror: {minus: -2.1%, plus: 2.2%}
+      label: sys
+    - {label: sys, symerror: 1.7%}
+    - asymerror: {minus: -7.5%, plus: 8.0%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.18
+  - errors:
+    - {label: stat, symerror: 15.0%}
+    - asymerror: {minus: -8.3%, plus: 9.2%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - asymerror: {minus: -2.6%, plus: 2.8%}
+      label: sys
+    - asymerror: {minus: -5.9%, plus: 6.4%}
+      label: sys
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - asymerror: {minus: -2.3%, plus: 2.4%}
+      label: sys
+    - asymerror: {minus: -11.0%, plus: 12.0%}
+      label: sys
+    - asymerror: {minus: -2.2%, plus: 2.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -8.8%, plus: 8.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.0211
+- header: {name: D2(SIG)/DM(2JET)/DYRAP*, units: PB*TEV*-1}
+  qualifiers:
+  - {name: ABS(YRAP(JET1)), value: < 3.0}
+  - {name: ABS(YRAP(JET2)), value: < 3.0}
+  - {name: Correlation assumptions, value: Stronger}
+  - {name: PT(JET1), units: GEV, value: '> 100'}
+  - {name: PT(JET2), units: GEV, value: '> 50'}
+  - {name: R, value: '0.6'}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  - {name: YRAP*, value: 0.5-1.0}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - asymerror: {minus: -2.2%, plus: 2.4%}
+      label: sys
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -4.4%, plus: 4.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.3%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -5.2%, plus: 5.8%}
+      label: sys
+    - {label: sys, symerror: 2.5%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 961000.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -3.2%, plus: 3.5%}
+      label: sys
+    - {label: sys, symerror: 2.1%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -4.5%, plus: 4.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.1%, plus: 2.5%}
+      label: sys
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -4.9%, plus: 5.5%}
+      label: sys
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 368000.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -3.5%, plus: 3.6%}
+      label: sys
+    - asymerror: {minus: -1.9%, plus: 1.8%}
+      label: sys
+    - asymerror: {minus: -1.2%, plus: 1.1%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.0%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -4.5%, plus: 4.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.0%, plus: -1.3%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -4.6%, plus: 5.0%}
+      label: sys
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 146000.0
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 3.8%}
+    - asymerror: {minus: -1.8%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 1.2%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -1.0%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 4.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.5%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -1.4%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -4.3%, plus: 4.5%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 60300.0
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -3.8%, plus: 4.1%}
+      label: sys
+    - {label: sys, symerror: 1.6%}
+    - {label: sys, symerror: 1.2%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - asymerror: {minus: -4.1%, plus: 4.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.5%}
+      label: sys
+    - asymerror: {minus: 1.2%, plus: -1.3%}
+      label: sys
+    - {label: sys, symerror: 2.1%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -3.8%, plus: 4.1%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 27300.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -3.9%, plus: 4.2%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.7%, plus: 4.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys
+    - asymerror: {minus: 1.3%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.1%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -3.3%, plus: 3.6%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 12400.0
+  - errors:
+    - {label: stat, symerror: 0.95%}
+    - asymerror: {minus: -4.0%, plus: 4.2%}
+      label: sys
+    - asymerror: {minus: -1.3%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.4%, plus: 3.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.5%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 1.2%, plus: -1.0%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -3.0%, plus: 3.2%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 5960.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -4.1%, plus: 4.3%}
+      label: sys
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.5%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -0.8%}
+      label: sys
+    - {label: sys, symerror: 1.7%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -2.7%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 2940.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -4.2%, plus: 4.3%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 0.9%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -2.8%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 0.9%, plus: -0.7%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.5%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 1410.0
+  - errors:
+    - {label: stat, symerror: 0.74%}
+    - asymerror: {minus: -4.3%, plus: 4.4%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.9%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.2%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 0.6%, plus: -0.6%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 683.0
+  - errors:
+    - {label: stat, symerror: 0.76%}
+    - asymerror: {minus: -4.5%, plus: 4.6%}
+      label: sys
+    - {label: sys, symerror: 1.5%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.1%, plus: -0.2%}
+      label: sys
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 336.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -4.7%, plus: 4.9%}
+      label: sys
+    - {label: sys, symerror: 1.7%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys
+    - asymerror: {minus: 0.1%, plus: -0.2%}
+      label: sys
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.7%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 159.0
+  - errors:
+    - {label: stat, symerror: 0.86%}
+    - asymerror: {minus: -5.0%, plus: 5.2%}
+      label: sys
+    - {label: sys, symerror: 2.1%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 1.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: -0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.5%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 76.4
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -5.3%, plus: 5.5%}
+      label: sys
+    - {label: sys, symerror: 2.6%}
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 1.3%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -2.3%, plus: 2.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 36.4
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - asymerror: {minus: -5.5%, plus: 5.8%}
+      label: sys
+    - asymerror: {minus: -3.2%, plus: 3.3%}
+      label: sys
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -3.2%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 16.7
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - asymerror: {minus: -5.8%, plus: 6.1%}
+      label: sys
+    - asymerror: {minus: -4.0%, plus: 4.2%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - asymerror: {minus: -4.1%, plus: 4.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 7.57
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - asymerror: {minus: -6.0%, plus: 6.4%}
+      label: sys
+    - asymerror: {minus: -4.8%, plus: 5.0%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 1.4%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -5.1%, plus: 5.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 3.36
+  - errors:
+    - {label: stat, symerror: 4.1%}
+    - asymerror: {minus: -6.3%, plus: 6.6%}
+      label: sys
+    - asymerror: {minus: -5.5%, plus: 5.8%}
+      label: sys
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -6.1%, plus: 6.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - asymerror: {minus: 0.5%, plus: -0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 1.29
+  - errors:
+    - {label: stat, symerror: 6.4%}
+    - asymerror: {minus: -6.5%, plus: 6.8%}
+      label: sys
+    - asymerror: {minus: -6.1%, plus: 6.4%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.1%}
+      label: sys
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 1.9%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - asymerror: {minus: -6.8%, plus: 7.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - asymerror: {minus: 0.6%, plus: -0.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.544
+  - errors:
+    - {label: stat, symerror: 10.0%}
+    - asymerror: {minus: -6.7%, plus: 7.1%}
+      label: sys
+    - asymerror: {minus: -6.7%, plus: 7.1%}
+      label: sys
+    - {label: sys, symerror: 2.2%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - asymerror: {minus: -2.1%, plus: 2.2%}
+      label: sys
+    - {label: sys, symerror: 1.7%}
+    - asymerror: {minus: -7.5%, plus: 8.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.18
+  - errors:
+    - {label: stat, symerror: 15.0%}
+    - asymerror: {minus: -8.3%, plus: 9.2%}
+      label: sys
+    - asymerror: {minus: -9.5%, plus: 11.0%}
+      label: sys
+    - asymerror: {minus: -3.0%, plus: 3.2%}
+      label: sys
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -2.6%, plus: 2.8%}
+      label: sys
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - asymerror: {minus: -2.3%, plus: 2.4%}
+      label: sys
+    - asymerror: {minus: -11.0%, plus: 12.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -8.8%, plus: 8.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.0211
+- header: {name: D2(SIG)/DM(2JET)/DYRAP*, units: PB*TEV*-1}
+  qualifiers:
+  - {name: ABS(YRAP(JET1)), value: < 3.0}
+  - {name: ABS(YRAP(JET2)), value: < 3.0}
+  - {name: Correlation assumptions, value: Weaker}
+  - {name: PT(JET1), units: GEV, value: '> 100'}
+  - {name: PT(JET2), units: GEV, value: '> 50'}
+  - {name: R, value: '0.6'}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  - {name: YRAP*, value: 0.5-1.0}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - asymerror: {minus: -2.5%, plus: 2.7%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -4.4%, plus: 4.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.3%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -5.2%, plus: 5.8%}
+      label: sys
+    - {label: sys, symerror: 2.5%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 961000.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.2%}
+    - asymerror: {minus: -2.6%, plus: 2.8%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 1.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -4.5%, plus: 4.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.1%, plus: 2.5%}
+      label: sys
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -4.9%, plus: 5.5%}
+      label: sys
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 368000.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - asymerror: {minus: -2.9%, plus: 2.8%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 1.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -4.5%, plus: 4.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.6%}
+      label: sys
+    - asymerror: {minus: 1.0%, plus: -1.3%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -4.6%, plus: 5.0%}
+      label: sys
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 146000.0
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -1.7%, plus: 1.6%}
+      label: sys
+    - asymerror: {minus: -3.1%, plus: 3.0%}
+      label: sys
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 4.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.3%, plus: -0.5%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -1.4%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -4.3%, plus: 4.5%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 60300.0
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - asymerror: {minus: -0.6%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 1.8%}
+    - asymerror: {minus: -3.1%, plus: 3.2%}
+      label: sys
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - asymerror: {minus: -4.1%, plus: 4.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.5%}
+      label: sys
+    - asymerror: {minus: 1.2%, plus: -1.3%}
+      label: sys
+    - {label: sys, symerror: 2.1%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -3.8%, plus: 4.1%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 27300.0
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - asymerror: {minus: -3.1%, plus: 3.4%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -0.7%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.7%, plus: 4.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys
+    - asymerror: {minus: 1.3%, plus: -1.2%}
+      label: sys
+    - asymerror: {minus: -2.0%, plus: 2.1%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -3.3%, plus: 3.6%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 12400.0
+  - errors:
+    - {label: stat, symerror: 0.95%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -2.0%, plus: 2.1%}
+      label: sys
+    - asymerror: {minus: -3.2%, plus: 3.4%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.2%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.4%, plus: 3.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.5%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 1.2%, plus: -1.0%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -3.0%, plus: 3.2%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 5960.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -2.1%, plus: 2.2%}
+      label: sys
+    - asymerror: {minus: -3.2%, plus: 3.4%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.5%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 1.1%, plus: -0.8%}
+      label: sys
+    - {label: sys, symerror: 1.7%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -2.7%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 2940.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.3%}
+    - asymerror: {minus: -3.3%, plus: 3.4%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -2.8%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.4%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 0.9%, plus: -0.7%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.5%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 1410.0
+  - errors:
+    - {label: stat, symerror: 0.74%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.4%}
+    - {label: sys, symerror: 3.5%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.2%, plus: -0.3%}
+      label: sys
+    - asymerror: {minus: 0.6%, plus: -0.6%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 683.0
+  - errors:
+    - {label: stat, symerror: 0.76%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 2.5%}
+    - asymerror: {minus: -3.6%, plus: 3.7%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -0.9%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.5%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.8%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.4%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.1%, plus: -0.2%}
+      label: sys
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 336.0
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - asymerror: {minus: -0.2%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 2.7%}
+    - asymerror: {minus: -3.8%, plus: 3.9%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.4%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 2.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys
+    - asymerror: {minus: 0.1%, plus: -0.2%}
+      label: sys
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.7%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 159.0
+  - errors:
+    - {label: stat, symerror: 0.86%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 2.9%}
+    - asymerror: {minus: -4.0%, plus: 4.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 1.6%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: -0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 1.5%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 76.4
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -3.0%, plus: 3.2%}
+      label: sys
+    - asymerror: {minus: -4.2%, plus: 4.4%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 1.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -2.3%, plus: 2.4%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 36.4
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -3.2%, plus: 3.4%}
+      label: sys
+    - asymerror: {minus: -4.4%, plus: 4.7%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -3.2%, plus: 3.3%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 16.7
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -3.4%, plus: 3.6%}
+      label: sys
+    - asymerror: {minus: -4.6%, plus: 4.9%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -0.7%, plus: 0.8%}
+      label: sys
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - asymerror: {minus: -2.2%, plus: 2.3%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 1.1%}
+    - asymerror: {minus: -4.1%, plus: 4.4%}
+      label: sys
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -0.3%, plus: 0.4%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.4%, plus: 0.5%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 7.57
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -3.6%, plus: 3.7%}
+      label: sys
+    - asymerror: {minus: -4.8%, plus: 5.2%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.2%, plus: 0.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.5%, plus: 0.6%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.8%, plus: 0.9%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - asymerror: {minus: -2.7%, plus: 2.9%}
+      label: sys
+    - {label: sys, symerror: 1.4%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -5.1%, plus: 5.4%}
+      label: sys
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -0.6%, plus: 0.7%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 3.36
+  - errors:
+    - {label: stat, symerror: 4.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 3.8%}
+    - asymerror: {minus: -5.0%, plus: 5.3%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -3.3%, plus: 3.4%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -6.1%, plus: 6.4%}
+      label: sys
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.4%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - asymerror: {minus: 0.5%, plus: -0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 1.29
+  - errors:
+    - {label: stat, symerror: 6.4%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -3.9%, plus: 4.0%}
+      label: sys
+    - asymerror: {minus: -5.2%, plus: 5.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: 0.0%, plus: 0.1%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.1%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 1.8%}
+    - asymerror: {minus: -3.7%, plus: 3.8%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - asymerror: {minus: -6.8%, plus: 7.2%}
+      label: sys
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.5%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.3%, plus: 1.4%}
+      label: sys
+    - asymerror: {minus: 0.6%, plus: -0.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.544
+  - errors:
+    - {label: stat, symerror: 10.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -4.0%, plus: 4.1%}
+      label: sys
+    - asymerror: {minus: -5.4%, plus: 5.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.7%}
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - {label: sys, symerror: 0.2%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -1.9%, plus: 2.0%}
+      label: sys
+    - asymerror: {minus: -4.1%, plus: 4.2%}
+      label: sys
+    - asymerror: {minus: -2.1%, plus: 2.2%}
+      label: sys
+    - {label: sys, symerror: 1.7%}
+    - asymerror: {minus: -7.5%, plus: 8.0%}
+      label: sys
+    - asymerror: {minus: -1.6%, plus: 1.7%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.8%}
+    - {label: sys, symerror: 0.4%}
+    - asymerror: {minus: -1.5%, plus: 1.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.7%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -1.2%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -0.9%, plus: 0.5%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 1.0%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.6%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.18
+  - errors:
+    - {label: stat, symerror: 15.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -4.9%, plus: 5.3%}
+      label: sys
+    - asymerror: {minus: -6.6%, plus: 7.3%}
+      label: sys
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.5%}
+    - asymerror: {minus: -0.1%, plus: 0.0%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.1%, plus: 0.2%}
+      label: sys
+    - {label: sys, symerror: 0.9%}
+    - {label: sys, symerror: 0.8%}
+    - asymerror: {minus: -2.4%, plus: 2.6%}
+      label: sys
+    - asymerror: {minus: -0.3%, plus: 0.2%}
+      label: sys
+    - asymerror: {minus: -1.7%, plus: 1.8%}
+      label: sys
+    - asymerror: {minus: -2.6%, plus: 2.8%}
+      label: sys
+    - asymerror: {minus: -5.9%, plus: 6.4%}
+      label: sys
+    - asymerror: {minus: -3.1%, plus: 3.3%}
+      label: sys
+    - asymerror: {minus: -2.3%, plus: 2.4%}
+      label: sys
+    - asymerror: {minus: -11.0%, plus: 12.0%}
+      label: sys
+    - asymerror: {minus: -2.2%, plus: 2.3%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.2%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.3%}
+    - asymerror: {minus: -1.0%, plus: 1.2%}
+      label: sys
+    - {label: sys, symerror: 0.6%}
+    - asymerror: {minus: -1.8%, plus: 1.9%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - asymerror: {minus: -0.9%, plus: 1.0%}
+      label: sys
+    - asymerror: {minus: -1.0%, plus: 1.1%}
+      label: sys
+    - {label: sys, symerror: 0.3%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.4%, plus: 1.5%}
+      label: sys
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys
+    - asymerror: {minus: -8.8%, plus: 8.6%}
+      label: sys
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.1%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 0.0%}
+    - asymerror: {minus: -1.1%, plus: 1.3%}
+      label: sys
+    - {label: sys, symerror: 1.9%}
+    - {label: sys, symerror: 0.0%}
+    - {label: sys, symerror: 1.1%}
+    - {label: sys, symerror: 1.8%}
+    - {label: sys, symerror: 0.5%}
+    value: 0.0211
+independent_variables:
+- header: {name: M(2JET), units: TEV}
+  values:
+  - {high: 0.37, low: 0.31}
+  - {high: 0.44, low: 0.37}
+  - {high: 0.51, low: 0.44}
+  - {high: 0.59, low: 0.51}
+  - {high: 0.67, low: 0.59}
+  - {high: 0.76, low: 0.67}
+  - {high: 0.85, low: 0.76}
+  - {high: 0.95, low: 0.85}
+  - {high: 1.06, low: 0.95}
+  - {high: 1.18, low: 1.06}
+  - {high: 1.31, low: 1.18}
+  - {high: 1.45, low: 1.31}
+  - {high: 1.6, low: 1.45}
+  - {high: 1.76, low: 1.6}
+  - {high: 1.94, low: 1.76}
+  - {high: 2.12, low: 1.94}
+  - {high: 2.33, low: 2.12}
+  - {high: 2.55, low: 2.33}
+  - {high: 2.78, low: 2.55}
+  - {high: 3.04, low: 2.78}
+  - {high: 4.27, low: 3.04}
