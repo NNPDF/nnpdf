@@ -58,14 +58,16 @@ def load_fktable(spec):
     else:
         tabledata = pineappl_reader(spec)
 
-    if not spec.cfactors:
+    # In the new theories, the cfactor get applied as the fktables are loaded
+    if not spec.cfactors or not spec.legacy:
         return tabledata
 
     cfprod = 1.0
     for cf in spec.cfactors:
         with open(cf, "rb") as f:
             cfdata = parse_cfactor(f)
-        cfprod *= cfdata.central_value
+            cfprod *= cfdata.central_value
+
     return tabledata.with_cfactor(cfprod)
 
 def _get_compressed_buffer(path):
