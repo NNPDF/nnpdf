@@ -342,6 +342,8 @@ def make_level1_data(
         commondata_wc = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
                             for cd in commondata_wc]
 
+    # same problem as below: when calling process_commondata I am rescaling the exp covmat calculated 
+    # using the experimental central values
 
     covmat = dataset_inputs_covmat_from_systematics(
         commondata_wc, #  --> central values from the exp., level0_commondata_wc --> central values from theory
