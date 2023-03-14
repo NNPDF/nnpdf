@@ -25,7 +25,9 @@ from_TeV_to_GeV = lambda x: 1e3 * x
 
 
 def filter_ATLAS_2JET_7TEV_R06():
-
+    """
+    
+    """
 
     with open('metadata.yaml', 'r') as file:
         metadata = yaml.safe_load(file)
@@ -41,7 +43,6 @@ def filter_ATLAS_2JET_7TEV_R06():
         
         with open(hepdata_tables, 'r') as file:
             input = yaml.safe_load(file)
-        
         
         ystar = range_str_to_floats(input['dependent_variables'][0]['qualifiers'][8]['value'])
         sqrts = float(input['dependent_variables'][0]['qualifiers'][7]['value'])
