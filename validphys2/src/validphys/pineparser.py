@@ -226,12 +226,12 @@ def pineappl_reader(fkspec):
         so in order to use them together with old-style grids (obs = sum_{bins} fk * xf (*xf))
         it is necessary to remove the factor of x and the normalization of the bins.
 
-    About apfelcomb flags:
-        old commondata files and old grids have evolved (in a Darwinian sense) together
+    About apfelcomb flags in yamldb files:
+        old commondata files and old grids have over time been through various iterations while remaining compatibility between each other,
         and fixes and hacks have been incorporated in one or another
         for the new theory to be compatible with old commpondata it is necessary
         to keep track of said hacks (and to apply conversion factors when required)
-    Note that both conversion factors and apfelcomb flags will be eventually removed.
+    NOTE: both conversion factors and apfelcomb flags will be eventually removed.
 
     Returns
     -------

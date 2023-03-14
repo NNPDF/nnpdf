@@ -8,7 +8,7 @@ from validphys.loader import Loader
 from validphys.results import ThPredictionsResult, PositivityResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions
-from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, POSITIVITIES, DATA
+from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, POSITIVITIES
 
 
 def test_basic_loading():
