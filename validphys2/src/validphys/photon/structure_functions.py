@@ -28,7 +28,9 @@ class StructureFunction :
         self.interpolator = RectBivariateSpline(x, q2, grid2D)
     
     def FxQ(self, x, Q):
-        if x < self.xmin or x > self.xmax or Q < self.qmin or Q > self.qmax :
+        # here we are requiring that the grid that we pass to fiatlux
+        # has Qmin = 1 (fiatlux doesn't go below Q=1)
+        if x < self.xmin or Q > self.qmax :
             return 0.
         return self.interpolator(x, Q**2)[0, 0]
 
@@ -36,15 +38,15 @@ class F2LO :
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
         # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
-        self.kcThr = theory["kcThr"] * theory["mc"]
-        self.kbThr = theory["kbThr"] * theory["mb"]
-        self.ktThr = theory["ktThr"] * theory["mt"]
+        self.thresh_c = theory["kcThr"] * theory["mc"]
+        self.thresh_b = theory["kbThr"] * theory["mb"]
+        self.thresh_t = theory["ktThr"] * theory["mt"]
         if theory["MaxNfPdf"] <= 5 :
-            self.ktThr = np.inf
+            self.thresh_t = np.inf
         if theory["MaxNfPdf"] <= 4 :
-            self.kbThr = np.inf
+            self.thresh_b = np.inf
         if theory["MaxNfPdf"] <= 3 :
-            self.kcThr = np.inf
+            self.thresh_c = np.inf
         eu2 = 4. / 9
         ed2 = 1. / 9
         self.eq2 = [ed2, eu2, ed2, eu2, ed2, eu2] # d u s c b t
@@ -66,11 +68,11 @@ class F2LO :
             Structure function F2 at LO
         """
         # at LO we use ZM-VFS
-        if Q < self.kcThr :
+        if Q < self.thresh_c :
             nf = 3
-        elif Q < self.kbThr :
+        elif Q < self.thresh_b :
             nf = 4
-        elif Q < self.ktThr :
+        elif Q < self.thresh_t :
             nf = 5
         else :
             nf = 6

@@ -23,15 +23,15 @@ class Photon:
         self.alpha_em_ref = self.theory["alphaqed"]
         self.qref = self.theory["Qref"]
         # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
-        self.kcThr = self.theory["kcThr"] * self.theory["mc"]
-        self.kbThr = self.theory["kbThr"] * self.theory["mb"]
-        self.ktThr = self.theory["ktThr"] * self.theory["mt"]
+        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
+        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
+        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
         if self.theory["MaxNfAs"] <= 5 :
-            self.ktThr = np.inf
+            self.thresh_t = np.inf
         if self.theory["MaxNfAs"] <= 4 :
-            self.kbThr = np.inf
+            self.thresh_b = np.inf
         if self.theory["MaxNfAs"] <= 3 :
-            self.kcThr = np.inf
+            self.thresh_c = np.inf
         self.set_betas()
         self.set_thresholds_alpha_em()
 
@@ -53,7 +53,7 @@ class Photon:
         # TODO : remove this dirty trick
         for i in range(len(replicas_id)):
             self.lux[i].PlugAlphaQED(self.alpha_em, self.qref)
-            self.lux[i].InsertInelasticSplitQ([self.kbThr, self.ktThr if self.theory["MaxNfPdf"]==6 else 1e100])        
+            self.lux[i].InsertInelasticSplitQ([self.thresh_b, self.thresh_t if self.theory["MaxNfPdf"]==6 else 1e100])        
             self.lux[i].PlugStructureFunctions(f2[i].FxQ, fl[i].FxQ, f2lo[i].FxQ)
         
         # TODO : once that #1537 is merged do:
@@ -79,11 +79,11 @@ class Photon:
         alpha_em: float
             electromagnetic coupling
         """
-        if q < self.kcThr :
+        if q < self.thresh_c :
             nf = 3
-        elif q < self.kbThr :
+        elif q < self.thresh_b :
             nf = 4
-        elif q < self.ktThr :
+        elif q < self.thresh_t :
             nf = 5
         else :
             nf = 6
@@ -122,12 +122,12 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
-        thresh_list = [self.kcThr, self.kbThr, self.ktThr]
-        if self.qref < self.kcThr :
+        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
+        if self.qref < self.thresh_c :
             nfref = 3
-        elif self.qref < self.kbThr :
+        elif self.qref < self.thresh_b :
             nfref = 4
-        elif self.qref < self.ktThr :
+        elif self.qref < self.thresh_t :
             nfref = 5
         else :
             nfref = 6
