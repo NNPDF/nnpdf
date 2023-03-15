@@ -1,11 +1,13 @@
-from ekobox import gen_theory, gen_op
-from eko import run_dglap
-
-from validphys.loader import Loader
-from . import utils
-
-from typing import Any, Dict, Optional
 import logging
+from typing import Any, Dict, Optional
+
+import numpy as np
+from eko import runner
+from eko.io import runcards
+from ekobox.cards import _operator as default_op_card
+from validphys.loader import Loader
+
+from . import utils
 
 _logger = logging.getLogger(__name__)
 
@@ -34,7 +36,12 @@ def construct_eko_cards(
     theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
     theory.update(theory_card_dict)
-    theory_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
+    if "nfref" not in theory:
+        theory["nfref"] = 5
+    if "nf0" not in theory:
+        theory["nf0"] = 4
+    legacy_class = runcards.Legacy(theory, {})
+    theory_card = legacy_class.new_theory
     # construct operator card
     q2_grid = utils.generate_q2grid(
         theory["Q0"],
@@ -42,8 +49,24 @@ def construct_eko_cards(
         q_points,
         {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
     )
-    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": x_grid})
-    op_card.update(op_card_dict)
+    op_card = default_op_card
+    op_card.update(
+        {
+            "mu0": theory["Q0"],
+            "_mugrid": np.sqrt(q2_grid).tolist(),
+        }
+    )
+    op_card["configs"].update(
+        {
+            "ev_op_iterations": 1,
+            "ev_op_max_order": (1, 0),
+            "evolution_method": "truncated",
+            "inversion_method": "expanded",
+            "n_integration_cores": 1,
+        }
+    )
+    op_card["rotations"]["xgrid"] = x_grid
+    op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
 
 
@@ -71,7 +94,7 @@ def construct_eko_for_fit(theory_card, op_card, save_path=None):
             raise FileNotFoundError(
                 f"Path where eko should be dumped does not exist: {save_path}"
             )
-    eko_op = run_dglap(theory_card, op_card)
+    eko_op = runner.solve(theory_card, op_card, save_path)
     if save_path is not None:
         # Here we want to catch all possible exceptions in order to avoid losing the computed eko
         try:

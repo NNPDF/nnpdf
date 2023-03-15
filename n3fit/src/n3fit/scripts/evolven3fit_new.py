@@ -8,6 +8,7 @@ import sys
 import numpy as np
 
 from evolven3fit_new import eko_utils, evolve, cli
+from n3fit.io.writer import XGRID
 
 _logger = logging.getLogger(__name__)
 
@@ -138,7 +139,7 @@ def main():
             logger_.addHandler(stdout_log)
         if args.x_grid_ini is None:
             if args.x_grid_points is None:
-                x_grid = cli.XGRID
+                x_grid = XGRID
             else:
                 raise ValueError(
                     "x_grid_ini and x_grid_points must be specified either both or none of them"
