@@ -40,6 +40,7 @@ def construct_eko_cards(
         theory["nfref"] = 5
     if "nf0" not in theory:
         theory["nf0"] = 4
+    #The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
     # construct operator card
