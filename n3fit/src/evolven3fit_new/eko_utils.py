@@ -95,13 +95,5 @@ def construct_eko_for_fit(theory_card, op_card, save_path=None):
             raise FileNotFoundError(
                 f"Path where eko should be dumped does not exist: {save_path}"
             )
-    eko_op = runner.solve(theory_card, op_card, save_path)
-    if save_path is not None:
-        # Here we want to catch all possible exceptions in order to avoid losing the computed eko
-        try:
-            _logger.info(f"Saving computed eko to : {save_path}")
-            eko_op.dump_tar(save_path)
-        except:
-            _logger.error(f"Error saving the eko to : {save_path}")
-            pass
-    return eko_op
+    
+    runner.solve(theory_card, op_card, save_path)
