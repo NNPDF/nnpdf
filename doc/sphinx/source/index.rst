@@ -35,7 +35,7 @@ members:
 * Andrea Barontini - Università degli Studi di Milano and INFN
 * Alessandro Candido - Università degli Studi di Milano and INFN
 * Stefano Carrazza - Università degli Studi di Milano and INFN
-* Juan Cruz-Martinez - Università degli Studi di Milano and INFN
+* Juan M. Cruz-Martinez - CERN
 * Luigi Del Debbio - University of Edinburgh
 * Stefano Forte - Università degli Studi di Milano and INFN
 * Tommaso Giani - Vrije University Amsterdam and Nikhef
@@ -48,7 +48,7 @@ members:
 * Emanuele R. Nocera - Università degli Studi di Torino and INFN
 * Juan Rojo - Vrije University Amsterdam and Nikhef
 * Christopher Schwan - University of Würzburg
-* Roy Stegeman - Università degli Studi di Milano and INFN
+* Roy Stegeman - University of Edinburgh
 * Maria Ubiali - University of Cambridge
 
 Former members of the NNPDF collaboration include
