@@ -67,7 +67,15 @@ def construct_eko_cards(
         }
     )
     op_card["rotations"]["xgrid"] = x_grid
-    #TODO: use op_card_dict to update
+
+    def update_key_if_exists(dict, update_dict, key):
+        if key in update_dict:
+            dict[key].update(update_dict[key])
+
+    for key in op_card:
+        if isinstance(op_card[key], dict):
+            update_key_if_exists(op_card, op_card_dict, key)
+
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
 
