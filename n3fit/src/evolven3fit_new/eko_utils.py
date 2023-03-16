@@ -83,10 +83,6 @@ def construct_eko_for_fit(theory_card, op_card, save_path):
             operator card to use for the eko
         save_path: pathlib.Path
             path where the eko will be saved
-    Returns
-    -------
-        : eko.output.Output
-        eko operator
     """
     # generate eko operator
     if not save_path.parent.exists():
