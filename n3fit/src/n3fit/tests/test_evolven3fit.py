@@ -53,12 +53,10 @@ def test_eko_utils(tmp_path):
     x_grid = [1.e-3, 0.1, 1.0]
     pto = 2
     comments = "Test"
-    n_cores = 6
-    t_card, op_card = eko_utils.construct_eko_cards(theoryID, q_fin, q_points, x_grid, {'n_integration_cores' : n_cores, 'interpolation_polynomial_degree' : 2}, {'Comments' : comments})
+    t_card, op_card = eko_utils.construct_eko_cards(theoryID, q_fin, q_points, x_grid, op_card_dict=None, theory_card_dict={'Comments' : comments})
     t_card_dict = t_card.raw
     op_card_dict = op_card.raw
     assert t_card_dict["order"][0] == pto + 1 #This is due to a different convention in eko orders due to QED
-    assert op_card_dict['configs']['n_integration_cores'] == n_cores
     assert_allclose(op_card_dict["rotations"]["xgrid"], x_grid)
     assert_allclose(op_card_dict["_mugrid"][0], 1.65)
     assert_allclose(op_card_dict["_mugrid"][-1], q_fin)

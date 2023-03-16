@@ -67,6 +67,7 @@ def construct_eko_cards(
         }
     )
     op_card["rotations"]["xgrid"] = x_grid
+    #TODO: use op_card_dict to update
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
 
