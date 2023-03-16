@@ -71,7 +71,7 @@ def construct_eko_cards(
     return theory_card, op_card
 
 
-def construct_eko_for_fit(theory_card, op_card, save_path=None):
+def construct_eko_for_fit(theory_card, op_card, save_path):
     """
     Construct the eko operator needed for evolution of fitted pdfs
 
@@ -82,18 +82,16 @@ def construct_eko_for_fit(theory_card, op_card, save_path=None):
         op_card: dict
             operator card to use for the eko
         save_path: pathlib.Path
-            path where the eko will be saved (the eko
-            won't be saved if save_path is None)
+            path where the eko will be saved
     Returns
     -------
         : eko.output.Output
         eko operator
     """
     # generate eko operator
-    if save_path is not None:
-        if not save_path.parent.exists():
-            raise FileNotFoundError(
-                f"Path where eko should be dumped does not exist: {save_path}"
-            )
+    if not save_path.parent.exists():
+        raise FileNotFoundError(
+            f"Path where eko should be dumped does not exist: {save_path}"
+        )
     
     runner.solve(theory_card, op_card, save_path)
