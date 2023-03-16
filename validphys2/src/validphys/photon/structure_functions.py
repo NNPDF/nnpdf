@@ -1,11 +1,9 @@
-from pathlib import Path
 import pineappl
 import numpy as np
 from scipy.interpolate import RectBivariateSpline
 
 class StructureFunction :
     def __init__(self, path_to_fktable, pdfs):
-        self.path_to_fktable = Path(path_to_fktable)
         self.fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
         self.pdfs = pdfs
         self.pdgid = int(pdfs.set().get_entry("Particle"))
@@ -16,7 +14,6 @@ class StructureFunction :
         x = np.unique(self.fktable.bin_left(1))
         q2 = np.unique(self.fktable.bin_left(0))
         self.xmin = min(x)
-        self.xmax = max(x)
         self.qmin = min(np.sqrt(q2))
         self.qmax = max(np.sqrt(q2))
 
