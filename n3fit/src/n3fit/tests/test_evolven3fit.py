@@ -4,7 +4,7 @@ from numpy.testing import assert_allclose
 import numpy as np
 from validphys.pdfbases import PIDS_DICT
 from evolven3fit_new import utils, eko_utils
-from eko.EKO import read
+from eko import EKO
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
@@ -67,6 +67,6 @@ def test_eko_utils(tmp_path):
     #Testing construct_eko_for_fit
     save_path = tmp_path / "ekotest.tar"
     eko_utils.construct_eko_for_fit(t_card ,op_card, save_path=save_path)
-    eko_op = read(save_path)
+    eko_op = EKO.read(save_path)
     assert_allclose(eko_op.operator_card.raw["rotations"]['xgrid'], x_grid)
     assert_allclose(list(eko_op.operator_card.raw["_mugrid"]), op_card_dict["_mugrid"])
