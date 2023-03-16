@@ -55,16 +55,16 @@ def test_eko_utils():
     comments = "Test"
     n_cores = 6
     t_card, op_card = eko_utils.construct_eko_cards(theoryID, q_fin, q_points, x_grid, {'n_integration_cores' : n_cores, 'interpolation_polynomial_degree' : 2}, {'Comments' : comments})
-    assert t_card['Qref'] == qref
-    assert t_card['PTO'] == pto
-    assert t_card['Comments'] == comments
-    assert op_card['n_integration_cores'] == n_cores
-    assert_allclose(op_card["interpolation_xgrid"], x_grid)
-    assert_allclose(op_card["Q2grid"][0], 1.65**2)
-    assert_allclose(op_card["Q2grid"][-1], q_fin**2)
+    t_card_dict = t_card.raw
+    op_card_dict = op_card.raw
+    assert t_card_dict["order"][0] == pto
+    assert op_card_dict['configs']['n_integration_cores'] == n_cores
+    assert_allclose(op_card_dict["rotations"]["xgrid"], x_grid)
+    assert_allclose(op_card_dict["_mugrid"][0], 1.65)
+    assert_allclose(op_card_dict["_mugrid"][-1], q_fin)
     #In this case there are not enough points to have twice the bottom matching scale
-    assert_allclose(op_card["Q2grid"][1], 4.92**2)
+    assert_allclose(op_card_dict["_mugrid"][1], 4.92)
     #Testing construct_eko_for_fit
     eko_op = eko_utils.construct_eko_for_fit(t_card ,op_card)
-    assert_allclose(eko_op['interpolation_xgrid'], x_grid)
-    assert_allclose(list(eko_op['Q2grid']), op_card["Q2grid"])
+    assert_allclose(eko_op.operator_card.raw["rotations"]['xgrid'], x_grid)
+    assert_allclose(list(eko_op.operator_card.raw["_mugrid"]), op_card_dict["_mugrid"])
