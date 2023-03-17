@@ -74,6 +74,8 @@ def construct_eko_cards(
     for key in op_card:
         if key in op_card_dict and isinstance(op_card[key], dict):
             op_card[key].update(op_card_dict[key])
+        elif key in op_card_dict:
+            _logger.warning("Entry %s is not a dictionary and will be ignored", key)
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
