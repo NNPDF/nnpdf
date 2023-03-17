@@ -11,6 +11,13 @@ from . import utils
 
 _logger = logging.getLogger(__name__)
 
+EVOLVEN3FIT_CONFIGS_DEFAULTS = {
+            "ev_op_iterations": 1,
+            "ev_op_max_order": (1, 0),
+            "evolution_method": "truncated",
+            "inversion_method": "expanded",
+            "n_integration_cores": 1,
+        }
 
 def construct_eko_cards(
     theoryID,
@@ -57,17 +64,13 @@ def construct_eko_cards(
             "_mugrid": np.sqrt(q2_grid).tolist(),
         }
     )
-    op_card["configs"].update(
-        {
-            "ev_op_iterations": 1,
-            "ev_op_max_order": (1, 0),
-            "evolution_method": "truncated",
-            "inversion_method": "expanded",
-            "n_integration_cores": 1,
-        }
-    )
     op_card["rotations"]["xgrid"] = x_grid
-
+    # Specific defaults for evolven3fit evolution
+    op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS)
+    # User can still change the configs via op_card_dict
+    
+    # Note that every entry that is not a dictionary should not be 
+    # touched by the user and indeed an user cannot touch them
     def update_key_if_exists(dict, update_dict, key):
         if key in update_dict:
             dict[key].update(update_dict[key])
