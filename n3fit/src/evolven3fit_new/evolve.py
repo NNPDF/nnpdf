@@ -2,8 +2,8 @@ import logging
 import pathlib
 import sys
 
-import eko
 import numpy as np
+import eko
 from eko import basis_rotation as br
 from ekobox import genpdf, info_file
 from ekomark import apply
