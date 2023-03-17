@@ -328,11 +328,9 @@ def make_level1_data(
     # =============== generate experimental covariance matrix ===============#
 
     dataset_input_list = list(data.dsinputs)
-    
-    commondata_wc = data.load_commondata_instance()
 
     covmat = dataset_inputs_covmat_from_systematics(
-        commondata_wc,
+        level0_commondata_wc,
         dataset_input_list,
         use_weights_in_covmat=False,
         norm_threshold=None,
