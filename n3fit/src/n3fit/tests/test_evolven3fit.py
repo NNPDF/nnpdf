@@ -4,6 +4,7 @@ from numpy.testing import assert_allclose
 import numpy as np
 from validphys.pdfbases import PIDS_DICT
 from evolven3fit_new import utils, eko_utils
+from eko import EKO
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
@@ -44,27 +45,26 @@ def test_utils():
     ID = utils.get_theoryID_from_runcard(REGRESSION_FOLDER)
     assert ID == 162
 
-def test_eko_utils():
+def test_eko_utils(tmp_path):
     #Testing construct eko cards
     theoryID = 162
     q_fin = 100
     q_points = 5
     x_grid = [1.e-3, 0.1, 1.0]
     pto = 2
-    qref = 91.2
     comments = "Test"
-    n_cores = 6
-    t_card, op_card = eko_utils.construct_eko_cards(theoryID, q_fin, q_points, x_grid, {'n_integration_cores' : n_cores, 'interpolation_polynomial_degree' : 2}, {'Comments' : comments})
-    assert t_card['Qref'] == qref
-    assert t_card['PTO'] == pto
-    assert t_card['Comments'] == comments
-    assert op_card['n_integration_cores'] == n_cores
-    assert_allclose(op_card["interpolation_xgrid"], x_grid)
-    assert_allclose(op_card["Q2grid"][0], 1.65**2)
-    assert_allclose(op_card["Q2grid"][-1], q_fin**2)
+    t_card, op_card = eko_utils.construct_eko_cards(theoryID, q_fin, q_points, x_grid, op_card_dict={"configs":{"interpolation_polynomial_degree":2}}, theory_card_dict={'Comments' : comments})
+    t_card_dict = t_card.raw
+    op_card_dict = op_card.raw
+    assert t_card_dict["order"][0] == pto + 1 #This is due to a different convention in eko orders due to QED
+    assert_allclose(op_card_dict["rotations"]["xgrid"], x_grid)
+    assert_allclose(op_card_dict["_mugrid"][0], 1.65)
+    assert_allclose(op_card_dict["_mugrid"][-1], q_fin)
     #In this case there are not enough points to have twice the bottom matching scale
-    assert_allclose(op_card["Q2grid"][1], 4.92**2)
+    assert_allclose(op_card_dict["_mugrid"][1], 4.92)
     #Testing construct_eko_for_fit
-    eko_op = eko_utils.construct_eko_for_fit(t_card ,op_card)
-    assert_allclose(eko_op['interpolation_xgrid'], x_grid)
-    assert_allclose(list(eko_op['Q2grid']), op_card["Q2grid"])
+    save_path = tmp_path / "ekotest.tar"
+    eko_utils.construct_eko_for_fit(t_card ,op_card, save_path=save_path)
+    eko_op = EKO.read(save_path)
+    assert_allclose(eko_op.operator_card.raw["rotations"]['xgrid'], x_grid)
+    assert_allclose(list(eko_op.operator_card.raw["_mugrid"]), op_card_dict["_mugrid"])

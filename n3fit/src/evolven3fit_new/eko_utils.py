@@ -40,6 +40,7 @@ def construct_eko_cards(
         theory["nfref"] = 5
     if "nf0" not in theory:
         theory["nf0"] = 4
+    #The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
     # construct operator card
@@ -66,11 +67,20 @@ def construct_eko_cards(
         }
     )
     op_card["rotations"]["xgrid"] = x_grid
+
+    def update_key_if_exists(dict, update_dict, key):
+        if key in update_dict:
+            dict[key].update(update_dict[key])
+
+    for key in op_card:
+        if isinstance(op_card[key], dict):
+            update_key_if_exists(op_card, op_card_dict, key)
+
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
 
 
-def construct_eko_for_fit(theory_card, op_card, save_path=None):
+def construct_eko_for_fit(theory_card, op_card, save_path):
     """
     Construct the eko operator needed for evolution of fitted pdfs
 
@@ -81,26 +91,12 @@ def construct_eko_for_fit(theory_card, op_card, save_path=None):
         op_card: dict
             operator card to use for the eko
         save_path: pathlib.Path
-            path where the eko will be saved (the eko
-            won't be saved if save_path is None)
-    Returns
-    -------
-        : eko.output.Output
-        eko operator
+            path where the eko will be saved
     """
     # generate eko operator
-    if save_path is not None:
-        if not save_path.parent.exists():
-            raise FileNotFoundError(
-                f"Path where eko should be dumped does not exist: {save_path}"
-            )
-    eko_op = runner.solve(theory_card, op_card, save_path)
-    if save_path is not None:
-        # Here we want to catch all possible exceptions in order to avoid losing the computed eko
-        try:
-            _logger.info(f"Saving computed eko to : {save_path}")
-            eko_op.dump_tar(save_path)
-        except:
-            _logger.error(f"Error saving the eko to : {save_path}")
-            pass
-    return eko_op
+    if not save_path.parent.exists():
+        raise FileNotFoundError(
+            f"Path where eko should be dumped does not exist: {save_path}"
+        )
+    
+    runner.solve(theory_card, op_card, save_path)

@@ -54,8 +54,7 @@ def evolve_fit(
             path where the eko is stored (if None the eko will be
             recomputed)
         dump_eko: str or pathlib.Path
-            path where the eko is dumped (if None the eko won't be
-            stored)
+            path where the eko is dumped (necessary only if the eko is computed)
     """
     log_file = pathlib.Path(fit_folder) / LOG_FILE
     if log_file.exists():
