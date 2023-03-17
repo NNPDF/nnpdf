@@ -70,14 +70,10 @@ def construct_eko_cards(
     # User can still change the configs via op_card_dict
     
     # Note that every entry that is not a dictionary should not be 
-    # touched by the user and indeed an user cannot touch them
-    def update_key_if_exists(dict, update_dict, key):
-        if key in update_dict:
-            dict[key].update(update_dict[key])
-
+    # touched by the user and indeed an user cannot touch them            
     for key in op_card:
-        if isinstance(op_card[key], dict):
-            update_key_if_exists(op_card, op_card_dict, key)
+        if key in op_card_dict and isinstance(op_card[key], dict):
+            op_card[key].update(op_card_dict[key])
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
