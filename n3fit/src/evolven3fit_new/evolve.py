@@ -4,7 +4,7 @@ import sys
 
 import numpy as np
 import eko
-from eko import basis_rotation as br
+from eko import basis_rotation
 from ekobox import genpdf, info_file
 from ekomark import apply
 from reportengine.compat import yaml
@@ -172,7 +172,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
         ev_pdf,
         xgrid=targetgrid,
         Q2grid=list(eko.mu2grid),
-        pids=br.flavor_basis_pids,
+        pids=basis_rotation.flavor_basis_pids,
     )
     return block
 
