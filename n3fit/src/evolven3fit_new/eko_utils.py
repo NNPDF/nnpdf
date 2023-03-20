@@ -12,12 +12,13 @@ from . import utils
 _logger = logging.getLogger(__name__)
 
 EVOLVEN3FIT_CONFIGS_DEFAULTS = {
-            "ev_op_iterations": 1,
-            "ev_op_max_order": (1, 0),
-            "evolution_method": "truncated",
-            "inversion_method": "expanded",
-            "n_integration_cores": 1,
-        }
+    "ev_op_iterations": 1,
+    "ev_op_max_order": (1, 0),
+    "evolution_method": "truncated",
+    "inversion_method": "expanded",
+    "n_integration_cores": 1,
+}
+
 
 def construct_eko_cards(
     theoryID,
@@ -47,7 +48,7 @@ def construct_eko_cards(
         theory["nfref"] = 5
     if "nf0" not in theory:
         theory["nf0"] = 4
-    #The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
+    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
     # construct operator card
@@ -68,9 +69,9 @@ def construct_eko_cards(
     # Specific defaults for evolven3fit evolution
     op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS)
     # User can still change the configs via op_card_dict
-    
-    # Note that every entry that is not a dictionary should not be 
-    # touched by the user and indeed an user cannot touch them            
+
+    # Note that every entry that is not a dictionary should not be
+    # touched by the user and indeed an user cannot touch them
     for key in op_card:
         if key in op_card_dict and isinstance(op_card[key], dict):
             op_card[key].update(op_card_dict[key])
