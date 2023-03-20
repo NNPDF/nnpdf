@@ -2,7 +2,6 @@ import logging
 from typing import Any, Dict, Optional
 
 import numpy as np
-from eko import runner
 from eko.io import runcards
 from ekobox.cards import _operator as default_op_card
 from validphys.loader import Loader
@@ -80,20 +79,3 @@ def construct_eko_cards(
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
-
-
-def construct_eko_for_fit(theory_card, op_card, save_path):
-    """
-    Construct the eko operator needed for evolution of fitted pdfs
-
-    Parameters
-    ----------
-        theory_card: dict
-            theory card to use for the eko
-        op_card: dict
-            operator card to use for the eko
-        save_path: pathlib.Path
-            path where the eko will be saved
-    """
-    # generate eko operator
-    runner.solve(theory_card, op_card, save_path)

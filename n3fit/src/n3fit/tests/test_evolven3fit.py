@@ -4,7 +4,7 @@ from numpy.testing import assert_allclose
 import numpy as np
 from validphys.pdfbases import PIDS_DICT
 from evolven3fit_new import utils, eko_utils
-from eko import EKO
+from eko import EKO, runner
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
@@ -74,9 +74,9 @@ def test_eko_utils(tmp_path):
     assert_allclose(op_card_dict["_mugrid"][-1], q_fin)
     # In this case there are not enough points to have twice the bottom matching scale
     assert_allclose(op_card_dict["_mugrid"][1], 4.92)
-    # Testing construct_eko_for_fit
+    # Testing computation of eko
     save_path = tmp_path / "ekotest.tar"
-    eko_utils.construct_eko_for_fit(t_card, op_card, save_path=save_path)
+    _ = runner.solve(t_card, op_card, save_path)
     eko_op = EKO.read(save_path)
     assert_allclose(eko_op.operator_card.raw["rotations"]["xgrid"], x_grid)
     assert_allclose(list(eko_op.operator_card.raw["_mugrid"]), op_card_dict["_mugrid"])

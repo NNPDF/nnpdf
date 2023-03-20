@@ -6,6 +6,7 @@ import pathlib
 from argparse import ArgumentParser
 import sys
 import numpy as np
+from eko import runner
 
 from evolven3fit_new import eko_utils, evolve, cli
 from n3fit.io.writer import XGRID
@@ -153,7 +154,7 @@ def main():
         tcard, opcard = eko_utils.construct_eko_cards(
             args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
         )
-        _ = eko_utils.construct_eko_for_fit(tcard, opcard, args.dump)
+        _ = runner.solve(tcard, opcard, args.dump)
 
 
 if __name__ == "__main__":

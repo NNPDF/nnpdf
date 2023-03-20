@@ -5,6 +5,7 @@ import sys
 import numpy as np
 import eko
 from eko import basis_rotation
+from eko import runner
 from ekobox import genpdf, info_file
 from ekomark import apply
 from reportengine.compat import yaml
@@ -95,7 +96,7 @@ def evolve_fit(
             eko_op = eko.EKO.edit(theory_eko_path)
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
-            eko_op = eko_utils.construct_eko_for_fit(theory, op, dump_eko)
+            eko_op = runner.solve(theory, op, dump_eko)
     with eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
