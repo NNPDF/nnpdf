@@ -15,8 +15,7 @@ import numpy as np
 @dataclasses.dataclass
 class FittableDataSet:
     """
-    Python version of the libNNPDF dataset
-    to be merged with the product of the new CommonData dataset
+    Representation of the DataSet information necessary to run a fit
 
     Parameters
     ----------
@@ -32,12 +31,6 @@ class FittableDataSet:
         training_mask: bool
             training mask to apply to the fktable
     """
-
-    # NOTE:
-    # This class tries to be compatible with the libNNPDF dataset class
-    # after commondata is also in python, FittableDataSet can inherit from the vp dataset
-    # which knows how to generate its "fittable" version.
-
     name: str
     fktables_data: list  # of validphys.coredata.FKTableData objects
 

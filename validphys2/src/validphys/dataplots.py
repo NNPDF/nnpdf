@@ -196,8 +196,8 @@ def check_normalize_to(ns, **kwargs):
 
     raise RuntimeError("Should not be here")
 
-#TODO: This interface is horrible. We need to think how to adapt libnnpdf
-#to make this use case easier
+#TODO: This interface is horrible.
+# We need to think how to adapt it to make this use case easier
 def _plot_fancy_impl(results, commondata, cutlist,
                normalize_to:(int,type(None)) = None, labellist=None):
 
@@ -785,31 +785,6 @@ def plot_trainvaliddist(fit, replica_data):
 
     ax.set_ylim(0, None)
     ax.legend()
-    return fig
-
-@figure
-def plot_covmat_eigs(data):
-    """Plot the eigenvalues of the covariance matrix for a given group of datasets."""
-    eigs = la.eigvalsh(data.load().get_covmat())
-    fig,ax = plt.subplots()
-    x = np.arange(1,len(eigs) + 1)
-    ax.plot(x, eigs, 'o', markersize=10)
-    ax.set_yscale('log')
-    ax.yaxis.grid(False)
-    plt.title("Covmat eigenvalues for %s" % data.name)
-    plt.xlabel("# Eigenvector")
-    return fig
-
-@figure
-def plot_corrmat_eigs(data):
-    """Plot the eigenvalues of the correlation matrix for a given group of datasets."""
-    covmat = data.load().get_covmat()
-    stds = np.sqrt(np.diag(covmat))
-    corrmat = covmat/np.outer(stds,stds)
-    eigs = la.eigvalsh(corrmat)
-    fig,ax = plt.subplots()
-    ax.plot(eigs, 'o')
-    ax.set_yscale('log')
     return fig
 
 

@@ -85,9 +85,8 @@ a substring). Currently they are:
 'SIA': ('$z$', '$Q^2 (GeV^2)$', '$y$')
 ```
 
-This mapping is declared as `CommonData.kinLabel_latex` in the C++
-code (and accessible as `validphys.plotoptions.core.kinlabels_latex`
-in the Python code).
+This mapping is declared as `validphys.commondataparser.KINLABEL_LATEX`
+in the python code.
 
 The three kinematic variables are referred to as `k1`, `k2` and `k3`
 in the plotting files. For example, for DIS processes, `k1` refers to `x`,
