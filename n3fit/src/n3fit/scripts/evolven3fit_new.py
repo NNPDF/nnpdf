@@ -154,7 +154,7 @@ def main():
         tcard, opcard = eko_utils.construct_eko_cards(
             args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
         )
-        _ = runner.solve(tcard, opcard, args.dump)
+        runner.solve(tcard, opcard, args.dump)
 
 
 if __name__ == "__main__":
