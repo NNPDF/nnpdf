@@ -669,7 +669,20 @@ def dbarubar_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
-  
+@scalar_function_transformation(label=r"c^+")
+def cplus(func, xmat, qmat):
+    gv = func([-4, 4], xmat, qmat)
+    cbar = gv[:, [0], ...]
+    c = gv[:, [1], ...]
+    return c + cbar
+
+@scalar_function_transformation(label=r"c^-")
+def cplus(func, xmat, qmat):
+    gv = func([-4, 4], xmat, qmat)
+    cbar = gv[:, [0], ...]
+    c = gv[:, [1], ...]
+    return c - cbar
+
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
     gv = func([-3, 3, -2, -1], xmat, qmat)
