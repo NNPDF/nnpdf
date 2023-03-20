@@ -95,9 +95,4 @@ def construct_eko_for_fit(theory_card, op_card, save_path):
             path where the eko will be saved
     """
     # generate eko operator
-    if not save_path.parent.exists():
-        raise FileNotFoundError(
-            f"Path where eko should be dumped does not exist: {save_path}"
-        )
-    
     runner.solve(theory_card, op_card, save_path)
