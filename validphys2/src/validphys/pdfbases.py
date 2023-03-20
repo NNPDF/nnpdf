@@ -677,7 +677,7 @@ def cplus(func, xmat, qmat):
     return c + cbar
 
 @scalar_function_transformation(label=r"c^-")
-def cplus(func, xmat, qmat):
+def cminus(func, xmat, qmat):
     gv = func([-4, 4], xmat, qmat)
     cbar = gv[:, [0], ...]
     c = gv[:, [1], ...]
