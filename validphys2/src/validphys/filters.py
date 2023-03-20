@@ -112,7 +112,9 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
     ADD=False, MULT=False, CORR=False, UNCORR=False,
-    inconsistent_datasets=[], sys_rescaling_factor=1, inconsistent_fit=False
+    inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
+    lvl1_inconsistent_fit=False, lvl2_inconsistent_fit=False,
+
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -123,7 +125,6 @@ def filter_closure_data_by_experiment(
     not reproducible.
 
     """
-
     res = []
     for exp in experiments_data:
         experiment_index = experiments_index[
@@ -134,8 +135,9 @@ def filter_closure_data_by_experiment(
             _filter_closure_data(
                         filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
                         ADD, MULT, CORR, UNCORR,
-                        inconsistent_datasets, sys_rescaling_factor, inconsistent_fit
-                                )
+                        inconsistent_datasets, sys_rescaling_factor_1, sys_rescaling_factor_2,
+                        lvl1_inconsistent_fit, lvl2_inconsistent_fit
+                        )
                 )
     return res
 
@@ -228,7 +230,9 @@ def process_commondata(commondata,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys
 def _filter_closure_data(
     filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
     ADD=False, MULT=False, CORR=False, UNCORR=False,
-    inconsistent_datasets=[], sys_rescaling_factor=1, inconsistent_fit=False
+    inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
+    lvl1_inconsistent_fit=False,
+    lvl2_inconsistent_fit=False
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
@@ -289,18 +293,24 @@ def _filter_closure_data(
     
     if fakenoise:
         #======= Level 1 closure test =======#
-
         closure_data = make_level1_data(
                 data,
                 closure_data,
                 filterseed,
                 experiments_index,
+                ADD,
+                MULT,
+                CORR,
+                UNCORR,
+                inconsistent_datasets,
+                sys_rescaling_factor_1,
+                lvl1_inconsistent_fit
             )
         
-        # for inconsistent fit only, modify the L1 data sys (written in filters folder)
+        # for lvl2 inconsistent fit only, modify the L1 data sys (written in filters folder)
         # such that the covmat used to generate L2 data is underestimating systematics
-        if inconsistent_fit:
-            closure_data = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+        if lvl2_inconsistent_fit:
+            closure_data = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor_2)
                     for cd in closure_data]
 
     #====== write commondata and systype files ======#

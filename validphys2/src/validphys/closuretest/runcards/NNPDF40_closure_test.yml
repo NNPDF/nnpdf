@@ -100,7 +100,7 @@ nnseed: 1737785873
 mcseed: 2123509817
 genrep: true          # true = generate MC replicas, false = use real data
 # Deprecated options still required by closure tests
-rngalg: 0
+rngalgo: 0
 seed: 4
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer

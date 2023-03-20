@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat, dataset_inputs_covmat_from_systematics
+from validphys.filters import process_commondata
 
 from reportengine import collect
 
@@ -233,7 +234,6 @@ def make_replica(
 def indexed_make_replica(groups_index, make_replica):
     """Index the make_replica pseudodata appropriately
     """
-
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
 def level0_commondata_wc(data, fakepdf):
@@ -260,7 +260,6 @@ def level0_commondata_wc(data, fakepdf):
     -------
     >>> from validphys.api import API
     >>> API.level0_commondata_wc(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
-
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
     from validphys.covmats import dataset_t0_predictions
@@ -287,7 +286,9 @@ def level0_commondata_wc(data, fakepdf):
 
 
 def make_level1_data(
-    data, level0_commondata_wc, filterseed, experiments_index
+    data, level0_commondata_wc, filterseed, experiments_index,
+    MULT = False, ADD = False, CORR = False, UNCORR = False,
+    inconsistent_datasets=[], sys_rescaling_factor=1, lvl1_inconsistent = False,
 ):
     """
     Given a list of level0 commondata instances, return the same list
@@ -326,11 +327,24 @@ def make_level1_data(
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
     # =============== generate experimental covariance matrix ===============#
-
     dataset_input_list = list(data.dsinputs)
-    
+
+
     commondata_wc = data.load_commondata_instance()
-    
+
+    # I want to generate Lvl1 data with a varied covariance matrix while keeping the original
+    # exp covmat when generating montecarlo replicas (Mark inconsistent closure test). There should 
+    # be no problem in doing so since make_replica only outputs the list of new central values 
+    # and when creating the lvl1 CommonData instance the covariance matrix is again the one 
+    # stored in level0_commondata_wc
+
+    if lvl1_inconsistent:
+        commondata_wc = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+                            for cd in commondata_wc]
+
+    # same problem as below: when calling process_commondata I am rescaling the exp covmat calculated 
+    # using the experimental central values
+
     covmat = dataset_inputs_covmat_from_systematics(
         commondata_wc, #  --> central values from the exp., level0_commondata_wc --> central values from theory
         dataset_input_list,
@@ -339,16 +353,20 @@ def make_level1_data(
         _list_of_central_values=None,
         _only_additive=False,
     )
-
     # ================== generation of pseudo data ======================#
     # = generate pseudo data starting from theory predictions
+    # covmat can be an inconsistent one
     level1_data = make_replica(
         level0_commondata_wc, filterseed, covmat, sep_mult=False, genrep=True
     )
 
+
+    
+
     indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
 
     # ===== create commondata instances with central values given by pseudo_data =====#
+
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
     level1_commondata_instances_wc = []
 
