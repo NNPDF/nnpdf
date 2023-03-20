@@ -92,6 +92,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
 
 fitting:
   fitbasis: EVOL # EVOL (7), EVOLQED (8), etc.
+  savepseudodata: False
   basis:
   - {fl: sng, trainable: false, smallx: [1.093, 1.121], largex: [1.486, 3.287]}
   - {fl: g, trainable: false, smallx: [0.8329, 1.071], largex: [3.084, 6.767]}

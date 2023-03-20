@@ -8,6 +8,10 @@ from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
 from pathlib import Path
 
+from eko.io import EKO
+from eko.io.manipulate import xgrid_reshape
+from eko.interpolation import XGrid
+
 import yaml
 from os import remove
 import time
@@ -184,12 +188,9 @@ class Photon:
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
-        from eko.io import EKO
         with EKO.edit(self.path_to_eko_photon) as eko:
             # If we make sure that the grid of the precomputed EKO is the same of 
             # self.xgrid then we don't need to reshape
-            from eko.io.manipulate import xgrid_reshape
-            from eko.interpolation import XGrid
             xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
 
             # construct PDFs
