@@ -52,9 +52,9 @@ PDFnormalize:
     Normtitle: Ratio
 
 Basespecs:
-  - basis: CCBAR_ASYMM_FLAVOUR
+  - basis: flavour
     Basistitle: Flavour basis
-  - basis: CCBAR_ASYMM
+  - basis: evolution
     Basistitle: Evolution basis
 
 PDFscalespecs:
