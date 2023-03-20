@@ -417,7 +417,7 @@ class HyperScanner:
                 units_sampler = hp_quniform(units_label, min_units, max_units,
                         step_size=1)
                 units.append(units_sampler)
-            # The last layer will always have 8 nodes
+            # The number of nodes in the last layer are read from the runcard
             units.append(output_size)
             nodes_choices.append(units)
 
