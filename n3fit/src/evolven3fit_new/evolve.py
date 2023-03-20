@@ -88,16 +88,16 @@ def evolve_fit(
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
-        eko_op = eko.EKO.edit(eko_path)
     else:
         try:
             _logger.info(f"Loading eko from theory {theoryID}")
-            theory_eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
-            eko_op = eko.EKO.edit(theory_eko_path)
+            eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
-            eko_op = runner.solve(theory, op, dump_eko)
-    with eko_op:
+            runner.solve(theory, op, dump_eko)
+            eko_path = dump_eko
+    eko_op = eko.EKO.edit(eko_path)
+    with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
         info = info_file.build(theory, op, 1, info_update={})
