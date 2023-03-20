@@ -114,6 +114,8 @@ def evolve_fit(
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
     (usr_path / "nnfit" / usr_path.stem).rmdir()
+    # close eko
+    eko_op.close()
 
 
 def load_fit(usr_path):
