@@ -96,26 +96,25 @@ def evolve_fit(
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
             eko_op = eko_utils.construct_eko_for_fit(theory, op, dump_eko)
-    x_grid_obj = eko.interpolation.XGrid(x_grid)
-    eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
-    info = info_file.build(theory, op, 1, info_update={})
-    info["NumMembers"] = "REPLACE_NREP"
-    info["ErrorType"] = "replicas"
-    info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
-    info["XMin"] = float(x_grid[0])
-    info["XMax"] = float(x_grid[-1])
-    dump_info_file(usr_path, info)
-    for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
-        dump_evolved_replica(
-            evolved_block, usr_path, int(replica.removeprefix("replica_"))
-        )
+    with eko_op:
+        x_grid_obj = eko.interpolation.XGrid(x_grid)
+        eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
+        info = info_file.build(theory, op, 1, info_update={})
+        info["NumMembers"] = "REPLACE_NREP"
+        info["ErrorType"] = "replicas"
+        info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
+        info["XMin"] = float(x_grid[0])
+        info["XMax"] = float(x_grid[-1])
+        dump_info_file(usr_path, info)
+        for replica in initial_PDFs_dict.keys():
+            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
+            dump_evolved_replica(
+                evolved_block, usr_path, int(replica.removeprefix("replica_"))
+            )
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
     (usr_path / "nnfit" / usr_path.stem).rmdir()
-    # close eko
-    eko_op.close()
 
 
 def load_fit(usr_path):
