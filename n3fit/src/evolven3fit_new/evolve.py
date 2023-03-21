@@ -2,9 +2,10 @@ import logging
 import pathlib
 import sys
 
-import eko
 import numpy as np
-from eko import basis_rotation as br
+import eko
+from eko import basis_rotation
+from eko import runner
 from ekobox import genpdf, info_file
 from ekomark import apply
 from reportengine.compat import yaml
@@ -87,29 +88,30 @@ def evolve_fit(
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
-        eko_op = eko.EKO.edit(eko_path)
     else:
         try:
             _logger.info(f"Loading eko from theory {theoryID}")
-            theory_eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
-            eko_op = eko.EKO.edit(theory_eko_path)
+            eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
-            eko_op = eko_utils.construct_eko_for_fit(theory, op, dump_eko)
-    x_grid_obj = eko.interpolation.XGrid(x_grid)
-    eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
+            runner.solve(theory, op, dump_eko)
+            eko_path = dump_eko
+    with eko.EKO.edit(eko_path) as eko_op:
+        x_grid_obj = eko.interpolation.XGrid(x_grid)
+        eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
     info = info_file.build(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
-    info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
-    dump_info_file(usr_path, info)
-    for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
-        dump_evolved_replica(
-            evolved_block, usr_path, int(replica.removeprefix("replica_"))
-        )
+    with eko.EKO.read(eko_path) as eko_op:
+        info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
+        dump_info_file(usr_path, info)
+        for replica in initial_PDFs_dict.keys():
+            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
+            dump_evolved_replica(
+                evolved_block, usr_path, int(replica.removeprefix("replica_"))
+            )
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
@@ -172,7 +174,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
         ev_pdf,
         xgrid=targetgrid,
         Q2grid=list(eko.mu2grid),
-        pids=br.flavor_basis_pids,
+        pids=basis_rotation.flavor_basis_pids,
     )
     return block
 
