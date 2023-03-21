@@ -96,7 +96,6 @@ def evolve_fit(
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
             runner.solve(theory, op, dump_eko)
             eko_path = dump_eko
-    eko_op = eko.EKO.edit(eko_path)
     with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
