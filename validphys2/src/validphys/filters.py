@@ -113,7 +113,7 @@ def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
     ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
-    lvl1_inconsistent_fit=False, lvl2_inconsistent_fit=False,
+    type1_inconsistency=False, type2_inconsistency=False,
 
 ):
     """
@@ -136,7 +136,7 @@ def filter_closure_data_by_experiment(
                         filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
                         ADD, MULT, CORR, UNCORR,
                         inconsistent_datasets, sys_rescaling_factor_1, sys_rescaling_factor_2,
-                        lvl1_inconsistent_fit, lvl2_inconsistent_fit
+                        type1_inconsistency, type2_inconsistency
                         )
                 )
     return res
@@ -231,8 +231,8 @@ def _filter_closure_data(
     filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
     ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
-    lvl1_inconsistent_fit=False,
-    lvl2_inconsistent_fit=False
+    type1_inconsistency=False,
+    type2_inconsistency=False
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
@@ -304,12 +304,12 @@ def _filter_closure_data(
                 UNCORR,
                 inconsistent_datasets,
                 sys_rescaling_factor_1,
-                lvl1_inconsistent_fit
+                type1_inconsistency
             )
         
         # for lvl2 inconsistent fit only, modify the L1 data sys (written in filters folder)
         # such that the covmat used to generate L2 data is underestimating systematics
-        if lvl2_inconsistent_fit:
+        if type2_inconsistency:
             closure_data = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor_2)
                     for cd in closure_data]
 
