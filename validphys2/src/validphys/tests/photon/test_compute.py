@@ -1,4 +1,3 @@
-import pytest
 from validphys.photon.compute import Photon
 from validphys.photon import structure_functions
 import lhapdf
@@ -26,8 +25,6 @@ class faketheory():
 
 fiatlux_runcard = {
     "pdf_name": "no_pdf",
-    "path_to_F2": "/",
-    "path_to_FL": "/",
     "additional_errors": False, 
 }
 

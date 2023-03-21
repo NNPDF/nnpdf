@@ -1,7 +1,5 @@
-import pytest
 import validphys.photon.structure_functions as sf
 import numpy as np
-from pathlib import Path
 import pineappl
 
 def test_zero_pdfs():
