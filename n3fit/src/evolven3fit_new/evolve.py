@@ -99,12 +99,13 @@ def evolve_fit(
     with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
-        info = info_file.build(theory, op, 1, info_update={})
-        info["NumMembers"] = "REPLACE_NREP"
-        info["ErrorType"] = "replicas"
+    info = info_file.build(theory, op, 1, info_update={})
+    info["NumMembers"] = "REPLACE_NREP"
+    info["ErrorType"] = "replicas"
+    info["XMin"] = float(x_grid[0])
+    info["XMax"] = float(x_grid[-1])
+    with eko.EKO.read(eko_path) as eko_op:
         info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
-        info["XMin"] = float(x_grid[0])
-        info["XMax"] = float(x_grid[-1])
         dump_info_file(usr_path, info)
         for replica in initial_PDFs_dict.keys():
             evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
