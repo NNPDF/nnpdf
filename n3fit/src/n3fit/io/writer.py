@@ -457,7 +457,7 @@ def storefit(
     data = {
         "replica": replica,
         "q20": q20,
-        "xgrid": xgrid.tolist(),
+        "xgrid": xgrid.T.tolist()[0],
         "labels": ["TBAR", "BBAR", "CBAR", "SBAR", "UBAR", "DBAR", "GLUON", "D", "U", "S", "C", "B", "T", "PHT"],
         "pdfgrid": lha.tolist(),
     }
