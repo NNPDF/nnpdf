@@ -26,7 +26,7 @@ def test_zero_pdfs():
 
     f2lo = sf.F2LO(pdfs, fake_theory)
 
-    np.testing.assert_equal(f2lo.ktThr, np.inf)
+    np.testing.assert_equal(f2lo.thresh_t, np.inf)
 
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
