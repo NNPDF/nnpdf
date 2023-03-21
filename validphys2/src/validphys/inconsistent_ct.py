@@ -140,23 +140,3 @@ class InconsistentCommonData(CommonData):
 
         return new_commondata
 
-
-
-
-
-
-if __name__ == "__main__":
-    from validphys.loader import Loader
-    l = Loader()
-    cd = l.check_commondata('NMC').load_commondata_instance()
-
-    icd = InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
-                        commondataproc=cd.commondataproc, 
-                        nkin=cd.nkin, nsys=cd.nsys, 
-                        commondata_table = cd.commondata_table, 
-                        systype_table = cd.systype_table)
-    
-
-    
-    
-    
