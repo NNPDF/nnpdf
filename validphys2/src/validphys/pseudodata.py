@@ -290,10 +290,29 @@ def make_level1_data(
     data, level0_commondata_wc, filterseed, experiments_index
 ):
     """
-    Given a list of level0 commondata instances, return the same list
-    with central values replaced by level1 data
+    Given a list of Level 0 commondata instances, return the
+    same list with central values replaced by Level 1 data.
 
+    Level 1 data is generated using validphys.make_replica.
+    The covariance matrix, from which the stochastic Level 1 
+    noise is sampled, is built from Level 0 commondata
+    instances (level0_commondata_wc). This, in particular,
+    means that the multiplicative systematics are generated
+    from the Level 0 central values.
 
+    Note that the covariance matrix used to generate Level 2
+    pseudodata is consistent with the one used at Level 1
+    up to corrections of the order eta * eps, where eta and
+    eps are defined as shown below:
+
+    Generate L1 data: L1 = L0 + eta, eta ~ N(0,CL0)
+    Generate L2 data: L2_k = L1 + eps_k, eps_k ~ N(0,CL1)
+    
+    where CL0 and CL1 means that the multiplicative entries
+    have been constructed from Level 0 and Level 1 central
+    values respectively.
+    
+    
     Parameters
     ----------
 
@@ -304,9 +323,10 @@ def make_level1_data(
                         all datasets within one experiment. The central value is replaced
                         by Level 0 fake data. Cuts already applied.
 
-    filterseed: int
+    filterseed : int
                 random seed used for the generation of Level 1 data
 
+    experiments_index : pandas.MultiIndex
 
     Returns
     -------
@@ -325,7 +345,6 @@ def make_level1_data(
     >>> l1_cd
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
-    # =============== generate experimental covariance matrix ===============#
 
     dataset_input_list = list(data.dsinputs)
 
@@ -338,8 +357,7 @@ def make_level1_data(
         _only_additive=False,
     )
 
-    # ================== generation of pseudo data ======================#
-    # = generate pseudo data starting from theory predictions
+    # ================== generation of Level1 data ======================#
     level1_data = make_replica(
         level0_commondata_wc, filterseed, covmat, sep_mult=False, genrep=True
     )
