@@ -4,8 +4,11 @@ from validphys.photon import structure_functions
 import lhapdf
 import numpy as np
 from collections import namedtuple
+from pathlib import Path
 
 class faketheory():
+    def __init__(self):
+        self.path = Path("/fake/path/")
     def get_description(self):
         return {
             "alphaqed": 0.01,
@@ -92,9 +95,9 @@ def test_init(monkeypatch):
     np.testing.assert_almost_equal(photon.alpha_em_ref, faketheory().get_description()["alphaqed"])
 
     # test masses
-    np.testing.assert_equal(photon.ktThr, np.inf)
-    np.testing.assert_almost_equal(photon.kbThr, 4.92)
-    np.testing.assert_almost_equal(photon.kcThr, 1.3)
+    np.testing.assert_equal(photon.thresh_t, np.inf)
+    np.testing.assert_almost_equal(photon.thresh_b, 4.92)
+    np.testing.assert_almost_equal(photon.thresh_c, 1.3)
 
     # test set_thresholds_alpha_em
     np.testing.assert_almost_equal(photon.thresh[5], 91.2)
