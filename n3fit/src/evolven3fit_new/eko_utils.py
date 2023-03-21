@@ -18,6 +18,8 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS = {
     "n_integration_cores": 1,
 }
 
+NFREF_DEFAULT = 5
+NF0_DEFAULT = 4
 
 def construct_eko_cards(
     theoryID,
@@ -44,9 +46,9 @@ def construct_eko_cards(
     theory.pop("FNS")
     theory.update(theory_card_dict)
     if "nfref" not in theory:
-        theory["nfref"] = 5
+        theory["nfref"] = NFREF_DEFAULT
     if "nf0" not in theory:
-        theory["nf0"] = 4
+        theory["nf0"] = NF0_DEFAULT
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
