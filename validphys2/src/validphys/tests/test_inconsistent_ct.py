@@ -93,6 +93,24 @@ def test_rescale_sys_CORR_ADD():
     assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
 
 
+def test_process_commondata():
+    """
+    Check whether process_commondata
+    leaves the commondata instance
+    unchanged when told to do so.
+    """
+    
+    new_icd = inconsys_cd.process_commondata(
+                    ADD=False,MULT=False,
+                    CORR=False,UNCORR=False,
+                    inconsistent_datasets=[SINGLE_DATASET['dataset']],
+                    sys_rescaling_factor=1
+                    )
+    tab1 = new_icd.commondata_table.drop(['process'],axis=1).to_numpy()
+    tab2 = inconsys_cd.commondata_table.drop(['process'], axis=1).to_numpy()
+    
+    assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
+
 
 def test_process_commondata_CORR_MULT():
     """
