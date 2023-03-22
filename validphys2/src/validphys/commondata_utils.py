@@ -4,8 +4,8 @@ Python utilities for commondata implementation.
 This module provides helpful functions that automate a few
 tasks that are regularly needed for the implementation of
 experimental data to the commondata format. If there are 
-any additional functions that should be added here as they
-could simply some repetitve tasks, please do suggest.
+any additional functions that could be added here as they
+could simplify some repetitve tasks, please do suggest.
 
 Before the usage of any functions, it is recommended to read
 the docstrings of the function to understand the inputs and
