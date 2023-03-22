@@ -50,20 +50,18 @@ variants:
 
 # Plotting  
 kinematic_coverage:
-   x: x
-   q2: q2
-dataset_label: "NMC $d/p$"
-plot_x: x
-figure_by: 
-   - q2
+   ystar: ystar
+   m12: m12
+dataset_label: "ATLAS dijets 7 TeV, R=0.6"
+plot_x: m12
+figure_by:
+  - ystar
 
 # Theory
 theory:
    FK_tables:
-     - - NMCPD_D1
-       - NMCPD_D2
-     - - NMCPD_P
-   compound: "RATIO"
+     - ATLAS_2JET_7TEV_R06
+   
 
 nnpdf_metadata:
    nnpdf31_process: "DIJET"
