@@ -53,9 +53,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         self.ymax = ymax
 
     def setup_flavour(self, flstate):
-        flstate.handles=[]
-        flstate.labels=[]
-        flstate.hatchit=plotutils.hatch_iter()
+        pass
 
     def normalize(self):
         normalize_to = self.normalize_to
@@ -189,27 +187,18 @@ def _warn_any_pdf_not_montecarlo(pdfs):
 
 class ReplicaPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
-        labels = flstate.labels
-        handles = flstate.handles
         ax = flstate.ax
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop['color']
-        stats = grid.select_flavour(flstate.flindex).grid_values
+        flavour_grid = grid.select_flavour(flstate.flindex)
+        stats = flavour_grid.grid_values
         gv = stats.data
         ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
                 color=color, zorder=1)
-        cv_line = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], 
-                color=color, linewidth=2)
-        handle = cv_line[0]
-        labels.append(pdf.label)
-        handles.append(handle)
+        ax.plot(grid.xgrid, stats.central_value(), color=color,
+                linewidth=2,
+                label=pdf.label)
         return gv
-
-    def legend(self, flstate):
-        return flstate.ax.legend(flstate.handles, flstate.labels,
-                                 handler_map={plotutils.HandlerSpec:
-                                             plotutils.ComposedHandler()
-                                             })
 
 @figuregen
 @check_pdf_normalize_to
@@ -415,6 +404,11 @@ class BandPDFPlotter(PDFPlotter):
         self.show_mc_errors = show_mc_errors
         self.legend_stat_labels = legend_stat_labels
         super().__init__(*args, **kwargs)
+
+    def setup_flavour(self, flstate):
+        flstate.handles=[]
+        flstate.labels=[]
+        flstate.hatchit=plotutils.hatch_iter()
 
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
@@ -1126,7 +1120,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     return fig
 
 
-class MixMatchPDFPlotter(ReplicaPDFPlotter, BandPDFPlotter):
+class MixMatchPDFPlotter(BandPDFPlotter):
     """Special wrapper class to plot, in the same figure, PDF bands and PDF replicas
     depending on the type of PDF.
     Practical use: plot together the PDF central values with the NNPDF bands
@@ -1134,9 +1128,22 @@ class MixMatchPDFPlotter(ReplicaPDFPlotter, BandPDFPlotter):
     def __init__(self, *args, pdfs_plot_replicas, **kwargs):
         self.pdfs_plot_replicas = pdfs_plot_replicas
         super().__init__(*args, **kwargs)
-    
+
     def draw(self, pdf, grid, flstate):
         if pdf in self.pdfs_plot_replicas:
-            # Go then to the draw method of ReplicaPDFPlotter
-            return super().draw(pdf, grid, flstate)
-        return super(ReplicaPDFPlotter, self).draw(pdf, grid, flstate)
+            labels = flstate.labels
+            handles = flstate.handles
+            ax = flstate.ax
+            next_prop = next(ax._get_lines.prop_cycler)
+            color = next_prop['color']
+            stats = grid.select_flavour(flstate.flindex).grid_values
+            gv = stats.data
+            ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
+                    color=color, zorder=1)
+            cv_line = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], 
+                    color=color, linewidth=2)
+            handle = cv_line[0]
+            labels.append(pdf.label)
+            handles.append(handle)
+            return gv
+        return super().draw(pdf, grid, flstate)
