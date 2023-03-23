@@ -8,7 +8,7 @@ pdfs:
 - {id: NNPDF40_nnlo_as_01180, label: NNLO}
 - {id: NNPDF40_nlo_as_01180, label: NLO}
 
-pdfs_plot_replicas: [2,]
+mixband_as_replicas: [2,]
 basis: flavour
 xscale: log
 npoints: 20

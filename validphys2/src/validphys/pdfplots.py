@@ -25,7 +25,7 @@ from validphys.core import MCStats
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.utils import scale_from_grid
 from validphys.checks import check_pdf_normalize_to, check_scale, check_have_two_pdfs
-from validphys.checks import check_pdfs_noband, check_pdfs_plot_replicas
+from validphys.checks import check_pdfs_noband, check_mixband_as_replicas
 
 log = logging.getLogger(__name__)
 
@@ -529,7 +529,7 @@ def plot_pdfs(
 
 @figuregen
 @check_pdf_normalize_to
-@check_pdfs_plot_replicas
+@check_mixband_as_replicas
 @check_pdfs_noband
 @check_scale("xscale", allow_none=True)
 def plot_pdfs_mixed(
@@ -542,22 +542,22 @@ def plot_pdfs_mixed(
     pdfs_noband: (list, type(None)) = None,
     show_mc_errors: bool = True,
     legend_stat_labels: bool = True,
-    pdfs_plot_replicas: (list, type(None)) = None,
+    mixband_as_replicas: (list, type(None)) = None,
 ):
     """This function is similar to plot_pdfs, except instead of only plotting
     the central value and the uncertainty of the PDFs, those PDFs indicated by
-    pdfs_plot_replicas will be plotted as replicas without the central value.
+    mixband_as_replicas will be plotted as replicas without the central value.
 
-    Inputs are the same as plot_pdfs, with the exeption of pdfs_plot_replicas,
+    Inputs are the same as plot_pdfs, with the exeption of mixband_as_replicas,
     which only exists here.
 
-    pdfs_plot_replicas: A list of PDFs to plot as replicas, i.e. the
+    mixband_as_replicas: A list of PDFs to plot as replicas, i.e. the
     central values and replicas of these PDFs will be plotted. The list can be
     formed of strings, corresponding to PDF IDs, integers (starting from one),
     corresponding to the index of the PDF in the list of PDFs, or a mixture
     of both.
     """
-    yield from MixMatchPDFPlotter(
+    yield from MixBandPDFPlotter(
         pdfs,
         xplotting_grids,
         xscale,
@@ -567,7 +567,7 @@ def plot_pdfs_mixed(
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,
-        pdfs_plot_replicas=pdfs_plot_replicas,
+        mixband_as_replicas=mixband_as_replicas,
     )
 
 
@@ -630,7 +630,7 @@ def plot_pdfreplicas_kinetic_energy(
 @figuregen
 @check_pdf_normalize_to
 @check_pdfs_noband
-@check_pdfs_plot_replicas
+@check_mixband_as_replicas
 @check_scale("xscale", allow_none=True)
 def plot_pdfs_mixed_kinetic_energy(
     pdfs,
@@ -642,7 +642,7 @@ def plot_pdfs_mixed_kinetic_energy(
     pdfs_noband: (list, type(None)) = None,
     show_mc_errors: bool = True,
     legend_stat_labels: bool = True,
-    pdfs_plot_replicas: (list, type(None)) = None,
+    mixband_as_replicas: (list, type(None)) = None,
 ):
     """Mixed band and replica plotting of the "kinetic energy" of the PDF as a
     function of x for a given value of Q.
@@ -657,7 +657,7 @@ def plot_pdfs_mixed_kinetic_energy(
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,
-        pdfs_plot_replicas=pdfs_plot_replicas,
+        mixband_as_replicas=mixband_as_replicas,
     )
 
 
@@ -1120,17 +1120,17 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     return fig
 
 
-class MixMatchPDFPlotter(BandPDFPlotter):
+class MixBandPDFPlotter(BandPDFPlotter):
     """Special wrapper class to plot, in the same figure, PDF bands and PDF replicas
     depending on the type of PDF.
     Practical use: plot together the PDF central values with the NNPDF bands
     """
-    def __init__(self, *args, pdfs_plot_replicas, **kwargs):
-        self.pdfs_plot_replicas = pdfs_plot_replicas
+    def __init__(self, *args, mixband_as_replicas, **kwargs):
+        self.mixband_as_replicas = mixband_as_replicas
         super().__init__(*args, **kwargs)
 
     def draw(self, pdf, grid, flstate):
-        if pdf in self.pdfs_plot_replicas:
+        if pdf in self.mixband_as_replicas:
             labels = flstate.labels
             handles = flstate.handles
             ax = flstate.ax
