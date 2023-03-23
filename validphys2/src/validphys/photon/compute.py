@@ -1,7 +1,7 @@
 """Script that calls fiatlux to add the photon PDF."""
-import lhapdf
-
 import numpy as np
+
+from validphys.lhapdfset import LHAPDFSet
 
 from . import structure_functions as sf
 from scipy.interpolate import interp1d
@@ -24,7 +24,8 @@ class Photon:
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         self.replicas_id = replicas_id
-        self.q_in2 = 100**2
+        self.q_in = 10
+        self.q_in2 = self.q_in**2
 
         # parameters for the alphaem running
         self.alpha_em_ref = self.theory["alphaqed"]
@@ -43,14 +44,14 @@ class Photon:
         self.set_thresholds_alpha_em()
 
         # structure functions
-        self.qcd_pdfs = [lhapdf.mkPDF(fiatlux_runcard["pdf_name"], id) for id in replicas_id]
+        self.qcd_pdfs = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
 
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
         path_to_FL = theoryid.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
-        f2 = [sf.StructureFunction(path_to_F2, pdfs) for pdfs in self.qcd_pdfs]
-        fl = [sf.StructureFunction(path_to_FL, pdfs) for pdfs in self.qcd_pdfs]
-        f2lo = [sf.F2LO(pdfs, self.theory) for pdfs in self.qcd_pdfs]
+        f2 = [sf.StructureFunction(path_to_F2, self.qcd_pdfs.members[id]) for id in self.replicas_id]
+        fl = [sf.StructureFunction(path_to_FL, self.qcd_pdfs.members[id]) for id in self.replicas_id]
+        f2lo = [sf.F2LO(self.qcd_pdfs.members[id], self.theory) for id in self.replicas_id]
 
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
 
@@ -64,7 +65,7 @@ class Photon:
         for i in range(len(replicas_id)):
             self.lux[i].PlugAlphaQED(self.alpha_em, self.qref)
             self.lux[i].InsertInelasticSplitQ([self.thresh_b, self.thresh_t if self.theory["MaxNfPdf"]==6 else 1e100])        
-            self.lux[i].PlugStructureFunctions(f2[i].FxQ, fl[i].FxQ, f2lo[i].FxQ)
+            self.lux[i].PlugStructureFunctions(f2[i].fxq, fl[i].fxq, f2lo[i].fxq)
         
         self.xgrid = XGRID
         self.error_matrix = self.generate_error_matrix()
@@ -197,11 +198,11 @@ class Photon:
                 if pid == 22 :
                     pdfs[j] = photon_100GeV
                     ph_id = j
-                if not self.qcd_pdfs[id].hasFlavor(pid):
+                if pid not in self.qcd_pdfs.flavors:
                     continue
                 pdfs[j] = np.array(
                     [
-                        self.qcd_pdfs[id].xfxQ2(pid, x, self.q_in2) / x
+                        self.qcd_pdfs.xfxQ(x, self.q_in, id, pid) / x
                         for x in self.xgrid
                     ]
                 )
@@ -248,10 +249,10 @@ class Photon:
         """generate error matrix to be used for the additional errors."""
         if not self.fiatlux_runcard["additional_errors"] :
             return None
-        extra_set = lhapdf.mkPDFs("LUXqed17_plus_PDF4LHC15_nnlo_100")
+        extra_set = LHAPDFSet("LUXqed17_plus_PDF4LHC15_nnlo_100", "replicas")
         return np.array(
             [
-                [(extra_set[i].xfxQ2(22, x, self.q_in2) - extra_set[0].xfxQ2(22, x, self.q_in2)) for i in range(101, 107+1)]
+                [(extra_set.xfxQ(x, self.q_in, i, 22) - extra_set.xfxQ(x, self.q_in, 0, 22)) for i in range(101, 107+1)]
                 for x in self.xgrid
             ]
         ) # first index must be x, while second one must be replica index
