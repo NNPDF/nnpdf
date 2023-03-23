@@ -8,8 +8,7 @@ Created on Mar  2023
 import yaml
 import numpy as np
 import pandas as pd
-from scipy.linalg import block_diag, cholesky
-
+from scipy.linalg import block_diag
 
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 from validphys.loader import Loader
@@ -18,18 +17,12 @@ warnings.filterwarnings('ignore')
 
 
 
-def filter_ATLAS_2JET_7TEV_R06(scenario=0,kin_data=True):
-    """
-    Parameters
-    ----------
+SCENARIO = {'nominal':0, 'stronger':1, 'weaker':2}
 
-    scenario : 0, 1, 2
-            0 = nominal, 1 = stronger, 2 = weaker
-            default is 0
-    
-    kin_data : bool
-            whether to save kin and data
-    
+def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
+    """
+    writes kinetic and data central values
+    to yaml file
     """
 
     with open('metadata.yaml', 'r') as file:
@@ -40,30 +33,32 @@ def filter_ATLAS_2JET_7TEV_R06(scenario=0,kin_data=True):
 
     data_central = []
     kin = []
-    dfs = []
+
     for table in tables:
-        hepdata_tables = f"rawdata/HEPData-ins1268975-v{version}-Table_{table}.yaml"
         
-        # uncertainties dataframe
-        df = fill_df(hepdata_tables,scenario=scenario)
-        dfs.append(df)
+        hepdata_tables = f"rawdata/HEPData-ins1268975-v{version}-Table_{table}.yaml"
 
         with open(hepdata_tables, 'r') as file:
             input = yaml.safe_load(file)
         
+        # half of rapidity separation, index 8 of qualifiers list
         ystar = range_str_to_floats(input['dependent_variables'][0]['qualifiers'][8]['value'])
+        # center of mass energy, index 7 of qualifiers list
         sqrts = float(input['dependent_variables'][0]['qualifiers'][7]['value'])
 
         # measurements of several dijet mass values
         values = input['dependent_variables'][0]['values']
 
-        # loop over different diijet mass bins
-        for i,value in enumerate(values):
+        # loop over different dijet mass bins
+        m12_values = input['independent_variables'][0]['values']
 
+        for value, m12 in zip(values, m12_values):
+
+            # central values
             data_central_value = value['value']
             data_central.append(data_central_value)
-              
-            m12 = input['independent_variables'][0]['values'][i]
+
+            # kinematics
             m12['low'], m12['high'] = 1e3 * m12['low'], 1e3 * m12['high']
             m12['mid'] = float(f"{0.5 * (m12['low']+m12['high']):.3f}")
 
@@ -73,6 +68,47 @@ def filter_ATLAS_2JET_7TEV_R06(scenario=0,kin_data=True):
 
             kin.append(kin_value)
     
+    data_central_yaml  = { 'data_central' : data_central }
+    kinematics_yaml    = { 'bins' : kin }
+
+    with open('data.yaml', 'w') as file:
+        yaml.dump(data_central_yaml, file, sort_keys=False)
+
+    with open('kinematics.yaml', 'w') as file:
+        yaml.dump(kinematics_yaml, file, sort_keys=False)
+
+
+
+def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
+    """
+    write uncertainties to yaml file depending on 
+    the correlation scenario
+
+    Parameters
+    ----------
+
+    scenario : string
+            can be either nominal, stronger orweaker
+            default is nominal
+
+    
+    """
+    
+    with open('metadata.yaml', 'r') as file:
+        metadata = yaml.safe_load(file)
+
+    version = metadata['hepdata']['version']
+    tables  = metadata['hepdata']['tables']
+
+    
+    dfs = []
+    for table in tables:
+        hepdata_tables = f"rawdata/HEPData-ins1268975-v{version}-Table_{table}.yaml"
+        
+        # uncertainties dataframe
+        df = fill_df(hepdata_tables,scenario=scenario)
+        dfs.append(df)
+
     
     # Construct Covariance matrix for Systematics
     Asys = pd.concat([df.drop(['lum_plus','lum_minus'],axis=1) for df in dfs], axis = 0).to_numpy()
@@ -113,24 +149,12 @@ def filter_ATLAS_2JET_7TEV_R06(scenario=0,kin_data=True):
 
     
     uncertainties_yaml = {"definition": error_definition, "bins": error}
-    data_central_yaml  = { 'data_central' : data_central }
-    kinematics_yaml    = { 'bins' : kin }
-
-    if kin_data:
-        with open('data.yaml', 'w') as file:
-            yaml.dump(data_central_yaml, file, sort_keys=False)
-
-        with open('kinematics.yaml', 'w') as file:
-            yaml.dump(kinematics_yaml, file, sort_keys=False)
-
-    if scenario==0:
-        with open("uncertainties.yaml",'w') as file:
+    
+    if scenario == 'nominal':
+        with open(f"uncertainties.yaml",'w') as file:
             yaml.dump(uncertainties_yaml,file, sort_keys=False)
-    elif scenario==1:
-        with open("uncertainties_stronger.yaml",'w') as file:
-            yaml.dump(uncertainties_yaml,file, sort_keys=False)
-    elif scenario==2:
-        with open("uncertainties_weaker.yaml",'w') as file:
+    else:
+        with open(f"uncertainties_{scenario}.yaml",'w') as file:
             yaml.dump(uncertainties_yaml,file, sort_keys=False)
 
     return covmat
@@ -217,7 +241,7 @@ def process_err(error,cv):
 
     
 
-def HEP_table_to_df(heptable,scenario=0):
+def HEP_table_to_df(heptable,scenario='nominal'):
     """
     Given hep data table return a pandas
     DataFrame with index given by Ndata,
@@ -232,20 +256,22 @@ def HEP_table_to_df(heptable,scenario=0):
     scenario : 0, 1, 2
             0 = nominal, 1 = stronger, 2 = weaker
     """
-
+    
     with open(heptable, 'r') as file:
         card = yaml.safe_load(file)
     
     # list of len ndata. Each entry is dict with
     # keys errors and value
-    card = card['dependent_variables'][scenario]['values']
+    card = card['dependent_variables'][SCENARIO[scenario]]['values']
     df = pd.DataFrame(index = range(1,len(card)+1))
     
     errors = card[0]['errors']
     for i, err in enumerate(errors):
-        if (scenario == 0 and i == 67) or (scenario == 1 and i == 57) or (scenario == 2 and i == 69):
+        # for the luminosity uncertainty
+        if (scenario == 'nominal' and i == 67) or (scenario == 'stronger' and i == 57) or (scenario == 'weaker' and i == 69):
             df["lum_plus"]=np.nan
             df["lum_minus"]=np.nan
+
         elif err['label'] == 'sys':
             df[f"{err['label']}_plus_{i}"]=np.nan
             df[f"{err['label']}_minus_{i}"]=np.nan
@@ -253,7 +279,7 @@ def HEP_table_to_df(heptable,scenario=0):
     return df
 
 
-def fill_df(heptable,scenario=0):
+def fill_df(heptable,scenario='nominal'):
     """
     Fill a data frame with index 
     corresponding to dijet mass bins
@@ -266,7 +292,7 @@ def fill_df(heptable,scenario=0):
     
     # list of len ndata. Each entry is dict with
     # keys errors and value
-    card = card['dependent_variables'][scenario]['values']
+    card = card['dependent_variables'][SCENARIO[scenario]]['values']
     df_nan = HEP_table_to_df(heptable,scenario)
     
     for i,dat in enumerate(card):
@@ -274,7 +300,7 @@ def fill_df(heptable,scenario=0):
     
         for j, err in enumerate(dat['errors']):
 
-            if (scenario == 0 and j == 67) or (scenario == 1 and j == 57) or (scenario == 2 and j == 69):
+            if (scenario == 'nominal' and j == 67) or (scenario == 'stronger' and j == 57) or (scenario == 'weaker' and j == 69):
                 d_p, d_m = process_err(err,cv)
                 df_nan.loc[df_nan.index == i+1,"lum_plus"] = d_p
                 df_nan.loc[df_nan.index == i+1,"lum_minus"] = d_m
@@ -294,10 +320,14 @@ def fill_df(heptable,scenario=0):
 
 if __name__ == "__main__":
     
+    # generate kinematics and central data values
+    filter_ATLAS_2JET_7TEV_R06_data_kinetic()
+
     # generate all uncertainties scenarios
-    filter_ATLAS_2JET_7TEV_R06(scenario=0,kin_data=True)
-    filter_ATLAS_2JET_7TEV_R06(scenario=1, kin_data=False)
-    filter_ATLAS_2JET_7TEV_R06(scenario=2, kin_data=False)
+    filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal')
+    filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='stronger')
+    filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='weaker')
+
     setname = "ATLAS_2JET_7TEV_R06"
     l = Loader()
     cd = l.check_commondata(setname = setname).load_commondata_instance()
@@ -318,12 +348,12 @@ if __name__ == "__main__":
              )
 
 
-    covmat = filter_ATLAS_2JET_7TEV_R06(scenario=0,kin_data=False)
+    covmat = filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal')
     
     ones = cmat / covmat
     print(ones[0,:])
     print(f"min covmat/cov = {np.min(ones)}")
     print(f"max covmat/cov = {np.max(ones)}")
     print(f"mean covmat / cov = {np.mean(ones)}")
-    print(f"np.allclose: {np.allclose(covmat,cmat, rtol = 1e05, atol =1e-5)}")
+    print(f"np.allclose: {np.allclose(covmat,cmat, rtol = 1e-5, atol =1e-5)}")
     
