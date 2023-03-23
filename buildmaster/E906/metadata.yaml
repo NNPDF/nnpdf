@@ -13,6 +13,7 @@ iNSPIRE:
 #    url: 
 #    version:
 #    tables:
+energy: "120GEV"
  
 nnpdf_metadata:
   nnpdf31_process: "DY"
@@ -22,6 +23,8 @@ implemented_observables:
   - dataset: "E906_FTDY_120GEV"
     observable: {description: "Ratio between fixed-target DY cross sections with hydrogen and deuterium target", label: $\sigma^pd/2*sigma^pp$, units: "" }
     ndata: 6
+    observable_name: "PDXSECRATIO"
+    process: "FTDY"
 
     dataset_label: "E906R"
     plot_x: Y
@@ -38,7 +41,6 @@ implemented_observables:
           sqrts:  {description: "Com energy", units: "GeV"}
       file: kinematics.yaml
 
-    # Data
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
