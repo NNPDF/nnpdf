@@ -1,5 +1,5 @@
 # Generalia
-setname: "E866_FTDY_800GEV_PXSEC"
+setname: "E866_DY_800GEV_PXSEC"
 
 version: 1
 version_comment: "Initial implementation"
@@ -12,19 +12,17 @@ iNSPIRE:
 hepdata:
    url: "https://www.hepdata.net/record/ins613362"
    version: 1
-energy: "800GEV"
 
 nnpdf_metadata:
    nnpdf31_process: "DY"
    experiment: "DYE886" # there was a typo in the nnpdf31 name
 
 implemented_observables:
-  - dataset: "E866_FTDY_800GEV_PXSEC"
+  - dataset: "E866_DY_800GEV_PXSEC"
     observable: {description: "Measurements of the double differential cross section as a function of the invariant mass of the DY pair M and the XF kinematical variable", label: $M^3 d^2\sigma/dM dx_F$, units: "NB*GEV**2/NUCLEON}" }
     ndata: 184
     tables: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     observable_name: "PXSEC"
-    process: "DY"
 
     dataset_label: E866P $M^3 d^2\sigma/dM dx_F$
     plot_x: xF

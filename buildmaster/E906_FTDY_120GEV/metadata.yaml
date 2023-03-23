@@ -1,5 +1,5 @@
 # Generalia
-setname: "E906"
+setname: "E906_DY_120GEV"
 
 version: 1
 version_comment: "Baseline implementation"
@@ -13,7 +13,6 @@ iNSPIRE:
 #    url: 
 #    version:
 #    tables:
-energy: "120GEV"
  
 nnpdf_metadata:
   nnpdf31_process: "DY"
@@ -24,7 +23,6 @@ implemented_observables:
     observable: {description: "Ratio between fixed-target DY cross sections with hydrogen and deuterium target", label: $\sigma^pd/2*sigma^pp$, units: "" }
     ndata: 6
     observable_name: "PDXSECRATIO"
-    process: "DY"
 
     dataset_label: "E906R"
     plot_x: Y

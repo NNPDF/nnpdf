@@ -1,5 +1,5 @@
 # Generalia
-setname: "E866_FTDY_800GEV_PDXSECRATIO"
+setname: "E866_DY_800GEV_PDXSECRATIO"
 
 version: 1
 version_comment: "Initial implementation"
@@ -12,19 +12,17 @@ iNSPIRE:
 hepdata:
    url: "https://www.hepdata.net/record/ins5543165"
    version: 1
-energy: "800GEV"
 
 nnpdf_metadata:
    nnpdf31_process: "DY"
    experiment: "E866"
 
 implemented_observables:
-  - dataset: "E866_FTDY_800GEV_PDXSECRATIO"
+  - dataset: "E866_DY_800GEV_PDXSECRATIO"
     observable: {description: "Data on the ratio of pd DY cross sections over pp cross sections", label: $\sigma^d/2 \sigma^p$, units: "" }
     ndata: 15
     tables: [4]
     observable_name: "PDXSECRATIO"
-    process: "DY"
 
     dataset_label: E866R $d/2*p$
     plot_x: x2
