@@ -13,6 +13,8 @@ from eko.interpolation import XGrid
 
 from n3fit.io.writer import XGRID
 
+import fiatlux
+
 import yaml
 from os import remove
 import time
@@ -53,7 +55,6 @@ class Photon:
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
 
         # set fiatlux
-        import fiatlux
         ff = open('fiatlux_runcard.yml', 'w+')
         yaml.dump(self.fiatlux_runcard, ff)
         self.lux = [fiatlux.FiatLux('fiatlux_runcard.yml') for i in range(len(replicas_id))]
