@@ -12,6 +12,8 @@ from scipy.linalg import block_diag
 
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 from validphys.loader import Loader
+
+# ignore pandas warning 
 import warnings
 warnings.filterwarnings('ignore')
 
