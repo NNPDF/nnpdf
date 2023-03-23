@@ -113,12 +113,13 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
 
     
     # Construct Covariance matrix for Systematics
-    Asys = pd.concat([df.drop(['lum_plus','lum_minus'],axis=1) for df in dfs], axis = 0).to_numpy()
+    Asys = pd.concat([df.drop(['lum'],axis=1) for df in dfs], axis = 0).to_numpy()
     Csys = np.einsum('ij,kj->ik',Asys,Asys)
 
     # Construct Special Sys (Lum) Cov matrix
-    Alum = pd.concat([df[['lum_plus','lum_minus']] for df in dfs], axis = 0).to_numpy()
+    Alum = pd.concat([df[['lum']] for df in dfs], axis = 0).to_numpy()
     Clum = np.einsum('ij,kj->ik',Alum,Alum)
+    
 
     # construct Block diagonal statistical Covariance matrix
     ndata = [21, 21, 19, 17, 8, 4]
@@ -130,16 +131,19 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         stat = stat.loc[13:,1:ndata[i]].to_numpy().astype(float)    
         BD_stat = block_diag(BD_stat,stat)
 
-    # full covariance matrix
-    covmat = Csys + BD_stat + Clum
+    # covariance matrix without the special systematics, that is, ATLASLUMI11
+    covmat_no_lum = Csys + BD_stat
 
     # generate artificial systematics 
-    A_art_sys = decompose_covmat(covmat=covmat)
+    A_art_sys = decompose_covmat(covmat=covmat_no_lum)
     
     # error definition
     error_definition = {f"art_sys_{i}" : {"description":  f"artificial systematic {i}",
                                         "treatment": "ADD", "type": "CORR"}
                         for i in range(1,A_art_sys.shape[0]+1)}
+
+    error_definition["luminosity_uncertainty"] = {"description": "luminosity uncertainty",
+                                                    "treatment": "ADD", "type": "ATLASLUMI11"}
 
     # store error in dict
     error = []
@@ -147,9 +151,10 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         error_value={}
         for m in range(A_art_sys.shape[1]):
             error_value[f"art_sys_{m+1}"] = float(A_art_sys[n,m])
+        
+        error_value["luminosity_uncertainty"] = float(Alum[n])
         error.append(error_value)
 
-    
     uncertainties_yaml = {"definition": error_definition, "bins": error}
     
     if scenario == 'nominal':
@@ -159,7 +164,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         with open(f"uncertainties_{scenario}.yaml",'w') as file:
             yaml.dump(uncertainties_yaml,file, sort_keys=False)
 
-    return covmat
+    return covmat_no_lum + Clum
 
 
 def range_str_to_floats(str_range):
@@ -209,7 +214,12 @@ def process_err(error,cv):
         tuple containing two floats
 
     """
-    if error['label'] == 'sys':
+    if "lum" in error:
+        # luminosity uncertainty is always symmetric
+        sigma = float(error['symerror'].strip('%')) / 100. * cv
+        return sigma 
+
+    elif error['label'] == 'sys':
 
         if 'asymerror' in error:
             d_p = float(error['asymerror']['plus'].strip('%')) / 100. * cv
@@ -269,10 +279,9 @@ def HEP_table_to_df(heptable,scenario='nominal'):
     
     errors = card[0]['errors']
     for i, err in enumerate(errors):
-        # for the luminosity uncertainty
+        # luminosity uncertainty, always symmetric
         if (scenario == 'nominal' and i == 67) or (scenario == 'stronger' and i == 57) or (scenario == 'weaker' and i == 69):
-            df["lum_plus"]=np.nan
-            df["lum_minus"]=np.nan
+            df["lum"] = np.nan
 
         elif err['label'] == 'sys':
             df[f"{err['label']}_plus_{i}"]=np.nan
@@ -303,9 +312,13 @@ def fill_df(heptable,scenario='nominal'):
         for j, err in enumerate(dat['errors']):
 
             if (scenario == 'nominal' and j == 67) or (scenario == 'stronger' and j == 57) or (scenario == 'weaker' and j == 69):
-                d_p, d_m = process_err(err,cv)
-                df_nan.loc[df_nan.index == i+1,"lum_plus"] = d_p
-                df_nan.loc[df_nan.index == i+1,"lum_minus"] = d_m
+                # d_p, d_m = process_err(err,cv)
+                # df_nan.loc[df_nan.index == i+1,"lum_plus"] = d_p
+                # df_nan.loc[df_nan.index == i+1,"lum_minus"] = d_m
+                err["lum"]="lum"
+                sigma = process_err(err,cv)
+                
+                df_nan.loc[df_nan.index == i+1, "lum"] = sigma
 
             elif err['label'] == 'sys':
                 d_p, d_m = process_err(err,cv)
@@ -322,7 +335,7 @@ def fill_df(heptable,scenario='nominal'):
 
 if __name__ == "__main__":
     
-    # generate kinematics and central data values
+    # # generate kinematics and central data values
     filter_ATLAS_2JET_7TEV_R06_data_kinetic()
 
     # generate all uncertainties scenarios
