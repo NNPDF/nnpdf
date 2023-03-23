@@ -1,52 +1,56 @@
-# Filter for DYE866R
-
-import sys
 import yaml
-import numpy as np
 
 
-def filter_DYE866R():
+def filter_E605():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
     tables = metadata["hepdata"]["tables"]
+    npoints = metadata["hepdata"]["npoints"]
 
     data_central = []
     kin = []
     error = []
-
-    for i in tables:
+    for i, n in zip(tables, npoints):
         hepdata_tables = (
-            "rawdata/HEPData-ins554316-v" + str(version) + "-Table_" + str(i) + ".yaml"
+            "rawdata/HEPData-ins302822-v" + str(version) + "-Table_" + str(i) + ".yaml"
         )
         with open(hepdata_tables, "r") as file:
             input = yaml.safe_load(file)
 
-        values = input["dependent_variables"][0]["values"]
-        sqrts = float(input["dependent_variables"][0]["qualifiers"][3]["value"])
+        y = float(input["dependent_variables"][0]["qualifiers"][2]["value"])
+        sqrts = float(input["dependent_variables"][0]["qualifiers"][1]["value"])
 
-        for j in range(len(values)):
+        for j in range(n):
 
-            data_central_value = values[j]["value"]
+            data_central_value = input["dependent_variables"][0]["values"][j]["value"]
             data_central.append(data_central_value)
-            xF = input["independent_variables"][1]["values"][j]["value"]
-            M = input["independent_variables"][3]["values"][j]["value"]
-            J = np.sqrt(xF**2 + 4 * M**2 / sqrts**2)
-            y = float(0.5 * np.log((J + xF) / (J - xF)))
-
+            sqrttau = input["independent_variables"][0]["values"][j]["value"]
             kin_value = {
+                "s": {"min": None, "mid": sqrts**2, "max": None},
+                "sqrttau": {"min": None, "mid": sqrttau, "max": None},
                 "y": {"min": None, "mid": y, "max": None},
-                "M": {"min": None, "mid": M, "max": None},
-                "sqrts": {"min": None, "mid": sqrts, "max": None},
             }
             kin.append(kin_value)
-
             error_value = {
                 "stat_1": input["dependent_variables"][0]["values"][j]["errors"][0][
                     "symerror"
                 ],
-                "syst_1": data_central_value * 0.97 * 1e-2,
+                "syst_1": float(
+                    input["dependent_variables"][0]["values"][j]["errors"][1][
+                        "symerror"
+                    ].rstrip("%")
+                )
+                * data_central_value
+                * 1e-2,
+                "syst_2": float(
+                    input["dependent_variables"][0]["values"][j]["errors"][2][
+                        "symerror"
+                    ].rstrip("%")
+                )
+                * data_central_value
+                * 1e-2,
             }
             error.append(error_value)
 
@@ -57,9 +61,14 @@ def filter_DYE866R():
             "type": "UNCORR",
         },
         "syst_1": {
-            "description": "total systematic uncertainty, 0.97%",
-            "treatment": "ADD",
+            "description": "normalization systematic uncertainty",
+            "treatment": "MULT",
             "type": "CORR",
+        },
+        "syst_2": {
+            "description": "total systematic uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
         },
     }
 
@@ -77,4 +86,4 @@ def filter_DYE866R():
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
-filter_DYE866R()
+filter_E605()

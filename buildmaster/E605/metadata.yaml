@@ -1,0 +1,49 @@
+# Generalia
+setname: "E605"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+   url: ""
+iNSPIRE:
+   url: "https://inspirehep.net/literature/302822"
+hepdata:
+   url: "https://www.hepdata.net/record/ins302822"
+   version: 1
+   tables: [1,2,3,4,5,6,7]
+   npoints: [17,18,18,18,18,18,12] # number of datapoints in each table
+
+nnpdf_metadata:
+   nnpdf31_process: "DY"
+   experiment: "DYE605"
+
+implemented_observables:
+  - dataset: "E605_FTDY_38GEV"
+    observable: {description: "Double differential distribution in muon pair tau and rapidity", label: $s*d^2\sigma/d\sqrt\tau/dy$, units: "nb*GeV**2 / nucleon" }
+    ndata: 119
+
+    dataset_label: "E605"
+    plot_x: sqrttau
+    figure_by: 
+      - y
+    kinematic_coverage:
+      y: y
+      sqrttau: sqrttau
+
+    kinematics:
+      variables:
+          s: {description: "Center of mass energy of the collision squared", label: $s$, units: "GeV²"}
+          sqrttau:  {description: " M/sqrt(s), with M the invariant mass of the muon pair", label: $\sqrt(\tau)$, units: ""}
+          y:  {description: "lepton rapidity: log( ( q0 + qz ) / ( q0 - qz ) ) / 2", label: "$y$",  units: ""}
+    file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - DYE605
+      operation: 'null'

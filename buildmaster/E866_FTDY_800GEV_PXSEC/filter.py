@@ -1,58 +1,55 @@
-# Filter for NMCPD
+# Filter for DYE866R
 
 import yaml
 
 
-def filter_E605():
+def filter_DYE866P():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
     tables = metadata["hepdata"]["tables"]
-    npoints = metadata["hepdata"]["npoints"]
 
     data_central = []
     kin = []
     error = []
-    for i, n in zip(tables, npoints):
+
+    for i in tables:
         hepdata_tables = (
-            "rawdata/HEPData-ins302822-v" + str(version) + "-Table_" + str(i) + ".yaml"
+            "rawdata/HEPData-ins613362-v" + str(version) + "-Table_" + str(i) + ".yaml"
         )
         with open(hepdata_tables, "r") as file:
             input = yaml.safe_load(file)
+        values = input["dependent_variables"][0]["values"]
+        sqrts = float(input["dependent_variables"][0]["qualifiers"][2]["value"])
 
-        y = float(input["dependent_variables"][0]["qualifiers"][2]["value"])
-        sqrts = float(input["dependent_variables"][0]["qualifiers"][1]["value"])
+        for j in range(len(values)):
 
-        for j in range(n):
-
-            data_central_value = input["dependent_variables"][0]["values"][j]["value"]
+            data_central_value = values[j]["value"]
             data_central.append(data_central_value)
-            sqrttau = input["independent_variables"][0]["values"][j]["value"]
+            xF = input["independent_variables"][1]["values"][j]["value"]
+            M_high = input["independent_variables"][0]["values"][j]["high"]
+            M_low = input["independent_variables"][0]["values"][j]["low"]
+            # M = input["independent_variables"][0]["values"][j]["value"]
+            # value for central M is missing for one point, so I m computing it.
+            # This is the way it is done in old implementation
+            M = 0.5 * (M_high + M_low)
+
             kin_value = {
-                "s": {"min": None, "mid": sqrts**2, "max": None},
-                "sqrttau": {"min": None, "mid": sqrttau, "max": None},
-                "y": {"min": None, "mid": y, "max": None},
+                "xF": {"min": None, "mid": xF, "max": None},
+                "M": {"min": M_low, "mid": M, "max": M_high},
+                "sqrts": {"min": None, "mid": sqrts, "max": None},
             }
             kin.append(kin_value)
+
             error_value = {
                 "stat_1": input["dependent_variables"][0]["values"][j]["errors"][0][
                     "symerror"
                 ],
-                "syst_1": float(
-                    input["dependent_variables"][0]["values"][j]["errors"][1][
-                        "symerror"
-                    ].rstrip("%")
-                )
-                * data_central_value
-                * 1e-2,
-                "syst_2": float(
-                    input["dependent_variables"][0]["values"][j]["errors"][2][
-                        "symerror"
-                    ].rstrip("%")
-                )
-                * data_central_value
-                * 1e-2,
+                "syst_1": input["dependent_variables"][0]["values"][j]["errors"][1][
+                    "symerror"
+                ],
+                "syst_2": data_central_value * 6.5 * 1e-2,
             }
             error.append(error_value)
 
@@ -63,14 +60,14 @@ def filter_E605():
             "type": "UNCORR",
         },
         "syst_1": {
-            "description": "normalization systematic uncertainty",
-            "treatment": "MULT",
-            "type": "CORR",
-        },
-        "syst_2": {
             "description": "total systematic uncertainty",
             "treatment": "ADD",
             "type": "UNCORR",
+        },
+        "syst_2": {
+            "description": "Additional systematic uncertainty in the normalization",
+            "treatment": "MULT",
+            "type": "CORR",
         },
     }
 
@@ -88,4 +85,4 @@ def filter_E605():
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
-filter_E605()
+filter_DYE866P()

@@ -1,0 +1,48 @@
+# Generalia
+setname: "E866_FTDY_800GEV_PXSEC"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/pdf/hep-ex/0302019.pdf"
+iNSPIRE:
+   url: "https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=find%20eprint%20hep-ex%2F0302019"
+hepdata:
+   url: "https://www.hepdata.net/record/ins613362"
+   version: 1
+   tables: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+
+nnpdf_metadata:
+   nnpdf31_process: "DY"
+   experiment: "DYE886" # there was a typo in the nnpdf31 name
+
+implemented_observables:
+  - dataset: "E866_FTDY_800GEV"
+    observable: {description: "Measurements of the double differential cross section as a function of the invariant mass of the DY pair M and the XF kinematical variable", label: $M^3 d^2\sigma/dM dx_F$, units: "NB*GEV**2/NUCLEON}" }
+    ndata: 184
+
+    dataset_label: E866P $M^3 d^2\sigma/dM dx_F$
+    plot_x: xF
+    figure_by: 
+      - M
+    kinematic_coverage:
+      xF: xF
+      M: M
+
+    kinematics:
+      variables:
+          xF: {description: "Feynman x", label: "$x_F", units: ""}
+          M:  {description: "Dilepton mass", units: ""}
+          sqrts:  {description: "Center of mass energy", units: ""}
+      file: kinematics.yaml
+
+      data_central: data.yaml
+      data_uncertainties:
+        - uncertainties.yaml
+
+      theory:
+        FK_tables:
+          - - DYE866P
+        operation: 'null'

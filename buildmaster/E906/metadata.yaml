@@ -1,0 +1,68 @@
+# Generalia
+setname: "E906"
+
+version: 1
+version_comment: "Baseline implementation"
+
+arXiv:
+   url: "https://arxiv.org/abs/2103.04024"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1849683"
+# References
+# hepdata:
+#    url: 
+#    version:
+#    tables:
+ 
+nnpdf_metadata:
+  nnpdf31_process: "DY"
+  experiment: "DYE906R"
+
+implemented_observables:
+  - dataset: "E906_FTDY_120GEV"
+    observable: {description: "Ratio between fixed-target DY cross sections with hydrogen and deuterium target", label: $\sigma^pd/2*sigma^pp$, units: "" }
+    ndata: 6
+
+    dataset_label: "E906R"
+    plot_x: Y
+    figure_by: 
+      - sqrts 
+    kinematic_coverage:
+      Y: Y
+      sqrts: sqrts
+
+    kinematics:
+      variables:
+          Y: {description: "05*log(xb/xt), with xb and xt the momentum fractions carried by the target and beam partons involved in the parton-level scattering. ", label: $Y$, units: ""}
+          M2:  {description: "Invariant mass", label: $M$, units: "GeV^2"}
+          sqrts:  {description: "Com energy", units: "GeV"}
+      file: kinematics.yaml
+
+    # Data
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - DYE906R_D_bin_0
+        - - DYE906R_D_bin_1
+        - - DYE906R_D_bin_2
+        - - DYE906R_D_bin_3
+        - - DYE906R_D_bin_4
+        - - DYE906R_D_bin_5
+        - - DYE906R_D_bin_6
+        - - DYE906R_D_bin_7
+        - - DYE906R_D_bin_8
+        - - DYE906R_D_bin_9
+        - - DYE906R_P_bin_0
+        - - DYE906R_P_bin_1
+        - - DYE906R_P_bin_2
+        - - DYE906R_P_bin_3
+        - - DYE906R_P_bin_4
+        - - DYE906R_P_bin_5
+        - - DYE906R_P_bin_6
+        - - DYE906R_P_bin_7
+        - - DYE906R_P_bin_8
+        - - DYE906R_P_bin_9
+      operation: 'COM'
