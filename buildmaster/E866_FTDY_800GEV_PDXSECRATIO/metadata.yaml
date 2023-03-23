@@ -24,7 +24,7 @@ implemented_observables:
     ndata: 15
     tables: [4]
     observable_name: "PDXSECRATIO"
-    process: "FTDY"
+    process: "DY"
 
     dataset_label: E866R $d/2*p$
     plot_x: x2

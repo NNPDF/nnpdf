@@ -24,7 +24,7 @@ implemented_observables:
     observable: {description: "Ratio between fixed-target DY cross sections with hydrogen and deuterium target", label: $\sigma^pd/2*sigma^pp$, units: "" }
     ndata: 6
     observable_name: "PDXSECRATIO"
-    process: "FTDY"
+    process: "DY"
 
     dataset_label: "E906R"
     plot_x: Y

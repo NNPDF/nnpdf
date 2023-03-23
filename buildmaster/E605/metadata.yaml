@@ -12,20 +12,20 @@ iNSPIRE:
 hepdata:
    url: "https://www.hepdata.net/record/ins302822"
    version: 1
-energy: "38.8EV"
+energy: "38p8GEV"
 
 nnpdf_metadata:
    nnpdf31_process: "DY"
    experiment: "DYE605"
 
 implemented_observables:
-  - dataset: "E605_FTDY_38.8GEV"
+  - dataset: "E605_FTDY_38P8GEV_PXSEC"
     observable: {description: "Double differential distribution in muon pair tau and rapidity", label: $s*d^2\sigma/d\sqrt\tau/dy$, units: "nb*GeV**2 / nucleon" }
     ndata: 119
     tables: [1,2,3,4,5,6,7]
     npoints: [17,18,18,18,18,18,12] # number of datapoints in each table
     observable_name: "PXSEC"
-    process: "FTDY"
+    process: "DY"
 
     dataset_label: "E605"
     plot_x: sqrttau
