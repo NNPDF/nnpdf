@@ -24,8 +24,7 @@ requirements:
         - python
         - numpy
     run:
-        # Only install tensorflow and fiatlux on linux. Select eigen build
-        - tensorflow >=2 *eigen* # [linux]
+        - tensorflow >=2 *eigen*
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -54,9 +53,7 @@ requirements:
         - pineappl >=0.5.8
         - eko >=0.12.0
         - banana-hep >=0.6.8
-        - lz4 >=3.1.10 # see https://github.com/conda-forge/eko-feedstock/issues/10
         - fiatlux
-
 
 test:
     requires:
