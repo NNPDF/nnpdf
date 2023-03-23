@@ -24,12 +24,12 @@ class StructureFunction :
         grid2D = predictions.reshape(len(x), len(q2))
         self.interpolator = RectBivariateSpline(x, q2, grid2D)
     
-    def FxQ(self, x, Q):
+    def fxq(self, x, q):
         # here we are requiring that the grid that we pass to fiatlux
         # has Qmin = 1 (fiatlux doesn't go below Q=1)
-        if x < self.xmin or Q > self.qmax :
+        if x < self.xmin or q > self.qmax :
             return 0.
-        return self.interpolator(x, Q**2)[0, 0]
+        return self.interpolator(x, q**2)[0, 0]
 
 class F2LO :
     def __init__(self, pdfs, theory):
@@ -48,7 +48,7 @@ class F2LO :
         ed2 = 1. / 9
         self.eq2 = [ed2, eu2, ed2, eu2, ed2, eu2] # d u s c b t
     
-    def FxQ(self, x, Q):
+    def fxq(self, x, q):
         r"""
         Compute the LO DIS structure function F2.
 
@@ -65,16 +65,16 @@ class F2LO :
             Structure function F2 at LO
         """
         # at LO we use ZM-VFS
-        if Q < self.thresh_c :
+        if q < self.thresh_c :
             nf = 3
-        elif Q < self.thresh_b :
+        elif q < self.thresh_b :
             nf = 4
-        elif Q < self.thresh_t :
+        elif q < self.thresh_t :
             nf = 5
         else :
             nf = 6
         res = 0
-        pdfs_values = self.pdfs.xfxQ(x, Q)
+        pdfs_values = self.pdfs.xfxQ(x, q)
         for i in range(1, nf+1):
             res += self.eq2[i-1] * (pdfs_values[i] + pdfs_values[-i])
         return res
