@@ -63,7 +63,7 @@ class fakeStructureFunction():
         self.path = path
         self.pdfs = pdfs
     
-    def FxQ(self):
+    def fxq(self):
         return 0
 
 class fakeF2LO():
@@ -71,7 +71,7 @@ class fakeF2LO():
         self.pdfs = pdfs
         self.theory = theory
     
-    def FxQ(self):
+    def fxq(self):
         return 0
 
 

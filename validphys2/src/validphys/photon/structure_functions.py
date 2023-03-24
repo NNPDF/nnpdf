@@ -3,6 +3,10 @@ import numpy as np
 from scipy.interpolate import RectBivariateSpline
 
 class StructureFunction :
+    """
+    Compute a given DIS structure function convoluting an FKtable
+    with a PDF.
+    """
     def __init__(self, path_to_fktable, pdfs):
         self.fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
         self.pdfs = pdfs
@@ -11,6 +15,7 @@ class StructureFunction :
     
 
     def produce_interpolator(self):
+        """Produce the interpolation function to be called in fxq"""
         x = np.unique(self.fktable.bin_left(1))
         q2 = np.unique(self.fktable.bin_left(0))
         self.xmin = min(x)
@@ -25,6 +30,21 @@ class StructureFunction :
         self.interpolator = RectBivariateSpline(x, q2, grid2D)
     
     def fxq(self, x, q):
+        r"""
+        Compute the DIS structure function.
+
+        Parameters
+        ----------
+        x : float
+            Bjorken's variable
+        Q : float
+            DIS hard scale
+        
+        Returns
+        -------
+        F_{2,L}: float
+            Structure function F2 or FL
+        """
         # here we are requiring that the grid that we pass to fiatlux
         # has Qmin = 1 (fiatlux doesn't go below Q=1)
         if x < self.xmin or q > self.qmax :
@@ -32,6 +52,7 @@ class StructureFunction :
         return self.interpolator(x, q**2)[0, 0]
 
 class F2LO :
+    """Compute the LO DIS structure function F2 given a PDF"""
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
         # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
