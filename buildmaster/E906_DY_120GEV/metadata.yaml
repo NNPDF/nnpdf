@@ -20,7 +20,6 @@ nnpdf_metadata:
 
 implemented_observables:
   - observable_name: "PDXSECRATIO"
-    dataset: "E906_DY_120GEV_PDXSECRATIO"
     observable: {description: "Ratio between fixed-target DY cross sections with hydrogen and deuterium target", label: $\sigma^pd/2*sigma^pp$, units: "" }
     ndata: 6
 
