@@ -24,7 +24,7 @@ class Photon:
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         self.replicas_id = replicas_id
-        self.q_in = 10
+        self.q_in = 100
         self.q_in2 = self.q_in**2
 
         # parameters for the alphaem running
