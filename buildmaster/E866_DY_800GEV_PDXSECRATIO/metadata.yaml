@@ -18,11 +18,10 @@ nnpdf_metadata:
    experiment: "E866"
 
 implemented_observables:
-  - dataset: "E866_DY_800GEV_PDXSECRATIO"
+  - observable_name: ""
     observable: {description: "Data on the ratio of pd DY cross sections over pp cross sections", label: $\sigma^d/2 \sigma^p$, units: "" }
     ndata: 15
     tables: [4]
-    observable_name: "PDXSECRATIO"
 
     dataset_label: E866R $d/2*p$
     plot_x: x2
