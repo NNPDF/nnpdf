@@ -48,15 +48,13 @@ def percentage_to_absolute(percentage, value):
 
     Parameters
     ----------
-    percentage : string
+    percentage : string/float
         Experimental datasets can provide the percentage 
         uncertainties with a % sign or without one. 
-        In case a % sign is used, it will be automatically 
-        stripped and the remaining string converted to a 
-        float. If a % sign is not present, just input the 
-        percentage uncertainty as a string, i.e. str(value).
-        This is important as this functions uses replace()
-        function which requires a string input.
+        The function will autostrip % sign and convert to
+        a float type in case the percentage uncertainty 
+        comes with a % sign. Else, it will directly perform 
+        the computation.
     value : float
         The data point
 
@@ -66,9 +64,13 @@ def percentage_to_absolute(percentage, value):
         The absolute value of the uncertainty
     
     """
-    percentage = float(percentage.replace("%", ""))
-    absolute = percentage * value * 0.01
-    return absolute 
+    if type(percentage) is str:
+        percentage = float(percentage.replace("%", ""))
+        absolute = percentage * value * 0.01
+        return absolute 
+    else:
+        absolute = percentage * value * 0.01
+        return absolute
 
 def corMat_to_covMat(errList, corMatList):
     r"""Convert correlation matrix elements to covariance
