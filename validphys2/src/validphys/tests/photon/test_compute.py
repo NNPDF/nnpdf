@@ -77,7 +77,7 @@ class fakeF2LO():
 
 
 def test_init(monkeypatch):
-    monkeypatch.setattr(structure_functions, "StructureFunction", fakeStructureFunction)
+    monkeypatch.setattr(structure_functions, "InterpStructureFunction", fakeStructureFunction)
     monkeypatch.setattr(structure_functions, "F2LO", fakeF2LO)
     # monkeypatch.setattr(LHAPDFSet, "mkPDF", lambda *args: fiatlux_runcard["pdf_name"])
     monkeypatch.setattr(fiatlux, "FiatLux", fakeFiatlux)
