@@ -3,8 +3,13 @@ import numpy as np
 from scipy.interpolate import RectBivariateSpline
 
 class StructureFunction :
+    """Abstract class for the DIS structure functions"""
+    def fxq(self, x, Q) :
+        pass
+
+class InterpStructureFunction(StructureFunction):
     """
-    Compute a given DIS structure function convoluting an FKtable
+    Compute an interpolated structure function convoluting an FKtable
     with a PDF.
     """
     def __init__(self, path_to_fktable, pdfs):
@@ -15,7 +20,7 @@ class StructureFunction :
     
 
     def produce_interpolator(self):
-        """Produce the interpolation function to be called in fxq"""
+        """Produce the interpolation function to be called in fxq."""
         x = np.unique(self.fktable.bin_left(1))
         q2 = np.unique(self.fktable.bin_left(0))
         self.xmin = min(x)
@@ -31,7 +36,7 @@ class StructureFunction :
     
     def fxq(self, x, q):
         r"""
-        Compute the DIS structure function.
+        Compute the DIS structure function interpolating the grid.
 
         Parameters
         ----------
@@ -47,12 +52,12 @@ class StructureFunction :
         """
         # here we are requiring that the grid that we pass to fiatlux
         # has Qmin = 1 (fiatlux doesn't go below Q=1)
-        if x < self.xmin or q > self.qmax :
-            return 0.
+        # if x < self.xmin or q > self.qmax :
+        #     return 0.
         return self.interpolator(x, q**2)[0, 0]
 
-class F2LO :
-    """Compute the LO DIS structure function F2 given a PDF"""
+class F2LO(StructureFunction) :
+    """Compute analytically the leading order structure function for F2."""
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
         # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
@@ -71,7 +76,7 @@ class F2LO :
     
     def fxq(self, x, q):
         r"""
-        Compute the LO DIS structure function F2.
+        Compute the analytical form of F2LO.
 
         Parameters
         ----------

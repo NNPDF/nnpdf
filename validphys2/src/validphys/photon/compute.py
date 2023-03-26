@@ -20,6 +20,7 @@ from os import remove
 import time
 
 class Photon:
+    """Photon class computing the photon array with the LuxQED approach."""
     def __init__(self, theoryid, fiatlux_runcard, replicas_id):
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
@@ -30,16 +31,7 @@ class Photon:
         # parameters for the alphaem running
         self.alpha_em_ref = self.theory["alphaqed"]
         self.qref = self.theory["Qref"]
-        # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
-        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
-        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
-        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
-        if self.theory["MaxNfAs"] <= 5 :
-            self.thresh_t = np.inf
-        if self.theory["MaxNfAs"] <= 4 :
-            self.thresh_b = np.inf
-        if self.theory["MaxNfAs"] <= 3 :
-            self.thresh_c = np.inf
+
         self.set_betas()
         self.set_thresholds_alpha_em()
 
@@ -49,19 +41,24 @@ class Photon:
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
         path_to_FL = theoryid.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
-        f2 = [sf.StructureFunction(path_to_F2, self.qcd_pdfs.members[id]) for id in self.replicas_id]
-        fl = [sf.StructureFunction(path_to_FL, self.qcd_pdfs.members[id]) for id in self.replicas_id]
-        f2lo = [sf.F2LO(self.qcd_pdfs.members[id], self.theory) for id in self.replicas_id]
-
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
 
         # set fiatlux
-        ff = open('fiatlux_runcard.yml', 'w+')
-        yaml.dump(self.fiatlux_runcard, ff)
-        self.lux = [fiatlux.FiatLux('fiatlux_runcard.yml') for i in range(len(replicas_id))]
-        remove('fiatlux_runcard.yml')
+        self.lux = []
+        f2 = []
+        fl = []
+        f2lo = []
+        for id in replicas_id:
+            f2.append(sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[id]))
+            fl.append(sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[id]))
+            f2lo.append(sf.F2LO(self.qcd_pdfs.members[id], self.theory))
+            ff = open(f'fiatlux_runcard_{id}.yml', 'w+')
+            yaml.dump(self.fiatlux_runcard, ff)
+            self.lux.append(fiatlux.FiatLux(f'fiatlux_runcard_{id}.yml'))
+            remove(f'fiatlux_runcard_{id}.yml')
         # we have a dict but fiatlux wants a yaml file
         # TODO : remove this dirty trick
+        # we print different runcards for every replica so they do not interfere with each other
         for i in range(len(replicas_id)):
             self.lux[i].PlugAlphaQED(self.alpha_em, self.qref)
             self.lux[i].InsertInelasticSplitQ([self.thresh_b, self.thresh_t if self.theory["MaxNfPdf"]==6 else 1e100])        
@@ -129,6 +126,17 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
+        # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
+        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
+        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
+        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
+        if self.theory["MaxNfAs"] <= 5 :
+            self.thresh_t = np.inf
+        if self.theory["MaxNfAs"] <= 4 :
+            self.thresh_b = np.inf
+        if self.theory["MaxNfAs"] <= 3 :
+            self.thresh_c = np.inf
+
         thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
         if self.qref < self.thresh_c :
             nfref = 3
@@ -219,6 +227,7 @@ class Photon:
         return self.xgrid * photon_Q0
     
     def produce_interpolators(self):
+        """Produce the interpolation functions to be called in compute."""
         self.photons_array = [self.compute_photon_array(i) for i in range(len(self.replicas_id))]
         self.interpolator = [interp1d(self.xgrid, photon_array, fill_value=0., kind='cubic') for photon_array in self.photons_array]
     
@@ -250,6 +259,8 @@ class Photon:
         if not self.fiatlux_runcard["additional_errors"] :
             return None
         extra_set = LHAPDFSet("LUXqed17_plus_PDF4LHC15_nnlo_100", "replicas")
+        # random generator must be set previously in case of parallel replicas
+        self.rng = np.random.default_rng(seed=self.fiatlux_runcard["luxseed"])
         return np.array(
             [
                 [(extra_set.xfxQ(x, self.q_in, i, 22) - extra_set.xfxQ(x, self.q_in, 0, 22)) for i in range(101, 107+1)]
@@ -262,6 +273,5 @@ class Photon:
         if self.error_matrix is None :
             return np.zeros_like(self.xgrid)
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
-        rng = np.random.default_rng(seed=self.fiatlux_runcard["luxseed"])
-        errors = u @ (s * rng.normal(size=7))
+        errors = u @ (s * self.rng.normal(size=7))
         return errors
