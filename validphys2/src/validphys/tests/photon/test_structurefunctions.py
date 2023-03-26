@@ -99,12 +99,12 @@ class ZeroPdf():
 
 def test_F2(monkeypatch):
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", ZeroFKTable)
-    structurefunc = sf.StructureFunction("", OnePdf())
+    structurefunc = sf.InterpStructureFunction("", OnePdf())
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0., rtol=1e-5)
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", OneFKTable)
-    structurefunc = sf.StructureFunction("", ZeroPdf())
+    structurefunc = sf.InterpStructureFunction("", ZeroPdf())
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0., rtol=1e-5)
