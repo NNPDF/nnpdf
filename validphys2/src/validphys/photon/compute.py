@@ -262,5 +262,6 @@ class Photon:
         if self.error_matrix is None :
             return np.zeros_like(self.xgrid)
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
-        errors = u @ (s * np.random.normal(size=7))
+        rng = np.random.default_rng(seed=self.fiatlux_runcard["luxseed"])
+        errors = u @ (s * rng.normal(size=7))
         return errors
