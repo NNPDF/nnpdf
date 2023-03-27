@@ -11,8 +11,7 @@ import numpy as np
 import pandas as pd
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat, dataset_inputs_covmat_from_systematics
-from validphys.filters import process_commondata
-
+from validphys.inconsistent_ct import InconsistentCommonData
 from reportengine import collect
 
 FILE_PREFIX = "datacuts_theory_fitting_"
@@ -329,7 +328,6 @@ def make_level1_data(
     # =============== generate experimental covariance matrix ===============#
     dataset_input_list = list(data.dsinputs)
 
-
     commondata_wc = data.load_commondata_instance()
 
     # I want to generate Lvl1 data with a varied covariance matrix while keeping the original
@@ -339,7 +337,16 @@ def make_level1_data(
     # stored in level0_commondata_wc
 
     if lvl1_inconsistent:
-        commondata_wc = [process_commondata(cd,ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+        commondata_wc = [
+                                InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
+                                                    commondataproc=cd.commondataproc, 
+                                                    nkin=cd.nkin, nsys=cd.nsys, 
+                                                    commondata_table = cd.commondata_table, 
+                                                    systype_table = cd.systype_table) 
+                                for cd in commondata_wc
+                        ]
+
+        commondata_wc = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
                             for cd in commondata_wc]
 
     # same problem as below: when calling process_commondata I am rescaling the exp covmat calculated 
