@@ -1,5 +1,5 @@
 import yaml
-
+import numpy as np
 
 def filter_CMS_2JET_7TRV_data_kinetic():
     """
@@ -63,6 +63,26 @@ def filter_CMS_2JET_7TRV_data_kinetic():
 
 
 
+def filterCMS_2JET_7TEV_uncertainties():
+    """
+    
+    """
+
+    # generate block diagonal statistical covariance matrix
+    # Statistical uncertainty correlated between the mass bins in 
+    # the same rapidity range
+
+    # read correlation matrix
+    corr_matrices = read_dat_file('rawdata/dijet_corr.dat')
+    print(len(corr_matrices))
+
+    # construct covariance matrix from correlation matrix
+    # TODOO
+
+    return corr_matrices
+
+    
+
 def range_str_to_floats(str_range):
     """
     converts a string range to a list,
@@ -78,9 +98,68 @@ def range_str_to_floats(str_range):
     # Return a dict
     return {"min": min, "mid": mid, "max": max}
 
+def read_dat_file(filename):
+    """
+    read out correlation matrices from the
+    dijet_corr.dat file
+
+    Parameters
+    ----------
+    filename : str
+        Takes path to dijet_corr.dat
+
+    Returns
+    -------
+    list
+        list, each element of which is a 2D np array
+    """
+
+    with open(filename) as file:
+        lines = file.readlines()
+    
+    begin_rows = []
+    end_rows = []
+
+    for i,line in enumerate(lines):
+
+        if "Statistical correlation" in line and begin_rows == []:
+            begin_rows.append(i+2)
+
+        elif "Statistical correlation" in line:
+            begin_rows.append(i+2)
+            end_rows.append(i-2)
+
+        elif i == len(lines)-1:
+            end_rows.append(i)
+
+    correlation_matrices = []
+    for begin_row, end_row in zip(begin_rows,end_rows):
+        
+        size_mat = end_row-begin_row+1
+        stat_corr = np.zeros((size_mat,size_mat))
+
+        i = 0
+        for idx in range(begin_row,end_row+1):
+            stat_corr[i] = np.fromstring(lines[idx], sep=' ')[2:]
+            i+=1
+        
+        correlation_matrices.append(stat_corr)
+        
+    return correlation_matrices
+    
 
 
 if __name__ == "__main__":
 
     # save kinematics and central values
-    filter_CMS_2JET_7TRV_data_kinetic()
+    # filter_CMS_2JET_7TRV_data_kinetic()
+    
+    filterCMS_2JET_7TEV_uncertainties()
+    # C = filterCMS_2JET_7TEV_uncertainties()
+
+    # for c in C:
+    #     print()
+    #     print(f"shape = {c.shape}")
+    #     print()
+    #     print(c)
+        
