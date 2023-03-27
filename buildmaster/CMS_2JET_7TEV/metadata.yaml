@@ -1,0 +1,65 @@
+# Generalia
+
+ setname: "CMS_2JET_7TEV"
+ ndata: 54
+ observable: 
+    description: "Double-differential dijet cross-sections as functions of dijet mass and rapidity separation of the two highest-pT jets." 
+    label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]" 
+    units: "" 
+
+ kinematics:
+    variables:
+       ydiff: {description: "rapidity separation", label: "$y$", units: ""}
+       m12: {description: "dijet mass", label: "$m_{12}$", units: ""}
+       sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+    file: kinematics.yaml
+
+ version: 0
+ version_comment: "Initial implementation"
+
+ # References
+ arXiv:
+    url: "https://arxiv.org/pdf/1212.6660.pdf"
+ iNSPIRE:
+    url: "https://inspirehep.net/literature/1208923"
+ hepdata:
+    url: "https://www.hepdata.net/record/ins1208923"
+    version: 1
+    tables: [6, 7, 8, 9, 10]
+
+ # Data 
+ data_central: data.yaml
+ data_uncertainties:
+    - uncertainties.yaml
+
+ # Data (variants)
+ variants:
+   deweighted:
+      data_uncertainties:
+         - uncertainties.yaml
+         - uncertainties_dw.yaml
+   shifted:
+      data_uncertainties:
+         - uncertainties.yaml
+         - uncertainties_sh.yaml
+
+ # Plotting  
+ kinematic_coverage:
+    x: x
+    q2: q2
+ dataset_label: "NMC $d/p$"
+ plot_x: x
+ figure_by: 
+    - q2
+
+ # Theory
+ theory:
+    FK_tables:
+      - - NMCPD_D1
+        - NMCPD_D2
+      - - NMCPD_P
+    compound: "RATIO"
+
+ nnpdf_metadata:
+    nnpdf31_process: "DIJET"
+    experiment: "CMS"
