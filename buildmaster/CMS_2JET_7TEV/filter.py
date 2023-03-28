@@ -1,5 +1,6 @@
 import yaml
 import numpy as np
+from scipy.linalg import block_diag
 
 def filter_CMS_2JET_7TRV_data_kinetic():
     """
@@ -63,6 +64,7 @@ def filter_CMS_2JET_7TRV_data_kinetic():
 
 
 
+
 def filterCMS_2JET_7TEV_uncertainties():
     """
     
@@ -72,16 +74,87 @@ def filterCMS_2JET_7TEV_uncertainties():
     # Statistical uncertainty correlated between the mass bins in 
     # the same rapidity range
 
-    # read correlation matrix
-    corr_matrices = read_dat_file('rawdata/dijet_corr.dat')
-    print(len(corr_matrices))
+    # get correlation matrix for statistical uncertainties
+    corr_matrices = get_corr_dat_file('rawdata/dijet_corr.dat')
+    # get statistical uncertainties from each HEPData table
+    stat_uncertainties = get_stat_uncertainties()
 
-    # construct covariance matrix from correlation matrix
-    # TODOO
 
-    return corr_matrices
+    with open('metadata.yaml', 'r') as file:
+        metadata = yaml.safe_load(file)
 
+    version = metadata['hepdata']['version']
+    tables  = metadata['hepdata']['tables']
+
+    stat_cov_mats = []
     
+    for i,table in enumerate(tables):
+        if corr_matrices[i].shape[0] != np.array(stat_uncertainties[table]).shape[0]:
+            raise("Shapes of correlation matrix and uncertainties array are not compatible")
+        # convert correlation matrices to covariance matrices
+        stat_cov_mats.append(correlation_to_covariance(corr_matrices[i],stat_uncertainties[table]))
+
+    BD_stat = stat_cov_mats[0]
+
+    for i in range(1,len(stat_cov_mats)):
+        stat = stat_cov_mats[i]
+        BD_stat = block_diag(BD_stat,stat)
+
+
+
+def correlation_to_covariance(correlation, uncertainties):
+    """
+    Converts a correlation matrix into a covariance matrix
+    using a list of uncertainties.
+    
+    Parameters:
+    -----------
+    correlation : np.ndarray
+        A square matrix of correlations.
+    uncertainties : np.ndarray
+        A 1D array of uncertainties.
+    
+    Returns:
+    --------
+    np.ndarray
+        The corresponding covariance matrix.
+    """
+    covariance = np.outer(uncertainties, uncertainties) * correlation
+    return covariance
+
+def get_stat_uncertainties():
+    """
+    function used to get the statistical
+    uncertainty from the HEPdata tables.
+
+    Returns
+    -------
+    dict
+        dictionary with keys = number of table
+        value = list of statistical uncertainties
+    
+    """
+    
+    with open('metadata.yaml', 'r') as file:
+        metadata = yaml.safe_load(file)
+
+    version = metadata['hepdata']['version']
+    tables  = metadata['hepdata']['tables']
+    
+    stat_err = {}
+
+    for table in tables:
+        stat = []
+        hepdata_tables = f"rawdata/HEPData-ins1208923-v{version}-Table_{table}.yaml"
+        with open(hepdata_tables, 'r') as file:
+            input = yaml.safe_load(file)
+
+        for err in input['dependent_variables'][0]['values']:
+            stat.append(err['errors'][0]['symerror'])
+        stat_err[table] = stat
+
+    return stat_err
+
 
 def range_str_to_floats(str_range):
     """
@@ -98,7 +171,7 @@ def range_str_to_floats(str_range):
     # Return a dict
     return {"min": min, "mid": mid, "max": max}
 
-def read_dat_file(filename):
+def get_corr_dat_file(filename):
     """
     read out correlation matrices from the
     dijet_corr.dat file
@@ -117,6 +190,8 @@ def read_dat_file(filename):
     with open(filename) as file:
         lines = file.readlines()
     
+    # store the number of the rows where the correlation matrix
+    # is printed
     begin_rows = []
     end_rows = []
 
@@ -140,7 +215,8 @@ def read_dat_file(filename):
 
         i = 0
         for idx in range(begin_row,end_row+1):
-            stat_corr[i] = np.fromstring(lines[idx], sep=' ')[2:]
+            # ignore first two columns as these give the bin kin
+            stat_corr[i] = np.fromstring(lines[idx], sep=' ')[2:] 
             i+=1
         
         correlation_matrices.append(stat_corr)
@@ -155,6 +231,10 @@ if __name__ == "__main__":
     # filter_CMS_2JET_7TRV_data_kinetic()
     
     filterCMS_2JET_7TEV_uncertainties()
+
+    # print(get_stat_uncertainties())
+    
+
     # C = filterCMS_2JET_7TEV_uncertainties()
 
     # for c in C:
