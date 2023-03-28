@@ -287,7 +287,7 @@ def level0_commondata_wc(data, fakepdf):
 def make_level1_data(
     data, level0_commondata_wc, filterseed, experiments_index,
     MULT = False, ADD = False, CORR = False, UNCORR = False,
-    inconsistent_datasets=[], sys_rescaling_factor=1, lvl1_inconsistent = False,
+    inconsistent_datasets=[], sys_rescaling_factor=1, type1_inconsistent = False,
 ):
     """
     Given a list of level0 commondata instances, return the same list
@@ -336,7 +336,7 @@ def make_level1_data(
     # and when creating the lvl1 CommonData instance the covariance matrix is again the one 
     # stored in level0_commondata_wc
 
-    if lvl1_inconsistent:
+    if type1_inconsistent:
         commondata_wc = [
                                 InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
                                                     commondataproc=cd.commondataproc, 
