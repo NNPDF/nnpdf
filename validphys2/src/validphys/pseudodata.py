@@ -287,7 +287,8 @@ def level0_commondata_wc(data, fakepdf):
 
 
 def make_level1_data(
-    data, level0_commondata_wc, filterseed, experiments_index
+    data, level0_commondata_wc, filterseed, experiments_index,
+    sep_mult
 ):
     """
     Given a list of Level 0 commondata instances, return the
@@ -354,12 +355,12 @@ def make_level1_data(
         use_weights_in_covmat=False,
         norm_threshold=None,
         _list_of_central_values=None,
-        _only_additive=False,
+        _only_additive=sep_mult,
     )
 
     # ================== generation of Level1 data ======================#
     level1_data = make_replica(
-        level0_commondata_wc, filterseed, covmat, sep_mult=False, genrep=True
+        level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
     )
 
     indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
