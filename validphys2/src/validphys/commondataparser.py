@@ -19,7 +19,7 @@ import dataclasses
 import logging
 from operator import attrgetter
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 
 import pandas as pd
 from reportengine.compat import yaml
@@ -33,6 +33,11 @@ EXT = "pineappl.lz4"
 _INDEX_NAME = "entry"
 
 log = logging.getLogger(__name__)
+
+# TODO: obviously the folder here is only for development purposes once the
+# whole thing is finished the data will be installed in the right path as given by the profile
+_folder_data = Path(__file__).parents[3] / "buildmaster"
+
 
 KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
@@ -167,32 +172,28 @@ def ValidVariants(variant_dict: dict) -> Dict[str, Variant]:
     return {k: parse_input(v, Variant) for k, v in variant_dict.items()}
 
 
-# TODO: obviously the folder here is only for development purposes once the
-# whole thing is finished the data will be installed in the right path as given by the profile
-_folder_data = Path(__file__).parent / "../../../buildmaster"
-
-
 @dataclasses.dataclass
-class CommonMetaData:
-    setname: str
-    ndata: int
+class ObservableMetaData:
+    observable_name: str
     observable: dict
-    kinematics: ValidKinematics
-    kinematic_coverage: dict
-    data_central: ValidPath
-    data_uncertainties: list[ValidPath]
+    ndata: int
+    # Plotting settings
     dataset_label: str
     plot_x: str
     figure_by: list[str]
-    nnpdf_metadata: dict
-    version: int
-    version_comment: str = ""
+    kinematic_coverage: dict
+    # Data itself
+    kinematics: ValidKinematics
+    data_central: ValidPath
+    data_uncertainties: list[ValidPath]
+    # Optional data
     theory: Optional[TheoryMeta] = None
-    arXiv: Optional[ValidReference] = None
-    iNSPIRE: Optional[ValidReference] = None
-    hepdata: Optional[ValidReference] = None
+    tables: Optional[list] = dataclasses.field(default_factory=list)
+    npoints: Optional[list] = dataclasses.field(default_factory=list)
     variants: Optional[ValidVariants] = dataclasses.field(default_factory=dict)
-    _folder: Optional[Path] = None
+    _parent: Optional[
+        Any
+    ] = None  # Note that an observable without a parent will fail in many different ways
 
     def apply_variant(self, variant_name):
         """Return a new instance of this class with the variant applied
@@ -202,34 +203,75 @@ class CommonMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist in {self.setname}") from e
+            raise ValueError(f"The requested variant does not exist {self.observable_name}") from e
 
         return dataclasses.replace(self, data_uncertainties=variant.data_uncertainties)
 
     @property
+    def path_data_central(self):
+        return self._parent.folder / self.data_central
+
+    @property
+    def paths_uncertainties(self):
+        return [self._parent.folder / i for i in self.data_uncertainties]
+
+    @property
+    def path_kinematics(self):
+        return self._parent.folder / self.kinematics.file
+
+    # Properties inherited from parent
+    @property
+    def nnpdf_metadata(self):
+        return self._parent.nnpdf_metadata
+
+
+@dataclasses.dataclass
+class SetMetaData:
+    """Metadata of the whole set"""
+
+    setname: str
+    version: int
+    version_comment: str
+    nnpdf_metadata: dict
+    implemented_observables: list[ObservableMetaData]
+    arXiv: Optional[ValidReference] = None
+    iNSPIRE: Optional[ValidReference] = None
+    hepdata: Optional[ValidReference] = None
+
+    @property
     def folder(self):
-        if self._folder is None:
-            self._folder = _folder_data / self.setname
-        return self._folder
+        # TODO currently _folder_data is the buildmaster folder as set above
+        # but it should come from share/NNPDF/whatever
+        return _folder_data / self.setname
+
+    def select_observable(self, obs_name_raw):
+        """Check whether the observable is implemented and return said observable"""
+        # TODO: should we check that we don't have two observables with the same name?
+        obs_name = obs_name_raw.lower().strip()
+        for observable in self.implemented_observables:
+            if observable.observable_name.lower().strip() == obs_name:
+                observable._parent = (
+                    self  # Not very happy with this but not sure how to do in a better way?
+                )
+                return observable
+        return ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
 
 
-# TODO:
-# These three parsers could just as well be methods of the CommonMetaData class
 def _parse_data(metadata):
     """Given the metadata defining the commondata,
     returns a dataframe with the right central data loaded
 
     Parameters
     ----------
-    metadata: CommonMetaData
-        instance of CommonMetaData defining exactly the commondata to be loaded
+    metadata: ObservableMetaData
+        instance of ObservableMetaData defining the data to be loaded
 
     Returns
     -------
     pd.DataFrame
         a dataframe containing the data
     """
-    data_file = metadata.folder / metadata.data_central
+    data_file = metadata.path_data_central
     datayaml = yaml.safe_load(data_file.read_text(encoding="utf-8"))
     data_df = pd.DataFrame(
         datayaml["data_central"], index=range(1, metadata.ndata + 1), columns=["data"]
@@ -244,17 +286,16 @@ def _parse_uncertainties(metadata):
 
     Parameters
     ----------
-    metadata: CommonMetaData
-        instance of CommonMetaData defining exactly the commondata to be loaded
+    metadata: ObservableMetaData
+        instance of ObservableMetaData defining the uncertainties to be loaded
 
     Returns
     -------
     pd.DataFrame
         a dataframe containing the uncertainties
     """
-    uncertainity_files = [metadata.folder / i for i in metadata.data_uncertainties]
     all_df = []
-    for ufile in uncertainity_files:
+    for ufile in metadata.paths_uncertainties:
         uncyaml = yaml.safe_load(ufile.read_text())
 
         mindex = pd.MultiIndex.from_tuples(
@@ -278,39 +319,57 @@ def _parse_kinematics(metadata):
 
     Parameters
     ----------
-    metadata: CommonMetaData
-        instance of CommonMetaData defining exactly the commondata to be loaded
+    metadata: ObservableMetaData
+        instance of ObservableMetaData defining the kinematics to be loaded
 
     Returns
     -------
     pd.DataFrame
         a dataframe containing the kinematics
     """
-    kinematics_file = metadata.folder / metadata.kinematics.file
+    kinematics_file = metadata.path_kinematics
     kinyaml = yaml.safe_load(kinematics_file.read_text())
     kin_dict = {i + 1: pd.DataFrame(d).stack() for i, d in enumerate(kinyaml["bins"])}
     return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
 
-def parse_commondata_folder(commondata_folder, variants=[]):
+def parse_commondata_new(dataset_fullname, variants=[]):
     """In the current iteration of the commondata, each of the commondata
-    (i.e., an observable from a data publication) correspond to one single folder.
+    (i.e., an observable from a data publication) correspond to one single observable
+    inside a folder which is named as "<experiment>_<process>_<energy>_<extra>"
+    The observable is defined by a last suffix of the form "_<obs>" so that the full name
+    of the dataset is always:
+
+        "<experiment>_<process>_<energy>{_<extra>}_<obs>"
+
+    where <extra> is optional.
+
+    This function right now works under the assumotion that the folder/observable
+    is separated in the last _ so that:
+        folder_name = <experiment>_<process>_<energy>{_<extra>}
+    but note that this convention is still not fully defined.
+
     This function returns a commondata object constructed by parsing the metadata.
 
-    A commondata object is defined by the folder from where it is
-    being read and the variants to be enabled.
     Once a variant is selected, it can no longer be changed
 
     Note that this function reproduces `parse_commondata` below, which parses the
     _old_ file format
     """
+    # Look at the folder & observable
+    setfolder, observable_name = dataset_fullname.rsplit("_", 1)
+    commondata_folder = _folder_data / setfolder
+
+    metadata_file = commondata_folder / "metadata.yaml"
+
     # Parse the metadata by iterating over variants
     commondata = commondata_folder.name
-    metadata_file = commondata_folder / "metadata.yaml"
-    metadata = parse_yaml_inp(metadata_file, CommonMetaData)
-    # TODO for debugging purposes
-    # keep a reference folder for people trying to test this out
-    metadata._folder = commondata_folder
+    # Load the entire set
+    set_metadata = parse_yaml_inp(metadata_file, SetMetaData)
+
+    # Select one observable
+    metadata = set_metadata.select_observable(observable_name)
+
     for variant in variants:
         metadata = metadata.apply_variant(variant)
 
