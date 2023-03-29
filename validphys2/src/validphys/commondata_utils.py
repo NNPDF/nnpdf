@@ -72,16 +72,16 @@ def percentage_to_absolute(percentage, value):
         absolute = percentage * value * 0.01
         return absolute
 
-def corMat_to_covMat(errList, corMatList):
+def cormat_to_covmat(err_list, cormat_list):
     r"""Convert correlation matrix elements to covariance
     matrix elements.
 
     Parameters
     ----------
-    errList : list
+    err_list : list
         A one dimensional list which contains the uncertainty
         associated to each data point in order.
-    corMatList : list
+    cormat_list : list
         A one dimensional list which contains the elements of 
         the correlation matrix row by row. Since experimental
         datasets provide these matrices in a list form, this 
@@ -89,19 +89,19 @@ def corMat_to_covMat(errList, corMatList):
 
     Returns
     -------
-    covMatList : list
+    covmat_list : list
         A one dimensional list which contains the elements of
         the covariance matrix row by row.
     
     """
-    covMatList = []
-    for i in range(len(corMatList)):
-        a = i // len(errList)
-        b = i % len(errList)
-        covMatList.append(corMatList[i] * errList[a] * errList[b])
-    return covMatList
+    covmat_list = []
+    for i in range(len(cormat_list)):
+        a = i // len(err_list)
+        b = i % len(err_list)
+        covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
+    return covmat_list
 
-def covMat_to_artUnc(ndata, covMatList, is_normalized):
+def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     r"""Convert the covariance matrix to a matrix of 
     artificial uncertainties.
 
@@ -109,20 +109,27 @@ def covMat_to_artUnc(ndata, covMatList, is_normalized):
     ----------
     ndata : integer
         Number of data points
-    covMatList : list
+    covmat_list : list
         A one dimensional list which contains the elements of
         the covariance matrix row by row. Since experimental
         datasets provide these matrices in a list form, this 
         simplifies the implementation for the user.
-    is_normalized : boolean
-        True if the dataset contains normalized values, False 
-        if the dataset contains absolute values. Needed for 
-        proper determination of whether the matrix is postive-
-        semidefinite.
+    no_of_norm_mat : int
+        Normalized covariance matrices may have an eigenvalue
+        of 0 due to the last data point not being linearly
+        independent. To allow for this, the user should input
+        the number of normalized matrices that are being treated
+        in an instance. For example, if a single covariance matrix
+        of a normalized distribution is being processed, the input
+        would be 1. If a covariance matrix contains pertains to
+        3 normalized datasets (i.e. cross covmat for 3 
+        distributions), the input would be 3. The default value is
+        0 for when the covariance matrix pertains to an absolute 
+        distribution.
 
     Returns
     -------
-    artUnc : list
+    artunc : list
         A two dimensional matrix (given as a list of lists)
         which contains artificial uncertainties to be added 
         to the commondata. i^th row (or list) contains the 
@@ -130,59 +137,51 @@ def covMat_to_artUnc(ndata, covMatList, is_normalized):
             
     """
     epsilon = -0.0000000001
-    negEValCount = 0
-    psdCheck = True
-    covMat = np.zeros((ndata, ndata))
-    artUnc = np.zeros((ndata, ndata))
-    for i in range(len(covMatList)):
+    neg_eval_count = 0
+    psd_check = True
+    covmat = np.zeros((ndata, ndata))
+    artunc = np.zeros((ndata, ndata))
+    for i in range(len(covmat_list)):
         a = i // ndata
         b = i % ndata
-        covMat[a][b] = covMatList[i]
-    eigVal, eigVec = eig(covMat)
-    if is_normalized == False:
+        covmat[a][b] = covmat_list[i]
+    eigval, eigvec = eig(covmat)
+    for j in range(len(eigval)):
+        if eigval[j] < epsilon:
+            psd_check = False
+        elif eigval[j] > epsilon and eigval[j] <= 0:
+            neg_eval_count = neg_eval_count + 1
+            if neg_eval_count == (no_of_norm_mat + 1):
+                psd_check = False
+        elif eigval[j] > 0:
+            continue
+    if psd_check == False:
+        raise ValueError('The covariance matrix is not positive-semidefinite')
+    else:
         for i in range(ndata):
             for j in range(ndata):
-                if eigVal[j] <= 0:
-                    raise ValueError('The covariance matrix is not positive-semidefinite')
+                if eigval[j] < 0:
+                    continue
                 else:
-                    artUnc[i][j] = eigVec[i][j] * sqrt(eigVal[j])
-    elif is_normalized == True:
-        for j in range(len(eigVal)):
-            if eigVal[j] < epsilon:
-                psdCheck = False
-            elif eigVal[j] > epsilon and eigVal[j] <= 0:
-                negEValCount = negEValCount + 1
-                if negEValCount == 2:
-                    psdCheck = False
-            elif eigVal[j] > 0:
-                continue
-        if psdCheck == False:
-            raise ValueError('The covariance matrix is not positive-semidefinite')
-        else:
-            for i in range(ndata):
-                for j in range(ndata):
-                    if eigVal[j] < 0:
-                        continue
-                    else:
-                        artUnc[i][j] = eigVec[i][j] * sqrt(eigVal[j]) 
-    return artUnc.tolist()
+                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j]) 
+    return artunc.tolist()
 
-def cross_corMat_to_covMat(rowErrList, colErrList, corMatList):
+def cross_cormat_to_covmat(row_err_list, col_err_list, cormat_list):
     r"""Convert cross correlation matrix elements 
     (i.e. those between different different variables or 
     observables) to covariance matrix elements.
     
     Parameters
     ----------
-    rowErrList : list
+    row_err_list : list
         A one dimensional list which contains the uncertainty
         associated to each data point of the variable that is
         given on the vertical axis.
-    colErrList : list
+    col_err_list : list
         A one dimensional list which contains the uncertainty
         associated to each data point of the variable that is
         given on the horizontal axis.
-    corMatList : list
+    cormat_list : list
         A one dimensional list which contains the elements of 
         the correlation matrix row by row. Since experimental
         datasets provide these matrices in a list form, this 
@@ -190,19 +189,19 @@ def cross_corMat_to_covMat(rowErrList, colErrList, corMatList):
         
     Returns
     -------
-    covMatList : list
+    covmat_list : list
         A one dimensional list which contains the elements of
         the covariance matrix row by row.
     
     """
-    covMatList = []
-    for i in range(len(corMatList)):
-        a = i // len(colErrList)
-        b = i % len(colErrList)
-        covMatList.append(corMatList[i] * rowErrList[a] * colErrList[b])
-    return covMatList
+    covmat_list = []
+    for i in range(len(cormat_list)):
+        a = i // len(col_err_list)
+        b = i % len(col_err_list)
+        covmat_list.append(cormat_list[i] * row_err_list[a] * col_err_list[b])
+    return covmat_list
 
-def matList_to_matrix(rows, columns, matList):
+def matlist_to_matrix(rows, columns, mat_list):
     r"""Convert a 1d list to a 2d matrix.
 
     Note: This utils function is not strictly needed for
@@ -219,7 +218,7 @@ def matList_to_matrix(rows, columns, matList):
         No. of rows in the matrix
     columns : int
         No. of columns in the matrix
-    matList : list
+    mat_list : list
         A one dimensional list which contains the elements of
         the matrix row by row.
 
@@ -229,17 +228,17 @@ def matList_to_matrix(rows, columns, matList):
         The matrix as a numpy 2d array.
     
     """
-    if rows * columns == len(matList):
+    if rows * columns == len(mat_list):
         matrix = np.zeros((rows, columns))
         for i in range(rows):
             for j in range(columns):
-                matrix[i][j] = matList[j + i * columns]
+                matrix[i][j] = mat_list[j + i * columns]
         matrix = np.array(matrix)
         return matrix
     else:
-        raise Exception('rows * columns != len(matList)')
+        raise Exception('rows * columns != len(mat_list)')
     
-def concatMatrices(rows, columns, listOfMatrices):
+def concat_matrices(rows, columns, list_of_matrices):
     r"""Join smaller matrices into a large matrix.
 
     This function aims to simplify the process of joining multiple
@@ -259,7 +258,7 @@ def concatMatrices(rows, columns, listOfMatrices):
     columns : int
         No. of columns of matrices to be concatenated. In the 
         above example, this would be 3.
-    listOfMatrices : list
+    list_of_matrices : list
         A list of the matrices that have to concatenated row by 
         row. In the above example, this would be [A, B, C, D, E, F].
         The matrices themselves need to be provided as a list of lists, 
@@ -271,27 +270,27 @@ def concatMatrices(rows, columns, listOfMatrices):
 
     Returns
     -------
-    finalMatList : list
+    final_mat_list : list
         A one dimensional list which contains the elements of
         the final, fully concatenated matrix row by row.
         
     """
-    for i in range(len(listOfMatrices)):
-        listOfMatrices[i] = np.array(listOfMatrices[i])
-    colList = []
+    for i in range(len(list_of_matrices)):
+        list_of_matrices[i] = np.array(list_of_matrices[i])
+    col_list = []
     for i in range(rows):
-        rowList = []
+        row_list = []
         for j in range(columns):
-            rowList.append(listOfMatrices[j + i * columns])
-        colList.append(np.concatenate(tuple(rowList), axis=1))
-    finalMat = np.concatenate(tuple(colList), axis=0)
-    finalMatList = []
-    for i in range(len(finalMat)):
-        for j in range(len(finalMat[i])):
-            finalMatList.append(finalMat[i][j])
-    return finalMatList
+            row_list.append(list_of_matrices[j + i * columns])
+        col_list.append(np.concatenate(tuple(row_list), axis=1))
+    final_mat = np.concatenate(tuple(col_list), axis=0)
+    final_mat_list = []
+    for i in range(len(final_mat)):
+        for j in range(len(final_mat[i])):
+            final_mat_list.append(final_mat[i][j])
+    return final_mat_list
 
-def triMat_to_fullMat(mode, triMatList):
+def trimat_to_fullmat(mode, tri_mat_list):
     r"""Convert a list of values of a triangular matrix
     to a symmetric matrix.
 
@@ -320,7 +319,7 @@ def triMat_to_fullMat(mode, triMatList):
         entries of the matrix but rather the index of the 
         entries of the list which contains the elements of 
         the triangular matrix.
-    triMatList : list
+    tri_mat_list : list
         A list containing the elements of the triangular matrix,
         for example, for a 4*4 matrix, the list of 
         triangular matrix entries could be: 
@@ -328,35 +327,35 @@ def triMat_to_fullMat(mode, triMatList):
 
     Returns
     -------
-    matList : list
+    mat_list : list
         A one dimensional list which contains the elements of
         the fully populated, symmetric matrix row by row.    
     
     """
-    dim = int((np.sqrt(1 + 8*len(triMatList)) - 1)/2)
+    dim = int((np.sqrt(1 + 8*len(tri_mat_list)) - 1)/2)
     matrix = np.zeros((dim, dim))
     if mode == 0:
         for i in range(dim):
             for j in range(i + 1):
-                listEl = len(triMatList) - 1 - ((i*(i + 1))//2 + j)
+                list_el = len(tri_mat_list) - 1 - ((i*(i + 1))//2 + j)
                 if i == j:
-                    matrix[dim - 1 - i][dim - 1 - j] = triMatList[listEl]
+                    matrix[dim - 1 - i][dim - 1 - j] = tri_mat_list[list_el]
                 else:
-                    matrix[dim - 1 - i][dim - 1 - j] = triMatList[listEl]
-                    matrix[dim - 1 - j][dim - 1 - i] = triMatList[listEl]
+                    matrix[dim - 1 - i][dim - 1 - j] = tri_mat_list[list_el]
+                    matrix[dim - 1 - j][dim - 1 - i] = tri_mat_list[list_el]
     elif mode == 1:
         for i in range(dim):
             for j in range(i + 1):
-                listEl = (i*(i + 1))//2 + j
+                list_el = (i*(i + 1))//2 + j
                 if i == j:
-                    matrix[i][j] = triMatList[listEl]
+                    matrix[i][j] = tri_mat_list[list_el]
                 else:
-                    matrix[i][j] = triMatList[listEl]
-                    matrix[j][i] = triMatList[listEl]
+                    matrix[i][j] = tri_mat_list[list_el]
+                    matrix[j][i] = tri_mat_list[list_el]
     else:
         raise Exception('Mode should be 0 or 1, refer to the function for usage')
-    matList = []
+    mat_list = []
     for i in range(dim):
         for j in range(dim):
-            matList.append(matrix[i][j])
-    return matList
+            mat_list.append(matrix[i][j])
+    return mat_list
