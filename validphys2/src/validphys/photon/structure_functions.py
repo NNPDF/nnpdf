@@ -60,7 +60,6 @@ class F2LO(StructureFunction) :
     """Compute analytically the leading order structure function for F2."""
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
-        # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
         self.thresh_c = theory["kcThr"] * theory["mc"]
         self.thresh_b = theory["kbThr"] * theory["mb"]
         self.thresh_t = theory["ktThr"] * theory["mt"]

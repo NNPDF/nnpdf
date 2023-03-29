@@ -126,7 +126,6 @@ class Photon:
     
     def set_thresholds_alpha_em(self):
         """Compute and store the couplings at thresholds"""
-        # TODO : maybe they shoud be kDIS instead of k, but usually they are the same
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
         self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
         self.thresh_t = self.theory["ktThr"] * self.theory["mt"]

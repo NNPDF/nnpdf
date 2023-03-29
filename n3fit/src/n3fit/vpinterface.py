@@ -80,17 +80,15 @@ class N3LHAPDFSet(LHAPDFSet):
 
     def _register_photon(self, xgrid):
         """If the PDF models contain photons, register the xgrid with them"""
-        try:
-            for m in self._lhapdf_set:
-                pl = m.get_layer("add_photon")
-                pl.register_photon(xgrid)
-                # Recompile the model if necessary
-                # (relies on the caching mechanism inside the add_photon layer)
-                if not pl.built:
-                    m.compile()
-        except ValueError:
-            # There's no photon I guess
-            pass
+        for m in self._lhapdf_set:
+            pl = m.get_layer_re("add_photon")
+            # if pl is an empy list there's no photon
+            if not pl : 
+                continue
+            pl.register_photon(xgrid)
+            # Recompile the model if necessary
+            if not pl.built:
+                m.compile()
 
     def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values for the grid
