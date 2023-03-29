@@ -1,6 +1,6 @@
 # implemented by Tanishq Sharma
 
-setname: "CMS_ttBar_8TeV_lj_dif"
+setname: "CMS_TTBAR_8TEV_LJ_DIF"
 
 nnpdf_metadata:
   nnpdf31_process: "TTB"
@@ -20,7 +20,7 @@ version_comment:
 implemented_observables:
 
   - observable: {description: "normalized differential cross section w.r.t. pT of t", label: '$1/\sigma * d\sigma/dpT_t$', units: "1/GeV"}
-    observable_name: pT_t
+    observable_name: PTT-NORM
     ndata: 8
     tables: [15]
     kinematics:
@@ -28,11 +28,9 @@ implemented_observables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         pT: {description: "transverse momentum of t", label: "$pT$", units: "GeV"}
       file: kinematics_dSig_dpTt_norm.yaml
-    data_central: 
-      file: data_dSig_dpTt_norm.yaml
+    data_central: data_dSig_dpTt_norm.yaml
     data_uncertainties:
-      file:
-        - uncertainties_dSig_dpTt_norm.yaml
+      - uncertainties_dSig_dpTt_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       pT: pT
@@ -45,7 +43,7 @@ implemented_observables:
         - - 
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of t", label: '$1/\sigma * d\sigma/dy_{t}$', units: ""}
-    observable_name: y_t
+    observable_name: YT-NORM
     ndata: 10
     tables: [21]
     kinematics:
@@ -53,11 +51,9 @@ implemented_observables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         y_t: {description: "rapidity of t", label: '$y_{t}$', units: ""}
       file: kinematics_dSig_dyt_norm.yaml
-    data_central: 
-      file: data_dSig_dyt_norm.yaml
+    data_central: data_dSig_dyt_norm.yaml
     data_uncertainties:
-      file:
-        - uncertainties_dSig_dyt_norm.yaml
+      - uncertainties_dSig_dyt_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       y_t: y_t
@@ -70,7 +66,7 @@ implemented_observables:
         - -
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of ttBar", label: '$1/\sigma * d\sigma/dy_{t\bar{t}}$', units: ""}
-    observable_name: y_ttBar
+    observable_name: YTTBAR-NORM
     ndata: 10
     tables: [36]
     kinematics:
@@ -78,11 +74,9 @@ implemented_observables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         y_ttBar: {description: "absolute rapidity of ttBar", label: '$y_{t\bar{t}}$', units: ""}
       file: kinematics_dSig_dyttBar_norm.yaml
-    data_central: 
-      file: data_dSig_dyttBar_norm.yaml
+    data_central: data_dSig_dyttBar_norm.yaml
     data_uncertainties:
-      file:
-        - uncertainties_dSig_dyttBar_norm.yaml
+      - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       y_ttBar: y_ttBar
@@ -95,7 +89,7 @@ implemented_observables:
         - - CMSTOPDIFF8TEVTTRAPNORM
 
   - observable: {description: "normalized differential cross section w.r.t. ttBar invariant mass", label: '$1/\sigma * d\sigma/dm_{t\bar{t}}$', units: "1/GeV"}
-    observable_name: m_ttBar
+    observable_name: MTTBAR-NORM
     ndata: 7
     tables: [39]
     kinematics:
@@ -103,11 +97,9 @@ implemented_observables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "GeV"}
       file: kinematics_dSig_dmttBar_norm.yaml
-    data_central: 
-      file: data_dSig_dmttBar_norm.yaml
+    data_central: data_dSig_dmttBar_norm.yaml
     data_uncertainties:
-      file:
-        - uncertainties_dSig_dmttBar_norm.yaml
+      - uncertainties_dSig_dmttBar_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
       m_ttBar: m_ttBar
