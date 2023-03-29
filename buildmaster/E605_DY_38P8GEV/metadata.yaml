@@ -37,7 +37,7 @@ implemented_observables:
           s: {description: "Center of mass energy of the collision squared", label: $s$, units: "GeV²"}
           sqrttau:  {description: " M/sqrt(s), with M the invariant mass of the muon pair", label: $\sqrt(\tau)$, units: ""}
           y:  {description: "lepton rapidity: log( ( q0 + qz ) / ( q0 - qz ) ) / 2", label: "$y$",  units: ""}
-    file: kinematics.yaml
+      file: kinematics.yaml
 
     data_central: data.yaml
     data_uncertainties:
