@@ -51,6 +51,7 @@ def processData():
     artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
+    mt_sqr = 29846.0176
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -65,7 +66,7 @@ def processData():
         data_central_value = values[i]['value']
         for j in range(11):
             error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': pT_t_mid, 'max': pT_t_max}}
+        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': pT_t_mid, 'max': pT_t_max}}
         data_central_dSig_dpTt.append(data_central_value)
         kin_dSig_dpTt.append(kin_value)
         error_dSig_dpTt.append(error_value)
@@ -111,6 +112,7 @@ def processData():
     artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
+    mt_sqr = 29846.0176
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -125,7 +127,7 @@ def processData():
         data_central_value = values[i]['value']
         for j in range(11):
             error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'y_t': {'min': y_t_min, 'mid': y_t_mid, 'max': y_t_max}}
+        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': y_t_mid, 'max': y_t_max}}
         data_central_dSig_dyt.append(data_central_value)
         kin_dSig_dyt.append(kin_value)
         error_dSig_dyt.append(error_value)
@@ -171,6 +173,7 @@ def processData():
     artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
+    mt_sqr = 29846.0176
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -185,7 +188,7 @@ def processData():
         data_central_value = values[i]['value']
         for j in range(11):
             error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': y_ttBar_mid, 'max': y_ttBar_max}}
+        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': y_ttBar_mid, 'max': y_ttBar_max}}
         data_central_dSig_dyttBar.append(data_central_value)
         kin_dSig_dyttBar.append(kin_value)
         error_dSig_dyttBar.append(error_value)
@@ -231,6 +234,7 @@ def processData():
     artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar, True)
 
     sqrt_s = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
+    mt_sqr = 29846.0176
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -245,7 +249,7 @@ def processData():
         data_central_value = values[i]['value']
         for j in range(11):
             error_value[input3['independent_variables'][0]['values'][j]['value']] = pta(str(input3['dependent_variables'][i]['values'][j]['value']), data_central_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': m_ttBar_mid, 'max': m_ttBar_max}}
+        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': m_ttBar_mid, 'max': m_ttBar_max}}
         data_central_dSig_dmttBar.append(data_central_value)
         kin_dSig_dmttBar.append(kin_value)
         error_dSig_dmttBar.append(error_value)

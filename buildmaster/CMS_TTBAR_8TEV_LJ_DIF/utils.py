@@ -1,10 +1,3 @@
-#    After adding a new util function, run the following command
-#    in the terminal in buildmaster directory:
-#    ....buildmaster$ for d in */; do cp utils.py "$d"; done
-#    to ensure the utils file is consistent across all folders.
-#    Existing functions should not be modified or removed as that might 
-#    break already implemented experiments' filter scripts.
-
 from math import sqrt
 import numpy as np
 from numpy.linalg import eig

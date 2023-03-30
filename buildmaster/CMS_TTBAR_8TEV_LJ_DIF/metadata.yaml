@@ -15,7 +15,7 @@ hepdata:
   version: 1
 
 version: 1
-version_comment: NA
+version_comment: 'NA'
 
 implemented_observables:
 
@@ -26,6 +26,7 @@ implemented_observables:
     kinematics:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
+        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         pT: {description: "transverse momentum of t", label: "$pT$", units: "GeV"}
       file: kinematics_dSig_dpTt_norm.yaml
     data_central: data_dSig_dpTt_norm.yaml
@@ -33,14 +34,12 @@ implemented_observables:
       - uncertainties_dSig_dpTt_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
+      mt_sqr: mt_sqr
       pT: pT
     dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $pT_{t}$'
     plot_x: pT
     figure_by: 
-      -
-    theory:
-      FK_tables:
-        - - 
+      - mt_sqr
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of t", label: '$1/\sigma * d\sigma/dy_{t}$', units: ""}
     observable_name: YT-NORM
@@ -49,6 +48,7 @@ implemented_observables:
     kinematics:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
+        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         y_t: {description: "rapidity of t", label: '$y_{t}$', units: ""}
       file: kinematics_dSig_dyt_norm.yaml
     data_central: data_dSig_dyt_norm.yaml
@@ -56,14 +56,12 @@ implemented_observables:
       - uncertainties_dSig_dyt_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
+      mt_sqr: mt_sqr
       y_t: y_t
     dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $y_{t}$'
     plot_x: y_t
     figure_by: 
-      -
-    theory:
-      FK_tables:
-        - -
+      - mt_sqr
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of ttBar", label: '$1/\sigma * d\sigma/dy_{t\bar{t}}$', units: ""}
     observable_name: YTTBAR-NORM
@@ -72,6 +70,7 @@ implemented_observables:
     kinematics:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
+        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         y_ttBar: {description: "absolute rapidity of ttBar", label: '$y_{t\bar{t}}$', units: ""}
       file: kinematics_dSig_dyttBar_norm.yaml
     data_central: data_dSig_dyttBar_norm.yaml
@@ -79,14 +78,17 @@ implemented_observables:
       - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
+      mt_sqr: mt_sqr
       y_ttBar: y_ttBar
     dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $y_{t\bar{t}}$'
     plot_x: y_ttBar
     figure_by: 
-      -
+      - mt_sqr
     theory:
       FK_tables:
-        - - CMSTOPDIFF8TEVTTRAPNORM
+        - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTTRAP
+        - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTOT
+      operation: RATIO
 
   - observable: {description: "normalized differential cross section w.r.t. ttBar invariant mass", label: '$1/\sigma * d\sigma/dm_{t\bar{t}}$', units: "1/GeV"}
     observable_name: MTTBAR-NORM
@@ -95,6 +97,7 @@ implemented_observables:
     kinematics:
       variables:
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "GeV"}
+        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "GeV"}
       file: kinematics_dSig_dmttBar_norm.yaml
     data_central: data_dSig_dmttBar_norm.yaml
@@ -102,11 +105,9 @@ implemented_observables:
       - uncertainties_dSig_dmttBar_norm.yaml
     kinematic_coverage:
       sqrt_s: sqrt_s
+      mt_sqr: mt_sqr
       m_ttBar: m_ttBar
     dataset_label: 'CMS 8 TeV $t\bar{t}$: differential cross section in $m_{t\bar{t}}$'
     plot_x: m_ttBar
     figure_by: 
-      -
-    theory:
-      FK_tables:
-        - -
+      - mt_sqr
