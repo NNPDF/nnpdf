@@ -163,7 +163,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
-    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed)
+    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
     # generate block to dump
     targetgrid = eko.rotations.targetgrid.tolist()
 

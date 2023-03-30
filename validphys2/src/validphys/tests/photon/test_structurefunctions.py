@@ -1,6 +1,7 @@
 import validphys.photon.structure_functions as sf
 import numpy as np
 import pineappl
+from validphys.lhapdfset import LHAPDFSet
 
 class ZeroPdfs:
     def xfxQ(self, x, Q):
@@ -98,11 +99,21 @@ class ZeroPdf():
 
 
 def test_F2(monkeypatch):
+    # grid put to 0 and pdf put to 1
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", ZeroFKTable)
     structurefunc = sf.InterpStructureFunction("", OnePdf())
     for x in np.geomspace(1e-4, 1., 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0., rtol=1e-5)
+    
+    # grid put to 0 and real pdf
+    pdf = LHAPDFSet("NNPDF40_nnlo_as_01180", "replicas")
+    structurefunc = sf.InterpStructureFunction("", pdf.central_member)
+    for x in np.geomspace(1e-4, 1., 10):
+        for Q in np.geomspace(10, 1000000, 10):
+            np.testing.assert_allclose(structurefunc.fxq(x, Q), 0., rtol=1e-5)
+    
+    # grid put to 1 and pdf put to 0
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", OneFKTable)
     structurefunc = sf.InterpStructureFunction("", ZeroPdf())
     for x in np.geomspace(1e-4, 1., 10):
