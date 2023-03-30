@@ -1,4 +1,4 @@
-definition:
+definitions:
   sys_1:
     description: systemtaic uncertainty
     treatment: ADD

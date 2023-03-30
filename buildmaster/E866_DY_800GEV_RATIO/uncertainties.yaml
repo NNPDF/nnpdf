@@ -1,4 +1,4 @@
-definition:
+definitions:
   stat_1:
     description: total statistical uncertainty
     treatment: ADD
