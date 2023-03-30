@@ -27,7 +27,7 @@ from validobj.custom import Parser
 from validobj import ValidationError, parse_input
 
 from validphys.utils import parse_yaml_inp
-from validphys.coredata import CommonData
+from validphys.coredata import CommonData, KIN_NAMES
 
 EXT = "pineappl.lz4"
 _INDEX_NAME = "entry"
@@ -36,7 +36,7 @@ log = logging.getLogger(__name__)
 
 # TODO: obviously the folder here is only for development purposes once the
 # whole thing is finished the data will be installed in the right path as given by the profile
-_folder_data = Path(__file__).parents[3] / "buildmaster"
+_folder_data = Path(__file__).parents[3] / "new_data"
 
 
 KINLABEL_LATEX = {
@@ -73,16 +73,17 @@ def ValidPath(path_str: str) -> Path:
 
 
 @Parser
-def ValidOperation(op_str: str) -> str:
+def ValidOperation(op_str) -> str:
     """Ensures that the operation defined in the commondata file is implemented in validphys"""
     ret = op_str.upper()
     # TODO: move accepted operations to this module so that the convolution receives an operation to apply
     # instead of an operation to understand
     from validphys.convolution import OP
 
+
     if ret not in OP:
         raise ValidationError(f"The operation '{op_str}' is not implemented in validphys")
-    return ret
+    return str(ret)
 
 
 @dataclasses.dataclass
@@ -110,7 +111,7 @@ class TheoryMeta:
     """Contains the necessary information to load the associated fktables"""
 
     FK_tables: list[list]
-    operation: ValidOperation
+    operation: Optional[ValidOperation] = "NULL"
     conversion_factor: float = 1.0
     comment: Optional[str] = None
     apfelcomb: Optional[ValidApfelComb] = None
@@ -162,14 +163,7 @@ class Variant:
 
     data_uncertainties: list[ValidPath]
 
-
-@Parser
-def ValidVariants(variant_dict: dict) -> Dict[str, Variant]:
-    """Variants of a dataset are allowed to overwrite a subset of the keys of a dataset
-    (those defined in the Variant dataclass).
-    This wrapper class runs over the dictionary of variant and parses them into valid Variants
-    """
-    return {k: parse_input(v, Variant) for k, v in variant_dict.items()}
+ValidVariants = Dict[str, Variant]
 
 
 @dataclasses.dataclass
@@ -329,7 +323,16 @@ def _parse_kinematics(metadata):
     """
     kinematics_file = metadata.path_kinematics
     kinyaml = yaml.safe_load(kinematics_file.read_text())
-    kin_dict = {i + 1: pd.DataFrame(d).stack() for i, d in enumerate(kinyaml["bins"])}
+
+    kin_dict = {}
+    for i, dbin in enumerate(kinyaml["bins"]):
+        bin_index = i+1
+        # TODO: for now we are dropping min/max information since it didn't exist in the past
+        for d in dbin.values():
+            d["min"] = None
+            d["max"] = None
+        kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+
     return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
 
@@ -381,17 +384,16 @@ def parse_commondata_new(dataset_fullname, variants=[]):
     kin_df = _parse_kinematics(metadata)
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
-    nsys = len([i for i in uncertainties_df.columns.get_level_values(0) if "syst" in i])
+    nsys = len([i for i in uncertainties_df.columns.get_level_values(0) if "stat" not in i])
 
     # Backwards-compatibility
     # Finally, create the commondata by merging the dataframes in the old commondata_table
 
     # For the kinematis, forget all the interesting information
     procname = metadata.nnpdf_metadata["nnpdf31_process"]
-    kinames = ["kin1", "kin2", "kin3"]
-    kin_df.columns = kinames
+    kin_df.columns = KIN_NAMES
     kin_df["process"] = procname
-    kin_df = kin_df[["process"] + kinames]
+    kin_df = kin_df[["process"] + KIN_NAMES]
 
     # For the uncertainties, create a simplified version to concatenate
     # and save the systype information
