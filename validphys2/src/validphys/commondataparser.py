@@ -80,7 +80,6 @@ def ValidOperation(op_str) -> str:
     # instead of an operation to understand
     from validphys.convolution import OP
 
-
     if ret not in OP:
         raise ValidationError(f"The operation '{op_str}' is not implemented in validphys")
     return str(ret)
@@ -162,6 +161,7 @@ class Variant:
     """Defines the keys of the CommonMetaData that can be overwritten"""
 
     data_uncertainties: list[ValidPath]
+
 
 ValidVariants = Dict[str, Variant]
 
@@ -326,7 +326,7 @@ def _parse_kinematics(metadata):
 
     kin_dict = {}
     for i, dbin in enumerate(kinyaml["bins"]):
-        bin_index = i+1
+        bin_index = i + 1
         # TODO: for now we are dropping min/max information since it didn't exist in the past
         for d in dbin.values():
             d["min"] = None
@@ -391,8 +391,10 @@ def parse_commondata_new(dataset_fullname, variants=[]):
 
     # For the kinematis, forget all the interesting information
     procname = metadata.nnpdf_metadata["nnpdf31_process"]
+    kin_df = kin_df[metadata.kinematics.variables.keys()]
     kin_df.columns = KIN_NAMES
     kin_df["process"] = procname
+
     kin_df = kin_df[["process"] + KIN_NAMES]
 
     # For the uncertainties, create a simplified version to concatenate
@@ -422,7 +424,9 @@ def parse_commondata_new(dataset_fullname, variants=[]):
         commondata_table["stat"] = 0.0
 
     if "MULT" in commondata_table:
-        commondata_table["MULT"] = commondata_table["MULT"].multiply(100/commondata_table["data"], axis="index")
+        commondata_table["MULT"] = commondata_table["MULT"].multiply(
+            100 / commondata_table["data"], axis="index"
+        )
 
     return CommonData(
         setname=commondata,
@@ -494,7 +498,7 @@ def parse_commondata(commondatafile, systypefile, setname):
         nsys=nsys,
         commondata_table=commondatatable,
         systype_table=systypetable,
-        legacy=True
+        legacy=True,
     )
 
 
