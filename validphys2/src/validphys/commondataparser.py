@@ -75,7 +75,9 @@ def ValidPath(path_str: str) -> Path:
 @Parser
 def ValidOperation(op_str) -> str:
     """Ensures that the operation defined in the commondata file is implemented in validphys"""
-    ret = op_str.upper()
+    if op_str is None:
+        op_str = "NONE"
+    ret = str(op_str).upper()
     # TODO: move accepted operations to this module so that the convolution receives an operation to apply
     # instead of an operation to understand
     from validphys.convolution import OP
