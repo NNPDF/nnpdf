@@ -5,7 +5,7 @@ bins:
     max: null
   M2:
     min: null
-    mid: 4.71
+    mid: 22.1841
     max: null
   s:
     min: null
@@ -17,7 +17,7 @@ bins:
     max: null
   M2:
     min: null
-    mid: 4.88
+    mid: 23.8144
     max: null
   s:
     min: null
@@ -29,7 +29,7 @@ bins:
     max: null
   M2:
     min: null
-    mid: 5.11
+    mid: 26.1121
     max: null
   s:
     min: null
@@ -41,7 +41,7 @@ bins:
     max: null
   M2:
     min: null
-    mid: 5.46
+    mid: 29.8116
     max: null
   s:
     min: null
@@ -53,7 +53,7 @@ bins:
     max: null
   M2:
     min: null
-    mid: 5.87
+    mid: 34.456900000000005
     max: null
   s:
     min: null
@@ -65,7 +65,7 @@ bins:
     max: null
   M2:
     min: null
-    mid: 6.36
+    mid: 40.449600000000004
     max: null
   s:
     min: null

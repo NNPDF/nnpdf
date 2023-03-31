@@ -32,8 +32,8 @@ def filter_E605():
             sqrttau = input["independent_variables"][0]["values"][j]["value"]
             m2 = (sqrttau*sqrts)**2
             kin_value = {
-                "roots": {"min": None, "mid": sqrts, "max": None},
-                "sqrttau": {"min": None, "mid": m2, "max": None},
+                "sqrts": {"min": None, "mid": sqrts, "max": None},
+                "m2": {"min": None, "mid": m2, "max": None},
                 "y": {"min": None, "mid": y, "max": None},
             }
             kin.append(kin_value)

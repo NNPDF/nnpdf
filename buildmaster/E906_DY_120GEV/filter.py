@@ -19,7 +19,8 @@ def filter_E906R():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
-    ndata = metadata["ndata"]
+    obs = metadata["implemented_observables"][0]
+    ndata = obs["ndata"]
 
     Eb = 120  # beam energy
     mp = 0.938  # proton mass
@@ -48,7 +49,7 @@ def filter_E906R():
 
         kin_value = {
             "Y": {"min": None, "mid": float(Y[n]), "max": None},
-            "M2": {"min": None, "mid": float(M[n]), "max": None},
+            "M2": {"min": None, "mid": float(M[n])**2, "max": None},
             "s": {"min": None, "mid": float(s), "max": None},
         }
         kin.append(kin_value)
@@ -102,7 +103,7 @@ def filter_E906R():
 
     data_central_yaml = {"data_central": data_central}
     kinematics_yaml = {"bins": kin}
-    uncertainties_yaml = {"definition": error_definition, "bins": error}
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)

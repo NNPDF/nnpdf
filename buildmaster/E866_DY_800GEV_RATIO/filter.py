@@ -7,7 +7,8 @@ def filter_DYE866R():
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
-    tables = metadata["hepdata"]["tables"]
+    obs = metadata["implemented_observables"][0]
+    tables = obs["tables"]
 
     data_central = []
     kin = []
@@ -34,7 +35,7 @@ def filter_DYE866R():
 
             kin_value = {
                 "y": {"min": None, "mid": y, "max": None},
-                "M": {"min": None, "mid": M, "max": None},
+                "m2": {"min": None, "mid": M**2, "max": None},
                 "sqrts": {"min": None, "mid": sqrts, "max": None},
             }
             kin.append(kin_value)
@@ -62,7 +63,7 @@ def filter_DYE866R():
 
     data_central_yaml = {"data_central": data_central}
     kinematics_yaml = {"bins": kin}
-    uncertainties_yaml = {"definition": error_definition, "bins": error}
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)

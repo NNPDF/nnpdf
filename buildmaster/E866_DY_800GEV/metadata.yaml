@@ -26,15 +26,15 @@ implemented_observables:
     dataset_label: E866P $M^3 d^2\sigma/dM dx_F$
     plot_x: xF
     figure_by: 
-      - M
+      - m2
     kinematic_coverage:
       xF: xF
-      M: M
+      m2: m2
 
     kinematics:
       variables:
           xF: {description: "Feynman x", label: "$x_F", units: ""}
-          M:  {description: "Dilepton mass", units: ""}
+          m2:  {description: "Dilepton mass squared", units: ""}
           sqrts:  {description: "Center of mass energy", units: ""}
       file: kinematics.yaml
 

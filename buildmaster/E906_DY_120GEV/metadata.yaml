@@ -34,8 +34,8 @@ implemented_observables:
     kinematics:
       variables:
           Y: {description: "05*log(xb/xt), with xb and xt the momentum fractions carried by the target and beam partons involved in the parton-level scattering. ", label: $Y$, units: ""}
-          M2:  {description: "Invariant mass", label: $M$, units: "GeV^2"}
-          sqrts:  {description: "Com energy", units: "GeV"}
+          M2:  {description: "Invariant mass squared", label: $M^2$, units: "GeV^2"}
+          s:  {description: "Com energy", units: "GeV"}
       file: kinematics.yaml
 
     data_central: data.yaml

@@ -8,7 +8,8 @@ def filter_DYE866P():
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
-    tables = metadata["hepdata"]["tables"]
+    obs = metadata["implemented_observables"][0]
+    tables = obs["tables"]
 
     data_central = []
     kin = []
@@ -33,11 +34,14 @@ def filter_DYE866P():
             # M = input["independent_variables"][0]["values"][j]["value"]
             # value for central M is missing for one point, so I m computing it.
             # This is the way it is done in old implementation
-            M = 0.5 * (M_high + M_low)
+
+            M2_high = M_high**2
+            M2_low = M_low**2
+            M2 = 0.5 * (M2_high + M2_low)
 
             kin_value = {
                 "xF": {"min": None, "mid": xF, "max": None},
-                "M": {"min": M_low, "mid": M, "max": M_high},
+                "m2": {"min": M2_low, "mid": M2, "max": M2_high},
                 "sqrts": {"min": None, "mid": sqrts, "max": None},
             }
             kin.append(kin_value)
@@ -73,7 +77,7 @@ def filter_DYE866P():
 
     data_central_yaml = {"data_central": data_central}
     kinematics_yaml = {"bins": kin}
-    uncertainties_yaml = {"definition": error_definition, "bins": error}
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
