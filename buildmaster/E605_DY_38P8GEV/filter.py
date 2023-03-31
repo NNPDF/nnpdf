@@ -5,9 +5,12 @@ def filter_E605():
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
+
     version = metadata["hepdata"]["version"]
-    tables = metadata["hepdata"]["tables"]
-    npoints = metadata["hepdata"]["npoints"]
+
+    obs = metadata["implemented_observables"][0]
+    tables = obs["tables"]
+    npoints = obs["npoints"]
 
     data_central = []
     kin = []
@@ -27,9 +30,10 @@ def filter_E605():
             data_central_value = input["dependent_variables"][0]["values"][j]["value"]
             data_central.append(data_central_value)
             sqrttau = input["independent_variables"][0]["values"][j]["value"]
+            m2 = (sqrttau*sqrts)**2
             kin_value = {
-                "s": {"min": None, "mid": sqrts**2, "max": None},
-                "sqrttau": {"min": None, "mid": sqrttau, "max": None},
+                "roots": {"min": None, "mid": sqrts, "max": None},
+                "sqrttau": {"min": None, "mid": m2, "max": None},
                 "y": {"min": None, "mid": y, "max": None},
             }
             kin.append(kin_value)
@@ -74,7 +78,7 @@ def filter_E605():
 
     data_central_yaml = {"data_central": data_central}
     kinematics_yaml = {"bins": kin}
-    uncertainties_yaml = {"definition": error_definition, "bins": error}
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
