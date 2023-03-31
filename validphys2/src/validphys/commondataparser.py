@@ -73,11 +73,11 @@ def ValidPath(path_str: str) -> Path:
 
 
 @Parser
-def ValidOperation(op_str) -> str:
+def ValidOperation(op_str: Optional[str]) -> str:
     """Ensures that the operation defined in the commondata file is implemented in validphys"""
     if op_str is None:
         op_str = "NONE"
-    ret = str(op_str).upper()
+    ret = op_str.upper()
     # TODO: move accepted operations to this module so that the convolution receives an operation to apply
     # instead of an operation to understand
     from validphys.convolution import OP
@@ -112,7 +112,7 @@ class TheoryMeta:
     """Contains the necessary information to load the associated fktables"""
 
     FK_tables: list[list]
-    operation: Optional[ValidOperation] = "NULL"
+    operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
     comment: Optional[str] = None
     apfelcomb: Optional[ValidApfelComb] = None
