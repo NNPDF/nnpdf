@@ -38,11 +38,11 @@ implemented_observables:
           sqrts:  {description: "Center of mass energy", units: ""}
       file: kinematics.yaml
 
-      data_central: data.yaml
-      data_uncertainties:
-        - uncertainties.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
 
-      theory:
-        FK_tables:
-          - - DYE866P
-        operation: 'null'
+    theory:
+      FK_tables:
+        - - DYE866P
+      operation: 'null'
