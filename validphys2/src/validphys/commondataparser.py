@@ -293,7 +293,7 @@ def _parse_uncertainties(metadata):
         uncyaml = yaml.safe_load(ufile.read_text())
 
         mindex = pd.MultiIndex.from_tuples(
-            [(k, v["treatment"], v["type"]) for k, v in uncyaml["definition"].items()],
+            [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
             names=["name", "treatment", "type"],
         )
         # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
@@ -414,6 +414,16 @@ def parse_commondata_new(dataset_fullname, variants=[]):
     systype_table = pd.DataFrame(systypes, index=range(1, nsys + 1))
     systype_table.index.name = "sys_index"
 
+    # TODO: Legacy compatibility
+    # 1. Add a stat column if it doesn't exist
+    # 2. Transform multiplicatie uncertainties into % as it was done in the older version
+
+    if "stat" not in commondata_table:
+        commondata_table["stat"] = 0.0
+
+    if "MULT" in commondata_table:
+        commondata_table["MULT"] = commondata_table["MULT"].multiply(100/commondata_table["data"], axis="index")
+
     return CommonData(
         setname=commondata,
         ndata=metadata.ndata,
@@ -422,6 +432,7 @@ def parse_commondata_new(dataset_fullname, variants=[]):
         nsys=nsys,
         commondata_table=commondata_table,
         systype_table=systype_table,
+        legacy=False,
     )
 
 
@@ -483,6 +494,7 @@ def parse_commondata(commondatafile, systypefile, setname):
         nsys=nsys,
         commondata_table=commondatatable,
         systype_table=systypetable,
+        legacy=True
     )
 
 
