@@ -246,6 +246,7 @@ class CommonData:
     commondata_table: pd.DataFrame = dataclasses.field(repr=False)
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
+    legacy: bool
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
@@ -317,10 +318,16 @@ class CommonData:
         mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
         # NOTE: Index with list here so that return is always a DataFrame, even
         # if N_sys = 1 (else a Series could be returned)
-        mult_table = self.systematics_table.loc[:, ["MULT"]]
-        # Minus 1 because iloc starts from 0, while the systype counting starts
-        # from 1.
-        mult_table = mult_table.iloc[:, mult_systype.index - 1]
+        mult_table = self.systematics_table.filter(like = "MULT")
+        # TODO: check whether the `filter` creates a problem with n_sys = 1, if not remove both
+        # note and todo
+        #mult_table = self.systematics_table.loc[:, ["MULT"]]
+
+        if self.legacy:
+            # Minus 1 because iloc starts from 0, while the systype counting starts
+            # from 1.
+            mult_table = mult_table.iloc[:, mult_systype.index - 1]
+
         mult_table.columns = mult_systype["name"].to_numpy()
         return mult_table.loc[:, mult_table.columns != "SKIP"]
 
@@ -334,10 +341,14 @@ class CommonData:
         add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
         # NOTE: Index with list here so that return is always a DataFrame, even
         # if N_sys = 1 (else a Series could be returned)
-        add_table = self.systematics_table.loc[:, ["ADD"]]
-        # Minus 1 because iloc starts from 0, while the systype counting starts
-        # from 1.
-        add_table = add_table.iloc[:, add_systype.index - 1]
+        add_table = self.systematics_table.filter(like = "ADD")
+        # TODO same as above
+
+        if self.legacy:
+            # Minus 1 because iloc starts from 0, while the systype counting starts
+            # from 1.
+            add_table = add_table.iloc[:, add_systype.index - 1]
+
         add_table.columns = add_systype["name"].to_numpy()
         return add_table.loc[:, add_table.columns != "SKIP"]
 
