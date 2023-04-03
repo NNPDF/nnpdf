@@ -940,14 +940,10 @@ class ModelTrainer:
                 photons,
             )
 
-            # Register the fitting grid with the photon layer
-            try:
+            if photons is not None:
                 for m in pdf_models:
                     pl = m.get_layer("add_photon")
                     pl.register_photon(xinput.input.tensor_content)
-            except ValueError:
-                # There's no photon I guess
-                pass
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
