@@ -7,6 +7,7 @@ from validphys.n3fit_data import replica_nnseed
 from . import structure_functions as sf
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
+import logging
 
 from eko.io import EKO
 
@@ -20,6 +21,8 @@ import fiatlux
 import yaml
 from os import remove
 import time
+
+log = logging.getLogger(__name__)
 
 
 class Photon:
@@ -194,8 +197,8 @@ class Photon:
 
         Parameters
         ----------
-        xgrids: numpy.array
-            grid of the x points
+        id: int
+            replica id
 
         Returns
         -------
@@ -209,7 +212,7 @@ class Photon:
         )
         photon_100GeV += self.generate_errors(id)
         photon_100GeV /= self.xgrid
-        print("Time to compute photon:", time.perf_counter() - start_time)
+        log.info(f"Time to compute photon: {time.perf_counter() - start_time}")
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
@@ -281,19 +284,14 @@ class Photon:
         if not self.fiatlux_runcard["additional_errors"]:
             return None
         extra_set = LHAPDFSet("LUXqed17_plus_PDF4LHC15_nnlo_100", "replicas")
-        # random generator must be set previously in case of parallel replicas
-        return np.array(
-            [
-                [
-                    (
-                        extra_set.xfxQ(x, self.q_in, i, 22)
-                        - extra_set.xfxQ(x, self.q_in, 0, 22)
-                    )
-                    for i in range(101, 107 + 1)
-                ]
-                for x in self.xgrid
-            ]
-        )  # first index must be x, while second one must be replica index
+        qs = [self.q_in]*len(self.xgrid)
+        res_central = np.array(extra_set.central_member.xfxQ(22, self.xgrid, qs))
+        res = []
+        for idx_member in range(101, 107+1):
+            tmp = np.array(extra_set.members[idx_member].xfxQ(22, self.xgrid, qs))
+            res.append(tmp - res_central)
+        # first index must be x, while second one must be replica index
+        return np.stack(res, axis=1)
 
     def generate_errors(self, replica_id):
         """generate LUX additional errors."""
