@@ -20,11 +20,7 @@ from reportengine.compat import yaml
 from reportengine.namespaces import NSList
 
 
-N3FIT_FIXED_CONFIG = dict(
-    use_cuts = 'internal',
-    use_t0 = True,
-    actions_ = []
-)
+N3FIT_FIXED_CONFIG = dict(use_cuts="internal", use_t0=True, actions_=[])
 
 FIT_NAMESPACE = "datacuts::theory::fitting "
 CLOSURE_NAMESPACE = "datacuts::theory::closuretest::fitting "
@@ -45,6 +41,7 @@ RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
 TAB_FOLDER = "tables"
 
+
 class N3FitError(Exception):
     """Exception raised when n3fit cannot succeed and knows why"""
 
@@ -64,12 +61,12 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not (self.output_path/"nnfit").is_dir():
+        if not (self.output_path / "nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
                 self.output_path.mkdir(exist_ok=True)
-                (self.output_path /"nnfit").mkdir(exist_ok=True)
+                (self.output_path / "nnfit").mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
 
@@ -124,18 +121,23 @@ class N3FitConfig(Config):
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
-            raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
+            raise ConfigError(
+                f"Expecting input runcard to be a mapping, "
+                f"not '{type(file_content)}'."
+            )
 
-        if file_content.get('closuretest') is not None:
+        if file_content.get("closuretest") is not None:
             namespace = CLOSURE_NAMESPACE
         else:
             namespace = FIT_NAMESPACE
 
-        N3FIT_FIXED_CONFIG['actions_'].append(namespace + "performfit")
+        N3FIT_FIXED_CONFIG["actions_"].append(namespace + "performfit")
 
         if fps := file_content["fitting"].get("savepseudodata", True):
             if fps != True:
-                raise TypeError(f"fitting::savepseudodata is neither True nor False ({fps})")
+                raise TypeError(
+                    f"fitting::savepseudodata is neither True nor False ({fps})"
+                )
             if len(kwargs["environment"].replicas) != 1:
                 raise ConfigError(
                     "Cannot request that multiple replicas are fitted and that "
@@ -146,27 +148,40 @@ class N3FitConfig(Config):
             training_action = namespace + "training_pseudodata"
             validation_action = namespace + "validation_pseudodata"
 
-            N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
+            N3FIT_FIXED_CONFIG["actions_"].extend((training_action, validation_action))
 
-        if (thconfig:=file_content.get('fiatlux')) is not None:
-            N3FIT_FIXED_CONFIG['fiatlux']=thconfig
-        else :
-            N3FIT_FIXED_CONFIG['fiatlux']=None
-        #Theorycovmat flags and defaults
-        N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
-        N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = False
-        N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = False
-        if (thconfig:=file_content.get('theorycovmatconfig')) is not None:
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting', True) 
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True) 
-            if N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] or N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting']:
-                N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
-            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties', False) 
-            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties', True) 
-        #Sampling flags
-        if (sam_t0:=file_content.get('sampling')) is not None:
-            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative', True) 
-        #Fitting flag
+        if (thconfig := file_content.get("fiatlux")) is not None:
+            N3FIT_FIXED_CONFIG["fiatlux"] = thconfig
+        else:
+            N3FIT_FIXED_CONFIG["fiatlux"] = None
+        # Theorycovmat flags and defaults
+        N3FIT_FIXED_CONFIG["theory_covmat_flag"] = False
+        N3FIT_FIXED_CONFIG["use_thcovmat_in_fitting"] = False
+        N3FIT_FIXED_CONFIG["use_thcovmat_in_sampling"] = False
+        if (thconfig := file_content.get("theorycovmatconfig")) is not None:
+            N3FIT_FIXED_CONFIG["use_thcovmat_in_fitting"] = thconfig.get(
+                "use_thcovmat_in_fitting", True
+            )
+            N3FIT_FIXED_CONFIG["use_thcovmat_in_sampling"] = thconfig.get(
+                "use_thcovmat_in_sampling", True
+            )
+            if (
+                N3FIT_FIXED_CONFIG["use_thcovmat_in_sampling"]
+                or N3FIT_FIXED_CONFIG["use_thcovmat_in_fitting"]
+            ):
+                N3FIT_FIXED_CONFIG["theory_covmat_flag"] = True
+            N3FIT_FIXED_CONFIG["use_user_uncertainties"] = thconfig.get(
+                "use_user_uncertainties", False
+            )
+            N3FIT_FIXED_CONFIG["use_scalevar_uncertainties"] = thconfig.get(
+                "use_scalevar_uncertainties", True
+            )
+        # Sampling flags
+        if (sam_t0 := file_content.get("sampling")) is not None:
+            N3FIT_FIXED_CONFIG["separate_multiplicative"] = sam_t0.get(
+                "separate_multiplicative", True
+            )
+        # Fitting flag
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
@@ -183,12 +198,13 @@ class N3FitConfig(Config):
         """
         if fakedata:
             log.warning("using filtered closure data")
-            if not (self.environment.output_path/'filter').is_dir():
+            if not (self.environment.output_path / "filter").is_dir():
                 raise ConfigError(
                     "Could not find filter result at "
                     f"{self.environment.output_path/'filter'} "
                     "to load commondata from. Did you run filter on the "
-                    "runcard?")
+                    "runcard?"
+                )
         return fakedata
 
     def produce_use_fitcommondata(self, fakedata):
@@ -198,8 +214,7 @@ class N3FitConfig(Config):
         return fakedata
 
     def produce_kfold_parameters(self, kfold=None, hyperopt=None):
-        """Return None even if there are kfolds in the runcard if the hyperopt flag is not active
-        """
+        """Return None even if there are kfolds in the runcard if the hyperopt flag is not active"""
         if hyperopt is not None:
             return kfold
         return None
@@ -237,18 +252,27 @@ class N3FitApp(App):
     @property
     def argparser(self):
         parser = super().argparser
-        parser.add_argument("-o", "--output", help="Output folder and name of the fit", default=None)
+        parser.add_argument(
+            "-o", "--output", help="Output folder and name of the fit", default=None
+        )
 
         def check_positive(value):
             ivalue = int(value)
             if ivalue <= 0:
-                raise argparse.ArgumentTypeError("%s is an invalid positive int value." % value)
+                raise argparse.ArgumentTypeError(
+                    "%s is an invalid positive int value." % value
+                )
             return ivalue
 
-        parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
+        parser.add_argument(
+            "--hyperopt", help="Enable hyperopt scan", default=None, type=int
+        )
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
-            "-r", "--replica_range", help="End of the range of replicas to compute", type=check_positive
+            "-r",
+            "--replica_range",
+            help="End of the range of replicas to compute",
+            type=check_positive,
         )
         return parser
 
@@ -260,7 +284,9 @@ class N3FitApp(App):
 
     def run(self):
         try:
-            self.environment.config_yml = pathlib.Path(self.args["config_yml"]).absolute()
+            self.environment.config_yml = pathlib.Path(
+                self.args["config_yml"]
+            ).absolute()
             replica = self.args["replica"]
             if self.args["replica_range"]:
                 replicas = list(range(replica, self.args["replica_range"] + 1))
@@ -274,7 +300,9 @@ class N3FitApp(App):
             sys.exit(1)
         except Exception as e:
             log.critical(f"Bug in n3fit ocurred. Please report it.")
-            print(colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr)
+            print(
+                colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr
+            )
             sys.exit(1)
 
 
