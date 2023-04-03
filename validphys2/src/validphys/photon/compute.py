@@ -2,6 +2,7 @@
 import numpy as np
 
 from validphys.lhapdfset import LHAPDFSet
+from validphys.n3fit_data import replica_nnseed
 
 from . import structure_functions as sf
 from scipy.interpolate import interp1d
@@ -282,8 +283,4 @@ class Photon:
 # TODO : move it in n3fit_data.py with the others replica_seed generators?
 # or use directly replica_nnseed?
 def replica_luxseed(replica, luxseed):
-    """Generates the ``luxseed`` for a ``replica``."""
-    np.random.seed(seed=luxseed)
-    for _ in range(replica):
-        res = np.random.randint(0, pow(2, 31))
-    return res
+    return replica_nnseed(replica, luxseed)
