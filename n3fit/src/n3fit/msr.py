@@ -36,26 +36,26 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(nx=int(2e3), mode="All", scaler=None, photons=None):
+def msr_impose(nx=int(2e3), mode='All', scaler=None, photons=None):
     """
-    This function receives:
-    Generates a function that applies a normalization layer to the fit.
-        - fit_layer: the 8-basis layer of PDF which we fit
-    The normalization is computed from the direct output of the NN (so the 7,8-flavours basis)
-        - final_layer: the 14-basis which is fed to the fktable
-    and it is applied to the input of the fktable (i.e., to the 14-flavours fk-basis).
-    It uses pdf_fit to compute the sum rule and returns a modified version of
-    the final_pdf layer with a normalisation by which the sum rule is imposed
+        This function receives:
+        Generates a function that applies a normalization layer to the fit.
+            - fit_layer: the 8-basis layer of PDF which we fit
+        The normalization is computed from the direct output of the NN (so the 7,8-flavours basis)
+            - final_layer: the 14-basis which is fed to the fktable
+        and it is applied to the input of the fktable (i.e., to the 14-flavours fk-basis).
+        It uses pdf_fit to compute the sum rule and returns a modified version of
+        the final_pdf layer with a normalisation by which the sum rule is imposed
 
-    Parameters
-    ----------
-        nx: int
-            number of points for the integration grid, default: 2000
-        mode: str
-            what sum rules to compute (MSR, VSR or All), default: All
-        scaler: scaler
-            Function to apply to the input. If given the input to the model
-            will be a (1, None, 2) tensor where dim [:,:,0] is scaled
+        Parameters
+        ----------
+            nx: int
+                number of points for the integration grid, default: 2000
+            mode: str
+                what sum rules to compute (MSR, VSR or All), default: All
+            scaler: scaler
+                Function to apply to the input. If given the input to the model
+                will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
     """
 
     # 1. Generate the fake input which will be used to integrate
@@ -84,16 +84,14 @@ def msr_impose(nx=int(2e3), mode="All", scaler=None, photons=None):
     # and will return it appropiately normalized.
     def apply_normalization(layer_pdf, ph_replica):
         """
-        layer_pdf: output of the PDF, unnormalized, ready for the fktable
+            layer_pdf: output of the PDF, unnormalized, ready for the fktable
         """
         x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
-        pdf_integrand = op.op_multiply(
-            [division_by_x(x_original), layer_pdf(xgrid_input)]
-        )
+        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
         normalization = normalizer(integrator(pdf_integrand), ph_replica)
 
         def ultimate_pdf(x):
-            return layer_pdf(x) * normalization
+            return layer_pdf(x)*normalization
 
         return ultimate_pdf
 

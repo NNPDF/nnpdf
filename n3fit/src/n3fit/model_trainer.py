@@ -37,7 +37,6 @@ PUSH_INTEGRABILITY_EACH = 100
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
 
-
 def _pdf_injection(pdf_layers, observables, masks):
     """
     Takes as input a list of PDF layers each corresponding to one observable (also given as a list)
@@ -187,9 +186,7 @@ class ModelTrainer:
             hyper_loss = kfold_parameters.get("target", None)
             if hyper_loss is None:
                 hyper_loss = "average"
-                log.warning(
-                    "No minimization target selected, defaulting to '%s'", hyper_loss
-                )
+                log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
             self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
 
@@ -465,9 +462,7 @@ class ModelTrainer:
         validation = MetaModel(full_model_input_dict, output_vl)
 
         # Or the positivity in the total chi2
-        output_ex = _pdf_injection(
-            exp_pdfs, self.experimental["output"], experimental_mask
-        )
+        output_ex = _pdf_injection(exp_pdfs, self.experimental["output"], experimental_mask)
         experimental = MetaModel(full_model_input_dict, output_ex)
 
         if self.print_summary:
@@ -563,9 +558,7 @@ class ModelTrainer:
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
 
-            pos_layer = model_gen.observable_generator(
-                pos_dict, positivity_initial=pos_initial
-            )
+            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
@@ -580,18 +573,13 @@ class ModelTrainer:
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
                 if not self.mode_hyperopt:
-                    log.info(
-                        "Generating integrability penalty for %s", integ_dict["name"]
-                    )
+                    log.info("Generating integrability penalty for %s", integ_dict["name"])
 
                 integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
                 max_lambda = integ_dict["lambda"]
 
                 integ_initial, integ_multiplier = _LM_initial_and_multiplier(
-                    all_integ_initial,
-                    all_integ_multiplier,
-                    max_lambda,
-                    integrability_steps,
+                    all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
                 )
 
                 integ_layer = model_gen.observable_generator(
@@ -617,15 +605,10 @@ class ModelTrainer:
             force_set_smallest = input_arr.min() > 1e-9
             if force_set_smallest:
                 new_xgrid = np.linspace(
-                    start=1 / input_arr_size,
-                    stop=1.0,
-                    endpoint=False,
-                    num=input_arr_size,
+                    start=1 / input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
                 )
             else:
-                new_xgrid = np.linspace(
-                    start=0, stop=1.0, endpoint=False, num=input_arr_size
-                )
+                new_xgrid = np.linspace(start=0, stop=1.0, endpoint=False, num=input_arr_size)
 
             # When mapping the FK xgrids onto our new grid, we need to consider degeneracies among
             # the x-values in the FK grids
@@ -645,9 +628,7 @@ class ModelTrainer:
 
             # Select the indices of the points that will be used by the interpolator
             onein = map_from_complete.size / (int(interpolation_points) - 1)
-            selected_points = [
-                round(i * onein - 1) for i in range(1, int(interpolation_points))
-            ]
+            selected_points = [round(i * onein - 1) for i in range(1, int(interpolation_points))]
             if selected_points[0] != 0:
                 selected_points = [0] + selected_points
             map_from = map_from_complete[selected_points]
@@ -658,8 +639,7 @@ class ModelTrainer:
                 scaler = PchipInterpolator(map_from, map_to)
             except ValueError:
                 raise ValueError(
-                    "interpolation_points is larger than the number of unique "
-                    "input x-values"
+                    "interpolation_points is larger than the number of unique " "input x-values"
                 )
             self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
 
@@ -736,14 +716,7 @@ class ModelTrainer:
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
-        reported_keys = [
-            "name",
-            "count_chi2",
-            "positivity",
-            "integrability",
-            "ndata",
-            "ndata_vl",
-        ]
+        reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
         reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
@@ -844,10 +817,7 @@ class ModelTrainer:
         # training and the validation which are actually `chi2` and not part of the penalty
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2 = stopping_object.vl_chi2
-        exp_chi2 = (
-            self.experimental["model"].compute_losses()["loss"]
-            / self.experimental["ndata"]
-        )
+        exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametrizable(self, params):
@@ -908,16 +878,16 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
-
+        
         # Initialize all photon classes for the different replicas:
         if self.fiatlux_runcard is not None:
-            photons = Photon(
+            photons=Photon(
                 theoryid=self.theoryid,
                 fiatlux_runcard=self.fiatlux_runcard,
                 replicas_id=self.replicas_id,
             )
         else:
-            photons = None
+            photons=None
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -945,6 +915,7 @@ class ModelTrainer:
                     pl = m.get_layer("add_photon")
                     pl.register_photon(xinput.input.tensor_content)
 
+
             # Model generation joins all the different observable layers
             # together with pdf model generated above
             models = self._model_generation(xinput, pdf_models, partition, k)
@@ -957,12 +928,8 @@ class ModelTrainer:
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
-                pos_and_int = (
-                    self.training["posdatasets"] + self.training["integdatasets"]
-                )
-                initial_values = (
-                    self.training["posinitials"] + self.training["posinitials"]
-                )
+                pos_and_int = self.training["posdatasets"] + self.training["integdatasets"]
+                initial_values = self.training["posinitials"] + self.training["posinitials"]
                 models["training"].reset_layer_weights_to(pos_and_int, initial_values)
 
             # Generate the list containing reporting info necessary for chi2
@@ -1003,14 +970,10 @@ class ModelTrainer:
                 validation_loss = np.mean(stopping_object.vl_chi2)
 
                 # Compute experimental loss
-                exp_loss_raw = np.average(
-                    models["experimental"].compute_losses()["loss"]
-                )
+                exp_loss_raw = np.average(models["experimental"].compute_losses()["loss"])
                 # And divide by the number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
-                ndata = np.sum(
-                    [np.count_nonzero(i[k]) for i in self.experimental["folds"]]
-                )
+                ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
                 # If ndata == 0 then it's the opposite, all data is in!
                 if ndata == 0:
                     ndata = self.experimental["ndata"]
@@ -1018,18 +981,12 @@ class ModelTrainer:
 
                 hyper_loss = experimental_loss
                 if passed != self.pass_status:
-                    log.info(
-                        "Hyperparameter combination fail to find a good fit, breaking"
-                    )
+                    log.info("Hyperparameter combination fail to find a good fit, breaking")
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(
-                        pdf_models=pdf_models, stopping_object=stopping_object
-                    )
-                log.info(
-                    "Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed
-                )
+                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+                log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
@@ -1078,9 +1035,5 @@ class ModelTrainer:
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)
         # and the pdf models (which are used to generate the PDF grids and compute arclengths)
-        dict_out = {
-            "status": passed,
-            "stopping_object": stopping_object,
-            "pdf_models": pdf_models,
-        }
+        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_models": pdf_models}
         return dict_out

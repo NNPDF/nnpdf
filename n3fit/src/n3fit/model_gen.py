@@ -351,9 +351,7 @@ def generate_dense_per_flavour_network(
         initializers = []
         for _ in range(basis_size):
             # select the initializer and move the seed
-            initializers.append(
-                MetaLayer.select_initializer(initializer_name, seed=current_seed)
-            )
+            initializers.append(MetaLayer.select_initializer(initializer_name, seed=current_seed))
             current_seed += 1
 
         # set the arguments that will define the layer
@@ -575,9 +573,7 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(
-            mode=impose_sumrule, scaler=scaler, photons=photons
-        )
+        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler, photons=photons)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -650,7 +646,7 @@ def pdfNN_layer_generator(
         # Rotation layer, changes from the 8-basis to the 14-basis
         def layer_pdf(x):
             return layer_evln(layer_fitbasis(x))
-
+        
         # Final PDF (apply normalization)
         normalized_pdf = sumrule_layer(layer_pdf, i)
 

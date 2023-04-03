@@ -74,9 +74,7 @@ class N3LHAPDFSet(LHAPDFSet):
         """Return the value of the PDF member for the given value in x"""
         if Q != self._fitting_q:
             log.warning(
-                "Querying N3LHAPDFSet at a value of Q=%f different from %f",
-                Q,
-                self._fitting_q,
+                "Querying N3LHAPDFSet at a value of Q=%f different from %f", Q, self._fitting_q
             )
         return self.grid_values([fl], [x]).squeeze()[n]
 
@@ -85,7 +83,7 @@ class N3LHAPDFSet(LHAPDFSet):
         for m in self._lhapdf_set:
             pl = m.get_layer_re("add_photon")
             # if pl is an empy list there's no photon
-            if not pl:
+            if not pl : 
                 continue
             # TODO : not sure this will work in parallel mode
             pl[0].register_photon(xgrid)
@@ -123,9 +121,7 @@ class N3LHAPDFSet(LHAPDFSet):
 
         if replica is None or replica == 0:
             # We need generate output values for all replicas
-            result = np.concatenate(
-                [m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0
-            )
+            result = np.concatenate([m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0)
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)

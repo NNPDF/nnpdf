@@ -28,7 +28,7 @@ class Rotation(MetaLayer):
         super().__init__(**kwargs)
 
     def is_identity(self):
-        """Returns true if the rotation is an identity"""
+        """ Returns true if the rotation is an identity """
         # check whether it is a mxm matrix
         if self.rotation_matrix.shape[0] == self.rotation_matrix.shape[1]:
             # check whether it is the identity
@@ -41,15 +41,12 @@ class Rotation(MetaLayer):
 
 class FlavourToEvolution(Rotation):
     """
-    Rotates from the flavour basis to
-    the evolution basis.
+        Rotates from the flavour basis to
+        the evolution basis.
     """
 
     def __init__(
-        self,
-        flav_info,
-        fitbasis,
-        **kwargs,
+        self, flav_info, fitbasis, **kwargs,
     ):
         rotation_matrix = pdfbases.fitbasis_to_NN31IC(flav_info, fitbasis)
         super().__init__(rotation_matrix, axes=1, **kwargs)
@@ -93,7 +90,6 @@ class FkRotation(MetaLayer):
         ret = op.concatenate(pdf_raw_list)
         # Concatenating destroys the batch index so we have to regenerate it
         return op.batchit(ret)
-
 
 class AddPhoton(MetaLayer):
     """
