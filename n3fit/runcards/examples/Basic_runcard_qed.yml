@@ -202,3 +202,4 @@ fiatlux:
   pdf_name: NNPDF40_nnlo_as_01180_1000
   additional_errors: true # should be set to true only for the last iteration
   luxseed: 1234567890
+  
