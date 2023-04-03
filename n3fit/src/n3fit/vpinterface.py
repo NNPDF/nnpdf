@@ -118,7 +118,7 @@ class N3LHAPDFSet(LHAPDFSet):
         # as the scaling is done by the model itself
         mod_xgrid = xarr.reshape(1, -1, 1)
 
-        # Try registering the grid with the photon
+        # Register the grid with the photon
         self._register_photon(mod_xgrid)
 
         if replica is None or replica == 0:
