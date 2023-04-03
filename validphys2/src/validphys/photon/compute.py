@@ -1,26 +1,23 @@
 """Script that calls fiatlux to add the photon PDF."""
 import numpy as np
-
-from validphys.lhapdfset import LHAPDFSet
-from validphys.n3fit_data import replica_nnseed
-
-from . import structure_functions as sf
 from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
-import logging
+from os import remove
+import time
 
+import fiatlux
+import yaml
 from eko.io import EKO
-
 # from eko.io.manipulate import xgrid_reshape
 # from eko.interpolation import XGrid
 
+from validphys.lhapdfset import LHAPDFSet
+from validphys.n3fit_data import replica_nnseed
+from . import structure_functions as sf
+import logging
 from n3fit.io.writer import XGRID
 
-import fiatlux
 
-import yaml
-from os import remove
-import time
 
 log = logging.getLogger(__name__)
 
@@ -132,7 +129,16 @@ class Photon:
         return alpha_NLO
 
     def set_thresholds_alpha_em(self):
-        """Compute and store the couplings at thresholds"""
+        """
+        Compute and store the couplings at thresholds to speed up the calling
+        to alpha_em inside fiatlux:
+        when q is in a certain range (e.g. thresh_c < q < thresh_b) and qref in a different one
+        (e.g. thresh_b < q < thresh_t) we need to evolve from qref to thresh_b with nf=5 and then
+        from thresh_b to q with nf=4. Given that the value of alpha at thresh_b is always the same
+        we can avoid computing the first step storing the values of alpha in the threshold points.
+        It is done for qref in a generic range (not necessarly qref=91.2).
+
+        """
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
         self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
         self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
@@ -144,6 +150,7 @@ class Photon:
             self.thresh_c = np.inf
 
         thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
+        # determine nfref
         if self.qref < self.thresh_c:
             nfref = 3
         elif self.qref < self.thresh_b:
@@ -160,6 +167,7 @@ class Photon:
 
         self.alpha_thresh = {nfref: self.alpha_em_ref}
 
+        # determine the values of alpha in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
             self.alpha_thresh[nf] = self.alpha_em_nlo(
                 self.thresh[nf], self.alpha_thresh[nf - 1], self.thresh[nf - 1], nf - 1
@@ -207,9 +215,10 @@ class Photon:
         """
         # Compute photon PDF
         start_time = time.perf_counter()
-        photon_100GeV = np.array(
-            [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
-        )
+        # photon_100GeV = np.array(
+        #     [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
+        # )
+        photon_100GeV = np.exp(-self.xgrid)
         photon_100GeV += self.generate_errors(id)
         photon_100GeV /= self.xgrid
         log.info(f"Time to compute photon: {time.perf_counter() - start_time}")
