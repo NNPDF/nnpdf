@@ -700,7 +700,7 @@ class ModelTrainer:
                 dictionary of arguments for the regularizer
             seed: int
                 seed for the NN
-            photon: Photon
+             :py:class:`validphys.photon.compute.Photon` 
                 function to compute the photon PDF
         see model_gen.pdfNN_layer_generator for more information
 
