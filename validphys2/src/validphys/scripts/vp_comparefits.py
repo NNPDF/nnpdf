@@ -62,6 +62,12 @@ class CompareFitApp(App):
             default=REFERENCE_FIT_LABEL_DEFAULT,
             help="The label for the fit that is being compared to.")
         parser.add_argument(
+            '--dataset_join',
+            nargs='?',
+            default="intersection",
+            choices=['intersection', 'union', 'current', 'reference'],
+            help="Which datasets to use for the computation of chi2 for the data-theory comparison.")
+        parser.add_argument(
             '-i',
             '--interactive',
             help="Ask interactively for the missing data",
@@ -79,7 +85,7 @@ class CompareFitApp(App):
         argnames = (
             'current_fit', 'reference_fit', 'title', 'author', 'keywords')
         optionalnames = (
-            'current_fit_label', 'reference_fit_label')
+            'current_fit_label', 'reference_fit_label', 'dataset_join')
         boolnames = (
             'thcovmat_if_present',)
         badargs = [argname for argname in argnames if not args[argname]]
@@ -171,6 +177,13 @@ class CompareFitApp(App):
                    "to calculate the statistical estimators? ")
         return confirm(message, default=True)
 
+    def interactive_dataset_join(self):
+        """Interactively fill in the `dataset_join` runcard flag. Which is "intersection" by default
+        """
+        message = ("For the data theory comparsion, do you wish to use the datasets of: \n"
+                   "current, reference, intersection, or union")
+        return confirm(message, default="intersection")
+
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
         # This is needed because the environment wants to know how to resolve
@@ -217,6 +230,7 @@ class CompareFitApp(App):
             'speclabel': args['reference_fit_label']
         }
         autosettings['use_thcovmat_if_present'] = args['thcovmat_if_present']
+        autosettings['data_theory_dataset'] = {'dataset_join': args['dataset_join'], "use_cuts": "internal"}
         return autosettings
 
 

@@ -302,13 +302,26 @@ class CoreConfig(configparser.Config):
 
         return dict(**fitinputcontext, **fitpdf)
 
-    def produce_fitinputcontext(self, fit):
+    def produce_fitinputcontext(self, fits, use_cuts, dataset_join="intersection"):
         """Like ``fitcontext`` but without setting the PDF"""
         _, theory = self.parse_from_("fit", "theory", write=False)
         thid = theory["theoryid"]
-
-        data_input = self._parse_data_input_from_("fit", {"theoryid": thid})
-        return {"theoryid": thid, "data_input": data_input}
+        if dataset_join == "union":
+            data_input = []
+            for fit in fits:
+                data_input += self._parse_data_input_from_("fit", {"theoryid": thid, "fit": fit})
+        elif dataset_join == "intersection":
+            data_input = self._parse_data_input_from_("fit", {"theoryid": thid})
+        elif dataset_join == "current":
+            data_input = self._parse_data_input_from_("fit", {"theoryid": thid, "fit": fits[0]})
+        elif dataset_join == "reference":
+            data_input = self._parse_data_input_from_("fit", {"theoryid": thid, "fit": fits[1]})
+        else:
+            raise ValueError(
+                f"Unknown argument {dataset_join} for dataset_join "
+                "accepted arguments are {intersection, union, current, reference}"
+            )
+        return {"theoryid": thid, "data_input": data_input, "use_cuts": use_cuts}
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""

@@ -78,6 +78,7 @@ Training-validation
 -------------------
 {@fits plot_training_validation@}
 
+{@with data_theory_dataset@}
 {@with DataGroups@}
 $\chi^2$ by {@processed_metadata_group@}
 ----------------------------------------
@@ -98,6 +99,7 @@ $\phi$ by {@processed_metadata_group@}
 --------------------------------------
 {@plot_fits_groups_data_phi@}
 {@endwith@}
+{@endwith@} <!-- ends data_theory_dataset -->
 
 Dataset plots
 -------------

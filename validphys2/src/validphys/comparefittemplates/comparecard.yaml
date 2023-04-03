@@ -25,6 +25,9 @@
 #   theoryid:
 #     from_: theory
 #   speclabel: "Reference Fit"
+#
+# data_theory_dataset:
+#   dataset_join: the dataset_join setting
 
 pdfs:
   - from_: current
