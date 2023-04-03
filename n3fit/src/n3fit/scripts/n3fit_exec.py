@@ -150,6 +150,16 @@ class N3FitConfig(Config):
 
         if (thconfig:=file_content.get('fiatlux')) is not None:
             N3FIT_FIXED_CONFIG['fiatlux']=thconfig
+            from validphys.lhapdfset import LHAPDFSet
+            pdfs_fiatlux = LHAPDFSet(thconfig["pdf_name"], "replicas")
+            max_id = max(kwargs["environment"].replicas)
+            pdfs_ids = pdfs_fiatlux.n_members - 1
+            if max_id > pdfs_ids :
+                log.error(
+                    f"Cannot generate a replica with id larger than the number of replicas of the fiatlux PDFs set "
+                    + thconfig["pdf_name"] + f": replica id={max_id}, replicas of " + thconfig["pdf_name"] + f"={pdfs_ids}"
+                )
+                sys.exit(1)
         else :
             N3FIT_FIXED_CONFIG['fiatlux']=None
         #Theorycovmat flags and defaults

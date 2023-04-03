@@ -41,10 +41,6 @@ class Photon:
         # structure functions
         self.qcd_pdfs = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
 
-        if max(self.replicas_id) > self.qcd_pdfs.n_members - 1 :
-            log.error(f"Cannot generate a replica with id larger than the number of replicas of " + self.fiatlux_runcard["pdf_name"])
-            sys.exit(1)
-
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
         path_to_FL = theoryid.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
