@@ -116,10 +116,10 @@ class AddPhoton(MetaLayer):
             self._pdf_ph = self._photons_generator.compute(xgrid)
             self.built = False
 
-    def call(self, pdfs, i):
+    def call(self, pdfs, ph_replica):
         if self._pdf_ph is None:
             return pdfs
-        return op.concatenate([self._pdf_ph[i], pdfs[:, :, 1:]], axis=-1)
+        return op.concatenate([self._pdf_ph[ph_replica], pdfs[:, :, 1:]], axis=-1)
 
 
 class ObsRotation(MetaLayer):

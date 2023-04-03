@@ -656,12 +656,13 @@ def pdfNN_layer_generator(
 
         # Photon layer, changes the photon from zero to non-zero
         def apply_photon(x):
-            return layer_photon(normalized_pdf(x), i)
+            # if photon is None then the pothon_layer is not applied
+            if photons is None:
+                return normalized_pdf(x)
+            else:
+                return layer_photon(normalized_pdf(x), i)
 
-        if photons is None:
-            final_pdf = normalized_pdf
-        else:
-            final_pdf = apply_photon
+        final_pdf = apply_photon
 
         # Create the model
         pdf_model = MetaModel(
