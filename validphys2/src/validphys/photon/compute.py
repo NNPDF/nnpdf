@@ -4,7 +4,6 @@ from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
 from os import remove
 import time
-import sys
 
 import fiatlux
 import yaml
