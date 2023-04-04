@@ -66,7 +66,7 @@ generation). The default is ``True`` for both.
 4. The flag ``use_scalevar_uncertainties``  corresponds to whether or not a 
    theory covmat is to be constructed from a pointprescription with instructions 
    inside ``theorycovmatconfig``. Usually in cases where a custom covmat is 
-   being loades, this will be set to ``False``.
+   being loaded, this will be set to ``False``.
 
 5. Make sure that datasets are grouped under one big experiment called "BIGEXP", 
    just like in :ref:`vptheorycov-index`.
