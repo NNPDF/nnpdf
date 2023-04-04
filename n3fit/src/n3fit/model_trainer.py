@@ -908,7 +908,7 @@ class ModelTrainer:
                 photons,
             )
 
-            if photons is not None:
+            if photons:
                 for m in pdf_models:
                     pl = m.get_layer("add_photon")
                     pl.register_photon(xinput.input.tensor_content)
