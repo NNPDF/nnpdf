@@ -878,7 +878,6 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
-        
         # Initialize all photon classes for the different replicas:
         if self.fiatlux_runcard is not None:
             photons=Photon(
@@ -888,7 +887,6 @@ class ModelTrainer:
             )
         else:
             photons=None
-
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model

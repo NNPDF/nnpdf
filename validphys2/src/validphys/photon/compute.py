@@ -162,9 +162,7 @@ class Photon:
             nfref = 6
         thresh_list.insert(nfref - 3, self.qref)
 
-        self.thresh = {
-            nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)
-        }
+        self.thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
 
         self.alpha_thresh = {nfref: self.alpha_em_ref}
 
@@ -190,9 +188,7 @@ class Photon:
         for nf in range(3, 6 + 1):
             nu = nf // 2
             nd = nf - nu
-            self.beta0[nf] = (-4.0 / 3 * (nl + nc * (nu * eu2 + nd * ed2))) / (
-                4 * np.pi
-            )
+            self.beta0[nf] = (-4.0 / 3 * (nl + nc * (nu * eu2 + nd * ed2))) / (4 * np.pi)
             self.b1[nf] = (
                 -4.0
                 * (nl + nc * (nu * eu2**2 + nd * ed2**2))
@@ -284,8 +280,7 @@ class Photon:
     def integrate(self):
         """Compute the integral of the photon on the x range."""
         return [
-            trapezoid(self.photons_array[id], self.xgrid)
-            for id in range(len(self.replicas_id))
+            trapezoid(self.photons_array[id], self.xgrid) for id in range(len(self.replicas_id))
         ]
 
     def generate_error_matrix(self):

@@ -268,12 +268,12 @@ def test_addphoton_init():
     np.testing.assert_equal(addphoton._photons_generator, 1234)
     np.testing.assert_equal(addphoton._pdf_ph, None)
 
-class fakePhoton():
+class FakePhoton():
     def compute(self, xgrid):
         return [np.exp(-xgrid)]
 
 def test_compute_photon():
-    photon = fakePhoton()
+    photon = FakePhoton()
     addphoton = layers.AddPhoton(photons=photon)
     xgrid = np.geomspace(1e-4, 1., 10)
     addphoton.register_photon(xgrid)
