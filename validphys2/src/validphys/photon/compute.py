@@ -53,10 +53,11 @@ class Photon:
             f2[id] = sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[id])
             fl[id] = sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[id])
             f2lo[id] = sf.F2LO(self.qcd_pdfs.members[id], self.theory)
-            with open(f"fiatlux_runcard_{id}.yml", "w+") as ff:
+            tmp_file = f"fiatlux_runcard_{id}.yml"
+            with open(tmp_file, "w+") as ff:
                 yaml.dump(self.fiatlux_runcard, ff)
-            self.lux[id] = fiatlux.FiatLux(f"fiatlux_runcard_{id}.yml")
-            remove(f"fiatlux_runcard_{id}.yml")
+            self.lux[id] = fiatlux.FiatLux(tmp_file)
+            remove(tmp_file)
         # we have a dict but fiatlux wants a yaml file
         # TODO : remove this dirty trick
         # we print different runcards for every replica so they do not interfere with each other
