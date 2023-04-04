@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.can_run_multiple_replicas
+@n3fit.checks.check_fiatlux_pdfs_id
 def performfit(
     *,
     n3fit_checks_action, # wrapper for all checks
@@ -85,6 +86,8 @@ def performfit(
                 Theory which is used to generate theory predictions from model
                 during fit. Object also contains some metadata on the theory
                 settings.
+            fiatlux : dict
+                dictionary containing the fiatlux runcard
             basis: list[dict]
                 preprocessing information for each flavour to be fitted.
             fitbasis: str

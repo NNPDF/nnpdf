@@ -1,5 +1,5 @@
-import pineappl
 import numpy as np
+import pineappl
 from scipy.interpolate import RectBivariateSpline
 
 

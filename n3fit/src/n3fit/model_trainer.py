@@ -135,6 +135,12 @@ class ModelTrainer:
                         whether sum rules should be enabled (All, MSR, VSR, False)
             parallel_models: int
                 number of models to fit in parallel
+            theoryid : validphys.core.TheoryIDSpec
+                object contining info for generating the photon
+            fiatlux_runcard : dict
+                dictionary containing the fiatlux runcard
+            replicas_id : list
+                list with the replicas ids to be fitted
         """
         # Save all input information
         self.exp_info = exp_info

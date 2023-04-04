@@ -85,7 +85,6 @@ class N3LHAPDFSet(LHAPDFSet):
             # if pl is an empy list there's no photon
             if not pl : 
                 continue
-            # TODO : not sure this will work in parallel mode
             pl[0].register_photon(xgrid)
             # Recompile the model if necessary
             if not pl[0].built:

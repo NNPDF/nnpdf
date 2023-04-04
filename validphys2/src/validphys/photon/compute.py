@@ -1,20 +1,20 @@
 """Script that calls fiatlux to add the photon PDF."""
-import numpy as np
-from scipy.interpolate import interp1d
-from scipy.integrate import trapezoid
-from os import remove
+import logging
 import time
+from os import remove
 
 import fiatlux
+import numpy as np
 import yaml
 from eko.io import EKO
-
+from scipy.integrate import trapezoid
+from scipy.interpolate import interp1d
 from validphys.lhapdfset import LHAPDFSet
 from validphys.n3fit_data import replica_nnseed
-from . import structure_functions as sf
-import logging
+
 from n3fit.io.writer import XGRID
 
+from . import structure_functions as sf
 
 log = logging.getLogger(__name__)
 
@@ -207,14 +207,14 @@ class Photon:
             photon PDF at the scale 1 GeV
         """
         # Compute photon PDF
+        log.info(f"Computing photon")
         start_time = time.perf_counter()
         photon_100GeV = np.array(
             [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
         )
+        log.info(f"Computation time: {time.perf_counter() - start_time}")
         photon_100GeV += self.generate_errors(id)
         photon_100GeV /= self.xgrid
-        log.info(f"Computing photon")
-        log.info(f"Computation time: {time.perf_counter() - start_time}")
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
@@ -296,6 +296,7 @@ class Photon:
 
     def generate_errors(self, replica_id):
         """generate LUX additional errors."""
+        log.info(f"Generating additional errors")
         if self.error_matrix is None:
             return np.zeros_like(self.xgrid)
         seed = replica_luxseed(replica_id, self.fiatlux_runcard["luxseed"])

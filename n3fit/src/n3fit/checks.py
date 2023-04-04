@@ -393,3 +393,21 @@ def check_deprecated_options(fitting):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
+
+@make_argcheck
+def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
+    if fiatlux :
+        import lhapdf
+        pdf_name = fiatlux["pdf_name"]
+        pdfs_fiatlux = lhapdf.getPDFSet(pdf_name)
+        max_id = max(replicas)
+        pdfs_ids = pdfs_fiatlux.size - 1
+        if max_id > pdfs_ids :
+            for replica_id in replicas:
+                # At this point it should be always empty
+                os.rmdir(replica_path / f"replica_{replica_id}")
+            raise CheckError(
+                f"Cannot generate a replica with id larger than the number of replicas of the fiatlux PDFs set "
+                + pdf_name + f": replica id={max_id}, replicas of " + pdf_name + f"={pdfs_ids}"
+                +"\nRemoving replica output folders"
+            )
