@@ -64,8 +64,10 @@ def test_concat_matrices():
             12, 15, 16, 17, 18, 21, 22, 19, 20, 23, 24]
     res2 = [1, 2, 5, 6, 9, 10, 3, 4, 7, 8, 11, 12, 13, 
             14, 17, 18, 21, 22, 15, 16, 19, 20, 23, 24]
-    np.testing.assert_allclose(res1, cdu.concat_matrices(3, 2, [arrA, arrB, arrC, arrD, arrE, arrF]))
-    np.testing.assert_allclose(res2, cdu.concat_matrices(2, 3, [arrA, arrB, arrC, arrD, arrE, arrF]))
+    np.testing.assert_allclose(res1, cdu.concat_matrices(3, 2, 
+                                [arrA, arrB, arrC, arrD, arrE, arrF]))
+    np.testing.assert_allclose(res2, cdu.concat_matrices(2, 3, 
+                                [arrA, arrB, arrC, arrD, arrE, arrF]))
 
 def test_trimat_to_fullmat():
     trimat = [1, 2, 3, 4, 5, 6]
