@@ -6,6 +6,7 @@ import logging
 import numbers
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
+from validphys.core import PDF
 from validphys.pdfbases import check_basis
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization import rewards as rewards_module
@@ -397,17 +398,15 @@ def check_deprecated_options(fitting):
 @make_argcheck
 def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
     if fiatlux :
-        import lhapdf
         pdf_name = fiatlux["pdf_name"]
-        pdfs_fiatlux = lhapdf.getPDFSet(pdf_name)
+        pdfs_ids = PDF(pdf_name).get_members() - 1 # get_members counts also replica0
         max_id = max(replicas)
-        pdfs_ids = pdfs_fiatlux.size - 1
         if max_id > pdfs_ids :
             for replica_id in replicas:
                 # At this point it should be always empty
                 os.rmdir(replica_path / f"replica_{replica_id}")
             raise CheckError(
-                f"Cannot generate a replica with id larger than the number of replicas of the fiatlux PDFs set "
+                f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set "
                 + pdf_name + f": replica id={max_id}, replicas of " + pdf_name + f"={pdfs_ids}"
                 +"\nRemoving replica output folders"
             )
