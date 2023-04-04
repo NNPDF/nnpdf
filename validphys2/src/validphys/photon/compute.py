@@ -4,14 +4,10 @@ from scipy.interpolate import interp1d
 from scipy.integrate import trapezoid
 from os import remove
 import time
-import sys
 
 import fiatlux
 import yaml
 from eko.io import EKO
-
-# from eko.io.manipulate import xgrid_reshape
-# from eko.interpolation import XGrid
 
 from validphys.lhapdfset import LHAPDFSet
 from validphys.n3fit_data import replica_nnseed
