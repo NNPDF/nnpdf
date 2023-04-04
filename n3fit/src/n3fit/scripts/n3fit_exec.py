@@ -148,7 +148,7 @@ class N3FitConfig(Config):
 
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
 
-        if (thconfig:=file_content.get('fiatlux')) is not None:
+        if (thconfig:=file_content.get('fiatlux')):
             N3FIT_FIXED_CONFIG['fiatlux']=thconfig
             from validphys.lhapdfset import LHAPDFSet
             pdfs_fiatlux = LHAPDFSet(thconfig["pdf_name"], "replicas")
