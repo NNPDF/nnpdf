@@ -213,7 +213,8 @@ class Photon:
         )
         photon_100GeV += self.generate_errors(id)
         photon_100GeV /= self.xgrid
-        log.info(f"Time to compute photon: {time.perf_counter() - start_time}")
+        log.info(f"Computing photon")
+        log.info(f"Computation time: {time.perf_counter() - start_time}")
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
