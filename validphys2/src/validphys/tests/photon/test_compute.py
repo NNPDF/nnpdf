@@ -21,7 +21,6 @@ class faketheory():
             "ktThr": 1.,
             "MaxNfAs": 5,
             "MaxNfPdf": 5,
-
         }
 
 fiatlux_runcard = {
