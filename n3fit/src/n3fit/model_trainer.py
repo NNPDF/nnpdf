@@ -885,7 +885,7 @@ class ModelTrainer:
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
         # Initialize all photon classes for the different replicas:
-        if self.fiatlux_runcard is not None:
+        if self.fiatlux_runcard:
             photons=Photon(
                 theoryid=self.theoryid,
                 fiatlux_runcard=self.fiatlux_runcard,
