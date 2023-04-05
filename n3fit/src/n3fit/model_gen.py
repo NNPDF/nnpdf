@@ -496,7 +496,7 @@ def pdfNN_layer_generator(
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
         parallel_models: int
             How many models should be trained in parallel
-        photon: Function
+        photon: :py:class:`validphys.photon.compute.Photon` 
             If given, gives the ``add_photon`` a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
