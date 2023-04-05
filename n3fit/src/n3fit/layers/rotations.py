@@ -94,7 +94,7 @@ class FkRotation(MetaLayer):
 class AddPhoton(MetaLayer):
     """
     Changes the value of the photon component of the PDF to non-zero.
-    The photon idx of the PDF is always index 0.
+    The photon idx in the dimension-14 PDF basis of the FKTables is always index 0.
 
     In order to avoid bottlenecks, this layer can only compute the photon
     for a given fixed shape.
