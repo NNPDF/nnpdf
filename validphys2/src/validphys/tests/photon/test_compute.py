@@ -3,7 +3,6 @@ from validphys.photon import structure_functions
 import numpy as np
 from collections import namedtuple
 from pathlib import Path
-from validphys.lhapdfset import LHAPDFSet
 import fiatlux
 
 class faketheory():
