@@ -1,7 +1,7 @@
 """Script that calls fiatlux to add the photon PDF."""
 import logging
+import tempfile
 import time
-from os import remove
 
 import fiatlux
 import numpy as np
@@ -53,11 +53,11 @@ class Photon:
             f2[id] = sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[id])
             fl[id] = sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[id])
             f2lo[id] = sf.F2LO(self.qcd_pdfs.members[id], self.theory)
-            tmp_file = f"fiatlux_runcard_{id}.yml"
-            with open(tmp_file, "w+") as ff:
-                yaml.dump(self.fiatlux_runcard, ff)
-            self.lux[id] = fiatlux.FiatLux(tmp_file)
-            remove(tmp_file)
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_file = tmp + f"/fiatlux_runcard_{id}.yml"
+                with open(tmp_file, "w+") as ff:
+                    yaml.dump(self.fiatlux_runcard, ff)
+                self.lux[id] = fiatlux.FiatLux(tmp_file)
         # we have a dict but fiatlux wants a yaml file
         # TODO : remove this dirty trick
         # we print different runcards for every replica so they do not interfere with each other
@@ -297,7 +297,7 @@ class Photon:
 
     def generate_errors(self, replica_id):
         """generate LUX additional errors."""
-        log.info(f"Generating additional errors")
+        log.info(f"Generating photon additional errors")
         if self.error_matrix is None:
             return np.zeros_like(self.xgrid)
         seed = replica_luxseed(replica_id, self.fiatlux_runcard["luxseed"])
