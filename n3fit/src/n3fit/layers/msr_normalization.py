@@ -53,7 +53,7 @@ class MSR_Normalization(MetaLayer):
         y = op.flatten(pdf_integrated)
         norm_constants = []
 
-        if self._photons is not None:
+        if self._photons:
             photon_integral = self._photons[ph_replica]
         else :
             photon_integral = 0.
