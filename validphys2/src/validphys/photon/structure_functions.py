@@ -1,11 +1,14 @@
+from abc import ABC, abstractmethod
+
 import numpy as np
 import pineappl
 from scipy.interpolate import RectBivariateSpline
 
 
-class StructureFunction:
+class StructureFunction(ABC):
     """Abstract class for the DIS structure functions"""
 
+    @abstractmethod
     def fxq(self, x, Q):
         pass
 
