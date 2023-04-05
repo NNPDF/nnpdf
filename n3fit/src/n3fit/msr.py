@@ -55,7 +55,9 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None, photons=None):
                 what sum rules to compute (MSR, VSR or All), default: All
             scaler: scaler
                 Function to apply to the input. If given the input to the model
-                will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
+                will be a (1, None, 2) tensor where dim [:,:,0] is scaled
+            photon: :py:class:`validphys.photon.compute.Photon` 
+                If given, gives the AddPhoton layer a function to compute the MSR component for the photon
     """
 
     # 1. Generate the fake input which will be used to integrate

@@ -646,7 +646,7 @@ def pdfNN_layer_generator(
         # Rotation layer, changes from the 8-basis to the 14-basis
         def layer_pdf(x):
             return layer_evln(layer_fitbasis(x))
-        
+
         # Final PDF (apply normalization)
         normalized_pdf = sumrule_layer(layer_pdf, i)
 
