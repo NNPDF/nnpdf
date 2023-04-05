@@ -154,6 +154,8 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             eko operator for evolution
         xgrid: list
             xgrid to be used as the targetgrid
+        qed: bool
+            whether qed is activated or not
     Returns
     -------
         : np.array

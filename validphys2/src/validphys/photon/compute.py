@@ -53,14 +53,13 @@ class Photon:
             f2[id] = sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[id])
             fl[id] = sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[id])
             f2lo[id] = sf.F2LO(self.qcd_pdfs.members[id], self.theory)
-            with tempfile.TemporaryDirectory() as tmp:
-                tmp_file = tmp + f"/fiatlux_runcard_{id}.yml"
-                with open(tmp_file, "w+") as ff:
-                    yaml.dump(self.fiatlux_runcard, ff)
-                self.lux[id] = fiatlux.FiatLux(tmp_file)
+            with tempfile.NamedTemporaryFile(mode="w") as tmp:
+                with tmp.file as tmp_file:
+                    tmp_file.write(yaml.dump(self.fiatlux_runcard))
+                self.lux[id] = fiatlux.FiatLux(tmp_file.name)
         # we have a dict but fiatlux wants a yaml file
-        # TODO : remove this dirty trick
-        # we print different runcards for every replica so they do not interfere with each other
+        # TODO : once that fiatlux will allow dictionaries
+        # pass directly self.fiatlux_runcard
         for id in replicas_id:
             self.lux[id].PlugAlphaQED(self.alpha_em, self.qref)
             self.lux[id].InsertInelasticSplitQ(
