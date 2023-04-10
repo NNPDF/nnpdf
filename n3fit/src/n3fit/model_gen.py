@@ -654,9 +654,9 @@ def pdfNN_layer_generator(
         def apply_photon(x):
             # if photon is None then the photon layer is not applied
             if photons:
-                return normalized_pdf(x)
-            else:
                 return layer_photon(normalized_pdf(x), i)
+            else:
+                return normalized_pdf(x)
 
         final_pdf = apply_photon
 
