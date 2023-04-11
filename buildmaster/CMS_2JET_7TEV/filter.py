@@ -1,11 +1,31 @@
+"""
+Filter for CMS_2JET_7TEV
+
+Created on Mar  2023
+
+@author: Mark N. Costantini
+"""
+
 import yaml
 import numpy as np
 from scipy.linalg import block_diag
+import pandas as pd
+
+from filter_utils import (correlation_to_covariance, 
+                            range_str_to_floats, 
+                            get_corr_dat_file,
+                            get_stat_uncertainties,
+                            dat_file_to_df,
+                            get_data_values, get_kinematics,
+                            lumi_covmat, JEC_covmat, unfolding_covmat,
+                            bin_by_bin_covmat, decompose_covmat)
+
 
 def filter_CMS_2JET_7TRV_data_kinetic():
     """
     writes kinetic and data central values
-    to yaml file
+    to kinematics.yaml and data.yaml files
+    respectively
     """
 
     with open('metadata.yaml', 'r') as file:
@@ -14,48 +34,16 @@ def filter_CMS_2JET_7TRV_data_kinetic():
     version = metadata['hepdata']['version']
     tables  = metadata['hepdata']['tables']
 
-    data_central = []
-    kin = []
+    # get kinematics from hepdata tables
+    kin = get_kinematics(tables,version)
 
-    for table in tables:
-        
-        hepdata_tables = f"rawdata/HEPData-ins1208923-v{version}-Table_{table}.yaml"
-        
-        with open(hepdata_tables, 'r') as file:
-            input = yaml.safe_load(file)
-        
-        rapidity_interval = input['dependent_variables'][0]['qualifiers'][0]['value']
-        ydiff = {}
-        if rapidity_interval == '< 0.5':
-            ydiff['min'], ydiff['max'], ydiff['mid'] = 0.0, 0.5, 0.25
-        else:
-            ydiff = range_str_to_floats(rapidity_interval)
-        
-        sqrts = float(input['dependent_variables'][0]['qualifiers'][2]['value'])
-            
-        dijet_mass_bins = input['independent_variables'][0]['values']
-
-        values = input['dependent_variables'][0]['values']
-        
-        for value, m12 in zip(values, dijet_mass_bins):
-
-            # central values
-            data_central_value = value['value']
-            data_central.append(data_central_value)
-
-            # kinematics
-            m12['low'], m12['high'] = m12['low'], m12['high']
-            m12['mid'] = float(f"{0.5 * (m12['low']+m12['high']):.3f}")
-
-            kin_value = {'ydiff' : {'min': ydiff['min'], 'mid': ydiff['mid'] , 'max': ydiff['max']}, 
-                        'm12' : {'min': m12['low'], 'mid': m12['mid'] , 'max': m12['high']} ,
-                         'sqrt_s' : {'min': None, 'mid': sqrts , 'max': None}}
-
-            kin.append(kin_value)
+    # get central values from hepdata tables
+    data_central = get_data_values(tables,version)
     
     data_central_yaml  = { 'data_central' : data_central }
     kinematics_yaml    = { 'bins' : kin }
 
+    # write central values and kinematics to yaml file
     with open('data.yaml', 'w') as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
 
@@ -63,12 +51,16 @@ def filter_CMS_2JET_7TRV_data_kinetic():
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-
-
 def filterCMS_2JET_7TEV_uncertainties():
     """
-    
+    writes uncertainties to uncertainties.yaml file
     """
+    # read metadata file
+    with open('metadata.yaml', 'r') as file:
+        metadata = yaml.safe_load(file)
+
+    tables  = metadata['hepdata']['tables']
+    version = metadata['hepdata']['version']
 
     # generate block diagonal statistical covariance matrix
     # Statistical uncertainty correlated between the mass bins in 
@@ -79,13 +71,6 @@ def filterCMS_2JET_7TEV_uncertainties():
     # get statistical uncertainties from each HEPData table
     stat_uncertainties = get_stat_uncertainties()
 
-
-    with open('metadata.yaml', 'r') as file:
-        metadata = yaml.safe_load(file)
-
-    version = metadata['hepdata']['version']
-    tables  = metadata['hepdata']['tables']
-
     stat_cov_mats = []
     
     for i,table in enumerate(tables):
@@ -94,152 +79,113 @@ def filterCMS_2JET_7TEV_uncertainties():
         # convert correlation matrices to covariance matrices
         stat_cov_mats.append(correlation_to_covariance(corr_matrices[i],stat_uncertainties[table]))
 
+    # build block diagonal stat covmat
     BD_stat = stat_cov_mats[0]
-
     for i in range(1,len(stat_cov_mats)):
         stat = stat_cov_mats[i]
         BD_stat = block_diag(BD_stat,stat)
-
-
-
-def correlation_to_covariance(correlation, uncertainties):
-    """
-    Converts a correlation matrix into a covariance matrix
-    using a list of uncertainties.
     
-    Parameters:
-    -----------
-    correlation : np.ndarray
-        A square matrix of correlations.
-    uncertainties : np.ndarray
-        A 1D array of uncertainties.
+    # dataframe of uncertainties
+    dfs = dat_file_to_df()
+    df_uncertainties = pd.concat(dfs, axis = 0)
+    cv = get_data_values(tables,version)
+    cv = np.array(cv)
+
+    # get Luminosity Covmat CMSLUMI11
+    lumi_cov = lumi_covmat()
+    A_lum = df_uncertainties["Lumi+"].multiply(cv, axis = 0).to_numpy()
     
-    Returns:
-    --------
-    np.ndarray
-        The corresponding covariance matrix.
-    """
-    covariance = np.outer(uncertainties, uncertainties) * correlation
-    return covariance
+    # Get JEC covmat, CORR
+    jec_cov = JEC_covmat()
 
-def get_stat_uncertainties():
-    """
-    function used to get the statistical
-    uncertainty from the HEPdata tables.
+    # get unfolding covmat, CORR
+    unfold_cov = unfolding_covmat()
 
-    Returns
-    -------
-    dict
-        dictionary with keys = number of table
-        value = list of statistical uncertainties
+    # get bin-by-bin covmat, UNCORR
+    bin_cov = bin_by_bin_covmat()
+    A_bin = df_uncertainties["Bin-by-bin-"].multiply(cv, axis = 0).to_numpy()
     
-    """
-    
-    with open('metadata.yaml', 'r') as file:
-        metadata = yaml.safe_load(file)
+    covmat_corr = BD_stat + jec_cov + unfold_cov
 
-    version = metadata['hepdata']['version']
-    tables  = metadata['hepdata']['tables']
-    
-    stat_err = {}
+    # generate artificial systematics
+    A_art_sys_corr = decompose_covmat(covmat=covmat_corr)
 
-    for table in tables:
-        stat = []
-        hepdata_tables = f"rawdata/HEPData-ins1208923-v{version}-Table_{table}.yaml"
-        with open(hepdata_tables, 'r') as file:
-            input = yaml.safe_load(file)
+    # error definition
+    error_definition = {f"art_sys_corr_{i}" : {"description":  f"artificial systematic {i}",
+                                        "treatment": "ADD", "type": "CORR"}
+                        for i in range(1,A_art_sys_corr.shape[0]+1)}
 
-        for err in input['dependent_variables'][0]['values']:
-            stat.append(err['errors'][0]['symerror'])
-        stat_err[table] = stat
+    error_definition["luminosity_uncertainty"] = {"description": "luminosity uncertainty",
+                                                    "treatment": "ADD", "type": "CMSLUMI11"}
 
-    return stat_err
+    error_definition["bin_by_bin_uncertainty"] = {"description": "bin_by_bin_uncertainty",
+                                                    "treatment": "ADD", "type": "UNCORR"}
 
-
-def range_str_to_floats(str_range):
-    """
-    converts a string range to a list,
-    e.g. "0.5 - 1.0" --> [0.5,1.0]
-    and returns a dictionary
-    """
-    # Split the range string into two parts
-    str_nums = str_range.split('-')
-    # Convert the parts to floats
-    min = float(str_nums[0])
-    max = float(str_nums[1])
-    mid = float(f"{0.5 * (min + max):.3f}")
-    # Return a dict
-    return {"min": min, "mid": mid, "max": max}
-
-def get_corr_dat_file(filename):
-    """
-    read out correlation matrices from the
-    dijet_corr.dat file
-
-    Parameters
-    ----------
-    filename : str
-        Takes path to dijet_corr.dat
-
-    Returns
-    -------
-    list
-        list, each element of which is a 2D np array
-    """
-
-    with open(filename) as file:
-        lines = file.readlines()
-    
-    # store the number of the rows where the correlation matrix
-    # is printed
-    begin_rows = []
-    end_rows = []
-
-    for i,line in enumerate(lines):
-
-        if "Statistical correlation" in line and begin_rows == []:
-            begin_rows.append(i+2)
-
-        elif "Statistical correlation" in line:
-            begin_rows.append(i+2)
-            end_rows.append(i-2)
-
-        elif i == len(lines)-1:
-            end_rows.append(i)
-
-    correlation_matrices = []
-    for begin_row, end_row in zip(begin_rows,end_rows):
+    # store error in dict
+    error = []
+    for n in range(A_art_sys_corr.shape[0]):
+        error_value={}
+        for m in range(A_art_sys_corr.shape[1]):
+            error_value[f"art_sys_corr_{m+1}"] = float(A_art_sys_corr[n,m])
         
-        size_mat = end_row-begin_row+1
-        stat_corr = np.zeros((size_mat,size_mat))
+        error_value["luminosity_uncertainty"] = float(A_lum[n])
+        error_value["bin_by_bin_uncertainty"] = float(A_bin[n])
 
-        i = 0
-        for idx in range(begin_row,end_row+1):
-            # ignore first two columns as these give the bin kin
-            stat_corr[i] = np.fromstring(lines[idx], sep=' ')[2:] 
-            i+=1
-        
-        correlation_matrices.append(stat_corr)
-        
-    return correlation_matrices
+        error.append(error_value)
+
+    uncertainties_yaml = {"definition": error_definition, "bins": error}
     
+    with open(f"uncertainties.yaml",'w') as file:
+            yaml.dump(uncertainties_yaml,file, sort_keys=False)
+
+    # this part here is only needed to test and can be removed
+    # function does not need to return anything
+    covmat = BD_stat + lumi_cov + jec_cov + unfold_cov + bin_cov
+
+
+    return covmat
+
+    
+
 
 
 if __name__ == "__main__":
 
-    # save kinematics and central values
-    # filter_CMS_2JET_7TRV_data_kinetic()
-    
+    # save data central values and kinematics
+    filter_CMS_2JET_7TRV_data_kinetic()
+
+    # save uncertainties
     filterCMS_2JET_7TEV_uncertainties()
 
-    # print(get_stat_uncertainties())
     
+    # only to test
+    covmat = filterCMS_2JET_7TEV_uncertainties()
 
-    # C = filterCMS_2JET_7TEV_uncertainties()
+    from validphys.loader import Loader
+    from validphys.covmats import dataset_inputs_covmat_from_systematics
+    setname = "CMS_2JET_7TEV"
+    l = Loader()
+    cd = l.check_commondata(setname = setname).load_commondata_instance()
+    dataset_input = l.check_dataset(setname,theoryid=200)
+    from validphys.commondataparser import parse_commondata
+    dat_file = '/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/results/DATA_CMS_2JET_7TEV.dat'
+    sys_file = '/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/results/systypes/SYSTYPE_CMS_2JET_7TEV_DEFAULT.dat'
+    
+    cd = parse_commondata(dat_file,sys_file,setname)
 
-    # for c in C:
-    #     print()
-    #     print(f"shape = {c.shape}")
-    #     print()
-    #     print(c)
+    cmat = dataset_inputs_covmat_from_systematics(
+        dataset_inputs_loaded_cd_with_cuts=[cd],
+        data_input = [dataset_input],
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+             )
+
+    print(covmat / cmat)
+    print(np.allclose(covmat / cmat, np.ones(cmat.shape)))
+    # dfs = dat_file_to_df()
+    # print(dfs)
+    # lumi_covmat(dfs)
+   
         
