@@ -1,0 +1,66 @@
+# Created on Mar 2023, author: Mark N. Costantini
+
+# Generalia
+setname: "ATLAS_1JET_8TEV_R06"
+ndata: 171
+observable: 
+  description: "Double-differential inclusive jet cross-section as functions of jet transverse momentum and the absolute jet rapidity."  
+  label: r"$10^{3*qbin} d^2\sigma/dp_Td|y|$"
+  units: "[pb/GeV]" 
+
+kinematics:
+   variables:
+     y: {description: "jet rapidity", label: "$|y|$", units: ""}
+     kt: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
+     sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+   file: kinematics.yaml
+
+version: 0
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/abs/1706.03192"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1604271"
+hepdata:
+   url: "https://www.hepdata.net/record/ins1604271"
+   version: 1
+   tables: [1,2,3,4,5,6]
+   
+
+# Data 
+data_central: data.yaml
+data_uncertainties:
+  nominal:
+    - uncertainties.yaml
+
+# Data (variants)
+# variants:
+#   stronger:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_stronger.yaml
+#   weaker:
+#      data_uncertainties:
+#         - uncertainties.yaml
+#         - uncertainties_weaker.yaml
+
+# Plotting  
+kinematic_coverage:
+   ystar: y
+   m12: kt
+dataset_label: "ATLAS jets 8 TeV, R=0.6"
+plot_x: kt
+figure_by:
+  - y
+
+# Theory
+theory:
+   FK_tables:
+     - ATLAS_1JET_8TEV_R06
+   
+
+nnpdf_metadata:
+   nnpdf31_process: "JETS"
+   experiment: "ATLAS"
