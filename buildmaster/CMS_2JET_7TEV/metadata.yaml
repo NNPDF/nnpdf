@@ -32,33 +32,20 @@
  data_uncertainties:
     - uncertainties.yaml
 
- # Data (variants)
- variants:
-   deweighted:
-      data_uncertainties:
-         - uncertainties.yaml
-         - uncertainties_dw.yaml
-   shifted:
-      data_uncertainties:
-         - uncertainties.yaml
-         - uncertainties_sh.yaml
-
  # Plotting  
  kinematic_coverage:
-    x: x
-    q2: q2
- dataset_label: "NMC $d/p$"
- plot_x: x
+    ydiff: ydiff
+    m12: m12
+ dataset_label: "CMS dijets 7 TeV"
+ plot_x: m12
  figure_by: 
-    - q2
+    - ydiff
 
  # Theory
  theory:
     FK_tables:
-      - - NMCPD_D1
-        - NMCPD_D2
-      - - NMCPD_P
-    compound: "RATIO"
+      - CMS_2JET_7TEV
+    
 
  nnpdf_metadata:
     nnpdf31_process: "DIJET"
