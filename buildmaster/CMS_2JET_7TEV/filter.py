@@ -21,7 +21,7 @@ from filter_utils import (correlation_to_covariance,
                             bin_by_bin_covmat, decompose_covmat)
 
 
-def filter_CMS_2JET_7TRV_data_kinetic():
+def filter_CMS_2JET_7TEV_data_kinetic():
     """
     writes kinetic and data central values
     to kinematics.yaml and data.yaml files
@@ -152,7 +152,7 @@ def filterCMS_2JET_7TEV_uncertainties():
 if __name__ == "__main__":
 
     # save data central values and kinematics
-    filter_CMS_2JET_7TRV_data_kinetic()
+    filter_CMS_2JET_7TEV_data_kinetic()
 
     # save uncertainties
     filterCMS_2JET_7TEV_uncertainties()
