@@ -9,7 +9,7 @@ from validphys.photon.compute import Photon
 from ..conftest import PDF
 
 
-class faketheory:
+class FakeTheory:
     def __init__(self):
         self.path = Path("/fake/path/")
 
@@ -36,7 +36,7 @@ fiatlux_runcard = {
 photon = namedtuple("photon", ["total", "elastic", "inelastic"])
 
 
-class fakeFiatlux:
+class FakeFiatlux:
     def __init__(self, runcard):
         self.runcard = runcard
         self.alphaem = None
@@ -65,7 +65,7 @@ class fakeFiatlux:
         return self.res
 
 
-class fakeStructureFunction:
+class FakeStructureFunction:
     def __init__(self, path, pdfs):
         self.path = path
         self.pdfs = pdfs
@@ -74,7 +74,7 @@ class fakeStructureFunction:
         return 0
 
 
-class fakeF2LO:
+class FakeF2LO:
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
         self.theory = theory
@@ -83,31 +83,46 @@ class fakeF2LO:
         return 0
 
 
-def test_init(monkeypatch):
+def test_parameters_init(monkeypatch):
     monkeypatch.setattr(
-        structure_functions, "InterpStructureFunction", fakeStructureFunction
+        structure_functions, "InterpStructureFunction", FakeStructureFunction
     )
-    monkeypatch.setattr(structure_functions, "F2LO", fakeF2LO)
-    # monkeypatch.setattr(LHAPDFSet, "mkPDF", lambda *args: fiatlux_runcard["pdf_name"])
-    monkeypatch.setattr(fiatlux, "FiatLux", fakeFiatlux)
+    monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
+
+    monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
     monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
 
-    photon = Photon(faketheory(), fiatlux_runcard, [1, 2, 3])
+    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
 
-    # test the easy parameters
     np.testing.assert_equal(photon.replicas_id, [1, 2, 3])
     np.testing.assert_equal(photon.fiatlux_runcard, fiatlux_runcard)
     np.testing.assert_almost_equal(photon.q_in2, 1e4)
     np.testing.assert_almost_equal(
-        photon.alpha_em_ref, faketheory().get_description()["alphaqed"]
+        photon.alpha_em_ref, FakeTheory().get_description()["alphaqed"]
     )
 
-    # test masses
+def test_masses_init(monkeypatch):
+    monkeypatch.setattr(
+        structure_functions, "InterpStructureFunction", FakeStructureFunction
+    )
+    monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
+
+    monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
+    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
+    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
     np.testing.assert_equal(photon.thresh_t, np.inf)
     np.testing.assert_almost_equal(photon.thresh_b, 4.92)
     np.testing.assert_almost_equal(photon.thresh_c, 1.3)
 
-    # test set_thresholds_alpha_em
+def test_set_thresholds_alpha_em(monkeypatch):
+    monkeypatch.setattr(
+        structure_functions, "InterpStructureFunction", FakeStructureFunction
+    )
+    monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
+
+    monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
+    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
+    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
     np.testing.assert_almost_equal(photon.thresh[5], 91.2)
     np.testing.assert_almost_equal(photon.thresh[4], 4.92)
     np.testing.assert_almost_equal(photon.thresh[3], 1.3)
@@ -122,7 +137,15 @@ def test_init(monkeypatch):
     np.testing.assert_equal(len(photon.alpha_thresh), 3)
     np.testing.assert_equal(len(photon.thresh), 3)
 
-    # test betas
+def test_betas(monkeypatch):
+    monkeypatch.setattr(
+        structure_functions, "InterpStructureFunction", FakeStructureFunction
+    )
+    monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
+
+    monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
+    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
+    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
     vec_beta0 = [
         -0.5305164769729844,
         -0.6719875374991137,

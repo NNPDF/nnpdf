@@ -10,6 +10,21 @@ class StructureFunction(ABC):
 
     @abstractmethod
     def fxq(self, x, Q):
+        r"""
+        Abstract method returning the value of a DIS structure functions.
+
+        Parameters
+        ----------
+        x : float
+            Bjorken x
+        Q : float
+            DIS hard scale
+
+        Returns
+        -------
+        F_{2,L}: float
+            Structure function F2 or FL
+        """
         pass
 
 
@@ -21,19 +36,11 @@ class InterpStructureFunction(StructureFunction):
 
     def __init__(self, path_to_fktable, pdfs):
         self.fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
-        self.pdfs = pdfs
-        self.pdgid = int(pdfs.set().get_entry("Particle"))
-        self.produce_interpolator()
-
-    def produce_interpolator(self):
-        """Produce the interpolation function to be called in fxq."""
         x = np.unique(self.fktable.bin_left(1))
         q2 = np.unique(self.fktable.bin_left(0))
-        self.xmin = min(x)
-        self.qmin = min(np.sqrt(q2))
-        self.qmax = max(np.sqrt(q2))
 
-        predictions = self.fktable.convolute_with_one(self.pdgid, self.pdfs.xfxQ2)
+        pdgid = int(pdfs.set().get_entry("Particle"))
+        predictions = self.fktable.convolute_with_one(pdgid, pdfs.xfxQ2)
         # here we require that the (x,Q2) couples that we passed
         # to pinefarm is a rectangular matrix
 
@@ -47,7 +54,7 @@ class InterpStructureFunction(StructureFunction):
         Parameters
         ----------
         x : float
-            Bjorken's variable
+            Bjorken x
         Q : float
             DIS hard scale
 
@@ -56,10 +63,6 @@ class InterpStructureFunction(StructureFunction):
         F_{2,L}: float
             Structure function F2 or FL
         """
-        # here we are requiring that the grid that we pass to fiatlux
-        # has Qmin = 1 (fiatlux doesn't go below Q=1)
-        # if x < self.xmin or q > self.qmax :
-        #     return 0.
         return self.interpolator(x, q**2)[0, 0]
 
 
@@ -88,7 +91,7 @@ class F2LO(StructureFunction):
         Parameters
         ----------
         x : float
-            Bjorken's variable
+            Bjorken x
         Q : float
             DIS hard scale
 
