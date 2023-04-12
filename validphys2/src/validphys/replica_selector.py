@@ -24,13 +24,13 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
     PDF and handles the writing of the alphas values
     to the header file.
     """
-    AlphaS_MZ = alphas_pdf.AlphaS_MZ
-    AlphaS_vals = alphas_pdf.AlphaS_vals
+    alphas_mz = alphas_pdf.alphas_mz
+    alphaS_vals = alphas_pdf.alphas_vals
     with open(new_replica_file, 'rb') as in_stream:
         data = in_stream.read()
     with open(new_replica_file, 'wb') as out_stream:
         # Add the AlphaS_MZ and AlphaS_vals keys
-        out_stream.write(f"AlphaS_MZ: {AlphaS_MZ}\nAlphaS_vals: {AlphaS_vals}\n".encode())
+        out_stream.write(f"AlphaS_MZ: {alphas_mz}\nAlphaS_vals: {alphaS_vals}\n".encode())
         out_stream.write(data)
 
 @make_argcheck
@@ -72,7 +72,7 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
     alphas_paths = [i.infopath.parent for i in pdfs]
     alphas_replica0s = [path / f'{p}_0000.dat' for path, p in zip(alphas_paths, pdfs)]
     new_nrep = nrep + len(alphas_replica0s)
-    alphas_values = [str(p.AlphaS_MZ) for p in pdfs]
+    alphas_values = [str(p.alphas_mz) for p in pdfs]
 
     if target_path.exists():
         log.warning(f"{target_path} already exists. Deleting contents.")
@@ -99,7 +99,7 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
             yaml_obj = yaml.YAML()
             info_yaml = yaml_obj.load(stream)
         info_yaml['NumMembers'] = new_nrep
-        info_yaml['error_type'] += '+as'
+        info_yaml['ErrorType'] += '+as'
         extra_desc = '; '.join(
             f"mem={i} => alphas(MZ)={val}"
             for val, i in zip(alphas_values, range(nrep, new_nrep))
