@@ -145,6 +145,19 @@ class PDF(TupleComp):
         return self.info["ErrorType"]
 
     @property
+    def alphas_mz(self):
+        """Alpha_s(M_Z) type as defined in the LHAPDF .info file"""
+        return self.info["AlphaS_MZ"]
+
+    @property
+    def alphas_vals(self):
+        """Alpha_s(M_Z) type as defined in the LHAPDF .info file"""
+        try:
+            return self.info["AlphaS_vals"]
+        except KeyError:
+            return self.info["AlphaS_Vals"]
+
+    @property
     def error_conf_level(self):
         """Error confidence level as defined in the LHAPDF .info file
         if no number is given in the LHAPDF .info file defaults to 68%
