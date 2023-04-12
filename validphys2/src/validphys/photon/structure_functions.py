@@ -67,7 +67,7 @@ class InterpStructureFunction(StructureFunction):
 
 
 class F2LO(StructureFunction):
-    """Compute analytically the leading order structure function for F2."""
+    """Analytically compute the structure function F2 at leading order."""
 
     def __init__(self, pdfs, theory):
         self.pdfs = pdfs
