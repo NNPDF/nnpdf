@@ -3,8 +3,6 @@ test_covmats.py
 
 Tests related to the computation of the covariance matrix and its derivatives
 """
-import random
-
 import pytest
 
 import numpy as np
@@ -13,7 +11,6 @@ import numpy as np
 from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.covmats import sqrt_covmat, dataset_t0_predictions
-from validphys.loader import Loader
 from validphys.tests.conftest import THEORYID, PDF, HESSIAN_PDF, DATA
 
 
