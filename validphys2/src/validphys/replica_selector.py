@@ -25,12 +25,12 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
     to the header file.
     """
     alphas_mz = alphas_pdf.alphas_mz
-    alphaS_vals = alphas_pdf.alphas_vals
+    alphas_vals = alphas_pdf.alphas_vals
     with open(new_replica_file, 'rb') as in_stream:
         data = in_stream.read()
     with open(new_replica_file, 'wb') as out_stream:
-        # Add the AlphaS_MZ and AlphaS_vals keys
-        out_stream.write(f"AlphaS_MZ: {alphas_mz}\nAlphaS_vals: {alphaS_vals}\n".encode())
+        # Add the AlphaS_MZ and AlphaS_Vals keys
+        out_stream.write(f"AlphaS_MZ: {alphas_mz}\nAlphaS_Vals: {alphas_vals}\n".encode())
         out_stream.write(data)
 
 @make_argcheck
