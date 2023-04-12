@@ -197,7 +197,7 @@ void EvolveGrid::WriteInfoFile(string const& infofile, int nrep) const
     for (int iq = 0; iq < (int) q2subgrids[s].size(); iq++)
       infodata << sqrt(q2subgrids[s][iq]) << ((s == (int) q2subgrids.size()-1 && iq == (int) q2subgrids[s].size()-1) ? "]\n" : ", ");
 
-  infodata << "AlphaS_Vals: [";
+  infodata << "AlphaS_vals: [";
   for (int s = 0; s < (int) q2subgrids.size(); s++)
     for (int iq = 0; iq < (int) q2subgrids[s].size(); iq++)
       infodata << APFEL::AlphaQCD(sqrt(q2subgrids[s][iq])) << ((s == (int) q2subgrids.size()-1 && iq == (int) q2subgrids[s].size()-1) ? "]\n" : ", ");
