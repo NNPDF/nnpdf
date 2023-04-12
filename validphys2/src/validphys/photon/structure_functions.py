@@ -97,7 +97,7 @@ class F2LO(StructureFunction):
 
         Returns
         -------
-        F2_LO : float
+        F_2^{LO} : float
             Structure function F2 at LO
         """
         # at LO we use ZM-VFS

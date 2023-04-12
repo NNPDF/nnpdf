@@ -25,16 +25,10 @@ class Photon:
     def __init__(self, theoryid, fiatlux_runcard, replicas_id):
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
+        self.fiatlux_runcard["qed_running"] = "QrefQED" in self.theory
         self.replicas_id = replicas_id
         self.q_in = 100
         self.q_in2 = self.q_in**2
-
-        # parameters for the alphaem running
-        self.alpha_em_ref = self.theory["alphaqed"]
-        self.qref = self.theory["Qref"]
-
-        self.set_betas()
-        self.set_thresholds_alpha_em()
 
         # structure functions
         self.qcd_pdfs = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
@@ -60,12 +54,13 @@ class Photon:
         # we have a dict but fiatlux wants a yaml file
         # TODO : once that fiatlux will allow dictionaries
         # pass directly self.fiatlux_runcard
+        alpha = Alpha(self.theory)
         for id in replicas_id:
-            self.lux[id].PlugAlphaQED(self.alpha_em, self.qref)
+            self.lux[id].PlugAlphaQED(alpha.alpha_em, alpha.qref)
             self.lux[id].InsertInelasticSplitQ(
                 [
-                    self.thresh_b,
-                    self.thresh_t if self.theory["MaxNfPdf"] == 6 else 1e100,
+                    self.theory["kbThr"] * self.theory["mb"],
+                    self.theory["ktThr"] * self.theory["mt"] if self.theory["MaxNfPdf"] == 6 else 1e100,
                 ]
             )
             self.lux[id].PlugStructureFunctions(f2[id].fxq, fl[id].fxq, f2lo[id].fxq)
@@ -75,7 +70,143 @@ class Photon:
 
         self.produce_interpolators()
 
-    def alpha_em(self, q):
+    def compute_photon_array(self, id):
+        r"""
+        Compute the photon PDF for every point in the grid xgrid.
+
+        Parameters
+        ----------
+        id: int
+            replica id
+
+        Returns
+        -------
+        compute_photon_array: numpy.array
+            photon PDF at the fitting scale Q0
+        """
+        # Compute photon PDF
+        log.info(f"Computing photon")
+        start_time = time.perf_counter()
+        photon_100GeV = np.array(
+            [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
+        )
+        log.info(f"Computation time: {time.perf_counter() - start_time}")
+        photon_100GeV += self.generate_errors(id)
+        photon_100GeV /= self.xgrid
+        # TODO : the different x points could be even computed in parallel
+
+        # Load eko and reshape it
+        with EKO.read(self.path_to_eko_photon) as eko:
+            # If we make sure that the grid of the precomputed EKO is the same of
+            # self.xgrid then we don't need to reshape
+            # TODO : move the reshape inside vp-setupfit
+            # xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
+
+            # construct PDFs
+            pdfs = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
+            for j, pid in enumerate(eko.rotations.inputpids):
+                if pid == 22:
+                    pdfs[j] = photon_100GeV
+                    ph_id = j
+                if pid not in self.qcd_pdfs.flavors:
+                    continue
+                pdfs[j] = np.array(
+                    [self.qcd_pdfs.xfxQ(x, self.q_in, id, pid) / x for x in self.xgrid]
+                )
+
+            # Apply EKO to PDFs
+            q2 = eko.mu2grid[0]
+            with eko.operator(q2) as elem:
+                pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
+                # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
+
+        photon_Q0 = pdf_final[ph_id]
+
+        # we want x * gamma(x)
+        return self.xgrid * photon_Q0
+
+    def produce_interpolators(self):
+        """Produce the interpolation functions to be called in compute."""
+        self.photons_array = [self.compute_photon_array(id) for id in self.replicas_id]
+        self.interpolator = [
+            interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
+            for photon_array in self.photons_array
+        ]
+
+    def __call__(self, xgrid):
+        """
+        Compute the photon interpolating the values of self.photon_array.
+
+        Parameters
+        ----------
+        xgrid : nd.array
+            array of x values with shape (1,xgrid,1)
+
+        Returns
+        -------
+        photon values : nd.array
+            array of photon values with shape (1,xgrid,1)
+        """
+        return [
+            self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
+            for id in range(len(self.replicas_id))
+        ]
+
+    def integrate(self):
+        """Compute the integral of the photon on the x range."""
+        return [
+            trapezoid(self.photons_array[id], self.xgrid) for id in range(len(self.replicas_id))
+        ]
+
+    def generate_error_matrix(self):
+        """generate error matrix to be used for the additional errors."""
+        if not self.fiatlux_runcard["additional_errors"]:
+            return None
+        extra_set = LHAPDFSet("LUXqed17_plus_PDF4LHC15_nnlo_100", "replicas")
+        qs = [self.q_in] * len(self.xgrid)
+        res_central = np.array(extra_set.central_member.xfxQ(22, self.xgrid, qs))
+        res = []
+        for idx_member in range(101, 107 + 1):
+            tmp = np.array(extra_set.members[idx_member].xfxQ(22, self.xgrid, qs))
+            res.append(tmp - res_central)
+        # first index must be x, while second one must be replica index
+        return np.stack(res, axis=1)
+
+    def generate_errors(self, replica_id):
+        """generate LUX additional errors."""
+        log.info(f"Generating photon additional errors")
+        if self.error_matrix is None:
+            return np.zeros_like(self.xgrid)
+        seed = replica_luxseed(replica_id, self.fiatlux_runcard["luxseed"])
+        rng = np.random.default_rng(seed=seed)
+        u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
+        errors = u @ (s * rng.normal(size=7))
+        return errors
+
+
+# TODO : move it in n3fit_data.py with the others replica_seed generators?
+# or use directly replica_nnseed?
+def replica_luxseed(replica, luxseed):
+    return replica_nnseed(replica, luxseed)
+
+
+class Alpha :
+    def __init__(self, theory):
+        # parameters for the alphaem running
+        self.theory = theory
+        self.alpha_em_ref = theory["alphaqed"]
+        self.theory["QrefQED"] = 91.2
+        self.qref = self.theory.get("QrefQED")
+
+        if self.qref:
+            self.set_betas()
+            self.set_thresholds_alpha_em()
+            self.alpha_em = self.running_alpha_em
+        else :
+            self.qref = self.theory["Qref"]
+            self.alpha_em = self.fixed_alpha_em
+
+    def running_alpha_em(self, q):
         r"""
         Compute the value of alpha_em.
 
@@ -98,6 +229,9 @@ class Photon:
         else:
             nf = 6
         return self.alpha_em_nlo(q, self.alpha_thresh[nf], self.thresh[nf], nf)
+    
+    def fixed_alpha_em(self, q):
+        return self.alpha_em_ref
 
     def alpha_em_nlo(self, q, alpha_ref, qref, nf):
         """
@@ -191,122 +325,3 @@ class Photon:
                 / self.beta0[nf]
                 / (4 * np.pi) ** 2
             )
-
-    def compute_photon_array(self, id):
-        r"""
-        Compute the photon PDF for every point in the grid xgrid.
-
-        Parameters
-        ----------
-        id: int
-            replica id
-
-        Returns
-        -------
-        compute_photon_array: numpy.array
-            photon PDF at the scale 1 GeV
-        """
-        # Compute photon PDF
-        log.info(f"Computing photon")
-        start_time = time.perf_counter()
-        photon_100GeV = np.array(
-            [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
-        )
-        log.info(f"Computation time: {time.perf_counter() - start_time}")
-        photon_100GeV += self.generate_errors(id)
-        photon_100GeV /= self.xgrid
-        # TODO : the different x points could be even computed in parallel
-
-        # Load eko and reshape it
-        with EKO.read(self.path_to_eko_photon) as eko:
-            # If we make sure that the grid of the precomputed EKO is the same of
-            # self.xgrid then we don't need to reshape
-            # TODO : move the reshape inside vp-setupfit
-            # xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
-
-            # construct PDFs
-            pdfs = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
-            for j, pid in enumerate(eko.rotations.inputpids):
-                if pid == 22:
-                    pdfs[j] = photon_100GeV
-                    ph_id = j
-                if pid not in self.qcd_pdfs.flavors:
-                    continue
-                pdfs[j] = np.array(
-                    [self.qcd_pdfs.xfxQ(x, self.q_in, id, pid) / x for x in self.xgrid]
-                )
-
-            # Apply EKO to PDFs
-            q2 = eko.mu2grid[0]
-            with eko.operator(q2) as elem:
-                pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-                # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
-
-        photon_Q0 = pdf_final[ph_id]
-
-        # we want x * gamma(x)
-        return self.xgrid * photon_Q0
-
-    def produce_interpolators(self):
-        """Produce the interpolation functions to be called in compute."""
-        self.photons_array = [self.compute_photon_array(id) for id in self.replicas_id]
-        self.interpolator = [
-            interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
-            for photon_array in self.photons_array
-        ]
-
-    def compute(self, xgrid):
-        """
-        Compute the photon interpolating the values of self.photon_array.
-
-        Parameters
-        ----------
-        xgrid : nd.array
-            array of x values with shape (1,xgrid,1)
-
-        Returns
-        -------
-        photon values : nd.array
-            array of photon values with shape (1,xgrid,1)
-        """
-        return [
-            self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
-            for id in range(len(self.replicas_id))
-        ]
-
-    def integrate(self):
-        """Compute the integral of the photon on the x range."""
-        return [
-            trapezoid(self.photons_array[id], self.xgrid) for id in range(len(self.replicas_id))
-        ]
-
-    def generate_error_matrix(self):
-        """generate error matrix to be used for the additional errors."""
-        if not self.fiatlux_runcard["additional_errors"]:
-            return None
-        extra_set = LHAPDFSet("LUXqed17_plus_PDF4LHC15_nnlo_100", "replicas")
-        qs = [self.q_in] * len(self.xgrid)
-        res_central = np.array(extra_set.central_member.xfxQ(22, self.xgrid, qs))
-        res = []
-        for idx_member in range(101, 107 + 1):
-            tmp = np.array(extra_set.members[idx_member].xfxQ(22, self.xgrid, qs))
-            res.append(tmp - res_central)
-        # first index must be x, while second one must be replica index
-        return np.stack(res, axis=1)
-
-    def generate_errors(self, replica_id):
-        """generate LUX additional errors."""
-        log.info(f"Generating photon additional errors")
-        if self.error_matrix is None:
-            return np.zeros_like(self.xgrid)
-        seed = replica_luxseed(replica_id, self.fiatlux_runcard["luxseed"])
-        rng = np.random.default_rng(seed=seed)
-        u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
-        errors = u @ (s * rng.normal(size=7))
-        return errors
-
-
-# TODO : move it in n3fit_data.py with the others replica_seed generators?
-# or use directly replica_nnseed?
-def replica_luxseed(replica, luxseed):
-    return replica_nnseed(replica, luxseed)
