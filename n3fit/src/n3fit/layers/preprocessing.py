@@ -108,7 +108,7 @@ class Preprocessing(MetaLayer):
         super(Preprocessing, self).build(input_shape)
 
     def call(self, inputs, **kwargs):
-        x = inputs
+        x = op.unstack(inputs, axis=1)[0]
         pdf_list = []
         for i in range(0, self.output_dim * 2, 2):
             pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i + 1][0])

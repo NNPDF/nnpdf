@@ -155,6 +155,14 @@ def observable_generator(
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset.operation
 
+        # TODO: For the time being fake the target info
+        if len(dataset.fktables_data) == 1:
+            target_info = [{'A': 1, 'Z': 1}]
+        elif len(dataset.fktables_data) == 2:
+            target_info = [{'A': 2, 'Z': 1}, {'A': 1, 'Z': 1}]
+        else:
+            raise ValueueError(f"{dataset_name} is not suppported")
+
         # Now generate the observable layer, which takes the following information:
         # operation name
         # dataset name
@@ -168,6 +176,7 @@ def observable_generator(
             obs_layer_tr = Obs_Layer(
                 dataset.fktables_data,
                 dataset.training_fktables(),
+                target_info,
                 operation_name,
                 name=f"dat_{dataset_name}",
             )
@@ -177,6 +186,7 @@ def observable_generator(
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
+                target_info,
                 operation_name,
                 name=f"exp_{dataset_name}",
             )
@@ -185,18 +195,21 @@ def observable_generator(
             obs_layer_tr = Obs_Layer(
                 dataset.fktables_data,
                 dataset.training_fktables(),
+                target_info,
                 operation_name,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
+                target_info,
                 operation_name,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
                 dataset.fktables_data,
                 dataset.validation_fktables(),
+                target_info,
                 operation_name,
                 name=f"val_{dataset_name}",
             )
@@ -205,13 +218,13 @@ def observable_generator(
         # otherwise the different xgrids need to be stored separately
         # Note: for pineappl grids, obs_layer_tr.splitting should always be None
         if obs_layer_tr.splitting is None:
-            xgrid = dataset.fktables_data[0].xgrid
+            xgrid = obs_layer_tr.xgrids[0]
             model_inputs.append(xgrid)
-            dataset_xsizes.append(len(xgrid))
+            dataset_xsizes.append(xgrid.shape[1])
         else:
-            xgrids = [i.xgrid for i in dataset.fktables_data]
+            xgrids = obs_layer_tr.xgrids
             model_inputs += xgrids
-            dataset_xsizes.append(sum([len(i) for i in xgrids]))
+            dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
         model_obs_tr.append(obs_layer_tr)
         model_obs_vl.append(obs_layer_vl)
@@ -223,8 +236,8 @@ def observable_generator(
         model_inputs = model_inputs[0:1]
         dataset_xsizes = dataset_xsizes[0:1]
 
-    # Reshape all inputs arrays to be (1, nx)
-    model_inputs = np.concatenate(model_inputs).reshape(1, -1)
+    # Reshape all inputs arrays to be (1, nx, 2)
+    model_inputs = np.concatenate(model_inputs, axis=1)
 
     full_nx = sum(dataset_xsizes)
     if spec_dict["positivity"]:
@@ -388,7 +401,7 @@ def generate_dense_per_flavour_network(
 
 
 def pdfNN_layer_generator(
-    inp=2,
+    inp=4,
     nodes=None,
     activations=None,
     initializer_name="glorot_normal",
@@ -468,7 +481,7 @@ def pdfNN_layer_generator(
     Parameters
     ----------
         inp: int
-            dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
+            dimension of the xgrid. If inp=4, turns the x point into a (x, log(x), A, log(A)) pair
         nodes: list(int)
             list of the number of nodes per layer of the PDF NN. Default: [15,8]
         activation: list
@@ -515,7 +528,7 @@ def pdfNN_layer_generator(
         impose_sumrule = "All"
 
     if scaler:
-        inp = 1
+        inp = 2
 
     if activations is None:
         activations = ["tanh", "linear"]
@@ -534,7 +547,7 @@ def pdfNN_layer_generator(
     # Generate the generic layers that will not depend on extra considerations
 
     # First prepare the input for the PDF model and any scaling if needed
-    placeholder_input = Input(shape=(None, 1), batch_size=1)
+    placeholder_input = Input(shape=(None, 2), batch_size=1)
 
     subtract_one = False
     process_input = Lambda(lambda x: x)
@@ -547,9 +560,9 @@ def pdfNN_layer_generator(
         subtract_one = True
         input_x_eq_1 = scaler([1.0])[0]
         placeholder_input = Input(shape=(None, 2), batch_size=1)
-    elif inp == 2:
-        # If the input is of type (x, logx)
-        # create a x --> (x, logx) layer to preppend to everything
+    elif inp == 4:
+        # If the input is of type (x, logx, A, logA)
+        # create a x --> (x, logx, A, logA) layer to preppend to everything
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1))
 
     model_input = {"pdf_input": placeholder_input}
@@ -618,8 +631,9 @@ def pdfNN_layer_generator(
 
         # Apply preprocessing and basis
         def layer_fitbasis(x):
-            """The tensor x has a expected shape of (1, None, {1,2})
-            where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
+            """The tensor x has a expected shape of (1, None, {2,4})
+            where x[...,0] corresponds to the feature_scaled input and
+            x[...,-1] the original input.
             """
             x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
             x_original = op.op_gather_keep_dims(x, -1, axis=-1)

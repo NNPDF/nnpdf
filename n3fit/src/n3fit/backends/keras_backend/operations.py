@@ -334,6 +334,14 @@ def split(*args, **kwargs):
     return tf.split(*args, **kwargs)
 
 
+def unstack(*args, **kwargs):
+    """
+    Unpacks the given dimension of a rank-R tensor into rank-(R-1) tensors.
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/unstack>`_
+    """
+    return tf.unstack(*args, **kwargs)
+
+
 def scatter_to_one(values, indices=[[1]], output_dim=14):
     """
     Like scatter_nd initialized to one instead of zero
@@ -359,3 +367,36 @@ def backend_function(fun_name, *args, **kwargs):
     """
     fun = getattr(K, fun_name)
     return fun(*args, **kwargs)
+
+# Phyics-Related Operations
+def extract_neutron_pdf(raw_pdf, mask, axis=2):
+    """Take a raw (bound)-proton PDFs and extract the neutron-bound
+    PDFs with the same rank/dimension/shape.
+
+    Parameters
+    ----------
+        raw_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
+        mask: tf.tensor
+            rank1 (len(nfl),)
+    Return
+    ------
+        neutron_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
+    """
+    dim_reshape = np.ones(len(raw_pdf.shape))
+    dim_reshape[axis] = -1
+    mask_reshaped = tf.reshape(mask, dim_reshape)
+    # Perform element-wise multiplications
+    neutron_pdf = mask_reshaped * raw_pdf
+    return neutron_pdf
+
+
+def add_target_dependence(xgrid, a_value):
+    """Add the A-dependence to the input of the NN."""
+
+    # For the time being Fake the A-dependence of a given target
+    # in the input. Now, as opposed to the free-proton fit the input
+    # (still called `xgrid`) is a two-dimensional array.
+    # TODO: Find a better (again) to propagate the A-dependence
+    return np.stack((xgrid, np.repeat(a_value, xgrid.size)), axis=-1)

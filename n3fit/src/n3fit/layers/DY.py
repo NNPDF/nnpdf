@@ -37,8 +37,10 @@ class DY(Observable):
             results: tensor
                 rank 3 tensor (batchsize, replicas, ndata)
         """
-        # Hadronic observables might need splitting of the input pdf in the x dimension
-        # so we have 3 different paths for this layer
+
+        # TODO: Implement required changes to make DY in combined fits
+        if self.is_nuclear != len(self.fktables):
+            raise ValueError("Integrated fits for DY is not yet ready!")
 
         results = []
         if self.many_masks:

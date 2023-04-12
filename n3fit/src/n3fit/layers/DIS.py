@@ -11,6 +11,27 @@ from .observable import Observable
 from n3fit.backends import operations as op
 
 
+def construct_pdf(pdf, target, m_mask, n_mask):
+    """Construct the PDF definition depending on the Observable"""
+
+    # Extract the values of the atomic (mass) numbers
+    a_value = target["A"]
+    z_value = target["Z"]
+
+    pdf_masked = op.boolean_mask(pdf, m_mask, axis=2)
+
+    # Compute bound-neutron PDF out of the bound-proton and construct
+    # the nuclear-PDFs to be convoluted with the FK tables.
+    if a_value != z_value:
+        neutron_pdf = op.extract_neutron_pdf(pdf_masked, n_mask)
+        # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+        pdf_masked = z_value * pdf_masked + (a_value - z_value) * neutron_pdf
+        # TODO: Check the Normalization if Applicable to ALL observables
+        pdf_masked /= a_value
+
+    return pdf_masked
+
+
 class DIS(Observable):
     """
         The DIS class receives a list of active flavours and a fktable
@@ -57,17 +78,22 @@ class DIS(Observable):
                 result: backend tensor
                     rank 3 tensor (batchsize, replicas, ndata)
         """
-        # DIS never needs splitting
-        if self.splitting is not None:
-            raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
 
         results = []
         # Separate the two possible paths this layer can take
         if self.many_masks:
-            for mask, fktable in zip(self.all_masks, self.fktables):
-                pdf_masked = op.boolean_mask(pdf, mask, axis=2)
-                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-                results.append(res)
+            # In the case of nuclear fit, a DIS dataset might contain different x
+            if self.splitting:
+                splitted_pdf = op.split(pdf_raw, self.splitting, axis=1)
+                for mask, target, pdf, fk in zip(self.all_masks, self.target_info, splitted_pdf, self.fktables):
+                    pdf_masked = construct_pdf(pdf, target, mask, self.neutron_mask)
+                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
+                    results.append(res)
+            else:
+                for mask, fktable in zip(self.all_masks, self.fktables):
+                    pdf_masked = op.boolean_mask(pdf, mask, axis=2)
+                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
+                    results.append(res)
         else:
             pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
             for fktable in self.fktables:
