@@ -146,18 +146,14 @@ class PDF(TupleComp):
 
     @property
     def alphas_mz(self):
-        """Alpha_s(M_Z) type as defined in the LHAPDF .info file"""
+        """Alpha_s(M_Z) as defined in the LHAPDF .info file"""
         return self.info["AlphaS_MZ"]
 
     @property
     def alphas_vals(self):
-        """Alpha_s(M_Z) type as defined in the LHAPDF .info file"""
-        # For a long time the nnpdf code wrote the incorrect "AlphaS_Vals"
-        # key to the LHAPDF .info files, therefore we check for both options.
-        try:
-            return self.info["AlphaS_vals"]
-        except KeyError:
-            return self.info["AlphaS_Vals"]
+        """List of alpha_s(Q) at various Q for interpolation based alphas.
+        Values as defined in the LHAPDF .info file"""
+        self.info["AlphaS_Vals"]
 
     @property
     def error_conf_level(self):
