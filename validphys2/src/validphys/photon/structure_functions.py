@@ -86,7 +86,7 @@ class F2LO(StructureFunction):
 
     def fxq(self, x, q):
         r"""
-        Compute the analytical form of F2LO.
+        Analytically compute F2LO.
 
         Parameters
         ----------
