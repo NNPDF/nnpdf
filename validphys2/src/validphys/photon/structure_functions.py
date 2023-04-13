@@ -41,8 +41,7 @@ class InterpStructureFunction(StructureFunction):
         x = np.unique(self.fktable.bin_left(1))
         q2 = np.unique(self.fktable.bin_left(0))
 
-        pdgid = int(pdfs.set().get_entry("Particle"))
-        predictions = self.fktable.convolute_with_one(pdgid, pdfs.xfxQ2)
+        predictions = self.fktable.convolute_with_one(2212, pdfs.xfxQ2)
 
         grid2D = predictions.reshape(len(x), len(q2))
         self.interpolator = RectBivariateSpline(x, q2, grid2D)

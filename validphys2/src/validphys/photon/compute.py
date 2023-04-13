@@ -46,8 +46,12 @@ class Photon:
         fl = {}
         f2lo = {}
         for replica in replicas:
-            f2[replica] = sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[replica])
-            fl[replica] = sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[replica])
+            f2[replica] = sf.InterpStructureFunction(
+                path_to_F2, self.qcd_pdfs.members[replica]
+            )
+            fl[replica] = sf.InterpStructureFunction(
+                path_to_FL, self.qcd_pdfs.members[replica]
+            )
             f2lo[replica] = sf.F2LO(self.qcd_pdfs.members[replica], self.theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
@@ -67,12 +71,15 @@ class Photon:
                     else 1e100,
                 ]
             )
-            self.lux[replica].PlugStructureFunctions(f2[replica].fxq, fl[replica].fxq, f2lo[replica].fxq)
+            self.lux[replica].PlugStructureFunctions(
+                f2[replica].fxq, fl[replica].fxq, f2lo[replica].fxq
+            )
 
         self.xgrid = XGRID
-        self.error_matrix = self.generate_error_matrix()
 
-        self.photons_array = [self.compute_photon_array(replica) for replica in self.replicas]
+        self.photons_array = [
+            self.compute_photon_array(replica) for replica in self.replicas
+        ]
         self.interpolator = [
             interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
             for photon_array in self.photons_array
@@ -100,6 +107,7 @@ class Photon:
         )
         log.info(f"Computation time: {time.perf_counter() - start_time}")
         photon_qin += self.generate_errors(replica)
+        # fiatlux computes x * gamma(x)
         photon_qin /= self.xgrid
         # TODO : the different x points could be even computed in parallel
 
@@ -146,17 +154,19 @@ class Photon:
         """
         return [
             self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
-            for id in range(len(self.replicas_id))
+            for id in range(len(self.replicas))
         ]
 
-    def integrate(self):
+    @property
+    def integral(self):
         """Compute the integral of the photon on the x range."""
         return [
             trapezoid(self.photons_array[id], self.xgrid)
-            for id in range(len(self.replicas_id))
+            for id in range(len(self.replicas))
         ]
 
-    def generate_error_matrix(self):
+    @property
+    def error_matrix(self):
         """generate error matrix to be used for the additional errors."""
         if not self.fiatlux_runcard["additional_errors"]:
             return None
@@ -170,12 +180,12 @@ class Photon:
         # first index must be x, while second one must be replica index
         return np.stack(res, axis=1)
 
-    def generate_errors(self, replica_id):
+    def generate_errors(self, replica):
         """generate LUX additional errors."""
         log.info(f"Generating photon additional errors")
         if self.error_matrix is None:
             return np.zeros_like(self.xgrid)
-        seed = replica_luxseed(replica_id, self.fiatlux_runcard["luxseed"])
+        seed = replica_luxseed(replica, self.fiatlux_runcard["luxseed"])
         rng = np.random.default_rng(seed=seed)
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
         errors = u @ (s * rng.normal(size=7))
