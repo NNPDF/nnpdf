@@ -33,7 +33,7 @@ class Photon:
         self.replicas = replicas
 
         # structure functions
-        self.qcd_pdfs = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
+        self.luxpdfset = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
 
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
@@ -47,12 +47,12 @@ class Photon:
         f2lo = {}
         for replica in replicas:
             f2[replica] = sf.InterpStructureFunction(
-                path_to_F2, self.qcd_pdfs.members[replica]
+                path_to_F2, self.luxpdfset.members[replica]
             )
             fl[replica] = sf.InterpStructureFunction(
-                path_to_FL, self.qcd_pdfs.members[replica]
+                path_to_FL, self.luxpdfset.members[replica]
             )
-            f2lo[replica] = sf.F2LO(self.qcd_pdfs.members[replica], self.theory)
+            f2lo[replica] = sf.F2LO(self.luxpdfset.members[replica], self.theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(self.fiatlux_runcard))
@@ -122,10 +122,10 @@ class Photon:
                 if pid == 22:
                     pdfs_init[j] = photon_qin
                     ph_id = j
-                if pid not in self.qcd_pdfs.flavors:
+                if pid not in self.luxpdfset.flavors:
                     continue
                 pdfs_init[j] = np.array(
-                    [self.qcd_pdfs.xfxQ(x, Q_IN, replica, pid) / x for x in self.xgrid]
+                    [self.luxpdfset.xfxQ(x, Q_IN, replica, pid) / x for x in self.xgrid]
                 )
 
             # Apply EKO to PDFs
