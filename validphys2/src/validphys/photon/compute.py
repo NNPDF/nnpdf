@@ -1,7 +1,6 @@
 """Script that calls fiatlux to add the photon PDF."""
 import logging
 import tempfile
-import time
 
 import fiatlux
 import numpy as np
@@ -101,11 +100,9 @@ class Photon:
         """
         # Compute photon PDF
         log.info(f"Computing photon")
-        start_time = time.perf_counter()
         photon_qin = np.array(
             [self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in self.xgrid]
         )
-        log.info(f"Computation time: {time.perf_counter() - start_time}")
         photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
         photon_qin /= self.xgrid
@@ -167,7 +164,7 @@ class Photon:
 
     @property
     def error_matrix(self):
-        """generate error matrix to be used for the additional errors."""
+        """Generate error matrix to be used for the additional errors."""
         if not self.fiatlux_runcard["additional_errors"]:
             return None
         extra_set = LHAPDFSet(EXTRA_SET, "replicas")
@@ -181,7 +178,10 @@ class Photon:
         return np.stack(res, axis=1)
 
     def generate_errors(self, replica):
-        """generate LUX additional errors."""
+        """
+        Generate LUX additional errors according to the procedure
+        described in sec. 2.5 of https://arxiv.org/pdf/1712.07053.pdf
+        """
         if self.error_matrix is None:
             return np.zeros_like(self.xgrid)
         log.info(f"Generating photon additional errors")
