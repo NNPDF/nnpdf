@@ -102,7 +102,7 @@ class ModelTrainer:
         parallel_models=1,
         theoryid=None,
         fiatlux_runcard=None,
-        replicas_id=None,
+        replicas=None,
     ):
         """
         Parameters
@@ -163,7 +163,7 @@ class ModelTrainer:
         self._parallel_models = parallel_models
         self.theoryid = theoryid
         self.fiatlux_runcard = fiatlux_runcard
-        self.replicas_id = replicas_id
+        self.replicas = replicas
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -889,7 +889,7 @@ class ModelTrainer:
             photons=Photon(
                 theoryid=self.theoryid,
                 fiatlux_runcard=self.fiatlux_runcard,
-                replicas_id=self.replicas_id,
+                replicas=self.replicas,
             )
         else:
             photons=None

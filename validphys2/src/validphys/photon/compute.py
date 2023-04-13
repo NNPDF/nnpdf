@@ -19,17 +19,18 @@ from . import structure_functions as sf
 
 log = logging.getLogger(__name__)
 
+Q_IN = 100
+EXTRA_SET = "LUXqed17_plus_PDF4LHC15_nnlo_100"
+
 
 class Photon:
     """Photon class computing the photon array with the LuxQED approach."""
 
-    def __init__(self, theoryid, fiatlux_runcard, replicas_id):
+    def __init__(self, theoryid, fiatlux_runcard, replicas):
         self.theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         self.fiatlux_runcard["qed_running"] = "QrefQED" in self.theory
-        self.replicas_id = replicas_id
-        self.q_in = 100
-        self.q_in2 = self.q_in**2
+        self.replicas = replicas
 
         # structure functions
         self.qcd_pdfs = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
@@ -44,21 +45,21 @@ class Photon:
         f2 = {}
         fl = {}
         f2lo = {}
-        for id in replicas_id:
-            f2[id] = sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[id])
-            fl[id] = sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[id])
-            f2lo[id] = sf.F2LO(self.qcd_pdfs.members[id], self.theory)
+        for replica in replicas:
+            f2[replica] = sf.InterpStructureFunction(path_to_F2, self.qcd_pdfs.members[replica])
+            fl[replica] = sf.InterpStructureFunction(path_to_FL, self.qcd_pdfs.members[replica])
+            f2lo[replica] = sf.F2LO(self.qcd_pdfs.members[replica], self.theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(self.fiatlux_runcard))
-                self.lux[id] = fiatlux.FiatLux(tmp_file.name)
+                self.lux[replica] = fiatlux.FiatLux(tmp_file.name)
         # we have a dict but fiatlux wants a yaml file
         # TODO : once that fiatlux will allow dictionaries
         # pass directly self.fiatlux_runcard
         alpha = Alpha(self.theory)
-        for id in replicas_id:
-            self.lux[id].PlugAlphaQED(alpha.alpha_em, alpha.qref)
-            self.lux[id].InsertInelasticSplitQ(
+        for replica in replicas:
+            self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
+            self.lux[replica].InsertInelasticSplitQ(
                 [
                     self.theory["kbThr"] * self.theory["mb"],
                     self.theory["ktThr"] * self.theory["mt"]
@@ -66,24 +67,24 @@ class Photon:
                     else 1e100,
                 ]
             )
-            self.lux[id].PlugStructureFunctions(f2[id].fxq, fl[id].fxq, f2lo[id].fxq)
+            self.lux[replica].PlugStructureFunctions(f2[replica].fxq, fl[replica].fxq, f2lo[replica].fxq)
 
         self.xgrid = XGRID
         self.error_matrix = self.generate_error_matrix()
 
-        self.photons_array = [self.compute_photon_array(id) for id in self.replicas_id]
+        self.photons_array = [self.compute_photon_array(id) for id in self.replicas]
         self.interpolator = [
             interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
             for photon_array in self.photons_array
         ]
 
-    def compute_photon_array(self, id):
+    def compute_photon_array(self, replica):
         r"""
         Compute the photon PDF for every point in the grid xgrid.
 
         Parameters
         ----------
-        id: int
+        replica: int
             replica id
 
         Returns
@@ -95,10 +96,10 @@ class Photon:
         log.info(f"Computing photon")
         start_time = time.perf_counter()
         photon_qin = np.array(
-            [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
+            [self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in self.xgrid]
         )
         log.info(f"Computation time: {time.perf_counter() - start_time}")
-        photon_qin += self.generate_errors(id)
+        photon_qin += self.generate_errors(replica)
         photon_qin /= self.xgrid
         # TODO : the different x points could be even computed in parallel
 
@@ -116,7 +117,7 @@ class Photon:
                 if pid not in self.qcd_pdfs.flavors:
                     continue
                 pdfs_init[j] = np.array(
-                    [self.qcd_pdfs.xfxQ(x, self.q_in, id, pid) / x for x in self.xgrid]
+                    [self.qcd_pdfs.xfxQ(x, Q_IN, replica, pid) / x for x in self.xgrid]
                 )
 
             # Apply EKO to PDFs
@@ -159,8 +160,8 @@ class Photon:
         """generate error matrix to be used for the additional errors."""
         if not self.fiatlux_runcard["additional_errors"]:
             return None
-        extra_set = LHAPDFSet("LUXqed17_plus_PDF4LHC15_nnlo_100", "replicas")
-        qs = [self.q_in] * len(self.xgrid)
+        extra_set = LHAPDFSet(EXTRA_SET, "replicas")
+        qs = [Q_IN] * len(self.xgrid)
         res_central = np.array(extra_set.central_member.xfxQ(22, self.xgrid, qs))
         res = []
         for idx_member in range(101, 107 + 1):
