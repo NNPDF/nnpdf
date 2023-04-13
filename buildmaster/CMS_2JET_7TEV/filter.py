@@ -11,8 +11,7 @@ import numpy as np
 from scipy.linalg import block_diag
 import pandas as pd
 
-from filter_utils import (correlation_to_covariance, 
-                            range_str_to_floats, 
+from filter_utils import (correlation_to_covariance,  
                             get_corr_dat_file,
                             get_stat_uncertainties,
                             dat_file_to_df,
