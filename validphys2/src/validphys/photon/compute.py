@@ -182,9 +182,9 @@ class Photon:
 
     def generate_errors(self, replica):
         """generate LUX additional errors."""
-        log.info(f"Generating photon additional errors")
         if self.error_matrix is None:
             return np.zeros_like(self.xgrid)
+        log.info(f"Generating photon additional errors")
         seed = replica_luxseed(replica, self.fiatlux_runcard["luxseed"])
         rng = np.random.default_rng(seed=seed)
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
@@ -224,11 +224,11 @@ class Alpha:
             nf = 5
         else:
             nf = 6
-        return self.alpha_em_nlo(q, self.alpha_thresh[nf], self.thresh[nf], nf)
+        return self.alpha_em_fixed_flavor(q, self.alpha_thresh[nf], self.thresh[nf], nf)
 
-    def alpha_em_nlo(self, q, alpha_ref, qref, nf):
+    def alpha_em_fixed_flavor(self, q, alpha_ref, qref, nf):
         """
-        Compute the alpha_em running for FFS at NLO.
+        Compute the alpha_em running for nf fixed at NLO.
 
         Parameters
         ----------
@@ -293,12 +293,12 @@ class Alpha:
 
         # determine the values of alpha in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alpha_thresh[nf] = self.alpha_em_nlo(
+            alpha_thresh[nf] = self.alpha_em_fixed_flavor(
                 thresh[nf], alpha_thresh[nf - 1], thresh[nf - 1], nf - 1
             )
 
         for nf in reversed(range(3, nfref)):
-            alpha_thresh[nf] = self.alpha_em_nlo(
+            alpha_thresh[nf] = self.alpha_em_fixed_flavor(
                 thresh[nf], alpha_thresh[nf + 1], thresh[nf + 1], nf + 1
             )
 
