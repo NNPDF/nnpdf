@@ -1,10 +1,8 @@
 import yaml
 import numpy as np
 import pandas as pd
-from scipy.linalg import block_diag
 from filter_utils import (
                             get_data_values, get_kinematics,
-                            get_stat_errors, get_lumi_errors,
                             fill_df, decompose_covmat
                         )
 
@@ -42,6 +40,7 @@ def filter_ATLAS_1JET_8TEV_data_kinetic():
     with open('kinematics.yaml', 'w') as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
+
 def filter_ATLAS_1JET_8TEV_uncertainties():
     """
     write uncertainties to uncertainties.yaml
@@ -62,12 +61,13 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
 
        - Construct covariance matrix from the Error matrix
 
-       - Decompose covariance matrix so as to get ndat unc
+       - Decompose covariance matrix so as to get ndat art unc
 
     3. Luminosity Uncertainty: ATLASLUMI12
        this uncertainty is correlated with all 
        the other ATLASLUMI12 datasets
     """
+
     with open('metadata.yaml', 'r') as file:
         metadata = yaml.safe_load(file)
 
@@ -86,14 +86,12 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
     # statistical errors fully uncorrelated
     stat_errors = df_unc['stat'].to_numpy()
 
-    # BD_stat = np.einsum('i,j->ij',dfs[0]['stat'],dfs[0]['stat'])
-    # for i in range(1,len(dfs)):
-    #     cov = np.einsum('i,j->ij',dfs[i]['stat'].to_numpy(),dfs[i]['stat'].to_numpy())
-    #     BD_stat = block_diag(BD_stat,cov)
-
     # luminosity errors
     lum_errors = df_unc["syst_lumi"].to_numpy()
     
+    # note: in the old implementation some sys are decorrelated.
+    # however the systype file used for the covmat construction is
+    # fully correlated (see difference between systype file in buildmaster and nnpdfcpp).
 
     # col_to_drop =  ("syst_JES_EtaIntercalibration_Stat98", "syst_JES_MJB_Alpha",
     #                 "syst_JES_Pileup_MuOffset")
@@ -105,7 +103,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
     cov_corr1 = np.einsum("ij,kj->ik",A_art_corr,A_art_corr)
     print(f"same cov_corr mat? :{np.allclose(cov_corr,cov_corr1)}")
 
-     # error definition
+    # error definition
     error_definition = {f"art_sys_corr_{i}" : {"description":  f"artificial systematic {i}",
                                         "treatment": "ADD", "type": "CORR"}
                         for i in range(1,A_art_corr.shape[0]+1)}
@@ -129,19 +127,18 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
 
     uncertainties_yaml = {"definition": error_definition, "bins": error}
     
+    # write uncertainties to file
     with open(f"uncertainties.yaml",'w') as file:
         yaml.dump(uncertainties_yaml,file, sort_keys=False)
     
-
+    # code below is only needed for testing and can be removed at some point
     cov_lum = np.einsum("i,j->ij",lum_errors,lum_errors)
     cov_stat = np.diag(stat_errors**2)
     
-    
-
     covmat = cov_corr + cov_stat + cov_lum 
     covmat1 = cov_corr1 + cov_stat + cov_lum 
     print(f"same covmat ?: {np.allclose(covmat,covmat1)}")
-    return np.real(covmat1)
+    return np.real(covmat)
 
 
 
