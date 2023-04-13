@@ -72,7 +72,7 @@ class Photon:
         self.xgrid = XGRID
         self.error_matrix = self.generate_error_matrix()
 
-        self.photons_array = [self.compute_photon_array(id) for id in self.replicas]
+        self.photons_array = [self.compute_photon_array(replica) for replica in self.replicas]
         self.interpolator = [
             interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
             for photon_array in self.photons_array

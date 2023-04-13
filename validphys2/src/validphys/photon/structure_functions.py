@@ -43,8 +43,6 @@ class InterpStructureFunction(StructureFunction):
 
         pdgid = int(pdfs.set().get_entry("Particle"))
         predictions = self.fktable.convolute_with_one(pdgid, pdfs.xfxQ2)
-        # here we require that the (x,Q2) couples that we passed
-        # to pinefarm is a rectangular matrix
 
         grid2D = predictions.reshape(len(x), len(q2))
         self.interpolator = RectBivariateSpline(x, q2, grid2D)
