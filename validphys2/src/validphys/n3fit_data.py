@@ -52,6 +52,12 @@ def replica_mcseed(replica, mcseed, genrep):
         res = np.random.randint(0, pow(2, 31))
     return res
 
+def replica_luxseed(replica, luxseed):
+    """Generate the ``luxseed`` for a ``replica``.
+    Identical to replica_nnseed but used for a different purpose.
+    """
+    return replica_nnseed(replica, luxseed)
+
 
 class _TrMasks(TupleComp):
     """Class holding the training validation mask for a group of datasets

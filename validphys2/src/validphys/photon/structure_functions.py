@@ -4,6 +4,8 @@ import numpy as np
 import pineappl
 from scipy.interpolate import RectBivariateSpline
 
+from . import constants
+
 
 class StructureFunction(ABC):
     """Abstract class for the DIS structure functions"""
@@ -80,9 +82,7 @@ class F2LO(StructureFunction):
             self.thresh_b = np.inf
         if theory["MaxNfPdf"] <= 3:
             self.thresh_c = np.inf
-        eu2 = 4.0 / 9
-        ed2 = 1.0 / 9
-        self.eq2 = [ed2, eu2, ed2, eu2, ed2, eu2]  # d u s c b t
+        self.eq2 = [constants.ED2, constants.EU2] * 3  # d u s c b t
 
     def fxq(self, x, q):
         r"""

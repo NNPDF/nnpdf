@@ -10,10 +10,11 @@ from eko.io import EKO
 from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
 from validphys.lhapdfset import LHAPDFSet
-from validphys.n3fit_data import replica_nnseed
+from validphys.n3fit_data import replica_luxseed
 
 from n3fit.io.writer import XGRID
 
+from . import constants
 from . import structure_functions as sf
 
 log = logging.getLogger(__name__)
@@ -60,7 +61,9 @@ class Photon:
             self.lux[id].InsertInelasticSplitQ(
                 [
                     self.theory["kbThr"] * self.theory["mb"],
-                    self.theory["ktThr"] * self.theory["mt"] if self.theory["MaxNfPdf"] == 6 else 1e100,
+                    self.theory["ktThr"] * self.theory["mt"]
+                    if self.theory["MaxNfPdf"] == 6
+                    else 1e100,
                 ]
             )
             self.lux[id].PlugStructureFunctions(f2[id].fxq, fl[id].fxq, f2lo[id].fxq)
@@ -68,7 +71,11 @@ class Photon:
         self.xgrid = XGRID
         self.error_matrix = self.generate_error_matrix()
 
-        self.produce_interpolators()
+        self.photons_array = [self.compute_photon_array(id) for id in self.replicas_id]
+        self.interpolator = [
+            interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
+            for photon_array in self.photons_array
+        ]
 
     def compute_photon_array(self, id):
         r"""
@@ -87,51 +94,40 @@ class Photon:
         # Compute photon PDF
         log.info(f"Computing photon")
         start_time = time.perf_counter()
-        photon_100GeV = np.array(
+        photon_qin = np.array(
             [self.lux[id].EvaluatePhoton(x, self.q_in2).total for x in self.xgrid]
         )
         log.info(f"Computation time: {time.perf_counter() - start_time}")
-        photon_100GeV += self.generate_errors(id)
-        photon_100GeV /= self.xgrid
+        photon_qin += self.generate_errors(id)
+        photon_qin /= self.xgrid
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
         with EKO.read(self.path_to_eko_photon) as eko:
-            # If we make sure that the grid of the precomputed EKO is the same of
-            # self.xgrid then we don't need to reshape
-            # TODO : move the reshape inside vp-setupfit
-            # xgrid_reshape(eko, targetgrid = XGrid(self.xgrid), inputgrid = XGrid(self.xgrid))
+            # TODO : if the eko has not the correct grid we have to reshape it
+            # it has to be done inside vp-setupfit
 
             # construct PDFs
-            pdfs = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
+            pdfs_init = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
             for j, pid in enumerate(eko.rotations.inputpids):
                 if pid == 22:
-                    pdfs[j] = photon_100GeV
+                    pdfs_init[j] = photon_qin
                     ph_id = j
                 if pid not in self.qcd_pdfs.flavors:
                     continue
-                pdfs[j] = np.array(
+                pdfs_init[j] = np.array(
                     [self.qcd_pdfs.xfxQ(x, self.q_in, id, pid) / x for x in self.xgrid]
                 )
 
             # Apply EKO to PDFs
             q2 = eko.mu2grid[0]
             with eko.operator(q2) as elem:
-                pdf_final = np.einsum("ajbk,bk", elem.operator, pdfs)
-                # error_final = np.einsum("ajbk,bk", elem.error, pdfs)
+                pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
 
-        photon_Q0 = pdf_final[ph_id]
+        photon_Q0 = pdfs_final[ph_id]
 
         # we want x * gamma(x)
         return self.xgrid * photon_Q0
-
-    def produce_interpolators(self):
-        """Produce the interpolation functions to be called in compute."""
-        self.photons_array = [self.compute_photon_array(id) for id in self.replicas_id]
-        self.interpolator = [
-            interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
-            for photon_array in self.photons_array
-        ]
 
     def __call__(self, xgrid):
         """
@@ -155,7 +151,8 @@ class Photon:
     def integrate(self):
         """Compute the integral of the photon on the x range."""
         return [
-            trapezoid(self.photons_array[id], self.xgrid) for id in range(len(self.replicas_id))
+            trapezoid(self.photons_array[id], self.xgrid)
+            for id in range(len(self.replicas_id))
         ]
 
     def generate_error_matrix(self):
@@ -184,29 +181,17 @@ class Photon:
         return errors
 
 
-# TODO : move it in n3fit_data.py with the others replica_seed generators?
-# or use directly replica_nnseed?
-def replica_luxseed(replica, luxseed):
-    return replica_nnseed(replica, luxseed)
-
-
-class Alpha :
+class Alpha:
     def __init__(self, theory):
         # parameters for the alphaem running
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
-        self.theory["QrefQED"] = 91.2
-        self.qref = self.theory.get("QrefQED")
+        self.qref = self.theory.get("QrefQED", theory["Qref"])
 
-        if self.qref:
-            self.set_betas()
-            self.set_thresholds_alpha_em()
-            self.alpha_em = self.running_alpha_em
-        else :
-            self.qref = self.theory["Qref"]
-            self.alpha_em = self.fixed_alpha_em
+        self.beta0, self.b1 = self.set_betas()
+        self.thresh, self.alpha_thresh = self.set_thresholds_alpha_em()
 
-    def running_alpha_em(self, q):
+    def alpha_em(self, q):
         r"""
         Compute the value of alpha_em.
 
@@ -229,9 +214,6 @@ class Alpha :
         else:
             nf = 6
         return self.alpha_em_nlo(q, self.alpha_thresh[nf], self.thresh[nf], nf)
-    
-    def fixed_alpha_em(self, q):
-        return self.alpha_em_ref
 
     def alpha_em_nlo(self, q, alpha_ref, qref, nf):
         """
@@ -292,36 +274,47 @@ class Alpha :
             nfref = 6
         thresh_list.insert(nfref - 3, self.qref)
 
-        self.thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
+        thresh = {
+            nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)
+        }
 
-        self.alpha_thresh = {nfref: self.alpha_em_ref}
+        alpha_thresh = {nfref: self.alpha_em_ref}
 
         # determine the values of alpha in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            self.alpha_thresh[nf] = self.alpha_em_nlo(
-                self.thresh[nf], self.alpha_thresh[nf - 1], self.thresh[nf - 1], nf - 1
+            alpha_thresh[nf] = self.alpha_em_nlo(
+                thresh[nf], alpha_thresh[nf - 1], thresh[nf - 1], nf - 1
             )
 
         for nf in reversed(range(3, nfref)):
-            self.alpha_thresh[nf] = self.alpha_em_nlo(
-                self.thresh[nf], self.alpha_thresh[nf + 1], self.thresh[nf + 1], nf + 1
+            alpha_thresh[nf] = self.alpha_em_nlo(
+                thresh[nf], alpha_thresh[nf + 1], thresh[nf + 1], nf + 1
             )
+
+        return thresh, alpha_thresh
 
     def set_betas(self):
         """Compute and store beta0 / 4pi and b1 = (beta1/beta0)/4pi as a function of nf."""
-        nl = 3
-        nc = 3
-        eu2 = 4.0 / 9
-        ed2 = 1.0 / 9
-        self.beta0 = {}
-        self.b1 = {}
+        beta0 = {}
+        b1 = {}
         for nf in range(3, 6 + 1):
             nu = nf // 2
             nd = nf - nu
-            self.beta0[nf] = (-4.0 / 3 * (nl + nc * (nu * eu2 + nd * ed2))) / (4 * np.pi)
-            self.b1[nf] = (
+            beta0[nf] = (
                 -4.0
-                * (nl + nc * (nu * eu2**2 + nd * ed2**2))
-                / self.beta0[nf]
+                / 3
+                * (
+                    constants.NL
+                    + constants.NC * (nu * constants.EU2 + nd * constants.ED2)
+                )
+            ) / (4 * np.pi)
+            b1[nf] = (
+                -4.0
+                * (
+                    constants.NL
+                    + constants.NC * (nu * constants.EU2**2 + nd * constants.ED2**2)
+                )
+                / beta0[nf]
                 / (4 * np.pi) ** 2
             )
+        return beta0, b1
