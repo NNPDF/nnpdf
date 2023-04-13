@@ -3,7 +3,9 @@ Utils to be used in CMS_1JET_8TEV/filter.py
 """
 
 import yaml
+import numpy as np
 import logging
+
 
 log = logging.getLogger(__name__)
 
@@ -101,5 +103,60 @@ def get_kinematics(tables,version):
     
     return kin
 
+def get_shape(correlation_file):
+    """
+    returns the shape of the statistical correlation
+    matrix.
+
+    Parameters
+    ----------
+    correlation_file : list
+                    list whose entries are the rows of the
+                    correlation file
+    
+    Returns
+    -------
+    int
+        integer giving the shape of the corr matrix
+    
+    """
+    shape_list = []
+    for i, line in enumerate(correlation_file):
+        # 74 is the lowest pt and is common to all .dat files
+        if len(line.split()) >= 5 and line.split()[-2] == '74':
+            shape_list.append(i)
+            if len(shape_list) == 2:
+                return shape_list[1]-shape_list[0]
+        
+
+def get_stat_correlations():
+    """
+    
+    Returns
+    -------
+    np.array
+    
+    """
+    with open('rawdata/CMS_8TeV_jets_Ybin6___CMS_8TeV_jets_Ybin6.dat','r') as file:
+        card = file.readlines()
+    
+    # get shape of matrix
+    shape_mat = get_shape(card)
+    print(shape_mat)
+
+    stat_corr =  np.zeros((shape_mat,shape_mat))
+
+    # correlation rows always start at row 18
+    for j in range(shape_mat):
+        # fill rows of correlation matrix
+        stat_corr[j,:] = np.array([card[(17 + shape_mat * j)+ k].split()[-1] for k in range(shape_mat)])
+
+
+    return stat_corr
+
+            
+
 if __name__ == "__main__":
-    print(get_kinematics(tables=[1],version=1))
+    # print(get_kinematics(tables=[1],version=1))
+
+    print(get_stat_correlations())

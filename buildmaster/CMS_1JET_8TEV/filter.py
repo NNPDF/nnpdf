@@ -42,6 +42,13 @@ def filter_CMS_1JET_8TEV_data_kinetic():
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
+def filter_CMS_1JET_8TEV_uncertainties():
+    """
+    
+    """
+
+    
+
 
 if __name__ == "__main__":
 
