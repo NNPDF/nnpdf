@@ -175,6 +175,15 @@ def get_lumi_errors(tables,version):
 
     return np.array(lumi_err)
 
+def decompose_covmat(covmat):
+     """Given a covmat it return an array sys with shape (ndat,ndat)
+     giving ndat correlated systematics for each of the ndat point.
+     The original covmat is obtained by doing sys@sys.T"""
+
+     lamb, mat = np.linalg.eig(covmat)
+     sys = np.multiply(np.sqrt(lamb), mat)
+     return sys
+     
 def HEP_table_to_df(table,version):
     """
     Given hep data table return a pandas
