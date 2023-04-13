@@ -233,7 +233,7 @@ class Alpha:
 
         Returns
         -------
-        as_NLO : float
+        alpha_em at NLO : float
             target value of a
         """
         lmu = 2 * np.log(q / qref)
