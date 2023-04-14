@@ -398,8 +398,8 @@ def check_deprecated_options(fitting):
 @make_argcheck
 def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
     if fiatlux :
-        pdf_name = fiatlux["pdf_name"]
-        pdfs_ids = PDF(pdf_name).get_members() - 1 # get_members counts also replica0
+        luxset = fiatlux["luxset"]
+        pdfs_ids = PDF(luxset).get_members() - 1 # get_members counts also replica0
         max_id = max(replicas)
         if max_id > pdfs_ids :
             for replica_id in replicas:
@@ -407,6 +407,6 @@ def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
                 os.rmdir(replica_path / f"replica_{replica_id}")
             raise CheckError(
                 f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set "
-                + pdf_name + f": replica id={max_id}, replicas of " + pdf_name + f"={pdfs_ids}"
+                + luxset + f": replica id={max_id}, replicas of " + luxset + f"={pdfs_ids}"
                 +"\nRemoving replica output folders"
             )

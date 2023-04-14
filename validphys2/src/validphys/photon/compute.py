@@ -26,13 +26,13 @@ class Photon:
     """Photon class computing the photon array with the LuxQED approach."""
 
     def __init__(self, theoryid, fiatlux_runcard, replicas):
-        self.theory = theoryid.get_description()
+        theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
-        self.fiatlux_runcard["qed_running"] = "QrefQED" in self.theory
+        self.fiatlux_runcard["qed_running"] = "QrefQED" in theory
         self.replicas = replicas
 
         # structure functions
-        self.luxpdfset = LHAPDFSet(fiatlux_runcard["pdf_name"], "replicas")
+        self.luxpdfset = LHAPDFSet(fiatlux_runcard["luxset"], "replicas")
 
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
@@ -51,7 +51,7 @@ class Photon:
             fl[replica] = sf.InterpStructureFunction(
                 path_to_FL, self.luxpdfset.members[replica]
             )
-            f2lo[replica] = sf.F2LO(self.luxpdfset.members[replica], self.theory)
+            f2lo[replica] = sf.F2LO(self.luxpdfset.members[replica], theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(self.fiatlux_runcard))
@@ -59,14 +59,14 @@ class Photon:
         # we have a dict but fiatlux wants a yaml file
         # TODO : once that fiatlux will allow dictionaries
         # pass directly self.fiatlux_runcard
-        alpha = Alpha(self.theory)
+        alpha = Alpha(theory)
         for replica in replicas:
             self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
             self.lux[replica].InsertInelasticSplitQ(
                 [
-                    self.theory["kbThr"] * self.theory["mb"],
-                    self.theory["ktThr"] * self.theory["mt"]
-                    if self.theory["MaxNfPdf"] == 6
+                    theory["kbThr"] * theory["mb"],
+                    theory["ktThr"] * theory["mt"]
+                    if theory["MaxNfPdf"] == 6
                     else 1e100,
                 ]
             )
@@ -74,14 +74,16 @@ class Photon:
                 f2[replica].fxq, fl[replica].fxq, f2lo[replica].fxq
             )
 
-        self.xgrid = XGRID
-
-        self.photons_array = [
+        photons_array = [
             self.compute_photon_array(replica) for replica in self.replicas
         ]
         self.interpolator = [
-            interp1d(self.xgrid, photon_array, fill_value=0.0, kind="cubic")
-            for photon_array in self.photons_array
+            interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic")
+            for photon_array in photons_array
+        ]
+        self.integral = [
+            trapezoid(photons_array[id], XGRID)
+            for id in range(len(self.replicas))
         ]
 
     def compute_photon_array(self, replica):
@@ -101,11 +103,11 @@ class Photon:
         # Compute photon PDF
         log.info(f"Computing photon")
         photon_qin = np.array(
-            [self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in self.xgrid]
+            [self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in XGRID]
         )
         photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
-        photon_qin /= self.xgrid
+        photon_qin /= XGRID
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
@@ -114,7 +116,7 @@ class Photon:
             # it has to be done inside vp-setupfit
 
             # construct PDFs
-            pdfs_init = np.zeros((len(eko.rotations.inputpids), len(self.xgrid)))
+            pdfs_init = np.zeros((len(eko.rotations.inputpids), len(XGRID)))
             for j, pid in enumerate(eko.rotations.inputpids):
                 if pid == 22:
                     pdfs_init[j] = photon_qin
@@ -122,7 +124,7 @@ class Photon:
                 if pid not in self.luxpdfset.flavors:
                     continue
                 pdfs_init[j] = np.array(
-                    [self.luxpdfset.xfxQ(x, Q_IN, replica, pid) / x for x in self.xgrid]
+                    [self.luxpdfset.xfxQ(x, Q_IN, replica, pid) / x for x in XGRID]
                 )
 
             # Apply EKO to PDFs
@@ -133,7 +135,7 @@ class Photon:
         photon_Q0 = pdfs_final[ph_id]
 
         # we want x * gamma(x)
-        return self.xgrid * photon_Q0
+        return XGRID * photon_Q0
 
     def __call__(self, xgrid):
         """
@@ -155,24 +157,16 @@ class Photon:
         ]
 
     @property
-    def integral(self):
-        """Compute the integral of the photon on the x range."""
-        return [
-            trapezoid(self.photons_array[id], self.xgrid)
-            for id in range(len(self.replicas))
-        ]
-
-    @property
     def error_matrix(self):
         """Generate error matrix to be used in generate_errors."""
         if not self.fiatlux_runcard["additional_errors"]:
             return None
         extra_set = LHAPDFSet(EXTRA_SET, "replicas")
-        qs = [Q_IN] * len(self.xgrid)
-        res_central = np.array(extra_set.central_member.xfxQ(22, self.xgrid, qs))
+        qs = [Q_IN] * len(XGRID)
+        res_central = np.array(extra_set.central_member.xfxQ(22, XGRID, qs))
         res = []
         for idx_member in range(101, 107 + 1):
-            tmp = np.array(extra_set.members[idx_member].xfxQ(22, self.xgrid, qs))
+            tmp = np.array(extra_set.members[idx_member].xfxQ(22, XGRID, qs))
             res.append(tmp - res_central)
         # first index must be x, while second one must be replica index
         return np.stack(res, axis=1)
@@ -183,7 +177,7 @@ class Photon:
         described in sec. 2.5 of https://arxiv.org/pdf/1712.07053.pdf
         """
         if self.error_matrix is None:
-            return np.zeros_like(self.xgrid)
+            return np.zeros_like(XGRID)
         log.info(f"Generating photon additional errors")
         seed = replica_luxseed(replica, self.fiatlux_runcard["luxseed"])
         rng = np.random.default_rng(seed=seed)

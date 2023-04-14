@@ -276,6 +276,12 @@ def check_t0pdfset(t0pdfset):
     log.info(f'{t0pdfset} T0 checked.')
 
 
+def check_luxset(luxset):
+    """Lux pdf check"""
+    luxset.load()
+    log.info(f'{luxset} Lux pdf checked.')
+
+
 def check_positivity(posdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying positivity tables:')
