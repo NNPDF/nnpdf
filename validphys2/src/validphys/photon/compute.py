@@ -164,7 +164,7 @@ class Photon:
 
     @property
     def error_matrix(self):
-        """Generate error matrix to be used for the additional errors."""
+        """Generate error matrix to be used in generate_errors."""
         if not self.fiatlux_runcard["additional_errors"]:
             return None
         extra_set = LHAPDFSet(EXTRA_SET, "replicas")
@@ -194,15 +194,29 @@ class Photon:
 
 class Alpha:
     def __init__(self, theory):
-        # parameters for the alphaem running
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
-        self.qref = self.theory.get("QrefQED", theory["Qref"])
+        self.qref = self.theory.get("QrefQED")
+        # if QrefQED is specified in the runcard then alpha_em
+        # is running, otherwise it's fixed
 
-        self.beta0, self.b1 = self.set_betas()
-        self.thresh, self.alpha_thresh = self.set_thresholds_alpha_em()
+        if self.qref:
+            self.beta0, self.b1 = self.set_betas()
+            self.thresh, self.alpha_thresh = self.set_thresholds_alpha_em()
+            self.alpha_em = self.running_alpha_em
+        else:
+            self.qref = 0.0
+            # Putting qref to 0. for compatibility with fiatlux
+            self.alpha_em = self.fixed_alpha_em
 
-    def alpha_em(self, q):
+    def fixed_alpha_em(self, q):
+        """
+        Return the fixed alpha_em.
+        Putting the q dependence only for compatibility with fiatlux.
+        """
+        return self.alpha_em_ref
+
+    def running_alpha_em(self, q):
         r"""
         Compute the value of alpha_em.
 

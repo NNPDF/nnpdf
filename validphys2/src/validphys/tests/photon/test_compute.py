@@ -46,7 +46,7 @@ class FakeFiatlux:
         self.f2 = None
         self.fl = None
         self.f2lo = None
-        self.res = photon(0, 0, 0)
+        self.res = photon(0., 0., 0.)
 
     def PlugAlphaQED(self, alphaem, qref):
         self.alphaem = alphaem
@@ -90,7 +90,6 @@ def test_parameters_init(monkeypatch):
     monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
 
     monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
-    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
 
     photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
 
