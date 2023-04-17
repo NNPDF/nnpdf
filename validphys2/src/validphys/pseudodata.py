@@ -304,8 +304,34 @@ def make_level1_data(
                         all datasets within one experiment. The central value is replaced
                         by Level 0 fake data. Cuts already applied.
 
-    filterseed: int
+    filterseed : int
                 random seed used for the generation of Level 1 data
+    
+    experiments_index : pandas.core.indexes.multi.MultiIndex
+
+    MULT : bool
+        whether to introduce an inconsistency for MULT type of sys
+
+    ADD : bool
+        whether to introduce an inconsistency for ADD type of sys
+
+    CORR : bool
+            whether to introduce an inconsistency for CORR sys
+
+    UNCORR : bool 
+            whether to introduce an inconsistency for UNCORR sys
+
+    inconsistent_datasets : list
+                            list of datasets for which to introduce an inconsistency
+
+    sys_rescaling_factor : int
+                        factor used to rescale systematics using
+                        type1 inconsistency
+
+    type1_inconsistency : bool
+                    type1 inconsistency: rescale systematics by a factor
+                    larger than 1 when generating L1 data and use the experimental
+                    covariance matrix for L2 data             
 
 
     Returns
@@ -361,7 +387,7 @@ def make_level1_data(
         _only_additive=False,
     )
     # ================== generation of pseudo data ======================#
-    # = generate pseudo data starting from theory predictions
+    # generate pseudo data starting from theory predictions
     # covmat can be an inconsistent one
     level1_data = make_replica(
         level0_commondata_wc, filterseed, covmat, sep_mult=False, genrep=True
