@@ -239,7 +239,6 @@ def pineappl_reader(fkspec):
             an FKTableData object containing all necessary information to compute predictions
     """
     from pineappl.fk_table import FkTable
-
     pines = [FkTable.read(i) for i in fkspec.fkpath]
     cfactors = fkspec.load_cfactors()
 
@@ -254,7 +253,10 @@ def pineappl_reader(fkspec):
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
     Q0 = np.sqrt(pine_rep.muf2())
-    xgrid = pine_rep.x_grid()
+    x_grids = [pine.x_grid() for pine in pines]
+    xgrids_shapes = [grid.shape[-1] for grid in x_grids]
+    max_xgrid_shape_index = xgrids_shapes.index(max(xgrids_shapes))
+    xgrid = x_grids[max_xgrid_shape_index]
     xi = np.arange(len(xgrid))
     protected = False
 
@@ -292,6 +294,13 @@ def pineappl_reader(fkspec):
             if apfelcomb.get("shifts") is not None:
                 ndata += apfelcomb["shifts"][i]
 
+        # Here I need to provide the additional dimension to match the other FKs
+        # First I need to find where holes are
+        missing_x_points = np.setdiff1d(xgrid, p.x_grid())
+        missing_x_points_index = [list(xgrid).index(miss) for miss in missing_x_points]
+        for miss_index in missing_x_points_index:
+            raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=2)
+            raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
         # Check conversion factors and remove the x* from the fktable
         raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
 
