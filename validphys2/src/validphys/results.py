@@ -98,7 +98,7 @@ class DataResult(StatsResult):
 
     @property
     def std_error(self):
-        return np.sqrt(np.diag(self.covmat))
+        return np.diag(self.sqrtcovmat)
 
     @property
     def covmat(self):
