@@ -1,7 +1,7 @@
 x: k1
-dataset_label: "EMC $F^2_c^{\\rm NC}$"
+dataset_label: "EMC $F_2^c$"
 
-y_label: '$10^{qbin}F^c_{2}(x,Q^2)$' 
+y_label: "$10^{qbin}F_2^c(x,Q^2)$" 
 y_scale: log
 x_scale: log
 result_transform: qbinexp

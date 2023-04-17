@@ -29,7 +29,7 @@ from validphys.theorydbutils import fetch_theory
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
 from validphys.lhapdfset import LHAPDFSet
-from validphys.fkparser import load_fktable
+from validphys.fkparser import load_fktable, parse_cfactor
 from validphys.commondataparser import (peek_commondata_metadata,
     get_plot_kinlabels,
     parse_commondata,)
@@ -465,6 +465,15 @@ class FKTableSpec(TupleComp):
             super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
         else:
             super().__init__(fkpath, cfactors)
+
+    def load_cfactors(self):
+        """Each of the sub-fktables that form the complete FKTable can have several cfactors
+        applied to it. This function uses ``parse_cfactor`` to make them into CFactorData
+        """
+        if self.legacy:
+            raise NotImplementedError("cfactor loading from spec not implemented for old theories")
+
+        return [[parse_cfactor(c.open("rb")) for c in cfacs] for cfacs in self.cfactors]
 
     def load_with_cuts(self, cuts):
         """Load the fktable and apply cuts inmediately. Returns a FKTableData"""

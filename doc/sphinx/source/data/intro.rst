@@ -60,3 +60,9 @@ When referred to, the *Dataset* and *Experiment* names refer to the
 short identifying string used in the code for each *Dataset* and
 *Experiment*.  For example, the *Dataset* name for the aforementioned
 ATLAS 2010 inclusive jet measurement with R=0.4 is ATLASR04JETS36PB.
+
+New dataset naming conventions
+------------------------------
+
+See :ref:`dataset_naming_convention` for a definition of how datasets should be
+named.

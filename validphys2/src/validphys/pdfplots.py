@@ -25,7 +25,7 @@ from validphys.core import MCStats
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.utils import scale_from_grid
 from validphys.checks import check_pdf_normalize_to, check_scale, check_have_two_pdfs
-from validphys.checks import check_pdfs_noband
+from validphys.checks import check_pdfs_noband, check_mixband_as_replicas
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +54,6 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
     def setup_flavour(self, flstate):
         pass
-
 
     def normalize(self):
         normalize_to = self.normalize_to
@@ -217,32 +216,6 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """
     yield from ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
                                  xscale=xscale, normalize_to=normalize_to, ymin=ymin, ymax=ymax)
-
-
-@figuregen
-@check_pdf_normalize_to
-@check_scale('xscale', allow_none=True)
-@_warn_any_pdf_not_montecarlo
-def plot_pdfreplicas_kinetic_energy(
-    pdfs,
-    kinetic_xplotting_grids,
-    xscale: (str, type(None)) = None,
-    normalize_to: (int, str, type(None)) = None,
-    ymin=None,
-    ymax=None,
-):
-    """Plot the kinetic energy of the replicas of the specified PDFs.
-    Otherise it works the same as ``plot_pdfs_kinetic_energy``.
-    """
-    return plot_pdfreplicas(
-        pdfs,
-        kinetic_xplotting_grids,
-        xscale=xscale,
-        normalize_to=normalize_to,
-        ymin=ymin,
-        ymax=ymax,
-    )
-
 
 class UncertaintyPDFPlotter(PDFPlotter):
 
@@ -444,10 +417,8 @@ class BandPDFPlotter(PDFPlotter):
         handles = flstate.handles
         # Take only the flavours we are interested in
         stats = grid.select_flavour(flstate.flindex).grid_values
-        pcycler = ax._get_lines.prop_cycler
-        #This is ugly but can't think of anything better
 
-        next_prop = next(pcycler)
+        next_prop = next(ax._get_lines.prop_cycler)
         cv = stats.central_value()
         xgrid = grid.xgrid
         #Ignore spurious normalization warnings
@@ -558,6 +529,50 @@ def plot_pdfs(
 
 @figuregen
 @check_pdf_normalize_to
+@check_mixband_as_replicas
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_pdfs_mixed(
+    pdfs,
+    xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+    mixband_as_replicas: (list, type(None)) = None,
+):
+    """This function is similar to plot_pdfs, except instead of only plotting
+    the central value and the uncertainty of the PDFs, those PDFs indicated by
+    mixband_as_replicas will be plotted as replicas without the central value.
+
+    Inputs are the same as plot_pdfs, with the exeption of mixband_as_replicas,
+    which only exists here.
+
+    mixband_as_replicas: A list of PDFs to plot as replicas, i.e. the
+    central values and replicas of these PDFs will be plotted. The list can be
+    formed of strings, corresponding to PDF IDs, integers (starting from one),
+    corresponding to the index of the PDF in the list of PDFs, or a mixture
+    of both.
+    """
+    yield from MixBandPDFPlotter(
+        pdfs,
+        xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+        mixband_as_replicas=mixband_as_replicas,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
 @check_pdfs_noband
 @check_scale("xscale", allow_none=True)
 def plot_pdfs_kinetic_energy(
@@ -584,6 +599,65 @@ def plot_pdfs_kinetic_energy(
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
+@_warn_any_pdf_not_montecarlo
+def plot_pdfreplicas_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+):
+    """Plot the kinetic energy of the replicas of the specified PDFs.
+    Otherise it works the same as ``plot_pdfs_kinetic_energy``.
+    """
+    return plot_pdfreplicas(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_noband
+@check_mixband_as_replicas
+@check_scale("xscale", allow_none=True)
+def plot_pdfs_mixed_kinetic_energy(
+    pdfs,
+    kinetic_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+    mixband_as_replicas: (list, type(None)) = None,
+):
+    """Mixed band and replica plotting of the "kinetic energy" of the PDF as a
+    function of x for a given value of Q.
+    """
+    return plot_pdfs_mixed(
+        pdfs,
+        kinetic_xplotting_grids,
+        xscale=xscale,
+        normalize_to=normalize_to,
+        ymin=ymin,
+        ymax=ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+        mixband_as_replicas=mixband_as_replicas,
     )
 
 
@@ -722,7 +796,7 @@ def plot_lumi1d(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
             f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
             f"$\\|y|<{format_number(y_cut)}$"
-        )      
+        )
 
     return fig
 
@@ -734,7 +808,7 @@ def plot_lumi1d_uncertainties(
     pdfs_lumis,
     lumi_channel,
     sqrts: numbers.Real,
-    y_cut: (numbers.Real, type(None)) = None,    
+    y_cut: (numbers.Real, type(None)) = None,
     normalize_to=None,
     ymin: (numbers.Real, type(None)) = None,
     ymax: (numbers.Real, type(None)) = None,
@@ -781,7 +855,7 @@ def plot_lumi1d_uncertainties(
     else:
         ax.set_title(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity uncertainty\n"
-            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "    
+            f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
             f"$\\|y|<{format_number(y_cut)}$"
         )
     ax.set_ylim(ymin, ymax)
@@ -807,7 +881,7 @@ def plot_lumi1d_replicas(
     scale="log",
 ):
     """This function is similar to `plot_lumi1d`, but instead of plotting
-    the standard deviation and 68% c.i. it plots the luminosities for 
+    the standard deviation and 68% c.i. it plots the luminosities for
     individual replicas.
 
     Plot PDF replica luminosities at a given center of mass energy.
@@ -869,7 +943,7 @@ def plot_lumi1d_replicas(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
             f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
             f"$\\|y|<{format_number(y_cut)}$"
-        )      
+        )
 
     return fig
 
@@ -1044,3 +1118,32 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.grid(False)
 
     return fig
+
+
+class MixBandPDFPlotter(BandPDFPlotter):
+    """Special wrapper class to plot, in the same figure, PDF bands and PDF replicas
+    depending on the type of PDF.
+    Practical use: plot together the PDF central values with the NNPDF bands
+    """
+    def __init__(self, *args, mixband_as_replicas, **kwargs):
+        self.mixband_as_replicas = mixband_as_replicas
+        super().__init__(*args, **kwargs)
+
+    def draw(self, pdf, grid, flstate):
+        if pdf in self.mixband_as_replicas:
+            labels = flstate.labels
+            handles = flstate.handles
+            ax = flstate.ax
+            next_prop = next(ax._get_lines.prop_cycler)
+            color = next_prop['color']
+            stats = grid.select_flavour(flstate.flindex).grid_values
+            gv = stats.data
+            ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
+                    color=color, zorder=1)
+            cv_line = ax.plot(grid.xgrid[0:1], stats.central_value()[0:1], 
+                    color=color, linewidth=2)
+            handle = cv_line[0]
+            labels.append(pdf.label)
+            handles.append(handle)
+            return gv
+        return super().draw(pdf, grid, flstate)
