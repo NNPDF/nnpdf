@@ -4,10 +4,11 @@ Plots of relations between data PDFs and fits.
 """
 from __future__ import generator_stop
 
+import logging
+import itertools
 from collections import defaultdict
 from collections.abc import Sequence
-import itertools
-import logging
+
 
 import matplotlib as mpl
 from matplotlib import cm
@@ -386,6 +387,7 @@ def _plot_fancy_impl(
         else:
             lb = labellist[normalize_to]
             ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
+
 
         ax.legend().set_zorder(100000)
         ax.set_xlabel(info.xlabel)
@@ -851,7 +853,7 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
 
 
 @figuregen
-def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
+def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     """
     Plot the correlations between the change in the observable and the change
     in the PDF in (x,fl) space.
@@ -879,7 +881,6 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
     info = get_info(dataset)
 
     table = kitable(dataset, info)
-    figby = sane_groupby_iter(table, info.figure_by)
 
     basis = obs_pdf_correlations.basis
 
@@ -891,54 +892,83 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
 
     plotting_var = info.get_xcol(table)
 
-    # TODO: vmin vmax should be global or by figure?
-    vmin, vmax = min(plotting_var), max(plotting_var)
-    if info.x_scale == 'log':
-        norm = mcolors.LogNorm(vmin, vmax)
+    categorical = not np.issubdtype(plotting_var.dtype, np.number)
+    if categorical:
+        # Categorical
+        keys, values = np.unique(plotting_var, return_inverse=True)
+        plotting_var = values
+        nunique = len(keys)
+        if nunique <= len(cm.Set2.colors):
+            cmap = mcolors.ListedColormap(cm.Set2.colors[:nunique])
+        else:
+            cmap = cm.viridis.resample(nunique)
+        bins = np.linspace(0, nunique, nunique + 1)
+        norm = mcolors.BoundaryNorm(bins, nunique)
+
     else:
-        norm = mcolors.Normalize(vmin, vmax)
-    # http://stackoverflow.com/a/11558629/1007990
-    sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
+        cmap = cm.viridis
+        #TODO: vmin vmax should be global or by figure?
+        vmin,vmax = min(plotting_var), max(plotting_var)
+        if info.x_scale == 'log':
+            norm = mcolors.LogNorm(vmin, vmax)
+        else:
+            norm = mcolors.Normalize(vmin, vmax)
+
+
+    table["__plotting_var"] = plotting_var
+    sm = cm.ScalarMappable(cmap=cmap, norm=norm)
+
+    figby = sane_groupby_iter(table, info.figure_by)
 
     for same_vals, fb in figby:
-        grid = fullgrid[np.asarray(fb.index), ...]
+        grid = fullgrid[ np.asarray(fb.index),...]
 
-        # Use the maximum absolute correlation for plotting purposes
+
+        #Use the maximum absolute correlation for plotting purposes
         absgrid = np.max(np.abs(grid), axis=0)
-        mark_mask = absgrid > np.max(absgrid) * mark_threshold
+        mark_mask = absgrid > np.max(absgrid)*mark_threshold
 
         label = info.group_label(same_vals, info.figure_by)
-        # TODO: PY36ScalarMappable
-        # TODO Improve title?
-        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)' % label if label else '', pdf.label)
+        #TODO: PY36ScalarMappable
+        #TODO Improve title?
+        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
 
-        # Start plotting
-        w, h = mpl.rcParams["figure.figsize"]
-        h *= 2.5
-        fig, axes = plotutils.subplots(nrows=nf, sharex=True, figsize=(w, h), sharey=True)
+        #Start plotting
+        w,h = plt.rcParams["figure.figsize"]
+        h*=2.5
+        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
         fig.suptitle(title)
-        colors = sm.to_rgba(info.get_xcol(fb))
+        colors = sm.to_rgba(fb["__plotting_var"])
         for flindex, (ax, fl) in enumerate(zip(axes, fls)):
-            for i, color in enumerate(colors):
-                ax.plot(x, grid[i, flindex, :].T, color=color)
+            for i,color in enumerate(colors):
+                ax.plot(x, grid[i,flindex,:].T, color=color)
 
-            flmask = mark_mask[flindex, :]
+
+            flmask = mark_mask[flindex,:]
             ranges = split_ranges(x, flmask, filter_falses=True)
             for r in ranges:
                 ax.axvspan(r[0], r[-1], color='#eeeeff')
 
-            ax.set_ylabel("$%s$" % basis.elementlabel(fl))
+            ax.set_ylabel("$%s$"%basis.elementlabel(fl))
             ax.set_xscale(scale_from_grid(obs_pdf_correlations))
-            ax.set_ylim(-1, 1)
+            ax.set_ylim(-1,1)
             ax.set_xlim(x[0], x[-1])
         ax.set_xlabel('$x$')
-        # fig.subplots_adjust(hspace=0)
+        #fig.subplots_adjust(hspace=0)
 
-        fig.colorbar(sm, ax=axes.ravel().tolist(), label=info.xlabel, aspect=100)
-        # TODO: Fix title for this
-        # fig.tight_layout()
+        cbar = fig.colorbar(
+            sm,
+            ax=axes.ravel().tolist(),
+            label=info.xlabel,
+            aspect=100,
+        )
+        if categorical:
+            cbar.set_ticks(np.linspace(0.5, nunique - 0.5, nunique))
+            cbar.ax.set_yticklabels(keys)
+
+        #TODO: Fix title for this
+        #fig.tight_layout()
         yield fig
-
 
 @figure
 def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
@@ -1225,14 +1255,14 @@ def plot_xq2(
         highlight_datasets = set()
 
     def next_options():
-        # Get the colors
-        prop_settings = mpl.rcParams['axes.prop_cycle']
-        # Apparently calling the object gives us an infinite cycler
+        #Get the colors
+        prop_settings = plt.rcParams['axes.prop_cycle']
+        #Apparently calling the object gives us an infinite cycler
         settings_cycler = prop_settings()
-        # So far, I don't understand how this is done with mpl "cycler"
-        # objects, or wether  I like it. So far this is godd enough
-        for markeropts, settings in zip(plotutils.marker_iter_plot(), settings_cycler):
-            # Override last with first
+        #So far, I don't understand how this is done with mpl "cycler"
+        #objects, or wether  I like it. So far this is godd enough
+        for  markeropts, settings in zip(plotutils.marker_iter_plot(), settings_cycler):
+            #Override last with first
             options = {
                 'linestyle': 'none',
                 **markeropts,
@@ -1243,7 +1273,7 @@ def plot_xq2(
     next_opts = next_options()
     key_options = {}
 
-    for experiment, commondata, fitted, masked, group in dataset_inputs_by_groups_xq2map:
+    for (experiment, commondata, fitted, masked, group) in dataset_inputs_by_groups_xq2map:
         info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description
