@@ -5,6 +5,8 @@ Utils to be used in CMS_1JET_8TEV/filter.py
 import yaml
 import numpy as np
 import logging
+from scipy.linalg import block_diag
+import pandas as pd
 
 
 log = logging.getLogger(__name__)
@@ -129,20 +131,28 @@ def get_shape(correlation_file):
                 return shape_list[1]-shape_list[0]
         
 
-def get_stat_correlations():
+def get_stat_correlations(table):
     """
-    
+    Read a CMS_8TeV_jets_Ybin#___CMS_8TeV_jets_Ybin#.dat
+    file and output the statistical correlation matrix.
+
+
+    Parameters
+    ----------
+    table : int
+            number of the table
+
     Returns
     -------
     np.array
-    
+            2-D array
+
     """
-    with open('rawdata/CMS_8TeV_jets_Ybin6___CMS_8TeV_jets_Ybin6.dat','r') as file:
+    with open(f'rawdata/CMS_8TeV_jets_Ybin{table}___CMS_8TeV_jets_Ybin{table}.dat','r') as file:
         card = file.readlines()
     
-    # get shape of matrix
+    # get shape of matrix 
     shape_mat = get_shape(card)
-    print(shape_mat)
 
     stat_corr =  np.zeros((shape_mat,shape_mat))
 
@@ -151,12 +161,140 @@ def get_stat_correlations():
         # fill rows of correlation matrix
         stat_corr[j,:] = np.array([card[(17 + shape_mat * j)+ k].split()[-1] for k in range(shape_mat)])
 
-
     return stat_corr
 
+def block_diagonal_corr(tables):
+    """
+    forms block diagonal correlation matrix
+    for stat uncertainties. Each block corresponds
+    to a rapidity bin.
+    Null correlations are associated to the points 
+    below the nominal pT cut (pT<74 GeV) for which the
+    information on correlations is not available.
+    
+    Parameters
+    ----------
+    tables : list
+            list of integers numbering the tables
+        
+    Returns
+    -------
+    np.array
+        block diagonal matrix of dim ndata x ndata
+    """
+
+    # null correlations for points below nominal pT cut 
+    null_correlations = np.zeros((9,9))
+
+    bd_corr = block_diag(null_correlations,get_stat_correlations(tables[0]))
+    
+    for table in tables[1:]:
+        tmp_corr = block_diag(null_correlations,get_stat_correlations(table))
+        bd_corr = block_diag(bd_corr,tmp_corr)
+
+    return bd_corr
+
+def correlation_to_covariance(correlation, uncertainties):
+    """
+    Converts a correlation matrix into a covariance matrix
+    using a list of uncertainties.
+    
+    Parameters:
+    -----------
+    correlation : np.ndarray
+        A square matrix of correlations.
+    uncertainties : np.ndarray
+        A 1D array of uncertainties.
+    
+    Returns:
+    --------
+    np.ndarray
+        The corresponding covariance matrix.
+    """
+    covariance = np.outer(uncertainties, uncertainties) * correlation
+    return covariance
+
+def get_stat_uncertainties():
+    """
+    function used to get the statistical
+    uncertainty from the HEPdata tables.
+
+    Returns
+    -------
+    np.array
+        array with ordered stat errors for all tables
+    
+    """
+    
+    with open('metadata.yaml', 'r') as file:
+        metadata = yaml.safe_load(file)
+
+    version = metadata['hepdata']['version']
+    tables  = metadata['hepdata']['tables']
+    
+    stat_err = []
+
+    for table in tables:
+        
+        hepdata_tables = f"rawdata/HEPData-ins1487277-v{version}-Table_{table}.yaml"
+        with open(hepdata_tables, 'r') as file:
+            input = yaml.safe_load(file)
+
+        for err in input['dependent_variables'][0]['values']:
+            stat_err.append(err['errors'][0]['symerror'])
+        
+    return np.array(stat_err)
+
+def get_uncertainties_df(table):
+    """
+    
+    """
+
+    with open(f"rawdata/CMS_8TeV_jets_Ybin{table}.dat",'r') as file:
+        card = file.readlines()
+
+    for line in card:
+        if "ColumnName" in line:
+            columns = line.split()
+            columns = [col.strip(", '") for col in columns[2:]]
+                
+                
+
             
+            
+
+    # ignore ColumnName, =, and binFlag
+    
+    # columns = columns[3:]
+    
+    # read dat file into dataframe by skipping the first 41 metadata rows
+    df = pd.read_csv(f"rawdata/CMS_8TeV_jets_Ybin{table}.dat", sep="\s+", skiprows = 41, names = columns)
+
+    # reindex
+    df = df.reset_index(drop=True)
+
+    return df
+
+def uncertainties_df(tables):
+    """
+    """
+    dfs = []
+    
+    for table in tables:
+        dfs.append(get_uncertainties_df(table))
+    df = pd.concat(dfs,axis = 0)
+    return df
+
 
 if __name__ == "__main__":
     # print(get_kinematics(tables=[1],version=1))
 
-    print(get_stat_correlations())
+    # print(get_stat_correlations())
+    # bd = block_diagonal_corr(tables=[1,2,3,4,5,6])
+    # stat = get_stat_uncertainties()
+    # print(stat)
+    df = uncertainties_df([1,2,3,4,5,6])
+    print(df)
+    print(df.columns)
+    print(df.Sigma)
+    
