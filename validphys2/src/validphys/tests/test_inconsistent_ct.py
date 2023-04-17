@@ -26,7 +26,7 @@ def test_with_MULT_sys():
     
     inc_mult_sys_tab = inconsys_cd.with_MULT_sys(mult_sys_tab).commondata_table["MULT"].to_numpy()
     
-    assert_allclose(mult_sys_tab, inc_mult_sys_tab, rtol=1e-5, atol=1e-5)
+    assert_allclose(mult_sys_tab, inc_mult_sys_tab)
 
 
 def test_with_ADD_sys():
@@ -40,7 +40,7 @@ def test_with_ADD_sys():
     
     inc_mult_sys_tab = inconsys_cd.with_ADD_sys(mult_sys_tab).commondata_table["ADD"].to_numpy()
     
-    assert_allclose(mult_sys_tab, inc_mult_sys_tab, rtol=1e-5, atol=1e-5)
+    assert_allclose(mult_sys_tab, inc_mult_sys_tab)
 
 
 def test_rescale_sys_CORR_MULT():
@@ -65,7 +65,7 @@ def test_rescale_sys_CORR_MULT():
 
     tab1 = new_icd.systematics_table.loc[:,[type_err]].iloc[:,systype_corr.index -1]
     
-    assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
+    assert_allclose(tab1,tab2)
 
 
 def test_rescale_sys_CORR_ADD():
@@ -90,7 +90,7 @@ def test_rescale_sys_CORR_ADD():
 
     tab1 = new_icd.systematics_table.loc[:,[type_err]].iloc[:,systype_corr.index -1]
     
-    assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
+    assert_allclose(tab1,tab2)
 
 
 def test_process_commondata():
@@ -109,7 +109,7 @@ def test_process_commondata():
     tab1 = new_icd.commondata_table.drop(['process'],axis=1).to_numpy()
     tab2 = inconsys_cd.commondata_table.drop(['process'], axis=1).to_numpy()
     
-    assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
+    assert_allclose(tab1,tab2)
 
 
 def test_process_commondata_CORR_MULT():
@@ -137,7 +137,7 @@ def test_process_commondata_CORR_MULT():
 
     tab1 = new_icd.systematics_table.loc[:,[type_err]].iloc[:,systype_corr.index -1]
     
-    assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
+    assert_allclose(tab1,tab2)
 
 
 def test_process_commondata_CORR_ADD():
@@ -165,6 +165,6 @@ def test_process_commondata_CORR_ADD():
 
     tab1 = new_icd.systematics_table.loc[:,[type_err]].iloc[:,systype_corr.index -1]
     
-    assert_allclose(tab1,tab2, rtol=1e-5, atol=1e-5)
+    assert_allclose(tab1,tab2)
 
 
