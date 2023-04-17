@@ -125,7 +125,62 @@ def filter_closure_data_by_experiment(
     in which closure data is generate, which means that the pseudodata is
     not reproducible.
 
+    Parameters
+    ----------
+    filter_path : pathlib.PosixPath
+                path to filter folder
+    
+    experiments_data : list
+                list of experiments, i.e., list of DataGroupSpec
+    
+    fakepdf : validphys.core.PDF
+    
+    fakenoise : bool
+                whether to add fakenoise to L0 data
+
+    filterseed : int
+                random seed for the generation of L1 noise
+
+    experiments_index : pandas.core.indexes.multi.MultiIndex
+
+    ADD : bool
+        whether to introduce an inconsistency for ADD type of sys
+
+    MULT : bool
+        whether to introduce an inconsistency for MULT type of sys
+
+    CORR : bool
+        whether to introduce an inconsistency for CORR sys
+    
+    UNCORR : bool
+        whether to introduce an inconsistency for UNCORR sys
+
+    inconsistent_datasets : list
+                            list of datasets for which to introduce
+                            inconsistency
+
+    sys_rescaling_factor_1 : int
+                        factor used to rescale systematics using
+                        type1 inconsistency
+
+    sys_rescaling_factor_2 : int
+                        factor used to rescale systematics using
+                        type2 inconsistency
+                        
+
+    type1_inconsistency : bool
+                    type1 inconsistency: rescale systematics by a factor
+                    larger than 1 when generating L1 data and use the experimental
+                    covariance matrix for L2 data             
+
+    type2_inconsistency : bool
+                    type2 inconsistency: use experimental covariance
+                    matrix when generating L1 data and rescale systematics
+                    by a factor less than 1 when generating L2 data
+
+
     """
+    
     res = []
     for exp in experiments_data:
         experiment_index = experiments_index[
