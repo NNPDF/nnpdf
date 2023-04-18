@@ -112,6 +112,13 @@ def progressive_sqrt_b_v_ratio_dataset(fits_dataset_bias_variance, dataset):
     return fig
 
 @figure
+def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data):
+    """
+    like `progressive_sqrt_b_v_ratio_dataset` but for all data
+    """
+    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data)
+
+@figure
 def plot_data_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data):
     """
     like `plot_dataset_fits_sqrt_bias_variance_ratio` but for all data.
