@@ -126,7 +126,7 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
 @figure
-def NEWFUN_data_type_1_ratio(fits_data_bias_variance, data):
+def progressive_sqrt_b_v_ratio(fits_data_bias_variance, data):
     """Like `progressive_sqrt_b_v_ratio` but for all data.
 
     """
