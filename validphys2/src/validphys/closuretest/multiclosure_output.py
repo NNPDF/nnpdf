@@ -84,7 +84,7 @@ def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, datas
     return fig
 
 @figure
-def progressive_sqrt_b_v_ratio(fits_dataset_bias_variance, dataset):
+def progressive_sqrt_b_v_ratio_dataset(fits_dataset_bias_variance, dataset):
     """For a set of closure fits, calculate bias and variance across fits on a given dataset.
     Plot the square root ratio between the two quantities as the number of fits increases.
     To sum up each plotted point is:
@@ -126,11 +126,11 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
 @figure
-def progressive_sqrt_b_v_ratio(fits_data_bias_variance, data):
+def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data):
     """Like `progressive_sqrt_b_v_ratio` but for all data.
 
     """
-    return progressive_sqrt_b_v_ratio(fits_data_bias_variance, data)
+    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data)
 
 
 @table
