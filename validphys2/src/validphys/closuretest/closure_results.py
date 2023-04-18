@@ -21,6 +21,8 @@ from validphys.closuretest.closure_checks import (
     check_fits_underlying_law_match,
 )
 
+from validphys.inconsistent_ct import InconsistentCommonData
+from validphys.covmats import dataset_inputs_covmat_from_systematics
 
 BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
@@ -394,3 +396,121 @@ fits_underlying_pdfs_summary = collect("fit_underlying_pdfs_summary", ("fits",))
 def summarise_closure_underlying_pdfs(fits_underlying_pdfs_summary):
     """Collects the underlying pdfs for all fits and concatenates them into a single table"""
     return pd.concat(fits_underlying_pdfs_summary, axis=1)
+
+
+def covmat_diffs(data, inconsistent_datasets, sys_rescaling_factor):
+    """Computes the difference between the original covmat and a modified one given:
+        data: complete dataset
+        inconsistent_dataset: list of inconsistent datasets
+
+        return: dictionary containing the relative weight of modification (calculated as diff between traces)
+        """
+
+    dataset_input_list = list(data.dsinputs)
+    commondata_wc = data.load_commondata_instance()
+    commondata_wc = [
+                    InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
+                        commondataproc=cd.commondataproc, 
+                        nkin=cd.nkin, nsys=cd.nsys, 
+                        commondata_table = cd.commondata_table, 
+                        systype_table = cd.systype_table) 
+                    for cd in commondata_wc
+                    ]
+    original_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    
+    or_trace = np.trace(original_covmat) #trace of original covmat
+
+    #entries of process_commondata: ADD, MULT, CORR, UNCORR
+    commondata_wc_temp = [cd.process_commondata(True,False,True,False,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    cov_dict = {"A/C": (or_trace-np.trace(modified_covmat))/or_trace*100}
+    commondata_wc_temp = [cd.process_commondata(True,False,False,True,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+
+    cov_dict["A/U"] = (or_trace-np.trace(modified_covmat))/or_trace*100
+    commondata_wc_temp = [cd.process_commondata(False,True,True,False,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    cov_dict["M/C"] = (or_trace-np.trace(modified_covmat))/or_trace*100
+
+    commondata_wc_temp = [cd.process_commondata(False,True,False,True,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    cov_dict["M/U"] = (or_trace-np.trace(modified_covmat))/or_trace*100
+
+    commondata_wc_temp = [cd.process_commondata(True,True,True,False,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp, 
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    cov_dict["AM/C"] = (or_trace-np.trace(modified_covmat))/or_trace*100
+
+    commondata_wc_temp = [cd.process_commondata(True,True,False,True,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp, 
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    cov_dict["AM/U"] = (or_trace-np.trace(modified_covmat))/or_trace*100
+
+    commondata_wc_temp = [cd.process_commondata(True,True,True,True,inconsistent_datasets,sys_rescaling_factor)
+                        for cd in commondata_wc]
+    modified_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc_temp,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    cov_dict["TOT"] = (or_trace-np.trace(modified_covmat))/or_trace*100
+
+    print(cov_dict)
+
+    return cov_dict
