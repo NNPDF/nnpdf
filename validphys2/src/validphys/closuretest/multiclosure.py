@@ -24,7 +24,9 @@ from validphys.closuretest.closure_checks import (
     check_t0pdfset_matches_multiclosure_law
 )
 from validphys.checks import check_use_t0
+from validphys.covmats import t0_covmat_from_systematics, dataset_t0_predictions
 import logging
+
 log = logging.getLogger(__name__)
 
 # bootstrap seed default
@@ -172,9 +174,32 @@ def expected_data_bias_variance(fits_data_bias_variance):
     return expected_dataset_bias_variance(fits_data_bias_variance)
 
 
-fits_datasets_bias_variance = collect(
-    "fits_data_bias_variance", ("data",)
-)
+def list_fits_datasets_bias_variance(
+    data, fits_pdf, multiclosure_underlyinglaw, fits, 
+    t0pdfset,_internal_max_reps=None, _internal_min_reps=20
+):
+    """
+    TODO
+    """
+    list_b_v = []
+
+    for dataset in data.datasets:
+        # construc t0 covmat for one dataset
+        t0_covmat = t0_covmat_from_systematics(
+                            loaded_commondata_with_cuts = dataset.load_commondata().with_cuts(dataset.cuts),
+                            dataset_input=dataset,
+                            use_weights_in_covmat=True,
+                            norm_threshold=None,
+                            dataset_t0_predictions = dataset_t0_predictions(dataset, t0pdfset)
+                        )
+        internal_mct_dataset_loader = internal_multiclosure_dataset_loader(
+                dataset, fits_pdf, multiclosure_underlyinglaw, fits, t0_covmat
+                )
+
+        list_b_v.append(fits_dataset_bias_variance(internal_mct_dataset_loader,_internal_max_reps,_internal_min_reps))
+
+    return list_b_v
+
 
 fits_experiments_bias_variance = collect(
     "fits_data_bias_variance", ("group_dataset_inputs_by_experiment",)
