@@ -168,11 +168,24 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     return df
 
 @table
-def bias_variance_ratio_for_each_dataset(list_fits_datasets_bias_variance,each_dataset):#(datasets_expected_bias_variance, each_dataset):
+def bias_variance_ratio_for_each_dataset(list_fits_datasets_bias_variance,each_dataset):
     """
-    TODO
-    """
-    
+    Table of bias / variance (and sqrt) for each dataset separately
+
+    Parameters
+    ----------
+    list_fits_datasets_bias_variance : list
+                        each element of the list corresponds to a
+                        multiclosure.fits_dataset_bias_variance
+                        for one dataset
+    each_dataset : list
+                list of DataSetSpec
+
+    Returns
+    -------
+    pd.DataFrame
+
+    """    
     records = []
     for ds, fit_datasets_bias_variance in zip(each_dataset, list_fits_datasets_bias_variance):
         # take the values averaged over fits

@@ -178,8 +178,9 @@ def list_fits_datasets_bias_variance(
     data, fits_pdf, multiclosure_underlyinglaw, fits, 
     t0pdfset,_internal_max_reps=None, _internal_min_reps=20
 ):
-    """
-    TODO
+    """like `fits_dataset_bias_variance` but returns list of which
+    each element is `fits_dataset_bias_variance` on a different
+    dataset
     """
     list_b_v = []
 
