@@ -76,9 +76,9 @@ def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, datas
     sqrt_ratio = np.sqrt(biases / variances)
 
     fig, ax = plt.subplots()
-    ax.plot(sqrt_ratio, "*", label = r"$\sqrt{bias/variance}$ "+f", std. dev. = {np.std(sqrt_ratio):.2f}")
+    ax.plot(sqrt_ratio, "*", label = r"$\sqrt{R_{bv}}$ "+f", std. dev. = {np.std(sqrt_ratio):.2f}")
     ax.axhline(np.mean(sqrt_ratio), label = f"mean = {np.mean(sqrt_ratio):.2f}")
-    ax.set_title(f"Square root of bias and variance ratio for {dataset} for each fit")
+    ax.set_title(r"$\sqrt{R_{bv}}$ "+f"indicator for {dataset} for each fit")
     ax.set_xlabel("fit index")
     ax.legend()
     return fig
@@ -115,8 +115,6 @@ def plot_data_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data):
     like `plot_dataset_fits_sqrt_bias_variance_ratio` but for all data.
     """
     return plot_dataset_fits_sqrt_bias_variance_ratio(fits_data_bias_variance,data)
-
-
 
 @figure
 def plot_total_fits_bias_variance(fits_total_bias_variance):

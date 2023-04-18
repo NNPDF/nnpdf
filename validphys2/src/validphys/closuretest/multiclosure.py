@@ -129,7 +129,7 @@ def fits_dataset_bias_variance(
 
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    # The dimentions here are (fit, data point, replica)
+    # The dimensions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
