@@ -24,6 +24,8 @@ from validphys.closuretest.closure_checks import (
     check_t0pdfset_matches_multiclosure_law
 )
 from validphys.checks import check_use_t0
+import logging
+log = logging.getLogger(__name__)
 
 # bootstrap seed default
 DEFAULT_SEED = 9689372
@@ -170,10 +172,13 @@ def expected_data_bias_variance(fits_data_bias_variance):
     return expected_dataset_bias_variance(fits_data_bias_variance)
 
 
+fits_datasets_bias_variance = collect(
+    "fits_data_bias_variance", ("data",)
+)
+
 fits_experiments_bias_variance = collect(
     "fits_data_bias_variance", ("group_dataset_inputs_by_experiment",)
 )
-
 
 def fits_total_bias_variance(fits_experiments_bias_variance):
     """Like `fits_dataset_bias_variance` except for all data, assumes there are
