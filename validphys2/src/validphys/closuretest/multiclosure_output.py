@@ -15,6 +15,8 @@ import scipy.stats
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
+import logging
+log = logging.getLogger(__name__)
 
 @figure
 def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
@@ -42,7 +44,6 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     ax.legend()
     return fig
 
-
 @figure
 def plot_data_fits_bias_variance(fits_data_bias_variance, data):
     """Like `plot_dataset_fits_bias_variance` but for all data. Can use
@@ -50,6 +51,45 @@ def plot_data_fits_bias_variance(fits_data_bias_variance, data):
 
     """
     return plot_dataset_fits_bias_variance(fits_data_bias_variance, data)
+
+@figure
+def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, dataset):
+    """Given a dataset and a set of closure fits, calculate the sqrt of bias 
+    and variance ratio across fits and then plot scatter points.
+    
+    Parameters
+    ----------
+    fits_dataset_bias_variance : multiclosure.fits_dataset_bias_variance
+                        tuple containing  biases, variances, len(law_th)
+
+    dataset : (DataSetSpec, DataGroupSpec)
+        Note that due to the structure of `validphys` this
+        function can be overloaded to accept a DataGroupSpec.
+
+    Returns
+    -------
+    matplotlib fig
+    
+
+    """
+    biases, variances, _ = fits_dataset_bias_variance
+    sqrt_ratio = np.sqrt(biases / variances)
+
+    fig, ax = plt.subplots()
+    ax.plot(sqrt_ratio, "*", label = r"$\sqrt{bias/variance}$ "+f", std. dev. = {np.std(sqrt_ratio):.2f}")
+    ax.axhline(np.mean(sqrt_ratio), label = f"mean = {np.mean(sqrt_ratio):.2f}")
+    ax.set_title(f"Square root of bias and variance ratio for {dataset} for each fit")
+    ax.set_xlabel("fit index")
+    ax.legend()
+    return fig
+
+@figure
+def plot_data_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data):
+    """
+    like `plot_dataset_fits_sqrt_bias_variance_ratio` but for all data.
+    """
+    return plot_dataset_fits_sqrt_bias_variance_ratio(fits_data_bias_variance,data)
+
 
 
 @figure
