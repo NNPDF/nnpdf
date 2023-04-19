@@ -121,11 +121,12 @@ class Photon:
                 if pid == 22:
                     pdfs_init[j] = photon_qin
                     ph_id = j
-                if pid not in self.luxpdfset.flavors:
-                    continue
-                pdfs_init[j] = np.array(
-                    [self.luxpdfset.xfxQ(x, Q_IN, replica, pid) / x for x in XGRID]
-                )
+                else :
+                    if pid not in self.luxpdfset.flavors:
+                        continue
+                    pdfs_init[j] = np.array(
+                        [self.luxpdfset.xfxQ(x, Q_IN, replica, pid) / x for x in XGRID]
+                    )
 
             # Apply EKO to PDFs
             q2 = eko.mu2grid[0]

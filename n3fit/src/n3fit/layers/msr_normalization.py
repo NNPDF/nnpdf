@@ -42,7 +42,7 @@ class MSR_Normalization(MetaLayer):
 
     def call(self, pdf_integrated, ph_replica):
         """Imposes the valence and momentum sum rules:
-        A_g = (1-sigma)/g
+        A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
         A_v3 = 1/V_3
         A_v8 = 3/V_8
