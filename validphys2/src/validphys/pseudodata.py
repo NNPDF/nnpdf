@@ -329,8 +329,8 @@ def make_level1_data(
                         type1 inconsistency
 
     type1_inconsistency : bool
-                    type1 inconsistency: rescale systematics by a factor
-                    larger than 1 when generating L1 data and use the experimental
+                    type1 inconsistency: rescale systematics (usually by a factor
+                    larger than 1) when generating L1 data and use the experimental
                     covariance matrix for L2 data             
 
 
