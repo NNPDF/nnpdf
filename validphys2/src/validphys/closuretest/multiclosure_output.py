@@ -231,7 +231,7 @@ def experiments_bias_variance_ratio(
         [[ntotal, bias_tot / var_tot, np.sqrt(bias_tot / var_tot)]], index=["Total"], columns=df_in.columns
     )
     df = pd.concat((df_in, tot_df), axis=0)
-    log.error(f"df_in = {df_in}")
+    
     df.index.rename("experiment", inplace=True)  # give index appropriate name
     return df
 
