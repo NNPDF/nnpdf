@@ -170,13 +170,13 @@ def filter_closure_data_by_experiment(
 
     type1_inconsistency : bool
                     type1 inconsistency: rescale systematics by a factor
-                    larger than 1 when generating L1 data and use the experimental
-                    covariance matrix for L2 data             
+                    (usually larger than 1) when generating L1 data and 
+                    use the experimental covariance matrix for L2 data             
 
     type2_inconsistency : bool
                     type2 inconsistency: use experimental covariance
                     matrix when generating L1 data and rescale systematics
-                    by a factor less than 1 when generating L2 data
+                    (usually by a factor less than 1) when generating L2 data
 
 
     """
