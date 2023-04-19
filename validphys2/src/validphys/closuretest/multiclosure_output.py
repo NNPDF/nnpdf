@@ -79,7 +79,7 @@ def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, datas
 
     fig, ax = plt.subplots()
     ax.plot(sqrt_ratio, "*", label = r"$\sqrt{R_{bv}}$ "+f", std. dev. = {np.std(sqrt_ratio):.2f}")
-    ax.axhline(np.mean(sqrt_ratio), label = f"mean = {np.mean(sqrt_ratio):.2f}")
+    ax.axhline(np.sqrt(np.mean(biases) / np.mean(variances)), label = f"mean = {np.mean(sqrt_ratio):.2f}")
     ax.set_title(r"$\sqrt{R_{bv}}$ "+f"indicator for {dataset} for each fit")
     ax.set_xlabel("fit index")
     ax.legend()
