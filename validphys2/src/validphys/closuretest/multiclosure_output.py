@@ -167,11 +167,11 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     """
     records = []
     for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
-        records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var))
+        records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var, sqrt_ratio = np.sqrt(bias/var)))
     df = pd.DataFrame.from_records(
-        records, index="dataset", columns=("dataset", "ndata", "ratio")
+        records, index="dataset", columns=("dataset", "ndata", "ratio","sqrt_ratio")
     )
-    df.columns = ["ndata", "bias/variance"]
+    df.columns = ["ndata", "bias/variance", "sqrt(bias/variance)"]
     return df
 
 @table
@@ -228,10 +228,10 @@ def experiments_bias_variance_ratio(
     bias_tot, var_tot, ntotal = expected_total_bias_variance
 
     tot_df = pd.DataFrame(
-        [[ntotal, bias_tot / var_tot]], index=["Total"], columns=df_in.columns
+        [[ntotal, bias_tot / var_tot, np.sqrt(bias_tot / var_tot)]], index=["Total"], columns=df_in.columns
     )
     df = pd.concat((df_in, tot_df), axis=0)
-
+    log.error(f"df_in = {df_in}")
     df.index.rename("experiment", inplace=True)  # give index appropriate name
     return df
 
@@ -294,7 +294,7 @@ def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
     vals = np.array(df_in.values)  # copy just in case
     vals[:, 1] = np.sqrt(vals[:, 1])
     return pd.DataFrame(
-        vals, index=df_in.index, columns=["ndata", "sqrt(bias/variance)"]
+        vals, index=df_in.index, columns=["ndata","bias/variance", "sqrt(bias/variance)"]
     )
 
 
