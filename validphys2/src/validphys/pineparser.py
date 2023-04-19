@@ -254,9 +254,9 @@ def pineappl_reader(fkspec):
         )
     Q0 = np.sqrt(pine_rep.muf2())
     x_grids = [pine.x_grid() for pine in pines]
-    xgrids_shapes = [grid.shape[-1] for grid in x_grids]
-    max_xgrid_shape_index = xgrids_shapes.index(max(xgrids_shapes))
-    xgrid = x_grids[max_xgrid_shape_index]
+    xgrid = np.array([])
+    for grid in x_grids:
+        xgrid = np.union1d(xgrid, grid)
     xi = np.arange(len(xgrid))
     protected = False
 
