@@ -472,7 +472,7 @@ def plot_fancy_dataspecs(
     #We have at least one element
     if not dataspecs_results:
         return
-    
+
     #For now, simply take the first data result. We'll need to improve this.
     results = [dataspecs_results[0][0], *[r[1] for r in dataspecs_results]]
     cutlist = [dataspecs_cuts[0], *dataspecs_cuts]
