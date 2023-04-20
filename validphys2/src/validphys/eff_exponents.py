@@ -9,7 +9,7 @@ import numbers
 import random
 import warnings
 
-import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
 
@@ -29,7 +29,7 @@ import validphys.pdfgrids as pdfgrids
 log = logging.getLogger(__name__)
 
 INTERNAL_LINESTYLE = ['-.', ':']
-INTERNAL_COLOR = plt.rcParams['axes.prop_cycle'].by_key()["color"]
+INTERNAL_COLOR = mpl.rcParams['axes.prop_cycle'].by_key()["color"]
 
 
 @check_positive('Q')

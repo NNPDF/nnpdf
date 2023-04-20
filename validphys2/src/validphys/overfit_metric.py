@@ -7,7 +7,7 @@ produce the corresponding tables and figures.
 
 import logging
 
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -179,7 +179,8 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
     mean = array_expected_overfitting.mean()
     std = array_expected_overfitting.std()
 
-    f, ax = plt.subplots(1, 1)
+    fig = Figure()
+    ax = fig.subplots(111)
 
     # if array_expected_overfitting is nan it should not produce a histogram
     if (array_expected_overfitting == array_expected_overfitting).all():
@@ -195,8 +196,8 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
         ax.set_xlabel(r"$\mathcal{R}_O$")
         ax.set_ylabel("density")
         ax.set_title(f"{fit.label}")
-        plt.tight_layout()
-    return f
+        fig.tight_layout()
+    return fig
 
 
 fits_overfitting_summary = collect(

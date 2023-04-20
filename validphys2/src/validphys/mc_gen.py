@@ -8,7 +8,7 @@ Tools to check the pseudo-data MC generation.
 # but they should not be used as an example as they follow the libNNPDF logic
 import logging
 import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 from scipy.stats import moment as mom
@@ -47,7 +47,8 @@ def art_data_residuals(art_rep_generation, color="green"):
 
     residuals = real_data - art_data
     normresiduals = residuals / real_data
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     ax.hist(
         normresiduals, bins=50, histtype="step", stacked=True, fill=False, color=color
@@ -70,7 +71,8 @@ def art_data_distribution(
     real_data, _, _, art_data = art_rep_generation
 
     normart_data = art_data / real_data
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     ax.hist(
         normart_data, bins=50, histtype="step", stacked=True, fill=False, color=color
@@ -91,8 +93,9 @@ def art_data_moments(art_rep_generation, color="green"):
     _, _, normart_replicas, _ = art_rep_generation
 
     artrep_array = np.asarray(normart_replicas)
-
-    fig, axes = plt.subplots(nrows=3, figsize=(10, 12))
+    
+    fig = Figure(figsize=(10, 12))
+    axes = [fig.add_subplot(3, 1, i+1) for i in range(3)]
     # Plot histogram of moments
     for momno, ax in zip(range(1, 4), axes.flatten()):
         # Calculate moments
@@ -117,9 +120,9 @@ def art_data_comparison(art_rep_generation, nreplica: int):
     artrep_array = np.asarray(normart_replicas)
     normart_data = art_data / real_data
 
-    fig, axes = plt.subplots(
-        nrows=len(artrep_array.T), figsize=(4, 2 * len(artrep_array.T))
-    )
+    nrows=len(artrep_array.T)
+    fig = Figure(figsize=(4, 2 * len(artrep_array.T)))
+    axes = [fig.add_subplot(nrows, 1, i+1) for i in range(nrows)]
 
     for i, ax, datapoint, normartdatapoint in zip(
         range(len(artrep_array.T)), axes.flatten(), artrep_array.T, normart_data
@@ -171,7 +174,8 @@ def one_art_data_residuals(groups_data, indexed_make_replicas):
         residual = one_art_data - real_data[one_data_index]
         all_normresidual.append(residual / real_data[one_data_index])
 
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     ax.hist(all_normresidual, bins=50, histtype="step", stacked=True, fill=False)
 
