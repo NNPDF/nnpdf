@@ -3,7 +3,7 @@ closuretest/plots.py
 
 Plots of statistical estimators for closure tests
 """
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 from reportengine.figure import figure
 from validphys import plotutils
@@ -33,10 +33,11 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits):
     """
     delta_chi2 = delta_chi2_bootstrap.T
     labels = [fit.label for fit in fits]
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     for i, label in enumerate(labels):
         ax.hist(delta_chi2[:, i], alpha=0.3, label=label, zorder=100)
-    plt.xlabel(r"$\Delta_{\chi^{2}}$")
+    ax.set_xlabel(r"$\Delta_{\chi^{2}}$")
     l = ax.legend()
     l.set_zorder(1000)
     ax.set_title(r"Total $\Delta_{\chi^{2}}$ for each fit")

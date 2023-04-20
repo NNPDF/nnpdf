@@ -6,7 +6,7 @@ Plots for the paramfits package.
 import logging
 import numbers
 
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -25,7 +25,8 @@ def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
     """Plot the total central chi² as a function of the value of α_s.
     Note that this plots as a function of the key "AlphaS_MZ" in the LHAPDF
     file, which is annoyingly *not* α_s(MZ) for Nf<5."""
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     alphas = fits_as
     #Could be a transposed data frame
     fits_total_chi2 = np.ravel(fits_total_chi2)
@@ -45,7 +46,8 @@ def plot_as_central_parabola(
         markmin:bool=False):
     """Plot a parabola with the central chi² per number of points, marking
     the chi² at the total best fit."""
-    fig,ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     asarr = np.linspace(min(fits_as), max(fits_as), 100)
     as_central_parabola = np.asarray(as_central_parabola)
     ndata = int(ndata)
@@ -67,7 +69,8 @@ def plot_as_cummulative_central_chi2(fits_as,
                                      as_datasets_central_parabolas,
                                      central_by_dataset_suptitle):
     """Plot the cumulative total chi² for each of the datasets"""
-    fig,ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     nx = 100
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
@@ -92,7 +95,8 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    fig,ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     nx = 100
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
@@ -123,7 +127,8 @@ def plot_as_cummulative_central_chi2_diff_underflow(
     """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    fig,ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     nx = 100
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
@@ -172,7 +177,8 @@ def plot_as_cummulative_central_chi2_diff_negative(
     """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
-    fig,ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     nx = 100
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
@@ -203,7 +209,8 @@ def plot_dataspecs_central_parabolas(
     limits = min(map(min, dataspecs_fits_as)), max(map(max, dataspecs_fits_as))
     alphasaxis = np.linspace(*limits, 100)
     for dsname, dataspecs_parabolas in dataspecs_as_central_parabolas_map.items():
-        fig, ax = plt.subplots()
+        fig = Figure()
+        ax = fig.subplots()
         for label, parabola in dataspecs_parabolas.items():
             ax.plot(alphasaxis, np.polyval(parabola, alphasaxis), label=label)
 
@@ -213,7 +220,7 @@ def plot_dataspecs_central_parabolas(
         ax.set_title(dsname)
         ax.set_xlim(alphasaxis[[0,-1]])
 
-        plt.legend()
+        ax.legend()
 
         yield fig
 
@@ -462,7 +469,8 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     std_dev = np.std(pulls)
     x = np.linspace(min(pulls),max(pulls), 100)
     kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     #ax.set_title(f"Histogram of pulls for {label} dataset")
     ax.set_xlabel(r"Pull")
@@ -616,7 +624,8 @@ def plot_pull_gaussian_fit_pseudo(dataspecs_as_value_error_table_impl,
         x = np.linspace(min(pulls),max(pulls), 100)
 
         kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
-        fig, ax = plt.subplots()
+        fig = Figure()
+        ax = fig.subplots()
 
         #ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
@@ -645,7 +654,8 @@ def plot_fitted_replicas_as_profiles_matched(fits_as,
 
     table = fits_replica_data_with_discarded_replicas.values
 
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     from matplotlib.collections import LineCollection
 
@@ -680,7 +690,8 @@ def plot_dataspecs_pseudoreplica_means(
 
 
     for it in dataset_items:
-        fig, ax = plt.subplots()
+        fig = Figure()
+        ax = fig.subplots()
         for label, tb in zip(dataspecs_speclabel, dataspecs_chi2_by_dataset_dict[it]):
             if tb is None:
                 #Advance color cycle so all dataspecs get the same color
@@ -730,7 +741,8 @@ def plot_dataspecs_parabola_examples(
 
         for index, row in sampled.iterrows():
 
-            fig, ax = plt.subplots()
+            fig = Figure()
+            ax = fig.subplots()
             im = marker_iter_plot()
             ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
             for i, (label, vals) in enumerate(row.groupby(level=0)):
@@ -758,7 +770,8 @@ def plot_as_distribution(parabolic_as_determination, suptitle):
 
     distribution = parabolic_as_determination.data
 
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     kde_plot(distribution)
     ax.legend()
@@ -773,7 +786,8 @@ def plot_total_as_distribution_dataspecs(
         ):
     """Compare the total alpha_s distributions across dataspecs.
     See ``plot_as_distribution``."""
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     for dist, label in zip(
             dataspecs_parabolic_as_determination_for_total,
             dataspecs_speclabel):
@@ -803,7 +817,8 @@ def plot_poly_as_fit(fits_as,
     filt = table.isnull().sum(axis=1) < max_ndiscarded
     table = table[filt]
     table = table.values
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
 
     minimums = []
     asarr = np.asarray(alphas)
@@ -825,7 +840,7 @@ def plot_poly_as_fit(fits_as,
 
     ax.set_xlim(min(alphas), max(alphas))
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
-    plt.title(rf"$\alpha_S$ from order {polorder} polynomial fit "
+    ax.set_title(rf"$\alpha_S$ from order {polorder} polynomial fit "
               rf"= ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$"
               rf"N={len(minimums)}")
     ax.set_xlabel(r'$\alpha_S$')

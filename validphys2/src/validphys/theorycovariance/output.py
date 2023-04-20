@@ -11,7 +11,7 @@ from math import inf
 import pandas as pd
 import numpy as np
 import scipy.linalg as la
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from matplotlib import cm, colors as mcolors
 
 from reportengine.figure import figure
@@ -100,7 +100,8 @@ def plot_covmat_heatmap(covmat, title):
     # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
-    fig, ax = plt.subplots(figsize=(15, 15))
+    fig = Figure(figsize=(15, 15))
+    ax = fig.subplots()
     matrixplot = ax.matshow(
         100 * matrix,
         cmap=cm.Spectral_r,
@@ -116,9 +117,11 @@ def plot_covmat_heatmap(covmat, title):
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
     ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
-    plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=30, ha="right", fontsize=20)
+    ax.xaxis.tick_bottom()
+    ax.set_yticks(ticklocs)
+    ax.set_yticklabels(ticklabels, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -0.5, len(matrix) - 0.5, linestyles="dashed")
@@ -203,15 +206,18 @@ def plot_corrmat_heatmap(corrmat, title):
     # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
-    fig, ax = plt.subplots(figsize=(15, 15))
+    fig = Figure(figsize=(15, 15))
+    ax = fig.subplots()
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
     ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
-    plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=30, ha="right", fontsize=20)
+    ax.xaxis.tick_bottom()
+    ax.set_yticks(ticklocs)
+    ax.set_yticklabels(ticklabels, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -0.5, len(matrix) - 0.5, linestyles="dashed")
@@ -392,12 +398,14 @@ def plot_diag_cov_comparison(
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
     sqrtdiags_tot.sort_index(0, inplace=True)
     sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig = Figure(figsize=(20, 10))
+    ax = fig.subplots()
     ax.plot(sqrtdiags_exp.values, ".", label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, ".", label="Theory", color="red")
     ax.plot(sqrtdiags_tot.values, ".", label="Total", color="blue")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
-    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, 0, len(data), linestyles="dashed")
@@ -438,11 +446,13 @@ def plot_diag_cov_impact(
     df_inv_tot = pd.DataFrame(inv_tot, index=plot_index)
     df_inv_tot.sort_index(0, inplace=True)
     df_inv_tot = df_inv_tot.reindex(newindex)
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.subplots()
     ax.plot(df_inv_exp.values, ".", label="Experiment", color="orange")
     ax.plot(df_inv_tot.values, ".", label="Experiment + Theory", color="mediumseagreen")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(df_inv_exp)
-    plt.xticks(ticklocs, ticklabels, rotation="vertical", fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation="vertical", fontsize=20)
     ax.vlines(startlocs, 0, len(matrix_theory), linestyles="dashed")
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$", fontsize=30)
     ax.yaxis.set_tick_params(labelsize=20)

@@ -13,7 +13,8 @@ import logging
 import scipy.stats as stats
 
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+import matplotlib as mpl
 import matplotlib.scale as mscale
 import matplotlib.patches as mpatches
 import matplotlib.collections as mcollections
@@ -31,7 +32,7 @@ def ax_or_gca(f):
     @functools.wraps(f)
     def _f(*args, **kwargs):
             if 'ax' not in kwargs or kwargs['ax'] is None:
-                kwargs['ax'] = plt.gca()
+                kwargs['ax'] = Figure().add_subplot(1, 1, 1)
             return f(*args, **kwargs)
     return _f
 
@@ -43,11 +44,11 @@ def ax_or_newfig(f):
     def _f(*args, **kwargs):
         noax = 'ax' not in kwargs or kwargs['ax'] is None
         if noax:
-                plt.figure()
-                kwargs['ax'] = plt.gca()
+                fig = Figure()
+                kwargs['ax'] = fig.add_subplot(1,1,1)
         result = f(*args, **kwargs)
         if noax:
-            plt.legend(loc = 'best')
+            kwargs['ax'].legend(loc = 'best')
         return result
 
     return _f
@@ -143,7 +144,7 @@ def color_iter():
     repeated infinitely. Therefore this avoids the overflow error at runtime
     when using matplotlib's ``f'C{i}'`` color specification (equivalent to
     ``colors[i]``) when ``i>len(colors)`` """
-    color_list = [prop['color'] for prop in plt.rcParams['axes.prop_cycle']]
+    color_list = [prop['color'] for prop in mpl.rcParams['axes.prop_cycle']]
     yield from color_list
     log.warning("Color cycle exhausted. Will repeat colors.")
     yield from itertools.cycle(color_list)
@@ -290,7 +291,7 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     width = 2
     #The tick positions
     x = np.linspace(0, 1.1*width*ntypes*l-1, l)
-    w,h = plt.rcParams["figure.figsize"]
+    w,h = mpl.rcParams["figure.figsize"]
 
     #Rescale if we have too much data
     rescale = max(1, 1+(width*l*ntypes-15)*0.05)
@@ -304,7 +305,8 @@ def barplot(values, collabels, datalabels, orientation='auto'):
             orientation = 'vertical'
 
     if orientation == 'vertical':
-        fig, ax = plt.subplots(figsize=(w*rescale, h*lbrescale))
+        fig = Figure(figsize=(w*rescale, h*lbrescale))
+        ax = fig.subplots()
         barfunc = ax.bar
         infoaxis = ax.xaxis
         infolim = ax.set_xlim
@@ -321,7 +323,8 @@ def barplot(values, collabels, datalabels, orientation='auto'):
 
         def xytext(x,y): return x,y
     elif orientation =='horizontal':
-        fig, ax = plt.subplots(figsize=(w*lbrescale, h*rescale))
+        fig = Figure(figsize=(w*lbrescale, h*rescale))
+        ax = fig.subplots()
         barfunc = ax.barh
         infoaxis = ax.yaxis
         infolim = ax.set_ylim
@@ -384,9 +387,10 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
     element for which errorbars are drawn and ``datalabels`` are the labels of
     the different datasets that are compared.
     """
-    w,h = plt.rcParams["figure.figsize"]
+    w,h = mpl.rcParams["figure.figsize"]
     rescale = max(1, 1 + 0.1*(len(categorylabels) - 7))
-    fig, ax = plt.subplots(figsize=(w*1.5, h*rescale))
+    fig = Figure(figsize=(w*1.5, h*rescale))
+    ax = fig.subplots()
     if datalabels is None:
         datalabels = itertools.repeat(None)
     y = np.arange(len(categorylabels))
@@ -519,7 +523,8 @@ def spiderplot(xticks, vals, label, ax=None):
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
-    plt.xticks(angles[:-1], xticks, size=8, zorder=6)
+    ax.set_ticks(angles[:-1])
+    ax.set_xticklabels(xticks, size=8, zorder=6)
 
     # Draw ylabels
 
