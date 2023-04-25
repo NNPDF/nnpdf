@@ -175,40 +175,6 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     return df
 
 @table
-def bias_variance_ratio_for_each_dataset(list_fits_datasets_bias_variance,each_dataset):
-    """
-    Table of bias / variance (and sqrt) for each dataset separately
-
-    Parameters
-    ----------
-    list_fits_datasets_bias_variance : list
-                        each element of the list corresponds to a
-                        multiclosure.fits_dataset_bias_variance
-                        for one dataset
-    each_dataset : list
-                list of DataSetSpec
-
-    Returns
-    -------
-    pd.DataFrame
-
-    """    
-    records = []
-    for ds, fit_datasets_bias_variance in zip(each_dataset, list_fits_datasets_bias_variance):
-        # take the values averaged over fits
-        # question: what is the correct thing to do:
-        # mean(bias) / mean(variance) or mean(bias / variance)
-        bias, var, ndata = expected_dataset_bias_variance(fit_datasets_bias_variance)
-        records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var, sqrt_ratio = np.sqrt(bias/var)))
-
-    df = pd.DataFrame.from_records(
-        records, index="dataset", columns=("dataset", "ndata", "ratio", "sqrt_ratio")
-    )
-    df.columns = ["ndata", "bias/variance", "sqrt(bias/variance)"]
-    return df
-
-
-@table
 def experiments_bias_variance_ratio(
     experiments_expected_bias_variance, experiments_data, expected_total_bias_variance
 ):
