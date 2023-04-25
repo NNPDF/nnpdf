@@ -11,14 +11,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.special as special
 import scipy.stats
+import yaml
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 from validphys.closuretest.multiclosure import expected_dataset_bias_variance
+from validphys.loader import Loader
 
 import logging
 log = logging.getLogger(__name__)
+
+l = Loader()
 
 @figure
 def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
@@ -172,6 +176,28 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
         records, index="dataset", columns=("dataset", "ndata", "ratio","sqrt_ratio")
     )
     df.columns = ["ndata", "bias/variance", "sqrt(bias/variance)"]
+    return df
+
+@table
+def bias_variance_ratio_by_process(datasets_expected_bias_variance, each_dataset):
+    """
+    Same as `datasets_bias_variance_ratio` but adding another index to table, namely,
+    the name of the process
+    """
+    
+    process_type = []
+
+    for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
+        # open plot file and get process name
+        plt_file = ds.commondata.plotfiles[1]
+        with open(plt_file,'r') as file:
+            card = yaml.safe_load(file)
+        prcs = card['nnpdf31_process']
+
+        process_type.append({'process':prcs,'dataset':str(ds),'ndata':ndata,'ratio':bias / var, 
+                                        'sqrt_ratio':np.sqrt(bias/var)})
+
+    df = pd.DataFrame(process_type).set_index(['process','dataset'])
     return df
 
 @table
