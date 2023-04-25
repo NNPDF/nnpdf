@@ -1,7 +1,32 @@
 # How to run an analysis in parallel
 
 
-In this tutorial we will show how to run a `validphys` (or more general a reportengine app analysis) analysis using the parallel resource executor of `reportengine`.
+In this tutorial, we will demonstrate how to use the parallel resource executor of reportengine to run a `validphys` analysis (or any other `reportengine` app analysis). Typically, when running a `validphys` script, `reportengine` creates a directed acyclic graph (DAG) that is executed sequentially, meaning that each node must wait for the previous node to complete before it can be evaluated. This approach is not very efficient, especially if the nodes are independent of each other. 
+The parallel execution of a reportengine task is based on `dask.distributed` ([dask-distributed](https://distributed.dask.org/en/stable/)).
+
+The main steps to follow when running a task in parallel are:
+
+1. Initialize a dask-scheduler 
+
+	```
+	$ dask-scheduler 
+
+  	2023-04-25 20:56:41,729 - distributed.scheduler - INFO - State start
+	2023-04-25 20:56:41,731 - distributed.scheduler - INFO - -----------------------------------------------
+	2023-04-25 20:56:41,731 - distributed.scheduler - INFO -   Scheduler at:  tcp://192.168.1.138:8786
+	2023-04-25 20:56:41,731 - distributed.scheduler - INFO -   dashboard at:  http://192.168.1.138:8787/status
+	```
+
+2. Assign some workers to the scheduler 
+	
+	```$ dask-worker  ```
+
+3. Run the process by ..
+
+
+The main thing to take care of when running a certain process is point 2, namely, as it will become clear from the examples the part of the memory limit plays a very important role
+
+
 
 Example 1
 --------
@@ -72,10 +97,9 @@ actions_:
 
 
 
-
 Example 2
 ---------
-
+A more complex example is the comparison of two fits.
 
 
 
