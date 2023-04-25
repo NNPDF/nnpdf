@@ -19,7 +19,7 @@ from n3fit.backends import operations as op
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
-import n3fit.hyper_optimization.rewards
+from n3fit.hyper_optimization.rewards import HyperLoss
 
 log = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ class ModelTrainer:
                 hyper_loss = "average"
                 log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
-            self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
+            self._hyper_loss = HyperLoss(hyper_loss)
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -986,9 +986,7 @@ class ModelTrainer:
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self._hyper_loss(
-                    fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models
-                ),
+                "loss": self._hyper_loss.compute(fold_losses=l_hyper),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {

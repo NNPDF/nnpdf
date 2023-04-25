@@ -28,19 +28,53 @@ import numpy as np
 from validphys.pdfgrids import xplotting_grid, distance_grids
 
 
-def average(fold_losses=None, **_kwargs):
-    """Returns the average of fold losses"""
-    return np.average(fold_losses)
+class HyperLoss:
+    """
+    Class to compute the hyper_loss based on the fold_losses
+
+    Args:
+        fold_statistic (str): the statistic to use to compute the hyper_loss
+    """
+
+    def __init__(self, fold_statistic: str):
+        self._compute = {
+            "average": self._average,
+            "best_worst": self._best_worst,
+            "std": self._std,
+            }
+
+        # Check if the fold_statistic is valid
+        if fold_statistic not in self._compute:
+            raise ValueError(f"fold_statistic {fold_statistic} should be one of"
+                             f"{list(self._compute.keys())}")
+
+        self.fold_statistic = fold_statistic
+
+    def compute(self, fold_losses: np.ndarray) -> float:
+        """
+        Compute the hyper_loss based on the fold_losses
+
+        Args:
+            fold_losses (np.ndarray of shape [K_folds]): the loss of each fold
+
+        Returns:
+            float: the hyper_loss
+        """
+        hyper_loss = self._compute[self.fold_statistic](fold_losses)
+        return hyper_loss.item()
 
 
-def best_worst(fold_losses=None, **_kwargs):
-    """Returns the maximum loss of all k folds"""
-    return np.max(fold_losses)
+    @staticmethod
+    def _average(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+        return np.average(fold_losses, axis=axis)
 
+    @staticmethod
+    def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+        return np.max(fold_losses, axis=axis)
 
-def std(fold_losses=None, **_kwargs):
-    """Return the standard dev of the losses of the folds"""
-    return np.std(fold_losses)
+    @staticmethod
+    def _std(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+        return np.std(fold_losses, axis=axis)
 
 
 def fit_distance(n3pdfs=None, **_kwargs):
