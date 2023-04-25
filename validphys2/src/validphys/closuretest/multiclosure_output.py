@@ -289,15 +289,6 @@ def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
         vals, index=df_in.index, columns=["ndata","bias/variance", "sqrt(bias/variance)"]
     )
 
-
-@table
-def sqrt_experiments_bias_variance_ratio(experiments_bias_variance_ratio):
-    """Like sqrt_datasets_bias_variance_ratio except for each experiment.
-
-    """
-    return sqrt_datasets_bias_variance_ratio(experiments_bias_variance_ratio)
-
-
 @table
 def total_bias_variance_ratio(
     experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments_data
