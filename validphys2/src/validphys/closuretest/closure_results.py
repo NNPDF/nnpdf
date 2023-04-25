@@ -7,9 +7,11 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from reportengine import collect
 from reportengine.table import table
+from reportengine.figure import figure, figuregen
 
 from validphys.calcutils import calc_chi2, bootstrap_values
 from validphys.checks import check_pdf_is_montecarlo
@@ -514,3 +516,13 @@ def covmat_diffs(data, inconsistent_datasets, sys_rescaling_factor):
     print(cov_dict)
 
     return cov_dict
+
+@table
+def table_inconsistency_impact(data,inconsistent_datasets, sys_rescaling_factor):
+    list_dicts = []
+    for ds in (inconsistent_datasets):
+        covmats = covmat_diffs(data,ds,sys_rescaling_factor)
+        ##this is a dictionary only
+        list_dicts.append(covmats)
+    df = pd.DataFrame.from_records(list_dicts,index = inconsistent_datasets)
+    return df
