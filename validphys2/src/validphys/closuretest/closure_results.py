@@ -522,7 +522,6 @@ def table_inconsistency_impact(data,inconsistent_datasets, sys_rescaling_factor)
     list_dicts = []
     for ds in (inconsistent_datasets):
         covmats = covmat_diffs(data,ds,sys_rescaling_factor)
-        ##this is a dictionary only
         list_dicts.append(covmats)
     df = pd.DataFrame.from_records(list_dicts,index = inconsistent_datasets)
     return df
