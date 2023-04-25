@@ -273,23 +273,6 @@ def experiments_bias_variance_table(
 
 
 @table
-def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
-    """Given `datasets_bias_variance_ratio` take the sqrt and tabulate the
-    results. This gives an idea of how
-    faithful the uncertainties are in sensible units. As noted in
-    `datasets_bias_variance_ratio`, bias/variance is a squared quantity and
-    so when considering how much uncertainty has been over or underestimated
-    it is more natural to consider sqrt(bias/variance).
-
-    """
-    df_in = datasets_bias_variance_ratio
-    vals = np.array(df_in.values)  # copy just in case
-    vals[:, 1] = np.sqrt(vals[:, 1])
-    return pd.DataFrame(
-        vals, index=df_in.index, columns=["ndata","bias/variance", "sqrt(bias/variance)"]
-    )
-
-@table
 def total_bias_variance_ratio(
     experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments_data
 ):
