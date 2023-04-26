@@ -31,18 +31,24 @@ class VersionMismatch(Exception):
     pass
 
 
+class CannotAccessURL(Exception):
+    pass
+
+
 class HepDataConfig:
     
-    def __init__(self, metadata_yaml: str, path: Path=None, force: bool=False) -> None:
-        """
+    def __init__(self, metadata_yaml: str, path: Path=None, force: bool=False):
+        """Main class that handles the downloading of HepData tables.
+
         Parameters
         ----------
-            metadata_yaml: str
-                Path to the metadata YAML file
-            path: Path
-                Path to create the folder in which the tables will be downloaded
-            force: bool
-                Decide on whether or not overwrite the existing tables
+        metadata_yaml: str
+            Path to the metadata YAML file
+        path: Path
+            Path to create the folder in which the tables will be downloaded
+        force: bool
+            Decide on whether or not overwrite the existing tables
+
         """
 
         hep_metadata = self.extract_metadata(metadata_yaml)
@@ -52,7 +58,7 @@ class HepDataConfig:
         self.tables = hep_metadata["tables"]
 
         # Instantiate the dictionary of the scrapped url
-        self.hep_webinfo = requests.get(self.url).json()
+        self.hep_webinfo = self.json_response(self.url)
         self.webversion = self.hep_webinfo["version"]
         self.tables_dict = self.hep_webinfo["hasPart"]
         self.folder = Path().absolute().joinpath("rawdata") if path is None else path
@@ -69,29 +75,55 @@ class HepDataConfig:
             )
 
     @staticmethod
-    def extract_metadata(metadata_path: str) -> dict:
+    def json_response(hepdata_url: str) -> dict:
+        """Request the HepData URL and raise an exception if this is not achieved.
+        The information contained in the URL is then cached as a JSON object.
+
+        Parameters:
+        -----------
+        hepdata_url: str
+            URL pointing to the HepData
+
+        Returns:
+        --------
+        dict:
+            a json object containing the data
+
         """
-        Extract specific information from the metadata, specifically the HepData
+        try:
+            response = requests.get(hepdata_url)
+            response.raise_for_status()
+        except Exception as e:
+            raise CannotAccessURL("There is a problem in accessing the URL") from e
+        return response.json()
+
+    @staticmethod
+    def extract_metadata(metadata_path: str) -> dict:
+        """Extract specific information from the metadata, specifically the HepData
         URL and version with the corresponding table number.
 
+        Parameters:
+        -----------
         metadata_path: str
             Path to the metadata YAML file
+
         """
         with open(metadata_path, 'r') as stream_metadata:
             metadata_dic = yaml.safe_load(stream_metadata)
         return metadata_dic["hepdata"]
 
     def write_tables(self, file: bytes, table_id: Optional[int] = None) -> None:
-        """
-        Write a given table into a file and save it into the disk afterwards.
+        """Write a given table into a file and save it into the disk afterwards.
 
         Parameters
         ----------
-            file: bytes
-                HepData table in bytes
-            table_id: int
-                Denote the `table_id`-th table
+        file: bytes
+            HepData table in bytes
+        table_id: int
+            Denote the `table_id`-th table
+
         """
+        # TODO: Settle on the table naming convention
         self.folder.mkdir(exist_ok=True)
         ins_id = self.url.split("/")[-1]
         filename = f"HEPData-{ins_id}-v{self.version}-Table_{table_id}"
@@ -101,10 +133,17 @@ class HepDataConfig:
             table_yaml.write(file)
 
     def check_downloaded_tables(self, table_numbers: list, vcheck: bool=False) -> None:
-        """
-        Check if the number of downloaded tables correspond to the list of tables
+        """Check if the number of downloaded tables correspond to the list of tables
         in the metadata.yaml file. This function should also be extended to include
         more checks (something much more relevant than this).
+
+        Parameters:
+        -----------
+        table_numbers: list[int]
+            list containing the table numbers
+        vcheck: bool
+            if set to TRUE explicitly matches the versions
+
         """
         nb_yaml_files_rawdata = sum(1 for _ in self.folder.glob("**/*.yaml")) - 1
 
@@ -119,8 +158,13 @@ class HepDataConfig:
                 raise VersionMismatch("The local version is different from HepData.")
 
     def download_heptables(self, table_numbers: list) -> None:
-        """
-        Download all the HepData tables specified in the metadata.
+        """Download all the HepData tables specified in the metadata.
+
+        Parameters:
+        -----------
+        table_numbers: list
+            list containing the table numbers
+
         """
         # Make sure that the list does not contain duplicates
         table_numbers = list(dict.fromkeys(table_numbers))
@@ -151,10 +195,11 @@ class HepDataConfig:
         print("All the tables have been downloaded and stored properly.")
 
     def check_hepdata_tables(self) -> None:
-        """
-        Check if the tables already exist locally. If not, then download all the requiered
-        tables. If yes, then perform `check_downloaded_tables`. As mentioned above, this
-        should perform more interesting checks (beyond just checking the numbers of tables).
+        """Check if the tables already exist locally. If not, then download all
+        the requiered tables. If yes, then perform `check_downloaded_tables`.
+        As mentioned above, this should perform more interesting checks (beyond
+        just checking the numbers of tables).
+
         """
         # Check if the rawdata folder already exists and if so if it contains tables
         if self.folder.exists() and sum(1 for _ in self.folder.glob("**/*.yaml")) > 0:
