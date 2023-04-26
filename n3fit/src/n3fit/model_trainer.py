@@ -934,6 +934,10 @@ class ModelTrainer:
             )
 
             if self.mode_hyperopt:
+                if passed != self.pass_status:
+                    log.info("Hyperparameter combination fail to find a good fit, breaking")
+                    break
+
                 validation_loss = stopping_object.vl_chi2
 
                 # number of active points in this fold
@@ -948,13 +952,9 @@ class ModelTrainer:
                 experimental_loss = exp_loss_raw / ndata
 
                 hyper_loss = experimental_loss
-                if passed != self.pass_status:
-                    log.info("Hyperparameter combination fail to find a good fit, breaking")
-                    # If the fit failed to fit, no need to add a penalty to the loss
-                    break
-                else:
-                    for penalty in self.hyper_penalties:
-                        hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+
+                for penalty in self.hyper_penalties:
+                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
                 log.info("Fold %d finished, mean loss=%.1f, pass=%s",
                          k + 1, np.mean(hyper_loss), passed)
 
