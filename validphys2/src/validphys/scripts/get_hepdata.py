@@ -181,7 +181,7 @@ class HepDataConfig:
                     if "YAML" in url_tab["description"]:
                         get_reads_yaml = requests.get(url_tab["contentUrl"])
                         self.write_tables(get_reads_yaml.content, table_id)
-                log.info(f"Table {table_id} downloaded and stored properly.")
+                        log.info(f"Table {table_id} downloaded and stored properly.")
 
         # Download the HepData metdata to be used as crosscheck in future.
         # Here, we do not want all the information concerning all the tables
