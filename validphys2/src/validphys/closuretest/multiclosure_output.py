@@ -230,9 +230,9 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     """
     records = []
     for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
-        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias/ndata, variance = var/ndata))
+        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance = var))
     df = pd.DataFrame.from_records(
-        records, index="dataset", columns=("dataset", "ndata", "ratio","sqrt_ratio")
+        records, index="dataset", columns=("dataset", "ndata", "bias (normalized)","variance (normalized)")
     )
     df.columns = ["ndata", "bias (normalized)", "variance (normalized)"]
     return df
