@@ -228,13 +228,8 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     process is going to have much more weight than the rest
 
     """
-    import ipdb; ipdb.set_trace()
     records = []
-    i = 0
     for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
-        print(bias)
-        i += 1
-        print(i)
         records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance=var))
     df = pd.DataFrame.from_records(
         records, index="dataset", columns=("dataset", "ndata", "bias", "variance")
