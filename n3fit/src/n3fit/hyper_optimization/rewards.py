@@ -44,7 +44,7 @@ class HyperLoss:
     """
 
     def __init__(self, replica_statistic: str = None, fold_statistic: str = None):
-        self._compute = {
+        self.implemented_stats = {
             "average": self._average,
             "best_worst": self._best_worst,
             "std": self._std,
@@ -68,9 +68,9 @@ class HyperLoss:
         if statistic is None:
             statistic = self._default_statistic
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
-        elif statistic not in self._compute:
+        elif statistic not in self.implemented_stats:
             raise ValueError(f"{name} {statistic} should be one of"
-                             f"{list(self._compute.keys())}")
+                             f"{list(self.implemented_stats.keys())}")
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
         return statistic
 
@@ -92,8 +92,8 @@ class HyperLoss:
         if losses.ndim != 2:
             raise ValueError(f"Losses should be a 2D array, got {losses.ndim}D, shape {losses.shape}")
 
-        fold_losses = self._compute[self.replica_statistic](losses, axis=1)
-        hyper_loss = self._compute[self.fold_statistic](fold_losses, axis=0)
+        fold_losses = self.implemented_stats[self.replica_statistic](losses, axis=1)
+        hyper_loss = self.implemented_stats[self.fold_statistic](fold_losses, axis=0)
         return hyper_loss.item()
 
     @staticmethod
