@@ -25,6 +25,10 @@ from validphys.closuretest.closure_checks import (
 )
 from validphys.checks import check_use_t0
 
+import logging
+
+log = logging.getLogger(__name__)
+
 # bootstrap seed default
 DEFAULT_SEED = 9689372
 # stepsize in fits/replicas to use for finite size bootstraps
@@ -37,7 +41,7 @@ SAMPLING_INTERVAL = 5
 @check_use_t0
 @check_t0pdfset_matches_multiclosure_law
 def internal_multiclosure_dataset_loader(
-    dataset, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
+    dataset, fits_pdf, multiclosure_underlyinglaw, fits, t0_covmat_from_systematics
 ):
     """Internal function for loading multiple theory predictions for a given
     dataset and a single covariance matrix using underlying law as t0 PDF,
@@ -88,10 +92,10 @@ def internal_multiclosure_dataset_loader(
         multiclosure_underlyinglaw, dataset
     )
 
-    sqrt_covmat = la.cholesky(dataset_inputs_t0_covmat_from_systematics, lower=True)
+    sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (fits_dataset_predictions, fits_underlying_predictions, dataset_inputs_t0_covmat_from_systematics, sqrt_covmat)
+    return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
 
 
 @check_fits_underlying_law_match
@@ -129,7 +133,7 @@ def fits_dataset_bias_variance(
 
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    # The dimentions here are (fit, data point, replica)
+    # The dimensions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
@@ -169,11 +173,9 @@ def expected_data_bias_variance(fits_data_bias_variance):
     """Like `expected_dataset_bias_variance` except for all data"""
     return expected_dataset_bias_variance(fits_data_bias_variance)
 
-
 fits_experiments_bias_variance = collect(
     "fits_data_bias_variance", ("group_dataset_inputs_by_experiment",)
 )
-
 
 def fits_total_bias_variance(fits_experiments_bias_variance):
     """Like `fits_dataset_bias_variance` except for all data, assumes there are
