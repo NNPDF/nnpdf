@@ -181,7 +181,7 @@ class ModelTrainer:
                 hyper_loss = "average"
                 log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
-            self._hyper_loss = HyperLoss(hyper_loss)
+            self._hyper_loss = HyperLoss(fold_statistic=hyper_loss, replica_statistic="average")
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -937,18 +937,17 @@ class ModelTrainer:
             )
 
             if self.mode_hyperopt:
-                # If doing a hyperparameter scan we need to keep track of the loss function
-                # Since hyperopt needs _one_ number take the average in case of many replicas
-                validation_loss = np.mean(stopping_object.vl_chi2)
+                validation_loss = stopping_object.vl_chi2
 
-                # Compute experimental loss
-                exp_loss_raw = np.average(models["experimental"].compute_losses()["loss"])
-                # And divide by the number of active points in this fold
+                # number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
                 ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
                 # If ndata == 0 then it's the opposite, all data is in!
                 if ndata == 0:
                     ndata = self.experimental["ndata"]
+
+                # Compute experimental loss
+                exp_loss_raw = models["experimental"].compute_losses()["loss"]
                 experimental_loss = exp_loss_raw / ndata
 
                 hyper_loss = experimental_loss
@@ -956,9 +955,11 @@ class ModelTrainer:
                     log.info("Hyperparameter combination fail to find a good fit, breaking")
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
-                for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
-                log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
+                else:
+                    for penalty in self.hyper_penalties:
+                        hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+                log.info("Fold %d finished, mean loss=%.1f, pass=%s",
+                         k + 1, np.mean(hyper_loss), passed)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
@@ -967,10 +968,10 @@ class ModelTrainer:
                 n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
                 exp_models.append(models["experimental"])
 
-                if hyper_loss > self.hyper_threshold:
+                if np.average(hyper_loss) > self.hyper_threshold:
                     log.info(
                         "Loss above threshold (%.1f > %.1f), breaking",
-                        hyper_loss,
+                        np.average(hyper_loss),
                         self.hyper_threshold,
                     )
                     # Apply a penalty proportional to the number of folds not computed
@@ -981,12 +982,17 @@ class ModelTrainer:
             # endfor
 
         if self.mode_hyperopt:
+            # turn losses into arrays
+            l_hyper = np.array(l_hyper)
+            l_valid = np.array(l_valid)
+            l_exper = np.array(l_exper)
+
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self._hyper_loss.compute(fold_losses=l_hyper),
+                "loss": self._hyper_loss.compute(l_hyper),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {

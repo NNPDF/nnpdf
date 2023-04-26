@@ -30,39 +30,47 @@ from validphys.pdfgrids import xplotting_grid, distance_grids
 
 class HyperLoss:
     """
-    Class to compute the hyper_loss based on the fold_losses
+    Class to compute the hyper_loss based on the individual replica losses
 
     Args:
-        fold_statistic (str): the statistic to use to compute the hyper_loss
+        replica_statistic (str): the statistic over the replicas to use
+        fold_statistic (str): the statistic over the folds to use
     """
 
-    def __init__(self, fold_statistic: str):
+    def __init__(self, replica_statistic: str, fold_statistic: str):
         self._compute = {
             "average": self._average,
             "best_worst": self._best_worst,
             "std": self._std,
             }
 
-        # Check if the fold_statistic is valid
+        # Check if the statistics are valid
+        if replica_statistic not in self._compute:
+            raise ValueError(f"replica_statistic {replica_statistic} should be one of"
+                             f"{list(self._compute.keys())}")
         if fold_statistic not in self._compute:
             raise ValueError(f"fold_statistic {fold_statistic} should be one of"
                              f"{list(self._compute.keys())}")
 
+        self.replica_statistic = replica_statistic
         self.fold_statistic = fold_statistic
 
-    def compute(self, fold_losses: np.ndarray) -> float:
+    def compute(self, losses: np.ndarray) -> float:
         """
-        Compute the hyper_loss based on the fold_losses
+        Compute the hyper_loss based on the individual losses.
+
+        This first computes the replica_statistic over the replicas
+        and then the fold_statistic over the folds.
 
         Args:
-            fold_losses (np.ndarray of shape [K_folds]): the loss of each fold
+            fold_losses (np.ndarray of shape [K_folds, N_replicas]): the loss of each fold
 
         Returns:
             float: the hyper_loss
         """
-        hyper_loss = self._compute[self.fold_statistic](fold_losses)
+        fold_losses = self._compute[self.replica_statistic](losses, axis=1)
+        hyper_loss = self._compute[self.fold_statistic](fold_losses, axis=0)
         return hyper_loss.item()
-
 
     @staticmethod
     def _average(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
