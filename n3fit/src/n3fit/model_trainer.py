@@ -176,8 +176,9 @@ class ModelTrainer:
                 self.hyper_penalties.append(pen_fun)
                 log.info("Adding penalty: %s", penalty)
             # Check what is the hyperoptimization target function
-            fold_statistic = kfold_parameters.get("target", None)
-            self._hyper_loss = HyperLoss(fold_statistic=fold_statistic)
+            replica_statistic = kfold_parameters.get("replica_statistic", None)
+            fold_statistic = kfold_parameters.get("fold_statistic", None)
+            self._hyper_loss = HyperLoss(replica_statistic=replica_statistic, fold_statistic=fold_statistic)
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []

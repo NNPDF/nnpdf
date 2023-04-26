@@ -68,12 +68,8 @@ class HyperLoss:
         if statistic is None:
             statistic = self._default_statistic
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
-        elif statistic not in self.implemented_stats:
-            raise ValueError(f"{name} {statistic} should be one of"
-                             f"{list(self.implemented_stats.keys())}")
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
         return statistic
-
 
     def compute(self, losses: np.ndarray) -> float:
         """
