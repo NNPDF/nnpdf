@@ -170,10 +170,11 @@ def plot_xq2_with_Rbv(dataset_inputs_by_groups_xq2map,datasets_bias_variance_rat
     rbv_ds = datasets_bias_variance_ratio['sqrt(bias/variance)']
     formatted_rbv_ds = {k: round(v, 2) for k, v in rbv_ds.items()}
     df['rbv'] = df['dataset'].map(dict(formatted_rbv_ds))
+    df['hue'] = df['dataset'] + ', ' + df['rbv'].astype(str)
 
     fig, ax = plt.subplots()
     palette =sns.color_palette("tab10")
-    sns.scatterplot(data=df, x="x", y="q2", hue="rbv", palette = palette)
+    sns.scatterplot(data=df, x="x", y="q2", hue="hue", palette = palette)
     ax.set(xscale="log", yscale="log")
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     return fig
