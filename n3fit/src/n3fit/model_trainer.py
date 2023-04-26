@@ -955,8 +955,15 @@ class ModelTrainer:
                 hyper_losses = experimental_loss
                 for penalty in self.hyper_penalties:
                     hyper_losses += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+
                 hyper_loss = np.average(hyper_losses)  # TODO: do we want to use HyperLoss's replica_statistic here too?
                 log.info("Fold %d finished, mean loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
+
+                if hyper_loss > self.hyper_threshold:
+                    log.info("Loss above threshold (%.1f > %.1f), breaking",
+                             hyper_loss, self.hyper_threshold)
+                    passed = self.failed_status
+                    break
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_losses)
@@ -965,16 +972,6 @@ class ModelTrainer:
                 n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
                 exp_models.append(models["experimental"])
 
-                if hyper_loss > self.hyper_threshold:
-                    log.info(
-                        "Loss above threshold (%.1f > %.1f), breaking",
-                        hyper_loss,
-                        self.hyper_threshold,
-                    )
-                    # Apply a penalty proportional to the number of folds not computed
-                    pen_mul = len(self.kpartitions) - k
-                    l_hyper = [i * pen_mul for i in l_hyper]
-                    break
 
             # endfor
 
@@ -984,12 +981,15 @@ class ModelTrainer:
             l_valid = np.array(l_valid)
             l_exper = np.array(l_exper)
 
+            # Compute the loss over all folds for hyperopt
+            final_hyper_loss = self._hyper_loss.compute(l_hyper) if passed == self.pass_status else float('inf')
+
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
             dict_out = {
                 "status": passed,
-                "loss": self._hyper_loss.compute(l_hyper),
+                "loss": final_hyper_loss,
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
