@@ -51,6 +51,7 @@ POSITIVITIES = ["POSDYCBD", "POSF2S"]
 PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
+THEORYID_NEW = 399
 FIT = "NNPDF40_nnlo_lowprecision"
 FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
 FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"
@@ -71,11 +72,18 @@ base_config = dict(
 def data_config():
     return base_config
 
+
 @pytest.fixture(scope='module')
 def data_internal_cuts_config(data_config):
     config_dict = dict(data_config)
     config_dict.update(use_cuts='internal')
     return config_dict
+
+@pytest.fixture(scope='module')
+def data_internal_cuts_new_theory_config(data_internal_cuts_config):
+    config = dict(data_internal_cuts_config)
+    config["theoryid"] = THEORYID_NEW
+    return config
 
 @pytest.fixture(scope='module')
 def single_data_internal_cuts_config(data_internal_cuts_config):

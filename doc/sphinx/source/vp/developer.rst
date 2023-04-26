@@ -22,9 +22,7 @@ Some of the most important modules are
 
 - `validphys.core`
 Core data structures that represent objects such as PDFs and data
-sets. Several of them map to `libnnpdf` objects. In that case they
-have a `.load()` method that produces the corresponding `C++`
-object.
+sets. 
 
 - `validphys.loader`
 Tools to obtain NNPDF resources locally or remotely. See :ref:`upload`
@@ -40,8 +38,8 @@ theory predictions.
 
 - `validphys.gridvalues`, `validphys.bases`, `validphys.pdfgrids`
 These contain tools to evaluate PDFs over grids of points.
-`validphys.gridvalues` contains low level functionality that uses
-`libnnpdf`, `validphys.pdfbases` contain several different bases
+`validphys.gridvalues` contains low level functionality that might use
+`lhapdf`, `validphys.pdfbases` contain several different bases
 over PDF flavour space and functionality to manipulate them, and
 `validphys.pdfgrids` contains high level providers suitable for
 using for plotting and as an input to other computations.

@@ -3,14 +3,9 @@
 Python based data objects
 =========================
 
-Internal data formats such as PDF sets, CommonData, or :ref:`FKTables
-<fktables>` files are currently accessed through the `libnnpdf` C++ code
-(interfaced trough the SWIG wrappers). However there is a :ref:`project
-<https://github.com/NNPDF/nnpdf/issues?q=label%3Adestroyingc%2B%2B+>` underway
-to make these resources available in terms of standard Python containers
-(particularly numpy arrays and pandas dataframes). The objectives include
-simplifying the codebase, increasing the ease of use and enabling more advanced
-computation and storage strategies.
+Internal data formats such as CommonData, or :ref:`FKTables
+<fktables>` are internally always numpy arrays or pandas dataframes.
+PDF sets are a bit more complicated since they use ``lhapdf``.
 
 Loading FKTables
 ----------------

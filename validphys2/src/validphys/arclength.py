@@ -34,7 +34,37 @@ def arc_lengths(
     basis: (str, Basis) = "flavour",
     flavours: (list, tuple, type(None)) = None,
 ):
-    """Compute arc lengths at scale Q"""
+    """
+    Compute arc lengths at scale Q
+    
+    set up a grid with three segments and
+    compute the arclength for each segment.
+    Note: the variation of the PDF over the grid
+    is computed by computing the forward differences
+    between adjacent grid points.
+    
+
+    Parameters
+    ----------
+    
+    pdf : validphys.core.PDF object
+
+    Q : float
+        scale at which to evaluate PDF
+    
+    basis : default = "flavour"
+
+    flavours : default = None
+
+    Returns
+    -------
+
+    validphys.arclength.ArcLengthGrid object
+    object that contains the PDF, basis, flavours, and computed 
+    arc length statistics.
+    
+    """
+
     checked = check_basis(basis, flavours)
     basis, flavours = checked["basis"], checked["flavours"]
     # x-grid points and limits in three segments
@@ -50,7 +80,7 @@ def arc_lengths(
         # PDFs evaluated on grid, use the entire thing, the Stats class will chose later
         xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data * ixgrid[1]
         fdiff = np.diff(xfgrid) / eps  # Compute forward differences
-        res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
+        res += integrate.simps(np.sqrt(1 + np.square(fdiff)), ixgrid[1][1:])
     stats = pdf.stats_class(res)
     return ArcLengthGrid(pdf, basis, flavours, stats)
 
@@ -89,21 +119,24 @@ def plot_arc_lengths(
         xlabels = [
             "$" + arclengths.basis.elementlabel(fl) + "$" for fl in arclengths.flavours
         ]
-        yvalues = arclengths.stats.central_value()
+        
         ylower, yupper = arclengths.stats.errorbar68()
-        ylower = yvalues - ylower
-        yupper = yupper - yvalues
+        yvalues = (ylower + yupper) * 0.5
+        yerr = np.abs(yupper - ylower) * 0.5
+
+        
         if normalize_to is not None:
             norm_cv = pdfs_arc_lengths[normalize_to].stats.central_value()
             yvalues = np.divide(yvalues, norm_cv)
-            yupper = np.divide(yupper, norm_cv)
-            ylower = np.divide(ylower, norm_cv)
+            yerr = np.divide(yerr, norm_cv)
+            
         shift = (ipdf - (len(pdfs_arc_lengths) - 1) / 2.0) / 5.0
         ax.errorbar(
             xvalues + shift,
             yvalues,
-            yerr=(ylower, yupper),
-            fmt=".",
+            yerr=yerr,
+            fmt='',
+            linestyle = '',
             label=arclengths.pdf.label,
         )
         ax.set_xticks(xvalues)

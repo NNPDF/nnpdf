@@ -27,9 +27,6 @@ Introduction to ``validphys 2``
   ``validphys`` can be found in the
   :ref:`Design <design>` section.
 
-* Some parts of ``validphys`` use the ``libnnpdf`` library in C++, through SWIG
-  wrappers.
-
 * The ideas behind the design of the code are explained in the
   :ref:`Design <design>` section.
 

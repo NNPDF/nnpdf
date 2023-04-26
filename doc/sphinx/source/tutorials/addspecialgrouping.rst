@@ -82,11 +82,6 @@ which tells the code to look for an ``nnpdf40_process`` key within the metadata 
 to attempt to parse it as a string. We do not attribute a default value to this new key,
 which implies that it must be provided within the metadata file.
 
-.. note::
-   The reason the group name should be a string is because it is sometimes
-   passed to the C++ code through the SWIG interface, which is very strict
-   about the typing you use.
-
 In addition to this, you must add the new grouping to
 :py:class:`validphys.plotoptions.core.PlotInfo` as a keyword arguments of
 the ``__init__`` function and subsequently as an attribute of the class

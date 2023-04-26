@@ -2,9 +2,6 @@
     Module containing an LHAPDF class compatible with validphys
     using the official lhapdf python interface.
 
-    It exposes an interface mostly compatible with libNNPDF::LHAPDFSet
-    so it can be used as a drop-in replacement.
-
     The ``.members`` and ``.central_member`` of the ``LHAPDFSet`` are
     LHAPDF objects (the typical output from ``mkPDFs``) and can be used normally.
 
