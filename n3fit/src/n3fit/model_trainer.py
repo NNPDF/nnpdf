@@ -951,24 +951,24 @@ class ModelTrainer:
                 exp_loss_raw = models["experimental"].compute_losses()["loss"]
                 experimental_loss = exp_loss_raw / ndata
 
-                hyper_loss = experimental_loss
-
+                # Compute per replica hyper losses
+                hyper_losses = experimental_loss
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
-                log.info("Fold %d finished, mean loss=%.1f, pass=%s",
-                         k + 1, np.mean(hyper_loss), passed)
+                    hyper_losses += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+                hyper_loss = np.average(hyper_losses)  # TODO: do we want to use HyperLoss's replica_statistic here too?
+                log.info("Fold %d finished, mean loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 # Now save all information from this fold
-                l_hyper.append(hyper_loss)
+                l_hyper.append(hyper_losses)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
                 n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
                 exp_models.append(models["experimental"])
 
-                if np.average(hyper_loss) > self.hyper_threshold:
+                if hyper_loss > self.hyper_threshold:
                     log.info(
                         "Loss above threshold (%.1f > %.1f), breaking",
-                        np.average(hyper_loss),
+                        hyper_loss,
                         self.hyper_threshold,
                     )
                     # Apply a penalty proportional to the number of folds not computed
