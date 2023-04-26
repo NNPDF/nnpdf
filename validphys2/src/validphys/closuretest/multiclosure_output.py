@@ -204,7 +204,7 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     df = pd.DataFrame.from_records(
         records, index="dataset", columns=("dataset", "ndata", "ratio","sqrt_ratio")
     )
-    df.columns = ["ndata", "bias/variance", "sqrt(bias/variance)"]
+    df.columns = ["ndata", "bias (normalized)", "variance (normalized)"]
     return df
 
 @table
