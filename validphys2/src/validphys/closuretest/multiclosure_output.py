@@ -9,6 +9,7 @@ data.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 import scipy.special as special
 import scipy.stats
 import yaml
@@ -150,6 +151,35 @@ def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data):
 
     """
     return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data)
+
+@figure
+def plot_xq2_with_Rbv(dataset_inputs_by_groups_xq2map,datasets_bias_variance_ratio):
+    """
+    Like validphys.dataplots.plot_xq2 but legend (hue axis) is given by Rbv value on each of
+    the datasets
+    """
+    
+    datasets_inp_x2map = dataset_inputs_by_groups_xq2map
+
+    ds_x_q2 = []
+
+    for ds in datasets_inp_x2map:
+        ds_x_q2.append({'dataset':str(ds.commondata),'x':ds.fitted[0], 'q2':ds.fitted[1]})
+    
+    df = pd.DataFrame([(x['dataset'], i, j) for x in ds_x_q2 for i, j in zip(x['x'], x['q2'])], columns=['dataset', 'x', 'q2'])
+    rbv_ds = datasets_bias_variance_ratio['sqrt(bias/variance)']
+    formatted_rbv_ds = {k: round(v, 2) for k, v in rbv_ds.items()}
+    df['rbv'] = df['dataset'].map(dict(formatted_rbv_ds))
+    df['hue'] = df['dataset'] + ', ' + df['rbv'].astype(str)
+
+    fig, ax = plt.subplots()
+    palette =sns.color_palette("tab10")
+    sns.scatterplot(data=df, x="x", y="q2", hue="hue", palette = palette)
+    ax.set(xscale="log", yscale="log")
+    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+    return fig
+
+
 
 
 @table
