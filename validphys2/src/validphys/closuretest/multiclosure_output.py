@@ -185,6 +185,29 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     return df
 
 @table
+def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
+    """For each dataset calculate the expected bias and expected variance
+    across fitsband tabulate the results. Bias and Variance are normalized by number of data points
+
+    Notes
+    -----
+
+    This is to check the weight each dataset/process has in the calculation of the complete R_bv ratio. 
+    This is because one dataset alone could have a correct B/V=1 but if Bias and Variance are both centered
+    around a number != 1 this means that in the calculation of B/V total ratio the specific dataset/
+    process is going to have much more weight than the rest
+
+    """
+    records = []
+    for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
+        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias/ndata, variance = var/ndata))
+    df = pd.DataFrame.from_records(
+        records, index="dataset", columns=("dataset", "ndata", "ratio","sqrt_ratio")
+    )
+    df.columns = ["ndata", "bias/variance", "sqrt(bias/variance)"]
+    return df
+
+@table
 def bias_variance_ratio_by_process(datasets_expected_bias_variance, each_dataset):
     """
     Same as `datasets_bias_variance_ratio` but adding another index to table, namely,
@@ -233,6 +256,32 @@ def experiments_bias_variance_ratio(
     df.index.rename("experiment", inplace=True)  # give index appropriate name
     return df
 
+@table
+def experiments_bias_variance(
+    experiments_expected_bias_variance, experiments_data, expected_total_bias_variance
+):
+    """Like datasets_bias_variance_ratio except for each experiment. Also
+    calculate and tabulate
+
+        (total expected bias) / (total expected variance)
+
+    where the total refers to summing over all experiments.
+
+    """
+    # don't reinvent wheel
+    df_in = datasets_bias_variance(
+        experiments_expected_bias_variance, experiments_data
+    )
+
+    bias_tot, var_tot, ntotal = expected_total_bias_variance
+
+    tot_df = pd.DataFrame(
+        [[ntotal, bias_tot/ntotal, var_tot/ntotal]], index=["Total"], columns=df_in.columns
+    )
+    df = pd.concat((df_in, tot_df), axis=0)
+    
+    df.index.rename("experiment", inplace=True)  # give index appropriate name
+    return df
 
 @table
 def experiments_bias_variance_table(
