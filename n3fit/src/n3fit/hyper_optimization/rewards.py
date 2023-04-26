@@ -26,34 +26,54 @@
 """
 import numpy as np
 from validphys.pdfgrids import xplotting_grid, distance_grids
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class HyperLoss:
     """
-    Class to compute the hyper_loss based on the individual replica losses
+    Class to compute the hyper_loss based on the individual replica losses.
+
+    Computes the statistic over the replicas and then over the folds, both
+    statistics default to the average.
 
     Args:
         replica_statistic (str): the statistic over the replicas to use
         fold_statistic (str): the statistic over the folds to use
     """
 
-    def __init__(self, replica_statistic: str, fold_statistic: str):
+    def __init__(self, replica_statistic: str = None, fold_statistic: str = None):
         self._compute = {
             "average": self._average,
             "best_worst": self._best_worst,
             "std": self._std,
             }
+        self._default_statistic = "average"
 
-        # Check if the statistics are valid
-        if replica_statistic not in self._compute:
-            raise ValueError(f"replica_statistic {replica_statistic} should be one of"
-                             f"{list(self._compute.keys())}")
-        if fold_statistic not in self._compute:
-            raise ValueError(f"fold_statistic {fold_statistic} should be one of"
-                             f"{list(self._compute.keys())}")
+        self.replica_statistic = self._parse_statistic(replica_statistic, "replica_statistic")
+        self.fold_statistic = self._parse_statistic(fold_statistic, "fold_statistic")
 
-        self.replica_statistic = replica_statistic
-        self.fold_statistic = fold_statistic
+    def _parse_statistic(self, statistic: str, name) -> str:
+        """
+        Parse the statistic and return the default if None.
+
+        Args:
+            statistic (str): the statistic to parse
+            name (str): the name of the statistic
+
+        Returns:
+            str: the parsed statistic
+        """
+        if statistic is None:
+            statistic = self._default_statistic
+            log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
+        elif statistic not in self._compute:
+            raise ValueError(f"{name} {statistic} should be one of"
+                             f"{list(self._compute.keys())}")
+        log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
+        return statistic
+
 
     def compute(self, losses: np.ndarray) -> float:
         """
@@ -68,6 +88,10 @@ class HyperLoss:
         Returns:
             float: the hyper_loss
         """
+        # Check if losses are complete, i.e. have the right dimension
+        if losses.ndim != 2:
+            raise ValueError(f"Losses should be a 2D array, got {losses.ndim}D, shape {losses.shape}")
+
         fold_losses = self._compute[self.replica_statistic](losses, axis=1)
         hyper_loss = self._compute[self.fold_statistic](fold_losses, axis=0)
         return hyper_loss.item()
