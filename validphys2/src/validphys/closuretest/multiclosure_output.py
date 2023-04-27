@@ -187,9 +187,10 @@ def plot_Rbv_sensitivity_to_test_datasets(data,fits_pdf,
                 multiclosure_underlyinglaw, fits, 
                 dataset_inputs_t0_covmat_from_systematics):
     """
-    The function calculates the Rbv ratio for each dataset by removing one dataset
-    at a time and recalculating the Rbv ratio. The resulting scatter plot shows 
-    how the Rbv ratio changes as each dataset is removed,
+    The function calculates the Rbv ratio by removing one dataset
+    at a time and recalculating the Rbv ratio on the resulting dataset.
+    The scatter plot shows how the Rbv ratio changes as 
+    each dataset is removed.
 
     Parameters
     ----------
