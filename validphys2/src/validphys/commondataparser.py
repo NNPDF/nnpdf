@@ -330,7 +330,10 @@ def _parse_kinematics(metadata):
     for i, dbin in enumerate(kinyaml["bins"]):
         bin_index = i + 1
         # TODO: for now we are dropping min/max information since it didn't exist in the past
+        # unless the point doesn't have a mid value, in that case we need to generate it!
         for d in dbin.values():
+            if d["mid"] is None:
+                d["mid"] = 0.5 * (d["max"] + d["min"])
             d["min"] = None
             d["max"] = None
         kin_dict[bin_index] = pd.DataFrame(dbin).stack()
