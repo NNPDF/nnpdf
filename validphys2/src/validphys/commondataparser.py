@@ -154,7 +154,7 @@ class ValidReference:
     """Holds literature information for the dataset"""
 
     url: str
-    version: int = 0
+    version: Optional[int] = None
     tables: list[int] = dataclasses.field(default_factory=list)
 
 
@@ -389,7 +389,9 @@ def parse_commondata_new(dataset_fullname, variants=[]):
     kin_df = _parse_kinematics(metadata)
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
-    nsys = len([i for i in uncertainties_df.columns.get_level_values(0) if "stat" not in i])
+    nsys = len(
+        [i for i in uncertainties_df.columns.get_level_values(0) if not i.startswith("stat")]
+    )
 
     # Backwards-compatibility
     # Finally, create the commondata by merging the dataframes in the old commondata_table
