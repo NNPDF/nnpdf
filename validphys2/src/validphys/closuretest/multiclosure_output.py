@@ -353,7 +353,7 @@ def experiments_bias_variance_ratio(
 def experiments_bias_variance(
     experiments_expected_bias_variance, experiments_data, expected_total_bias_variance
 ):
-    """Like datasets_bias_variance_ratio except for each experiment. Also
+    """Like datasets_bias_variance except for each experiment. Also
     calculate and tabulate
 
         (total expected bias) / (total expected variance)
