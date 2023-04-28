@@ -26,6 +26,52 @@ from reportengine.floatformatting import format_number
 
 log = logging.getLogger(__name__)
 
+def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False):
+    """
+    Use matplotlib.figure.Figure() objects and not import pyplot anywhere. 
+    The reason is that pyplot maintains a global state that makes it misbehave 
+    in multithreaded applications such when executed under dask parallel mode.
+
+    Parameters
+    ----------
+    figsize : 2-tuple of floats
+            defaults is None
+    
+    nrows, ncols : int, default 1
+
+    sharex, sharey : bool, default False
+
+    Returns
+    -------
+    tuple
+        fig, ax = (matplotlib.figure.Figure, fig.subplots)
+    """
+    fig = Figure(figsize=figsize)
+    ax = fig.subplots(nrows=nrows, ncols = ncols, sharex=sharex, sharey=sharey)
+    return fig, ax
+
+def add_subplot(figsize=None,projection=None):
+    """
+    Use matplotlib.figure.Figure() objects and not import pyplot anywhere. 
+    The reason is that pyplot maintains a global state that makes it misbehave 
+    in multithreaded applications such when executed under dask parallel mode.
+    
+    Parameters
+    ----------
+    figsize : 2-tuple of floats
+            default is None
+    projections : The projection type of the subplot (Axes).
+                default is None
+    
+    Returns
+    -------
+    tuple
+        fig, ax = (matplotlib.figure.Figure, fig.add_subplot)
+    """
+    fig = Figure(figsize=figsize)    
+    ax = fig.add_subplot(projection=projection)
+    return fig, ax
+
 def ax_or_gca(f):
     """A decorator. When applied to a function, the keyword argument  ``ax``
     will automatically be filled with the current axis, if it was None."""
