@@ -7,7 +7,6 @@ produce the corresponding tables and figures.
 
 import logging
 
-from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -17,6 +16,7 @@ from reportengine.figure import figure
 from reportengine.table import table
 
 from validphys.checks import check_at_least_two_replicas
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -179,8 +179,7 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
     mean = array_expected_overfitting.mean()
     std = array_expected_overfitting.std()
 
-    fig = Figure()
-    ax = fig.subplots(111)
+    fig, ax = plotutils.subplots()
 
     # if array_expected_overfitting is nan it should not produce a histogram
     if (array_expected_overfitting == array_expected_overfitting).all():

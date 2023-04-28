@@ -11,7 +11,6 @@ from math import inf
 import pandas as pd
 import numpy as np
 import scipy.linalg as la
-from matplotlib.figure import Figure
 from matplotlib import cm, colors as mcolors
 
 from reportengine.figure import figure
@@ -100,8 +99,7 @@ def plot_covmat_heatmap(covmat, title):
     # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
-    fig = Figure(figsize=(15, 15))
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots(figsize=(15, 15))
     matrixplot = ax.matshow(
         100 * matrix,
         cmap=cm.Spectral_r,
@@ -206,8 +204,7 @@ def plot_corrmat_heatmap(corrmat, title):
     # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
-    fig = Figure(figsize=(15, 15))
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots(figsize=(15, 15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.ax.tick_params(labelsize=20)
@@ -398,8 +395,7 @@ def plot_diag_cov_comparison(
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
     sqrtdiags_tot.sort_index(0, inplace=True)
     sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
-    fig = Figure(figsize=(20, 10))
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags_exp.values, ".", label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, ".", label="Theory", color="red")
     ax.plot(sqrtdiags_tot.values, ".", label="Total", color="blue")
@@ -446,8 +442,7 @@ def plot_diag_cov_impact(
     df_inv_tot = pd.DataFrame(inv_tot, index=plot_index)
     df_inv_tot.sort_index(0, inplace=True)
     df_inv_tot = df_inv_tot.reindex(newindex)
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(df_inv_exp.values, ".", label="Experiment", color="orange")
     ax.plot(df_inv_tot.values, ".", label="Experiment + Theory", color="mediumseagreen")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(df_inv_exp)

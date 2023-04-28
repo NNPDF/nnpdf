@@ -8,13 +8,13 @@ data.
 """
 import numpy as np
 import pandas as pd
-from matplotlib.figure import Figure
 import scipy.special as special
 import scipy.stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
+from validphys import plotutils
 
 @figure
 def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
@@ -26,8 +26,7 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
 
     """
     biases, variances, _ = fits_dataset_bias_variance
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     
     ax.plot(biases, "*", label=f"bias, std. dev. = {np.std(biases):.2f}")
     ax.axhline(
@@ -318,8 +317,7 @@ def plot_dataset_xi(dataset_xi, dataset):
     (0.68). In the legend include the mean across eigenvectors.
 
     """
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(
         dataset_xi,
         "*",
@@ -347,8 +345,7 @@ def plot_dataset_xi_histogram(dataset_xi, dataset):
     of the distribution.
 
     """
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.hist(
         dataset_xi,
         label=(
@@ -400,8 +397,7 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
         for sigma, central_diff
         in experiments_replica_central_diff
     ])
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.hist(
         scaled_diffs, bins=50, density=True, label="Central prediction distribution"
     )
@@ -786,9 +782,8 @@ def plot_experiments_sqrt_ratio_bootstrap_distribution(
     # generate title, so appending string is fine.
     for sqrt_ratio_sample, exp in zip(
         experiments_bootstrap_sqrt_ratio, experiments_data + ["Total"]
-    ):
-        fig = Figure()
-        ax = fig.subplots()
+    ): 
+        fig, ax = plotutils.subplots()
         ax.hist(sqrt_ratio_sample, bins=20, density=True)
         mean = np.mean(sqrt_ratio_sample)
         std = np.std(sqrt_ratio_sample)
@@ -852,8 +847,7 @@ def plot_bias_variance_distributions(
             experiments_fits_bias_replicas_variance_samples,
             group_dataset_inputs_by_experiment
         ):
-        fig = Figure()
-        ax = fig.subplots()
+        fig, ax = plotutils.subplots()
         labels = [
             "fits bias distribution",
             "replicas variance distribution",
@@ -872,8 +866,7 @@ def plot_bias_variance_distributions(
         experiments_fits_bias_replicas_variance_samples,
         axis=0
     )
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.hist(
         [total_bias, total_var],
         density=True,

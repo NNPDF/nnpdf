@@ -7,7 +7,6 @@ PDF space.
 """
 import numpy as np
 import pandas as pd
-from matplotlib.figure import Figure
 from matplotlib.ticker import MaxNLocator
 import scipy.linalg as la
 import scipy.special
@@ -25,6 +24,7 @@ from validphys.closuretest.multiclosure_pdf import (
     fits_covariance_matrix_by_flavour,
     fits_covariance_matrix_totalpdf,
 )
+from validphys import plotutils
 
 
 @table
@@ -75,8 +75,7 @@ def plot_xi_flavour_x(
     for i, fl in enumerate(XI_FLAVOURS):
         if i == 0:
             fl = f"${fl}$"
-        fig = Figure()
-        ax = fig.subplots()
+        fig, ax = plotutils.subplots()
         ax.plot(
             x_for_plot[i],
             xi_flavour_x[i, :],
@@ -104,8 +103,7 @@ def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
     """
     sigma, delta = replica_and_central_diff_totalpdf
     scaled_diffs = (delta / sigma).flatten()
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.hist(
         scaled_diffs, bins=50, density=True, label="Central PDF distribution"
     )
@@ -318,8 +316,7 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
     # we want to centre the labels on each of the xgrids
     # ticks appear shifted right by 0.5, so we account for this here
     ticks = (n_x) / 2 + n_x * np.arange(len(XI_FLAVOURS)) - 0.5
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     im = ax.imshow(matrix, **kwargs)
     fig.colorbar(im, ax=ax)
     ax.set_xticks(ticks)
@@ -371,8 +368,7 @@ def plot_multiclosure_correlation_eigenvalues(fits_correlation_matrix_totalpdf):
     # e_val is in ascending order
     e_val, _ = la.eigh(fits_correlation_matrix_totalpdf)
     l2_condition = e_val[-1] / e_val[0]
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(e_val, "*", label=f"l2-condition: {l2_condition:,.0f}")
     ax.set_ylabel(r"$\lambda_{\rm corr}$")
     ax.set_xlabel("eigenvalue index (ascending)")

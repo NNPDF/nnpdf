@@ -20,8 +20,8 @@ from validphys.pdfbases import Basis, check_basis
 from validphys.pdfgrids import xgrid, xplotting_grid
 from validphys.core import PDF
 from validphys.checks import check_pdf_normalize_to
+from validphys import plotutils
 
-from matplotlib.figure import Figure
 
 ArcLengthGrid = namedtuple("ArcLengthGrid", ("pdf", "basis", "flavours", "stats"))
 
@@ -108,8 +108,7 @@ def plot_arc_lengths(
     pdfs_arc_lengths: Sequence, Q: numbers.Real, normalize_to: (type(None), int) = None
 ):
     """Plot the arc lengths of provided pdfs"""
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
     if normalize_to is not None:
         ax.set_ylabel(f"Arc length $Q={Q}$ GeV (normalised)")
     else:

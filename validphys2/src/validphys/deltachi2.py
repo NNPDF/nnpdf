@@ -64,8 +64,7 @@ def plot_kullback_leibler(delta_chi2_hessian):
     bin_central_nnpdf = (bins_nnpdf[1:] + bins_nnpdf[:-1]) / 2
     x = np.linspace(0, 7.4, 200)
 
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
 
     vals_nnpdf, _, _ = ax.hist(
         delta_chi2,
@@ -99,8 +98,7 @@ def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
 
     x = np.arange(1, len(delta_chi2) + 1)
 
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
 
     ax.bar(x, delta_chi2, label=pdf.label)
     ax.set_xlabel("# Hessian PDF")
@@ -121,8 +119,7 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     """
     delta_chi2 = delta_chi2_hessian
 
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
 
     bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2))+1)
 
