@@ -289,7 +289,7 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
 
     This is to check the weight each dataset/process has in the calculation of the complete R_bv ratio. 
     This is because one dataset alone could have a correct B/V=1 but if Bias and Variance are both centered
-    around a number != 1 this means that in the calculation of B/V total ratio the specific dataset/
+    around a number >> 1 this means that in the calculation of B/V total ratio the specific dataset/
     process is going to have much more weight than the rest
 
     """
@@ -355,7 +355,7 @@ def experiments_bias_variance_ratio(
 def experiments_bias_variance(
     experiments_expected_bias_variance, experiments_data, expected_total_bias_variance
 ):
-    """Like datasets_bias_variance_ratio except for each experiment. Also
+    """Like datasets_bias_variance except for each experiment. Also
     calculate and tabulate
 
         (total expected bias) / (total expected variance)
