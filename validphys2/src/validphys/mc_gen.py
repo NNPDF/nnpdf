@@ -16,6 +16,8 @@ from scipy.stats import moment as mom
 from reportengine.table import table
 from reportengine.figure import figure
 
+from validphys import plotutils
+
 log = logging.getLogger(__name__)
 
 
@@ -47,8 +49,7 @@ def art_data_residuals(art_rep_generation, color="green"):
 
     residuals = real_data - art_data
     normresiduals = residuals / real_data
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
 
     ax.hist(
         normresiduals, bins=50, histtype="step", stacked=True, fill=False, color=color
@@ -71,8 +72,7 @@ def art_data_distribution(
     real_data, _, _, art_data = art_rep_generation
 
     normart_data = art_data / real_data
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
 
     ax.hist(
         normart_data, bins=50, histtype="step", stacked=True, fill=False, color=color
@@ -174,8 +174,7 @@ def one_art_data_residuals(groups_data, indexed_make_replicas):
         residual = one_art_data - real_data[one_data_index]
         all_normresidual.append(residual / real_data[one_data_index])
 
-    fig = Figure()
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots()
 
     ax.hist(all_normresidual, bins=50, histtype="step", stacked=True, fill=False)
 

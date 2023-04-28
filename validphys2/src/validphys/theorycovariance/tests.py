@@ -40,6 +40,7 @@ from validphys.theorycovariance.theorycovarianceutils import (
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination_dataspecs,
 )
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -730,8 +731,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
     oldindex = f.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
-    fig = Figure(figsize=(10, 2 * len(evecs)))
-    axes = fig.subplots(nrows=len(evecs))
+    fig, axes = plotutils.subplots(figsize=(10, 2 * len(evecs)), nrows=len(evecs))
     
     fig.subplots_adjust(hspace=0.8)
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
@@ -791,8 +791,7 @@ def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_ve
     fmiss.sort_index(0, inplace=True)
     fmiss = fmiss.reindex(newindex)
     # Plotting
-    fig = Figure(figsize=(20, 10))
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(f.values * 100, ".-", label="NNLO-NLO Shift", color="black")
     ax.plot(
         fmiss.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue"
@@ -846,8 +845,7 @@ def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector)
     fnorm.sort_index(0, inplace=True)
     fnorm = fnorm.reindex(newindex)
     # Plotting
-    fig = Figure(figsize=(20, 10))
-    ax = fig.subplots()
+    fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags * 100, ".-", label=f"MHOU ({l} pt)", color="red")
     ax.plot(-sqrtdiags * 100, ".-", color="red")
     ax.plot(fnorm.values * 100, ".-", label="NNLO-NLO Shift", color="black")
