@@ -162,8 +162,9 @@ def scalar_log_formatter():
 
     Examples
     --------
-    >>> import matplotlib.pyplot as plt
-    >>> fig, ax = plt.subplots()
+    >>> from matplotlib.figure import Figure
+    >>> fig = Figure()
+    >>> ax = fig.subplots()
     >>> ax.plot([0.01, 0.1, 1, 10, 100])
     >>> ax.set_yscale("log")
     >>> ax.yaxis.set_major_formatter(scalar_log_formatter())
@@ -463,10 +464,9 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     -------
 
     >>> import numpy as np
-    >>> import matplotlib.pyplot as plt
     >>> dist = np.random.normal(size=100)
-    >>> kde_plot(dist)
-    >>> plt.show()
+    >>> ax = kde_plot(dist)
+
     """
 
     a = np.asarray(a).ravel()
