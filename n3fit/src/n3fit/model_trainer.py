@@ -99,6 +99,7 @@ class ModelTrainer:
         model_file=None,
         sum_rules=None,
         parallel_models=1,
+        skip_connections=[],
     ):
         """
         Parameters
@@ -646,6 +647,7 @@ class ModelTrainer:
         regularizer,
         regularizer_args,
         seed,
+        skip_connections,
     ):
         """
         Defines the internal variable layer_pdf
@@ -884,6 +886,7 @@ class ModelTrainer:
                 params["layer_type"],
                 params["dropout"],
                 params.get("regularizer", None),  # regularizer optional
+                params.get("skip_connections", None), # List of tuples with the connected layers, optional
                 params.get("regularizer_args", None),
                 seeds,
             )

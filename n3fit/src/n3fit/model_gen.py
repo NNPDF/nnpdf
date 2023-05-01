@@ -20,7 +20,8 @@ from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
-
+# TODO Should be moved to backend at some point
+from tensorflow.keras.layers import add
 
 @dataclass
 class ObservableWrapper:
@@ -403,6 +404,7 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
+    skip_connections=[],
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -607,6 +609,14 @@ def pdfNN_layer_generator(
                 curr_fun = dense_layer(curr_fun)
             return curr_fun
 
+        def dense_skip(x,skip):
+            processed_x = process_input(x)
+            curr_fun = list_of_pdf_layers[0](processed_x)
+            import pdb; pdb.set_trace()
+            for i in len(list_of_pdf_layers[1:]):
+              curr_fun = list_of_pdf_layers[i](curr_fun)
+            return curr_fun
+
         preproseed = layer_seed + number_of_layers
         layer_preproc = Preprocessing(
             flav_info=flav_info,
@@ -623,6 +633,10 @@ def pdfNN_layer_generator(
             """
             x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
             x_original = op.op_gather_keep_dims(x, -1, axis=-1)
+            if skip_connections != []:
+                nn_output = dense_skip(x_scaled,skip_connections)
+                ret = op.op_multiply([nn_output,layer_preproc(x_original)])
+                return basis_rotation(ret)
 
             nn_output = dense_me(x_scaled)
             if subtract_one:

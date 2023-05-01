@@ -38,6 +38,7 @@ def performfit(
     debug=False,
     maxcores=None,
     parallel_models=False,
+    skip_connections=[],
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -193,7 +194,8 @@ def performfit(
             max_cores=maxcores,
             model_file=load,
             sum_rules=sum_rules,
-            parallel_models=n_models
+            parallel_models=n_models,
+            skip_connection=[]
         )
 
         # This is just to give a descriptive name to the fit function
