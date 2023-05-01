@@ -19,7 +19,8 @@ class Mask(MetaLayer):
         c: float
             constant multiplier for every output
         axis: int
-            axis in which to apply the mask
+            axis in which to apply the mask. Currently,
+            only the last axis gives the correct output shape
     """
 
     def __init__(self, bool_mask=None, c=None, axis=None, **kwargs):
@@ -36,16 +37,17 @@ class Mask(MetaLayer):
     def build(self, input_shape):
         if self.c is not None:
             initializer = MetaLayer.init_constant(value=self.c)
-            output_shape = list(input_shape)
-            output_shape[-1] = self.last_dim
             self.kernel = self.builder_helper(
-                "mask", output_shape, initializer, trainable=False
+                "mask", (1,), initializer, trainable=False
             )
         super(Mask, self).build(input_shape)
 
     def call(self, ret):
         if self.mask is not None:
-            ret = op.reshape(op.boolean_mask(ret, self.mask, axis=self.axis), shape=(1, -1, self.last_dim))
+            flat_res = op.boolean_mask(ret, self.mask, axis=self.axis)
+            output_shape = ret.get_shape().as_list()
+            output_shape[-1] = self.last_dim
+            ret = op.reshape(flat_res, shape=output_shape)
         if self.c is not None:
             ret = ret * self.kernel
         return ret

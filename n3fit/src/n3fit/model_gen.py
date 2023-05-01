@@ -11,7 +11,6 @@
 """
 from dataclasses import dataclass
 
-import numpy
 import numpy as np
 from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
@@ -22,8 +21,6 @@ from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
-
-from keras.layers import Masking
 
 @dataclass
 class ObservableWrapper:
@@ -178,8 +175,8 @@ def observable_generator(spec_dict,
         # Extract the masks that will end up in the observable wrappers...
         trmask = mask_array[:, offset:offset + dataset.ndata] if apply_masks else None
         masks.append(trmask)
-        tr_mask_layers.append(Mask(trmask, axis=1, c=1, name=f"trmask_{dataset_name}") if apply_masks else None)
-        vl_mask_layers.append(Mask(~trmask, axis=1, c=1, name=f"vlmask_{dataset_name}") if apply_masks else None)
+        tr_mask_layers.append(Mask(trmask, axis=1, name=f"trmask_{dataset_name}") if apply_masks else None)
+        vl_mask_layers.append(Mask(~trmask, axis=1, name=f"vlmask_{dataset_name}") if apply_masks else None)
 
         # Now generate the observable layer, which takes the following information:
         # operation name
