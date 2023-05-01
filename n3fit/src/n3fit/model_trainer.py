@@ -91,8 +91,6 @@ class ModelTrainer:
         flavinfo,
         fitbasis,
         nnseeds,
-        pass_status="ok",
-        failed_status="fail",
         debug=False,
         kfold_parameters=None,
         max_cores=None,
@@ -115,10 +113,6 @@ class ModelTrainer:
                 the name of the basis being fitted
             nnseeds: list(int)
                 the seed used to initialise the NN for each model to be passed to model_gen
-            pass_status: str
-                flag to signal a good run
-            failed_status: str
-                flag to signal a bad run
             debug: bool
                 flag to activate some debug options
             kfold_parameters: dict
@@ -145,8 +139,6 @@ class ModelTrainer:
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
-        self.pass_status = pass_status
-        self.failed_status = failed_status
         self.debug = debug
         self.all_datasets = []
         self._scaler = None
@@ -225,9 +217,8 @@ class ModelTrainer:
         if debug:
             self.callbacks.append(callbacks.TimerCallback())
 
-    def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
+    def set_hyperopt(self, hyperopt_on, keys=None):
         """Set hyperopt options on and off (mostly suppresses some printing)"""
-        self.pass_status = status_ok
         if keys is None:
             keys = []
         self._hyperkeys = keys
@@ -718,7 +709,7 @@ class ModelTrainer:
             reporting_list.append(reporting_dict)
         return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100):
+    def _train_and_fit(self, training_model, stopping_object, epochs=100) -> bool:
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -748,9 +739,8 @@ class ModelTrainer:
 
         # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
         # for now consider the run as good if any replica passed
-        if any(bool(i) for i in stopping_object.e_best_chi2):
-            return self.pass_status
-        return self.failed_status
+        fit_has_passed = any(bool(i) for i in stopping_object.e_best_chi2)
+        return fit_has_passed
 
     def _hyperopt_override(self, params):
         """Unrolls complicated hyperopt structures into very simple dictionaries"""
@@ -934,7 +924,7 @@ class ModelTrainer:
             )
 
             if self.mode_hyperopt:
-                if passed != self.pass_status:
+                if not passed:
                     log.info("Hyperparameter combination fail to find a good fit, breaking")
                     break
 
@@ -962,7 +952,7 @@ class ModelTrainer:
 
                 if hyper_loss > self.hyper_threshold:
                     log.info(f"Loss above threshold ({hyper_loss:.1f} > {self.hyper_threshold:.1f}), breaking")
-                    passed = self.failed_status
+                    passed = False
                     break
 
                 # Now save all information from this fold
@@ -982,7 +972,7 @@ class ModelTrainer:
             l_exper = np.array(l_exper)
 
             # Compute the loss over all folds for hyperopt
-            final_hyper_loss = self._hyper_loss.compute(l_hyper) if passed == self.pass_status else float('inf')
+            final_hyper_loss = self._hyper_loss.compute(l_hyper) if passed else float('inf')
 
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file

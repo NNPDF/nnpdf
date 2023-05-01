@@ -12,6 +12,7 @@ another hyperoptimization library, assuming that it also takes just
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the miniimization).
 """
+from typing import Callable
 import copy
 import hyperopt
 import numpy as np
@@ -20,6 +21,10 @@ import n3fit.hyper_optimization.filetrials as filetrials
 import logging
 
 log = logging.getLogger(__name__)
+
+# Hyperopt uses these strings for a passed and failed run
+# it also has statusses "new", "running" and "suspended", but we don't use them
+HYPEROPT_STATUSSES = {True: "ok", False: "fail"}
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
 # https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
@@ -107,13 +112,13 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         parameters of the best trial as found by ``hyperopt``
     """
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
+    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
     # Generate the trials object
     trials = filetrials.FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
 
     # Perform the scan
     best = hyperopt.fmin(
-        fn=model_trainer.hyperparametrizable,
+        fn=_status_wrapper(model_trainer.hyperparametrizable),
         space=hyperscanner.as_dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
@@ -122,6 +127,15 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     )
     return hyperscanner.space_eval(best)
 
+def _status_wrapper(hyperparametrizable: Callable) -> Callable:
+    """
+    Wrapper that just converts the "status" value to hyperopt's conventions.
+    """
+    def wrapped(*args, **kwargs):
+        results_dict = hyperparametrizable(*args, **kwargs)
+        results_dict["status"] = HYPEROPT_STATUSSES[results_dict["status"]]
+        return results_dict
+    return wrapped
 
 class ActivationStr:
     """
