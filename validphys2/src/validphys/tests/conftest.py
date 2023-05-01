@@ -3,11 +3,13 @@ conftest.py
 
 Pytest fixtures.
 """
+import contextlib
 import pathlib
 import sys
 
-import pytest
 from hypothesis import settings
+import lhapdf
+import pytest
 
 # Adding this here to change the time of deadline from default (200ms) to 1500ms
 settings.register_profile("extratime", deadline=1500)
@@ -192,3 +194,13 @@ def hessian_single_data_internal_cuts_config(single_data_internal_cuts_config):
     new_config = dict(single_data_internal_cuts_config)
     new_config["pdf"] = HESSIAN_PDF
     return new_config
+
+@contextlib.contextmanager
+def temp_lhapdf_path(folder):
+    """Modify the data path for LHAPDF sets"""
+    oldpaths = lhapdf.paths()
+    lhapdf.setPaths([str(folder)])
+    try:
+        yield
+    finally:
+        lhapdf.setPaths(oldpaths)

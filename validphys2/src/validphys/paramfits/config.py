@@ -44,7 +44,7 @@ class ParamfitsConfig(Config):
     def produce_fits_as(self, fits_pdf_config):
         """NOTE: EXPERIMENTAL. Return the as value of the fits, reading
         it from the installed pdf"""
-        return [pdf.AlphaS_MZ for pdf in fits_pdf_config]
+        return [pdf.alphas_mz for pdf in fits_pdf_config]
 
     #TODO: Try to remove the loop from here.
     def produce_fits_as_from_fitdeclarations(self, fitdeclarations):
