@@ -22,6 +22,8 @@ from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
 # TODO Should be moved to backend at some point
 from tensorflow.keras.layers import add
+import logging
+log = logging.getLogger(__name__)
 
 @dataclass
 class ObservableWrapper:
@@ -612,9 +614,11 @@ def pdfNN_layer_generator(
         def dense_skip(x,skip):
             processed_x = process_input(x)
             curr_fun = list_of_pdf_layers[0](processed_x)
-            import pdb; pdb.set_trace()
-            for i in len(list_of_pdf_layers[1:]):
-              curr_fun = list_of_pdf_layers[i](curr_fun)
+
+            for dense_layer in list_of_pdf_layers[1:]:
+                curr_fun = dense_layer(curr_fun)
+#            for i in range(len(list_of_pdf_layers[1:])):
+#              curr_fun = list_of_pdf_layers[i](curr_fun)
             return curr_fun
 
         preproseed = layer_seed + number_of_layers

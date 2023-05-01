@@ -152,6 +152,7 @@ class ModelTrainer:
         self.all_datasets = []
         self._scaler = None
         self._parallel_models = parallel_models
+        self.skip_connections = skip_connections
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -646,8 +647,8 @@ class ModelTrainer:
         dropout,
         regularizer,
         regularizer_args,
-        seed,
         skip_connections,
+        seed,
     ):
         """
         Defines the internal variable layer_pdf
@@ -699,6 +700,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
+            skip_connections=skip_connections,
         )
         return pdf_models
 
@@ -886,8 +888,8 @@ class ModelTrainer:
                 params["layer_type"],
                 params["dropout"],
                 params.get("regularizer", None),  # regularizer optional
-                params.get("skip_connections", None), # List of tuples with the connected layers, optional
                 params.get("regularizer_args", None),
+                params.get("skip_connections", None), # List of tuples with the connected layers, optional
                 seeds,
             )
 

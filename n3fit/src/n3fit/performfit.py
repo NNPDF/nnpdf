@@ -195,7 +195,7 @@ def performfit(
             model_file=load,
             sum_rules=sum_rules,
             parallel_models=n_models,
-            skip_connection=[]
+            skip_connections=skip_connections
         )
 
         # This is just to give a descriptive name to the fit function
