@@ -4,7 +4,7 @@ from pathlib import Path
 import fiatlux
 import numpy as np
 from validphys.photon import structure_functions
-from validphys.photon.compute import Photon
+from validphys.photon.compute import Photon, Alpha
 
 from ..conftest import PDF
 
@@ -17,6 +17,7 @@ class FakeTheory:
         return {
             "alphaqed": 0.01,
             "Qref": 91.2,
+            "QrefQED": 91.2,
             "mc": 1.3,
             "mb": 4.92,
             "mt": 172.0,
@@ -29,7 +30,7 @@ class FakeTheory:
 
 
 fiatlux_runcard = {
-    "pdf_name": PDF,
+    "luxset": PDF,
     "additional_errors": False,
 }
 
@@ -88,30 +89,23 @@ def test_parameters_init(monkeypatch):
         structure_functions, "InterpStructureFunction", FakeStructureFunction
     )
     monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
-
     monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
+    monkeypatch.setattr(Photon, "compute_photon_array", lambda *args: np.zeros(196))
 
     photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
+    alpha = Alpha(FakeTheory().get_description())
 
-    np.testing.assert_equal(photon.replicas_id, [1, 2, 3])
+    np.testing.assert_equal(photon.replicas, [1, 2, 3])
     np.testing.assert_equal(photon.fiatlux_runcard, fiatlux_runcard)
-    np.testing.assert_almost_equal(photon.q_in2, 1e4)
     np.testing.assert_almost_equal(
-        photon.alpha_em_ref, FakeTheory().get_description()["alphaqed"]
+        alpha.alpha_em_ref, FakeTheory().get_description()["alphaqed"]
     )
 
-def test_masses_init(monkeypatch):
-    monkeypatch.setattr(
-        structure_functions, "InterpStructureFunction", FakeStructureFunction
-    )
-    monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
-
-    monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
-    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
-    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
-    np.testing.assert_equal(photon.thresh_t, np.inf)
-    np.testing.assert_almost_equal(photon.thresh_b, 4.92)
-    np.testing.assert_almost_equal(photon.thresh_c, 1.3)
+def test_masses_init():
+    alpha = Alpha(FakeTheory().get_description())
+    np.testing.assert_equal(alpha.thresh_t, np.inf)
+    np.testing.assert_almost_equal(alpha.thresh_b, 4.92)
+    np.testing.assert_almost_equal(alpha.thresh_c, 1.3)
 
 def test_set_thresholds_alpha_em(monkeypatch):
     monkeypatch.setattr(
@@ -120,31 +114,26 @@ def test_set_thresholds_alpha_em(monkeypatch):
     monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
 
     monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
-    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
-    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
-    np.testing.assert_almost_equal(photon.thresh[5], 91.2)
-    np.testing.assert_almost_equal(photon.thresh[4], 4.92)
-    np.testing.assert_almost_equal(photon.thresh[3], 1.3)
-    np.testing.assert_almost_equal(photon.alpha_thresh[5], 0.01)
-    np.testing.assert_almost_equal(
-        photon.alpha_thresh[4], photon.alpha_em_nlo(4.92, 0.01, 91.2, 5)
-    )
-    np.testing.assert_almost_equal(
-        photon.alpha_thresh[3],
-        photon.alpha_em_nlo(1.3, photon.alpha_thresh[4], 4.92, 4),
-    )
-    np.testing.assert_equal(len(photon.alpha_thresh), 3)
-    np.testing.assert_equal(len(photon.thresh), 3)
+    monkeypatch.setattr(Photon, "compute_photon_array", lambda *args: np.zeros(196))
 
-def test_betas(monkeypatch):
-    monkeypatch.setattr(
-        structure_functions, "InterpStructureFunction", FakeStructureFunction
-    )
-    monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
+    alpha = Alpha(FakeTheory().get_description())
 
-    monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
-    monkeypatch.setattr(Photon, "produce_interpolators", lambda *args: None)
-    photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
+    np.testing.assert_almost_equal(alpha.thresh[5], 91.2)
+    np.testing.assert_almost_equal(alpha.thresh[4], 4.92)
+    np.testing.assert_almost_equal(alpha.thresh[3], 1.3)
+    np.testing.assert_almost_equal(alpha.alpha_thresh[5], 0.01)
+    np.testing.assert_almost_equal(
+        alpha.alpha_thresh[4], alpha.alpha_em_fixed_flavor(4.92, 0.01, 91.2, 5)
+    )
+    np.testing.assert_almost_equal(
+        alpha.alpha_thresh[3],
+        alpha.alpha_em_fixed_flavor(1.3, alpha.alpha_thresh[4], 4.92, 4),
+    )
+    np.testing.assert_equal(len(alpha.alpha_thresh), 3)
+    np.testing.assert_equal(len(alpha.thresh), 3)
+
+def test_betas():
+    alpha = Alpha(FakeTheory().get_description())
     vec_beta0 = [
         -0.5305164769729844,
         -0.6719875374991137,
@@ -158,5 +147,5 @@ def test_betas(monkeypatch):
         0.1458920311675707,
     ]
     for nf in range(3, 6 + 1):
-        np.testing.assert_allclose(photon.beta0[nf], vec_beta0[nf - 3], rtol=1e-7)
-        np.testing.assert_allclose(photon.b1[nf], vec_b1[nf - 3], rtol=1e-7)
+        np.testing.assert_allclose(alpha.beta0[nf], vec_beta0[nf - 3], rtol=1e-7)
+        np.testing.assert_allclose(alpha.b1[nf], vec_b1[nf - 3], rtol=1e-7)

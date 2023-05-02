@@ -29,6 +29,7 @@ class Photon:
         theory = theoryid.get_description()
         self.fiatlux_runcard = fiatlux_runcard
         self.fiatlux_runcard["qed_running"] = "QrefQED" in theory
+        # TODO: QrefQED is going to be removed from the runcard
         self.replicas = replicas
 
         # structure functions
