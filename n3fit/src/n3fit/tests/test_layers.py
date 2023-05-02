@@ -269,7 +269,7 @@ def test_addphoton_init():
     np.testing.assert_equal(addphoton._pdf_ph, None)
 
 class FakePhoton():
-    def compute(self, xgrid):
+    def __call__(self, xgrid):
         return [np.exp(-xgrid)]
 
 def test_compute_photon():
