@@ -91,6 +91,8 @@ environment. Note
 that the ``binary-bootstrap.sh`` should be downloaded and run as
 explained above, if the user has not already done so.
 
+**NOTE:** For installation on M1 Macs, please see the :ref:`M1` section.
+
 1. Create an NNPDF developer environment ``nnpdf-dev`` and install all
    relevant dependencies using
 
@@ -236,6 +238,195 @@ explained above, if the user has not already done so.
 .. _Mac Software Development Kit: https://github.com/phracker/MacOSX-SDKs
 .. _anconda documentation: https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html#macos-sdk
 
+
+.. _M1:
+
+Installation from source on M1 Macs
+-----------------------------------
+
+Installation on M1 Macs is not directly supported, so everything needs to be
+done manually. The following steps are required:
+
+1. Clone repos
+
+  .. code::
+
+      mkdir nnpdfgit
+      cd nnpdfgit
+      git clone git@github.com:NNPDF/nnpdf.git
+      git clone git@github.com:NNPDF/binary-bootstrap.git
+      git clone https://github.com/scarrazza/apfel.git
+
+2. Execute binary bootstrap to set channels in .condarc
+   .. code::
+
+      ./binary-bootstrap/bootstrap.sh
+
+3. Setup conda environment using python 3.9
+
+   .. code::
+
+      conda create -n nnpdf-dev python=3.9
+      conda activate nnpdf-dev
+
+4. Install compiler
+
+   .. code::
+
+      conda install clangxx_osx-arm64
+
+5. LHAPDF
+
+   Download version 6.4.0 and decompress
+
+    .. code::
+
+       wget -O LHAPDF-6.4.0.tar.gz https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.4.0.tar.gz
+       tar -xzvf LHAPDF-6.4.0.tar.gz
+       rm LHAPDF-6.4.0.tar.gz
+       cd LHAPDF-6.4.0
+
+   Regenerate the configuration files, configure the build with the specified options, and compile and install the software.
+   You may need to `brew install automake` first:
+
+    .. code::
+
+      autoreconf -f -i
+      ./configure --prefix=$CONDA_PREFIX --disable-python
+      make -j8
+      make install
+
+   Install python wrapper
+
+   .. code::
+
+      cd wrappers/python
+      pip install -e .
+
+   Test
+   .. code::
+
+      lhapdf install CT18NNLO
+      python
+
+   Just check if `import lhapdf` works
+
+6. Apfel
+
+   Not sure if this is necessary, but to make sure the environment is active,
+
+   .. code::
+
+      echo 'export PATH=${CONDA_PREFIX}/bin:$PATH' >> "${CONDA_PREFIX}/etc/conda/activate.d/env_vars.sh"
+      conda deactivate
+      conda activate nnpdf-dev
+
+   install these:
+
+   .. code::
+      conda install pkg-config swig cmake
+
+   Then build it
+   .. code::
+      cd ../../../apfel
+      autoreconf -f -i
+      PYTHON=$(which python) ./configure --prefix=$CONDA_PREFIX 
+      make clean
+      make -j8
+      make install
+
+7. validphys
+
+   First install reportengine and validobj, then validphys itself:
+
+   .. code::
+
+      pip install reportengine validobj
+      cd ../nnpdf/validphys2
+      pip install -e .
+
+8. nnpdf
+
+   Install other dependencies
+
+   .. code::
+
+      conda install libarchive sqlite gsl yaml-cpp
+
+   Run cmake in nnpdf/build directory:
+
+   .. code::
+
+      cd ..
+      mkdir build
+      cd build
+      cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+
+   Edit the file `nnpdfgit/nnpdf/CMakeLists.txt` :
+    - on line 8 change the option to true, so it says:
+
+      .. code::
+
+         SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+
+    - comment out line 58 (`set(LIBNNPDF_HAVE_SSE "#define SSE_CONV")`)
+
+    - line 104 should read:
+
+      .. code::
+
+         set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
+
+       (so delete "-march=nocona -mtune=haswell").
+
+   Then make:
+
+   .. code::
+
+      make -j8
+      make install
+
+   Install remaining packages
+   .. code::
+
+      pip install seaborn prompt_toolkit scipy psutil hyperopt
+
+9. Install tensorflow
+   Not specifying versions will install at the time of writing macos 2.12.0 and metal 0.8.0, which both work.
+   They only give warnings on the optimizers, that the legacy versions are faster.
+   If you want an older version, macos 2.9.2 and metal 0.5.0 are also tested to work.
+
+   .. code::
+
+      conda install -c apple tensorflow-deps
+      pip install tensorflow-macos==2.9.2
+      pip install tensorflow-metal==0.5.0
+
+10. Test
+
+   .. code::
+
+      cd nnpdf/n3fit/runcards/examples
+      vp-setupfit Basic_runcard.yml
+      n3fit Basic_runcard.yml 1
+      evolven3fit Basic_runcard 1
+
+   You can experiment with setting
+
+   .. code::
+
+      tf.config.set_visible_devices([], 'GPU')
+
+   to disable the GPU for tensorflow. In this small example at least, this makes it faster.
+   You can add this line for example in the `set_initial_state` function in `n3fit/src/n3fit/backends/keras_backend/internal_state.py`.
+   And to use legacy optimizers, you only need to change one line in `n3fit/src/n3fit/backends/keras_backend/MetaModel.py`:
+
+   .. code::
+
+      # from tensorflow.keras import optimizers as Kopt
+      import tensorflow.keras.optimizers.legacy as Kopt
+
+   With both these tweaks, and the latest tensorflow versions, the basic runcard with 1 replica should take about 30 seconds.
 
 .. _docker:
 
