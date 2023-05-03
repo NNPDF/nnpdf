@@ -143,10 +143,16 @@ class TheoryMeta:
 
 @dataclasses.dataclass
 class ValidKinematics:
-    """Contains all metadata for the kinematics of the dataset"""
+    """Contains all metadata for the kinematics of the dataset
+    The minimum number of variables is 3, any variable beyond 3 is ignored.
+    """
 
     file: ValidPath
     variables: dict
+
+    @property
+    def keys(self):
+        return [*self.variables][:3]
 
 
 @dataclasses.dataclass
@@ -398,7 +404,7 @@ def parse_commondata_new(dataset_fullname, variants=[]):
 
     # For the kinematis, forget all the interesting information
     procname = metadata.nnpdf_metadata["nnpdf31_process"]
-    kin_df = kin_df[metadata.kinematics.variables.keys()]
+    kin_df = kin_df[metadata.kinematics.keys]
     kin_df.columns = KIN_NAMES
     kin_df["process"] = procname
 
