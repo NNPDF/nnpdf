@@ -257,7 +257,7 @@ built manually. The following steps are required:
       git clone git@github.com:NNPDF/binary-bootstrap.git
       git clone https://github.com/scarrazza/apfel.git
 
-2. Execute binary bootstrap to set channels in .condarc
+2. Execute binary bootstrap to set the channels in ``.condarc``
 
    .. code::
 
