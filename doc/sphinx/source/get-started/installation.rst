@@ -91,7 +91,7 @@ environment. Note
 that the ``binary-bootstrap.sh`` should be downloaded and run as
 explained above, if the user has not already done so.
 
-**NOTE:** For installation on M1 Macs, please see the :ref:`M1` section.
+**NOTE:** For installation on M1/M2 Macs, please see the :ref:`M1` section.
 
 1. Create an NNPDF developer environment ``nnpdf-dev`` and install all
    relevant dependencies using
@@ -241,13 +241,13 @@ explained above, if the user has not already done so.
 
 .. _M1:
 
-Installation from source on M1 Macs
+Installation from source on M1/M2 Macs
 -----------------------------------
 
-Installation on M1 Macs is not directly supported, so everything needs to be
-done manually. The following steps are required:
+Installation on M1/M2 Macs is not directly supported, so everything needs to be
+built manually. The following steps are required:
 
-1. Clone repos
+1. Clone the repositories
 
   .. code::
 
@@ -270,7 +270,7 @@ done manually. The following steps are required:
       conda create -n nnpdf-dev python=3.9
       conda activate nnpdf-dev
 
-4. Install compiler
+4. Install ARM compiler
 
    .. code::
 
@@ -287,8 +287,8 @@ done manually. The following steps are required:
        rm LHAPDF-6.4.0.tar.gz
        cd LHAPDF-6.4.0
 
-   Regenerate the configuration files, configure the build with the specified options, and compile and install the software.
-   You may need to `brew install automake` first:
+   Regenerate the configuration files, configure the build with python disabled, compile and 
+   install. You may need to `brew install automake` first:
 
     .. code::
 
@@ -297,7 +297,7 @@ done manually. The following steps are required:
       make -j
       make install
 
-   Install python wrapper
+   Install the python wrapper
 
    .. code::
 
@@ -321,7 +321,7 @@ done manually. The following steps are required:
       conda deactivate
       conda activate nnpdf-dev
 
-   install these:
+   First, we need to install some dependencies:
 
    .. code::
       conda install pkg-config swig cmake
