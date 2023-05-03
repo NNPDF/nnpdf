@@ -258,6 +258,7 @@ done manually. The following steps are required:
       git clone https://github.com/scarrazza/apfel.git
 
 2. Execute binary bootstrap to set channels in .condarc
+
    .. code::
 
       ./binary-bootstrap/bootstrap.sh
@@ -293,7 +294,7 @@ done manually. The following steps are required:
 
       autoreconf -f -i
       ./configure --prefix=$CONDA_PREFIX --disable-python
-      make -j8
+      make -j
       make install
 
    Install python wrapper
@@ -304,12 +305,11 @@ done manually. The following steps are required:
       pip install -e .
 
    Test
+
    .. code::
 
       lhapdf install CT18NNLO
-      python
-
-   Just check if `import lhapdf` works
+      python -c "import lhapdf"
 
 6. Apfel
 
@@ -327,12 +327,13 @@ done manually. The following steps are required:
       conda install pkg-config swig cmake
 
    Then build it
+
    .. code::
       cd ../../../apfel
       autoreconf -f -i
       PYTHON=$(which python) ./configure --prefix=$CONDA_PREFIX 
       make clean
-      make -j8
+      make -j
       make install
 
 7. validphys
@@ -362,14 +363,14 @@ done manually. The following steps are required:
       cd build
       cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 
-   Edit the file `nnpdfgit/nnpdf/CMakeLists.txt` :
+   Edit the file ``nnpdfgit/nnpdf/CMakeLists.txt`` :
     - on line 8 change the option to true, so it says:
 
       .. code::
 
          SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-    - comment out line 58 (`set(LIBNNPDF_HAVE_SSE "#define SSE_CONV")`)
+    - comment out line 58 (:code:`set(LIBNNPDF_HAVE_SSE "#define SSE_CONV")`)
 
     - line 104 should read:
 
@@ -377,21 +378,23 @@ done manually. The following steps are required:
 
          set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
 
-       (so delete "-march=nocona -mtune=haswell").
+      (so delete ``-march=nocona -mtune=haswell``).
 
    Then make:
 
    .. code::
 
-      make -j8
+      make -j
       make install
 
    Install remaining packages
+
    .. code::
 
       pip install seaborn prompt_toolkit scipy psutil hyperopt
 
 9. Install tensorflow
+
    Not specifying versions will install at the time of writing macos 2.12.0 and metal 0.8.0, which both work.
    They only give warnings on the optimizers, that the legacy versions are faster.
    If you want an older version, macos 2.9.2 and metal 0.5.0 are also tested to work.
@@ -411,15 +414,20 @@ done manually. The following steps are required:
       n3fit Basic_runcard.yml 1
       evolven3fit Basic_runcard 1
 
-   You can experiment with setting
+   With these settings tensorflow will run by default on GPU which makes
+   the fit run very slow. To disable the GPU, type the following command:
+   
+   .. code::
+
+      export CUDA_VISIBLE_DEVICES=0
+      
+   or insert the following line in ... [followed by Roy's comment]
 
    .. code::
 
       tf.config.set_visible_devices([], 'GPU')
-
-   to disable the GPU for tensorflow. In this small example at least, this makes it faster.
-   You can add this line for example in the `set_initial_state` function in `n3fit/src/n3fit/backends/keras_backend/internal_state.py`.
-   And to use legacy optimizers, you only need to change one line in `n3fit/src/n3fit/backends/keras_backend/MetaModel.py`:
+   You can add this line for example in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``.
+   And to use legacy optimizers, you only need to change one line in ``n3fit/src/n3fit/backends/keras_backend/MetaModel.py``:
 
    .. code::
 
