@@ -10,7 +10,6 @@ import pandas as pd
 from reportengine.compat import yaml
 from validphys.coredata import FKTableData
 from validphys.commondataparser import TheoryMeta, EXT
-from validphys.utils import parse_yaml_inp
 
 
 class GridFileNotFound(FileNotFoundError):
@@ -44,7 +43,6 @@ def pineko_yaml(yaml_file, grids_folder):
     # they should be 100% compatible (and if they are not there is something wrong somewhere)
     # so already at this stage, use TheoryMeta parser to get the metadata for pineappl theories
     # Note also that we need to use this "parser" due to the usage of the name "operands" in the yamldb
-#     theory_meta = parse_yaml_inp(yaml_file, TheoryMeta)
     theory_meta = TheoryMeta.parser(yaml_file)
     member_paths = theory_meta.fktables_to_paths(grids_folder)
     return theory_meta, member_paths
