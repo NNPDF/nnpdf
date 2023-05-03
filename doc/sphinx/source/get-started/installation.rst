@@ -313,13 +313,6 @@ built manually. The following steps are required:
 
 6. Apfel
 
-   Not sure if this is necessary, but to make sure the environment is active,
-
-   .. code::
-
-      echo 'export PATH=${CONDA_PREFIX}/bin:$PATH' >> "${CONDA_PREFIX}/etc/conda/activate.d/env_vars.sh"
-      conda deactivate
-      conda activate nnpdf-dev
 
    First, we need to install some dependencies:
 
