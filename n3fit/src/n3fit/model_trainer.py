@@ -11,6 +11,8 @@
 import logging
 from collections import namedtuple
 from itertools import zip_longest
+
+import numpy
 import numpy as np
 from scipy.interpolate import PchipInterpolator
 from n3fit import model_gen
@@ -127,15 +129,13 @@ class ModelTrainer:
                 number of models to fit in parallel
         """
         # Save all input information
-        self.exp_info = exp_info
-        if pos_info is None:
-            pos_info = []
+        self.exp_info = list(exp_info)
         self.pos_info = pos_info
         self.integ_info = integ_info
         if self.integ_info is not None:
-            self.all_info = exp_info + pos_info + integ_info
+            self.all_info = self.exp_info[0] + pos_info + integ_info
         else:
-            self.all_info = exp_info + pos_info
+            self.all_info = self.exp_info[0] + pos_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -202,6 +202,7 @@ class ModelTrainer:
             "model": None,
             "folds": [],
         }
+        self.tr_masks = []
 
         self._fill_the_dictionaries()
 
@@ -250,7 +251,7 @@ class ModelTrainer:
             - ``name``: names of the experiment
             - ``ndata``: number of experimental points
         """
-        for exp_dict in self.exp_info:
+        for index, exp_dict in enumerate(self.exp_info[0]):
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
@@ -275,6 +276,7 @@ class ModelTrainer:
             self.training["posdatasets"].append(pos_dict["name"])
             self.validation["expdata"].append(pos_dict["expdata"])
             self.validation["posdatasets"].append(pos_dict["name"])
+
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
                 self.training["expdata"].append(integ_dict["expdata"])
@@ -472,7 +474,7 @@ class ModelTrainer:
             self.experimental[key] = []
 
     ############################################################################
-    # # Parametizable functions                                                #
+    # # Parameterizable functions                                                #
     #                                                                          #
     # The functions defined in this block accept a 'params' dictionary which   #
     # defines the fit and the behaviours of the Neural Networks                #
@@ -513,11 +515,23 @@ class ModelTrainer:
         log.info("Generating layers")
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for exp_dict in self.exp_info:
+        for index, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            # Stacked tr-vl mask array for all replicas for this dataset
+            replica_masks = numpy.stack([e[index]["trmask"] for e in self.exp_info])
+            training_data = numpy.stack([e[index]["expdata"].flatten() for e in self.exp_info])
+            validation_data = numpy.stack([e[index]["expdata_vl"].flatten() for e in self.exp_info])
+            invcovmat = numpy.stack([e[index]["invcovmat"] for e in self.exp_info])
+            invcovmat_vl = numpy.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
+
+            exp_layer = model_gen.observable_generator(exp_dict,
+                                                       mask_array=replica_masks,
+                                                       training_data=training_data,
+                                                       validation_data=validation_data,
+                                                       invcovmat_tr=invcovmat,
+                                                       invcovmat_vl=invcovmat_vl)
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -538,8 +552,14 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
+            replica_masks = numpy.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
+            training_data = numpy.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(pos_dict,
+                                                       positivity_initial=pos_initial,
+                                                       mask_array=replica_masks,
+                                                       training_data=training_data,
+                                                       validation_data=training_data)
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 

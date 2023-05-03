@@ -70,7 +70,7 @@ class _TrMasks(TupleComp):
             yield m
 
 
-def tr_masks(data, replica_trvlseed):
+def tr_masks(data, replica_trvlseed, parallel_models):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
@@ -78,6 +78,9 @@ def tr_masks(data, replica_trvlseed):
 
         tr_data = data[tr_mask]
 
+    The single_datapoints_toss flag signals whether single-point datasets
+    should be always included in the training set only (True), or randomly
+    selected. The former is required for parallel replica fits.
     """
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
@@ -94,7 +97,7 @@ def tr_masks(data, replica_trvlseed):
         trmax = int(ndata*frac)
         if trmax == 0:
             # If that number is 0, then get 1 point with probability frac
-            trmax = int(rng.random() < frac)
+            trmax = int(rng.random() < frac) if not parallel_models else 1
         mask = np.concatenate(
             [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
         )

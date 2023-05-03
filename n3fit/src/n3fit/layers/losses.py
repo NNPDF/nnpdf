@@ -57,7 +57,7 @@ class LossInvcovmat(MetaLayer):
         weights of the layers"""
         init = MetaLayer.init_constant(self._invcovmat)
         self.kernel = self.builder_helper(
-            "invcovmat", (self._ndata, self._ndata), init, trainable=False
+            "invcovmat", self._invcovmat.shape, init, trainable=False
         )
         mask_shape = (1, 1, self._ndata)
         if self._mask is None:
@@ -88,7 +88,10 @@ class LossInvcovmat(MetaLayer):
             right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
             res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
         else:
-            res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
+            if len(self.kernel.shape) == 3:
+                res = op.einsum("bri, rij, brj -> r", tmp, self.kernel, tmp)
+            else:
+                res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
         return res
 
 
