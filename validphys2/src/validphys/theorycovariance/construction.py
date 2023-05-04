@@ -499,7 +499,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     cut_df = filecovmat.reindex(newindex).T
     cut_df = cut_df.reindex(newindex).T
     # Elements where cuts are applied will become NaN - remove these rows and columns
-    cut_df = cut_df.dropna(0).dropna(1)
+    cut_df = cut_df.dropna(axis=0).dropna(axis=1)
     # -------------------- #
     # 2: Expand dimensions #
     # -------------------- #
