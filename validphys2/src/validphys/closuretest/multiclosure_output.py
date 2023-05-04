@@ -101,9 +101,12 @@ def plot_data_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data):
     like `plot_dataset_fits_sqrt_bias_variance_ratio` but for all data.
     """
     return plot_dataset_fits_sqrt_bias_variance_ratio(fits_data_bias_variance,data)
-    
+
+## GDC: I am adding possibility to calculate a weighted average for Bias and Variance. Need to check if it
+## makes sense
+
 @figure
-def progressive_sqrt_b_v_ratio_dataset(fits_dataset_bias_variance, dataset):
+def progressive_sqrt_b_v_ratio_dataset(fits_dataset_bias_variance, dataset, weight = False):
     """For a set of closure fits, calculate bias and variance across fits on a given dataset.
     Plot the square root ratio between the two quantities as the number of fits increases.
     The progressiv average is calculated as:
@@ -126,6 +129,9 @@ def progressive_sqrt_b_v_ratio_dataset(fits_dataset_bias_variance, dataset):
 
     """
     biases, variances, _ = fits_dataset_bias_variance
+    if weight:
+        biases = np.size(biases) * biases
+        variances = np.size(variances) * variances
     prog_biases = []
     prog_var = []
     for i in range(np.size(biases)):
@@ -151,11 +157,11 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
 @figure
-def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data):
+def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data, weight):
     """Like `progressive_sqrt_b_v_ratio` but for all data.
 
     """
-    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data)
+    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data, weight)
 
 @figure
 def plot_xq2_with_Rbv(dataset_inputs_by_groups_xq2map,datasets_bias_variance_ratio):
