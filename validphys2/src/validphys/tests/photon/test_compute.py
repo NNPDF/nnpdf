@@ -5,6 +5,7 @@ import fiatlux
 import numpy as np
 from validphys.photon import structure_functions
 from validphys.photon.compute import Photon, Alpha
+from validphys.core import PDF as PDFset
 
 from ..conftest import PDF
 
@@ -26,12 +27,14 @@ class FakeTheory:
             "ktThr": 1.0,
             "MaxNfAs": 5,
             "MaxNfPdf": 5,
+            "MP": 0.938
         }
 
 
 fiatlux_runcard = {
-    "luxset": PDF,
+    "luxset": PDFset(PDF),
     "additional_errors": False,
+    "luxseed": 123456789
 }
 
 photon = namedtuple("photon", ["total", "elastic", "inelastic"])
@@ -96,7 +99,9 @@ def test_parameters_init(monkeypatch):
     alpha = Alpha(FakeTheory().get_description())
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
-    np.testing.assert_equal(photon.fiatlux_runcard, fiatlux_runcard)
+    np.testing.assert_equal(photon.luxpdfset._name, fiatlux_runcard["luxset"].name)
+    np.testing.assert_equal(photon.additional_errors, fiatlux_runcard["additional_errors"])
+    np.testing.assert_equal(photon.luxseed, fiatlux_runcard["luxseed"])
     np.testing.assert_almost_equal(
         alpha.alpha_em_ref, FakeTheory().get_description()["alphaqed"]
     )
