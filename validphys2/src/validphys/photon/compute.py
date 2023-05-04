@@ -20,20 +20,53 @@ log = logging.getLogger(__name__)
 
 Q_IN = 100
 EXTRA_SET = "LUXqed17_plus_PDF4LHC15_nnlo_100"
+FIATLUX_DEFAULT = {
+    "apfel" : False,
+    "q2_max" : 1e8,  # the maximum allowed Q2.
+    "eps_base" : 1e-5, # precision on final integration of double integral.
+    "eps_rel" : 1e-1, # extra precision on any single integration.
+    "mum_proton" : 2.792847356, # proton magnetic moment, from
+    # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
+    # gets it from arXiv:1203.5425 (CODATA)
+
+    # the elastic param type, options:
+    # dipole
+    # A1_world_spline
+    # A1_world_pol_spline
+    "elastic_param" : "A1_world_pol_spline",
+    "elastic_electric_rescale": 1,
+    "elastic_magnetic_rescale": 1,
+    # the inelastic param type, options:
+    "inelastic_param" : "LHAPDF_Hermes_ALLM_CLAS", # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
+    "rescale_r_twist4" : 0,
+    "rescale_r" : 1,
+    "allm_limits" : 0,
+    "rescale_non_resonance" : 1,
+    "rescale_resonance" : 1,
+    "use_mu2_as_upper_limit" : False,
+    "q2min_inel_override" : 0.0,
+    "q2max_inel_override" : 1E300,
+    "lhapdf_transition_q2" : 9,
+    # general
+    "verbose" : False,
+}
 
 
 class Photon:
     """Photon class computing the photon array with the LuxQED approach."""
 
-    def __init__(self, theoryid, fiatlux_runcard, replicas):
+    def __init__(self, theoryid, lux_params, replicas):
         theory = theoryid.get_description()
-        self.fiatlux_runcard = fiatlux_runcard
-        self.fiatlux_runcard["qed_running"] = "QrefQED" in theory
+        fiatlux_runcard = FIATLUX_DEFAULT
+        fiatlux_runcard["qed_running"] = "QrefQED" in theory
         # TODO: QrefQED is going to be removed from the runcard
+        fiatlux_runcard["mproton"] = theory["MP"]
         self.replicas = replicas
 
         # structure functions
-        self.luxpdfset = LHAPDFSet(fiatlux_runcard["luxset"], "replicas")
+        self.luxpdfset = lux_params["luxset"].load()
+        self.additional_errors = lux_params["additional_errors"]
+        self.luxseed = lux_params["luxseed"]
 
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
@@ -55,11 +88,11 @@ class Photon:
             f2lo[replica] = sf.F2LO(self.luxpdfset.members[replica], theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
-                    tmp_file.write(yaml.dump(self.fiatlux_runcard))
+                    tmp_file.write(yaml.dump(fiatlux_runcard))
                 self.lux[replica] = fiatlux.FiatLux(tmp_file.name)
         # we have a dict but fiatlux wants a yaml file
         # TODO : once that fiatlux will allow dictionaries
-        # pass directly self.fiatlux_runcard
+        # pass directly fiatlux_runcard
         alpha = Alpha(theory)
         for replica in replicas:
             self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
@@ -161,7 +194,7 @@ class Photon:
     @property
     def error_matrix(self):
         """Generate error matrix to be used in generate_errors."""
-        if not self.fiatlux_runcard["additional_errors"]:
+        if not self.additional_errors:
             return None
         extra_set = LHAPDFSet(EXTRA_SET, "replicas")
         qs = [Q_IN] * len(XGRID)
@@ -181,7 +214,7 @@ class Photon:
         if self.error_matrix is None:
             return np.zeros_like(XGRID)
         log.info(f"Generating photon additional errors")
-        seed = replica_luxseed(replica, self.fiatlux_runcard["luxseed"])
+        seed = replica_luxseed(replica, self.luxseed)
         rng = np.random.default_rng(seed=seed)
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
         errors = u @ (s * rng.normal(size=7))

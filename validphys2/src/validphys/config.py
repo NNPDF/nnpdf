@@ -1040,6 +1040,10 @@ class CoreConfig(configparser.Config):
             return t0pdfset
         return None
     
+    def parse_luxset(self, name):
+        """PDF set used to generate the photon with fiatlux."""
+        return self.parse_pdf(name)
+    
 
     def parse_fakepdf(self, name):
         """PDF set used to generate the fake data in a closure test."""

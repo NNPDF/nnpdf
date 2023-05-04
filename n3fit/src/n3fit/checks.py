@@ -399,7 +399,7 @@ def check_deprecated_options(fitting):
 def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
     if fiatlux :
         luxset = fiatlux["luxset"]
-        pdfs_ids = PDF(luxset).get_members() - 1 # get_members counts also replica0
+        pdfs_ids = luxset.get_members() - 1 # get_members counts also replica0
         max_id = max(replicas)
         if max_id > pdfs_ids :
             for replica_id in replicas:

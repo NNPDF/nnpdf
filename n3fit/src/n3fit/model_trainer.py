@@ -101,7 +101,7 @@ class ModelTrainer:
         sum_rules=None,
         parallel_models=1,
         theoryid=None,
-        fiatlux_runcard=None,
+        lux_params=None,
         replicas=None,
     ):
         """
@@ -137,8 +137,8 @@ class ModelTrainer:
                 number of models to fit in parallel
             theoryid : validphys.core.TheoryIDSpec
                 object contining info for generating the photon
-            fiatlux_runcard : dict
-                dictionary containing the fiatlux runcard
+            lux_params : dict
+                dictionary containing the params needed from LuxQED
             replicas_id : list
                 list with the replicas ids to be fitted
         """
@@ -162,7 +162,7 @@ class ModelTrainer:
         self._scaler = None
         self._parallel_models = parallel_models
         self.theoryid = theoryid
-        self.fiatlux_runcard = fiatlux_runcard
+        self.lux_params = lux_params
         self.replicas = replicas
 
         # Initialise internal variables which define behaviour
@@ -885,10 +885,10 @@ class ModelTrainer:
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
         # Initialize all photon classes for the different replicas:
-        if self.fiatlux_runcard:
+        if self.lux_params:
             photons=Photon(
                 theoryid=self.theoryid,
-                fiatlux_runcard=self.fiatlux_runcard,
+                lux_params=self.lux_params,
                 replicas=self.replicas,
             )
         else:

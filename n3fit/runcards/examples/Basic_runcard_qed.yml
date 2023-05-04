@@ -89,7 +89,7 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  t0pdfset: NNPDF40_nnlo_as_01180_1000  # PDF set to generate t0 covmat
+  t0pdfset: NNPDF40_nnlo_as_01180  # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
 
@@ -166,38 +166,6 @@ debug: True
 maxcores: 8
 
 fiatlux:
-  apfel: off
-
-  q2_max: 1e8  # the maximum allowed Q2.
-  eps_base: 1e-5 # precision on final integration of double integral.
-  eps_rel: 1e-1 # extra precision on any single integration.
-  mproton: 0.938272046 # proton mass from 2015 update of PDG review
-  mum_proton: 2.792847356 # proton magnetic moment, from
-  # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
-  # gets it from arXiv:1203.5425 (CODATA)
-
-  # the elastic param type, options:
-  # dipole
-  # A1_world_spline
-  # A1_world_pol_spline
-  elastic_param: A1_world_pol_spline
-  elastic_electric_rescale: 1
-  elastic_magnetic_rescale: 1
-
-  # the inelastic param type, options:
-  inelastic_param: LHAPDF_Hermes_ALLM_CLAS # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
-  rescale_r_twist4: 0
-  rescale_r: 1
-  allm_limits: 0
-  rescale_non_resonance: 1
-  rescale_resonance: 1
-  use_mu2_as_upper_limit: off
-  q2min_inel_override: 0.0
-  q2max_inel_override: 1E300
-  lhapdf_transition_q2: 9
-
-  # general
-  verbose: off
   luxset: NNPDF40_nnlo_as_01180_1000
   additional_errors: true # should be set to true only for the last iteration
   luxseed: 1234567890
