@@ -32,8 +32,8 @@ FIATLUX_DEFAULT = {
     # A1_world_spline
     # A1_world_pol_spline
     "elastic_param" : "A1_world_pol_spline",
-    "elastic_electric_rescale": 1,
-    "elastic_magnetic_rescale": 1,
+    "elastic_electric_rescale" : 1,
+    "elastic_magnetic_rescale" : 1,
     # the inelastic param type, options:
     "inelastic_param" : "LHAPDF_Hermes_ALLM_CLAS", # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
     "rescale_r_twist4" : 0,
@@ -56,8 +56,10 @@ class Photon:
     def __init__(self, theoryid, lux_params, replicas):
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
-        fiatlux_runcard["qed_running"] = "QrefQED" in theory
-        # TODO: QrefQED is going to be removed from the runcard
+        fiatlux_runcard["qed_running"] = np.isclose(theory["Qedref"], theory["Qref"])
+        # TODO: for the time being, we trigger alphaem running if Qedref=Qref.
+        # This is going to be changed in favor of a bool em_running
+        # in the runcard
         fiatlux_runcard["mproton"] = theory["MP"]
         self.replicas = replicas
 
