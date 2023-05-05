@@ -18,7 +18,7 @@ class FakeTheory:
         return {
             "alphaqed": 0.01,
             "Qref": 91.2,
-            "QrefQED": 91.2,
+            "Qedref": 91.2,
             "mc": 1.3,
             "mb": 4.92,
             "mt": 172.0,
