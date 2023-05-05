@@ -280,6 +280,11 @@ def check_luxset(luxset):
     luxset.load()
     log.info(f'{luxset} Lux pdf checked.')
 
+def check_additional_errors(additional_errors):
+    """Lux additional errors pdf check"""
+    additional_errors.load()
+    log.info(f'{additional_errors} Lux additional errors pdf checked.')
+
 def check_positivity(posdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying positivity tables:')

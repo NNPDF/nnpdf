@@ -160,6 +160,9 @@ class SetupFitConfig(Config):
         if file_content.get('fiatlux') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'fiatlux check_luxset')
+            if file_content.get('fiatlux')["additional_errors"]:
+                SETUPFIT_FIXED_CONFIG['actions_'].append(
+                    'fiatlux check_additional_errors')
         for k,v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)

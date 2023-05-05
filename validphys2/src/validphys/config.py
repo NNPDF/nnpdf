@@ -1044,6 +1044,12 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the photon with fiatlux."""
         return self.parse_pdf(name)
     
+    def parse_additional_errors(self, bool):
+        """PDF set used to generate the photon additional errors."""
+        if bool:
+            return self.parse_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100")
+        else:
+            return False
 
     def parse_fakepdf(self, name):
         """PDF set used to generate the fake data in a closure test."""

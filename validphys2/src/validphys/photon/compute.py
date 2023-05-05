@@ -8,7 +8,6 @@ import yaml
 from eko.io import EKO
 from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
-from validphys.lhapdfset import LHAPDFSet
 from validphys.n3fit_data import replica_luxseed
 
 from n3fit.io.writer import XGRID
@@ -19,7 +18,6 @@ from . import structure_functions as sf
 log = logging.getLogger(__name__)
 
 Q_IN = 100
-EXTRA_SET = "LUXqed17_plus_PDF4LHC15_nnlo_100"
 FIATLUX_DEFAULT = {
     "apfel" : False,
     "q2_max" : 1e8,  # the maximum allowed Q2.
@@ -196,7 +194,7 @@ class Photon:
         """Generate error matrix to be used in generate_errors."""
         if not self.additional_errors:
             return None
-        extra_set = LHAPDFSet(EXTRA_SET, "replicas")
+        extra_set = self.additional_errors.load()
         qs = [Q_IN] * len(XGRID)
         res_central = np.array(extra_set.central_member.xfxQ(22, XGRID, qs))
         res = []

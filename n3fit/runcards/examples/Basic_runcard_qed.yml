@@ -166,7 +166,7 @@ debug: True
 maxcores: 8
 
 fiatlux:
-  luxset: NNPDF40_nnlo_as_01180_1000
+  luxset: NNPDF40_nnlo_as_01180
   additional_errors: true # should be set to true only for the last iteration
   luxseed: 1234567890
   
