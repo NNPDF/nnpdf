@@ -14,7 +14,7 @@ We are comparing:
 
 t0 losses
 ---------
-{@ dataspecs::t0_info t0_chi2_info_table @}
+{@T0_dataspecs dataspecs_t0_chi2_info_table @}
 
 Theory covariance summary
 -------------------------

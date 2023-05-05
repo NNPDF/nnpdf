@@ -223,6 +223,13 @@ def t0_chi2_info_table(pdf, dataset_inputs_abs_chi2_data, t0pdfset, use_t0):
 
     return pd.Series(data, index=data.keys(), name=pdf.label)
 
+dataspecs_t0_chi2_info = collect("t0_chi2_info_table", ("dataspecs",))
+
+@table
+def dataspecs_t0_chi2_info_table(dataspecs_t0_chi2_info, dataspecs_speclabel):
+    return pd.concat(dataspecs_t0_chi2_info, axis=1, keys=dataspecs_speclabel)
+
+
 fits_replica_data = collect('replica_data', ('fits',))
 
 #Do collect in two parts so we get a list for each fit instead of a single list
