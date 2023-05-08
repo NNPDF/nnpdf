@@ -242,7 +242,7 @@ explained above, if the user has not already done so.
 .. _M1:
 
 Installation from source on M1/M2 Macs
------------------------------------
+--------------------------------------
 
 Installation on M1/M2 Macs is not directly supported, so everything needs to be
 built manually. The following steps are required:
@@ -317,11 +317,13 @@ built manually. The following steps are required:
    First, we need to install some dependencies:
 
    .. code::
+
       conda install pkg-config swig cmake
 
    Then build it
 
    .. code::
+
       cd ../../../apfel
       autoreconf -f -i
       PYTHON=$(which python) ./configure --prefix=$CONDA_PREFIX 
