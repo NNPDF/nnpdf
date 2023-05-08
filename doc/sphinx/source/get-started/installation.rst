@@ -280,7 +280,7 @@ built manually. The following steps are required:
 
    Download version 6.4.0 and decompress
 
-    .. code::
+   .. code::
 
        wget -O LHAPDF-6.4.0.tar.gz https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.4.0.tar.gz
        tar -xzvf LHAPDF-6.4.0.tar.gz
@@ -290,7 +290,7 @@ built manually. The following steps are required:
    Regenerate the configuration files, configure the build with python disabled, compile and 
    install. You may need to `brew install automake` first:
 
-    .. code::
+   .. code::
 
       autoreconf -f -i
       ./configure --prefix=$CONDA_PREFIX --disable-python
@@ -359,6 +359,7 @@ built manually. The following steps are required:
       cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 
    Edit the file ``nnpdfgit/nnpdf/CMakeLists.txt`` :
+
     - on line 8 change the option to true, so it says:
 
       .. code::
@@ -418,7 +419,7 @@ built manually. The following steps are required:
       
    or insert the following line in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``:
 
-    .. code::
+   .. code::
 
       tf.config.set_visible_devices([], 'GPU')
 
