@@ -418,7 +418,7 @@ built manually. The following steps are required:
       
    or insert the following line in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``:
 
-.. code::
+    .. code::
 
       tf.config.set_visible_devices([], 'GPU')
 
