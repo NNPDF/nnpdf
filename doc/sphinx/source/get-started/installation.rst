@@ -414,12 +414,12 @@ built manually. The following steps are required:
 
       export CUDA_VISIBLE_DEVICES=0
       
-   or insert the following line in ... [followed by Roy's comment]
+   or insert the following line in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``:
 
-   .. code::
+.. code::
 
       tf.config.set_visible_devices([], 'GPU')
-   You can add this line for example in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``.
+
    And to use legacy optimizers, you only need to change one line in ``n3fit/src/n3fit/backends/keras_backend/MetaModel.py``:
 
    .. code::
