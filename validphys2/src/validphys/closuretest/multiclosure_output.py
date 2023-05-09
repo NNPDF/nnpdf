@@ -308,6 +308,27 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     df.columns = ["ndata", "bias", "variance"]
     return df
 
+@figure
+
+def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
+    """
+    plot the trend of bias and variance with the number of points. It is expected that all these lie
+    on a line
+    """
+    data = []
+    biases = []
+    variances = []
+    for (bias, var, ndata) in zip(datasets_expected_bias_variance):
+        data.append(ndata)
+        biases.append(bias)
+        variances.append(var)
+    fig,ax = plt.subplots()
+    ax.plot(ndata, biases, label = "biases")
+    ax.plot(ndata, variances, label = "variances")
+    ax.legend()
+
+    return fig
+
 @table
 def bias_variance_ratio_by_process(datasets_expected_bias_variance, each_dataset):
     """
