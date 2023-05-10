@@ -18,7 +18,7 @@ import matplotlib as mpl
 import matplotlib.scale as mscale
 import matplotlib.patches as mpatches
 import matplotlib.collections as mcollections
-from matplotlib  import transforms
+from matplotlib import transforms
 from matplotlib.markers import MarkerStyle
 from matplotlib import ticker
 
@@ -26,19 +26,20 @@ from reportengine.floatformatting import format_number
 
 log = logging.getLogger(__name__)
 
-def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False, **kwargs):
+
+def subplots(figsize=None, nrows=1, ncols=1, sharex=False, sharey=False, **kwargs):
     """
     matplotlib.figure wrapper used to generate a figure and add subplots.
 
-    Use matplotlib.figure.Figure() objects to avoid importing ``pyplot`` anywhere. 
-    The reason is that pyplot maintains a global state that makes it misbehave 
+    Use matplotlib.figure.Figure() objects to avoid importing ``pyplot`` anywhere.
+    The reason is that pyplot maintains a global state that makes it misbehave
     in multithreaded applications such when executed under dask parallel mode.
 
     Parameters
     ----------
     figsize : 2-tuple of floats
             defaults is None
-    
+
     nrows, ncols : int, default 1
 
     sharex, sharey : bool, default False
@@ -49,32 +50,37 @@ def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False, **kwargs
         fig, ax = (matplotlib.figure.Figure, fig.subplots)
     """
     fig = Figure(figsize=figsize)
-    ax = fig.subplots(nrows=nrows, ncols = ncols, sharex=sharex, sharey=sharey, **kwargs)
+    ax = fig.subplots(nrows=nrows, ncols=ncols, sharex=sharex, sharey=sharey, **kwargs)
     return fig, ax
 
-def add_subplot(figsize=None,projection=None,**kwargs):
+
+def add_subplot(figsize=None, projection=None, **kwargs):
     """
     matplotlib.figure wrapper used to generate a figure and add a subplot.
 
-    Use matplotlib.figure.Figure() objects to avoid importing ``pyplot`` anywhere. 
-    The reason is that pyplot maintains a global state that makes it misbehave 
+    Use matplotlib.figure.Figure() objects to avoid importing ``pyplot`` anywhere.
+    The reason is that pyplot maintains a global state that makes it misbehave
     in multithreaded applications such when executed under dask parallel mode.
-    
+
+
     Parameters
     ----------
     figsize : 2-tuple of floats
             default is None
     projections : The projection type of the subplot (Axes).
                 default is None
-    
+
+
     Returns
     -------
     tuple
         fig, ax = (matplotlib.figure.Figure, fig.add_subplot)
     """
-    fig = Figure(figsize=figsize)    
-    ax = fig.add_subplot(projection=projection,**kwargs)
+
+    fig = Figure(figsize=figsize)
+    ax = fig.add_subplot(projection=projection, **kwargs)
     return fig, ax
+
 
 def ax_or_gca(f):
     """A decorator. When applied to a function, the keyword argument  ``ax``
