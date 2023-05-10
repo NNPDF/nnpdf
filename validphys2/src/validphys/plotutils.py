@@ -28,7 +28,9 @@ log = logging.getLogger(__name__)
 
 def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False, **kwargs):
     """
-    Use matplotlib.figure.Figure() objects and not import pyplot anywhere. 
+    matplotlib.figure wrapper used to generate a figure and add subplots.
+
+    Use matplotlib.figure.Figure() objects to avoid importing ``pyplot`` anywhere. 
     The reason is that pyplot maintains a global state that makes it misbehave 
     in multithreaded applications such when executed under dask parallel mode.
 
@@ -52,7 +54,9 @@ def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False, **kwargs
 
 def add_subplot(figsize=None,projection=None,**kwargs):
     """
-    Use matplotlib.figure.Figure() objects and not import pyplot anywhere. 
+    matplotlib.figure wrapper used to generate a figure and add a subplot.
+
+    Use matplotlib.figure.Figure() objects to avoid importing ``pyplot`` anywhere. 
     The reason is that pyplot maintains a global state that makes it misbehave 
     in multithreaded applications such when executed under dask parallel mode.
     
