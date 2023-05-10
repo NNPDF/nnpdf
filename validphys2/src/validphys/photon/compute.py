@@ -19,34 +19,33 @@ log = logging.getLogger(__name__)
 
 Q_IN = 100
 FIATLUX_DEFAULT = {
-    "apfel" : False,
-    "q2_max" : 1e8,  # the maximum allowed Q2.
-    "eps_base" : 1e-5, # precision on final integration of double integral.
-    "eps_rel" : 1e-1, # extra precision on any single integration.
-    "mum_proton" : 2.792847356, # proton magnetic moment, from
+    "apfel": False,
+    "q2_max": 1e8,  # the maximum allowed Q2.
+    "eps_base": 1e-5,  # precision on final integration of double integral.
+    "eps_rel": 1e-1,  # extra precision on any single integration.
+    "mum_proton": 2.792847356,  # proton magnetic moment, from
     # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
     # gets it from arXiv:1203.5425 (CODATA)
-
     # the elastic param type, options:
     # dipole
     # A1_world_spline
     # A1_world_pol_spline
-    "elastic_param" : "A1_world_pol_spline",
-    "elastic_electric_rescale" : 1,
-    "elastic_magnetic_rescale" : 1,
+    "elastic_param": "A1_world_pol_spline",
+    "elastic_electric_rescale": 1,
+    "elastic_magnetic_rescale": 1,
     # the inelastic param type, options:
-    "inelastic_param" : "LHAPDF_Hermes_ALLM_CLAS", # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
-    "rescale_r_twist4" : 0,
-    "rescale_r" : 1,
-    "allm_limits" : 0,
-    "rescale_non_resonance" : 1,
-    "rescale_resonance" : 1,
-    "use_mu2_as_upper_limit" : False,
-    "q2min_inel_override" : 0.0,
-    "q2max_inel_override" : 1E300,
-    "lhapdf_transition_q2" : 9,
+    "inelastic_param": "LHAPDF_Hermes_ALLM_CLAS",  # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
+    "rescale_r_twist4": 0,
+    "rescale_r": 1,
+    "allm_limits": 0,
+    "rescale_non_resonance": 1,
+    "rescale_resonance": 1,
+    "use_mu2_as_upper_limit": False,
+    "q2min_inel_override": 0.0,
+    "q2max_inel_override": 1e300,
+    "lhapdf_transition_q2": 9,
     # general
-    "verbose" : False,
+    "verbose": False,
 }
 
 
@@ -56,7 +55,9 @@ class Photon:
     def __init__(self, theoryid, lux_params, replicas):
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
-        fiatlux_runcard["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
+        fiatlux_runcard["qed_running"] = bool(
+            np.isclose(theory["Qedref"], theory["Qref"])
+        )
         # cast explicitly from np.bool_ to bool otherwise problems in dumping it
         # TODO: for the time being, we trigger alphaem running if Qedref=Qref.
         # This is going to be changed in favor of a bool em_running
@@ -117,8 +118,7 @@ class Photon:
             for photon_array in photons_array
         ]
         self.integral = [
-            trapezoid(photons_array[id], XGRID)
-            for id in range(len(self.replicas))
+            trapezoid(photons_array[id], XGRID) for id in range(len(self.replicas))
         ]
 
     def compute_photon_array(self, replica):
@@ -156,7 +156,7 @@ class Photon:
                 if pid == 22:
                     pdfs_init[j] = photon_qin
                     ph_id = j
-                else :
+                else:
                     if pid not in self.luxpdfset.flavors:
                         continue
                     pdfs_init[j] = np.array(
