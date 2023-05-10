@@ -95,12 +95,7 @@ def validphys_group_extractor(datasets, tr_masks):
     # Use zip_longest since tr_mask can be (and it is fine) an empty list
     for dspec, mask in zip_longest(datasets, tr_masks):
         # Load all fktables with the appropiate cuts
-        fktables = [load_cached_fk_tables(fk, dspec.cuts) for fk in dspec.fkspecs]
+        fktables = [fk.load_with_cuts(dspec.cuts) for fk in dspec.fkspecs]
         # And now put them in a FittableDataSet object which
         loaded_obs.append(FittableDataSet(dspec.name, fktables, dspec.op, dspec.frac, mask))
     return loaded_obs
-
-@functools.lru_cache
-def load_cached_fk_tables(fk, cuts):
-    return fk.load_with_cuts(cuts)
-
