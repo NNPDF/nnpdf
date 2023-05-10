@@ -26,7 +26,7 @@ from reportengine.floatformatting import format_number
 
 log = logging.getLogger(__name__)
 
-def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False):
+def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False, **kwargs):
     """
     Use matplotlib.figure.Figure() objects and not import pyplot anywhere. 
     The reason is that pyplot maintains a global state that makes it misbehave 
@@ -47,10 +47,10 @@ def subplots(figsize=None,nrows=1, ncols =1,sharex=False, sharey=False):
         fig, ax = (matplotlib.figure.Figure, fig.subplots)
     """
     fig = Figure(figsize=figsize)
-    ax = fig.subplots(nrows=nrows, ncols = ncols, sharex=sharex, sharey=sharey)
+    ax = fig.subplots(nrows=nrows, ncols = ncols, sharex=sharex, sharey=sharey, **kwargs)
     return fig, ax
 
-def add_subplot(figsize=None,projection=None):
+def add_subplot(figsize=None,projection=None,**kwargs):
     """
     Use matplotlib.figure.Figure() objects and not import pyplot anywhere. 
     The reason is that pyplot maintains a global state that makes it misbehave 
@@ -69,7 +69,7 @@ def add_subplot(figsize=None,projection=None):
         fig, ax = (matplotlib.figure.Figure, fig.add_subplot)
     """
     fig = Figure(figsize=figsize)    
-    ax = fig.add_subplot(projection=projection)
+    ax = fig.add_subplot(projection=projection,**kwargs)
     return fig, ax
 
 def ax_or_gca(f):
