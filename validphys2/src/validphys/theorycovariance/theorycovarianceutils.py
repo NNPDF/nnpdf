@@ -18,7 +18,7 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9, 71, 81}, f"Expecting exactly 3, 5, 7 or 9 or 81 theories, but got {l}.")
+    check(l in {3, 5, 7, 9, 71, 73, 81}, f"Expecting exactly 3, 5, 7 or 9 or 81 theories, but got {l}.")
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
@@ -53,7 +53,7 @@ def check_correct_theory_combination_internal(
     elif l == 7:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-    elif l == 71 or l == 81:
+    elif l in [71, 73, 81]:
         # check Anomalous dimensions variations
         n3lo_vars_dict = {
             "P_gg": 18,
@@ -63,7 +63,11 @@ def check_correct_theory_combination_internal(
         }
         # TODO: for the moment fish the n3lo_ad_variation from the comments
         n3lo_vars_list = []
-        id_max = -10 if l == 81 else None
+        id_max = None
+        if l == 81:
+            id_max = -10
+        elif l == 73:
+            id_max = -2
         for theoryid in theoryids[:id_max]:
             n3lo_vars_list.append([int(val) for val in theoryid.get_description()["Comments"][28:-1].split(",")])
         full_var_list = [[0,0,0,0]]

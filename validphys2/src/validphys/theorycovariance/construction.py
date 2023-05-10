@@ -420,6 +420,11 @@ def covs_pt_prescrip(
             # n3lo ad variation prescriprion
             elif l == 71:
                 s = covmat_n3lo_ad(name1, name2, deltas1, deltas2)
+            # n3lo ihou prescriprion
+            elif l == 73:
+                s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-2], deltas2[:-2])
+                s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+                s = s_ad + s_cf
             # n3lo full covmat prescriprion
             elif l == 81:
                 # spit deltas and compose thcovmat
