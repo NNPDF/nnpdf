@@ -45,10 +45,12 @@ from validphys.loader import (
 )
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
+from validphys.utils import freeze_args
+from frozendict import frozendict
 import validphys.scalevariations
 
-log = logging.getLogger(__name__)
 
+log = logging.getLogger(__name__)
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
@@ -1247,6 +1249,8 @@ class CoreConfig(configparser.Config):
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
         return rules
 
+    @freeze_args
+    @functools.lru_cache
     def produce_rules(
         self,
         theoryid,
@@ -1286,7 +1290,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not isinstance(rule, dict):
+                if not (isinstance(rule, dict) or isinstance(rule, frozendict)):
                     raise ConfigError(f"added rule {i} is not a dict")
                 try:
                     rule_list.append(
