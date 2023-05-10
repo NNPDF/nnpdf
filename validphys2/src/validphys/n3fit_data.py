@@ -74,7 +74,7 @@ class _TrMasks(TupleComp):
             yield m
 
 
-def tr_masks(data, replica_trvlseed, parallel_models):
+def tr_masks(data, replica_trvlseed, parallel_models=False):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
