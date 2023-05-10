@@ -7,6 +7,7 @@ and extracts the relevant information into :py:class:`validphys.n3fit_data_utils
 The ``validphys_group_extractor`` will loop over every dataset of a given group
 loading their fktables (and applying any necessary cuts).
 """
+import functools
 from itertools import zip_longest
 import dataclasses
 import numpy as np
@@ -94,7 +95,12 @@ def validphys_group_extractor(datasets, tr_masks):
     # Use zip_longest since tr_mask can be (and it is fine) an empty list
     for dspec, mask in zip_longest(datasets, tr_masks):
         # Load all fktables with the appropiate cuts
-        fktables = [fk.load_with_cuts(dspec.cuts) for fk in dspec.fkspecs]
+        fktables = [load_cached_fk_tables(fk, dspec.cuts) for fk in dspec.fkspecs]
         # And now put them in a FittableDataSet object which
         loaded_obs.append(FittableDataSet(dspec.name, fktables, dspec.op, dspec.frac, mask))
     return loaded_obs
+
+@functools.lru_cache
+def load_cached_fk_tables(fk, cuts):
+    return fk.load_with_cuts(cuts)
+
