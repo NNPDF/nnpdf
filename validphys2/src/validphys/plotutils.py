@@ -101,7 +101,7 @@ def ax_or_newfig(f):
         noax = 'ax' not in kwargs or kwargs['ax'] is None
         if noax:
                 fig = Figure()
-                kwargs['ax'] = fig.add_subplot(1,1,1)
+                kwargs['ax'] = fig.add_subplot(1, 1, 1)
         result = f(*args, **kwargs)
         if noax:
             kwargs['ax'].legend(loc = 'best')

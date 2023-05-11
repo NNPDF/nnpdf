@@ -14,10 +14,8 @@ from reportengine.floatformatting import format_number
 from reportengine.checks import make_argcheck, CheckError, check_positive
 from reportengine.figure import figure, figuregen
 
-from validphys.plotutils import (plot_horizontal_errorbars, 
-                                    barplot, kde_plot, 
-                                    marker_iter_plot)
 from validphys import plotutils
+from validphys.plotutils import barplot, kde_plot, marker_iter_plot, plot_horizontal_errorbars
 from validphys.paramfits.dataops import check_dataset_items, get_parabola
 
 log = logging.getLogger(__name__)

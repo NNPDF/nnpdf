@@ -782,7 +782,7 @@ def plot_experiments_sqrt_ratio_bootstrap_distribution(
     # generate title, so appending string is fine.
     for sqrt_ratio_sample, exp in zip(
         experiments_bootstrap_sqrt_ratio, experiments_data + ["Total"]
-    ): 
+    ):
         fig, ax = plotutils.subplots()
         ax.hist(sqrt_ratio_sample, bins=20, density=True)
         mean = np.mean(sqrt_ratio_sample)
