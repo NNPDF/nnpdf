@@ -554,7 +554,6 @@ def plot_groups_data_phi_spider(groups_data, groups_data_phi, processed_metadata
     """Plot the phi of all groups of datasets as a spider plot."""
     phi = [exp_phi for (exp_phi, _npoints) in groups_data_phi]
     xticks = [group.name for group in groups_data]
-    
     fig, ax = plotutils.add_subplot(projection='polar')
     
     ax = plotutils.spiderplot(xticks, phi, pdf)
@@ -598,7 +597,7 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2):
         xticks = [dataset.name for dataset in group]
         dschi2 = [dsres.central_result/dsres.ndata for dsres in group_res]
 
-    fig, ax = plotutils.add_subplot(figsize=(4,4), projection='polar')
+    fig, ax = plotutils.add_subplot(figsize=(4, 4), projection='polar')
     ax = plotutils.spiderplot(xticks, dschi2, label=[r'$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
@@ -624,7 +623,7 @@ def _plot_chi2s_spider_df(df, size=6):
     data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()
     expnames = list(df.index.get_level_values(0))
-    fig, ax = plotutils.add_subplot(figsize=(size,size),projection='polar')
+    fig, ax = plotutils.add_subplot(figsize=(size, size), projection='polar')
     for dat, fitname in zip(data, fitnames):
         ax = plotutils.spiderplot(expnames, dat, fitname)
     ax.legend(bbox_to_anchor=(0.3,-0.2), fontsize=15)
@@ -723,11 +722,12 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
 
     """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plotutils.subplots(figsize=(
+    fig, ax = plotutils.subplots(
+        figsize=(
             max(mpl.rcParams.get("figure.figsize")),
             max(mpl.rcParams.get("figure.figsize")),
-        ))
-    
+        )
+    )
     ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
     if replica_filters:
         _scatter_marked(ax, training, valid, replica_filters, zorder=90)
@@ -873,9 +873,9 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
 
         #Start plotting
-        w,h = mpl.rcParams["figure.figsize"]
+        w, h = mpl.rcParams["figure.figsize"]
         h*=2.5
-        fig, axes = plotutils.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
+        fig, axes = plotutils.subplots(nrows=nf, sharex=True, figsize=(w, h), sharey=True)
         fig.suptitle(title)
         colors = sm.to_rgba(info.get_xcol(fb))
         for flindex, (ax, fl) in enumerate(zip(axes, fls)):
@@ -928,7 +928,6 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 
     """
     fig, ax = plotutils.subplots()
-
     ax.axhline(0, color='red')
 
     posset = posdataset.load_commondata()
