@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 LOG_FILE = "evolven3fit_new.log"
 
 LOGGING_SETTINGS = {
-    "formatter": "%(asctime)s %(name)s/%(levelname)s: %(message)s",
+    "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
     "level": logging.INFO,
 }
 
