@@ -115,13 +115,9 @@ def plot_data_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data):
     return plot_dataset_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data)
 
 
-## GDC: I am adding possibility to calculate a weighted average for Bias and Variance. Need to check if it
-## makes sense
-
-
 @figure
 def progressive_sqrt_b_v_ratio_dataset(
-    fits_dataset_bias_variance, dataset, weight=False
+    fits_dataset_bias_variance, dataset
 ):
     """For a set of closure fits, calculate bias and variance across fits on a given dataset.
     Plot the square root ratio between the two quantities as the number of fits increases.
@@ -145,9 +141,6 @@ def progressive_sqrt_b_v_ratio_dataset(
 
     """
     biases, variances, _ = fits_dataset_bias_variance
-    if weight:
-        biases = np.size(biases) * biases
-        variances = np.size(variances) * variances
     prog_biases = []
     prog_var = []
     for i in range(np.size(biases)):
@@ -175,9 +168,9 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
 
 
 @figure
-def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data, weight):
+def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data):
     """Like `progressive_sqrt_b_v_ratio` but for all data."""
-    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data, weight)
+    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data)
 
 
 @figure
