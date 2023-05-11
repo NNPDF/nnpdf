@@ -98,7 +98,7 @@ def export_mask(path, mask):
     np.savetxt(path, mask, fmt='%d')
 
 
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed,sep_mult):
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -106,11 +106,11 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed,sep_mu
 
     """
     log.info('Filtering closure-test data.')
-    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed,sep_mult)
+    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult)
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,sep_mult
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index, sep_mult
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -129,7 +129,7 @@ def filter_closure_data_by_experiment(
         ]
         res.append(
             _filter_closure_data(
-                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,sep_mult
+                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index, sep_mult
             )
         )
 
@@ -182,7 +182,7 @@ def _filter_real_data(filter_path, data):
 
 def _filter_closure_data(
     filter_path, data, fakepdf, fakenoise, filterseed, experiments_index
-    ,sep_mult
+    , sep_mult
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata

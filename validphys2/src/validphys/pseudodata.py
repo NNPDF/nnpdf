@@ -287,8 +287,7 @@ def level0_commondata_wc(data, fakepdf):
 
 
 def make_level1_data(
-    data, level0_commondata_wc, filterseed, experiments_index,
-    sep_mult
+    data, level0_commondata_wc, filterseed, experiments_index, sep_mult
 ):
     """
     Given a list of Level 0 commondata instances, return the
