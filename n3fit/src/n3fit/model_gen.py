@@ -13,7 +13,7 @@ from dataclasses import dataclass
 import numpy as np
 from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
+from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask
 from n3fit.layers.observable import is_unique
 
 from n3fit.backends import MetaModel, Input
@@ -409,7 +409,7 @@ def pdfNN_layer_generator(
     and outputs a basis of 14 PDFs.
     It generates the preprocessing of the x into a set (x, log(x)),
     the arbitrary NN to fit the form of the PDF
-    and the preprocessing factors.
+    and the prefactor.
 
     The funtional form of the output of this function is of:
 
@@ -444,7 +444,7 @@ def pdfNN_layer_generator(
     A function is constructed that joins all those layers. The function takes a
     tensor as the input and applies all layers for NN in order.
 
-    4. Create a preprocessing layer (that takes as input the same tensor x as the NN)
+    4. Create a prefactor layer (that takes as input the same tensor x as the NN)
     and multiply it to the NN. We have now:
         N(x)_{j} * x^{1-alpha_{j}} * (1-x)^{beta_{j}}
 
@@ -481,7 +481,7 @@ def pdfNN_layer_generator(
             selects the type of architecture of the NN. Default: dense
         flav_info: dict
             dictionary containing the information about each PDF (basis dictionary in the runcard)
-            to be used by Preprocessing
+            to be used by Prefactor
         out: int
             number of output flavours of the model (default 14)
         seed: list(int)
@@ -604,12 +604,12 @@ def pdfNN_layer_generator(
                 x = layer(x)
             return x
 
-        preproseed = replica_seed + number_of_layers
-        layer_preproc = Preprocessing(
+        prefacseed = replica_seed + number_of_layers
+        layer_preproc = Prefactor(
             flav_info=flav_info,
             input_shape=(1,),
-            name=f"pdf_prepro_{i_replica}",
-            seed=preproseed,
+            name=f"pdf_prefactor_{i_replica}",
+            seed=prefacseed,
             large_x=not subtract_one,
         )
 

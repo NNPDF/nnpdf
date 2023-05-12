@@ -1,4 +1,4 @@
-from .preprocessing import Preprocessing
+from .prefactor import Prefactor
 from .rotations import FkRotation, FlavourToEvolution, ObsRotation
 from .x_operations import xIntegrator, xDivide
 from .msr_normalization import MSR_Normalization
