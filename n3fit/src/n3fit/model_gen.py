@@ -570,9 +570,9 @@ def pdfNN_layer_generator(
     else:
         sumrule_layer = lambda x: x
 
-    # Now we need a trainable network per model to be trained in parallel
+    # Now we need a trainable network per replica to be trained in parallel
     pdf_models = []
-    for i, layer_seed in enumerate(seed):
+    for i_replica, replica_seed in enumerate(seed):
         if layer_type == "dense":
             reg = regularizer_selector(regularizer, **regularizer_args)
             list_of_pdf_layers = generate_dense_network(
@@ -580,7 +580,7 @@ def pdfNN_layer_generator(
                 nodes,
                 activations,
                 initializer_name,
-                seed=layer_seed,
+                seed=replica_seed,
                 dropout_rate=dropout,
                 regularizer=reg,
             )
@@ -593,7 +593,7 @@ def pdfNN_layer_generator(
                 nodes,
                 activations,
                 initializer_name,
-                seed=layer_seed,
+                seed=replica_seed,
                 basis_size=last_layer_nodes,
             )
 
@@ -604,11 +604,11 @@ def pdfNN_layer_generator(
                 x = layer(x)
             return x
 
-        preproseed = layer_seed + number_of_layers
+        preproseed = replica_seed + number_of_layers
         layer_preproc = Preprocessing(
             flav_info=flav_info,
             input_shape=(1,),
-            name=f"pdf_prepro_{i}",
+            name=f"pdf_prepro_{i_replica}",
             seed=preproseed,
             large_x=not subtract_one,
         )
@@ -641,7 +641,7 @@ def pdfNN_layer_generator(
 
         # Create the model
         pdf_model = MetaModel(
-            model_input, final_pdf(placeholder_input), name=f"PDF_{i}", scaler=scaler
+            model_input, final_pdf(placeholder_input), name=f"PDF_{i_replica}", scaler=scaler
         )
         pdf_models.append(pdf_model)
     return pdf_models
