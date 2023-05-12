@@ -534,7 +534,7 @@ def pdfNN_layer_generator(
     # Generate the generic layers that will not depend on extra considerations
 
     # First prepare the input for the PDF model and any scaling if needed
-    placeholder_input = Input(shape=(None, 1), batch_size=1)
+    placeholder_input = Input(shape=(None, 1), batch_size=1, name='xgrids')
 
     subtract_one = False
     process_input = Lambda(lambda x: x)
@@ -546,7 +546,7 @@ def pdfNN_layer_generator(
         process_input = Lambda(lambda x: 2 * x - 1)
         subtract_one = True
         input_x_eq_1 = scaler([1.0])[0]
-        placeholder_input = Input(shape=(None, 2), batch_size=1)
+        placeholder_input = Input(shape=(None, 2), batch_size=1, name='xgrids')
     elif inp == 2:
         # If the input is of type (x, logx)
         # create a x --> (x, logx) layer to preppend to everything
