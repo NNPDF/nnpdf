@@ -103,19 +103,25 @@ class MSR_Normalization(MetaLayer):
             """
                 layer_pdf: output of the PDF, unnormalized, ready for the fktable
             """
-            x_original = op.op_gather_keep_dims(self.xgrid_integration, -1, axis=-1)
-            x_divided = self.divide_by_x(x_original)
             pdf_xgrid_integration = layer_pdf(self.xgrid_integration)
-            pdf_integrand = op.op_multiply([x_divided, pdf_xgrid_integration])
-            normalization_factor = self(self.integrator(pdf_integrand))
 
             def ultimate_pdf(x):
                 pdf_xgrid = layer_pdf(x)
-                return normalization_factor * pdf_xgrid
+                return self.tempcall([pdf_xgrid, pdf_xgrid_integration])
 
             return ultimate_pdf
 
         return apply_normalization
+
+    def tempcall(self, pdfx_pdfinteg):
+        pdf_xgrid, pdf_xgrid_integration = pdfx_pdfinteg
+
+        x_original = op.op_gather_keep_dims(self.xgrid_integration, -1, axis=-1)
+        x_divided = self.divide_by_x(x_original)
+        pdf_integrand = op.op_multiply([x_divided, pdf_xgrid_integration])
+        normalization_factor = self(self.integrator(pdf_integrand))
+
+        return normalization_factor * pdf_xgrid
 
     def _gen_integration_input(self):
         """
