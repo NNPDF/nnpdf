@@ -18,7 +18,9 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, output_dim=14, mode="ALL", **kwargs):
+    def __init__(self, output_dim=14, mode="ALL", nx=int(2e3), scaler=None, **kwargs):
+        self.nx = nx
+        self.scaler = scaler
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -67,7 +69,7 @@ class MSR_Normalization(MetaLayer):
 
         return self._out_scatter(norm_constants)
 
-    def msr_impose(self, nx=int(2e3), mode='All', scaler=None):
+    def msr_impose(self):
         """
             This function receives:
             Generates a function that applies a normalization layer to the fit.
@@ -80,26 +82,22 @@ class MSR_Normalization(MetaLayer):
 
             Parameters
             ----------
-                nx: int
-                    number of points for the integration grid, default: 2000
-                mode: str
-                    what sum rules to compute (MSR, VSR or All), default: All
                 scaler: scaler
                     Function to apply to the input. If given the input to the model
                     will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
         """
 
         # 1. Generate the fake input which will be used to integrate
-        xgrid, weights_array = gen_integration_input(nx)
+        xgrid, weights_array = self._gen_integration_input()
         # 1b If a scaler is provided, scale the input xgrid
-        if scaler:
-            xgrid = scaler(xgrid)
+        if self.scaler:
+            xgrid = self.scaler(xgrid)
 
         # 2. Prepare the pdf for integration
         #    for that we need to multiply several flavours with 1/x
         division_by_x = xDivide()
         # 3. Now create the integration layer (the layer that will simply integrate, given some weight
-        integrator = xIntegrator(weights_array, input_shape=(nx,))
+        integrator = xIntegrator(weights_array, input_shape=(self.nx,))
 
         # 4. Now create the normalization by selecting the right integrations
 
@@ -122,28 +120,27 @@ class MSR_Normalization(MetaLayer):
 
         return apply_normalization, xgrid_input
 
-def gen_integration_input(nx):
-    """
-    Generates a np.array (shaped (nx,1)) of nx elements where the
-    nx/2 first elements are a logspace between 0 and 0.1
-    and the rest a linspace from 0.1 to 0
-    """
-    lognx = int(nx / 2)
-    linnx = int(nx - lognx)
-    xgrid_log = np.logspace(-9, -1, lognx + 1)
-    xgrid_lin = np.linspace(0.1, 1, linnx)
-    xgrid = np.concatenate([xgrid_log[:-1], xgrid_lin]).reshape(nx, 1)
+    def _gen_integration_input(self):
+        """
+        Generates a np.array (shaped (nx,1)) of nx elements where the
+        nx/2 first elements are a logspace between 0 and 0.1
+        and the rest a linspace from 0.1 to 0
+        """
+        lognx = int(self.nx / 2)
+        linnx = int(self.nx - lognx)
+        xgrid_log = np.logspace(-9, -1, lognx + 1)
+        xgrid_lin = np.linspace(0.1, 1, linnx)
+        xgrid = np.concatenate([xgrid_log[:-1], xgrid_lin]).reshape(self.nx, 1)
 
-    spacing = [0.0]
-    for i in range(1, nx):
-        spacing.append(np.abs(xgrid[i - 1] - xgrid[i]))
-    spacing.append(0.0)
+        spacing = [0.0]
+        for i in range(1, self.nx):
+            spacing.append(np.abs(xgrid[i - 1] - xgrid[i]))
+        spacing.append(0.0)
 
-    weights = []
-    for i in range(nx):
-        weights.append((spacing[i] + spacing[i + 1]) / 2.0)
-    weights_array = np.array(weights).reshape(nx, 1)
+        weights = []
+        for i in range(self.nx):
+            weights.append((spacing[i] + spacing[i + 1]) / 2.0)
+        weights_array = np.array(weights).reshape(self.nx, 1)
 
-    return xgrid, weights_array
-
+        return xgrid, weights_array
 
