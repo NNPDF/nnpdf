@@ -368,6 +368,7 @@ def backend_function(fun_name, *args, **kwargs):
     fun = getattr(K, fun_name)
     return fun(*args, **kwargs)
 
+
 # Phyics-Related Operations
 def extract_neutron_pdf(raw_pdf, mask, axis=2):
     """Take a raw (bound)-proton PDFs and extract the neutron-bound
@@ -399,4 +400,5 @@ def add_target_dependence(xgrid, a_value):
     # in the input. Now, as opposed to the free-proton fit the input
     # (still called `xgrid`) is a two-dimensional array.
     # TODO: Find a better (again) to propagate the A-dependence
-    return np.stack((xgrid, np.repeat(a_value, xgrid.size)), axis=-1)
+    a_value_expand = np.full(xgrid.shape, a_value)
+    return np.stack((xgrid, a_value_expand), axis=-1)

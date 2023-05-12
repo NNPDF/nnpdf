@@ -23,9 +23,10 @@ def construct_pdf(pdf, target, m_mask, n_mask):
     # Compute bound-neutron PDF out of the bound-proton and construct
     # the nuclear-PDFs to be convoluted with the FK tables.
     if a_value != z_value:
-        neutron_pdf = op.extract_neutron_pdf(pdf_masked, n_mask)
+        neutron_pdf = op.extract_neutron_pdf(pdf, n_mask)
+        neutron_pdf_masked = op.boolean_mask(neutron_pdf, m_mask, axis=2)
         # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
-        pdf_masked = z_value * pdf_masked + (a_value - z_value) * neutron_pdf
+        pdf_masked = z_value * pdf_masked + (a_value - z_value) * neutron_pdf_masked
         # TODO: Check the Normalization if Applicable to ALL observables
         pdf_masked /= a_value
 
@@ -84,8 +85,8 @@ class DIS(Observable):
         if self.many_masks:
             # In the case of nuclear fit, a DIS dataset might contain different x
             if self.splitting:
-                splitted_pdf = op.split(pdf_raw, self.splitting, axis=1)
-                for mask, target, pdf, fk in zip(self.all_masks, self.target_info, splitted_pdf, self.fktables):
+                splitted_pdf = op.split(pdf, self.splitting, axis=1)
+                for mask, target, pdf, fktable in zip(self.all_masks, self.target_info, splitted_pdf, self.fktables):
                     pdf_masked = construct_pdf(pdf, target, mask, self.neutron_mask)
                     res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                     results.append(res)

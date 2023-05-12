@@ -215,16 +215,18 @@ def observable_generator(
             )
 
         # If the observable layer found that all input grids are equal, the splitting will be None
-        # otherwise the different xgrids need to be stored separately
+        # otherwise the different xgrids need to be stored separately.
+        # By introducing the `A`-dependence, the `xgrids`inputs should now be extracted from the
+        # `Observable` class.
         # Note: for pineappl grids, obs_layer_tr.splitting should always be None
         if obs_layer_tr.splitting is None:
             xgrid = obs_layer_tr.xgrids[0]
             model_inputs.append(xgrid)
-            dataset_xsizes.append(xgrid.shape[1])
+            dataset_xsizes.append(xgrid.shape[0])
         else:
             xgrids = obs_layer_tr.xgrids
             model_inputs += xgrids
-            dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
+            dataset_xsizes.append(sum([i.shape[0] for i in xgrids]))
 
         model_obs_tr.append(obs_layer_tr)
         model_obs_vl.append(obs_layer_vl)
@@ -236,8 +238,8 @@ def observable_generator(
         model_inputs = model_inputs[0:1]
         dataset_xsizes = dataset_xsizes[0:1]
 
-    # Reshape all inputs arrays to be (1, nx, 2)
-    model_inputs = np.concatenate(model_inputs, axis=1)
+    # Reshape all inputs arrays to be (nx, 2)
+    model_inputs = np.concatenate(model_inputs, axis=0)
 
     full_nx = sum(dataset_xsizes)
     if spec_dict["positivity"]:
@@ -528,7 +530,7 @@ def pdfNN_layer_generator(
         impose_sumrule = "All"
 
     if scaler:
-        inp = 2
+        raise ValueError("Feature Scaling is not Supported yet!")
 
     if activations is None:
         activations = ["tanh", "linear"]
@@ -630,20 +632,24 @@ def pdfNN_layer_generator(
         )
 
         # Apply preprocessing and basis
-        def layer_fitbasis(x):
-            """The tensor x has a expected shape of (1, None, {2,4})
-            where x[...,0] corresponds to the feature_scaled input and
-            x[...,-1] the original input.
+        def layer_fitbasis(nn_input):
+            """The tensor T has a expected shape of (1, None, {2,4}).
+            In principle, T[1, None, :2] represents the scaled input
+            while T[1, None, 2:] represents the original input.
             """
-            x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
-            x_original = op.op_gather_keep_dims(x, -1, axis=-1)
+            # Extract the x value from the original input. The resulting
+            # shape should be (1, None, 1)
+            x_input = op.op_gather_keep_dims(nn_input, 0, axis=-1)
+            # TODO: Fix case where Feature Scaling is ON
+            # import ipdb; ipdb.set_trace()
 
-            nn_output = dense_me(x_scaled)
+            nn_output = dense_me(nn_input)
             if subtract_one:
                 nn_at_one = dense_me(layer_x_eq_1)
                 nn_output = op.op_subtract([nn_output, nn_at_one])
 
-            ret = op.op_multiply([nn_output, layer_preproc(x_original)])
+            ret = op.op_multiply([nn_output, layer_preproc(x_input)])
+            # ret = nn_output
             if basis_rotation.is_identity():
                 # if we don't need to rotate basis we don't want spurious layers
                 return ret

@@ -12,6 +12,7 @@ def is_unique(list_of_arrays):
             return False
     return True
 
+
 def generate_neutron_mask(number_fl):
     """Generate the mask to compute the neutron-bound PDFs from the
     proton ones. Assumming `isospin asymmetry` the relation between
@@ -77,11 +78,11 @@ class Observable(MetaLayer, ABC):
         self.xgrids = []
         self.fktables = []
         for fkdata, fk, info in zip(fktable_data, fktable_arr, target_info):
-            xgrids_wa = op.add_target_dependence(fkdata.xgrid, info['A'])
             xgrids_shape.append(fkdata.xgrid.size)
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
-            self.xgrids.append(np.expand_dims(xgrids_wa, axis=0))
+            xgrids_wa = op.add_target_dependence(fkdata.xgrid, info['A'])
+            self.xgrids.append(xgrids_wa)
 
         # check how many xgrids this dataset needs
         if is_unique(self.xgrids):

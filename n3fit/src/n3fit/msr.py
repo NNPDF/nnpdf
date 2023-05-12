@@ -74,15 +74,19 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None):
     normalizer = MSR_Normalization(mode=mode)
 
     # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
-    xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
+    # TODO: For the time being, only A=1 is used during the integration. This needs to be modified
+    xinput_wa = op.add_target_dependence(xgrid, a_value=1)
+    nn_input = op.numpy_to_input(xinput_wa, name="integration_grid")
+
     # Finally prepare a function which will take as input the output of the PDF model
     # and will return it appropiately normalized.
     def apply_normalization(layer_pdf):
         """
             layer_pdf: output of the PDF, unnormalized, ready for the fktable
         """
-        x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
-        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
+        x_original = op.op_gather_keep_dims(nn_input, 0, axis=-1)
+        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(nn_input)])
+        # import ipdb; ipdb.set_trace()
         normalization = normalizer(integrator(pdf_integrand))
 
         def ultimate_pdf(x):
@@ -90,4 +94,4 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None):
 
         return ultimate_pdf
 
-    return apply_normalization, xgrid_input
+    return apply_normalization, nn_input

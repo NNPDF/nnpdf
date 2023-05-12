@@ -342,7 +342,7 @@ class ModelTrainer:
                 inputs_unique.append(igrid)
 
         # Concatenate the unique inputs
-        input_arr = np.concatenate(inputs_unique, axis=1).T
+        input_arr = np.concatenate(inputs_unique, axis=0)
         if self._scaler:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
@@ -350,7 +350,7 @@ class ModelTrainer:
 
         # The PDF model will be called with a concatenation of all inputs
         # now the output needs to be splitted so that each experiment takes its corresponding input
-        sp_ar = [[i.shape[1] for i in inputs_unique]]
+        sp_ar = [[i.shape[0] for i in inputs_unique]]
         sp_kw = {"axis": 1}
         sp_layer = op.as_layer(
             op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
