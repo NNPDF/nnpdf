@@ -573,6 +573,15 @@ def pdfNN_layer_generator(
     # Now we need a trainable network per replica to be trained in parallel
     pdf_models = []
     for i_replica, replica_seed in enumerate(seed):
+        prefacseed = replica_seed + number_of_layers
+        compute_prefactor = Prefactor(
+            flav_info=flav_info,
+            input_shape=(1,),
+            name=f"pdf_prefactor_{i_replica}",
+            seed=prefacseed,
+            large_x=not subtract_one,
+        )
+
         if layer_type == "dense":
             reg = regularizer_selector(regularizer, **regularizer_args)
             list_of_pdf_layers = generate_dense_network(
@@ -604,15 +613,6 @@ def pdfNN_layer_generator(
                 x = layer(x)
             return x
 
-        prefacseed = replica_seed + number_of_layers
-        layer_preproc = Prefactor(
-            flav_info=flav_info,
-            input_shape=(1,),
-            name=f"pdf_prefactor_{i_replica}",
-            seed=prefacseed,
-            large_x=not subtract_one,
-        )
-
         # Apply preprocessing and basis
         def layer_fitbasis(x):
             """The tensor x has a expected shape of (1, None, {1,2})
@@ -626,7 +626,9 @@ def pdfNN_layer_generator(
                 nn_at_one = neural_network(process_input(layer_x_eq_1))
                 nn_output = op.op_subtract([nn_output, nn_at_one])
 
-            ret = op.op_multiply([nn_output, layer_preproc(x_original)])
+            apply_prefactor = Lambda(op.op_multiply)
+            prefactor = compute_prefactor(x_original)
+            ret = apply_prefactor([nn_output, prefactor])
             if basis_rotation.is_identity():
                 # if we don't need to rotate basis we don't want spurious layers
                 return ret
