@@ -597,15 +597,12 @@ def pdfNN_layer_generator(
                 basis_size=last_layer_nodes,
             )
 
-        def dense_me(x):
+        def neural_network(x):
             """Takes an input tensor `x` and applies all layers
             from the `list_of_pdf_layers` in order"""
-            processed_x = process_input(x)
-            curr_fun = list_of_pdf_layers[0](processed_x)
-
-            for dense_layer in list_of_pdf_layers[1:]:
-                curr_fun = dense_layer(curr_fun)
-            return curr_fun
+            for layer in list_of_pdf_layers:
+                x = layer(x)
+            return x
 
         preproseed = layer_seed + number_of_layers
         layer_preproc = Preprocessing(
@@ -624,9 +621,9 @@ def pdfNN_layer_generator(
             x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
             x_original = op.op_gather_keep_dims(x, -1, axis=-1)
 
-            nn_output = dense_me(x_scaled)
+            nn_output = neural_network(process_input(x_scaled))
             if subtract_one:
-                nn_at_one = dense_me(layer_x_eq_1)
+                nn_at_one = neural_network(process_input(layer_x_eq_1))
                 nn_output = op.op_subtract([nn_output, nn_at_one])
 
             ret = op.op_multiply([nn_output, layer_preproc(x_original)])
