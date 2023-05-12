@@ -13,7 +13,6 @@ from types import SimpleNamespace
 
 
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 
 from reportengine.figure import figure, figuregen
@@ -137,7 +136,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         basis = self.firstgrid.basis
 
         for flindex, fl in enumerate(self.firstgrid.flavours):
-            fig, ax = plt.subplots()
+            fig, ax = plotutils.subplots()
             parton_name = basis.elementlabel(fl)
             flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
                                     parton_name=parton_name)
@@ -273,7 +272,7 @@ class AllFlavoursPlotter(PDFPlotter):
         self.hatchit = plotutils.hatch_iter()
 
         basis = self.firstgrid.basis
-        fig, ax = plt.subplots()
+        fig, ax = plotutils.subplots()
         ax.set_xlabel('$x$')
         ax.set_ylabel(self.get_ylabel(None))
         ax.set_xscale(self.xscale)
@@ -710,8 +709,7 @@ def plot_lumi1d(
     whether to show detailed information on what kind of confidence interval
     is being plotted in the legend labels.
     """
-
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     if normalize_to is not None:
         norm = pdfs_lumis[normalize_to].grid_values.central_value()
         ylabel = f"Ratio to {pdfs[normalize_to]}"
@@ -822,7 +820,7 @@ def plot_lumi1d_uncertainties(
     over the integration range.
     """
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     if normalize_to is not None:
         norm = pdfs_lumis[normalize_to].grid_values.central_value()
         ylabel = f"Ratio to {pdfs[normalize_to]}"
@@ -897,7 +895,7 @@ def plot_lumi1d_replicas(
     PDFs.
     """
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     if normalize_to is not None:
         norm = pdfs_lumis[normalize_to].grid_values.central_value()
         ylabel = f"Ratio to {pdfs[normalize_to]}"
@@ -998,11 +996,11 @@ def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
 
     cmap = copy.copy(cm.viridis_r)
     cmap.set_bad("white", alpha=0)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     gv = lumigrid2d.grid_values
     mat = gv.central_value()
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
     mat = _reflect_matud(mat)
     y = _reflect_matrl(lumigrid2d.y, odd=True)
@@ -1078,7 +1076,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     gv = grid.grid_values
     mat = gv.std_error()/np.abs(gv.central_value())*100
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
     mat = _reflect_matud(mat)
     y = _reflect_matrl(grid.y, odd=True)

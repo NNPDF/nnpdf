@@ -7,7 +7,6 @@ closure fits with the previous effective exponents, to see if there is a big
 dependence on the level 1 shift.
 
 """
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from reportengine import collect
@@ -20,6 +19,7 @@ from validphys.closuretest.closure_checks import (
     check_fits_underlying_law_match,
 )
 from validphys.plotutils import plot_horizontal_errorbars
+from validphys import plotutils
 
 
 def _next_multiclosure_preprocessing_table(fits_pdf, fits_preprocessing_table):
@@ -180,7 +180,7 @@ def plot_next_multiclosure_alpha_preprocessing_range_width(
         next_flavour_range = next_multiclosure_alpha_preprocessing_table.loc[:, flavour]
         next_flavour_range_vals = next_flavour_range.to_numpy()
         diffs = next_flavour_range_vals[:, 1] - next_flavour_range_vals[:, 0]
-        fig, ax = plt.subplots()
+        fig, ax = plotutils.subplots()
         ax.hist(diffs, label="Next range width")
         prev_lims = first_prev_ranges.loc[flavour].to_numpy().squeeze()
         ax.axvline(
