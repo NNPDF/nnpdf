@@ -11,7 +11,7 @@
 """
 from dataclasses import dataclass
 import numpy as np
-from n3fit.msr import msr_impose
+from n3fit.layers.msr_normalization import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask
 from n3fit.layers.observable import is_unique
