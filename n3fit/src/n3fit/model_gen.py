@@ -566,7 +566,7 @@ def pdfNN_layer_generator(
     if impose_sumrule:
         msr_normalization = MSR_Normalization(mode=impose_sumrule)
         sumrule_layer = msr_normalization.msr_impose()
-        model_input["integrator_input"] = msr_normalization.xgrid_input
+        model_input["integrator_input"] = msr_normalization.xgrid_integration
     else:
         sumrule_layer = lambda x: x
 

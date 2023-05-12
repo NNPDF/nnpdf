@@ -42,6 +42,12 @@ class MSR_Normalization(MetaLayer):
         )
 
         self._gen_integration_input()
+        # 2. Prepare the pdf for integration
+        #    for that we need to multiply several flavours with 1/x
+        self.divide_by_x = xDivide()
+        # 3. Now create the integration layer (the layer that will simply integrate, given some weight
+        self.integrator = xIntegrator(self.weights_array, input_shape=(self.nx,))
+
 
         super().__init__(**kwargs, name="normalizer")
 
@@ -89,12 +95,6 @@ class MSR_Normalization(MetaLayer):
                     will be a (1, None, 2) tensor where dim [:,:,0] is scaled 
         """
 
-        # 2. Prepare the pdf for integration
-        #    for that we need to multiply several flavours with 1/x
-        division_by_x = xDivide()
-        # 3. Now create the integration layer (the layer that will simply integrate, given some weight
-        integrator = xIntegrator(self.weights_array, input_shape=(self.nx,))
-
         # 4. Now create the normalization by selecting the right integrations
 
         # Finally prepare a function which will take as input the output of the PDF model
@@ -103,12 +103,15 @@ class MSR_Normalization(MetaLayer):
             """
                 layer_pdf: output of the PDF, unnormalized, ready for the fktable
             """
-            x_original = op.op_gather_keep_dims(self.xgrid_input, -1, axis=-1)
-            pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(self.xgrid_input)])
-            normalization = self(integrator(pdf_integrand))
+            x_original = op.op_gather_keep_dims(self.xgrid_integration, -1, axis=-1)
+            x_divided = self.divide_by_x(x_original)
+            pdf_xgrid_integration = layer_pdf(self.xgrid_integration)
+            pdf_integrand = op.op_multiply([x_divided, pdf_xgrid_integration])
+            normalization_factor = self(self.integrator(pdf_integrand))
 
             def ultimate_pdf(x):
-                return layer_pdf(x)*normalization
+                pdf_xgrid = layer_pdf(x)
+                return normalization_factor * pdf_xgrid
 
             return ultimate_pdf
 
@@ -142,5 +145,5 @@ class MSR_Normalization(MetaLayer):
             xgrid = self.scaler(xgrid)
 
         # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
-        self.xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
+        self.xgrid_integration = op.numpy_to_input(xgrid, name="integration_grid")
 
