@@ -11,9 +11,8 @@
 """
 from dataclasses import dataclass
 import numpy as np
-from n3fit.layers.msr_normalization import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask
+from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask, MSR_Normalization
 from n3fit.layers.observable import is_unique
 
 from n3fit.backends import MetaModel, Input
@@ -565,7 +564,8 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
+        msr_normalization = MSR_Normalization(mode=impose_sumrule)
+        sumrule_layer, integrator_input = msr_normalization.msr_impose(mode=impose_sumrule, scaler=scaler)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
