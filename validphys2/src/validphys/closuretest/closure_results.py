@@ -437,7 +437,7 @@ def covmat_diffs(data, inconsistent_datasets, sys_rescaling_factor):
     # MULT/UNCORR
     # use the following entries_dict as input for process_commondata
     entries_dict = {"A/C":[True,False,True,False],"A/U":[True,False,False,True],
-                    "M/C":[False,True,True,False],"M/U":[True,True,True,False]}
+                    "M/C":[False,True,True,False],"M/U":[False,True,False,True]}
     impact_dict = {}
     for inconsist_ds in inconsistent_datasets:
         cov_dict = {}
