@@ -11,6 +11,7 @@ from reportengine.compat import yaml
 import validphys
 import n3fit
 from n3fit import vpinterface
+from n3fit.backends import operations as op
 
 XGRID = np.array(
     [
@@ -326,6 +327,8 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = replica_status.positivity_status
+    # all_info["arc_lengths"] = None
+    # all_info["integrability"] = None
     all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
     all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
     all_info["timing"] = timing

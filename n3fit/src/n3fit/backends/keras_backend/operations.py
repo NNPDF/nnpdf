@@ -400,5 +400,8 @@ def add_target_dependence(xgrid, a_value):
     # in the input. Now, as opposed to the free-proton fit the input
     # (still called `xgrid`) is a two-dimensional array.
     # TODO: Find a better (again) to propagate the A-dependence
+    if xgrid.ndim == 1:
+        xgrid = np.expand_dims(xgrid, axis=-1)
+
     a_value_expand = np.full(xgrid.shape, a_value)
-    return np.stack((xgrid, a_value_expand), axis=-1)
+    return np.concatenate((xgrid, a_value_expand), axis=-1)
