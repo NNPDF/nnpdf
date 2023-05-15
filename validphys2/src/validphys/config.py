@@ -1421,12 +1421,13 @@ class CoreConfig(configparser.Config):
         self,
         q2min=None,
         w2min=None,
+        maxTau=None,
         default_filter_settings=None,
         filter_defaults={},
         default_filter_settings_recorded_spec_=None,
     ):
-        """Produce default values for filters taking into account both the
-        values of ``q2min`` and ` `w2min`` defined at namespace
+        """Produce default values for filters taking into account the
+        values of ``q2min``, ` `w2min`` and ``maxTau`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
@@ -1443,6 +1444,13 @@ class CoreConfig(configparser.Config):
             and w2min != filter_defaults["w2min"]
         ):
             raise ConfigError("w2min defined multiple times with different values")
+        
+        if (
+            maxTau is not None
+            and "maxTau" in filter_defaults
+            and maxTau != filter_defaults["maxTau"]
+        ):
+            raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
             filter_defaults = default_filter_settings_recorded_spec_[
@@ -1464,6 +1472,10 @@ class CoreConfig(configparser.Config):
         if w2min is not None and defaults_loaded:
             log.warning("Using w2min from runcard")
             filter_defaults["w2min"] = w2min
+            
+        if maxTau is not None and defaults_loaded:
+            log.warning("Using maxTau from runcard")
+            filter_defaults["maxTau"] = maxTau
 
         return filter_defaults
 
