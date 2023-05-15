@@ -122,7 +122,8 @@ class MSR_Normalization(MetaLayer):
         x_original = self.get_original(self.xgrid_integration)
         x_divided = self.divide_by_x(x_original)
         pdf_integrand = self.compute_integrand([x_divided, pdf_xgrid_integration])
-        normalization_factor = self(self.integrator(pdf_integrand))
+        pdf_integrated = self.integrator(pdf_integrand)
+        normalization_factor = self(pdf_integrated)
 
         pdf_normalized = self.compute_normalized_pdf([pdf_xgrid, normalization_factor])
         return pdf_normalized
