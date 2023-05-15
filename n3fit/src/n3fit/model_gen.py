@@ -536,20 +536,29 @@ def pdfNN_layer_generator(
     placeholder_input = Input(shape=(None, 1), batch_size=1, name='xgrids')
 
     subtract_one = False
-    process_input = Lambda(lambda x: x)
+    process_input = Lambda(lambda x: x, name='process_input')
     input_x_eq_1 = [1.0]
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
     if scaler:
         # change the input domain [0,1] -> [-1,1]
-        process_input = Lambda(lambda x: 2 * x - 1)
+        process_input = Lambda(lambda x: 2 * x - 1, name='process_input')
         subtract_one = True
         input_x_eq_1 = scaler([1.0])[0]
         placeholder_input = Input(shape=(None, 2), batch_size=1, name='xgrids')
     elif inp == 2:
         # If the input is of type (x, logx)
         # create a x --> (x, logx) layer to preppend to everything
-        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1))
+        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='process_input')
+
+    extract_scaled = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
+    extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
+
+    # the layer that multiplies the NN output by the prefactor
+    apply_prefactor = Lambda(op.op_multiply, name='apply_prefactor')
+
+    # the layer that subtracts 1 from the NN output
+    subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
 
     model_input = {"pdf_input": placeholder_input}
     if subtract_one:
@@ -614,25 +623,25 @@ def pdfNN_layer_generator(
             return x
 
         # Apply preprocessing and basis
+
         def layer_fitbasis(x):
             """The tensor x has a expected shape of (1, None, {1,2})
             where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
             """
-            x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
-            x_original = op.op_gather_keep_dims(x, -1, axis=-1)
+            x_scaled = extract_scaled(x)
+            x_original = extract_original(x)
 
             nn_output = neural_network(process_input(x_scaled))
             if subtract_one:
                 nn_at_one = neural_network(process_input(layer_x_eq_1))
-                nn_output = op.op_subtract([nn_output, nn_at_one])
+                nn_output = subtract_one_layer([nn_output, nn_at_one])
 
-            apply_prefactor = Lambda(op.op_multiply)
             prefactor = compute_prefactor(x_original)
             ret = apply_prefactor([nn_output, prefactor])
-            if basis_rotation.is_identity():
+            if not basis_rotation.is_identity():
                 # if we don't need to rotate basis we don't want spurious layers
-                return ret
-            return basis_rotation(ret)
+                ret = basis_rotation(ret)
+            return ret
 
         # Rotation layer, changes from the 8-basis to the 14-basis
         def layer_pdf(x):
