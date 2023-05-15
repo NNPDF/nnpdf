@@ -46,6 +46,8 @@ class MSR_Normalization(MetaLayer):
         #    for that we need to multiply several flavours with 1/x
         self.get_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")
         self.divide_by_x = xDivide()
+        x_original = self.get_original(self.xgrid_integration)
+        self.x_divided = self.divide_by_x(x_original)
         # 3. Now create the integration layer (the layer that will simply integrate, given some weight
         self.integrator = xIntegrator(self.weights_array, input_shape=(self.nx,))
 
@@ -54,7 +56,7 @@ class MSR_Normalization(MetaLayer):
 
         super().__init__(**kwargs, name="normalizer")
 
-    def call(self, pdf_integrated):
+    def call(self, pdf_integrand):
         """Imposes the valence and momentum sum rules:
         A_g = (1-sigma)/g
         A_v = A_v24 = A_v35 = 3/V
@@ -64,6 +66,7 @@ class MSR_Normalization(MetaLayer):
 
         Note that both the input and the output are in the 14-flavours fk-basis
         """
+        pdf_integrated = self.integrator(pdf_integrand)
         y = op.flatten(pdf_integrated)
         norm_constants = []
 
@@ -119,11 +122,8 @@ class MSR_Normalization(MetaLayer):
     def tempcall(self, pdfx_pdfinteg):
         pdf_xgrid, pdf_xgrid_integration = pdfx_pdfinteg
 
-        x_original = self.get_original(self.xgrid_integration)
-        x_divided = self.divide_by_x(x_original)
-        pdf_integrand = self.compute_integrand([x_divided, pdf_xgrid_integration])
-        pdf_integrated = self.integrator(pdf_integrand)
-        normalization_factor = self(pdf_integrated)
+        pdf_integrand = self.compute_integrand([self.x_divided, pdf_xgrid_integration])
+        normalization_factor = self(pdf_integrand)
 
         pdf_normalized = self.compute_normalized_pdf([pdf_xgrid, normalization_factor])
         return pdf_normalized
