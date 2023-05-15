@@ -1422,16 +1422,18 @@ class CoreConfig(configparser.Config):
         q2min=None,
         w2min=None,
         maxTau=None,
+        max_M=None,
+        min_M=None,
         default_filter_settings=None,
         filter_defaults={},
         default_filter_settings_recorded_spec_=None,
     ):
         """Produce default values for filters taking into account the
-        values of ``q2min``, ` `w2min`` and ``maxTau`` defined at namespace
+        values of ``q2min``, ` `w2min``, ``maxTau``, ``max_M`` and ``min_M`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
-
+        
         if (
             q2min is not None
             and "q2min" in filter_defaults
@@ -1451,6 +1453,20 @@ class CoreConfig(configparser.Config):
             and maxTau != filter_defaults["maxTau"]
         ):
             raise ConfigError("maxTau defined multiple times with different values")
+        
+        if (
+            max_M is not None
+            and "max_M" in filter_defaults
+            and max_M != filter_defaults["max_M"]
+        ):
+            raise ConfigError("max_M defined multiple times with different values")
+        
+        if (
+            min_M is not None
+            and "min_M" in filter_defaults
+            and min_M != filter_defaults["min_M"]
+        ):
+            raise ConfigError("min_M defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
             filter_defaults = default_filter_settings_recorded_spec_[
@@ -1477,6 +1493,14 @@ class CoreConfig(configparser.Config):
             log.warning("Using maxTau from runcard")
             filter_defaults["maxTau"] = maxTau
 
+        if max_M is not None and defaults_loaded:
+            log.warning("Using max_M from runcard")
+            filter_defaults["max_M"] = max_M
+            
+        if min_M is not None and defaults_loaded:
+            log.warning("Using min_M from runcard")
+            filter_defaults["min_M"] = min_M
+            
         return filter_defaults
 
     def produce_data(

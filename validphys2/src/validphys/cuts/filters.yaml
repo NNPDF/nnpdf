@@ -166,8 +166,8 @@
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
   local_variables:
     M: sqrt(M2)
-    max_M: 116.0
-  rule: M <= max_M
+    max_M_ATLAS: 116.0
+  rule: M <= max_M_ATLAS
   
 - dataset: CMSDY2D11
   reason: |
@@ -176,7 +176,6 @@
   PTO: NNLO-
   local_variables:
     M: sqrt(M2)
-    max_M: 200.0
   rule: M <= max_M
 
 - dataset: CMSDY2D11
@@ -184,7 +183,6 @@
   PTO: NNLO-
   local_variables:
     M: sqrt(M2)
-    min_M: 30.0
     max_rapidity: 2.2
   rule: M >= min_M and etay <= max_rapidity
 
@@ -194,7 +192,6 @@
   local_variables:
     M: sqrt(M2)
     max_rapidity: 2.2
-    max_M: 200.0
   rule: M <= max_M and etay <= max_rapidity
 
 - dataset: CMSDY2D12
@@ -204,7 +201,6 @@
   PTO: NNLO-
   local_variables:
     M: sqrt(M2)
-    max_M: 200.0
   rule: M <= max_M
 
 - dataset: CMSDY2D12
@@ -212,7 +208,6 @@
   PTO: NNLO-
   local_variables:
     M: sqrt(M2)
-    min_M: 30.0
     max_rapidity: 2.2
   rule: M >= min_M and etay <= max_rapidity
 
@@ -222,13 +217,10 @@
   local_variables:
     M: sqrt(M2)
     max_rapidity: 2.2
-    max_M: 200.0
   rule: M <= max_M and etay <= max_rapidity
 
 - dataset: ATLASZHIGHMASS49FB
   reason: Avoid the region where resummation effects become important.
-  local_variables:
-    max_M: 200.0
   rule: M_ll <= max_M
 
 # - dataset: LHCBLOWMASS37PB
