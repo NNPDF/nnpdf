@@ -112,21 +112,16 @@ class MSR_Normalization(MetaLayer):
             pdf_xgrid_integration = layer_pdf(self.xgrid_integration)
 
             def ultimate_pdf(x):
+                pdf_integrand = self.compute_integrand([self.x_divided, pdf_xgrid_integration])
+                normalization_factor = self(pdf_integrand)
+
                 pdf_xgrid = layer_pdf(x)
-                return self.tempcall([pdf_xgrid, pdf_xgrid_integration])
+                pdf_normalized = self.compute_normalized_pdf([pdf_xgrid, normalization_factor])
+                return pdf_normalized
 
             return ultimate_pdf
 
         return apply_normalization
-
-    def tempcall(self, pdfx_pdfinteg):
-        pdf_xgrid, pdf_xgrid_integration = pdfx_pdfinteg
-
-        pdf_integrand = self.compute_integrand([self.x_divided, pdf_xgrid_integration])
-        normalization_factor = self(pdf_integrand)
-
-        pdf_normalized = self.compute_normalized_pdf([pdf_xgrid, normalization_factor])
-        return pdf_normalized
 
     def _gen_integration_input(self):
         """
