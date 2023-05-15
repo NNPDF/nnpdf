@@ -1,6 +1,6 @@
 import numpy as np
 from n3fit.layers import xDivide, xIntegrator
-from n3fit.backends import MetaLayer
+from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import operations as op
 
 GLUON_IDX = [[2]]
@@ -44,10 +44,13 @@ class MSR_Normalization(MetaLayer):
         self._gen_integration_input()
         # 2. Prepare the pdf for integration
         #    for that we need to multiply several flavours with 1/x
+        self.get_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")
         self.divide_by_x = xDivide()
         # 3. Now create the integration layer (the layer that will simply integrate, given some weight
         self.integrator = xIntegrator(self.weights_array, input_shape=(self.nx,))
 
+        self.compute_integrand = Lambda(op.op_multiply, name="pdf_integrand")
+        self.compute_normalized_pdf = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")
 
         super().__init__(**kwargs, name="normalizer")
 
@@ -116,12 +119,13 @@ class MSR_Normalization(MetaLayer):
     def tempcall(self, pdfx_pdfinteg):
         pdf_xgrid, pdf_xgrid_integration = pdfx_pdfinteg
 
-        x_original = op.op_gather_keep_dims(self.xgrid_integration, -1, axis=-1)
+        x_original = self.get_original(self.xgrid_integration)
         x_divided = self.divide_by_x(x_original)
-        pdf_integrand = op.op_multiply([x_divided, pdf_xgrid_integration])
+        pdf_integrand = self.compute_integrand([x_divided, pdf_xgrid_integration])
         normalization_factor = self(self.integrator(pdf_integrand))
 
-        return normalization_factor * pdf_xgrid
+        pdf_normalized = self.compute_normalized_pdf([pdf_xgrid, normalization_factor])
+        return pdf_normalized
 
     def _gen_integration_input(self):
         """
