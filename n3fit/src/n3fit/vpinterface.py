@@ -195,29 +195,31 @@ class N3PDF(PDF):
         """Outputs all weights of the NN as numpy.ndarrays"""
         return [model.get_weights() for model in self._models]
 
-    def get_preprocessing_factors(self, replica=None):
-        """Loads the preprocessing alpha and beta arrays from the PDF trained model.
+    def get_prefactor_factors(self, replica=None):
+        """Loads the prefactor alpha and beta arrays from the PDF trained model.
         If a ``fit_basis`` given in the format of ``n3fit`` runcards is given it will be used
         to generate a new dictionary with the names, the exponent and whether they are trainable
         otherwise outputs a Nx2 array where [:,0] are alphas and [:,1] betas
         """
-        # If no replica is explicitly requested, get the preprocessing layer for the first model
+        # If no replica is explicitly requested, get the prefactor layer for the first model
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        preprocessing_layers = self._models[replica - 1].get_layer_re(r"pdf_prepro_\d")
-        if len(preprocessing_layers) != 1:
+        prefactor_layers = self._models[replica - 1].get_layer_re(r"pdf_prefactor_\d")
+        if len(prefactor_layers) > 1:
             # We really don't want to fail at this point, but print a warning at least...
-            log.warning("More than one preprocessing layer found within the model!")
-        preprocessing_layer = preprocessing_layers[0]
+            log.warning("More than one prefactor layer found within the model!")
+        elif len(prefactor_layers) < 1:
+            log.warning("No prefactor layer found within the model!")
+        prefactor_layer = prefactor_layers[0]
 
         alphas_and_betas = None
         if self.fit_basis is not None:
             output_dictionaries = []
             for d in self.fit_basis:
                 flavour = d["fl"]
-                alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
-                beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
+                alpha = prefactor_layer.get_weight_by_name(f"alpha_{flavour}")
+                beta = prefactor_layer.get_weight_by_name(f"beta_{flavour}")
                 if alpha is not None:
                     alpha = float(alpha.numpy())
                 if beta is not None:

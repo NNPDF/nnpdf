@@ -318,7 +318,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     """
     all_info = {}
     # Generate preprocessing information
-    all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
+    all_info["preprocessing"] = pdf_object.get_prefactor_factors()
     # .fitinfo-like info
     all_info["stop_epoch"] = stop_epoch
     all_info["best_epoch"] = replica_status.best_epoch
