@@ -401,8 +401,7 @@ def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
         luxset = fiatlux["luxset"]
         pdfs_ids = luxset.get_members() - 1 # get_members counts also replica0
         max_id = max(replicas)
-        if max_id > pdfs_ids :
+        if max_id > pdfs_ids:
             raise CheckError(
-                f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set "
-                + luxset.name + f":\nreplica id={max_id}, replicas of " + luxset.name + f"={pdfs_ids}"
+                f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set {luxset.name}:\nreplica id={max_id}, replicas of {luxset.name} = {pdfs_ids}"
             )
