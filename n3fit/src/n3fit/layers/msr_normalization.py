@@ -55,7 +55,7 @@ class MSR_Normalization(MetaLayer):
 
         if self._photons:
             photon_integral = self._photons[ph_replica]
-        else :
+        else:
             photon_integral = 0.
 
         if self._msr_enabled:

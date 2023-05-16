@@ -150,7 +150,7 @@ class N3FitConfig(Config):
 
         if (thconfig:=file_content.get('fiatlux')):
             N3FIT_FIXED_CONFIG['fiatlux']=thconfig
-        else :
+        else:
             N3FIT_FIXED_CONFIG['fiatlux']=None
         #Theorycovmat flags and defaults
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
