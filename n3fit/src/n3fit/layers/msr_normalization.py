@@ -54,7 +54,7 @@ class MSR_Normalization(MetaLayer):
         self.compute_integrand = Lambda(op.op_multiply, name="pdf_integrand")
         self.compute_normalized_pdf = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")
 
-        super().__init__(**kwargs, name="normalizer")
+        super().__init__(**kwargs, name="msr_weights")
 
     def call(self, pdf_integrand):
         """Imposes the valence and momentum sum rules:

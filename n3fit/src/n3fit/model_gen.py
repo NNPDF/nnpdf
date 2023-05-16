@@ -534,7 +534,7 @@ def pdfNN_layer_generator(
     # Generate the generic layers that will not depend on extra considerations
 
     # First prepare the input for the PDF model and any scaling if needed
-    placeholder_input = Input(shape=(None, 1), batch_size=1, name='xgrids')
+    placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
 
     subtract_one = False
     process_input = Lambda(lambda x: x, name='process_input')
@@ -546,17 +546,17 @@ def pdfNN_layer_generator(
         process_input = Lambda(lambda x: 2 * x - 1, name='process_input')
         subtract_one = True
         input_x_eq_1 = scaler([1.0])[0]
-        placeholder_input = Input(shape=(None, 2), batch_size=1, name='xgrids')
+        placeholder_input = Input(shape=(None, 2), batch_size=1, name='x')
     elif inp == 2:
         # If the input is of type (x, logx)
         # create a x --> (x, logx) layer to preppend to everything
-        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='process_input')
+        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
 
     extract_scaled = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
     extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
 
     # the layer that multiplies the NN output by the prefactor
-    apply_prefactor = Lambda(op.op_multiply, name='apply_prefactor')
+    apply_prefactor = Lambda(op.op_multiply, name='prefactor_times_NN')
 
     # the layer that subtracts 1 from the NN output
     subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
@@ -566,11 +566,11 @@ def pdfNN_layer_generator(
         layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1))
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
-    # Evolution layer
-    layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
-
     # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
+    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis")
+
+    # Evolution layer
+    layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out, name="pdf_FK_basis")
 
     # Normalization and sum rules
     if impose_sumrule:
@@ -587,7 +587,7 @@ def pdfNN_layer_generator(
         compute_prefactor = Prefactor(
             flav_info=flav_info,
             input_shape=(1,),
-            name=f"pdf_prefactor_{i_replica}",
+            name=f"prefactor_{i_replica}",
             seed=replica_seed + number_of_layers,
             large_x=not subtract_one,
         )

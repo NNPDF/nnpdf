@@ -205,7 +205,7 @@ class N3PDF(PDF):
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        prefactor_layers = self._models[replica - 1].get_layer_re(r"pdf_prefactor_\d")
+        prefactor_layers = self._models[replica - 1].get_layer_re(r"prefactor_\d")
         if len(prefactor_layers) > 1:
             # We really don't want to fail at this point, but print a warning at least...
             log.warning("More than one prefactor layer found within the model!")
