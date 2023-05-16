@@ -251,7 +251,6 @@ def dataset_replica_and_central_diff(
     sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
     return sigma, central_diff
 
-
 def dataset_xi(dataset_replica_and_central_diff):
     """Take sigma and delta for a dataset, where sigma is the RMS difference
     between replica predictions and central predictions, and delta is the
