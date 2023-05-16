@@ -9,6 +9,7 @@
 
 
 """
+from typing import List
 from dataclasses import dataclass
 import numpy as np
 from n3fit.layers import DIS, DY, ObsRotation, losses
@@ -387,21 +388,21 @@ def generate_dense_per_flavour_network(
 
 
 def pdfNN_layer_generator(
-    inp=2,
-    nodes=None,
-    activations=None,
-    initializer_name="glorot_normal",
-    layer_type="dense",
-    flav_info=None,
+    inp: int = 2,
+    nodes: List[int] = None,
+    activations: List[str] = None,
+    initializer_name: str = "glorot_normal",
+    layer_type: str = "dense",
+    flav_info: dict = None,
     fitbasis="NN31IC",
-    out=14,
-    seed=None,
-    dropout=0.0,
+    out: int = 14,
+    seed: int = None,
+    dropout: float = 0.0,
     regularizer=None,
     regularizer_args=None,
-    impose_sumrule=None,
+    impose_sumrule: str = None,
     scaler=None,
-    parallel_models=1,
+    parallel_models: int = 1,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -582,48 +583,21 @@ def pdfNN_layer_generator(
     # Now we need a trainable network per replica to be trained in parallel
     pdf_models = []
     for i_replica, replica_seed in enumerate(seed):
-        prefacseed = replica_seed + number_of_layers
+
         compute_prefactor = Prefactor(
             flav_info=flav_info,
             input_shape=(1,),
             name=f"pdf_prefactor_{i_replica}",
-            seed=prefacseed,
+            seed=replica_seed + number_of_layers,
             large_x=not subtract_one,
         )
 
-        if layer_type == "dense":
-            reg = regularizer_selector(regularizer, **regularizer_args)
-            list_of_pdf_layers = generate_dense_network(
-                inp,
-                nodes,
-                activations,
-                initializer_name,
-                seed=replica_seed,
-                dropout_rate=dropout,
-                regularizer=reg,
-            )
-        elif layer_type == "dense_per_flavour":
-            # Define the basis size attending to the last layer in the network
-            # TODO: this information should come from the basis information
-            #       once the basis information is passed to this class
-            list_of_pdf_layers = generate_dense_per_flavour_network(
-                inp,
-                nodes,
-                activations,
-                initializer_name,
-                seed=replica_seed,
-                basis_size=last_layer_nodes,
-            )
-
-        def neural_network(x):
-            """Takes an input tensor `x` and applies all layers
-            from the `list_of_pdf_layers` in order"""
-            for layer in list_of_pdf_layers:
-                x = layer(x)
-            return x
+        neural_network = generate_nn(
+            layer_type, inp, nodes, activations, initializer_name,
+            replica_seed, dropout, regularizer, regularizer_args,
+            last_layer_nodes, name=f"NN_{i_replica}")
 
         # Apply preprocessing and basis
-
         def layer_fitbasis(x):
             """The tensor x has a expected shape of (1, None, {1,2})
             where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
@@ -650,9 +624,43 @@ def pdfNN_layer_generator(
         # Final PDF (apply normalization)
         final_pdf = sumrule_layer(layer_pdf)
 
+        model_output = final_pdf(placeholder_input)
+
         # Create the model
-        pdf_model = MetaModel(
-            model_input, final_pdf(placeholder_input), name=f"PDF_{i_replica}", scaler=scaler
-        )
+        pdf_model = MetaModel(model_input, model_output, name=f"PDF_{i_replica}", scaler=scaler)
         pdf_models.append(pdf_model)
     return pdf_models
+
+def generate_nn(
+        layer_type: str,
+        inp: int,
+        nodes: List[int],
+        activations: List[str],
+        initializer_name: str,
+        replica_seed: int,
+        dropout: float,
+        regularizer: str,
+        regularizer_args: dict,
+        last_layer_nodes: int,
+        name: str) -> MetaModel:
+    """
+    Create the part of the model that contains all of the actual neural network
+    layers.
+    """
+    common_args = {'nodes_in': inp, 'nodes': nodes, 'activations': activations, 'initializer_name': initializer_name, 'seed': replica_seed}
+    if layer_type == "dense":
+        reg = regularizer_selector(regularizer, **regularizer_args)
+        list_of_pdf_layers = generate_dense_network(**common_args, dropout_rate=dropout, regularizer=reg)
+    elif layer_type == "dense_per_flavour":
+        list_of_pdf_layers = generate_dense_per_flavour_network(**common_args, basis_size=last_layer_nodes)
+
+    # Note: using a Sequential model would be more appropriate, but it would require
+    # creating a MetaSequential model.
+    x = Input(shape=(None, inp), batch_size=1, name='xgrids_processed')
+    pdf = x
+    for layer in list_of_pdf_layers:
+        pdf = layer(pdf)
+
+    model = MetaModel({'NN_input': x}, pdf, name=name)
+    return model
+
