@@ -402,11 +402,7 @@ def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
         pdfs_ids = luxset.get_members() - 1 # get_members counts also replica0
         max_id = max(replicas)
         if max_id > pdfs_ids :
-            for replica_id in replicas:
-                # At this point it should be always empty
-                os.rmdir(replica_path / f"replica_{replica_id}")
             raise CheckError(
                 f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set "
-                + luxset + f": replica id={max_id}, replicas of " + luxset + f"={pdfs_ids}"
-                +"\nRemoving replica output folders"
+                + luxset.name + f":\nreplica id={max_id}, replicas of " + luxset.name + f"={pdfs_ids}"
             )
