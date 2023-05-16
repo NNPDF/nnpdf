@@ -262,8 +262,8 @@ class Alpha:
         ----------
         q : float
             target scale
-        a_ref : float
-            reference value of a = alpha_em/(4*pi)
+        alph_aem_ref : float
+            reference value of alpha_em
         qref: float
             reference scale
         nf: int

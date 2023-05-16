@@ -397,7 +397,7 @@ def check_deprecated_options(fitting):
 
 @make_argcheck
 def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
-    if fiatlux :
+    if fiatlux is not None:
         luxset = fiatlux["luxset"]
         pdfs_ids = luxset.get_members() - 1 # get_members counts also replica0
         max_id = max(replicas)
