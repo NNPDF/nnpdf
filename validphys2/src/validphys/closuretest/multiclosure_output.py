@@ -9,7 +9,6 @@ data.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import scipy.special as special
 import scipy.stats
 import yaml
