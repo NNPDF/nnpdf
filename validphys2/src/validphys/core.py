@@ -749,6 +749,9 @@ class Stats:
     def central_value(self):
         return self.data[0]
 
+    def replica_average(self):
+        return self.data[1:].mean(axis=0)
+
     def error_members(self):
         return self.data[1:]
 
