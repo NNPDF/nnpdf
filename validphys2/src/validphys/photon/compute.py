@@ -77,49 +77,40 @@ class Photon:
 
         # set fiatlux
         self.lux = {}
-        f2 = {}
-        fl = {}
-        f2lo = {}
+
+        alpha = Alpha(theory)
+        mb_thr = theory["kbThr"] * theory["mb"]
+        mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
+
+        self.interpolator = []
+        self.integral = []
+
         for replica in replicas:
-            f2[replica] = sf.InterpStructureFunction(
-                path_to_F2, self.luxpdfset.members[replica]
-            )
-            fl[replica] = sf.InterpStructureFunction(
-                path_to_FL, self.luxpdfset.members[replica]
-            )
-            f2lo[replica] = sf.F2LO(self.luxpdfset.members[replica], theory)
+            f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
+            fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
+            f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(fiatlux_runcard))
                 self.lux[replica] = fiatlux.FiatLux(tmp_file.name)
-        # we have a dict but fiatlux wants a yaml file
-        # TODO : once that fiatlux will allow dictionaries
-        # pass directly fiatlux_runcard
-        alpha = Alpha(theory)
-        for replica in replicas:
+            # we have a dict but fiatlux wants a yaml file
+            # TODO : once that fiatlux will allow dictionaries
+            # pass directly fiatlux_runcard
+
             self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
             self.lux[replica].InsertInelasticSplitQ(
                 [
-                    theory["kbThr"] * theory["mb"],
-                    theory["ktThr"] * theory["mt"]
-                    if theory["MaxNfPdf"] == 6
-                    else 1e100,
+                    mb_thr,
+                    mt_thr,
                 ]
             )
-            self.lux[replica].PlugStructureFunctions(
-                f2[replica].fxq, fl[replica].fxq, f2lo[replica].fxq
-            )
+            self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
-        photons_array = [
-            self.compute_photon_array(replica) for replica in self.replicas
-        ]
-        self.interpolator = [
-            interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic")
-            for photon_array in photons_array
-        ]
-        self.integral = [
-            trapezoid(photons_array[id], XGRID) for id in range(len(self.replicas))
-        ]
+            photon_array = self.compute_photon_array(replica)
+            self.interpolator.append(
+                interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic")
+            )
+            self.integral.append(trapezoid(photon_array, XGRID))
 
     def compute_photon_array(self, replica):
         r"""
