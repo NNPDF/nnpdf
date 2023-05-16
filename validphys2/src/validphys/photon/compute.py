@@ -12,7 +12,7 @@ from validphys.n3fit_data import replica_luxseed
 
 from n3fit.io.writer import XGRID
 
-from . import constants
+from .constants import NC, NL, ED2, EU2
 from . import structure_functions as sf
 
 log = logging.getLogger(__name__)
@@ -334,15 +334,15 @@ class Alpha:
                 -4.0
                 / 3
                 * (
-                    constants.NL
-                    + constants.NC * (nu * constants.EU2 + nd * constants.ED2)
+                    NL
+                    + NC * (nu * EU2 + nd * ED2)
                 )
             ) / (4 * np.pi)
             b1[nf] = (
                 -4.0
                 * (
-                    constants.NL
-                    + constants.NC * (nu * constants.EU2**2 + nd * constants.ED2**2)
+                    NL
+                    + NC * (nu * EU2**2 + nd * ED2**2)
                 )
                 / beta0[nf]
                 / (4 * np.pi) ** 2
