@@ -91,6 +91,7 @@ class FkRotation(MetaLayer):
         # Concatenating destroys the batch index so we have to regenerate it
         return op.batchit(ret)
 
+
 class AddPhoton(MetaLayer):
     """
     Changes the value of the photon component of the PDF to non-zero.
