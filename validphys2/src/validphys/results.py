@@ -32,6 +32,7 @@ from validphys.calcutils import (
     calc_chi2,
     calc_phi,
     bootstrap_values,
+    replica_average_chi2
 )
 from validphys.convolution import (
     predictions,
@@ -63,6 +64,10 @@ class StatsResult(Result):
     @property
     def central_value(self):
         return self.stats.central_value()
+    
+    @property
+    def replica_average(self):
+        return self.stats.replica_average()
 
     @property
     def std_error(self):
@@ -493,7 +498,6 @@ def pdf_results(
 ):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
-
     th_results = [ThPredictionsResult.from_convolution(pdf, dataset) for pdf in pdfs]
 
     return (DataResult(dataset, covariance_matrix, sqrt_covmat), *th_results)
@@ -530,6 +534,20 @@ def abs_chi2_data(results):
     chi2s = all_chi2(results)
 
     central_result = central_chi2(results)
+
+    return Chi2Data(
+        th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result)
+    )
+
+
+def abs_chi2_data_replica_average(results):
+    """Return a tuple (member_chi², central_chi², numpoints) for a
+    given dataset"""
+    data_result, th_result = results
+
+    chi2s = all_chi2(results)
+
+    central_result = replica_average_chi2(results)
 
     return Chi2Data(
         th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result)
@@ -639,6 +657,7 @@ def predictions_by_kinematics_table(results, kinematics_table_notable):
     return tb
 
 groups_each_dataset_chi2 = collect("each_dataset_chi2", ("group_dataset_inputs_by_metadata",))
+groups_each_dataset_chi2_replica_average = collect("each_dataset_chi2_replica_average", ("group_dataset_inputs_by_metadata",))
 groups_chi2_by_process = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_process",))
 groups_each_dataset_chi2_by_process = collect("each_dataset_chi2", ("group_dataset_inputs_by_process",))
 
@@ -648,6 +667,19 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     the groups, grouped by metadata."""
     records = []
     for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2):
+        for dataset, dsres in zip(group, dsresults):
+            stats = chi2_stats(dsres)
+            stats["group"] = dataset.name
+            records.append(stats)
+    return pd.DataFrame(records)
+
+
+@table
+def groups_chi2_table_replica_average(groups_data, groups_chi2, groups_each_dataset_chi2_replica_average):
+    """Return a table with the chi² to the groups and each dataset in
+    the groups, grouped by metadata."""
+    records = []
+    for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2_replica_average):
         for dataset, dsres in zip(group, dsresults):
             stats = chi2_stats(dsres)
             stats["group"] = dataset.name
@@ -1147,7 +1179,7 @@ def dataspecs_dataset_chi2_difference_table(
 
 
 each_dataset_chi2 = collect(abs_chi2_data, ("data",))
-
+each_dataset_chi2_replica_average = collect(abs_chi2_data_replica_average, ("data",))
 pdfs_total_chi2 = collect(total_chi2_per_point_data, ("pdfs",))
 
 # These are convenient ways to iterate and extract various data from fits
