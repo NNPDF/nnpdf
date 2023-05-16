@@ -86,7 +86,7 @@ def performfit(
                 Theory which is used to generate theory predictions from model
                 during fit. Object also contains some metadata on the theory
                 settings.
-            lux_params : dict
+            fiatlux: dict
                 dictionary containing the params needed from LuxQED
             basis: list[dict]
                 preprocessing information for each flavour to be fitted.
