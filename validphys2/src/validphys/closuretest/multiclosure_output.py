@@ -85,7 +85,7 @@ def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, datas
 
     Returns
     -------
-    matplotlib fig
+    : matplotlib.pyplot.fig
 
 
     """
