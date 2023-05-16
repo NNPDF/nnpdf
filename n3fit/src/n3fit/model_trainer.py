@@ -135,11 +135,11 @@ class ModelTrainer:
                         whether sum rules should be enabled (All, MSR, VSR, False)
             parallel_models: int
                 number of models to fit in parallel
-            theoryid : validphys.core.TheoryIDSpec
+            theoryid: validphys.core.TheoryIDSpec
                 object contining info for generating the photon
-            lux_params : dict
+            lux_params: dict
                 dictionary containing the params needed from LuxQED
-            replicas_id : list
+            replicas_id: list
                 list with the replicas ids to be fitted
         """
         # Save all input information
