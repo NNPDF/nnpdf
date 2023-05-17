@@ -8,12 +8,14 @@ from collections.abc import Mapping
 from importlib.resources import read_text
 
 import numpy as np
-import validphys.cuts
+
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
-from validphys.commondatawriter import (write_commondata_to_file,
-                                        write_systype_to_file)
-
+import validphys.cuts
+from validphys.commondatawriter import (
+        write_commondata_to_file,
+        write_systype_to_file,
+    )
 log = logging.getLogger(__name__)
 
 KIN_LABEL = {
@@ -51,7 +53,6 @@ class BadPerturbativeOrder(ValueError):
     """Exception raised when the perturbative order string is not
     recognized."""
 
-
 class MissingRuleAttribute(RuleProcessingError, AttributeError):
     """Exception raised when a rule is missing required attributes."""
 
@@ -74,14 +75,13 @@ def default_filter_rules_input():
     return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
 
+
 def check_nonnegative(var: str):
     """Ensure that `var` is positive"""
-
     @make_check
     def run_check(ns, **kwargs):
         val = ns[var]
         check(val >= 0, f"'{var}' must be positive or equal zero, but it is {val!r}.")
-
     return run_check
 
 
@@ -95,7 +95,7 @@ def make_dataset_dir(path):
 
 def export_mask(path, mask):
     """Dump mask to file"""
-    np.savetxt(path, mask, fmt="%d")
+    np.savetxt(path, mask, fmt='%d')
 
 
 def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
@@ -105,7 +105,7 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
     being shifted away from the underlying law.
 
     """
-    log.info("Filtering closure-test data.")
+    log.info('Filtering closure-test data.')
     return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed)
 
 
@@ -137,17 +137,16 @@ def filter_closure_data_by_experiment(
 
 
 def filter_real_data(filter_path, data):
-    """Filter real data, cutting any points which do not pass the filter rules."""
-    log.info("Filtering real data.")
+    """Filter real data, cutting any points which do not pass the filter rules.
+    """
+    log.info('Filtering real data.')
     return _filter_real_data(filter_path, data)
 
 
 def filter(filter_data):
     """Summarise filters applied to all datasets"""
     total_data, total_cut_data = np.atleast_2d(filter_data).sum(axis=0)
-    log.info(
-        f"Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts."
-    )
+    log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
 
 
 def _write_ds_cut_data(path, dataset):
@@ -159,13 +158,11 @@ def _write_ds_cut_data(path, dataset):
         log.info("All {all_ndata} points  in in {dataset.name} passed kinematic cuts.")
     else:
         filtered_dsndata = len(datamask)
-        log.info(
-            f"{len(datamask)}/{all_dsndata} datapoints "
-            f"in {dataset.name} passed kinematic cuts."
-        )
+        log.info(f"{len(datamask)}/{all_dsndata} datapoints "
+                 f"in {dataset.name} passed kinematic cuts.")
     # save to disk
     if datamask is not None:
-        export_mask(path / f"FKMASK_{dataset.name}.dat", datamask)
+        export_mask(path / f'FKMASK_{dataset.name}.dat', datamask)
     return all_dsndata, filtered_dsndata
 
 
@@ -236,24 +233,24 @@ def _filter_closure_data(
     closure_data = level0_commondata_wc(data, fakepdf)
 
     for dataset in data.datasets:
-        # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
+        #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
-
+    
     if fakenoise:
-        # ======= Level 1 closure test =======#
+        #======= Level 1 closure test =======#
 
         closure_data = make_level1_data(
-            data,
-            closure_data,
-            filterseed,
-            experiments_index,
-        )
+                data,
+                closure_data,
+                filterseed,
+                experiments_index,
+            )
 
-    # ====== write commondata and systype files ======#
+    #====== write commondata and systype files ======#
     if fakenoise:
         log.info("Writing Level1 data")
     else:
@@ -262,7 +259,10 @@ def _filter_closure_data(
     for cd in closure_data:
         path_cd = filter_path / cd.setname / f"DATA_{cd.setname}.dat"
         path_sys = (
-            filter_path / cd.setname / "systypes" / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
+            filter_path
+            / cd.setname
+            / "systypes"
+            / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
         )
         write_commondata_to_file(commondata=cd, path=path_cd)
         write_systype_to_file(commondata=cd, path=path_sys)
@@ -273,36 +273,31 @@ def _filter_closure_data(
 def check_t0pdfset(t0pdfset):
     """T0 pdf check"""
     t0pdfset.load()
-    log.info(f"{t0pdfset} T0 checked.")
-
+    log.info(f'{t0pdfset} T0 checked.')
 
 def check_luxset(luxset):
     """Lux pdf check"""
     luxset.load()
-    log.info(f"{luxset} Lux pdf checked.")
-
+    log.info(f'{luxset} Lux pdf checked.')
 
 def check_additional_errors(additional_errors):
     """Lux additional errors pdf check"""
     additional_errors.load()
-    log.info(f"{additional_errors} Lux additional errors pdf checked.")
-
+    log.info(f'{additional_errors} Lux additional errors pdf checked.')
 
 def check_positivity(posdatasets):
     """Verify positive datasets are ready for the fit."""
-    log.info("Verifying positivity tables:")
+    log.info('Verifying positivity tables:')
     for pos in posdatasets:
         pos.load_commondata()
-        log.info(f"{pos.name} checked.")
-
+        log.info(f'{pos.name} checked.')
 
 def check_integrability(integdatasets):
     """Verify positive datasets are ready for the fit."""
-    log.info("Verifying integrability tables:")
+    log.info('Verifying integrability tables:')
     for integ in integdatasets:
         integ.load_commondata()
-        log.info(f"{integ.name} checked.")
-
+        log.info(f'{integ.name} checked.')
 
 class PerturbativeOrder:
     """Class that conveniently handles
@@ -373,7 +368,6 @@ class PerturbativeOrder:
             return i < self.numeric_pto
         else:
             return i == self.numeric_pto
-
 
 class Rule:
     """Rule object to be used to generate cuts mask.
@@ -509,12 +503,7 @@ class Rule:
         """Attributes of the Rule class that are defining. Two
         Rules with identical ``_properties`` are considered equal.
         """
-        return (
-            self.rule_string,
-            self.dataset,
-            self.process_type,
-            self.theory_params["ID"],
-        )
+        return (self.rule_string, self.dataset, self.process_type, self.theory_params['ID'])
 
     def __eq__(self, other):
         return self._properties == other._properties
@@ -545,7 +534,9 @@ class Rule:
             if k == "PTO" and hasattr(self, "PTO"):
                 if v not in self.PTO:
                     return None
-            elif hasattr(self, k) and (getattr(self, k) != v):
+            elif hasattr(self, k) and (
+                getattr(self, k) != v
+            ):
                 return None
 
         # Will return True if datapoint passes through the filter
@@ -559,12 +550,12 @@ class Rule:
                     **ns,
                 },
             )
-        except Exception as e:  # pragma: no cover
+        except Exception as e: # pragma: no cover
             raise FatalRuleError(
                 f"Error when applying rule {self.rule_string!r}: {e}"
             ) from e
 
-    def __repr__(self):  # pragma: no cover
+    def __repr__(self): # pragma: no cover
         return self.rule_string
 
     def _make_kinematics_dict(self, dataset, idat) -> dict:
@@ -580,7 +571,6 @@ class Rule:
         for key, value in self._local_variables_code.items():
             ns[key] = eval(value, {**self.numpy_functions, **ns})
         return ns
-
 
 def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index
