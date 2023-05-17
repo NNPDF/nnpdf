@@ -8,18 +8,20 @@
     This allows to use hyperscanning libraries, that need to change the parameters of the network
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
-import logging
 from collections import namedtuple
 from itertools import zip_longest
+import logging
+
 import numpy as np
 from scipy.interpolate import PchipInterpolator
+
 from n3fit import model_gen
-from n3fit.backends import MetaModel, clear_backend_state, callbacks
+from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
-from n3fit.stopping import Stopping
-from n3fit.vpinterface import N3PDF
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from n3fit.stopping import Stopping
+from n3fit.vpinterface import N3PDF
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
@@ -36,6 +38,7 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
+
 
 def _pdf_injection(pdf_layers, observables, masks):
     """
@@ -365,9 +368,7 @@ class ModelTrainer:
         # now the output needs to be splitted so that each experiment takes its corresponding input
         sp_ar = [[i.shape[1] for i in inputs_unique]]
         sp_kw = {"axis": 1}
-        sp_layer = op.as_layer(
-            op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
-        )
+        sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
@@ -423,9 +424,7 @@ class ModelTrainer:
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
-                {"pdf_input": xinput.input}
-            )
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
@@ -686,7 +685,7 @@ class ModelTrainer:
                 dictionary of arguments for the regularizer
             seed: int
                 seed for the NN
-            photons: :py:class:`validphys.photon.compute.Photon` 
+            photons: :py:class:`validphys.photon.compute.Photon`
                 function to compute the photon PDF
         see model_gen.pdfNN_layer_generator for more information
 
@@ -886,13 +885,13 @@ class ModelTrainer:
         xinput = self._xgrid_generation()
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
-            photons=Photon(
+            photons = Photon(
                 theoryid=self.theoryid,
                 lux_params=self.lux_params,
                 replicas=self.replicas,
             )
         else:
-            photons=None
+            photons = None
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
@@ -918,7 +917,6 @@ class ModelTrainer:
                 for m in pdf_models:
                     pl = m.get_layer("add_photon")
                     pl.register_photon(xinput.input.tensor_content)
-
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above

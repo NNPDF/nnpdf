@@ -3,28 +3,22 @@
     n3fit - performs fit using ml external frameworks
 """
 
-import sys
+import argparse
+import logging
+import pathlib
 import re
 import shutil
-import pathlib
-import logging
+import sys
 import warnings
-import argparse
 
-from validphys.app import App
-from validphys.config import Environment, Config
-from validphys.config import EnvironmentError_, ConfigError
-from validphys.core import FitSpec
 from reportengine import colors
 from reportengine.compat import yaml
 from reportengine.namespaces import NSList
+from validphys.app import App
+from validphys.config import Config, ConfigError, Environment, EnvironmentError_
+from validphys.core import FitSpec
 
-
-N3FIT_FIXED_CONFIG = dict(
-    use_cuts = 'internal',
-    use_t0 = True,
-    actions_ = []
-)
+N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[])
 
 FIT_NAMESPACE = "datacuts::theory::fitting "
 CLOSURE_NAMESPACE = "datacuts::theory::closuretest::fitting "
@@ -45,6 +39,7 @@ RUNCARD_COPY_FILENAME = "filter.yml"
 INPUT_FOLDER = "input"
 TAB_FOLDER = "tables"
 
+
 class N3FitError(Exception):
     """Exception raised when n3fit cannot succeed and knows why"""
 
@@ -64,12 +59,12 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not (self.output_path/"nnfit").is_dir():
+        if not (self.output_path / "nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
                 self.output_path.mkdir(exist_ok=True)
-                (self.output_path /"nnfit").mkdir(exist_ok=True)
+                (self.output_path / "nnfit").mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
 
@@ -124,7 +119,9 @@ class N3FitConfig(Config):
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
-            raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
+            raise ConfigError(
+                f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'."
+            )
 
         if file_content.get('closuretest') is not None:
             namespace = CLOSURE_NAMESPACE
@@ -148,25 +145,38 @@ class N3FitConfig(Config):
 
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
 
-        if (thconfig:=file_content.get('fiatlux')):
-            N3FIT_FIXED_CONFIG['fiatlux']=thconfig
+        if thconfig := file_content.get('fiatlux'):
+            N3FIT_FIXED_CONFIG['fiatlux'] = thconfig
         else:
-            N3FIT_FIXED_CONFIG['fiatlux']=None
-        #Theorycovmat flags and defaults
+            N3FIT_FIXED_CONFIG['fiatlux'] = None
+        # Theorycovmat flags and defaults
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
         N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = False
         N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = False
-        if (thconfig:=file_content.get('theorycovmatconfig')) is not None:
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get('use_thcovmat_in_fitting', True) 
-            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get('use_thcovmat_in_sampling', True) 
-            if N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] or N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting']:
+        if (thconfig := file_content.get('theorycovmatconfig')) is not None:
+            N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = thconfig.get(
+                'use_thcovmat_in_fitting', True
+            )
+            N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get(
+                'use_thcovmat_in_sampling', True
+            )
+            if (
+                N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling']
+                or N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting']
+            ):
                 N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
-            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get('use_user_uncertainties', False) 
-            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get('use_scalevar_uncertainties', True) 
-        #Sampling flags
-        if (sam_t0:=file_content.get('sampling')) is not None:
-            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get('separate_multiplicative', True) 
-        #Fitting flag
+            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get(
+                'use_user_uncertainties', False
+            )
+            N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get(
+                'use_scalevar_uncertainties', True
+            )
+        # Sampling flags
+        if (sam_t0 := file_content.get('sampling')) is not None:
+            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get(
+                'separate_multiplicative', True
+            )
+        # Fitting flag
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
@@ -183,12 +193,13 @@ class N3FitConfig(Config):
         """
         if fakedata:
             log.warning("using filtered closure data")
-            if not (self.environment.output_path/'filter').is_dir():
+            if not (self.environment.output_path / 'filter').is_dir():
                 raise ConfigError(
                     "Could not find filter result at "
                     f"{self.environment.output_path/'filter'} "
                     "to load commondata from. Did you run filter on the "
-                    "runcard?")
+                    "runcard?"
+                )
         return fakedata
 
     def produce_use_fitcommondata(self, fakedata):
@@ -198,8 +209,7 @@ class N3FitConfig(Config):
         return fakedata
 
     def produce_kfold_parameters(self, kfold=None, hyperopt=None):
-        """Return None even if there are kfolds in the runcard if the hyperopt flag is not active
-        """
+        """Return None even if there are kfolds in the runcard if the hyperopt flag is not active"""
         if hyperopt is not None:
             return kfold
         return None
@@ -237,7 +247,9 @@ class N3FitApp(App):
     @property
     def argparser(self):
         parser = super().argparser
-        parser.add_argument("-o", "--output", help="Output folder and name of the fit", default=None)
+        parser.add_argument(
+            "-o", "--output", help="Output folder and name of the fit", default=None
+        )
 
         def check_positive(value):
             ivalue = int(value)
@@ -248,7 +260,10 @@ class N3FitApp(App):
         parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
-            "-r", "--replica_range", help="End of the range of replicas to compute", type=check_positive
+            "-r",
+            "--replica_range",
+            help="End of the range of replicas to compute",
+            type=check_positive,
         )
         return parser
 

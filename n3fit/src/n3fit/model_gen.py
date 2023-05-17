@@ -10,16 +10,24 @@
 
 """
 from dataclasses import dataclass
-import numpy as np
-from n3fit.msr import msr_impose
-from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, AddPhoton
-from n3fit.layers.observable import is_unique
 
-from n3fit.backends import MetaModel, Input
+import numpy as np
+
+from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
-from n3fit.backends import MetaLayer, Lambda
-from n3fit.backends import base_layer_selector, regularizer_selector
+from n3fit.backends import regularizer_selector
+from n3fit.layers import (
+    DIS,
+    DY,
+    AddPhoton,
+    FkRotation,
+    FlavourToEvolution,
+    ObsRotation,
+    Preprocessing,
+    losses,
+)
+from n3fit.layers.observable import is_unique
+from n3fit.msr import msr_impose
 
 
 @dataclass
@@ -496,7 +504,7 @@ def pdfNN_layer_generator(
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
         parallel_models: int
             How many models should be trained in parallel
-        photon: :py:class:`validphys.photon.compute.Photon` 
+        photon: :py:class:`validphys.photon.compute.Photon`
             If given, gives the AddPhoton layer a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
@@ -573,7 +581,9 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler, photons=photons)
+        sumrule_layer, integrator_input = msr_impose(
+            mode=impose_sumrule, scaler=scaler, photons=photons
+        )
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x

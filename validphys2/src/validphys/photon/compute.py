@@ -4,13 +4,13 @@ import tempfile
 
 import fiatlux
 import numpy as np
-import yaml
-from eko.io import EKO
 from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
-from validphys.n3fit_data import replica_luxseed
+import yaml
 
+from eko.io import EKO
 from n3fit.io.writer import XGRID
+from validphys.n3fit_data import replica_luxseed
 
 from . import structure_functions as sf
 from .constants import ED2, EU2, NC, NL
@@ -54,9 +54,7 @@ class Photon:
     def __init__(self, theoryid, lux_params, replicas):
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
-        fiatlux_runcard["qed_running"] = bool(
-            np.isclose(theory["Qedref"], theory["Qref"])
-        )
+        fiatlux_runcard["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
         # cast explicitly from np.bool_ to bool otherwise problems in dumping it
         # TODO: for the time being, we trigger alphaem running if Qedref=Qref.
         # This is going to be changed in favor of a bool em_running
@@ -87,8 +85,10 @@ class Photon:
         for replica in replicas:
             f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
             fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
-            if not np.isclose(f2.q2_max, fl.q2_max) :
-                log.error("FKtables for fiatlux_dis_F2 and fiatlux_dis_FL have two different q2_max")
+            if not np.isclose(f2.q2_max, fl.q2_max):
+                log.error(
+                    "FKtables for fiatlux_dis_F2 and fiatlux_dis_FL have two different q2_max"
+                )
 
             fiatlux_runcard["q2_max"] = float(f2.q2_max)
             f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
@@ -110,9 +110,7 @@ class Photon:
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
             photon_array = self.compute_photon_array(replica)
-            self.interpolator.append(
-                interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic")
-            )
+            self.interpolator.append(interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic"))
             self.integral.append(trapezoid(photon_array, XGRID))
 
     def compute_photon_array(self, replica):
@@ -131,9 +129,7 @@ class Photon:
         """
         # Compute photon PDF
         log.info(f"Computing photon")
-        photon_qin = np.array(
-            [self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in XGRID]
-        )
+        photon_qin = np.array([self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in XGRID])
         photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
         photon_qin /= XGRID
@@ -307,9 +303,7 @@ class Alpha:
             nfref = 6
         thresh_list.insert(nfref - 3, self.qref)
 
-        thresh = {
-            nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)
-        }
+        thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
 
         alpha_thresh = {nfref: self.alpha_em_ref}
 
@@ -335,9 +329,6 @@ class Alpha:
             nd = nf - nu
             beta0[nf] = (-4.0 / 3 * (NL + NC * (nu * EU2 + nd * ED2))) / (4 * np.pi)
             b1[nf] = (
-                -4.0
-                * (NL + NC * (nu * EU2**2 + nd * ED2**2))
-                / beta0[nf]
-                / (4 * np.pi) ** 2
+                -4.0 * (NL + NC * (nu * EU2**2 + nd * ED2**2)) / beta0[nf] / (4 * np.pi) ** 2
             )
         return beta0, b1
