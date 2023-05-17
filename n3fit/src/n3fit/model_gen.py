@@ -582,47 +582,61 @@ def pdfNN_layer_generator(
 
     # Now we need a trainable network per replica to be trained in parallel
     pdf_models = []
-    for i_replica, replica_seed in enumerate(seed):
 
-        compute_prefactor = PreprocessingFactor(
-            flav_info=flav_info,
-            input_shape=(1,),
-            name=f"preprocessing_factor_{i_replica}",
-            seed=replica_seed + number_of_layers,
-            large_x=not subtract_one,
+    # Only these layers change from replica to replica:
+    nn_replicas = []
+    prefactor_replicas = []
+    for i_replica, replica_seed in enumerate(seed):
+        prefactor_replicas.append(
+            PreprocessingFactor(
+                flav_info=flav_info,
+                input_shape=(1,),
+                name=f"preprocessing_factor_{i_replica}",
+                seed=replica_seed + number_of_layers,
+                large_x=not subtract_one,
+            )
+        )
+        nn_replicas.append(
+            generate_nn(
+                layer_type, inp, nodes, activations, initializer_name,
+                replica_seed, dropout, regularizer, regularizer_args,
+                last_layer_nodes, name=f"NN_{i_replica}")
         )
 
-        neural_network = generate_nn(
-            layer_type, inp, nodes, activations, initializer_name,
-            replica_seed, dropout, regularizer, regularizer_args,
-            last_layer_nodes, name=f"NN_{i_replica}")
+    # All layers have been made, now we need to connect them,
+    # do this in a function so we can call it for both grids and each replica
+    # Since all layers are already made, they will be reused
+    def compute_unnormalized_pdf(x, neural_network, compute_prefactor):
+        # Preprocess the input grid
+        x_scaled = extract_scaled(x)
+        x_original = extract_original(x)
+        x_processed = process_input(x_scaled)
 
-        # Apply preprocessing and basis
-        def layer_fitbasis(x):
-            """The tensor x has a expected shape of (1, None, {1,2})
-            where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
-            """
-            x_scaled = extract_scaled(x)
-            x_original = extract_original(x)
+        # Compute the neural network output
+        nn_output = neural_network(x_processed)
+        if subtract_one:
+            x_eq_1_processed = process_input(layer_x_eq_1)
+            nn_at_one = neural_network(x_eq_1_processed)
+            nn_output = subtract_one_layer([nn_output, nn_at_one])
 
-            nn_output = neural_network(process_input(x_scaled))
-            if subtract_one:
-                nn_at_one = neural_network(process_input(layer_x_eq_1))
-                nn_output = subtract_one_layer([nn_output, nn_at_one])
+        # Compute the preprocessing prefactor and multiply
+        prefactor = compute_prefactor(x_original)
+        pref_nn = apply_prefactor([nn_output, prefactor])
 
-            prefactor = compute_prefactor(x_original)
-            ret = apply_prefactor([nn_output, prefactor])
-            if not basis_rotation.is_identity():
-                # if we don't need to rotate basis we don't want spurious layers
-                ret = basis_rotation(ret)
-            return ret
+        # Apply basis rotation if needed
+        if not basis_rotation.is_identity():
+            pref_nn = basis_rotation(pref_nn)
 
-        # Rotation layer, changes from the 8-basis to the 14-basis
-        def layer_pdf(x):
-            return layer_evln(layer_fitbasis(x))
+        # Transform to FK basis
+        pdf_unnormalized = layer_evln(pref_nn)
 
-        pdf_unnormalized = layer_pdf(placeholder_input)
-        pdf_integration_grid = layer_pdf(integrator_input)
+        return pdf_unnormalized
+
+    # Finally compute the normalized PDFs for each replica
+    pdf_models = []
+    for i_replica, (prefactor, nn) in enumerate(zip(prefactor_replicas, nn_replicas)):
+        pdf_unnormalized = compute_unnormalized_pdf(placeholder_input, nn, prefactor)
+        pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, prefactor)
 
         pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
         model_output = pdf_normalized
@@ -630,6 +644,7 @@ def pdfNN_layer_generator(
         # Create the model
         pdf_model = MetaModel(model_input, model_output, name=f"PDF_{i_replica}", scaler=scaler)
         pdf_models.append(pdf_model)
+
     return pdf_models
 
 def generate_nn(
