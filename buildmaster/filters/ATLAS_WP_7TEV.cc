@@ -3,7 +3,7 @@
  * (see also ATLASWZRAP11.cc)
  * Implementation of ATLAS 2011 W plus rapidity data
  *
- * This filter contains the implementation data set: ATLAS_WP_7TEV,
+ * This filter contains the implementation of dataset: ATLAS_WP_7TEV,
  * Corresponding to the "central" selection cuts. The specific cuts 
  * can be found at the top of page eight of https://arxiv.org/pdf/1612.03016.pdf.
  *
@@ -11,13 +11,8 @@
  * Published as: https://link.springer.com/article/10.1140%2Fepjc%2Fs10052-017-4911-9
  * HEPData entry: https://www.hepdata.net/record/ins1502620
  *
- * Note:
- * It is believed that the second kinematic variable, i.e. the elements of fKin2, for the Z data were
- * originally set to incorrect values for these two data sets. This should not have led to any incorrect
- * results and this has now been fixed. See https://github.com/NNPDF/buildmaster/pull/154 for more details.
  */
 
-#include "common.h"
 #include "ATLAS.h"
 
 
