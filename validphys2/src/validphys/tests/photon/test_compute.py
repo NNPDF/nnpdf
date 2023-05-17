@@ -73,6 +73,7 @@ class FakeStructureFunction:
     def __init__(self, path, pdfs):
         self.path = path
         self.pdfs = pdfs
+        self.q2_max = 1e8
 
     def fxq(self):
         return 0
