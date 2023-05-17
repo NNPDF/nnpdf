@@ -1045,7 +1045,12 @@ class CoreConfig(configparser.Config):
         return self.parse_pdf(name)
     
     def parse_additional_errors(self, bool):
-        """PDF set used to generate the photon additional errors."""
+        """PDF set used to generate the photon additional errors:
+        they are constructed using the replicas 101-107 of the PDF set
+        LUXqed17_plus_PDF4LHC15_nnlo_100 (that are obtained varying some
+        parameters of the LuxQED approach) in the way described
+        in sec. 2.5 of https://arxiv.org/pdf/1712.07053.pdf
+        """
         if bool:
             return self.parse_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100")
         else:
