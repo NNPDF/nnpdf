@@ -105,7 +105,9 @@ def evolve_fit(
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
     with eko.EKO.read(eko_path) as eko_op:
-        info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
+        if eko.__version__ >= "0.13":
+            raise ModuleNotFoundError("Please, fix evolven3fit np.sqrt(Q) hack")
+        info["AlphaS_Qs"] = np.sqrt(info["AlphaS_Qs"]).tolist()
         dump_info_file(usr_path, info)
         for replica in initial_PDFs_dict.keys():
             evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
