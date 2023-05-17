@@ -112,7 +112,7 @@ def batchit(x, batch_dimension=0, **kwarg):
 
 
 # layer generation
-def numpy_to_input(numpy_array, no_reshape=False, name=None):
+def numpy_to_input(numpy_array, no_reshape=False, name=None, custom_shape: tuple = None):
     """
     Takes a numpy array and generates a Input layer.
     By default it adds a batch dimension (of size 1) so that the shape of the layer
@@ -125,6 +125,8 @@ def numpy_to_input(numpy_array, no_reshape=False, name=None):
             if true, don't add batch dimension, take the first dimension of the array as the batch
         name: bool
             name to give to the layer
+        custom_shape: tuple
+            To specify a more general shape with None values
     """
     if no_reshape:
         batched_array = numpy_array
@@ -134,6 +136,8 @@ def numpy_to_input(numpy_array, no_reshape=False, name=None):
         batched_array = np.expand_dims(numpy_array, 0)
         batch_size = 1
         shape = numpy_array.shape
+    if custom_shape is not None:
+        shape = custom_shape
     input_layer = Input(batch_size=batch_size, shape=shape, name=name)
     input_layer.tensor_content = batched_array
     input_layer.original_shape = no_reshape

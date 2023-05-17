@@ -108,7 +108,8 @@ def gen_integration_input(nx):
         weights.append((spacing[i] + spacing[i + 1]) / 2.0)
     weights_array = np.array(weights).reshape(nx, 1)
 
-    xgrid = op.numpy_to_input(xgrid, name="integration_grid")
+    # Specify a custom shape here using None, so shapes will display properly in the model summary
+    xgrid = op.numpy_to_input(xgrid, name="integration_grid", custom_shape=(None, 1))
 
     return xgrid, weights_array
 
