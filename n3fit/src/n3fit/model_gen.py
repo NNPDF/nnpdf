@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import numpy as np
 from n3fit.msr import generate_msr_model_and_grid
 from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask
+from n3fit.layers import PreprocessingFactor, FkRotation, FlavourToEvolution, Mask
 from n3fit.layers.observable import is_unique
 
 from n3fit.backends import MetaModel, Input
@@ -482,7 +482,7 @@ def pdfNN_layer_generator(
             selects the type of architecture of the NN. Default: dense
         flav_info: dict
             dictionary containing the information about each PDF (basis dictionary in the runcard)
-            to be used by Prefactor
+            to be used by PreprocessingFactor
         out: int
             number of output flavours of the model (default 14)
         seed: list(int)
@@ -584,10 +584,10 @@ def pdfNN_layer_generator(
     pdf_models = []
     for i_replica, replica_seed in enumerate(seed):
 
-        compute_prefactor = Prefactor(
+        compute_prefactor = PreprocessingFactor(
             flav_info=flav_info,
             input_shape=(1,),
-            name=f"prefactor_{i_replica}",
+            name=f"preprocessing_factor_{i_replica}",
             seed=replica_seed + number_of_layers,
             large_x=not subtract_one,
         )
