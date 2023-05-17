@@ -12,7 +12,6 @@ from collections import OrderedDict
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy import optimize
 
 from reportengine import collect
@@ -24,6 +23,7 @@ from validphys import checks
 from validphys.lhio import new_pdf_from_indexes
 from validphys.pdfoutput import pdfset
 from validphys.dataplots import plot_training_validation
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -166,7 +166,7 @@ def p_alpha_study(chi2_data_for_reweighting_experiments):
 @figure
 def plot_p_alpha(p_alpha_study):
     """Plot the results of ``p_alpha_study``."""
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.set_title(r"$P(\alpha)$")
 
     xmax = p_alpha_study.idxmax()
