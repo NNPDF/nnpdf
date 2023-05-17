@@ -120,7 +120,7 @@ class N3FitConfig(Config):
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(
-                f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'."
+                f"Expecting input runcard to be a mapping, not '{type(file_content)}'."
             )
 
         if file_content.get('closuretest') is not None:
