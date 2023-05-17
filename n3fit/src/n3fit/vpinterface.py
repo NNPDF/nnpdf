@@ -20,12 +20,13 @@
 """
 import logging
 from collections.abc import Iterable
+
 import numpy as np
 import numpy.linalg as la
+from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
-from validphys.pdfbases import ALL_FLAVOURS, check_basis
 from validphys.lhapdfset import LHAPDFSet
-from validphys.arclength import integrability_number, arc_lengths
+from validphys.pdfbases import ALL_FLAVOURS, check_basis
 
 log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
@@ -74,7 +75,9 @@ class N3LHAPDFSet(LHAPDFSet):
         """Return the value of the PDF member for the given value in x"""
         if Q != self._fitting_q:
             log.warning(
-                "Querying N3LHAPDFSet at a value of Q=%f different from %f", Q, self._fitting_q
+                "Querying N3LHAPDFSet at a value of Q=%f different from %f",
+                Q,
+                self._fitting_q,
             )
         return self.grid_values([fl], [x]).squeeze()[n]
 
@@ -83,7 +86,7 @@ class N3LHAPDFSet(LHAPDFSet):
         for m in self._lhapdf_set:
             pl = m.get_layer_re("add_photon")
             # if pl is an empy list there's no photon
-            if not pl : 
+            if not pl:
                 continue
             pl[0].register_photon(xgrid)
             # Recompile the model if necessary
@@ -120,7 +123,9 @@ class N3LHAPDFSet(LHAPDFSet):
 
         if replica is None or replica == 0:
             # We need generate output values for all replicas
-            result = np.concatenate([m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0)
+            result = np.concatenate(
+                [m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0
+            )
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)

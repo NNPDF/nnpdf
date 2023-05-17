@@ -5,20 +5,16 @@ Providers which prepare the data ready for
 :py:func:`n3fit.performfit.performfit`.
 """
 import functools
-from collections import defaultdict
 import hashlib
 import logging
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
-
 from reportengine import collect
 from reportengine.table import table
-
-from validphys.n3fit_data_utils import (
-    validphys_group_extractor,
-)
 from validphys.core import IntegrabilitySetSpec, TupleComp
+from validphys.n3fit_data_utils import validphys_group_extractor
 
 log = logging.getLogger(__name__)
 
@@ -51,6 +47,7 @@ def replica_mcseed(replica, mcseed, genrep):
     for _ in range(replica):
         res = np.random.randint(0, pow(2, 31))
     return res
+
 
 def replica_luxseed(replica, luxseed):
     """Generate the ``luxseed`` for a ``replica``.
@@ -97,7 +94,7 @@ def tr_masks(data, replica_trvlseed):
         ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
         frac = dataset.frac
         # We do this so that a given dataset will always have the same number of points masked
-        trmax = int(ndata*frac)
+        trmax = int(ndata * frac)
         if trmax == 0:
             # If that number is 0, then get 1 point with probability frac
             trmax = int(rng.random() < frac)
@@ -238,11 +235,13 @@ def fitting_data_dict(
     """
     # TODO: Plug in the python data loading when available. Including but not
     # limited to: central values, ndata, replica generation, covmat construction
-    expdata_true = np.concatenate([d.central_values for d in dataset_inputs_loaded_cd_with_cuts])
+    expdata_true = np.concatenate(
+        [d.central_values for d in dataset_inputs_loaded_cd_with_cuts]
+    )
 
     expdata = make_replica
     tr_masks = tr_masks.masks
-    covmat = dataset_inputs_fitting_covmat # t0 covmat, or theory covmat or whatever was decided by the runcard
+    covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
 
@@ -319,7 +318,9 @@ def fitting_data_dict(
     return dict_out
 
 
-exps_fitting_data_dict = collect("fitting_data_dict", ("group_dataset_inputs_by_metadata",))
+exps_fitting_data_dict = collect(
+    "fitting_data_dict", ("group_dataset_inputs_by_metadata",)
+)
 
 
 def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nnseed):
@@ -336,7 +337,9 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 
-replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
+replicas_nnseed_fitting_data_dict = collect(
+    "replica_nnseed_fitting_data_dict", ("replicas",)
+)
 groups_replicas_indexed_make_replica = collect(
     "indexed_make_replica", ("group_dataset_inputs_by_experiment", "replicas")
 )
@@ -351,7 +354,7 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     Notes
     -----
     Whilst running ``n3fit``, this action will only be called if
-    `fitting::savepseudodata` is `true` (as per the default setting) and 
+    `fitting::savepseudodata` is `true` (as per the default setting) and
     replicas are fitted one at a time. The table can be found in the replica
     folder i.e. <fit dir>/nnfit/replica_*/
 
@@ -444,8 +447,12 @@ def replica_training_mask(exps_tr_masks, replica, experiments_index):
 
     [345 rows x 1 columns]
     """
-    all_masks = np.concatenate([ds_mask for exp_masks in exps_tr_masks for ds_mask in exp_masks])
-    return pd.DataFrame(all_masks, columns=[f"replica {replica}"], index=experiments_index)
+    all_masks = np.concatenate(
+        [ds_mask for exp_masks in exps_tr_masks for ds_mask in exp_masks]
+    )
+    return pd.DataFrame(
+        all_masks, columns=[f"replica {replica}"], index=experiments_index
+    )
 
 
 replicas_training_mask = collect("replica_training_mask", ("replicas",))

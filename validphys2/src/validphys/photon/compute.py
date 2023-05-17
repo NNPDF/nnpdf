@@ -87,8 +87,10 @@ class Photon:
         for replica in replicas:
             f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
             fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
-            if not np.isclose(f2.q2_max, fl.q2_max) :
-                log.error("FKtables for fiatlux_dis_F2 and fiatlux_dis_FL have two different q2_max")
+            if not np.isclose(f2.q2_max, fl.q2_max):
+                log.error(
+                    "FKtables for fiatlux_dis_F2 and fiatlux_dis_FL have two different q2_max"
+                )
 
             fiatlux_runcard["q2_max"] = float(f2.q2_max)
             f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
