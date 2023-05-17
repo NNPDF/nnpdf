@@ -157,6 +157,7 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new ATLASWZRAP11CCFilter());
   target.emplace_back(new ATLASWZRAP11CFFilter());
   target.emplace_back(new ATLAS_WP_7TEVFilter());
+  target.emplace_back(new ATLAS_WM_7TEVFilter());
   target.emplace_back(new ATLASR04JETS36PBFilter());
   target.emplace_back(new ATLASR06JETS36PBFilter());
   target.emplace_back(new ATLASR04JETS2P76TEVFilter());
