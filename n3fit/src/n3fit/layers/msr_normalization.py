@@ -37,7 +37,7 @@ class MSR_Normalization(MetaLayer):
             op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
         )
 
-        super().__init__(**kwargs, name="normalizer")
+        super().__init__(**kwargs)
 
     def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:

@@ -12,7 +12,7 @@
 from typing import List
 from dataclasses import dataclass
 import numpy as np
-from n3fit.msr import msr_impose
+from n3fit.msr import generate_msr_model_and_grid
 from n3fit.layers import DIS, DY, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask
 from n3fit.layers.observable import is_unique
@@ -575,7 +575,7 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
+        sumrule_layer, integrator_input = generate_msr_model_and_grid(mode=impose_sumrule, scaler=scaler)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -621,10 +621,11 @@ def pdfNN_layer_generator(
         def layer_pdf(x):
             return layer_evln(layer_fitbasis(x))
 
-        # Final PDF (apply normalization)
-        final_pdf = sumrule_layer(layer_pdf)
+        pdf_unnormalized = layer_pdf(placeholder_input)
+        pdf_integration_grid = layer_pdf(integrator_input)
 
-        model_output = final_pdf(placeholder_input)
+        pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
+        model_output = pdf_normalized
 
         # Create the model
         pdf_model = MetaModel(model_input, model_output, name=f"PDF_{i_replica}", scaler=scaler)
