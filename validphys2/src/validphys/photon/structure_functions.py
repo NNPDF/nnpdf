@@ -41,6 +41,8 @@ class InterpStructureFunction(StructureFunction):
         x = np.unique(self.fktable.bin_left(1))
         q2 = np.unique(self.fktable.bin_left(0))
 
+        self.q2_max = max(q2)
+
         predictions = self.fktable.convolute_with_one(2212, pdfs.xfxQ2)
 
         grid2D = predictions.reshape(len(x), len(q2))
