@@ -253,10 +253,9 @@ def pineappl_reader(fkspec):
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
     Q0 = np.sqrt(pine_rep.muf2())
-    x_grids = [pine.x_grid() for pine in pines]
     xgrid = np.array([])
-    for grid in x_grids:
-        xgrid = np.union1d(xgrid, grid)
+    for pine in pines:
+        xgrid = np.union1d(xgrid, pine.x_grid())
     xi = np.arange(len(xgrid))
     protected = False
 
@@ -294,13 +293,13 @@ def pineappl_reader(fkspec):
             if apfelcomb.get("shifts") is not None:
                 ndata += apfelcomb["shifts"][i]
 
-        # Here I need to provide the additional dimension to match the other FKs
-        # First I need to find where holes are
-        missing_x_points = np.setdiff1d(xgrid, p.x_grid())
-        missing_x_points_index = [list(xgrid).index(miss) for miss in missing_x_points]
-        for miss_index in missing_x_points_index:
+        # Add empty points to ensure that all fktables share the same x-grid upon convolution
+        missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
+        for x_point in missing_x_points:
+            miss_index = list(xgrid).index(x_point)
             raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=2)
-            raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
+            if hadronic:
+                raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
         # Check conversion factors and remove the x* from the fktable
         raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
 
