@@ -68,7 +68,7 @@ def evolve_fit(
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
         log.setLevel(LOGGING_SETTINGS["level"])
-        log.setFormatter(logging.Formatter(LOGGING_SETTINGS["formatter"]))
+        log.setFormatter(LOGGING_SETTINGS["formatter"])
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
