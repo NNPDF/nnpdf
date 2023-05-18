@@ -253,10 +253,9 @@ def pineappl_reader(fkspec):
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
     Q0 = np.sqrt(pine_rep.muf2())
-    x_grids = [pine.x_grid() for pine in pines]
     xgrid = np.array([])
-    for grid in x_grids:
-        xgrid = np.union1d(xgrid, grid)
+    for pine in pines:
+        xgrid = np.union1d(xgrid, pine.x_grid())
     xi = np.arange(len(xgrid))
     protected = False
 
