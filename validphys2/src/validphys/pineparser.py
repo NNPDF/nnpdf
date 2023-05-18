@@ -294,11 +294,12 @@ def pineappl_reader(fkspec):
                 ndata += apfelcomb["shifts"][i]
 
         # Add empty points to ensure that all fktables share the same x-grid upon convolution
-        missing_x_points = np.setdiff1d(xgrid, p.x_grid())
-        missing_x_points_index = [list(xgrid).index(miss) for miss in missing_x_points]
-        for miss_index in missing_x_points_index:
+        missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
+        for x_point in missing_x_points:
+            miss_index = list(xgrid).index(x_point)
             raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=2)
-            raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
+            if hadronic:
+                raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
         # Check conversion factors and remove the x* from the fktable
         raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
 
