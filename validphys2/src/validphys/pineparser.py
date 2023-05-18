@@ -294,8 +294,7 @@ def pineappl_reader(fkspec):
             if apfelcomb.get("shifts") is not None:
                 ndata += apfelcomb["shifts"][i]
 
-        # Here I need to provide the additional dimension to match the other FKs
-        # First I need to find where holes are
+        # Add empty points to ensure that all fktables share the same x-grid upon convolution
         missing_x_points = np.setdiff1d(xgrid, p.x_grid())
         missing_x_points_index = [list(xgrid).index(miss) for miss in missing_x_points]
         for miss_index in missing_x_points_index:
