@@ -10,16 +10,24 @@
 
 """
 from dataclasses import dataclass
-import numpy as np
-from n3fit.msr import msr_impose
-from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
-from n3fit.layers.observable import is_unique
 
-from n3fit.backends import MetaModel, Input
+import numpy as np
+
+from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
-from n3fit.backends import MetaLayer, Lambda
-from n3fit.backends import base_layer_selector, regularizer_selector
+from n3fit.backends import regularizer_selector
+from n3fit.layers import (
+    DIS,
+    DY,
+    AddPhoton,
+    FkRotation,
+    FlavourToEvolution,
+    ObsRotation,
+    Preprocessing,
+    losses,
+)
+from n3fit.layers.observable import is_unique
+from n3fit.msr import msr_impose
 
 
 @dataclass
@@ -403,6 +411,7 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
+    photons=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -495,6 +504,10 @@ def pdfNN_layer_generator(
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
         parallel_models: int
             How many models should be trained in parallel
+        photon: :py:class:`validphys.photon.compute.Photon`
+            If given, gives the AddPhoton layer a function to compute a photon which will be added at the
+            index 0 of the 14-size FK basis
+            This same function will also be used to compute the MSR component for the photon
 
     Returns
     -------
@@ -560,12 +573,17 @@ def pdfNN_layer_generator(
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
 
+    # Photon layer
+    layer_photon = AddPhoton(photons=photons)
+
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
+        sumrule_layer, integrator_input = msr_impose(
+            mode=impose_sumrule, scaler=scaler, photons=photons
+        )
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -640,7 +658,17 @@ def pdfNN_layer_generator(
             return layer_evln(layer_fitbasis(x))
 
         # Final PDF (apply normalization)
-        final_pdf = sumrule_layer(layer_pdf)
+        normalized_pdf = sumrule_layer(layer_pdf, i)
+
+        # Photon layer, changes the photon from zero to non-zero
+        def apply_photon(x):
+            # if photon is None then the photon layer is not applied
+            if photons:
+                return layer_photon(normalized_pdf(x), i)
+            else:
+                return normalized_pdf(x)
+
+        final_pdf = apply_photon
 
         # Create the model
         pdf_model = MetaModel(

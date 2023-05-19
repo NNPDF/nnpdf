@@ -16,7 +16,8 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, output_dim=14, mode="ALL", **kwargs):
+    def __init__(self, output_dim=14, mode="ALL", photons_contribution=None, **kwargs):
+        self._photons = photons_contribution
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -39,9 +40,9 @@ class MSR_Normalization(MetaLayer):
 
         super().__init__(**kwargs, name="normalizer")
 
-    def call(self, pdf_integrated):
+    def call(self, pdf_integrated, ph_replica):
         """Imposes the valence and momentum sum rules:
-        A_g = (1-sigma)/g
+        A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
         A_v3 = 1/V_3
         A_v8 = 3/V_8
@@ -52,8 +53,15 @@ class MSR_Normalization(MetaLayer):
         y = op.flatten(pdf_integrated)
         norm_constants = []
 
+        if self._photons:
+            photon_integral = self._photons[ph_replica]
+        else:
+            photon_integral = 0.0
+
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0]-1]) / y[GLUON_IDX[0][0]]] * len(GLUON_IDX)
+            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - photon_integral) / y[GLUON_IDX[0][0]]] * len(
+                GLUON_IDX
+            )
             norm_constants += n_ag
 
         if self._vsr_enabled:
