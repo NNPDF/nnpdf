@@ -1433,7 +1433,6 @@ class CoreConfig(configparser.Config):
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
-        
         if (
             q2min is not None
             and "q2min" in filter_defaults
