@@ -17,7 +17,7 @@ The parameters to be added are the following:
       luxseed: 1234567890
 
 `luxset` is the PDF set used to generate the photon PDF with `FiatLux <https://github.com/scarrazza/fiatlux/>`.
-The code wil generate as much photon replicas as the number of replicas contained in the `luxset`. Therefore, if the user
+The code will generate as many photon replicas as the number of replicas contained in the `luxset`. Therefore, if the user
 tries to generate a replica with ID higher than the maximum ID of the `luxset`, the code will
 raise an error. Moreover, being the `LuxQED` approach an iterated prcedure, and given that some replicas
 do not pass the `postfit` selection criteria, the user should make sure that the number of replicas in
