@@ -518,7 +518,6 @@ class CoreConfig(configparser.Config):
             None, "cut_similarity_threshold", write=False
         )
         try:
-
             _, exclusion_list = self.parse_from_(None, "do_not_require_similarity_for", write=False)
         except configparser.InputNotFoundError:
             exclusion_list = []
@@ -859,7 +858,6 @@ class CoreConfig(configparser.Config):
         self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
 
@@ -1316,7 +1314,6 @@ class CoreConfig(configparser.Config):
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
     ):
-
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 

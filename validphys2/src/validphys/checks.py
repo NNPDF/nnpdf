@@ -5,22 +5,28 @@ Created on Thu Jun  2 19:35:40 2016
 @author: Zahari Kassabov
 """
 from collections import Counter
+import json
+import logging
 import platform
 import tempfile
-import json
-
-from matplotlib import scale as mscale
 
 import lhapdf
+from matplotlib import scale as mscale
 
-from reportengine.checks import (make_check, CheckError, require_one,
-                                 check_not_empty, make_argcheck, check_positive, check)
-
+from reportengine.checks import (
+    CheckError,
+    check,
+    check_not_empty,
+    check_positive,
+    make_argcheck,
+    make_check,
+    require_one,
+)
 from validphys import lhaindex
 from validphys.core import CutsPolicy
 
-import logging
 log = logging.getLogger(__name__)
+
 
 @make_check
 def check_use_t0(ns, **kwargs):
@@ -28,13 +34,14 @@ def check_use_t0(ns, **kwargs):
     if not ns.get("use_t0"):
         raise CheckError("The flag 'use_t0' needs to be set to 'true' for this action.")
 
+
 @make_check
 def check_pdf_is_montecarlo(ns, **kwargs):
     pdf = ns['pdf']
     etype = pdf.error_type
     if etype != 'replicas':
-        raise CheckError("Error type of PDF %s must be 'replicas' and not %s"
-                          % (pdf, etype))
+        raise CheckError(f"Error type of PDF {pdf} must be 'replicas' and not {etype}")
+
 
 @make_check
 def check_know_errors(ns, **kwargs):
@@ -54,30 +61,35 @@ def check_can_save_grid(ns, **kwags):
     try:
         tempfile.TemporaryFile(dir=write_path)
     except OSError as e:
-        raise CheckError("Cannot write to the LHAPDF path %s.\n"
-                         "This is required because the 'installgrid' "
-                         "parameter is set to True:\n%s" %
-                        (write_path, e))
+        raise CheckError(
+            f"""Cannot write to the LHAPDF path {write_path}."
+This is required because the 'installgrid' parameter is set to True:
+{e}"""
+        )
+
 
 @make_argcheck
 def check_xlimits(xmax, xmin):
     if not (0 <= xmin < xmax <= 1):
-        raise CheckError(f'xmin ({xmin}) and xmax ({xmax}) must satisfy \n'
-                         '0 <= xmin < xmax <= 1')
+        raise CheckError(f'xmin ({xmin}) and xmax ({xmax}) must satisfy \n' '0 <= xmin < xmax <= 1')
+
 
 @make_check
 def check_has_fitted_replicas(ns, **kwargs):
     name, path = ns['fit']
-    postfit_path = path/'postfit'/'postfit.log'
-    old_postfit_path = path/'nnfit'/'postfit.log'
+    postfit_path = path / 'postfit' / 'postfit.log'
+    old_postfit_path = path / 'nnfit' / 'postfit.log'
     if not postfit_path.exists():
         if not old_postfit_path.exists():
             raise CheckError(
                 f"Fit {name} does not appear to be completed. "
-                f"Expected to find file {postfit_path}")
+                f"Expected to find file {postfit_path}"
+            )
         else:
-            log.info(f"Cannot find postfit log at: {postfit_path}. "
-                     f"Falling back to old location: {old_postfit_path}")
+            log.info(
+                f"Cannot find postfit log at: {postfit_path}. "
+                f"Falling back to old location: {old_postfit_path}"
+            )
 
     if not lhaindex.isinstalled(name):
         raise CheckError(
@@ -90,6 +102,7 @@ def check_has_fitted_replicas(ns, **kwargs):
 def check_scale(scalename, allow_none=False):
     """Check that we have a valid matplotlib scale. With allow_none=True,
     also None is valid."""
+
     @make_check
     def check(ns, *args, **kwargs):
         val = ns[scalename]
@@ -97,12 +110,15 @@ def check_scale(scalename, allow_none=False):
             return
         valid_scales = mscale.get_scale_names()
         if not val in valid_scales:
-            e = CheckError("Invalid plotting scale: %s" % scalename,
-                             bad_item=val,
-                             alternatives=valid_scales,
-                             display_alternatives='all')
+            e = CheckError(
+                "Invalid plotting scale: %s" % scalename,
+                bad_item=val,
+                alternatives=valid_scales,
+                display_alternatives='all',
+            )
             e.alternatives_header = "No such scale '%s'. The allowed values are:"
             raise e
+
     return check
 
 
@@ -114,7 +130,9 @@ def check_cuts_fromfit(use_cuts):
 @make_argcheck
 def check_cuts_considered(use_cuts):
     if use_cuts == CutsPolicy.NOCUTS:
-        raise CheckError(f"Cuts must be computed for this action, but they are set to {use_cuts.value}")
+        raise CheckError(
+            f"Cuts must be computed for this action, but they are set to {use_cuts.value}"
+        )
 
 
 @make_argcheck
@@ -132,8 +150,7 @@ def check_dataset_cuts_match_theorycovmat(dataset, fitthcovmat):
 
 
 @make_argcheck
-def check_data_cuts_match_theorycovmat(
-        data, fitthcovmat):
+def check_data_cuts_match_theorycovmat(data, fitthcovmat):
     for dataset in data.datasets:
         if fitthcovmat:
             ds_index = fitthcovmat.load().index.get_level_values(1)
@@ -147,28 +164,26 @@ def check_data_cuts_match_theorycovmat(
             check(ndata == ncovmat)
 
 
-
 @make_argcheck
 def check_have_two_pdfs(pdfs):
-    check(len(pdfs) == 2,'Expecting exactly two pdfs.')
+    check(len(pdfs) == 2, 'Expecting exactly two pdfs.')
 
 
 @make_argcheck
 def check_at_least_two_replicas(pdf):
     # The get_members function also includes the central value replica,
     # therefore we need it to be larger than 3
-    check(pdf.get_members() >= 3,'Expecting at least two replicas.')
+    check(pdf.get_members() >= 3, 'Expecting at least two replicas.')
 
 
-#The indexing to one instead of zero is so that we can be consistent with
-#how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
-#for both.
+# The indexing to one instead of zero is so that we can be consistent with
+# how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
+# for both.
 @make_argcheck
 def check_pdf_normalize_to(pdfs, normalize_to):
     """Transforn normalize_to into an index."""
 
-    msg = ("normalize_to should be, a pdf id or an index of the "
-           "pdf (starting from one)")
+    msg = "normalize_to should be, a pdf id or an index of the pdf (starting from one)"
 
     if normalize_to is None:
         return
@@ -176,7 +191,7 @@ def check_pdf_normalize_to(pdfs, normalize_to):
     names = [pdf.name for pdf in pdfs]
     if isinstance(normalize_to, int):
         normalize_to -= 1
-        if not normalize_to < len(names) or normalize_to<0:
+        if not normalize_to < len(names) or normalize_to < 0:
             raise CheckError(msg)
         return {'normalize_to': normalize_to}
 
@@ -187,18 +202,22 @@ def check_pdf_normalize_to(pdfs, normalize_to):
             raise CheckError(msg, normalize_to, alternatives=names)
         return {'normalize_to': normalize_to}
 
-
     raise RuntimeError("Should not be here")
+
 
 @make_argcheck
 def check_pdfs_noband(pdfs, pdfs_noband):
     """Allows pdfs_noband to be specified as a list of PDF IDs or a list of
     PDF indexes (starting from one)."""
 
-    msg = ("pdfs_noband should be a list of PDF IDs (strings) or a list of "
-           "PDF indexes (integers, starting from one)")
-    msg_range = ("At least one of your pdf_noband indexes is out of range. "
-                 "Note that pdf_noband indexing starts at 1, not 0.")
+    msg = (
+        "pdfs_noband should be a list of PDF IDs (strings) or a list of "
+        "PDF indexes (integers, starting from one)"
+    )
+    msg_range = (
+        "At least one of your pdf_noband indexes is out of range. "
+        "Note that pdf_noband indexing starts at 1, not 0."
+    )
 
     if pdfs_noband is None:
         return
@@ -226,7 +245,6 @@ def check_pdfs_noband(pdfs, pdfs_noband):
         else:
             raise CheckError(msg)
 
-
     return {'pdfs_noband': pdfs_noband_combined}
 
 
@@ -236,10 +254,14 @@ def check_mixband_as_replicas(pdfs, mixband_as_replicas):
     Allows mixband_as_replicas to be specified as a list of PDF IDs or a list of
     PDF indexes (starting from one)."""
 
-    msg = ("mixband_as_replicas should be a list of PDF IDs (strings) or a list of "
-           "PDF indexes (integers, starting from one)")
-    msg_range = ("At least one of the choices in mixband_as_replicas indexes is out of range. "
-                 "Note that pdf_noband indexing starts at 1, not 0.")
+    msg = (
+        "mixband_as_replicas should be a list of PDF IDs (strings) or a list of "
+        "PDF indexes (integers, starting from one)"
+    )
+    msg_range = (
+        "At least one of the choices in mixband_as_replicas indexes is out of range. "
+        "Note that pdf_noband indexing starts at 1, not 0."
+    )
 
     if mixband_as_replicas is None:
         return {'mixband_as_replicas': []}
@@ -269,23 +291,26 @@ def check_mixband_as_replicas(pdfs, mixband_as_replicas):
 
     return {'mixband_as_replicas': mixband_as_replicas_combined}
 
+
 def _check_list_different(l, name):
     strs = [str(item) for item in l]
-    if not len(set(strs))==len(l):
+    if not len(set(strs)) == len(l):
         counter = Counter(strs)
         duplicates = [k for k, v in counter.items() if v > 1]
-        raise CheckError(f"{name} must be all different "
-                         f"but there are duplicates: {duplicates}")
+        raise CheckError(f"{name} must be all different but there are duplicates: {duplicates}")
+
 
 @make_argcheck
 def check_fits_different(fits):
     """Need this check because oterwise the pandas object gets confused"""
     return _check_list_different(fits, 'fits')
 
+
 @make_argcheck
 def check_dataspecs_fits_different(dataspecs_fit):
     """Need this check because oterwise the pandas object gets confused"""
     return _check_list_different(dataspecs_fit, 'fits')
+
 
 @make_argcheck
 def check_speclabels_different(dataspecs_speclabel):
@@ -293,15 +318,18 @@ def check_speclabels_different(dataspecs_speclabel):
     generally indecated a bug)"""
     return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
 
+
 @make_argcheck
 def check_two_dataspecs(dataspecs):
     l = len(dataspecs)
     check(l == 2, f"Expecting exactly 2 dataspecs, not {l}")
 
+
 @make_argcheck
 def check_norm_threshold(norm_threshold):
     """Check norm_threshold is not None"""
     check(norm_threshold is not None)
+
 
 @make_argcheck
 def check_darwin_single_process(NPROC):
@@ -322,6 +350,4 @@ def check_darwin_single_process(NPROC):
 
     """
     if platform.system() == "Darwin" and NPROC != 1:
-        raise CheckError(
-            "NPROC must be set to 1 on OSX, because multithreading is not supported."
-        )
+        raise CheckError("NPROC must be set to 1 on OSX, because multithreading is not supported.")

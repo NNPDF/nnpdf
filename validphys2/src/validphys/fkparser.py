@@ -17,15 +17,15 @@ CFactors applied.
     fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
     res = load_fktable(fk)
 """
-import io
-import functools
-import tarfile
 import dataclasses
+import functools
+import io
+import tarfile
 
 import numpy as np
 import pandas as pd
 
-from validphys.coredata import FKTableData, CFactorData
+from validphys.coredata import CFactorData, FKTableData
 from validphys.pineparser import pineappl_reader
 
 
@@ -40,10 +40,12 @@ class BadFKTableError(Exception):
 @dataclasses.dataclass(frozen=True)
 class GridInfo:
     """Class containing the basic properties of an FKTable grid."""
+
     setname: str
     hadronic: bool
     ndata: int
     nx: int
+
 
 @functools.lru_cache()
 def load_fktable(spec):
@@ -70,13 +72,13 @@ def load_fktable(spec):
 
     return tabledata.with_cfactor(cfprod)
 
+
 def _get_compressed_buffer(path):
     archive = tarfile.open(path)
     members = archive.getmembers()
     l = len(members)
     if l != 1:
-        raise BadFKTableError(
-            f"Archive {path} should contain one file, but it contains {l}.")
+        raise BadFKTableError(f"Archive {path} should contain one file, but it contains {l}.")
     return archive.extractfile(members[0])
 
 
@@ -103,8 +105,10 @@ def open_fkpath(path):
 def _is_header_line(line):
     return line.startswith((b'_', b'{'))
 
+
 def _bytes_to_bool(x):
     return bool(int(x))
+
 
 def _parse_fk_options(line_and_stream, value_parsers=None):
     """Parse a sequence of lines of the form
@@ -146,20 +150,25 @@ def _segment_parser(f):
                 return processed, lineno, next_line
             buf.write(next_line)
         raise BadFKTableError("FKTable should end with FastKernel spec, not with a segment string")
+
     return f_
+
 
 @_segment_parser
 def _parse_string(buf):
     return buf.getvalue().decode()
+
 
 @_segment_parser
 def _parse_flavour_map(buf):
     buf.seek(0)
     return np.loadtxt(buf, dtype=bool)
 
+
 @_segment_parser
 def _parse_xgrid(buf):
     return np.fromstring(buf.getvalue(), sep='\n')
+
 
 # This used a different interface from segment parser because we want it to
 # be fast.
@@ -170,15 +179,16 @@ def _parse_hadronic_fast_kernel(f):
     # Note that we need the slower whitespace here because it turns out
     # that there are fktables where space and tab are used as separators
     # within the same table.
-    df = pd.read_csv(f, sep=r'\s+', header=None, index_col=(0,1,2))
-    df.columns = list(range(14*14))
+    df = pd.read_csv(f, sep=r'\s+', header=None, index_col=(0, 1, 2))
+    df.columns = list(range(14 * 14))
     df.index.names = ['data', 'x1', 'x2']
     return df
+
 
 def _parse_dis_fast_kernel(f):
     """Parse the FastKernel section of a DIS FKTable into a DataFrame.
     ``f`` should be a stream containing only the section"""
-    df = pd.read_csv(f, sep=r'\s+', header=None, index_col=(0,1))
+    df = pd.read_csv(f, sep=r'\s+', header=None, index_col=(0, 1))
     df.columns = list(range(14))
     df.index.names = ['data', 'x']
     return df
@@ -186,39 +196,34 @@ def _parse_dis_fast_kernel(f):
 
 def _parse_gridinfo(line_and_stream):
     dict_result, line_number, next_line = _parse_fk_options(
-        line_and_stream,
-        value_parsers={
-            "HADRONIC": _bytes_to_bool,
-            "NDATA": int,
-            "NX": int
-        })
+        line_and_stream, value_parsers={"HADRONIC": _bytes_to_bool, "NDATA": int, "NX": int}
+    )
     gi = GridInfo(**{k.lower(): v for k, v in dict_result.items()})
     return gi, line_number, next_line
 
 
-
 def _parse_header(lineno, header):
     if not _is_header_line(header):
-        raise BadFKTableError(f"Bad header at line {lineno}: First "
-                "character should be either '_' or '{'")
+        raise BadFKTableError(
+            f"Bad header at line {lineno}: First character should be either '_' or '{'"
+        )
     try:
         endname = header.index(b'_', 1)
     except ValueError:
         raise BadFKTableError(f"Bad header at line {lineno}: Expected '_' after name") from None
     header_name = header[1:endname]
-    #Note: This is not the same as header[0]. Bytes iterate as ints.
+    # Note: This is not the same as header[0]. Bytes iterate as ints.
     return header[0:1], header_name.decode()
 
 
 def _build_sigma(f, res):
     gi = res["GridInfo"]
     fm = res["FlavourMap"]
-    table = (
-        _parse_hadronic_fast_kernel(f) if gi.hadronic else _parse_dis_fast_kernel(f)
-    )
+    table = _parse_hadronic_fast_kernel(f) if gi.hadronic else _parse_dis_fast_kernel(f)
     # Filter out empty flavour indices
     table = table.loc[:, fm.ravel()]
     return table
+
 
 _KNOWN_SEGMENTS = {
     "GridDesc": _parse_string,
@@ -266,14 +271,14 @@ _KNOWN_SEGMENTS = {
     ),
 }
 
+
 def _check_required_sections(res, lineno):
     """Check that we have found all the required sections by the time we
     reach 'FastKernel'"""
     for section in _KNOWN_SEGMENTS:
         if section not in res:
-            raise BadFKTableError(
-                f"{section} must come before 'FastKernel' section at {lineno}"
-            )
+            raise BadFKTableError(f"{section} must come before 'FastKernel' section at {lineno}")
+
 
 def parse_fktable(f):
     """Parse an open byte stream into an FKTableData. Raise a BadFKTableError
@@ -327,9 +332,7 @@ def parse_fktable(f):
             out, lineno, header = parser(line_and_stream)
         except Exception as e:
             # Note that the old lineno is the one we want
-            raise BadFKTableError(
-                f"Failed processing header {header_name} on line {lineno}"
-            ) from e
+            raise BadFKTableError(f"Failed processing header {header_name} on line {lineno}") from e
         res[header_name] = out
 
 

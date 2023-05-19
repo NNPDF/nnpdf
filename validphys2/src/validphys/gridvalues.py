@@ -46,6 +46,7 @@ QUARK_COMBINATIONS = {
     "csbar": [4, -3],
 }
 
+
 def _grid_values(lpdf, flmat, xmat, qmat):
     """Compute lpdf.grid_values with more forgiving argument types"""
     flmat = np.atleast_1d(np.asanyarray(flmat))
@@ -53,7 +54,8 @@ def _grid_values(lpdf, flmat, xmat, qmat):
     qmat = np.atleast_1d(np.asarray(qmat))
     return lpdf.grid_values(flmat, xmat, qmat)
 
-def grid_values(pdf:PDF, flmat, xmat, qmat):
+
+def grid_values(pdf: PDF, flmat, xmat, qmat):
     """
     Evaluate ``x*f(x)`` on a grid of points in flavour, x and Q.
 
@@ -97,7 +99,8 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
     """
     return _grid_values(pdf.load(), flmat, xmat, qmat)
 
-def central_grid_values(pdf:PDF, flmat, xmat, qmat):
+
+def central_grid_values(pdf: PDF, flmat, xmat, qmat):
     """Same as :py:func:`grid_values` but it returns only the central values. The
     return value is indexed as::
 
@@ -109,10 +112,12 @@ def central_grid_values(pdf:PDF, flmat, xmat, qmat):
     return _grid_values(pdf.load_t0(), flmat, xmat, qmat)
 
 
-#TODO: Investigate writting these in cython/cffi/numba/...
+# TODO: Investigate writting these in cython/cffi/numba/...
 
-def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
-                        x1: float, x2: float, channel):
+
+def evaluate_luminosity(
+    pdf_set: LHAPDFSet, n: int, s: float, mx: float, x1: float, x2: float, channel
+):
     """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2
     for a given channel.
 
@@ -123,7 +128,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     channel: The channel tag name from LUMI_CHANNELS.
     """
 
-
+    # fmt: off
     res = 0
     if channel == 'gg':
         res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
@@ -157,6 +162,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
 
     else:
         raise ValueError("Bad channel")
+    # fmt: on
 
     # The following is equivalent to Eq.(2) in arXiv:1607.01831
-    return res/x1/x2/s
+    return res / x1 / x2 / s

@@ -7,8 +7,9 @@ and extracts the relevant information into :py:class:`validphys.n3fit_data_utils
 The ``validphys_group_extractor`` will loop over every dataset of a given group
 loading their fktables (and applying any necessary cuts).
 """
-from itertools import zip_longest
 import dataclasses
+from itertools import zip_longest
+
 import numpy as np
 
 
@@ -31,6 +32,7 @@ class FittableDataSet:
         training_mask: bool
             training mask to apply to the fktable
     """
+
     name: str
     fktables_data: list  # of validphys.coredata.FKTableData objects
 
