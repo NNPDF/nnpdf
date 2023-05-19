@@ -205,7 +205,7 @@ def _parse_gridinfo(line_and_stream):
 def _parse_header(lineno, header):
     if not _is_header_line(header):
         raise BadFKTableError(
-            f"Bad header at line {lineno}: First character should be either '_' or '{'"
+            f"Bad header at line {lineno}: First character should be either '_' or '{{'"
         )
     try:
         endname = header.index(b'_', 1)
