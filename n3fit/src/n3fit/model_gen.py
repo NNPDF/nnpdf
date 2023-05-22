@@ -536,6 +536,7 @@ def pdfNN_layer_generator(
     # when feature scaling is on, don't add logs regardless of the input
     use_feature_scaling = scaler is not None
     add_logs = inp == 2 and not use_feature_scaling
+    print(f"******************** inp: {inp}, use_feature_scaling: {use_feature_scaling}, add_logs: {add_logs}")
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
     subtract_one = use_feature_scaling
@@ -547,14 +548,20 @@ def pdfNN_layer_generator(
     if add_logs:
         placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
+        extract_original = None
+        extract_nn_input = None
     elif use_feature_scaling:
         # Note feature scaling happens before the model created here,
         # so the input is of the form (scaler(x), x)
         placeholder_input = Input(shape=(None, 2), batch_size=1, name='scaledx_x')
         process_input = Lambda(lambda x: 2 * x - 1, name='process_input')
+        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
+        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
     else:
         placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
         process_input = None
+        extract_original = None
+        extract_nn_input = None
 
     model_input = {"pdf_input": placeholder_input}
 
@@ -567,8 +574,6 @@ def pdfNN_layer_generator(
         layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1))
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
-    extract_scaled = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
-    extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
 
     # the layer that multiplies the NN output by the prefactor
     apply_prefactor = Lambda(op.op_multiply, name='prefactor_times_NN')
@@ -614,12 +619,9 @@ def pdfNN_layer_generator(
     # Since all layers are already made, they will be reused
     def compute_unnormalized_pdf(x, neural_network, compute_prefactor):
         # Preprocess the input grid
-        x_scaled = extract_scaled(x)
-        x_original = extract_original(x)
-        if process_input is not None:
-            x_processed = process_input(x_scaled)
-        else:
-            x_processed = x_scaled
+        x_nn_input = extract_nn_input(x) if extract_nn_input is not None else x
+        x_original = extract_original(x) if extract_original is not None else x
+        x_processed = process_input(x_nn_input) if process_input is not None else x_nn_input
 
         # Compute the neural network output
         nn_output = neural_network(x_processed)
