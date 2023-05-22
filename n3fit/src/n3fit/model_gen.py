@@ -515,9 +515,6 @@ def pdfNN_layer_generator(
     if impose_sumrule is None:
         impose_sumrule = "All"
 
-    if scaler:
-        inp = 1
-
     if activations is None:
         activations = ["tanh", "linear"]
     elif callable(activations):
@@ -532,40 +529,49 @@ def pdfNN_layer_generator(
     # The number of nodes in the last layer is equal to the number of fitted flavours
     last_layer_nodes = nodes[-1]  # (== len(flav_info))
 
-    # Generate the generic layers that will not depend on extra considerations
-
-    # First prepare the input for the PDF model and any scaling if needed
-    placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
-
-    subtract_one = False
-    process_input = Lambda(lambda x: x, name='process_input')
-    input_x_eq_1 = [1.0]
+    # Process input options. There are 3 options:
+    # 1. Do nothing
+    # 2. Scale the input
+    # 3. Concatenate log(x) to the input
+    # when feature scaling is on, don't add logs regardless of the input
+    use_feature_scaling = scaler is not None
+    add_logs = inp == 2 and not use_feature_scaling
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
-    if scaler:
-        # change the input domain [0,1] -> [-1,1]
-        process_input = Lambda(lambda x: 2 * x - 1, name='process_input')
-        subtract_one = True
-        input_x_eq_1 = scaler([1.0])[0]
-        placeholder_input = Input(shape=(None, 2), batch_size=1, name='x')
-    elif inp == 2:
-        # If the input is of type (x, logx)
-        # create a x --> (x, logx) layer to preppend to everything
+    subtract_one = use_feature_scaling
+
+    if use_feature_scaling:
+        inp = 1
+
+    # Define the main input
+    if add_logs:
+        placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
+    elif use_feature_scaling:
+        # Note feature scaling happens before the model created here,
+        # so the input is of the form (scaler(x), x)
+        placeholder_input = Input(shape=(None, 2), batch_size=1, name='scaledx_x')
+        process_input = Lambda(lambda x: 2 * x - 1, name='process_input')
+    else:
+        placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
+        process_input = None
+
+    model_input = {"pdf_input": placeholder_input}
+
+    if subtract_one:
+        input_x_eq_1 = [1.0]
+        if use_feature_scaling:
+            input_x_eq_1 = scaler(input_x_eq_1)[0]
+        # the layer that subtracts 1 from the NN output
+        subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
+        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1))
+        model_input["layer_x_eq_1"] = layer_x_eq_1
 
     extract_scaled = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
     extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
 
     # the layer that multiplies the NN output by the prefactor
     apply_prefactor = Lambda(op.op_multiply, name='prefactor_times_NN')
-
-    # the layer that subtracts 1 from the NN output
-    subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
-
-    model_input = {"pdf_input": placeholder_input}
-    if subtract_one:
-        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1))
-        model_input["layer_x_eq_1"] = layer_x_eq_1
 
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis")
@@ -610,7 +616,10 @@ def pdfNN_layer_generator(
         # Preprocess the input grid
         x_scaled = extract_scaled(x)
         x_original = extract_original(x)
-        x_processed = process_input(x_scaled)
+        if process_input is not None:
+            x_processed = process_input(x_scaled)
+        else:
+            x_processed = x_scaled
 
         # Compute the neural network output
         nn_output = neural_network(x_processed)
@@ -672,7 +681,8 @@ def generate_nn(
 
     # Note: using a Sequential model would be more appropriate, but it would require
     # creating a MetaSequential model.
-    x = Input(shape=(None, inp), batch_size=1, name='xgrids_processed')
+    input_dimensions = 2 if inp == 2 or scaler is not None else 1
+    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
     pdf = x
     for layer in list_of_pdf_layers:
         pdf = layer(pdf)
