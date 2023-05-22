@@ -62,8 +62,9 @@ def generate_msr_model_and_grid(
 
     # Turn into input layer. Specify a custom shape here using None,
     # so shapes will display properly in the model summary
+    grid_shape = 2 if scaler is not None else 1
     xgrid_integration = op.numpy_to_input(
-            xgrid_integration, name="integration_grid", custom_shape=(None, 1))
+            xgrid_integration, name="integration_grid", custom_shape=(None, grid_shape))
 
     # 1c Get the original grid
     x_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")(xgrid_integration)
