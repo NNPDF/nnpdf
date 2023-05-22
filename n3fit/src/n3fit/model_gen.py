@@ -609,10 +609,18 @@ def pdfNN_layer_generator(
         )
         nn_replicas.append(
             generate_nn(
-                layer_type, inp, nodes, activations, initializer_name,
-                replica_seed, dropout, regularizer, regularizer_args,
-                last_layer_nodes, name=f"NN_{i_replica}")
-        )
+                    layer_type=layer_type,
+                    inp=inp,
+                    nodes=nodes,
+                    activations=activations,
+                    initializer_name=initializer_name,
+                    replica_seed=replica_seed,
+                    dropout=dropout,
+                    regularizer=regularizer,
+                    regularizer_args=regularizer_args,
+                    last_layer_nodes=last_layer_nodes,
+                    name=f"NN_{i_replica}")
+            )
 
     # All layers have been made, now we need to connect them,
     # do this in a function so we can call it for both grids and each replica
@@ -683,8 +691,7 @@ def generate_nn(
 
     # Note: using a Sequential model would be more appropriate, but it would require
     # creating a MetaSequential model.
-    input_dimensions = 2 if inp == 2 or scaler is not None else 1
-    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+    x = Input(shape=(None, inp), batch_size=1, name='xgrids_processed')
     pdf = x
     for layer in list_of_pdf_layers:
         pdf = layer(pdf)

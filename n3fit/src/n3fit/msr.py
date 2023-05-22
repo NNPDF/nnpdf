@@ -59,6 +59,12 @@ def generate_msr_model_and_grid(
     # 1b If a scaler is provided, scale the input xgrid
     if scaler:
         xgrid_integration = scaler(xgrid_integration)
+
+    # Turn into input layer. Specify a custom shape here using None,
+    # so shapes will display properly in the model summary
+    xgrid_integration = op.numpy_to_input(
+            xgrid_integration, name="integration_grid", custom_shape=(None, 1))
+
     # 1c Get the original grid
     x_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")(xgrid_integration)
 
@@ -107,9 +113,6 @@ def gen_integration_input(nx):
     for i in range(nx):
         weights.append((spacing[i] + spacing[i + 1]) / 2.0)
     weights_array = np.array(weights).reshape(nx, 1)
-
-    # Specify a custom shape here using None, so shapes will display properly in the model summary
-    xgrid = op.numpy_to_input(xgrid, name="integration_grid", custom_shape=(None, 1))
 
     return xgrid, weights_array
 
