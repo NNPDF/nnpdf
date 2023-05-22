@@ -91,6 +91,7 @@ def internal_multiclosure_dataset_loader(
     sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
+    print(np.shape(t0_covmat_from_systematics))
     return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
 
 
@@ -113,6 +114,8 @@ def fits_dataset_bias_variance(
     internal_multiclosure_dataset_loader,
     _internal_max_reps=None,
     _internal_min_reps=20,
+    only_pdf_err = False,
+    pdf_and_exp_err = False
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -127,21 +130,56 @@ def fits_dataset_bias_variance(
     Can control the number of replicas taken from each fit with
     ``_internal_max_reps``.
 
+    Specify whether to compute bias and variance using as covariance matrix the one given by:
+    - experimental covmat (default behaviour)
+    - pdf covmat (only_pdf_err: True and pdf_and_exp_err: False)
+    - pdf + exp covmat(only_pdf_err:: False and pdf_and_exp_err: True)
+
+    if both the flags are True there is an error
+
     """
-    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # Compute pdf covariance matrix for each fit. Dimensions here are (fit, data point, data point)
+    # Across fits the pdf_cov should be all similair. Just to be consistent biases and variances are
+    # calculated using for each fit its sampled pdf_cov
+    if only_pdf_err and pdf_and_exp_err == False:
+        pdf_cov = np.cov(reps, axes = (1,2))
+        sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[j]) for j in range(np.shape(pdf_cov)[0])])
+    if pdf_and_exp_err and only_pdf_err == False:
+        pdf_cov = np.cov(reps, axes = (1,2))
+        sqrt_pdf_exp_cov = np.asarray([la.cholesky(pdf_cov[j] + exp_cov) for j in range(np.shape(pdf_cov)[0])])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis
     diffs = law_th.central_value[:, np.newaxis] - centrals.T
-    biases = calc_chi2(sqrtcov, diffs)
-    variances = []
-    # this seems slow but breaks for datasets with single data point otherwise
-    for i in range(reps.shape[0]):
-        diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-        variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
-    return biases, np.asarray(variances), len(law_th)
+    if (only_pdf_err==False and pdf_and_exp_err == False):
+        biases = calc_chi2(sqrtcov, diffs)
+        variances = []
+        # this seems slow but breaks for datasets with single data point otherwise
+        for i in range(reps.shape[0]):
+            diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+        return biases, np.asarray(variances), len(law_th)
+    
+    if (only_pdf_err and pdf_and_exp_err == False):
+        biases = calc_chi2(sqrt_pdf_cov, diffs)
+        variances = []
+        # this seems slow but breaks for datasets with single data point otherwise
+        for i in range(reps.shape[0]):
+            diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+        return biases, np.asarray(variances), len(law_th)
+    
+    if (only_pdf_err == False and pdf_and_exp_err):
+        biases = calc_chi2(sqrt_pdf_exp_cov, diffs)
+        variances = []
+        # this seems slow but breaks for datasets with single data point otherwise
+        for i in range(reps.shape[0]):
+            diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+        return biases, np.asarray(variances), len(law_th)
 
 
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
@@ -158,10 +196,14 @@ def fits_data_bias_variance(
     internal_multiclosure_data_loader,
     _internal_max_reps=None,
     _internal_min_reps=20,
+    only_pdf_err = False,
+    pdf_and_exp_err = False
+
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
-        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps
+        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps,
+        only_pdf_err, pdf_and_exp_err
     )
 
 
@@ -377,6 +419,8 @@ def bias_variance_resampling_dataset(
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
     use_repeats=True,
+    only_pdf_err = False,
+    pdf_and_exp_err = False
 ):
     """For a single dataset, create bootstrap distributions of bias and variance
     varying the number of fits and replicas drawn for each resample. Return two
@@ -429,7 +473,7 @@ def bias_variance_resampling_dataset(
                 # explicitly pass n_rep to fits_dataset_bias_variance so it uses
                 # full subsample
                 bias, variance, _ = expected_dataset_bias_variance(
-                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample)
+                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample, only_pdf_err, pdf_and_exp_err)
                 )
                 bias_boot.append(bias)
                 variance_boot.append(variance)
@@ -608,6 +652,8 @@ def fits_bootstrap_data_bias_variance(
     _internal_min_reps=20,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
+    only_pdf_err = False,
+    pdf_and_exp_err = False
 ):
     """Perform bootstrap resample of `fits_data_bias_variance`, returns
     tuple of bias_samples, variance_samples where each element is a 1-D np.array
@@ -634,7 +680,8 @@ def fits_bootstrap_data_bias_variance(
         # full subsample
         bias, variance, _ = expected_dataset_bias_variance(
             fits_dataset_bias_variance(
-                boot_internal_loader, _internal_max_reps, _internal_min_reps
+                boot_internal_loader, _internal_max_reps, _internal_min_reps,
+                only_pdf_err, pdf_and_exp_err
             )
         )
         bias_boot.append(bias)
