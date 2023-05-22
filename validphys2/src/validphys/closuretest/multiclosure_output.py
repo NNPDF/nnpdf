@@ -9,6 +9,7 @@ data.
 import numpy as np
 import pandas as pd
 import scipy.special as special
+import matplotlib.pyplot as plt
 import scipy.stats
 import yaml
 
@@ -219,7 +220,7 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
 @table
 def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     """For each dataset calculate the expected bias and expected variance
-    across fitsband tabulate the results. Bias and Variance are normalized by number of data points
+    across fits and tabulate the results. Bias and Variance are normalized by number of data points
 
     Notes
     -----
@@ -240,6 +241,7 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     return df
 
 
+# This does not work for now
 @figure
 def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
     """
