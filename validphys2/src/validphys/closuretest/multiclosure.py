@@ -143,29 +143,22 @@ def fits_dataset_bias_variance(
     # Compute pdf covariance matrix for each fit. Dimensions here are (fit, data point, data point)
     # Across fits the pdf_cov should be all similair. Just to be consistent biases and variances should be
     # calculated using for each fit its sampled pdf_cov
-    import ipdb; ipdb.set_trace()
 
     if only_pdf_err and pdf_and_exp_err == False:
     #TODO: For now I am using the mean of the pdf covs over fits. It is simply easier to implement
     # and there shouldnt be a lot of differences between the covmats.
-        print("entro nel for di only_pdf_err")
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
-        print("shape della covmat")
-        print(np.shape(pdf_cov))
         sqrt_pdf_cov = la.cholesky(pdf_cov, lower = True)
 
     if pdf_and_exp_err and only_pdf_err == False:
-        print("entro nel for di pdf_and_exp_err")
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
-        print("shape della covmat")
-        print(np.shape(pdf_cov))
         sqrt_pdf_exp_cov = la.cholesky(pdf_cov + exp_cov, lower = True)
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
     # place bins on first axis
     diffs = law_th.central_value[:, np.newaxis] - centrals.T
     if (only_pdf_err == False and pdf_and_exp_err == False):
-        print("comportamento standard")
+        # Standard behaviour
         biases = calc_chi2(sqrtcov, diffs)
         variances = []
         # this seems slow but breaks for datasets with single data point otherwise
@@ -175,7 +168,7 @@ def fits_dataset_bias_variance(
         return biases, np.asarray(variances), len(law_th)
     
     if (only_pdf_err and pdf_and_exp_err == False):
-        print("calcolo chi2 con only_pdf")
+        # Only pdf error
         biases = calc_chi2(sqrt_pdf_cov, diffs)
         variances = []
         # this seems slow but breaks for datasets with single data point otherwise
@@ -185,7 +178,7 @@ def fits_dataset_bias_variance(
         return biases, np.asarray(variances), len(law_th)
     
     if (only_pdf_err == False and pdf_and_exp_err):
-        print("calcolo chi2 con pdf and exp")
+        # pdf error + exp error
         biases = calc_chi2(sqrt_pdf_exp_cov, diffs)
         variances = []
         # this seems slow but breaks for datasets with single data point otherwise
