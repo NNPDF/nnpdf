@@ -1,0 +1,23 @@
+meta:
+  title: Example for mixing bands and replicas
+  author: The Creator
+  keywords: [replicas, bands, mix]
+
+Q: 1.7
+pdfs:
+- {id: NNPDF40_nnlo_as_01180, label: NNLO}
+- {id: NNPDF40_nlo_as_01180, label: NLO}
+
+mixband_as_replicas: [2,]
+basis: flavour
+xscale: log
+npoints: 20
+template_text: |
+  Plots
+  --------------
+
+  {@plot_pdfs_mixed@}
+  {@plot_pdfs_mixed_kinetic_energy@}
+actions_:
+- report(main=True)
+

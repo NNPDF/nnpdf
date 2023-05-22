@@ -2,6 +2,7 @@
     This module includes rotation layers
 """
 import numpy as np
+
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 from validphys import pdfbases
@@ -28,7 +29,7 @@ class Rotation(MetaLayer):
         super().__init__(**kwargs)
 
     def is_identity(self):
-        """ Returns true if the rotation is an identity """
+        """Returns true if the rotation is an identity"""
         # check whether it is a mxm matrix
         if self.rotation_matrix.shape[0] == self.rotation_matrix.shape[1]:
             # check whether it is the identity
@@ -41,12 +42,15 @@ class Rotation(MetaLayer):
 
 class FlavourToEvolution(Rotation):
     """
-        Rotates from the flavour basis to
-        the evolution basis.
+    Rotates from the flavour basis to
+    the evolution basis.
     """
 
     def __init__(
-        self, flav_info, fitbasis, **kwargs,
+        self,
+        flav_info,
+        fitbasis,
+        **kwargs,
     ):
         rotation_matrix = pdfbases.fitbasis_to_NN31IC(flav_info, fitbasis)
         super().__init__(rotation_matrix, axes=1, **kwargs)
@@ -90,6 +94,33 @@ class FkRotation(MetaLayer):
         ret = op.concatenate(pdf_raw_list)
         # Concatenating destroys the batch index so we have to regenerate it
         return op.batchit(ret)
+
+
+class AddPhoton(MetaLayer):
+    """
+    Changes the value of the photon component of the PDF to non-zero.
+    The photon idx in the dimension-14 PDF basis of the FKTables is always index 0.
+
+    In order to avoid bottlenecks, this layer can only compute the photon
+    for a given fixed shape.
+    In order to change the shape it is necessary to rebuild the photon.
+    """
+
+    def __init__(self, photons, **kwargs):
+        self._photons_generator = photons
+        self._pdf_ph = None
+        super().__init__(**kwargs)
+
+    def register_photon(self, xgrid):
+        """Compute the photon array and set the layer to be rebuilt"""
+        if self._photons_generator:
+            self._pdf_ph = self._photons_generator(xgrid)
+            self.built = False
+
+    def call(self, pdfs, ph_replica):
+        if self._pdf_ph is None:
+            return pdfs
+        return op.concatenate([self._pdf_ph[ph_replica], pdfs[:, :, 1:]], axis=-1)
 
 
 class ObsRotation(MetaLayer):

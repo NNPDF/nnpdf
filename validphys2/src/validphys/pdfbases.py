@@ -525,6 +525,9 @@ evolution = LinearBasis.from_mapping({
 
 EVOL = evolution
 
+LUX = copy.deepcopy(evolution)
+LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'photon')
+
 CCBAR_ASYMM = copy.deepcopy(evolution)
 CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')
 
@@ -669,7 +672,20 @@ def dbarubar_ratio(func, xmat, qmat):
     den = gv[:, [1], ...]
     return num / den
 
-  
+@scalar_function_transformation(label=r"c^+")
+def cplus(func, xmat, qmat):
+    gv = func([-4, 4], xmat, qmat)
+    cbar = gv[:, [0], ...]
+    c = gv[:, [1], ...]
+    return c + cbar
+
+@scalar_function_transformation(label=r"c^-")
+def cminus(func, xmat, qmat):
+    gv = func([-4, 4], xmat, qmat)
+    cbar = gv[:, [0], ...]
+    c = gv[:, [1], ...]
+    return c - cbar
+
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
     gv = func([-3, 3, -2, -1], xmat, qmat)

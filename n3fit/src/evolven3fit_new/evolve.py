@@ -1,26 +1,26 @@
-import pathlib
 import logging
+import pathlib
 import sys
 
 import numpy as np
+import eko
+from eko import basis_rotation
+from eko import runner
+from ekobox import genpdf, info_file, apply
 from reportengine.compat import yaml
-
-from ekobox import genpdf, gen_info
-from ekomark import apply
-from eko import basis_rotation as br
-from eko import output
 from validphys.loader import Loader
 
-from . import utils, eko_utils
-
+from . import eko_utils, utils
 
 _logger = logging.getLogger(__name__)
 
 LOG_FILE = "evolven3fit_new.log"
 
-LOGGING_SETTINGS = {"formatter" : "%(asctime)s %(name)s/%(levelname)s: %(message)s",
-                    "level" : logging.INFO
+LOGGING_SETTINGS = {
+    "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
+    "level": logging.INFO,
 }
+
 
 def evolve_fit(
     fit_folder,
@@ -54,8 +54,7 @@ def evolve_fit(
             path where the eko is stored (if None the eko will be
             recomputed)
         dump_eko: str or pathlib.Path
-            path where the eko is dumped (if None the eko won't be
-            stored)
+            path where the eko is dumped (necessary only if the eko is computed)
     """
     log_file = pathlib.Path(fit_folder) / LOG_FILE
     if log_file.exists():
@@ -69,9 +68,7 @@ def evolve_fit(
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
         log.setLevel(LOGGING_SETTINGS["level"])
-        log.setFormatter(
-            logging.Formatter(LOGGING_SETTINGS["formatter"])
-        )
+        log.setFormatter(LOGGING_SETTINGS["formatter"])
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
@@ -87,31 +84,36 @@ def evolve_fit(
     theory, op = eko_utils.construct_eko_cards(
         theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
     )
+    qed = theory.order[1] > 0
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
-        eko_op = output.Output.load_tar(eko_path)
     else:
         try:
             _logger.info(f"Loading eko from theory {theoryID}")
-            theory_eko_path = (Loader().check_theoryID(theoryID).path)/'eko.tar'
-            eko_op = output.Output.load_tar(theory_eko_path)
+            eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
-            eko_op = eko_utils.construct_eko_for_fit(theory, op, dump_eko) 
-    eko_op.xgrid_reshape(targetgrid=x_grid, inputgrid=x_grid)
-    info = gen_info.create_info_file(theory, op, 1, info_update={})
+            runner.solve(theory, op, dump_eko)
+            eko_path = dump_eko
+    with eko.EKO.edit(eko_path) as eko_op:
+        x_grid_obj = eko.interpolation.XGrid(x_grid)
+        eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
+    info = info_file.build(theory, op, 1, info_update={})
     info["NumMembers"] = "REPLACE_NREP"
     info["ErrorType"] = "replicas"
-    info["AlphaS_Qs"] = list(eko_op["Q2grid"])
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
-    dump_info_file(usr_path, info)
-    for replica in initial_PDFs_dict.keys():
-        evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
-        dump_evolved_replica(
-            evolved_block, usr_path, int(replica.removeprefix("replica_"))
-        )
+    with eko.EKO.read(eko_path) as eko_op:
+        if eko.__version__ >= "0.13":
+            raise ModuleNotFoundError("Please, fix evolven3fit np.sqrt(Q) hack")
+        info["AlphaS_Qs"] = np.sqrt(info["AlphaS_Qs"]).tolist()
+        dump_info_file(usr_path, info)
+        for replica in initial_PDFs_dict.keys():
+            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
+            dump_evolved_replica(
+                evolved_block, usr_path, int(replica.removeprefix("replica_"))
+            )
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
@@ -142,7 +144,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def evolve_exportgrid(exportgrid, eko, x_grid):
+def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     """
     Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
 
@@ -154,6 +156,8 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
             eko operator for evolution
         xgrid: list
             xgrid to be used as the targetgrid
+        qed: bool
+            whether qed is activated or not
     Returns
     -------
         : np.array
@@ -163,9 +167,9 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
-    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
+    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
     # generate block to dump
-    targetgrid = list(eko["targetgrid"])
+    targetgrid = eko.rotations.targetgrid.tolist()
 
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
@@ -173,8 +177,8 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,
-        Q2grid=list(eko["Q2grid"]),
-        pids=br.flavor_basis_pids,
+        Q2grid=list(eko.mu2grid),
+        pids=basis_rotation.flavor_basis_pids,
     )
     return block
 

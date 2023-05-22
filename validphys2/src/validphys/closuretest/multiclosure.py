@@ -95,12 +95,8 @@ def internal_multiclosure_dataset_loader(
     sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (
-        fits_dataset_predictions,
-        fits_underlying_predictions,
-        t0_covmat_from_systematics,
-        sqrt_covmat,
-    )
+    return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
+
 
 
 @check_fits_underlying_law_match

@@ -2,21 +2,24 @@
 Filters for NNPDF fits
 """
 
-import logging
-import re
 from collections.abc import Mapping
 from importlib.resources import read_text
+import logging
+import re
 
 import numpy as np
 
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
+from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 import validphys.cuts
+
 from validphys.inconsistent_ct import InconsistentCommonData
 from validphys.commondatawriter import (
         write_commondata_to_file,
         write_systype_to_file,
     )
+
 log = logging.getLogger(__name__)
 
 KIN_LABEL = {
@@ -54,6 +57,7 @@ class BadPerturbativeOrder(ValueError):
     """Exception raised when the perturbative order string is not
     recognized."""
 
+
 class MissingRuleAttribute(RuleProcessingError, AttributeError):
     """Exception raised when a rule is missing required attributes."""
 
@@ -76,13 +80,14 @@ def default_filter_rules_input():
     return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
 
-
 def check_nonnegative(var: str):
     """Ensure that `var` is positive"""
+
     @make_check
     def run_check(ns, **kwargs):
         val = ns[var]
         check(val >= 0, f"'{var}' must be positive or equal zero, but it is {val!r}.")
+
     return run_check
 
 
@@ -99,7 +104,7 @@ def export_mask(path, mask):
     np.savetxt(path, mask, fmt='%d')
 
 
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -107,7 +112,7 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed):
 
     """
     log.info('Filtering closure-test data.')
-    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed)
+    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult)
 
 
 def filter_closure_data_by_experiment(
@@ -116,6 +121,7 @@ def filter_closure_data_by_experiment(
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
     type1_inconsistency=False, type2_inconsistency=False,
 
+  
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -183,6 +189,7 @@ def filter_closure_data_by_experiment(
     
     res = []
     for exp in experiments_data:
+
         experiment_index = experiments_index[
             experiments_index.isin([exp.name], level=0)
         ]
@@ -195,12 +202,12 @@ def filter_closure_data_by_experiment(
                         type1_inconsistency, type2_inconsistency
                         )
                 )
+
     return res
 
 
 def filter_real_data(filter_path, data):
-    """Filter real data, cutting any points which do not pass the filter rules.
-    """
+    """Filter real data, cutting any points which do not pass the filter rules."""
     log.info('Filtering real data.')
     return _filter_real_data(filter_path, data)
 
@@ -220,8 +227,9 @@ def _write_ds_cut_data(path, dataset):
         log.info("All {all_ndata} points  in in {dataset.name} passed kinematic cuts.")
     else:
         filtered_dsndata = len(datamask)
-        log.info(f"{len(datamask)}/{all_dsndata} datapoints "
-                 f"in {dataset.name} passed kinematic cuts.")
+        log.info(
+            f"{len(datamask)}/{all_dsndata} datapoints " f"in {dataset.name} passed kinematic cuts."
+        )
     # save to disk
     if datamask is not None:
         export_mask(path / f'FKMASK_{dataset.name}.dat', datamask)
@@ -243,11 +251,13 @@ def _filter_real_data(filter_path, data):
 
 
 def _filter_closure_data(
+
     filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
     ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
     type1_inconsistency=False,
     type2_inconsistency=False
+
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
@@ -299,14 +309,15 @@ def _filter_closure_data(
     closure_data = level0_commondata_wc(data, fakepdf)
 
     for dataset in data.datasets:
-        #== print number of points passing cuts, make dataset directory and write FKMASK  ==#
+        # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
         make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
-    
+
     if fakenoise:
+
         #======= Level 1 closure test =======#
         closure_data = make_level1_data(
                 data,
@@ -336,7 +347,8 @@ def _filter_closure_data(
             closure_data = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor_2)
                     for cd in closure_data]
 
-    #====== write commondata and systype files ======#
+
+    # ====== write commondata and systype files ======#
     if fakenoise:
         log.info("Writing Level1 data")
     else:
@@ -344,12 +356,7 @@ def _filter_closure_data(
 
     for cd in closure_data:
         path_cd = filter_path / cd.setname / f"DATA_{cd.setname}.dat"
-        path_sys = (
-            filter_path
-            / cd.setname
-            / "systypes"
-            / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
-        )
+        path_sys = filter_path / cd.setname / "systypes" / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
         write_commondata_to_file(commondata=cd, path=path_cd)
         write_systype_to_file(commondata=cd, path=path_sys)
 
@@ -362,6 +369,18 @@ def check_t0pdfset(t0pdfset):
     log.info(f'{t0pdfset} T0 checked.')
 
 
+def check_luxset(luxset):
+    """Lux pdf check"""
+    luxset.load()
+    log.info(f'{luxset} Lux pdf checked.')
+
+
+def check_additional_errors(additional_errors):
+    """Lux additional errors pdf check"""
+    additional_errors.load()
+    log.info(f'{additional_errors} Lux additional errors pdf checked.')
+
+
 def check_positivity(posdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying positivity tables:')
@@ -369,12 +388,14 @@ def check_positivity(posdatasets):
         pos.load_commondata()
         log.info(f'{pos.name} checked.')
 
+
 def check_integrability(integdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying integrability tables:')
     for integ in integdatasets:
         integ.load_commondata()
         log.info(f'{integ.name} checked.')
+
 
 class PerturbativeOrder:
     """Class that conveniently handles
@@ -446,6 +467,7 @@ class PerturbativeOrder:
         else:
             return i == self.numeric_pto
 
+
 class Rule:
     """Rule object to be used to generate cuts mask.
 
@@ -494,9 +516,7 @@ class Rule:
             raise MissingRuleAttribute("No rule defined.")
 
         if self.dataset is None and self.process_type is None:
-            raise MissingRuleAttribute(
-                "Please define either a process type or dataset."
-            )
+            raise MissingRuleAttribute("Please define either a process type or dataset.")
 
         if self.process_type is None:
             from validphys.loader import Loader, LoaderError
@@ -506,9 +526,7 @@ class Rule:
             try:
                 cd = loader.check_commondata(self.dataset)
             except LoaderError as e:
-                raise RuleProcessingError(
-                    f"Could not find dataset {self.dataset}"
-                ) from e
+                raise RuleProcessingError(f"Could not find dataset {self.dataset}") from e
             if cd.process_type[:3] == "DIS":
                 self.variables = KIN_LABEL["DIS"]
             else:
@@ -529,9 +547,7 @@ class Rule:
 
         if hasattr(self, "PTO"):
             if not isinstance(self.PTO, str):
-                raise RuleProcessingError(
-                    f"Expecting PTO to be a string, not {type(self.PTO)}."
-                )
+                raise RuleProcessingError(f"Expecting PTO to be a string, not {type(self.PTO)}.")
             try:
                 self.PTO = PerturbativeOrder(self.PTO)
             except BadPerturbativeOrder as e:
@@ -566,9 +582,7 @@ class Rule:
         try:
             self.rule = compile(self.rule, "rule", "eval")
         except Exception as e:
-            raise RuleProcessingError(
-                f"Could not process rule {self.rule_string!r}: {e}"
-            ) from e
+            raise RuleProcessingError(f"Could not process rule {self.rule_string!r}: {e}") from e
         for name in self.rule.co_names:
             if name not in ns:
                 raise RuleProcessingError(
@@ -611,9 +625,7 @@ class Rule:
             if k == "PTO" and hasattr(self, "PTO"):
                 if v not in self.PTO:
                     return None
-            elif hasattr(self, k) and (
-                getattr(self, k) != v
-            ):
+            elif hasattr(self, k) and (getattr(self, k) != v):
                 return None
 
         # Will return True if datapoint passes through the filter
@@ -627,12 +639,10 @@ class Rule:
                     **ns,
                 },
             )
-        except Exception as e: # pragma: no cover
-            raise FatalRuleError(
-                f"Error when applying rule {self.rule_string!r}: {e}"
-            ) from e
+        except Exception as e:  # pragma: no cover
+            raise FatalRuleError(f"Error when applying rule {self.rule_string!r}: {e}") from e
 
-    def __repr__(self): # pragma: no cover
+    def __repr__(self):  # pragma: no cover
         return self.rule_string
 
     def _make_kinematics_dict(self, dataset, idat) -> dict:
@@ -648,6 +658,7 @@ class Rule:
         for key, value in self._local_variables_code.items():
             ns[key] = eval(value, {**self.numpy_functions, **ns})
         return ns
+
 
 def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index

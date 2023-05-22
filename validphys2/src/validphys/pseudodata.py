@@ -285,15 +285,36 @@ def level0_commondata_wc(data, fakepdf):
 
 
 def make_level1_data(
+
     data, level0_commondata_wc, filterseed, experiments_index,
     MULT = False, ADD = False, CORR = False, UNCORR = False,
     inconsistent_datasets=[], sys_rescaling_factor=1, type1_inconsistency = False,
+
 ):
     """
-    Given a list of level0 commondata instances, return the same list
-    with central values replaced by level1 data
+    Given a list of Level 0 commondata instances, return the
+    same list with central values replaced by Level 1 data.
 
+    Level 1 data is generated using validphys.make_replica.
+    The covariance matrix, from which the stochastic Level 1 
+    noise is sampled, is built from Level 0 commondata
+    instances (level0_commondata_wc). This, in particular,
+    means that the multiplicative systematics are generated
+    from the Level 0 central values.
 
+    Note that the covariance matrix used to generate Level 2
+    pseudodata is consistent with the one used at Level 1
+    up to corrections of the order eta * eps, where eta and
+    eps are defined as shown below:
+
+    Generate L1 data: L1 = L0 + eta, eta ~ N(0,CL0)
+    Generate L2 data: L2_k = L1 + eps_k, eps_k ~ N(0,CL1)
+    
+    where CL0 and CL1 means that the multiplicative entries
+    have been constructed from Level 0 and Level 1 central
+    values respectively.
+    
+    
     Parameters
     ----------
 
@@ -333,6 +354,7 @@ def make_level1_data(
                     larger than 1) when generating L1 data and use the experimental
                     covariance matrix for L2 data             
 
+    experiments_index : pandas.MultiIndex
 
     Returns
     -------
@@ -355,6 +377,7 @@ def make_level1_data(
     dataset_input_list = list(data.dsinputs)
 
     commondata_wc = data.load_commondata_instance()
+
 
     # I want to generate Lvl1 data with a varied covariance matrix while keeping the original
     # exp covmat when generating montecarlo replicas (Mark inconsistent closure test). There should 
@@ -379,18 +402,21 @@ def make_level1_data(
     # using the experimental central values
 
     covmat = dataset_inputs_covmat_from_systematics(
+
         commondata_wc, #  --> central values from the exp., level0_commondata_wc --> central values from theory
         dataset_input_list,
         use_weights_in_covmat=False,
         norm_threshold=None,
         _list_of_central_values=None,
-        _only_additive=False,
+        _only_additive=sep_mult,
     )
+
     # ================== generation of pseudo data ======================#
     # generate pseudo data starting from theory predictions
     # covmat can be an inconsistent one
+
     level1_data = make_replica(
-        level0_commondata_wc, filterseed, covmat, sep_mult=False, genrep=True
+        level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
     )
 
 

@@ -1,14 +1,33 @@
-from ekobox import gen_theory, gen_op
-from eko import run_dglap
-
-from validphys.loader import Loader
-from . import utils
-
-from typing import Any, Dict, Optional
 import logging
+from typing import Any, Dict, Optional
+
+import numpy as np
+from eko.io import runcards
+from ekobox.cards import _operator as default_op_card
+from validphys.loader import Loader
+
+from . import utils
 
 _logger = logging.getLogger(__name__)
 
+EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN = {
+    "ev_op_iterations": 1,
+    "ev_op_max_order": (1, 0),
+    "evolution_method": "truncated",
+    "inversion_method": "expanded",
+    "n_integration_cores": 1,
+}
+
+EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
+    "ev_op_iterations": 10,
+    "ev_op_max_order": (1, 0),
+    "evolution_method": "iterate-exact",
+    "inversion_method": "exact",
+    "n_integration_cores": 1,
+}
+
+NFREF_DEFAULT = 5
+NF0_DEFAULT = 4
 
 def construct_eko_cards(
     theoryID,
@@ -34,7 +53,13 @@ def construct_eko_cards(
     theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
     theory.update(theory_card_dict)
-    theory_card = gen_theory.gen_theory_card(theory["PTO"], theory["Q0"], update=theory)
+    if "nfref" not in theory:
+        theory["nfref"] = NFREF_DEFAULT
+    if "nf0" not in theory:
+        theory["nf0"] = NF0_DEFAULT
+    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
+    legacy_class = runcards.Legacy(theory, {})
+    theory_card = legacy_class.new_theory
     # construct operator card
     q2_grid = utils.generate_q2grid(
         theory["Q0"],
@@ -42,42 +67,28 @@ def construct_eko_cards(
         q_points,
         {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
     )
-    op_card = gen_op.gen_op_card(q2_grid, update={"interpolation_xgrid": x_grid})
-    op_card.update(op_card_dict)
+    op_card = default_op_card
+    op_card.update(
+        {
+            "mu0": theory["Q0"],
+            "_mugrid": np.sqrt(q2_grid).tolist(),
+        }
+    )
+    op_card["rotations"]["xgrid"] = x_grid
+    # Specific defaults for evolven3fit evolution
+    if theory["ModEv"] == "TRN":
+        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
+    if theory["ModEv"] == "EXA":
+        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
+    # User can still change the configs via op_card_dict
+
+    # Note that every entry that is not a dictionary should not be
+    # touched by the user and indeed an user cannot touch them
+    for key in op_card:
+        if key in op_card_dict and isinstance(op_card[key], dict):
+            op_card[key].update(op_card_dict[key])
+        elif key in op_card_dict:
+            _logger.warning("Entry %s is not a dictionary and will be ignored", key)
+
+    op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
-
-
-def construct_eko_for_fit(theory_card, op_card, save_path=None):
-    """
-    Construct the eko operator needed for evolution of fitted pdfs
-
-    Parameters
-    ----------
-        theory_card: dict
-            theory card to use for the eko
-        op_card: dict
-            operator card to use for the eko
-        save_path: pathlib.Path
-            path where the eko will be saved (the eko
-            won't be saved if save_path is None)
-    Returns
-    -------
-        : eko.output.Output
-        eko operator
-    """
-    # generate eko operator
-    if save_path is not None:
-        if not save_path.parent.exists():
-            raise FileNotFoundError(
-                f"Path where eko should be dumped does not exist: {save_path}"
-            )
-    eko_op = run_dglap(theory_card, op_card)
-    if save_path is not None:
-        # Here we want to catch all possible exceptions in order to avoid losing the computed eko
-        try:
-            _logger.info(f"Saving computed eko to : {save_path}")
-            eko_op.dump_tar(save_path)
-        except:
-            _logger.error(f"Error saving the eko to : {save_path}")
-            pass
-    return eko_op
