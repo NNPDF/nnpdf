@@ -117,7 +117,7 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_m
 
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
-    ADD=False, MULT=False, CORR=False, UNCORR=False,
+    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
     type1_inconsistency=False, type2_inconsistency=False,
 
@@ -197,7 +197,7 @@ def filter_closure_data_by_experiment(
         res.append(
             _filter_closure_data(
                         filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
-                        ADD, MULT, CORR, UNCORR,
+                        sep_mult, ADD, MULT, CORR, UNCORR,
                         inconsistent_datasets, sys_rescaling_factor_1, sys_rescaling_factor_2,
                         type1_inconsistency, type2_inconsistency
                         )
@@ -251,9 +251,8 @@ def _filter_real_data(filter_path, data):
 
 
 def _filter_closure_data(
-
     filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
-    ADD=False, MULT=False, CORR=False, UNCORR=False,
+    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
     type1_inconsistency=False,
     type2_inconsistency=False
@@ -324,6 +323,7 @@ def _filter_closure_data(
                 closure_data,
                 filterseed,
                 experiments_index,
+                sep_mult,
                 ADD,
                 MULT,
                 CORR,

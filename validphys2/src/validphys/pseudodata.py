@@ -285,9 +285,8 @@ def level0_commondata_wc(data, fakepdf):
 
 
 def make_level1_data(
-
     data, level0_commondata_wc, filterseed, experiments_index,
-    MULT = False, ADD = False, CORR = False, UNCORR = False,
+    sep_mult, MULT = False, ADD = False, CORR = False, UNCORR = False,
     inconsistent_datasets=[], sys_rescaling_factor=1, type1_inconsistency = False,
 
 ):
@@ -376,34 +375,22 @@ def make_level1_data(
     # =============== generate experimental covariance matrix ===============#
     dataset_input_list = list(data.dsinputs)
 
-    commondata_wc = data.load_commondata_instance()
-
-
-    # I want to generate Lvl1 data with a varied covariance matrix while keeping the original
-    # exp covmat when generating montecarlo replicas (Mark inconsistent closure test). There should 
-    # be no problem in doing so since make_replica only outputs the list of new central values 
-    # and when creating the lvl1 CommonData instance the covariance matrix is again the one 
-    # stored in level0_commondata_wc
-
     if type1_inconsistency:
-        commondata_wc = [
+        level0_commondata_wc = [
                                 InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
                                                     commondataproc=cd.commondataproc, 
                                                     nkin=cd.nkin, nsys=cd.nsys, 
                                                     commondata_table = cd.commondata_table, 
                                                     systype_table = cd.systype_table) 
-                                for cd in commondata_wc
+                                for cd in level0_commondata_wc
                         ]
 
-        commondata_wc = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
-                            for cd in commondata_wc]
+        level0_commondata_wc = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+                            for cd in level0_commondata_wc]
 
-    # same problem as below: when calling process_commondata I am rescaling the exp covmat calculated 
-    # using the experimental central values
 
     covmat = dataset_inputs_covmat_from_systematics(
-
-        commondata_wc, #  --> central values from the exp., level0_commondata_wc --> central values from theory
+        level0_commondata_wc, 
         dataset_input_list,
         use_weights_in_covmat=False,
         norm_threshold=None,
@@ -418,9 +405,6 @@ def make_level1_data(
     level1_data = make_replica(
         level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
     )
-
-
-    
 
     indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
 
