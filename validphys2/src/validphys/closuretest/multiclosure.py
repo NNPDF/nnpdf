@@ -145,12 +145,12 @@ def fits_dataset_bias_variance(
     # calculated using for each fit its sampled pdf_cov
 
     #if only_pdf_err and pdf_and_exp_err == False:
-    #TODO: There is a problem in the inversion of the matrix. Probably comes from too few replicas 
+    #TODO: There is a problem in the inversion of the pdf matrix. Probably comes from too few replicas 
     # being sampled since when testing on out of sample data one is trying to compute a covariance matrix of
     # a high dimensional random variable (n > 800) with a sample of ~100 elements (the replicas per fit)
-        #pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])])
-        #sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[i], lower = True) for i in range(np.shape(pdf_cov)[0])])
-        #sqrt_pdf_cov = np.mean(sqrt_pdf_cov, axis = 0)
+        # pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])])
+        # sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[i], lower = True) for i in range(np.shape(pdf_cov)[0])])
+        # sqrt_pdf_cov = np.mean(sqrt_pdf_cov, axis = 0)
     if pdf_and_exp_err and only_pdf_err == False:
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
         sqrt_pdf_exp_cov = la.cholesky(pdf_cov + exp_cov, lower = True)
@@ -179,6 +179,9 @@ def fits_dataset_bias_variance(
         return biases, np.asarray(variances), len(law_th)
     
     if (only_pdf_err and pdf_and_exp_err == False):
+        # temporary measure: assume the pdf_covmat is diagonalized by the same change of baasis
+        # as the experimental one (assume the correlations induced by pdfs in data space are the same as the
+        # experiments)
         print(type(only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader)))
         return (*only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader), len(law_th))
     
