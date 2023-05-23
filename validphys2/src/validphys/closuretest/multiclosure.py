@@ -144,12 +144,13 @@ def fits_dataset_bias_variance(
     # Across fits the pdf_cov should be all similair. Just to be consistent biases and variances should be
     # calculated using for each fit its sampled pdf_cov
 
-    if only_pdf_err and pdf_and_exp_err == False:
-    #TODO: For now I am using the mean of the pdf covs over fits. It is simply easier to implement
-    # and there shouldnt be a lot of differences between the covmats.
-        pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])])
-        sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[i], lower = True) for i in range(np.shape(pdf_cov)[0])])
-        sqrt_pdf_cov = np.mean(sqrt_pdf_cov, axis = 0)
+    #if only_pdf_err and pdf_and_exp_err == False:
+    #TODO: There is a problem in the inversion of the matrix. Probably comes from too few replicas 
+    # being sampled since when testing on out of sample data one is trying to compute a covariance matrix of
+    # a high dimensional random variable (n > 800) with a sample of ~100 elements (the replicas per fit)
+        #pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])])
+        #sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[i], lower = True) for i in range(np.shape(pdf_cov)[0])])
+        #sqrt_pdf_cov = np.mean(sqrt_pdf_cov, axis = 0)
     if pdf_and_exp_err and only_pdf_err == False:
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
         sqrt_pdf_exp_cov = la.cholesky(pdf_cov + exp_cov, lower = True)
@@ -167,15 +168,19 @@ def fits_dataset_bias_variance(
             variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
         return biases, np.asarray(variances), len(law_th)
     
-    if (only_pdf_err and pdf_and_exp_err == False):
+    #if (only_pdf_err and pdf_and_exp_err == False):
         # Only pdf error
-        biases = calc_chi2(sqrt_pdf_cov, diffs)
-        variances = []
+        #biases = calc_chi2(sqrt_pdf_cov, diffs)
+        #variances = []
         # this seems slow but breaks for datasets with single data point otherwise
         for i in range(reps.shape[0]):
             diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
             variances.append(np.mean(calc_chi2(sqrt_pdf_cov, diffs)))
         return biases, np.asarray(variances), len(law_th)
+    
+    if (only_pdf_err and pdf_and_exp_err == False):
+        print(type(only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader)))
+        return (*only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader), len(law_th))
     
     if (only_pdf_err == False and pdf_and_exp_err):
         # pdf error + exp error
@@ -280,6 +285,45 @@ def dataset_replica_and_central_diff(
     var_diff = var_diff_sqrt ** 2
     sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
     return sigma, central_diff
+
+def only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader, diagonal_basis=True):
+    """Temporary function to calculate the bias without diagonalizing the pdf_covmat itself but 
+    regularizing it assuming it is diagonalized by the same change of basis as the experimental covmat
+    (similair to the xi calculation)
+
+    """
+    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
+    replicas = np.asarray([th.error_members for th in closures_th])
+    centrals = np.mean(replicas, axis=-1)
+    underlying = law_th.central_value
+
+    _, e_vec = la.eigh(covmat)
+
+    central_diff = centrals - underlying[np.newaxis, :]
+    var_diff_sqrt = centrals[:, :, np.newaxis] - replicas
+
+    if diagonal_basis:
+        # project into basis which diagonalises covariance matrix
+        var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
+        central_diff = e_vec.T @ central_diff.T
+    else:
+        var_diff_sqrt = var_diff_sqrt.transpose(2, 1, 0)
+        central_diff = central_diff.T
+
+    var_diff = var_diff_sqrt ** 2
+    sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
+    print(np.shape(central_diff))
+    print(np.shape(sigma))
+
+    biases = np.asarray([np.sum(central_diff.T[j]*central_diff.T[j]/(sigma.T[j]*sigma.T[j])) for j in range(np.shape(central_diff)[1])])
+    variances = np.full(np.shape(sigma)[1],np.shape(sigma)[0])
+    print((biases, variances))
+    return biases, variances
+
+# all data version; probably not needed
+def only_pdf_data_bias_variance(internal_multiclosure_data_loader, diagonal_basis=True):
+    return only_pdf_dataset_bias_variance(internal_multiclosure_data_loader, diagonal_basis)
+
 
 def dataset_xi(dataset_replica_and_central_diff):
     """Take sigma and delta for a dataset, where sigma is the RMS difference
