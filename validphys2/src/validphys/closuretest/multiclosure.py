@@ -147,9 +147,9 @@ def fits_dataset_bias_variance(
     if only_pdf_err and pdf_and_exp_err == False:
     #TODO: For now I am using the mean of the pdf covs over fits. It is simply easier to implement
     # and there shouldnt be a lot of differences between the covmats.
-        pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
-        sqrt_pdf_cov = la.cholesky(pdf_cov, lower = True)
-
+        pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])])
+        sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[i], lower = True) for i in range(np.shape(pdf_cov)[0])])
+        sqrt_pdf_cov = np.mean(sqrt_pdf_cov, axis = 0)
     if pdf_and_exp_err and only_pdf_err == False:
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
         sqrt_pdf_exp_cov = la.cholesky(pdf_cov + exp_cov, lower = True)
