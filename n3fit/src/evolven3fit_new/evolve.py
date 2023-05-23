@@ -6,8 +6,7 @@ import numpy as np
 import eko
 from eko import basis_rotation
 from eko import runner
-from ekobox import genpdf, info_file
-from ekomark import apply
+from ekobox import genpdf, info_file, apply
 from reportengine.compat import yaml
 from validphys.loader import Loader
 
@@ -69,7 +68,7 @@ def evolve_fit(
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
         log.setLevel(LOGGING_SETTINGS["level"])
-        log.setFormatter(logging.Formatter(LOGGING_SETTINGS["formatter"]))
+        log.setFormatter(LOGGING_SETTINGS["formatter"])
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
@@ -85,6 +84,7 @@ def evolve_fit(
     theory, op = eko_utils.construct_eko_cards(
         theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
     )
+    qed = theory.order[1] > 0
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
@@ -105,10 +105,12 @@ def evolve_fit(
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
     with eko.EKO.read(eko_path) as eko_op:
-        info["AlphaS_Qs"] = eko_op.mu2grid.tolist()
+        if eko.__version__ >= "0.13":
+            raise ModuleNotFoundError("Please, fix evolven3fit np.sqrt(Q) hack")
+        info["AlphaS_Qs"] = np.sqrt(info["AlphaS_Qs"]).tolist()
         dump_info_file(usr_path, info)
         for replica in initial_PDFs_dict.keys():
-            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid)
+            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
             dump_evolved_replica(
                 evolved_block, usr_path, int(replica.removeprefix("replica_"))
             )
@@ -142,7 +144,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def evolve_exportgrid(exportgrid, eko, x_grid):
+def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     """
     Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
 
@@ -154,6 +156,8 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
             eko operator for evolution
         xgrid: list
             xgrid to be used as the targetgrid
+        qed: bool
+            whether qed is activated or not
     Returns
     -------
         : np.array
@@ -163,7 +167,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
-    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
+    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
     # generate block to dump
     targetgrid = eko.rotations.targetgrid.tolist()
 

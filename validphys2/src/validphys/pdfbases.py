@@ -525,6 +525,9 @@ evolution = LinearBasis.from_mapping({
 
 EVOL = evolution
 
+LUX = copy.deepcopy(evolution)
+LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'photon')
+
 CCBAR_ASYMM = copy.deepcopy(evolution)
 CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')
 

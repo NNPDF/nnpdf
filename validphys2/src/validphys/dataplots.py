@@ -1018,8 +1018,9 @@ def _check_highlights(data_input, highlight_datasets):
         names_set = {ds.name for ds in data_input}
         diff = values - names_set
         if diff:
+            formatted_diff = '\n'.join(diff)
             raise CheckError(f"The following highlight elements are "
-                             "not dataset names: {diff}")
+                             f"not dataset names:\n{formatted_diff}")
         return {'highlight_datasets': values}
 
 

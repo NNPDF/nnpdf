@@ -4,58 +4,47 @@ Created on Wed Mar  9 15:43:10 2016
 
 @author: Zahari Kassabov
 """
-import logging
-import pathlib
-import functools
-import inspect
-import numbers
-import copy
-from importlib.resources import read_text, contents
-
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
+import copy
+import functools
+import glob
+from importlib.resources import contents, read_text
+import inspect
+import logging
+import numbers
+import pathlib
 
 import pandas as pd
-import glob
 
-from reportengine import configparser
+from reportengine import configparser, report
+from reportengine.compat import yaml
+from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
 from reportengine.environment import Environment, EnvironmentError_
-from reportengine.configparser import (
-    ConfigError,
-    element_of,
-    _parse_func,
-    record_from_defaults,
-)
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
-from reportengine import report
-from reportengine.compat import yaml
-
 from validphys.core import (
+    CutsPolicy,
     DataGroupSpec,
     DataSetInput,
     ExperimentInput,
-    CutsPolicy,
     MatchedCuts,
     SimilarCuts,
     ThCovMatSpec,
 )
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
+from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
+    DataNotFoundError,
+    FallbackLoader,
+    InconsistentMetaDataError,
     Loader,
     LoaderError,
     LoadFailedError,
-    DataNotFoundError,
     PDFNotFound,
-    FallbackLoader,
-    InconsistentMetaDataError,
 )
-from validphys.gridvalues import LUMI_CHANNELS
-
 from validphys.paramfits.config import ParamfitsConfig
-
 from validphys.plotoptions import get_info
-
 import validphys.scalevariations
 
 log = logging.getLogger(__name__)
@@ -65,7 +54,13 @@ class Environment(Environment):
     """Container for information to be filled at run time"""
 
     def __init__(
-        self, *, this_folder=None, net=True, upload=False, dry=False, **kwargs,
+        self,
+        *,
+        this_folder=None,
+        net=True,
+        upload=False,
+        dry=False,
+        **kwargs,
     ):
         if this_folder:
             self.this_folder = pathlib.Path(this_folder)
@@ -84,10 +79,7 @@ class Environment(Environment):
         try:
             self.loader = loader_class()
         except LoaderError as e:
-            log.error(
-                "Failed to find the paths. These are configured "
-                "in the nnprofile settings"
-            )
+            log.error("Failed to find the paths. These are configured " "in the nnprofile settings")
             raise EnvironmentError_(e) from e
         self.deta_path = self.loader.datapath
         self.results_path = self.loader.resultspath
@@ -207,9 +199,7 @@ class CoreConfig(configparser.Config):
         elif isinstance(use_cuts, str) and use_cuts in valid_cuts:
             res = CutsPolicy(use_cuts)
         else:
-            raise ConfigError(
-                f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts
-            )
+            raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
 
         return res
 
@@ -223,7 +213,7 @@ class CoreConfig(configparser.Config):
         point_prescription: (str, None) = None,
     ):
         """Whether to use a scale variation uncertainty theory covmat.
-        Checks whether a point prescription is included in the runcard and if so 
+        Checks whether a point prescription is included in the runcard and if so
         assumes scale uncertainties are to be used."""
         if (not use_scalevar_uncertainties) and (point_prescription is not None):
             use_scalevar_uncertainties = True
@@ -255,8 +245,7 @@ class CoreConfig(configparser.Config):
         return NSList(replicas, nskey="replica")
 
     def produce_fitcontextwithcuts(self, fit, fitinputcontext):
-        """Like fitinputcontext but setting the cuts policy.
-        """
+        """Like fitinputcontext but setting the cuts policy."""
         theoryid = fitinputcontext["theoryid"]
         data_input = fitinputcontext["data_input"]
 
@@ -331,18 +320,13 @@ class CoreConfig(configparser.Config):
         try:
             return self.loader.check_hyperscan(hyperscan)
         except LoadFailedError as e:
-            raise ConfigError(
-                str(e), hyperscan, self.loader.available_hyperscans
-            ) from e
+            raise ConfigError(str(e), hyperscan, self.loader.available_hyperscans) from e
 
     def parse_hyperscan_config(self, hyperscan_config, hyperopt=None):
-        """Configuration of the hyperscan
-        """
+        """Configuration of the hyperscan"""
         if "from_hyperscan" in hyperscan_config:
             hyperscan = self.parse_hyperscan(hyperscan_config["from_hyperscan"])
-            log.info(
-                "Using previous hyperscan: '%s' to generate the search space", hyperscan
-            )
+            log.info("Using previous hyperscan: '%s' to generate the search space", hyperscan)
             return hyperscan.as_input().get("hyperscan_config")
 
         if "use_tries_from" in hyperscan_config:
@@ -378,8 +362,7 @@ class CoreConfig(configparser.Config):
 
         if len(laws) != 1:
             raise ConfigError(
-                "Did not find unique underlying law from fits, "
-                f"instead found: {laws}"
+                "Did not find unique underlying law from fits, " f"instead found: {laws}"
             )
         return self.parse_pdf(laws.pop())
 
@@ -398,7 +381,7 @@ class CoreConfig(configparser.Config):
         return {"basis": basis}
 
     def produce_fitpdfandbasis(self, fitpdf, basisfromfit):
-        """ Set the PDF and basis from the fit config. """
+        """Set the PDF and basis from the fit config."""
         return {**fitpdf, **basisfromfit}
 
     @element_of("dataset_inputs")
@@ -417,9 +400,7 @@ class CoreConfig(configparser.Config):
                 if name.startswith("POS"):
                     raise ConfigError("Please, use `posdataset` for positivity")
         except KeyError:
-            raise ConfigError(
-                "'dataset' must be a mapping with " "'dataset' and 'sysnum'"
-            )
+            raise ConfigError("'dataset' must be a mapping with " "'dataset' and 'sysnum'")
 
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
@@ -437,9 +418,7 @@ class CoreConfig(configparser.Config):
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             # Abuse ConfigError to get the suggestions.
-            log.warning(
-                ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys)
-            )
+            log.warning(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
         return DataSetInput(
             name=name,
             sys=sysnum,
@@ -502,15 +481,11 @@ class CoreConfig(configparser.Config):
         self._check_dataspecs_type(nss)
 
         if not nss:
-            raise ConfigError(
-                "'cuts_intersection_spec' must contain at least one namespace."
-            )
+            raise ConfigError("'cuts_intersection_spec' must contain at least one namespace.")
 
         for ns in nss:
             with self.set_context(
-                ns=self._curr_ns.new_child(ns).new_child(
-                    {"use_cuts": CutsPolicy.INTERNAL}
-                )
+                ns=self._curr_ns.new_child(ns).new_child({"use_cuts": CutsPolicy.INTERNAL})
             ):
                 # Note: Do not call _produce_internal_cuts directly here:
                 # That doesn't correctly set the namespace in a way that `rules`
@@ -520,7 +495,7 @@ class CoreConfig(configparser.Config):
         return MatchedCuts(cut_list, ndata=ndata)
 
     def _produce_similarity_cuts(self, commondata):
-        """ Compute the intersection between two namespaces (similar to
+        """Compute the intersection between two namespaces (similar to
         `fromintersection`) but additionally require that the predictions
         computed for each dataset across the namespaces are *similar*,
         specifically that the ratio between the absolute difference in the
@@ -544,22 +519,24 @@ class CoreConfig(configparser.Config):
         )
         try:
 
-            _, exclusion_list = self.parse_from_(
-                None, "do_not_require_similarity_for", write=False
-            )
+            _, exclusion_list = self.parse_from_(None, "do_not_require_similarity_for", write=False)
         except configparser.InputNotFoundError:
             exclusion_list = []
         name = commondata.name
         # slightly circular here, since matched cuts will re-produce nss
         if name in exclusion_list:
-            with self.set_context(
-                ns=self._curr_ns.new_child({"use_cuts": CutsPolicy.INTERNAL})
-            ):
+            with self.set_context(ns=self._curr_ns.new_child({"use_cuts": CutsPolicy.INTERNAL})):
                 return self.parse_from_(None, "cuts", write=False)[1]
         matched_cuts = self._produce_matched_cuts(commondata)
         inps = []
         for i, ns in enumerate(nss):
-            with self.set_context(ns=self._curr_ns.new_child({**ns,})):
+            with self.set_context(
+                ns=self._curr_ns.new_child(
+                    {
+                        **ns,
+                    }
+                )
+            ):
                 # TODO: find a way to not duplicate this and use a dict
                 # instead of a linear search
                 _, dins = self.parse_from_(None, "dataset_inputs", write=False)
@@ -613,9 +590,9 @@ class CoreConfig(configparser.Config):
         check_plotting: bool = False,
     ):
         """Dataset specification from the theory and CommonData.
-           Use the cuts from the fit, if provided. If check_plotting is set to
-           True, attempt to lod and check the PLOTTING files
-           (note this may cause a noticeable slowdown in general)."""
+        Use the cuts from the fit, if provided. If check_plotting is set to
+        True, attempt to lod and check the PLOTTING files
+        (note this may cause a noticeable slowdown in general)."""
         name = dataset_input.name
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
@@ -652,8 +629,8 @@ class CoreConfig(configparser.Config):
     @configparser.element_of("experiments")
     def parse_experiment(self, experiment: dict):
         """A set of datasets where correlated systematics are taken
-           into account. It is a mapping where the keys are the experiment
-           name 'experiment' and a list of datasets."""
+        into account. It is a mapping where the keys are the experiment
+        name 'experiment' and a list of datasets."""
         try:
             name, datasets = experiment["experiment"], experiment["datasets"]
         except KeyError as e:
@@ -684,9 +661,7 @@ class CoreConfig(configparser.Config):
         return ExperimentInput(name=name, datasets=datasets)
 
     # TODO: Do away with the mapping and make the conversion implicitly
-    def produce_experiment_from_input(
-        self, experiment_input, theoryid, use_cuts, fit=None
-    ):
+    def produce_experiment_from_input(self, experiment_input, theoryid, use_cuts, fit=None):
         """Return a mapping containing a single experiment from an experiment
         input. NOTE: This might be deprecated in the future."""
         return {
@@ -700,8 +675,8 @@ class CoreConfig(configparser.Config):
 
     def produce_sep_mult(self, separate_multiplicative=None):
         """
-        Specifies whether to separate the multiplicative errors in the 
-        experimental covmat construction. The default is True. 
+        Specifies whether to separate the multiplicative errors in the
+        experimental covmat construction. The default is True.
         """
         if separate_multiplicative is False:
             return False
@@ -761,7 +736,7 @@ class CoreConfig(configparser.Config):
     ):
         """
         Loads the theory covmat from the correct file according to how it
-        was generated by vp-setupfit. 
+        was generated by vp-setupfit.
         """
         if theory_covmat_flag is False:
             return 0.0
@@ -769,34 +744,21 @@ class CoreConfig(configparser.Config):
         generic_path = "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
         if use_user_uncertainties is True:
             if use_scalevar_uncertainties is True:
-                generic_path = (
-                    "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
-                )
+                generic_path = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
             else:
                 generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
         # check if there are multiple files
         files = glob.glob(str(output_path / "tables/*theorycovmat*"))
         paths = [
-            str(
-                output_path
-                / "tables/datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
-            ),
-            str(
-                output_path
-                / "tables/datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
-            ),
-            str(
-                output_path
-                / "tables/datacuts_theory_theorycovmatconfig_user_covmat.csv"
-            ),
+            str(output_path / "tables/datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"),
+            str(output_path / "tables/datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"),
+            str(output_path / "tables/datacuts_theory_theorycovmatconfig_user_covmat.csv"),
         ]
         paths.remove(str(output_path / "tables" / generic_path))
         for f in files:
             for path in paths:
                 if f == path:
-                    raise ValueError(
-                        "More than one theory_covmat file in folder tables"
-                    )
+                    raise ValueError("More than one theory_covmat file in folder tables")
         theorypath = output_path / "tables" / generic_path
         theory_covmat = pd.read_csv(
             theorypath,
@@ -863,8 +825,7 @@ class CoreConfig(configparser.Config):
     def _check_dataspecs_type(dataspecs):
         if not isinstance(dataspecs, Sequence):
             raise ConfigError(
-                "dataspecs should be a sequence of mappings, not "
-                f"{type(dataspecs).__name__}"
+                "dataspecs should be a sequence of mappings, not " f"{type(dataspecs).__name__}"
             )
 
         for spec in dataspecs:
@@ -918,7 +879,12 @@ class CoreConfig(configparser.Config):
             inner_spec_list = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
                 # Passing spec by referene
-                d = ChainMap({"dataset_input": all_names[ispec][k],}, spec)
+                d = ChainMap(
+                    {
+                        "dataset_input": all_names[ispec][k],
+                    },
+                    spec,
+                )
                 inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["process"], x["dataset_name"]))
@@ -942,7 +908,12 @@ class CoreConfig(configparser.Config):
             l = inres["dataspecs"] = []
             for ispec, spec in enumerate(dataspecs):
                 # Passing spec by referene
-                d = ChainMap({"posdataset": all_names[ispec][k],}, spec)
+                d = ChainMap(
+                    {
+                        "posdataset": all_names[ispec][k],
+                    },
+                    spec,
+                )
                 l.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x["posdataset_name"]))
@@ -1011,13 +982,9 @@ class CoreConfig(configparser.Config):
 
     # TODO: Worth it to do some black magic to not pass params explicitly?
     # Note that `parse_experiments` doesn't exist yet.
-    def parse_reweighting_experiments(
-        self, experiments, *, theoryid, use_cuts, fit=None
-    ):
+    def parse_reweighting_experiments(self, experiments, *, theoryid, use_cuts, fit=None):
         """A list of experiments to be used for reweighting."""
-        return self.parse_experiments(
-            experiments, theoryid=theoryid, use_cuts=use_cuts, fit=fit
-        )
+        return self.parse_experiments(experiments, theoryid=theoryid, use_cuts=use_cuts, fit=fit)
 
     def parse_t0pdfset(self, name):
         """PDF set used to generate the t0 covmat."""
@@ -1029,7 +996,9 @@ class CoreConfig(configparser.Config):
 
     # TODO: Find a good name for this
     def produce_t0set(
-        self, t0pdfset=None, use_t0=False,
+        self,
+        t0pdfset=None,
+        use_t0=False,
     ):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
@@ -1040,18 +1009,36 @@ class CoreConfig(configparser.Config):
             return t0pdfset
         return None
 
+    def parse_luxset(self, name):
+        """PDF set used to generate the photon with fiatlux."""
+        return self.parse_pdf(name)
+
+    def parse_additional_errors(self, bool):
+        """PDF set used to generate the photon additional errors:
+        they are constructed using the replicas 101-107 of the PDF set
+        LUXqed17_plus_PDF4LHC15_nnlo_100 (that are obtained varying some
+        parameters of the LuxQED approach) in the way described
+        in sec. 2.5 of https://arxiv.org/pdf/1712.07053.pdf
+        """
+        if bool:
+            return self.parse_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100")
+        else:
+            return False
+
     def parse_fakepdf(self, name):
         """PDF set used to generate the fake data in a closure test."""
         return self.parse_pdf(name)
 
     def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
-        """ Lagrange multiplier constraints are mappings
+        """Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
-        defines the maximum value allowed for the multiplier """
-        bad_msg = f"{kind} must be a mapping with a name ('dataset') and a float multiplier (maxlambda)"
+        defines the maximum value allowed for the multiplier"""
+        bad_msg = (
+            f"{kind} must be a mapping with a name ('dataset') and a float multiplier (maxlambda)"
+        )
         theoryno, _ = theoryid
         lambda_key = "maxlambda"
-        #BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
+        # BCH allow for old-style runcards with 'poslambda' instead of 'maxlambda'
         if "poslambda" in setdict and "maxlambda" not in setdict:
             log.warning("The `poslambda` argument has been deprecated in favour of `maxlambda`")
             lambda_key = "poslambda"
@@ -1078,8 +1065,7 @@ class CoreConfig(configparser.Config):
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
             raise ConfigError(
-                "Failed to get 'posdatasets' from positivity. "
-                "Expected that key to be present."
+                "Failed to get 'posdatasets' from positivity. " "Expected that key to be present."
             )
         return positivity["posdatasets"]
 
@@ -1102,12 +1088,8 @@ class CoreConfig(configparser.Config):
         ret = []
         for experiment in experiments:
             for dsinput, dataset in zip(experiment, experiment.datasets):
-                single_exp = DataGroupSpec(
-                    experiment.name, datasets=[dataset], dsinputs=[dsinput]
-                )
-                ret.append(
-                    {"reweighting_experiments": [single_exp], "dataset_input": dsinput}
-                )
+                single_exp = DataGroupSpec(experiment.name, datasets=[dataset], dsinputs=[dsinput])
+                ret.append({"reweighting_experiments": [single_exp], "dataset_input": dsinput})
         return ret
 
     """
@@ -1169,16 +1151,12 @@ class CoreConfig(configparser.Config):
         if inclusive_use_scalevar_uncertainties:
             if use_user_uncertainties:
                 # Both scalevar and user uncertainties
-                from validphys.theorycovariance.construction import (
-                    total_theory_covmat_fitting,
-                )
+                from validphys.theorycovariance.construction import total_theory_covmat_fitting
 
                 f = total_theory_covmat_fitting
             else:
                 # Only scalevar uncertainties
-                from validphys.theorycovariance.construction import (
-                    theory_covmat_custom_fitting,
-                )
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
                 f = theory_covmat_custom_fitting
         elif use_user_uncertainties:
@@ -1203,20 +1181,14 @@ class CoreConfig(configparser.Config):
         theory covariance matrix then returns `False`.
         """
         if not isinstance(use_thcovmat_if_present, bool):
-            raise ConfigError(
-                "use_thcovmat_if_present should be a boolean, by default it is False"
-            )
+            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is False")
 
         if use_thcovmat_if_present and not fit:
-            raise ConfigError(
-                "`use_thcovmat_if_present` was true but no `fit` was specified."
-            )
+            raise ConfigError("`use_thcovmat_if_present` was true but no `fit` was specified.")
 
         if use_thcovmat_if_present and fit:
             try:
-                thcovmat_present = fit.as_input()["theorycovmatconfig"][
-                    "use_thcovmat_in_fitting"
-                ]
+                thcovmat_present = fit.as_input()["theorycovmatconfig"]["use_thcovmat_in_fitting"]
             except KeyError:
                 # assume covmat wasn't used and fill in key accordingly but warn user
                 log.warning(
@@ -1264,21 +1236,17 @@ class CoreConfig(configparser.Config):
         return label
 
     def produce_all_commondata(self):
-        """produces all commondata using the loader function """
+        """produces all commondata using the loader function"""
         ds_names = self.loader.available_datasets
         ds_inputs = [self.parse_dataset_input({"dataset": ds}) for ds in ds_names]
-        cd_out = [
-            self.produce_commondata(dataset_input=ds_input) for ds_input in ds_inputs
-        ]
+        cd_out = [self.produce_commondata(dataset_input=ds_input) for ds_input in ds_inputs]
         return cd_out
 
     def parse_groupby(self, grouping: str):
         """parses the groupby key and checks it is an allowed grouping"""
         # TODO: think if better way to do this properly
         if grouping not in ["experiment", "nnpdf31_process"]:
-            raise ConfigError(
-                f"Grouping not available: {grouping}, did you spell it " "correctly?"
-            )
+            raise ConfigError(f"Grouping not available: {grouping}, did you spell it " "correctly?")
         return grouping
 
     def parse_norm_threshold(self, val: (numbers.Number, type(None))):
@@ -1312,9 +1280,7 @@ class CoreConfig(configparser.Config):
 
         lock_token = "_filters.lock.yaml"
         try:
-            return yaml.safe_load(
-                read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}")
-            )
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}"))
         except FileNotFoundError as e:
             alternatives = [
                 el.strip(lock_token)
@@ -1352,11 +1318,7 @@ class CoreConfig(configparser.Config):
     ):
 
         """Produce filter rules based on the user defined input and defaults."""
-        from validphys.filters import (
-            Rule,
-            RuleProcessingError,
-            default_filter_rules_input,
-        )
+        from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
         theory_parameters = theoryid.get_description()
 
@@ -1393,9 +1355,7 @@ class CoreConfig(configparser.Config):
 
         lock_token = "_defaults.lock.yaml"
         try:
-            return yaml.safe_load(
-                read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}")
-            )
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}"))
         except FileNotFoundError as e:
             alternatives = alternatives = [
                 el.strip(lock_token)
@@ -1439,11 +1399,7 @@ class CoreConfig(configparser.Config):
             and q2min != filter_defaults["q2min"]
         ):
             raise ConfigError("q2min defined multiple times with different values")
-        if (
-            w2min is not None
-            and "w2min" in filter_defaults
-            and w2min != filter_defaults["w2min"]
-        ):
+        if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
         
         if (
@@ -1468,9 +1424,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError("min_M defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
-            filter_defaults = default_filter_settings_recorded_spec_[
-                default_filter_settings
-            ]
+            filter_defaults = default_filter_settings_recorded_spec_[default_filter_settings]
             # If we find recorded specs return immediately and don't read q2min and w2min
             # from runcard
             return filter_defaults
@@ -1503,7 +1457,10 @@ class CoreConfig(configparser.Config):
         return filter_defaults
 
     def produce_data(
-        self, data_input, *, group_name="data",
+        self,
+        data_input,
+        *,
+        group_name="data",
     ):
         """A set of datasets where correlated systematics are taken
         into account
@@ -1560,15 +1517,9 @@ class CoreConfig(configparser.Config):
                 )
                 # We need to make theoryid available if using experiments
                 try:
-                    _, experiments = self.parse_from_(
-                        parse_from_value, data_key, write=False
-                    )
+                    _, experiments = self.parse_from_(parse_from_value, data_key, write=False)
                     data_val = NSList(
-                        [
-                            dsinput
-                            for experiment in experiments
-                            for dsinput in experiment.dsinputs
-                        ],
+                        [dsinput for experiment in experiments for dsinput in experiment.dsinputs],
                         nskey="dataset_input",
                     )
                 except ConfigError as inner_error:
@@ -1605,22 +1556,23 @@ class CoreConfig(configparser.Config):
         """Load the default grouping of data"""
         # slightly superfluous, only one default at present but perhaps
         # somebody will want to add to this at some point e.g for th. uncertainties
-        allowed = {
-            "standard_report": "experiment",
-            "thcovmat_fit": "ALL"
-        }
+        allowed = {"standard_report": "experiment", "thcovmat_fit": "ALL"}
         return allowed[spec]
 
     def produce_processed_data_grouping(
-        self, use_thcovmat_in_fitting=False, use_thcovmat_in_sampling=False, data_grouping=None, data_grouping_recorded_spec_=None
+        self,
+        use_thcovmat_in_fitting=False,
+        use_thcovmat_in_sampling=False,
+        data_grouping=None,
+        data_grouping_recorded_spec_=None,
     ):
         """Process the data_grouping key from the runcard, or lockfile. If
         `data_grouping_recorded_spec_` is present then its value is taken, and
         the runcard is assumed to be a lockfile.
 
         If data_grouping is None, then, if either use_thcovmat_in_fitting or use_thcovmat_in_sampling
-        (or both) are true (which means that the fit is a thcovmat fit), group all the datasets 
-        together, otherwise fall back to the default behaviour of grouping by 
+        (or both) are true (which means that the fit is a thcovmat fit), group all the datasets
+        together, otherwise fall back to the default behaviour of grouping by
         experiment (called standard_report).
 
         Else, the user can specfiy their own grouping, for example metadata_process.
@@ -1634,9 +1586,7 @@ class CoreConfig(configparser.Config):
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
 
-    def produce_processed_metadata_group(
-        self, processed_data_grouping, metadata_group=None
-    ):
+    def produce_processed_metadata_group(self, processed_data_grouping, metadata_group=None):
         """Expose the final data grouping result. Either metadata_group is
         specified by user, in which case uses `processed_data_grouping` which
         is experiment by default.
@@ -1646,7 +1596,9 @@ class CoreConfig(configparser.Config):
         return metadata_group
 
     def produce_group_dataset_inputs_by_metadata(
-        self, data_input, processed_metadata_group,
+        self,
+        data_input,
+        processed_metadata_group,
     ):
         """Take the data and the processed_metadata_group key and attempt
         to group the data, returns a list where each element specifies the data_input
@@ -1700,28 +1652,21 @@ class CoreConfig(configparser.Config):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
     def produce_group_dataset_inputs_by_process(self, data_input):
-        return self.produce_group_dataset_inputs_by_metadata(
-            data_input, "nnpdf31_process"
-        )
+        return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
-           prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
-           and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
-           theories needed for each prescription to avoid user error."""
+        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
+        and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
+        theories needed for each prescription to avoid user error."""
         pp = point_prescription
         th = theoryid.id
 
-        lsv = yaml.safe_load(
-            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
-        )
+        lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
         scalevarsfor_list = lsv["scale_variations_for"]
         # Allowed central theoryids
-        cent_thids = [
-            str(scalevarsfor_dict["theoryid"])
-            for scalevarsfor_dict in scalevarsfor_list
-        ]
+        cent_thids = [str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list]
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
             raise ConfigError(
