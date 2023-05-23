@@ -56,7 +56,10 @@ def generate_scaler(input_list: List[np.ndarray], interpolation_points: int = No
             "interpolation_points is larger than the number of unique input x-values"
         )
 
-    _scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
+    def _scaler(x):
+        x_scaled = scaler(np.log(x))
+        x_scaled = 2 * x_scaled - 1
+        return np.concatenate([x_scaled, x], axis=-1)
 
     return _scaler
 

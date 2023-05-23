@@ -568,7 +568,7 @@ def pdfNN_layer_generator(
         # Note feature scaling happens before the model created here,
         # so the input is of the form (scaler(x), x)
         placeholder_input = Input(shape=(None, 2), batch_size=1, name='scaledx_x')
-        process_input = Lambda(lambda x: 2 * x - 1, name='process_input')
+        process_input = None
         extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
         extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
     else:
@@ -590,7 +590,6 @@ def pdfNN_layer_generator(
                 name='x_ones',
                 custom_shape=(None, 1))  # Just to make shapes consistent
         model_input["layer_x_eq_1"] = layer_x_eq_1
-
 
     # the layer that multiplies the NN output by the prefactor
     apply_prefactor = Lambda(op.op_multiply, name='prefactor_times_NN')
@@ -654,7 +653,10 @@ def pdfNN_layer_generator(
         # Compute the neural network output
         nn_output = neural_network(x_processed)
         if subtract_one:
-            x_eq_1_processed = process_input(layer_x_eq_1)
+            if process_input is not None:
+                x_eq_1_processed = process_input(layer_x_eq_1)
+            else:
+                x_eq_1_processed = layer_x_eq_1
             nn_at_one = neural_network(x_eq_1_processed)
             nn_output = subtract_one_layer([nn_output, nn_at_one])
 
