@@ -48,6 +48,15 @@ private:
   void ReadData();
 };
 
+class ATLAS_ZRAPPC_7TEVFilter: public CommonData
+{
+public: ATLAS_ZRAPPC_7TEVFilter():
+  CommonData("ATLAS_ZRAPPC_7TEV") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class ATLASWZRAP11CFFilter: public CommonData
 {
 public: ATLASWZRAP11CFFilter():
