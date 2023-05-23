@@ -1,0 +1,9 @@
+# .git-blame-ignore-revs
+# Run black and isort with pyproject.toml
+3e5428765702ae696688d70fca21e15caa4c88ce
+# Revert "Call balck and isort to all changed files"
+09059e62ff2f2271de54a9c17604ec2ea646604e
+# Call balck and isort to all changed files
+fbfd77118d60306d4e0ea84b832088eafb8cb867
+# CAll black and isort on the last commit
+5d9b9e8da6805abd18910cf09314b29a564728a8

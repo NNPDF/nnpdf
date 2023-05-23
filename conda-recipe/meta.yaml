@@ -51,9 +51,9 @@ requirements:
         - sphinxcontrib-bibtex
         - curio >=1.0
         - pineappl >=0.5.8
-        - eko >=0.12.0
+        - eko >=0.12.2
         - banana-hep >=0.6.8
-
+        - fiatlux
 
 test:
     requires:

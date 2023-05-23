@@ -2,13 +2,12 @@
     The constraint module include functions to impose the momentum sum rules on the PDFs
 """
 import logging
+
 import numpy as np
 
-from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations as op
-
 from n3fit.backends import MetaModel, Lambda, Input
-
+from n3fit.layers import MSR_Normalization, xDivide, xIntegrator
 
 log = logging.getLogger(__name__)
 
@@ -18,6 +17,7 @@ def generate_msr_model_and_grid(
         mode: str = "ALL",
         nx: int = int(2e3),
         scaler=None,
+        photons=None,
         **kwargs) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.
@@ -35,6 +35,8 @@ def generate_msr_model_and_grid(
         Number of points of the integration grid
     scaler: Scaler
         Scaler to be applied to the PDF before applying the sum rules
+    photons: :py:class:`validphys.photon.compute.Photon`
+        If given, gives the AddPhoton layer a function to compute the MSR component for the photon
 
     Returns
     -------
@@ -78,10 +80,15 @@ def generate_msr_model_and_grid(
     # 4. Integrate the pdf
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
-    # 5. Compute the normalization factor
-    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights")(pdf_integrated)
+    # 5. If a photon is given, compute the photon component of the MSR
+    photons_c = None
+    if photons:
+        photons_c = photons.integral
 
-    # 6. Apply the normalization factor to the pdf
+    # 6. Compute the normalization factor
+    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights", photons_contribution=photons_c)(pdf_integrated)
+
+    # 7. Apply the normalization factor to the pdf
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")([pdf_x, normalization_factor])
 
     inputs = {

@@ -3,7 +3,7 @@ from n3fit.backends import constraints
 from n3fit.backends import operations as op
 
 
-class PreprocessingFactor(MetaLayer):
+class Preprocessing(MetaLayer):
     """
     Computes prefactor for the PDF.
 
@@ -105,7 +105,7 @@ class PreprocessingFactor(MetaLayer):
             beta_name = f"beta_{flav_name}"
             self.generate_weight(beta_name, "largex", flav_dict, set_to_zero=not self.large_x)
 
-        super(PreprocessingFactor, self).build(input_shape)
+        super(Preprocessing, self).build(input_shape)
 
     def call(self, inputs, **kwargs):
         x = inputs

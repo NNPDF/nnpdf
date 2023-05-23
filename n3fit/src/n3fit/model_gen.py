@@ -11,16 +11,26 @@
 """
 from typing import List
 from dataclasses import dataclass
+
 import numpy as np
 from n3fit.msr import generate_msr_model_and_grid
 from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import PreprocessingFactor, FkRotation, FlavourToEvolution, Mask
 from n3fit.layers.observable import is_unique
 
-from n3fit.backends import MetaModel, Input
+from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
-from n3fit.backends import MetaLayer, Lambda
-from n3fit.backends import base_layer_selector, regularizer_selector
+from n3fit.backends import regularizer_selector
+from n3fit.layers import (
+    DIS,
+    DY,
+    AddPhoton,
+    FkRotation,
+    FlavourToEvolution,
+    ObsRotation,
+    Preprocessing,
+    losses,
+)
+from n3fit.layers.observable import is_unique
 
 
 @dataclass
@@ -404,6 +414,7 @@ def pdfNN_layer_generator(
     impose_sumrule: str = None,
     scaler=None,
     parallel_models: int = 1,
+    photons=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -482,7 +493,7 @@ def pdfNN_layer_generator(
             selects the type of architecture of the NN. Default: dense
         flav_info: dict
             dictionary containing the information about each PDF (basis dictionary in the runcard)
-            to be used by PreprocessingFactor
+            to be used by Preprocessing
         out: int
             number of output flavours of the model (default 14)
         seed: list(int)
@@ -496,6 +507,10 @@ def pdfNN_layer_generator(
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
         parallel_models: int
             How many models should be trained in parallel
+        photon: :py:class:`validphys.photon.compute.Photon`
+            If given, gives the AddPhoton layer a function to compute a photon which will be added at the
+            index 0 of the 14-size FK basis
+            This same function will also be used to compute the MSR component for the photon
 
     Returns
     -------
@@ -536,7 +551,6 @@ def pdfNN_layer_generator(
     # when feature scaling is on, don't add logs regardless of the input
     use_feature_scaling = scaler is not None
     add_logs = inp == 2 and not use_feature_scaling
-    print(f"******************** inp: {inp}, use_feature_scaling: {use_feature_scaling}, add_logs: {add_logs}")
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
     subtract_one = use_feature_scaling
@@ -581,6 +595,9 @@ def pdfNN_layer_generator(
     # the layer that multiplies the NN output by the prefactor
     apply_prefactor = Lambda(op.op_multiply, name='prefactor_times_NN')
 
+    # Photon layer
+    layer_photon = AddPhoton(photons=photons, name="add_photon")
+
     # Basis rotation
     basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis")
 
@@ -589,7 +606,7 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = generate_msr_model_and_grid(mode=impose_sumrule, scaler=scaler)
+        sumrule_layer, integrator_input = generate_msr_model_and_grid(mode=impose_sumrule, scaler=scaler, photons=photons)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -602,7 +619,7 @@ def pdfNN_layer_generator(
     prefactor_replicas = []
     for i_replica, replica_seed in enumerate(seed):
         prefactor_replicas.append(
-            PreprocessingFactor(
+            Preprocessing(
                 flav_info=flav_info,
                 input_shape=(1,),
                 name=f"preprocessing_factor_{i_replica}",
@@ -661,6 +678,11 @@ def pdfNN_layer_generator(
         pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, prefactor)
 
         pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
+        # Final PDF (apply normalization)
+
+        if photons:
+            pdf_normalized = layer_photon(pdf_normalized, i_replica)
+
         model_output = pdf_normalized
 
         # Create the model

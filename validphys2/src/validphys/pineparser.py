@@ -239,7 +239,6 @@ def pineappl_reader(fkspec):
             an FKTableData object containing all necessary information to compute predictions
     """
     from pineappl.fk_table import FkTable
-
     pines = [FkTable.read(i) for i in fkspec.fkpath]
     cfactors = fkspec.load_cfactors()
 
@@ -254,7 +253,9 @@ def pineappl_reader(fkspec):
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
     Q0 = np.sqrt(pine_rep.muf2())
-    xgrid = pine_rep.x_grid()
+    xgrid = np.array([])
+    for pine in pines:
+        xgrid = np.union1d(xgrid, pine.x_grid())
     xi = np.arange(len(xgrid))
     protected = False
 
@@ -292,6 +293,13 @@ def pineappl_reader(fkspec):
             if apfelcomb.get("shifts") is not None:
                 ndata += apfelcomb["shifts"][i]
 
+        # Add empty points to ensure that all fktables share the same x-grid upon convolution
+        missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
+        for x_point in missing_x_points:
+            miss_index = list(xgrid).index(x_point)
+            raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=2)
+            if hadronic:
+                raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
         # Check conversion factors and remove the x* from the fktable
         raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
 
