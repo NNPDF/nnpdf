@@ -25,37 +25,37 @@
 # top.
 
 
-import sys
+import hashlib
+import logging
+import pathlib
 import re
 import shutil
-import pathlib
-import logging
-import hashlib
+import sys
 import warnings
 
-from validphys.config import Environment, Config, EnvironmentError_, ConfigError
-from validphys.app import App
-from reportengine.compat import yaml
 from reportengine import colors
-
+from reportengine.compat import yaml
+from validphys.app import App
+from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 
 SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
-    ])
+    ]
+)
 
-SETUPFIT_PROVIDERS = ['validphys.filters',
-                      'validphys.theorycovariance.construction',
-                      'validphys.results',
-                      'validphys.covmats',
-                      'n3fit.n3fit_checks_provider'
+SETUPFIT_PROVIDERS = [
+    'validphys.filters',
+    'validphys.theorycovariance.construction',
+    'validphys.results',
+    'validphys.covmats',
+    'n3fit.n3fit_checks_provider',
 ]
 
 SETUPFIT_DEFAULTS = dict(
-    use_cuts = 'internal',
+    use_cuts='internal',
 )
-
 
 
 log = logging.getLogger(__name__)
@@ -69,11 +69,13 @@ INPUT_FOLDER = "input"
 
 class SetupFitError(Exception):
     """Exception raised when setup-fit cannot succeed and knows why"""
+
     pass
 
 
 class SetupFitEnvironment(Environment):
     """Container for information to be filled at run time"""
+
     def init_output(self):
         # check file exists, is a file, has extension.
         if not self.config_yml.exists():
@@ -122,8 +124,7 @@ class SetupFitEnvironment(Environment):
 
     @classmethod
     def ns_dump_description(cls):
-        return {'filter_path': "The filter output folder",
-                **super().ns_dump_description()}
+        return {'filter_path': "The filter output folder", **super().ns_dump_description()}
 
 
 class SetupFitConfig(Config):
@@ -133,19 +134,19 @@ class SetupFitConfig(Config):
     def from_yaml(cls, o, *args, **kwargs):
         try:
             with warnings.catch_warnings():
-                warnings.simplefilter('ignore',
-                                      yaml.error.MantissaNoDotYAML1_1Warning)
-                #We need to specify the older version 1.1 to support the
-                #older configuration files, which liked to use on/off for
-                #booleans.
-                #The floating point parsing yields warnings everywhere, which
-                #we suppress.
+                warnings.simplefilter('ignore', yaml.error.MantissaNoDotYAML1_1Warning)
+                # We need to specify the older version 1.1 to support the
+                # older configuration files, which liked to use on/off for
+                # booleans.
+                # The floating point parsing yields warnings everywhere, which
+                # we suppress.
                 file_content = yaml.safe_load(o, version='1.1')
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
-            raise ConfigError(f"Expecting input runcard to be a mapping, "
-                              f"not '{type(file_content)}'.")
+            raise ConfigError(
+                f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'."
+            )
 
         if file_content.get('closuretest') is not None:
             filter_action = 'datacuts::closuretest::theory::fitting filter'
@@ -156,8 +157,13 @@ class SetupFitConfig(Config):
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append(
-                'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
-        for k,v in SETUPFIT_DEFAULTS.items():
+                'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
+            )
+        if file_content.get('fiatlux') is not None:
+            SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
+            if file_content.get('fiatlux')["additional_errors"]:
+                SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+        for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -165,19 +171,19 @@ class SetupFitConfig(Config):
 
 class SetupFitApp(App):
     """The class which parsers and perform the filtering"""
+
     environment_class = SetupFitEnvironment
     config_class = SetupFitConfig
 
     def __init__(self):
-        super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=SETUPFIT_PROVIDERS)
+        super(SetupFitApp, self).__init__(name='setup-fit', providers=SETUPFIT_PROVIDERS)
 
     @property
     def argparser(self):
         parser = super().argparser
-        parser.add_argument('-o','--output',
-                        help="Output folder and name of the fit",
-                        default=None)
+        parser.add_argument(
+            '-o', '--output', help="Output folder and name of the fit", default=None
+        )
         return parser
 
     def get_commandline_arguments(self, cmdline=None):
@@ -201,9 +207,7 @@ class SetupFitApp(App):
             sys.exit(1)
         except Exception as e:
             log.critical(f"Bug in setup-fit ocurred. Please report it.")
-            print(
-                colors.color_exception(e.__class__, e, e.__traceback__),
-                file=sys.stderr)
+            print(colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr)
             sys.exit(1)
 
 

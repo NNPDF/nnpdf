@@ -259,3 +259,22 @@ def test_mask():
     masker = layers.Mask(bool_mask=np_mask, c=rn_val)
     ret = masker(fi)
     np.testing.assert_allclose(ret, masked_fi * rn_val, rtol=1e-5)
+
+def test_addphoton_init():
+    """Test AddPhoton class."""
+    addphoton = layers.AddPhoton(photons=None)
+    np.testing.assert_equal(addphoton._photons_generator, None)
+    addphoton = layers.AddPhoton(photons=1234)
+    np.testing.assert_equal(addphoton._photons_generator, 1234)
+    np.testing.assert_equal(addphoton._pdf_ph, None)
+
+class FakePhoton():
+    def __call__(self, xgrid):
+        return [np.exp(-xgrid)]
+
+def test_compute_photon():
+    photon = FakePhoton()
+    addphoton = layers.AddPhoton(photons=photon)
+    xgrid = np.geomspace(1e-4, 1., 10)
+    addphoton.register_photon(xgrid)
+    np.testing.assert_allclose(addphoton._pdf_ph, [np.exp(-xgrid)])
