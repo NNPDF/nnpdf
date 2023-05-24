@@ -14,6 +14,7 @@ import scipy.special as special
 from reportengine import collect
 
 from validphys.results import ThPredictionsResult
+from validphys.covmats import sqrt_covmat, regularize_sqrt_cov
 from validphys.calcutils import calc_chi2
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
@@ -140,22 +141,73 @@ def fits_dataset_bias_variance(
     closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    n_fits = np.shape(reps)[0]
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
     # Compute pdf covariance matrix for each fit. Dimensions here are (fit, data point, data point)
     # Across fits the pdf_cov should be all similair. Just to be consistent biases and variances should be
     # calculated using for each fit its sampled pdf_cov
-
-    #if only_pdf_err and pdf_and_exp_err == False:
+    
     #TODO: There is a problem in the inversion of the pdf matrix. Probably comes from too few replicas 
     # being sampled since when testing on out of sample data one is trying to compute a covariance matrix of
     # a high dimensional random variable (n > 800) with a sample of ~100 elements (the replicas per fit)
-        # pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])])
-        # sqrt_pdf_cov = np.asarray([la.cholesky(pdf_cov[i], lower = True) for i in range(np.shape(pdf_cov)[0])])
-        # sqrt_pdf_cov = np.mean(sqrt_pdf_cov, axis = 0)
+
+    if only_pdf_err and pdf_and_exp_err == False:
+        biases = []
+        variances = []
+        pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
+        threshold = 10**(-4)
+        dist_threshold = 0.2
+        # There are n_fits pdf_covariances
+        for i in range(n_fits):
+            t1, t2 = la.eigh(pdf_cov[i])
+            t1 = t1.real
+            t2 = t2.real
+            #print(t1)
+            print("this is starting evals shape: " + str(t1.shape))
+            diagonale = np.diag(t2.T@pdf_cov[i]@t2@np.diag(1./t1))
+            # t1 has shape (n_fits, n_dat) t2 has shape (n_fits, n_dat, n_dat)
+            # Mask the vector of eigenvalues. The indices indicate the variables which are practically the same
+            # observable, thus making the covariance matrix singular. A first rough approcah can be to delete 
+            # the entries of the diagonalized covmat and also removing the obs from the calculation
+            #mask_vec = np.abs(diagonale - 1.) > dist_threshold
+            mask_vec = t1 < threshold
+            indices = np.where(mask_vec)[0]
+            regularized_evals = np.delete(t1, indices)
+            print("this is reg evals shape:" + str(regularized_evals.shape))
+            #print("this is shape of mask: " + str(mask_vec.shape))
+            rotated_obs = t2.T@reps[i]
+            #this has shape (n_dat, n_reps)
+            rotated_centrals = rotated_obs.mean(axis=1)
+            #print("rotated central prediction shape is: " + str(np.shape(rotated_centrals)))
+            reg_obs = np.delete(rotated_obs, indices, axis = 0)
+            #print("reg obs shape is: " + str(reg_obs.shape))
+            reg_centrals = np.delete(rotated_centrals, indices)
+            #print("law_th.central_vals shape is: " + str(law_th.central_value.shape))
+            lvl0_rotated = t2.T@law_th.central_value
+            masked_lvl0 = np.delete(lvl0_rotated, indices)
+            diffs = masked_lvl0 - reg_centrals
+            diagonale = np.diag(t2.T@pdf_cov[i]@t2@np.diag(1./t1))
+            #print("test invertibility" + str(diagonale))
+            #print("biases delts: \n" + str(diffs))
+            bias = diffs@(np.diag(1./regularized_evals))@diffs
+            biases.append(bias)
+            diffs_var = reg_obs-reg_centrals[:,np.newaxis]
+            #print("shap delle delts variance: " + str(diffs_var.shape))
+            variance = np.mean(np.diag(diffs_var.T@np.diag(1./regularized_evals)@diffs_var))
+            print(bias)
+            print(variance)
+            variances.append(variance)
+        print(biases)
+        print("this is the biases mean" + str(np.mean(biases)))
+        print("this is the vars mean" + str(np.mean(variances)))
+        return np.asarray(biases), np.asarray(variances), len(law_th)
+        #sqrt_pdf_cov = np.asarray([regularize_sqrt_cov(pdf_cov[j]) for j in range(n_fits)])
+        #sqrt_cov calculated using function that regularizes 
+        #sqrt_pdf_cov = np.asarray([sqrt_covmat(pdf_cov[j]) for j in range(n_fits)])
     if pdf_and_exp_err and only_pdf_err == False:
-        pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(np.shape(reps)[0])]), axis = 0)
+        pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)]), axis = 0)
         sqrt_pdf_exp_cov = la.cholesky(pdf_cov + exp_cov, lower = True)
-    # take mean across replicas - since we might have changed no. of reps
-    centrals = reps.mean(axis=2)
     # place bins on first axis
     diffs = law_th.central_value[:, np.newaxis] - centrals.T
     if (only_pdf_err == False and pdf_and_exp_err == False):
@@ -170,15 +222,21 @@ def fits_dataset_bias_variance(
     
     #if (only_pdf_err and pdf_and_exp_err == False):
         # Only pdf error
-        #biases = calc_chi2(sqrt_pdf_cov, diffs)
-        #variances = []
+        biases = np.asarray([calc_chi2(sqrt_pdf_cov[j], diffs.T[j]) for j in range(n_fits)])
+        variances = []
         # this seems slow but breaks for datasets with single data point otherwise
         for i in range(reps.shape[0]):
+            print("variances diffs \n")
             diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            variances.append(np.mean(calc_chi2(sqrt_pdf_cov, diffs)))
+            print(diffs.T[0])
+            variances.append(np.mean(calc_chi2(sqrt_pdf_cov[i], diffs)))
+        print(biases)
+        print(variances)
+        print(np.asarray(biases)/np.asarray(variances))
+
         return biases, np.asarray(variances), len(law_th)
     
-    if (only_pdf_err and pdf_and_exp_err == False):
+    #if (only_pdf_err and pdf_and_exp_err == False):
         # temporary measure: assume the pdf_covmat is diagonalized by the same change of baasis
         # as the experimental one (assume the correlations induced by pdfs in data space are the same as the
         # experiments)
@@ -289,6 +347,7 @@ def dataset_replica_and_central_diff(
     sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
     return sigma, central_diff
 
+##TODO: remove this function
 def only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader, diagonal_basis=True):
     """Temporary function to calculate the bias without diagonalizing the pdf_covmat itself but 
     regularizing it assuming it is diagonalized by the same change of basis as the experimental covmat
@@ -324,7 +383,7 @@ def only_pdf_dataset_bias_variance(internal_multiclosure_dataset_loader, diagona
     return biases, variances
 
 # all data version; probably not needed
-def only_pdf_data_bias_variance(internal_multiclosure_data_loader, diagonal_basis=True):
+#def only_pdf_data_bias_variance(internal_multiclosure_data_loader, diagonal_basis=True):
     return only_pdf_dataset_bias_variance(internal_multiclosure_data_loader, diagonal_basis)
 
 

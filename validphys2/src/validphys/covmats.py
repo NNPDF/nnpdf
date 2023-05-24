@@ -581,6 +581,25 @@ def sqrt_covmat(covariance_matrix):
     return sqrt_matrix
 
 
+def regularize_sqrt_cov(covmat):
+    """Function that computes the sqrt covmat regularizing the starting covmat in case it is not positive
+    definite. Introducing the pdf covmat in the calculation of bias and variance what happens is that too
+    few replicas can lead to instabilities in the inversion since the sampled covmat is not pos def
+
+    """
+    eigenvalues, eigenvectors = la.eigh(covmat)
+    for i in range(np.size(eigenvalues)):
+        if eigenvalues[i] < 10**(-16):
+            eigenvalues[i] = 10**(-16)
+    s = 0
+    for i in range(np.size(eigenvalues)):
+        temp = (eigenvalues[i]*(eigenvectors.T[i][:,np.newaxis]@eigenvectors.T[i][:,np.newaxis].T))
+        s += temp
+    reg_covmat = s
+
+    return sqrt_covmat(reg_covmat)
+    
+
 def groups_covmat_no_table(
        groups_data, groups_index, groups_covmat_collection):
     """Export the covariance matrix for the groups. It exports the full
