@@ -4,7 +4,7 @@ def __give_git():
     from pathlib import Path
 
     file_dir = Path(__file__).parent
-    from subprocess import run, CalledProcessError
+    from subprocess import CalledProcessError, run
 
     try:
         result = run(
@@ -28,9 +28,7 @@ def __give_git():
             check=True,
             cwd=file_dir,
         ).stdout.strip()
-        version = result.replace(f"-g{githash}", f"+g{githash}").replace(
-            f"{tag}-", f"{tag}."
-        )
+        version = result.replace(f"-g{githash}", f"+g{githash}").replace(f"{tag}-", f"{tag}.")
     except CalledProcessError:
         # In principle this function should not exist on an installed version
         # but who knows. Also maybe git doesn't work on the machine or whatever

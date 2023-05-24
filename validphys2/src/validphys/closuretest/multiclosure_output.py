@@ -13,8 +13,8 @@ import scipy.stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
-
 from validphys import plotutils
+
 
 @figure
 def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
@@ -27,11 +27,9 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     """
     biases, variances, _ = fits_dataset_bias_variance
     fig, ax = plotutils.subplots()
-    
+
     ax.plot(biases, "*", label=f"bias, std. dev. = {np.std(biases):.2f}")
-    ax.axhline(
-        np.mean(biases), label=f"bias, mean = {np.mean(biases):.2f}", linestyle="-"
-    )
+    ax.axhline(np.mean(biases), label=f"bias, mean = {np.mean(biases):.2f}", linestyle="-")
     ax.plot(variances, ".", label=f"variance, std. dev. = {np.std(variances):.2f}")
     ax.axhline(
         np.mean(variances),
@@ -89,9 +87,7 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     records = []
     for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
         records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var))
-    df = pd.DataFrame.from_records(
-        records, index="dataset", columns=("dataset", "ndata", "ratio")
-    )
+    df = pd.DataFrame.from_records(records, index="dataset", columns=("dataset", "ndata", "ratio"))
     df.columns = ["ndata", "bias/variance"]
     return df
 
@@ -109,15 +105,11 @@ def experiments_bias_variance_ratio(
 
     """
     # don't reinvent wheel
-    df_in = datasets_bias_variance_ratio(
-        experiments_expected_bias_variance, experiments_data
-    )
+    df_in = datasets_bias_variance_ratio(experiments_expected_bias_variance, experiments_data)
 
     bias_tot, var_tot, ntotal = expected_total_bias_variance
 
-    tot_df = pd.DataFrame(
-        [[ntotal, bias_tot / var_tot]], index=["Total"], columns=df_in.columns
-    )
+    tot_df = pd.DataFrame([[ntotal, bias_tot / var_tot]], index=["Total"], columns=df_in.columns)
     df = pd.concat((df_in, tot_df), axis=0)
 
     df.index.rename("experiment", inplace=True)  # give index appropriate name
@@ -138,33 +130,31 @@ def experiments_bias_variance_table(
     """
     records = []
     for exp, (bias, var, ndata) in zip(
-        group_dataset_inputs_by_experiment,
-        experiments_expected_bias_variance
+        group_dataset_inputs_by_experiment, experiments_expected_bias_variance
     ):
-        records.append(dict(
-            experiment=exp["group_name"],
-            ndata=ndata,
-            bias=bias/ndata,
-            variance=var/ndata,
-            sqrt_ratio=np.sqrt(bias/var)
-        ))
+        records.append(
+            dict(
+                experiment=exp["group_name"],
+                ndata=ndata,
+                bias=bias / ndata,
+                variance=var / ndata,
+                sqrt_ratio=np.sqrt(bias / var),
+            )
+        )
 
     bias_tot, var_tot, ntotal = expected_total_bias_variance
 
-    records.append(dict(
-        experiment="Total",
-        ndata=ntotal,
-        bias=bias_tot/ntotal,
-        variance=var_tot/ntotal,
-        sqrt_ratio=np.sqrt(bias_tot/var_tot)
-    ))
+    records.append(
+        dict(
+            experiment="Total",
+            ndata=ntotal,
+            bias=bias_tot / ntotal,
+            variance=var_tot / ntotal,
+            sqrt_ratio=np.sqrt(bias_tot / var_tot),
+        )
+    )
     df = pd.DataFrame.from_records(records, index="experiment")
-    df.columns = [
-        "ndata",
-        "bias",
-        "variance",
-        "sqrt(bias/variance)"
-    ]
+    df.columns = ["ndata", "bias", "variance", "sqrt(bias/variance)"]
     return df
 
 
@@ -181,16 +171,12 @@ def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
     df_in = datasets_bias_variance_ratio
     vals = np.array(df_in.values)  # copy just in case
     vals[:, 1] = np.sqrt(vals[:, 1])
-    return pd.DataFrame(
-        vals, index=df_in.index, columns=["ndata", "sqrt(bias/variance)"]
-    )
+    return pd.DataFrame(vals, index=df_in.index, columns=["ndata", "sqrt(bias/variance)"])
 
 
 @table
 def sqrt_experiments_bias_variance_ratio(experiments_bias_variance_ratio):
-    """Like sqrt_datasets_bias_variance_ratio except for each experiment.
-
-    """
+    """Like sqrt_datasets_bias_variance_ratio except for each experiment."""
     return sqrt_datasets_bias_variance_ratio(experiments_bias_variance_ratio)
 
 
@@ -210,11 +196,7 @@ def total_bias_variance_ratio(
 
     dset_index = pd.MultiIndex.from_arrays(
         [
-            [
-                str(experiment)
-                for experiment in experiments_data
-                for ds in experiment.datasets
-            ],
+            [str(experiment) for experiment in experiments_data for ds in experiment.datasets],
             datasets_bias_variance_ratio.index.values,
         ]
     )
@@ -303,9 +285,7 @@ def compare_measured_expected_xi(fits_measured_xi, expected_xi_from_bias_varianc
 
     """
     # don't want ndata twice
-    df = pd.concat(
-        (fits_measured_xi, expected_xi_from_bias_variance.iloc[:, 1]), axis=1
-    )
+    df = pd.concat((fits_measured_xi, expected_xi_from_bias_variance.iloc[:, 1]), axis=1)
     return df
 
 
@@ -324,12 +304,8 @@ def plot_dataset_xi(dataset_xi, dataset):
         label=r"$\xi_{1\sigma}$ = " + f"{dataset_xi.mean():.2f}, from multifits",
         clip_on=False,
     )
-    ax.axhline(
-        0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ " + "expected value"
-    )
-    ax.axhline(
-        0.95, linestyle=":", color="r", label=r"$\xi_{2\sigma}$ " + "expected value"
-    )
+    ax.axhline(0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ " + "expected value")
+    ax.axhline(0.95, linestyle=":", color="r", label=r"$\xi_{2\sigma}$ " + "expected value")
     ax.set_ylim((0, 1))
     ax.set_xlabel("eigenvector index (ascending order)")
     ax.set_title(r"$\xi_{1\sigma}$ for " + str(dataset))
@@ -355,9 +331,7 @@ def plot_dataset_xi_histogram(dataset_xi, dataset):
             + f"{dataset_xi.std():.2f}"
         ),
     )
-    ax.axvline(
-        0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ " + "expected value"
-    )
+    ax.axvline(0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ " + "expected value")
     ax.set_xlim((0, 1))
     ax.set_xlabel(r"$\xi^{i}_{1\sigma}$")
     ax.set_title("Histogram of " + r"$\xi^{i}_{1\sigma}$ for " + str(dataset))
@@ -392,15 +366,14 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
     which fall within the 1-sigma confidence interval of the scaled gaussian.
 
     """
-    scaled_diffs = np.concatenate([
-        (central_diff / sigma).flatten()
-        for sigma, central_diff
-        in experiments_replica_central_diff
-    ])
-    fig, ax = plotutils.subplots()
-    ax.hist(
-        scaled_diffs, bins=50, density=True, label="Central prediction distribution"
+    scaled_diffs = np.concatenate(
+        [
+            (central_diff / sigma).flatten()
+            for sigma, central_diff in experiments_replica_central_diff
+        ]
     )
+    fig, ax = plotutils.subplots()
+    ax.hist(scaled_diffs, bins=50, density=True, label="Central prediction distribution")
     xlim = (-5, 5)
     ax.set_xlim(xlim)
 
@@ -414,7 +387,6 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
     ax.legend()
     ax.set_xlabel("Difference to underlying prediction")
     return fig
-
 
 
 @table
@@ -471,9 +443,7 @@ def total_ratio_means_finite_effects(
 
 
 @table
-def dataset_xi_error_finite_effects(
-    xi_resampling_dataset, n_fit_samples, n_replica_samples
-):
+def dataset_xi_error_finite_effects(xi_resampling_dataset, n_fit_samples, n_replica_samples):
     """For a single dataset vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the mean of xi across datapoints (note that points
     here refers to points in the basis which diagonalises the covmat) and then
@@ -487,9 +457,7 @@ def dataset_xi_error_finite_effects(
 
 
 @table
-def dataset_xi_means_finite_effects(
-    xi_resampling_dataset, n_fit_samples, n_replica_samples
-):
+def dataset_xi_means_finite_effects(xi_resampling_dataset, n_fit_samples, n_replica_samples):
     """For a single dataset vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the mean of xi across datapoints (note that points
     here refers to points in the basis which diagonalises the covmat) and then
@@ -505,9 +473,7 @@ def dataset_xi_means_finite_effects(
 # NOTE: This action was written when trying to understand the finite size effects
 # and is largely redundant.
 @table
-def dataset_std_xi_error_finite_effects(
-    xi_resampling_dataset, n_fit_samples, n_replica_samples
-):
+def dataset_std_xi_error_finite_effects(xi_resampling_dataset, n_fit_samples, n_replica_samples):
     """For a single dataset vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the standard deviation of xi across datapoints
     (note that points here refers to points in the basis which diagonalises the
@@ -522,9 +488,7 @@ def dataset_std_xi_error_finite_effects(
 
 
 @table
-def dataset_std_xi_means_finite_effects(
-    xi_resampling_dataset, n_fit_samples, n_replica_samples
-):
+def dataset_std_xi_means_finite_effects(xi_resampling_dataset, n_fit_samples, n_replica_samples):
     """For a single dataset vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the standard deviation of xi across datapoints
     (note that points here refers to points in the basis which diagonalises the
@@ -546,9 +510,7 @@ def total_xi_error_finite_effects(total_xi_resample, n_fit_samples, n_replica_sa
     tabulate the standard deviation of xi_1sigma across bootstrap samples.
 
     """
-    return dataset_xi_error_finite_effects(
-        total_xi_resample, n_fit_samples, n_replica_samples
-    )
+    return dataset_xi_error_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
 
 
 @table
@@ -559,9 +521,7 @@ def total_xi_means_finite_effects(total_xi_resample, n_fit_samples, n_replica_sa
     tabulate the standard deviation of xi_1sigma across bootstrap samples.
 
     """
-    return dataset_xi_means_finite_effects(
-        total_xi_resample, n_fit_samples, n_replica_samples
-    )
+    return dataset_xi_means_finite_effects(total_xi_resample, n_fit_samples, n_replica_samples)
 
 
 @table
@@ -597,9 +557,7 @@ def total_expected_xi_error_finite_effects(
 
 
 @table
-def total_std_xi_error_finite_effects(
-    exps_xi_resample, n_fit_samples, n_replica_samples
-):
+def total_std_xi_error_finite_effects(exps_xi_resample, n_fit_samples, n_replica_samples):
     """For all data vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the std deviation of xi across datapoints
     (note that points here refers to points in the basis which diagonalises
@@ -608,15 +566,11 @@ def total_std_xi_error_finite_effects(
 
     """
     xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_std_xi_error_finite_effects(
-        xi_total, n_fit_samples, n_replica_samples
-    )
+    return dataset_std_xi_error_finite_effects(xi_total, n_fit_samples, n_replica_samples)
 
 
 @table
-def total_std_xi_means_finite_effects(
-    exps_xi_resample, n_fit_samples, n_replica_samples
-):
+def total_std_xi_means_finite_effects(exps_xi_resample, n_fit_samples, n_replica_samples):
     """For all data vary number of fits and number of replicas used to perform
     bootstrap sample of xi. Take the std deviation of xi across datapoints
     (note that points here refers to points in the basis which diagonalises the
@@ -625,15 +579,11 @@ def total_std_xi_means_finite_effects(
 
     """
     xi_total = np.concatenate(exps_xi_resample, axis=-1)
-    return dataset_std_xi_means_finite_effects(
-        xi_total, n_fit_samples, n_replica_samples
-    )
+    return dataset_std_xi_means_finite_effects(xi_total, n_fit_samples, n_replica_samples)
 
 
 @table
-def experiments_bootstrap_sqrt_ratio_table(
-    experiments_bootstrap_sqrt_ratio, experiments_data
-):
+def experiments_bootstrap_sqrt_ratio_table(experiments_bootstrap_sqrt_ratio, experiments_data):
     """Given experiments_bootstrap_sqrt_ratio, which a bootstrap
     resampling of the sqrt(bias/variance) for each experiment and the total
     across all data, tabulate the mean and standard deviation across bootstrap
@@ -662,32 +612,24 @@ def experiments_bootstrap_sqrt_ratio_table(
 
 
 @table
-def groups_bootstrap_sqrt_ratio_table(
-    groups_bootstrap_sqrt_ratio, groups_data
-):
+def groups_bootstrap_sqrt_ratio_table(groups_bootstrap_sqrt_ratio, groups_data):
     """Like :py:func:`experiments_bootstrap_sqrt_ratio_table` but for
     metadata groups.
     """
-    df = experiments_bootstrap_sqrt_ratio_table(
-        groups_bootstrap_sqrt_ratio, groups_data
-    )
+    df = experiments_bootstrap_sqrt_ratio_table(groups_bootstrap_sqrt_ratio, groups_data)
     idx = df.index.rename("group")
     return df.set_index(idx)
 
 
 @table
-def experiments_bootstrap_expected_xi_table(
-    experiments_bootstrap_expected_xi, experiments_data
-):
+def experiments_bootstrap_expected_xi_table(experiments_bootstrap_expected_xi, experiments_data):
     """Tabulate the mean and standard deviation across bootstrap samples of the
     expected xi calculated from the ratio of bias/variance. Returns a table with
     two columns, for the bootstrap mean and standard deviation
     and a row for each experiment plus the total across all experiments.
 
     """
-    df = experiments_bootstrap_sqrt_ratio_table(
-        experiments_bootstrap_expected_xi, experiments_data
-    )
+    df = experiments_bootstrap_sqrt_ratio_table(experiments_bootstrap_expected_xi, experiments_data)
     # change the column headers
     df.columns = [
         r"Bootstrap mean expected $\xi_{1\sigma}$ from ratio",
@@ -701,15 +643,13 @@ def groups_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data
     """Like :py:func:`experiments_bootstrap_expected_xi_table` but for metadata
     groups.
     """
-    df = experiments_bootstrap_expected_xi_table(
-        groups_bootstrap_expected_xi, groups_data)
+    df = experiments_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data)
     idx = df.index.rename("group")
     return df.set_index(idx)
 
+
 @table
-def experiments_bootstrap_xi_table(
-    experiments_bootstrap_xi, experiments_data, total_bootstrap_xi
-):
+def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments_data, total_bootstrap_xi):
     """Tabulate the mean and standard deviation of xi_1sigma across bootstrap
     samples. Note that the mean has already be taken across data points
     (or eigenvectors in the basis which diagonalises the covariance
@@ -731,12 +671,9 @@ def experiments_bootstrap_xi_table(
 
 
 @table
-def groups_bootstrap_xi_table(
-    groups_bootstrap_xi, groups_data, total_bootstrap_xi
-):
+def groups_bootstrap_xi_table(groups_bootstrap_xi, groups_data, total_bootstrap_xi):
     """Like :py:func:`experiments_bootstrap_xi_table` but for metadata groups."""
-    df = experiments_bootstrap_xi_table(
-        groups_bootstrap_xi, groups_data, total_bootstrap_xi)
+    df = experiments_bootstrap_xi_table(groups_bootstrap_xi, groups_data, total_bootstrap_xi)
     idx = df.index.rename("group")
     return df.set_index(idx)
 
@@ -757,9 +694,7 @@ def experiments_bootstrap_xi_comparison(
 
 
 @table
-def groups_bootstrap_xi_comparison(
-    groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table
-):
+def groups_bootstrap_xi_comparison(groups_bootstrap_xi_table, groups_bootstrap_expected_xi_table):
     """Like :py:func:`experiments_bootstrap_xi_comparison` but for metadata
     groups.
     """
@@ -818,9 +753,7 @@ def plot_experiments_xi_bootstrap_distribution(
     # take mean across all data
     xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
     # use plotting function from above
-    xi_plots = plot_experiments_sqrt_ratio_bootstrap_distribution(
-        xi_1sigma, experiments_data
-    )
+    xi_plots = plot_experiments_sqrt_ratio_bootstrap_distribution(xi_1sigma, experiments_data)
     # Update the title and x label on each plot to reflect that we're plotting
     # \xi_1sigma, don't forget Total plot.
     for fig, exp in zip(xi_plots, experiments_data + ["Total"]):
@@ -829,10 +762,10 @@ def plot_experiments_xi_bootstrap_distribution(
         ax.set_xlabel(r"$\xi_{1\sigma}$")
         yield fig
 
+
 @figuregen
 def plot_bias_variance_distributions(
-    experiments_fits_bias_replicas_variance_samples,
-    group_dataset_inputs_by_experiment
+    experiments_fits_bias_replicas_variance_samples, group_dataset_inputs_by_experiment
 ):
     """For each experiment, plot the distribution across fits of bias
     and the distribution across fits and replicas of
@@ -844,34 +777,20 @@ def plot_bias_variance_distributions(
 
     """
     for (exp_biases, exp_vars, _), group_spec in zip(
-            experiments_fits_bias_replicas_variance_samples,
-            group_dataset_inputs_by_experiment
-        ):
+        experiments_fits_bias_replicas_variance_samples, group_dataset_inputs_by_experiment
+    ):
         fig, ax = plotutils.subplots()
         labels = [
             "fits bias distribution",
             "replicas variance distribution",
         ]
-        ax.hist(
-            [exp_biases, exp_vars],
-            density=True,
-            label=labels
-        )
+        ax.hist([exp_biases, exp_vars], density=True, label=labels)
         ax.legend()
-        ax.set_title(
-            f"Bias and variance distributions for {group_spec['group_name']}."
-        )
+        ax.set_title(f"Bias and variance distributions for {group_spec['group_name']}.")
         yield fig
-    total_bias, total_var, _ = np.sum(
-        experiments_fits_bias_replicas_variance_samples,
-        axis=0
-    )
+    total_bias, total_var, _ = np.sum(experiments_fits_bias_replicas_variance_samples, axis=0)
     fig, ax = plotutils.subplots()
-    ax.hist(
-        [total_bias, total_var],
-        density=True,
-        label=labels
-    )
+    ax.hist([total_bias, total_var], density=True, label=labels)
     ax.legend()
     ax.set_title("Total bias and variance distributions.")
     yield fig
