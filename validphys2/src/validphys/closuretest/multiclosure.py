@@ -115,7 +115,8 @@ def fits_dataset_bias_variance(
     _internal_max_reps=None,
     _internal_min_reps=20,
     only_pdf_err = False,
-    pdf_and_exp_err = False
+    pdf_and_exp_err = False,
+    threshold = 0
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -156,7 +157,6 @@ def fits_dataset_bias_variance(
         biases = []
         variances = []
         pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
-        dist_threshold = 0.2
         # There are n_fits pdf_covariances
         for i in range(n_fits):
 
@@ -164,7 +164,6 @@ def fits_dataset_bias_variance(
                 sqrt_cov = sqrt_covmat(pdf_cov[i])
             except:
                 evals, eigens = la.eigh(pdf_cov[i])  
-                threshold = 10**(-8)  
                 mask = evals < threshold
                 indices = np.where(mask)[0]
                 print("number of raw obs: " + str(np.shape(evals)))
@@ -300,13 +299,14 @@ def fits_data_bias_variance(
     _internal_max_reps=None,
     _internal_min_reps=20,
     only_pdf_err = False,
-    pdf_and_exp_err = False
+    pdf_and_exp_err = False,
+    threshold = 0
 
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
         internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps,
-        only_pdf_err, pdf_and_exp_err
+        only_pdf_err, pdf_and_exp_err, threshold
     )
 
 
@@ -563,7 +563,8 @@ def bias_variance_resampling_dataset(
     boot_seed=DEFAULT_SEED,
     use_repeats=True,
     only_pdf_err = False,
-    pdf_and_exp_err = False
+    pdf_and_exp_err = False,
+    threshold = 0
 ):
     """For a single dataset, create bootstrap distributions of bias and variance
     varying the number of fits and replicas drawn for each resample. Return two
@@ -616,7 +617,8 @@ def bias_variance_resampling_dataset(
                 # explicitly pass n_rep to fits_dataset_bias_variance so it uses
                 # full subsample
                 bias, variance, _ = expected_dataset_bias_variance(
-                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample, only_pdf_err, pdf_and_exp_err)
+                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample, only_pdf_err, pdf_and_exp_err,
+                                               threshold)
                 )
                 bias_boot.append(bias)
                 variance_boot.append(variance)
@@ -796,7 +798,8 @@ def fits_bootstrap_data_bias_variance(
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
     only_pdf_err = False,
-    pdf_and_exp_err = False
+    pdf_and_exp_err = False,
+    threshold = 0
 ):
     """Perform bootstrap resample of `fits_data_bias_variance`, returns
     tuple of bias_samples, variance_samples where each element is a 1-D np.array
@@ -824,7 +827,7 @@ def fits_bootstrap_data_bias_variance(
         bias, variance, _ = expected_dataset_bias_variance(
             fits_dataset_bias_variance(
                 boot_internal_loader, _internal_max_reps, _internal_min_reps,
-                only_pdf_err, pdf_and_exp_err
+                only_pdf_err, pdf_and_exp_err, threshold
             )
         )
         bias_boot.append(bias)
