@@ -156,11 +156,35 @@ def fits_dataset_bias_variance(
         biases = []
         variances = []
         pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
-        threshold = 10**(-4)
         dist_threshold = 0.2
         # There are n_fits pdf_covariances
         for i in range(n_fits):
-            t1, t2 = la.eigh(pdf_cov[i])
+
+            try:
+                sqrt_cov = sqrt_covmat(pdf_cov[i])
+            except:
+                evals, eigens = la.eigh(pdf_cov[i])  
+                threshold = 10**(-8)  
+                mask = evals < threshold
+                indices = np.where(mask)[0]
+                print("number of raw obs: " + str(np.shape(evals)))
+                print("number of deleted eigenvalues: " + str(np.size(indices)))
+                for idx in indices:
+                    evals[idx] = threshold
+                new_covmat = eigens@np.diag(evals)@eigens.T
+                print("difference of covs" + str(new_covmat-pdf_cov[i]))
+                sqrt_cov = sqrt_covmat(new_covmat)
+            bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+            var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+
+            bias = calc_chi2(sqrt_cov, bias_diffs)
+            var = np.mean(calc_chi2(sqrt_cov, var_diffs))
+            biases.append(bias)
+            variances.append(var)
+            print("this is bias for fit: " + str(bias))
+            print("this is var for fit: " + str(var))
+
+            """t1, t2 = la.eigh(pdf_cov[i])
             t1 = t1.real
             t2 = t2.real
             #print(t1)
@@ -175,6 +199,8 @@ def fits_dataset_bias_variance(
             indices = np.where(mask_vec)[0]
             regularized_evals = np.delete(t1, indices)
             print("this is reg evals shape:" + str(regularized_evals.shape))
+            print("there are the regularized eigenvals: " + str(regularized_evals))
+            print("there are the old eigenvals: " + str(t1))
             #print("this is shape of mask: " + str(mask_vec.shape))
             rotated_obs = t2.T@reps[i]
             #this has shape (n_dat, n_reps)
@@ -204,7 +230,12 @@ def fits_dataset_bias_variance(
         return np.asarray(biases), np.asarray(variances), len(law_th)
         #sqrt_pdf_cov = np.asarray([regularize_sqrt_cov(pdf_cov[j]) for j in range(n_fits)])
         #sqrt_cov calculated using function that regularizes 
-        #sqrt_pdf_cov = np.asarray([sqrt_covmat(pdf_cov[j]) for j in range(n_fits)])
+        #sqrt_pdf_cov = np.asarray([sqrt_covmat(pdf_cov[j]) for j in range(n_fits)])"""
+        print("media bias: " + str(np.mean(biases)))    
+        print("media var: " + str(np.mean(variances)))
+        print("square root ratio: " + str(np.sqrt(np.mean(biases)/np.mean(variances))))  
+        print(str(biases) + "\n" + str(variances))
+        return np.asarray(biases), np.asarray(variances), len(law_th)
     if pdf_and_exp_err and only_pdf_err == False:
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)]), axis = 0)
         sqrt_pdf_exp_cov = la.cholesky(pdf_cov + exp_cov, lower = True)
