@@ -10,6 +10,7 @@ in this module are used to produce results which are plotted in
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
+import copy
 
 from reportengine import collect
 
@@ -142,6 +143,7 @@ def fits_dataset_bias_variance(
     closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    print("this is shape of reps:" + str(np.shape(reps)))
     n_fits = np.shape(reps)[0]
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
@@ -157,83 +159,94 @@ def fits_dataset_bias_variance(
         biases = []
         variances = []
         pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
+        print("this is shape of covmat" + str(np.shape(pdf_cov)))
+        print("number of fits: " + str(n_fits))
         # There are n_fits pdf_covariances
         for i in range(n_fits):
+            if(np.shape(pdf_cov[i]) == ()):
+                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+                print("bias diffs shape: " + str(np.shape(bias_diffs)))
+                print("var diffs shape: " + str(np.shape(var_diffs)))
+                bias = bias_diffs*bias_diffs/(float(pdf_cov[i]))
+                var = np.mean(var_diffs*var_diffs, axis = 1)/(float(pdf_cov[i]))
+                biases.append(bias)
+                variances.append(var)
+            else:
+                try:
+                    sqrt_cov = sqrt_covmat(pdf_cov[i])
+                except:
+                    evals, eigens = la.eigh(pdf_cov[i])  
+                    mask = evals < threshold
+                    indices = np.where(mask)[0]
+                    print("number of raw obs: " + str(np.shape(evals)))
+                    print("number of deleted eigenvalues: " + str(np.size(indices)))
+                    for idx in indices:
+                        evals[idx] = threshold
+                    new_covmat = eigens@np.diag(evals)@eigens.T
+                    print("difference of covs" + str(new_covmat-pdf_cov[i]))
+                    sqrt_cov = sqrt_covmat(new_covmat)
+                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
 
-            try:
-                sqrt_cov = sqrt_covmat(pdf_cov[i])
-            except:
-                evals, eigens = la.eigh(pdf_cov[i])  
-                mask = evals < threshold
-                indices = np.where(mask)[0]
-                print("number of raw obs: " + str(np.shape(evals)))
-                print("number of deleted eigenvalues: " + str(np.size(indices)))
-                for idx in indices:
-                    evals[idx] = threshold
-                new_covmat = eigens@np.diag(evals)@eigens.T
-                print("difference of covs" + str(new_covmat-pdf_cov[i]))
-                sqrt_cov = sqrt_covmat(new_covmat)
-            bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
-            var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+                bias = calc_chi2(sqrt_cov, bias_diffs)
+                var = np.mean(calc_chi2(sqrt_cov, var_diffs))
+                biases.append(bias)
+                variances.append(var)
+                print("this is bias for fit: " + str(bias))
+                print("this is var for fit: " + str(var))
 
-            bias = calc_chi2(sqrt_cov, bias_diffs)
-            var = np.mean(calc_chi2(sqrt_cov, var_diffs))
-            biases.append(bias)
-            variances.append(var)
-            print("this is bias for fit: " + str(bias))
-            print("this is var for fit: " + str(var))
-
-            """t1, t2 = la.eigh(pdf_cov[i])
-            t1 = t1.real
-            t2 = t2.real
-            #print(t1)
-            print("this is starting evals shape: " + str(t1.shape))
-            diagonale = np.diag(t2.T@pdf_cov[i]@t2@np.diag(1./t1))
-            # t1 has shape (n_fits, n_dat) t2 has shape (n_fits, n_dat, n_dat)
-            # Mask the vector of eigenvalues. The indices indicate the variables which are practically the same
-            # observable, thus making the covariance matrix singular. A first rough approcah can be to delete 
-            # the entries of the diagonalized covmat and also removing the obs from the calculation
-            #mask_vec = np.abs(diagonale - 1.) > dist_threshold
-            mask_vec = t1 < threshold
-            indices = np.where(mask_vec)[0]
-            regularized_evals = np.delete(t1, indices)
-            print("this is reg evals shape:" + str(regularized_evals.shape))
-            print("there are the regularized eigenvals: " + str(regularized_evals))
-            print("there are the old eigenvals: " + str(t1))
-            #print("this is shape of mask: " + str(mask_vec.shape))
-            rotated_obs = t2.T@reps[i]
-            #this has shape (n_dat, n_reps)
-            rotated_centrals = rotated_obs.mean(axis=1)
-            #print("rotated central prediction shape is: " + str(np.shape(rotated_centrals)))
-            reg_obs = np.delete(rotated_obs, indices, axis = 0)
-            #print("reg obs shape is: " + str(reg_obs.shape))
-            reg_centrals = np.delete(rotated_centrals, indices)
-            #print("law_th.central_vals shape is: " + str(law_th.central_value.shape))
-            lvl0_rotated = t2.T@law_th.central_value
-            masked_lvl0 = np.delete(lvl0_rotated, indices)
-            diffs = masked_lvl0 - reg_centrals
-            diagonale = np.diag(t2.T@pdf_cov[i]@t2@np.diag(1./t1))
-            #print("test invertibility" + str(diagonale))
-            #print("biases delts: \n" + str(diffs))
-            bias = diffs@(np.diag(1./regularized_evals))@diffs
-            biases.append(bias)
-            diffs_var = reg_obs-reg_centrals[:,np.newaxis]
-            #print("shap delle delts variance: " + str(diffs_var.shape))
-            variance = np.mean(np.diag(diffs_var.T@np.diag(1./regularized_evals)@diffs_var))
-            print(bias)
-            print(variance)
-            variances.append(variance)
-        print(biases)
-        print("this is the biases mean" + str(np.mean(biases)))
-        print("this is the vars mean" + str(np.mean(variances)))
-        return np.asarray(biases), np.asarray(variances), len(law_th)
-        #sqrt_pdf_cov = np.asarray([regularize_sqrt_cov(pdf_cov[j]) for j in range(n_fits)])
-        #sqrt_cov calculated using function that regularizes 
-        #sqrt_pdf_cov = np.asarray([sqrt_covmat(pdf_cov[j]) for j in range(n_fits)])"""
-        print("media bias: " + str(np.mean(biases)))    
-        print("media var: " + str(np.mean(variances)))
-        print("square root ratio: " + str(np.sqrt(np.mean(biases)/np.mean(variances))))  
-        print(str(biases) + "\n" + str(variances))
+                """t1, t2 = la.eigh(pdf_cov[i])
+                t1 = t1.real
+                t2 = t2.real
+                #print(t1)
+                print("this is starting evals shape: " + str(t1.shape))
+                diagonale = np.diag(t2.T@pdf_cov[i]@t2@np.diag(1./t1))
+                # t1 has shape (n_fits, n_dat) t2 has shape (n_fits, n_dat, n_dat)
+                # Mask the vector of eigenvalues. The indices indicate the variables which are practically the same
+                # observable, thus making the covariance matrix singular. A first rough approcah can be to delete 
+                # the entries of the diagonalized covmat and also removing the obs from the calculation
+                #mask_vec = np.abs(diagonale - 1.) > dist_threshold
+                mask_vec = t1 < threshold
+                indices = np.where(mask_vec)[0]
+                regularized_evals = np.delete(t1, indices)
+                print("this is reg evals shape:" + str(regularized_evals.shape))
+                print("there are the regularized eigenvals: " + str(regularized_evals))
+                print("there are the old eigenvals: " + str(t1))
+                #print("this is shape of mask: " + str(mask_vec.shape))
+                rotated_obs = t2.T@reps[i]
+                #this has shape (n_dat, n_reps)
+                rotated_centrals = rotated_obs.mean(axis=1)
+                #print("rotated central prediction shape is: " + str(np.shape(rotated_centrals)))
+                reg_obs = np.delete(rotated_obs, indices, axis = 0)
+                #print("reg obs shape is: " + str(reg_obs.shape))
+                reg_centrals = np.delete(rotated_centrals, indices)
+                #print("law_th.central_vals shape is: " + str(law_th.central_value.shape))
+                lvl0_rotated = t2.T@law_th.central_value
+                masked_lvl0 = np.delete(lvl0_rotated, indices)
+                diffs = masked_lvl0 - reg_centrals
+                diagonale = np.diag(t2.T@pdf_cov[i]@t2@np.diag(1./t1))
+                #print("test invertibility" + str(diagonale))
+                #print("biases delts: \n" + str(diffs))
+                bias = diffs@(np.diag(1./regularized_evals))@diffs
+                biases.append(bias)
+                diffs_var = reg_obs-reg_centrals[:,np.newaxis]
+                #print("shap delle delts variance: " + str(diffs_var.shape))
+                variance = np.mean(np.diag(diffs_var.T@np.diag(1./regularized_evals)@diffs_var))
+                print(bias)
+                print(variance)
+                variances.append(variance)
+            print(biases)
+            print("this is the biases mean" + str(np.mean(biases)))
+            print("this is the vars mean" + str(np.mean(variances)))
+            return np.asarray(biases), np.asarray(variances), len(law_th)
+            #sqrt_pdf_cov = np.asarray([regularize_sqrt_cov(pdf_cov[j]) for j in range(n_fits)])
+            #sqrt_cov calculated using function that regularizes 
+            #sqrt_pdf_cov = np.asarray([sqrt_covmat(pdf_cov[j]) for j in range(n_fits)])"""
+            print("media bias: " + str(np.mean(biases)))    
+            print("media var: " + str(np.mean(variances)))
+            print("square root ratio: " + str(np.sqrt(np.mean(biases)/np.mean(variances))))  
+            print(str(biases) + "\n" + str(variances))
         return np.asarray(biases), np.asarray(variances), len(law_th)
     if pdf_and_exp_err and only_pdf_err == False:
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)]), axis = 0)
