@@ -3,6 +3,8 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 from eko.io import runcards
+from eko.matchings import Atlas, nf_default
+from eko.quantities.heavy_quarks import MatchingScales
 from ekobox.cards import _operator as default_op_card
 from validphys.loader import Loader
 
@@ -68,13 +70,19 @@ def construct_eko_cards(
         {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
     )
     op_card = default_op_card
+    masses = np.array([theory["mc"],theory["mb"],theory["mt"]]) ** 2
+    thresholds_ratios=np.array([theory["kcThr"],theory["kbThr"],theory["ktThr"]]) ** 2
+    atlas = Atlas(
+        matching_scales=MatchingScales(masses * thresholds_ratios),
+        origin=(theory["Q0"], theory["nf0"])
+    )
     op_card.update(
         {
             "mu0": theory["Q0"],
-            "_mugrid": np.sqrt(q2_grid).tolist(),
+            "mugrid": [(float(np.sqrt(q2)), int(nf_default(q2, atlas))) for q2 in q2_grid],
         }
     )
-    op_card["rotations"]["xgrid"] = x_grid
+    op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
     if theory["ModEv"] == "TRN":
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
