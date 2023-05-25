@@ -11,6 +11,7 @@ from reportengine import collect
 
 from validphys.core import Stats
 from validphys.checks import check_pdf_is_montecarlo
+from validphys.results import ThPredictionsResult
 
 #This would be a good candidate to be optimized to calculate everything in one
 #pass over x,
@@ -79,3 +80,50 @@ def obs_obs_correlations(pdf, corrpair_results):
     """Return the theoretical correlation matrix between a pair of observables."""
     (_, th1), (_, th2) = corrpair_results
     return _basic_obs_obs_correlation(th1.error_members, th2.error_members)
+
+
+@check_pdf_is_montecarlo
+def mc_dataset_correlation(dataset, pdf):
+    """
+    Returns the theoretical correlation between the datapoints of one
+    dataset
+    """
+    th = ThPredictionsResult.from_convolution(pdf, dataset)
+    pdf_corr = np.corrcoef(th.error_members, rowvar=True)
+    return pdf_corr
+
+@check_pdf_is_montecarlo
+def mc_dataset_covariance(dataset, pdf):
+    """
+    Returns the theoretical correlation between the datapoints of one
+    dataset
+    """
+    th = ThPredictionsResult.from_convolution(pdf, dataset)
+    pdf_cov = np.cov(th.error_members, rowvar=True)
+    return pdf_cov
+
+def hessian_dataset_correlation(dataset, pdf):
+    """
+    Returns the theoretical correlation between the datapoints of one
+    dataset
+    """
+    th = ThPredictionsResult.from_convolution(pdf, dataset)
+    hessian_eigenvectors = th.error_members
+    central_predictions = th.central_value
+    
+    # Need to subtract the central set, which is not the average of the hessian eigenvectors
+    # hence we cannot use np.cov(hessian_eigenvectors)
+    X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0],1))
+
+    # Covariance Matrix
+    cov_matrix = np.einsum("ij,kj->ik", X, X)
+
+    # compute the correlation matrix
+    std_dev = np.sqrt(np.diag(cov_matrix))
+    corr_matrix = cov_matrix / np.outer(std_dev, std_dev)
+
+    return corr_matrix
+    
+
+
+
