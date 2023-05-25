@@ -5,38 +5,35 @@ Tools for constructing theory covariance matrices and computing their chi2s.
 """
 from __future__ import generator_stop
 
+from collections import defaultdict, namedtuple
 import logging
 
-from collections import defaultdict, namedtuple
 import numpy as np
-import scipy.linalg as la
 import pandas as pd
+import scipy.linalg as la
 
-from reportengine.table import table
 from reportengine import collect
-
-from validphys.results import (
-    procs_central_values,
-    procs_central_values_no_table,
-)
-from validphys.results import Chi2Data, results
-from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
+from reportengine.table import table
+from validphys.calcutils import all_chi2_theory, calc_chi2, central_chi2_theory
+from validphys.results import Chi2Data, procs_central_values, procs_central_values_no_table, results
 from validphys.theorycovariance.theorycovarianceutils import (
-    process_lookup,
     check_correct_theory_combination,
     check_fit_dataset_order_matches_grouped,
+    process_lookup,
 )
-
 
 log = logging.getLogger(__name__)
 
 theoryids_procs_central_values = collect(procs_central_values, ("theoryids",))
 
-theoryids_procs_central_values_no_table = collect(
-    procs_central_values_no_table, ("theoryids",)
-)
+theoryids_procs_central_values_no_table = collect(procs_central_values_no_table, ("theoryids",))
 
-collected_theoryids = collect("theoryids", ["theoryconfig",])
+collected_theoryids = collect(
+    "theoryids",
+    [
+        "theoryconfig",
+    ],
+)
 
 
 def make_scale_var_covmat(predictions):
@@ -59,9 +56,11 @@ def make_scale_var_covmat(predictions):
 
 @check_correct_theory_combination
 def theory_covmat_singleprocess_no_table(
-    theoryids_procs_central_values_no_table, procs_index, theoryids, fivetheories,
+    theoryids_procs_central_values_no_table,
+    procs_index,
+    theoryids,
+    fivetheories,
 ):
-
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by procs_index."""
     s = make_scale_var_covmat(theoryids_procs_central_values_no_table)
@@ -223,9 +222,7 @@ def covmap(combine_by_type, dataset_names):
         start_exp[dataset] = running_index
         running_index += size
     start = 0
-    names_by_proc_list = [
-        item for sublist in process_info.namelist.values() for item in sublist
-    ]
+    names_by_proc_list = [item for sublist in process_info.namelist.values() for item in sublist]
     for dataset in names_by_proc_list:
         for i in range(process_info.sizes[dataset]):
             mapping[start + i] = start_exp[dataset] + i
@@ -268,9 +265,9 @@ def covmat_5pt(name1, name2, deltas1, deltas2):
     if name1 == name2:
         s = 0.5 * sum(np.outer(d, d) for d in deltas1)
     else:
-        s = 0.5 * (
-            np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1])
-        ) + 0.25 * (np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
+        s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1])) + 0.25 * (
+            np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3]))
+        )
     return s
 
 
@@ -524,9 +521,7 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
             if (ds1 in shortlist) and (ds2 in shortlist):
                 # If both datasets in the fromfile covmat, use the piece of the fromfile covmat
                 covmat = (
-                    cut_df.xs(ds1, level=1, drop_level=False)
-                    .T.xs(ds2, level=1, drop_level=False)
-                    .T
+                    cut_df.xs(ds1, level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
                 )
             else:
                 # Otherwise use a covmat of 0s
@@ -559,13 +554,13 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
 @table
 def user_covmat(procs_data, procs_index, loaded_user_covmat_path):
     """
-    General theory covariance matrix provided by the user. 
+    General theory covariance matrix provided by the user.
     Useful for testing the impact of externally produced
-    covariance matrices. Matrices must be produced as a 
+    covariance matrices. Matrices must be produced as a
     csv of pandas DataFrame, and uploaded to the validphys
-    server. The server path is then provided via 
-    ``user_covmat_path`` in ``theorycovmatconfig`` in the 
-    runcard. For more information see documentation. 
+    server. The server path is then provided via
+    ``user_covmat_path`` in ``theorycovmatconfig`` in the
+    runcard. For more information see documentation.
     """
     return fromfile_covmat(loaded_user_covmat_path, procs_data, procs_index)
 
@@ -580,29 +575,27 @@ def total_theory_covmat(theory_covmat_custom, user_covmat):
 
 
 def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
-    """theory_covmat_custom but reindexed so the order of the datasets matches  
+    """theory_covmat_custom but reindexed so the order of the datasets matches
     those in the experiment covmat so they are aligned when fitting."""
-    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(
-        procs_index_matched
-    )
+    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
     return df
 
 
 def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
-    """total_theory_covmat but reindexed so the order of the datasets matches 
-  those in the experiment covmat so they are aligned when fitting."""
+    """total_theory_covmat but reindexed so the order of the datasets matches
+    those in the experiment covmat so they are aligned when fitting."""
     return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
 
 
 def user_covmat_fitting(user_covmat, procs_index_matched):
-    """user_covmat but reindexed so the order of the datasets matches 
-  those in the experiment covmat so they are aligned when fitting."""
+    """user_covmat but reindexed so the order of the datasets matches
+    those in the experiment covmat so they are aligned when fitting."""
     return theory_covmat_custom_fitting(user_covmat, procs_index_matched)
 
 
 def procs_index_matched(groups_index, procs_index):
     """procs_index but matched to the dataset order given
-    by groups_index. """
+    by groups_index."""
     # Making list with exps ordered like in groups_index
     groups_ds_order = groups_index.get_level_values(level=1).unique().tolist()
     # Tuples to make multiindex, ordered like in groups_index
@@ -716,7 +709,7 @@ def experimentplustheory_normcovmat_singleprocess(
     procs_covmat, theory_covmat_singleprocess, procs_data
 ):
     """Calculates the experiment + theory covariance matrix for scale
-       variations normalised to data."""
+    variations normalised to data."""
     df = procs_covmat + theory_covmat_singleprocess
     procs_data_array = np.array(procs_data)
     mat = df / np.outer(procs_data_array, procs_data_array)
@@ -731,10 +724,8 @@ def experimentplusblocktheory_normcovmat(
     experimentplustheory_normcovmat,
 ):
     """Calculates the experiment + theory covariance matrix for scale
-       variations normalised to data, block diagonal by data set."""
-    mat = experimentplustheory_normcovmat(
-        procs_covmat, theory_block_diag_covmat, procs_data_values
-    )
+    variations normalised to data, block diagonal by data set."""
+    mat = experimentplustheory_normcovmat(procs_covmat, theory_block_diag_covmat, procs_data_values)
     return mat
 
 
@@ -746,18 +737,14 @@ def experimentplustheory_normcovmat_custom(
     experimentplustheory_normcovmat,
 ):
     """Calculates the experiment + theory covariance matrix for scale
-       variations normalised to data, correlations by process type."""
-    mat = experimentplustheory_normcovmat(
-        procs_covmat, theory_covmat_custom, procs_data_values
-    )
+    variations normalised to data, correlations by process type."""
+    mat = experimentplustheory_normcovmat(procs_covmat, theory_covmat_custom, procs_data_values)
 
     return mat
 
 
 @table
-def experimentplustheory_corrmat_singleprocess(
-    procs_covmat, theory_covmat_singleprocess
-):
+def experimentplustheory_corrmat_singleprocess(procs_covmat, theory_covmat_singleprocess):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices."""
     total_df = procs_covmat + theory_covmat_singleprocess
@@ -771,9 +758,7 @@ def experimentplustheory_corrmat_singleprocess(
 def experimentplusblocktheory_corrmat(procs_covmat, theory_block_diag_covmat):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, block diagonal by dataset."""
-    corrmat = experimentplustheory_corrmat_singleprocess(
-        procs_covmat, theory_block_diag_covmat
-    )
+    corrmat = experimentplustheory_corrmat_singleprocess(procs_covmat, theory_block_diag_covmat)
     return corrmat
 
 
@@ -781,9 +766,7 @@ def experimentplusblocktheory_corrmat(procs_covmat, theory_block_diag_covmat):
 def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, correlations by prescription."""
-    corrmat = experimentplustheory_corrmat_singleprocess(
-        procs_covmat, theory_covmat_custom
-    )
+    corrmat = experimentplustheory_corrmat_singleprocess(procs_covmat, theory_covmat_custom)
     return corrmat
 
 
@@ -882,10 +865,6 @@ def abs_chi2_data_diagtheory_proc(procs_results, total_covmat_diagtheory_procs):
     return abs_chi2_data_theory_proc(procs_results, total_covmat_diagtheory_procs)
 
 
-def abs_chi2_data_diagtheory_dataset(
-    each_dataset_results, total_covmat_diagtheory_datasets
-):
+def abs_chi2_data_diagtheory_dataset(each_dataset_results, total_covmat_diagtheory_datasets):
     """For a diagonal theory covmat"""
-    return abs_chi2_data_theory_dataset(
-        each_dataset_results, total_covmat_diagtheory_datasets
-    )
+    return abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_diagtheory_datasets)

@@ -3,9 +3,12 @@ Data containers backed by Python managed memory (Numpy arrays and Pandas
 dataframes). 
 """
 import dataclasses
+
 import numpy as np
 import pandas as pd
-from validphys.commondatawriter import write_systype_to_file, write_commondata_to_file
+
+from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
+
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 
 
@@ -294,9 +297,9 @@ class CommonData:
         return self.commondata_table["data"]
 
     def with_central_value(self, cv):
-         tb = self.commondata_table.copy()
-         tb["data"] = cv
-         return dataclasses.replace(self, commondata_table=tb)
+        tb = self.commondata_table.copy()
+        tb["data"] = cv
+        return dataclasses.replace(self, commondata_table=tb)
 
     def get_cv(self):
         return self.central_values.values
@@ -366,7 +369,6 @@ class CommonData:
             central_values = self.central_values.to_numpy()
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
-
 
     def export(self, path):
         """Export the data, and error types

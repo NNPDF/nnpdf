@@ -10,11 +10,19 @@ from . import utils
 
 _logger = logging.getLogger(__name__)
 
-EVOLVEN3FIT_CONFIGS_DEFAULTS = {
+EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN = {
     "ev_op_iterations": 1,
     "ev_op_max_order": (1, 0),
     "evolution_method": "truncated",
     "inversion_method": "expanded",
+    "n_integration_cores": 1,
+}
+
+EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
+    "ev_op_iterations": 10,
+    "ev_op_max_order": (1, 0),
+    "evolution_method": "iterate-exact",
+    "inversion_method": "exact",
     "n_integration_cores": 1,
 }
 
@@ -68,7 +76,10 @@ def construct_eko_cards(
     )
     op_card["rotations"]["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
-    op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS)
+    if theory["ModEv"] == "TRN":
+        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
+    if theory["ModEv"] == "EXA":
+        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
     # User can still change the configs via op_card_dict
 
     # Note that every entry that is not a dictionary should not be

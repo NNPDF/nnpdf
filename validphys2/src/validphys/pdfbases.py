@@ -4,18 +4,17 @@ pdfbases.py
 This holds the concrete labels data relative to the PDF bases,
 as declaratively as possible.
 """
-import copy
-import inspect
-import functools
 import abc
+import copy
+import functools
+import inspect
 
 import numpy as np
 
 from reportengine.checks import CheckError
+from validphys.gridvalues import central_grid_values, grid_values
 
-from validphys.gridvalues import grid_values, central_grid_values
-
-
+# fmt: off
 #This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
 PDG_PARTONS = dict((
         (-6,  r'\bar{t}'),
@@ -524,6 +523,9 @@ evolution = LinearBasis.from_mapping({
 )
 
 EVOL = evolution
+
+LUX = copy.deepcopy(evolution)
+LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'photon')
 
 CCBAR_ASYMM = copy.deepcopy(evolution)
 CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')

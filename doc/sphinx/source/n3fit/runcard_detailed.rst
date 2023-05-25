@@ -420,3 +420,4 @@ It is however possible to disable them by setting to false the ``sum_rules`` fla
 
 It is also possible to impose just the valence or the momentum sum rules by using the
 ``VSR`` or ``MSR`` flags, respectively (``True`` is equal to ``All``).
+

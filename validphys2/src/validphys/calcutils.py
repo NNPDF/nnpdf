@@ -8,8 +8,8 @@ import logging
 from typing import Callable
 
 import numpy as np
-import scipy.linalg as la
 import pandas as pd
+import scipy.linalg as la
 
 log = logging.getLogger(__name__)
 
@@ -57,20 +57,22 @@ def calc_chi2(sqrtcov, diffs):
     44.64401691354948
 
     """
-    #Note la.cho_solve doesn't really improve things here
-    #NOTE: Do not enable check_finite. The upper triangular part is not
-    #guaranteed to make any sense.
+    # Note la.cho_solve doesn't really improve things here
+    # NOTE: Do not enable check_finite. The upper triangular part is not
+    # guaranteed to make any sense.
     vec = la.solve_triangular(sqrtcov, diffs, lower=True, check_finite=False)
-    #This sums up the result for the chi² for any input shape.
-    #Sum the squares over the first dimension and leave the others alone
-    return np.einsum('i...,i...->...', vec,vec)
+    # This sums up the result for the chi² for any input shape.
+    # Sum the squares over the first dimension and leave the others alone
+    return np.einsum('i...,i...->...', vec, vec)
+
 
 def all_chi2(results):
     """Return the chi² for all elements in the result, regardless of the Stats class
     Note that the interpretation of the result will depend on the PDF error type"""
     data_result, th_result = results
-    diffs = th_result.rawdata - data_result.central_value[:,np.newaxis]
+    diffs = th_result.rawdata - data_result.central_value[:, np.newaxis]
     return calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
+
 
 def central_chi2(results):
     """Calculate the chi² from the central value of the theory prediction to
@@ -84,9 +86,10 @@ def all_chi2_theory(results, totcov):
     """Like all_chi2 but here the chi² are calculated using a covariance matrix
     that is the sum of the experimental covmat and the theory covmat."""
     data_result, th_result = results
-    diffs = th_result.rawdata - data_result.central_value[:,np.newaxis]
+    diffs = th_result.rawdata - data_result.central_value[:, np.newaxis]
     total_covmat = np.array(totcov)
     return calc_chi2(sqrtcov=la.cholesky(total_covmat, lower=True), diffs=diffs)
+
 
 def central_chi2_theory(results, totcov):
     """Like central_chi2 but here the chi² is calculated using a covariance matrix
@@ -95,6 +98,7 @@ def central_chi2_theory(results, totcov):
     central_diff = th_result.central_value - data_result.central_value
     total_covmat = np.array(totcov)
     return calc_chi2(la.cholesky(total_covmat, lower=True), central_diff)
+
 
 def calc_phi(sqrtcov, diffs):
     """Low level function which calculates phi given a Cholesky decomposed
@@ -105,11 +109,15 @@ def calc_phi(sqrtcov, diffs):
     axis
     """
     diffs = np.array(diffs)
-    return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs), axis=0) -
-                    calc_chi2(sqrtcov, diffs.mean(axis=1)))/diffs.shape[0])
+    return np.sqrt(
+        (np.mean(calc_chi2(sqrtcov, diffs), axis=0) - calc_chi2(sqrtcov, diffs.mean(axis=1)))
+        / diffs.shape[0]
+    )
 
-def bootstrap_values(data, nresamples, *, boot_seed:int=None,
-                    apply_func:Callable=None, args=None):
+
+def bootstrap_values(
+    data, nresamples, *, boot_seed: int = None, apply_func: Callable = None, args=None
+):
     """General bootstrap sample
 
     `data` is the data which is to be sampled, replicas is assumed to
@@ -132,12 +140,14 @@ def bootstrap_values(data, nresamples, *, boot_seed:int=None,
     """
     data = np.atleast_2d(data)
     N_reps = data.shape[-1]
-    bootstrap_data = data[..., np.random.RandomState(boot_seed).randint(N_reps,
-                                                                        size=(N_reps, nresamples))]
+    bootstrap_data = data[
+        ..., np.random.RandomState(boot_seed).randint(N_reps, size=(N_reps, nresamples))
+    ]
     if apply_func is None:
         return np.mean(bootstrap_data, axis=-2)
     else:
         return apply_func(bootstrap_data, *args)
+
 
 def get_df_block(matrix: pd.DataFrame, key: str, level):
     """Given a pandas dataframe whose index and column keys match, and data represents a symmetric
@@ -148,10 +158,9 @@ def get_df_block(matrix: pd.DataFrame, key: str, level):
     taken, by default it is set to 1 which corresponds to the dataset level of a theory covariance
     matrix
     """
-    block = matrix.xs(
-        key, level=level, axis=0).xs(
-            key, level=level, axis=1).values
+    block = matrix.xs(key, level=level, axis=0).xs(key, level=level, axis=1).values
     return block
+
 
 def regularize_covmat(covmat: np.array, norm_threshold=4):
     """Given a covariance matrix, performs a regularization which is equivalent
@@ -187,12 +196,13 @@ def regularize_covmat(covmat: np.array, norm_threshold=4):
             "Negative eigenvalue encountered in correlation matrix: %s. "
             "Assuming eigenvalue should be zero and is negative due to numerical "
             "precision.",
-            e_val[0]
+            e_val[0],
         )
-    if e_val[0] > 1/sqr_threshold:
+    if e_val[0] > 1 / sqr_threshold:
         return covmat
-    new_e_val = np.clip(e_val, a_min=1/sqr_threshold, a_max=None)
+    new_e_val = np.clip(e_val, a_min=1 / sqr_threshold, a_max=None)
     return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
+
 
 def regularize_l2(sqrtcov, norm_threshold=4):
     r"""Return a regularized version of `sqrtcov`.
@@ -230,10 +240,10 @@ def regularize_l2(sqrtcov, norm_threshold=4):
         A regularized version of `sqrtcov`.
     """
 
-    d = np.sqrt(np.sum(sqrtcov ** 2, axis=1))[:, np.newaxis]
+    d = np.sqrt(np.sum(sqrtcov**2, axis=1))[:, np.newaxis]
     sqrtcorr = sqrtcov / d
     u, s, vt = la.svd(sqrtcorr, full_matrices=False)
     if 1 / s[-1] <= norm_threshold:
         return sqrtcov
-    snew = np.clip(s, a_min=1/norm_threshold, a_max=None)
+    snew = np.clip(s, a_min=1 / norm_threshold, a_max=None)
     return u * (snew * d) @ vt
