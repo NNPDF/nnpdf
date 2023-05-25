@@ -86,7 +86,8 @@ def generate_msr_model_and_grid(
         photons_c = photons.integral
 
     # 6. Compute the normalization factor
-    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights", photons_contribution=photons_c)(pdf_integrated)
+    # For now set the photon component to None
+    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights", photons_contribution=photons_c)(pdf_integrated, ph_replica=None)
 
     # 7. Apply the normalization factor to the pdf
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")([pdf_x, normalization_factor])
