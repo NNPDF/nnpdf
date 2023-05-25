@@ -169,7 +169,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
     # generate block to dump
-    targetgrid = eko.rotations.targetgrid.tolist()
+    targetgrid = eko.bases.targetgrid.tolist()
 
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
@@ -177,7 +177,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,
-        Q2grid=list(eko.mu2grid),
+        evolgrid=eko.evolgrid,
         pids=basis_rotation.flavor_basis_pids,
     )
     return block
