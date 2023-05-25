@@ -203,7 +203,6 @@ def tensor_ones_like(*args, **kwargs):
     """
     return K.ones_like(*args, **kwargs)
 
-
 @tf.function
 def many_replication(grid, replications, axis=0, **kwargs):
     """
@@ -313,6 +312,14 @@ def tensor_product(*args, **kwargs):
     return tf.tensordot(*args, **kwargs)
 
 
+@tf.function
+def pow(tensor, power):
+    """
+    Computes the power of the tensor
+    """
+    return tf.pow(tensor, power)
+
+
 @tf.function(experimental_relax_shapes=True)
 def op_log(o_tensor, **kwargs):
     """
@@ -345,6 +352,15 @@ def scatter_to_one(values, indices=[[1]], output_dim=14):
     """
     ones = np.ones(output_dim, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
+
+def scatter_to_zero(values, indices, output_dim):
+    """
+    Like scatter_nd initialized to zero
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
+    """
+    indices = tf.constant([[i] for i in indices])
+    updates = tf.constant(values)
+    return tf.scatter_nd(indices, updates, [output_dim])
 
 
 def op_subtract(inputs, **kwargs):

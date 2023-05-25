@@ -1,7 +1,7 @@
 """
     This module contains layers acting on the x-grid input of the NN
 
-    The three operations included are:
+    The two operations included are:
         - ``xDivide``
         - ``xIntegrator``
 
@@ -9,6 +9,7 @@
     for all flavours. The choice of flavours on which to act in a different way is given
     as an input argument.
 """
+from typing import List
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
@@ -31,24 +32,26 @@ class xDivide(MetaLayer):
             list of indices to be divided by X (by default [3,4,5, 6]; [v, v3, v8, v15]
     """
 
-    def __init__(self, output_dim=BASIS_SIZE, div_list=None, **kwargs):
+    def __init__(self, output_dim: int = BASIS_SIZE, div_list: List = None, **kwargs):
         if div_list is None:
             div_list = [3, 4, 5, 6]
         self.output_dim = output_dim
         self.div_list = div_list
         super().__init__(**kwargs)
 
+        # Create powers, a vector of zeros except for the indices
+        self.powers = op.scatter_to_zero(
+                indices=div_list,
+                values=[-1.0] * len(div_list),
+                output_dim=output_dim)
+
     def call(self, x):
-        out_array = []
-        one = op.tensor_ones_like(x)
-        for i in range(self.output_dim):
-            if i in self.div_list:
-                res = one / x
-            else:
-                res = one
-            out_array.append(res)
-        out_tensor = op.concatenate(out_array)
-        return out_tensor
+        return op.pow(x, self.powers)
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({"output_dim": self.output_dim, "div_list": self.div_list})
+        return config
 
 
 class xIntegrator(MetaLayer):
