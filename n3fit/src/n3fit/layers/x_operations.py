@@ -19,8 +19,8 @@ class xDivide(MetaLayer):
     """
     Divide some PDFs by x
 
-    By default it utilizes the 14-flavour FK basis and divides [v, v3, v8]
-    which corresponds to indices (3,4,5) from
+    By default it utilizes the 14-flavour FK basis and divides [v, v3, v8, v15]
+    which corresponds to indices (3,4,5, 6) from
     (photon, sigma, g, v, v3, v8, v15, v24, v35, t3, t8, t15, t24, t35)
 
     Parameters:
@@ -28,7 +28,7 @@ class xDivide(MetaLayer):
         output_dim: int
             dimension of the pdf
         div_list: list
-            list of indices to be divided by X (by default [3,4,5]; [v, v3, v8]
+            list of indices to be divided by X (by default [3,4,5, 6]; [v, v3, v8, v15]
     """
 
     def __init__(self, output_dim=BASIS_SIZE, div_list=None, **kwargs):
