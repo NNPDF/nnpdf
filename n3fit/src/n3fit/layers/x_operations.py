@@ -18,7 +18,8 @@ BASIS_SIZE=14
 
 class xDivide(MetaLayer):
     """
-    Divide some PDFs by x
+    Create tensor of either 1/x or ones depending on the flavour,
+    to be used to divide some PDFs by x by multiplying with the result.
 
     By default it utilizes the 14-flavour FK basis and divides [v, v3, v8, v15]
     which corresponds to indices (3,4,5, 6) from
