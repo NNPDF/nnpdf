@@ -177,7 +177,7 @@ class ModelTrainer:
             self.max_cores = max_cores
         self.model_file = model_file
         self.print_summary = True
-        self.plot_model = True
+        self.plot_model = False  # TODO: change back to true once dependencies fixed
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
         self._hyperkeys = None
@@ -259,7 +259,7 @@ class ModelTrainer:
             self.mode_hyperopt = True
         else:
             self.print_summary = True
-            self.plot_model = True
+            self.plot_model = False  # TODO: change back to true once dependencies fixed
             self.mode_hyperopt = False
 
     ###########################################################################
