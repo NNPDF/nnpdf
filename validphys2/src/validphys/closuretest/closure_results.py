@@ -7,7 +7,6 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from reportengine import collect
 from reportengine.table import table
