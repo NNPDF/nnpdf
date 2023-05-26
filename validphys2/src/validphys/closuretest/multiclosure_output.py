@@ -97,7 +97,7 @@ def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, datas
     # expectation value over fits
     expected_sqrt_ratio = np.sqrt(np.mean(biases) / np.mean(variances))
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(
         sqrt_ratio,
         "*",
@@ -151,7 +151,7 @@ def progressive_sqrt_b_v_ratio_dataset(
         prog_var.append(np.mean(variances[0 : i + 1]))
     prog_biases = np.asarray(prog_biases)
     prog_var = np.asarray(prog_var)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(np.sqrt(prog_biases / prog_var), "-", label=f"progressive sqrt b/v ratio")
 
     ax.set_title(f"progressive sqrt b/v ratio for {dataset} for increasing fits")
@@ -253,7 +253,7 @@ def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
         data.append(ndata)
         biases.append(bias)
         variances.append(var)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(ndata, biases, label="biases")
     ax.plot(ndata, variances, label="variances")
     ax.legend()
