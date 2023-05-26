@@ -74,7 +74,7 @@ def construct_eko_cards(
     thresholds_ratios=np.array([theory["kcThr"],theory["kbThr"],theory["ktThr"]]) ** 2
     atlas = Atlas(
         matching_scales=MatchingScales(masses * thresholds_ratios),
-        origin=(theory["Q0"], theory["nf0"])
+        origin=(theory["Q0"]**2, theory["nf0"])
     )
     op_card.update(
         {
