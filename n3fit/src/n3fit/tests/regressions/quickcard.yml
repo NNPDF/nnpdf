@@ -52,11 +52,11 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     optimizer_name: 'RMSprop'
     learning_rate: 0.00001
     clipnorm: 1.0
-  epochs: 1000
+  epochs: 1100
   positivity:
     multiplier: 1.05
     initial: 1.5
-  stopping_patience: 0.30 # percentage of the number of epochs
+  stopping_patience: 0.10 # percentage of the number of epochs
   layer_type: 'dense'
   dropout: 0.0
   threshold_chi2: 10.0
