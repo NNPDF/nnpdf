@@ -79,7 +79,7 @@ def evolve_fit(
     initial_PDFs_dict = load_fit(usr_path)
     x_grid = np.array(
         initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]
-    ).astype(np.float)
+    ).astype(float)
     theoryID = utils.get_theoryID_from_runcard(usr_path)
     theory, op = eko_utils.construct_eko_cards(
         theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
@@ -105,9 +105,6 @@ def evolve_fit(
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
     with eko.EKO.read(eko_path) as eko_op:
-        if eko.__version__ >= "0.13":
-            raise ModuleNotFoundError("Please, fix evolven3fit np.sqrt(Q) hack")
-        info["AlphaS_Qs"] = np.sqrt(info["AlphaS_Qs"]).tolist()
         dump_info_file(usr_path, info)
         for replica in initial_PDFs_dict.keys():
             evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
@@ -169,7 +166,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     # evolve pdf
     evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
     # generate block to dump
-    targetgrid = eko.rotations.targetgrid.tolist()
+    targetgrid = eko.bases.targetgrid.tolist()
 
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
@@ -177,7 +174,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,
-        Q2grid=list(eko.mu2grid),
+        evolgrid=eko.evolgrid,
         pids=basis_rotation.flavor_basis_pids,
     )
     return block
