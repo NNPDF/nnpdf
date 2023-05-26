@@ -94,7 +94,7 @@ def set_actual_column_level0(df, new_levels):
     This is a separate function mostly because it breaks
     in every patch update of pandas."""
     cols = df.columns
-    cols.set_levels(new_levels, inplace=True, level=0)
+    df.columns = cols.set_levels(new_levels, level=0)
 
 
 # TODO: Find a better place for this function
@@ -130,7 +130,7 @@ def combine_pseudoreplica_tables(
     # The idea is: Set to inf the nans of the valid curves, so that we select
     # the minimum (which is not infinite).  Leave the bad nans as nans, so we
     # write nan always for those.
-    total_chis = total_chis.groupby(axis=1, level=1).apply(fixup_min_points)
+    total_chis = total_chis.groupby(axis=1, level=1, group_keys=False).apply(fixup_min_points)
 
     # Note, asarray is needed because it ignores NANs otherwise.
     argmin = lambda x: pd.Series(np.argmin(np.asarray(x), axis=1), index=x.index)
