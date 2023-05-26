@@ -132,9 +132,6 @@ class InconsistentCommonData(CommonData):
         if not self.setname in inconsistent_datasets:
             return self
         
-        # When modifying new_commondata I think one should call the method with_MULT/ADD on the new_commondata
-        # itself. This for the fact that if one has both MULT and ADD set to TRUE the modified commondata would
-        # takes into account only the ADD keyword
         if MULT:
             new_commondata = new_commondata.with_MULT_sys(self.rescale_sys("MULT",CORR,UNCORR,sys_rescaling_factor))
             
