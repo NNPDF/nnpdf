@@ -4,11 +4,10 @@ Plots of relations between data PDFs and fits.
 """
 from __future__ import generator_stop
 
-import logging
-import itertools
 from collections import defaultdict
 from collections.abc import Sequence
-
+import itertools
+import logging
 
 import matplotlib as mpl
 from matplotlib import cm
@@ -895,20 +894,20 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     categorical = not np.issubdtype(plotting_var.dtype, np.number)
     if categorical:
         # Categorical
-        keys, values = np.unique(plotting_var, return_inverse=True)
+        categorical_keys, values = np.unique(plotting_var, return_inverse=True)
         plotting_var = values
-        nunique = len(keys)
-        if nunique <= len(cm.Set2.colors):
-            cmap = mcolors.ListedColormap(cm.Set2.colors[:nunique])
+        num_categories = len(categorical_keys)
+        if num_categories <= len(cm.Set2.colors):
+            cmap = mcolors.ListedColormap(cm.Set2.colors[:num_categories])
         else:
-            cmap = cm.viridis.resample(nunique)
-        bins = np.linspace(0, nunique, nunique + 1)
-        norm = mcolors.BoundaryNorm(bins, nunique)
+            cmap = cm.viridis.resample(num_categories)
+        bins = np.linspace(0, num_categories, num_categories + 1)
+        norm = mcolors.BoundaryNorm(bins, num_categories)
 
     else:
         cmap = cm.viridis
         #TODO: vmin vmax should be global or by figure?
-        vmin,vmax = min(plotting_var), max(plotting_var)
+        vmin, vmax = min(plotting_var), max(plotting_var)
         if info.x_scale == 'log':
             norm = mcolors.LogNorm(vmin, vmax)
         else:
@@ -931,12 +930,12 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         label = info.group_label(same_vals, info.figure_by)
         #TODO: PY36ScalarMappable
         #TODO Improve title?
-        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
+        title = f"{info.dataset_label} {label if label else ''}\n[{pdf.label}]"
 
         #Start plotting
-        w,h = plt.rcParams["figure.figsize"]
+        w,h = mpl.rcParams["figure.figsize"]
         h*=2.5
-        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
+        fig, axes = plotutils.subplots(nrows=nf, sharex=True, figsize=(w,h), sharey=True)
         fig.suptitle(title)
         colors = sm.to_rgba(fb["__plotting_var"])
         for flindex, (ax, fl) in enumerate(zip(axes, fls)):
@@ -954,7 +953,6 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
             ax.set_ylim(-1,1)
             ax.set_xlim(x[0], x[-1])
         ax.set_xlabel('$x$')
-        #fig.subplots_adjust(hspace=0)
 
         cbar = fig.colorbar(
             sm,
@@ -963,8 +961,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
             aspect=100,
         )
         if categorical:
-            cbar.set_ticks(np.linspace(0.5, nunique - 0.5, nunique))
-            cbar.ax.set_yticklabels(keys)
+            cbar.set_ticks(np.linspace(0.5, num_categories - 0.5, num_categories))
+            cbar.ax.set_yticklabels(categorical_keys)
 
         #TODO: Fix title for this
         #fig.tight_layout()
