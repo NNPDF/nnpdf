@@ -105,7 +105,6 @@ def evolve_fit(
     info["XMin"] = float(x_grid[0])
     info["XMax"] = float(x_grid[-1])
     with eko.EKO.read(eko_path) as eko_op:
-        info["AlphaS_Qs"] = info["AlphaS_Qs"]
         dump_info_file(usr_path, info)
         for replica in initial_PDFs_dict.keys():
             evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
