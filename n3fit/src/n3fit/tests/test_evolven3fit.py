@@ -1,7 +1,12 @@
-import pathlib
 import logging
+import pathlib
+import pytest
+import shutil
+import subprocess as sp
 from numpy.testing import assert_allclose
 import numpy as np
+from reportengine.compat import yaml
+from validphys.api import API
 from validphys.pdfbases import PIDS_DICT
 from evolven3fit_new import utils, eko_utils
 from eko import EKO, runner
@@ -13,6 +18,23 @@ log = logging.getLogger(__name__)
 def check_consecutive_members(grid, value):
     """Check if the first occurrence of value in grid is followed by value again"""
     return np.allclose(grid[list(grid).index(value) + 1], value)
+
+
+def check_lhapdf_info(info_path):
+    """Check the LHAPDF info file is correct"""
+    info = yaml.load(info_path.open("r", encoding="utf-8"))
+
+    alphas_qs = info["AlphaS_Qs"]
+    alphas = info["AlphaS_Vals"]
+
+    np.testing.assert_equal(info["QMin"], alphas_qs[0])
+    np.testing.assert_equal(len(alphas), len(alphas_qs))
+    assert isinstance(info["Particle"], int)
+    np.testing.assert_allclose(info["AlphaS_OrderQCD"], 2)
+    assert info["ErrorType"] == "replicas"
+
+    for flavor in info["Flavors"]:
+        assert isinstance(flavor, int)
 
 
 def test_utils():
@@ -80,3 +102,25 @@ def test_eko_utils(tmp_path):
     eko_op = EKO.read(save_path)
     assert_allclose(eko_op.operator_card.raw["xgrid"], x_grid)
     assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
+
+
+@pytest.mark.parametrize("fitname", ["Basic_runcard_3replicas_lowprec_399"])
+def test_perform_evolution(tmp_path, fitname):
+    """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
+    In addition checks that the generated .info files are correct
+    """
+    fit = API.fit(fit=fitname)
+    # Move the fit to a temporary folder
+    tmp_fit = tmp_path / fitname
+    shutil.copytree(fit.path, tmp_fit)
+    # Clear the .log and .dat files
+    (tmp_fit / "evolven3fit_new.log").unlink()
+    tmp_nnfit = tmp_fit / "nnfit"
+    tmp_info = tmp_nnfit/f"{fitname}.info"
+    tmp_info.unlink()
+    for datpath in tmp_nnfit.glob("replica_*/*.dat"):
+        datpath.unlink()
+    # And re-evolve the fit
+    sp.run(["evolven3fit_new", "evolve", fitname], cwd=tmp_path, check=True)
+    # check that everything worked!
+    check_lhapdf_info(tmp_info)
