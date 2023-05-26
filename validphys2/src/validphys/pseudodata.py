@@ -6,6 +6,7 @@ networks during the fitting.
 from collections import namedtuple
 import logging
 import hashlib
+import copy
 
 import numpy as np
 import pandas as pd
@@ -13,6 +14,7 @@ import pandas as pd
 from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat, dataset_inputs_covmat_from_systematics
 from validphys.inconsistent_ct import InconsistentCommonData
 from reportengine import collect
+
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -288,7 +290,7 @@ def make_level1_data(
     data, level0_commondata_wc, filterseed, experiments_index,
     sep_mult, MULT = False, ADD = False, CORR = False, UNCORR = False,
     inconsistent_datasets=[], sys_rescaling_factor=1, type1_inconsistency = False,
-
+    reference_fit=True
 ):
     """
     Given a list of Level 0 commondata instances, return the
@@ -329,6 +331,8 @@ def make_level1_data(
     
     experiments_index : pandas.core.indexes.multi.MultiIndex
 
+    sep_mult : bool, default is True
+
     MULT : bool
         whether to introduce an inconsistency for MULT type of sys
 
@@ -341,19 +345,24 @@ def make_level1_data(
     UNCORR : bool 
             whether to introduce an inconsistency for UNCORR sys
 
-    inconsistent_datasets : list
+    inconsistent_datasets : list, default is empty []
                             list of datasets for which to introduce an inconsistency
 
-    sys_rescaling_factor : int
+    sys_rescaling_factor : int, default is 1
                         factor used to rescale systematics using
                         type1 inconsistency
 
-    type1_inconsistency : bool
+    type1_inconsistency : bool, default is False
                     type1 inconsistency: rescale systematics (usually by a factor
                     larger than 1) when generating L1 data and use the experimental
                     covariance matrix for L2 data             
 
-    experiments_index : pandas.MultiIndex
+    reference_fit : bool, default is True
+                True:   same systematics as those used to generate L1 written
+                        to the filter folder, hence, L1 and L2 are generated from
+                        the same covariance matrix
+                False:  systematics used to generate L1 are not the same as those
+                        that are used for L2
 
     Returns
     -------
@@ -374,6 +383,7 @@ def make_level1_data(
     """
     # =============== generate experimental covariance matrix ===============#
     dataset_input_list = list(data.dsinputs)
+    original_level0_commondata_wc = copy.deepcopy(level0_commondata_wc)
 
     if type1_inconsistency:
         level0_commondata_wc = [
@@ -387,7 +397,6 @@ def make_level1_data(
 
         level0_commondata_wc = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
                             for cd in level0_commondata_wc]
-
 
     covmat = dataset_inputs_covmat_from_systematics(
         level0_commondata_wc, 
@@ -408,11 +417,16 @@ def make_level1_data(
 
     indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
 
-    # ===== create commondata instances with central values given by pseudo_data =====#
+    # for an inconsistent fit use commondata with unmodified systematics and only change central value
+    if not reference_fit:
+        level1_commondata_dict = {c.setname: c for c in original_level0_commondata_wc}
 
-    level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
+    # for a consistent fit use commondata with modified systematics and also change central value
+    else:
+        level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
     level1_commondata_instances_wc = []
 
+    # replace central value of commondata with the L1 values computed by make_replica
     for xx, grp in indexed_level1_data.groupby('dataset'):
         level1_commondata_instances_wc.append(
             level1_commondata_dict[xx].with_central_value(grp.values)

@@ -119,7 +119,7 @@ def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
     sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
-    type1_inconsistency=False, type2_inconsistency=False,
+    type1_inconsistency=False, type2_inconsistency=False, reference_fit=True
 
   
 ):
@@ -184,6 +184,10 @@ def filter_closure_data_by_experiment(
                     matrix when generating L1 data and rescale systematics
                     (usually by a factor less than 1) when generating L2 data
 
+    reference_fit : bool, default is True
+                 when True a reference fit is computed
+                 when False a type1 inconsistent fit is computed
+
 
     """
     
@@ -199,7 +203,7 @@ def filter_closure_data_by_experiment(
                         filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
                         sep_mult, ADD, MULT, CORR, UNCORR,
                         inconsistent_datasets, sys_rescaling_factor_1, sys_rescaling_factor_2,
-                        type1_inconsistency, type2_inconsistency
+                        type1_inconsistency, type2_inconsistency, reference_fit
                         )
                 )
 
@@ -255,7 +259,8 @@ def _filter_closure_data(
     sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
     type1_inconsistency=False,
-    type2_inconsistency=False
+    type2_inconsistency=False,
+    reference_fit=True
 
 ):
     """
@@ -263,14 +268,34 @@ def _filter_closure_data(
     namespace has to be True (If fakedata = False, the _filter_real_data function
     will be used to write the commondata files).
 
-    The function writes commondata and systypes files within the
-    name_closure_test/filter folder.
-    If fakenoise is True, Level 1 type data is written to the filter folder, otherwise
-    Level 0 data is written.
+    1. CONSISTENT CLOSURE TESTS:
+        The function writes commondata and systypes files within the
+        name_closure_test/filter folder.
+        If fakenoise is True, Level 1 type data is written to the filter folder, otherwise
+        Level 0 data is written.
 
-    Level 1 data is generated from the Level 0 data by adding noise sampled from
-    the experimental covariance matrix using the validphys.pseudodata.make_replica
-    function.
+        Level 1 data is generated from the Level 0 data by adding noise sampled from
+        the experimental covariance matrix (note that the MULT uncertainties are constructed
+        from L0 data) using the validphys.pseudodata.make_replica function.
+
+    2. INCONSISTENT CLOSURE TESTS:
+        The function contains the logic to perform an inconsistent closure test. There
+        are two possible methods for doing so:
+
+        - type1_inconsistency:  rescale systematics by a factor (usually larger than 1) 
+                                when generating L1 data and use the experimental 
+                                covariance matrix for L2 data.
+                                Note: a type1 inconsistent fit has to be compared with the
+                                corresponding reference fit. To compute the reference fit,
+                                `reference_fit` has to be True. To compute an inconsistent fit
+                                `reference_fit` has to be set to False. 
+                                See also `pseudodata.make_level1_data`
+                                
+                                
+
+        - type2_inconsistency:  use experimental covariance matrix when generating L1 
+                                data and rescale systematics (usually by a factor 
+                                less than 1) when generating L2 data.
 
     Parameters
     ----------
@@ -289,8 +314,29 @@ def _filter_closure_data(
                  random seed used for the generation of
                  random noise added to Level 0 data
 
-
     experiments_index : pandas.MultiIndex
+
+    sep_mult : bool, default is True
+
+    ADD, MULT, CORR, UNCORR : bool, default is False for all of them
+                            which systematics to modify
+
+    inconsistent_datasets : list, default is empty []
+                        datasets for which an inconsistency is to be introduced
+
+    sys_rescaling_factor_1 : float, default is 1
+                        rescaling factor of systematics for type1_inconsistency
+
+    sys_rescaling_factor_2 : float, default is 1
+                        rescaling factor of systematics for type2_inconsistency
+
+    type1_inconsistency : bool, default is False
+
+    type2_inconsistency : bool, default is False
+    
+    reference_fit : bool, default is True
+                 when True a reference fit is computed
+                 when False a type1 inconsistent fit is computed
 
 
     Returns
@@ -330,7 +376,8 @@ def _filter_closure_data(
                 UNCORR,
                 inconsistent_datasets,
                 sys_rescaling_factor_1,
-                type1_inconsistency
+                type1_inconsistency,
+                reference_fit
             )
         
         # for lvl2 inconsistent fit only, modify the L1 data sys (written in filters folder)
