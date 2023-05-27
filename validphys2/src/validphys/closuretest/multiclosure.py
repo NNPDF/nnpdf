@@ -163,13 +163,16 @@ def fits_dataset_bias_variance(
         pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
         # There are n_fits pdf_covariances
         for i in range(n_fits):
+            n_data = len(law_th)
+            print("questa pdf cov ecc: " + str(pdf_cov[i]))
             if(np.shape(pdf_cov[i]) == ()):
-                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
-                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+                bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
+                var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
+                print("queste le bias diffs: " + str(bias_diffs))
                 print("bias diffs shape: " + str(np.shape(bias_diffs)))
                 print("var diffs shape: " + str(np.shape(var_diffs)))
-                bias = bias_diffs*bias_diffs/(float(pdf_cov[i]))
-                var = np.mean(var_diffs*var_diffs, axis = 1)/(float(pdf_cov[i]))
+                bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
+                var = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
             else:
                 bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
                 var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
@@ -198,9 +201,9 @@ def fits_dataset_bias_variance(
                     print("this is variance:" + str(var))
                     print("this is bias: " + str (bias))
                     print("shape of the thing i wanna divide: " + str(np.shape(rotated_var_diffs)))
-                    mask_b = bias > 30
+                    mask_b = bias > 10
                     mask_b_1 = bias < 0
-                    mask_v = var > 30
+                    mask_v = var > 10
                     mask_v_1 = var < 0
 
                     m1 = np.logical_or(mask_b,mask_b_1)
@@ -213,10 +216,10 @@ def fits_dataset_bias_variance(
                     var = np.delete(var,indices)
                     bias = np.sum(bias)
                     var = np.sum(var)
-                biases.append(bias)
-                variances.append(var)
-                print("this is bias for fit: " + str(bias))
-                print("this is var for fit: " + str(var))
+            biases.append(bias)
+            variances.append(var)
+            print("this is bias for fit: " + str(bias))
+            print("this is var for fit: " + str(var))
             print("mean bias: " + str(np.mean(biases)))    
             print("mean var: " + str(np.mean(variances)))
             print("square root ratio: " + str(np.sqrt(np.mean(biases)/np.mean(variances))))  
