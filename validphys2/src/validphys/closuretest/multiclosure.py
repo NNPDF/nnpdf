@@ -164,7 +164,7 @@ def fits_dataset_bias_variance(
         # There are n_fits pdf_covariances
         for i in range(n_fits):
             n_data = len(law_th)
-            evals, eigens = la.eigh(pdf_cov[i])
+            #evals, eigens = la.eigh(pdf_cov[i])
             if(np.shape(pdf_cov[i]) == ()):
                 bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
                 var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
