@@ -1026,10 +1026,10 @@ def perreplica_chi2_table(groups_data, groups_chi2, total_chi2_data):
     ls = []
     for i, ch in enumerate(chs, 1):
         th, central, l = ch
-        total_chis[i] = [central, *th.error_members()]
+        total_chis[i] = np.concatenate([[central], *th.error_members()])
         ls.append(l)
     total_rep, total_central, total_n = total_chi2_data
-    total_chis[0] = [total_central, *total_rep.error_members()]
+    total_chis[0] = np.concatenate([[total_central], *total_rep.error_members()])
     total_chis[0] /= total_n
     total_chis[1:, :] /= np.array(ls)[:, np.newaxis]
 
