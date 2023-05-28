@@ -164,13 +164,24 @@ def fits_dataset_bias_variance(
         # There are n_fits pdf_covariances
         for i in range(n_fits):
             n_data = len(law_th)
-            print("questa pdf cov ecc: " + str(pdf_cov[i]))
+            evals, eigens = la.eigh(pdf_cov[i])
             if(np.shape(pdf_cov[i]) == ()):
                 bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
                 var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
-                print("queste le bias diffs: " + str(bias_diffs))
-                print("bias diffs shape: " + str(np.shape(bias_diffs)))
-                print("var diffs shape: " + str(np.shape(var_diffs)))
+                bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
+                var = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
+            else:
+                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+                diag_mat = np.diag(pdf_cov[i])
+                diag_inv = 1./diag_mat
+                bias = bias_diffs*bias_diffs*diag_inv
+                var = np.mean(var_diffs.T*var_diffs.T*diag_inv, axis = 0)
+                bias = np.sum(bias)
+                var = np.sum(var)
+            """if(np.shape(pdf_cov[i]) == ()):
+                bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
+                var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
                 bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
                 var = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
             else:
@@ -184,26 +195,19 @@ def fits_dataset_bias_variance(
                     bias = calc_chi2(sqrt_cov, bias_diffs)
                     var = np.mean(calc_chi2(sqrt_cov, var_diffs))
 
-                    print("bias calculated from calc chi 2 ecc: " + str(bias))
                 except:
                     evals, eigens = la.eigh(pdf_cov[i])  
                     ##compute as quadratic form biases
                     bias = (eigens.T@bias_diffs)*(eigens.T@bias_diffs)/evals
                     rotated_var_diffs = eigens.T@var_diffs
-                    print("this is shape of rotated var diffs: " + str(np.shape(rotated_var_diffs)))
-                print("somma dei bias:" + str(np.sum(bias)))
-                print("lawthcentralshape:" + str(law_th.central_value.shape))
                 if (abs(np.sum(bias) -  law_th.central_value.shape[0])> 5*np.sqrt(2*law_th.central_value.shape[0])):
                     print("entro nell'if")
                     evals, eigens = la.eigh(pdf_cov[i])
                     bias = np.asarray((eigens.T@bias_diffs)*(eigens.T@bias_diffs)/evals)
                     var = np.asarray(np.mean((rotated_var_diffs*rotated_var_diffs).T/evals, axis = 0))
-                    print("this is variance:" + str(var))
-                    print("this is bias: " + str (bias))
-                    print("shape of the thing i wanna divide: " + str(np.shape(rotated_var_diffs)))
-                    mask_b = bias > 10
+                    mask_b = bias > 30
                     mask_b_1 = bias < 0
-                    mask_v = var > 10
+                    mask_v = var > 30
                     mask_v_1 = var < 0
 
                     m1 = np.logical_or(mask_b,mask_b_1)
@@ -211,19 +215,14 @@ def fits_dataset_bias_variance(
                     mask = np.logical_or(m1,m2)
                     indices = np.where(mask)[0]
                     n_data = n_data - np.size(indices)
-                    print("new_points number: " + str(n_data))
                     bias = np.delete(bias,indices)
                     var = np.delete(var,indices)
                     bias = np.sum(bias)
-                    var = np.sum(var)
+                    var = np.sum(var)"""
             biases.append(bias)
             variances.append(var)
-            print("this is bias for fit: " + str(bias))
-            print("this is var for fit: " + str(var))
-            print("mean bias: " + str(np.mean(biases)))    
-            print("mean var: " + str(np.mean(variances)))
-            print("square root ratio: " + str(np.sqrt(np.mean(biases)/np.mean(variances))))  
-            print(str(biases) + "\n" + str(variances))
+        print("this is biases mean"+ str(np.mean(biases)))
+        print("this is vars mean"+ str(np.mean(variances)))
         return np.asarray(biases), np.asarray(variances), n_data
     
     if pdf_and_exp_err and only_pdf_err == False:
