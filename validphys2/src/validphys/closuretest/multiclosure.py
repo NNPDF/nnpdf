@@ -162,6 +162,8 @@ def fits_dataset_bias_variance(
         variances = []
         pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
         # There are n_fits pdf_covariances
+        # flag to see whether to eliminate dataset
+        flag = True
         for i in range(n_fits):
             n_data = len(law_th)
             #evals, eigens = la.eigh(pdf_cov[i])
@@ -195,15 +197,18 @@ def fits_dataset_bias_variance(
                     bias = calc_chi2(sqrt_cov, bias_diffs)
                     var = np.mean(calc_chi2(sqrt_cov, var_diffs))
                     if (abs(var-law_th.central_value.shape[0])) > law_th.central_value.shape[0]*5./100:
-                        var = 0
-                        bias = 0
+                        flag = False
+                        break
 
 
                 except:
-                    var = 0
-                    bias = 0
+                    flag = False
+                    break
             biases.append(bias)
             variances.append(var)
+        if flag == False:
+            biases = np.full(n_fits,0.000001)
+            variances = np.full(n_fits,0.000001)
         print("this is biases mean"+ str(np.mean(biases)))
         print("this is vars mean"+ str(np.mean(variances)))
         return np.asarray(biases), np.asarray(variances), n_data
