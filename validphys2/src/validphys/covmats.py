@@ -303,6 +303,41 @@ def t0_covmat_from_systematics(
         _central_values=dataset_t0_predictions
     )
 
+def t0_covmat_from_systematics_pdferr_considered(
+    loaded_commondata_with_cuts,
+    *,
+    dataset_input,
+    pdf,
+    dataset,
+    pdf_err=False,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    dataset_t0_predictions
+):
+    """Like :py:func:`t0_covmat_from_systematics` except allows for the
+    PDF error covariance matrix to be summed to it.
+    """
+    if pdf_err:
+        th = ThPredictionsResult.from_convolution(pdf, dataset)
+        pdf_cov = np.cov(th.error_members, rowvar=True)
+        
+        return pdf_cov + covmat_from_systematics(
+                                                    loaded_commondata_with_cuts,
+                                                    dataset_input,
+                                                    use_weights_in_covmat,
+                                                    norm_threshold=norm_threshold,
+                                                    _central_values=dataset_t0_predictions
+                                                )
+
+    else:
+        return covmat_from_systematics(
+                                        loaded_commondata_with_cuts,
+                                        dataset_input,
+                                        use_weights_in_covmat,
+                                        norm_threshold=norm_threshold,
+                                        _central_values=dataset_t0_predictions
+                                    )
+
 
 dataset_inputs_t0_predictions = collect("dataset_t0_predictions", ("data",))
 
@@ -344,6 +379,41 @@ def dataset_inputs_t0_covmat_from_systematics(
         norm_threshold=norm_threshold,
         _list_of_central_values=dataset_inputs_t0_predictions
     )
+
+
+def dataset_inputs_t0_covmat_from_systematics_pdferr_considered(
+    dataset_inputs_loaded_cd_with_cuts,
+    *,
+    data_input,
+    data,
+    pdf,
+    pdf_err=False,
+    use_weights_in_covmat=True,
+    norm_threshold=None,
+    dataset_inputs_t0_predictions
+):
+    """Like :py:func:`dataset_inputs_t0_covmat_from_systematics`except 
+    allows for the PDF error covariance matrix to be summed to it.
+    """
+    if pdf_err:
+        th = ThPredictionsResult.from_convolution(pdf, data)
+        pdf_cov = np.cov(th.error_members, rowvar=True)
+
+        return pdf_cov + dataset_inputs_covmat_from_systematics(
+                                                        dataset_inputs_loaded_cd_with_cuts,
+                                                        data_input,
+                                                        use_weights_in_covmat,
+                                                        norm_threshold=norm_threshold,
+                                                        _list_of_central_values=dataset_inputs_t0_predictions
+                                                    )
+    else:
+        return dataset_inputs_covmat_from_systematics(
+            dataset_inputs_loaded_cd_with_cuts,
+            data_input,
+            use_weights_in_covmat,
+            norm_threshold=norm_threshold,
+            _list_of_central_values=dataset_inputs_t0_predictions
+        )
 
 
 def dataset_inputs_t0_total_covmat_separate(
