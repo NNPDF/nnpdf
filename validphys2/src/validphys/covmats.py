@@ -309,6 +309,7 @@ def t0_covmat_from_systematics_pdferr_considered(
     dataset_input,
     pdf,
     dataset,
+    covmat_combi=False,
     pdf_err=False,
     use_weights_in_covmat=True,
     norm_threshold=None,
@@ -317,7 +318,7 @@ def t0_covmat_from_systematics_pdferr_considered(
     """Like :py:func:`t0_covmat_from_systematics` except allows for the
     PDF error covariance matrix to be summed to it.
     """
-    if pdf_err:
+    if covmat_combi:
         th = ThPredictionsResult.from_convolution(pdf, dataset)
         pdf_cov = np.cov(th.error_members, rowvar=True)
         
@@ -328,6 +329,12 @@ def t0_covmat_from_systematics_pdferr_considered(
                                                     norm_threshold=norm_threshold,
                                                     _central_values=dataset_t0_predictions
                                                 )
+
+    elif pdf_err:
+        th = ThPredictionsResult.from_convolution(pdf, dataset)
+        pdf_cov = np.cov(th.error_members, rowvar=True)
+        
+        return pdf_cov
 
     else:
         return covmat_from_systematics(
@@ -387,6 +394,7 @@ def dataset_inputs_t0_covmat_from_systematics_pdferr_considered(
     data_input,
     data,
     pdf,
+    covmat_combi=False,
     pdf_err=False,
     use_weights_in_covmat=True,
     norm_threshold=None,
@@ -395,7 +403,7 @@ def dataset_inputs_t0_covmat_from_systematics_pdferr_considered(
     """Like :py:func:`dataset_inputs_t0_covmat_from_systematics`except 
     allows for the PDF error covariance matrix to be summed to it.
     """
-    if pdf_err:
+    if covmat_combi:
         th = ThPredictionsResult.from_convolution(pdf, data)
         pdf_cov = np.cov(th.error_members, rowvar=True)
 
@@ -406,6 +414,12 @@ def dataset_inputs_t0_covmat_from_systematics_pdferr_considered(
                                                         norm_threshold=norm_threshold,
                                                         _list_of_central_values=dataset_inputs_t0_predictions
                                                     )
+    elif pdf_err:
+        th = ThPredictionsResult.from_convolution(pdf, data)
+        pdf_cov = np.cov(th.error_members, rowvar=True)
+
+        return pdf_cov
+
     else:
         return dataset_inputs_covmat_from_systematics(
             dataset_inputs_loaded_cd_with_cuts,
