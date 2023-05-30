@@ -117,7 +117,7 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_m
 
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
-    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False,
+    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False, SPECIAL=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
     type1_inconsistency=False, type2_inconsistency=False, reference_fit=True
 
@@ -160,6 +160,10 @@ def filter_closure_data_by_experiment(
     
     UNCORR : bool
         whether to introduce an inconsistency for UNCORR sys
+    
+    SPECIAL : bool
+            whether to introduce an inconsistency for intra datasets
+            correlated systematics
 
     inconsistent_datasets : list
                             list of datasets for which to introduce
@@ -201,7 +205,7 @@ def filter_closure_data_by_experiment(
         res.append(
             _filter_closure_data(
                         filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
-                        sep_mult, ADD, MULT, CORR, UNCORR,
+                        sep_mult, ADD, MULT, CORR, UNCORR,SPECIAL,
                         inconsistent_datasets, sys_rescaling_factor_1, sys_rescaling_factor_2,
                         type1_inconsistency, type2_inconsistency, reference_fit
                         )
@@ -256,7 +260,7 @@ def _filter_real_data(filter_path, data):
 
 def _filter_closure_data(
     filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
-    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False,
+    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False, SPECIAL=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
     type1_inconsistency=False,
     type2_inconsistency=False,
@@ -318,7 +322,7 @@ def _filter_closure_data(
 
     sep_mult : bool, default is True
 
-    ADD, MULT, CORR, UNCORR : bool, default is False for all of them
+    ADD, MULT, CORR, UNCORR, SPECIAL : bool, default is False for all of them
                             which systematics to modify
 
     inconsistent_datasets : list, default is empty []
@@ -374,6 +378,7 @@ def _filter_closure_data(
                 MULT,
                 CORR,
                 UNCORR,
+                SPECIAL,
                 inconsistent_datasets,
                 sys_rescaling_factor_1,
                 type1_inconsistency,
@@ -391,7 +396,7 @@ def _filter_closure_data(
                                                     systype_table = cd.systype_table) 
                                 for cd in closure_data
                             ]
-            closure_data = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor_2)
+            closure_data = [cd.process_commondata(ADD,MULT,CORR,UNCORR,SPECIAL,inconsistent_datasets,sys_rescaling_factor_2)
                     for cd in closure_data]
 
 

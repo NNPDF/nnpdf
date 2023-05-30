@@ -288,7 +288,7 @@ def level0_commondata_wc(data, fakepdf):
 
 def make_level1_data(
     data, level0_commondata_wc, filterseed, experiments_index,
-    sep_mult, MULT = False, ADD = False, CORR = False, UNCORR = False,
+    sep_mult, MULT = False, ADD = False, CORR = False, UNCORR = False, SPECIAL=False,
     inconsistent_datasets=[], sys_rescaling_factor=1, type1_inconsistency = False,
     reference_fit=True
 ):
@@ -345,6 +345,10 @@ def make_level1_data(
     UNCORR : bool 
             whether to introduce an inconsistency for UNCORR sys
 
+    SPECIAL: bool
+            whether to introduce an inconsistency for inter dataset
+            correlated systematics
+
     inconsistent_datasets : list, default is empty []
                             list of datasets for which to introduce an inconsistency
 
@@ -395,7 +399,7 @@ def make_level1_data(
                                 for cd in level0_commondata_wc
                         ]
 
-        level0_commondata_wc = [cd.process_commondata(ADD,MULT,CORR,UNCORR,inconsistent_datasets,sys_rescaling_factor)
+        level0_commondata_wc = [cd.process_commondata(ADD,MULT,CORR,UNCORR,SPECIAL,inconsistent_datasets,sys_rescaling_factor)
                             for cd in level0_commondata_wc]
 
     covmat = dataset_inputs_covmat_from_systematics(

@@ -4,6 +4,7 @@ import pandas as pd
 
 
 
+
 @dataclasses.dataclass(eq = False)
 class InconsistentCommonData(CommonData):
     """
@@ -55,10 +56,10 @@ class InconsistentCommonData(CommonData):
         table["ADD"] = add_sys
         return dataclasses.replace(self, commondata_table = table)
 
-    def rescale_sys(self,type_err,CORR,UNCORR,sys_rescaling_factor):
+    def rescale_sys(self,type_err,CORR,UNCORR,SPECIAL,sys_rescaling_factor):
         """
         rescale the sys (MULT or ADD) by constant factor, sys_rescaling_factor,
-        a distinction is done between CORR and UNCORR systematics
+        a distinction is done between CORR, UNCORR and SPECIAL systematics
 
         Parameters
         ----------
@@ -70,13 +71,16 @@ class InconsistentCommonData(CommonData):
 
         UNCORR : bool
 
+        SPECIAL : bool
+
         sys_rescaling_factor : float, int
 
         Returns
         -------
         pd.DataFrame corresponding to the rescaled MULT systematics
         """
-        
+        # avoid circular import error
+        from validphys.covmats import INTRA_DATASET_SYS_NAME
         err_table = self.systematics_table.loc[:,[type_err]].copy()
         # get indices of CORR / UNCORR sys
         systype_corr = self.systype_table[(self.systype_table["type"] == type_err) 
@@ -85,17 +89,24 @@ class InconsistentCommonData(CommonData):
         systype_uncorr = self.systype_table[(self.systype_table["type"] == type_err) 
                             & (self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
 
+        # get indices of special (intra datasets) correlations
+        systype_special = self.systype_table[(self.systype_table["type"] == type_err) 
+                            & (~self.systype_table["name"].isin(INTRA_DATASET_SYS_NAME))]
+        
         # rescale systematics
         if CORR:
             err_table.iloc[:,systype_corr.index - 1] *= sys_rescaling_factor
         if UNCORR:
             err_table.iloc[:,systype_uncorr.index - 1] *= sys_rescaling_factor
+        if SPECIAL:
+            err_table.iloc[:,systype_special.index - 1] *= sys_rescaling_factor
 
         return err_table
     
     def process_commondata(
                     self,ADD,MULT,
                     CORR,UNCORR,
+                    SPECIAL,
                     inconsistent_datasets,
                     sys_rescaling_factor
                     ):
@@ -118,6 +129,8 @@ class InconsistentCommonData(CommonData):
 
         UNCORR : bool
 
+        SPECIAL : bool
+
         inconsistent_datasets : list
                             list of the datasets for which an inconsistency should be introduced
         
@@ -133,10 +146,10 @@ class InconsistentCommonData(CommonData):
             return self
         
         if MULT:
-            new_commondata = new_commondata.with_MULT_sys(self.rescale_sys("MULT",CORR,UNCORR,sys_rescaling_factor))
+            new_commondata = new_commondata.with_MULT_sys(self.rescale_sys("MULT",CORR,UNCORR,SPECIAL,sys_rescaling_factor))
             
         if ADD:
-            new_commondata = new_commondata.with_ADD_sys(self.rescale_sys("ADD",CORR,UNCORR,sys_rescaling_factor))
+            new_commondata = new_commondata.with_ADD_sys(self.rescale_sys("ADD",CORR,UNCORR,SPECIAL,sys_rescaling_factor))
 
         return new_commondata
 
