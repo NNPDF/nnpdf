@@ -679,13 +679,13 @@ def groups_corrmat(groups_covmat):
 
 def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
-    `covmat_t0_considered` and the PDF error: 
-    - If the PDF error_type is 'replicas', a covariance matrix is estimated from 
-      the replica theory predictions 
+    `covmat_t0_considered` and the PDF error:
+    - If the PDF error_type is 'replicas', a covariance matrix is estimated from
+      the replica theory predictions
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
       formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
 
-    
+
     Parameters
     ----------
     dataset: DataSetSpec
@@ -730,10 +730,10 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
 
         # need to subtract the central set which is not the same as the average of the
         # Hessian eigenvectors.
-        X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0],1))
+        X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0], 1))
         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
         X = X / rescale_fac
-        pdf_cov = np.einsum("ij,kj->ik",X, X)
+        pdf_cov = np.einsum("ij,kj->ik", X, X)
 
     return pdf_cov + covmat_t0_considered
 
