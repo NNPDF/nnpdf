@@ -10,17 +10,15 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.table import table
-
-from validphys.calcutils import calc_chi2, bootstrap_values
+from validphys.calcutils import bootstrap_values, calc_chi2
 from validphys.checks import check_pdf_is_montecarlo
 from validphys.closuretest.closure_checks import (
     check_fit_isclosure,
-    check_use_fitcommondata,
     check_fits_areclosures,
     check_fits_same_filterseed,
     check_fits_underlying_law_match,
+    check_use_fitcommondata,
 )
-
 
 BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
@@ -47,9 +45,7 @@ def bias_dataset(results, underlying_results, fit, use_fitcommondata):
     return BiasData(bias_out, len(th_ct))
 
 
-underlying_dataset_inputs_results = collect(
-    "dataset_inputs_results", ("fitunderlyinglaw",)
-)
+underlying_dataset_inputs_results = collect("dataset_inputs_results", ("fitunderlyinglaw",))
 
 
 @check_fit_isclosure
@@ -57,8 +53,7 @@ underlying_dataset_inputs_results = collect(
 def bias_experiment(
     dataset_inputs_results, underlying_dataset_inputs_results, fit, use_fitcommondata
 ):
-    """Like `bias_dataset` but for a whole experiment.
-    """
+    """Like `bias_dataset` but for a whole experiment."""
     return bias_dataset(
         dataset_inputs_results,
         underlying_dataset_inputs_results,
@@ -75,9 +70,7 @@ fits_experiments = collect("experiments_data", ("fits", "fitcontext"))
 @table
 @check_fits_same_filterseed
 @check_fits_underlying_law_match
-def biases_table(
-    fits_experiments, fits_experiments_bias, fits, show_total: bool = False
-):
+def biases_table(fits_experiments, fits_experiments_bias, fits, show_total: bool = False):
     """Creates a table with fits as the columns and the experiments from both
     fits as the row index.
     """
@@ -131,9 +124,7 @@ def bootstrap_bias_experiment(
 experiments_bootstrap_bias = collect(
     "bootstrap_bias_experiment", ("group_dataset_inputs_by_experiment",)
 )
-fits_experiments_bootstrap_bias = collect(
-    "experiments_bootstrap_bias", ("fits", "fitcontext")
-)
+fits_experiments_bootstrap_bias = collect("experiments_bootstrap_bias", ("fits", "fitcontext"))
 
 
 @table
@@ -226,9 +217,7 @@ experiments_boostrap_variance = collect(
     "bootstrap_variance_experiment", ("group_dataset_inputs_by_experiment",)
 )
 
-fits_exps_bootstrap_var = collect(
-    "experiments_boostrap_variance", ("fits", "fitcontext")
-)
+fits_exps_bootstrap_var = collect("experiments_boostrap_variance", ("fits", "fitcontext"))
 
 
 @table
@@ -286,9 +275,7 @@ experiments_bootstrap_chi2_central = collect(
 fits_exps_bootstrap_chi2_central = collect(
     "experiments_bootstrap_chi2_central", ("fits", "fitcontext")
 )
-fits_level_1_noise = collect(
-    "total_chi2_data", ("fits", "fitinputcontext", "fitunderlyinglaw")
-)
+fits_level_1_noise = collect("total_chi2_data", ("fits", "fitinputcontext", "fitunderlyinglaw"))
 
 
 @check_use_fitcommondata
@@ -352,16 +339,10 @@ def delta_chi2_table(
         fits_exps_level_1_noise,
     ):
         records = []
-        for experiment, exp_chi2, level_1_noise in zip(
-            experiments, exps_chi2, exps_level_1_noise
-        ):
-            delta_chi2 = (
-                exp_chi2.central_result - level_1_noise.central_result
-            ) / exp_chi2.ndata
+        for experiment, exp_chi2, level_1_noise in zip(experiments, exps_chi2, exps_level_1_noise):
+            delta_chi2 = (exp_chi2.central_result - level_1_noise.central_result) / exp_chi2.ndata
             npoints = exp_chi2.ndata
-            records.append(
-                dict(experiment=str(experiment), npoints=npoints, delta_chi2=delta_chi2)
-            )
+            records.append(dict(experiment=str(experiment), npoints=npoints, delta_chi2=delta_chi2))
         df = pd.DataFrame.from_records(
             records,
             columns=("experiment", "npoints", "delta_chi2"),

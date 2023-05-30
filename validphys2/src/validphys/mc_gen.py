@@ -7,15 +7,15 @@ Tools to check the pseudo-data MC generation.
 # The functions in this module have been ported to not use libNNPDF
 # but they should not be used as an example as they follow the libNNPDF logic
 import logging
-import matplotlib.patches as mpatches
+
 from matplotlib.figure import Figure
+import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
 from scipy.stats import moment as mom
 
-from reportengine.table import table
 from reportengine.figure import figure
-
+from reportengine.table import table
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
@@ -51,9 +51,7 @@ def art_data_residuals(art_rep_generation, color="green"):
     normresiduals = residuals / real_data
     fig, ax = plotutils.subplots()
 
-    ax.hist(
-        normresiduals, bins=50, histtype="step", stacked=True, fill=False, color=color
-    )
+    ax.hist(normresiduals, bins=50, histtype="step", stacked=True, fill=False, color=color)
 
     ax.set_ylabel(r"Data points")
     ax.set_xlabel(r"$(D^0-<D^{(r)}>)/D^0$")
@@ -63,9 +61,7 @@ def art_data_residuals(art_rep_generation, color="green"):
 
 
 @figure
-def art_data_distribution(
-    art_rep_generation, title="Artificial Data Distribution", color="green"
-):
+def art_data_distribution(art_rep_generation, title="Artificial Data Distribution", color="green"):
     """
     Plot of the distribution of pseudodata.
     """
@@ -74,9 +70,7 @@ def art_data_distribution(
     normart_data = art_data / real_data
     fig, ax = plotutils.subplots()
 
-    ax.hist(
-        normart_data, bins=50, histtype="step", stacked=True, fill=False, color=color
-    )
+    ax.hist(normart_data, bins=50, histtype="step", stacked=True, fill=False, color=color)
 
     ax.set_ylabel(r"Data points")
     ax.set_xlabel(r"$<D^{(r)}>/D^0$")
@@ -93,9 +87,9 @@ def art_data_moments(art_rep_generation, color="green"):
     _, _, normart_replicas, _ = art_rep_generation
 
     artrep_array = np.asarray(normart_replicas)
-    
+
     fig = Figure(figsize=(10, 12))
-    axes = [fig.add_subplot(3, 1, i+1) for i in range(3)]
+    axes = [fig.add_subplot(3, 1, i + 1) for i in range(3)]
     # Plot histogram of moments
     for momno, ax in zip(range(1, 4), axes.flatten()):
         # Calculate moments
@@ -120,9 +114,9 @@ def art_data_comparison(art_rep_generation, nreplica: int):
     artrep_array = np.asarray(normart_replicas)
     normart_data = art_data / real_data
 
-    nrows=len(artrep_array.T)
+    nrows = len(artrep_array.T)
     fig = Figure(figsize=(4, 2 * len(artrep_array.T)))
-    axes = [fig.add_subplot(nrows, 1, i+1) for i in range(nrows)]
+    axes = [fig.add_subplot(nrows, 1, i + 1) for i in range(nrows)]
 
     for i, ax, datapoint, normartdatapoint in zip(
         range(len(artrep_array.T)), axes.flatten(), artrep_array.T, normart_data
@@ -141,12 +135,8 @@ def art_data_comparison(art_rep_generation, nreplica: int):
             linestyle="-",
             color="darkorchid",
         )
-        ax.vlines(
-            0, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue"
-        )
-        ax.vlines(
-            2, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue"
-        )
+        ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
+        ax.vlines(2, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
         ax.legend(handles=handles)
         ax.set_xlabel(r"$D^{(r)}/D^0$")
         ax.set_ylabel("Frequency")

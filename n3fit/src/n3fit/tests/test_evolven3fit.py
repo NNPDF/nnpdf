@@ -69,14 +69,14 @@ def test_eko_utils(tmp_path):
     assert (
         t_card_dict["order"][0] == pto + 1
     )  # This is due to a different convention in eko orders due to QED
-    assert_allclose(op_card_dict["rotations"]["xgrid"], x_grid)
-    assert_allclose(op_card_dict["_mugrid"][0], 1.65)
-    assert_allclose(op_card_dict["_mugrid"][-1], q_fin)
+    assert_allclose(op_card_dict["xgrid"], x_grid)
+    assert_allclose(op_card_dict["mugrid"][0], (1.65, 4))
+    assert_allclose(op_card_dict["mugrid"][-1], (q_fin, 5))
     # In this case there are not enough points to have twice the bottom matching scale
-    assert_allclose(op_card_dict["_mugrid"][1], 4.92)
+    assert_allclose(op_card_dict["mugrid"][1], (4.92, 5))
     # Testing computation of eko
     save_path = tmp_path / "ekotest.tar"
     runner.solve(t_card, op_card, save_path)
     eko_op = EKO.read(save_path)
-    assert_allclose(eko_op.operator_card.raw["rotations"]["xgrid"], x_grid)
-    assert_allclose(list(eko_op.operator_card.raw["_mugrid"]), op_card_dict["_mugrid"])
+    assert_allclose(eko_op.operator_card.raw["xgrid"], x_grid)
+    assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])

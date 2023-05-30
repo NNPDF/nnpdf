@@ -12,16 +12,14 @@ import pandas as pd
 import scipy.integrate as integrate
 
 from reportengine import collect
+from reportengine.checks import check_positive, make_argcheck
 from reportengine.figure import figure
 from reportengine.table import table
-from reportengine.checks import check_positive, make_argcheck
-
+from validphys import plotutils
+from validphys.checks import check_pdf_normalize_to
+from validphys.core import PDF
 from validphys.pdfbases import Basis, check_basis
 from validphys.pdfgrids import xgrid, xplotting_grid
-from validphys.core import PDF
-from validphys.checks import check_pdf_normalize_to
-from validphys import plotutils
-
 
 ArcLengthGrid = namedtuple("ArcLengthGrid", ("pdf", "basis", "flavours", "stats"))
 
@@ -36,22 +34,22 @@ def arc_lengths(
 ):
     """
     Compute arc lengths at scale Q
-    
+
     set up a grid with three segments and
     compute the arclength for each segment.
     Note: the variation of the PDF over the grid
     is computed by computing the forward differences
     between adjacent grid points.
-    
+
 
     Parameters
     ----------
-    
+
     pdf : validphys.core.PDF object
 
     Q : float
         scale at which to evaluate PDF
-    
+
     basis : default = "flavour"
 
     flavours : default = None
@@ -60,9 +58,9 @@ def arc_lengths(
     -------
 
     validphys.arclength.ArcLengthGrid object
-    object that contains the PDF, basis, flavours, and computed 
+    object that contains the PDF, basis, flavours, and computed
     arc length statistics.
-    
+
     """
 
     checked = check_basis(basis, flavours)
@@ -94,12 +92,8 @@ def arc_length_table(arc_lengths):
     """Return a table with the descriptive statistics of the arc lengths
     over members of the PDF."""
     arc_length_data = arc_lengths.stats.error_members()
-    arc_length_columns = [
-        f"${arc_lengths.basis.elementlabel(fl)}$" for fl in arc_lengths.flavours
-    ]
-    return (
-        pd.DataFrame(arc_length_data, columns=arc_length_columns).describe().iloc[1:, :]
-    )
+    arc_length_columns = [f"${arc_lengths.basis.elementlabel(fl)}$" for fl in arc_lengths.flavours]
+    return pd.DataFrame(arc_length_data, columns=arc_length_columns).describe().iloc[1:, :]
 
 
 @figure
@@ -116,27 +110,24 @@ def plot_arc_lengths(
 
     for ipdf, arclengths in enumerate(pdfs_arc_lengths):
         xvalues = np.array(range(len(arclengths.flavours)))
-        xlabels = [
-            "$" + arclengths.basis.elementlabel(fl) + "$" for fl in arclengths.flavours
-        ]
-        
+        xlabels = ["$" + arclengths.basis.elementlabel(fl) + "$" for fl in arclengths.flavours]
+
         ylower, yupper = arclengths.stats.errorbar68()
         yvalues = (ylower + yupper) * 0.5
         yerr = np.abs(yupper - ylower) * 0.5
 
-        
         if normalize_to is not None:
             norm_cv = pdfs_arc_lengths[normalize_to].stats.central_value()
             yvalues = np.divide(yvalues, norm_cv)
             yerr = np.divide(yerr, norm_cv)
-            
+
         shift = (ipdf - (len(pdfs_arc_lengths) - 1) / 2.0) / 5.0
         ax.errorbar(
             xvalues + shift,
             yvalues,
             yerr=yerr,
             fmt='',
-            linestyle = '',
+            linestyle='',
             label=arclengths.pdf.label,
         )
         ax.set_xticks(xvalues)
@@ -152,8 +143,8 @@ def integrability_number(
     basis: (str, Basis) = "evolution",
     flavours: (list, tuple, type(None)) = None,
 ):
-    """Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7} 
-    for selected flavours 
+    """Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7}
+    for selected flavours
     """
     checked = check_basis(basis, flavours)
     basis, flavours = checked["basis"], checked["flavours"]
