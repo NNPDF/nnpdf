@@ -15,7 +15,7 @@ from validphys.checks import (
     check_data_cuts_match_theorycovmat,
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
-    check_pdf_is_montecarlo,
+    check_pdf_is_montecarlo_or_symmhessian,
     check_speclabels_different,
 )
 from validphys.commondata import loaded_commondata_with_cuts
@@ -677,6 +677,7 @@ def groups_corrmat(groups_covmat):
     return mat
 
 
+@check_pdf_is_montecarlo_or_symmhessian
 def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
     `covmat_t0_considered` and the PDF error:
@@ -733,7 +734,7 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
         X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0], 1))
         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
         X = X / rescale_fac
-        pdf_cov = np.einsum("ij,kj->ik", X, X)
+        pdf_cov = X @ X.T
 
     return pdf_cov + covmat_t0_considered
 
