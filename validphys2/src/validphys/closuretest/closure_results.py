@@ -21,7 +21,7 @@ from validphys.closuretest.closure_checks import (
     check_fits_same_filterseed,
     check_fits_underlying_law_match,
 )
-
+from validphys import plotutils
 from validphys.inconsistent_ct import InconsistentCommonData
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 

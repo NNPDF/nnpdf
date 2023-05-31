@@ -9,10 +9,44 @@ from validphys.inconsistent_ct import InconsistentCommonData
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 import numpy as np
 
-#TODO: maybe change location
-def covmat_trace_diff(data, inconsistent_datasets, ADD, MULT, CORR, UNCORR, SPECIAL, sys_rescaling_factor):
+def covmat_trace_ratio(data, inconsistent_datasets, ADD, MULT, CORR, UNCORR, SPECIAL, sys_rescaling_factor, type1 = True, type2 = False):
     """ Calculate trace difference between the original exp covmat and the inconsistent one rescaled by
     sys_rescaling_factor affecting ADD/MULT (decided by type_a_m) unc CORR/UNCORR/SPECIAL (decided by type_c_u_s)
+
+    Separate two possible cases: type1 and type2 trace diff.
+
+    This is necessary in order to have a good comparison useful for the inconsistent closure tests of type1 and
+    type2. 
+
+    A type1 reference fit is defined by: 
+    L1_data = L0 + N(0,C_exp)
+    L2_data = L1 + N(0,C_exp)
+
+    A type2 reference fit is defined by:
+
+    L1_data = L0 + N(0,C+)
+    L2_data = L1 + N(0,C+)
+
+    where C+ is (roughly) defined as C_exp*sys_rescaling_factor (usually larger than 1)
+
+    in order to see the impact of the inconsistency then:
+
+    Type1 inconsistent closure test:
+    L1_data = L0 + N(0,C_exp)
+    L2_data = L1 + N(0,C-)
+
+    Type1 trace percentage diff: 
+
+    tr(C-)/(tr(C_exp))*100
+
+    Type2 inconsistent closure test:
+    L1_data = L0 + N(0,C+)
+    L2_data = L1 + N(0,C_exp)
+
+    Type2 percentage diff:
+    tr(C_exp)/(tr(C+))*100
+
+
     """
 
     dataset_input_list = list(data.dsinputs)
@@ -46,30 +80,36 @@ def covmat_trace_diff(data, inconsistent_datasets, ADD, MULT, CORR, UNCORR, SPEC
             _list_of_central_values=None,
             _only_additive=False,
         )
-    inconsistent_trace = np.trace(modified_covmat)
-    percentage_diff = abs(inconsistent_trace-trace)/(trace)*100
+    modified_trace = np.trace(modified_covmat)
+    if type1:   
+        percentage_diff = abs(modified_trace)/(trace)*100
+    if type2:
+        percentage_diff = abs(trace)/(modified_trace)*100
     return percentage_diff
 
 @figure
 def plot_trace_impact(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL):
-    rs_factors = np.arange(0.1,5,0.1)
-    impacts = []
-    for fac in rs_factors:
-        impacts.append(covmat_trace_diff(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL, fac))
+    rs_factors_1 = np.arange(0.1,1.1,0.1)
+    rs_factors_2 = np.arange(1,5,0.1)
+    impacts_1 = []
+    impacts_2 = []
+    for fac in rs_factors_1:
+        impacts_1.append(covmat_trace_ratio(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL, fac,type1 = True,type2 = False))
+    for fac in rs_factors_2:
+        impacts_2.append(covmat_trace_ratio(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL, fac,type1 = False,type2 = True))
     fig, ax = plotutils.subplots()
 
-    ax.plot(rs_factors,impacts)
-    ds_names = ""
-    for ds in inconsistent_datasets:
-        ds_names += str(ds) + " "
+    ax.plot(rs_factors_1,impacts_1, label = "type1 Inconsistent Closure")
+    ax.plot(rs_factors_2,impacts_2, label = "type2 Inconsistent Closure")
     type_a_m = ""
     type_c_u_s = ""
     if ADD: type_a_m = " ADD "
     if MULT: type_a_m = type_a_m + " MULT "
     if CORR: type_c_u_s = " CORR "
     if UNCORR: type_c_u_s = type_c_u_s + " UNCORR "
-    if SPECIAL: type_c_u_s = type_c_u_s  + " SPECIA L"
-    title = "Impact of inconsistency of type " + str(type_a_m)  + " and " + str(type_c_u_s) + " in " + ds_names + " wrt all ds"
+    if SPECIAL: type_c_u_s = type_c_u_s  + " SPECIAL"
+    title = "Impact of inconsistency of type " + str(type_a_m)  + " and " + str(type_c_u_s) + " in \n" + str(inconsistent_datasets) + " wrt all ds. \n"
+    ax.legend()
     ax.set_title(title)
     ax.set_xlabel("rescaling factor")
     ax.set_ylabel("percentage diff")
