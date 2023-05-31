@@ -333,8 +333,8 @@ def t0_covmat_from_systematics_pdferr_considered(
     elif pdf_err:
         th = ThPredictionsResult.from_convolution(pdf, dataset)
         pdf_cov = np.cov(th.error_members, rowvar=True)
-        
-        return pdf_cov
+        regularized_pdf_covmat = regularize_covmat(pdf_cov)
+        return regularized_pdf_covmat
 
     else:
         return covmat_from_systematics(
@@ -417,8 +417,8 @@ def dataset_inputs_t0_covmat_from_systematics_pdferr_considered(
     elif pdf_err:
         th = ThPredictionsResult.from_convolution(pdf, data)
         pdf_cov = np.cov(th.error_members, rowvar=True)
-
-        return pdf_cov
+        regularized_pdf_covmat = regularize_covmat(pdf_cov)
+        return regularized_pdf_covmat
 
     else:
         return dataset_inputs_covmat_from_systematics(

@@ -84,7 +84,7 @@ class InconsistentCommonData(CommonData):
         err_table = self.systematics_table.loc[:,[type_err]].copy()
         # get indices of CORR / UNCORR sys
         systype_corr = self.systype_table[(self.systype_table["type"] == type_err) 
-                            & (~self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
+                            & (self.systype_table["name"].isin(["CORR","THEORYCORR"]))]
         
         systype_uncorr = self.systype_table[(self.systype_table["type"] == type_err) 
                             & (self.systype_table["name"].isin(["UNCORR","THEORYUNCORR"]))]
