@@ -399,7 +399,6 @@ def generate_dense_per_flavour_network(
 
 
 def pdfNN_layer_generator(
-    inp: int = 2,
     nodes: List[int] = None,
     activations: List[str] = None,
     initializer_name: str = "glorot_normal",
@@ -479,8 +478,6 @@ def pdfNN_layer_generator(
 
     Parameters
     ----------
-        inp: int
-            dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
         nodes: list(int)
             list of the number of nodes per layer of the PDF NN. Default: [15,8]
         activation: list
@@ -502,9 +499,10 @@ def pdfNN_layer_generator(
             rate of dropout layer by layer
         impose_sumrule: str
             whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR)
-        scaler: scaler
+        scaler: callable
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
+            When None, instead turn the x point into a (x, log(x)) pair
         parallel_models: int
             How many models should be trained in parallel
         photon: :py:class:`validphys.photon.compute.Photon`
@@ -544,41 +542,35 @@ def pdfNN_layer_generator(
     # The number of nodes in the last layer is equal to the number of fitted flavours
     last_layer_nodes = nodes[-1]  # (== len(flav_info))
 
-    # Process input options. There are 3 options:
-    # 1. Do nothing
-    # 2. Scale the input
-    # 3. Concatenate log(x) to the input
-    # when feature scaling is on, don't add logs regardless of the input
+    # Process input options. There are 2 options:
+    # 1. Scale the input
+    # 2. Concatenate log(x) to the input
     use_feature_scaling = scaler is not None
-    add_logs = inp == 2 and not use_feature_scaling
+    add_logs = not use_feature_scaling
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
     subtract_one = use_feature_scaling
 
-    if use_feature_scaling:
-        inp = 1
+    # Feature scaling happens before the pdf model and changes x->(scaler(x), x),
+    # so it adds an input dimension
+    pdf_input_dimensions = 2 if use_feature_scaling else 1
+    # Adding of logs happens inside, but before the NN and adds a dimension there
+    nn_input_dimensions = 1 if use_feature_scaling else 2
 
     # Define the main input
     do_nothing = lambda x: x
-    if add_logs:
-        placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
+    if use_feature_scaling:
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
+        process_input = do_nothing
+        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
+        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
+    else:  # if add_logs
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
         extract_original = do_nothing
         extract_nn_input = do_nothing
-    elif use_feature_scaling:
-        # Note feature scaling happens before the model created here,
-        # so the input is of the form (scaler(x), x)
-        placeholder_input = Input(shape=(None, 2), batch_size=1, name='scaledx_x')
-        process_input = do_nothing
-        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name='x_original')
-        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
-    else:
-        placeholder_input = Input(shape=(None, 1), batch_size=1, name='x')
-        process_input = do_nothing
-        extract_original = do_nothing
-        extract_nn_input = do_nothing
 
-    model_input = {"pdf_input": placeholder_input}
+    model_input = {"pdf_input": pdf_input}
 
     if subtract_one:
         input_x_eq_1 = [1.0]
@@ -630,7 +622,7 @@ def pdfNN_layer_generator(
         nn_replicas.append(
             generate_nn(
                     layer_type=layer_type,
-                    inp=inp,
+                    input_dimensions=nn_input_dimensions,
                     nodes=nodes,
                     activations=activations,
                     initializer_name=initializer_name,
@@ -674,7 +666,7 @@ def pdfNN_layer_generator(
     # Finally compute the normalized PDFs for each replica
     pdf_models = []
     for i_replica, (prefactor, nn) in enumerate(zip(prefactor_replicas, nn_replicas)):
-        pdf_unnormalized = compute_unnormalized_pdf(placeholder_input, nn, prefactor)
+        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, prefactor)
         pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, prefactor)
 
         pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
@@ -693,7 +685,7 @@ def pdfNN_layer_generator(
 
 def generate_nn(
         layer_type: str,
-        inp: int,
+        input_dimensions: int,
         nodes: List[int],
         activations: List[str],
         initializer_name: str,
@@ -707,7 +699,7 @@ def generate_nn(
     Create the part of the model that contains all of the actual neural network
     layers.
     """
-    common_args = {'nodes_in': inp, 'nodes': nodes, 'activations': activations, 'initializer_name': initializer_name, 'seed': replica_seed}
+    common_args = {'nodes_in': input_dimensions, 'nodes': nodes, 'activations': activations, 'initializer_name': initializer_name, 'seed': replica_seed}
     if layer_type == "dense":
         reg = regularizer_selector(regularizer, **regularizer_args)
         list_of_pdf_layers = generate_dense_network(**common_args, dropout_rate=dropout, regularizer=reg)
@@ -716,7 +708,7 @@ def generate_nn(
 
     # Note: using a Sequential model would be more appropriate, but it would require
     # creating a MetaSequential model.
-    x = Input(shape=(None, inp), batch_size=1, name='xgrids_processed')
+    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
     pdf = x
     for layer in list_of_pdf_layers:
         pdf = layer(pdf)
