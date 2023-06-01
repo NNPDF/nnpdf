@@ -86,8 +86,8 @@ def check_correct_theory_combination_internal(
             varied_xirs = [xirs[0]]
             varied_xifs.extend(xifs[-10:-2])
             varied_xirs.extend(xirs[-10:-2])
-            correct_xifs = [1.0, 0.5, 2.0, 0.5, 1.0, 2.0, 0.5, 1.0, 2.0]
-            correct_xirs = [1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 2.0, 2.0, 2.0]
+            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
             check(
                 varied_xifs == correct_xifs and varied_xirs == correct_xirs,
                 "Choice of input theories does not correspond to a valid "

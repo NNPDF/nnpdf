@@ -138,7 +138,7 @@ scale_variations_for:
   # N3LO MHOU
   - theoryid: 439
     variations:
-      (0, 0, 0, 0): 439 # central th
+      (1, 1): 439 # central th
       (0.5, 1): 510 # scale variations
       (2, 1): 511
       (0.5, 0.5): 512
@@ -222,8 +222,8 @@ scale_variations_for:
       (0, 0, 0, 6): 507
       (0, 0, 0, 7): 508
       (0, 0, 0, 8): 509
-      (-1,-1): 518 # k fact variations
-      (1,1): 519
+      (-1, -1): 518 # k fact variations
+      (1, 1): 519
 
 
   # N3LO: MHOU + IHOU
@@ -308,5 +308,5 @@ scale_variations_for:
       (0.5, 2): 515
       (1, 2): 516
       (2, 2): 517
-      (-1,-1): 518 # k fact variations
-      (1,1): 519 # k fact variations
+      (-1, -1): 518 # k fact variations
+      (1, 1): 519 # k fact variations
