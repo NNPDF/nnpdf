@@ -22,7 +22,7 @@ class xDivide(MetaLayer):
     to be used to divide some PDFs by x by multiplying with the result.
 
     By default it utilizes the 14-flavour FK basis and divides [v, v3, v8, v15]
-    which corresponds to indices (3,4,5, 6) from
+    which corresponds to indices (3, 4, 5, 6) from
     (photon, sigma, g, v, v3, v8, v15, v24, v35, t3, t8, t15, t24, t35)
 
     Parameters:
@@ -30,7 +30,7 @@ class xDivide(MetaLayer):
         output_dim: int
             dimension of the pdf
         div_list: list
-            list of indices to be divided by X (by default [3,4,5, 6]; [v, v3, v8, v15]
+            list of indices to be divided by X (by default [3, 4, 5, 6]; [v, v3, v8, v15]
     """
 
     def __init__(self, output_dim: int = BASIS_SIZE, div_list: List = None, **kwargs):
@@ -40,11 +40,7 @@ class xDivide(MetaLayer):
         self.div_list = div_list
         super().__init__(**kwargs)
 
-        # Create powers, a vector of zeros except for the indices
-        self.powers = op.scatter_to_zero(
-                indices=div_list,
-                values=[-1.0] * len(div_list),
-                output_dim=output_dim)
+        self.powers = [-1 if i in div_list else 0 for i in range(output_dim)]
 
     def call(self, x):
         return op.pow(x, self.powers)

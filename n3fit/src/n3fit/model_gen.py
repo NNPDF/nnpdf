@@ -32,6 +32,8 @@ from n3fit.layers import (
 )
 from n3fit.layers.observable import is_unique
 
+from validphys.photon.compute import Photon  # only used for type hint here
+
 
 @dataclass
 class ObservableWrapper:
@@ -413,14 +415,14 @@ def pdfNN_layer_generator(
     impose_sumrule: str = None,
     scaler: Callable = None,
     parallel_models: int = 1,
-    photons=None,
+    photons: Photon = None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
     and outputs a basis of 14 PDFs.
     It generates the preprocessing of the x into a set (x, log(x)),
     the arbitrary NN to fit the form of the PDF
-    and the prefactor.
+    and the preprocessing factor.
 
     The funtional form of the output of this function is of:
 
@@ -455,7 +457,7 @@ def pdfNN_layer_generator(
     A function is constructed that joins all those layers. The function takes a
     tensor as the input and applies all layers for NN in order.
 
-    4. Create a prefactor layer (that takes as input the same tensor x as the NN)
+    4. Create a preprocessing factor layer (that takes as input the same tensor x as the NN)
     and multiply it to the NN. We have now:
         N(x)_{j} * x^{1-alpha_{j}} * (1-x)^{beta_{j}}
 
@@ -546,7 +548,7 @@ def pdfNN_layer_generator(
     # 1. Scale the input
     # 2. Concatenate log(x) to the input
     use_feature_scaling = scaler is not None
-    add_logs = not use_feature_scaling
+
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
     subtract_one = use_feature_scaling
@@ -564,7 +566,7 @@ def pdfNN_layer_generator(
         process_input = do_nothing
         extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
         extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
-    else:  # if add_logs
+    else:  # add log(x)
         pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
         extract_original = do_nothing
@@ -584,8 +586,8 @@ def pdfNN_layer_generator(
                 custom_shape=(None, 1))  # Just to make shapes consistent
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
-    # the layer that multiplies the NN output by the prefactor
-    apply_prefactor = Lambda(op.op_multiply, name='prefactor_times_NN')
+    # the layer that multiplies the NN output by the preprocessing factor
+    apply_preprocessing_factor = Lambda(op.op_multiply, name='prefactor_times_NN')
 
     # Photon layer
     layer_photon = AddPhoton(photons=photons, name="add_photon")
@@ -608,9 +610,9 @@ def pdfNN_layer_generator(
 
     # Only these layers change from replica to replica:
     nn_replicas = []
-    prefactor_replicas = []
+    preprocessing_factor_replicas = []
     for i_replica, replica_seed in enumerate(seed):
-        prefactor_replicas.append(
+        preprocessing_factor_replicas.append(
             Preprocessing(
                 flav_info=flav_info,
                 input_shape=(1,),
@@ -637,7 +639,7 @@ def pdfNN_layer_generator(
     # All layers have been made, now we need to connect them,
     # do this in a function so we can call it for both grids and each replica
     # Since all layers are already made, they will be reused
-    def compute_unnormalized_pdf(x, neural_network, compute_prefactor):
+    def compute_unnormalized_pdf(x, neural_network, compute_preprocessing_factor):
         # Preprocess the input grid
         x_nn_input = extract_nn_input(x)
         x_original = extract_original(x)
@@ -650,9 +652,9 @@ def pdfNN_layer_generator(
             nn_at_one = neural_network(x_eq_1_processed)
             nn_output = subtract_one_layer([nn_output, nn_at_one])
 
-        # Compute the preprocessing prefactor and multiply
-        prefactor = compute_prefactor(x_original)
-        pref_nn = apply_prefactor([nn_output, prefactor])
+        # Compute the preprocessing factor and multiply
+        preprocessing_factor = compute_preprocessing_factor(x_original)
+        pref_nn = apply_preprocessing_factor([nn_output, preprocessing_factor])
 
         # Apply basis rotation if needed
         if not basis_rotation.is_identity():
@@ -665,12 +667,14 @@ def pdfNN_layer_generator(
 
     # Finally compute the normalized PDFs for each replica
     pdf_models = []
-    for i_replica, (prefactor, nn) in enumerate(zip(prefactor_replicas, nn_replicas)):
-        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, prefactor)
-        pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, prefactor)
+    for i_replica, (preprocessing_factor, nn) in \
+            enumerate(zip(preprocessing_factor_replicas, nn_replicas)):
+        pdf_unnormalized = compute_unnormalized_pdf(
+                pdf_input, nn, preprocessing_factor)
+        pdf_integration_grid = compute_unnormalized_pdf(
+                integrator_input, nn, preprocessing_factor)
 
         pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
-        # Final PDF (apply normalization)
 
         if photons:
             pdf_normalized = layer_photon(pdf_normalized, i_replica)
