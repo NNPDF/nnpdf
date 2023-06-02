@@ -112,7 +112,12 @@ def batchit(x, batch_dimension=0, **kwarg):
 
 
 # layer generation
-def numpy_to_input(numpy_array, no_reshape=False, name=None, custom_shape: tuple = None):
+def numpy_to_input(
+        numpy_array: np.ndarray,
+        no_reshape: bool = False,
+        name: str = None,
+        custom_shape: tuple = None,
+        ):
     """
     Takes a numpy array and generates a Input layer.
     By default it adds a batch dimension (of size 1) so that the shape of the layer

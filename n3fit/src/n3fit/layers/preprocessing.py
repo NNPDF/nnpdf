@@ -5,11 +5,11 @@ from n3fit.backends import operations as op
 
 class Preprocessing(MetaLayer):
     """
-    Computes prefactor for the PDF.
+    Computes preprocessing factor for the PDF.
 
     This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha
-    are model paramters that can be trained. If feature scaling is used, the
-    prefactor is x^(1-alpha).
+    are model paramters that can be trained. If feature scaling is used, the preprocessing
+    factor is x^(1-alpha).
 
     Alpha is initialized uniformly within the ranges allowed in the runcard and
     then it is only allowed to move between those two values (with a hard wall in each side)
@@ -21,7 +21,7 @@ class Preprocessing(MetaLayer):
     Parameters
     ----------
         flav_info: list
-            list of dicts containing the information about the fitting of the prefactor
+            list of dicts containing the information about the fitting of the preprocessing factor
             This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
             The dicts can contain the following fields:
                 `smallx`: range of alpha
@@ -29,7 +29,7 @@ class Preprocessing(MetaLayer):
                 `trainable`: whether these alpha-beta should be trained during the fit
                             (defaults to true)
         large_x: bool
-            Whether large x prefactor should be active
+            Whether large x preprocessing factor should be active
         seed: int
             seed for the initializer of the random alpha and beta values
     """
@@ -43,7 +43,7 @@ class Preprocessing(MetaLayer):
         **kwargs,
     ):
         if flav_info is None:
-            raise ValueError("Trying to instantiate a prefactor with no basis information")
+            raise ValueError("Trying to instantiate a preprocessing factor with no basis information")
         self.flav_info = flav_info
         self.seed = seed
         self.output_dim = len(flav_info)

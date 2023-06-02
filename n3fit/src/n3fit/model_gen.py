@@ -9,7 +9,7 @@
 
 
 """
-from typing import List
+from typing import List, Callable
 from dataclasses import dataclass
 
 import numpy as np
@@ -302,13 +302,13 @@ def observable_generator(
 
 # Network generation functions
 def generate_dense_network(
-    nodes_in,
-    nodes,
-    activations,
-    initializer_name="glorot_normal",
-    seed=0,
-    dropout_rate=0.0,
-    regularizer=None,
+    nodes_in: int,
+    nodes: int,
+    activations: List[str],
+    initializer_name: str = "glorot_normal",
+    seed: int = 0,
+    dropout_rate: float = 0.0,
+    regularizer: str = None,
 ):
     """
     Generates a dense network
@@ -404,14 +404,14 @@ def pdfNN_layer_generator(
     initializer_name: str = "glorot_normal",
     layer_type: str = "dense",
     flav_info: dict = None,
-    fitbasis="NN31IC",
+    fitbasis: str = "NN31IC",
     out: int = 14,
     seed: int = None,
     dropout: float = 0.0,
-    regularizer=None,
-    regularizer_args=None,
+    regularizer: str = None,
+    regularizer_args: dict = None,
     impose_sumrule: str = None,
-    scaler=None,
+    scaler: Callable = None,
     parallel_models: int = 1,
     photons=None,
 ):  # pylint: disable=too-many-locals

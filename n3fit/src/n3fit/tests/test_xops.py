@@ -16,7 +16,7 @@ def test_xdivide_default():
     for i in default_indices:
         expected_output[:, :, i] = 1 / test_input[:, :, 0]
 
-    assert np.allclose(test_output, expected_output)
+    np.testing.assert_allclose(test_output, expected_output, rtol=1e-05)
 
 def test_xdivide_indices():
     """Check that the default xDivide works as expected"""
@@ -29,5 +29,5 @@ def test_xdivide_indices():
     for i in custom_indices:
         expected_output[:, :, i] = 1 / test_input[:, :, 0]
 
-    assert np.allclose(test_output, expected_output)
+    np.testing.assert_allclose(test_output, expected_output, rtol=1e-05)
 
