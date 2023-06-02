@@ -18,7 +18,7 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9, 71, 73, 81}, f"Expecting exactly 3, 5, 7 or 9 or 81 theories, but got {l}.")
+    check(l in {3, 5, 7, 9, 71, 73, 81}, f"Expecting exactly 3, 5, 7, 9, 71, 73 or 81 theories, but got {l}.")
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
