@@ -174,7 +174,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     block = genpdf.generate_block(
         ev_pdf,
         xgrid=targetgrid,
-        evolgrid=eko.evolgrid,
+        evolgrid=[(float(q2), int(nf)) for q2, nf in np.sort(eko.evolgrid, axis=0)],
         pids=basis_rotation.flavor_basis_pids,
     )
     return block
