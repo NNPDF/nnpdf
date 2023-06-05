@@ -24,8 +24,6 @@ from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 from validphys.photon.compute import Photon
 
-from tensorflow.keras.utils import plot_model
-
 log = logging.getLogger(__name__)
 
 # Threshold defaults
@@ -177,7 +175,6 @@ class ModelTrainer:
             self.max_cores = max_cores
         self.model_file = model_file
         self.print_summary = True
-        self.plot_model = False  # TODO: change back to true once dependencies fixed
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
         self._hyperkeys = None
@@ -255,11 +252,9 @@ class ModelTrainer:
         self._hyperkeys = keys
         if hyperopt_on:
             self.print_summary = False
-            self.plot_model = False
             self.mode_hyperopt = True
         else:
             self.print_summary = True
-            self.plot_model = False  # TODO: change back to true once dependencies fixed
             self.mode_hyperopt = False
 
     ###########################################################################
@@ -483,15 +478,6 @@ class ModelTrainer:
             nn_model.summary()
             msr_model = pdf_model.get_layer("impose_msr")
             msr_model.summary()
-        if self.plot_model:
-            log.info("Generating model plots saved in the current directory")
-            plot_model(training, to_file="full_model.png", show_shapes=True)
-            pdf_model = training.get_layer("PDF_0")
-            plot_model(pdf_model, to_file="pdf_model.png", show_shapes=True)
-            nn_model = pdf_model.get_layer("NN_0")
-            plot_model(nn_model, to_file="nn_model.png", show_shapes=True)
-            msr_model = pdf_model.get_layer("impose_msr")
-            plot_model(msr_model, to_file="msr_model.png", show_shapes=True)
 
         models = {
             "training": training,
