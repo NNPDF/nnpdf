@@ -1,18 +1,26 @@
 import logging
 import pathlib
-import pytest
 import shutil
 import subprocess as sp
-from numpy.testing import assert_allclose
+
+from evolven3fit_new import eko_utils, utils
 import numpy as np
+from numpy.testing import assert_allclose
+import pytest
+
+from eko import EKO, runner
 from reportengine.compat import yaml
 from validphys.api import API
 from validphys.pdfbases import PIDS_DICT
-from evolven3fit_new import utils, eko_utils
-from eko import EKO, runner
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
+
+
+def assert_sorted(arr, title):
+    """Assert that the array is sorted"""
+    if not np.all(np.diff(arr) >= 0):
+        raise ValueError(f"The values of {title} are not sorted!")
 
 
 def check_consecutive_members(grid, value):
@@ -30,11 +38,41 @@ def check_lhapdf_info(info_path):
     np.testing.assert_equal(info["QMin"], alphas_qs[0])
     np.testing.assert_equal(len(alphas), len(alphas_qs))
     assert isinstance(info["Particle"], int)
-    np.testing.assert_allclose(info["AlphaS_OrderQCD"], 2)
+    np.testing.assert_allclose(info["AlphaS_OrderQCD"], 2)  # Test theories are NNLO
     assert info["ErrorType"] == "replicas"
+
+    # Check that the values of Q are sorted
+    assert_sorted(alphas_qs, "Qs in the .info file")
 
     for flavor in info["Flavors"]:
         assert isinstance(flavor, int)
+
+    return info
+
+
+def check_lhapdf_dat(dat_path, info):
+    """Check that the dat file itself makes sense
+    and that it is consistent with the info file
+    """
+    blocks = dat_path.read_text().split("---")[:-1]
+
+    for i, block in enumerate(blocks[1:]):
+        sp_block = block.strip().split("\n", 3)
+        x = np.fromstring(sp_block[0], sep=" ")
+        q = np.fromstring(sp_block[1], sep=" ")
+        flavs = np.fromstring(sp_block[2], dtype=int, sep=" ")
+
+        np.testing.assert_array_equal(info["Flavors"], flavs)
+
+        assert x[0] == info["XMin"]
+        assert x[-1] == info["XMax"]
+        assert_sorted(x, "x-grid")
+
+        if i == 0:
+            assert q[0] == info["QMin"]
+        assert_sorted(q, "q-grid")
+
+    assert q[-1] == info["QMax"]
 
 
 def test_utils():
@@ -116,11 +154,15 @@ def test_perform_evolution(tmp_path, fitname):
     # Clear the .log and .dat files
     (tmp_fit / "evolven3fit_new.log").unlink()
     tmp_nnfit = tmp_fit / "nnfit"
-    tmp_info = tmp_nnfit/f"{fitname}.info"
+    tmp_info = tmp_nnfit / f"{fitname}.info"
     tmp_info.unlink()
     for datpath in tmp_nnfit.glob("replica_*/*.dat"):
         datpath.unlink()
+
     # And re-evolve the fit
     sp.run(["evolven3fit_new", "evolve", fitname], cwd=tmp_path, check=True)
+
     # check that everything worked!
-    check_lhapdf_info(tmp_info)
+    info = check_lhapdf_info(tmp_info)
+    for datpath in tmp_nnfit.glob("replica_*/*.dat"):
+        check_lhapdf_dat(datpath, info)
