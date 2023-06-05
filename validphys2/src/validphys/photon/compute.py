@@ -17,7 +17,6 @@ from .constants import ED2, EU2, NC, NL
 
 log = logging.getLogger(__name__)
 
-Q_IN = 100
 FIATLUX_DEFAULT = {
     "apfel": False,
     "eps_base": 1e-5,  # precision on final integration of double integral.
@@ -71,6 +70,9 @@ class Photon:
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
         path_to_FL = theoryid.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
+        with EKO.read(self.path_to_eko_photon) as eko:
+            self.q_in = np.sqrt(eko.mu20)
+        
 
         # set fiatlux
         self.lux = {}
@@ -129,7 +131,7 @@ class Photon:
         """
         # Compute photon PDF
         log.info(f"Computing photon")
-        photon_qin = np.array([self.lux[replica].EvaluatePhoton(x, Q_IN**2).total for x in XGRID])
+        photon_qin = np.array([self.lux[replica].EvaluatePhoton(x, self.q_in**2).total for x in XGRID])
         photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
         photon_qin /= XGRID
@@ -150,7 +152,7 @@ class Photon:
                     if pid not in self.luxpdfset.flavors:
                         continue
                     pdfs_init[j] = np.array(
-                        [self.luxpdfset.xfxQ(x, Q_IN, replica, pid) / x for x in XGRID]
+                        [self.luxpdfset.xfxQ(x, self.q_in, replica, pid) / x for x in XGRID]
                     )
 
             # Apply EKO to PDFs
@@ -188,7 +190,7 @@ class Photon:
         if not self.additional_errors:
             return None
         extra_set = self.additional_errors.load()
-        qs = [Q_IN] * len(XGRID)
+        qs = [self.q_in] * len(XGRID)
         res_central = np.array(extra_set.central_member.xfxQ(22, XGRID, qs))
         res = []
         for idx_member in range(101, 107 + 1):
