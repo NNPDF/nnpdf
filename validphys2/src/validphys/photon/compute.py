@@ -95,7 +95,7 @@ class Photon:
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(fiatlux_runcard))
-                self.lux[replica] = fiatlux.FiatLux(tmp_file.name)
+                self.lux[replica] = fiatlux.FiatLux(tmp.name)
             # we have a dict but fiatlux wants a yaml file
             # TODO : once that fiatlux will allow dictionaries
             # pass directly fiatlux_runcard
