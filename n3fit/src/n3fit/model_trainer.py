@@ -495,7 +495,7 @@ class ModelTrainer:
             self.experimental[key] = []
 
     ############################################################################
-    # # Parametizable functions                                                #
+    # # Parameterizable functions                                                #
     #                                                                          #
     # The functions defined in this block accept a 'params' dictionary which   #
     # defines the fit and the behaviours of the Neural Networks                #
@@ -536,11 +536,23 @@ class ModelTrainer:
         log.info("Generating layers")
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for exp_dict in self.exp_info:
+        for index, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            # Stacked tr-vl mask array for all replicas for this dataset
+            replica_masks = np.stack([e[index]["trmask"] for e in self.exp_info])
+            training_data = np.stack([e[index]["expdata"].flatten() for e in self.exp_info])
+            validation_data = np.stack([e[index]["expdata_vl"].flatten() for e in self.exp_info])
+            invcovmat = np.stack([e[index]["invcovmat"] for e in self.exp_info])
+            invcovmat_vl = np.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
+
+            exp_layer = model_gen.observable_generator(exp_dict,
+                                                       mask_array=replica_masks,
+                                                       training_data=training_data,
+                                                       validation_data=validation_data,
+                                                       invcovmat_tr=invcovmat,
+                                                       invcovmat_vl=invcovmat_vl)
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -561,8 +573,14 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
+            replica_masks = np.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
+            training_data = np.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(pos_dict,
+                                                       positivity_initial=pos_initial,
+                                                       mask_array=replica_masks,
+                                                       training_data=training_data,
+                                                       validation_data=training_data)
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
