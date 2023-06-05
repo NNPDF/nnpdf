@@ -69,7 +69,11 @@ def generate_msr_model_and_grid(
             xgrid_integration, name="integration_grid", custom_shape=(None, grid_shape))
 
     # 1c Get the original grid
-    x_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")(xgrid_integration)
+    if scaler:
+        get_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")
+    else:
+        get_original = lambda x: x
+    x_original = get_original(xgrid_integration)
 
     # 2. Divide the grid by x depending on the flavour
     x_divided = xDivide()(x_original)
