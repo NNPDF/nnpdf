@@ -43,7 +43,9 @@ class Preprocessing(MetaLayer):
         **kwargs,
     ):
         if flav_info is None:
-            raise ValueError("Trying to instantiate a preprocessing factor with no basis information")
+            raise ValueError(
+                "Trying to instantiate a preprocessing factor with no basis information"
+            )
         self.flav_info = flav_info
         self.seed = seed
         self.output_dim = len(flav_info)

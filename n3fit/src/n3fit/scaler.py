@@ -52,9 +52,7 @@ def generate_scaler(input_list: List[np.ndarray], interpolation_points: int = No
     try:
         scaler = PchipInterpolator(map_from, map_to)
     except ValueError:
-        raise ValueError(
-            "interpolation_points is larger than the number of unique input x-values"
-        )
+        raise ValueError("interpolation_points is larger than the number of unique input x-values")
 
     def _scaler(x):
         x_scaled = scaler(np.log(x))
@@ -62,4 +60,3 @@ def generate_scaler(input_list: List[np.ndarray], interpolation_points: int = No
         return np.concatenate([x_scaled, x], axis=-1)
 
     return _scaler
-

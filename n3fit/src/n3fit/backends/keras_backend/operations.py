@@ -36,7 +36,7 @@ from validphys.convolution import OP
 
 
 def evaluate(tensor):
-    """ Evaluate input tensor using the backend """
+    """Evaluate input tensor using the backend"""
     return K.eval(tensor)
 
 
@@ -107,17 +107,17 @@ def numpy_to_tensor(ival, **kwargs):
 
 # f(x: tensor) -> y: tensor
 def batchit(x, batch_dimension=0, **kwarg):
-    """ Add a batch dimension to tensor x """
+    """Add a batch dimension to tensor x"""
     return tf.expand_dims(x, batch_dimension, **kwarg)
 
 
 # layer generation
 def numpy_to_input(
-        numpy_array: np.ndarray,
-        no_reshape: bool = False,
-        name: str = None,
-        custom_shape: tuple = None,
-        ):
+    numpy_array: np.ndarray,
+    no_reshape: bool = False,
+    name: str = None,
+    custom_shape: tuple = None,
+):
     """
     Takes a numpy array and generates a Input layer.
     By default it adds a batch dimension (of size 1) so that the shape of the layer
@@ -183,7 +183,7 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     both eager and non-eager tensors
     """
     if indices == -1:
-        indices = tensor.shape[axis]-1
+        indices = tensor.shape[axis] - 1
 
     def tmp(x):
         y = tf.gather(x, indices, axis=axis, **kwargs)
@@ -198,6 +198,7 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
 # f(x: tensor[s]) -> y: tensor
 #
 
+
 # Generation operations
 # generate tensors of given shape/content
 @tf.function
@@ -207,6 +208,7 @@ def tensor_ones_like(*args, **kwargs):
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
     """
     return K.ones_like(*args, **kwargs)
+
 
 @tf.function
 def many_replication(grid, replications, axis=0, **kwargs):
@@ -224,7 +226,7 @@ def many_replication(grid, replications, axis=0, **kwargs):
 # modify properties of the tensor like the shape or elements it has
 @tf.function
 def flatten(x):
-    """ Flatten tensor x """
+    """Flatten tensor x"""
     return tf.reshape(x, (-1,))
 
 
@@ -248,7 +250,7 @@ def transpose(tensor, **kwargs):
 
 
 def stack(tensor_list, axis=0, **kwargs):
-    """ Stack a list of tensors
+    """Stack a list of tensors
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
     """
     return tf.stack(tensor_list, axis=axis, **kwargs)
@@ -288,8 +290,8 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
         pdf_x_pdf: tf.tensor
             rank3 (len(mask_true), xgrid, xgrid, replicas)
     """
-    if raw_pdf.shape[-1] == 1: # only one replica!
-        pdf = tf.squeeze(raw_pdf, axis=(0,-1))
+    if raw_pdf.shape[-1] == 1:  # only one replica!
+        pdf = tf.squeeze(raw_pdf, axis=(0, -1))
         luminosity = tensor_product(pdf, pdf, axes=0)
         lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
         pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), -1)
@@ -357,6 +359,7 @@ def scatter_to_one(values, indices=[[1]], output_dim=14):
     """
     ones = np.ones(output_dim, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
+
 
 def scatter_to_zero(values, indices, output_dim):
     """

@@ -360,7 +360,6 @@ def generate_dense_per_flavour_network(
     number_of_layers = len(nodes)
     current_seed = seed
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-
         initializers = []
         for _ in range(basis_size):
             # select the initializer and move the seed
@@ -581,9 +580,8 @@ def pdfNN_layer_generator(
         # the layer that subtracts 1 from the NN output
         subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
         layer_x_eq_1 = op.numpy_to_input(
-                np.array(input_x_eq_1).reshape(1, 1),
-                name='x_ones',
-                custom_shape=(None, 1))  # Just to make shapes consistent
+            np.array(input_x_eq_1).reshape(1, 1), name='x_ones', custom_shape=(None, 1)
+        )  # Just to make shapes consistent
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
     # the layer that multiplies the NN output by the preprocessing factor
@@ -593,14 +591,18 @@ def pdfNN_layer_generator(
     layer_photon = AddPhoton(photons=photons, name="add_photon")
 
     # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis")
+    basis_rotation = FlavourToEvolution(
+        flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis"
+    )
 
     # Evolution layer
     layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out, name="pdf_FK_basis")
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = generate_msr_model_and_grid(mode=impose_sumrule, scaler=scaler, photons=photons)
+        sumrule_layer, integrator_input = generate_msr_model_and_grid(
+            mode=impose_sumrule, scaler=scaler, photons=photons
+        )
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -623,18 +625,19 @@ def pdfNN_layer_generator(
         )
         nn_replicas.append(
             generate_nn(
-                    layer_type=layer_type,
-                    input_dimensions=nn_input_dimensions,
-                    nodes=nodes,
-                    activations=activations,
-                    initializer_name=initializer_name,
-                    replica_seed=replica_seed,
-                    dropout=dropout,
-                    regularizer=regularizer,
-                    regularizer_args=regularizer_args,
-                    last_layer_nodes=last_layer_nodes,
-                    name=f"NN_{i_replica}")
+                layer_type=layer_type,
+                input_dimensions=nn_input_dimensions,
+                nodes=nodes,
+                activations=activations,
+                initializer_name=initializer_name,
+                replica_seed=replica_seed,
+                dropout=dropout,
+                regularizer=regularizer,
+                regularizer_args=regularizer_args,
+                last_layer_nodes=last_layer_nodes,
+                name=f"NN_{i_replica}",
             )
+        )
 
     # All layers have been made, now we need to connect them,
     # do this in a function so we can call it for both grids and each replica
@@ -667,12 +670,11 @@ def pdfNN_layer_generator(
 
     # Finally compute the normalized PDFs for each replica
     pdf_models = []
-    for i_replica, (preprocessing_factor, nn) in \
-            enumerate(zip(preprocessing_factor_replicas, nn_replicas)):
-        pdf_unnormalized = compute_unnormalized_pdf(
-                pdf_input, nn, preprocessing_factor)
-        pdf_integration_grid = compute_unnormalized_pdf(
-                integrator_input, nn, preprocessing_factor)
+    for i_replica, (preprocessing_factor, nn) in enumerate(
+        zip(preprocessing_factor_replicas, nn_replicas)
+    ):
+        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
+        pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, preprocessing_factor)
 
         pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
 
@@ -687,28 +689,40 @@ def pdfNN_layer_generator(
 
     return pdf_models
 
+
 def generate_nn(
-        layer_type: str,
-        input_dimensions: int,
-        nodes: List[int],
-        activations: List[str],
-        initializer_name: str,
-        replica_seed: int,
-        dropout: float,
-        regularizer: str,
-        regularizer_args: dict,
-        last_layer_nodes: int,
-        name: str) -> MetaModel:
+    layer_type: str,
+    input_dimensions: int,
+    nodes: List[int],
+    activations: List[str],
+    initializer_name: str,
+    replica_seed: int,
+    dropout: float,
+    regularizer: str,
+    regularizer_args: dict,
+    last_layer_nodes: int,
+    name: str,
+) -> MetaModel:
     """
     Create the part of the model that contains all of the actual neural network
     layers.
     """
-    common_args = {'nodes_in': input_dimensions, 'nodes': nodes, 'activations': activations, 'initializer_name': initializer_name, 'seed': replica_seed}
+    common_args = {
+        'nodes_in': input_dimensions,
+        'nodes': nodes,
+        'activations': activations,
+        'initializer_name': initializer_name,
+        'seed': replica_seed,
+    }
     if layer_type == "dense":
         reg = regularizer_selector(regularizer, **regularizer_args)
-        list_of_pdf_layers = generate_dense_network(**common_args, dropout_rate=dropout, regularizer=reg)
+        list_of_pdf_layers = generate_dense_network(
+            **common_args, dropout_rate=dropout, regularizer=reg
+        )
     elif layer_type == "dense_per_flavour":
-        list_of_pdf_layers = generate_dense_per_flavour_network(**common_args, basis_size=last_layer_nodes)
+        list_of_pdf_layers = generate_dense_per_flavour_network(
+            **common_args, basis_size=last_layer_nodes
+        )
 
     # Note: using a Sequential model would be more appropriate, but it would require
     # creating a MetaSequential model.
@@ -719,4 +733,3 @@ def generate_nn(
 
     model = MetaModel({'NN_input': x}, pdf, name=name)
     return model
-

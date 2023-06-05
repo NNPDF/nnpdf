@@ -13,12 +13,8 @@ log = logging.getLogger(__name__)
 
 
 def generate_msr_model_and_grid(
-        output_dim: int = 14,
-        mode: str = "ALL",
-        nx: int = int(2e3),
-        scaler=None,
-        photons=None,
-        **kwargs) -> MetaModel:
+    output_dim: int = 14, mode: str = "ALL", nx: int = int(2e3), scaler=None, photons=None, **kwargs
+) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.
 
@@ -54,7 +50,9 @@ def generate_msr_model_and_grid(
     """
     # 0. Prepare input layers to MSR model
     pdf_x = Input(shape=(None, output_dim), batch_size=1, name="pdf_x")
-    pdf_xgrid_integration = Input(shape=(nx, output_dim), batch_size=1, name="pdf_xgrid_integration")
+    pdf_xgrid_integration = Input(
+        shape=(nx, output_dim), batch_size=1, name="pdf_xgrid_integration"
+    )
 
     # 1. Generate the grid and weights that will be used to integrate
     xgrid_integration, weights_array = gen_integration_input(nx)
@@ -66,11 +64,14 @@ def generate_msr_model_and_grid(
     # so shapes will display properly in the model summary
     grid_shape = 2 if scaler is not None else 1
     xgrid_integration = op.numpy_to_input(
-            xgrid_integration, name="integration_grid", custom_shape=(None, grid_shape))
+        xgrid_integration, name="integration_grid", custom_shape=(None, grid_shape)
+    )
 
     # 1c Get the original grid
     if scaler:
-        get_original = Lambda(lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ")
+        get_original = Lambda(
+            lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ"
+        )
     else:
         get_original = lambda x: x
     x_original = get_original(xgrid_integration)
@@ -91,19 +92,24 @@ def generate_msr_model_and_grid(
 
     # 6. Compute the normalization factor
     # For now set the photon component to None
-    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights", photons_contribution=photons_c)(pdf_integrated, ph_replica=None)
+    normalization_factor = MSR_Normalization(
+        output_dim, mode, name="msr_weights", photons_contribution=photons_c
+    )(pdf_integrated, ph_replica=None)
 
     # 7. Apply the normalization factor to the pdf
-    pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")([pdf_x, normalization_factor])
+    pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(
+        [pdf_x, normalization_factor]
+    )
 
     inputs = {
         "pdf_x": pdf_x,
         "pdf_xgrid_integration": pdf_xgrid_integration,
         "xgrid_integration": xgrid_integration,
-        }
+    }
     model = MetaModel(inputs, pdf_normalized, name="impose_msr")
 
     return model, xgrid_integration
+
 
 def gen_integration_input(nx):
     """
@@ -128,4 +134,3 @@ def gen_integration_input(nx):
     weights_array = np.array(weights).reshape(nx, 1)
 
     return xgrid, weights_array
-
