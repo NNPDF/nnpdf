@@ -4,12 +4,12 @@
 """
 import os
 import sys
-import time
 import threading
+import time
 
 
 class Spinner:
-    """ Context manager to provide a spinning cursor
+    """Context manager to provide a spinning cursor
     while validphys performs some other task silently.
 
     When exececuted in a TTY, it shows a spinning cursor for the duration of
@@ -24,6 +24,7 @@ class Spinner:
     ...     time.sleep(5)
 
     """
+
     def __init__(self, delay=0.1):
         self.spinner_generator = self.spinning_cursor()
         self.delay = delay
@@ -55,16 +56,16 @@ class Spinner:
         else:
             print("Done")
 
-
     @staticmethod
     def spinning_cursor():
         while True:
-            for cursor in '|/-\\': yield cursor
+            for cursor in '|/-\\':
+                yield cursor
 
 
 def rename_pdf(pdf_folder, initial_fit_name, final_name):
     for item in os.listdir(pdf_folder):
-        p = pdf_folder/item
+        p = pdf_folder / item
         if p.is_symlink():
             replica = p.resolve().parent.name
             pointer = f'../../nnfit/{replica}/{final_name}.dat'
@@ -76,19 +77,19 @@ def rename_pdf(pdf_folder, initial_fit_name, final_name):
 
 
 def rename_nnfit(nnfit_path, initial_fit_name, final_name):
-    info_file = nnfit_path/f'{initial_fit_name}.info'
+    info_file = nnfit_path / f'{initial_fit_name}.info'
     info_file.rename(info_file.with_name(f'{final_name}.info'))
-    #Some older fits have the PDF here
+    # Some older fits have the PDF here
     pdf_folder = nnfit_path / initial_fit_name
     if pdf_folder.is_dir():
         rename_pdf(pdf_folder, initial_fit_name, final_name)
-    #Change replica names
+    # Change replica names
     for item in nnfit_path.glob('replica*'):
         if item.is_dir():
             files = item.glob(initial_fit_name + '*')
             for i in files:
                 newname = i.name.replace(initial_fit_name, final_name)
-                i.rename(item/newname)
+                i.rename(item / newname)
 
 
 def rename_postfit(postfit_path, initial_fit_name, final_name):
@@ -96,14 +97,15 @@ def rename_postfit(postfit_path, initial_fit_name, final_name):
     rename_pdf(pdf_folder, initial_fit_name, final_name)
     os.system(f'sed -i -e "s/{initial_fit_name}/{final_name}/g" {postfit_path/"postfit.log"}')
 
+
 def change_name(initial_path, final_name):
     """Function that takes initial fit name and final fit name
     and performs the renaming"""
     initial_fit_name = initial_path.name
-    nnfit = initial_path/'nnfit'
+    nnfit = initial_path / 'nnfit'
     if nnfit.exists():
         rename_nnfit(nnfit, initial_fit_name, final_name)
-    postfit = initial_path/'postfit'
+    postfit = initial_path / 'postfit'
     if postfit.exists():
         rename_postfit(postfit, initial_fit_name, final_name)
     newpath = initial_path.with_name(final_name)

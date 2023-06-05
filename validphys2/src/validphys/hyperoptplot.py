@@ -8,18 +8,20 @@
 # still used for the plotting script
 
 
-import os
-import re
 import glob
 import json
 import logging
+import os
+import re
 from types import SimpleNamespace
+
 import numpy as np
 import pandas as pd
+import seaborn as sns
+
 from reportengine.figure import figure
 from reportengine.table import table
-import seaborn as sns
-import matplotlib.pyplot as plt
+from validphys import plotutils
 from validphys.hyper_algorithm import autofilter_dataframe
 
 log = logging.getLogger(__name__)
@@ -698,7 +700,7 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
     """
     This function performs the plotting and is called by the `plot_` functions in this file.
     """
-    figs, ax = plt.subplots()
+    figs, ax = plotutils.subplots()
 
     # Set the quantity we will be plotting in the y axis
     loss_k = "loss"
@@ -706,7 +708,7 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
     key = plotting_parameter
     mode = plotting_styles[plotting_parameter]
 
-    if mode in (0,2):  # normal scatter plot
+    if mode in (0, 2):  # normal scatter plot
         ax = sns.scatterplot(x=key, y=loss_k, data=df, ax=ax)
         best_x = best_df.get(key)
         if mode == 2:
@@ -742,7 +744,6 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
             order=ordering_true,
             alpha=0.4,
         )
-
 
     # Finally plot the "best" one, which will be first
     if include_best:

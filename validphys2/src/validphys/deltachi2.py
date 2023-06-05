@@ -3,22 +3,20 @@ deltachi2.py
 
 Plots and data processing that can be used in a delta chi2 analysis
 """
+from collections import namedtuple
 import logging
 import warnings
-from collections import namedtuple
 
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import numpy as np
 import scipy as sp
 
 from reportengine.checks import CheckError, make_argcheck
 from reportengine.figure import figure, figuregen
-
 from validphys import plotutils
-from validphys.checks import check_scale, check_pdf_normalize_to, check_pdfs_noband
+from validphys.checks import check_pdf_normalize_to, check_pdfs_noband, check_scale
 from validphys.core import PDF
-from validphys.pdfplots import PDFPlotter, BandPDFPlotter
-
+from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 
 log = logging.getLogger(__name__)
 
@@ -28,9 +26,7 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
     """Check ``pdf`` has error type of ``symmhessian``"""
     etype = pdf.error_type
     if etype != "symmhessian":
-        raise CheckError(
-            "Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype)
-        )
+        raise CheckError("Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype))
 
 
 @check_pdf_is_symmhessian
@@ -40,8 +36,7 @@ def delta_chi2_hessian(pdf, total_chi2_data):
     each eigenvector of the Hessian set.
     """
     delta_chi2 = (
-        np.ravel(total_chi2_data.replica_result.error_members())
-        - total_chi2_data.central_result
+        np.ravel(total_chi2_data.replica_result.error_members()) - total_chi2_data.central_result
     )
     return delta_chi2
 
@@ -49,13 +44,13 @@ def delta_chi2_hessian(pdf, total_chi2_data):
 @figure
 def plot_kullback_leibler(delta_chi2_hessian):
     """
-    Determines the Kullback–Leibler divergence by comparing the expectation value of Delta chi2 to 
-    the cumulative distribution function of chi-square distribution with one degree of freedom 
+    Determines the Kullback–Leibler divergence by comparing the expectation value of Delta chi2 to
+    the cumulative distribution function of chi-square distribution with one degree of freedom
     (see: https://en.wikipedia.org/wiki/Chi-square_distribution).
-    
-    The Kullback-Leibler divergence provides a measure of the difference between two distribution 
+
+    The Kullback-Leibler divergence provides a measure of the difference between two distribution
     functions, here we compare the chi-squared distribution and the cumulative distribution of the
-    expectation value of Delta chi2. 
+    expectation value of Delta chi2.
     """
     delta_chi2 = delta_chi2_hessian
 
@@ -64,7 +59,7 @@ def plot_kullback_leibler(delta_chi2_hessian):
     bin_central_nnpdf = (bins_nnpdf[1:] + bins_nnpdf[:-1]) / 2
     x = np.linspace(0, 7.4, 200)
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
     vals_nnpdf, _, _ = ax.hist(
         delta_chi2,
@@ -74,7 +69,7 @@ def plot_kullback_leibler(delta_chi2_hessian):
         label="cumulative $\Delta\chi^2$",
     )
     # compute Kullback-Leibler (null values set to 1e-8)
-    vals_nnpdf[vals_nnpdf==0] = 1e-8
+    vals_nnpdf[vals_nnpdf == 0] = 1e-8
     kl_nnpdf = sp.stats.entropy(sp.stats.chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
 
     ax.plot(x, sp.stats.chi2.cdf(x, 1), label="$\chi^2$ CDF")
@@ -98,7 +93,7 @@ def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
 
     x = np.arange(1, len(delta_chi2) + 1)
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
     ax.bar(x, delta_chi2, label=pdf.label)
     ax.set_xlabel("# Hessian PDF")
@@ -119,9 +114,9 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     """
     delta_chi2 = delta_chi2_hessian
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
-    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2))+1)
+    bins = np.arange(np.floor(min(delta_chi2)), np.ceil(max(delta_chi2)) + 1)
 
     ax.hist(
         delta_chi2,
@@ -201,7 +196,7 @@ class PDFEpsilonPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
         flstate.labels = []
         flstate.handles = []
-    
+
     def get_ylabel(self, parton_name):
         return '$\epsilon(x)$'
 
@@ -232,7 +227,7 @@ class PDFEpsilonPlotter(PDFPlotter):
         error68 = (error68up - error68down) / 2.0
         epsilon = abs(1 - errorstd / error68)
 
-        handle, = ax.plot(xgrid, epsilon, linestyle="-", color=color)
+        (handle,) = ax.plot(xgrid, epsilon, linestyle="-", color=color)
 
         handles.append(handle)
         labels.append(pdf.label)
@@ -240,11 +235,11 @@ class PDFEpsilonPlotter(PDFPlotter):
         return [5 * epsilon]
 
     def legend(self, flstate):
-        return flstate.ax.legend(flstate.handles, flstate.labels,
-                                 handler_map={plotutils.HandlerSpec:
-                                             plotutils.ComposedHandler()
-                                             }
-                                 )
+        return flstate.ax.legend(
+            flstate.handles,
+            flstate.labels,
+            handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
+        )
 
 
 @make_argcheck
@@ -253,9 +248,7 @@ def check_pdfs_are_montecarlo(pdfs, **kwargs):
     for pdf in pdfs:
         etype = pdf.error_type
         if etype != "replicas":
-            raise CheckError(
-                "Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype)
-            )
+            raise CheckError("Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype))
 
 
 @figuregen

@@ -3,6 +3,8 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 from eko.io import runcards
+from eko.matchings import Atlas, nf_default
+from eko.quantities.heavy_quarks import MatchingScales
 from ekobox.cards import _operator as default_op_card
 from validphys.loader import Loader
 
@@ -10,11 +12,19 @@ from . import utils
 
 _logger = logging.getLogger(__name__)
 
-EVOLVEN3FIT_CONFIGS_DEFAULTS = {
+EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN = {
     "ev_op_iterations": 1,
     "ev_op_max_order": (1, 0),
     "evolution_method": "truncated",
     "inversion_method": "expanded",
+    "n_integration_cores": 1,
+}
+
+EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
+    "ev_op_iterations": 10,
+    "ev_op_max_order": (1, 0),
+    "evolution_method": "iterate-exact",
+    "inversion_method": "exact",
     "n_integration_cores": 1,
 }
 
@@ -60,15 +70,24 @@ def construct_eko_cards(
         {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
     )
     op_card = default_op_card
+    masses = np.array([theory["mc"],theory["mb"],theory["mt"]]) ** 2
+    thresholds_ratios=np.array([theory["kcThr"],theory["kbThr"],theory["ktThr"]]) ** 2
+    atlas = Atlas(
+        matching_scales=MatchingScales(masses * thresholds_ratios),
+        origin=(theory["Q0"]**2, theory["nf0"])
+    )
     op_card.update(
         {
             "mu0": theory["Q0"],
-            "_mugrid": np.sqrt(q2_grid).tolist(),
+            "mugrid": [(float(np.sqrt(q2)), int(nf_default(q2, atlas))) for q2 in q2_grid],
         }
     )
-    op_card["rotations"]["xgrid"] = x_grid
+    op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
-    op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS)
+    if theory["ModEv"] == "TRN":
+        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
+    if theory["ModEv"] == "EXA":
+        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
     # User can still change the configs via op_card_dict
 
     # Note that every entry that is not a dictionary should not be

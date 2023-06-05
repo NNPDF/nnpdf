@@ -12,23 +12,23 @@ import scipy.linalg as la
 import scipy.special as special
 
 from reportengine import collect
-
-from validphys.results import ThPredictionsResult
 from validphys.calcutils import calc_chi2
+from validphys.checks import check_use_t0
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
-    check_multifit_replicas,
-    check_fits_underlying_law_match,
     check_fits_areclosures,
     check_fits_different_filterseed,
-    check_t0pdfset_matches_multiclosure_law
+    check_fits_underlying_law_match,
+    check_multifit_replicas,
+    check_t0pdfset_matches_multiclosure_law,
 )
-from validphys.checks import check_use_t0
+from validphys.results import ThPredictionsResult
 
 # bootstrap seed default
 DEFAULT_SEED = 9689372
 # stepsize in fits/replicas to use for finite size bootstraps
 SAMPLING_INTERVAL = 5
+
 
 # TODO: deprecate this at some point
 @check_fits_underlying_law_match
@@ -81,8 +81,7 @@ def internal_multiclosure_dataset_loader(
 
     """
     fits_dataset_predictions = [
-        ThPredictionsResult.from_convolution(pdf, dataset)
-        for pdf in fits_pdf
+        ThPredictionsResult.from_convolution(pdf, dataset) for pdf in fits_pdf
     ]
     fits_underlying_predictions = ThPredictionsResult.from_convolution(
         multiclosure_underlyinglaw, dataset
@@ -91,7 +90,12 @@ def internal_multiclosure_dataset_loader(
     sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
+    return (
+        fits_dataset_predictions,
+        fits_underlying_predictions,
+        t0_covmat_from_systematics,
+        sqrt_covmat,
+    )
 
 
 @check_fits_underlying_law_match
@@ -185,9 +189,7 @@ def fits_total_bias_variance(fits_experiments_bias_variance):
     return bias_total, variance_total, n_total
 
 
-datasets_expected_bias_variance = collect(
-    "expected_dataset_bias_variance", ("data",)
-)
+datasets_expected_bias_variance = collect("expected_dataset_bias_variance", ("data",))
 
 
 experiments_expected_bias_variance = collect(
@@ -200,8 +202,7 @@ def expected_total_bias_variance(fits_total_bias_variance):
     return expected_dataset_bias_variance(fits_total_bias_variance)
 
 
-def dataset_replica_and_central_diff(
-    internal_multiclosure_dataset_loader, diagonal_basis=True):
+def dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, diagonal_basis=True):
     """For a given dataset calculate sigma, the RMS difference between
     replica predictions and central predictions, and delta, the difference
     between the central prediction and the underlying prediction.
@@ -229,9 +230,10 @@ def dataset_replica_and_central_diff(
         var_diff_sqrt = var_diff_sqrt.transpose(2, 1, 0)
         central_diff = central_diff.T
 
-    var_diff = var_diff_sqrt ** 2
+    var_diff = var_diff_sqrt**2
     sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
     return sigma, central_diff
+
 
 def dataset_xi(dataset_replica_and_central_diff):
     """Take sigma and delta for a dataset, where sigma is the RMS difference
@@ -262,11 +264,9 @@ def dataset_xi(dataset_replica_and_central_diff):
     return in_1_sigma.mean(axis=1)
 
 
-def data_replica_and_central_diff(
-    internal_multiclosure_data_loader, diagonal_basis=True):
+def data_replica_and_central_diff(internal_multiclosure_data_loader, diagonal_basis=True):
     """Like ``dataset_replica_and_central_diff`` but for all data"""
-    return dataset_replica_and_central_diff(
-        internal_multiclosure_data_loader, diagonal_basis)
+    return dataset_replica_and_central_diff(internal_multiclosure_data_loader, diagonal_basis)
 
 
 def data_xi(data_replica_and_central_diff):
@@ -276,7 +276,9 @@ def data_xi(data_replica_and_central_diff):
 
 experiments_xi_measured = collect("data_xi", ("group_dataset_inputs_by_experiment",))
 experiments_replica_central_diff = collect(
-    "data_replica_and_central_diff", ("group_dataset_inputs_by_experiment",))
+    "data_replica_and_central_diff", ("group_dataset_inputs_by_experiment",)
+)
+
 
 @check_at_least_10_fits
 def n_fit_samples(fits):
@@ -571,8 +573,6 @@ def xi_resampling_data(
     )
 
 
-
-
 exps_xi_resample = collect("xi_resampling_data", ("group_dataset_inputs_by_experiment",))
 
 
@@ -633,9 +633,7 @@ def fits_bootstrap_data_bias_variance(
         # explicitly pass n_rep to fits_dataset_bias_variance so it uses
         # full subsample
         bias, variance, _ = expected_dataset_bias_variance(
-            fits_dataset_bias_variance(
-                boot_internal_loader, _internal_max_reps, _internal_min_reps
-            )
+            fits_dataset_bias_variance(boot_internal_loader, _internal_max_reps, _internal_min_reps)
         )
         bias_boot.append(bias)
         variance_boot.append(variance)
@@ -702,6 +700,7 @@ def experiments_bootstrap_expected_xi(experiments_bootstrap_sqrt_ratio):
     estimated_integral = special.erf(n_sigma_in_variance / np.sqrt(2))
     return estimated_integral
 
+
 groups_bootstrap_bias_variance = collect(
     "fits_bootstrap_data_bias_variance", ("group_dataset_inputs_by_metadata",)
 )
@@ -753,14 +752,14 @@ def fits_bootstrap_data_xi(
             _internal_max_reps,
             True,
         )
-        xi_1sigma_boot.append(
-            dataset_xi(dataset_replica_and_central_diff(boot_internal_loader))
-        )
+        xi_1sigma_boot.append(dataset_xi(dataset_replica_and_central_diff(boot_internal_loader)))
     return xi_1sigma_boot
 
 
 experiments_bootstrap_xi = collect(
-    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_experiment",))
+    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_experiment",)
+)
+
 
 def total_bootstrap_xi(experiments_bootstrap_xi):
     """Given the bootstrap samples of xi_1sigma for all experiments,
@@ -770,8 +769,8 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
     """
     return np.concatenate(experiments_bootstrap_xi, axis=1)
 
-groups_bootstrap_xi = collect(
-    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",))
+
+groups_bootstrap_xi = collect("fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",))
 
 
 def dataset_fits_bias_replicas_variance_samples(
@@ -816,6 +815,7 @@ def dataset_fits_bias_replicas_variance_samples(
         variances.append(calc_chi2(sqrtcov, diffs))
     return biases, np.concatenate(variances), len(law_th)
 
+
 def dataset_inputs_fits_bias_replicas_variance_samples(
     internal_multiclosure_data_loader,
     _internal_max_reps=None,
@@ -827,7 +827,7 @@ def dataset_inputs_fits_bias_replicas_variance_samples(
         _internal_min_reps=20,
     )
 
+
 experiments_fits_bias_replicas_variance_samples = collect(
-    "dataset_inputs_fits_bias_replicas_variance_samples",
-    ("group_dataset_inputs_by_experiment",)
+    "dataset_inputs_fits_bias_replicas_variance_samples", ("group_dataset_inputs_by_experiment",)
 )

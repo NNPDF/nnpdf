@@ -12,7 +12,8 @@ function, e.g.:
 
 	@figure
 	def plot_p_alpha(p_alpha_study):
-	   fig, ax = plt.subplots()
+	   fig = Figure()
+	   ax = fig.subplots()
 	   #Plot something
 	   ...
 	   return fig

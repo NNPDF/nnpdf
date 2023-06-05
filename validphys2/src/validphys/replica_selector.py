@@ -4,18 +4,17 @@ replica_selector.py
 Tools for filtering replica sets based on criteria on the replicas.
 """
 import logging
-import shutil
 import re
+import shutil
 
-
-from reportengine.checks import make_argcheck, check
+from reportengine.checks import check, make_argcheck
 from reportengine.compat import yaml
-
 from validphys.core import PDF
 from validphys.renametools import rename_pdf
 from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
+
 
 def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
     """Helper function that takes in a
@@ -33,6 +32,7 @@ def _fixup_new_replica(alphas_pdf: PDF, new_replica_file):
         out_stream.write(f"AlphaS_MZ: {alphas_mz}\nAlphaS_Vals: {alphas_vals}\n".encode())
         out_stream.write(data)
 
+
 @make_argcheck
 def _check_target_name(target_name):
     """Make sure this specifies a name and not some kid of path"""
@@ -42,6 +42,7 @@ def _check_target_name(target_name):
         re.fullmatch(r'[\w]+', target_name),
         "`target_name` must contain alphnumeric characters and underscores only",
     )
+
 
 @_check_target_name
 def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = None):
@@ -101,8 +102,7 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
         info_yaml['NumMembers'] = new_nrep
         info_yaml['ErrorType'] += '+as'
         extra_desc = '; '.join(
-            f"mem={i} => alphas(MZ)={val}"
-            for val, i in zip(alphas_values, range(nrep, new_nrep))
+            f"mem={i} => alphas(MZ)={val}" for val, i in zip(alphas_values, range(nrep, new_nrep))
         )
         info_yaml['SetDesc'] += f"; {extra_desc}"
         with open(info_file, 'w') as stream:
@@ -117,4 +117,3 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
         new_pdf = new_pdf.rename(target_path)
     log.info(f"alpha_s bundle written at {new_pdf}")
     return target_name
-

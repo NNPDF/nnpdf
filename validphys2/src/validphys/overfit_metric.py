@@ -7,7 +7,6 @@ produce the corresponding tables and figures.
 
 import logging
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -15,12 +14,13 @@ import scipy.stats as stats
 from reportengine import collect
 from reportengine.figure import figure
 from reportengine.table import table
-
+from validphys import plotutils
 from validphys.checks import check_at_least_two_replicas
 
 log = logging.getLogger(__name__)
 
-preds = collect("predictions",("dataset_inputs",))
+preds = collect("predictions", ("dataset_inputs",))
+
 
 def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
     """Loads all validation pseudodata replicas used during the fiting of the
@@ -34,15 +34,13 @@ def _create_new_val_pseudodata(pdf_data_index, fit_data_indices_list):
     """
     vl_data_fitrep = []
     for fitreplica_info in fit_data_indices_list:
-        vl_data_fitrep.append(
-            fitreplica_info.pseudodata.loc[pdf_data_index.val_idx]
-        )
+        vl_data_fitrep.append(fitreplica_info.pseudodata.loc[pdf_data_index.val_idx])
     return np.array(vl_data_fitrep)[:, :, 0]
 
 
 @check_at_least_two_replicas
 def calculate_chi2s_per_replica(
-    pdf, # for the check
+    pdf,  # for the check
     fit_code_version,
     recreate_pdf_pseudodata_no_table,
     preds,
@@ -74,7 +72,7 @@ def calculate_chi2s_per_replica(
     """
     fit_name = fit_code_version.columns[0]
     nnpdf_version = fit_code_version[fit_name]['nnpdf']
-    if nnpdf_version>='4.0.5':
+    if nnpdf_version >= '4.0.5':
         pp = []
         for i, dss in enumerate(dataset_inputs):
             preds_witout_cv = preds[i].drop(0, axis=1)
@@ -85,7 +83,6 @@ def calculate_chi2s_per_replica(
 
         chi2s_per_replica = []
         for enum, pdf_data_index in enumerate(recreate_pdf_pseudodata_no_table):
-
             prediction_filter = pdf_data_index.val_idx.droplevel(level=0)
             prediction_filter.rename(["dataset", "data"], inplace=True)
             PDF_predictions_val = PDF_predictions.loc[prediction_filter]
@@ -96,9 +93,7 @@ def calculate_chi2s_per_replica(
             )
 
             invcovmat_vl = np.linalg.inv(
-                groups_covmat_no_table[pdf_data_index.val_idx].T[
-                    pdf_data_index.val_idx
-                ]
+                groups_covmat_no_table[pdf_data_index.val_idx].T[pdf_data_index.val_idx]
             )
 
             tmp = PDF_predictions_val - new_val_pseudodata_list
@@ -107,8 +102,10 @@ def calculate_chi2s_per_replica(
             chi2s_per_replica.append(chi2)
             ret = np.array(chi2s_per_replica)
     else:
-        log.warning(f"""Since {fit_name} pseudodata generation has changed,
-            hence the overfit metric cannot be determined.""")
+        log.warning(
+            f"""Since {fit_name} pseudodata generation has changed,
+            hence the overfit metric cannot be determined."""
+        )
         ret = np.array(np.nan)
 
     return ret
@@ -147,7 +144,7 @@ def array_expected_overfitting(
         (number_of_resamples*Npdfs,) sized array containing the mean delta chi2
         values per resampled list.
     """
-    # calculate_chi2s_per_replica is set to NaN if the pseudodata generation 
+    # calculate_chi2s_per_replica is set to NaN if the pseudodata generation
     # has changed sinc the fit has been performed. As a result the overfitting
     # metric can no longer be determined.
     if (calculate_chi2s_per_replica != calculate_chi2s_per_replica).all():
@@ -158,9 +155,7 @@ def array_expected_overfitting(
         number_pdfs = calculate_chi2s_per_replica.shape[0]
         list_expected_overfitting = []
         for _ in range(number_pdfs * number_of_resamples):
-            mask = np.random.randint(
-                0, number_pdfs, size=int(resampling_fraction * number_pdfs)
-            )
+            mask = np.random.randint(0, number_pdfs, size=int(resampling_fraction * number_pdfs))
             res_tmp = calculate_chi2s_per_replica[mask][:, mask]
 
             fitted_val_erf_tmp = fitted_val_erf[mask]
@@ -179,7 +174,7 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
     mean = array_expected_overfitting.mean()
     std = array_expected_overfitting.std()
 
-    f, ax = plt.subplots(1, 1)
+    fig, ax = plotutils.subplots()
 
     # if array_expected_overfitting is nan it should not produce a histogram
     if (array_expected_overfitting == array_expected_overfitting).all():
@@ -195,13 +190,11 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
         ax.set_xlabel(r"$\mathcal{R}_O$")
         ax.set_ylabel("density")
         ax.set_title(f"{fit.label}")
-        plt.tight_layout()
-    return f
+        fig.tight_layout()
+    return fig
 
 
-fits_overfitting_summary = collect(
-    "fit_overfitting_summary", ("fits", "fitcontext")
-)
+fits_overfitting_summary = collect("fit_overfitting_summary", ("fits", "fitcontext"))
 
 
 @table
