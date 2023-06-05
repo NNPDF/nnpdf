@@ -486,8 +486,9 @@ class FKTableSpec(TupleComp):
 
         return [[parse_cfactor(c.open("rb")) for c in cfacs] for cfacs in self.cfactors]
 
+    @functools.lru_cache()
     def load_with_cuts(self, cuts):
-        """Load the fktable and apply cuts inmediately. Returns a FKTableData"""
+        """Load the fktable and apply cuts immediately. Returns a FKTableData"""
         return load_fktable(self).with_cuts(cuts)
 
 

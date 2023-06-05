@@ -77,12 +77,11 @@ class ObservableWrapper:
             output_layers = [obs(pdf) for obs in self.observables]
 
         masked_output_layers = []
-
-        for output_layer, mask_layer in zip(output_layers, self.trvl_mask_layers):
-            if mask_layer is None:
-                masked_output_layers.append(output_layer)
-            else:
+        if self.trvl_mask_layers is not None:
+            for output_layer, mask_layer in zip(output_layers, self.trvl_mask_layers):
                 masked_output_layers.append(mask_layer(output_layer))
+        else:
+            masked_output_layers = output_layers
 
         # Finally concatenate all observables (so that experiments are one single entity)
         ret = op.concatenate(masked_output_layers)
@@ -173,10 +172,11 @@ def observable_generator(spec_dict,
         operation_name = dataset.operation
 
         # Extract the masks that will end up in the observable wrappers...
-        trmask = mask_array[:, offset:offset + dataset.ndata] if apply_masks else None
-        masks.append(trmask)
-        tr_mask_layers.append(Mask(trmask, axis=1, name=f"trmask_{dataset_name}") if apply_masks else None)
-        vl_mask_layers.append(Mask(~trmask, axis=1, name=f"vlmask_{dataset_name}") if apply_masks else None)
+        if apply_masks:
+            trmask = mask_array[:, offset:offset + dataset.ndata]
+            masks.append(trmask)
+            tr_mask_layers.append(Mask(trmask, axis=1, name=f"trmask_{dataset_name}"))
+            vl_mask_layers.append(Mask(~trmask, axis=1, name=f"vlmask_{dataset_name}"))
 
         # Now generate the observable layer, which takes the following information:
         # operation name
@@ -221,7 +221,7 @@ def observable_generator(spec_dict,
         out_positivity = ObservableWrapper(
             spec_name,
             model_observables,
-            tr_mask_layers,
+            tr_mask_layers if apply_masks else None,
             dataset_xsizes,
             multiplier=positivity_initial,
             positivity=not integrability,
@@ -247,7 +247,7 @@ def observable_generator(spec_dict,
     out_tr = ObservableWrapper(
         spec_name,
         model_observables,
-        tr_mask_layers,
+        tr_mask_layers if apply_masks else None,
         dataset_xsizes,
         invcovmat=invcovmat_tr,
         data=training_data,
@@ -256,7 +256,7 @@ def observable_generator(spec_dict,
     out_vl = ObservableWrapper(
         f"{spec_name}_val",
         model_observables,
-        vl_mask_layers,
+        vl_mask_layers if apply_masks else None,
         dataset_xsizes,
         invcovmat=invcovmat_vl,
         data=validation_data,
@@ -265,7 +265,7 @@ def observable_generator(spec_dict,
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
         model_observables,
-        [None] * len(model_observables),
+        None,
         dataset_xsizes,
         invcovmat=spec_dict["invcovmat_true"],
         covmat=spec_dict["covmat"],
