@@ -165,7 +165,9 @@ def fits_dataset_bias_variance(
         # flag to see whether to eliminate dataset
         flag = True
         for i in range(n_fits):
-            n_data = len(law_th)
+
+            #get rows and columns which have too large correlations (these should be the ones that make the
+            # matrix ill defined)
             #evals, eigens = la.eigh(pdf_cov[i])
             """if(np.shape(pdf_cov[i]) == ()):
                 bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
@@ -187,18 +189,29 @@ def fits_dataset_bias_variance(
                 bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
                 var = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
             else:
-                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
-                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
-                evals, eigens = la.eigh(pdf_cov[i])  
-                bias = (eigens.T@bias_diffs)*(eigens.T@bias_diffs)/evals
-                rotated_var_diffs = eigens.T@var_diffs
+                print("shape diag???")
+                print(np.shape(np.diag(pdf_cov[i])))
+                d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+                corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
+                mask = (abs(corr) > 0.9)
+                print(mask)
+                print("these are indices")
+                print(set(np.where(np.tril(mask))[0]))
+                indices = list(set(np.where(np.tril(mask))[0]))
+                print(type(indices))
+                corr_cov = np.delete(pdf_cov[i],indices,0)
+                corr_cov = np.delete(corr_cov,indices,1)
+                print("this is corrected cov shape: ")
+                print(corr_cov.shape)
+                n_data = corr_cov.shape[0]
+                corr_reps = np.delete(reps[i], indices,0)
+                corr_theo = np.delete(law_th.central_value,indices)
+                bias_diffs = np.mean(corr_reps, axis = 1) - corr_theo
+                var_diffs = np.mean(corr_reps, axis = 1)[:,np.newaxis] - corr_reps
                 try:
-                    sqrt_cov = sqrt_covmat(pdf_cov[i])
+                    sqrt_cov = sqrt_covmat(corr_cov)
                     bias = calc_chi2(sqrt_cov, bias_diffs)
                     var = np.mean(calc_chi2(sqrt_cov, var_diffs))
-                    if (abs(var-law_th.central_value.shape[0])) > law_th.central_value.shape[0]*5./100:
-                        flag = False
-                        break
 
 
                 except:
