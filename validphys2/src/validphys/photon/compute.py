@@ -143,8 +143,8 @@ class Photon:
             # it has to be done inside vp-setupfit
 
             # construct PDFs
-            pdfs_init = np.zeros((len(eko.rotations.inputpids), len(XGRID)))
-            for j, pid in enumerate(eko.rotations.inputpids):
+            pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
+            for j, pid in enumerate(eko.bases.inputpids):
                 if pid == 22:
                     pdfs_init[j] = photon_qin
                     ph_id = j
@@ -156,8 +156,7 @@ class Photon:
                     )
 
             # Apply EKO to PDFs
-            q2 = eko.mu2grid[0]
-            with eko.operator(q2) as elem:
+            for (mu2, nf), elem in eko.items():
                 pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
 
         photon_Q0 = pdfs_final[ph_id]
