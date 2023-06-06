@@ -64,15 +64,16 @@ def check_lhapdf_dat(dat_path, info):
 
         np.testing.assert_array_equal(info["Flavors"], flavs)
 
-        assert x[0] == info["XMin"]
-        assert x[-1] == info["XMax"]
+        np.testing.assert_equal(x[0], info["XMin"])
+        np.testing.assert_equal(x[-1], info["XMax"])
         assert_sorted(x, "x-grid")
 
         if i == 0:
-            assert q[0] == info["QMin"]
+            np.testing.assert_equal(q[0], info["QMin"])
         assert_sorted(q, "q-grid")
 
-    assert q[-1] == info["QMax"]
+    # Use allclose here to avoid failing because of a different in the 7th place
+    np.testing.assert_allclose(q[-1], info["QMax"])
 
 
 def test_utils():

@@ -77,14 +77,9 @@ def evolve_fit(
 
     usr_path = pathlib.Path(fit_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    x_grid = np.array(
-        initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]
-    ).astype(float)
+    x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(float)
     theoryID = utils.get_theoryID_from_runcard(usr_path)
-    theory, op = eko_utils.construct_eko_cards(
-        theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
-    )
-    qed = theory.order[1] > 0
+
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
@@ -94,23 +89,37 @@ def evolve_fit(
             eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
+            theory, op = eko_utils.construct_eko_cards(
+                theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
+            )
             runner.solve(theory, op, dump_eko)
             eko_path = dump_eko
+
     with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
-    info = info_file.build(theory, op, 1, info_update={})
-    info["NumMembers"] = "REPLACE_NREP"
-    info["ErrorType"] = "replicas"
-    info["XMin"] = float(x_grid[0])
-    info["XMax"] = float(x_grid[-1])
+
     with eko.EKO.read(eko_path) as eko_op:
+        # Read the cards directly from the eko to make sure they are consistent
+        theory = eko_op.theory_card
+        op = eko_op.operator_card
+
+        qed = theory.order[1] > 0
+
+        # Modify the info file with the fit-specific info
+        info = info_file.build(theory, op, 1, info_update={})
+        info["NumMembers"] = "REPLACE_NREP"
+        info["ErrorType"] = "replicas"
+        info["XMin"] = float(x_grid[0])
+        info["XMax"] = float(x_grid[-1])
+        # Save the PIDs in the info file in the same order as in the evolution
+        info["Flavors"] = basis_rotation.flavor_basis_pids
         dump_info_file(usr_path, info)
-        for replica in initial_PDFs_dict.keys():
-            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
-            dump_evolved_replica(
-                evolved_block, usr_path, int(replica.removeprefix("replica_"))
-            )
+
+        for replica, pdf_data in initial_PDFs_dict.items():
+            evolved_block = evolve_exportgrid(pdf_data, eko_op, x_grid, qed)
+            dump_evolved_replica(evolved_block, usr_path, int(replica.removeprefix("replica_")))
+
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
