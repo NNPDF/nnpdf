@@ -47,6 +47,8 @@ def check_lhapdf_info(info_path):
     for flavor in info["Flavors"]:
         assert isinstance(flavor, int)
 
+    assert info["NumFlavors"] <= 6
+
     return info
 
 

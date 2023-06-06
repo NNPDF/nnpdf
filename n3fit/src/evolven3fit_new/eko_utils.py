@@ -51,6 +51,7 @@ def construct_eko_cards(
         theory_card_dict = {}
     if op_card_dict is None:
         op_card_dict = {}
+
     # theory_card construction
     theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
@@ -59,19 +60,29 @@ def construct_eko_cards(
         theory["nfref"] = NFREF_DEFAULT
     if "nf0" not in theory:
         theory["nf0"] = NF0_DEFAULT
+
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
+
+    # Prepare the thresholds according to MaxNfPdf
+    thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["kbThr"]}
+    if theory["MaxNfPdf"] < 5:
+        thresholds["b"] = np.inf
+    if theory["MaxNfPdf"] < 6:
+        thresholds["t"] = np.inf
+
     # construct operator card
     q2_grid = utils.generate_q2grid(
         theory["Q0"],
         q_fin,
         q_points,
-        {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
+        {theory["mb"]: thresholds["b"], theory["mt"]: thresholds["t"]},
     )
     op_card = default_op_card
-    masses = np.array([theory["mc"],theory["mb"],theory["mt"]]) ** 2
-    thresholds_ratios=np.array([theory["kcThr"],theory["kbThr"],theory["ktThr"]]) ** 2
+    masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
+    thresholds_ratios = np.array([thresholds["c"], thresholds["b"], thresholds["t"]]) ** 2
+
     atlas = Atlas(
         matching_scales=MatchingScales(masses * thresholds_ratios),
         origin=(theory["Q0"]**2, theory["nf0"])

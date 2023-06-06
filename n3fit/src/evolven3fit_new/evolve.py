@@ -114,6 +114,7 @@ def evolve_fit(
         info["XMax"] = float(x_grid[-1])
         # Save the PIDs in the info file in the same order as in the evolution
         info["Flavors"] = basis_rotation.flavor_basis_pids
+        info["NumFlavors"] = theory.couplings.max_num_flavs
         dump_info_file(usr_path, info)
 
         for replica, pdf_data in initial_PDFs_dict.items():
