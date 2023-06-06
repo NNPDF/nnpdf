@@ -117,8 +117,8 @@ def evolve_fit(
         dump_info_file(usr_path, info)
 
         for replica, pdf_data in initial_PDFs_dict.items():
-            evolved_block = evolve_exportgrid(pdf_data, eko_op, x_grid, qed)
-            dump_evolved_replica(evolved_block, usr_path, int(replica.removeprefix("replica_")))
+            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid, qed)
+            dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
 
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
@@ -166,8 +166,8 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             whether qed is activated or not
     Returns
     -------
-        : np.array
-        evolved block
+        : list(np.array)
+        list of evolved blocks
     """
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
@@ -179,25 +179,28 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
 
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
+    evolgrid_list = eko_utils.split_evolgrid(eko.evolgrid)
+    blocks = []
+    for evgrid in evolgrid_list:
+        block = genpdf.generate_block(
+            ev_pdf,
+            xgrid=targetgrid,
+            evolgrid=evgrid,
+            pids=basis_rotation.flavor_basis_pids,
+        )
+        blocks.append(block)
+    return blocks
 
-    block = genpdf.generate_block(
-        ev_pdf,
-        xgrid=targetgrid,
-        evolgrid=eko.evolgrid,
-        pids=basis_rotation.flavor_basis_pids,
-    )
-    return block
 
-
-def dump_evolved_replica(evolved_block, usr_path, replica_num):
+def dump_evolved_replica(evolved_blocks, usr_path, replica_num):
     """
     Dump the evolved replica given by evolved_block as the replica num "replica_num" in
     the folder usr_path/nnfit/replica_<replica_num>/usr_path.stem.dat
 
     Parameters
     ----------
-        evolved_block: numpy.array
-            block of an evolved PDF
+        evolved_block: list(numpy.array)
+            list of blocks of an evolved PDF
         usr_path: pathlib.Path
             path of the fit folder
         replica_num: int
@@ -208,7 +211,7 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
     path_where_dump.mkdir(exist_ok=True)
     to_write_in_head = f"PdfType: replica\nFromMCReplica: {replica_num}\n"
     genpdf.export.dump_blocks(
-        path_where_dump, replica_num, [evolved_block], pdf_type=to_write_in_head
+        path_where_dump, replica_num, evolved_blocks, pdf_type=to_write_in_head
     )
     # fixing_replica_path
     utils.fix_replica_path(usr_path, replica_num)

@@ -100,3 +100,24 @@ def construct_eko_cards(
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
+
+
+def split_evolgrid(evolgrid):
+    """Split the evolgrid in blocks according to the number of flavors and repeating the last entry of one block in the first entry of the next."""
+    evolgrid_index_list = []
+    evolgrid.sort()
+    starting_nf = evolgrid[0][1]
+    for evo_point in evolgrid:
+        current_nf = evo_point[1]
+        if current_nf != starting_nf:
+            evolgrid_index_list.append(evolgrid.index(evo_point))
+            starting_nf = current_nf
+    start_index = 0
+    evolgrid_list = []
+    for index in evolgrid_index_list:
+        evolgrid_list.append(evolgrid[start_index:index+1])
+        start_index = index
+    evolgrid_list.append(evolgrid[start_index:])
+    return evolgrid_list
+            
+        
