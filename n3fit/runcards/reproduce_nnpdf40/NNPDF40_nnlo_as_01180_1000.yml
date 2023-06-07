@@ -112,7 +112,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 100
   positivity:
     initial: 184.8
     multiplier:
@@ -125,6 +125,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 3.5
 
 fitting:
+  savepseudodata: false
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
   basis:
   - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
@@ -163,4 +164,6 @@ integrability:
 
 ############################################################
 debug: false
-maxcores: 4
+maxcores: 8
+parallel_models: true
+same_trvl_per_replica: false

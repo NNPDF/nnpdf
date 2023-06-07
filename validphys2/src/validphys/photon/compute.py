@@ -8,7 +8,7 @@ from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
 import yaml
 
-from eko.io import EKO
+#from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
 
