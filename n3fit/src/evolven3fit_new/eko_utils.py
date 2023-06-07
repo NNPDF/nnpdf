@@ -66,7 +66,7 @@ def construct_eko_cards(
     theory_card = legacy_class.new_theory
 
     # Prepare the thresholds according to MaxNfPdf
-    thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["kbThr"]}
+    thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["ktThr"]}
     if theory["MaxNfPdf"] < 5:
         thresholds["b"] = np.inf
     if theory["MaxNfPdf"] < 6:
