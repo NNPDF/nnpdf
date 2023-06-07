@@ -1,11 +1,12 @@
 import logging
 from typing import Any, Dict, Optional
 
+from ekobox.cards import _operator as default_op_card
 import numpy as np
+
 from eko.io import runcards
 from eko.matchings import Atlas, nf_default
 from eko.quantities.heavy_quarks import MatchingScales
-from ekobox.cards import _operator as default_op_card
 from validphys.loader import Loader
 
 from . import utils
@@ -31,6 +32,7 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
 NFREF_DEFAULT = 5
 NF0_DEFAULT = 4
 
+
 def construct_eko_cards(
     theoryID,
     q_fin,
@@ -51,6 +53,7 @@ def construct_eko_cards(
         theory_card_dict = {}
     if op_card_dict is None:
         op_card_dict = {}
+
     # theory_card construction
     theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
@@ -59,6 +62,7 @@ def construct_eko_cards(
         theory["nfref"] = NFREF_DEFAULT
     if "nf0" not in theory:
         theory["nf0"] = NF0_DEFAULT
+
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
@@ -66,19 +70,28 @@ def construct_eko_cards(
     if theory["QED"] > 0:
         if np.isclose(theory["Qref"], theory["Qedref"]):
             theory_card.couplings.em_running = True
+            
+    # Prepare the thresholds according to MaxNfPdf
+    thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["ktThr"]}
+    if theory["MaxNfPdf"] < 5:
+        thresholds["b"] = np.inf
+    if theory["MaxNfPdf"] < 6:
+        thresholds["t"] = np.inf
+
     # construct operator card
     q2_grid = utils.generate_q2grid(
         theory["Q0"],
         q_fin,
         q_points,
-        {theory["mb"]: theory["kbThr"], theory["mt"]: theory["ktThr"]},
+        {theory["mb"]: thresholds["b"], theory["mt"]: thresholds["t"]},
     )
     op_card = default_op_card
-    masses = np.array([theory["mc"],theory["mb"],theory["mt"]]) ** 2
-    thresholds_ratios=np.array([theory["kcThr"],theory["kbThr"],theory["ktThr"]]) ** 2
+    masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
+    thresholds_ratios = np.array([thresholds["c"], thresholds["b"], thresholds["t"]]) ** 2
+
     atlas = Atlas(
         matching_scales=MatchingScales(masses * thresholds_ratios),
-        origin=(theory["Q0"]**2, theory["nf0"])
+        origin=(theory["Q0"] ** 2, theory["nf0"]),
     )
     op_card.update(
         {
@@ -104,3 +117,22 @@ def construct_eko_cards(
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
+
+
+def split_evolgrid(evolgrid):
+    """Split the evolgrid in blocks according to the number of flavors and repeating the last entry of one block in the first entry of the next."""
+    evolgrid_index_list = []
+    evolgrid.sort()
+    starting_nf = evolgrid[0][1]
+    for evo_point in evolgrid:
+        current_nf = evo_point[1]
+        if current_nf != starting_nf:
+            evolgrid_index_list.append(evolgrid.index(evo_point))
+            starting_nf = current_nf
+    start_index = 0
+    evolgrid_list = []
+    for index in evolgrid_index_list:
+        evolgrid_list.append(evolgrid[start_index : index + 1])
+        start_index = index
+    evolgrid_list.append(evolgrid[start_index:])
+    return evolgrid_list
