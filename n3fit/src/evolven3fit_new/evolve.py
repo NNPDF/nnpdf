@@ -2,11 +2,11 @@ import logging
 import pathlib
 import sys
 
+from ekobox import apply, genpdf, info_file
 import numpy as np
+
 import eko
-from eko import basis_rotation
-from eko import runner
-from ekobox import genpdf, info_file, apply
+from eko import basis_rotation, runner
 from reportengine.compat import yaml
 from validphys.loader import Loader
 
@@ -180,6 +180,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
 
     def ev_pdf(pid, x, Q2):
         return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
+
     evolgrid_list = eko_utils.split_evolgrid(eko.evolgrid)
     blocks = []
     for evgrid in evolgrid_list:

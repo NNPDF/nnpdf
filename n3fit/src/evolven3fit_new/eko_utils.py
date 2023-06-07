@@ -1,11 +1,12 @@
 import logging
 from typing import Any, Dict, Optional
 
+from ekobox.cards import _operator as default_op_card
 import numpy as np
+
 from eko.io import runcards
 from eko.matchings import Atlas, nf_default
 from eko.quantities.heavy_quarks import MatchingScales
-from ekobox.cards import _operator as default_op_card
 from validphys.loader import Loader
 
 from . import utils
@@ -30,6 +31,7 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
 
 NFREF_DEFAULT = 5
 NF0_DEFAULT = 4
+
 
 def construct_eko_cards(
     theoryID,
@@ -85,7 +87,7 @@ def construct_eko_cards(
 
     atlas = Atlas(
         matching_scales=MatchingScales(masses * thresholds_ratios),
-        origin=(theory["Q0"]**2, theory["nf0"])
+        origin=(theory["Q0"] ** 2, theory["nf0"]),
     )
     op_card.update(
         {
@@ -126,9 +128,7 @@ def split_evolgrid(evolgrid):
     start_index = 0
     evolgrid_list = []
     for index in evolgrid_index_list:
-        evolgrid_list.append(evolgrid[start_index:index+1])
+        evolgrid_list.append(evolgrid[start_index : index + 1])
         start_index = index
     evolgrid_list.append(evolgrid[start_index:])
     return evolgrid_list
-            
-        
