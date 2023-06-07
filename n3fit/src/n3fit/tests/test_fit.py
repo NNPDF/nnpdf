@@ -106,9 +106,9 @@ def test_performfit(tmp_path):
 
 
 @pytest.mark.linux
-def test_performfit_and_timing(tmp_path):
-    auxiliary_performfit(tmp_path, replica=1, timing=True)
-    auxiliary_performfit(tmp_path, replica=2, timing=True)
+@pytest.mark.parametrize("replica", [1, 2])
+def test_performfit_and_timing(tmp_path, replica):
+    auxiliary_performfit(tmp_path, replica=replica, timing=True)
 
 
 @pytest.mark.skip(reason="Still not implemented in parallel mode")
