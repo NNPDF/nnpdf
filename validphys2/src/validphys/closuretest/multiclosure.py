@@ -10,7 +10,6 @@ in this module are used to produce results which are plotted in
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
-import copy
 
 from reportengine import collect
 
@@ -224,6 +223,8 @@ def fits_dataset_bias_variance(
             variances = np.full(n_fits,0.000001)
         print("this is biases mean"+ str(np.mean(biases)))
         print("this is vars mean"+ str(np.mean(variances)))
+        print("these are biases: " + str(biases))
+        print("these are variances: " + str(variances))
         return np.asarray(biases), np.asarray(variances), n_data
     
     if pdf_and_exp_err and only_pdf_err == False:
