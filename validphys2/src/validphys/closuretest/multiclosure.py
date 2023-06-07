@@ -160,7 +160,6 @@ def fits_dataset_bias_variance(
         biases = []
         variances = []
         pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
-        import ipdb; ipdb.set_trace()
         # There are n_fits pdf_covariances
         # flag to see whether to eliminate dataset
         for i in range(n_fits):
