@@ -169,7 +169,7 @@ To see the structure of the model, one can use Keras's ``plot_model`` function a
 
 
 This will produce for instance the plot of the PDF model below, and can also be used to plot the
-neural network model, the momentum sum rule model, and the model containing everything that is illustrated above.
+neural network model, and the momentum sum rule model.
 
 .. image::
     figures/plot_pdf.png
