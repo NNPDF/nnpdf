@@ -62,17 +62,20 @@ def construct_eko_cards(
         theory["nfref"] = NFREF_DEFAULT
     if "nf0" not in theory:
         theory["nf0"] = NF0_DEFAULT
-
-    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
-    legacy_class = runcards.Legacy(theory, {})
-    theory_card = legacy_class.new_theory
-
+        
     # Prepare the thresholds according to MaxNfPdf
     thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["ktThr"]}
     if theory["MaxNfPdf"] < 5:
         thresholds["b"] = np.inf
     if theory["MaxNfPdf"] < 6:
         thresholds["t"] = np.inf
+        
+    # Setting the thresholds in the theory card to inf if necessary
+    theory.update({"kbThr":thresholds["b"], "ktThr":thresholds["t"] })
+    
+    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
+    legacy_class = runcards.Legacy(theory, {})
+    theory_card = legacy_class.new_theory
 
     # construct operator card
     q2_grid = utils.generate_q2grid(
