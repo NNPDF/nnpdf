@@ -4,74 +4,30 @@ closuretest/inconsistent_plots.py
 Useful plots for analysis of inconsistent closure tests
 """
 from reportengine.figure import figure
+from reportengine.table import table
 from validphys import plotutils
 from validphys.inconsistent_ct import InconsistentCommonData
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 import numpy as np
+import pandas as pd
 
-def covmat_trace_ratio(data, inconsistent_datasets, ADD, MULT, CORR, UNCORR, SPECIAL, sys_rescaling_factor, type1 = True, type2 = False):
-    """ Calculate trace difference between the original exp covmat and the inconsistent one rescaled by
-    sys_rescaling_factor affecting ADD/MULT (decided by type_a_m) unc CORR/UNCORR/SPECIAL (decided by type_c_u_s)
-
-    Separate two possible cases: type1 and type2 trace diff.
-
-    This is necessary in order to have a good comparison useful for the inconsistent closure tests of type1 and
-    type2. 
-
-    A type1 reference fit is defined by: 
-    L1_data = L0 + N(0,C+)
-    L2_data = L1 + N(0,C+)
-
-    A type2 reference fit is defined by:
-
-    L1_data = L0 + N(0,C_exp)
-    L2_data = L1 + N(0,C_exp)
-
-    where C+ is (roughly) defined as C_exp*sys_rescaling_factor (usually larger than 1)
-
-    in order to see the impact of the inconsistency then:
-
-    Type1 inconsistent closure test:
-    L1_data = L0 + N(0,C+)
-    L2_data = L1 + N(0,C_exp)
-
-    Type1 trace percentage diff: 
-
-    tr(C_exp)/(tr(C+))*100
-
-    Type2 inconsistent closure test:
-    L1_data = L0 + N(0,C_exp)
-    L2_data = L1 + N(0,C-)
-
-    where C- is (roughly) defined as C_exp*sys_rescaling_factor (usually smaller than 1)
-
-
-    Type2 percentage diff:
-    tr(C-)/(tr(C_exp))*100
-
-
+def covmat_trace(dataset_input_list,commondata_wc):
+    """Return trace of experimental matrix
     """
+    normal_covmat = dataset_inputs_covmat_from_systematics(
+                commondata_wc,
+                dataset_input_list,
+                use_weights_in_covmat=False,
+                norm_threshold=None,
+                _list_of_central_values=None,
+                _only_additive=False,
+            )
+    return np.trace(normal_covmat)
 
-    dataset_input_list = list(data.dsinputs)
-    commondata_wc = data.load_commondata_instance()
-    commondata_wc = [
-                    InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
-                        commondataproc=cd.commondataproc, 
-                        nkin=cd.nkin, nsys=cd.nsys, 
-                        commondata_table = cd.commondata_table, 
-                        systype_table = cd.systype_table) 
-                    for cd in commondata_wc
-                    ]
-    consistent_covmat = dataset_inputs_covmat_from_systematics(
-        commondata_wc,
-        dataset_input_list,
-        use_weights_in_covmat=False,
-        norm_threshold=None,
-        _list_of_central_values=None,
-        _only_additive=False,
-    )
-    
-    trace = np.trace(consistent_covmat)
+def mod_covmat_trace(dataset_input_list,commondata_wc, inconsistent_datasets, ADD, MULT, CORR, UNCORR, SPECIAL, sys_rescaling_factor):
+    """ Calculate trace of inconsistent covmat rescaled by
+    sys_rescaling_factor affecting ADD/MULT & CORR/UNCORR/SPECIAL.
+    """
     commondata_wc_temp = [cd.process_commondata(ADD,MULT,CORR,UNCORR,SPECIAL,
                                             inconsistent_datasets,sys_rescaling_factor)
                             for cd in commondata_wc]
@@ -83,27 +39,50 @@ def covmat_trace_ratio(data, inconsistent_datasets, ADD, MULT, CORR, UNCORR, SPE
             _list_of_central_values=None,
             _only_additive=False,
         )
+    #Calculate trace of modified trace (either for type 1 or 2)
     modified_trace = np.trace(modified_covmat)
-    if type1:   
-        percentage_ratio = (trace)/(modified_trace)*100
-    if type2:
-        percentage_ratio = modified_trace/trace*100
-    return percentage_ratio
+    return modified_trace
 
 @figure
 def plot_trace_impact(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL):
-    rs_factors_2 = np.arange(0.1,1.1,0.1)
-    rs_factors_1 = np.arange(1,5,0.1)
-    impacts_1 = []
-    impacts_2 = []
-    for fac in rs_factors_2:
-        impacts_2.append(covmat_trace_ratio(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL, fac,type1 = False,type2 = True))
-    for fac in rs_factors_1:
-        impacts_1.append(covmat_trace_ratio(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL, fac,type1 = True,type2 = False))
-    fig, ax = plotutils.subplots()
+    """
+    Plot trace ratio for different sys_rescaling_factors. Specify what kind 
+    of error has been modified and for which datasets.
+    The marked points are the one for which the trace ratio corresponds between type1/type2 inconsistent fit.
+    """
 
-    ax.plot(rs_factors_1,impacts_1, label = "type1 Inconsistent Closure")
-    ax.plot(rs_factors_2,impacts_2, label = "type2 Inconsistent Closure")
+    # Load here all the data, does not make sense to load them each time the funciton is called
+    dataset_input_list = list(data.dsinputs)
+    commondata_wc = data.load_commondata_instance()
+    commondata_wc_ic = [
+                InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
+                    commondataproc=cd.commondataproc, 
+                    nkin=cd.nkin, nsys=cd.nsys, 
+                    commondata_table = cd.commondata_table, 
+                    systype_table = cd.systype_table) 
+                for cd in commondata_wc
+                ]
+    normal_trace = covmat_trace(dataset_input_list,commondata_wc)
+    lam_factors = np.arange(0,3,0.02)
+    ratios = []
+    fig, ax = plotutils.subplots()
+    points = []
+    i = 0
+    for lam in lam_factors:
+        mod_trace = mod_covmat_trace(dataset_input_list,commondata_wc_ic, inconsistent_datasets, 
+                                     ADD,MULT,CORR,UNCORR,SPECIAL, 
+                                     lam)
+        if lam < 1: ratios.append(mod_trace/normal_trace*100)
+        if lam >= 1: ratios.append(normal_trace/mod_trace*100)
+        if i%10 == 0 and lam < 1: 
+            ax.plot(lam_factors[i],ratios[-1],marker = ".",
+                    markersize = 10, 
+                    label = "lambda type 2: " + str(round(lam_factors[i],3)) + "; ratio: " + str(round(ratios[-1],3)))
+            points.append(ratios[-1])
+        i += 1
+    for point in points:
+        a,b = find_intersections(np.asarray(lam_factors), np.asarray(ratios), point)
+        ax.plot(a,b,marker = ".",markersize = 10,label = "lambda type1: " + str(round(a[0],3))+"; ratio: " + str(round(b[0],3)))
     type_a_m = ""
     type_c_u_s = ""
     if ADD: type_a_m = " ADD "
@@ -111,9 +90,18 @@ def plot_trace_impact(data, inconsistent_datasets, ADD,MULT,CORR,UNCORR,SPECIAL)
     if CORR: type_c_u_s = " CORR "
     if UNCORR: type_c_u_s = type_c_u_s + " UNCORR "
     if SPECIAL: type_c_u_s = type_c_u_s  + " SPECIAL"
+    ax.plot(lam_factors, ratios, label = "percentage ratios")
     title = "Impact of inconsistency of type " + str(type_a_m)  + " and " + str(type_c_u_s) + " in \n" + str(inconsistent_datasets) + " wrt all ds. \n"
     ax.legend()
     ax.set_title(title)
     ax.set_xlabel("rescaling factor")
     ax.set_ylabel("percentage ratio")
     return fig
+
+def find_intersections(x, y, C):
+    # Contains numpy indexing tricks that can be hard to reproduce
+    # in the case where both functions are non-constants
+    ii, = np.nonzero((y[1:]-C)*(y[:-1]-C) < 0.)  # intersection indices
+    x_intersections = x[ii] + (C - y[ii])/(y[1+ii] - y[ii])*(x[1+ii] - x[ii])
+    y_intersections = C * np.ones(len(ii))
+    return x_intersections, y_intersections
