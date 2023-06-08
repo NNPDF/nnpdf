@@ -112,11 +112,8 @@ def main():
     evolven3fit_parser = construct_evolven3fit_parser(subparsers)
 
     args = parser.parse_args()
-    op_card_info = {
-        "ev_op_max_order": 10,
-        "ev_op_iterations": 1,
-        "n_integration_cores": args.n_cores,
-        "backward_inversion": "expanded",
+    op_card_info = { "configs" : {
+        "n_integration_cores": args.n_cores,}
     }
     theory_card_info = {}
     if args.actions == "evolve":
