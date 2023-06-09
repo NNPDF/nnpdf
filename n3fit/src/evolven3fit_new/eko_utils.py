@@ -30,7 +30,6 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
 }
 
 NFREF_DEFAULT = 5
-NF0_DEFAULT = 4
 
 
 def construct_eko_cards(
@@ -58,31 +57,46 @@ def construct_eko_cards(
     theory = Loader().check_theoryID(theoryID).get_description()
     theory.pop("FNS")
     theory.update(theory_card_dict)
-    if "nfref" not in theory:
-        theory["nfref"] = NFREF_DEFAULT
-    if "nf0" not in theory:
-        theory["nf0"] = NF0_DEFAULT
-        
+
     # Prepare the thresholds according to MaxNfPdf
     thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["ktThr"]}
     if theory["MaxNfPdf"] < 5:
         thresholds["b"] = np.inf
     if theory["MaxNfPdf"] < 6:
         thresholds["t"] = np.inf
-        
+
+    if "nfref" not in theory:
+        theory["nfref"] = NFREF_DEFAULT
+
+    # Set nf_0 according to the fitting scale unless set explicitly
+    mu0 = theory["Q0"]
+    if "nf0" not in theory:
+        if mu0 < theory["mc"] * thresholds["c"]:
+            theory["nf0"] = 3
+        elif mu0 < theory["mb"] * thresholds["b"]:
+            theory["nf0"] = 4
+        elif mu0 < theory["mt"] * thresholds["t"]:
+            theory["nf0"] = 5
+        else:
+            theory["nf0"] = 6
+
     # Setting the thresholds in the theory card to inf if necessary
-    theory.update({"kbThr":thresholds["b"], "ktThr":thresholds["t"] })
-    
+    theory.update({"kbThr": thresholds["b"], "ktThr": thresholds["t"]})
+
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
     # construct operator card
     q2_grid = utils.generate_q2grid(
-        theory["Q0"],
+        mu0,
         q_fin,
         q_points,
-        {theory["mb"]: thresholds["b"], theory["mt"]: thresholds["t"]},
+        {
+            theory["mc"]: thresholds["c"],
+            theory["mb"]: thresholds["b"],
+            theory["mt"]: thresholds["t"],
+        },
     )
     op_card = default_op_card
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
@@ -90,11 +104,11 @@ def construct_eko_cards(
 
     atlas = Atlas(
         matching_scales=MatchingScales(masses * thresholds_ratios),
-        origin=(theory["Q0"] ** 2, theory["nf0"]),
+        origin=(mu0**2, theory["nf0"]),
     )
     op_card.update(
         {
-            "mu0": theory["Q0"],
+            "mu0": mu0,
             "mugrid": [(float(np.sqrt(q2)), int(nf_default(q2, atlas))) for q2 in q2_grid],
         }
     )
