@@ -106,12 +106,25 @@ def construct_eko_cards(
         matching_scales=MatchingScales(masses * thresholds_ratios),
         origin=(mu0**2, theory["nf0"]),
     )
-    op_card.update(
-        {
-            "mu0": mu0,
-            "mugrid": [(float(np.sqrt(q2)), int(nf_default(q2, atlas))) for q2 in q2_grid],
-        }
-    )
+
+    # Create the eko operator q2grid
+    # This is a grid which contains information on (q, nf)
+    # in VFNS values at the matching scales need to be doubled so that they are considered in both sides
+
+    ep = 1e-4
+    mugrid = []
+    for q2 in q2_grid:
+        q = float(np.sqrt(q2))
+        if nf_default(q2 + ep, atlas) != nf_default(q2 - ep, atlas):
+            nf_l = int(nf_default(q2 - ep, atlas))
+            nf_u = int(nf_default(q2 + ep, atlas))
+            mugrid.append((q, nf_l))
+            mugrid.append((q, nf_u))
+        else:
+            mugrid.append((q, int(nf_default(q2, atlas))))
+
+    op_card.update({"mu0": theory["Q0"], "mugrid": mugrid})
+
     op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
     if theory["ModEv"] == "TRN":
@@ -133,7 +146,7 @@ def construct_eko_cards(
 
 
 def split_evolgrid(evolgrid):
-    """Split the evolgrid in blocks according to the number of flavors and repeating the last entry of one block in the first entry of the next."""
+    """Split the evolgrid in blocks according to the number of flavors."""
     evolgrid_index_list = []
     evolgrid.sort()
     starting_nf = evolgrid[0][1]
@@ -145,7 +158,7 @@ def split_evolgrid(evolgrid):
     start_index = 0
     evolgrid_list = []
     for index in evolgrid_index_list:
-        evolgrid_list.append(evolgrid[start_index : index + 1])
+        evolgrid_list.append(evolgrid[start_index:index])
         start_index = index
     evolgrid_list.append(evolgrid[start_index:])
     return evolgrid_list
