@@ -97,6 +97,7 @@ def construct_eko_cards(
             theory["mb"]: thresholds["b"],
             theory["mt"]: thresholds["t"],
         },
+        theory["nf0"],
     )
     op_card = default_op_card
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2

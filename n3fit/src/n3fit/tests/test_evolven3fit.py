@@ -23,11 +23,6 @@ def assert_sorted(arr, title):
         raise ValueError(f"The values of {title} are not sorted!")
 
 
-def check_consecutive_members(grid, value):
-    """Check if the first occurrence of value in grid is followed by value again"""
-    return np.allclose(grid[list(grid).index(value) + 1], value)
-
-
 def check_lhapdf_info(info_path):
     """Check the LHAPDF info file is correct"""
     info = yaml.load(info_path.open("r", encoding="utf-8"))
@@ -77,24 +72,40 @@ def check_lhapdf_dat(dat_path, info):
     # Use allclose here to avoid failing because of a different in the 7th place
     np.testing.assert_allclose(q[-1], info["QMax"])
 
+     
+def test_generate_q2grid():
+    """Tests the creation of the default grids for different values of nf
+    and whether the matched grid is generating points in the desired locations
+    """
+    # nf 3, q0 = 1.0
+    grid = utils.generate_q2grid(None, None, None, {}, 3)
+    assert grid[0] == 1.0**2
+    # nf 4, q0 = 1.65
+    grid = utils.generate_q2grid(None, None, None, {}, 4)
+    assert grid[0] == 1.65**2
+
+    for nf in [1, 2, 5, 6]:
+        with pytest.raises(NotImplementedError):
+            grid = utils.generate_q2grid(None, None, None, {}, nf)
+
+    with pytest.raises(ValueError):
+        grid = utils.generate_q2grid(None, None, None, {})
+
+    matched_grid = utils.generate_q2grid(1.65, 1.0e5, 100, {4.92: 2.0, 100: 1.0})
+    t1 = 4.92 * 2.0
+    t2 = 100.0 * 1.0
+
+    assert_allclose((1.65) ** 2, matched_grid[0])
+    assert_allclose((1.0e5) ** 2, matched_grid[-1])
+    assert t1**2 in matched_grid
+    assert t2**2 in matched_grid
+
 
 def test_utils():
-    # Testing the default grid
-    grid = utils.generate_q2grid(1.65, None, None, {})
-    assert_allclose(1.65**2, grid[0])
-    assert len(grid) == 50
-    # We expect the bottom mass to be repeated twice because it is intended once in 4 flavors and once in 5 flavors.
-    assert check_consecutive_members(grid, 4.92**2)
-    # Testing if the points of the matching are correctly repeated twice
-    matched_grid = utils.generate_q2grid(1.65, 1.0e5, 100, {4.92: 2.0, 100: 1.0})
-    assert len(matched_grid) == 100
-    assert_allclose((1.0e5) ** 2, matched_grid[-1])
-    assert check_consecutive_members(matched_grid, (4.92 * 2.0) ** 2)
-    assert check_consecutive_members(matched_grid, (100.0 * 1.0) ** 2)
     # Testing the fake LHAPDF class
     q20 = 1.65**2
     x_grid = np.geomspace(1.0e-7, 1.0, 30)
-    fake_grids = [[x * (1.0 - x) for x in x_grid] for pid in PIDS_DICT.keys()]
+    fake_grids = [[x * (1.0 - x) for x in x_grid] for _ in PIDS_DICT.keys()]
     pdf_grid = dict([(pid, v) for pid, v in zip(range(len(PIDS_DICT)), fake_grids)])
     my_PDF = utils.LhapdfLike(pdf_grid, q20, x_grid)
     assert my_PDF.hasFlavor(6)
@@ -133,10 +144,15 @@ def test_eko_utils(tmp_path):
         t_card_dict["order"][0] == pto + 1
     )  # This is due to a different convention in eko orders due to QED
     assert_allclose(op_card_dict["xgrid"], x_grid)
-    assert_allclose(op_card_dict["mugrid"][0], (1.65, 4))
+    # In theory 162 the charm threshold is at 1.51
+    # and we should find two entries, one for nf=3 and another one for nf=4
+    assert_allclose(op_card_dict["mugrid"][0], (1.51, 3))
+    assert_allclose(op_card_dict["mugrid"][1], (1.51, 4))
+    # Then (with the number of points we chosen it will happen in position 2,3
+    # we will find the bottom threshold at two different nf
+    assert_allclose(op_card_dict["mugrid"][2], (4.92, 4))
+    assert_allclose(op_card_dict["mugrid"][3], (4.92, 5))
     assert_allclose(op_card_dict["mugrid"][-1], (q_fin, 5))
-    # In this case there are not enough points to have twice the bottom matching scale
-    assert_allclose(op_card_dict["mugrid"][1], (4.92, 5))
     # Testing computation of eko
     save_path = tmp_path / "ekotest.tar"
     runner.solve(t_card, op_card, save_path)
