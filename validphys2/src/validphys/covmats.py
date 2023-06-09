@@ -303,48 +303,6 @@ def t0_covmat_from_systematics(
         _central_values=dataset_t0_predictions
     )
 
-def t0_covmat_from_systematics_pdferr_considered(
-    loaded_commondata_with_cuts,
-    *,
-    dataset_input,
-    pdf,
-    dataset,
-    covmat_combi=False,
-    pdf_err=False,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
-    dataset_t0_predictions
-):
-    """Like :py:func:`t0_covmat_from_systematics` except allows for the
-    PDF error covariance matrix to be summed to it.
-    """
-    if covmat_combi:
-        th = ThPredictionsResult.from_convolution(pdf, dataset)
-        pdf_cov = np.cov(th.error_members, rowvar=True)
-        
-        return pdf_cov + covmat_from_systematics(
-                                                    loaded_commondata_with_cuts,
-                                                    dataset_input,
-                                                    use_weights_in_covmat,
-                                                    norm_threshold=norm_threshold,
-                                                    _central_values=dataset_t0_predictions
-                                                )
-
-    elif pdf_err:
-        th = ThPredictionsResult.from_convolution(pdf, dataset)
-        pdf_cov = np.cov(th.error_members, rowvar=True)
-        regularized_pdf_covmat = regularize_covmat(pdf_cov)
-        return regularized_pdf_covmat
-
-    else:
-        return covmat_from_systematics(
-                                        loaded_commondata_with_cuts,
-                                        dataset_input,
-                                        use_weights_in_covmat,
-                                        norm_threshold=norm_threshold,
-                                        _central_values=dataset_t0_predictions
-                                    )
-
 
 dataset_inputs_t0_predictions = collect("dataset_t0_predictions", ("data",))
 
@@ -429,48 +387,6 @@ def dataset_inputs_t0_covmat_from_systematics_pdferr_considered(
             _list_of_central_values=dataset_inputs_t0_predictions
         )
 
-
-def dataset_inputs_t0_total_covmat_separate(
-    dataset_inputs_t0_exp_covmat_separate,
-    loaded_theory_covmat
-):
-    """
-    Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
-    errors are separated. Moreover, the theory covmat is added to experimental covmat.  
-    """
-    covmat = dataset_inputs_t0_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
-
-def dataset_inputs_t0_exp_covmat_separate(
-    dataset_inputs_loaded_cd_with_cuts,
-    *,
-    data_input,
-    use_weights_in_covmat=True,
-    norm_threshold=None,
-    dataset_inputs_t0_predictions,
-):
-    """
-    Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
-    errors are separated.
-    """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , True)
-    return covmat
-
-def dataset_inputs_total_covmat_separate(
-    dataset_inputs_exp_covmat_separate,
-    loaded_theory_covmat,
-):
-    """
-    Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
-    errors are separated. Moreover, the theory covmat is added to experimental covmat.
-    """
-    covmat = dataset_inputs_exp_covmat_separate
-    covmat += loaded_theory_covmat
-    return covmat
 
 def dataset_inputs_exp_covmat_separate(
     dataset_inputs_loaded_cd_with_cuts,
