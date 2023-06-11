@@ -361,6 +361,7 @@ def plot_data_xi_histogram(data_xi, data):
 def plot_replica_central_diff_consistent_vs_inconsistent(
     consistent_dataset_replica_minus_central,
     inconsistent_dataset_replica_minus_central,
+    dataset
 ):
     """ 
     For a given dataset plot the distributions of the replica theory predictions around
@@ -383,6 +384,7 @@ def plot_replica_central_diff_consistent_vs_inconsistent(
         alpha=0.5,
         label=f"Inconsistent, Central-Replica Distribution",
     )
+    ax.set_title(f"Dataset: {dataset}")
     ax.legend()
 
     return fig
