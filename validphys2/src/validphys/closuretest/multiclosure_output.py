@@ -358,6 +358,37 @@ def plot_data_xi_histogram(data_xi, data):
 
 
 @figure
+def plot_replica_central_diff_consistent_vs_inconsistent(
+    consistent_dataset_replica_minus_central,
+    inconsistent_dataset_replica_minus_central,
+):
+    """ 
+    For a given dataset plot the distributions of the replica theory predictions around
+    the central replica prediction.
+    Note:
+        - Comparison is done between consistent and inconsistent fits
+        - average is done over fits and datapoints of one dataset
+
+    """
+    diff_consistent = consistent_dataset_replica_minus_central
+    diff_inconsistent = inconsistent_dataset_replica_minus_central
+
+    fig, ax = plotutils.subplots()
+    ax.hist(
+        diff_consistent, density=True, alpha=0.5, label=f"Consistent, Central-Replica Distribution"
+    )
+    ax.hist(
+        diff_inconsistent,
+        density=True,
+        alpha=0.5,
+        label=f"Inconsistent, Central-Replica Distribution",
+    )
+    ax.legend()
+
+    return fig
+
+
+@figure
 def plot_data_central_diff_histogram(experiments_replica_central_diff):
     """Histogram of the difference between central prediction
     and underlying law prediction normalised by the corresponding replica
