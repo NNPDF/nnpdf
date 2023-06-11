@@ -112,6 +112,40 @@ def internal_multiclosure_data_loader(
     )
 
 
+def consistent_internal_multiclosure_dataset_loader(
+    dataset,
+    consistent_pdfs,
+    consistent_multiclosure_underlyinglaw,
+    consistent_fits,
+    t0_covmat_from_systematics,
+):
+    """like `internal_multiclosure_dataset_loader` but explicitly for consistent fits only"""
+    return internal_multiclosure_dataset_loader(
+        dataset,
+        consistent_pdfs,
+        consistent_multiclosure_underlyinglaw,
+        consistent_fits,
+        t0_covmat_from_systematics,
+    )
+
+
+def inconsistent_internal_multiclosure_dataset_loader(
+    dataset,
+    inconsistent_pdfs,
+    inconsistent_multiclosure_underlyinglaw,
+    inconsistent_fits,
+    t0_covmat_from_systematics,
+):
+    """like `internal_multiclosure_dataset_loader` but explicitly for inconsistent fits only"""
+    return internal_multiclosure_dataset_loader(
+        dataset,
+        inconsistent_pdfs,
+        inconsistent_multiclosure_underlyinglaw,
+        inconsistent_fits,
+        t0_covmat_from_systematics,
+    )
+
+
 @check_multifit_replicas
 def fits_dataset_bias_variance(
     internal_multiclosure_dataset_loader,
