@@ -157,7 +157,54 @@ class CoreConfig(configparser.Config):
             raise ConfigError(str(e))
         return pdf
 
+<<<<<<< HEAD
     
+=======
+    @element_of("consistent_pdfs")
+    @_id_with_label
+    def parse_consistent_pdf(self, name: str):
+        """same as `parse_pdf` but for explicitly consistent closure pdf"""
+        try:
+            pdf = self.loader.check_pdf(name)
+        except PDFNotFound as e:
+            raise ConfigError(
+                "Bad PDF: {} not installed".format(name),
+                name,
+                self.loader.available_pdfs,
+            ) from e
+        except LoaderError as e:
+            raise ConfigError(e) from e
+
+        # Check that we know how to compute errors
+        try:
+            pdf.stats_class
+        except NotImplementedError as e:
+            raise ConfigError(str(e))
+        return pdf
+
+    @element_of("inconsistent_pdfs")
+    @_id_with_label
+    def parse_inconsistent_pdf(self, name: str):
+        """same as `parse_pdf` but for explicitly inconsistent closure pdf"""
+        try:
+            pdf = self.loader.check_pdf(name)
+        except PDFNotFound as e:
+            raise ConfigError(
+                "Bad PDF: {} not installed".format(name),
+                name,
+                self.loader.available_pdfs,
+            ) from e
+        except LoaderError as e:
+            raise ConfigError(e) from e
+
+        # Check that we know how to compute errors
+        try:
+            pdf.stats_class
+        except NotImplementedError as e:
+            raise ConfigError(str(e))
+        return pdf
+
+>>>>>>> 855cb88eb (added parse rules for consistent/inconsistent fits and pdfs)
     @element_of("theoryids")
     @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
@@ -230,7 +277,28 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(str(e), fit, self.loader.available_fits)
 
+<<<<<<< HEAD
     
+=======
+    @element_of("consistent_fits")
+    @_id_with_label
+    def parse_consistent_fit(self, consistent_fit: str):
+        """A fit in the results folder, containing at least a valid filter result."""
+        try:
+            return self.loader.check_fit(consistent_fit)
+        except LoadFailedError as e:
+            raise ConfigError(str(e), consistent_fit, self.loader.available_fits)
+
+    @element_of("inconsistent_fits")
+    @_id_with_label
+    def parse_inconsistent_fit(self, inconsistent_fit: str):
+        """A fit in the results folder, containing at least a valid filter result."""
+        try:
+            return self.loader.check_fit(inconsistent_fit)
+        except LoadFailedError as e:
+            raise ConfigError(str(e), inconsistent_fit, self.loader.available_fits)
+
+>>>>>>> 855cb88eb (added parse rules for consistent/inconsistent fits and pdfs)
     def produce_fitreplicas(self, fit):
         """Production rule mapping the ``replica`` key to each Monte Carlo
         fit replica.
@@ -368,7 +436,20 @@ class CoreConfig(configparser.Config):
             )
         return self.parse_pdf(laws.pop())
 
+<<<<<<< HEAD
     
+=======
+    def produce_consistent_multiclosure_underlyinglaw(self, consistent_fits):
+        """
+        like `produce_multiclosure_underlyinglaw but for explicitly consistent pdfs`
+        """
+        return self.produce_multiclosure_underlyinglaw(consistent_fits)
+
+    def produce_inconsistent_multiclosure_underlyinglaw(self, inconsistent_fits):
+        """like `produce_multiclosure_underlyinglaw but for explicitly inconsistent pdfs`"""
+        return self.produce_multiclosure_underlyinglaw(inconsistent_fits)
+
+>>>>>>> 855cb88eb (added parse rules for consistent/inconsistent fits and pdfs)
     def produce_basisfromfit(self, fit):
         """Set the basis from fit config. In the fit config file the basis
         is set using the key ``fitbasis``, but it is exposed to validphys
