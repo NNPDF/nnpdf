@@ -369,15 +369,21 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
 
     indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
 
+    dataset_order = [cd.setname for cd in level0_commondata_wc]
+
     # ===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
     level1_commondata_instances_wc = []
 
+    # note that groupby sorts alphabetically
     for xx, grp in indexed_level1_data.groupby('dataset'):
         level1_commondata_instances_wc.append(
             level1_commondata_dict[xx].with_central_value(grp.values)
         )
-
+    # sort back so as to mantain same order as in level0_commondata_wc
+    level1_commondata_instances_wc = sorted(
+        level1_commondata_instances_wc, key=lambda obj: dataset_order.index(obj.setname)
+    )
     return level1_commondata_instances_wc
 
 
