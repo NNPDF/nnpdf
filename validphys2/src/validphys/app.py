@@ -42,6 +42,7 @@ providers = [
     "validphys.theorycovariance.tests",
     "validphys.replica_selector",
     "validphys.closuretest",
+    "validphys.closuretest.inconsistent_closuretest",
     "validphys.mc_gen",
     "validphys.theoryinfo",
     "validphys.pseudodata",
