@@ -12,19 +12,16 @@ import shutil
 import numpy as np
 
 from reportengine.checks import check, check_positive, make_argcheck
-
 from validphys import lhaindex
+from validphys.checks import check_pdf_is_montecarlo
 from validphys.lhio import hessian_from_lincomb
 from validphys.pdfgrids import xplotting_grid
-
-from validphys.checks import check_pdf_is_montecarlo
 
 log = logging.getLogger(__name__)
 
 
 def gridname(pdf, Neig, mc2hname: (str, type(None)) = None):
-    """If no custom `mc2hname' is specified, the name of the Hessian PDF is automatically generated.
-    """
+    """If no custom `mc2hname' is specified, the name of the Hessian PDF is automatically generated."""
     if mc2hname is None:
         grid_name = f"{pdf.name}_hessian_{Neig}"
     else:

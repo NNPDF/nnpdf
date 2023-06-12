@@ -9,21 +9,20 @@ import scipy.linalg as la
 
 from reportengine import collect
 from reportengine.table import table
-
-from validphys.calcutils import regularize_covmat, get_df_block
+from validphys.calcutils import get_df_block, regularize_covmat
 from validphys.checks import (
+    check_cuts_considered,
+    check_data_cuts_match_theorycovmat,
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
-    check_pdf_is_montecarlo,
+    check_pdf_is_montecarlo_or_symmhessian,
     check_speclabels_different,
-    check_data_cuts_match_theorycovmat,
-    check_cuts_considered,
 )
+from validphys.commondata import loaded_commondata_with_cuts
 from validphys.convolution import central_predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
 from validphys.results import ThPredictionsResult
-from validphys.commondata import loaded_commondata_with_cuts
 
 log = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ def covmat_from_systematics(
     dataset_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    _central_values=None
+    _central_values=None,
 ):
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
@@ -117,15 +116,12 @@ def covmat_from_systematics(
     """
     covmat = construct_covmat(
         loaded_commondata_with_cuts.stat_errors.to_numpy(),
-        loaded_commondata_with_cuts.systematic_errors(_central_values)
+        loaded_commondata_with_cuts.systematic_errors(_central_values),
     )
     if use_weights_in_covmat:
         covmat = covmat / dataset_input.weight
     if norm_threshold is not None:
-        covmat = regularize_covmat(
-            covmat,
-            norm_threshold=norm_threshold
-        )
+        covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
     return covmat
 
 
@@ -198,11 +194,9 @@ def dataset_inputs_covmat_from_systematics(
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
 
     for cd, dsinp, central_values in zip(
-        dataset_inputs_loaded_cd_with_cuts,
-        data_input,
-        _list_of_central_values
+        dataset_inputs_loaded_cd_with_cuts, data_input, _list_of_central_values
     ):
-        #used if we want to separate additive and multiplicative errors in make_replica
+        # used if we want to separate additive and multiplicative errors in make_replica
         if _only_additive:
             sys_errors = cd.additive_errors
         else:
@@ -212,8 +206,7 @@ def dataset_inputs_covmat_from_systematics(
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)
-        block_diags.append(construct_covmat(
-            stat_errors, sys_errors.loc[:, is_intra_dataset_error]))
+        block_diags.append(construct_covmat(stat_errors, sys_errors.loc[:, is_intra_dataset_error]))
         special_corrs.append(sys_errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets
@@ -229,10 +222,7 @@ def dataset_inputs_covmat_from_systematics(
         # returns C_ij / (sqrt(w_i) * sqrt(w_j))
         covmat = (covmat / sqrt_weights).T / sqrt_weights
     if norm_threshold is not None:
-        covmat = regularize_covmat(
-            covmat,
-            norm_threshold=norm_threshold
-        )
+        covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
     return covmat
 
 
@@ -268,7 +258,7 @@ def t0_covmat_from_systematics(
     dataset_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    dataset_t0_predictions
+    dataset_t0_predictions,
 ):
     """Like :py:func:`covmat_from_systematics` except uses the t0 predictions
     to calculate the absolute constributions to the covmat from multiplicative
@@ -300,7 +290,7 @@ def t0_covmat_from_systematics(
         dataset_input,
         use_weights_in_covmat,
         norm_threshold=norm_threshold,
-        _central_values=dataset_t0_predictions
+        _central_values=dataset_t0_predictions,
     )
 
 
@@ -313,7 +303,7 @@ def dataset_inputs_t0_covmat_from_systematics(
     data_input,
     use_weights_in_covmat=True,
     norm_threshold=None,
-    dataset_inputs_t0_predictions
+    dataset_inputs_t0_predictions,
 ):
     """Like :py:func:`t0_covmat_from_systematics` except for all data
 
@@ -342,22 +332,22 @@ def dataset_inputs_t0_covmat_from_systematics(
         data_input,
         use_weights_in_covmat,
         norm_threshold=norm_threshold,
-        _list_of_central_values=dataset_inputs_t0_predictions
+        _list_of_central_values=dataset_inputs_t0_predictions,
     )
 
 
 def dataset_inputs_t0_total_covmat_separate(
-    dataset_inputs_t0_exp_covmat_separate,
-    loaded_theory_covmat
+    dataset_inputs_t0_exp_covmat_separate, loaded_theory_covmat
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
-    errors are separated. Moreover, the theory covmat is added to experimental covmat.  
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative
+    errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
     covmat = dataset_inputs_t0_exp_covmat_separate
     covmat += loaded_theory_covmat
     return covmat
+
 
 def dataset_inputs_t0_exp_covmat_separate(
     dataset_inputs_loaded_cd_with_cuts,
@@ -369,11 +359,19 @@ def dataset_inputs_t0_exp_covmat_separate(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is used for the experimental covmat and the multiplicative 
+    In this case the t0 prescription is used for the experimental covmat and the multiplicative
     errors are separated.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , True)
+    covmat = generate_exp_covmat(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        norm_threshold,
+        dataset_inputs_t0_predictions,
+        True,
+    )
     return covmat
+
 
 def dataset_inputs_total_covmat_separate(
     dataset_inputs_exp_covmat_separate,
@@ -381,12 +379,13 @@ def dataset_inputs_total_covmat_separate(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative
     errors are separated. Moreover, the theory covmat is added to experimental covmat.
     """
     covmat = dataset_inputs_exp_covmat_separate
     covmat += loaded_theory_covmat
     return covmat
+
 
 def dataset_inputs_exp_covmat_separate(
     dataset_inputs_loaded_cd_with_cuts,
@@ -397,11 +396,19 @@ def dataset_inputs_exp_covmat_separate(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
-    In this case the t0 prescription is not used for the experimental covmat and the multiplicative 
-    errors are separated. 
+    In this case the t0 prescription is not used for the experimental covmat and the multiplicative
+    errors are separated.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , True)
+    covmat = generate_exp_covmat(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        norm_threshold,
+        None,
+        True,
+    )
     return covmat
+
 
 def dataset_inputs_t0_total_covmat(
     dataset_inputs_t0_exp_covmat,
@@ -409,12 +416,13 @@ def dataset_inputs_t0_total_covmat(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
-    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
     covmat = dataset_inputs_t0_exp_covmat
     covmat += loaded_theory_covmat
     return covmat
+
 
 def dataset_inputs_t0_exp_covmat(
     dataset_inputs_loaded_cd_with_cuts,
@@ -426,11 +434,19 @@ def dataset_inputs_t0_exp_covmat(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
-    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat 
-    and the multiplicative errors are included in it. 
+    by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
+    and the multiplicative errors are included in it.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, dataset_inputs_t0_predictions , False)
+    covmat = generate_exp_covmat(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        norm_threshold,
+        dataset_inputs_t0_predictions,
+        False,
+    )
     return covmat
+
 
 def dataset_inputs_total_covmat(
     dataset_inputs_exp_covmat,
@@ -438,12 +454,13 @@ def dataset_inputs_total_covmat(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
-    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
     and the multiplicative errors are included in it. Moreover, the theory covmat is added to experimental covmat.
     """
     covmat = dataset_inputs_exp_covmat
     covmat += loaded_theory_covmat
     return covmat
+
 
 def dataset_inputs_exp_covmat(
     dataset_inputs_loaded_cd_with_cuts,
@@ -454,18 +471,22 @@ def dataset_inputs_exp_covmat(
 ):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
-    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat 
+    by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
     and the multiplicative errors are included in it.
     """
-    covmat = generate_exp_covmat(dataset_inputs_loaded_cd_with_cuts, data_input, use_weights_in_covmat, norm_threshold, None , False)
+    covmat = generate_exp_covmat(
+        dataset_inputs_loaded_cd_with_cuts,
+        data_input,
+        use_weights_in_covmat,
+        norm_threshold,
+        None,
+        False,
+    )
     return covmat
 
-def generate_exp_covmat(datasets_input,
-    data,
-    use_weights, 
-    norm_threshold, 
-    _list_of_c_values, 
-    only_add
+
+def generate_exp_covmat(
+    datasets_input, data, use_weights, norm_threshold, _list_of_c_values, only_add
 ):
     """
     Function to generate the experimental covmat eventually using the t0 prescription. It is also
@@ -492,7 +513,7 @@ def generate_exp_covmat(datasets_input,
             values are used.
         only_add: bool
             specifies whether to use only the additive errors to compute the covmat
-    
+
     Returns
     -------
         : np.array
@@ -504,7 +525,7 @@ def generate_exp_covmat(datasets_input,
         use_weights,
         norm_threshold=norm_threshold,
         _list_of_central_values=_list_of_c_values,
-        _only_additive = only_add
+        _only_additive=only_add,
     )
 
 
@@ -570,9 +591,11 @@ def sqrt_covmat(covariance_matrix):
     if covariance_matrix.size == 0:
         raise ValueError("Attempting the decomposition of an empty matrix.")
     elif dimensions[0] != dimensions[1]:
-        raise ValueError("The input covariance matrix should be square but "
-                         f"instead it has dimensions {dimensions[0]} x "
-                         f"{dimensions[1]}")
+        raise ValueError(
+            "The input covariance matrix should be square but "
+            f"instead it has dimensions {dimensions[0]} x "
+            f"{dimensions[1]}"
+        )
 
     sqrt_diags = np.sqrt(np.diag(covariance_matrix))
     correlation_matrix = covariance_matrix / sqrt_diags[:, np.newaxis] / sqrt_diags
@@ -581,8 +604,7 @@ def sqrt_covmat(covariance_matrix):
     return sqrt_matrix
 
 
-def groups_covmat_no_table(
-       groups_data, groups_index, groups_covmat_collection):
+def groups_covmat_no_table(groups_data, groups_index, groups_covmat_collection):
     """Export the covariance matrix for the groups. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -592,12 +614,11 @@ def groups_covmat_no_table(
 
         - index of the point within the dataset.
     """
-    data = np.zeros((len(groups_index),len(groups_index)))
+    data = np.zeros((len(groups_index), len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
-    for group, group_covmat in zip(
-            groups_data, groups_covmat_collection):
+    for group, group_covmat in zip(groups_data, groups_covmat_collection):
         name = group.name
-        df.loc[[name],[name]] = group_covmat
+        df.loc[[name], [name]] = group_covmat
     return df
 
 
@@ -608,36 +629,32 @@ def groups_covmat(groups_covmat_no_table):
 
 
 @table
-def groups_sqrtcovmat(
-        groups_data, groups_index, groups_sqrt_covmat):
+def groups_sqrtcovmat(groups_data, groups_index, groups_sqrt_covmat):
     """Like groups_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
     """
-    data = np.zeros((len(groups_index),len(groups_index)))
+    data = np.zeros((len(groups_index), len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
-    for group, group_sqrt_covmat in zip(
-            groups_data, groups_sqrt_covmat):
+    for group, group_sqrt_covmat in zip(groups_data, groups_sqrt_covmat):
         name = group.name
         group_sqrt_covmat[np.triu_indices_from(group_sqrt_covmat, k=1)] = 0
-        df.loc[[name],[name]] = group_sqrt_covmat
+        df.loc[[name], [name]] = group_sqrt_covmat
     return df
 
 
 @table
-def groups_invcovmat(
-        groups_data, groups_index, groups_covmat_collection):
+def groups_invcovmat(groups_data, groups_index, groups_covmat_collection):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
-    data = np.zeros((len(groups_index),len(groups_index)))
+    data = np.zeros((len(groups_index), len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
-    for group, group_covmat in zip(
-            groups_data, groups_covmat_collection):
+    for group, group_covmat in zip(groups_data, groups_covmat_collection):
         name = group.name
-        #Improve this inversion if this method tuns out to be important
+        # Improve this inversion if this method tuns out to be important
         invcov = la.inv(group_covmat)
-        df.loc[[name],[name]] = invcov
+        df.loc[[name], [name]] = invcov
     return df
 
 
@@ -646,7 +663,7 @@ def groups_normcovmat(groups_covmat, groups_data_values):
     """Calculates the grouped experimental covariance matrix normalised to data."""
     df = groups_covmat
     groups_data_array = np.array(groups_data_values)
-    mat = df/np.outer(groups_data_array, groups_data_array)
+    mat = df / np.outer(groups_data_array, groups_data_array)
     return mat
 
 
@@ -655,16 +672,20 @@ def groups_corrmat(groups_covmat):
     """Generates the grouped experimental correlation matrix with groups_covmat as input"""
     df = groups_covmat
     covmat = df.values
-    diag_minus_half = (np.diagonal(covmat))**(-0.5)
-    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    diag_minus_half = (np.diagonal(covmat)) ** (-0.5)
+    mat = diag_minus_half[:, np.newaxis] * df * diag_minus_half
     return mat
 
 
-@check_pdf_is_montecarlo
+@check_pdf_is_montecarlo_or_symmhessian
 def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
-    `covmat_t0_considered` and the PDF error: a covariance matrix estimated from the
-    replica theory predictions from a given monte carlo `pdf`
+    `covmat_t0_considered` and the PDF error:
+    - If the PDF error_type is 'replicas', a covariance matrix is estimated from
+      the replica theory predictions
+    - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
+      formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
+
 
     Parameters
     ----------
@@ -699,8 +720,24 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     True
     """
     th = ThPredictionsResult.from_convolution(pdf, dataset)
-    pdf_cov = np.cov(th.error_members, rowvar=True)
+
+    if pdf.error_type == 'replicas':
+        pdf_cov = np.cov(th.error_members, rowvar=True)
+
+    elif pdf.error_type == 'symmhessian':
+        rescale_fac = pdf._rescale_factor()
+        hessian_eigenvectors = th.error_members
+        central_predictions = th.central_value
+
+        # need to subtract the central set which is not the same as the average of the
+        # Hessian eigenvectors.
+        X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0], 1))
+        # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
+        X = X / rescale_fac
+        pdf_cov = X @ X.T
+
     return pdf_cov + covmat_t0_considered
+
 
 def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     """
@@ -712,12 +749,18 @@ def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
     return tmp.reindex(index=bb, columns=bb, level=0)
 
+
 def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat_t0_considered, fitthcovmat):
     """Like `pdferr_plus_covmat` except for an experiment"""
     # do checks get performed here?
     if fitthcovmat is not None:
-        #change ordering according to exp_covmat (so according to runcard order)
-        return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered+ reorder_thcovmat_as_expcovmat(fitthcovmat,data).values)
+        # change ordering according to exp_covmat (so according to runcard order)
+        return pdferr_plus_covmat(
+            data,
+            pdf,
+            dataset_inputs_covmat_t0_considered
+            + reorder_thcovmat_as_expcovmat(fitthcovmat, data).values,
+        )
     return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered)
 
 
@@ -727,10 +770,7 @@ def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
 
 
 def systematics_matrix_from_commondata(
-    loaded_commondata_with_cuts,
-    dataset_input,
-    use_weights_in_covmat=True,
-    _central_values=None
+    loaded_commondata_with_cuts, dataset_input, use_weights_in_covmat=True, _central_values=None
 ):
     """Returns a systematics matrix, :math:`A`, for the corresponding dataset.
     The systematics matrix is a square root of the covmat:
@@ -745,11 +785,12 @@ def systematics_matrix_from_commondata(
     """
     sqrt_covmat = systematics_matrix(
         loaded_commondata_with_cuts.stat_errors.to_numpy(),
-        loaded_commondata_with_cuts.systematic_errors(_central_values)
+        loaded_commondata_with_cuts.systematic_errors(_central_values),
     )
     if use_weights_in_covmat:
         return sqrt_covmat / np.sqrt(dataset_input.weight)
     return sqrt_covmat
+
 
 def covmat_stability_characteristic(systematics_matrix_from_commondata):
     """
@@ -781,7 +822,7 @@ def covmat_stability_characteristic(systematics_matrix_from_commondata):
     """
     sqrtcov = systematics_matrix_from_commondata
     # copied from calcutils.regularize_l2 but just return stability condition.
-    d = np.sqrt(np.sum(sqrtcov ** 2, axis=1))[:, np.newaxis]
+    d = np.sqrt(np.sum(sqrtcov**2, axis=1))[:, np.newaxis]
     sqrtcorr = sqrtcov / d
     _, s, _ = la.svd(sqrtcorr, full_matrices=False)
     return 1 / s[-1]
@@ -816,7 +857,8 @@ def fit_name_with_covmat_label(fit, fitthcovmat):
 @table
 @check_norm_threshold
 def datasets_covmat_differences_table(
-    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg, norm_threshold):
+    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg, norm_threshold
+):
     """For each dataset calculate and tabulate two max differences upon
     regularization given a value for `norm_threshold`:
 
@@ -825,38 +867,36 @@ def datasets_covmat_differences_table(
 
     """
     records = []
-    for ds, reg, noreg in zip(
-        each_dataset, datasets_covmat_reg, datasets_covmat_no_reg):
-        cov_diag_rel_diff = np.diag(reg)/np.diag(noreg)
+    for ds, reg, noreg in zip(each_dataset, datasets_covmat_reg, datasets_covmat_no_reg):
+        cov_diag_rel_diff = np.diag(reg) / np.diag(noreg)
         d_reg = np.sqrt(np.diag(reg))
         d_noreg = np.sqrt(np.diag(noreg))
-        corr_reg = reg/d_reg[:, np.newaxis]/d_reg[np.newaxis, :]
-        corr_noreg = noreg/d_noreg[:, np.newaxis]/d_noreg[np.newaxis, :]
+        corr_reg = reg / d_reg[:, np.newaxis] / d_reg[np.newaxis, :]
+        corr_noreg = noreg / d_noreg[:, np.newaxis] / d_noreg[np.newaxis, :]
         corr_abs_diff = abs(corr_reg - corr_noreg)
-        records.append(dict(
+        records.append(
+            dict(
                 dataset=str(ds),
-                covdiff= np.max(abs(cov_diag_rel_diff- 1))*100, #make percentage
-                corrdiff=np.max(corr_abs_diff)
-            ))
-    df = pd.DataFrame.from_records(records,
-        columns=("dataset", "covdiff", "corrdiff"),
-        index = ("dataset",)
+                covdiff=np.max(abs(cov_diag_rel_diff - 1)) * 100,  # make percentage
+                corrdiff=np.max(corr_abs_diff),
+            )
         )
+    df = pd.DataFrame.from_records(
+        records, columns=("dataset", "covdiff", "corrdiff"), index=("dataset",)
+    )
     df.columns = ["Variance rel. diff. (%)", "Correlation max abs. diff."]
     return df
 
 
 @check_speclabels_different
 @table
-def dataspecs_datasets_covmat_differences_table(
-    dataspecs_speclabel, dataspecs_covmat_diff_tables
-):
+def dataspecs_datasets_covmat_differences_table(dataspecs_speclabel, dataspecs_covmat_diff_tables):
     """For each dataspec calculate and tabulate the two covmat differences
     described in `datasets_covmat_differences_table`
     (max relative difference in variance and max absolute correlation difference)
 
     """
-    df = pd.concat( dataspecs_covmat_diff_tables, axis=1)
+    df = pd.concat(dataspecs_covmat_diff_tables, axis=1)
     cols = df.columns.get_level_values(0).unique()
     df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
     return df
@@ -876,34 +916,34 @@ def _dataset_inputs_covmat_t0_considered(dataset_inputs_covmat_t0_considered, fi
     and ``use_pdferr``
     """
     if fitthcovmat is not None:
-        #change ordering according to exp_covmat (so according to runcard order)
-        return dataset_inputs_covmat_t0_considered + reorder_thcovmat_as_expcovmat(fitthcovmat,data).values
-    return dataset_inputs_covmat_t0_considered 
+        # change ordering according to exp_covmat (so according to runcard order)
+        return (
+            dataset_inputs_covmat_t0_considered
+            + reorder_thcovmat_as_expcovmat(fitthcovmat, data).values
+        )
+    return dataset_inputs_covmat_t0_considered
+
 
 groups_covmat_collection = collect(
     'dataset_inputs_covariance_matrix', ('group_dataset_inputs_by_metadata',)
 )
 
-groups_sqrt_covmat = collect(
-    'dataset_inputs_sqrt_covmat',
-    ('group_dataset_inputs_by_metadata',)
-)
+groups_sqrt_covmat = collect('dataset_inputs_sqrt_covmat', ('group_dataset_inputs_by_metadata',))
 
-dataspecs_covmat_diff_tables = collect(
-    "datasets_covmat_differences_table", ("dataspecs",)
-)
+dataspecs_covmat_diff_tables = collect("datasets_covmat_differences_table", ("dataspecs",))
 
 fits_name_with_covmat_label = collect('fit_name_with_covmat_label', ('fits',))
 
-datasets_covmat_no_reg = collect(
-    "covariance_matrix", ("data", "no_covmat_reg"))
+datasets_covmat_no_reg = collect("covariance_matrix", ("data", "no_covmat_reg"))
 
-datasets_covmat_reg = collect(
-    "covariance_matrix", ("data",))
+datasets_covmat_reg = collect("covariance_matrix", ("data",))
 
 datasets_covmat = collect('covariance_matrix', ('data',))
 
 datasets_covariance_matrix = collect(
     'covariance_matrix',
-    ('experiments', 'experiment',)
+    (
+        'experiments',
+        'experiment',
+    ),
 )

@@ -9,6 +9,7 @@ actions/providers.
 import numpy as np
 import pandas as pd
 
+
 def systematics_matrix(stat_errors: np.array, sys_errors: pd.DataFrame):
     """Basic function to create a systematics matrix , :math:`A`, such that:
 
@@ -42,7 +43,7 @@ def systematics_matrix(stat_errors: np.array, sys_errors: pd.DataFrame):
     of ``sys_errors`` before passing that to this function.
 
     """
-    diagonal = stat_errors ** 2
+    diagonal = stat_errors**2
 
     is_uncorr = sys_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
     diagonal += (sys_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
@@ -78,7 +79,7 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     of ``sys_errors`` before passing that to this function.
 
     """
-    diagonal = stat_errors ** 2
+    diagonal = stat_errors**2
 
     is_uncorr = sys_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
     diagonal += (sys_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)

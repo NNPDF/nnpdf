@@ -4,15 +4,18 @@ Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
 """
 from collections import namedtuple
-import logging
 import hashlib
+import logging
 
 import numpy as np
 import pandas as pd
 
-from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat, dataset_inputs_covmat_from_systematics
-
 from reportengine import collect
+from validphys.covmats import (
+    INTRA_DATASET_SYS_NAME,
+    dataset_inputs_covmat_from_systematics,
+    sqrt_covmat,
+)
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -23,6 +26,7 @@ DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
 context_index = collect("groups_index", ("fitcontext",))
 read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitcontextwithcuts'))
 read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitcontextwithcuts'))
+
 
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
@@ -66,7 +70,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     # List of length 1 due to the collect
     context_index = context_index[0]
     # The [0] is because of how pandas handles sorting a MultiIndex
-    sorted_index = context_index.sortlevel(level=range(1,3))[0]
+    sorted_index = context_index.sortlevel(level=range(1, 3))[0]
 
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
     replica_path = fit.path / "nnfit" / f"replica_{replica}"
@@ -82,7 +86,9 @@ def read_replica_pseudodata(fit, context_index, replica):
         training_path = replica_path / "training.dat"
         validation_path = replica_path / "validation.dat"
         tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
-        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
+        val = pd.read_csv(
+            validation_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"]
+        )
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
@@ -91,22 +97,23 @@ def read_replica_pseudodata(fit, context_index, replica):
     tr["type"], val["type"] = "training", "validation"
 
     pseudodata = pd.concat((tr, val))
-    pseudodata.sort_index(level=range(1,3), inplace=True)
+    pseudodata.sort_index(level=range(1, 3), inplace=True)
 
     pseudodata.index = sorted_index
 
-    tr = pseudodata[pseudodata["type"]=="training"]
-    val = pseudodata[pseudodata["type"]=="validation"]
+    tr = pseudodata[pseudodata["type"] == "training"]
+    val = pseudodata[pseudodata["type"] == "validation"]
 
     return DataTrValSpec(pseudodata.drop("type", axis=1), tr.index, val.index)
 
+
 def make_replica(
-    groups_dataset_inputs_loaded_cd_with_cuts, 
-    replica_mcseed,  
-    dataset_inputs_sampling_covmat, 
-    sep_mult, 
-    genrep=True 
-    ):
+    groups_dataset_inputs_loaded_cd_with_cuts,
+    replica_mcseed,
+    dataset_inputs_sampling_covmat,
+    sep_mult,
+    genrep=True,
+):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
@@ -131,10 +138,10 @@ def make_replica(
     separate_multiplicative: bool
         Specifies whether computing the shifts with the full covmat or separating multiplicative
         errors (in the latter case remember to generate the covmat coherently)
-    
+
     genrep: bool
         Specifies whether computing replicas or not
-        
+
     Returns
     -------
     pseudodata: np.array
@@ -157,16 +164,18 @@ def make_replica(
        0.34206012, 0.31866286, 0.2790856 , 0.33257621, 0.33680007,
     """
     if not genrep:
-        return np.concatenate([cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts])
+        return np.concatenate(
+            [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
+        )
 
     # Seed the numpy RNG with the seed and the name of the datasets in this run
     name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
-    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10 ** 8
-    rng = np.random.default_rng(seed=replica_mcseed+name_seed)
-    #construct covmat
+    name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
+    rng = np.random.default_rng(seed=replica_mcseed + name_seed)
+    # construct covmat
     covmat = dataset_inputs_sampling_covmat
     covmat_sqrt = sqrt_covmat(covmat)
-    #Loading the data
+    # Loading the data
     pseudodatas = []
     check_positive_masks = []
     nonspecial_mult = []
@@ -176,13 +185,13 @@ def make_replica(
         pseudodata = cd.central_values.to_numpy()
 
         pseudodatas.append(pseudodata)
-        #Separation of multiplicative errors. If separate_multiplicative is True also the exp_covmat is produced 
+        # Separation of multiplicative errors. If separate_multiplicative is True also the exp_covmat is produced
         # without multiplicative errors
         if sep_mult:
             mult_errors = cd.multiplicative_errors
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
             mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
-            nonspecial_mult.append( (mult_uncorr_errors, mult_corr_errors) )
+            nonspecial_mult.append((mult_uncorr_errors, mult_corr_errors))
             special_mult.append(
                 mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
             )
@@ -190,7 +199,7 @@ def make_replica(
             check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
-    #concatenating special multiplicative errors, pseudodatas and positive mask 
+    # concatenating special multiplicative errors, pseudodatas and positive mask
     if sep_mult:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
     all_pseudodata = np.concatenate(pseudodatas, axis=0)
@@ -201,7 +210,7 @@ def make_replica(
         mult_shifts = []
         # Prepare the per-dataset multiplicative shifts
         for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
-        # convert to from percent to fraction
+            # convert to from percent to fraction
             mult_shift = (
                 1 + mult_uncorr_errors * rng.normal(size=mult_uncorr_errors.shape) / 100
             ).prod(axis=1)
@@ -211,19 +220,18 @@ def make_replica(
             ).prod(axis=1)
 
             mult_shifts.append(mult_shift)
-            
-        #If sep_mult is true then the multiplicative shifts were not included in the covmat
+
+        # If sep_mult is true then the multiplicative shifts were not included in the covmat
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
-        mult_part = 1.
+        mult_part = 1.0
         if sep_mult:
             special_mult = (
-                1 + special_mult_errors * rng.normal(size=(1, 
-                special_mult_errors.shape[1])) / 100
-                ).prod(axis=1)
-            mult_part = np.concatenate(mult_shifts, axis=0)*special_mult
-        #Shifting pseudodata
-        shifted_pseudodata = (all_pseudodata + shifts)*mult_part
-        #positivity control
+                1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100
+            ).prod(axis=1)
+            mult_part = np.concatenate(mult_shifts, axis=0) * special_mult
+        # Shifting pseudodata
+        shifted_pseudodata = (all_pseudodata + shifts) * mult_part
+        # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
             break
 
@@ -231,10 +239,10 @@ def make_replica(
 
 
 def indexed_make_replica(groups_index, make_replica):
-    """Index the make_replica pseudodata appropriately
-    """
+    """Index the make_replica pseudodata appropriately"""
 
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
+
 
 def level0_commondata_wc(data, fakepdf):
     """
@@ -264,6 +272,7 @@ def level0_commondata_wc(data, fakepdf):
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
     from validphys.covmats import dataset_t0_predictions
+
     level0_commondata_instances_wc = []
 
     # ==== Load validphys.coredata.CommonData instance with cuts ====#
@@ -279,22 +288,18 @@ def level0_commondata_wc(data, fakepdf):
         t0_prediction = dataset_t0_predictions(
             dataset=dataset, t0set=fakepdf
         )  # N.B. cuts already applied to th. pred.
-        level0_commondata_instances_wc.append(
-            commondata_wc.with_central_value(t0_prediction)
-        )
+        level0_commondata_instances_wc.append(commondata_wc.with_central_value(t0_prediction))
 
     return level0_commondata_instances_wc
 
 
-def make_level1_data(
-    data, level0_commondata_wc, filterseed, experiments_index, sep_mult
-):
+def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, sep_mult):
     """
     Given a list of Level 0 commondata instances, return the
     same list with central values replaced by Level 1 data.
 
     Level 1 data is generated using validphys.make_replica.
-    The covariance matrix, from which the stochastic Level 1 
+    The covariance matrix, from which the stochastic Level 1
     noise is sampled, is built from Level 0 commondata
     instances (level0_commondata_wc). This, in particular,
     means that the multiplicative systematics are generated
@@ -307,12 +312,12 @@ def make_level1_data(
 
     Generate L1 data: L1 = L0 + eta, eta ~ N(0,CL0)
     Generate L2 data: L2_k = L1 + eps_k, eps_k ~ N(0,CL1)
-    
+
     where CL0 and CL1 means that the multiplicative entries
     have been constructed from Level 0 and Level 1 central
     values respectively.
-    
-    
+
+
     Parameters
     ----------
 
@@ -379,18 +384,15 @@ def make_level1_data(
 _group_recreate_pseudodata = collect(
     'indexed_make_replica', ('group_dataset_inputs_by_experiment',)
 )
-_recreate_fit_pseudodata = collect(
-    '_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment')
-)
-_recreate_pdf_pseudodata = collect(
-    '_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment')
-)
+_recreate_fit_pseudodata = collect('_group_recreate_pseudodata', ('fitreplicas', 'fitenvironment'))
+_recreate_pdf_pseudodata = collect('_group_recreate_pseudodata', ('pdfreplicas', 'fitenvironment'))
 
 fit_tr_masks = collect('replica_training_mask_table', ('fitreplicas', 'fitenvironment'))
 pdf_tr_masks = collect('replica_training_mask_table', ('pdfreplicas', 'fitenvironment'))
 make_replicas = collect('make_replica', ('replicas',))
 fitted_make_replicas = collect('make_replica', ('pdfreplicas',))
 indexed_make_replicas = collect('indexed_make_replica', ('replicas',))
+
 
 def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks):
     """Function used to reconstruct the pseudodata seen by each of the
@@ -425,6 +427,7 @@ def recreate_fit_pseudodata(_recreate_fit_pseudodata, fitreplicas, fit_tr_masks)
         res.append(DataTrValSpec(df, tr_idx, val_idx))
     return res
 
+
 def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks):
     """Like :py:func:`validphys.pseudodata.recreate_fit_pseudodata`
     but accounts for the postfit reshuffling of replicas.
@@ -447,6 +450,9 @@ def recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
     """
     return recreate_fit_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks)
 
+
 pdf_tr_masks_no_table = collect('replica_training_mask', ('pdfreplicas', 'fitenvironment'))
+
+
 def recreate_pdf_pseudodata_no_table(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks_no_table):
     return recreate_pdf_pseudodata(_recreate_pdf_pseudodata, pdfreplicas, pdf_tr_masks_no_table)

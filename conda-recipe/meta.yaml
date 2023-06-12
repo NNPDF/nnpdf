@@ -41,7 +41,7 @@ requirements:
         - matplotlib >=3.3.0
         - blessings >=1.7
         - scipy >=0.19.1
-        - pandas
+        - pandas <2 # In principle the code runs with pandas 2 but the results (plots, tables, formats) are untested
         - requests
         - prompt_toolkit
         - validobj
@@ -51,7 +51,7 @@ requirements:
         - sphinxcontrib-bibtex
         - curio >=1.0
         - pineappl >=0.5.8
-        - eko >=0.12.2
+        - eko >=0.13.4,<0.14
         - banana-hep >=0.6.8
         - fiatlux
 

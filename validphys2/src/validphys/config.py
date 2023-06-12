@@ -518,7 +518,6 @@ class CoreConfig(configparser.Config):
             None, "cut_similarity_threshold", write=False
         )
         try:
-
             _, exclusion_list = self.parse_from_(None, "do_not_require_similarity_for", write=False)
         except configparser.InputNotFoundError:
             exclusion_list = []
@@ -859,7 +858,6 @@ class CoreConfig(configparser.Config):
         self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, data_input = self.parse_from_(None, "data_input", write=False)
 
@@ -1316,7 +1314,6 @@ class CoreConfig(configparser.Config):
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
     ):
-
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
@@ -1381,20 +1378,31 @@ class CoreConfig(configparser.Config):
         self,
         q2min=None,
         w2min=None,
+        maxTau=None,
         default_filter_settings=None,
         filter_defaults={},
         default_filter_settings_recorded_spec_=None,
     ):
-        """Produce default values for filters taking into account both the
-        values of ``q2min`` and ` `w2min`` defined at namespace
+        """Produce default values for filters taking into account the
+        values of ``q2min``, ` `w2min`` and ``maxTau`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
-
-        if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
+        if (
+            q2min is not None
+            and "q2min" in filter_defaults
+            and q2min != filter_defaults["q2min"]
+        ):
             raise ConfigError("q2min defined multiple times with different values")
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
+        
+        if (
+            maxTau is not None
+            and "maxTau" in filter_defaults
+            and maxTau != filter_defaults["maxTau"]
+        ):
+            raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
             filter_defaults = default_filter_settings_recorded_spec_[default_filter_settings]
@@ -1414,7 +1422,11 @@ class CoreConfig(configparser.Config):
         if w2min is not None and defaults_loaded:
             log.warning("Using w2min from runcard")
             filter_defaults["w2min"] = w2min
-
+            
+        if maxTau is not None and defaults_loaded:
+            log.warning("Using maxTau from runcard")
+            filter_defaults["maxTau"] = maxTau
+            
         return filter_defaults
 
     def produce_data(
@@ -1571,7 +1583,7 @@ class CoreConfig(configparser.Config):
             if processed_metadata_group == "custom_group":
                 group_name = str(dsinput.custom_group)
             # special case of ALL, grouping everything together
-            if processed_metadata_group == "ALL":
+            elif processed_metadata_group == "ALL":
                 group_name = processed_metadata_group
             # otherwise try and take the key from the metadata.
             else:

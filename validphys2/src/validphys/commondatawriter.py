@@ -3,6 +3,7 @@ This module contains functions to write commondata and systypes
 tables to files
 """
 
+
 def write_commondata_data(commondata, buffer):
     """
     write commondata table to buffer, this can be a memory map,
