@@ -14,7 +14,7 @@ import scipy.special as special
 from reportengine import collect
 
 from validphys.results import ThPredictionsResult
-from validphys.covmats import sqrt_covmat, regularize_sqrt_cov
+from validphys.covmats import sqrt_covmat, regularize_sqrt_cov, regularize_covmat
 from validphys.calcutils import calc_chi2
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
@@ -116,7 +116,10 @@ def fits_dataset_bias_variance(
     _internal_min_reps=20,
     only_pdf_err = False,
     pdf_and_exp_err = False,
-    only_diag = False
+    only_diag = False,
+    regularize_corr = False,
+    cut_obs = False,
+    regularization_threshold = 4
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -172,11 +175,42 @@ def fits_dataset_bias_variance(
                 bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
                 var = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
             else:
-                if only_diag==False:
+                if only_diag==False and regularize_corr == True and cut_obs == False:
+                    #d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+                    #corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
+                    ##Here the matrix is reduced deleting observables which are too correlated
+                    #if i == 0:
+                        #d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+                        #corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
+                        #mask = (abs(corr) > 0.6)
+                    #indices = list(set(np.where(np.tril(mask))[0]))
+                    #corr_cov = np.delete(pdf_cov[i],indices,0)
+                    #corr_cov = np.delete(corr_cov,indices,1)
+                    #n_data = corr_cov.shape[0]
+                    #corr_reps = np.delete(reps[i], indices,0)
+                    #corr_theo = np.delete(law_th.central_value,indices)
+                    bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+                    var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+                    covmat = regularize_covmat(pdf_cov[i],regularization_threshold)
+                    #sqrt_cov = sqrt_covmat(corr_cov)
+                    sqrt_cov = sqrt_covmat(covmat)
+                    bias = calc_chi2(sqrt_cov, bias_diffs)
+                    var = np.mean(calc_chi2(sqrt_cov, var_diffs))
+                if only_diag==True and regularize_corr == False and cut_obs == False:
+                    d = np.diag(np.diag(pdf_cov[i]))
+                    sqrt_cov = la.cholesky(d, lower=True)
+                    bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
+                    var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
+                    bias = calc_chi2(sqrt_cov, bias_diffs)
+                    var = (np.mean(calc_chi2(sqrt_cov, var_diffs)))
+                if only_diag==False and regularize_corr == False and cut_obs == True:
                     d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
                     corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
-                    ##Here the matrix is reduced deleting observables which are too correlated
-                    mask = (abs(corr) > 0.9)
+                    #Here the matrix is reduced deleting observables which are too correlated
+                    if i == 0:
+                        d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+                        corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
+                        mask = (abs(corr) > 0.9)
                     indices = list(set(np.where(np.tril(mask))[0]))
                     corr_cov = np.delete(pdf_cov[i],indices,0)
                     corr_cov = np.delete(corr_cov,indices,1)
@@ -186,13 +220,6 @@ def fits_dataset_bias_variance(
                     bias_diffs = np.mean(corr_reps, axis = 1) - corr_theo
                     var_diffs = np.mean(corr_reps, axis = 1)[:,np.newaxis] - corr_reps
                     sqrt_cov = sqrt_covmat(corr_cov)
-                    bias = calc_chi2(sqrt_cov, bias_diffs)
-                    var = np.mean(calc_chi2(sqrt_cov, var_diffs))
-                else:
-                    d = np.diag(np.diag(pdf_cov[i]))
-                    sqrt_cov = la.cholesky(d, lower=True)
-                    bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
-                    var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
                     bias = calc_chi2(sqrt_cov, bias_diffs)
                     var = (np.mean(calc_chi2(sqrt_cov, var_diffs)))
                     
@@ -247,13 +274,16 @@ def fits_data_bias_variance(
     _internal_min_reps=20,
     only_pdf_err = False,
     pdf_and_exp_err = False,
-    only_diag = False
+    only_diag = False,
+    regularize_corr = False,
+    cut_obs = False,
+    regularization_threshold = 4
 
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
         internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps,
-        only_pdf_err, pdf_and_exp_err, only_diag
+        only_pdf_err, pdf_and_exp_err, only_diag, regularize_corr, cut_obs, regularization_threshold
     )
 
 
@@ -511,7 +541,10 @@ def bias_variance_resampling_dataset(
     use_repeats=True,
     only_pdf_err = False,
     pdf_and_exp_err = False,
-    only_diag = False
+    only_diag = False,
+    regularize_corr = False,
+    cut_obs = False,
+    regularization_threshold = 4
 ):
     """For a single dataset, create bootstrap distributions of bias and variance
     varying the number of fits and replicas drawn for each resample. Return two
@@ -565,7 +598,7 @@ def bias_variance_resampling_dataset(
                 # full subsample
                 bias, variance, _ = expected_dataset_bias_variance(
                     fits_dataset_bias_variance(boot_internal_loader, n_rep_sample, only_pdf_err, pdf_and_exp_err,
-                                               only_diag)
+                                               only_diag, regularize_corr, cut_obs, regularization_threshold)
                 )
                 bias_boot.append(bias)
                 variance_boot.append(variance)
@@ -746,7 +779,10 @@ def fits_bootstrap_data_bias_variance(
     boot_seed=DEFAULT_SEED,
     only_pdf_err = False,
     pdf_and_exp_err = False,
-    only_diag = False
+    only_diag = False,
+    regularize_corr = False,
+    cut_obs = False,
+    regularization_threshold = 4
 ):
     """Perform bootstrap resample of `fits_data_bias_variance`, returns
     tuple of bias_samples, variance_samples where each element is a 1-D np.array
@@ -774,7 +810,7 @@ def fits_bootstrap_data_bias_variance(
         bias, variance, _ = expected_dataset_bias_variance(
             fits_dataset_bias_variance(
                 boot_internal_loader, _internal_max_reps, _internal_min_reps,
-                only_pdf_err, pdf_and_exp_err, only_diag
+                only_pdf_err, pdf_and_exp_err, only_diag, regularize_corr, cut_obs, regularization_threshold
             )
         )
         bias_boot.append(bias)
