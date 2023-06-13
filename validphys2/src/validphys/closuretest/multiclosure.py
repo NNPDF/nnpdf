@@ -601,6 +601,46 @@ def total_expected_xi_resample(bias_variance_resampling_total):
 
 
 @check_multifit_replicas
+def fits_bootstrap_dataset_bias_variance(
+    internal_multiclosure_dataset_loader,
+    fits,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+    bootstrap_samples=100,
+    boot_seed=DEFAULT_SEED,
+):
+    """Perform bootstrap resample of `fits_data_bias_variance`, returns
+    tuple of bias_samples, variance_samples where each element is a 1-D np.array
+    of length bootstrap_samples. The elements of the arrays are bootstrap samples
+    of bias and variance respectively.
+
+    """
+    # seed same rng so we can aggregate results
+    rng = np.random.RandomState(seed=boot_seed)
+    bias_boot = []
+    variance_boot = []
+    for _ in range(bootstrap_samples):
+        # use all fits. Use all replicas by default. Allow repeats in resample.
+        boot_internal_loader = _bootstrap_multiclosure_fits(
+            internal_multiclosure_dataset_loader,
+            rng,
+            len(fits),
+            len(fits),
+            _internal_max_reps,
+            _internal_max_reps,
+            True,
+        )
+        # explicitly pass n_rep to fits_dataset_bias_variance so it uses
+        # full subsample
+        bias, variance, _ = expected_dataset_bias_variance(
+            fits_dataset_bias_variance(boot_internal_loader, _internal_max_reps, _internal_min_reps)
+        )
+        bias_boot.append(bias)
+        variance_boot.append(variance)
+    return np.array(bias_boot), np.array(variance_boot)
+
+
+@check_multifit_replicas
 def fits_bootstrap_data_bias_variance(
     internal_multiclosure_data_loader,
     fits,
