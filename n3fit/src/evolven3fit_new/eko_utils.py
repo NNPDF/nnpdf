@@ -22,7 +22,7 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN = {
 }
 
 EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
-    "ev_op_iterations": 10,
+    "ev_op_iterations": 30,
     "ev_op_max_order": (1, 0),
     "evolution_method": "iterate-exact",
     "inversion_method": "exact",
@@ -76,6 +76,11 @@ def construct_eko_cards(
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
+
+    # if Qedref = Qref alphaem is running, otherwise it's fixed
+    if theory["QED"] > 0:
+        if np.isclose(theory["Qref"], theory["Qedref"]):
+            theory_card.couplings.em_running = True
 
     # construct operator card
     q2_grid = utils.generate_q2grid(
