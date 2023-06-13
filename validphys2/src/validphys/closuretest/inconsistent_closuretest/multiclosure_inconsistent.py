@@ -20,6 +20,10 @@ multi_dataset_fits_bias_replicas_variance_samples = collect(
     "dataset_fits_bias_replicas_variance_samples", ("dataspecs",)
 )
 
+multi_fits_bootstrap_dataset_bias_variance = collect(
+    "fits_bootstrap_dataset_bias_variance", ("dataspecs",)
+)
+
 multi_bias_variance_resampling_dataset = collect("bias_variance_resampling_dataset", ("dataspecs",))
 
 

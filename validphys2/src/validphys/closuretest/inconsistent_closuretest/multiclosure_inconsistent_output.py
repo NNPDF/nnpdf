@@ -78,3 +78,44 @@ def plot_bias_distribution_multi(multi_dataset_fits_bias_replicas_variance_sampl
 
     ax.legend()
     return fig
+
+
+@figure
+def plot_multi_bias_distribution_bootstrap(multi_fits_bootstrap_dataset_bias_variance, dataspecs):
+    """
+    histogram of the distribution of the biases obtained by bootstrapping with
+    `fits_bootstrap_dataset_bias_variance` over the existing fits.
+
+    If more than one group of dataspecs (e.g. consistent and inconsistent)
+    fits are defined, than plot comparison of these.
+    """
+    fig, ax = plotutils.subplots()
+    for (bias, _), spec in zip(multi_fits_bootstrap_dataset_bias_variance, dataspecs):
+        label = spec['speclabel']
+
+        ax.hist(bias, bins='auto', density=True, alpha=0.5, label=label)
+
+    ax.legend()
+    return fig
+
+
+@figure
+def plot_multi_ratio_bias_variance_distribution_bootstrap(
+    multi_fits_bootstrap_dataset_bias_variance, dataspecs
+):
+    """
+    histogram of the ratio bias variance distribution obtained by bootstrapping bias
+    and variance with `fits_bootstrap_dataset_bias_variance`.
+
+    If more than one group of dataspecs (e.g. consistent and inconsistent)
+    fits are defined, than plot comparison of these.
+    """
+    fig, ax = plotutils.subplots()
+    for (bias, variance), spec in zip(multi_fits_bootstrap_dataset_bias_variance, dataspecs):
+        ratio = bias / variance
+        label = spec['speclabel']
+
+        ax.hist(ratio, bins='auto', density=True, alpha=0.5, label=label)
+
+    ax.legend()
+    return fig
