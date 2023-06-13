@@ -9,13 +9,18 @@ in this module are used to produce results which are plotted in
 """
 
 import numpy as np
-from validphys.calcutils import calc_chi2
 
 from reportengine import collect
 
 
 """ To load several multiclosure fits. Useful for inconsistent closure test analysis """
 multi_dataset_loader = collect("internal_multiclosure_dataset_loader", ("dataspecs",))
+
+multi_dataset_fits_bias_replicas_variance_samples = collect(
+    "dataset_fits_bias_replicas_variance_samples", ("dataspecs",)
+)
+
+multi_bias_variance_resampling_dataset = collect("bias_variance_resampling_dataset", ("dataspecs",))
 
 
 def dataset_replica_minus_central(internal_multiclosure_dataset_loader):
@@ -56,36 +61,3 @@ def dataset_replica_minus_central_multi(multi_dataset_loader):
         diff_nrep, diff_ndat_nrep, sqrt_cov = dataset_replica_minus_central(internal_mct_ds_loader)
         multi_diffs.append((diff_nrep, diff_ndat_nrep, sqrt_cov))
     return multi_diffs
-
-
-def dataset_variance_per_replica(dataset_replica_minus_central):
-    """
-    Compute the variance for each replica for one or multiple fits.
-    The average over fits is done in `dataset_replica_minus_central`.
-
-    Returns
-    -------
-    np.ndarray
-            array of shape (Nreplica,) for the distribution of the
-            variance over replicas
-    """
-    _, diff, sqrt_cov = dataset_replica_minus_central
-
-    variances = calc_chi2(sqrt_cov, diff)
-    return variances
-
-
-def dataset_variance_per_replica_multi(dataset_replica_minus_central_multi):
-    """
-    like `dataset_variance_per_replica` but for different groups of fits.
-
-    Returns
-    -------
-    list
-        list each element of which is an array obtained with `dataset_variance_per_replica`
-    """
-    multi_variances = []
-    for ds_rep_minus_central in dataset_replica_minus_central_multi:
-        variances = dataset_variance_per_replica(ds_rep_minus_central)
-        multi_variances.append(variances)
-    return multi_variances
