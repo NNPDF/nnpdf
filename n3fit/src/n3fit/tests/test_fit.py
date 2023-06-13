@@ -33,6 +33,7 @@ from validphys.n3fit_data import replica_trvlseed, replica_nnseed, replica_mcsee
 log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
+QUICKNAME_QED = "quickcard_qed"
 EXE = "n3fit"
 REPLICA = "1"
 EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
@@ -153,3 +154,50 @@ def test_weirdbasis(tmp_path, timing=30):
 #     with pytest.raises(sp.TimeoutExpired):
     with pytest.raises(sp.CalledProcessError):
         sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing, check=True)
+
+
+def auxiliary_performfit_qed(tmp_path, replica=1, timing=True, rel_error=2e-3):
+    """Fits quickcard and checks the json file to ensure the results have not changed.
+    """
+    quickcard = f"{QUICKNAME_QED}.yml"
+    # Prepare the runcard
+    quickpath = REGRESSION_FOLDER / quickcard
+    weightpath = REGRESSION_FOLDER / f"weights_{replica}.h5"
+    # read up the previous json file for the given replica
+    old_json = load_data(REGRESSION_FOLDER / f"{QUICKNAME_QED}_{replica}.json")
+    # cp runcard and weights to tmp folder
+    shutil.copy(quickpath, tmp_path)
+    shutil.copy(weightpath, tmp_path / "weights.h5")
+    # run the fit
+    sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
+    # read up json files
+    full_json = tmp_path / f"{QUICKNAME_QED}/nnfit/replica_{replica}/{QUICKNAME_QED}.json"
+    new_json = load_data(full_json)
+    # Now compare to regression results, taking into account precision won't be 100%
+    equal_checks = ["stop_epoch", "pos_state"]
+    approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "arc_lengths", "integrability", "best_epoch"]
+    for key in equal_checks:
+        assert_equal(new_json[key], old_json[key])
+    for key in approx_checks:
+        if old_json[key] is None and new_json[key] is None:
+            continue
+        assert_allclose(new_json[key], old_json[key], rtol=rel_error)
+    # check that the times didnt grow in a weird manner
+    if timing:
+        # Better to catch up errors even when they happen to grow larger by chance
+        times = new_json["timing"]
+        fitting_time = times["walltime"]["replica_set_to_replica_fitted"]
+        assert fitting_time < EXPECTED_MAX_FITTIME
+    # For safety, check also the version
+    assert new_json["version"]["nnpdf"] == n3fit.__version__
+
+
+@pytest.mark.darwin
+def test_performfit_qed(tmp_path):
+    auxiliary_performfit_qed(tmp_path, replica=2, timing=False, rel_error=1e-1)
+
+
+@pytest.mark.linux
+@pytest.mark.parametrize("replica", [1, 2])
+def test_performfit_and_timing_qed(tmp_path, replica):
+    auxiliary_performfit_qed(tmp_path, replica=replica, timing=True)
