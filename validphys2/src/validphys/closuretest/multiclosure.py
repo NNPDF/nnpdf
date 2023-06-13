@@ -204,7 +204,7 @@ def fits_dataset_bias_variance(
                     bias = calc_chi2(sqrt_cov, bias_diffs)
                     var = (np.mean(calc_chi2(sqrt_cov, var_diffs)))
                 if only_diag==False and regularize_corr == False and cut_obs == True:
-                    d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+                    """d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
                     corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
                     #Here the matrix is reduced deleting observables which are too correlated
                     if i == 0:
@@ -214,6 +214,22 @@ def fits_dataset_bias_variance(
                     indices = list(set(np.where(np.tril(mask))[0]))
                     corr_cov = np.delete(pdf_cov[i],indices,0)
                     corr_cov = np.delete(corr_cov,indices,1)
+                    n_data = corr_cov.shape[0]
+                    corr_reps = np.delete(reps[i], indices,0)
+                    corr_theo = np.delete(law_th.central_value,indices)
+                    bias_diffs = np.mean(corr_reps, axis = 1) - corr_theo
+                    var_diffs = np.mean(corr_reps, axis = 1)[:,np.newaxis] - corr_reps
+                    sqrt_cov = sqrt_covmat(corr_cov)
+                    bias = calc_chi2(sqrt_cov, bias_diffs)
+                    var = (np.mean(calc_chi2(sqrt_cov, var_diffs)))"""
+                    # Different approach
+                    if i == 0:
+                        d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+                        corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
+                        # diagonalize corr and get indices of observables which are too correlated
+                        evals, evecs = la.eigh(corr)
+                        indices = np.where(np.diag(evecs.T@corr@evecs) < 10**(-10))[0]
+                    corr_cov = np.delete(np.delete(pdf_cov[i],indices,1),indices,0)
                     n_data = corr_cov.shape[0]
                     corr_reps = np.delete(reps[i], indices,0)
                     corr_theo = np.delete(law_th.central_value,indices)
