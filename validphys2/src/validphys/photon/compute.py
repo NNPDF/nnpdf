@@ -156,7 +156,7 @@ class Photon:
                     )
 
             # Apply EKO to PDFs
-            for (mu2, nf), elem in eko.items():
+            for _, elem in eko.items():
                 pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
 
         photon_Q0 = pdfs_final[ph_id]
