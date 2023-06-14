@@ -361,16 +361,6 @@ def scatter_to_one(values, indices=[[1]], output_dim=14):
     return tf.tensor_scatter_nd_update(ones, indices, values)
 
 
-def scatter_to_zero(values, indices, output_dim):
-    """
-    Like scatter_nd initialized to zero
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
-    """
-    indices = tf.constant([[i] for i in indices])
-    updates = tf.constant(values)
-    return tf.scatter_nd(indices, updates, [output_dim])
-
-
 def op_subtract(inputs, **kwargs):
     """
     Computes the difference between two tensors.
