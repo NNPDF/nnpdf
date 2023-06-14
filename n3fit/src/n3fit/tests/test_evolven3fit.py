@@ -145,7 +145,7 @@ def test_eko_utils(tmp_path):
     assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
 
 
-@pytest.mark.parametrize("fitname", ["Basic_runcard_3replicas_lowprec_399"])
+@pytest.mark.parametrize("fitname", ["Basic_runcard_3replicas_lowprec_399", "Basic_runcard_qed_3replicas_lowprec_398"])
 def test_perform_evolution(tmp_path, fitname):
     """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
     In addition checks that the generated .info files are correct
@@ -170,28 +170,3 @@ def test_perform_evolution(tmp_path, fitname):
     for datpath in tmp_nnfit.glob("replica_*/*.dat"):
         check_lhapdf_dat(datpath, info)
 
-
-@pytest.mark.parametrize("fitname", ["Basic_runcard_qed_3replicas_lowprec_398"])
-def test_perform_evolution_qed(tmp_path, fitname):
-    """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
-    In addition checks that the generated .info files are correct
-    """
-    fit = API.fit(fit=fitname)
-    # Move the fit to a temporary folder
-    tmp_fit = tmp_path / fitname
-    shutil.copytree(fit.path, tmp_fit)
-    # Clear the .log and .dat files
-    (tmp_fit / "evolven3fit_new.log").unlink()
-    tmp_nnfit = tmp_fit / "nnfit"
-    tmp_info = tmp_nnfit / f"{fitname}.info"
-    tmp_info.unlink()
-    for datpath in tmp_nnfit.glob("replica_*/*.dat"):
-        datpath.unlink()
-
-    # And re-evolve the fit
-    sp.run(["evolven3fit_new", "evolve", fitname], cwd=tmp_path, check=True)
-
-    # check that everything worked!
-    info = check_lhapdf_info(tmp_info)
-    for datpath in tmp_nnfit.glob("replica_*/*.dat"):
-        check_lhapdf_dat(datpath, info)
