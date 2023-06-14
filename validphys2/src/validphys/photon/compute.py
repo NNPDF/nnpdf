@@ -58,12 +58,12 @@ class Photon:
         # This is going to be changed in favor of a bool em_running
         # in the runcard
         fiatlux_runcard["mproton"] = theory["MP"]
-        if "abs_err" in lux_params:
-            fiatlux_runcard["eps_base"] = lux_params["abs_err"]
-            log.info(f"Using eps_base from runcard")
+        if "eps_base" in lux_params:
+            fiatlux_runcard["eps_base"] = lux_params["eps_base"]
+            log.warning(f"Using fiatlux parameter eps_base from runcard")
         else:
             fiatlux_runcard["eps_base"] = 1e-5 # precision on final integration of double integral.
-            log.info(f"Using default eps_base = 1e-5")
+            log.info(f"Using default value for fiatlux parameter eps_base")
 
         self.replicas = replicas
 
