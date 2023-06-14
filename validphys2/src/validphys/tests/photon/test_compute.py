@@ -8,6 +8,7 @@ from validphys.photon.compute import Photon, Alpha
 from validphys.core import PDF as PDFset
 
 from ..conftest import PDF
+from eko.io import EKO
 
 
 class FakeTheory:
@@ -68,6 +69,17 @@ class FakeFiatlux:
     def EvaluatePhoton(self, x, q):
         return self.res
 
+class FakeEKO:
+    def __init__(self, path):
+        self.path = path
+        self.mu20 = 100**2
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type: type, _exc_value, _traceback):
+        pass
+
 
 class FakeStructureFunction:
     def __init__(self, path, pdfs):
@@ -95,6 +107,7 @@ def test_parameters_init(monkeypatch):
     monkeypatch.setattr(structure_functions, "F2LO", FakeF2LO)
     monkeypatch.setattr(fiatlux, "FiatLux", FakeFiatlux)
     monkeypatch.setattr(Photon, "compute_photon_array", lambda *args: np.zeros(196))
+    monkeypatch.setattr(EKO, "read", FakeEKO)
 
     photon = Photon(FakeTheory(), fiatlux_runcard, [1, 2, 3])
     alpha = Alpha(FakeTheory().get_description())
