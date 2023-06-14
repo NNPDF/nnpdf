@@ -73,14 +73,14 @@ def auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, re
     quickpath = REGRESSION_FOLDER / quickcard
     weightpath = REGRESSION_FOLDER / f"weights_{replica}.h5"
     # read up the previous json file for the given replica
-    old_json = load_data(REGRESSION_FOLDER / f"{QUICKNAME}_{replica}.json")
+    old_json = load_data(REGRESSION_FOLDER / f"{runcard}_{replica}.json")
     # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
     shutil.copy(weightpath, tmp_path / "weights.h5")
     # run the fit
     sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
     # read up json files
-    full_json = tmp_path / f"{QUICKNAME}/nnfit/replica_{replica}/{QUICKNAME}.json"
+    full_json = tmp_path / f"{runcard}/nnfit/replica_{replica}/{runcard}.json"
     new_json = load_data(full_json)
     # Now compare to regression results, taking into account precision won't be 100%
     equal_checks = ["stop_epoch", "pos_state"]
