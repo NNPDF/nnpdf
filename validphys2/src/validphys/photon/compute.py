@@ -19,7 +19,6 @@ log = logging.getLogger(__name__)
 
 FIATLUX_DEFAULT = {
     "apfel": False,
-    "eps_base": 1e-5,  # precision on final integration of double integral.
     "eps_rel": 1e-1,  # extra precision on any single integration.
     "mum_proton": 2.792847356,  # proton magnetic moment, from
     # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
@@ -59,6 +58,13 @@ class Photon:
         # This is going to be changed in favor of a bool em_running
         # in the runcard
         fiatlux_runcard["mproton"] = theory["MP"]
+        if "abs_err" in lux_params:
+            fiatlux_runcard["eps_base"] = lux_params["abs_err"]
+            log.info(f"Using eps_base from runcard")
+        else:
+            fiatlux_runcard["eps_base"] = 1e-5 # precision on final integration of double integral.
+            log.info(f"Using default eps_base = 1e-5")
+
         self.replicas = replicas
 
         # structure functions
