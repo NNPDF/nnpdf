@@ -118,7 +118,7 @@ class Photon:
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
             photon_array = self.compute_photon_array(replica)
-            self.interpolator.append(interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic"))
+            self.interpolator.append(interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic"))
             self.integral.append(trapezoid(photon_array, XGRID))
 
     def compute_photon_array(self, replica):
