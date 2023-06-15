@@ -108,6 +108,121 @@ def internal_multiclosure_data_loader(
         data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
     )
 
+@check_multifit_replicas
+def alternative_fits_dataset_bias_variance(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20
+):
+    """
+
+    """
+    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    print("this is shape of reps:" + str(np.shape(reps)))
+    n_fits = np.shape(reps)[0]
+    n_data = len(law_th)
+    # The number of actual data used for calculation of chi2 could change because of the regularization
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
+    # Compute pdf covariance matrix for each fit. Dimensions here are (fit, data point, data point)
+    # Across fits the pdf_cov should be all similair. Just to be consistent biases and variances should be
+    # calculated using for each fit its sampled pdf_cov
+    
+    #TODO: There is a problem in the inversion of the pdf matrix. Probably comes from too few replicas 
+    # being sampled since when testing on out of sample data one is trying to compute a covariance matrix of
+    # a high dimensional random variable (n > 800) with a sample of ~100 elements (the replicas per fit)
+    all_vars = list()
+    biases = []
+    variances = []
+    pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
+    # There are n_fits pdf_covariances
+    # flag to see whether to eliminate dataset
+    for i in range(n_fits):
+        #get rows and columns which have too large correlations (these should be the ones that make the
+        # matrix ill defined)
+        #evals, eigens = la.eigh(pdf_cov[i])
+        if(np.shape(pdf_cov[i]) == ()):
+            bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
+            var_diffs = np.asarray(np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i])
+            chi_squares_bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
+            chi_squares_variance = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
+        else:
+            # Different approach
+            
+            """d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
+            corr = pdf_cov[i]/d/d.T
+            # diagonalize corr and get indices of observables which are too correlated
+            evals, evecs = la.eigh(corr)
+            indices = np.where((np.diag(evecs.T@corr@evecs)) < 10**(-5))[0]
+            #import ipdb; ipdb.set_trace()
+            # # cut observables corresponding to indices defined above; correct covmat
+            # import ipdb; ipdb.set_trace()
+            corr_cov = np.delete(np.delete(pdf_cov[i],indices,1),indices,0)
+            # save the new number of dof
+            n_data = corr_cov.shape[0]
+            # cut observables from reps and theoretical exp
+            corr_reps = np.delete(reps[i], indices,0)
+            corr_theo = np.delete(law_th.central_value,indices)
+            bias_diffs = np.mean(corr_reps, axis = 1) - corr_theo
+            var_diffs = np.mean(corr_reps, axis = 1)[:,np.newaxis] - corr_reps
+            # these are instances of correlated normal variables. De-correlate with change of basis
+            evals, evecs = la.eigh(corr_cov)
+            print(evals)
+            # evals are the diagonal of rotated corr_cov
+            rotated_bias_diffs = evecs.T@bias_diffs
+            rotated_var_diffs = evecs.T@var_diffs
+            # rotated var diffs have shape (obs, reps)
+            inv_evals = 1./evals
+            chi_squares_bias = rotated_bias_diffs*rotated_bias_diffs*inv_evals
+            chi_squares_variance = rotated_var_diffs*rotated_var_diffs*inv_evals[:,np.newaxis]
+            #import ipdb; ipdb.set_trace()"""
+            """evals, evecs = la.eigh(pdf_cov[i])
+            diagonal_elements = np.diag(evecs.T@pdf_cov[i]@evecs)
+            indices = np.where(diagonal_elements < 10**(-12))[0]
+            
+            
+            corr_cov = np.delete(np.delete(evecs.T@pdf_cov[i]@evecs,indices,1),indices,0)
+            n_data = corr_cov.shape[0]
+            corr_reps = np.delete(reps[i], indices,0)
+            corr_theo = np.delete(law_th.central_value,indices)
+            bias_diffs = np.mean(corr_reps, axis = 1) - corr_theo
+            var_diffs = np.mean(corr_reps, axis = 1)[:,np.newaxis] - corr_reps
+            # these are instances of correlated normal variables. De-correlate with change of basis
+            evals, evecs = la.eigh(corr_cov)
+            print(evals)
+            # evals are the diagonal of rotated corr_cov
+            rotated_bias_diffs = evecs.T@bias_diffs
+            rotated_var_diffs = evecs.T@var_diffs
+            # rotated var diffs have shape (obs, reps)
+            inv_evals = 1./evals
+            chi_squares_bias = rotated_bias_diffs*rotated_bias_diffs*inv_evals
+            chi_squares_variance = rotated_var_diffs*rotated_var_diffs*inv_evals[:,np.newaxis]"""
+            bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+            var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+            inv = 1./np.diag(pdf_cov[i])
+            chi_squares_bias = bias_diffs*bias_diffs*inv
+            chi_squares_variance = var_diffs*var_diffs*inv[:,np.newaxis]
+            biases.append(chi_squares_bias)
+            variances.append(chi_squares_variance)
+    #import ipdb; ipdb.set_trace()
+    variances = list(np.concatenate(variances).flat)
+    biases = list(np.concatenate(biases).flat)
+    return np.asarray(biases), np.asarray(variances), n_data
+
+@check_multifit_replicas
+def alternative_fits_data_bias_variance(
+    internal_multiclosure_data_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20
+
+):
+    #import ipdb; ipdb.set_trace()
+    """Like `alternative_fits_dataset_bias_variance` but for all data"""
+    return alternative_fits_dataset_bias_variance(
+        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps
+    )
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
@@ -158,7 +273,7 @@ def fits_dataset_bias_variance(
     #TODO: There is a problem in the inversion of the pdf matrix. Probably comes from too few replicas 
     # being sampled since when testing on out of sample data one is trying to compute a covariance matrix of
     # a high dimensional random variable (n > 800) with a sample of ~100 elements (the replicas per fit)
-
+    all_vars = list()
     if only_pdf_err and pdf_and_exp_err == False:
         biases = []
         variances = []
@@ -225,10 +340,11 @@ def fits_dataset_bias_variance(
                     # Different approach
                     if i == 0:
                         d = np.sqrt(np.diag(pdf_cov[i]))[:, np.newaxis]
-                        corr = pdf_cov[i]/d/d.T-np.diag(np.ones(pdf_cov[i].shape[0]))
+                        corr = pdf_cov[i]/d/d.T
                         # diagonalize corr and get indices of observables which are too correlated
                         evals, evecs = la.eigh(corr)
-                        indices = np.where(np.diag(evecs.T@corr@evecs) < 10**(-10))[0]
+                        indices = np.where(np.diag(evecs.T@corr@evecs) < 10**(-15))[0]
+                    # cut observables corresponding to indices defined above
                     corr_cov = np.delete(np.delete(pdf_cov[i],indices,1),indices,0)
                     n_data = corr_cov.shape[0]
                     corr_reps = np.delete(reps[i], indices,0)
@@ -238,14 +354,20 @@ def fits_dataset_bias_variance(
                     sqrt_cov = sqrt_covmat(corr_cov)
                     bias = calc_chi2(sqrt_cov, bias_diffs)
                     var = (np.mean(calc_chi2(sqrt_cov, var_diffs)))
+                    alternative_variance = list(calc_chi2(sqrt_cov, var_diffs))
+                    #import ipdb; ipdb.set_trace()
                     
             biases.append(bias)
             variances.append(var)
+            all_vars.append(alternative_variance)
+            
+
         print("this is biases mean"+ str(np.mean(biases)))
         print("this is vars mean"+ str(np.mean(variances)))
         print("these are biases: " + str(biases))
         print("these are variances: " + str(variances))
-        return np.asarray(biases), np.asarray(variances), n_data
+        all_vars = list(np.concatenate(all_vars).flat)
+        return np.asarray(biases), np.asarray(variances), n_data, np.asarray(all_vars)
     
     if pdf_and_exp_err and only_pdf_err == False:
         pdf_cov = np.mean(np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)]), axis = 0)

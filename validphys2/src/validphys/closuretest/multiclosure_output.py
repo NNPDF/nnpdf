@@ -32,7 +32,57 @@ log = logging.getLogger(__name__)
 
 l = Loader()
 
+def CDF(x, bins = 1000):
+    """
+    Given an array of observations "x" build the cumulative distribution function 
+    """
+    count, bins_count = np.histogram(x, bins=bins)
+    pdf = count / sum(count)
+    cdf = np.cumsum(pdf)
+    return bins_count, pdf, cdf
 
+
+@figure
+def plot_CDF_dataset_KS(alternative_fits_dataset_bias_variance, bins = 1000):
+    biases, variances, n_dat = alternative_fits_dataset_bias_variance
+    import itertools
+    fig, ax = plotutils.subplots()
+    bin_bias_count, pdf_bias, cdf_bias = CDF(biases, bins)
+    bin_var_count, pdf_variance, cdf_variance = CDF(variances, bins)
+    ## probably one cdf ends before the other. Fill the plot to match the domains
+    # take maximum and minimum of 2 domains
+    left = min(min(bin_bias_count[1:]),min(bin_var_count[1:]))
+    right = max(max(bin_var_count[1:]),max(bin_bias_count[1:]))
+
+    #import ipdb; ipdb.set_trace()
+    ax.plot(np.insert(np.insert(bin_bias_count[1:],0,left),bins+1,right), 
+    np.insert(np.insert(cdf_bias,0,0),bins+1,1), label = "cdf of bias")
+    ##Plot the CDF of a normal chi square
+    chi2 = scipy.stats.chi2.cdf(bin_bias_count[1:],n_dat)
+    ax.plot(np.insert(np.insert(bin_var_count[1:],0,left),bins+1,right), 
+    np.insert(np.insert(cdf_variance,0,0),bins+1,1), label = "cdf of variance")
+    ##Find maximum of difference
+    maximum = np.max(abs(np.insert(np.insert(cdf_variance,0,0),bins+1,1)-np.insert(np.insert(cdf_bias,0,0),bins+1,1)))
+    print("maximum diff is: " + str(maximum))
+    ax.legend()
+    return fig
+
+@figure
+def plot_CDF_data_KS(alternative_fits_data_bias_variance, bins = 1000):
+    return plot_CDF_dataset_KS(alternative_fits_data_bias_variance, bins)
+
+@figure
+def plot_hist_bias_variance_dataset(alternative_fits_dataset_bias_variance, bins):
+    fig, ax = plotutils.subplots()
+    biases, variances, n_dat = alternative_fits_dataset_bias_variance
+    ax.hist(biases, bins = 100, label = "bias", alpha = 0.3, density = True)
+    ax.hist(variances, bins = 100, label = "variance", alpha = 0.3, density = True)
+    ax.legend()
+    return fig
+
+@figure
+def plot_hist_bias_variance_data(alternative_fits_data_bias_variance, bins = 1000):
+    return plot_hist_bias_variance_dataset(alternative_fits_data_bias_variance, bins)
 
 
 
