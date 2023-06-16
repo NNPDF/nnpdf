@@ -12,7 +12,6 @@ from eko import EKO, runner
 from reportengine.compat import yaml
 from validphys.api import API
 from validphys.pdfbases import PIDS_DICT
-from validphys.core import TheoryIDSpec
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
