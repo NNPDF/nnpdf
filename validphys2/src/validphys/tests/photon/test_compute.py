@@ -52,13 +52,13 @@ FIATLUX_DEFAULT = {
 
 
 def test_parameters_init():
+    "test initailization of the parameters from Photon class"
     fiatlux_runcard = FIATLUX_RUNCARD.copy()
 
     # we are not testing the photon here so we make it faster
     fiatlux_runcard['eps_base'] = 1e-1
 
     photon = Photon(TEST_THEORY, fiatlux_runcard, [1, 2, 3])
-    alpha = Alpha(TEST_THEORY.get_description())
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
     np.testing.assert_equal(photon.luxpdfset._name, FIATLUX_RUNCARD["luxset"].name)
@@ -66,10 +66,10 @@ def test_parameters_init():
     np.testing.assert_equal(photon.luxseed, FIATLUX_RUNCARD["luxseed"])
     np.testing.assert_equal(photon.path_to_eko_photon, TEST_THEORY.path / "eko_photon.tar")
     np.testing.assert_equal(photon.q_in, 100.0)
-    np.testing.assert_almost_equal(alpha.alpha_em_ref, TEST_THEORY.get_description()["alphaqed"])
 
 
 def test_masses_init():
+    "test thresholds in Alpha class"
     theory = TEST_THEORY.get_description()
     alpha = Alpha(theory)
     np.testing.assert_equal(alpha.thresh_t, np.inf)
@@ -78,10 +78,12 @@ def test_masses_init():
 
 
 def test_set_thresholds_alpha_em():
+    "test value of alpha_em at threshold values"
     theory = TEST_THEORY.get_description()
 
     alpha = Alpha(theory)
 
+    np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alphaqed"])
     np.testing.assert_almost_equal(alpha.thresh[5], theory["Qedref"])
     np.testing.assert_almost_equal(alpha.thresh[4], theory["mb"])
     np.testing.assert_almost_equal(alpha.thresh[3], theory["mc"])
@@ -99,6 +101,7 @@ def test_set_thresholds_alpha_em():
 
 
 def test_betas():
+    "test betas for different nf"
     alpha = Alpha(TEST_THEORY.get_description())
     vec_beta0 = [
         -0.5305164769729844,
@@ -118,6 +121,9 @@ def test_betas():
 
 
 def test_photon():
+    """test that photon coming out of Photon interpolator matches the photon array
+    for XGRID points
+    """
     fiatlux_runcard = FIATLUX_RUNCARD.copy()
     fiatlux_runcard["additional_errors"] = False
     theory = TEST_THEORY.get_description()
