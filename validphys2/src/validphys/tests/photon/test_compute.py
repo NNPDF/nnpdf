@@ -1,14 +1,19 @@
 from collections import namedtuple
 from pathlib import Path
+import tempfile
 
+import fiatlux
 import numpy as np
-from validphys.photon import structure_functions
-from validphys.photon.compute import Photon, Alpha
-from validphys.core import PDF as PDFset
+import yaml
+
+from eko.io import EKO
+from n3fit.io.writer import XGRID
 from validphys.api import API
+from validphys.core import PDF as PDFset
+from validphys.photon import structure_functions as sf
+from validphys.photon.compute import Alpha, Photon
 
 from ..conftest import PDF
-from eko.io import EKO
 
 TEST_THEORY = API.theoryid(theoryid=398)
 
@@ -19,8 +24,40 @@ FIATLUX_RUNCARD = {
     "eps_base": 1e-2,
 }
 
-def test_parameters_init():
+FIATLUX_DEFAULT = {
+    "apfel": False,
+    "qed_running": True,
+    "q2_max": 1e8,
+    "eps_base": 1e-2,
+    "eps_rel": 1e-1,  # extra precision on any single integration.
+    "mproton": 0.938,
+    "mum_proton": 2.792847356,  # proton magnetic moment, from
+    # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
+    # gets it from arXiv:1203.5425 (CODATA)
+    # the elastic param type, options:
+    # dipole
+    # A1_world_spline
+    # A1_world_pol_spline
+    "elastic_param": "A1_world_pol_spline",
+    "elastic_electric_rescale": 1,
+    "elastic_magnetic_rescale": 1,
+    # the inelastic param type, options:
+    "inelastic_param": "LHAPDF_Hermes_ALLM_CLAS",  # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
+    "rescale_r_twist4": 0,
+    "rescale_r": 1,
+    "allm_limits": 0,
+    "rescale_non_resonance": 1,
+    "rescale_resonance": 1,
+    "use_mu2_as_upper_limit": False,
+    "q2min_inel_override": 0.0,
+    "q2max_inel_override": 1e300,
+    "lhapdf_transition_q2": 9,
+    # general
+    "verbose": False,
+}
 
+
+def test_parameters_init():
     fiatlux_runcard = FIATLUX_RUNCARD.copy()
 
     # we are not testing the photon here so we make it faster
@@ -34,10 +71,9 @@ def test_parameters_init():
     np.testing.assert_equal(photon.additional_errors.name, "LUXqed17_plus_PDF4LHC15_nnlo_100")
     np.testing.assert_equal(photon.luxseed, FIATLUX_RUNCARD["luxseed"])
     np.testing.assert_equal(photon.path_to_eko_photon, TEST_THEORY.path / "eko_photon.tar")
-    np.testing.assert_equal(photon.q_in, 100.)
-    np.testing.assert_almost_equal(
-        alpha.alpha_em_ref, TEST_THEORY.get_description()["alphaqed"]
-    )
+    np.testing.assert_equal(photon.q_in, 100.0)
+    np.testing.assert_almost_equal(alpha.alpha_em_ref, TEST_THEORY.get_description()["alphaqed"])
+
 
 def test_masses_init():
     alpha = Alpha(TEST_THEORY.get_description())
@@ -45,8 +81,8 @@ def test_masses_init():
     np.testing.assert_almost_equal(alpha.thresh_b, 4.92)
     np.testing.assert_almost_equal(alpha.thresh_c, 1.51)
 
-def test_set_thresholds_alpha_em():
 
+def test_set_thresholds_alpha_em():
     theory = TEST_THEORY.get_description()
 
     alpha = Alpha(theory)
@@ -56,7 +92,8 @@ def test_set_thresholds_alpha_em():
     np.testing.assert_almost_equal(alpha.thresh[3], theory["mc"])
     np.testing.assert_almost_equal(alpha.alpha_thresh[5], theory["alphaqed"])
     np.testing.assert_almost_equal(
-        alpha.alpha_thresh[4], alpha.alpha_em_fixed_flavor(theory["mb"], theory["alphaqed"], theory["Qedref"], 5)
+        alpha.alpha_thresh[4],
+        alpha.alpha_em_fixed_flavor(theory["mb"], theory["alphaqed"], theory["Qedref"], 5),
     )
     np.testing.assert_almost_equal(
         alpha.alpha_thresh[3],
@@ -64,6 +101,7 @@ def test_set_thresholds_alpha_em():
     )
     np.testing.assert_equal(len(alpha.alpha_thresh), 3)
     np.testing.assert_equal(len(alpha.thresh), 3)
+
 
 def test_betas():
     alpha = Alpha(TEST_THEORY.get_description())
@@ -82,3 +120,60 @@ def test_betas():
     for nf in range(3, 6 + 1):
         np.testing.assert_allclose(alpha.beta0[nf], vec_beta0[nf - 3], rtol=1e-7)
         np.testing.assert_allclose(alpha.b1[nf], vec_b1[nf - 3], rtol=1e-7)
+
+
+def test_photon():
+    fiatlux_runcard = FIATLUX_RUNCARD.copy()
+    fiatlux_runcard["additional_errors"] = False
+    theory = TEST_THEORY.get_description()
+
+    for replica in [1, 2, 3]:
+        photon = Photon(TEST_THEORY, fiatlux_runcard, [replica])
+
+        # set up fiatlux
+        path_to_F2 = TEST_THEORY.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
+        path_to_FL = TEST_THEORY.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
+        pdfs = FIATLUX_RUNCARD["luxset"].load()
+        f2 = sf.InterpStructureFunction(path_to_F2, pdfs.members[replica])
+        fl = sf.InterpStructureFunction(path_to_FL, pdfs.members[replica])
+        f2lo = sf.F2LO(pdfs.members[replica], theory)
+        with tempfile.NamedTemporaryFile(mode="w") as tmp:
+            with tmp.file as tmp_file:
+                tmp_file.write(yaml.dump(FIATLUX_DEFAULT))
+            lux = fiatlux.FiatLux(tmp.name)
+
+        alpha = Alpha(theory)
+
+        lux.PlugAlphaQED(alpha.alpha_em, alpha.qref)
+        lux.InsertInelasticSplitQ(
+            [
+                theory["mb"],
+                1e100,
+            ]
+        )
+        lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
+        photon_fiatlux_qin = np.array([lux.EvaluatePhoton(x, 100**2).total for x in XGRID])
+        path_to_eko_photon = TEST_THEORY.path / "eko_photon.tar"
+        photon_fiatlux_qin /= XGRID
+        with EKO.read(path_to_eko_photon) as eko:
+            # construct PDFs
+            pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
+            for j, pid in enumerate(eko.bases.inputpids):
+                if pid == 22:
+                    pdfs_init[j] = photon_fiatlux_qin
+                    ph_id = j
+                else:
+                    if pid not in pdfs.flavors:
+                        continue
+                    pdfs_init[j] = np.array([pdfs.xfxQ(x, 100, replica, pid) / x for x in XGRID])
+
+            # Apply EKO to PDFs
+            for _, elem in eko.items():
+                pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
+
+        photon_Q0 = pdfs_final[ph_id]
+        photon_fiatlux = XGRID * photon_Q0
+
+        photon_validphys = photon(XGRID[np.newaxis, :, np.newaxis])[0][0, :, 0]
+
+        np.testing.assert_allclose(photon_fiatlux, photon_validphys, rtol=1e-7)
