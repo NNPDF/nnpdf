@@ -31,7 +31,7 @@ def test_parameters_init():
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
     np.testing.assert_equal(photon.luxpdfset._name, FIATLUX_RUNCARD["luxset"].name)
-    np.testing.assert_equal(photon.additional_errors._name, "LUXqed17_plus_PDF4LHC15_nnlo_100")
+    np.testing.assert_equal(photon.additional_errors.name, "LUXqed17_plus_PDF4LHC15_nnlo_100")
     np.testing.assert_equal(photon.luxseed, FIATLUX_RUNCARD["luxseed"])
     np.testing.assert_equal(photon.path_to_eko_photon, TEST_THEORY.path / "eko_photon.tar")
     np.testing.assert_equal(photon.q_in, 100.)
@@ -60,7 +60,7 @@ def test_set_thresholds_alpha_em():
     )
     np.testing.assert_almost_equal(
         alpha.alpha_thresh[3],
-        alpha.alpha_em_fixed_flavor(theory["mb"], alpha.alpha_thresh[4], theory["mb"], 4),
+        alpha.alpha_em_fixed_flavor(theory["mc"], alpha.alpha_thresh[4], theory["mb"], 4),
     )
     np.testing.assert_equal(len(alpha.alpha_thresh), 3)
     np.testing.assert_equal(len(alpha.thresh), 3)
