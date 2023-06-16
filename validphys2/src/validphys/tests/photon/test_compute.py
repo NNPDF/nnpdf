@@ -46,14 +46,14 @@ def test_set_thresholds_alpha_em():
 
     np.testing.assert_almost_equal(alpha.thresh[5], 91.2)
     np.testing.assert_almost_equal(alpha.thresh[4], 4.92)
-    np.testing.assert_almost_equal(alpha.thresh[3], 1.3)
+    np.testing.assert_almost_equal(alpha.thresh[3], 51)
     np.testing.assert_almost_equal(alpha.alpha_thresh[5], 0.01)
     np.testing.assert_almost_equal(
         alpha.alpha_thresh[4], alpha.alpha_em_fixed_flavor(4.92, 0.01, 91.2, 5)
     )
     np.testing.assert_almost_equal(
         alpha.alpha_thresh[3],
-        alpha.alpha_em_fixed_flavor(1.3, alpha.alpha_thresh[4], 4.92, 4),
+        alpha.alpha_em_fixed_flavor(1.51, alpha.alpha_thresh[4], 4.92, 4),
     )
     np.testing.assert_equal(len(alpha.alpha_thresh), 3)
     np.testing.assert_equal(len(alpha.thresh), 3)
