@@ -21,7 +21,12 @@ FIATLUX_RUNCARD = {
 
 def test_parameters_init():
 
-    photon = Photon(TEST_THEORY, FIATLUX_RUNCARD, [1, 2, 3])
+    fiatlux_runcard = FIATLUX_RUNCARD.copy()
+
+    # we are not testing the photon here so we make it faster
+    fiatlux_runcard['eps_base'] = 1e-1
+
+    photon = Photon(TEST_THEORY, fiatlux_runcard, [1, 2, 3])
     alpha = Alpha(TEST_THEORY.get_description())
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
