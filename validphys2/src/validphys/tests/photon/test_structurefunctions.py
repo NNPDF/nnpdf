@@ -20,9 +20,6 @@ class ZeroPdfs:
         return res
 
 
-TEST_THEORY = API.theoryid(theoryid=398)
-
-
 class ZeroPdfs:
     def xfxQ(self, x, Q):
         res = {}
@@ -144,22 +141,37 @@ def test_F2(monkeypatch):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0.0, rtol=1e-5)
 
-
-def test_interpolation_grid():
+def test_params():
     pdfs = NNPDF40.load()
     replica = 1
+    theory = TEST_THEORY.get_description()
     for channel in ["F2", "FL"]:
         tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
         path_to_fktable = TEST_THEORY.path / tmp
-        fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
-        x = np.unique(fktable.bin_left(1))
-        q2 = np.unique(fktable.bin_left(0))
-        predictions = fktable.convolute_with_one(2212, pdfs.members[replica].xfxQ2)
-        grid2D = predictions.reshape(len(x), len(q2))
-
         struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
-        for i, x_ in enumerate(x):
-            for j, q2_ in enumerate(q2):
-                np.testing.assert_allclose(
-                    struct_func.fxq(x_, np.sqrt(q2_)), grid2D[i, j], rtol=1e-5
-                )
+        np.testing.assert_allclose(struct_func.q2_max, 1e8)
+    f2lo = sf.F2LO(pdfs.members[replica], theory)
+    np.testing.assert_allclose(f2lo.thresh_c, theory["mc"])
+    np.testing.assert_allclose(f2lo.thresh_b, theory["mb"])
+    np.testing.assert_allclose(f2lo.thresh_t, np.inf)
+
+
+
+def test_interpolation_grid():
+    pdfs = NNPDF40.load()
+    for replica in [1, 2, 3]:
+        for channel in ["F2", "FL"]:
+            tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
+            path_to_fktable = TEST_THEORY.path / tmp
+            fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
+            x = np.unique(fktable.bin_left(1))
+            q2 = np.unique(fktable.bin_left(0))
+            predictions = fktable.convolute_with_one(2212, pdfs.members[replica].xfxQ2)
+            grid2D = predictions.reshape(len(x), len(q2))
+
+            struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
+            for i, x_ in enumerate(x):
+                for j, q2_ in enumerate(q2):
+                    np.testing.assert_allclose(
+                        struct_func.fxq(x_, np.sqrt(q2_)), grid2D[i, j], rtol=1e-5
+                    )
