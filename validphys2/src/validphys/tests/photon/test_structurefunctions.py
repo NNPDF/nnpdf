@@ -68,8 +68,8 @@ def test_zero_grid(monkeypatch):
     "test that a zero grid gives a zero structure function"
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", ZeroFKTable)
     # grid put to 0 and real pdf
-    pdf = PDFset(PDF).load()
-    structurefunc = sf.InterpStructureFunction("", pdf.central_member)
+    pdfs = NNPDF40.load()
+    structurefunc = sf.InterpStructureFunction("", pdfs.central_member)
     for x in np.geomspace(1e-4, 1.0, 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0.0, rtol=1e-5)
