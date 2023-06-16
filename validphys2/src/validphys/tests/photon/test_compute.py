@@ -9,7 +9,7 @@ from n3fit.io.writer import XGRID
 from validphys.api import API
 from validphys.core import PDF as PDFset
 from validphys.photon import structure_functions as sf
-from validphys.photon.compute import Alpha, Photon
+from validphys.photon.compute import Alpha, Photon, FIATLUX_DEFAULT
 
 from ..conftest import PDF
 
@@ -20,34 +20,6 @@ FIATLUX_RUNCARD = {
     "additional_errors": API.pdf(pdf='LUXqed17_plus_PDF4LHC15_nnlo_100'),
     "luxseed": 123456789,
     "eps_base": 1e-2, # using low precision to speed up tests
-}
-
-FIATLUX_DEFAULT = {
-    "apfel": False,
-    "eps_rel": 1e-1,  # extra precision on any single integration.
-    "mum_proton": 2.792847356,  # proton magnetic moment, from
-    # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
-    # gets it from arXiv:1203.5425 (CODATA)
-    # the elastic param type, options:
-    # dipole
-    # A1_world_spline
-    # A1_world_pol_spline
-    "elastic_param": "A1_world_pol_spline",
-    "elastic_electric_rescale": 1,
-    "elastic_magnetic_rescale": 1,
-    # the inelastic param type, options:
-    "inelastic_param": "LHAPDF_Hermes_ALLM_CLAS",  # Hermes_ALLM_CLAS, LHAPDF_Hermes_ALLM_CLAS
-    "rescale_r_twist4": 0,
-    "rescale_r": 1,
-    "allm_limits": 0,
-    "rescale_non_resonance": 1,
-    "rescale_resonance": 1,
-    "use_mu2_as_upper_limit": False,
-    "q2min_inel_override": 0.0,
-    "q2max_inel_override": 1e300,
-    "lhapdf_transition_q2": 9,
-    # general
-    "verbose": False,
 }
 
 
@@ -69,7 +41,7 @@ def test_parameters_init():
 
 
 def test_masses_init():
-    "test thresholds in Alpha class"
+    "test thresholds values in Alpha class"
     theory = TEST_THEORY.get_description()
     alpha = Alpha(theory)
     np.testing.assert_equal(alpha.thresh_t, np.inf)

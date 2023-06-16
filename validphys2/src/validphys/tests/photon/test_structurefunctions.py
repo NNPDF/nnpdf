@@ -3,7 +3,6 @@ import pineappl
 
 from validphys.api import API
 from validphys.core import PDF as PDFset
-from validphys.lhapdfset import LHAPDFSet
 import validphys.photon.structure_functions as sf
 
 from ..conftest import PDF
@@ -66,8 +65,8 @@ def test_zero_pdfs():
 
 def test_zero_grid(monkeypatch):
     "test that a zero grid gives a zero structure function"
+    # patching pineappl.fk_table.FkTable to use ZeroFKTable
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", ZeroFKTable)
-    # grid put to 0 and real pdf
     pdfs = NNPDF40.load()
     structurefunc = sf.InterpStructureFunction("", pdfs.central_member)
     for x in np.geomspace(1e-4, 1.0, 10):
