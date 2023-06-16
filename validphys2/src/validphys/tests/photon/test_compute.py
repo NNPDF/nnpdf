@@ -24,11 +24,7 @@ FIATLUX_RUNCARD = {
 
 FIATLUX_DEFAULT = {
     "apfel": False,
-    "qed_running": True,
-    "q2_max": 1e8,
-    "eps_base": 1e-2,
     "eps_rel": 1e-1,  # extra precision on any single integration.
-    "mproton": 0.938,
     "mum_proton": 2.792847356,  # proton magnetic moment, from
     # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
     # gets it from arXiv:1203.5425 (CODATA)
@@ -135,6 +131,15 @@ def test_photon():
         f2 = sf.InterpStructureFunction(path_to_F2, pdfs.members[replica])
         fl = sf.InterpStructureFunction(path_to_FL, pdfs.members[replica])
         f2lo = sf.F2LO(pdfs.members[replica], theory)
+
+        # runcard
+        fiatlux_default = FIATLUX_DEFAULT.copy()
+        fiatlux_default['mproton'] = theory['MP']
+        fiatlux_default["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
+        fiatlux_default["q2_max"] = float(f2.q2_max)
+        fiatlux_default["eps_base"] = FIATLUX_RUNCARD["eps_base"]
+
+        # load fiatlux
         with tempfile.NamedTemporaryFile(mode="w") as tmp:
             with tmp.file as tmp_file:
                 tmp_file.write(yaml.dump(FIATLUX_DEFAULT))
@@ -145,15 +150,15 @@ def test_photon():
         lux.PlugAlphaQED(alpha.alpha_em, alpha.qref)
         lux.InsertInelasticSplitQ(
             [
-                theory["mb"],
-                1e100,
+                theory["kbThr"] * theory["mb"],
+                theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100,
             ]
         )
         lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
-        photon_fiatlux_qin = np.array([lux.EvaluatePhoton(x, 100**2).total for x in XGRID])
         path_to_eko_photon = TEST_THEORY.path / "eko_photon.tar"
-        photon_fiatlux_qin /= XGRID
         with EKO.read(path_to_eko_photon) as eko:
+            photon_fiatlux_qin = np.array([lux.EvaluatePhoton(x, eko.mu20).total for x in XGRID])
+            photon_fiatlux_qin /= XGRID
             # construct PDFs
             pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
             for j, pid in enumerate(eko.bases.inputpids):
@@ -163,7 +168,9 @@ def test_photon():
                 else:
                     if pid not in pdfs.flavors:
                         continue
-                    pdfs_init[j] = np.array([pdfs.xfxQ(x, 100, replica, pid) / x for x in XGRID])
+                    pdfs_init[j] = np.array(
+                        [pdfs.xfxQ(x, np.sqrt(eko.mu20), replica, pid) / x for x in XGRID]
+                    )
 
             # Apply EKO to PDFs
             for _, elem in eko.items():
