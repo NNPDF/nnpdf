@@ -2,7 +2,21 @@ import numpy as np
 import pineappl
 import validphys.photon.structure_functions as sf
 from validphys.lhapdfset import LHAPDFSet
+from validphys.api import API
+from ..conftest import PDF
+from validphys.core import PDF as PDFset
 
+TEST_THEORY = API.theoryid(theoryid=398)
+NNPDF40 = PDFset(PDF)
+
+class ZeroPdfs:
+    def xfxQ(self, x, Q):
+        res = {}
+        for i in range(1, 6 + 1):
+            res[i] = res[-i] = 0.0
+        return res
+
+TEST_THEORY = API.theoryid(theoryid=398)
 
 class ZeroPdfs:
     def xfxQ(self, x, Q):
@@ -125,3 +139,20 @@ def test_F2(monkeypatch):
     for x in np.geomspace(1e-4, 1.0, 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0.0, rtol=1e-5)
+
+def test_interpolation_grid():
+    pdfs = NNPDF40.load()
+    replica = 1
+    for channel in ["F2", "FL"]:
+        tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
+        path_to_fktable = TEST_THEORY.path / tmp
+        fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
+        x = np.unique(fktable.bin_left(1))
+        q2 = np.unique(fktable.bin_left(0))
+        predictions = fktable.convolute_with_one(2212, pdfs.members[replica].xfxQ2)
+        grid2D = predictions.reshape(len(x), len(q2))
+
+        struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
+        for i,x_ in enumerate(x):
+            for j, q2_ in enumerate(q2):
+                np.testing.assert_allclose(struct_func.fxq(x_, np.sqrt(q2_)), grid2D[i,j], rtol=1e-5)
