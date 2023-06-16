@@ -141,6 +141,7 @@ def test_F2(monkeypatch):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0.0, rtol=1e-5)
 
+
 def test_params():
     pdfs = NNPDF40.load()
     replica = 1
@@ -154,7 +155,6 @@ def test_params():
     np.testing.assert_allclose(f2lo.thresh_c, theory["mc"])
     np.testing.assert_allclose(f2lo.thresh_b, theory["mb"])
     np.testing.assert_allclose(f2lo.thresh_t, np.inf)
-
 
 
 def test_interpolation_grid():
