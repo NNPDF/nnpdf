@@ -47,18 +47,20 @@ def test_masses_init():
 
 def test_set_thresholds_alpha_em():
 
-    alpha = Alpha(TEST_THEORY.get_description())
+    theory = TEST_THEORY.get_description()
 
-    np.testing.assert_almost_equal(alpha.thresh[5], 91.2)
-    np.testing.assert_almost_equal(alpha.thresh[4], 4.92)
-    np.testing.assert_almost_equal(alpha.thresh[3], 1.51)
-    np.testing.assert_almost_equal(alpha.alpha_thresh[5], 0.01)
+    alpha = Alpha(theory)
+
+    np.testing.assert_almost_equal(alpha.thresh[5], theory["Qedref"])
+    np.testing.assert_almost_equal(alpha.thresh[4], theory["mb"])
+    np.testing.assert_almost_equal(alpha.thresh[3], theory["mc"])
+    np.testing.assert_almost_equal(alpha.alpha_thresh[5], theory["alphaqed"])
     np.testing.assert_almost_equal(
-        alpha.alpha_thresh[4], alpha.alpha_em_fixed_flavor(4.92, 0.01, 91.2, 5)
+        alpha.alpha_thresh[4], alpha.alpha_em_fixed_flavor(theory["mb"], theory["alphaqed"], theory["Qedref"], 5)
     )
     np.testing.assert_almost_equal(
         alpha.alpha_thresh[3],
-        alpha.alpha_em_fixed_flavor(1.51, alpha.alpha_thresh[4], 4.92, 4),
+        alpha.alpha_em_fixed_flavor(theory["mb"], alpha.alpha_thresh[4], theory["mb"], 4),
     )
     np.testing.assert_equal(len(alpha.alpha_thresh), 3)
     np.testing.assert_equal(len(alpha.thresh), 3)
