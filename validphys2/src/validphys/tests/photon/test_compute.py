@@ -70,10 +70,11 @@ def test_parameters_init():
 
 
 def test_masses_init():
-    alpha = Alpha(TEST_THEORY.get_description())
+    theory = TEST_THEORY.get_description()
+    alpha = Alpha(theory)
     np.testing.assert_equal(alpha.thresh_t, np.inf)
-    np.testing.assert_almost_equal(alpha.thresh_b, 4.92)
-    np.testing.assert_almost_equal(alpha.thresh_c, 1.51)
+    np.testing.assert_almost_equal(alpha.thresh_b, theory["mb"])
+    np.testing.assert_almost_equal(alpha.thresh_c, theory["mc"])
 
 
 def test_set_thresholds_alpha_em():
