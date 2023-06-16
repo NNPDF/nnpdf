@@ -151,10 +151,8 @@ def test_perform_evolution(tmp_path, fitname):
     """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
     In addition checks that the generated .info files are correct
     """
-    theory = API.theoryid(theoryid=int(fitname[-3:]))
-    # check that nothing went wrong
-    assert isinstance(theory, TheoryIDSpec)
     fit = API.fit(fit=fitname)
+    _ = API.theoryid(theoryid=fit.as_input()['theory']['theoryid'])
     # Move the fit to a temporary folder
     tmp_fit = tmp_path / fitname
     shutil.copytree(fit.path, tmp_fit)
