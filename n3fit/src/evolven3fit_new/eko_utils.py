@@ -22,7 +22,7 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN = {
 }
 
 EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
-    "ev_op_iterations": 10,
+    "ev_op_iterations": 30,
     "ev_op_max_order": (1, 0),
     "evolution_method": "iterate-exact",
     "inversion_method": "exact",
