@@ -21,6 +21,7 @@ from validphys.closuretest.multiclosure import expected_dataset_bias_variance
 from validphys.loader import Loader
 from validphys.closuretest.multiclosure import (
     internal_multiclosure_data_loader,
+    fits_dataset_bias_variance,
     fits_data_bias_variance,
 )
 from validphys.core import DataGroupSpec
@@ -31,6 +32,119 @@ import logging
 log = logging.getLogger(__name__)
 
 l = Loader()
+
+@figuregen
+def plt_prog_sqrt_ratio_thr_dependence_data(internal_multiclosure_data_loader):
+    return plt_prog_sqrt_ratio_thr_dependence_dataset(internal_multiclosure_data_loader)
+
+@figuregen
+def plot_threshold_dependency_data(internal_multiclosure_data_loader):
+    return plot_threshold_dependency_dataset(internal_multiclosure_data_loader)
+
+@figuregen
+def plt_prog_sqrt_ratio_thr_dependence_dataset(internal_multiclosure_dataset_loader):
+    """
+    For a dataset plot the sqrt b/v ratio labelling wrt thr
+    """
+    thresholds_array = [-1,0.,10**(-14),10**(-10),10**(-7), 10**(-5), 10**(-3), 10**(-1)]
+    import matplotlib.pyplot as plt
+    for thr in thresholds_array:
+        fig, ax = plt.subplots()
+        bias, variance, n_data = fits_dataset_bias_variance(internal_multiclosure_dataset_loader,
+                                    corr = True, threshold = thr)
+        bias_fits = np.sum(bias, axis = 1)
+        var_fits = np.mean(np.sum(variance, axis = 1), axis = 1)
+        prog_bias_sum = list()
+        prog_var_sum = list()
+        for i in range(bias_fits.size):
+            prog_bias_sum.append(np.sum(bias_fits[:i+1]))
+            prog_var_sum.append(np.sum(var_fits[:i+1]))
+        Nfits = np.arange(1,bias_fits.size+1)
+        try: ratio = np.asarray(prog_bias_sum)/np.asarray(prog_var_sum)
+        except: pass
+        ax.plot(Nfits, ratio, label = "progressive ratio considering correlation for thr = " + str(thr))
+        #ax.axhline(1.0,Nfits, label = "expected b/v ratio")
+        ax.legend()
+        yield fig
+
+@figuregen
+def plot_threshold_dependency_dataset(internal_multiclosure_dataset_loader):
+    """
+    For a dataset plot the dependency of varying the threshold in cutting the observables
+    """
+    thresholds_array = [-1,0.,10**(-14),10**(-10),10**(-7), 10**(-5), 10**(-3), 10**(-1)]
+    import matplotlib.pyplot as plt
+    for thr in thresholds_array:
+
+        fig, ax = plt.subplots(2)
+        bias, variance, n_data = fits_dataset_bias_variance(internal_multiclosure_dataset_loader,
+                                                            corr = True, uncorr = False, threshold = thr)
+        if n_data == 0:
+            pass
+        chi_square_bias = np.sum(bias,axis = 1)
+        chi_square_variance = np.sum(variance, axis = 1)
+        ax[0].hist(np.reshape(bias,bias.size), bins = int(np.sqrt(bias.size)) + 1, label = "Bias, $\chi^2$ with DoF = 1", 
+                   density = True, alpha = 0.4, range = [0,3])
+        ax[0].hist(np.reshape(variance,variance.size), bins = int(np.sqrt(variance.size)) + 1, label = "Variance, $\chi^2$ with DoF = 1", 
+                   density = True, alpha = 0.4, range = [0,3])
+        ax[1].hist(chi_square_bias, bins = int(np.sqrt(chi_square_bias.size))+1, 
+                   label = "Bias, $\chi^2$ with DoF = "+ str(n_data), 
+                   density = True, alpha = 0.4, range =  [n_data/2, 2*n_data])
+        ax[1].hist(chi_square_bias, bins = int(np.sqrt(chi_square_variance.size))+1, 
+                   label = "Variance, $\chi^2$ with DoF = "+ str(n_data), 
+                   density = True, alpha = 0.4, range =  [n_data/2, 2*n_data] )
+        x = np.linspace(0,3,100)
+        ax[0].plot(x, scipy.stats.chi2.pdf(x, 1), label = "expected $\chi^2$")
+        x = np.linspace(n_data/2,2*n_data/2,100)
+        ax[1].plot(x, scipy.stats.chi2.pdf(x, n_data), label = "expected $\chi^2$")
+        ax[0].set_xlabel("bias/variance values")
+        ax[1].set_xlabel("bias/variance values")
+        ax[0].set_ylabel("frequency")
+        ax[1].set_ylabel("frequency")
+        ax[0].legend()
+        ax[1].legend()
+        fig.suptitle("Bias and variance considering correlations for threshold = " + str(thr))
+        yield fig
+
+@figure
+def plot_uncorrelated_bias_variance_data(internal_multiclosure_data_loader):
+    return plot_uncorrelated_bias_variance_dataset(internal_multiclosure_data_loader)
+
+@figure
+def plot_uncorrelated_bias_variance_dataset(internal_multiclosure_dataset_loader):
+    # Plot both the bias and variance distribution and the sqrt trend. This is for not doing the same
+    # loading twice
+    import matplotlib.pyplot as plt
+    bias, variance, n_data = fits_dataset_bias_variance(internal_multiclosure_dataset_loader,
+                                        corr = False, uncorr = True, threshold = -1)
+    fig, ax = plt.subplots(2)
+    # considering everything uncorrelated each element of bias and variance can be considered an
+    # independent sample of a standard chi square with 1 DoF
+    sample_size_bias = int(bias.size)
+    sample_size_variance = int(variance.size)
+    flat_bias = np.reshape(bias, sample_size_bias)
+    flat_variance = np.reshape(variance, sample_size_variance)
+    ax[0].hist(flat_bias, bins = int(np.sqrt(sample_size_bias)), alpha = 0.4, 
+               label = "uncorr bias", density = True, range = [0,3])
+    ax[0].hist(flat_variance, bins = int(np.sqrt(sample_size_variance)), alpha = 0.4, 
+               label = "uncorr variance", density = True, range = [0,3])
+    x = np.linspace(0,3,100)
+    ax[0].plot(x, scipy.stats.chi2.pdf(x, 1), label = "expected $\chi^2$ pdf")
+    ax[0].legend()
+    prog_bias_sum = list()
+    prog_var_sum = list()
+    var_fits = np.mean(np.sum(variance, axis = 1), axis = 1)
+    bias_fits = np.sum(bias, axis = 1)
+    for i in range(bias_fits.size):
+        prog_bias_sum.append(np.sum(bias_fits[:i+1]))
+        prog_var_sum.append(np.sum(var_fits[:i+1]))
+    Nfits = np.arange(1,bias_fits.size+1)
+    ratio = np.asarray(prog_bias_sum)/np.asarray(prog_var_sum)
+    ax[1].plot(Nfits, ratio, label = "progressive ratio considering no correlation")
+    #ax[1].axhline(1.0,Nfits, label = "expected b/v ratio")
+    ax[1].legend()
+    
+    return fig
 
 def CDF(x, bins = 1000):
     """
