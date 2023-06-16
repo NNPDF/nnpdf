@@ -87,7 +87,7 @@ def construct_eko_cards(
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
-    # construct operator card
+    # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
     q2_grid = utils.generate_q2grid(
         mu0,
         q_fin,
@@ -99,6 +99,8 @@ def construct_eko_cards(
         },
         theory["nf0"],
     )
+
+    # construct operator card
     op_card = default_op_card
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
     thresholds_ratios = np.array([thresholds["c"], thresholds["b"], thresholds["t"]]) ** 2
@@ -144,22 +146,3 @@ def construct_eko_cards(
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card
-
-
-def split_evolgrid(evolgrid):
-    """Split the evolgrid in blocks according to the number of flavors."""
-    evolgrid_index_list = []
-    evolgrid.sort()
-    starting_nf = evolgrid[0][1]
-    for evo_point in evolgrid:
-        current_nf = evo_point[1]
-        if current_nf != starting_nf:
-            evolgrid_index_list.append(evolgrid.index(evo_point))
-            starting_nf = current_nf
-    start_index = 0
-    evolgrid_list = []
-    for index in evolgrid_index_list:
-        evolgrid_list.append(evolgrid[start_index:index])
-        start_index = index
-    evolgrid_list.append(evolgrid[start_index:])
-    return evolgrid_list

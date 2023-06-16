@@ -1,3 +1,4 @@
+from collections import defaultdict
 import logging
 import pathlib
 import sys
@@ -178,19 +179,27 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     # generate block to dump
     targetgrid = eko.bases.targetgrid.tolist()
 
-    def ev_pdf(pid, x, Q2):
-        return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
+    # Finally separate by nf block (and order per nf/q)
+    by_nf = defaultdict(list)
+    for q, nf in sorted(eko.evolgrid, key=lambda ep: ep[1]):
+        by_nf[nf].append(q)
+    q2block_per_nf = {nf: sorted(qs) for nf, qs in by_nf.items()}
 
-    evolgrid_list = eko_utils.split_evolgrid(eko.evolgrid)
     blocks = []
-    for evgrid in evolgrid_list:
+    for nf, q2grid in q2block_per_nf.items():
+
+        def pdf_xq2(pid, x, Q2):
+            x_idx = targetgrid.index(x)
+            return x * evolved_pdf[(Q2, nf)]["pdfs"][pid][x_idx]
+
         block = genpdf.generate_block(
-            ev_pdf,
+            pdf_xq2,
             xgrid=targetgrid,
-            evolgrid=evgrid,
+            sorted_q2grid=q2grid,
             pids=basis_rotation.flavor_basis_pids,
         )
         blocks.append(block)
+
     return blocks
 
 
