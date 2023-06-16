@@ -12,6 +12,7 @@ from eko import EKO, runner
 from reportengine.compat import yaml
 from validphys.api import API
 from validphys.pdfbases import PIDS_DICT
+from validphys.core import TheoryIDSpec
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
@@ -150,6 +151,9 @@ def test_perform_evolution(tmp_path, fitname):
     """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
     In addition checks that the generated .info files are correct
     """
+    theory = API.theoryid(theoryid=int(fitname[-3:]))
+    # check that nothing went wrong
+    assert isinstance(theory, TheoryIDSpec)
     fit = API.fit(fit=fitname)
     # Move the fit to a temporary folder
     tmp_fit = tmp_path / fitname
