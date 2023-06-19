@@ -15,6 +15,7 @@ from validphys.checks import (
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
     check_pdf_is_montecarlo,
+    check_pdf_is_montecarlo_or_symmhessian,
     check_speclabels_different,
     check_data_cuts_match_theorycovmat,
     check_cuts_considered,
@@ -660,34 +661,33 @@ def groups_corrmat(groups_covmat):
     return mat
 
 
+# @check_pdf_is_montecarlo_or_symmhessian
 def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
-    """For a given `dataset`, returns the sum of the covariance matrix given by
-    `covmat_t0_considered` and the PDF error: 
-    - If the PDF error_type is 'replicas', a covariance matrix is estimated from 
-      the replica theory predictions 
-    - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
-      formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
+     """For a given `dataset`, returns the sum of the covariance matrix given by
+     `covmat_t0_considered` and the PDF error: a covariance matrix estimated from the
+     replica theory predictions from a given monte carlo `pdf`
+     `covmat_t0_considered` and the PDF error:
+     - If the PDF error_type is 'replicas', a covariance matrix is estimated from
+       the replica theory predictions
+     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
+       formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
 
-    
-    Parameters
-    ----------
+
+     Parameters
+     ----------
     dataset: DataSetSpec
         object parsed from the `dataset_input` runcard key
     pdf: PDF
         monte carlo pdf used to estimate PDF error
     covmat_t0_considered: np.array
         experimental covariance matrix with the t0 considered
-
     Returns
     -------
     covariance_matrix: np.array
         sum of the experimental and pdf error as a numpy array
-
     Examples
     --------
-
     `use_pdferr` makes this action be used for `covariance_matrix`
-
     >>> from validphys.api import API
     >>> from import numpy as np
     >>> inp = {
@@ -699,26 +699,27 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_covmat(**inp)
     >>> np.allclose(a == b)
-    True
-    """
-    th = ThPredictionsResult.from_convolution(pdf, dataset)
+     True
+     """
+     th = ThPredictionsResult.from_convolution(pdf, dataset)
+     pdf_cov = np.cov(th.error_members, rowvar=True)
 
-    if pdf.error_type == 'replicas':
-        pdf_cov = np.cov(th.error_members, rowvar=True)
+     if pdf.error_type == 'replicas':
+         pdf_cov = np.cov(th.error_members, rowvar=True)
 
-    elif pdf.error_type == 'symmhessian':
-        rescale_fac = pdf._rescale_factor()
-        hessian_eigenvectors = th.error_members
-        central_predictions = th.central_value
+     elif pdf.error_type == 'symmhessian':
+         rescale_fac = pdf._rescale_factor()
+         hessian_eigenvectors = th.error_members
+         central_predictions = th.central_value
 
-        # need to subtract the central set which is not the same as the average of the
-        # Hessian eigenvectors.
-        X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0],1))
-        # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
-        X = X / rescale_fac
-        pdf_cov = np.einsum("ij,kj->ik",X, X)
+         # need to subtract the central set which is not the same as the average of the
+         # Hessian eigenvectors.
+         X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0], 1))
+         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
+         X = X / rescale_fac
+         pdf_cov = X @ X.T
 
-    return pdf_cov + covmat_t0_considered
+     return pdf_cov + covmat_t0_considered
 
 def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     """

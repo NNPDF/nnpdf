@@ -44,6 +44,14 @@ def check_know_errors(ns, **kwargs):
     except NotImplementedError as e:
         raise CheckError(e) from e
 
+@make_argcheck
+def check_pdf_is_montecarlo_or_symmhessian(ns, **kwargs):
+     pdf = ns['pdf']
+     etype = pdf.error_type
+     check(
+         etype in {'replicas', 'symhessian'},
+         f"Error type of PDF {pdf} must be either 'replicas' or 'symmhessian' and not {etype}",
+     )
 
 @make_check
 def check_can_save_grid(ns, **kwags):
