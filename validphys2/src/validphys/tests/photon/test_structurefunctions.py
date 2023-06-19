@@ -18,7 +18,7 @@ class ZeroPdfs:
         res[21] = 0.0
         res[22] = 0.0
         return res
-    
+
     def xfxQ2(self, i, x, Q2):
         return self.xfxQ(x, np.sqrt(Q2))[i]
 
@@ -61,7 +61,6 @@ def test_zero_pdfs():
             np.testing.assert_allclose(fl.fxq(x, Q), 0.0)
 
 
-
 def test_zero_grid(monkeypatch):
     "test that a zero grid gives a zero structure function"
     # patching pineappl.fk_table.FkTable to use ZeroFKTable
@@ -71,7 +70,6 @@ def test_zero_grid(monkeypatch):
     for x in np.geomspace(1e-4, 1.0, 10):
         for Q in np.geomspace(10, 1000000, 10):
             np.testing.assert_allclose(structurefunc.fxq(x, Q), 0.0, rtol=1e-5)
-
 
 
 def test_params():
