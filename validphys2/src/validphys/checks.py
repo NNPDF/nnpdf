@@ -43,6 +43,16 @@ def check_pdf_is_montecarlo(ns, **kwargs):
         raise CheckError(f"Error type of PDF {pdf} must be 'replicas' and not {etype}")
 
 
+@make_argcheck
+def check_pdf_is_montecarlo_or_symmhessian(ns, **kwargs):
+    pdf = ns['pdf']
+    etype = pdf.error_type
+    check(
+        etype in {'replicas', 'symhessian'},
+        f"Error type of PDF {pdf} must be either 'replicas' or 'symmhessian' and not {etype}",
+    )
+
+
 @make_check
 def check_know_errors(ns, **kwargs):
     pdf = ns['pdf']
