@@ -10,14 +10,17 @@ from validphys.api import API
 from validphys.core import PDF as PDFset
 from validphys.photon import structure_functions as sf
 from validphys.photon.compute import Alpha, Photon, FIATLUX_DEFAULT
+from validphys.loader import FallbackLoader
 
 from ..conftest import PDF
 
 TEST_THEORY = API.theoryid(theoryid=398)
 
+# check if "LUXqed17_plus_PDF4LHC15_nnlo_100" is installed
+FallbackLoader().check_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100")
 FIATLUX_RUNCARD = {
     "luxset": PDFset(PDF),
-    "additional_errors": API.pdf(pdf='LUXqed17_plus_PDF4LHC15_nnlo_100'),
+    "additional_errors": PDFset('LUXqed17_plus_PDF4LHC15_nnlo_100'),
     "luxseed": 123456789,
     "eps_base": 1e-2, # using low precision to speed up tests
 }
