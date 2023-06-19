@@ -852,7 +852,7 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
 
 
 @figuregen
-def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
+def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
     """
     Plot the correlations between the change in the observable and the change
     in the PDF in (x,fl) space.
@@ -893,7 +893,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
     categorical = not np.issubdtype(plotting_var.dtype, np.number)
     if categorical:
-        # Categorical
+        # Plot lines using a categorical color map (for a reasonable number of
+        # categories), and set up the categorical labels (used below).
         categorical_keys, values = np.unique(plotting_var, return_inverse=True)
         plotting_var = values
         num_categories = len(categorical_keys)
