@@ -17,6 +17,7 @@ from .constants import ED2, EU2, NC, NL
 
 log = logging.getLogger(__name__)
 
+# not the complete fiatlux runcard since some parameters are set in the code
 FIATLUX_DEFAULT = {
     "apfel": False,
     "eps_rel": 1e-1,  # extra precision on any single integration.
