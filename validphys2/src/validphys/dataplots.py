@@ -1255,7 +1255,7 @@ def plot_xq2(
 
     def next_options():
         #Get the colors
-        prop_settings = plt.rcParams['axes.prop_cycle']
+        prop_settings = mpl.rcParams['axes.prop_cycle']
         #Apparently calling the object gives us an infinite cycler
         settings_cycler = prop_settings()
         #So far, I don't understand how this is done with mpl "cycler"
