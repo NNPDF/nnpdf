@@ -27,7 +27,7 @@ SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 
 SINGLE_DATASET = {'dataset': 'NMC'}
 
-SINGLE_CATEGICAL = {"dataset": "ATLAS_WZ_TOT_13TEV", 'cfac': ["QCD"]}
+SINGLE_CATEGORICAL = {"dataset": "ATLAS_WZ_TOT_13TEV", 'cfac': ["QCD"]}
 
 DATA = [
     {'dataset': 'NMC'},
@@ -102,7 +102,7 @@ def single_data_categorical_internal_cuts_config(data_internal_cuts_config):
     """Test dataset with categorical plotting variables"""
     return {
         **data_internal_cuts_config,
-        'dataset_input': SINGLE_CATEGICAL,
+        'dataset_input': SINGLE_CATEGORICAL,
         # NOTE: The old theory is currently bugged for this dataset
         'theoryid': THEORYID_NEW,
     }
