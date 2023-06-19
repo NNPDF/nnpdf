@@ -8,7 +8,6 @@ import validphys.photon.structure_functions as sf
 from ..conftest import PDF
 
 TEST_THEORY = API.theoryid(theoryid=398)
-NNPDF40 = PDFset(PDF)
 
 
 class ZeroPdfs:
@@ -67,7 +66,7 @@ def test_zero_grid(monkeypatch):
     "test that a zero grid gives a zero structure function"
     # patching pineappl.fk_table.FkTable to use ZeroFKTable
     monkeypatch.setattr(pineappl.fk_table.FkTable, "read", ZeroFKTable)
-    pdfs = NNPDF40.load()
+    pdfs = PDFset(PDF).load()
     structurefunc = sf.InterpStructureFunction("", pdfs.central_member)
     for x in np.geomspace(1e-4, 1.0, 10):
         for Q in np.geomspace(10, 1000000, 10):
@@ -77,7 +76,7 @@ def test_zero_grid(monkeypatch):
 
 def test_params():
     "test initialization of parameters"
-    pdfs = NNPDF40.load()
+    pdfs = PDFset(PDF).load()
     replica = 1
     theory = TEST_THEORY.get_description()
     for channel in ["F2", "FL"]:
@@ -93,7 +92,7 @@ def test_params():
 
 def test_interpolation_grid():
     """test that the values coming out of InterpStructureFunction match the grid ones"""
-    pdfs = NNPDF40.load()
+    pdfs = PDFset(PDF).load()
     for replica in [1, 2, 3]:
         for channel in ["F2", "FL"]:
             tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
