@@ -61,6 +61,39 @@ def plot_bias_distribution_flavour(fits_pdf_flavour_bias_variance):
         yield fig
 
 
+@figure
+def plot_variance_distribution(fits_pdf_total_bias_variance):
+    """
+    plot the distribution of variance (in PDF space).
+    The PDF covariance matrix includes flavours correlations.
+    """
+    _, var = fits_pdf_total_bias_variance
+    
+    
+    fig, ax = plotutils.subplots()
+    # plot distribution of all fits
+    var = np.concatenate(var, axis=0)
+    ax.hist(var, density=True, label = f"Variance Distribution, mean = {np.mean(var):.3f}")
+    
+    ax.legend()
+    return fig
+
+
+@figure
+def plot_bias_distribution(fits_pdf_total_bias_variance):
+    """
+    plot the distribution of bias (in PDF space).
+    The PDF covariance matrix includes flavours correlations.
+    """
+    bias, _ = fits_pdf_total_bias_variance
+    
+    fig, ax = plotutils.subplots()
+
+    ax.hist(bias, density=True, label = f"Bias Distribution, mean = {np.mean(bias):.3f}")
+    ax.legend()
+    return fig
+
+
 @table
 def xi_flavour_table(xi_flavour_x, xi_totalpdf):
     """For each flavour take the mean of xi_flavour_x across x to get a single

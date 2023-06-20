@@ -354,6 +354,33 @@ def fits_pdf_total_ratio(
     variance = np.mean(calc_chi2(sqrtcov, rep_diff.transpose(2, 1, 0)), axis=0)
     return np.mean(bias) / np.mean(variance)
 
+def fits_pdf_total_bias_variance(
+    fits_central_difference,
+    fits_replica_difference,
+    fits_covariance_matrix_totalpdf,
+    multiclosure_nx=4,
+):
+    """Calculate the total bias and variance for all flavours and x allowing for
+    correlations across flavour.
+
+    Returns
+    -------
+
+    """
+    central_diff = np.asarray(fits_central_difference).reshape(
+        -1, multiclosure_nx * len(XI_FLAVOURS)
+    )
+    rep_diff = np.asarray(fits_replica_difference).reshape(
+        len(fits_replica_difference), -1, multiclosure_nx * len(XI_FLAVOURS)
+    )
+
+    sqrtcov = la.cholesky(fits_covariance_matrix_totalpdf, lower=True)
+
+    bias = calc_chi2(sqrtcov, central_diff.T)
+    # need flav x on first axis
+    variance = calc_chi2(sqrtcov, rep_diff.transpose(2, 1, 0))
+    return bias, variance
+
 
 fits_xi_grid_values = collect("xi_grid_values", ("fits", "fitpdf"))
 
