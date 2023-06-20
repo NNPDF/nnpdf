@@ -38,7 +38,7 @@ def plot_variance_distribution_flavour(fits_pdf_flavour_bias_variance):
         fig, ax = plotutils.subplots()
         # plot distribution of all fits
         var = np.concatenate(var, axis=0)
-        ax.hist(var, label = f"Variance Distribution, mean = {np.mean(var):.3f}")
+        ax.hist(var, density=True, label = f"Variance Distribution, mean = {np.mean(var):.3f}")
         ax.set_title(f"Flavour = {fl}")
         ax.legend()
         yield fig
@@ -55,7 +55,7 @@ def plot_bias_distribution_flavour(fits_pdf_flavour_bias_variance):
     for fl, bias in bias_fl.items():
         fig, ax = plotutils.subplots()
         
-        ax.hist(bias, label = f"Bias Distribution, mean = {np.mean(bias):.3f}")
+        ax.hist(bias, density=True, label = f"Bias Distribution, mean = {np.mean(bias):.3f}")
         ax.set_title(f"Flavour = {fl}")
         ax.legend()
         yield fig
