@@ -42,6 +42,11 @@ def test_plot_smpdf(single_data_internal_cuts_config):
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
+def test_plot_smpdf_categorical(single_data_categorical_internal_cuts_config):
+    return next(API.plot_smpdf(**single_data_categorical_internal_cuts_config))
+
+@pytest.mark.linux
+@pytest.mark.mpl_image_compare
 def test_plot_obscorrs(single_data_internal_cuts_config):
     corrpair = [{"corrpair": (i["dataset"],)} for i in DATA[:2]]
     return API.plot_obscorrs(**single_data_internal_cuts_config, corrpair=corrpair)
@@ -56,14 +61,40 @@ def test_plot_xq2():
     metadata_group = "experiment"
     dataset_inputs = [
         {'dataset': 'NMC'},
-        {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
-        {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}    
-        ]    
-        
+        {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
+        {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+    ]
+
     return API.plot_xq2(
-            theoryid=theoryid,
-            use_cuts=use_cuts,
-            dataset_inputs=dataset_inputs,
-            display_cuts=display_cuts,
-            marker_by=marker_by,
-            metadata_group=metadata_group)
+        theoryid=theoryid,
+        use_cuts=use_cuts,
+        dataset_inputs=dataset_inputs,
+        display_cuts=display_cuts,
+        marker_by=marker_by,
+        metadata_group=metadata_group,
+    )
+
+@pytest.mark.linux
+@pytest.mark.mpl_image_compare
+def test_plot_xq2_custom():
+    theoryid = THEORYID
+    use_cuts = "nocuts"
+    display_cuts = False
+
+    marker_by = "group"
+    metadata_group = "custom_group"
+
+    dataset_inputs = [
+        {'dataset': 'NMC', 'custom_group': 'one'},
+        {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD'], 'custom_group': 'one'},
+        {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10, 'custom_group': 'two'},
+    ]
+
+    return API.plot_xq2(
+        theoryid=theoryid,
+        use_cuts=use_cuts,
+        dataset_inputs=dataset_inputs,
+        display_cuts=display_cuts,
+        marker_by=marker_by,
+        metadata_group=metadata_group,
+    )

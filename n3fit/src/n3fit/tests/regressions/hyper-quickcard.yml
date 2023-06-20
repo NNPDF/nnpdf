@@ -33,7 +33,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 162        # database id
+  theoryid: 399        # database id
 
 hyperscan_config:
     stopping:
@@ -116,12 +116,11 @@ fitting:
 positivity:
   posdatasets:
     - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSDYC    , maxlambda: 1e5 }
+    - { dataset: POSDYS    , maxlambda: 1e5 }
 
 integrability:
   integdatasets:
     - {dataset: INTEGXT8, maxlambda: 1e2}
-    - {dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 closuretest:

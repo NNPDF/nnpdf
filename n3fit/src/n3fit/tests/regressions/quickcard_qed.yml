@@ -13,7 +13,7 @@ description: n3fit regression test
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 - { dataset: NMC, frac: 0.5 }
-- { dataset: SLACP, frac: 0.5}
+- { dataset: SLACP_dwsh, frac: 0.5}
 - { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
 - { dataset: ATLASTTBARTOT8TEV, frac: 1.0, cfac: ['QCD'] }
 
@@ -34,7 +34,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 399        # database id
+  theoryid: 398        # database id
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
@@ -85,3 +85,9 @@ integrability:
 
 ############################################################
 debug: true
+
+fiatlux:
+  luxset: NNPDF40_nnlo_as_01180
+  additional_errors: true # should be set to true only for the last iteration
+  luxseed: 1234567890
+  eps_base: 1e-2
