@@ -856,6 +856,77 @@ def dataset_fits_bias_replicas_variance_samples(
     return biases, np.concatenate(variances), len(law_th)
 
 
+def dataset_fits_bias_replicas_variance_samples_pdf_covmat(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    """
+    like `dataset_fits_bias_replicas_variance_samples` but using a regularized
+    PDF covmat for computation of variance and bias
+    """
+    from validphys import covmats
+    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
+
+    # loop over fits to determine the number of eigenvalues of the covariance matrix to keep
+    N_eigenvalues = []
+    for i in range(reps.shape[0]):
+        pdf_covmat = np.cov(reps[i,:,:])
+        
+        # Diagonalize the matrix and sort the eigenvalues and eigenvectors from largest to smallest
+        L, W = np.linalg.eig(pdf_covmat)
+        idx = L.argsort()[::-1]   
+        L = L[idx]
+        W = W[:,idx]
+        
+        # select nr of eigenvalues based on explained variance
+        perc_var = 0
+        N_eig = 0
+
+        for eig in L:
+            N_eig+=1
+            perc_var += np.real(eig) / np.real(np.sum(L))
+
+            if perc_var > 0.99:
+                N_eigenvalues.append(N_eig)
+                break
+
+    N_eig = np.min(N_eigenvalues)
+
+    biases = []
+    variances = []
+
+    # loop over fits to compute variances and biases
+    for i in range(reps.shape[0]):
+        pdf_covmat = np.cov(reps[i,:,:])
+        L, W = np.linalg.eig(pdf_covmat)
+        idx = L.argsort()[::-1]   
+        L = L[idx]
+        W = W[:,idx]
+
+        # Keep only the N_eig largest eigenvectors
+        Wtilde = W[:, :N_eig]
+
+        # Transform initial covariance matrix
+        pdf_covmat_pca = np.einsum("ij,jk->ik", np.einsum("ij,ik->jk",Wtilde, pdf_covmat), Wtilde).real
+        sqrt_pdf_covmat_pca = covmats.sqrt_covmat(pdf_covmat_pca)
+        
+        # transform data 
+        diffs_variance = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+        diffs_variance_pca = diffs_variance.T @ Wtilde
+        diff_bias = law_th.central_value - centrals[i].T
+        diff_bias_pca = diff_bias.T @ Wtilde
+
+        variances.append(np.real(calc_chi2(sqrt_pdf_covmat_pca, diffs_variance_pca.T)))
+        biases.append(np.real(calc_chi2(sqrt_pdf_covmat_pca, diff_bias_pca)))
+
+    return biases, np.concatenate(variances), N_eig
+
+
 def dataset_inputs_fits_bias_replicas_variance_samples(
     internal_multiclosure_data_loader,
     _internal_max_reps=None,

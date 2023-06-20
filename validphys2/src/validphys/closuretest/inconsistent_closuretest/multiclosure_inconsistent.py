@@ -20,11 +20,22 @@ multi_dataset_fits_bias_replicas_variance_samples = collect(
     "dataset_fits_bias_replicas_variance_samples", ("dataspecs",)
 )
 
+multi_dataset_fits_bias_replicas_variance_samples_pdf_covmat = collect(
+    "dataset_fits_bias_replicas_variance_samples_pdf_covmat", ("dataspecs",)
+)
+
 multi_fits_bootstrap_dataset_bias_variance = collect(
     "fits_bootstrap_dataset_bias_variance", ("dataspecs",)
 )
 
 multi_bias_variance_resampling_dataset = collect("bias_variance_resampling_dataset", ("dataspecs",))
+
+
+
+## PDF SPACE
+multi_fits_pdf_total_bias_variance = collect(
+    "fits_pdf_total_bias_variance", ("dataspecs", )
+)
 
 
 def dataset_replica_minus_central(internal_multiclosure_dataset_loader):

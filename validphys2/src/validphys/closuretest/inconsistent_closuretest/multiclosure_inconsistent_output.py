@@ -6,6 +6,7 @@ reports i.e figures or tables for (inconsistent) multiclosure
 estimators in the space of data
 
 """
+import numpy as np
 
 from reportengine.figure import figure
 from validphys import plotutils
@@ -39,7 +40,7 @@ def plot_replica_central_diff_multi(dataset_replica_minus_central_multi, dataspe
 
 
 @figure
-def plot_variance_distribution_multi(multi_dataset_fits_bias_replicas_variance_samples, dataspecs):
+def plot_variance_distribution_multi(multi_dataset_fits_bias_replicas_variance_samples_pdf_covmat, dataspecs):
     """
     histogram of the distribution of the variances (k) defined as the
     distance between central replica and replica (k) in units of the
@@ -49,18 +50,18 @@ def plot_variance_distribution_multi(multi_dataset_fits_bias_replicas_variance_s
     """
     fig, ax = plotutils.subplots()
     for (_, variance_dist, _), spec in zip(
-        multi_dataset_fits_bias_replicas_variance_samples, dataspecs
+        multi_dataset_fits_bias_replicas_variance_samples_pdf_covmat, dataspecs
     ):
         label = spec['speclabel']
-
-        ax.hist(variance_dist, bins='auto', density=True, alpha=0.5, label=label)
+        
+        ax.hist(variance_dist, bins='auto', density=True, alpha=0.5, label=label+f"variance={np.mean(variance_dist)}")
 
     ax.legend()
     return fig
 
 
 @figure
-def plot_bias_distribution_multi(multi_dataset_fits_bias_replicas_variance_samples, dataspecs):
+def plot_bias_distribution_multi(multi_dataset_fits_bias_replicas_variance_samples_pdf_covmat, dataspecs):
     """
     histogram of the distribution of the biases (l) defined as the
     distance between central replica and underlying law in units of the
@@ -70,14 +71,49 @@ def plot_bias_distribution_multi(multi_dataset_fits_bias_replicas_variance_sampl
     """
     fig, ax = plotutils.subplots()
     for (bias_dist, _, _), spec in zip(
-        multi_dataset_fits_bias_replicas_variance_samples, dataspecs
+        multi_dataset_fits_bias_replicas_variance_samples_pdf_covmat, dataspecs
     ):
         label = spec['speclabel']
 
-        ax.hist(bias_dist, bins='auto', density=True, alpha=0.5, label=label)
+        ax.hist(bias_dist, bins='auto', density=True, alpha=0.5, label=label+f"bias = {np.mean(bias_dist)}")
 
     ax.legend()
     return fig
+
+
+@figure
+def plot_pdf_space_variance_distribution_multi(multi_fits_pdf_total_bias_variance, dataspecs):
+    """
+    
+    """
+    fig, ax = plotutils.subplots()
+    for (_, variance_dist), spec in zip(
+        multi_fits_pdf_total_bias_variance, dataspecs
+    ):
+        label = spec['speclabel']
+
+        variance_dist = np.concatenate(variance_dist, axis=0)
+        ax.hist(variance_dist, bins='auto', density=True, alpha=0.5, label = label + f" Variance Distribution, mean = {np.mean(variance_dist):.3f}")
+    
+    ax.legend()
+    return fig
+
+@figure
+def plot_pdf_space_bias_distribution_multi(multi_fits_pdf_total_bias_variance, dataspecs):
+    """
+    
+    """
+    fig, ax = plotutils.subplots()
+    for (bias_dist, _), spec in zip(
+        multi_fits_pdf_total_bias_variance, dataspecs
+    ):
+        label = spec['speclabel']
+
+        ax.hist(bias_dist, bins='auto', density=True, alpha=0.5, label = label + f" Bias Distribution, mean = {np.mean(bias_dist):.3f}")
+    
+    ax.legend()
+    return fig
+
 
 
 @figure
