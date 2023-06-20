@@ -26,6 +26,41 @@ from validphys.closuretest.multiclosure_pdf import (
 )
 
 
+@figuregen
+def plot_variance_distribution_flavour(fits_pdf_flavour_bias_variance):
+    """
+    plot the distribution of variance (in PDF space) for each flavour.
+    The PDF covariance matrix does not include flavour correlations.
+    """
+    _, var_fl = fits_pdf_flavour_bias_variance
+    
+    for fl, var in var_fl.items():
+        fig, ax = plotutils.subplots()
+        # plot distribution of all fits
+        var = np.concatenate(var, axis=0)
+        ax.hist(var, label = f"Variance Distribution, mean = {np.mean(var):.3f}")
+        ax.set_title(f"Flavour = {fl}")
+        ax.legend()
+        yield fig
+
+
+@figuregen
+def plot_bias_distribution_flavour(fits_pdf_flavour_bias_variance):
+    """
+    plot the distribution of bias (in PDF space) for each flavour.
+    The PDF covariance matrix does not include flavour correlations.
+    """
+    bias_fl, _ = fits_pdf_flavour_bias_variance
+    
+    for fl, bias in bias_fl.items():
+        fig, ax = plotutils.subplots()
+        
+        ax.hist(bias, label = f"Bias Distribution, mean = {np.mean(bias):.3f}")
+        ax.set_title(f"Flavour = {fl}")
+        ax.legend()
+        yield fig
+
+
 @table
 def xi_flavour_table(xi_flavour_x, xi_totalpdf):
     """For each flavour take the mean of xi_flavour_x across x to get a single

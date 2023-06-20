@@ -292,6 +292,39 @@ def fits_pdf_flavour_ratio(
     return ratios
 
 
+def fits_pdf_flavour_bias_variance(
+    fits_sqrt_covmat_by_flavour, fits_central_difference, fits_replica_difference
+):
+    """Calculate the bias (chi2 between central PDF and underlying PDF)
+    for each flavour and the variance (chi2 between replica and central PDF),
+    then return a tuple of two dictionaries.
+
+    Returns
+    -------
+    tuple
+        2D tuple consisting of a dict of the biases and a dict of variances:
+        - bias: key = flavour, value = biases (shape = Nfits)
+        - variances: key = flavour, values = variances (shape = (Nrep, Nfits))
+    """
+    central_diff = np.asarray(fits_central_difference)
+    rep_diff = np.asarray(fits_replica_difference)
+    biases_fl = {}
+    variances_fl = {}
+    for i, fl in enumerate(XI_FLAVOURS):
+        bias = calc_chi2(fits_sqrt_covmat_by_flavour[i], central_diff[:, i, :].T)
+        
+        variance = calc_chi2(
+                fits_sqrt_covmat_by_flavour[i],
+                rep_diff[:, :, i, :].transpose(2, 1, 0),  
+            )
+        
+
+        biases_fl[fl] = bias
+        variances_fl[fl] = variance
+        
+    return biases_fl, variances_fl
+
+
 def fits_pdf_total_ratio(
     fits_central_difference,
     fits_replica_difference,
