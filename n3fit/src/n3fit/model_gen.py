@@ -676,8 +676,8 @@ def pdfNN_layer_generator(
         pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
         pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, preprocessing_factor)
 
-        pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
-
+        # i_replica argument is necessary to select the right photon integral
+        pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input, i_replica])
         if photons:
             pdf_normalized = layer_photon(pdf_normalized, i_replica)
 

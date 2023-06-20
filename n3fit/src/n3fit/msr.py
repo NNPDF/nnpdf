@@ -85,16 +85,18 @@ def generate_msr_model_and_grid(
     # 4. Integrate the pdf
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
-    # 5. If a photon is given, compute the photon component of the MSR
+    # 5. If a photon is given, retrieve the photon component of the MSR...
     photons_c = None
     if photons:
         photons_c = photons.integral
+    # ... and add the replica number as an input, as the above contains the integrals for all replicas
+    replica_number = Input(shape=(1,), batch_size=1, name="replica_number", dtype="int32")
 
     # 6. Compute the normalization factor
     # For now set the photon component to None
     normalization_factor = MSR_Normalization(
         output_dim, mode, name="msr_weights", photons_contribution=photons_c
-    )(pdf_integrated, ph_replica=None)
+    )(pdf_integrated, ph_replica=replica_number)
 
     # 7. Apply the normalization factor to the pdf
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(
@@ -105,6 +107,7 @@ def generate_msr_model_and_grid(
         "pdf_x": pdf_x,
         "pdf_xgrid_integration": pdf_xgrid_integration,
         "xgrid_integration": xgrid_integration,
+        "replica_number": replica_number,
     }
     model = MetaModel(inputs, pdf_normalized, name="impose_msr")
 
