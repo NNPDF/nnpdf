@@ -216,6 +216,30 @@ def total_bias_variance_ratio(
 
 
 @table
+def datasets_bias_variance_pdf_covmat(datasets_expected_bias_variance_pdf_covmat, each_dataset):
+    """For each dataset calculate the expected bias and expected variance
+    across fitsband tabulate the results. Bias and Variance are normalized by number of data points
+
+    Notes
+    -----
+
+    This is to check the weight each dataset/process has in the calculation of the complete R_bv ratio.
+    This is because one dataset alone could have a correct B/V=1 but if Bias and Variance are both centered
+    around a number >> 1 this means that in the calculation of B/V total ratio the specific dataset/
+    process is going to have much more weight than the rest
+
+    """
+    records = []
+    for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance_pdf_covmat):
+        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance=var))
+    df = pd.DataFrame.from_records(
+        records, index="dataset", columns=("dataset", "ndata", "bias", "variance")
+    )
+    df.columns = ["ndata", "bias", "variance"]
+    return df
+
+
+@table
 def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
     """Given the ``sqrt_experiments_bias_variance_ratio`` calculate a predicted
     value of :math:`\\xi_{1 \sigma}` for each experiment. The predicted value is based of

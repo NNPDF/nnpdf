@@ -927,6 +927,23 @@ def dataset_fits_bias_replicas_variance_samples_pdf_covmat(
     return biases, np.concatenate(variances), N_eig
 
 
+@check_multifit_replicas
+def fits_dataset_bias_variance_pdf_covmat_expected(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    biases, variances, N_eig = dataset_fits_bias_replicas_variance_samples_pdf_covmat(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+)
+
+    return np.mean(biases), np.mean(variances), N_eig
+
+
+datasets_expected_bias_variance_pdf_covmat = collect("fits_dataset_bias_variance_pdf_covmat_expected", ("data",))
+
 def dataset_inputs_fits_bias_replicas_variance_samples(
     internal_multiclosure_data_loader,
     _internal_max_reps=None,
