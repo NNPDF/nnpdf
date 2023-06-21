@@ -9,4 +9,4 @@ line_by:
     - k1
 experiment: "NUCLEAR"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_NC

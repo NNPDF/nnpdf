@@ -4,4 +4,4 @@ y_label: '$1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$'
 #x_label: 'Boson rapidity $|y|$'
 experiment: "D0"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_NC

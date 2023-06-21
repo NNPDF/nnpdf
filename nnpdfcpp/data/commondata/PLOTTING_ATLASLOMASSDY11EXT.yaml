@@ -3,4 +3,4 @@ x: k2
 y_label: '$d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)' 
 experiment: "ATLAS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_NC

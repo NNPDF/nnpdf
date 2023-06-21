@@ -17,4 +17,5 @@ extra_labels:
 
 experiment: "ATLAS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_CC
+#TO SPLIT

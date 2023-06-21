@@ -7,4 +7,4 @@ y_scale: log
 
 experiment: "ATLAS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_CC

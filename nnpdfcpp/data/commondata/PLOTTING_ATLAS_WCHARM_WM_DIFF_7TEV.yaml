@@ -4,4 +4,4 @@ y_label: '$d\sigma(W^-+c)/d|\eta^\ell|$ (fb)'
 x_label: '$|\eta^\ell|$'
 experiment: "ATLAS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_CC

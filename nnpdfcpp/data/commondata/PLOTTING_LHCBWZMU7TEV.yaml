@@ -13,4 +13,5 @@ extra_labels:
 
 experiment: "LHCb"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_NC
+#TO SPLIT

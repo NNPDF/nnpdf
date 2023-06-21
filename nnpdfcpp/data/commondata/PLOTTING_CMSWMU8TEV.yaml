@@ -4,4 +4,4 @@ y_label: '$d\sigma(W\to l\nu)/dy_l$'
 #x_label: 'Lepton rapidity $|y_l|$'
 experiment: "CMS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_CC
