@@ -13,7 +13,8 @@ pdf: {id: "NNPDF40_nlo_as_01180", label: "4.0 NLO"}
 sqrts: 13000 # GeV
 
 lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
-                   #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp]
+                   #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp,
+                   #         wlum, zlum]
 
 PDFscalespecs:
   - xscale: log
