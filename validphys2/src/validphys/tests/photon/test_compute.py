@@ -14,7 +14,6 @@ from validphys.photon.compute import FIATLUX_DEFAULT, Alpha, Photon
 
 from ..conftest import PDF, THEORY_QED
 
-TEST_THEORY = API.theoryid(theoryid=THEORY_QED)
 
 def generate_fiatlux_runcard():
     return {
@@ -29,23 +28,25 @@ def generate_fiatlux_runcard():
 def test_parameters_init():
     "test initailization of the parameters from Photon class"
     fiatlux_runcard = generate_fiatlux_runcard()
+    test_theory = API.theoryid(theoryid=THEORY_QED)
 
     # we are not testing the photon here so we make it faster
     fiatlux_runcard['eps_base'] = 1e-1
 
-    photon = Photon(TEST_THEORY, fiatlux_runcard, [1, 2, 3])
+    photon = Photon(test_theory, fiatlux_runcard, [1, 2, 3])
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
     np.testing.assert_equal(photon.luxpdfset._name, fiatlux_runcard["luxset"].name)
     np.testing.assert_equal(photon.additional_errors.name, "LUXqed17_plus_PDF4LHC15_nnlo_100")
     np.testing.assert_equal(photon.luxseed, fiatlux_runcard["luxseed"])
-    np.testing.assert_equal(photon.path_to_eko_photon, TEST_THEORY.path / "eko_photon.tar")
+    np.testing.assert_equal(photon.path_to_eko_photon, test_theory.path / "eko_photon.tar")
     np.testing.assert_equal(photon.q_in, 100.0)
 
 
 def test_masses_init():
     "test thresholds values in Alpha class"
-    theory = TEST_THEORY.get_description()
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
     alpha = Alpha(theory)
     np.testing.assert_equal(alpha.thresh_t, np.inf)
     np.testing.assert_almost_equal(alpha.thresh_b, theory["mb"])
@@ -54,7 +55,8 @@ def test_masses_init():
 
 def test_set_thresholds_alpha_em():
     "test value of alpha_em at threshold values"
-    theory = TEST_THEORY.get_description()
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
 
     alpha = Alpha(theory)
 
@@ -77,7 +79,8 @@ def test_set_thresholds_alpha_em():
 
 def test_betas():
     "test betas for different nf"
-    alpha = Alpha(TEST_THEORY.get_description())
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    alpha = Alpha(test_theory.get_description())
     vec_beta0 = [
         -0.5305164769729844,
         -0.6719875374991137,
@@ -101,14 +104,15 @@ def test_photon():
     """
     fiatlux_runcard = generate_fiatlux_runcard()
     fiatlux_runcard["additional_errors"] = False
-    theory = TEST_THEORY.get_description()
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
 
     for replica in [1, 2, 3]:
-        photon = Photon(TEST_THEORY, fiatlux_runcard, [replica])
+        photon = Photon(test_theory, fiatlux_runcard, [replica])
 
         # set up fiatlux
-        path_to_F2 = TEST_THEORY.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
-        path_to_FL = TEST_THEORY.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
+        path_to_F2 = test_theory.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
+        path_to_FL = test_theory.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
         pdfs = fiatlux_runcard["luxset"].load()
         f2 = sf.InterpStructureFunction(path_to_F2, pdfs.members[replica])
         fl = sf.InterpStructureFunction(path_to_FL, pdfs.members[replica])
@@ -137,7 +141,7 @@ def test_photon():
             ]
         )
         lux.PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
-        path_to_eko_photon = TEST_THEORY.path / "eko_photon.tar"
+        path_to_eko_photon = test_theory.path / "eko_photon.tar"
         with EKO.read(path_to_eko_photon) as eko:
             photon_fiatlux_qin = np.array([lux.EvaluatePhoton(x, eko.mu20).total for x in XGRID])
             photon_fiatlux_qin /= XGRID
