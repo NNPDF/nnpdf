@@ -5,9 +5,9 @@ from validphys.api import API
 from validphys.core import PDF as PDFset
 import validphys.photon.structure_functions as sf
 
-from ..conftest import PDF
+from ..conftest import PDF, THEORY_QED
 
-TEST_THEORY = API.theoryid(theoryid=398)
+TEST_THEORY = API.theoryid(theoryid=THEORY_QED)
 
 
 class ZeroPdfs:

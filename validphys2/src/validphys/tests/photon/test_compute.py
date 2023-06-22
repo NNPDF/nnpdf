@@ -12,22 +12,23 @@ from validphys.loader import FallbackLoader
 from validphys.photon import structure_functions as sf
 from validphys.photon.compute import FIATLUX_DEFAULT, Alpha, Photon
 
-from ..conftest import PDF
+from ..conftest import PDF, THEORY_QED
 
-TEST_THEORY = API.theoryid(theoryid=398)
+TEST_THEORY = API.theoryid(theoryid=THEORY_QED)
 
-FIATLUX_RUNCARD = {
-    "luxset": PDFset(PDF),
-    # check if "LUXqed17_plus_PDF4LHC15_nnlo_100" is installed
-    "additional_errors": FallbackLoader().check_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100"),
-    "luxseed": 123456789,
-    "eps_base": 1e-2,  # using low precision to speed up tests
-}
+def generate_fiatlux_runcard():
+    return {
+        "luxset": PDFset(PDF),
+        # check if "LUXqed17_plus_PDF4LHC15_nnlo_100" is installed
+        "additional_errors": FallbackLoader().check_pdf("LUXqed17_plus_PDF4LHC15_nnlo_100"),
+        "luxseed": 123456789,
+        "eps_base": 1e-2,  # using low precision to speed up tests
+    }
 
 
 def test_parameters_init():
     "test initailization of the parameters from Photon class"
-    fiatlux_runcard = FIATLUX_RUNCARD.copy()
+    fiatlux_runcard = generate_fiatlux_runcard()
 
     # we are not testing the photon here so we make it faster
     fiatlux_runcard['eps_base'] = 1e-1
@@ -35,9 +36,9 @@ def test_parameters_init():
     photon = Photon(TEST_THEORY, fiatlux_runcard, [1, 2, 3])
 
     np.testing.assert_equal(photon.replicas, [1, 2, 3])
-    np.testing.assert_equal(photon.luxpdfset._name, FIATLUX_RUNCARD["luxset"].name)
+    np.testing.assert_equal(photon.luxpdfset._name, fiatlux_runcard["luxset"].name)
     np.testing.assert_equal(photon.additional_errors.name, "LUXqed17_plus_PDF4LHC15_nnlo_100")
-    np.testing.assert_equal(photon.luxseed, FIATLUX_RUNCARD["luxseed"])
+    np.testing.assert_equal(photon.luxseed, fiatlux_runcard["luxseed"])
     np.testing.assert_equal(photon.path_to_eko_photon, TEST_THEORY.path / "eko_photon.tar")
     np.testing.assert_equal(photon.q_in, 100.0)
 
@@ -98,7 +99,7 @@ def test_photon():
     """test that photon coming out of Photon interpolator matches the photon array
     for XGRID points
     """
-    fiatlux_runcard = FIATLUX_RUNCARD.copy()
+    fiatlux_runcard = generate_fiatlux_runcard()
     fiatlux_runcard["additional_errors"] = False
     theory = TEST_THEORY.get_description()
 
@@ -108,7 +109,7 @@ def test_photon():
         # set up fiatlux
         path_to_F2 = TEST_THEORY.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
         path_to_FL = TEST_THEORY.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
-        pdfs = FIATLUX_RUNCARD["luxset"].load()
+        pdfs = fiatlux_runcard["luxset"].load()
         f2 = sf.InterpStructureFunction(path_to_F2, pdfs.members[replica])
         fl = sf.InterpStructureFunction(path_to_FL, pdfs.members[replica])
         f2lo = sf.F2LO(pdfs.members[replica], theory)
@@ -118,7 +119,7 @@ def test_photon():
         fiatlux_default['mproton'] = theory['MP']
         fiatlux_default["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
         fiatlux_default["q2_max"] = float(f2.q2_max)
-        fiatlux_default["eps_base"] = FIATLUX_RUNCARD["eps_base"]
+        fiatlux_default["eps_base"] = fiatlux_runcard["eps_base"]
 
         # load fiatlux
         with tempfile.NamedTemporaryFile(mode="w") as tmp:
