@@ -10,7 +10,7 @@ import logging
 from collections import namedtuple
 import numpy as np
 import scipy.linalg as la
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import matplotlib.patches as mpatches
 import pandas as pd
 
@@ -40,6 +40,7 @@ from validphys.theorycovariance.theorycovarianceutils import (
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination_dataspecs,
 )
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -680,7 +681,10 @@ def projector_eigenvalue_ratio(theory_shift_test):
     ratio = ratio[mask]
     xvals = np.arange(1, len(evals) + 1, 1)
     # Plotting
-    fig, (ax1, ax2) = plt.subplots(2, figsize=(5, 5))
+    fig = Figure(figsize=(5, 5))
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplots(2, 1, 2)
+    
     ax1.plot(xvals, np.abs(projectors), "s", label=r"|$\delta_a$|")
     ax1.plot(xvals, np.sqrt(np.abs(evals)), "o", label=r"$|s_a|$")
     ax1.plot(0, fmiss_mod, "*", label=r"$|\delta_{miss}|$", color="b")
@@ -727,7 +731,8 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
     oldindex = f.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
-    fig, axes = plt.subplots(nrows=len(evecs), figsize=(10, 2 * len(evecs)))
+    fig, axes = plotutils.subplots(figsize=(10, 2 * len(evecs)), nrows=len(evecs))
+    
     fig.subplots_adjust(hspace=0.8)
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
         eval_3sf = floatformatting.significant_digits(eval.item(), 3)
@@ -786,13 +791,15 @@ def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_ve
     fmiss.sort_index(0, inplace=True)
     fmiss = fmiss.reindex(newindex)
     # Plotting
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(f.values * 100, ".-", label="NNLO-NLO Shift", color="black")
     ax.plot(
         fmiss.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue"
     )
     ticklocs, ticklabels, startlocs = matrix_plot_labels(f)
-    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
+    
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -70, 70, linestyles="dashed")
@@ -838,12 +845,13 @@ def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector)
     fnorm.sort_index(0, inplace=True)
     fnorm = fnorm.reindex(newindex)
     # Plotting
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags * 100, ".-", label=f"MHOU ({l} pt)", color="red")
     ax.plot(-sqrtdiags * 100, ".-", color="red")
     ax.plot(fnorm.values * 100, ".-", label="NNLO-NLO Shift", color="black")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
-    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -70, 70, linestyles="dashed")

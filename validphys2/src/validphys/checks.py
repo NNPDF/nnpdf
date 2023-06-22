@@ -230,6 +230,45 @@ def check_pdfs_noband(pdfs, pdfs_noband):
     return {'pdfs_noband': pdfs_noband_combined}
 
 
+@make_argcheck
+def check_mixband_as_replicas(pdfs, mixband_as_replicas):
+    """Same as check_pdfs_noband, but for the mixband_as_replicas key.
+    Allows mixband_as_replicas to be specified as a list of PDF IDs or a list of
+    PDF indexes (starting from one)."""
+
+    msg = ("mixband_as_replicas should be a list of PDF IDs (strings) or a list of "
+           "PDF indexes (integers, starting from one)")
+    msg_range = ("At least one of the choices in mixband_as_replicas indexes is out of range. "
+                 "Note that pdf_noband indexing starts at 1, not 0.")
+
+    if mixband_as_replicas is None:
+        return {'mixband_as_replicas': []}
+
+    names = [pdf.name for pdf in pdfs]
+    # A list to which PDF IDs can be added, when the PDF is specified by either
+    # its PDF ID (i.e. a string) or an index (i.e. an int)
+    mixband_as_replicas_combined = []
+
+    for pdf_noband in mixband_as_replicas:
+        if isinstance(pdf_noband, int):
+            if not pdf_noband <= len(names) or pdf_noband < 0:
+                raise CheckError(msg_range)
+            # Convert PDF index to list index (i.e. starting from zero)
+            pdf_noband -= 1
+            mixband_as_replicas_combined.append(pdfs[pdf_noband])
+
+        elif isinstance(pdf_noband, str):
+            try:
+                pdf_index = names.index(pdf_noband)
+                mixband_as_replicas_combined.append(pdfs[pdf_index])
+            except ValueError:
+                raise CheckError(msg, pdf_noband, alternatives=names)
+
+        else:
+            raise CheckError(msg)
+
+    return {'mixband_as_replicas': mixband_as_replicas_combined}
+
 def _check_list_different(l, name):
     strs = [str(item) for item in l]
     if not len(set(strs))==len(l):

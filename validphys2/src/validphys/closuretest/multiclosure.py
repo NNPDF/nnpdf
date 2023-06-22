@@ -37,7 +37,7 @@ SAMPLING_INTERVAL = 5
 @check_use_t0
 @check_t0pdfset_matches_multiclosure_law
 def internal_multiclosure_dataset_loader(
-    dataset, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
+    dataset, fits_pdf, multiclosure_underlyinglaw, fits, t0_covmat_from_systematics
 ):
     """Internal function for loading multiple theory predictions for a given
     dataset and a single covariance matrix using underlying law as t0 PDF,
@@ -88,10 +88,10 @@ def internal_multiclosure_dataset_loader(
         multiclosure_underlyinglaw, dataset
     )
 
-    sqrt_covmat = la.cholesky(dataset_inputs_t0_covmat_from_systematics, lower=True)
+    sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (fits_dataset_predictions, fits_underlying_predictions, dataset_inputs_t0_covmat_from_systematics, sqrt_covmat)
+    return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
 
 
 @check_fits_underlying_law_match

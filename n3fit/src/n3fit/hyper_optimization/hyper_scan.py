@@ -214,6 +214,7 @@ class HyperScanner:
                 min_units=nn_dict.get("min_units"),
                 max_units=nn_dict.get("max_units"),
                 layer_types=nn_dict.get("layer_types"),
+                output_size=parameters['nodes_per_layer'][-1],
             )
 
     def as_dict(self):
@@ -370,6 +371,7 @@ class HyperScanner:
         min_units=15,
         max_units=25,
         layer_types=None,
+        output_size=None,
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
@@ -415,8 +417,8 @@ class HyperScanner:
                 units_sampler = hp_quniform(units_label, min_units, max_units,
                         step_size=1)
                 units.append(units_sampler)
-            # The last layer will always have 8 nodes
-            units.append(8)
+            # The number of nodes in the last layer are read from the runcard
+            units.append(output_size)
             nodes_choices.append(units)
 
         # For the initializer we need to check for the ones implemented in MetaLayer

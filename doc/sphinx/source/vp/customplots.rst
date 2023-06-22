@@ -73,7 +73,7 @@ There are two ways to take advantage of resources produced using the
      for an external module could be::
          # extra_plots.py
 
-         import matplotlib.pyplot as plt
+         from matplotlib.figure import Figure
          from reportengine.figure import figure
 
          from validphys.commondataparser import load_commondata
@@ -82,7 +82,8 @@ There are two ways to take advantage of resources produced using the
 
          @figure
          def plot_central_values(commondata):
-             fig, ax = plt.subplots()
+             fig = Figure()
+             ax = fig.subplots()
              ax.plot(load_commondata(commondata).central_values)
              return fig
 

@@ -1,23 +1,10 @@
 """
     Test for the mc2hessian module
 """
-import contextlib
-import lhapdf
 from validphys.api import API
+from validphys.tests.conftest import temp_lhapdf_path
 
 NEIG = 5
-
-
-@contextlib.contextmanager
-def temp_lhapdf_path(folder):
-    """Modify the data path for LHAPDF sets"""
-    oldpaths = lhapdf.paths()
-    lhapdf.setPaths([str(folder)])
-    try:
-        yield
-    finally:
-        lhapdf.setPaths(oldpaths)
-
 
 def test_mc2hessian(data_config, tmp):
     """Tests that the generated hessian PDF is indeed marked as such

@@ -11,7 +11,7 @@ from collections.abc import Sequence
 
 import numpy as np
 import numpy.linalg as la
-import matplotlib.pyplot as plt
+import matplotlib as mpl
 from matplotlib import cm, colors as mcolors, ticker as mticker
 import scipy.stats as stats
 import pandas as pd
@@ -57,7 +57,7 @@ def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
 
 
 def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     label = pdf.name
     alldata, central, npoints = chi2_data
     if not isinstance(alldata, MCStats):
@@ -112,7 +112,7 @@ def plot_dataset_inputs_phi_dist(data, dataset_inputs_bootstrap_phi_data):
     phi = dataset_inputs_bootstrap_phi_data
     label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
                        fr'$\phi$ std dev = {format_number(phi.std())}'])
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.hist(phi, label=label)
     ax.set_title(r"$\phi$ distribution for " + data.name)
     ax.legend()
@@ -152,7 +152,7 @@ def plot_phi_scatter_dataspecs(dataspecs_groups,
     exps = dataspecs_groups
     xticks = [group.name for group in exps[0]]
     x = range(1, len(xticks)+1)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
     for i, label in enumerate(labels):
         phi_errs = np.vstack((phi_stats[2, i, :] - phi_stats[1, i, :],
@@ -281,7 +281,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
         #For some reason matplotlib doesn't set the axis right
         min_vals = []
         max_vals = []
-        fig, ax = plt.subplots()
+        fig, ax = plotutils.subplots()
         ax.set_title("%s %s"%(info.dataset_label,
                      info.group_label(samefig_vals, info.figure_by)))
 
@@ -506,8 +506,7 @@ def plot_fits_chi2_spider(fits, fits_groups_chi2,
     """Plots the chi²s of all groups of datasets
     on a spider/radar diagram."""
 
-    fig = plt.figure(figsize=(12,12))
-    ax = fig.add_subplot(projection='polar')
+    fig, ax = plotutils.add_subplot(figsize=(12,12), projection='polar')
 
     for fit, fitchi2, fitgroup in zip(fits, fits_groups_chi2, fits_groups_data):
         exchi2 = [group_res.central_result/group_res.ndata for group_res in fitchi2]
@@ -525,8 +524,7 @@ def plot_fits_phi_spider(
 ):
     """Like plot_fits_chi2_spider but for phi."""
 
-    fig = plt.figure(figsize=(12, 12))
-    ax = fig.add_subplot(projection='polar')
+    fig, ax = plotutils.add_subplot(figsize=(12,12), projection='polar')
 
     for fit, fitphi, fitgroup in zip(fits, fits_groups_data_phi, fits_groups_data):
         phi = [exp_phi for (exp_phi, _npoints) in fitphi]
@@ -545,8 +543,8 @@ def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_gr
     exchi2 = [group_res.central_result/group_res.ndata for group_res in groups_chi2]
     xticks = [group.name for group in groups_data]
 
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='polar')
+    fig, ax = plotutils.add_subplot(projection='polar')
+
     ax = plotutils.spiderplot(xticks, exchi2, pdf)
     ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
     return fig
@@ -556,9 +554,8 @@ def plot_groups_data_phi_spider(groups_data, groups_data_phi, processed_metadata
     """Plot the phi of all groups of datasets as a spider plot."""
     phi = [exp_phi for (exp_phi, _npoints) in groups_data_phi]
     xticks = [group.name for group in groups_data]
-
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='polar')
+    fig, ax = plotutils.add_subplot(projection='polar')
+    
     ax = plotutils.spiderplot(xticks, phi, pdf)
     ax.set_title(rf"$\phi$ by {processed_metadata_group}")
     return fig
@@ -600,8 +597,7 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2):
         xticks = [dataset.name for dataset in group]
         dschi2 = [dsres.central_result/dsres.ndata for dsres in group_res]
 
-    fig = plt.figure(figsize=(4,4))
-    ax = fig.add_subplot(projection='polar')
+    fig, ax = plotutils.add_subplot(figsize=(4, 4), projection='polar')
     ax = plotutils.spiderplot(xticks, dschi2, label=[r'$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
@@ -627,8 +623,7 @@ def _plot_chi2s_spider_df(df, size=6):
     data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()
     expnames = list(df.index.get_level_values(0))
-    fig = plt.figure(figsize=(size,size))
-    ax = fig.add_subplot(projection="polar")
+    fig, ax = plotutils.add_subplot(figsize=(size, size), projection='polar')
     for dat, fitname in zip(data, fitnames):
         ax = plotutils.spiderplot(expnames, dat, fitname)
     ax.legend(bbox_to_anchor=(0.3,-0.2), fontsize=15)
@@ -707,7 +702,7 @@ def plot_training_length(replica_data, fit):
     number of replicas.
 
     """
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     x = [x.nite for x in replica_data]
     hist, bin_edges = np.histogram(x)
     # don't plot pdf, instead proportion of replicas in each bin.
@@ -727,10 +722,10 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
 
     """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plt.subplots(
+    fig, ax = plotutils.subplots(
         figsize=(
-            max(plt.rcParams.get("figure.figsize")),
-            max(plt.rcParams.get("figure.figsize")),
+            max(mpl.rcParams.get("figure.figsize")),
+            max(mpl.rcParams.get("figure.figsize")),
         )
     )
     ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
@@ -767,7 +762,7 @@ def plot_trainvaliddist(fit, replica_data):
     """KDEs for the trainning and validation distributions for
     each replica in the fit."""
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
     kde_train = stats.gaussian_kde(training, bw_method='silverman')
     kde_valid = stats.gaussian_kde(valid, bw_method='silverman')
@@ -790,18 +785,18 @@ def plot_trainvaliddist(fit, replica_data):
 
 @figure
 def plot_chi2_eigs(pdf,dataset,chi2_per_eig):
-    fig,ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     x = np.arange(1,len(chi2_per_eig) + 1)
     ax.plot(x, chi2_per_eig, 'o', markersize=10)
     ax.yaxis.grid(False)
-    plt.title(fr"$\chi^2/N_{{dat}}$  {dataset}")
-    plt.xlabel("# Eigenvalue")
+    ax.set_title(fr"$\chi^2/N_{{dat}}$  {dataset}")
+    ax.set_xlabel("# Eigenvalue")
     return fig
 
 @figure
 def plot_replica_sum_rules(pdf, sum_rules, Q):
     """Plot the value of each sum rule as a function of the replica index"""
-    fig, axes = plt.subplots(nrows=len(sum_rules), sharex=True)
+    fig, axes = plotutils.subplots(nrows=len(sum_rules), sharex=True)
     #TODO: Get rid of this nonsense
     ncomputed = len(sum_rules[0])
     if pdf.error_type == 'replicas':
@@ -878,9 +873,9 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
 
         #Start plotting
-        w,h = plt.rcParams["figure.figsize"]
+        w, h = mpl.rcParams["figure.figsize"]
         h*=2.5
-        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
+        fig, axes = plotutils.subplots(nrows=nf, sharex=True, figsize=(w, h), sharey=True)
         fig.suptitle(title)
         colors = sm.to_rgba(info.get_xcol(fb))
         for flindex, (ax, fl) in enumerate(zip(axes, fls)):
@@ -909,7 +904,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 @figure
 def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
     """NOTE: EXPERIMENTAL. Plot the correlation matrix between a pair of datasets."""
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
 
     ds1, ds2 = corrpair_datasets
     #in1,in2 = get_info(ds1), get_info(ds2)
@@ -932,7 +927,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     kinematic variable (if pos_use_kin==True).
 
     """
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.axhline(0, color='red')
 
     posset = posdataset.load_commondata()
@@ -1023,8 +1018,9 @@ def _check_highlights(data_input, highlight_datasets):
         names_set = {ds.name for ds in data_input}
         diff = values - names_set
         if diff:
+            formatted_diff = '\n'.join(diff)
             raise CheckError(f"The following highlight elements are "
-                             "not dataset names: {diff}")
+                             f"not dataset names:\n{formatted_diff}")
         return {'highlight_datasets': values}
 
 
@@ -1159,7 +1155,7 @@ def plot_xq2(
 
     """
 
-    w,h = plt.rcParams["figure.figsize"]
+    w,h = mpl.rcParams["figure.figsize"]
     rescaling_factor = 1.6
     w *= rescaling_factor
     h *= rescaling_factor
@@ -1171,7 +1167,7 @@ def plot_xq2(
         figsize = h, h
     else:
         raise ValueError(f"Unknown aspect {aspect}")
-    fig, ax = plt.subplots(figsize=figsize)
+    fig, ax = plotutils.subplots(figsize=figsize)
 
     filteredx = []
     filteredq2 = []
@@ -1187,7 +1183,7 @@ def plot_xq2(
 
     def next_options():
         #Get the colors
-        prop_settings = plt.rcParams['axes.prop_cycle']
+        prop_settings = mpl.rcParams['axes.prop_cycle']
         #Apparently calling the object gives us an infinite cycler
         settings_cycler = prop_settings()
         #So far, I don't understand how this is done with mpl "cycler"

@@ -19,8 +19,8 @@ import pandas as pd
 from reportengine.figure import figure
 from reportengine.table import table
 import seaborn as sns
-import matplotlib.pyplot as plt
 from validphys.hyper_algorithm import autofilter_dataframe
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -698,7 +698,7 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
     """
     This function performs the plotting and is called by the `plot_` functions in this file.
     """
-    figs, ax = plt.subplots()
+    figs, ax = plotutils.subplots()
 
     # Set the quantity we will be plotting in the y axis
     loss_k = "loss"
