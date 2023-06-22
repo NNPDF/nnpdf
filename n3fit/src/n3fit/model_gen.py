@@ -161,7 +161,7 @@ def observable_generator(
         elif len(dataset.fktables_data) == 2:
             target_info = [{'A': 2, 'Z': 1}, {'A': 1, 'Z': 1}]
         else:
-            raise ValueueError(f"{dataset_name} is not suppported")
+            raise ValueError(f"{dataset_name} is not suppported")
 
         # Now generate the observable layer, which takes the following information:
         # operation name
