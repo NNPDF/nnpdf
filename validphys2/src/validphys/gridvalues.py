@@ -32,6 +32,8 @@ LUMI_CHANNELS = {
     'csbar': r'c\bar{s}',
     'pp': r'\gamma\gamma',
     'gp': r'g\gamma',
+    'zlum1': r'u\bar{u} + d\bar{d}',
+    'wlum1': r'u\bar{d} + d\bar{u}',
 }
 
 QUARK_COMBINATIONS = {
@@ -115,6 +117,15 @@ def central_grid_values(pdf: PDF, flmat, xmat, qmat):
 # TODO: Investigate writting these in cython/cffi/numba/...
 
 
+def _parton_pair_lumi_inner(pdf_set, n, mx, x1, x2, i, j):
+    """Helper to evaluate lumis for pairs of partons."""
+    # fmt: off
+    return (
+        pdf_set.xfxQ(x1, mx, n, i)*pdf_set.xfxQ(x2, mx, n, j) +
+        pdf_set.xfxQ(x1, mx, n, j)*pdf_set.xfxQ(x2, mx, n, i)
+    )
+
+
 def evaluate_luminosity(
     pdf_set: LHAPDFSet, n: int, s: float, mx: float, x1: float, x2: float, channel
 ):
@@ -155,11 +166,24 @@ def evaluate_luminosity(
 
         # as in the second of Eq.(4) in arXiv:1607.01831
         res = sum(a*b for a,b in itertools.product(r1,r2))
+    elif channel == 'zlum1':
+        u, ubar = 2, -2
+        d, dbar = -1, 1
+        res = (
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=u, j=ubar) +
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=d, j=dbar)
+        )
+    elif channel == 'wlum1':
+        u, dbar = 2, -1
+        d, ubar = 1, -2
+        res = (
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=u, j=dbar) +
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=d, j=ubar)
+        )
+
     elif channel in QUARK_COMBINATIONS.keys():
         i, j = QUARK_COMBINATIONS[channel]
-        res = (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
-               + pdf_set.xfxQ(x1, mx, n, j) * pdf_set.xfxQ(x2, mx, n, i))
-
+        res = _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=i, j=j)
     else:
         raise ValueError("Bad channel")
     # fmt: on
