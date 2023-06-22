@@ -32,8 +32,8 @@ LUMI_CHANNELS = {
     'csbar': r'c\bar{s}',
     'pp': r'\gamma\gamma',
     'gp': r'g\gamma',
-    'zlum': r'u\bar{u} + d\bar{d}',
-    'wlum': r'u\bar{d} + d\bar{u}',
+    'zlum1': r'u\bar{u} + d\bar{d}',
+    'wlum1': r'u\bar{d} + d\bar{u}',
 }
 
 QUARK_COMBINATIONS = {
@@ -166,14 +166,14 @@ def evaluate_luminosity(
 
         # as in the second of Eq.(4) in arXiv:1607.01831
         res = sum(a*b for a,b in itertools.product(r1,r2))
-    elif channel == 'zlum':
+    elif channel == 'zlum1':
         u, ubar = 2, -2
         d, dbar = -1, 1
         res = (
             _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=u, j=ubar) +
             _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=d, j=dbar)
         )
-    elif channel == 'wlum':
+    elif channel == 'wlum1':
         u, dbar = 2, -1
         d, ubar = 1, -2
         res = (

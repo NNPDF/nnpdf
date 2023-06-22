@@ -14,7 +14,7 @@ sqrts: 13000 # GeV
 
 lumi_channel: "gg" # one of [gg, gq, qqbar, qq, ddbar, uubar, ssbar,
                    #         ccbar, bbbar, dubar, udbar, scbar, csbar, pp, gp,
-                   #         wlum, zlum]
+                   #         wlum1, zlum1]
 
 PDFscalespecs:
   - xscale: log
