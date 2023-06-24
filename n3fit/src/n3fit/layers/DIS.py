@@ -12,7 +12,13 @@ from n3fit.backends import operations as op
 
 
 def construct_pdf(pdf, target, m_mask, n_mask):
-    """Construct the PDF definition depending on the Observable"""
+    """Construct the PDF definition depending on the Observable.
+
+    TODO: For all NC DIS datasets, previously, isoscalarity has
+    always been enforced. That is, only the proton bound PDF `pdf`
+    is returned. Check the consistency of this!!!
+
+    """
 
     # Extract the values of the atomic (mass) numbers
     a_value = target["A"]

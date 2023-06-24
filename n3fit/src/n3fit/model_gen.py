@@ -11,6 +11,7 @@
 """
 from dataclasses import dataclass
 import numpy as np
+from n3fit.nuclear_info import add_nucinfo
 from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
 from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution
@@ -155,13 +156,8 @@ def observable_generator(
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset.operation
 
-        # TODO: For the time being fake the target info
-        if len(dataset.fktables_data) == 1:
-            target_info = [{'A': 1, 'Z': 1}]
-        elif len(dataset.fktables_data) == 2:
-            target_info = [{'A': 2, 'Z': 1}, {'A': 1, 'Z': 1}]
-        else:
-            raise ValueError(f"{dataset_name} is not suppported")
+        # Get the target info values from dataset name
+        target_info = add_nucinfo(dataset_name, len(dataset.fktables_data))
 
         # Now generate the observable layer, which takes the following information:
         # operation name
