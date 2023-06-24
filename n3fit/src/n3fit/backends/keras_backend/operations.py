@@ -193,9 +193,6 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     return layer_op(tensor)
 
 
-def op_gather(tensor, indices, **kwargs):
-    return tf.gather(tensor, indices, **kwargs)
-
 #
 # Tensor operations
 # f(x: tensor[s]) -> y: tensor

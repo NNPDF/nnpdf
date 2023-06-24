@@ -54,7 +54,7 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._photons:
-            photon_integral = op.op_gather(self._photons, ph_replica)
+            photon_integral = self._photons[ph_replica]
         else:
             photon_integral = 0.0
 
