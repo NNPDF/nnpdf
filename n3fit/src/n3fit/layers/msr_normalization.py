@@ -16,8 +16,7 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, output_dim=14, mode="ALL", photons_contribution=None, **kwargs):
-        self._photons = photons_contribution
+    def __init__(self, output_dim=14, mode="ALL", **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -40,7 +39,7 @@ class MSR_Normalization(MetaLayer):
 
         super().__init__(**kwargs)
 
-    def call(self, pdf_integrated, ph_replica):
+    def call(self, pdf_integrated, photon_integral):
         """Imposes the valence and momentum sum rules:
         A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
@@ -49,17 +48,24 @@ class MSR_Normalization(MetaLayer):
         A_v15 = 3/V_15
 
         Note that both the input and the output are in the 14-flavours fk-basis
+
+        Parameters
+        ----------
+        pdf_integrated: (Tensor(1,None,14))
+            the integrated PDF
+        photon_integral: (Tensor(1)):
+            the integrated photon, not included in PDF
+
+        Returns
+        -------
+        normalization_factor: Tensor(14)
+            The normalization factors per flavour.
         """
         y = op.flatten(pdf_integrated)
         norm_constants = []
 
-        if self._photons:
-            photon_integral = self._photons[ph_replica]
-        else:
-            photon_integral = 0.0
-
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - photon_integral) / y[GLUON_IDX[0][0]]] * len(
+            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - photon_integral[0]) / y[GLUON_IDX[0][0]]] * len(
                 GLUON_IDX
             )
             norm_constants += n_ag

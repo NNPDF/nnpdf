@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 
 def generate_msr_model_and_grid(
-    output_dim: int = 14, mode: str = "ALL", nx: int = int(2e3), scaler=None, photons=None, **kwargs
+    output_dim: int = 14, mode: str = "ALL", nx: int = int(2e3), scaler=None, **kwargs
 ) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.
@@ -31,8 +31,6 @@ def generate_msr_model_and_grid(
         Number of points of the integration grid
     scaler: Scaler
         Scaler to be applied to the PDF before applying the sum rules
-    photons: :py:class:`validphys.photon.compute.Photon`
-        If given, gives the AddPhoton layer a function to compute the MSR component for the photon
 
     Returns
     -------
@@ -42,6 +40,7 @@ def generate_msr_model_and_grid(
             - pdf_x: the PDF output of the model
             - pdf_xgrid_integration: the PDF output of the model evaluated at the integration grid
             - xgrid_integration: the integration grid
+            - photon_integral: the integrated photon contribution
         It returns the PDF with the sum rules applied
     xgrid_integration: dict
         Dictionary with the integration grid, with:
@@ -85,16 +84,13 @@ def generate_msr_model_and_grid(
     # 4. Integrate the pdf
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
-    # 5. If a photon is given, compute the photon component of the MSR
-    photons_c = None
-    if photons:
-        photons_c = photons.integral
+    # 5. THe input for the photon integral, will be set to 0 if no photons
+    photon_integral = Input(shape=(), batch_size=1, name='photon_integral')
 
     # 6. Compute the normalization factor
     # For now set the photon component to None
     normalization_factor = MSR_Normalization(
-        output_dim, mode, name="msr_weights", photons_contribution=photons_c
-    )(pdf_integrated, ph_replica=None)
+        output_dim, mode, name="msr_weights")(pdf_integrated, photon_integral)
 
     # 7. Apply the normalization factor to the pdf
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(
@@ -105,6 +101,7 @@ def generate_msr_model_and_grid(
         "pdf_x": pdf_x,
         "pdf_xgrid_integration": pdf_xgrid_integration,
         "xgrid_integration": xgrid_integration,
+        "photon_integral": photon_integral,
     }
     model = MetaModel(inputs, pdf_normalized, name="impose_msr")
 

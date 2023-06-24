@@ -606,6 +606,14 @@ def pdfNN_layer_generator(
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
+    # The photon is treated separately, need to get its integrals to normalize the pdf
+    if photons:
+        photon_integrals = photons.integral
+    else:
+        photon_integrals = [0.0 for _ in range(len(seed))]
+    import tensorflow as tf
+    photon_integrals = [tf.constant(photon_integrals[i_replica])
+                            for i_replica in range(len(seed))]
 
     # Now we need a trainable network per replica to be trained in parallel
     pdf_models = []
@@ -676,7 +684,12 @@ def pdfNN_layer_generator(
         pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
         pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, preprocessing_factor)
 
-        pdf_normalized = sumrule_layer([pdf_unnormalized, pdf_integration_grid, integrator_input])
+        pdf_normalized = sumrule_layer({
+            "pdf_x": pdf_unnormalized,
+            "pdf_xgrid_integration": pdf_integration_grid,
+            "xgrid_integration": integrator_input,
+            "photon_integral": photon_integrals[i_replica],
+        })
 
         if photons:
             pdf_normalized = layer_photon(pdf_normalized, i_replica)
