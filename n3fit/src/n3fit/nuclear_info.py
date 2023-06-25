@@ -89,10 +89,6 @@ def add_nucinfo(name: str, n_fktables: int) -> list:
 
     """
     if name in NDATA_SPECS.keys():
-        try:
-            assert len(NDATA_SPECS[name]) == n_fktables
-        except AssertionError as err:
-            raise ErrorNuclearInfo("Mismatch in nuclear info.") from err
         return NDATA_SPECS[name]
     else:
         return [{"A": 1, "Z": 1}] * n_fktables
