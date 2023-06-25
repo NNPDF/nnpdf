@@ -259,9 +259,6 @@ def performfit(
 
         pdf_models = result["pdf_models"]
         for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
-            # Each model goes into its own replica folder
-            replica_path_set = replica_path / f"replica_{replica_number}"
-
             # Create a pdf instance
             q0 = theoryid.get_description().get("Q0")
             pdf_instance = N3PDF(pdf_model, fit_basis=basis, Q=q0)
@@ -282,15 +279,19 @@ def performfit(
 
             # And write the data down
             writer_wrapper.write_data(
-                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
+                replica_path,
+                output_path.name,
+                training_chi2,
+                val_chi2,
+                exp_chi2
             )
             log.info(
                     "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
                     replica_number,
                     exp_chi2,
                     training_chi2,
-                    val_chi2
-                    )
+                    val_chi2,
+            )
 
 
             # Save the weights to some file for the given replica

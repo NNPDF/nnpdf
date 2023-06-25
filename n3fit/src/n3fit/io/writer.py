@@ -6,12 +6,18 @@
 """
 import os
 import json
+import logging
 import numpy as np
-from reportengine.compat import yaml
 import validphys
 import n3fit
+
 from n3fit import vpinterface
-from n3fit.backends import operations as op
+from pathlib import Path
+from reportengine.compat import yaml
+
+log = logging.getLogger(__name__)
+
+A_PREDS = [1, 2, 4, 6, 9, 12, 14, 27, 40, 56, 64, 119, 131, 208]
 
 XGRID = np.array(
     [
@@ -214,8 +220,11 @@ XGRID = np.array(
     ]
 )
 
+
 class WriterWrapper:
-    def __init__(self, replica_number, pdf_object, stopping_object, q2, timings):
+    def __init__(
+        self, replica_number, pdf_object, stopping_object, q2, timings
+    ):
         """
         Initializes the writer for one given replica. This is decoupled from the writing
         of the fit in order to fix some of the variables which would be, in principle,
@@ -240,13 +249,13 @@ class WriterWrapper:
         self.q2 = q2
         self.timings = timings
 
-    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2):
+    def write_data(self, replica_path, fitname, tr_chi2, vl_chi2, true_chi2):
         """
         Wrapper around the `storefit` function.
 
         Parameters
         ----------
-            `replica_path_set`
+            `replica_path`
                 full path for the replica, ex: `${PWD}/runcard_name/nnfit/replica_1`
             `fitname`
                 name of the fit
@@ -257,46 +266,64 @@ class WriterWrapper:
             `true_chi2`
                 chi2 of the replica to the central experimental data
         """
-        # Check the directory exist, if it doesn't, generate it
-        os.makedirs(replica_path_set, exist_ok=True)
-
         stop_epoch = self.stopping_object.stop_epoch
 
         # Get the replica status for this object
         replica_status = self.stopping_object.get_next_replica()
 
-        # export PDF grid to file
-        storefit(
-            self.pdf_object,
-            self.replica_number,
-            replica_path_set,
-            fitname,
-            self.q2,
-        )
+        for a_value in A_PREDS:
+            log.info(f"Writing grids for target A={a_value}")
+            suffix = "" if a_value == 1 else f"_A{a_value}"
 
-        # write the log file for the chi2
-        chi2_log = self.stopping_object.chi2exps_json()
-        with (replica_path_set / "chi2exps.log").open("w", encoding="utf-8") as fs:
-            json.dump(chi2_log, fs, indent=2, cls = SuperEncoder)
+            # Each model goes into its own replica folder
+            path_rset = f"{replica_path}{suffix}/replica_{self.replica_number}"
+            # Check the directory exist, if it doesn't, generate it
+            os.makedirs(path_rset, exist_ok=True)
 
-        # export all metadata from the fit to a single yaml file
-        output_file = f"{replica_path_set}/{fitname}.json"
-        json_dict = jsonfit(
-            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings
-        )
-        with open(output_file, "w", encoding="utf-8") as fs:
-            json.dump(json_dict, fs, indent=2, cls = SuperEncoder)
+            # export PDF grid to file
+            storefit(
+                self.pdf_object,
+                self.replica_number,
+                path_rset,
+                fitname,
+                self.q2,
+                a_value,
+            )
+
+            # write the log file for the chi2
+            chi2_log = self.stopping_object.chi2exps_json()
+            with (Path(path_rset).joinpath("chi2exps.log")).open(
+                "w", encoding="utf-8"
+            ) as fs:
+                json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
+
+            # export all metadata from the fit to a single yaml file
+            output_file = f"{path_rset}/{fitname}{suffix}.json"
+            json_dict = jsonfit(
+                replica_status,
+                self.pdf_object,
+                tr_chi2,
+                vl_chi2,
+                true_chi2,
+                stop_epoch,
+                self.timings,
+            )
+            with open(output_file, "w", encoding="utf-8") as fs:
+                json.dump(json_dict, fs, indent=2, cls=SuperEncoder)
 
 
 class SuperEncoder(json.JSONEncoder):
-    """ Custom json encoder to get around the fact that np.float32 =/= float """
+    """Custom json encoder to get around the fact that np.float32 =/= float"""
+
     def default(self, o):
         if isinstance(o, np.float32):
             return float(o)
         return super().default(o)
 
 
-def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing):
+def jsonfit(
+    replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing
+):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
@@ -330,7 +357,9 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     # all_info["arc_lengths"] = None
     # all_info["integrability"] = None
     all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
-    all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
+    all_info["integrability"] = vpinterface.integrability_numbers(
+        pdf_object
+    ).tolist()
     all_info["timing"] = timing
     # Versioning info
     all_info["version"] = version()
@@ -338,7 +367,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
 
 
 def version():
-    """ Generates a dictionary with misc version info for this run """
+    """Generates a dictionary with misc version info for this run"""
     versions = {}
     try:
         # Wrap tf in try-except block as it could possible to run n3fit without tf
@@ -376,53 +405,135 @@ def evln2lha(evln):
 
     lha[6] = evln[2]
 
-    lha[8] = ( 10*evln[1]
-	       + 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] + 30*evln[4] + 10*evln[5] + 5*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[8] = (
+        10 * evln[1]
+        + 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        + 30 * evln[4]
+        + 10 * evln[5]
+        + 5 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[4] = ( 10*evln[1]
-		  + 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] - 30*evln[4] - 10*evln[5] - 5*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[4] = (
+        10 * evln[1]
+        + 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        - 30 * evln[4]
+        - 10 * evln[5]
+        - 5 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[7] = ( 10*evln[1]
-	       - 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] - 30*evln[4] + 10*evln[5] + 5*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[7] = (
+        10 * evln[1]
+        - 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        - 30 * evln[4]
+        + 10 * evln[5]
+        + 5 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[5] = ( 10*evln[1]
-		  - 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] + 30*evln[4] - 10*evln[5] - 5*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[5] = (
+        10 * evln[1]
+        - 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        + 30 * evln[4]
+        - 10 * evln[5]
+        - 5 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[9] = ( 10*evln[1]
-	       - 20*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] - 20*evln[5] + 5*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[9] = (
+        10 * evln[1]
+        - 20 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        - 20 * evln[5]
+        + 5 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[3] = ( 10*evln[1]
-		  - 20*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] + 20*evln[5] - 5*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[3] = (
+        10 * evln[1]
+        - 20 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        + 20 * evln[5]
+        - 5 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[10] = ( 10*evln[1]
-	       - 15*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] - 15*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[10] = (
+        10 * evln[1]
+        - 15 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        - 15 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[2] = ( 10*evln[1]
-		  - 15*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] + 15*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[2] = (
+        10 * evln[1]
+        - 15 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        + 15 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[11] = ( 5*evln[1]
-	       - 6*evln[12] + evln[13]
-	       + 5*evln[3] - 6*evln[7] + evln[8] ) / 60
+    lha[11] = (
+        5 * evln[1]
+        - 6 * evln[12]
+        + evln[13]
+        + 5 * evln[3]
+        - 6 * evln[7]
+        + evln[8]
+    ) / 60
 
-    lha[1] = ( 5*evln[1]
-		  - 6*evln[12] + evln[13]
-		  - 5*evln[3] + 6*evln[7] - evln[8] ) / 60
+    lha[1] = (
+        5 * evln[1]
+        - 6 * evln[12]
+        + evln[13]
+        - 5 * evln[3]
+        + 6 * evln[7]
+        - evln[8]
+    ) / 60
 
-    lha[12] = ( evln[1]
-	       - evln[13]
-	       + evln[3] - evln[8] ) / 12
+    lha[12] = (evln[1] - evln[13] + evln[3] - evln[8]) / 12
 
-    lha[0] = ( evln[1]
-		  - evln[13]
-		  - evln[3] + evln[8] ) / 12
+    lha[0] = (evln[1] - evln[13] - evln[3] + evln[8]) / 12
     return lha
 
 
@@ -432,6 +543,7 @@ def storefit(
     replica_path,
     fitname,
     q20,
+    a_value=1,
 ):
     """
     One-trick function which generates all output in the NNPDF format
@@ -453,17 +565,33 @@ def storefit(
     """
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
-        
-    result = pdf_object(xgrid, flavours="n3fit").squeeze()
+
+    result = pdf_object(xgrid, a_value=a_value, flavours="n3fit").squeeze()
     lha = evln2lha(result.T).T
 
     data = {
         "replica": replica,
         "q20": q20,
         "xgrid": xgrid.T.tolist()[0],
-        "labels": ["TBAR", "BBAR", "CBAR", "SBAR", "UBAR", "DBAR", "GLUON", "D", "U", "S", "C", "B", "T", "PHT"],
+        "labels": [
+            "TBAR",
+            "BBAR",
+            "CBAR",
+            "SBAR",
+            "UBAR",
+            "DBAR",
+            "GLUON",
+            "D",
+            "U",
+            "S",
+            "C",
+            "B",
+            "T",
+            "PHT",
+        ],
         "pdfgrid": lha.tolist(),
     }
 
-    with open(f"{replica_path}/{fitname}.exportgrid", "w") as fs:
+    suffix = "" if a_value == 1 else f"_A{a_value}"
+    with open(f"{replica_path}/{fitname}{suffix}.exportgrid", "w") as fs:
         yaml.dump(data, fs)
