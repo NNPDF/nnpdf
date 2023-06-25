@@ -1,4 +1,4 @@
-dataset_label: "ATLAS $W,Z$ inclusive 13 TeV"
+dataset_label: "ATLAS $Z$ inclusive 13 TeV"
 
 x: " "
 
@@ -7,15 +7,11 @@ figure_by:
     - boson
 extra_labels:
     " ":
-        - $W^-$
-        - $W^+$
         - Z
     boson:
-        - W
-        - W
         - Z
 
 experiment: "ATLAS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_CC
 

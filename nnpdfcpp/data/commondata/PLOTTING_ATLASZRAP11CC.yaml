@@ -1,4 +1,4 @@
-dataset_label: "ATLAS $W,Z$ 7 TeV 2011 Central selection"
+dataset_label: "ATLAS $Z$ 7 TeV 2011 Central selection"
 x: k1
 
 x_label: '$\left\|\eta/y\right|$'
@@ -15,10 +15,7 @@ normalize:
 
 
 extra_labels:
-   Boson:  ['$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$',
-       '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^-$', '$W^-$',
-       '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$',
-       '$W^-$', '$W^-$', '$Z_{low}$', '$Z_{low}$', '$Z_{low}$',
+   Boson:  ['$Z_{low}$', '$Z_{low}$', '$Z_{low}$',
        '$Z_{low}$', '$Z_{low}$', '$Z_{low}$', '$Z_{peak}$',
        '$Z_{peak}$', '$Z_{peak}$', '$Z_{peak}$', '$Z_{peak}$',
        '$Z_{peak}$', '$Z_{peak}$', '$Z_{peak}$', '$Z_{peak}$',
@@ -29,4 +26,4 @@ extra_labels:
 
 experiment: "ATLAS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY_NC

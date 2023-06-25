@@ -1,0 +1,16 @@
+dataset_label: "LHCb $Z \\to \\mu$ 7 TeV"
+x: k1
+
+y_label: '$d\sigma/dy$ (fb)' 
+
+kinematics_override: ewk_pseudorapity_sqrt_scale
+
+figure_by:
+  - Boson
+
+extra_labels:
+   Boson:  ["$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$"]
+
+experiment: "LHCb"
+
+nnpdf31_process: DY_NC

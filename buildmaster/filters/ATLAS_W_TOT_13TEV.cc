@@ -1,13 +1,12 @@
-/*
-This implementation supersedes that in ATLASWZTOT13TEV81PB
-in that it includes the experimental correlation coefficients
-between W+, W- and Z cross sections.
+/* 
+   This file implements the W production subset of the ATLAS_WZ_TOT_13TEV data 
+   set. This is required to separate CC DY from NC DY.
+   Implemented by ERN June 2023.
 */
 
+#include "ATLAS_W_TOT_13TEV.h"
 
-#include "ATLAS_WZ_TOT_13TEV.h"
-
-void ATLAS_WZ_TOT_13TEVFilter::ReadData()
+void ATLAS_W_TOT_13TEVFilter::ReadData()
 {
   fstream f1, f2;
   
@@ -31,20 +30,22 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
       exit(-1);
     }
 
+  int data_tot = 3;
+  
   //Central value, statistical and systematic uncertainties
-   string line;
+  string line;
   for(int i=0; i<11; i++)
     {
       getline(f1,line);
     }
-
-  vector<double> sys(fNData);
+  
+  vector<double> sys(data_tot);
   vector<double> lumi(fNData);
 
   for(int i=0; i<fNData; i++)
     {
       string sdum;
-
+      
       getline(f1,line);
       istringstream lstream(line);
       lstream >> sdum 
@@ -61,6 +62,24 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
       sys[i]   *= 1e6;
       lumi[i]  *= 1e6;
     }
+
+  for(int i=0; i<1; i++)
+    {
+      string sdum;
+      double ddum;
+      
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> sdum 
+	      >> ddum
+	      >> ddum
+	      >> sys[i+2]
+	      >> ddum
+	      >> ddum
+	      >> ddum
+	      >> ddum;
+      sys[i+2] *= 1e6;
+    }
   
   //Correlation coefficients
   for(int i=0; i<25; i++)
@@ -68,11 +87,11 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
        getline(f2,line);
     }
 
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double** covmat = new double*[data_tot];
+  for(int i=0; i<data_tot; i++)
     {
-      covmat[i] = new double[fNData];
-      for(int j=0; j<fNData; j++)
+      covmat[i] = new double[data_tot];
+      for(int j=0; j<data_tot; j++)
 	{
 	  covmat[i][j] = 1.;
 	}
@@ -97,32 +116,34 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
   covmat[1][2] = corrcoeff[2];
   covmat[2][1] = covmat[1][2];
 
-  for(int i=0; i<fNData; i++)
+  for(int i=0; i<data_tot; i++)
     {
-      for(int j=0; j<fNData; j++)
+      for(int j=0; j<data_tot; j++)
 	{
 	  covmat[i][j] = covmat[i][j]*sys[i]*sys[j];
 	}
     }
-
+  
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
-    syscor[i] = new double[fNData];
+  double** syscor = new double*[data_tot];
+  for(int i = 0; i < data_tot; i++)
+    syscor[i] = new double[data_tot];
 
-  if(!genArtSys(fNData,covmat,syscor))
+  if(!genArtSys(data_tot,covmat,syscor))
     {
       throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
   
   for(int i=0; i<fNData; i++)
     {
-      for(int j=0; j<fNData; j++)
+      for(int j=0; j<data_tot; j++)
 	{
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
+	  ostringstream sysname;
+	  sysname << "ATLAS_WZ_TOT_13TEV_" << j;
+	  fSys[i][j].name = sysname.str();
 	}
       fSys[i][fNSys-1].add = lumi[i];
       fSys[i][fNSys-1].mult = fSys[i][fNSys-1].add*1e2/fData[i];
@@ -133,7 +154,7 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
   f1.close();
   f2.close();
 
-  for(int i = 0; i < fNData; i++) 
+  for(int i = 0; i < data_tot; i++) 
     {
       delete[] syscor[i];
       delete[] covmat[i];
