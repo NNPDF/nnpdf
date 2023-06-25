@@ -21,6 +21,7 @@ from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
+from n3fit.nuclear_info import NDATA_SPECS
 
 
 @dataclass
@@ -89,6 +90,18 @@ class ObservableWrapper:
         return loss_f(experiment_prediction)
 
 
+def get_operation(opname, dataset_name, target_info):
+    """Get the operation required for a given dataset. The following
+    needs to be introduced in the presence of nuclear datasets given
+    that even in the case of ratio only one single FK table is passed.
+
+    TODO: maybe put the operation in the yamldb instead.
+    """
+    if dataset_name in NDATA_SPECS.keys() and len(target_info) == 2:
+        return "RATIO"
+    return opname
+
+
 def observable_generator(
     spec_dict, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
@@ -153,11 +166,11 @@ def observable_generator(
         else:
             Obs_Layer = DIS
 
-        # Set the operation (if any) to be applied to the fktables of this dataset
-        operation_name = dataset.operation
-
         # Get the target info values from dataset name
         target_info = add_nucinfo(dataset_name, len(dataset.fktables_data))
+
+        # Set the operation (if any) to be applied to the fktables of this dataset
+        operation_name = get_operation(dataset.operation, dataset_name, target_info)
 
         # Now generate the observable layer, which takes the following information:
         # operation name
