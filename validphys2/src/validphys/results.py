@@ -156,11 +156,11 @@ def data_index(data):
     """
     Given a core.DataGroupSpec instance, return pd.MultiIndex
     with the following levels:
-    
+
     1. experiment
     2. datasets
     3. datapoints indices (cuts already applied to)
-    
+
 
     Parameters
     ----------
@@ -173,9 +173,7 @@ def data_index(data):
     """
     tuples = []
 
-
     for ds in data.datasets:
-        
         experiment = get_info(ds).experiment
 
         for i in ds.cuts.load():
