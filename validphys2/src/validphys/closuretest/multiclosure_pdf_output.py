@@ -116,32 +116,41 @@ def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
 
 
 @table
-def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
+def fits_pdf_bias_variance_ratio(fits_pdf_flavour_bias_variance, fits_pdf_total_bias_variance):
     """Returns a table with the values of mean bias / mean variance with mean
     referring to mean across fits, by flavour. Includes total across all
     flavours allowing for correlations.
 
     """
     records = []
+    bias_fl, variance_fl = fits_pdf_flavour_bias_variance
+    bias_tot, variance_tot = fits_pdf_total_bias_variance
     for i, fl in enumerate(XI_FLAVOURS):
         if i == 0:
             fl = f"${fl}$"
-        records.append(dict(flavour=fl, ratio=fits_pdf_flavour_ratio[i]))
-    records.append(dict(flavour="Total", ratio=fits_pdf_total_ratio))
-    df = pd.DataFrame.from_records(records, index="flavour", columns=["flavour", "ratio"])
-    df.columns = ["bias/variance"]
+        records.append(
+            dict(
+                flavour=fl,
+                bias=bias_fl[i],
+                variance=variance_fl[i],
+                ratio=bias_fl[i] / variance_fl[i],
+                ratio_sqrt=np.sqrt(bias_fl[i] / variance_fl[i]),
+            )
+        )
+    records.append(
+        dict(
+            flavour="Total",
+            bias=bias_tot,
+            variance=variance_tot,
+            ratio=bias_tot / variance_tot,
+            ratio_sqrt=np.sqrt(bias_tot / variance_tot),
+        )
+    )
+    df = pd.DataFrame.from_records(
+        records, index="flavour", columns=["flavour", "bias", "variance", "ratio", "ratio_sqrt"]
+    )
+    df.columns = ["bias", "variance", "bias/variance", "sqrt(bias/variance)"]
     return df
-
-
-@table
-def fits_pdf_sqrt_ratio(fits_pdf_bias_variance_ratio):
-    """Like :py:func:`fits_pdf_bias_variance_ratio` except taking the sqrt. This
-    is to see how faithful our uncertainty is in units of the standard deviation.
-
-    """
-    df_in = fits_pdf_bias_variance_ratio
-    data = np.sqrt(df_in.values)
-    return pd.DataFrame(data, index=df_in.index, columns=["sqrt bias/variance"])
 
 
 @table
