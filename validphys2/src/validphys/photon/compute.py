@@ -75,7 +75,7 @@ class Photon:
         self.additional_errors = lux_params["additional_errors"]
         self.luxseed = lux_params["luxseed"]
 
-        if not lux_params["component"]:
+        if "component" not in lux_params:
             self.component = "total"
         else:
             self.component = lux_params["component"]
@@ -160,7 +160,6 @@ class Photon:
             photon_qin["inelastic"][i] = pht.inelastic_pf
             photon_qin["msbar"][i] = pht.msbar_pf
         # photon_qin += self.generate_errors(replica)
-        # fiatlux computes x * gamma(x)
         # TODO : the different x points could be even computed in parallel
 
         # Load eko and reshape it
@@ -175,6 +174,7 @@ class Photon:
                 pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
                 for j, pid in enumerate(eko.bases.inputpids):
                     if pid == 22:
+                        # fiatlux computes x * gamma(x)
                         pdfs_init[j] = value / XGRID
                         ph_id = j
                     else:
@@ -198,8 +198,10 @@ class Photon:
 
         Parameters
         ----------
-        xgrid : nd.array
+        xgrid: nd.array
             array of x values with shape (1,xgrid,1)
+        total: bool
+            True for the total component, False for the others
 
         Returns
         -------
