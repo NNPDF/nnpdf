@@ -371,6 +371,8 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
 
     dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)} 
 
+    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)} 
+
     # ===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
     level1_commondata_instances_wc = []
