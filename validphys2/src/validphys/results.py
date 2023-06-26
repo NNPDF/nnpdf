@@ -26,6 +26,7 @@ from validphys.checks import (
 )
 from validphys.convolution import PredictionsRequireCutsError, predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec, Stats
+from validphys.plotoptions import get_info
 
 log = logging.getLogger(__name__)
 
@@ -154,8 +155,12 @@ class PositivityResult(StatsResult):
 def data_index(data):
     """
     Given a core.DataGroupSpec instance, return pd.MultiIndex
-    with first level given by datasets names and second level
-    by datapoint index (cuts already applied to).
+    with the following levels:
+    
+    1. experiment
+    2. datasets
+    3. datapoints indices (cuts already applied to)
+    
 
     Parameters
     ----------
@@ -168,13 +173,15 @@ def data_index(data):
     """
     tuples = []
 
-    
+
     for ds in data.datasets:
-        for i in ds.cuts.load():
         
-            tp = (ds.name, i)
+        experiment = get_info(ds).experiment
+
+        for i in ds.cuts.load():
+            tp = (experiment, ds.name, i)
             tuples.append(tp)
-    return pd.MultiIndex.from_tuples(tuples, names=('dataset', 'id'))
+    return pd.MultiIndex.from_tuples(tuples, names=('experiment', 'dataset', 'id'))
 
 
 # TODO: finish deprecating all dependencies on this index largely in theorycovmat module
