@@ -111,10 +111,10 @@ class AddPhoton(MetaLayer):
         self._pdf_ph = None
         super().__init__(**kwargs)
 
-    def register_photon(self, xgrid):
+    def register_photon(self, xgrid, total):
         """Compute the photon array and set the layer to be rebuilt"""
         if self._photons_generator:
-            self._pdf_ph = self._photons_generator(xgrid)
+            self._pdf_ph = self._photons_generator(xgrid, total)
             self.built = False
 
     def call(self, pdfs, ph_replica):

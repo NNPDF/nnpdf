@@ -916,7 +916,7 @@ class ModelTrainer:
             if photons:
                 for m in pdf_models:
                     pl = m.get_layer("add_photon")
-                    pl.register_photon(xinput.input.tensor_content)
+                    pl.register_photon(xinput.input.tensor_content, True)
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above

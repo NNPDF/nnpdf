@@ -276,5 +276,5 @@ def test_compute_photon():
     photon = FakePhoton()
     addphoton = layers.AddPhoton(photons=photon)
     xgrid = np.geomspace(1e-4, 1., 10)
-    addphoton.register_photon(xgrid)
+    addphoton.register_photon(xgrid, True)
     np.testing.assert_allclose(addphoton._pdf_ph, [np.exp(-xgrid)])

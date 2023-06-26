@@ -170,3 +170,4 @@ fiatlux:
   additional_errors: true # should be set to true only for the last iteration
   luxseed: 1234567890
   eps_base: 1e-2
+  component: total

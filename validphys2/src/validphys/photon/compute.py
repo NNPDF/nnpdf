@@ -75,6 +75,11 @@ class Photon:
         self.additional_errors = lux_params["additional_errors"]
         self.luxseed = lux_params["luxseed"]
 
+        if not lux_params["component"]:
+            self.component = "total"
+        else:
+            self.component = lux_params["component"]
+
         # TODO : maybe find a different name for fiatlux_dis_F2
         path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
         path_to_FL = theoryid.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
@@ -89,7 +94,7 @@ class Photon:
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
 
-        self.interpolator = []
+        self.interpolator = {"total":[], "elastic":[], "inelastic":[], "msbar":[]}
         self.integral = []
 
         for replica in replicas:
@@ -119,11 +124,12 @@ class Photon:
             )
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
-            photon_array = self.compute_photon_array(replica)
-            self.interpolator.append(
-                interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic")
-            )
-            self.integral.append(trapezoid(photon_array, XGRID))
+            photon_dict = self.compute_photon_array(replica)
+            for key, value in photon_dict.items():
+                self.interpolator[key].append(
+                    interp1d(XGRID, value, fill_value="extrapolate", kind="cubic")
+                )
+            self.integral.append(trapezoid(photon_dict["total"], XGRID))
 
     def compute_photon_array(self, replica):
         r"""
@@ -141,42 +147,47 @@ class Photon:
         """
         # Compute photon PDF
         log.info(f"Computing photon")
-        photon_qin = np.array(
-            [self.lux[replica].EvaluatePhoton(x, self.q_in**2).total for x in XGRID]
-        )
-        photon_qin += self.generate_errors(replica)
+        photon_qin = {"total": np.zeros_like(XGRID), "elastic": np.zeros_like(XGRID), "inelastic": np.zeros_like(XGRID), "msbar": np.zeros_like(XGRID)}
+        for i, x in enumerate(XGRID):
+            pht = self.lux[replica].EvaluatePhoton(x, self.q_in**2)
+            photon_qin["total"][i] = pht.total
+            photon_qin["elastic"][i] = pht.elastic
+            photon_qin["inelastic"][i] = pht.inelastic_pf
+            photon_qin["msbar"][i] = pht.msbar_pf
+        # photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
-        photon_qin /= XGRID
         # TODO : the different x points could be even computed in parallel
-
+        
         # Load eko and reshape it
+        photon_Q0 = {}
         with EKO.read(self.path_to_eko_photon) as eko:
             # TODO : if the eko has not the correct grid we have to reshape it
             # it has to be done inside vp-setupfit
 
-            # construct PDFs
-            pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
-            for j, pid in enumerate(eko.bases.inputpids):
-                if pid == 22:
-                    pdfs_init[j] = photon_qin
-                    ph_id = j
-                else:
-                    if pid not in self.luxpdfset.flavors:
-                        continue
-                    pdfs_init[j] = np.array(
-                        [self.luxpdfset.xfxQ(x, self.q_in, replica, pid) / x for x in XGRID]
-                    )
+            # loop over different components
+            for key, value in photon_qin.items():
+                # construct PDFs
+                pdfs_init = np.zeros((len(eko.bases.inputpids), len(XGRID)))
+                for j, pid in enumerate(eko.bases.inputpids):
+                    if pid == 22:
+                        pdfs_init[j] = value / XGRID
+                        ph_id = j
+                    else:
+                        if pid not in self.luxpdfset.flavors:
+                            continue
+                        pdfs_init[j] = np.array(
+                            [self.luxpdfset.xfxQ(x, self.q_in, replica, pid) / x for x in XGRID]
+                        )
 
-            # Apply EKO to PDFs
-            for _, elem in eko.items():
-                pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
+                # Apply EKO to PDFs
+                for _, elem in eko.items():
+                    pdfs_final = np.einsum("ajbk,bk", elem.operator, pdfs_init)
+                # we want x * gamma(x)
+                photon_Q0[key] = pdfs_final[ph_id] * XGRID
 
-        photon_Q0 = pdfs_final[ph_id]
+        return photon_Q0
 
-        # we want x * gamma(x)
-        return XGRID * photon_Q0
-
-    def __call__(self, xgrid):
+    def __call__(self, xgrid, total):
         """
         Compute the photon interpolating the values of self.photon_array.
 
@@ -190,8 +201,12 @@ class Photon:
         photon values : nd.array
             array of photon values with shape (1,xgrid,1)
         """
+        if total:
+            component = "total"
+        else:
+            component = self.component
         return [
-            self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
+            self.interpolator[component][id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
             for id in range(len(self.replicas))
         ]
 
