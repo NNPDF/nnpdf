@@ -151,6 +151,32 @@ class PositivityResult(StatsResult):
         return cls(stats)
 
 
+def data_index(data):
+    """
+    Given a core.DataGroupSpec instance, return pd.MultiIndex
+    with first level given by datasets names and second level
+    by datapoint index (cuts already applied to).
+
+    Parameters
+    ----------
+    data: core.DataGroupSpec
+
+    Returns
+    -------
+    pd.MultiIndex
+
+    """
+    tuples = []
+
+    
+    for ds in data.datasets:
+        for i in ds.cuts.load():
+        
+            tp = (ds.name, i)
+            tuples.append(tp)
+    return pd.MultiIndex.from_tuples(tuples, names=('dataset', 'id'))
+
+
 # TODO: finish deprecating all dependencies on this index largely in theorycovmat module
 groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
