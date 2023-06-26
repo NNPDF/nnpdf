@@ -1,0 +1,127 @@
+#
+# Configuration file for n3fit
+#
+
+############################################################
+description: Architecture Testing - Fully Connected Network
+
+dataset_inputs:
+# Fixed target DIS
+- {dataset: NMCPD_dw_ite, frac: 0.75}
+- {dataset: NMC, frac: 0.75}
+- {dataset: SLACP_dwsh, frac: 0.75}
+- {dataset: SLACD_dw_ite, frac: 0.75}
+- {dataset: BCDMSP_dwsh, frac: 0.75}
+- {dataset: BCDMSD_dw_ite, frac: 0.75}
+- {dataset: CHORUSNUPb_dw_ite, frac: 0.75}
+- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
+- {dataset: NTVNUDMNFe_dw_ite, frac: 0.75}
+- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75}
+# HERA data
+- {dataset: HERACOMBNCEM, frac: 0.75}
+- {dataset: HERACOMBNCEP460, frac: 0.75}
+- {dataset: HERACOMBNCEP575, frac: 0.75}
+- {dataset: HERACOMBNCEP820, frac: 0.75}
+- {dataset: HERACOMBNCEP920, frac: 0.75}
+- {dataset: HERACOMBCCEM, frac: 0.75}
+- {dataset: HERACOMBCCEP, frac: 0.75}
+
+
+############################################################
+datacuts:
+  t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
+  q2min: 3.49                        # Q2 minimum
+  w2min: 12.5                        # W2 minimum
+  combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
+  jetptcut_tev: 0                    # jet pt cut for tevatron
+  jetptcut_lhc: 0                    # jet pt cut for lhc
+  wptcut_lhc: 30.0                   # Minimum pT for W pT diff distributions
+  jetycut_tev: 1e30                  # jet rap. cut for tevatron
+  jetycut_lhc: 1e30                  # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut: 1e30                  # jet cfact. cut
+
+############################################################
+theory:
+  theoryid: 200     # database id
+
+sampling:
+  separate_multiplicative: true
+
+############################################################
+trvlseed: 1
+nnseed: 2
+mcseed: 3
+genrep: false        # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 15, 8]
+  arch_mods: [['skip_full', true]]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 0.001
+    learning_rate: 0.01
+    optimizer_name: Nadam
+  epochs: 5000
+  positivity:
+    initial: 184.8
+    multiplier: 1.05 
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.2
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.121, 1.154], largex: [1.498, 3.138]}
+  - {fl: g, trainable: false, smallx: [0.9224, 1.149], largex: [3.266, 6.214]}
+  - {fl: v, trainable: false, smallx: [0.5279, 0.8017], largex: [1.6, 3.588]}
+  - {fl: v3, trainable: false, smallx: [0.2011, 0.4374], largex: [1.761, 3.427]}
+  - {fl: v8, trainable: false, smallx: [0.5775, 0.8357], largex: [1.589, 3.378]}
+  - {fl: t3, trainable: false, smallx: [-0.484, 1.0], largex: [1.763, 3.397]}
+  - {fl: t8, trainable: false, smallx: [0.6714, 0.9197], largex: [1.572, 3.496]}
+  - {fl: t15, trainable: false, smallx: [1.073, 1.164], largex: [1.503, 3.636]}
+
+############################################################
+
+positivity:
+  posdatasets:
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: POSF2DW, maxlambda: 1e6}
+  - {dataset: POSF2S, maxlambda: 1e6}
+  - {dataset: POSFLL, maxlambda: 1e6}
+  - {dataset: POSDYU, maxlambda: 1e10}
+  - {dataset: POSDYD, maxlambda: 1e10}
+  - {dataset: POSDYS, maxlambda: 1e10}
+  - {dataset: POSF2C, maxlambda: 1e6}
+  - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: POSXUB, maxlambda: 1e6}
+  - {dataset: POSXDQ, maxlambda: 1e6}
+  - {dataset: POSXDB, maxlambda: 1e6}
+  - {dataset: POSXSQ, maxlambda: 1e6}
+  - {dataset: POSXSB, maxlambda: 1e6}
+  - {dataset: POSXGL, maxlambda: 1e6}
+
+############################################################
+
+integrability:
+  integdatasets:
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
+
+############################################################
+debug: True
+maxcores: 8
+
+tensorboard:
+  weight_freq: 100
+  profiling: False
+
+save: 'weights.h5'
+# load: '/path/to/weights.h5/file'
