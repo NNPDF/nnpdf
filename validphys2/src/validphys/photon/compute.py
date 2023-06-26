@@ -94,7 +94,7 @@ class Photon:
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
 
-        self.interpolator = {"total":[], "elastic":[], "inelastic":[], "msbar":[]}
+        self.interpolator = {"total": [], "elastic": [], "inelastic": [], "msbar": []}
         self.integral = []
 
         for replica in replicas:
@@ -147,7 +147,12 @@ class Photon:
         """
         # Compute photon PDF
         log.info(f"Computing photon")
-        photon_qin = {"total": np.zeros_like(XGRID), "elastic": np.zeros_like(XGRID), "inelastic": np.zeros_like(XGRID), "msbar": np.zeros_like(XGRID)}
+        photon_qin = {
+            "total": np.zeros_like(XGRID),
+            "elastic": np.zeros_like(XGRID),
+            "inelastic": np.zeros_like(XGRID),
+            "msbar": np.zeros_like(XGRID),
+        }
         for i, x in enumerate(XGRID):
             pht = self.lux[replica].EvaluatePhoton(x, self.q_in**2)
             photon_qin["total"][i] = pht.total
@@ -157,7 +162,7 @@ class Photon:
         # photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
         # TODO : the different x points could be even computed in parallel
-        
+
         # Load eko and reshape it
         photon_Q0 = {}
         with EKO.read(self.path_to_eko_photon) as eko:
