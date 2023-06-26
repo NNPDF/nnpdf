@@ -5,4 +5,4 @@ x_label: 'y'
 
 experiment: "LHCb"
 
-nnpdf31_process: DY_NC
+nnpdf31_process: DY NC

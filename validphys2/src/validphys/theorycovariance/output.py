@@ -128,7 +128,7 @@ def plot_covmat_heatmap(covmat, title):
     return fig
 
 
-_procorder = ("DIS NC", "DIS CC", "DY", "JETS", "TOP")
+_procorder = ("DIS NC", "DIS CC", "DY NC", "DY CC", "JETS", "TOP", "SINGLETOP", "PHOTON", "DIJET")
 
 _dsorder = (
     "BCDMSP",

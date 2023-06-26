@@ -4,4 +4,4 @@ y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
 #x_label: 'Boson rapidity $|y|$'
 experiment: "LHCb"
 
-nnpdf31_process: DY_NC
+nnpdf31_process: DY NC

@@ -4,4 +4,4 @@ y_label: '$\sigma(W^+ + \bar{c})/\sigma(W^- + c)$'
 #x_label: 'Boson rapidity $|y|$'
 experiment: "CMS"
 
-nnpdf31_process: DY_CC
+nnpdf31_process: DY CC

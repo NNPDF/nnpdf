@@ -13,4 +13,4 @@ extra_labels:
 
 experiment: "LHCb"
 
-nnpdf31_process: DY_CC
+nnpdf31_process: DY CC

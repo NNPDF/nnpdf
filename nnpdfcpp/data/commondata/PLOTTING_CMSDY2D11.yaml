@@ -8,4 +8,4 @@ kinematics_override: ewk_mll_sqrt_scale
 
 experiment: "CMS"
 
-nnpdf31_process: DY_NC
+nnpdf31_process: DY NC

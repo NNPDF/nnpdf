@@ -5,4 +5,4 @@ y_label: '$1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$'
 
 experiment: "D0"
 
-nnpdf31_process: DY_NC
+nnpdf31_process: DY NC
