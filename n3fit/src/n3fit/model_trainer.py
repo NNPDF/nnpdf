@@ -99,7 +99,7 @@ class ModelTrainer:
         model_file=None,
         sum_rules=None,
         parallel_models=1,
-        skip_connections=[],
+        arch_mods={}
     ):
         """
         Parameters
@@ -152,15 +152,14 @@ class ModelTrainer:
         self.all_datasets = []
         self._scaler = None
         self._parallel_models = parallel_models
-        self.skip_connections = skip_connections
-
+        self.arch_mods = arch_mods
         # Initialise internal variables which define behaviour
         if debug:
             self.max_cores = 1
         else:
             self.max_cores = max_cores
         self.model_file = model_file
-        self.print_summary = True
+        self.W_summary = True
         self.mode_hyperopt = False
         self.impose_sumrule = sum_rules
         self._hyperkeys = None
@@ -282,6 +281,7 @@ class ModelTrainer:
 
             for dataset in exp_dict["datasets"]:
                 self.all_datasets.append(dataset.name)
+
         self.all_datasets = set(self.all_datasets)
 
         for pos_dict in self.pos_info:
@@ -333,6 +333,7 @@ class ModelTrainer:
         log.info("Generating the input grid")
 
         inputs_unique = []
+        
         inputs_idx = []
         for igrid in self.input_list:
             for idx, arr in enumerate(inputs_unique):
@@ -342,9 +343,9 @@ class ModelTrainer:
             else:
                 inputs_idx.append(len(inputs_unique))
                 inputs_unique.append(igrid)
-
         # Concatenate the unique inputs
         input_arr = np.concatenate(inputs_unique, axis=1).T
+
         if self._scaler:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
@@ -647,7 +648,7 @@ class ModelTrainer:
         dropout,
         regularizer,
         regularizer_args,
-        skip_connections,
+        arch_mods,
         seed,
     ):
         """
@@ -700,7 +701,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
-            skip_connections=skip_connections,
+            arch_mods=dict(arch_mods)
         )
         return pdf_models
 
@@ -808,6 +809,7 @@ class ModelTrainer:
             raise RuntimeError("Modeltrainer.evaluate was called before any training")
         # Needs to receive a `stopping_object` in order to select the part of the
         # training and the validation which are actually `chi2` and not part of the penalty
+        print()
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2 = stopping_object.vl_chi2
         exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
@@ -889,7 +891,7 @@ class ModelTrainer:
                 params["dropout"],
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
-                params.get("skip_connections", None), # List of tuples with the connected layers, optional
+                params.get("arch_mods", {}),
                 seeds,
             )
 

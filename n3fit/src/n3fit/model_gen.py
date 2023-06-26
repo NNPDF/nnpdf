@@ -10,6 +10,7 @@
 
 """
 from dataclasses import dataclass
+import tensorflow as tf
 import numpy as np
 from n3fit.msr import msr_impose
 from n3fit.layers import DIS, DY, ObsRotation, losses
@@ -20,8 +21,6 @@ from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations as op
 from n3fit.backends import MetaLayer, Lambda
 from n3fit.backends import base_layer_selector, regularizer_selector
-# TODO Should be moved to backend at some point
-from tensorflow.keras.layers import add
 import logging
 log = logging.getLogger(__name__)
 
@@ -301,6 +300,10 @@ def generate_dense_network(
     seed=0,
     dropout_rate=0.0,
     regularizer=None,
+    skip_connections={},
+    skip_full=False,
+    emb_att=False,
+    kernels=False
 ):
     """
     Generates a dense network
@@ -309,16 +312,31 @@ def generate_dense_network(
     for the next to last layer (i.e., the last layer of the dense network before getting to
     the output layer for the basis choice)
     """
+
     list_of_pdf_layers = []
-    number_of_layers = len(nodes)
+    
+    # add attention layer(s) to network
+    if emb_att:
+        list_of_pdf_layers.append(base_layer_selector("attention", use_scale=True))
+        
+    if kernels:
+        list_of_pdf_layers.append(base_layer_selector("gaussian_kernel"))
+    
+    number_of_layers = len(nodes) + len(list_of_pdf_layers)
     if dropout_rate > 0:
         dropout_layer = number_of_layers - 2
     else:
-        dropout_layer = -1
+        dropout_layer = None
+
+    concat_shape = nodes_in
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
         # if we have dropout set up, add it to the list
-        if dropout_rate > 0 and i == dropout_layer:
+        if i == dropout_layer:
             list_of_pdf_layers.append(base_layer_selector("dropout", rate=dropout_rate))
+
+        if i in skip_connections:
+            # list_of_pdf_layers.append(base_layer_selector('add'))
+            list_of_pdf_layers.append(base_layer_selector('concatenate'))
 
         # select the initializer and move the seed
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
@@ -336,6 +354,11 @@ def generate_dense_network(
 
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
+        if skip_full and i != number_of_layers-1:
+            concat_shape += nodes_out
+            list_of_pdf_layers.append(base_layer_selector('concatenate'))
+            nodes_in = concat_shape
+    
     return list_of_pdf_layers
 
 
@@ -406,7 +429,7 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
-    skip_connections=[],
+    arch_mods={}
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -505,6 +528,23 @@ def pdfNN_layer_generator(
        pdf_models: list with a number equal to `parallel_models` of type n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
     """
+    mods = {
+        'skip_connections': {},
+        'skip_full': False,
+        'emb_att': False,
+        'kernels': False
+    }
+
+    # fill mods dict with data from runcards
+    for mod in arch_mods:
+        if mod == 'skip_connections':
+            mods[mod] = dict(arch_mods[mod])
+        else:
+            mods[mod] = arch_mods[mod]
+    
+    if mods['skip_connections'] and mods['skip_full']:
+        raise Exception("You can't have skip_connections and skip_full in a network, pick one of the two")
+ 
     # Parse the input configuration
     if seed is None:
         seed = parallel_models * [None]
@@ -539,6 +579,10 @@ def pdfNN_layer_generator(
 
     # First prepare the input for the PDF model and any scaling if needed
     placeholder_input = Input(shape=(None, 1), batch_size=1)
+    
+    # define a dictionary with initializations for modifications the the network architecture
+
+
 
     subtract_one = False
     process_input = Lambda(lambda x: x)
@@ -569,7 +613,7 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
+        sumrule_layer, integrator_input = msr_impose(nx=1210, mode=impose_sumrule, scaler=scaler)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -587,6 +631,10 @@ def pdfNN_layer_generator(
                 seed=layer_seed,
                 dropout_rate=dropout,
                 regularizer=reg,
+                skip_connections=mods['skip_connections'],
+                skip_full=mods['skip_full'],
+                emb_att= mods["emb_att"],
+                kernels=mods['kernels']
             )
         elif layer_type == "dense_per_flavour":
             # Define the basis size attending to the last layer in the network
@@ -602,24 +650,37 @@ def pdfNN_layer_generator(
             )
 
         def dense_me(x):
+            skip = mods['skip_connections']
+
             """Takes an input tensor `x` and applies all layers
             from the `list_of_pdf_layers` in order"""
             processed_x = process_input(x)
-            curr_fun = list_of_pdf_layers[0](processed_x)
+            current = [processed_x]
 
-            for dense_layer in list_of_pdf_layers[1:]:
-                curr_fun = dense_layer(curr_fun)
-            return curr_fun
+            extra_index = 0
+            for i, layer in enumerate(list_of_pdf_layers):
+                # for attention modification: self-attention requires the input be given twice
+                if 'attention' in layer.name:
+                    current.append(layer([x,x]))
 
-        def dense_skip(x,skip):
-            processed_x = process_input(x)
-            curr_fun = list_of_pdf_layers[0](processed_x)
-
-            for dense_layer in list_of_pdf_layers[1:]:
-                curr_fun = dense_layer(curr_fun)
-#            for i in range(len(list_of_pdf_layers[1:])):
-#              curr_fun = list_of_pdf_layers[i](curr_fun)
-            return curr_fun
+                # for a fully connected network: Concatenate all outputs of layers except for those from Concatenate or 
+                # Dropout layers
+                elif mods['skip_full'] and 'concatenate' in layer.name:
+                    current.append(layer([x for x in current if ('concatenate' not in str(x) and 'dropout' not in str(x))]))
+                
+                # for simple skip_connections, Add together the requested layers, 
+                # skipping Dropout and previous Add layers using an extra_index
+                elif 'dropout' in layer.name:
+                    current.append(layer(current[-1]))
+                    extra_index += 1
+                elif i in skip:
+                    current.append(layer([current[skip[i]], current[-1]]))
+                    extra_index += 1
+                
+                # or if just a regular dense layer
+                else:
+                    current.append(layer(current[-1]))
+            return current[-1]
 
         preproseed = layer_seed + number_of_layers
         layer_preproc = Preprocessing(
@@ -635,14 +696,14 @@ def pdfNN_layer_generator(
             """The tensor x has a expected shape of (1, None, {1,2})
             where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
             """
+
+
             x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
             x_original = op.op_gather_keep_dims(x, -1, axis=-1)
-            if skip_connections != []:
-                nn_output = dense_skip(x_scaled,skip_connections)
-                ret = op.op_multiply([nn_output,layer_preproc(x_original)])
-                return basis_rotation(ret)
 
-            nn_output = dense_me(x_scaled)
+            nn_output = dense_me(x_scaled) 
+            
+
             if subtract_one:
                 nn_at_one = dense_me(layer_x_eq_1)
                 nn_output = op.op_subtract([nn_output, nn_at_one])
@@ -664,5 +725,8 @@ def pdfNN_layer_generator(
         pdf_model = MetaModel(
             model_input, final_pdf(placeholder_input), name=f"PDF_{i}", scaler=scaler
         )
+        path="/data/theorie/abos/nnpdfgit/nnpdf/n3fit/examples/runcards/architecture_mod/"
+        pdf_model.summary()
+
         pdf_models.append(pdf_model)
     return pdf_models

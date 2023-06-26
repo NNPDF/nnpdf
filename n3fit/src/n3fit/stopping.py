@@ -605,7 +605,7 @@ class Stopping:
         """ Return the next ReplicaState object"""
         return next(self._history)
 
-    def chi2exps_json(self, replica=0, log_each=100):
+    def chi2exps_json(self, replica=0, log_each=20):
         """
         Returns and apt-for-json dictionary with the status of the fit every `log_each` epochs
 

@@ -11,6 +11,7 @@ from reportengine.compat import yaml
 import validphys
 import n3fit
 from n3fit import vpinterface
+# from scipy.interpolate import interp1d
 
 XGRID = np.array(
     [
@@ -213,6 +214,9 @@ XGRID = np.array(
     ]
 )
 
+# f = interp1d(np.arange(0,len(XGRID),1), XGRID)
+# XGRID = f(np.arange(0, 195, 195/1210))
+
 class WriterWrapper:
     def __init__(self, replica_number, pdf_object, stopping_object, q2, timings):
         """
@@ -239,7 +243,7 @@ class WriterWrapper:
         self.q2 = q2
         self.timings = timings
 
-    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2):
+    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2, kernel):
         """
         Wrapper around the `storefit` function.
 
@@ -327,6 +331,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = replica_status.positivity_status
     all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
+    print('archlengths', all_info["arc_lengths"])
     all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
     all_info["timing"] = timing
     # Versioning info
@@ -450,8 +455,10 @@ def storefit(
     """
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
+    print(xgrid.shape)
         
     result = pdf_object(xgrid, flavours="n3fit").squeeze()
+    print(result, result.shape)
     lha = evln2lha(result.T).T
 
     data = {

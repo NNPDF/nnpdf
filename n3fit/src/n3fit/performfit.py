@@ -38,7 +38,6 @@ def performfit(
     debug=False,
     maxcores=None,
     parallel_models=False,
-    skip_connections=[],
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit
@@ -149,6 +148,7 @@ def performfit(
     #       [list of all NN seeds]
     #       )
     #
+
     n_models = len(replicas_nnseed_fitting_data_dict)
     if parallel_models and n_models != 1:
         replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
@@ -182,6 +182,7 @@ def performfit(
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
+
         the_model_trainer = ModelTrainer(
             exp_info,
             posdatasets_fitting_pos_dict,
@@ -195,7 +196,6 @@ def performfit(
             model_file=load,
             sum_rules=sum_rules,
             parallel_models=n_models,
-            skip_connections=skip_connections
         )
 
         # This is just to give a descriptive name to the fit function
@@ -252,7 +252,6 @@ def performfit(
         #############################################################################
         result = pdf_gen_and_train_function(parameters)
         stopwatch.register_ref("replica_fitted", "replica_set")
-
         stopping_object = result["stopping_object"]
         log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
 
@@ -260,10 +259,19 @@ def performfit(
         all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
 
         pdf_models = result["pdf_models"]
+
+        if parameters.get('arch_mods'):
+            runcard = parameters.get('arch_mods')[0][0]
+        else:
+            runcard = 'no_mod'
+
+        file_path = f'/data/theorie/abos/nnpdfgit/nnpdf/n3fit/runcards/examples/architecture_mod/runcard_{runcard}/nnfit/replica_{replica_idxs[0]}/testchi^2.txt'
+        with open(file_path, "w") as file:
+            file.write(f"{all_exp_chi2[0]} \n")
+        
         for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
             # Each model goes into its own replica folder
             replica_path_set = replica_path / f"replica_{replica_number}"
-
             # Create a pdf instance
             q0 = theoryid.get_description().get("Q0")
             pdf_instance = N3PDF(pdf_model, fit_basis=basis, Q=q0)
@@ -284,8 +292,14 @@ def performfit(
 
             # And write the data down
             writer_wrapper.write_data(
-                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
+                replica_path_set, 
+                output_path.name, 
+                training_chi2, 
+                val_chi2, 
+                exp_chi2, 
+                kernel=parameters.get('arch_mods')[0][0] == 'kernels'
             )
+
             log.info(
                     "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
                     replica_number,

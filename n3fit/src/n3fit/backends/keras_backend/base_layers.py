@@ -17,11 +17,13 @@
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
-from tensorflow.keras.layers import Lambda, LSTM, Dropout, Concatenate
+from tensorflow.keras.layers import Lambda, LSTM, Dropout, Concatenate, Add, Embedding, Attention, Reshape
 from tensorflow.keras.layers import concatenate, Input # pylint: disable=unused-import
 from tensorflow.keras.layers import Dense as KerasDense
-from tensorflow import expand_dims
+from tensorflow.keras.layers.experimental import RandomFourierFeatures
+from tensorflow import expand_dims, norm
 from tensorflow.keras.regularizers import l1_l2
+from tensorflow.keras.initializers import Constant
 from tensorflow import nn, math
 
 from n3fit.backends import MetaLayer
@@ -42,7 +44,7 @@ def leaky_relu(x):
 custom_activations = {
     "square" : square_activation,
     "leaky_relu": leaky_relu,
-    "modified_tanh": modified_tanh,
+    "modified_tanh": modified_tanh
 }
 
 def LSTM_modified(**kwargs):
@@ -63,6 +65,19 @@ def LSTM_modified(**kwargs):
 
 class Dense(KerasDense, MetaLayer):
     pass
+
+class GaussianKernel(MetaLayer):
+    def __init__(self):
+        super(GaussianKernel, self).__init__()
+
+    def build(self, input_shape):
+        self.sigma = self.add_weight("sigma", shape=(1,), initializer=Constant(1), trainable=True)
+        super(GaussianKernel, self).build(input_shape)
+
+    def call(self, inputs):
+        mse = math.square(norm(expand_dims(inputs, axis=2) - expand_dims(inputs, axis=1), axis=3))
+        return math.exp(-mse/(2*self.sigma))
+        
 
 def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):
     """
@@ -125,6 +140,7 @@ layers = {
             "kernel_regularizer": None
         },
     ),
+    'gaussian_kernel': (GaussianKernel,{}),
     "dense_per_flavour": (
         dense_per_flavour,
         {
@@ -141,6 +157,11 @@ layers = {
     ),
     "dropout": (Dropout, {"rate": 0.0}),
     "concatenate": (Concatenate, {}),
+    "reshape": (Reshape, {"target_shape":None}),
+    "add": (Add, {}),
+    "embedding": (Embedding, {"input_dim": (1,), "output_dim": 8}),
+    "attention": (Attention, {"use_scale": True}),
+    "kernel_layer": (RandomFourierFeatures, {"output_dim":15, 'scale': 1, 'kernel_initializer':"gaussian"})
 }
 
 regularizers = {

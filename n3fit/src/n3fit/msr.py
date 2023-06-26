@@ -32,7 +32,6 @@ def gen_integration_input(nx):
     for i in range(nx):
         weights.append((spacing[i] + spacing[i + 1]) / 2.0)
     weights_array = np.array(weights).reshape(nx, 1)
-
     return xgrid, weights_array
 
 
