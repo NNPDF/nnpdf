@@ -267,18 +267,25 @@ def fits_sqrt_covmat_by_flavour(fits_covariance_matrix_by_flavour):
     return [la.cholesky(cov, lower=True) for cov in fits_covariance_matrix_by_flavour]
 
 
-def fits_pdf_flavour_ratio(
+def fits_pdf_flavour_bias_variance(
     fits_sqrt_covmat_by_flavour, fits_central_difference, fits_replica_difference
 ):
     """Calculate the bias (chi2 between central PDF and underlying PDF)
     for each flavour and the variance (mean chi2 between replica and central PDF),
-    then return a numpy array with shape (flavours, 2) with second axis being
-    bias, variance
+    for each flavour
+
+    Returns
+    -------
+    tuple
+        - list of len flavours, biases
+        - list of len flavours, variances
+
 
     """
     central_diff = np.asarray(fits_central_difference)
     rep_diff = np.asarray(fits_replica_difference)
-    ratios = []
+    biases = []
+    variances = []
     for i in range(len(XI_FLAVOURS)):
         bias = calc_chi2(fits_sqrt_covmat_by_flavour[i], central_diff[:, i, :].T)
         variance = np.mean(
@@ -288,11 +295,13 @@ def fits_pdf_flavour_ratio(
             ),
             axis=0,
         )
-        ratios.append(np.mean(bias) / np.mean(variance))
-    return ratios
+        biases.append(np.mean(bias))
+        variances.append(np.mean(variance))
+
+    return (biases, variances)
 
 
-def fits_pdf_total_ratio(
+def fits_pdf_total_bias_variance(
     fits_central_difference,
     fits_replica_difference,
     fits_covariance_matrix_totalpdf,
@@ -301,11 +310,11 @@ def fits_pdf_total_ratio(
     """Calculate the total bias and variance for all flavours and x allowing for
     correlations across flavour.
 
-    Returns:
-
-    ratio_data: tuple
-        required data for calculating mean(bias) over mean(variance) across fits
-        in form of tuple (bias, variance)
+    Returns
+    -------
+    tuple
+        - bias
+        - variance
     """
     central_diff = np.asarray(fits_central_difference).reshape(
         -1, multiclosure_nx * len(XI_FLAVOURS)
@@ -319,7 +328,7 @@ def fits_pdf_total_ratio(
     bias = calc_chi2(sqrtcov, central_diff.T)
     # need flav x on first axis
     variance = np.mean(calc_chi2(sqrtcov, rep_diff.transpose(2, 1, 0)), axis=0)
-    return np.mean(bias) / np.mean(variance)
+    return np.mean(bias), np.mean(variance)
 
 
 fits_xi_grid_values = collect("xi_grid_values", ("fits", "fitpdf"))
@@ -385,10 +394,14 @@ def fits_bootstrap_pdf_ratio(
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         flav_sqrt_cov = fits_sqrt_covmat_by_flavour(flav_cov)
         total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, multiclosure_nx)
-        ratio_flav = fits_pdf_flavour_ratio(flav_sqrt_cov, boot_central_diff, boot_rep_diff)
-        ratio_tot = fits_pdf_total_ratio(
+        bias_flav, variance_flav = fits_pdf_flavour_bias_variance(
+            flav_sqrt_cov, boot_central_diff, boot_rep_diff
+        )
+        ratio_flav = bias_flav / variance_flav
+        bias_tot, variance_tot = fits_pdf_total_bias_variance(
             boot_central_diff, boot_rep_diff, total_cov, multiclosure_nx
         )
+        ratio_tot = bias_tot / variance_tot
         ratio_data = np.concatenate((ratio_flav, [ratio_tot]), axis=0)
         ratio_boot.append(ratio_data)
     return ratio_boot
