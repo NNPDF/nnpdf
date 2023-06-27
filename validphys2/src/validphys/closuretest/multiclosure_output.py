@@ -231,11 +231,11 @@ def datasets_bias_variance_pdf_covmat(datasets_expected_bias_variance_pdf_covmat
     """
     records = []
     for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance_pdf_covmat):
-        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance=var))
+        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance=var, ratio=bias / var, ratio_sqrt=np.sqrt(bias/var)))
     df = pd.DataFrame.from_records(
-        records, index="dataset", columns=("dataset", "ndata", "bias", "variance")
+        records, index="dataset", columns=("dataset", "ndata", "bias", "variance", "ratio", "ratio_sqrt")
     )
-    df.columns = ["ndata", "bias", "variance"]
+    df.columns = ["ndata", "bias", "variance", "ratio", "sqrt(ratio)"]
     return df
 
 
