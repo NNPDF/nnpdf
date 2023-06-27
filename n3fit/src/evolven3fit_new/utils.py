@@ -7,7 +7,7 @@ from scipy.interpolate import interp1d
 from reportengine.compat import yaml
 from validphys.pdfbases import PIDS_DICT
 
-DEFAULT_Q2GRID = (
+Q2GRID_Nf04 = (
     np.array(
         [
             1.6500000e00,
@@ -21,7 +21,6 @@ DEFAULT_Q2GRID = (
             3.4705775e00,
             3.8800751e00,
             4.3584516e00,
-            4.9200000e00,
             4.9200000e00,
             5.5493622e00,
             6.2897452e00,
@@ -59,6 +58,62 @@ DEFAULT_Q2GRID = (
             2.3573066e04,
             3.7444017e04,
             6.0599320e04,
+            1.0000000e05,
+        ]
+    )
+    ** 2
+)
+
+Q2GRID_Nf03 = (
+    np.array(
+        [
+            1.0000000e00,
+            1.0768843e00,
+            1.1642787e00,
+            1.2640247e00,
+            1.3783565e00,
+            1.5100000e00,
+            1.6573843e00,
+            1.8279487e00,
+            2.0263188e00,
+            2.2582323e00,
+            2.5308507e00,
+            2.8531703e00,
+            3.2365690e00,
+            3.6955380e00,
+            4.2486693e00,
+            4.9200000e00,
+            5.6571821e00,
+            6.5475141e00,
+            7.6300446e00,
+            8.9555329e00,
+            1.0590474e01,
+            1.2622686e01,
+            1.5169120e01,
+            1.8386905e01,
+            2.2489085e01,
+            2.7767274e01,
+            3.4624624e01,
+            4.3624282e01,
+            5.5561424e01,
+            7.1571582e01,
+            9.3295496e01,
+            1.2313315e02,
+            1.6464038e02,
+            2.2315640e02,
+            3.0681103e02,
+            4.2816505e02,
+            6.0692308e02,
+            8.7449251e02,
+            1.2817733e03,
+            1.9127020e03,
+            2.9082314e03,
+            4.5095982e03,
+            7.1379509e03,
+            1.1543948e04,
+            1.9094934e04,
+            3.2338760e04,
+            5.6137084e04,
             1.0000000e05,
         ]
     )
@@ -123,7 +178,7 @@ def get_theoryID_from_runcard(usr_path):
     return my_runcard["theory"]["theoryid"]
 
 
-def generate_q2grid(Q0, Qfin, Q_points, match_dict):
+def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
 
@@ -131,7 +186,14 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
     in order to obtain the relative matching scale.
     """
     if Qfin is None and Q_points is None:
-        return DEFAULT_Q2GRID
+        if nf0 == 4:
+            return Q2GRID_Nf04
+        elif nf0 == 3:
+            return Q2GRID_Nf03
+        elif nf0 is None:
+            raise ValueError("In order to use a default grid, a value of nf0 must be provided")
+        else:
+            raise NotImplementedError(f"No default grid in Q available for {nf0=}")
     elif Qfin is None or Q_points is None:
         raise ValueError("q_fin and q_points must be specified either both or none of them")
     else:
@@ -148,7 +210,9 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict):
                 frac_of_point = np.log(match_scale / Q_ini) / np.log(Qfin / Q0)
                 num_points = int(Q_points * frac_of_point)
                 num_points_list.append(num_points)
-                grids.append(np.geomspace(Q_ini**2, match_scale**2, num=num_points))
+                grids.append(
+                    np.geomspace(Q_ini**2, match_scale**2, num=num_points, endpoint=False)
+                )
                 Q_ini = match_scale
         num_points = Q_points - sum(num_points_list)
         grids.append(np.geomspace(Q_ini**2, Qfin**2, num=num_points))
