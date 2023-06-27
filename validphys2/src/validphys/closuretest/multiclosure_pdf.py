@@ -30,6 +30,14 @@ def internal_singlet_gluon_xgrid(multiclosure_nx=4):
     between 10^-3 and 0.1 and the other half of the points being linearly
     spaced between 0.1 and 0.5
     """
+    if multiclosure_nx%2 !=0:
+        return np.concatenate(
+        (
+            np.logspace(-3, -1, int(multiclosure_nx / 2), endpoint=False),
+            np.linspace(0.1, 0.5, int(multiclosure_nx / 2)+1),
+        ),
+        axis=0,
+    )
     return np.concatenate(
         (
             np.logspace(-3, -1, int(multiclosure_nx / 2), endpoint=False),
