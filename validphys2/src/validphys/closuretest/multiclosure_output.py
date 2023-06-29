@@ -9,7 +9,6 @@ data.
 import numpy as np
 import pandas as pd
 import scipy.special as special
-import matplotlib.pyplot as plt
 import scipy.stats
 import yaml
 
@@ -21,7 +20,6 @@ from validphys.closuretest.multiclosure import expected_dataset_bias_variance
 from validphys.loader import Loader
 from validphys.closuretest.multiclosure import (
     internal_multiclosure_data_loader,
-    fits_dataset_bias_variance,
     fits_data_bias_variance,
 )
 from validphys.core import DataGroupSpec
@@ -33,171 +31,59 @@ log = logging.getLogger(__name__)
 
 l = Loader()
 
-@figuregen
-def plt_prog_sqrt_ratio_thr_dependence_data(internal_multiclosure_data_loader):
-    return plt_prog_sqrt_ratio_thr_dependence_dataset(internal_multiclosure_data_loader)
 
 @figuregen
-def plot_threshold_dependency_data(internal_multiclosure_data_loader):
-    return plot_threshold_dependency_dataset(internal_multiclosure_data_loader)
-
-@figuregen
-def plt_prog_sqrt_ratio_thr_dependence_dataset(internal_multiclosure_dataset_loader):
+def generate_gaussians(datasets_deltas, each_dataset):
     """
-    For a dataset plot the sqrt b/v ratio labelling wrt thr
+    For each dataset separately plot a histogram of distribution of "bias deltas" normalized
+    by the respective fit's results variance
     """
-    thresholds_array = [-1,0.,10**(-14),10**(-10),10**(-7), 10**(-5), 10**(-3), 10**(-1)]
     import matplotlib.pyplot as plt
-    for thr in thresholds_array:
-        fig, ax = plt.subplots()
-        bias, variance, n_data = fits_dataset_bias_variance(internal_multiclosure_dataset_loader,
-                                    corr = True, threshold = thr)
-        bias_fits = np.sum(bias, axis = 1)
-        var_fits = np.mean(np.sum(variance, axis = 1), axis = 1)
-        prog_bias_sum = list()
-        prog_var_sum = list()
-        for i in range(bias_fits.size):
-            prog_bias_sum.append(np.sum(bias_fits[:i+1]))
-            prog_var_sum.append(np.sum(var_fits[:i+1]))
-        Nfits = np.arange(1,bias_fits.size+1)
-        try: ratio = np.asarray(prog_bias_sum)/np.asarray(prog_var_sum)
-        except: pass
-        ax.plot(Nfits, ratio, label = "progressive ratio considering correlation for thr = " + str(thr))
-        #ax.axhline(1.0,Nfits, label = "expected b/v ratio")
-        ax.legend()
-        yield fig
-
-@figuregen
-def plot_threshold_dependency_dataset(internal_multiclosure_dataset_loader):
-    """
-    For a dataset plot the dependency of varying the threshold in cutting the observables
-    """
-    thresholds_array = [-1,0.,10**(-14),10**(-10),10**(-7), 10**(-5), 10**(-3), 10**(-1)]
-    import matplotlib.pyplot as plt
-    for thr in thresholds_array:
-
-        fig, ax = plt.subplots(2)
-        bias, variance, n_data = fits_dataset_bias_variance(internal_multiclosure_dataset_loader,
-                                                            corr = True, uncorr = False, threshold = thr)
-        if n_data == 0:
-            pass
-        chi_square_bias = np.sum(bias,axis = 1)
-        chi_square_variance = np.sum(variance, axis = 1)
-        ax[0].hist(np.reshape(bias,bias.size), bins = int(np.sqrt(bias.size)) + 1, label = "Bias, $\chi^2$ with DoF = 1", 
-                   density = True, alpha = 0.4, range = [0,3])
-        ax[0].hist(np.reshape(variance,variance.size), bins = int(np.sqrt(variance.size)) + 1, label = "Variance, $\chi^2$ with DoF = 1", 
-                   density = True, alpha = 0.4, range = [0,3])
-        ax[1].hist(chi_square_bias, bins = int(np.sqrt(chi_square_bias.size))+1, 
-                   label = "Bias, $\chi^2$ with DoF = "+ str(n_data), 
-                   density = True, alpha = 0.4, range =  [n_data/2, 2*n_data])
-        ax[1].hist(chi_square_bias, bins = int(np.sqrt(chi_square_variance.size))+1, 
-                   label = "Variance, $\chi^2$ with DoF = "+ str(n_data), 
-                   density = True, alpha = 0.4, range =  [n_data/2, 2*n_data] )
-        x = np.linspace(0,3,100)
-        ax[0].plot(x, scipy.stats.chi2.pdf(x, 1), label = "expected $\chi^2$")
-        x = np.linspace(n_data/2,2*n_data/2,100)
-        ax[1].plot(x, scipy.stats.chi2.pdf(x, n_data), label = "expected $\chi^2$")
-        ax[0].set_xlabel("bias/variance values")
-        ax[1].set_xlabel("bias/variance values")
-        ax[0].set_ylabel("frequency")
-        ax[1].set_ylabel("frequency")
+    for ds, deltas in zip(each_dataset,datasets_deltas):
+        fig, ax = plt.subplots(1,2)
+        ax[0].hist(deltas.flatten(), label = str(ds), density = True)
+        x = np.linspace(-5,5,100)
+        ax[0].plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
+        ax[0].set_title("Normalized diff central/true val")
+        ax[0].set_xlabel("$\delta$ normalized")
+        ax[0].set_ylabel("Frequency")
         ax[0].legend()
+        p_vals = list()
+        for i in range(deltas.shape[1]):
+            p_vals.append(scipy.stats.ks_1samp(deltas[:,i],scipy.stats.norm.cdf)[1])
+        ax[1].hist(p_vals, density = True, label = "p-values distribution.\n Mean: " + str(np.mean(p_vals)))
+        ax[1].set_xlabel("p-values")
+        ax[1].set_ylabel("Frequency")
+        ax[1].set_title("P-values")
         ax[1].legend()
-        fig.suptitle("Bias and variance considering correlations for threshold = " + str(thr))
+        fig.suptitle("Dataset " + str(ds))
+        fig.tight_layout()
         yield fig
 
-@figure
-def plot_uncorrelated_bias_variance_data(internal_multiclosure_data_loader):
-    return plot_uncorrelated_bias_variance_dataset(internal_multiclosure_data_loader)
 
-@figure
-def plot_uncorrelated_bias_variance_dataset(internal_multiclosure_dataset_loader):
-    # Plot both the bias and variance distribution and the sqrt trend. This is for not doing the same
-    # loading twice
-    import matplotlib.pyplot as plt
-    bias, variance, n_data = fits_dataset_bias_variance(internal_multiclosure_dataset_loader,
-                                        corr = False, uncorr = True, threshold = -1)
-    fig, ax = plt.subplots(2)
-    # considering everything uncorrelated each element of bias and variance can be considered an
-    # independent sample of a standard chi square with 1 DoF
-    sample_size_bias = int(bias.size)
-    sample_size_variance = int(variance.size)
-    flat_bias = np.reshape(bias, sample_size_bias)
-    flat_variance = np.reshape(variance, sample_size_variance)
-    ax[0].hist(flat_bias, bins = int(np.sqrt(sample_size_bias)), alpha = 0.4, 
-               label = "uncorr bias", density = True, range = [0,3])
-    ax[0].hist(flat_variance, bins = int(np.sqrt(sample_size_variance)), alpha = 0.4, 
-               label = "uncorr variance", density = True, range = [0,3])
-    x = np.linspace(0,3,100)
-    ax[0].plot(x, scipy.stats.chi2.pdf(x, 1), label = "expected $\chi^2$ pdf")
-    ax[0].legend()
-    prog_bias_sum = list()
-    prog_var_sum = list()
-    var_fits = np.mean(np.sum(variance, axis = 1), axis = 1)
-    bias_fits = np.sum(bias, axis = 1)
-    for i in range(bias_fits.size):
-        prog_bias_sum.append(np.sum(bias_fits[:i+1]))
-        prog_var_sum.append(np.sum(var_fits[:i+1]))
-    Nfits = np.arange(1,bias_fits.size+1)
-    ratio = np.asarray(prog_bias_sum)/np.asarray(prog_var_sum)
-    ax[1].plot(Nfits, ratio, label = "progressive ratio considering no correlation")
-    #ax[1].axhline(1.0,Nfits, label = "expected b/v ratio")
-    ax[1].legend()
-    
-    return fig
 
-def CDF(x, bins = 1000):
+@table
+def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
+    """For each dataset calculate the expected bias and expected variance
+    across fitsband tabulate the results. Bias and Variance are normalized by number of data points
+
+    Notes
+    -----
+
+    This is to check the weight each dataset/process has in the calculation of the complete R_bv ratio.
+    This is because one dataset alone could have a correct B/V=1 but if Bias and Variance are both centered
+    around a number >> 1 this means that in the calculation of B/V total ratio the specific dataset/
+    process is going to have much more weight than the rest
+
     """
-    Given an array of observations "x" build the cumulative distribution function 
-    """
-    count, bins_count = np.histogram(x, bins=bins)
-    pdf = count / sum(count)
-    cdf = np.cumsum(pdf)
-    return bins_count, pdf, cdf
-
-
-@figure
-def plot_CDF_dataset_KS(alternative_fits_dataset_bias_variance, bins = 1000):
-    biases, variances, n_dat = alternative_fits_dataset_bias_variance
-    import itertools
-    fig, ax = plotutils.subplots()
-    bin_bias_count, pdf_bias, cdf_bias = CDF(biases, bins)
-    bin_var_count, pdf_variance, cdf_variance = CDF(variances, bins)
-    ## probably one cdf ends before the other. Fill the plot to match the domains
-    # take maximum and minimum of 2 domains
-    left = min(min(bin_bias_count[1:]),min(bin_var_count[1:]))
-    right = max(max(bin_var_count[1:]),max(bin_bias_count[1:]))
-
-    #import ipdb; ipdb.set_trace()
-    ax.plot(np.insert(np.insert(bin_bias_count[1:],0,left),bins+1,right), 
-    np.insert(np.insert(cdf_bias,0,0),bins+1,1), label = "cdf of bias")
-    ##Plot the CDF of a normal chi square
-    chi2 = scipy.stats.chi2.cdf(bin_bias_count[1:],n_dat)
-    ax.plot(np.insert(np.insert(bin_var_count[1:],0,left),bins+1,right), 
-    np.insert(np.insert(cdf_variance,0,0),bins+1,1), label = "cdf of variance")
-    ##Find maximum of difference
-    maximum = np.max(abs(np.insert(np.insert(cdf_variance,0,0),bins+1,1)-np.insert(np.insert(cdf_bias,0,0),bins+1,1)))
-    print("maximum diff is: " + str(maximum))
-    ax.legend()
-    return fig
-
-@figure
-def plot_CDF_data_KS(alternative_fits_data_bias_variance, bins = 1000):
-    return plot_CDF_dataset_KS(alternative_fits_data_bias_variance, bins)
-
-@figure
-def plot_hist_bias_variance_dataset(alternative_fits_dataset_bias_variance, bins):
-    fig, ax = plotutils.subplots()
-    biases, variances, n_dat = alternative_fits_dataset_bias_variance
-    ax.hist(biases, bins = 100, label = "bias", alpha = 0.3, density = True)
-    ax.hist(variances, bins = 100, label = "variance", alpha = 0.3, density = True)
-    ax.legend()
-    return fig
-
-@figure
-def plot_hist_bias_variance_data(alternative_fits_data_bias_variance, bins = 1000):
-    return plot_hist_bias_variance_dataset(alternative_fits_data_bias_variance, bins)
-
+    records = []
+    for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
+        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance=var))
+    df = pd.DataFrame.from_records(
+        records, index="dataset", columns=("dataset", "ndata", "bias", "variance")
+    )
+    df.columns = ["ndata", "bias", "variance"]
+    return df
 
 
 @figure
@@ -262,7 +148,7 @@ def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, datas
     # expectation value over fits
     expected_sqrt_ratio = np.sqrt(np.mean(biases) / np.mean(variances))
 
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(
         sqrt_ratio,
         "*",
@@ -316,7 +202,7 @@ def progressive_sqrt_b_v_ratio_dataset(
         prog_var.append(np.mean(variances[0 : i + 1]))
     prog_biases = np.asarray(prog_biases)
     prog_var = np.asarray(prog_var)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(np.sqrt(prog_biases / prog_var), "-", label=f"progressive sqrt b/v ratio")
 
     ax.set_title(f"progressive sqrt b/v ratio for {dataset} for increasing fits")
@@ -384,7 +270,7 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
 @table
 def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     """For each dataset calculate the expected bias and expected variance
-    across fits and tabulate the results. Bias and Variance are normalized by number of data points
+    across fitsband tabulate the results. Bias and Variance are normalized by number of data points
 
     Notes
     -----
@@ -405,7 +291,6 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
     return df
 
 
-# This does not work for now
 @figure
 def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
     """
@@ -419,7 +304,7 @@ def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
         data.append(ndata)
         biases.append(bias)
         variances.append(var)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(ndata, biases, label="biases")
     ax.plot(ndata, variances, label="variances")
     ax.legend()

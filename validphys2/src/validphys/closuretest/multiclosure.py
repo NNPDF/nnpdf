@@ -109,13 +109,52 @@ def internal_multiclosure_data_loader(
     )
 
 @check_multifit_replicas
+def fits_normed_dataset_central_delta(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20):
+    """
+    For each fit calculate the difference between central expectation value and true val. Normalize this
+    value by the variance of the differences between replicas and central expectation value (different
+    for each fit but expected to vary only a little). Each observable central exp value is 
+    expected to be gaussianly distributed around the true value set by the fakepdf
+    """
+    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # One could mask here some reps in order to avoid redundancy of information
+    #TODO
+
+    n_data = len(law_th)
+    n_fits = np.shape(reps)[0]
+    deltas = []
+    # There are n_fits pdf_covariances
+    # flag to see whether to eliminate dataset
+    for i in range(n_fits):
+        bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+        # bias diffs in the for loop should have dim = (n_obs)
+        sigmas = np.sqrt(np.var(reps[i], axis = 1))
+        # var diffs has shape (n_obs,reps)
+        bias_diffs = bias_diffs/sigmas
+        
+        deltas.append(bias_diffs.tolist())
+        # biases.shape = (n_fits, n_obs_cut/uncut)
+        # variances.shape = (n_fits, n_obs_cut/uncut, reps)
+    return np.asarray(deltas)
+
+datasets_deltas = collect(
+    "fits_normed_dataset_central_delta", ("data",)
+)
+
+def fun(datasets_deltas):
+    import ipdb; ipdb.set_trace()
+    return
+
+@check_multifit_replicas
 def fits_dataset_bias_variance(
     internal_multiclosure_dataset_loader,
     _internal_max_reps=None,
-    _internal_min_reps=20,
-    corr = True,
-    uncorr = False,
-    threshold = -1
+    _internal_min_reps=20
 ):
     """
 
@@ -132,7 +171,7 @@ def fits_dataset_bias_variance(
     # There are n_fits pdf_covariances
     # flag to see whether to eliminate dataset
     for i in range(n_fits):
-        #get rows and columns which have too large correlations (these should be the ones that make the
+        # get rows and columns which have too large correlations (these should be the ones that make the
         # matrix ill defined)
         if(np.shape(pdf_cov[i]) == ()):
             bias_diffs = np.asarray(np.mean(reps[i], axis = 1) - law_th.central_value)
@@ -140,37 +179,16 @@ def fits_dataset_bias_variance(
             bias = bias_diffs[0]*bias_diffs[0]/(pdf_cov[i])
             var = np.mean(var_diffs[0]*var_diffs[0])/(pdf_cov[i])
         else:
-            
-            if corr:
-
-                evals, evecs = la.eigh(pdf_cov[i])
-                # get eigenvalues and eigenvectors of pdf_cov
-                # mask evals which are too small
-                if i == 0: 
-                    mask = np.where(evals < threshold)[0]
-                    n_data = n_data - mask.shape[0]
-                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
-                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
-                evecs = np.delete(evecs,mask,1)
-                inv_evals = 1./np.delete(evals,mask)
-                rotated_bias_diffs = evecs.T@bias_diffs
-                rotated_var_diffs = evecs.T@var_diffs
-                bias = rotated_bias_diffs*rotated_bias_diffs*inv_evals
-                var = rotated_var_diffs*rotated_var_diffs*inv_evals[:,np.newaxis]
-                # Here I have for each fit N_observables values for bias and N_obs*reps per variance. 
-                # Each of these values should be taken from the same distribution
-            if uncorr:
-                # simply the same as above without taking into consideration correlations
-                bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
-                var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
-                inv = 1./np.diag(pdf_cov[i])
-                bias = bias_diffs*bias_diffs*inv
-                var = var_diffs*var_diffs*inv[:,np.newaxis]
-        biases.append(bias)
-        variances.append(var)
+            bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+            var_diffs = np.mean(reps[i], axis = 1)[:,np.newaxis] - reps[i]
+            inv = 1./np.diag(pdf_cov[i])
+            bias = bias_diffs*bias_diffs*inv
+            var = var_diffs*var_diffs*inv[:,np.newaxis]
         
+        biases.append(bias.tolist())
+        variances.append(var.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
-        # variances.shape = (N-fits, n_obs_cut/uncut, reps)
+        # variances.shape = (n_fits, n_obs_cut/uncut, reps)
     return np.asarray(biases), np.asarray(variances), n_data
 
 
@@ -188,15 +206,11 @@ def fits_data_bias_variance(
     internal_multiclosure_data_loader,
     _internal_max_reps=None,
     _internal_min_reps=20,
-    corr = True,
-    uncorr = False,
-    threshold = -1
 
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
-        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps,
-        corr, uncorr, threshold
+        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps
     )
 
 
@@ -223,7 +237,6 @@ def fits_total_bias_variance(fits_experiments_bias_variance):
 datasets_expected_bias_variance = collect(
     "expected_dataset_bias_variance", ("data",)
 )
-
 
 experiments_expected_bias_variance = collect(
     "expected_data_bias_variance", ("group_dataset_inputs_by_experiment",)
@@ -412,10 +425,7 @@ def bias_variance_resampling_dataset(
     n_replica_samples,
     bootstrap_samples=100,
     boot_seed=DEFAULT_SEED,
-    use_repeats=True,
-    corr = True,
-    uncorr = False, 
-    threshold = -1
+    use_repeats=True
 ):
     """For a single dataset, create bootstrap distributions of bias and variance
     varying the number of fits and replicas drawn for each resample. Return two
@@ -468,7 +478,7 @@ def bias_variance_resampling_dataset(
                 # explicitly pass n_rep to fits_dataset_bias_variance so it uses
                 # full subsample
                 bias, variance, _ = expected_dataset_bias_variance(
-                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample, corr, uncorr, threshold)
+                    fits_dataset_bias_variance(boot_internal_loader, n_rep_sample)
                 )
                 bias_boot.append(bias)
                 variance_boot.append(variance)
