@@ -61,7 +61,7 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
       sys[i]   *= 1e6;
       lumi[i]  *= 1e6;
     }
-
+  
   //Correlation coefficients
   for(int i=0; i<25; i++)
     {
@@ -114,7 +114,7 @@ void ATLAS_WZ_TOT_13TEVFilter::ReadData()
     {
       throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
-
+  
   for(int i=0; i<fNData; i++)
     {
       for(int j=0; j<fNData; j++)

@@ -42,6 +42,11 @@ def test_plot_smpdf(single_data_internal_cuts_config):
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare
+def test_plot_smpdf_categorical(single_data_categorical_internal_cuts_config):
+    return next(API.plot_smpdf(**single_data_categorical_internal_cuts_config))
+
+@pytest.mark.linux
+@pytest.mark.mpl_image_compare
 def test_plot_obscorrs(single_data_internal_cuts_config):
     corrpair = [{"corrpair": (i["dataset"],)} for i in DATA[:2]]
     return API.plot_obscorrs(**single_data_internal_cuts_config, corrpair=corrpair)

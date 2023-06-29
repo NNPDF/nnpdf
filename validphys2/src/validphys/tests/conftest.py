@@ -27,6 +27,8 @@ SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
 
 SINGLE_DATASET = {'dataset': 'NMC'}
 
+SINGLE_CATEGORICAL = {"dataset": "ATLAS_WZ_TOT_13TEV", 'cfac': ["QCD"]}
+
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
@@ -54,6 +56,7 @@ PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
 THEORYID_NEW = 399
+THEORY_QED = 398
 FIT = "NNPDF40_nnlo_lowprecision"
 FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
 FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"
@@ -94,6 +97,16 @@ def single_data_internal_cuts_config(data_internal_cuts_config):
     config_dict.pop("dataset_inputs")
     config_dict.update(dataset_input=DATA[0])
     return config_dict
+
+@pytest.fixture(scope='module')
+def single_data_categorical_internal_cuts_config(data_internal_cuts_config):
+    """Test dataset with categorical plotting variables"""
+    return {
+        **data_internal_cuts_config,
+        'dataset_input': SINGLE_CATEGORICAL,
+        # NOTE: The old theory is currently bugged for this dataset
+        'theoryid': THEORYID_NEW,
+    }
 
 @pytest.fixture(scope='module')
 def single_data_single_point_internal_cuts_config(single_data_internal_cuts_config):

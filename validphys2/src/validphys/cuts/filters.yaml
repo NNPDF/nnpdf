@@ -76,12 +76,46 @@
   PTO: NNLO+
   rule: "etay >= 2.25"
 
+- dataset: LHCBWMU8TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  # Only evaluate rule if PTO matches
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBZMU8TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  # Only evaluate rule if PTO matches
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
 - dataset: LHCBWZMU7TEV
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   PTO: NNLO+
+  rule: "etay >= 2.25"
+
+- dataset: LHCBWMU7TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBZMU7TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  PTO: NNLO
   rule: "etay >= 2.25"
 
 - dataset: LHCB_Z_13TEV_DIELECTRON

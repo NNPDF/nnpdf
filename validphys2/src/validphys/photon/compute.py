@@ -17,9 +17,9 @@ from .constants import ED2, EU2, NC, NL
 
 log = logging.getLogger(__name__)
 
+# not the complete fiatlux runcard since some parameters are set in the code
 FIATLUX_DEFAULT = {
     "apfel": False,
-    "eps_base": 1e-5,  # precision on final integration of double integral.
     "eps_rel": 1e-1,  # extra precision on any single integration.
     "mum_proton": 2.792847356,  # proton magnetic moment, from
     # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
@@ -59,6 +59,15 @@ class Photon:
         # This is going to be changed in favor of a bool em_running
         # in the runcard
         fiatlux_runcard["mproton"] = theory["MP"]
+
+        # precision on final integration of double integral
+        if "eps_base" in lux_params:
+            fiatlux_runcard["eps_base"] = lux_params["eps_base"]
+            log.warning(f"Using fiatlux parameter eps_base from runcard")
+        else:
+            fiatlux_runcard["eps_base"] = 1e-5
+            log.info(f"Using default value for fiatlux parameter eps_base")
+
         self.replicas = replicas
 
         # structure functions
@@ -72,7 +81,6 @@ class Photon:
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
         with EKO.read(self.path_to_eko_photon) as eko:
             self.q_in = np.sqrt(eko.mu20)
-        
 
         # set fiatlux
         self.lux = {}
@@ -112,7 +120,9 @@ class Photon:
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
             photon_array = self.compute_photon_array(replica)
-            self.interpolator.append(interp1d(XGRID, photon_array, fill_value=0.0, kind="cubic"))
+            self.interpolator.append(
+                interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic")
+            )
             self.integral.append(trapezoid(photon_array, XGRID))
 
     def compute_photon_array(self, replica):
@@ -131,7 +141,9 @@ class Photon:
         """
         # Compute photon PDF
         log.info(f"Computing photon")
-        photon_qin = np.array([self.lux[replica].EvaluatePhoton(x, self.q_in**2).total for x in XGRID])
+        photon_qin = np.array(
+            [self.lux[replica].EvaluatePhoton(x, self.q_in**2).total for x in XGRID]
+        )
         photon_qin += self.generate_errors(replica)
         # fiatlux computes x * gamma(x)
         photon_qin /= XGRID
