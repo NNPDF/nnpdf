@@ -18,7 +18,21 @@ def generate_neutron_mask(number_fl):
     proton ones. Assumming `isospin asymmetry` the relation between
     the two bound PDFs is trivial. Basically, the bound-neutron PDFs
     are extracted from the proton counterpart by adding a `minus` sign
-    to T3 and V3."""
+    to T3 and V3.
+    
+    Parameters
+    ----------
+    number_fl: list
+        `number_fl`-PDF in evolution basis (according to FK tables
+        this should always be 14)
+
+    Returns
+    -------
+    generate_neutron_mask: tf.tensor
+        tensor object that defines the appropriate sign to each
+        PDF flavour
+
+    """
 
     # TODO: Make this modular depending on the Fitting Basis
     neutron_mask = np.ones(number_fl)
