@@ -41,7 +41,8 @@ def generate_gaussians(datasets_deltas, each_dataset):
     import matplotlib.pyplot as plt
     for ds, deltas in zip(each_dataset,datasets_deltas):
         fig, ax = plt.subplots(1,2)
-        ax[0].hist(deltas.flatten(), label = str(ds), density = True)
+        ax[0].hist(deltas.flatten(), label = str(ds)+ "\n N obs = " + str(deltas.shape[1]), density = True)
+        #import ipdb; ipdb.set_trace()
         x = np.linspace(-5,5,100)
         ax[0].plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
         ax[0].set_title("Normalized diff central/true val")
@@ -56,7 +57,7 @@ def generate_gaussians(datasets_deltas, each_dataset):
         ax[1].set_ylabel("Frequency")
         ax[1].set_title("P-values")
         ax[1].legend()
-        fig.suptitle("Dataset " + str(ds))
+        fig.suptitle(str(ds) + "; N fits = "  + str(deltas.shape[0]))
         fig.tight_layout()
         yield fig
 
@@ -292,22 +293,26 @@ def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
 
 
 @figure
-def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
+def plot_bias_variance_ndata(datasets_expected_bias_variance):
     """
-    plot the trend of bias and variance with the number of points. It is expected that all these lie
-    on a line
+    plot the trend of mean bias and mean variance with the number of points. 
+    It is expected that all these lie on a straight line
     """
     data = []
     biases = []
     variances = []
-    for bias, var, ndata in zip(datasets_expected_bias_variance):
+    #import ipdb; ipdb.set_trace()
+    for (bias, var, ndata) in (datasets_expected_bias_variance):
+        #import ipdb; ipdb.set_trace()
         data.append(ndata)
         biases.append(bias)
         variances.append(var)
+    #import ipdb; ipdb.set_trace()
     fig, ax = plotutils.subplots()
-    ax.plot(ndata, biases, label="biases")
-    ax.plot(ndata, variances, label="variances")
+    ax.plot(data, biases, label="biases", linestyle = "None", marker = ".")
+    ax.plot(data, variances, label="variances", linestyle = "None", marker = ".")
     ax.legend()
+    ax.set_title("Bias Variance trend wrt number of data per dataset")
 
     return fig
 
