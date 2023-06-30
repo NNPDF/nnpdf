@@ -3,7 +3,7 @@
 #
 
 ############################################################
-description: Architecture Testing - No modifications
+description: Architecture Testing - With Input --> last layer skip-connection
 
 dataset_inputs:
 # Fixed target DIS
@@ -61,7 +61,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   initializer: glorot_normal
   optimizer:
     clipnorm: 0.001
-    learning_rate: 0.01
+    learning_rate: 0.001
     optimizer_name: Nadam
   epochs: 5000
   positivity:
