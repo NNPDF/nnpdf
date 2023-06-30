@@ -302,7 +302,6 @@ def generate_dense_network(
     regularizer=None,
     skip_connections={},
     skip_full=False,
-    emb_att=False,
     kernels=False
 ):
     """
@@ -315,10 +314,7 @@ def generate_dense_network(
 
     list_of_pdf_layers = []
     
-    # add attention layer(s) to network
-    if emb_att:
-        list_of_pdf_layers.append(base_layer_selector("attention", use_scale=True))
-        
+    # add the Gaussian Kernel layer to the network
     if kernels:
         list_of_pdf_layers.append(base_layer_selector("gaussian_kernel"))
     
@@ -333,10 +329,6 @@ def generate_dense_network(
         # if we have dropout set up, add it to the list
         if i == dropout_layer:
             list_of_pdf_layers.append(base_layer_selector("dropout", rate=dropout_rate))
-
-        if i in skip_connections:
-            # list_of_pdf_layers.append(base_layer_selector('add'))
-            list_of_pdf_layers.append(base_layer_selector('concatenate'))
 
         # select the initializer and move the seed
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
@@ -354,6 +346,8 @@ def generate_dense_network(
 
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
+        
+        # add a concatenation layer for the fully connected model
         if skip_full and i != number_of_layers-1:
             concat_shape += nodes_out
             list_of_pdf_layers.append(base_layer_selector('concatenate'))
@@ -429,7 +423,8 @@ def pdfNN_layer_generator(
     impose_sumrule=None,
     scaler=None,
     parallel_models=1,
-    arch_mods={}
+    arch_mods={},
+    nx=2000
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -528,10 +523,11 @@ def pdfNN_layer_generator(
        pdf_models: list with a number equal to `parallel_models` of type n3fit.backends.MetaModel
             a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
     """
+    
+    # dict containing all possible architecture modifications
     mods = {
         'skip_connections': {},
         'skip_full': False,
-        'emb_att': False,
         'kernels': False
     }
 
@@ -613,7 +609,7 @@ def pdfNN_layer_generator(
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(nx=1210, mode=impose_sumrule, scaler=scaler)
+        sumrule_layer, integrator_input = msr_impose(nx=nx, mode=impose_sumrule, scaler=scaler)
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
@@ -633,7 +629,6 @@ def pdfNN_layer_generator(
                 regularizer=reg,
                 skip_connections=mods['skip_connections'],
                 skip_full=mods['skip_full'],
-                emb_att= mods["emb_att"],
                 kernels=mods['kernels']
             )
         elif layer_type == "dense_per_flavour":
@@ -659,23 +654,16 @@ def pdfNN_layer_generator(
 
             extra_index = 0
             for i, layer in enumerate(list_of_pdf_layers):
-                # for attention modification: self-attention requires the input be given twice
-                if 'attention' in layer.name:
-                    current.append(layer([x,x]))
 
                 # for a fully connected network: Concatenate all outputs of layers except for those from Concatenate or 
                 # Dropout layers
-                elif mods['skip_full'] and 'concatenate' in layer.name:
+                if mods['skip_full'] and 'concatenate' in layer.name:
                     current.append(layer([x for x in current if ('concatenate' not in str(x) and 'dropout' not in str(x))]))
-                
-                # for simple skip_connections, Add together the requested layers, 
-                # skipping Dropout and previous Add layers using an extra_index
-                elif 'dropout' in layer.name:
-                    current.append(layer(current[-1]))
-                    extra_index += 1
+
+                # for simple skip connections, add a concetanate layer between every dense layer
                 elif i in skip:
-                    current.append(layer([current[skip[i]], current[-1]]))
-                    extra_index += 1
+                    current.append(base_layer_selector('concatenate')([current[skip[i]], current[-1]]))
+                    current.append(layer(current[-1]))
                 
                 # or if just a regular dense layer
                 else:
@@ -725,8 +713,6 @@ def pdfNN_layer_generator(
         pdf_model = MetaModel(
             model_input, final_pdf(placeholder_input), name=f"PDF_{i}", scaler=scaler
         )
-        path="/data/theorie/abos/nnpdfgit/nnpdf/n3fit/examples/runcards/architecture_mod/"
-        pdf_model.summary()
 
         pdf_models.append(pdf_model)
     return pdf_models

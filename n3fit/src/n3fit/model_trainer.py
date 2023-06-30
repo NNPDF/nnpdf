@@ -685,6 +685,12 @@ class ModelTrainer:
         """
         log.info("Generating PDF models")
 
+        # change nx to the size of the training data
+        if dict(arch_mods).get('kernels'):
+            nx = 1210
+        else:
+            nx = 2000
+            
         # Set the parameters of the NN
         # Generate the NN layers
         pdf_models = model_gen.pdfNN_layer_generator(
@@ -701,7 +707,8 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
-            arch_mods=dict(arch_mods)
+            arch_mods=dict(arch_mods),
+            nx = nx
         )
         return pdf_models
 

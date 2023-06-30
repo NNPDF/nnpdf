@@ -289,6 +289,12 @@ def performfit(
             training_chi2 = np.take(all_training_chi2, i)
             val_chi2 = np.take(all_val_chi2, i)
             exp_chi2 = np.take(all_exp_chi2, i)
+        
+            # data cannot be written to log files with kernel methods because of dimensionality problems
+            # so kernel is given as parameter to writer_wrapper to turn off some functions
+            kernel = None
+            if parameters.get('arch_mods'):
+                kernel = parameters.get('arch_mods')[0][0] == 'kernels'
 
             # And write the data down
             writer_wrapper.write_data(
@@ -297,7 +303,7 @@ def performfit(
                 training_chi2, 
                 val_chi2, 
                 exp_chi2, 
-                kernel=parameters.get('arch_mods')[0][0] == 'kernels'
+                kernel=kernel
             )
 
             log.info(

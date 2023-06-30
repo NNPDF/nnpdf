@@ -71,11 +71,14 @@ class GaussianKernel(MetaLayer):
         super(GaussianKernel, self).__init__()
 
     def build(self, input_shape):
+        # adds sigma as a trainable weight to the model
         self.sigma = self.add_weight("sigma", shape=(1,), initializer=Constant(1), trainable=True)
         super(GaussianKernel, self).build(input_shape)
 
     def call(self, inputs):
+        # make a matrix where each element ij is the mean squared error of i and j in the input
         mse = math.square(norm(expand_dims(inputs, axis=2) - expand_dims(inputs, axis=1), axis=3))
+        # apply gaussian kernel function to each mse and return the kernel matrix
         return math.exp(-mse/(2*self.sigma))
         
 
@@ -160,8 +163,6 @@ layers = {
     "reshape": (Reshape, {"target_shape":None}),
     "add": (Add, {}),
     "embedding": (Embedding, {"input_dim": (1,), "output_dim": 8}),
-    "attention": (Attention, {"use_scale": True}),
-    "kernel_layer": (RandomFourierFeatures, {"output_dim":15, 'scale': 1, 'kernel_initializer':"gaussian"})
 }
 
 regularizers = {

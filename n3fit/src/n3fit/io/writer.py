@@ -11,7 +11,7 @@ from reportengine.compat import yaml
 import validphys
 import n3fit
 from n3fit import vpinterface
-# from scipy.interpolate import interp1d
+from scipy.interpolate import interp1d
 
 XGRID = np.array(
     [
@@ -214,6 +214,7 @@ XGRID = np.array(
     ]
 )
 
+# can be used if kernel methods are applied to change data size to input data size
 # f = interp1d(np.arange(0,len(XGRID),1), XGRID)
 # XGRID = f(np.arange(0, 195, 195/1210))
 
@@ -243,7 +244,7 @@ class WriterWrapper:
         self.q2 = q2
         self.timings = timings
 
-    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2, kernel):
+    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2, kernel=None):
         """
         Wrapper around the `storefit` function.
 
@@ -285,7 +286,7 @@ class WriterWrapper:
         # export all metadata from the fit to a single yaml file
         output_file = f"{replica_path_set}/{fitname}.json"
         json_dict = jsonfit(
-            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings
+            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings, kernel=kernel
         )
         with open(output_file, "w", encoding="utf-8") as fs:
             json.dump(json_dict, fs, indent=2, cls = SuperEncoder)
@@ -299,7 +300,7 @@ class SuperEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing):
+def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing, kernel=None):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
@@ -330,9 +331,9 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = replica_status.positivity_status
-    all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
-    print('archlengths', all_info["arc_lengths"])
-    all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
+    if not kernel:
+        all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
+        all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
     all_info["timing"] = timing
     # Versioning info
     all_info["version"] = version()
@@ -455,10 +456,8 @@ def storefit(
     """
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
-    print(xgrid.shape)
         
     result = pdf_object(xgrid, flavours="n3fit").squeeze()
-    print(result, result.shape)
     lha = evln2lha(result.T).T
 
     data = {
