@@ -6,9 +6,54 @@ reports i.e figures or tables for (inconsistent) multiclosure
 estimators in the space of data
 
 """
+import pandas as pd
+import numpy as np
 
 from reportengine.figure import figure
+from reportengine.table import table
+
 from validphys import plotutils
+
+
+@table
+def datasets_bias_variance_pca_table(
+    expected_datasets_fits_bias_variance_samples_pca, each_dataset
+):
+    """For each dataset calculate the expected bias and expected variance computed by
+    first projecting the covariance matrix into a lower dimensional space trough PCA.
+
+    """
+    records = []
+    for ds, (bias, var, ndata) in zip(
+        each_dataset, expected_datasets_fits_bias_variance_samples_pca
+    ):
+        records.append(
+            dict(
+                dataset=str(ds),
+                ndata=ndata,
+                bias=bias,
+                variance=var,
+                ratio=bias / var,
+                ratio_sqrt=np.sqrt(bias / var),
+            )
+        )
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=("dataset", "ndata", "bias", "variance", "ratio", "ratio_sqrt"),
+    )
+    df.columns = ["ndata", "bias", "variance", "ratio", "sqrt(ratio)"]
+    return df
+
+
+@figure
+def plot_sqrt_ratio_distribution_pca(dataset_fits_ratio_bias_variance_samples_pca):
+    """"""
+    sqrt_ratios = dataset_fits_ratio_bias_variance_samples_pca
+    fig, ax = plotutils.subplots()
+    ax.hist(sqrt_ratios, bins='auto', density=True, alpha=0.5, label="sqrt_ratio")
+    ax.legend()
+    return fig
 
 
 @figure
