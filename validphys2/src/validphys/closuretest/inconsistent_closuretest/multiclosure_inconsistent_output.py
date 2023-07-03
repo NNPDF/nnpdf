@@ -12,33 +12,6 @@ from validphys import plotutils
 
 
 @figure
-def plot_replica_central_diff_multi(dataset_replica_minus_central_multi, dataspecs):
-    """
-    histogram of the distribution of the differences between central replica
-    and replicas.
-    Datapoints are averaged over.
-    """
-    fig, ax = plotutils.subplots()
-
-    for ds_replica_minus_central, spec in zip(dataset_replica_minus_central_multi, dataspecs):
-        diff, _, _ = ds_replica_minus_central
-
-        label = spec['speclabel']
-
-        ax.hist(
-            diff,
-            bins='auto',
-            density=True,
-            alpha=0.5,
-            label=f"{label}",
-        )
-
-    ax.legend()
-
-    return fig
-
-
-@figure
 def plot_variance_distribution_multi(multi_dataset_fits_bias_replicas_variance_samples, dataspecs):
     """
     histogram of the distribution of the variances (k) defined as the
