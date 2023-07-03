@@ -599,5 +599,8 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
             closuretest_data["filterseed"] = random.randrange(0, maxint)
+    
+    if "fiatlux" in filtermap:
+        filtermap['fiatlux']['luxset'] = fit.name
 
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
