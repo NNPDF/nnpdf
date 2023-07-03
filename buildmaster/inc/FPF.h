@@ -1,38 +1,44 @@
+// FPF-related Data
 #pragma once
 
 #include "buildmaster_utils.h"
 
-class FASERVBARFilter: public CommonData
+// FASERV2 EXPERIMENTS //
+// Filter for Inlusive NU productions @ FASERV2
+class FASERV2NUINCLUSIVEFilter: public CommonData
 {
-public: FASERVBARFilter():
-  CommonData("FASERVBAR") { ReadData(); }
+public: FASERV2NUINCLUSIVEFilter():
+  CommonData("FASERV2NU_DSIGMA_INCLUSIVE") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class FASERVFilter: public CommonData
+// Filter for Inlusive NUB productions @ FASERV2
+class FASERV2NBINCLUSIVEFilter: public CommonData
 {
-public: FASERVFilter():
-  CommonData("FASERV") { ReadData(); }
+public: FASERV2NBINCLUSIVEFilter():
+  CommonData("FASERV2NB_DSIGMA_INCLUSIVE") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class FASERVBAR2Filter: public CommonData
+// Filter for Charm NU productions @ FASERV2
+class FASERV2NUCHARMFilter: public CommonData
 {
-public: FASERVBAR2Filter():
-  CommonData("FASERVBAR2") { ReadData(); }
+public: FASERV2NUCHARMFilter():
+  CommonData("FASERV2NU_DSIGMA_CHARM") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class FASERV2Filter: public CommonData
+// Filter for Charm NUB productions @ FASERV2
+class FASERV2NBCHARMFilter: public CommonData
 {
-public: FASERV2Filter():
-  CommonData("FASERV2") { ReadData(); }
+public: FASERV2NBCHARMFilter():
+  CommonData("FASERV2NB_DSIGMA_CHARM") { ReadData(); }
 
 private:
   void ReadData();

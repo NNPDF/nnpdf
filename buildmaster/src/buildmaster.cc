@@ -581,10 +581,10 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new CMS_2JET_5TEVFilter()); // DIJET
 
   // **************** FPF *****************************
-  target.emplace_back(new FASERVBARFilter());
-  target.emplace_back(new FASERVFilter());
-  target.emplace_back(new FASERVBAR2Filter());
-  target.emplace_back(new FASERV2Filter());
+  target.emplace_back(new FASERV2NUINCLUSIVEFilter());
+  target.emplace_back(new FASERV2NBINCLUSIVEFilter());
+  target.emplace_back(new FASERV2NUCHARMFilter());
+  target.emplace_back(new FASERV2NBCHARMFilter());
 
 
   return target;
