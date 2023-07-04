@@ -585,6 +585,8 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new FASERV2NBINCLUSIVEFilter());
   target.emplace_back(new FASERV2NUCHARMFilter());
   target.emplace_back(new FASERV2NBCHARMFilter());
+  target.emplace_back(new FASERV2SUMCHARMFilter());
+  target.emplace_back(new FASERV2SUMINCLUSIVEFilter());
 
 
   return target;
