@@ -78,6 +78,15 @@ def plot_variance_distribution_multi(multi_dataset_fits_bias_replicas_variance_s
 
 
 @figure
+def plot_variance_distribution_pca_multi(multi_dataset_fits_bias_variance_samples_pca, dataspecs):
+    """
+    like `plot_variance_distribution_multi`, but for variance computed with the covariance matrix
+    predicted by the PDFs (and reduced with PCA).
+    """
+    return plot_variance_distribution_multi(multi_dataset_fits_bias_variance_samples_pca, dataspecs)
+
+
+@figure
 def plot_bias_distribution_multi(multi_dataset_fits_bias_replicas_variance_samples, dataspecs):
     """
     histogram of the distribution of the biases (l) defined as the
@@ -93,6 +102,36 @@ def plot_bias_distribution_multi(multi_dataset_fits_bias_replicas_variance_sampl
         label = spec['speclabel']
 
         ax.hist(bias_dist, bins='auto', density=True, alpha=0.5, label=label)
+
+    ax.legend()
+    return fig
+
+
+@figure
+def plot_bias_distribution_pca_multi(multi_dataset_fits_bias_variance_samples_pca, dataspecs):
+    """
+    like `plot_bias_distribution_multi`, but for variance computed with the covariance matrix
+    predicted by the PDFs (and reduced with PCA).
+    """
+    return plot_bias_distribution_multi(multi_dataset_fits_bias_variance_samples_pca, dataspecs)
+
+
+@figure
+def plot_sqrt_ratio_distribution_pca(multi_dataset_fits_bias_variance_samples_pca, dataspecs):
+    """
+    histogram of the distribution of the sqrt ratio of bias and variance computed with
+    the estimated "PDF" covariance matrix (reduced with PCA).
+    If more than one group of dataspecs (e.g. consistent and inconsistent)
+    fits are defined, than plot comparison of these.
+    """
+    fig, ax = plotutils.subplots()
+    for (bias_dist, variance_dist, _), spec in zip(
+        multi_dataset_fits_bias_variance_samples_pca, dataspecs
+    ):
+        label = spec['speclabel']
+        sqrt_ratios = np.sqrt(bias_dist / variance_dist)
+
+        ax.hist(sqrt_ratios, bins='auto', density=True, alpha=0.5, label=label)
 
     ax.legend()
     return fig

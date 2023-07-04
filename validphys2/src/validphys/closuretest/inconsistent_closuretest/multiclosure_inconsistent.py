@@ -29,6 +29,10 @@ multi_fits_bootstrap_dataset_bias_variance = collect(
 
 multi_bias_variance_resampling_dataset = collect("bias_variance_resampling_dataset", ("dataspecs",))
 
+multi_dataset_fits_bias_variance_samples_pca = collect(
+    "dataset_fits_bias_variance_samples_pca", ("dataspecs",)
+)
+
 
 def compute_num_components(covariance_matrix, threshold=0.99):
     """
@@ -97,13 +101,13 @@ def calc_chi2_pca(pdf_cov, diff, num_components):
         sqrt_pdf_cov_pca = covmats.sqrt_covmat(pdf_cov_pca)
     except:
         raise ValueError(
-            "PCA Covariance Matrix cannot be Cholesky decomposed, perhaps less than {num_components} PC should be kept"
+            f"PCA Covariance Matrix cannot be Cholesky decomposed, perhaps less than {num_components} PC should be kept"
         )
 
     return np.real(calc_chi2(sqrt_pdf_cov_pca, diff_pca.T))
 
 
-def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader, threshold=0.99):
+def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader, threshold=0.999):
     """
     similar to `dataset_fits_bias_replicas_variance_samples`.
 
@@ -127,6 +131,9 @@ def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader,
     centrals = reps.mean(axis=2)
 
     # compute the PDF covariance matrix of the central samples
+    if centrals.shape[0] <=1:
+        raise ValueError(f"Need more than one fit to compute the 'Bias' PDF covariance Matrix")
+    
     pdf_cov_bias = np.cov(centrals.T)
 
     # find number of (ordered) eigenvalues that explain 99% of the total variance (total sum of eigenvalues)
@@ -134,7 +141,6 @@ def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader,
 
     # compute bias from PCs
     diffs_bias = centrals.T - law_th.central_value[:, np.newaxis]
-
     biases = calc_chi2_pca(pdf_cov_bias, diffs_bias, n_eig)
 
     # compute variances from PCs
@@ -144,9 +150,9 @@ def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader,
     for i in range(reps.shape[0]):
         diffs_var = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
         pdf_cov_var = np.cov(reps[i, :, :])
-
+        
         variances.append(np.mean(calc_chi2_pca(pdf_cov_var, diffs_var, n_eig)))
-
+    
     return biases, np.asarray(variances), n_eig
 
 
