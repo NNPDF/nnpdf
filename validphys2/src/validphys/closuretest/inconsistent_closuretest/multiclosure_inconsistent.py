@@ -107,7 +107,7 @@ def calc_chi2_pca(pdf_cov, diff, num_components):
     return np.real(calc_chi2(sqrt_pdf_cov_pca, diff_pca.T))
 
 
-def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader, threshold=0.999):
+def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader, threshold=0.99):
     """
     similar to `dataset_fits_bias_replicas_variance_samples`.
 
