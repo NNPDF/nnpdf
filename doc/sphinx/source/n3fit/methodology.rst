@@ -127,7 +127,8 @@ provide a faster convergence to the solution.
 	Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 
 
-To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below:
+To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below.
+See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
 
 .. code-block:: python
 
