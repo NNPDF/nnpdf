@@ -14,8 +14,6 @@ from dataclasses import dataclass
 
 import numpy as np
 from n3fit.msr import generate_msr_model_and_grid
-from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers.observable import is_unique
 
 from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
