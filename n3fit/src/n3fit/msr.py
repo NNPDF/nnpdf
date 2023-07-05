@@ -59,12 +59,8 @@ def generate_msr_model_and_grid(
     if scaler:
         xgrid_integration = scaler(xgrid_integration)
 
-    # Turn into input layer. Specify a custom shape here using None,
-    # so shapes will display properly in the model summary
-    grid_shape = 2 if scaler is not None else 1
-    xgrid_integration = op.numpy_to_input(
-        xgrid_integration, name="integration_grid", custom_shape=(None, grid_shape)
-    )
+    # Turn into input layer.
+    xgrid_integration = op.numpy_to_input(xgrid_integration, name="integration_grid")
 
     # 1c Get the original grid
     if scaler:

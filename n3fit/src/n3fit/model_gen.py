@@ -577,9 +577,7 @@ def pdfNN_layer_generator(
             input_x_eq_1 = scaler(input_x_eq_1)[0]
         # the layer that subtracts 1 from the NN output
         subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
-        layer_x_eq_1 = op.numpy_to_input(
-            np.array(input_x_eq_1).reshape(1, 1), name='x_ones', custom_shape=(None, 1)
-        )  # Just to make shapes consistent
+        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1), name='x_eq_1')
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
     # the layer that multiplies the NN output by the preprocessing factor

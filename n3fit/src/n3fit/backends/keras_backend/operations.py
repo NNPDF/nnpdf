@@ -114,9 +114,7 @@ def batchit(x, batch_dimension=0, **kwarg):
 # layer generation
 def numpy_to_input(
     numpy_array: np.ndarray,
-    no_reshape: bool = False,
     name: str = None,
-    custom_shape: tuple = None,
 ):
     """
     Takes a numpy array and generates a Input layer.
@@ -126,26 +124,17 @@ def numpy_to_input(
     Parameters
     ----------
         numpy_array: np.ndarray
-        no_reshape: bool
-            if true, don't add batch dimension, take the first dimension of the array as the batch
         name: bool
             name to give to the layer
-        custom_shape: tuple
-            To specify a more general shape with None values
     """
-    if no_reshape:
-        batched_array = numpy_array
-        batch_size = numpy_array.shape[0]
-        shape = numpy_array.shape[1:]
-    else:
-        batched_array = np.expand_dims(numpy_array, 0)
-        batch_size = 1
-        shape = numpy_array.shape
-    if custom_shape is not None:
-        shape = custom_shape
+    batched_array = np.expand_dims(numpy_array, 0)
+    batch_size = 1
+    shape = list(numpy_array.shape)
+    # set the number of gridpoints to None, otherwise shapes don't show in model.summary
+    shape[0] = None
+
     input_layer = Input(batch_size=batch_size, shape=shape, name=name)
     input_layer.tensor_content = batched_array
-    input_layer.original_shape = no_reshape
     return input_layer
 
 
