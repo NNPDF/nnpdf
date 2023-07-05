@@ -85,11 +85,21 @@ def msr_impose(nx=int(2e3), mode='All', scaler=None):
             layer_pdf: output of the PDF, unnormalized, ready for the fktable
         """
         x_original = op.op_gather_keep_dims(nn_input, 0, axis=-1)
-        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(nn_input)])
-        # import ipdb; ipdb.set_trace()
-        normalization = normalizer(integrator(pdf_integrand))
 
         def ultimate_pdf(x):
+            # TODO: Replace the following with better implementation
+            nn_input_1 = op.op_gather_keep_dims(nn_input, 0, axis=-1)
+
+            a_values_nn = op.op_gather_keep_dims(x, 1, axis=-1)  # Get `A` from the NN input
+            a_nn_inputs = op.tf_add_target_dependence(x_original, a_values_nn[0, 0, 0])
+            nn_input_2 = op.op_gather_keep_dims(a_nn_inputs, 1, axis=-1)
+
+            nn_input_c = op.concatenate([nn_input_1, nn_input_2])
+
+            pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(nn_input_c)])
+            # import ipdb; ipdb.set_trace()
+            normalization = normalizer(integrator(pdf_integrand))
+
             return layer_pdf(x)*normalization
 
         return ultimate_pdf

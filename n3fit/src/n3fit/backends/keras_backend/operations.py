@@ -405,3 +405,8 @@ def add_target_dependence(xgrid, a_value):
 
     a_value_expand = np.full(xgrid.shape, a_value)
     return np.concatenate((xgrid, a_value_expand), axis=-1)
+
+def tf_add_target_dependence(tensor_input, a_value):
+    """Similar to `add_target_dependence` but for tensors."""
+    a_value_expand = tf.fill(tensor_input.shape, a_value)
+    return tf.concat([tensor_input, a_value_expand], axis=-1)
