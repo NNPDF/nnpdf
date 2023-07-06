@@ -185,7 +185,6 @@ def fits_dataset_bias_variance(
         variances.append(var.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
-    #import ipdb; ipdb.set_trace()
     return np.asarray(biases), np.asarray(variances), n_data
 
 
@@ -195,7 +194,7 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
     """
     biases, variances, n_data = fits_dataset_bias_variance
-    return (np.sum(biases), np.mean(np.sum(np.mean(variances,axis = 2),axis=1),axis = 0), n_data)
+    return (np.mean(np.sum(biases, axis = 1), axis = 0), np.mean(np.sum(np.mean(variances,axis = 2),axis=1),axis = 0), n_data)
 
 
 @check_multifit_replicas

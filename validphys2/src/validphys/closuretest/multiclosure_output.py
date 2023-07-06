@@ -39,7 +39,10 @@ def generate_gaussians(datasets_deltas, each_dataset):
     by the respective fit's results variance
     """
     import matplotlib.pyplot as plt
+    overall_deltas = list()
+    overall_p_vals = list()
     for ds, deltas in zip(each_dataset,datasets_deltas):
+        overall_deltas.append(deltas.flatten().tolist())
         fig, ax = plt.subplots(1,2)
         ax[0].hist(deltas.flatten(), label = str(ds)+ "\n N obs = " + str(deltas.shape[1]), density = True)
         #import ipdb; ipdb.set_trace()
@@ -51,7 +54,9 @@ def generate_gaussians(datasets_deltas, each_dataset):
         ax[0].legend()
         p_vals = list()
         for i in range(deltas.shape[1]):
-            p_vals.append(scipy.stats.ks_1samp(deltas[:,i],scipy.stats.norm.cdf)[1])
+            p = scipy.stats.ks_1samp(deltas[:,i],scipy.stats.norm.cdf)[1]
+            p_vals.append(p)
+            overall_p_vals.append(p)
         ax[1].hist(p_vals, density = True, label = "p-values distribution.\n Mean: " + str(np.mean(p_vals)))
         ax[1].set_xlabel("p-values")
         ax[1].set_ylabel("Frequency")
@@ -60,6 +65,26 @@ def generate_gaussians(datasets_deltas, each_dataset):
         fig.suptitle(str(ds) + "; N fits = "  + str(deltas.shape[0]))
         fig.tight_layout()
         yield fig
+    import itertools
+    overall_deltas = list(itertools.chain(*overall_deltas))
+    fig, ax = plt.subplots(1,2)
+    ax[0].hist(overall_deltas, label = "all data aggregated", density = True)
+    #import ipdb; ipdb.set_trace()
+    x = np.linspace(-5,5,100)
+    ax[0].plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
+    ax[0].set_title("Normalized diff central/true val")
+    ax[0].set_xlabel("$\delta$ normalized")
+    ax[0].set_ylabel("Frequency")
+    ax[0].legend()
+    ax[1].hist(overall_p_vals, density = True, label = "p-values distribution.\n Mean: " + str(np.mean(overall_p_vals)))
+    ax[1].set_xlabel("p-values")
+    ax[1].set_ylabel("Frequency")
+    ax[1].set_title("P-values")
+    ax[1].legend()
+    fig.suptitle("All data aggregated")
+    fig.tight_layout()
+    yield fig
+
 
 
 
