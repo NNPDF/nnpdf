@@ -56,6 +56,7 @@ PDF = "NNPDF40_nnlo_as_01180"
 HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
 THEORYID_NEW = 399
+THEORY_QED = 398
 FIT = "NNPDF40_nnlo_lowprecision"
 FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
 FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"

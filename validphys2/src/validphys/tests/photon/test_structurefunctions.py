@@ -5,9 +5,7 @@ from validphys.api import API
 from validphys.core import PDF as PDFset
 import validphys.photon.structure_functions as sf
 
-from ..conftest import PDF
-
-TEST_THEORY = API.theoryid(theoryid=398)
+from ..conftest import PDF, THEORY_QED
 
 
 class ZeroPdfs:
@@ -44,9 +42,10 @@ class ZeroFKTable:
 def test_zero_pdfs():
     "test that a zero PDF gives a zero structure function"
     pdfs = ZeroPdfs()
-    theory = TEST_THEORY.get_description()
-    path_to_F2 = TEST_THEORY.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
-    path_to_FL = TEST_THEORY.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
+    path_to_F2 = test_theory.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
+    path_to_FL = test_theory.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
 
     f2 = sf.InterpStructureFunction(path_to_F2, pdfs)
     fl = sf.InterpStructureFunction(path_to_FL, pdfs)
@@ -76,10 +75,11 @@ def test_params():
     "test initialization of parameters"
     pdfs = PDFset(PDF).load()
     replica = 1
-    theory = TEST_THEORY.get_description()
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
     for channel in ["F2", "FL"]:
         tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
-        path_to_fktable = TEST_THEORY.path / tmp
+        path_to_fktable = test_theory.path / tmp
         struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
         np.testing.assert_allclose(struct_func.q2_max, 1e8)
     f2lo = sf.F2LO(pdfs.members[replica], theory)
@@ -91,10 +91,11 @@ def test_params():
 def test_interpolation_grid():
     """test that the values coming out of InterpStructureFunction match the grid ones"""
     pdfs = PDFset(PDF).load()
+    test_theory = API.theoryid(theoryid=THEORY_QED)
     for replica in [1, 2, 3]:
         for channel in ["F2", "FL"]:
             tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
-            path_to_fktable = TEST_THEORY.path / tmp
+            path_to_fktable = test_theory.path / tmp
             fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
             x = np.unique(fktable.bin_left(1))
             q2 = np.unique(fktable.bin_left(0))
