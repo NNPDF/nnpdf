@@ -45,7 +45,8 @@ class Preprocessing(MetaLayer):
         self.output_dim = len(flav_info)
         self.initializer = initializer
         self.large_x = large_x
-        self.kernel = []
+        self.alphas = []
+        self.betas = []
         super().__init__(**kwargs)
 
     def generate_weight(self, weight_name, kind, dictionary, set_to_zero=False):
@@ -90,22 +91,22 @@ class Preprocessing(MetaLayer):
             trainable=trainable,
             constraint=weight_constraint,
         )
-        self.kernel.append(newpar)
+        return newpar
 
     def build(self, input_shape):
         # Run through the whole basis
         for flav_dict in self.flav_info:
             flav_name = flav_dict["fl"]
             alpha_name = f"alpha_{flav_name}"
-            self.generate_weight(alpha_name, "smallx", flav_dict)
+            self.alphas.append(self.generate_weight(alpha_name, "smallx", flav_dict))
             beta_name = f"beta_{flav_name}"
-            self.generate_weight(beta_name, "largex", flav_dict, set_to_zero=not self.large_x)
+            self.betas.append(self.generate_weight(beta_name, "largex", flav_dict, set_to_zero=not self.large_x))
 
         super(Preprocessing, self).build(input_shape)
 
     def call(self, inputs, **kwargs):
         x = inputs
         pdf_list = []
-        for i in range(0, self.output_dim * 2, 2):
-            pdf_list.append(x ** (1 - self.kernel[i][0]) * (1 - x) ** self.kernel[i + 1][0])
+        for i in range(0, self.output_dim):
+            pdf_list.append(x ** (1 - self.alphas[i][0]) * (1 - x) ** self.betas[i][0])
         return op.concatenate(pdf_list, axis=-1)
