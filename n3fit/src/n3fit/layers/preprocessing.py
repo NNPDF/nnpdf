@@ -35,9 +35,9 @@ class Preprocessing(MetaLayer):
 
     def __init__(
         self,
-        flav_info=None,
-        seed=0,
-        large_x=True,
+        flav_info: list = None,
+        seed: int = 0,
+        large_x: bool = True,
         **kwargs,
     ):
         if flav_info is None:
@@ -53,7 +53,12 @@ class Preprocessing(MetaLayer):
         self.betas = []
         super().__init__(**kwargs)
 
-    def generate_weight(self, weight_name, kind, dictionary, set_to_zero=False):
+    def generate_weight(self,
+        weight_name: str,
+        kind: str,
+        dictionary: dict,
+        set_to_zero: bool = False
+        ):
         """
         Generates weights according to the flavour dictionary
 
