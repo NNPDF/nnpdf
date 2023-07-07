@@ -69,18 +69,16 @@ class Preprocessing(MetaLayer):
             initializer = MetaLayer.init_constant(0.0)
             trainable = False
         else:
-            limits = dictionary[kind]
-            ldo = limits[0]
-            lup = limits[1]
+            minval, maxval = dictionary[kind]
             trainable = dictionary.get("trainable", True)
             # Set the initializer and move the seed one up
             initializer = MetaLayer.select_initializer(
-                self.initializer, minval=ldo, maxval=lup, seed=self.seed
+                self.initializer, minval=minval, maxval=maxval, seed=self.seed
             )
             self.seed += 1
             # If we are training, constrain the weights to be within the limits
             if trainable:
-                weight_constraint = constraints.MinMaxWeight(ldo, lup)
+                weight_constraint = constraints.MinMaxWeight(minval, maxval)
 
         # Generate the new trainable (or not) parameter
         newpar = self.builder_helper(
