@@ -53,7 +53,7 @@ class Preprocessing(MetaLayer):
         super().__init__(**kwargs)
 
     def generate_weight(self,
-        weight_name: str,
+        name: str,
         kind: str,
         dictionary: dict,
         set_to_zero: bool = False
@@ -63,7 +63,7 @@ class Preprocessing(MetaLayer):
 
         Parameters
         ----------
-            weight_name: str
+            name: str
                 name to be given to the generated weight
             kind: str
                 where to find the limits of the weight in the dictionary
@@ -72,7 +72,7 @@ class Preprocessing(MetaLayer):
             set_to_zero: bool
                 set the weight to constant 0
         """
-        weight_constraint = None
+        constraint = None
         if set_to_zero:
             initializer = MetaLayer.init_constant(0.0)
             trainable = False
@@ -86,15 +86,15 @@ class Preprocessing(MetaLayer):
             self.seed += 1
             # If we are training, constrain the weights to be within the limits
             if trainable:
-                weight_constraint = constraints.MinMaxWeight(minval, maxval)
+                constraint = constraints.MinMaxWeight(minval, maxval)
 
         # Generate the new trainable (or not) parameter
         newpar = self.builder_helper(
-            name=weight_name,
+            name=name,
             kernel_shape=(1,),
             initializer=initializer,
             trainable=trainable,
-            constraint=weight_constraint,
+            constraint=constraint,
         )
         return newpar
 
