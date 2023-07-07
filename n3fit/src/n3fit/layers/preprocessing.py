@@ -34,7 +34,11 @@ class Preprocessing(MetaLayer):
     """
 
     def __init__(
-        self, flav_info=None, seed=0, initializer="random_uniform", large_x=True, **kwargs,
+        self,
+        flav_info=None,
+        seed=0,
+        large_x=True,
+        **kwargs,
     ):
         if flav_info is None:
             raise ValueError(
@@ -43,7 +47,7 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.output_dim = len(flav_info)
-        self.initializer = initializer
+        self.initializer = "random_uniform"
         self.large_x = large_x
         self.alphas = []
         self.betas = []
