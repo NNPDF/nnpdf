@@ -51,8 +51,7 @@ class Preprocessing(MetaLayer):
 
     def generate_weight(self, weight_name, kind, dictionary, set_to_zero=False):
         """
-        Generates weights according to the flavour dictionary and adds them
-        to the kernel list of the class
+        Generates weights according to the flavour dictionary
 
         Parameters
         ----------
@@ -105,6 +104,17 @@ class Preprocessing(MetaLayer):
         super(Preprocessing, self).build(input_shape)
 
     def call(self, x):
+        """
+        Compute preprocessing prefactor.
+
+        Parameters
+        ----------
+            x: tensor(shape=[1,N,1])
+
+        Returns
+        -------
+            prefactor: tensor(shape=[1,N,F])
+        """
         alphas = op.stack(self.alphas, axis=1)
         betas = op.stack(self.betas, axis=1)
 
