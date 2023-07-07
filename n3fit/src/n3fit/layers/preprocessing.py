@@ -46,7 +46,6 @@ class Preprocessing(MetaLayer):
             )
         self.flav_info = flav_info
         self.seed = seed
-        self.output_dim = len(flav_info)
         self.initializer = "random_uniform"
         self.large_x = large_x
         self.alphas = []
