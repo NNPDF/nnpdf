@@ -117,23 +117,21 @@ def numpy_to_input(
     name: str = None,
 ):
     """
-    Takes a numpy array and generates a Input layer.
-    By default it adds a batch dimension (of size 1) so that the shape of the layer
-    is that of the array
+    Takes a numpy array and generates an Input layer with the same shape,
+    but with a batch dimension (of size 1) added.
 
     Parameters
     ----------
         numpy_array: np.ndarray
-        name: bool
+        name: str
             name to give to the layer
     """
     batched_array = np.expand_dims(numpy_array, 0)
-    batch_size = 1
     shape = list(numpy_array.shape)
     # set the number of gridpoints to None, otherwise shapes don't show in model.summary
     shape[0] = None
 
-    input_layer = Input(batch_size=batch_size, shape=shape, name=name)
+    input_layer = Input(batch_size=1, shape=shape, name=name)
     input_layer.tensor_content = batched_array
     return input_layer
 
