@@ -9,9 +9,12 @@ in this module are used to produce results which are plotted in
 """
 
 import numpy as np
+from sklearn.decomposition import PCA
+from sklearn import preprocessing
 
 from validphys import covmats
 from validphys.calcutils import calc_chi2
+from validphys.results import ThPredictionsResult
 
 from reportengine import collect
 
@@ -33,6 +36,102 @@ multi_dataset_fits_bias_variance_samples_pca = collect(
     "dataset_fits_bias_variance_samples_pca", ("dataspecs",)
 )
 
+
+def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_variance_ratio=0.93):
+    """
+    Compute the principal components of theory predictions replica matrix
+    (Ndat x Nrep feature matrix).
+
+    Parameters
+    ----------
+    dataset: (DataSetSpec, DataGroupSpec)
+        dataset for which the theory predictions and t0 covariance matrix
+        will be loaded. Note that due to the structure of `validphys` this
+        function can be overloaded to accept a DataGroupSpec.
+
+    fits_pdf: list
+        list of PDF objects produced from performing multiple closure tests
+        fits. Each fit should have a different filterseed but the same
+        underlying law used to generate the pseudodata.
+
+    variancepdf: validphys.core.PDF
+            PDF object used to estimate the variance of the fits.
+
+    explained_variance_ratio: float, default is 0.93
+
+    Returns
+    -------
+    tuple
+        2D tuple:
+        - matrix of the principal components (PCs) of shape (N_pc, N_dat)
+        - reduced feature matrix, i.e., feature matrix projected onto PCs of shape (N_pc, N_rep)
+
+    """
+    # fits_dataset_predictions = [
+    #     ThPredictionsResult.from_convolution(pdf, dataset) for pdf in fits_pdf
+    # ]
+
+    # dimensions here are (Nfits, Ndat, Nrep)
+    # reps = np.asarray([th.error_members for th in fits_dataset_predictions])
+
+    # reshape so as to get PCs from all the samples
+    # reps = reps.reshape(reps.shape[1],-1)
+
+    # get replicas from variance fit, used to estimate variance
+    reps = ThPredictionsResult.from_convolution(variancepdf, dataset).error_members
+
+    # rescale feature matrix
+    reps_scaled = reps  # preprocessing.scale(reps)
+
+    # choose number of principal components (PCs) based on explained variance ratio
+    n_comp = 1
+    for _ in range(reps.shape[0]):
+        pca = PCA(n_comp).fit(reps_scaled.T)
+        if np.sum(pca.explained_variance_ratio_) >= explained_variance_ratio:
+            break
+        n_comp += 1
+
+    # project feature matrix onto PCs
+    pc_reps = pca.components_ @ reps
+
+    return pca.components_, pc_reps, n_comp
+
+
+def principal_components_bias_variance_dataset(
+    internal_multiclosure_dataset_loader, principal_components_dataset
+):
+    """
+    TODO
+    """
+
+    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
+
+    reps = np.asarray([th.error_members for th in closures_th])
+
+    pc_basis, pc_reps, n_comp = principal_components_dataset
+
+    # estimate (PC) pdf covariance matrix (from replicas), shape is (Npc, Npc)
+    covmat_pdf = np.cov(pc_reps)
+    sqrt_covmat_pdf = covmats.sqrt_covmat(covmat_pdf)
+
+    # compute bias diff and project it onto space spanned by PCs
+    delta_bias = reps.mean(axis=2).T - law_th.central_value[:, np.newaxis]
+    # shape here is (Npc, Nfits)
+    delta_bias = pc_basis @ delta_bias
+
+    # compute biases, shape of biases is (Nfits)
+    biases = calc_chi2(sqrt_covmat_pdf, delta_bias)
+
+    variances = []
+    for i in range(reps.shape[0]):
+        diffs = pc_basis @ (reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True))
+        variances.append(np.mean(calc_chi2(sqrt_covmat_pdf, diffs)))
+
+    return biases, np.asarray(variances), n_comp
+
+principal_components_bias_variance_datasets = collect(
+    "principal_components_bias_variance_dataset", ("data",)
+)
 
 def compute_num_components(covariance_matrix, threshold=0.99):
     """
@@ -60,6 +159,24 @@ def compute_num_components(covariance_matrix, threshold=0.99):
     num_components = np.argmin(np.abs(cumulative_sum / total_sum - threshold))
 
     return num_components
+
+
+def pca_covmat(X, num_components):
+    """
+    given data X of shape (n,p), reduce its dimension to
+    (n,num_components) and return the covariance matrix
+    of the reduced data matrix.
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+    """
+    pca = PCA(num_components)
+    X_reduced = pca.fit_transform(X)
+    covariance = np.dot(X_reduced.T, X_reduced) / (X_reduced.shape[0] - 1)
+    return covariance
 
 
 def calc_chi2_pca(pdf_cov, diff, num_components):
@@ -131,9 +248,9 @@ def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader,
     centrals = reps.mean(axis=2)
 
     # compute the PDF covariance matrix of the central samples
-    if centrals.shape[0] <=1:
+    if centrals.shape[0] <= 1:
         raise ValueError(f"Need more than one fit to compute the 'Bias' PDF covariance Matrix")
-    
+
     pdf_cov_bias = np.cov(centrals.T)
 
     # find number of (ordered) eigenvalues that explain 99% of the total variance (total sum of eigenvalues)
@@ -150,9 +267,9 @@ def dataset_fits_bias_variance_samples_pca(internal_multiclosure_dataset_loader,
     for i in range(reps.shape[0]):
         diffs_var = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
         pdf_cov_var = np.cov(reps[i, :, :])
-        
+
         variances.append(np.mean(calc_chi2_pca(pdf_cov_var, diffs_var, n_eig)))
-    
+
     return biases, np.asarray(variances), n_eig
 
 
@@ -175,3 +292,34 @@ def dataset_fits_ratio_bias_variance_samples_pca(dataset_fits_bias_variance_samp
     biases, variances, _ = dataset_fits_bias_variance_samples_pca
     sqrt_ratios = np.sqrt(biases / variances)
     return sqrt_ratios
+
+
+def dataset_fits_gaussian_parameters(internal_multiclosure_dataset_loader, threshold=0.99):
+    """
+    returns parameters of multi gaussian distribution of replicas
+    and central replicas
+    """
+    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
+
+    # The dimensions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members for th in closures_th])
+
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
+
+    centrals_covmat = np.cov(centrals.T)
+    centrals_covmat = pca_covmat(
+        centrals, num_components=compute_num_components(centrals_covmat, threshold)
+    )
+    mean_centrals = np.mean(centrals, axis=0)
+
+    replicas_covmat = 0
+    for i in range(reps.shape[0]):
+        replicas_covmat = np.cov(reps[i, :, :])
+        replicas_covmat += pca_covmat(
+            reps[i, :, :].T, num_components=compute_num_components(replicas_covmat, threshold)
+        )
+    replicas_covmat /= reps.shape[0]
+    mean_replicas = np.mean(reps.reshape(reps.shape[1], -1), axis=1)
+
+    return mean_centrals, centrals_covmat, mean_replicas, replicas_covmat

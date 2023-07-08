@@ -8,11 +8,36 @@ estimators in the space of data
 """
 import pandas as pd
 import numpy as np
+from scipy import stats
 
-from reportengine.figure import figure
+from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 from validphys import plotutils
+
+
+@figuregen
+def plot_bias_distribution_datasets(principal_components_bias_variance_datasets, each_dataset):
+    """
+    """
+    for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
+        biases, variances, n_comp = pc_bias_var_dataset
+        sqrt_rbv = np.sqrt(np.mean(biases) / np.mean(variances))
+        vals = np.linspace(0, 3 * n_comp, 100)
+        
+        chi2_pdf = stats.chi2.pdf(vals, df=n_comp)
+        chi2_cdf = lambda x: stats.chi2.cdf(x, df=n_comp)
+        pvalue_ks = stats.kstest(biases, chi2_cdf).pvalue
+
+        fig, ax = plotutils.subplots()
+        ax.hist(biases, density=True, bins='auto', label=f"Bias {str(ds)}, p={pvalue_ks:.3f}")
+        ax.plot(vals, chi2_pdf, label = f"chi2, dof={n_comp}")
+        ax.plot([], [], 'ro', label=f"sqrt(Rbv) = {sqrt_rbv:.2f}")
+        
+        ax.legend()
+
+        yield fig
+
 
 
 @table
@@ -125,14 +150,15 @@ def plot_sqrt_ratio_distribution_pca(multi_dataset_fits_bias_variance_samples_pc
     fits are defined, than plot comparison of these.
     """
     fig, ax = plotutils.subplots()
+    ratios = []
+    labels = []
     for (bias_dist, variance_dist, _), spec in zip(
         multi_dataset_fits_bias_variance_samples_pca, dataspecs
     ):
-        label = spec['speclabel']
-        sqrt_ratios = np.sqrt(bias_dist / variance_dist)
+        labels.append(spec['speclabel'])
+        ratios.append(bias_dist / variance_dist)
 
-        ax.hist(sqrt_ratios, bins='auto', density=True, alpha=0.5, label=label)
-
+    ax.hist(ratios, bins='auto', density=True, label=labels)
     ax.legend()
     return fig
 
