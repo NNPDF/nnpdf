@@ -129,9 +129,41 @@ def principal_components_bias_variance_dataset(
 
     return biases, np.asarray(variances), n_comp
 
+
 principal_components_bias_variance_datasets = collect(
     "principal_components_bias_variance_dataset", ("data",)
 )
+
+
+def principal_components_variance_distribution_dataset(
+    internal_multiclosure_dataset_loader, principal_components_dataset
+):
+    """
+    TODO
+    """
+
+    closures_th, _, _, _ = internal_multiclosure_dataset_loader
+
+    reps = np.asarray([th.error_members for th in closures_th])
+
+    pc_basis, pc_reps, n_comp = principal_components_dataset
+
+    # estimate (PC) pdf covariance matrix (from replicas), shape is (Npc, Npc)
+    covmat_pdf = np.cov(pc_reps)
+    sqrt_covmat_pdf = covmats.sqrt_covmat(covmat_pdf)
+
+    variances = []
+    for i in range(reps.shape[0]):
+        diffs = pc_basis @ (reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True))
+        variances.append([calc_chi2(sqrt_covmat_pdf, diffs)])
+
+    return np.asarray(variances), n_comp
+
+
+principal_components_variance_distribution_datasets = collect(
+    "principal_components_variance_distribution_dataset", ("data",)
+)
+
 
 def compute_num_components(covariance_matrix, threshold=0.99):
     """

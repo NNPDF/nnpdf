@@ -19,25 +19,59 @@ from validphys import plotutils
 @figuregen
 def plot_bias_distribution_datasets(principal_components_bias_variance_datasets, each_dataset):
     """
+    TODO
     """
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
         biases, variances, n_comp = pc_bias_var_dataset
         sqrt_rbv = np.sqrt(np.mean(biases) / np.mean(variances))
         vals = np.linspace(0, 3 * n_comp, 100)
-        
+
         chi2_pdf = stats.chi2.pdf(vals, df=n_comp)
         chi2_cdf = lambda x: stats.chi2.cdf(x, df=n_comp)
         pvalue_ks = stats.kstest(biases, chi2_cdf).pvalue
 
         fig, ax = plotutils.subplots()
         ax.hist(biases, density=True, bins='auto', label=f"Bias {str(ds)}, p={pvalue_ks:.3f}")
-        ax.plot(vals, chi2_pdf, label = f"chi2, dof={n_comp}")
+        ax.plot(vals, chi2_pdf, label=f"chi2, dof={n_comp}")
         ax.plot([], [], 'ro', label=f"sqrt(Rbv) = {sqrt_rbv:.2f}")
-        
+
         ax.legend()
 
         yield fig
 
+
+@figuregen
+def plot_variance_distribution_datasets(
+    principal_components_variance_distribution_datasets, each_dataset
+):
+    """
+    TODO
+    """
+
+    for pc_var_dataset, ds in zip(
+        principal_components_variance_distribution_datasets, each_dataset
+    ):
+        variances, n_comp = pc_var_dataset
+
+        vals = np.linspace(0, 3 * n_comp, 100)
+        chi2_pdf = stats.chi2.pdf(vals, df=n_comp)
+        chi2_cdf = lambda x: stats.chi2.cdf(x, df=n_comp)
+
+        for i, var_fit in enumerate(variances):
+            pvalue_ks = stats.kstest(var_fit[0], chi2_cdf).pvalue
+
+            fig, ax = plotutils.subplots()
+            ax.hist(
+                var_fit[0],
+                density=True,
+                bins='auto',
+                label=f"Variance {str(ds)}, p={pvalue_ks:.3f}",
+            )
+            ax.plot(vals, chi2_pdf, label=f"chi2, dof={n_comp}")
+            ax.set_title(f"Fit {i}")
+            ax.legend()
+
+            yield fig
 
 
 @table
