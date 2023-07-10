@@ -58,11 +58,11 @@ class FlavourToEvolution(Rotation):
 
 class FkRotation(Rotation):
     """
-    Applies a transformation from the dimension-8 evolution basis
+    Applies a transformation from the dimension-9 evolution basis
     to the dimension-14 evolution basis used by the fktables.
 
     The input to this layer is a `pdf_raw` variable which is expected to have
-    a shape (1,  None, 8), and it is then rotated to an output (1, None, 14)
+    a shape (1,  None, 9), and it is then rotated to an output (1, None, 14)
     """
     def __init__(self, output_dim=14, name="evolution", **kwargs):
         self.output_dim = output_dim
