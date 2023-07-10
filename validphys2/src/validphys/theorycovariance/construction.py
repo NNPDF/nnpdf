@@ -415,15 +415,15 @@ def covs_pt_prescrip(
             elif l == 9:
                 s = covmat_9pt(name1, name2, deltas1, deltas2)
             # n3lo ad variation prescriprion
-            elif l == 71:
+            elif l == 70:
                 s = covmat_n3lo_ad(name1, name2, deltas1, deltas2)
             # n3lo ihou prescriprion
-            elif l == 73:
+            elif l == 72:
                 s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-2], deltas2[:-2])
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf
             # n3lo full covmat prescriprion
-            elif l == 81:
+            elif l == 80:
                 # spit deltas and compose thcovmat
                 s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-10], deltas2[:-10])
                 s_mhou = covmat_9pt(name1, name2, deltas1[-10:-2], deltas2[-10:-2])
