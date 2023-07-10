@@ -16,10 +16,10 @@ import numpy as np
 
 from n3fit import model_gen
 from n3fit.backends import MetaModel, callbacks, clear_backend_state
-from n3fit.scaler import generate_scaler
 from n3fit.backends import operations as op
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
 from validphys.photon.compute import Photon
@@ -846,9 +846,7 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid,
-                lux_params=self.lux_params,
-                replicas=self.replicas,
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
             )
         else:
             photons = None
@@ -920,11 +918,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function

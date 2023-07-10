@@ -1,4 +1,5 @@
 from typing import Callable, List
+
 import numpy as np
 from scipy.interpolate import PchipInterpolator
 

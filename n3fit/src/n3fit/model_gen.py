@@ -9,11 +9,10 @@
 
 
 """
-from typing import List, Callable
 from dataclasses import dataclass
+from typing import Callable, List
 
 import numpy as np
-from n3fit.msr import generate_msr_model_and_grid
 
 from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
@@ -29,7 +28,7 @@ from n3fit.layers import (
     losses,
 )
 from n3fit.layers.observable import is_unique
-
+from n3fit.msr import generate_msr_model_and_grid
 from validphys.photon.compute import Photon  # only used for type hint here
 
 
@@ -672,13 +671,17 @@ def pdfNN_layer_generator(
         pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
         pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, preprocessing_factor)
 
-        pdf_normalized = sumrule_layer({
-            "pdf_x": pdf_unnormalized,
-            "pdf_xgrid_integration": pdf_integration_grid,
-            "xgrid_integration": integrator_input,
-            # The photon is treated separately, need to get its integrals to normalize the pdf
-            "photon_integral": op.numpy_to_tensor(0.0 if not photons else photons.integral[i_replica]),
-        })
+        pdf_normalized = sumrule_layer(
+            {
+                "pdf_x": pdf_unnormalized,
+                "pdf_xgrid_integration": pdf_integration_grid,
+                "xgrid_integration": integrator_input,
+                # The photon is treated separately, need to get its integrals to normalize the pdf
+                "photon_integral": op.numpy_to_tensor(
+                    0.0 if not photons else photons.integral[i_replica]
+                ),
+            }
+        )
 
         if photons:
             # Add in the photon component

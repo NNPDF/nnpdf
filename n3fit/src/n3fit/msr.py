@@ -5,8 +5,8 @@ import logging
 
 import numpy as np
 
+from n3fit.backends import Input, Lambda, MetaModel
 from n3fit.backends import operations as op
-from n3fit.backends import MetaModel, Lambda, Input
 from n3fit.layers import MSR_Normalization, xDivide, xIntegrator
 
 log = logging.getLogger(__name__)
@@ -85,8 +85,9 @@ def generate_msr_model_and_grid(
 
     # 6. Compute the normalization factor
     # For now set the photon component to None
-    normalization_factor = MSR_Normalization(
-        output_dim, mode, name="msr_weights")(pdf_integrated, photon_integral)
+    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights")(
+        pdf_integrated, photon_integral
+    )
 
     # 7. Apply the normalization factor to the pdf
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(

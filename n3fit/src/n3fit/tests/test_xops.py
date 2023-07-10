@@ -2,6 +2,7 @@
     Test the x operations
 """
 import numpy as np
+
 from n3fit.layers import xDivide
 
 

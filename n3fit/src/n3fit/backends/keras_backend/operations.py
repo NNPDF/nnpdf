@@ -25,12 +25,11 @@
 
 import numpy as np
 import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import subtract as keras_subtract
-
-from tensorflow.keras.layers import Input
-from tensorflow.keras import backend as K
 
 from validphys.convolution import OP
 
@@ -113,8 +112,7 @@ def batchit(x, batch_dimension=0, **kwarg):
 
 # layer generation
 def numpy_to_input(
-    numpy_array: np.ndarray,
-    name: str = None,
+    numpy_array: np.ndarray, name: str = None,
 ):
     """
     Takes a numpy array and generates an Input layer with the same shape,

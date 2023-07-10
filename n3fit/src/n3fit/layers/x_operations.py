@@ -14,7 +14,8 @@ from typing import List
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-BASIS_SIZE=14
+BASIS_SIZE = 14
+
 
 class xDivide(MetaLayer):
     """

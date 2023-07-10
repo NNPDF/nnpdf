@@ -1,5 +1,4 @@
-from n3fit.backends import MetaLayer
-from n3fit.backends import constraints
+from n3fit.backends import MetaLayer, constraints
 from n3fit.backends import operations as op
 
 
@@ -35,12 +34,7 @@ class Preprocessing(MetaLayer):
     """
 
     def __init__(
-        self,
-        flav_info=None,
-        seed=0,
-        initializer="random_uniform",
-        large_x=True,
-        **kwargs,
+        self, flav_info=None, seed=0, initializer="random_uniform", large_x=True, **kwargs,
     ):
         if flav_info is None:
             raise ValueError(
