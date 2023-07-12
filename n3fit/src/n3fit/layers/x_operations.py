@@ -9,7 +9,7 @@
     for all flavours. The choice of flavours on which to act in a different way is given
     as an input argument.
 """
-from typing import List
+from typing import List, Optional
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
@@ -34,7 +34,9 @@ class xDivide(MetaLayer):
             list of indices to be divided by X (by default [3, 4, 5, 6]; [v, v3, v8, v15]
     """
 
-    def __init__(self, output_dim: int = BASIS_SIZE, div_list: List = None, **kwargs):
+    def __init__(
+        self, output_dim: int = BASIS_SIZE, div_list: Optional[List[int]] = None, **kwargs
+    ):
         if div_list is None:
             div_list = [3, 4, 5, 6]
         self.output_dim = output_dim

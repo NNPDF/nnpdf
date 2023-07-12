@@ -1,10 +1,12 @@
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 import numpy as np
 from scipy.interpolate import PchipInterpolator
 
 
-def generate_scaler(input_list: List[np.ndarray], interpolation_points: int = None) -> Callable:
+def generate_scaler(
+    input_list: List[np.ndarray], interpolation_points: Optional[int] = None
+) -> Callable:
     """
     Generate the scaler function that applies feature scaling to the input data.
 
@@ -16,7 +18,7 @@ def generate_scaler(input_list: List[np.ndarray], interpolation_points: int = No
 
     Returns
     -------
-    _scaler : function
+    _scaler : Callable
         The scaler function that applies feature scaling to the input data.
     """
     input_arr = np.concatenate(input_list, axis=1)

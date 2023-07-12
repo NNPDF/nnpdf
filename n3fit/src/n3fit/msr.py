@@ -2,6 +2,7 @@
     The constraint module include functions to impose the momentum sum rules on the PDFs
 """
 import logging
+from typing import Callable, Optional
 
 import numpy as np
 
@@ -13,7 +14,11 @@ log = logging.getLogger(__name__)
 
 
 def generate_msr_model_and_grid(
-    output_dim: int = 14, mode: str = "ALL", nx: int = int(2e3), scaler=None, **kwargs
+    output_dim: int = 14,
+    mode: str = "ALL",
+    nx: int = int(2e3),
+    scaler: Optional[Callable] = None,
+    **kwargs
 ) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.
