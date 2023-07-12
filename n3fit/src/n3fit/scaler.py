@@ -1,11 +1,12 @@
 from typing import Callable, List, Optional
 
 import numpy as np
+import numpy.typing as npt
 from scipy.interpolate import PchipInterpolator
 
 
 def generate_scaler(
-    input_list: List[np.ndarray], interpolation_points: Optional[int] = None
+    input_list: List[npt.NDArray], interpolation_points: Optional[int] = None
 ) -> Callable:
     """
     Generate the scaler function that applies feature scaling to the input data.
