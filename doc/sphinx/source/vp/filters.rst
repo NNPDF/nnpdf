@@ -225,13 +225,13 @@ above. For example:
      - dataset: NMC
        rule: x > 0.2
 
-.. code:: eval_rst
 
-   .. warning::
-     Adding a :code:`filter_rules` section to the runcard overwrites the default behaviour and does
-     **not** append to the default behaviour. This is done intentionally since a rule cannot be 
-     overwritten by another rule. By adding the above code snippet, this would be the **only** rule used by
-     :code:`vp-setupfit`. As such a bit of copy and pasting may be necessary if one wishes to append a rule.
+.. warning::
+  Adding a :code:`filter_rules` section to the runcard overwrites the default
+   behaviour and does **not** append to the default behaviour. By adding the
+   above code snippet, this would be the **only** rule used by
+   :code:`vp-setupfit`. Use the :ref:`added_filter_rules option
+   <added_filter_rules>` to append rules when needed.
 
 Similarly the defaults can be overwritten by adding a
 ``filter_defaults`` namespace to the runcard. For example:
@@ -245,12 +245,68 @@ Similarly the defaults can be overwritten by adding a
 As in the case of the rules, this overwrites the original defaults and
 does not append to them.
 
-.. code:: eval_rst
 
-   .. attention::
-     To ensure backwards compatibility with old style runcards, if :code:`q2min` and :code:`w2min` are defined
-     under the :code:`datacuts` namespace within the runcard, these values are read in and override the default
-     values. However, if this overriding occurs, a warning is displayed in standard output.
+.. attention::
+  To ensure backwards compatibility with old style runcards, if :code:`q2min` and :code:`w2min` are defined
+  under the :code:`datacuts` namespace within the runcard, these values are read in and override the default
+  values. However, if this overriding occurs, a warning is displayed in standard output.
+
+
+
+.. _added_filter_rules:
+
+Adding filters to the default ones
+----------------------------------
+
+An ``added_filter_rules`` key may be specified in the runcard. Its effect is to
+append a list of filter rules to the rules obtained by the mechanisms described above. It is particularly useful when one wishes to analyze the effect of a sliding cut:
+
+.. code:: yaml
+
+    fit: mm_sm_hllhc_seed1_221222
+
+    pdf:
+      from_: fit
+
+
+    # Retrieve default filters
+    use_cuts: "internal"
+
+    theoryid: 200
+
+    dataset_inputs:
+      from_: fit
+
+
+    dataspecs:
+      - speclabel: "Filter: 50"
+        added_filter_rules:
+          - process_type: EWK_MLL
+            local_variables:
+                mass_threshold: 50
+            reason: "Variable mass filter"
+            rule: "M_ll < mass_threshold"
+
+      - speclabel: "Filter: 500"
+        added_filter_rules:
+          - process_type: EWK_MLL
+            local_variables:
+                mass_threshold: 500
+            reason: "Variable mass filter"
+            rule: "M_ll < mass_threshold"
+
+
+    template_text: |
+      # χ² as a function of sliding cut
+      {@dataspecs_chi2_table@}
+
+
+    actions_:
+      - report(main=True)
+
+The value of ``added_filter_rules`` should be a list of rules with the same format as ``filter_rules``.
+
+
 
 Examples
 --------
