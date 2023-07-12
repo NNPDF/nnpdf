@@ -64,8 +64,10 @@ def generate_scaler(
 
     try:
         scaler = PchipInterpolator(map_from, map_to)
-    except ValueError:
-        raise ValueError("interpolation_points is larger than the number of unique input x-values")
+    except ValueError as e:
+        raise ValueError(
+            "interpolation_points is larger than the number of unique input x-values"
+        ) from e
 
     def _scaler(x):
         x_scaled = scaler(np.log(x))
