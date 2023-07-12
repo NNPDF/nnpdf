@@ -669,28 +669,32 @@ def pdfNN_layer_generator(
         zip(preprocessing_factor_replicas, nn_replicas)
     ):
         pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
-        pdf_integration_grid = compute_unnormalized_pdf(integrator_input, nn, preprocessing_factor)
 
-        pdf_normalized = sumrule_layer(
-            {
-                "pdf_x": pdf_unnormalized,
-                "pdf_xgrid_integration": pdf_integration_grid,
-                "xgrid_integration": integrator_input,
-                # The photon is treated separately, need to get its integrals to normalize the pdf
-                "photon_integral": op.numpy_to_tensor(
-                    0.0 if not photons else photons.integral[i_replica]
-                ),
-            }
-        )
+        if impose_sumrule:
+            pdf_integration_grid = compute_unnormalized_pdf(
+                integrator_input, nn, preprocessing_factor
+            )
+            pdf_normalized = sumrule_layer(
+                {
+                    "pdf_x": pdf_unnormalized,
+                    "pdf_xgrid_integration": pdf_integration_grid,
+                    "xgrid_integration": integrator_input,
+                    # The photon is treated separately, need to get its integrals to normalize the pdf
+                    "photon_integral": op.numpy_to_tensor(
+                        0.0 if not photons else photons.integral[i_replica]
+                    ),
+                }
+            )
+            pdf = pdf_normalized
+        else:
+            pdf = pdf_unnormalized
 
         if photons:
             # Add in the photon component
-            model_output = layer_photon(pdf_normalized, i_replica)
-        else:
-            model_output = pdf_normalized
+            pdf = layer_photon(pdf, i_replica)
 
         # Create the model
-        pdf_model = MetaModel(model_input, model_output, name=f"PDF_{i_replica}", scaler=scaler)
+        pdf_model = MetaModel(model_input, pdf, name=f"PDF_{i_replica}", scaler=scaler)
         pdf_models.append(pdf_model)
 
     return pdf_models
