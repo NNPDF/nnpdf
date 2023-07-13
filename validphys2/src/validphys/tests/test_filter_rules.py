@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from validphys.api import API
@@ -9,7 +10,7 @@ from validphys.filters import (
     PerturbativeOrder,
     BadPerturbativeOrder,
 )
-from validphys.tests.conftest import THEORYID
+from validphys.tests.conftest import THEORYID, PDF
 
 bad_rules = [
     {'dataset': 'NMC'},
@@ -93,3 +94,36 @@ def test_good_rules():
     for dsname in dsnames:
         ds = l.check_dataset(dsname, cuts='internal', rules=rules, theoryid=THEORYID)
         assert ds.cuts.load() is not None
+
+
+def test_added_rules():
+    inp = {
+        "theoryid": THEORYID,
+        "pdf": PDF,
+        "use_cuts": "internal",
+        "dataset_inputs": [{"dataset": "ATLAS1JET11"}],
+        "filter_rules": [],
+        "dataspecs": [
+            {
+                "speclabel": "Original",
+                "added_filter_rules": None,
+            },
+            {
+                "speclabel": "fewer data",
+                "added_filter_rules": [
+                    {"dataset": "ATLAS1JET11", "rule": "p_T2 < 1000**2", "reson": "pt cut"}
+                ],
+            },
+            {
+                "speclabel": "empty data",
+                "added_filter_rules": [
+                    {"dataset": "ATLAS1JET11", "rule": "eta < 0", "reson": "empty data"}
+                ],
+            },
+        ],
+    }
+    tb = API.dataspecs_chi2_table(**inp)
+    assert tb["empty data"]["ndata"].iloc[0] == 0
+    assert np.isnan(tb["empty data"].iloc[1,1])
+    assert tb["empty data"]["ndata"].iloc[0] == 0
+    assert np.all(tb[1:]["fewer data"] != tb[1:]["Original"])
