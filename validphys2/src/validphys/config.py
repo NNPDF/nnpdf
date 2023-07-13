@@ -1305,6 +1305,9 @@ class CoreConfig(configparser.Config):
         """
         return spec
 
+    def parse_added_filter_rules(self, rules: (list, type(None)) = None):
+        return rules
+
     def produce_rules(
         self,
         theoryid,
