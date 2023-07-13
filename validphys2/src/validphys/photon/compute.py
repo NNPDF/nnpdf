@@ -75,9 +75,8 @@ class Photon:
         self.additional_errors = lux_params["additional_errors"]
         self.luxseed = lux_params["luxseed"]
 
-        # TODO : maybe find a different name for fiatlux_dis_F2
-        path_to_F2 = theoryid.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
-        path_to_FL = theoryid.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
+        path_to_F2 = theoryid.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
+        path_to_FL = theoryid.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
         with EKO.read(self.path_to_eko_photon) as eko:
             self.q_in = np.sqrt(eko.mu20)
@@ -97,7 +96,7 @@ class Photon:
             fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
             if not np.isclose(f2.q2_max, fl.q2_max):
                 log.error(
-                    "FKtables for fiatlux_dis_F2 and fiatlux_dis_FL have two different q2_max"
+                    "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
                 )
 
             fiatlux_runcard["q2_max"] = float(f2.q2_max)

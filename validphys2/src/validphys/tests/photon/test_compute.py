@@ -111,8 +111,8 @@ def test_photon():
         photon = Photon(test_theory, fiatlux_runcard, [replica])
 
         # set up fiatlux
-        path_to_F2 = test_theory.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
-        path_to_FL = test_theory.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
+        path_to_F2 = test_theory.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
+        path_to_FL = test_theory.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
         pdfs = fiatlux_runcard["luxset"].load()
         f2 = sf.InterpStructureFunction(path_to_F2, pdfs.members[replica])
         fl = sf.InterpStructureFunction(path_to_FL, pdfs.members[replica])
