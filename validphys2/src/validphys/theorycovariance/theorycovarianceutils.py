@@ -18,7 +18,7 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9, 70, 72, 80}, f"Expecting exactly 3, 5, 7, 9, 70, 72 or 80 theories, but got {l}.")
+    check(l in {3, 5, 7, 9, 70, 72, 78}, f"Expecting exactly 3, 5, 7, 9, 70, 72 or 78 theories, but got {l}.")
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
@@ -53,7 +53,7 @@ def check_correct_theory_combination_internal(
     elif l == 7:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-    elif l in [70, 72, 80]:
+    elif l in [70, 72, 78]:
         # check Anomalous dimensions variations
         n3lo_vars_dict = {
             "P_gg": 17,
@@ -64,8 +64,8 @@ def check_correct_theory_combination_internal(
         # TODO: for the moment fish the n3lo_ad_variation from the comments
         n3lo_vars_list = []
         id_max = None
-        if l == 80:
-            id_max = -10
+        if l == 78:
+            id_max = -8
         elif l == 72:
             id_max = -2
         for theoryid in theoryids[:id_max]:
@@ -80,14 +80,14 @@ def check_correct_theory_combination_internal(
             n3lo_vars_list == full_var_list, 
             f"Theories do not include the full list of N3LO variation but {n3lo_vars_list}"
         )
-        if l == 80:
+        if l == 78:
             # check Scale variations
             varied_xifs = [xifs[0]]
             varied_xirs = [xirs[0]]
-            varied_xifs.extend(xifs[-10:-2])
-            varied_xirs.extend(xirs[-10:-2])
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
+            varied_xifs.extend(xifs[-8:-2])
+            varied_xirs.extend(xirs[-8:-2])
+            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
             check(
                 varied_xifs == correct_xifs and varied_xirs == correct_xirs,
                 "Choice of input theories does not correspond to a valid "

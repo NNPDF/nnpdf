@@ -347,7 +347,8 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
         * \prod{n_s} = degeneracy factor (in this case we have 18 * 21 * 24 * 17)
         * n_is = number of independent scales (in this case 4)
     """
-    norm = (71 - 1) * 1
+    n_var = len(deltas1)
+    norm = (n_var - 1) * 1
     if name1 == name2:
         s = sum(np.outer(d, d) for d in deltas1)
     else:
@@ -423,10 +424,10 @@ def covs_pt_prescrip(
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf
             # n3lo full covmat prescriprion
-            elif l == 80:
+            elif l == 78:
                 # spit deltas and compose thcovmat
-                s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-10], deltas2[:-10])
-                s_mhou = covmat_9pt(name1, name2, deltas1[-10:-2], deltas2[-10:-2])
+                s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-8], deltas2[:-8])
+                s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf + s_mhou
             start_locs = (start_proc[name1], start_proc[name2])
