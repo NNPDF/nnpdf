@@ -107,13 +107,21 @@ def main():
         default=1,
         help="Number of cores to be used",
     )
+    parser.add_argument(
+        "-i",
+        "--iterations",
+        type=int,
+        default=30,
+        help="ev_op_iterations for the EXA theory",
+    )
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     eko_parser = construct_eko_parser(subparsers)
     evolven3fit_parser = construct_evolven3fit_parser(subparsers)
 
     args = parser.parse_args()
     op_card_info = { "configs" : {
-        "n_integration_cores": args.n_cores,}
+        "n_integration_cores": args.n_cores,
+        "ev_op_iterations": args.iterations,}
     }
     theory_card_info = {}
     if args.actions == "evolve":
@@ -152,6 +160,8 @@ def main():
             args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
         )
         runner.solve(tcard, opcard, args.dump)
+    elif args.actions == "produce_eko_photon":
+        pass
 
 
 if __name__ == "__main__":

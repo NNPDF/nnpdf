@@ -131,6 +131,8 @@ def construct_eko_cards(
     op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
     if theory["ModEv"] == "TRN":
+        if op_card_dict["configs"]["ev_op_iterations"]:
+            _logger.warning("Provided ev_op_iterations for a TRN theory. It will be unused")
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
     if theory["ModEv"] == "EXA":
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
