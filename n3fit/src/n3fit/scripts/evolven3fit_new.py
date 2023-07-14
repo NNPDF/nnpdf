@@ -49,6 +49,25 @@ def construct_eko_parser(subparsers):
     )
     return parser
 
+def construct_eko_photon_parser(subparsers):
+    parser = subparsers.add_parser(
+        "produce_eko_photon",
+        help=(
+            """Produce the eko_photon for the specified theory.
+            The q_gamma will be the provided one.
+            The x_grid starts at x_grid_ini and ends at 1.0 and contains the 
+            provided number of points. The eko will be dumped in the provided path."""
+        ),
+    )
+    parser.add_argument(
+        "-g",
+        "--q-gamma",
+        default=100,
+        type=float,
+        help="Scale at which the photon is generated",
+    )
+    return parser
+
 
 def construct_evolven3fit_parser(subparsers):
     parser = subparsers.add_parser(
@@ -108,20 +127,21 @@ def main():
         help="Number of cores to be used",
     )
     parser.add_argument(
-        "-i",
-        "--iterations",
+        "-e",
+        "--ev-op-iterations",
         type=int,
         default=30,
         help="ev_op_iterations for the EXA theory",
     )
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     eko_parser = construct_eko_parser(subparsers)
+    eko_photon_parser = construct_eko_photon_parser(subparsers)
     evolven3fit_parser = construct_evolven3fit_parser(subparsers)
 
     args = parser.parse_args()
     op_card_info = { "configs" : {
         "n_integration_cores": args.n_cores,
-        "ev_op_iterations": args.iterations,}
+        "ev_op_iterations": args.ev_op_iterations,}
     }
     theory_card_info = {}
     if args.actions == "evolve":
@@ -135,7 +155,7 @@ def main():
             args.load,
             args.force,
         )
-    elif args.actions == "produce_eko":
+    else:
         stdout_log = logging.StreamHandler(sys.stdout)
         stdout_log.setLevel(evolve.LOGGING_SETTINGS["level"])
         stdout_log.setFormatter(evolve.LOGGING_SETTINGS["formatter"])
@@ -156,12 +176,14 @@ def main():
             )
         else:
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
-        tcard, opcard = eko_utils.construct_eko_cards(
-            args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
-        )
+        if args.actions == "produce_eko":
+            tcard, opcard = eko_utils.construct_eko_cards(
+                args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
+            )
+        elif args.actions == "produce_eko_photon":
+            #has to produce the correct card for the eko photon
+            pass
         runner.solve(tcard, opcard, args.dump)
-    elif args.actions == "produce_eko_photon":
-        pass
 
 
 if __name__ == "__main__":
