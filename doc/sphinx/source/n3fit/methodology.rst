@@ -126,6 +126,56 @@ provide a faster convergence to the solution.
 .. important::
 	Parameters like the number of layers, nodes, activation functions are hyper-parameters that require tuning.
 
+
+To see the structure of the model, one can use Keras's ``plot_model`` function as illustrated in the script below.
+See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model>`_ for more details.
+
+.. code-block:: python
+
+   from tensorflow.keras.utils import plot_model
+   from n3fit.model_gen import pdfNN_layer_generator
+   from validphys.api import API
+
+   fit_info = API.fit(fit="NNPDF40_nnlo_as_01180_1000").as_input()
+   basis_info = fit_info["fitting"]["basis"]
+
+   pdf_models = pdfNN_layer_generator(
+       nodes=[25, 20, 8],
+       activations=["tanh", "tanh", "linear"],
+       initializer_name="glorot_normal",
+       layer_type="dense",
+       flav_info=basis_info,
+       fitbasis="EVOL",
+       out=14,
+       seed=42,
+       dropout=0.0,
+       regularizer=None,
+       regularizer_args=None,
+       impose_sumrule="All",
+       scaler=None,
+       parallel_models=1,
+   )
+
+   pdf_model = pdf_models[0]
+   nn_model = pdf_model.get_layer("NN_0")
+   msr_model = pdf_model.get_layer("impose_msr")
+   models_to_plot = {
+           'plot_pdf': pdf_model,
+           'plot_nn': nn_model,
+           'plot_msr': msr_model
+           }
+
+   for name, model in models_to_plot.items():
+       plot_model(model, to_file=f"./{name}.png", show_shapes=True)
+
+
+This will produce for instance the plot of the PDF model below, and can also be used to plot the
+neural network model, and the momentum sum rule model.
+
+.. image::
+    figures/plot_pdf.png
+
+
 .. _preprocessing:
 
 Preprocessing
