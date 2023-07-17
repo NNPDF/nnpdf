@@ -39,6 +39,8 @@ def construct_eko_cards(
     x_grid,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
+    q_gamma = None,
+    is_eko_photon = False
 ):
     """
     Return the theory and operator cards used to construct the eko.
@@ -68,8 +70,13 @@ def construct_eko_cards(
     if "nfref" not in theory:
         theory["nfref"] = NFREF_DEFAULT
 
+    # if is eko_photon then mu0 = q_gamma
+    if not is_eko_photon:
+        mu0 = theory["Q0"]
+    else:
+        mu0 = q_gamma
+    
     # Set nf_0 according to the fitting scale unless set explicitly
-    mu0 = theory["Q0"]
     if "nf0" not in theory:
         if mu0 < theory["mc"] * thresholds["c"]:
             theory["nf0"] = 3
@@ -87,18 +94,31 @@ def construct_eko_cards(
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
-    # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
-    q2_grid = utils.generate_q2grid(
-        mu0,
-        q_fin,
-        q_points,
-        {
-            theory["mc"]: thresholds["c"],
-            theory["mb"]: thresholds["b"],
-            theory["mt"]: thresholds["t"],
-        },
-        theory["nf0"],
-    )
+    if not is_eko_photon:
+        # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
+        q2_grid = utils.generate_q2grid(
+            mu0,
+            q_fin,
+            q_points,
+            {
+                theory["mc"]: thresholds["c"],
+                theory["mb"]: thresholds["b"],
+                theory["mt"]: thresholds["t"],
+            },
+            theory["nf0"],
+        )
+    else:
+        q_fin = theory["Q0"]
+        # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
+        q2_grid = [q_fin]
+        if q_fin < theory["mc"] * thresholds["c"]:
+            nf_fin = 3
+        elif q_fin < theory["mb"] * thresholds["b"]:
+            nf_fin = 4
+        elif q_fin < theory["mt"] * thresholds["t"]:
+            nf_fin = 5
+        else:
+            nf_fin = 6
 
     # construct operator card
     op_card = default_op_card
@@ -110,27 +130,31 @@ def construct_eko_cards(
         origin=(mu0**2, theory["nf0"]),
     )
 
-    # Create the eko operator q2grid
-    # This is a grid which contains information on (q, nf)
-    # in VFNS values at the matching scales need to be doubled so that they are considered in both sides
+    if not is_eko_photon:
+        # Create the eko operator q2grid
+        # This is a grid which contains information on (q, nf)
+        # in VFNS values at the matching scales need to be doubled so that they are considered in both sides
+        ep = 1e-4
+        mugrid = []
+        for q2 in q2_grid:
+            q = float(np.sqrt(q2))
+            if nf_default(q2 + ep, atlas) != nf_default(q2 - ep, atlas):
+                nf_l = int(nf_default(q2 - ep, atlas))
+                nf_u = int(nf_default(q2 + ep, atlas))
+                mugrid.append((q, nf_l))
+                mugrid.append((q, nf_u))
+            else:
+                mugrid.append((q, int(nf_default(q2, atlas))))
 
-    ep = 1e-4
-    mugrid = []
-    for q2 in q2_grid:
-        q = float(np.sqrt(q2))
-        if nf_default(q2 + ep, atlas) != nf_default(q2 - ep, atlas):
-            nf_l = int(nf_default(q2 - ep, atlas))
-            nf_u = int(nf_default(q2 + ep, atlas))
-            mugrid.append((q, nf_l))
-            mugrid.append((q, nf_u))
-        else:
-            mugrid.append((q, int(nf_default(q2, atlas))))
-
-    op_card.update({"mu0": theory["Q0"], "mugrid": mugrid})
+        op_card.update({"mu0": theory["Q0"], "mugrid": mugrid})
+    else:
+        op_card.update({"mu0": mu0, "mugrid": [(q_fin, nf_fin)]})
 
     op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
     if theory["ModEv"] == "TRN":
+        if op_card_dict["configs"]["ev_op_iterations"]:
+            _logger.warning("Provided ev_op_iterations for a TRN theory. It will be unused")
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
     if theory["ModEv"] == "EXA":
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
