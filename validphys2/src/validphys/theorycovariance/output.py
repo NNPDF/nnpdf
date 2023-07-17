@@ -6,18 +6,17 @@ Basic tools for plotting theory covariance matrices and their properties.
 from __future__ import generator_stop
 
 import logging
-
 from math import inf
-import pandas as pd
-import numpy as np
-import scipy.linalg as la
-import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors
 
+from matplotlib import cm
+from matplotlib import colors as mcolors
+import numpy as np
+import pandas as pd
+import scipy.linalg as la
+
+from reportengine import collect
 from reportengine.figure import figure
 from reportengine.table import table
-from reportengine import collect
-
 from validphys import plotutils
 from validphys.results import groups_chi2_table
 
@@ -100,7 +99,7 @@ def plot_covmat_heatmap(covmat, title):
     # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
-    fig, ax = plt.subplots(figsize=(15, 15))
+    fig, ax = plotutils.subplots(figsize=(15, 15))
     matrixplot = ax.matshow(
         100 * matrix,
         cmap=cm.Spectral_r,
@@ -116,9 +115,11 @@ def plot_covmat_heatmap(covmat, title):
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
     ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
-    plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=30, ha="right", fontsize=20)
+    ax.xaxis.tick_bottom()
+    ax.set_yticks(ticklocs)
+    ax.set_yticklabels(ticklabels, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -0.5, len(matrix) - 0.5, linestyles="dashed")
@@ -127,7 +128,7 @@ def plot_covmat_heatmap(covmat, title):
     return fig
 
 
-_procorder = ("DIS NC", "DIS CC", "DY", "JETS", "TOP")
+_procorder = ("DIS NC", "DIS CC", "TOP", "DY NC", "DY CC", "SINGLETOP", "JETS", "PHOTON", "DIJET")
 
 _dsorder = (
     "BCDMSP",
@@ -203,15 +204,17 @@ def plot_corrmat_heatmap(corrmat, title):
     # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
-    fig, ax = plt.subplots(figsize=(15, 15))
+    fig, ax = plotutils.subplots(figsize=(15, 15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
     ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
-    plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=30, ha="right", fontsize=20)
+    ax.xaxis.tick_bottom()
+    ax.set_yticks(ticklocs)
+    ax.set_yticklabels(ticklabels, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -0.5, len(matrix) - 0.5, linestyles="dashed")
@@ -238,23 +241,24 @@ def plot_expcorrmat_heatmap(procs_corrmat):
 def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
     """Matrix plot for block diagonal theory covariance matrix"""
     fig = plot_covmat_heatmap(
-        theory_normblockcovmat, "Block diagonal theory covariance matrix by dataset",
+        theory_normblockcovmat,
+        "Block diagonal theory covariance matrix by dataset",
     )
     return fig
 
 
 @figure
 def plot_normthcovmat_heatmap_custom(
-    theory_normcovmat_custom, theoryids, fivetheories,
+    theory_normcovmat_custom,
+    theoryids,
+    fivetheories,
 ):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-    fig = plot_covmat_heatmap(
-        theory_normcovmat_custom, f"Theory Covariance matrix ({l} pt)"
-    )
+    fig = plot_covmat_heatmap(theory_normcovmat_custom, f"Theory Covariance matrix ({l} pt)")
     return fig
 
 
@@ -269,16 +273,16 @@ def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
 
 @figure
 def plot_thcorrmat_heatmap_custom(
-    theory_corrmat_custom, theoryids, fivetheories,
+    theory_corrmat_custom,
+    theoryids,
+    fivetheories,
 ):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
     if l == 5:
         if fivetheories == "bar":
             l = r"$\bar{5}$"
-    fig = plot_corrmat_heatmap(
-        theory_corrmat_custom, f"Theory Correlation matrix ({l} pt)"
-    )
+    fig = plot_corrmat_heatmap(theory_corrmat_custom, f"Theory Correlation matrix ({l} pt)")
     return fig
 
 
@@ -294,7 +298,9 @@ def plot_normexpplusblockthcovmat_heatmap(experimentplusblocktheory_normcovmat):
 
 @figure
 def plot_normexpplusthcovmat_heatmap_custom(
-    experimentplustheory_normcovmat_custom, theoryids, fivetheories,
+    experimentplustheory_normcovmat_custom,
+    theoryids,
+    fivetheories,
 ):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
@@ -320,7 +326,9 @@ def plot_expplusblockthcorrmat_heatmap(experimentplusblocktheory_corrmat):
 
 @figure
 def plot_expplusthcorrmat_heatmap_custom(
-    experimentplustheory_corrmat_custom, theoryids, fivetheories,
+    experimentplustheory_corrmat_custom,
+    theoryids,
+    fivetheories,
 ):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
@@ -337,20 +345,20 @@ def plot_expplusthcorrmat_heatmap_custom(
 @figure
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, procs_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df = (theory_block_diag_covmat.as_matrix() + procs_covmat.values) / np.mean(
-        procs_covmat.values
-    )
+    df = (theory_block_diag_covmat.as_matrix() + procs_covmat.values) / np.mean(procs_covmat.values)
     fig = plot_covmat_heatmap(
         df,
-        "(Theory + experiment)/mean(experiment)"
-        + "for block diagonal theory covmat by dataset",
+        "(Theory + experiment)/mean(experiment)" + "for block diagonal theory covmat by dataset",
     )
     return fig
 
 
 @figure
 def plot_covdiff_heatmap_custom(
-    theory_covmat_custom, procs_covmat, theoryids, fivetheories,
+    theory_covmat_custom,
+    procs_covmat,
+    theoryids,
+    fivetheories,
 ):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
@@ -360,15 +368,18 @@ def plot_covdiff_heatmap_custom(
     df = (theory_covmat_custom + procs_covmat) / np.mean(procs_covmat.values)
     fig = plot_covmat_heatmap(
         df,
-        "(Theory + experiment)/mean(experiment)"
-        + f"covariance matrices for {l} points",
+        f"(Theory + experiment)/mean(experiment) covariance matrices for {l} points",
     )
     return fig
 
 
 @figure
 def plot_diag_cov_comparison(
-    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, fivetheories,
+    theory_covmat_custom,
+    procs_covmat,
+    procs_data_values,
+    theoryids,
+    fivetheories,
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
@@ -392,12 +403,13 @@ def plot_diag_cov_comparison(
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
     sqrtdiags_tot.sort_index(0, inplace=True)
     sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags_exp.values, ".", label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, ".", label="Theory", color="red")
     ax.plot(sqrtdiags_tot.values, ".", label="Total", color="blue")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
-    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, 0, len(data), linestyles="dashed")
@@ -416,7 +428,11 @@ def plot_diag_cov_comparison(
 
 @figure
 def plot_diag_cov_impact(
-    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, fivetheories,
+    theory_covmat_custom,
+    procs_covmat,
+    procs_data_values,
+    theoryids,
+    fivetheories,
 ):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
@@ -426,9 +442,7 @@ def plot_diag_cov_impact(
     matrix_theory = theory_covmat_custom.values
     matrix_experiment = procs_covmat.values
     inv_exp = (np.diag(la.inv(matrix_experiment))) ** (-0.5) / procs_data_values
-    inv_tot = (np.diag(la.inv(matrix_theory + matrix_experiment))) ** (
-        -0.5
-    ) / procs_data_values
+    inv_tot = (np.diag(la.inv(matrix_theory + matrix_experiment))) ** (-0.5) / procs_data_values
     plot_index = theory_covmat_custom.index
     df_inv_exp = pd.DataFrame(inv_exp, index=plot_index)
     df_inv_exp.sort_index(0, inplace=True)
@@ -438,11 +452,12 @@ def plot_diag_cov_impact(
     df_inv_tot = pd.DataFrame(inv_tot, index=plot_index)
     df_inv_tot.sort_index(0, inplace=True)
     df_inv_tot = df_inv_tot.reindex(newindex)
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(df_inv_exp.values, ".", label="Experiment", color="orange")
     ax.plot(df_inv_tot.values, ".", label="Experiment + Theory", color="mediumseagreen")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(df_inv_exp)
-    plt.xticks(ticklocs, ticklabels, rotation="vertical", fontsize=20)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation="vertical", fontsize=20)
     ax.vlines(startlocs, 0, len(matrix_theory), linestyles="dashed")
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$", fontsize=30)
     ax.yaxis.set_tick_params(labelsize=20)
@@ -456,9 +471,7 @@ def plot_diag_cov_impact(
 
 
 @figure
-def plot_datasets_chi2_theory(
-    procs_data, each_dataset_chi2, abs_chi2_data_theory_dataset
-):
+def plot_datasets_chi2_theory(procs_data, each_dataset_chi2, abs_chi2_data_theory_dataset):
     """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
     ds = iter(each_dataset_chi2)
     dstheory = iter(abs_chi2_data_theory_dataset)

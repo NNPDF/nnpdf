@@ -1,14 +1,18 @@
 """
 This module contains checks to be perform by n3fit on the input
 """
-import os
 import logging
 import numbers
+import os
+
 import numpy as np
-from reportengine.checks import make_argcheck, CheckError
-from validphys.pdfbases import check_basis
+
 from n3fit.hyper_optimization import penalties as penalties_module
+from n3fit.hyper_optimization import rewards as rewards_module
 from n3fit.hyper_optimization.rewards import HyperLoss
+from reportengine.checks import CheckError, make_argcheck
+from validphys.core import PDF
+from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
 
@@ -402,3 +406,15 @@ def check_deprecated_options(fitting):
     for option in nnfit_options:
         if option in fitting:
             log.warning("'fitting::%s' is an nnfit-only key, it will be ignored", option)
+
+
+@make_argcheck
+def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
+    if fiatlux is not None:
+        luxset = fiatlux["luxset"]
+        pdfs_ids = luxset.get_members() - 1  # get_members counts also replica0
+        max_id = max(replicas)
+        if max_id > pdfs_ids:
+            raise CheckError(
+                f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set {luxset.name}:\nreplica id={max_id}, replicas of {luxset.name} = {pdfs_ids}"
+            )

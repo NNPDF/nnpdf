@@ -18,14 +18,16 @@
 
 
 """
-import logging
 from collections.abc import Iterable
+import logging
+
 import numpy as np
 import numpy.linalg as la
+
+from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
-from validphys.pdfbases import ALL_FLAVOURS, check_basis
 from validphys.lhapdfset import LHAPDFSet
-from validphys.arclength import integrability_number, arc_lengths
+from validphys.pdfbases import ALL_FLAVOURS, check_basis
 
 log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
@@ -78,6 +80,18 @@ class N3LHAPDFSet(LHAPDFSet):
             )
         return self.grid_values([fl], [x]).squeeze()[n]
 
+    def _register_photon(self, xgrid):
+        """If the PDF models contain photons, register the xgrid with them"""
+        for m in self._lhapdf_set:
+            pl = m.get_layer_re("add_photon")
+            # if pl is an empy list there's no photon
+            if not pl:
+                continue
+            pl[0].register_photon(xgrid)
+            # Recompile the model if necessary
+            if not pl[0].built:
+                m.compile()
+
     def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values for the grid
         The output is on the evolution basis.
@@ -103,9 +117,14 @@ class N3LHAPDFSet(LHAPDFSet):
         # as the scaling is done by the model itself
         mod_xgrid = xarr.reshape(1, -1, 1)
 
+        # Register the grid with the photon
+        self._register_photon(mod_xgrid)
+
         if replica is None or replica == 0:
             # We need generate output values for all replicas
-            result = np.concatenate([m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0)
+            result = np.concatenate(
+                [m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0
+            )
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
@@ -205,10 +224,12 @@ class N3PDF(PDF):
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        preprocessing_layers = self._models[replica - 1].get_layer_re(r"pdf_prepro_\d")
-        if len(preprocessing_layers) != 1:
+        preprocessing_layers = self._models[replica - 1].get_layer_re(r"preprocessing_factor_\d")
+        if len(preprocessing_layers) > 1:
             # We really don't want to fail at this point, but print a warning at least...
             log.warning("More than one preprocessing layer found within the model!")
+        elif len(preprocessing_layers) < 1:
+            log.warning("No preprocessing layer found within the model!")
         preprocessing_layer = preprocessing_layers[0]
 
         alphas_and_betas = None

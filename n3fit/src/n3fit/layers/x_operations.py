@@ -1,7 +1,7 @@
 """
     This module contains layers acting on the x-grid input of the NN
 
-    The three operations included are:
+    The two operations included are:
         - ``xDivide``
         - ``xIntegrator``
 
@@ -9,18 +9,21 @@
     for all flavours. The choice of flavours on which to act in a different way is given
     as an input argument.
 """
+from typing import List, Optional
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-BASIS_SIZE=14
+BASIS_SIZE = 14
+
 
 class xDivide(MetaLayer):
     """
-    Divide some PDFs by x
+    Create tensor of either 1/x or ones depending on the flavour,
+    to be used to divide some PDFs by x by multiplying with the result.
 
-    By default it utilizes the 14-flavour FK basis and divides [v, v3, v8]
-    which corresponds to indices (3,4,5) from
+    By default it utilizes the 14-flavour FK basis and divides [v, v3, v8, v15]
+    which corresponds to indices (3, 4, 5, 6) from
     (photon, sigma, g, v, v3, v8, v15, v24, v35, t3, t8, t15, t24, t35)
 
     Parameters:
@@ -28,27 +31,27 @@ class xDivide(MetaLayer):
         output_dim: int
             dimension of the pdf
         div_list: list
-            list of indices to be divided by X (by default [3,4,5]; [v, v3, v8]
+            list of indices to be divided by X (by default [3, 4, 5, 6]; [v, v3, v8, v15]
     """
 
-    def __init__(self, output_dim=BASIS_SIZE, div_list=None, **kwargs):
+    def __init__(
+        self, output_dim: int = BASIS_SIZE, div_list: Optional[List[int]] = None, **kwargs
+    ):
         if div_list is None:
             div_list = [3, 4, 5, 6]
         self.output_dim = output_dim
         self.div_list = div_list
         super().__init__(**kwargs)
 
+        self.powers = [-1 if i in div_list else 0 for i in range(output_dim)]
+
     def call(self, x):
-        out_array = []
-        one = op.tensor_ones_like(x)
-        for i in range(self.output_dim):
-            if i in self.div_list:
-                res = one / x
-            else:
-                res = one
-            out_array.append(res)
-        out_tensor = op.concatenate(out_array)
-        return out_tensor
+        return op.pow(x, self.powers)
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({"output_dim": self.output_dim, "div_list": self.div_list})
+        return config
 
 
 class xIntegrator(MetaLayer):

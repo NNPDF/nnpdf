@@ -85,8 +85,12 @@ class LossInvcovmat(MetaLayer):
         tmp = op.op_multiply([tmp_raw, self.mask])
         if tmp.shape[1] == 1:
             # einsum is not well suited for CPU, so use tensordot if not multimodel
-            right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
-            res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+            if len(self.kernel.shape) == 3:
+                right_dot = op.tensor_product(self.kernel[0, ...], tmp[0, 0, :], axes=1)
+                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+            else:
+                right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
+                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
         else:
             if len(self.kernel.shape) == 3:
                 res = op.einsum("bri, rij, brj -> r", tmp, self.kernel, tmp)

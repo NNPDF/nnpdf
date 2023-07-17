@@ -15,7 +15,7 @@ dataset_inputs:
 - { dataset: NMC, frac: 0.5 }
 - { dataset: SLACP, frac: 0.5}
 - { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
-- { dataset: CMSTTBARTOT, frac: 1.0, cfac: ['QCD'] }
+- { dataset: ATLASTTBARTOT8TEV, frac: 1.0, cfac: ['QCD'] }
 
 ############################################################
 datacuts:
@@ -34,7 +34,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 162        # database id
+  theoryid: 399        # database id
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
@@ -52,11 +52,11 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
     optimizer_name: 'RMSprop'
     learning_rate: 0.00001
     clipnorm: 1.0
-  epochs: 1000
+  epochs: 1100
   positivity:
     multiplier: 1.05
     initial: 1.5
-  stopping_patience: 0.30 # percentage of the number of epochs
+  stopping_patience: 0.10 # percentage of the number of epochs
   layer_type: 'dense'
   dropout: 0.0
   threshold_chi2: 10.0
@@ -77,12 +77,11 @@ fitting:
 positivity:
   posdatasets:
     - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSDYC, maxlambda: 1e5 }
+    - { dataset: POSDYS, maxlambda: 1e5 }
 
 integrability:
   integdatasets:
     - {dataset: INTEGXT8, maxlambda: 1e2}
-    - {dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 debug: true

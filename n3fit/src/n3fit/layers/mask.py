@@ -29,7 +29,10 @@ class Mask(MetaLayer):
             self.last_dim = -1
         else:
             self.mask = op.numpy_to_tensor(bool_mask, dtype=bool)
-            self.last_dim = count_nonzero(bool_mask[0,...])
+            if len(bool_mask.shape) == 1:
+                self.last_dim = count_nonzero(bool_mask)
+            else:
+                self.last_dim = count_nonzero(bool_mask[0, ...])
         self.c = c
         self.axis = axis
         super().__init__(**kwargs)

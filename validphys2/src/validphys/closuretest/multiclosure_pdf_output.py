@@ -5,25 +5,24 @@ Module containing all of the plots and tables for multiclosure estimators in
 PDF space.
 
 """
+from matplotlib.ticker import MaxNLocator
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
 import scipy.linalg as la
 import scipy.special
 
+from reportengine.figure import figure, figuregen
 from reportengine.table import table
-from reportengine.figure import figuregen, figure
-
+from validphys import plotutils
 from validphys.closuretest.multiclosure import DEFAULT_SEED
 from validphys.closuretest.multiclosure_pdf import (
     XI_FLAVOURS,
     bootstrap_pdf_differences,
-    xi_flavour_x,
-    replica_and_central_diff_totalpdf,
-    xi_totalpdf,
     fits_covariance_matrix_by_flavour,
     fits_covariance_matrix_totalpdf,
+    replica_and_central_diff_totalpdf,
+    xi_flavour_x,
+    xi_totalpdf,
 )
 
 
@@ -40,9 +39,7 @@ def xi_flavour_table(xi_flavour_x, xi_totalpdf):
         table of xi by flavour
 
     """
-    data = np.concatenate((xi_flavour_x.mean(axis=-1), [xi_totalpdf]), axis=0)[
-        :, np.newaxis
-    ]
+    data = np.concatenate((xi_flavour_x.mean(axis=-1), [xi_totalpdf]), axis=0)[:, np.newaxis]
     index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
     return pd.DataFrame(data, columns=[r"measured $\xi_{1\sigma}$"], index=index)
 
@@ -64,9 +61,7 @@ def plot_xi_flavour_x(
     """
     # treat singlet and gluon separately
     if use_x_basis:
-        x_for_plot = 2 * [internal_singlet_gluon_xgrid] + 5 * [
-            internal_nonsinglet_xgrid
-        ]
+        x_for_plot = 2 * [internal_singlet_gluon_xgrid] + 5 * [internal_nonsinglet_xgrid]
         x_label = "x"
     else:
         x_for_plot = 7 * [np.arange(multiclosure_nx)]
@@ -75,7 +70,7 @@ def plot_xi_flavour_x(
     for i, fl in enumerate(XI_FLAVOURS):
         if i == 0:
             fl = f"${fl}$"
-        fig, ax = plt.subplots()
+        fig, ax = plotutils.subplots()
         ax.plot(
             x_for_plot[i],
             xi_flavour_x[i, :],
@@ -103,10 +98,8 @@ def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
     """
     sigma, delta = replica_and_central_diff_totalpdf
     scaled_diffs = (delta / sigma).flatten()
-    fig, ax = plt.subplots()
-    ax.hist(
-        scaled_diffs, bins=50, density=True, label="Central PDF distribution"
-    )
+    fig, ax = plotutils.subplots()
+    ax.hist(scaled_diffs, bins=50, density=True, label="Central PDF distribution")
     xlim = (-5, 5)
     ax.set_xlim(xlim)
 
@@ -135,9 +128,7 @@ def fits_pdf_bias_variance_ratio(fits_pdf_flavour_ratio, fits_pdf_total_ratio):
             fl = f"${fl}$"
         records.append(dict(flavour=fl, ratio=fits_pdf_flavour_ratio[i]))
     records.append(dict(flavour="Total", ratio=fits_pdf_total_ratio))
-    df = pd.DataFrame.from_records(
-        records, index="flavour", columns=["flavour", "ratio"]
-    )
+    df = pd.DataFrame.from_records(records, index="flavour", columns=["flavour", "ratio"])
     df.columns = ["bias/variance"]
     return df
 
@@ -316,7 +307,7 @@ def plot_pdf_matrix(matrix, n_x, **kwargs):
     # we want to centre the labels on each of the xgrids
     # ticks appear shifted right by 0.5, so we account for this here
     ticks = (n_x) / 2 + n_x * np.arange(len(XI_FLAVOURS)) - 0.5
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     im = ax.imshow(matrix, **kwargs)
     fig.colorbar(im, ax=ax)
     ax.set_xticks(ticks)
@@ -349,9 +340,7 @@ def plot_multiclosure_correlation_matrix(fits_correlation_matrix_totalpdf, multi
     matrix.
 
     """
-    fig, ax = plot_pdf_matrix(
-        fits_correlation_matrix_totalpdf, multiclosure_nx, vmin=0, vmax=1
-    )
+    fig, ax = plot_pdf_matrix(fits_correlation_matrix_totalpdf, multiclosure_nx, vmin=0, vmax=1)
     ax.set_title("Correlation matrix estimated from multiclosure replicas")
     return fig
 
@@ -368,7 +357,7 @@ def plot_multiclosure_correlation_eigenvalues(fits_correlation_matrix_totalpdf):
     # e_val is in ascending order
     e_val, _ = la.eigh(fits_correlation_matrix_totalpdf)
     l2_condition = e_val[-1] / e_val[0]
-    fig, ax = plt.subplots()
+    fig, ax = plotutils.subplots()
     ax.plot(e_val, "*", label=f"l2-condition: {l2_condition:,.0f}")
     ax.set_ylabel(r"$\lambda_{\rm corr}$")
     ax.set_xlabel("eigenvalue index (ascending)")

@@ -10,17 +10,27 @@
 
 """
 from dataclasses import dataclass
+from typing import Callable, List
 
 import numpy as np
-from n3fit.msr import msr_impose
-from n3fit.layers import DIS, DY, ObsRotation, losses
-from n3fit.layers import Preprocessing, FkRotation, FlavourToEvolution, Mask
-from n3fit.layers.observable import is_unique
 
-from n3fit.backends import MetaModel, Input
+from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
-from n3fit.backends import MetaLayer, Lambda
-from n3fit.backends import base_layer_selector, regularizer_selector
+from n3fit.backends import regularizer_selector
+from n3fit.layers import (
+    DIS,
+    DY,
+    AddPhoton,
+    FkRotation,
+    FlavourToEvolution,
+    ObsRotation,
+    Preprocessing,
+    Mask,
+    losses,
+)
+from n3fit.layers.observable import is_unique
+from n3fit.msr import generate_msr_model_and_grid
+from validphys.photon.compute import Photon  # only used for type hint here
 
 @dataclass
 class ObservableWrapper:
@@ -285,13 +295,13 @@ def observable_generator(spec_dict,
 
 # Network generation functions
 def generate_dense_network(
-    nodes_in,
-    nodes,
-    activations,
-    initializer_name="glorot_normal",
-    seed=0,
-    dropout_rate=0.0,
-    regularizer=None,
+    nodes_in: int,
+    nodes: int,
+    activations: List[str],
+    initializer_name: str = "glorot_normal",
+    seed: int = 0,
+    dropout_rate: float = 0.0,
+    regularizer: str = None,
 ):
     """
     Generates a dense network
@@ -341,7 +351,6 @@ def generate_dense_per_flavour_network(
     number_of_layers = len(nodes)
     current_seed = seed
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-
         initializers = []
         for _ in range(basis_size):
             # select the initializer and move the seed
@@ -382,28 +391,28 @@ def generate_dense_per_flavour_network(
 
 
 def pdfNN_layer_generator(
-    inp=2,
-    nodes=None,
-    activations=None,
-    initializer_name="glorot_normal",
-    layer_type="dense",
-    flav_info=None,
-    fitbasis="NN31IC",
-    out=14,
-    seed=None,
-    dropout=0.0,
-    regularizer=None,
-    regularizer_args=None,
-    impose_sumrule=None,
-    scaler=None,
-    parallel_models=1,
+    nodes: List[int] = None,
+    activations: List[str] = None,
+    initializer_name: str = "glorot_normal",
+    layer_type: str = "dense",
+    flav_info: dict = None,
+    fitbasis: str = "NN31IC",
+    out: int = 14,
+    seed: int = None,
+    dropout: float = 0.0,
+    regularizer: str = None,
+    regularizer_args: dict = None,
+    impose_sumrule: str = None,
+    scaler: Callable = None,
+    parallel_models: int = 1,
+    photons: Photon = None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
     and outputs a basis of 14 PDFs.
     It generates the preprocessing of the x into a set (x, log(x)),
     the arbitrary NN to fit the form of the PDF
-    and the preprocessing factors.
+    and the preprocessing factor.
 
     The funtional form of the output of this function is of:
 
@@ -438,7 +447,7 @@ def pdfNN_layer_generator(
     A function is constructed that joins all those layers. The function takes a
     tensor as the input and applies all layers for NN in order.
 
-    4. Create a preprocessing layer (that takes as input the same tensor x as the NN)
+    4. Create a preprocessing factor layer (that takes as input the same tensor x as the NN)
     and multiply it to the NN. We have now:
         N(x)_{j} * x^{1-alpha_{j}} * (1-x)^{beta_{j}}
 
@@ -461,8 +470,6 @@ def pdfNN_layer_generator(
 
     Parameters
     ----------
-        inp: int
-            dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
         nodes: list(int)
             list of the number of nodes per layer of the PDF NN. Default: [15,8]
         activation: list
@@ -484,11 +491,16 @@ def pdfNN_layer_generator(
             rate of dropout layer by layer
         impose_sumrule: str
             whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR)
-        scaler: scaler
+        scaler: callable
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
+            When None, instead turn the x point into a (x, log(x)) pair
         parallel_models: int
             How many models should be trained in parallel
+        photon: :py:class:`validphys.photon.compute.Photon`
+            If given, gives the AddPhoton layer a function to compute a photon which will be added at the
+            index 0 of the 14-size FK basis
+            This same function will also be used to compute the MSR component for the photon
 
     Returns
     -------
@@ -508,9 +520,6 @@ def pdfNN_layer_generator(
     if impose_sumrule is None:
         impose_sumrule = "All"
 
-    if scaler:
-        inp = 1
-
     if activations is None:
         activations = ["tanh", "linear"]
     elif callable(activations):
@@ -525,120 +534,206 @@ def pdfNN_layer_generator(
     # The number of nodes in the last layer is equal to the number of fitted flavours
     last_layer_nodes = nodes[-1]  # (== len(flav_info))
 
-    # Generate the generic layers that will not depend on extra considerations
+    # Process input options. There are 2 options:
+    # 1. Scale the input
+    # 2. Concatenate log(x) to the input
+    use_feature_scaling = scaler is not None
 
-    # First prepare the input for the PDF model and any scaling if needed
-    placeholder_input = Input(shape=(None, 1), batch_size=1)
-
-    subtract_one = False
-    process_input = Lambda(lambda x: x)
-    input_x_eq_1 = [1.0]
     # When scaler is active we also want to do the subtraction of large x
     # TODO: make it its own option (i.e., one could want to use this without using scaler)
-    if scaler:
-        # change the input domain [0,1] -> [-1,1]
-        process_input = Lambda(lambda x: 2 * x - 1)
-        subtract_one = True
-        input_x_eq_1 = scaler([1.0])[0]
-        placeholder_input = Input(shape=(None, 2), batch_size=1)
-    elif inp == 2:
-        # If the input is of type (x, logx)
-        # create a x --> (x, logx) layer to preppend to everything
-        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1))
+    subtract_one = use_feature_scaling
 
-    model_input = {"pdf_input": placeholder_input}
+    # Feature scaling happens before the pdf model and changes x->(scaler(x), x),
+    # so it adds an input dimension
+    pdf_input_dimensions = 2 if use_feature_scaling else 1
+    # Adding of logs happens inside, but before the NN and adds a dimension there
+    nn_input_dimensions = 1 if use_feature_scaling else 2
+
+    # Define the main input
+    do_nothing = lambda x: x
+    if use_feature_scaling:
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
+        process_input = do_nothing
+        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
+        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
+    else:  # add log(x)
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
+        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
+        extract_original = do_nothing
+        extract_nn_input = do_nothing
+
+    model_input = {"pdf_input": pdf_input}
+
     if subtract_one:
-        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1))
+        input_x_eq_1 = [1.0]
+        if use_feature_scaling:
+            input_x_eq_1 = scaler(input_x_eq_1)[0]
+        # the layer that subtracts 1 from the NN output
+        subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
+        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1), name='x_eq_1')
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
-    # Evolution layer
-    layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out)
+    # the layer that multiplies the NN output by the preprocessing factor
+    apply_preprocessing_factor = Lambda(op.op_multiply, name='prefactor_times_NN')
+
+    # Photon layer
+    layer_photon = AddPhoton(photons=photons, name="add_photon")
 
     # Basis rotation
-    basis_rotation = FlavourToEvolution(flav_info=flav_info, fitbasis=fitbasis)
+    basis_rotation = FlavourToEvolution(
+        flav_info=flav_info, fitbasis=fitbasis, name="pdf_evolution_basis"
+    )
+
+    # Evolution layer
+    layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out, name="pdf_FK_basis")
 
     # Normalization and sum rules
     if impose_sumrule:
-        sumrule_layer, integrator_input = msr_impose(mode=impose_sumrule, scaler=scaler)
+        sumrule_layer, integrator_input = generate_msr_model_and_grid(
+            mode=impose_sumrule, scaler=scaler, photons=photons
+        )
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
 
-    # Now we need a trainable network per model to be trained in parallel
+    # Now we need a trainable network per replica to be trained in parallel
     pdf_models = []
-    for i, layer_seed in enumerate(seed):
-        if layer_type == "dense":
-            reg = regularizer_selector(regularizer, **regularizer_args)
-            list_of_pdf_layers = generate_dense_network(
-                inp,
-                nodes,
-                activations,
-                initializer_name,
-                seed=layer_seed,
-                dropout_rate=dropout,
-                regularizer=reg,
+
+    # Only these layers change from replica to replica:
+    nn_replicas = []
+    preprocessing_factor_replicas = []
+    for i_replica, replica_seed in enumerate(seed):
+        preprocessing_factor_replicas.append(
+            Preprocessing(
+                flav_info=flav_info,
+                input_shape=(1,),
+                name=f"preprocessing_factor_{i_replica}",
+                seed=replica_seed + number_of_layers,
+                large_x=not subtract_one,
             )
-        elif layer_type == "dense_per_flavour":
-            # Define the basis size attending to the last layer in the network
-            # TODO: this information should come from the basis information
-            #       once the basis information is passed to this class
-            list_of_pdf_layers = generate_dense_per_flavour_network(
-                inp,
-                nodes,
-                activations,
-                initializer_name,
-                seed=layer_seed,
-                basis_size=last_layer_nodes,
+        )
+        nn_replicas.append(
+            generate_nn(
+                layer_type=layer_type,
+                input_dimensions=nn_input_dimensions,
+                nodes=nodes,
+                activations=activations,
+                initializer_name=initializer_name,
+                replica_seed=replica_seed,
+                dropout=dropout,
+                regularizer=regularizer,
+                regularizer_args=regularizer_args,
+                last_layer_nodes=last_layer_nodes,
+                name=f"NN_{i_replica}",
             )
-
-        def dense_me(x):
-            """Takes an input tensor `x` and applies all layers
-            from the `list_of_pdf_layers` in order"""
-            processed_x = process_input(x)
-            curr_fun = list_of_pdf_layers[0](processed_x)
-
-            for dense_layer in list_of_pdf_layers[1:]:
-                curr_fun = dense_layer(curr_fun)
-            return curr_fun
-
-        preproseed = layer_seed + number_of_layers
-        layer_preproc = Preprocessing(
-            flav_info=flav_info,
-            input_shape=(1,),
-            name=f"pdf_prepro_{i}",
-            seed=preproseed,
-            large_x=not subtract_one,
         )
 
-        # Apply preprocessing and basis
-        def layer_fitbasis(x):
-            """The tensor x has a expected shape of (1, None, {1,2})
-            where x[...,0] corresponds to the feature_scaled input and x[...,-1] the original input
-            """
-            x_scaled = op.op_gather_keep_dims(x, 0, axis=-1)
-            x_original = op.op_gather_keep_dims(x, -1, axis=-1)
+    # All layers have been made, now we need to connect them,
+    # do this in a function so we can call it for both grids and each replica
+    # Since all layers are already made, they will be reused
+    def compute_unnormalized_pdf(x, neural_network, compute_preprocessing_factor):
+        # Preprocess the input grid
+        x_nn_input = extract_nn_input(x)
+        x_original = extract_original(x)
+        x_processed = process_input(x_nn_input)
 
-            nn_output = dense_me(x_scaled)
-            if subtract_one:
-                nn_at_one = dense_me(layer_x_eq_1)
-                nn_output = op.op_subtract([nn_output, nn_at_one])
+        # Compute the neural network output
+        nn_output = neural_network(x_processed)
+        if subtract_one:
+            x_eq_1_processed = process_input(layer_x_eq_1)
+            nn_at_one = neural_network(x_eq_1_processed)
+            nn_output = subtract_one_layer([nn_output, nn_at_one])
 
-            ret = op.op_multiply([nn_output, layer_preproc(x_original)])
-            if basis_rotation.is_identity():
-                # if we don't need to rotate basis we don't want spurious layers
-                return ret
-            return basis_rotation(ret)
+        # Compute the preprocessing factor and multiply
+        preprocessing_factor = compute_preprocessing_factor(x_original)
+        pref_nn = apply_preprocessing_factor([nn_output, preprocessing_factor])
 
-        # Rotation layer, changes from the 8-basis to the 14-basis
-        def layer_pdf(x):
-            return layer_evln(layer_fitbasis(x))
+        # Apply basis rotation if needed
+        if not basis_rotation.is_identity():
+            pref_nn = basis_rotation(pref_nn)
 
-        # Final PDF (apply normalization)
-        final_pdf = sumrule_layer(layer_pdf)
+        # Transform to FK basis
+        pdf_unnormalized = layer_evln(pref_nn)
+
+        return pdf_unnormalized
+
+    # Finally compute the normalized PDFs for each replica
+    pdf_models = []
+    for i_replica, (preprocessing_factor, nn) in enumerate(
+        zip(preprocessing_factor_replicas, nn_replicas)
+    ):
+        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
+
+        if impose_sumrule:
+            pdf_integration_grid = compute_unnormalized_pdf(
+                integrator_input, nn, preprocessing_factor
+            )
+            pdf_normalized = sumrule_layer(
+                {
+                    "pdf_x": pdf_unnormalized,
+                    "pdf_xgrid_integration": pdf_integration_grid,
+                    "xgrid_integration": integrator_input,
+                    # The photon is treated separately, need to get its integrals to normalize the pdf
+                    "photon_integral": op.numpy_to_tensor(
+                        0.0 if not photons else photons.integral[i_replica]
+                    ),
+                }
+            )
+            pdf = pdf_normalized
+        else:
+            pdf = pdf_unnormalized
+
+        if photons:
+            # Add in the photon component
+            pdf = layer_photon(pdf, i_replica)
 
         # Create the model
-        pdf_model = MetaModel(
-            model_input, final_pdf(placeholder_input), name=f"PDF_{i}", scaler=scaler
-        )
+        pdf_model = MetaModel(model_input, pdf, name=f"PDF_{i_replica}", scaler=scaler)
         pdf_models.append(pdf_model)
+
     return pdf_models
+
+
+def generate_nn(
+    layer_type: str,
+    input_dimensions: int,
+    nodes: List[int],
+    activations: List[str],
+    initializer_name: str,
+    replica_seed: int,
+    dropout: float,
+    regularizer: str,
+    regularizer_args: dict,
+    last_layer_nodes: int,
+    name: str,
+) -> MetaModel:
+    """
+    Create the part of the model that contains all of the actual neural network
+    layers.
+    """
+    common_args = {
+        'nodes_in': input_dimensions,
+        'nodes': nodes,
+        'activations': activations,
+        'initializer_name': initializer_name,
+        'seed': replica_seed,
+    }
+    if layer_type == "dense":
+        reg = regularizer_selector(regularizer, **regularizer_args)
+        list_of_pdf_layers = generate_dense_network(
+            **common_args, dropout_rate=dropout, regularizer=reg
+        )
+    elif layer_type == "dense_per_flavour":
+        list_of_pdf_layers = generate_dense_per_flavour_network(
+            **common_args, basis_size=last_layer_nodes
+        )
+
+    # Note: using a Sequential model would be more appropriate, but it would require
+    # creating a MetaSequential model.
+    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+    pdf = x
+    for layer in list_of_pdf_layers:
+        pdf = layer(pdf)
+
+    model = MetaModel({'NN_input': x}, pdf, name=name)
+    return model

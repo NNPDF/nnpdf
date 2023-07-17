@@ -4,8 +4,8 @@ n3fit_data.py
 Providers which prepare the data ready for
 :py:func:`n3fit.performfit.performfit`.
 """
-import functools
 from collections import defaultdict
+import functools
 import hashlib
 import logging
 
@@ -14,11 +14,8 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.table import table
-
-from validphys.n3fit_data_utils import (
-    validphys_group_extractor,
-)
 from validphys.core import IntegrabilitySetSpec, TupleComp
+from validphys.n3fit_data_utils import validphys_group_extractor
 
 log = logging.getLogger(__name__)
 
@@ -53,6 +50,13 @@ def replica_mcseed(replica, mcseed, genrep):
     return res
 
 
+def replica_luxseed(replica, luxseed):
+    """Generate the ``luxseed`` for a ``replica``.
+    Identical to replica_nnseed but used for a different purpose.
+    """
+    return replica_nnseed(replica, luxseed)
+
+
 class _TrMasks(TupleComp):
     """Class holding the training validation mask for a group of datasets
     If the same group of dataset receives the same trvlseed then the mask
@@ -70,7 +74,7 @@ class _TrMasks(TupleComp):
             yield m
 
 
-def tr_masks(data, replica_trvlseed, parallel_models):
+def tr_masks(data, replica_trvlseed, parallel_models=False):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
@@ -94,13 +98,11 @@ def tr_masks(data, replica_trvlseed, parallel_models):
         ndata = len(cuts.load()) if cuts else dataset.commondata.ndata
         frac = dataset.frac
         # We do this so that a given dataset will always have the same number of points masked
-        trmax = int(ndata*frac)
+        trmax = int(ndata * frac)
         if trmax == 0:
             # If that number is 0, then get 1 point with probability frac
             trmax = int(rng.random() < frac) if not parallel_models else 1
-        mask = np.concatenate(
-            [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
-        )
+        mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
         rng.shuffle(mask)
         trmask_partial.append(mask)
     return _TrMasks(str(data), replica_trvlseed, trmask_partial)

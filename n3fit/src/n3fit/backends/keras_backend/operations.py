@@ -23,20 +23,22 @@
     equally operations are automatically converted to layers when used as such.
 """
 
+from typing import Optional
+
 import numpy as np
+import numpy.typing as npt
 import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import subtract as keras_subtract
-
-from tensorflow.keras.layers import Input
-from tensorflow.keras import backend as K
 
 from validphys.convolution import OP
 
 
 def evaluate(tensor):
-    """ Evaluate input tensor using the backend """
+    """Evaluate input tensor using the backend"""
     return K.eval(tensor)
 
 
@@ -107,36 +109,29 @@ def numpy_to_tensor(ival, **kwargs):
 
 # f(x: tensor) -> y: tensor
 def batchit(x, batch_dimension=0, **kwarg):
-    """ Add a batch dimension to tensor x """
+    """Add a batch dimension to tensor x"""
     return tf.expand_dims(x, batch_dimension, **kwarg)
 
 
 # layer generation
-def numpy_to_input(numpy_array, no_reshape=False, name=None):
+def numpy_to_input(numpy_array: npt.NDArray, name: Optional[str] = None):
     """
-    Takes a numpy array and generates a Input layer.
-    By default it adds a batch dimension (of size 1) so that the shape of the layer
-    is that of the array
+    Takes a numpy array and generates an Input layer with the same shape,
+    but with a batch dimension (of size 1) added.
 
     Parameters
     ----------
         numpy_array: np.ndarray
-        no_reshape: bool
-            if true, don't add batch dimension, take the first dimension of the array as the batch
-        name: bool
+        name: str
             name to give to the layer
     """
-    if no_reshape:
-        batched_array = numpy_array
-        batch_size = numpy_array.shape[0]
-        shape = numpy_array.shape[1:]
-    else:
-        batched_array = np.expand_dims(numpy_array, 0)
-        batch_size = 1
-        shape = numpy_array.shape
-    input_layer = Input(batch_size=batch_size, shape=shape, name=name)
+    batched_array = np.expand_dims(numpy_array, 0)
+    shape = list(numpy_array.shape)
+    # set the number of gridpoints to None, otherwise shapes don't show in model.summary
+    shape[0] = None
+
+    input_layer = Input(batch_size=1, shape=shape, name=name)
     input_layer.tensor_content = batched_array
-    input_layer.original_shape = no_reshape
     return input_layer
 
 
@@ -174,7 +169,7 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     both eager and non-eager tensors
     """
     if indices == -1:
-        indices = tensor.shape[axis]-1
+        indices = tensor.shape[axis] - 1
 
     def tmp(x):
         y = tf.gather(x, indices, axis=axis, **kwargs)
@@ -188,6 +183,7 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
 # Tensor operations
 # f(x: tensor[s]) -> y: tensor
 #
+
 
 # Generation operations
 # generate tensors of given shape/content
@@ -216,7 +212,7 @@ def many_replication(grid, replications, axis=0, **kwargs):
 # modify properties of the tensor like the shape or elements it has
 @tf.function
 def flatten(x):
-    """ Flatten tensor x """
+    """Flatten tensor x"""
     return tf.reshape(x, (-1,))
 
 @tf.function
@@ -244,7 +240,7 @@ def transpose(tensor, **kwargs):
 
 
 def stack(tensor_list, axis=0, **kwargs):
-    """ Stack a list of tensors
+    """Stack a list of tensors
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
     """
     return tf.stack(tensor_list, axis=axis, **kwargs)
@@ -284,8 +280,8 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
         pdf_x_pdf: tf.tensor
             rank3 (len(mask_true), xgrid, xgrid, replicas)
     """
-    if raw_pdf.shape[-1] == 1: # only one replica!
-        pdf = tf.squeeze(raw_pdf, axis=(0,-1))
+    if raw_pdf.shape[-1] == 1:  # only one replica!
+        pdf = tf.squeeze(raw_pdf, axis=(0, -1))
         luminosity = tensor_product(pdf, pdf, axes=0)
         lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
         pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), -1)
@@ -311,6 +307,14 @@ def tensor_product(*args, **kwargs):
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
     """
     return tf.tensordot(*args, **kwargs)
+
+
+@tf.function
+def pow(tensor, power):
+    """
+    Computes the power of the tensor
+    """
+    return tf.pow(tensor, power)
 
 
 @tf.function(experimental_relax_shapes=True)

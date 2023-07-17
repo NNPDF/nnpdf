@@ -8,4 +8,4 @@ extra_labels:
 
 experiment: "AUXILIARY"
 
-nnpdf31_process: DY
+nnpdf31_process: DY NC

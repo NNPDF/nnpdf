@@ -122,15 +122,6 @@ following the points presented above you can proceed with a fit.
     downloaded automatically. Alternatively they can be obtained with the
     ``vp-get`` tool.
 
-    ```eval_rst
-    .. note::
-       This step is not strictly necessary when producing a standard fit with
-       ``n3fit`` but it is required by :ref:`validphys <vp-index>`
-       and it should therefore always be done. Note that :ref:`vp-upload <upload-fit>`
-       will fail unless this step has been followed. If necessary, this step can
-       be done after the fit has been run.
-    ```
-
 2. The ``n3fit`` program takes a ``runcard.yml`` as input and a replica number, e.g.
 ```n3fit runcard.yml replica``` where ``replica`` goes from 1-n where n is the
 maximum number of desired replicas. Note that if you desire, for example, a 100
@@ -256,3 +247,8 @@ Iterate the fit
 
 It may be desirable to iterate a fit to achieve a higher degree of convergence/stability in the fit.
 To read more about this, see [How to run an iterated fit](run-iterated-fit).
+
+QED fit
+-------
+
+In order to run a QED fit see [How to run a QED fit](run-qed-fit)

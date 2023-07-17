@@ -8,20 +8,22 @@
     This allows to use hyperscanning libraries, that need to change the parameters of the network
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
-import logging
 from collections import namedtuple
 from itertools import zip_longest
+import logging
 
-import numpy
 import numpy as np
-from scipy.interpolate import PchipInterpolator
+
 from n3fit import model_gen
-from n3fit.backends import MetaModel, clear_backend_state, callbacks
+from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
+import n3fit.hyper_optimization.penalties
+import n3fit.hyper_optimization.rewards
+from n3fit.hyper_optimization.rewards import HyperLoss
+from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
-import n3fit.hyper_optimization.penalties
-from n3fit.hyper_optimization.rewards import HyperLoss
+from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +39,7 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
+
 
 def _pdf_injection(pdf_layers, observables, masks):
     """
@@ -99,6 +102,9 @@ class ModelTrainer:
         model_file=None,
         sum_rules=None,
         parallel_models=1,
+        theoryid=None,
+        lux_params=None,
+        replicas=None,
     ):
         """
         Parameters
@@ -127,6 +133,12 @@ class ModelTrainer:
                         whether sum rules should be enabled (All, MSR, VSR, False)
             parallel_models: int
                 number of models to fit in parallel
+            theoryid: validphys.core.TheoryIDSpec
+                object contining info for generating the photon
+            lux_params: dict
+                dictionary containing the params needed from LuxQED
+            replicas_id: list
+                list with the replicas ids to be fitted
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -143,6 +155,9 @@ class ModelTrainer:
         self.all_datasets = []
         self._scaler = None
         self._parallel_models = parallel_models
+        self.theoryid = theoryid
+        self.lux_params = lux_params
+        self.replicas = replicas
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -276,7 +291,6 @@ class ModelTrainer:
             self.training["posdatasets"].append(pos_dict["name"])
             self.validation["expdata"].append(pos_dict["expdata"])
             self.validation["posdatasets"].append(pos_dict["name"])
-
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
                 self.training["expdata"].append(integ_dict["expdata"])
@@ -342,9 +356,7 @@ class ModelTrainer:
         # now the output needs to be splitted so that each experiment takes its corresponding input
         sp_ar = [[i.shape[1] for i in inputs_unique]]
         sp_kw = {"axis": 1}
-        sp_layer = op.as_layer(
-            op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split"
-        )
+        sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
@@ -400,9 +412,7 @@ class ModelTrainer:
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
-                {"pdf_input": xinput.input}
-            )
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
@@ -450,6 +460,12 @@ class ModelTrainer:
 
         if self.print_summary:
             training.summary()
+            pdf_model = training.get_layer("PDF_0")
+            pdf_model.summary()
+            nn_model = pdf_model.get_layer("NN_0")
+            nn_model.summary()
+            msr_model = pdf_model.get_layer("impose_msr")
+            msr_model.summary()
 
         models = {
             "training": training,
@@ -520,11 +536,11 @@ class ModelTrainer:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
             # Stacked tr-vl mask array for all replicas for this dataset
-            replica_masks = numpy.stack([e[index]["trmask"] for e in self.exp_info])
-            training_data = numpy.stack([e[index]["expdata"].flatten() for e in self.exp_info])
-            validation_data = numpy.stack([e[index]["expdata_vl"].flatten() for e in self.exp_info])
-            invcovmat = numpy.stack([e[index]["invcovmat"] for e in self.exp_info])
-            invcovmat_vl = numpy.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
+            replica_masks = np.stack([e[index]["trmask"] for e in self.exp_info])
+            training_data = np.stack([e[index]["expdata"].flatten() for e in self.exp_info])
+            validation_data = np.stack([e[index]["expdata_vl"].flatten() for e in self.exp_info])
+            invcovmat = np.stack([e[index]["invcovmat"] for e in self.exp_info])
+            invcovmat_vl = np.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
 
             exp_layer = model_gen.observable_generator(exp_dict,
                                                        mask_array=replica_masks,
@@ -552,8 +568,8 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
-            replica_masks = numpy.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
-            training_data = numpy.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
+            replica_masks = np.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
+            training_data = np.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
 
             pos_layer = model_gen.observable_generator(pos_dict,
                                                        positivity_initial=pos_initial,
@@ -596,53 +612,7 @@ class ModelTrainer:
 
         # Store a reference to the interpolator as self._scaler
         if interpolation_points:
-            input_arr = np.concatenate(self.input_list, axis=1)
-            input_arr = np.sort(input_arr)
-            input_arr_size = input_arr.size
-
-            # Define an evenly spaced grid in the domain [0,1]
-            # force_set_smallest is used to make sure the smallest point included in the scaling is
-            # 1e-9, to prevent trouble when saving it to the LHAPDF grid
-            force_set_smallest = input_arr.min() > 1e-9
-            if force_set_smallest:
-                new_xgrid = np.linspace(
-                    start=1 / input_arr_size, stop=1.0, endpoint=False, num=input_arr_size
-                )
-            else:
-                new_xgrid = np.linspace(start=0, stop=1.0, endpoint=False, num=input_arr_size)
-
-            # When mapping the FK xgrids onto our new grid, we need to consider degeneracies among
-            # the x-values in the FK grids
-            unique, counts = np.unique(input_arr, return_counts=True)
-            map_to_complete = []
-            for cumsum_ in np.cumsum(counts):
-                # Make sure to include the smallest new_xgrid value, such that we have a point at
-                # x<=1e-9
-                map_to_complete.append(new_xgrid[cumsum_ - counts[0]])
-            map_to_complete = np.array(map_to_complete)
-            map_from_complete = unique
-
-            #  If needed, set feature_scaling(x=1e-9)=0
-            if force_set_smallest:
-                map_from_complete = np.insert(map_from_complete, 0, 1e-9)
-                map_to_complete = np.insert(map_to_complete, 0, 0.0)
-
-            # Select the indices of the points that will be used by the interpolator
-            onein = map_from_complete.size / (int(interpolation_points) - 1)
-            selected_points = [round(i * onein - 1) for i in range(1, int(interpolation_points))]
-            if selected_points[0] != 0:
-                selected_points = [0] + selected_points
-            map_from = map_from_complete[selected_points]
-            map_from = np.log(map_from)
-            map_to = map_to_complete[selected_points]
-
-            try:
-                scaler = PchipInterpolator(map_from, map_to)
-            except ValueError:
-                raise ValueError(
-                    "interpolation_points is larger than the number of unique " "input x-values"
-                )
-            self._scaler = lambda x: np.concatenate([scaler(np.log(x)), x], axis=-1)
+            self._scaler = generate_scaler(self.input_list, interpolation_points)
 
     def _generate_pdf(
         self,
@@ -654,6 +624,7 @@ class ModelTrainer:
         regularizer,
         regularizer_args,
         seed,
+        photons,
     ):
         """
         Defines the internal variable layer_pdf
@@ -680,6 +651,8 @@ class ModelTrainer:
                 dictionary of arguments for the regularizer
             seed: int
                 seed for the NN
+            photons: :py:class:`validphys.photon.compute.Photon`
+                function to compute the photon PDF
         see model_gen.pdfNN_layer_generator for more information
 
         Returns
@@ -705,6 +678,7 @@ class ModelTrainer:
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
             parallel_models=self._parallel_models,
+            photons=photons,
         )
         return pdf_models
 
@@ -874,7 +848,13 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
-
+        # Initialize all photon classes for the different replicas:
+        if self.lux_params:
+            photons = Photon(
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+            )
+        else:
+            photons = None
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
@@ -893,7 +873,13 @@ class ModelTrainer:
                 params.get("regularizer", None),  # regularizer optional
                 params.get("regularizer_args", None),
                 seeds,
+                photons,
             )
+
+            if photons:
+                for m in pdf_models:
+                    pl = m.get_layer("add_photon")
+                    pl.register_photon(xinput.input.tensor_content)
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
@@ -937,11 +923,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
 
             if self.mode_hyperopt:
                 if not passed:

@@ -181,6 +181,11 @@ void LHCBWZMU7TEVFilter::ReadData()
   }
   idat+=ndata_wm;
 
+  for(int i=0; i<fNData; i++)
+    {
+      cout << totsys[i] << endl;
+    }
+  
   // Reading Covariance Matrix
   for (int i = 0; i < fNData; i++) {
     for (int j = 0; j < i+1; j++) {             // read only lower triangle
