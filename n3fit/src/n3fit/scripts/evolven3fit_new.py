@@ -60,6 +60,28 @@ def construct_eko_photon_parser(subparsers):
         ),
     )
     parser.add_argument(
+        "theoryID", type=int, help="ID of the theory used to produce the eko"
+    )
+    parser.add_argument(
+        "dump",
+        type=pathlib.Path,
+        help="Path where the EKO is dumped",
+    )
+    parser.add_argument(
+        "-i",
+        "--x-grid-ini",
+        default=None,
+        type=float,
+        help="Starting point of the x-grid",
+    )
+    parser.add_argument(
+        "-p",
+        "--x-grid-points",
+        default=None,
+        type=int,
+        help="Number of points of the x-grid",
+    )
+    parser.add_argument(
         "-g",
         "--q-gamma",
         default=100,
@@ -181,8 +203,9 @@ def main():
                 args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
             )
         elif args.actions == "produce_eko_photon":
-            #has to produce the correct card for the eko photon
-            pass
+            tcard, opcard = eko_utils.construct_eko_cards(
+                args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info, args.q_gamma, is_eko_photon = True
+            )
         runner.solve(tcard, opcard, args.dump)
 
 
