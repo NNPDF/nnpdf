@@ -1,0 +1,20 @@
+dataset_label: "ATLAS $Z$ 7 TeV 2010"
+x: k1
+
+x_label: '$\left\|\eta/y\right|$'
+
+y_label: '$d\sigma/dy$ (fb)'
+
+line_by:
+  - Boson
+
+normalize:
+    figure_by:
+        - Boson
+
+extra_labels:
+   Boson:  ["$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$"]
+
+experiment: "ATLAS"
+
+nnpdf31_process: DY NC

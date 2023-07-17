@@ -1,11 +1,10 @@
-from n3fit.backends import MetaLayer
-from n3fit.backends import constraints
+from n3fit.backends import MetaLayer, constraints
 from n3fit.backends import operations as op
 
 
 class Preprocessing(MetaLayer):
     """
-    Applies preprocessing to the PDF.
+    Computes preprocessing factor for the PDF.
 
     This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha
     are model paramters that can be trained. If feature scaling is used, the preprocessing
@@ -21,7 +20,7 @@ class Preprocessing(MetaLayer):
     Parameters
     ----------
         flav_info: list
-            list of dicts containing the information about the fitting of the preprocessing
+            list of dicts containing the information about the fitting of the preprocessing factor
             This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
             The dicts can contain the following fields:
                 `smallx`: range of alpha
@@ -29,21 +28,18 @@ class Preprocessing(MetaLayer):
                 `trainable`: whether these alpha-beta should be trained during the fit
                             (defaults to true)
         large_x: bool
-            Whether large x preprocessing should be active
+            Whether large x preprocessing factor should be active
         seed: int
             seed for the initializer of the random alpha and beta values
     """
 
     def __init__(
-        self,
-        flav_info=None,
-        seed=0,
-        initializer="random_uniform",
-        large_x=True,
-        **kwargs,
+        self, flav_info=None, seed=0, initializer="random_uniform", large_x=True, **kwargs,
     ):
         if flav_info is None:
-            raise ValueError("Trying to instantiate a preprocessing with no basis information")
+            raise ValueError(
+                "Trying to instantiate a preprocessing factor with no basis information"
+            )
         self.flav_info = flav_info
         self.seed = seed
         self.output_dim = len(flav_info)
