@@ -54,6 +54,7 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     If normalize is True, the specialization for ratio plots will be used to
     generate the PlotInfo objects.
     """
+    #import ipdb; ipdb.set_trace()
     if cuts is None:
         if isinstance(data, DataSetSpec):
             cuts = data.cuts.load() if data.cuts else None

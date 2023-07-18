@@ -140,6 +140,7 @@ def fits_normed_dataset_central_delta(
         deltas.append(bias_diffs.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
+    np.savetxt("prove_output.txt",np.asarray(deltas))
     return np.asarray(deltas)
 
 datasets_deltas = collect(
