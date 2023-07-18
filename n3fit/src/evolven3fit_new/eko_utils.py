@@ -153,8 +153,6 @@ def construct_eko_cards(
     op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
     if theory["ModEv"] == "TRN":
-        if "ev_op_iterations" in op_card_dict["configs"]:
-            _logger.warning("Provided ev_op_iterations for a TRN theory. It will be unused")
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
     if theory["ModEv"] == "EXA":
         op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
@@ -167,6 +165,13 @@ def construct_eko_cards(
             op_card[key].update(op_card_dict[key])
         elif key in op_card_dict:
             _logger.warning("Entry %s is not a dictionary and will be ignored", key)
-
+    
+    # if no -e was given, take ev_op_iterations from EVOLVEN3FIT_CONFIGS_DEFAULTS_{TRN,EXA}
+    if op_card['configs']['ev_op_iterations'] is None:
+        if theory["ModEv"] == "TRN":
+            op_card['configs']['ev_op_iterations'] = EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN["ev_op_iterations"]
+        if theory["ModEv"] == "EXA":
+            op_card['configs']['ev_op_iterations'] = EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA["ev_op_iterations"]
+    
     op_card = runcards.OperatorCard.from_dict(op_card)
     return theory_card, op_card

@@ -152,7 +152,7 @@ def main():
         "-e",
         "--ev-op-iterations",
         type=int,
-        default=30,
+        default=None,
         help="ev_op_iterations for the EXA theory",
     )
     subparsers = parser.add_subparsers(title="actions", dest="actions")
