@@ -338,12 +338,12 @@ def split(*args, **kwargs):
     return tf.split(*args, **kwargs)
 
 
-def scatter_to_one(values, indices=[[1]], output_dim=14):
+def scatter_to_one(values, indices, output_shape):
     """
     Like scatter_nd initialized to one instead of zero
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
-    ones = np.ones(output_dim, dtype=np.float32)
+    ones = np.ones(output_shape, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
 
 

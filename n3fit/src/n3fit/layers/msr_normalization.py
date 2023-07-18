@@ -34,18 +34,21 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        indices = []
+        self.indices = []
         if self._msr_enabled:
-            indices += [IDX['g']]
+            self.indices += [IDX['g']]
         if self._vsr_enabled:
-            indices += [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
-        indices = [[i] for i in indices]
-
-        self._out_scatter = op.as_layer(
-            op.scatter_to_one, op_kwargs={"indices": indices, "output_dim": output_dim}
-        )
+            self.indices += [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
+        self.indices = [[i] for i in self.indices]
 
         super().__init__(**kwargs)
+
+    def build(self, input_shape):
+        self.out_shape = input_shape[1:]
+        self._out_scatter = lambda pdf_integrated: op.scatter_to_one(
+            pdf_integrated, indices=self.indices, output_shape=self.out_shape
+        )
+        super().build(input_shape)
 
     def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:
