@@ -203,8 +203,8 @@ def main():
                 args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info
             )
         elif args.actions == "produce_eko_photon":
-            tcard, opcard = eko_utils.construct_eko_cards(
-                args.theoryID, args.q_fin, args.q_points, x_grid, op_card_info, theory_card_info, args.q_gamma, is_eko_photon = True
+            tcard, opcard = eko_utils.construct_eko_photon_cards(
+                args.theoryID, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info,
             )
         runner.solve(tcard, opcard, args.dump)
 
