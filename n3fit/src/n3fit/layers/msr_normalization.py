@@ -67,7 +67,7 @@ class MSR_Normalization(MetaLayer):
         normalization_factor: Tensor(14)
             The normalization factors per flavour.
         """
-        y = op.flatten(pdf_integrated)
+        y = pdf_integrated[0]  # get rid of the batch dimension
         norm_constants = []
 
         if self._msr_enabled:
