@@ -17,14 +17,21 @@
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
-from tensorflow.keras.layers import Lambda, LSTM, Dropout, Concatenate
-from tensorflow.keras.layers import concatenate, Input # pylint: disable=unused-import
+from tensorflow import expand_dims, math, nn
+from tensorflow.keras.layers import (  # pylint: disable=unused-import
+    Dropout,
+    Input,
+    Lambda,
+    concatenate,
+)
 from tensorflow.keras.layers import Dense as KerasDense
-from tensorflow import expand_dims
+from tensorflow.keras.layers import LSTM, Concatenate  # pylint: disable=unused-import
 from tensorflow.keras.regularizers import l1_l2
-from tensorflow import nn, math
+from tensorflow.keras.initializers import GlorotNormal
 
 from n3fit.backends import MetaLayer
+from n3fit.backends.keras_backend.multi_dense import MultiDense
+
 
 # Custom activation functions
 def square_activation(x):
@@ -123,6 +130,19 @@ layers = {
             "units": 5,
             "activation": "sigmoid",
             "kernel_regularizer": None
+        },
+    ),
+    "multidense": (
+        MultiDense,
+        {
+            "input_shape": (1,),
+            "initializer_class": GlorotNormal,
+            "units": 5,
+            "activation": "sigmoid",
+            "kernel_regularizer": None,
+            "replicas": 1,
+            "seed": 42,
+            "replica_input": True,
         },
     ),
     "dense_per_flavour": (
