@@ -4,7 +4,7 @@ from n3fit.backends import operations as op
 from n3fit.layers import MSR_Normalization
 
 
-def test_layer(layer):
+def apply_layer_to_fixed_input(layer):
     np.random.seed(422)
     pdf_integrated = op.numpy_to_tensor(np.random.normal(size=(1, 14)))
 
@@ -19,7 +19,7 @@ def test_layer(layer):
 
 def test_all():
     layer = MSR_Normalization(mode='ALL')
-    output = test_layer(layer)
+    output = apply_layer_to_fixed_input(layer)
     known_output = op.numpy_to_tensor(
         [
             1.0,
@@ -43,7 +43,7 @@ def test_all():
 
 def test_msr():
     layer = MSR_Normalization(mode='MSR')
-    output = test_layer(layer)
+    output = apply_layer_to_fixed_input(layer)
     known_output = op.numpy_to_tensor(
         [
             1.0,
@@ -67,7 +67,7 @@ def test_msr():
 
 def test_vsr():
     layer = MSR_Normalization(mode='VSR')
-    output = test_layer(layer)
+    output = apply_layer_to_fixed_input(layer)
     known_output = op.numpy_to_tensor(
         [
             1.0,
