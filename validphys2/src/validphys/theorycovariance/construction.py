@@ -333,22 +333,35 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
         ) + (1 / 8) * (np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
     return s
 
+def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for all the
+    singlet splitting function variations.
+    """
+    n3lo_vars_dict = {
+        "gg": 17,
+        "gq": 24,
+        "qg": 15,
+        "qq": 6,
+    }
+    s_singlet_ad = 0
+    cnt = 0
+    for n_var in n3lo_vars_dict.values():
+        s_singlet_ad += covmat_n3lo_ad(name1, name2, deltas1[cnt:cnt+n_var], deltas2[cnt:cnt+n_var])
+        cnt += n_var
+    return s_singlet_ad
+
+
 def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
-    """Returns theory covariance sub-matrix for the n3lo anomalous
-    dimension variation, given two dataset names and collections 
-    of variation shifts.
+    """Returns theory covariance sub-matrix for each of the
+    singlet splitting function variations.
 
     Normalization is given by:
-        (n_pt - 1) * n_s ** (p-1)
+        (n_pt - 1)
     
     where:
         * n_pt = number of point presctiption
-        * p = number of process types (here only one)
-        * \prod{n_s} = degeneracy factor (in this case we have 18 * 21 * 24 * 17)
-        * n_is = number of independent scales (in this case 4)
     """
-    n_var = len(deltas1)
-    norm = (n_var - 1) * 1
+    norm = len(deltas1)
     if name1 == name2:
         s = sum(np.outer(d, d) for d in deltas1)
     else:
@@ -416,18 +429,21 @@ def covs_pt_prescrip(
             elif l == 9:
                 s = covmat_9pt(name1, name2, deltas1, deltas2)
             # n3lo ad variation prescriprion
-            elif l == 70:
-                s = covmat_n3lo_ad(name1, name2, deltas1, deltas2)
+            elif l == 63:
+                s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
             # n3lo ihou prescriprion
-            elif l == 72:
-                s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-2], deltas2[:-2])
+            elif l == 65:
+                s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-2], deltas2[:-2])
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf
             # n3lo full covmat prescriprion
-            elif l == 78:
+            elif l == 71:
                 # spit deltas and compose thcovmat
-                s_ad = covmat_n3lo_ad(name1, name2, deltas1[:-8], deltas2[:-8])
+                # splittin functions variatons
+                s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-8], deltas2[:-8])
+                # scale variations
                 s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
+                # massive coefficient function variations
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf + s_mhou
             start_locs = (start_proc[name1], start_proc[name2])
