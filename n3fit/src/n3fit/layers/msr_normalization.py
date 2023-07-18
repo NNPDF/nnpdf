@@ -1,7 +1,6 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-V_IDX = [[3], [7], [8]]
 
 indices = {
     'photon': 0,
@@ -14,7 +13,6 @@ indices = {
     'v35': 7,
     'v24': 8,
 }
-
 
 
 class MSR_Normalization(MetaLayer):
@@ -61,7 +59,7 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1,None,14))
+        pdf_integrated: (Tensor(1, 14))
             the integrated PDF
 
         Returns
