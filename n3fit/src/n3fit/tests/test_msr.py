@@ -7,9 +7,14 @@ from n3fit.layers import MSR_Normalization
 def test_layer(layer):
     np.random.seed(422)
     pdf_integrated = op.numpy_to_tensor(np.random.normal(size=(1, 14)))
-    photon_integral = op.numpy_to_tensor(np.random.normal(size=(1,)))
 
-    return layer(pdf_integrated, photon_integral)
+    # done this way to stay consistent with the original code
+    photon_integral = op.numpy_to_tensor([np.random.normal(size=(1,))])
+    pdf_integrated = op.concatenate(
+        [op.numpy_to_tensor(photon_integral), pdf_integrated[:, 1:]], axis=1
+    )
+
+    return layer(pdf_integrated)
 
 
 def test_all():

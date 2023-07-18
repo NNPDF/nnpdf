@@ -86,13 +86,17 @@ def generate_msr_model_and_grid(
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
     # 5. THe input for the photon integral, will be set to 0 if no photons
-    photon_integral = Input(shape=(), batch_size=1, name='photon_integral')
+    photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')
+
+    # 5b. Insert the photon integral as the first component of the pdf integrals
+    pdf_integrated = Lambda(
+        lambda pdf_photon: op.stack([pdf_photon[1], pdf_photon[0][:, 1:]], axis=1),
+        name="join_photon",
+    )([pdf_integrated, photon_integral])
 
     # 6. Compute the normalization factor
     # For now set the photon component to None
-    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights")(
-        pdf_integrated, photon_integral
-    )
+    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights")(pdf_integrated)
 
     # 7. Apply the normalization factor to the pdf
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(

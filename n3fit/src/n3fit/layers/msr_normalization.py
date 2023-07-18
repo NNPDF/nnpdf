@@ -39,7 +39,7 @@ class MSR_Normalization(MetaLayer):
 
         super().__init__(**kwargs)
 
-    def call(self, pdf_integrated, photon_integral):
+    def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:
         A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
@@ -53,8 +53,6 @@ class MSR_Normalization(MetaLayer):
         ----------
         pdf_integrated: (Tensor(1,None,14))
             the integrated PDF
-        photon_integral: (Tensor(1)):
-            the integrated photon, not included in PDF
 
         Returns
         -------
@@ -65,7 +63,7 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - photon_integral[0]) / y[GLUON_IDX[0][0]]] * len(
+            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - y[GLUON_IDX[0][0] - 2]) / y[GLUON_IDX[0][0]]] * len(
                 GLUON_IDX
             )
             norm_constants += n_ag
