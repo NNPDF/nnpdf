@@ -1,11 +1,20 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-GLUON_IDX = [[2]]
 V_IDX = [[3], [7], [8]]
-V3_IDX = [[4]]
-V8_IDX = [[5]]
-V15_IDX = [[6]]
+
+indices = {
+    'photon': 0,
+    'sigma': 1,
+    'g': 2,
+    'v': 3,
+    'v3': 4,
+    'v8': 5,
+    'v15': 6,
+    'v35': 7,
+    'v24': 8,
+}
+
 
 
 class MSR_Normalization(MetaLayer):
@@ -29,9 +38,10 @@ class MSR_Normalization(MetaLayer):
 
         idx = []
         if self._msr_enabled:
-            idx += GLUON_IDX
+            idx += [indices['g']]
         if self._vsr_enabled:
-            idx += V_IDX + V3_IDX + V8_IDX + V15_IDX
+            idx += [indices[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
+        idx = [[i] for i in idx]
 
         self._out_scatter = op.as_layer(
             op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
@@ -63,16 +73,14 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - y[GLUON_IDX[0][0] - 2]) / y[GLUON_IDX[0][0]]] * len(
-                GLUON_IDX
-            )
+            n_ag = [(1.0 - y[indices['sigma']] - y[indices['photon']]) / y[indices['g']]]
             norm_constants += n_ag
 
         if self._vsr_enabled:
-            n_av = [3.0 / y[V_IDX[0][0]]] * len(V_IDX)
-            n_av3 = [1.0 / y[V3_IDX[0][0]]] * len(V3_IDX)
-            n_av8 = [3.0 / y[V8_IDX[0][0]]] * len(V8_IDX)
-            n_av15 = [3.0 / y[V15_IDX[0][0]]] * len(V15_IDX)
+            n_av = [3.0 / y[indices['v']]] * 3
+            n_av3 = [1.0 / y[indices['v3']]]
+            n_av8 = [3.0 / y[indices['v8']]]
+            n_av15 = [3.0 / y[indices['v15']]]
             norm_constants += n_av + n_av3 + n_av8 + n_av15
 
         return self._out_scatter(norm_constants)
