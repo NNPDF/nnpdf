@@ -2,7 +2,7 @@ from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 
-indices = {
+IDX = {
     'photon': 0,
     'sigma': 1,
     'g': 2,
@@ -34,15 +34,15 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        idx = []
+        indices = []
         if self._msr_enabled:
-            idx += [indices['g']]
+            indices += [IDX['g']]
         if self._vsr_enabled:
-            idx += [indices[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
-        idx = [[i] for i in idx]
+            indices += [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
+        indices = [[i] for i in indices]
 
         self._out_scatter = op.as_layer(
-            op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
+            op.scatter_to_one, op_kwargs={"indices": indices, "output_dim": output_dim}
         )
 
         super().__init__(**kwargs)
@@ -71,14 +71,14 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[indices['sigma']] - y[indices['photon']]) / y[indices['g']]]
+            n_ag = [(1.0 - y[IDX['sigma']] - y[IDX['photon']]) / y[IDX['g']]]
             norm_constants += n_ag
 
         if self._vsr_enabled:
-            n_av = [3.0 / y[indices['v']]] * 3
-            n_av3 = [1.0 / y[indices['v3']]]
-            n_av8 = [3.0 / y[indices['v8']]]
-            n_av15 = [3.0 / y[indices['v15']]]
+            n_av = [3.0 / y[IDX['v']]] * 3
+            n_av3 = [1.0 / y[IDX['v3']]]
+            n_av8 = [3.0 / y[IDX['v8']]]
+            n_av15 = [3.0 / y[IDX['v15']]]
             norm_constants += n_av + n_av3 + n_av8 + n_av15
 
         return self._out_scatter(norm_constants)
