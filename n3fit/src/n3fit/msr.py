@@ -90,7 +90,7 @@ def generate_msr_model_and_grid(
 
     # 5b. Insert the photon integral as the first component of the pdf integrals
     pdf_integrated = Lambda(
-        lambda pdf_photon: op.stack([pdf_photon[1], pdf_photon[0][:, 1:]], axis=1),
+        lambda pdf_photon: op.concatenate([pdf_photon[1], pdf_photon[0][:, 1:]], axis=1),
         name="join_photon",
     )([pdf_integrated, photon_integral])
 

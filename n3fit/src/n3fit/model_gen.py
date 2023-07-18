@@ -680,8 +680,9 @@ def pdfNN_layer_generator(
                     "pdf_xgrid_integration": pdf_integration_grid,
                     "xgrid_integration": integrator_input,
                     # The photon is treated separately, need to get its integrals to normalize the pdf
-                    "photon_integral": op.numpy_to_tensor(
+                    "photon_integral": op.numpy_to_tensor([[
                         0.0 if not photons else photons.integral[i_replica]
+                        ]]
                     ),
                 }
             )
