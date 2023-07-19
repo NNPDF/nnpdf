@@ -55,7 +55,7 @@ def construct_eko_cards(
 
     # Set nf_0 according to the fitting scale unless set explicitly
     if "nf0" not in theory:
-        theory["nf0"] = set_nf0(mu0, theory, thresholds)
+        theory["nf0"] = find_nf(mu0, theory, thresholds)
 
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
@@ -128,7 +128,7 @@ def construct_eko_photon_cards(
 
     # Set nf_0 according to mu0 unless set explicitly
     if "nf0" not in theory:
-        theory["nf0"] = set_nf0(mu0, theory, thresholds)
+        theory["nf0"] = find_nf(mu0, theory, thresholds)
 
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
@@ -136,14 +136,7 @@ def construct_eko_photon_cards(
 
     q_fin = theory["Q0"]
 
-    if q_fin < theory["mc"] * thresholds["c"]:
-        nf_fin = 3
-    elif q_fin < theory["mb"] * thresholds["b"]:
-        nf_fin = 4
-    elif q_fin < theory["mt"] * thresholds["t"]:
-        nf_fin = 5
-    else:
-        nf_fin = 6
+    nf_fin = find_nf(q_fin, theory, thresholds)
 
     # construct mugrid
     mugrid = [(q_fin, nf_fin)]
@@ -220,7 +213,7 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
     return op_card
 
 
-def set_nf0(mu0, theory, thresholds):
+def find_nf(mu0, theory, thresholds):
     """compute nf0"""
     if mu0 < theory["mc"] * thresholds["c"]:
         nf0 = 3
