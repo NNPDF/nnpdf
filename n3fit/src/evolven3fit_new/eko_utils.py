@@ -213,14 +213,14 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
     return op_card
 
 
-def find_nf(mu0, theory, thresholds):
-    """compute nf0"""
-    if mu0 < theory["mc"] * thresholds["c"]:
-        nf0 = 3
-    elif mu0 < theory["mb"] * thresholds["b"]:
-        nf0 = 4
-    elif mu0 < theory["mt"] * thresholds["t"]:
-        nf0 = 5
+def find_nf(mu, theory, thresholds):
+    """compute nf for a given mu"""
+    if mu < theory["mc"] * thresholds["c"]:
+        nf = 3
+    elif mu < theory["mb"] * thresholds["b"]:
+        nf = 4
+    elif mu < theory["mt"] * thresholds["t"]:
+        nf = 5
     else:
-        nf0 = 6
-    return nf0
+        nf = 6
+    return nf
