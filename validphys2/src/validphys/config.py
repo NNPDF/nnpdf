@@ -45,10 +45,11 @@ from validphys.loader import (
 )
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
+from validphys.utils import freezeargs
 import validphys.scalevariations
 
-log = logging.getLogger(__name__)
 
+log = logging.getLogger(__name__)
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
@@ -561,6 +562,7 @@ class CoreConfig(configparser.Config):
             inps.append((ds, pdf))
         return SimilarCuts(tuple(inps), cut_similarity_threshold)
 
+    @functools.lru_cache
     def produce_cuts(self, *, commondata, use_cuts):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy.
@@ -1304,7 +1306,9 @@ class CoreConfig(configparser.Config):
         it reportengine detects a conflict in the `dataset` key.
         """
         return spec
-
+    
+    @freezeargs
+    @functools.lru_cache
     def produce_rules(
         self,
         theoryid,

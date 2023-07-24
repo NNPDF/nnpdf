@@ -8,9 +8,34 @@ import contextlib
 import pathlib
 import shutil
 import tempfile
+import functools
 
 import numpy as np
 from validobj import ValidationError, parse_input
+
+from frozendict import frozendict
+from frozenlist import FrozenList as frozenlist
+
+def immute(element):
+    if isinstance(element, dict):
+        return frozendict(element)
+    if isinstance(element, list):
+        ret = frozenlist(element)
+        ret.freeze()
+        return ret
+    return element 
+
+def freezeargs(func):
+    """Transform mutable dictionnary
+    Into immutable
+    Useful to be compatible with cache
+    """
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        args = tuple([immute(arg) for arg in args])
+        kwargs = {k: immute(v) for k, v in kwargs.items()}
+        return func(*args, **kwargs)
+    return wrapped
 
 
 def parse_yaml_inp(inp, spec, path):
