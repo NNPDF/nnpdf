@@ -3,8 +3,7 @@ dataset_label: "ATLAS $W,Z$ inclusive 13 TeV"
 x: " "
 
 y_label: $\sigma^{fid}$ (fb)
-figure_by:
-    - boson
+
 extra_labels:
     " ":
         - $W^-$
@@ -18,3 +17,4 @@ extra_labels:
 experiment: "ATLAS"
 
 nnpdf31_process: DY
+

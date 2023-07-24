@@ -1,12 +1,13 @@
+from collections import defaultdict
 import logging
 import pathlib
 import sys
 
+from ekobox import apply, genpdf, info_file
 import numpy as np
+
 import eko
-from eko import basis_rotation
-from eko import runner
-from ekobox import genpdf, info_file, apply
+from eko import basis_rotation, runner
 from reportengine.compat import yaml
 from validphys.loader import Loader
 
@@ -77,14 +78,9 @@ def evolve_fit(
 
     usr_path = pathlib.Path(fit_folder)
     initial_PDFs_dict = load_fit(usr_path)
-    x_grid = np.array(
-        initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]
-    ).astype(float)
+    x_grid = np.array(initial_PDFs_dict[list(initial_PDFs_dict.keys())[0]]["xgrid"]).astype(float)
     theoryID = utils.get_theoryID_from_runcard(usr_path)
-    theory, op = eko_utils.construct_eko_cards(
-        theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
-    )
-    qed = theory.order[1] > 0
+
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
@@ -94,23 +90,38 @@ def evolve_fit(
             eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
         except FileNotFoundError:
             _logger.info(f"eko not found in theory {theoryID}, we will construct it")
+            theory, op = eko_utils.construct_eko_cards(
+                theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
+            )
             runner.solve(theory, op, dump_eko)
             eko_path = dump_eko
+
     with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
-    info = info_file.build(theory, op, 1, info_update={})
-    info["NumMembers"] = "REPLACE_NREP"
-    info["ErrorType"] = "replicas"
-    info["XMin"] = float(x_grid[0])
-    info["XMax"] = float(x_grid[-1])
+
     with eko.EKO.read(eko_path) as eko_op:
+        # Read the cards directly from the eko to make sure they are consistent
+        theory = eko_op.theory_card
+        op = eko_op.operator_card
+
+        qed = theory.order[1] > 0
+
+        # Modify the info file with the fit-specific info
+        info = info_file.build(theory, op, 1, info_update={})
+        info["NumMembers"] = "REPLACE_NREP"
+        info["ErrorType"] = "replicas"
+        info["XMin"] = float(x_grid[0])
+        info["XMax"] = float(x_grid[-1])
+        # Save the PIDs in the info file in the same order as in the evolution
+        info["Flavors"] = basis_rotation.flavor_basis_pids
+        info["NumFlavors"] = theory.heavy.num_flavs_max_pdf
         dump_info_file(usr_path, info)
-        for replica in initial_PDFs_dict.keys():
-            evolved_block = evolve_exportgrid(initial_PDFs_dict[replica], eko_op, x_grid, qed)
-            dump_evolved_replica(
-                evolved_block, usr_path, int(replica.removeprefix("replica_"))
-            )
+
+        for replica, pdf_data in initial_PDFs_dict.items():
+            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid, qed)
+            dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
+
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
     # We need then to remove it after fixing the position of those replica files
@@ -135,7 +146,7 @@ def load_fit(usr_path):
     """
     nnfitpath = usr_path / "nnfit"
     pdf_dict = {}
-    for yaml_file in nnfitpath.glob("replica_*/*.exportgrid"):
+    for yaml_file in nnfitpath.glob(f"replica_*/{usr_path.name}.exportgrid"):
         data = yaml.safe_load(yaml_file.read_text(encoding="UTF-8"))
         pdf_dict[yaml_file.parent.stem] = data
     return pdf_dict
@@ -157,8 +168,8 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             whether qed is activated or not
     Returns
     -------
-        : np.array
-        evolved block
+        : list(np.array)
+        list of evolved blocks
     """
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
@@ -168,27 +179,39 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     # generate block to dump
     targetgrid = eko.bases.targetgrid.tolist()
 
-    def ev_pdf(pid, x, Q2):
-        return x * evolved_pdf[Q2]["pdfs"][pid][targetgrid.index(x)]
+    # Finally separate by nf block (and order per nf/q)
+    by_nf = defaultdict(list)
+    for q, nf in sorted(eko.evolgrid, key=lambda ep: ep[1]):
+        by_nf[nf].append(q)
+    q2block_per_nf = {nf: sorted(qs) for nf, qs in by_nf.items()}
 
-    block = genpdf.generate_block(
-        ev_pdf,
-        xgrid=targetgrid,
-        evolgrid=eko.evolgrid,
-        pids=basis_rotation.flavor_basis_pids,
-    )
-    return block
+    blocks = []
+    for nf, q2grid in q2block_per_nf.items():
+
+        def pdf_xq2(pid, x, Q2):
+            x_idx = targetgrid.index(x)
+            return x * evolved_pdf[(Q2, nf)]["pdfs"][pid][x_idx]
+
+        block = genpdf.generate_block(
+            pdf_xq2,
+            xgrid=targetgrid,
+            sorted_q2grid=q2grid,
+            pids=basis_rotation.flavor_basis_pids,
+        )
+        blocks.append(block)
+
+    return blocks
 
 
-def dump_evolved_replica(evolved_block, usr_path, replica_num):
+def dump_evolved_replica(evolved_blocks, usr_path, replica_num):
     """
     Dump the evolved replica given by evolved_block as the replica num "replica_num" in
     the folder usr_path/nnfit/replica_<replica_num>/usr_path.stem.dat
 
     Parameters
     ----------
-        evolved_block: numpy.array
-            block of an evolved PDF
+        evolved_block: list(numpy.array)
+            list of blocks of an evolved PDF
         usr_path: pathlib.Path
             path of the fit folder
         replica_num: int
@@ -199,7 +222,7 @@ def dump_evolved_replica(evolved_block, usr_path, replica_num):
     path_where_dump.mkdir(exist_ok=True)
     to_write_in_head = f"PdfType: replica\nFromMCReplica: {replica_num}\n"
     genpdf.export.dump_blocks(
-        path_where_dump, replica_num, [evolved_block], pdf_type=to_write_in_head
+        path_where_dump, replica_num, evolved_blocks, pdf_type=to_write_in_head
     )
     # fixing_replica_path
     utils.fix_replica_path(usr_path, replica_num)

@@ -1587,7 +1587,7 @@ class CoreConfig(configparser.Config):
             if processed_metadata_group == "custom_group":
                 group_name = str(dsinput.custom_group)
             # special case of ALL, grouping everything together
-            if processed_metadata_group == "ALL":
+            elif processed_metadata_group == "ALL":
                 group_name = processed_metadata_group
             # otherwise try and take the key from the metadata.
             else:

@@ -6,4 +6,4 @@ x_label: '$\eta^e$'
 
 experiment: "LHCb"
 
-nnpdf31_process: DY
+nnpdf31_process: DY CC
