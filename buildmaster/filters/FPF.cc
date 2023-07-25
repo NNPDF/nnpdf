@@ -9,7 +9,7 @@ void FASERV2NUINCLUSIVEFilter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_inclusive_nu_El_fluctuated.txt";
+  << fSetName << "/FASERv2_inclusive_nu_comb_fluctuated.txt";
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -48,7 +48,7 @@ void FASERV2NBINCLUSIVEFilter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_inclusive_nub_El_fluctuated.txt";
+  << fSetName << "/FASERv2_inclusive_nub_comb_fluctuated.txt";
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -87,7 +87,7 @@ void FASERV2SUMINCLUSIVEFilter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_inclusive_nochargediscrimination_El_fluctuated.txt";
+  << fSetName << "/FASERv2_inclusive_nochargediscrimination_comb_fluctuated.txt";
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -126,7 +126,7 @@ void FASERV2NUCHARMFilter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_charm_nu_El_fluctuated.txt";
+  << fSetName << "/FASERv2_charm_nu_comb_fluctuated.txt";
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -165,7 +165,7 @@ void FASERV2NBCHARMFilter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_charm_nub_El_fluctuated.txt";
+  << fSetName << "/FASERv2_charm_nub_comb_fluctuated.txt";
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -204,7 +204,7 @@ void FASERV2SUMCHARMFilter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_charm_nochargediscrimination_El_fluctuated.txt";
+  << fSetName << "/FASERv2_charm_nochargediscrimination_comb_fluctuated.txt";
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
