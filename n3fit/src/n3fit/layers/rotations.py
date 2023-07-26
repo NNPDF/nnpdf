@@ -18,14 +18,13 @@ class Rotation(MetaLayer):
     ----------
         rotation_matrix: np.array
             rotation matrix
-        axes: int or list
-            if given a number, contracts as many indices as given
-            if given a list (of tuples) contracts indices according to op.tensor_product
+        rotation_axis: int
+            rotation_axis of input to be rotated
     """
 
-    def __init__(self, rotation_matrix, axes=1, **kwargs):
+    def __init__(self, rotation_matrix, rotation_axis=2, **kwargs):
         self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)
-        self.axes = axes
+        self.rotation_axis = rotation_axis
         super().__init__(**kwargs)
 
     def is_identity(self):
@@ -37,7 +36,9 @@ class Rotation(MetaLayer):
             return np.allclose(self.rotation_matrix, iden)
 
     def call(self, x_raw):
-        return op.tensor_product(x_raw, self.rotation_matrix, self.axes)
+        rotated = op.tensor_product(x_raw, self.rotation_matrix, [self.rotation_axis, 0])
+        # this puts the rotated axis back in the original place
+        return op.moveaxis(rotated, -1, self.rotation_axis)
 
 
 class FlavourToEvolution(Rotation):
@@ -45,7 +46,6 @@ class FlavourToEvolution(Rotation):
     Rotates from the flavour basis to
     the evolution basis.
     """
-
     def __init__(
         self,
         flav_info,
@@ -53,7 +53,7 @@ class FlavourToEvolution(Rotation):
         **kwargs,
     ):
         rotation_matrix = pdfbases.fitbasis_to_NN31IC(flav_info, fitbasis)
-        super().__init__(rotation_matrix, axes=1, **kwargs)
+        super().__init__(rotation_matrix, **kwargs)
 
 
 class FkRotation(Rotation):
@@ -67,7 +67,7 @@ class FkRotation(Rotation):
     def __init__(self, output_dim=14, name="evolution", **kwargs):
         self.output_dim = output_dim
         rotation_matrix = self._create_rotation_matrix()
-        super().__init__(rotation_matrix, axes=1, name=name, **kwargs)
+        super().__init__(rotation_matrix, name=name, **kwargs)
 
     def _create_rotation_matrix(self):
         """Create the rotation matrix"""

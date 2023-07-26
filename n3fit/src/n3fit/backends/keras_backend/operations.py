@@ -342,6 +342,20 @@ def op_subtract(inputs, **kwargs):
     """
     return keras_subtract(inputs, **kwargs)
 
+def moveaxis(tensor, source, destination):
+    """
+    Moves the axis of the tensor from source to destination
+    """
+    indices = list(range(tensor.shape.rank))
+    if source < 0:
+        source += tensor.shape.rank
+    if destination < 0:
+        destination += tensor.shape.rank
+
+    indices[source], indices[destination] = indices[destination], indices[source]
+
+    return tf.transpose(tensor, indices)
+
 
 @tf.function
 def backend_function(fun_name, *args, **kwargs):
