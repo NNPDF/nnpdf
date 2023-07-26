@@ -1,11 +1,18 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-GLUON_IDX = [[2]]
-V_IDX = [[3], [7], [8]]
-V3_IDX = [[4]]
-V8_IDX = [[5]]
-V15_IDX = [[6]]
+
+IDX = {
+    'photon': 0,
+    'sigma': 1,
+    'g': 2,
+    'v': 3,
+    'v3': 4,
+    'v8': 5,
+    'v15': 6,
+    'v35': 7,
+    'v24': 8,
+}
 
 
 class MSR_Normalization(MetaLayer):
@@ -27,19 +34,23 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        idx = []
+        self.indices = []
         if self._msr_enabled:
-            idx += GLUON_IDX
+            self.indices += [IDX['g']]
         if self._vsr_enabled:
-            idx += V_IDX + V3_IDX + V8_IDX + V15_IDX
-
-        self._out_scatter = op.as_layer(
-            op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
-        )
+            self.indices += [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
+        self.indices = [[i] for i in self.indices]
 
         super().__init__(**kwargs)
 
-    def call(self, pdf_integrated, photon_integral):
+    def build(self, input_shape):
+        self.out_shape = input_shape[1:]
+        self._out_scatter = lambda pdf_integrated: op.scatter_to_one(
+            pdf_integrated, indices=self.indices, output_shape=self.out_shape
+        )
+        super().build(input_shape)
+
+    def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:
         A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
@@ -51,30 +62,26 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1,None,14))
+        pdf_integrated: (Tensor(1, 14))
             the integrated PDF
-        photon_integral: (Tensor(1)):
-            the integrated photon, not included in PDF
 
         Returns
         -------
         normalization_factor: Tensor(14)
             The normalization factors per flavour.
         """
-        y = op.flatten(pdf_integrated)
+        y = pdf_integrated[0]  # get rid of the batch dimension
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - photon_integral[0]) / y[GLUON_IDX[0][0]]] * len(
-                GLUON_IDX
-            )
+            n_ag = [(1.0 - y[IDX['sigma']] - y[IDX['photon']]) / y[IDX['g']]]
             norm_constants += n_ag
 
         if self._vsr_enabled:
-            n_av = [3.0 / y[V_IDX[0][0]]] * len(V_IDX)
-            n_av3 = [1.0 / y[V3_IDX[0][0]]] * len(V3_IDX)
-            n_av8 = [3.0 / y[V8_IDX[0][0]]] * len(V8_IDX)
-            n_av15 = [3.0 / y[V15_IDX[0][0]]] * len(V15_IDX)
+            n_av = [3.0 / y[IDX['v']]] * 3
+            n_av3 = [1.0 / y[IDX['v3']]]
+            n_av8 = [3.0 / y[IDX['v8']]]
+            n_av15 = [3.0 / y[IDX['v15']]]
             norm_constants += n_av + n_av3 + n_av8 + n_av15
 
         return self._out_scatter(norm_constants)
