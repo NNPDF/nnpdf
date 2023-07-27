@@ -354,9 +354,11 @@ def op_subtract(inputs, **kwargs):
     """
     return keras_subtract(inputs, **kwargs)
 
-def moveaxis(tensor, source, destination):
+
+def swapaxes(tensor, source, destination):
     """
-    Moves the axis of the tensor from source to destination
+    Moves the axis of the tensor from source to destination, as in numpy.swapaxes.
+    see full `docs <https://numpy.org/doc/stable/reference/generated/numpy.swapaxes.html>`_
     """
     indices = list(range(tensor.shape.rank))
     if source < 0:

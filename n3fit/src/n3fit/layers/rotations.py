@@ -38,7 +38,7 @@ class Rotation(MetaLayer):
     def call(self, x_raw):
         rotated = op.tensor_product(x_raw, self.rotation_matrix, [self.rotation_axis, 0])
         # this puts the rotated axis back in the original place
-        return op.moveaxis(rotated, -1, self.rotation_axis)
+        return op.swapaxes(rotated, -1, self.rotation_axis)
 
 
 class FlavourToEvolution(Rotation):
@@ -46,6 +46,7 @@ class FlavourToEvolution(Rotation):
     Rotates from the flavour basis to
     the evolution basis.
     """
+
     def __init__(
         self,
         flav_info,
@@ -64,6 +65,7 @@ class FkRotation(Rotation):
     The input to this layer is a `pdf_raw` variable which is expected to have
     a shape (1,  None, 9), and it is then rotated to an output (1, None, 14)
     """
+
     def __init__(self, output_dim=14, name="evolution", **kwargs):
         self.output_dim = output_dim
         rotation_matrix = self._create_rotation_matrix()
@@ -71,22 +73,24 @@ class FkRotation(Rotation):
 
     def _create_rotation_matrix(self):
         """Create the rotation matrix"""
-        array = np.array([
-            [0, 0, 0, 0, 0, 0, 0, 0, 0], # photon
-            [1, 0, 0, 0, 0, 0, 0, 0, 0], # sigma
-            [0, 1, 0, 0, 0, 0, 0, 0, 0], # g
-            [0, 0, 1, 0, 0, 0, 0, 0, 0], # v
-            [0, 0, 0, 1, 0, 0, 0, 0, 0], # v3
-            [0, 0, 0, 0, 1, 0, 0, 0, 0], # v8
-            [0, 0, 0, 0, 0, 0, 0, 0, 1], # v15
-            [0, 0, 1, 0, 0, 0, 0, 0, 0], # v24
-            [0, 0, 1, 0, 0, 0, 0, 0, 0], # v35
-            [0, 0, 0, 0, 0, 1, 0, 0, 0], # t3
-            [0, 0, 0, 0, 0, 0, 1, 0, 0], # t8
-            [1, 0, 0, 0, 0, 0, 0,-4, 0], # t15 (c-)
-            [1, 0, 0, 0, 0, 0, 0, 0, 0], # t24
-            [1, 0, 0, 0, 0, 0, 0, 0, 0], # t35
-        ])
+        array = np.array(
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],  # photon
+                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # sigma
+                [0, 1, 0, 0, 0, 0, 0, 0, 0],  # g
+                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v
+                [0, 0, 0, 1, 0, 0, 0, 0, 0],  # v3
+                [0, 0, 0, 0, 1, 0, 0, 0, 0],  # v8
+                [0, 0, 0, 0, 0, 0, 0, 0, 1],  # v15
+                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v24
+                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v35
+                [0, 0, 0, 0, 0, 1, 0, 0, 0],  # t3
+                [0, 0, 0, 0, 0, 0, 1, 0, 0],  # t8
+                [1, 0, 0, 0, 0, 0, 0, -4, 0],  # t15 (c-)
+                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # t24
+                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # t35
+            ]
+        )
         tensor = op.numpy_to_tensor(array.T)
         return tensor
 
