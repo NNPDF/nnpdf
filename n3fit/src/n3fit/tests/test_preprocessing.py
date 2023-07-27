@@ -1,5 +1,6 @@
 import numpy as np
 
+from n3fit.backends import operations as op
 from n3fit.layers import Preprocessing
 
 
@@ -18,7 +19,7 @@ def test_preprocessing():
     ]
     prepro = Preprocessing(flav_info=flav_info, seed=0)
     np.random.seed(42)
-    test_x = np.random.uniform(size=(1, 4, 1))
+    test_x = op.numpy_to_tensor(np.random.uniform(size=(1, 4, 1)))
     test_prefactors = np.array(
         [
             [
