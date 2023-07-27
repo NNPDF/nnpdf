@@ -48,44 +48,20 @@ def construct_eko_cards(
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
     """
-    if theory_card_dict is None:
-        theory_card_dict = {}
-    if op_card_dict is None:
-        op_card_dict = {}
+    theory, thresholds = load_theory(theoryID, theory_card_dict)
 
-    # theory_card construction
-    theory = Loader().check_theoryID(theoryID).get_description()
-    theory.pop("FNS")
-    theory.update(theory_card_dict)
-
-    # Prepare the thresholds according to MaxNfPdf
-    thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["ktThr"]}
-    if theory["MaxNfPdf"] < 5:
-        thresholds["b"] = np.inf
-    if theory["MaxNfPdf"] < 6:
-        thresholds["t"] = np.inf
-
-    if "nfref" not in theory:
-        theory["nfref"] = NFREF_DEFAULT
+    # if is eko_photon then mu0 = q_gamma
+    mu0 = theory["Q0"]
 
     # Set nf_0 according to the fitting scale unless set explicitly
-    mu0 = theory["Q0"]
     if "nf0" not in theory:
-        if mu0 < theory["mc"] * thresholds["c"]:
-            theory["nf0"] = 3
-        elif mu0 < theory["mb"] * thresholds["b"]:
-            theory["nf0"] = 4
-        elif mu0 < theory["mt"] * thresholds["t"]:
-            theory["nf0"] = 5
-        else:
-            theory["nf0"] = 6
-
-    # Setting the thresholds in the theory card to inf if necessary
-    theory.update({"kbThr": thresholds["b"], "ktThr": thresholds["t"]})
+        theory["nf0"] = find_nf(mu0, theory, thresholds)
 
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
+
+    # construct mugrid
 
     # Generate the q2grid, if q_fin and q_points are None, use `nf0` to select a default
     q2_grid = utils.generate_q2grid(
@@ -100,8 +76,6 @@ def construct_eko_cards(
         theory["nf0"],
     )
 
-    # construct operator card
-    op_card = default_op_card
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
     thresholds_ratios = np.array([thresholds["c"], thresholds["b"], thresholds["t"]]) ** 2
 
@@ -113,7 +87,6 @@ def construct_eko_cards(
     # Create the eko operator q2grid
     # This is a grid which contains information on (q, nf)
     # in VFNS values at the matching scales need to be doubled so that they are considered in both sides
-
     ep = 1e-4
     mugrid = []
     for q2 in q2_grid:
@@ -126,7 +99,87 @@ def construct_eko_cards(
         else:
             mugrid.append((q, int(nf_default(q2, atlas))))
 
-    op_card.update({"mu0": theory["Q0"], "mugrid": mugrid})
+    # construct operator card
+    op_card = build_opcard(op_card_dict, theory, x_grid, mu0, mugrid)
+
+    return theory_card, op_card
+
+
+def construct_eko_photon_cards(
+    theoryID,
+    q_fin,
+    x_grid,
+    q_gamma,
+    op_card_dict: Optional[Dict[str, Any]] = None,
+    theory_card_dict: Optional[Dict[str, Any]] = None,
+):
+    """
+    Return the theory and operator cards used to construct the eko_photon.
+    theoryID is the ID of the theory for which we are computing the theory and operator card.
+    q_fin is the final point of the q grid while q_points is the number of points of the grid.
+    x_grid is the x grid to be used.
+    op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
+    operator card and to the theory card.
+    """
+    theory, thresholds = load_theory(theoryID, theory_card_dict)
+
+    # if is eko_photon then mu0 = q_gamma
+    mu0 = q_gamma
+
+    # Set nf_0 according to mu0 unless set explicitly
+    if "nf0" not in theory:
+        theory["nf0"] = find_nf(mu0, theory, thresholds)
+
+    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
+    legacy_class = runcards.Legacy(theory, {})
+    theory_card = legacy_class.new_theory
+
+    q_fin = theory["Q0"]
+
+    nf_fin = find_nf(q_fin, theory, thresholds)
+
+    # construct mugrid
+    mugrid = [(q_fin, nf_fin)]
+
+    # construct operator card
+    op_card = build_opcard(op_card_dict, theory, x_grid, mu0, mugrid)
+
+    return theory_card, op_card
+
+
+def load_theory(theoryID, theory_card_dict):
+    """loads and returns the theory dictionary and the thresholds"""
+    if theory_card_dict is None:
+        theory_card_dict = {}
+    # theory_card construction
+    theory = Loader().check_theoryID(theoryID).get_description()
+    theory.pop("FNS")
+    theory.update(theory_card_dict)
+
+    if "nfref" not in theory:
+        theory["nfref"] = NFREF_DEFAULT
+
+    # Prepare the thresholds according to MaxNfPdf
+    thresholds = {"c": theory["kcThr"], "b": theory["kbThr"], "t": theory["ktThr"]}
+    if theory["MaxNfPdf"] < 5:
+        thresholds["b"] = np.inf
+    if theory["MaxNfPdf"] < 6:
+        thresholds["t"] = np.inf
+
+    # Setting the thresholds in the theory card to inf if necessary
+    theory.update({"kbThr": thresholds["b"], "ktThr": thresholds["t"]})
+
+    return theory, thresholds
+
+
+def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
+    """builds the opcard"""
+    if op_card_dict is None:
+        op_card_dict = {}
+
+    op_card = default_op_card
+
+    op_card.update({"mu0": mu0, "mugrid": mugrid})
 
     op_card["xgrid"] = x_grid
     # Specific defaults for evolven3fit evolution
@@ -144,5 +197,30 @@ def construct_eko_cards(
         elif key in op_card_dict:
             _logger.warning("Entry %s is not a dictionary and will be ignored", key)
 
+    # if no -e was given, take ev_op_iterations from EVOLVEN3FIT_CONFIGS_DEFAULTS_{TRN,EXA}
+    if op_card['configs']['ev_op_iterations'] is None:
+        if theory["ModEv"] == "TRN":
+            op_card['configs']['ev_op_iterations'] = EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN[
+                "ev_op_iterations"
+            ]
+        if theory["ModEv"] == "EXA":
+            op_card['configs']['ev_op_iterations'] = EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA[
+                "ev_op_iterations"
+            ]
+
     op_card = runcards.OperatorCard.from_dict(op_card)
-    return theory_card, op_card
+
+    return op_card
+
+
+def find_nf(mu, theory, thresholds):
+    """compute nf for a given mu"""
+    if mu < theory["mc"] * thresholds["c"]:
+        nf = 3
+    elif mu < theory["mb"] * thresholds["b"]:
+        nf = 4
+    elif mu < theory["mt"] * thresholds["t"]:
+        nf = 5
+    else:
+        nf = 6
+    return nf
