@@ -43,9 +43,9 @@ class MSR_Normalization(MetaLayer):
         super().__init__(**kwargs)
 
     def build(self, input_shape):
-        out_shape.out_shape = input_shape[1:]
+        out_shape = input_shape[1:]
         self._out_scatter = lambda pdf_integrated: op.scatter_to_one(
-            pdf_integrated, indices=self.indices, output_shape=out_shap
+            pdf_integrated, indices=self.indices, output_shape=out_shape
         )
         super().build(input_shape)
 
