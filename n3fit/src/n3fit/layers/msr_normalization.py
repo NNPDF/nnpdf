@@ -1,7 +1,6 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-
 IDX = {
     'photon': 0,
     'sigma': 1,
@@ -23,7 +22,7 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, output_dim=14, mode="ALL", **kwargs):
+    def __init__(self, mode="ALL", **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -44,9 +43,9 @@ class MSR_Normalization(MetaLayer):
         super().__init__(**kwargs)
 
     def build(self, input_shape):
-        self.out_shape = input_shape[1:]
+        out_shape.out_shape = input_shape[1:]
         self._out_scatter = lambda pdf_integrated: op.scatter_to_one(
-            pdf_integrated, indices=self.indices, output_shape=self.out_shape
+            pdf_integrated, indices=self.indices, output_shape=out_shap
         )
         super().build(input_shape)
 
