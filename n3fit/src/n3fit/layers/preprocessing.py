@@ -52,12 +52,7 @@ class Preprocessing(MetaLayer):
         self.betas = []
         super().__init__(**kwargs)
 
-    def generate_weight(self,
-        name: str,
-        kind: str,
-        dictionary: dict,
-        set_to_zero: bool = False
-        ):
+    def generate_weight(self, name: str, kind: str, dictionary: dict, set_to_zero: bool = False):
         """
         Generates weights according to the flavour dictionary
 
@@ -105,7 +100,9 @@ class Preprocessing(MetaLayer):
             alpha_name = f"alpha_{flav_name}"
             self.alphas.append(self.generate_weight(alpha_name, "smallx", flav_dict))
             beta_name = f"beta_{flav_name}"
-            self.betas.append(self.generate_weight(beta_name, "largex", flav_dict, set_to_zero=not self.large_x))
+            self.betas.append(
+                self.generate_weight(beta_name, "largex", flav_dict, set_to_zero=not self.large_x)
+            )
 
         super(Preprocessing, self).build(input_shape)
 
