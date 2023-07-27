@@ -67,11 +67,3 @@ def test_preprocessing():
     )
     prefactors = prepro(test_x)
     assert np.allclose(test_prefactors, prefactors)
-
-
-def main():
-    test_preprocessing()
-
-
-if __name__ == '__main__':
-    main()
