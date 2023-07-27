@@ -46,7 +46,6 @@ class Preprocessing(MetaLayer):
             )
         self.flav_info = flav_info
         self.seed = seed
-        self.initializer = "random_uniform"
         self.large_x = large_x
         self.alphas = []
         self.betas = []
@@ -76,7 +75,7 @@ class Preprocessing(MetaLayer):
             trainable = dictionary.get("trainable", True)
             # Set the initializer and move the seed one up
             initializer = MetaLayer.select_initializer(
-                self.initializer, minval=minval, maxval=maxval, seed=self.seed
+                "random_uniform", minval=minval, maxval=maxval, seed=self.seed
             )
             self.seed += 1
             # If we are training, constrain the weights to be within the limits
