@@ -7,9 +7,9 @@ def test_preprocessing():
     """Regression test"""
     # taken from basic runcard
     flav_info = [
-        {'fl': 'sng', 'smallx': [1.05, 1.19], 'largex': [1.47, 2.7]},  # 'trainable': False},
-        {'fl': 'g', 'smallx': [0.94, 1.25], 'largex': [0.11, 5.87]},  # 'trainable': False},
-        {'fl': 'v', 'smallx': [0.54, 0.75], 'largex': [1.15, 2.76]},  # 'trainable': False},
+        {'fl': 'sng', 'smallx': [1.05, 1.19], 'largex': [1.47, 2.7], 'trainable': False},
+        {'fl': 'g', 'smallx': [0.94, 1.25], 'largex': [0.11, 5.87], 'trainable': False},
+        {'fl': 'v', 'smallx': [0.54, 0.75], 'largex': [1.15, 2.76], 'trainable': False},
         {'fl': 'v3', 'smallx': [0.21, 0.57], 'largex': [1.35, 3.08]},
         {'fl': 'v8', 'smallx': [0.52, 0.76], 'largex': [0.77, 3.56]},
         {'fl': 't3', 'smallx': [-0.37, 1.52], 'largex': [1.74, 3.39]},
