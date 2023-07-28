@@ -110,6 +110,9 @@ def principal_components_bias_variance_dataset(
 
     pc_basis, pc_reps, n_comp = principal_components_dataset
 
+    if n_comp <=1:
+        return None, None, n_comp
+        
     # estimate (PC) pdf covariance matrix (from replicas), shape is (Npc, Npc)
     covmat_pdf = np.cov(pc_reps)
     sqrt_covmat_pdf = covmats.sqrt_covmat(covmat_pdf)
