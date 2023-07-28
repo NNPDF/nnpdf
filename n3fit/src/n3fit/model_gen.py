@@ -558,17 +558,24 @@ def pdfNN_layer_generator(
     # Define the main input
     do_nothing = lambda x: x
     if use_feature_scaling:
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
+        x_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
         process_input = do_nothing
         extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
         extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
     else:  # add log(x)
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
+        x_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
         extract_original = do_nothing
         extract_nn_input = do_nothing
 
-    model_input = {"pdf_input": pdf_input}
+    # The mass A
+    # The None dimension will be of the same length as x_input
+    A_input_stacked = Input(shape=(None,), batch_size=1, name='A_stacked')
+
+    model_input = {
+        "x_input": x_input,
+        "A_input_stacked": A_input_stacked,
+    }
 
     if subtract_one:
         input_x_eq_1 = [1.0]
@@ -599,6 +606,9 @@ def pdfNN_layer_generator(
             mode=impose_sumrule, scaler=scaler, photons=photons
         )
         model_input["integrator_input"] = integrator_input
+        # The None here is the number of experiments
+        A_input_unique = Input(shape=(None,), batch_size=1, name='A')
+        model_input["A_input_unique"] = A_input_unique
     else:
         sumrule_layer = lambda x: x
 
@@ -637,17 +647,17 @@ def pdfNN_layer_generator(
     # All layers have been made, now we need to connect them,
     # do this in a function so we can call it for both grids and each replica
     # Since all layers are already made, they will be reused
-    def compute_unnormalized_pdf(x, neural_network, compute_preprocessing_factor):
+    def compute_unnormalized_pdf(x, A, neural_network, compute_preprocessing_factor):
         # Preprocess the input grid
         x_nn_input = extract_nn_input(x)
         x_original = extract_original(x)
         x_processed = process_input(x_nn_input)
 
         # Compute the neural network output
-        nn_output = neural_network(x_processed)
+        nn_output = neural_network(x_processed, A)
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            nn_at_one = neural_network(x_eq_1_processed)
+            nn_at_one = neural_network(x_eq_1_processed, A)
             nn_output = subtract_one_layer([nn_output, nn_at_one])
 
         # Compute the preprocessing factor and multiply
@@ -668,21 +678,48 @@ def pdfNN_layer_generator(
     for i_replica, (preprocessing_factor, nn) in enumerate(
         zip(preprocessing_factor_replicas, nn_replicas)
     ):
-        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
+        pdf_unnormalized = compute_unnormalized_pdf(
+            x_input, A_input_stacked, nn, preprocessing_factor
+        )
 
         if impose_sumrule:
-            pdf_integration_grid = compute_unnormalized_pdf(
-                integrator_input, nn, preprocessing_factor
+            import tensorflow as tf
+
+            num_unique_As = 5  # TODO: this will have to be an input to the function we're in, that can be computed in model_trainer
+            integration_grid_size = (
+                2000  # TODO: this can be extracted from the integration grid rather than hardcoded
             )
+            # turn integration_grid from shape (1, 2000, 1) to (1, 2000*5, 1) by repeating
+            integrator_x = Lambda(
+                lambda x: tf.tile(x, (1, num_unique_As, 1)), name='x_integ_repeated'
+            )(integrator_input)
+            # turn A_input_unique from shape (1, 5) to (1, 5*2000, 1) by repeating
+            integrator_A = Lambda(
+                lambda x: tf.repeat(x, integration_grid_size, axis=1), name='A_integ_repeated'
+            )(A_input_unique)
+
+            pdf_integration_grid = compute_unnormalized_pdf(
+                integrator_x, integrator_A, nn, preprocessing_factor
+            )
+            # split axis 1 of the result every 2000 points, so that the As are separated into their own axis
+            num_flavors = 14  # TODO: this needs to be derived from somewhere or input rather than hardcoded like this
+            # NOTE: the order of the axes here is like this so it works with the sumrule_layer, but it may not actually give the
+            # correct result. If not, need to be switched and then transposed
+            pdf_integration_grid = Lambda(
+                lambda x: tf.reshape(
+                    x, shape=(1, integration_grid_size, num_unique_As, num_flavors)
+                ),
+                name='split_A',
+            )(pdf_integration_grid)
             pdf_normalized = sumrule_layer(
                 {
                     "pdf_x": pdf_unnormalized,
                     "pdf_xgrid_integration": pdf_integration_grid,
                     "xgrid_integration": integrator_input,
+                    "A_input_unique": A_input_unique,  # inside the sumrule layer this is combined with the xgrid_integration
                     # The photon is treated separately, need to get its integrals to normalize the pdf
-                    "photon_integral": op.numpy_to_tensor([[
-                        0.0 if not photons else photons.integral[i_replica]
-                        ]]
+                    "photon_integral": op.numpy_to_tensor(
+                        [[0.0 if not photons else photons.integral[i_replica]]]
                     ),
                 }
             )

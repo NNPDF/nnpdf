@@ -66,15 +66,22 @@ def generate_msr_model_and_grid(
 
     # Turn into input layer.
     xgrid_integration = op.numpy_to_input(xgrid_integration, name="integration_grid")
+    A_input_unique = Input(shape=(None,), batch_size=1, name="A_input_unique")
+    # take tensor product
+    x_A_integrator_input = Lambda(
+        lambda x: op.tensor_product(x[0], x[1], axes=0), name="x_A_integrator_input"
+    )([xgrid_integration, A_input_unique])
+    # shape will now be (1, nx, nA, 1/2), rest will act still on axis 1
+    # so will do the same for each A as it should
 
     # 1c Get the original grid
     if scaler:
-        get_original = Lambda(
-            lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ"
+        get_original = Lambda(  # here the axis changes from -1 to -2
+            lambda x: op.op_gather_keep_dims(x, -1, axis=-2), name="x_original_integ"
         )
     else:
         get_original = lambda x: x
-    x_original = get_original(xgrid_integration)
+    x_original = get_original(x_A_integrator_input)
 
     # 2. Divide the grid by x depending on the flavour
     x_divided = xDivide()(x_original)
@@ -84,15 +91,26 @@ def generate_msr_model_and_grid(
 
     # 4. Integrate the pdf
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
+    # NOTE: something goes wrong here, the shape should be (1, 5, 14) but is (1, 2, 2000, 14)...
 
     # 5. THe input for the photon integral, will be set to 0 if no photons
     photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')
 
     # 5b. Insert the photon integral as the first component of the pdf integrals
+    # pretend the photon integral is the same for all As
+    import tensorflow as tf
+
+    num_unique_As = 5  # needs to be an argument ofcourse
+    photon_integral_As = Lambda(
+        lambda x: tf.repeat(tf.expand_dims(x, axis=2), num_unique_As, axis=-2),
+        name="photon_integral_As",
+    )(photon_integral)
     pdf_integrated = Lambda(
-        lambda pdf_photon: op.concatenate([pdf_photon[1], pdf_photon[0][:, 1:]], axis=1),
+        lambda pdf_photon: op.concatenate(
+            [pdf_photon[0], pdf_photon[1][:, 1:]], axis=2
+        ),  # this 2 is the flavor axis
         name="join_photon",
-    )([pdf_integrated, photon_integral])
+    )([photon_integral_As, pdf_integrated])
 
     # 6. Compute the normalization factor
     # For now set the photon component to None
@@ -107,6 +125,7 @@ def generate_msr_model_and_grid(
         "pdf_x": pdf_x,
         "pdf_xgrid_integration": pdf_xgrid_integration,
         "xgrid_integration": xgrid_integration,
+        "A_input_unique": A_input_unique,
         "photon_integral": photon_integral,
     }
     model = MetaModel(inputs, pdf_normalized, name="impose_msr")
