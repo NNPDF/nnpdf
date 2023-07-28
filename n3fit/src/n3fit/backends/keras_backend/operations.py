@@ -196,18 +196,6 @@ def tensor_ones_like(*args, **kwargs):
     return K.ones_like(*args, **kwargs)
 
 
-@tf.function
-def many_replication(grid, replications, axis=0, **kwargs):
-    """
-    Generates a tensor with one extra dimension:
-        a repetition of "grid" n times along the given axis
-    from keras documentation:
-    If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/repeat_elements>`_
-    """
-    return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
-
-
 # Property operations
 # modify properties of the tensor like the shape or elements it has
 @tf.function
