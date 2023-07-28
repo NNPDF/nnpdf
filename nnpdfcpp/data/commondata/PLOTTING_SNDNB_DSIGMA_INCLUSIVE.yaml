@@ -1,0 +1,3 @@
+dataset_label: "DIS $d\\sigma^2/(dx dQ^2)$"
+experiment: "SND"
+nnpdf31_process: DIS CC
