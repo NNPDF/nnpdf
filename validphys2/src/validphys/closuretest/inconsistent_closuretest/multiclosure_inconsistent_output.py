@@ -41,6 +41,7 @@ def plot_bias_distribution_datasets(principal_components_bias_variance_datasets,
         
         except:
             fig, ax = plotutils.subplots()
+            ax.plot([], [], label=f"Dataset: {str(ds)}")
             yield fig
 
 @figuregen
@@ -55,27 +56,29 @@ def plot_variance_distribution_datasets(
         principal_components_variance_distribution_datasets, each_dataset
     ):
         variances, n_comp = pc_var_dataset
+        try:
+            vals = np.linspace(0, 3 * n_comp, 100)
+            chi2_pdf = stats.chi2.pdf(vals, df=n_comp)
+            chi2_cdf = lambda x: stats.chi2.cdf(x, df=n_comp)
 
-        vals = np.linspace(0, 3 * n_comp, 100)
-        chi2_pdf = stats.chi2.pdf(vals, df=n_comp)
-        chi2_cdf = lambda x: stats.chi2.cdf(x, df=n_comp)
+            for i, var_fit in enumerate(variances):
+                pvalue_ks = stats.kstest(var_fit[0], chi2_cdf).pvalue
 
-        for i, var_fit in enumerate(variances):
-            pvalue_ks = stats.kstest(var_fit[0], chi2_cdf).pvalue
+                fig, ax = plotutils.subplots()
+                ax.hist(
+                    var_fit[0],
+                    density=True,
+                    bins='auto',
+                    label=f"Variance {str(ds)}, p={pvalue_ks:.3f}",
+                )
+                ax.plot(vals, chi2_pdf, label=f"chi2, dof={n_comp}")
+                ax.set_title(f"Fit {i}")
+                ax.legend()
 
+                yield fig
+        except:
             fig, ax = plotutils.subplots()
-            ax.hist(
-                var_fit[0],
-                density=True,
-                bins='auto',
-                label=f"Variance {str(ds)}, p={pvalue_ks:.3f}",
-            )
-            ax.plot(vals, chi2_pdf, label=f"chi2, dof={n_comp}")
-            ax.set_title(f"Fit {i}")
-            ax.legend()
-
             yield fig
-
 
 @table
 def datasets_bias_variance_pca_table(
