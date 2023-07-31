@@ -42,6 +42,7 @@ def plot_bias_distribution_datasets(principal_components_bias_variance_datasets,
         except:
             fig, ax = plotutils.subplots()
             ax.plot([], [], label=f"Dataset: {str(ds)}")
+            ax.legend()
             yield fig
 
 @figuregen
