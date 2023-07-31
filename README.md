@@ -1,7 +1,7 @@
 <div align="center">
   <img src="doc/sphinx/source/_static/LogoNNPDF.png" height=100>
 </div>
-
+ 
 ![Build status](https://github.com/NNPDF/nnpdf/actions/workflows/tests.yml/badge.svg)
 [![DOI](https://zenodo.org/badge/118135201.svg)](https://zenodo.org/badge/latestdoi/118135201)
 
