@@ -128,7 +128,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
         error_value["statistical_uncertainty"] = float(stat_errors[n])
         error.append(error_value)
 
-    uncertainties_yaml = {"definition": error_definition, "bins": error}
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     # write uncertainties to file
     with open(f"uncertainties.yaml", "w") as file:
