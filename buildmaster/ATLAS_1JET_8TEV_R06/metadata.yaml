@@ -27,9 +27,10 @@ implemented_observables:
     observable: 
       description: "Double-differential inclusive jet cross-section as functions of jet transverse momentum and the absolute jet rapidity."
       label: r"$10^{3*qbin} d^2\sigma/dp_Td|y|$" 
+      units: "[pb/GeV]"
       
     ndata: 171
-    # units: "[pb/GeV]"
+    
     tables: [1,2,3,4,5,6]
 
     kinematics:
@@ -42,7 +43,7 @@ implemented_observables:
     # Data 
     data_central: data.yaml
     data_uncertainties:
-      # nominal:
+      nominal:
         - uncertainties.yaml
 
     # Theory

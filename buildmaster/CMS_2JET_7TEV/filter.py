@@ -132,7 +132,7 @@ def filterCMS_2JET_7TEV_uncertainties():
 
         error.append(error_value)
 
-    uncertainties_yaml = {"definition": error_definition, "bins": error}
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
     
     with open(f"uncertainties.yaml",'w') as file:
             yaml.dump(uncertainties_yaml,file, sort_keys=False)
