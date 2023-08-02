@@ -690,7 +690,7 @@ definition:
   statistical_uncertainty:
     description: statistical uncertainty
     treatment: ADD
-    type: CORR
+    type: UNCORR
 bins:
 - art_sys_corr_1: 3217.950401146546
   art_sys_corr_2: -1178.0082148941556

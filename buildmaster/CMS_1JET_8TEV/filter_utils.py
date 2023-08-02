@@ -20,6 +20,74 @@ TABLE_TO_RAPIDITY = {
     6: [2.5, 3.0],
 }
 
+COLUMN_NAMES = [
+    'binFlag',
+    'ylow',
+    'yhigh',
+    'ptlow',
+    'pthigh',
+    'Sigma',
+    'NPCorr',
+    'npcorerr+',
+    'npcorerr-',
+    'ignore',
+    'Unfolding+',
+    'Unfolding-',
+    'AbsoluteStat+',
+    'AbsoluteStat-',
+    'AbsoluteScale+',
+    'AbsoluteScale-',
+    'AbsoluteMPFBias+',
+    'AbsoluteMPFBias-',
+    'Fragmentation+',
+    'Fragmentation-',
+    'SinglePionECAL+',
+    'SinglePionECAL-',
+    'SinglePionHCAL+',
+    'SinglePionHCAL-',
+    'FlavorQCD+',
+    'FlavorQCD-',
+    'RelativeJEREC1+',
+    'RelativeJEREC1-',
+    'RelativeJEREC2+',
+    'RelativeJEREC2-',
+    'RelativeJERHF+',
+    'RelativeJERHF-',
+    'RelativePtBB+',
+    'RelativePtBB-',
+    'RelativePtEC1+',
+    'RelativePtEC1-',
+    'RelativePtEC2+',
+    'RelativePtEC2-',
+    'RelativePtHF+',
+    'RelativePtHF-',
+    'RelativeFSR+',
+    'RelativeFSR-',
+    'RelativeStatEC2+',
+    'RelativeStatEC2-',
+    'RelativeStatHF+',
+    'RelativeStatHF-',
+    'PileUpDataMC+',
+    'PileUpDataMC-',
+    'PileUpPtRef+',
+    'PileUpPtRef-',
+    'PileUpPtBB+',
+    'PileUpPtBB-',
+    'PileUpPtEC1+',
+    'PileUpPtEC1-',
+    'PileUpPtEC2+',
+    'PileUpPtEC2-',
+    'PileUpPtHF+',
+    'PileUpPtHF-',
+    'RelativeStatFSR+',
+    'RelativeStatFSR-',
+    'Luminosity',
+    'stat',
+    'uncor',
+]
+
+TABLE_DATA_SHAPE = {1: 37, 2: 37, 3: 36, 4: 32, 5: 25, 6: 18}
+
 
 def get_data_values(tables, version):
     """
@@ -111,33 +179,7 @@ def get_kinematics(tables, version):
             kin.append(kin_value)
 
     return kin
-
-
-def get_shape(correlation_file):
-    """
-    returns the shape of the statistical correlation
-    matrix.
-
-    Parameters
-    ----------
-    correlation_file : list
-                    list whose entries are the rows of the
-                    correlation file
-
-    Returns
-    -------
-    int
-        integer giving the shape of the corr matrix
-
-    """
-    shape_list = []
-    for i, line in enumerate(correlation_file):
-        # 74 is the lowest pt and is common to all .dat files
-        if len(line.split()) >= 5 and line.split()[-2] == '74':
-            shape_list.append(i)
-            if len(shape_list) == 2:
-                return shape_list[1] - shape_list[0]
-
+    
 
 def get_stat_correlations(table):
     """
@@ -158,19 +200,19 @@ def get_stat_correlations(table):
     """
     with open(f'rawdata/CMS_8TeV_jets_Ybin{table}___CMS_8TeV_jets_Ybin{table}.dat', 'r') as file:
         card = file.readlines()
-
+    
     # get shape of matrix
-    shape_mat = get_shape(card)
-
+    shape_mat = TABLE_DATA_SHAPE[table] 
+    
     stat_corr = np.zeros((shape_mat, shape_mat))
-
+    
     # correlation rows always start at row 18
     for j in range(shape_mat):
         # fill rows of correlation matrix
         stat_corr[j, :] = np.array(
             [card[(17 + shape_mat * j) + k].split()[-1] for k in range(shape_mat)]
         )
-
+    
     return stat_corr
 
 
@@ -179,10 +221,7 @@ def block_diagonal_corr(tables):
     forms block diagonal correlation matrix
     for stat uncertainties. Each block corresponds
     to a rapidity bin.
-    Null correlations are associated to the points
-    below the nominal pT cut (pT<74 GeV) for which the
-    information on correlations is not available.
-
+    
     Parameters
     ----------
     tables : list
@@ -193,15 +232,11 @@ def block_diagonal_corr(tables):
     np.array
         block diagonal matrix of dim ndata x ndata
     """
-
-    # null correlations for points below nominal pT cut
-    null_correlations = np.zeros((9, 9))
-
-    bd_corr = block_diag(null_correlations, get_stat_correlations(tables[0]))
+    bd_corr = get_stat_correlations(tables[0])
 
     for table in tables[1:]:
-        tmp_corr = block_diag(null_correlations, get_stat_correlations(table))
-        bd_corr = block_diag(bd_corr, tmp_corr)
+        
+        bd_corr = block_diag(bd_corr, get_stat_correlations(table))
 
     return bd_corr
 
@@ -251,36 +286,32 @@ def get_stat_uncertainties():
         hepdata_tables = f"rawdata/HEPData-ins1487277-v{version}-Table_{table}.yaml"
         with open(hepdata_tables, 'r') as file:
             input = yaml.safe_load(file)
+        
+        # discard pT < 74 GeV entries
 
-        for err in input['dependent_variables'][0]['values']:
-            stat_err.append(err['errors'][0]['symerror'])
-
+        for err, pt in zip(input['dependent_variables'][0]['values'], input['independent_variables'][0]['values']):
+            if pt['high'] > 74:
+                stat_err.append(err['errors'][0]['symerror'])
+    
     return np.array(stat_err)
 
 
 def get_uncertainties_df(table):
-    """ """
-
-    with open(f"rawdata/CMS_8TeV_jets_Ybin{table}.dat", 'r') as file:
-        card = file.readlines()
-
-    for line in card:
-        if "ColumnName" in line:
-            columns = line.split()
-            columns = [col.strip(", '") for col in columns[2:]]
-
-    # ignore ColumnName, =, and binFlag
-
-    # columns = columns[3:]
+    """ 
+    TODO
+    """
 
     # read dat file into dataframe by skipping the first 41 metadata rows
     df = pd.read_csv(
-        f"rawdata/CMS_8TeV_jets_Ybin{table}.dat", sep="\s+", skiprows=41, names=columns
+        f"rawdata/CMS_8TeV_jets_Ybin{table}.dat", sep="\s+", skiprows=41, names=COLUMN_NAMES
     )
 
     # reindex
     df = df.reset_index(drop=True)
 
+    # cut pT < 74 GeV region as correlations are not available
+    df = df[df.pthigh>74][:-1] # discard also last one as it is repeated (typo?)
+    
     return df
 
 
@@ -293,6 +324,23 @@ def uncertainties_df(tables):
     df = pd.concat(dfs, axis=0)
     return df
 
+def process_err(df):
+    """
+    Given the uncertainties dataframe, if the two variations in the pair 
+    (of uncertainties) have the same sign, only the largest (in absolute value) 
+    is retained, while the other is set to zero
+    
+    """
+    for col_idx in np.arange(0,len(df.columns),2):
+
+        for row_idx, (val1, val2) in enumerate(zip(df.iloc[:,col_idx], df.iloc[:, col_idx+1])):
+            if np.sign(val1) ==  np.sign(val2):
+    
+                if np.abs(val1) > np.abs(val2):
+                    df.iloc[row_idx, col_idx+1] = 0
+                elif np.abs(val1) < np.abs(val2):
+                    df.iloc[row_idx, col_idx] = 0
+    return df
 
 if __name__ == "__main__":
     # print(get_kinematics(tables=[1],version=1))
