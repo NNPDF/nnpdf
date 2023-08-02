@@ -7,6 +7,8 @@ Created on Apr  2023
 """
 
 import yaml
+import numpy as np
+
 from filter_utils import (
     get_data_values,
     get_kinematics,
@@ -14,6 +16,7 @@ from filter_utils import (
     block_diagonal_corr,
     correlation_to_covariance,
     uncertainties_df,
+    process_err,
 )
 
 
@@ -60,13 +63,57 @@ def filter_CMS_1JET_8TEV_uncertainties():
     df_unc = uncertainties_df(tables)
 
     # construct block diagonal statistical covariance matrix
-    bd_stat_cov = correlation_to_covariance(block_diagonal_corr(tables), get_stat_uncertainties())
+    stat_unc = df_unc['ignore'].values
+    # stat_unc = df_unc['stat'].values * df_unc['Sigma'].values / 100
 
-    # luminosity
-    lum_unc = df_unc['Luminosity']
-    print(lum_unc)
+    bd_stat_cov = correlation_to_covariance(
+        block_diagonal_corr(tables), stat_unc
+    )  # get_stat_uncertainties())
 
-    covmat = bd_stat_cov
+    # Luminosity uncertainty
+    lum_unc = df_unc['Luminosity'].values * df_unc['Sigma'].values / 100
+    lumi_cov = np.outer(lum_unc, lum_unc)  # np.einsum('i,j->ij', lum_unc, lum_unc)
+
+    # Uncorrelated
+    uncorr = df_unc['uncor'].values * df_unc['Sigma'].values / 100
+    cov_uncorr = np.diag(uncorr**2)
+
+    # Unfolding Systematics
+    df_unfold = (
+        df_unc[['Unfolding+', 'Unfolding-']]
+        * df_unc['Sigma'].values[:, np.newaxis]
+        / 100.0
+        / np.sqrt(2.0)
+    )
+    cov_unfold = df_unfold.to_numpy() @ df_unfold.to_numpy().T
+
+    # Systematic Correlated Uncertainties (Unfolding + JES)
+    df_JES = (
+        df_unc.iloc[:, 10:].drop(
+            ['stat', 'uncor', 'Luminosity', 'Unfolding+', 'Unfolding-'], axis=1
+        )
+        * df_unc['Sigma'].values[:, np.newaxis]
+        / 100.0
+        / np.sqrt(2.0)
+    )
+    # if a pair of uncertainties has the same sign keep only the one with the
+    # largest absolute value and set the other one to zero.
+
+    df_JES = process_err(df_JES)
+
+    cov_JES = df_JES.to_numpy() @ df_JES.to_numpy().T
+
+    import IPython
+
+    IPython.embed()
+
+    # # NP corrections (SKIP)
+    # np_p = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr+'].values / 100.) - 1) / np.sqrt(2.)
+    # cov_np = np.einsum('i,j->ij', np_p, np_p)
+    # np_m = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr-'].values / 100.) - 1) / np.sqrt(2.)
+    # cov_np += np.einsum('i,j->ij', np_m, np_m)
+
+    covmat = cov_JES + cov_unfold + bd_stat_cov + lumi_cov + cov_uncorr
 
     return covmat
 
@@ -77,34 +124,16 @@ if __name__ == "__main__":
     covmat = filter_CMS_1JET_8TEV_uncertainties()
 
     from validphys.api import API
-    from validphys.commondataparser import parse_commondata
-    from validphys.loader import Loader
-    from validphys.covmats import dataset_inputs_covmat_from_systematics
-
-    l = Loader()
-    dat_file = (
-        "/Users/markcostantini/codes/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/DATA_CMS_1JET_8TEV.dat"
-    )
-    systype_file = "/Users/markcostantini/codes/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/systypes/SYSTYPE_CMS_1JET_8TEV_DEFAULT.dat"
-    setname = "CMS_1JET_8TEV"
-
-    cd = parse_commondata(dat_file, systype_file, setname)
-    dataset_input = l.check_dataset(setname, theoryid=200)
-
-    cmat = dataset_inputs_covmat_from_systematics(
-        dataset_inputs_loaded_cd_with_cuts=[cd],
-        data_input=[dataset_input],
-        use_weights_in_covmat=False,
-        norm_threshold=None,
-        _list_of_central_values=None,
-        _only_additive=False,
-    )
-
-    print(covmat / cmat)
 
     # why does the API give a 185 x 185 shaped covmat
     # i.e. why is it ignoring the low pt stuff
 
-    # inps = [{'dataset': "CMS_1JET_8TEV"}]
-    # inp = dict(dataset_inputs=inps, theoryid=200, use_cuts="internal")
-    # cmat = API.dataset_inputs_covmat_from_systematics(**inp)
+    inps = [{'dataset': "CMS_1JET_8TEV"}]
+    inp = dict(dataset_inputs=inps, theoryid=200, use_cuts="internal")
+    cmat = API.dataset_inputs_covmat_from_systematics(**inp)
+
+    print(cmat / covmat)
+    print()
+    print(np.diag(covmat / cmat))
+    print()
+    print(np.allclose(np.ones(covmat.shape), covmat / cmat))
