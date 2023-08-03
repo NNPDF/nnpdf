@@ -36,7 +36,7 @@ log = logging.getLogger(__name__)
 
 # TODO: obviously the folder here is only for development purposes once the
 # whole thing is finished the data will be installed in the right path as given by the profile
-_folder_data = Path(__file__).parents[3] / "new_data"
+_folder_data = "/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster"
 
 
 KINLABEL_LATEX = {
@@ -244,7 +244,7 @@ class SetMetaData:
     def folder(self):
         # TODO currently _folder_data is the buildmaster folder as set above
         # but it should come from share/NNPDF/whatever
-        return _folder_data / self.setname
+        return _folder_data + "/" + self.setname
 
     def select_observable(self, obs_name_raw):
         """Check whether the observable is implemented and return said observable"""
@@ -372,12 +372,12 @@ def parse_commondata_new(dataset_fullname, variants=[]):
     """
     # Look at the folder & observable
     setfolder, observable_name = dataset_fullname.rsplit("_", 1)
-    commondata_folder = _folder_data / setfolder
+    commondata_folder = _folder_data + "/" + setfolder
 
-    metadata_file = commondata_folder / "metadata.yaml"
+    metadata_file = commondata_folder + "/" + "metadata.yaml"
 
     # Parse the metadata by iterating over variants
-    commondata = commondata_folder.name
+    commondata = setfolder# commondata_folder.name
     # Load the entire set
     set_metadata = parse_yaml_inp(metadata_file, SetMetaData)
 
