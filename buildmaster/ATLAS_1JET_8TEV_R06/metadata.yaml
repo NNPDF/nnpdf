@@ -43,10 +43,8 @@ implemented_observables:
     # Data 
     data_central: data.yaml
     data_uncertainties:
-      nominal:
-        - uncertainties.yaml
-      decorrelated:
-        - uncertainties_dec.yaml
+      # - uncertainties_decorrelated.yaml
+      - uncertainties.yaml
 
     # Theory
     theory:
@@ -63,14 +61,3 @@ implemented_observables:
     plot_x: kt
     figure_by:
       - y
-
-# Data (variants)
-# variants:
-#   stronger:
-#      data_uncertainties:
-#         - uncertainties.yaml
-#         - uncertainties_stronger.yaml
-#   weaker:
-#      data_uncertainties:
-#         - uncertainties.yaml
-#         - uncertainties_weaker.yaml
