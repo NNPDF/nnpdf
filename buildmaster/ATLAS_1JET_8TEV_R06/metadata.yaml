@@ -43,9 +43,15 @@ implemented_observables:
     # Data 
     data_central: data.yaml
     data_uncertainties:
-      # - uncertainties_decorrelated.yaml
       - uncertainties.yaml
-
+    variants:
+        nominal:
+          data_uncertainties:
+            - uncertainties.yaml
+        decorrelated:
+          data_uncertainties:
+              - uncertainties_decorrelated.yaml
+        
     # Theory
     theory:
       FK_tables:
