@@ -1,7 +1,7 @@
 import yaml
 import numpy as np
 import pandas as pd
-from filter_utils import get_data_values, get_kinematics, fill_df, decompose_covmat
+from filter_utils import get_data_values, get_kinematics, fill_df
 
 # ignore pandas warning
 import warnings
@@ -39,17 +39,18 @@ def filter_ATLAS_1JET_8TEV_data_kinetic():
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_ATLAS_1JET_8TEV_uncertainties():
+def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     """
-    write uncertainties to uncertainties.yaml
-    file.
+    Writes the uncertainties to a .yaml file.
+    Two possible variants are implemented: nominal and decorrelated
+    
     There are three types of uncertainties:
 
-    1. Statistical Uncertainties: CORR
-       -> correlated over the full dataset
+    1. Statistical Uncertainties: ADD, UNCORR
+       
 
-    2. Artificial Uncertainties: CORR, these
-       are obtained by following the steps:
+    2. Systematic Uncertainties: ADD, CORR
+       Constructed following the exp. prescription:
 
        - Construct an Error matrix in which
          each part of an asymmetric error is considered
@@ -57,9 +58,6 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
          see also filter_utils/process_error and
          filter_utils/HEP_table_to_df
 
-       - Construct covariance matrix from the Error matrix
-
-       - Decompose covariance matrix so as to get ndat art unc
 
     3. Luminosity Uncertainty: ATLASLUMI12
        this uncertainty is correlated with all
@@ -76,7 +74,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
     dfs = []
     for table in tables:
         # uncertainties dataframe
-        df = fill_df(table, version)
+        df = fill_df(table, version, variant)
         dfs.append(df)
 
     df_unc = pd.concat([df for df in dfs], axis=0)
@@ -87,22 +85,17 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
     # luminosity errors
     lum_errors = df_unc["syst_lumi"].to_numpy()
 
-    # note: in the old implementation some sys are decorrelated.
-    # however the systype file used for the covmat construction is
-    # fully correlated (see difference between systype file in buildmaster and nnpdfcpp).
-
     A_corr = df_unc.drop(["stat", "syst_lumi"], axis=1).to_numpy() / np.sqrt(2.0)
     cov_corr = np.einsum("ij,kj->ik", A_corr, A_corr)
-    A_art_corr = decompose_covmat(covmat=cov_corr)
 
     # error definition
     error_definition = {
-        f"art_sys_corr_{i}": {
-            "description": f"artificial systematic {i}",
+        f"{col}": {
+            "description": f"correlated systematic {col}",
             "treatment": "ADD",
             "type": "CORR",
         }
-        for i in range(1, A_art_corr.shape[0] + 1)
+        for col in df_unc.drop(["stat", "syst_lumi"], axis=1).columns
     }
 
     error_definition["luminosity_uncertainty"] = {
@@ -119,10 +112,10 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
 
     # store error in dict
     error = []
-    for n in range(A_art_corr.shape[0]):
+    for n in range(A_corr.shape[0]):
         error_value = {}
-        for m in range(A_art_corr.shape[1]):
-            error_value[f"art_sys_corr_{m+1}"] = float(A_art_corr[n, m])
+        for m in range(A_corr.shape[1]):
+            error_value[f"art_sys_corr_{m+1}"] = float(A_corr[n, m])
 
         error_value["luminosity_uncertainty"] = float(lum_errors[n])
         error_value["statistical_uncertainty"] = float(stat_errors[n])
@@ -131,40 +124,47 @@ def filter_ATLAS_1JET_8TEV_uncertainties():
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     # write uncertainties to file
-    with open(f"uncertainties.yaml", "w") as file:
-        yaml.dump(uncertainties_yaml, file, sort_keys=False)
+    if variant=='nominal':
+        with open(f"uncertainties.yaml", "w") as file:
+            yaml.dump(uncertainties_yaml, file, sort_keys=False)
+    else:
+        with open(f"uncertainties_{variant}.yaml", "w") as file:
+            yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
     # @@@@@@@@@@@ code below for testing only, should be removed at some point @@@@@@@@@@@@#
     cov_lum = np.einsum("i,j->ij", lum_errors, lum_errors)
     cov_stat = np.diag(stat_errors**2)
 
     covmat = cov_corr + cov_stat + cov_lum
-    
+
     return np.real(covmat)
 
 
 if __name__ == "__main__":
-    # # write kinematics and central data values
-    # filter_ATLAS_1JET_8TEV_data_kinetic()
+    # write kinematics and central data values
+    filter_ATLAS_1JET_8TEV_data_kinetic()
 
-    # # write uncertainties file
-    # filter_ATLAS_1JET_8TEV_uncertainties()
+    # write uncertainties file
+    filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal')
 
-    # code below for testing only. Should be removed at some point
-    covmat = filter_ATLAS_1JET_8TEV_uncertainties()
+    # write decorrelated uncertainties file
+    filter_ATLAS_1JET_8TEV_uncertainties(variant='decorrelated')
 
-    from validphys.api import API
-    
+    ## 
 
-    setname = "ATLAS_1JET_8TEV_R06"
-    dsinps = [
-        {"dataset": setname},
-    ]
-    inp = dict(dataset_inputs=dsinps, theoryid=200, use_cuts="internal")
-    cov = API.dataset_inputs_covmat_from_systematics(**inp)
+    # # code below for testing only. Should be removed at some point
+    # covmat = filter_ATLAS_1JET_8TEV_uncertainties()
 
-   
-    ones = cov / covmat
-    print(ones)
-    print(np.max(ones), np.min(ones))
-    print(np.allclose(ones, np.ones(cov.shape), rtol=1e-5))
+    # from validphys.api import API
+
+    # setname = "ATLAS_1JET_8TEV_R06"
+    # dsinps = [
+    #     {"dataset": setname},
+    # ]
+    # inp = dict(dataset_inputs=dsinps, theoryid=200, use_cuts="internal")
+    # cov = API.dataset_inputs_covmat_from_systematics(**inp)
+
+    # ones = cov / covmat
+    # print(ones)
+    # print(np.max(ones), np.min(ones))
+    # print(np.allclose(ones, np.ones(cov.shape), rtol=1e-5))
