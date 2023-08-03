@@ -6,7 +6,7 @@ import numpy as np
 
 datasetname = "ATLAS_2JET_7TEV_R06_M12Y"
 
-cd_new = parse_commondata_new(datasetname, variants=[])
+cd_new = parse_commondata_new(datasetname, variants=['bugged'])
 
 inp = {'dataset_input': {"dataset": "ATLAS_2JET_7TEV_R06"} , 'theoryid': 200, 'use_cuts': 'internal'}
 

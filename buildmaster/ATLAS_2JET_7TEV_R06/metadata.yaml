@@ -47,20 +47,19 @@ implemented_observables:
     # components are given, denoted as nominal, stronger and weaker
     data_central: data.yaml
     data_uncertainties:
-      # nominal:
       - uncertainties.yaml
-      # TODO: add bugged variant
-
-      # Data (variants)
-      # variants:
-      #   stronger:
-      #     data_uncertainties:
-      #         - uncertainties.yaml
-      #         - uncertainties_stronger.yaml
-      #   weaker:
-      #     data_uncertainties:
-      #         - uncertainties.yaml
-      #         - uncertainties_weaker.yaml
+    
+    # Variants
+    variants:
+      stronger:
+        data_uncertainties:
+          - uncertainties_stronger.yaml
+      weaker:
+        data_uncertainties:
+          - uncertainties_weaker.yaml
+      bugged:
+        data_uncertainties:
+          - uncertainties_bugged.yaml
 
 
     # Plotting  
@@ -71,7 +70,6 @@ implemented_observables:
     plot_x: m12
     figure_by:
       - ystar
-
 
     # Theory
     theory:
