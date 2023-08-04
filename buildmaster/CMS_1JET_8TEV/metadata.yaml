@@ -1,52 +1,68 @@
 # Created on Apr 2023, author: Mark N. Costantini
 
- setname: "CMS_1JET_8TEV"
- ndata: 239
- observable: 
-    description: "Double-differential inclusive jet cross-section as function of jet transverse momentum and the absolute jet rapidity." 
-    label: r"$10^{3*qbin} d^2\sigma/dp_Tdy$" 
-    units: "[pb/GeV]" 
+setname: "CMS_1JET_8TEV"
 
- kinematics:
-    variables:
-       y: {description: "jet rapidity", label: "$|y|$", units: ""}
-       kt: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
-       sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
-    file: kinematics.yaml
+version: 0
 
- version: 0
- version_comment: "Initial implementation"
+version_comment: "Initial implementation"
 
- # References
- arXiv:
-    url: "https://arxiv.org/pdf/1609.05331.pdf"
- iNSPIRE:
-    url: "https://inspirehep.net/literature/1487277"
- hepdata:
-    url: "https://www.hepdata.net/record/ins1487277"
-    version: 1
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/1609.05331.pdf"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1487277"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1487277"
+  version: 1
+  tables: [1,2,3,4,5,6]
+
+
+nnpdf_metadata:
+  nnpdf31_process: "JETS"
+  experiment: "CMS"
+
+
+implemented_observables:
+  - observable_name: PTY
+    observable: 
+      description: "Double-differential inclusive jet cross-section as function of jet transverse momentum and the absolute jet rapidity." 
+      label: r"$10^{3*qbin} d^2\sigma/dp_Tdy$" 
+      units: "[pb/GeV]" 
+
+    ndata: 185
+
     tables: [1,2,3,4,5,6]
 
- # Data 
- data_central: data.yaml
- data_uncertainties:
-    - uncertainties.yaml
 
- # Plotting  
- kinematic_coverage:
-    ydiff: y
-    m12: kt
- dataset_label: "CMS jets 8 TeV"
- plot_x: kt
- figure_by: 
-    - y
+    kinematics:
+        variables:
+          y: {description: "jet rapidity", label: "$|y|$", units: ""}
+          kt: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
+          sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        file: kinematics.yaml
 
- # Theory
- theory:
-    FK_tables:
-      - CMS_1JET_8TEV
+    # Data 
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    # Variants
+    variants:
+      nominal:
+        data_uncertainties:
+          - uncertainties.yaml
     
+    # Theory
+    theory:
+      FK_tables:
+        - - CMS_1JET_8TEV
+      operation: 'null'
 
- nnpdf_metadata:
-    nnpdf31_process: "JETS"
-    experiment: "CMS"
+
+    # Plotting  
+    kinematic_coverage:
+        ydiff: y
+        m12: kt
+    dataset_label: "CMS jets 8 TeV"
+    plot_x: kt
+    figure_by: 
+        - y

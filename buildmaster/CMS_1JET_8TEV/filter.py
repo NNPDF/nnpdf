@@ -17,6 +17,7 @@ from filter_utils import (
     correlation_to_covariance,
     uncertainties_df,
     process_err,
+    decompose_covmat,
 )
 
 
@@ -62,13 +63,18 @@ def filter_CMS_1JET_8TEV_uncertainties():
     # get dataframe of uncertainties
     df_unc = uncertainties_df(tables)
 
-    # construct block diagonal statistical covariance matrix
-    stat_unc = get_stat_uncertainties() #df_unc['ignore'].values
+    # construct block diagonal statistical covariance matrix (stat correlations within the same rapidity bins)
+    stat_unc = get_stat_uncertainties()  # df_unc['ignore'].values
     # stat_unc = df_unc['stat'].values * df_unc['Sigma'].values / 100
 
     bd_stat_cov = correlation_to_covariance(
         block_diagonal_corr(tables), stat_unc
-    )  # get_stat_uncertainties())
+    )
+    # bd_stat_cov = np.diag(stat_unc**2)
+
+    # generate artificial systematics by decomposing statistical covariance matrix
+    A_art_stat = decompose_covmat(bd_stat_cov)
+    A_art_stat = np.nan_to_num(A_art_stat) # set nan to zero
 
     # Luminosity uncertainty
     lum_unc = df_unc['Luminosity'].values * df_unc['Sigma'].values / 100
@@ -103,10 +109,6 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     cov_JES = df_JES.to_numpy() @ df_JES.to_numpy().T
 
-    import IPython
-
-    IPython.embed()
-
     # # NP corrections (SKIP)
     # np_p = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr+'].values / 100.) - 1) / np.sqrt(2.)
     # cov_np = np.einsum('i,j->ij', np_p, np_p)
@@ -114,13 +116,84 @@ def filter_CMS_1JET_8TEV_uncertainties():
     # cov_np += np.einsum('i,j->ij', np_m, np_m)
 
     covmat = cov_JES + cov_unfold + bd_stat_cov + lumi_cov + cov_uncorr
+    
+
+    # save systematics to yaml file
+
+    # error definition
+    error_definition = {
+        f"art_sys_{i}": {
+            "description": f"artificial systematic {i}, generated from block diagonal statistical covariance matrix",
+            "treatment": "ADD",
+            "type": "CORR",
+        }
+        for i in range(1, A_art_stat.shape[0] + 1)
+    }
+
+    error_definition["luminosity_uncertainty"] = {
+        "description": "luminosity uncertainty",
+        "treatment": "ADD",
+        "type": "CMSLUMI12",
+    }
+
+    error_definition["uncorrelated_uncertainty"] = {
+        "description": "uncorrelated systematic uncertainty",
+        "treatment": "ADD",
+        "type": "UNCORR",
+    }
+
+    for col in df_unfold.columns:
+        error_definition[f"{col}"] = {
+            "description": f"correlated unfolding uncertainty, {col}",
+            "treatment": "ADD",
+            "type": "CORR",
+        }
+
+    for col in df_JES:
+        error_definition[f"{col}"] = {
+            "description": f"correlated JES uncertainty, {col}",
+            "treatment": "ADD",
+            "type": "CORR",
+        }
+
+    
+    # store error in dict
+    error = []
+    for n in range(A_art_stat.shape[0]):
+        error_value={}
+        
+        # artificial stat uncertainties
+        for m in range(A_art_stat.shape[1]):
+            error_value[f"art_sys_{m+1}"] = float(A_art_stat[n,m])
+        
+        # unfolding uncertainties
+        for col, m in zip(df_unfold.columns, range(df_unfold.to_numpy().shape[1])):
+            error_value[f"{col}"] = float(df_unfold.to_numpy()[n,m])
+
+        # JES uncertainties
+        for col, m in zip(df_JES.columns, range(df_JES.to_numpy().shape[1])):
+            error_value[f"{col}"] = float(df_JES.to_numpy()[n,m])
+
+        # luminosity uncertainties
+        error_value["luminosity_uncertainty"] = float(lum_unc[n])
+
+        # uncorrelated uncertainties
+        error_value["uncorrelated_uncertainty"] = float(uncorr[n])
+
+        error.append(error_value)
+
+    uncertainties_yaml = {"definitions": error_definition, "bins": error}
+
+    with open(f"uncertainties.yaml",'w') as file:
+            yaml.dump(uncertainties_yaml,file, sort_keys=False)
 
     return covmat
 
 
 if __name__ == "__main__":
     # write data central values and kinematics to file
-    # filter_CMS_1JET_8TEV_data_kinetic()
+    filter_CMS_1JET_8TEV_data_kinetic()
+
     covmat = filter_CMS_1JET_8TEV_uncertainties()
 
     from validphys.api import API
@@ -132,8 +205,34 @@ if __name__ == "__main__":
     inp = dict(dataset_inputs=inps, theoryid=200, use_cuts="internal")
     cmat = API.dataset_inputs_covmat_from_systematics(**inp)
 
-    print(cmat / covmat)
+    import matplotlib.pyplot as plt
+    import seaborn as sns    
+    fig, axs = plt.subplots(1,2, figsize = (12,5), sharey = True)
+
+    # Create a shared colorbar axis
+    cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
+
+    sns.heatmap(covmat / np.outer(np.sqrt(np.diag(covmat)), np.sqrt(np.diag(covmat))), annot=False, cmap="YlGnBu", ax=axs[0], cbar_ax=cbar_ax)
+    sns.heatmap(cmat / np.outer(np.sqrt(np.diag(cmat)), np.sqrt(np.diag(cmat))), annot=False, cmap="YlGnBu", ax=axs[1], cbar_ax=cbar_ax)
+
+    plt.show()
+
+
+    ones = covmat / cmat
+    print(ones)
     print()
-    print(np.diag(covmat / cmat))
+    print(np.diag(ones))
     print()
-    print(np.allclose(np.ones(covmat.shape), covmat / cmat))
+    print(np.allclose(np.ones(covmat.shape), ones, rtol=1e-5))
+    print(np.max(covmat-cmat), np.min(covmat-cmat))
+    # print(np.argmax(covmat-cmat, axis=1), np.argmax(covmat-cmat, axis=0), np.argmin(covmat-cmat))
+    max_index = np.argmax(covmat-cmat)
+    print("Index of the largest entry:", max_index)
+
+    # Get the row and column indices of the largest entry
+    max_row_index, max_col_index = np.unravel_index(max_index, (covmat-cmat).shape)
+    print("Row index of the largest entry:", max_row_index)
+    print("Column index of the largest entry:", max_col_index)
+    print((covmat.flatten()[max_index]), covmat[max_row_index, max_col_index])
+    print((cmat.flatten()[max_index]), cmat[max_row_index, max_col_index])
+    # print(covmat[np.argmax(covmat-cmat)])
