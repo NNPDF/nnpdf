@@ -1,0 +1,29 @@
+meta:
+  title: Test new Datasets
+  author: Mark N. Costantini
+  keywords: [example]
+
+Datasets:
+  - {dataset_input: {dataset: ATLAS_1JET_8TEV_R06, cfac: [QCD]}, new_dataset_name: ATLAS_1JET_8TEV_R06_PTY, variant: "nominal"}
+  - {dataset_input: {dataset: ATLAS_1JET_8TEV_R06_DEC, cfac: [QCD]}, new_dataset_name: ATLAS_1JET_8TEV_R06_PTY, variant: "decorrelated"}
+  - {dataset_input: {dataset: CMS_1JET_8TEV, cfac: [QCD]}, new_dataset_name: CMS_1JET_8TEV_PTY, variant: nominal}
+  - {dataset_input: {dataset: ATLAS_2JET_7TEV_R06, cfac: [QCD]}, new_dataset_name: ATLAS_2JET_7TEV_R06_M12Y, variant: nominal}
+  - {dataset_input: {dataset: CMS_2JET_7TEV, cfac: [QCD]}, new_dataset_name: CMS_2JET_7TEV_M12Y, variant: nominal}
+
+pdf: NNPDF40_nnlo_as_01180
+
+theoryid: 200
+
+use_cuts: internal
+
+template_text: |
+  {@with Datasets@}
+  ## Dataset: {@dataset@}, Variant: {@variant@}
+  {@table_comparison_old_new_dataset@}
+  {@figure_comparison_correlation_matrices@}
+  {@endwith@}
+
+  
+  
+actions_:
+  - report(main=true)
