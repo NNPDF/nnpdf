@@ -119,9 +119,11 @@ def get_data_values(tables, version):
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
-
-        for value in values:
-            data_central.append(value['value'])
+        pt_values = input['independent_variables'][0]['values']
+        
+        for pt, value in zip(pt_values, values):
+            if pt['high']>74:
+                data_central.append(value['value'])
 
     return data_central
 
@@ -167,16 +169,17 @@ def get_kinematics(tables, version):
         jet_kt_bins = input['independent_variables'][0]['values']
         KT = {}
         for kt in jet_kt_bins:
-            KT['min'], KT['max'] = kt['low'], kt['high']
-            KT['mid'] = float(f"{0.5 * (kt['low'] + kt['high']):.3f}")
+            if kt['high'] > 74:
+                KT['min'], KT['max'] = kt['low'], kt['high']
+                KT['mid'] = float(f"{0.5 * (kt['low'] + kt['high']):.3f}")
 
-            kin_value = {
-                'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
-                'kt': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
-                'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
-            }
+                kin_value = {
+                    'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
+                    'kt': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
+                    'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
+                }
 
-            kin.append(kin_value)
+                kin.append(kin_value)
 
     return kin
     
@@ -341,6 +344,15 @@ def process_err(df):
                 elif np.abs(val1) < np.abs(val2):
                     df.iloc[row_idx, col_idx] = 0
     return df
+
+def decompose_covmat(covmat):
+     """Given a covmat it return an array sys with shape (ndat,ndat)
+     giving ndat correlated systematics for each of the ndat point.
+     The original covmat is obtained by doing sys@sys.T"""
+
+     lamb, mat = np.linalg.eig(covmat)
+     sys = np.multiply(np.sqrt(lamb), mat)
+     return sys
 
 if __name__ == "__main__":
     # print(get_kinematics(tables=[1],version=1))
