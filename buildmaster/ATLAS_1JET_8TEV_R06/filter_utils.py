@@ -252,7 +252,7 @@ def fill_df(table, version, variant='nominal'):
     # list of len ndata. Each entry is dict with
     # keys errors and value
     card = card['dependent_variables'][0]['values']
-    df = HEP_table_to_df(table, version)
+    df = HEP_table_to_df(table, version, variant)
 
     for i, dat in enumerate(card):
         # cv = dat['value']

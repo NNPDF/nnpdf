@@ -114,8 +114,8 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     error = []
     for n in range(A_corr.shape[0]):
         error_value = {}
-        for m in range(A_corr.shape[1]):
-            error_value[f"art_sys_corr_{m+1}"] = float(A_corr[n, m])
+        for col, m in zip(df_unc.drop(["stat", "syst_lumi"], axis=1).columns, range(A_corr.shape[1])):
+            error_value[f"{col}"] = float(A_corr[n, m])
 
         error_value["luminosity_uncertainty"] = float(lum_errors[n])
         error_value["statistical_uncertainty"] = float(stat_errors[n])
