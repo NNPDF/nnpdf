@@ -48,6 +48,12 @@ implemented_observables:
     data_uncertainties:
       - uncertainties.yaml
     
+    # Variants
+    variants:
+      nominal:
+        data_uncertainties:
+          - uncertainties.yaml
+    
     # Theory
     theory:
       FK_tables:

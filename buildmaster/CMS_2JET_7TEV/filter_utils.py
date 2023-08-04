@@ -287,7 +287,7 @@ def dat_file_to_df():
     return dfs
 
 
-def JEC_covmat():
+def JEC_error_matrix():
     """
     Jet Energy Scale (JET): 14 Asymmetric uncertainties correlated across all 
     rapidity and mass bins (CORR). This uncertainty is not always presented as 
@@ -311,7 +311,7 @@ def JEC_covmat():
     JEC_err = []
     for df in dfs:
         JEC_err.append(df.filter(like = "JEC"))
-
+    
     # divide by sqrt(2) since treating each unc of asymm as independent
     jec = pd.concat(JEC_err,axis=0) / np.sqrt(2)
     
@@ -326,9 +326,8 @@ def JEC_covmat():
     
     # convert mult error to absolute
     jec = jec.multiply(cv,axis = 0)
-    jec = jec.to_numpy().astype(float)
     
-    return np.einsum('ij,kj->ik',jec,jec)
+    return jec
 
 
 def lumi_covmat():
@@ -368,7 +367,7 @@ def lumi_covmat():
     
     return np.einsum('ij,kj->ik',lumi,lumi)
 
-def unfolding_covmat():
+def unfolding_error_matrix():
     """
     Unfolding uncertainty: this asymmetric is correlated across all rapidity 
     and mass bins (CORR).
@@ -397,9 +396,8 @@ def unfolding_covmat():
 
     # convert mult to abs
     unfold = unfold.multiply(cv, axis = 0)
-    unfold = unfold.to_numpy().astype(float)
     
-    return np.einsum('ij,kj->ik',unfold,unfold)
+    return unfold
 
 def bin_by_bin_covmat():
     """
