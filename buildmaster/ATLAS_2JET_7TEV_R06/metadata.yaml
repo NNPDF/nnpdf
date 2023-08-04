@@ -51,6 +51,9 @@ implemented_observables:
     
     # Variants
     variants:
+      nominal:
+        data_uncertainties:
+          - uncertainties.yaml
       stronger:
         data_uncertainties:
           - uncertainties_stronger.yaml
