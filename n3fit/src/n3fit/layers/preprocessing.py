@@ -1,3 +1,5 @@
+from typing import Optional
+
 from n3fit.backends import MetaLayer, constraints
 from n3fit.backends import operations as op
 
@@ -35,7 +37,7 @@ class Preprocessing(MetaLayer):
 
     def __init__(
         self,
-        flav_info: list = None,
+        flav_info: Optional[list] = None,
         seed: int = 0,
         large_x: bool = True,
         **kwargs,
