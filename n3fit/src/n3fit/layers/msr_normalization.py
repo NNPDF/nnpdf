@@ -18,7 +18,7 @@ VSR_INDICES = [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
 
 class MSR_Normalization(MetaLayer):
     """
-    Applies the normalisation so that the PDF output fullfills the sum rules
+    Computes the normalisation factors for the sum rules of the PDFs.
     """
 
     _msr_enabled = False
@@ -40,12 +40,14 @@ class MSR_Normalization(MetaLayer):
             self.indices += MSR_INDICES
         if self._vsr_enabled:
             self.indices += VSR_INDICES
+        # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in self.indices]
 
         super().__init__(**kwargs)
 
     def call(self, pdf_integrated):
-        """Imposes the valence and momentum sum rules:
+        """
+        Computes the normalization factors for the PDFs:
         A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
         A_v3 = 1/V_3
@@ -78,6 +80,7 @@ class MSR_Normalization(MetaLayer):
             n_av15 = [3.0 / y[IDX['v15']]]
             norm_constants += n_av + n_av3 + n_av8 + n_av15
 
+        # Fill in the rest of the flavours with 1
         norm_constants = op.scatter_to_one(
             norm_constants, indices=self.indices, output_shape=y.shape
         )
