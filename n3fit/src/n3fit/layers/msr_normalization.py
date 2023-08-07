@@ -12,6 +12,8 @@ IDX = {
     'v24': 7,
     'v35': 8,
 }
+MSR_INDICES = [IDX['g']]
+VSR_INDICES = [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
 
 
 class MSR_Normalization(MetaLayer):
@@ -35,9 +37,9 @@ class MSR_Normalization(MetaLayer):
 
         self.indices = []
         if self._msr_enabled:
-            self.indices += [IDX['g']]
+            self.indices += MSR_INDICES
         if self._vsr_enabled:
-            self.indices += [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
+            self.indices += VSR_INDICES
         self.indices = [[i] for i in self.indices]
 
         super().__init__(**kwargs)
