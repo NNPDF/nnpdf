@@ -44,13 +44,6 @@ class MSR_Normalization(MetaLayer):
 
         super().__init__(**kwargs)
 
-    def build(self, input_shape):
-        out_shape = input_shape[1:]
-        self._out_scatter = lambda pdf_integrated: op.scatter_to_one(
-            pdf_integrated, indices=self.indices, output_shape=out_shape
-        )
-        super().build(input_shape)
-
     def call(self, pdf_integrated):
         """Imposes the valence and momentum sum rules:
         A_g = (1-sigma-photon)/g
@@ -85,4 +78,8 @@ class MSR_Normalization(MetaLayer):
             n_av15 = [3.0 / y[IDX['v15']]]
             norm_constants += n_av + n_av3 + n_av8 + n_av15
 
-        return self._out_scatter(norm_constants)
+        norm_constants = op.scatter_to_one(
+            norm_constants, indices=self.indices, output_shape=y.shape
+        )
+
+        return norm_constants
