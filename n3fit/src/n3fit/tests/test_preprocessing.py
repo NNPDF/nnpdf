@@ -62,4 +62,4 @@ def test_preprocessing():
         ],
     ]
     prefactors = prepro(test_x)
-    assert np.allclose(test_prefactors, prefactors)
+    np.testing.assert_allclose(test_prefactors, prefactors)
