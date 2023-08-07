@@ -16,7 +16,7 @@ def test_preprocessing():
         {'fl': 't8', 'smallx': [0.56, 1.29], 'largex': [1.45, 3.03]},
         {'fl': 'cp', 'smallx': [0.12, 1.19], 'largex': [1.83, 6.7]},
     ]
-    prepro = Preprocessing(flav_info=flav_info, seed=0)
+    prepro = Preprocessing(flav_info=flav_info, seed=1)
     np.random.seed(42)
     test_x = np.random.uniform(size=(1, 4, 1))
     test_prefactors = [
