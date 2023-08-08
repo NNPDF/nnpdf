@@ -12,8 +12,29 @@ IDX = {
     'v24': 7,
     'v35': 8,
 }
-MSR_INDICES = [IDX['g']]
-VSR_INDICES = [IDX[f] for f in ['v', 'v35', 'v24', 'v3', 'v8', 'v15']]
+MSR_COMPONENTS = ['g']
+MSR_DENOMINATORS = {
+    'g': 'g',
+}
+# The VSR normalization factor of component f is given by
+# VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
+VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
+VSR_CONSTANTS = {
+    'v': 3.0,
+    'v35': 3.0,
+    'v24': 3.0,
+    'v3': 1.0,
+    'v8': 3.0,
+    'v15': 3.0,
+}
+VSR_DENOMINATORS = {
+    'v': 'v',
+    'v35': 'v',
+    'v24': 'v',
+    'v3': 'v3',
+    'v8': 'v8',
+    'v15': 'v15',
+}
 
 
 class MSR_Normalization(MetaLayer):
@@ -36,10 +57,14 @@ class MSR_Normalization(MetaLayer):
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
         self.indices = []
+        self.divisor_indices = []
         if self._msr_enabled:
-            self.indices += MSR_INDICES
+            self.indices += [IDX[c] for c in MSR_COMPONENTS]
+            self.divisor_indices += [IDX[MSR_DENOMINATORS[c]] for c in MSR_COMPONENTS]
         if self._vsr_enabled:
-            self.indices += VSR_INDICES
+            self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
+            self.indices += [IDX[c] for c in VSR_COMPONENTS]
+            self.vsr_factors = [VSR_CONSTANTS[c] for c in VSR_COMPONENTS]
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in self.indices]
 
@@ -70,15 +95,13 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[IDX['sigma']] - y[IDX['photon']]) / y[IDX['g']]]
-            norm_constants += n_ag
+            norm_constants += [(1.0 - y[IDX['sigma']] - y[IDX['photon']])]
 
         if self._vsr_enabled:
-            n_av = [3.0 / y[IDX['v']]] * 3
-            n_av3 = [1.0 / y[IDX['v3']]]
-            n_av8 = [3.0 / y[IDX['v8']]]
-            n_av15 = [3.0 / y[IDX['v15']]]
-            norm_constants += n_av + n_av3 + n_av8 + n_av15
+            norm_constants += self.vsr_factors
+
+        divisors = op.gather(y, self.divisor_indices, axis=0)
+        norm_constants = norm_constants / divisors
 
         # Fill in the rest of the flavours with 1
         norm_constants = op.scatter_to_one(
