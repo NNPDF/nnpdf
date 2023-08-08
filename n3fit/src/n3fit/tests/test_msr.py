@@ -8,13 +8,9 @@ def apply_layer_to_fixed_input(layer):
     np.random.seed(422)
     pdf_integrated = op.numpy_to_tensor(np.random.normal(size=(1, 14)))
 
-    # done this way to stay consistent with the original code
     photon_integral = op.numpy_to_tensor([np.random.normal(size=(1,))])
-    pdf_integrated = op.concatenate(
-        [op.numpy_to_tensor(photon_integral), pdf_integrated[:, 1:]], axis=1
-    )
 
-    return layer(pdf_integrated)
+    return layer(pdf_integrated, photon_integral)
 
 
 def test_all():
@@ -87,3 +83,13 @@ def test_vsr():
         ]
     )
     np.testing.assert_allclose(output, known_output, rtol=1e-5)
+
+
+def main():
+    test_all()
+    test_msr()
+    test_vsr()
+
+
+if __name__ == '__main__':
+    main()

@@ -70,7 +70,7 @@ class MSR_Normalization(MetaLayer):
 
         super().__init__(**kwargs)
 
-    def call(self, pdf_integrated):
+    def call(self, pdf_integrated, photon_integral):
         """
         Computes the normalization factors for the PDFs:
         A_g = (1-sigma-photon)/g
@@ -85,6 +85,8 @@ class MSR_Normalization(MetaLayer):
         ----------
         pdf_integrated: (Tensor(1, 14))
             the integrated PDF
+        photon_integral: (Tensor(1, 1))
+            the integrated photon PDF
 
         Returns
         -------
@@ -92,10 +94,11 @@ class MSR_Normalization(MetaLayer):
             The normalization factors per flavour.
         """
         y = pdf_integrated[0]  # get rid of the batch dimension
+        photon_integral = photon_integral[0]  # get rid of the batch dimension
         norm_constants = []
 
         if self._msr_enabled:
-            norm_constants += [(1.0 - y[IDX['sigma']] - y[IDX['photon']])]
+            norm_constants += [(1.0 - y[IDX['sigma']] - photon_integral[0])]
 
         if self._vsr_enabled:
             norm_constants += self.vsr_factors
