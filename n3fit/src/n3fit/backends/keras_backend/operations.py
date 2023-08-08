@@ -359,6 +359,34 @@ def swapaxes(tensor, source, destination):
     return tf.transpose(tensor, indices)
 
 
+def all_combinations(a, b, axis=1):
+    """
+    Computes all possible combinations of the elements of a and b
+
+    Parameters
+    ----------
+        a: tf.tensor
+            A tensor of any shape with size N in the axis specified
+        b: tf.tensor
+            A tensor of any shape with size M in the axis specified
+        axis: int
+            The axis along which the combinations are computed
+
+    Returns
+    -------
+        a_repeated: tf.tensor
+            A tensor of the same shape as a, except for the axis specified,
+            which is now of size N*M
+        b_repeated: tf.tensor
+            A tensor of the same shape as b, except for the axis specified,
+            which is now of size N*M
+    """
+    N, M = a.shape[axis], b.shape[axis]
+    a_repeated = K.repeat_elements(a, M, axis=axis)
+    b_repeated = K.tile(b, [N if i == axis else 1 for i in range(b.shape.rank)])
+    return a_repeated, b_repeated
+
+
 @tf.function
 def backend_function(fun_name, *args, **kwargs):
     """

@@ -38,6 +38,7 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
+InputInfoA = namedtuple("InputInfoA", ["num", "unique", "stacked"])
 
 
 def _pdf_injection(pdf_layers, observables, masks):
@@ -200,7 +201,8 @@ class ModelTrainer:
             self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
 
         # Initialize the dictionaries which contain all fitting information
-        self.input_list = []
+        self.input_list_x = []
+        self.input_list_A = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -348,7 +350,7 @@ class ModelTrainer:
 
         inputs_unique = []
         inputs_idx = []
-        for igrid in self.input_list:
+        for igrid in self.input_list_x:
             for idx, arr in enumerate(inputs_unique):
                 if igrid.size == arr.size and np.allclose(igrid, arr):
                     inputs_idx.append(idx)
@@ -372,7 +374,39 @@ class ModelTrainer:
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _model_generation(self, xinput, pdf_models, partition, partition_idx):
+    def _Agrid_generation(self):
+        """
+        Generate input layers for the A values belonging to the experiment.
+
+        Returns
+        ------
+            Instance of ``InputInfoA`` containing the input information necessary for the PDF model:
+            - num:
+                number of unique A values
+            - unique:
+                backend input layer with an array attached which is a sorted list
+                of unique A values
+            - stacked:
+                backend input layer with an array attached which is a concatenation of
+                repeated A values for each gridpoint for each experiment
+        """
+        # for each dataset, take the A value, repeat it to match the size of the x grid
+        # and concatenate all together to get the A input
+        inputs_A = []
+        for A, igrid in zip(self.input_list_A, self.input_list_x):
+            inputs_A.append(np.repeat(A, igrid.shape[1]))
+
+        input_A_arr = np.concatenate(inputs_A)
+        input_A_arr = np.expand_dims(input_A_arr, axis=1)  # add feature dimension
+        input_A_stacked = op.numpy_to_input(input_A_arr)
+
+        unique_As = np.unique(input_A_arr)
+        unique_As = np.expand_dims(unique_As, axis=1)  # add feature dimension
+        input_A_unique = op.numpy_to_input(unique_As)
+
+        return InputInfoA(len(unique_As), input_A_unique, input_A_stacked)
+
+    def _model_generation(self, xinput, Ainput, pdf_models, partition, partition_idx):
         """
         Fills the three dictionaries (``training``, ``validation``, ``experimental``)
         with the ``model`` entry
@@ -403,6 +437,8 @@ class ModelTrainer:
                 a tuple containing the input layer (with all values of x), and the information
                 (in the form of a splitting layer and a list of indices) to distribute
                 the results of the PDF (PDF(xgrid)) among the different observables
+            Ainput: InputInfoA
+                a tuple containing all the information about As
             pdf_models: list(n3fit.backend.MetaModel)
                 a list of models that produce PDF values
             partition: dict
@@ -421,10 +457,15 @@ class ModelTrainer:
         #   The trainable part of the n3fit framework is a concatenation of all PDF models
         #   each model, in the NNPDF language, corresponds to a different replica
         all_replicas_pdf = []
+        pdf_input_dict = {"pdf_input_x": xinput.input}
+        if Ainput.num > 1:
+            pdf_input_dict["pdf_input_A_stacked"] = Ainput.stacked
+            pdf_input_dict["pdf_input_A_unique"] = Ainput.unique
+
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(pdf_input_dict)
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
@@ -491,11 +532,11 @@ class ModelTrainer:
         """
         Resets the 'output' and 'losses' entries of all 3 dictionaries:
                             (``training``, ``validation``, ``experimental``)
-        as well as the input_list
+        as well as the input_list_x
         this is necessary as these can either depend on the parametrization of the NN
         or be obliterated when/if the backend state is reset
         """
-        self.input_list = []
+        self.input_list_x = []
         for key in ["output", "posmultipliers", "integmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
@@ -523,7 +564,7 @@ class ModelTrainer:
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
         with the output layers and the loss functions
-        It also fill the list of input tensors (input_list)
+        It also fill the list of input tensors (input_list_x)
 
         The arguments of this function are used to define the initial positivity of the
         positivity observables and the multiplier to be applied at each step.
@@ -550,7 +591,8 @@ class ModelTrainer:
             exp_layer = model_gen.observable_generator(exp_dict)
 
             # Save the input(s) corresponding to this experiment
-            self.input_list.append(exp_layer["inputs"])
+            self.input_list_x.append(exp_layer["inputs"])
+            self.input_list_A.append(exp_layer.get("input_A", 1))
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -571,7 +613,8 @@ class ModelTrainer:
 
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
-            self.input_list.append(pos_layer["inputs"])
+            self.input_list_x.append(pos_layer["inputs"])
+            self.input_list_A.append(pos_layer.get("input_A", 1))
 
             # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
@@ -597,7 +640,8 @@ class ModelTrainer:
                     integ_dict, positivity_initial=integ_initial, integrability=True
                 )
                 # The input list is still common
-                self.input_list.append(integ_layer["inputs"])
+                self.input_list_x.append(integ_layer["inputs"])
+                self.input_list_A.append(integ_layer.get("input_A", 1))
 
                 # The integrability all falls to the training
                 self.training["output"].append(integ_layer["output_tr"])
@@ -606,7 +650,7 @@ class ModelTrainer:
 
         # Store a reference to the interpolator as self._scaler
         if interpolation_points:
-            self._scaler = generate_scaler(self.input_list, interpolation_points)
+            self._scaler = generate_scaler(self.input_list_x, interpolation_points)
 
     def _generate_pdf(
         self,
@@ -619,12 +663,13 @@ class ModelTrainer:
         regularizer_args,
         seed,
         photons,
+        num_unique_As,
     ):
         """
         Defines the internal variable layer_pdf
         this layer takes any input (x) and returns the pdf value for that x
 
-        if the sumrule is being imposed, it also updates input_list with the
+        if the sumrule is being imposed, it also updates input_list_x with the
         integrator_input tensor used to calculate the sumrule
 
         Parameters:
@@ -647,6 +692,8 @@ class ModelTrainer:
                 seed for the NN
             photons: :py:class:`validphys.photon.compute.Photon`
                 function to compute the photon PDF
+            num_unique_As: int
+                number of unique As in a multi nucleon PDF
         see model_gen.pdfNN_layer_generator for more information
 
         Returns
@@ -673,6 +720,7 @@ class ModelTrainer:
             scaler=self._scaler,
             parallel_models=self._parallel_models,
             photons=photons,
+            num_unique_As=num_unique_As,
         )
         return pdf_models
 
@@ -843,10 +891,16 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
+        # Generate the A inputs
+        Ainput = self._Agrid_generation()
+        num_unique_As = Ainput.num
+
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid,
+                lux_params=self.lux_params,
+                replicas=self.replicas,
             )
         else:
             photons = None
@@ -869,6 +923,7 @@ class ModelTrainer:
                 params.get("regularizer_args", None),
                 seeds,
                 photons,
+                num_unique_As,
             )
 
             if photons:
@@ -878,7 +933,7 @@ class ModelTrainer:
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(xinput, pdf_models, partition, k)
+            models = self._model_generation(xinput, Ainput, pdf_models, partition, k)
 
             # Only after model generation, apply possible weight file
             if self.model_file:
@@ -918,7 +973,11 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function

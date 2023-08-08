@@ -412,6 +412,7 @@ def pdfNN_layer_generator(
     scaler: Callable = None,
     parallel_models: int = 1,
     photons: Photon = None,
+    num_unique_As: int = 1,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -507,6 +508,8 @@ def pdfNN_layer_generator(
             If given, gives the AddPhoton layer a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
+        num_unique_As: int
+            Number of unique masses A, used for multi nuclei fits
 
     Returns
     -------
@@ -558,17 +561,25 @@ def pdfNN_layer_generator(
     # Define the main input
     do_nothing = lambda x: x
     if use_feature_scaling:
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
+        pdf_input_x = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
         process_input = do_nothing
         extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
         extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
     else:  # add log(x)
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
+        pdf_input_x = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
         extract_original = do_nothing
         extract_nn_input = do_nothing
 
-    model_input = {"pdf_input": pdf_input}
+    model_input = {"pdf_input_x": pdf_input_x}
+    nn_input = {"NN_input_x": pdf_input_x}
+
+    if num_unique_As > 1:
+        pdf_input_A_stacked = Input(shape=(None,), batch_size=1, name='A_stacked')
+        pdf_input_A_unique = Input(shape=(num_unique_As,), batch_size=1, name='A_unique')
+        model_input["pdf_input_A_stacked"] = pdf_input_A_stacked
+        nn_input["NN_input_A"] = pdf_input_A_stacked
+        model_input["pdf_input_A_unique"] = pdf_input_A_unique
 
     if subtract_one:
         input_x_eq_1 = [1.0]
@@ -599,6 +610,13 @@ def pdfNN_layer_generator(
             mode=impose_sumrule, scaler=scaler, photons=photons
         )
         model_input["integrator_input"] = integrator_input
+        if num_unique_As == 1:
+            nn_input_integration = {"NN_input_x": integrator_input}
+        else:
+            # Need to expand inputs to give each combination of integration gridpoint
+            # and A value
+            x_repeated, A_repeated = op.all_combinations(integrator_input, pdf_input_A_unique)
+            nn_input_integration = {"NN_input_x": x_repeated, "NN_input_A": A_repeated}
     else:
         sumrule_layer = lambda x: x
 
@@ -630,6 +648,7 @@ def pdfNN_layer_generator(
                 regularizer=regularizer,
                 regularizer_args=regularizer_args,
                 last_layer_nodes=last_layer_nodes,
+                A_input=num_unique_As > 1,
                 name=f"NN_{i_replica}",
             )
         )
@@ -637,17 +656,20 @@ def pdfNN_layer_generator(
     # All layers have been made, now we need to connect them,
     # do this in a function so we can call it for both grids and each replica
     # Since all layers are already made, they will be reused
-    def compute_unnormalized_pdf(x, neural_network, compute_preprocessing_factor):
+    def compute_unnormalized_pdf(nn_input, neural_network, compute_preprocessing_factor):
+        x = nn_input["NN_input_x"]
         # Preprocess the input grid
         x_nn_input = extract_nn_input(x)
         x_original = extract_original(x)
         x_processed = process_input(x_nn_input)
 
         # Compute the neural network output
-        nn_output = neural_network(x_processed)
+        nn_input["NN_input_x"] = x_processed
+        nn_output = neural_network(nn_input)
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            nn_at_one = neural_network(x_eq_1_processed)
+            nn_input["NN_input_x"] = x_eq_1_processed
+            nn_at_one = neural_network(nn_input)
             nn_output = subtract_one_layer([nn_output, nn_at_one])
 
         # Compute the preprocessing factor and multiply
@@ -668,11 +690,11 @@ def pdfNN_layer_generator(
     for i_replica, (preprocessing_factor, nn) in enumerate(
         zip(preprocessing_factor_replicas, nn_replicas)
     ):
-        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
+        pdf_unnormalized = compute_unnormalized_pdf(nn_input, nn, preprocessing_factor)
 
         if impose_sumrule:
             pdf_integration_grid = compute_unnormalized_pdf(
-                integrator_input, nn, preprocessing_factor
+                nn_input_integration, nn, preprocessing_factor
             )
             pdf_normalized = sumrule_layer(
                 {
@@ -712,6 +734,7 @@ def generate_nn(
     regularizer_args: dict,
     last_layer_nodes: int,
     name: str,
+    A_input: bool,
 ) -> MetaModel:
     """
     Create the part of the model that contains all of the actual neural network
@@ -737,9 +760,15 @@ def generate_nn(
     # Note: using a Sequential model would be more appropriate, but it would require
     # creating a MetaSequential model.
     x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+    input_dict = {'NN_input_x': x}
+    if A_input:
+        A = Input(shape=(None, 1), batch_size=1, name='A')
+        x = Concatenate(axis=-1)([x, A])
+        input_dict['NN_input_A'] = A
+
     pdf = x
     for layer in list_of_pdf_layers:
         pdf = layer(pdf)
 
-    model = MetaModel({'NN_input': x}, pdf, name=name)
+    model = MetaModel(input_dict, pdf, name=name)
     return model
