@@ -64,7 +64,7 @@ class MSR_Normalization(MetaLayer):
         if self._vsr_enabled:
             self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
             self.indices += [IDX[c] for c in VSR_COMPONENTS]
-            self.vsr_factors = [VSR_CONSTANTS[c] for c in VSR_COMPONENTS]
+            self.vsr_factors = op.numpy_to_tensor([VSR_CONSTANTS[c] for c in VSR_COMPONENTS])
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in self.indices]
 
@@ -98,10 +98,13 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            norm_constants += [(1.0 - y[IDX['sigma']] - photon_integral[0])]
+            norm_constants += [
+                op.batchit(1.0 - y[IDX['sigma']] - photon_integral[0], batch_dimension=0)
+            ]
 
         if self._vsr_enabled:
-            norm_constants += self.vsr_factors
+            norm_constants += [self.vsr_factors]
+        norm_constants = op.concatenate(norm_constants, axis=0)
 
         divisors = op.gather(y, self.divisor_indices, axis=0)
         norm_constants = norm_constants / divisors

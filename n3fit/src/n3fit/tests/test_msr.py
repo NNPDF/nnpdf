@@ -83,13 +83,3 @@ def test_vsr():
         ]
     )
     np.testing.assert_allclose(output, known_output, rtol=1e-5)
-
-
-def main():
-    test_all()
-    test_msr()
-    test_vsr()
-
-
-if __name__ == '__main__':
-    main()
