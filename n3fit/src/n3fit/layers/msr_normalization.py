@@ -1,22 +1,51 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-GLUON_IDX = [[2]]
-V_IDX = [[3], [7], [8]]
-V3_IDX = [[4]]
-V8_IDX = [[5]]
-V15_IDX = [[6]]
+IDX = {
+    'photon': 0,
+    'sigma': 1,
+    'g': 2,
+    'v': 3,
+    'v3': 4,
+    'v8': 5,
+    'v15': 6,
+    'v24': 7,
+    'v35': 8,
+}
+MSR_COMPONENTS = ['g']
+MSR_DENOMINATORS = {
+    'g': 'g',
+}
+# The VSR normalization factor of component f is given by
+# VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
+VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
+VSR_CONSTANTS = {
+    'v': 3.0,
+    'v35': 3.0,
+    'v24': 3.0,
+    'v3': 1.0,
+    'v8': 3.0,
+    'v15': 3.0,
+}
+VSR_DENOMINATORS = {
+    'v': 'v',
+    'v35': 'v',
+    'v24': 'v',
+    'v3': 'v3',
+    'v8': 'v8',
+    'v15': 'v15',
+}
 
 
 class MSR_Normalization(MetaLayer):
     """
-    Applies the normalisation so that the PDF output fullfills the sum rules
+    Computes the normalisation factors for the sum rules of the PDFs.
     """
 
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, output_dim=14, mode="ALL", **kwargs):
+    def __init__(self, mode="ALL", **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -27,20 +56,23 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        idx = []
+        self.indices = []
+        self.divisor_indices = []
         if self._msr_enabled:
-            idx += GLUON_IDX
+            self.indices += [IDX[c] for c in MSR_COMPONENTS]
+            self.divisor_indices += [IDX[MSR_DENOMINATORS[c]] for c in MSR_COMPONENTS]
         if self._vsr_enabled:
-            idx += V_IDX + V3_IDX + V8_IDX + V15_IDX
-
-        self._out_scatter = op.as_layer(
-            op.scatter_to_one, op_kwargs={"indices": idx, "output_dim": output_dim}
-        )
+            self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
+            self.indices += [IDX[c] for c in VSR_COMPONENTS]
+            self.vsr_factors = [VSR_CONSTANTS[c] for c in VSR_COMPONENTS]
+        # Need this extra dimension for the scatter_to_one operation
+        self.indices = [[i] for i in self.indices]
 
         super().__init__(**kwargs)
 
     def call(self, pdf_integrated, photon_integral):
-        """Imposes the valence and momentum sum rules:
+        """
+        Computes the normalization factors for the PDFs:
         A_g = (1-sigma-photon)/g
         A_v = A_v24 = A_v35 = 3/V
         A_v3 = 1/V_3
@@ -51,30 +83,32 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1,None,14))
+        pdf_integrated: (Tensor(1, 14))
             the integrated PDF
-        photon_integral: (Tensor(1)):
-            the integrated photon, not included in PDF
+        photon_integral: (Tensor(1, 1))
+            the integrated photon PDF
 
         Returns
         -------
         normalization_factor: Tensor(14)
             The normalization factors per flavour.
         """
-        y = op.flatten(pdf_integrated)
+        y = pdf_integrated[0]  # get rid of the batch dimension
+        photon_integral = photon_integral[0]  # get rid of the batch dimension
         norm_constants = []
 
         if self._msr_enabled:
-            n_ag = [(1.0 - y[GLUON_IDX[0][0] - 1] - photon_integral[0]) / y[GLUON_IDX[0][0]]] * len(
-                GLUON_IDX
-            )
-            norm_constants += n_ag
+            norm_constants += [(1.0 - y[IDX['sigma']] - photon_integral[0])]
 
         if self._vsr_enabled:
-            n_av = [3.0 / y[V_IDX[0][0]]] * len(V_IDX)
-            n_av3 = [1.0 / y[V3_IDX[0][0]]] * len(V3_IDX)
-            n_av8 = [3.0 / y[V8_IDX[0][0]]] * len(V8_IDX)
-            n_av15 = [3.0 / y[V15_IDX[0][0]]] * len(V15_IDX)
-            norm_constants += n_av + n_av3 + n_av8 + n_av15
+            norm_constants += self.vsr_factors
 
-        return self._out_scatter(norm_constants)
+        divisors = op.gather(y, self.divisor_indices, axis=0)
+        norm_constants = norm_constants / divisors
+
+        # Fill in the rest of the flavours with 1
+        norm_constants = op.scatter_to_one(
+            norm_constants, indices=self.indices, output_shape=y.shape
+        )
+
+        return norm_constants

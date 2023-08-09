@@ -89,11 +89,10 @@ def generate_msr_model_and_grid(
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
     # 5. THe input for the photon integral, will be set to 0 if no photons
-    photon_integral = Input(shape=(), batch_size=1, name='photon_integral')
+    photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')
 
     # 6. Compute the normalization factor
-    # For now set the photon component to None
-    normalization_factor = MSR_Normalization(output_dim, mode, name="msr_weights")(
+    normalization_factor = MSR_Normalization(mode, name="msr_weights")(
         pdf_integrated, photon_integral
     )
 
