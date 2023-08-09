@@ -211,6 +211,11 @@ def flatten(x):
     return tf.reshape(x, (-1,))
 
 
+def reshape(x, shape, **kwargs):
+    """Reshape tensor x"""
+    return tf.reshape(x, shape, **kwargs)
+
+
 def boolean_mask(*args, **kwargs):
     """
     Applies a boolean mask to a tensor
@@ -336,7 +341,7 @@ def split(*args, **kwargs):
 def scatter_to_one(values, indices, output_shape):
     """
     Like scatter_nd initialized to one instead of zero
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/tensor_scatter_nd_update>`_
     """
     ones = np.ones(output_shape, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
@@ -392,6 +397,27 @@ def all_combinations(a, b, axis=1):
     a_repeated = K.repeat_elements(a, M, axis=axis)
     b_repeated = K.tile(b, [N if i == axis else 1 for i in range(b.shape.rank)])
     return a_repeated, b_repeated
+
+
+def repeat(tensor, n, axis=0):
+    """
+    Repeats the tensor n times along a given axis
+
+    Parameters
+    ----------
+        tensor: tf.tensor
+            A tensor of any shape
+        n: int
+            The number of repetitions
+        axis: int
+            The axis along which the tensor is repeated
+
+    Returns
+    -------
+        repeated_tensor: tf.tensor
+            The tensor repeated n times along the specified axis
+    """
+    return K.repeat_elements(tensor, n, axis=axis)
 
 
 @tf.function

@@ -45,7 +45,7 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, mode="ALL", **kwargs):
+    def __init__(self, mode="ALL", num_unique_As=1, **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -56,6 +56,8 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
+        self.num_unique_As = num_unique_As
+
         self.indices = []
         self.divisor_indices = []
         if self._msr_enabled:
@@ -64,7 +66,9 @@ class MSR_Normalization(MetaLayer):
         if self._vsr_enabled:
             self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
             self.indices += [IDX[c] for c in VSR_COMPONENTS]
-            self.vsr_factors = op.numpy_to_tensor([VSR_CONSTANTS[c] for c in VSR_COMPONENTS])
+            self.vsr_factors = op.batchit(
+                op.numpy_to_tensor([VSR_CONSTANTS[c] for c in VSR_COMPONENTS]), batch_dimension=0
+            )
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in self.indices]
 
@@ -83,9 +87,9 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1, 14))
+        pdf_integrated: (Tensor(1, nA, 14))
             the integrated PDF
-        photon_integral: (Tensor(1, 1))
+        photon_integral: (Tensor(1, nA, 1))
             the integrated photon PDF
 
         Returns
@@ -98,20 +102,25 @@ class MSR_Normalization(MetaLayer):
         norm_constants = []
 
         if self._msr_enabled:
-            norm_constants += [
-                op.batchit(1.0 - y[IDX['sigma']] - photon_integral[0], batch_dimension=0)
-            ]
+            norm_constants_msr = op.batchit(
+                1.0 - y[:, IDX['sigma']] - photon_integral[:, 0], batch_dimension=-1
+            )
+            norm_constants += [norm_constants_msr]
 
         if self._vsr_enabled:
-            norm_constants += [self.vsr_factors]
-        norm_constants = op.concatenate(norm_constants, axis=0)
+            # Pretend for now that the constants are independent of A
+            norm_constants_vsr = op.repeat(self.vsr_factors, self.num_unique_As, axis=0)
+            norm_constants += [norm_constants_vsr]
+        norm_constants = op.concatenate(norm_constants, axis=-1)
 
-        divisors = op.gather(y, self.divisor_indices, axis=0)
+        divisors = op.gather(y, self.divisor_indices, axis=-1)
         norm_constants = norm_constants / divisors
 
         # Fill in the rest of the flavours with 1
+        norm_constants = op.transpose(norm_constants)
         norm_constants = op.scatter_to_one(
-            norm_constants, indices=self.indices, output_shape=y.shape
+            norm_constants, indices=self.indices, output_shape=(y.shape[1], self.num_unique_As)
         )
+        norm_constants = op.transpose(norm_constants)
 
         return norm_constants

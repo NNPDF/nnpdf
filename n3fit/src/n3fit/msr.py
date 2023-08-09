@@ -19,7 +19,7 @@ def generate_msr_model_and_grid(
     nx: int = int(2e3),
     scaler: Optional[Callable] = None,
     num_unique_As: int = 1,
-    **kwargs
+    **kwargs,
 ) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.
@@ -58,8 +58,12 @@ def generate_msr_model_and_grid(
     # 0. Prepare input layers to MSR model
     pdf_x = Input(shape=(None, output_dim), batch_size=1, name="pdf_x")
     pdf_xgrid_integration = Input(
-        shape=(nx, output_dim), batch_size=1, name="pdf_xgrid_integration"
+        shape=(nx * num_unique_As, output_dim), batch_size=1, name="pdf_xgrid_integration"
     )
+    # 0b. Reshape the pdf_xgrid_integration to be (1, nx, num_unique_As, output_dim)
+    pdf_xgrid_integration_reshaped = Lambda(
+        lambda x: op.reshape(x, (1, nx, num_unique_As, output_dim)), name="reshape_As"
+    )(pdf_xgrid_integration)
 
     # 1. Generate the grid and weights that will be used to integrate
     xgrid_integration, weights_array = gen_integration_input(nx)
@@ -82,21 +86,40 @@ def generate_msr_model_and_grid(
     # 2. Divide the grid by x depending on the flavour
     x_divided = xDivide()(x_original)
 
-    # 3. Prepare the pdf for integration by dividing by x
-    pdf_integrand = Lambda(op.op_multiply, name="pdf_integrand")([x_divided, pdf_xgrid_integration])
+    # 3. Prepare the pdf for integration by dividing by x, shape (1, nx, num_unique_As, output_dim)
+    pdf_integrand = Lambda(
+        lambda x_pdf: op.op_multiply([op.batchit(x_pdf[0], batch_dimension=2), x_pdf[1]]),
+        name="pdf_integrand",
+    )([x_divided, pdf_xgrid_integration_reshaped])
 
-    # 4. Integrate the pdf
+    # 4. Integrate the pdf, shape (1, num_unique_As, output_dim)
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
-    # 5. THe input for the photon integral, will be set to 0 if no photons
-    photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')
+    # 5. The input for the photon integral, will be set to 0 if no photons
+    photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')  # Shape (1, 1)
+    # 5b. Copy the photon integral for all As, and add feature dimension, shape (1, num_unique_As, 1)
+    photon_integrals = Lambda(
+        lambda x: op.repeat(op.batchit(x, batch_dimension=2), num_unique_As, axis=1),
+        name="photon_integral_copied",
+    )(photon_integral)
 
-    # 6. Compute the normalization factor
-    normalization_factor = MSR_Normalization(mode, name="msr_weights")(
-        pdf_integrated, photon_integral
+    # 6. Compute the normalization factor, shape (1, num_unique_As, 1)
+    normalization_factor = MSR_Normalization(mode, num_unique_As=num_unique_As, name="msr_weights")(
+        pdf_integrated, photon_integrals
     )
 
-    # 7. Apply the normalization factor to the pdf
+    # 6b. broadcast the unique As to the corresponding inputs using A_indices
+    if num_unique_As > 1:
+        A_indices = Input(shape=(None,), batch_size=1, name="A_indices", dtype='int32')
+        normalization_factor = Lambda(
+            lambda N_i: op.gather(N_i[0][0], N_i[1][0], axis=0), name="msr_weights_broadcasted"
+        )(
+            [normalization_factor, A_indices]
+        )  # Shape (1, None, 1) (None equal to pdf_x.shape[1])
+    else:
+        # nothing to be done, will broadcast automatically
+        pass
+    # 7. Apply the normalization factor to the pdf Shapes (1, None, 14) x (1, 1/None, 14) -> (1, None, 14)
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(
         [pdf_x, normalization_factor]
     )
@@ -107,6 +130,8 @@ def generate_msr_model_and_grid(
         "xgrid_integration": xgrid_integration,
         "photon_integral": photon_integral,
     }
+    if num_unique_As > 1:
+        inputs["A_indices"] = A_indices
     model = MetaModel(inputs, pdf_normalized, name="impose_msr")
 
     return model, xgrid_integration
