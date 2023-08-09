@@ -1,5 +1,8 @@
 #include "FPF.h"
 
+// Define the commondata from the Systematic Error types
+// Possible values: El, Eh, Theta, comb
+string ERRTYPE = "comb";
 
 // #########################################################
 // FASERV2 EXPERIMENTS //
@@ -8,10 +11,10 @@ void FASERV2NUINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv2_inclusive_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_inclusive_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -47,10 +50,10 @@ void FASERV2NBINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv2_inclusive_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_inclusive_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -86,10 +89,10 @@ void FASERV2SUMINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv2_inclusive_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_inclusive_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -125,10 +128,10 @@ void FASERV2NUCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv2_charm_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_charm_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -164,10 +167,10 @@ void FASERV2NBCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv2_charm_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_charm_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -203,10 +206,10 @@ void FASERV2SUMCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv2_charm_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv2_charm_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -245,10 +248,10 @@ void FASERVNUINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv_inclusive_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv_inclusive_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -284,10 +287,10 @@ void FASERVNBINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv_inclusive_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv_inclusive_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -323,10 +326,10 @@ void FASERVSUMINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv_inclusive_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv_inclusive_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -362,10 +365,10 @@ void FASERVNUCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv_charm_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv_charm_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -401,10 +404,10 @@ void FASERVNBCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv_charm_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv_charm_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -440,10 +443,10 @@ void FASERVSUMCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FASERv_charm_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FASERv_charm_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -481,10 +484,10 @@ void FLArE100NUINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FLArE100_inclusive_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FLArE100_inclusive_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -520,10 +523,10 @@ void FLArE100NBINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FLArE100_inclusive_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FLArE100_inclusive_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -559,10 +562,10 @@ void FLArE100SUMINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FLArE100_inclusive_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FLArE100_inclusive_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -598,10 +601,10 @@ void FLArE100NUCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FLArE100_charm_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FLArE100_charm_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -637,10 +640,10 @@ void FLArE100NBCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FLArE100_charm_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FLArE100_charm_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -676,10 +679,10 @@ void FLArE100SUMCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/FLArE100_charm_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/FLArE100_charm_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -717,10 +720,10 @@ void SNDNUINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/SND_inclusive_nu_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/SND_inclusive_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -756,10 +759,10 @@ void SNDNBINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/SND_inclusive_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/SND_inclusive_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -795,10 +798,10 @@ void SNDSUMINCLUSIVEFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/SND_inclusive_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/SND_inclusive_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -834,10 +837,10 @@ void SNDNUCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/SND_charm_nu_" +ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/SND_charm_nu_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -873,10 +876,10 @@ void SNDNBCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/SND_charm_nub_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/SND_charm_nub_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
@@ -912,10 +915,10 @@ void SNDSUMCHARMFilter::ReadData()
 {
   // Opening files
   fstream f1;
+  string filename = "/SND_charm_nochargediscrimination_" + ERRTYPE + "_fluctuated.txt";
   
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/SND_charm_nochargediscrimination_comb_fluctuated.txt";
+  datafile << dataPath() << "rawdata/" << fSetName << filename;
   f1.open(datafile.str().c_str(), ios::in);
   
   if (f1.fail()) {
