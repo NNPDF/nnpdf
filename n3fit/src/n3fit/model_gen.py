@@ -607,7 +607,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            mode=impose_sumrule, scaler=scaler, photons=photons
+            mode=impose_sumrule, scaler=scaler, photons=photons, num_unique_As=num_unique_As
         )
         model_input["integrator_input"] = integrator_input
         if num_unique_As == 1:
@@ -696,17 +696,21 @@ def pdfNN_layer_generator(
             pdf_integration_grid = compute_unnormalized_pdf(
                 nn_input_integration, nn, preprocessing_factor
             )
-            pdf_normalized = sumrule_layer(
-                {
-                    "pdf_x": pdf_unnormalized,
-                    "pdf_xgrid_integration": pdf_integration_grid,
-                    "xgrid_integration": integrator_input,
-                    # The photon is treated separately, need to get its integrals to normalize the pdf
-                    "photon_integral": op.numpy_to_tensor(
-                        0.0 if not photons else photons.integral[i_replica]
-                    ),
-                }
-            )
+            sumrule_inputs = {
+                "pdf_x": pdf_unnormalized,
+                "pdf_xgrid_integration": pdf_integration_grid,
+                "xgrid_integration": integrator_input,
+                # The photon is treated separately, need to get its integrals to normalize the pdf
+                "photon_integral": op.numpy_to_tensor(
+                    0.0 if not photons else photons.integral[i_replica]
+                ),
+            }
+            if num_unique_As > 1:
+                # get the indices in A_input_unique that correspond to the values in
+                # A_input_stacked
+                sumrule_inputs["A_indices"] = indices_in_array(A_input_unique, A_input_stacked)
+            pdf_normalized = sumrule_layer(sumrule_inputs)
+
             pdf = pdf_normalized
         else:
             pdf = pdf_unnormalized
@@ -720,6 +724,16 @@ def pdfNN_layer_generator(
         pdf_models.append(pdf_model)
 
     return pdf_models
+
+
+def indices_in_array(array, values):
+    """
+    Get the indices in `array` that correspond to the values in `values`.
+    """
+    array = np.squeeze(array)
+    values = np.squeeze(values)
+    indices = np.concatenate([np.where(np.equal(array, value)) for value in values])
+    return np.squeeze(indices)
 
 
 def generate_nn(

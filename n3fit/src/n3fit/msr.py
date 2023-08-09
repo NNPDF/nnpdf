@@ -18,6 +18,7 @@ def generate_msr_model_and_grid(
     mode: str = "ALL",
     nx: int = int(2e3),
     scaler: Optional[Callable] = None,
+    num_unique_As: int = 1,
     **kwargs
 ) -> MetaModel:
     """
@@ -36,6 +37,8 @@ def generate_msr_model_and_grid(
         Number of points of the integration grid
     scaler: Scaler
         Scaler to be applied to the PDF before applying the sum rules
+    num_unique_As: int
+        Number of unique As for which PDf is computed
 
     Returns
     -------
