@@ -196,18 +196,6 @@ def tensor_ones_like(*args, **kwargs):
     return K.ones_like(*args, **kwargs)
 
 
-@tf.function
-def many_replication(grid, replications, axis=0, **kwargs):
-    """
-    Generates a tensor with one extra dimension:
-        a repetition of "grid" n times along the given axis
-    from keras documentation:
-    If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/repeat_elements>`_
-    """
-    return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
-
-
 # Property operations
 # modify properties of the tensor like the shape or elements it has
 @tf.function
@@ -357,6 +345,22 @@ def op_subtract(inputs, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
     """
     return keras_subtract(inputs, **kwargs)
+
+
+def swapaxes(tensor, source, destination):
+    """
+    Moves the axis of the tensor from source to destination, as in numpy.swapaxes.
+    see full `docs <https://numpy.org/doc/stable/reference/generated/numpy.swapaxes.html>`_
+    """
+    indices = list(range(tensor.shape.rank))
+    if source < 0:
+        source += tensor.shape.rank
+    if destination < 0:
+        destination += tensor.shape.rank
+
+    indices[source], indices[destination] = indices[destination], indices[source]
+
+    return tf.transpose(tensor, indices)
 
 
 @tf.function
