@@ -37,7 +37,7 @@ PUSH_POSITIVITY_EACH = 100
 PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
-InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
+InputInfo = namedtuple("InputInfo", ["input", "split", "idx", "lengths"])
 InputInfoA = namedtuple("InputInfoA", ["num", "unique", "stacked", "indices"])
 
 
@@ -345,11 +345,14 @@ class ModelTrainer:
                 unique inputs, to be applied after the PDF is called
             - idx:
                 indices of the observables to which the split PDF must be distributed
+            - lengths:
+                lengths of the unique inputs
         """
         log.info("Generating the input grid")
 
         inputs_unique = []
         inputs_idx = []
+        input_lengths = []
         for igrid in self.input_list_x:
             for idx, arr in enumerate(inputs_unique):
                 if igrid.size == arr.size and np.allclose(igrid, arr):
@@ -358,6 +361,7 @@ class ModelTrainer:
             else:
                 inputs_idx.append(len(inputs_unique))
                 inputs_unique.append(igrid)
+                input_lengths.append(igrid.size)
 
         # Concatenate the unique inputs
         input_arr = np.concatenate(inputs_unique, axis=1).T
@@ -372,9 +376,9 @@ class ModelTrainer:
         sp_kw = {"axis": 1}
         sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
 
-        return InputInfo(input_layer, sp_layer, inputs_idx)
+        return InputInfo(input_layer, sp_layer, inputs_idx, input_lengths)
 
-    def _Agrid_generation(self):
+    def _Agrid_generation(self, xinput):
         """
         Generate input layers for the A values belonging to the experiment.
 
@@ -396,8 +400,8 @@ class ModelTrainer:
         # for each dataset, take the A value, repeat it to match the size of the x grid
         # and concatenate all together to get the A input
         inputs_A = []
-        for A, igrid in zip(self.input_list_A, self.input_list_x):
-            inputs_A.append(np.repeat(A, igrid.shape[1]))
+        for A, length in zip(self.input_list_A, xinput.lengths):
+            inputs_A.append(np.repeat(A, length))
 
         input_A_stacked = np.concatenate(inputs_A)
 
@@ -906,7 +910,7 @@ class ModelTrainer:
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
         # Generate the A inputs
-        Ainput = self._Agrid_generation()
+        Ainput = self._Agrid_generation(xinput)
         num_unique_As = Ainput.num
 
         # Initialize all photon classes for the different replicas:
