@@ -371,16 +371,20 @@ def swapaxes(tensor, source, destination):
     return tf.transpose(tensor, indices)
 
 
-def all_combinations(a, b, axis=1):
+def all_combinations(a, b, N_a, N_b, axis=1):
     """
     Computes all possible combinations of the elements of a and b
 
     Parameters
     ----------
         a: tf.tensor
-            A tensor of any shape with size N in the axis specified
+            A tensor of any shape with size N_a in the axis specified
         b: tf.tensor
-            A tensor of any shape with size M in the axis specified
+            A tensor of any shape with size N_b in the axis specified
+        N_a: int
+            The size of the axis of a along which the combinations are computed
+        N_b: int
+            The size of the axis of b along which the combinations are computed
         axis: int
             The axis along which the combinations are computed
 
@@ -393,9 +397,8 @@ def all_combinations(a, b, axis=1):
             A tensor of the same shape as b, except for the axis specified,
             which is now of size N*M
     """
-    N, M = a.shape[axis], b.shape[axis]
-    a_repeated = K.repeat_elements(a, M, axis=axis)
-    b_repeated = K.tile(b, [N if i == axis else 1 for i in range(b.shape.rank)])
+    a_repeated = K.repeat_elements(a, N_b, axis=axis)
+    b_repeated = K.tile(b, [N_a if i == axis else 1 for i in range(b.shape.rank)])
     return a_repeated, b_repeated
 
 

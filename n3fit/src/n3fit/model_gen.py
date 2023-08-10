@@ -576,8 +576,10 @@ def pdfNN_layer_generator(
 
     if num_unique_As > 1:
         pdf_input_A_stacked = Input(shape=(None,), batch_size=1, name='A_stacked')
-        pdf_input_A_unique = Input(shape=(num_unique_As,), batch_size=1, name='A_unique')
+        pdf_input_A_unique = Input(shape=(num_unique_As, 1), batch_size=1, name='A_unique')
+        pdf_input_A_indices = Input(shape=(None,), batch_size=1, name='A_indices')
         model_input["pdf_input_A_stacked"] = pdf_input_A_stacked
+        model_input["pdf_input_A_indices"] = pdf_input_A_indices
         nn_input["NN_input_A"] = pdf_input_A_stacked
         model_input["pdf_input_A_unique"] = pdf_input_A_unique
 
@@ -586,9 +588,43 @@ def pdfNN_layer_generator(
         if use_feature_scaling:
             input_x_eq_1 = scaler(input_x_eq_1)[0]
         # the layer that subtracts 1 from the NN output
-        subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
-        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1), name='x_eq_1')
+        if num_unique_As == 1:
+            subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
+        else:
+            # if there are multiple As, inputs will be of shapes (1, nx * nA, nf) and (1, nA, nf)
+            # so we need to reshape these into (1, nx, nA, nf) and (1, 1, nA, nf)
+            # and recombine the resulting (1, nx, nA, nf) tensor into (1, nx * nA, nf)
+            subtract_one_layer = Lambda(
+                lambda pdfx_pdfx1: op.reshape(
+                    op.op_subtract(
+                        [
+                            op.reshape(pdfx_pdfx1[0], (1, -1, num_unique_As, last_layer_nodes)),
+                            op.reshape(pdfx_pdfx1[1], (1, 1, num_unique_As, last_layer_nodes)),
+                        ]
+                    ),
+                    (1, -1, last_layer_nodes),
+                ),
+                name='subtract_one',
+            )
+        layer_x_eq_1 = np.array(input_x_eq_1).reshape(1, 1)
+
+        nn_input_x1 = dict()
+        if num_unique_As > 1:
+            layer_x_eq_1 = np.repeat(layer_x_eq_1, num_unique_As, axis=0)
+            nn_input_x1["NN_input_A"] = pdf_input_A_unique
+        layer_x_eq_1 = op.numpy_to_input(layer_x_eq_1, name='x_eq_1')
+        nn_input_x1["NN_input_x"] = layer_x_eq_1
+
+        for key, value in nn_input_x1.items():
+            print(f"{key}: {value.shape}")
+
         model_input["layer_x_eq_1"] = layer_x_eq_1
+
+    pdf_inputs = {
+        "nn_input": dict(),
+        "nn_input_integration": dict(),
+        "nn_input_x=1": dict(),
+    }
 
     # the layer that multiplies the NN output by the preprocessing factor
     apply_preprocessing_factor = Lambda(op.op_multiply, name='prefactor_times_NN')
@@ -615,8 +651,14 @@ def pdfNN_layer_generator(
         else:
             # Need to expand inputs to give each combination of integration gridpoint
             # and A value
-            x_repeated, A_repeated = op.all_combinations(integrator_input, pdf_input_A_unique)
+            print("pdf_input_A_unique", pdf_input_A_unique.shape)
+            print("integrator_input", integrator_input.shape)
+            x_repeated, A_repeated = op.all_combinations(
+                integrator_input, pdf_input_A_unique, N_a=2_000, N_b=num_unique_As
+            )
             nn_input_integration = {"NN_input_x": x_repeated, "NN_input_A": A_repeated}
+        for key, value in nn_input_integration.items():
+            print("nn_input_integration", key, value.shape)
     else:
         sumrule_layer = lambda x: x
 
@@ -667,9 +709,9 @@ def pdfNN_layer_generator(
         nn_input["NN_input_x"] = x_processed
         nn_output = neural_network(nn_input)
         if subtract_one:
-            x_eq_1_processed = process_input(layer_x_eq_1)
-            nn_input["NN_input_x"] = x_eq_1_processed
-            nn_at_one = neural_network(nn_input)
+            print("Subtracting NN(1)...")
+            nn_input_x1["NN_input_x"] = process_input(layer_x_eq_1)
+            nn_at_one = neural_network(nn_input_x1)
             nn_output = subtract_one_layer([nn_output, nn_at_one])
 
         # Compute the preprocessing factor and multiply
@@ -706,9 +748,7 @@ def pdfNN_layer_generator(
                 ),
             }
             if num_unique_As > 1:
-                # get the indices in A_input_unique that correspond to the values in
-                # A_input_stacked
-                sumrule_inputs["A_indices"] = indices_in_array(A_input_unique, A_input_stacked)
+                sumrule_inputs["A_indices"] = pdf_input_A_indices
             pdf_normalized = sumrule_layer(sumrule_inputs)
 
             pdf = pdf_normalized
@@ -724,16 +764,6 @@ def pdfNN_layer_generator(
         pdf_models.append(pdf_model)
 
     return pdf_models
-
-
-def indices_in_array(array, values):
-    """
-    Get the indices in `array` that correspond to the values in `values`.
-    """
-    array = np.squeeze(array)
-    values = np.squeeze(values)
-    indices = np.concatenate([np.where(np.equal(array, value)) for value in values])
-    return np.squeeze(indices)
 
 
 def generate_nn(
@@ -777,7 +807,7 @@ def generate_nn(
     input_dict = {'NN_input_x': x}
     if A_input:
         A = Input(shape=(None, 1), batch_size=1, name='A')
-        x = Concatenate(axis=-1)([x, A])
+        x = op.as_layer(op.concatenate, name='concat_x_A')([x, A])
         input_dict['NN_input_A'] = A
 
     pdf = x

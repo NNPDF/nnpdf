@@ -38,7 +38,7 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
-InputInfoA = namedtuple("InputInfoA", ["num", "unique", "stacked"])
+InputInfoA = namedtuple("InputInfoA", ["num", "unique", "stacked", "indices"])
 
 
 def _pdf_injection(pdf_layers, observables, masks):
@@ -389,6 +389,9 @@ class ModelTrainer:
             - stacked:
                 backend input layer with an array attached which is a concatenation of
                 repeated A values for each gridpoint for each experiment
+            - indices:
+                backend input layer with an array attached which are the indices of the
+                stacked As into the unique As
         """
         # for each dataset, take the A value, repeat it to match the size of the x grid
         # and concatenate all together to get the A input
@@ -396,15 +399,22 @@ class ModelTrainer:
         for A, igrid in zip(self.input_list_A, self.input_list_x):
             inputs_A.append(np.repeat(A, igrid.shape[1]))
 
-        input_A_arr = np.concatenate(inputs_A)
-        input_A_arr = np.expand_dims(input_A_arr, axis=1)  # add feature dimension
-        input_A_stacked = op.numpy_to_input(input_A_arr)
+        input_A_stacked = np.concatenate(inputs_A)
 
-        unique_As = np.unique(input_A_arr)
-        unique_As = np.expand_dims(unique_As, axis=1)  # add feature dimension
-        input_A_unique = op.numpy_to_input(unique_As)
+        input_A_unique = np.unique(input_A_stacked)
 
-        return InputInfoA(len(unique_As), input_A_unique, input_A_stacked)
+        input_A_indices = np.concatenate(
+            [np.where(np.equal(input_A_unique, value)) for value in input_A_stacked]
+        )
+
+        input_A_indices = op.numpy_to_input(input_A_indices)
+
+        input_A_stacked = np.expand_dims(input_A_stacked, axis=1)  # add feature dimension
+        input_A_stacked = op.numpy_to_input(input_A_stacked)
+        input_A_unique = np.expand_dims(input_A_unique, axis=1)  # add feature dimension
+        num_unique_As = input_A_unique.shape[0]
+        input_A_unique = op.numpy_to_input(input_A_unique)
+        return InputInfoA(num_unique_As, input_A_unique, input_A_stacked, input_A_indices)
 
     def _model_generation(self, xinput, Ainput, pdf_models, partition, partition_idx):
         """
@@ -460,6 +470,7 @@ class ModelTrainer:
         pdf_input_dict = {"pdf_input_x": xinput.input}
         if Ainput.num > 1:
             pdf_input_dict["pdf_input_A_stacked"] = Ainput.stacked
+            pdf_input_dict["pdf_input_A_indices"] = Ainput.indices
             pdf_input_dict["pdf_input_A_unique"] = Ainput.unique
 
         for pdf_model in pdf_models:
@@ -592,7 +603,8 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list_x.append(exp_layer["inputs"])
-            self.input_list_A.append(exp_layer.get("input_A", 1))
+            default_A = 2 if exp_dict['datasets'][0].name == 'ATLASZPT8TEVMDIST' else 1
+            self.input_list_A.append(exp_layer.get("input_A", default_A))
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -614,7 +626,8 @@ class ModelTrainer:
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
             self.input_list_x.append(pos_layer["inputs"])
-            self.input_list_A.append(pos_layer.get("input_A", 1))
+            default_A = 2 if exp_dict['datasets'][0].name == 'ATLASZPT8TEVMDIST' else 1
+            self.input_list_A.append(pos_layer.get("input_A", default_A))
 
             # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
@@ -641,7 +654,8 @@ class ModelTrainer:
                 )
                 # The input list is still common
                 self.input_list_x.append(integ_layer["inputs"])
-                self.input_list_A.append(integ_layer.get("input_A", 1))
+                default_A = 2 if exp_dict['datasets'][0].name == 'ATLASZPT8TEVMDIST' else 1
+                self.input_list_A.append(integ_layer.get("input_A", default_A))
 
                 # The integrability all falls to the training
                 self.training["output"].append(integ_layer["output_tr"])
