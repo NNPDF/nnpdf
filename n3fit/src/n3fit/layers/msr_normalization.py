@@ -1,3 +1,11 @@
+"""
+    Definition of the imposition of the Momentum Sum Rule and Valence Sum Rules to in the PDF fit.
+    
+    In the module level constants ``{MSR/VSR}_COMPONENTS`` the flavours affected by the MSR and VSR are defined.
+    For the Valence Sum Rule instead `VSR_DENOMINATOR` defines the integral of which flavour are used
+    to compute the normalization. Note that for a Nf=4 fit  `v35=v24=v`.
+    If the number of flavours were to be changed in the future, this would need to be updated accordingly.
+"""
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
