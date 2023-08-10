@@ -407,8 +407,8 @@ class ModelTrainer:
 
         input_A_unique = np.unique(input_A_stacked)
 
-        input_A_indices = np.concatenate(
-            [np.where(np.equal(input_A_unique, value)) for value in input_A_stacked]
+        input_A_indices = np.squeeze(
+            np.concatenate([np.where(np.equal(input_A_unique, value)) for value in input_A_stacked])
         )
 
         input_A_indices = op.numpy_to_input(input_A_indices)

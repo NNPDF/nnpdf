@@ -103,7 +103,7 @@ def generate_msr_model_and_grid(
         name="photon_integral_copied",
     )(photon_integral)
 
-    # 6. Compute the normalization factor, shape (1, num_unique_As, 1)
+    # 6. Compute the normalization factor, shape (num_unique_As, nf)
     normalization_factor = MSR_Normalization(mode, num_unique_As=num_unique_As, name="msr_weights")(
         pdf_integrated, photon_integrals
     )
@@ -112,14 +112,14 @@ def generate_msr_model_and_grid(
     if num_unique_As > 1:
         A_indices = Input(shape=(None,), batch_size=1, name="A_indices", dtype='int32')
         normalization_factor = Lambda(
-            lambda N_i: op.gather(N_i[0][0], N_i[1][0], axis=0), name="msr_weights_broadcasted"
+            lambda N_i: op.gather(N_i[0], N_i[1][0], axis=0), name="msr_weights_broadcasted"
         )(
             [normalization_factor, A_indices]
-        )  # Shape (1, None, 1) (None equal to pdf_x.shape[1])
+        )  # Shape (None, 1) (None equal to pdf_x.shape[1])
     else:
         # nothing to be done, will broadcast automatically
         pass
-    # 7. Apply the normalization factor to the pdf Shapes (1, None, 14) x (1, 1/None, 14) -> (1, None, 14)
+    # 7. Apply the normalization factor to the pdf Shapes (1, None, 14) x (1/None, 14) -> (1, None, 14)
     pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(
         [pdf_x, normalization_factor]
     )

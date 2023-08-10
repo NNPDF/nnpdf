@@ -575,7 +575,7 @@ def pdfNN_layer_generator(
     nn_input = {"NN_input_x": pdf_input_x}
 
     if num_unique_As > 1:
-        pdf_input_A_stacked = Input(shape=(None,), batch_size=1, name='A_stacked')
+        pdf_input_A_stacked = Input(shape=(None, 1), batch_size=1, name='A_stacked')
         pdf_input_A_unique = Input(shape=(num_unique_As, 1), batch_size=1, name='A_unique')
         pdf_input_A_indices = Input(shape=(None,), batch_size=1, name='A_indices')
         model_input["pdf_input_A_stacked"] = pdf_input_A_stacked
@@ -615,9 +615,6 @@ def pdfNN_layer_generator(
         layer_x_eq_1 = op.numpy_to_input(layer_x_eq_1, name='x_eq_1')
         nn_input_x1["NN_input_x"] = layer_x_eq_1
 
-        for key, value in nn_input_x1.items():
-            print(f"{key}: {value.shape}")
-
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
     pdf_inputs = {
@@ -651,14 +648,10 @@ def pdfNN_layer_generator(
         else:
             # Need to expand inputs to give each combination of integration gridpoint
             # and A value
-            print("pdf_input_A_unique", pdf_input_A_unique.shape)
-            print("integrator_input", integrator_input.shape)
             x_repeated, A_repeated = op.all_combinations(
                 integrator_input, pdf_input_A_unique, N_a=2_000, N_b=num_unique_As
             )
             nn_input_integration = {"NN_input_x": x_repeated, "NN_input_A": A_repeated}
-        for key, value in nn_input_integration.items():
-            print("nn_input_integration", key, value.shape)
     else:
         sumrule_layer = lambda x: x
 
@@ -709,7 +702,6 @@ def pdfNN_layer_generator(
         nn_input["NN_input_x"] = x_processed
         nn_output = neural_network(nn_input)
         if subtract_one:
-            print("Subtracting NN(1)...")
             nn_input_x1["NN_input_x"] = process_input(layer_x_eq_1)
             nn_at_one = neural_network(nn_input_x1)
             nn_output = subtract_one_layer([nn_output, nn_at_one])
