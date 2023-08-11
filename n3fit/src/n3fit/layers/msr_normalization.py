@@ -64,17 +64,17 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        self.indices = []
+        indices = []
         self.divisor_indices = []
         if self._msr_enabled:
-            self.indices += [IDX[c] for c in MSR_COMPONENTS]
+            indices += [IDX[c] for c in MSR_COMPONENTS]
             self.divisor_indices += [IDX[MSR_DENOMINATORS[c]] for c in MSR_COMPONENTS]
         if self._vsr_enabled:
             self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
-            self.indices += [IDX[c] for c in VSR_COMPONENTS]
+            indices += [IDX[c] for c in VSR_COMPONENTS]
             self.vsr_factors = op.numpy_to_tensor([VSR_CONSTANTS[c] for c in VSR_COMPONENTS])
         # Need this extra dimension for the scatter_to_one operation
-        self.indices = [[i] for i in self.indices]
+        self.indices = [[i] for i in indices]
 
         super().__init__(**kwargs)
 
@@ -103,23 +103,21 @@ class MSR_Normalization(MetaLayer):
         """
         y = pdf_integrated[0]  # get rid of the batch dimension
         photon_integral = photon_integral[0]  # get rid of the batch dimension
-        norm_constants = []
+        numerators = []
 
         if self._msr_enabled:
-            norm_constants += [
+            numerators += [
                 op.batchit(1.0 - y[IDX['sigma']] - photon_integral[0], batch_dimension=0)
             ]
-
         if self._vsr_enabled:
-            norm_constants += [self.vsr_factors]
-        norm_constants = op.concatenate(norm_constants, axis=0)
+            numerators += [self.vsr_factors]
 
+        numerators = op.concatenate(numerators, axis=0)
         divisors = op.gather(y, self.divisor_indices, axis=0)
-        norm_constants = norm_constants / divisors
 
         # Fill in the rest of the flavours with 1
         norm_constants = op.scatter_to_one(
-            norm_constants, indices=self.indices, output_shape=y.shape
+            numerators / divisors, indices=self.indices, output_shape=y.shape
         )
 
         return norm_constants
