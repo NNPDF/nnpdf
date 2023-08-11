@@ -149,7 +149,8 @@ def make_replica(
 
     max_tries: int
         The stochastic nature of replica generation means one can obtain (unphysical) negative predictions.
-        If after max_tries (default=1e6) no physical configuration is found, the code will raise an Exception
+        If after max_tries (default=1e6) no physical configuration is found,
+        it will raise a :py:class:`ReplicaGenerationError`
 
     Returns
     -------
@@ -242,13 +243,11 @@ def make_replica(
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
-            break
-    else:
-        dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
-        log.error(f"Error generating replicas for the group: {dfail}")
-        raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
+            return shifted_pseudodata
 
-    return shifted_pseudodata
+    dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
+    log.error(f"Error generating replicas for the group: {dfail}")
+    raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
 
 
 def indexed_make_replica(groups_index, make_replica):
