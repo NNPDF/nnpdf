@@ -1,6 +1,6 @@
 """
     Definition of the imposition of the Momentum Sum Rule and Valence Sum Rules to in the PDF fit.
-    
+
     In the module level constants ``{MSR/VSR}_COMPONENTS`` the flavours affected by the MSR and VSR are defined.
     For the Valence Sum Rule instead `VSR_DENOMINATOR` defines the integral of which flavour are used
     to compute the normalization. Note that for a Nf=4 fit  `v35=v24=v`.
@@ -21,9 +21,7 @@ IDX = {
     'v35': 8,
 }
 MSR_COMPONENTS = ['g']
-MSR_DENOMINATORS = {
-    'g': 'g',
-}
+MSR_DENOMINATORS = {'g': 'g'}
 # The VSR normalization factor of component f is given by
 # VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
 VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
