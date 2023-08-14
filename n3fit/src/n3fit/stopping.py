@@ -28,6 +28,7 @@
     be used instead.
 """
 import logging
+
 import numpy as np
 
 log = logging.getLogger(__name__)
@@ -213,27 +214,27 @@ class FitState:
         return self._vl_dict
 
     def all_tr_chi2_for_replica(self, r):
-        """" Return the tr chi2 per dataset for a given replica """
+        """ " Return the tr chi2 per dataset for a given replica"""
         return {k: np.take(i, r) for k, i in self.all_tr_chi2.items()}
 
     def all_vl_chi2_for_replica(self, r):
-        """" Return the vl chi2 per dataset for a given replica """
+        """ " Return the vl chi2 per dataset for a given replica"""
         return {k: np.take(i, r) for k, i in self.all_vl_chi2.items()}
 
     def total_partial_tr_chi2(self):
-        """ Return the tr chi2 summed over replicas per experiment"""
+        """Return the tr chi2 summed over replicas per experiment"""
         return {k: np.sum(i) for k, i in self.all_tr_chi2.items()}
 
     def total_partial_vl_chi2(self):
-        """ Return the vl chi2 summed over replicas per experiment"""
+        """Return the vl chi2 summed over replicas per experiment"""
         return {k: np.sum(i) for k, i in self.all_tr_chi2.items()}
 
     def total_tr_chi2(self):
-        """ Return the total tr chi2 summed over replicas """
+        """Return the total tr chi2 summed over replicas"""
         return np.sum(self.tr_chi2)
 
     def total_vl_chi2(self):
-        """ Return the total vl chi2 summed over replicas """
+        """Return the total vl chi2 summed over replicas"""
         return np.sum(self.vl_chi2)
 
     def __str__(self):
@@ -252,7 +253,7 @@ class ReplicaState:
         self._best_vl_chi2 = INITIAL_CHI2
 
     def positivity_pass(self):
-        """ By definition, if we have a ``best_epoch`` then positivity passed """
+        """By definition, if we have a ``best_epoch`` then positivity passed"""
         if self._best_epoch is None:
             return False
         else:
@@ -280,18 +281,18 @@ class ReplicaState:
             return POS_BAD
 
     def register_best(self, chi2, epoch):
-        """ Register a new best state and some metadata about it """
+        """Register a new best state and some metadata about it"""
         self._weights = self._pdf_model.get_weights()
         self._best_epoch = epoch
         self._best_vl_chi2 = chi2
 
     def reload(self):
-        """ Reload the weights of the best state """
+        """Reload the weights of the best state"""
         if self._weights:
             self._pdf_model.set_weights(self._weights)
 
-    def stop_training(self, epoch = None):
-        """ Stop training this replica if not stopped before """
+    def stop_training(self, epoch=None):
+        """Stop training this replica if not stopped before"""
         if self._pdf_model.trainable:
             self._pdf_model.trainable = False
             self._stop_epoch = epoch
@@ -309,8 +310,8 @@ class FitHistory:
 
     Parameters
     ----------
-        pdf_models: n3fit.backends.MetaModel
-            list of PDF models being trained, used to saved the weights
+        pdf_model: n3fit.backends.MetaModel
+            PDF model being trained, used to saved the weights
     """
 
     def __init__(self, pdf_models, tr_ndata, vl_ndata):
@@ -337,11 +338,11 @@ class FitHistory:
 
     @property
     def best_epoch(self):
-        """ Return the best epoch per replica """
+        """Return the best epoch per replica"""
         return [i.best_epoch for i in self._replicas]
 
     def get_state(self, epoch):
-        """ Get the FitState of the system for a given epoch """
+        """Get the FitState of the system for a given epoch"""
         try:
             return self._history[epoch]
         except IndexError as e:
@@ -360,11 +361,11 @@ class FitHistory:
         self._replicas[i].register_best(loss, epoch)
 
     def all_positivity_status(self):
-        """ Returns whether the positivity passed or not per replica """
+        """Returns whether the positivity passed or not per replica"""
         return np.array([i.positivity_status for i in self._replicas])
 
     def all_best_vl_loss(self):
-        """ Returns the best validation loss for each replica """
+        """Returns the best validation loss for each replica"""
         return np.array([i.best_vl for i in self._replicas])
 
     def register(self, epoch, training_info, validation_info):
@@ -385,7 +386,7 @@ class FitHistory:
         return fitstate
 
     def stop_training_replica(self, i, e):
-        """ Stop training replica i in epoch e"""
+        """Stop training replica i in epoch e"""
         self._replicas[i].stop_training(e)
 
     def reload(self):
@@ -415,8 +416,8 @@ class Stopping:
         all_data_dict: dict
            list containg all dictionaries containing all information about
            the experiments/validation/regularizers/etc to be parsed by Stopping
-        pdf_models: list(n3fit.backends.MetaModel)
-           list of pdf_models being trained
+        pdf_model: n3fit.backends.MetaModel
+            the pdf model being trained
         threshold_positivity: float
            maximum value allowed for the sum of all positivity losses
         total_epochs: int
@@ -431,7 +432,7 @@ class Stopping:
         self,
         validation_model,
         all_data_dicts,
-        pdf_models,
+        pdf_model,
         threshold_positivity=THRESHOLD_POS,
         total_epochs=0,
         stopping_patience=7000,
@@ -443,13 +444,13 @@ class Stopping:
 
         # Create the History object
         tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
-        self._history = FitHistory(pdf_models, tr_ndata, vl_ndata)
+        self._history = FitHistory(pdf_model, tr_ndata, vl_ndata)
 
         # And the positivity checker
         self._positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal variables for the stopping
-        self.n_replicas = len(pdf_models)
+        self.n_replicas = pdf_model.output_shape[-1]
         self.threshold_chi2 = threshold_chi2
         self.stopping_degree = np.zeros(self.n_replicas, dtype=int)
         self.count = np.zeros(self.n_replicas, dtype=int)
@@ -459,21 +460,24 @@ class Stopping:
         self.stopping_patience = stopping_patience
         self.total_epochs = total_epochs
 
+        self.best_epochs = np.zeros(self.n_replicas, dtype=int)
+        self.positivity_statusses = np.repeat(POS_BAD, self.n_replicas)
+
     @property
     def vl_chi2(self):
-        """ Current validation chi2 """
+        """Current validation chi2"""
         validation_info = self._validation.compute_losses()
         fitstate = FitState(None, validation_info)
         return fitstate.vl_chi2
 
     @property
     def e_best_chi2(self):
-        """ Epoch of the best chi2, if there is no best epoch, return last"""
+        """Epoch of the best chi2, if there is no best epoch, return last"""
         return self._history.best_epoch
 
     @property
     def stop_epoch(self):
-        """ Epoch in which the fit is stopped """
+        """Epoch in which the fit is stopped"""
         return self._history.final_epoch + 1
 
     @property
@@ -602,7 +606,7 @@ class Stopping:
             return self.stop_now
 
     def get_next_replica(self):
-        """ Return the next ReplicaState object"""
+        """Return the next ReplicaState object"""
         return next(self._history)
 
     def chi2exps_json(self, replica=0, log_each=100):
