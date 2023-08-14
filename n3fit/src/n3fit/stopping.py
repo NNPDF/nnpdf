@@ -304,10 +304,6 @@ class FitHistory:
 
     It also keeps track of the best epoch and the associated weights.
 
-    Can be iterated when there are snapshots of the fit being saved.
-    When iterated it will rewind the fit to each of the point in history
-    that have been saved.
-
     Parameters
     ----------
         pdf_models: n3fit.backends.MetaModel
@@ -320,7 +316,6 @@ class FitHistory:
         self._replicas = []
         for pdf_model in pdf_models:
             self._replicas.append(ReplicaState(pdf_model))
-        self._iter_replicas = iter(self._replicas)
 
         if vl_ndata is None:
             vl_ndata = tr_ndata
@@ -396,9 +391,6 @@ class FitHistory:
         for replica in self._replicas:
             replica.stop_training(self.final_epoch)
             replica.reload()
-
-    def __next__(self):
-        return next(self._iter_replicas)
 
 
 class Stopping:
@@ -606,10 +598,6 @@ class Stopping:
             return False
         else:
             return self.stop_now
-
-    def get_next_replica(self):
-        """Return the next ReplicaState object"""
-        return next(self._history)
 
     def chi2exps_json(self, replica=0, log_each=100):
         """
