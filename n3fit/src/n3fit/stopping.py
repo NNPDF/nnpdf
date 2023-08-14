@@ -214,11 +214,11 @@ class FitState:
         return self._vl_dict
 
     def all_tr_chi2_for_replica(self, r):
-        """ " Return the tr chi2 per dataset for a given replica"""
+        """Return the tr chi2 per dataset for a given replica"""
         return {k: np.take(i, r) for k, i in self.all_tr_chi2.items()}
 
     def all_vl_chi2_for_replica(self, r):
-        """ " Return the vl chi2 per dataset for a given replica"""
+        """Return the vl chi2 per dataset for a given replica"""
         return {k: np.take(i, r) for k, i in self.all_vl_chi2.items()}
 
     def total_partial_tr_chi2(self):
@@ -310,8 +310,8 @@ class FitHistory:
 
     Parameters
     ----------
-        pdf_model: n3fit.backends.MetaModel
-            PDF model being trained, used to saved the weights
+        pdf_models: n3fit.backends.MetaModel
+            list of PDF models being trained, used to saved the weights
     """
 
     def __init__(self, pdf_models, tr_ndata, vl_ndata):
@@ -416,8 +416,8 @@ class Stopping:
         all_data_dict: dict
            list containg all dictionaries containing all information about
            the experiments/validation/regularizers/etc to be parsed by Stopping
-        pdf_model: n3fit.backends.MetaModel
-            the pdf model being trained
+        pdf_models: list(n3fit.backends.MetaModel)
+           list of pdf_models being trained
         threshold_positivity: float
            maximum value allowed for the sum of all positivity losses
         total_epochs: int
@@ -432,7 +432,7 @@ class Stopping:
         self,
         validation_model,
         all_data_dicts,
-        pdf_model,
+        pdf_models,
         threshold_positivity=THRESHOLD_POS,
         total_epochs=0,
         stopping_patience=7000,
@@ -444,13 +444,13 @@ class Stopping:
 
         # Create the History object
         tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
-        self._history = FitHistory(pdf_model, tr_ndata, vl_ndata)
+        self._history = FitHistory(pdf_models, tr_ndata, vl_ndata)
 
         # And the positivity checker
         self._positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal variables for the stopping
-        self.n_replicas = pdf_model.output_shape[-1]
+        self.n_replicas = len(pdf_models)
         self.threshold_chi2 = threshold_chi2
         self.stopping_degree = np.zeros(self.n_replicas, dtype=int)
         self.count = np.zeros(self.n_replicas, dtype=int)
