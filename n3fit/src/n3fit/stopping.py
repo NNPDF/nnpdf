@@ -556,6 +556,8 @@ class Stopping:
 
         # Step 5. loop over the valid indices to check whether the vl improved
         for i in np.where(passes)[0]:
+            self.best_epochs[i] = epoch
+            self.positivity_statusses[i] = POS_OK
             self._history.save_best_replica(i)
             self.stopping_degree[i] = 0
             self.count[i] = 1
