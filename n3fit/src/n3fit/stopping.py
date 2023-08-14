@@ -460,7 +460,7 @@ class Stopping:
         self.stopping_patience = stopping_patience
         self.total_epochs = total_epochs
 
-        self.best_epochs = np.zeros(self.n_replicas, dtype=int)
+        self.best_epochs = [0] * self.n_replicas
         self.positivity_statusses = np.repeat(POS_BAD, self.n_replicas)
 
     @property

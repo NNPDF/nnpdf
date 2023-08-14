@@ -277,7 +277,7 @@ def performfit(
             q0**2,
             final_time,
         )
-        writer_wrapper.write_data(replica_path, output_path.name)
+        writer_wrapper.write_data(replica_path, output_path.name, save)
 
         if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)

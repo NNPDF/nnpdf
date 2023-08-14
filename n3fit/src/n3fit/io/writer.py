@@ -5,6 +5,7 @@
     so previously active scripts can still work.
 """
 import json
+import logging
 import os
 
 import numpy as np
@@ -13,6 +14,8 @@ import n3fit
 from n3fit import vpinterface
 from reportengine.compat import yaml
 import validphys
+
+log = logging.getLogger(__name__)
 
 XGRID = np.array(
     [
@@ -259,11 +262,13 @@ class WriterWrapper:
             `weights_name`
                 name of the file to save weights to, if not empty
         """
-        os.makedirs(replica_path_set, exist_ok=True)
+        os.makedirs(save_path, exist_ok=True)
 
         for i in range(len(self.replica_numbers)):
             replica_path = f"{save_path}/replica_{self.replica_numbers[i]}"
-            self._write_chi2(f"{replica_path}/chi2exps.log")
+            os.makedirs(replica_path, exist_ok=True)
+
+            self._write_chi2s(f"{replica_path}/chi2exps.log")
             self._write_metadata_json(i, f"{replica_path}/{fitname}.json")
             self._export_pdf_grid(i, f"{replica_path}/{fitname}.exportgrid")
             if weights_name:
@@ -272,7 +277,7 @@ class WriterWrapper:
     def _write_chi2s(self, out_path):
         # Note: same for all replicas, unless run separately
         chi2_log = self.stopping_object.chi2exps_json()
-        with out_path.open("w", encoding="utf-8") as fs:
+        with open(out_path, "w", encoding="utf-8") as fs:
             json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
 
     def _write_metadata_json(self, i, out_path):
@@ -280,11 +285,11 @@ class WriterWrapper:
             best_epoch=self.stopping_object.best_epochs[i],
             positivity_status=self.stopping_object.positivity_statusses[i],
             pdf_object=self.pdf_objects[i],
-            tr_chi2=self.tr_chi2s[i],
-            vl_chi2=self.vl_chi2s[i],
-            true_chi2=self.true_chi2s[i],
+            tr_chi2=self.tr_chi2[i],
+            vl_chi2=self.vl_chi2[i],
+            true_chi2=self.true_chi2[i],
             # Note: last 2 same for all replicas, unless run separately
-            timings=self.timings,
+            timing=self.timings,
             stop_epoch=self.stopping_object.stop_epoch,
         )
 
@@ -294,9 +299,9 @@ class WriterWrapper:
         log.info(
             "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
             self.replica_numbers[i],
-            self.true_chi2s[i],
-            self.tr_chi2s[i],
-            self.vl_chi2s[i],
+            self.true_chi2[i],
+            self.tr_chi2[i],
+            self.vl_chi2[i],
         )
 
     def _export_pdf_grid(self, i, out_path):
@@ -309,8 +314,10 @@ class WriterWrapper:
 
     def _write_weights(self, i, out_path):
         log.info(" > Saving the weights for future in %s", out_path)
+        # Extract model out of N3PDF
+        model = self.pdf_objects[i]._models[0]
         # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3)
-        self.pdf_objects[i].save_weights(str(out_path), save_format="h5")
+        model.save_weights(str(out_path), save_format="h5")
 
 
 class SuperEncoder(json.JSONEncoder):
@@ -539,6 +546,8 @@ def storefit(
             that receives as input a point in x and returns an array of 14 flavours
         `replica`
             the replica index
+        `out_path`
+            the path where to store the output
         `q20`
             q_0^2
     """
