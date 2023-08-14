@@ -4,13 +4,15 @@
     The goal is to generate the same folder/file structure as the old nnfit code
     so previously active scripts can still work.
 """
-import os
 import json
+import os
+
 import numpy as np
-from reportengine.compat import yaml
-import validphys
+
 import n3fit
 from n3fit import vpinterface
+from reportengine.compat import yaml
+import validphys
 
 XGRID = np.array(
     [
@@ -213,95 +215,124 @@ XGRID = np.array(
     ]
 )
 
+
 class WriterWrapper:
-    def __init__(self, replica_number, pdf_object, stopping_object, q2, timings):
+    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, q2, timings):
         """
-        Initializes the writer for one given replica. This is decoupled from the writing
-        of the fit in order to fix some of the variables which would be, in principle,
-        be shared by several different history objects.
+        Initializes the writer for all replicas.
+
+        This is decoupled from the writing of the fit in order to fix some of the variables
+        which would be, in principle, be shared by several different history objects.
 
         Parameters
         ----------
-            `replica_number`
-                index of the replica
-            `pdf_object`
+            `replica_numbers`
+                indices of the replicas
+            `pdf_objects`
                 function to evaluate with a grid in x to generate a pdf
             `stopping_object`
                 a stopping.Stopping object
+            `all_chi2s`
+                list of all the chi2s, in the order: tr_chi2, vl_chi2, true_chi2
             `q2`
                 q^2 of the fit
             `timings`
                 dictionary of the timing of the different events that happened
         """
-        self.replica_number = replica_number
-        self.pdf_object = pdf_object
+        self.replica_numbers = replica_numbers
+        self.pdf_objects = pdf_objects
         self.stopping_object = stopping_object
         self.q2 = q2
         self.timings = timings
+        self.tr_chi2, self.vl_chi2, self.true_chi2 = all_chi2s
 
-    def write_data(self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2):
+    def write_data(self, save_path, fitname, weights_name):
         """
-        Wrapper around the `storefit` function.
+        Save all the data of a fit, for all replicas.
 
         Parameters
         ----------
-            `replica_path_set`
-                full path for the replica, ex: `${PWD}/runcard_name/nnfit/replica_1`
+            `save_path`
+                path for the replica, ex: `${PWD}/runcard_name/nnfit`
             `fitname`
-                name of the fit
-            `tr_chi2`
-                training chi2
-            `vl_chi2`
-                validation chi2
-            `true_chi2`
-                chi2 of the replica to the central experimental data
+                name of the fit, ex: `Basic_runcard`
+            `weights_name`
+                name of the file to save weights to, if not empty
         """
-        # Check the directory exist, if it doesn't, generate it
         os.makedirs(replica_path_set, exist_ok=True)
 
-        stop_epoch = self.stopping_object.stop_epoch
+        for i in range(len(self.replica_numbers)):
+            replica_path = f"{save_path}/replica_{self.replica_numbers[i]}"
+            self._write_chi2(f"{replica_path}/chi2exps.log")
+            self._write_metadata_json(i, f"{replica_path}/{fitname}.json")
+            self._export_pdf_grid(i, f"{replica_path}/{fitname}.exportgrid")
+            if weights_name:
+                self._write_weights(i, f"{replica_path}/{weights_name}")
 
-        # Get the replica status for this object
-        replica_status = self.stopping_object.get_next_replica()
+    def _write_chi2s(self, out_path):
+        # Note: same for all replicas, unless run separately
+        chi2_log = self.stopping_object.chi2exps_json()
+        with out_path.open("w", encoding="utf-8") as fs:
+            json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
 
-        # export PDF grid to file
+    def _write_metadata_json(self, i, out_path):
+        json_dict = jsonfit(
+            best_epoch=self.stopping_object.best_epochs[i],
+            positivity_status=self.stopping_object.positivity_statusses[i],
+            pdf_object=self.pdf_objects[i],
+            tr_chi2=self.tr_chi2s[i],
+            vl_chi2=self.vl_chi2s[i],
+            true_chi2=self.true_chi2s[i],
+            # Note: last 2 same for all replicas, unless run separately
+            timings=self.timings,
+            stop_epoch=self.stopping_object.stop_epoch,
+        )
+
+        with open(out_path, "w", encoding="utf-8") as fs:
+            json.dump(json_dict, fs, indent=2, cls=SuperEncoder)
+
+        log.info(
+            "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
+            self.replica_numbers[i],
+            self.true_chi2s[i],
+            self.tr_chi2s[i],
+            self.vl_chi2s[i],
+        )
+
+    def _export_pdf_grid(self, i, out_path):
         storefit(
-            self.pdf_object,
-            self.replica_number,
-            replica_path_set,
-            fitname,
+            self.pdf_objects[i],
+            self.replica_numbers[i],
+            out_path,
             self.q2,
         )
 
-        # write the log file for the chi2
-        chi2_log = self.stopping_object.chi2exps_json()
-        with (replica_path_set / "chi2exps.log").open("w", encoding="utf-8") as fs:
-            json.dump(chi2_log, fs, indent=2, cls = SuperEncoder)
-
-        # export all metadata from the fit to a single yaml file
-        output_file = f"{replica_path_set}/{fitname}.json"
-        json_dict = jsonfit(
-            replica_status, self.pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, self.timings
-        )
-        with open(output_file, "w", encoding="utf-8") as fs:
-            json.dump(json_dict, fs, indent=2, cls = SuperEncoder)
+    def _write_weights(self, i, out_path):
+        log.info(" > Saving the weights for future in %s", out_path)
+        # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3)
+        self.pdf_objects[i].save_weights(str(out_path), save_format="h5")
 
 
 class SuperEncoder(json.JSONEncoder):
-    """ Custom json encoder to get around the fact that np.float32 =/= float """
+    """Custom json encoder to get around the fact that np.float32 =/= float"""
+
     def default(self, o):
         if isinstance(o, np.float32):
             return float(o)
         return super().default(o)
 
 
-def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing):
+def jsonfit(
+    best_epoch, positivity_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing
+):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
     ----------
-        replica_status: n3fit.stopping.ReplicaBest
-            a stopping.Validation object
+        best_epoch: int
+            epoch at which the best fit was found
+        positivity_status: str
+            string describing the positivity status of the fit
         pdf_object: n3fit.vpinterface.N3PDF
             N3PDF object constructed from the pdf_model
             that receives as input a point in x and returns an array of 14 flavours
@@ -321,11 +352,11 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
     all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
     # .fitinfo-like info
     all_info["stop_epoch"] = stop_epoch
-    all_info["best_epoch"] = replica_status.best_epoch
+    all_info["best_epoch"] = best_epoch
     all_info["erf_tr"] = tr_chi2
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
-    all_info["pos_state"] = replica_status.positivity_status
+    all_info["pos_state"] = positivity_status
     all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
     all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
     all_info["timing"] = timing
@@ -335,7 +366,7 @@ def jsonfit(replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch,
 
 
 def version():
-    """ Generates a dictionary with misc version info for this run """
+    """Generates a dictionary with misc version info for this run"""
     versions = {}
     try:
         # Wrap tf in try-except block as it could possible to run n3fit without tf
@@ -373,61 +404,128 @@ def evln2lha(evln):
 
     lha[6] = evln[2]
 
-    lha[8] = ( 10*evln[1]
-	       + 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] + 30*evln[4] + 10*evln[5] + 5*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[8] = (
+        10 * evln[1]
+        + 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        + 30 * evln[4]
+        + 10 * evln[5]
+        + 5 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[4] = ( 10*evln[1]
-		  + 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] - 30*evln[4] - 10*evln[5] - 5*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[4] = (
+        10 * evln[1]
+        + 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        - 30 * evln[4]
+        - 10 * evln[5]
+        - 5 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[7] = ( 10*evln[1]
-	       - 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] - 30*evln[4] + 10*evln[5] + 5*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[7] = (
+        10 * evln[1]
+        - 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        - 30 * evln[4]
+        + 10 * evln[5]
+        + 5 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[5] = ( 10*evln[1]
-		  - 30*evln[9] + 10*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] + 30*evln[4] - 10*evln[5] - 5*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[5] = (
+        10 * evln[1]
+        - 30 * evln[9]
+        + 10 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        + 30 * evln[4]
+        - 10 * evln[5]
+        - 5 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[9] = ( 10*evln[1]
-	       - 20*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] - 20*evln[5] + 5*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[9] = (
+        10 * evln[1]
+        - 20 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        - 20 * evln[5]
+        + 5 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[3] = ( 10*evln[1]
-		  - 20*evln[10] + 5*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] + 20*evln[5] - 5*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[3] = (
+        10 * evln[1]
+        - 20 * evln[10]
+        + 5 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        + 20 * evln[5]
+        - 5 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[10] = ( 10*evln[1]
-	       - 15*evln[11] + 3*evln[12] + 2*evln[13]
-	       + 10*evln[3] - 15*evln[6] + 3*evln[7] + 2*evln[8] ) / 120
+    lha[10] = (
+        10 * evln[1]
+        - 15 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        + 10 * evln[3]
+        - 15 * evln[6]
+        + 3 * evln[7]
+        + 2 * evln[8]
+    ) / 120
 
-    lha[2] = ( 10*evln[1]
-		  - 15*evln[11] + 3*evln[12] + 2*evln[13]
-		  - 10*evln[3] + 15*evln[6] - 3*evln[7] - 2*evln[8] ) / 120
+    lha[2] = (
+        10 * evln[1]
+        - 15 * evln[11]
+        + 3 * evln[12]
+        + 2 * evln[13]
+        - 10 * evln[3]
+        + 15 * evln[6]
+        - 3 * evln[7]
+        - 2 * evln[8]
+    ) / 120
 
-    lha[11] = ( 5*evln[1]
-	       - 6*evln[12] + evln[13]
-	       + 5*evln[3] - 6*evln[7] + evln[8] ) / 60
+    lha[11] = (5 * evln[1] - 6 * evln[12] + evln[13] + 5 * evln[3] - 6 * evln[7] + evln[8]) / 60
 
-    lha[1] = ( 5*evln[1]
-		  - 6*evln[12] + evln[13]
-		  - 5*evln[3] + 6*evln[7] - evln[8] ) / 60
+    lha[1] = (5 * evln[1] - 6 * evln[12] + evln[13] - 5 * evln[3] + 6 * evln[7] - evln[8]) / 60
 
-    lha[12] = ( evln[1]
-	       - evln[13]
-	       + evln[3] - evln[8] ) / 12
+    lha[12] = (evln[1] - evln[13] + evln[3] - evln[8]) / 12
 
-    lha[0] = ( evln[1]
-		  - evln[13]
-		  - evln[3] + evln[8] ) / 12
+    lha[0] = (evln[1] - evln[13] - evln[3] + evln[8]) / 12
     return lha
 
 
 def storefit(
     pdf_object,
     replica,
-    replica_path,
-    fitname,
+    out_path,
     q20,
 ):
     """
@@ -441,16 +539,12 @@ def storefit(
             that receives as input a point in x and returns an array of 14 flavours
         `replica`
             the replica index
-        `replica_path`
-            path for this replica
-        `fitname`
-            name of the fit
         `q20`
             q_0^2
     """
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
-        
+
     result = pdf_object(xgrid, flavours="n3fit").squeeze()
     lha = evln2lha(result.T).T
 
@@ -458,9 +552,24 @@ def storefit(
         "replica": replica,
         "q20": q20,
         "xgrid": xgrid.T.tolist()[0],
-        "labels": ["TBAR", "BBAR", "CBAR", "SBAR", "UBAR", "DBAR", "GLUON", "D", "U", "S", "C", "B", "T", "PHT"],
+        "labels": [
+            "TBAR",
+            "BBAR",
+            "CBAR",
+            "SBAR",
+            "UBAR",
+            "DBAR",
+            "GLUON",
+            "D",
+            "U",
+            "S",
+            "C",
+            "B",
+            "T",
+            "PHT",
+        ],
         "pdfgrid": lha.tolist(),
     }
 
-    with open(f"{replica_path}/{fitname}.exportgrid", "w") as fs:
+    with open(out_path, "w") as fs:
         yaml.dump(data, fs)

@@ -264,49 +264,20 @@ def performfit(
         log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
 
         final_time = stopwatch.stop()
-        all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
+        all_chi2s = the_model_trainer.evaluate(stopping_object)
 
         pdf_models = result["pdf_models"]
-        for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
-            # Each model goes into its own replica folder
-            replica_path_set = replica_path / f"replica_{replica_number}"
-
-            # Create a pdf instance
-            q0 = theoryid.get_description().get("Q0")
-            pdf_instance = N3PDF(pdf_model, fit_basis=basis, Q=q0)
-
-            # Generate the writer wrapper
-            writer_wrapper = WriterWrapper(
-                replica_number,
-                pdf_instance,
-                stopping_object,
-                q0**2,
-                final_time,
-            )
-
-            # Get the right chi2s
-            training_chi2 = np.take(all_training_chi2, i)
-            val_chi2 = np.take(all_val_chi2, i)
-            exp_chi2 = np.take(all_exp_chi2, i)
-
-            # And write the data down
-            writer_wrapper.write_data(
-                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
-            )
-            log.info(
-                "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
-                replica_number,
-                exp_chi2,
-                training_chi2,
-                val_chi2,
-            )
-
-            # Save the weights to some file for the given replica
-            if save:
-                model_file_path = replica_path_set / save
-                log.info(" > Saving the weights for future in %s", model_file_path)
-                # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3)
-                pdf_model.save_weights(str(model_file_path), save_format="h5")
+        q0 = theoryid.get_description().get("Q0")
+        pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
+        writer_wrapper = WriterWrapper(
+            replica_idxs,
+            pdf_instances,
+            stopping_object,
+            all_chi2s,
+            q0**2,
+            final_time,
+        )
+        writer_wrapper.write_data(replica_path, output_path.name)
 
         if tensorboard is not None:
             log.info("Tensorboard logging information is stored at %s", log_path)
