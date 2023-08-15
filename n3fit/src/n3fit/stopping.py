@@ -252,13 +252,6 @@ class ReplicaState:
         self._stop_epoch = None
         self._best_vl_chi2 = INITIAL_CHI2
 
-    def positivity_pass(self):
-        """By definition, if we have a ``best_epoch`` then positivity passed"""
-        if self._best_epoch is None:
-            return False
-        else:
-            return True
-
     @property
     def best_epoch(self):
         if self._best_epoch is None:
@@ -272,13 +265,6 @@ class ReplicaState:
     @property
     def best_vl(self):
         return float(self._best_vl_chi2)
-
-    @property
-    def positivity_status(self):
-        if self.positivity_pass():
-            return POS_OK
-        else:
-            return POS_BAD
 
     def register_best(self, chi2, epoch):
         """Register a new best state and some metadata about it"""
@@ -549,7 +535,9 @@ class Stopping:
         # Step 5. loop over the valid indices to check whether the vl improved
         for i in np.where(passes)[0]:
             self.best_epochs[i] = epoch
+            # By definition, if we have a ``best_epoch`` then positivity passed
             self.positivity_statusses[i] = POS_OK
+
             self._history.save_best_replica(i)
             self.stopping_degree[i] = 0
             self.count[i] = 1
