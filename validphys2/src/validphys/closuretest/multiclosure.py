@@ -140,12 +140,66 @@ def fits_normed_dataset_central_delta(
         deltas.append(bias_diffs.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
-    np.savetxt("prove_output.txt",np.asarray(deltas))
+    #import ipdb; ipdb.set_trace()
     return np.asarray(deltas)
 
 datasets_deltas = collect(
     "fits_normed_dataset_central_delta", ("data",)
 )
+
+
+@check_multifit_replicas
+def fits_dataset_experimental_error_bv(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20        
+):
+    """For a single dataset, calculate the bias and variance for each fit
+    and return tuple (bias, variance, n_data), where bias and variance are
+    1-D arrays of length ``len(fits)``.
+
+    For more information on bias see closuretest.bias_dataset and for more information
+    on variance see :py:func:`validphys.closuretest.closure_results.variance_dataset`.
+
+    The fits should each have the same underlying law and t0 PDF, but have
+    different filterseeds, so that the level 1 shift is different.
+
+    Can control the number of replicas taken from each fit with
+    ``_internal_max_reps``.
+
+    """
+    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # take mean across replicas - since we might have changed no. of reps
+    centrals = reps.mean(axis=2)
+    # place bins on first axis
+    diffs = law_th.central_value[:, np.newaxis] - centrals.T
+    biases = calc_chi2(sqrtcov, diffs)
+    variances = []
+    # this seems slow but breaks for datasets with single data point otherwise
+    for i in range(reps.shape[0]):
+        diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+        variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+    #import ipdb; ipdb.set_trace()
+    ##This gives back only n_fits biases and variances (clearly)
+    return np.mean(biases), np.mean(np.asarray(variances)), len(law_th)
+
+
+bias_variance_list = collect("fits_dataset_experimental_error_bv", ("data",))
+
+@check_multifit_replicas
+def fits_data_experimental_error_bv(
+    internal_multiclosure_data_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+
+):
+    """Like `fits_dataset_experimental_error_bv` but for all data"""
+    return fits_dataset_experimental_error_bv(
+        internal_multiclosure_data_loader, _internal_max_reps, _internal_min_reps
+    )
+
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
@@ -154,6 +208,7 @@ def fits_dataset_bias_variance(
     _internal_min_reps=20
 ):
     """
+    Compute the bias
 
     """
     closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
@@ -167,6 +222,7 @@ def fits_dataset_bias_variance(
     pdf_cov = np.asarray([np.cov(reps[j], rowvar=True) for j in range(n_fits)])
     # There are n_fits pdf_covariances
     # flag to see whether to eliminate dataset
+    #import ipdb; ipdb.set_trace()
     for i in range(n_fits):
         # get rows and columns which have too large correlations (these should be the ones that make the
         # matrix ill defined)
@@ -186,6 +242,7 @@ def fits_dataset_bias_variance(
         variances.append(var.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
+    #import ipdb; ipdb.set_trace()
     return np.asarray(biases), np.asarray(variances), n_data
 
 

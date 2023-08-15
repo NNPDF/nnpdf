@@ -16,7 +16,7 @@ from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 
-from validphys.closuretest.multiclosure import expected_dataset_bias_variance
+from validphys.closuretest.multiclosure import expected_dataset_bias_variance, bias_variance_list
 from validphys.loader import Loader
 from validphys.closuretest.multiclosure import (
     internal_multiclosure_data_loader,
@@ -92,7 +92,20 @@ def generate_gaussians(datasets_deltas, each_dataset):
     yield fig
 
 
-
+@figure
+def plot_bias_variance_exp_err(bias_variance_list):
+    fig, ax = plotutils.subplots()
+    #import ipdb; ipdb.set_trace()
+    n_dats = [row[2] for row in bias_variance_list]
+    biases = [row[0] for row in bias_variance_list]
+    vars = [row[1] for row in bias_variance_list]
+    ax.plot(n_dats, biases, label = "bias",linestyle = 'None', marker = '*')
+    ax.plot(n_dats, vars, label = "variance",linestyle = 'None', marker = '*')
+    ax.set_xlabel("n_data")
+    ax.set_ylabel("normalized bias variance values")
+    ax.set_title("Bias Variance trend vs data")
+    ax.legend()
+    return fig
 
 @table
 def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
