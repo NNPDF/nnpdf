@@ -134,11 +134,7 @@ def parse_losses(history_object, data, suffix="loss"):
 
 class FitState:
     """
-    Holds the state of the chi2 during the fit for all replicas
-
-    It holds the necessary information to reload the fit
-    to a specific point in time if we are interested on reloading
-    (otherwise the relevant variables stay empty to save memory)
+    Holds the state of the chi2 during the fit, for all replicas and one epoch
 
     Note: the training chi2 is computed before the update of the weights
     so it is the chi2 that informed the updated corresponding to this state.
@@ -243,9 +239,7 @@ class FitState:
 
 class FitHistory:
     """
-    Keeps a list of FitState items holding the full history of the fit.
-
-    It also keeps track of the best epoch and the associated weights.
+    Keeps a list of FitState items holding the full chi2 history of the fit.
 
     Parameters
     ----------
@@ -284,11 +278,16 @@ class FitHistory:
 
         Parameters
         ----------
-            fitstate: FitState
-                FitState object
-                the fitstate of the object to save
             epoch: int
                 the current epoch of the fit
+            training_info: dict
+                all losses for the training model
+            validation_info: dict
+                all losses for the validation model
+
+        Returns
+        -------
+            FitState
         """
         # Save all the information in a fitstate object
         fitstate = FitState(training_info, validation_info)
@@ -309,7 +308,7 @@ class Stopping:
         validation_model: n3fit.backends.MetaModel
            the model with the validation mask applied
            (and compiled with the validation data and covmat)
-        all_data_dict: dict
+        all_data_dicts: dict
            list containg all dictionaries containing all information about
            the experiments/validation/regularizers/etc to be parsed by Stopping
         pdf_models: list(n3fit.backends.MetaModel)
@@ -320,6 +319,8 @@ class Stopping:
            total number of epochs
         stopping_patience: int
            how many epochs to wait for the validation loss to improve
+        threshold_chi2: float
+            maximum value allowed for chi2
         dont_stop: bool
            dont care about early stopping
     """
