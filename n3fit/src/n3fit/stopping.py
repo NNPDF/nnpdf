@@ -317,10 +317,6 @@ class FitHistory:
         loss = self.get_state(epoch).vl_loss[i]
         self._replicas[i].register_best(loss, epoch)
 
-    def all_positivity_status(self):
-        """Returns whether the positivity passed or not per replica"""
-        return np.array([i.positivity_status for i in self._replicas])
-
     def all_best_vl_loss(self):
         """Returns the best validation loss for each replica"""
         return np.array([i.best_vl for i in self._replicas])
@@ -438,7 +434,7 @@ class Stopping:
     def positivity_status(self):
         """Returns POS_PASS if positivity passes or veto if it doesn't
         for each replica"""
-        return self._history.all_positivity_status()
+        return self.positivity_statusses
 
     def evaluate_training(self, training_model):
         """Given the training model, evaluates the
