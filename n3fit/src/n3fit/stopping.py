@@ -241,30 +241,6 @@ class FitState:
         return f"chi2: tr={self.tr_chi2} vl={self.vl_chi2}"
 
 
-class ReplicaState:
-    """Extra complication which eventually will be merged with someone else
-    but it is here only for development."""
-
-    def __init__(self, pdf_model):
-        self._pdf_model = pdf_model
-        self._weights = None
-        self._best_vl_chi2 = INITIAL_CHI2
-
-    @property
-    def best_vl(self):
-        return float(self._best_vl_chi2)
-
-    def register_best(self, chi2, epoch):
-        """Register a new best state and some metadata about it"""
-        self._weights = self._pdf_model.get_weights()
-        self._best_vl_chi2 = chi2
-
-    def reload(self):
-        """Reload the weights of the best state"""
-        if self._weights:
-            self._pdf_model.set_weights(self._weights)
-
-
 class FitHistory:
     """
     Keeps a list of FitState items holding the full history of the fit.
@@ -278,11 +254,9 @@ class FitHistory:
     """
 
     def __init__(self, pdf_models, tr_ndata, vl_ndata):
-        # Create a ReplicaState object for all models
-        # which will hold the best chi2 and weights per replica
-        self._replicas = []
-        for pdf_model in pdf_models:
-            self._replicas.append(ReplicaState(pdf_model))
+        self._replicas = pdf_models
+        self._best_weights = [None] * len(pdf_models)
+        self._best_val_chi2s = [INITIAL_CHI2] * len(pdf_models)
 
         if vl_ndata is None:
             vl_ndata = tr_ndata
@@ -314,12 +288,12 @@ class FitHistory:
         """
         if epoch is None:
             epoch = self.final_epoch
-        loss = self.get_state(epoch).vl_loss[i]
-        self._replicas[i].register_best(loss, epoch)
+        self._best_val_chi2s[i] = self.get_state(epoch).vl_loss[i]
+        self._best_weights[i] = self._replicas[i].get_weights()
 
     def all_best_vl_loss(self):
         """Returns the best validation loss for each replica"""
-        return np.array([i.best_vl for i in self._replicas])
+        return np.array(self._best_val_chi2s)
 
     def register(self, epoch, training_info, validation_info):
         """Save a new fitstate and updates the current final epoch
@@ -342,8 +316,8 @@ class FitHistory:
         """Reloads the best fit weights into the model if there are models to be reloaded
         Ensure that all replicas have stopped at this point.
         """
-        for replica in self._replicas:
-            replica.reload()
+        for replica, weights in zip(self._replicas, self._best_weights):
+            replica.set_weights(weights)
 
 
 class Stopping:
