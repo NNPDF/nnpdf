@@ -251,6 +251,10 @@ class FitHistory:
     ----------
         pdf_models: n3fit.backends.MetaModel
             list of PDF models being trained, used to saved the weights
+        tr_ndata: dict
+            dictionary of {dataset: n_points} for the training data
+        vl_ndata: dict
+            dictionary of {dataset: n_points} for the validation data
     """
 
     def __init__(self, pdf_models, tr_ndata, vl_ndata):
