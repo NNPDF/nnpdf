@@ -157,7 +157,7 @@ class FitState:
             raise ValueError(
                 "FitState cannot be instantiated until vl_ndata, tr_ndata and vl_suffix are filled"
             )
-        self.training = training_info
+        self._training = training_info
         self.validation = validation_info
         self._parsed = False
         self._vl_chi2 = None  # These are per replica
@@ -173,7 +173,7 @@ class FitState:
     @property
     def tr_loss(self):
         """Return the total validation loss as it comes from the info dictionaries"""
-        return self.training.get("loss")
+        return self._training.get("loss")
 
     def _parse_chi2(self):
         """
@@ -182,8 +182,8 @@ class FitState:
         """
         if self._parsed:
             return
-        if self.training is not None:
-            self._tr_chi2, self._tr_dict = parse_losses(self.training, self.tr_ndata)
+        if self._training is not None:
+            self._tr_chi2, self._tr_dict = parse_losses(self._training, self.tr_ndata)
         if self.validation is not None:
             self._vl_chi2, self._vl_dict = parse_losses(
                 self.validation, self.vl_ndata, suffix=self.vl_suffix
@@ -336,7 +336,7 @@ class Stopping:
         threshold_chi2=10.0,
         dont_stop=False,
     ):
-        self.pdf_models = pdf_models
+        self._pdf_models = pdf_models
 
         # Save the validation object
         self._validation = validation_model
@@ -349,21 +349,21 @@ class Stopping:
         self._positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal variables for the stopping
-        self.n_replicas = len(pdf_models)
-        self.threshold_chi2 = threshold_chi2
-        self.stopping_degrees = np.zeros(self.n_replicas, dtype=int)
-        self.counts = np.zeros(self.n_replicas, dtype=int)
+        self._n_replicas = len(pdf_models)
+        self._threshold_chi2 = threshold_chi2
+        self._stopping_degrees = np.zeros(self._n_replicas, dtype=int)
+        self._counts = np.zeros(self._n_replicas, dtype=int)
 
-        self.dont_stop = dont_stop
-        self.stop_now = False
-        self.stopping_patience = stopping_patience
-        self.total_epochs = total_epochs
+        self._dont_stop = dont_stop
+        self._stop_now = False
+        self._stopping_patience = stopping_patience
+        self._total_epochs = total_epochs
 
-        self.stop_epochs = [None] * self.n_replicas
-        self.best_epochs = [None] * self.n_replicas
-        self.positivity_statusses = [POS_BAD] * self.n_replicas
-        self._best_weights = [None] * self.n_replicas
-        self._best_val_chi2s = [INITIAL_CHI2] * self.n_replicas
+        self._stop_epochs = [None] * self._n_replicas
+        self.best_epochs = [None] * self._n_replicas
+        self.positivity_statusses = [POS_BAD] * self._n_replicas
+        self._best_weights = [None] * self._n_replicas
+        self._best_val_chi2s = [INITIAL_CHI2] * self._n_replicas
 
     @property
     def vl_chi2(self):
@@ -377,7 +377,7 @@ class Stopping:
         """Epoch of the best chi2, if there is no best epoch, return last"""
         best_or_last_epochs = [
             best if best is not None else last
-            for best, last in zip(self.best_epochs, self.stop_epochs)
+            for best, last in zip(self.best_epochs, self._stop_epochs)
         ]
         return best_or_last_epochs
 
@@ -453,12 +453,12 @@ class Stopping:
         #         this means improving vl_chi2 and passing positivity
         # Don't start counting until the chi2 of the validation goes below a certain threshold
         # once we start counting, don't bother anymore
-        passes = self.counts | (fitstate.vl_chi2 < self.threshold_chi2)
+        passes = self._counts | (fitstate.vl_chi2 < self._threshold_chi2)
         passes &= fitstate.vl_loss < self._best_val_chi2s
         # And the ones that pass positivity
         passes &= self._positivity(fitstate)
 
-        self.stopping_degrees += self.counts
+        self._stopping_degrees += self._counts
 
         # Step 5. loop over the valid indices to check whether the vl improved
         for i_replica in np.where(passes)[0]:
@@ -467,18 +467,18 @@ class Stopping:
             self.positivity_statusses[i_replica] = POS_OK
 
             self._best_val_chi2s[i_replica] = self._history.get_state(epoch).vl_loss[i_replica]
-            self._best_weights[i_replica] = self.pdf_models[i_replica].get_weights()
+            self._best_weights[i_replica] = self._pdf_models[i_replica].get_weights()
 
-            self.stopping_degrees[i_replica] = 0
-            self.counts[i_replica] = 1
+            self._stopping_degrees[i_replica] = 0
+            self._counts[i_replica] = 1
 
-        stop_replicas = self.counts & (self.stopping_degrees > self.stopping_patience)
+        stop_replicas = self._counts & (self._stopping_degrees > self._stopping_patience)
         for i_replica in np.where(stop_replicas)[0]:
-            self.stop_epochs[i_replica] = epoch
-            self.counts[i_replica] = 0
+            self._stop_epochs[i_replica] = epoch
+            self._counts[i_replica] = 0
 
         # By using the stopping degree we only stop when none of the replicas are improving anymore
-        if min(self.stopping_degrees) > self.stopping_patience:
+        if min(self._stopping_degrees) > self._stopping_patience:
             self.make_stop()
         return True
 
@@ -486,11 +486,11 @@ class Stopping:
         """Convenience method to set the stop_now flag
         and reload the history to the point of the best model if any
         """
-        self.stop_now = True
+        self._stop_now = True
         self._restore_best_weights()
 
     def _restore_best_weights(self):
-        for replica, weights in zip(self.pdf_models, self._best_weights):
+        for replica, weights in zip(self._pdf_models, self._best_weights):
             replica.set_weights(weights)
 
     def print_current_stats(self, epoch, fitstate):
@@ -500,10 +500,10 @@ class Stopping:
         epoch_index = epoch + 1
         tr_chi2 = fitstate.total_tr_chi2()
         vl_chi2 = fitstate.total_vl_chi2()
-        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total chi2: {tr_chi2}\n"
+        total_str = f"At epoch {epoch_index}/{self._total_epochs}, total chi2: {tr_chi2}\n"
 
         # The partial chi2 makes no sense for more than one replica at once:
-        if self.n_replicas == 1:
+        if self._n_replicas == 1:
             partial_tr_chi2 = fitstate.total_partial_tr_chi2()
             partials = []
             for experiment, chi2 in partial_tr_chi2.items():
@@ -516,10 +516,10 @@ class Stopping:
         """Returns the stopping status
         If `dont_stop` is set returns always False (i.e., never stop)
         """
-        if self.dont_stop:
+        if self._dont_stop:
             return False
         else:
-            return self.stop_now
+            return self._stop_now
 
     def chi2exps_json(self, i_replica=0, log_each=100):
         """
