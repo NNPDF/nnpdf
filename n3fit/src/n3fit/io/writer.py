@@ -264,6 +264,17 @@ class WriterWrapper:
         """
         os.makedirs(save_path, exist_ok=True)
 
+        self.preprocessing = [
+            pdf_object.get_preprocessing_factors() for pdf_object in self.pdf_objects
+        ]
+        self.arc_lengths = [
+            vpinterface.compute_arclength(pdf_object).tolist() for pdf_object in self.pdf_objects
+        ]
+        self.integrability_numbers = [
+            vpinterface.integrability_numbers(pdf_object).tolist()
+            for pdf_object in self.pdf_objects
+        ]
+
         for i in range(len(self.replica_numbers)):
             replica_path = f"{save_path}/replica_{self.replica_numbers[i]}"
             os.makedirs(replica_path, exist_ok=True)
@@ -284,7 +295,9 @@ class WriterWrapper:
         json_dict = jsonfit(
             best_epoch=self.stopping_object.best_epochs[i],
             positivity_status=self.stopping_object.positivity_statusses[i],
-            pdf_object=self.pdf_objects[i],
+            preprocessing=self.preprocessing[i],
+            arc_lengths=self.arc_lengths[i],
+            integrability_numbers=self.integrability_numbers[i],
             tr_chi2=self.tr_chi2[i],
             vl_chi2=self.vl_chi2[i],
             true_chi2=self.true_chi2[i],
@@ -330,7 +343,16 @@ class SuperEncoder(json.JSONEncoder):
 
 
 def jsonfit(
-    best_epoch, positivity_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing
+    best_epoch,
+    positivity_status,
+    preprocessing,
+    arc_lengths,
+    integrability_numbers,
+    tr_chi2,
+    vl_chi2,
+    true_chi2,
+    stop_epoch,
+    timing,
 ):
     """Generates a dictionary containing all relevant metadata for the fit
 
@@ -340,9 +362,12 @@ def jsonfit(
             epoch at which the best fit was found
         positivity_status: str
             string describing the positivity status of the fit
-        pdf_object: n3fit.vpinterface.N3PDF
-            N3PDF object constructed from the pdf_model
-            that receives as input a point in x and returns an array of 14 flavours
+        preprocessing: dict
+            dictionary of the preprocessing factors
+        arc_lengths: list
+            list of the arc lengths of the different PDFs
+        integrability_numbers: list
+            list of the integrability numbers of the different PDFs
         tr_chi2: float
             chi2 for the training
         vl_chi2: float
@@ -356,7 +381,7 @@ def jsonfit(
     """
     all_info = {}
     # Generate preprocessing information
-    all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
+    all_info["preprocessing"] = preprocessing
     # .fitinfo-like info
     all_info["stop_epoch"] = stop_epoch
     all_info["best_epoch"] = best_epoch
@@ -364,8 +389,8 @@ def jsonfit(
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
     all_info["pos_state"] = positivity_status
-    all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
-    all_info["integrability"] = vpinterface.integrability_numbers(pdf_object).tolist()
+    all_info["arc_lengths"] = arc_lengths
+    all_info["integrability"] = integrability_numbers
     all_info["timing"] = timing
     # Versioning info
     all_info["version"] = version()
