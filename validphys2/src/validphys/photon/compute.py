@@ -4,16 +4,17 @@ import tempfile
 
 import fiatlux
 import numpy as np
-from scipy.integrate import trapezoid
+from scipy.integrate import solve_ivp, trapezoid
 from scipy.interpolate import interp1d
 import yaml
 
+from eko import beta
+from eko.couplings import compute_matching_coeffs_down, compute_matching_coeffs_up
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
 
 from . import structure_functions as sf
-from .constants import ED2, EU2, NC, NL
 
 log = logging.getLogger(__name__)
 
@@ -227,10 +228,15 @@ class Photon:
 class Alpha:
     def __init__(self, theory):
         self.theory = theory
+        self.alpha_s_ref = theory["alphas"]
         self.alpha_em_ref = theory["alphaqed"]
-        self.qref = self.theory["Qedref"]
-        self.beta0, self.b1 = self.set_betas()
-        self.thresh, self.alpha_thresh = self.set_thresholds_alpha_em()
+        self.qref = self.theory["Qref"]
+        if self.theory["ModEv"] == "TRN":
+            self.couplings_fixed_flavor = self.couplings_fixed_flavor_trn
+        elif self.theory["ModEv"] == "EXA":
+            self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
+        self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.set_betas()
+        self.thresh, self.couplings_thresh = self.set_couplings_thresholds()
 
     def alpha_em(self, q):
         r"""
@@ -239,11 +245,27 @@ class Alpha:
         Parameters
         ----------
         q: float
-            value in which the coupling is computed
+            value in which alpha_em is computed
 
         Returns
         -------
         alpha_em: float
+            electromagnetic coupling
+        """
+        return self.couplings_variable_flavor(q)[1]
+
+    def couplings_variable_flavor(self, q):
+        r"""
+        Compute the value of the running couplings.
+
+        Parameters
+        ----------
+        q: float
+            value in which the couplings are computed
+
+        Returns
+        -------
+        alpha_em: numpy.ndarray
             electromagnetic coupling
         """
         if q < self.thresh_c:
@@ -254,11 +276,13 @@ class Alpha:
             nf = 5
         else:
             nf = 6
-        return self.alpha_em_fixed_flavor(q, self.alpha_thresh[nf], self.thresh[nf], nf)
+        return self.couplings_fixed_flavor(q, self.couplings_thresh[nf], self.thresh[nf], nf)
 
-    def alpha_em_fixed_flavor(self, q, alpha_ref, qref, nf):
+    def couplings_fixed_flavor_trn(self, q, couplings_ref, qref, nf):
         """
-        Compute the alpha_em running for nf fixed at NLO.
+        Compute the running couplings for nf fixed at NLO, using truncated method.
+        In this case the RGE for alpha_em is solved decoupling it from the RGE for alpha_s
+        (so the mixed terms are removed). alpha_s will just be unused.
 
         Parameters
         ----------
@@ -276,13 +300,77 @@ class Alpha:
         alpha_em at NLO : float
             target value of a
         """
+        alpha_ref = couplings_ref[1]
         lmu = 2 * np.log(q / qref)
-        den = 1.0 + self.beta0[nf] * alpha_ref * lmu
+        den = 1.0 + self.betas_qed[nf][0] * alpha_ref * lmu
         alpha_LO = alpha_ref / den
-        alpha_NLO = alpha_LO * (1 - self.b1[nf] * alpha_LO * np.log(den))
-        return alpha_NLO
+        alpha_NLO = alpha_LO * (1 - self.betas_qed[nf][1] * alpha_LO * np.log(den))
+        return [couplings_ref[0], alpha_NLO]
 
-    def set_thresholds_alpha_em(self):
+    def couplings_fixed_flavor_exa(self, q, couplings_ref, qref, nf):
+        """
+        Compute numerically the running running for nf fixed.
+        The RGEs for the two couplings are coupled by the mixed terms,
+        so must be solved together starting from the same qref.
+
+        Parameters
+        ----------
+        q : float
+            target scale
+        alph_aem_ref : float
+            reference value of alpha_em
+        qref: float
+            reference scale
+        nf: int
+            number of flavors
+
+        Returns
+        -------
+        alpha_em at NLO : float
+            target value of a
+        """
+        u = 2 * np.log(q / qref)
+
+        # integration kernel
+        def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
+            rge_qcd = (
+                -(alpha[0] ** 2)
+                * beta_qcd_vec[0]
+                * (
+                    1
+                    + np.sum([alpha[0] ** (k + 1) * b for k, b in enumerate(beta_qcd_vec[1:])])
+                    + alpha[1] * beta_qcd_mix
+                )
+            )
+            rge_qed = (
+                -(alpha[1] ** 2)
+                * beta_qed_vec[0]
+                * (
+                    1
+                    + np.sum([alpha[1] ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
+                    + alpha[0] * beta_qed_mix
+                )
+            )
+            res = np.array([rge_qcd, rge_qed])
+            return res
+
+        # let scipy solve
+        res = solve_ivp(
+            rge,
+            (0, u),
+            couplings_ref,
+            args=[
+                self.betas_qcd[nf],
+                self.beta_mix_qcd[nf],
+                self.betas_qed[nf],
+                self.beta_mix_qed[nf],
+            ],
+            method="Radau",
+            rtol=1e-6,
+        )
+        return [res.y[0][-1], res.y[1][-1]]
+
+    def set_couplings_thresholds(self):
         """
         Compute and store the couplings at thresholds to speed up the calling
         to alpha_em inside fiatlux:
@@ -317,30 +405,60 @@ class Alpha:
 
         thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
 
-        alpha_thresh = {nfref: self.alpha_em_ref}
+        couplings_thresh = {nfref: [self.alpha_s_ref, self.alpha_em_ref]}
 
-        # determine the values of alpha in the threshold points, depending on the value of qref
+        logs = {
+            4: np.log(self.theory["kcThr"]),
+            5: np.log(self.theory["kbThr"]),
+            6: np.log(self.theory["ktThr"]),
+        }
+
+        # determine the values of the couplings in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alpha_thresh[nf] = self.alpha_em_fixed_flavor(
-                thresh[nf], alpha_thresh[nf - 1], thresh[nf - 1], nf - 1
+            coupl_tmp = self.couplings_fixed_flavor(
+                thresh[nf], couplings_thresh[nf - 1], thresh[nf - 1], nf - 1
             )
+            # compute matchings
+            match_up = compute_matching_coeffs_up(self.theory["HQ"], nf)
+            alpha_s = coupl_tmp[0]
+            fact = 1.0
+            for n in range(1, self.theory['PTO'] + 1):
+                for l_pow in range(n + 1):
+                    fact += (alpha_s / (4 * np.pi)) ** n * logs[nf] ** l_pow * match_up[n, l_pow]
+            couplings_thresh[nf] = [alpha_s * fact, coupl_tmp[1]]
 
         for nf in reversed(range(3, nfref)):
-            alpha_thresh[nf] = self.alpha_em_fixed_flavor(
-                thresh[nf], alpha_thresh[nf + 1], thresh[nf + 1], nf + 1
+            coupl_tmp = self.couplings_fixed_flavor(
+                thresh[nf], couplings_thresh[nf + 1], thresh[nf + 1], nf + 1
             )
+            # compute matchings
+            match_down = compute_matching_coeffs_down(self.theory["HQ"], nf - 1)
+            alpha_s = coupl_tmp[0]
+            fact = 1.0
+            for n in range(1, self.theory['PTO'] + 1):
+                for l_pow in range(n + 1):
+                    fact += (
+                        (alpha_s / (4 * np.pi)) ** n * logs[nf + 1] ** l_pow * match_down[n, l_pow]
+                    )
+            couplings_thresh[nf] = [alpha_s * fact, coupl_tmp[1]]
 
-        return thresh, alpha_thresh
+        return thresh, couplings_thresh
 
     def set_betas(self):
-        """Compute and store beta0 / 4pi and b1 = (beta1/beta0)/4pi as a function of nf."""
-        beta0 = {}
-        b1 = {}
+        """Set values of betaQCD and betaQED"""
+        betas_qcd = {}
+        betas_qed = {}
+        beta_mix_qcd = {}
+        beta_mix_qed = {}
         for nf in range(3, 6 + 1):
-            nu = nf // 2
-            nd = nf - nu
-            beta0[nf] = (-4.0 / 3 * (NL + NC * (nu * EU2 + nd * ED2))) / (4 * np.pi)
-            b1[nf] = (
-                -4.0 * (NL + NC * (nu * EU2**2 + nd * ED2**2)) / beta0[nf] / (4 * np.pi) ** 2
-            )
-        return beta0, b1
+            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi)]
+            vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
+            for ord in range(1, self.theory['PTO'] + 1):
+                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord)
+            for ord in range(1, self.theory['QED']):
+                vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
+            betas_qcd[nf] = vec_qcd
+            betas_qed[nf] = vec_qed
+            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi)
+            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi)
+        return betas_qcd, betas_qed, beta_mix_qcd, beta_mix_qed
