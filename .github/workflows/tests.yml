@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.9", "3.10"]
-        resolver: ["conda", "mamba"]
+        resolver: [conda, mamba]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
@@ -30,7 +30,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Configure mamba as the resolver
-      if: startsWith(matrix.resolver, "mamba")
+      if: startsWith(matrix.resolver, 'mamba')
       run: |
         conda install -n base conda-libmamba-solver
         conda config --set solver libmamba
