@@ -31,8 +31,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Configure mamba as the resolver
       if: startsWith(matrix.resolver, "mamba")
-      conda install -n base conda-libmamba-solver
-      conda config --set solver libmamba
+      run: |
+        conda install -n base conda-libmamba-solver
+        conda config --set solver libmamba
     - name: Install macOS SDK
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
