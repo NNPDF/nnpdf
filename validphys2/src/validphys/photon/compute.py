@@ -421,11 +421,8 @@ class Alpha:
             # compute matchings
             match_up = compute_matching_coeffs_up(self.theory["HQ"], nf)
             alpha_s = coupl_tmp[0]
-            fact = 1.0
-            for n in range(1, self.theory['PTO'] + 1):
-                for l_pow in range(n + 1):
-                    fact += (alpha_s / (4 * np.pi)) ** n * logs[nf] ** l_pow * match_up[n, l_pow]
-            couplings_thresh[nf] = [alpha_s * fact, coupl_tmp[1]]
+            alphas_new = apply_match(alpha_s, self.theory['PTO'] + 1, logs[nf], match_up)
+            couplings_thresh[nf] = [alphas_new, coupl_tmp[1]]
 
         for nf in reversed(range(3, nfref)):
             coupl_tmp = self.couplings_fixed_flavor(
@@ -434,13 +431,8 @@ class Alpha:
             # compute matchings
             match_down = compute_matching_coeffs_down(self.theory["HQ"], nf - 1)
             alpha_s = coupl_tmp[0]
-            fact = 1.0
-            for n in range(1, self.theory['PTO'] + 1):
-                for l_pow in range(n + 1):
-                    fact += (
-                        (alpha_s / (4 * np.pi)) ** n * logs[nf + 1] ** l_pow * match_down[n, l_pow]
-                    )
-            couplings_thresh[nf] = [alpha_s * fact, coupl_tmp[1]]
+            alphas_new = apply_match(alpha_s, self.theory['PTO'] + 1, logs[nf + 1], match_down)
+            couplings_thresh[nf] = [alphas_new, coupl_tmp[1]]
 
         return thresh, couplings_thresh
 
@@ -462,3 +454,12 @@ class Alpha:
             beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi)
             beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi)
         return betas_qcd, betas_qed, beta_mix_qcd, beta_mix_qed
+
+
+def apply_match(alphas, ord, L, match):
+    "applying matching conditions to alphas"
+    fact = 1.0
+    for n in range(1, ord):
+        for l_pow in range(n + 1):
+            fact += (alphas / (4 * np.pi)) ** n * L**l_pow * match[n, l_pow]
+    return alphas * fact

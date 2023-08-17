@@ -4,7 +4,8 @@ import fiatlux
 import numpy as np
 import yaml
 
-from eko.couplings import Couplings
+from eko import beta
+from eko.couplings import Couplings, expanded_qed
 from eko.io import EKO
 from eko.quantities.couplings import CouplingEvolutionMethod, CouplingsInfo
 from eko.quantities.heavy_quarks import QuarkMassScheme
@@ -61,25 +62,30 @@ def test_set_thresholds_alpha_em():
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
 
-    alpha = Alpha(theory)
-    coupl_ref = [theory["alphas"], theory["alphaqed"]]
+    for modev in ['EXA', 'TRN']:
+        theory['ModEv'] = modev
 
-    np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alphaqed"])
-    np.testing.assert_almost_equal(alpha.thresh[5], theory["Qedref"])
-    np.testing.assert_almost_equal(alpha.thresh[4], theory["mb"])
-    np.testing.assert_almost_equal(alpha.thresh[3], theory["mc"])
-    np.testing.assert_almost_equal(alpha.couplings_thresh[5][0], theory["alphas"])
-    np.testing.assert_almost_equal(alpha.couplings_thresh[5][1], theory["alphaqed"])
-    np.testing.assert_almost_equal(
-        alpha.couplings_thresh[4][1],
-        alpha.couplings_fixed_flavor(theory["mb"], coupl_ref, theory["Qedref"], 5)[1],
-    )
-    np.testing.assert_almost_equal(
-        alpha.couplings_thresh[3][1],
-        alpha.couplings_fixed_flavor(theory["mc"], alpha.couplings_thresh[4], theory["mb"], 4)[1],
-    )
-    np.testing.assert_equal(len(alpha.couplings_thresh), 3)
-    np.testing.assert_equal(len(alpha.thresh), 3)
+        alpha = Alpha(theory)
+        coupl_ref = [theory["alphas"], theory["alphaqed"]]
+
+        np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alphaqed"])
+        np.testing.assert_almost_equal(alpha.thresh[5], theory["Qedref"])
+        np.testing.assert_almost_equal(alpha.thresh[4], theory["mb"])
+        np.testing.assert_almost_equal(alpha.thresh[3], theory["mc"])
+        np.testing.assert_almost_equal(alpha.couplings_thresh[5][0], theory["alphas"])
+        np.testing.assert_almost_equal(alpha.couplings_thresh[5][1], theory["alphaqed"])
+        np.testing.assert_almost_equal(
+            alpha.couplings_thresh[4][1],
+            alpha.couplings_fixed_flavor(theory["mb"], coupl_ref, theory["Qedref"], 5)[1],
+        )
+        np.testing.assert_almost_equal(
+            alpha.couplings_thresh[3][1],
+            alpha.couplings_fixed_flavor(theory["mc"], alpha.couplings_thresh[4], theory["mb"], 4)[
+                1
+            ],
+        )
+        np.testing.assert_equal(len(alpha.couplings_thresh), 3)
+        np.testing.assert_equal(len(alpha.thresh), 3)
 
 
 def test_couplings_exa():
@@ -132,6 +138,36 @@ def test_couplings_exa():
             rtol=2e-7,
         )
 
+
+def test_couplings_trn():
+    "benchmark the exact running of alpha with EKO"
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
+    theory["ModEv"] = 'TRN'
+    alpha = Alpha(theory)
+    coupl_ref = [theory["alphas"], theory["alphaqed"]]
+
+    for q in [80, 10, 5]:
+        np.testing.assert_allclose(
+            alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
+            alpha.alpha_em(q),
+            rtol=1e-10,
+        )
+        np.testing.assert_allclose(
+            alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
+            expanded_qed(
+                coupl_ref[1] / (4 * np.pi),
+                theory["QED"],
+                beta.beta_qed((0, 2), 5),
+                [beta.b_qed((0, i + 2), 5) for i in range(theory["QED"])],
+                2 * np.log(q / theory["Qref"]),
+            )
+            * 4
+            * np.pi,
+            rtol=1e-7,
+        )
+
+
 def test_trn_vs_exa():
     "benchmark the exact running of alpha vs truncated"
     test_theory = API.theoryid(theoryid=THEORY_QED)
@@ -143,11 +179,7 @@ def test_trn_vs_exa():
     alpha_trn = Alpha(theory_trn)
 
     for q in [1, 3, 10, 50, 80]:
-        np.testing.assert_allclose(
-            alpha_exa.alpha_em(q),
-            alpha_trn.alpha_em(q),
-            rtol=2e-3
-        )
+        np.testing.assert_allclose(alpha_exa.alpha_em(q), alpha_trn.alpha_em(q), rtol=2e-3)
 
 
 def test_betas():
