@@ -235,8 +235,20 @@ class Alpha:
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_trn
         elif self.theory["ModEv"] == "EXA":
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
-        self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.set_betas()
-        self.thresh, self.couplings_thresh = self.set_couplings_thresholds()
+        self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.compute_betas()
+        
+        # compute and store thresholds
+        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
+        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
+        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
+        if self.theory["MaxNfAs"] <= 5:
+            self.thresh_t = np.inf
+        if self.theory["MaxNfAs"] <= 4:
+            self.thresh_b = np.inf
+        if self.theory["MaxNfAs"] <= 3:
+            self.thresh_c = np.inf
+        
+        self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
         # if "ModEv" is "EXA" we interpolate, otherwise it's too slow
         if self.theory["ModEv"] == "EXA":
             q = np.geomspace(1., np.sqrt(q2max), 1000, endpoint=True)
@@ -285,7 +297,7 @@ class Alpha:
         return self.couplings_fixed_flavor(q, self.couplings_thresh[nf], self.thresh[nf], nf)
     
     def interpolate_alphaem(self, q):
-        ""
+        "interpolate precomputed alphaem values"
         return self.alphaem_interpolator(q)
 
     def couplings_fixed_flavor_trn(self, q, couplings_ref, qref, nf):
@@ -343,6 +355,7 @@ class Alpha:
 
         # integration kernel
         def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
+            "RGEs for the couplings. See Eqs. (5-6) of arXiv:hep-ph/9803211"
             rge_qcd = (
                 -(alpha[0] ** 2)
                 * beta_qcd_vec[0]
@@ -380,7 +393,7 @@ class Alpha:
         )
         return [res.y[0][-1], res.y[1][-1]]
 
-    def set_couplings_thresholds(self):
+    def compute_couplings_at_thresholds(self):
         """
         Compute and store the couplings at thresholds to speed up the calling
         to alpha_em inside fiatlux:
@@ -391,17 +404,7 @@ class Alpha:
         It is done for qref in a generic range (not necessarly qref=91.2).
 
         """
-        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
-        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
-        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
-        if self.theory["MaxNfAs"] <= 5:
-            self.thresh_t = np.inf
-        if self.theory["MaxNfAs"] <= 4:
-            self.thresh_b = np.inf
-        if self.theory["MaxNfAs"] <= 3:
-            self.thresh_c = np.inf
-
-        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
+        
         # determine nfref
         if self.qref < self.thresh_c:
             nfref = 3
@@ -411,6 +414,8 @@ class Alpha:
             nfref = 5
         else:
             nfref = 6
+        
+        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
         thresh_list.insert(nfref - 3, self.qref)
 
         thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
@@ -446,7 +451,7 @@ class Alpha:
 
         return thresh, couplings_thresh
 
-    def set_betas(self):
+    def compute_betas(self):
         """Set values of betaQCD and betaQED"""
         betas_qcd = {}
         betas_qed = {}
