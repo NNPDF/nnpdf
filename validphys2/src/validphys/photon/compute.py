@@ -85,7 +85,6 @@ class Photon:
         # set fiatlux
         self.lux = {}
 
-        alpha = Alpha(theory)
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
 
@@ -101,6 +100,7 @@ class Photon:
                 )
 
             fiatlux_runcard["q2_max"] = float(f2.q2_max)
+            alpha = Alpha(theory, fiatlux_runcard["q2_max"])
             f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
@@ -226,7 +226,7 @@ class Photon:
 
 
 class Alpha:
-    def __init__(self, theory):
+    def __init__(self, theory, q2max):
         self.theory = theory
         self.alpha_s_ref = theory["alphas"]
         self.alpha_em_ref = theory["alphaqed"]
@@ -237,6 +237,12 @@ class Alpha:
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
         self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.set_betas()
         self.thresh, self.couplings_thresh = self.set_couplings_thresholds()
+        # if "ModEv" is "EXA" we interpolate, otherwise it's too slow
+        if self.theory["ModEv"] == "EXA":
+            q = np.geomspace(1., np.sqrt(q2max), 1000, endpoint=True)
+            alpha_vec = np.array([self.alpha_em(q_) for q_ in q])
+            self.alphaem_interpolator = interp1d(q, alpha_vec, fill_value="extrapolate", kind="cubic")
+            self.alpha_em = self.interpolate_alphaem
 
     def alpha_em(self, q):
         r"""
@@ -277,6 +283,10 @@ class Alpha:
         else:
             nf = 6
         return self.couplings_fixed_flavor(q, self.couplings_thresh[nf], self.thresh[nf], nf)
+    
+    def interpolate_alphaem(self, q):
+        ""
+        return self.alphaem_interpolator(q)
 
     def couplings_fixed_flavor_trn(self, q, couplings_ref, qref, nf):
         """
