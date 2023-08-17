@@ -13,6 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.9", "3.10"]
+        resolver: ["conda", "mamba"]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
@@ -28,6 +29,10 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Configure mamba as the resolver
+      if: startsWith(matrix.resolver, "mamba")
+      conda install -n base conda-libmamba-solver
+      conda config --set solver libmamba
     - name: Install macOS SDK
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
