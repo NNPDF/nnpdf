@@ -51,7 +51,7 @@ def test_masses_init():
     "test thresholds values in Alpha class"
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
-    alpha = Alpha(theory)
+    alpha = Alpha(theory, 1e8)
     np.testing.assert_equal(alpha.thresh_t, np.inf)
     np.testing.assert_almost_equal(alpha.thresh_b, theory["mb"])
     np.testing.assert_almost_equal(alpha.thresh_c, theory["mc"])
@@ -65,7 +65,7 @@ def test_set_thresholds_alpha_em():
     for modev in ['EXA', 'TRN']:
         theory['ModEv'] = modev
 
-        alpha = Alpha(theory)
+        alpha = Alpha(theory, 1e8)
         coupl_ref = [theory["alphas"], theory["alphaqed"]]
 
         np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alphaqed"])
@@ -94,7 +94,7 @@ def test_couplings_exa():
     theory = test_theory.get_description()
     mass_list = [theory["mc"], theory["mb"], theory["mt"]]
 
-    alpha = Alpha(theory)
+    alpha = Alpha(theory, 1e8)
     couplings = CouplingsInfo.from_dict(
         dict(
             alphas=theory["alphas"],
@@ -117,7 +117,7 @@ def test_couplings_exa():
     for q in [80, 10, 5]:
         np.testing.assert_allclose(
             alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
-            alpha.alpha_em(q),
+            alpha.couplings_variable_flavor(q)[1],
             rtol=1e-10,
         )
         np.testing.assert_allclose(
@@ -130,7 +130,7 @@ def test_couplings_exa():
             rtol=1e-7,
         )
     for q in [4, 3, 2, 1]:
-        np.testing.assert_allclose(alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7)
+        np.testing.assert_allclose(alpha.couplings_variable_flavor(q)[1], eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7)
     for nf in range(3, theory["MaxNfAs"]):
         np.testing.assert_allclose(
             alpha.couplings_thresh[nf],
@@ -138,13 +138,22 @@ def test_couplings_exa():
             rtol=2e-7,
         )
 
+def test_exa_interpolation():
+    ""
+    test_theory = API.theoryid(theoryid=THEORY_QED)
+    theory = test_theory.get_description()
+
+    alpha = Alpha(theory, 1e8)
+    for q in np.geomspace(1., 1e4, 100, endpoint=True):
+        np.testing.assert_allclose(alpha.couplings_variable_flavor(q)[1], alpha.alpha_em(q), rtol=1e-7)
+
 
 def test_couplings_trn():
     "benchmark the exact running of alpha with EKO"
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
     theory["ModEv"] = 'TRN'
-    alpha = Alpha(theory)
+    alpha = Alpha(theory, 1e8)
     coupl_ref = [theory["alphas"], theory["alphaqed"]]
 
     for q in [80, 10, 5]:
@@ -175,8 +184,8 @@ def test_trn_vs_exa():
     theory_trn = theory_exa.copy()
     theory_trn["ModEv"] = 'TRN'
 
-    alpha_exa = Alpha(theory_exa)
-    alpha_trn = Alpha(theory_trn)
+    alpha_exa = Alpha(theory_exa, 1e8)
+    alpha_trn = Alpha(theory_trn, 1e8)
 
     for q in [1, 3, 10, 50, 80]:
         np.testing.assert_allclose(alpha_exa.alpha_em(q), alpha_trn.alpha_em(q), rtol=2e-3)
@@ -185,7 +194,7 @@ def test_trn_vs_exa():
 def test_betas():
     "test betas for different nf"
     test_theory = API.theoryid(theoryid=THEORY_QED)
-    alpha = Alpha(test_theory.get_description())
+    alpha = Alpha(test_theory.get_description(), 1e8)
     vec_beta0 = [
         -0.5305164769729844,
         -0.6719875374991137,
@@ -236,7 +245,7 @@ def test_photon():
                 tmp_file.write(yaml.dump(FIATLUX_DEFAULT))
             lux = fiatlux.FiatLux(tmp.name)
 
-        alpha = Alpha(theory)
+        alpha = Alpha(theory, fiatlux_default["q2_max"])
 
         lux.PlugAlphaQED(alpha.alpha_em, alpha.qref)
         lux.InsertInelasticSplitQ(
