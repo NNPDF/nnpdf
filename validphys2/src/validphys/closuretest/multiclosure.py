@@ -109,6 +109,46 @@ def internal_multiclosure_data_loader(
     )
 
 @check_multifit_replicas
+def variance_deltas_per_point(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20):
+    
+    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    #using fits singul
+    deltas_per_points = []
+    for elem in reps:
+        #these are the deltas
+        if elem.shape[0] == 1:
+            deltas_per_points.append(elem-np.mean(elem, axis=1)[:,np.newaxis])
+        else:
+            deltas_per_points.append(elem[0]-np.mean(elem[0], axis=1)[:,np.newaxis])
+            deltas_per_points.append(elem[-1]-np.mean(elem[0], axis=1)[:,np.newaxis])
+    import ipdb; ipdb.set_trace()
+    # on the first axis there is index for number of fit
+    # on the second n observables
+    # on the third n reps
+    return np.asarray(deltas_per_points)
+
+
+
+var_deltas = collect("variance_deltas_per_point",("data",))
+from scipy import stats
+def KS_test_for_variance_deltas(var_deltas):
+    #rearrange deltas
+    Z = np.concatenate(var_deltas, axis=1)
+    p_vals = []
+    for elem in var_deltas:
+        Z = np.concatenate(elem, axis=1)
+        for i in range(Z.shape[0]):
+            for j in range(i):
+                h = np.random.randint(0,Z.shape[1])
+                p_vals.append(stats.ks_2samp(Z[i,h,:],Z[j,h,:]).pvalue)
+    import ipdb; ipdb.set_trace()
+    return
+
+@check_multifit_replicas
 def fits_normed_dataset_central_delta(
     internal_multiclosure_dataset_loader,
     _internal_max_reps=None,
