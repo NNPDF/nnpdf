@@ -222,7 +222,7 @@ def xq2_data_var_map(fit_type, ciccio):
     for elem in ciccio:
         plt.scatter(elem['x_coords'],elem['Q_coords'],c=np.sqrt(np.asarray(elem['std_devs'])), cmap=cmap, s=int(np.random.uniform(10,30)),label = elem['name'], marker=markers[i])
         # REMOVE PLT CLIM IF I NEED TO USE THIS FOR A CONSISTENT CLOSURE TEST ONLY
-        plt.clim(0,2)
+        plt.clim(0,6)
         i = (i+1)%len(markers)
     plt.xscale('log')  # Set x-axis to log scale
     plt.yscale('log')  # Set y-axis to log scale
