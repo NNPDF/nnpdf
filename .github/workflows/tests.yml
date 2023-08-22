@@ -43,6 +43,7 @@ jobs:
         conda config --set solver libmamba
         conda config --append channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
+        conda config --remove channels defaults
         conda config --set show_channel_urls true
         conda activate test
         conda install boa --yes
