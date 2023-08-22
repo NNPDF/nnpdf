@@ -18,7 +18,7 @@ requirements:
         - lhapdf      # with python wrapper
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
-        - libarchive ==3.4.2 # See https://github.com/NNPDF/nnpdf/pull/1130
+        - libarchive
         - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
