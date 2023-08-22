@@ -19,6 +19,7 @@ from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from n3fit.ndata_specs import NDATA_SPECS
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
@@ -38,6 +39,7 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
+InputInfoA = namedtuple("InputInfoA", ["unique_As", "A_indices", "A_to_idx"])
 
 
 def _pdf_injection(pdf_layers, observables, masks):
@@ -201,6 +203,7 @@ class ModelTrainer:
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
+        self.input_list_A = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -372,7 +375,47 @@ class ModelTrainer:
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _model_generation(self, xinput, pdf_models, partition, partition_idx):
+    def _Agrid_generation(self, xinput):
+        """
+        Generates the A grid containing the nuclear masses.
+
+        Returns
+        -------
+            Instance of ``InputInfoA`` containing the input information necessary for the PDF model:
+            - unique_As:
+                backend input layer with an array attached which are the unique A values
+                in all experiments
+            - A_indices:
+                backend input layer of the same size as the x-grid, pairing each x with an A,
+                through an index into the unique_As input
+            - A_to_idx:
+                dictionary mapping each unique A to its index in the unique_As input
+        """
+        log.info("Generating the A grid")
+        unique_As = []
+        As_seen = set()
+        for Alist in self.input_list_A:
+            for A in Alist:
+                if A not in As_seen:
+                    As_seen.add(A)
+                    unique_As.append(A)
+
+        # Now sort the unique_As and update A_to_idx accordingly
+        unique_As = sorted(unique_As)
+        A_to_idx = {A: idx for idx, A in enumerate(unique_As)}
+
+        unique_As = op.numpy_to_input(np.array(unique_As))
+
+        # TODO: flag here to only compute if necessary?
+        # perhaps can even create flag with info we have here? add to inputInfoA?
+        A_indices = []
+        # for Alist,  in self.input_list_A:
+
+        # A_indices = op.numpy_to_input(A_indices)
+
+        return InputInfoA(unique_As, A_indices, A_to_idx)
+
+    def _model_generation(self, xinput, Ainput, pdf_models, partition, partition_idx):
         """
         Fills the three dictionaries (``training``, ``validation``, ``experimental``)
         with the ``model`` entry
@@ -403,6 +446,8 @@ class ModelTrainer:
                 a tuple containing the input layer (with all values of x), and the information
                 (in the form of a splitting layer and a list of indices) to distribute
                 the results of the PDF (PDF(xgrid)) among the different observables
+            Ainput: InputInfoA
+                a tuple containing the input layer (with all values of A), and the information
             pdf_models: list(n3fit.backend.MetaModel)
                 a list of models that produce PDF values
             partition: dict
@@ -424,7 +469,9 @@ class ModelTrainer:
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
+                {"pdf_input_x": xinput.input, "pdf_input_A": Ainput.unique_As}
+            )
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
@@ -555,6 +602,8 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
+            log.info(f"Trying to append data for dataset {exp_dict['name']}")
+            self.input_list_A.append([n["A"] for n in NDATA_SPECS[exp_dict["name"]]])
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -576,6 +625,8 @@ class ModelTrainer:
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
+            # TODO: how does it go for other types/
+            # self.input_list_A.append([n["A"] for n in NDATA_SPECS[exp_dict["name"]]])
 
             # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
@@ -847,13 +898,20 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
+        Ainput = self._Agrid_generation(xinput)
+
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid,
+                lux_params=self.lux_params,
+                replicas=self.replicas,
             )
         else:
             photons = None
+        # TODO: To make nuclear fits work with photons, need to have an A axis
+        # on the photons, one for each unique A
+
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
@@ -882,7 +940,7 @@ class ModelTrainer:
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(xinput, pdf_models, partition, k)
+            models = self._model_generation(xinput, Ainput, pdf_models, partition, k)
 
             # Only after model generation, apply possible weight file
             if self.model_file:
@@ -922,7 +980,11 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function

@@ -22,7 +22,7 @@ class Rotation(MetaLayer):
             rotation_axis of input to be rotated
     """
 
-    def __init__(self, rotation_matrix, rotation_axis=2, **kwargs):
+    def __init__(self, rotation_matrix, rotation_axis=3, **kwargs):
         self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)
         self.rotation_axis = rotation_axis
         super().__init__(**kwargs)

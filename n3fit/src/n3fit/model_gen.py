@@ -412,6 +412,7 @@ def pdfNN_layer_generator(
     scaler: Callable = None,
     parallel_models: int = 1,
     photons: Photon = None,
+    old_theory: bool = False,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -507,6 +508,9 @@ def pdfNN_layer_generator(
             If given, gives the AddPhoton layer a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
+        old_theory: bool
+            Flag indicating whether a theory using different grids for different experiments is used.
+            If so, a final layer is necessary to extract the right A values
 
     Returns
     -------
@@ -558,17 +562,25 @@ def pdfNN_layer_generator(
     # Define the main input
     do_nothing = lambda x: x
     if use_feature_scaling:
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
+        pdf_input_x = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
         process_input = do_nothing
         extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
         extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
     else:  # add log(x)
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
+        pdf_input_x = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
         process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
         extract_original = do_nothing
         extract_nn_input = do_nothing
+    model_input = {"pdf_input_x": pdf_input_x}
 
-    model_input = {"pdf_input": pdf_input}
+    # The None below is the number of unique As
+    pdf_input_A = Input(shape=(None, 1), batch_size=1, name='A')
+    model_input["pdf_input_A"] = pdf_input_A
+
+    if old_theory:
+        # The None below is the number of points in the x-grid
+        pdf_input_A_indices = Input(shape=(None, 1), batch_size=1, name='A_indices')
+        model_input["pdf_input_A_indices"] = pdf_input_A_indices
 
     if subtract_one:
         input_x_eq_1 = [1.0]
@@ -637,17 +649,17 @@ def pdfNN_layer_generator(
     # All layers have been made, now we need to connect them,
     # do this in a function so we can call it for both grids and each replica
     # Since all layers are already made, they will be reused
-    def compute_unnormalized_pdf(x, neural_network, compute_preprocessing_factor):
+    def compute_unnormalized_pdf(x, A, neural_network, compute_preprocessing_factor):
         # Preprocess the input grid
         x_nn_input = extract_nn_input(x)
         x_original = extract_original(x)
         x_processed = process_input(x_nn_input)
 
         # Compute the neural network output
-        nn_output = neural_network(x_processed)
+        nn_output = neural_network({'NN_input_x': x_processed, 'NN_input_A': A})
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            nn_at_one = neural_network(x_eq_1_processed)
+            nn_at_one = neural_network({'NN_input_x': x_eq_1_processed, 'NN_input_A': A})
             nn_output = subtract_one_layer([nn_output, nn_at_one])
 
         # Compute the preprocessing factor and multiply
@@ -668,11 +680,13 @@ def pdfNN_layer_generator(
     for i_replica, (preprocessing_factor, nn) in enumerate(
         zip(preprocessing_factor_replicas, nn_replicas)
     ):
-        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
+        pdf_unnormalized = compute_unnormalized_pdf(
+            pdf_input_x, pdf_input_A, nn, preprocessing_factor
+        )
 
         if impose_sumrule:
             pdf_integration_grid = compute_unnormalized_pdf(
-                integrator_input, nn, preprocessing_factor
+                integrator_input, pdf_input_A, nn, preprocessing_factor
             )
             pdf_normalized = sumrule_layer(
                 {
@@ -680,9 +694,8 @@ def pdfNN_layer_generator(
                     "pdf_xgrid_integration": pdf_integration_grid,
                     "xgrid_integration": integrator_input,
                     # The photon is treated separately, need to get its integrals to normalize the pdf
-                    "photon_integral": op.numpy_to_tensor([[
-                        0.0 if not photons else photons.integral[i_replica]
-                        ]]
+                    "photon_integral": op.numpy_to_tensor(
+                        [[0.0 if not photons else photons.integral[i_replica]]]
                     ),
                 }
             )
@@ -693,6 +706,12 @@ def pdfNN_layer_generator(
         if photons:
             # Add in the photon component
             pdf = layer_photon(pdf, i_replica)
+
+        if old_theory:
+            pdf = Lambda(
+                lambda x: op.op_gather_keep_dims(x, A_indices, axis=2),
+                name="extract_right_As",
+            )(pdf)
 
         # Create the model
         pdf_model = MetaModel(model_input, pdf, name=f"PDF_{i_replica}", scaler=scaler)
@@ -738,9 +757,21 @@ def generate_nn(
     # Note: using a Sequential model would be more appropriate, but it would require
     # creating a MetaSequential model.
     x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+    A = Input(shape=(None, 1), batch_size=1, name='A')
     pdf = x
     for layer in list_of_pdf_layers:
         pdf = layer(pdf)
 
-    model = MetaModel({'NN_input': x}, pdf, name=name)
+    # temporary way to use the As just to get the shape right as (1, gridsize, num_unique_As, num_flavours)
+    def temp_mult_As(pdf, A):
+        pdf = op.batchit(pdf, batch_dimension=2)
+        A = op.batchit(A, batch_dimension=1)
+        return pdf * A
+
+    pdf = Lambda(
+        lambda pdf_A: temp_mult_As(pdf_A[0], pdf_A[1]),
+        name=f"mult_As",
+    )([pdf, A])
+
+    model = MetaModel({'NN_input_x': x, 'NN_input_A': A}, pdf, name=name)
     return model
