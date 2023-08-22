@@ -28,6 +28,8 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
+        mamba-version: "*"
+        channels: "conda-forge,https://packages.nnpdf.science/public"
     - name: Install macOS SDK
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
@@ -39,9 +41,6 @@ jobs:
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/public
-        conda config --remove channels defaults
         conda install -n base conda-libmamba-solver
         conda config --set solver libmamba
         conda config --set show_channel_urls true
