@@ -6,11 +6,13 @@
 """
 
 import re
+
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
+
 import n3fit.backends.keras_backend.operations as op
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
@@ -47,11 +49,10 @@ for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
 
 
-def _default_loss(y_true, y_pred): # pylint: disable=unused-argument
+def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
     return op.sum(y_pred)
-
 
 
 class MetaModel(Model):
@@ -95,7 +96,6 @@ class MetaModel(Model):
         if not isinstance(input_values, dict):
             raise TypeError("Expecting input_values to be a dict or None")
 
-
         x_in = {}
         # Go over the inputs. If we can deduce a constant value, either because
         # it is set in input_values or because it has a tensor_content, we
@@ -117,7 +117,6 @@ class MetaModel(Model):
         self.compute_losses_function = None
         self._scaler = scaler
 
-
     @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
         """Returns the input data the model was compiled with.
@@ -127,9 +126,7 @@ class MetaModel(Model):
         """
         if extra_input is None:
             if self.required_slots:
-                raise ValueError(
-                    f"The following inputs must be provided: {self.required_slots}"
-                )
+                raise ValueError(f"The following inputs must be provided: {self.required_slots}")
             return self.x_in
 
         if not isinstance(extra_input, dict):
@@ -171,10 +168,14 @@ class MetaModel(Model):
         loss_dict = history.history
         return loss_dict
 
-    def predict(self, x=None, **kwargs):
-        """ Call super().predict with the right input arguments """
+    def predict(self, x=None, proton_only=True, **kwargs):
+        """Call super().predict with the right input arguments"""
+        if proton_only:
+            x['pdf_input_A'] = op.numpy_to_tensor(np.array([[1]]))
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
+        if proton_only:
+            result = result[:, :, 0]
         return result
 
     def compute_losses(self):
@@ -325,11 +326,11 @@ class MetaModel(Model):
                 w.assign(v)
 
     def apply_as_layer(self, x):
-        """ Apply the model as a layer """
+        """Apply the model as a layer"""
         all_input = {**self.tensors_in, **x}
         return all_input, super().__call__(all_input)
 
     def get_layer_re(self, regex):
-        """ Get all layers matching the given regular expression """
+        """Get all layers matching the given regular expression"""
         check = lambda x: re.match(regex, x.name)
         return list(filter(check, self.layers))
