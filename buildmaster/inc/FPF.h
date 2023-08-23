@@ -5,62 +5,115 @@
 
 
 // #########################################################
-// SND EXPERIMENTS //
-// Filter for Inlusive NU productions @ SND
-class SNDNUINCLUSIVEFilter: public CommonData
+// FLArE10 EXPERIMENTS //
+// Filter for Inlusive NU productions @ FLArE10
+class FLArE10NUINCLUSIVEFilter: public CommonData
 {
-public: SNDNUINCLUSIVEFilter():
-  CommonData("SNDNU_DSIGMA_INCLUSIVE") { ReadData(); }
+public: FLArE10NUINCLUSIVEFilter():
+  CommonData("FLArE10NU_DSIGMA_INCLUSIVE") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-// Filter for Inlusive NUB productions @ SND
-class SNDNBINCLUSIVEFilter: public CommonData
+// Filter for Inlusive NUB productions @ FLArE10
+class FLArE10NBINCLUSIVEFilter: public CommonData
 {
-public: SNDNBINCLUSIVEFilter():
-  CommonData("SNDNB_DSIGMA_INCLUSIVE") { ReadData(); }
+public: FLArE10NBINCLUSIVEFilter():
+  CommonData("FLArE10NB_DSIGMA_INCLUSIVE") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-// Filter for Inlusive SUM productions @ SND
-class SNDSUMINCLUSIVEFilter: public CommonData
+// Filter for Inlusive SUM productions @ FLArE10
+class FLArE10SUMINCLUSIVEFilter: public CommonData
 {
-public: SNDSUMINCLUSIVEFilter():
-  CommonData("SND_SUM_DSIGMA_INCLUSIVE") { ReadData(); }
+public: FLArE10SUMINCLUSIVEFilter():
+  CommonData("FLArE10_SUM_DSIGMA_INCLUSIVE") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-// Filter for Charm NU productions @ SND
-class SNDNUCHARMFilter: public CommonData
+// Filter for Charm NU productions @ FLArE10
+class FLArE10NUCHARMFilter: public CommonData
 {
-public: SNDNUCHARMFilter():
-  CommonData("SNDNU_DSIGMA_CHARM") { ReadData(); }
+public: FLArE10NUCHARMFilter():
+  CommonData("FLArE10NU_DSIGMA_CHARM") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-// Filter for Charm NUB productions @ SND
-class SNDNBCHARMFilter: public CommonData
+// Filter for Charm NUB productions @ FLArE10
+class FLArE10NBCHARMFilter: public CommonData
 {
-public: SNDNBCHARMFilter():
-  CommonData("SNDNB_DSIGMA_CHARM") { ReadData(); }
+public: FLArE10NBCHARMFilter():
+  CommonData("FLArE10NB_DSIGMA_CHARM") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-// Filter for Charm SUM productions @ SND
-class SNDSUMCHARMFilter: public CommonData
+
+// #########################################################
+// AdvSND EXPERIMENTS //
+// Filter for Inlusive NU productions @ AdvSND
+class AdvSNDNUINCLUSIVEFilter: public CommonData
 {
-public: SNDSUMCHARMFilter():
-  CommonData("SND_SUM_DSIGMA_CHARM") { ReadData(); }
+public: AdvSNDNUINCLUSIVEFilter():
+  CommonData("AdvSNDNU_DSIGMA_INCLUSIVE") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+// Filter for Inlusive NUB productions @ AdvSND
+class AdvSNDNBINCLUSIVEFilter: public CommonData
+{
+public: AdvSNDNBINCLUSIVEFilter():
+  CommonData("AdvSNDNB_DSIGMA_INCLUSIVE") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+// Filter for Inlusive SUM productions @ AdvSND
+class AdvSNDSUMINCLUSIVEFilter: public CommonData
+{
+public: AdvSNDSUMINCLUSIVEFilter():
+  CommonData("AdvSND_SUM_DSIGMA_INCLUSIVE") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+// Filter for Charm NU productions @ AdvSND
+class AdvSNDNUCHARMFilter: public CommonData
+{
+public: AdvSNDNUCHARMFilter():
+  CommonData("AdvSNDNU_DSIGMA_CHARM") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+// // Filter for Charm NUB productions @ AdvSND
+// class AdvSNDNBCHARMFilter: public CommonData
+// {
+// public: AdvSNDNBCHARMFilter():
+//   CommonData("AdvSNDNB_DSIGMA_CHARM") { ReadData(); }
+//
+// private:
+//   void ReadData();
+// };
+
+// Filter for Charm SUM productions @ AdvSND
+class AdvSNDSUMCHARMFilter: public CommonData
+{
+public: AdvSNDSUMCHARMFilter():
+  CommonData("AdvSND_SUM_DSIGMA_CHARM") { ReadData(); }
 
 private:
   void ReadData();
@@ -162,35 +215,35 @@ private:
   void ReadData();
 };
 
-// Filter for Charm NU productions @ FASERV
-class FASERVNUCHARMFilter: public CommonData
-{
-public: FASERVNUCHARMFilter():
-  CommonData("FASERVNU_DSIGMA_CHARM") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-// Filter for Charm NUB productions @ FASERV
-class FASERVNBCHARMFilter: public CommonData
-{
-public: FASERVNBCHARMFilter():
-  CommonData("FASERVNB_DSIGMA_CHARM") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-// Filter for Charm SUM productions @ FASERV
-class FASERVSUMCHARMFilter: public CommonData
-{
-public: FASERVSUMCHARMFilter():
-  CommonData("FASERV_SUM_DSIGMA_CHARM") { ReadData(); }
-
-private:
-  void ReadData();
-};
+// // Filter for Charm NU productions @ FASERV
+// class FASERVNUCHARMFilter: public CommonData
+// {
+// public: FASERVNUCHARMFilter():
+//   CommonData("FASERVNU_DSIGMA_CHARM") { ReadData(); }
+//
+// private:
+//   void ReadData();
+// };
+//
+// // Filter for Charm NUB productions @ FASERV
+// class FASERVNBCHARMFilter: public CommonData
+// {
+// public: FASERVNBCHARMFilter():
+//   CommonData("FASERVNB_DSIGMA_CHARM") { ReadData(); }
+//
+// private:
+//   void ReadData();
+// };
+//
+// // Filter for Charm SUM productions @ FASERV
+// class FASERVSUMCHARMFilter: public CommonData
+// {
+// public: FASERVSUMCHARMFilter():
+//   CommonData("FASERV_SUM_DSIGMA_CHARM") { ReadData(); }
+//
+// private:
+//   void ReadData();
+// };
 
 
 // #########################################################
