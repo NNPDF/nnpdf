@@ -39,17 +39,17 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
-InputInfoA = namedtuple("InputInfoA", ["unique_As", "A_indices", "A_to_idx"])
+InputInfoA = namedtuple("InputInfoA", ["input_A", "A_to_idx"])
 
 
-def _pdf_injection(pdf_layers, observables, masks):
+def _pdf_injection(pdf_layers, observables, masks, A_to_idx):
     """
     Takes as input a list of PDF layers each corresponding to one observable (also given as a list)
     And (where neded) a mask to select the output.
     Returns a list of obs(pdf).
     Note that the list of masks don't need to be the same size as the list of layers/observables
     """
-    return [f(x, mask=m) for f, x, m in zip_longest(observables, pdf_layers, masks)]
+    return [f(x, A_to_idx, mask=m) for f, x, m in zip_longest(observables, pdf_layers, masks)]
 
 
 def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
@@ -375,21 +375,18 @@ class ModelTrainer:
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _Agrid_generation(self, xinput):
+    def _Agrid_generation(self):
         """
         Generates the A grid containing the nuclear masses.
 
         Returns
         -------
             Instance of ``InputInfoA`` containing the input information necessary for the PDF model:
-            - unique_As:
+            - input_A:
                 backend input layer with an array attached which are the unique A values
                 in all experiments
-            - A_indices:
-                backend input layer of the same size as the x-grid, pairing each x with an A,
-                through an index into the unique_As input
             - A_to_idx:
-                dictionary mapping each unique A to its index in the unique_As input
+                dictionary mapping each unique A to its index in the input_A input
         """
         log.info("Generating the A grid")
         unique_As = []
@@ -404,16 +401,9 @@ class ModelTrainer:
         unique_As = sorted(unique_As)
         A_to_idx = {A: idx for idx, A in enumerate(unique_As)}
 
-        unique_As = op.numpy_to_input(np.array(unique_As))
+        input_A = op.numpy_to_input(np.array(unique_As))
 
-        # TODO: flag here to only compute if necessary?
-        # perhaps can even create flag with info we have here? add to inputInfoA?
-        A_indices = []
-        # for Alist,  in self.input_list_A:
-
-        # A_indices = op.numpy_to_input(A_indices)
-
-        return InputInfoA(unique_As, A_indices, A_to_idx)
+        return InputInfoA(input_A, A_to_idx)
 
     def _model_generation(self, xinput, Ainput, pdf_models, partition, partition_idx):
         """
@@ -470,7 +460,7 @@ class ModelTrainer:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
             full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
-                {"pdf_input_x": xinput.input, "pdf_input_A": Ainput.unique_As}
+                {"pdf_input_x": xinput.input, "pdf_input_A": Ainput.input_A}
             )
 
             all_replicas_pdf.append(full_pdf)
@@ -495,7 +485,9 @@ class ModelTrainer:
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
-        output_tr = _pdf_injection(split_pdf, self.training["output"], training_mask)
+        output_tr = _pdf_injection(
+            split_pdf, self.training["output"], training_mask, Ainput.A_to_idx
+        )
         training = MetaModel(full_model_input_dict, output_tr)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
@@ -510,11 +502,15 @@ class ModelTrainer:
                 val_pdfs.append(partial_pdf)
 
         # We don't want to included the integrablity in the validation
-        output_vl = _pdf_injection(val_pdfs, self.validation["output"], validation_mask)
+        output_vl = _pdf_injection(
+            val_pdfs, self.validation["output"], validation_mask, Ainput.A_to_idx
+        )
         validation = MetaModel(full_model_input_dict, output_vl)
 
         # Or the positivity in the total chi2
-        output_ex = _pdf_injection(exp_pdfs, self.experimental["output"], experimental_mask)
+        output_ex = _pdf_injection(
+            exp_pdfs, self.experimental["output"], experimental_mask, Ainput.A_to_idx
+        )
         experimental = MetaModel(full_model_input_dict, output_ex)
 
         if self.print_summary:
@@ -595,6 +591,10 @@ class ModelTrainer:
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
         for exp_dict in self.exp_info:
+            # TODO: this is just a temporary hack to add A values in this dict
+            for dataset in exp_dict["datasets"]:
+                dataset.A_values = [n["A"] for n in NDATA_SPECS[dataset.name]]
+
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
@@ -602,8 +602,11 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
-            log.info(f"Trying to append data for dataset {exp_dict['name']}")
-            self.input_list_A.append([n["A"] for n in NDATA_SPECS[exp_dict["name"]]])
+
+            # Save the A values, corresponding to each dataset in this experiment
+            for dataset in exp_dict["datasets"]:
+                log.info(f"Appending A values {dataset.A_values} to input_list_A")
+                self.input_list_A.append(dataset.A_values)
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -612,6 +615,9 @@ class ModelTrainer:
 
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
+            # TODO: this is just a temporary hack to add A values in this dict
+            for dataset in pos_dict["datasets"]:
+                dataset.A_values = [1]
             if not self.mode_hyperopt:
                 log.info("Generating positivity penalty for %s", pos_dict["name"])
 
@@ -625,8 +631,6 @@ class ModelTrainer:
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
-            # TODO: how does it go for other types/
-            # self.input_list_A.append([n["A"] for n in NDATA_SPECS[exp_dict["name"]]])
 
             # The positivity should be on both training and validation models
             self.training["output"].append(pos_layer["output_tr"])
@@ -638,6 +642,9 @@ class ModelTrainer:
         # Finally generate the integrability penalty
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
+                # TODO: this is just a temporary hack to add A values in this dict
+                for dataset in integ_dict["datasets"]:
+                    dataset.A_values = [1]
                 if not self.mode_hyperopt:
                     log.info("Generating integrability penalty for %s", integ_dict["name"])
 
@@ -898,7 +905,7 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
-        Ainput = self._Agrid_generation(xinput)
+        Ainput = self._Agrid_generation()
 
         # Initialize all photon classes for the different replicas:
         if self.lux_params:

@@ -1,6 +1,8 @@
-from n3fit.backends import MetaLayer
+from abc import ABC, abstractmethod
+
 import numpy as np
-from abc import abstractmethod, ABC
+
+from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 
@@ -34,13 +36,16 @@ class Observable(MetaLayer, ABC):
             list of fktables for this observable
         operation_name: str
             string defining the name of the operation to be applied to the fktables
+        A_values: list
+            list of A values for this observable
         nfl: int
             number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_data, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(self, fktable_data, fktable_arr, operation_name, A_values, nfl=14, **kwargs):
         super(MetaLayer, self).__init__(**kwargs)
 
+        self.A_values = A_values
         self.nfl = nfl
 
         basis = []
@@ -75,3 +80,8 @@ class Observable(MetaLayer, ABC):
     @abstractmethod
     def gen_mask(self, basis):
         pass
+
+    def call(self, pdf, A_to_idx):
+        A_indices = [A_to_idx[i] for i in self.A_values]
+        pdfs = [pdf[:, :, i] for i in A_indices]
+        return pdfs

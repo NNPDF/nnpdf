@@ -1,4 +1,4 @@
-"""
+""""
     Library of functions which generate the NN objects
 
     Contains:
@@ -69,7 +69,7 @@ class ObservableWrapper:
             loss = losses.LossIntegrability(name=self.name, c=self.multiplier)
         return loss
 
-    def _generate_experimental_layer(self, pdf):
+    def _generate_experimental_layer(self, pdf, A_to_idx):
         """Generate the experimental layer by feeding to each observable its PDF.
         In the most general case, each observable might need a PDF evaluated on a different xgrid,
         the input PDF is evaluated in all points that the experiment needs and needs to be split
@@ -82,9 +82,9 @@ class ObservableWrapper:
                 name=f"{self.name}_split",
             )
             sp_pdf = splitting_layer(pdf)
-            output_layers = [obs(p) for obs, p in zip(self.observables, sp_pdf)]
+            output_layers = [obs(p, A_to_idx) for obs, p in zip(self.observables, sp_pdf)]
         else:
-            output_layers = [obs(pdf) for obs in self.observables]
+            output_layers = [obs(pdf, A_to_idx) for obs in self.observables]
 
         # Finally concatenate all observables (so that experiments are one single entitiy)
         ret = op.concatenate(output_layers, axis=2)
@@ -92,9 +92,9 @@ class ObservableWrapper:
             ret = self.rotation(ret)
         return ret
 
-    def __call__(self, pdf_layer, mask=None):
+    def __call__(self, pdf_layer, A_to_idx, mask=None):
         loss_f = self._generate_loss(mask)
-        experiment_prediction = self._generate_experimental_layer(pdf_layer)
+        experiment_prediction = self._generate_experimental_layer(pdf_layer, A_to_idx)
         return loss_f(experiment_prediction)
 
 
@@ -125,7 +125,7 @@ def observable_generator(
 
         `def out_tr(pdf_layer, dataset_out=None)`
 
-    The `pdf_layer` must be a layer of shape (1, size_of_xgrid, flavours)
+    The `pdf_layer` must be a layer of shape (1, size_of_xgrid, A_values, flavours)
     `datasets_out` is the list of dataset to be masked to 0 when generating the layer
 
     Parameters
@@ -179,6 +179,7 @@ def observable_generator(
                 dataset.fktables_data,
                 dataset.training_fktables(),
                 operation_name,
+                dataset.A_values,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = obs_layer_vl = None
@@ -188,6 +189,7 @@ def observable_generator(
                 dataset.fktables_data,
                 dataset.fktables(),
                 operation_name,
+                dataset.A_values,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
@@ -196,18 +198,21 @@ def observable_generator(
                 dataset.fktables_data,
                 dataset.training_fktables(),
                 operation_name,
+                dataset.A_values,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
                 operation_name,
+                dataset.A_values,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
                 dataset.fktables_data,
                 dataset.validation_fktables(),
                 operation_name,
+                dataset.A_values,
                 name=f"val_{dataset_name}",
             )
 
@@ -592,7 +597,10 @@ def pdfNN_layer_generator(
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
     # the layer that multiplies the NN output by the preprocessing factor
-    apply_preprocessing_factor = Lambda(op.op_multiply, name='prefactor_times_NN')
+    apply_preprocessing_factor = Lambda(
+        lambda nn_pref: nn_pref[0] * op.batchit(nn_pref[1], batch_dimension=2),
+        name='prefactor_times_NN',
+    )
 
     # Photon layer
     layer_photon = AddPhoton(photons=photons, name="add_photon")
