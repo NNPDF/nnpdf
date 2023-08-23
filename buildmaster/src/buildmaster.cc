@@ -583,10 +583,18 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   // **************** FPF FASERV *****************************
   target.emplace_back(new FASERVNUINCLUSIVEFilter());
   target.emplace_back(new FASERVNBINCLUSIVEFilter());
-  target.emplace_back(new FASERVNUCHARMFilter());
-  target.emplace_back(new FASERVNBCHARMFilter());
+  // target.emplace_back(new FASERVNUCHARMFilter());
+  // target.emplace_back(new FASERVNBCHARMFilter());
   target.emplace_back(new FASERVSUMCHARMFilter());
   target.emplace_back(new FASERVSUMINCLUSIVEFilter());
+
+  // **************** FPF FLArE10 *****************************
+  target.emplace_back(new FLArE10NUINCLUSIVEFilter());
+  target.emplace_back(new FLArE10NBINCLUSIVEFilter());
+  target.emplace_back(new FLArE10NUCHARMFilter());
+  target.emplace_back(new FLArE10NBCHARMFilter());
+  target.emplace_back(new FLArE10SUMCHARMFilter());
+  target.emplace_back(new FLArE10SUMINCLUSIVEFilter());
 
   // **************** FPF FASERV2 *****************************
   target.emplace_back(new FASERV2NUINCLUSIVEFilter());
@@ -604,13 +612,13 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new FLArE100SUMCHARMFilter());
   target.emplace_back(new FLArE100SUMINCLUSIVEFilter());
 
-  // **************** FPF SND *****************************
-  target.emplace_back(new SNDNUINCLUSIVEFilter());
-  target.emplace_back(new SNDNBINCLUSIVEFilter());
-  target.emplace_back(new SNDNUCHARMFilter());
-  target.emplace_back(new SNDNBCHARMFilter());
-  target.emplace_back(new SNDSUMCHARMFilter());
-  target.emplace_back(new SNDSUMINCLUSIVEFilter());
+  // **************** FPF AdvSND *****************************
+  target.emplace_back(new AdvSNDNUINCLUSIVEFilter());
+  target.emplace_back(new AdvSNDNBINCLUSIVEFilter());
+  target.emplace_back(new AdvSNDNUCHARMFilter());
+  // target.emplace_back(new AdvSNDNBCHARMFilter());
+  target.emplace_back(new AdvSNDSUMCHARMFilter());
+  target.emplace_back(new AdvSNDSUMINCLUSIVEFilter());
 
 
   return target;

@@ -56,6 +56,16 @@ private:
   void ReadData();
 };
 
+// Filter for Charm NUB productions @ FLArE10
+class FLArE10SUMCHARMFilter: public CommonData
+{
+public: FLArE10SUMCHARMFilter():
+  CommonData("FLArE10_SUM_DSIGMA_CHARM") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 
 // #########################################################
 // AdvSND EXPERIMENTS //
@@ -235,15 +245,15 @@ private:
 //   void ReadData();
 // };
 //
-// // Filter for Charm SUM productions @ FASERV
-// class FASERVSUMCHARMFilter: public CommonData
-// {
-// public: FASERVSUMCHARMFilter():
-//   CommonData("FASERV_SUM_DSIGMA_CHARM") { ReadData(); }
-//
-// private:
-//   void ReadData();
-// };
+// Filter for Charm SUM productions @ FASERV
+class FASERVSUMCHARMFilter: public CommonData
+{
+public: FASERVSUMCHARMFilter():
+  CommonData("FASERV_SUM_DSIGMA_CHARM") { ReadData(); }
+
+private:
+  void ReadData();
+};
 
 
 // #########################################################
