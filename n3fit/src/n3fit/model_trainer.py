@@ -593,7 +593,7 @@ class ModelTrainer:
         for exp_dict in self.exp_info:
             # TODO: this is just a temporary hack to add A values in this dict
             for dataset in exp_dict["datasets"]:
-                dataset.A_values = [n["A"] for n in NDATA_SPECS[dataset.name]]
+                dataset.A_values = [n["A"] for n in NDATA_SPECS.get(dataset.name, 'proton')]
 
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])

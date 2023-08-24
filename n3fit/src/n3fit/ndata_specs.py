@@ -1,6 +1,7 @@
 NDATA_SPECS = {
     # temporary fake data to be able to test with basic runcard
     # "SLACP_dwsh": [{"A": 208, "Z": 82}, {"A": 12, "Z": 6}],  # Copied from NMC96_Pb_C
+    "proton": [{"A": 1, "Z": 1}],  # Changed to have at least one A=1
     "SLACP_dwsh": [{"A": 1, "Z": 82}],  # Changed to have at least one A=1
     "NMCPD_dw": [{"A": 208, "Z": 82}],  # Copied from CHORUS_NU_PB
     "ATLASZPT8TEVMDIST": [
