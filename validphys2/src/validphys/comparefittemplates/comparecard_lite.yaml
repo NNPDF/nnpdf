@@ -60,27 +60,13 @@ PDFscalespecs:
   - xscale: linear
     Xscaletitle: Linear
 
-Energies:
-  - sqrts: 13000
-    Energytitle: "13 TeV"
-
 Distspecs:
   - ymin: 0
     ymax: 20
 
-pos_use_kin: True
-
-dataset_report:
-  meta: Null
-  template: data.md
-
 pdf_report:
   meta: Null
   template: pdf.md
-
-exponents_report:
-  meta: Null
-  template: exponents.md
 
 template: report_lite.md
 
@@ -88,9 +74,6 @@ positivity:
   from_: fit
 
 description:
-  from_: fit
-
-dataset_inputs:
   from_: fit
 
 dataspecs:
@@ -111,26 +94,9 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
-      
-t0_info:
-  - use_t0: True
-    datacuts:
-      from_: fit
-    t0pdfset:
-      from_: datacuts     
  
 Normalize:
   normalize_to: 2
-
-Datanorm:
-  normalize_to: data
-
-DataGroups:
-  - metadata_group: nnpdf31_process
-  - metadata_group: experiment
-
-ProcessGroup:
-    metadata_group: nnpdf31_process
 
 actions_:
   - report(main=true)
