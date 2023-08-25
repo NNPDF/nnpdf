@@ -39,6 +39,11 @@ def set_number_of_cores(max_cores=None):
         max_cores: int
             Maximum number of cores to be used
     """
+    try:
+        import lhapdf
+    except ModuleNotFoundError:
+        # If LHAPDF is not working then that means we already have initialized tensorflow at this point
+        return
     # Find how many cores we have and how many threads per core
     cores = psutil.cpu_count(logical=False)
     logical = psutil.cpu_count(logical=True)

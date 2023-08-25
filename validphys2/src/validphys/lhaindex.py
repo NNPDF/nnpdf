@@ -12,9 +12,8 @@ import os
 import os.path as osp
 import re
 
-import lhapdf
-
 from reportengine.compat import yaml
+from validphys.lhapdf_compatibility import lhapdf
 
 _indexes_to_names = None
 _names_to_indexes = None

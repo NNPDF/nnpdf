@@ -1,0 +1,23 @@
+# n3fit
+tensorflow
+psutil
+# evolven3fit
+eko
+# validphys
+pineappl
+reportengine
+validobj
+prompt_toolkit
+## hyperopt
+hyperopt
+seaborn
+
+# not available from pypi
+# lhapdf
+# instead install:
+pdfflow
+lhapdf_management
+
+# if lhapdf_management needs to be initialized:
+# LHAPDF_DATA_PATH=$(python -c 'from pathlib import Path ; from sys import prefix ; print(Path(prefix) / "share" / "LHAPDF")' ; lhapdf-management update
+
