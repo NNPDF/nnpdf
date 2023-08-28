@@ -179,6 +179,13 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     return layer_op(tensor)
 
 
+def gather(*args, **kwargs):
+    """
+    Gather elements from a tensor along an axis
+    """
+    return tf.gather(*args, **kwargs)
+
+
 #
 # Tensor operations
 # f(x: tensor[s]) -> y: tensor
@@ -330,12 +337,12 @@ def split(*args, **kwargs):
     return tf.split(*args, **kwargs)
 
 
-def scatter_to_one(values, indices=[[1]], output_dim=14):
+def scatter_to_one(values, indices, output_shape):
     """
     Like scatter_nd initialized to one instead of zero
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
-    ones = np.ones(output_dim, dtype=np.float32)
+    ones = np.ones(output_shape, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
 
 

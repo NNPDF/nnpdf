@@ -39,6 +39,8 @@ jobs:
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        conda install -n base conda-libmamba-solver
+        conda config --set solver libmamba
         conda config --append channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
