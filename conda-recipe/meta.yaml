@@ -54,6 +54,7 @@ requirements:
         - eko >=0.13.5,<0.14
         - banana-hep >=0.6.8
         - fiatlux
+        - frozendict  # needed for caching of data loading
 
 test:
     requires:
