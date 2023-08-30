@@ -18,14 +18,13 @@ class Rotation(MetaLayer):
     ----------
         rotation_matrix: np.array
             rotation matrix
-        axes: int or list
-            if given a number, contracts as many indices as given
-            if given a list (of tuples) contracts indices according to op.tensor_product
+        rotation_axis: int
+            rotation_axis of input to be rotated
     """
 
-    def __init__(self, rotation_matrix, axes=1, **kwargs):
+    def __init__(self, rotation_matrix, rotation_axis=2, **kwargs):
         self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)
-        self.axes = axes
+        self.rotation_axis = rotation_axis
         super().__init__(**kwargs)
 
     def is_identity(self):
@@ -37,7 +36,9 @@ class Rotation(MetaLayer):
             return np.allclose(self.rotation_matrix, iden)
 
     def call(self, x_raw):
-        return op.tensor_product(x_raw, self.rotation_matrix, self.axes)
+        rotated = op.tensor_product(x_raw, self.rotation_matrix, [self.rotation_axis, 0])
+        # this puts the rotated axis back in the original place
+        return op.swapaxes(rotated, -1, self.rotation_axis)
 
 
 class FlavourToEvolution(Rotation):
@@ -53,47 +54,45 @@ class FlavourToEvolution(Rotation):
         **kwargs,
     ):
         rotation_matrix = pdfbases.fitbasis_to_NN31IC(flav_info, fitbasis)
-        super().__init__(rotation_matrix, axes=1, **kwargs)
+        super().__init__(rotation_matrix, **kwargs)
 
 
-class FkRotation(MetaLayer):
+class FkRotation(Rotation):
     """
-    Applies a transformation from the dimension-8 evolution basis
+    Applies a transformation from the dimension-9 evolution basis
     to the dimension-14 evolution basis used by the fktables.
 
     The input to this layer is a `pdf_raw` variable which is expected to have
-    a shape (1,  None, 8), and it is then rotated to an output (1, None, 14)
+    a shape (1,  None, 9), and it is then rotated to an output (1, None, 14)
     """
 
-    # TODO: Generate a rotation matrix in the input and just do tf.tensordot in call
-    # the matrix should be: (8, 14) so that we can just do tf.tensordot(pdf, rotmat, axes=1)
-    # i.e., create the matrix and inherit from the Rotation layer above
     def __init__(self, output_dim=14, name="evolution", **kwargs):
         self.output_dim = output_dim
-        super().__init__(name=name, **kwargs)
+        rotation_matrix = self._create_rotation_matrix()
+        super().__init__(rotation_matrix, name=name, **kwargs)
 
-    def call(self, pdf_raw):
-        # Transpose the PDF so that the flavour index is the first one
-        x = op.transpose(pdf_raw)
-        pdf_raw_list = [
-            0 * x[0],  # photon
-            x[0],  # sigma
-            x[1],  # g
-            x[2],  # v
-            x[3],  # v3
-            x[4],  # v8
-            x[8],  # v15
-            x[2],  # v24
-            x[2],  # v35
-            x[5],  # t3
-            x[6],  # t8
-            x[0] - 4 * x[7],  # t15 (c-)
-            x[0],  # t24
-            x[0],  # t35
-        ]
-        ret = op.concatenate(pdf_raw_list)
-        # Concatenating destroys the batch index so we have to regenerate it
-        return op.batchit(ret)
+    def _create_rotation_matrix(self):
+        """Create the rotation matrix"""
+        array = np.array(
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],  # photon
+                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # sigma
+                [0, 1, 0, 0, 0, 0, 0, 0, 0],  # g
+                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v
+                [0, 0, 0, 1, 0, 0, 0, 0, 0],  # v3
+                [0, 0, 0, 0, 1, 0, 0, 0, 0],  # v8
+                [0, 0, 0, 0, 0, 0, 0, 0, 1],  # v15
+                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v24
+                [0, 0, 1, 0, 0, 0, 0, 0, 0],  # v35
+                [0, 0, 0, 0, 0, 1, 0, 0, 0],  # t3
+                [0, 0, 0, 0, 0, 0, 1, 0, 0],  # t8
+                [1, 0, 0, 0, 0, 0, 0, -4, 0],  # t15 (c-)
+                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # t24
+                [1, 0, 0, 0, 0, 0, 0, 0, 0],  # t35
+            ]
+        )
+        tensor = op.numpy_to_tensor(array.T)
+        return tensor
 
 
 class AddPhoton(MetaLayer):

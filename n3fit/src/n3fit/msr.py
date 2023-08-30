@@ -2,13 +2,111 @@
     The constraint module include functions to impose the momentum sum rules on the PDFs
 """
 import logging
+from typing import Callable, Optional
 
 import numpy as np
 
+from n3fit.backends import Input, Lambda, MetaModel
 from n3fit.backends import operations as op
 from n3fit.layers import MSR_Normalization, xDivide, xIntegrator
 
 log = logging.getLogger(__name__)
+
+
+def generate_msr_model_and_grid(
+    output_dim: int = 14,
+    mode: str = "ALL",
+    nx: int = int(2e3),
+    scaler: Optional[Callable] = None,
+    **kwargs
+) -> MetaModel:
+    """
+    Generates a model that applies the sum rules to the PDF.
+
+    Parameters
+    ----------
+    output_dim: int
+        Number of flavours of the output PDF
+    mode: str
+        Mode of sum rules to apply. It can be:
+            - "ALL": applies both the momentum and valence sum rules
+            - "MSR": applies only the momentum sum rule
+            - "VSR": applies only the valence sum rule
+    nx: int
+        Number of points of the integration grid
+    scaler: Scaler
+        Scaler to be applied to the PDF before applying the sum rules
+
+    Returns
+    -------
+    model: MetaModel
+        Model that applies the sum rules to the PDF
+        It takes as inputs:
+            - pdf_x: the PDF output of the model
+            - pdf_xgrid_integration: the PDF output of the model evaluated at the integration grid
+            - xgrid_integration: the integration grid
+            - photon_integral: the integrated photon contribution
+        It returns the PDF with the sum rules applied
+    xgrid_integration: dict
+        Dictionary with the integration grid, with:
+            - values: the integration grid
+            - input: the input layer of the integration grid
+    """
+    # 0. Prepare input layers to MSR model
+    pdf_x = Input(shape=(None, output_dim), batch_size=1, name="pdf_x")
+    pdf_xgrid_integration = Input(
+        shape=(nx, output_dim), batch_size=1, name="pdf_xgrid_integration"
+    )
+
+    # 1. Generate the grid and weights that will be used to integrate
+    xgrid_integration, weights_array = gen_integration_input(nx)
+    # 1b If a scaler is provided, scale the input xgrid
+    if scaler:
+        xgrid_integration = scaler(xgrid_integration)
+
+    # Turn into input layer.
+    xgrid_integration = op.numpy_to_input(xgrid_integration, name="integration_grid")
+
+    # 1c Get the original grid
+    if scaler:
+        get_original = Lambda(
+            lambda x: op.op_gather_keep_dims(x, -1, axis=-1), name="x_original_integ"
+        )
+    else:
+        get_original = lambda x: x
+    x_original = get_original(xgrid_integration)
+
+    # 2. Divide the grid by x depending on the flavour
+    x_divided = xDivide()(x_original)
+
+    # 3. Prepare the pdf for integration by dividing by x
+    pdf_integrand = Lambda(op.op_multiply, name="pdf_integrand")([x_divided, pdf_xgrid_integration])
+
+    # 4. Integrate the pdf
+    pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
+
+    # 5. THe input for the photon integral, will be set to 0 if no photons
+    photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')
+
+    # 6. Compute the normalization factor
+    normalization_factor = MSR_Normalization(mode, name="msr_weights")(
+        pdf_integrated, photon_integral
+    )
+
+    # 7. Apply the normalization factor to the pdf
+    pdf_normalized = Lambda(lambda pdf_norm: pdf_norm[0] * pdf_norm[1], name="pdf_normalized")(
+        [pdf_x, normalization_factor]
+    )
+
+    inputs = {
+        "pdf_x": pdf_x,
+        "pdf_xgrid_integration": pdf_xgrid_integration,
+        "xgrid_integration": xgrid_integration,
+        "photon_integral": photon_integral,
+    }
+    model = MetaModel(inputs, pdf_normalized, name="impose_msr")
+
+    return model, xgrid_integration
 
 
 def gen_integration_input(nx):
@@ -34,67 +132,3 @@ def gen_integration_input(nx):
     weights_array = np.array(weights).reshape(nx, 1)
 
     return xgrid, weights_array
-
-
-def msr_impose(nx=int(2e3), mode='All', scaler=None, photons=None):
-    """
-    This function receives:
-    Generates a function that applies a normalization layer to the fit.
-        - fit_layer: the 8-basis layer of PDF which we fit
-    The normalization is computed from the direct output of the NN (so the 7,8-flavours basis)
-        - final_layer: the 14-basis which is fed to the fktable
-    and it is applied to the input of the fktable (i.e., to the 14-flavours fk-basis).
-    It uses pdf_fit to compute the sum rule and returns a modified version of
-    the final_pdf layer with a normalisation by which the sum rule is imposed
-
-    Parameters
-    ----------
-        nx: int
-            number of points for the integration grid, default: 2000
-        mode: str
-            what sum rules to compute (MSR, VSR or All), default: All
-        scaler: scaler
-            Function to apply to the input. If given the input to the model
-            will be a (1, None, 2) tensor where dim [:,:,0] is scaled
-        photon: :py:class:`validphys.photon.compute.Photon`
-            If given, gives the AddPhoton layer a function to compute the MSR component for the photon
-    """
-
-    # 1. Generate the fake input which will be used to integrate
-    xgrid, weights_array = gen_integration_input(nx)
-    # 1b If a scaler is provided, scale the input xgrid
-    if scaler:
-        xgrid = scaler(xgrid)
-
-    # 2. Prepare the pdf for integration
-    #    for that we need to multiply several flavours with 1/x
-    division_by_x = xDivide()
-    # 3. Now create the integration layer (the layer that will simply integrate, given some weight
-    integrator = xIntegrator(weights_array, input_shape=(nx,))
-
-    # 3.1 If a photon is given, compute the photon component of the MSR
-    photons_c = None
-    if photons:
-        photons_c = photons.integral
-
-    # 4. Now create the normalization by selecting the right integrations
-    normalizer = MSR_Normalization(mode=mode, photons_contribution=photons_c)
-
-    # 5. Make the xgrid array into a backend input layer so it can be given to the normalization
-    xgrid_input = op.numpy_to_input(xgrid, name="integration_grid")
-    # Finally prepare a function which will take as input the output of the PDF model
-    # and will return it appropiately normalized.
-    def apply_normalization(layer_pdf, ph_replica):
-        """
-        layer_pdf: output of the PDF, unnormalized, ready for the fktable
-        """
-        x_original = op.op_gather_keep_dims(xgrid_input, -1, axis=-1)
-        pdf_integrand = op.op_multiply([division_by_x(x_original), layer_pdf(xgrid_input)])
-        normalization = normalizer(integrator(pdf_integrand), ph_replica)
-
-        def ultimate_pdf(x):
-            return layer_pdf(x) * normalization
-
-        return ultimate_pdf
-
-    return apply_normalization, xgrid_input

@@ -824,7 +824,7 @@ def plot_lumi1d(
         ax.set_title(
             f"${LUMI_CHANNELS[lumi_channel]}$ luminosity\n"
             f"$\\sqrt{{s}}={format_number(sqrts/1000)}$ TeV   "
-            f"$\\|y|<{format_number(y_cut)}$"
+            f"$\\|y\\|<{format_number(y_cut)}$"
         )
 
     return fig

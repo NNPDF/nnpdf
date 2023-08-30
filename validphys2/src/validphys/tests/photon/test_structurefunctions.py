@@ -44,8 +44,8 @@ def test_zero_pdfs():
     pdfs = ZeroPdfs()
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
-    path_to_F2 = test_theory.path / "fastkernel/fiatlux_dis_F2.pineappl.lz4"
-    path_to_FL = test_theory.path / "fastkernel/fiatlux_dis_FL.pineappl.lz4"
+    path_to_F2 = test_theory.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
+    path_to_FL = test_theory.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
 
     f2 = sf.InterpStructureFunction(path_to_F2, pdfs)
     fl = sf.InterpStructureFunction(path_to_FL, pdfs)
@@ -77,8 +77,8 @@ def test_params():
     replica = 1
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
-    for channel in ["F2", "FL"]:
-        tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
+    for kind in ["F2", "FL"]:
+        tmp = "fastkernel/FIATLUX_DIS_" + kind + ".pineappl.lz4"
         path_to_fktable = test_theory.path / tmp
         struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
         np.testing.assert_allclose(struct_func.q2_max, 1e8)
@@ -93,8 +93,8 @@ def test_interpolation_grid():
     pdfs = PDFset(PDF).load()
     test_theory = API.theoryid(theoryid=THEORY_QED)
     for replica in [1, 2, 3]:
-        for channel in ["F2", "FL"]:
-            tmp = "fastkernel/fiatlux_dis_" + channel + ".pineappl.lz4"
+        for kind in ["F2", "FL"]:
+            tmp = "fastkernel/FIATLUX_DIS_" + kind + ".pineappl.lz4"
             path_to_fktable = test_theory.path / tmp
             fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
             x = np.unique(fktable.bin_left(1))
