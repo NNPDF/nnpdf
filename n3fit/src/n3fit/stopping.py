@@ -496,12 +496,12 @@ class Stopping:
         """
         epoch_index = epoch + 1
         vl_chi2 = fitstate.total_vl_chi2()
-        total_str = f"""Epoch {epoch_index}/{self.total_epochs}: loss: {fitstate.tr_loss:.7f}
-Validation loss after training step: {vl_chi2:.7f}.
-Validation chi2s: """
+        total_str = f"Epoch {epoch_index}/{self.total_epochs}: loss: {fitstate.tr_loss:.7f}"
+        total_str += f"\nValidation loss after training step: {vl_chi2:.7f}."
 
         # The partial chi2 makes no sense for more than one replica at once:
         if self._n_replicas == 1:
+            total_str += "\nValidation chi2s: "
             partial_vl_chi2 = fitstate.total_partial_vl_chi2()
             partials = []
             for experiment, chi2 in partial_vl_chi2.items():
